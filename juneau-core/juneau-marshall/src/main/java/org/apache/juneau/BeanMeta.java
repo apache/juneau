@@ -124,7 +124,7 @@ public class BeanMeta<T> {
 			if (nn(b.getter))
 				pt = b.getter.getReturnType();
 			else if (nn(b.field))
-				pt = b.field.getType();
+				pt = b.field.inner().getType();  // TODO - Convert to FieldInfo
 
 			// Matches if only a setter is defined.
 			if (pt == null)
@@ -449,7 +449,7 @@ public class BeanMeta<T> {
 						.findFirst()
 						.orElse(propertyNamer.getPropertyName(x.getName()));
 					if (nn(name)) {
-						normalProps.computeIfAbsent(name, n->BeanPropertyMeta.builder(this, n)).setField(x.inner());
+						normalProps.computeIfAbsent(name, n->BeanPropertyMeta.builder(this, n)).setField(x);
 					}
 				});
 

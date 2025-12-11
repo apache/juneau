@@ -65,7 +65,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		BeanMeta<?> beanMeta;  // Package-private for BeanMeta access
 		BeanContext bc;  // Package-private for BeanMeta access
 		String name;  // Package-private for BeanMeta access
-		Field field, innerField;  // Package-private for BeanMeta access. TODO - Replace with FieldInfo fields
+		FieldInfo field;  // Package-private for BeanMeta access
+		FieldInfo innerField;  // Package-private for BeanMeta access
 		Method getter, setter, extraKeys;  // Package-private for BeanMeta access. TODO - Replace with MethodInfo fields
 		private boolean isConstructorArg, isUri, isDyna, isDynaGetterMap;
 		private ClassMeta<?> rawTypeMeta, typeMeta;
@@ -209,14 +210,14 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	/**
 	 * Sets the field for this bean property.
 	 *
-	 * @param value The field for this bean property.
+	 * @param value The field info for this bean property.
 	 * @return This object.
 	 */
-	public BeanPropertyMeta.Builder setField(Field value) {
+	public BeanPropertyMeta.Builder setField(FieldInfo value) {
 		assertArgNotNull("value", value);
-		setAccessible(value);
+		value.accessible();
 		this.field = value;
-		this.innerField = value;
+		this.innerField = value.inner();
 		return this;
 	}
 
@@ -400,10 +401,10 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			}
 			if (nn(field)) {
 				if (isDyna) {
-					if (! info(field.getType()).isChildOf(Map.class))
+					if (! field.getFieldType().isChildOf(Map.class))
 						return false;
 				} else {
-					if (! ci.isChildOf(field.getType()))
+					if (! ci.isChildOf(field.getFieldType()))
 						return false;
 				}
 			}
@@ -454,7 +455,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	private final BeanContext bc;                    // The context that created this meta.
 	private final AnnotationProvider ap;
 	private final String name;                                // The name of the property.
-	private final Field field;                                // The bean property field (if it has one).
+	private final FieldInfo field;                                // The bean property field (if it has one).
 	private final Field innerField;                                // The bean property field (if it has one).
 
 	private final Method getter, setter, extraKeys;           // The bean property getter and setter.
@@ -716,7 +717,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	public <A extends Annotation> BeanPropertyMeta forEachAnnotation(Class<A> a, Predicate<A> filter, Consumer<A> action) {
 		if (nn(a)) {
 			if (nn(field))
-				ap.find(a, info(field)).stream().map(AnnotationInfo::inner).filter(filter).forEach(action);
+				ap.find(a, field).stream().map(AnnotationInfo::inner).filter(filter).forEach(action);
 			if (nn(getter))
 				ap.find(a, info(getter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).stream().map(AnnotationInfo::inner).filter(filter).forEach(action);
 			if (nn(setter))
@@ -759,7 +760,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	public <A extends Annotation> List<A> getAllAnnotationsParentFirst(Class<A> a) {
 		var l = new LinkedList<A>();
 		var ap = bc.getAnnotationProvider();
-		var fi = field == null ? null : info(field);
+		var fi = field;
 		var gi = getter == null ? null : info(getter);
 		var si = setter == null ? null : info(setter);
 		if (a == null)
@@ -767,7 +768,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		rstream(ap.find(a, getBeanMeta().getClassMeta())).forEach(x -> l.add(x.inner()));
 		if (nn(field)) {
 			ap.find(a, fi).forEach(x -> l.add(x.inner()));
-			rstream(ap.find(a, info(field.getType()))).forEach(x -> l.add(x.inner()));
+			rstream(ap.find(a, field.getFieldType())).forEach(x -> l.add(x.inner()));
 		}
 		if (nn(gi)) {
 			// Walk up the inheritance hierarchy for the getter method
@@ -873,9 +874,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	/**
 	 * Returns the field for this property.
 	 *
-	 * @return The field for this bean property, or <jk>null</jk> if there is no field associated with this bean property.
+	 * @return The field info for this bean property, or <jk>null</jk> if there is no field associated with this bean property.
 	 */
-	public Field getField() { return field; }
+	public FieldInfo getField() { return field; }
 
 	/**
 	 * Returns the getter method for this property.
