@@ -132,7 +132,7 @@
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 			<strong class="jxr_keyword">if</strong> (nn(b.getter))
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 				pt = b.getter.getReturnType();
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(b.field))
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 				pt = b.field.getType();
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 				pt = b.field.<strong class="jxr_keyword">inner</strong>().getType();  <em class="jxr_comment">// TODO - Convert to FieldInfo</em>
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<em class="jxr_comment">// Matches if only a setter is defined.</em>
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 			<strong class="jxr_keyword">if</strong> (pt == <strong class="jxr_keyword">null</strong>)
@@ -457,7 +457,7 @@
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> 						.findFirst()
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 						.orElse(propertyNamer.getPropertyName(x.getName()));
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> 					<strong class="jxr_keyword">if</strong> (nn(name)) {
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 						normalProps.computeIfAbsent(name, n-&gt;BeanPropertyMeta.builder(<strong class="jxr_keyword">this</strong>, n)).setField(x.<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 						normalProps.computeIfAbsent(name, n-&gt;BeanPropertyMeta.builder(<strong class="jxr_keyword">this</strong>, n)).setField(x);
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> 					}
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 				});
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 
