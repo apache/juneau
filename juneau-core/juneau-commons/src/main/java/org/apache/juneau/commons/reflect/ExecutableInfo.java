@@ -87,6 +87,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	private final boolean isConstructor;
 
 	private final Supplier<List<ParameterInfo>> parameters;  // All parameters of this executable.
+	private final Supplier<List<ClassInfo>> parameterTypes;  // All parameter types of this executable.
 	private final Supplier<List<ClassInfo>> exceptions;  // All exceptions declared by this executable.
 	private final Supplier<List<AnnotationInfo<Annotation>>> declaredAnnotations;  // All annotations declared directly on this executable.
 	private final Supplier<String> shortName;  // Short name (method/constructor name with parameters).
@@ -109,6 +110,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		this.inner = inner;
 		this.isConstructor = inner instanceof Constructor;
 		this.parameters = memoize(this::findParameters);
+		this.parameterTypes = memoize(() -> getParameters().stream().map(ParameterInfo::getParameterType).toList());
 		this.exceptions = memoize(() -> stream(inner.getExceptionTypes()).map(ClassInfo::of).map(ClassInfo.class::cast).toList());
 		this.declaredAnnotations = memoize(() -> stream(inner.getDeclaredAnnotations()).flatMap(a -> AnnotationUtils.streamRepeated(a)).map(a -> ai((Annotatable)this, a)).toList());
 		this.shortName = memoize(() -> f("{0}({1})", getSimpleName(), getParameters().stream().map(p -> p.getParameterType().getNameSimple()).collect(joining(","))));
@@ -320,6 +322,26 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return An array of parameter information, never <jk>null</jk>.
 	 */
 	public final List<ParameterInfo> getParameters() { return parameters.get(); }
+
+	/**
+	 * Returns the parameter types for this executable.
+	 *
+	 * <p>
+	 * This is a convenience method that extracts the parameter types from {@link #getParameters()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get parameter types: void myMethod(String s, int i)</jc>
+	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>, String.<jk>class</jk>, <jk>int</jk>.<jk>class</jk>);
+	 * 	List&lt;ClassInfo&gt; <jv>paramTypes</jv> = <jv>mi</jv>.getParameterTypes();
+	 * 	<jc>// paramTypes contains ClassInfo for String and int</jc>
+	 * </p>
+	 *
+	 * @return A list of parameter types, never <jk>null</jk>.
+	 */
+	public final List<ClassInfo> getParameterTypes() {
+		return parameterTypes.get();
+	}
 
 	/**
 	 * Returns the short name of this executable.

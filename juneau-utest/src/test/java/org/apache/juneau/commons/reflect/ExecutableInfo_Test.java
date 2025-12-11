@@ -382,6 +382,38 @@ class ExecutableInfo_Test extends TestBase {
 	}
 
 	//====================================================================================================
+	// getParameterTypes()
+	//====================================================================================================
+	@Test
+	void a013a_getParameterTypes() {
+		// Test with no parameters
+		check("", b_c1.getParameterTypes());
+		check("", b_m1.getParameterTypes());
+		
+		// Test with single parameter
+		check("String", b_c2.getParameterTypes());
+		check("String", b_m2.getParameterTypes());
+		
+		// Test with multiple parameters
+		var b1 = ClassInfo.of(B1.class);
+		check("String,int", b1.getDeclaredConstructors().get(0).getParameterTypes());
+		
+		// Test with different parameter types
+		check("int", c_c3.getParameterTypes());
+		check("int", c_m3.getParameterTypes());
+		
+		// Test caching - should return same result
+		var types1 = b_c2.getParameterTypes();
+		var types2 = b_c2.getParameterTypes();
+		assertSame(types1, types2, "getParameterTypes() should return cached result");
+		
+		// Verify that getParameterTypes() returns the same types as getParameters().stream().map(ParameterInfo::getParameterType)
+		var typesFromMethod = b_c2.getParameterTypes();
+		var typesFromParams = b_c2.getParameters().stream().map(ParameterInfo::getParameterType).toList();
+		assertEquals(typesFromMethod, typesFromParams, "getParameterTypes() should match types from getParameters()");
+	}
+
+	//====================================================================================================
 	// getShortName()
 	//====================================================================================================
 	@Test

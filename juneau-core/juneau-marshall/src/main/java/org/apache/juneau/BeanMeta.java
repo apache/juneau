@@ -120,11 +120,11 @@ public class BeanMeta<T> {
 				return true;
 
 			// Get the bean property type from the getter/field.
-			var pt = (Class<?>)null;
+			var pt = (Class<?>)null;  // TODO - Convert to ClassInfo
 			if (nn(b.getter))
-				pt = b.getter.getReturnType();
+				pt = b.getter.getReturnType().inner(); 
 			else if (nn(b.field))
-				pt = b.field.inner().getType();  // TODO - Convert to FieldInfo
+				pt = b.field.inner().getType();
 
 			// Matches if only a setter is defined.
 			if (pt == null)
@@ -403,7 +403,7 @@ public class BeanMeta<T> {
 		var _notABeanReason = (String)null;
 		var _properties = Value.<Map<String,BeanPropertyMeta>>empty();
 		var _hiddenProperties = CollectionUtils.<String,BeanPropertyMeta>map();
-		var _getterProps = CollectionUtils.<Method,String>map();
+		var _getterProps = CollectionUtils.<Method,String>map();  // Convert to MethodInfo keys
 		var _setterProps = CollectionUtils.<Method,String>map();
 		var _dynaProperty = Value.<BeanPropertyMeta>empty();
 		var _sortProperties = false;
@@ -435,7 +435,11 @@ public class BeanMeta<T> {
 					bi = Introspector.getBeanInfo(c2.inner(), null);
 				if (nn(bi)) {
 					for (var pd : bi.getPropertyDescriptors()) {
-						normalProps.computeIfAbsent(pd.getName(), n -> BeanPropertyMeta.builder(this, n)).setGetter(pd.getReadMethod()).setSetter(pd.getWriteMethod());
+						var builder = normalProps.computeIfAbsent(pd.getName(), n -> BeanPropertyMeta.builder(this, n));
+						if (pd.getReadMethod() != null)
+							builder.setGetter(info(pd.getReadMethod()));
+						if (pd.getWriteMethod() != null)
+							builder.setSetter(pd.getWriteMethod());
 					}
 				}
 
@@ -458,20 +462,20 @@ public class BeanMeta<T> {
 				// Iterate through all the getters.
 				bms.forEach(x -> {
 					var pn = x.propertyName;
-					var m = x.method;
+					var m = x.method;  // TODO - Convert to MethodInfo
 					var mi = info(m);
 					var bpm = normalProps.computeIfAbsent(pn, k -> new BeanPropertyMeta.Builder(this, k));
 
 					if (x.methodType == GETTER) {
 						// Two getters.  Pick the best.
 						if (nn(bpm.getter)) {
-							if (! ap.has(Beanp.class, mi) && ap.has(Beanp.class, info(bpm.getter))) {
-								m = bpm.getter;  // @Beanp annotated method takes precedence.
-							} else if (m.getName().startsWith("is") && bpm.getter.getName().startsWith("get")) {
-								m = bpm.getter;  // getX() overrides isX().
+							if (! ap.has(Beanp.class, mi) && ap.has(Beanp.class, bpm.getter)) {
+								m = bpm.getter.inner();  // @Beanp annotated method takes precedence.
+							} else if (m.getName().startsWith("is") && bpm.getter.getSimpleName().startsWith("get")) {
+								m = bpm.getter.inner();  // getX() overrides isX().
 							}
 						}
-						bpm.setGetter(m);
+						bpm.setGetter(info(m));
 					}
 				});
 
@@ -500,7 +504,7 @@ public class BeanMeta<T> {
 					if (p.validate(beanContext, beanRegistry.get(), typeVarImpls, readOnlyProps, writeOnlyProps)) {
 
 						if (nn(p.getter))
-							_getterProps.put(p.getter, p.name);
+							_getterProps.put(p.getter.inner(), p.name);
 
 						if (nn(p.setter))
 							_setterProps.put(p.setter, p.name);
