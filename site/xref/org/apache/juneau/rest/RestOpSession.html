@@ -197,10 +197,10 @@
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">	 * @throws Throwable Any throwable can be thrown.</em>
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> run() <strong class="jxr_keyword">throws</strong> Throwable {
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> guard : ctx.getGuards())
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			<strong class="jxr_keyword">if</strong> (! guard.guard(req, res))
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 				<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> guard : ctx.getGuards()) {
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			<strong class="jxr_keyword">if</strong> (! guard.guard(req, res))
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 				<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		}
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 		ctx.getMethodInvoker().invoke(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 

@@ -1689,7 +1689,7 @@
 <a class="jxr_linenumber" name="L1681" href="#L1681">1681</a> 			beanStore
 <a class="jxr_linenumber" name="L1682" href="#L1682">1682</a> 				.createMethodFinder(RestGuardList.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L1683" href="#L1683">1683</a> 				.addBean(RestGuardList.Builder.<strong class="jxr_keyword">class</strong>, v.get())
-<a class="jxr_linenumber" name="L1684" href="#L1684">1684</a> 				.find(<strong class="jxr_keyword">this</strong>::matches)
+<a class="jxr_linenumber" name="L1684" href="#L1684">1684</a> 				.find(m -&gt; <strong class="jxr_keyword">this</strong>.matches(m))
 <a class="jxr_linenumber" name="L1685" href="#L1685">1685</a> 				.run(x -&gt; v.get().impl(x));
 <a class="jxr_linenumber" name="L1686" href="#L1686">1686</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L1687" href="#L1687">1687</a> 
@@ -2300,7 +2300,7 @@
 <a class="jxr_linenumber" name="L2292" href="#L2292">2292</a> 
 <a class="jxr_linenumber" name="L2293" href="#L2293">2293</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L2294" href="#L2294">2294</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
-<a class="jxr_linenumber" name="L2295" href="#L2295">2295</a> 		<strong class="jxr_keyword">return</strong> (o instanceof <a name="RestOpContext" href="../../../../org/apache/juneau/rest/RestOpContext.html#RestOpContext">RestOpContext</a> o2) &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, o2, (x, y) -&gt; x.method.equals(y.method));
+<a class="jxr_linenumber" name="L2295" href="#L2295">2295</a> 		<strong class="jxr_keyword">return</strong> (o instanceof <a name="RestOpContext" href="../../../../org/apache/juneau/rest/RestOpContext.html#RestOpContext">RestOpContext</a> o2) &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, o2, (x, y) -&gt; eq(x.method, y.method));
 <a class="jxr_linenumber" name="L2296" href="#L2296">2296</a> 	}
 <a class="jxr_linenumber" name="L2297" href="#L2297">2297</a> 
 <a class="jxr_linenumber" name="L2298" href="#L2298">2298</a> 	<em class="jxr_javadoccomment">/**</em>
