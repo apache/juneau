@@ -217,7 +217,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		assertArgNotNull("value", value);
 		value.accessible();
 		this.field = value;
-		this.innerField = value.inner();
+		this.innerField = value;
 		return this;
 	}
 
@@ -242,7 +242,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 */
 	public BeanPropertyMeta.Builder setInnerField(FieldInfo value) {
 		assertArgNotNull("value", value);
-		this.innerField = value == null ? null : value.inner();
+		this.innerField = value;
 		return this;
 	}
 
@@ -254,7 +254,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 */
 	public BeanPropertyMeta.Builder setInnerField(Field value) {
 		assertArgNotNull("value", value);
-		this.innerField = value;
+		this.innerField = FieldInfo.of(value);
 		return this;
 	}
 
@@ -296,7 +296,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			canRead |= (nn(field) || nn(getter));
 			canWrite |= (nn(field) || nn(setter));
 
-			var ifi = innerField == null ? null : info(innerField);
+			var ifi = innerField;
 			var gi = getter == null ? null : info(getter);
 			var si = setter == null ? null : info(setter);
 
@@ -306,7 +306,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				if (nn(field) || isNotEmpty(lp)) {
 					// Only use field type if it's a bean property or has @Beanp annotation.
 					// Otherwise, we want to infer the type from the getter or setter.
-					rawTypeMeta = bc.resolveClassMeta(last(lp), innerField.getGenericType(), typeVarImpls);
+					rawTypeMeta = bc.resolveClassMeta(last(lp), innerField.inner().getGenericType(), typeVarImpls);
 					isUri |= (rawTypeMeta.isUri());
 				}
 				lp.forEach(x -> {
@@ -456,7 +456,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	private final AnnotationProvider ap;
 	private final String name;                                // The name of the property.
 	private final FieldInfo field;                                // The bean property field (if it has one).
-	private final Field innerField;                                // The bean property field (if it has one).
+	private final FieldInfo innerField;                                // The bean property field (if it has one).
 
 	private final Method getter, setter, extraKeys;           // The bean property getter and setter.
 
@@ -888,9 +888,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	/**
 	 * Returns the field for this property even if the field is private.
 	 *
-	 * @return The field for this bean property, or <jk>null</jk> if there is no field associated with this bean property.
+	 * @return The field info for this bean property, or <jk>null</jk> if there is no field associated with this bean property.
 	 */
-	public Field getInnerField() { return innerField; }
+	public FieldInfo getInnerField() { return innerField; }
 
 	/**
 	 * Returns the name of this bean property.

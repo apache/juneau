@@ -83,7 +83,7 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 		var b = new Builder();
 		if (nn(bpm.getInnerField()))
-			ap.find(Html.class, info(bpm.getInnerField())).forEach(x -> b.findHtmlInfo(x.inner()));
+			ap.find(Html.class, bpm.getInnerField()).forEach(x -> b.findHtmlInfo(x.inner()));
 		if (nn(bpm.getGetter()))
 			ap.find(Html.class, info(bpm.getGetter())).forEach(x -> b.findHtmlInfo(x.inner()));
 		if (nn(bpm.getSetter()))
