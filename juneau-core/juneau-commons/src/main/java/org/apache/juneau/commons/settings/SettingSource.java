@@ -40,7 +40,7 @@ import java.util.*;
  * 	<jv>source</jv>.set(<js>"my.property"</js>, <js>"value"</js>);
  *
  * 	<jc>// Create a read-only source from a function</jc>
- * 	ReadOnlySource <jv>readOnly</jv> = <jk>new</jk> ReadOnlySource(x -&gt; System.getProperty(x));
+ * 	FunctionalSource <jv>readOnly</jv> = <jk>new</jk> FunctionalSource(x -&gt; System.getProperty(x));
  * </p>
  */
 public interface SettingSource {
@@ -72,13 +72,13 @@ public interface SettingSource {
 	 *
 	 * @return <c>true</c> if this source is writable, <c>false</c> otherwise.
 	 */
-	boolean canWrite();
+	boolean isWriteable();
 
 	/**
 	 * Sets a setting in this setting source.
 	 *
 	 * <p>
-	 * Should be a no-op if the source is not writable (i.e., {@link #canWrite()} returns <c>false</c>).
+	 * Should be a no-op if the source is not writable (i.e., {@link #assertWriteable()} returns <c>false</c>).
 	 *
 	 * <p>
 	 * Setting a value to <c>null</c> means that {@link #get(String)} will return <c>Optional.empty()</c> for that key,
@@ -94,7 +94,7 @@ public interface SettingSource {
 	 * Removes a setting from this setting source.
 	 *
 	 * <p>
-	 * Should be a no-op if the source is not writable (i.e., {@link #canWrite()} returns <c>false</c>).
+	 * Should be a no-op if the source is not writable (i.e., {@link #assertWriteable()} returns <c>false</c>).
 	 *
 	 * <p>
 	 * After calling this method, {@link #get(String)} will return <c>null</c> for the specified key,
@@ -109,7 +109,7 @@ public interface SettingSource {
 	 * Clears all settings from this setting source.
 	 *
 	 * <p>
-	 * Should be a no-op if the source is not writable (i.e., {@link #canWrite()} returns <c>false</c>).
+	 * Should be a no-op if the source is not writable (i.e., {@link #assertWriteable()} returns <c>false</c>).
 	 *
 	 * <p>
 	 * After calling this method, all keys will be removed from this source, and {@link #get(String)} will

@@ -1711,6 +1711,21 @@ public class CollectionUtils {
 		return new LinkedHashSet<>(Arrays.asList(values));
 	}
 
+	/**
+	 * Returns an empty immutable set.
+	 *
+	 * <p>
+	 * This is a convenience method that returns {@link Collections#emptySet()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Set&lt;String&gt; <jv>empty</jv> = CollectionUtils.<jsf>sete</jsf>();  <jc>// Returns Collections.emptySet()</jc>
+	 * </p>
+	 *
+	 * @param <T> The element type.
+	 * @return An empty immutable set.
+	 * @see Collections#emptySet()
+	 */
 	public static <T> Set<T> sete() {
 		return Collections.emptySet();
 	}

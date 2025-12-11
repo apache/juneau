@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.settings;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
@@ -99,8 +100,7 @@ public class MapSource implements SettingSource {
 	 */
 	@Override
 	public void set(String key, String value) {
-		if (! canWrite())
-			return;
+		assertWriteable("Attempting to set a value on a read-only map source.");
 		var m = map.get();
 		if (m == null) {
 			var newMap = new ConcurrentHashMap<String,Optional<String>>();
@@ -118,21 +118,10 @@ public class MapSource implements SettingSource {
 	 */
 	@Override
 	public void clear() {
-		if (! canWrite())
-			return;
+		assertWriteable("Attempting to update a read-only map source.");
 		var m = map.get();
 		if (m != null)
 			m.clear();
-	}
-
-	/**
-	 * Returns <c>true</c> since this source is writable.
-	 *
-	 * @return <c>true</c>
-	 */
-	@Override
-	public boolean canWrite() {
-		return true;
 	}
 
 	/**
@@ -147,10 +136,19 @@ public class MapSource implements SettingSource {
 	 */
 	@Override
 	public void unset(String name) {
-		if (! canWrite())
-			return;
+		assertWriteable("Attempting to unset a value on a read-only map source.");
 		var m = map.get();
 		if (m != null)
 			m.remove(name);
 	}
+
+	@Override
+	public boolean isWriteable() {
+		return true;
+	}
+
+	private void assertWriteable(String msg, Object...args) {
+		assertArg(isWriteable(), msg, args);
+	}
+
 }

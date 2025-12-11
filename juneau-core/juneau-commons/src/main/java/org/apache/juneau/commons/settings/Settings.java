@@ -24,7 +24,6 @@ import java.net.*;
 import java.nio.charset.*;
 import java.nio.file.*;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -97,8 +96,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * 	<li><c>juneau.settings.disableGlobal</c> - If set to <c>true</c>, prevents new global overrides
  * 		from being set via {@link #setGlobal(String, String)}. Existing global overrides will still be
  * 		returned by {@link #get(String)} until explicitly removed.
+ * 		<p class='bnote'>
+ * 			Note: This property is read once at class initialization time and cannot be changed at runtime.
+ * 			Changing the system property after the class has been loaded will have no effect.
+ * 		</p>
  * 	<li><c>juneau.settings.disableCustomSources</c> - If set to <c>true</c>, prevents custom sources
  * 		from being added via {@link #addSource(SettingSource)} or {@link #setSources(SettingSource...)}.
+ * 		<p class='bnote'>
+ * 			Note: This property is read once at class initialization time and cannot be changed at runtime.
+ * 			Changing the system property after the class has been loaded will have no effect.
+ * 		</p>
  * </ul>
  */
 public class Settings {
@@ -121,12 +128,12 @@ public class Settings {
 	/**
 	 * System property source that delegates to {@link System#getProperty(String)}.
 	 */
-	public static final SettingSource SYSTEM_PROPERTY_SOURCE = new ReadOnlySource(x -> System.getProperty(x));
+	public static final SettingSource SYSTEM_PROPERTY_SOURCE = new FunctionalSource(x -> System.getProperty(x));
 
 	/**
 	 * System environment variable source that delegates to {@link System#getenv(String)}.
 	 */
-	public static final SettingSource SYSTEM_ENV_SOURCE = new ReadOnlySource(x -> System.getenv(x));
+	public static final SettingSource SYSTEM_ENV_SOURCE = new FunctionalSource(x -> System.getenv(x));
 
 	/**
 	 * Returns properties for this Settings object itself.
@@ -135,10 +142,10 @@ public class Settings {
 	private static final Optional<String> initProperty(String property) {
 		var v = SYSTEM_PROPERTY_SOURCE.get(property);
 		if (v != null)
-			return v;
+			return v;  // Not testable
 		v = SYSTEM_ENV_SOURCE.get(property);
 		if (v != null)
-			return v;
+			return v;  // Not testable
 		return opte();
 	}
 
@@ -475,6 +482,10 @@ public class Settings {
 		// Add at the end - since we iterate in reverse order, this means it's checked first (before system sources)
 		sources.add(source);
 		return this;
+	}
+
+	public Settings addSource(FunctionalSource source) {
+		return addSource((SettingSource)source);
 	}
 
 	/**

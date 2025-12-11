@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.settings;
 
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
@@ -42,16 +43,16 @@ import java.util.function.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Create a read-only source from System.getProperty</jc>
- * 	ReadOnlySource <jv>sysProps</jv> = <jk>new</jk> ReadOnlySource(x -&gt; System.getProperty(x));
+ * 	FunctionalSource <jv>sysProps</jv> = <jk>new</jk> FunctionalSource(x -&gt; System.getProperty(x));
  *
  * 	<jc>// Create a read-only source from System.getenv</jc>
- * 	ReadOnlySource <jv>envVars</jv> = <jk>new</jk> ReadOnlySource(x -&gt; System.getenv(x));
+ * 	FunctionalSource <jv>envVars</jv> = <jk>new</jk> FunctionalSource(x -&gt; System.getenv(x));
  *
  * 	<jc>// Add to Settings</jc>
  * 	Settings.<jsf>get</jsf>().addSource(<jv>sysProps</jv>);
  * </p>
  */
-public class ReadOnlySource implements SettingSource {
+public class FunctionalSource implements SettingSource {
 
 	private final Function<String,String> function;
 
@@ -60,7 +61,7 @@ public class ReadOnlySource implements SettingSource {
 	 *
 	 * @param function The function to delegate property lookups to. Must not be <c>null</c>.
 	 */
-	public ReadOnlySource(Function<String,String> function) {
+	public FunctionalSource(Function<String,String> function) {
 		this.function = function;
 	}
 
@@ -86,7 +87,7 @@ public class ReadOnlySource implements SettingSource {
 	 * @return <c>false</c>
 	 */
 	@Override
-	public boolean canWrite() {
+	public boolean isWriteable() {
 		return false;
 	}
 
@@ -97,7 +98,9 @@ public class ReadOnlySource implements SettingSource {
 	 * @param value The property value (ignored).
 	 */
 	@Override
-	public void set(String name, String value) {}
+	public void set(String name, String value) {
+		throw illegalArg("Attempting to set a value on a read-only source.");
+	}
 
 	/**
 	 * No-op since this source is read-only.
@@ -105,12 +108,15 @@ public class ReadOnlySource implements SettingSource {
 	 * @param name The property name (ignored).
 	 */
 	@Override
-	public void unset(String name) {}
+	public void unset(String name) {
+		throw illegalArg("Attempting to unset a value on a read-only source.");
+	}
 
 	/**
 	 * No-op since this source is read-only.
 	 */
 	@Override
-	public void clear() {}
-
+	public void clear() {
+		throw illegalArg("Attempting to clear a read-only source.");
+	}
 }

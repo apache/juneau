@@ -557,6 +557,7 @@ public class ClassUtils {
 	 *
 	 * @param t The type we're recursing.
 	 * @param m Where the results are loaded.
+	 * @return A map of class to type variable implementations.
 	 */
 	public static Map<Class<?>,Class<?>[]> findTypeVarImpls(Type t) {
 		Map<Class<?>,Class<?>[]> m = new LinkedHashMap<>();
