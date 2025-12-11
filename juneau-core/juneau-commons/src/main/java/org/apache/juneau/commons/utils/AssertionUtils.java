@@ -19,6 +19,8 @@ package org.apache.juneau.commons.utils;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import java.util.concurrent.atomic.*;
+
 /**
  * Utility methods for argument validation and assertion.
  *

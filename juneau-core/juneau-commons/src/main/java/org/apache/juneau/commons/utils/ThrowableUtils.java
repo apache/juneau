@@ -20,13 +20,17 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.settings.*;
 
 /**
  * Various utility methods for creating and working with throwables.
  */
 public class ThrowableUtils {
+
+	static AtomicBoolean VERBOSE = new AtomicBoolean(Settings.get().getBoolean("juneau.enableVerboseExceptions").orElse(false));
 
 	/**
 	 * Interface used with {@link Utils#safeSupplier(SupplierWithThrowable)}.
@@ -54,7 +58,7 @@ public class ThrowableUtils {
 	 * @return A new {@link BeanRuntimeException}.
 	 */
 	public static BeanRuntimeException bex(Class<?> c, String msg, Object...args) {
-		return new BeanRuntimeException(c, msg, args);
+		return log(new BeanRuntimeException(c, msg, args));
 	}
 
 	/**
@@ -69,7 +73,7 @@ public class ThrowableUtils {
 	 * @return A new {@link BeanRuntimeException}.
 	 */
 	public static BeanRuntimeException bex(ClassInfo c, String msg, Object...args) {
-		return new BeanRuntimeException(c.inner(), msg, args);
+		return log(new BeanRuntimeException(c.inner(), msg, args));
 	}
 
 	/**
@@ -80,7 +84,7 @@ public class ThrowableUtils {
 	 * @return A new RuntimeException with the formatted message.
 	 */
 	public static BeanRuntimeException bex(String msg, Object...args) {
-		return new BeanRuntimeException(msg, args);
+		return log(new BeanRuntimeException(msg, args));
 	}
 
 	/**
@@ -90,7 +94,7 @@ public class ThrowableUtils {
 	 * @return A new RuntimeException wrapping the given cause.
 	 */
 	public static BeanRuntimeException bex(Throwable cause) {
-		return new BeanRuntimeException(cause);
+		return log(new BeanRuntimeException(cause));
 	}
 
 	/**
@@ -103,7 +107,7 @@ public class ThrowableUtils {
 	 * @return A new {@link BeanRuntimeException}.
 	 */
 	public static BeanRuntimeException bex(Throwable e, Class<?> c, String msg, Object...args) {
-		return new BeanRuntimeException(e, c, msg, args);
+		return log(new BeanRuntimeException(e, c, msg, args));
 	}
 
 	/**
@@ -119,7 +123,7 @@ public class ThrowableUtils {
 	 * @return A new {@link BeanRuntimeException}.
 	 */
 	public static BeanRuntimeException bex(Throwable e, ClassInfo c, String msg, Object...args) {
-		return new BeanRuntimeException(e, c.inner(), msg, args);
+		return log(new BeanRuntimeException(e, c.inner(), msg, args));
 	}
 
 	/**
@@ -131,7 +135,7 @@ public class ThrowableUtils {
 	 * @return A new RuntimeException with the formatted message and cause.
 	 */
 	public static BeanRuntimeException bex(Throwable cause, String msg, Object...args) {
-		return new BeanRuntimeException(f(msg, args), cause);
+		return log(new BeanRuntimeException(f(msg, args), cause));
 	}
 
 	/**
@@ -142,7 +146,7 @@ public class ThrowableUtils {
 	 * @return A new {@link ExecutableException}.
 	 */
 	public static ExecutableException exex(String msg, Object...args) {
-		return new ExecutableException(msg, args);
+		return log(new ExecutableException(msg, args));
 	}
 
 	/**
@@ -152,7 +156,7 @@ public class ThrowableUtils {
 	 * @return A new ExecutableException wrapping the given cause.
 	 */
 	public static ExecutableException exex(Throwable cause) {
-		return new ExecutableException(cause);
+		return log(new ExecutableException(cause));
 	}
 
 	/**
@@ -164,7 +168,7 @@ public class ThrowableUtils {
 	 * @return A new ExecutableException with the formatted message and cause.
 	 */
 	public static ExecutableException exex(Throwable cause, String msg, Object...args) {
-		return new ExecutableException(cause, msg, args);
+		return log(new ExecutableException(cause, msg, args));
 	}
 
 	/**
@@ -329,7 +333,12 @@ public class ThrowableUtils {
 	 * @return A new IllegalArgumentException with the formatted message.
 	 */
 	public static IllegalArgumentException illegalArg(String msg, Object...args) {
-		return new IllegalArgumentException(f(msg, args));
+		return log(new IllegalArgumentException(f(msg, args)));
+	}
+
+	private static <T extends Throwable> T log(T exception) {
+		if (VERBOSE.get()) exception.printStackTrace();
+		return exception;
 	}
 
 	/**
@@ -351,7 +360,7 @@ public class ThrowableUtils {
 	 * @see #illegalArg(String, Object...)
 	 */
 	public static IllegalStateException illegalState(String msg, Object...args) {
-		return new IllegalStateException(f(msg, args));
+		return log(new IllegalStateException(f(msg, args)));
 	}
 
 
@@ -362,7 +371,7 @@ public class ThrowableUtils {
 	 * @return A new IllegalArgumentException wrapping the given cause.
 	 */
 	public static IllegalArgumentException illegalArg(Throwable cause) {
-		return new IllegalArgumentException(cause);
+		return log(new IllegalArgumentException(cause));
 	}
 
 	/**
@@ -374,7 +383,7 @@ public class ThrowableUtils {
 	 * @return A new IllegalArgumentException with the formatted message and cause.
 	 */
 	public static IllegalArgumentException illegalArg(Throwable cause, String msg, Object...args) {
-		return new IllegalArgumentException(f(msg, args), cause);
+		return log(new IllegalArgumentException(f(msg, args), cause));
 	}
 
 	/**
@@ -385,7 +394,7 @@ public class ThrowableUtils {
 	 * @return A new IOException with the formatted message.
 	 */
 	public static java.io.IOException ioex(String msg, Object...args) {
-		return new java.io.IOException(f(msg, args));
+		return log(new java.io.IOException(f(msg, args)));
 	}
 
 	/**
@@ -395,7 +404,7 @@ public class ThrowableUtils {
 	 * @return A new IOException wrapping the given cause.
 	 */
 	public static java.io.IOException ioex(Throwable cause) {
-		return new java.io.IOException(cause);
+		return log(new java.io.IOException(cause));
 	}
 
 	/**
@@ -407,7 +416,7 @@ public class ThrowableUtils {
 	 * @return A new IOException with the formatted message and cause.
 	 */
 	public static java.io.IOException ioex(Throwable cause, String msg, Object...args) {
-		return new java.io.IOException(f(msg, args), cause);
+		return log(new java.io.IOException(f(msg, args), cause));
 	}
 
 	/**
@@ -428,7 +437,7 @@ public class ThrowableUtils {
 	 * @return A new RuntimeException with the formatted message.
 	 */
 	public static RuntimeException rex(String msg, Object...args) {
-		return new RuntimeException(f(msg, args));
+		return log(new RuntimeException(f(msg, args)));
 	}
 
 	/**
@@ -438,7 +447,7 @@ public class ThrowableUtils {
 	 * @return A new RuntimeException wrapping the given cause.
 	 */
 	public static RuntimeException rex(Throwable cause) {
-		return new RuntimeException(cause);
+		return log(new RuntimeException(cause));
 	}
 
 	/**
@@ -450,7 +459,7 @@ public class ThrowableUtils {
 	 * @return A new RuntimeException with the formatted message and cause.
 	 */
 	public static RuntimeException rex(Throwable cause, String msg, Object...args) {
-		return new RuntimeException(f(msg, args), cause);
+		return log(new RuntimeException(f(msg, args), cause));
 	}
 
 	/**
@@ -469,7 +478,7 @@ public class ThrowableUtils {
 	 * @return A new UnsupportedOperationException with the message "Not supported."
 	 */
 	public static UnsupportedOperationException unsupportedOp() {
-		return new UnsupportedOperationException("Not supported.");
+		return log(new UnsupportedOperationException("Not supported."));
 	}
 
 	/**
@@ -480,7 +489,7 @@ public class ThrowableUtils {
 	 * @return A new UnsupportedOperationException with the formatted message.
 	 */
 	public static UnsupportedOperationException unsupportedOp(String msg, Object...args) {
-		return new UnsupportedOperationException(f(msg, args));
+		return log(new UnsupportedOperationException(f(msg, args)));
 	}
 
 	/**
@@ -490,7 +499,7 @@ public class ThrowableUtils {
 	 * @return A new UnsupportedOperationException wrapping the given cause.
 	 */
 	public static UnsupportedOperationException unsupportedOp(Throwable cause) {
-		return new UnsupportedOperationException(cause);
+		return log(new UnsupportedOperationException(cause));
 	}
 
 	/**
@@ -502,7 +511,7 @@ public class ThrowableUtils {
 	 * @return A new UnsupportedOperationException with the formatted message and cause.
 	 */
 	public static UnsupportedOperationException unsupportedOp(Throwable cause, String msg, Object...args) {
-		return new UnsupportedOperationException(f(msg, args), cause);
+		return log(new UnsupportedOperationException(f(msg, args), cause));
 	}
 
 	/**
@@ -511,6 +520,6 @@ public class ThrowableUtils {
 	 * @return A new UnsupportedOperationException with the message "Object is read only."
 	 */
 	public static UnsupportedOperationException unsupportedOpReadOnly() {
-		return new UnsupportedOperationException("Object is read only.");
+		return log(new UnsupportedOperationException("Object is read only."));
 	}
 }
