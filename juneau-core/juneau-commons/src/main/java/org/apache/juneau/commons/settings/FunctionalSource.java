@@ -16,19 +16,22 @@
  */
 package org.apache.juneau.commons.settings;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
 
 /**
- * A read-only {@link SettingSource} implementation that delegates to a function.
+ * A functional interface for creating read-only {@link SettingSource} instances from a function.
  *
  * <p>
- * This class provides a read-only source for settings that delegates property lookups to a provided function.
- * It's particularly useful for wrapping existing property sources (e.g., {@link System#getProperty(String)},
+ * This functional interface allows you to create setting sources directly from lambda expressions or method references,
+ * making it easy to wrap existing property sources (e.g., {@link System#getProperty(String)},
  * {@link System#getenv(String)}) as {@link SettingSource} instances.
+ *
+ * <p>
+ * Functional sources are read-only and do not implement {@link SettingStore}. If you need a writable source,
+ * use {@link MapStore} or {@link FunctionalStore} instead.
  *
  * <h5 class='section'>Return Value Semantics:</h5>
  * <ul class='spaced-list'>
@@ -38,35 +41,29 @@ import java.util.function.*;
  *
  * <p>
  * Note: This source cannot distinguish between a key that doesn't exist and a key that exists with a null value,
- * since the function only returns a <c>String</c>. If you need to distinguish these cases, use {@link MapSource} instead.
+ * since the function only returns a <c>String</c>. If you need to distinguish these cases, use {@link MapStore} instead.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<jc>// Create a read-only source from System.getProperty</jc>
- * 	FunctionalSource <jv>sysProps</jv> = <jk>new</jk> FunctionalSource(x -&gt; System.getProperty(x));
+ * 	<jc>// Create a read-only source directly from a lambda (returns Optional)</jc>
+ * 	Settings.<jsf>get</jsf>().addSource(name -&gt; opt(System.getProperty(name)));
+ *
+ * 	<jc>// Using the static factory method (takes Function&lt;String, String&gt;)</jc>
+ * 	Settings.<jsf>get</jsf>().addSource(FunctionalSource.<jsf>of</jsf>(System::getProperty));
  *
  * 	<jc>// Create a read-only source from System.getenv</jc>
- * 	FunctionalSource <jv>envVars</jv> = <jk>new</jk> FunctionalSource(x -&gt; System.getenv(x));
+ * 	Settings.<jsf>get</jsf>().addSource(FunctionalSource.<jsf>of</jsf>(System::getenv));
  *
- * 	<jc>// Add to Settings</jc>
+ * 	<jc>// Explicit creation for reuse</jc>
+ * 	FunctionalSource <jv>sysProps</jv> = FunctionalSource.<jsf>of</jsf>(System::getProperty);
  * 	Settings.<jsf>get</jsf>().addSource(<jv>sysProps</jv>);
  * </p>
  */
-public class FunctionalSource implements SettingSource {
-
-	private final Function<String,String> function;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param function The function to delegate property lookups to. Must not be <c>null</c>.
-	 */
-	public FunctionalSource(Function<String,String> function) {
-		this.function = function;
-	}
+@FunctionalInterface
+public interface FunctionalSource extends SettingSource {
 
 	/**
-	 * Returns a setting by delegating to the function.
+	 * Returns a setting by applying the function.
 	 *
 	 * <p>
 	 * If the function returns <c>null</c>, this method returns <c>null</c> (indicating the key doesn't exist).
@@ -76,47 +73,35 @@ public class FunctionalSource implements SettingSource {
 	 * @return The property value, or <c>null</c> if the function returns <c>null</c>.
 	 */
 	@Override
-	public Optional<String> get(String name) {
-		var v = function.apply(name);
-		return v == null ? null : opt(v);
-	}
+	Optional<String> get(String name);
 
 	/**
-	 * Returns <c>false</c> since this source is read-only.
+	 * Creates a functional source from a function that returns a string.
 	 *
-	 * @return <c>false</c>
-	 */
-	@Override
-	public boolean isWriteable() {
-		return false;
-	}
-
-	/**
-	 * No-op since this source is read-only.
+	 * <p>
+	 * This is a convenience factory method for creating functional sources from functions that return
+	 * <c>String</c> values. The function's return value is converted to an <c>Optional</c> as follows:
+	 * <ul>
+	 * 	<li>If the function returns <c>null</c>, the source returns <c>null</c> (key doesn't exist).
+	 * 	<li>If the function returns a non-null value, the source returns <c>Optional.of(value)</c>.
+	 * </ul>
 	 *
-	 * @param name The property name (ignored).
-	 * @param value The property value (ignored).
-	 */
-	@Override
-	public void set(String name, String value) {
-		throw illegalArg("Attempting to set a value on a read-only source.");
-	}
-
-	/**
-	 * No-op since this source is read-only.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Create from a lambda</jc>
+	 * 	FunctionalSource <jv>source1</jv> = FunctionalSource.<jsf>of</jsf>(name -&gt; System.getProperty(name));
 	 *
-	 * @param name The property name (ignored).
+	 * 	<jc>// Create from a method reference</jc>
+	 * 	FunctionalSource <jv>source2</jv> = FunctionalSource.<jsf>of</jsf>(System::getProperty);
+	 * </p>
+	 *
+	 * @param function The function to delegate property lookups to. Must not be <c>null</c>.
+	 * @return A new functional source instance.
 	 */
-	@Override
-	public void unset(String name) {
-		throw illegalArg("Attempting to unset a value on a read-only source.");
-	}
-
-	/**
-	 * No-op since this source is read-only.
-	 */
-	@Override
-	public void clear() {
-		throw illegalArg("Attempting to clear a read-only source.");
+	static FunctionalSource of(Function<String, String> function) {
+		return name -> {
+			var v = function.apply(name);
+			return v == null ? null : opt(v);
+		};
 	}
 }

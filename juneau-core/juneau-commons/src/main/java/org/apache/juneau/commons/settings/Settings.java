@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.settings;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
@@ -24,7 +25,10 @@ import java.net.*;
 import java.nio.charset.*;
 import java.nio.file.*;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.*;
+import java.util.function.*;
+
+import org.apache.juneau.commons.function.*;
 
 /**
  * Encapsulates Java system properties with support for global and per-thread overrides for unit testing.
@@ -34,30 +38,41 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * and per-thread level, making it useful for unit tests that need to temporarily change system property
  * values without affecting other tests or threads.
  *
+ * <p>
+ * Settings instances are created using the {@link Builder} pattern. Use {@link #create()} to create a new builder,
+ * or {@link #get()} to get the singleton instance (which is created using default builder settings).
+ *
  * <h5 class='section'>Lookup Order:</h5>
  * <p>
  * When retrieving a property value, the lookup order is:
  * <ol>
- * 	<li>Per-thread override (if set via {@link #setLocal(String, String)})
- * 	<li>Global override (if set via {@link #setGlobal(String, String)})
- * 	<li>Sources in reverse order (last source added via {@link #addSource(SettingSource)} is checked first)
+ * 	<li>Per-thread store (if set via {@link #setLocal(String, String)})
+ * 	<li>Global store (if set via {@link #setGlobal(String, String)})
+ * 	<li>Sources in reverse order (last source added via {@link Builder#addSource(SettingSource)} is checked first)
  * 	<li>System property source (default, always second-to-last)
  * 	<li>System environment variable source (default, always last)
  * </ol>
  *
+ * <h5 class='section'>Sources vs Stores:</h5>
+ * <ul class='spaced-list'>
+ * 	<li><b>Sources</b> ({@link SettingSource}) - Provide read-only access to property values. Examples: {@link FunctionalSource}
+ * 	<li><b>Stores</b> ({@link SettingStore}) - Provide read/write access to property values. Examples: {@link MapStore}, {@link FunctionalStore}
+ * 	<li>Stores can be used as sources (they extend {@link SettingSource}), so you can add stores via {@link Builder#addSource(SettingSource)}
+ * </ul>
+ *
  * <h5 class='section'>Features:</h5>
  * <ul class='spaced-list'>
  * 	<li>System property access - read Java system properties with type conversion
- * 	<li>Global overrides - override system properties globally for all threads
- * 	<li>Per-thread overrides - override system properties for specific threads (useful for unit tests)
- * 	<li>Custom sources - add arbitrary property sources (e.g., Spring properties, environment variables, config files)
+ * 	<li>Global overrides - override system properties globally for all threads (stored in a {@link SettingStore})
+ * 	<li>Per-thread overrides - override system properties for specific threads (stored in a per-thread {@link SettingStore})
+ * 	<li>Custom sources - add arbitrary property sources (e.g., Spring properties, environment variables, config files) via the {@link Builder}
  * 	<li>Disable override support - system property to prevent new global overrides from being set
  * 	<li>Type-safe accessors - convenience methods for common types: Integer, Long, Boolean, Double, Float, File, Path, URI, Charset
  * </ul>
  *
  * <h5 class='section'>Usage Examples:</h5>
  * <p class='bjava'>
- * 	<jc>// Get a system property as a string</jc>
+ * 	<jc>// Get a system property as a string (using singleton instance)</jc>
  * 	Optional&lt;String&gt; <jv>value</jv> = Settings.<jsf>get</jsf>().get(<js>"my.property"</js>);
  *
  * 	<jc>// Get with type conversion</jc>
@@ -85,32 +100,164 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * 	<jc>// OR</jc>
  * 	Settings.<jsf>get</jsf>().clearGlobal();  <jc>// Clear all global overrides</jc>
  *
- * 	<jc>// Add a custom source (e.g., Spring properties)</jc>
- * 	MapSource <jv>springSource</jv> = <jk>new</jk> MapSource();
+ * 	<jc>// Create a custom Settings instance with custom sources (e.g., Spring properties)</jc>
+ * 	MapStore <jv>springSource</jv> = <jk>new</jk> MapStore();
  * 	<jv>springSource</jv>.set(<js>"spring.datasource.url"</js>, <js>"jdbc:postgresql://localhost/db"</js>);
- * 	Settings.<jsf>get</jsf>().addSource(<jv>springSource</jv>);
+ * 	Settings <jv>custom</jv> = Settings.<jsf>create</jsf>()
+ * 		.addSource(<jv>springSource</jv>)
+ * 		.addSource(FunctionalSource.<jsf>of</jsf>(System::getProperty))
+ * 		.build();
  * </p>
  *
  * <h5 class='section'>System Properties:</h5>
  * <ul class='spaced-list'>
- * 	<li><c>juneau.settings.disableGlobal</c> - If set to <c>true</c>, prevents new global overrides
+ * 	<li><c>juneau.settings.disableGlobal</c> (system property) or <c>JUNEAU_SETTINGS_DISABLEGLOBAL</c> (system env) - If set to <c>true</c>, prevents new global overrides
  * 		from being set via {@link #setGlobal(String, String)}. Existing global overrides will still be
  * 		returned by {@link #get(String)} until explicitly removed.
  * 		<p class='bnote'>
- * 			Note: This property is read once at class initialization time and cannot be changed at runtime.
- * 			Changing the system property after the class has been loaded will have no effect.
- * 		</p>
- * 	<li><c>juneau.settings.disableCustomSources</c> - If set to <c>true</c>, prevents custom sources
- * 		from being added via {@link #addSource(SettingSource)} or {@link #setSources(SettingSource...)}.
- * 		<p class='bnote'>
- * 			Note: This property is read once at class initialization time and cannot be changed at runtime.
- * 			Changing the system property after the class has been loaded will have no effect.
+ * 			Note: This property is read once at class initialization time when creating the singleton instance
+ * 			and cannot be changed at runtime. Changing the system property after the class has been loaded will
+ * 			have no effect on the singleton instance. However, you can create custom Settings instances using
+ * 			{@link #create()} that ignore this property.
  * 		</p>
  * </ul>
  */
 public class Settings {
 
-	private static final Settings INSTANCE = new Settings();
+	/**
+	 * System property source that delegates to {@link System#getProperty(String)}.
+	 */
+	public static final SettingSource SYSTEM_PROPERTY_SOURCE = FunctionalSource.of(System::getProperty);
+
+	/**
+	 * System environment variable source that delegates to {@link System#getenv(String)}.
+	 */
+	public static final SettingSource SYSTEM_ENV_SOURCE = FunctionalSource.of(System::getenv);
+
+	private static final String DISABLE_GLOBAL_PROP = "juneau.settings.disableGlobal";
+	private static final String MSG_globalDisabled = "Global settings not enabled";
+	private static final String MSG_localDisabled = "Local settings not enabled";
+
+	/**
+	 * Returns properties for this Settings object itself.
+	 * Note that these are initialized at startup and not changeable through System.setProperty().
+	 */
+	private static final Optional<String> initProperty(String property) {
+		var v = SYSTEM_PROPERTY_SOURCE.get(property);
+		if (v != null)
+			return v;  // Not testable
+		v = SYSTEM_ENV_SOURCE.get(uc(property.replace('.', '_')));
+		if (v != null)
+			return v;  // Not testable
+		return opte();
+	}
+
+	/**
+	 * Creates a new builder for constructing a Settings instance.
+	 *
+	 * <p>
+	 * This method provides a convenient way to create custom Settings instances with specific
+	 * configuration. The builder allows you to configure stores, sources, and other settings
+	 * before building the final Settings instance.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Create a custom Settings instance</jc>
+	 * 	Settings <jv>custom</jv> = Settings.<jsf>create</jsf>()
+	 * 		.globalStore(() -&gt; <jk>new</jk> MapStore())
+	 * 		.localStore(() -&gt; <jk>new</jk> MapStore())
+	 * 		.addSource(FunctionalSource.<jsf>of</jsf>(System::getProperty))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @return A new Builder instance.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+
+	/**
+	 * Builder for creating Settings instances.
+	 */
+	public static class Builder {
+		private Supplier<SettingStore> globalStoreSupplier = () -> new MapStore();
+		private Supplier<SettingStore> localStoreSupplier = () -> new MapStore();
+		private final List<SettingSource> sources = new ArrayList<>();
+
+		/**
+		 * Sets the supplier for the global store.
+		 *
+		 * @param supplier The supplier for the global store.  Must not be <c>null</c>.  Can supply null to disable global store.
+		 * @return This builder for method chaining.
+		 */
+		public Builder globalStore(OptionalSupplier<SettingStore> supplier) {
+			this.globalStoreSupplier = assertArgNotNull("supplier", supplier);
+			return this;
+		}
+
+		/**
+		 * Sets the supplier for the local (per-thread) store.
+		 *
+		 * @param supplier The supplier for the local store. Must not be <c>null</c>.
+		 * @return This builder for method chaining.
+		 */
+		public Builder localStore(OptionalSupplier<SettingStore> supplier) {
+			this.localStoreSupplier = assertArgNotNull("supplier", supplier);
+			return this;
+		}
+
+		/**
+		 * Sets the sources list, replacing any existing sources.
+		 *
+		 * @param sources The sources to set. Must not be <c>null</c> or contain <c>null</c> elements.
+		 * @return This builder for method chaining.
+		 */
+		@SafeVarargs
+		public final Builder setSources(SettingSource...sources) {
+			assertVarargsNotNull("sources", sources);
+			this.sources.clear();
+			for (var source : sources) {
+				this.sources.add(source);
+			}
+			return this;
+		}
+
+		/**
+		 * Adds a source to the sources list.
+		 *
+		 * @param source The source to add. Must not be <c>null</c>.
+		 * @return This builder for method chaining.
+		 */
+		public Builder addSource(SettingSource source) {
+			assertArgNotNull("source", source);
+			this.sources.add(source);
+			return this;
+		}
+
+		/**
+		 * Adds a functional source to the sources list.
+		 *
+		 * @param source The functional source to add. Must not be <c>null</c>.
+		 * @return This builder for method chaining.
+		 */
+		public Builder addSource(FunctionalSource source) {
+			return addSource((SettingSource)source);
+		}
+
+		/**
+		 * Builds a Settings instance from this builder.
+		 *
+		 * @return A new Settings instance.
+		 */
+		public Settings build() {
+			return new Settings(this);
+		}
+	}
+
+	private static final Settings INSTANCE = new Builder()
+		.globalStore(initProperty(DISABLE_GLOBAL_PROP).map(Boolean::valueOf).orElse(false) ? () -> null : () -> new MapStore())
+		.setSources(SYSTEM_ENV_SOURCE, SYSTEM_PROPERTY_SOURCE)
+		.build();
 
 	/**
 	 * Returns the singleton instance of Settings.
@@ -121,46 +268,17 @@ public class Settings {
 		return INSTANCE;
 	}
 
-	private final MapSource globalOverrides = new MapSource();
-	private final ThreadLocal<MapSource> threadOverrides = new ThreadLocal<>();
-	private final List<SettingSource> sources = new CopyOnWriteArrayList<>();
-
-	/**
-	 * System property source that delegates to {@link System#getProperty(String)}.
-	 */
-	public static final SettingSource SYSTEM_PROPERTY_SOURCE = new FunctionalSource(x -> System.getProperty(x));
-
-	/**
-	 * System environment variable source that delegates to {@link System#getenv(String)}.
-	 */
-	public static final SettingSource SYSTEM_ENV_SOURCE = new FunctionalSource(x -> System.getenv(x));
-
-	/**
-	 * Returns properties for this Settings object itself.
-	 * Note that these are initialized at startup and not changeable through System.setProperty().
-	 */
-	private static final Optional<String> initProperty(String property) {
-		var v = SYSTEM_PROPERTY_SOURCE.get(property);
-		if (v != null)
-			return v;  // Not testable
-		v = SYSTEM_ENV_SOURCE.get(property);
-		if (v != null)
-			return v;  // Not testable
-		return opte();
-	}
-
-	private static final String DISABLE_CUSTOM_SOURCES_PROP = "juneau.settings.disableCustomSources";
-	private static final String DISABLE_GLOBAL_PROP = "juneau.settings.disableGlobal";
-	private static final boolean DISABLE_CUSTOM_SOURCES = initProperty(DISABLE_CUSTOM_SOURCES_PROP).map(Boolean::valueOf).orElse(false);
-	private static final boolean DISABLE_GLOBAL = initProperty(DISABLE_GLOBAL_PROP).map(Boolean::valueOf).orElse(false);
+	private final ResettableSupplier<SettingStore> globalStore;
+	private final ThreadLocal<SettingStore> localStore;
+	private final List<SettingSource> sources;
 
 	/**
 	 * Constructor.
 	 */
-	private Settings() {
-		// Initialize with system sources as defaults (env first, then property, so property has higher precedence)
-		sources.add(SYSTEM_ENV_SOURCE);
-		sources.add(SYSTEM_PROPERTY_SOURCE);
+	private Settings(Builder builder) {
+		this.globalStore = memoizeResettable(builder.globalStoreSupplier);
+		this.localStore = ThreadLocal.withInitial(builder.localStoreSupplier);
+		this.sources = new CopyOnWriteArrayList<>(builder.sources);
 	}
 
 	/**
@@ -181,32 +299,24 @@ public class Settings {
 	 */
 	public Optional<String> get(String name) {
 		// 1. Check thread-local override
-		var localSource = threadOverrides.get();
-		if (localSource != null) {
-			var v = localSource.get(name);
-			if (v != null)
-				return v; // v is Optional.empty() if key exists with null value, or Optional.of(value) if present
-		}
+		var v = localStore.get().get(name);
+		if (v != null)
+			return v; // v is Optional.empty() if key exists with null value, or Optional.of(value) if present
 
 		// 2. Check global override
-		var v = globalOverrides.get(name);
+		v = globalStore.get().get(name);
 		if (v != null)
 			return v; // v is Optional.empty() if key exists with null value, or Optional.of(value) if present
 
 		// 3. Check sources in reverse order (last added first)
 		for (int i = sources.size() - 1; i >= 0; i--) {
 			var source = sources.get(i);
-			if (source == null)
-				continue; // Skip null sources (defensive check)
 			var result = source.get(name);
-			if (result == null)
-				continue; // Key not in this source, try next source
-			// If result is Optional.empty(), it means key exists with null value, so return it
-			// If result is present, return it
-			return result;
+			if (result != null)
+				return result;
 		}
 
-		return Optional.empty();
+		return opte();
 	}
 
 	/**
@@ -357,12 +467,14 @@ public class Settings {
 	 *
 	 * @param name The property name.
 	 * @param value The override value, or <c>null</c> to set an empty override.
+	 * @return This object for method chaining.
 	 * @see #unsetGlobal(String)
 	 * @see #clearGlobal()
 	 */
-	public void setGlobal(String name, String value) {
-		assertArg(! DISABLE_GLOBAL, "Global settings have been disabled via ''{0}''", DISABLE_GLOBAL_PROP);
-		globalOverrides.set(name, value);
+	public Settings setGlobal(String name, String value) {
+		assertArgNotNull("name", name);
+		globalStore.orElseThrow(()->illegalState(MSG_globalDisabled)).set(name, value);
+		return this;
 	}
 
 	/**
@@ -377,8 +489,8 @@ public class Settings {
 	 * @see #clearGlobal()
 	 */
 	public void unsetGlobal(String name) {
-		assertArg(! DISABLE_GLOBAL, "Global settings have been disabled via ''{0}''", DISABLE_GLOBAL_PROP);
-		globalOverrides.unset(name);
+		assertArgNotNull("name", name);
+		globalStore.orElseThrow(()->illegalState(MSG_globalDisabled)).unset(name);
 	}
 
 	/**
@@ -395,16 +507,15 @@ public class Settings {
 	 *
 	 * @param name The property name.
 	 * @param value The override value, or <c>null</c> to set an empty override.
+	 * @return This object for method chaining.
 	 * @see #unsetLocal(String)
 	 * @see #clearLocal()
 	 */
-	public void setLocal(String name, String value) {
-		var localSource = threadOverrides.get();
-		if (localSource == null) {
-			localSource = new MapSource();
-			threadOverrides.set(localSource);
-		}
-		localSource.set(name, value);
+	public Settings setLocal(String name, String value) {
+		assertArgNotNull("name", name);
+		assertState(nn(localStore.get()), MSG_localDisabled);
+		localStore.get().set(name, value);
+		return this;
 	}
 
 	/**
@@ -419,9 +530,9 @@ public class Settings {
 	 * @see #clearLocal()
 	 */
 	public void unsetLocal(String name) {
-		var localSource = threadOverrides.get();
-		if (localSource != null)
-			localSource.unset(name);
+		assertArgNotNull("name", name);
+		assertState(nn(localStore.get()), MSG_localDisabled);
+		localStore.get().unset(name);
 	}
 
 	/**
@@ -435,11 +546,14 @@ public class Settings {
 	 * This is typically called in a <c>@AfterEach</c> or <c>@After</c> test method to clean up
 	 * thread-local overrides after a test completes.
 	 *
+	 * @return This object for method chaining.
 	 * @see #setLocal(String, String)
 	 * @see #unsetLocal(String)
 	 */
-	public void clearLocal() {
-		threadOverrides.remove();
+	public Settings clearLocal() {
+		assertState(nn(localStore.get()), MSG_localDisabled);
+		localStore.get().clear();
+		return this;
 	}
 
 	/**
@@ -449,96 +563,13 @@ public class Settings {
 	 * After calling this method, all properties will fall back to resolver values
 	 * (or per-thread overrides if they exist).
 	 *
+	 * @return This object for method chaining.
 	 * @see #setGlobal(String, String)
 	 * @see #unsetGlobal(String)
 	 */
-	public void clearGlobal() {
-		globalOverrides.clear();
-	}
-
-	/**
-	 * Adds a source to the source list.
-	 *
-	 * <p>
-	 * Sources are checked in reverse order (last added is checked first), after global overrides
-	 * but before the system property source. This allows you to add custom property sources such
-	 * as Spring properties, environment variables, or configuration files.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Add a Spring properties source</jc>
-	 * 	MapSource <jv>springSource</jv> = <jk>new</jk> MapSource();
-	 * 	<jv>springSource</jv>.set(<js>"spring.datasource.url"</js>, <js>"jdbc:postgresql://localhost/db"</js>);
-	 * 	Settings.<jsf>get</jsf>().addSource(<jv>springSource</jv>);
-	 * </p>
-	 *
-	 * @param source The source. Must not be <c>null</c>.
-	 * @return This object for method chaining.
-	 * @see #setSources(SettingSource...)
-	 */
-	public Settings addSource(SettingSource source) {
-		assertArg(! DISABLE_CUSTOM_SOURCES, "Global custom sources have been disabled via ''{0}''", DISABLE_CUSTOM_SOURCES_PROP);
-		assertArgNotNull("source", source);
-		// Add at the end - since we iterate in reverse order, this means it's checked first (before system sources)
-		sources.add(source);
+	public Settings clearGlobal() {
+		globalStore.orElseThrow(()->illegalState(MSG_globalDisabled)).clear();
 		return this;
-	}
-
-	public Settings addSource(FunctionalSource source) {
-		return addSource((SettingSource)source);
-	}
-
-	/**
-	 * Sets the source list, replacing all existing sources.
-	 *
-	 * <p>
-	 * This method clears all existing sources (except the system property and environment variable sources which are always
-	 * present) and adds the specified sources in order. The sources will be checked in reverse
-	 * order (last source in the array is checked first).
-	 *
-	 * <p>
-	 * Note that using this method resets existing sources, so if you want to maintain resolving environment variables
-	 * or system properties, you'll need to add {@link #SYSTEM_ENV_SOURCE} and {@link #SYSTEM_PROPERTIES_SOURCE} to the
-	 * list of sources added to this method.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Set multiple sources</jc>
-	 * 	MapSource <jv>springSource</jv> = <jk>new</jk> MapSource();
-	 * 	MapSource <jv>envSource</jv> = <jk>new</jk> MapSource();
-	 * 	Settings.<jsf>get</jsf>().setSources(<jv>springSource</jv>, <jv>envSource</jv>);
-	 * 	<jc>// Lookup order: local &gt; global &gt; envSource &gt; springSource &gt; system properties &gt; system env vars</jc>
-	 * </p>
-	 *
-	 * <p>
-	 * Note that the order of precedence of the sources is in reverse order.  So sources at the end of the list are
-	 * checked before sources at the beginning of the list.
-	 *
-	 * @param sources The sources to add. Must not be <c>null</c> or contain <c>null</c> elements.
-	 * @return This object for method chaining.
-	 * @see #addSource(SettingSource)
-	 */
-	@SafeVarargs
-	public final Settings setSources(SettingSource...sources) {
-		assertArg(! DISABLE_CUSTOM_SOURCES, "Global custom sources have been disabled via ''{0}''", DISABLE_CUSTOM_SOURCES_PROP);
-		assertVarargsNotNull("sources", sources);
-		// Remove all sources
-		this.sources.clear();
-		// Add new sources
-		for (var source : sources) {
-			this.sources.add(source);
-		}
-		return this;
-	}
-
-	/**
-	 * Resets the sources list to default (only system sources).
-	 * Package-private for testing purposes.
-	 */
-	void resetSources() {
-		this.sources.clear();
-		this.sources.add(SYSTEM_ENV_SOURCE);
-		this.sources.add(SYSTEM_PROPERTY_SOURCE);
 	}
 }
 

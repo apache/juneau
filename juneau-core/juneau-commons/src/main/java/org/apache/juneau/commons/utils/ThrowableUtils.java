@@ -61,7 +61,7 @@ public class ThrowableUtils {
 	 * Shortcut for creating a {@link BeanRuntimeException} with a message and associated class.
 	 *
 	 * <p>
-	 * Same as {@link #bex(Class, String, Object...) bex(Class, String, Object...)} but accepts a {@link ClassInfo} instead of a {@link Class}.
+	 * Same as the {@code bex(Class, String, Object...)} method but accepts a {@link ClassInfo} instead of a {@link Class}.
 	 *
 	 * @param c The class info associated with the exception.
 	 * @param msg The message.
@@ -110,7 +110,7 @@ public class ThrowableUtils {
 	 * Shortcut for creating a {@link BeanRuntimeException} with a cause, message, and associated class.
 	 *
 	 * <p>
-	 * Same as {@link #bex(Throwable, Class, String, Object...)} but accepts a {@link ClassInfo} instead of a {@link Class}.
+	 * Same as the {@code bex(Throwable, Class, String, Object...)} method but accepts a {@link ClassInfo} instead of a {@link Class}.
 	 *
 	 * @param e The cause of the exception.
 	 * @param c The class info associated with the exception.
@@ -331,6 +331,29 @@ public class ThrowableUtils {
 	public static IllegalArgumentException illegalArg(String msg, Object...args) {
 		return new IllegalArgumentException(f(msg, args));
 	}
+
+	/**
+	 * Creates an {@link IllegalStateException} with a formatted message.
+	 *
+	 * <p>
+	 * This is a convenience method for creating state exceptions with formatted messages.
+	 * The message is formatted using {@link #f(String, Object...)}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>throw</jk> <jsm>illegalState</jsm>(<js>"Invalid state: {0}"</js>, <jv>state</jv>);
+	 * </p>
+	 *
+	 * @param msg The message format string.
+	 * @param args The arguments for the message format string.
+	 * @return A new IllegalStateException with the formatted message.
+	 * @see #f(String, Object...)
+	 * @see #illegalArg(String, Object...)
+	 */
+	public static IllegalStateException illegalState(String msg, Object...args) {
+		return new IllegalStateException(f(msg, args));
+	}
+
 
 	/**
 	 * Creates an {@link IllegalArgumentException} wrapping the given throwable.

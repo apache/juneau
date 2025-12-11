@@ -16,16 +16,16 @@
  */
 package org.apache.juneau.commons.settings;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.net.URI;
 import java.nio.charset.Charset;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.function.*;
 import org.junit.jupiter.api.*;
 
 class Settings_Test extends TestBase {
@@ -38,7 +38,6 @@ class Settings_Test extends TestBase {
 		// Clean up before each test
 		Settings.get().clearLocal();
 		Settings.get().clearGlobal();
-		Settings.get().resetSources();
 		// Remove test system properties if they exist
 		System.clearProperty(TEST_PROP);
 		System.clearProperty(TEST_PROP_2);
@@ -59,21 +58,21 @@ class Settings_Test extends TestBase {
 	@Test
 	void a01_get_fromSystemProperty() {
 		System.setProperty(TEST_PROP, "system-value");
-		Optional<String> result = Settings.get().get(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals("system-value", result.get());
 	}
 
 	@Test
 	void a02_get_notFound() {
-		Optional<String> result = Settings.get().get("nonexistent.property");
+		var result = Settings.get().get("nonexistent.property");
 		assertFalse(result.isPresent());
 	}
 
 	@Test
 	void a03_get_fromGlobalOverride() {
 		Settings.get().setGlobal(TEST_PROP, "global-value");
-		Optional<String> result = Settings.get().get(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals("global-value", result.get());
 	}
@@ -81,7 +80,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void a04_get_fromLocalOverride() {
 		Settings.get().setLocal(TEST_PROP, "local-value");
-		Optional<String> result = Settings.get().get(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals("local-value", result.get());
 	}
@@ -91,7 +90,7 @@ class Settings_Test extends TestBase {
 		System.setProperty(TEST_PROP, "system-value");
 		Settings.get().setGlobal(TEST_PROP, "global-value");
 		Settings.get().setLocal(TEST_PROP, "local-value");
-		Optional<String> result = Settings.get().get(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals("local-value", result.get());
 	}
@@ -100,7 +99,7 @@ class Settings_Test extends TestBase {
 	void a06_get_lookupOrder_globalOverridesSystem() {
 		System.setProperty(TEST_PROP, "system-value");
 		Settings.get().setGlobal(TEST_PROP, "global-value");
-		Optional<String> result = Settings.get().get(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals("global-value", result.get());
 	}
@@ -108,7 +107,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void a07_get_nullValue() {
 		Settings.get().setLocal(TEST_PROP, null);
-		Optional<String> result = Settings.get().get(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP);
 		assertFalse(result.isPresent());
 	}
 
@@ -118,7 +117,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void b01_getInteger_valid() {
 		System.setProperty(TEST_PROP, "123");
-		Optional<Integer> result = Settings.get().getInteger(TEST_PROP);
+		var result = Settings.get().getInteger(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals(123, result.get());
 	}
@@ -126,20 +125,20 @@ class Settings_Test extends TestBase {
 	@Test
 	void b02_getInteger_invalid() {
 		System.setProperty(TEST_PROP, "not-a-number");
-		Optional<Integer> result = Settings.get().getInteger(TEST_PROP);
+		var result = Settings.get().getInteger(TEST_PROP);
 		assertFalse(result.isPresent());
 	}
 
 	@Test
 	void b03_getInteger_notFound() {
-		Optional<Integer> result = Settings.get().getInteger("nonexistent.property");
+		var result = Settings.get().getInteger("nonexistent.property");
 		assertFalse(result.isPresent());
 	}
 
 	@Test
 	void b04_getInteger_fromOverride() {
 		Settings.get().setLocal(TEST_PROP, "456");
-		Optional<Integer> result = Settings.get().getInteger(TEST_PROP);
+		var result = Settings.get().getInteger(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals(456, result.get());
 	}
@@ -150,7 +149,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void c01_getLong_valid() {
 		System.setProperty(TEST_PROP, "123456789");
-		Optional<Long> result = Settings.get().getLong(TEST_PROP);
+		var result = Settings.get().getLong(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals(123456789L, result.get());
 	}
@@ -158,14 +157,14 @@ class Settings_Test extends TestBase {
 	@Test
 	void c02_getLong_invalid() {
 		System.setProperty(TEST_PROP, "not-a-number");
-		Optional<Long> result = Settings.get().getLong(TEST_PROP);
+		var result = Settings.get().getLong(TEST_PROP);
 		assertFalse(result.isPresent());
 	}
 
 	@Test
 	void c03_getLong_fromOverride() {
 		Settings.get().setLocal(TEST_PROP, "987654321");
-		Optional<Long> result = Settings.get().getLong(TEST_PROP);
+		var result = Settings.get().getLong(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals(987654321L, result.get());
 	}
@@ -176,7 +175,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void d01_getBoolean_true() {
 		System.setProperty(TEST_PROP, "true");
-		Optional<Boolean> result = Settings.get().getBoolean(TEST_PROP);
+		var result = Settings.get().getBoolean(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertTrue(result.get());
 	}
@@ -184,7 +183,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void d02_getBoolean_false() {
 		System.setProperty(TEST_PROP, "false");
-		Optional<Boolean> result = Settings.get().getBoolean(TEST_PROP);
+		var result = Settings.get().getBoolean(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertFalse(result.get());
 	}
@@ -192,7 +191,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void d03_getBoolean_caseInsensitive() {
 		System.setProperty(TEST_PROP, "TRUE");
-		Optional<Boolean> result = Settings.get().getBoolean(TEST_PROP);
+		var result = Settings.get().getBoolean(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertTrue(result.get());
 	}
@@ -200,14 +199,14 @@ class Settings_Test extends TestBase {
 	@Test
 	void d04_getBoolean_nonTrueValue() {
 		System.setProperty(TEST_PROP, "anything");
-		Optional<Boolean> result = Settings.get().getBoolean(TEST_PROP);
+		var result = Settings.get().getBoolean(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertFalse(result.get());
 	}
 
 	@Test
 	void d05_getBoolean_notFound() {
-		Optional<Boolean> result = Settings.get().getBoolean("nonexistent.property");
+		var result = Settings.get().getBoolean("nonexistent.property");
 		assertFalse(result.isPresent());
 	}
 
@@ -217,7 +216,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void e01_getDouble_valid() {
 		System.setProperty(TEST_PROP, "123.456");
-		Optional<Double> result = Settings.get().getDouble(TEST_PROP);
+		var result = Settings.get().getDouble(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals(123.456, result.get(), 0.0001);
 	}
@@ -225,7 +224,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void e02_getDouble_invalid() {
 		System.setProperty(TEST_PROP, "not-a-number");
-		Optional<Double> result = Settings.get().getDouble(TEST_PROP);
+		var result = Settings.get().getDouble(TEST_PROP);
 		assertFalse(result.isPresent());
 	}
 
@@ -235,7 +234,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void f01_getFloat_valid() {
 		System.setProperty(TEST_PROP, "123.456");
-		Optional<Float> result = Settings.get().getFloat(TEST_PROP);
+		var result = Settings.get().getFloat(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals(123.456f, result.get(), 0.0001f);
 	}
@@ -243,7 +242,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void f02_getFloat_invalid() {
 		System.setProperty(TEST_PROP, "not-a-number");
-		Optional<Float> result = Settings.get().getFloat(TEST_PROP);
+		var result = Settings.get().getFloat(TEST_PROP);
 		assertFalse(result.isPresent());
 	}
 
@@ -253,14 +252,14 @@ class Settings_Test extends TestBase {
 	@Test
 	void g01_getFile_valid() {
 		System.setProperty(TEST_PROP, "/tmp/test.txt");
-		Optional<File> result = Settings.get().getFile(TEST_PROP);
+		var result = Settings.get().getFile(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals(new File("/tmp/test.txt"), result.get());
 	}
 
 	@Test
 	void g02_getFile_notFound() {
-		Optional<File> result = Settings.get().getFile("nonexistent.property");
+		var result = Settings.get().getFile("nonexistent.property");
 		assertFalse(result.isPresent());
 	}
 
@@ -270,7 +269,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void h01_getPath_valid() {
 		System.setProperty(TEST_PROP, "/tmp/test.txt");
-		Optional<Path> result = Settings.get().getPath(TEST_PROP);
+		var result = Settings.get().getPath(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals(Paths.get("/tmp/test.txt"), result.get());
 	}
@@ -280,7 +279,7 @@ class Settings_Test extends TestBase {
 		// Paths.get() can throw exceptions for invalid paths on some systems
 		// This test verifies that invalid paths return empty
 		System.setProperty(TEST_PROP, "\0invalid");
-		Optional<Path> result = Settings.get().getPath(TEST_PROP);
+		var result = Settings.get().getPath(TEST_PROP);
 		// May or may not be empty depending on OS, but should not throw
 		assertNotNull(result);
 	}
@@ -291,7 +290,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void i01_getURI_valid() {
 		System.setProperty(TEST_PROP, "http://example.com/test");
-		Optional<URI> result = Settings.get().getURI(TEST_PROP);
+		var result = Settings.get().getURI(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals(URI.create("http://example.com/test"), result.get());
 	}
@@ -299,7 +298,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void i02_getURI_invalid() {
 		System.setProperty(TEST_PROP, "not a valid uri");
-		Optional<URI> result = Settings.get().getURI(TEST_PROP);
+		var result = Settings.get().getURI(TEST_PROP);
 		assertFalse(result.isPresent());
 	}
 
@@ -309,7 +308,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void j01_getCharset_valid() {
 		System.setProperty(TEST_PROP, "UTF-8");
-		Optional<Charset> result = Settings.get().getCharset(TEST_PROP);
+		var result = Settings.get().getCharset(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals(Charset.forName("UTF-8"), result.get());
 	}
@@ -317,7 +316,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void j02_getCharset_invalid() {
 		System.setProperty(TEST_PROP, "INVALID-CHARSET");
-		Optional<Charset> result = Settings.get().getCharset(TEST_PROP);
+		var result = Settings.get().getCharset(TEST_PROP);
 		assertFalse(result.isPresent());
 	}
 
@@ -327,7 +326,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void k01_setGlobal() {
 		Settings.get().setGlobal(TEST_PROP, "global-value");
-		Optional<String> result = Settings.get().get(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals("global-value", result.get());
 	}
@@ -336,7 +335,7 @@ class Settings_Test extends TestBase {
 	void k02_unsetGlobal() {
 		Settings.get().setGlobal(TEST_PROP, "global-value");
 		Settings.get().unsetGlobal(TEST_PROP);
-		Optional<String> result = Settings.get().get(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP);
 		assertFalse(result.isPresent());
 	}
 
@@ -352,7 +351,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void k04_setGlobal_nullValue() {
 		Settings.get().setGlobal(TEST_PROP, null);
-		Optional<String> result = Settings.get().get(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP);
 		assertFalse(result.isPresent());
 	}
 
@@ -362,7 +361,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void l01_setLocal() {
 		Settings.get().setLocal(TEST_PROP, "local-value");
-		Optional<String> result = Settings.get().get(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals("local-value", result.get());
 	}
@@ -371,7 +370,16 @@ class Settings_Test extends TestBase {
 	void l02_unsetLocal() {
 		Settings.get().setLocal(TEST_PROP, "local-value");
 		Settings.get().unsetLocal(TEST_PROP);
-		Optional<String> result = Settings.get().get(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP);
+		assertFalse(result.isPresent());
+	}
+
+	@Test
+	void l07_unsetLocal_whenNoLocalSource() {
+		// unsetLocal should not throw when there's no local source (threadOverrides.get() returns null)
+		Settings.get().unsetLocal(TEST_PROP);
+		// Should not throw an exception
+		var result = Settings.get().get(TEST_PROP);
 		assertFalse(result.isPresent());
 	}
 
@@ -387,7 +395,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void l04_setLocal_nullValue() {
 		Settings.get().setLocal(TEST_PROP, null);
-		Optional<String> result = Settings.get().get(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP);
 		assertFalse(result.isPresent());
 	}
 
@@ -395,7 +403,7 @@ class Settings_Test extends TestBase {
 	void l05_setLocal_overridesGlobal() {
 		Settings.get().setGlobal(TEST_PROP, "global-value");
 		Settings.get().setLocal(TEST_PROP, "local-value");
-		Optional<String> result = Settings.get().get(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals("local-value", result.get());
 	}
@@ -404,7 +412,7 @@ class Settings_Test extends TestBase {
 	void l06_setLocal_overridesSystemProperty() {
 		System.setProperty(TEST_PROP, "system-value");
 		Settings.get().setLocal(TEST_PROP, "local-value");
-		Optional<String> result = Settings.get().get(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals("local-value", result.get());
 	}
@@ -416,9 +424,9 @@ class Settings_Test extends TestBase {
 	void m01_localOverride_threadIsolation() throws InterruptedException {
 		Settings.get().setLocal(TEST_PROP, "thread1-value");
 
-		Thread thread2 = new Thread(() -> {
+		var thread2 = new Thread(() -> {
 			Settings.get().setLocal(TEST_PROP, "thread2-value");
-			Optional<String> result = Settings.get().get(TEST_PROP);
+			var result = Settings.get().get(TEST_PROP);
 			assertTrue(result.isPresent());
 			assertEquals("thread2-value", result.get());
 		});
@@ -427,7 +435,7 @@ class Settings_Test extends TestBase {
 		thread2.join();
 
 		// Original thread should still have its value
-		Optional<String> result = Settings.get().get(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals("thread1-value", result.get());
 	}
@@ -436,8 +444,8 @@ class Settings_Test extends TestBase {
 	void m02_globalOverride_sharedAcrossThreads() throws InterruptedException {
 		Settings.get().setGlobal(TEST_PROP, "global-value");
 
-		Thread thread2 = new Thread(() -> {
-			Optional<String> result = Settings.get().get(TEST_PROP);
+		var thread2 = new Thread(() -> {
+			var result = Settings.get().get(TEST_PROP);
 			assertTrue(result.isPresent());
 			assertEquals("global-value", result.get());
 		});
@@ -446,7 +454,7 @@ class Settings_Test extends TestBase {
 		thread2.join();
 
 		// Original thread should also see the global value
-		Optional<String> result = Settings.get().get(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals("global-value", result.get());
 	}
@@ -456,8 +464,8 @@ class Settings_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void n01_get_returnsSameInstance() {
-		Settings instance1 = Settings.get();
-		Settings instance2 = Settings.get();
+		var instance1 = Settings.get();
+		var instance2 = Settings.get();
 		assertSame(instance1, instance2);
 	}
 
@@ -466,41 +474,61 @@ class Settings_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void o01_addSource() {
-		MapSource source = new MapSource();
+		var source = new MapStore();
 		source.set(TEST_PROP, "source-value");
-		Settings.get().addSource(source);
+		var settings = Settings.create()
+			.addSource(source)
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.build();
 
-		Optional<String> result = Settings.get().get(TEST_PROP);
+		var result = settings.get(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals("source-value", result.get());
 	}
 
 	@Test
 	void o02_addSource_reverseOrder() {
-		MapSource source1 = new MapSource();
+		var source1 = new MapStore();
 		source1.set(TEST_PROP, "source1-value");
-		Settings.get().addSource(source1);
 
-		MapSource source2 = new MapSource();
+		var source2 = new MapStore();
 		source2.set(TEST_PROP, "source2-value");
-		Settings.get().addSource(source2);
+
+		var settings = Settings.create()
+			.addSource(source1)
+			.addSource(source2)
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.build();
 
 		// Last added source should be checked first
-		Optional<String> result = Settings.get().get(TEST_PROP);
+		var result = settings.get(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals("source2-value", result.get());
 	}
 
 	@Test
 	void o03_addSource_afterGlobalOverride() {
-		Settings.get().setGlobal(TEST_PROP, "global-value");
+		var settings = Settings.create()
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.build();
 
-		MapSource source = new MapSource();
+		settings.setGlobal(TEST_PROP, "global-value");
+
+		var source = new MapStore();
 		source.set(TEST_PROP, "source-value");
-		Settings.get().addSource(source);
+		// Note: Can't add sources after building, so we create a new instance
+		var settingsWithSource = Settings.create()
+			.addSource(source)
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.build();
+		settingsWithSource.setGlobal(TEST_PROP, "global-value");
 
 		// Global override should take precedence
-		Optional<String> result = Settings.get().get(TEST_PROP);
+		var result = settingsWithSource.get(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals("global-value", result.get());
 	}
@@ -509,105 +537,338 @@ class Settings_Test extends TestBase {
 	void o04_addSource_beforeSystemProperty() {
 		System.setProperty(TEST_PROP, "system-value");
 
-		MapSource source = new MapSource();
+		var source = new MapStore();
 		source.set(TEST_PROP, "source-value");
-		Settings.get().addSource(source);
+		// Sources are checked in reverse order, so add system sources first, then custom source
+		var settings = Settings.create()
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(source)
+			.build();
 
-		// Source should take precedence over system property
-		Optional<String> result = Settings.get().get(TEST_PROP);
+		// Source should take precedence over system property (checked first)
+		var result = settings.get(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals("source-value", result.get());
 	}
 
 	@Test
 	void o05_addSource_fallbackToSystemProperty() {
-		MapSource source = new MapSource();
+		var source = new MapStore();
 		// Source doesn't have the property
 
 		System.setProperty(TEST_PROP, "system-value");
-		Settings.get().addSource(source);
+		var settings = Settings.create()
+			.addSource(source)
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.build();
 
 		// Should fall back to system property
-		Optional<String> result = Settings.get().get(TEST_PROP);
+		var result = settings.get(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals("system-value", result.get());
 	}
 
 	@Test
 	void o06_setSources() {
-		MapSource source1 = new MapSource();
+		var source1 = new MapStore();
 		source1.set(TEST_PROP, "source1-value");
 
-		MapSource source2 = new MapSource();
+		var source2 = new MapStore();
 		source2.set(TEST_PROP, "source2-value");
 
-		Settings.get().setSources(source1, source2);
+		var settings = Settings.create()
+			.setSources(source1, source2, Settings.SYSTEM_PROPERTY_SOURCE, Settings.SYSTEM_ENV_SOURCE)
+			.build();
 
 		// Last source in array should be checked first
-		Optional<String> result = Settings.get().get(TEST_PROP);
+		var result = settings.get(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals("source2-value", result.get());
 	}
 
 	@Test
 	void o07_setSources_clearsExisting() {
-		MapSource source1 = new MapSource();
+		var source1 = new MapStore();
 		source1.set(TEST_PROP, "source1-value");
-		Settings.get().addSource(source1);
 
-		MapSource source2 = new MapSource();
+		var source2 = new MapStore();
 		source2.set(TEST_PROP, "source2-value");
-		Settings.get().setSources(source2);
+
+		var settings = Settings.create()
+			.addSource(source1)
+			.setSources(source2, Settings.SYSTEM_PROPERTY_SOURCE, Settings.SYSTEM_ENV_SOURCE)
+			.build();
 
 		// Only source2 should exist now
-		Optional<String> result = Settings.get().get(TEST_PROP);
+		var result = settings.get(TEST_PROP);
 		assertTrue(result.isPresent());
 		assertEquals("source2-value", result.get());
 	}
 
 	@Test
 	void o08_addSource_nullValue() {
-		MapSource source = new MapSource();
+		var source = new MapStore();
 		source.set(TEST_PROP, null);
-		Settings.get().addSource(source);
-
-		// Note that setting a null value on the source overrides the system property.
 		System.setProperty(TEST_PROP, "system-value");
-		Optional<String> result = Settings.get().get(TEST_PROP);
+
+		// Sources are checked in reverse order, so add system sources first, then custom source
+		var settings = Settings.create()
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(source)
+			.build();
+
+		// Note that setting a null value on the source (Optional.empty()) overrides the system property.
+		// When a source returns Optional.empty(), it means the property exists but has a null value.
+		var result = settings.get(TEST_PROP);
 		assertFalse(result.isPresent());
 	}
 
 	@Test
 	void o09_addSource_nullSource() {
 		assertThrows(IllegalArgumentException.class, () -> {
-			Settings.get().addSource(null);
+			Settings.create().addSource(null);
 		});
 	}
 
 	@Test
 	void o10_setSources_nullSource() {
-		MapSource source1 = new MapSource();
+		var source1 = new MapStore();
 		assertThrows(IllegalArgumentException.class, () -> {
-			Settings.get().setSources(source1, null);
+			Settings.create().setSources(source1, null);
 		});
 	}
 
 	@Test
 	void o11_source_springPropertiesExample() {
 		// Simulate Spring properties
-		MapSource springSource = new MapSource();
+		var springSource = new MapStore();
 		springSource.set("spring.datasource.url", "jdbc:postgresql://localhost/db");
 		springSource.set("spring.datasource.username", "admin");
 
-		Settings.get().addSource(springSource);
+		var settings = Settings.create()
+			.addSource(springSource)
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.build();
 
-		Optional<String> url = Settings.get().get("spring.datasource.url");
+		var url = settings.get("spring.datasource.url");
 		assertTrue(url.isPresent());
 		assertEquals("jdbc:postgresql://localhost/db", url.get());
 
-		Optional<String> username = Settings.get().get("spring.datasource.username");
+		var username = settings.get("spring.datasource.username");
 		assertTrue(username.isPresent());
 		assertEquals("admin", username.get());
+	}
+
+	//====================================================================================================
+	// addSource(FunctionalSource) - Functional interface usage
+	//====================================================================================================
+	@Test
+	void p01_addSource_functionalSource() {
+		// Test the addSource(FunctionalSource) overload
+		var source = (FunctionalSource) name -> opt(System.getProperty(name));
+		System.setProperty(TEST_PROP, "system-value");
+		var settings = Settings.create()
+			.addSource(source)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.build();
+		var result = settings.get(TEST_PROP);
+		assertTrue(result.isPresent());
+		assertEquals("system-value", result.get());
+	}
+
+	@Test
+	void p02_addSource_functionalSource_factoryMethod() {
+		// Test addSource with FunctionalSource.of()
+		var source = FunctionalSource.of(System::getProperty);
+		System.setProperty(TEST_PROP, "system-value");
+		var settings = Settings.create()
+			.addSource(source)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.build();
+		var result = settings.get(TEST_PROP);
+		assertTrue(result.isPresent());
+		assertEquals("system-value", result.get());
+	}
+
+	//====================================================================================================
+	// FunctionalStore
+	//====================================================================================================
+	@Test
+	void q01_writeableFunctionalSource_basic() {
+		// Create a writable functional source using system properties
+		var source = FunctionalStore.of(
+			System::getProperty,
+			(k, v) -> System.setProperty(k, v),
+			k -> System.clearProperty(k),
+			() -> { /* No-op clear for system properties */ }
+		);
+
+		// Test set and get
+		source.set(TEST_PROP, "test-value");
+		var result = source.get(TEST_PROP);
+		assertNotNull(result);
+		assertTrue(result.isPresent());
+		assertEquals("test-value", result.get());
+
+		// Test unset
+		source.unset(TEST_PROP);
+		result = source.get(TEST_PROP);
+		assertNull(result); // Should return null when property doesn't exist
+
+		// Clean up
+		System.clearProperty(TEST_PROP);
+	}
+
+	@Test
+	void q02_writeableFunctionalSource_withSettings() {
+		// Create a writable functional source and add it to Settings
+		var source = FunctionalStore.of(
+			System::getProperty,
+			(k, v) -> System.setProperty(k, v),
+			k -> System.clearProperty(k),
+			() -> { /* No-op clear for system properties */ }
+		);
+
+		var settings = Settings.create()
+			.addSource(source)
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.build();
+
+		// Set a value through the source
+		source.set(TEST_PROP, "source-value");
+
+		// Get it through Settings
+		var result = settings.get(TEST_PROP);
+		assertTrue(result.isPresent());
+		assertEquals("source-value", result.get());
+
+		// Clean up
+		source.unset(TEST_PROP);
+		System.clearProperty(TEST_PROP);
+	}
+
+	@Test
+	void q03_writeableFunctionalSource_clear() {
+		// Test clear() functionality with a custom clearer
+		var map = new java.util.HashMap<String, String>();
+		var source = FunctionalStore.of(
+			map::get,
+			map::put,
+			map::remove,
+			map::clear
+		);
+
+		source.set(TEST_PROP, "test-value");
+		source.set(TEST_PROP_2, "test-value-2");
+
+		// Verify values are set
+		var result1 = source.get(TEST_PROP);
+		assertNotNull(result1);
+		assertTrue(result1.isPresent());
+		assertEquals("test-value", result1.get());
+
+		var result2 = source.get(TEST_PROP_2);
+		assertNotNull(result2);
+		assertTrue(result2.isPresent());
+		assertEquals("test-value-2", result2.get());
+
+		// Clear all values
+		source.clear();
+
+		// Verify values are cleared
+		result1 = source.get(TEST_PROP);
+		assertNull(result1);
+
+		result2 = source.get(TEST_PROP_2);
+		assertNull(result2);
+	}
+
+	//====================================================================================================
+	// Builder.localStore() - Coverage for lines 205-206
+	//====================================================================================================
+	@Test
+	void r01_localStore() {
+		// Test that localStore() method can be called on the builder
+		var settings = Settings.create()
+			.localStore(OptionalSupplier.of(() -> new MapStore()))
+			.build();
+		// Verify it works by setting a local value
+		settings.setLocal(TEST_PROP, "test-value");
+		var result = settings.get(TEST_PROP);
+		assertTrue(result.isPresent());
+		assertEquals("test-value", result.get());
+	}
+
+	//====================================================================================================
+	// Global store disabled (null supplier) - Coverage for lines 476, 493, 571
+	//====================================================================================================
+	@Test
+	void s01_setGlobal_whenGlobalStoreDisabled() {
+		// Create Settings with null global store (disabled)
+		var settings = Settings.create()
+			.globalStore(OptionalSupplier.empty())
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.build();
+
+		// setGlobal() should throw IllegalStateException
+		assertThrows(IllegalStateException.class, () -> {
+			settings.setGlobal(TEST_PROP, "value");
+		});
+	}
+
+	@Test
+	void s02_unsetGlobal_whenGlobalStoreDisabled() {
+		// Create Settings with null global store (disabled)
+		var settings = Settings.create()
+			.globalStore(OptionalSupplier.empty())
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.build();
+
+		// unsetGlobal() should throw IllegalStateException
+		assertThrows(IllegalStateException.class, () -> {
+			settings.unsetGlobal(TEST_PROP);
+		});
+	}
+
+	@Test
+	void s03_clearGlobal_whenGlobalStoreDisabled() {
+		// Create Settings with null global store (disabled)
+		var settings = Settings.create()
+			.globalStore(OptionalSupplier.empty())
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.build();
+
+		// clearGlobal() should throw IllegalStateException
+		assertThrows(IllegalStateException.class, () -> {
+			settings.clearGlobal();
+		});
+	}
+
+	//====================================================================================================
+	// MapStore.unset() - Coverage for line 134 (when map is null)
+	//====================================================================================================
+	@Test
+	void t01_mapStore_unset_whenMapNotInitialized() {
+		// Create a fresh MapStore that has never had set() called on it
+		// This means the internal map is still null (lazy initialization)
+		var store = new MapStore();
+
+		// Calling unset() when map is null should not throw and should do nothing
+		// This covers the branch where m == null in line 134
+		store.unset(TEST_PROP);
+
+		// Verify the map is still null (not initialized)
+		// get() should return null since the map doesn't exist
+		var result = store.get(TEST_PROP);
+		assertNull(result);
 	}
 }
 

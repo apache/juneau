@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.settings;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
@@ -24,12 +23,12 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
 /**
- * A writable {@link SettingSource} implementation backed by a thread-safe map.
+ * A writable {@link SettingStore} implementation backed by a thread-safe map.
  *
  * <p>
- * This class provides a mutable source for settings that can be modified at runtime. It's particularly useful
- * for creating custom property sources (e.g., Spring properties, configuration files) that can be added to
- * {@link Settings}.
+ * This class provides a mutable store for settings that can be modified at runtime. It's particularly useful
+ * for creating custom property stores (e.g., Spring properties, configuration files) that can be added to
+ * {@link Settings} as sources.
  *
  * <h5 class='section'>Thread Safety:</h5>
  * <p>
@@ -44,29 +43,29 @@ import java.util.concurrent.atomic.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<jc>// Create a source and add properties</jc>
- * 	MapSource <jv>source</jv> = <jk>new</jk> MapSource();
- * 	<jv>source</jv>.set(<js>"my.property"</js>, <js>"value"</js>);
- * 	<jv>source</jv>.set(<js>"another.property"</js>, <js>"another-value"</js>);
+ * 	<jc>// Create a store and add properties</jc>
+ * 	MapStore <jv>store</jv> = <jk>new</jk> MapStore();
+ * 	<jv>store</jv>.set(<js>"my.property"</js>, <js>"value"</js>);
+ * 	<jv>store</jv>.set(<js>"another.property"</js>, <js>"another-value"</js>);
  *
- * 	<jc>// Add to Settings</jc>
- * 	Settings.<jsf>get</jsf>().addSource(<jv>source</jv>);
+ * 	<jc>// Add to Settings as a source (stores can be used as sources)</jc>
+ * 	Settings.<jsf>get</jsf>().addSource(<jv>store</jv>);
  *
  * 	<jc>// Override a system property with null</jc>
- * 	<jv>source</jv>.set(<js>"system.property"</js>, <jk>null</jk>);
+ * 	<jv>store</jv>.set(<js>"system.property"</js>, <jk>null</jk>);
  * 	<jc>// get() will now return Optional.empty() for "system.property"</jc>
  *
  * 	<jc>// Remove a property entirely</jc>
- * 	<jv>source</jv>.unset(<js>"my.property"</js>);
+ * 	<jv>store</jv>.unset(<js>"my.property"</js>);
  * 	<jc>// get() will now return null for "my.property"</jc>
  * </p>
  */
-public class MapSource implements SettingSource {
+public class MapStore implements SettingStore {
 
 	private final AtomicReference<Map<String,Optional<String>>> map = new AtomicReference<>();
 
 	/**
-	 * Returns a setting from this source.
+	 * Returns a setting from this store.
 	 *
 	 * <p>
 	 * Returns <c>null</c> if the key doesn't exist in the map, or the stored value (which may be
@@ -80,15 +79,12 @@ public class MapSource implements SettingSource {
 	public Optional<String> get(String key) {
 		var m = map.get();
 		if (m == null)
-			return null; // Key not in source (map doesn't exist)
-		if (! m.containsKey(key))
-			return null; // Key not in source (key doesn't exist in map)
-		// Key exists in map - return the value (which may be Optional.empty() if value was set to null)
+			return null;
 		return m.get(key);
 	}
 
 	/**
-	 * Sets a setting in this source.
+	 * Sets a setting in this store.
 	 *
 	 * <p>
 	 * The internal map is lazily initialized on the first call to this method. Setting a value to <c>null</c>
@@ -100,17 +96,16 @@ public class MapSource implements SettingSource {
 	 */
 	@Override
 	public void set(String key, String value) {
-		assertWriteable("Attempting to set a value on a read-only map source.");
 		var m = map.get();
 		if (m == null) {
 			var newMap = new ConcurrentHashMap<String,Optional<String>>();
-			m = map.compareAndSet(null, newMap) ? newMap : map.get();
+			m = map.compareAndSet(null, newMap) ? newMap : map.get();  // Not easily testable.
 		}
 		m.put(key, opt(value));
 	}
 
 	/**
-	 * Clears all entries from this source.
+	 * Clears all entries from this store.
 	 *
 	 * <p>
 	 * After calling this method, all keys will be removed from the map, and {@link #get(String)} will return
@@ -118,37 +113,26 @@ public class MapSource implements SettingSource {
 	 */
 	@Override
 	public void clear() {
-		assertWriteable("Attempting to update a read-only map source.");
 		var m = map.get();
 		if (m != null)
 			m.clear();
 	}
 
 	/**
-	 * Removes a setting from this source.
+	 * Removes a setting from this store.
 	 *
 	 * <p>
 	 * After calling this method, {@link #get(String)} will return <c>null</c> for the specified key,
-	 * indicating that the key doesn't exist in this source (as opposed to returning <c>Optional.empty()</c>,
+	 * indicating that the key doesn't exist in this store (as opposed to returning <c>Optional.empty()</c>,
 	 * which would indicate the key exists but has a null value).
 	 *
 	 * @param name The property name to remove.
 	 */
 	@Override
 	public void unset(String name) {
-		assertWriteable("Attempting to unset a value on a read-only map source.");
 		var m = map.get();
 		if (m != null)
 			m.remove(name);
-	}
-
-	@Override
-	public boolean isWriteable() {
-		return true;
-	}
-
-	private void assertWriteable(String msg, Object...args) {
-		assertArg(isWriteable(), msg, args);
 	}
 
 }

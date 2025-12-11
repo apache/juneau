@@ -79,6 +79,24 @@ public class AssertionUtils {
 	}
 
 	/**
+	 * Asserts that the given expression is <c>true</c>, throwing an {@link IllegalStateException} if it's not.
+	 *
+	 * <p>
+	 * This method is similar to {@link #assertArg(boolean, String, Object...)} but throws an
+	 * {@link IllegalStateException} instead of an {@link IllegalArgumentException}, making it suitable
+	 * for state validation rather than argument validation.
+	 *
+	 * @param expression The expression to test.
+	 * @param msg The error message format string.
+	 * @param args The arguments for the error message format string.
+	 * @throws IllegalStateException if the expression is <c>false</c>.
+	 */
+	public static final void assertState(boolean expression, String msg, Object...args) throws IllegalStateException {
+		if (! expression)
+			throw illegalState(msg, args);
+	}
+
+	/**
 	 * Throws an {@link IllegalArgumentException} if the specified argument is <jk>null</jk>.
 	 *
 	 * <h5 class='section'>Example:</h5>

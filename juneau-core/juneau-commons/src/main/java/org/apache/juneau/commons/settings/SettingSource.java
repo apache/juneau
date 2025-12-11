@@ -22,8 +22,11 @@ import java.util.*;
  * Interface for pluggable property sources used by {@link Settings}.
  *
  * <p>
- * A setting source provides a way to retrieve and optionally modify property values.
+ * A setting source provides a way to retrieve property values.
  * Sources are checked in reverse order (last added is checked first) when looking up properties.
+ *
+ * <p>
+ * For writable sources that support modifying property values, see {@link SettingStore}.
  *
  * <h5 class='section'>Return Value Semantics:</h5>
  * <ul class='spaced-list'>
@@ -35,12 +38,16 @@ import java.util.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bjava'>
- * 	<jc>// Create a writable source</jc>
- * 	MapSource <jv>source</jv> = <jk>new</jk> MapSource();
- * 	<jv>source</jv>.set(<js>"my.property"</js>, <js>"value"</js>);
+ * 	<jc>// Create a read-only functional source directly from a lambda</jc>
+ * 	FunctionalSource <jv>readOnly</jv> = name -&gt; opt(System.getProperty(name));
  *
- * 	<jc>// Create a read-only source from a function</jc>
- * 	FunctionalSource <jv>readOnly</jv> = <jk>new</jk> FunctionalSource(x -&gt; System.getProperty(x));
+ * 	<jc>// Or use the factory method</jc>
+ * 	FunctionalSource <jv>readOnly2</jv> = FunctionalSource.<jsf>of</jsf>(System::getProperty);
+ *
+ * 	<jc>// Stores can be used as sources (they extend SettingSource)</jc>
+ * 	MapStore <jv>store</jv> = <jk>new</jk> MapStore();
+ * 	<jv>store</jv>.set(<js>"my.property"</js>, <js>"value"</js>);
+ * 	Settings.<jsf>get</jsf>().addSource(<jv>store</jv>);  <jc>// Stores can be added as sources</jc>
  * </p>
  */
 public interface SettingSource {
@@ -62,58 +69,4 @@ public interface SettingSource {
 	 * 	if the property exists but has a null value.
 	 */
 	Optional<String> get(String name);
-
-	/**
-	 * Returns whether this source is writable.
-	 *
-	 * <p>
-	 * If <c>false</c>, all write operations ({@link #set(String, String)}, {@link #unset(String)}, {@link #clear()})
-	 * should be no-ops.
-	 *
-	 * @return <c>true</c> if this source is writable, <c>false</c> otherwise.
-	 */
-	boolean isWriteable();
-
-	/**
-	 * Sets a setting in this setting source.
-	 *
-	 * <p>
-	 * Should be a no-op if the source is not writable (i.e., {@link #assertWriteable()} returns <c>false</c>).
-	 *
-	 * <p>
-	 * Setting a value to <c>null</c> means that {@link #get(String)} will return <c>Optional.empty()</c> for that key,
-	 * effectively overriding any values from lower-priority sources. Use {@link #unset(String)} if you want
-	 * {@link #get(String)} to return <c>null</c> (indicating the key doesn't exist in this source).
-	 *
-	 * @param name The property name.
-	 * @param value The property value, or <c>null</c> to set an empty override.
-	 */
-	void set(String name, String value);
-
-	/**
-	 * Removes a setting from this setting source.
-	 *
-	 * <p>
-	 * Should be a no-op if the source is not writable (i.e., {@link #assertWriteable()} returns <c>false</c>).
-	 *
-	 * <p>
-	 * After calling this method, {@link #get(String)} will return <c>null</c> for the specified key,
-	 * indicating that the key doesn't exist in this source (as opposed to returning <c>Optional.empty()</c>,
-	 * which would indicate the key exists but has a null value).
-	 *
-	 * @param name The property name to remove.
-	 */
-	void unset(String name);
-
-	/**
-	 * Clears all settings from this setting source.
-	 *
-	 * <p>
-	 * Should be a no-op if the source is not writable (i.e., {@link #assertWriteable()} returns <c>false</c>).
-	 *
-	 * <p>
-	 * After calling this method, all keys will be removed from this source, and {@link #get(String)} will
-	 * return <c>null</c> for all keys.
-	 */
-	void clear();
 }
