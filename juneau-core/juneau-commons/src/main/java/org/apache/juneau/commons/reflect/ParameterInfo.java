@@ -475,13 +475,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (obj instanceof ParameterInfo other)
-			return inner.equals(other.inner);
-		return false;
+		return obj instanceof ParameterInfo other && eq(this, other, (x, y) -> eq(x.inner, y.inner));
 	}
 
 	/**

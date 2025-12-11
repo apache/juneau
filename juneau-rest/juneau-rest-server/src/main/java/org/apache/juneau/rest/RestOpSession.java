@@ -189,10 +189,10 @@ public class RestOpSession extends ContextSession {
 	 * @throws Throwable Any throwable can be thrown.
 	 */
 	public void run() throws Throwable {
-
-		for (var guard : ctx.getGuards())
+		for (var guard : ctx.getGuards()) {
 			if (! guard.guard(req, res))
 				return;
+		}
 
 		ctx.getMethodInvoker().invoke(this);
 

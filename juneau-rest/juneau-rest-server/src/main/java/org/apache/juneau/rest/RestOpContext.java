@@ -1681,7 +1681,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			beanStore
 				.createMethodFinder(RestGuardList.class)
 				.addBean(RestGuardList.Builder.class, v.get())
-				.find(this::matches)
+				.find(m -> this.matches(m))
 				.run(x -> v.get().impl(x));
 			// @formatter:on
 
@@ -2292,7 +2292,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return (o instanceof RestOpContext o2) && eq(this, o2, (x, y) -> x.method.equals(y.method));
+		return (o instanceof RestOpContext o2) && eq(this, o2, (x, y) -> eq(x.method, y.method));
 	}
 
 	/**

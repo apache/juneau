@@ -555,22 +555,17 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @param obj The object to compare with.
 	 * @return <jk>true</jk> if the objects are equal, <jk>false</jk> otherwise.
 	 */
-//	@Override
-//	public boolean equals(Object obj) {
-//		if (this == obj)
-//			return true;
-//		if (obj == null)
-//			return false;
-//		if (obj instanceof MethodInfo other)
-//			return inner.equals(other.inner);
-//		return false;
-//	}
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof MethodInfo other && eq(this, other, (x, y) -> eq(x.inner, y.inner) && eq(x.declaringClass, y.declaringClass));
+	}
 
 	/**
 	 * Returns a hash code value for this MethodInfo.
 	 *
 	 * <p>
-	 * This delegates to the underlying {@link Method#hashCode()} method.
+	 * This combines the hash code of the underlying {@link Method} with the hash code of the declaring class
+	 * to ensure that methods from different subclasses that inherit the same method are not considered equal.
 	 *
 	 * <p>
 	 * This method makes MethodInfo suitable for use as keys in hash-based collections such as {@link HashMap}
@@ -580,7 +575,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	@Override
 	public int hashCode() {
-		return inner.hashCode();
+		return 31 * inner.hashCode() + declaringClass.hashCode();
 	}
 
 	/**

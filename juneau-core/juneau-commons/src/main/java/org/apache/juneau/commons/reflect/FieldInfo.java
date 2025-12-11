@@ -314,13 +314,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (obj instanceof FieldInfo other)
-			return inner.equals(other.inner);
-		return false;
+		return obj instanceof FieldInfo other && eq(this, other, (x, y) -> eq(x.inner, y.inner));
 	}
 
 	/**

@@ -192,13 +192,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (obj instanceof ConstructorInfo other)
-			return inner.equals(other.inner);
-		return false;
+		return obj instanceof ConstructorInfo other && eq(this, other, (x, y) -> eq(x.inner, y.inner));
 	}
 
 	/**
