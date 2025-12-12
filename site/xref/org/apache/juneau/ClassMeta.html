@@ -1282,7 +1282,7 @@
 <a class="jxr_linenumber" name="L1274" href="#L1274">1274</a> 		<strong class="jxr_keyword">var</strong> ci = info(c);
 <a class="jxr_linenumber" name="L1275" href="#L1275">1275</a> 
 <a class="jxr_linenumber" name="L1276" href="#L1276">1276</a> 		<strong class="jxr_keyword">if</strong> (ci.isChildOf(ObjectSwap.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> 			<strong class="jxr_keyword">var</strong> ps = BeanCreator.of(ObjectSwap.<strong class="jxr_keyword">class</strong>).type(c).run();
+<a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> 			<strong class="jxr_keyword">var</strong> ps = BeanCreator.of(ObjectSwap.<strong class="jxr_keyword">class</strong>).type(ci).run();
 <a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> 			<strong class="jxr_keyword">if</strong> (s.mediaTypes().length &gt; 0)
 <a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> 				ps.forMediaTypes(MediaType.ofAll(s.mediaTypes()));
 <a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> 			<strong class="jxr_keyword">if</strong> (! s.template().isEmpty())
