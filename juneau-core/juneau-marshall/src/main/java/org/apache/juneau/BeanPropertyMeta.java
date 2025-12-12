@@ -741,6 +741,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			result.addAll(ap.find(getter, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE));
 		if (nn(setter))
 			result.addAll(ap.find(setter, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE));
+		if (nn(extraKeys))
+			result.addAll(ap.find(extraKeys, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE));
 		return u(result);
 	}
 
@@ -777,22 +779,19 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	public <A extends Annotation> List<A> getAllAnnotationsParentFirst(Class<A> a) {
 		var l = new LinkedList<A>();
 		var ap = bc.getAnnotationProvider();
-		var fi = field;
-		var gi = getter;
-		var si = setter;
 		if (a == null)
 			return l;
 		rstream(ap.find(a, getBeanMeta().getClassMeta())).forEach(x -> l.add(x.inner()));
 		if (nn(field)) {
-			ap.find(a, fi).forEach(x -> l.add(x.inner()));
+			ap.find(a, field).forEach(x -> l.add(x.inner()));
 			rstream(ap.find(a, field.getFieldType())).forEach(x -> l.add(x.inner()));
 		}
-		if (nn(gi)) {
-			ap.find(a, gi, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
-			rstream(ap.find(a, gi.getReturnType())).forEach(x -> l.add(x.inner()));
+		if (nn(getter)) {
+			ap.find(a, getter, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
+			rstream(ap.find(a, getter.getReturnType())).forEach(x -> l.add(x.inner()));
 		}
 		if (nn(setter)) {
-			ap.find(a, si, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
+			ap.find(a, setter, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
 			rstream(ap.find(a, setter.getReturnType())).forEach(x -> l.add(x.inner()));
 		}
 		if (nn(extraKeys)) {
