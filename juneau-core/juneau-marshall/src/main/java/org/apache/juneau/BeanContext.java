@@ -3713,24 +3713,31 @@ public class BeanContext extends Context {
 	 * 	The class to resolve.
 	 * @param type
 	 * 	The class to resolve.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link ClassInfo}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * @param args
 	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link ClassInfo}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The resolved class meta.
 	 */
 	public final <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
 		if (type == null)
 			return null;
-		ClassMeta<T> cm = type instanceof Class type2 ? getClassMeta(type2) : resolveClassMeta(type, null);
+		var cm = (ClassMeta<T>)null;
+		if (type instanceof Class type2)
+			cm = getClassMeta(type2);
+		else
+			cm = resolveClassMeta(type, null);
 		if (args.length == 0)
 			return cm;
-		ClassMeta<?>[] cma = new ClassMeta[args.length + 1];
+		var cma = new ClassMeta<?>[args.length + 1];
 		cma[0] = cm;
-		for (var i = 0; i < Array.getLength(args); i++) {
+		for (var i = 0; i < length(args); i++) {
 			var arg = (Type)Array.get(args, i);
-			cma[i + 1] = arg instanceof Class arg2 ? getClassMeta(arg2) : resolveClassMeta(arg, null);
+			if (arg instanceof Class arg2)
+				cma[i + 1] = getClassMeta(arg2);
+			else
+				cma[i + 1] = resolveClassMeta(arg, null);
 		}
 		return (ClassMeta<T>)getTypedClassMeta(cma, 0);
 	}

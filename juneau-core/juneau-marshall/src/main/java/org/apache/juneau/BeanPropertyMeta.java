@@ -140,13 +140,15 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			return this;
 		}
 
-		private static ObjectSwap getPropertySwap(Beanp p) {
+		private static ObjectSwap beanpSwap(AnnotationInfo<Beanp> ai) {
+			var p = ai.inner();
 			if (! p.format().isEmpty())
 				return BeanCreator.of(ObjectSwap.class).type(StringFormatSwap.class).arg(String.class, p.format()).run();
 			return null;
 		}
 
-		private static ObjectSwap getPropertySwap(Swap s) throws RuntimeException {
+		private static ObjectSwap swapSwap(AnnotationInfo<Swap> ai) throws RuntimeException {
+			var s = ai.inner();
 			var c = s.value();
 			if (isVoid(c))
 				c = s.impl();
@@ -297,7 +299,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				lp.forEach(x -> {
 					var beanp = x.inner();
 					if (swap == null)
-						swap = getPropertySwap(beanp);
+						swap = beanpSwap(x);
 					if (isNotEmpty(beanp.properties()))
 						properties = split(beanp.properties());
 					bdClasses.addAll(l(beanp.dictionary()));
@@ -306,7 +308,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					if (isNotEmpty(beanp.wo()))
 						writeOnly = b(beanp.wo());
 				});
-				ap.find(Swap.class, ifi).stream().map(AnnotationInfo::inner).findFirst().ifPresent(x -> swap = getPropertySwap(x));
+				ap.find(Swap.class, ifi).stream().findFirst().ifPresent(x -> swap = swapSwap(x));
 				isUri |= ap.has(Uri.class, ifi);
 			}
 
@@ -318,7 +320,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				lp.forEach(x -> {
 					var beanp = x.inner();
 					if (swap == null)
-						swap = getPropertySwap(beanp);
+						swap = beanpSwap(x);
 					if (nn(properties) && isNotEmpty(beanp.properties()))
 						properties = split(beanp.properties());
 					bdClasses.addAll(l(beanp.dictionary()));
@@ -327,7 +329,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					if (isNotEmpty(beanp.wo()))
 						writeOnly = b(beanp.wo());
 				});
-				ap.find(Swap.class, gi).stream().map(AnnotationInfo::inner).forEach(x -> swap = getPropertySwap(x));
+				ap.find(Swap.class, gi).stream().forEach(x -> swap = swapSwap(x));
 			}
 
 			if (nn(setter)) {
@@ -338,7 +340,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				lp.forEach(x -> {
 					var beanp = x.inner();
 					if (swap == null)
-						swap = getPropertySwap(beanp);
+						swap = beanpSwap(x);
 					if (nn(properties) && isNotEmpty(beanp.properties()))
 						properties = split(beanp.properties());
 					bdClasses.addAll(l(beanp.dictionary()));
@@ -347,7 +349,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					if (isNotEmpty(beanp.wo()))
 						writeOnly = b(beanp.wo());
 				});
-				ap.find(Swap.class, si).stream().map(AnnotationInfo::inner).forEach(x -> swap = getPropertySwap(x));
+				ap.find(Swap.class, si).stream().forEach(x -> swap = swapSwap(x));
 			}
 
 			if (rawTypeMeta == null)
@@ -406,7 +408,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				return false;
 
 			if (typeMeta == null)
-				typeMeta = (nn(swap) ? bc.getClassMeta(swap.getSwapClass().innerType()) : rawTypeMeta == null ? bc.object() : rawTypeMeta);
+				typeMeta = (nn(swap) ? bc.getClassMeta(swap.getSwapClass()) : rawTypeMeta == null ? bc.object() : rawTypeMeta);
 			if (typeMeta == null)
 				typeMeta = rawTypeMeta;
 
