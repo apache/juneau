@@ -32,6 +32,8 @@ Release Notes - Juneau - Version 9.2.0
     * Bump node-forge from 1.3.1 to 1.3.2 in /juneau-docs #283, fixes CVE-2025-12816.
     * Bump mdast-util-to-hast from 13.2.0 to 13.2.1 in /juneau-docs #286, fixes Dependabot alerts #17 mdast-util-to-hast has unsanitized class attribute.
     * Bump org.apache.maven.plugins:maven-shade-plugin from 3.5.1 to 3.6.1 #284.
+    * Bump express from 4.21.2 to 4.22.1 in /juneau-docs #287
+      Security fix for CVE-2024-51999 (GHSA-pj86-cfqh-vqx6).
 
 ** New Features - Multi-Key Cache and Concurrent Map Classes
 
