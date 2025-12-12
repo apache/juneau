@@ -207,12 +207,12 @@ public class Cache2<K1,K2,V> {
 		 * total cache hits, and total cache misses (size of cache) to help analyze cache effectiveness.
 		 *
 		 * @param value Whether to enable logging on exit.
-		 * @param id The identifier to use in the log message.
+		 * @param idValue The identifier to use in the log message.
 		 * @return This object for method chaining.
 		 */
-		public Builder<K1,K2,V> logOnExit(boolean value, String id) {
-			this.id = id;
-			this.logOnExit = value;
+		public Builder<K1,K2,V> logOnExit(boolean value, String idValue) {
+			id = idValue;
+			logOnExit = value;
 			return this;
 		}
 
@@ -237,12 +237,12 @@ public class Cache2<K1,K2,V> {
 		 * 	<li>Monitoring cache efficiency in production
 		 * </ul>
 		 *
-		 * @param id The identifier to use in the log message.
+		 * @param value The identifier to use in the log message.
 		 * @return This object for method chaining.
 		 */
-		public Builder<K1,K2,V> logOnExit(String id) {
-			this.id = id;
-			this.logOnExit = true;
+		public Builder<K1,K2,V> logOnExit(String value) {
+			id = value;
+			logOnExit = true;
 			return this;
 		}
 
