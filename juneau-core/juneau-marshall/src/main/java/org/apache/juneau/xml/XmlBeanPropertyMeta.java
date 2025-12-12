@@ -53,7 +53,7 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		super(bpm);
 		this.xmlMetaProvider = mp;
 
-		bpm.forEachAnnotation(Xml.class, x -> true, x -> findXmlInfo(x, bpm.getClassMeta().getBeanContext().getAnnotationProvider()));
+		bpm.getAnnotations(Xml.class).forEach(x -> findXmlInfo(x.inner(), bpm.getClassMeta().getBeanContext().getAnnotationProvider()));
 
 		if (namespace == null)
 			namespace = mp.getXmlClassMeta(bpm.getBeanMeta().getClassMeta()).getNamespace();

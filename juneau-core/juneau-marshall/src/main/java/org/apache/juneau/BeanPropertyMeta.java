@@ -30,6 +30,7 @@ import java.lang.reflect.*;
 import java.net.*;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
@@ -432,30 +433,31 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		return new Builder(beanMeta, name);
 	}
 
-	private final AnnotationProvider ap;                   // Annotation provider for finding annotations on this property.
-	private final BeanContext bc;                          // The context that created this meta.
-	private final BeanMeta<?> beanMeta;                    // The bean that this property belongs to.
-	private final BeanRegistry beanRegistry;               // Bean registry for resolving bean types in this property.
-	private final boolean canRead;                         // True if this property can be read.
-	private final boolean canWrite;                        // True if this property can be written.
-	private final BeanPropertyMeta delegateFor;            // The bean property that this meta is a delegate for.
-	private final MethodInfo extraKeys;                    // The bean property extraKeys method.
-	private final FieldInfo field;                         // The bean property field (if it has one).
-	private final MethodInfo getter;                       // The bean property getter.
-	private final int hashCode;                            // Cached hash code for this property meta.
-	private final FieldInfo innerField;                    // The bean property field even if private (if it has one).
-	private final boolean isDyna;                          // True if this is a dyna property (i.e. name="*").
-	private final boolean isDynaGetterMap;                 // True if this is a dyna property where the getter returns a Map directly.
-	private final boolean isUri;                           // True if this is a URL/URI or annotated with @URI.
-	private final String name;                             // The name of the property.
-	private final Object overrideValue;                    // The bean property value (if it's an overridden delegate).
-	private final List<String> properties;                 // The value of the @Beanp(properties) annotation (unmodifiable).
-	private final ClassMeta<?> rawTypeMeta;                // The real class type of the bean property.
-	private final boolean readOnly;                        // True if this property is read-only.
-	private final MethodInfo setter;                       // The bean property setter.
-	private final ObjectSwap swap;                         // ObjectSwap defined only via @Beanp annotation.
-	private final ClassMeta<?> typeMeta;                   // The transformed class type of the bean property.
-	private final boolean writeOnly;                       // True if this property is write-only.
+	private final AnnotationProvider ap;                                                                        // Annotation provider for finding annotations on this property.
+	private final Supplier<List<AnnotationInfo<?>>> annotations;                                      // Memoized list of all annotations on this property.
+	private final BeanContext bc;                                                                               // The context that created this meta.
+	private final BeanMeta<?> beanMeta;                                                                         // The bean that this property belongs to.
+	private final BeanRegistry beanRegistry;                                                                    // Bean registry for resolving bean types in this property.
+	private final boolean canRead;                                                                              // True if this property can be read.
+	private final boolean canWrite;                                                                             // True if this property can be written.
+	private final BeanPropertyMeta delegateFor;                                                                 // The bean property that this meta is a delegate for.
+	private final MethodInfo extraKeys;                                                                         // The bean property extraKeys method.
+	private final FieldInfo field;                                                                              // The bean property field (if it has one).
+	private final MethodInfo getter;                                                                            // The bean property getter.
+	private final int hashCode;                                                                                 // Cached hash code for this property meta.
+	private final FieldInfo innerField;                                                                         // The bean property field even if private (if it has one).
+	private final boolean isDyna;                                                                               // True if this is a dyna property (i.e. name="*").
+	private final boolean isDynaGetterMap;                                                                      // True if this is a dyna property where the getter returns a Map directly.
+	private final boolean isUri;                                                                                // True if this is a URL/URI or annotated with @URI.
+	private final String name;                                                                                  // The name of the property.
+	private final Object overrideValue;                                                                         // The bean property value (if it's an overridden delegate).
+	private final List<String> properties;                                                                      // The value of the @Beanp(properties) annotation (unmodifiable).
+	private final ClassMeta<?> rawTypeMeta;                                                                     // The real class type of the bean property.
+	private final boolean readOnly;                                                                             // True if this property is read-only.
+	private final MethodInfo setter;                                                                            // The bean property setter.
+	private final ObjectSwap swap;                                                                              // ObjectSwap defined only via @Beanp annotation.
+	private final ClassMeta<?> typeMeta;                                                                        // The transformed class type of the bean property.
+	private final boolean writeOnly;                                                                            // True if this property is write-only.
 
 	/**
 	 * Creates a new BeanPropertyMeta using the contents of the specified builder.
@@ -463,6 +465,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @param b The builder to copy fields from.
 	 */
 	protected BeanPropertyMeta(Builder b) {
+		annotations = memoize(() -> findAnnotations());
 		bc = b.bc;
 		beanMeta = b.beanMeta;
 		beanRegistry = b.beanRegistry;
@@ -485,6 +488,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		swap = b.swap;
 		typeMeta = b.typeMeta;
 		writeOnly = b.writeOnly;
+
 		ap = bc.getAnnotationProvider();
 		hashCode = hash(beanMeta, name);
 	}
@@ -609,10 +613,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 		var bean = m.getBean(true);
 
-		var elementType = rawTypeMeta.getElementType();
-
 		try {
-			var v = session.convertToType(value, elementType);
+			var v = session.convertToType(value, rawTypeMeta.getElementType());
 
 			if (isMap) {
 				var map = (Map)invokeGetter(bean, pName);
@@ -636,15 +638,13 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				var b = invokeGetter(bean, pName);
 
 				if (nn(b)) {
-					var bm = session.toBeanMap(b);
-					bm.put(key, v);
+					session.toBeanMap(b).put(key, v);
 					return;
 				}
 
 				if (rawTypeMeta.canCreateNewInstance(m.getBean(false))) {
 					b = rawTypeMeta.newInstance();
-					var bm = session.toBeanMap(b);
-					bm.put(key, v);
+					session.toBeanMap(b).put(key, v);
 				}
 
 				invokeSetter(bean, pName, b);
@@ -686,24 +686,62 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	}
 
 	/**
-	 * Performs an action on all matching instances of the specified annotation on the getter/setter/field of the property.
+	 * Returns all annotations on this property (field, getter, and setter).
 	 *
-	 * @param <A> The class to find annotations for.
-	 * @param a The class to find annotations for.
-	 * @param filter The filter to apply to the annotation.
-	 * @param action The action to perform against the annotation.
-	 * @return A list of annotations ordered in child-to-parent order.  Never <jk>null</jk>.
+	 * <p>
+	 * The annotations are found on:
+	 * <ul>
+	 * 	<li>The field (if present)
+	 * 	<li>The getter method (if present) - including annotations on the method, its return type, and package
+	 * 	<li>The setter method (if present) - including annotations on the method, its return type, and package
+	 * </ul>
+	 *
+	 * <p>
+	 * The result is memoized and computed only once.
+	 *
+	 * @return A list of all annotation infos on this property. Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> BeanPropertyMeta forEachAnnotation(Class<A> a, Predicate<A> filter, Consumer<A> action) {
-		if (nn(a)) {
-			if (nn(field))
-				ap.find(a, field).stream().map(AnnotationInfo::inner).filter(filter).forEach(action);
-			if (nn(getter))
-				ap.find(a, getter, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).stream().map(AnnotationInfo::inner).filter(filter).forEach(action);
-			if (nn(setter))
-				ap.find(a, setter, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).stream().map(AnnotationInfo::inner).filter(filter).forEach(action);
-		}
-		return this;
+	public List<AnnotationInfo> getAnnotations() {
+		return (List)annotations.get();
+	}
+
+	/**
+	 * Returns a stream of annotations of the specified type on this property.
+	 *
+	 * <p>
+	 * The annotations are found on:
+	 * <ul>
+	 * 	<li>The field (if present)
+	 * 	<li>The getter method (if present) - including annotations on the method, its return type, and package
+	 * 	<li>The setter method (if present) - including annotations on the method, its return type, and package
+	 * </ul>
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param a The annotation class to find.
+	 * @return A stream of annotation infos of the specified type. Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> a) {
+		if (a == null)
+			return Stream.empty();
+		return annotations.get().stream()
+			.filter(x -> x.isType(a))
+			.map(x -> (AnnotationInfo<A>)x);
+	}
+
+	/**
+	 * Helper method to find all annotations on this property.
+	 *
+	 * @return A list of all annotation infos found on the field, getter, and setter.
+	 */
+	private List<AnnotationInfo<?>> findAnnotations() {
+		var result = new ArrayList<AnnotationInfo<?>>();
+		if (nn(field))
+			result.addAll(ap.find(field));
+		if (nn(getter))
+			result.addAll(ap.find(getter, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE));
+		if (nn(setter))
+			result.addAll(ap.find(setter, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE));
+		return u(result);
 	}
 
 	/**
