@@ -756,13 +756,12 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @param a The class to find annotations for.
 	 * @return A list of annotations ordered in parent-to-child order.  Never <jk>null</jk>.
 	 */
-	@SuppressWarnings("null")
 	public <A extends Annotation> List<A> getAllAnnotationsParentFirst(Class<A> a) {
 		var l = new LinkedList<A>();
 		var ap = bc.getAnnotationProvider();
 		var fi = field;
 		var gi = getter;
-		var si = setter == null ? null : info(setter);
+		var si = setter;
 		if (a == null)
 			return l;
 		rstream(ap.find(a, getBeanMeta().getClassMeta())).forEach(x -> l.add(x.inner()));
@@ -771,27 +770,15 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			rstream(ap.find(a, field.getFieldType())).forEach(x -> l.add(x.inner()));
 		}
 		if (nn(gi)) {
-			// Walk up the inheritance hierarchy for the getter method
-			forEachParentMethod(getter.inner(), parentGetter -> {
-				ap.find(a, info(parentGetter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
-			});
 			ap.find(a, gi, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
 			rstream(ap.find(a, gi.getReturnType())).forEach(x -> l.add(x.inner()));
 		}
 		if (nn(setter)) {
-			// Walk up the inheritance hierarchy for the setter method
-			forEachParentMethod(setter.inner(), parentSetter -> {
-				ap.find(a, info(parentSetter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
-			});
 			ap.find(a, si, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
 			rstream(ap.find(a, setter.getReturnType())).forEach(x -> l.add(x.inner()));
 		}
 		if (nn(extraKeys)) {
 			var eki = extraKeys;
-			// Walk up the inheritance hierarchy for the extraKeys method
-			forEachParentMethod(extraKeys.inner(), parentExtraKeys -> {
-				ap.find(a, info(parentExtraKeys), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
-			});
 			ap.find(a, eki, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
 			rstream(ap.find(a, extraKeys.getReturnType())).forEach(x -> l.add(x.inner()));
 		}
@@ -1024,54 +1011,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		return o;
 	}
 
-	/**
-	 * Walks up the class hierarchy to find parent methods that match the signature of the given method.
-	 * Executes the consumer for each parent method found, starting from the topmost parent down to
-	 * the immediate parent (but not including the method itself).
-	 *
-	 * @param method The method to find parents for.
-	 * @param consumer The action to perform for each parent method.
-	 */
-	private static void forEachParentMethod(Method method, Consumer<Method> consumer) {
-		// TODO - Convert to use MethodInfo parameters
-		if (method == null)
-			return;
-
-		var methodName = method.getName();
-		var paramTypes = method.getParameterTypes();
-		var declaringClass = method.getDeclaringClass();
-
-		// Collect parent methods in a list (we'll reverse it to get parent-to-child order)
-		var parentMethods = new LinkedList<Method>();
-
-		// Walk up the class hierarchy
-		var currentClass = declaringClass.getSuperclass();
-		while (nn(currentClass) && currentClass != Object.class) {
-			try {
-				var parentMethod = currentClass.getDeclaredMethod(methodName, paramTypes);
-				parentMethods.add(parentMethod);
-			} catch (@SuppressWarnings("unused") NoSuchMethodException e) {
-				// No matching method in this parent class, continue up the hierarchy
-			}
-			currentClass = currentClass.getSuperclass();
-		}
-
-		// Also check interfaces
-		for (var iface : declaringClass.getInterfaces()) {
-			try {
-				var ifaceMethod = iface.getDeclaredMethod(methodName, paramTypes);
-				parentMethods.add(ifaceMethod);
-			} catch (@SuppressWarnings("unused") NoSuchMethodException e) {
-				// No matching method in this interface
-			}
-		}
-
-		// Process in reverse order (parent-to-child) to match the "ParentFirst" semantics
-		for (var i = parentMethods.size() - 1; i >= 0; i--) {
-			consumer.accept(parentMethods.get(i));
-		}
-	}
-
 	private Object getInner(BeanMap<?> m, String pName) {
 		try {
 
@@ -1098,7 +1037,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 	}
 
-	private Object invokeGetter(Object bean, String pName) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+	private Object invokeGetter(Object bean, String pName) throws IllegalArgumentException {
 		if (isDyna) {
 			var m = (Map)null;
 			if (nn(getter)) {
@@ -1118,7 +1057,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		throw bex(beanMeta.getClassMeta(), "Getter or public field not defined on property ''{0}''", name);
 	}
 
-	private Object invokeSetter(Object bean, String pName, Object val) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+	private Object invokeSetter(Object bean, String pName, Object val) throws IllegalArgumentException {
 		if (isDyna) {
 			if (nn(setter))
 				return setter.invoke(bean, pName, val);
