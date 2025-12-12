@@ -232,7 +232,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type {
 		this.fullName = memoize(() -> getNameFormatted(FULL, true, '$', BRACKETS));
 		this.shortName = memoize(() -> getNameFormatted(SHORT, true, '$', BRACKETS));
 		this.readableName = memoize(() -> getNameFormatted(SIMPLE, false, '$', WORD));
-		this.declaredInterfaces = memoize(() -> opt(inner).map(x -> stream(x.getInterfaces()).map(ClassInfo::of).map(ClassInfo.class::cast).toList()).orElse(liste()));
+		this.declaredInterfaces = memoize(() -> opt(inner).map(x -> stream(x.getGenericInterfaces()).map(ClassInfo::of).map(ClassInfo.class::cast).toList()).orElse(liste()));
 		this.interfaces = memoize(() -> getParents().stream().flatMap(x -> x.getDeclaredInterfaces().stream()).flatMap(ci2 -> concat(Stream.of(ci2), ci2.getInterfaces().stream())).distinct().toList());
 		this.allParents = memoize(() -> concat(getParents().stream(), getInterfaces().stream()).toList());
 		this.parentsAndInterfaces = memoize(this::findParentsAndInterfaces);

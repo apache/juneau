@@ -4208,25 +4208,26 @@ public class BeanContext extends Context {
 	 * Used for determining the class type on a method or field where a {@code @Beanp} annotation may be present.
 	 *
 	 * @param <T> The class type we're wrapping.
-	 * @param p The property annotation on the type if there is one.
-	 * @param t The type.
+	 * @param p The property annotation info on the type if there is one.
+	 * @param ci The class info for the type.
 	 * @param typeVarImpls
 	 * 	Contains known resolved type parameters on the specified class so that we can result
 	 * 	{@code ParameterizedTypes} and {@code TypeVariables}.
 	 * 	Can be <jk>null</jk> if the information is not known.
-	 * @return The new {@code ClassMeta} object wrapped around the {@code Type} object.
+	 * @return The new {@code ClassMeta} object wrapped around the type.
 	 */
-	protected final <T> ClassMeta<T> resolveClassMeta(Beanp p, Type t, Map<Class<?>,Class<?>[]> typeVarImpls) {
-		ClassMeta<T> cm = resolveClassMeta(t, typeVarImpls);
+	protected final <T> ClassMeta<T> resolveClassMeta(AnnotationInfo<Beanp> p, ClassInfo ci, Map<Class<?>,Class<?>[]> typeVarImpls) {
+		ClassMeta<T> cm = resolveClassMeta(ci, typeVarImpls);
 		ClassMeta<T> cm2 = cm;
 
 		if (nn(p)) {
+			var beanp = p.inner();
 
-			if (isNotVoid(p.type()))
-				cm2 = resolveClassMeta(p.type(), typeVarImpls);
+			if (isNotVoid(beanp.type()))
+				cm2 = resolveClassMeta(beanp.type(), typeVarImpls);
 
 			if (cm2.isMap()) {
-				Class<?>[] pParams = (p.params().length == 0 ? a(Object.class, Object.class) : p.params());
+				Class<?>[] pParams = (beanp.params().length == 0 ? a(Object.class, Object.class) : beanp.params());
 				if (pParams.length != 2)
 					throw rex("Invalid number of parameters specified for Map (must be 2): {0}", pParams.length);
 				ClassMeta<?> keyType = resolveType(pParams[0], cm2.getKeyType(), cm.getKeyType());
@@ -4237,7 +4238,7 @@ public class BeanContext extends Context {
 			}
 
 			if (cm2.isCollection() || cm2.isOptional()) {
-				Class<?>[] pParams = (p.params().length == 0 ? a(Object.class) : p.params());
+				Class<?>[] pParams = (beanp.params().length == 0 ? a(Object.class) : beanp.params());
 				if (pParams.length != 1)
 					throw rex("Invalid number of parameters specified for {1} (must be 1): {0}", pParams.length, (cm2.isCollection() ? "Collection" : cm2.isOptional() ? "Optional" : "Array"));
 				ClassMeta<?> elementType = resolveType(pParams[0], cm2.getElementType(), cm.getElementType());
@@ -4406,6 +4407,11 @@ public class BeanContext extends Context {
 			if (cm.isCollection() || cm.isOptional())
 				return getClassMeta(cm.inner(), cm.getElementType());
 			return getClassMeta(cm.inner());
+		}
+
+		// Handle ClassInfo by extracting the underlying Type
+		if (o instanceof ClassInfo ci) {
+			return resolveClassMeta(ci.innerType(), typeVarImpls);
 		}
 
 		Class c = resolve(o, typeVarImpls);
