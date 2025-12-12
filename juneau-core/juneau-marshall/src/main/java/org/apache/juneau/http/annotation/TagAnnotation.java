@@ -64,7 +64,7 @@ public class TagAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -75,7 +75,7 @@ public class TagAnnotation {
 		 * @return This object.
 		 */
 		public Builder externalDocs(ExternalDocs value) {
-			this.externalDocs = value;
+			externalDocs = value;
 			return this;
 		}
 
@@ -86,7 +86,7 @@ public class TagAnnotation {
 		 * @return This object.
 		 */
 		public Builder name(String value) {
-			this.name = value;
+			name = value;
 			return this;
 		}
 

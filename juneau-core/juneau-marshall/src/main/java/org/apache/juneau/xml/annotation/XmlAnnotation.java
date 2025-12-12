@@ -112,7 +112,7 @@ public class XmlAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -123,7 +123,7 @@ public class XmlAnnotation {
 		 * @return This object.
 		 */
 		public Builder childName(String value) {
-			this.childName = value;
+			childName = value;
 			return this;
 		}
 
@@ -134,7 +134,7 @@ public class XmlAnnotation {
 		 * @return This object.
 		 */
 		public Builder format(XmlFormat value) {
-			this.format = value;
+			format = value;
 			return this;
 		}
 
@@ -145,7 +145,7 @@ public class XmlAnnotation {
 		 * @return This object.
 		 */
 		public Builder namespace(String value) {
-			this.namespace = value;
+			namespace = value;
 			return this;
 		}
 
@@ -156,7 +156,7 @@ public class XmlAnnotation {
 		 * @return This object.
 		 */
 		public Builder prefix(String value) {
-			this.prefix = value;
+			prefix = value;
 			return this;
 		}
 

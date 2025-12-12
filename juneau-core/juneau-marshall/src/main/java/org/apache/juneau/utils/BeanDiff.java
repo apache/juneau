@@ -71,7 +71,7 @@ public class BeanDiff {
 		 * @return This object.
 		 */
 		public Builder<T> beanContext(BeanContext value) {
-			this.beanContext = value;
+			beanContext = value;
 			return this;
 		}
 
@@ -113,7 +113,7 @@ public class BeanDiff {
 		 * @return This object.
 		 */
 		public Builder<T> first(T value) {
-			this.first = value;
+			first = value;
 			return this;
 		}
 
@@ -152,7 +152,7 @@ public class BeanDiff {
 		 * @return This object.
 		 */
 		public Builder<T> second(T value) {
-			this.second = value;
+			second = value;
 			return this;
 		}
 	}

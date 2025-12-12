@@ -98,7 +98,7 @@ public class BeanBuilder<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public BeanBuilder<T> impl(Object value) {
-		this.impl = (T)value;
+		impl = (T)value;
 		return this;
 	}
 

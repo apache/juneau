@@ -329,7 +329,7 @@ public class MapBuilder<K,V> {
 			|| (isArray(x) && Array.getLength(x) == 0)
 			|| (x instanceof Map x2 && x2.isEmpty())
 			|| (x instanceof Collection x3 && x3.isEmpty())
-		));
+			));
 		// @formatter:on
 	}
 
@@ -390,7 +390,7 @@ public class MapBuilder<K,V> {
 	 * @return This object.
 	 */
 	public MapBuilder<K,V> sparse() {
-		this.sparse = true;
+		sparse = true;
 		return this;
 	}
 
@@ -414,7 +414,7 @@ public class MapBuilder<K,V> {
 	 * @return This object.
 	 */
 	public MapBuilder<K,V> unmodifiable() {
-		this.unmodifiable = true;
+		unmodifiable = true;
 		return this;
 	}
 

@@ -222,7 +222,7 @@ public class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder example(String value) {
-			this.example = value;
+			example = value;
 			return this;
 		}
 
@@ -264,7 +264,7 @@ public class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder excludeProperties(String...value) {
-			this.excludeProperties = set();
+			excludeProperties = set();
 			for (var v : value)
 				split(v, x -> excludeProperties.add(x));
 			return this;
@@ -303,7 +303,7 @@ public class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder findFluentSetters() {
-			this.fluentSetters = true;
+			fluentSetters = true;
 			return this;
 		}
 
@@ -314,7 +314,7 @@ public class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder implClass(Class<?> value) {
-			this.implClass = value == null ? null : info(value);
+			implClass = value == null ? null : info(value);
 			return this;
 		}
 
@@ -328,7 +328,7 @@ public class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder implClass(ClassInfo value) {
-			this.implClass = value;
+			implClass = value;
 			return this;
 		}
 
@@ -366,7 +366,7 @@ public class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder interceptor(Class<?> value) {
-			this.interceptor.type(value);
+			interceptor.type(value);
 			return this;
 		}
 
@@ -388,7 +388,7 @@ public class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder interceptor(ClassInfo value) {
-			this.interceptor.type(value);
+			interceptor.type(value);
 			return this;
 		}
 
@@ -443,7 +443,7 @@ public class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder interfaceClass(Class<?> value) {
-			this.interfaceClass = value == null ? null : info(value);
+			interfaceClass = value == null ? null : info(value);
 			return this;
 		}
 
@@ -457,7 +457,7 @@ public class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder interfaceClass(ClassInfo value) {
-			this.interfaceClass = value;
+			interfaceClass = value;
 			return this;
 		}
 
@@ -499,7 +499,7 @@ public class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder properties(String...value) {
-			this.properties = set();
+			properties = set();
 			for (var v : value)
 				split(v, x -> properties.add(x));
 			return this;
@@ -544,7 +544,7 @@ public class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder propertyNamer(Class<? extends PropertyNamer> value) {
-			this.propertyNamer.type(value);
+			propertyNamer.type(value);
 			return this;
 		}
 
@@ -567,7 +567,7 @@ public class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder propertyNamer(ClassInfoTyped<? extends PropertyNamer> value) {
-			this.propertyNamer.type(value);
+			propertyNamer.type(value);
 			return this;
 		}
 
@@ -611,7 +611,7 @@ public class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder readOnlyProperties(String...value) {
-			this.readOnlyProperties = set();
+			readOnlyProperties = set();
 			for (var v : value)
 				split(v, x -> readOnlyProperties.add(x));
 			return this;
@@ -631,7 +631,7 @@ public class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder sortProperties() {
-			this.sortProperties = true;
+			sortProperties = true;
 			return this;
 		}
 
@@ -672,7 +672,7 @@ public class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder sortProperties(boolean value) {
-			this.sortProperties = value;
+			sortProperties = value;
 			return this;
 		}
 
@@ -729,7 +729,7 @@ public class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder stopClass(Class<?> value) {
-			this.stopClass = value == null ? null : info(value);
+			stopClass = value == null ? null : info(value);
 			return this;
 		}
 
@@ -743,7 +743,7 @@ public class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder stopClass(ClassInfo value) {
-			this.stopClass = value;
+			stopClass = value;
 			return this;
 		}
 
@@ -780,7 +780,7 @@ public class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder typeName(String value) {
-			this.typeName = value;
+			typeName = value;
 			return this;
 		}
 
@@ -824,7 +824,7 @@ public class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder writeOnlyProperties(String...value) {
-			this.writeOnlyProperties = set();
+			writeOnlyProperties = set();
 			for (var v : value)
 				split(v, x -> writeOnlyProperties.add(x));
 			return this;

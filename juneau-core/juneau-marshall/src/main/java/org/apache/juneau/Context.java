@@ -495,7 +495,7 @@ public abstract class Context {
 		 * @return This object.
 		 */
 		public Builder cache(Cache<HashKey,? extends Context> value) {
-			this.cache = value;
+			cache = value;
 			return this;
 		}
 
@@ -639,18 +639,18 @@ public abstract class Context {
 		 * @return This object.
 		 */
 		public Builder type(Class<? extends Context> value) {
-			this.type = value;
+			type = value;
 			return this;
 		}
 
 		private ConstructorInfo getContextConstructor() {
 			var cci = CONTEXT_CONSTRUCTORS.get(type);
 			if (cci == null) {
-			// @formatter:off
-			cci = info(type).getPublicConstructor(
-				x -> x.hasNumParameters(1)
+				// @formatter:off
+				cci = info(type).getPublicConstructor(
+					x -> x.hasNumParameters(1)
 					&& x.getParameter(0).canAccept(this)
-				).orElseThrow(() -> rex("Public constructor not found: {0}({1})", cn(type), cn(this)));
+					).orElseThrow(() -> rex("Public constructor not found: {0}({1})", cn(type), cn(this)));
 				// @formatter:on
 				CONTEXT_CONSTRUCTORS.put(type, cci);
 			}
@@ -734,7 +734,7 @@ public abstract class Context {
 							&& x.isNotDeprecated()
 							&& x.hasName("create")
 							&& x.hasReturnType(ci.getParameter(0).getParameterType())
-						).orElse(null);
+							).orElse(null);
 						// @formatter:on
 						if (nn(mi))
 							break;

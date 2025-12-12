@@ -111,7 +111,7 @@ public class UrlEncodingAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -122,7 +122,7 @@ public class UrlEncodingAnnotation {
 		 * @return This object.
 		 */
 		public Builder expandedParams(boolean value) {
-			this.expandedParams = value;
+			expandedParams = value;
 			return this;
 		}
 

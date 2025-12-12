@@ -316,7 +316,7 @@ public class ListBuilder<E> {
 	 * @return This object.
 	 */
 	public ListBuilder<E> elementType(Class<E> value) {
-		this.elementType = assertArgNotNull("value", value);
+		elementType = assertArgNotNull("value", value);
 		return this;
 	}
 
@@ -350,7 +350,7 @@ public class ListBuilder<E> {
 	 * @return This object.
 	 */
 	public ListBuilder<E> sparse() {
-		this.sparse = true;
+		sparse = true;
 		return this;
 	}
 

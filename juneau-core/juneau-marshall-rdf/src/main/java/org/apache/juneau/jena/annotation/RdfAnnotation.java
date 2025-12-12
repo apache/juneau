@@ -101,7 +101,7 @@ public class RdfAnnotation {
 		 * @return This object.
 		 */
 		public Builder collectionFormat(RdfCollectionFormat value) {
-			this.collectionFormat = value;
+			collectionFormat = value;
 			return this;
 		}
 
@@ -141,7 +141,7 @@ public class RdfAnnotation {
 		 * @return This object.
 		 */
 		public Builder prefix(String value) {
-			this.prefix = value;
+			prefix = value;
 			return this;
 		}
 
@@ -156,7 +156,7 @@ public class RdfAnnotation {
 			super.onClass(value);
 			return this;
 		}
-	
+
 		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
 		public Builder on(ClassInfo...value) {
 			super.on(value);

@@ -111,7 +111,7 @@ public class SwapAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -122,7 +122,7 @@ public class SwapAnnotation {
 		 * @return This object.
 		 */
 		public Builder impl(Class<?> value) {
-			this.impl = value;
+			impl = value;
 			return this;
 		}
 
@@ -133,7 +133,7 @@ public class SwapAnnotation {
 		 * @return This object.
 		 */
 		public Builder mediaTypes(String...value) {
-			this.mediaTypes = value;
+			mediaTypes = value;
 			return this;
 		}
 
@@ -144,7 +144,7 @@ public class SwapAnnotation {
 		 * @return This object.
 		 */
 		public Builder template(String value) {
-			this.template = value;
+			template = value;
 			return this;
 		}
 

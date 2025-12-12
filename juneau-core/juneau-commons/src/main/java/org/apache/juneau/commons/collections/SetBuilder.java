@@ -319,7 +319,7 @@ public class SetBuilder<E> {
 	 * @return This object.
 	 */
 	public SetBuilder<E> elementType(Class<E> value) {
-		this.elementType = assertArgNotNull("value", value);
+		elementType = assertArgNotNull("value", value);
 		return this;
 	}
 
@@ -353,7 +353,7 @@ public class SetBuilder<E> {
 	 * @return This object.
 	 */
 	public SetBuilder<E> sparse() {
-		this.sparse = true;
+		sparse = true;
 		return this;
 	}
 
@@ -377,7 +377,7 @@ public class SetBuilder<E> {
 	 * @return This object.
 	 */
 	public SetBuilder<E> unmodifiable() {
-		this.unmodifiable = true;
+		unmodifiable = true;
 		return this;
 	}
 }
