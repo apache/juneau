@@ -136,24 +136,24 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">		 * total cache hits, and total cache misses (size of cache) to help analyze cache effectiveness.</em>
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">		 * @param value Whether to enable logging on exit.</em>
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">		 * @param id The identifier to use in the log message.</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">		 * @param idValue The identifier to use in the log message.</em>
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">		 * @return This object for method chaining.</em>
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">public</strong> Builder&lt;K1,K2,K3,K4,K5,V&gt; logOnExit(<strong class="jxr_keyword">boolean</strong> value, String id) {
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<strong class="jxr_keyword">this</strong>.id = id;
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			<strong class="jxr_keyword">this</strong>.logOnExit = value;
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">public</strong> Builder&lt;K1,K2,K3,K4,K5,V&gt; logOnExit(<strong class="jxr_keyword">boolean</strong> value, String idValue) {
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			id = idValue;
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			logOnExit = value;
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 		}
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">		 * Enables logging of cache statistics when the JVM exits.</em>
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">		 * @param id The identifier to use in the log message.</em>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">		 * @param value The identifier to use in the log message.</em>
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">		 * @return This object for method chaining.</em>
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">public</strong> Builder&lt;K1,K2,K3,K4,K5,V&gt; logOnExit(String id) {
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			<strong class="jxr_keyword">this</strong>.id = id;
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 			<strong class="jxr_keyword">this</strong>.logOnExit = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">public</strong> Builder&lt;K1,K2,K3,K4,K5,V&gt; logOnExit(String value) {
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			id = value;
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 			logOnExit = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 		}
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 
@@ -345,7 +345,7 @@
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> <em class="jxr_javadoccomment">	 * @param key5 Fifth key component. Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">	 * @return The cached or computed value. May be &lt;jk&gt;null&lt;/jk&gt; if the supplier returns &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">	 * @throws NullPointerException if no default supplier was configured.</em>
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">	 * </em>
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 	<strong class="jxr_keyword">public</strong> V get(K1 key1, K2 key2, K3 key3, K4 key4, K5 key5) {
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">return</strong> get(key1, key2, key3, key4, key5, () -&gt; supplier.apply(key1, key2, key3, key4, key5));
@@ -361,7 +361,7 @@
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> <em class="jxr_javadoccomment">	 * @param key5 Fifth key component. Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> <em class="jxr_javadoccomment">	 * @param supplier The supplier to compute the value if it's not in the cache. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> <em class="jxr_javadoccomment">	 * @return The cached or computed value. May be &lt;jk&gt;null&lt;/jk&gt; if the supplier returns &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> <em class="jxr_javadoccomment">	 * </em>
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 	<strong class="jxr_keyword">public</strong> V get(K1 key1, K2 key2, K3 key3, K4 key4, K5 key5, java.util.function.Supplier&lt;V&gt; supplier) {
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 		assertArgNotNull(<span class="jxr_string">"supplier"</span>, supplier);
@@ -408,7 +408,7 @@
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">	 * @param key5 The fifth key.</em>
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 * @param value The value to associate with the five-part key.</em>
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">	 * @return The previous value associated with the five-part key, or &lt;jk&gt;null&lt;/jk&gt; if there was no mapping.</em>
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 * </em>
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 	<strong class="jxr_keyword">public</strong> V put(K1 key1, K2 key2, K3 key3, K4 key4, K5 key5, V value) {
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">var</strong> m = getMap();
@@ -426,7 +426,7 @@
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> <em class="jxr_javadoccomment">	 * @param key4 The fourth key.</em>
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">	 * @param key5 The fifth key.</em>
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 * @return The previous value associated with the five-part key, or &lt;jk&gt;null&lt;/jk&gt; if there was no mapping.</em>
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">	 * </em>
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 	<strong class="jxr_keyword">public</strong> V remove(K1 key1, K2 key2, K3 key3, K4 key4, K5 key5) {
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">return</strong> getMap().remove(Tuple5.of(key1, key2, key3, key4, key5));
