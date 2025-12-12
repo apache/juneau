@@ -327,7 +327,7 @@
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 	<strong class="jxr_keyword">public</strong> SetBuilder&lt;E&gt; elementType(Class&lt;E&gt; value) {
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<strong class="jxr_keyword">this</strong>.elementType = assertArgNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		elementType = assertArgNotNull(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 	}
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 
@@ -361,7 +361,7 @@
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 	<strong class="jxr_keyword">public</strong> SetBuilder&lt;E&gt; sparse() {
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<strong class="jxr_keyword">this</strong>.sparse = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		sparse = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 	}
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 
@@ -385,7 +385,7 @@
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 	<strong class="jxr_keyword">public</strong> SetBuilder&lt;E&gt; unmodifiable() {
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		<strong class="jxr_keyword">this</strong>.unmodifiable = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		unmodifiable = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 	}
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> }

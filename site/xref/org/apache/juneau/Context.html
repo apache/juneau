@@ -503,7 +503,7 @@
 <a class="jxr_linenumber" name="L495" href="#L495">495</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L496" href="#L496">496</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L497" href="#L497">497</a> 		<strong class="jxr_keyword">public</strong> Builder cache(Cache&lt;HashKey,? <strong class="jxr_keyword">extends</strong> Context&gt; value) {
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> 			<strong class="jxr_keyword">this</strong>.cache = value;
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 			cache = value;
 <a class="jxr_linenumber" name="L499" href="#L499">499</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L500" href="#L500">500</a> 		}
 <a class="jxr_linenumber" name="L501" href="#L501">501</a> 
@@ -647,18 +647,18 @@
 <a class="jxr_linenumber" name="L639" href="#L639">639</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L640" href="#L640">640</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L641" href="#L641">641</a> 		<strong class="jxr_keyword">public</strong> Builder type(Class&lt;? <strong class="jxr_keyword">extends</strong> Context&gt; value) {
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 			<strong class="jxr_keyword">this</strong>.type = value;
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 			type = value;
 <a class="jxr_linenumber" name="L643" href="#L643">643</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L644" href="#L644">644</a> 		}
 <a class="jxr_linenumber" name="L645" href="#L645">645</a> 
 <a class="jxr_linenumber" name="L646" href="#L646">646</a> 		<strong class="jxr_keyword">private</strong> <a name="ConstructorInfo" href="../../../org/apache/juneau/commons/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> getContextConstructor() {
 <a class="jxr_linenumber" name="L647" href="#L647">647</a> 			<strong class="jxr_keyword">var</strong> cci = CONTEXT_CONSTRUCTORS.get(type);
 <a class="jxr_linenumber" name="L648" href="#L648">648</a> 			<strong class="jxr_keyword">if</strong> (cci == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 			<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 			cci = info(type).getPublicConstructor(
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 				x -&gt; x.hasNumParameters(1)
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 				<em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 				cci = info(type).getPublicConstructor(
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 					x -&gt; x.hasNumParameters(1)
 <a class="jxr_linenumber" name="L652" href="#L652">652</a> 					&amp;&amp; x.getParameter(0).canAccept(<strong class="jxr_keyword">this</strong>)
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 				).orElseThrow(() -&gt; rex(<span class="jxr_string">"Public constructor not found: {0}({1})"</span>, cn(type), cn(<strong class="jxr_keyword">this</strong>)));
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 					).orElseThrow(() -&gt; rex(<span class="jxr_string">"Public constructor not found: {0}({1})"</span>, cn(type), cn(<strong class="jxr_keyword">this</strong>)));
 <a class="jxr_linenumber" name="L654" href="#L654">654</a> 				<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> 				CONTEXT_CONSTRUCTORS.put(type, cci);
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 			}
@@ -742,7 +742,7 @@
 <a class="jxr_linenumber" name="L734" href="#L734">734</a> 							&amp;&amp; x.isNotDeprecated()
 <a class="jxr_linenumber" name="L735" href="#L735">735</a> 							&amp;&amp; x.hasName(<span class="jxr_string">"create"</span>)
 <a class="jxr_linenumber" name="L736" href="#L736">736</a> 							&amp;&amp; x.hasReturnType(ci.getParameter(0).getParameterType())
-<a class="jxr_linenumber" name="L737" href="#L737">737</a> 						).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> 							).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L738" href="#L738">738</a> 						<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L739" href="#L739">739</a> 						<strong class="jxr_keyword">if</strong> (nn(mi))
 <a class="jxr_linenumber" name="L740" href="#L740">740</a> 							<strong class="jxr_keyword">break</strong>;
