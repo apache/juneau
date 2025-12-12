@@ -1208,7 +1208,7 @@
 <a class="jxr_linenumber" name="L1200" href="#L1200">1200</a> 				<strong class="jxr_keyword">var</strong> fc = swap.getSwapClass();
 <a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> 				<strong class="jxr_keyword">if</strong> (nc.isParentOf(tc) &amp;&amp; fc.isParentOf(value.getClass()))
 <a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> 					<strong class="jxr_keyword">return</strong> (T)swap.unswap(<strong class="jxr_keyword">this</strong>, value, to);
-<a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> 				<strong class="jxr_keyword">var</strong> fcm = getClassMeta(fc.<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> 				<strong class="jxr_keyword">var</strong> fcm = getClassMeta(fc);
 <a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> 				<strong class="jxr_keyword">if</strong> (fcm.isNumber() &amp;&amp; value instanceof Number value2) {
 <a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> 					value = convertToMemberType(<strong class="jxr_keyword">null</strong>, value2, fc.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L1206" href="#L1206">1206</a> 					<strong class="jxr_keyword">return</strong> (T)swap.unswap(<strong class="jxr_keyword">this</strong>, value, to);
