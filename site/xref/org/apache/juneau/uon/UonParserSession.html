@@ -355,7 +355,7 @@
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 				<strong class="jxr_keyword">var</strong> s = parseString(r, isUrlParamValue);
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 				<strong class="jxr_keyword">if</strong> (c != '\'') {
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 					<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"true"</span>.equals(s) || <span class="jxr_string">"false"</span>.equals(s))
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 						o = Boolean.valueOf(s);
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 						o = b(s);
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 					<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (! <span class="jxr_string">"null"</span>.equals(s)) {
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 						<strong class="jxr_keyword">if</strong> (isNumeric(s))
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 							o = StringUtils.parseNumber(s, Number.<strong class="jxr_keyword">class</strong>);

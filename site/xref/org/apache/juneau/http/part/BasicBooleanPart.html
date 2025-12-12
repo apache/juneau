@@ -96,7 +96,7 @@
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<strong class="jxr_keyword">public</strong> <a name="BasicBooleanPart" href="../../../../../org/apache/juneau/http/part/BasicBooleanPart.html#BasicBooleanPart">BasicBooleanPart</a>(String name, String value) {
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">super</strong>(name, value);
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">this</strong>.value = isEmpty(value) ? <strong class="jxr_keyword">null</strong> : Boolean.valueOf(value);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">this</strong>.value = isEmpty(value) ? <strong class="jxr_keyword">null</strong> : b(value);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">this</strong>.supplier = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  	}
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  

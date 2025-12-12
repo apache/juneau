@@ -130,7 +130,7 @@
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicBooleanHeader" href="../../../../../org/apache/juneau/http/header/BasicBooleanHeader.html#BasicBooleanHeader">BasicBooleanHeader</a>(String name, String value) {
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">super</strong>(name, value);
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">this</strong>.value = isEmpty(value) ? <strong class="jxr_keyword">null</strong> : Boolean.valueOf(value);
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">this</strong>.value = isEmpty(value) ? <strong class="jxr_keyword">null</strong> : b(value);
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">this</strong>.supplier = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 	}
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 
