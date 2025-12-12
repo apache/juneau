@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.text.*;
@@ -182,7 +183,7 @@ public class BeanTraverseSession extends BeanSession {
 		if (isDetectRecursions() || isDebug()) {
 			set = new IdentityHashMap<>();
 		} else {
-			set = Collections.emptyMap();
+			set = mape();
 		}
 	}
 

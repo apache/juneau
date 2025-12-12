@@ -830,7 +830,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				return (Map)field.get(bean);
 			throw bex(beanMeta.getClassMeta(), "Getter or public field not defined on property ''{0}''", name);
 		}
-		return Collections.EMPTY_MAP;
+		return mape();
 	}
 
 	/**

@@ -380,7 +380,7 @@ public class RestSession extends ContextSession {
 	@SuppressWarnings("unchecked")
 	public Map<String,String> getPathVars() {
 		var m = (Map<String,String>)req.getAttribute(REST_PATHVARS_ATTR);
-		return m == null ? Collections.emptyMap() : m;
+		return m == null ? mape() : m;
 	}
 
 	/**

@@ -128,7 +128,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 
 		// Add parameters from parent context if any.
 		@SuppressWarnings("unchecked")
-		var parentVars = (Map<String,String>)req.getAttribute("juneau.pathVars").orElse(Collections.emptyMap());
+		var parentVars = (Map<String,String>)req.getAttribute("juneau.pathVars").orElse(mape());
 		for (var e : parentVars.entrySet())
 			add(e.getKey(), e.getValue());
 

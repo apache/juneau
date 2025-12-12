@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.mock;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StateEnum.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -142,7 +143,7 @@ class MockPathResolver {
 		pathToResolve = emptyIfNull(pathToResolve);
 
 		if (! (pathToResolve.startsWith("http://") || pathToResolve.startsWith("https://"))) {
-			pathToResolve = fixSegment(pathToResolve, Collections.emptyMap());
+			pathToResolve = fixSegment(pathToResolve, mape());
 			this.uri = target + contextPath + servletPath + pathToResolve;
 			this.target = target;
 			this.contextPath = contextPath;

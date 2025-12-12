@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.util;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -48,7 +49,7 @@ public class UrlPathMatch {
 	protected UrlPathMatch(String path, int matchedParts, String[] keys, String[] values) {
 		this.path = path;
 		this.matchedParts = matchedParts;
-		this.vars = keys == null ? Collections.emptyMap() : new SimpleMap<>(keys, values);
+		this.vars = keys == null ? mape() : new SimpleMap<>(keys, values);
 	}
 
 	/**

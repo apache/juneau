@@ -6409,7 +6409,7 @@ public class StringUtils {
 		if (s == null)
 			return null;  // NOSONAR - Intentional.
 		if (isEmpty(s))
-			return Collections.emptyMap();
+			return mape();
 
 		var m = new LinkedHashMap<String,String>();
 

@@ -161,7 +161,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 
 		@Override /* Overridden from Map */
 		public Collection<Object> values() {
-			return Collections.emptyMap().values();
+			return mape().values();
 		}
 	};
 

@@ -1584,6 +1584,9 @@ public class CollectionUtils {
 		return Collections.emptyMap();
 	}
 
+	public static <K,V> Map<K,V> mape() {
+		return Collections.emptyMap();
+	}
 	/**
 	 * Returns a null map.
 	 *

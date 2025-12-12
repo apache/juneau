@@ -1379,7 +1379,7 @@ public class Serializer extends BeanTraverseContext {
 	 * 	Never <jk>null</jk>.
 	 */
 	public Map<String,String> getResponseHeaders(SerializerSession session) {
-		return Collections.emptyMap();
+		return mape();
 	}
 
 	@Override /* Overridden from Context */
