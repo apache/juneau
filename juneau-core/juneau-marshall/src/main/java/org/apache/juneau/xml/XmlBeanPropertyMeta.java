@@ -16,8 +16,11 @@
  */
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
+
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
@@ -107,8 +110,13 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		var cmBean = bpm.getBeanMeta().getClassMeta();
 		var name = bpm.getName();
 
-		var xmls = bpm.getAllAnnotationsParentFirst(Xml.class);
-		var schemas = bpm.getAllAnnotationsParentFirst(XmlSchema.class);
+		var ap = bpm.getClassMeta().getBeanContext().getAnnotationProvider();
+		var xmls = new ArrayList<Xml>();
+		rstream(ap.find(Xml.class, bpm.getBeanMeta().getClassMeta())).forEach(x -> xmls.add(x.inner()));
+		xmls.addAll(bpm.getAllAnnotationsParentFirst(Xml.class));
+		var schemas = new ArrayList<XmlSchema>();
+		rstream(ap.find(XmlSchema.class, bpm.getBeanMeta().getClassMeta())).forEach(x -> schemas.add(x.inner()));
+		schemas.addAll(bpm.getAllAnnotationsParentFirst(XmlSchema.class));
 		namespace = XmlUtils.findNamespace(xmls, schemas);
 
 		if (xmlFormat == XmlFormat.DEFAULT)

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -74,7 +75,10 @@ class AnnotationInheritance_Test extends TestBase {
 		assertNotNull(prop, "Property 'v' should exist (inherited from @Beanp in parent)");
 
 		// Verify the annotation is inherited
-		List<Beanp> beanpList = prop.getAllAnnotationsParentFirst(Beanp.class);
+		var ap = prop.getClassMeta().getBeanContext().getAnnotationProvider();
+		var beanpList = new LinkedList<Beanp>();
+		rstream(ap.find(Beanp.class, prop.getBeanMeta().getClassMeta())).forEach(x -> beanpList.add(x.inner()));
+		beanpList.addAll(prop.getAllAnnotationsParentFirst(Beanp.class));
 		assertNotEmpty(beanpList);
 	}
 
@@ -122,7 +126,10 @@ class AnnotationInheritance_Test extends TestBase {
 		assertNotNull(prop, "Property 'i' should exist (inherited from @Beanp)");
 
 		// Check that @Xml annotations are inherited
-		List<Xml> xmlAnnotations = prop.getAllAnnotationsParentFirst(Xml.class);
+		var ap = prop.getClassMeta().getBeanContext().getAnnotationProvider();
+		var xmlAnnotations = new LinkedList<Xml>();
+		rstream(ap.find(Xml.class, prop.getBeanMeta().getClassMeta())).forEach(x -> xmlAnnotations.add(x.inner()));
+		xmlAnnotations.addAll(prop.getAllAnnotationsParentFirst(Xml.class));
 		assertNotEmpty(xmlAnnotations);
 
 		var xml = xmlAnnotations.get(0);
@@ -177,7 +184,10 @@ class AnnotationInheritance_Test extends TestBase {
 		assertNotNull(prop, "Property 'n' should exist");
 
 		// Verify all @Beanp attributes are inherited
-		List<Beanp> beanpAnnotations = prop.getAllAnnotationsParentFirst(Beanp.class);
+		var ap = prop.getClassMeta().getBeanContext().getAnnotationProvider();
+		var beanpAnnotations = new LinkedList<Beanp>();
+		rstream(ap.find(Beanp.class, prop.getBeanMeta().getClassMeta())).forEach(x -> beanpAnnotations.add(x.inner()));
+		beanpAnnotations.addAll(prop.getAllAnnotationsParentFirst(Beanp.class));
 		assertNotEmpty(beanpAnnotations);
 
 		var beanp = beanpAnnotations.get(0);
@@ -229,7 +239,10 @@ class AnnotationInheritance_Test extends TestBase {
 		assertNotNull(prop, "Property 'c' should exist through multi-level inheritance");
 
 		// Verify annotation is inherited through multiple levels
-		List<Beanp> beanpAnnotations = prop.getAllAnnotationsParentFirst(Beanp.class);
+		var ap = prop.getClassMeta().getBeanContext().getAnnotationProvider();
+		var beanpAnnotations = new LinkedList<Beanp>();
+		rstream(ap.find(Beanp.class, prop.getBeanMeta().getClassMeta())).forEach(x -> beanpAnnotations.add(x.inner()));
+		beanpAnnotations.addAll(prop.getAllAnnotationsParentFirst(Beanp.class));
 		assertNotEmpty(beanpAnnotations);
 
 		// Note: Both "c" and "count" properties exist due to getter/setter property resolution

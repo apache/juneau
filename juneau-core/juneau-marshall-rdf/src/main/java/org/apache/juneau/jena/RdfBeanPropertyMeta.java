@@ -16,6 +16,10 @@
  */
 package org.apache.juneau.jena;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.xml.*;
@@ -49,8 +53,13 @@ public class RdfBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	public RdfBeanPropertyMeta(BeanPropertyMeta bpm, RdfMetaProvider mp) {
 		super(bpm);
 
-		var rdfs = bpm.getAllAnnotationsParentFirst(Rdf.class);
-		var schemas = bpm.getAllAnnotationsParentFirst(RdfSchema.class);
+		var ap = bpm.getClassMeta().getBeanContext().getAnnotationProvider();
+		var rdfs = new ArrayList<Rdf>();
+		rstream(ap.find(Rdf.class, bpm.getBeanMeta().getClassMeta())).forEach(x -> rdfs.add(x.inner()));
+		rdfs.addAll(bpm.getAllAnnotationsParentFirst(Rdf.class));
+		var schemas = new ArrayList<RdfSchema>();
+		rstream(ap.find(RdfSchema.class, bpm.getBeanMeta().getClassMeta())).forEach(x -> schemas.add(x.inner()));
+		schemas.addAll(bpm.getAllAnnotationsParentFirst(RdfSchema.class));
 
 		rdfs.forEach(x -> {
 			if (x.collectionFormat() != RdfCollectionFormat.DEFAULT)

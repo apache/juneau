@@ -781,7 +781,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		var ap = bc.getAnnotationProvider();
 		if (a == null)
 			return l;
-		rstream(ap.find(a, getBeanMeta().getClassMeta())).forEach(x -> l.add(x.inner()));
 		if (nn(field)) {
 			ap.find(a, field).forEach(x -> l.add(x.inner()));
 			rstream(ap.find(a, field.getFieldType())).forEach(x -> l.add(x.inner()));
