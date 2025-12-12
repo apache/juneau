@@ -163,124 +163,124 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			}
 			if (ci.isChildOf(Surrogate.class))
 				throw unsupportedOp("TODO - Surrogate swaps not yet supported on bean properties.");
-		throw rex("Invalid class used in @Swap annotation.  Must be a subclass of ObjectSwap or Surrogate. {0}", cn(c));
-	}
+			throw rex("Invalid class used in @Swap annotation.  Must be a subclass of ObjectSwap or Surrogate. {0}", cn(c));
+		}
 
-	/**
-	 * Marks this property as readable.
-	 *
-	 * @return This object.
-	 */
-	public Builder canRead() {
-		this.canRead = true;
-		return this;
-	}
+		/**
+		 * Marks this property as readable.
+		 *
+		 * @return This object.
+		 */
+		public Builder canRead() {
+			this.canRead = true;
+			return this;
+		}
 
-	/**
-	 * Marks this property as writable.
-	 *
-	 * @return This object.
-	 */
-	public Builder canWrite() {
-		this.canWrite = true;
-		return this;
-	}
+		/**
+		 * Marks this property as writable.
+		 *
+		 * @return This object.
+		 */
+		public Builder canWrite() {
+			this.canWrite = true;
+			return this;
+		}
 
-	/**
-	 * Marks this property as a constructor argument.
-	 *
-	 * @return This object.
-	 */
-	public BeanPropertyMeta.Builder setAsConstructorArg() {
-		this.isConstructorArg = true;
-		return this;
-	}
+		/**
+		 * Marks this property as a constructor argument.
+		 *
+		 * @return This object.
+		 */
+		public BeanPropertyMeta.Builder setAsConstructorArg() {
+			this.isConstructorArg = true;
+			return this;
+		}
 
-	/**
-	 * Sets the extra keys method for this bean property.
-	 *
-	 * @param value The method info that returns extra keys for this property.
-	 * @return This object.
-	 */
-	public BeanPropertyMeta.Builder setExtraKeys(MethodInfo value) {
-		assertArgNotNull("value", value);
-		this.extraKeys = value.accessible();
-		return this;
-	}
+		/**
+		 * Sets the extra keys method for this bean property.
+		 *
+		 * @param value The method info that returns extra keys for this property.
+		 * @return This object.
+		 */
+		public BeanPropertyMeta.Builder setExtraKeys(MethodInfo value) {
+			assertArgNotNull("value", value);
+			this.extraKeys = value.accessible();
+			return this;
+		}
 
-	/**
-	 * Sets the field for this bean property.
-	 *
-	 * @param value The field info for this bean property.
-	 * @return This object.
-	 */
-	public BeanPropertyMeta.Builder setField(FieldInfo value) {
-		assertArgNotNull("value", value);
-		this.field = value.accessible();
-		this.innerField = this.field;
-		return this;
-	}
+		/**
+		 * Sets the field for this bean property.
+		 *
+		 * @param value The field info for this bean property.
+		 * @return This object.
+		 */
+		public BeanPropertyMeta.Builder setField(FieldInfo value) {
+			assertArgNotNull("value", value);
+			this.field = value.accessible();
+			this.innerField = this.field;
+			return this;
+		}
 
-	/**
-	 * Sets the getter method for this bean property.
-	 *
-	 * @param value The getter method info for this bean property.
-	 * @return This object.
-	 */
-	public BeanPropertyMeta.Builder setGetter(MethodInfo value) {
-		assertArgNotNull("value", value);
-		this.getter = value.accessible();
-		return this;
-	}
+		/**
+		 * Sets the getter method for this bean property.
+		 *
+		 * @param value The getter method info for this bean property.
+		 * @return This object.
+		 */
+		public BeanPropertyMeta.Builder setGetter(MethodInfo value) {
+			assertArgNotNull("value", value);
+			this.getter = value.accessible();
+			return this;
+		}
 
-	/**
-	 * Sets the inner field for this bean property from a {@link FieldInfo}.
-	 *
-	 * @param value The field info containing the inner field.
-	 * @return This object.
-	 */
-	public BeanPropertyMeta.Builder setInnerField(FieldInfo value) {
-		assertArgNotNull("value", value);
-		this.innerField = value;
-		return this;
-	}
+		/**
+		 * Sets the inner field for this bean property from a {@link FieldInfo}.
+		 *
+		 * @param value The field info containing the inner field.
+		 * @return This object.
+		 */
+		public BeanPropertyMeta.Builder setInnerField(FieldInfo value) {
+			assertArgNotNull("value", value);
+			this.innerField = value;
+			return this;
+		}
 
-	/**
-	 * Sets the inner field for this bean property.
-	 *
-	 * @param value The inner field for this bean property.
-	 * @return This object.
-	 */
-	public BeanPropertyMeta.Builder setInnerField(Field value) {
-		assertArgNotNull("value", value);
-		this.innerField = FieldInfo.of(value);
-		return this;
-	}
+		/**
+		 * Sets the inner field for this bean property.
+		 *
+		 * @param value The inner field for this bean property.
+		 * @return This object.
+		 */
+		public BeanPropertyMeta.Builder setInnerField(Field value) {
+			assertArgNotNull("value", value);
+			this.innerField = FieldInfo.of(value);
+			return this;
+		}
 
-	/**
-	 * Sets the setter method for this bean property.
-	 *
-	 * @param value The setter method info for this bean property.
-	 * @return This object.
-	 */
-	public BeanPropertyMeta.Builder setSetter(MethodInfo value) {
-		assertArgNotNull("value", value);
-		this.setter = value.accessible();
-		return this;
-	}
+		/**
+		 * Sets the setter method for this bean property.
+		 *
+		 * @param value The setter method info for this bean property.
+		 * @return This object.
+		 */
+		public BeanPropertyMeta.Builder setSetter(MethodInfo value) {
+			assertArgNotNull("value", value);
+			this.setter = value.accessible();
+			return this;
+		}
 
-	/**
-	 * Validates this bean property configuration.
-	 *
-	 * @param bc The bean context.
-	 * @param parentBeanRegistry The parent bean registry.
-	 * @param typeVarImpls Type variable implementations.
-	 * @param bpro Bean properties read-only set.
-	 * @param bpwo Bean properties write-only set.
-	 * @return <jk>true</jk> if this property is valid, <jk>false</jk> otherwise.
-	 * @throws Exception If validation fails.
-	 */
-	public boolean validate(BeanContext bc, BeanRegistry parentBeanRegistry, TypeVariables typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
+		/**
+		 * Validates this bean property configuration.
+		 *
+		 * @param bc The bean context.
+		 * @param parentBeanRegistry The parent bean registry.
+		 * @param typeVarImpls Type variable implementations.
+		 * @param bpro Bean properties read-only set.
+		 * @param bpwo Bean properties write-only set.
+		 * @return <jk>true</jk> if this property is valid, <jk>false</jk> otherwise.
+		 * @throws Exception If validation fails.
+		 */
+		public boolean validate(BeanContext bc, BeanRegistry parentBeanRegistry, TypeVariables typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
 
 			var bdClasses = list();
 			var ap = bc.getAnnotationProvider();
@@ -458,7 +458,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	private final boolean isDyna, isDynaGetterMap;            // This is a dyna property (i.e. name="*")
 
 	private final ClassMeta<?> rawTypeMeta,                                           // The real class type of the bean property.
-		typeMeta;                                              // The transformed class type of the bean property.
+	typeMeta;                                              // The transformed class type of the bean property.
 
 	private final List<String> properties;                        // The value of the @Beanp(properties) annotation (unmodifiable).
 	private final ObjectSwap swap;                              // ObjectSwap defined only via @Beanp annotation.
@@ -568,13 +568,13 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 			} else /* isArray() */ {
 
-			if (m.arrayPropertyCache == null)
-				m.arrayPropertyCache = new TreeMap<>();
+				if (m.arrayPropertyCache == null)
+					m.arrayPropertyCache = new TreeMap<>();
 
-			List l = m.arrayPropertyCache.get(name);
-			if (l == null) {
-				l = new LinkedList();  // ArrayLists and LinkLists appear to perform equally.
-				m.arrayPropertyCache.put(name, l);
+				List l = m.arrayPropertyCache.get(name);
+				if (l == null) {
+					l = new LinkedList();  // ArrayLists and LinkLists appear to perform equally.
+					m.arrayPropertyCache.put(name, l);
 
 					// Copy any existing array values into the temporary list.
 					var oldArray = invokeGetter(bean, pName);
