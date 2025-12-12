@@ -69,7 +69,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		FieldInfo innerField;  // Package-private for BeanMeta access
 		MethodInfo getter;  // Package-private for BeanMeta access
 		MethodInfo setter;  // Package-private for BeanMeta access
-		Method extraKeys;  // Package-private for BeanMeta access. TODO - Replace with MethodInfo field
+		MethodInfo extraKeys;  // Package-private for BeanMeta access
 		private boolean isConstructorArg, isUri, isDyna, isDynaGetterMap;
 		private ClassMeta<?> rawTypeMeta, typeMeta;
 		private List<String> properties;
@@ -199,13 +199,12 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	/**
 	 * Sets the extra keys method for this bean property.
 	 *
-	 * @param value The method that returns extra keys for this property.
+	 * @param value The method info that returns extra keys for this property.
 	 * @return This object.
 	 */
-	public BeanPropertyMeta.Builder setExtraKeys(Method value) {
+	public BeanPropertyMeta.Builder setExtraKeys(MethodInfo value) {
 		assertArgNotNull("value", value);
-		setAccessible(value);
-		this.extraKeys = value;
+		this.extraKeys = value.accessible();
 		return this;
 	}
 
@@ -459,7 +458,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 	private final MethodInfo getter;           // The bean property getter.
 	private final MethodInfo setter;           // The bean property setter.
-	private final Method extraKeys;           // The bean property extraKeys.
+	private final MethodInfo extraKeys;           // The bean property extraKeys.
 
 	private final boolean isUri;                              // True if this is a URL/URI or annotated with @URI.
 	private final boolean isDyna, isDynaGetterMap;            // This is a dyna property (i.e. name="*")
@@ -788,13 +787,13 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			rstream(ap.find(a, setter.getReturnType())).forEach(x -> l.add(x.inner()));
 		}
 		if (nn(extraKeys)) {
-			var eki = info(extraKeys);
+			var eki = extraKeys;
 			// Walk up the inheritance hierarchy for the extraKeys method
-			forEachParentMethod(extraKeys, parentExtraKeys -> {
+			forEachParentMethod(extraKeys.inner(), parentExtraKeys -> {
 				ap.find(a, info(parentExtraKeys), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
 			});
 			ap.find(a, eki, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
-			rstream(ap.find(a, info(extraKeys.getReturnType()))).forEach(x -> l.add(x.inner()));
+			rstream(ap.find(a, extraKeys.getReturnType())).forEach(x -> l.add(x.inner()));
 		}
 
 		return l;

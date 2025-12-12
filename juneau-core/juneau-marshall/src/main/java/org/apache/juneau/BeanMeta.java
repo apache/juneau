@@ -487,7 +487,7 @@ public class BeanMeta<T> {
 				});
 
 				// Now iterate through all the extraKeys.
-				bms.stream().filter(x -> eq(x.methodType, EXTRAKEYS)).forEach(x -> normalProps.get(x.propertyName).setExtraKeys(x.method));
+				bms.stream().filter(x -> eq(x.methodType, EXTRAKEYS)).forEach(x -> normalProps.get(x.propertyName).setExtraKeys(info(x.method)));
 			}
 
 			var typeVarImpls = ClassUtils.findTypeVarImpls(c);
