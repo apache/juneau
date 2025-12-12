@@ -311,7 +311,7 @@
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 				<strong class="jxr_keyword">if</strong> (nn(field) || isNotEmpty(lp)) {
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 					<em class="jxr_comment">// Only use field type if it's a bean property or has @Beanp annotation.</em>
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 					<em class="jxr_comment">// Otherwise, we want to infer the type from the getter or setter.</em>
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 					rawTypeMeta = bc.resolveClassMeta(opt(last(lp)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>), innerField.<strong class="jxr_keyword">inner</strong>().getGenericType(), typeVarImpls);
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 					rawTypeMeta = bc.resolveClassMeta(opt(last(lp)).orElse(<strong class="jxr_keyword">null</strong>), innerField.getFieldType(), typeVarImpls);
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 					isUri |= (rawTypeMeta.isUri());
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 				}
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 				lp.forEach(x -&gt; {
@@ -333,7 +333,7 @@
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 			<strong class="jxr_keyword">if</strong> (nn(getter)) {
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 				<strong class="jxr_keyword">var</strong> lp = ap.find(Beanp.<strong class="jxr_keyword">class</strong>, gi);
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 				<strong class="jxr_keyword">if</strong> (rawTypeMeta == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 					rawTypeMeta = bc.resolveClassMeta(opt(last(lp)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>), getter.<strong class="jxr_keyword">inner</strong>().getGenericReturnType(), typeVarImpls);
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 					rawTypeMeta = bc.resolveClassMeta(opt(last(lp)).orElse(<strong class="jxr_keyword">null</strong>), getter.getReturnType(), typeVarImpls);
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 				isUri |= (rawTypeMeta.isUri() || ap.has(Uri.<strong class="jxr_keyword">class</strong>, gi));
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 				lp.forEach(x -&gt; {
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 					<strong class="jxr_keyword">var</strong> beanp = x.<strong class="jxr_keyword">inner</strong>();
@@ -353,7 +353,7 @@
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 			<strong class="jxr_keyword">if</strong> (nn(setter)) {
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 				<strong class="jxr_keyword">var</strong> lp = ap.find(Beanp.<strong class="jxr_keyword">class</strong>, si);
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 				<strong class="jxr_keyword">if</strong> (rawTypeMeta == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 					rawTypeMeta = bc.resolveClassMeta(opt(last(lp)).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>), setter.<strong class="jxr_keyword">inner</strong>().getGenericParameterTypes()[0], typeVarImpls);
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 					rawTypeMeta = bc.resolveClassMeta(opt(last(lp)).orElse(<strong class="jxr_keyword">null</strong>), setter.getParameterTypes().get(0), typeVarImpls);
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 				isUri |= (rawTypeMeta.isUri() || ap.has(Uri.<strong class="jxr_keyword">class</strong>, si));
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 				lp.forEach(x -&gt; {
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 					<strong class="jxr_keyword">var</strong> beanp = x.<strong class="jxr_keyword">inner</strong>();
