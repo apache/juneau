@@ -303,7 +303,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				if (nn(field) || isNotEmpty(lp)) {
 					// Only use field type if it's a bean property or has @Beanp annotation.
 					// Otherwise, we want to infer the type from the getter or setter.
-					rawTypeMeta = bc.resolveClassMeta(isNotEmpty(lp) ? last(lp).inner() : null, innerField.inner().getGenericType(), typeVarImpls);
+					rawTypeMeta = bc.resolveClassMeta(opt(last(lp)).map(AnnotationInfo::inner).orElse(null), innerField.inner().getGenericType(), typeVarImpls);
 					isUri |= (rawTypeMeta.isUri());
 				}
 				lp.forEach(x -> {
@@ -325,7 +325,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (nn(getter)) {
 				var lp = ap.find(Beanp.class, gi);
 				if (rawTypeMeta == null)
-					rawTypeMeta = bc.resolveClassMeta(isNotEmpty(lp) ? last(lp).inner() : null, getter.inner().getGenericReturnType(), typeVarImpls);
+					rawTypeMeta = bc.resolveClassMeta(opt(last(lp)).map(AnnotationInfo::inner).orElse(null), getter.inner().getGenericReturnType(), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || ap.has(Uri.class, gi));
 				lp.forEach(x -> {
 					var beanp = x.inner();
@@ -345,7 +345,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (nn(setter)) {
 				var lp = ap.find(Beanp.class, si);
 				if (rawTypeMeta == null)
-					rawTypeMeta = bc.resolveClassMeta(isNotEmpty(lp) ? last(lp).inner() : null, setter.inner().getGenericParameterTypes()[0], typeVarImpls);
+					rawTypeMeta = bc.resolveClassMeta(opt(last(lp)).map(AnnotationInfo::inner).orElse(null), setter.inner().getGenericParameterTypes()[0], typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || ap.has(Uri.class, si));
 				lp.forEach(x -> {
 					var beanp = x.inner();
