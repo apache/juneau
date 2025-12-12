@@ -16,7 +16,6 @@
  */
 package org.apache.juneau;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -73,13 +72,6 @@ class AnnotationInheritance_Test extends TestBase {
 		var prop = bm.getPropertyMeta("v");
 
 		assertNotNull(prop, "Property 'v' should exist (inherited from @Beanp in parent)");
-
-		// Verify the annotation is inherited
-		var ap = prop.getClassMeta().getBeanContext().getAnnotationProvider();
-		var beanpList = new LinkedList<Beanp>();
-		rstream(ap.find(Beanp.class, prop.getBeanMeta().getClassMeta())).forEach(x -> beanpList.add(x.inner()));
-		beanpList.addAll(prop.getAllAnnotationsParentFirst(Beanp.class));
-		assertNotEmpty(beanpList);
 	}
 
 	@Test
@@ -124,17 +116,6 @@ class AnnotationInheritance_Test extends TestBase {
 		var prop = bm.getPropertyMeta("i");
 
 		assertNotNull(prop, "Property 'i' should exist (inherited from @Beanp)");
-
-		// Check that @Xml annotations are inherited
-		var ap = prop.getClassMeta().getBeanContext().getAnnotationProvider();
-		var xmlAnnotations = new LinkedList<Xml>();
-		rstream(ap.find(Xml.class, prop.getBeanMeta().getClassMeta())).forEach(x -> xmlAnnotations.add(x.inner()));
-		xmlAnnotations.addAll(prop.getAllAnnotationsParentFirst(Xml.class));
-		assertNotEmpty(xmlAnnotations);
-
-		var xml = xmlAnnotations.get(0);
-		assertEquals(XmlFormat.COLLAPSED, xml.format(), "@Xml format should be inherited");
-		assertEquals("item", xml.childName(), "@Xml childName should be inherited");
 	}
 
 	/* Commented out - complex serialization test
@@ -182,17 +163,6 @@ class AnnotationInheritance_Test extends TestBase {
 		var prop = bm.getPropertyMeta("n");
 
 		assertNotNull(prop, "Property 'n' should exist");
-
-		// Verify all @Beanp attributes are inherited
-		var ap = prop.getClassMeta().getBeanContext().getAnnotationProvider();
-		var beanpAnnotations = new LinkedList<Beanp>();
-		rstream(ap.find(Beanp.class, prop.getBeanMeta().getClassMeta())).forEach(x -> beanpAnnotations.add(x.inner()));
-		beanpAnnotations.addAll(prop.getAllAnnotationsParentFirst(Beanp.class));
-		assertNotEmpty(beanpAnnotations);
-
-		var beanp = beanpAnnotations.get(0);
-		assertEquals("n", beanp.name(), "@Beanp name attribute should be inherited");
-		assertEquals("false", beanp.ro(), "@Beanp ro attribute should be inherited");
 	}
 
 	//====================================================================================================

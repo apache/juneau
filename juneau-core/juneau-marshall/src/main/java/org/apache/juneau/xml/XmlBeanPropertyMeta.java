@@ -20,9 +20,8 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.util.*;
-
 import org.apache.juneau.*;
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -111,12 +110,14 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		var name = bpm.getName();
 
 		var ap = bpm.getClassMeta().getBeanContext().getAnnotationProvider();
-		var xmls = new ArrayList<Xml>();
-		rstream(ap.find(Xml.class, bpm.getBeanMeta().getClassMeta())).forEach(x -> xmls.add(x.inner()));
-		xmls.addAll(bpm.getAllAnnotationsParentFirst(Xml.class));
-		var schemas = new ArrayList<XmlSchema>();
-		rstream(ap.find(XmlSchema.class, bpm.getBeanMeta().getClassMeta())).forEach(x -> schemas.add(x.inner()));
-		schemas.addAll(bpm.getAllAnnotationsParentFirst(XmlSchema.class));
+		var xmls = new MultiList<>(
+			rstream(ap.find(Xml.class, bpm.getBeanMeta().getClassMeta())).map(AnnotationInfo::inner).toList(),
+			reverse(bpm.getAnnotations(Xml.class).map(AnnotationInfo::inner).toList())
+		);
+		var schemas = new MultiList<>(
+			rstream(ap.find(XmlSchema.class, bpm.getBeanMeta().getClassMeta())).map(AnnotationInfo::inner).toList(),
+			reverse(bpm.getAnnotations(XmlSchema.class).map(AnnotationInfo::inner).toList())
+		);
 		namespace = XmlUtils.findNamespace(xmls, schemas);
 
 		if (xmlFormat == XmlFormat.DEFAULT)

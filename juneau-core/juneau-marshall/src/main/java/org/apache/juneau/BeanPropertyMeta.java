@@ -762,47 +762,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	}
 
 	/**
-	 * Returns all instances of the specified annotation in the hierarchy of this bean property.
-	 *
-	 * <p>
-	 * Searches through the class hierarchy (e.g. superclasses, interfaces, packages) for all instances of the
-	 * specified annotation.
-	 *
-	 * <p>
-	 * This method now walks up the method inheritance hierarchy for getter and setter methods, ensuring that
-	 * annotations are properly inherited from overridden parent methods.
-	 *
-	 * @param <A> The class to find annotations for.
-	 * @param a The class to find annotations for.
-	 * @return A list of annotations ordered in parent-to-child order.  Never <jk>null</jk>.
-	 */
-	public <A extends Annotation> List<A> getAllAnnotationsParentFirst(Class<A> a) {
-		var l = new LinkedList<A>();
-		var ap = bc.getAnnotationProvider();
-		if (a == null)
-			return l;
-		if (nn(field)) {
-			ap.find(a, field).forEach(x -> l.add(x.inner()));
-			rstream(ap.find(a, field.getFieldType())).forEach(x -> l.add(x.inner()));
-		}
-		if (nn(getter)) {
-			ap.find(a, getter, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
-			rstream(ap.find(a, getter.getReturnType())).forEach(x -> l.add(x.inner()));
-		}
-		if (nn(setter)) {
-			ap.find(a, setter, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
-			rstream(ap.find(a, setter.getReturnType())).forEach(x -> l.add(x.inner()));
-		}
-		if (nn(extraKeys)) {
-			var eki = extraKeys;
-			ap.find(a, eki, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
-			rstream(ap.find(a, extraKeys.getReturnType())).forEach(x -> l.add(x.inner()));
-		}
-
-		return l;
-	}
-
-	/**
 	 * Returns the bean meta that this property belongs to.
 	 *
 	 * @return The bean meta that this property belongs to.

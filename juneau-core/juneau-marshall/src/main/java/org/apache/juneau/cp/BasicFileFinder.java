@@ -30,7 +30,6 @@ import java.util.concurrent.*;
 import java.util.regex.*;
 
 import org.apache.juneau.commons.io.*;
-import org.apache.juneau.commons.utils.*;
 
 /**
  * Basic implementation of a {@link FileFinder}.
