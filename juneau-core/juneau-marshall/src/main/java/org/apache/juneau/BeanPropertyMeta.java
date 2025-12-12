@@ -433,31 +433,31 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		return new Builder(beanMeta, name);
 	}
 
-	private final AnnotationProvider ap;                                                                        // Annotation provider for finding annotations on this property.
-	private final Supplier<List<AnnotationInfo<?>>> annotations;                                      // Memoized list of all annotations on this property.
-	private final BeanContext bc;                                                                               // The context that created this meta.
-	private final BeanMeta<?> beanMeta;                                                                         // The bean that this property belongs to.
-	private final BeanRegistry beanRegistry;                                                                    // Bean registry for resolving bean types in this property.
-	private final boolean canRead;                                                                              // True if this property can be read.
-	private final boolean canWrite;                                                                             // True if this property can be written.
-	private final BeanPropertyMeta delegateFor;                                                                 // The bean property that this meta is a delegate for.
-	private final MethodInfo extraKeys;                                                                         // The bean property extraKeys method.
-	private final FieldInfo field;                                                                              // The bean property field (if it has one).
-	private final MethodInfo getter;                                                                            // The bean property getter.
-	private final int hashCode;                                                                                 // Cached hash code for this property meta.
-	private final FieldInfo innerField;                                                                         // The bean property field even if private (if it has one).
-	private final boolean isDyna;                                                                               // True if this is a dyna property (i.e. name="*").
-	private final boolean isDynaGetterMap;                                                                      // True if this is a dyna property where the getter returns a Map directly.
-	private final boolean isUri;                                                                                // True if this is a URL/URI or annotated with @URI.
-	private final String name;                                                                                  // The name of the property.
-	private final Object overrideValue;                                                                         // The bean property value (if it's an overridden delegate).
-	private final List<String> properties;                                                                      // The value of the @Beanp(properties) annotation (unmodifiable).
-	private final ClassMeta<?> rawTypeMeta;                                                                     // The real class type of the bean property.
-	private final boolean readOnly;                                                                             // True if this property is read-only.
-	private final MethodInfo setter;                                                                            // The bean property setter.
-	private final ObjectSwap swap;                                                                              // ObjectSwap defined only via @Beanp annotation.
-	private final ClassMeta<?> typeMeta;                                                                        // The transformed class type of the bean property.
-	private final boolean writeOnly;                                                                            // True if this property is write-only.
+	private final AnnotationProvider ap;                             // Annotation provider for finding annotations on this property.
+	private final Supplier<List<AnnotationInfo<?>>> annotations;     // Memoized list of all annotations on this property.
+	private final BeanContext bc;                                    // The context that created this meta.
+	private final BeanMeta<?> beanMeta;                              // The bean that this property belongs to.
+	private final BeanRegistry beanRegistry;                         // Bean registry for resolving bean types in this property.
+	private final boolean canRead;                                   // True if this property can be read.
+	private final boolean canWrite;                                  // True if this property can be written.
+	private final BeanPropertyMeta delegateFor;                      // The bean property that this meta is a delegate for.
+	private final MethodInfo extraKeys;                              // The bean property extraKeys method.
+	private final FieldInfo field;                                   // The bean property field (if it has one).
+	private final MethodInfo getter;                                 // The bean property getter.
+	private final int hashCode;                                      // Cached hash code for this property meta.
+	private final FieldInfo innerField;                              // The bean property field even if private (if it has one).
+	private final boolean isDyna;                                    // True if this is a dyna property (i.e. name="*").
+	private final boolean isDynaGetterMap;                           // True if this is a dyna property where the getter returns a Map directly.
+	private final boolean isUri;                                     // True if this is a URL/URI or annotated with @URI.
+	private final String name;                                       // The name of the property.
+	private final Object overrideValue;                              // The bean property value (if it's an overridden delegate).
+	private final List<String> properties;                           // The value of the @Beanp(properties) annotation (unmodifiable).
+	private final ClassMeta<?> rawTypeMeta;                          // The real class type of the bean property.
+	private final boolean readOnly;                                  // True if this property is read-only.
+	private final MethodInfo setter;                                 // The bean property setter.
+	private final ObjectSwap swap;                                   // ObjectSwap defined only via @Beanp annotation.
+	private final ClassMeta<?> typeMeta;                             // The transformed class type of the bean property.
+	private final boolean writeOnly;                                 // True if this property is write-only.
 
 	/**
 	 * Creates a new BeanPropertyMeta using the contents of the specified builder.
