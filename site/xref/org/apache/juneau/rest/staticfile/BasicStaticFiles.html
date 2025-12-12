@@ -99,7 +99,7 @@
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">public</strong> <a name="BasicStaticFiles" href="../../../../../org/apache/juneau/rest/staticfile/BasicStaticFiles.html#BasicStaticFiles">BasicStaticFiles</a>(StaticFiles.Builder builder) {
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">this</strong>.headers = builder.headers.toArray(<strong class="jxr_keyword">new</strong> Header[builder.headers.size()]);
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">this</strong>.mimeTypes = builder.mimeTypes;
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">this</strong>.hashCode = HashCode.of(hashCode(), headers);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">this</strong>.hashCode = hash(hashCode(), headers);
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">this</strong>.fileFinder = builder.fileFinder.build();
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  	}
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  
@@ -112,7 +112,7 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">protected</strong> <a name="BasicStaticFiles" href="../../../../../org/apache/juneau/rest/staticfile/BasicStaticFiles.html#BasicStaticFiles">BasicStaticFiles</a>() {
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">this</strong>.headers = <strong class="jxr_keyword">new</strong> Header[0];
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">this</strong>.mimeTypes = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">this</strong>.hashCode = HashCode.of(hashCode(), headers);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">this</strong>.hashCode = hash(hashCode(), headers);
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">this</strong>.fileFinder = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 	}
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 
