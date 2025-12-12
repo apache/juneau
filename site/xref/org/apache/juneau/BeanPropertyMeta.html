@@ -288,7 +288,7 @@
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this property is valid, &lt;jk&gt;false&lt;/jk&gt; otherwise.</em>
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">	 * @throws Exception If validation fails.</em>
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> validate(BeanContext bc, <a name="BeanRegistry" href="../../../org/apache/juneau/BeanRegistry.html#BeanRegistry">BeanRegistry</a> parentBeanRegistry, Map&lt;Class&lt;?&gt;,Class&lt;?&gt;[]&gt; typeVarImpls, Set&lt;String&gt; bpro, Set&lt;String&gt; bpwo) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> validate(BeanContext bc, <a name="BeanRegistry" href="../../../org/apache/juneau/BeanRegistry.html#BeanRegistry">BeanRegistry</a> parentBeanRegistry, <a name="TypeVariables" href="../../../org/apache/juneau/commons/reflect/TypeVariables.html#TypeVariables">TypeVariables</a> typeVarImpls, Set&lt;String&gt; bpro, Set&lt;String&gt; bpwo) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 			<strong class="jxr_keyword">var</strong> bdClasses = list();
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 			<strong class="jxr_keyword">var</strong> ap = bc.getAnnotationProvider();

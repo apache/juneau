@@ -1340,7 +1340,7 @@
 <a class="jxr_linenumber" name="L1332" href="#L1332">1332</a> 		<strong class="jxr_keyword">if</strong> (beanContext == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1333" href="#L1333">1333</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1334" href="#L1334">1334</a> 		<strong class="jxr_keyword">if</strong> (cat.is(ARRAY)) {
-<a class="jxr_linenumber" name="L1335" href="#L1335">1335</a> 			<strong class="jxr_keyword">return</strong> beanContext.getClassMeta(<strong class="jxr_keyword">inner</strong>().getComponentType(), false);
+<a class="jxr_linenumber" name="L1335" href="#L1335">1335</a> 			<strong class="jxr_keyword">return</strong> beanContext.getClassMeta(<strong class="jxr_keyword">inner</strong>().getComponentType());
 <a class="jxr_linenumber" name="L1336" href="#L1336">1336</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cat.is(COLLECTION) || is(Optional.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L1337" href="#L1337">1337</a> 			<em class="jxr_comment">// If this is a COLLECTION, see if it's parameterized (e.g. AddressBook extends LinkedList&lt;Person&gt;)</em>
 <a class="jxr_linenumber" name="L1338" href="#L1338">1338</a> 			<strong class="jxr_keyword">var</strong> parameters = beanContext.findParameters(<strong class="jxr_keyword">inner</strong>(), <strong class="jxr_keyword">inner</strong>());
