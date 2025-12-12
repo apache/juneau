@@ -490,7 +490,7 @@ public class BeanMeta<T> {
 				bms.stream().filter(x -> eq(x.methodType, EXTRAKEYS)).forEach(x -> normalProps.get(x.propertyName).setExtraKeys(info(x.method)));
 			}
 
-			var typeVarImpls = ClassUtils.findTypeVarImpls(c);
+			var typeVarImpls = TypeVariables.of(c);
 
 			// Eliminate invalid properties, and set the contents of getterProps and setterProps.
 			var readOnlyProps = bfo.map(x -> x.getReadOnlyProperties()).orElse(sete());

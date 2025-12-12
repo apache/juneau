@@ -1332,7 +1332,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (beanContext == null)
 			return null;
 		if (cat.is(ARRAY)) {
-			return beanContext.getClassMeta(inner().getComponentType(), false);
+			return beanContext.getClassMeta(inner().getComponentType());
 		} else if (cat.is(COLLECTION) || is(Optional.class)) {
 			// If this is a COLLECTION, see if it's parameterized (e.g. AddressBook extends LinkedList<Person>)
 			var parameters = beanContext.findParameters(inner(), inner());

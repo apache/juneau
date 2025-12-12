@@ -280,7 +280,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @return <jk>true</jk> if this property is valid, <jk>false</jk> otherwise.
 	 * @throws Exception If validation fails.
 	 */
-	public boolean validate(BeanContext bc, BeanRegistry parentBeanRegistry, Map<Class<?>,Class<?>[]> typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
+	public boolean validate(BeanContext bc, BeanRegistry parentBeanRegistry, TypeVariables typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
 
 			var bdClasses = list();
 			var ap = bc.getAnnotationProvider();

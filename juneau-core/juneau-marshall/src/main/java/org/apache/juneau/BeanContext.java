@@ -3679,18 +3679,6 @@ public class BeanContext extends Context {
 	 */
 	public final String getBeanTypePropertyName() { return typePropertyName; }
 
-	/**
-	 * Construct a {@code ClassMeta} wrapper around a {@link Class} object.
-	 *
-	 * @param <T> The class type being wrapped.
-	 * @param type The class to resolve.
-	 * @return
-	 * 	If the class is not an array, returns a cached {@link ClassMeta} object.
-	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
-	 */
-	public final <T> ClassMeta<T> getClassMeta(Class<T> type) {
-		return getClassMeta(type, true);
-	}
 
 	/**
 	 * Used to resolve <c>ClassMetas</c> of type <c>Collection</c> and <c>Map</c> that have
@@ -4216,7 +4204,7 @@ public class BeanContext extends Context {
 	 * 	Can be <jk>null</jk> if the information is not known.
 	 * @return The new {@code ClassMeta} object wrapped around the type.
 	 */
-	protected final <T> ClassMeta<T> resolveClassMeta(AnnotationInfo<Beanp> p, ClassInfo ci, Map<Class<?>,Class<?>[]> typeVarImpls) {
+	protected final <T> ClassMeta<T> resolveClassMeta(AnnotationInfo<Beanp> p, ClassInfo ci, TypeVariables typeVarImpls) {
 		ClassMeta<T> cm = resolveClassMeta(ci, typeVarImpls);
 		ClassMeta<T> cm2 = cm;
 
@@ -4310,13 +4298,11 @@ public class BeanContext extends Context {
 	 *
 	 * @param <T> The class type being wrapped.
 	 * @param type The class to resolve.
-	 * @param waitForInit
-	 * 	When enabled, wait for the ClassMeta constructor to finish before returning.
 	 * @return
 	 * 	If the class is not an array, returns a cached {@link ClassMeta} object.
 	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
 	 */
-	final <T> ClassMeta<T> getClassMeta(Class<T> type, boolean waitForInit) {
+	public final <T> ClassMeta<T> getClassMeta(Class<T> type) {
 
 		// This can happen if we have transforms defined against String or Object.
 		if (cmCache == null)
@@ -4332,67 +4318,11 @@ public class BeanContext extends Context {
 					cm = new ClassMeta<>(type, this);
 			}
 		}
-//		if (waitForInit)
-//			cm.waitForInit();
 		return cm;
 	}
 
-	/**
-	 * Convert a Type to a Class if possible.
-	 * Return null if not possible.
-	 */
-	final Class resolve(Type t, Map<Class<?>,Class<?>[]> typeVarImpls) {
 
-		if (t instanceof Class t2)
-			return t2;
-
-		if (t instanceof ParameterizedType t3)
-			// A parameter (e.g. <String>.
-			return (Class)t3.getRawType();
-
-		if (t instanceof GenericArrayType t4) {
-			// An array parameter (e.g. <byte[]>).
-			var gatct = t4.getGenericComponentType();
-
-			if (gatct instanceof Class<?> gatct2)
-				return Array.newInstance(gatct2, 0).getClass();
-
-			if (gatct instanceof ParameterizedType gatct3)
-				return Array.newInstance((Class)gatct3.getRawType(), 0).getClass();
-
-			if (gatct instanceof GenericArrayType gatct4)
-				return Array.newInstance(resolve(gatct4, typeVarImpls), 0).getClass();
-
-			return null;
-
-		} else if (t instanceof TypeVariable t4) {
-			if (nn(typeVarImpls)) {
-				String varName = t4.getName();
-				int varIndex = -1;
-				var gc = (Class)t4.getGenericDeclaration();
-				TypeVariable[] tvv = gc.getTypeParameters();
-				for (var i = 0; i < tvv.length; i++) {
-					if (tvv[i].getName().equals(varName)) {
-						varIndex = i;
-					}
-				}
-				if (varIndex != -1) {
-
-					// If we couldn't find a type variable implementation, that means
-					// the type was defined at runtime (e.g. Bean b = new Bean<Foo>();)
-					// in which case the type is lost through erasure.
-					// Assume java.lang.Object as the type.
-					if (! typeVarImpls.containsKey(gc))
-						return null;
-
-					return typeVarImpls.get(gc)[varIndex];
-				}
-			}
-		}
-		return null;
-	}
-
-	final ClassMeta resolveClassMeta(Type o, Map<Class<?>,Class<?>[]> typeVarImpls) {
+	final ClassMeta resolveClassMeta(Type o, TypeVariables typeVars) {
 		if (o == null)
 			return null;
 
@@ -4411,10 +4341,10 @@ public class BeanContext extends Context {
 
 		// Handle ClassInfo by extracting the underlying Type
 		if (o instanceof ClassInfo ci) {
-			return resolveClassMeta(ci.innerType(), typeVarImpls);
+			return resolveClassMeta(ci.innerType(), typeVars);
 		}
 
-		Class c = resolve(o, typeVarImpls);
+		Class<?> c = TypeVariables.resolve(o, typeVars);
 
 		// This can happen when trying to resolve the "E getFirst()" method on LinkedList, whose type is a TypeVariable
 		// These should just resolve to Object.
@@ -4444,7 +4374,7 @@ public class BeanContext extends Context {
 
 		if (rawType.isArray()) {
 			if (o instanceof GenericArrayType o2) {
-				ClassMeta elementType = resolveClassMeta(o2.getGenericComponentType(), typeVarImpls);
+				ClassMeta elementType = resolveClassMeta(o2.getGenericComponentType(), typeVars);
 				return new ClassMeta(rawType, null, null, elementType);
 			}
 		}
