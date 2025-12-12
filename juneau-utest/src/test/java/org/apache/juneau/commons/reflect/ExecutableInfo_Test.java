@@ -709,7 +709,7 @@ class ExecutableInfo_Test extends TestBase {
 		
 		// Public methods might already be accessible
 		var publicAccessible = f_isPublic.isAccessible();
-		assertNotNull(Boolean.valueOf(publicAccessible));
+		assertNotNull(publicAccessible);
 	}
 
 	//====================================================================================================

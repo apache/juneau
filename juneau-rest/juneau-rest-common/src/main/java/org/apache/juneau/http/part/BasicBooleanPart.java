@@ -88,7 +88,7 @@ public class BasicBooleanPart extends BasicPart {
 	 */
 	public BasicBooleanPart(String name, String value) {
 		super(name, value);
-		this.value = isEmpty(value) ? null : Boolean.valueOf(value);
+		this.value = isEmpty(value) ? null : b(value);
 		this.supplier = null;
 	}
 

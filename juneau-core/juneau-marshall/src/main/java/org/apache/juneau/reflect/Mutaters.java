@@ -80,7 +80,7 @@ public class Mutaters {
 				public Boolean mutate(Object outer, String in) {
 					if (in == null || "null".equals(in) || in.isEmpty())
 						return null;
-					return Boolean.valueOf(in);
+					return b(in);
 				}
 			}
 		);

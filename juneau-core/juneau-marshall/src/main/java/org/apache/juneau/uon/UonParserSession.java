@@ -347,7 +347,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 				var s = parseString(r, isUrlParamValue);
 				if (c != '\'') {
 					if ("true".equals(s) || "false".equals(s))
-						o = Boolean.valueOf(s);
+						o = b(s);
 					else if (! "null".equals(s)) {
 						if (isNumeric(s))
 							o = StringUtils.parseNumber(s, Number.class);

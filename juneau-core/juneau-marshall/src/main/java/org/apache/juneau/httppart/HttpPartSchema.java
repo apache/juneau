@@ -2533,7 +2533,7 @@ public class HttpPartSchema {
 		}
 
 		private static Boolean resolve(String newValue, Boolean oldValue) {
-			return isEmpty(newValue) ? oldValue : Boolean.valueOf(newValue);
+			return isEmpty(newValue) ? oldValue : b(newValue);
 		}
 
 		private static Long resolve(String newValue, Long oldValue) {

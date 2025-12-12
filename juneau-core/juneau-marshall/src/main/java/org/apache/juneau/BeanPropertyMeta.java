@@ -246,18 +246,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 
 		/**
-		 * Sets the inner field for this bean property.
-		 *
-		 * @param value The inner field for this bean property.
-		 * @return This object.
-		 */
-		public Builder setInnerField(Field value) {
-			assertArgNotNull("value", value);
-			innerField = FieldInfo.of(value);
-			return this;
-		}
-
-		/**
 		 * Sets the setter method for this bean property.
 		 *
 		 * @param value The setter method info for this bean property.
@@ -314,9 +302,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 						properties = split(beanp.properties());
 					bdClasses.addAll(l(beanp.dictionary()));
 					if (isNotEmpty(beanp.ro()))
-						readOnly = Boolean.valueOf(beanp.ro());
+						readOnly = b(beanp.ro());
 					if (isNotEmpty(beanp.wo()))
-						writeOnly = Boolean.valueOf(beanp.wo());
+						writeOnly = b(beanp.wo());
 				});
 				ap.find(Swap.class, ifi).stream().map(AnnotationInfo::inner).findFirst().ifPresent(x -> swap = getPropertySwap(x));
 				isUri |= ap.has(Uri.class, ifi);
@@ -335,9 +323,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 						properties = split(beanp.properties());
 					bdClasses.addAll(l(beanp.dictionary()));
 					if (isNotEmpty(beanp.ro()))
-						readOnly = Boolean.valueOf(beanp.ro());
+						readOnly = b(beanp.ro());
 					if (isNotEmpty(beanp.wo()))
-						writeOnly = Boolean.valueOf(beanp.wo());
+						writeOnly = b(beanp.wo());
 				});
 				ap.find(Swap.class, gi).stream().map(AnnotationInfo::inner).forEach(x -> swap = getPropertySwap(x));
 			}
@@ -355,9 +343,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 						properties = split(beanp.properties());
 					bdClasses.addAll(l(beanp.dictionary()));
 					if (isNotEmpty(beanp.ro()))
-						readOnly = Boolean.valueOf(beanp.ro());
+						readOnly = b(beanp.ro());
 					if (isNotEmpty(beanp.wo()))
-						writeOnly = Boolean.valueOf(beanp.wo());
+						writeOnly = b(beanp.wo());
 				});
 				ap.find(Swap.class, si).stream().map(AnnotationInfo::inner).forEach(x -> swap = getPropertySwap(x));
 			}

@@ -235,11 +235,11 @@ class PackageInfo_Test extends TestBase {
 		if (specVersion != null && !specVersion.isEmpty()) {
 			// Line 309: normal return path when package has a version
 			var compatible = pi.isCompatibleWith("1.0");
-			assertNotNull(Boolean.valueOf(compatible));
+			assertNotNull(compatible);
 			
 			// Test with another version
 			var compatible2 = pi.isCompatibleWith("2.0");
-			assertNotNull(Boolean.valueOf(compatible2));
+			assertNotNull(compatible2);
 		} else {
 			// Package doesn't have a version - isCompatibleWith will throw NumberFormatException
 			// Line 309 is still executed, exception is thrown from inner.isCompatibleWith
@@ -263,7 +263,7 @@ class PackageInfo_Test extends TestBase {
 		var pi = PackageInfo.of(TestClass1.class);
 		var sealed = pi.isSealed();
 		// Most packages are not sealed
-		assertNotNull(Boolean.valueOf(sealed));
+		assertNotNull(sealed);
 	}
 
 	//====================================================================================================
@@ -275,7 +275,7 @@ class PackageInfo_Test extends TestBase {
 		var url = new URL("file:///test.jar");
 		var sealed = pi.isSealed(url);
 		// Most packages are not sealed with respect to a specific URL
-		assertNotNull(Boolean.valueOf(sealed));
+		assertNotNull(sealed);
 	}
 
 	//====================================================================================================

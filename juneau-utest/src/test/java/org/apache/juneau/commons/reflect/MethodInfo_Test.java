@@ -464,7 +464,7 @@ class MethodInfo_Test extends TestBase {
 		// This test case demonstrates the limitation mentioned in the javadoc.
 		var result = e_a2.hasOnlyParameterTypes(int.class);
 		// The result depends on the implementation - it may be true (lenient) or false (strict)
-		assertNotNull(Boolean.valueOf(result));
+		assertNotNull(result);
 	}
 
 	//====================================================================================================

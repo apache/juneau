@@ -520,7 +520,7 @@ class ConstructorInfo_Test extends TestBase {
 		
 		// Public constructors might already be accessible
 		var publicAccessible = b_c1.isAccessible();
-		assertNotNull(Boolean.valueOf(publicAccessible));
+		assertNotNull(publicAccessible);
 	}
 
 	//====================================================================================================

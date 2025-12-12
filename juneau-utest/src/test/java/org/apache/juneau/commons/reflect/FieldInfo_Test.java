@@ -501,7 +501,7 @@ class FieldInfo_Test extends TestBase {
 		
 		// Public fields might already be accessible
 		var publicAccessible = d_isPublic.isAccessible();
-		assertNotNull(Boolean.valueOf(publicAccessible));
+		assertNotNull(publicAccessible);
 	}
 
 	//====================================================================================================

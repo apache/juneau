@@ -174,8 +174,8 @@ class BooleanAssertion_Test extends TestBase {
 
 	@Test void ca08_isSame() {
 		// Note that even the following returns the same object sometimes.
-		var x1 = Boolean.valueOf(new String("true"));
-		var x1a = Boolean.valueOf(new String("true"));
+		var x1 = b(new String("true"));
+		var x1a = b(new String("true"));
 		var nil = n(Boolean.class);
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
