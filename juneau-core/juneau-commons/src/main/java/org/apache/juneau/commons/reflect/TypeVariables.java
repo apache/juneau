@@ -314,7 +314,7 @@ public class TypeVariables {
 		if (type instanceof TypeVariable<?> tv) {
 			if (typeVars == null)
 				return null;
-			return typeVars.resolve(type);
+			return typeVars.resolve(tv);
 		}
 
 		return null;

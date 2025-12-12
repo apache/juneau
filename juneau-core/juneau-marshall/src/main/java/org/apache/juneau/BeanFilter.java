@@ -31,14 +31,49 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.swap.*;
 
 /**
- * TODO
+ * Bean filter for customizing bean property handling during serialization and parsing.
  *
  * <p>
- * Bean filters are used to control aspects of how beans are handled during serialization and parsing.
+ * Bean filters provide fine-grained control over how beans are processed, allowing you to:
+ * <ul>
+ * 	<li>Specify which properties to include or exclude
+ * 	<li>Define read-only and write-only properties
+ * 	<li>Control property ordering and naming
+ * 	<li>Configure bean dictionaries for polymorphic types
+ * 	<li>Intercept property getter and setter calls
+ * 	<li>Define interface classes and stop classes for property filtering
+ * </ul>
  *
  * <p>
- * Bean filters are created by {@link Builder} which is the programmatic equivalent to the {@link Bean @Bean}
- * annotation.
+ * Bean filters are created using the {@link Builder} class, which is the programmatic equivalent to the
+ * {@link Bean @Bean} annotation. Filters can be registered with serializers and parsers to customize
+ * how specific bean classes are handled.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Define a custom filter for MyBean</jc>
+ * 	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilter.Builder&lt;MyBean&gt; {
+ * 		<jk>public</jk> MyBeanFilter() {
+ * 			properties(<js>"id,name,email"</js>);  <jc>// Only include these properties</jc>
+ * 			excludeProperties(<js>"password"</js>);  <jc>// Exclude sensitive data</jc>
+ * 			readOnlyProperties(<js>"id"</js>);  <jc>// ID is read-only</jc>
+ * 			sortProperties();  <jc>// Sort properties alphabetically</jc>
+ * 		}
+ * 	}
+ *
+ * 	<jc>// Register the filter with a serializer</jc>
+ * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+ * 		.<jsm>create</jsm>()
+ * 		.beanFilters(MyBeanFilter.<jk>class</jk>)
+ * 		.build();
+ * </p>
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='ja'>{@link Bean @Bean}
+ * 	<li class='jc'>{@link BeanInterceptor}
+ * 	<li class='jc'>{@link PropertyNamer}
+ * </ul>
  */
 @SuppressWarnings("rawtypes")
 public class BeanFilter {
@@ -46,7 +81,7 @@ public class BeanFilter {
 	/**
 	 * Builder class.
 	 */
-	protected static class Builder {
+	public static class Builder {
 
 		private ClassInfoTyped<?> beanClass;
 		private String typeName, example;
@@ -92,13 +127,13 @@ public class BeanFilter {
 				if (isNotVoid(x.propertyNamer()))
 					propertyNamer(x.propertyNamer());
 				if (isNotVoid(x.interfaceClass()))
-					interfaceClass(info(x.interfaceClass()));
+					interfaceClass(x.interfaceClass());
 				if (isNotVoid(x.stopClass()))
-					stopClass(info(x.stopClass()));
+					stopClass(x.stopClass());
 				if (isNotVoid(x.interceptor()))
 					interceptor(x.interceptor());
 				if (isNotVoid(x.implClass()))
-					implClass(info(x.implClass()));
+					implClass(x.implClass());
 				if (isNotEmptyArray(x.dictionary()))
 					dictionary(x.dictionary());
 				if (isNotEmpty(x.example()))
@@ -336,6 +371,28 @@ public class BeanFilter {
 		}
 
 		/**
+		 * Bean interceptor.
+		 *
+		 * <p>
+		 * Same as the other interceptor method but accepts a {@link ClassInfo} object directly instead of a {@link Class} object.
+		 *
+		 * <p>
+		 * The interceptor to use for intercepting and altering getter and setter calls.
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link Bean#interceptor()}
+		 * 	<li class='jc'>{@link BeanInterceptor}
+		 * </ul>
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder interceptor(ClassInfo value) {
+			this.interceptor.type(value);
+			return this;
+		}
+
+		/**
 		 * Bean interface class.
 		 *
 		 * Identifies a class to be used as the interface class for this and all subclasses.
@@ -487,6 +544,29 @@ public class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder propertyNamer(Class<? extends PropertyNamer> value) {
+			this.propertyNamer.type(value);
+			return this;
+		}
+
+		/**
+		 * Bean property namer.
+		 *
+		 * <p>
+		 * Same as the other propertyNamer method but accepts a {@link ClassInfoTyped} object directly instead of a {@link Class} object.
+		 *
+		 * <p>
+		 * The class to use for calculating bean property names.
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link Bean#propertyNamer()}
+		 * 	<li class='jm'>{@link BeanContext.Builder#propertyNamer(Class)}
+		 * 	<li class='jc'>{@link PropertyNamer}
+		 * </ul>
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder propertyNamer(ClassInfoTyped<? extends PropertyNamer> value) {
 			this.propertyNamer.type(value);
 			return this;
 		}

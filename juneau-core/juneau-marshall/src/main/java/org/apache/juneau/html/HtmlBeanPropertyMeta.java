@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.html;
 
-import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.*;
