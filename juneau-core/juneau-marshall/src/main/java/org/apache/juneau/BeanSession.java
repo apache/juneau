@@ -1664,7 +1664,7 @@ public class BeanSession extends ContextSession {
 		var i = IntegerValue.create();
 		list.forEach(x -> {
 			var x2 = x;
-			if (! type.inner().isInstance(x)) {
+			if (! type.isInstance(x)) {
 				if (componentType.isArray() && x instanceof Collection<?> c)
 					x2 = toArray(componentType, c);
 				else if (x == null && componentType.isPrimitive())
