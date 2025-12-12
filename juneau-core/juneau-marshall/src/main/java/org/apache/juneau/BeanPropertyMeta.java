@@ -93,7 +93,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 */
 		public Builder beanRegistry(BeanRegistry value) {
 			assertArgNotNull("value", value);
-			this.beanRegistry = value;
+			beanRegistry = value;
 			return this;
 		}
 
@@ -112,7 +112,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 */
 		public Builder delegateFor(BeanPropertyMeta value) {
 			assertArgNotNull("value", value);
-			this.delegateFor = value;
+			delegateFor = value;
 			return this;
 		}
 
@@ -123,7 +123,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder overrideValue(Object value) {
-			this.overrideValue = value;
+			overrideValue = value;
 			return this;
 		}
 
@@ -135,8 +135,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 */
 		public Builder rawMetaType(ClassMeta<?> value) {
 			assertArgNotNull("value", value);
-			this.rawTypeMeta = value;
-			this.typeMeta = rawTypeMeta;
+			rawTypeMeta = value;
+			typeMeta = rawTypeMeta;
 			return this;
 		}
 
@@ -154,7 +154,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				return null;
 			var ci = info(c);
 			if (ci.isChildOf(ObjectSwap.class)) {
-				var ps = BeanCreator.of(ObjectSwap.class).type(c).run();
+				var ps = BeanCreator.of(ObjectSwap.class).type(ci).run();
 				if (nn(ps.forMediaTypes()))
 					throw unsupportedOp("TODO - Media types on swaps not yet supported on bean properties.");
 				if (nn(ps.withTemplate()))
@@ -172,7 +172,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder canRead() {
-			this.canRead = true;
+			canRead = true;
 			return this;
 		}
 
@@ -182,7 +182,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder canWrite() {
-			this.canWrite = true;
+			canWrite = true;
 			return this;
 		}
 
@@ -191,8 +191,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 *
 		 * @return This object.
 		 */
-		public BeanPropertyMeta.Builder setAsConstructorArg() {
-			this.isConstructorArg = true;
+		public Builder setAsConstructorArg() {
+			isConstructorArg = true;
 			return this;
 		}
 
@@ -202,9 +202,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @param value The method info that returns extra keys for this property.
 		 * @return This object.
 		 */
-		public BeanPropertyMeta.Builder setExtraKeys(MethodInfo value) {
+		public Builder setExtraKeys(MethodInfo value) {
 			assertArgNotNull("value", value);
-			this.extraKeys = value.accessible();
+			extraKeys = value.accessible();
 			return this;
 		}
 
@@ -214,10 +214,10 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @param value The field info for this bean property.
 		 * @return This object.
 		 */
-		public BeanPropertyMeta.Builder setField(FieldInfo value) {
+		public Builder setField(FieldInfo value) {
 			assertArgNotNull("value", value);
-			this.field = value.accessible();
-			this.innerField = this.field;
+			field = value.accessible();
+			innerField = field;
 			return this;
 		}
 
@@ -227,9 +227,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @param value The getter method info for this bean property.
 		 * @return This object.
 		 */
-		public BeanPropertyMeta.Builder setGetter(MethodInfo value) {
+		public Builder setGetter(MethodInfo value) {
 			assertArgNotNull("value", value);
-			this.getter = value.accessible();
+			getter = value.accessible();
 			return this;
 		}
 
@@ -239,9 +239,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @param value The field info containing the inner field.
 		 * @return This object.
 		 */
-		public BeanPropertyMeta.Builder setInnerField(FieldInfo value) {
+		public Builder setInnerField(FieldInfo value) {
 			assertArgNotNull("value", value);
-			this.innerField = value;
+			innerField = value;
 			return this;
 		}
 
@@ -251,9 +251,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @param value The inner field for this bean property.
 		 * @return This object.
 		 */
-		public BeanPropertyMeta.Builder setInnerField(Field value) {
+		public Builder setInnerField(Field value) {
 			assertArgNotNull("value", value);
-			this.innerField = FieldInfo.of(value);
+			innerField = FieldInfo.of(value);
 			return this;
 		}
 
@@ -263,9 +263,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @param value The setter method info for this bean property.
 		 * @return This object.
 		 */
-		public BeanPropertyMeta.Builder setSetter(MethodInfo value) {
+		public Builder setSetter(MethodInfo value) {
 			assertArgNotNull("value", value);
-			this.setter = value.accessible();
+			setter = value.accessible();
 			return this;
 		}
 
@@ -365,7 +365,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (rawTypeMeta == null)
 				return false;
 
-			this.beanRegistry = new BeanRegistry(bc, parentBeanRegistry, bdClasses.toArray(new Class<?>[0]));
+			beanRegistry = new BeanRegistry(bc, parentBeanRegistry, bdClasses.toArray(new Class<?>[0]));
 
 			isDyna = "*".equals(name);
 
@@ -476,7 +476,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 *
 	 * @param b The builder to copy fields from.
 	 */
-	protected BeanPropertyMeta(BeanPropertyMeta.Builder b) {
+	protected BeanPropertyMeta(Builder b) {
 		field = b.field;
 		innerField = b.innerField;
 		getter = b.getter;
@@ -1162,7 +1162,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 						}
 					} else {
 						if (propMap == null) {
-							propMap = BeanCreator.of(Map.class).type(propertyClass).run();
+							propMap = BeanCreator.of(Map.class).type(rawTypeMeta).run();
 						} else {
 							propMap.clear();
 						}
@@ -1221,7 +1221,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 						propList.clear();
 					} else {
 						if (propList == null) {
-							propList = BeanCreator.of(Collection.class).type(propertyClass).run();
+							propList = BeanCreator.of(Collection.class).type(rawTypeMeta).run();
 							invokeSetter(bean, pName, propList);
 						} else {
 							propList.clear();

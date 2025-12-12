@@ -1274,7 +1274,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		var ci = info(c);
 
 		if (ci.isChildOf(ObjectSwap.class)) {
-			var ps = BeanCreator.of(ObjectSwap.class).type(c).run();
+			var ps = BeanCreator.of(ObjectSwap.class).type(ci).run();
 			if (s.mediaTypes().length > 0)
 				ps.forMediaTypes(MediaType.ofAll(s.mediaTypes()));
 			if (! s.template().isEmpty())
