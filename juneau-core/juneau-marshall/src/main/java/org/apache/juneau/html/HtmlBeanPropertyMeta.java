@@ -87,7 +87,7 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		if (nn(bpm.getGetter()))
 			ap.find(Html.class, bpm.getGetter()).forEach(x -> b.findHtmlInfo(x.inner()));
 		if (nn(bpm.getSetter()))
-			ap.find(Html.class, info(bpm.getSetter())).forEach(x -> b.findHtmlInfo(x.inner()));
+			ap.find(Html.class, bpm.getSetter()).forEach(x -> b.findHtmlInfo(x.inner()));
 
 		format = b.format;
 		noTables = b.noTables;

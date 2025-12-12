@@ -122,7 +122,7 @@ public class BeanMeta<T> {
 			// Get the bean property type from the getter/field.
 			var pt = (Class<?>)null;  // TODO - Convert to ClassInfo
 			if (nn(b.getter))
-				pt = b.getter.getReturnType().inner(); 
+				pt = b.getter.getReturnType().inner();
 			else if (nn(b.field))
 				pt = b.field.inner().getType();
 
@@ -139,7 +139,7 @@ public class BeanMeta<T> {
 			if (b.setter == null)
 				return true;
 
-			return type.isStrictChildOf(b.setter.getParameterTypes()[0]);
+			return type.isStrictChildOf(b.setter.getParameterTypes().get(0).inner());
 		}
 	}
 
@@ -439,7 +439,7 @@ public class BeanMeta<T> {
 						if (pd.getReadMethod() != null)
 							builder.setGetter(info(pd.getReadMethod()));
 						if (pd.getWriteMethod() != null)
-							builder.setSetter(pd.getWriteMethod());
+							builder.setSetter(info(pd.getWriteMethod()));
 					}
 				}
 
@@ -483,7 +483,7 @@ public class BeanMeta<T> {
 				bms.stream().filter(x -> eq(x.methodType, SETTER)).forEach(x -> {
 					var bpm = normalProps.get(x.propertyName);
 					if (x.matchesPropertyType(bpm))
-						bpm.setSetter(x.method);
+						bpm.setSetter(info(x.method));
 				});
 
 				// Now iterate through all the extraKeys.
@@ -507,7 +507,7 @@ public class BeanMeta<T> {
 							_getterProps.put(p.getter.inner(), p.name);
 
 						if (nn(p.setter))
-							_setterProps.put(p.setter, p.name);
+							_setterProps.put(p.setter.inner(), p.name);
 
 					} else {
 						i.remove();

@@ -68,7 +68,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		FieldInfo field;  // Package-private for BeanMeta access
 		FieldInfo innerField;  // Package-private for BeanMeta access
 		MethodInfo getter;  // Package-private for BeanMeta access
-		Method setter, extraKeys;  // Package-private for BeanMeta access. TODO - Replace with MethodInfo fields
+		MethodInfo setter;  // Package-private for BeanMeta access
+		Method extraKeys;  // Package-private for BeanMeta access. TODO - Replace with MethodInfo field
 		private boolean isConstructorArg, isUri, isDyna, isDynaGetterMap;
 		private ClassMeta<?> rawTypeMeta, typeMeta;
 		private List<String> properties;
@@ -260,13 +261,12 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	/**
 	 * Sets the setter method for this bean property.
 	 *
-	 * @param value The setter method for this bean property.
+	 * @param value The setter method info for this bean property.
 	 * @return This object.
 	 */
-	public BeanPropertyMeta.Builder setSetter(Method value) {
+	public BeanPropertyMeta.Builder setSetter(MethodInfo value) {
 		assertArgNotNull("value", value);
-		setAccessible(value);
-		this.setter = value;
+		this.setter = value.accessible();
 		return this;
 	}
 
@@ -297,7 +297,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 			var ifi = innerField;
 			var gi = getter;
-			var si = setter == null ? null : info(setter);
+			var si = setter;
 
 			if (nn(innerField)) {
 				List<Beanp> lp = list();
@@ -345,7 +345,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (nn(setter)) {
 				var lp = ap.find(Beanp.class, si).stream().map(AnnotationInfo::inner).toList();
 				if (rawTypeMeta == null)
-					rawTypeMeta = bc.resolveClassMeta(last(lp), setter.getGenericParameterTypes()[0], typeVarImpls);
+					rawTypeMeta = bc.resolveClassMeta(last(lp), setter.inner().getGenericParameterTypes()[0], typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || ap.has(Uri.class, si));
 				lp.forEach(x -> {
 					if (swap == null)
@@ -388,13 +388,13 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (nn(setter)) {
 				var pt = setter.getParameterTypes();
 				if (isDyna) {
-					if (pt.length == 2 && pt[0] == String.class) {
+					if (pt.size() == 2 && pt.get(0).inner().equals(String.class)) {
 						// OK.
 					} else {
 						return false;
 					}
 				} else {
-					if (pt.length != 1 || ! ci.isChildOf(pt[0]))
+					if (pt.size() != 1 || ! ci.isChildOf(pt.get(0).inner()))
 						return false;
 				}
 			}
@@ -458,7 +458,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	private final FieldInfo innerField;                                // The bean property field (if it has one).
 
 	private final MethodInfo getter;           // The bean property getter.
-	private final Method setter, extraKeys;           // The bean property setter and extraKeys.
+	private final MethodInfo setter;           // The bean property setter.
+	private final Method extraKeys;           // The bean property extraKeys.
 
 	private final boolean isUri;                              // True if this is a URL/URI or annotated with @URI.
 	private final boolean isDyna, isDynaGetterMap;            // This is a dyna property (i.e. name="*")
@@ -721,7 +722,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (nn(getter))
 				ap.find(a, getter, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).stream().map(AnnotationInfo::inner).filter(filter).forEach(action);
 			if (nn(setter))
-				ap.find(a, info(setter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).stream().map(AnnotationInfo::inner).filter(filter).forEach(action);
+				ap.find(a, setter, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).stream().map(AnnotationInfo::inner).filter(filter).forEach(action);
 		}
 		return this;
 	}
@@ -780,11 +781,11 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 		if (nn(setter)) {
 			// Walk up the inheritance hierarchy for the setter method
-			forEachParentMethod(setter, parentSetter -> {
+			forEachParentMethod(setter.inner(), parentSetter -> {
 				ap.find(a, info(parentSetter), SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
 			});
 			ap.find(a, si, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE).forEach(x -> l.add(x.inner()));
-			rstream(ap.find(a, info(setter.getReturnType()))).forEach(x -> l.add(x.inner()));
+			rstream(ap.find(a, setter.getReturnType())).forEach(x -> l.add(x.inner()));
 		}
 		if (nn(extraKeys)) {
 			var eki = info(extraKeys);
@@ -938,9 +939,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	/**
 	 * Returns the setter method for this property.
 	 *
-	 * @return The setter method for this bean property, or <jk>null</jk> if there is no setter method.
+	 * @return The setter method info for this bean property, or <jk>null</jk> if there is no setter method.
 	 */
-	public Method getSetter() { return setter; }
+	public MethodInfo getSetter() { return setter; }
 
 	@Override /* Overridden from Object */
 	public int hashCode() {
@@ -1267,7 +1268,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 									"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter or public field is defined, and the current value is null", name,
 									propertyClass.getName(), findClassName(value));
 
-							if (propertyClass.isInstance(valueList) || (nn(setter) && setter.getParameterTypes()[0] == Collection.class)) {
+							if (propertyClass.isInstance(valueList) || (nn(setter) && setter.getParameterTypes().get(0).inner().equals(Collection.class))) {
 								if (! elementType.isObject()) {
 									List l = new JsonList(valueList);
 									for (ListIterator<Object> i = l.listIterator(); i.hasNext();) {
