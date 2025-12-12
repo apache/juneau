@@ -299,63 +299,65 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			var si = setter;
 
 			if (nn(innerField)) {
-				List<Beanp> lp = list();
-				ap.find(Beanp.class, ifi).forEach(x -> lp.add(x.inner()));
+				var lp = ap.find(Beanp.class, ifi);
 				if (nn(field) || isNotEmpty(lp)) {
 					// Only use field type if it's a bean property or has @Beanp annotation.
 					// Otherwise, we want to infer the type from the getter or setter.
-					rawTypeMeta = bc.resolveClassMeta(last(lp), innerField.inner().getGenericType(), typeVarImpls);
+					rawTypeMeta = bc.resolveClassMeta(isNotEmpty(lp) ? last(lp).inner() : null, innerField.inner().getGenericType(), typeVarImpls);
 					isUri |= (rawTypeMeta.isUri());
 				}
 				lp.forEach(x -> {
+					var beanp = x.inner();
 					if (swap == null)
-						swap = getPropertySwap(x);
-					if (! x.properties().isEmpty())
-						properties = split(x.properties());
-					addAll(bdClasses, (Object[])x.dictionary());
-					if (! x.ro().isEmpty())
-						readOnly = Boolean.valueOf(x.ro());
-					if (! x.wo().isEmpty())
-						writeOnly = Boolean.valueOf(x.wo());
+						swap = getPropertySwap(beanp);
+					if (isNotEmpty(beanp.properties()))
+						properties = split(beanp.properties());
+					bdClasses.addAll(l(beanp.dictionary()));
+					if (isNotEmpty(beanp.ro()))
+						readOnly = Boolean.valueOf(beanp.ro());
+					if (isNotEmpty(beanp.wo()))
+						writeOnly = Boolean.valueOf(beanp.wo());
 				});
-				ap.find(Swap.class, ifi).stream().findFirst().ifPresent(x -> swap = getPropertySwap(x.inner()));
+				ap.find(Swap.class, ifi).stream().map(AnnotationInfo::inner).findFirst().ifPresent(x -> swap = getPropertySwap(x));
 				isUri |= ap.has(Uri.class, ifi);
 			}
 
 			if (nn(getter)) {
-				var lp = ap.find(Beanp.class, gi).stream().map(AnnotationInfo::inner).toList();
+				var lp = ap.find(Beanp.class, gi);
 				if (rawTypeMeta == null)
-					rawTypeMeta = bc.resolveClassMeta(last(lp), getter.inner().getGenericReturnType(), typeVarImpls);
+					rawTypeMeta = bc.resolveClassMeta(isNotEmpty(lp) ? last(lp).inner() : null, getter.inner().getGenericReturnType(), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || ap.has(Uri.class, gi));
 				lp.forEach(x -> {
+					var beanp = x.inner();
 					if (swap == null)
-						swap = getPropertySwap(x);
-					if (nn(properties) && ! x.properties().isEmpty())
-						properties = split(x.properties());
-					addAll(bdClasses, (Object[])x.dictionary());
-					if (! x.ro().isEmpty())
-						readOnly = Boolean.valueOf(x.ro());
-					if (! x.wo().isEmpty())
-						writeOnly = Boolean.valueOf(x.wo());
+						swap = getPropertySwap(beanp);
+					if (nn(properties) && isNotEmpty(beanp.properties()))
+						properties = split(beanp.properties());
+					bdClasses.addAll(l(beanp.dictionary()));
+					if (isNotEmpty(beanp.ro()))
+						readOnly = Boolean.valueOf(beanp.ro());
+					if (isNotEmpty(beanp.wo()))
+						writeOnly = Boolean.valueOf(beanp.wo());
 				});
 				ap.find(Swap.class, gi).stream().map(AnnotationInfo::inner).forEach(x -> swap = getPropertySwap(x));
 			}
 
 			if (nn(setter)) {
-				var lp = ap.find(Beanp.class, si).stream().map(AnnotationInfo::inner).toList();
+				var lp = ap.find(Beanp.class, si);
 				if (rawTypeMeta == null)
-					rawTypeMeta = bc.resolveClassMeta(last(lp), setter.inner().getGenericParameterTypes()[0], typeVarImpls);
+					rawTypeMeta = bc.resolveClassMeta(isNotEmpty(lp) ? last(lp).inner() : null, setter.inner().getGenericParameterTypes()[0], typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || ap.has(Uri.class, si));
 				lp.forEach(x -> {
+					var beanp = x.inner();
 					if (swap == null)
-						swap = getPropertySwap(x);
-					if (nn(properties) && ! x.properties().isEmpty())
-						properties = split(x.properties());
-					addAll(bdClasses, (Object[])x.dictionary());
-					if (! x.ro().isEmpty())
-						readOnly = Boolean.valueOf(x.ro());
-					if (! x.wo().isEmpty())
-						writeOnly = Boolean.valueOf(x.wo());
+						swap = getPropertySwap(beanp);
+					if (nn(properties) && isNotEmpty(beanp.properties()))
+						properties = split(beanp.properties());
+					bdClasses.addAll(l(beanp.dictionary()));
+					if (isNotEmpty(beanp.ro()))
+						readOnly = Boolean.valueOf(beanp.ro());
+					if (isNotEmpty(beanp.wo()))
+						writeOnly = Boolean.valueOf(beanp.wo());
 				});
 				ap.find(Swap.class, si).stream().map(AnnotationInfo::inner).forEach(x -> swap = getPropertySwap(x));
 			}
