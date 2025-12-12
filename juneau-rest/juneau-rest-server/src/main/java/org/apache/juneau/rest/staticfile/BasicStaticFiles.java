@@ -91,7 +91,7 @@ public class BasicStaticFiles implements StaticFiles {
 	public BasicStaticFiles(StaticFiles.Builder builder) {
 		this.headers = builder.headers.toArray(new Header[builder.headers.size()]);
 		this.mimeTypes = builder.mimeTypes;
-		this.hashCode = HashCode.of(hashCode(), headers);
+		this.hashCode = hash(hashCode(), headers);
 		this.fileFinder = builder.fileFinder.build();
 	}
 
@@ -104,7 +104,7 @@ public class BasicStaticFiles implements StaticFiles {
 	protected BasicStaticFiles() {
 		this.headers = new Header[0];
 		this.mimeTypes = null;
-		this.hashCode = HashCode.of(hashCode(), headers);
+		this.hashCode = hash(hashCode(), headers);
 		this.fileFinder = null;
 	}
 

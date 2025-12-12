@@ -76,7 +76,7 @@ public class BasicFileFinder implements FileFinder {
 		this.exclude = builder.exclude;
 		this.includePatterns = l(include).stream().map(Pattern::pattern).toArray(String[]::new);
 		this.excludePatterns = l(exclude).stream().map(Pattern::pattern).toArray(String[]::new);
-		this.hashCode = HashCode.of(getClass(), roots, cachingLimit, includePatterns, excludePatterns);
+		this.hashCode = hash(getClass(), roots, cachingLimit, includePatterns, excludePatterns);
 	}
 
 	/**
@@ -92,7 +92,7 @@ public class BasicFileFinder implements FileFinder {
 		this.exclude = new Pattern[0];
 		this.includePatterns = new String[0];
 		this.excludePatterns = new String[0];
-		this.hashCode = HashCode.of(getClass(), roots, cachingLimit, includePatterns, excludePatterns);
+		this.hashCode = hash(getClass(), roots, cachingLimit, includePatterns, excludePatterns);
 	}
 
 	@Override /* Overridden from Object */

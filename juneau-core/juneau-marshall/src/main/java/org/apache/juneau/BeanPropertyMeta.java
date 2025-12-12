@@ -35,7 +35,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -433,33 +432,30 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		return new Builder(beanMeta, name);
 	}
 
-	final BeanMeta<?> beanMeta;                               // The bean that this property belongs to.
-	private final BeanContext bc;                    // The context that created this meta.
-	private final AnnotationProvider ap;
-	private final String name;                                // The name of the property.
-	private final FieldInfo field;                                // The bean property field (if it has one).
-	private final FieldInfo innerField;                                // The bean property field (if it has one).
-
-	private final MethodInfo getter;           // The bean property getter.
-	private final MethodInfo setter;           // The bean property setter.
-	private final MethodInfo extraKeys;           // The bean property extraKeys.
-
-	private final boolean isUri;                              // True if this is a URL/URI or annotated with @URI.
-	private final boolean isDyna, isDynaGetterMap;            // This is a dyna property (i.e. name="*")
-
-	private final ClassMeta<?> rawTypeMeta,                                           // The real class type of the bean property.
-	typeMeta;                                              // The transformed class type of the bean property.
-
-	private final List<String> properties;                        // The value of the @Beanp(properties) annotation (unmodifiable).
-	private final ObjectSwap swap;                              // ObjectSwap defined only via @Beanp annotation.
-	private final BeanRegistry beanRegistry;
-	private final Object overrideValue;                       // The bean property value (if it's an overridden delegate).
-
-	private final BeanPropertyMeta delegateFor;               // The bean property that this meta is a delegate for.
-
-	private final boolean canRead, canWrite, readOnly, writeOnly;
-
-	private final int hashCode;
+	private final AnnotationProvider ap;                   // Annotation provider for finding annotations on this property.
+	private final BeanContext bc;                          // The context that created this meta.
+	private final BeanMeta<?> beanMeta;                    // The bean that this property belongs to.
+	private final BeanRegistry beanRegistry;               // Bean registry for resolving bean types in this property.
+	private final boolean canRead;                         // True if this property can be read.
+	private final boolean canWrite;                        // True if this property can be written.
+	private final BeanPropertyMeta delegateFor;            // The bean property that this meta is a delegate for.
+	private final MethodInfo extraKeys;                    // The bean property extraKeys method.
+	private final FieldInfo field;                         // The bean property field (if it has one).
+	private final MethodInfo getter;                       // The bean property getter.
+	private final int hashCode;                            // Cached hash code for this property meta.
+	private final FieldInfo innerField;                    // The bean property field even if private (if it has one).
+	private final boolean isDyna;                          // True if this is a dyna property (i.e. name="*").
+	private final boolean isDynaGetterMap;                 // True if this is a dyna property where the getter returns a Map directly.
+	private final boolean isUri;                           // True if this is a URL/URI or annotated with @URI.
+	private final String name;                             // The name of the property.
+	private final Object overrideValue;                    // The bean property value (if it's an overridden delegate).
+	private final List<String> properties;                 // The value of the @Beanp(properties) annotation (unmodifiable).
+	private final ClassMeta<?> rawTypeMeta;                // The real class type of the bean property.
+	private final boolean readOnly;                        // True if this property is read-only.
+	private final MethodInfo setter;                       // The bean property setter.
+	private final ObjectSwap swap;                         // ObjectSwap defined only via @Beanp annotation.
+	private final ClassMeta<?> typeMeta;                   // The transformed class type of the bean property.
+	private final boolean writeOnly;                       // True if this property is write-only.
 
 	/**
 	 * Creates a new BeanPropertyMeta using the contents of the specified builder.
@@ -467,30 +463,30 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @param b The builder to copy fields from.
 	 */
 	protected BeanPropertyMeta(Builder b) {
-		field = b.field;
-		innerField = b.innerField;
-		getter = b.getter;
-		setter = b.setter;
-		extraKeys = b.extraKeys;
-		isUri = b.isUri;
-		beanMeta = b.beanMeta;
 		bc = b.bc;
-		ap = bc.getAnnotationProvider();
-		name = b.name;
-		rawTypeMeta = b.rawTypeMeta;
-		typeMeta = b.typeMeta;
-		properties = b.properties == null ? null : u(b.properties);
-		swap = b.swap;
+		beanMeta = b.beanMeta;
 		beanRegistry = b.beanRegistry;
-		overrideValue = b.overrideValue;
-		delegateFor = b.delegateFor;
-		isDyna = b.isDyna;
-		isDynaGetterMap = b.isDynaGetterMap;
 		canRead = b.canRead;
 		canWrite = b.canWrite;
+		delegateFor = b.delegateFor;
+		extraKeys = b.extraKeys;
+		field = b.field;
+		getter = b.getter;
+		innerField = b.innerField;
+		isDyna = b.isDyna;
+		isDynaGetterMap = b.isDynaGetterMap;
+		isUri = b.isUri;
+		name = b.name;
+		overrideValue = b.overrideValue;
+		properties = u(b.properties);
+		rawTypeMeta = b.rawTypeMeta;
 		readOnly = b.readOnly;
+		setter = b.setter;
+		swap = b.swap;
+		typeMeta = b.typeMeta;
 		writeOnly = b.writeOnly;
-		hashCode = HashCode.of(beanMeta, name);
+		ap = bc.getAnnotationProvider();
+		hashCode = hash(beanMeta, name);
 	}
 
 	/**

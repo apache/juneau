@@ -662,10 +662,18 @@ public class Utils {
 	 * Calculates a hash code for the specified values.
 	 *
 	 * <p>
-	 * This method combines multiple values into a single hash code using the same algorithm as
-	 * {@link Objects#hash(Object...)}. It handles annotations specially by delegating to
-	 * {@link AnnotationUtils#hash(Annotation)} to ensure consistent hashing according to the
-	 * {@link java.lang.annotation.Annotation#hashCode()} contract.
+	 * This method delegates to {@link HashCode#of(Object...)} to combine multiple values into a single hash code.
+	 * It uses the same algorithm as {@link Objects#hash(Object...)} (31 * result + element hash).
+	 *
+	 * <p>
+	 * Special handling is provided for:
+	 * <ul>
+	 * 	<li><b>Annotations:</b> Uses {@link AnnotationUtils#hash(Annotation)} to ensure consistent hashing
+	 * 		according to the {@link java.lang.annotation.Annotation#hashCode()} contract.
+	 * 	<li><b>Arrays:</b> Uses content-based hashing via {@link java.util.Arrays#hashCode(Object[])}
+	 * 		instead of identity-based hashing.
+	 * 	<li><b>Null values:</b> Treated as 0 in the hash calculation.
+	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -675,6 +683,9 @@ public class Utils {
 	 * 	<jc>// Hash with annotations</jc>
 	 * 	<jk>int</jk> <jv>hash2</jv> = hash(<jv>myAnnotation</jv>, <js>"value"</js>);
 	 *
+	 * 	<jc>// Hash with arrays (content-based)</jc>
+	 * 	<jk>int</jk> <jv>hash3</jv> = hash(<jk>new</jk> <jk>int</jk>[]{1, 2, 3});
+	 *
 	 * 	<jc>// Use in hashCode() implementation</jc>
 	 * 	<jk>public</jk> <jk>int</jk> hashCode() {
 	 * 		<jk>return</jk> hash(id, name, created);
@@ -683,16 +694,13 @@ public class Utils {
 	 *
 	 * @param values The values to hash.
 	 * @return A hash code value for the given values.
+	 * @see HashCode#of(Object...)
 	 * @see AnnotationUtils#hash(Annotation)
 	 * @see Objects#hash(Object...)
 	 */
 	public static final int hash(Object...values) {
 		assertArgNotNull("values", values);
-		var result = 1;
-		for (var value : values) {
-			result = 31 * result + (value instanceof java.lang.annotation.Annotation ? AnnotationUtils.hash((java.lang.annotation.Annotation)value) : Objects.hashCode(value));
-		}
-		return result;
+		return HashCode.of(values);
 	}
 
 	/**

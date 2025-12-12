@@ -91,7 +91,7 @@ public class Tuple5<A,B,C,D,E> {
 		this.c = c;
 		this.d = d;
 		this.e = e;
-		this.hashCode = HashCode.of(a, b, c, d, e);
+		this.hashCode = hash(a, b, c, d, e);
 	}
 
 	@Override /* Overridden from Object */

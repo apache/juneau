@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.utils;
 
+import java.lang.annotation.*;
+
 /**
  * Utility class for generating integer hash codes.
  *
@@ -40,8 +42,24 @@ public class HashCode {
 	/**
 	 * Calculates a hash code over the specified objects.
 	 *
+	 * <p>
+	 * Uses the same algorithm as {@link java.util.Objects#hash(Object...)} (31 * result + element hash).
+	 *
+	 * <p>
+	 * Special handling is provided for:
+	 * <ul>
+	 * 	<li><b>Annotations:</b> Uses {@link AnnotationUtils#hash(Annotation)} to ensure consistent hashing
+	 * 		according to the {@link java.lang.annotation.Annotation#hashCode()} contract.
+	 * 	<li><b>Arrays:</b> Uses content-based hashing via {@link java.util.Arrays#hashCode(Object[])}
+	 * 		instead of identity-based hashing.
+	 * 	<li><b>Null values:</b> Treated as 0 in the hash calculation.
+	 * </ul>
+	 *
 	 * @param objects The objects to calculate a hashcode over.
 	 * @return A numerical hashcode value.
+	 * @see #add(Object)
+	 * @see AnnotationUtils#hash(Annotation)
+	 * @see java.util.Objects#hash(Object...)
 	 */
 	public static final int of(Object...objects) {
 		HashCode x = create();
@@ -70,16 +88,30 @@ public class HashCode {
 	 * Hashes the hashcode of the specified object into this object.
 	 *
 	 * <p>
-	 * Arrays are handled specially to use content-based hashing via {@link java.util.Arrays#hashCode(Object[])}
-	 * instead of identity-based hashing.
+	 * The formula is <c>hashCode = 31*hashCode + elementHash;</c>
+	 *
+	 * <p>
+	 * Special handling is provided for:
+	 * <ul>
+	 * 	<li><b>Null values:</b> Adds 0 to the hash code.
+	 * 	<li><b>Annotations:</b> Uses {@link AnnotationUtils#hash(Annotation)} to ensure consistent hashing
+	 * 		according to the {@link java.lang.annotation.Annotation#hashCode()} contract.
+	 * 	<li><b>Arrays:</b> Uses content-based hashing via {@link java.util.Arrays#hashCode(Object[])}
+	 * 		instead of identity-based hashing. Supports all primitive array types and object arrays.
+	 * 	<li><b>Other objects:</b> Uses the object's {@link Object#hashCode()} method.
+	 * </ul>
 	 *
 	 * @param o The object whose hashcode will be hashed with this object.
 	 * @return This object.
+	 * @see AnnotationUtils#hash(Annotation)
+	 * @see java.util.Arrays#hashCode(Object[])
 	 */
 	public HashCode add(Object o) {
 		o = unswap(o);
 		if (o == null) {
 			add(0);
+		} else if (o instanceof Annotation a) {
+			add(AnnotationUtils.hash(a));
 		} else if (o.getClass().isArray()) {
 			// Use content-based hashcode for arrays
 			if (o instanceof Object[])

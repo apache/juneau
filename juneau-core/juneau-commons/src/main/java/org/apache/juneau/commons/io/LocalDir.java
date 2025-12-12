@@ -146,7 +146,7 @@ public class LocalDir {
 		this.clazz = assertArgNotNull("clazz", clazz);
 		this.clazzPath = "/".equals(clazzPath) ? "/" : StringUtils.nullIfEmpty(trimTrailingSlashes(clazzPath));
 		this.path = null;
-		this.hashCode = HashCode.of(clazz, clazzPath);
+		this.hashCode = hash(clazz, clazzPath);
 	}
 
 	/**

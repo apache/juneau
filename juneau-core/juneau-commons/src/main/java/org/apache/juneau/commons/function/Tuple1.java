@@ -112,7 +112,7 @@ public class Tuple1<A> {
 	 */
 	public Tuple1(A a) {
 		this.a = a;
-		this.hashCode = HashCode.of(a);
+		this.hashCode = hash(a);
 	}
 
 	@Override /* Overridden from Object */
