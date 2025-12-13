@@ -1592,359 +1592,359 @@
 <a class="jxr_linenumber" name="L1584" href="#L1584">1584</a> 		<strong class="jxr_keyword">return</strong> Collections.emptyMap();
 <a class="jxr_linenumber" name="L1585" href="#L1585">1585</a> 	}
 <a class="jxr_linenumber" name="L1586" href="#L1586">1586</a> 
-<a class="jxr_linenumber" name="L1587" href="#L1587">1587</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; Map&lt;K,V&gt; mape() {
-<a class="jxr_linenumber" name="L1588" href="#L1588">1588</a> 		<strong class="jxr_keyword">return</strong> Collections.emptyMap();
-<a class="jxr_linenumber" name="L1589" href="#L1589">1589</a> 	}
-<a class="jxr_linenumber" name="L1590" href="#L1590">1590</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1591" href="#L1591">1591</a> <em class="jxr_javadoccomment">	 * Returns a null map.</em>
-<a class="jxr_linenumber" name="L1592" href="#L1592">1592</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1593" href="#L1593">1593</a> <em class="jxr_javadoccomment">	 * @param &lt;K&gt; The key type.</em>
-<a class="jxr_linenumber" name="L1594" href="#L1594">1594</a> <em class="jxr_javadoccomment">	 * @param &lt;V&gt; The value type.</em>
-<a class="jxr_linenumber" name="L1595" href="#L1595">1595</a> <em class="jxr_javadoccomment">	 * @param keyType The key type class.</em>
-<a class="jxr_linenumber" name="L1596" href="#L1596">1596</a> <em class="jxr_javadoccomment">	 * @param valueType The value type class.</em>
-<a class="jxr_linenumber" name="L1597" href="#L1597">1597</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1598" href="#L1598">1598</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1599" href="#L1599">1599</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; Map&lt;K,V&gt; mapn(Class&lt;K&gt; keyType, Class&lt;V&gt; valueType) {
-<a class="jxr_linenumber" name="L1600" href="#L1600">1600</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1601" href="#L1601">1601</a> 	}
-<a class="jxr_linenumber" name="L1602" href="#L1602">1602</a> 
-<a class="jxr_linenumber" name="L1603" href="#L1603">1603</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1604" href="#L1604">1604</a> <em class="jxr_javadoccomment">	 * Convenience method for creating a {@link LinkedHashMap}.</em>
-<a class="jxr_linenumber" name="L1605" href="#L1605">1605</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1606" href="#L1606">1606</a> <em class="jxr_javadoccomment">	 * @param &lt;K&gt; The key type.</em>
-<a class="jxr_linenumber" name="L1607" href="#L1607">1607</a> <em class="jxr_javadoccomment">	 * @param &lt;V&gt; The value type.</em>
-<a class="jxr_linenumber" name="L1608" href="#L1608">1608</a> <em class="jxr_javadoccomment">	 * @param keyType The key type.</em>
-<a class="jxr_linenumber" name="L1609" href="#L1609">1609</a> <em class="jxr_javadoccomment">	 * @param valueType The value type.</em>
-<a class="jxr_linenumber" name="L1610" href="#L1610">1610</a> <em class="jxr_javadoccomment">	 * @return A new modifiable map.</em>
-<a class="jxr_linenumber" name="L1611" href="#L1611">1611</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1612" href="#L1612">1612</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; LinkedHashMap&lt;K,V&gt; mapOf(Class&lt;K&gt; keyType, Class&lt;V&gt; valueType) {
-<a class="jxr_linenumber" name="L1613" href="#L1613">1613</a> 		<strong class="jxr_keyword">return</strong> map();
-<a class="jxr_linenumber" name="L1614" href="#L1614">1614</a> 	}
-<a class="jxr_linenumber" name="L1615" href="#L1615">1615</a> 
-<a class="jxr_linenumber" name="L1616" href="#L1616">1616</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1617" href="#L1617">1617</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;null&lt;/jk&gt; for the specified array type.</em>
-<a class="jxr_linenumber" name="L1618" href="#L1618">1618</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1619" href="#L1619">1619</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The component type.</em>
-<a class="jxr_linenumber" name="L1620" href="#L1620">1620</a> <em class="jxr_javadoccomment">	 * @param type The component type class.</em>
-<a class="jxr_linenumber" name="L1621" href="#L1621">1621</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1587" href="#L1587">1587</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1588" href="#L1588">1588</a> <em class="jxr_javadoccomment">	 * Shortcut for creating an empty map with generic types.</em>
+<a class="jxr_linenumber" name="L1589" href="#L1589">1589</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1590" href="#L1590">1590</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1591" href="#L1591">1591</a> <em class="jxr_javadoccomment">	 * This is a convenience method that creates an empty unmodifiable map without requiring</em>
+<a class="jxr_linenumber" name="L1592" href="#L1592">1592</a> <em class="jxr_javadoccomment">	 * explicit type parameters. The types will be inferred from usage context.</em>
+<a class="jxr_linenumber" name="L1593" href="#L1593">1593</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1594" href="#L1594">1594</a> <em class="jxr_javadoccomment">	 * @param &lt;K&gt; The key type.</em>
+<a class="jxr_linenumber" name="L1595" href="#L1595">1595</a> <em class="jxr_javadoccomment">	 * @param &lt;V&gt; The value type.</em>
+<a class="jxr_linenumber" name="L1596" href="#L1596">1596</a> <em class="jxr_javadoccomment">	 * @return An empty unmodifiable map.</em>
+<a class="jxr_linenumber" name="L1597" href="#L1597">1597</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1598" href="#L1598">1598</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; Map&lt;K,V&gt; mape() {
+<a class="jxr_linenumber" name="L1599" href="#L1599">1599</a> 		<strong class="jxr_keyword">return</strong> Collections.emptyMap();
+<a class="jxr_linenumber" name="L1600" href="#L1600">1600</a> 	}
+<a class="jxr_linenumber" name="L1601" href="#L1601">1601</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1602" href="#L1602">1602</a> <em class="jxr_javadoccomment">	 * Returns a null map.</em>
+<a class="jxr_linenumber" name="L1603" href="#L1603">1603</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1604" href="#L1604">1604</a> <em class="jxr_javadoccomment">	 * @param &lt;K&gt; The key type.</em>
+<a class="jxr_linenumber" name="L1605" href="#L1605">1605</a> <em class="jxr_javadoccomment">	 * @param &lt;V&gt; The value type.</em>
+<a class="jxr_linenumber" name="L1606" href="#L1606">1606</a> <em class="jxr_javadoccomment">	 * @param keyType The key type class.</em>
+<a class="jxr_linenumber" name="L1607" href="#L1607">1607</a> <em class="jxr_javadoccomment">	 * @param valueType The value type class.</em>
+<a class="jxr_linenumber" name="L1608" href="#L1608">1608</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1609" href="#L1609">1609</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1610" href="#L1610">1610</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; Map&lt;K,V&gt; mapn(Class&lt;K&gt; keyType, Class&lt;V&gt; valueType) {
+<a class="jxr_linenumber" name="L1611" href="#L1611">1611</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1612" href="#L1612">1612</a> 	}
+<a class="jxr_linenumber" name="L1613" href="#L1613">1613</a> 
+<a class="jxr_linenumber" name="L1614" href="#L1614">1614</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1615" href="#L1615">1615</a> <em class="jxr_javadoccomment">	 * Convenience method for creating a {@link LinkedHashMap}.</em>
+<a class="jxr_linenumber" name="L1616" href="#L1616">1616</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1617" href="#L1617">1617</a> <em class="jxr_javadoccomment">	 * @param &lt;K&gt; The key type.</em>
+<a class="jxr_linenumber" name="L1618" href="#L1618">1618</a> <em class="jxr_javadoccomment">	 * @param &lt;V&gt; The value type.</em>
+<a class="jxr_linenumber" name="L1619" href="#L1619">1619</a> <em class="jxr_javadoccomment">	 * @param keyType The key type.</em>
+<a class="jxr_linenumber" name="L1620" href="#L1620">1620</a> <em class="jxr_javadoccomment">	 * @param valueType The value type.</em>
+<a class="jxr_linenumber" name="L1621" href="#L1621">1621</a> <em class="jxr_javadoccomment">	 * @return A new modifiable map.</em>
 <a class="jxr_linenumber" name="L1622" href="#L1622">1622</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1623" href="#L1623">1623</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T[] na(Class&lt;T&gt; type) {
-<a class="jxr_linenumber" name="L1624" href="#L1624">1624</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1623" href="#L1623">1623</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; LinkedHashMap&lt;K,V&gt; mapOf(Class&lt;K&gt; keyType, Class&lt;V&gt; valueType) {
+<a class="jxr_linenumber" name="L1624" href="#L1624">1624</a> 		<strong class="jxr_keyword">return</strong> map();
 <a class="jxr_linenumber" name="L1625" href="#L1625">1625</a> 	}
 <a class="jxr_linenumber" name="L1626" href="#L1626">1626</a> 
 <a class="jxr_linenumber" name="L1627" href="#L1627">1627</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1628" href="#L1628">1628</a> <em class="jxr_javadoccomment">	 * Adds all the specified values to the specified collection.</em>
-<a class="jxr_linenumber" name="L1629" href="#L1629">1629</a> <em class="jxr_javadoccomment">	 * Creates a new set if the value is &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1630" href="#L1630">1630</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1631" href="#L1631">1631</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
-<a class="jxr_linenumber" name="L1632" href="#L1632">1632</a> <em class="jxr_javadoccomment">	 * @param value The collection to add to.</em>
-<a class="jxr_linenumber" name="L1633" href="#L1633">1633</a> <em class="jxr_javadoccomment">	 * @param entries The entries to add.</em>
-<a class="jxr_linenumber" name="L1634" href="#L1634">1634</a> <em class="jxr_javadoccomment">	 * @return The set.</em>
-<a class="jxr_linenumber" name="L1635" href="#L1635">1635</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1636" href="#L1636">1636</a> 	@SafeVarargs
-<a class="jxr_linenumber" name="L1637" href="#L1637">1637</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; List&lt;E&gt; prependAll(List&lt;E&gt; value, E...entries) {
-<a class="jxr_linenumber" name="L1638" href="#L1638">1638</a> 		<strong class="jxr_keyword">if</strong> (nn(entries)) {
-<a class="jxr_linenumber" name="L1639" href="#L1639">1639</a> 			<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1640" href="#L1640">1640</a> 				value = list(entries);
-<a class="jxr_linenumber" name="L1641" href="#L1641">1641</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L1642" href="#L1642">1642</a> 				value.addAll(0, l(entries));
-<a class="jxr_linenumber" name="L1643" href="#L1643">1643</a> 		}
-<a class="jxr_linenumber" name="L1644" href="#L1644">1644</a> 		<strong class="jxr_keyword">return</strong> value;
-<a class="jxr_linenumber" name="L1645" href="#L1645">1645</a> 	}
-<a class="jxr_linenumber" name="L1646" href="#L1646">1646</a> 
-<a class="jxr_linenumber" name="L1647" href="#L1647">1647</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1648" href="#L1648">1648</a> <em class="jxr_javadoccomment">	 * Reverses the entries in an array.</em>
-<a class="jxr_linenumber" name="L1649" href="#L1649">1649</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1650" href="#L1650">1650</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
-<a class="jxr_linenumber" name="L1651" href="#L1651">1651</a> <em class="jxr_javadoccomment">	 * @param array The array to reverse.</em>
-<a class="jxr_linenumber" name="L1652" href="#L1652">1652</a> <em class="jxr_javadoccomment">	 * @return The same array.</em>
-<a class="jxr_linenumber" name="L1653" href="#L1653">1653</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1654" href="#L1654">1654</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1655" href="#L1655">1655</a> <em class="jxr_javadoccomment">	 * Reverses the elements in the specified array in-place.</em>
-<a class="jxr_linenumber" name="L1656" href="#L1656">1656</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1657" href="#L1657">1657</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
-<a class="jxr_linenumber" name="L1658" href="#L1658">1658</a> <em class="jxr_javadoccomment">	 * @param array The array to reverse.</em>
-<a class="jxr_linenumber" name="L1659" href="#L1659">1659</a> <em class="jxr_javadoccomment">	 * @return The same array, reversed.</em>
-<a class="jxr_linenumber" name="L1660" href="#L1660">1660</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1661" href="#L1661">1661</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; E[] reverse(E[] array) {
-<a class="jxr_linenumber" name="L1662" href="#L1662">1662</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; array.length / 2; i++) {
-<a class="jxr_linenumber" name="L1663" href="#L1663">1663</a> 			E temp = array[i];
-<a class="jxr_linenumber" name="L1664" href="#L1664">1664</a> 			array[i] = array[array.length - i - 1];
-<a class="jxr_linenumber" name="L1665" href="#L1665">1665</a> 			array[array.length - i - 1] = temp;
-<a class="jxr_linenumber" name="L1666" href="#L1666">1666</a> 		}
-<a class="jxr_linenumber" name="L1667" href="#L1667">1667</a> 		<strong class="jxr_keyword">return</strong> array;
-<a class="jxr_linenumber" name="L1668" href="#L1668">1668</a> 	}
-<a class="jxr_linenumber" name="L1669" href="#L1669">1669</a> 
-<a class="jxr_linenumber" name="L1670" href="#L1670">1670</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1671" href="#L1671">1671</a> <em class="jxr_javadoccomment">	 * Returns a reversed view of the specified list.</em>
-<a class="jxr_linenumber" name="L1672" href="#L1672">1672</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1673" href="#L1673">1673</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1674" href="#L1674">1674</a> <em class="jxr_javadoccomment">	 * The returned list is a live view that reflects changes to the original list.</em>
-<a class="jxr_linenumber" name="L1675" href="#L1675">1675</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1676" href="#L1676">1676</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
-<a class="jxr_linenumber" name="L1677" href="#L1677">1677</a> <em class="jxr_javadoccomment">	 * @param list The list to reverse.</em>
-<a class="jxr_linenumber" name="L1678" href="#L1678">1678</a> <em class="jxr_javadoccomment">	 * @return A reversed view of the list.</em>
-<a class="jxr_linenumber" name="L1679" href="#L1679">1679</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1680" href="#L1680">1680</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; List&lt;E&gt; reverse(List&lt;E&gt; list) {
-<a class="jxr_linenumber" name="L1681" href="#L1681">1681</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(list);
-<a class="jxr_linenumber" name="L1682" href="#L1682">1682</a> 	}
-<a class="jxr_linenumber" name="L1683" href="#L1683">1683</a> 
-<a class="jxr_linenumber" name="L1684" href="#L1684">1684</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1685" href="#L1685">1685</a> <em class="jxr_javadoccomment">	 * Returns a reverse stream of the specified list.</em>
+<a class="jxr_linenumber" name="L1628" href="#L1628">1628</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;null&lt;/jk&gt; for the specified array type.</em>
+<a class="jxr_linenumber" name="L1629" href="#L1629">1629</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1630" href="#L1630">1630</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The component type.</em>
+<a class="jxr_linenumber" name="L1631" href="#L1631">1631</a> <em class="jxr_javadoccomment">	 * @param type The component type class.</em>
+<a class="jxr_linenumber" name="L1632" href="#L1632">1632</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1633" href="#L1633">1633</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1634" href="#L1634">1634</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T[] na(Class&lt;T&gt; type) {
+<a class="jxr_linenumber" name="L1635" href="#L1635">1635</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1636" href="#L1636">1636</a> 	}
+<a class="jxr_linenumber" name="L1637" href="#L1637">1637</a> 
+<a class="jxr_linenumber" name="L1638" href="#L1638">1638</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1639" href="#L1639">1639</a> <em class="jxr_javadoccomment">	 * Adds all the specified values to the specified collection.</em>
+<a class="jxr_linenumber" name="L1640" href="#L1640">1640</a> <em class="jxr_javadoccomment">	 * Creates a new set if the value is &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1641" href="#L1641">1641</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1642" href="#L1642">1642</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
+<a class="jxr_linenumber" name="L1643" href="#L1643">1643</a> <em class="jxr_javadoccomment">	 * @param value The collection to add to.</em>
+<a class="jxr_linenumber" name="L1644" href="#L1644">1644</a> <em class="jxr_javadoccomment">	 * @param entries The entries to add.</em>
+<a class="jxr_linenumber" name="L1645" href="#L1645">1645</a> <em class="jxr_javadoccomment">	 * @return The set.</em>
+<a class="jxr_linenumber" name="L1646" href="#L1646">1646</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1647" href="#L1647">1647</a> 	@SafeVarargs
+<a class="jxr_linenumber" name="L1648" href="#L1648">1648</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; List&lt;E&gt; prependAll(List&lt;E&gt; value, E...entries) {
+<a class="jxr_linenumber" name="L1649" href="#L1649">1649</a> 		<strong class="jxr_keyword">if</strong> (nn(entries)) {
+<a class="jxr_linenumber" name="L1650" href="#L1650">1650</a> 			<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1651" href="#L1651">1651</a> 				value = list(entries);
+<a class="jxr_linenumber" name="L1652" href="#L1652">1652</a> 			<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L1653" href="#L1653">1653</a> 				value.addAll(0, l(entries));
+<a class="jxr_linenumber" name="L1654" href="#L1654">1654</a> 		}
+<a class="jxr_linenumber" name="L1655" href="#L1655">1655</a> 		<strong class="jxr_keyword">return</strong> value;
+<a class="jxr_linenumber" name="L1656" href="#L1656">1656</a> 	}
+<a class="jxr_linenumber" name="L1657" href="#L1657">1657</a> 
+<a class="jxr_linenumber" name="L1658" href="#L1658">1658</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1659" href="#L1659">1659</a> <em class="jxr_javadoccomment">	 * Reverses the entries in an array.</em>
+<a class="jxr_linenumber" name="L1660" href="#L1660">1660</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1661" href="#L1661">1661</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
+<a class="jxr_linenumber" name="L1662" href="#L1662">1662</a> <em class="jxr_javadoccomment">	 * @param array The array to reverse.</em>
+<a class="jxr_linenumber" name="L1663" href="#L1663">1663</a> <em class="jxr_javadoccomment">	 * @return The same array.</em>
+<a class="jxr_linenumber" name="L1664" href="#L1664">1664</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1665" href="#L1665">1665</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1666" href="#L1666">1666</a> <em class="jxr_javadoccomment">	 * Reverses the elements in the specified array in-place.</em>
+<a class="jxr_linenumber" name="L1667" href="#L1667">1667</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1668" href="#L1668">1668</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
+<a class="jxr_linenumber" name="L1669" href="#L1669">1669</a> <em class="jxr_javadoccomment">	 * @param array The array to reverse.</em>
+<a class="jxr_linenumber" name="L1670" href="#L1670">1670</a> <em class="jxr_javadoccomment">	 * @return The same array, reversed.</em>
+<a class="jxr_linenumber" name="L1671" href="#L1671">1671</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1672" href="#L1672">1672</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; E[] reverse(E[] array) {
+<a class="jxr_linenumber" name="L1673" href="#L1673">1673</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; array.length / 2; i++) {
+<a class="jxr_linenumber" name="L1674" href="#L1674">1674</a> 			E temp = array[i];
+<a class="jxr_linenumber" name="L1675" href="#L1675">1675</a> 			array[i] = array[array.length - i - 1];
+<a class="jxr_linenumber" name="L1676" href="#L1676">1676</a> 			array[array.length - i - 1] = temp;
+<a class="jxr_linenumber" name="L1677" href="#L1677">1677</a> 		}
+<a class="jxr_linenumber" name="L1678" href="#L1678">1678</a> 		<strong class="jxr_keyword">return</strong> array;
+<a class="jxr_linenumber" name="L1679" href="#L1679">1679</a> 	}
+<a class="jxr_linenumber" name="L1680" href="#L1680">1680</a> 
+<a class="jxr_linenumber" name="L1681" href="#L1681">1681</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1682" href="#L1682">1682</a> <em class="jxr_javadoccomment">	 * Returns a reversed view of the specified list.</em>
+<a class="jxr_linenumber" name="L1683" href="#L1683">1683</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1684" href="#L1684">1684</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1685" href="#L1685">1685</a> <em class="jxr_javadoccomment">	 * The returned list is a live view that reflects changes to the original list.</em>
 <a class="jxr_linenumber" name="L1686" href="#L1686">1686</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1687" href="#L1687">1687</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L1688" href="#L1688">1688</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L1689" href="#L1689">1689</a> <em class="jxr_javadoccomment">	 * 	List&amp;lt;String&amp;gt; &lt;jv&gt;list&lt;/jv&gt; = &lt;jsm&gt;list&lt;/jsm&gt;(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L1690" href="#L1690">1690</a> <em class="jxr_javadoccomment">	 * 	Stream&amp;lt;String&amp;gt; &lt;jv&gt;reversed&lt;/jv&gt; = &lt;jsm&gt;rstream&lt;/jsm&gt;(&lt;jv&gt;list&lt;/jv&gt;);</em>
-<a class="jxr_linenumber" name="L1691" href="#L1691">1691</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Produces stream: "c", "b", "a"&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1692" href="#L1692">1692</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L1693" href="#L1693">1693</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1694" href="#L1694">1694</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The element type.</em>
-<a class="jxr_linenumber" name="L1695" href="#L1695">1695</a> <em class="jxr_javadoccomment">	 * @param value The list to stream in reverse order. Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1696" href="#L1696">1696</a> <em class="jxr_javadoccomment">	 * @return A stream of the list elements in reverse order, or an empty stream if the list is &lt;jk&gt;null&lt;/jk&gt; or empty.</em>
-<a class="jxr_linenumber" name="L1697" href="#L1697">1697</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1698" href="#L1698">1698</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; Stream&lt;T&gt; rstream(List&lt;T&gt; value) {
-<a class="jxr_linenumber" name="L1699" href="#L1699">1699</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong> || value.isEmpty())
-<a class="jxr_linenumber" name="L1700" href="#L1700">1700</a> 			<strong class="jxr_keyword">return</strong> Stream.empty();
-<a class="jxr_linenumber" name="L1701" href="#L1701">1701</a> 		<strong class="jxr_keyword">return</strong> IntStream.range(0, value.size()).mapToObj(i -&gt; value.get(value.size() - 1 - i));
-<a class="jxr_linenumber" name="L1702" href="#L1702">1702</a> 	}
-<a class="jxr_linenumber" name="L1703" href="#L1703">1703</a> 
-<a class="jxr_linenumber" name="L1704" href="#L1704">1704</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1705" href="#L1705">1705</a> <em class="jxr_javadoccomment">	 * Shortcut for creating a modifiable set out of an array of values.</em>
-<a class="jxr_linenumber" name="L1706" href="#L1706">1706</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1707" href="#L1707">1707</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The element type.</em>
-<a class="jxr_linenumber" name="L1708" href="#L1708">1708</a> <em class="jxr_javadoccomment">	 * @param values The values to add to the set.</em>
-<a class="jxr_linenumber" name="L1709" href="#L1709">1709</a> <em class="jxr_javadoccomment">	 * @return A modifiable LinkedHashSet containing the specified values.</em>
-<a class="jxr_linenumber" name="L1710" href="#L1710">1710</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1711" href="#L1711">1711</a> 	@SafeVarargs
-<a class="jxr_linenumber" name="L1712" href="#L1712">1712</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; LinkedHashSet&lt;T&gt; set(T...values) {  <em class="jxr_comment">// NOSONAR</em>
-<a class="jxr_linenumber" name="L1713" href="#L1713">1713</a> 		assertArgNotNull(<span class="jxr_string">"values"</span>, values);
-<a class="jxr_linenumber" name="L1714" href="#L1714">1714</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(Arrays.asList(values));
-<a class="jxr_linenumber" name="L1715" href="#L1715">1715</a> 	}
-<a class="jxr_linenumber" name="L1716" href="#L1716">1716</a> 
-<a class="jxr_linenumber" name="L1717" href="#L1717">1717</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1718" href="#L1718">1718</a> <em class="jxr_javadoccomment">	 * Returns an empty immutable set.</em>
-<a class="jxr_linenumber" name="L1719" href="#L1719">1719</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1720" href="#L1720">1720</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1721" href="#L1721">1721</a> <em class="jxr_javadoccomment">	 * This is a convenience method that returns {@link Collections#emptySet()}.</em>
-<a class="jxr_linenumber" name="L1722" href="#L1722">1722</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1723" href="#L1723">1723</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L1724" href="#L1724">1724</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L1725" href="#L1725">1725</a> <em class="jxr_javadoccomment">	 * 	Set&amp;lt;String&amp;gt; &lt;jv&gt;empty&lt;/jv&gt; = CollectionUtils.&lt;jsf&gt;sete&lt;/jsf&gt;();  &lt;jc&gt;// Returns Collections.emptySet()&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1726" href="#L1726">1726</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L1727" href="#L1727">1727</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1728" href="#L1728">1728</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The element type.</em>
-<a class="jxr_linenumber" name="L1729" href="#L1729">1729</a> <em class="jxr_javadoccomment">	 * @return An empty immutable set.</em>
-<a class="jxr_linenumber" name="L1730" href="#L1730">1730</a> <em class="jxr_javadoccomment">	 * @see Collections#emptySet()</em>
-<a class="jxr_linenumber" name="L1731" href="#L1731">1731</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1732" href="#L1732">1732</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; Set&lt;T&gt; sete() {
-<a class="jxr_linenumber" name="L1733" href="#L1733">1733</a> 		<strong class="jxr_keyword">return</strong> Collections.emptySet();
-<a class="jxr_linenumber" name="L1734" href="#L1734">1734</a> 	}
-<a class="jxr_linenumber" name="L1735" href="#L1735">1735</a> 
-<a class="jxr_linenumber" name="L1736" href="#L1736">1736</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1737" href="#L1737">1737</a> <em class="jxr_javadoccomment">	 * Convenience factory for a {@link SetBuilder}.</em>
+<a class="jxr_linenumber" name="L1687" href="#L1687">1687</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
+<a class="jxr_linenumber" name="L1688" href="#L1688">1688</a> <em class="jxr_javadoccomment">	 * @param list The list to reverse.</em>
+<a class="jxr_linenumber" name="L1689" href="#L1689">1689</a> <em class="jxr_javadoccomment">	 * @return A reversed view of the list.</em>
+<a class="jxr_linenumber" name="L1690" href="#L1690">1690</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1691" href="#L1691">1691</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; List&lt;E&gt; reverse(List&lt;E&gt; list) {
+<a class="jxr_linenumber" name="L1692" href="#L1692">1692</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(list);
+<a class="jxr_linenumber" name="L1693" href="#L1693">1693</a> 	}
+<a class="jxr_linenumber" name="L1694" href="#L1694">1694</a> 
+<a class="jxr_linenumber" name="L1695" href="#L1695">1695</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1696" href="#L1696">1696</a> <em class="jxr_javadoccomment">	 * Returns a reverse stream of the specified list.</em>
+<a class="jxr_linenumber" name="L1697" href="#L1697">1697</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1698" href="#L1698">1698</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1699" href="#L1699">1699</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L1700" href="#L1700">1700</a> <em class="jxr_javadoccomment">	 * 	List&amp;lt;String&amp;gt; &lt;jv&gt;list&lt;/jv&gt; = &lt;jsm&gt;list&lt;/jsm&gt;(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L1701" href="#L1701">1701</a> <em class="jxr_javadoccomment">	 * 	Stream&amp;lt;String&amp;gt; &lt;jv&gt;reversed&lt;/jv&gt; = &lt;jsm&gt;rstream&lt;/jsm&gt;(&lt;jv&gt;list&lt;/jv&gt;);</em>
+<a class="jxr_linenumber" name="L1702" href="#L1702">1702</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Produces stream: "c", "b", "a"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1703" href="#L1703">1703</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L1704" href="#L1704">1704</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1705" href="#L1705">1705</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The element type.</em>
+<a class="jxr_linenumber" name="L1706" href="#L1706">1706</a> <em class="jxr_javadoccomment">	 * @param value The list to stream in reverse order. Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1707" href="#L1707">1707</a> <em class="jxr_javadoccomment">	 * @return A stream of the list elements in reverse order, or an empty stream if the list is &lt;jk&gt;null&lt;/jk&gt; or empty.</em>
+<a class="jxr_linenumber" name="L1708" href="#L1708">1708</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1709" href="#L1709">1709</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; Stream&lt;T&gt; rstream(List&lt;T&gt; value) {
+<a class="jxr_linenumber" name="L1710" href="#L1710">1710</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong> || value.isEmpty())
+<a class="jxr_linenumber" name="L1711" href="#L1711">1711</a> 			<strong class="jxr_keyword">return</strong> Stream.empty();
+<a class="jxr_linenumber" name="L1712" href="#L1712">1712</a> 		<strong class="jxr_keyword">return</strong> IntStream.range(0, value.size()).mapToObj(i -&gt; value.get(value.size() - 1 - i));
+<a class="jxr_linenumber" name="L1713" href="#L1713">1713</a> 	}
+<a class="jxr_linenumber" name="L1714" href="#L1714">1714</a> 
+<a class="jxr_linenumber" name="L1715" href="#L1715">1715</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1716" href="#L1716">1716</a> <em class="jxr_javadoccomment">	 * Shortcut for creating a modifiable set out of an array of values.</em>
+<a class="jxr_linenumber" name="L1717" href="#L1717">1717</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1718" href="#L1718">1718</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The element type.</em>
+<a class="jxr_linenumber" name="L1719" href="#L1719">1719</a> <em class="jxr_javadoccomment">	 * @param values The values to add to the set.</em>
+<a class="jxr_linenumber" name="L1720" href="#L1720">1720</a> <em class="jxr_javadoccomment">	 * @return A modifiable LinkedHashSet containing the specified values.</em>
+<a class="jxr_linenumber" name="L1721" href="#L1721">1721</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1722" href="#L1722">1722</a> 	@SafeVarargs
+<a class="jxr_linenumber" name="L1723" href="#L1723">1723</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; LinkedHashSet&lt;T&gt; set(T...values) {  <em class="jxr_comment">// NOSONAR</em>
+<a class="jxr_linenumber" name="L1724" href="#L1724">1724</a> 		assertArgNotNull(<span class="jxr_string">"values"</span>, values);
+<a class="jxr_linenumber" name="L1725" href="#L1725">1725</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(Arrays.asList(values));
+<a class="jxr_linenumber" name="L1726" href="#L1726">1726</a> 	}
+<a class="jxr_linenumber" name="L1727" href="#L1727">1727</a> 
+<a class="jxr_linenumber" name="L1728" href="#L1728">1728</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1729" href="#L1729">1729</a> <em class="jxr_javadoccomment">	 * Returns an empty immutable set.</em>
+<a class="jxr_linenumber" name="L1730" href="#L1730">1730</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1731" href="#L1731">1731</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1732" href="#L1732">1732</a> <em class="jxr_javadoccomment">	 * This is a convenience method that returns {@link Collections#emptySet()}.</em>
+<a class="jxr_linenumber" name="L1733" href="#L1733">1733</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1734" href="#L1734">1734</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1735" href="#L1735">1735</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L1736" href="#L1736">1736</a> <em class="jxr_javadoccomment">	 * 	Set&amp;lt;String&amp;gt; &lt;jv&gt;empty&lt;/jv&gt; = CollectionUtils.&lt;jsf&gt;sete&lt;/jsf&gt;();  &lt;jc&gt;// Returns Collections.emptySet()&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1737" href="#L1737">1737</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1738" href="#L1738">1738</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1739" href="#L1739">1739</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
-<a class="jxr_linenumber" name="L1740" href="#L1740">1740</a> <em class="jxr_javadoccomment">	 * @param type The element type.</em>
-<a class="jxr_linenumber" name="L1741" href="#L1741">1741</a> <em class="jxr_javadoccomment">	 * @param converters Optional converters to use for converting values.</em>
-<a class="jxr_linenumber" name="L1742" href="#L1742">1742</a> <em class="jxr_javadoccomment">	 * @return A new set builder.</em>
-<a class="jxr_linenumber" name="L1743" href="#L1743">1743</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1744" href="#L1744">1744</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; SetBuilder&lt;E&gt; setb(Class&lt;E&gt; type, Converter...converters) {
-<a class="jxr_linenumber" name="L1745" href="#L1745">1745</a> 		<strong class="jxr_keyword">return</strong> SetBuilder.create(type).converters(converters);
-<a class="jxr_linenumber" name="L1746" href="#L1746">1746</a> 	}
-<a class="jxr_linenumber" name="L1747" href="#L1747">1747</a> 
-<a class="jxr_linenumber" name="L1748" href="#L1748">1748</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1749" href="#L1749">1749</a> <em class="jxr_javadoccomment">	 * Convenience method for creating a {@link LinkedHashSet}.</em>
-<a class="jxr_linenumber" name="L1750" href="#L1750">1750</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1751" href="#L1751">1751</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
-<a class="jxr_linenumber" name="L1752" href="#L1752">1752</a> <em class="jxr_javadoccomment">	 * @param elementType The element type.</em>
-<a class="jxr_linenumber" name="L1753" href="#L1753">1753</a> <em class="jxr_javadoccomment">	 * @param values The values to initialize the set with.</em>
-<a class="jxr_linenumber" name="L1754" href="#L1754">1754</a> <em class="jxr_javadoccomment">	 * @return A new modifiable set.</em>
-<a class="jxr_linenumber" name="L1755" href="#L1755">1755</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1756" href="#L1756">1756</a> 	@SafeVarargs
-<a class="jxr_linenumber" name="L1757" href="#L1757">1757</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; LinkedHashSet&lt;E&gt; setOf(Class&lt;E&gt; elementType, E...values) {
-<a class="jxr_linenumber" name="L1758" href="#L1758">1758</a> 		<strong class="jxr_keyword">return</strong> set(values);
-<a class="jxr_linenumber" name="L1759" href="#L1759">1759</a> 	}
-<a class="jxr_linenumber" name="L1760" href="#L1760">1760</a> 
-<a class="jxr_linenumber" name="L1761" href="#L1761">1761</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1762" href="#L1762">1762</a> <em class="jxr_javadoccomment">	 * Shortcut for creating a short array.</em>
-<a class="jxr_linenumber" name="L1763" href="#L1763">1763</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1764" href="#L1764">1764</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;Accepts int values and converts them to shorts, eliminating the need for explicit short casts.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L1765" href="#L1765">1765</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1766" href="#L1766">1766</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L1767" href="#L1767">1767</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L1768" href="#L1768">1768</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;short&lt;/jk&gt;[] &lt;jv&gt;myArray&lt;/jv&gt; = &lt;jsm&gt;shorts&lt;/jsm&gt;(1, 2, 3);</em>
-<a class="jxr_linenumber" name="L1769" href="#L1769">1769</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L1770" href="#L1770">1770</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1771" href="#L1771">1771</a> <em class="jxr_javadoccomment">	 * @param value The int values to convert to shorts. Values outside the short range (-32768 to 32767) will be truncated.</em>
-<a class="jxr_linenumber" name="L1772" href="#L1772">1772</a> <em class="jxr_javadoccomment">	 * @return A new short array.</em>
-<a class="jxr_linenumber" name="L1773" href="#L1773">1773</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1774" href="#L1774">1774</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">short</strong>[] shorts(<strong class="jxr_keyword">int</strong>...value) {
-<a class="jxr_linenumber" name="L1775" href="#L1775">1775</a> 		<strong class="jxr_keyword">var</strong> result = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">short</strong>[value.length];
-<a class="jxr_linenumber" name="L1776" href="#L1776">1776</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; value.length; i++) {
-<a class="jxr_linenumber" name="L1777" href="#L1777">1777</a> 			result[i] = (<strong class="jxr_keyword">short</strong>)value[i];
-<a class="jxr_linenumber" name="L1778" href="#L1778">1778</a> 		}
-<a class="jxr_linenumber" name="L1779" href="#L1779">1779</a> 		<strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L1780" href="#L1780">1780</a> 	}
-<a class="jxr_linenumber" name="L1781" href="#L1781">1781</a> 
-<a class="jxr_linenumber" name="L1782" href="#L1782">1782</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1783" href="#L1783">1783</a> <em class="jxr_javadoccomment">	 * Convenience method for creating an {@link ArrayList} and sorting it.</em>
-<a class="jxr_linenumber" name="L1784" href="#L1784">1784</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1785" href="#L1785">1785</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
-<a class="jxr_linenumber" name="L1786" href="#L1786">1786</a> <em class="jxr_javadoccomment">	 * @param comparator The comparator to use to sort the list.</em>
-<a class="jxr_linenumber" name="L1787" href="#L1787">1787</a> <em class="jxr_javadoccomment">	 * @param value The values to initialize the list with.</em>
-<a class="jxr_linenumber" name="L1788" href="#L1788">1788</a> <em class="jxr_javadoccomment">	 * @return A new modifiable list.</em>
-<a class="jxr_linenumber" name="L1789" href="#L1789">1789</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1790" href="#L1790">1790</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; ArrayList&lt;E&gt; sortedList(Comparator&lt;E&gt; comparator, Collection&lt;E&gt; value) {
-<a class="jxr_linenumber" name="L1791" href="#L1791">1791</a> 		ArrayList&lt;E&gt; l = toList(value);
-<a class="jxr_linenumber" name="L1792" href="#L1792">1792</a> 		Collections.sort(l, comparator);
-<a class="jxr_linenumber" name="L1793" href="#L1793">1793</a> 		<strong class="jxr_keyword">return</strong> l;
-<a class="jxr_linenumber" name="L1794" href="#L1794">1794</a> 	}
-<a class="jxr_linenumber" name="L1795" href="#L1795">1795</a> 
-<a class="jxr_linenumber" name="L1796" href="#L1796">1796</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1797" href="#L1797">1797</a> <em class="jxr_javadoccomment">	 * Convenience method for creating an {@link ArrayList} and sorting it.</em>
-<a class="jxr_linenumber" name="L1798" href="#L1798">1798</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1799" href="#L1799">1799</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
-<a class="jxr_linenumber" name="L1800" href="#L1800">1800</a> <em class="jxr_javadoccomment">	 * @param comparator The comparator to use to sort the list.</em>
-<a class="jxr_linenumber" name="L1801" href="#L1801">1801</a> <em class="jxr_javadoccomment">	 * @param values The values to initialize the list with.</em>
-<a class="jxr_linenumber" name="L1802" href="#L1802">1802</a> <em class="jxr_javadoccomment">	 * @return A new modifiable list.</em>
-<a class="jxr_linenumber" name="L1803" href="#L1803">1803</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1804" href="#L1804">1804</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; List&lt;E&gt; sortedList(Comparator&lt;E&gt; comparator, E[] values) {
-<a class="jxr_linenumber" name="L1805" href="#L1805">1805</a> 		List&lt;E&gt; l = list(values);
-<a class="jxr_linenumber" name="L1806" href="#L1806">1806</a> 		Collections.sort(l, comparator);
-<a class="jxr_linenumber" name="L1807" href="#L1807">1807</a> 		<strong class="jxr_keyword">return</strong> l;
-<a class="jxr_linenumber" name="L1808" href="#L1808">1808</a> 	}
-<a class="jxr_linenumber" name="L1809" href="#L1809">1809</a> 
-<a class="jxr_linenumber" name="L1810" href="#L1810">1810</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1811" href="#L1811">1811</a> <em class="jxr_javadoccomment">	 * Convenience method for creating an {@link ArrayList} and sorting it.</em>
-<a class="jxr_linenumber" name="L1812" href="#L1812">1812</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1813" href="#L1813">1813</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
-<a class="jxr_linenumber" name="L1814" href="#L1814">1814</a> <em class="jxr_javadoccomment">	 * @param values The values to initialize the list with.</em>
-<a class="jxr_linenumber" name="L1815" href="#L1815">1815</a> <em class="jxr_javadoccomment">	 * @return A new modifiable list.</em>
-<a class="jxr_linenumber" name="L1816" href="#L1816">1816</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1817" href="#L1817">1817</a> 	@SuppressWarnings({ <span class="jxr_string">"rawtypes"</span>, <span class="jxr_string">"unchecked"</span> })
-<a class="jxr_linenumber" name="L1818" href="#L1818">1818</a> 	@SafeVarargs
-<a class="jxr_linenumber" name="L1819" href="#L1819">1819</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; List&lt;E&gt; sortedList(E...values) {
-<a class="jxr_linenumber" name="L1820" href="#L1820">1820</a> 		List&lt;E&gt; l = list(values);
-<a class="jxr_linenumber" name="L1821" href="#L1821">1821</a> 		Collections.sort((List&lt;Comparable&gt;)l);
-<a class="jxr_linenumber" name="L1822" href="#L1822">1822</a> 		<strong class="jxr_keyword">return</strong> l;
-<a class="jxr_linenumber" name="L1823" href="#L1823">1823</a> 	}
-<a class="jxr_linenumber" name="L1824" href="#L1824">1824</a> 
-<a class="jxr_linenumber" name="L1825" href="#L1825">1825</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1826" href="#L1826">1826</a> <em class="jxr_javadoccomment">	 * Convenience method for creating a {@link TreeMap}.</em>
-<a class="jxr_linenumber" name="L1827" href="#L1827">1827</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1828" href="#L1828">1828</a> <em class="jxr_javadoccomment">	 * @param &lt;K&gt; The key type.</em>
-<a class="jxr_linenumber" name="L1829" href="#L1829">1829</a> <em class="jxr_javadoccomment">	 * @param &lt;V&gt; The value type.</em>
-<a class="jxr_linenumber" name="L1830" href="#L1830">1830</a> <em class="jxr_javadoccomment">	 * @return A new modifiable set.</em>
-<a class="jxr_linenumber" name="L1831" href="#L1831">1831</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1832" href="#L1832">1832</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; TreeMap&lt;K,V&gt; sortedMap() {
-<a class="jxr_linenumber" name="L1833" href="#L1833">1833</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> TreeMap&lt;&gt;();
+<a class="jxr_linenumber" name="L1739" href="#L1739">1739</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The element type.</em>
+<a class="jxr_linenumber" name="L1740" href="#L1740">1740</a> <em class="jxr_javadoccomment">	 * @return An empty immutable set.</em>
+<a class="jxr_linenumber" name="L1741" href="#L1741">1741</a> <em class="jxr_javadoccomment">	 * @see Collections#emptySet()</em>
+<a class="jxr_linenumber" name="L1742" href="#L1742">1742</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1743" href="#L1743">1743</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; Set&lt;T&gt; sete() {
+<a class="jxr_linenumber" name="L1744" href="#L1744">1744</a> 		<strong class="jxr_keyword">return</strong> Collections.emptySet();
+<a class="jxr_linenumber" name="L1745" href="#L1745">1745</a> 	}
+<a class="jxr_linenumber" name="L1746" href="#L1746">1746</a> 
+<a class="jxr_linenumber" name="L1747" href="#L1747">1747</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1748" href="#L1748">1748</a> <em class="jxr_javadoccomment">	 * Convenience factory for a {@link SetBuilder}.</em>
+<a class="jxr_linenumber" name="L1749" href="#L1749">1749</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1750" href="#L1750">1750</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
+<a class="jxr_linenumber" name="L1751" href="#L1751">1751</a> <em class="jxr_javadoccomment">	 * @param type The element type.</em>
+<a class="jxr_linenumber" name="L1752" href="#L1752">1752</a> <em class="jxr_javadoccomment">	 * @param converters Optional converters to use for converting values.</em>
+<a class="jxr_linenumber" name="L1753" href="#L1753">1753</a> <em class="jxr_javadoccomment">	 * @return A new set builder.</em>
+<a class="jxr_linenumber" name="L1754" href="#L1754">1754</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1755" href="#L1755">1755</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; SetBuilder&lt;E&gt; setb(Class&lt;E&gt; type, Converter...converters) {
+<a class="jxr_linenumber" name="L1756" href="#L1756">1756</a> 		<strong class="jxr_keyword">return</strong> SetBuilder.create(type).converters(converters);
+<a class="jxr_linenumber" name="L1757" href="#L1757">1757</a> 	}
+<a class="jxr_linenumber" name="L1758" href="#L1758">1758</a> 
+<a class="jxr_linenumber" name="L1759" href="#L1759">1759</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1760" href="#L1760">1760</a> <em class="jxr_javadoccomment">	 * Convenience method for creating a {@link LinkedHashSet}.</em>
+<a class="jxr_linenumber" name="L1761" href="#L1761">1761</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1762" href="#L1762">1762</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
+<a class="jxr_linenumber" name="L1763" href="#L1763">1763</a> <em class="jxr_javadoccomment">	 * @param elementType The element type.</em>
+<a class="jxr_linenumber" name="L1764" href="#L1764">1764</a> <em class="jxr_javadoccomment">	 * @param values The values to initialize the set with.</em>
+<a class="jxr_linenumber" name="L1765" href="#L1765">1765</a> <em class="jxr_javadoccomment">	 * @return A new modifiable set.</em>
+<a class="jxr_linenumber" name="L1766" href="#L1766">1766</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1767" href="#L1767">1767</a> 	@SafeVarargs
+<a class="jxr_linenumber" name="L1768" href="#L1768">1768</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; LinkedHashSet&lt;E&gt; setOf(Class&lt;E&gt; elementType, E...values) {
+<a class="jxr_linenumber" name="L1769" href="#L1769">1769</a> 		<strong class="jxr_keyword">return</strong> set(values);
+<a class="jxr_linenumber" name="L1770" href="#L1770">1770</a> 	}
+<a class="jxr_linenumber" name="L1771" href="#L1771">1771</a> 
+<a class="jxr_linenumber" name="L1772" href="#L1772">1772</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1773" href="#L1773">1773</a> <em class="jxr_javadoccomment">	 * Shortcut for creating a short array.</em>
+<a class="jxr_linenumber" name="L1774" href="#L1774">1774</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1775" href="#L1775">1775</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;Accepts int values and converts them to shorts, eliminating the need for explicit short casts.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L1776" href="#L1776">1776</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1777" href="#L1777">1777</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1778" href="#L1778">1778</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L1779" href="#L1779">1779</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;short&lt;/jk&gt;[] &lt;jv&gt;myArray&lt;/jv&gt; = &lt;jsm&gt;shorts&lt;/jsm&gt;(1, 2, 3);</em>
+<a class="jxr_linenumber" name="L1780" href="#L1780">1780</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L1781" href="#L1781">1781</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1782" href="#L1782">1782</a> <em class="jxr_javadoccomment">	 * @param value The int values to convert to shorts. Values outside the short range (-32768 to 32767) will be truncated.</em>
+<a class="jxr_linenumber" name="L1783" href="#L1783">1783</a> <em class="jxr_javadoccomment">	 * @return A new short array.</em>
+<a class="jxr_linenumber" name="L1784" href="#L1784">1784</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1785" href="#L1785">1785</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">short</strong>[] shorts(<strong class="jxr_keyword">int</strong>...value) {
+<a class="jxr_linenumber" name="L1786" href="#L1786">1786</a> 		<strong class="jxr_keyword">var</strong> result = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">short</strong>[value.length];
+<a class="jxr_linenumber" name="L1787" href="#L1787">1787</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; value.length; i++) {
+<a class="jxr_linenumber" name="L1788" href="#L1788">1788</a> 			result[i] = (<strong class="jxr_keyword">short</strong>)value[i];
+<a class="jxr_linenumber" name="L1789" href="#L1789">1789</a> 		}
+<a class="jxr_linenumber" name="L1790" href="#L1790">1790</a> 		<strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L1791" href="#L1791">1791</a> 	}
+<a class="jxr_linenumber" name="L1792" href="#L1792">1792</a> 
+<a class="jxr_linenumber" name="L1793" href="#L1793">1793</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1794" href="#L1794">1794</a> <em class="jxr_javadoccomment">	 * Convenience method for creating an {@link ArrayList} and sorting it.</em>
+<a class="jxr_linenumber" name="L1795" href="#L1795">1795</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1796" href="#L1796">1796</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
+<a class="jxr_linenumber" name="L1797" href="#L1797">1797</a> <em class="jxr_javadoccomment">	 * @param comparator The comparator to use to sort the list.</em>
+<a class="jxr_linenumber" name="L1798" href="#L1798">1798</a> <em class="jxr_javadoccomment">	 * @param value The values to initialize the list with.</em>
+<a class="jxr_linenumber" name="L1799" href="#L1799">1799</a> <em class="jxr_javadoccomment">	 * @return A new modifiable list.</em>
+<a class="jxr_linenumber" name="L1800" href="#L1800">1800</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1801" href="#L1801">1801</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; ArrayList&lt;E&gt; sortedList(Comparator&lt;E&gt; comparator, Collection&lt;E&gt; value) {
+<a class="jxr_linenumber" name="L1802" href="#L1802">1802</a> 		ArrayList&lt;E&gt; l = toList(value);
+<a class="jxr_linenumber" name="L1803" href="#L1803">1803</a> 		Collections.sort(l, comparator);
+<a class="jxr_linenumber" name="L1804" href="#L1804">1804</a> 		<strong class="jxr_keyword">return</strong> l;
+<a class="jxr_linenumber" name="L1805" href="#L1805">1805</a> 	}
+<a class="jxr_linenumber" name="L1806" href="#L1806">1806</a> 
+<a class="jxr_linenumber" name="L1807" href="#L1807">1807</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1808" href="#L1808">1808</a> <em class="jxr_javadoccomment">	 * Convenience method for creating an {@link ArrayList} and sorting it.</em>
+<a class="jxr_linenumber" name="L1809" href="#L1809">1809</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1810" href="#L1810">1810</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
+<a class="jxr_linenumber" name="L1811" href="#L1811">1811</a> <em class="jxr_javadoccomment">	 * @param comparator The comparator to use to sort the list.</em>
+<a class="jxr_linenumber" name="L1812" href="#L1812">1812</a> <em class="jxr_javadoccomment">	 * @param values The values to initialize the list with.</em>
+<a class="jxr_linenumber" name="L1813" href="#L1813">1813</a> <em class="jxr_javadoccomment">	 * @return A new modifiable list.</em>
+<a class="jxr_linenumber" name="L1814" href="#L1814">1814</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1815" href="#L1815">1815</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; List&lt;E&gt; sortedList(Comparator&lt;E&gt; comparator, E[] values) {
+<a class="jxr_linenumber" name="L1816" href="#L1816">1816</a> 		List&lt;E&gt; l = list(values);
+<a class="jxr_linenumber" name="L1817" href="#L1817">1817</a> 		Collections.sort(l, comparator);
+<a class="jxr_linenumber" name="L1818" href="#L1818">1818</a> 		<strong class="jxr_keyword">return</strong> l;
+<a class="jxr_linenumber" name="L1819" href="#L1819">1819</a> 	}
+<a class="jxr_linenumber" name="L1820" href="#L1820">1820</a> 
+<a class="jxr_linenumber" name="L1821" href="#L1821">1821</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1822" href="#L1822">1822</a> <em class="jxr_javadoccomment">	 * Convenience method for creating an {@link ArrayList} and sorting it.</em>
+<a class="jxr_linenumber" name="L1823" href="#L1823">1823</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1824" href="#L1824">1824</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
+<a class="jxr_linenumber" name="L1825" href="#L1825">1825</a> <em class="jxr_javadoccomment">	 * @param values The values to initialize the list with.</em>
+<a class="jxr_linenumber" name="L1826" href="#L1826">1826</a> <em class="jxr_javadoccomment">	 * @return A new modifiable list.</em>
+<a class="jxr_linenumber" name="L1827" href="#L1827">1827</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1828" href="#L1828">1828</a> 	@SuppressWarnings({ <span class="jxr_string">"rawtypes"</span>, <span class="jxr_string">"unchecked"</span> })
+<a class="jxr_linenumber" name="L1829" href="#L1829">1829</a> 	@SafeVarargs
+<a class="jxr_linenumber" name="L1830" href="#L1830">1830</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; List&lt;E&gt; sortedList(E...values) {
+<a class="jxr_linenumber" name="L1831" href="#L1831">1831</a> 		List&lt;E&gt; l = list(values);
+<a class="jxr_linenumber" name="L1832" href="#L1832">1832</a> 		Collections.sort((List&lt;Comparable&gt;)l);
+<a class="jxr_linenumber" name="L1833" href="#L1833">1833</a> 		<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L1834" href="#L1834">1834</a> 	}
 <a class="jxr_linenumber" name="L1835" href="#L1835">1835</a> 
 <a class="jxr_linenumber" name="L1836" href="#L1836">1836</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1837" href="#L1837">1837</a> <em class="jxr_javadoccomment">	 * Convenience method for creating a {@link TreeSet}.</em>
+<a class="jxr_linenumber" name="L1837" href="#L1837">1837</a> <em class="jxr_javadoccomment">	 * Convenience method for creating a {@link TreeMap}.</em>
 <a class="jxr_linenumber" name="L1838" href="#L1838">1838</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1839" href="#L1839">1839</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
-<a class="jxr_linenumber" name="L1840" href="#L1840">1840</a> <em class="jxr_javadoccomment">	 * @param values The values to initialize the set with.</em>
+<a class="jxr_linenumber" name="L1839" href="#L1839">1839</a> <em class="jxr_javadoccomment">	 * @param &lt;K&gt; The key type.</em>
+<a class="jxr_linenumber" name="L1840" href="#L1840">1840</a> <em class="jxr_javadoccomment">	 * @param &lt;V&gt; The value type.</em>
 <a class="jxr_linenumber" name="L1841" href="#L1841">1841</a> <em class="jxr_javadoccomment">	 * @return A new modifiable set.</em>
 <a class="jxr_linenumber" name="L1842" href="#L1842">1842</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1843" href="#L1843">1843</a> 	@SafeVarargs
-<a class="jxr_linenumber" name="L1844" href="#L1844">1844</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; TreeSet&lt;E&gt; sortedSet(E...values) {
-<a class="jxr_linenumber" name="L1845" href="#L1845">1845</a> 		assertArgNotNull(<span class="jxr_string">"values"</span>, values);
-<a class="jxr_linenumber" name="L1846" href="#L1846">1846</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> TreeSet&lt;E&gt;();
-<a class="jxr_linenumber" name="L1847" href="#L1847">1847</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : values)
-<a class="jxr_linenumber" name="L1848" href="#L1848">1848</a> 			l.add(v);
-<a class="jxr_linenumber" name="L1849" href="#L1849">1849</a> 		<strong class="jxr_keyword">return</strong> l;
-<a class="jxr_linenumber" name="L1850" href="#L1850">1850</a> 	}
-<a class="jxr_linenumber" name="L1851" href="#L1851">1851</a> 
-<a class="jxr_linenumber" name="L1852" href="#L1852">1852</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1853" href="#L1853">1853</a> <em class="jxr_javadoccomment">	 * Returns a stream of the specified array.</em>
-<a class="jxr_linenumber" name="L1854" href="#L1854">1854</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1855" href="#L1855">1855</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1856" href="#L1856">1856</a> <em class="jxr_javadoccomment">	 * Gracefully handles &lt;jk&gt;null&lt;/jk&gt; arrays by returning an empty stream.</em>
-<a class="jxr_linenumber" name="L1857" href="#L1857">1857</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1858" href="#L1858">1858</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L1859" href="#L1859">1859</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L1860" href="#L1860">1860</a> <em class="jxr_javadoccomment">	 * 	String[] &lt;jv&gt;array&lt;/jv&gt; = {&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;};</em>
-<a class="jxr_linenumber" name="L1861" href="#L1861">1861</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1862" href="#L1862">1862</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Prints "a", "b", "c"&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1863" href="#L1863">1863</a> <em class="jxr_javadoccomment">	 * 	&lt;jsm&gt;stream&lt;/jsm&gt;(&lt;jv&gt;array&lt;/jv&gt;).forEach(System.&lt;jk&gt;out&lt;/jk&gt;::println);</em>
-<a class="jxr_linenumber" name="L1864" href="#L1864">1864</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1865" href="#L1865">1865</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Handles null gracefully - returns empty stream&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1866" href="#L1866">1866</a> <em class="jxr_javadoccomment">	 * 	&lt;jsm&gt;stream&lt;/jsm&gt;(&lt;jk&gt;null&lt;/jk&gt;).forEach(System.&lt;jk&gt;out&lt;/jk&gt;::println);  &lt;jc&gt;// Prints nothing&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1867" href="#L1867">1867</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L1843" href="#L1843">1843</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; TreeMap&lt;K,V&gt; sortedMap() {
+<a class="jxr_linenumber" name="L1844" href="#L1844">1844</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> TreeMap&lt;&gt;();
+<a class="jxr_linenumber" name="L1845" href="#L1845">1845</a> 	}
+<a class="jxr_linenumber" name="L1846" href="#L1846">1846</a> 
+<a class="jxr_linenumber" name="L1847" href="#L1847">1847</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1848" href="#L1848">1848</a> <em class="jxr_javadoccomment">	 * Convenience method for creating a {@link TreeSet}.</em>
+<a class="jxr_linenumber" name="L1849" href="#L1849">1849</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1850" href="#L1850">1850</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
+<a class="jxr_linenumber" name="L1851" href="#L1851">1851</a> <em class="jxr_javadoccomment">	 * @param values The values to initialize the set with.</em>
+<a class="jxr_linenumber" name="L1852" href="#L1852">1852</a> <em class="jxr_javadoccomment">	 * @return A new modifiable set.</em>
+<a class="jxr_linenumber" name="L1853" href="#L1853">1853</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1854" href="#L1854">1854</a> 	@SafeVarargs
+<a class="jxr_linenumber" name="L1855" href="#L1855">1855</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; TreeSet&lt;E&gt; sortedSet(E...values) {
+<a class="jxr_linenumber" name="L1856" href="#L1856">1856</a> 		assertArgNotNull(<span class="jxr_string">"values"</span>, values);
+<a class="jxr_linenumber" name="L1857" href="#L1857">1857</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> TreeSet&lt;E&gt;();
+<a class="jxr_linenumber" name="L1858" href="#L1858">1858</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : values)
+<a class="jxr_linenumber" name="L1859" href="#L1859">1859</a> 			l.add(v);
+<a class="jxr_linenumber" name="L1860" href="#L1860">1860</a> 		<strong class="jxr_keyword">return</strong> l;
+<a class="jxr_linenumber" name="L1861" href="#L1861">1861</a> 	}
+<a class="jxr_linenumber" name="L1862" href="#L1862">1862</a> 
+<a class="jxr_linenumber" name="L1863" href="#L1863">1863</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1864" href="#L1864">1864</a> <em class="jxr_javadoccomment">	 * Returns a stream of the specified array.</em>
+<a class="jxr_linenumber" name="L1865" href="#L1865">1865</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1866" href="#L1866">1866</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1867" href="#L1867">1867</a> <em class="jxr_javadoccomment">	 * Gracefully handles &lt;jk&gt;null&lt;/jk&gt; arrays by returning an empty stream.</em>
 <a class="jxr_linenumber" name="L1868" href="#L1868">1868</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1869" href="#L1869">1869</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The element type.</em>
-<a class="jxr_linenumber" name="L1870" href="#L1870">1870</a> <em class="jxr_javadoccomment">	 * @param array The array to stream. Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1871" href="#L1871">1871</a> <em class="jxr_javadoccomment">	 * @return A stream of the array elements, or an empty stream if the array is &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1872" href="#L1872">1872</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1873" href="#L1873">1873</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; Stream&lt;T&gt; stream(T[] array) {
-<a class="jxr_linenumber" name="L1874" href="#L1874">1874</a> 		<strong class="jxr_keyword">return</strong> array == <strong class="jxr_keyword">null</strong> ? Stream.empty() : Arrays.stream(array);
-<a class="jxr_linenumber" name="L1875" href="#L1875">1875</a> 	}
-<a class="jxr_linenumber" name="L1876" href="#L1876">1876</a> 
-<a class="jxr_linenumber" name="L1877" href="#L1877">1877</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1878" href="#L1878">1878</a> <em class="jxr_javadoccomment">	 * Wraps the specified list in {@link Collections#unmodifiableList(List)}.</em>
+<a class="jxr_linenumber" name="L1869" href="#L1869">1869</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1870" href="#L1870">1870</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L1871" href="#L1871">1871</a> <em class="jxr_javadoccomment">	 * 	String[] &lt;jv&gt;array&lt;/jv&gt; = {&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;};</em>
+<a class="jxr_linenumber" name="L1872" href="#L1872">1872</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1873" href="#L1873">1873</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Prints "a", "b", "c"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1874" href="#L1874">1874</a> <em class="jxr_javadoccomment">	 * 	&lt;jsm&gt;stream&lt;/jsm&gt;(&lt;jv&gt;array&lt;/jv&gt;).forEach(System.&lt;jk&gt;out&lt;/jk&gt;::println);</em>
+<a class="jxr_linenumber" name="L1875" href="#L1875">1875</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1876" href="#L1876">1876</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Handles null gracefully - returns empty stream&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1877" href="#L1877">1877</a> <em class="jxr_javadoccomment">	 * 	&lt;jsm&gt;stream&lt;/jsm&gt;(&lt;jk&gt;null&lt;/jk&gt;).forEach(System.&lt;jk&gt;out&lt;/jk&gt;::println);  &lt;jc&gt;// Prints nothing&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1878" href="#L1878">1878</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1879" href="#L1879">1879</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1880" href="#L1880">1880</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
-<a class="jxr_linenumber" name="L1881" href="#L1881">1881</a> <em class="jxr_javadoccomment">	 * @param value The list to wrap.</em>
-<a class="jxr_linenumber" name="L1882" href="#L1882">1882</a> <em class="jxr_javadoccomment">	 * @return The wrapped list.</em>
+<a class="jxr_linenumber" name="L1880" href="#L1880">1880</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The element type.</em>
+<a class="jxr_linenumber" name="L1881" href="#L1881">1881</a> <em class="jxr_javadoccomment">	 * @param array The array to stream. Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1882" href="#L1882">1882</a> <em class="jxr_javadoccomment">	 * @return A stream of the array elements, or an empty stream if the array is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L1883" href="#L1883">1883</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1884" href="#L1884">1884</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; List&lt;E&gt; synced(List&lt;E&gt; value) {
-<a class="jxr_linenumber" name="L1885" href="#L1885">1885</a> 		<strong class="jxr_keyword">return</strong> value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : Collections.synchronizedList(value);
+<a class="jxr_linenumber" name="L1884" href="#L1884">1884</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; Stream&lt;T&gt; stream(T[] array) {
+<a class="jxr_linenumber" name="L1885" href="#L1885">1885</a> 		<strong class="jxr_keyword">return</strong> array == <strong class="jxr_keyword">null</strong> ? Stream.empty() : Arrays.stream(array);
 <a class="jxr_linenumber" name="L1886" href="#L1886">1886</a> 	}
 <a class="jxr_linenumber" name="L1887" href="#L1887">1887</a> 
 <a class="jxr_linenumber" name="L1888" href="#L1888">1888</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1889" href="#L1889">1889</a> <em class="jxr_javadoccomment">	 * Wraps the specified map in {@link Collections#unmodifiableMap(Map)}.</em>
+<a class="jxr_linenumber" name="L1889" href="#L1889">1889</a> <em class="jxr_javadoccomment">	 * Wraps the specified list in {@link Collections#unmodifiableList(List)}.</em>
 <a class="jxr_linenumber" name="L1890" href="#L1890">1890</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1891" href="#L1891">1891</a> <em class="jxr_javadoccomment">	 * @param &lt;K&gt; The key type.</em>
-<a class="jxr_linenumber" name="L1892" href="#L1892">1892</a> <em class="jxr_javadoccomment">	 * @param &lt;V&gt; The value type.</em>
-<a class="jxr_linenumber" name="L1893" href="#L1893">1893</a> <em class="jxr_javadoccomment">	 * @param value The map to wrap.</em>
-<a class="jxr_linenumber" name="L1894" href="#L1894">1894</a> <em class="jxr_javadoccomment">	 * @return The wrapped map.</em>
-<a class="jxr_linenumber" name="L1895" href="#L1895">1895</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1896" href="#L1896">1896</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; Map&lt;K,V&gt; synced(Map&lt;K,V&gt; value) {
-<a class="jxr_linenumber" name="L1897" href="#L1897">1897</a> 		<strong class="jxr_keyword">return</strong> value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : Collections.synchronizedMap(value);
-<a class="jxr_linenumber" name="L1898" href="#L1898">1898</a> 	}
-<a class="jxr_linenumber" name="L1899" href="#L1899">1899</a> 
-<a class="jxr_linenumber" name="L1900" href="#L1900">1900</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1901" href="#L1901">1901</a> <em class="jxr_javadoccomment">	 * Wraps the specified set in {@link Collections#unmodifiableSet(Set)}.</em>
-<a class="jxr_linenumber" name="L1902" href="#L1902">1902</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1903" href="#L1903">1903</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
-<a class="jxr_linenumber" name="L1904" href="#L1904">1904</a> <em class="jxr_javadoccomment">	 * @param value The set to wrap.</em>
-<a class="jxr_linenumber" name="L1905" href="#L1905">1905</a> <em class="jxr_javadoccomment">	 * @return The wrapped set.</em>
+<a class="jxr_linenumber" name="L1891" href="#L1891">1891</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
+<a class="jxr_linenumber" name="L1892" href="#L1892">1892</a> <em class="jxr_javadoccomment">	 * @param value The list to wrap.</em>
+<a class="jxr_linenumber" name="L1893" href="#L1893">1893</a> <em class="jxr_javadoccomment">	 * @return The wrapped list.</em>
+<a class="jxr_linenumber" name="L1894" href="#L1894">1894</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1895" href="#L1895">1895</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; List&lt;E&gt; synced(List&lt;E&gt; value) {
+<a class="jxr_linenumber" name="L1896" href="#L1896">1896</a> 		<strong class="jxr_keyword">return</strong> value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : Collections.synchronizedList(value);
+<a class="jxr_linenumber" name="L1897" href="#L1897">1897</a> 	}
+<a class="jxr_linenumber" name="L1898" href="#L1898">1898</a> 
+<a class="jxr_linenumber" name="L1899" href="#L1899">1899</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1900" href="#L1900">1900</a> <em class="jxr_javadoccomment">	 * Wraps the specified map in {@link Collections#unmodifiableMap(Map)}.</em>
+<a class="jxr_linenumber" name="L1901" href="#L1901">1901</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1902" href="#L1902">1902</a> <em class="jxr_javadoccomment">	 * @param &lt;K&gt; The key type.</em>
+<a class="jxr_linenumber" name="L1903" href="#L1903">1903</a> <em class="jxr_javadoccomment">	 * @param &lt;V&gt; The value type.</em>
+<a class="jxr_linenumber" name="L1904" href="#L1904">1904</a> <em class="jxr_javadoccomment">	 * @param value The map to wrap.</em>
+<a class="jxr_linenumber" name="L1905" href="#L1905">1905</a> <em class="jxr_javadoccomment">	 * @return The wrapped map.</em>
 <a class="jxr_linenumber" name="L1906" href="#L1906">1906</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1907" href="#L1907">1907</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; Set&lt;E&gt; synced(Set&lt;E&gt; value) {
-<a class="jxr_linenumber" name="L1908" href="#L1908">1908</a> 		<strong class="jxr_keyword">return</strong> value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : Collections.synchronizedSet(value);
+<a class="jxr_linenumber" name="L1907" href="#L1907">1907</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; Map&lt;K,V&gt; synced(Map&lt;K,V&gt; value) {
+<a class="jxr_linenumber" name="L1908" href="#L1908">1908</a> 		<strong class="jxr_keyword">return</strong> value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : Collections.synchronizedMap(value);
 <a class="jxr_linenumber" name="L1909" href="#L1909">1909</a> 	}
 <a class="jxr_linenumber" name="L1910" href="#L1910">1910</a> 
 <a class="jxr_linenumber" name="L1911" href="#L1911">1911</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1912" href="#L1912">1912</a> <em class="jxr_javadoccomment">	 * Converts the specified collection to an array.</em>
+<a class="jxr_linenumber" name="L1912" href="#L1912">1912</a> <em class="jxr_javadoccomment">	 * Wraps the specified set in {@link Collections#unmodifiableSet(Set)}.</em>
 <a class="jxr_linenumber" name="L1913" href="#L1913">1913</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1914" href="#L1914">1914</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1915" href="#L1915">1915</a> <em class="jxr_javadoccomment">	 * Works on both object and primitive arrays.</em>
-<a class="jxr_linenumber" name="L1916" href="#L1916">1916</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1917" href="#L1917">1917</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
-<a class="jxr_linenumber" name="L1918" href="#L1918">1918</a> <em class="jxr_javadoccomment">	 * @param c The collection to convert to an array.</em>
-<a class="jxr_linenumber" name="L1919" href="#L1919">1919</a> <em class="jxr_javadoccomment">	 * @param elementType The component type of the collection.</em>
-<a class="jxr_linenumber" name="L1920" href="#L1920">1920</a> <em class="jxr_javadoccomment">	 * @return A new array.</em>
-<a class="jxr_linenumber" name="L1921" href="#L1921">1921</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1922" href="#L1922">1922</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; Object toArray(Collection&lt;?&gt; c, Class&lt;E&gt; elementType) {
-<a class="jxr_linenumber" name="L1923" href="#L1923">1923</a> 		<strong class="jxr_keyword">var</strong> a = Array.newInstance(elementType, c.size());
-<a class="jxr_linenumber" name="L1924" href="#L1924">1924</a> 		Iterator&lt;?&gt; it = c.iterator();
-<a class="jxr_linenumber" name="L1925" href="#L1925">1925</a> 		<strong class="jxr_keyword">int</strong> i = 0;
-<a class="jxr_linenumber" name="L1926" href="#L1926">1926</a> 		<strong class="jxr_keyword">while</strong> (it.hasNext())
-<a class="jxr_linenumber" name="L1927" href="#L1927">1927</a> 			Array.set(a, i++, it.next());
-<a class="jxr_linenumber" name="L1928" href="#L1928">1928</a> 		<strong class="jxr_keyword">return</strong> a;
-<a class="jxr_linenumber" name="L1929" href="#L1929">1929</a> 	}
-<a class="jxr_linenumber" name="L1930" href="#L1930">1930</a> 
-<a class="jxr_linenumber" name="L1931" href="#L1931">1931</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1932" href="#L1932">1932</a> <em class="jxr_javadoccomment">	 * Creates an {@link ArrayList} copy from a collection.</em>
-<a class="jxr_linenumber" name="L1933" href="#L1933">1933</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1934" href="#L1934">1934</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
-<a class="jxr_linenumber" name="L1935" href="#L1935">1935</a> <em class="jxr_javadoccomment">	 * @param value The collection to copy from.</em>
-<a class="jxr_linenumber" name="L1936" href="#L1936">1936</a> <em class="jxr_javadoccomment">	 * @return A new modifiable list.</em>
-<a class="jxr_linenumber" name="L1937" href="#L1937">1937</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1938" href="#L1938">1938</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; ArrayList&lt;E&gt; toList(Collection&lt;E&gt; value) {
-<a class="jxr_linenumber" name="L1939" href="#L1939">1939</a> 		<strong class="jxr_keyword">return</strong> toList(value, false);
+<a class="jxr_linenumber" name="L1914" href="#L1914">1914</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
+<a class="jxr_linenumber" name="L1915" href="#L1915">1915</a> <em class="jxr_javadoccomment">	 * @param value The set to wrap.</em>
+<a class="jxr_linenumber" name="L1916" href="#L1916">1916</a> <em class="jxr_javadoccomment">	 * @return The wrapped set.</em>
+<a class="jxr_linenumber" name="L1917" href="#L1917">1917</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1918" href="#L1918">1918</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; Set&lt;E&gt; synced(Set&lt;E&gt; value) {
+<a class="jxr_linenumber" name="L1919" href="#L1919">1919</a> 		<strong class="jxr_keyword">return</strong> value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : Collections.synchronizedSet(value);
+<a class="jxr_linenumber" name="L1920" href="#L1920">1920</a> 	}
+<a class="jxr_linenumber" name="L1921" href="#L1921">1921</a> 
+<a class="jxr_linenumber" name="L1922" href="#L1922">1922</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1923" href="#L1923">1923</a> <em class="jxr_javadoccomment">	 * Converts the specified collection to an array.</em>
+<a class="jxr_linenumber" name="L1924" href="#L1924">1924</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1925" href="#L1925">1925</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1926" href="#L1926">1926</a> <em class="jxr_javadoccomment">	 * Works on both object and primitive arrays.</em>
+<a class="jxr_linenumber" name="L1927" href="#L1927">1927</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1928" href="#L1928">1928</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
+<a class="jxr_linenumber" name="L1929" href="#L1929">1929</a> <em class="jxr_javadoccomment">	 * @param c The collection to convert to an array.</em>
+<a class="jxr_linenumber" name="L1930" href="#L1930">1930</a> <em class="jxr_javadoccomment">	 * @param elementType The component type of the collection.</em>
+<a class="jxr_linenumber" name="L1931" href="#L1931">1931</a> <em class="jxr_javadoccomment">	 * @return A new array.</em>
+<a class="jxr_linenumber" name="L1932" href="#L1932">1932</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1933" href="#L1933">1933</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; Object toArray(Collection&lt;?&gt; c, Class&lt;E&gt; elementType) {
+<a class="jxr_linenumber" name="L1934" href="#L1934">1934</a> 		<strong class="jxr_keyword">var</strong> a = Array.newInstance(elementType, c.size());
+<a class="jxr_linenumber" name="L1935" href="#L1935">1935</a> 		Iterator&lt;?&gt; it = c.iterator();
+<a class="jxr_linenumber" name="L1936" href="#L1936">1936</a> 		<strong class="jxr_keyword">int</strong> i = 0;
+<a class="jxr_linenumber" name="L1937" href="#L1937">1937</a> 		<strong class="jxr_keyword">while</strong> (it.hasNext())
+<a class="jxr_linenumber" name="L1938" href="#L1938">1938</a> 			Array.set(a, i++, it.next());
+<a class="jxr_linenumber" name="L1939" href="#L1939">1939</a> 		<strong class="jxr_keyword">return</strong> a;
 <a class="jxr_linenumber" name="L1940" href="#L1940">1940</a> 	}
 <a class="jxr_linenumber" name="L1941" href="#L1941">1941</a> 
 <a class="jxr_linenumber" name="L1942" href="#L1942">1942</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -1952,328 +1952,339 @@
 <a class="jxr_linenumber" name="L1944" href="#L1944">1944</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1945" href="#L1945">1945</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
 <a class="jxr_linenumber" name="L1946" href="#L1946">1946</a> <em class="jxr_javadoccomment">	 * @param value The collection to copy from.</em>
-<a class="jxr_linenumber" name="L1947" href="#L1947">1947</a> <em class="jxr_javadoccomment">	 * @param nullIfEmpty If &lt;jk&gt;true&lt;/jk&gt; will return &lt;jk&gt;null&lt;/jk&gt; if the collection is empty.</em>
-<a class="jxr_linenumber" name="L1948" href="#L1948">1948</a> <em class="jxr_javadoccomment">	 * @return A new modifiable list.</em>
-<a class="jxr_linenumber" name="L1949" href="#L1949">1949</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1950" href="#L1950">1950</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; ArrayList&lt;E&gt; toList(Collection&lt;E&gt; value, <strong class="jxr_keyword">boolean</strong> nullIfEmpty) {
-<a class="jxr_linenumber" name="L1951" href="#L1951">1951</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong> || (nullIfEmpty &amp;&amp; value.isEmpty()))
-<a class="jxr_linenumber" name="L1952" href="#L1952">1952</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1953" href="#L1953">1953</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> ArrayList&lt;E&gt;();
-<a class="jxr_linenumber" name="L1954" href="#L1954">1954</a> 		value.forEach(x -&gt; l.add(x));
-<a class="jxr_linenumber" name="L1955" href="#L1955">1955</a> 		<strong class="jxr_keyword">return</strong> l;
-<a class="jxr_linenumber" name="L1956" href="#L1956">1956</a> 	}
-<a class="jxr_linenumber" name="L1957" href="#L1957">1957</a> 
-<a class="jxr_linenumber" name="L1958" href="#L1958">1958</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1959" href="#L1959">1959</a> <em class="jxr_javadoccomment">	 * Converts various collection-like objects to a {@link List}.</em>
-<a class="jxr_linenumber" name="L1960" href="#L1960">1960</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1961" href="#L1961">1961</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This utility method enables testing of any collection-like object by converting it to a List that can be</em>
-<a class="jxr_linenumber" name="L1962" href="#L1962">1962</a> <em class="jxr_javadoccomment">	 * passed to methods such as TestUtils.assertList().&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L1963" href="#L1963">1963</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1964" href="#L1964">1964</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Supported Input Types:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L1965" href="#L1965">1965</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1966" href="#L1966">1966</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;List:&lt;/b&gt; Returns the input unchanged&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L1967" href="#L1967">1967</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;Iterable:&lt;/b&gt; Any collection, set, queue, etc. (converted to List preserving order)&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L1968" href="#L1968">1968</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;Iterator:&lt;/b&gt; Converts iterator contents to List&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L1969" href="#L1969">1969</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;Enumeration:&lt;/b&gt; Converts enumeration contents to List&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L1970" href="#L1970">1970</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;Stream:&lt;/b&gt; Converts stream contents to List (stream is consumed)&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L1971" href="#L1971">1971</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;Map:&lt;/b&gt; Converts map entries to List of Map.Entry objects&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L1972" href="#L1972">1972</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;Array:&lt;/b&gt; Converts any array type (including primitive arrays) to List&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L1973" href="#L1973">1973</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1947" href="#L1947">1947</a> <em class="jxr_javadoccomment">	 * @return A new modifiable list.</em>
+<a class="jxr_linenumber" name="L1948" href="#L1948">1948</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1949" href="#L1949">1949</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; ArrayList&lt;E&gt; toList(Collection&lt;E&gt; value) {
+<a class="jxr_linenumber" name="L1950" href="#L1950">1950</a> 		<strong class="jxr_keyword">return</strong> toList(value, false);
+<a class="jxr_linenumber" name="L1951" href="#L1951">1951</a> 	}
+<a class="jxr_linenumber" name="L1952" href="#L1952">1952</a> 
+<a class="jxr_linenumber" name="L1953" href="#L1953">1953</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1954" href="#L1954">1954</a> <em class="jxr_javadoccomment">	 * Creates an {@link ArrayList} copy from a collection.</em>
+<a class="jxr_linenumber" name="L1955" href="#L1955">1955</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1956" href="#L1956">1956</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
+<a class="jxr_linenumber" name="L1957" href="#L1957">1957</a> <em class="jxr_javadoccomment">	 * @param value The collection to copy from.</em>
+<a class="jxr_linenumber" name="L1958" href="#L1958">1958</a> <em class="jxr_javadoccomment">	 * @param nullIfEmpty If &lt;jk&gt;true&lt;/jk&gt; will return &lt;jk&gt;null&lt;/jk&gt; if the collection is empty.</em>
+<a class="jxr_linenumber" name="L1959" href="#L1959">1959</a> <em class="jxr_javadoccomment">	 * @return A new modifiable list.</em>
+<a class="jxr_linenumber" name="L1960" href="#L1960">1960</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1961" href="#L1961">1961</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; ArrayList&lt;E&gt; toList(Collection&lt;E&gt; value, <strong class="jxr_keyword">boolean</strong> nullIfEmpty) {
+<a class="jxr_linenumber" name="L1962" href="#L1962">1962</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong> || (nullIfEmpty &amp;&amp; value.isEmpty()))
+<a class="jxr_linenumber" name="L1963" href="#L1963">1963</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1964" href="#L1964">1964</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> ArrayList&lt;E&gt;();
+<a class="jxr_linenumber" name="L1965" href="#L1965">1965</a> 		value.forEach(x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L1966" href="#L1966">1966</a> 		<strong class="jxr_keyword">return</strong> l;
+<a class="jxr_linenumber" name="L1967" href="#L1967">1967</a> 	}
+<a class="jxr_linenumber" name="L1968" href="#L1968">1968</a> 
+<a class="jxr_linenumber" name="L1969" href="#L1969">1969</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1970" href="#L1970">1970</a> <em class="jxr_javadoccomment">	 * Converts various collection-like objects to a {@link List}.</em>
+<a class="jxr_linenumber" name="L1971" href="#L1971">1971</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1972" href="#L1972">1972</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This utility method enables testing of any collection-like object by converting it to a List that can be</em>
+<a class="jxr_linenumber" name="L1973" href="#L1973">1973</a> <em class="jxr_javadoccomment">	 * passed to methods such as TestUtils.assertList().&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1974" href="#L1974">1974</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1975" href="#L1975">1975</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L1976" href="#L1976">1976</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L1977" href="#L1977">1977</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Test a Set&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1978" href="#L1978">1978</a> <em class="jxr_javadoccomment">	 * 	Set&amp;lt;String&amp;gt; &lt;jv&gt;mySet&lt;/jv&gt; = Set.of(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L1979" href="#L1979">1979</a> <em class="jxr_javadoccomment">	 * 	assertList(toList(&lt;jv&gt;mySet&lt;/jv&gt;), &lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L1980" href="#L1980">1980</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1981" href="#L1981">1981</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Test an array&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1982" href="#L1982">1982</a> <em class="jxr_javadoccomment">	 * 	String[] &lt;jv&gt;myArray&lt;/jv&gt; = {&lt;js&gt;"x"&lt;/js&gt;, &lt;js&gt;"y"&lt;/js&gt;, &lt;js&gt;"z"&lt;/js&gt;};</em>
-<a class="jxr_linenumber" name="L1983" href="#L1983">1983</a> <em class="jxr_javadoccomment">	 * 	assertList(toList(&lt;jv&gt;myArray&lt;/jv&gt;), &lt;js&gt;"x"&lt;/js&gt;, &lt;js&gt;"y"&lt;/js&gt;, &lt;js&gt;"z"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L1984" href="#L1984">1984</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1985" href="#L1985">1985</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Test a primitive array&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1986" href="#L1986">1986</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;int&lt;/jk&gt;[] &lt;jv&gt;numbers&lt;/jv&gt; = {1, 2, 3};</em>
-<a class="jxr_linenumber" name="L1987" href="#L1987">1987</a> <em class="jxr_javadoccomment">	 * 	assertList(toList(&lt;jv&gt;numbers&lt;/jv&gt;), &lt;js&gt;"1"&lt;/js&gt;, &lt;js&gt;"2"&lt;/js&gt;, &lt;js&gt;"3"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L1988" href="#L1988">1988</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1989" href="#L1989">1989</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Test a Stream&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1990" href="#L1990">1990</a> <em class="jxr_javadoccomment">	 * 	Stream&amp;lt;String&amp;gt; &lt;jv&gt;myStream&lt;/jv&gt; = Stream.of(&lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"bar"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L1991" href="#L1991">1991</a> <em class="jxr_javadoccomment">	 * 	assertList(toList(&lt;jv&gt;myStream&lt;/jv&gt;), &lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"bar"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L1992" href="#L1992">1992</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1993" href="#L1993">1993</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Test a Map (converted to entries)&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1994" href="#L1994">1994</a> <em class="jxr_javadoccomment">	 * 	Map&amp;lt;String,Integer&amp;gt; &lt;jv&gt;myMap&lt;/jv&gt; = Map.of(&lt;js&gt;"a"&lt;/js&gt;, 1, &lt;js&gt;"b"&lt;/js&gt;, 2);</em>
-<a class="jxr_linenumber" name="L1995" href="#L1995">1995</a> <em class="jxr_javadoccomment">	 * 	assertList(toList(&lt;jv&gt;myMap&lt;/jv&gt;), &lt;js&gt;"a=1"&lt;/js&gt;, &lt;js&gt;"b=2"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L1996" href="#L1996">1996</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1997" href="#L1997">1997</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Test any Iterable collection&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1998" href="#L1998">1998</a> <em class="jxr_javadoccomment">	 * 	Queue&amp;lt;String&amp;gt; &lt;jv&gt;myQueue&lt;/jv&gt; = new LinkedList&amp;lt;&amp;gt;(List.of(&lt;js&gt;"first"&lt;/js&gt;, &lt;js&gt;"second"&lt;/js&gt;));</em>
-<a class="jxr_linenumber" name="L1999" href="#L1999">1999</a> <em class="jxr_javadoccomment">	 * 	assertList(toList(&lt;jv&gt;myQueue&lt;/jv&gt;), &lt;js&gt;"first"&lt;/js&gt;, &lt;js&gt;"second"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L2000" href="#L2000">2000</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L2001" href="#L2001">2001</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2002" href="#L2002">2002</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Integration with Testing:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L2003" href="#L2003">2003</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method is specifically designed to work with testing frameworks to provide</em>
-<a class="jxr_linenumber" name="L2004" href="#L2004">2004</a> <em class="jxr_javadoccomment">	 * a unified testing approach for all collection-like types. Instead of having separate assertion methods</em>
-<a class="jxr_linenumber" name="L2005" href="#L2005">2005</a> <em class="jxr_javadoccomment">	 * for arrays, sets, and other collections, you can convert them all to Lists and use standard</em>
-<a class="jxr_linenumber" name="L2006" href="#L2006">2006</a> <em class="jxr_javadoccomment">	 * list assertion methods.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L1975" href="#L1975">1975</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Supported Input Types:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1976" href="#L1976">1976</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1977" href="#L1977">1977</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;List:&lt;/b&gt; Returns the input unchanged&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L1978" href="#L1978">1978</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;Iterable:&lt;/b&gt; Any collection, set, queue, etc. (converted to List preserving order)&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L1979" href="#L1979">1979</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;Iterator:&lt;/b&gt; Converts iterator contents to List&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L1980" href="#L1980">1980</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;Enumeration:&lt;/b&gt; Converts enumeration contents to List&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L1981" href="#L1981">1981</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;Stream:&lt;/b&gt; Converts stream contents to List (stream is consumed)&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L1982" href="#L1982">1982</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;Map:&lt;/b&gt; Converts map entries to List of Map.Entry objects&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L1983" href="#L1983">1983</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;Array:&lt;/b&gt; Converts any array type (including primitive arrays) to List&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L1984" href="#L1984">1984</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1985" href="#L1985">1985</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1986" href="#L1986">1986</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1987" href="#L1987">1987</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L1988" href="#L1988">1988</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Test a Set&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1989" href="#L1989">1989</a> <em class="jxr_javadoccomment">	 * 	Set&amp;lt;String&amp;gt; &lt;jv&gt;mySet&lt;/jv&gt; = Set.of(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L1990" href="#L1990">1990</a> <em class="jxr_javadoccomment">	 * 	assertList(toList(&lt;jv&gt;mySet&lt;/jv&gt;), &lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L1991" href="#L1991">1991</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1992" href="#L1992">1992</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Test an array&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1993" href="#L1993">1993</a> <em class="jxr_javadoccomment">	 * 	String[] &lt;jv&gt;myArray&lt;/jv&gt; = {&lt;js&gt;"x"&lt;/js&gt;, &lt;js&gt;"y"&lt;/js&gt;, &lt;js&gt;"z"&lt;/js&gt;};</em>
+<a class="jxr_linenumber" name="L1994" href="#L1994">1994</a> <em class="jxr_javadoccomment">	 * 	assertList(toList(&lt;jv&gt;myArray&lt;/jv&gt;), &lt;js&gt;"x"&lt;/js&gt;, &lt;js&gt;"y"&lt;/js&gt;, &lt;js&gt;"z"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L1995" href="#L1995">1995</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1996" href="#L1996">1996</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Test a primitive array&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1997" href="#L1997">1997</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;int&lt;/jk&gt;[] &lt;jv&gt;numbers&lt;/jv&gt; = {1, 2, 3};</em>
+<a class="jxr_linenumber" name="L1998" href="#L1998">1998</a> <em class="jxr_javadoccomment">	 * 	assertList(toList(&lt;jv&gt;numbers&lt;/jv&gt;), &lt;js&gt;"1"&lt;/js&gt;, &lt;js&gt;"2"&lt;/js&gt;, &lt;js&gt;"3"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L1999" href="#L1999">1999</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2000" href="#L2000">2000</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Test a Stream&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L2001" href="#L2001">2001</a> <em class="jxr_javadoccomment">	 * 	Stream&amp;lt;String&amp;gt; &lt;jv&gt;myStream&lt;/jv&gt; = Stream.of(&lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"bar"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L2002" href="#L2002">2002</a> <em class="jxr_javadoccomment">	 * 	assertList(toList(&lt;jv&gt;myStream&lt;/jv&gt;), &lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"bar"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L2003" href="#L2003">2003</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2004" href="#L2004">2004</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Test a Map (converted to entries)&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L2005" href="#L2005">2005</a> <em class="jxr_javadoccomment">	 * 	Map&amp;lt;String,Integer&amp;gt; &lt;jv&gt;myMap&lt;/jv&gt; = Map.of(&lt;js&gt;"a"&lt;/js&gt;, 1, &lt;js&gt;"b"&lt;/js&gt;, 2);</em>
+<a class="jxr_linenumber" name="L2006" href="#L2006">2006</a> <em class="jxr_javadoccomment">	 * 	assertList(toList(&lt;jv&gt;myMap&lt;/jv&gt;), &lt;js&gt;"a=1"&lt;/js&gt;, &lt;js&gt;"b=2"&lt;/js&gt;);</em>
 <a class="jxr_linenumber" name="L2007" href="#L2007">2007</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2008" href="#L2008">2008</a> <em class="jxr_javadoccomment">	 * @param o The object to convert to a List. Must not be null and must be a supported collection-like type.</em>
-<a class="jxr_linenumber" name="L2009" href="#L2009">2009</a> <em class="jxr_javadoccomment">	 * @return A {@link List} containing the elements from the input object.</em>
-<a class="jxr_linenumber" name="L2010" href="#L2010">2010</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException if the input object cannot be converted to a List.</em>
-<a class="jxr_linenumber" name="L2011" href="#L2011">2011</a> <em class="jxr_javadoccomment">	 * @see arrayToList</em>
-<a class="jxr_linenumber" name="L2012" href="#L2012">2012</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2013" href="#L2013">2013</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;?&gt; toList(Object o) {  <em class="jxr_comment">// NOSONAR</em>
-<a class="jxr_linenumber" name="L2014" href="#L2014">2014</a> 		assertArgNotNull(<span class="jxr_string">"o"</span>, o);
-<a class="jxr_linenumber" name="L2015" href="#L2015">2015</a> 		<strong class="jxr_keyword">if</strong> (o instanceof List&lt;?&gt; o2)
-<a class="jxr_linenumber" name="L2016" href="#L2016">2016</a> 			<strong class="jxr_keyword">return</strong> o2;
-<a class="jxr_linenumber" name="L2017" href="#L2017">2017</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Iterable&lt;?&gt; o2)
-<a class="jxr_linenumber" name="L2018" href="#L2018">2018</a> 			<strong class="jxr_keyword">return</strong> StreamSupport.stream(o2.spliterator(), false).toList();
-<a class="jxr_linenumber" name="L2019" href="#L2019">2019</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Iterator&lt;?&gt; o2)
-<a class="jxr_linenumber" name="L2020" href="#L2020">2020</a> 			<strong class="jxr_keyword">return</strong> StreamSupport.stream(Spliterators.spliteratorUnknownSize(o2, 0), false).toList();
-<a class="jxr_linenumber" name="L2021" href="#L2021">2021</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Enumeration&lt;?&gt; o2)
-<a class="jxr_linenumber" name="L2022" href="#L2022">2022</a> 			<strong class="jxr_keyword">return</strong> Collections.list(o2);
-<a class="jxr_linenumber" name="L2023" href="#L2023">2023</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Stream&lt;?&gt; o2)
-<a class="jxr_linenumber" name="L2024" href="#L2024">2024</a> 			<strong class="jxr_keyword">return</strong> o2.toList();
-<a class="jxr_linenumber" name="L2025" href="#L2025">2025</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Map&lt;?,?&gt; o2)
-<a class="jxr_linenumber" name="L2026" href="#L2026">2026</a> 			<strong class="jxr_keyword">return</strong> toList(o2.entrySet());
-<a class="jxr_linenumber" name="L2027" href="#L2027">2027</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Optional&lt;?&gt; o2)
-<a class="jxr_linenumber" name="L2028" href="#L2028">2028</a> 			<strong class="jxr_keyword">return</strong> o2.isEmpty() ? Collections.emptyList() : Collections.singletonList(o2.get());
-<a class="jxr_linenumber" name="L2029" href="#L2029">2029</a> 		<strong class="jxr_keyword">if</strong> (isArray(o))
-<a class="jxr_linenumber" name="L2030" href="#L2030">2030</a> 			<strong class="jxr_keyword">return</strong> arrayToList(o);
-<a class="jxr_linenumber" name="L2031" href="#L2031">2031</a> 		<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Could not convert object of type {0} to a list"</span>, cn(o));
-<a class="jxr_linenumber" name="L2032" href="#L2032">2032</a> 	}
-<a class="jxr_linenumber" name="L2033" href="#L2033">2033</a> 
-<a class="jxr_linenumber" name="L2034" href="#L2034">2034</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2035" href="#L2035">2035</a> <em class="jxr_javadoccomment">	 * Converts the specified array to an &lt;c&gt;ArrayList&lt;/c&gt;</em>
-<a class="jxr_linenumber" name="L2036" href="#L2036">2036</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2037" href="#L2037">2037</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
-<a class="jxr_linenumber" name="L2038" href="#L2038">2038</a> <em class="jxr_javadoccomment">	 * @param array The array to convert.</em>
-<a class="jxr_linenumber" name="L2039" href="#L2039">2039</a> <em class="jxr_javadoccomment">	 * @param elementType</em>
-<a class="jxr_linenumber" name="L2040" href="#L2040">2040</a> <em class="jxr_javadoccomment">	 * 	The type of objects in the array.</em>
-<a class="jxr_linenumber" name="L2041" href="#L2041">2041</a> <em class="jxr_javadoccomment">	 * 	It must match the actual component type in the array.</em>
-<a class="jxr_linenumber" name="L2042" href="#L2042">2042</a> <em class="jxr_javadoccomment">	 * @return A new {@link ArrayList}</em>
-<a class="jxr_linenumber" name="L2043" href="#L2043">2043</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2044" href="#L2044">2044</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L2045" href="#L2045">2045</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; List&lt;E&gt; toList(Object array, Class&lt;E&gt; elementType) {
-<a class="jxr_linenumber" name="L2046" href="#L2046">2046</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> ArrayList&lt;E&gt;(Array.getLength(array));
-<a class="jxr_linenumber" name="L2047" href="#L2047">2047</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; Array.getLength(array); i++)
-<a class="jxr_linenumber" name="L2048" href="#L2048">2048</a> 			l.add((E)Array.get(array, i));
-<a class="jxr_linenumber" name="L2049" href="#L2049">2049</a> 		<strong class="jxr_keyword">return</strong> l;
-<a class="jxr_linenumber" name="L2050" href="#L2050">2050</a> 	}
-<a class="jxr_linenumber" name="L2051" href="#L2051">2051</a> 
-<a class="jxr_linenumber" name="L2052" href="#L2052">2052</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2053" href="#L2053">2053</a> <em class="jxr_javadoccomment">	 * Recursively converts the specified array into a list of objects.</em>
-<a class="jxr_linenumber" name="L2054" href="#L2054">2054</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2055" href="#L2055">2055</a> <em class="jxr_javadoccomment">	 * @param array The array to convert.</em>
-<a class="jxr_linenumber" name="L2056" href="#L2056">2056</a> <em class="jxr_javadoccomment">	 * @return A new {@link ArrayList}</em>
-<a class="jxr_linenumber" name="L2057" href="#L2057">2057</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2058" href="#L2058">2058</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> List&lt;Object&gt; toObjectList(Object array) {
-<a class="jxr_linenumber" name="L2059" href="#L2059">2059</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(Array.getLength(array));
-<a class="jxr_linenumber" name="L2060" href="#L2060">2060</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; Array.getLength(array); i++) {
-<a class="jxr_linenumber" name="L2061" href="#L2061">2061</a> 			<strong class="jxr_keyword">var</strong> o = Array.get(array, i);
-<a class="jxr_linenumber" name="L2062" href="#L2062">2062</a> 			<strong class="jxr_keyword">if</strong> (isArray(o))
-<a class="jxr_linenumber" name="L2063" href="#L2063">2063</a> 				o = toObjectList(o);
-<a class="jxr_linenumber" name="L2064" href="#L2064">2064</a> 			l.add(o);
-<a class="jxr_linenumber" name="L2065" href="#L2065">2065</a> 		}
-<a class="jxr_linenumber" name="L2066" href="#L2066">2066</a> 		<strong class="jxr_keyword">return</strong> l;
-<a class="jxr_linenumber" name="L2067" href="#L2067">2067</a> 	}
-<a class="jxr_linenumber" name="L2068" href="#L2068">2068</a> 
-<a class="jxr_linenumber" name="L2069" href="#L2069">2069</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2070" href="#L2070">2070</a> <em class="jxr_javadoccomment">	 * Creates a new set from the specified collection.</em>
-<a class="jxr_linenumber" name="L2071" href="#L2071">2071</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2072" href="#L2072">2072</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
-<a class="jxr_linenumber" name="L2073" href="#L2073">2073</a> <em class="jxr_javadoccomment">	 * @param val The value to copy from.</em>
-<a class="jxr_linenumber" name="L2074" href="#L2074">2074</a> <em class="jxr_javadoccomment">	 * @return A new {@link LinkedHashSet}, or &lt;jk&gt;null&lt;/jk&gt; if the input was null.</em>
-<a class="jxr_linenumber" name="L2075" href="#L2075">2075</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2076" href="#L2076">2076</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; Set&lt;E&gt; toSet(Collection&lt;E&gt; val) {
-<a class="jxr_linenumber" name="L2077" href="#L2077">2077</a> 		<strong class="jxr_keyword">return</strong> val == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(val);
+<a class="jxr_linenumber" name="L2008" href="#L2008">2008</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Test any Iterable collection&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L2009" href="#L2009">2009</a> <em class="jxr_javadoccomment">	 * 	Queue&amp;lt;String&amp;gt; &lt;jv&gt;myQueue&lt;/jv&gt; = new LinkedList&amp;lt;&amp;gt;(List.of(&lt;js&gt;"first"&lt;/js&gt;, &lt;js&gt;"second"&lt;/js&gt;));</em>
+<a class="jxr_linenumber" name="L2010" href="#L2010">2010</a> <em class="jxr_javadoccomment">	 * 	assertList(toList(&lt;jv&gt;myQueue&lt;/jv&gt;), &lt;js&gt;"first"&lt;/js&gt;, &lt;js&gt;"second"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L2011" href="#L2011">2011</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L2012" href="#L2012">2012</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2013" href="#L2013">2013</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Integration with Testing:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L2014" href="#L2014">2014</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method is specifically designed to work with testing frameworks to provide</em>
+<a class="jxr_linenumber" name="L2015" href="#L2015">2015</a> <em class="jxr_javadoccomment">	 * a unified testing approach for all collection-like types. Instead of having separate assertion methods</em>
+<a class="jxr_linenumber" name="L2016" href="#L2016">2016</a> <em class="jxr_javadoccomment">	 * for arrays, sets, and other collections, you can convert them all to Lists and use standard</em>
+<a class="jxr_linenumber" name="L2017" href="#L2017">2017</a> <em class="jxr_javadoccomment">	 * list assertion methods.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L2018" href="#L2018">2018</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2019" href="#L2019">2019</a> <em class="jxr_javadoccomment">	 * @param o The object to convert to a List. Must not be null and must be a supported collection-like type.</em>
+<a class="jxr_linenumber" name="L2020" href="#L2020">2020</a> <em class="jxr_javadoccomment">	 * @return A {@link List} containing the elements from the input object.</em>
+<a class="jxr_linenumber" name="L2021" href="#L2021">2021</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException if the input object cannot be converted to a List.</em>
+<a class="jxr_linenumber" name="L2022" href="#L2022">2022</a> <em class="jxr_javadoccomment">	 * @see arrayToList</em>
+<a class="jxr_linenumber" name="L2023" href="#L2023">2023</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2024" href="#L2024">2024</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;?&gt; toList(Object o) {  <em class="jxr_comment">// NOSONAR</em>
+<a class="jxr_linenumber" name="L2025" href="#L2025">2025</a> 		assertArgNotNull(<span class="jxr_string">"o"</span>, o);
+<a class="jxr_linenumber" name="L2026" href="#L2026">2026</a> 		<strong class="jxr_keyword">if</strong> (o instanceof List&lt;?&gt; o2)
+<a class="jxr_linenumber" name="L2027" href="#L2027">2027</a> 			<strong class="jxr_keyword">return</strong> o2;
+<a class="jxr_linenumber" name="L2028" href="#L2028">2028</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Iterable&lt;?&gt; o2)
+<a class="jxr_linenumber" name="L2029" href="#L2029">2029</a> 			<strong class="jxr_keyword">return</strong> StreamSupport.stream(o2.spliterator(), false).toList();
+<a class="jxr_linenumber" name="L2030" href="#L2030">2030</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Iterator&lt;?&gt; o2)
+<a class="jxr_linenumber" name="L2031" href="#L2031">2031</a> 			<strong class="jxr_keyword">return</strong> StreamSupport.stream(Spliterators.spliteratorUnknownSize(o2, 0), false).toList();
+<a class="jxr_linenumber" name="L2032" href="#L2032">2032</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Enumeration&lt;?&gt; o2)
+<a class="jxr_linenumber" name="L2033" href="#L2033">2033</a> 			<strong class="jxr_keyword">return</strong> Collections.list(o2);
+<a class="jxr_linenumber" name="L2034" href="#L2034">2034</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Stream&lt;?&gt; o2)
+<a class="jxr_linenumber" name="L2035" href="#L2035">2035</a> 			<strong class="jxr_keyword">return</strong> o2.toList();
+<a class="jxr_linenumber" name="L2036" href="#L2036">2036</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Map&lt;?,?&gt; o2)
+<a class="jxr_linenumber" name="L2037" href="#L2037">2037</a> 			<strong class="jxr_keyword">return</strong> toList(o2.entrySet());
+<a class="jxr_linenumber" name="L2038" href="#L2038">2038</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Optional&lt;?&gt; o2)
+<a class="jxr_linenumber" name="L2039" href="#L2039">2039</a> 			<strong class="jxr_keyword">return</strong> o2.isEmpty() ? Collections.emptyList() : Collections.singletonList(o2.get());
+<a class="jxr_linenumber" name="L2040" href="#L2040">2040</a> 		<strong class="jxr_keyword">if</strong> (isArray(o))
+<a class="jxr_linenumber" name="L2041" href="#L2041">2041</a> 			<strong class="jxr_keyword">return</strong> arrayToList(o);
+<a class="jxr_linenumber" name="L2042" href="#L2042">2042</a> 		<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Could not convert object of type {0} to a list"</span>, cn(o));
+<a class="jxr_linenumber" name="L2043" href="#L2043">2043</a> 	}
+<a class="jxr_linenumber" name="L2044" href="#L2044">2044</a> 
+<a class="jxr_linenumber" name="L2045" href="#L2045">2045</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2046" href="#L2046">2046</a> <em class="jxr_javadoccomment">	 * Converts the specified array to an &lt;c&gt;ArrayList&lt;/c&gt;</em>
+<a class="jxr_linenumber" name="L2047" href="#L2047">2047</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2048" href="#L2048">2048</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
+<a class="jxr_linenumber" name="L2049" href="#L2049">2049</a> <em class="jxr_javadoccomment">	 * @param array The array to convert.</em>
+<a class="jxr_linenumber" name="L2050" href="#L2050">2050</a> <em class="jxr_javadoccomment">	 * @param elementType</em>
+<a class="jxr_linenumber" name="L2051" href="#L2051">2051</a> <em class="jxr_javadoccomment">	 * 	The type of objects in the array.</em>
+<a class="jxr_linenumber" name="L2052" href="#L2052">2052</a> <em class="jxr_javadoccomment">	 * 	It must match the actual component type in the array.</em>
+<a class="jxr_linenumber" name="L2053" href="#L2053">2053</a> <em class="jxr_javadoccomment">	 * @return A new {@link ArrayList}</em>
+<a class="jxr_linenumber" name="L2054" href="#L2054">2054</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2055" href="#L2055">2055</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L2056" href="#L2056">2056</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; List&lt;E&gt; toList(Object array, Class&lt;E&gt; elementType) {
+<a class="jxr_linenumber" name="L2057" href="#L2057">2057</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> ArrayList&lt;E&gt;(Array.getLength(array));
+<a class="jxr_linenumber" name="L2058" href="#L2058">2058</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; Array.getLength(array); i++)
+<a class="jxr_linenumber" name="L2059" href="#L2059">2059</a> 			l.add((E)Array.get(array, i));
+<a class="jxr_linenumber" name="L2060" href="#L2060">2060</a> 		<strong class="jxr_keyword">return</strong> l;
+<a class="jxr_linenumber" name="L2061" href="#L2061">2061</a> 	}
+<a class="jxr_linenumber" name="L2062" href="#L2062">2062</a> 
+<a class="jxr_linenumber" name="L2063" href="#L2063">2063</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2064" href="#L2064">2064</a> <em class="jxr_javadoccomment">	 * Recursively converts the specified array into a list of objects.</em>
+<a class="jxr_linenumber" name="L2065" href="#L2065">2065</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2066" href="#L2066">2066</a> <em class="jxr_javadoccomment">	 * @param array The array to convert.</em>
+<a class="jxr_linenumber" name="L2067" href="#L2067">2067</a> <em class="jxr_javadoccomment">	 * @return A new {@link ArrayList}</em>
+<a class="jxr_linenumber" name="L2068" href="#L2068">2068</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2069" href="#L2069">2069</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> List&lt;Object&gt; toObjectList(Object array) {
+<a class="jxr_linenumber" name="L2070" href="#L2070">2070</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(Array.getLength(array));
+<a class="jxr_linenumber" name="L2071" href="#L2071">2071</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; Array.getLength(array); i++) {
+<a class="jxr_linenumber" name="L2072" href="#L2072">2072</a> 			<strong class="jxr_keyword">var</strong> o = Array.get(array, i);
+<a class="jxr_linenumber" name="L2073" href="#L2073">2073</a> 			<strong class="jxr_keyword">if</strong> (isArray(o))
+<a class="jxr_linenumber" name="L2074" href="#L2074">2074</a> 				o = toObjectList(o);
+<a class="jxr_linenumber" name="L2075" href="#L2075">2075</a> 			l.add(o);
+<a class="jxr_linenumber" name="L2076" href="#L2076">2076</a> 		}
+<a class="jxr_linenumber" name="L2077" href="#L2077">2077</a> 		<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L2078" href="#L2078">2078</a> 	}
 <a class="jxr_linenumber" name="L2079" href="#L2079">2079</a> 
 <a class="jxr_linenumber" name="L2080" href="#L2080">2080</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2081" href="#L2081">2081</a> <em class="jxr_javadoccomment">	 * Converts the specified array to a &lt;c&gt;Set&lt;/c&gt;.</em>
+<a class="jxr_linenumber" name="L2081" href="#L2081">2081</a> <em class="jxr_javadoccomment">	 * Creates a new set from the specified collection.</em>
 <a class="jxr_linenumber" name="L2082" href="#L2082">2082</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2083" href="#L2083">2083</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L2084" href="#L2084">2084</a> <em class="jxr_javadoccomment">	 * The order of the entries in the set are the same as the array.</em>
-<a class="jxr_linenumber" name="L2085" href="#L2085">2085</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2086" href="#L2086">2086</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The entry type of the array.</em>
-<a class="jxr_linenumber" name="L2087" href="#L2087">2087</a> <em class="jxr_javadoccomment">	 * @param array The array being wrapped in a &lt;c&gt;Set&lt;/c&gt; interface.</em>
-<a class="jxr_linenumber" name="L2088" href="#L2088">2088</a> <em class="jxr_javadoccomment">	 * @return The new set.</em>
-<a class="jxr_linenumber" name="L2089" href="#L2089">2089</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2090" href="#L2090">2090</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; Set&lt;T&gt; toSet(T[] array) {
-<a class="jxr_linenumber" name="L2091" href="#L2091">2091</a> 		assertArgNotNull(<span class="jxr_string">"array"</span>, array);
-<a class="jxr_linenumber" name="L2092" href="#L2092">2092</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> AbstractSet&lt;&gt;() {
-<a class="jxr_linenumber" name="L2093" href="#L2093">2093</a> 
-<a class="jxr_linenumber" name="L2094" href="#L2094">2094</a> 			@Override <em class="jxr_comment">/* Overridden from Set */</em>
-<a class="jxr_linenumber" name="L2095" href="#L2095">2095</a> 			<strong class="jxr_keyword">public</strong> Iterator&lt;T&gt; iterator() {
-<a class="jxr_linenumber" name="L2096" href="#L2096">2096</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Iterator&lt;&gt;() {
-<a class="jxr_linenumber" name="L2097" href="#L2097">2097</a> 					<strong class="jxr_keyword">int</strong> i = 0;
-<a class="jxr_linenumber" name="L2098" href="#L2098">2098</a> 
-<a class="jxr_linenumber" name="L2099" href="#L2099">2099</a> 					@Override <em class="jxr_comment">/* Overridden from Iterator */</em>
-<a class="jxr_linenumber" name="L2100" href="#L2100">2100</a> 					<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasNext() {
-<a class="jxr_linenumber" name="L2101" href="#L2101">2101</a> 						<strong class="jxr_keyword">return</strong> i &lt; array.length;
-<a class="jxr_linenumber" name="L2102" href="#L2102">2102</a> 					}
-<a class="jxr_linenumber" name="L2103" href="#L2103">2103</a> 
-<a class="jxr_linenumber" name="L2104" href="#L2104">2104</a> 					@Override <em class="jxr_comment">/* Overridden from Iterator */</em>
-<a class="jxr_linenumber" name="L2105" href="#L2105">2105</a> 					<strong class="jxr_keyword">public</strong> T next() {
-<a class="jxr_linenumber" name="L2106" href="#L2106">2106</a> 						<strong class="jxr_keyword">if</strong> (i &gt;= array.length)
-<a class="jxr_linenumber" name="L2107" href="#L2107">2107</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NoSuchElementException();
-<a class="jxr_linenumber" name="L2108" href="#L2108">2108</a> 						T t = array[i];
-<a class="jxr_linenumber" name="L2109" href="#L2109">2109</a> 						i++;
-<a class="jxr_linenumber" name="L2110" href="#L2110">2110</a> 						<strong class="jxr_keyword">return</strong> t;
-<a class="jxr_linenumber" name="L2111" href="#L2111">2111</a> 					}
-<a class="jxr_linenumber" name="L2112" href="#L2112">2112</a> 
-<a class="jxr_linenumber" name="L2113" href="#L2113">2113</a> 					@Override <em class="jxr_comment">/* Overridden from Iterator */</em>
-<a class="jxr_linenumber" name="L2114" href="#L2114">2114</a> 					<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> remove() {
-<a class="jxr_linenumber" name="L2115" href="#L2115">2115</a> 						<strong class="jxr_keyword">throw</strong> unsupportedOp();
-<a class="jxr_linenumber" name="L2116" href="#L2116">2116</a> 					}
-<a class="jxr_linenumber" name="L2117" href="#L2117">2117</a> 				};
-<a class="jxr_linenumber" name="L2118" href="#L2118">2118</a> 			}
-<a class="jxr_linenumber" name="L2119" href="#L2119">2119</a> 
-<a class="jxr_linenumber" name="L2120" href="#L2120">2120</a> 			@Override <em class="jxr_comment">/* Overridden from Set */</em>
-<a class="jxr_linenumber" name="L2121" href="#L2121">2121</a> 			<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> size() {
-<a class="jxr_linenumber" name="L2122" href="#L2122">2122</a> 				<strong class="jxr_keyword">return</strong> array.length;
-<a class="jxr_linenumber" name="L2123" href="#L2123">2123</a> 			}
-<a class="jxr_linenumber" name="L2124" href="#L2124">2124</a> 		};
-<a class="jxr_linenumber" name="L2125" href="#L2125">2125</a> 	}
-<a class="jxr_linenumber" name="L2126" href="#L2126">2126</a> 
-<a class="jxr_linenumber" name="L2127" href="#L2127">2127</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L2128" href="#L2128">2128</a> 	<em class="jxr_comment">// Primitive array creation methods</em>
-<a class="jxr_linenumber" name="L2129" href="#L2129">2129</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L2083" href="#L2083">2083</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
+<a class="jxr_linenumber" name="L2084" href="#L2084">2084</a> <em class="jxr_javadoccomment">	 * @param val The value to copy from.</em>
+<a class="jxr_linenumber" name="L2085" href="#L2085">2085</a> <em class="jxr_javadoccomment">	 * @return A new {@link LinkedHashSet}, or &lt;jk&gt;null&lt;/jk&gt; if the input was null.</em>
+<a class="jxr_linenumber" name="L2086" href="#L2086">2086</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2087" href="#L2087">2087</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; Set&lt;E&gt; toSet(Collection&lt;E&gt; val) {
+<a class="jxr_linenumber" name="L2088" href="#L2088">2088</a> 		<strong class="jxr_keyword">return</strong> val == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(val);
+<a class="jxr_linenumber" name="L2089" href="#L2089">2089</a> 	}
+<a class="jxr_linenumber" name="L2090" href="#L2090">2090</a> 
+<a class="jxr_linenumber" name="L2091" href="#L2091">2091</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2092" href="#L2092">2092</a> <em class="jxr_javadoccomment">	 * Converts the specified array to a &lt;c&gt;Set&lt;/c&gt;.</em>
+<a class="jxr_linenumber" name="L2093" href="#L2093">2093</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2094" href="#L2094">2094</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L2095" href="#L2095">2095</a> <em class="jxr_javadoccomment">	 * The order of the entries in the set are the same as the array.</em>
+<a class="jxr_linenumber" name="L2096" href="#L2096">2096</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2097" href="#L2097">2097</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The entry type of the array.</em>
+<a class="jxr_linenumber" name="L2098" href="#L2098">2098</a> <em class="jxr_javadoccomment">	 * @param array The array being wrapped in a &lt;c&gt;Set&lt;/c&gt; interface.</em>
+<a class="jxr_linenumber" name="L2099" href="#L2099">2099</a> <em class="jxr_javadoccomment">	 * @return The new set.</em>
+<a class="jxr_linenumber" name="L2100" href="#L2100">2100</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2101" href="#L2101">2101</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; Set&lt;T&gt; toSet(T[] array) {
+<a class="jxr_linenumber" name="L2102" href="#L2102">2102</a> 		assertArgNotNull(<span class="jxr_string">"array"</span>, array);
+<a class="jxr_linenumber" name="L2103" href="#L2103">2103</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> AbstractSet&lt;&gt;() {
+<a class="jxr_linenumber" name="L2104" href="#L2104">2104</a> 
+<a class="jxr_linenumber" name="L2105" href="#L2105">2105</a> 			@Override <em class="jxr_comment">/* Overridden from Set */</em>
+<a class="jxr_linenumber" name="L2106" href="#L2106">2106</a> 			<strong class="jxr_keyword">public</strong> Iterator&lt;T&gt; iterator() {
+<a class="jxr_linenumber" name="L2107" href="#L2107">2107</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Iterator&lt;&gt;() {
+<a class="jxr_linenumber" name="L2108" href="#L2108">2108</a> 					<strong class="jxr_keyword">int</strong> i = 0;
+<a class="jxr_linenumber" name="L2109" href="#L2109">2109</a> 
+<a class="jxr_linenumber" name="L2110" href="#L2110">2110</a> 					@Override <em class="jxr_comment">/* Overridden from Iterator */</em>
+<a class="jxr_linenumber" name="L2111" href="#L2111">2111</a> 					<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasNext() {
+<a class="jxr_linenumber" name="L2112" href="#L2112">2112</a> 						<strong class="jxr_keyword">return</strong> i &lt; array.length;
+<a class="jxr_linenumber" name="L2113" href="#L2113">2113</a> 					}
+<a class="jxr_linenumber" name="L2114" href="#L2114">2114</a> 
+<a class="jxr_linenumber" name="L2115" href="#L2115">2115</a> 					@Override <em class="jxr_comment">/* Overridden from Iterator */</em>
+<a class="jxr_linenumber" name="L2116" href="#L2116">2116</a> 					<strong class="jxr_keyword">public</strong> T next() {
+<a class="jxr_linenumber" name="L2117" href="#L2117">2117</a> 						<strong class="jxr_keyword">if</strong> (i &gt;= array.length)
+<a class="jxr_linenumber" name="L2118" href="#L2118">2118</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NoSuchElementException();
+<a class="jxr_linenumber" name="L2119" href="#L2119">2119</a> 						T t = array[i];
+<a class="jxr_linenumber" name="L2120" href="#L2120">2120</a> 						i++;
+<a class="jxr_linenumber" name="L2121" href="#L2121">2121</a> 						<strong class="jxr_keyword">return</strong> t;
+<a class="jxr_linenumber" name="L2122" href="#L2122">2122</a> 					}
+<a class="jxr_linenumber" name="L2123" href="#L2123">2123</a> 
+<a class="jxr_linenumber" name="L2124" href="#L2124">2124</a> 					@Override <em class="jxr_comment">/* Overridden from Iterator */</em>
+<a class="jxr_linenumber" name="L2125" href="#L2125">2125</a> 					<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> remove() {
+<a class="jxr_linenumber" name="L2126" href="#L2126">2126</a> 						<strong class="jxr_keyword">throw</strong> unsupportedOp();
+<a class="jxr_linenumber" name="L2127" href="#L2127">2127</a> 					}
+<a class="jxr_linenumber" name="L2128" href="#L2128">2128</a> 				};
+<a class="jxr_linenumber" name="L2129" href="#L2129">2129</a> 			}
 <a class="jxr_linenumber" name="L2130" href="#L2130">2130</a> 
-<a class="jxr_linenumber" name="L2131" href="#L2131">2131</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2132" href="#L2132">2132</a> <em class="jxr_javadoccomment">	 * Creates a new {@link TreeSet} from the specified collection.</em>
-<a class="jxr_linenumber" name="L2133" href="#L2133">2133</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2134" href="#L2134">2134</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
-<a class="jxr_linenumber" name="L2135" href="#L2135">2135</a> <em class="jxr_javadoccomment">	 * @param value The value to copy from.</em>
-<a class="jxr_linenumber" name="L2136" href="#L2136">2136</a> <em class="jxr_javadoccomment">	 * @return A new {@link TreeSet}, or &lt;jk&gt;null&lt;/jk&gt; if the input was null.</em>
-<a class="jxr_linenumber" name="L2137" href="#L2137">2137</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2138" href="#L2138">2138</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; TreeSet&lt;E&gt; toSortedSet(Collection&lt;E&gt; value) {
-<a class="jxr_linenumber" name="L2139" href="#L2139">2139</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L2140" href="#L2140">2140</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L2141" href="#L2141">2141</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> TreeSet&lt;E&gt;();
-<a class="jxr_linenumber" name="L2142" href="#L2142">2142</a> 		value.forEach(x -&gt; l.add(x));
-<a class="jxr_linenumber" name="L2143" href="#L2143">2143</a> 		<strong class="jxr_keyword">return</strong> l;
-<a class="jxr_linenumber" name="L2144" href="#L2144">2144</a> 	}
-<a class="jxr_linenumber" name="L2145" href="#L2145">2145</a> 
-<a class="jxr_linenumber" name="L2146" href="#L2146">2146</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2147" href="#L2147">2147</a> <em class="jxr_javadoccomment">	 * Creates a new {@link TreeSet} from the specified collection.</em>
-<a class="jxr_linenumber" name="L2148" href="#L2148">2148</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2149" href="#L2149">2149</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
-<a class="jxr_linenumber" name="L2150" href="#L2150">2150</a> <em class="jxr_javadoccomment">	 * @param value The value to copy from.</em>
-<a class="jxr_linenumber" name="L2151" href="#L2151">2151</a> <em class="jxr_javadoccomment">	 * @param nullIfEmpty If &lt;jk&gt;true&lt;/jk&gt; returns &lt;jk&gt;null&lt;/jk&gt; if the collection is empty.</em>
-<a class="jxr_linenumber" name="L2152" href="#L2152">2152</a> <em class="jxr_javadoccomment">	 * @return A new {@link TreeSet}, or &lt;jk&gt;null&lt;/jk&gt; if the input was null.</em>
-<a class="jxr_linenumber" name="L2153" href="#L2153">2153</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2154" href="#L2154">2154</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; TreeSet&lt;E&gt; toSortedSet(Collection&lt;E&gt; value, <strong class="jxr_keyword">boolean</strong> nullIfEmpty) {
-<a class="jxr_linenumber" name="L2155" href="#L2155">2155</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong> || (nullIfEmpty &amp;&amp; value.isEmpty()))
-<a class="jxr_linenumber" name="L2156" href="#L2156">2156</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L2157" href="#L2157">2157</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> TreeSet&lt;E&gt;();
-<a class="jxr_linenumber" name="L2158" href="#L2158">2158</a> 		value.forEach(x -&gt; l.add(x));
-<a class="jxr_linenumber" name="L2159" href="#L2159">2159</a> 		<strong class="jxr_keyword">return</strong> l;
-<a class="jxr_linenumber" name="L2160" href="#L2160">2160</a> 	}
-<a class="jxr_linenumber" name="L2161" href="#L2161">2161</a> 
-<a class="jxr_linenumber" name="L2162" href="#L2162">2162</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2163" href="#L2163">2163</a> <em class="jxr_javadoccomment">	 * Creates a new {@link TreeSet} containing a copy of the specified set.</em>
-<a class="jxr_linenumber" name="L2164" href="#L2164">2164</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2165" href="#L2165">2165</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The element type.</em>
-<a class="jxr_linenumber" name="L2166" href="#L2166">2166</a> <em class="jxr_javadoccomment">	 * @param copyFrom The set to copy from.</em>
-<a class="jxr_linenumber" name="L2167" href="#L2167">2167</a> <em class="jxr_javadoccomment">	 * @return A new {@link TreeSet}, or &lt;jk&gt;null&lt;/jk&gt; if the set was &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L2168" href="#L2168">2168</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2169" href="#L2169">2169</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; TreeSet&lt;T&gt; toSortedSet(Set&lt;T&gt; copyFrom) {
-<a class="jxr_linenumber" name="L2170" href="#L2170">2170</a> 		<strong class="jxr_keyword">return</strong> copyFrom == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(copyFrom);
+<a class="jxr_linenumber" name="L2131" href="#L2131">2131</a> 			@Override <em class="jxr_comment">/* Overridden from Set */</em>
+<a class="jxr_linenumber" name="L2132" href="#L2132">2132</a> 			<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> size() {
+<a class="jxr_linenumber" name="L2133" href="#L2133">2133</a> 				<strong class="jxr_keyword">return</strong> array.length;
+<a class="jxr_linenumber" name="L2134" href="#L2134">2134</a> 			}
+<a class="jxr_linenumber" name="L2135" href="#L2135">2135</a> 		};
+<a class="jxr_linenumber" name="L2136" href="#L2136">2136</a> 	}
+<a class="jxr_linenumber" name="L2137" href="#L2137">2137</a> 
+<a class="jxr_linenumber" name="L2138" href="#L2138">2138</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L2139" href="#L2139">2139</a> 	<em class="jxr_comment">// Primitive array creation methods</em>
+<a class="jxr_linenumber" name="L2140" href="#L2140">2140</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L2141" href="#L2141">2141</a> 
+<a class="jxr_linenumber" name="L2142" href="#L2142">2142</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2143" href="#L2143">2143</a> <em class="jxr_javadoccomment">	 * Creates a new {@link TreeSet} from the specified collection.</em>
+<a class="jxr_linenumber" name="L2144" href="#L2144">2144</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2145" href="#L2145">2145</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
+<a class="jxr_linenumber" name="L2146" href="#L2146">2146</a> <em class="jxr_javadoccomment">	 * @param value The value to copy from.</em>
+<a class="jxr_linenumber" name="L2147" href="#L2147">2147</a> <em class="jxr_javadoccomment">	 * @return A new {@link TreeSet}, or &lt;jk&gt;null&lt;/jk&gt; if the input was null.</em>
+<a class="jxr_linenumber" name="L2148" href="#L2148">2148</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2149" href="#L2149">2149</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; TreeSet&lt;E&gt; toSortedSet(Collection&lt;E&gt; value) {
+<a class="jxr_linenumber" name="L2150" href="#L2150">2150</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L2151" href="#L2151">2151</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L2152" href="#L2152">2152</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> TreeSet&lt;E&gt;();
+<a class="jxr_linenumber" name="L2153" href="#L2153">2153</a> 		value.forEach(x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L2154" href="#L2154">2154</a> 		<strong class="jxr_keyword">return</strong> l;
+<a class="jxr_linenumber" name="L2155" href="#L2155">2155</a> 	}
+<a class="jxr_linenumber" name="L2156" href="#L2156">2156</a> 
+<a class="jxr_linenumber" name="L2157" href="#L2157">2157</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2158" href="#L2158">2158</a> <em class="jxr_javadoccomment">	 * Creates a new {@link TreeSet} from the specified collection.</em>
+<a class="jxr_linenumber" name="L2159" href="#L2159">2159</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2160" href="#L2160">2160</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
+<a class="jxr_linenumber" name="L2161" href="#L2161">2161</a> <em class="jxr_javadoccomment">	 * @param value The value to copy from.</em>
+<a class="jxr_linenumber" name="L2162" href="#L2162">2162</a> <em class="jxr_javadoccomment">	 * @param nullIfEmpty If &lt;jk&gt;true&lt;/jk&gt; returns &lt;jk&gt;null&lt;/jk&gt; if the collection is empty.</em>
+<a class="jxr_linenumber" name="L2163" href="#L2163">2163</a> <em class="jxr_javadoccomment">	 * @return A new {@link TreeSet}, or &lt;jk&gt;null&lt;/jk&gt; if the input was null.</em>
+<a class="jxr_linenumber" name="L2164" href="#L2164">2164</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2165" href="#L2165">2165</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; TreeSet&lt;E&gt; toSortedSet(Collection&lt;E&gt; value, <strong class="jxr_keyword">boolean</strong> nullIfEmpty) {
+<a class="jxr_linenumber" name="L2166" href="#L2166">2166</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong> || (nullIfEmpty &amp;&amp; value.isEmpty()))
+<a class="jxr_linenumber" name="L2167" href="#L2167">2167</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L2168" href="#L2168">2168</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> TreeSet&lt;E&gt;();
+<a class="jxr_linenumber" name="L2169" href="#L2169">2169</a> 		value.forEach(x -&gt; l.add(x));
+<a class="jxr_linenumber" name="L2170" href="#L2170">2170</a> 		<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L2171" href="#L2171">2171</a> 	}
 <a class="jxr_linenumber" name="L2172" href="#L2172">2172</a> 
 <a class="jxr_linenumber" name="L2173" href="#L2173">2173</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2174" href="#L2174">2174</a> <em class="jxr_javadoccomment">	 * Converts an array to a stream of objects.</em>
-<a class="jxr_linenumber" name="L2175" href="#L2175">2175</a> <em class="jxr_javadoccomment">	 * @param array The array to convert.</em>
-<a class="jxr_linenumber" name="L2176" href="#L2176">2176</a> <em class="jxr_javadoccomment">	 * @return A new stream.</em>
-<a class="jxr_linenumber" name="L2177" href="#L2177">2177</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2178" href="#L2178">2178</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Stream&lt;Object&gt; toStream(Object array) {
-<a class="jxr_linenumber" name="L2179" href="#L2179">2179</a> 		assertArg(isArray(array), <span class="jxr_string">"Arg was not an array.  Type: {0}"</span>, cn(array));
-<a class="jxr_linenumber" name="L2180" href="#L2180">2180</a> 		<strong class="jxr_keyword">var</strong> length = Array.getLength(array);
-<a class="jxr_linenumber" name="L2181" href="#L2181">2181</a> 		<strong class="jxr_keyword">return</strong> IntStream.range(0, length).mapToObj(i -&gt; Array.get(array, i));
+<a class="jxr_linenumber" name="L2174" href="#L2174">2174</a> <em class="jxr_javadoccomment">	 * Creates a new {@link TreeSet} containing a copy of the specified set.</em>
+<a class="jxr_linenumber" name="L2175" href="#L2175">2175</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2176" href="#L2176">2176</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The element type.</em>
+<a class="jxr_linenumber" name="L2177" href="#L2177">2177</a> <em class="jxr_javadoccomment">	 * @param copyFrom The set to copy from.</em>
+<a class="jxr_linenumber" name="L2178" href="#L2178">2178</a> <em class="jxr_javadoccomment">	 * @return A new {@link TreeSet}, or &lt;jk&gt;null&lt;/jk&gt; if the set was &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L2179" href="#L2179">2179</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2180" href="#L2180">2180</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; TreeSet&lt;T&gt; toSortedSet(Set&lt;T&gt; copyFrom) {
+<a class="jxr_linenumber" name="L2181" href="#L2181">2181</a> 		<strong class="jxr_keyword">return</strong> copyFrom == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(copyFrom);
 <a class="jxr_linenumber" name="L2182" href="#L2182">2182</a> 	}
 <a class="jxr_linenumber" name="L2183" href="#L2183">2183</a> 
 <a class="jxr_linenumber" name="L2184" href="#L2184">2184</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2185" href="#L2185">2185</a> <em class="jxr_javadoccomment">	 * Converts the specified collection to an array of strings.</em>
-<a class="jxr_linenumber" name="L2186" href="#L2186">2186</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2187" href="#L2187">2187</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L2188" href="#L2188">2188</a> <em class="jxr_javadoccomment">	 * Entries are converted to strings using {@link #toString()}.</em>
-<a class="jxr_linenumber" name="L2189" href="#L2189">2189</a> <em class="jxr_javadoccomment">	 * &lt;jk&gt;null&lt;/jk&gt; values remain &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L2190" href="#L2190">2190</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2191" href="#L2191">2191</a> <em class="jxr_javadoccomment">	 * @param c The collection to convert.</em>
-<a class="jxr_linenumber" name="L2192" href="#L2192">2192</a> <em class="jxr_javadoccomment">	 * @return The collection as a string array.</em>
-<a class="jxr_linenumber" name="L2193" href="#L2193">2193</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2194" href="#L2194">2194</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String[] toStringArray(Collection&lt;?&gt; c) {
-<a class="jxr_linenumber" name="L2195" href="#L2195">2195</a> 		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> String[c.size()];
-<a class="jxr_linenumber" name="L2196" href="#L2196">2196</a> 		<strong class="jxr_keyword">var</strong> i = 0;
-<a class="jxr_linenumber" name="L2197" href="#L2197">2197</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : c)
-<a class="jxr_linenumber" name="L2198" href="#L2198">2198</a> 			r[i++] = s(o);
-<a class="jxr_linenumber" name="L2199" href="#L2199">2199</a> 		<strong class="jxr_keyword">return</strong> r;
-<a class="jxr_linenumber" name="L2200" href="#L2200">2200</a> 	}
-<a class="jxr_linenumber" name="L2201" href="#L2201">2201</a> 
-<a class="jxr_linenumber" name="L2202" href="#L2202">2202</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2203" href="#L2203">2203</a> <em class="jxr_javadoccomment">	 * Traverses all elements in the specified object and executes a consumer for it.</em>
-<a class="jxr_linenumber" name="L2204" href="#L2204">2204</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2205" href="#L2205">2205</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The element type.</em>
-<a class="jxr_linenumber" name="L2206" href="#L2206">2206</a> <em class="jxr_javadoccomment">	 * @param o The object to traverse.</em>
-<a class="jxr_linenumber" name="L2207" href="#L2207">2207</a> <em class="jxr_javadoccomment">	 * @param c The consumer of the objects.</em>
-<a class="jxr_linenumber" name="L2208" href="#L2208">2208</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2209" href="#L2209">2209</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L2210" href="#L2210">2210</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; <strong class="jxr_keyword">void</strong> traverse(Object o, Consumer&lt;T&gt; c) {
-<a class="jxr_linenumber" name="L2211" href="#L2211">2211</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L2212" href="#L2212">2212</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L2213" href="#L2213">2213</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Iterable&lt;?&gt; o2)
-<a class="jxr_linenumber" name="L2214" href="#L2214">2214</a> 			o2.forEach(x -&gt; traverse(x, c));
-<a class="jxr_linenumber" name="L2215" href="#L2215">2215</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (o instanceof Stream&lt;?&gt; o2)
-<a class="jxr_linenumber" name="L2216" href="#L2216">2216</a> 			o2.forEach(x -&gt; traverse(x, c));
-<a class="jxr_linenumber" name="L2217" href="#L2217">2217</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isArray(o))
-<a class="jxr_linenumber" name="L2218" href="#L2218">2218</a> 			toStream(o).forEach(x -&gt; traverse(x, c));
-<a class="jxr_linenumber" name="L2219" href="#L2219">2219</a> 		<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L2220" href="#L2220">2220</a> 			c.accept((T)o);
-<a class="jxr_linenumber" name="L2221" href="#L2221">2221</a> 	}
-<a class="jxr_linenumber" name="L2222" href="#L2222">2222</a> 
-<a class="jxr_linenumber" name="L2223" href="#L2223">2223</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2224" href="#L2224">2224</a> <em class="jxr_javadoccomment">	 * Creates an unmodifiable view of the specified list.</em>
-<a class="jxr_linenumber" name="L2225" href="#L2225">2225</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2226" href="#L2226">2226</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This is a null-safe wrapper around {@link Collections#unmodifiableList(List)}.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L2227" href="#L2227">2227</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2228" href="#L2228">2228</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The element type.</em>
-<a class="jxr_linenumber" name="L2229" href="#L2229">2229</a> <em class="jxr_javadoccomment">	 * @param value The list to make unmodifiable. Can be null.</em>
-<a class="jxr_linenumber" name="L2230" href="#L2230">2230</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable view of the list, or null if the input was null.</em>
-<a class="jxr_linenumber" name="L2231" href="#L2231">2231</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2232" href="#L2232">2232</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; List&lt;T&gt; u(List&lt;? <strong class="jxr_keyword">extends</strong> T&gt; value) {
-<a class="jxr_linenumber" name="L2233" href="#L2233">2233</a> 		<strong class="jxr_keyword">return</strong> value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : Collections.unmodifiableList(value);
-<a class="jxr_linenumber" name="L2234" href="#L2234">2234</a> 	}
-<a class="jxr_linenumber" name="L2235" href="#L2235">2235</a> 
-<a class="jxr_linenumber" name="L2236" href="#L2236">2236</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2237" href="#L2237">2237</a> <em class="jxr_javadoccomment">	 * Creates an unmodifiable view of the specified map.</em>
+<a class="jxr_linenumber" name="L2185" href="#L2185">2185</a> <em class="jxr_javadoccomment">	 * Converts an array to a stream of objects.</em>
+<a class="jxr_linenumber" name="L2186" href="#L2186">2186</a> <em class="jxr_javadoccomment">	 * @param array The array to convert.</em>
+<a class="jxr_linenumber" name="L2187" href="#L2187">2187</a> <em class="jxr_javadoccomment">	 * @return A new stream.</em>
+<a class="jxr_linenumber" name="L2188" href="#L2188">2188</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2189" href="#L2189">2189</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Stream&lt;Object&gt; toStream(Object array) {
+<a class="jxr_linenumber" name="L2190" href="#L2190">2190</a> 		assertArg(isArray(array), <span class="jxr_string">"Arg was not an array.  Type: {0}"</span>, cn(array));
+<a class="jxr_linenumber" name="L2191" href="#L2191">2191</a> 		<strong class="jxr_keyword">var</strong> length = Array.getLength(array);
+<a class="jxr_linenumber" name="L2192" href="#L2192">2192</a> 		<strong class="jxr_keyword">return</strong> IntStream.range(0, length).mapToObj(i -&gt; Array.get(array, i));
+<a class="jxr_linenumber" name="L2193" href="#L2193">2193</a> 	}
+<a class="jxr_linenumber" name="L2194" href="#L2194">2194</a> 
+<a class="jxr_linenumber" name="L2195" href="#L2195">2195</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2196" href="#L2196">2196</a> <em class="jxr_javadoccomment">	 * Converts the specified collection to an array of strings.</em>
+<a class="jxr_linenumber" name="L2197" href="#L2197">2197</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2198" href="#L2198">2198</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L2199" href="#L2199">2199</a> <em class="jxr_javadoccomment">	 * Entries are converted to strings using {@link #toString()}.</em>
+<a class="jxr_linenumber" name="L2200" href="#L2200">2200</a> <em class="jxr_javadoccomment">	 * &lt;jk&gt;null&lt;/jk&gt; values remain &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L2201" href="#L2201">2201</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2202" href="#L2202">2202</a> <em class="jxr_javadoccomment">	 * @param c The collection to convert.</em>
+<a class="jxr_linenumber" name="L2203" href="#L2203">2203</a> <em class="jxr_javadoccomment">	 * @return The collection as a string array.</em>
+<a class="jxr_linenumber" name="L2204" href="#L2204">2204</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2205" href="#L2205">2205</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String[] toStringArray(Collection&lt;?&gt; c) {
+<a class="jxr_linenumber" name="L2206" href="#L2206">2206</a> 		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> String[c.size()];
+<a class="jxr_linenumber" name="L2207" href="#L2207">2207</a> 		<strong class="jxr_keyword">var</strong> i = 0;
+<a class="jxr_linenumber" name="L2208" href="#L2208">2208</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : c)
+<a class="jxr_linenumber" name="L2209" href="#L2209">2209</a> 			r[i++] = s(o);
+<a class="jxr_linenumber" name="L2210" href="#L2210">2210</a> 		<strong class="jxr_keyword">return</strong> r;
+<a class="jxr_linenumber" name="L2211" href="#L2211">2211</a> 	}
+<a class="jxr_linenumber" name="L2212" href="#L2212">2212</a> 
+<a class="jxr_linenumber" name="L2213" href="#L2213">2213</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2214" href="#L2214">2214</a> <em class="jxr_javadoccomment">	 * Traverses all elements in the specified object and executes a consumer for it.</em>
+<a class="jxr_linenumber" name="L2215" href="#L2215">2215</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2216" href="#L2216">2216</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The element type.</em>
+<a class="jxr_linenumber" name="L2217" href="#L2217">2217</a> <em class="jxr_javadoccomment">	 * @param o The object to traverse.</em>
+<a class="jxr_linenumber" name="L2218" href="#L2218">2218</a> <em class="jxr_javadoccomment">	 * @param c The consumer of the objects.</em>
+<a class="jxr_linenumber" name="L2219" href="#L2219">2219</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2220" href="#L2220">2220</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L2221" href="#L2221">2221</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; <strong class="jxr_keyword">void</strong> traverse(Object o, Consumer&lt;T&gt; c) {
+<a class="jxr_linenumber" name="L2222" href="#L2222">2222</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L2223" href="#L2223">2223</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L2224" href="#L2224">2224</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Iterable&lt;?&gt; o2)
+<a class="jxr_linenumber" name="L2225" href="#L2225">2225</a> 			o2.forEach(x -&gt; traverse(x, c));
+<a class="jxr_linenumber" name="L2226" href="#L2226">2226</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (o instanceof Stream&lt;?&gt; o2)
+<a class="jxr_linenumber" name="L2227" href="#L2227">2227</a> 			o2.forEach(x -&gt; traverse(x, c));
+<a class="jxr_linenumber" name="L2228" href="#L2228">2228</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isArray(o))
+<a class="jxr_linenumber" name="L2229" href="#L2229">2229</a> 			toStream(o).forEach(x -&gt; traverse(x, c));
+<a class="jxr_linenumber" name="L2230" href="#L2230">2230</a> 		<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L2231" href="#L2231">2231</a> 			c.accept((T)o);
+<a class="jxr_linenumber" name="L2232" href="#L2232">2232</a> 	}
+<a class="jxr_linenumber" name="L2233" href="#L2233">2233</a> 
+<a class="jxr_linenumber" name="L2234" href="#L2234">2234</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2235" href="#L2235">2235</a> <em class="jxr_javadoccomment">	 * Creates an unmodifiable view of the specified list.</em>
+<a class="jxr_linenumber" name="L2236" href="#L2236">2236</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2237" href="#L2237">2237</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This is a null-safe wrapper around {@link Collections#unmodifiableList(List)}.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L2238" href="#L2238">2238</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2239" href="#L2239">2239</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This is a null-safe wrapper around {@link Collections#unmodifiableMap(Map)}.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L2240" href="#L2240">2240</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2241" href="#L2241">2241</a> <em class="jxr_javadoccomment">	 * @param &lt;K&gt; The key type.</em>
-<a class="jxr_linenumber" name="L2242" href="#L2242">2242</a> <em class="jxr_javadoccomment">	 * @param &lt;V&gt; The value type.</em>
-<a class="jxr_linenumber" name="L2243" href="#L2243">2243</a> <em class="jxr_javadoccomment">	 * @param value The map to make unmodifiable. Can be null.</em>
-<a class="jxr_linenumber" name="L2244" href="#L2244">2244</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable view of the map, or null if the input was null.</em>
-<a class="jxr_linenumber" name="L2245" href="#L2245">2245</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2246" href="#L2246">2246</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; Map&lt;K,V&gt; u(Map&lt;? <strong class="jxr_keyword">extends</strong> K,? <strong class="jxr_keyword">extends</strong> V&gt; value) {
-<a class="jxr_linenumber" name="L2247" href="#L2247">2247</a> 		<strong class="jxr_keyword">return</strong> value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : Collections.unmodifiableMap(value);
-<a class="jxr_linenumber" name="L2248" href="#L2248">2248</a> 	}
-<a class="jxr_linenumber" name="L2249" href="#L2249">2249</a> 
-<a class="jxr_linenumber" name="L2250" href="#L2250">2250</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L2251" href="#L2251">2251</a> 	<em class="jxr_comment">// Stream utilities</em>
-<a class="jxr_linenumber" name="L2252" href="#L2252">2252</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L2253" href="#L2253">2253</a> 
-<a class="jxr_linenumber" name="L2254" href="#L2254">2254</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2255" href="#L2255">2255</a> <em class="jxr_javadoccomment">	 * Creates an unmodifiable view of the specified set.</em>
-<a class="jxr_linenumber" name="L2256" href="#L2256">2256</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2257" href="#L2257">2257</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This is a null-safe wrapper around {@link Collections#unmodifiableSet(Set)}.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L2258" href="#L2258">2258</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2259" href="#L2259">2259</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The element type.</em>
-<a class="jxr_linenumber" name="L2260" href="#L2260">2260</a> <em class="jxr_javadoccomment">	 * @param value The set to make unmodifiable. Can be null.</em>
-<a class="jxr_linenumber" name="L2261" href="#L2261">2261</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable view of the set, or null if the input was null.</em>
-<a class="jxr_linenumber" name="L2262" href="#L2262">2262</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2263" href="#L2263">2263</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; Set&lt;T&gt; u(Set&lt;? <strong class="jxr_keyword">extends</strong> T&gt; value) {
-<a class="jxr_linenumber" name="L2264" href="#L2264">2264</a> 		<strong class="jxr_keyword">return</strong> value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : Collections.unmodifiableSet(value);
-<a class="jxr_linenumber" name="L2265" href="#L2265">2265</a> 	}
-<a class="jxr_linenumber" name="L2266" href="#L2266">2266</a> 
-<a class="jxr_linenumber" name="L2267" href="#L2267">2267</a> 	<strong class="jxr_keyword">private</strong> <a name="CollectionUtils" href="../../../../../org/apache/juneau/commons/utils/CollectionUtils.html#CollectionUtils">CollectionUtils</a>() {}
-<a class="jxr_linenumber" name="L2268" href="#L2268">2268</a> }
+<a class="jxr_linenumber" name="L2239" href="#L2239">2239</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The element type.</em>
+<a class="jxr_linenumber" name="L2240" href="#L2240">2240</a> <em class="jxr_javadoccomment">	 * @param value The list to make unmodifiable. Can be null.</em>
+<a class="jxr_linenumber" name="L2241" href="#L2241">2241</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable view of the list, or null if the input was null.</em>
+<a class="jxr_linenumber" name="L2242" href="#L2242">2242</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2243" href="#L2243">2243</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; List&lt;T&gt; u(List&lt;? <strong class="jxr_keyword">extends</strong> T&gt; value) {
+<a class="jxr_linenumber" name="L2244" href="#L2244">2244</a> 		<strong class="jxr_keyword">return</strong> value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : Collections.unmodifiableList(value);
+<a class="jxr_linenumber" name="L2245" href="#L2245">2245</a> 	}
+<a class="jxr_linenumber" name="L2246" href="#L2246">2246</a> 
+<a class="jxr_linenumber" name="L2247" href="#L2247">2247</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2248" href="#L2248">2248</a> <em class="jxr_javadoccomment">	 * Creates an unmodifiable view of the specified map.</em>
+<a class="jxr_linenumber" name="L2249" href="#L2249">2249</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2250" href="#L2250">2250</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This is a null-safe wrapper around {@link Collections#unmodifiableMap(Map)}.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L2251" href="#L2251">2251</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2252" href="#L2252">2252</a> <em class="jxr_javadoccomment">	 * @param &lt;K&gt; The key type.</em>
+<a class="jxr_linenumber" name="L2253" href="#L2253">2253</a> <em class="jxr_javadoccomment">	 * @param &lt;V&gt; The value type.</em>
+<a class="jxr_linenumber" name="L2254" href="#L2254">2254</a> <em class="jxr_javadoccomment">	 * @param value The map to make unmodifiable. Can be null.</em>
+<a class="jxr_linenumber" name="L2255" href="#L2255">2255</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable view of the map, or null if the input was null.</em>
+<a class="jxr_linenumber" name="L2256" href="#L2256">2256</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2257" href="#L2257">2257</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; Map&lt;K,V&gt; u(Map&lt;? <strong class="jxr_keyword">extends</strong> K,? <strong class="jxr_keyword">extends</strong> V&gt; value) {
+<a class="jxr_linenumber" name="L2258" href="#L2258">2258</a> 		<strong class="jxr_keyword">return</strong> value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : Collections.unmodifiableMap(value);
+<a class="jxr_linenumber" name="L2259" href="#L2259">2259</a> 	}
+<a class="jxr_linenumber" name="L2260" href="#L2260">2260</a> 
+<a class="jxr_linenumber" name="L2261" href="#L2261">2261</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L2262" href="#L2262">2262</a> 	<em class="jxr_comment">// Stream utilities</em>
+<a class="jxr_linenumber" name="L2263" href="#L2263">2263</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L2264" href="#L2264">2264</a> 
+<a class="jxr_linenumber" name="L2265" href="#L2265">2265</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2266" href="#L2266">2266</a> <em class="jxr_javadoccomment">	 * Creates an unmodifiable view of the specified set.</em>
+<a class="jxr_linenumber" name="L2267" href="#L2267">2267</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2268" href="#L2268">2268</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This is a null-safe wrapper around {@link Collections#unmodifiableSet(Set)}.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L2269" href="#L2269">2269</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2270" href="#L2270">2270</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The element type.</em>
+<a class="jxr_linenumber" name="L2271" href="#L2271">2271</a> <em class="jxr_javadoccomment">	 * @param value The set to make unmodifiable. Can be null.</em>
+<a class="jxr_linenumber" name="L2272" href="#L2272">2272</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable view of the set, or null if the input was null.</em>
+<a class="jxr_linenumber" name="L2273" href="#L2273">2273</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2274" href="#L2274">2274</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; Set&lt;T&gt; u(Set&lt;? <strong class="jxr_keyword">extends</strong> T&gt; value) {
+<a class="jxr_linenumber" name="L2275" href="#L2275">2275</a> 		<strong class="jxr_keyword">return</strong> value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : Collections.unmodifiableSet(value);
+<a class="jxr_linenumber" name="L2276" href="#L2276">2276</a> 	}
+<a class="jxr_linenumber" name="L2277" href="#L2277">2277</a> 
+<a class="jxr_linenumber" name="L2278" href="#L2278">2278</a> 	<strong class="jxr_keyword">private</strong> <a name="CollectionUtils" href="../../../../../org/apache/juneau/commons/utils/CollectionUtils.html#CollectionUtils">CollectionUtils</a>() {}
+<a class="jxr_linenumber" name="L2279" href="#L2279">2279</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -563,39 +563,37 @@
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> 		}
 <a class="jxr_linenumber" name="L556" href="#L556">556</a> 	}
 <a class="jxr_linenumber" name="L557" href="#L557">557</a> 
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L559" href="#L559">559</a> 	<strong class="jxr_keyword">private</strong> K convertKey(Object key) {
-<a class="jxr_linenumber" name="L560" href="#L560">560</a> 		<strong class="jxr_keyword">if</strong> (keyFunction != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 			key = keyFunction.apply(key);
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 		}
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 		<strong class="jxr_keyword">if</strong> (key == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> 			<em class="jxr_comment">// Allow null for non-primitive types</em>
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 			<strong class="jxr_keyword">if</strong> (keyType.isPrimitive())
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 				<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Cannot set null key for primitive type {0}"</span>, keyType.getName());
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> 		}
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		<strong class="jxr_keyword">if</strong> (keyType.isInstance(key))
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 			<strong class="jxr_keyword">return</strong> keyType.<strong class="jxr_keyword">cast</strong>(key);
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Object of type {0} could not be converted to key type {1}"</span>, cn(key), cn(keyType));
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> 	}
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 	<strong class="jxr_keyword">private</strong> V convertValue(Object value) {
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		<strong class="jxr_keyword">if</strong> (valueFunction != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> 			value = valueFunction.apply(value);
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> 		}
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> 			<em class="jxr_comment">// Allow null for non-primitive types</em>
-<a class="jxr_linenumber" name="L581" href="#L581">581</a> 			<strong class="jxr_keyword">if</strong> (valueType.isPrimitive())
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> 				<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Cannot set null value for primitive type {0}"</span>, valueType.getName());
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> 		}
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> 		<strong class="jxr_keyword">if</strong> (valueType.isInstance(value))
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> 			<strong class="jxr_keyword">return</strong> valueType.<strong class="jxr_keyword">cast</strong>(value);
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> 		<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Object of type {0} could not be converted to value type {1}"</span>, cn(value), cn(valueType));
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> 	}
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> }
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> 
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 	<strong class="jxr_keyword">private</strong> K convertKey(Object key) {
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 		<strong class="jxr_keyword">if</strong> (keyFunction != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 			key = keyFunction.apply(key);
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		}
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 		<strong class="jxr_keyword">if</strong> (key == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 			<em class="jxr_comment">// Allow null for non-primitive types</em>
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 			<strong class="jxr_keyword">if</strong> (keyType.isPrimitive())
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 				<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Cannot set null key for primitive type {0}"</span>, keyType.getName());
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		}
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 		<strong class="jxr_keyword">if</strong> (keyType.isInstance(key))
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 			<strong class="jxr_keyword">return</strong> keyType.<strong class="jxr_keyword">cast</strong>(key);
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Object of type {0} could not be converted to key type {1}"</span>, cn(key), cn(keyType));
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 	}
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 	<strong class="jxr_keyword">private</strong> V convertValue(Object value) {
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 		<strong class="jxr_keyword">if</strong> (valueFunction != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 			value = valueFunction.apply(value);
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		}
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 			<em class="jxr_comment">// Allow null for non-primitive types</em>
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 			<strong class="jxr_keyword">if</strong> (valueType.isPrimitive())
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 				<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Cannot set null value for primitive type {0}"</span>, valueType.getName());
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		}
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 		<strong class="jxr_keyword">if</strong> (valueType.isInstance(value))
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 			<strong class="jxr_keyword">return</strong> valueType.<strong class="jxr_keyword">cast</strong>(value);
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 		<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Object of type {0} could not be converted to value type {1}"</span>, cn(value), cn(valueType));
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 	}
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> }
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
