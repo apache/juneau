@@ -1672,7 +1672,7 @@
 <a class="jxr_linenumber" name="L1664" href="#L1664">1664</a> 		<strong class="jxr_keyword">var</strong> i = IntegerValue.create();
 <a class="jxr_linenumber" name="L1665" href="#L1665">1665</a> 		list.forEach(x -&gt; {
 <a class="jxr_linenumber" name="L1666" href="#L1666">1666</a> 			<strong class="jxr_keyword">var</strong> x2 = x;
-<a class="jxr_linenumber" name="L1667" href="#L1667">1667</a> 			<strong class="jxr_keyword">if</strong> (! type.<strong class="jxr_keyword">inner</strong>().isInstance(x)) {
+<a class="jxr_linenumber" name="L1667" href="#L1667">1667</a> 			<strong class="jxr_keyword">if</strong> (! type.isInstance(x)) {
 <a class="jxr_linenumber" name="L1668" href="#L1668">1668</a> 				<strong class="jxr_keyword">if</strong> (componentType.isArray() &amp;&amp; x instanceof Collection&lt;?&gt; c)
 <a class="jxr_linenumber" name="L1669" href="#L1669">1669</a> 					x2 = toArray(componentType, c);
 <a class="jxr_linenumber" name="L1670" href="#L1670">1670</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (x == <strong class="jxr_keyword">null</strong> &amp;&amp; componentType.isPrimitive())
