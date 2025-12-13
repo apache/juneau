@@ -29,7 +29,7 @@ import org.apache.juneau.*;
  * @param <K> The key class type.
  * @param <V> The value class type.
  */
-public class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate<Map<K,V>> {
+public class FilteredKeyMap<K,V> extends AbstractMap<K,V> implements Delegate<Map<K,V>> {
 
 	/**
 	 * A set with ordered entries (a List with a Set API).
@@ -66,7 +66,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate<Map<K
 	 * @param keys The keys in the new map.  Must not be <jk>null</jk>.
 	 */
 	// TODO - Convert keys to List<K>
-	public FilteredMap(ClassMeta<Map<K,V>> classMeta, Map<K,V> innerMap, K[] keys) {
+	public FilteredKeyMap(ClassMeta<Map<K,V>> classMeta, Map<K,V> innerMap, K[] keys) {
 		assertArgNotNull("innerMap", innerMap);
 		assertArgNotNull("keys", keys);
 

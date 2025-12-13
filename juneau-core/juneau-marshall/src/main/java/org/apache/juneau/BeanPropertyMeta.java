@@ -1155,12 +1155,12 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			return new BeanMap(session, o, new BeanMetaFiltered(cm.getBeanMeta(), properties));
 		if (cm.isMap()) {
 			var propsArray = properties == null ? null : properties.toArray(new String[0]);
-			return new FilteredMap(cm, (Map)o, propsArray);
+			return new FilteredKeyMap(cm, (Map)o, propsArray);
 		}
 		if (cm.isObject()) {
 			if (o instanceof Map o2) {
 				var propsArray = properties == null ? null : properties.toArray(new String[0]);
-				return new FilteredMap(cm, o2, propsArray);
+				return new FilteredKeyMap(cm, o2, propsArray);
 			}
 			var bm = bc.getBeanMeta(o.getClass());
 			if (nn(bm))

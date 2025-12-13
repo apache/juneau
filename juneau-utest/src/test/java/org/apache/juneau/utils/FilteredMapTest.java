@@ -40,14 +40,14 @@ class FilteredMapTest extends TestBase {
 		ClassMeta<Map<String,Object>> cm = BeanContext.DEFAULT.getClassMeta(Map.class, String.class, Object.class);
 		ClassMeta<Map<String,String>> cm2 = BeanContext.DEFAULT.getClassMeta(Map.class, String.class, String.class);
 
-		var m2 = new FilteredMap<>(cm, m, a("a"));
+		var m2 = new FilteredKeyMap<>(cm, m, a("a"));
 
 		assertBean(m2, "a", "1");
 
 		m2.entrySet().iterator().next().setValue("3");
 		assertBean(m2, "a", "3");
 
-		assertThrows(IllegalArgumentException.class, ()->new FilteredMap<>(cm2, null, new String[0]));
-		assertThrows(IllegalArgumentException.class, ()->new FilteredMap<>(cm, m, null));
+		assertThrows(IllegalArgumentException.class, ()->new FilteredKeyMap<>(cm2, null, new String[0]));
+		assertThrows(IllegalArgumentException.class, ()->new FilteredKeyMap<>(cm, m, null));
 	}
 }

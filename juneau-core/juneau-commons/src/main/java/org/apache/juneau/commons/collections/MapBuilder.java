@@ -124,6 +124,10 @@ public class MapBuilder<K,V> {
 		return new MapBuilder<>(assertArgNotNull("keyType", keyType), assertArgNotNull("valueType", valueType));
 	}
 
+	public static <K,V> MapBuilder<K,V> create() {
+		return new MapBuilder(Object.class, Object.class);
+	}
+
 	private Map<K,V> map;
 	private boolean unmodifiable = false, sparse = false;
 	private Comparator<K> comparator;

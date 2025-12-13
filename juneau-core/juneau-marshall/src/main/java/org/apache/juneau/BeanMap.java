@@ -473,7 +473,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	<br>Note that modifying the values in this map will also modify the underlying bean.
 	 */
 	public Map<String,Object> getProperties(String...fields) {
-		return new FilteredMap<>(null, this, fields);
+		return new FilteredKeyMap<>(null, this, fields);
 	}
 
 	/**
