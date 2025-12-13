@@ -1005,7 +1005,7 @@ public class CollectionUtils {
 	 * @return A new unmodifiable map.
 	 */
 	public static <K,V> Map<K,V> m(K k1, V v1) {
-		return new SimpleUnmodifiableMap<>(a(k1), a(v1));
+		return new SimpleMap<>(a(k1), a(v1));
 	}
 
 	/**
@@ -1021,7 +1021,7 @@ public class CollectionUtils {
 	 * @return A new unmodifiable map.
 	 */
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2) {
-		return new SimpleUnmodifiableMap<>(a(k1, k2), a(v1, v2));
+		return new SimpleMap<>(a(k1, k2), a(v1, v2));
 	}
 
 	/**
@@ -1039,7 +1039,7 @@ public class CollectionUtils {
 	 * @return A new unmodifiable map.
 	 */
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3) {
-		return new SimpleUnmodifiableMap<>(a(k1, k2, k3), a(v1, v2, v3));
+		return new SimpleMap<>(a(k1, k2, k3), a(v1, v2, v3));
 	}
 
 	/**
@@ -1059,7 +1059,7 @@ public class CollectionUtils {
 	 * @return A new unmodifiable map.
 	 */
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
-		return new SimpleUnmodifiableMap<>(a(k1, k2, k3, k4), a(v1, v2, v3, v4));
+		return new SimpleMap<>(a(k1, k2, k3, k4), a(v1, v2, v3, v4));
 	}
 
 	/**
@@ -1081,7 +1081,7 @@ public class CollectionUtils {
 	 * @return A new unmodifiable map.
 	 */
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
-		return new SimpleUnmodifiableMap<>(a(k1, k2, k3, k4, k5), a(v1, v2, v3, v4, v5));
+		return new SimpleMap<>(a(k1, k2, k3, k4, k5), a(v1, v2, v3, v4, v5));
 	}
 
 	/**
@@ -1105,7 +1105,7 @@ public class CollectionUtils {
 	 * @return A new unmodifiable map.
 	 */
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) {
-		return new SimpleUnmodifiableMap<>(a(k1, k2, k3, k4, k5, k6), a(v1, v2, v3, v4, v5, v6));
+		return new SimpleMap<>(a(k1, k2, k3, k4, k5, k6), a(v1, v2, v3, v4, v5, v6));
 	}
 
 	/**
@@ -1131,7 +1131,7 @@ public class CollectionUtils {
 	 * @return A new unmodifiable map.
 	 */
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7) {
-		return new SimpleUnmodifiableMap<>(a(k1, k2, k3, k4, k5, k6, k7), a(v1, v2, v3, v4, v5, v6, v7));
+		return new SimpleMap<>(a(k1, k2, k3, k4, k5, k6, k7), a(v1, v2, v3, v4, v5, v6, v7));
 	}
 
 	/**
@@ -1159,7 +1159,7 @@ public class CollectionUtils {
 	 * @return A new unmodifiable map.
 	 */
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) {
-		return new SimpleUnmodifiableMap<>(a(k1, k2, k3, k4, k5, k6, k7, k8), a(v1, v2, v3, v4, v5, v6, v7, v8));
+		return new SimpleMap<>(a(k1, k2, k3, k4, k5, k6, k7, k8), a(v1, v2, v3, v4, v5, v6, v7, v8));
 	}
 
 	/**
@@ -1189,7 +1189,7 @@ public class CollectionUtils {
 	 * @return A new unmodifiable map.
 	 */
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) {
-		return new SimpleUnmodifiableMap<>(a(k1, k2, k3, k4, k5, k6, k7, k8, k9), a(v1, v2, v3, v4, v5, v6, v7, v8, v9));
+		return new SimpleMap<>(a(k1, k2, k3, k4, k5, k6, k7, k8, k9), a(v1, v2, v3, v4, v5, v6, v7, v8, v9));
 	}
 
 	/**
@@ -1221,7 +1221,7 @@ public class CollectionUtils {
 	 * @return A new unmodifiable map.
 	 */
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) {
-		return new SimpleUnmodifiableMap<>(a(k1, k2, k3, k4, k5, k6, k7, k8, k9, k10), a(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10));
+		return new SimpleMap<>(a(k1, k2, k3, k4, k5, k6, k7, k8, k9, k10), a(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10));
 	}
 
 	/**

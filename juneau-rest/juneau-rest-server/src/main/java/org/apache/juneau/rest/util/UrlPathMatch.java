@@ -49,7 +49,7 @@ public class UrlPathMatch {
 	protected UrlPathMatch(String path, int matchedParts, String[] keys, String[] values) {
 		this.path = path;
 		this.matchedParts = matchedParts;
-		this.vars = keys == null ? mape() : new SimpleUnmodifiableMap<>(keys, values);
+		this.vars = keys == null ? mape() : new SimpleMap<>(keys, values);
 	}
 
 	/**

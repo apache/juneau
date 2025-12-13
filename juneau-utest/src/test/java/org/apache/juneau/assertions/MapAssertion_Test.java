@@ -268,7 +268,7 @@ class MapAssertion_Test extends TestBase {
 	@Test void ca13_isExactType() {
 		var x = m(1,2);
 		var nil = mapn(Object.class, Object.class);
-		test(x).isExactType(SimpleUnmodifiableMap.class);
+		test(x).isExactType(SimpleMap.class);
 		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().isMatches("Unexpected type.  Expect='java.lang.Object'.  Actual='*'.");
 		assertThrown(()->test(x).isExactType(String.class)).asMessage().asOneLine().isMatches("Unexpected type.  Expect='java.lang.String'.  Actual='*'.");
 		assertThrown(()->test(nil).isExactType(String.class)).asMessage().asOneLine().is("Value was null.");

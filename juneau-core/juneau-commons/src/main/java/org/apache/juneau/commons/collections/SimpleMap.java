@@ -60,7 +60,7 @@ import org.apache.juneau.commons.utils.Utils;
  * 	String[] <jv>keys</jv> = {<js>"host"</js>, <js>"port"</js>, <js>"timeout"</js>};
  * 	Object[] <jv>values</jv> = {<js>"localhost"</js>, 8080, 30000};
  *
- * 	SimpleUnmodifiableMap&lt;String,Object&gt; <jv>config</jv> = <jk>new</jk> SimpleUnmodifiableMap&lt;&gt;(<jv>keys</jv>, <jv>values</jv>);
+ * 	SimpleMap&lt;String,Object&gt; <jv>config</jv> = <jk>new</jk> SimpleMap&lt;&gt;(<jv>keys</jv>, <jv>values</jv>);
  *
  * 	<jc>// Get values</jc>
  * 	String <jv>host</jv> = (String)<jv>config</jv>.get(<js>"host"</js>);     <jc>// Returns: "localhost"</jc>
@@ -88,12 +88,12 @@ import org.apache.juneau.commons.utils.Utils;
  * <h5 class='section'>Thread Safety:</h5>
  * <p>
  * This class is thread-safe since it's immutable after construction. Multiple threads can safely
- * read from a SimpleUnmodifiableMap concurrently without synchronization.
+ * read from a SimpleMap concurrently without synchronization.
  *
  * <h5 class='section'>Example - Configuration Map:</h5>
  * <p class='bjava'>
  * 	<jc>// Create immutable configuration</jc>
- * 	SimpleUnmodifiableMap&lt;String,Object&gt; <jv>defaults</jv> = <jk>new</jk> SimpleUnmodifiableMap&lt;&gt;(
+ * 	SimpleMap&lt;String,Object&gt; <jv>defaults</jv> = <jk>new</jk> SimpleMap&lt;&gt;(
  * 		<jk>new</jk> String[]{<js>"maxConnections"</js>, <js>"timeout"</js>, <js>"retries"</js>},
  * 		<jk>new</jk> Object[]{100, 5000, 3}
  * 	);
@@ -104,9 +104,9 @@ import org.apache.juneau.commons.utils.Utils;
  *
  * <h5 class='section'>Comparison with Map.of():</h5>
  * <ul class='spaced-list'>
- * 	<li><b>Null Support:</b> SimpleUnmodifiableMap supports null keys/values, Map.of() does not
- * 	<li><b>Insertion Order:</b> SimpleUnmodifiableMap preserves insertion order, Map.of() does not
- * 	<li><b>Size Limit:</b> Map.of() limited to 10 entries, SimpleUnmodifiableMap has no limit
+ * 	<li><b>Null Support:</b> SimpleMap supports null keys/values, Map.of() does not
+ * 	<li><b>Insertion Order:</b> SimpleMap preserves insertion order, Map.of() does not
+ * 	<li><b>Size Limit:</b> Map.of() limited to 10 entries, SimpleMap has no limit
  * </ul>
  *
  * <h5 class='section'>See Also:</h5>
@@ -118,7 +118,7 @@ import org.apache.juneau.commons.utils.Utils;
  * @param <K> The key type.
  * @param <V> The value type.
  */
-public class SimpleUnmodifiableMap<K,V> extends AbstractMap<K,V> {
+public class SimpleMap<K,V> extends AbstractMap<K,V> {
 
 	/**
 	 * Inner class representing a single key-value entry in this map.
@@ -178,7 +178,7 @@ public class SimpleUnmodifiableMap<K,V> extends AbstractMap<K,V> {
 	final SimpleUnmodifiableMapEntry[] entries;
 
 	/**
-	 * Constructs a new SimpleUnmodifiableMap with the specified keys and values.
+	 * Constructs a new SimpleMap with the specified keys and values.
 	 *
 	 * <p>
 	 * The keys and values arrays are stored by reference (not copied), so external
@@ -191,7 +191,7 @@ public class SimpleUnmodifiableMap<K,V> extends AbstractMap<K,V> {
 	 * 	String[] <jv>keys</jv> = {<js>"name"</js>, <js>"age"</js>, <js>"city"</js>};
 	 * 	Object[] <jv>values</jv> = {<js>"John"</js>, 30, <js>"NYC"</js>};
 	 *
-	 * 	SimpleUnmodifiableMap&lt;String,Object&gt; <jv>person</jv> = <jk>new</jk> SimpleUnmodifiableMap&lt;&gt;(<jv>keys</jv>, <jv>values</jv>);
+	 * 	SimpleMap&lt;String,Object&gt; <jv>person</jv> = <jk>new</jk> SimpleMap&lt;&gt;(<jv>keys</jv>, <jv>values</jv>);
 	 * </p>
 	 *
 	 * @param keys The map keys. Must not be <jk>null</jk>. Individual keys can be <jk>null</jk>.
@@ -206,7 +206,7 @@ public class SimpleUnmodifiableMap<K,V> extends AbstractMap<K,V> {
 	 *         </ul>
 	 */
 	@SuppressWarnings("unchecked")
-	public SimpleUnmodifiableMap(K[] keys, V[] values) {
+	public SimpleMap(K[] keys, V[] values) {
 		assertArgsNotNull("keys", keys, "values", values);
 		assertArg(keys.length == values.length, "keys ''{0}'' and values ''{1}'' array lengths differ", keys.length, values.length);
 
@@ -235,7 +235,7 @@ public class SimpleUnmodifiableMap<K,V> extends AbstractMap<K,V> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	SimpleUnmodifiableMap&lt;String,Integer&gt; <jv>map</jv> = <jk>new</jk> SimpleUnmodifiableMap&lt;&gt;(
+	 * 	SimpleMap&lt;String,Integer&gt; <jv>map</jv> = <jk>new</jk> SimpleMap&lt;&gt;(
 	 * 		<jk>new</jk> String[]{<js>"a"</js>, <js>"b"</js>},
 	 * 		<jk>new</jk> Integer[]{1, 2}
 	 * 	);
@@ -262,7 +262,7 @@ public class SimpleUnmodifiableMap<K,V> extends AbstractMap<K,V> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	SimpleUnmodifiableMap&lt;String,Integer&gt; <jv>map</jv> = <jk>new</jk> SimpleUnmodifiableMap&lt;&gt;(
+	 * 	SimpleMap&lt;String,Integer&gt; <jv>map</jv> = <jk>new</jk> SimpleMap&lt;&gt;(
 	 * 		<jk>new</jk> String[]{<js>"age"</js>, <js>"score"</js>},
 	 * 		<jk>new</jk> Integer[]{25, 100}
 	 * 	);
@@ -291,7 +291,7 @@ public class SimpleUnmodifiableMap<K,V> extends AbstractMap<K,V> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	SimpleUnmodifiableMap&lt;String,Integer&gt; <jv>map</jv> = <jk>new</jk> SimpleUnmodifiableMap&lt;&gt;(
+	 * 	SimpleMap&lt;String,Integer&gt; <jv>map</jv> = <jk>new</jk> SimpleMap&lt;&gt;(
 	 * 		<jk>new</jk> String[]{<js>"x"</js>, <js>"y"</js>, <js>"z"</js>},
 	 * 		<jk>new</jk> Integer[]{1, 2, 3}
 	 * 	);

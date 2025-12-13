@@ -107,7 +107,7 @@ public class ResultSetList extends LinkedList<Map<String,Object>> {
 					var o = readEntry(rs, i + 1, colTypes[i]);
 					row[i + offset] = o;
 				}
-				add(new SimpleUnmodifiableMap<>(columns, row));
+				add(new SimpleMap<>(columns, row));
 			}
 		} finally {
 			rs.close();
