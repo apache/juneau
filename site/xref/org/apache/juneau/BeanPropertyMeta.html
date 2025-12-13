@@ -1163,12 +1163,12 @@
 <a class="jxr_linenumber" name="L1155" href="#L1155">1155</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BeanMap" href="../../../org/apache/juneau/BeanMap.html#BeanMap">BeanMap</a>(session, o, <strong class="jxr_keyword">new</strong> <a name="BeanMetaFiltered" href="../../../org/apache/juneau/BeanMetaFiltered.html#BeanMetaFiltered">BeanMetaFiltered</a>(cm.getBeanMeta(), properties));
 <a class="jxr_linenumber" name="L1156" href="#L1156">1156</a> 		<strong class="jxr_keyword">if</strong> (cm.isMap()) {
 <a class="jxr_linenumber" name="L1157" href="#L1157">1157</a> 			<strong class="jxr_keyword">var</strong> propsArray = properties == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : properties.toArray(<strong class="jxr_keyword">new</strong> String[0]);
-<a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="FilteredMap" href="../../../org/apache/juneau/internal/FilteredMap.html#FilteredMap">FilteredMap</a>(cm, (Map)o, propsArray);
+<a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="FilteredKeyMap" href="../../../org/apache/juneau/internal/FilteredKeyMap.html#FilteredKeyMap">FilteredKeyMap</a>(cm, (Map)o, propsArray);
 <a class="jxr_linenumber" name="L1159" href="#L1159">1159</a> 		}
 <a class="jxr_linenumber" name="L1160" href="#L1160">1160</a> 		<strong class="jxr_keyword">if</strong> (cm.isObject()) {
 <a class="jxr_linenumber" name="L1161" href="#L1161">1161</a> 			<strong class="jxr_keyword">if</strong> (o instanceof Map o2) {
 <a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> 				<strong class="jxr_keyword">var</strong> propsArray = properties == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : properties.toArray(<strong class="jxr_keyword">new</strong> String[0]);
-<a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="FilteredMap" href="../../../org/apache/juneau/internal/FilteredMap.html#FilteredMap">FilteredMap</a>(cm, o2, propsArray);
+<a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="FilteredKeyMap" href="../../../org/apache/juneau/internal/FilteredKeyMap.html#FilteredKeyMap">FilteredKeyMap</a>(cm, o2, propsArray);
 <a class="jxr_linenumber" name="L1164" href="#L1164">1164</a> 			}
 <a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> 			<strong class="jxr_keyword">var</strong> bm = bc.getBeanMeta(o.getClass());
 <a class="jxr_linenumber" name="L1166" href="#L1166">1166</a> 			<strong class="jxr_keyword">if</strong> (nn(bm))
