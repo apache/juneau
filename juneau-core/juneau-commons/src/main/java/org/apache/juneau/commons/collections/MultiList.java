@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.collections;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -500,19 +501,19 @@ public class MultiList<E> extends AbstractList<E> {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		if (o == this)
-			return true;
 		if (!(o instanceof List))
 			return false;
-		var e1 = listIterator();
-		var e2 = ((List<?>)o).listIterator();
-		while (e1.hasNext() && e2.hasNext()) {
-			var o1 = e1.next();
-			var o2 = e2.next();
-			if (!(o1 == null ? o2 == null : o1.equals(o2)))
-				return false;
-		}
-		return !(e1.hasNext() || e2.hasNext());
+		return eq(this, (List<?>)o, (x, y) -> {
+			var e1 = x.listIterator();
+			var e2 = y.listIterator();
+			while (e1.hasNext() && e2.hasNext()) {
+				var o1 = e1.next();
+				var o2 = e2.next();
+				if (!eq(o1, o2))
+					return false;
+			}
+			return !(e1.hasNext() || e2.hasNext());
+		});
 	}
 
 	/**

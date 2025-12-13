@@ -370,4 +370,55 @@ public class BidiMap<K,V> implements Map<K,V> {
 	public Collection<V> values() {
 		return forward.values();
 	}
+
+	/**
+	 * Returns a string representation of this map.
+	 *
+	 * <p>
+	 * The format follows the standard Java map convention: <c>"{key1=value1, key2=value2, ...}"</c>
+	 *
+	 * @return A string representation of this map.
+	 */
+	@Override
+	public String toString() {
+		return forward.toString();
+	}
+
+	/**
+	 * Compares the specified object with this map for equality.
+	 *
+	 * <p>
+	 * Returns <jk>true</jk> if the given object is also a map and the two maps represent the same
+	 * mappings. More formally, two maps <c>m1</c> and <c>m2</c> represent the same mappings if
+	 * <c>m1.entrySet().equals(m2.entrySet())</c>.
+	 *
+	 * <p>
+	 * This implementation compares the entry sets of the two maps.
+	 *
+	 * @param o Object to be compared for equality with this map.
+	 * @return <jk>true</jk> if the specified object is equal to this map.
+	 */
+	@Override
+	public boolean equals(Object o) {
+		return (o instanceof Map o2) && eq(this, o2, (x, y) -> x.entrySet().equals(y.entrySet()));
+	}
+
+	/**
+	 * Returns the hash code value for this map.
+	 *
+	 * <p>
+	 * The hash code of a map is defined to be the sum of the hash codes of each entry in the map's
+	 * <c>entrySet()</c> view. This ensures that <c>m1.equals(m2)</c> implies that
+	 * <c>m1.hashCode()==m2.hashCode()</c> for any two maps <c>m1</c> and <c>m2</c>, as required
+	 * by the general contract of {@link Object#hashCode()}.
+	 *
+	 * <p>
+	 * This implementation computes the hash code from the entry set.
+	 *
+	 * @return The hash code value for this map.
+	 */
+	@Override
+	public int hashCode() {
+		return entrySet().hashCode();
+	}
 }

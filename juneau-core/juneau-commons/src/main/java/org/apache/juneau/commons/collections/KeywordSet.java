@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.collections;
 
+import static org.apache.juneau.commons.utils.Utils.*;
+
 import java.util.*;
 
 /**
@@ -168,5 +170,49 @@ public class KeywordSet {
 		if (s == null || s.length() < 2)
 			return false;
 		return Arrays.binarySearch(store, s) >= 0;
+	}
+
+	/**
+	 * Returns a string representation of this keyword set.
+	 *
+	 * <p>
+	 * The format follows the standard Java set convention: <c>"[keyword1, keyword2, ...]"</c>
+	 *
+	 * @return A string representation of this keyword set.
+	 */
+	@Override
+	public String toString() {
+		return Arrays.toString(store);
+	}
+
+	/**
+	 * Compares the specified object with this keyword set for equality.
+	 *
+	 * <p>
+	 * Returns <jk>true</jk> if the given object is also a keyword set and contains the same keywords
+	 * in the same order. Two keyword sets are equal if their internal arrays are equal.
+	 *
+	 * @param o Object to be compared for equality with this keyword set.
+	 * @return <jk>true</jk> if the specified object is equal to this keyword set.
+	 */
+	@Override
+	public boolean equals(Object o) {
+		return (o instanceof KeywordSet o2) && eq(this, o2, (x, y) -> Arrays.equals(x.store, y.store));
+	}
+
+	/**
+	 * Returns the hash code value for this keyword set.
+	 *
+	 * <p>
+	 * The hash code is computed from the internal array of keywords using {@link Arrays#hashCode(Object[])}.
+	 * This ensures that <c>ks1.equals(ks2)</c> implies that <c>ks1.hashCode()==ks2.hashCode()</c>
+	 * for any two keyword sets <c>ks1</c> and <c>ks2</c>, as required by the general contract of
+	 * {@link Object#hashCode()}.
+	 *
+	 * @return The hash code value for this keyword set.
+	 */
+	@Override
+	public int hashCode() {
+		return hash((Object[])store);
 	}
 }

@@ -21,6 +21,8 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
@@ -307,5 +309,110 @@ class SimpleUnmodifiableMap_Test extends TestBase {
 		assertEquals("value1", map.get("key1"));
 		assertEquals("value2", map.get(null));
 		assertEquals("value3", map.get("key3"));
+	}
+
+	//====================================================================================================
+	// toString(), equals(), hashCode()
+	//====================================================================================================
+
+	@Test
+	void e01_toString_standardFormat() {
+		String[] keys = { "key1", "key2", "key3" };
+		Object[] values = { "value1", "value2", "value3" };
+		SimpleUnmodifiableMap<String,Object> map = new SimpleUnmodifiableMap<>(keys, values);
+
+		var result = map.toString();
+		assertTrue(result.startsWith("{"));
+		assertTrue(result.endsWith("}"));
+		assertTrue(result.contains("key1=value1"));
+		assertTrue(result.contains("key2=value2"));
+		assertTrue(result.contains("key3=value3"));
+	}
+
+	@Test
+	void e02_toString_emptyMap() {
+		String[] keys = {};
+		Object[] values = {};
+		SimpleUnmodifiableMap<String,Object> map = new SimpleUnmodifiableMap<>(keys, values);
+
+		assertEquals("{}", map.toString());
+	}
+
+	@Test
+	void e03_equals_sameContents() {
+		String[] keys1 = { "key1", "key2" };
+		Object[] values1 = { "value1", "value2" };
+		SimpleUnmodifiableMap<String,Object> map1 = new SimpleUnmodifiableMap<>(keys1, values1);
+
+		String[] keys2 = { "key1", "key2" };
+		Object[] values2 = { "value1", "value2" };
+		SimpleUnmodifiableMap<String,Object> map2 = new SimpleUnmodifiableMap<>(keys2, values2);
+
+		assertTrue(map1.equals(map2));
+		assertTrue(map2.equals(map1));
+	}
+
+	@Test
+	void e04_equals_differentContents() {
+		String[] keys1 = { "key1", "key2" };
+		Object[] values1 = { "value1", "value2" };
+		SimpleUnmodifiableMap<String,Object> map1 = new SimpleUnmodifiableMap<>(keys1, values1);
+
+		String[] keys2 = { "key1", "key2" };
+		Object[] values2 = { "value1", "value3" };
+		SimpleUnmodifiableMap<String,Object> map2 = new SimpleUnmodifiableMap<>(keys2, values2);
+
+		assertFalse(map1.equals(map2));
+		assertFalse(map2.equals(map1));
+	}
+
+	@Test
+	void e05_equals_regularMap() {
+		String[] keys = { "key1", "key2" };
+		Object[] values = { "value1", "value2" };
+		SimpleUnmodifiableMap<String,Object> map = new SimpleUnmodifiableMap<>(keys, values);
+
+		var regularMap = new LinkedHashMap<String, Object>();
+		regularMap.put("key1", "value1");
+		regularMap.put("key2", "value2");
+
+		assertTrue(map.equals(regularMap));
+		assertTrue(regularMap.equals(map));
+	}
+
+	@Test
+	void e06_equals_notAMap() {
+		String[] keys = { "key1" };
+		Object[] values = { "value1" };
+		SimpleUnmodifiableMap<String,Object> map = new SimpleUnmodifiableMap<>(keys, values);
+
+		assertFalse(map.equals("not a map"));
+		assertFalse(map.equals(null));
+	}
+
+	@Test
+	void e07_hashCode_sameContents() {
+		String[] keys1 = { "key1", "key2" };
+		Object[] values1 = { "value1", "value2" };
+		SimpleUnmodifiableMap<String,Object> map1 = new SimpleUnmodifiableMap<>(keys1, values1);
+
+		String[] keys2 = { "key1", "key2" };
+		Object[] values2 = { "value1", "value2" };
+		SimpleUnmodifiableMap<String,Object> map2 = new SimpleUnmodifiableMap<>(keys2, values2);
+
+		assertEquals(map1.hashCode(), map2.hashCode());
+	}
+
+	@Test
+	void e08_hashCode_regularMap() {
+		String[] keys = { "key1", "key2" };
+		Object[] values = { "value1", "value2" };
+		SimpleUnmodifiableMap<String,Object> map = new SimpleUnmodifiableMap<>(keys, values);
+
+		var regularMap = new LinkedHashMap<String, Object>();
+		regularMap.put("key1", "value1");
+		regularMap.put("key2", "value2");
+
+		assertEquals(map.hashCode(), regularMap.hashCode());
 	}
 }

@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.collections;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -304,14 +305,7 @@ public class MultiSet<E> extends AbstractSet<E> {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		if (o == this)
-			return true;
-		if (!(o instanceof Set))
-			return false;
-		var s = (Set<?>)o;
-		if (s.size() != size())
-			return false;
-		return containsAll(s);
+		return (o instanceof Set o2) && eq(this, o2, (x,y) -> eq(x.size(), y.size()) && x.containsAll(y));
 	}
 
 	/**

@@ -19,10 +19,12 @@ package org.apache.juneau.commons.collections;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.stream.Collectors;
+
+import org.apache.juneau.commons.utils.Utils;
 
 /**
  * An unmodifiable, fixed-size map implementation backed by parallel key and value arrays.
@@ -147,6 +149,23 @@ public class SimpleUnmodifiableMap<K,V> extends AbstractMap<K,V> {
 		public V setValue(V val) {
 			throw unsupportedOp("Map is unmodifiable");
 		}
+
+		@Override
+		public String toString() {
+			return getKey() + "=" + getValue();
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			return (o instanceof Map.Entry<?,?> o2) && Utils.eq(this, o2, (x,y) -> Utils.eq(x.getKey(), y.getKey()) && Utils.eq(x.getValue(), y.getValue()));
+		}
+
+		@Override
+		public int hashCode() {
+			K key = getKey();
+			V value = getValue();
+			return (key == null ? 0 : key.hashCode()) ^ (value == null ? 0 : value.hashCode());
+		}
 	}
 
 	/** The array of keys. Keys are immutable after construction. */
@@ -194,7 +213,7 @@ public class SimpleUnmodifiableMap<K,V> extends AbstractMap<K,V> {
 		// Check for duplicate keys
 		for (var i = 0; i < keys.length; i++) {
 			for (var j = i + 1; j < keys.length; j++) {
-				if (eq(keys[i], keys[j])) {
+				if (Utils.eq(keys[i], keys[j])) {
 					throw illegalArg("Duplicate key found: {0}", keys[i]);
 				}
 			}
@@ -259,7 +278,7 @@ public class SimpleUnmodifiableMap<K,V> extends AbstractMap<K,V> {
 	@Override /* Map */
 	public V get(Object key) {
 		for (var i = 0; i < keys.length; i++)
-			if (eq(keys[i], key))
+			if (Utils.eq(keys[i], key))
 				return values[i];
 		return null;
 	}
@@ -298,5 +317,56 @@ public class SimpleUnmodifiableMap<K,V> extends AbstractMap<K,V> {
 	@Override /* Map */
 	public V put(K key, V value) {
 		throw unsupportedOp("Map is unmodifiable");
+	}
+
+	/**
+	 * Returns a string representation of this map.
+	 *
+	 * <p>
+	 * The format follows the standard Java map convention: <c>"{key1=value1, key2=value2, ...}"</c>
+	 *
+	 * @return A string representation of this map.
+	 */
+	@Override
+	public String toString() {
+		return entrySet().stream().map(Object::toString).collect(Collectors.joining(", ", "{", "}"));
+	}
+
+	/**
+	 * Compares the specified object with this map for equality.
+	 *
+	 * <p>
+	 * Returns <jk>true</jk> if the given object is also a map and the two maps represent the same
+	 * mappings. More formally, two maps <c>m1</c> and <c>m2</c> represent the same mappings if
+	 * <c>m1.entrySet().equals(m2.entrySet())</c>.
+	 *
+	 * <p>
+	 * This implementation compares the entry sets of the two maps.
+	 *
+	 * @param o Object to be compared for equality with this map.
+	 * @return <jk>true</jk> if the specified object is equal to this map.
+	 */
+	@Override
+	public boolean equals(Object o) {
+		return (o instanceof Map o2) && Utils.eq(this, o2, (x, y) -> x.entrySet().equals(y.entrySet()));
+	}
+
+	/**
+	 * Returns the hash code value for this map.
+	 *
+	 * <p>
+	 * The hash code of a map is defined to be the sum of the hash codes of each entry in the map's
+	 * <c>entrySet()</c> view. This ensures that <c>m1.equals(m2)</c> implies that
+	 * <c>m1.hashCode()==m2.hashCode()</c> for any two maps <c>m1</c> and <c>m2</c>, as required
+	 * by the general contract of {@link Object#hashCode()}.
+	 *
+	 * <p>
+	 * This implementation computes the hash code from the entry set.
+	 *
+	 * @return The hash code value for this map.
+	 */
+	@Override
+	public int hashCode() {
+		return entrySet().hashCode();
 	}
 }

@@ -20,6 +20,8 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.*;
+
+import org.apache.juneau.commons.utils.Utils;
 import java.util.stream.Collectors;
 
 /**
@@ -416,11 +418,7 @@ public class MultiMap<K,V> extends AbstractMap<K,V> {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		if (o == this)
-			return true;
-		if (!(o instanceof Map))
-			return false;
-		return entrySet().equals(((Map<?,?>)o).entrySet());
+		return (o instanceof Map o2) && Utils.eq(this, o2, (x, y) -> x.entrySet().equals(y.entrySet()));
 	}
 
 	/**

@@ -17,8 +17,10 @@
 package org.apache.juneau.commons.collections;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A reversed view of a list that does not modify the underlying list.
@@ -278,5 +280,80 @@ public class ReversedList<E> extends AbstractList<E> implements RandomAccess {
 		int translatedTo = list.size() - fromIndex;
 
 		return new ReversedList<>(list.subList(translatedFrom, translatedTo));
+	}
+
+	/**
+	 * Returns a string representation of this reversed list.
+	 *
+	 * <p>
+	 * The format follows the standard Java list convention: <c>"[element1, element2, ...]"</c>
+	 * Elements are shown in reversed order (as they appear in this view).
+	 *
+	 * @return A string representation of this reversed list.
+	 */
+	@Override
+	public String toString() {
+		return stream().map(Object::toString).collect(Collectors.joining(", ", "[", "]"));
+	}
+
+	/**
+	 * Compares the specified object with this list for equality.
+	 *
+	 * <p>
+	 * Returns <jk>true</jk> if and only if the specified object is also a list, both lists have the
+	 * same size, and all corresponding pairs of elements in the two lists are <i>equal</i>. In other
+	 * words, two lists are defined to be equal if they contain the same elements in the same order.
+	 *
+	 * <p>
+	 * This implementation compares elements in the reversed order as they appear in this view.
+	 *
+	 * @param o The object to be compared for equality with this list.
+	 * @return <jk>true</jk> if the specified object is equal to this list.
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof List))
+			return false;
+		return eq(this, (List<?>)o, (x, y) -> {
+			var e1 = x.listIterator();
+			var e2 = y.listIterator();
+			while (e1.hasNext() && e2.hasNext()) {
+				var o1 = e1.next();
+				var o2 = e2.next();
+				if (!eq(o1, o2))
+					return false;
+			}
+			return !(e1.hasNext() || e2.hasNext());
+		});
+	}
+
+	/**
+	 * Returns the hash code value for this list.
+	 *
+	 * <p>
+	 * The hash code of a list is defined to be the result of the following calculation:
+	 * <p class='bcode w800'>
+	 * 	<jk>int</jk> hashCode = 1;
+	 * 	<jk>for</jk> (E e : list)
+	 * 		hashCode = 31 * hashCode + (e == <jk>null</jk> ? 0 : e.hashCode());
+	 * </p>
+	 *
+	 * <p>
+	 * This ensures that <c>list1.equals(list2)</c> implies that
+	 * <c>list1.hashCode()==list2.hashCode()</c> for any two lists <c>list1</c> and <c>list2</c>,
+	 * as required by the general contract of {@link Object#hashCode()}.
+	 *
+	 * <p>
+	 * This implementation computes the hash code from the elements in reversed order as they appear
+	 * in this view.
+	 *
+	 * @return The hash code value for this list.
+	 */
+	@Override
+	public int hashCode() {
+		int hashCode = 1;
+		for (E e : this)
+			hashCode = 31 * hashCode + (e == null ? 0 : e.hashCode());
+		return hashCode;
 	}
 }

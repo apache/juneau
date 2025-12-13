@@ -580,4 +580,106 @@ class BidiMap_Test extends TestBase {
 		map.remove("one");
 		assertTrue(map.isEmpty());
 	}
+
+	//====================================================================================================
+	// toString(), equals(), hashCode()
+	//====================================================================================================
+
+	@Test
+	void w01_toString_delegatesToForwardMap() {
+		var map = BidiMap.<String,Integer>create()
+			.add("one", 1)
+			.add("two", 2)
+			.build();
+
+		var forwardMap = new LinkedHashMap<String, Integer>();
+		forwardMap.put("one", 1);
+		forwardMap.put("two", 2);
+
+		assertEquals(forwardMap.toString(), map.toString());
+	}
+
+	@Test
+	void w02_equals_sameContents() {
+		var map1 = BidiMap.<String,Integer>create()
+			.add("one", 1)
+			.add("two", 2)
+			.build();
+
+		var map2 = BidiMap.<String,Integer>create()
+			.add("one", 1)
+			.add("two", 2)
+			.build();
+
+		assertTrue(map1.equals(map2));
+		assertTrue(map2.equals(map1));
+	}
+
+	@Test
+	void w03_equals_differentContents() {
+		var map1 = BidiMap.<String,Integer>create()
+			.add("one", 1)
+			.build();
+
+		var map2 = BidiMap.<String,Integer>create()
+			.add("one", 2)
+			.build();
+
+		assertFalse(map1.equals(map2));
+		assertFalse(map2.equals(map1));
+	}
+
+	@Test
+	void w04_equals_regularMap() {
+		var map = BidiMap.<String,Integer>create()
+			.add("one", 1)
+			.add("two", 2)
+			.build();
+
+		var regularMap = new LinkedHashMap<String, Integer>();
+		regularMap.put("one", 1);
+		regularMap.put("two", 2);
+
+		assertTrue(map.equals(regularMap));
+		assertTrue(regularMap.equals(map));
+	}
+
+	@Test
+	void w05_equals_notAMap() {
+		var map = BidiMap.<String,Integer>create()
+			.add("one", 1)
+			.build();
+
+		assertFalse(map.equals("not a map"));
+		assertFalse(map.equals(null));
+	}
+
+	@Test
+	void w06_hashCode_sameContents() {
+		var map1 = BidiMap.<String,Integer>create()
+			.add("one", 1)
+			.add("two", 2)
+			.build();
+
+		var map2 = BidiMap.<String,Integer>create()
+			.add("one", 1)
+			.add("two", 2)
+			.build();
+
+		assertEquals(map1.hashCode(), map2.hashCode());
+	}
+
+	@Test
+	void w07_hashCode_regularMap() {
+		var map = BidiMap.<String,Integer>create()
+			.add("one", 1)
+			.add("two", 2)
+			.build();
+
+		var regularMap = new LinkedHashMap<String, Integer>();
+		regularMap.put("one", 1);
+		regularMap.put("two", 2);
+
+		assertEquals(map.hashCode(), regularMap.hashCode());
+	}
 }

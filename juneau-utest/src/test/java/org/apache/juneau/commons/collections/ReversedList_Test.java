@@ -509,5 +509,88 @@ class ReversedList_Test extends TestBase {
 		assertFalse(it.hasNext());
 		assertFalse(it.hasPrevious());
 	}
+
+	//====================================================================================================
+	// toString(), equals(), hashCode()
+	//====================================================================================================
+
+	@Test
+	void k01_toString_showsReversedOrder() {
+		var original = new ArrayList<>(List.of("a", "b", "c"));
+		var reversed = new ReversedList<>(original);
+
+		// ReversedList.toString() should show the reversed order
+		// The underlying list is ["a", "b", "c"], so reversed should show ["c", "b", "a"]
+		var expected = "[c, b, a]";
+		assertEquals(expected, reversed.toString());
+	}
+
+	@Test
+	void k02_equals_sameContents() {
+		var original1 = new ArrayList<>(List.of("a", "b", "c"));
+		var reversed1 = new ReversedList<>(original1);
+
+		var original2 = new ArrayList<>(List.of("a", "b", "c"));
+		var reversed2 = new ReversedList<>(original2);
+
+		// ReversedList.equals() compares in reversed order
+		assertTrue(reversed1.equals(reversed2));
+		assertTrue(reversed2.equals(reversed1));
+	}
+
+	@Test
+	void k03_equals_differentContents() {
+		var original1 = new ArrayList<>(List.of("a", "b", "c"));
+		var reversed1 = new ReversedList<>(original1);
+
+		var original2 = new ArrayList<>(List.of("a", "b", "d"));
+		var reversed2 = new ReversedList<>(original2);
+
+		assertFalse(reversed1.equals(reversed2));
+		assertFalse(reversed2.equals(reversed1));
+	}
+
+	@Test
+	void k04_equals_regularList() {
+		var original = new ArrayList<>(List.of("a", "b", "c"));
+		var reversed = new ReversedList<>(original);
+
+		// A reversed list ["c", "b", "a"] should equal a regular list ["c", "b", "a"]
+		var regularList = new ArrayList<>(List.of("c", "b", "a"));
+
+		assertTrue(reversed.equals(regularList));
+		assertTrue(regularList.equals(reversed));
+	}
+
+	@Test
+	void k05_equals_notAList() {
+		var original = new ArrayList<>(List.of("a", "b", "c"));
+		var reversed = new ReversedList<>(original);
+
+		assertFalse(reversed.equals("not a list"));
+		assertFalse(reversed.equals(null));
+	}
+
+	@Test
+	void k06_hashCode_sameContents() {
+		var original1 = new ArrayList<>(List.of("a", "b", "c"));
+		var reversed1 = new ReversedList<>(original1);
+
+		var original2 = new ArrayList<>(List.of("a", "b", "c"));
+		var reversed2 = new ReversedList<>(original2);
+
+		assertEquals(reversed1.hashCode(), reversed2.hashCode());
+	}
+
+	@Test
+	void k07_hashCode_regularList() {
+		var original = new ArrayList<>(List.of("a", "b", "c"));
+		var reversed = new ReversedList<>(original);
+
+		// A reversed list ["c", "b", "a"] should have same hash as a regular list ["c", "b", "a"]
+		var regularList = new ArrayList<>(List.of("c", "b", "a"));
+
+		assertEquals(reversed.hashCode(), regularList.hashCode());
+	}
 }
 
