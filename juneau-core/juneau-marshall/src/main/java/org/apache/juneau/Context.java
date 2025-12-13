@@ -25,7 +25,6 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.concurrent.*;
 import java.util.function.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
@@ -74,19 +73,104 @@ import org.apache.juneau.xml.annotation.*;
  *
  */
 public abstract class Context {
+
+	/*
+	 * Cache of static <c>create</c> methods that return builder instances for context classes.
+	 *
+	 * <p>
+	 * This cache stores {@link MethodInfo} objects for public static methods named <c>create</c> that return
+	 * builder objects. The methods are discovered by:
+	 * <ol>
+	 * 	<li>Finding public constructors that take a single parameter (the builder type)
+	 * 	<li>Looking for a matching static <c>create</c> method that returns the builder type
+	 * 	<li>Caching the result for future lookups
+	 * </ol>
+	 *
+	 * <p>
+	 * Used by {@link #createBuilder(Class)} to efficiently locate and invoke builder creation methods.
+	 *
+	 * @see #createBuilder(Class)
+	 */
+	private static final Cache<Class<?>,MethodInfo> BUILDER_CREATE_METHODS = Cache.<Class<?>,MethodInfo>create()
+		.supplier(type -> {
+			var c = info(type);
+			// @formatter:off
+			return c.getPublicConstructors().stream()
+				.filter(ci -> ci.hasNumParameters(1) && ! ci.getParameter(0).getParameterType().is(type))
+				.map(ci -> c.getPublicMethod(
+					x -> x.isStatic()
+					&& x.isNotDeprecated()
+					&& x.hasName("create")
+					&& x.hasReturnType(ci.getParameter(0).getParameterType())
+					).orElse(null))
+				.filter(Objects::nonNull)
+				.findFirst()
+				.orElseThrow(() -> rex("Could not find builder create method on class {0}", cn(type)));
+			// @formatter:on
+		})
+		.build();
+
+	/*
+	 * Cache of public constructors on context classes that accept builder instances.
+	 *
+	 * <p>
+	 * This cache stores {@link ConstructorInfo} objects for public constructors on context classes that take
+	 * a single parameter of the builder type. The constructor is discovered by:
+	 * <ol>
+	 * 	<li>Finding public constructors on the context type that take exactly one parameter
+	 * 	<li>Matching constructors where the parameter type is a parent of (or equal to) the builder type
+	 * 	<li>Caching the result for future lookups
+	 * </ol>
+	 *
+	 * <p>
+	 * Used by {@link Builder#getContextConstructor()} to efficiently locate and invoke context constructors
+	 * when building context instances from builders.
+	 *
+	 * @see Builder#getContextConstructor()
+	 * @see Builder#innerBuild()
+	 */
+	private static final Cache2<Class<? extends Context>,Class<? extends Builder>,ConstructorInfo> CONTEXT_CONSTRUCTORS = Cache2.<Class<? extends Context>,Class<? extends Builder>,ConstructorInfo>create()
+		.supplier((cacheType, builderType) -> {
+			var ct = info(cacheType);
+			var bt = info(builderType);
+			return ct
+				.getPublicConstructor(x -> x.hasNumParameters(1) && x.getParameter(0).getParameterType().isParentOf(builderType))
+				.orElseThrow(() -> rex("Public constructor not found: {0}({1})", ct.getName(), bt.getName()));
+		})
+		.build();
+
+
+	/*
+	 * Default annotation provider instance for finding annotations on classes, methods, fields, and constructors.
+	 *
+	 * <p>
+	 * This is a static reference to {@link AnnotationProvider#INSTANCE}, used by the {@link Builder#traverse(AnnotationWorkList, Object)}
+	 * method to discover annotations that can be applied to context builders.
+	 *
+	 * <p>
+	 * The annotation provider supports:
+	 * <ul>
+	 * 	<li>Finding annotations on classes, methods, fields, and constructors
+	 * 	<li>Traversing class hierarchies (parent-to-child or child-to-parent order)
+	 * 	<li>Supporting runtime annotations (annotations added programmatically)
+	 * 	<li>Caching results for performance
+	 * </ul>
+	 *
+	 * @see AnnotationProvider
+	 * @see Builder#traverse(AnnotationWorkList, Object)
+	 */
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
 	/**
 	 * Builder class.
 	 */
 	public abstract static class Builder {
 
-		private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
-		private static final Map<Class<?>,ConstructorInfo> CONTEXT_CONSTRUCTORS = new ConcurrentHashMap<>();
-
-		boolean debug;
-		Class<? extends Context> type;
-		Context impl;
-		List<Annotation> annotations;
-		Cache<HashKey,? extends Context> cache;
+		private boolean debug;
+		private Class<? extends Context> type;
+		private Context impl;
+		private List<Annotation> annotations;
+		private Cache<HashKey,? extends Context> cache;
 
 		private final List<Object> builders = list();
 		private final AnnotationWorkList applied = AnnotationWorkList.create();
@@ -354,17 +438,29 @@ public abstract class Context {
 		}
 
 		/**
-		 * Apply a consumer to this builder.
+		 * Returns this builder cast to the specified subtype if it is an instance of that type.
 		 *
-		 * @param <T> The builder subtype that this consumer can be applied to.
-		 * @param subtype The builder subtype that this consumer can be applied to.
-		 * @param consumer The consumer.
-		 * @return This object.
+		 * <p>
+		 * This is a type-safe way to check if this builder is an instance of a specific builder subtype
+		 * and cast it accordingly. Returns an empty {@link Optional} if this builder is not an instance
+		 * of the specified subtype.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	Builder <jv>b</jv> = JsonSerializer.<jsm>create</jsm>();
+		 * 	Optional&lt;JsonSerializer.Builder&gt; <jv>jsonBuilder</jv> = <jv>b</jv>.asSubtype(JsonSerializer.Builder.<jk>class</jk>);
+		 * 	<jk>if</jk> (<jv>jsonBuilder</jv>.isPresent()) {
+		 * 		<jc>// Use JsonSerializer.Builder-specific methods</jc>
+		 * 		<jv>jsonBuilder</jv>.get().pretty();
+		 * 	}
+		 * </p>
+		 *
+		 * @param <T> The builder subtype.
+		 * @param subtype The builder subtype class to cast to.
+		 * @return An {@link Optional} containing this builder cast to the subtype, or empty if not an instance.
 		 */
-		public <T extends Builder> Builder apply(Class<T> subtype, Consumer<T> consumer) {
-			if (subtype.isInstance(this))
-				consumer.accept(subtype.cast(this));
-			return this;
+		public <T extends Builder> Optional<T> asSubtype(Class<T> subtype) {
+			return opt(subtype.isInstance(this) ? subtype.cast(this) : null);
 		}
 
 		/**
@@ -506,9 +602,7 @@ public abstract class Context {
 		 * @return <jk>true</jk> if any of the annotations/appliers can be applied to this builder.
 		 */
 		public boolean canApply(AnnotationWorkList work) {
-			var f = Flag.create();
-			work.forEach(x -> builders.forEach(b -> f.setIf(x.canApply(b))));
-			return f.isSet();
+			return work.stream().anyMatch(x -> builders.stream().anyMatch(b -> x.canApply(b)));
 		}
 
 		/**
@@ -644,17 +738,7 @@ public abstract class Context {
 		}
 
 		private ConstructorInfo getContextConstructor() {
-			var cci = CONTEXT_CONSTRUCTORS.get(type);
-			if (cci == null) {
-				// @formatter:off
-				cci = info(type).getPublicConstructor(
-					x -> x.hasNumParameters(1)
-					&& x.getParameter(0).canAccept(this)
-					).orElseThrow(() -> rex("Public constructor not found: {0}({1})", cn(type), cn(this)));
-				// @formatter:on
-				CONTEXT_CONSTRUCTORS.put(type, cci);
-			}
-			return cci;
+			return CONTEXT_CONSTRUCTORS.get(type, getClass());
 		}
 
 		private Context innerBuild() {
@@ -704,8 +788,6 @@ public abstract class Context {
 		}
 	}
 
-	private static final Map<Class<?>,MethodInfo> BUILDER_CREATE_METHODS = new ConcurrentHashMap<>();
-
 	/**
 	 * Predicate for annotations that themselves are annotated with {@link ContextApply}.
 	 */
@@ -724,26 +806,6 @@ public abstract class Context {
 	public static Builder createBuilder(Class<? extends Context> type) {
 		try {
 			MethodInfo mi = BUILDER_CREATE_METHODS.get(type);
-			if (mi == null) {
-				var c = info(type);
-				for (var ci : c.getPublicConstructors()) {
-					if (ci.hasNumParameters(1) && ! ci.getParameter(0).getParameterType().is(type)) {
-						// @formatter:off
-						mi = c.getPublicMethod(
-							x -> x.isStatic()
-							&& x.isNotDeprecated()
-							&& x.hasName("create")
-							&& x.hasReturnType(ci.getParameter(0).getParameterType())
-							).orElse(null);
-						// @formatter:on
-						if (nn(mi))
-							break;
-					}
-				}
-				if (mi == null)
-					throw rex("Could not find builder create method on class {0}", cn(type));
-				BUILDER_CREATE_METHODS.put(type, mi);
-			}
 			var b = (Builder)mi.invoke(null);
 			b.type(type);
 			return b;

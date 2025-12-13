@@ -147,7 +147,7 @@ public class ComboSerialize_Tester<T> {
 			if (x.getA().equals(BeanContext.Builder.class))
 				sb.beanContext((Consumer<BeanContext.Builder>) x.getB());
 			else if (x.getA().isInstance(sb))
-				sb.apply(Serializer.Builder.class, (Consumer<Serializer.Builder>) x.getB());
+				sb.asSubtype(Serializer.Builder.class).ifPresent((Consumer<Serializer.Builder>) x.getB());
 		});
 		return sb.build();
 	}

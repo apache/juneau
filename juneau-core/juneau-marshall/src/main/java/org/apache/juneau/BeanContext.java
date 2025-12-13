@@ -165,6 +165,7 @@ import org.apache.juneau.utils.*;
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class BeanContext extends Context {
+
 	/**
 	 * Builder class.
 	 */
