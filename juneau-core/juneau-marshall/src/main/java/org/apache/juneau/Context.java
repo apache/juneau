@@ -74,93 +74,6 @@ import org.apache.juneau.xml.annotation.*;
  */
 public abstract class Context {
 
-	/*
-	 * Cache of static <c>create</c> methods that return builder instances for context classes.
-	 *
-	 * <p>
-	 * This cache stores {@link MethodInfo} objects for public static methods named <c>create</c> that return
-	 * builder objects. The methods are discovered by:
-	 * <ol>
-	 * 	<li>Finding public constructors that take a single parameter (the builder type)
-	 * 	<li>Looking for a matching static <c>create</c> method that returns the builder type
-	 * 	<li>Caching the result for future lookups
-	 * </ol>
-	 *
-	 * <p>
-	 * Used by {@link #createBuilder(Class)} to efficiently locate and invoke builder creation methods.
-	 *
-	 * @see #createBuilder(Class)
-	 */
-	private static final Cache<Class<?>,MethodInfo> BUILDER_CREATE_METHODS = Cache.<Class<?>,MethodInfo>create()
-		.supplier(type -> {
-			var c = info(type);
-			// @formatter:off
-			return c.getPublicConstructors().stream()
-				.filter(ci -> ci.hasNumParameters(1) && ! ci.getParameter(0).getParameterType().is(type))
-				.map(ci -> c.getPublicMethod(
-					x -> x.isStatic()
-					&& x.isNotDeprecated()
-					&& x.hasName("create")
-					&& x.hasReturnType(ci.getParameter(0).getParameterType())
-					).orElse(null))
-				.filter(Objects::nonNull)
-				.findFirst()
-				.orElseThrow(() -> rex("Could not find builder create method on class {0}", cn(type)));
-			// @formatter:on
-		})
-		.build();
-
-	/*
-	 * Cache of public constructors on context classes that accept builder instances.
-	 *
-	 * <p>
-	 * This cache stores {@link ConstructorInfo} objects for public constructors on context classes that take
-	 * a single parameter of the builder type. The constructor is discovered by:
-	 * <ol>
-	 * 	<li>Finding public constructors on the context type that take exactly one parameter
-	 * 	<li>Matching constructors where the parameter type is a parent of (or equal to) the builder type
-	 * 	<li>Caching the result for future lookups
-	 * </ol>
-	 *
-	 * <p>
-	 * Used by {@link Builder#getContextConstructor()} to efficiently locate and invoke context constructors
-	 * when building context instances from builders.
-	 *
-	 * @see Builder#getContextConstructor()
-	 * @see Builder#innerBuild()
-	 */
-	private static final Cache2<Class<? extends Context>,Class<? extends Builder>,ConstructorInfo> CONTEXT_CONSTRUCTORS = Cache2.<Class<? extends Context>,Class<? extends Builder>,ConstructorInfo>create()
-		.supplier((cacheType, builderType) -> {
-			var ct = info(cacheType);
-			var bt = info(builderType);
-			return ct
-				.getPublicConstructor(x -> x.hasNumParameters(1) && x.getParameter(0).getParameterType().isParentOf(builderType))
-				.orElseThrow(() -> rex("Public constructor not found: {0}({1})", ct.getName(), bt.getName()));
-		})
-		.build();
-
-
-	/*
-	 * Default annotation provider instance for finding annotations on classes, methods, fields, and constructors.
-	 *
-	 * <p>
-	 * This is a static reference to {@link AnnotationProvider#INSTANCE}, used by the {@link Builder#traverse(AnnotationWorkList, Object)}
-	 * method to discover annotations that can be applied to context builders.
-	 *
-	 * <p>
-	 * The annotation provider supports:
-	 * <ul>
-	 * 	<li>Finding annotations on classes, methods, fields, and constructors
-	 * 	<li>Traversing class hierarchies (parent-to-child or child-to-parent order)
-	 * 	<li>Supporting runtime annotations (annotations added programmatically)
-	 * 	<li>Caching results for performance
-	 * </ul>
-	 *
-	 * @see AnnotationProvider
-	 * @see Builder#traverse(AnnotationWorkList, Object)
-	 */
-	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
-
 	/**
 	 * Builder class.
 	 */
@@ -170,9 +83,10 @@ public abstract class Context {
 		private Class<? extends Context> type;
 		private Context impl;
 		private List<Annotation> annotations;
-		private Cache<HashKey,? extends Context> cache;
 
+		private Cache<HashKey,? extends Context> cache;
 		private final List<Object> builders = list();
+
 		private final AnnotationWorkList applied = AnnotationWorkList.create();
 
 		/**
@@ -182,7 +96,7 @@ public abstract class Context {
 		@SuppressWarnings("unchecked")
 		protected Builder() {
 			debug = env("Context.debug", false);
-			annotations = null;
+			annotations = list();
 			registerBuilders(this);
 
 			// By default, the type being created should be the class declaring the builder.
@@ -199,7 +113,7 @@ public abstract class Context {
 		protected Builder(Builder copyFrom) {
 			debug = copyFrom.debug;
 			type = copyFrom.type;
-			annotations = toList(copyFrom.annotations, true);
+			annotations = copyOf(copyFrom.annotations);
 			registerBuilders(this);
 		}
 
@@ -211,7 +125,7 @@ public abstract class Context {
 		protected Builder(Context copyFrom) {
 			debug = copyFrom.debug;
 			type = copyFrom.getClass();
-			annotations = toList(copyFrom.annotations, true);
+			annotations = copyOf(copyFrom.annotations);
 			registerBuilders(this);
 		}
 
@@ -387,7 +301,7 @@ public abstract class Context {
 		 * @return This object.
 		 */
 		public Builder annotations(Annotation...values) {
-			annotations = addAll(annotations, values);
+			annotations.addAll(l(values));
 			return this;
 		}
 
@@ -399,7 +313,7 @@ public abstract class Context {
 		 * @return This object.
 		 */
 		public Builder annotations(List<Annotation> values) {
-			annotations = addAll(annotations, values);
+			annotations.addAll(values);
 			return this;
 		}
 
@@ -435,32 +349,6 @@ public abstract class Context {
 			applied.addAll(work);
 			work.forEach(x -> builders.forEach(x::apply));
 			return this;
-		}
-
-		/**
-		 * Returns this builder cast to the specified subtype if it is an instance of that type.
-		 *
-		 * <p>
-		 * This is a type-safe way to check if this builder is an instance of a specific builder subtype
-		 * and cast it accordingly. Returns an empty {@link Optional} if this builder is not an instance
-		 * of the specified subtype.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	Builder <jv>b</jv> = JsonSerializer.<jsm>create</jsm>();
-		 * 	Optional&lt;JsonSerializer.Builder&gt; <jv>jsonBuilder</jv> = <jv>b</jv>.asSubtype(JsonSerializer.Builder.<jk>class</jk>);
-		 * 	<jk>if</jk> (<jv>jsonBuilder</jv>.isPresent()) {
-		 * 		<jc>// Use JsonSerializer.Builder-specific methods</jc>
-		 * 		<jv>jsonBuilder</jv>.get().pretty();
-		 * 	}
-		 * </p>
-		 *
-		 * @param <T> The builder subtype.
-		 * @param subtype The builder subtype class to cast to.
-		 * @return An {@link Optional} containing this builder cast to the subtype, or empty if not an instance.
-		 */
-		public <T extends Builder> Optional<T> asSubtype(Class<T> subtype) {
-			return opt(subtype.isInstance(this) ? subtype.cast(this) : null);
 		}
 
 		/**
@@ -559,6 +447,32 @@ public abstract class Context {
 			var work = AnnotationWorkList.create();
 			Arrays.stream(from).forEach(x -> traverse(work, x));
 			return apply(work);
+		}
+
+		/**
+		 * Returns this builder cast to the specified subtype if it is an instance of that type.
+		 *
+		 * <p>
+		 * This is a type-safe way to check if this builder is an instance of a specific builder subtype
+		 * and cast it accordingly. Returns an empty {@link Optional} if this builder is not an instance
+		 * of the specified subtype.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	Builder <jv>b</jv> = JsonSerializer.<jsm>create</jsm>();
+		 * 	Optional&lt;JsonSerializer.Builder&gt; <jv>jsonBuilder</jv> = <jv>b</jv>.asSubtype(JsonSerializer.Builder.<jk>class</jk>);
+		 * 	<jk>if</jk> (<jv>jsonBuilder</jv>.isPresent()) {
+		 * 		<jc>// Use JsonSerializer.Builder-specific methods</jc>
+		 * 		<jv>jsonBuilder</jv>.get().pretty();
+		 * 	}
+		 * </p>
+		 *
+		 * @param <T> The builder subtype.
+		 * @param subtype The builder subtype class to cast to.
+		 * @return An {@link Optional} containing this builder cast to the subtype, or empty if not an instance.
+		 */
+		public <T extends Builder> Optional<T> asSubtype(Class<T> subtype) {
+			return opt(subtype.isInstance(this) ? subtype.cast(this) : null);
 		}
 
 		/**
@@ -737,37 +651,6 @@ public abstract class Context {
 			return this;
 		}
 
-		private ConstructorInfo getContextConstructor() {
-			return CONTEXT_CONSTRUCTORS.get(type, getClass());
-		}
-
-		private Context innerBuild() {
-			if (type == null)
-				throw rex("Type not specified for context builder {0}", cn(getClass()));
-			if (nn(impl) && type.isInstance(impl))
-				return type.cast(impl);
-			if (nn(cache))
-				return cache.get(hashKey(), () -> getContextConstructor().newInstance(this));
-			return getContextConstructor().newInstance(this);
-		}
-
-		private static AnnotationWorkList traverse(AnnotationWorkList work, Object x) {
-			var ap = AP;
-			CollectionUtils.traverse(x, y -> {
-				if (x instanceof Class<?> x2)
-					work.add(rstream(ap.find(info(x2))).filter(CONTEXT_APPLY_FILTER));
-				else if (x instanceof ClassInfo x2)
-					work.add(rstream(ap.find(x2)).filter(CONTEXT_APPLY_FILTER));
-				else if (x instanceof Method x2)
-					work.add(rstream(ap.find(info(x2))).filter(CONTEXT_APPLY_FILTER));
-				else if (x instanceof MethodInfo x2)
-					work.add(rstream(ap.find(x2)).filter(CONTEXT_APPLY_FILTER));
-				else
-					illegalArg("Invalid type passed to applyAnnotations:  {0}", cn(x));
-			});
-			return work;
-		}
-
 		/**
 		 * Registers the specified secondary builders with this context builder.
 		 *
@@ -786,7 +669,108 @@ public abstract class Context {
 					this.builders.add(b);
 			}
 		}
+
+		private ConstructorInfo getContextConstructor() {
+			return CONTEXT_CONSTRUCTORS.get(type, getClass());
+		}
+
+		private Context innerBuild() {
+			if (type == null)
+				throw rex("Type not specified for context builder {0}", cn(getClass()));
+			if (nn(impl) && type.isInstance(impl))
+				return type.cast(impl);
+			if (nn(cache))
+				return cache.get(hashKey(), () -> getContextConstructor().newInstance(this));
+			return getContextConstructor().newInstance(this);
+		}
 	}
+
+	/*
+	 * Cache of static <c>create</c> methods that return builder instances for context classes.
+	 *
+	 * <p>
+	 * This cache stores {@link MethodInfo} objects for public static methods named <c>create</c> that return
+	 * builder objects. The methods are discovered by:
+	 * <ol>
+	 * 	<li>Finding public constructors that take a single parameter (the builder type)
+	 * 	<li>Looking for a matching static <c>create</c> method that returns the builder type
+	 * 	<li>Caching the result for future lookups
+	 * </ol>
+	 *
+	 * <p>
+	 * Used by {@link #createBuilder(Class)} to efficiently locate and invoke builder creation methods.
+	 *
+	 * @see #createBuilder(Class)
+	 */
+	private static final Cache<Class<?>,MethodInfo> BUILDER_CREATE_METHODS = Cache.<Class<?>,MethodInfo>create()
+		.supplier(type -> {
+			var c = info(type);
+			// @formatter:off
+			return c.getPublicConstructors().stream()
+				.filter(ci -> ci.hasNumParameters(1) && ! ci.getParameter(0).getParameterType().is(type))
+				.map(ci -> c.getPublicMethod(
+					x -> x.isStatic()
+					&& x.isNotDeprecated()
+					&& x.hasName("create")
+					&& x.hasReturnType(ci.getParameter(0).getParameterType())
+					).orElse(null))
+				.filter(Objects::nonNull)
+				.findFirst()
+				.orElseThrow(() -> rex("Could not find builder create method on class {0}", cn(type)));
+			// @formatter:on
+		})
+		.build();
+
+
+	/*
+	 * Cache of public constructors on context classes that accept builder instances.
+	 *
+	 * <p>
+	 * This cache stores {@link ConstructorInfo} objects for public constructors on context classes that take
+	 * a single parameter of the builder type. The constructor is discovered by:
+	 * <ol>
+	 * 	<li>Finding public constructors on the context type that take exactly one parameter
+	 * 	<li>Matching constructors where the parameter type is a parent of (or equal to) the builder type
+	 * 	<li>Caching the result for future lookups
+	 * </ol>
+	 *
+	 * <p>
+	 * Used by {@link Builder#getContextConstructor()} to efficiently locate and invoke context constructors
+	 * when building context instances from builders.
+	 *
+	 * @see Builder#getContextConstructor()
+	 * @see Builder#innerBuild()
+	 */
+	private static final Cache2<Class<? extends Context>,Class<? extends Builder>,ConstructorInfo> CONTEXT_CONSTRUCTORS = Cache2.<Class<? extends Context>,Class<? extends Builder>,ConstructorInfo>create()
+		.supplier((cacheType, builderType) -> {
+			var ct = info(cacheType);
+			var bt = info(builderType);
+			return ct
+				.getPublicConstructor(x -> x.hasNumParameters(1) && x.getParameter(0).getParameterType().isParentOf(builderType))
+				.orElseThrow(() -> rex("Public constructor not found: {0}({1})", ct.getName(), bt.getName()));
+		})
+		.build();
+
+	/*
+	 * Default annotation provider instance for finding annotations on classes, methods, fields, and constructors.
+	 *
+	 * <p>
+	 * This is a static reference to {@link AnnotationProvider#INSTANCE}, used by the {@link Builder#traverse(AnnotationWorkList, Object)}
+	 * method to discover annotations that can be applied to context builders.
+	 *
+	 * <p>
+	 * The annotation provider supports:
+	 * <ul>
+	 * 	<li>Finding annotations on classes, methods, fields, and constructors
+	 * 	<li>Traversing class hierarchies (parent-to-child or child-to-parent order)
+	 * 	<li>Supporting runtime annotations (annotations added programmatically)
+	 * 	<li>Caching results for performance
+	 * </ul>
+	 *
+	 * @see AnnotationProvider
+	 * @see Builder#traverse(AnnotationWorkList, Object)
+	 */
+	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	/**
 	 * Predicate for annotations that themselves are annotated with {@link ContextApply}.
@@ -805,18 +789,31 @@ public abstract class Context {
 	 */
 	public static Builder createBuilder(Class<? extends Context> type) {
 		try {
-			MethodInfo mi = BUILDER_CREATE_METHODS.get(type);
-			var b = (Builder)mi.invoke(null);
-			b.type(type);
-			return b;
+			return ((Builder)BUILDER_CREATE_METHODS.get(type).invoke(null)).type(type);
 		} catch (ExecutableException e) {
 			throw toRex(e);
 		}
 	}
 
-	final List<Annotation> annotations;
-	final boolean debug;
+	private static AnnotationWorkList traverse(AnnotationWorkList work, Object x) {
+		var ap = AP;
+		CollectionUtils.traverse(x, y -> {
+			if (x instanceof Class<?> x2)
+				work.add(rstream(ap.find(info(x2))).filter(CONTEXT_APPLY_FILTER));
+			else if (x instanceof ClassInfo x2)
+				work.add(rstream(ap.find(x2)).filter(CONTEXT_APPLY_FILTER));
+			else if (x instanceof Method x2)
+				work.add(rstream(ap.find(info(x2))).filter(CONTEXT_APPLY_FILTER));
+			else if (x instanceof MethodInfo x2)
+				work.add(rstream(ap.find(x2)).filter(CONTEXT_APPLY_FILTER));
+			else
+				illegalArg("Invalid type passed to applyAnnotations:  {0}", cn(x));
+		});
+		return work;
+	}
 
+	private final List<Annotation> annotations;
+	private final boolean debug;
 	private final AnnotationProvider annotationProvider;
 
 	/**
@@ -827,7 +824,7 @@ public abstract class Context {
 	protected Context(Builder builder) {
 		init(builder);
 		debug = builder.debug;
-		annotations = opt(builder.annotations).orElseGet(Collections::emptyList);
+		annotations = copyOf(builder.annotations);
 		annotationProvider = AnnotationProvider.create().addRuntimeAnnotations(annotations).build();
 	}
 
@@ -837,17 +834,10 @@ public abstract class Context {
 	 * @param copyFrom The context to copy from.
 	 */
 	protected Context(Context copyFrom) {
-		annotations = copyFrom.annotations;
+		annotations = copyOf(copyFrom.annotations);
 		debug = copyFrom.debug;
 		annotationProvider = copyFrom.annotationProvider;
 	}
-
-	/**
-	 * Returns the annotation provider for this context.
-	 *
-	 * @return The annotation provider for this context.
-	 */
-	public AnnotationProvider getAnnotationProvider() { return annotationProvider; }
 
 	/**
 	 * Creates a builder from this context object.
@@ -873,6 +863,13 @@ public abstract class Context {
 	public ContextSession.Builder createSession() {
 		throw unsupportedOp();
 	}
+
+	/**
+	 * Returns the annotation provider for this context.
+	 *
+	 * @return The annotation provider for this context.
+	 */
+	public AnnotationProvider getAnnotationProvider() { return annotationProvider; }
 
 	/**
 	 * Returns a session to use for this context.

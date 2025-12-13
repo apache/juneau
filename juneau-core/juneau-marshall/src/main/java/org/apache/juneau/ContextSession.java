@@ -55,7 +55,7 @@ public abstract class ContextSession {
 		 */
 		protected Builder(Context ctx) {
 			this.ctx = ctx;
-			debug = ctx.debug;
+			debug = ctx.isDebug();
 		}
 
 		/**
