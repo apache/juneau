@@ -1,11 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-<title>SimpleUnmodifiableMap xref</title>
+<title>SimpleMap xref</title>
 <link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
 </head>
 <body>
-<div id="overview"><a href="../../../../../../apidocs/org/apache/juneau/commons/collections/SimpleUnmodifiableMap.html">View Javadoc</a></div><pre>
+<div id="overview"><a href="../../../../../../apidocs/org/apache/juneau/commons/collections/SimpleMap.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
@@ -68,7 +68,7 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * 	String[] &lt;jv&gt;keys&lt;/jv&gt; = {&lt;js&gt;"host"&lt;/js&gt;, &lt;js&gt;"port"&lt;/js&gt;, &lt;js&gt;"timeout"&lt;/js&gt;};</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * 	Object[] &lt;jv&gt;values&lt;/jv&gt; = {&lt;js&gt;"localhost"&lt;/js&gt;, 8080, 30000};</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * 	SimpleUnmodifiableMap&amp;lt;String,Object&amp;gt; &lt;jv&gt;config&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; SimpleUnmodifiableMap&amp;lt;&amp;gt;(&lt;jv&gt;keys&lt;/jv&gt;, &lt;jv&gt;values&lt;/jv&gt;);</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * 	SimpleMap&amp;lt;String,Object&amp;gt; &lt;jv&gt;config&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; SimpleMap&amp;lt;&amp;gt;(&lt;jv&gt;keys&lt;/jv&gt;, &lt;jv&gt;values&lt;/jv&gt;);</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Get values&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * 	String &lt;jv&gt;host&lt;/jv&gt; = (String)&lt;jv&gt;config&lt;/jv&gt;.get(&lt;js&gt;"host"&lt;/js&gt;);     &lt;jc&gt;// Returns: "localhost"&lt;/jc&gt;</em>
@@ -96,12 +96,12 @@
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment"> * This class is thread-safe since it's immutable after construction. Multiple threads can safely</em>
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment"> * read from a SimpleUnmodifiableMap concurrently without synchronization.</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment"> * read from a SimpleMap concurrently without synchronization.</em>
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Example - Configuration Map:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Create immutable configuration&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment"> * 	SimpleUnmodifiableMap&amp;lt;String,Object&amp;gt; &lt;jv&gt;defaults&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; SimpleUnmodifiableMap&amp;lt;&amp;gt;(</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment"> * 	SimpleMap&amp;lt;String,Object&amp;gt; &lt;jv&gt;defaults&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; SimpleMap&amp;lt;&amp;gt;(</em>
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment"> * 		&lt;jk&gt;new&lt;/jk&gt; String[]{&lt;js&gt;"maxConnections"&lt;/js&gt;, &lt;js&gt;"timeout"&lt;/js&gt;, &lt;js&gt;"retries"&lt;/js&gt;},</em>
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment"> * 		&lt;jk&gt;new&lt;/jk&gt; Object[]{100, 5000, 3}</em>
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment"> * 	);</em>
@@ -112,9 +112,9 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Comparison with Map.of():&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment"> * &lt;ul class='spaced-list'&gt;</em>
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Null Support:&lt;/b&gt; SimpleUnmodifiableMap supports null keys/values, Map.of() does not</em>
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Insertion Order:&lt;/b&gt; SimpleUnmodifiableMap preserves insertion order, Map.of() does not</em>
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Size Limit:&lt;/b&gt; Map.of() limited to 10 entries, SimpleUnmodifiableMap has no limit</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Null Support:&lt;/b&gt; SimpleMap supports null keys/values, Map.of() does not</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Insertion Order:&lt;/b&gt; SimpleMap preserves insertion order, Map.of() does not</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Size Limit:&lt;/b&gt; Map.of() limited to 10 entries, SimpleMap has no limit</em>
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</em>
@@ -126,7 +126,7 @@
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> <em class="jxr_javadoccomment"> * @param &lt;K&gt; The key type.</em>
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> <em class="jxr_javadoccomment"> * @param &lt;V&gt; The value type.</em>
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> SimpleUnmodifiableMap&lt;K,V&gt; <strong class="jxr_keyword">extends</strong> AbstractMap&lt;K,V&gt; {
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> SimpleMap&lt;K,V&gt; <strong class="jxr_keyword">extends</strong> AbstractMap&lt;K,V&gt; {
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment">	 * Inner class representing a single key-value entry in this map.</em>
@@ -186,7 +186,7 @@
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 	<strong class="jxr_keyword">final</strong> SimpleUnmodifiableMapEntry[] entries;
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 * Constructs a new SimpleUnmodifiableMap with the specified keys and values.</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 * Constructs a new SimpleMap with the specified keys and values.</em>
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 * The keys and values arrays are stored by reference (not copied), so external</em>
@@ -199,7 +199,7 @@
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">	 * 	String[] &lt;jv&gt;keys&lt;/jv&gt; = {&lt;js&gt;"name"&lt;/js&gt;, &lt;js&gt;"age"&lt;/js&gt;, &lt;js&gt;"city"&lt;/js&gt;};</em>
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">	 * 	Object[] &lt;jv&gt;values&lt;/jv&gt; = {&lt;js&gt;"John"&lt;/js&gt;, 30, &lt;js&gt;"NYC"&lt;/js&gt;};</em>
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">	 * 	SimpleUnmodifiableMap&amp;lt;String,Object&amp;gt; &lt;jv&gt;person&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; SimpleUnmodifiableMap&amp;lt;&amp;gt;(&lt;jv&gt;keys&lt;/jv&gt;, &lt;jv&gt;values&lt;/jv&gt;);</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">	 * 	SimpleMap&amp;lt;String,Object&amp;gt; &lt;jv&gt;person&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; SimpleMap&amp;lt;&amp;gt;(&lt;jv&gt;keys&lt;/jv&gt;, &lt;jv&gt;values&lt;/jv&gt;);</em>
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 * @param keys The map keys. Must not be &lt;jk&gt;null&lt;/jk&gt;. Individual keys can be &lt;jk&gt;null&lt;/jk&gt;.</em>
@@ -214,7 +214,7 @@
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">	 *         &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	<strong class="jxr_keyword">public</strong> <a name="SimpleUnmodifiableMap" href="../../../../../org/apache/juneau/commons/collections/SimpleUnmodifiableMap.html#SimpleUnmodifiableMap">SimpleUnmodifiableMap</a>(K[] keys, V[] values) {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	<strong class="jxr_keyword">public</strong> <a name="SimpleMap" href="../../../../../org/apache/juneau/commons/collections/SimpleMap.html#SimpleMap">SimpleMap</a>(K[] keys, V[] values) {
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 		assertArgsNotNull(<span class="jxr_string">"keys"</span>, keys, <span class="jxr_string">"values"</span>, values);
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 		assertArg(keys.length == values.length, <span class="jxr_string">"keys ''{0}'' and values ''{1}'' array lengths differ"</span>, keys.length, values.length);
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 
@@ -243,7 +243,7 @@
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">	 * 	SimpleUnmodifiableMap&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; SimpleUnmodifiableMap&amp;lt;&amp;gt;(</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">	 * 	SimpleMap&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; SimpleMap&amp;lt;&amp;gt;(</em>
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">	 * 		&lt;jk&gt;new&lt;/jk&gt; String[]{&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;},</em>
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">	 * 		&lt;jk&gt;new&lt;/jk&gt; Integer[]{1, 2}</em>
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">	 * 	);</em>
@@ -270,7 +270,7 @@
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">	 * 	SimpleUnmodifiableMap&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; SimpleUnmodifiableMap&amp;lt;&amp;gt;(</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">	 * 	SimpleMap&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; SimpleMap&amp;lt;&amp;gt;(</em>
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">	 * 		&lt;jk&gt;new&lt;/jk&gt; String[]{&lt;js&gt;"age"&lt;/js&gt;, &lt;js&gt;"score"&lt;/js&gt;},</em>
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">	 * 		&lt;jk&gt;new&lt;/jk&gt; Integer[]{25, 100}</em>
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">	 * 	);</em>
@@ -299,7 +299,7 @@
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 * 	SimpleUnmodifiableMap&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; SimpleUnmodifiableMap&amp;lt;&amp;gt;(</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 * 	SimpleMap&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; SimpleMap&amp;lt;&amp;gt;(</em>
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 * 		&lt;jk&gt;new&lt;/jk&gt; String[]{&lt;js&gt;"x"&lt;/js&gt;, &lt;js&gt;"y"&lt;/js&gt;, &lt;js&gt;"z"&lt;/js&gt;},</em>
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">	 * 		&lt;jk&gt;new&lt;/jk&gt; Integer[]{1, 2, 3}</em>
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">	 * 	);</em>

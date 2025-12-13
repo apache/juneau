@@ -276,7 +276,7 @@
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 	@Test <strong class="jxr_keyword">void</strong> ca13_isExactType() {
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<strong class="jxr_keyword">var</strong> x = m(1,2);
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<strong class="jxr_keyword">var</strong> nil = mapn(Object.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		test(x).isExactType(SimpleUnmodifiableMap.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		test(x).isExactType(SimpleMap.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 		assertThrown(()-&gt;test(x).isExactType(Object.<strong class="jxr_keyword">class</strong>)).asMessage().asOneLine().isMatches(<span class="jxr_string">"Unexpected type.  Expect='java.lang.Object'.  Actual='*'."</span>);
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 		assertThrown(()-&gt;test(x).isExactType(String.<strong class="jxr_keyword">class</strong>)).asMessage().asOneLine().isMatches(<span class="jxr_string">"Unexpected type.  Expect='java.lang.String'.  Actual='*'."</span>);
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 		assertThrown(()-&gt;test(nil).isExactType(String.<strong class="jxr_keyword">class</strong>)).asMessage().asOneLine().is(<span class="jxr_string">"Value was null."</span>);
