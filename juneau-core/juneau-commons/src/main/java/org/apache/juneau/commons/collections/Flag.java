@@ -267,4 +267,51 @@ public class Flag {
 		value = false;
 		return this;
 	}
+
+	/**
+	 * Returns a string representation of this flag.
+	 *
+	 * <p>
+	 * The format is simply the string representation of the boolean value.
+	 *
+	 * @return A string representation of this flag.
+	 */
+	@Override
+	public String toString() {
+		return String.valueOf(value);
+	}
+
+	/**
+	 * Compares the specified object with this flag for equality.
+	 *
+	 * <p>
+	 * Returns <jk>true</jk> if and only if the specified object is also a <c>Flag</c> and both flags
+	 * have the same boolean value.
+	 *
+	 * @param o The object to be compared for equality with this flag.
+	 * @return <jk>true</jk> if the specified object is equal to this flag.
+	 */
+	@Override
+	public boolean equals(Object o) {
+		return (o instanceof Flag o2) && eq(this, o2, (x, y) -> x.value == y.value);
+	}
+
+	/**
+	 * Returns the hash code value for this flag.
+	 *
+	 * <p>
+	 * The hash code is computed from the boolean value using the standard <c>Boolean.hashCode(boolean)</c>
+	 * method, which returns <c>1231</c> for <c>true</c> and <c>1237</c> for <c>false</c>.
+	 *
+	 * <p>
+	 * This ensures that <c>flag1.equals(flag2)</c> implies that <c>flag1.hashCode()==flag2.hashCode()</c>
+	 * for any two flags <c>flag1</c> and <c>flag2</c>, as required by the general contract of
+	 * {@link Object#hashCode()}.
+	 *
+	 * @return The hash code value for this flag.
+	 */
+	@Override
+	public int hashCode() {
+		return Boolean.hashCode(value);
+	}
 }

@@ -239,4 +239,72 @@ class Flag_Test extends TestBase {
 
 		assertEquals(2, d);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// toString(), equals(), hashCode()
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void d01_toString_true() {
+		var flag = Flag.of(true);
+		assertEquals("true", flag.toString());
+	}
+
+	@Test
+	void d02_toString_false() {
+		var flag = Flag.of(false);
+		assertEquals("false", flag.toString());
+	}
+
+	@Test
+	void d03_equals_sameValue() {
+		var flag1 = Flag.of(true);
+		var flag2 = Flag.of(true);
+		assertTrue(flag1.equals(flag2));
+		assertTrue(flag2.equals(flag1));
+	}
+
+	@Test
+	void d04_equals_differentValue() {
+		var flag1 = Flag.of(true);
+		var flag2 = Flag.of(false);
+		assertFalse(flag1.equals(flag2));
+		assertFalse(flag2.equals(flag1));
+	}
+
+	@Test
+	void d05_equals_sameInstance() {
+		var flag = Flag.of(true);
+		assertTrue(flag.equals(flag));
+	}
+
+	@Test
+	void d06_equals_notAFlag() {
+		var flag = Flag.of(true);
+		assertFalse(flag.equals("not a flag"));
+		assertFalse(flag.equals(null));
+	}
+
+	@Test
+	void d07_hashCode_sameValue() {
+		var flag1 = Flag.of(true);
+		var flag2 = Flag.of(true);
+		assertEquals(flag1.hashCode(), flag2.hashCode());
+	}
+
+	@Test
+	void d08_hashCode_differentValue() {
+		var flag1 = Flag.of(true);
+		var flag2 = Flag.of(false);
+		// Different values should have different hash codes (though not guaranteed)
+		assertNotEquals(flag1.hashCode(), flag2.hashCode());
+	}
+
+	@Test
+	void d09_hashCode_booleanHashCode() {
+		var flagTrue = Flag.of(true);
+		var flagFalse = Flag.of(false);
+		assertEquals(Boolean.hashCode(true), flagTrue.hashCode());
+		assertEquals(Boolean.hashCode(false), flagFalse.hashCode());
+	}
 }
