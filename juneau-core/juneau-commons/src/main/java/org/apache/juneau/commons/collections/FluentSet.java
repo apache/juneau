@@ -237,5 +237,20 @@ public class FluentSet<E> extends AbstractSet<E> {
 	public <T> T[] toArray(T[] a) {
 		return set.toArray(a);
 	}
+
+	@Override
+	public String toString() {
+		return set.toString();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return set.equals(o);
+	}
+
+	@Override
+	public int hashCode() {
+		return set.hashCode();
+	}
 }
 

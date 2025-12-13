@@ -283,5 +283,20 @@ public class FluentList<E> extends AbstractList<E> {
 	public <T> T[] toArray(T[] a) {
 		return list.toArray(a);
 	}
+
+	@Override
+	public String toString() {
+		return list.toString();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return list.equals(o);
+	}
+
+	@Override
+	public int hashCode() {
+		return list.hashCode();
+	}
 }
 

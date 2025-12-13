@@ -1003,5 +1003,73 @@ class FilteredMap_Test extends TestBase {
 		assertNull(map.get("key1"));
 		assertEquals(5, map.get(null));
 	}
+
+	//====================================================================================================
+	// toString(), equals(), hashCode()
+	//====================================================================================================
+
+	@Test
+	void w01_toString_delegatesToUnderlyingMap() {
+		var map = FilteredMap
+			.create(String.class, String.class)
+			.filter((k, v) -> true)
+			.build();
+		map.put("key1", "value1");
+		map.put("key2", "value2");
+
+		var underlyingMap = new LinkedHashMap<String, String>();
+		underlyingMap.put("key1", "value1");
+		underlyingMap.put("key2", "value2");
+
+		assertEquals(underlyingMap.toString(), map.toString());
+	}
+
+	@Test
+	void w02_equals_delegatesToUnderlyingMap() {
+		var map1 = FilteredMap
+			.create(String.class, String.class)
+			.filter((k, v) -> true)
+			.build();
+		map1.put("key1", "value1");
+		map1.put("key2", "value2");
+
+		var map2 = new LinkedHashMap<String, String>();
+		map2.put("key1", "value1");
+		map2.put("key2", "value2");
+
+		assertTrue(map1.equals(map2));
+		assertTrue(map2.equals(map1));
+	}
+
+	@Test
+	void w03_equals_differentContents_returnsFalse() {
+		var map1 = FilteredMap
+			.create(String.class, String.class)
+			.filter((k, v) -> true)
+			.build();
+		map1.put("key1", "value1");
+
+		var map2 = new LinkedHashMap<String, String>();
+		map2.put("key1", "value2");
+
+		assertFalse(map1.equals(map2));
+		assertFalse(map2.equals(map1));
+	}
+
+	@Test
+	void w04_hashCode_delegatesToUnderlyingMap() {
+		var map = FilteredMap
+			.create(String.class, String.class)
+			.filter((k, v) -> true)
+			.build();
+		map.put("key1", "value1");
+		map.put("key2", "value2");
+
+		var underlyingMap = new LinkedHashMap<String, String>();
+		underlyingMap.put("key1", "value1");
+		underlyingMap.put("key2", "value2");
+
+		assertEquals(underlyingMap.hashCode(), map.hashCode());
+	}
 }
 

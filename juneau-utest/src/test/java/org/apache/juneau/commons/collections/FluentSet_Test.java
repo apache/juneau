@@ -412,5 +412,62 @@ class FluentSet_Test extends TestBase {
 		assertSize(1, set);
 		assertTrue(set.contains("item1"));
 	}
+
+	//====================================================================================================
+	// toString(), equals(), hashCode()
+	//====================================================================================================
+
+	@Test
+	void w01_toString_delegatesToUnderlyingSet() {
+		var set = new FluentSet<>(new LinkedHashSet<String>());
+		set.a("item1").a("item2").a("item3");
+
+		var underlyingSet = new LinkedHashSet<String>();
+		underlyingSet.add("item1");
+		underlyingSet.add("item2");
+		underlyingSet.add("item3");
+
+		assertEquals(underlyingSet.toString(), set.toString());
+	}
+
+	@Test
+	void w02_equals_delegatesToUnderlyingSet() {
+		var set1 = new FluentSet<>(new LinkedHashSet<String>());
+		set1.a("item1").a("item2").a("item3");
+
+		var set2 = new LinkedHashSet<String>();
+		set2.add("item1");
+		set2.add("item2");
+		set2.add("item3");
+
+		assertTrue(set1.equals(set2));
+		assertTrue(set2.equals(set1));
+	}
+
+	@Test
+	void w03_equals_differentContents_returnsFalse() {
+		var set1 = new FluentSet<>(new LinkedHashSet<String>());
+		set1.a("item1").a("item2");
+
+		var set2 = new LinkedHashSet<String>();
+		set2.add("item1");
+		set2.add("item3");
+
+		assertFalse(set1.equals(set2));
+		assertFalse(set2.equals(set1));
+	}
+
+	@Test
+	void w04_hashCode_delegatesToUnderlyingSet() {
+		var set = new FluentSet<>(new LinkedHashSet<String>());
+		set.a("item1").a("item2").a("item3");
+
+		var underlyingSet = new LinkedHashSet<String>();
+		underlyingSet.add("item1");
+		underlyingSet.add("item2");
+		underlyingSet.add("item3");
+
+		assertEquals(underlyingSet.hashCode(), set.hashCode());
+	}
 }
 

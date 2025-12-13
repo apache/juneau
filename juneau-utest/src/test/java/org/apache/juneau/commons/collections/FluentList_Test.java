@@ -460,5 +460,62 @@ class FluentList_Test extends TestBase {
 		assertEquals("item2", list.get(0));
 		assertEquals("item4", list.get(1));
 	}
+
+	//====================================================================================================
+	// toString(), equals(), hashCode()
+	//====================================================================================================
+
+	@Test
+	void w01_toString_delegatesToUnderlyingList() {
+		var list = new FluentList<>(new ArrayList<String>());
+		list.a("item1").a("item2").a("item3");
+
+		var underlyingList = new ArrayList<String>();
+		underlyingList.add("item1");
+		underlyingList.add("item2");
+		underlyingList.add("item3");
+
+		assertEquals(underlyingList.toString(), list.toString());
+	}
+
+	@Test
+	void w02_equals_delegatesToUnderlyingList() {
+		var list1 = new FluentList<>(new ArrayList<String>());
+		list1.a("item1").a("item2").a("item3");
+
+		var list2 = new ArrayList<String>();
+		list2.add("item1");
+		list2.add("item2");
+		list2.add("item3");
+
+		assertTrue(list1.equals(list2));
+		assertTrue(list2.equals(list1));
+	}
+
+	@Test
+	void w03_equals_differentContents_returnsFalse() {
+		var list1 = new FluentList<>(new ArrayList<String>());
+		list1.a("item1").a("item2");
+
+		var list2 = new ArrayList<String>();
+		list2.add("item1");
+		list2.add("item3");
+
+		assertFalse(list1.equals(list2));
+		assertFalse(list2.equals(list1));
+	}
+
+	@Test
+	void w04_hashCode_delegatesToUnderlyingList() {
+		var list = new FluentList<>(new ArrayList<String>());
+		list.a("item1").a("item2").a("item3");
+
+		var underlyingList = new ArrayList<String>();
+		underlyingList.add("item1");
+		underlyingList.add("item2");
+		underlyingList.add("item3");
+
+		assertEquals(underlyingList.hashCode(), list.hashCode());
+	}
 }
 

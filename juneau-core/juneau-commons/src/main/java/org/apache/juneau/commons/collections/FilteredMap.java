@@ -584,5 +584,20 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 			return valueType.cast(value);
 		throw rex("Object of type {0} could not be converted to value type {1}", cn(value), cn(valueType));
 	}
+
+	@Override
+	public String toString() {
+		return map.toString();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return map.equals(o);
+	}
+
+	@Override
+	public int hashCode() {
+		return map.hashCode();
+	}
 }
 

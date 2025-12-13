@@ -231,5 +231,20 @@ public class FluentMap<K,V> extends AbstractMap<K,V> {
 	public Collection<V> values() {
 		return map.values();
 	}
+
+	@Override
+	public String toString() {
+		return map.toString();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return map.equals(o);
+	}
+
+	@Override
+	public int hashCode() {
+		return map.hashCode();
+	}
 }
 
