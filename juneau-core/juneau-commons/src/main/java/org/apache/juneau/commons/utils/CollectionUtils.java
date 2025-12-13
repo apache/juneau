@@ -1584,6 +1584,17 @@ public class CollectionUtils {
 		return Collections.emptyMap();
 	}
 
+	/**
+	 * Shortcut for creating an empty map with generic types.
+	 *
+	 * <p>
+	 * This is a convenience method that creates an empty unmodifiable map without requiring
+	 * explicit type parameters. The types will be inferred from usage context.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @return An empty unmodifiable map.
+	 */
 	public static <K,V> Map<K,V> mape() {
 		return Collections.emptyMap();
 	}

@@ -124,6 +124,27 @@ public class MapBuilder<K,V> {
 		return new MapBuilder<>(assertArgNotNull("keyType", keyType), assertArgNotNull("valueType", valueType));
 	}
 
+	/**
+	 * Static creator without explicit type parameters.
+	 *
+	 * <p>
+	 * This is a convenience method that creates a builder without requiring explicit type parameters.
+	 * The types will be inferred from usage context. Internally uses <c>Object.class</c> for both
+	 * key and value types, which allows any types to be added.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Map&lt;String, Integer&gt; <jv>map</jv> = MapBuilder.<jsm>create</jsm>()
+	 * 		.add(<js>"one"</js>, 1)
+	 * 		.add(<js>"two"</js>, 2)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param <K> Key type.
+	 * @param <V> Value type.
+	 * @return A new builder.
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <K,V> MapBuilder<K,V> create() {
 		return new MapBuilder(Object.class, Object.class);
 	}

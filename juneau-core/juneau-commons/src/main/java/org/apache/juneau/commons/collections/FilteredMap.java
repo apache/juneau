@@ -555,7 +555,6 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private K convertKey(Object key) {
 		if (keyFunction != null) {
 			key = keyFunction.apply(key);
@@ -571,7 +570,6 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 		throw rex("Object of type {0} could not be converted to key type {1}", cn(key), cn(keyType));
 	}
 
-	@SuppressWarnings("unchecked")
 	private V convertValue(Object value) {
 		if (valueFunction != null) {
 			value = valueFunction.apply(value);
