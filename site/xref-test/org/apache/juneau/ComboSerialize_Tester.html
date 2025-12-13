@@ -155,7 +155,7 @@
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 			<strong class="jxr_keyword">if</strong> (x.getA().equals(BeanContext.Builder.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 				sb.beanContext((Consumer&lt;BeanContext.Builder&gt;) x.getB());
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (x.getA().isInstance(sb))
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 				sb.apply(Serializer.Builder.<strong class="jxr_keyword">class</strong>, (Consumer&lt;Serializer.Builder&gt;) x.getB());
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 				sb.asSubtype(Serializer.Builder.<strong class="jxr_keyword">class</strong>).ifPresent((Consumer&lt;Serializer.Builder&gt;) x.getB());
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 		});
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">return</strong> sb.build();
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 	}

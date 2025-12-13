@@ -196,7 +196,7 @@
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 			<strong class="jxr_keyword">if</strong> (x.getA().equals(BeanContext.Builder.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 				sb.beanContext((Consumer&lt;BeanContext.Builder&gt;) x.getB());
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (x.getA().isInstance(sb))
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 				sb.apply(Serializer.Builder.<strong class="jxr_keyword">class</strong>, (Consumer&lt;Serializer.Builder&gt;) x.getB());
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 				sb.asSubtype(Serializer.Builder.<strong class="jxr_keyword">class</strong>).ifPresent((Consumer&lt;Serializer.Builder&gt;) x.getB());
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 		});
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">return</strong> sb.build();
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 	}
@@ -208,7 +208,7 @@
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 			<strong class="jxr_keyword">if</strong> (x.getA().equals(BeanContext.Builder.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 				pb.beanContext((Consumer&lt;BeanContext.Builder&gt;) x.getB());
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (x.getA().isInstance(pb))
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 				pb.apply(Parser.Builder.<strong class="jxr_keyword">class</strong>, (Consumer&lt;Parser.Builder&gt;) x.getB());
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 				pb.asSubtype(Parser.Builder.<strong class="jxr_keyword">class</strong>).ifPresent((Consumer&lt;Parser.Builder&gt;) x.getB());
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 		});
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">return</strong> pb.build();
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 	}
