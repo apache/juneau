@@ -57,7 +57,7 @@
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<strong class="jxr_keyword">protected</strong> <a name="UrlPathMatch" href="../../../../../org/apache/juneau/rest/util/UrlPathMatch.html#UrlPathMatch">UrlPathMatch</a>(String path, <strong class="jxr_keyword">int</strong> matchedParts, String[] keys, String[] values) {
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">this</strong>.path = path;
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">this</strong>.matchedParts = matchedParts;
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">this</strong>.vars = keys == <strong class="jxr_keyword">null</strong> ? mape() : <strong class="jxr_keyword">new</strong> SimpleMap&lt;&gt;(keys, values);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">this</strong>.vars = keys == <strong class="jxr_keyword">null</strong> ? mape() : <strong class="jxr_keyword">new</strong> SimpleUnmodifiableMap&lt;&gt;(keys, values);
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  	}
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<em class="jxr_javadoccomment">/**</em>
