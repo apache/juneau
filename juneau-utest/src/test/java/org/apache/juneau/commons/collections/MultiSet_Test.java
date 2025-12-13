@@ -178,5 +178,134 @@ class MultiSet_Test extends TestBase {
 		assertEquals("3", it.next());
 		assertFalse(it.hasNext());
 	}
+
+	//====================================================================================================
+	// toString()
+	//====================================================================================================
+
+	@Test
+	void toString_singleCollection() {
+		var l1 = l(a("1", "2"));
+		var ms = new MultiSet<>(l1);
+
+		var expected = "[" + l1.toString() + "]";
+		assertEquals(expected, ms.toString());
+	}
+
+	@Test
+	void toString_multipleCollections() {
+		var l1 = l(a("1", "2"));
+		var l2 = l(a("3", "4"));
+		var l3 = l(a("5", "6"));
+		var ms = new MultiSet<>(l1, l2, l3);
+
+		var expected = "[" + l1.toString() + ", " + l2.toString() + ", " + l3.toString() + "]";
+		assertEquals(expected, ms.toString());
+	}
+
+	@Test
+	void toString_emptyCollections() {
+		var l1 = l(a());
+		var l2 = l(a());
+		var ms = new MultiSet<>(l1, l2);
+
+		var expected = "[" + l1.toString() + ", " + l2.toString() + "]";
+		assertEquals(expected, ms.toString());
+	}
+
+	@Test
+	void toString_mixedEmptyAndNonEmpty() {
+		List<String> l1 = l(a());
+		var l2 = l(a("1", "2"));
+		List<String> l3 = l(a());
+		var ms = new MultiSet<>(l1, l2, l3);
+
+		var expected = "[" + l1.toString() + ", " + l2.toString() + ", " + l3.toString() + "]";
+		assertEquals(expected, ms.toString());
+	}
+
+	//====================================================================================================
+	// equals() and hashCode()
+	//====================================================================================================
+
+	@Test
+	void equals_sameContents() {
+		var l1 = l(a("1", "2"));
+		var l2 = l(a("3", "4"));
+		var multiSet1 = new MultiSet<>(l1, l2);
+
+		var l3 = l(a("1", "2"));
+		var l4 = l(a("3", "4"));
+		var multiSet2 = new MultiSet<>(l3, l4);
+
+		assertTrue(multiSet1.equals(multiSet2));
+		assertTrue(multiSet2.equals(multiSet1));
+	}
+
+	@Test
+	void equals_differentContents() {
+		var l1 = l(a("1", "2"));
+		var multiSet1 = new MultiSet<>(l1);
+
+		var l2 = l(a("1", "3"));
+		var multiSet2 = new MultiSet<>(l2);
+
+		assertFalse(multiSet1.equals(multiSet2));
+		assertFalse(multiSet2.equals(multiSet1));
+	}
+
+	@Test
+	void equals_differentOrder() {
+		var l1 = l(a("1", "2"));
+		var l2 = l(a("3", "4"));
+		var multiSet1 = new MultiSet<>(l1, l2);
+
+		var l3 = l(a("3", "4"));
+		var l4 = l(a("1", "2"));
+		var multiSet2 = new MultiSet<>(l3, l4);
+
+		assertTrue(multiSet1.equals(multiSet2)); // Order doesn't matter for sets
+	}
+
+	@Test
+	void equals_regularSet() {
+		var l1 = l(a("1", "2", "3"));
+		var multiSet = new MultiSet<>(l1);
+
+		var regularSet = new LinkedHashSet<>(l(a("1", "2", "3")));
+
+		assertTrue(multiSet.equals(regularSet));
+		assertTrue(regularSet.equals(multiSet));
+	}
+
+	@Test
+	void equals_notASet() {
+		var l1 = l(a("1", "2"));
+		var multiSet = new MultiSet<>(l1);
+
+		assertFalse(multiSet.equals("not a set"));
+		assertFalse(multiSet.equals(null));
+	}
+
+	@Test
+	void hashCode_sameContents() {
+		var l1 = l(a("1", "2", "3"));
+		var multiSet1 = new MultiSet<>(l1);
+
+		var l2 = l(a("1", "2", "3"));
+		var multiSet2 = new MultiSet<>(l2);
+
+		assertEquals(multiSet1.hashCode(), multiSet2.hashCode());
+	}
+
+	@Test
+	void hashCode_regularSet() {
+		var l1 = l(a("1", "2", "3"));
+		var multiSet = new MultiSet<>(l1);
+
+		var regularSet = new LinkedHashSet<>(l(a("1", "2", "3")));
+
+		assertEquals(multiSet.hashCode(), regularSet.hashCode());
+	}
 }
 

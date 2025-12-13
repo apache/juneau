@@ -19,6 +19,7 @@ package org.apache.juneau.commons.collections;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A composite list that presents multiple lists as a single unified list.
@@ -457,6 +458,87 @@ public class MultiList<E> extends AbstractList<E> {
 		for (var list : l)
 			i += list.size();
 		return i;
+	}
+
+	/**
+	 * Returns a string representation of this MultiList.
+	 *
+	 * <p>
+	 * The format is <c>"[[...],[...],...]"</c> where each <c>[...]</c> is the standard
+	 * {@link List#toString()} representation of each underlying list.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	List&lt;String&gt; <jv>list1</jv> = List.of(<js>"a"</js>, <js>"b"</js>);
+	 * 	List&lt;String&gt; <jv>list2</jv> = List.of(<js>"c"</js>, <js>"d"</js>);
+	 * 	MultiList&lt;String&gt; <jv>multiList</jv> = <jk>new</jk> MultiList&lt;&gt;(<jv>list1</jv>, <jv>list2</jv>);
+	 * 	<jv>multiList</jv>.toString(); <jc>// Returns: "[[a, b], [c, d]]"</jc>
+	 * </p>
+	 *
+	 * @return A string representation of this MultiList.
+	 */
+	@Override
+	public String toString() {
+		return Arrays.stream(l).map(Object::toString).collect(Collectors.joining(", ", "[", "]"));
+	}
+
+	/**
+	 * Compares the specified object with this list for equality.
+	 *
+	 * <p>
+	 * Returns <jk>true</jk> if and only if the specified object is also a list, both lists have the
+	 * same size, and all corresponding pairs of elements in the two lists are <i>equal</i>. In other
+	 * words, two lists are defined to be equal if they contain the same elements in the same order.
+	 *
+	 * <p>
+	 * This implementation first checks if the specified object is this list. If so, it returns
+	 * <jk>true</jk>; if not, it checks if the specified object is a list. If not, it returns
+	 * <jk>false</jk>; if so, it iterates over both lists, comparing corresponding pairs of elements.
+	 *
+	 * @param o The object to be compared for equality with this list.
+	 * @return <jk>true</jk> if the specified object is equal to this list.
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+		if (!(o instanceof List))
+			return false;
+		var e1 = listIterator();
+		var e2 = ((List<?>)o).listIterator();
+		while (e1.hasNext() && e2.hasNext()) {
+			var o1 = e1.next();
+			var o2 = e2.next();
+			if (!(o1 == null ? o2 == null : o1.equals(o2)))
+				return false;
+		}
+		return !(e1.hasNext() || e2.hasNext());
+	}
+
+	/**
+	 * Returns the hash code value for this list.
+	 *
+	 * <p>
+	 * The hash code of a list is defined to be the result of the following calculation:
+	 * <p class='bcode w800'>
+	 * 	<jk>int</jk> hashCode = 1;
+	 * 	<jk>for</jk> (E e : list)
+	 * 		hashCode = 31 * hashCode + (e == <jk>null</jk> ? 0 : e.hashCode());
+	 * </p>
+	 *
+	 * <p>
+	 * This ensures that <c>list1.equals(list2)</c> implies that
+	 * <c>list1.hashCode()==list2.hashCode()</c> for any two lists <c>list1</c> and <c>list2</c>,
+	 * as required by the general contract of {@link Object#hashCode()}.
+	 *
+	 * @return The hash code value for this list.
+	 */
+	@Override
+	public int hashCode() {
+		int hashCode = 1;
+		for (E e : this)
+			hashCode = 31 * hashCode + (e == null ? 0 : e.hashCode());
+		return hashCode;
 	}
 }
 

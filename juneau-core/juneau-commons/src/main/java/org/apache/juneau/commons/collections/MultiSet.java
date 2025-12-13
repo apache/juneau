@@ -19,6 +19,7 @@ package org.apache.juneau.commons.collections;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A composite set that presents multiple collections as a single unified set.
@@ -263,5 +264,76 @@ public class MultiSet<E> extends AbstractSet<E> {
 		for (var c : l)
 			i += c.size();
 		return i;
+	}
+
+	/**
+	 * Returns a string representation of this MultiSet.
+	 *
+	 * <p>
+	 * The format is <c>"[[...],[...],...]"</c> where each <c>[...]</c> is the standard
+	 * {@link Collection#toString()} representation of each underlying collection.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	List&lt;String&gt; <jv>list1</jv> = List.of(<js>"a"</js>, <js>"b"</js>);
+	 * 	List&lt;String&gt; <jv>list2</jv> = List.of(<js>"c"</js>, <js>"d"</js>);
+	 * 	MultiSet&lt;String&gt; <jv>multiSet</jv> = <jk>new</jk> MultiSet&lt;&gt;(<jv>list1</jv>, <jv>list2</jv>);
+	 * 	<jv>multiSet</jv>.toString(); <jc>// Returns: "[[a, b], [c, d]]"</jc>
+	 * </p>
+	 *
+	 * @return A string representation of this MultiSet.
+	 */
+	@Override
+	public String toString() {
+		return Arrays.stream(l).map(Object::toString).collect(Collectors.joining(", ", "[", "]"));
+	}
+
+	/**
+	 * Compares the specified object with this set for equality.
+	 *
+	 * <p>
+	 * Returns <jk>true</jk> if the given object is also a set, the two sets have the same size,
+	 * and every member of the given set is contained in this set.
+	 *
+	 * <p>
+	 * This implementation checks if the specified object is a set, and if so, compares the sizes
+	 * and checks if all elements in the specified set are contained in this set.
+	 *
+	 * @param o Object to be compared for equality with this set.
+	 * @return <jk>true</jk> if the specified object is equal to this set.
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+		if (!(o instanceof Set))
+			return false;
+		var s = (Set<?>)o;
+		if (s.size() != size())
+			return false;
+		return containsAll(s);
+	}
+
+	/**
+	 * Returns the hash code value for this set.
+	 *
+	 * <p>
+	 * The hash code of a set is defined to be the sum of the hash codes of the elements in the set,
+	 * where the hash code of a <jk>null</jk> element is defined to be zero. This ensures that
+	 * <c>s1.equals(s2)</c> implies that <c>s1.hashCode()==s2.hashCode()</c> for any two sets
+	 * <c>s1</c> and <c>s2</c>, as required by the general contract of {@link Object#hashCode()}.
+	 *
+	 * <p>
+	 * This implementation iterates over the set, calling the <c>hashCode</c> method on each element
+	 * in the set, and adding up the results.
+	 *
+	 * @return The hash code value for this set.
+	 */
+	@Override
+	public int hashCode() {
+		int h = 0;
+		for (E e : this)
+			h += e == null ? 0 : e.hashCode();
+		return h;
 	}
 }

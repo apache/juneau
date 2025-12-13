@@ -489,5 +489,134 @@ class MultiList_Test extends TestBase {
 		assertEquals("3", array[2]);
 		assertEquals("4", array[3]);
 	}
+
+	//====================================================================================================
+	// toString()
+	//====================================================================================================
+
+	@Test
+	void f01_toString_singleList() {
+		var l1 = l(a("1", "2"));
+		var ml = new MultiList<>(l1);
+
+		var expected = "[" + l1.toString() + "]";
+		assertEquals(expected, ml.toString());
+	}
+
+	@Test
+	void f02_toString_multipleLists() {
+		var l1 = l(a("1", "2"));
+		var l2 = l(a("3", "4"));
+		var l3 = l(a("5", "6"));
+		var ml = new MultiList<>(l1, l2, l3);
+
+		var expected = "[" + l1.toString() + ", " + l2.toString() + ", " + l3.toString() + "]";
+		assertEquals(expected, ml.toString());
+	}
+
+	@Test
+	void f03_toString_emptyLists() {
+		var l1 = l(a());
+		var l2 = l(a());
+		var ml = new MultiList<>(l1, l2);
+
+		var expected = "[" + l1.toString() + ", " + l2.toString() + "]";
+		assertEquals(expected, ml.toString());
+	}
+
+	@Test
+	void f04_toString_mixedEmptyAndNonEmpty() {
+		List<String> l1 = l(a());
+		var l2 = l(a("1", "2"));
+		List<String> l3 = l(a());
+		var ml = new MultiList<>(l1, l2, l3);
+
+		var expected = "[" + l1.toString() + ", " + l2.toString() + ", " + l3.toString() + "]";
+		assertEquals(expected, ml.toString());
+	}
+
+	//====================================================================================================
+	// equals() and hashCode()
+	//====================================================================================================
+
+	@Test
+	void g01_equals_sameContents() {
+		var l1 = l(a("1", "2"));
+		var l2 = l(a("3", "4"));
+		var multiList1 = new MultiList<>(l1, l2);
+
+		var l3 = l(a("1", "2"));
+		var l4 = l(a("3", "4"));
+		var multiList2 = new MultiList<>(l3, l4);
+
+		assertTrue(multiList1.equals(multiList2));
+		assertTrue(multiList2.equals(multiList1));
+	}
+
+	@Test
+	void g02_equals_differentContents() {
+		var l1 = l(a("1", "2"));
+		var multiList1 = new MultiList<>(l1);
+
+		var l2 = l(a("1", "3"));
+		var multiList2 = new MultiList<>(l2);
+
+		assertFalse(multiList1.equals(multiList2));
+		assertFalse(multiList2.equals(multiList1));
+	}
+
+	@Test
+	void g03_equals_differentOrder() {
+		var l1 = l(a("1", "2"));
+		var l2 = l(a("3", "4"));
+		var multiList1 = new MultiList<>(l1, l2);
+
+		var l3 = l(a("3", "4"));
+		var l4 = l(a("1", "2"));
+		var multiList2 = new MultiList<>(l3, l4);
+
+		assertFalse(multiList1.equals(multiList2)); // Order matters for lists
+	}
+
+	@Test
+	void g04_equals_regularList() {
+		var l1 = l(a("1", "2", "3"));
+		var multiList = new MultiList<>(l1);
+
+		var regularList = new ArrayList<>(l(a("1", "2", "3")));
+
+		assertTrue(multiList.equals(regularList));
+		assertTrue(regularList.equals(multiList));
+	}
+
+	@Test
+	void g05_equals_notAList() {
+		var l1 = l(a("1", "2"));
+		var multiList = new MultiList<>(l1);
+
+		assertFalse(multiList.equals("not a list"));
+		assertFalse(multiList.equals(null));
+	}
+
+	@Test
+	void g06_hashCode_sameContents() {
+		var l1 = l(a("1", "2", "3"));
+		var multiList1 = new MultiList<>(l1);
+
+		var l2 = l(a("1", "2", "3"));
+		var multiList2 = new MultiList<>(l2);
+
+		assertEquals(multiList1.hashCode(), multiList2.hashCode());
+	}
+
+	@Test
+	void g07_hashCode_regularList() {
+		var l1 = l(a("1", "2", "3"));
+		var multiList = new MultiList<>(l1);
+
+		var regularList = new ArrayList<>(l(a("1", "2", "3")));
+
+		assertEquals(multiList.hashCode(), regularList.hashCode());
+	}
 }
 
