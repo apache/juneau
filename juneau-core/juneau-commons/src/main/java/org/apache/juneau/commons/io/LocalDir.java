@@ -23,8 +23,6 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.net.*;
 import java.nio.file.*;
 
-import org.apache.juneau.commons.utils.*;
-
 /**
  * Represents a directory that can be located either on the classpath or in the file system.
  *
@@ -144,7 +142,7 @@ public class LocalDir {
 	 */
 	public LocalDir(Class<?> clazz, String clazzPath) {
 		this.clazz = assertArgNotNull("clazz", clazz);
-		this.clazzPath = "/".equals(clazzPath) ? "/" : StringUtils.nullIfEmpty(trimTrailingSlashes(clazzPath));
+		this.clazzPath = "/".equals(clazzPath) ? "/" : nullIfEmpty(trimTrailingSlashes(clazzPath));
 		this.path = null;
 		this.hashCode = hash(clazz, clazzPath);
 	}

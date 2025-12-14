@@ -32,7 +32,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.internal.*;
 import org.apache.juneau.config.mod.*;
@@ -980,7 +979,7 @@ public class Config extends Context implements ConfigEventListener {
 		assertArgNotNull("key", key);
 		var sname = sname(key);
 		var skey = skey(key);
-		modifiers = StringUtils.nullIfEmpty(modifiers);
+		modifiers = nullIfEmpty(modifiers);
 
 		var s = applyMods(modifiers, serialize(value, serializer));
 

@@ -71,8 +71,8 @@ import org.apache.juneau.commons.collections.*;
 public class MediaType extends OpenApiElement {
 	private SchemaInfo schema;
 	private Object example;
-	private Map<String,Example> examples;
-	private Map<String,Encoding> encoding;
+	private Map<String,Example> examples = map();
+	private Map<String,Encoding> encoding = map();
 
 	/**
 	 * Default constructor.
@@ -89,8 +89,10 @@ public class MediaType extends OpenApiElement {
 
 		this.schema = copyFrom.schema;
 		this.example = copyFrom.example;
-		this.examples = copyOf(copyFrom.examples, Example::copy);
-		this.encoding = copyOf(copyFrom.encoding, Encoding::copy);
+		if (nn(copyFrom.examples))
+			examples.putAll(copyOf(copyFrom.examples, Example::copy));
+		if (nn(copyFrom.encoding))
+			encoding.putAll(copyOf(copyFrom.encoding, Encoding::copy));
 	}
 
 	/**
@@ -105,7 +107,7 @@ public class MediaType extends OpenApiElement {
 	public MediaType addEncoding(String key, Encoding value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		encoding = mapb(String.class, Encoding.class).to(encoding).sparse().add(key, value).build();
+		encoding.put(key, value);
 		return this;
 	}
 
@@ -119,7 +121,7 @@ public class MediaType extends OpenApiElement {
 	public MediaType addExample(String name, Example example) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("example", example);
-		examples = mapb(String.class, Example.class).to(examples).add(name, example).build();
+		examples.put(name, example);
 		return this;
 	}
 
@@ -149,7 +151,7 @@ public class MediaType extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Encoding> getEncoding() { return encoding; }
+	public Map<String,Encoding> getEncoding() { return nullIfEmpty(encoding); }
 
 	/**
 	 * Bean property getter:  <property>x-example</property>.
@@ -167,7 +169,7 @@ public class MediaType extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Example> getExamples() { return examples; }
+	public Map<String,Example> getExamples() { return nullIfEmpty(examples); }
 
 	/**
 	 * Bean property getter:  <property>schema</property>.
@@ -182,8 +184,8 @@ public class MediaType extends OpenApiElement {
 		var s = setb(String.class)
 			.addIf(nn(schema), "schema")
 			.addIf(nn(example), "x-example")
-			.addIf(nn(encoding), "encoding")
-			.addIf(nn(examples), "examples")
+			.addIf(isNotEmpty(encoding), "encoding")
+			.addIf(isNotEmpty(examples), "examples")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -213,7 +215,9 @@ public class MediaType extends OpenApiElement {
 	 * @return This object
 	 */
 	public MediaType setEncoding(Map<String,Encoding> value) {
-		encoding = copyOf(value);
+		encoding.clear();
+		if (nn(value))
+			encoding.putAll(value);
 		return this;
 	}
 
@@ -243,7 +247,9 @@ public class MediaType extends OpenApiElement {
 	 * @return This object
 	 */
 	public MediaType setExamples(Map<String,Example> value) {
-		examples = copyOf(value);
+		examples.clear();
+		if (nn(value))
+			examples.putAll(value);
 		return this;
 	}
 

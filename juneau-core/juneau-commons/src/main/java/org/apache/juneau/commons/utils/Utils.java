@@ -19,7 +19,6 @@ package org.apache.juneau.commons.utils;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.text.*;
@@ -1001,11 +1000,46 @@ public class Utils {
 		return value != null;
 	}
 
+	/**
+	 * Returns <jk>true</jk> if the specified object is <jk>null</jk>.
+	 *
+	 * <p>
+	 * Equivalent to <c><jv>value</jv> == <jk>null</jk></c>, but with a more readable method name.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>if</jk> (<jsm>isNull</jsm>(<jv>myObject</jv>)) {
+	 * 		<jc>// Handle null case</jc>
+	 * 	}
+	 * </p>
+	 *
+	 * @param <T> The object type.
+	 * @param value The object to check.
+	 * @return <jk>true</jk> if the specified object is <jk>null</jk>.
+	 * @see #isNotNull(Object)
+	 * @see #nn(Object)
+	 */
 	public static <T> boolean isNull(T value) {
 		return value == null;
 	}
 
-	public static <T> boolean isAllNull(T...values) {
+	/**
+	 * Returns <jk>true</jk> if all specified values are <jk>null</jk>.
+	 *
+	 * <p>
+	 * If the values array itself is <jk>null</jk>, returns <jk>true</jk>.
+	 * If any value in the array is not <jk>null</jk>, returns <jk>false</jk>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>boolean</jk> <jv>allNull</jv> = <jsm>isAllNull</jsm>(<jk>null</jk>, <jk>null</jk>, <jk>null</jk>);  <jc>// true</jc>
+	 * 	<jk>boolean</jk> <jv>notAllNull</jv> = <jsm>isAllNull</jsm>(<jk>null</jk>, <js>"value"</js>, <jk>null</jk>);  <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param values The values to check.
+	 * @return <jk>true</jk> if all values are <jk>null</jk> (or the array is <jk>null</jk>), <jk>false</jk> otherwise.
+	 */
+	public static boolean isAllNull(Object...values) {
 		if (values == null) return true;
 		for (var v : values)
 			if (v != null)
@@ -1192,6 +1226,7 @@ public class Utils {
 	 * @return <jk>true</jk> if the objects are not equal.
 	 * @see #eq(Object, Object)
 	 */
+	// TODO - Rename this to neq, then add a ne for not-empty
 	public static <T> boolean ne(T s1, T s2) {
 		return ! eq(s1, s2);
 	}
@@ -1218,6 +1253,7 @@ public class Utils {
 	 * @return <jk>true</jk> if the objects are not equal based on the test, or if one is <jk>null</jk> and the other is not.
 	 * @see #eq(Object, Object, BiPredicate)
 	 */
+	// TODO - Rename this to neq, then add a ne for not-empty
 	public static <T,U> boolean ne(T o1, U o2, BiPredicate<T,U> test) {
 		if (o1 == null)
 			return nn(o2);
@@ -1247,6 +1283,7 @@ public class Utils {
 	 * @return <jk>true</jk> if the strings are not equal ignoring case.
 	 * @see #eqic(String, String)
 	 */
+	// TODO - Rename this to neqic, then add a ne for not-empty
 	public static boolean neic(String s1, String s2) {
 		return ! eqic(s1, s2);
 	}
@@ -1270,7 +1307,7 @@ public class Utils {
 	 * @return <jk>true</jk> if the specified object is not <jk>null</jk>.
 	 */
 	public static boolean nn(Object o) {
-		return isNotNull(o);
+		return o != null;
 	}
 
 	/**
@@ -1713,4 +1750,61 @@ public class Utils {
 
 	/** Constructor - This class is meant to be subclasses. */
 	protected Utils() {}
+
+	/**
+	 * Returns the specified string, or <jk>null</jk> if that string is <jk>null</jk> or empty.
+	 *
+	 * @param value The string value to check.
+	 * @return The string value, or <jk>null</jk> if the string is <jk>null</jk> or empty.
+	 */
+	public static String nullIfEmpty(String value) {
+		return StringUtils.isEmpty(value) ? null : value;
+	}
+
+	/**
+	 * Returns <jk>null</jk> if the specified map is <jk>null</jk> or empty, otherwise returns the map.
+	 *
+	 * <p>
+	 * This is a convenience method for preserving backward compatibility when maps are initialized immediately
+	 * but getters should return <jk>null</jk> if the map is empty.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param val The map to check.
+	 * @return <jk>null</jk> if the map is <jk>null</jk> or empty, otherwise the map itself.
+	 */
+	public static <K,V> Map<K,V> nullIfEmpty(Map<K,V> val) {
+		return isEmpty(val) ? null : val;
+	}
+
+	/**
+	 * Returns <jk>null</jk> if the specified list is <jk>null</jk> or empty, otherwise returns the list.
+	 *
+	 * <p>
+	 * This is a convenience method for preserving backward compatibility when lists are initialized immediately
+	 * but getters should return <jk>null</jk> if the list is empty.
+	 *
+	 * @param <E> The element type.
+	 * @param val The list to check.
+	 * @return <jk>null</jk> if the list is <jk>null</jk> or empty, otherwise the list itself.
+	 */
+	public static <E> List<E> nullIfEmpty(List<E> val) {
+		return isEmpty(val) ? null : val;
+	}
+
+	/**
+	 * Returns <jk>null</jk> if the specified set is <jk>null</jk> or empty, otherwise returns the set.
+	 *
+	 * <p>
+	 * This is a convenience method for preserving backward compatibility when sets are initialized immediately
+	 * but getters should return <jk>null</jk> if the set is empty.
+	 *
+	 * @param <E> The element type.
+	 * @param val The set to check.
+	 * @return <jk>null</jk> if the set is <jk>null</jk> or empty, otherwise the set itself.
+	 */
+	public static <E> Set<E> nullIfEmpty(Set<E> val) {
+		return isEmpty(val) ? null : val;
+	}
+
 }

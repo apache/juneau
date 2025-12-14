@@ -18,10 +18,10 @@ package org.apache.juneau;
 
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 
@@ -123,10 +123,10 @@ public class UriContext {
 	 */
 	public UriContext(String s) throws ParseException {
 		var m = JsonMap.ofJson(s);
-		this.authority = StringUtils.nullIfEmpty(trimSlashes(m.getString("authority")));
-		this.contextRoot = StringUtils.nullIfEmpty(trimSlashes(m.getString("contextRoot")));
-		this.servletPath = StringUtils.nullIfEmpty(trimSlashes(m.getString("servletPath")));
-		this.pathInfo = StringUtils.nullIfEmpty(trimSlashes(m.getString("pathInfo")));
+		this.authority = nullIfEmpty(trimSlashes(m.getString("authority")));
+		this.contextRoot = nullIfEmpty(trimSlashes(m.getString("contextRoot")));
+		this.servletPath = nullIfEmpty(trimSlashes(m.getString("servletPath")));
+		this.pathInfo = nullIfEmpty(trimSlashes(m.getString("pathInfo")));
 		this.parentPath = this.pathInfo == null || this.pathInfo.indexOf('/') == -1 ? null : this.pathInfo.substring(0, this.pathInfo.lastIndexOf('/'));
 	}
 
@@ -150,10 +150,10 @@ public class UriContext {
 	 */
 	@Beanc
 	public UriContext(@Name("authority") String authority, @Name("contextRoot") String contextRoot, @Name("servletPath") String servletPath, @Name("pathInfo") String pathInfo) {
-		this.authority = StringUtils.nullIfEmpty(trimSlashes(authority));
-		this.contextRoot = StringUtils.nullIfEmpty(trimSlashes(contextRoot));
-		this.servletPath = StringUtils.nullIfEmpty(trimSlashes(servletPath));
-		this.pathInfo = StringUtils.nullIfEmpty(trimSlashes(pathInfo));
+		this.authority = nullIfEmpty(trimSlashes(authority));
+		this.contextRoot = nullIfEmpty(trimSlashes(contextRoot));
+		this.servletPath = nullIfEmpty(trimSlashes(servletPath));
+		this.pathInfo = nullIfEmpty(trimSlashes(pathInfo));
 		this.parentPath = this.pathInfo == null || this.pathInfo.indexOf('/') == -1 ? null : this.pathInfo.substring(0, this.pathInfo.lastIndexOf('/'));
 	}
 

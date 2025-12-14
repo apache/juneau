@@ -1155,5 +1155,76 @@ class Utils_Test extends TestBase {
 		assertEquals("test", unwrap("test"));
 		assertEquals(123, unwrap(123));
 	}
+
+	//====================================================================================================
+	// nullIfEmpty(String)
+	//====================================================================================================
+	@Test
+	void a059_nullIfEmpty_String() {
+		assertNull(nullIfEmpty((String)null));
+		assertNull(nullIfEmpty(""));
+		assertNotNull(nullIfEmpty("x"));
+		assertEquals("test", nullIfEmpty("test"));
+	}
+
+	//====================================================================================================
+	// nullIfEmpty(Map)
+	//====================================================================================================
+	@Test
+	void a060_nullIfEmpty_Map() {
+		// Null map
+		assertNull(nullIfEmpty((Map<String,Integer>)null));
+
+		// Empty map
+		Map<String,Integer> empty = new HashMap<>();
+		assertNull(nullIfEmpty(empty));
+
+		// Non-empty map
+		Map<String,Integer> nonEmpty = new HashMap<>();
+		nonEmpty.put("a", 1);
+		assertNotNull(nullIfEmpty(nonEmpty));
+		assertSame(nonEmpty, nullIfEmpty(nonEmpty));
+		assertEquals(1, nullIfEmpty(nonEmpty).size());
+	}
+
+	//====================================================================================================
+	// nullIfEmpty(List)
+	//====================================================================================================
+	@Test
+	void a061_nullIfEmpty_List() {
+		// Null list
+		assertNull(nullIfEmpty((List<String>)null));
+
+		// Empty list
+		List<String> empty = new ArrayList<>();
+		assertNull(nullIfEmpty(empty));
+
+		// Non-empty list
+		List<String> nonEmpty = new ArrayList<>();
+		nonEmpty.add("a");
+		assertNotNull(nullIfEmpty(nonEmpty));
+		assertSame(nonEmpty, nullIfEmpty(nonEmpty));
+		assertEquals(1, nullIfEmpty(nonEmpty).size());
+	}
+
+	//====================================================================================================
+	// nullIfEmpty(Set)
+	//====================================================================================================
+	@Test
+	void a062_nullIfEmpty_Set() {
+		// Null set
+		assertNull(nullIfEmpty((Set<String>)null));
+
+		// Empty set
+		Set<String> empty = new HashSet<>();
+		assertNull(nullIfEmpty(empty));
+
+		// Non-empty set
+		Set<String> nonEmpty = new HashSet<>();
+		nonEmpty.add("a");
+		assertNotNull(nullIfEmpty(nonEmpty));
+		assertSame(nonEmpty, nullIfEmpty(nonEmpty));
+		assertEquals(1, nullIfEmpty(nonEmpty).size());
+	}
 }
 

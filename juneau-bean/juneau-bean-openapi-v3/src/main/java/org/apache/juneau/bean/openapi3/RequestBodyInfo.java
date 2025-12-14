@@ -68,7 +68,7 @@ import org.apache.juneau.commons.collections.*;
 public class RequestBodyInfo extends OpenApiElement {
 
 	private String description;
-	private Map<String,MediaType> content;
+	private Map<String,MediaType> content = map();
 	private Boolean required;
 
 	/**
@@ -86,7 +86,8 @@ public class RequestBodyInfo extends OpenApiElement {
 
 		this.description = copyFrom.description;
 		this.required = copyFrom.required;
-		this.content = copyOf(copyFrom.content, MediaType::copy);
+		if (nn(copyFrom.content))
+			content.putAll(copyOf(copyFrom.content, MediaType::copy));
 	}
 
 	/**
@@ -102,7 +103,7 @@ public class RequestBodyInfo extends OpenApiElement {
 	public RequestBodyInfo addContent(String key, MediaType value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		content = mapb(String.class, MediaType.class).to(content).sparse().add(key, value).build();
+		content.put(key, value);
 		return this;
 	}
 
@@ -131,7 +132,7 @@ public class RequestBodyInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,MediaType> getContent() { return content; }
+	public Map<String,MediaType> getContent() { return nullIfEmpty(content); }
 
 	/**
 	 * Bean property getter:  <property>contentType</property>.
@@ -157,7 +158,7 @@ public class RequestBodyInfo extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(content), "content")
+			.addIf(isNotEmpty(content), "content")
 			.addIf(nn(description), "description")
 			.addIf(nn(required), "required")
 			.build();
@@ -188,7 +189,9 @@ public class RequestBodyInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public RequestBodyInfo setContent(Map<String,MediaType> value) {
-		content = copyOf(value);
+		content.clear();
+		if (nn(value))
+			content.putAll(value);
 		return this;
 	}
 

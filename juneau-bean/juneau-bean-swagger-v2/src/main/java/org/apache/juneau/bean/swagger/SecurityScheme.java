@@ -86,7 +86,7 @@ public class SecurityScheme extends SwaggerElement {
 	private static final String[] VALID_TYPES = { "basic", "apiKey", "oauth2" };
 
 	private String type, description, name, in, flow, authorizationUrl, tokenUrl;
-	private Map<String,String> scopes;
+	private Map<String,String> scopes = map();
 
 	/**
 	 * Default constructor.
@@ -106,7 +106,8 @@ public class SecurityScheme extends SwaggerElement {
 		this.flow = copyFrom.flow;
 		this.in = copyFrom.in;
 		this.name = copyFrom.name;
-		this.scopes = copyOf(copyFrom.scopes);
+		if (nn(copyFrom.scopes))
+			scopes.putAll(copyFrom.scopes);
 		this.tokenUrl = copyFrom.tokenUrl;
 		this.type = copyFrom.type;
 	}
@@ -124,7 +125,7 @@ public class SecurityScheme extends SwaggerElement {
 	public SecurityScheme addScope(String key, String value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		scopes = mapb(String.class, String.class).to(scopes).sparse().add(key, value).build();
+		scopes.put(key, value);
 		return this;
 	}
 
@@ -211,7 +212,7 @@ public class SecurityScheme extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,String> getScopes() { return scopes; }
+	public Map<String,String> getScopes() { return nullIfEmpty(scopes); }
 
 	/**
 	 * Bean property getter:  <property>tokenUrl</property>.
@@ -242,7 +243,7 @@ public class SecurityScheme extends SwaggerElement {
 			.addIf(nn(flow), "flow")
 			.addIf(nn(in), "in")
 			.addIf(nn(name), "name")
-			.addIf(nn(scopes), "scopes")
+			.addIf(isNotEmpty(scopes), "scopes")
 			.addIf(nn(tokenUrl), "tokenUrl")
 			.addIf(nn(type), "type")
 			.build();
@@ -374,7 +375,9 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SecurityScheme setScopes(Map<String,String> value) {
-		scopes = copyOf(value);
+		scopes.clear();
+		if (nn(value))
+			scopes.putAll(value);
 		return this;
 	}
 

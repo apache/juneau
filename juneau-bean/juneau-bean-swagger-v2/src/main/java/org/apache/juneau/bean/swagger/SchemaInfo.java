@@ -110,7 +110,7 @@ public class SchemaInfo extends SwaggerElement {
 	private Set<Object> _enum;  // NOSONAR - Intentional naming.
 	private Set<SchemaInfo> allOf;
 	private Set<String> requiredProperties;
-	private Map<String,SchemaInfo> properties;
+	private Map<String,SchemaInfo> properties = map();
 	private SchemaInfo additionalProperties;
 
 	/**
@@ -156,7 +156,8 @@ public class SchemaInfo extends SwaggerElement {
 		this.type = copyFrom.type;
 		this.uniqueItems = copyFrom.uniqueItems;
 		this.xml = copyFrom.xml == null ? null : copyFrom.xml.copy();
-		this.properties = copyOf(copyFrom.properties, SchemaInfo::copy);
+		if (nn(copyFrom.properties))
+			properties.putAll(copyOf(copyFrom.properties, SchemaInfo::copy));
 	}
 
 	/**
@@ -227,7 +228,7 @@ public class SchemaInfo extends SwaggerElement {
 	public SchemaInfo addProperty(String key, SchemaInfo value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		properties = mapb(String.class, SchemaInfo.class).to(properties).sparse().add(key, value).build();
+		properties.put(key, value);
 		return this;
 	}
 
@@ -473,7 +474,7 @@ public class SchemaInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,SchemaInfo> getProperties() { return properties; }
+	public Map<String,SchemaInfo> getProperties() { return nullIfEmpty(properties); }
 
 	/**
 	 * Bean property getter:  <property>readOnly</property>.
@@ -561,7 +562,7 @@ public class SchemaInfo extends SwaggerElement {
 			.addIf(nn(minProperties), "minProperties")
 			.addIf(nn(multipleOf), "multipleOf")
 			.addIf(nn(pattern), "pattern")
-			.addIf(nn(properties), "properties")
+			.addIf(isNotEmpty(properties), "properties")
 			.addIf(nn(readOnly), "readOnly")
 			.addIf(nn(ref), "$ref")
 			.addIf(nn(required), "required")
@@ -602,8 +603,7 @@ public class SchemaInfo extends SwaggerElement {
 		if (nn(items))
 			items = items.resolveRefs(swagger, refStack, maxDepth);
 
-		if (nn(properties))
-			properties.entrySet().forEach(x -> x.setValue(x.getValue().resolveRefs(swagger, refStack, maxDepth)));
+		properties.entrySet().forEach(x -> x.setValue(x.getValue().resolveRefs(swagger, refStack, maxDepth)));
 
 		if (nn(additionalProperties))
 			additionalProperties = additionalProperties.resolveRefs(swagger, refStack, maxDepth);
@@ -994,7 +994,9 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setProperties(Map<String,SchemaInfo> value) {
-		properties = copyOf(value);
+		properties.clear();
+		if (nn(value))
+			properties.putAll(value);
 		return this;
 	}
 

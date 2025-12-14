@@ -81,7 +81,7 @@ public class HeaderInfo extends OpenApiElement {
 	private Boolean required, explode, deprecated, allowEmptyValue, allowReserved;
 	private SchemaInfo schema;
 	private Object example;
-	private Map<String,Example> examples;
+	private Map<String,Example> examples = map();
 
 	/**
 	 * Default constructor.
@@ -105,7 +105,8 @@ public class HeaderInfo extends OpenApiElement {
 		this.ref = copyFrom.ref;
 		this.explode = copyFrom.explode;
 		this.deprecated = copyFrom.deprecated;
-		this.examples = copyOf(copyFrom.examples, Example::copy);
+		if (nn(copyFrom.examples))
+			examples.putAll(copyOf(copyFrom.examples, Example::copy));
 	}
 
 	/**
@@ -118,7 +119,7 @@ public class HeaderInfo extends OpenApiElement {
 	public HeaderInfo addExample(String name, Example example) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("example", example);
-		examples = mapb(String.class, Example.class).to(examples).sparse().add(name, example).build();
+		examples.put(name, example);
 		return this;
 	}
 
@@ -205,7 +206,7 @@ public class HeaderInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Example> getExamples() { return examples; }
+	public Map<String,Example> getExamples() { return nullIfEmpty(examples); }
 
 	/**
 	 * Bean property getter:  <property>required</property>.
@@ -251,7 +252,7 @@ public class HeaderInfo extends OpenApiElement {
 			.addIf(nn(allowReserved), "allowReserved")
 			.addIf(nn(deprecated), "deprecated")
 			.addIf(nn(description), "description")
-			.addIf(nn(examples), "examples")
+			.addIf(isNotEmpty(examples), "examples")
 			.addIf(nn(explode), "explode")
 			.addIf(nn(required), "required")
 			.addIf(nn(schema), "schema")
@@ -399,7 +400,9 @@ public class HeaderInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public HeaderInfo setExamples(Map<String,Example> value) {
-		examples = copyOf(value);
+		examples.clear();
+		if (nn(value))
+			examples.putAll(value);
 		return this;
 	}
 

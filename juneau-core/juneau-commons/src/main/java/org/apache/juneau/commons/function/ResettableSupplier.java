@@ -150,4 +150,33 @@ public class ResettableSupplier<T> implements OptionalSupplier<T> {
 	public void set(T value) {
 		cache.set(opt(value));
 	}
+
+	/**
+	 * Returns <jk>true</jk> if the supplier has not yet been called (cache is empty).
+	 *
+	 * <p>
+	 * This method checks whether the cached value is <jk>null</jk>, which indicates that
+	 * {@link #get()} has not yet been called, or the cache was reset.
+	 *
+	 * @return <jk>true</jk> if the supplier has not been called yet, <jk>false</jk> if a value has been cached.
+	 */
+	public boolean isSupplied() {
+		return cache.get() == null;
+	}
+
+	/**
+	 * Creates a copy of this supplier.
+	 *
+	 * <p>
+	 * If a value has been cached, the copy will use a supplier that returns that cached value.
+	 * If no value has been cached yet, the copy will use the original supplier.
+	 *
+	 * @return A new {@link ResettableSupplier} instance with the same state as this supplier.
+	 */
+	public ResettableSupplier<T> copy() {
+		Optional<T> o = cache.get();
+		if (o == null)
+			return new ResettableSupplier<>(supplier);
+		return new ResettableSupplier<>(()->o.get());
+	}
 }

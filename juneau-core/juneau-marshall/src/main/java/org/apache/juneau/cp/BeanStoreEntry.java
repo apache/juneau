@@ -18,12 +18,12 @@ package org.apache.juneau.cp;
 
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.function.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * Represents a bean in a {@link BeanStore}.
@@ -110,7 +110,7 @@ public class BeanStoreEntry<T> {
 	 * @return <jk>true</jk> if this bean is exactly of the specified type and has the specified name.
 	 */
 	public boolean matches(Class<?> type, String name) {
-		name = nullIfEmpty(name);
+		name = Utils.nullIfEmpty(name);
 		return matches(type) && eq(this.name, name);
 	}
 

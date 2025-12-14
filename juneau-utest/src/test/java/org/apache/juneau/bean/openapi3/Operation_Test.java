@@ -336,7 +336,7 @@ class Operation_Test extends TestBase {
 			assertMapped(
 				TESTER.bean(), (obj,prop) -> cns(obj.get(prop, Object.class)),
 				"callbacks,deprecated,description,externalDocs,operationId,parameters,requestBody,responses,security,servers,summary,tags,x1,x2",
-				"FilteredMap,Boolean,String,ExternalDocumentation,String,ArrayList,RequestBodyInfo,FilteredMap,ArrayList,ArrayList,String,ArrayList,String,<null>"
+				"LinkedHashMap,Boolean,String,ExternalDocumentation,String,ArrayList,RequestBodyInfo,LinkedHashMap,ArrayList,ArrayList,String,ArrayList,String,<null>"
 			);
 		}
 

@@ -101,12 +101,12 @@ public class Swagger extends SwaggerElement {
 	private Set<MediaType> consumes, produces;
 	private Set<Tag> tags;
 	private List<Map<String,List<String>>> security;
-	private Map<String,JsonMap> definitions;
-	private Map<String,ParameterInfo> parameters;
-	private Map<String,ResponseInfo> responses;
-	private Map<String,SecurityScheme> securityDefinitions;
+	private Map<String,JsonMap> definitions = map();
+	private Map<String,ParameterInfo> parameters = map();
+	private Map<String,ResponseInfo> responses = map();
+	private Map<String,SecurityScheme> securityDefinitions = map();
 
-	private Map<String,OperationMap> paths;
+	private Map<String,OperationMap> paths = new TreeMap<>(PATH_COMPARATOR);
 
 	/**
 	 * Default constructor.
@@ -131,17 +131,22 @@ public class Swagger extends SwaggerElement {
 		this.swagger = copyFrom.swagger;
 
 		// TODO - Definitions are not deep copied, so they should not contain references.
-		this.definitions = copyOf(copyFrom.definitions, JsonMap::new);
+		if (nn(copyFrom.definitions))
+			definitions.putAll(copyOf(copyFrom.definitions, JsonMap::new));
 
-		this.paths = copyOf(copyFrom.paths, v -> {
-			var m = new OperationMap();
-			v.forEach((k2, v2) -> m.put(k2, v2.copy()));
-			return m;
-		});
+		if (nn(copyFrom.paths))
+			copyFrom.paths.forEach((k, v) -> {
+				var m = new OperationMap();
+				v.forEach((k2, v2) -> m.put(k2, v2.copy()));
+				paths.put(k, m);
+			});
 
-		this.parameters = copyOf(copyFrom.parameters, ParameterInfo::copy);
-		this.responses = copyOf(copyFrom.responses, ResponseInfo::copy);
-		this.securityDefinitions = copyOf(copyFrom.securityDefinitions, SecurityScheme::copy);
+		if (nn(copyFrom.parameters))
+			parameters.putAll(copyOf(copyFrom.parameters, ParameterInfo::copy));
+		if (nn(copyFrom.responses))
+			responses.putAll(copyOf(copyFrom.responses, ResponseInfo::copy));
+		if (nn(copyFrom.securityDefinitions))
+			securityDefinitions.putAll(copyOf(copyFrom.securityDefinitions, SecurityScheme::copy));
 
 		this.security = copyOf(copyFrom.security, x -> {
 			Map<String,List<String>> m2 = map();
@@ -198,7 +203,7 @@ public class Swagger extends SwaggerElement {
 	public Swagger addDefinition(String name, JsonMap schema) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("schema", schema);
-		definitions = mapb(String.class, JsonMap.class).to(definitions).sparse().add(name, schema).build();
+		definitions.put(name, schema);
 		return this;
 	}
 
@@ -215,7 +220,7 @@ public class Swagger extends SwaggerElement {
 	public Swagger addParameter(String name, ParameterInfo parameter) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("parameter", parameter);
-		parameters = mapb(String.class, ParameterInfo.class).to(parameters).sparse().add(name, parameter).build();
+		parameters.put(name, parameter);
 		return this;
 	}
 
@@ -234,9 +239,7 @@ public class Swagger extends SwaggerElement {
 		assertArgNotNull("path", path);
 		assertArgNotNull("methodName", methodName);
 		assertArgNotNull("operation", operation);
-		if (paths == null)
-			paths = new TreeMap<>(PATH_COMPARATOR);
-		getPaths().computeIfAbsent(path, k -> new OperationMap()).put(methodName, operation);
+		paths.computeIfAbsent(path, k -> new OperationMap()).put(methodName, operation);
 		return this;
 	}
 
@@ -287,7 +290,7 @@ public class Swagger extends SwaggerElement {
 	public Swagger addResponse(String name, ResponseInfo response) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("response", response);
-		responses = mapb(String.class, ResponseInfo.class).to(responses).sparse().add(name, response).build();
+		responses.put(name, response);
 		return this;
 	}
 
@@ -387,7 +390,7 @@ public class Swagger extends SwaggerElement {
 	public Swagger addSecurityDefinition(String name, SecurityScheme securityScheme) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("securityScheme", securityScheme);
-		securityDefinitions = mapb(String.class, SecurityScheme.class).to(securityDefinitions).sparse().add(name, securityScheme).build();
+		securityDefinitions.put(name, securityScheme);
 		return this;
 	}
 
@@ -519,7 +522,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,JsonMap> getDefinitions() { return definitions; }
+	public Map<String,JsonMap> getDefinitions() { return nullIfEmpty(definitions); }
 
 	/**
 	 * Bean property getter:  <property>externalDocs</property>.
@@ -588,7 +591,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,ParameterInfo> getParameters() { return parameters; }
+	public Map<String,ParameterInfo> getParameters() { return nullIfEmpty(parameters); }
 
 	/**
 	 * Shortcut for calling <c>getPaths().get(path);</c>
@@ -609,7 +612,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,OperationMap> getPaths() { return paths; }
+	public Map<String,OperationMap> getPaths() { return nullIfEmpty(paths); }
 
 	/**
 	 * Bean property getter:  <property>produces</property>.
@@ -656,7 +659,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,ResponseInfo> getResponses() { return responses; }
+	public Map<String,ResponseInfo> getResponses() { return nullIfEmpty(responses); }
 
 	/**
 	 * Bean property getter:  <property>schemes</property>.
@@ -686,7 +689,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,SecurityScheme> getSecurityDefinitions() { return securityDefinitions; }
+	public Map<String,SecurityScheme> getSecurityDefinitions() { return nullIfEmpty(securityDefinitions); }
 
 	/**
 	 * Bean property getter:  <property>swagger</property>.
@@ -714,17 +717,17 @@ public class Swagger extends SwaggerElement {
 		var s = setb(String.class)
 			.addIf(nn(basePath), "basePath")
 			.addIf(nn(consumes), "consumes")
-			.addIf(nn(definitions), "definitions")
+			.addIf(isNotEmpty(definitions), "definitions")
 			.addIf(nn(externalDocs), "externalDocs")
 			.addIf(nn(host), "host")
 			.addIf(nn(info), "info")
-			.addIf(nn(parameters), "parameters")
-			.addIf(nn(paths), "paths")
+			.addIf(isNotEmpty(parameters), "parameters")
+			.addIf(isNotEmpty(paths), "paths")
 			.addIf(nn(produces), "produces")
-			.addIf(nn(responses), "responses")
+			.addIf(isNotEmpty(responses), "responses")
 			.addIf(nn(schemes), "schemes")
 			.addIf(nn(security), "security")
-			.addIf(nn(securityDefinitions), "securityDefinitions")
+			.addIf(isNotEmpty(securityDefinitions), "securityDefinitions")
 			.addIf(nn(swagger), "swagger")
 			.addIf(nn(tags), "tags")
 			.build();
@@ -822,7 +825,9 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setDefinitions(Map<String,JsonMap> value) {
-		definitions = copyOf(value);
+		definitions.clear();
+		if (nn(value))
+			definitions.putAll(value);
 		return this;
 	}
 
@@ -891,7 +896,9 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setParameters(Map<String,ParameterInfo> value) {
-		parameters = copyOf(value);
+		parameters.clear();
+		if (nn(value))
+			parameters.putAll(value);
 		return this;
 	}
 
@@ -908,7 +915,9 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setPaths(Map<String,OperationMap> value) {
-		paths = mapb(String.class, OperationMap.class).sparse().sorted(PATH_COMPARATOR).addAll(value).build();
+		paths.clear();
+		if (nn(value))
+			paths.putAll(value);
 		return this;
 	}
 
@@ -956,7 +965,9 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setResponses(Map<String,ResponseInfo> value) {
-		responses = copyOf(value);
+		responses.clear();
+		if (nn(value))
+			responses.putAll(value);
 		return this;
 	}
 
@@ -1027,7 +1038,9 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setSecurityDefinitions(Map<String,SecurityScheme> value) {
-		securityDefinitions = copyOf(value);
+		securityDefinitions.clear();
+		if (nn(value))
+			securityDefinitions.putAll(value);
 		return this;
 	}
 

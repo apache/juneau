@@ -4869,16 +4869,6 @@ public class StringUtils {
 	}
 
 	/**
-	 * Returns the specified string, or <jk>null</jk> if that string is <jk>null</jk> or empty.
-	 *
-	 * @param value The string value to check.
-	 * @return The string value, or <jk>null</jk> if the string is <jk>null</jk> or empty.
-	 */
-	public static String nullIfEmpty(String value) {
-		return isEmpty(value) ? null : value;
-	}
-
-	/**
 	 * Returns an obfuscated version of the specified string.
 	 *
 	 * @param s The string to obfuscate.

@@ -75,7 +75,7 @@ import org.apache.juneau.commons.collections.*;
 public class Discriminator extends OpenApiElement {
 
 	private String propertyName;
-	private Map<String,String> mapping;
+	private Map<String,String> mapping = map();
 
 	/**
 	 * Default constructor.
@@ -104,7 +104,7 @@ public class Discriminator extends OpenApiElement {
 	public Discriminator addMapping(String key, String value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		mapping = mapb(String.class, String.class).to(mapping).sparse().add(key, value).build();
+		mapping.put(key, value);
 		return this;
 	}
 
@@ -135,7 +135,7 @@ public class Discriminator extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,String> getMapping() { return mapping; }
+	public Map<String,String> getMapping() { return nullIfEmpty(mapping); }
 
 	/**
 	 * Bean property getter:  <property>propertyName</property>.
@@ -151,7 +151,7 @@ public class Discriminator extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(mapping), "mapping")
+			.addIf(isNotEmpty(mapping), "mapping")
 			.addIf(nn(propertyName), "propertyName")
 			.build();
 		// @formatter:on
@@ -185,7 +185,9 @@ public class Discriminator extends OpenApiElement {
 	 * @return This object
 	 */
 	public Discriminator setMapping(Map<String,String> value) {
-		mapping = copyOf(value);
+		mapping.clear();
+		if (nn(value))
+			mapping.putAll(value);
 		return this;
 	}
 

@@ -144,7 +144,6 @@ class FilteredList_Test extends TestBase {
 		list.add(10);
 
 		assertSize(2, list);
-		assertTrue(list instanceof FilteredList);
 	}
 
 	//====================================================================================================

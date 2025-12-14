@@ -74,7 +74,7 @@ import org.apache.juneau.commons.collections.*;
 public class Server extends OpenApiElement {
 	private URI url;
 	private String description;
-	private Map<String,ServerVariable> variables;
+	private Map<String,ServerVariable> variables = map();
 
 	/**
 	 * Default constructor.
@@ -91,7 +91,8 @@ public class Server extends OpenApiElement {
 
 		this.url = copyFrom.url;
 		this.description = copyFrom.description;
-		this.variables = copyOf(copyFrom.variables, ServerVariable::copy);
+		if (nn(copyFrom.variables))
+			variables.putAll(copyOf(copyFrom.variables, ServerVariable::copy));
 	}
 
 	/**
@@ -107,7 +108,7 @@ public class Server extends OpenApiElement {
 	public Server addVariable(String key, ServerVariable value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		variables = mapb(String.class, ServerVariable.class).to(variables).sparse().add(key, value).build();
+		variables.put(key, value);
 		return this;
 	}
 
@@ -153,7 +154,7 @@ public class Server extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,ServerVariable> getVariables() { return variables; }
+	public Map<String,ServerVariable> getVariables() { return nullIfEmpty(variables); }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
@@ -161,7 +162,7 @@ public class Server extends OpenApiElement {
 		var s = setb(String.class)
 			.addIf(nn(description), "description")
 			.addIf(nn(url), "url")
-			.addIf(nn(variables), "variables")
+			.addIf(isNotEmpty(variables), "variables")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -223,7 +224,9 @@ public class Server extends OpenApiElement {
 	 * @return This object
 	 */
 	public Server setVariables(Map<String,ServerVariable> value) {
-		variables = copyOf(value);
+		variables.clear();
+		if (nn(value))
+			variables.putAll(value);
 		return this;
 	}
 

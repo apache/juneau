@@ -78,9 +78,9 @@ import org.apache.juneau.commons.collections.*;
 public class Response extends OpenApiElement {
 
 	private String description;
-	private Map<String,HeaderInfo> headers;
-	private Map<String,MediaType> content;
-	private Map<String,Link> links;
+	private Map<String,HeaderInfo> headers = map();
+	private Map<String,MediaType> content = map();
+	private Map<String,Link> links = map();
 
 	/**
 	 * Default constructor.
@@ -96,9 +96,12 @@ public class Response extends OpenApiElement {
 		super(copyFrom);
 
 		this.description = copyFrom.description;
-		this.headers = copyOf(copyFrom.headers, HeaderInfo::copy);
-		this.content = copyOf(copyFrom.content, MediaType::copy);
-		this.links = copyOf(copyFrom.links, Link::copy);
+		if (nn(copyFrom.headers))
+			headers.putAll(copyOf(copyFrom.headers, HeaderInfo::copy));
+		if (nn(copyFrom.content))
+			content.putAll(copyOf(copyFrom.content, MediaType::copy));
+		if (nn(copyFrom.links))
+			links.putAll(copyOf(copyFrom.links, Link::copy));
 	}
 
 	/**
@@ -111,7 +114,7 @@ public class Response extends OpenApiElement {
 	public Response addContent(String key, MediaType value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		content = mapb(String.class, MediaType.class).to(content).sparse().add(key, value).build();
+		content.put(key, value);
 		return this;
 	}
 
@@ -125,7 +128,7 @@ public class Response extends OpenApiElement {
 	public Response addHeader(String key, HeaderInfo value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		headers = mapb(String.class, HeaderInfo.class).to(headers).sparse().add(key, value).build();
+		headers.put(key, value);
 		return this;
 	}
 
@@ -139,7 +142,7 @@ public class Response extends OpenApiElement {
 	public Response addLink(String key, Link value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		links = mapb(String.class, Link.class).to(links).sparse().add(key, value).build();
+		links.put(key, value);
 		return this;
 	}
 
@@ -169,7 +172,7 @@ public class Response extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,MediaType> getContent() { return content; }
+	public Map<String,MediaType> getContent() { return nullIfEmpty(content); }
 
 	/**
 	 * Returns the content with the specified media type.
@@ -179,7 +182,7 @@ public class Response extends OpenApiElement {
 	 */
 	public MediaType getContent(String mediaType) {
 		assertArgNotNull("mediaType", mediaType);
-		return content == null ? null : content.get(mediaType);
+		return content.get(mediaType);
 	}
 
 	/**
@@ -200,7 +203,7 @@ public class Response extends OpenApiElement {
 	 */
 	public HeaderInfo getHeader(String name) {
 		assertArgNotNull("name", name);
-		return headers == null ? null : headers.get(name);
+		return headers.get(name);
 	}
 
 	/**
@@ -208,7 +211,7 @@ public class Response extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,HeaderInfo> getHeaders() { return headers; }
+	public Map<String,HeaderInfo> getHeaders() { return nullIfEmpty(headers); }
 
 	/**
 	 * Returns the link with the specified name.
@@ -218,7 +221,7 @@ public class Response extends OpenApiElement {
 	 */
 	public Link getLink(String name) {
 		assertArgNotNull("name", name);
-		return links == null ? null : links.get(name);
+		return links.get(name);
 	}
 
 	/**
@@ -226,16 +229,16 @@ public class Response extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Link> getLinks() { return links; }
+	public Map<String,Link> getLinks() { return nullIfEmpty(links); }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(content), "content")
+			.addIf(isNotEmpty(content), "content")
 			.addIf(nn(description), "description")
-			.addIf(nn(headers), "headers")
-			.addIf(nn(links), "links")
+			.addIf(isNotEmpty(headers), "headers")
+			.addIf(isNotEmpty(links), "links")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -265,7 +268,9 @@ public class Response extends OpenApiElement {
 	 * @return This object
 	 */
 	public Response setContent(Map<String,MediaType> value) {
-		content = copyOf(value);
+		content.clear();
+		if (nn(value))
+			content.putAll(value);
 		return this;
 	}
 
@@ -298,7 +303,9 @@ public class Response extends OpenApiElement {
 	 * @return This object
 	 */
 	public Response setHeaders(Map<String,HeaderInfo> value) {
-		headers = copyOf(value);
+		headers.clear();
+		if (nn(value))
+			headers.putAll(value);
 		return this;
 	}
 
@@ -311,7 +318,9 @@ public class Response extends OpenApiElement {
 	 * @return This object
 	 */
 	public Response setLinks(Map<String,Link> value) {
-		links = copyOf(value);
+		links.clear();
+		if (nn(value))
+			links.putAll(value);
 		return this;
 	}
 

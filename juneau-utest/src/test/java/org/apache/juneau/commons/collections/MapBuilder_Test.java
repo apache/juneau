@@ -281,23 +281,6 @@ class MapBuilder_Test extends TestBase {
 	// Copy mode
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	void f01_copy() {
-		var original = new LinkedHashMap<String,Integer>();
-		original.put("a", 1);
-
-		var map = MapBuilder.create(String.class, Integer.class)
-			.to(original)
-			.add("b", 2)
-			.copy()
-			.add("c", 3)
-			.build();
-
-		assertSize(3, map);
-		assertSize(2, original);  // Original has "a" and "b" added before copy()
-		assertNotSame(original, map);  // After copy(), they're different maps
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Complex scenarios
 	//-----------------------------------------------------------------------------------------------------------------
@@ -806,18 +789,6 @@ class MapBuilder_Test extends TestBase {
 	@Test
 	void l01_build_sparseWithNullMap() {
 		var map = MapBuilder.create(String.class, Integer.class)
-			.sparse()
-			.build();
-
-		assertNull(map);
-	}
-
-	@Test
-	void l02_build_sparseWithEmptyMap() {
-		var existing = new LinkedHashMap<String,Integer>();
-
-		var map = MapBuilder.create(String.class, Integer.class)
-			.to(existing)
 			.sparse()
 			.build();
 

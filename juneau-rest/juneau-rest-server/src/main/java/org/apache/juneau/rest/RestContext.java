@@ -5143,7 +5143,7 @@ public class RestContext extends Context {
 				var uppm = pathMatcher.match(upi2);
 				if (nn(uppm) && ! uppm.hasEmptyVars()) {
 					sb.pathVars(uppm.getVars());
-					sb.req(new OverrideableHttpServletRequest(sb.req()).pathInfo(StringUtils.nullIfEmpty(urlDecode(uppm.getSuffix()))).servletPath(uppm.getPrefix()));
+					sb.req(new OverrideableHttpServletRequest(sb.req()).pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix()))).servletPath(uppm.getPrefix()));
 				} else {
 					var call = sb.build();
 					call.debug(isDebug(call)).status(SC_NOT_FOUND).finish();
@@ -5158,7 +5158,7 @@ public class RestContext extends Context {
 				var rc = childMatch.get().getChildContext();
 				if (! uppm.hasEmptyVars()) {
 					sb.pathVars(uppm.getVars());
-					var childRequest = new OverrideableHttpServletRequest(sb.req()).pathInfo(StringUtils.nullIfEmpty(urlDecode(uppm.getSuffix())))
+					var childRequest = new OverrideableHttpServletRequest(sb.req()).pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
 						.servletPath(sb.req().getServletPath() + uppm.getPrefix());
 					rc.execute(rc.getResource(), childRequest, sb.res());
 				} else {

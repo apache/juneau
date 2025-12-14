@@ -95,7 +95,7 @@ public class RemoteOperationMeta {
 			}
 
 			if (path.isEmpty()) {
-				path = HttpUtils.detectHttpPath(m, StringUtils.nullIfEmpty(httpMethod));
+				path = HttpUtils.detectHttpPath(m, nullIfEmpty(httpMethod));
 			}
 			if (httpMethod.isEmpty())
 				httpMethod = HttpUtils.detectHttpMethod(m, true, defaultMethod);

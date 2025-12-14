@@ -432,7 +432,6 @@ public class FilteredSet<E> extends AbstractSet<E> {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public <T> T[] toArray(T[] a) {
 		return set.toArray(a);
 	}

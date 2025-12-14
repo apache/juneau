@@ -80,7 +80,7 @@ public class OAuthFlow extends OpenApiElement {
 	private String authorizationUrl;
 	private String tokenUrl;
 	private String refreshUrl;
-	private Map<String,String> scopes;
+	private Map<String,String> scopes = map();
 
 	/**
 	 * Default constructor.
@@ -98,7 +98,8 @@ public class OAuthFlow extends OpenApiElement {
 		this.authorizationUrl = copyFrom.authorizationUrl;
 		this.tokenUrl = copyFrom.tokenUrl;
 		this.refreshUrl = copyFrom.refreshUrl;
-		this.scopes = copyOf(copyFrom.scopes);
+		if (nn(copyFrom.scopes))
+			scopes.putAll(copyFrom.scopes);
 	}
 
 	/**
@@ -111,7 +112,7 @@ public class OAuthFlow extends OpenApiElement {
 	public OAuthFlow addScope(String name, String description) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("description", description);
-		scopes = mapb(String.class, String.class).to(scopes).sparse().add(name, description).build();
+		scopes.put(name, description);
 		return this;
 	}
 
@@ -164,7 +165,7 @@ public class OAuthFlow extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,String> getScopes() { return scopes; }
+	public Map<String,String> getScopes() { return nullIfEmpty(scopes); }
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -182,7 +183,7 @@ public class OAuthFlow extends OpenApiElement {
 		var s = setb(String.class)
 			.addIf(nn(authorizationUrl), "authorizationUrl")
 			.addIf(nn(refreshUrl), "refreshUrl")
-			.addIf(nn(scopes), "scopes")
+			.addIf(isNotEmpty(scopes), "scopes")
 			.addIf(nn(tokenUrl), "tokenUrl")
 			.build();
 		// @formatter:on
@@ -250,7 +251,9 @@ public class OAuthFlow extends OpenApiElement {
 	 * @return This object
 	 */
 	public OAuthFlow setScopes(Map<String,String> value) {
-		scopes = copyOf(value);
+		scopes.clear();
+		if (nn(value))
+			scopes.putAll(value);
 		return this;
 	}
 

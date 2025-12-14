@@ -24,6 +24,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * Represents a URL path pattern match.
@@ -67,7 +68,7 @@ public class UrlPathMatch {
 			if (c == -1)
 				c = path.length();
 		}
-		return nullIfEmpty(path.substring(0, c));
+		return Utils.nullIfEmpty(path.substring(0, c));
 	}
 
 	/**

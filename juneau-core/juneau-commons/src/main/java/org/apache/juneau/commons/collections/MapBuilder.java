@@ -580,20 +580,6 @@ public class MapBuilder<K,V> {
 	}
 
 	/**
-	 * Specifies the map to append to.
-	 *
-	 * <p>
-	 * If not specified, uses a new {@link HashMap} (or {@link LinkedHashMap} if {@link #ordered()} is set).
-	 *
-	 * @param map The map to append to.
-	 * @return This object.
-	 */
-	public MapBuilder<K,V> to(Map<K,V> map) {
-		this.map = map;
-		return this;
-	}
-
-	/**
 	 * When specified, {@link #build()} will return an unmodifiable map.
 	 *
 	 * @return This object.

@@ -84,8 +84,8 @@ public class ResponseInfo extends SwaggerElement {
 
 	private String description;
 	private SchemaInfo schema;
-	private Map<String,HeaderInfo> headers;
-	private Map<String,Object> examples;
+	private Map<String,HeaderInfo> headers = map();
+	private Map<String,Object> examples = map();
 
 	/**
 	 * Default constructor.
@@ -102,8 +102,10 @@ public class ResponseInfo extends SwaggerElement {
 
 		this.description = copyFrom.description;
 		this.schema = copyFrom.schema == null ? null : copyFrom.schema.copy();
-		this.examples = copyOf(copyFrom.examples);
-		this.headers = copyOf(copyFrom.headers, HeaderInfo::copy);
+		if (nn(copyFrom.examples))
+			examples.putAll(copyOf(copyFrom.examples));
+		if (nn(copyFrom.headers))
+			headers.putAll(copyOf(copyFrom.headers, HeaderInfo::copy));
 	}
 
 	/**
@@ -119,7 +121,7 @@ public class ResponseInfo extends SwaggerElement {
 	public ResponseInfo addExample(String mimeType, Object example) {
 		assertArgNotNull("mimeType", mimeType);
 		assertArgNotNull("example", example);
-		examples = mapb(String.class, Object.class).to(examples).sparse().add(mimeType, example).build();
+		examples.put(mimeType, example);
 		return this;
 	}
 
@@ -133,7 +135,7 @@ public class ResponseInfo extends SwaggerElement {
 	public ResponseInfo addHeader(String name, HeaderInfo header) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("header", header);
-		headers = mapb(String.class, HeaderInfo.class).to(headers).add(name, header).build();
+		headers.put(name, header);
 		return this;
 	}
 
@@ -198,7 +200,7 @@ public class ResponseInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Object> getExamples() { return examples; }
+	public Map<String,Object> getExamples() { return nullIfEmpty(examples); }
 
 	/**
 	 * Returns the header information with the specified name.
@@ -208,7 +210,7 @@ public class ResponseInfo extends SwaggerElement {
 	 */
 	public HeaderInfo getHeader(String name) {
 		assertArgNotNull("name", name);
-		return headers == null ? null : headers.get(name);
+		return headers.get(name);
 	}
 
 	/**
@@ -219,7 +221,7 @@ public class ResponseInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,HeaderInfo> getHeaders() { return headers; }
+	public Map<String,HeaderInfo> getHeaders() { return nullIfEmpty(headers); }
 
 	/**
 	 * Bean property getter:  <property>schema</property>.
@@ -236,8 +238,8 @@ public class ResponseInfo extends SwaggerElement {
 		// @formatter:off
 		var s = setb(String.class)
 			.addIf(nn(description), "description")
-			.addIf(nn(examples), "examples")
-			.addIf(nn(headers), "headers")
+			.addIf(isNotEmpty(examples), "examples")
+			.addIf(isNotEmpty(headers), "headers")
 			.addIf(nn(schema), "schema")
 			.build();
 		// @formatter:on
@@ -262,8 +264,7 @@ public class ResponseInfo extends SwaggerElement {
 		if (nn(schema))
 			schema = schema.resolveRefs(swagger, refStack, maxDepth);
 
-		if (nn(headers))
-			headers.entrySet().forEach(x -> x.setValue(x.getValue().resolveRefs(swagger, refStack, maxDepth)));
+		headers.entrySet().forEach(x -> x.setValue(x.getValue().resolveRefs(swagger, refStack, maxDepth)));
 
 		return this;
 	}
@@ -314,7 +315,9 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ResponseInfo setExamples(Map<String,Object> value) {
-		examples = copyOf(value);
+		examples.clear();
+		if (nn(value))
+			examples.putAll(value);
 		return this;
 	}
 
@@ -330,7 +333,9 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ResponseInfo setHeaders(Map<String,HeaderInfo> value) {
-		headers = copyOf(value);
+		headers.clear();
+		if (nn(value))
+			headers.putAll(value);
 		return this;
 	}
 

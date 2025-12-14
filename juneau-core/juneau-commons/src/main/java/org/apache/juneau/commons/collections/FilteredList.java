@@ -485,7 +485,6 @@ public class FilteredList<E> extends AbstractList<E> {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public <T> T[] toArray(T[] a) {
 		return list.toArray(a);
 	}

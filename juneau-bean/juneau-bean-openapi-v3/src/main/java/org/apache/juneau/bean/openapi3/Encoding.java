@@ -77,7 +77,7 @@ import org.apache.juneau.commons.collections.*;
 public class Encoding extends OpenApiElement {
 
 	private String contentType, style;
-	private Map<String,HeaderInfo> headers;
+	private Map<String,HeaderInfo> headers = map();
 	private Boolean explode, allowReserved;
 
 	/**
@@ -97,7 +97,8 @@ public class Encoding extends OpenApiElement {
 		this.style = copyFrom.style;
 		this.explode = copyFrom.explode;
 		this.allowReserved = copyFrom.allowReserved;
-		this.headers = copyOf(copyFrom.headers, HeaderInfo::copy);
+		if (nn(copyFrom.headers))
+			headers.putAll(copyOf(copyFrom.headers, HeaderInfo::copy));
 	}
 
 	/**
@@ -112,7 +113,7 @@ public class Encoding extends OpenApiElement {
 	public Encoding addHeader(String key, HeaderInfo value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		headers = mapb(String.class, HeaderInfo.class).to(headers).sparse().add(key, value).build();
+		headers.put(key, value);
 		return this;
 	}
 
@@ -173,7 +174,7 @@ public class Encoding extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,HeaderInfo> getHeaders() { return headers; }
+	public Map<String,HeaderInfo> getHeaders() { return nullIfEmpty(headers); }
 
 	/**
 	 * Bean property getter:  <property>style</property>.
@@ -189,7 +190,7 @@ public class Encoding extends OpenApiElement {
 			.addIf(nn(allowReserved), "allowReserved")
 			.addIf(nn(contentType), "contentType")
 			.addIf(nn(explode), "explode")
-			.addIf(nn(headers), "headers")
+			.addIf(isNotEmpty(headers), "headers")
 			.addIf(nn(style), "style")
 			.build();
 		// @formatter:on
@@ -275,7 +276,9 @@ public class Encoding extends OpenApiElement {
 	 * @return This object
 	 */
 	public Encoding setHeaders(Map<String,HeaderInfo> value) {
-		headers = copyOf(value);
+		headers.clear();
+		if (nn(value))
+			headers.putAll(value);
 		return this;
 	}
 

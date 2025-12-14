@@ -69,7 +69,7 @@ public class Link extends OpenApiElement {
 	private String description;
 	private Object requestBody;
 	private Server server;
-	private Map<String,Object> parameters;
+	private Map<String,Object> parameters = map();
 
 	/**
 	 * Default constructor.
@@ -89,7 +89,8 @@ public class Link extends OpenApiElement {
 		this.operationId = copyFrom.operationId;
 		this.requestBody = copyFrom.requestBody;
 		this.server = copyFrom.server == null ? null : copyFrom.server.copy();
-		this.parameters = copyOf(copyFrom.parameters);
+		if (nn(copyFrom.parameters))
+			parameters.putAll(copyFrom.parameters);
 	}
 
 	/**
@@ -102,7 +103,7 @@ public class Link extends OpenApiElement {
 	public Link addParameter(String mimeType, Object parameter) {
 		assertArgNotNull("mimeType", mimeType);
 		assertArgNotNull("parameter", parameter);
-		parameters = mapb(String.class, Object.class).to(parameters).sparse().add(mimeType, parameter).build();
+		parameters.put(mimeType, parameter);
 		return this;
 	}
 
@@ -167,7 +168,7 @@ public class Link extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Object> getParameters() { return parameters; }
+	public Map<String,Object> getParameters() { return nullIfEmpty(parameters); }
 
 	/**
 	 * Bean property getter:  <property>default</property>.
@@ -197,7 +198,7 @@ public class Link extends OpenApiElement {
 			.addIf(nn(description), "description")
 			.addIf(nn(operationId), "operationId")
 			.addIf(nn(operationRef), "operationRef")
-			.addIf(nn(parameters), "parameters")
+			.addIf(isNotEmpty(parameters), "parameters")
 			.addIf(nn(requestBody), "requestBody")
 			.addIf(nn(server), "server")
 			.build();
@@ -280,7 +281,9 @@ public class Link extends OpenApiElement {
 	 * @return This object
 	 */
 	public Link setParameters(Map<String,Object> value) {
-		parameters = copyOf(value);
+		parameters.clear();
+		if (nn(value))
+			parameters.putAll(value);
 		return this;
 	}
 

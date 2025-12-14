@@ -168,7 +168,7 @@ public class Operation extends SwaggerElement {
 	private List<ParameterInfo> parameters;
 	private List<Map<String,List<String>>> security;
 
-	private Map<String,ResponseInfo> responses;
+	private Map<String,ResponseInfo> responses = map();
 
 	/**
 	 * Default constructor.
@@ -200,12 +200,8 @@ public class Operation extends SwaggerElement {
 			copyFrom.parameters.forEach(x -> this.parameters.add(x.copy()));
 		}
 
-		if (copyFrom.responses == null) {
-			this.responses = null;
-		} else {
-			this.responses = map();
-			copyFrom.responses.forEach((k, v) -> this.responses.put(k, v.copy()));
-		}
+		if (nn(copyFrom.responses))
+			copyFrom.responses.forEach((k, v) -> responses.put(k, v.copy()));
 
 		if (copyFrom.security == null) {
 			this.security = null;
@@ -322,7 +318,7 @@ public class Operation extends SwaggerElement {
 	public Operation addResponse(String statusCode, ResponseInfo response) {
 		assertArgNotNull("statusCode", statusCode);
 		assertArgNotNull("response", response);
-		responses = mapb(String.class, ResponseInfo.class).to(responses).add(statusCode, response).build();
+		responses.put(statusCode, response);
 		return this;
 	}
 
@@ -577,7 +573,7 @@ public class Operation extends SwaggerElement {
 	 */
 	public ResponseInfo getResponse(String status) {
 		assertArgNotNull("status", status);
-		return responses == null ? null : responses.get(status);
+		return responses.get(status);
 	}
 
 	/**
@@ -588,7 +584,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,ResponseInfo> getResponses() { return responses; }
+	public Map<String,ResponseInfo> getResponses() { return nullIfEmpty(responses); }
 
 	/**
 	 * Bean property getter:  <property>schemes</property>.
@@ -652,7 +648,7 @@ public class Operation extends SwaggerElement {
 			.addIf(nn(operationId), "operationId")
 			.addIf(nn(parameters), "parameters")
 			.addIf(nn(produces), "produces")
-			.addIf(nn(responses), "responses")
+			.addIf(isNotEmpty(responses), "responses")
 			.addIf(nn(schemes), "schemes")
 			.addIf(nn(security), "security")
 			.addIf(nn(summary), "summary")
@@ -863,7 +859,9 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setResponses(Map<String,ResponseInfo> value) {
-		responses = copyOf(value);
+		responses.clear();
+		if (nn(value))
+			responses.putAll(value);
 		return this;
 	}
 

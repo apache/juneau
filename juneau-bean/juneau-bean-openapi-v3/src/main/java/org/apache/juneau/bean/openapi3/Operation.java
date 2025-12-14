@@ -96,8 +96,8 @@ public class Operation extends OpenApiElement {
 	private ExternalDocumentation externalDocs;
 	private List<Parameter> parameters;
 	private RequestBodyInfo requestBody;
-	private Map<String,Response> responses;
-	private Map<String,Callback> callbacks;
+	private Map<String,Response> responses = map();
+	private Map<String,Callback> callbacks = map();
 	private Boolean deprecated;
 	private List<SecurityRequirement> security;
 	private List<Server> servers;
@@ -121,8 +121,10 @@ public class Operation extends OpenApiElement {
 		this.externalDocs = copyFrom.externalDocs;
 		this.parameters = copyOf(copyFrom.parameters);
 		this.requestBody = copyFrom.requestBody;
-		this.responses = copyOf(copyFrom.responses);
-		this.callbacks = copyOf(copyFrom.callbacks);
+		if (nn(copyFrom.responses))
+			responses.putAll(copyFrom.responses);
+		if (nn(copyFrom.callbacks))
+			callbacks.putAll(copyFrom.callbacks);
 		this.deprecated = copyFrom.deprecated;
 		this.security = copyOf(copyFrom.security);
 		this.servers = copyOf(copyFrom.servers);
@@ -145,7 +147,7 @@ public class Operation extends OpenApiElement {
 	public Operation addCallback(String name, Callback callback) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("callback", callback);
-		callbacks = mapb(String.class, Callback.class).to(callbacks).sparse().add(name, callback).build();
+		callbacks.put(name, callback);
 		return this;
 	}
 
@@ -198,7 +200,7 @@ public class Operation extends OpenApiElement {
 	public Operation addResponse(String statusCode, Response response) {
 		assertArgNotNull("statusCode", statusCode);
 		assertArgNotNull("response", response);
-		responses = mapb(String.class, Response.class).to(responses).sparse().add(statusCode, response).build();
+		responses.put(statusCode, response);
 		return this;
 	}
 
@@ -332,7 +334,7 @@ public class Operation extends OpenApiElement {
 	 *
 	 * @return The callbacks map.
 	 */
-	public Map<String,Callback> getCallbacks() { return callbacks; }
+	public Map<String,Callback> getCallbacks() { return nullIfEmpty(callbacks); }
 
 	/**
 	 * Returns the deprecated flag.
@@ -411,7 +413,7 @@ public class Operation extends OpenApiElement {
 	 */
 	public Response getResponse(String status) {
 		assertArgNotNull("status", status);
-		return responses == null ? null : responses.get(status);
+		return responses.get(status);
 	}
 
 	/**
@@ -419,7 +421,7 @@ public class Operation extends OpenApiElement {
 	 *
 	 * @return The responses map.
 	 */
-	public Map<String,Response> getResponses() { return responses; }
+	public Map<String,Response> getResponses() { return nullIfEmpty(responses); }
 
 	/**
 	 * Returns the security requirements list.
@@ -453,14 +455,14 @@ public class Operation extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(callbacks), "callbacks")
+			.addIf(isNotEmpty(callbacks), "callbacks")
 			.addIf(nn(deprecated), "deprecated")
 			.addIf(nn(description), "description")
 			.addIf(nn(externalDocs), "externalDocs")
 			.addIf(nn(operationId), "operationId")
 			.addIf(nn(parameters), "parameters")
 			.addIf(nn(requestBody), "requestBody")
-			.addIf(nn(responses), "responses")
+			.addIf(isNotEmpty(responses), "responses")
 			.addIf(nn(security), "security")
 			.addIf(nn(servers), "servers")
 			.addIf(nn(summary), "summary")
@@ -500,7 +502,9 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation setCallbacks(Map<String,Callback> value) {
-		this.callbacks = value;
+		callbacks.clear();
+		if (nn(value))
+			callbacks.putAll(value);
 		return this;
 	}
 
@@ -588,7 +592,9 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation setResponses(Map<String,Response> value) {
-		this.responses = value;
+		responses.clear();
+		if (nn(value))
+			responses.putAll(value);
 		return this;
 	}
 

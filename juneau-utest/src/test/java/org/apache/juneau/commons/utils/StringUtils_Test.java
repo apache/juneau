@@ -493,15 +493,15 @@ class StringUtils_Test extends TestBase {
 		assertTrue(compare("a", "b") < 0);
 		assertTrue(compare("b", "a") > 0);
 		assertEquals(0, compare("a", "a"));
-		
+
 		// s1 null - covers line 630-631 (returns Integer.MIN_VALUE)
 		assertEquals(Integer.MIN_VALUE, compare(null, "b"));
 		assertTrue(compare(null, "b") < 0);
-		
+
 		// s2 null - covers line 632-633 (returns Integer.MAX_VALUE)
 		assertEquals(Integer.MAX_VALUE, compare("b", null));
 		assertTrue(compare("b", null) > 0);
-		
+
 		// Both null - covers line 628-629
 		assertEquals(0, compare(null, null));
 	}
@@ -1777,7 +1777,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals(1 * h + 30 * m, getDuration("1h 30m"));
 		assertEquals(2 * d + 3 * h + 15 * m, getDuration("2d3h15m"));
 		assertEquals(1 * w + 2 * d + 3 * h, getDuration("1w2d3h"));
-		assertEquals(-1, getDuration("d10"));  // Non-number before unit - covers invalid number branch 
+		assertEquals(-1, getDuration("d10"));  // Non-number before unit - covers invalid number branch
 
 		// Months
 		assertEquals(1 * mo, getDuration("1mo"));
@@ -1913,7 +1913,7 @@ class StringUtils_Test extends TestBase {
 		assertTrue(pattern.matcher("test123").matches());
 		assertTrue(pattern.matcher("TEST123").matches());
 
-		// Null input should return null 
+		// Null input should return null
 		assertNull(getMatchPattern(null));
 		assertNull(getMatchPattern(null, java.util.regex.Pattern.CASE_INSENSITIVE));
 	}
@@ -2493,7 +2493,7 @@ class StringUtils_Test extends TestBase {
 		// Code path: firstRealCharacter(s) == -1 (after closing bracket)
 		assertTrue(isProbablyJsonArray("  [1,2,3]  ", true)); // Valid, no characters after ']'
 		assertTrue(isProbablyJsonArray("  /*comment*/ [1,2,3] /*comment*/  ", true)); // Valid, only comments/whitespace after ']'
-		// Test with newline to ensure the code path is covered 
+		// Test with newline to ensure the code path is covered
 		// Code path: c == '\n' branch
 		assertTrue(isProbablyJsonArray("  [1,2,3] //comment\n  ", true)); // Valid, // comment with newline
 		// Code path: c == -1 branch (EOF)
@@ -2541,7 +2541,7 @@ class StringUtils_Test extends TestBase {
 		// Test with ignoreWhitespaceAndComments=true - triggers code path
 		assertTrue(isProbablyJsonObject("  {}  ", true)); // Valid, no characters after '}'
 		assertTrue(isProbablyJsonObject("  /*comment*/ {key:value} /*comment*/  ", true)); // Valid, only comments/whitespace after '}'
-		// Test with newline to ensure the code path is covered 
+		// Test with newline to ensure the code path is covered
 		// Code path: c == '\n' branch
 		assertTrue(isProbablyJsonObject("  {key:value} //comment\n  ", true)); // Valid, // comment with newline
 		// Code path: c == -1 branch (EOF)
@@ -4254,17 +4254,6 @@ class StringUtils_Test extends TestBase {
 		// Test with StringBuffer (CharSequence)
 		assertFalse(notContains("test", new StringBuffer("te")));
 		assertTrue(notContains("test", new StringBuffer("xx")));
-	}
-
-	//====================================================================================================
-	// nullIfEmpty(String)
-	//====================================================================================================
-	@Test
-	void a137_nullIfEmpty() {
-		assertNull(nullIfEmpty(null));
-		assertNull(nullIfEmpty(""));
-		assertNotNull(nullIfEmpty("x"));
-		assertEquals("test", nullIfEmpty("test"));
 	}
 
 	//====================================================================================================
@@ -6843,8 +6832,8 @@ class StringUtils_Test extends TestBase {
 		assertFalse(result3b.contains("verylongword")); // Long word should be broken
 		// Test word that breaks into multiple chunks (covers code path)
 		// Word length 15, wrapLength 5 -> 3 chunks of 5, 5, 5
-		// This tests: wordPos > 0 , append chunk , advance position 
-		// And: remaining <= wrapLength , append remaining , break 
+		// This tests: wordPos > 0 , append chunk , advance position
+		// And: remaining <= wrapLength , append remaining , break
 		var result3c = wrap("abcdefghijklmno here", 5, "\n");
 		assertTrue(result3c.contains("abcde")); // First chunk (wordPos == 0, no newline before)
 		assertTrue(result3c.contains("fghij")); // Second chunk (wordPos > 0, newline before, code path)
