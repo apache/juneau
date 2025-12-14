@@ -107,8 +107,8 @@ public class SchemaInfo extends OpenApiElement {
 	private Items items;
 	private Xml xml;
 	private ExternalDocumentation externalDocs;
-	private List<Object> allOf, oneOf, anyOf, _enum;  // NOSONAR - Intentional naming.
-	private List<String> required;
+	private List<Object> allOf = list(), oneOf = list(), anyOf = list(), _enum = list();  // NOSONAR - Intentional naming.
+	private List<String> required = list();
 	private Discriminator discriminator;
 	private Map<String,SchemaInfo> properties;
 	private SchemaInfo additionalProperties;
@@ -155,11 +155,16 @@ public class SchemaInfo extends OpenApiElement {
 		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
 		this.xml = copyFrom.xml == null ? null : copyFrom.xml.copy();
 		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
-		this._enum = copyOf(copyFrom._enum);
-		this.allOf = copyOf(copyFrom.allOf);
-		this.required = copyOf(copyFrom.required);
-		this.anyOf = copyOf(copyFrom.anyOf);
-		this.oneOf = copyOf(copyFrom.oneOf);
+		if (nn(copyFrom._enum))
+			_enum.addAll(copyFrom._enum);
+		if (nn(copyFrom.allOf))
+			allOf.addAll(copyFrom.allOf);
+		if (nn(copyFrom.required))
+			required.addAll(copyFrom.required);
+		if (nn(copyFrom.anyOf))
+			anyOf.addAll(copyFrom.anyOf);
+		if (nn(copyFrom.oneOf))
+			oneOf.addAll(copyFrom.oneOf);
 		this.properties = copyOf(copyFrom.properties, SchemaInfo::copy);
 		this.additionalProperties = copyFrom.additionalProperties == null ? null : copyFrom.additionalProperties.copy();
 		this.not = copyFrom.not == null ? null : copyFrom.not.copy();
@@ -189,7 +194,10 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo addAllOf(Object...values) {
-		allOf = listb(Object.class).to(allOf).sparse().addAny(values).build();
+		if (nn(values))
+			for (var v : values)
+				if (nn(v))
+					allOf.add(v);
 		return this;
 	}
 
@@ -217,7 +225,10 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo addAnyOf(Object...values) {
-		anyOf = listb(Object.class).to(anyOf).sparse().addAny(values).build();
+		if (nn(values))
+			for (var v : values)
+				if (nn(v))
+					anyOf.add(v);
 		return this;
 	}
 
@@ -245,7 +256,10 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo addEnum(Object...values) {
-		_enum = listb(Object.class).to(_enum).sparse().addAny(values).build();
+		if (nn(values))
+			for (var v : values)
+				if (nn(v))
+					_enum.add(v);
 		return this;
 	}
 
@@ -273,7 +287,10 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo addOneOf(Object...values) {
-		oneOf = listb(Object.class).to(oneOf).sparse().addAny(values).build();
+		if (nn(values))
+			for (var v : values)
+				if (nn(v))
+					oneOf.add(v);
 		return this;
 	}
 
@@ -299,7 +316,10 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo addRequired(String...values) {
-		required = listb(String.class).to(required).sparse().add(values).build();
+		if (nn(values))
+			for (var v : values)
+				if (nn(v))
+					required.add(v);
 		return this;
 	}
 
@@ -368,14 +388,14 @@ public class SchemaInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getAllOf() { return allOf; }
+	public List<Object> getAllOf() { return nullIfEmpty(allOf); }
 
 	/**
 	 * Bean property getter:  <property>allOf</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getAnyOf() { return anyOf; }
+	public List<Object> getAnyOf() { return nullIfEmpty(anyOf); }
 
 	/**
 	 * Bean property getter:  <property>default</property>.
@@ -413,7 +433,7 @@ public class SchemaInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getEnum() { return _enum; }
+	public List<Object> getEnum() { return nullIfEmpty(_enum); }
 
 	/**
 	 * Bean property getter:  <property>example</property>.
@@ -539,7 +559,7 @@ public class SchemaInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getOneOf() { return oneOf; }
+	public List<Object> getOneOf() { return nullIfEmpty(oneOf); }
 
 	/**
 	 * Bean property getter:  <property>pattern</property>.
@@ -578,7 +598,7 @@ public class SchemaInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<String> getRequired() { return required; }
+	public List<String> getRequired() { return nullIfEmpty(required); }
 
 	/**
 	 * Bean property getter:  <property>title</property>.
@@ -621,13 +641,13 @@ public class SchemaInfo extends OpenApiElement {
 		var s = setb(String.class)
 			.addIf(nn(ref), "$ref")
 			.addIf(nn(additionalProperties), "additionalProperties")
-			.addIf(nn(allOf), "allOf")
-			.addIf(nn(anyOf), "anyOf")
+			.addIf(isNotEmpty(allOf), "allOf")
+			.addIf(isNotEmpty(anyOf), "anyOf")
 			.addIf(nn(_default), "default")
 			.addIf(nn(deprecated), "deprecated")
 			.addIf(nn(description), "description")
 			.addIf(nn(discriminator), "discriminator")
-			.addIf(nn(_enum), "enum")
+			.addIf(isNotEmpty(_enum), "enum")
 			.addIf(nn(example), "example")
 			.addIf(nn(exclusiveMaximum), "exclusiveMaximum")
 			.addIf(nn(exclusiveMinimum), "exclusiveMinimum")
@@ -645,11 +665,11 @@ public class SchemaInfo extends OpenApiElement {
 			.addIf(nn(multipleOf), "multipleOf")
 			.addIf(nn(not), "not")
 			.addIf(nn(nullable), "nullable")
-			.addIf(nn(oneOf), "oneOf")
+			.addIf(isNotEmpty(oneOf), "oneOf")
 			.addIf(nn(pattern), "pattern")
 			.addIf(nn(properties), "properties")
 			.addIf(nn(readOnly), "readOnly")
-			.addIf(nn(required), "required")
+			.addIf(isNotEmpty(required), "required")
 			.addIf(nn(title), "title")
 			.addIf(nn(type), "type")
 			.addIf(nn(uniqueItems), "uniqueItems")
@@ -769,7 +789,9 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setAllOf(Collection<Object> value) {
-		allOf = toList(value);
+		allOf.clear();
+		if (nn(value))
+			allOf.addAll(value);
 		return this;
 	}
 
@@ -782,7 +804,9 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setAnyOf(Collection<Object> value) {
-		anyOf = toList(value);
+		anyOf.clear();
+		if (nn(value))
+			anyOf.addAll(value);
 		return this;
 	}
 
@@ -850,7 +874,9 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setEnum(Collection<Object> value) {
-		_enum = toList(value);
+		_enum.clear();
+		if (nn(value))
+			_enum.addAll(value);
 		return this;
 	}
 
@@ -1096,7 +1122,9 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setOneOf(Collection<Object> value) {
-		oneOf = toList(value);
+		oneOf.clear();
+		if (nn(value))
+			oneOf.addAll(value);
 		return this;
 	}
 
@@ -1175,7 +1203,9 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setRequired(Collection<String> value) {
-		required = toList(value);
+		required.clear();
+		if (nn(value))
+			required.addAll(value);
 		return this;
 	}
 

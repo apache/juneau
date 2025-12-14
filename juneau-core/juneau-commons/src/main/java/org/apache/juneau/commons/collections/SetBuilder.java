@@ -18,14 +18,12 @@ package org.apache.juneau.commons.collections;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
-
-import org.apache.juneau.commons.utils.*;
+import java.util.function.*;
 
 /**
  * A fluent builder for constructing {@link Set} instances with various configuration options.
@@ -44,7 +42,8 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Sorting support - natural order or custom {@link Comparator}
  * 	<li>Sparse mode - return <jk>null</jk> for empty sets
  * 	<li>Unmodifiable mode - create immutable sets
- * 	<li>Custom converters - type conversion via {@link Converter}
+ * 	<li>Filtering support - exclude unwanted elements via {@link #filtered()} or {@link #filtered(Predicate)}
+ * 	<li>Custom conversion functions - type conversion via {@link #elementFunction(Function)}
  * 	<li>Automatic deduplication - duplicate elements are automatically removed
  * </ul>
  *
@@ -95,6 +94,13 @@ import org.apache.juneau.commons.utils.*;
  * 	FluentSet&lt;String&gt; <jv>fluent</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
  * 		.add(<js>"one"</js>, <js>"two"</js>)
  * 		.buildFluent();
+ *
+ * 	<jc>// FilteredSet - use buildFiltered()</jc>
+ * 	FilteredSet&lt;Integer&gt; <jv>filtered</jv> = SetBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+ * 		.filtered(v -&gt; v &gt; 0)
+ * 		.add(5)
+ * 		.add(-1)  <jc>// Filtered out</jc>
+ * 		.buildFiltered();
  * </p>
  *
  * <h5 class='section'>Thread Safety:</h5>
@@ -125,12 +131,12 @@ public class SetBuilder<E> {
 	}
 
 	private Set<E> set;
-	private boolean unmodifiable, sparse, concurrent;
+	private boolean unmodifiable, sparse, concurrent, ordered = false;
 
 	private Comparator<E> comparator;
+	private Predicate<E> filter;
 	private Class<E> elementType;
-
-	private List<Converter> converters;
+	private Function<Object,E> elementFunction;
 
 	/**
 	 * Constructor.
@@ -145,12 +151,21 @@ public class SetBuilder<E> {
 	/**
 	 * Adds a single value to this set.
 	 *
+	 * <p>
+	 * Note: Filtering is applied at build time, not when adding elements.
+	 *
 	 * @param value The value to add to this set.
 	 * @return This object.
 	 */
 	public SetBuilder<E> add(E value) {
-		if (set == null)
-			set = new LinkedHashSet<>();
+		if (set == null) {
+			if (ordered)
+				set = new LinkedHashSet<>();
+			else if (nn(comparator))
+				set = new TreeSet<>(comparator);
+			else
+				set = new HashSet<>();
+		}
 		set.add(value);
 		return this;
 	}
@@ -180,10 +195,16 @@ public class SetBuilder<E> {
 	 */
 	public SetBuilder<E> addAll(Collection<E> value) {
 		if (nn(value)) {
-			if (set == null)
-				set = new LinkedHashSet<>(value);
-			else
+			if (set == null) {
+				if (ordered)
+					set = new LinkedHashSet<>(value);
+				else if (nn(comparator))
+					set = new TreeSet<>(comparator);
+				else
+					set = new HashSet<>(value);
+			} else {
 				set.addAll(value);
+			}
 		}
 		return this;
 	}
@@ -214,17 +235,9 @@ public class SetBuilder<E> {
 					} else if (elementType.isInstance(o)) {
 						add(elementType.cast(o));
 					} else {
-						if (nn(converters)) {
-							var e = converters.stream().map(x -> x.convertTo(elementType, o)).filter(x -> nn(x)).findFirst().orElse(null);
-							if (nn(e)) {
-								add(e);
-							} else {
-								var l = converters.stream().map(x -> x.convertTo(List.class, o)).filter(x -> nn(x)).findFirst().orElse(null);
-								if (nn(l))
-									addAny(l);
-								else
-									throw rex("Object of type {0} could not be converted to type {1}", cn(o), cn(elementType));
-							}
+						E converted = convertElement(o);
+						if (converted != null) {
+							add(converted);
 						} else {
 							throw rex("Object of type {0} could not be converted to type {1}", cn(o), cn(elementType));
 						}
@@ -267,30 +280,54 @@ public class SetBuilder<E> {
 	 * Builds the set.
 	 *
 	 * <p>
-	 * Applies sorting/unmodifiable/sparse options.
+	 * Applies filtering, sorting, ordering, concurrent, unmodifiable, and sparse options.
 	 *
-	 * @return The built set or {@code null} if {@link #sparse()} is set and the set is empty.
+	 * <p>
+	 * Set type selection:
+	 * <ul>
+	 * 	<li>If {@link #sorted()} is set: Uses {@link TreeSet} (or synchronized TreeSet if concurrent)
+	 * 	<li>If {@link #ordered()} is set: Uses {@link LinkedHashSet} (or synchronized LinkedHashSet if concurrent)
+	 * 	<li>Otherwise: Uses {@link HashSet} (or synchronized HashSet if concurrent)
+	 * </ul>
+	 *
+	 * <p>
+	 * If filtering is applied, the result is wrapped in a {@link FilteredSet}.
+	 *
+	 * @return The built set, or {@code null} if {@link #sparse()} is set and the set is empty.
 	 */
 	public Set<E> build() {
-		if (sparse) {
-			if (nn(set) && set.isEmpty())
-				set = null;
+		if (sparse && isEmpty(set))
+			return null;
+
+		var set2 = (Set<E>)null;
+
+		if (ordered) {
+			set2 = new LinkedHashSet<>();
+		} else if (nn(comparator)) {
+			set2 = new TreeSet<>(comparator);
 		} else {
-			if (set == null)
-				set = new LinkedHashSet<>(0);
+			set2 = new HashSet<>();
 		}
-		if (nn(set)) {
-			if (nn(comparator)) {
-				var s = new TreeSet<>(comparator);
-				s.addAll(set);
-				set = s;
-			}
-			if (concurrent)
-				set = synchronizedSet(set);
-			if (unmodifiable)
-				set = unmodifiableSet(set);
+
+		if (concurrent)
+			set2 = synchronizedSet(set2);
+
+		if (nn(filter) || nn(elementFunction)) {
+			var set3b = FilteredSet.create(elementType);
+			if (nn(filter))
+				set3b.filter(filter);
+			if (nn(elementFunction))
+				set3b.elementFunction(elementFunction);
+			set2 = set3b.inner(set2).build();
 		}
-		return set;
+
+		if (nn(set))
+			set2.addAll(set);
+
+		if (unmodifiable)
+			set2 = unmodifiableSet(set2);
+
+		return set2;
 	}
 
 	/**
@@ -316,28 +353,56 @@ public class SetBuilder<E> {
 	}
 
 	/**
-	 * Registers value converters that can adapt incoming values in {@link #addAny(Object...)}.
+	 * Builds the set as a {@link FilteredSet}.
 	 *
-	 * @param values Converters to register. Ignored if {@code null}.
-	 * @return This object.
+	 * <p>
+	 * Set type selection:
+	 * <ul>
+	 * 	<li>If {@link #sorted()} is set: Uses {@link TreeSet} (or synchronized TreeSet if concurrent)
+	 * 	<li>If {@link #ordered()} is set: Uses {@link LinkedHashSet} (or synchronized LinkedHashSet if concurrent)
+	 * 	<li>Otherwise: Uses {@link HashSet} (or synchronized HashSet if concurrent)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
+	 *
+	 * 	FilteredSet&lt;Integer&gt; <jv>set</jv> = SetBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+	 * 		.filtered(v -&gt; v != <jk>null</jk> &amp;&amp; v &gt; 0)
+	 * 		.add(5)
+	 * 		.add(-1)  <jc>// Will be filtered out</jc>
+	 * 		.buildFiltered();
+	 * </p>
+	 *
+	 * <p>
+	 * Note: If {@link #unmodifiable()} is set, the returned set will be wrapped in an unmodifiable view,
+	 * which may cause issues if the FilteredSet tries to modify it internally. It's recommended to avoid
+	 * using {@link #unmodifiable()} when calling this method.
+	 *
+	 * @return The built set as a {@link FilteredSet}, or {@code null} if {@link #sparse()} is set and the set is empty.
 	 */
-	public SetBuilder<E> converters(Converter...values) {
-		if (values.length == 0)
-			return this;
-		if (converters == null)
-			converters = list();
-		converters.addAll(l(values));
-		return this;
+	public FilteredSet<E> buildFiltered() {
+		var s = build();
+		if (s == null)  // sparse mode and empty
+			return null;
+		if (s instanceof FilteredSet<E> s2)
+			return s2;
+		// Note that if unmodifiable is true, 's' will be unmodifiable and will cause an error if you try
+		// to insert a value from within FilteredSet.
+		return FilteredSet.create(elementType).inner(s).build();
 	}
 
 	/**
-	 * Forces the existing set to be copied instead of appended to.
+	 * Sets the element conversion function for converting elements in {@link #addAny(Object...)}.
 	 *
+	 * <p>
+	 * The function is applied to each element when adding elements in {@link #addAny(Object...)}.
+	 *
+	 * @param elementFunction The function to convert elements. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public SetBuilder<E> copy() {
-		if (nn(set))
-			set = new LinkedHashSet<>(set);
+	public SetBuilder<E> elementFunction(Function<Object,E> elementFunction) {
+		this.elementFunction = assertArgNotNull("elementFunction", elementFunction);
 		return this;
 	}
 
@@ -353,7 +418,102 @@ public class SetBuilder<E> {
 	}
 
 	/**
+	 * Applies a default filter that excludes common "empty" or "unset" values from being added to the set.
+	 *
+	 * <p>
+	 * The following values are filtered out:
+	 * <ul>
+	 * 	<li>{@code null}
+	 * 	<li>{@link Boolean#FALSE}
+	 * 	<li>Numbers with {@code intValue() == -1}
+	 * 	<li>Empty arrays
+	 * 	<li>Empty {@link Map Maps}
+	 * 	<li>Empty {@link Collection Collections}
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
+	 *
+	 * 	Set&lt;Object&gt; <jv>set</jv> = SetBuilder.<jsm>create</jsm>(Object.<jk>class</jk>)
+	 * 		.filtered()
+	 * 		.add(<js>"name"</js>)
+	 * 		.add(-1)              <jc>// Filtered out at build time</jc>
+	 * 		.add(<jk>false</jk>)     <jc>// Filtered out at build time</jc>
+	 * 		.add(<jk>new</jk> String[0]) <jc>// Filtered out at build time</jc>
+	 * 		.build();
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public SetBuilder<E> filtered() {
+		// @formatter:off
+		return filtered(v -> ! (
+			v == null
+			|| (v instanceof Boolean v2 && v2.equals(false))
+			|| (v instanceof Number v3 && v3.intValue() == -1)
+			|| (isArray(v) && Array.getLength(v) == 0)
+			|| (v instanceof Map v2 && v2.isEmpty())
+			|| (v instanceof Collection v3 && v3.isEmpty())
+			));
+		// @formatter:on
+	}
+
+	/**
+	 * Applies a filter predicate to elements when building the set.
+	 *
+	 * <p>
+	 * The filter receives the element value. Elements where the predicate returns
+	 * {@code true} will be kept; elements where it returns {@code false} will be filtered out.
+	 *
+	 * <p>
+	 * This method can be called multiple times. When called multiple times, all filters are combined
+	 * using AND logic - an element must pass all filters to be kept in the set.
+	 *
+	 * <p>
+	 * Note: Filtering is applied at build time, not when adding elements.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
+	 *
+	 * 	<jc>// Keep only non-null, positive integers</jc>
+	 * 	Set&lt;Integer&gt; <jv>set</jv> = SetBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+	 * 		.filtered(v -&gt; v != <jk>null</jk> &amp;&amp; v &gt; 0)
+	 * 		.add(5)
+	 * 		.add(-1)     <jc>// Filtered out at build time</jc>
+	 * 		.add(<jk>null</jk>) <jc>// Filtered out at build time</jc>
+	 * 		.build();
+	 *
+	 * 	<jc>// Multiple filters combined with AND</jc>
+	 * 	Set&lt;Integer&gt; <jv>set2</jv> = SetBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+	 * 		.filtered(v -&gt; v != <jk>null</jk>)           <jc>// First filter</jc>
+	 * 		.filtered(v -&gt; v &gt; 0)                    <jc>// Second filter (ANDed with first)</jc>
+	 * 		.filtered(v -&gt; v &lt; 100);                  <jc>// Third filter (ANDed with previous)</jc>
+	 * 		.add(5)
+	 * 		.add(150)  <jc>// Filtered out (not &lt; 100)</jc>
+	 * 		.add(-1)   <jc>// Filtered out (not &gt; 0)</jc>
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param filter The filter predicate. Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public SetBuilder<E> filtered(Predicate<E> filter) {
+		Predicate<E> newFilter = assertArgNotNull("filter", filter);
+		if (this.filter == null)
+			this.filter = newFilter;
+		else
+			this.filter = this.filter.and(newFilter);
+		return this;
+	}
+
+	/**
 	 * Converts the set into a {@link SortedSet}.
+	 *
+	 * <p>
+	 * Note: If {@link #ordered()} was previously called, calling this method will override it.
+	 * The last method called ({@link #ordered()} or {@link #sorted()}) determines the final set type.
 	 *
 	 * @return This object.
 	 */
@@ -365,11 +525,16 @@ public class SetBuilder<E> {
 	/**
 	 * Converts the set into a {@link SortedSet} using the specified comparator.
 	 *
+	 * <p>
+	 * Note: If {@link #ordered()} was previously called, calling this method will override it.
+	 * The last method called ({@link #ordered()} or {@link #sorted()}) determines the final set type.
+	 *
 	 * @param comparator The comparator to use for sorting. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public SetBuilder<E> sorted(Comparator<E> comparator) {
 		this.comparator = assertArgNotNull("comparator", comparator);
+		ordered = false;
 		return this;
 	}
 
@@ -386,19 +551,6 @@ public class SetBuilder<E> {
 		return this;
 	}
 
-	/**
-	 * Specifies the set to append to.
-	 *
-	 * <p>
-	 * If not specified, uses a new {@link LinkedHashSet}.
-	 *
-	 * @param set The set to append to.
-	 * @return This object.
-	 */
-	public SetBuilder<E> to(Set<E> set) {
-		this.set = set;
-		return this;
-	}
 
 	/**
 	 * When specified, {@link #build()} will return an unmodifiable set.
@@ -414,15 +566,29 @@ public class SetBuilder<E> {
 	 * When specified, {@link #build()} will return a thread-safe synchronized set.
 	 *
 	 * <p>
-	 * The set will be wrapped using {@link Collections#synchronizedSet(Set)} to provide thread-safety.
+	 * The thread-safety implementation depends on other settings:
+	 * <ul>
+	 * 	<li>If {@link #sorted()} is set: Uses synchronized {@link TreeSet}
+	 * 	<li>If {@link #ordered()} is set: Uses synchronized {@link LinkedHashSet}
+	 * 	<li>Otherwise: Uses synchronized {@link HashSet}
+	 * </ul>
+	 *
+	 * <p>
 	 * This is useful when the set needs to be accessed from multiple threads.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Create a thread-safe set</jc>
+	 * 	<jc>// Create a thread-safe set using synchronized HashSet</jc>
 	 * 	Set&lt;String&gt; <jv>set</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
 	 * 		.add(<js>"one"</js>, <js>"two"</js>)
 	 * 		.concurrent()
+	 * 		.build();
+	 *
+	 * 	<jc>// Create a thread-safe ordered set</jc>
+	 * 	Set&lt;String&gt; <jv>set2</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 		.ordered()
+	 * 		.concurrent()
+	 * 		.add(<js>"one"</js>)
 	 * 		.build();
 	 * </p>
 	 *
@@ -437,7 +603,14 @@ public class SetBuilder<E> {
 	 * Sets whether {@link #build()} should return a thread-safe synchronized set.
 	 *
 	 * <p>
-	 * When <c>true</c>, the set will be wrapped using {@link Collections#synchronizedSet(Set)} to provide thread-safety.
+	 * The thread-safety implementation depends on other settings:
+	 * <ul>
+	 * 	<li>If {@link #sorted()} is set: Uses synchronized {@link TreeSet}
+	 * 	<li>If {@link #ordered()} is set: Uses synchronized {@link LinkedHashSet}
+	 * 	<li>Otherwise: Uses synchronized {@link HashSet}
+	 * </ul>
+	 *
+	 * <p>
 	 * This is useful when the set needs to be accessed from multiple threads.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -455,5 +628,76 @@ public class SetBuilder<E> {
 	public SetBuilder<E> concurrent(boolean value) {
 		concurrent = value;
 		return this;
+	}
+
+	/**
+	 * When specified, {@link #build()} will use a {@link LinkedHashSet} to preserve insertion order.
+	 *
+	 * <p>
+	 * If not specified, a {@link HashSet} is used by default (no guaranteed order).
+	 *
+	 * <p>
+	 * Note: If {@link #sorted()} was previously called, calling this method will override it.
+	 * The last method called ({@link #ordered()} or {@link #sorted()}) determines the final set type.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Create an ordered set (preserves insertion order)</jc>
+	 * 	Set&lt;String&gt; <jv>set</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 		.ordered()
+	 * 		.add(<js>"one"</js>)
+	 * 		.add(<js>"two"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public SetBuilder<E> ordered() {
+		return ordered(true);
+	}
+
+	/**
+	 * Sets whether {@link #build()} should use a {@link LinkedHashSet} to preserve insertion order.
+	 *
+	 * <p>
+	 * If <c>false</c> (default), a {@link HashSet} is used (no guaranteed order).
+	 * If <c>true</c>, a {@link LinkedHashSet} is used (preserves insertion order).
+	 *
+	 * <p>
+	 * Note: If {@link #sorted()} was previously called, calling this method with <c>true</c> will override it.
+	 * The last method called ({@link #ordered()} or {@link #sorted()}) determines the final set type.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Conditionally create an ordered set</jc>
+	 * 	Set&lt;String&gt; <jv>set</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 		.ordered(<jv>preserveOrder</jv>)
+	 * 		.add(<js>"one"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value Whether to preserve insertion order.
+	 * @return This object.
+	 */
+	public SetBuilder<E> ordered(boolean value) {
+		ordered = value;
+		if (ordered)
+			comparator = null;
+		return this;
+	}
+
+	/**
+	 * Converts an element object to the element type.
+	 *
+	 * @param o The object to convert.
+	 * @return The converted element, or <jk>null</jk> if conversion is not possible.
+	 */
+	@SuppressWarnings("unchecked")
+	private E convertElement(Object o) {
+		if (elementType.isInstance(o))
+			return (E)o;
+		if (nn(elementFunction))
+			return elementFunction.apply(o);
+		return null;
 	}
 }

@@ -133,7 +133,7 @@ public class ParameterInfo extends SwaggerElement {
 	private SchemaInfo schema;
 	private Items items;
 	private Object _default;  // NOSONAR - Intentional naming.
-	private Set<Object> _enum;  // NOSONAR - Intentional naming.
+	private Set<Object> _enum = new LinkedHashSet<>();  // NOSONAR - Intentional naming.
 	private Object example;
 	private Map<String,String> examples;
 
@@ -154,7 +154,8 @@ public class ParameterInfo extends SwaggerElement {
 		this.collectionFormat = copyFrom.collectionFormat;
 		this._default = copyFrom._default;
 		this.description = copyFrom.description;
-		this._enum = copyOf(copyFrom._enum);
+		if (nn(copyFrom._enum))
+			this._enum.addAll(copyOf(copyFrom._enum));
 		this.example = copyFrom.example;
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
@@ -187,7 +188,10 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ParameterInfo addEnum(Object...value) {
-		_enum = setb(Object.class).to(_enum).sparse().add(value).build();
+		if (nn(value))
+			for (var v : value)
+				if (nn(v))
+					_enum.add(v);
 		return this;
 	}
 
@@ -350,7 +354,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<Object> getEnum() { return _enum; }
+	public Set<Object> getEnum() { return nullIfEmpty(_enum); }
 
 	/**
 	 * Bean property getter:  <property>example</property>.
@@ -538,7 +542,7 @@ public class ParameterInfo extends SwaggerElement {
 			.addIf(nn(collectionFormat), "collectionFormat")
 			.addIf(nn(_default), "default")
 			.addIf(nn(description), "description")
-			.addIf(nn(_enum), "enum")
+			.addIf(isNotEmpty(_enum), "enum")
 			.addIf(nn(example), "example")
 			.addIf(nn(examples), "examples")
 			.addIf(nn(exclusiveMaximum), "exclusiveMaximum")
@@ -714,7 +718,9 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ParameterInfo setEnum(Collection<Object> value) {
-		_enum = toSet(value);
+		_enum.clear();
+		if (nn(value))
+			_enum.addAll(value);
 		return this;
 	}
 

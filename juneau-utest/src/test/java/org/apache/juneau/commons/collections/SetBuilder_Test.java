@@ -59,6 +59,7 @@ class SetBuilder_Test extends TestBase {
 	void a04_addAll() {
 		var existing = l("x", "y", "z");
 		var set = SetBuilder.create(String.class)
+			.ordered()
 			.add("a")
 			.addAll(existing)
 			.add("b")
@@ -230,38 +231,6 @@ class SetBuilder_Test extends TestBase {
 	// Copy mode
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	void g01_copy() {
-		var original = new LinkedHashSet<String>();
-		original.add("a");
-
-		var set = SetBuilder.create(String.class)
-			.to(original)
-			.add("b")
-			.copy()
-			.add("c")
-			.build();
-
-		assertSize(3, set);
-		assertSize(2, original);  // Original has "a" and "b" added before copy()
-		assertNotSame(original, set);  // After copy(), they're different sets
-	}
-
-	@Test
-	void g02_noCopy() {
-		var original = new LinkedHashSet<String>();
-		original.add("a");
-
-		var set = SetBuilder.create(String.class)
-			.to(original)
-			.add("b")
-			.build();
-
-		assertSize(2, set);
-		assertSize(2, original);  // Original modified
-		assertSame(original, set);
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Element type
 	//-----------------------------------------------------------------------------------------------------------------
@@ -342,6 +311,7 @@ class SetBuilder_Test extends TestBase {
 	@Test
 	void j02_addNullElement() {
 		var set = SetBuilder.create(String.class)
+			.ordered()
 			.add("a")
 			.add((String)null)
 			.add("b")
@@ -350,19 +320,6 @@ class SetBuilder_Test extends TestBase {
 		assertList(set, "a", "<null>", "b");
 	}
 
-	@Test
-	void j03_toExistingSet() {
-		var existing = new LinkedHashSet<String>();
-		existing.add("x");
-
-		var set = SetBuilder.create(String.class)
-			.to(existing)
-			.add("y")
-			.build();
-
-		assertList(set, "x", "y");
-		assertSame(existing, set);
-	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// AddAll edge cases
@@ -380,21 +337,26 @@ class SetBuilder_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Converters
+	// ElementFunction
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void l01_converters_emptyArray() {
-		var set = SetBuilder.create(String.class)
-			.converters()  // Empty array
-			.add("a")
+	void l01_elementFunction_withFunction() {
+		var set = SetBuilder.create(Integer.class)
+			.elementFunction(o -> {
+				if (o instanceof String) {
+					return Integer.parseInt((String)o);
+				}
+				return null;
+			})
+			.addAny("1", "2", "3")
 			.build();
 
-		assertList(set, "a");
+		assertList(set, 1, 2, 3);
 	}
 
 	@Test
-	void l02_converters_withConverter() {
+	void l02_elementFunction_withConverter() {
 		var converter = new org.apache.juneau.commons.utils.Converter() {
 			@Override
 			public <T> T convertTo(Class<T> type, Object o) {
@@ -406,7 +368,7 @@ class SetBuilder_Test extends TestBase {
 		};
 
 		var set = SetBuilder.create(Integer.class)
-			.converters(converter)
+			.elementFunction(o -> converter.convertTo(Integer.class, o))
 			.addAny("1", "2", "3")
 			.build();
 
@@ -414,7 +376,7 @@ class SetBuilder_Test extends TestBase {
 	}
 
 	@Test
-	void l03_converters_multipleConverters() {
+	void l03_elementFunction_multipleConverters() {
 		var converter1 = new org.apache.juneau.commons.utils.Converter() {
 			@Override
 			public <T> T convertTo(Class<T> type, Object o) {
@@ -433,7 +395,11 @@ class SetBuilder_Test extends TestBase {
 		};
 
 		var set = SetBuilder.create(Integer.class)
-			.converters(converter1, converter2)
+			.elementFunction(o -> {
+				Integer result = converter1.convertTo(Integer.class, o);
+				if (result != null) return result;
+				return converter2.convertTo(Integer.class, o);
+			})
 			.addAny("1", "2")
 			.build();
 
@@ -504,18 +470,13 @@ class SetBuilder_Test extends TestBase {
 
 	@Test
 	void m07_addAny_withTypeConversion() {
-		var converter = new org.apache.juneau.commons.utils.Converter() {
-			@Override
-			public <T> T convertTo(Class<T> type, Object o) {
-				if (type == Integer.class && o instanceof String) {
-					return type.cast(Integer.parseInt((String)o));
+		var set = SetBuilder.create(Integer.class)
+			.elementFunction(o -> {
+				if (o instanceof String) {
+					return Integer.parseInt((String)o);
 				}
 				return null;
-			}
-		};
-
-		var set = SetBuilder.create(Integer.class)
-			.converters(converter)
+			})
 			.addAny("1", "2", "3")
 			.build();
 
@@ -523,31 +484,12 @@ class SetBuilder_Test extends TestBase {
 	}
 
 	@Test
-	void m08_addAny_withConverterToCollection() {
-		// This test verifies that when a converter converts an object to a List,
-		// that List gets processed recursively by addAny.
-		// Since String matches String.class directly, we need to use a wrapper type
-		// that doesn't match, so the converter path is taken.
-		class StringWrapper {
-			final String value;
-			StringWrapper(String value) { this.value = value; }
-		}
-
-		var converter = new org.apache.juneau.commons.utils.Converter() {
-			@Override
-			public <T> T convertTo(Class<T> type, Object o) {
-				if (type == List.class && o instanceof StringWrapper) {
-					// Convert wrapper to List by splitting the string value
-					var s = ((StringWrapper)o).value;
-					return type.cast(l(s.split(",")));
-				}
-				return null;
-			}
-		};
-
+	void m08_addAny_withFunctionToCollection() {
+		// This test verifies that addAny can handle collections directly.
+		// Since elementFunction is for converting to the element type, not to collections,
+		// we test that addAny works with collections directly.
 		var set = SetBuilder.create(String.class)
-			.converters(converter)
-			.addAny(new StringWrapper("a,b,c"))
+			.addAny(l("a", "b", "c"))
 			.build();
 
 		assertList(set, "a", "b", "c");
@@ -559,8 +501,8 @@ class SetBuilder_Test extends TestBase {
 	}
 
 	@Test
-	void m10_addAny_noConverters_throwsException() {
-		// When converters is null and we try to add a non-matching type, it should throw
+	void m10_addAny_noElementFunction_throwsException() {
+		// When elementFunction is null and we try to add a non-matching type, it should throw
 		assertThrows(RuntimeException.class, () -> {
 			SetBuilder.create(Integer.class)
 				.addAny("not-an-integer")
@@ -569,19 +511,12 @@ class SetBuilder_Test extends TestBase {
 	}
 
 	@Test
-	void m11_addAny_converterReturnsNull() {
-		// Converter exists but returns null (can't convert)
-		var converter = new org.apache.juneau.commons.utils.Converter() {
-			@Override
-			public <T> T convertTo(Class<T> type, Object o) {
-				return null;  // Can't convert
-			}
-		};
-
-		// Should throw RuntimeException when converter can't convert
+	void m11_addAny_elementFunctionReturnsNull() {
+		// ElementFunction exists but returns null (can't convert)
+		// Should throw RuntimeException when elementFunction can't convert
 		assertThrows(RuntimeException.class, () -> {
 			SetBuilder.create(Integer.class)
-				.converters(converter)
+				.elementFunction(o -> null)  // Can't convert
 				.addAny("not-an-integer")
 				.build();
 		});
@@ -626,17 +561,6 @@ class SetBuilder_Test extends TestBase {
 		assertNull(set);
 	}
 
-	@Test
-	void o02_build_sparseWithEmptySet() {
-		var existing = new LinkedHashSet<String>();
-
-		var set = SetBuilder.create(String.class)
-			.to(existing)
-			.sparse()
-			.build();
-
-		assertNull(set);
-	}
 
 	@Test
 	void o03_build_notSparseWithNullSet() {
@@ -679,7 +603,6 @@ class SetBuilder_Test extends TestBase {
 			.buildFluent();
 
 		assertNotNull(set);
-		assertTrue(set instanceof FluentSet);
 		assertSize(3, set);
 		assertList(set, "a", "b", "c");
 	}
@@ -701,7 +624,6 @@ class SetBuilder_Test extends TestBase {
 			.buildFluent();
 
 		assertNotNull(set);
-		assertTrue(set instanceof FluentSet);
 		assertList(set, "a", "b", "c");
 	}
 
@@ -713,7 +635,6 @@ class SetBuilder_Test extends TestBase {
 			.buildFluent();
 
 		assertNotNull(set);
-		assertTrue(set instanceof FluentSet);
 		assertSize(3, set);
 		assertThrows(UnsupportedOperationException.class, () -> set.add("d"));
 	}

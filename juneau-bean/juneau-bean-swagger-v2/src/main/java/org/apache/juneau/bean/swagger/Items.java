@@ -88,7 +88,7 @@ public class Items extends SwaggerElement {
 	private Boolean exclusiveMaximum, exclusiveMinimum, uniqueItems;
 	private Items items;  // NOSONAR - Intentional naming.
 	private Object _default;  // NOSONAR - Intentional naming.
-	private Set<Object> _enum;  // NOSONAR - Intentional naming.
+	private Set<Object> _enum = new LinkedHashSet<>();  // NOSONAR - Intentional naming.
 
 	/**
 	 * Default constructor.
@@ -105,7 +105,8 @@ public class Items extends SwaggerElement {
 
 		this.collectionFormat = copyFrom.collectionFormat;
 		this._default = copyFrom._default;
-		this._enum = copyOf(copyFrom._enum);
+		if (nn(copyFrom._enum))
+			this._enum.addAll(copyOf(copyFrom._enum));
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
 		this.format = copyFrom.format;
@@ -132,7 +133,10 @@ public class Items extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Items addEnum(Object...value) {
-		setEnum(setb(Object.class).to(_enum).sparse().add(value).build());
+		if (nn(value))
+			for (var v : value)
+				if (nn(v))
+					_enum.add(v);
 		return this;
 	}
 
@@ -203,7 +207,7 @@ public class Items extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<Object> getEnum() { return _enum; }
+	public Set<Object> getEnum() { return nullIfEmpty(_enum); }
 
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
@@ -326,7 +330,7 @@ public class Items extends SwaggerElement {
 		var s = setb(String.class)
 			.addIf(nn(collectionFormat), "collectionFormat")
 			.addIf(nn(_default), "default")
-			.addIf(nn(_enum), "enum")
+			.addIf(isNotEmpty(_enum), "enum")
 			.addIf(nn(exclusiveMaximum), "exclusiveMaximum")
 			.addIf(nn(exclusiveMinimum), "exclusiveMinimum")
 			.addIf(nn(format), "format")
@@ -463,7 +467,9 @@ public class Items extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Items setEnum(Collection<Object> value) {
-		_enum = toSet(value);
+		_enum.clear();
+		if (nn(value))
+			_enum.addAll(value);
 		return this;
 	}
 

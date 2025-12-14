@@ -90,7 +90,7 @@ public class Items extends OpenApiElement {
 	private Boolean exclusiveMaximum, exclusiveMinimum, uniqueItems;
 	private Items items;  // NOSONAR - Intentional naming.
 	private Object _default;  // NOSONAR - Intentional naming.
-	private List<Object> _enum;  // NOSONAR - Intentional naming.
+	private List<Object> _enum = list();  // NOSONAR - Intentional naming.
 
 	/**
 	 * Default constructor.
@@ -121,7 +121,8 @@ public class Items extends OpenApiElement {
 		this.uniqueItems = copyFrom.uniqueItems;
 		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
 		this._default = copyFrom._default;
-		this._enum = copyOf(copyFrom._enum);
+		if (nn(copyFrom._enum))
+			this._enum.addAll(copyOf(copyFrom._enum));
 		this.ref = copyFrom.ref;
 	}
 
@@ -134,7 +135,10 @@ public class Items extends OpenApiElement {
 	 * @return This object
 	 */
 	public Items addEnum(Object...values) {
-		_enum = listb(Object.class).to(_enum).sparse().addAny(values).build();
+		if (nn(values))
+			for (var v : values)
+				if (nn(v))
+					_enum.add(v);
 		return this;
 	}
 
@@ -206,7 +210,7 @@ public class Items extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getEnum() { return _enum; }
+	public List<Object> getEnum() { return nullIfEmpty(_enum); }
 
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
@@ -330,7 +334,7 @@ public class Items extends OpenApiElement {
 			.addIf(nn(ref), "$ref")
 			.addIf(nn(collectionFormat), "collectionFormat")
 			.addIf(nn(_default), "default")
-			.addIf(nn(_enum), "enum")
+			.addIf(isNotEmpty(_enum), "enum")
 			.addIf(nn(exclusiveMaximum), "exclusiveMaximum")
 			.addIf(nn(exclusiveMinimum), "exclusiveMinimum")
 			.addIf(nn(format), "format")
@@ -472,7 +476,9 @@ public class Items extends OpenApiElement {
 	 * @return This object
 	 */
 	public Items setEnum(Collection<Object> value) {
-		_enum = toList(value);
+		_enum.clear();
+		if (nn(value))
+			_enum.addAll(value);
 		return this;
 	}
 

@@ -24,8 +24,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
-
-import org.apache.juneau.commons.utils.*;
+import java.util.function.*;
 
 /**
  * A fluent builder for constructing {@link List} instances with various configuration options.
@@ -44,7 +43,8 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Sorting support - natural order or custom {@link Comparator}
  * 	<li>Sparse mode - return <jk>null</jk> for empty lists
  * 	<li>Unmodifiable mode - create immutable lists
- * 	<li>Custom converters - type conversion via {@link Converter}
+ * 	<li>Filtering support - exclude unwanted elements via {@link #filtered()} or {@link #filtered(Predicate)}
+ * 	<li>Custom conversion functions - type conversion via {@link #elementFunction(Function)}
  * </ul>
  *
  * <h5 class='section'>Examples:</h5>
@@ -88,6 +88,13 @@ import org.apache.juneau.commons.utils.*;
  * 	FluentList&lt;String&gt; <jv>fluent</jv> = ListBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
  * 		.add(<js>"one"</js>, <js>"two"</js>)
  * 		.buildFluent();
+ *
+ * 	<jc>// FilteredList - use buildFiltered()</jc>
+ * 	FilteredList&lt;Integer&gt; <jv>filtered</jv> = ListBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+ * 		.filtered(v -&gt; v &gt; 0)
+ * 		.add(5)
+ * 		.add(-1)  <jc>// Filtered out</jc>
+ * 		.buildFiltered();
  * </p>
  *
  * <h5 class='section'>Thread Safety:</h5>
@@ -126,9 +133,10 @@ public class ListBuilder<E> {
 	private List<E> list;
 	private boolean unmodifiable = false, sparse = false, concurrent = false;
 	private Comparator<E> comparator;
-	private List<Converter> converters;
 
+	private Predicate<E> filter;
 	private Class<E> elementType;
+	private Function<Object,E> elementFunction;
 
 	/**
 	 * Constructor.
@@ -141,6 +149,9 @@ public class ListBuilder<E> {
 
 	/**
 	 * Adds a single value to this list.
+	 *
+	 * <p>
+	 * Note: Filtering is applied at build time, not when adding elements.
 	 *
 	 * @param value The value to add to this list.
 	 * @return This object.
@@ -194,7 +205,7 @@ public class ListBuilder<E> {
 	 * 	<li>Direct instances of the element type - added as-is
 	 * 	<li>Collections - recursively flattened and elements converted
 	 * 	<li>Arrays - recursively flattened and elements converted
-	 * 	<li>Convertible types - converted using registered {@link Converter}s
+	 * 	<li>Convertible types - converted using {@link #elementFunction(Function)}
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -224,17 +235,9 @@ public class ListBuilder<E> {
 					} else if (elementType.isInstance(o)) {
 						add(elementType.cast(o));
 					} else {
-						if (nn(converters)) {
-							var e = converters.stream().map(x -> x.convertTo(elementType, o)).filter(x -> nn(x)).findFirst().orElse(null);
-							if (nn(e)) {
-								add(e);
-							} else {
-								var l = converters.stream().map(x -> x.convertTo(List.class, o)).filter(x -> nn(x)).findFirst().orElse(null);
-								if (nn(l))
-									addAny(l);
-								else
-									throw rex("Object of type {0} could not be converted to type {1}", cn(o), cn(elementType));
-							}
+						E converted = convertElement(o);
+						if (converted != null) {
+							add(converted);
 						} else {
 							throw rex("Object of type {0} could not be converted to type {1}", cn(o), cn(elementType));
 						}
@@ -267,27 +270,42 @@ public class ListBuilder<E> {
 	 * Builds the list.
 	 *
 	 * <p>
-	 * Applies sorting/unmodifiable/sparse options.
+	 * Applies filtering, sorting, concurrent, unmodifiable, and sparse options.
 	 *
-	 * @return The built list or {@code null} if {@link #sparse()} is set and the list is empty.
+	 * <p>
+	 * If filtering is applied, the result is wrapped in a {@link FilteredList}.
+	 *
+	 * @return The built list, or {@code null} if {@link #sparse()} is set and the list is empty.
 	 */
 	public List<E> build() {
-		if (sparse) {
-			if (nn(list) && list.isEmpty())
-				list = null;
-		} else {
-			if (list == null)
-				list = list();
+		if (sparse && isEmpty(list))
+			return null;
+
+		var list2 = (List<E>)null;
+		if (nn(comparator))
+			list2 = new SortedArrayList<>(comparator);
+		else
+			list2 = new ArrayList<>();
+
+		if (concurrent)
+			list2 = synchronizedList(list2);
+
+		if (nn(filter) || nn(elementFunction)) {
+			var list3b = FilteredList.create(elementType);
+			if (nn(filter))
+				list3b.filter(filter);
+			if (nn(elementFunction))
+				list3b.elementFunction(elementFunction);
+			list2 = list3b.inner(list2).build();
 		}
-		if (nn(list)) {
-			if (nn(comparator))
-				Collections.sort(list, comparator);
-			if (concurrent)
-				list = synchronizedList(list);
-			if (unmodifiable)
-				list = unmodifiableList(list);
-		}
-		return list;
+
+		if (nn(list))
+			list2.addAll(list);
+
+		if (unmodifiable)
+			list2 = unmodifiableList(list2);
+
+		return list2;
 	}
 
 	/**
@@ -313,28 +331,48 @@ public class ListBuilder<E> {
 	}
 
 	/**
-	 * Registers value converters that can adapt incoming values in {@link #addAny(Object...)}.
+	 * Builds the list as a {@link FilteredList}.
 	 *
-	 * @param values Converters to register. Ignored if {@code null}.
-	 * @return This object.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
+	 *
+	 * 	FilteredList&lt;Integer&gt; <jv>list</jv> = ListBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+	 * 		.filtered(v -&gt; v != <jk>null</jk> &amp;&amp; v &gt; 0)
+	 * 		.add(5)
+	 * 		.add(-1)  <jc>// Will be filtered out</jc>
+	 * 		.buildFiltered();
+	 * </p>
+	 *
+	 * <p>
+	 * Note: If {@link #unmodifiable()} is set, the returned list will be wrapped in an unmodifiable view,
+	 * which may cause issues if the FilteredList tries to modify it internally. It's recommended to avoid
+	 * using {@link #unmodifiable()} when calling this method.
+	 *
+	 * @return The built list as a {@link FilteredList}, or {@code null} if {@link #sparse()} is set and the list is empty.
 	 */
-	public ListBuilder<E> converters(Converter...values) {
-		if (values.length == 0)
-			return this;
-		if (converters == null)
-			converters = list();
-		converters.addAll(l(values));
-		return this;
+	public FilteredList<E> buildFiltered() {
+		var l = build();
+		if (l == null)  // sparse mode and empty
+			return null;
+		if (l instanceof FilteredList<E> l2)
+			return l2;
+		// Note that if unmodifiable is true, 'l' will be unmodifiable and will cause an error if you try
+		// to insert a value from within FilteredList.
+		return FilteredList.create(elementType).inner(l).build();
 	}
 
 	/**
-	 * Forces the existing list to be copied instead of appended to.
+	 * Sets the element conversion function for converting elements in {@link #addAny(Object...)}.
 	 *
+	 * <p>
+	 * The function is applied to each element when adding elements in {@link #addAny(Object...)}.
+	 *
+	 * @param elementFunction The function to convert elements. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public ListBuilder<E> copy() {
-		if (nn(list))
-			list = copyOf(list);
+	public ListBuilder<E> elementFunction(Function<Object,E> elementFunction) {
+		this.elementFunction = assertArgNotNull("elementFunction", elementFunction);
 		return this;
 	}
 
@@ -346,6 +384,97 @@ public class ListBuilder<E> {
 	 */
 	public ListBuilder<E> elementType(Class<E> value) {
 		elementType = assertArgNotNull("value", value);
+		return this;
+	}
+
+	/**
+	 * Applies a default filter that excludes common "empty" or "unset" values from being added to the list.
+	 *
+	 * <p>
+	 * The following values are filtered out:
+	 * <ul>
+	 * 	<li>{@code null}
+	 * 	<li>{@link Boolean#FALSE}
+	 * 	<li>Numbers with {@code intValue() == -1}
+	 * 	<li>Empty arrays
+	 * 	<li>Empty {@link Map Maps}
+	 * 	<li>Empty {@link Collection Collections}
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
+	 *
+	 * 	List&lt;Object&gt; <jv>list</jv> = ListBuilder.<jsm>create</jsm>(Object.<jk>class</jk>)
+	 * 		.filtered()
+	 * 		.add(<js>"name"</js>)
+	 * 		.add(-1)              <jc>// Filtered out at build time</jc>
+	 * 		.add(<jk>false</jk>)     <jc>// Filtered out at build time</jc>
+	 * 		.add(<jk>new</jk> String[0]) <jc>// Filtered out at build time</jc>
+	 * 		.build();
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public ListBuilder<E> filtered() {
+		// @formatter:off
+		return filtered(v -> ! (
+			v == null
+			|| (v instanceof Boolean v2 && v2.equals(false))
+			|| (v instanceof Number v3 && v3.intValue() == -1)
+			|| (isArray(v) && Array.getLength(v) == 0)
+			|| (v instanceof Map v2 && v2.isEmpty())
+			|| (v instanceof Collection v3 && v3.isEmpty())
+			));
+		// @formatter:on
+	}
+
+	/**
+	 * Applies a filter predicate to elements when building the list.
+	 *
+	 * <p>
+	 * The filter receives the element value. Elements where the predicate returns
+	 * {@code true} will be kept; elements where it returns {@code false} will be filtered out.
+	 *
+	 * <p>
+	 * This method can be called multiple times. When called multiple times, all filters are combined
+	 * using AND logic - an element must pass all filters to be kept in the list.
+	 *
+	 * <p>
+	 * Note: Filtering is applied at build time, not when adding elements.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
+	 *
+	 * 	<jc>// Keep only non-null, positive integers</jc>
+	 * 	List&lt;Integer&gt; <jv>list</jv> = ListBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+	 * 		.filtered(v -&gt; v != <jk>null</jk> &amp;&amp; v &gt; 0)
+	 * 		.add(5)
+	 * 		.add(-1)     <jc>// Filtered out at build time</jc>
+	 * 		.add(<jk>null</jk>) <jc>// Filtered out at build time</jc>
+	 * 		.build();
+	 *
+	 * 	<jc>// Multiple filters combined with AND</jc>
+	 * 	List&lt;Integer&gt; <jv>list2</jv> = ListBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+	 * 		.filtered(v -&gt; v != <jk>null</jk>)           <jc>// First filter</jc>
+	 * 		.filtered(v -&gt; v &gt; 0)                    <jc>// Second filter (ANDed with first)</jc>
+	 * 		.filtered(v -&gt; v &lt; 100);                  <jc>// Third filter (ANDed with previous)</jc>
+	 * 		.add(5)
+	 * 		.add(150)  <jc>// Filtered out (not &lt; 100)</jc>
+	 * 		.add(-1)   <jc>// Filtered out (not &gt; 0)</jc>
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param filter The filter predicate. Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public ListBuilder<E> filtered(Predicate<E> filter) {
+		Predicate<E> newFilter = assertArgNotNull("filter", filter);
+		if (this.filter == null)
+			this.filter = newFilter;
+		else
+			this.filter = this.filter.and(newFilter);
 		return this;
 	}
 
@@ -383,19 +512,6 @@ public class ListBuilder<E> {
 		return this;
 	}
 
-	/**
-	 * Specifies the list to append to.
-	 *
-	 * <p>
-	 * If not specified, uses a new {@link ArrayList}.
-	 *
-	 * @param list The list to append to.
-	 * @return This object.
-	 */
-	public ListBuilder<E> to(List<E> list) {
-		this.list = list;
-		return this;
-	}
 
 	/**
 	 * When specified, {@link #build()} will return an unmodifiable list.
@@ -452,5 +568,20 @@ public class ListBuilder<E> {
 	public ListBuilder<E> concurrent(boolean value) {
 		concurrent = value;
 		return this;
+	}
+
+	/**
+	 * Converts an element object to the element type.
+	 *
+	 * @param o The object to convert.
+	 * @return The converted element, or <jk>null</jk> if conversion is not possible.
+	 */
+	@SuppressWarnings("unchecked")
+	private E convertElement(Object o) {
+		if (elementType.isInstance(o))
+			return (E)o;
+		if (nn(elementFunction))
+			return elementFunction.apply(o);
+		return null;
 	}
 }

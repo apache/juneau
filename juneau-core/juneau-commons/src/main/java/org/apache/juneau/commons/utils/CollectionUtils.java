@@ -896,11 +896,10 @@ public class CollectionUtils {
 	 *
 	 * @param <E> The element type.
 	 * @param type The element type.
-	 * @param converters Optional converters to use for converting values.
 	 * @return A new list builder.
 	 */
-	public static <E> ListBuilder<E> listb(Class<E> type, Converter...converters) {
-		return ListBuilder.create(type).converters(converters);
+	public static <E> ListBuilder<E> listb(Class<E> type) {
+		return ListBuilder.create(type);
 	}
 
 	/**
@@ -1749,11 +1748,10 @@ public class CollectionUtils {
 	 *
 	 * @param <E> The element type.
 	 * @param type The element type.
-	 * @param converters Optional converters to use for converting values.
 	 * @return A new set builder.
 	 */
-	public static <E> SetBuilder<E> setb(Class<E> type, Converter...converters) {
-		return SetBuilder.create(type).converters(converters);
+	public static <E> SetBuilder<E> setb(Class<E> type) {
+		return SetBuilder.create(type).ordered();
 	}
 
 	/**

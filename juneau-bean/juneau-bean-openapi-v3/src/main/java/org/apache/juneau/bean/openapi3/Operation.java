@@ -91,16 +91,16 @@ import org.apache.juneau.commons.collections.*;
  */
 public class Operation extends OpenApiElement {
 
-	private List<String> tags;
+	private List<String> tags = list();
 	private String summary, description, operationId;
 	private ExternalDocumentation externalDocs;
-	private List<Parameter> parameters;
+	private List<Parameter> parameters = list();
 	private RequestBodyInfo requestBody;
 	private Map<String,Response> responses = map();
 	private Map<String,Callback> callbacks = map();
 	private Boolean deprecated;
-	private List<SecurityRequirement> security;
-	private List<Server> servers;
+	private List<SecurityRequirement> security = list();
+	private List<Server> servers = list();
 
 	/**
 	 * Default constructor.
@@ -114,20 +114,24 @@ public class Operation extends OpenApiElement {
 	 */
 	public Operation(Operation copyFrom) {
 		super(copyFrom);
-		this.tags = copyOf(copyFrom.tags);
+		if (nn(copyFrom.tags))
+			tags.addAll(copyFrom.tags);
 		this.summary = copyFrom.summary;
 		this.description = copyFrom.description;
 		this.operationId = copyFrom.operationId;
 		this.externalDocs = copyFrom.externalDocs;
-		this.parameters = copyOf(copyFrom.parameters);
+		if (nn(copyFrom.parameters))
+			parameters.addAll(copyOf(copyFrom.parameters, Parameter::copy));
 		this.requestBody = copyFrom.requestBody;
 		if (nn(copyFrom.responses))
 			responses.putAll(copyFrom.responses);
 		if (nn(copyFrom.callbacks))
 			callbacks.putAll(copyFrom.callbacks);
 		this.deprecated = copyFrom.deprecated;
-		this.security = copyOf(copyFrom.security);
-		this.servers = copyOf(copyFrom.servers);
+		if (nn(copyFrom.security))
+			security.addAll(copyOf(copyFrom.security, SecurityRequirement::copy));
+		if (nn(copyFrom.servers))
+			servers.addAll(copyOf(copyFrom.servers, Server::copy));
 	}
 
 	/**
@@ -163,7 +167,8 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addParameters(Collection<Parameter> values) {
-		parameters = listb(Parameter.class).to(parameters).sparse().addAll(values).build();
+		if (nn(values))
+			parameters.addAll(values);
 		return this;
 	}
 
@@ -179,7 +184,10 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addParameters(Parameter...values) {
-		parameters = listb(Parameter.class).to(parameters).sparse().add(values).build();
+		if (nn(values))
+			for (var v : values)
+				if (nn(v))
+					parameters.add(v);
 		return this;
 	}
 
@@ -216,7 +224,8 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addSecurity(Collection<SecurityRequirement> values) {
-		security = listb(SecurityRequirement.class).to(security).sparse().addAll(values).build();
+		if (nn(values))
+			security.addAll(values);
 		return this;
 	}
 
@@ -232,7 +241,10 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addSecurity(SecurityRequirement...values) {
-		security = listb(SecurityRequirement.class).to(security).sparse().add(values).build();
+		if (nn(values))
+			for (var v : values)
+				if (nn(v))
+					security.add(v);
 		return this;
 	}
 
@@ -248,7 +260,8 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addServers(Collection<Server> values) {
-		servers = listb(Server.class).to(servers).sparse().addAll(values).build();
+		if (nn(values))
+			servers.addAll(values);
 		return this;
 	}
 
@@ -264,7 +277,10 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addServers(Server...values) {
-		servers = listb(Server.class).to(servers).sparse().add(values).build();
+		if (nn(values))
+			for (var v : values)
+				if (nn(v))
+					servers.add(v);
 		return this;
 	}
 
@@ -280,7 +296,8 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addTags(Collection<String> values) {
-		tags = listb(String.class).to(tags).sparse().addAll(values).build();
+		if (nn(values))
+			tags.addAll(values);
 		return this;
 	}
 
@@ -296,7 +313,10 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addTags(String...values) {
-		tags = listb(String.class).to(tags).sparse().add(values).build();
+		if (nn(values))
+			for (var v : values)
+				if (nn(v))
+					tags.add(v);
 		return this;
 	}
 
@@ -374,10 +394,9 @@ public class Operation extends OpenApiElement {
 	public Parameter getParameter(String in, String name) {
 		assertArgNotNull("in", in);
 		assertArgNotNull("name", name);
-		if (nn(parameters))
-			for (var p : parameters)
-				if (eq(p.getIn(), in) && eq(p.getName(), name))
-					return p;
+		for (var p : parameters)
+			if (eq(p.getIn(), in) && eq(p.getName(), name))
+				return p;
 		return null;
 	}
 
@@ -386,7 +405,7 @@ public class Operation extends OpenApiElement {
 	 *
 	 * @return The parameters list.
 	 */
-	public List<Parameter> getParameters() { return parameters; }
+	public List<Parameter> getParameters() { return nullIfEmpty(parameters); }
 
 	/**
 	 * Returns the request body.
@@ -428,14 +447,14 @@ public class Operation extends OpenApiElement {
 	 *
 	 * @return The security requirements list.
 	 */
-	public List<SecurityRequirement> getSecurity() { return security; }
+	public List<SecurityRequirement> getSecurity() { return nullIfEmpty(security); }
 
 	/**
 	 * Returns the servers list.
 	 *
 	 * @return The servers list.
 	 */
-	public List<Server> getServers() { return servers; }
+	public List<Server> getServers() { return nullIfEmpty(servers); }
 
 	/**
 	 * Returns the summary.
@@ -449,7 +468,7 @@ public class Operation extends OpenApiElement {
 	 *
 	 * @return The tags list.
 	 */
-	public List<String> getTags() { return tags; }
+	public List<String> getTags() { return nullIfEmpty(tags); }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
@@ -460,13 +479,13 @@ public class Operation extends OpenApiElement {
 			.addIf(nn(description), "description")
 			.addIf(nn(externalDocs), "externalDocs")
 			.addIf(nn(operationId), "operationId")
-			.addIf(nn(parameters), "parameters")
+			.addIf(isNotEmpty(parameters), "parameters")
 			.addIf(nn(requestBody), "requestBody")
 			.addIf(isNotEmpty(responses), "responses")
-			.addIf(nn(security), "security")
-			.addIf(nn(servers), "servers")
+			.addIf(isNotEmpty(security), "security")
+			.addIf(isNotEmpty(servers), "servers")
 			.addIf(nn(summary), "summary")
-			.addIf(nn(tags), "tags")
+			.addIf(isNotEmpty(tags), "tags")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -559,7 +578,9 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation setParameters(List<Parameter> value) {
-		this.parameters = value;
+		parameters.clear();
+		if (nn(value))
+			parameters.addAll(value);
 		return this;
 	}
 
@@ -605,7 +626,9 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation setSecurity(List<SecurityRequirement> value) {
-		this.security = value;
+		security.clear();
+		if (nn(value))
+			security.addAll(value);
 		return this;
 	}
 
@@ -627,7 +650,9 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation setServers(List<Server> value) {
-		this.servers = value;
+		servers.clear();
+		if (nn(value))
+			servers.addAll(value);
 		return this;
 	}
 
@@ -660,7 +685,9 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation setTags(List<String> value) {
-		this.tags = value;
+		tags.clear();
+		if (nn(value))
+			tags.addAll(value);
 		return this;
 	}
 

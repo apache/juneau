@@ -97,10 +97,10 @@ public class Swagger extends SwaggerElement {
 		host, basePath;
 	private Info info;
 	private ExternalDocumentation externalDocs;
-	private Set<String> schemes;
-	private Set<MediaType> consumes, produces;
-	private Set<Tag> tags;
-	private List<Map<String,List<String>>> security;
+	private Set<String> schemes = new LinkedHashSet<>();
+	private Set<MediaType> consumes = new LinkedHashSet<>(), produces = new LinkedHashSet<>();
+	private Set<Tag> tags = new LinkedHashSet<>();
+	private List<Map<String,List<String>>> security = list();
 	private Map<String,JsonMap> definitions = map();
 	private Map<String,ParameterInfo> parameters = map();
 	private Map<String,ResponseInfo> responses = map();
@@ -122,12 +122,15 @@ public class Swagger extends SwaggerElement {
 		super(copyFrom);
 
 		this.basePath = copyFrom.basePath;
-		this.consumes = copyOf(copyFrom.consumes);
+		if (nn(copyFrom.consumes))
+			this.consumes.addAll(copyOf(copyFrom.consumes));
 		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
 		this.host = copyFrom.host;
 		this.info = copyFrom.info == null ? null : copyFrom.info.copy();
-		this.produces = copyOf(copyFrom.produces);
-		this.schemes = copyOf(copyFrom.schemes);
+		if (nn(copyFrom.produces))
+			this.produces.addAll(copyOf(copyFrom.produces));
+		if (nn(copyFrom.schemes))
+			this.schemes.addAll(copyOf(copyFrom.schemes));
 		this.swagger = copyFrom.swagger;
 
 		// TODO - Definitions are not deep copied, so they should not contain references.
@@ -148,13 +151,15 @@ public class Swagger extends SwaggerElement {
 		if (nn(copyFrom.securityDefinitions))
 			securityDefinitions.putAll(copyOf(copyFrom.securityDefinitions, SecurityScheme::copy));
 
-		this.security = copyOf(copyFrom.security, x -> {
-			Map<String,List<String>> m2 = map();
-			x.forEach((k, v) -> m2.put(k, copyOf(v)));
-			return m2;
-		});
+		if (nn(copyFrom.security))
+			copyFrom.security.forEach(x -> {
+				Map<String,List<String>> m2 = map();
+				x.forEach((k, v) -> m2.put(k, copyOf(v)));
+				security.add(m2);
+			});
 
-		this.tags = copyOf(copyFrom.tags, x -> x.copy());
+		if (nn(copyFrom.tags))
+			this.tags.addAll(copyOf(copyFrom.tags, x -> x.copy()));
 	}
 
 	/**
@@ -169,7 +174,8 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addConsumes(Collection<MediaType> values) {
-		consumes = setb(MediaType.class).to(consumes).sparse().addAll(values).build();
+		if (nn(values))
+			consumes.addAll(values);
 		return this;
 	}
 
@@ -186,7 +192,10 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addConsumes(MediaType...values) {
-		consumes = setb(MediaType.class).to(consumes).sparse().add(values).build();
+		if (nn(values))
+			for (var v : values)
+				if (nn(v))
+					consumes.add(v);
 		return this;
 	}
 
@@ -256,7 +265,8 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addProduces(Collection<MediaType> values) {
-		produces = setb(MediaType.class).to(produces).sparse().addAll(values).build();
+		if (nn(values))
+			produces.addAll(values);
 		return this;
 	}
 
@@ -273,7 +283,10 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addProduces(MediaType...values) {
-		produces = setb(MediaType.class).to(produces).sparse().add(values).build();
+		if (nn(values))
+			for (var v : values)
+				if (nn(v))
+					produces.add(v);
 		return this;
 	}
 
@@ -313,7 +326,8 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addSchemes(Collection<String> values) {
-		schemes = setb(String.class).to(schemes).sparse().addAll(values).build();
+		if (nn(values))
+			schemes.addAll(values);
 		return this;
 	}
 
@@ -336,7 +350,10 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addSchemes(String...values) {
-		schemes = setb(String.class).to(schemes).sparse().add(values).build();
+		if (nn(values))
+			for (var v : values)
+				if (nn(v))
+					schemes.add(v);
 		return this;
 	}
 
@@ -351,9 +368,9 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Swagger addSecurity(Collection<Map<String,List<String>>> values) {
-		security = listb(Map.class).to((List)security).sparse().addAll(values).build();
+		if (nn(values))
+			security.addAll(values);
 		return this;
 	}
 
@@ -368,12 +385,11 @@ public class Swagger extends SwaggerElement {
 	 * 	The list of values describes alternative security schemes that can be used (that is, there is a logical OR between the security requirements).
 	 * @return This object.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Swagger addSecurity(String scheme, String...alternatives) {
 		assertArgNotNull("scheme", scheme);
-		var m = map();
+		Map<String,List<String>> m = map();
 		m.put(scheme, l(alternatives));
-		security = listb(Map.class).to((List)security).sparse().addAll(Collections.singleton(m)).build();
+		security.add(m);
 		return this;
 	}
 
@@ -410,7 +426,8 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addTags(Collection<Tag> values) {
-		tags = setb(Tag.class).to(tags).sparse().addAll(values).build();
+		if (nn(values))
+			tags.addAll(values);
 		return this;
 	}
 
@@ -430,7 +447,10 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addTags(Tag...values) {
-		tags = setb(Tag.class).to(tags).sparse().add(values).build();
+		if (nn(values))
+			for (var v : values)
+				if (nn(v))
+					tags.add(v);
 		return this;
 	}
 
@@ -512,7 +532,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<MediaType> getConsumes() { return consumes; }
+	public Set<MediaType> getConsumes() { return nullIfEmpty(consumes); }
 
 	/**
 	 * Bean property getter:  <property>definitions</property>.
@@ -622,7 +642,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<MediaType> getProduces() { return produces; }
+	public Set<MediaType> getProduces() { return nullIfEmpty(produces); }
 
 	/**
 	 * Shortcut for calling <c>getPaths().get(path).get(operation).getResponse(status);</c>
@@ -669,7 +689,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<String> getSchemes() { return schemes; }
+	public Set<String> getSchemes() { return nullIfEmpty(schemes); }
 
 	/**
 	 * Bean property getter:  <property>security</property>.
@@ -679,7 +699,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Map<String,List<String>>> getSecurity() { return security; }
+	public List<Map<String,List<String>>> getSecurity() { return nullIfEmpty(security); }
 
 	/**
 	 * Bean property getter:  <property>securityDefinitions</property>.
@@ -709,27 +729,27 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<Tag> getTags() { return tags; }
+	public Set<Tag> getTags() { return nullIfEmpty(tags); }
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
 			.addIf(nn(basePath), "basePath")
-			.addIf(nn(consumes), "consumes")
+			.addIf(isNotEmpty(consumes), "consumes")
 			.addIf(isNotEmpty(definitions), "definitions")
 			.addIf(nn(externalDocs), "externalDocs")
 			.addIf(nn(host), "host")
 			.addIf(nn(info), "info")
 			.addIf(isNotEmpty(parameters), "parameters")
 			.addIf(isNotEmpty(paths), "paths")
-			.addIf(nn(produces), "produces")
+			.addIf(isNotEmpty(produces), "produces")
 			.addIf(isNotEmpty(responses), "responses")
-			.addIf(nn(schemes), "schemes")
-			.addIf(nn(security), "security")
+			.addIf(isNotEmpty(schemes), "schemes")
+			.addIf(isNotEmpty(security), "security")
 			.addIf(isNotEmpty(securityDefinitions), "securityDefinitions")
 			.addIf(nn(swagger), "swagger")
-			.addIf(nn(tags), "tags")
+			.addIf(isNotEmpty(tags), "tags")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -794,7 +814,9 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setConsumes(Collection<MediaType> value) {
-		consumes = toSet(value);
+		consumes.clear();
+		if (nn(value))
+			consumes.addAll(value);
 		return this;
 	}
 
@@ -934,7 +956,9 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setProduces(Collection<MediaType> value) {
-		produces = toSet(value);
+		produces.clear();
+		if (nn(value))
+			produces.addAll(value);
 		return this;
 	}
 
@@ -990,7 +1014,9 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setSchemes(Collection<String> value) {
-		schemes = toSet(value);
+		schemes.clear();
+		if (nn(value))
+			schemes.addAll(value);
 		return this;
 	}
 
@@ -1022,7 +1048,9 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setSecurity(Collection<Map<String,List<String>>> value) {
-		security = toList(value);
+		security.clear();
+		if (nn(value))
+			security.addAll(value);
 		return this;
 	}
 
@@ -1077,7 +1105,9 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setTags(Collection<Tag> value) {
-		tags = toSet(value);
+		tags.clear();
+		if (nn(value))
+			tags.addAll(value);
 		return this;
 	}
 

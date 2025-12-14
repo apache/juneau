@@ -73,7 +73,7 @@ import org.apache.juneau.commons.collections.*;
  */
 public class ServerVariable extends OpenApiElement {
 
-	private List<Object> _enum;  // NOSONAR - Intentional naming.
+	private List<Object> _enum = list();  // NOSONAR - Intentional naming.
 	private String _default;  // NOSONAR - Intentional naming.
 	private String description;
 
@@ -90,7 +90,8 @@ public class ServerVariable extends OpenApiElement {
 	public ServerVariable(ServerVariable copyFrom) {
 		super(copyFrom);
 
-		this._enum = copyOf(copyFrom._enum);
+		if (nn(copyFrom._enum))
+			this._enum.addAll(copyOf(copyFrom._enum));
 		this._default = copyFrom._default;
 		this.description = copyFrom.description;
 	}
@@ -119,7 +120,10 @@ public class ServerVariable extends OpenApiElement {
 	 * @return This object
 	 */
 	public ServerVariable addEnum(Object...values) {
-		_enum = listb(Object.class).to(_enum).sparse().addAny(values).build();
+		if (nn(values))
+			for (var v : values)
+				if (nn(v))
+					_enum.add(v);
 		return this;
 	}
 
@@ -183,7 +187,7 @@ public class ServerVariable extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getEnum() { return _enum; }
+	public List<Object> getEnum() { return nullIfEmpty(_enum); }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
@@ -191,7 +195,7 @@ public class ServerVariable extends OpenApiElement {
 		var s = setb(String.class)
 			.addIf(nn(_default),"default" )
 			.addIf(nn(description), "description")
-			.addIf(nn(_enum), "enum")
+			.addIf(isNotEmpty(_enum), "enum")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -268,7 +272,9 @@ public class ServerVariable extends OpenApiElement {
 	 * @return This object
 	 */
 	public ServerVariable setEnum(Collection<Object> value) {
-		_enum = toList(value);
+		_enum.clear();
+		if (nn(value))
+			_enum.addAll(value);
 		return this;
 	}
 

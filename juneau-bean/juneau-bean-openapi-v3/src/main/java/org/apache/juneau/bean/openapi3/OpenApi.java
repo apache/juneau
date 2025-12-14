@@ -84,11 +84,11 @@ public class OpenApi extends OpenApiElement {
 
 	private String openapi = "3.0.0";
 	private Info info;
-	private List<Server> servers;
+	private List<Server> servers = list();
 	private Map<String,PathItem> paths;
 	private Components components;
-	private List<SecurityRequirement> security;
-	private List<Tag> tags;
+	private List<SecurityRequirement> security = list();
+	private List<Tag> tags = list();
 	private ExternalDocumentation externalDocs;
 
 	/**
@@ -105,11 +105,14 @@ public class OpenApi extends OpenApiElement {
 		super(copyFrom);
 		this.openapi = copyFrom.openapi;
 		this.info = copyFrom.info;
-		this.servers = copyOf(copyFrom.servers);
+		if (nn(copyFrom.servers))
+			this.servers.addAll(copyOf(copyFrom.servers, Server::copy));
 		this.paths = copyOf(copyFrom.paths);
 		this.components = copyFrom.components;
-		this.security = copyOf(copyFrom.security);
-		this.tags = copyOf(copyFrom.tags);
+		if (nn(copyFrom.security))
+			this.security.addAll(copyOf(copyFrom.security, SecurityRequirement::copy));
+		if (nn(copyFrom.tags))
+			this.tags.addAll(copyOf(copyFrom.tags, Tag::copy));
 		this.externalDocs = copyFrom.externalDocs;
 	}
 
@@ -173,7 +176,8 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi addServers(Collection<Server> values) {
-		servers = listb(Server.class).to(servers).sparse().addAll(values).build();
+		if (nn(values))
+			servers.addAll(values);
 		return this;
 	}
 
@@ -189,7 +193,10 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi addServers(Server...values) {
-		servers = listb(Server.class).to(servers).sparse().add(values).build();
+		if (nn(values))
+			for (var v : values)
+				if (nn(v))
+					servers.add(v);
 		return this;
 	}
 
@@ -205,7 +212,8 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi addTags(Collection<Tag> values) {
-		tags = listb(Tag.class).to(tags).sparse().addAll(values).build();
+		if (nn(values))
+			tags.addAll(values);
 		return this;
 	}
 
@@ -221,7 +229,10 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi addTags(Tag...values) {
-		tags = listb(Tag.class).to(tags).sparse().add(values).build();
+		if (nn(values))
+			for (var v : values)
+				if (nn(v))
+					tags.add(v);
 		return this;
 	}
 
@@ -309,21 +320,21 @@ public class OpenApi extends OpenApiElement {
 	 *
 	 * @return The security requirements list.
 	 */
-	public List<SecurityRequirement> getSecurity() { return security; }
+	public List<SecurityRequirement> getSecurity() { return nullIfEmpty(security); }
 
 	/**
 	 * Returns the servers list.
 	 *
 	 * @return The servers list.
 	 */
-	public List<Server> getServers() { return servers; }
+	public List<Server> getServers() { return nullIfEmpty(servers); }
 
 	/**
 	 * Returns the tags list.
 	 *
 	 * @return The tags list.
 	 */
-	public List<Tag> getTags() { return tags; }
+	public List<Tag> getTags() { return nullIfEmpty(tags); }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
@@ -334,9 +345,9 @@ public class OpenApi extends OpenApiElement {
 			.addIf(nn(info), "info")
 			.addIf(nn(openapi), "openapi")
 			.addIf(nn(paths), "paths")
-			.addIf(nn(security), "security")
-			.addIf(nn(servers), "servers")
-			.addIf(nn(tags), "tags")
+			.addIf(isNotEmpty(security), "security")
+			.addIf(isNotEmpty(servers), "servers")
+			.addIf(isNotEmpty(tags), "tags")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -423,7 +434,9 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi setSecurity(List<SecurityRequirement> value) {
-		this.security = value;
+		security.clear();
+		if (nn(value))
+			security.addAll(value);
 		return this;
 	}
 
@@ -434,7 +447,9 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi setServers(List<Server> value) {
-		this.servers = value;
+		servers.clear();
+		if (nn(value))
+			servers.addAll(value);
 		return this;
 	}
 
@@ -445,7 +460,9 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi setTags(List<Tag> value) {
-		this.tags = value;
+		tags.clear();
+		if (nn(value))
+			tags.addAll(value);
 		return this;
 	}
 

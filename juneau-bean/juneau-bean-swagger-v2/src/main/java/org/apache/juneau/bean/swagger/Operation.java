@@ -163,10 +163,10 @@ public class Operation extends SwaggerElement {
 	private String summary, description, operationId;
 	private Boolean deprecated;
 	private ExternalDocumentation externalDocs;
-	private Set<String> tags, schemes;
-	private Set<MediaType> consumes, produces;
-	private List<ParameterInfo> parameters;
-	private List<Map<String,List<String>>> security;
+	private Set<String> tags = new LinkedHashSet<>(), schemes = new LinkedHashSet<>();
+	private Set<MediaType> consumes = new LinkedHashSet<>(), produces = new LinkedHashSet<>();
+	private List<ParameterInfo> parameters = list();
+	private List<Map<String,List<String>>> security = list();
 
 	private Map<String,ResponseInfo> responses = map();
 
@@ -183,36 +183,32 @@ public class Operation extends SwaggerElement {
 	public Operation(Operation copyFrom) {
 		super(copyFrom);
 
-		this.consumes = copyOf(copyFrom.consumes);
+		if (nn(copyFrom.consumes))
+			this.consumes.addAll(copyOf(copyFrom.consumes));
 		this.deprecated = copyFrom.deprecated;
 		this.description = copyFrom.description;
 		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
 		this.operationId = copyFrom.operationId;
-		this.produces = copyOf(copyFrom.produces);
-		this.schemes = copyOf(copyFrom.schemes);
+		if (nn(copyFrom.produces))
+			this.produces.addAll(copyOf(copyFrom.produces));
+		if (nn(copyFrom.schemes))
+			this.schemes.addAll(copyOf(copyFrom.schemes));
 		this.summary = copyFrom.summary;
-		this.tags = copyOf(copyFrom.tags);
+		if (nn(copyFrom.tags))
+			this.tags.addAll(copyOf(copyFrom.tags));
 
-		if (copyFrom.parameters == null) {
-			this.parameters = null;
-		} else {
-			this.parameters = list();
-			copyFrom.parameters.forEach(x -> this.parameters.add(x.copy()));
-		}
+		if (nn(copyFrom.parameters))
+			parameters.addAll(copyOf(copyFrom.parameters, ParameterInfo::copy));
 
 		if (nn(copyFrom.responses))
 			copyFrom.responses.forEach((k, v) -> responses.put(k, v.copy()));
 
-		if (copyFrom.security == null) {
-			this.security = null;
-		} else {
-			this.security = list();
+		if (nn(copyFrom.security))
 			copyFrom.security.forEach(x -> {
 				Map<String,List<String>> m2 = map();
 				x.forEach((k, v) -> m2.put(k, copyOf(v)));
-				this.security.add(m2);
+				security.add(m2);
 			});
-		}
 	}
 
 	/**
@@ -227,7 +223,8 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addConsumes(Collection<MediaType> values) {
-		consumes = setb(MediaType.class).to(consumes).sparse().addAll(values).build();
+		if (nn(values))
+			consumes.addAll(values);
 		return this;
 	}
 
@@ -242,7 +239,10 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addConsumes(MediaType...value) {
-		consumes = setb(MediaType.class).to(consumes).sparse().add(value).build();
+		if (nn(value))
+			for (var v : value)
+				if (nn(v))
+					consumes.add(v);
 		return this;
 	}
 
@@ -258,7 +258,8 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addParameters(Collection<ParameterInfo> values) {
-		parameters = listb(ParameterInfo.class).to(parameters).sparse().addAll(values).build();
+		if (nn(values))
+			parameters.addAll(values);
 		return this;
 	}
 
@@ -273,7 +274,10 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addParameters(ParameterInfo...value) {
-		parameters = listb(ParameterInfo.class).to(parameters).sparse().add(value).build();
+		if (nn(value))
+			for (var v : value)
+				if (nn(v))
+					parameters.add(v);
 		return this;
 	}
 
@@ -289,7 +293,8 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addProduces(Collection<MediaType> values) {
-		produces = setb(MediaType.class).to(produces).sparse().addAll(values).build();
+		if (nn(values))
+			produces.addAll(values);
 		return this;
 	}
 
@@ -304,7 +309,10 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addProduces(MediaType...value) {
-		produces = setb(MediaType.class).to(produces).sparse().add(value).build();
+		if (nn(value))
+			for (var v : value)
+				if (nn(v))
+					produces.add(v);
 		return this;
 	}
 
@@ -334,7 +342,8 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addSchemes(Collection<String> values) {
-		schemes = setb(String.class).to(schemes).sparse().addAll(values).build();
+		if (nn(values))
+			schemes.addAll(values);
 		return this;
 	}
 
@@ -350,7 +359,10 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addSchemes(String...value) {
-		schemes = setb(String.class).to(schemes).sparse().add(value).build();
+		if (nn(value))
+			for (var v : value)
+				if (nn(v))
+					schemes.add(v);
 		return this;
 	}
 
@@ -365,10 +377,9 @@ public class Operation extends SwaggerElement {
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Operation addSecurity(Collection<Map<String,List<String>>> value) {
 		assertArgNotNull("value", value);
-		security = listb(Map.class).to((List)security).addAny(value).build();
+		security.addAll(value);
 		return this;
 	}
 
@@ -383,12 +394,11 @@ public class Operation extends SwaggerElement {
 	 * 	between the security requirements).
 	 * @return This object.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Operation addSecurity(String scheme, String...alternatives) {
 		assertArgNotNull("scheme", scheme);
 		Map<String,List<String>> m = map();
 		m.put(scheme, l(alternatives));
-		security = listb(Map.class).to((List)security).add(m).build();
+		security.add(m);
 		return this;
 	}
 
@@ -404,7 +414,8 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addTags(Collection<String> values) {
-		tags = setb(String.class).to(tags).sparse().addAll(values).build();
+		if (nn(values))
+			tags.addAll(values);
 		return this;
 	}
 
@@ -420,7 +431,10 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addTags(String...value) {
-		tags = setb(String.class).to(tags).sparse().add(value).build();
+		if (nn(value))
+			for (var v : value)
+				if (nn(v))
+					tags.add(v);
 		return this;
 	}
 
@@ -461,7 +475,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<MediaType> getConsumes() { return consumes; }
+	public Set<MediaType> getConsumes() { return nullIfEmpty(consumes); }
 
 	/**
 	 * Bean property getter:  <property>deprecated</property>.
@@ -513,10 +527,9 @@ public class Operation extends SwaggerElement {
 	public ParameterInfo getParameter(String in, String name) {
 		assertArgNotNull("in", in);
 		// Note: name can be null for "body" parameters
-		if (nn(parameters))
-			for (var pi : parameters)
-				if (eq(pi.getIn(), in) && (eq(pi.getName(), name) || "body".equals(pi.getIn())))
-					return pi;
+		for (var pi : parameters)
+			if (eq(pi.getIn(), in) && (eq(pi.getName(), name) || "body".equals(pi.getIn())))
+				return pi;
 		return null;
 	}
 
@@ -543,7 +556,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<ParameterInfo> getParameters() { return parameters; }
+	public List<ParameterInfo> getParameters() { return nullIfEmpty(parameters); }
 
 	/**
 	 * Bean property getter:  <property>produces</property>.
@@ -553,7 +566,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<MediaType> getProduces() { return produces; }
+	public Set<MediaType> getProduces() { return nullIfEmpty(produces); }
 
 	/**
 	 * Returns the response info with the given status code.
@@ -594,7 +607,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<String> getSchemes() { return schemes; }
+	public Set<String> getSchemes() { return nullIfEmpty(schemes); }
 
 	/**
 	 * Bean property getter:  <property>security</property>.
@@ -604,7 +617,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Map<String,List<String>>> getSecurity() { return security; }
+	public List<Map<String,List<String>>> getSecurity() { return nullIfEmpty(security); }
 
 	/**
 	 * Bean property getter:  <property>summary</property>.
@@ -625,7 +638,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<String> getTags() { return tags; }
+	public Set<String> getTags() { return nullIfEmpty(tags); }
 
 	/**
 	 * Bean property getter:  <property>deprecated</property>.
@@ -641,18 +654,18 @@ public class Operation extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(consumes), "consumes")
+			.addIf(isNotEmpty(consumes), "consumes")
 			.addIf(nn(deprecated), "deprecated")
 			.addIf(nn(description), "description")
 			.addIf(nn(externalDocs), "externalDocs")
 			.addIf(nn(operationId), "operationId")
-			.addIf(nn(parameters), "parameters")
-			.addIf(nn(produces), "produces")
+			.addIf(isNotEmpty(parameters), "parameters")
+			.addIf(isNotEmpty(produces), "produces")
 			.addIf(isNotEmpty(responses), "responses")
-			.addIf(nn(schemes), "schemes")
-			.addIf(nn(security), "security")
+			.addIf(isNotEmpty(schemes), "schemes")
+			.addIf(isNotEmpty(security), "security")
 			.addIf(nn(summary), "summary")
-			.addIf(nn(tags), "tags")
+			.addIf(isNotEmpty(tags), "tags")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -695,7 +708,9 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setConsumes(Collection<MediaType> value) {
-		consumes = toSet(value);
+		consumes.clear();
+		if (nn(value))
+			consumes.addAll(value);
 		return this;
 	}
 
@@ -826,7 +841,9 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setProduces(Collection<MediaType> value) {
-		produces = toSet(value);
+		produces.clear();
+		if (nn(value))
+			produces.addAll(value);
 		return this;
 	}
 
@@ -884,7 +901,9 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setSchemes(Collection<String> value) {
-		schemes = toSet(value);
+		schemes.clear();
+		if (nn(value))
+			schemes.addAll(value);
 		return this;
 	}
 
@@ -966,7 +985,9 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setTags(Collection<String> value) {
-		tags = toSet(value);
+		tags.clear();
+		if (nn(value))
+			tags.addAll(value);
 		return this;
 	}
 

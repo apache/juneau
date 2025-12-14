@@ -233,7 +233,7 @@ public class ConverterUtils {
 	 * @return A new {@link ListBuilder} containing the converted elements.
 	 */
 	public static <T> ListBuilder<T> toListBuilder(Object value, Class<T> type) {
-		return listb(type, GenericConverter.INSTANCE).addAny(value);
+		return listb(type).elementFunction(o -> GenericConverter.INSTANCE.convertTo(type, o)).addAny(value);
 	}
 
 	/**
@@ -282,6 +282,6 @@ public class ConverterUtils {
 	 * @return A new {@link SetBuilder} containing the converted elements.
 	 */
 	public static <T> SetBuilder<T> toSetBuilder(Object value, Class<T> type) {
-		return setb(type, GenericConverter.INSTANCE).addAny(value);
+		return setb(type).elementFunction(o -> GenericConverter.INSTANCE.convertTo(type, o)).addAny(value);
 	}
 }
