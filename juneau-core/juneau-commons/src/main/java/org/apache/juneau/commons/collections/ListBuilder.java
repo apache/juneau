@@ -119,7 +119,7 @@ public class ListBuilder<E> {
 	}
 
 	private List<E> list;
-	private boolean unmodifiable = false, sparse = false;
+	private boolean unmodifiable = false, sparse = false, concurrent = false;
 	private Comparator<E> comparator;
 	private List<Converter> converters;
 
@@ -277,6 +277,8 @@ public class ListBuilder<E> {
 		if (nn(list)) {
 			if (nn(comparator))
 				Collections.sort(list, comparator);
+			if (concurrent)
+				list = synchronizedList(list);
 			if (unmodifiable)
 				list = unmodifiableList(list);
 		}
@@ -375,6 +377,53 @@ public class ListBuilder<E> {
 	 */
 	public ListBuilder<E> unmodifiable() {
 		this.unmodifiable = true;
+		return this;
+	}
+
+	/**
+	 * When specified, {@link #build()} will return a thread-safe synchronized list.
+	 *
+	 * <p>
+	 * The list will be wrapped using {@link Collections#synchronizedList(List)} to provide thread-safety.
+	 * This is useful when the list needs to be accessed from multiple threads.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Create a thread-safe list</jc>
+	 * 	List&lt;String&gt; <jv>list</jv> = ListBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 		.add(<js>"one"</js>, <js>"two"</js>)
+	 * 		.concurrent()
+	 * 		.build();
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public ListBuilder<E> concurrent() {
+		concurrent = true;
+		return this;
+	}
+
+	/**
+	 * Sets whether {@link #build()} should return a thread-safe synchronized list.
+	 *
+	 * <p>
+	 * When <c>true</c>, the list will be wrapped using {@link Collections#synchronizedList(List)} to provide thread-safety.
+	 * This is useful when the list needs to be accessed from multiple threads.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Conditionally create a thread-safe list</jc>
+	 * 	List&lt;String&gt; <jv>list</jv> = ListBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 		.add(<js>"one"</js>, <js>"two"</js>)
+	 * 		.concurrent(<jv>needsThreadSafety</jv>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value Whether to make the list thread-safe.
+	 * @return This object.
+	 */
+	public ListBuilder<E> concurrent(boolean value) {
+		concurrent = value;
 		return this;
 	}
 }

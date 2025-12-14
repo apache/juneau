@@ -1001,6 +1001,18 @@ public class Utils {
 		return value != null;
 	}
 
+	public static <T> boolean isNull(T value) {
+		return value == null;
+	}
+
+	public static <T> boolean isAllNull(T...values) {
+		if (values == null) return true;
+		for (var v : values)
+			if (v != null)
+				return false;
+		return true;
+	}
+
 	/**
 	 * Checks if the specified Boolean is not <jk>null</jk> and is <jk>true</jk>.
 	 *

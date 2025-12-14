@@ -1554,7 +1554,7 @@ public class CollectionUtils {
 	 * @see MapBuilder
 	 */
 	public static MapBuilder<String,Object> mapb() {
-		return MapBuilder.create(String.class, Object.class);
+		return MapBuilder.create(String.class, Object.class).ordered();
 	}
 
 	/**
@@ -1568,7 +1568,7 @@ public class CollectionUtils {
 	 * @return A new map builder.
 	 */
 	public static <K,V> MapBuilder<K,V> mapb(Class<K> keyType, Class<V> valueType) {
-		return MapBuilder.create(keyType, valueType);
+		return MapBuilder.create(keyType, valueType).ordered();
 	}
 
 	/**

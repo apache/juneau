@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.function.*;
 
 /**
@@ -160,7 +161,7 @@ public class MapBuilder<K,V> {
 	}
 
 	private Map<K,V> map;
-	private boolean unmodifiable = false, sparse = false;
+	private boolean unmodifiable = false, sparse = false, concurrent = false, ordered = false;
 	private Comparator<K> comparator;
 
 	private BiPredicate<K,V> filter;
@@ -274,53 +275,56 @@ public class MapBuilder<K,V> {
 	 * Builds the map.
 	 *
 	 * <p>
-	 * Applies filtering, sorting, unmodifiable, and sparse options.
+	 * Applies filtering, sorting, ordering, concurrent, unmodifiable, and sparse options.
 	 *
 	 * <p>
-	 * If filtering is applied, the result is wrapped in a {@link FilteredMap}. If sorting is applied,
-	 * a {@link TreeMap} is used as the underlying map; otherwise a {@link LinkedHashMap} is used.
+	 * Map type selection:
+	 * <ul>
+	 * 	<li>If {@link #sorted()} is set: Uses {@link TreeMap} (or {@link java.util.concurrent.ConcurrentSkipListMap} if concurrent)
+	 * 	<li>If {@link #ordered()} is set: Uses {@link LinkedHashMap} (or synchronized LinkedHashMap if concurrent)
+	 * 	<li>Otherwise: Uses {@link HashMap} (or {@link java.util.concurrent.ConcurrentHashMap} if concurrent)
+	 * </ul>
+	 *
+	 * <p>
+	 * If filtering is applied, the result is wrapped in a {@link FilteredMap}.
 	 *
 	 * @return The built map, or {@code null} if {@link #sparse()} is set and the map is empty.
 	 */
 	public Map<K,V> build() {
-		if (sparse) {
-			if (nn(map) && map.isEmpty())
-				return null;
+
+		if (sparse && isEmpty(map))
+			return null;
+
+		var map2 = (Map<K,V>)null;
+
+		if (ordered) {
+			map2 = new LinkedHashMap<>();
+			if (concurrent)
+				map2 = Collections.synchronizedMap(map2);
+		} else if (nn(comparator)) {
+			map2 = concurrent ? new ConcurrentSkipListMap<>(comparator) : new TreeMap<>(comparator);
 		} else {
-			if (map == null)
-				map = new LinkedHashMap<>();
+			map2 = concurrent ? new ConcurrentHashMap<>() : new HashMap<>();
 		}
 
-		Map<K,V> result = map;
-
-		if (nn(result)) {
-			// Apply filtering if specified
-			if (nn(filter)) {
-				Map<K,V> innerMap = nn(comparator)
-					? new TreeMap<>(comparator)
-					: new LinkedHashMap<>();
-
-				var filteredMap = FilteredMap.<K,V>create(keyType, valueType)
-					.filter(filter)
-					.inner(innerMap)
-					.build();
-
-				// Add all entries to the filtered map
-				result.forEach(filteredMap::put);
-				result = filteredMap;
-			} else if (nn(comparator)) {
-				// Apply sorting if no filter
-				var m2 = new TreeMap<K,V>(comparator);
-				m2.putAll(result);
-				result = m2;
-			}
-
-			// Apply unmodifiable if specified
-			if (unmodifiable)
-				result = Collections.unmodifiableMap(result);
+		if (nn(filter) || nn(keyFunction) || nn(valueFunction)) {
+			var map3b = FilteredMap.create(keyType, valueType);
+			if (nn(filter))
+				map3b.filter(filter);
+			if (nn(keyFunction))
+				map3b.keyFunction(keyFunction);
+			if (nn(valueFunction))
+				map3b.valueFunction(valueFunction);
+			map2 = map3b.inner(map2).build();
 		}
 
-		return result;
+		if (nn(map))
+			map2.putAll(map);
+
+		if (unmodifiable)
+			map2 = Collections.unmodifiableMap(map2);
+
+		return map2;
 	}
 
 	/**
@@ -350,7 +354,12 @@ public class MapBuilder<K,V> {
 	 * Builds the map as a {@link FilteredMap}.
 	 *
 	 * <p>
-	 * If sorting is applied, a {@link TreeMap} is used as the underlying map; otherwise a {@link LinkedHashMap} is used.
+	 * Map type selection:
+	 * <ul>
+	 * 	<li>If {@link #sorted()} is set: Uses {@link TreeMap} (or {@link java.util.concurrent.ConcurrentSkipListMap} if concurrent)
+	 * 	<li>If {@link #ordered()} is set: Uses {@link LinkedHashMap} (or synchronized LinkedHashMap if concurrent)
+	 * 	<li>Otherwise: Uses {@link HashMap} (or {@link java.util.concurrent.ConcurrentHashMap} if concurrent)
+	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -530,6 +539,10 @@ public class MapBuilder<K,V> {
 	/**
 	 * Converts the set into a {@link SortedMap}.
 	 *
+	 * <p>
+	 * Note: If {@link #ordered()} was previously called, calling this method will override it.
+	 * The last method called ({@link #ordered()} or {@link #sorted()}) determines the final map type.
+	 *
 	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
@@ -540,11 +553,16 @@ public class MapBuilder<K,V> {
 	/**
 	 * Converts the set into a {@link SortedMap} using the specified comparator.
 	 *
+	 * <p>
+	 * Note: If {@link #ordered()} was previously called, calling this method will override it.
+	 * The last method called ({@link #ordered()} or {@link #sorted()}) determines the final map type.
+	 *
 	 * @param comparator The comparator to use for sorting. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public MapBuilder<K,V> sorted(Comparator<K> comparator) {
 		this.comparator = assertArgNotNull("comparator", comparator);
+		ordered = false;
 		return this;
 	}
 
@@ -565,7 +583,7 @@ public class MapBuilder<K,V> {
 	 * Specifies the map to append to.
 	 *
 	 * <p>
-	 * If not specified, uses a new {@link LinkedHashMap}.
+	 * If not specified, uses a new {@link HashMap} (or {@link LinkedHashMap} if {@link #ordered()} is set).
 	 *
 	 * @param map The map to append to.
 	 * @return This object.
@@ -582,6 +600,139 @@ public class MapBuilder<K,V> {
 	 */
 	public MapBuilder<K,V> unmodifiable() {
 		unmodifiable = true;
+		return this;
+	}
+
+	/**
+	 * When specified, {@link #build()} will return a thread-safe map.
+	 *
+	 * <p>
+	 * The thread-safety implementation depends on other settings:
+	 * <ul>
+	 * 	<li>If {@link #sorted()} is set: Uses {@link java.util.concurrent.ConcurrentSkipListMap}
+	 * 	<li>If {@link #ordered()} is set: Uses {@link Collections#synchronizedMap(LinkedHashMap)}
+	 * 	<li>Otherwise: Uses {@link java.util.concurrent.ConcurrentHashMap}
+	 * </ul>
+	 *
+	 * <p>
+	 * This is useful when the map needs to be accessed from multiple threads.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
+	 *
+	 * 	<jc>// Create a thread-safe map using ConcurrentHashMap</jc>
+	 * 	Map&lt;String,Integer&gt; <jv>map</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+	 * 		.add(<js>"one"</js>, 1)
+	 * 		.add(<js>"two"</js>, 2)
+	 * 		.concurrent()
+	 * 		.build();
+	 *
+	 * 	<jc>// Create a thread-safe ordered map</jc>
+	 * 	Map&lt;String,Integer&gt; <jv>map2</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+	 * 		.ordered()
+	 * 		.concurrent()
+	 * 		.add(<js>"one"</js>, 1)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public MapBuilder<K,V> concurrent() {
+		concurrent = true;
+		return this;
+	}
+
+	/**
+	 * Sets whether {@link #build()} should return a thread-safe map.
+	 *
+	 * <p>
+	 * The thread-safety implementation depends on other settings:
+	 * <ul>
+	 * 	<li>If {@link #sorted()} is set: Uses {@link java.util.concurrent.ConcurrentSkipListMap}
+	 * 	<li>If {@link #ordered()} is set: Uses {@link Collections#synchronizedMap(LinkedHashMap)}
+	 * 	<li>Otherwise: Uses {@link java.util.concurrent.ConcurrentHashMap}
+	 * </ul>
+	 *
+	 * <p>
+	 * This is useful when the map needs to be accessed from multiple threads.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
+	 *
+	 * 	<jc>// Conditionally create a thread-safe map</jc>
+	 * 	Map&lt;String,Integer&gt; <jv>map</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+	 * 		.add(<js>"one"</js>, 1)
+	 * 		.concurrent(<jv>needsThreadSafety</jv>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value Whether to make the map thread-safe.
+	 * @return This object.
+	 */
+	public MapBuilder<K,V> concurrent(boolean value) {
+		concurrent = value;
+		return this;
+	}
+
+	/**
+	 * When specified, {@link #build()} will use a {@link LinkedHashMap} to preserve insertion order.
+	 *
+	 * <p>
+	 * If not specified, a {@link HashMap} is used by default (no guaranteed order).
+	 *
+	 * <p>
+	 * Note: If {@link #sorted()} was previously called, calling this method will override it.
+	 * The last method called ({@link #ordered()} or {@link #sorted()}) determines the final map type.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
+	 *
+	 * 	<jc>// Create an ordered map (preserves insertion order)</jc>
+	 * 	Map&lt;String,Integer&gt; <jv>map</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+	 * 		.ordered()
+	 * 		.add(<js>"one"</js>, 1)
+	 * 		.add(<js>"two"</js>, 2)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public MapBuilder<K,V> ordered() {
+		return ordered(true);
+	}
+
+	/**
+	 * Sets whether {@link #build()} should use a {@link LinkedHashMap} to preserve insertion order.
+	 *
+	 * <p>
+	 * If <c>false</c> (default), a {@link HashMap} is used (no guaranteed order).
+	 * If <c>true</c>, a {@link LinkedHashMap} is used (preserves insertion order).
+	 *
+	 * <p>
+	 * Note: If {@link #sorted()} was previously called, calling this method with <c>true</c> will override it.
+	 * The last method called ({@link #ordered()} or {@link #sorted()}) determines the final map type.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
+	 *
+	 * 	<jc>// Conditionally create an ordered map</jc>
+	 * 	Map&lt;String,Integer&gt; <jv>map</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+	 * 		.ordered(<jv>preserveOrder</jv>)
+	 * 		.add(<js>"one"</js>, 1)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value Whether to preserve insertion order.
+	 * @return This object.
+	 */
+	public MapBuilder<K,V> ordered(boolean value) {
+		ordered = value;
+		if (ordered)
+			comparator = null;
 		return this;
 	}
 

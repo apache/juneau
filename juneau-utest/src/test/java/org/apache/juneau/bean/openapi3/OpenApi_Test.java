@@ -281,7 +281,7 @@ class OpenApi_Test extends TestBase {
 			assertMapped(
 				TESTER.bean(), (obj,prop) -> cns(obj.get(prop, Object.class)),
 				"components,externalDocs,info,openapi,paths,security,servers,tags,x1,x2",
-				"Components,ExternalDocumentation,Info,String,TreeMap,ArrayList,ArrayList,ArrayList,String,<null>"
+				"Components,ExternalDocumentation,Info,String,FilteredMap,ArrayList,ArrayList,ArrayList,String,<null>"
 			);
 		}
 

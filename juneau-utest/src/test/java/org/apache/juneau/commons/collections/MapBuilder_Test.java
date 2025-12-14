@@ -68,7 +68,12 @@ class MapBuilder_Test extends TestBase {
 			.add("b", 2)
 			.build();
 
-		assertMap(map, "a=1", "x=10", "y=20", "b=2");
+		// Without ordered(), order is not guaranteed (HashMap)
+		assertSize(4, map);
+		assertEquals(1, map.get("a"));
+		assertEquals(10, map.get("x"));
+		assertEquals(20, map.get("y"));
+		assertEquals(2, map.get("b"));
 	}
 
 	@Test
@@ -99,6 +104,88 @@ class MapBuilder_Test extends TestBase {
 	void b02_addPairs_oddNumber() {
 		var b = MapBuilder.create(String.class, String.class);
 		assertThrows(IllegalArgumentException.class, () -> b.addPairs("a", "b", "c"));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Ordered
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void c00_ordered_preservesInsertionOrder() {
+		var map = MapBuilder.create(String.class, Integer.class)
+			.ordered()
+			.add("c", 3)
+			.add("a", 1)
+			.add("b", 2)
+			.build();
+
+		assertSize(3, map);
+		assertTrue(map instanceof LinkedHashMap);
+		// With ordered(), insertion order is preserved
+		var keys = new ArrayList<>(map.keySet());
+		assertEquals("c", keys.get(0));
+		assertEquals("a", keys.get(1));
+		assertEquals("b", keys.get(2));
+	}
+
+	@Test
+	void c00b_ordered_defaultIsHashMap() {
+		var map = MapBuilder.create(String.class, Integer.class)
+			.add("a", 1)
+			.add("b", 2)
+			.build();
+
+		assertSize(2, map);
+		// Without ordered(), should be HashMap (unordered)
+		assertTrue(map instanceof HashMap);
+		assertFalse(map instanceof LinkedHashMap);
+		// Verify it's not ordered by checking key order is not preserved
+		// (HashMap doesn't guarantee order, so we can't rely on it)
+		assertEquals(1, map.get("a"));
+		assertEquals(2, map.get("b"));
+	}
+
+	@Test
+	void c00c_ordered_boolean() {
+		var map1 = MapBuilder.create(String.class, Integer.class)
+			.ordered(true)
+			.add("a", 1)
+			.build();
+		assertTrue(map1 instanceof LinkedHashMap);
+
+		var map2 = MapBuilder.create(String.class, Integer.class)
+			.ordered(false)
+			.add("a", 1)
+			.build();
+		assertTrue(map2 instanceof HashMap);
+	}
+
+	@Test
+	void c00d_ordered_lastOneWins() {
+		// If ordered() is called first, then sorted(), sorted() wins
+		var map1 = MapBuilder.create(String.class, Integer.class)
+			.ordered()
+			.add("c", 3)
+			.add("a", 1)
+			.add("b", 2)
+			.sorted()
+			.build();
+		assertTrue(map1 instanceof TreeMap);
+		assertList(map1.keySet(), "a", "b", "c");
+
+		// If sorted() is called first, then ordered(), ordered() wins
+		var map2 = MapBuilder.create(String.class, Integer.class)
+			.sorted()
+			.add("c", 3)
+			.add("a", 1)
+			.add("b", 2)
+			.ordered()
+			.build();
+		assertTrue(map2 instanceof LinkedHashMap);
+		var keys2 = new ArrayList<>(map2.keySet());
+		assertEquals("c", keys2.get(0));
+		assertEquals("a", keys2.get(1));
+		assertEquals("b", keys2.get(2));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -211,21 +298,6 @@ class MapBuilder_Test extends TestBase {
 		assertNotSame(original, map);  // After copy(), they're different maps
 	}
 
-	@Test
-	void f02_noCopy() {
-		var original = new LinkedHashMap<String,Integer>();
-		original.put("a", 1);
-
-		var map = MapBuilder.create(String.class, Integer.class)
-			.to(original)
-			.add("b", 2)
-			.build();
-
-		assertSize(2, map);
-		assertSize(2, original);  // Original modified
-		assertSame(original, map);
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Complex scenarios
 	//-----------------------------------------------------------------------------------------------------------------
@@ -246,6 +318,29 @@ class MapBuilder_Test extends TestBase {
 		assertSize(4, map);
 		// Should be sorted by key
 		assertList(map.keySet(), "a", "b", "x", "y");
+	}
+
+	@Test
+	void g01b_multipleOperations_withOrdered() {
+		var existing = new LinkedHashMap<String,Integer>();
+		existing.put("x", 10);
+		existing.put("y", 20);
+
+		var map = MapBuilder.create(String.class, Integer.class)
+			.ordered()
+			.add("a", 1)
+			.addAll(existing)
+			.add("b", 2)
+			.build();
+
+		assertSize(4, map);
+		assertTrue(map instanceof LinkedHashMap);
+		// With ordered(), insertion order is preserved
+		var keys = new ArrayList<>(map.keySet());
+		assertEquals("a", keys.get(0));
+		assertEquals("x", keys.get(1));
+		assertEquals("y", keys.get(2));
+		assertEquals("b", keys.get(3));
 	}
 
 	@Test
@@ -328,21 +423,6 @@ class MapBuilder_Test extends TestBase {
 
 		assertSize(1, map);  // Only one entry for key "a"
 		assertMap(map, "a=3");  // Last value wins
-	}
-
-	@Test
-	void h05_toExistingMap() {
-		var existing = new LinkedHashMap<String,Integer>();
-		existing.put("x", 10);
-
-		var map = MapBuilder.create(String.class, Integer.class)
-			.to(existing)
-			.add("y", 20)
-			.build();
-
-		assertSize(2, map);
-		assertMap(map, "x=10", "y=20");
-		assertSame(existing, map);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -644,6 +724,82 @@ class MapBuilder_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// Concurrent
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void o01_concurrent_defaultHashMap() {
+		var map = MapBuilder.create(String.class, Integer.class)
+			.concurrent()
+			.add("a", 1)
+			.add("b", 2)
+			.build();
+
+		assertSize(2, map);
+		assertTrue(map instanceof java.util.concurrent.ConcurrentHashMap);
+	}
+
+	@Test
+	void o02_concurrent_ordered() {
+		var map = MapBuilder.create(String.class, Integer.class)
+			.ordered()
+			.concurrent()
+			.add("a", 1)
+			.add("b", 2)
+			.build();
+
+		assertSize(2, map);
+		// Should be a synchronized LinkedHashMap - verify by checking order is preserved
+		var keys = new ArrayList<>(map.keySet());
+		assertEquals("a", keys.get(0));
+		assertEquals("b", keys.get(1));
+		// Verify it's synchronized by checking it's not a ConcurrentHashMap
+		assertFalse(map instanceof java.util.concurrent.ConcurrentHashMap);
+	}
+
+	@Test
+	void o03_concurrent_sorted() {
+		var map = MapBuilder.create(String.class, Integer.class)
+			.sorted()
+			.concurrent()
+			.add("c", 3)
+			.add("a", 1)
+			.add("b", 2)
+			.build();
+
+		assertSize(3, map);
+		assertTrue(map instanceof java.util.concurrent.ConcurrentSkipListMap);
+		assertList(map.keySet(), "a", "b", "c");
+	}
+
+	@Test
+	void o04_concurrent_boolean() {
+		var map1 = MapBuilder.create(String.class, Integer.class)
+			.concurrent(true)
+			.add("a", 1)
+			.build();
+		assertTrue(map1 instanceof java.util.concurrent.ConcurrentHashMap);
+
+		var map2 = MapBuilder.create(String.class, Integer.class)
+			.concurrent(false)
+			.add("a", 1)
+			.build();
+		assertTrue(map2 instanceof HashMap);
+	}
+
+	@Test
+	void o05_concurrent_unmodifiable() {
+		var map = MapBuilder.create(String.class, Integer.class)
+			.concurrent()
+			.unmodifiable()
+			.add("a", 1)
+			.build();
+
+		assertSize(1, map);
+		assertThrows(UnsupportedOperationException.class, () -> map.put("b", 2));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// Build edge cases
 	//-----------------------------------------------------------------------------------------------------------------
 
@@ -685,6 +841,29 @@ class MapBuilder_Test extends TestBase {
 
 		assertNotNull(map);
 		assertTrue(map instanceof TreeMap);
+		assertEmpty(map);
+	}
+
+	@Test
+	void l06_build_orderedWithNullMap() {
+		var map = MapBuilder.create(String.class, Integer.class)
+			.ordered()
+			.build();
+
+		assertNotNull(map);
+		assertTrue(map instanceof LinkedHashMap);
+		assertEmpty(map);
+	}
+
+	@Test
+	void l07_build_defaultHashMap() {
+		var map = MapBuilder.create(String.class, Integer.class)
+			.build();
+
+		assertNotNull(map);
+		// Without ordered(), should be HashMap (unordered)
+		assertTrue(map instanceof HashMap);
+		assertFalse(map instanceof LinkedHashMap);
 		assertEmpty(map);
 	}
 

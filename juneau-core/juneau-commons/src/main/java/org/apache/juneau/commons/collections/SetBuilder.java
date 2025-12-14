@@ -120,7 +120,7 @@ public class SetBuilder<E> {
 	}
 
 	private Set<E> set;
-	private boolean unmodifiable, sparse;
+	private boolean unmodifiable, sparse, concurrent;
 
 	private Comparator<E> comparator;
 	private Class<E> elementType;
@@ -280,6 +280,8 @@ public class SetBuilder<E> {
 				s.addAll(set);
 				set = s;
 			}
+			if (concurrent)
+				set = synchronizedSet(set);
 			if (unmodifiable)
 				set = unmodifiableSet(set);
 		}
@@ -378,6 +380,53 @@ public class SetBuilder<E> {
 	 */
 	public SetBuilder<E> unmodifiable() {
 		unmodifiable = true;
+		return this;
+	}
+
+	/**
+	 * When specified, {@link #build()} will return a thread-safe synchronized set.
+	 *
+	 * <p>
+	 * The set will be wrapped using {@link Collections#synchronizedSet(Set)} to provide thread-safety.
+	 * This is useful when the set needs to be accessed from multiple threads.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Create a thread-safe set</jc>
+	 * 	Set&lt;String&gt; <jv>set</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 		.add(<js>"one"</js>, <js>"two"</js>)
+	 * 		.concurrent()
+	 * 		.build();
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public SetBuilder<E> concurrent() {
+		concurrent = true;
+		return this;
+	}
+
+	/**
+	 * Sets whether {@link #build()} should return a thread-safe synchronized set.
+	 *
+	 * <p>
+	 * When <c>true</c>, the set will be wrapped using {@link Collections#synchronizedSet(Set)} to provide thread-safety.
+	 * This is useful when the set needs to be accessed from multiple threads.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Conditionally create a thread-safe set</jc>
+	 * 	Set&lt;String&gt; <jv>set</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 		.add(<js>"one"</js>, <js>"two"</js>)
+	 * 		.concurrent(<jv>needsThreadSafety</jv>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value Whether to make the set thread-safe.
+	 * @return This object.
+	 */
+	public SetBuilder<E> concurrent(boolean value) {
+		concurrent = value;
 		return this;
 	}
 }

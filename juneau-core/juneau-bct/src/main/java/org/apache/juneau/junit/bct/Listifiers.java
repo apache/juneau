@@ -135,6 +135,7 @@ public class Listifiers {
 	public static Listifier<Collection> collectionListifier() {
 		return (bc, collection) -> {
 			if (collection instanceof Set && ! (collection instanceof SortedSet) && ! (collection instanceof LinkedHashSet)) {
+				// TODO - This is too unreliable.
 				var collection2 = new TreeSet<>(flexibleComparator(bc));
 				collection2.addAll(collection);
 				collection = collection2;
@@ -314,6 +315,7 @@ public class Listifiers {
 	public static Listifier<Map> mapListifier() {
 		return (bc, map) -> {
 			if (! (map instanceof SortedMap) && ! (map instanceof LinkedHashMap)) {
+				// TODO - This is too unreliable.
 				var map2 = new TreeMap<>(flexibleComparator(bc));
 				map2.putAll(map);
 				map = map2;

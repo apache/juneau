@@ -243,7 +243,7 @@ class Parameter_Test extends TestBase {
 			assertMapped(
 				TESTER.bean(), (obj,prop) -> cns(obj.get(prop, Object.class)),
 				"allowEmptyValue,allowReserved,content,deprecated,description,example,examples,explode,in,name,required,schema,style,x1,x2",
-				"Boolean,Boolean,LinkedHashMap,Boolean,String,String,LinkedHashMap,Boolean,String,String,Boolean,SchemaInfo,String,String,<null>"
+				"Boolean,Boolean,LinkedHashMap,Boolean,String,String,FilteredMap,Boolean,String,String,Boolean,SchemaInfo,String,String,<null>"
 			);
 		}
 
