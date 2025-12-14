@@ -50,47 +50,47 @@ import java.util.function.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bjava'>
  * 	<jc>// Basic usage</jc>
- * 	List&lt;String&gt; <jv>list</jv> = ListBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+ * 	List&lt;String&gt; <jv>list</jv> = Lists.<jsm>create</jsm>(String.<jk>class</jk>)
  * 		.add(<js>"apple"</js>, <js>"banana"</js>, <js>"cherry"</js>)
  * 		.build();
  *
  * 	<jc>// With sorting</jc>
- * 	List&lt;Integer&gt; <jv>sorted</jv> = ListBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+ * 	List&lt;Integer&gt; <jv>sorted</jv> = Lists.<jsm>create</jsm>(Integer.<jk>class</jk>)
  * 		.add(3, 1, 4, 1, 5, 9, 2, 6)
  * 		.sorted()
  * 		.build();
  *
  * 	<jc>// Conditional elements</jc>
- * 	List&lt;String&gt; <jv>filtered</jv> = ListBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+ * 	List&lt;String&gt; <jv>filtered</jv> = Lists.<jsm>create</jsm>(String.<jk>class</jk>)
  * 		.add(<js>"always"</js>)
  * 		.addIf(<jv>includeOptional</jv>, <js>"optional"</js>)
  * 		.build();
  *
  * 	<jc>// Immutable list</jc>
- * 	List&lt;String&gt; <jv>immutable</jv> = ListBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+ * 	List&lt;String&gt; <jv>immutable</jv> = Lists.<jsm>create</jsm>(String.<jk>class</jk>)
  * 		.add(<js>"read"</js>, <js>"only"</js>)
  * 		.unmodifiable()
  * 		.build();
  *
  * 	<jc>// Sparse mode - returns null when empty</jc>
- * 	List&lt;String&gt; <jv>maybeNull</jv> = ListBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+ * 	List&lt;String&gt; <jv>maybeNull</jv> = Lists.<jsm>create</jsm>(String.<jk>class</jk>)
  * 		.sparse()
  * 		.build();  <jc>// Returns null, not empty list</jc>
  *
  * 	<jc>// From multiple sources</jc>
  * 	List&lt;Integer&gt; <jv>existing</jv> = l(1, 2, 3);
- * 	List&lt;Integer&gt; <jv>combined</jv> = ListBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+ * 	List&lt;Integer&gt; <jv>combined</jv> = Lists.<jsm>create</jsm>(Integer.<jk>class</jk>)
  * 		.addAll(<jv>existing</jv>)
  * 		.add(4, 5, 6)
  * 		.build();
  *
  * 	<jc>// FluentList wrapper - use buildFluent()</jc>
- * 	FluentList&lt;String&gt; <jv>fluent</jv> = ListBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+ * 	FluentList&lt;String&gt; <jv>fluent</jv> = Lists.<jsm>create</jsm>(String.<jk>class</jk>)
  * 		.add(<js>"one"</js>, <js>"two"</js>)
  * 		.buildFluent();
  *
  * 	<jc>// FilteredList - use buildFiltered()</jc>
- * 	FilteredList&lt;Integer&gt; <jv>filtered</jv> = ListBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+ * 	FilteredList&lt;Integer&gt; <jv>filtered</jv> = Lists.<jsm>create</jsm>(Integer.<jk>class</jk>)
  * 		.filtered(v -&gt; v &gt; 0)
  * 		.add(5)
  * 		.add(-1)  <jc>// Filtered out</jc>
@@ -104,20 +104,20 @@ import java.util.function.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsCollections">juneau-commons-collections</a>
- * 	<li class='jc'>{@link MapBuilder}
- * 	<li class='jc'>{@link SetBuilder}
+ * 	<li class='jc'>{@link Maps}
+ * 	<li class='jc'>{@link Sets}
  * </ul>
  *
  * @param <E> The element type.
  */
-public class ListBuilder<E> {
+public class Lists<E> {
 
 	/**
 	 * Creates a new list builder for the specified element type.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	List&lt;String&gt; <jv>list</jv> = ListBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 	List&lt;String&gt; <jv>list</jv> = Lists.<jsm>create</jsm>(String.<jk>class</jk>)
 	 * 		.add(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>)
 	 * 		.build();
 	 * </p>
@@ -126,8 +126,8 @@ public class ListBuilder<E> {
 	 * @param elementType The element type class. Required for type-safe operations. Must not be <jk>null</jk>.
 	 * @return A new list builder instance.
 	 */
-	public static <E> ListBuilder<E> create(Class<E> elementType) {
-		return new ListBuilder<>(assertArgNotNull("elementType", elementType));
+	public static <E> Lists<E> create(Class<E> elementType) {
+		return new Lists<>(assertArgNotNull("elementType", elementType));
 	}
 
 	private List<E> list;
@@ -143,7 +143,7 @@ public class ListBuilder<E> {
 	 *
 	 * @param elementType The element type. Must not be <jk>null</jk>.
 	 */
-	public ListBuilder(Class<E> elementType) {
+	public Lists(Class<E> elementType) {
 		this.elementType = assertArgNotNull("elementType", elementType);
 	}
 
@@ -156,7 +156,7 @@ public class ListBuilder<E> {
 	 * @param value The value to add to this list.
 	 * @return This object.
 	 */
-	public ListBuilder<E> add(E value) {
+	public Lists<E> add(E value) {
 		if (list == null)
 			list = list();
 		list.add(value);
@@ -170,7 +170,7 @@ public class ListBuilder<E> {
 	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
-	public ListBuilder<E> add(E...values) {
+	public Lists<E> add(E...values) {
 		assertArgNotNull("values", values);
 		for (var v : values)
 			add(v);
@@ -186,7 +186,7 @@ public class ListBuilder<E> {
 	 * @param value The collection to add to this list.
 	 * @return This object.
 	 */
-	public ListBuilder<E> addAll(Collection<E> value) {
+	public Lists<E> addAll(Collection<E> value) {
 		if (nn(value)) {
 			if (list == null)
 				list = new LinkedList<>(value);
@@ -211,7 +211,7 @@ public class ListBuilder<E> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Mix different input types</jc>
-	 * 	List&lt;Integer&gt; <jv>list</jv> = ListBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+	 * 	List&lt;Integer&gt; <jv>list</jv> = Lists.<jsm>create</jsm>(Integer.<jk>class</jk>)
 	 * 		.addAny(1, 2, 3)                           <jc>// Direct values</jc>
 	 * 		.addAny(l(4, 5, 6))            <jc>// Collection</jc>
 	 * 		.addAny(<jk>new int</jk>[]{7, 8, 9})                 <jc>// Array</jc>
@@ -223,7 +223,7 @@ public class ListBuilder<E> {
 	 * @throws IllegalStateException if element type is unknown.
 	 * @throws RuntimeException if a value cannot be converted to the element type.
 	 */
-	public ListBuilder<E> addAny(Object...values) {
+	public Lists<E> addAny(Object...values) {
 		if (nn(values)) {
 			for (var o : values) {
 				if (nn(o)) {
@@ -255,7 +255,7 @@ public class ListBuilder<E> {
 	 * @param value The value.
 	 * @return This object.
 	 */
-	public ListBuilder<E> addIf(boolean flag, E value) {
+	public Lists<E> addIf(boolean flag, E value) {
 		if (flag)
 			add(value);
 		return this;
@@ -318,7 +318,7 @@ public class ListBuilder<E> {
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
-	 * 	FluentList&lt;String&gt; <jv>list</jv> = ListBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 	FluentList&lt;String&gt; <jv>list</jv> = Lists.<jsm>create</jsm>(String.<jk>class</jk>)
 	 * 		.add(<js>"one"</js>, <js>"two"</js>)
 	 * 		.buildFluent();
 	 * </p>
@@ -337,7 +337,7 @@ public class ListBuilder<E> {
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
-	 * 	FilteredList&lt;Integer&gt; <jv>list</jv> = ListBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+	 * 	FilteredList&lt;Integer&gt; <jv>list</jv> = Lists.<jsm>create</jsm>(Integer.<jk>class</jk>)
 	 * 		.filtered(v -&gt; v != <jk>null</jk> &amp;&amp; v &gt; 0)
 	 * 		.add(5)
 	 * 		.add(-1)  <jc>// Will be filtered out</jc>
@@ -371,7 +371,7 @@ public class ListBuilder<E> {
 	 * @param elementFunction The function to convert elements. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public ListBuilder<E> elementFunction(Function<Object,E> elementFunction) {
+	public Lists<E> elementFunction(Function<Object,E> elementFunction) {
 		this.elementFunction = assertArgNotNull("elementFunction", elementFunction);
 		return this;
 	}
@@ -382,7 +382,7 @@ public class ListBuilder<E> {
 	 * @param value The element type. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public ListBuilder<E> elementType(Class<E> value) {
+	public Lists<E> elementType(Class<E> value) {
 		elementType = assertArgNotNull("value", value);
 		return this;
 	}
@@ -405,7 +405,7 @@ public class ListBuilder<E> {
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
-	 * 	List&lt;Object&gt; <jv>list</jv> = ListBuilder.<jsm>create</jsm>(Object.<jk>class</jk>)
+	 * 	List&lt;Object&gt; <jv>list</jv> = Lists.<jsm>create</jsm>(Object.<jk>class</jk>)
 	 * 		.filtered()
 	 * 		.add(<js>"name"</js>)
 	 * 		.add(-1)              <jc>// Filtered out at build time</jc>
@@ -416,7 +416,7 @@ public class ListBuilder<E> {
 	 *
 	 * @return This object.
 	 */
-	public ListBuilder<E> filtered() {
+	public Lists<E> filtered() {
 		// @formatter:off
 		return filtered(v -> ! (
 			v == null
@@ -448,7 +448,7 @@ public class ListBuilder<E> {
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
 	 * 	<jc>// Keep only non-null, positive integers</jc>
-	 * 	List&lt;Integer&gt; <jv>list</jv> = ListBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+	 * 	List&lt;Integer&gt; <jv>list</jv> = Lists.<jsm>create</jsm>(Integer.<jk>class</jk>)
 	 * 		.filtered(v -&gt; v != <jk>null</jk> &amp;&amp; v &gt; 0)
 	 * 		.add(5)
 	 * 		.add(-1)     <jc>// Filtered out at build time</jc>
@@ -456,7 +456,7 @@ public class ListBuilder<E> {
 	 * 		.build();
 	 *
 	 * 	<jc>// Multiple filters combined with AND</jc>
-	 * 	List&lt;Integer&gt; <jv>list2</jv> = ListBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+	 * 	List&lt;Integer&gt; <jv>list2</jv> = Lists.<jsm>create</jsm>(Integer.<jk>class</jk>)
 	 * 		.filtered(v -&gt; v != <jk>null</jk>)           <jc>// First filter</jc>
 	 * 		.filtered(v -&gt; v &gt; 0)                    <jc>// Second filter (ANDed with first)</jc>
 	 * 		.filtered(v -&gt; v &lt; 100);                  <jc>// Third filter (ANDed with previous)</jc>
@@ -469,7 +469,7 @@ public class ListBuilder<E> {
 	 * @param filter The filter predicate. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public ListBuilder<E> filtered(Predicate<E> filter) {
+	public Lists<E> filtered(Predicate<E> filter) {
 		Predicate<E> newFilter = assertArgNotNull("filter", filter);
 		if (this.filter == null)
 			this.filter = newFilter;
@@ -484,7 +484,7 @@ public class ListBuilder<E> {
 	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
-	public ListBuilder<E> sorted() {
+	public Lists<E> sorted() {
 		return sorted((Comparator<E>)Comparator.naturalOrder());
 	}
 
@@ -494,7 +494,7 @@ public class ListBuilder<E> {
 	 * @param comparator The comparator to use for sorting. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public ListBuilder<E> sorted(Comparator<E> comparator) {
+	public Lists<E> sorted(Comparator<E> comparator) {
 		this.comparator = assertArgNotNull("comparator", comparator);
 		return this;
 	}
@@ -507,7 +507,7 @@ public class ListBuilder<E> {
 	 *
 	 * @return This object.
 	 */
-	public ListBuilder<E> sparse() {
+	public Lists<E> sparse() {
 		sparse = true;
 		return this;
 	}
@@ -518,7 +518,7 @@ public class ListBuilder<E> {
 	 *
 	 * @return This object.
 	 */
-	public ListBuilder<E> unmodifiable() {
+	public Lists<E> unmodifiable() {
 		this.unmodifiable = true;
 		return this;
 	}
@@ -533,7 +533,7 @@ public class ListBuilder<E> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Create a thread-safe list</jc>
-	 * 	List&lt;String&gt; <jv>list</jv> = ListBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 	List&lt;String&gt; <jv>list</jv> = Lists.<jsm>create</jsm>(String.<jk>class</jk>)
 	 * 		.add(<js>"one"</js>, <js>"two"</js>)
 	 * 		.concurrent()
 	 * 		.build();
@@ -541,7 +541,7 @@ public class ListBuilder<E> {
 	 *
 	 * @return This object.
 	 */
-	public ListBuilder<E> concurrent() {
+	public Lists<E> concurrent() {
 		concurrent = true;
 		return this;
 	}
@@ -556,7 +556,7 @@ public class ListBuilder<E> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Conditionally create a thread-safe list</jc>
-	 * 	List&lt;String&gt; <jv>list</jv> = ListBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 	List&lt;String&gt; <jv>list</jv> = Lists.<jsm>create</jsm>(String.<jk>class</jk>)
 	 * 		.add(<js>"one"</js>, <js>"two"</js>)
 	 * 		.concurrent(<jv>needsThreadSafety</jv>)
 	 * 		.build();
@@ -565,7 +565,7 @@ public class ListBuilder<E> {
 	 * @param value Whether to make the list thread-safe.
 	 * @return This object.
 	 */
-	public ListBuilder<E> concurrent(boolean value) {
+	public Lists<E> concurrent(boolean value) {
 		concurrent = value;
 		return this;
 	}

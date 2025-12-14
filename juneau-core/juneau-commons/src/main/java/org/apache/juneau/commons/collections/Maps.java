@@ -113,14 +113,14 @@ import java.util.function.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsCollections">juneau-commons-collections</a>
- * 	<li class='jc'>{@link ListBuilder}
- * 	<li class='jc'>{@link SetBuilder}
+ * 	<li class='jc'>{@link Lists}
+ * 	<li class='jc'>{@link Sets}
  * </ul>
  *
  * @param <K> The key type.
  * @param <V> The value type.
  */
-public class MapBuilder<K,V> {
+public class Maps<K,V> {
 
 	/**
 	 * Static creator.
@@ -131,8 +131,8 @@ public class MapBuilder<K,V> {
 	 * @param valueType The value type. Must not be <jk>null</jk>.
 	 * @return A new builder.
 	 */
-	public static <K,V> MapBuilder<K,V> create(Class<K> keyType, Class<V> valueType) {
-		return new MapBuilder<>(assertArgNotNull("keyType", keyType), assertArgNotNull("valueType", valueType));
+	public static <K,V> Maps<K,V> create(Class<K> keyType, Class<V> valueType) {
+		return new Maps<>(assertArgNotNull("keyType", keyType), assertArgNotNull("valueType", valueType));
 	}
 
 	/**
@@ -145,7 +145,7 @@ public class MapBuilder<K,V> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	Map&lt;String, Integer&gt; <jv>map</jv> = MapBuilder.<jsm>create</jsm>()
+	 * 	Map&lt;String, Integer&gt; <jv>map</jv> = Maps.<jsm>create</jsm>()
 	 * 		.add(<js>"one"</js>, 1)
 	 * 		.add(<js>"two"</js>, 2)
 	 * 		.build();
@@ -156,8 +156,8 @@ public class MapBuilder<K,V> {
 	 * @return A new builder.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static <K,V> MapBuilder<K,V> create() {
-		return new MapBuilder(Object.class, Object.class);
+	public static <K,V> Maps<K,V> create() {
+		return new Maps(Object.class, Object.class);
 	}
 
 	private Map<K,V> map;
@@ -177,7 +177,7 @@ public class MapBuilder<K,V> {
 	 * @param keyType The key type. Must not be <jk>null</jk>.
 	 * @param valueType The value type. Must not be <jk>null</jk>.
 	 */
-	public MapBuilder(Class<K> keyType, Class<V> valueType) {
+	public Maps(Class<K> keyType, Class<V> valueType) {
 		this.keyType = assertArgNotNull("keyType", keyType);
 		this.valueType = assertArgNotNull("valueType", valueType);
 	}
@@ -192,7 +192,7 @@ public class MapBuilder<K,V> {
 	 * @param value The map value.
 	 * @return This object.
 	 */
-	public MapBuilder<K,V> add(K key, V value) {
+	public Maps<K,V> add(K key, V value) {
 		if (map == null)
 			map = new LinkedHashMap<>();
 		map.put(key, value);
@@ -211,7 +211,7 @@ public class MapBuilder<K,V> {
 	 * @param value The map to add to this map.
 	 * @return This object.
 	 */
-	public MapBuilder<K,V> addAll(Map<K,V> value) {
+	public Maps<K,V> addAll(Map<K,V> value) {
 		if (nn(value)) {
 			if (map == null)
 				map = new LinkedHashMap<>();
@@ -238,7 +238,7 @@ public class MapBuilder<K,V> {
 	 * @throws RuntimeException If a non-Map object is provided.
 	 */
 	@SuppressWarnings("unchecked")
-	public MapBuilder<K,V> addAny(Object...values) {
+	public Maps<K,V> addAny(Object...values) {
 		for (var o : values) {
 			if (nn(o)) {
 				if (o instanceof Map o2) {
@@ -262,10 +262,10 @@ public class MapBuilder<K,V> {
 	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
-	public MapBuilder<K,V> addPairs(Object...pairs) {
+	public Maps<K,V> addPairs(Object...pairs) {
 		assertArgNotNull("pairs", pairs);
 		if (pairs.length % 2 != 0)
-			throw illegalArg("Odd number of parameters passed into MapBuilder.addPairs(...)");
+			throw illegalArg("Odd number of parameters passed into Maps.addPairs(...)");
 		for (var i = 0; i < pairs.length; i += 2)
 			add((K)pairs[i], (V)pairs[i + 1]);
 		return this;
@@ -399,7 +399,7 @@ public class MapBuilder<K,V> {
 	 * @param keyFunction The function to convert keys. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public MapBuilder<K,V> keyFunction(Function<Object,K> keyFunction) {
+	public Maps<K,V> keyFunction(Function<Object,K> keyFunction) {
 		this.keyFunction = assertArgNotNull("keyFunction", keyFunction);
 		return this;
 	}
@@ -413,7 +413,7 @@ public class MapBuilder<K,V> {
 	 * @param valueFunction The function to convert values. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public MapBuilder<K,V> valueFunction(Function<Object,V> valueFunction) {
+	public Maps<K,V> valueFunction(Function<Object,V> valueFunction) {
 		this.valueFunction = assertArgNotNull("valueFunction", valueFunction);
 		return this;
 	}
@@ -428,7 +428,7 @@ public class MapBuilder<K,V> {
 	 * @param valueFunction The function to convert values. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public MapBuilder<K,V> functions(Function<Object,K> keyFunction, Function<Object,V> valueFunction) {
+	public Maps<K,V> functions(Function<Object,K> keyFunction, Function<Object,V> valueFunction) {
 		this.keyFunction = assertArgNotNull("keyFunction", keyFunction);
 		this.valueFunction = assertArgNotNull("valueFunction", valueFunction);
 		return this;
@@ -463,7 +463,7 @@ public class MapBuilder<K,V> {
 	 *
 	 * @return This object.
 	 */
-	public MapBuilder<K,V> filtered() {
+	public Maps<K,V> filtered() {
 		// @formatter:off
 		return filtered((k, v) -> ! (
 			v == null
@@ -516,7 +516,7 @@ public class MapBuilder<K,V> {
 	 * @param filter The filter predicate. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public MapBuilder<K,V> filtered(BiPredicate<K,V> filter) {
+	public Maps<K,V> filtered(BiPredicate<K,V> filter) {
 		BiPredicate<K,V> newFilter = assertArgNotNull("filter", filter);
 		if (this.filter == null)
 			this.filter = newFilter;
@@ -535,7 +535,7 @@ public class MapBuilder<K,V> {
 	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
-	public MapBuilder<K,V> sorted() {
+	public Maps<K,V> sorted() {
 		return sorted((Comparator<K>)Comparator.naturalOrder());
 	}
 
@@ -549,7 +549,7 @@ public class MapBuilder<K,V> {
 	 * @param comparator The comparator to use for sorting. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public MapBuilder<K,V> sorted(Comparator<K> comparator) {
+	public Maps<K,V> sorted(Comparator<K> comparator) {
 		this.comparator = assertArgNotNull("comparator", comparator);
 		ordered = false;
 		return this;
@@ -563,7 +563,7 @@ public class MapBuilder<K,V> {
 	 *
 	 * @return This object.
 	 */
-	public MapBuilder<K,V> sparse() {
+	public Maps<K,V> sparse() {
 		sparse = true;
 		return this;
 	}
@@ -573,7 +573,7 @@ public class MapBuilder<K,V> {
 	 *
 	 * @return This object.
 	 */
-	public MapBuilder<K,V> unmodifiable() {
+	public Maps<K,V> unmodifiable() {
 		unmodifiable = true;
 		return this;
 	}
@@ -613,7 +613,7 @@ public class MapBuilder<K,V> {
 	 *
 	 * @return This object.
 	 */
-	public MapBuilder<K,V> concurrent() {
+	public Maps<K,V> concurrent() {
 		concurrent = true;
 		return this;
 	}
@@ -646,7 +646,7 @@ public class MapBuilder<K,V> {
 	 * @param value Whether to make the map thread-safe.
 	 * @return This object.
 	 */
-	public MapBuilder<K,V> concurrent(boolean value) {
+	public Maps<K,V> concurrent(boolean value) {
 		concurrent = value;
 		return this;
 	}
@@ -675,7 +675,7 @@ public class MapBuilder<K,V> {
 	 *
 	 * @return This object.
 	 */
-	public MapBuilder<K,V> ordered() {
+	public Maps<K,V> ordered() {
 		return ordered(true);
 	}
 
@@ -704,7 +704,7 @@ public class MapBuilder<K,V> {
 	 * @param value Whether to preserve insertion order.
 	 * @return This object.
 	 */
-	public MapBuilder<K,V> ordered(boolean value) {
+	public Maps<K,V> ordered(boolean value) {
 		ordered = value;
 		if (ordered)
 			comparator = null;

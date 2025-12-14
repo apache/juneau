@@ -25,7 +25,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class SetBuilder_Test extends TestBase {
+class Lists_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -33,75 +33,49 @@ class SetBuilder_Test extends TestBase {
 
 	@Test
 	void a01_create() {
-		var b = SetBuilder.create(String.class);
+		var b = Lists.create(String.class);
 		assertNotNull(b);
 	}
 
 	@Test
 	void a02_addSingle() {
-		var set = SetBuilder.create(String.class)
+		var list = Lists.create(String.class)
 			.add("a")
 			.build();
 
-		assertList(set, "a");
+		assertList(list, "a");
 	}
 
 	@Test
 	void a03_addMultiple() {
-		var set = SetBuilder.create(String.class)
+		var list = Lists.create(String.class)
 			.add("a", "b", "c")
 			.build();
 
-		assertList(set, "a", "b", "c");
+		assertList(list, "a", "b", "c");
 	}
 
 	@Test
 	void a04_addAll() {
 		var existing = l("x", "y", "z");
-		var set = SetBuilder.create(String.class)
-			.ordered()
+		var list = Lists.create(String.class)
 			.add("a")
 			.addAll(existing)
 			.add("b")
 			.build();
 
-		assertList(set, "a", "x", "y", "z", "b");
+		assertList(list, "a", "x", "y", "z", "b");
 	}
 
 	@Test
 	void a05_addAllNull() {
-		var set = SetBuilder.create(String.class)
+		var list = Lists.create(String.class)
 			.add("a")
 			.addAll(null)
 			.add("b")
 			.build();
 
-		assertList(set, "a", "b");
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Deduplication
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	void b01_duplicates() {
-		var set = SetBuilder.create(String.class)
-			.add("a", "b", "a", "c", "b", "a")
-			.build();
-
-		assertList(set, "a", "b", "c");  // Duplicates removed
-	}
-
-	@Test
-	void b02_addAllWithDuplicates() {
-		var existing = l("a", "b", "c");
-		var set = SetBuilder.create(String.class)
-			.add("a", "b")  // a and b already in next collection
-			.addAll(existing)
-			.add("c", "d")  // c already exists
-			.build();
-
-		assertSize(4, set);  // a, b, c, d (no duplicates)
+		assertList(list, "a", "b");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -109,29 +83,25 @@ class SetBuilder_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void c01_addIf_true() {
-		var set = SetBuilder.create(String.class)
+	void b01_addIf_true() {
+		var list = Lists.create(String.class)
 			.add("a")
 			.addIf(true, "b")
 			.add("c")
 			.build();
 
-		assertSize(3, set);
-		assertTrue(set.contains("b"));
+		assertList(list, "a", "b", "c");
 	}
 
 	@Test
-	void c02_addIf_false() {
-		var set = SetBuilder.create(String.class)
+	void b02_addIf_false() {
+		var list = Lists.create(String.class)
 			.add("a")
 			.addIf(false, "b")
 			.add("c")
 			.build();
 
-		assertSize(2, set);
-		assertTrue(set.contains("a"));
-		assertFalse(set.contains("b"));
-		assertTrue(set.contains("c"));
+		assertList(list, "a", "c");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -139,34 +109,33 @@ class SetBuilder_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void d01_sorted_naturalOrder() {
-		var set = SetBuilder.create(String.class)
+	void c01_sorted_naturalOrder() {
+		var list = Lists.create(String.class)
 			.add("c", "a", "b")
 			.sorted()
 			.build();
 
-		assertList(set, "a", "b", "c");
-		assertTrue(set instanceof TreeSet);
+		assertList(list, "a", "b", "c");
 	}
 
 	@Test
-	void d02_sorted_customComparator() {
-		var set = SetBuilder.create(String.class)
+	void c02_sorted_customComparator() {
+		var list = Lists.create(String.class)
 			.add("a", "bb", "ccc")
 			.sorted(Comparator.comparing(String::length))
 			.build();
 
-		assertList(set, "a", "bb", "ccc");
+		assertList(list, "a", "bb", "ccc");
 	}
 
 	@Test
-	void d03_sorted_integers() {
-		var set = SetBuilder.create(Integer.class)
+	void c03_sorted_integers() {
+		var list = Lists.create(Integer.class)
 			.add(5, 2, 8, 1, 9)
 			.sorted()
 			.build();
 
-		assertList(set, 1, 2, 5, 8, 9);
+		assertList(list, 1, 2, 5, 8, 9);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -174,32 +143,32 @@ class SetBuilder_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void e01_sparse_empty() {
-		var set = SetBuilder.create(String.class)
+	void d01_sparse_empty() {
+		var list = Lists.create(String.class)
 			.sparse()
 			.build();
 
-		assertNull(set);
+		assertNull(list);
 	}
 
 	@Test
-	void e02_sparse_notEmpty() {
-		var set = SetBuilder.create(String.class)
+	void d02_sparse_notEmpty() {
+		var list = Lists.create(String.class)
 			.add("a")
 			.sparse()
 			.build();
 
-		assertNotNull(set);
-		assertSize(1, set);
+		assertNotNull(list);
+		assertSize(1, list);
 	}
 
 	@Test
-	void e03_notSparse_empty() {
-		var set = SetBuilder.create(String.class)
+	void d03_notSparse_empty() {
+		var list = Lists.create(String.class)
 			.build();
 
-		assertNotNull(set);
-		assertEmpty(set);
+		assertNotNull(list);
+		assertEmpty(list);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -207,24 +176,24 @@ class SetBuilder_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void f01_unmodifiable() {
-		var set = SetBuilder.create(String.class)
+	void e01_unmodifiable() {
+		var list = Lists.create(String.class)
 			.add("a", "b", "c")
 			.unmodifiable()
 			.build();
 
-		assertSize(3, set);
-		assertThrows(UnsupportedOperationException.class, () -> set.add("d"));
+		assertSize(3, list);
+		assertThrows(UnsupportedOperationException.class, () -> list.add("d"));
 	}
 
 	@Test
-	void f02_modifiable() {
-		var set = SetBuilder.create(String.class)
+	void e02_modifiable() {
+		var list = Lists.create(String.class)
 			.add("a", "b", "c")
 			.build();
 
-		set.add("d");
-		assertSize(4, set);
+		list.add("d");
+		assertSize(4, list);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -236,12 +205,12 @@ class SetBuilder_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void h01_elementType() {
-		var b = new SetBuilder<>(String.class);
+	void g01_elementType() {
+		var b = new Lists<>(String.class);
 		b.elementType(String.class);
 
-		var set = b.add("a", "b").build();
-		assertSize(2, set);
+		var list = b.add("a", "b").build();
+		assertSize(2, list);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -249,50 +218,50 @@ class SetBuilder_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void i01_multipleOperations() {
+	void h01_multipleOperations() {
 		var existing = l("x", "y");
-		var set = SetBuilder.create(String.class)
+		var list = Lists.create(String.class)
 			.add("a")
 			.addAll(existing)
 			.addIf(true, "b")
 			.addIf(false, "skip")
-			.add("c", "d", "a")  // "a" is duplicate
+			.add("c", "d")
 			.sorted()
 			.build();
 
-		// Should be sorted, no "skip", no duplicate "a"
-		assertList(set, "a", "b", "c", "d", "x", "y");
+		// Should be sorted and not contain "skip"
+		assertList(list, "a", "b", "c", "d", "x", "y");
 	}
 
 	@Test
-	void i02_sortedAndUnmodifiable() {
-		var set = SetBuilder.create(Integer.class)
+	void h02_sortedAndUnmodifiable() {
+		var list = Lists.create(Integer.class)
 			.add(3, 1, 2)
 			.sorted()
 			.unmodifiable()
 			.build();
 
-		assertList(set, 1, 2, 3);
-		assertThrows(UnsupportedOperationException.class, () -> set.add(4));
+		assertList(list, 1, 2, 3);
+		assertThrows(UnsupportedOperationException.class, () -> list.add(4));
 	}
 
 	@Test
-	void i03_sparseAndSorted() {
-		var set1 = SetBuilder.create(String.class)
+	void h03_sparseAndSorted() {
+		var list1 = Lists.create(String.class)
 			.add("c", "a", "b")
 			.sorted()
 			.sparse()
 			.build();
 
-		assertNotNull(set1);
-		assertList(set1, "a", "b", "c");
+		assertNotNull(list1);
+		assertList(list1, "a", "b", "c");
 
-		var set2 = SetBuilder.create(String.class)
+		var list2 = Lists.create(String.class)
 			.sorted()
 			.sparse()
 			.build();
 
-		assertNull(set2);
+		assertNull(list2);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -300,24 +269,32 @@ class SetBuilder_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void j01_buildEmptySet() {
-		var set = SetBuilder.create(String.class)
+	void i01_buildEmptyList() {
+		var list = Lists.create(String.class)
 			.build();
 
-		assertNotNull(set);
-		assertEmpty(set);
+		assertNotNull(list);
+		assertEmpty(list);
 	}
 
 	@Test
-	void j02_addNullElement() {
-		var set = SetBuilder.create(String.class)
-			.ordered()
+	void i02_addNullElement() {
+		var list = Lists.create(String.class)
 			.add("a")
 			.add((String)null)
 			.add("b")
 			.build();
 
-		assertList(set, "a", "<null>", "b");
+		assertList(list, "a", "<null>", "b");
+	}
+
+	@Test
+	void i03_duplicateElements() {
+		var list = Lists.create(String.class)
+			.add("a", "a", "b", "a")
+			.build();
+
+		assertList(list, "a", "a", "b", "a");  // Lists allow duplicates
 	}
 
 
@@ -326,14 +303,14 @@ class SetBuilder_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void k01_addAll_whenSetIsNull() {
-		// Test addAll when set is null (should create new LinkedHashSet from collection)
+	void j01_addAll_whenListIsNull() {
+		// Test addAll when list is null (should create new LinkedList from collection)
 		var existing = l("a", "b", "c");
-		var set = SetBuilder.create(String.class)
+		var list = Lists.create(String.class)
 			.addAll(existing)
 			.build();
 
-		assertList(set, "a", "b", "c");
+		assertList(list, "a", "b", "c");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -341,8 +318,8 @@ class SetBuilder_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void l01_elementFunction_withFunction() {
-		var set = SetBuilder.create(Integer.class)
+	void k01_elementFunction_withFunction() {
+		var list = Lists.create(Integer.class)
 			.elementFunction(o -> {
 				if (o instanceof String) {
 					return Integer.parseInt((String)o);
@@ -352,11 +329,11 @@ class SetBuilder_Test extends TestBase {
 			.addAny("1", "2", "3")
 			.build();
 
-		assertList(set, 1, 2, 3);
+		assertList(list, 1, 2, 3);
 	}
 
 	@Test
-	void l02_elementFunction_withConverter() {
+	void k02_elementFunction_withConverter() {
 		var converter = new org.apache.juneau.commons.utils.Converter() {
 			@Override
 			public <T> T convertTo(Class<T> type, Object o) {
@@ -367,16 +344,16 @@ class SetBuilder_Test extends TestBase {
 			}
 		};
 
-		var set = SetBuilder.create(Integer.class)
+		var list = Lists.create(Integer.class)
 			.elementFunction(o -> converter.convertTo(Integer.class, o))
 			.addAny("1", "2", "3")
 			.build();
 
-		assertList(set, 1, 2, 3);
+		assertList(list, 1, 2, 3);
 	}
 
 	@Test
-	void l03_elementFunction_multipleConverters() {
+	void k03_elementFunction_multipleConverters() {
 		var converter1 = new org.apache.juneau.commons.utils.Converter() {
 			@Override
 			public <T> T convertTo(Class<T> type, Object o) {
@@ -394,7 +371,7 @@ class SetBuilder_Test extends TestBase {
 			}
 		};
 
-		var set = SetBuilder.create(Integer.class)
+		var list = Lists.create(Integer.class)
 			.elementFunction(o -> {
 				Integer result = converter1.convertTo(Integer.class, o);
 				if (result != null) return result;
@@ -403,7 +380,7 @@ class SetBuilder_Test extends TestBase {
 			.addAny("1", "2")
 			.build();
 
-		assertList(set, 1, 2);
+		assertList(list, 1, 2);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -411,66 +388,66 @@ class SetBuilder_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void m01_addAny_withDirectValues() {
-		var set = SetBuilder.create(String.class)
+	void l01_addAny_withDirectValues() {
+		var list = Lists.create(String.class)
 			.addAny("a", "b", "c")
 			.build();
 
-		assertList(set, "a", "b", "c");
+		assertList(list, "a", "b", "c");
 	}
 
 	@Test
-	void m02_addAny_withCollection() {
+	void l02_addAny_withCollection() {
 		var collection = l("a", "b", "c");
-		var set = SetBuilder.create(String.class)
+		var list = Lists.create(String.class)
 			.addAny(collection)
 			.build();
 
-		assertList(set, "a", "b", "c");
+		assertList(list, "a", "b", "c");
 	}
 
 	@Test
-	void m03_addAny_withArray() {
+	void l03_addAny_withArray() {
 		var array = new String[]{"a", "b", "c"};
-		var set = SetBuilder.create(String.class)
+		var list = Lists.create(String.class)
 			.addAny((Object)array)
 			.build();
 
-		assertList(set, "a", "b", "c");
+		assertList(list, "a", "b", "c");
 	}
 
 	@Test
-	void m04_addAny_withNestedCollection() {
+	void l04_addAny_withNestedCollection() {
 		var nested = l(l("a", "b"), l("c", "d"));
-		var set = SetBuilder.create(String.class)
+		var list = Lists.create(String.class)
 			.addAny(nested)
 			.build();
 
-		assertList(set, "a", "b", "c", "d");
+		assertList(list, "a", "b", "c", "d");
 	}
 
 	@Test
-	void m05_addAny_withNestedArray() {
+	void l05_addAny_withNestedArray() {
 		var nested = new Object[]{new String[]{"a", "b"}, new String[]{"c", "d"}};
-		var set = SetBuilder.create(String.class)
+		var list = Lists.create(String.class)
 			.addAny(nested)
 			.build();
 
-		assertList(set, "a", "b", "c", "d");
+		assertList(list, "a", "b", "c", "d");
 	}
 
 	@Test
-	void m06_addAny_withNullValues() {
-		var set = SetBuilder.create(String.class)
+	void l06_addAny_withNullValues() {
+		var list = Lists.create(String.class)
 			.addAny("a", null, "b", null, "c")
 			.build();
 
-		assertList(set, "a", "b", "c");
+		assertList(list, "a", "b", "c");
 	}
 
 	@Test
-	void m07_addAny_withTypeConversion() {
-		var set = SetBuilder.create(Integer.class)
+	void l07_addAny_withTypeConversion() {
+		var list = Lists.create(Integer.class)
 			.elementFunction(o -> {
 				if (o instanceof String) {
 					return Integer.parseInt((String)o);
@@ -480,42 +457,41 @@ class SetBuilder_Test extends TestBase {
 			.addAny("1", "2", "3")
 			.build();
 
-		assertList(set, 1, 2, 3);
+		assertList(list, 1, 2, 3);
 	}
 
 	@Test
-	void m08_addAny_withFunctionToCollection() {
-		// This test verifies that addAny can handle collections directly.
-		// Since elementFunction is for converting to the element type, not to collections,
-		// we test that addAny works with collections directly.
-		var set = SetBuilder.create(String.class)
+	void l08_addAny_withFunctionToCollection() {
+		// This test verifies that addAny works with collections directly.
+		// Note: elementFunction is for converting to the element type, not to collections,
+		// so we test that addAny works with collections directly.
+		var list = Lists.create(String.class)
 			.addAny(l("a", "b", "c"))
 			.build();
-
-		assertList(set, "a", "b", "c");
+		assertList(list, "a", "b", "c");
 	}
 
 	@Test
-	void m09_addAny_noElementType() {
-		assertThrows(IllegalArgumentException.class, () -> new SetBuilder<String>(null));
+	void l09_addAny_noElementType() {
+		assertThrows(IllegalArgumentException.class, () -> new Lists<String>(null));
 	}
 
 	@Test
-	void m10_addAny_noElementFunction_throwsException() {
+	void l10_addAny_noElementFunction_throwsException() {
 		// When elementFunction is null and we try to add a non-matching type, it should throw
 		assertThrows(RuntimeException.class, () -> {
-			SetBuilder.create(Integer.class)
+			Lists.create(Integer.class)
 				.addAny("not-an-integer")
 				.build();
 		});
 	}
 
 	@Test
-	void m11_addAny_elementFunctionReturnsNull() {
+	void l11_addAny_elementFunctionReturnsNull() {
 		// ElementFunction exists but returns null (can't convert)
 		// Should throw RuntimeException when elementFunction can't convert
 		assertThrows(RuntimeException.class, () -> {
-			SetBuilder.create(Integer.class)
+			Lists.create(Integer.class)
 				.elementFunction(o -> null)  // Can't convert
 				.addAny("not-an-integer")
 				.build();
@@ -523,29 +499,12 @@ class SetBuilder_Test extends TestBase {
 	}
 
 	@Test
-	void m12_addAny_withNullArray() {
-		var set = SetBuilder.create(String.class)
+	void l12_addAny_withNullArray() {
+		var list = Lists.create(String.class)
 			.addAny((Object[])null)
 			.build();
 
-		assertEmpty(set);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// AddJson
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	void n01_addJson() {
-		// addJson is a wrapper around addAny, so it should work similarly
-		// Note: This will depend on converters being able to parse JSON strings
-		// For now, we'll test that it calls addAny correctly
-		var set = SetBuilder.create(String.class)
-			.addJson("a", "b", "c")
-			.build();
-
-		// Since there's no JSON parser converter by default, these are treated as strings
-		assertList(set, "a", "b", "c");
+		assertEmpty(list);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -553,43 +512,42 @@ class SetBuilder_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void o01_build_sparseWithNullSet() {
-		var set = SetBuilder.create(String.class)
+	void m01_build_sparseWithNullList() {
+		var list = Lists.create(String.class)
 			.sparse()
 			.build();
 
-		assertNull(set);
+		assertNull(list);
 	}
 
 
 	@Test
-	void o03_build_notSparseWithNullSet() {
-		var set = SetBuilder.create(String.class)
+	void m03_build_notSparseWithNullList() {
+		var list = Lists.create(String.class)
 			.build();
 
-		assertNotNull(set);
-		assertEmpty(set);
+		assertNotNull(list);
+		assertEmpty(list);
 	}
 
 	@Test
-	void o04_build_sortedWithNullSet() {
-		var set = SetBuilder.create(String.class)
+	void m04_build_sortedWithNullList() {
+		var list = Lists.create(String.class)
 			.sorted()
 			.build();
 
-		assertNotNull(set);
-		assertTrue(set instanceof TreeSet);
-		assertEmpty(set);
+		assertNotNull(list);
+		assertEmpty(list);
 	}
 
 	@Test
-	void o05_build_unmodifiableWithNullSet() {
-		var set = SetBuilder.create(String.class)
+	void m05_build_unmodifiableWithNullList() {
+		var list = Lists.create(String.class)
 			.unmodifiable()
 			.build();
 
-		assertNotNull(set);
-		assertThrows(UnsupportedOperationException.class, () -> set.add("a"));
+		assertNotNull(list);
+		assertThrows(UnsupportedOperationException.class, () -> list.add("a"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -597,57 +555,58 @@ class SetBuilder_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void p01_buildFluent_returnsFluentSet() {
-		var set = SetBuilder.create(String.class)
+	void n01_buildFluent_returnsFluentList() {
+		var list = Lists.create(String.class)
 			.add("a", "b", "c")
 			.buildFluent();
 
-		assertNotNull(set);
-		assertSize(3, set);
-		assertList(set, "a", "b", "c");
+		assertNotNull(list);
+		assertSize(3, list);
+		assertList(list, "a", "b", "c");
 	}
 
 	@Test
-	void p02_buildFluent_sparseEmpty() {
-		var set = SetBuilder.create(String.class)
+	void n02_buildFluent_sparseEmpty() {
+		var list = Lists.create(String.class)
 			.sparse()
 			.buildFluent();
 
-		assertNull(set);
+		assertNull(list);
 	}
 
 	@Test
-	void p03_buildFluent_withSorted() {
-		var set = SetBuilder.create(String.class)
+	void n03_buildFluent_withSorted() {
+		var list = Lists.create(String.class)
 			.add("c", "a", "b")
 			.sorted()
 			.buildFluent();
 
-		assertNotNull(set);
-		assertList(set, "a", "b", "c");
+		assertNotNull(list);
+		assertList(list, "a", "b", "c");
 	}
 
 	@Test
-	void p04_buildFluent_withUnmodifiable() {
-		var set = SetBuilder.create(String.class)
+	void n04_buildFluent_withUnmodifiable() {
+		var list = Lists.create(String.class)
 			.add("a", "b", "c")
 			.unmodifiable()
 			.buildFluent();
 
-		assertNotNull(set);
-		assertSize(3, set);
-		assertThrows(UnsupportedOperationException.class, () -> set.add("d"));
+		assertNotNull(list);
+		assertSize(3, list);
+		assertThrows(UnsupportedOperationException.class, () -> list.add("d"));
 	}
 
 	@Test
-	void p05_buildFluent_fluentMethods() {
-		var set = SetBuilder.create(String.class)
+	void n05_buildFluent_fluentMethods() {
+		var list = Lists.create(String.class)
 			.add("a", "b")
 			.buildFluent();
 
-		assertNotNull(set);
-		// Test that FluentSet methods work
-		set.a("c").aa(l("d", "e"));
-		assertList(set, "a", "b", "c", "d", "e");
+		assertNotNull(list);
+		// Test that FluentList methods work
+		list.a("c").aa(l("d", "e"));
+		assertList(list, "a", "b", "c", "d", "e");
 	}
 }
+

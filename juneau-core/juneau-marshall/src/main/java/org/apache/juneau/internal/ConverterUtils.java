@@ -216,7 +216,7 @@ public class ConverterUtils {
 	}
 
 	/**
-	 * Converts the specified object to a {@link ListBuilder} with elements of the specified type.
+	 * Converts the specified object to a {@link Lists} with elements of the specified type.
 	 *
 	 * <p>
 	 * The input value can be any of the following:
@@ -230,14 +230,14 @@ public class ConverterUtils {
 	 * @param <T> The element type.
 	 * @param value The value to convert. Can be <jk>null</jk>.
 	 * @param type The element type class.
-	 * @return A new {@link ListBuilder} containing the converted elements.
+	 * @return A new {@link Lists} containing the converted elements.
 	 */
-	public static <T> ListBuilder<T> toListBuilder(Object value, Class<T> type) {
+	public static <T> Lists<T> toListBuilder(Object value, Class<T> type) {
 		return listb(type).elementFunction(o -> GenericConverter.INSTANCE.convertTo(type, o)).addAny(value);
 	}
 
 	/**
-	 * Converts the specified object to a {@link MapBuilder} with keys and values of the specified types.
+	 * Converts the specified object to a {@link Maps} with keys and values of the specified types.
 	 *
 	 * <p>
 	 * The input value can be any of the following:
@@ -252,9 +252,9 @@ public class ConverterUtils {
 	 * @param value The value to convert. Can be <jk>null</jk>.
 	 * @param keyType The key type class.
 	 * @param valueType The value type class.
-	 * @return A new {@link MapBuilder} containing the converted entries.
+	 * @return A new {@link Maps} containing the converted entries.
 	 */
-	public static <K,V> MapBuilder<K,V> toMapBuilder(Object value, Class<K> keyType, Class<V> valueType) {
+	public static <K,V> Maps<K,V> toMapBuilder(Object value, Class<K> keyType, Class<V> valueType) {
 		return mapb(keyType, valueType)
 			.keyFunction(o -> GenericConverter.INSTANCE.convertTo(keyType, o))
 			.valueFunction(o -> GenericConverter.INSTANCE.convertTo(valueType, o))
@@ -262,7 +262,7 @@ public class ConverterUtils {
 	}
 
 	/**
-	 * Converts the specified object to a {@link SetBuilder} with elements of the specified type.
+	 * Converts the specified object to a {@link Sets} with elements of the specified type.
 	 *
 	 * <p>
 	 * The input value can be any of the following:
@@ -279,9 +279,9 @@ public class ConverterUtils {
 	 * @param <T> The element type.
 	 * @param value The value to convert. Can be <jk>null</jk>.
 	 * @param type The element type class.
-	 * @return A new {@link SetBuilder} containing the converted elements.
+	 * @return A new {@link Sets} containing the converted elements.
 	 */
-	public static <T> SetBuilder<T> toSetBuilder(Object value, Class<T> type) {
+	public static <T> Sets<T> toSetBuilder(Object value, Class<T> type) {
 		return setb(type).elementFunction(o -> GenericConverter.INSTANCE.convertTo(type, o)).addAny(value);
 	}
 }

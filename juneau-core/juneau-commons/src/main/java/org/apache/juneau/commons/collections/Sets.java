@@ -50,53 +50,53 @@ import java.util.function.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bjava'>
  * 	<jc>// Basic usage</jc>
- * 	Set&lt;String&gt; <jv>set</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+ * 	Set&lt;String&gt; <jv>set</jv> = Sets.<jsm>create</jsm>(String.<jk>class</jk>)
  * 		.add(<js>"apple"</js>, <js>"banana"</js>, <js>"cherry"</js>)
  * 		.build();
  *
  * 	<jc>// Automatic deduplication</jc>
- * 	Set&lt;Integer&gt; <jv>unique</jv> = SetBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+ * 	Set&lt;Integer&gt; <jv>unique</jv> = Sets.<jsm>create</jsm>(Integer.<jk>class</jk>)
  * 		.add(1, 2, 3, 2, 1)  <jc>// Duplicates ignored</jc>
  * 		.build();  <jc>// Contains: 1, 2, 3</jc>
  *
  * 	<jc>// With sorting</jc>
- * 	Set&lt;String&gt; <jv>sorted</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+ * 	Set&lt;String&gt; <jv>sorted</jv> = Sets.<jsm>create</jsm>(String.<jk>class</jk>)
  * 		.add(<js>"zebra"</js>, <js>"apple"</js>, <js>"banana"</js>)
  * 		.sorted()
  * 		.build();  <jc>// Returns TreeSet in natural order</jc>
  *
  * 	<jc>// Conditional elements</jc>
- * 	Set&lt;String&gt; <jv>features</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+ * 	Set&lt;String&gt; <jv>features</jv> = Sets.<jsm>create</jsm>(String.<jk>class</jk>)
  * 		.add(<js>"basic"</js>)
  * 		.addIf(<jv>hasPremium</jv>, <js>"premium"</js>)
  * 		.addIf(<jv>hasEnterprise</jv>, <js>"enterprise"</js>)
  * 		.build();
  *
  * 	<jc>// Immutable set</jc>
- * 	Set&lt;String&gt; <jv>immutable</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+ * 	Set&lt;String&gt; <jv>immutable</jv> = Sets.<jsm>create</jsm>(String.<jk>class</jk>)
  * 		.add(<js>"read"</js>, <js>"only"</js>)
  * 		.unmodifiable()
  * 		.build();
  *
  * 	<jc>// From multiple sources</jc>
  * 	Set&lt;Integer&gt; <jv>existing</jv> = Set.of(1, 2, 3);
- * 	Set&lt;Integer&gt; <jv>combined</jv> = SetBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+ * 	Set&lt;Integer&gt; <jv>combined</jv> = Sets.<jsm>create</jsm>(Integer.<jk>class</jk>)
  * 		.addAll(<jv>existing</jv>)
  * 		.add(4, 5, 6)
  * 		.build();
  *
  * 	<jc>// Sparse mode - returns null when empty</jc>
- * 	Set&lt;String&gt; <jv>maybeNull</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+ * 	Set&lt;String&gt; <jv>maybeNull</jv> = Sets.<jsm>create</jsm>(String.<jk>class</jk>)
  * 		.sparse()
  * 		.build();  <jc>// Returns null, not empty set</jc>
  *
  * 	<jc>// FluentSet wrapper - use buildFluent()</jc>
- * 	FluentSet&lt;String&gt; <jv>fluent</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+ * 	FluentSet&lt;String&gt; <jv>fluent</jv> = Sets.<jsm>create</jsm>(String.<jk>class</jk>)
  * 		.add(<js>"one"</js>, <js>"two"</js>)
  * 		.buildFluent();
  *
  * 	<jc>// FilteredSet - use buildFiltered()</jc>
- * 	FilteredSet&lt;Integer&gt; <jv>filtered</jv> = SetBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+ * 	FilteredSet&lt;Integer&gt; <jv>filtered</jv> = Sets.<jsm>create</jsm>(Integer.<jk>class</jk>)
  * 		.filtered(v -&gt; v &gt; 0)
  * 		.add(5)
  * 		.add(-1)  <jc>// Filtered out</jc>
@@ -110,13 +110,13 @@ import java.util.function.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsCollections">juneau-commons-collections</a>
- * 	<li class='jc'>{@link ListBuilder}
- * 	<li class='jc'>{@link MapBuilder}
+ * 	<li class='jc'>{@link Lists}
+ * 	<li class='jc'>{@link Maps}
  * </ul>
  *
  * @param <E> The element type.
  */
-public class SetBuilder<E> {
+public class Sets<E> {
 
 	/**
 	 * Static creator.
@@ -126,8 +126,8 @@ public class SetBuilder<E> {
 	 * @param elementTypeArgs Optional element type arguments.
 	 * @return A new builder.
 	 */
-	public static <E> SetBuilder<E> create(Class<E> elementType) {
-		return new SetBuilder<>(assertArgNotNull("elementType", elementType));
+	public static <E> Sets<E> create(Class<E> elementType) {
+		return new Sets<>(assertArgNotNull("elementType", elementType));
 	}
 
 	private Set<E> set;
@@ -144,7 +144,7 @@ public class SetBuilder<E> {
 	 * @param elementType The element type. Must not be <jk>null</jk>.
 	 * @param elementTypeArgs The element type generic arguments if there are any.
 	 */
-	public SetBuilder(Class<E> elementType) {
+	public Sets(Class<E> elementType) {
 		this.elementType = assertArgNotNull("elementType", elementType);
 	}
 
@@ -157,7 +157,7 @@ public class SetBuilder<E> {
 	 * @param value The value to add to this set.
 	 * @return This object.
 	 */
-	public SetBuilder<E> add(E value) {
+	public Sets<E> add(E value) {
 		if (set == null) {
 			if (ordered)
 				set = new LinkedHashSet<>();
@@ -177,7 +177,7 @@ public class SetBuilder<E> {
 	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
-	public SetBuilder<E> add(E...values) {
+	public Sets<E> add(E...values) {
 		assertArgNotNull("values", values);
 		for (var v : values)
 			add(v);
@@ -193,7 +193,7 @@ public class SetBuilder<E> {
 	 * @param value The collection to add to this set.
 	 * @return This object.
 	 */
-	public SetBuilder<E> addAll(Collection<E> value) {
+	public Sets<E> addAll(Collection<E> value) {
 		if (nn(value)) {
 			if (set == null) {
 				if (ordered)
@@ -223,7 +223,7 @@ public class SetBuilder<E> {
 	 * @param values The values to add.
 	 * @return This object.
 	 */
-	public SetBuilder<E> addAny(Object...values) {
+	public Sets<E> addAny(Object...values) {
 		if (nn(values)) {
 			for (var o : values) {
 				if (nn(o)) {
@@ -255,7 +255,7 @@ public class SetBuilder<E> {
 	 * @param value The value.
 	 * @return This object.
 	 */
-	public SetBuilder<E> addIf(boolean flag, E value) {
+	public Sets<E> addIf(boolean flag, E value) {
 		if (flag)
 			add(value);
 		return this;
@@ -267,7 +267,7 @@ public class SetBuilder<E> {
 	 * @param values The JSON array strings to parse and add to this set.
 	 * @return This object.
 	 */
-	public SetBuilder<E> addJson(String...values) {
+	public Sets<E> addJson(String...values) {
 		return addAny((Object[])values);
 	}
 
@@ -340,7 +340,7 @@ public class SetBuilder<E> {
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
-	 * 	FluentSet&lt;String&gt; <jv>set</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 	FluentSet&lt;String&gt; <jv>set</jv> = Sets.<jsm>create</jsm>(String.<jk>class</jk>)
 	 * 		.add(<js>"one"</js>, <js>"two"</js>)
 	 * 		.buildFluent();
 	 * </p>
@@ -367,7 +367,7 @@ public class SetBuilder<E> {
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
-	 * 	FilteredSet&lt;Integer&gt; <jv>set</jv> = SetBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+	 * 	FilteredSet&lt;Integer&gt; <jv>set</jv> = Sets.<jsm>create</jsm>(Integer.<jk>class</jk>)
 	 * 		.filtered(v -&gt; v != <jk>null</jk> &amp;&amp; v &gt; 0)
 	 * 		.add(5)
 	 * 		.add(-1)  <jc>// Will be filtered out</jc>
@@ -401,7 +401,7 @@ public class SetBuilder<E> {
 	 * @param elementFunction The function to convert elements. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public SetBuilder<E> elementFunction(Function<Object,E> elementFunction) {
+	public Sets<E> elementFunction(Function<Object,E> elementFunction) {
 		this.elementFunction = assertArgNotNull("elementFunction", elementFunction);
 		return this;
 	}
@@ -412,7 +412,7 @@ public class SetBuilder<E> {
 	 * @param value The element type. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public SetBuilder<E> elementType(Class<E> value) {
+	public Sets<E> elementType(Class<E> value) {
 		elementType = assertArgNotNull("value", value);
 		return this;
 	}
@@ -435,7 +435,7 @@ public class SetBuilder<E> {
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
-	 * 	Set&lt;Object&gt; <jv>set</jv> = SetBuilder.<jsm>create</jsm>(Object.<jk>class</jk>)
+	 * 	Set&lt;Object&gt; <jv>set</jv> = Sets.<jsm>create</jsm>(Object.<jk>class</jk>)
 	 * 		.filtered()
 	 * 		.add(<js>"name"</js>)
 	 * 		.add(-1)              <jc>// Filtered out at build time</jc>
@@ -446,7 +446,7 @@ public class SetBuilder<E> {
 	 *
 	 * @return This object.
 	 */
-	public SetBuilder<E> filtered() {
+	public Sets<E> filtered() {
 		// @formatter:off
 		return filtered(v -> ! (
 			v == null
@@ -478,7 +478,7 @@ public class SetBuilder<E> {
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
 	 * 	<jc>// Keep only non-null, positive integers</jc>
-	 * 	Set&lt;Integer&gt; <jv>set</jv> = SetBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+	 * 	Set&lt;Integer&gt; <jv>set</jv> = Sets.<jsm>create</jsm>(Integer.<jk>class</jk>)
 	 * 		.filtered(v -&gt; v != <jk>null</jk> &amp;&amp; v &gt; 0)
 	 * 		.add(5)
 	 * 		.add(-1)     <jc>// Filtered out at build time</jc>
@@ -486,7 +486,7 @@ public class SetBuilder<E> {
 	 * 		.build();
 	 *
 	 * 	<jc>// Multiple filters combined with AND</jc>
-	 * 	Set&lt;Integer&gt; <jv>set2</jv> = SetBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+	 * 	Set&lt;Integer&gt; <jv>set2</jv> = Sets.<jsm>create</jsm>(Integer.<jk>class</jk>)
 	 * 		.filtered(v -&gt; v != <jk>null</jk>)           <jc>// First filter</jc>
 	 * 		.filtered(v -&gt; v &gt; 0)                    <jc>// Second filter (ANDed with first)</jc>
 	 * 		.filtered(v -&gt; v &lt; 100);                  <jc>// Third filter (ANDed with previous)</jc>
@@ -499,7 +499,7 @@ public class SetBuilder<E> {
 	 * @param filter The filter predicate. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public SetBuilder<E> filtered(Predicate<E> filter) {
+	public Sets<E> filtered(Predicate<E> filter) {
 		Predicate<E> newFilter = assertArgNotNull("filter", filter);
 		if (this.filter == null)
 			this.filter = newFilter;
@@ -518,7 +518,7 @@ public class SetBuilder<E> {
 	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
-	public SetBuilder<E> sorted() {
+	public Sets<E> sorted() {
 		return sorted((Comparator<E>)Comparator.naturalOrder());
 	}
 
@@ -532,7 +532,7 @@ public class SetBuilder<E> {
 	 * @param comparator The comparator to use for sorting. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public SetBuilder<E> sorted(Comparator<E> comparator) {
+	public Sets<E> sorted(Comparator<E> comparator) {
 		this.comparator = assertArgNotNull("comparator", comparator);
 		ordered = false;
 		return this;
@@ -546,7 +546,7 @@ public class SetBuilder<E> {
 	 *
 	 * @return This object.
 	 */
-	public SetBuilder<E> sparse() {
+	public Sets<E> sparse() {
 		sparse = true;
 		return this;
 	}
@@ -557,7 +557,7 @@ public class SetBuilder<E> {
 	 *
 	 * @return This object.
 	 */
-	public SetBuilder<E> unmodifiable() {
+	public Sets<E> unmodifiable() {
 		unmodifiable = true;
 		return this;
 	}
@@ -579,13 +579,13 @@ public class SetBuilder<E> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Create a thread-safe set using synchronized HashSet</jc>
-	 * 	Set&lt;String&gt; <jv>set</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 	Set&lt;String&gt; <jv>set</jv> = Sets.<jsm>create</jsm>(String.<jk>class</jk>)
 	 * 		.add(<js>"one"</js>, <js>"two"</js>)
 	 * 		.concurrent()
 	 * 		.build();
 	 *
 	 * 	<jc>// Create a thread-safe ordered set</jc>
-	 * 	Set&lt;String&gt; <jv>set2</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 	Set&lt;String&gt; <jv>set2</jv> = Sets.<jsm>create</jsm>(String.<jk>class</jk>)
 	 * 		.ordered()
 	 * 		.concurrent()
 	 * 		.add(<js>"one"</js>)
@@ -594,7 +594,7 @@ public class SetBuilder<E> {
 	 *
 	 * @return This object.
 	 */
-	public SetBuilder<E> concurrent() {
+	public Sets<E> concurrent() {
 		concurrent = true;
 		return this;
 	}
@@ -616,7 +616,7 @@ public class SetBuilder<E> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Conditionally create a thread-safe set</jc>
-	 * 	Set&lt;String&gt; <jv>set</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 	Set&lt;String&gt; <jv>set</jv> = Sets.<jsm>create</jsm>(String.<jk>class</jk>)
 	 * 		.add(<js>"one"</js>, <js>"two"</js>)
 	 * 		.concurrent(<jv>needsThreadSafety</jv>)
 	 * 		.build();
@@ -625,7 +625,7 @@ public class SetBuilder<E> {
 	 * @param value Whether to make the set thread-safe.
 	 * @return This object.
 	 */
-	public SetBuilder<E> concurrent(boolean value) {
+	public Sets<E> concurrent(boolean value) {
 		concurrent = value;
 		return this;
 	}
@@ -643,7 +643,7 @@ public class SetBuilder<E> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Create an ordered set (preserves insertion order)</jc>
-	 * 	Set&lt;String&gt; <jv>set</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 	Set&lt;String&gt; <jv>set</jv> = Sets.<jsm>create</jsm>(String.<jk>class</jk>)
 	 * 		.ordered()
 	 * 		.add(<js>"one"</js>)
 	 * 		.add(<js>"two"</js>)
@@ -652,7 +652,7 @@ public class SetBuilder<E> {
 	 *
 	 * @return This object.
 	 */
-	public SetBuilder<E> ordered() {
+	public Sets<E> ordered() {
 		return ordered(true);
 	}
 
@@ -670,7 +670,7 @@ public class SetBuilder<E> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Conditionally create an ordered set</jc>
-	 * 	Set&lt;String&gt; <jv>set</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 	Set&lt;String&gt; <jv>set</jv> = Sets.<jsm>create</jsm>(String.<jk>class</jk>)
 	 * 		.ordered(<jv>preserveOrder</jv>)
 	 * 		.add(<js>"one"</js>)
 	 * 		.build();
@@ -679,7 +679,7 @@ public class SetBuilder<E> {
 	 * @param value Whether to preserve insertion order.
 	 * @return This object.
 	 */
-	public SetBuilder<E> ordered(boolean value) {
+	public Sets<E> ordered(boolean value) {
 		ordered = value;
 		if (ordered)
 			comparator = null;

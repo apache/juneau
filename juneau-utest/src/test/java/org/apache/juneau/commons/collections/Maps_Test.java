@@ -24,7 +24,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class MapBuilder_Test extends TestBase {
+class Maps_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -32,13 +32,13 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void a01_create() {
-		var b = MapBuilder.create(String.class, Integer.class);
+		var b = Maps.create(String.class, Integer.class);
 		assertNotNull(b);
 	}
 
 	@Test
 	void a02_addSingle() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.add("a", 1)
 			.build();
 
@@ -47,7 +47,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void a03_addMultiple() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.add("a", 1)
 			.add("b", 2)
 			.add("c", 3)
@@ -62,7 +62,7 @@ class MapBuilder_Test extends TestBase {
 		existing.put("x", 10);
 		existing.put("y", 20);
 
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.add("a", 1)
 			.addAll(existing)
 			.add("b", 2)
@@ -78,7 +78,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void a05_addAllNull() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.add("a", 1)
 			.addAll(null)
 			.add("b", 2)
@@ -93,7 +93,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void b01_addPairs() {
-		var map = MapBuilder.create(String.class, String.class)
+		var map = Maps.create(String.class, String.class)
 			.addPairs("host", "localhost", "port", "8080", "protocol", "https")
 			.build();
 
@@ -102,7 +102,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void b02_addPairs_oddNumber() {
-		var b = MapBuilder.create(String.class, String.class);
+		var b = Maps.create(String.class, String.class);
 		assertThrows(IllegalArgumentException.class, () -> b.addPairs("a", "b", "c"));
 	}
 
@@ -112,7 +112,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void c00_ordered_preservesInsertionOrder() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.ordered()
 			.add("c", 3)
 			.add("a", 1)
@@ -130,7 +130,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void c00b_ordered_defaultIsHashMap() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.add("a", 1)
 			.add("b", 2)
 			.build();
@@ -147,13 +147,13 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void c00c_ordered_boolean() {
-		var map1 = MapBuilder.create(String.class, Integer.class)
+		var map1 = Maps.create(String.class, Integer.class)
 			.ordered(true)
 			.add("a", 1)
 			.build();
 		assertTrue(map1 instanceof LinkedHashMap);
 
-		var map2 = MapBuilder.create(String.class, Integer.class)
+		var map2 = Maps.create(String.class, Integer.class)
 			.ordered(false)
 			.add("a", 1)
 			.build();
@@ -163,7 +163,7 @@ class MapBuilder_Test extends TestBase {
 	@Test
 	void c00d_ordered_lastOneWins() {
 		// If ordered() is called first, then sorted(), sorted() wins
-		var map1 = MapBuilder.create(String.class, Integer.class)
+		var map1 = Maps.create(String.class, Integer.class)
 			.ordered()
 			.add("c", 3)
 			.add("a", 1)
@@ -174,7 +174,7 @@ class MapBuilder_Test extends TestBase {
 		assertList(map1.keySet(), "a", "b", "c");
 
 		// If sorted() is called first, then ordered(), ordered() wins
-		var map2 = MapBuilder.create(String.class, Integer.class)
+		var map2 = Maps.create(String.class, Integer.class)
 			.sorted()
 			.add("c", 3)
 			.add("a", 1)
@@ -194,7 +194,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void c01_sorted_naturalOrder() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.add("c", 3)
 			.add("a", 1)
 			.add("b", 2)
@@ -208,7 +208,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void c02_sorted_customComparator() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.add("a", 1)
 			.add("bb", 2)
 			.add("ccc", 3)
@@ -224,7 +224,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void d01_sparse_empty() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.sparse()
 			.build();
 
@@ -233,7 +233,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void d02_sparse_notEmpty() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.add("a", 1)
 			.sparse()
 			.build();
@@ -244,7 +244,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void d03_notSparse_empty() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.build();
 
 		assertNotNull(map);
@@ -257,7 +257,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void e01_unmodifiable() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.add("a", 1)
 			.add("b", 2)
 			.unmodifiable()
@@ -269,7 +269,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void e02_modifiable() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.add("a", 1)
 			.build();
 
@@ -291,7 +291,7 @@ class MapBuilder_Test extends TestBase {
 		existing.put("x", 10);
 		existing.put("y", 20);
 
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.add("a", 1)
 			.addAll(existing)
 			.add("b", 2)
@@ -309,7 +309,7 @@ class MapBuilder_Test extends TestBase {
 		existing.put("x", 10);
 		existing.put("y", 20);
 
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.ordered()
 			.add("a", 1)
 			.addAll(existing)
@@ -328,7 +328,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void g02_sortedAndUnmodifiable() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.add("c", 3)
 			.add("a", 1)
 			.add("b", 2)
@@ -343,7 +343,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void g03_sparseAndSorted() {
-		var map1 = MapBuilder.create(String.class, Integer.class)
+		var map1 = Maps.create(String.class, Integer.class)
 			.add("c", 3)
 			.add("a", 1)
 			.add("b", 2)
@@ -354,7 +354,7 @@ class MapBuilder_Test extends TestBase {
 		assertNotNull(map1);
 		assertSize(3, map1);
 
-		var map2 = MapBuilder.create(String.class, Integer.class)
+		var map2 = Maps.create(String.class, Integer.class)
 			.sorted()
 			.sparse()
 			.build();
@@ -368,7 +368,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void h01_buildEmptyMap() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.build();
 
 		assertNotNull(map);
@@ -377,7 +377,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void h02_addNullKey() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.add(null, 1)
 			.add("a", 2)
 			.build();
@@ -387,7 +387,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void h03_addNullValue() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.add("a", 1)
 			.add("b", null)
 			.add("c", 3)
@@ -398,7 +398,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void h04_duplicateKeys() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.add("a", 1)
 			.add("a", 2)  // Overwrites first value
 			.add("a", 3)  // Overwrites again
@@ -414,7 +414,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void i01_filtered_customPredicate() {
-		var map = MapBuilder.create(String.class, String.class)
+		var map = Maps.create(String.class, String.class)
 			.filtered((k, v) -> v != null && !v.equals(""))
 			.add("a", "foo")
 			.add("b", null)     // Not added
@@ -427,7 +427,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void i02_filtered_defaultFilter() {
-		var map = MapBuilder.create(String.class, Object.class)
+		var map = Maps.create(String.class, Object.class)
 			.filtered()
 			.add("name", "John")
 			.add("age", -1)              // Not added
@@ -443,7 +443,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void i03_filtered_rejectsValue() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.filtered((k, v) -> v != null && v > 0)
 			.add("a", 1)
 			.add("b", -1)  // Not added
@@ -456,7 +456,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void i04_add_withFilter() {
-		var map = MapBuilder.create(String.class, String.class)
+		var map = Maps.create(String.class, String.class)
 			.filtered((k, v) -> v != null && v.length() > 2)
 			.add("a", "foo")   // Added
 			.add("b", "ab")    // Not added (length <= 2)
@@ -473,7 +473,7 @@ class MapBuilder_Test extends TestBase {
 		existing.put("y", "ab");  // Will be filtered out
 		existing.put("z", "another");
 
-		var map = MapBuilder.create(String.class, String.class)
+		var map = Maps.create(String.class, String.class)
 			.filtered((k, v) -> v != null && v.length() > 2)
 			.addAll(existing)
 			.build();
@@ -487,7 +487,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void j01_keyValueFunctions_notSet() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.add("a", 1)
 			.build();
 
@@ -500,7 +500,7 @@ class MapBuilder_Test extends TestBase {
 		inputMap.put("a", "1");
 		inputMap.put("b", "2");
 
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.valueFunction(o -> o instanceof String ? Integer.parseInt((String)o) : (Integer)o)
 			.addAny(inputMap)
 			.build();
@@ -514,7 +514,7 @@ class MapBuilder_Test extends TestBase {
 		inputMap.put(1, "10");
 		inputMap.put(2, "20");
 
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.keyFunction(o -> String.valueOf(o))
 			.valueFunction(o -> o instanceof String ? Integer.parseInt((String)o) : (Integer)o)
 			.addAny(inputMap)
@@ -529,7 +529,7 @@ class MapBuilder_Test extends TestBase {
 		inputMap.put(1, "10");
 		inputMap.put(2, "20");
 
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.functions(
 				o -> String.valueOf(o),  // key function
 				o -> o instanceof String ? Integer.parseInt((String)o) : (Integer)o  // value function
@@ -550,7 +550,7 @@ class MapBuilder_Test extends TestBase {
 		inputMap.put("a", 1);
 		inputMap.put("b", 2);
 
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.addAny(inputMap)
 			.build();
 
@@ -567,7 +567,7 @@ class MapBuilder_Test extends TestBase {
 		map2.put("c", 3);
 		map2.put("d", 4);
 
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.addAny(map1, map2)
 			.build();
 
@@ -580,7 +580,7 @@ class MapBuilder_Test extends TestBase {
 		inputMap.put("a", 1);
 		inputMap.put("b", 2);
 
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.addAny(inputMap, null)  // null map should be ignored
 			.build();
 
@@ -595,7 +595,7 @@ class MapBuilder_Test extends TestBase {
 		inputMap.put("b", null);
 
 		assertThrows(RuntimeException.class, () -> {
-			MapBuilder.create(String.class, Integer.class)
+			Maps.create(String.class, Integer.class)
 				.addAny(inputMap)
 				.build();
 		});
@@ -607,7 +607,7 @@ class MapBuilder_Test extends TestBase {
 		inputMap.put(1, "10");
 		inputMap.put(2, "20");
 
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.keyFunction(o -> String.valueOf(o))
 			.valueFunction(o -> o instanceof String ? Integer.parseInt((String)o) : (Integer)o)
 			.addAny(inputMap)
@@ -628,7 +628,7 @@ class MapBuilder_Test extends TestBase {
 			}
 		}
 
-		var map = MapBuilder.create(String.class, String.class)
+		var map = Maps.create(String.class, String.class)
 			.addAny(parsedMap)
 			.build();
 
@@ -642,7 +642,7 @@ class MapBuilder_Test extends TestBase {
 		var map2 = new LinkedHashMap<String,String>();
 		map2.put("y", "bar");
 
-		var map = MapBuilder.create(String.class, String.class)
+		var map = Maps.create(String.class, String.class)
 			.addAny(map1, map2)
 			.build();
 
@@ -651,16 +651,16 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void k07_addAny_noKeyOrValueType() {
-		assertThrows(IllegalArgumentException.class, () -> new MapBuilder<String,Integer>(null, null));
-		assertThrows(IllegalArgumentException.class, () -> new MapBuilder<String,Integer>(String.class, null));
-		assertThrows(IllegalArgumentException.class, () -> new MapBuilder<String,Integer>(null, Integer.class));
+		assertThrows(IllegalArgumentException.class, () -> new Maps<String,Integer>(null, null));
+		assertThrows(IllegalArgumentException.class, () -> new Maps<String,Integer>(String.class, null));
+		assertThrows(IllegalArgumentException.class, () -> new Maps<String,Integer>(null, Integer.class));
 	}
 
 	@Test
 	void k08_addAny_nonMapObject() {
 		// addAny only accepts Map instances, non-Map objects throw exception
 		assertThrows(RuntimeException.class, () -> {
-			MapBuilder.create(String.class, Integer.class)
+			Maps.create(String.class, Integer.class)
 				.addAny("not-a-map")
 				.build();
 		});
@@ -673,7 +673,7 @@ class MapBuilder_Test extends TestBase {
 		inputMap.put("a", "not-an-integer");
 
 		assertThrows(RuntimeException.class, () -> {
-			MapBuilder.create(String.class, Integer.class)
+			Maps.create(String.class, Integer.class)
 				.valueFunction(o -> {
 					if (o instanceof String) {
 						try {
@@ -695,7 +695,7 @@ class MapBuilder_Test extends TestBase {
 		inputMap.put(new Object(), "value");  // Object can't be converted to String
 
 		assertThrows(RuntimeException.class, () -> {
-			MapBuilder.create(String.class, String.class)
+			Maps.create(String.class, String.class)
 				.keyFunction(o -> {
 					if (o instanceof String)
 						return (String)o;
@@ -712,7 +712,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void o01_concurrent_defaultHashMap() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.concurrent()
 			.add("a", 1)
 			.add("b", 2)
@@ -724,7 +724,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void o02_concurrent_ordered() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.ordered()
 			.concurrent()
 			.add("a", 1)
@@ -742,7 +742,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void o03_concurrent_sorted() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.sorted()
 			.concurrent()
 			.add("c", 3)
@@ -757,13 +757,13 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void o04_concurrent_boolean() {
-		var map1 = MapBuilder.create(String.class, Integer.class)
+		var map1 = Maps.create(String.class, Integer.class)
 			.concurrent(true)
 			.add("a", 1)
 			.build();
 		assertTrue(map1 instanceof java.util.concurrent.ConcurrentHashMap);
 
-		var map2 = MapBuilder.create(String.class, Integer.class)
+		var map2 = Maps.create(String.class, Integer.class)
 			.concurrent(false)
 			.add("a", 1)
 			.build();
@@ -772,7 +772,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void o05_concurrent_unmodifiable() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.concurrent()
 			.unmodifiable()
 			.add("a", 1)
@@ -788,7 +788,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void l01_build_sparseWithNullMap() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.sparse()
 			.build();
 
@@ -797,7 +797,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void l03_build_notSparseWithNullMap() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.build();
 
 		assertNotNull(map);
@@ -806,7 +806,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void l04_build_sortedWithNullMap() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.sorted()
 			.build();
 
@@ -817,7 +817,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void l06_build_orderedWithNullMap() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.ordered()
 			.build();
 
@@ -828,7 +828,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void l07_build_defaultHashMap() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.build();
 
 		assertNotNull(map);
@@ -840,7 +840,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void l05_build_unmodifiableWithNullMap() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.unmodifiable()
 			.build();
 
@@ -854,7 +854,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void m01_buildFluent_returnsFluentMap() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.add("a", 1)
 			.add("b", 2)
 			.buildFluent();
@@ -866,7 +866,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void m02_buildFluent_sparseEmpty() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.sparse()
 			.buildFluent();
 
@@ -875,7 +875,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void m03_buildFluent_withFiltering() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.filtered((k, v) -> v != null && v > 0)
 			.add("a", 1)
 			.add("b", -1)  // Filtered out
@@ -892,7 +892,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void n01_buildFiltered_withFilter() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.filtered((k, v) -> v != null && v > 0)
 			.add("a", 1)
 			.add("b", -1)  // Filtered out
@@ -907,7 +907,7 @@ class MapBuilder_Test extends TestBase {
 	@Test
 	void n02_buildFiltered_withoutFilter() {
 		// buildFiltered() should work even without explicit filter (uses default filter)
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.add("a", 1)
 			.add("b", 2)
 			.buildFiltered();
@@ -918,7 +918,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void n03_buildFiltered_sparseEmpty() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.filtered((k, v) -> v != null && v > 0)
 			.sparse()
 			.buildFiltered();
@@ -928,7 +928,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void n04_buildFiltered_withSorted() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.filtered((k, v) -> v != null && v > 0)
 			.add("c", 3)
 			.add("a", 1)
@@ -942,7 +942,7 @@ class MapBuilder_Test extends TestBase {
 
 	@Test
 	void n05_buildFiltered_multipleFilters() {
-		var map = MapBuilder.create(String.class, Integer.class)
+		var map = Maps.create(String.class, Integer.class)
 			.filtered((k, v) -> v != null)
 			.filtered((k, v) -> v > 0)
 			.filtered((k, v) -> !k.startsWith("_"))

@@ -892,14 +892,14 @@ public class CollectionUtils {
 	}
 
 	/**
-	 * Convenience factory for a {@link ListBuilder}.
+	 * Convenience factory for a {@link Lists}.
 	 *
 	 * @param <E> The element type.
 	 * @param type The element type.
 	 * @return A new list builder.
 	 */
-	public static <E> ListBuilder<E> listb(Class<E> type) {
-		return ListBuilder.create(type);
+	public static <E> Lists<E> listb(Class<E> type) {
+		return Lists.create(type);
 	}
 
 	/**
@@ -1525,10 +1525,10 @@ public class CollectionUtils {
 	}
 
 	/**
-	 * Convenience factory for a {@link MapBuilder} with {@link String} keys and {@link Object} values.
+	 * Convenience factory for a {@link Maps} with {@link String} keys and {@link Object} values.
 	 *
 	 * <p>
-	 * This is a shortcut for <c>MapBuilder.create(String.<jk>class</jk>, Object.<jk>class</jk>)</c>.
+	 * This is a shortcut for <c>Maps.create(String.<jk>class</jk>, Object.<jk>class</jk>)</c>.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -1550,14 +1550,14 @@ public class CollectionUtils {
 	 * </p>
 	 *
 	 * @return A new map builder.
-	 * @see MapBuilder
+	 * @see Maps
 	 */
-	public static MapBuilder<String,Object> mapb() {
-		return MapBuilder.create(String.class, Object.class).ordered();
+	public static Maps<String,Object> mapb() {
+		return Maps.create(String.class, Object.class).ordered();
 	}
 
 	/**
-	 * Convenience factory for a {@link MapBuilder}.
+	 * Convenience factory for a {@link Maps}.
 	 *
 	 * @param <K> The key type.
 	 * @param <V> The value type.
@@ -1566,8 +1566,8 @@ public class CollectionUtils {
 	 * @param converters Optional converters to use for converting values.
 	 * @return A new map builder.
 	 */
-	public static <K,V> MapBuilder<K,V> mapb(Class<K> keyType, Class<V> valueType) {
-		return MapBuilder.create(keyType, valueType).ordered();
+	public static <K,V> Maps<K,V> mapb(Class<K> keyType, Class<V> valueType) {
+		return Maps.create(keyType, valueType).ordered();
 	}
 
 	/**
@@ -1744,14 +1744,14 @@ public class CollectionUtils {
 	}
 
 	/**
-	 * Convenience factory for a {@link SetBuilder}.
+	 * Convenience factory for a {@link Sets}.
 	 *
 	 * @param <E> The element type.
 	 * @param type The element type.
 	 * @return A new set builder.
 	 */
-	public static <E> SetBuilder<E> setb(Class<E> type) {
-		return SetBuilder.create(type).ordered();
+	public static <E> Sets<E> setb(Class<E> type) {
+		return Sets.create(type).ordered();
 	}
 
 	/**

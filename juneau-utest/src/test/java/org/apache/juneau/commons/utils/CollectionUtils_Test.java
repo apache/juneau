@@ -723,7 +723,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a044_listb() {
-		ListBuilder<String> builder = listb(String.class);
+		Lists<String> builder = listb(String.class);
 		assertNotNull(builder);
 		List<String> result = builder.add("a").add("b").build();
 		assertEquals(2, result.size());
@@ -945,7 +945,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a053_mapb() {
-		MapBuilder<String, Object> builder = mapb();
+		Maps<String, Object> builder = mapb();
 		assertNotNull(builder);
 		Map<String, Object> result = builder.add("a", 1).add("b", 2).build();
 		assertEquals(2, result.size());
@@ -958,7 +958,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a054_mapb_class() {
-		MapBuilder<String, Integer> builder = mapb(String.class, Integer.class);
+		Maps<String, Integer> builder = mapb(String.class, Integer.class);
 		assertNotNull(builder);
 		Map<String, Integer> result = builder.add("a", 1).build();
 		assertEquals(1, result.size());
@@ -1089,7 +1089,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a064_setb() {
-		SetBuilder<String> builder = setb(String.class);
+		Sets<String> builder = setb(String.class);
 		assertNotNull(builder);
 		Set<String> result = builder.add("a").add("b").build();
 		assertEquals(2, result.size());
