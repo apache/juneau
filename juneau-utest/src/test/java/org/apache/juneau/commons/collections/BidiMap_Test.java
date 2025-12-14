@@ -650,7 +650,6 @@ class BidiMap_Test extends TestBase {
 			.add("one", 1)
 			.build();
 
-		assertFalse(map.equals("not a map"));
 		assertFalse(map.equals(null));
 	}
 

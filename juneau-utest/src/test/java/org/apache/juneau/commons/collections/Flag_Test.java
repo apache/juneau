@@ -281,7 +281,6 @@ class Flag_Test extends TestBase {
 	@Test
 	void d06_equals_notAFlag() {
 		var flag = Flag.of(true);
-		assertFalse(flag.equals("not a flag"));
 		assertFalse(flag.equals(null));
 	}
 

@@ -1567,8 +1567,8 @@ public class CollectionUtils {
 	 * @param converters Optional converters to use for converting values.
 	 * @return A new map builder.
 	 */
-	public static <K,V> MapBuilder<K,V> mapb(Class<K> keyType, Class<V> valueType, Converter...converters) {
-		return MapBuilder.create(keyType, valueType).converters(converters);
+	public static <K,V> MapBuilder<K,V> mapb(Class<K> keyType, Class<V> valueType) {
+		return MapBuilder.create(keyType, valueType);
 	}
 
 	/**

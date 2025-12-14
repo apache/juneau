@@ -34,7 +34,11 @@ import java.util.function.*;
  * <h5 class='section'>Features:</h5>
  * <ul class='spaced-list'>
  * 	<li><b>Flexible Filtering:</b> Use any {@link BiPredicate} to filter entries based on key, value, or both
- * 	<li><b>Custom Map Types:</b> Works with any map implementation via the builder's <c>creator</c> function
+ * 	<li><b>Optional Filter:</b> Filter is optional when using the builder - defaults to accepting all entries
+ * 	<li><b>Multiple Filters:</b> Can combine multiple filters using AND logic
+ * 	<li><b>Custom Map Types:</b> Works with any map implementation via the builder's <c>inner</c> method
+ * 	<li><b>Type Conversion:</b> Supports automatic type conversion via key/value functions
+ * 	<li><b>Convenience Methods:</b> Provides {@link #add(Object, Object)}, {@link #addAll(Map)}, {@link #addAny(Object...)}, and {@link #addPairs(Object...)} for easy entry addition
  * 	<li><b>Transparent Interface:</b> Implements the full {@link Map} interface, so it can be used anywhere a map is expected
  * 	<li><b>Filter on Add:</b> Filtering happens when entries are added via {@link #put(Object, Object)}, {@link #putAll(Map)}, etc.
  * </ul>
@@ -60,7 +64,7 @@ import java.util.function.*;
  * 	FilteredMap&lt;String, Integer&gt; <jv>map</jv> = FilteredMap
  * 		.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
  * 		.filter((k, v) -&gt; v != <jk>null</jk> &amp;&amp; v &gt; 0)
- * 		.creator(() -&gt; <jk>new</jk> TreeMap&lt;&gt;())
+ * 		.inner(<jk>new</jk> TreeMap&lt;&gt;())
  * 		.build();
  *
  * 	<jv>map</jv>.put(<js>"a"</js>, 5);   <jc>// Added</jc>
@@ -77,13 +81,13 @@ import java.util.function.*;
  * 		being filtered out versus an existing entry being filtered out.
  * 	<li>The filter is not applied when reading from the map (e.g., {@link #get(Object)}, {@link #containsKey(Object)})
  * 	<li>All other map operations behave as expected on the underlying map
- * 	<li>The underlying map type is determined by the <c>creator</c> function (defaults to {@link LinkedHashMap})
+ * 	<li>The underlying map type is determined by the <c>inner</c> method (defaults to {@link LinkedHashMap})
  * </ul>
  *
  * <h5 class='section'>Thread Safety:</h5>
  * <p>
  * This class is not thread-safe unless the underlying map is thread-safe. If thread safety is required,
- * use a thread-safe map type (e.g., {@link java.util.concurrent.ConcurrentHashMap}) via the <c>creator</c> function.
+ * use a thread-safe map type (e.g., {@link java.util.concurrent.ConcurrentHashMap}) via the <c>inner</c> method.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
@@ -103,7 +107,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	 * 	FilteredMap&lt;String, Integer&gt; <jv>map</jv> = FilteredMap
 	 * 		.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
 	 * 		.filter((k, v) -&gt; v != <jk>null</jk> &amp;&amp; v &gt; 0)
-	 * 		.creator(() -&gt; <jk>new</jk> TreeMap&lt;&gt;())
+	 * 		.inner(<jk>new</jk> TreeMap&lt;&gt;())
 	 * 		.build();
 	 * </p>
 	 *
@@ -111,8 +115,8 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	 * @param <V> The value type.
 	 */
 	public static class Builder<K,V> {
-		private BiPredicate<K,V> filter;
-		private Supplier<Map<K,V>> creator = LinkedHashMap::new;
+		private BiPredicate<K,V> filter = (k,v) -> true;
+		private Map<K,V> inner;
 		private Class<K> keyType;
 		private Class<V> valueType;
 		private Function<Object,K> keyFunction;
@@ -125,6 +129,13 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 		 * The predicate receives both the key and value of each entry. If it returns <jk>true</jk>,
 		 * the entry is added to the map. If it returns <jk>false</jk>, the entry is silently ignored.
 		 *
+		 * <p>
+		 * This method is optional. If not called, the map will accept all entries (defaults to <c>(k,v) -&gt; true</c>).
+		 *
+		 * <p>
+		 * This method can be called multiple times. When called multiple times, all filters are combined
+		 * using AND logic - an entry must pass all filters to be added to the map.
+		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Filter out null values</jc>
@@ -134,39 +145,53 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 		 * 	<jc>// Filter based on both key and value</jc>
 		 * 	Builder&lt;String, Integer&gt; <jv>b2</jv> = FilteredMap.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
 		 * 		.filter((k, v) -&gt; ! k.startsWith(<js>"_"</js>) &amp;&amp; v != <jk>null</jk> &amp;&amp; v &gt; 0);
+		 *
+		 * 	<jc>// Multiple filters combined with AND</jc>
+		 * 	Builder&lt;String, Integer&gt; <jv>b3</jv> = FilteredMap.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+		 * 		.filter((k, v) -&gt; v != <jk>null</jk>)           <jc>// First filter</jc>
+		 * 		.filter((k, v) -&gt; v &gt; 0)                    <jc>// Second filter (ANDed with first)</jc>
+		 * 		.filter((k, v) -&gt; ! k.startsWith(<js>"_"</js>)); <jc>// Third filter (ANDed with previous)</jc>
 		 * </p>
 		 *
 		 * @param value The filter predicate. Must not be <jk>null</jk>.
 		 * @return This object for method chaining.
 		 */
 		public Builder<K,V> filter(BiPredicate<K,V> value) {
-			filter = assertArgNotNull("value", value);
+			BiPredicate<K,V> newFilter = assertArgNotNull("value", value);
+			if (filter == null)
+				filter = newFilter;
+			else
+				filter = filter.and(newFilter);
 			return this;
 		}
 
 		/**
-		 * Sets the supplier that creates the underlying map instance.
+		 * Sets the underlying map instance that will store the filtered entries.
 		 *
 		 * <p>
-		 * This supplier is called once during {@link #build()} to create the underlying map that will
-		 * store the filtered entries. The default implementation creates a {@link LinkedHashMap}.
+		 * If not specified, a new {@link LinkedHashMap} will be created during {@link #build()}.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Use a TreeMap for sorted keys</jc>
 		 * 	Builder&lt;String, Integer&gt; <jv>b</jv> = FilteredMap.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
-		 * 		.creator(() -&gt; <jk>new</jk> TreeMap&lt;&gt;());
+		 * 		.inner(<jk>new</jk> TreeMap&lt;&gt;());
 		 *
 		 * 	<jc>// Use a ConcurrentHashMap for thread safety</jc>
 		 * 	Builder&lt;String, Integer&gt; <jv>b2</jv> = FilteredMap.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
-		 * 		.creator(() -&gt; <jk>new</jk> ConcurrentHashMap&lt;&gt;());
+		 * 		.inner(<jk>new</jk> ConcurrentHashMap&lt;&gt;());
+		 *
+		 * 	<jc>// Use an existing map</jc>
+		 * 	Map&lt;String, Integer&gt; <jv>existing</jv> = <jk>new</jk> LinkedHashMap&lt;&gt;();
+		 * 	Builder&lt;String, Integer&gt; <jv>b3</jv> = FilteredMap.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+		 * 		.inner(<jv>existing</jv>);
 		 * </p>
 		 *
-		 * @param value The creator supplier. Must not be <jk>null</jk>.
+		 * @param value The underlying map instance. Must not be <jk>null</jk>.
 		 * @return This object for method chaining.
 		 */
-		public Builder<K,V> creator(Supplier<Map<K,V>> value) {
-			creator = assertArgNotNull("value", value);
+		public Builder<K,V> inner(Map<K,V> value) {
+			inner = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -255,12 +280,15 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 		/**
 		 * Builds a new {@link FilteredMap} instance.
 		 *
+		 * <p>
+		 * If {@link #filter(BiPredicate)} was not called, the map will accept all entries
+		 * (defaults to <c>(k,v) -&gt; true</c>).
+		 *
 		 * @return A new filtered map instance.
-		 * @throws IllegalArgumentException If the filter has not been set.
 		 */
 		public FilteredMap<K,V> build() {
-			assertArgNotNull("filter", filter);
-			return new FilteredMap<>(filter, creator.get(), keyType, valueType, keyFunction, valueFunction);
+			Map<K,V> map = inner != null ? inner : new LinkedHashMap<>();
+			return new FilteredMap<>(filter, map, keyType, valueType, keyFunction, valueFunction);
 		}
 	}
 
@@ -324,7 +352,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	/**
 	 * Constructor.
 	 *
-	 * @param filter The filter predicate. Must not be <jk>null</jk>.
+	 * @param filter The filter predicate. Can be <jk>null</jk> (if null, all entries are accepted).
 	 * @param map The underlying map. Must not be <jk>null</jk>.
 	 * @param keyType The key type. Must not be <jk>null</jk> (use <c>Object.class</c> to disable type checking).
 	 * @param valueType The value type. Must not be <jk>null</jk> (use <c>Object.class</c> to disable type checking).
@@ -405,7 +433,8 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	 *
 	 * <p>
 	 * This method provides access to the filter for debugging, inspection, or advanced use cases.
-	 * The returned predicate is the same instance used internally by this map.
+	 * The returned predicate is the combined filter used internally by this map. If multiple filters
+	 * were set via the builder, they are combined using AND logic.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -478,7 +507,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	 * Adds an entry to this map with automatic type conversion.
 	 *
 	 * <p>
-	 * This method converts the key and value using the configured converters (if any) and validates
+	 * This method converts the key and value using the configured key/value functions (if any) and validates
 	 * the types (if key/value types were specified when creating the map). After conversion and validation,
 	 * the entry is added using the standard {@link #put(Object, Object)} method, which applies the filter.
 	 *
@@ -546,13 +575,86 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	 * </p>
 	 *
 	 * @param source The map containing entries to add. Can be <jk>null</jk> (no-op).
+	 * @return This object for method chaining.
 	 */
-	public void addAll(Map<?,?> source) {
+	public FilteredMap<K,V> addAll(Map<?,?> source) {
 		if (source != null) {
 			for (var entry : source.entrySet()) {
 				add(entry.getKey(), entry.getValue());
 			}
 		}
+		return this;
+	}
+
+	/**
+	 * Adds arbitrary values to this map.
+	 *
+	 * <p>
+	 * Objects can be any of the following:
+	 * <ul>
+	 * 	<li>Maps of key/value types convertible to the key/value types of this map.
+	 * </ul>
+	 *
+	 * <p>
+	 * Each entry from the maps will be added using {@link #add(Object, Object)}, which applies
+	 * conversion and filtering.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	FilteredMap&lt;String, Integer&gt; <jv>map</jv> = FilteredMap
+	 * 		.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+	 * 		.filter((k, v) -&gt; v != <jk>null</jk> &amp;&amp; v &gt; 0)
+	 * 		.build();
+	 *
+	 * 	Map&lt;String, Integer&gt; <jv>map1</jv> = Map.of(<js>"a"</js>, 5, <js>"b"</js>, -1);
+	 * 	Map&lt;String, Integer&gt; <jv>map2</jv> = Map.of(<js>"c"</js>, 10);
+	 * 	<jv>map</jv>.addAny(<jv>map1</jv>, <jv>map2</jv>);  <jc>// Adds a=5, c=10 (b=-1 filtered out)</jc>
+	 * </p>
+	 *
+	 * @param values The values to add. Can be <jk>null</jk> or contain <jk>null</jk> values (ignored).
+	 * @return This object for method chaining.
+	 */
+	public FilteredMap<K,V> addAny(Object...values) {
+		if (values != null) {
+			for (var o : values) {
+				if (o != null && o instanceof Map<?,?> m) {
+					addAll(m);
+				}
+			}
+		}
+		return this;
+	}
+
+	/**
+	 * Adds a list of key/value pairs to this map.
+	 *
+	 * <p>
+	 * The pairs are processed in order, with each pair consisting of two consecutive elements
+	 * in the array. Each pair is added using {@link #add(Object, Object)}, which applies
+	 * conversion and filtering.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	FilteredMap&lt;String, Integer&gt; <jv>map</jv> = FilteredMap
+	 * 		.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+	 * 		.filter((k, v) -&gt; v != <jk>null</jk> &amp;&amp; v &gt; 0)
+	 * 		.build();
+	 *
+	 * 	<jv>map</jv>.addPairs(<js>"a"</js>, 5, <js>"b"</js>, -1, <js>"c"</js>, 10);
+	 * 	<jc>// Adds a=5, c=10 (b=-1 filtered out)</jc>
+	 * </p>
+	 *
+	 * @param pairs The pairs to add. Must have an even number of elements.
+	 * @return This object for method chaining.
+	 * @throws IllegalArgumentException If an odd number of parameters is provided.
+	 */
+	public FilteredMap<K,V> addPairs(Object...pairs) {
+		assertArgNotNull("pairs", pairs);
+		if (pairs.length % 2 != 0)
+			throw illegalArg("Odd number of parameters passed into addPairs()");
+		for (var i = 0; i < pairs.length; i += 2)
+			add(pairs[i], pairs[i + 1]);
+		return this;
 	}
 
 	private K convertKey(Object key) {

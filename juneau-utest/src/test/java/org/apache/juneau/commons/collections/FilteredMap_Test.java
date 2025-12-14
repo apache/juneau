@@ -164,7 +164,7 @@ class FilteredMap_Test extends TestBase {
 		var map = FilteredMap
 			.create(String.class, Integer.class)
 			.filter((k, v) -> v != null && v > 0)
-			.creator(() -> new TreeMap<>())
+			.inner(new TreeMap<>())
 			.build();
 
 		map.put("zebra", 3);
@@ -185,7 +185,7 @@ class FilteredMap_Test extends TestBase {
 		var map = FilteredMap
 			.create(String.class, String.class)
 			.filter((k, v) -> v != null)
-			.creator(() -> new ConcurrentHashMap<>())
+			.inner(new ConcurrentHashMap<>())
 			.build();
 
 		map.put("key1", "value1");
@@ -420,10 +420,18 @@ class FilteredMap_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	void i01_builder_noFilter_throwsException() {
-		assertThrowsWithMessage(IllegalArgumentException.class, "filter", () -> {
-			FilteredMap.create(String.class, String.class).build();
-		});
+	void i01_builder_noFilter_acceptsAllEntries() {
+		// Filter is optional - defaults to (k,v) -> true (accepts all entries)
+		var map = FilteredMap.create(String.class, String.class)
+			.build();
+
+		assertNotNull(map);
+		map.put("key1", "value1");
+		map.put("key2", null);  // Should be accepted (no filter)
+		map.put("key3", "value3");
+
+		assertSize(3, map);
+		assertMap(map, "key1=value1", "key2=<null>", "key3=value3");
 	}
 
 	@Test
@@ -434,11 +442,11 @@ class FilteredMap_Test extends TestBase {
 	}
 
 	@Test
-	void i03_builder_nullCreator_throwsException() {
+	void i03_builder_nullInner_throwsException() {
 		assertThrowsWithMessage(IllegalArgumentException.class, "value", () -> {
 			FilteredMap.create(String.class, String.class)
 				.filter((k, v) -> true)
-				.creator(null);
+				.inner(null);
 		});
 	}
 
@@ -907,7 +915,10 @@ class FilteredMap_Test extends TestBase {
 
 		var retrievedFilter = map.getFilter();
 		assertNotNull(retrievedFilter);
-		assertSame(originalFilter, retrievedFilter);  // Should be the same instance
+		// The filter may be combined with the default filter, so test behavior instead of instance equality
+		assertTrue(retrievedFilter.test("key1", 5));   // Should accept positive values
+		assertFalse(retrievedFilter.test("key2", -1)); // Should reject negative values
+		assertFalse(retrievedFilter.test("key3", null)); // Should reject null values
 	}
 
 	@Test

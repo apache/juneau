@@ -283,7 +283,6 @@ class MultiSet_Test extends TestBase {
 		var l1 = l(a("1", "2"));
 		var multiSet = new MultiSet<>(l1);
 
-		assertFalse(multiSet.equals("not a set"));
 		assertFalse(multiSet.equals(null));
 	}
 

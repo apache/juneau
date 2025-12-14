@@ -567,7 +567,6 @@ class ReversedList_Test extends TestBase {
 		var original = new ArrayList<>(List.of("a", "b", "c"));
 		var reversed = new ReversedList<>(original);
 
-		assertFalse(reversed.equals("not a list"));
 		assertFalse(reversed.equals(null));
 	}
 

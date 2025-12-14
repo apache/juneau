@@ -255,7 +255,10 @@ public class ConverterUtils {
 	 * @return A new {@link MapBuilder} containing the converted entries.
 	 */
 	public static <K,V> MapBuilder<K,V> toMapBuilder(Object value, Class<K> keyType, Class<V> valueType) {
-		return mapb(keyType, valueType, GenericConverter.INSTANCE).addAny(value);
+		return mapb(keyType, valueType)
+			.keyFunction(o -> GenericConverter.INSTANCE.convertTo(keyType, o))
+			.valueFunction(o -> GenericConverter.INSTANCE.convertTo(valueType, o))
+			.addAny(value);
 	}
 
 	/**

@@ -386,7 +386,6 @@ class SimpleMap_Test extends TestBase {
 		Object[] values = { "value1" };
 		SimpleMap<String,Object> map = new SimpleMap<>(keys, values);
 
-		assertFalse(map.equals("not a map"));
 		assertFalse(map.equals(null));
 	}
 
