@@ -241,7 +241,7 @@
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">	 * @return A new {@link ListBuilder} containing the converted elements.</em>
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; ListBuilder&lt;T&gt; toListBuilder(Object value, Class&lt;T&gt; type) {
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">return</strong> listb(type, GenericConverter.INSTANCE).addAny(value);
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">return</strong> listb(type).elementFunction(o -&gt; GenericConverter.INSTANCE.convertTo(type, o)).addAny(value);
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 	}
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -290,7 +290,7 @@
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">	 * @return A new {@link SetBuilder} containing the converted elements.</em>
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; SetBuilder&lt;T&gt; toSetBuilder(Object value, Class&lt;T&gt; type) {
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">return</strong> setb(type, GenericConverter.INSTANCE).addAny(value);
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">return</strong> setb(type).elementFunction(o -&gt; GenericConverter.INSTANCE.convertTo(type, o)).addAny(value);
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 	}
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> }
 </pre>
