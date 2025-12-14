@@ -26,12 +26,12 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.collections.JsonMap.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.AssertionUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.StringUtils.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.utils.*;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * Represents a bean in a {@link BeanStore}.</em>
@@ -118,7 +118,7 @@
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this bean is exactly of the specified type and has the specified name.</em>
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> matches(Class&lt;?&gt; type, String name) {
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		name = nullIfEmpty(name);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		name = Utils.nullIfEmpty(name);
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">return</strong> matches(type) &amp;&amp; eq(<strong class="jxr_keyword">this</strong>.name, name);
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 

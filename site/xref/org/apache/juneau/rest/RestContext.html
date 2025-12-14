@@ -5151,7 +5151,7 @@
 <a class="jxr_linenumber" name="L5143" href="#L5143">5143</a> 				<strong class="jxr_keyword">var</strong> uppm = pathMatcher.match(upi2);
 <a class="jxr_linenumber" name="L5144" href="#L5144">5144</a> 				<strong class="jxr_keyword">if</strong> (nn(uppm) &amp;&amp; ! uppm.hasEmptyVars()) {
 <a class="jxr_linenumber" name="L5145" href="#L5145">5145</a> 					sb.pathVars(uppm.getVars());
-<a class="jxr_linenumber" name="L5146" href="#L5146">5146</a> 					sb.req(<strong class="jxr_keyword">new</strong> <a name="OverrideableHttpServletRequest" href="../../../../org/apache/juneau/rest/OverrideableHttpServletRequest.html#OverrideableHttpServletRequest">OverrideableHttpServletRequest</a>(sb.req()).pathInfo(StringUtils.nullIfEmpty(urlDecode(uppm.getSuffix()))).servletPath(uppm.getPrefix()));
+<a class="jxr_linenumber" name="L5146" href="#L5146">5146</a> 					sb.req(<strong class="jxr_keyword">new</strong> <a name="OverrideableHttpServletRequest" href="../../../../org/apache/juneau/rest/OverrideableHttpServletRequest.html#OverrideableHttpServletRequest">OverrideableHttpServletRequest</a>(sb.req()).pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix()))).servletPath(uppm.getPrefix()));
 <a class="jxr_linenumber" name="L5147" href="#L5147">5147</a> 				} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L5148" href="#L5148">5148</a> 					<strong class="jxr_keyword">var</strong> call = sb.build();
 <a class="jxr_linenumber" name="L5149" href="#L5149">5149</a> 					call.debug(isDebug(call)).status(SC_NOT_FOUND).finish();
@@ -5166,7 +5166,7 @@
 <a class="jxr_linenumber" name="L5158" href="#L5158">5158</a> 				<strong class="jxr_keyword">var</strong> rc = childMatch.get().getChildContext();
 <a class="jxr_linenumber" name="L5159" href="#L5159">5159</a> 				<strong class="jxr_keyword">if</strong> (! uppm.hasEmptyVars()) {
 <a class="jxr_linenumber" name="L5160" href="#L5160">5160</a> 					sb.pathVars(uppm.getVars());
-<a class="jxr_linenumber" name="L5161" href="#L5161">5161</a> 					<strong class="jxr_keyword">var</strong> childRequest = <strong class="jxr_keyword">new</strong> <a name="OverrideableHttpServletRequest" href="../../../../org/apache/juneau/rest/OverrideableHttpServletRequest.html#OverrideableHttpServletRequest">OverrideableHttpServletRequest</a>(sb.req()).pathInfo(StringUtils.nullIfEmpty(urlDecode(uppm.getSuffix())))
+<a class="jxr_linenumber" name="L5161" href="#L5161">5161</a> 					<strong class="jxr_keyword">var</strong> childRequest = <strong class="jxr_keyword">new</strong> <a name="OverrideableHttpServletRequest" href="../../../../org/apache/juneau/rest/OverrideableHttpServletRequest.html#OverrideableHttpServletRequest">OverrideableHttpServletRequest</a>(sb.req()).pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
 <a class="jxr_linenumber" name="L5162" href="#L5162">5162</a> 						.servletPath(sb.req().getServletPath() + uppm.getPrefix());
 <a class="jxr_linenumber" name="L5163" href="#L5163">5163</a> 					rc.execute(rc.getResource(), childRequest, sb.res());
 <a class="jxr_linenumber" name="L5164" href="#L5164">5164</a> 				} <strong class="jxr_keyword">else</strong> {

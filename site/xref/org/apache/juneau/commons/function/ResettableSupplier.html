@@ -158,7 +158,36 @@
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> set(T value) {
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 		cache.set(opt(value));
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 	}
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> }
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if the supplier has not yet been called (cache is empty).</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">	 * This method checks whether the cached value is &lt;jk&gt;null&lt;/jk&gt;, which indicates that</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">	 * {@link #get()} has not yet been called, or the cache was reset.</em>
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the supplier has not been called yet, &lt;jk&gt;false&lt;/jk&gt; if a value has been cached.</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isSupplied() {
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">return</strong> cache.get() == <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">	 * Creates a copy of this supplier.</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> <em class="jxr_javadoccomment">	 * If a value has been cached, the copy will use a supplier that returns that cached value.</em>
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> <em class="jxr_javadoccomment">	 * If no value has been cached yet, the copy will use the original supplier.</em>
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> <em class="jxr_javadoccomment">	 * @return A new {@link ResettableSupplier} instance with the same state as this supplier.</em>
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	<strong class="jxr_keyword">public</strong> ResettableSupplier&lt;T&gt; copy() {
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		Optional&lt;T&gt; o = cache.get();
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ResettableSupplier&lt;&gt;(supplier);
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ResettableSupplier&lt;&gt;(()-&gt;o.get());
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	}
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -1163,8 +1163,79 @@
 <a class="jxr_linenumber" name="L1155" href="#L1155">1155</a> 		assertEquals(<span class="jxr_string">"test"</span>, unwrap(<span class="jxr_string">"test"</span>));
 <a class="jxr_linenumber" name="L1156" href="#L1156">1156</a> 		assertEquals(123, unwrap(123));
 <a class="jxr_linenumber" name="L1157" href="#L1157">1157</a> 	}
-<a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> }
-<a class="jxr_linenumber" name="L1159" href="#L1159">1159</a> 
+<a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> 
+<a class="jxr_linenumber" name="L1159" href="#L1159">1159</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L1160" href="#L1160">1160</a> 	<em class="jxr_comment">// nullIfEmpty(String)</em>
+<a class="jxr_linenumber" name="L1161" href="#L1161">1161</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> 	@Test
+<a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> 	<strong class="jxr_keyword">void</strong> a059_nullIfEmpty_String() {
+<a class="jxr_linenumber" name="L1164" href="#L1164">1164</a> 		assertNull(nullIfEmpty((String)<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> 		assertNull(nullIfEmpty(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L1166" href="#L1166">1166</a> 		assertNotNull(nullIfEmpty(<span class="jxr_string">"x"</span>));
+<a class="jxr_linenumber" name="L1167" href="#L1167">1167</a> 		assertEquals(<span class="jxr_string">"test"</span>, nullIfEmpty(<span class="jxr_string">"test"</span>));
+<a class="jxr_linenumber" name="L1168" href="#L1168">1168</a> 	}
+<a class="jxr_linenumber" name="L1169" href="#L1169">1169</a> 
+<a class="jxr_linenumber" name="L1170" href="#L1170">1170</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L1171" href="#L1171">1171</a> 	<em class="jxr_comment">// nullIfEmpty(Map)</em>
+<a class="jxr_linenumber" name="L1172" href="#L1172">1172</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L1173" href="#L1173">1173</a> 	@Test
+<a class="jxr_linenumber" name="L1174" href="#L1174">1174</a> 	<strong class="jxr_keyword">void</strong> a060_nullIfEmpty_Map() {
+<a class="jxr_linenumber" name="L1175" href="#L1175">1175</a> 		<em class="jxr_comment">// Null map</em>
+<a class="jxr_linenumber" name="L1176" href="#L1176">1176</a> 		assertNull(nullIfEmpty((Map&lt;String,Integer&gt;)<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> 
+<a class="jxr_linenumber" name="L1178" href="#L1178">1178</a> 		<em class="jxr_comment">// Empty map</em>
+<a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> 		Map&lt;String,Integer&gt; empty = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L1180" href="#L1180">1180</a> 		assertNull(nullIfEmpty(empty));
+<a class="jxr_linenumber" name="L1181" href="#L1181">1181</a> 
+<a class="jxr_linenumber" name="L1182" href="#L1182">1182</a> 		<em class="jxr_comment">// Non-empty map</em>
+<a class="jxr_linenumber" name="L1183" href="#L1183">1183</a> 		Map&lt;String,Integer&gt; nonEmpty = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L1184" href="#L1184">1184</a> 		nonEmpty.put(<span class="jxr_string">"a"</span>, 1);
+<a class="jxr_linenumber" name="L1185" href="#L1185">1185</a> 		assertNotNull(nullIfEmpty(nonEmpty));
+<a class="jxr_linenumber" name="L1186" href="#L1186">1186</a> 		assertSame(nonEmpty, nullIfEmpty(nonEmpty));
+<a class="jxr_linenumber" name="L1187" href="#L1187">1187</a> 		assertEquals(1, nullIfEmpty(nonEmpty).size());
+<a class="jxr_linenumber" name="L1188" href="#L1188">1188</a> 	}
+<a class="jxr_linenumber" name="L1189" href="#L1189">1189</a> 
+<a class="jxr_linenumber" name="L1190" href="#L1190">1190</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L1191" href="#L1191">1191</a> 	<em class="jxr_comment">// nullIfEmpty(List)</em>
+<a class="jxr_linenumber" name="L1192" href="#L1192">1192</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L1193" href="#L1193">1193</a> 	@Test
+<a class="jxr_linenumber" name="L1194" href="#L1194">1194</a> 	<strong class="jxr_keyword">void</strong> a061_nullIfEmpty_List() {
+<a class="jxr_linenumber" name="L1195" href="#L1195">1195</a> 		<em class="jxr_comment">// Null list</em>
+<a class="jxr_linenumber" name="L1196" href="#L1196">1196</a> 		assertNull(nullIfEmpty((List&lt;String&gt;)<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L1197" href="#L1197">1197</a> 
+<a class="jxr_linenumber" name="L1198" href="#L1198">1198</a> 		<em class="jxr_comment">// Empty list</em>
+<a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> 		List&lt;String&gt; empty = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L1200" href="#L1200">1200</a> 		assertNull(nullIfEmpty(empty));
+<a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> 
+<a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> 		<em class="jxr_comment">// Non-empty list</em>
+<a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> 		List&lt;String&gt; nonEmpty = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> 		nonEmpty.add(<span class="jxr_string">"a"</span>);
+<a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> 		assertNotNull(nullIfEmpty(nonEmpty));
+<a class="jxr_linenumber" name="L1206" href="#L1206">1206</a> 		assertSame(nonEmpty, nullIfEmpty(nonEmpty));
+<a class="jxr_linenumber" name="L1207" href="#L1207">1207</a> 		assertEquals(1, nullIfEmpty(nonEmpty).size());
+<a class="jxr_linenumber" name="L1208" href="#L1208">1208</a> 	}
+<a class="jxr_linenumber" name="L1209" href="#L1209">1209</a> 
+<a class="jxr_linenumber" name="L1210" href="#L1210">1210</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L1211" href="#L1211">1211</a> 	<em class="jxr_comment">// nullIfEmpty(Set)</em>
+<a class="jxr_linenumber" name="L1212" href="#L1212">1212</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L1213" href="#L1213">1213</a> 	@Test
+<a class="jxr_linenumber" name="L1214" href="#L1214">1214</a> 	<strong class="jxr_keyword">void</strong> a062_nullIfEmpty_Set() {
+<a class="jxr_linenumber" name="L1215" href="#L1215">1215</a> 		<em class="jxr_comment">// Null set</em>
+<a class="jxr_linenumber" name="L1216" href="#L1216">1216</a> 		assertNull(nullIfEmpty((Set&lt;String&gt;)<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> 
+<a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> 		<em class="jxr_comment">// Empty set</em>
+<a class="jxr_linenumber" name="L1219" href="#L1219">1219</a> 		Set&lt;String&gt; empty = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;();
+<a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> 		assertNull(nullIfEmpty(empty));
+<a class="jxr_linenumber" name="L1221" href="#L1221">1221</a> 
+<a class="jxr_linenumber" name="L1222" href="#L1222">1222</a> 		<em class="jxr_comment">// Non-empty set</em>
+<a class="jxr_linenumber" name="L1223" href="#L1223">1223</a> 		Set&lt;String&gt; nonEmpty = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;();
+<a class="jxr_linenumber" name="L1224" href="#L1224">1224</a> 		nonEmpty.add(<span class="jxr_string">"a"</span>);
+<a class="jxr_linenumber" name="L1225" href="#L1225">1225</a> 		assertNotNull(nullIfEmpty(nonEmpty));
+<a class="jxr_linenumber" name="L1226" href="#L1226">1226</a> 		assertSame(nonEmpty, nullIfEmpty(nonEmpty));
+<a class="jxr_linenumber" name="L1227" href="#L1227">1227</a> 		assertEquals(1, nullIfEmpty(nonEmpty).size());
+<a class="jxr_linenumber" name="L1228" href="#L1228">1228</a> 	}
+<a class="jxr_linenumber" name="L1229" href="#L1229">1229</a> }
+<a class="jxr_linenumber" name="L1230" href="#L1230">1230</a> 
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

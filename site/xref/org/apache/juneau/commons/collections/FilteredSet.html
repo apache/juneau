@@ -440,167 +440,166 @@
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 	}
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 	@Override
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T[] toArray(T[] a) {
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		<strong class="jxr_keyword">return</strong> set.toArray(a);
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	}
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 * Adds an element to this set with automatic type conversion.</em>
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 * This method converts the element using the configured element function (if any) and validates</em>
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">	 * the type (if element type was specified when creating the set). After conversion and validation,</em>
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">	 * the element is added using the standard {@link #add(Object)} method, which applies the filter.</em>
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Type Conversion:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;If an element function is configured, the element is converted by applying the function</em>
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;If no function is configured, the object is used as-is (but may be validated if types were specified)</em>
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Type Validation:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;If element type was specified (via {@link #create(Class)}), the converted element must be an instance of that type</em>
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;If {@link #create()} was used (no types specified), &lt;c&gt;Object.class&lt;/c&gt; is used, which accepts any type</em>
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Return Value:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;If the element is added successfully, returns &lt;jk&gt;true&lt;/jk&gt;</em>
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;If the element is filtered out or already present, returns &lt;jk&gt;false&lt;/jk&gt;</em>
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> <em class="jxr_javadoccomment">	 * 	FilteredSet&amp;lt;Integer&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</em>
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">	 * 		.&lt;jsm&gt;create&lt;/jsm&gt;(Integer.&lt;jk&gt;class&lt;/jk&gt;)</em>
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">	 * 		.filter(v -&amp;gt; v != &lt;jk&gt;null&lt;/jk&gt; &amp;amp;&amp;amp; v &amp;gt; 0)</em>
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">	 * 		.elementFunction(o -&amp;gt; Integer.parseInt(o.toString()))</em>
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">	 * 		.build();</em>
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">	 * 	&lt;jv&gt;set&lt;/jv&gt;.addConverted(&lt;js&gt;"123"&lt;/js&gt;);  &lt;jc&gt;// Element converted from String to Integer&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> <em class="jxr_javadoccomment">	 * @param element The element to add. Will be converted if an element function is configured.</em>
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the element was added, &lt;jk&gt;false&lt;/jk&gt; if it was filtered out or already present.</em>
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">	 * @throws RuntimeException If conversion fails or type validation fails.</em>
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> addConverted(Object element) {
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		E convertedElement = convertElement(element);
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 		<strong class="jxr_keyword">return</strong> add(convertedElement);
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 	}
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">	 * Adds all elements from the specified collection with automatic type conversion.</em>
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">	 * This method iterates over all elements in the source collection and adds each one using {@link #addConverted(Object)},</em>
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">	 * which applies conversion and validation before adding.</em>
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> <em class="jxr_javadoccomment">	 * 	FilteredSet&amp;lt;Integer&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</em>
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> <em class="jxr_javadoccomment">	 * 		.&lt;jsm&gt;create&lt;/jsm&gt;(Integer.&lt;jk&gt;class&lt;/jk&gt;)</em>
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> <em class="jxr_javadoccomment">	 * 		.filter(v -&amp;gt; v != &lt;jk&gt;null&lt;/jk&gt; &amp;amp;&amp;amp; v &amp;gt; 0)</em>
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> <em class="jxr_javadoccomment">	 * 		.elementFunction(o -&amp;gt; Integer.parseInt(o.toString()))</em>
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> <em class="jxr_javadoccomment">	 * 		.build();</em>
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> <em class="jxr_javadoccomment">	 * 	Collection&amp;lt;String&amp;gt; &lt;jv&gt;source&lt;/jv&gt; = List.of(&lt;js&gt;"5"&lt;/js&gt;, &lt;js&gt;"-1"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> <em class="jxr_javadoccomment">	 * 	&lt;jv&gt;set&lt;/jv&gt;.addAllConverted(&lt;jv&gt;source&lt;/jv&gt;);  &lt;jc&gt;// Elements converted, negative value filtered out&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> <em class="jxr_javadoccomment">	 * @param source The collection containing elements to add. Can be &lt;jk&gt;null&lt;/jk&gt; (no-op).</em>
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> <em class="jxr_javadoccomment">	 * @return This object for method chaining.</em>
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 	<strong class="jxr_keyword">public</strong> FilteredSet&lt;E&gt; addAllConverted(Collection&lt;?&gt; source) {
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> 		<strong class="jxr_keyword">if</strong> (source != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : source) {
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> 				addConverted(e);
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> 			}
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		}
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> 	}
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> 
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> <em class="jxr_javadoccomment">	 * Adds arbitrary values to this set.</em>
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> <em class="jxr_javadoccomment">	 * Objects can be any of the following:</em>
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;The same type or convertible to the element type of this set.</em>
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Collections or arrays of anything on this set.</em>
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> <em class="jxr_javadoccomment">	 * Each element from the collections/arrays will be added using {@link #add(Object)}, which applies</em>
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> <em class="jxr_javadoccomment">	 * conversion and filtering.</em>
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> <em class="jxr_javadoccomment">	 * 	FilteredSet&amp;lt;Integer&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</em>
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> <em class="jxr_javadoccomment">	 * 		.&lt;jsm&gt;create&lt;/jsm&gt;(Integer.&lt;jk&gt;class&lt;/jk&gt;)</em>
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> <em class="jxr_javadoccomment">	 * 		.filter(v -&amp;gt; v != &lt;jk&gt;null&lt;/jk&gt; &amp;amp;&amp;amp; v &amp;gt; 0)</em>
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> <em class="jxr_javadoccomment">	 * 		.build();</em>
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">	 * 	Set&amp;lt;Integer&amp;gt; &lt;jv&gt;set1&lt;/jv&gt; = Set.of(5, -1);</em>
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">	 * 	Set&amp;lt;Integer&amp;gt; &lt;jv&gt;set2&lt;/jv&gt; = Set.of(10);</em>
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">	 * 	&lt;jv&gt;set&lt;/jv&gt;.addAny(&lt;jv&gt;set1&lt;/jv&gt;, &lt;jv&gt;set2&lt;/jv&gt;);  &lt;jc&gt;// Adds 5, 10 (-1 filtered out)&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> <em class="jxr_javadoccomment">	 * @param values The values to add. Can be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; values (ignored).</em>
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> <em class="jxr_javadoccomment">	 * @return This object for method chaining.</em>
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> 	<strong class="jxr_keyword">public</strong> FilteredSet&lt;E&gt; addAny(Object...values) {
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> 		<strong class="jxr_keyword">if</strong> (values != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : values) {
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 				<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> 					<strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> 				<strong class="jxr_keyword">if</strong> (o instanceof Collection&lt;?&gt; c) {
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> 					addAllConverted(c);
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (o.getClass().isArray()) {
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; java.lang.reflect.Array.getLength(o); i++) {
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> 						addConverted(java.lang.reflect.Array.get(o, i));
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 					}
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> 					addConverted(o);
-<a class="jxr_linenumber" name="L559" href="#L559">559</a> 				}
-<a class="jxr_linenumber" name="L560" href="#L560">560</a> 			}
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		}
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 	}
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> 
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 	<strong class="jxr_keyword">private</strong> E convertElement(Object element) {
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 		<strong class="jxr_keyword">if</strong> (elementFunction != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 			element = elementFunction.apply(element);
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> 		}
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		<strong class="jxr_keyword">if</strong> (element == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 			<em class="jxr_comment">// Allow null for non-primitive types</em>
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 			<strong class="jxr_keyword">if</strong> (elementType.isPrimitive())
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> 				<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Cannot set null element for primitive type {0}"</span>, elementType.getName());
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> 		}
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		<strong class="jxr_keyword">if</strong> (elementType.isInstance(element))
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> 			<strong class="jxr_keyword">return</strong> elementType.<strong class="jxr_keyword">cast</strong>(element);
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> 		<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Object of type {0} could not be converted to element type {1}"</span>, cn(element), cn(elementType));
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> 	}
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> 
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> 	@Override
-<a class="jxr_linenumber" name="L581" href="#L581">581</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		<strong class="jxr_keyword">return</strong> set.toString();
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> 	}
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> 
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> 	@Override
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> 		<strong class="jxr_keyword">return</strong> set.equals(o);
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> 	}
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> 
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> 	@Override
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> 		<strong class="jxr_keyword">return</strong> set.hashCode();
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> 	}
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> }
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> 
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T[] toArray(T[] a) {
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		<strong class="jxr_keyword">return</strong> set.toArray(a);
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	}
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">	 * Adds an element to this set with automatic type conversion.</em>
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 * This method converts the element using the configured element function (if any) and validates</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 * the type (if element type was specified when creating the set). After conversion and validation,</em>
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">	 * the element is added using the standard {@link #add(Object)} method, which applies the filter.</em>
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Type Conversion:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;If an element function is configured, the element is converted by applying the function</em>
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;If no function is configured, the object is used as-is (but may be validated if types were specified)</em>
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Type Validation:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;If element type was specified (via {@link #create(Class)}), the converted element must be an instance of that type</em>
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;If {@link #create()} was used (no types specified), &lt;c&gt;Object.class&lt;/c&gt; is used, which accepts any type</em>
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Return Value:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;If the element is added successfully, returns &lt;jk&gt;true&lt;/jk&gt;</em>
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;If the element is filtered out or already present, returns &lt;jk&gt;false&lt;/jk&gt;</em>
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment">	 * 	FilteredSet&amp;lt;Integer&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</em>
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> <em class="jxr_javadoccomment">	 * 		.&lt;jsm&gt;create&lt;/jsm&gt;(Integer.&lt;jk&gt;class&lt;/jk&gt;)</em>
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">	 * 		.filter(v -&amp;gt; v != &lt;jk&gt;null&lt;/jk&gt; &amp;amp;&amp;amp; v &amp;gt; 0)</em>
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">	 * 		.elementFunction(o -&amp;gt; Integer.parseInt(o.toString()))</em>
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">	 * 		.build();</em>
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">	 * 	&lt;jv&gt;set&lt;/jv&gt;.addConverted(&lt;js&gt;"123"&lt;/js&gt;);  &lt;jc&gt;// Element converted from String to Integer&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> <em class="jxr_javadoccomment">	 * @param element The element to add. Will be converted if an element function is configured.</em>
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the element was added, &lt;jk&gt;false&lt;/jk&gt; if it was filtered out or already present.</em>
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> <em class="jxr_javadoccomment">	 * @throws RuntimeException If conversion fails or type validation fails.</em>
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> addConverted(Object element) {
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		E convertedElement = convertElement(element);
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		<strong class="jxr_keyword">return</strong> add(convertedElement);
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 	}
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">	 * Adds all elements from the specified collection with automatic type conversion.</em>
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">	 * This method iterates over all elements in the source collection and adds each one using {@link #addConverted(Object)},</em>
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">	 * which applies conversion and validation before adding.</em>
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> <em class="jxr_javadoccomment">	 * 	FilteredSet&amp;lt;Integer&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</em>
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> <em class="jxr_javadoccomment">	 * 		.&lt;jsm&gt;create&lt;/jsm&gt;(Integer.&lt;jk&gt;class&lt;/jk&gt;)</em>
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> <em class="jxr_javadoccomment">	 * 		.filter(v -&amp;gt; v != &lt;jk&gt;null&lt;/jk&gt; &amp;amp;&amp;amp; v &amp;gt; 0)</em>
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> <em class="jxr_javadoccomment">	 * 		.elementFunction(o -&amp;gt; Integer.parseInt(o.toString()))</em>
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> <em class="jxr_javadoccomment">	 * 		.build();</em>
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> <em class="jxr_javadoccomment">	 * 	Collection&amp;lt;String&amp;gt; &lt;jv&gt;source&lt;/jv&gt; = List.of(&lt;js&gt;"5"&lt;/js&gt;, &lt;js&gt;"-1"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> <em class="jxr_javadoccomment">	 * 	&lt;jv&gt;set&lt;/jv&gt;.addAllConverted(&lt;jv&gt;source&lt;/jv&gt;);  &lt;jc&gt;// Elements converted, negative value filtered out&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">	 * @param source The collection containing elements to add. Can be &lt;jk&gt;null&lt;/jk&gt; (no-op).</em>
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> <em class="jxr_javadoccomment">	 * @return This object for method chaining.</em>
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 	<strong class="jxr_keyword">public</strong> FilteredSet&lt;E&gt; addAllConverted(Collection&lt;?&gt; source) {
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 		<strong class="jxr_keyword">if</strong> (source != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : source) {
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 				addConverted(e);
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 			}
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 		}
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 	}
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> <em class="jxr_javadoccomment">	 * Adds arbitrary values to this set.</em>
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> <em class="jxr_javadoccomment">	 * Objects can be any of the following:</em>
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;The same type or convertible to the element type of this set.</em>
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Collections or arrays of anything on this set.</em>
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">	 * Each element from the collections/arrays will be added using {@link #add(Object)}, which applies</em>
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> <em class="jxr_javadoccomment">	 * conversion and filtering.</em>
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> <em class="jxr_javadoccomment">	 * 	FilteredSet&amp;lt;Integer&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</em>
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> <em class="jxr_javadoccomment">	 * 		.&lt;jsm&gt;create&lt;/jsm&gt;(Integer.&lt;jk&gt;class&lt;/jk&gt;)</em>
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> <em class="jxr_javadoccomment">	 * 		.filter(v -&amp;gt; v != &lt;jk&gt;null&lt;/jk&gt; &amp;amp;&amp;amp; v &amp;gt; 0)</em>
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> <em class="jxr_javadoccomment">	 * 		.build();</em>
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> <em class="jxr_javadoccomment">	 * 	Set&amp;lt;Integer&amp;gt; &lt;jv&gt;set1&lt;/jv&gt; = Set.of(5, -1);</em>
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">	 * 	Set&amp;lt;Integer&amp;gt; &lt;jv&gt;set2&lt;/jv&gt; = Set.of(10);</em>
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">	 * 	&lt;jv&gt;set&lt;/jv&gt;.addAny(&lt;jv&gt;set1&lt;/jv&gt;, &lt;jv&gt;set2&lt;/jv&gt;);  &lt;jc&gt;// Adds 5, 10 (-1 filtered out)&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> <em class="jxr_javadoccomment">	 * @param values The values to add. Can be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; values (ignored).</em>
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> <em class="jxr_javadoccomment">	 * @return This object for method chaining.</em>
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 	<strong class="jxr_keyword">public</strong> FilteredSet&lt;E&gt; addAny(Object...values) {
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 		<strong class="jxr_keyword">if</strong> (values != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : values) {
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 				<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 					<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 				<strong class="jxr_keyword">if</strong> (o instanceof Collection&lt;?&gt; c) {
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 					addAllConverted(c);
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (o.getClass().isArray()) {
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; java.lang.reflect.Array.getLength(o); i++) {
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 						addConverted(java.lang.reflect.Array.get(o, i));
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 					}
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 					addConverted(o);
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 				}
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 			}
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 		}
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 	}
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 	<strong class="jxr_keyword">private</strong> E convertElement(Object element) {
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 		<strong class="jxr_keyword">if</strong> (elementFunction != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 			element = elementFunction.apply(element);
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		}
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 		<strong class="jxr_keyword">if</strong> (element == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 			<em class="jxr_comment">// Allow null for non-primitive types</em>
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 			<strong class="jxr_keyword">if</strong> (elementType.isPrimitive())
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 				<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Cannot set null element for primitive type {0}"</span>, elementType.getName());
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 		}
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 		<strong class="jxr_keyword">if</strong> (elementType.isInstance(element))
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 			<strong class="jxr_keyword">return</strong> elementType.<strong class="jxr_keyword">cast</strong>(element);
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Object of type {0} could not be converted to element type {1}"</span>, cn(element), cn(elementType));
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 	}
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 	@Override
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 	<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 		<strong class="jxr_keyword">return</strong> set.toString();
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 	}
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 	@Override
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 		<strong class="jxr_keyword">return</strong> set.equals(o);
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 	}
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 	@Override
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 		<strong class="jxr_keyword">return</strong> set.hashCode();
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 	}
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> }
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
