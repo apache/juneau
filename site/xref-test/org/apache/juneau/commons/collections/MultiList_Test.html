@@ -601,33 +601,31 @@
 <a class="jxr_linenumber" name="L593" href="#L593">593</a> 	<strong class="jxr_keyword">void</strong> g05_equals_notAList() {
 <a class="jxr_linenumber" name="L594" href="#L594">594</a> 		<strong class="jxr_keyword">var</strong> l1 = l(a(<span class="jxr_string">"1"</span>, <span class="jxr_string">"2"</span>));
 <a class="jxr_linenumber" name="L595" href="#L595">595</a> 		<strong class="jxr_keyword">var</strong> multiList = <strong class="jxr_keyword">new</strong> MultiList&lt;&gt;(l1);
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> 
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> 		assertFalse(multiList.equals(<span class="jxr_string">"not a list"</span>));
-<a class="jxr_linenumber" name="L598" href="#L598">598</a> 		assertFalse(multiList.equals(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L599" href="#L599">599</a> 	}
-<a class="jxr_linenumber" name="L600" href="#L600">600</a> 
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> 	@Test
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> 	<strong class="jxr_keyword">void</strong> g06_hashCode_sameContents() {
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		<strong class="jxr_keyword">var</strong> l1 = l(a(<span class="jxr_string">"1"</span>, <span class="jxr_string">"2"</span>, <span class="jxr_string">"3"</span>));
-<a class="jxr_linenumber" name="L604" href="#L604">604</a> 		<strong class="jxr_keyword">var</strong> multiList1 = <strong class="jxr_keyword">new</strong> MultiList&lt;&gt;(l1);
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> 
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> 		<strong class="jxr_keyword">var</strong> l2 = l(a(<span class="jxr_string">"1"</span>, <span class="jxr_string">"2"</span>, <span class="jxr_string">"3"</span>));
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		<strong class="jxr_keyword">var</strong> multiList2 = <strong class="jxr_keyword">new</strong> MultiList&lt;&gt;(l2);
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> 
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> 		assertEquals(multiList1.hashCode(), multiList2.hashCode());
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> 	}
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 	@Test
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 	<strong class="jxr_keyword">void</strong> g07_hashCode_regularList() {
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		<strong class="jxr_keyword">var</strong> l1 = l(a(<span class="jxr_string">"1"</span>, <span class="jxr_string">"2"</span>, <span class="jxr_string">"3"</span>));
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		<strong class="jxr_keyword">var</strong> multiList = <strong class="jxr_keyword">new</strong> MultiList&lt;&gt;(l1);
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 		assertFalse(multiList.equals(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 	}
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 	@Test
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 	<strong class="jxr_keyword">void</strong> g06_hashCode_sameContents() {
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 		<strong class="jxr_keyword">var</strong> l1 = l(a(<span class="jxr_string">"1"</span>, <span class="jxr_string">"2"</span>, <span class="jxr_string">"3"</span>));
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		<strong class="jxr_keyword">var</strong> multiList1 = <strong class="jxr_keyword">new</strong> MultiList&lt;&gt;(l1);
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 		<strong class="jxr_keyword">var</strong> l2 = l(a(<span class="jxr_string">"1"</span>, <span class="jxr_string">"2"</span>, <span class="jxr_string">"3"</span>));
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 		<strong class="jxr_keyword">var</strong> multiList2 = <strong class="jxr_keyword">new</strong> MultiList&lt;&gt;(l2);
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		assertEquals(multiList1.hashCode(), multiList2.hashCode());
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 	}
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 	@Test
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 	<strong class="jxr_keyword">void</strong> g07_hashCode_regularList() {
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		<strong class="jxr_keyword">var</strong> l1 = l(a(<span class="jxr_string">"1"</span>, <span class="jxr_string">"2"</span>, <span class="jxr_string">"3"</span>));
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		<strong class="jxr_keyword">var</strong> multiList = <strong class="jxr_keyword">new</strong> MultiList&lt;&gt;(l1);
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		<strong class="jxr_keyword">var</strong> regularList = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(l(a(<span class="jxr_string">"1"</span>, <span class="jxr_string">"2"</span>, <span class="jxr_string">"3"</span>)));
 <a class="jxr_linenumber" name="L616" href="#L616">616</a> 
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> 		<strong class="jxr_keyword">var</strong> regularList = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(l(a(<span class="jxr_string">"1"</span>, <span class="jxr_string">"2"</span>, <span class="jxr_string">"3"</span>)));
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> 
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> 		assertEquals(multiList.hashCode(), regularList.hashCode());
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 	}
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> }
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 		assertEquals(multiList.hashCode(), regularList.hashCode());
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 	}
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> }
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

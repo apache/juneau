@@ -658,39 +658,38 @@
 <a class="jxr_linenumber" name="L650" href="#L650">650</a> 			.add(<span class="jxr_string">"one"</span>, 1)
 <a class="jxr_linenumber" name="L651" href="#L651">651</a> 			.build();
 <a class="jxr_linenumber" name="L652" href="#L652">652</a> 
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 		assertFalse(map.equals(<span class="jxr_string">"not a map"</span>));
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 		assertFalse(map.equals(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 	}
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 	@Test
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 	<strong class="jxr_keyword">void</strong> w06_hashCode_sameContents() {
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 		<strong class="jxr_keyword">var</strong> map1 = BidiMap.&lt;String,Integer&gt;create()
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> 			.add(<span class="jxr_string">"one"</span>, 1)
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> 			.add(<span class="jxr_string">"two"</span>, 2)
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 			.build();
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> 
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> 		<strong class="jxr_keyword">var</strong> map2 = BidiMap.&lt;String,Integer&gt;create()
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 			.add(<span class="jxr_string">"one"</span>, 1)
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> 			.add(<span class="jxr_string">"two"</span>, 2)
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> 			.build();
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> 
-<a class="jxr_linenumber" name="L669" href="#L669">669</a> 		assertEquals(map1.hashCode(), map2.hashCode());
-<a class="jxr_linenumber" name="L670" href="#L670">670</a> 	}
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> 	@Test
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> 	<strong class="jxr_keyword">void</strong> w07_hashCode_regularMap() {
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create()
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> 			.add(<span class="jxr_string">"one"</span>, 1)
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> 			.add(<span class="jxr_string">"two"</span>, 2)
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> 			.build();
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> 
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> 		<strong class="jxr_keyword">var</strong> regularMap = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String, Integer&gt;();
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 		regularMap.put(<span class="jxr_string">"one"</span>, 1);
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> 		regularMap.put(<span class="jxr_string">"two"</span>, 2);
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> 
-<a class="jxr_linenumber" name="L683" href="#L683">683</a> 		assertEquals(map.hashCode(), regularMap.hashCode());
-<a class="jxr_linenumber" name="L684" href="#L684">684</a> 	}
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> }
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 		assertFalse(map.equals(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 	}
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 	@Test
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 	<strong class="jxr_keyword">void</strong> w06_hashCode_sameContents() {
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 		<strong class="jxr_keyword">var</strong> map1 = BidiMap.&lt;String,Integer&gt;create()
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 			.add(<span class="jxr_string">"one"</span>, 1)
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 			.add(<span class="jxr_string">"two"</span>, 2)
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 			.build();
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 		<strong class="jxr_keyword">var</strong> map2 = BidiMap.&lt;String,Integer&gt;create()
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 			.add(<span class="jxr_string">"one"</span>, 1)
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 			.add(<span class="jxr_string">"two"</span>, 2)
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 			.build();
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 		assertEquals(map1.hashCode(), map2.hashCode());
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 	}
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 	@Test
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 	<strong class="jxr_keyword">void</strong> w07_hashCode_regularMap() {
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 		<strong class="jxr_keyword">var</strong> map = BidiMap.&lt;String,Integer&gt;create()
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 			.add(<span class="jxr_string">"one"</span>, 1)
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 			.add(<span class="jxr_string">"two"</span>, 2)
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 			.build();
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 		<strong class="jxr_keyword">var</strong> regularMap = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String, Integer&gt;();
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 		regularMap.put(<span class="jxr_string">"one"</span>, 1);
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 		regularMap.put(<span class="jxr_string">"two"</span>, 2);
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 		assertEquals(map.hashCode(), regularMap.hashCode());
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 	}
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

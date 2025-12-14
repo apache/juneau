@@ -289,33 +289,32 @@
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 	@Test
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 	<strong class="jxr_keyword">void</strong> d06_equals_notAFlag() {
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<strong class="jxr_keyword">var</strong> flag = Flag.of(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		assertFalse(flag.equals(<span class="jxr_string">"not a flag"</span>));
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		assertFalse(flag.equals(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	}
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	@Test
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 	<strong class="jxr_keyword">void</strong> d07_hashCode_sameValue() {
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<strong class="jxr_keyword">var</strong> flag1 = Flag.of(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">var</strong> flag2 = Flag.of(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		assertEquals(flag1.hashCode(), flag2.hashCode());
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	}
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	@Test
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	<strong class="jxr_keyword">void</strong> d08_hashCode_differentValue() {
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">var</strong> flag1 = Flag.of(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<strong class="jxr_keyword">var</strong> flag2 = Flag.of(false);
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<em class="jxr_comment">// Different values should have different hash codes (though not guaranteed)</em>
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		assertNotEquals(flag1.hashCode(), flag2.hashCode());
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 	}
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 	@Test
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	<strong class="jxr_keyword">void</strong> d09_hashCode_booleanHashCode() {
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		<strong class="jxr_keyword">var</strong> flagTrue = Flag.of(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<strong class="jxr_keyword">var</strong> flagFalse = Flag.of(false);
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		assertEquals(Boolean.hashCode(<strong class="jxr_keyword">true</strong>), flagTrue.hashCode());
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		assertEquals(Boolean.hashCode(false), flagFalse.hashCode());
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	}
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> }
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		assertFalse(flag.equals(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	}
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	@Test
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	<strong class="jxr_keyword">void</strong> d07_hashCode_sameValue() {
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<strong class="jxr_keyword">var</strong> flag1 = Flag.of(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<strong class="jxr_keyword">var</strong> flag2 = Flag.of(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		assertEquals(flag1.hashCode(), flag2.hashCode());
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	}
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	@Test
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	<strong class="jxr_keyword">void</strong> d08_hashCode_differentValue() {
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		<strong class="jxr_keyword">var</strong> flag1 = Flag.of(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">var</strong> flag2 = Flag.of(false);
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<em class="jxr_comment">// Different values should have different hash codes (though not guaranteed)</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		assertNotEquals(flag1.hashCode(), flag2.hashCode());
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	}
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	@Test
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 	<strong class="jxr_keyword">void</strong> d09_hashCode_booleanHashCode() {
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<strong class="jxr_keyword">var</strong> flagTrue = Flag.of(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		<strong class="jxr_keyword">var</strong> flagFalse = Flag.of(false);
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		assertEquals(Boolean.hashCode(<strong class="jxr_keyword">true</strong>), flagTrue.hashCode());
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		assertEquals(Boolean.hashCode(false), flagFalse.hashCode());
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 	}
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

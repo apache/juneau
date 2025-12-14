@@ -1575,8 +1575,8 @@
 <a class="jxr_linenumber" name="L1567" href="#L1567">1567</a> <em class="jxr_javadoccomment">	 * @param converters Optional converters to use for converting values.</em>
 <a class="jxr_linenumber" name="L1568" href="#L1568">1568</a> <em class="jxr_javadoccomment">	 * @return A new map builder.</em>
 <a class="jxr_linenumber" name="L1569" href="#L1569">1569</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1570" href="#L1570">1570</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; MapBuilder&lt;K,V&gt; mapb(Class&lt;K&gt; keyType, Class&lt;V&gt; valueType, Converter...converters) {
-<a class="jxr_linenumber" name="L1571" href="#L1571">1571</a> 		<strong class="jxr_keyword">return</strong> MapBuilder.create(keyType, valueType).converters(converters);
+<a class="jxr_linenumber" name="L1570" href="#L1570">1570</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; MapBuilder&lt;K,V&gt; mapb(Class&lt;K&gt; keyType, Class&lt;V&gt; valueType) {
+<a class="jxr_linenumber" name="L1571" href="#L1571">1571</a> 		<strong class="jxr_keyword">return</strong> MapBuilder.create(keyType, valueType);
 <a class="jxr_linenumber" name="L1572" href="#L1572">1572</a> 	}
 <a class="jxr_linenumber" name="L1573" href="#L1573">1573</a> 
 <a class="jxr_linenumber" name="L1574" href="#L1574">1574</a> 	<em class="jxr_javadoccomment">/**</em>

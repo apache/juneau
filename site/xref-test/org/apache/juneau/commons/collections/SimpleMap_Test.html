@@ -394,36 +394,35 @@
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 		Object[] values = { <span class="jxr_string">"value1"</span> };
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 		SimpleMap&lt;String,Object&gt; map = <strong class="jxr_keyword">new</strong> SimpleMap&lt;&gt;(keys, values);
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		assertFalse(map.equals(<span class="jxr_string">"not a map"</span>));
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		assertFalse(map.equals(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	}
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	@Test
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	<strong class="jxr_keyword">void</strong> e07_hashCode_sameContents() {
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		String[] keys1 = { <span class="jxr_string">"key1"</span>, <span class="jxr_string">"key2"</span> };
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		Object[] values1 = { <span class="jxr_string">"value1"</span>, <span class="jxr_string">"value2"</span> };
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		SimpleMap&lt;String,Object&gt; map1 = <strong class="jxr_keyword">new</strong> SimpleMap&lt;&gt;(keys1, values1);
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		String[] keys2 = { <span class="jxr_string">"key1"</span>, <span class="jxr_string">"key2"</span> };
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		Object[] values2 = { <span class="jxr_string">"value1"</span>, <span class="jxr_string">"value2"</span> };
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		SimpleMap&lt;String,Object&gt; map2 = <strong class="jxr_keyword">new</strong> SimpleMap&lt;&gt;(keys2, values2);
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		assertEquals(map1.hashCode(), map2.hashCode());
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	}
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 	@Test
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 	<strong class="jxr_keyword">void</strong> e08_hashCode_regularMap() {
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		String[] keys = { <span class="jxr_string">"key1"</span>, <span class="jxr_string">"key2"</span> };
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		Object[] values = { <span class="jxr_string">"value1"</span>, <span class="jxr_string">"value2"</span> };
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		SimpleMap&lt;String,Object&gt; map = <strong class="jxr_keyword">new</strong> SimpleMap&lt;&gt;(keys, values);
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<strong class="jxr_keyword">var</strong> regularMap = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String, Object&gt;();
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		regularMap.put(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"value1"</span>);
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		regularMap.put(<span class="jxr_string">"key2"</span>, <span class="jxr_string">"value2"</span>);
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		assertEquals(map.hashCode(), regularMap.hashCode());
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 	}
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> }
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		assertFalse(map.equals(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	}
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	@Test
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	<strong class="jxr_keyword">void</strong> e07_hashCode_sameContents() {
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		String[] keys1 = { <span class="jxr_string">"key1"</span>, <span class="jxr_string">"key2"</span> };
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		Object[] values1 = { <span class="jxr_string">"value1"</span>, <span class="jxr_string">"value2"</span> };
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		SimpleMap&lt;String,Object&gt; map1 = <strong class="jxr_keyword">new</strong> SimpleMap&lt;&gt;(keys1, values1);
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		String[] keys2 = { <span class="jxr_string">"key1"</span>, <span class="jxr_string">"key2"</span> };
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		Object[] values2 = { <span class="jxr_string">"value1"</span>, <span class="jxr_string">"value2"</span> };
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		SimpleMap&lt;String,Object&gt; map2 = <strong class="jxr_keyword">new</strong> SimpleMap&lt;&gt;(keys2, values2);
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		assertEquals(map1.hashCode(), map2.hashCode());
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 	}
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	@Test
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 	<strong class="jxr_keyword">void</strong> e08_hashCode_regularMap() {
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		String[] keys = { <span class="jxr_string">"key1"</span>, <span class="jxr_string">"key2"</span> };
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		Object[] values = { <span class="jxr_string">"value1"</span>, <span class="jxr_string">"value2"</span> };
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		SimpleMap&lt;String,Object&gt; map = <strong class="jxr_keyword">new</strong> SimpleMap&lt;&gt;(keys, values);
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<strong class="jxr_keyword">var</strong> regularMap = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String, Object&gt;();
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		regularMap.put(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"value1"</span>);
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		regularMap.put(<span class="jxr_string">"key2"</span>, <span class="jxr_string">"value2"</span>);
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		assertEquals(map.hashCode(), regularMap.hashCode());
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	}
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
