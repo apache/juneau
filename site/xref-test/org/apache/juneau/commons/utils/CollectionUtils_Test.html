@@ -731,7 +731,7 @@
 <a class="jxr_linenumber" name="L723" href="#L723">723</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L724" href="#L724">724</a> 	@Test
 <a class="jxr_linenumber" name="L725" href="#L725">725</a> 	<strong class="jxr_keyword">void</strong> a044_listb() {
-<a class="jxr_linenumber" name="L726" href="#L726">726</a> 		ListBuilder&lt;String&gt; builder = listb(String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L726" href="#L726">726</a> 		Lists&lt;String&gt; builder = listb(String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L727" href="#L727">727</a> 		assertNotNull(builder);
 <a class="jxr_linenumber" name="L728" href="#L728">728</a> 		List&lt;String&gt; result = builder.add(<span class="jxr_string">"a"</span>).add(<span class="jxr_string">"b"</span>).build();
 <a class="jxr_linenumber" name="L729" href="#L729">729</a> 		assertEquals(2, result.size());
@@ -953,7 +953,7 @@
 <a class="jxr_linenumber" name="L945" href="#L945">945</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L946" href="#L946">946</a> 	@Test
 <a class="jxr_linenumber" name="L947" href="#L947">947</a> 	<strong class="jxr_keyword">void</strong> a053_mapb() {
-<a class="jxr_linenumber" name="L948" href="#L948">948</a> 		MapBuilder&lt;String, Object&gt; builder = mapb();
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> 		Maps&lt;String, Object&gt; builder = mapb();
 <a class="jxr_linenumber" name="L949" href="#L949">949</a> 		assertNotNull(builder);
 <a class="jxr_linenumber" name="L950" href="#L950">950</a> 		Map&lt;String, Object&gt; result = builder.add(<span class="jxr_string">"a"</span>, 1).add(<span class="jxr_string">"b"</span>, 2).build();
 <a class="jxr_linenumber" name="L951" href="#L951">951</a> 		assertEquals(2, result.size());
@@ -966,7 +966,7 @@
 <a class="jxr_linenumber" name="L958" href="#L958">958</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L959" href="#L959">959</a> 	@Test
 <a class="jxr_linenumber" name="L960" href="#L960">960</a> 	<strong class="jxr_keyword">void</strong> a054_mapb_<strong class="jxr_keyword">class</strong>() {
-<a class="jxr_linenumber" name="L961" href="#L961">961</a> 		MapBuilder&lt;String, Integer&gt; builder = mapb(String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L961" href="#L961">961</a> 		Maps&lt;String, Integer&gt; builder = mapb(String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L962" href="#L962">962</a> 		assertNotNull(builder);
 <a class="jxr_linenumber" name="L963" href="#L963">963</a> 		Map&lt;String, Integer&gt; result = builder.add(<span class="jxr_string">"a"</span>, 1).build();
 <a class="jxr_linenumber" name="L964" href="#L964">964</a> 		assertEquals(1, result.size());
@@ -1097,7 +1097,7 @@
 <a class="jxr_linenumber" name="L1089" href="#L1089">1089</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L1090" href="#L1090">1090</a> 	@Test
 <a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> 	<strong class="jxr_keyword">void</strong> a064_setb() {
-<a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 		SetBuilder&lt;String&gt; builder = setb(String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 		Sets&lt;String&gt; builder = setb(String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> 		assertNotNull(builder);
 <a class="jxr_linenumber" name="L1094" href="#L1094">1094</a> 		Set&lt;String&gt; result = builder.add(<span class="jxr_string">"a"</span>).add(<span class="jxr_string">"b"</span>).build();
 <a class="jxr_linenumber" name="L1095" href="#L1095">1095</a> 		assertEquals(2, result.size());

@@ -900,14 +900,14 @@
 <a class="jxr_linenumber" name="L892" href="#L892">892</a> 	}
 <a class="jxr_linenumber" name="L893" href="#L893">893</a> 
 <a class="jxr_linenumber" name="L894" href="#L894">894</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L895" href="#L895">895</a> <em class="jxr_javadoccomment">	 * Convenience factory for a {@link ListBuilder}.</em>
+<a class="jxr_linenumber" name="L895" href="#L895">895</a> <em class="jxr_javadoccomment">	 * Convenience factory for a {@link Lists}.</em>
 <a class="jxr_linenumber" name="L896" href="#L896">896</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L897" href="#L897">897</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
 <a class="jxr_linenumber" name="L898" href="#L898">898</a> <em class="jxr_javadoccomment">	 * @param type The element type.</em>
 <a class="jxr_linenumber" name="L899" href="#L899">899</a> <em class="jxr_javadoccomment">	 * @return A new list builder.</em>
 <a class="jxr_linenumber" name="L900" href="#L900">900</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L901" href="#L901">901</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; ListBuilder&lt;E&gt; listb(Class&lt;E&gt; type) {
-<a class="jxr_linenumber" name="L902" href="#L902">902</a> 		<strong class="jxr_keyword">return</strong> ListBuilder.create(type);
+<a class="jxr_linenumber" name="L901" href="#L901">901</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; Lists&lt;E&gt; listb(Class&lt;E&gt; type) {
+<a class="jxr_linenumber" name="L902" href="#L902">902</a> 		<strong class="jxr_keyword">return</strong> Lists.create(type);
 <a class="jxr_linenumber" name="L903" href="#L903">903</a> 	}
 <a class="jxr_linenumber" name="L904" href="#L904">904</a> 
 <a class="jxr_linenumber" name="L905" href="#L905">905</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -1533,10 +1533,10 @@
 <a class="jxr_linenumber" name="L1525" href="#L1525">1525</a> 	}
 <a class="jxr_linenumber" name="L1526" href="#L1526">1526</a> 
 <a class="jxr_linenumber" name="L1527" href="#L1527">1527</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1528" href="#L1528">1528</a> <em class="jxr_javadoccomment">	 * Convenience factory for a {@link MapBuilder} with {@link String} keys and {@link Object} values.</em>
+<a class="jxr_linenumber" name="L1528" href="#L1528">1528</a> <em class="jxr_javadoccomment">	 * Convenience factory for a {@link Maps} with {@link String} keys and {@link Object} values.</em>
 <a class="jxr_linenumber" name="L1529" href="#L1529">1529</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1530" href="#L1530">1530</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1531" href="#L1531">1531</a> <em class="jxr_javadoccomment">	 * This is a shortcut for &lt;c&gt;MapBuilder.create(String.&lt;jk&gt;class&lt;/jk&gt;, Object.&lt;jk&gt;class&lt;/jk&gt;)&lt;/c&gt;.</em>
+<a class="jxr_linenumber" name="L1531" href="#L1531">1531</a> <em class="jxr_javadoccomment">	 * This is a shortcut for &lt;c&gt;Maps.create(String.&lt;jk&gt;class&lt;/jk&gt;, Object.&lt;jk&gt;class&lt;/jk&gt;)&lt;/c&gt;.</em>
 <a class="jxr_linenumber" name="L1532" href="#L1532">1532</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1533" href="#L1533">1533</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L1534" href="#L1534">1534</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
@@ -1558,14 +1558,14 @@
 <a class="jxr_linenumber" name="L1550" href="#L1550">1550</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1551" href="#L1551">1551</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1552" href="#L1552">1552</a> <em class="jxr_javadoccomment">	 * @return A new map builder.</em>
-<a class="jxr_linenumber" name="L1553" href="#L1553">1553</a> <em class="jxr_javadoccomment">	 * @see MapBuilder</em>
+<a class="jxr_linenumber" name="L1553" href="#L1553">1553</a> <em class="jxr_javadoccomment">	 * @see Maps</em>
 <a class="jxr_linenumber" name="L1554" href="#L1554">1554</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1555" href="#L1555">1555</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> MapBuilder&lt;String,Object&gt; mapb() {
-<a class="jxr_linenumber" name="L1556" href="#L1556">1556</a> 		<strong class="jxr_keyword">return</strong> MapBuilder.create(String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>).ordered();
+<a class="jxr_linenumber" name="L1555" href="#L1555">1555</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Maps&lt;String,Object&gt; mapb() {
+<a class="jxr_linenumber" name="L1556" href="#L1556">1556</a> 		<strong class="jxr_keyword">return</strong> Maps.create(String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>).ordered();
 <a class="jxr_linenumber" name="L1557" href="#L1557">1557</a> 	}
 <a class="jxr_linenumber" name="L1558" href="#L1558">1558</a> 
 <a class="jxr_linenumber" name="L1559" href="#L1559">1559</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1560" href="#L1560">1560</a> <em class="jxr_javadoccomment">	 * Convenience factory for a {@link MapBuilder}.</em>
+<a class="jxr_linenumber" name="L1560" href="#L1560">1560</a> <em class="jxr_javadoccomment">	 * Convenience factory for a {@link Maps}.</em>
 <a class="jxr_linenumber" name="L1561" href="#L1561">1561</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1562" href="#L1562">1562</a> <em class="jxr_javadoccomment">	 * @param &lt;K&gt; The key type.</em>
 <a class="jxr_linenumber" name="L1563" href="#L1563">1563</a> <em class="jxr_javadoccomment">	 * @param &lt;V&gt; The value type.</em>
@@ -1574,8 +1574,8 @@
 <a class="jxr_linenumber" name="L1566" href="#L1566">1566</a> <em class="jxr_javadoccomment">	 * @param converters Optional converters to use for converting values.</em>
 <a class="jxr_linenumber" name="L1567" href="#L1567">1567</a> <em class="jxr_javadoccomment">	 * @return A new map builder.</em>
 <a class="jxr_linenumber" name="L1568" href="#L1568">1568</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1569" href="#L1569">1569</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; MapBuilder&lt;K,V&gt; mapb(Class&lt;K&gt; keyType, Class&lt;V&gt; valueType) {
-<a class="jxr_linenumber" name="L1570" href="#L1570">1570</a> 		<strong class="jxr_keyword">return</strong> MapBuilder.create(keyType, valueType).ordered();
+<a class="jxr_linenumber" name="L1569" href="#L1569">1569</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; Maps&lt;K,V&gt; mapb(Class&lt;K&gt; keyType, Class&lt;V&gt; valueType) {
+<a class="jxr_linenumber" name="L1570" href="#L1570">1570</a> 		<strong class="jxr_keyword">return</strong> Maps.create(keyType, valueType).ordered();
 <a class="jxr_linenumber" name="L1571" href="#L1571">1571</a> 	}
 <a class="jxr_linenumber" name="L1572" href="#L1572">1572</a> 
 <a class="jxr_linenumber" name="L1573" href="#L1573">1573</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -1752,14 +1752,14 @@
 <a class="jxr_linenumber" name="L1744" href="#L1744">1744</a> 	}
 <a class="jxr_linenumber" name="L1745" href="#L1745">1745</a> 
 <a class="jxr_linenumber" name="L1746" href="#L1746">1746</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1747" href="#L1747">1747</a> <em class="jxr_javadoccomment">	 * Convenience factory for a {@link SetBuilder}.</em>
+<a class="jxr_linenumber" name="L1747" href="#L1747">1747</a> <em class="jxr_javadoccomment">	 * Convenience factory for a {@link Sets}.</em>
 <a class="jxr_linenumber" name="L1748" href="#L1748">1748</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1749" href="#L1749">1749</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The element type.</em>
 <a class="jxr_linenumber" name="L1750" href="#L1750">1750</a> <em class="jxr_javadoccomment">	 * @param type The element type.</em>
 <a class="jxr_linenumber" name="L1751" href="#L1751">1751</a> <em class="jxr_javadoccomment">	 * @return A new set builder.</em>
 <a class="jxr_linenumber" name="L1752" href="#L1752">1752</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1753" href="#L1753">1753</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; SetBuilder&lt;E&gt; setb(Class&lt;E&gt; type) {
-<a class="jxr_linenumber" name="L1754" href="#L1754">1754</a> 		<strong class="jxr_keyword">return</strong> SetBuilder.create(type).ordered();
+<a class="jxr_linenumber" name="L1753" href="#L1753">1753</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; Sets&lt;E&gt; setb(Class&lt;E&gt; type) {
+<a class="jxr_linenumber" name="L1754" href="#L1754">1754</a> 		<strong class="jxr_keyword">return</strong> Sets.create(type).ordered();
 <a class="jxr_linenumber" name="L1755" href="#L1755">1755</a> 	}
 <a class="jxr_linenumber" name="L1756" href="#L1756">1756</a> 
 <a class="jxr_linenumber" name="L1757" href="#L1757">1757</a> 	<em class="jxr_javadoccomment">/**</em>
