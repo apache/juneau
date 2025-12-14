@@ -1562,7 +1562,7 @@
 <a class="jxr_linenumber" name="L1554" href="#L1554">1554</a> <em class="jxr_javadoccomment">	 * @see MapBuilder</em>
 <a class="jxr_linenumber" name="L1555" href="#L1555">1555</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1556" href="#L1556">1556</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> MapBuilder&lt;String,Object&gt; mapb() {
-<a class="jxr_linenumber" name="L1557" href="#L1557">1557</a> 		<strong class="jxr_keyword">return</strong> MapBuilder.create(String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1557" href="#L1557">1557</a> 		<strong class="jxr_keyword">return</strong> MapBuilder.create(String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>).ordered();
 <a class="jxr_linenumber" name="L1558" href="#L1558">1558</a> 	}
 <a class="jxr_linenumber" name="L1559" href="#L1559">1559</a> 
 <a class="jxr_linenumber" name="L1560" href="#L1560">1560</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -1576,7 +1576,7 @@
 <a class="jxr_linenumber" name="L1568" href="#L1568">1568</a> <em class="jxr_javadoccomment">	 * @return A new map builder.</em>
 <a class="jxr_linenumber" name="L1569" href="#L1569">1569</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1570" href="#L1570">1570</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; MapBuilder&lt;K,V&gt; mapb(Class&lt;K&gt; keyType, Class&lt;V&gt; valueType) {
-<a class="jxr_linenumber" name="L1571" href="#L1571">1571</a> 		<strong class="jxr_keyword">return</strong> MapBuilder.create(keyType, valueType);
+<a class="jxr_linenumber" name="L1571" href="#L1571">1571</a> 		<strong class="jxr_keyword">return</strong> MapBuilder.create(keyType, valueType).ordered();
 <a class="jxr_linenumber" name="L1572" href="#L1572">1572</a> 	}
 <a class="jxr_linenumber" name="L1573" href="#L1573">1573</a> 
 <a class="jxr_linenumber" name="L1574" href="#L1574">1574</a> 	<em class="jxr_javadoccomment">/**</em>
