@@ -83,6 +83,11 @@ import org.apache.juneau.commons.utils.*;
  * 		.addAll(<jv>existing</jv>)
  * 		.add(4, 5, 6)
  * 		.build();
+ *
+ * 	<jc>// FluentList wrapper - use buildFluent()</jc>
+ * 	FluentList&lt;String&gt; <jv>fluent</jv> = ListBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+ * 		.add(<js>"one"</js>, <js>"two"</js>)
+ * 		.buildFluent();
  * </p>
  *
  * <h5 class='section'>Thread Safety:</h5>
@@ -283,6 +288,28 @@ public class ListBuilder<E> {
 				list = unmodifiableList(list);
 		}
 		return list;
+	}
+
+	/**
+	 * Builds the list and wraps it in a {@link FluentList}.
+	 *
+	 * <p>
+	 * This is a convenience method that calls {@link #build()} and wraps the result in a {@link FluentList}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
+	 *
+	 * 	FluentList&lt;String&gt; <jv>list</jv> = ListBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 		.add(<js>"one"</js>, <js>"two"</js>)
+	 * 		.buildFluent();
+	 * </p>
+	 *
+	 * @return The built list wrapped in a {@link FluentList}, or {@code null} if {@link #sparse()} is set and the list is empty.
+	 */
+	public FluentList<E> buildFluent() {
+		List<E> result = build();
+		return result == null ? null : new FluentList<>(result);
 	}
 
 	/**

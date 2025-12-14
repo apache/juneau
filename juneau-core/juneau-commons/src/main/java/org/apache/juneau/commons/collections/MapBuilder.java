@@ -435,17 +435,6 @@ public class MapBuilder<K,V> {
 	}
 
 	/**
-	 * Forces the existing set to be copied instead of appended to.
-	 *
-	 * @return This object.
-	 */
-	public MapBuilder<K,V> copy() {
-		if (nn(map))
-			map = new LinkedHashMap<>(map);
-		return this;
-	}
-
-	/**
 	 * Applies a default filter that excludes common "empty" or "unset" values from being added to the map.
 	 *
 	 * <p>

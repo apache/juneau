@@ -628,5 +628,67 @@ class ListBuilder_Test extends TestBase {
 		assertNotNull(list);
 		assertThrows(UnsupportedOperationException.class, () -> list.add("a"));
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// BuildFluent
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void n01_buildFluent_returnsFluentList() {
+		var list = ListBuilder.create(String.class)
+			.add("a", "b", "c")
+			.buildFluent();
+
+		assertNotNull(list);
+		assertTrue(list instanceof FluentList);
+		assertSize(3, list);
+		assertList(list, "a", "b", "c");
+	}
+
+	@Test
+	void n02_buildFluent_sparseEmpty() {
+		var list = ListBuilder.create(String.class)
+			.sparse()
+			.buildFluent();
+
+		assertNull(list);
+	}
+
+	@Test
+	void n03_buildFluent_withSorted() {
+		var list = ListBuilder.create(String.class)
+			.add("c", "a", "b")
+			.sorted()
+			.buildFluent();
+
+		assertNotNull(list);
+		assertTrue(list instanceof FluentList);
+		assertList(list, "a", "b", "c");
+	}
+
+	@Test
+	void n04_buildFluent_withUnmodifiable() {
+		var list = ListBuilder.create(String.class)
+			.add("a", "b", "c")
+			.unmodifiable()
+			.buildFluent();
+
+		assertNotNull(list);
+		assertTrue(list instanceof FluentList);
+		assertSize(3, list);
+		assertThrows(UnsupportedOperationException.class, () -> list.add("d"));
+	}
+
+	@Test
+	void n05_buildFluent_fluentMethods() {
+		var list = ListBuilder.create(String.class)
+			.add("a", "b")
+			.buildFluent();
+
+		assertNotNull(list);
+		// Test that FluentList methods work
+		list.a("c").aa(l("d", "e"));
+		assertList(list, "a", "b", "c", "d", "e");
+	}
 }
 

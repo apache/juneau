@@ -90,6 +90,11 @@ import org.apache.juneau.commons.utils.*;
  * 	Set&lt;String&gt; <jv>maybeNull</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
  * 		.sparse()
  * 		.build();  <jc>// Returns null, not empty set</jc>
+ *
+ * 	<jc>// FluentSet wrapper - use buildFluent()</jc>
+ * 	FluentSet&lt;String&gt; <jv>fluent</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+ * 		.add(<js>"one"</js>, <js>"two"</js>)
+ * 		.buildFluent();
  * </p>
  *
  * <h5 class='section'>Thread Safety:</h5>
@@ -286,6 +291,28 @@ public class SetBuilder<E> {
 				set = unmodifiableSet(set);
 		}
 		return set;
+	}
+
+	/**
+	 * Builds the set and wraps it in a {@link FluentSet}.
+	 *
+	 * <p>
+	 * This is a convenience method that calls {@link #build()} and wraps the result in a {@link FluentSet}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
+	 *
+	 * 	FluentSet&lt;String&gt; <jv>set</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 		.add(<js>"one"</js>, <js>"two"</js>)
+	 * 		.buildFluent();
+	 * </p>
+	 *
+	 * @return The built set wrapped in a {@link FluentSet}, or {@code null} if {@link #sparse()} is set and the set is empty.
+	 */
+	public FluentSet<E> buildFluent() {
+		Set<E> result = build();
+		return result == null ? null : new FluentSet<>(result);
 	}
 
 	/**

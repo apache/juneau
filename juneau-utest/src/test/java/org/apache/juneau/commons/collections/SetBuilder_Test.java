@@ -667,4 +667,66 @@ class SetBuilder_Test extends TestBase {
 		assertNotNull(set);
 		assertThrows(UnsupportedOperationException.class, () -> set.add("a"));
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// BuildFluent
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void p01_buildFluent_returnsFluentSet() {
+		var set = SetBuilder.create(String.class)
+			.add("a", "b", "c")
+			.buildFluent();
+
+		assertNotNull(set);
+		assertTrue(set instanceof FluentSet);
+		assertSize(3, set);
+		assertList(set, "a", "b", "c");
+	}
+
+	@Test
+	void p02_buildFluent_sparseEmpty() {
+		var set = SetBuilder.create(String.class)
+			.sparse()
+			.buildFluent();
+
+		assertNull(set);
+	}
+
+	@Test
+	void p03_buildFluent_withSorted() {
+		var set = SetBuilder.create(String.class)
+			.add("c", "a", "b")
+			.sorted()
+			.buildFluent();
+
+		assertNotNull(set);
+		assertTrue(set instanceof FluentSet);
+		assertList(set, "a", "b", "c");
+	}
+
+	@Test
+	void p04_buildFluent_withUnmodifiable() {
+		var set = SetBuilder.create(String.class)
+			.add("a", "b", "c")
+			.unmodifiable()
+			.buildFluent();
+
+		assertNotNull(set);
+		assertTrue(set instanceof FluentSet);
+		assertSize(3, set);
+		assertThrows(UnsupportedOperationException.class, () -> set.add("d"));
+	}
+
+	@Test
+	void p05_buildFluent_fluentMethods() {
+		var set = SetBuilder.create(String.class)
+			.add("a", "b")
+			.buildFluent();
+
+		assertNotNull(set);
+		// Test that FluentSet methods work
+		set.a("c").aa(l("d", "e"));
+		assertList(set, "a", "b", "c", "d", "e");
+	}
 }
