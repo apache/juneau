@@ -114,7 +114,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder const_(String...value) {
-			this.const_ = value;
+			const_ = value;
 			return this;
 		}
 
@@ -125,7 +125,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder default_(String...value) {
-			this.default_ = value;
+			default_ = value;
 			return this;
 		}
 
@@ -136,7 +136,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder else_(String...value) {
-			this.else_ = value;
+			else_ = value;
 			return this;
 		}
 
@@ -147,7 +147,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder enum_(String...value) {
-			this.enum_ = value;
+			enum_ = value;
 			return this;
 		}
 
@@ -158,7 +158,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder if_(String...value) {
-			this.if_ = value;
+			if_ = value;
 			return this;
 		}
 
@@ -169,7 +169,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder then_(String...value) {
-			this.then_ = value;
+			then_ = value;
 			return this;
 		}
 
@@ -224,7 +224,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder additionalProperties(String...value) {
-			this.additionalProperties = value;
+			additionalProperties = value;
 			return this;
 		}
 
@@ -235,7 +235,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder aev(boolean value) {
-			this.aev = value;
+			aev = value;
 			return this;
 		}
 
@@ -246,7 +246,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder allOf(String...value) {
-			this.allOf = value;
+			allOf = value;
 			return this;
 		}
 
@@ -257,7 +257,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder allowEmptyValue(boolean value) {
-			this.allowEmptyValue = value;
+			allowEmptyValue = value;
 			return this;
 		}
 
@@ -277,7 +277,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -288,7 +288,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder cf(String value) {
-			this.cf = value;
+			cf = value;
 			return this;
 		}
 
@@ -299,7 +299,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder collectionFormat(String value) {
-			this.collectionFormat = value;
+			collectionFormat = value;
 			return this;
 		}
 
@@ -310,7 +310,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder contentEncoding(String value) {
-			this.contentEncoding = value;
+			contentEncoding = value;
 			return this;
 		}
 
@@ -321,7 +321,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder contentMediaType(String value) {
-			this.contentMediaType = value;
+			contentMediaType = value;
 			return this;
 		}
 
@@ -332,7 +332,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder d(String...value) {
-			this.d = value;
+			d = value;
 			return this;
 		}
 
@@ -343,7 +343,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder dependentRequired(String...value) {
-			this.dependentRequired = value;
+			dependentRequired = value;
 			return this;
 		}
 
@@ -354,7 +354,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder dependentSchemas(String...value) {
-			this.dependentSchemas = value;
+			dependentSchemas = value;
 			return this;
 		}
 
@@ -365,7 +365,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder deprecatedProperty(boolean value) {
-			this.deprecatedProperty = value;
+			deprecatedProperty = value;
 			return this;
 		}
 
@@ -376,7 +376,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder df(String...value) {
-			this.df = value;
+			df = value;
 			return this;
 		}
 
@@ -387,7 +387,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder discriminator(String value) {
-			this.discriminator = value;
+			discriminator = value;
 			return this;
 		}
 
@@ -398,7 +398,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder e(String...value) {
-			this.e = value;
+			e = value;
 			return this;
 		}
 
@@ -409,7 +409,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder emax(boolean value) {
-			this.emax = value;
+			emax = value;
 			return this;
 		}
 
@@ -420,7 +420,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder emin(boolean value) {
-			this.emin = value;
+			emin = value;
 			return this;
 		}
 
@@ -431,7 +431,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder examples(String...value) {
-			this.examples = value;
+			examples = value;
 			return this;
 		}
 
@@ -442,7 +442,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder exclusiveMaximum(boolean value) {
-			this.exclusiveMaximum = value;
+			exclusiveMaximum = value;
 			return this;
 		}
 
@@ -453,7 +453,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder exclusiveMaximumValue(String value) {
-			this.exclusiveMaximumValue = value;
+			exclusiveMaximumValue = value;
 			return this;
 		}
 
@@ -464,7 +464,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder exclusiveMinimum(boolean value) {
-			this.exclusiveMinimum = value;
+			exclusiveMinimum = value;
 			return this;
 		}
 
@@ -475,7 +475,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder exclusiveMinimumValue(String value) {
-			this.exclusiveMinimumValue = value;
+			exclusiveMinimumValue = value;
 			return this;
 		}
 
@@ -486,7 +486,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder externalDocs(ExternalDocs value) {
-			this.externalDocs = value;
+			externalDocs = value;
 			return this;
 		}
 
@@ -497,7 +497,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder f(String value) {
-			this.f = value;
+			f = value;
 			return this;
 		}
 
@@ -508,7 +508,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder format(String value) {
-			this.format = value;
+			format = value;
 			return this;
 		}
 
@@ -519,7 +519,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder ignore(boolean value) {
-			this.ignore = value;
+			ignore = value;
 			return this;
 		}
 
@@ -530,7 +530,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder items(Items value) {
-			this.items = value;
+			items = value;
 			return this;
 		}
 
@@ -541,7 +541,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder max(String value) {
-			this.max = value;
+			max = value;
 			return this;
 		}
 
@@ -552,7 +552,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder maxi(long value) {
-			this.maxi = value;
+			maxi = value;
 			return this;
 		}
 
@@ -563,7 +563,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder maximum(String value) {
-			this.maximum = value;
+			maximum = value;
 			return this;
 		}
 
@@ -574,7 +574,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder maxItems(long value) {
-			this.maxItems = value;
+			maxItems = value;
 			return this;
 		}
 
@@ -585,7 +585,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder maxl(long value) {
-			this.maxl = value;
+			maxl = value;
 			return this;
 		}
 
@@ -596,7 +596,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder maxLength(long value) {
-			this.maxLength = value;
+			maxLength = value;
 			return this;
 		}
 
@@ -607,7 +607,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder maxp(long value) {
-			this.maxp = value;
+			maxp = value;
 			return this;
 		}
 
@@ -618,7 +618,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder maxProperties(long value) {
-			this.maxProperties = value;
+			maxProperties = value;
 			return this;
 		}
 
@@ -629,7 +629,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder min(String value) {
-			this.min = value;
+			min = value;
 			return this;
 		}
 
@@ -640,7 +640,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder mini(long value) {
-			this.mini = value;
+			mini = value;
 			return this;
 		}
 
@@ -651,7 +651,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder minimum(String value) {
-			this.minimum = value;
+			minimum = value;
 			return this;
 		}
 
@@ -662,7 +662,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder minItems(long value) {
-			this.minItems = value;
+			minItems = value;
 			return this;
 		}
 
@@ -673,7 +673,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder minl(long value) {
-			this.minl = value;
+			minl = value;
 			return this;
 		}
 
@@ -684,7 +684,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder minLength(long value) {
-			this.minLength = value;
+			minLength = value;
 			return this;
 		}
 
@@ -695,7 +695,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder minp(long value) {
-			this.minp = value;
+			minp = value;
 			return this;
 		}
 
@@ -706,7 +706,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder minProperties(long value) {
-			this.minProperties = value;
+			minProperties = value;
 			return this;
 		}
 
@@ -717,7 +717,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder mo(String value) {
-			this.mo = value;
+			mo = value;
 			return this;
 		}
 
@@ -728,7 +728,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder multipleOf(String value) {
-			this.multipleOf = value;
+			multipleOf = value;
 			return this;
 		}
 
@@ -743,7 +743,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder p(String value) {
-			this.p = value;
+			p = value;
 			return this;
 		}
 
@@ -754,7 +754,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder pattern(String value) {
-			this.pattern = value;
+			pattern = value;
 			return this;
 		}
 
@@ -765,7 +765,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder prefixItems(String...value) {
-			this.prefixItems = value;
+			prefixItems = value;
 			return this;
 		}
 
@@ -776,7 +776,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder properties(String...value) {
-			this.properties = value;
+			properties = value;
 			return this;
 		}
 
@@ -787,7 +787,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder r(boolean value) {
-			this.r = value;
+			r = value;
 			return this;
 		}
 
@@ -798,7 +798,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder readOnly(boolean value) {
-			this.readOnly = value;
+			readOnly = value;
 			return this;
 		}
 
@@ -809,7 +809,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder required(boolean value) {
-			this.required = value;
+			required = value;
 			return this;
 		}
 
@@ -820,7 +820,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder ro(boolean value) {
-			this.ro = value;
+			ro = value;
 			return this;
 		}
 
@@ -831,7 +831,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder sie(boolean value) {
-			this.sie = value;
+			sie = value;
 			return this;
 		}
 
@@ -842,7 +842,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder skipIfEmpty(boolean value) {
-			this.skipIfEmpty = value;
+			skipIfEmpty = value;
 			return this;
 		}
 
@@ -853,7 +853,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder t(String value) {
-			this.t = value;
+			t = value;
 			return this;
 		}
 
@@ -864,7 +864,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder title(String value) {
-			this.title = value;
+			title = value;
 			return this;
 		}
 
@@ -875,7 +875,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder type(String value) {
-			this.type = value;
+			type = value;
 			return this;
 		}
 
@@ -886,7 +886,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder ui(boolean value) {
-			this.ui = value;
+			ui = value;
 			return this;
 		}
 
@@ -897,7 +897,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder unevaluatedItems(String...value) {
-			this.unevaluatedItems = value;
+			unevaluatedItems = value;
 			return this;
 		}
 
@@ -908,7 +908,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder unevaluatedProperties(String...value) {
-			this.unevaluatedProperties = value;
+			unevaluatedProperties = value;
 			return this;
 		}
 
@@ -919,7 +919,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder uniqueItems(boolean value) {
-			this.uniqueItems = value;
+			uniqueItems = value;
 			return this;
 		}
 
@@ -930,7 +930,7 @@ public class SchemaAnnotation {
 		 * @return This object.
 		 */
 		public Builder xml(String...value) {
-			this.xml = value;
+			xml = value;
 			return this;
 		}
 

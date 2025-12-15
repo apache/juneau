@@ -142,7 +142,7 @@ public class Person extends Common {
 	 * @return This object.
 	 */
 	public Person setEmail(String value) {
-		this.email = value;
+		email = value;
 		return this;
 	}
 
@@ -169,7 +169,7 @@ public class Person extends Common {
 	 * @return This object.
 	 */
 	public Person setName(String value) {
-		this.name = value;
+		name = value;
 		return this;
 	}
 

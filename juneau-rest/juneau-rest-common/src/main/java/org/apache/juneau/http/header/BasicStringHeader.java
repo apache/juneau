@@ -124,7 +124,7 @@ public class BasicStringHeader extends BasicHeader {
 	public BasicStringHeader(String name, Supplier<String> value) {
 		super(name, null);
 		this.value = null;
-		this.supplier = value;
+		supplier = value;
 	}
 
 	/**

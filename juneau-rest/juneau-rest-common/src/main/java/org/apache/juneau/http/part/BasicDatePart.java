@@ -93,7 +93,7 @@ public class BasicDatePart extends BasicPart {
 	public BasicDatePart(String name, Supplier<ZonedDateTime> value) {
 		super(name, value);
 		this.value = null;
-		this.supplier = value;
+		supplier = value;
 	}
 
 	/**

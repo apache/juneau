@@ -753,7 +753,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @return This object.
 	 */
 	public RestResponse setMaxHeaderLength(int value) {
-		this.maxHeaderLength = value;
+		maxHeaderLength = value;
 		return this;
 	}
 

@@ -57,393 +57,393 @@ public class ItemsAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder default_(String...value) {
-			this.default_ = value;
-			return this;
-		}
+	public Builder default_(String...value) {
+		default_ = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#enum_} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder enum_(String...value) {
-			this.enum_ = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#enum_} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder enum_(String...value) {
+		enum_ = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#$ref} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder $ref(String value) {
-			this.$ref = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#$ref} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder $ref(String value) {
+		$ref = value;
+		return this;
+	}
 
-		/**
-		 * Instantiates a new {@link Items @Items} object initialized with this builder.
-		 *
-		 * @return A new {@link Items @Items} object.
-		 */
-		public Items build() {
-			return new Object(this);
-		}
+	/**
+	 * Instantiates a new {@link Items @Items} object initialized with this builder.
+	 *
+	 * @return A new {@link Items @Items} object.
+	 */
+	public Items build() {
+		return new Object(this);
+	}
 
-		/**
-		 * Sets the description property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder description(String...value) {
-			this.description = value;
-			return this;
-		}
+	/**
+	 * Sets the description property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder description(String...value) {
+		description = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#cf} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder cf(String value) {
-			this.cf = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#cf} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder cf(String value) {
+		cf = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#collectionFormat} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder collectionFormat(String value) {
-			this.collectionFormat = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#collectionFormat} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder collectionFormat(String value) {
+		collectionFormat = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#df} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder df(String...value) {
-			this.df = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#df} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder df(String...value) {
+		df = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#e} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder e(String...value) {
-			this.e = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#e} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder e(String...value) {
+		e = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#emax} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder emax(boolean value) {
-			this.emax = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#emax} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder emax(boolean value) {
+		emax = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#emin} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder emin(boolean value) {
-			this.emin = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#emin} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder emin(boolean value) {
+		emin = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#exclusiveMaximum} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder exclusiveMaximum(boolean value) {
-			this.exclusiveMaximum = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#exclusiveMaximum} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder exclusiveMaximum(boolean value) {
+		exclusiveMaximum = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#exclusiveMinimum} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder exclusiveMinimum(boolean value) {
-			this.exclusiveMinimum = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#exclusiveMinimum} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder exclusiveMinimum(boolean value) {
+		exclusiveMinimum = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#f} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder f(String value) {
-			this.f = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#f} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder f(String value) {
+		f = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#format} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder format(String value) {
-			this.format = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#format} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder format(String value) {
+		format = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#items} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder items(SubItems value) {
-			this.items = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#items} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder items(SubItems value) {
+		items = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#max} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder max(String value) {
-			this.max = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#max} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder max(String value) {
+		max = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#maxi} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder maxi(long value) {
-			this.maxi = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#maxi} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder maxi(long value) {
+		maxi = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#maximum} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder maximum(String value) {
-			this.maximum = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#maximum} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder maximum(String value) {
+		maximum = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#maxItems} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder maxItems(long value) {
-			this.maxItems = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#maxItems} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder maxItems(long value) {
+		maxItems = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#maxl} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder maxl(long value) {
-			this.maxl = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#maxl} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder maxl(long value) {
+		maxl = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#maxLength} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder maxLength(long value) {
-			this.maxLength = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#maxLength} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder maxLength(long value) {
+		maxLength = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#min} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder min(String value) {
-			this.min = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#min} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder min(String value) {
+		min = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#mini} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder mini(long value) {
-			this.mini = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#mini} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder mini(long value) {
+		mini = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#minimum} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder minimum(String value) {
-			this.minimum = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#minimum} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder minimum(String value) {
+		minimum = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#minItems} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder minItems(long value) {
-			this.minItems = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#minItems} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder minItems(long value) {
+		minItems = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#minl} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder minl(long value) {
-			this.minl = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#minl} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder minl(long value) {
+		minl = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#minLength} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder minLength(long value) {
-			this.minLength = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#minLength} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder minLength(long value) {
+		minLength = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#mo} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder mo(String value) {
-			this.mo = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#mo} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder mo(String value) {
+		mo = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#multipleOf} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder multipleOf(String value) {
-			this.multipleOf = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#multipleOf} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder multipleOf(String value) {
+		multipleOf = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#p} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder p(String value) {
-			this.p = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#p} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder p(String value) {
+		p = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#pattern} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder pattern(String value) {
-			this.pattern = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#pattern} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder pattern(String value) {
+		pattern = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#t} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder t(String value) {
-			this.t = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#t} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder t(String value) {
+		t = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#type} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder type(String value) {
-			this.type = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#type} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder type(String value) {
+		type = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#ui} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder ui(boolean value) {
-			this.ui = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#ui} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder ui(boolean value) {
+		ui = value;
+		return this;
+	}
 
-		/**
-		 * Sets the {@link Items#uniqueItems} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder uniqueItems(boolean value) {
-			this.uniqueItems = value;
-			return this;
-		}
+	/**
+	 * Sets the {@link Items#uniqueItems} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Builder uniqueItems(boolean value) {
+		uniqueItems = value;
+		return this;
+	}
 
 	}
 

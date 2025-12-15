@@ -122,7 +122,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	public BasicMediaTypeHeader(String name, Supplier<MediaType> value) {
 		super(name, (String)null);
 		this.value = null;
-		this.supplier = value;
+		supplier = value;
 	}
 
 	/**

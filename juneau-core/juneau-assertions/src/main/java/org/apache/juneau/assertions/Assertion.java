@@ -136,7 +136,7 @@ public class Assertion {
 	 * @return This object.
 	 */
 	public Assertion setOut(PrintStream value) {
-		this.out = value;
+		out = value;
 		return this;
 	}
 
@@ -188,7 +188,7 @@ public class Assertion {
 	 * @return This object.
 	 */
 	public Assertion setThrowable(Class<? extends RuntimeException> value) {
-		this.throwable = value;
+		throwable = value;
 		return this;
 	}
 

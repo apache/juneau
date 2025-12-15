@@ -180,7 +180,7 @@ public class IfRange extends BasicDateHeader {
 	public IfRange(Supplier<?> value) {
 		super(NAME, (String)null);
 		this.value = null;
-		this.supplier = value;
+		supplier = value;
 	}
 
 	/**

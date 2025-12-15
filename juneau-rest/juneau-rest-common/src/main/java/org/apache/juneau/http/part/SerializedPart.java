@@ -178,7 +178,7 @@ public class SerializedPart extends BasicPart {
 	 * @return This object.
 	 */
 	public SerializedPart schema(HttpPartSchema value) {
-		this.schema = value;
+		schema = value;
 		return this;
 	}
 
@@ -221,7 +221,7 @@ public class SerializedPart extends BasicPart {
 	 * @return This object.
 	 */
 	public SerializedPart skipIfEmpty(boolean value) {
-		this.skipIfEmpty = value;
+		skipIfEmpty = value;
 		return this;
 	}
 

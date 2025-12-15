@@ -128,7 +128,7 @@ public class Id extends Common {
 	 * @return This object
 	 */
 	public Id setText(String value) {
-		this.text = value;
+		text = value;
 		return this;
 	}
 }

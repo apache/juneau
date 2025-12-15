@@ -171,7 +171,7 @@ public class Serializer extends BeanTraverseContext {
 		 * @return This object.
 		 */
 		public Builder accept(String value) {
-			this.accept = value;
+			accept = value;
 			return this;
 		}
 
@@ -795,7 +795,7 @@ public class Serializer extends BeanTraverseContext {
 		 * @return This object.
 		 */
 		public Builder produces(String value) {
-			this.produces = value;
+			produces = value;
 			return this;
 		}
 

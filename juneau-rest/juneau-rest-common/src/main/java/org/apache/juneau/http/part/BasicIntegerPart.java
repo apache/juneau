@@ -101,7 +101,7 @@ public class BasicIntegerPart extends BasicPart {
 	public BasicIntegerPart(String name, Supplier<Integer> value) {
 		super(name, value);
 		this.value = null;
-		this.supplier = value;
+		supplier = value;
 	}
 
 	/**

@@ -969,7 +969,7 @@ public class JsonList extends LinkedList<Object> {
 	 * @return This object.
 	 */
 	public JsonList setBeanSession(BeanSession value) {
-		this.session = value;
+		session = value;
 		return this;
 	}
 

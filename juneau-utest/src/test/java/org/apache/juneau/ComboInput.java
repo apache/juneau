@@ -96,87 +96,87 @@ public class ComboInput<T> {
 	}
 
 	public ComboInput<T> json(String value) {
-		this.json = value;
+		json = value;
 		return this;
 	}
 	public ComboInput<T> jsonT(String value) {
-		this.jsonT = value;
+		jsonT = value;
 		return this;
 	}
 	public ComboInput<T> jsonR(String value) {
-		this.jsonR = value;
+		jsonR = value;
 		return this;
 	}
 	public ComboInput<T> xml(String value) {
-		this.xml = value;
+		xml = value;
 		return this;
 	}
 	public ComboInput<T> xmlT(String value) {
-		this.xmlT = value;
+		xmlT = value;
 		return this;
 	}
 	public ComboInput<T> xmlR(String value) {
-		this.xmlR = value;
+		xmlR = value;
 		return this;
 	}
 	public ComboInput<T> xmlNs(String value) {
-		this.xmlNs = value;
+		xmlNs = value;
 		return this;
 	}
 	public ComboInput<T> html(String value) {
-		this.html = value;
+		html = value;
 		return this;
 	}
 	public ComboInput<T> htmlT(String value) {
-		this.htmlT = value;
+		htmlT = value;
 		return this;
 	}
 	public ComboInput<T> htmlR(String value) {
-		this.htmlR = value;
+		htmlR = value;
 		return this;
 	}
 	public ComboInput<T> uon(String value) {
-		this.uon = value;
+		uon = value;
 		return this;
 	}
 	public ComboInput<T> uonT(String value) {
-		this.uonT = value;
+		uonT = value;
 		return this;
 	}
 	public ComboInput<T> uonR(String value) {
-		this.uonR = value;
+		uonR = value;
 		return this;
 	}
 	public ComboInput<T> urlEnc(String value) {
-		this.urlEncoding = value;
+		urlEncoding = value;
 		return this;
 	}
 	public ComboInput<T> urlEncT(String value) {
-		this.urlEncodingT = value;
+		urlEncodingT = value;
 		return this;
 	}
 	public ComboInput<T> urlEncR(String value) {
-		this.urlEncodingR = value;
+		urlEncodingR = value;
 		return this;
 	}
 	public ComboInput<T> msgPack(String value) {
-		this.msgPack = value;
+		msgPack = value;
 		return this;
 	}
 	public ComboInput<T> msgPackT(String value) {
-		this.msgPackT = value;
+		msgPackT = value;
 		return this;
 	}
 	public ComboInput<T> rdfXml(String value) {
-		this.rdfXml = value;
+		rdfXml = value;
 		return this;
 	}
 	public ComboInput<T> rdfXmlT(String value) {
-		this.rdfXmlT = value;
+		rdfXmlT = value;
 		return this;
 	}
 	public ComboInput<T> rdfXmlR(String value) {
-		this.rdfXmlR = value;
+		rdfXmlR = value;
 		return this;
 	}
 

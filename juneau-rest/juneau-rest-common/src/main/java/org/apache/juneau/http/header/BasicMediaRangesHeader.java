@@ -103,7 +103,7 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 	 */
 	public BasicMediaRangesHeader(String name, String value) {
 		super(name, value);
-		this.stringValue = value;
+		stringValue = value;
 		this.value = parse(value);
 		this.supplier = null;
 	}
@@ -124,7 +124,7 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 		super(name, (String)null);
 		this.stringValue = null;
 		this.value = null;
-		this.supplier = value;
+		supplier = value;
 	}
 
 	/**

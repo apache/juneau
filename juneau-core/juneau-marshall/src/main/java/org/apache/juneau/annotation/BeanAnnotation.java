@@ -116,7 +116,7 @@ public class BeanAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -127,7 +127,7 @@ public class BeanAnnotation {
 		 * @return This object.
 		 */
 		public Builder dictionary(Class<?>...value) {
-			this.dictionary = value;
+			dictionary = value;
 			return this;
 		}
 
@@ -138,7 +138,7 @@ public class BeanAnnotation {
 		 * @return This object.
 		 */
 		public Builder example(String value) {
-			this.example = value;
+			example = value;
 			return this;
 		}
 
@@ -149,7 +149,7 @@ public class BeanAnnotation {
 		 * @return This object.
 		 */
 		public Builder excludeProperties(String value) {
-			this.excludeProperties = value;
+			excludeProperties = value;
 			return this;
 		}
 
@@ -160,7 +160,7 @@ public class BeanAnnotation {
 		 * @return This object.
 		 */
 		public Builder findFluentSetters(boolean value) {
-			this.findFluentSetters = value;
+			findFluentSetters = value;
 			return this;
 		}
 
@@ -171,7 +171,7 @@ public class BeanAnnotation {
 		 * @return This object.
 		 */
 		public Builder implClass(Class<?> value) {
-			this.implClass = value;
+			implClass = value;
 			return this;
 		}
 
@@ -182,7 +182,7 @@ public class BeanAnnotation {
 		 * @return This object.
 		 */
 		public Builder interceptor(Class<? extends BeanInterceptor<?>> value) {
-			this.interceptor = value;
+			interceptor = value;
 			return this;
 		}
 
@@ -193,7 +193,7 @@ public class BeanAnnotation {
 		 * @return This object.
 		 */
 		public Builder interfaceClass(Class<?> value) {
-			this.interfaceClass = value;
+			interfaceClass = value;
 			return this;
 		}
 
@@ -204,7 +204,7 @@ public class BeanAnnotation {
 		 * @return This object.
 		 */
 		public Builder p(String value) {
-			this.p = value;
+			p = value;
 			return this;
 		}
 
@@ -215,7 +215,7 @@ public class BeanAnnotation {
 		 * @return This object.
 		 */
 		public Builder properties(String value) {
-			this.properties = value;
+			properties = value;
 			return this;
 		}
 
@@ -226,7 +226,7 @@ public class BeanAnnotation {
 		 * @return This object.
 		 */
 		public Builder propertyNamer(Class<? extends PropertyNamer> value) {
-			this.propertyNamer = value;
+			propertyNamer = value;
 			return this;
 		}
 
@@ -237,7 +237,7 @@ public class BeanAnnotation {
 		 * @return This object.
 		 */
 		public Builder readOnlyProperties(String value) {
-			this.readOnlyProperties = value;
+			readOnlyProperties = value;
 			return this;
 		}
 
@@ -248,7 +248,7 @@ public class BeanAnnotation {
 		 * @return This object.
 		 */
 		public Builder ro(String value) {
-			this.ro = value;
+			ro = value;
 			return this;
 		}
 
@@ -259,7 +259,7 @@ public class BeanAnnotation {
 		 * @return This object.
 		 */
 		public Builder sort(boolean value) {
-			this.sort = value;
+			sort = value;
 			return this;
 		}
 
@@ -270,7 +270,7 @@ public class BeanAnnotation {
 		 * @return This object.
 		 */
 		public Builder stopClass(Class<?> value) {
-			this.stopClass = value;
+			stopClass = value;
 			return this;
 		}
 
@@ -281,7 +281,7 @@ public class BeanAnnotation {
 		 * @return This object.
 		 */
 		public Builder typeName(String value) {
-			this.typeName = value;
+			typeName = value;
 			return this;
 		}
 
@@ -292,7 +292,7 @@ public class BeanAnnotation {
 		 * @return This object.
 		 */
 		public Builder typePropertyName(String value) {
-			this.typePropertyName = value;
+			typePropertyName = value;
 			return this;
 		}
 
@@ -303,7 +303,7 @@ public class BeanAnnotation {
 		 * @return This object.
 		 */
 		public Builder wo(String value) {
-			this.wo = value;
+			wo = value;
 			return this;
 		}
 
@@ -314,7 +314,7 @@ public class BeanAnnotation {
 		 * @return This object.
 		 */
 		public Builder writeOnlyProperties(String value) {
-			this.writeOnlyProperties = value;
+			writeOnlyProperties = value;
 			return this;
 		}
 
@@ -325,7 +325,7 @@ public class BeanAnnotation {
 		 * @return This object.
 		 */
 		public Builder xp(String value) {
-			this.xp = value;
+			xp = value;
 			return this;
 		}
 

@@ -2619,7 +2619,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		public Builder httpClient(CloseableHttpClient value) {
-			this.httpClient = value;
+			httpClient = value;
 			return this;
 		}
 
@@ -2653,7 +2653,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		public Builder httpClientBuilder(HttpClientBuilder value) {
-			this.httpClientBuilder = value;
+			httpClientBuilder = value;
 			return this;
 		}
 

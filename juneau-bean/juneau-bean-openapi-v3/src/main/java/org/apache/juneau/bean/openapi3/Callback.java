@@ -159,7 +159,7 @@ public class Callback extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Callback setCallbacks(Map<String,PathItem> value) {
-		this.callbacks = value;
+		callbacks = value;
 		return this;
 	}
 

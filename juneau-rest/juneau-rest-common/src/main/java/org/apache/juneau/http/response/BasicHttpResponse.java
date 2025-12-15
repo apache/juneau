@@ -187,7 +187,7 @@ public class BasicHttpResponse implements HttpResponse {
 	 */
 	public BasicHttpResponse setContent(HttpEntity value) {
 		assertModifiable();
-		this.content = value;
+		content = value;
 		return this;
 	}
 

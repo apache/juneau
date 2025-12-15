@@ -121,7 +121,7 @@ public class BasicUriHeader extends BasicHeader {
 	public BasicUriHeader(String name, Supplier<URI> value) {
 		super(name, null);
 		this.value = null;
-		this.supplier = value;
+		supplier = value;
 	}
 
 	/**

@@ -241,7 +241,7 @@ public class FileReaderBuilder {
 	 * @return This object for method chaining.
 	 */
 	public FileReaderBuilder file(File value) {
-		this.file = value;
+		file = value;
 		return this;
 	}
 

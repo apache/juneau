@@ -184,7 +184,7 @@ public class SerializerSession extends BeanTraverseSession {
 		 */
 		public Builder schema(HttpPartSchema value) {
 			if (nn(value))
-				this.schema = value;
+				schema = value;
 			return this;
 		}
 
@@ -198,7 +198,7 @@ public class SerializerSession extends BeanTraverseSession {
 		 */
 		public Builder schemaDefault(HttpPartSchema value) {
 			if (nn(value) && schema == null)
-				this.schema = value;
+				schema = value;
 			return this;
 		}
 

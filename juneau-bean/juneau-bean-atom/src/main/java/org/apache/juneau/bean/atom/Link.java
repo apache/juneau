@@ -211,7 +211,7 @@ public class Link extends Common {
 	 * @return This object.
 	 */
 	public Link setHref(String value) {
-		this.href = value;
+		href = value;
 		return this;
 	}
 
@@ -233,7 +233,7 @@ public class Link extends Common {
 	 * @return This object.
 	 */
 	public Link setHreflang(String value) {
-		this.hreflang = value;
+		hreflang = value;
 		return this;
 	}
 
@@ -262,7 +262,7 @@ public class Link extends Common {
 	 * @return This object.
 	 */
 	public Link setLength(Integer value) {
-		this.length = value;
+		length = value;
 		return this;
 	}
 
@@ -290,7 +290,7 @@ public class Link extends Common {
 	 * @return This object.
 	 */
 	public Link setRel(String value) {
-		this.rel = value;
+		rel = value;
 		return this;
 	}
 
@@ -312,7 +312,7 @@ public class Link extends Common {
 	 * @return This object.
 	 */
 	public Link setTitle(String value) {
-		this.title = value;
+		title = value;
 		return this;
 	}
 
@@ -339,7 +339,7 @@ public class Link extends Common {
 	 * @return This object
 	 */
 	public Link setType(String value) {
-		this.type = value;
+		type = value;
 		return this;
 	}
 }

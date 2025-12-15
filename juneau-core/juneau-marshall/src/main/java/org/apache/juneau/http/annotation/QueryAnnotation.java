@@ -119,7 +119,7 @@ public class QueryAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -130,7 +130,7 @@ public class QueryAnnotation {
 		 * @return This object.
 		 */
 		public Builder def(String value) {
-			this.def = value;
+			def = value;
 			return this;
 		}
 
@@ -141,7 +141,7 @@ public class QueryAnnotation {
 		 * @return This object.
 		 */
 		public Builder name(String value) {
-			this.name = value;
+			name = value;
 			return this;
 		}
 
@@ -152,7 +152,7 @@ public class QueryAnnotation {
 		 * @return This object.
 		 */
 		public Builder parser(Class<? extends HttpPartParser> value) {
-			this.parser = value;
+			parser = value;
 			return this;
 		}
 
@@ -163,7 +163,7 @@ public class QueryAnnotation {
 		 * @return This object.
 		 */
 		public Builder schema(Schema value) {
-			this.schema = value;
+			schema = value;
 			return this;
 		}
 
@@ -174,7 +174,7 @@ public class QueryAnnotation {
 		 * @return This object.
 		 */
 		public Builder serializer(Class<? extends HttpPartSerializer> value) {
-			this.serializer = value;
+			serializer = value;
 			return this;
 		}
 

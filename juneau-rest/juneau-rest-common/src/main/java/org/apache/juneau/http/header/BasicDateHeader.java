@@ -125,7 +125,7 @@ public class BasicDateHeader extends BasicHeader {
 	public BasicDateHeader(String name, Supplier<ZonedDateTime> value) {
 		super(name, null);
 		this.value = null;
-		this.supplier = value;
+		supplier = value;
 	}
 
 	/**

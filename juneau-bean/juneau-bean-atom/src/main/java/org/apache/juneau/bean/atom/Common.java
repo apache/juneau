@@ -155,7 +155,7 @@ public abstract class Common {
 	 * @return This object.
 	 */
 	public Common setLang(String value) {
-		this.lang = value;
+		lang = value;
 		return this;
 	}
 

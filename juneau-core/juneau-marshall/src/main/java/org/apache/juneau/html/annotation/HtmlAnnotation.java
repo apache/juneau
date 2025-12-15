@@ -107,7 +107,7 @@ public class HtmlAnnotation {
 		 * @return This object.
 		 */
 		public Builder anchorText(String value) {
-			this.anchorText = value;
+			anchorText = value;
 			return this;
 		}
 
@@ -127,7 +127,7 @@ public class HtmlAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -138,7 +138,7 @@ public class HtmlAnnotation {
 		 * @return This object.
 		 */
 		public Builder format(HtmlFormat value) {
-			this.format = value;
+			format = value;
 			return this;
 		}
 
@@ -149,7 +149,7 @@ public class HtmlAnnotation {
 		 * @return This object.
 		 */
 		public Builder link(String value) {
-			this.link = value;
+			link = value;
 			return this;
 		}
 
@@ -160,7 +160,7 @@ public class HtmlAnnotation {
 		 * @return This object.
 		 */
 		public Builder noTableHeaders(boolean value) {
-			this.noTableHeaders = value;
+			noTableHeaders = value;
 			return this;
 		}
 
@@ -171,7 +171,7 @@ public class HtmlAnnotation {
 		 * @return This object.
 		 */
 		public Builder noTables(boolean value) {
-			this.noTables = value;
+			noTables = value;
 			return this;
 		}
 
@@ -182,7 +182,7 @@ public class HtmlAnnotation {
 		 * @return This object.
 		 */
 		public Builder render(Class<? extends HtmlRender> value) {
-			this.render = value;
+			render = value;
 			return this;
 		}
 
@@ -193,7 +193,7 @@ public class HtmlAnnotation {
 		 * @return This object.
 		 */
 		public Builder style(String value) {
-			this.style = value;
+			style = value;
 			return this;
 		}
 

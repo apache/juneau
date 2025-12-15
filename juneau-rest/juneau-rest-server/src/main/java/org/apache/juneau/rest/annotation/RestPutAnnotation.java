@@ -87,7 +87,7 @@ public class RestPutAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -98,7 +98,7 @@ public class RestPutAnnotation {
 		 * @return This object.
 		 */
 		public Builder clientVersion(String value) {
-			this.clientVersion = value;
+			clientVersion = value;
 			return this;
 		}
 
@@ -109,7 +109,7 @@ public class RestPutAnnotation {
 		 * @return This object.
 		 */
 		public Builder consumes(String...value) {
-			this.consumes = value;
+			consumes = value;
 			return this;
 		}
 
@@ -121,7 +121,7 @@ public class RestPutAnnotation {
 		 */
 		@SafeVarargs
 		public final Builder converters(Class<? extends RestConverter>...value) {
-			this.converters = value;
+			converters = value;
 			return this;
 		}
 
@@ -132,7 +132,7 @@ public class RestPutAnnotation {
 		 * @return This object.
 		 */
 		public Builder debug(String value) {
-			this.debug = value;
+			debug = value;
 			return this;
 		}
 
@@ -143,7 +143,7 @@ public class RestPutAnnotation {
 		 * @return This object.
 		 */
 		public Builder defaultAccept(String value) {
-			this.defaultAccept = value;
+			defaultAccept = value;
 			return this;
 		}
 
@@ -154,7 +154,7 @@ public class RestPutAnnotation {
 		 * @return This object.
 		 */
 		public Builder defaultCharset(String value) {
-			this.defaultCharset = value;
+			defaultCharset = value;
 			return this;
 		}
 
@@ -165,7 +165,7 @@ public class RestPutAnnotation {
 		 * @return This object.
 		 */
 		public Builder defaultContentType(String value) {
-			this.defaultContentType = value;
+			defaultContentType = value;
 			return this;
 		}
 
@@ -176,7 +176,7 @@ public class RestPutAnnotation {
 		 * @return This object.
 		 */
 		public Builder defaultRequestAttributes(String...value) {
-			this.defaultRequestAttributes = value;
+			defaultRequestAttributes = value;
 			return this;
 		}
 
@@ -187,7 +187,7 @@ public class RestPutAnnotation {
 		 * @return This object.
 		 */
 		public Builder defaultRequestFormData(String...value) {
-			this.defaultRequestFormData = value;
+			defaultRequestFormData = value;
 			return this;
 		}
 
@@ -198,7 +198,7 @@ public class RestPutAnnotation {
 		 * @return This object.
 		 */
 		public Builder defaultRequestHeaders(String...value) {
-			this.defaultRequestHeaders = value;
+			defaultRequestHeaders = value;
 			return this;
 		}
 
@@ -209,7 +209,7 @@ public class RestPutAnnotation {
 		 * @return This object.
 		 */
 		public Builder defaultRequestQueryData(String...value) {
-			this.defaultRequestQueryData = value;
+			defaultRequestQueryData = value;
 			return this;
 		}
 
@@ -220,7 +220,7 @@ public class RestPutAnnotation {
 		 * @return This object.
 		 */
 		public Builder defaultResponseHeaders(String...value) {
-			this.defaultResponseHeaders = value;
+			defaultResponseHeaders = value;
 			return this;
 		}
 
@@ -232,7 +232,7 @@ public class RestPutAnnotation {
 		 */
 		@SafeVarargs
 		public final Builder encoders(Class<? extends Encoder>...value) {
-			this.encoders = value;
+			encoders = value;
 			return this;
 		}
 
@@ -244,7 +244,7 @@ public class RestPutAnnotation {
 		 */
 		@SafeVarargs
 		public final Builder guards(Class<? extends RestGuard>...value) {
-			this.guards = value;
+			guards = value;
 			return this;
 		}
 
@@ -256,7 +256,7 @@ public class RestPutAnnotation {
 		 */
 		@SafeVarargs
 		public final Builder matchers(Class<? extends RestMatcher>...value) {
-			this.matchers = value;
+			matchers = value;
 			return this;
 		}
 
@@ -267,7 +267,7 @@ public class RestPutAnnotation {
 		 * @return This object.
 		 */
 		public Builder maxInput(String value) {
-			this.maxInput = value;
+			maxInput = value;
 			return this;
 		}
 
@@ -278,7 +278,7 @@ public class RestPutAnnotation {
 		 * @return This object.
 		 */
 		public Builder parsers(Class<?>...value) {
-			this.parsers = value;
+			parsers = value;
 			return this;
 		}
 
@@ -289,7 +289,7 @@ public class RestPutAnnotation {
 		 * @return This object.
 		 */
 		public Builder path(String...value) {
-			this.path = value;
+			path = value;
 			return this;
 		}
 
@@ -300,7 +300,7 @@ public class RestPutAnnotation {
 		 * @return This object.
 		 */
 		public Builder produces(String...value) {
-			this.produces = value;
+			produces = value;
 			return this;
 		}
 
@@ -311,7 +311,7 @@ public class RestPutAnnotation {
 		 * @return This object.
 		 */
 		public Builder roleGuard(String value) {
-			this.roleGuard = value;
+			roleGuard = value;
 			return this;
 		}
 
@@ -322,7 +322,7 @@ public class RestPutAnnotation {
 		 * @return This object.
 		 */
 		public Builder rolesDeclared(String value) {
-			this.rolesDeclared = value;
+			rolesDeclared = value;
 			return this;
 		}
 
@@ -334,7 +334,7 @@ public class RestPutAnnotation {
 		 */
 		@SafeVarargs
 		public final Builder serializers(Class<? extends Serializer>...value) {
-			this.serializers = value;
+			serializers = value;
 			return this;
 		}
 
@@ -345,7 +345,7 @@ public class RestPutAnnotation {
 		 * @return This object.
 		 */
 		public Builder summary(String value) {
-			this.summary = value;
+			summary = value;
 			return this;
 		}
 
@@ -356,7 +356,7 @@ public class RestPutAnnotation {
 		 * @return This object.
 		 */
 		public Builder swagger(OpSwagger value) {
-			this.swagger = value;
+			swagger = value;
 			return this;
 		}
 

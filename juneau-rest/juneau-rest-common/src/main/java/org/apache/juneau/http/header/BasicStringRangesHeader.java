@@ -104,7 +104,7 @@ public class BasicStringRangesHeader extends BasicHeader {
 	 */
 	public BasicStringRangesHeader(String name, String value) {
 		super(name, value);
-		this.stringValue = value;
+		stringValue = value;
 		this.value = StringRanges.of(value);
 		this.supplier = null;
 	}
@@ -141,7 +141,7 @@ public class BasicStringRangesHeader extends BasicHeader {
 		super(name, null);
 		this.stringValue = null;
 		this.value = null;
-		this.supplier = value;
+		supplier = value;
 	}
 
 	/**

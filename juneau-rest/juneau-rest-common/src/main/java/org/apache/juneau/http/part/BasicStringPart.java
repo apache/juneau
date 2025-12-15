@@ -85,7 +85,7 @@ public class BasicStringPart extends BasicPart {
 	public BasicStringPart(String name, Supplier<String> value) {
 		super(name, value);
 		this.value = null;
-		this.supplier = value;
+		supplier = value;
 	}
 
 	/**

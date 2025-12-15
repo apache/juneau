@@ -108,7 +108,7 @@ public class BeancAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -119,7 +119,7 @@ public class BeancAnnotation {
 		 * @return This object.
 		 */
 		public Builder properties(String value) {
-			this.properties = value;
+			properties = value;
 			return this;
 		}
 

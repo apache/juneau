@@ -237,7 +237,7 @@ public class Messages extends ResourceBundle {
 		 * @return This object.
 		 */
 		public Builder parent(Messages value) {
-			this.parent = value;
+			parent = value;
 			return this;
 		}
 

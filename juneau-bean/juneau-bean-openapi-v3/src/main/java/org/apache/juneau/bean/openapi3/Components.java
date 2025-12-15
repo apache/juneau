@@ -251,7 +251,7 @@ public class Components extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Components setCallbacks(Map<String,Callback> value) {
-		this.callbacks = value;
+		callbacks = value;
 		return this;
 	}
 
@@ -262,7 +262,7 @@ public class Components extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Components setExamples(Map<String,Example> value) {
-		this.examples = value;
+		examples = value;
 		return this;
 	}
 
@@ -273,7 +273,7 @@ public class Components extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Components setHeaders(Map<String,HeaderInfo> value) {
-		this.headers = value;
+		headers = value;
 		return this;
 	}
 
@@ -284,7 +284,7 @@ public class Components extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Components setLinks(Map<String,Link> value) {
-		this.links = value;
+		links = value;
 		return this;
 	}
 
@@ -295,7 +295,7 @@ public class Components extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Components setParameters(Map<String,Parameter> value) {
-		this.parameters = value;
+		parameters = value;
 		return this;
 	}
 
@@ -306,7 +306,7 @@ public class Components extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Components setRequestBodies(Map<String,RequestBodyInfo> value) {
-		this.requestBodies = value;
+		requestBodies = value;
 		return this;
 	}
 
@@ -317,7 +317,7 @@ public class Components extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Components setResponses(Map<String,Response> value) {
-		this.responses = value;
+		responses = value;
 		return this;
 	}
 
@@ -328,7 +328,7 @@ public class Components extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Components setSchemas(Map<String,SchemaInfo> value) {
-		this.schemas = value;
+		schemas = value;
 		return this;
 	}
 
@@ -339,7 +339,7 @@ public class Components extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Components setSecuritySchemes(Map<String,SecuritySchemeInfo> value) {
-		this.securitySchemes = value;
+		securitySchemes = value;
 		return this;
 	}
 

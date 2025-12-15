@@ -798,7 +798,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder httpMethod(String value) {
-			this.httpMethod = value;
+			httpMethod = value;
 			return this;
 		}
 

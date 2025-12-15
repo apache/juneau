@@ -111,7 +111,7 @@ public class JsonAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -122,7 +122,7 @@ public class JsonAnnotation {
 		 * @return This object.
 		 */
 		public Builder wrapperAttr(String value) {
-			this.wrapperAttr = value;
+			wrapperAttr = value;
 			return this;
 		}
 

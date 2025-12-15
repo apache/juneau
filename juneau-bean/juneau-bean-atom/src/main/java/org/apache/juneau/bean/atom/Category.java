@@ -147,7 +147,7 @@ public class Category extends Common {
 	 * @return This object
 	 */
 	public Category setLabel(String value) {
-		this.label = value;
+		label = value;
 		return this;
 	}
 
@@ -190,7 +190,7 @@ public class Category extends Common {
 	 */
 	@Xml(format = ATTR)
 	public Category setTerm(String value) {
-		this.term = value;
+		term = value;
 		return this;
 	}
 }

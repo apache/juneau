@@ -68,7 +68,7 @@ public class OpSwaggerAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -79,7 +79,7 @@ public class OpSwaggerAnnotation {
 		 * @return This object.
 		 */
 		public Builder consumes(String...value) {
-			this.consumes = value;
+			consumes = value;
 			return this;
 		}
 
@@ -90,7 +90,7 @@ public class OpSwaggerAnnotation {
 		 * @return This object.
 		 */
 		public Builder deprecated(String value) {
-			this.deprecated = value;
+			deprecated = value;
 			return this;
 		}
 
@@ -101,7 +101,7 @@ public class OpSwaggerAnnotation {
 		 * @return This object.
 		 */
 		public Builder externalDocs(ExternalDocs value) {
-			this.externalDocs = value;
+			externalDocs = value;
 			return this;
 		}
 
@@ -112,7 +112,7 @@ public class OpSwaggerAnnotation {
 		 * @return This object.
 		 */
 		public Builder operationId(String value) {
-			this.operationId = value;
+			operationId = value;
 			return this;
 		}
 
@@ -123,7 +123,7 @@ public class OpSwaggerAnnotation {
 		 * @return This object.
 		 */
 		public Builder parameters(String...value) {
-			this.parameters = value;
+			parameters = value;
 			return this;
 		}
 
@@ -134,7 +134,7 @@ public class OpSwaggerAnnotation {
 		 * @return This object.
 		 */
 		public Builder produces(String...value) {
-			this.produces = value;
+			produces = value;
 			return this;
 		}
 
@@ -145,7 +145,7 @@ public class OpSwaggerAnnotation {
 		 * @return This object.
 		 */
 		public Builder responses(String...value) {
-			this.responses = value;
+			responses = value;
 			return this;
 		}
 
@@ -156,7 +156,7 @@ public class OpSwaggerAnnotation {
 		 * @return This object.
 		 */
 		public Builder schemes(String...value) {
-			this.schemes = value;
+			schemes = value;
 			return this;
 		}
 
@@ -167,7 +167,7 @@ public class OpSwaggerAnnotation {
 		 * @return This object.
 		 */
 		public Builder summary(String...value) {
-			this.summary = value;
+			summary = value;
 			return this;
 		}
 
@@ -178,7 +178,7 @@ public class OpSwaggerAnnotation {
 		 * @return This object.
 		 */
 		public Builder tags(String...value) {
-			this.tags = value;
+			tags = value;
 			return this;
 		}
 

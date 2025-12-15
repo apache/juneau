@@ -81,7 +81,7 @@ public class RdfAnnotation {
 		 * @return This object.
 		 */
 		public Builder beanUri(boolean value) {
-			this.beanUri = value;
+			beanUri = value;
 			return this;
 		}
 
@@ -112,7 +112,7 @@ public class RdfAnnotation {
 		 * @return This object.
 		 */
 		public Builder namespace(String value) {
-			this.namespace = value;
+			namespace = value;
 			return this;
 		}
 

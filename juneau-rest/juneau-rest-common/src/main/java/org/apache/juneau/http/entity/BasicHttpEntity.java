@@ -235,7 +235,7 @@ public class BasicHttpEntity implements HttpEntity {
 	 */
 	public BasicHttpEntity setCharset(Charset value) {
 		assertModifiable();
-		this.charset = value;
+		charset = value;
 		return this;
 	}
 
@@ -278,7 +278,7 @@ public class BasicHttpEntity implements HttpEntity {
 	 */
 	public BasicHttpEntity setContent(Object value) {
 		assertModifiable();
-		this.content = value;
+		content = value;
 		return this;
 	}
 
@@ -365,7 +365,7 @@ public class BasicHttpEntity implements HttpEntity {
 	 */
 	public BasicHttpEntity setMaxLength(int value) {
 		assertModifiable();
-		this.maxLength = value;
+		maxLength = value;
 		return this;
 	}
 

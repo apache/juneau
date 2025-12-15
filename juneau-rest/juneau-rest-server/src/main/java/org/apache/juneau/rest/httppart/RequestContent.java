@@ -333,7 +333,7 @@ public class RequestContent {
 	 * @return This object.
 	 */
 	public RequestContent content(byte[] value) {
-		this.content = value;
+		content = value;
 		return this;
 	}
 
@@ -344,7 +344,7 @@ public class RequestContent {
 	 * @return This object.
 	 */
 	public RequestContent encoders(EncoderSet value) {
-		this.encoders = value;
+		encoders = value;
 		return this;
 	}
 
@@ -420,7 +420,7 @@ public class RequestContent {
 	 * @return This object.
 	 */
 	public RequestContent maxInput(long value) {
-		this.maxInput = value;
+		maxInput = value;
 		return this;
 	}
 
@@ -431,7 +431,7 @@ public class RequestContent {
 	 * @return This object.
 	 */
 	public RequestContent mediaType(MediaType value) {
-		this.mediaType = value;
+		mediaType = value;
 		return this;
 	}
 
@@ -442,7 +442,7 @@ public class RequestContent {
 	 * @return This object.
 	 */
 	public RequestContent parser(Parser value) {
-		this.parser = value;
+		parser = value;
 		return this;
 	}
 
@@ -453,7 +453,7 @@ public class RequestContent {
 	 * @return This object.
 	 */
 	public RequestContent parsers(ParserSet value) {
-		this.parsers = value;
+		parsers = value;
 		return this;
 	}
 

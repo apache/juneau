@@ -63,7 +63,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder default_(String...value) {
-			this.default_ = value;
+			default_ = value;
 			return this;
 		}
 
@@ -74,7 +74,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder enum_(String...value) {
-			this.enum_ = value;
+			enum_ = value;
 			return this;
 		}
 
@@ -105,7 +105,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -116,7 +116,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder cf(String value) {
-			this.cf = value;
+			cf = value;
 			return this;
 		}
 
@@ -127,7 +127,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder collectionFormat(String value) {
-			this.collectionFormat = value;
+			collectionFormat = value;
 			return this;
 		}
 
@@ -138,7 +138,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder df(String...value) {
-			this.df = value;
+			df = value;
 			return this;
 		}
 
@@ -149,7 +149,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder e(String...value) {
-			this.e = value;
+			e = value;
 			return this;
 		}
 
@@ -160,7 +160,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder emax(boolean value) {
-			this.emax = value;
+			emax = value;
 			return this;
 		}
 
@@ -171,7 +171,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder emin(boolean value) {
-			this.emin = value;
+			emin = value;
 			return this;
 		}
 
@@ -182,7 +182,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder exclusiveMaximum(boolean value) {
-			this.exclusiveMaximum = value;
+			exclusiveMaximum = value;
 			return this;
 		}
 
@@ -193,7 +193,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder exclusiveMinimum(boolean value) {
-			this.exclusiveMinimum = value;
+			exclusiveMinimum = value;
 			return this;
 		}
 
@@ -204,7 +204,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder f(String value) {
-			this.f = value;
+			f = value;
 			return this;
 		}
 
@@ -215,7 +215,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder format(String value) {
-			this.format = value;
+			format = value;
 			return this;
 		}
 
@@ -226,7 +226,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder items(String...value) {
-			this.items = value;
+			items = value;
 			return this;
 		}
 
@@ -237,7 +237,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder max(String value) {
-			this.max = value;
+			max = value;
 			return this;
 		}
 
@@ -248,7 +248,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder maxi(long value) {
-			this.maxi = value;
+			maxi = value;
 			return this;
 		}
 
@@ -259,7 +259,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder maximum(String value) {
-			this.maximum = value;
+			maximum = value;
 			return this;
 		}
 
@@ -270,7 +270,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder maxItems(long value) {
-			this.maxItems = value;
+			maxItems = value;
 			return this;
 		}
 
@@ -281,7 +281,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder maxl(long value) {
-			this.maxl = value;
+			maxl = value;
 			return this;
 		}
 
@@ -292,7 +292,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder maxLength(long value) {
-			this.maxLength = value;
+			maxLength = value;
 			return this;
 		}
 
@@ -303,7 +303,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder min(String value) {
-			this.min = value;
+			min = value;
 			return this;
 		}
 
@@ -314,7 +314,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder mini(long value) {
-			this.mini = value;
+			mini = value;
 			return this;
 		}
 
@@ -325,7 +325,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder minimum(String value) {
-			this.minimum = value;
+			minimum = value;
 			return this;
 		}
 
@@ -336,7 +336,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder minItems(long value) {
-			this.minItems = value;
+			minItems = value;
 			return this;
 		}
 
@@ -347,7 +347,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder minl(long value) {
-			this.minl = value;
+			minl = value;
 			return this;
 		}
 
@@ -358,7 +358,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder minLength(long value) {
-			this.minLength = value;
+			minLength = value;
 			return this;
 		}
 
@@ -369,7 +369,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder mo(String value) {
-			this.mo = value;
+			mo = value;
 			return this;
 		}
 
@@ -380,7 +380,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder multipleOf(String value) {
-			this.multipleOf = value;
+			multipleOf = value;
 			return this;
 		}
 
@@ -391,7 +391,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder p(String value) {
-			this.p = value;
+			p = value;
 			return this;
 		}
 
@@ -402,7 +402,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder pattern(String value) {
-			this.pattern = value;
+			pattern = value;
 			return this;
 		}
 
@@ -413,7 +413,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder t(String value) {
-			this.t = value;
+			t = value;
 			return this;
 		}
 
@@ -424,7 +424,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder type(String value) {
-			this.type = value;
+			type = value;
 			return this;
 		}
 
@@ -435,7 +435,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder ui(boolean value) {
-			this.ui = value;
+			ui = value;
 			return this;
 		}
 
@@ -446,7 +446,7 @@ public class SubItemsAnnotation {
 		 * @return This object.
 		 */
 		public Builder uniqueItems(boolean value) {
-			this.uniqueItems = value;
+			uniqueItems = value;
 			return this;
 		}
 

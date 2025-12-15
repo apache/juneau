@@ -749,7 +749,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ParameterInfo setExample(Object value) {
-		this.example = value;
+		example = value;
 		return this;
 	}
 
@@ -765,7 +765,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ParameterInfo setExamples(Map<String,String> value) {
-		this.examples = value;
+		examples = value;
 		return this;
 	}
 

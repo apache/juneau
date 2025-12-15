@@ -1099,7 +1099,7 @@ public class ResponseContent implements HttpEntity {
 	 * @return This object.
 	 */
 	public ResponseContent parser(Parser value) {
-		this.parser = value;
+		parser = value;
 		return this;
 	}
 
@@ -1254,7 +1254,7 @@ public class ResponseContent implements HttpEntity {
 	 * @return This object.
 	 */
 	public ResponseContent schema(HttpPartSchema value) {
-		this.schema = value;
+		schema = value;
 		return this;
 	}
 

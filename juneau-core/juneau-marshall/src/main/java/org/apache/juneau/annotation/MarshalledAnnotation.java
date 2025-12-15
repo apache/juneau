@@ -108,7 +108,7 @@ public class MarshalledAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -119,7 +119,7 @@ public class MarshalledAnnotation {
 		 * @return This object.
 		 */
 		public Builder example(String value) {
-			this.example = value;
+			example = value;
 			return this;
 		}
 
@@ -130,7 +130,7 @@ public class MarshalledAnnotation {
 		 * @return This object.
 		 */
 		public Builder implClass(Class<?> value) {
-			this.implClass = value;
+			implClass = value;
 			return this;
 		}
 

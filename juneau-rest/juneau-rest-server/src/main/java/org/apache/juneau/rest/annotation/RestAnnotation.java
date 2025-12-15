@@ -101,7 +101,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder allowedHeaderParams(String value) {
-			this.allowedHeaderParams = value;
+			allowedHeaderParams = value;
 			return this;
 		}
 
@@ -112,7 +112,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder allowedMethodHeaders(String value) {
-			this.allowedMethodHeaders = value;
+			allowedMethodHeaders = value;
 			return this;
 		}
 
@@ -123,7 +123,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder allowedMethodParams(String value) {
-			this.allowedMethodParams = value;
+			allowedMethodParams = value;
 			return this;
 		}
 
@@ -134,7 +134,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder beanStore(Class<? extends BeanStore> value) {
-			this.beanStore = value;
+			beanStore = value;
 			return this;
 		}
 
@@ -154,7 +154,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -165,7 +165,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder callLogger(Class<? extends CallLogger> value) {
-			this.callLogger = value;
+			callLogger = value;
 			return this;
 		}
 
@@ -176,7 +176,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder children(Class<?>...value) {
-			this.children = value;
+			children = value;
 			return this;
 		}
 
@@ -187,7 +187,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder clientVersionHeader(String value) {
-			this.clientVersionHeader = value;
+			clientVersionHeader = value;
 			return this;
 		}
 
@@ -198,7 +198,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder config(String value) {
-			this.config = value;
+			config = value;
 			return this;
 		}
 
@@ -209,7 +209,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder consumes(String...value) {
-			this.consumes = value;
+			consumes = value;
 			return this;
 		}
 
@@ -221,7 +221,7 @@ public class RestAnnotation {
 		 */
 		@SafeVarargs
 		public final Builder converters(Class<? extends RestConverter>...value) {
-			this.converters = value;
+			converters = value;
 			return this;
 		}
 
@@ -232,7 +232,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder debug(String value) {
-			this.debug = value;
+			debug = value;
 			return this;
 		}
 
@@ -243,7 +243,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder debugEnablement(Class<? extends DebugEnablement> value) {
-			this.debugEnablement = value;
+			debugEnablement = value;
 			return this;
 		}
 
@@ -254,7 +254,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder debugOn(String value) {
-			this.debugOn = value;
+			debugOn = value;
 			return this;
 		}
 
@@ -265,7 +265,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder defaultAccept(String value) {
-			this.defaultAccept = value;
+			defaultAccept = value;
 			return this;
 		}
 
@@ -276,7 +276,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder defaultCharset(String value) {
-			this.defaultCharset = value;
+			defaultCharset = value;
 			return this;
 		}
 
@@ -287,7 +287,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder defaultContentType(String value) {
-			this.defaultContentType = value;
+			defaultContentType = value;
 			return this;
 		}
 
@@ -298,7 +298,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder defaultRequestAttributes(String...value) {
-			this.defaultRequestAttributes = value;
+			defaultRequestAttributes = value;
 			return this;
 		}
 
@@ -309,7 +309,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder defaultRequestHeaders(String...value) {
-			this.defaultRequestHeaders = value;
+			defaultRequestHeaders = value;
 			return this;
 		}
 
@@ -320,7 +320,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder defaultResponseHeaders(String...value) {
-			this.defaultResponseHeaders = value;
+			defaultResponseHeaders = value;
 			return this;
 		}
 
@@ -331,7 +331,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder disableContentParam(String value) {
-			this.disableContentParam = value;
+			disableContentParam = value;
 			return this;
 		}
 
@@ -343,7 +343,7 @@ public class RestAnnotation {
 		 */
 		@SafeVarargs
 		public final Builder encoders(Class<? extends Encoder>...value) {
-			this.encoders = value;
+			encoders = value;
 			return this;
 		}
 
@@ -355,7 +355,7 @@ public class RestAnnotation {
 		 */
 		@SafeVarargs
 		public final Builder guards(Class<? extends RestGuard>...value) {
-			this.guards = value;
+			guards = value;
 			return this;
 		}
 
@@ -366,7 +366,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder maxInput(String value) {
-			this.maxInput = value;
+			maxInput = value;
 			return this;
 		}
 
@@ -377,7 +377,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder messages(String value) {
-			this.messages = value;
+			messages = value;
 			return this;
 		}
 
@@ -388,7 +388,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder parsers(Class<?>...value) {
-			this.parsers = value;
+			parsers = value;
 			return this;
 		}
 
@@ -399,7 +399,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder partParser(Class<? extends HttpPartParser> value) {
-			this.partParser = value;
+			partParser = value;
 			return this;
 		}
 
@@ -410,7 +410,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder partSerializer(Class<? extends HttpPartSerializer> value) {
-			this.partSerializer = value;
+			partSerializer = value;
 			return this;
 		}
 
@@ -421,7 +421,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder path(String value) {
-			this.path = value;
+			path = value;
 			return this;
 		}
 
@@ -432,7 +432,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder produces(String...value) {
-			this.produces = value;
+			produces = value;
 			return this;
 		}
 
@@ -443,7 +443,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder renderResponseStackTraces(String value) {
-			this.renderResponseStackTraces = value;
+			renderResponseStackTraces = value;
 			return this;
 		}
 
@@ -455,7 +455,7 @@ public class RestAnnotation {
 		 */
 		@SafeVarargs
 		public final Builder responseProcessors(Class<? extends ResponseProcessor>...value) {
-			this.responseProcessors = value;
+			responseProcessors = value;
 			return this;
 		}
 
@@ -466,7 +466,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder restChildrenClass(Class<? extends RestChildren> value) {
-			this.restChildrenClass = value;
+			restChildrenClass = value;
 			return this;
 		}
 
@@ -478,7 +478,7 @@ public class RestAnnotation {
 		 */
 		@SafeVarargs
 		public final Builder restOpArgs(Class<? extends RestOpArg>...value) {
-			this.restOpArgs = value;
+			restOpArgs = value;
 			return this;
 		}
 
@@ -489,7 +489,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder restOperationsClass(Class<? extends RestOperations> value) {
-			this.restOperationsClass = value;
+			restOperationsClass = value;
 			return this;
 		}
 
@@ -500,7 +500,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder roleGuard(String value) {
-			this.roleGuard = value;
+			roleGuard = value;
 			return this;
 		}
 
@@ -511,7 +511,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder rolesDeclared(String value) {
-			this.rolesDeclared = value;
+			rolesDeclared = value;
 			return this;
 		}
 
@@ -523,7 +523,7 @@ public class RestAnnotation {
 		 */
 		@SafeVarargs
 		public final Builder serializers(Class<? extends Serializer>...value) {
-			this.serializers = value;
+			serializers = value;
 			return this;
 		}
 
@@ -534,7 +534,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder siteName(String value) {
-			this.siteName = value;
+			siteName = value;
 			return this;
 		}
 
@@ -545,7 +545,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder staticFiles(Class<? extends StaticFiles> value) {
-			this.staticFiles = value;
+			staticFiles = value;
 			return this;
 		}
 
@@ -556,7 +556,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder swagger(Swagger value) {
-			this.swagger = value;
+			swagger = value;
 			return this;
 		}
 
@@ -567,7 +567,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder swaggerProvider(Class<? extends SwaggerProvider> value) {
-			this.swaggerProvider = value;
+			swaggerProvider = value;
 			return this;
 		}
 
@@ -578,7 +578,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder title(String...value) {
-			this.title = value;
+			title = value;
 			return this;
 		}
 
@@ -589,7 +589,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder uriAuthority(String value) {
-			this.uriAuthority = value;
+			uriAuthority = value;
 			return this;
 		}
 
@@ -600,7 +600,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder uriContext(String value) {
-			this.uriContext = value;
+			uriContext = value;
 			return this;
 		}
 
@@ -611,7 +611,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder uriRelativity(String value) {
-			this.uriRelativity = value;
+			uriRelativity = value;
 			return this;
 		}
 
@@ -622,7 +622,7 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder uriResolution(String value) {
-			this.uriResolution = value;
+			uriResolution = value;
 			return this;
 		}
 

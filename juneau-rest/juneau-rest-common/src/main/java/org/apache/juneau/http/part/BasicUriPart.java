@@ -89,7 +89,7 @@ public class BasicUriPart extends BasicPart {
 	public BasicUriPart(String name, Supplier<URI> value) {
 		super(name, value);
 		this.value = null;
-		this.supplier = value;
+		supplier = value;
 	}
 
 	/**

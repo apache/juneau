@@ -63,7 +63,7 @@ public class MockHttpSession implements HttpSession {
 	 * @return This object.
 	 */
 	public MockHttpSession creationTime(long value) {
-		this.creationTime = value;
+		creationTime = value;
 		return this;
 	}
 
@@ -100,7 +100,7 @@ public class MockHttpSession implements HttpSession {
 	 * @return This object.
 	 */
 	public MockHttpSession id(String value) {
-		this.id = value;
+		id = value;
 		return this;
 	}
 
@@ -120,7 +120,7 @@ public class MockHttpSession implements HttpSession {
 	 * @return This object.
 	 */
 	public MockHttpSession isNew(boolean value) {
-		this.isNew = value;
+		isNew = value;
 		return this;
 	}
 
@@ -134,7 +134,7 @@ public class MockHttpSession implements HttpSession {
 	 * @return This object.
 	 */
 	public MockHttpSession lastAccessedTime(long value) {
-		this.lastAccessedTime = value;
+		lastAccessedTime = value;
 		return this;
 	}
 
@@ -148,7 +148,7 @@ public class MockHttpSession implements HttpSession {
 	 * @return This object.
 	 */
 	public MockHttpSession maxInactiveInterval(int value) {
-		this.maxInactiveInterval = value;
+		maxInactiveInterval = value;
 		return this;
 	}
 
@@ -167,7 +167,7 @@ public class MockHttpSession implements HttpSession {
 	 * @return This object.
 	 */
 	public MockHttpSession servletContext(ServletContext value) {
-		this.servletContext = value;
+		servletContext = value;
 		return this;
 	}
 

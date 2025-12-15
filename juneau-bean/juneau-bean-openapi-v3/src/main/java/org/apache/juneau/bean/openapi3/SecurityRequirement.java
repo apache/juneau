@@ -153,7 +153,7 @@ public class SecurityRequirement extends OpenApiElement {
 	 * @return This object.
 	 */
 	public SecurityRequirement setRequirements(Map<String,List<String>> value) {
-		this.requirements = value;
+		requirements = value;
 		return this;
 	}
 

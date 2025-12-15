@@ -110,7 +110,7 @@ public class HtmlLinkAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -121,7 +121,7 @@ public class HtmlLinkAnnotation {
 		 * @return This object.
 		 */
 		public Builder nameProperty(String value) {
-			this.nameProperty = value;
+			nameProperty = value;
 			return this;
 		}
 
@@ -132,7 +132,7 @@ public class HtmlLinkAnnotation {
 		 * @return This object.
 		 */
 		public Builder uriProperty(String value) {
-			this.uriProperty = value;
+			uriProperty = value;
 			return this;
 		}
 

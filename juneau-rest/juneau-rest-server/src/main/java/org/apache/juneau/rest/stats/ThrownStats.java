@@ -72,7 +72,7 @@ public class ThrownStats implements Cloneable {
 		 * @return This object.
 		 */
 		public Builder causedBy(ThrownStats value) {
-			this.causedBy = value;
+			causedBy = value;
 			return this;
 		}
 
@@ -83,7 +83,7 @@ public class ThrownStats implements Cloneable {
 		 * @return This object.
 		 */
 		public Builder hash(long value) {
-			this.hash = value;
+			hash = value;
 			return this;
 		}
 
@@ -94,7 +94,7 @@ public class ThrownStats implements Cloneable {
 		 * @return This object.
 		 */
 		public Builder stackTrace(List<String> value) {
-			this.stackTrace = value;
+			stackTrace = value;
 			return this;
 		}
 
@@ -105,7 +105,7 @@ public class ThrownStats implements Cloneable {
 		 * @return This object.
 		 */
 		public Builder throwable(Throwable value) {
-			this.throwable = value;
+			throwable = value;
 			return this;
 		}
 

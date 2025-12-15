@@ -109,7 +109,7 @@ public class RequestAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -120,7 +120,7 @@ public class RequestAnnotation {
 		 * @return This object.
 		 */
 		public Builder parser(Class<? extends HttpPartParser> value) {
-			this.parser = value;
+			parser = value;
 			return this;
 		}
 
@@ -131,7 +131,7 @@ public class RequestAnnotation {
 		 * @return This object.
 		 */
 		public Builder serializer(Class<? extends HttpPartSerializer> value) {
-			this.serializer = value;
+			serializer = value;
 			return this;
 		}
 

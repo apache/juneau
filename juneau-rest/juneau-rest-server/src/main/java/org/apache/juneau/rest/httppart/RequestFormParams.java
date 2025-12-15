@@ -322,7 +322,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @return This object (for method chaining).
 	 */
 	public RequestFormParams caseSensitive(boolean value) {
-		this.caseSensitive = value;
+		caseSensitive = value;
 		return this;
 	}
 
@@ -469,7 +469,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @return This object.
 	 */
 	public RequestFormParams parser(HttpPartParserSession value) {
-		this.parser = value;
+		parser = value;
 		forEach(x -> x.parser(parser));
 		return this;
 	}

@@ -96,7 +96,7 @@ public class ParserSession extends BeanSession {
 		 * @return This object.
 		 */
 		public Builder javaMethod(Method value) {
-			this.javaMethod = value;
+			javaMethod = value;
 			return this;
 		}
 
@@ -133,7 +133,7 @@ public class ParserSession extends BeanSession {
 		 * @return This object.
 		 */
 		public Builder outer(Object value) {
-			this.outer = value;
+			outer = value;
 			return this;
 		}
 
@@ -162,7 +162,7 @@ public class ParserSession extends BeanSession {
 		 */
 		public Builder schema(HttpPartSchema value) {
 			if (nn(value))
-				this.schema = value;
+				schema = value;
 			return this;
 		}
 
@@ -176,7 +176,7 @@ public class ParserSession extends BeanSession {
 		 */
 		public Builder schemaDefault(HttpPartSchema value) {
 			if (nn(value) && schema == null)
-				this.schema = value;
+				schema = value;
 			return this;
 		}
 

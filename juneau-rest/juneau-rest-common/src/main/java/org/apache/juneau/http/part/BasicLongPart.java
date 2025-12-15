@@ -102,7 +102,7 @@ public class BasicLongPart extends BasicPart {
 	public BasicLongPart(String name, Supplier<Long> value) {
 		super(name, value);
 		this.value = null;
-		this.supplier = value;
+		supplier = value;
 	}
 
 	/**

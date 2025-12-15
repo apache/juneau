@@ -186,7 +186,7 @@ public class CommonEntry extends Common {
 	 * @return This object
 	 */
 	public CommonEntry setAuthors(Person...value) {
-		this.authors = value;
+		authors = value;
 		return this;
 	}
 
@@ -208,7 +208,7 @@ public class CommonEntry extends Common {
 	 * @return This object
 	 */
 	public CommonEntry setCategories(Category...value) {
-		this.categories = value;
+		categories = value;
 		return this;
 	}
 
@@ -224,7 +224,7 @@ public class CommonEntry extends Common {
 	 * @return This object
 	 */
 	public CommonEntry setContributors(Person...value) {
-		this.contributors = value;
+		contributors = value;
 		return this;
 	}
 
@@ -240,7 +240,7 @@ public class CommonEntry extends Common {
 	 * @return This object
 	 */
 	public CommonEntry setId(Id value) {
-		this.id = value;
+		id = value;
 		return this;
 	}
 
@@ -278,7 +278,7 @@ public class CommonEntry extends Common {
 	 * @return This object
 	 */
 	public CommonEntry setLinks(Link...value) {
-		this.links = value;
+		links = value;
 		return this;
 	}
 
@@ -310,7 +310,7 @@ public class CommonEntry extends Common {
 	 * @return This object
 	 */
 	public CommonEntry setRights(Text value) {
-		this.rights = value;
+		rights = value;
 		return this;
 	}
 
@@ -342,7 +342,7 @@ public class CommonEntry extends Common {
 	 * @return This object
 	 */
 	public CommonEntry setTitle(Text value) {
-		this.title = value;
+		title = value;
 		return this;
 	}
 
@@ -358,7 +358,7 @@ public class CommonEntry extends Common {
 	 * @return This object
 	 */
 	public CommonEntry setUpdated(Calendar value) {
-		this.updated = value;
+		updated = value;
 		return this;
 	}
 

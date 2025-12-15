@@ -281,7 +281,7 @@ public class FileWriterBuilder {
 	 * @return This object for method chaining.
 	 */
 	public FileWriterBuilder file(File value) {
-		this.file = value;
+		file = value;
 		return this;
 	}
 

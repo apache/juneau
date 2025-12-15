@@ -1726,7 +1726,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @return This object.
 	 */
 	public JsonMap setBeanSession(BeanSession value) {
-		this.session = value;
+		session = value;
 		return this;
 	}
 

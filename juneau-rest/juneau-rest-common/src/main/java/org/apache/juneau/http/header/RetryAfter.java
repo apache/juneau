@@ -172,7 +172,7 @@ public class RetryAfter extends BasicDateHeader {
 	public RetryAfter(Supplier<?> value) {
 		super(NAME, (String)null);
 		this.value = null;
-		this.supplier = value;
+		supplier = value;
 	}
 
 	/**

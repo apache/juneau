@@ -121,7 +121,7 @@ public class BasicStatusLine implements StatusLine {
 	 */
 	public BasicStatusLine setLocale(Locale value) {
 		assertModifiable();
-		this.locale = value;
+		locale = value;
 		return this;
 	}
 
@@ -136,7 +136,7 @@ public class BasicStatusLine implements StatusLine {
 	 */
 	public BasicStatusLine setProtocolVersion(ProtocolVersion value) {
 		assertModifiable();
-		this.protocolVersion = value;
+		protocolVersion = value;
 		return this;
 	}
 
@@ -152,7 +152,7 @@ public class BasicStatusLine implements StatusLine {
 	 */
 	public BasicStatusLine setReasonPhrase(String value) {
 		assertModifiable();
-		this.reasonPhrase = value;
+		reasonPhrase = value;
 		return this;
 	}
 
@@ -167,7 +167,7 @@ public class BasicStatusLine implements StatusLine {
 	 */
 	public BasicStatusLine setReasonPhraseCatalog(ReasonPhraseCatalog value) {
 		assertModifiable();
-		this.reasonPhraseCatalog = value;
+		reasonPhraseCatalog = value;
 		return this;
 	}
 
@@ -182,7 +182,7 @@ public class BasicStatusLine implements StatusLine {
 	 */
 	public BasicStatusLine setStatusCode(int value) {
 		assertModifiable();
-		this.statusCode = value;
+		statusCode = value;
 		return this;
 	}
 

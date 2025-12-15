@@ -261,7 +261,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @return This object (for method chaining).
 	 */
 	public RequestHeaders caseSensitive(boolean value) {
-		this.caseSensitive = value;
+		caseSensitive = value;
 		return this;
 	}
 
@@ -408,7 +408,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @return This object.
 	 */
 	public RequestHeaders parser(HttpPartParserSession value) {
-		this.parser = value;
+		parser = value;
 		forEach(x -> x.parser(parser));
 		return this;
 	}

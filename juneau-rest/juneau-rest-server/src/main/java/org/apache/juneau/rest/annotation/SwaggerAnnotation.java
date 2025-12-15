@@ -72,7 +72,7 @@ public class SwaggerAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -83,7 +83,7 @@ public class SwaggerAnnotation {
 		 * @return This object.
 		 */
 		public Builder contact(Contact value) {
-			this.contact = value;
+			contact = value;
 			return this;
 		}
 
@@ -94,7 +94,7 @@ public class SwaggerAnnotation {
 		 * @return This object.
 		 */
 		public Builder externalDocs(ExternalDocs value) {
-			this.externalDocs = value;
+			externalDocs = value;
 			return this;
 		}
 
@@ -105,7 +105,7 @@ public class SwaggerAnnotation {
 		 * @return This object.
 		 */
 		public Builder license(License value) {
-			this.license = value;
+			license = value;
 			return this;
 		}
 
@@ -116,7 +116,7 @@ public class SwaggerAnnotation {
 		 * @return This object.
 		 */
 		public Builder tags(Tag...value) {
-			this.tags = value;
+			tags = value;
 			return this;
 		}
 
@@ -127,7 +127,7 @@ public class SwaggerAnnotation {
 		 * @return This object.
 		 */
 		public Builder termsOfService(String...value) {
-			this.termsOfService = value;
+			termsOfService = value;
 			return this;
 		}
 
@@ -138,7 +138,7 @@ public class SwaggerAnnotation {
 		 * @return This object.
 		 */
 		public Builder title(String...value) {
-			this.title = value;
+			title = value;
 			return this;
 		}
 
@@ -160,7 +160,7 @@ public class SwaggerAnnotation {
 		 * @return This object.
 		 */
 		public Builder version(String value) {
-			this.version = value;
+			version = value;
 			return this;
 		}
 

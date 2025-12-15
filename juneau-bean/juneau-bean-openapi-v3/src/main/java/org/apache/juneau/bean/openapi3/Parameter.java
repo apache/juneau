@@ -279,7 +279,7 @@ public class Parameter extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Parameter setAllowEmptyValue(Boolean value) {
-		this.allowEmptyValue = value;
+		allowEmptyValue = value;
 		return this;
 	}
 
@@ -290,7 +290,7 @@ public class Parameter extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Parameter setAllowReserved(Boolean value) {
-		this.allowReserved = value;
+		allowReserved = value;
 		return this;
 	}
 
@@ -301,7 +301,7 @@ public class Parameter extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Parameter setDeprecated(Boolean value) {
-		this.deprecated = value;
+		deprecated = value;
 		return this;
 	}
 
@@ -312,7 +312,7 @@ public class Parameter extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Parameter setDescription(String value) {
-		this.description = value;
+		description = value;
 		return this;
 	}
 
@@ -323,7 +323,7 @@ public class Parameter extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Parameter setExample(Object value) {
-		this.example = value;
+		example = value;
 		return this;
 	}
 
@@ -334,7 +334,7 @@ public class Parameter extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Parameter setExamples(Map<String,Example> value) {
-		this.examples = value;
+		examples = value;
 		return this;
 	}
 
@@ -345,7 +345,7 @@ public class Parameter extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Parameter setExplode(Boolean value) {
-		this.explode = value;
+		explode = value;
 		return this;
 	}
 
@@ -358,7 +358,7 @@ public class Parameter extends OpenApiElement {
 	public Parameter setIn(String value) {
 		if (isStrict() && ! contains(value, VALID_IN))
 			throw rex("Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_IN));
-		this.in = value;
+		in = value;
 		return this;
 	}
 
@@ -369,7 +369,7 @@ public class Parameter extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Parameter setName(String value) {
-		this.name = value;
+		name = value;
 		return this;
 	}
 
@@ -380,7 +380,7 @@ public class Parameter extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Parameter setRequired(Boolean value) {
-		this.required = value;
+		required = value;
 		return this;
 	}
 
@@ -391,7 +391,7 @@ public class Parameter extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Parameter setSchema(SchemaInfo value) {
-		this.schema = value;
+		schema = value;
 		return this;
 	}
 
@@ -404,7 +404,7 @@ public class Parameter extends OpenApiElement {
 	public Parameter setStyle(String value) {
 		if (isStrict() && ! contains(value, VALID_STYLES))
 			throw rex("Invalid value passed in to setStyle(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_STYLES));
-		this.style = value;
+		style = value;
 		return this;
 	}
 

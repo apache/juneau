@@ -49,13 +49,13 @@ class OverrideableHttpServletRequest extends HttpServletRequestWrapper {
 		validatePathInfo(value);
 		if (value == null)
 			value = "\u0000";
-		this.pathInfo = value;
+		pathInfo = value;
 		return this;
 	}
 
 	public OverrideableHttpServletRequest servletPath(String value) {
 		validateServletPath(value);
-		this.servletPath = value;
+		servletPath = value;
 		return this;
 	}
 }

@@ -173,7 +173,7 @@ public class Source extends CommonEntry {
 	 * @return This object
 	 */
 	public Source setGenerator(Generator value) {
-		this.generator = value;
+		generator = value;
 		return this;
 	}
 
@@ -189,7 +189,7 @@ public class Source extends CommonEntry {
 	 * @return This object
 	 */
 	public Source setIcon(Icon value) {
-		this.icon = value;
+		icon = value;
 		return this;
 	}
 
@@ -229,7 +229,7 @@ public class Source extends CommonEntry {
 	 * @return This object
 	 */
 	public Source setLogo(Logo value) {
-		this.logo = value;
+		logo = value;
 		return this;
 	}
 
@@ -273,7 +273,7 @@ public class Source extends CommonEntry {
 	 * @return This object
 	 */
 	public Source setSubtitle(Text value) {
-		this.subtitle = value;
+		subtitle = value;
 		return this;
 	}
 

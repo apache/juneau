@@ -277,7 +277,7 @@ public class PathItem extends OpenApiElement {
 	 * @return This object.
 	 */
 	public PathItem setDelete(Operation value) {
-		this.delete = value;
+		delete = value;
 		return this;
 	}
 
@@ -288,7 +288,7 @@ public class PathItem extends OpenApiElement {
 	 * @return This object.
 	 */
 	public PathItem setDescription(String value) {
-		this.description = value;
+		description = value;
 		return this;
 	}
 
@@ -299,7 +299,7 @@ public class PathItem extends OpenApiElement {
 	 * @return This object.
 	 */
 	public PathItem setGet(Operation value) {
-		this.get = value;
+		get = value;
 		return this;
 	}
 
@@ -310,7 +310,7 @@ public class PathItem extends OpenApiElement {
 	 * @return This object.
 	 */
 	public PathItem setHead(Operation value) {
-		this.head = value;
+		head = value;
 		return this;
 	}
 
@@ -321,7 +321,7 @@ public class PathItem extends OpenApiElement {
 	 * @return This object.
 	 */
 	public PathItem setOptions(Operation value) {
-		this.options = value;
+		options = value;
 		return this;
 	}
 
@@ -332,7 +332,7 @@ public class PathItem extends OpenApiElement {
 	 * @return This object.
 	 */
 	public PathItem setParameters(List<Parameter> value) {
-		this.parameters = value;
+		parameters = value;
 		return this;
 	}
 
@@ -343,7 +343,7 @@ public class PathItem extends OpenApiElement {
 	 * @return This object.
 	 */
 	public PathItem setPatch(Operation value) {
-		this.patch = value;
+		patch = value;
 		return this;
 	}
 
@@ -354,7 +354,7 @@ public class PathItem extends OpenApiElement {
 	 * @return This object.
 	 */
 	public PathItem setPost(Operation value) {
-		this.post = value;
+		post = value;
 		return this;
 	}
 
@@ -365,7 +365,7 @@ public class PathItem extends OpenApiElement {
 	 * @return This object.
 	 */
 	public PathItem setPut(Operation value) {
-		this.put = value;
+		put = value;
 		return this;
 	}
 
@@ -376,7 +376,7 @@ public class PathItem extends OpenApiElement {
 	 * @return This object.
 	 */
 	public PathItem setServers(List<Server> value) {
-		this.servers = value;
+		servers = value;
 		return this;
 	}
 
@@ -387,7 +387,7 @@ public class PathItem extends OpenApiElement {
 	 * @return This object.
 	 */
 	public PathItem setSummary(String value) {
-		this.summary = value;
+		summary = value;
 		return this;
 	}
 
@@ -398,7 +398,7 @@ public class PathItem extends OpenApiElement {
 	 * @return This object.
 	 */
 	public PathItem setTrace(Operation value) {
-		this.trace = value;
+		trace = value;
 		return this;
 	}
 

@@ -128,7 +128,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 		this.name = name;
 		this.value = null;
 		this.stringValue = null;
-		this.supplier = value;
+		supplier = value;
 	}
 
 	/**

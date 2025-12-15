@@ -211,7 +211,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest authType(String value) {
-		this.authType = value;
+		authType = value;
 		return this;
 	}
 
@@ -227,7 +227,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest characterEncoding(String value) {
-		this.characterEncoding = value;
+		characterEncoding = value;
 		return this;
 	}
 
@@ -271,7 +271,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest contextPath(String value) {
-		this.contextPath = value;
+		contextPath = value;
 		return this;
 	}
 
@@ -282,7 +282,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest cookies(Cookie[] value) {
-		this.cookies = value;
+		cookies = value;
 		return this;
 	}
 
@@ -293,7 +293,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest dispatcherType(DispatcherType value) {
-		this.dispatcherType = value;
+		dispatcherType = value;
 		return this;
 	}
 
@@ -554,7 +554,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest httpSession(HttpSession value) {
-		this.httpSession = value;
+		httpSession = value;
 		return this;
 	}
 
@@ -588,7 +588,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest localAddr(String value) {
-		this.localAddr = value;
+		localAddr = value;
 		return this;
 	}
 
@@ -599,7 +599,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest locale(Locale value) {
-		this.locale = value;
+		locale = value;
 		return this;
 	}
 
@@ -610,7 +610,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest localName(String value) {
-		this.localName = value;
+		localName = value;
 		return this;
 	}
 
@@ -621,7 +621,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest localPort(int value) {
-		this.localPort = value;
+		localPort = value;
 		return this;
 	}
 
@@ -638,7 +638,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest method(String value) {
-		this.method = value;
+		method = value;
 		return this;
 	}
 
@@ -664,7 +664,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest pathInfo(String value) {
-		this.pathInfo = value;
+		pathInfo = value;
 		return this;
 	}
 
@@ -675,7 +675,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest pathTranslated(String value) {
-		this.pathTranslated = value;
+		pathTranslated = value;
 		return this;
 	}
 
@@ -715,7 +715,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest protocol(String value) {
-		this.protocol = value;
+		protocol = value;
 		return this;
 	}
 
@@ -726,7 +726,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest queryString(String value) {
-		this.queryString = value;
+		queryString = value;
 		return this;
 	}
 
@@ -737,7 +737,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest remoteAddr(String value) {
-		this.remoteAddr = value;
+		remoteAddr = value;
 		return this;
 	}
 
@@ -748,7 +748,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest remoteHost(String value) {
-		this.remoteHost = value;
+		remoteHost = value;
 		return this;
 	}
 
@@ -759,7 +759,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest remotePort(int value) {
-		this.remotePort = value;
+		remotePort = value;
 		return this;
 	}
 
@@ -770,7 +770,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest remoteUser(String value) {
-		this.remoteUser = value;
+		remoteUser = value;
 		return this;
 	}
 
@@ -798,7 +798,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest requestedSessionId(String value) {
-		this.requestedSessionId = value;
+		requestedSessionId = value;
 		return this;
 	}
 
@@ -809,7 +809,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest requestURI(String value) {
-		this.requestURI = value;
+		requestURI = value;
 		return this;
 	}
 
@@ -842,7 +842,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest scheme(String value) {
-		this.scheme = value;
+		scheme = value;
 		return this;
 	}
 
@@ -853,7 +853,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest serverName(String value) {
-		this.serverName = value;
+		serverName = value;
 		return this;
 	}
 
@@ -864,7 +864,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest serverPort(int value) {
-		this.serverPort = value;
+		serverPort = value;
 		return this;
 	}
 
@@ -875,7 +875,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest servletContext(ServletContext value) {
-		this.servletContext = value;
+		servletContext = value;
 		return this;
 	}
 
@@ -886,7 +886,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest servletPath(String value) {
-		this.servletPath = value;
+		servletPath = value;
 		return this;
 	}
 
@@ -941,7 +941,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest userPrincipal(Principal value) {
-		this.userPrincipal = value;
+		userPrincipal = value;
 		return this;
 	}
 

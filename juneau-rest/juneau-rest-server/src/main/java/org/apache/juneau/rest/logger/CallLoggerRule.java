@@ -93,7 +93,7 @@ public class CallLoggerRule {
 		 * @return This object.
 		 */
 		public Builder enabled(Enablement value) {
-			this.enabled = value;
+			enabled = value;
 			return this;
 		}
 
@@ -118,7 +118,7 @@ public class CallLoggerRule {
 		 * @return This object.
 		 */
 		public Builder enabledPredicate(Predicate<HttpServletRequest> value) {
-			this.enabledTest = value;
+			enabledTest = value;
 			return this;
 		}
 
@@ -143,7 +143,7 @@ public class CallLoggerRule {
 		 * @return This object.
 		 */
 		public Builder exceptionFilter(Predicate<Throwable> value) {
-			this.exceptionFilter = value;
+			exceptionFilter = value;
 			return this;
 		}
 
@@ -164,7 +164,7 @@ public class CallLoggerRule {
 		 * @return This object.
 		 */
 		public Builder level(Level value) {
-			this.level = value;
+			level = value;
 			return this;
 		}
 
@@ -195,7 +195,7 @@ public class CallLoggerRule {
 		 * @return This object.
 		 */
 		public Builder requestDetail(CallLoggingDetail value) {
-			this.requestDetail = value;
+			requestDetail = value;
 			return this;
 		}
 
@@ -216,7 +216,7 @@ public class CallLoggerRule {
 		 * @return This object.
 		 */
 		public Builder requestFilter(Predicate<HttpServletRequest> value) {
-			this.requestFilter = value;
+			requestFilter = value;
 			return this;
 		}
 
@@ -234,7 +234,7 @@ public class CallLoggerRule {
 		 * @return This object.
 		 */
 		public Builder responseDetail(CallLoggingDetail value) {
-			this.responseDetail = value;
+			responseDetail = value;
 			return this;
 		}
 
@@ -259,7 +259,7 @@ public class CallLoggerRule {
 		 * @return This object.
 		 */
 		public Builder responseFilter(Predicate<HttpServletResponse> value) {
-			this.responseFilter = value;
+			responseFilter = value;
 			return this;
 		}
 
@@ -280,7 +280,7 @@ public class CallLoggerRule {
 		 * @return This object.
 		 */
 		public Builder statusFilter(Predicate<Integer> value) {
-			this.statusFilter = value;
+			statusFilter = value;
 			return this;
 		}
 

@@ -87,7 +87,7 @@ public class MarshalledFilter {
 		 * @return This object.
 		 */
 		public Builder example(String value) {
-			this.example = value;
+			example = value;
 			return this;
 		}
 
@@ -98,7 +98,7 @@ public class MarshalledFilter {
 		 * @return This object.
 		 */
 		public Builder implClass(Class<?> value) {
-			this.implClass = value;
+			implClass = value;
 			return this;
 		}
 	}

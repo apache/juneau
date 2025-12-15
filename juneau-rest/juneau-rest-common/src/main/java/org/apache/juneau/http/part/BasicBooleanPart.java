@@ -101,7 +101,7 @@ public class BasicBooleanPart extends BasicPart {
 	public BasicBooleanPart(String name, Supplier<Boolean> value) {
 		super(name, value);
 		this.value = null;
-		this.supplier = value;
+		supplier = value;
 	}
 
 	/**

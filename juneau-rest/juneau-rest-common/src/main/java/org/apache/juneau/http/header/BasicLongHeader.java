@@ -143,7 +143,7 @@ public class BasicLongHeader extends BasicHeader {
 	public BasicLongHeader(String name, Supplier<Long> value) {
 		super(name, null);
 		this.value = null;
-		this.supplier = value;
+		supplier = value;
 	}
 
 	/**

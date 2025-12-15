@@ -430,7 +430,7 @@ public class HtmlElementText extends HtmlElement {
 	 * @return This object.
 	 */
 	public HtmlElement text(Object value) { // NOSONAR - Intentional naming.
-		this.text = value;
+		text = value;
 		return this;
 	}
 

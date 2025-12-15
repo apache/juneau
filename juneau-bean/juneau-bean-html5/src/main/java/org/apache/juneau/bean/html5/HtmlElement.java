@@ -1051,7 +1051,7 @@ public abstract class HtmlElement {
 					x.setValue(toUri(x.getValue()));
 			});
 		}
-		this.attrs = value;
+		attrs = value;
 		return this;
 	}
 

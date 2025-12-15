@@ -228,7 +228,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder beanContext(BeanContext value) {
-			this.bc = value;
+			bc = value;
 			return this;
 		}
 
@@ -244,7 +244,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder beanContext(BeanContext.Builder value) {
-			this.bcBuilder = value;
+			bcBuilder = value;
 			return this;
 		}
 

@@ -459,7 +459,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 */
 	public RestRequest content(Object value) {
-		this.content = value;
+		content = value;
 		return this;
 	}
 
@@ -581,7 +581,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 */
 	public RestRequest errorCodes(Predicate<Integer> value) {
-		this.errorCodes = value;
+		errorCodes = value;
 		return this;
 	}
 

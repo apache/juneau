@@ -29,7 +29,7 @@ class Property_Test extends TestBase {
 		private int intField;
 
 		public void setPublicField(String value) {
-			this.publicField = value;
+			publicField = value;
 		}
 
 		public String getPublicField() {
@@ -37,7 +37,7 @@ class Property_Test extends TestBase {
 		}
 
 		public void setPrivateField(String value) {
-			this.privateField = value;
+			privateField = value;
 		}
 
 		public String getPrivateField() {
@@ -45,7 +45,7 @@ class Property_Test extends TestBase {
 		}
 
 		public void setIntField(int value) {
-			this.intField = value;
+			intField = value;
 		}
 
 		public int getIntField() {

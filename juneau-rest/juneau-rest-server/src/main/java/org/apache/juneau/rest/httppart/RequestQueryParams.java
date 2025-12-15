@@ -295,7 +295,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 * @return This object (for method chaining).
 	 */
 	public RequestQueryParams caseSensitive(boolean value) {
-		this.caseSensitive = value;
+		caseSensitive = value;
 		return this;
 	}
 
@@ -474,7 +474,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 * @return This object.
 	 */
 	public RequestQueryParams parser(HttpPartParserSession value) {
-		this.parser = value;
+		parser = value;
 		forEach(x -> x.parser(parser));
 		return this;
 	}

@@ -114,7 +114,7 @@ public class ResponseAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -125,7 +125,7 @@ public class ResponseAnnotation {
 		 * @return This object.
 		 */
 		public Builder examples(String...value) {
-			this.examples = value;
+			examples = value;
 			return this;
 		}
 
@@ -136,7 +136,7 @@ public class ResponseAnnotation {
 		 * @return This object.
 		 */
 		public Builder headers(Header...value) {
-			this.headers = value;
+			headers = value;
 			return this;
 		}
 
@@ -147,7 +147,7 @@ public class ResponseAnnotation {
 		 * @return This object.
 		 */
 		public Builder parser(Class<? extends HttpPartParser> value) {
-			this.parser = value;
+			parser = value;
 			return this;
 		}
 
@@ -158,7 +158,7 @@ public class ResponseAnnotation {
 		 * @return This object.
 		 */
 		public Builder schema(Schema value) {
-			this.schema = value;
+			schema = value;
 			return this;
 		}
 
@@ -169,7 +169,7 @@ public class ResponseAnnotation {
 		 * @return This object.
 		 */
 		public Builder serializer(Class<? extends HttpPartSerializer> value) {
-			this.serializer = value;
+			serializer = value;
 			return this;
 		}
 

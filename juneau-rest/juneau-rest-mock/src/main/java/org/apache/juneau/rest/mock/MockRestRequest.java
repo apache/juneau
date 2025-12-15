@@ -135,7 +135,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest authType(String value) {
-		this.authType = value;
+		authType = value;
 		return this;
 	}
 
@@ -159,7 +159,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest characterEncoding(String value) {
-		this.characterEncoding = value;
+		characterEncoding = value;
 		return this;
 	}
 
@@ -213,7 +213,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest contextPath(String value) {
-		this.contextPath = value;
+		contextPath = value;
 		return this;
 	}
 
@@ -231,7 +231,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest cookies(Cookie[] value) {
-		this.cookies = value;
+		cookies = value;
 		return this;
 	}
 
@@ -255,7 +255,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest dispatcherType(DispatcherType value) {
-		this.dispatcherType = value;
+		dispatcherType = value;
 		return this;
 	}
 
@@ -561,7 +561,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest httpSession(HttpSession value) {
-		this.httpSession = value;
+		httpSession = value;
 		return this;
 	}
 
@@ -603,7 +603,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest localAddr(String value) {
-		this.localAddr = value;
+		localAddr = value;
 		return this;
 	}
 
@@ -621,7 +621,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest locale(Locale value) {
-		this.locale = value;
+		locale = value;
 		return this;
 	}
 
@@ -639,7 +639,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest localName(String value) {
-		this.localName = value;
+		localName = value;
 		return this;
 	}
 
@@ -657,7 +657,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest localPort(int value) {
-		this.localPort = value;
+		localPort = value;
 		return this;
 	}
 
@@ -735,7 +735,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest pathInfo(String value) {
-		this.pathInfo = value;
+		pathInfo = value;
 		return this;
 	}
 
@@ -753,7 +753,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest pathTranslated(String value) {
-		this.pathTranslated = value;
+		pathTranslated = value;
 		return this;
 	}
 
@@ -777,7 +777,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest protocol(String value) {
-		this.protocol = value;
+		protocol = value;
 		return this;
 	}
 
@@ -831,7 +831,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest queryString(String value) {
-		this.queryString = value;
+		queryString = value;
 		return this;
 	}
 
@@ -849,7 +849,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest remoteAddr(String value) {
-		this.remoteAddr = value;
+		remoteAddr = value;
 		return this;
 	}
 
@@ -867,7 +867,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest remoteHost(String value) {
-		this.remoteHost = value;
+		remoteHost = value;
 		return this;
 	}
 
@@ -885,7 +885,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest remotePort(int value) {
-		this.remotePort = value;
+		remotePort = value;
 		return this;
 	}
 
@@ -903,7 +903,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest remoteUser(String value) {
-		this.remoteUser = value;
+		remoteUser = value;
 		return this;
 	}
 
@@ -940,7 +940,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest requestedSessionId(String value) {
-		this.requestedSessionId = value;
+		requestedSessionId = value;
 		return this;
 	}
 
@@ -958,7 +958,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest requestURI(String value) {
-		this.requestURI = value;
+		requestURI = value;
 		return this;
 	}
 
@@ -1030,7 +1030,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest serverName(String value) {
-		this.serverName = value;
+		serverName = value;
 		return this;
 	}
 
@@ -1048,7 +1048,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest serverPort(int value) {
-		this.serverPort = value;
+		serverPort = value;
 		return this;
 	}
 
@@ -1066,7 +1066,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest servletContext(ServletContext value) {
-		this.servletContext = value;
+		servletContext = value;
 		return this;
 	}
 
@@ -1084,7 +1084,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest servletPath(String value) {
-		this.servletPath = value;
+		servletPath = value;
 		return this;
 	}
 
@@ -1146,7 +1146,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	@Override
 	public MockRestRequest uriScheme(String value) {
 		super.uriScheme(value);
-		this.scheme = value;
+		scheme = value;
 		return this;
 	}
 
@@ -1182,7 +1182,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest userPrincipal(Principal value) {
-		this.userPrincipal = value;
+		userPrincipal = value;
 		return this;
 	}
 

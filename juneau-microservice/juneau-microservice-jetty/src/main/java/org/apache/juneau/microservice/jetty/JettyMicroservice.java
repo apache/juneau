@@ -164,7 +164,7 @@ public class JettyMicroservice extends Microservice {
 		 * @return This object.
 		 */
 		public Builder jettyServerFactory(JettyServerFactory value) {
-			this.factory = value;
+			factory = value;
 			return this;
 		}
 

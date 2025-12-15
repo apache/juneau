@@ -273,7 +273,7 @@ public class Feed extends CommonEntry {
 	 * @return This object.
 	 */
 	public Feed setEntries(Entry...value) {
-		this.entries = value;
+		entries = value;
 		return this;
 	}
 
@@ -299,7 +299,7 @@ public class Feed extends CommonEntry {
 	 * @return This object.
 	 */
 	public Feed setGenerator(Generator value) {
-		this.generator = value;
+		generator = value;
 		return this;
 	}
 
@@ -321,7 +321,7 @@ public class Feed extends CommonEntry {
 	 * @return This object.
 	 */
 	public Feed setIcon(Icon value) {
-		this.icon = value;
+		icon = value;
 		return this;
 	}
 
@@ -367,7 +367,7 @@ public class Feed extends CommonEntry {
 	 * @return This object.
 	 */
 	public Feed setLogo(Logo value) {
-		this.logo = value;
+		logo = value;
 		return this;
 	}
 
@@ -420,7 +420,7 @@ public class Feed extends CommonEntry {
 	 * @return This object.
 	 */
 	public Feed setSubtitle(Text value) {
-		this.subtitle = value;
+		subtitle = value;
 		return this;
 	}
 

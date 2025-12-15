@@ -139,7 +139,7 @@ public class BasicCsvHeader extends BasicHeader {
 	public BasicCsvHeader(String name, Supplier<String[]> value) {
 		super(name, null);
 		this.value = null;
-		this.supplier = value;
+		supplier = value;
 	}
 
 	/**

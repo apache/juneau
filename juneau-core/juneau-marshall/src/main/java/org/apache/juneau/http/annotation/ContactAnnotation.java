@@ -63,7 +63,7 @@ public class ContactAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -74,7 +74,7 @@ public class ContactAnnotation {
 		 * @return This object.
 		 */
 		public Builder email(String value) {
-			this.email = value;
+			email = value;
 			return this;
 		}
 
@@ -85,7 +85,7 @@ public class ContactAnnotation {
 		 * @return This object.
 		 */
 		public Builder name(String value) {
-			this.name = value;
+			name = value;
 			return this;
 		}
 
@@ -96,7 +96,7 @@ public class ContactAnnotation {
 		 * @return This object.
 		 */
 		public Builder url(String value) {
-			this.url = value;
+			url = value;
 			return this;
 		}
 	}

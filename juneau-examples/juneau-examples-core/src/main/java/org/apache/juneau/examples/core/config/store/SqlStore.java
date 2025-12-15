@@ -70,7 +70,7 @@ public class SqlStore extends ConfigStore {
 		 * @return This object.
 		 */
 		public Builder jdbcUrl(String value) {
-			this.jdbcUrl = value;
+			jdbcUrl = value;
 			return this;
 		}
 
@@ -81,7 +81,7 @@ public class SqlStore extends ConfigStore {
 		 * @return This object.
 		 */
 		public Builder nameColumn(String value) {
-			this.nameColumn = value;
+			nameColumn = value;
 			return this;
 		}
 
@@ -92,7 +92,7 @@ public class SqlStore extends ConfigStore {
 		 * @return This object.
 		 */
 		public Builder pollInterval(int value) {
-			this.pollInterval = value;
+			pollInterval = value;
 			return this;
 		}
 
@@ -103,7 +103,7 @@ public class SqlStore extends ConfigStore {
 		 * @return This object.
 		 */
 		public Builder tableName(String value) {
-			this.tableName = value;
+			tableName = value;
 			return this;
 		}
 
@@ -114,7 +114,7 @@ public class SqlStore extends ConfigStore {
 		 * @return This object.
 		 */
 		public Builder valueColumn(String value) {
-			this.valueColumn = value;
+			valueColumn = value;
 			return this;
 		}
 	}

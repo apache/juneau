@@ -216,7 +216,7 @@ public class SerializedEntity extends BasicHttpEntity {
 	 */
 	public SerializedEntity setSchema(HttpPartSchema value) {
 		assertModifiable();
-		this.schema = value;
+		schema = value;
 		return this;
 	}
 
@@ -228,7 +228,7 @@ public class SerializedEntity extends BasicHttpEntity {
 	 */
 	public SerializedEntity setSerializer(Serializer value) {
 		assertModifiable();
-		this.serializer = value;
+		serializer = value;
 		return this;
 	}
 

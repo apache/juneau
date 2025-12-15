@@ -284,7 +284,7 @@ public class Xml extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Xml setWrapped(Boolean value) {
-		this.wrapped = value;
+		wrapped = value;
 		return this;
 	}
 

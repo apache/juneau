@@ -111,7 +111,7 @@ public class LinkString implements Comparable<LinkString> {
 	 * @return This object
 	 */
 	public LinkString setName(String value) {
-		this.name = value;
+		name = value;
 		return this;
 	}
 
@@ -127,7 +127,7 @@ public class LinkString implements Comparable<LinkString> {
 	 * @return This object
 	 */
 	public LinkString setUri(java.net.URI value) {
-		this.uri = value;
+		uri = value;
 		return this;
 	}
 

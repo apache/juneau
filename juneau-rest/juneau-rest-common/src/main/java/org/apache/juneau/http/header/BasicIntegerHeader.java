@@ -142,7 +142,7 @@ public class BasicIntegerHeader extends BasicHeader {
 	public BasicIntegerHeader(String name, Supplier<Integer> value) {
 		super(name, null);
 		this.value = null;
-		this.supplier = value;
+		supplier = value;
 	}
 
 	/**

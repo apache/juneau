@@ -149,7 +149,7 @@ public class RestOperation {
 	 * @return This object.
 	 */
 	public RestOperation hasContent(boolean value) {
-		this.hasContent = value;
+		hasContent = value;
 		return this;
 	}
 }

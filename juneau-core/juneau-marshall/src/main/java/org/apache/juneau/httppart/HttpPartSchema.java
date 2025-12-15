@@ -123,7 +123,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder const_(String value) {
-			this.const_ = value;
+			const_ = value;
 			return this;
 		}
 
@@ -150,7 +150,7 @@ public class HttpPartSchema {
 		 */
 		public Builder default_(String value) {
 			if (isNotEmpty(value))
-				this.default_ = value;
+				default_ = value;
 			return this;
 		}
 
@@ -176,7 +176,7 @@ public class HttpPartSchema {
 		 */
 		public Builder enum_(Set<String> value) {
 			if (nn(value) && ! value.isEmpty())
-				this.enum_ = value;
+				enum_ = value;
 			return this;
 		}
 
@@ -750,7 +750,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder examples(String...value) {
-			this.examples = value;
+			examples = value;
 			return this;
 		}
 
@@ -827,7 +827,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder exclusiveMaximumValue(Number value) {
-			this.exclusiveMaximumValue = value;
+			exclusiveMaximumValue = value;
 			return this;
 		}
 
@@ -904,7 +904,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder exclusiveMinimumValue(Number value) {
-			this.exclusiveMinimumValue = value;
+			exclusiveMinimumValue = value;
 			return this;
 		}
 
@@ -1242,7 +1242,7 @@ public class HttpPartSchema {
 		 */
 		public Builder items(Builder value) {
 			if (nn(value))
-				this.items = value;
+				items = value;
 			return this;
 		}
 
@@ -1271,7 +1271,7 @@ public class HttpPartSchema {
 		 */
 		public Builder items(HttpPartSchema value) {
 			if (nn(value))
-				this.items = value;
+				items = value;
 			return this;
 		}
 
@@ -1333,7 +1333,7 @@ public class HttpPartSchema {
 		 */
 		public Builder maximum(Number value) {
 			if (nn(value))
-				this.maximum = value;
+				maximum = value;
 			return this;
 		}
 
@@ -1563,7 +1563,7 @@ public class HttpPartSchema {
 		 */
 		public Builder minimum(Number value) {
 			if (nn(value))
-				this.minimum = value;
+				minimum = value;
 			return this;
 		}
 
@@ -1771,7 +1771,7 @@ public class HttpPartSchema {
 		 */
 		public Builder multipleOf(Number value) {
 			if (nn(value))
-				this.multipleOf = value;
+				multipleOf = value;
 			return this;
 		}
 
@@ -1826,7 +1826,7 @@ public class HttpPartSchema {
 		 */
 		public Builder noValidate(Boolean value) {
 			if (nn(value))
-				this.noValidate = value;
+				noValidate = value;
 			return this;
 		}
 
@@ -2314,7 +2314,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder type(HttpPartDataType value) {
-			this.type = value;
+			type = value;
 			return this;
 		}
 

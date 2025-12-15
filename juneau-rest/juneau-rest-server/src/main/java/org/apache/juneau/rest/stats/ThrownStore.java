@@ -88,7 +88,7 @@ public class ThrownStore {
 		 * @return This object.
 		 */
 		public Builder parent(ThrownStore value) {
-			this.parent = value;
+			parent = value;
 			return this;
 		}
 
@@ -99,7 +99,7 @@ public class ThrownStore {
 		 * @return This object.
 		 */
 		public Builder statsImplClass(Class<? extends ThrownStats> value) {
-			this.statsImplClass = value;
+			statsImplClass = value;
 			return this;
 		}
 

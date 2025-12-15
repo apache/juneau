@@ -82,7 +82,7 @@ public class RestInjectAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -93,7 +93,7 @@ public class RestInjectAnnotation {
 		 * @return This object.
 		 */
 		public Builder methodScope(String...value) {
-			this.methodScope = value;
+			methodScope = value;
 			return this;
 		}
 
@@ -104,7 +104,7 @@ public class RestInjectAnnotation {
 		 * @return This object.
 		 */
 		public Builder name(String value) {
-			this.name = value;
+			name = value;
 			return this;
 		}
 

@@ -257,7 +257,7 @@ public class Entry extends CommonEntry {
 	 * @return This object.
 	 */
 	public Entry setContent(Content value) {
-		this.content = value;
+		content = value;
 		return this;
 	}
 
@@ -309,7 +309,7 @@ public class Entry extends CommonEntry {
 	 * @return This object.
 	 */
 	public Entry setPublished(Calendar value) {
-		this.published = value;
+		published = value;
 		return this;
 	}
 
@@ -370,7 +370,7 @@ public class Entry extends CommonEntry {
 	 * @return This object.
 	 */
 	public Entry setSource(Source value) {
-		this.source = value;
+		source = value;
 		return this;
 	}
 
@@ -411,7 +411,7 @@ public class Entry extends CommonEntry {
 	 * @return This object.
 	 */
 	public Entry setSummary(Text value) {
-		this.summary = value;
+		summary = value;
 		return this;
 	}
 

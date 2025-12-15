@@ -110,7 +110,7 @@ public class ContentAnnotation {
 		 * @return This object.
 		 */
 		public Builder def(String value) {
-			this.def = value;
+			def = value;
 			return this;
 		}
 
@@ -121,7 +121,7 @@ public class ContentAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -132,7 +132,7 @@ public class ContentAnnotation {
 		 * @return This object.
 		 */
 		public Builder schema(Schema value) {
-			this.schema = value;
+			schema = value;
 			return this;
 		}
 

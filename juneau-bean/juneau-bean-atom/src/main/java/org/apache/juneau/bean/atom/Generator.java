@@ -145,7 +145,7 @@ public class Generator extends Common {
 	 * @return This object
 	 */
 	public Generator setText(String value) {
-		this.text = value;
+		text = value;
 		return this;
 	}
 
@@ -181,7 +181,7 @@ public class Generator extends Common {
 	 * @return This object
 	 */
 	public Generator setVersion(String value) {
-		this.version = value;
+		version = value;
 		return this;
 	}
 }

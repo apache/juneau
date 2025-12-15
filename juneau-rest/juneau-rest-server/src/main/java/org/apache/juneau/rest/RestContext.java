@@ -978,7 +978,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder config(Config value) {
-			this.config = value;
+			config = value;
 			return this;
 		}
 

@@ -534,7 +534,7 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation setDeprecated(Boolean value) {
-		this.deprecated = value;
+		deprecated = value;
 		return this;
 	}
 
@@ -545,7 +545,7 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation setDescription(String value) {
-		this.description = value;
+		description = value;
 		return this;
 	}
 
@@ -556,7 +556,7 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation setExternalDocs(ExternalDocumentation value) {
-		this.externalDocs = value;
+		externalDocs = value;
 		return this;
 	}
 
@@ -567,7 +567,7 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation setOperationId(String value) {
-		this.operationId = value;
+		operationId = value;
 		return this;
 	}
 
@@ -602,7 +602,7 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation setRequestBody(RequestBodyInfo value) {
-		this.requestBody = value;
+		requestBody = value;
 		return this;
 	}
 
@@ -674,7 +674,7 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation setSummary(String value) {
-		this.summary = value;
+		summary = value;
 		return this;
 	}
 

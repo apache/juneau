@@ -62,7 +62,7 @@ public class HasFormDataAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -73,7 +73,7 @@ public class HasFormDataAnnotation {
 		 * @return This object.
 		 */
 		public Builder name(String value) {
-			this.name = value;
+			name = value;
 			return this;
 		}
 

@@ -141,7 +141,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	public BasicBooleanHeader(String name, Supplier<Boolean> value) {
 		super(name, null);
 		this.value = null;
-		this.supplier = value;
+		supplier = value;
 	}
 
 	/**

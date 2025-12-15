@@ -379,7 +379,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi setComponents(Components value) {
-		this.components = value;
+		components = value;
 		return this;
 	}
 
@@ -390,7 +390,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi setExternalDocs(ExternalDocumentation value) {
-		this.externalDocs = value;
+		externalDocs = value;
 		return this;
 	}
 
@@ -401,7 +401,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi setInfo(Info value) {
-		this.info = value;
+		info = value;
 		return this;
 	}
 
@@ -412,7 +412,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi setOpenapi(String value) {
-		this.openapi = value;
+		openapi = value;
 		return this;
 	}
 

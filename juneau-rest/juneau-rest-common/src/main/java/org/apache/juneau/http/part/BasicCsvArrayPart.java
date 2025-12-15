@@ -96,7 +96,7 @@ public class BasicCsvArrayPart extends BasicPart {
 		super(name, value);
 		this.value = splita(value);
 		this.supplier = null;
-		this.stringValue = value;
+		stringValue = value;
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	public BasicCsvArrayPart(String name, Supplier<String[]> value) {
 		super(name, value);
 		this.value = null;
-		this.supplier = value;
+		supplier = value;
 		this.stringValue = null;
 	}
 

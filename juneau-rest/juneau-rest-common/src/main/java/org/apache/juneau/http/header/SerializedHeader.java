@@ -169,7 +169,7 @@ public class SerializedHeader extends BasicHeader {
 	public SerializedHeader(String name, Supplier<Object> value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
 		super(name, null);
 		this.value = null;
-		this.supplier = value;
+		supplier = value;
 		this.serializer = serializer;
 		this.schema = schema;
 		this.skipIfEmpty = skipIfEmpty;
@@ -247,7 +247,7 @@ public class SerializedHeader extends BasicHeader {
 	 * @return This object.
 	 */
 	public SerializedHeader schema(HttpPartSchema value) {
-		this.schema = value;
+		schema = value;
 		return this;
 	}
 
@@ -290,7 +290,7 @@ public class SerializedHeader extends BasicHeader {
 	 * @return This object.
 	 */
 	public SerializedHeader skipIfEmpty(boolean value) {
-		this.skipIfEmpty = value;
+		skipIfEmpty = value;
 		return this;
 	}
 }

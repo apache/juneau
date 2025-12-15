@@ -151,7 +151,7 @@ public class Text extends Common {
 	 * @return This object
 	 */
 	public Text setText(String value) {
-		this.text = value;
+		text = value;
 		return this;
 	}
 
@@ -176,7 +176,7 @@ public class Text extends Common {
 	 * @return This object
 	 */
 	public Text setType(String value) {
-		this.type = value;
+		type = value;
 		return this;
 	}
 }

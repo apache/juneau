@@ -551,7 +551,7 @@ public class ResponseHeader extends BasicHeader {
 	 * @return This object.
 	 */
 	public ResponseHeader schema(HttpPartSchema value) {
-		this.schema = value;
+		schema = value;
 		return this;
 	}
 }

@@ -155,7 +155,7 @@ public interface StaticFiles extends FileFinder {
 		 * @return This object.
 		 */
 		public Builder mimeTypes(MimeTypeDetector value) {
-			this.mimeTypes = value;
+			mimeTypes = value;
 			return this;
 		}
 

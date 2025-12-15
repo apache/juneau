@@ -110,7 +110,7 @@ public class BeanpAnnotation {
 		 * @return This object.
 		 */
 		public Builder description(String...value) {
-			this.description = value;
+			description = value;
 			return this;
 		}
 
@@ -121,7 +121,7 @@ public class BeanpAnnotation {
 		 * @return This object.
 		 */
 		public Builder dictionary(Class<?>...value) {
-			this.dictionary = value;
+			dictionary = value;
 			return this;
 		}
 
@@ -132,7 +132,7 @@ public class BeanpAnnotation {
 		 * @return This object.
 		 */
 		public Builder format(String value) {
-			this.format = value;
+			format = value;
 			return this;
 		}
 
@@ -143,7 +143,7 @@ public class BeanpAnnotation {
 		 * @return This object.
 		 */
 		public Builder name(String value) {
-			this.name = value;
+			name = value;
 			return this;
 		}
 
@@ -154,7 +154,7 @@ public class BeanpAnnotation {
 		 * @return This object.
 		 */
 		public Builder params(Class<?>...value) {
-			this.params = value;
+			params = value;
 			return this;
 		}
 
@@ -165,7 +165,7 @@ public class BeanpAnnotation {
 		 * @return This object.
 		 */
 		public Builder properties(String value) {
-			this.properties = value;
+			properties = value;
 			return this;
 		}
 
@@ -176,7 +176,7 @@ public class BeanpAnnotation {
 		 * @return This object.
 		 */
 		public Builder ro(String value) {
-			this.ro = value;
+			ro = value;
 			return this;
 		}
 
@@ -187,7 +187,7 @@ public class BeanpAnnotation {
 		 * @return This object.
 		 */
 		public Builder type(Class<?> value) {
-			this.type = value;
+			type = value;
 			return this;
 		}
 
@@ -209,7 +209,7 @@ public class BeanpAnnotation {
 		 * @return This object.
 		 */
 		public Builder wo(String value) {
-			this.wo = value;
+			wo = value;
 			return this;
 		}
 

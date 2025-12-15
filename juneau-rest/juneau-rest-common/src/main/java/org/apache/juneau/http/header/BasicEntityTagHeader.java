@@ -137,7 +137,7 @@ public class BasicEntityTagHeader extends BasicHeader {
 	public BasicEntityTagHeader(String name, Supplier<EntityTag> value) {
 		super(name, null);
 		this.value = null;
-		this.supplier = value;
+		supplier = value;
 	}
 
 	/**

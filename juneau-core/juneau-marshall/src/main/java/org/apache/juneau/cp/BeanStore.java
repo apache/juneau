@@ -141,7 +141,7 @@ public class BeanStore {
 		 * @return This object.
 		 */
 		public Builder impl(BeanStore value) {
-			this.impl = value;
+			impl = value;
 			return this;
 		}
 
@@ -155,7 +155,7 @@ public class BeanStore {
 		 * @return  This object.
 		 */
 		public Builder outer(Object value) {
-			this.outer = value;
+			outer = value;
 			return this;
 		}
 
@@ -211,7 +211,7 @@ public class BeanStore {
 		 * @return This object.
 		 */
 		public Builder type(Class<? extends BeanStore> value) {
-			this.type = value;
+			type = value;
 			return this;
 		}
 	}

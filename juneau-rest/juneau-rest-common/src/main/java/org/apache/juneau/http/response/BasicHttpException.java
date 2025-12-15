@@ -315,7 +315,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 */
 	public BasicHttpException setContent(HttpEntity value) {
 		assertModifiable();
-		this.content = value;
+		content = value;
 		return this;
 	}
 

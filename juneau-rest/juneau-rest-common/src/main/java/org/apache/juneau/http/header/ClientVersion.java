@@ -124,7 +124,7 @@ public class ClientVersion extends BasicStringHeader {
 	public ClientVersion(Supplier<Version> value) {
 		super(NAME, (String)null);
 		this.value = null;
-		this.supplier = value;
+		supplier = value;
 	}
 
 	/**

@@ -74,7 +74,7 @@ public class EntityTags {
 	 * @param value The header value.
 	 */
 	public EntityTags(String value) {
-		this.string = value;
+		string = value;
 		this.value = parse(value);
 	}
 

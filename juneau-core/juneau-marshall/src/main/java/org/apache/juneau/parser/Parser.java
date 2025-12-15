@@ -420,7 +420,7 @@ public class Parser extends BeanContextable {
 		 * @return This object.
 		 */
 		public Builder consumes(String value) {
-			this.consumes = value;
+			consumes = value;
 			return this;
 		}
 

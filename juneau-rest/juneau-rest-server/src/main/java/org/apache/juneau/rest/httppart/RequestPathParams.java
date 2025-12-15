@@ -259,7 +259,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * @return This object (for method chaining).
 	 */
 	public RequestPathParams caseSensitive(boolean value) {
-		this.caseSensitive = value;
+		caseSensitive = value;
 		return this;
 	}
 
@@ -477,7 +477,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * @return This object.
 	 */
 	public RequestPathParams parser(HttpPartParserSession value) {
-		this.parser = value;
+		parser = value;
 		forEach(x -> x.parser(parser));
 		return this;
 	}
