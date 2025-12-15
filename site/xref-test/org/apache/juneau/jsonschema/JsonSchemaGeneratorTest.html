@@ -1325,7 +1325,7 @@
 <a class="jxr_linenumber" name="L1317" href="#L1317">1317</a> 		assertBean(schema, <span class="jxr_string">"const"</span>, <span class="jxr_string">"MY_CONSTANT"</span>);
 <a class="jxr_linenumber" name="L1318" href="#L1318">1318</a> 	}
 <a class="jxr_linenumber" name="L1319" href="#L1319">1319</a> 
-<a class="jxr_linenumber" name="L1320" href="#L1320">1320</a> 	@Schema(type=<span class="jxr_string">"string"</span>, _<strong class="jxr_keyword">const</strong>=<span class="jxr_string">"MY_CONSTANT"</span>)
+<a class="jxr_linenumber" name="L1320" href="#L1320">1320</a> 	@Schema(type=<span class="jxr_string">"string"</span>, <strong class="jxr_keyword">const</strong>_=<span class="jxr_string">"MY_CONSTANT"</span>)
 <a class="jxr_linenumber" name="L1321" href="#L1321">1321</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ConstBean {
 <a class="jxr_linenumber" name="L1322" href="#L1322">1322</a> 		<strong class="jxr_keyword">public</strong> String value;
 <a class="jxr_linenumber" name="L1323" href="#L1323">1323</a> 	}
@@ -1484,9 +1484,9 @@
 <a class="jxr_linenumber" name="L1476" href="#L1476">1476</a> 	}
 <a class="jxr_linenumber" name="L1477" href="#L1477">1477</a> 
 <a class="jxr_linenumber" name="L1478" href="#L1478">1478</a> 	@Schema(type=<span class="jxr_string">"object"</span>,
-<a class="jxr_linenumber" name="L1479" href="#L1479">1479</a> 		_<strong class="jxr_keyword">if</strong>=<span class="jxr_string">"properties:{foo:{const:'bar'}}"</span>,
-<a class="jxr_linenumber" name="L1480" href="#L1480">1480</a> 		_then=<span class="jxr_string">"required:['baz']"</span>,
-<a class="jxr_linenumber" name="L1481" href="#L1481">1481</a> 		_<strong class="jxr_keyword">else</strong>=<span class="jxr_string">"required:['qux']"</span>)
+<a class="jxr_linenumber" name="L1479" href="#L1479">1479</a> 		<strong class="jxr_keyword">if</strong>_=<span class="jxr_string">"properties:{foo:{const:'bar'}}"</span>,
+<a class="jxr_linenumber" name="L1480" href="#L1480">1480</a> 		then_=<span class="jxr_string">"required:['baz']"</span>,
+<a class="jxr_linenumber" name="L1481" href="#L1481">1481</a> 		<strong class="jxr_keyword">else</strong>_=<span class="jxr_string">"required:['qux']"</span>)
 <a class="jxr_linenumber" name="L1482" href="#L1482">1482</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ConditionalBean {
 <a class="jxr_linenumber" name="L1483" href="#L1483">1483</a> 		<strong class="jxr_keyword">public</strong> String foo;
 <a class="jxr_linenumber" name="L1484" href="#L1484">1484</a> 		<strong class="jxr_keyword">public</strong> String baz;
@@ -1502,7 +1502,7 @@
 <a class="jxr_linenumber" name="L1494" href="#L1494">1494</a> 
 <a class="jxr_linenumber" name="L1495" href="#L1495">1495</a> 	@Schema(type=<span class="jxr_string">"integer"</span>,
 <a class="jxr_linenumber" name="L1496" href="#L1496">1496</a> 		$id=<span class="jxr_string">"https://example.com/combined"</span>,
-<a class="jxr_linenumber" name="L1497" href="#L1497">1497</a> 		_<strong class="jxr_keyword">const</strong>=<span class="jxr_string">"FIXED"</span>,
+<a class="jxr_linenumber" name="L1497" href="#L1497">1497</a> 		<strong class="jxr_keyword">const</strong>_=<span class="jxr_string">"FIXED"</span>,
 <a class="jxr_linenumber" name="L1498" href="#L1498">1498</a> 		examples={<span class="jxr_string">"ex1"</span>, <span class="jxr_string">"ex2"</span>},
 <a class="jxr_linenumber" name="L1499" href="#L1499">1499</a> 		$comment=<span class="jxr_string">"A comprehensive example"</span>,
 <a class="jxr_linenumber" name="L1500" href="#L1500">1500</a> 		deprecatedProperty=<strong class="jxr_keyword">true</strong>,

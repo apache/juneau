@@ -50,8 +50,8 @@
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * 			collectionFormat=&lt;js&gt;"csv"&lt;/js&gt;,</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * 			items=&lt;ja&gt;@Items&lt;/ja&gt;(</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * 				type=&lt;js&gt;"string"&lt;/js&gt;,</em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * 				_enum=&lt;js&gt;"AVAILABLE,PENDING,SOLD"&lt;/js&gt;,</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * 				_default=&lt;js&gt;"AVAILABLE"&lt;/js&gt;</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * 				enum_=&lt;js&gt;"AVAILABLE,PENDING,SOLD"&lt;/js&gt;,</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * 				default_=&lt;js&gt;"AVAILABLE"&lt;/js&gt;</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> *			)</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> *		)</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * 	)</em>
@@ -95,7 +95,7 @@
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	String[] _<strong class="jxr_keyword">default</strong>() <strong class="jxr_keyword">default</strong> {};
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	String[] <strong class="jxr_keyword">default</strong>_() <strong class="jxr_keyword">default</strong> {};
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 * &lt;mk&gt;enum&lt;/mk&gt; field of the &lt;a class="doclink" href="<a href="https://swagger.io/specification/v2" target="alexandria_uri">https://swagger.io/specification/v2</a>#itemsObject"&gt;Swagger Items Object&lt;/a&gt;.</em>
@@ -107,7 +107,7 @@
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	String[] _enum() <strong class="jxr_keyword">default</strong> {};
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	String[] enum_() <strong class="jxr_keyword">default</strong> {};
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 * &lt;mk&gt;$ref&lt;/mk&gt; field of the &lt;a class="doclink" href="<a href="https://swagger.io/specification/v2" target="alexandria_uri">https://swagger.io/specification/v2</a>#itemsObject"&gt;Swagger Items Object&lt;/a&gt;.</em>
@@ -149,14 +149,14 @@
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 	String[] description() <strong class="jxr_keyword">default</strong> {};
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 * Synonym for {@link #_default()}.</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 * Synonym for {@link #default_()}.</em>
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 	String[] df() <strong class="jxr_keyword">default</strong> {};
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">	 * Synonym for {@link #_enum()}.</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">	 * Synonym for {@link #enum_()}.</em>
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">	 */</em>

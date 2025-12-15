@@ -110,12 +110,12 @@
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<strong class="jxr_keyword">private</strong> Number multipleOf, maximum, minimum;
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<strong class="jxr_keyword">private</strong> Integer maxLength, minLength, maxItems, minItems, maxProperties, minProperties;
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">private</strong> Boolean exclusiveMaximum, exclusiveMinimum, uniqueItems, readOnly, required;
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<strong class="jxr_keyword">private</strong> Object _<strong class="jxr_keyword">default</strong>,  <em class="jxr_comment">// NOSONAR - Intentional naming.</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<strong class="jxr_keyword">private</strong> Object <strong class="jxr_keyword">default</strong>_,
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		example;
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<strong class="jxr_keyword">private</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/swagger/Items.html#Items">Items</a> items;
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 	<strong class="jxr_keyword">private</strong> <a name="Xml" href="../../../../../org/apache/juneau/bean/swagger/Xml.html#Xml">Xml</a> xml;
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 	<strong class="jxr_keyword">private</strong> <a name="ExternalDocumentation" href="../../../../../org/apache/juneau/bean/swagger/ExternalDocumentation.html#ExternalDocumentation">ExternalDocumentation</a> externalDocs;
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	<strong class="jxr_keyword">private</strong> Set&lt;Object&gt; _enum = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;();  <em class="jxr_comment">// NOSONAR - Intentional naming.</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	<strong class="jxr_keyword">private</strong> Set&lt;Object&gt; enum_ = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;();
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<strong class="jxr_keyword">private</strong> Set&lt;SchemaInfo&gt; allOf = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;();
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 	<strong class="jxr_keyword">private</strong> Set&lt;String&gt; requiredProperties = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;();
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<strong class="jxr_keyword">private</strong> Map&lt;String,SchemaInfo&gt; properties = map();
@@ -137,11 +137,11 @@
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">this</strong>.additionalProperties = copyFrom.additionalProperties == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : copyFrom.additionalProperties.copy();
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">if</strong> (nn(copyFrom.allOf))
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 			<strong class="jxr_keyword">this</strong>.allOf.addAll(copyOf(copyFrom.allOf, SchemaInfo::copy));
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">this</strong>._<strong class="jxr_keyword">default</strong> = copyFrom._<strong class="jxr_keyword">default</strong>;
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">default</strong>_ = copyFrom.<strong class="jxr_keyword">default</strong>_;
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">this</strong>.description = copyFrom.description;
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">this</strong>.discriminator = copyFrom.discriminator;
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">if</strong> (nn(copyFrom._enum))
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			<strong class="jxr_keyword">this</strong>._enum.addAll(copyOf(copyFrom._enum));
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">if</strong> (nn(copyFrom.enum_))
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			<strong class="jxr_keyword">this</strong>.enum_.addAll(copyOf(copyFrom.enum_));
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">this</strong>.example = copyFrom.example;
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">this</strong>.exclusiveMaximum = copyFrom.exclusiveMaximum;
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">this</strong>.exclusiveMinimum = copyFrom.exclusiveMinimum;
@@ -219,7 +219,7 @@
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 	<strong class="jxr_keyword">public</strong> <a name="SchemaInfo" href="../../../../../org/apache/juneau/bean/swagger/SchemaInfo.html#SchemaInfo">SchemaInfo</a> addEnum(Collection&lt;Object&gt; values) {
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<strong class="jxr_keyword">if</strong> (nn(values))
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			_enum.addAll(values);
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			enum_.addAll(values);
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 	}
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 
@@ -235,7 +235,7 @@
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">if</strong> (nn(value))
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : value)
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 				<strong class="jxr_keyword">if</strong> (nn(v))
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 					_enum.add(v);
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 					enum_.add(v);
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 	}
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 
@@ -359,7 +359,7 @@
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> <em class="jxr_javadoccomment">	 * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</em>
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	<strong class="jxr_keyword">public</strong> Object getDefault() { <strong class="jxr_keyword">return</strong> _<strong class="jxr_keyword">default</strong>; }
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	<strong class="jxr_keyword">public</strong> Object getDefault() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">default</strong>_; }
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> <em class="jxr_javadoccomment">	 * Bean property getter:  &lt;property&gt;description&lt;/property&gt;.</em>
@@ -380,7 +380,7 @@
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> <em class="jxr_javadoccomment">	 * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</em>
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	<strong class="jxr_keyword">public</strong> Set&lt;Object&gt; getEnum() { <strong class="jxr_keyword">return</strong> nullIfEmpty(_enum); }
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	<strong class="jxr_keyword">public</strong> Set&lt;Object&gt; getEnum() { <strong class="jxr_keyword">return</strong> nullIfEmpty(enum_); }
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">	 * Bean property getter:  &lt;property&gt;example&lt;/property&gt;.</em>
@@ -567,10 +567,10 @@
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> 		<strong class="jxr_keyword">var</strong> s = setb(String.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> 			.addIf(nn(additionalProperties), <span class="jxr_string">"additionalProperties"</span>)
 <a class="jxr_linenumber" name="L561" href="#L561">561</a> 			.addIf(isNotEmpty(allOf), <span class="jxr_string">"allOf"</span>)
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 			.addIf(nn(_<strong class="jxr_keyword">default</strong>), <span class="jxr_string">"default"</span>)
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 			.addIf(nn(<strong class="jxr_keyword">default</strong>_), <span class="jxr_string">"default"</span>)
 <a class="jxr_linenumber" name="L563" href="#L563">563</a> 			.addIf(nn(description), <span class="jxr_string">"description"</span>)
 <a class="jxr_linenumber" name="L564" href="#L564">564</a> 			.addIf(nn(discriminator), <span class="jxr_string">"discriminator"</span>)
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 			.addIf(isNotEmpty(_enum), <span class="jxr_string">"enum"</span>)
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 			.addIf(isNotEmpty(enum_), <span class="jxr_string">"enum"</span>)
 <a class="jxr_linenumber" name="L566" href="#L566">566</a> 			.addIf(nn(example), <span class="jxr_string">"example"</span>)
 <a class="jxr_linenumber" name="L567" href="#L567">567</a> 			.addIf(nn(exclusiveMaximum), <span class="jxr_string">"exclusiveMaximum"</span>)
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> 			.addIf(nn(exclusiveMinimum), <span class="jxr_string">"exclusiveMinimum"</span>)
@@ -734,7 +734,7 @@
 <a class="jxr_linenumber" name="L726" href="#L726">726</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L727" href="#L727">727</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L728" href="#L728">728</a> 	<strong class="jxr_keyword">public</strong> <a name="SchemaInfo" href="../../../../../org/apache/juneau/bean/swagger/SchemaInfo.html#SchemaInfo">SchemaInfo</a> setDefault(Object value) {
-<a class="jxr_linenumber" name="L729" href="#L729">729</a> 		_<strong class="jxr_keyword">default</strong> = value;
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> 		<strong class="jxr_keyword">default</strong>_ = value;
 <a class="jxr_linenumber" name="L730" href="#L730">730</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L731" href="#L731">731</a> 	}
 <a class="jxr_linenumber" name="L732" href="#L732">732</a> 
@@ -774,9 +774,9 @@
 <a class="jxr_linenumber" name="L766" href="#L766">766</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L767" href="#L767">767</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L768" href="#L768">768</a> 	<strong class="jxr_keyword">public</strong> <a name="SchemaInfo" href="../../../../../org/apache/juneau/bean/swagger/SchemaInfo.html#SchemaInfo">SchemaInfo</a> setEnum(Collection&lt;Object&gt; value) {
-<a class="jxr_linenumber" name="L769" href="#L769">769</a> 		_enum.clear();
+<a class="jxr_linenumber" name="L769" href="#L769">769</a> 		enum_.clear();
 <a class="jxr_linenumber" name="L770" href="#L770">770</a> 		<strong class="jxr_keyword">if</strong> (nn(value))
-<a class="jxr_linenumber" name="L771" href="#L771">771</a> 			_enum.addAll(value);
+<a class="jxr_linenumber" name="L771" href="#L771">771</a> 			enum_.addAll(value);
 <a class="jxr_linenumber" name="L772" href="#L772">772</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L773" href="#L773">773</a> 	}
 <a class="jxr_linenumber" name="L774" href="#L774">774</a> 

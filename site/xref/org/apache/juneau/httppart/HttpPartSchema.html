@@ -98,9 +98,9 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 * Builder class.</em>
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder {
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		String name, _<strong class="jxr_keyword">default</strong>;
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		String name, <strong class="jxr_keyword">default</strong>_;
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		Set&lt;Integer&gt; codes;
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		Set&lt;String&gt; _enum;
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		Set&lt;String&gt; enum_;
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  		Boolean allowEmptyValue, exclusiveMaximum, exclusiveMinimum, required, uniqueItems, skipIfEmpty;
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  		HttpPartCollectionFormat collectionFormat = HttpPartCollectionFormat.NO_COLLECTION_FORMAT;
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  		HttpPartDataType type = HttpPartDataType.NO_TYPE;
@@ -114,7 +114,7 @@
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		Class&lt;? <strong class="jxr_keyword">extends</strong> HttpPartParser&gt; parser;
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		Class&lt;? <strong class="jxr_keyword">extends</strong> HttpPartSerializer&gt; serializer;
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<em class="jxr_comment">// JSON Schema Draft 2020-12 properties</em>
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		String _<strong class="jxr_keyword">const</strong>;
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		String <strong class="jxr_keyword">const</strong>_;
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		String[] examples;
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 		Boolean deprecated;
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 		Number exclusiveMaximumValue, exclusiveMinimumValue;
@@ -130,8 +130,8 @@
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">		 * 	The new value for this property.</em>
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">public</strong> Builder _<strong class="jxr_keyword">const</strong>(String value) {
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 			<strong class="jxr_keyword">this</strong>._<strong class="jxr_keyword">const</strong> = value;
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">public</strong> Builder <strong class="jxr_keyword">const</strong>_(String value) {
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 			<strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">const</strong>_ = value;
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 		}
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 
@@ -156,9 +156,9 @@
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">		 * 	&lt;br&gt;Ignored if value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">public</strong> Builder _<strong class="jxr_keyword">default</strong>(String value) {
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">public</strong> Builder <strong class="jxr_keyword">default</strong>_(String value) {
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(value))
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 				<strong class="jxr_keyword">this</strong>._<strong class="jxr_keyword">default</strong> = value;
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 				<strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">default</strong>_ = value;
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 		}
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 
@@ -182,25 +182,25 @@
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> <em class="jxr_javadoccomment">		 * 	&lt;br&gt;Ignored if value is &lt;jk&gt;null&lt;/jk&gt; or an empty set.</em>
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">public</strong> Builder _enum(Set&lt;String&gt; value) {
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">public</strong> Builder enum_(Set&lt;String&gt; value) {
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 			<strong class="jxr_keyword">if</strong> (nn(value) &amp;&amp; ! value.isEmpty())
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 				<strong class="jxr_keyword">this</strong>._enum = value;
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 				<strong class="jxr_keyword">this</strong>.enum_ = value;
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 		}
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">		 * &lt;mk&gt;_enum&lt;/mk&gt; field.</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">		 * &lt;mk&gt;enum&lt;/mk&gt; field.</em>
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">		 * Same as {@link #_enum(Set)} but takes in a var-args array.</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">		 * Same as {@link #enum_(Set)} but takes in a var-args array.</em>
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">		 * @param values</em>
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">		 * 	The new values for this property.</em>
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">		 * 	&lt;br&gt;Ignored if value is empty.</em>
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">public</strong> Builder _enum(String...values) {
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 			<strong class="jxr_keyword">return</strong> _enum(set(values));
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">public</strong> Builder enum_(String...values) {
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 			<strong class="jxr_keyword">return</strong> enum_(set(values));
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 		}
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<em class="jxr_javadoccomment">/**</em>
@@ -652,36 +652,36 @@
 <a class="jxr_linenumber" name="L644" href="#L644">644</a> 		}
 <a class="jxr_linenumber" name="L645" href="#L645">645</a> 
 <a class="jxr_linenumber" name="L646" href="#L646">646</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> <em class="jxr_javadoccomment">		 * Synonym for {@link #_default(String)}.</em>
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> <em class="jxr_javadoccomment">		 * Synonym for {@link #default_(String)}.</em>
 <a class="jxr_linenumber" name="L648" href="#L648">648</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L649" href="#L649">649</a> <em class="jxr_javadoccomment">		 * @param value</em>
 <a class="jxr_linenumber" name="L650" href="#L650">650</a> <em class="jxr_javadoccomment">		 * 	The new value for this property.</em>
 <a class="jxr_linenumber" name="L651" href="#L651">651</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L652" href="#L652">652</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L653" href="#L653">653</a> 		<strong class="jxr_keyword">public</strong> Builder df(String value) {
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 			<strong class="jxr_keyword">return</strong> _<strong class="jxr_keyword">default</strong>(value);
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">default</strong>_(value);
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> 		}
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 
 <a class="jxr_linenumber" name="L657" href="#L657">657</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> <em class="jxr_javadoccomment">		 * Synonym for {@link #_enum(Set)}.</em>
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> <em class="jxr_javadoccomment">		 * Synonym for {@link #enum_(Set)}.</em>
 <a class="jxr_linenumber" name="L659" href="#L659">659</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L660" href="#L660">660</a> <em class="jxr_javadoccomment">		 * @param value</em>
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> <em class="jxr_javadoccomment">		 * 	The new value for this property.</em>
 <a class="jxr_linenumber" name="L662" href="#L662">662</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L663" href="#L663">663</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L664" href="#L664">664</a> 		<strong class="jxr_keyword">public</strong> Builder e(Set&lt;String&gt; value) {
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 			<strong class="jxr_keyword">return</strong> _enum(value);
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 			<strong class="jxr_keyword">return</strong> enum_(value);
 <a class="jxr_linenumber" name="L666" href="#L666">666</a> 		}
 <a class="jxr_linenumber" name="L667" href="#L667">667</a> 
 <a class="jxr_linenumber" name="L668" href="#L668">668</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L669" href="#L669">669</a> <em class="jxr_javadoccomment">		 * Synonym for {@link #_enum(String...)}.</em>
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> <em class="jxr_javadoccomment">		 * Synonym for {@link #enum_(String...)}.</em>
 <a class="jxr_linenumber" name="L670" href="#L670">670</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L671" href="#L671">671</a> <em class="jxr_javadoccomment">		 * @param values</em>
 <a class="jxr_linenumber" name="L672" href="#L672">672</a> <em class="jxr_javadoccomment">		 * 	The new values for this property.</em>
 <a class="jxr_linenumber" name="L673" href="#L673">673</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L674" href="#L674">674</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L675" href="#L675">675</a> 		<strong class="jxr_keyword">public</strong> Builder e(String...values) {
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> 			<strong class="jxr_keyword">return</strong> _enum(values);
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 			<strong class="jxr_keyword">return</strong> enum_(values);
 <a class="jxr_linenumber" name="L677" href="#L677">677</a> 		}
 <a class="jxr_linenumber" name="L678" href="#L678">678</a> 
 <a class="jxr_linenumber" name="L679" href="#L679">679</a> 		<em class="jxr_javadoccomment">/**</em>
@@ -2582,7 +2582,7 @@
 <a class="jxr_linenumber" name="L2574" href="#L2574">2574</a> 		Builder apply(Content a) {
 <a class="jxr_linenumber" name="L2575" href="#L2575">2575</a> 			<strong class="jxr_keyword">if</strong> (! SchemaAnnotation.empty(a.schema()))
 <a class="jxr_linenumber" name="L2576" href="#L2576">2576</a> 				apply(a.schema());
-<a class="jxr_linenumber" name="L2577" href="#L2577">2577</a> 			_<strong class="jxr_keyword">default</strong>(a.def());
+<a class="jxr_linenumber" name="L2577" href="#L2577">2577</a> 			<strong class="jxr_keyword">default</strong>_(a.def());
 <a class="jxr_linenumber" name="L2578" href="#L2578">2578</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L2579" href="#L2579">2579</a> 		}
 <a class="jxr_linenumber" name="L2580" href="#L2580">2580</a> 
@@ -2590,7 +2590,7 @@
 <a class="jxr_linenumber" name="L2582" href="#L2582">2582</a> 			<strong class="jxr_keyword">if</strong> (! SchemaAnnotation.empty(a.schema()))
 <a class="jxr_linenumber" name="L2583" href="#L2583">2583</a> 				apply(a.schema());
 <a class="jxr_linenumber" name="L2584" href="#L2584">2584</a> 			name(firstNonEmpty(a.name(), a.value()));
-<a class="jxr_linenumber" name="L2585" href="#L2585">2585</a> 			_<strong class="jxr_keyword">default</strong>(a.def());
+<a class="jxr_linenumber" name="L2585" href="#L2585">2585</a> 			<strong class="jxr_keyword">default</strong>_(a.def());
 <a class="jxr_linenumber" name="L2586" href="#L2586">2586</a> 			parser(a.parser());
 <a class="jxr_linenumber" name="L2587" href="#L2587">2587</a> 			serializer(a.serializer());
 <a class="jxr_linenumber" name="L2588" href="#L2588">2588</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -2610,15 +2610,15 @@
 <a class="jxr_linenumber" name="L2602" href="#L2602">2602</a> 			<strong class="jxr_keyword">if</strong> (! SchemaAnnotation.empty(a.schema()))
 <a class="jxr_linenumber" name="L2603" href="#L2603">2603</a> 				apply(a.schema());
 <a class="jxr_linenumber" name="L2604" href="#L2604">2604</a> 			name(firstNonEmpty(a.name(), a.value()));
-<a class="jxr_linenumber" name="L2605" href="#L2605">2605</a> 			_<strong class="jxr_keyword">default</strong>(a.def());
+<a class="jxr_linenumber" name="L2605" href="#L2605">2605</a> 			<strong class="jxr_keyword">default</strong>_(a.def());
 <a class="jxr_linenumber" name="L2606" href="#L2606">2606</a> 			parser(a.parser());
 <a class="jxr_linenumber" name="L2607" href="#L2607">2607</a> 			serializer(a.serializer());
 <a class="jxr_linenumber" name="L2608" href="#L2608">2608</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L2609" href="#L2609">2609</a> 		}
 <a class="jxr_linenumber" name="L2610" href="#L2610">2610</a> 
 <a class="jxr_linenumber" name="L2611" href="#L2611">2611</a> 		Builder apply(<a name="Items" href="../../../../org/apache/juneau/annotation/Items.html#Items">Items</a> a) {
-<a class="jxr_linenumber" name="L2612" href="#L2612">2612</a> 			_<strong class="jxr_keyword">default</strong>(joinnlOrNull(a._<strong class="jxr_keyword">default</strong>(), a.df()));
-<a class="jxr_linenumber" name="L2613" href="#L2613">2613</a> 			_enum(toSet(a._enum(), a.e()));
+<a class="jxr_linenumber" name="L2612" href="#L2612">2612</a> 			<strong class="jxr_keyword">default</strong>_(joinnlOrNull(a.<strong class="jxr_keyword">default</strong>_(), a.df()));
+<a class="jxr_linenumber" name="L2613" href="#L2613">2613</a> 			enum_(toSet(a.enum_(), a.e()));
 <a class="jxr_linenumber" name="L2614" href="#L2614">2614</a> 			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
 <a class="jxr_linenumber" name="L2615" href="#L2615">2615</a> 			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
 <a class="jxr_linenumber" name="L2616" href="#L2616">2616</a> 			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
@@ -2643,8 +2643,8 @@
 <a class="jxr_linenumber" name="L2635" href="#L2635">2635</a> 
 <a class="jxr_linenumber" name="L2636" href="#L2636">2636</a> 		Builder apply(<a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> m) {
 <a class="jxr_linenumber" name="L2637" href="#L2637">2637</a> 			<strong class="jxr_keyword">if</strong> (nn(m) &amp;&amp; ! m.isEmpty()) {
-<a class="jxr_linenumber" name="L2638" href="#L2638">2638</a> 				_<strong class="jxr_keyword">default</strong>(m.getString(<span class="jxr_string">"default"</span>));
-<a class="jxr_linenumber" name="L2639" href="#L2639">2639</a> 				_enum(HttpPartSchema.toSet(m.getString(<span class="jxr_string">"enum"</span>)));
+<a class="jxr_linenumber" name="L2638" href="#L2638">2638</a> 				<strong class="jxr_keyword">default</strong>_(m.getString(<span class="jxr_string">"default"</span>));
+<a class="jxr_linenumber" name="L2639" href="#L2639">2639</a> 				enum_(HttpPartSchema.toSet(m.getString(<span class="jxr_string">"enum"</span>)));
 <a class="jxr_linenumber" name="L2640" href="#L2640">2640</a> 				allowEmptyValue(m.getBoolean(<span class="jxr_string">"allowEmptyValue"</span>));
 <a class="jxr_linenumber" name="L2641" href="#L2641">2641</a> 				exclusiveMaximum(m.getBoolean(<span class="jxr_string">"exclusiveMaximum"</span>));
 <a class="jxr_linenumber" name="L2642" href="#L2642">2642</a> 				exclusiveMinimum(m.getBoolean(<span class="jxr_string">"exclusiveMinimum"</span>));
@@ -2679,7 +2679,7 @@
 <a class="jxr_linenumber" name="L2671" href="#L2671">2671</a> 			name(firstNonEmpty(a.name(), a.value()));
 <a class="jxr_linenumber" name="L2672" href="#L2672">2672</a> 			String def = a.def();
 <a class="jxr_linenumber" name="L2673" href="#L2673">2673</a> 			<strong class="jxr_keyword">if</strong> (ne(NONE, def))
-<a class="jxr_linenumber" name="L2674" href="#L2674">2674</a> 				_<strong class="jxr_keyword">default</strong> = def;  <em class="jxr_comment">// Set directly to allow empty strings as valid defaults</em>
+<a class="jxr_linenumber" name="L2674" href="#L2674">2674</a> 				<strong class="jxr_keyword">default</strong>_ = def;  <em class="jxr_comment">// Set directly to allow empty strings as valid defaults</em>
 <a class="jxr_linenumber" name="L2675" href="#L2675">2675</a> 			parser(a.parser());
 <a class="jxr_linenumber" name="L2676" href="#L2676">2676</a> 			serializer(a.serializer());
 <a class="jxr_linenumber" name="L2677" href="#L2677">2677</a> 
@@ -2700,7 +2700,7 @@
 <a class="jxr_linenumber" name="L2692" href="#L2692">2692</a> 				apply(a.schema());
 <a class="jxr_linenumber" name="L2693" href="#L2693">2693</a> 			<em class="jxr_comment">// PathRemainder is always "/*"</em>
 <a class="jxr_linenumber" name="L2694" href="#L2694">2694</a> 			name(<span class="jxr_string">"/*"</span>);
-<a class="jxr_linenumber" name="L2695" href="#L2695">2695</a> 			_<strong class="jxr_keyword">default</strong>(a.def());
+<a class="jxr_linenumber" name="L2695" href="#L2695">2695</a> 			<strong class="jxr_keyword">default</strong>_(a.def());
 <a class="jxr_linenumber" name="L2696" href="#L2696">2696</a> 			parser(a.parser());
 <a class="jxr_linenumber" name="L2697" href="#L2697">2697</a> 			serializer(a.serializer());
 <a class="jxr_linenumber" name="L2698" href="#L2698">2698</a> 
@@ -2715,7 +2715,7 @@
 <a class="jxr_linenumber" name="L2707" href="#L2707">2707</a> 			<strong class="jxr_keyword">if</strong> (! SchemaAnnotation.empty(a.schema()))
 <a class="jxr_linenumber" name="L2708" href="#L2708">2708</a> 				apply(a.schema());
 <a class="jxr_linenumber" name="L2709" href="#L2709">2709</a> 			name(firstNonEmpty(a.name(), a.value()));
-<a class="jxr_linenumber" name="L2710" href="#L2710">2710</a> 			_<strong class="jxr_keyword">default</strong>(a.def());
+<a class="jxr_linenumber" name="L2710" href="#L2710">2710</a> 			<strong class="jxr_keyword">default</strong>_(a.def());
 <a class="jxr_linenumber" name="L2711" href="#L2711">2711</a> 			parser(a.parser());
 <a class="jxr_linenumber" name="L2712" href="#L2712">2712</a> 			serializer(a.serializer());
 <a class="jxr_linenumber" name="L2713" href="#L2713">2713</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -2736,8 +2736,8 @@
 <a class="jxr_linenumber" name="L2728" href="#L2728">2728</a> 
 <a class="jxr_linenumber" name="L2729" href="#L2729">2729</a> 		@SuppressWarnings(<span class="jxr_string">"deprecation"</span>)
 <a class="jxr_linenumber" name="L2730" href="#L2730">2730</a> 		Builder apply(Schema a) {
-<a class="jxr_linenumber" name="L2731" href="#L2731">2731</a> 			_<strong class="jxr_keyword">default</strong>(joinnlOrNull(a._<strong class="jxr_keyword">default</strong>(), a.df()));
-<a class="jxr_linenumber" name="L2732" href="#L2732">2732</a> 			_enum(toSet(a._enum(), a.e()));
+<a class="jxr_linenumber" name="L2731" href="#L2731">2731</a> 			<strong class="jxr_keyword">default</strong>_(joinnlOrNull(a.<strong class="jxr_keyword">default</strong>_(), a.df()));
+<a class="jxr_linenumber" name="L2732" href="#L2732">2732</a> 			enum_(toSet(a.enum_(), a.e()));
 <a class="jxr_linenumber" name="L2733" href="#L2733">2733</a> 			additionalProperties(HttpPartSchema.toJsonMap(a.additionalProperties()));
 <a class="jxr_linenumber" name="L2734" href="#L2734">2734</a> 			allowEmptyValue(a.allowEmptyValue() || a.aev());
 <a class="jxr_linenumber" name="L2735" href="#L2735">2735</a> 			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
@@ -2777,7 +2777,7 @@
 <a class="jxr_linenumber" name="L2769" href="#L2769">2769</a> 			uniqueItems(a.uniqueItems() || a.ui());
 <a class="jxr_linenumber" name="L2770" href="#L2770">2770</a> 
 <a class="jxr_linenumber" name="L2771" href="#L2771">2771</a> 			<em class="jxr_comment">// JSON Schema Draft 2020-12 properties</em>
-<a class="jxr_linenumber" name="L2772" href="#L2772">2772</a> 			_<strong class="jxr_keyword">const</strong>(joinnlOrNull(a._<strong class="jxr_keyword">const</strong>()));
+<a class="jxr_linenumber" name="L2772" href="#L2772">2772</a> 			<strong class="jxr_keyword">const</strong>_(joinnlOrNull(a.<strong class="jxr_keyword">const</strong>_()));
 <a class="jxr_linenumber" name="L2773" href="#L2773">2773</a> 			examples(a.examples());
 <a class="jxr_linenumber" name="L2774" href="#L2774">2774</a> 			deprecated(a.deprecatedProperty());
 <a class="jxr_linenumber" name="L2775" href="#L2775">2775</a> 
@@ -2790,8 +2790,8 @@
 <a class="jxr_linenumber" name="L2782" href="#L2782">2782</a> 		}
 <a class="jxr_linenumber" name="L2783" href="#L2783">2783</a> 
 <a class="jxr_linenumber" name="L2784" href="#L2784">2784</a> 		Builder apply(<a name="SubItems" href="../../../../org/apache/juneau/annotation/SubItems.html#SubItems">SubItems</a> a) {
-<a class="jxr_linenumber" name="L2785" href="#L2785">2785</a> 			_<strong class="jxr_keyword">default</strong>(joinnlOrNull(a._<strong class="jxr_keyword">default</strong>(), a.df()));
-<a class="jxr_linenumber" name="L2786" href="#L2786">2786</a> 			_enum(toSet(a._enum(), a.e()));
+<a class="jxr_linenumber" name="L2785" href="#L2785">2785</a> 			<strong class="jxr_keyword">default</strong>_(joinnlOrNull(a.<strong class="jxr_keyword">default</strong>_(), a.df()));
+<a class="jxr_linenumber" name="L2786" href="#L2786">2786</a> 			enum_(toSet(a.enum_(), a.e()));
 <a class="jxr_linenumber" name="L2787" href="#L2787">2787</a> 			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
 <a class="jxr_linenumber" name="L2788" href="#L2788">2788</a> 			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
 <a class="jxr_linenumber" name="L2789" href="#L2789">2789</a> 			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
@@ -3595,8 +3595,8 @@
 <a class="jxr_linenumber" name="L3587" href="#L3587">3587</a> 	}
 <a class="jxr_linenumber" name="L3588" href="#L3588">3588</a> 
 <a class="jxr_linenumber" name="L3589" href="#L3589">3589</a> 	<strong class="jxr_keyword">final</strong> String name;
-<a class="jxr_linenumber" name="L3590" href="#L3590">3590</a> 	<strong class="jxr_keyword">final</strong> String _<strong class="jxr_keyword">default</strong>;
-<a class="jxr_linenumber" name="L3591" href="#L3591">3591</a> 	<strong class="jxr_keyword">final</strong> Set&lt;String&gt; _enum;
+<a class="jxr_linenumber" name="L3590" href="#L3590">3590</a> 	<strong class="jxr_keyword">final</strong> String <strong class="jxr_keyword">default</strong>_;
+<a class="jxr_linenumber" name="L3591" href="#L3591">3591</a> 	<strong class="jxr_keyword">final</strong> Set&lt;String&gt; enum_;
 <a class="jxr_linenumber" name="L3592" href="#L3592">3592</a> 	<strong class="jxr_keyword">final</strong> Map&lt;String,HttpPartSchema&gt; properties;
 <a class="jxr_linenumber" name="L3593" href="#L3593">3593</a> 	<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> allowEmptyValue, exclusiveMaximum, exclusiveMinimum, required, uniqueItems, skipIfEmpty;
 <a class="jxr_linenumber" name="L3594" href="#L3594">3594</a> 	<strong class="jxr_keyword">final</strong> <a name="HttpPartCollectionFormat" href="../../../../org/apache/juneau/httppart/HttpPartCollectionFormat.html#HttpPartCollectionFormat">HttpPartCollectionFormat</a> collectionFormat;
@@ -3614,7 +3614,7 @@
 <a class="jxr_linenumber" name="L3606" href="#L3606">3606</a> 	<strong class="jxr_keyword">final</strong> ClassMeta&lt;?&gt; parsedType;
 <a class="jxr_linenumber" name="L3607" href="#L3607">3607</a> 
 <a class="jxr_linenumber" name="L3608" href="#L3608">3608</a> 	<em class="jxr_comment">// JSON Schema Draft 2020-12 fields</em>
-<a class="jxr_linenumber" name="L3609" href="#L3609">3609</a> 	<strong class="jxr_keyword">final</strong> String _<strong class="jxr_keyword">const</strong>;
+<a class="jxr_linenumber" name="L3609" href="#L3609">3609</a> 	<strong class="jxr_keyword">final</strong> String <strong class="jxr_keyword">const</strong>_;
 <a class="jxr_linenumber" name="L3610" href="#L3610">3610</a> 
 <a class="jxr_linenumber" name="L3611" href="#L3611">3611</a> 	<strong class="jxr_keyword">final</strong> String[] examples;
 <a class="jxr_linenumber" name="L3612" href="#L3612">3612</a> 
@@ -3624,8 +3624,8 @@
 <a class="jxr_linenumber" name="L3616" href="#L3616">3616</a> 
 <a class="jxr_linenumber" name="L3617" href="#L3617">3617</a> 	HttpPartSchema(Builder b) {
 <a class="jxr_linenumber" name="L3618" href="#L3618">3618</a> 		name = b.name;
-<a class="jxr_linenumber" name="L3619" href="#L3619">3619</a> 		_<strong class="jxr_keyword">default</strong> = b._<strong class="jxr_keyword">default</strong>;
-<a class="jxr_linenumber" name="L3620" href="#L3620">3620</a> 		_enum = copy(b._enum);
+<a class="jxr_linenumber" name="L3619" href="#L3619">3619</a> 		<strong class="jxr_keyword">default</strong>_ = b.<strong class="jxr_keyword">default</strong>_;
+<a class="jxr_linenumber" name="L3620" href="#L3620">3620</a> 		enum_ = copy(b.enum_);
 <a class="jxr_linenumber" name="L3621" href="#L3621">3621</a> 		properties = build(b.properties, b.noValidate);
 <a class="jxr_linenumber" name="L3622" href="#L3622">3622</a> 		allowEmptyValue = resolve(b.allowEmptyValue);
 <a class="jxr_linenumber" name="L3623" href="#L3623">3623</a> 		exclusiveMaximum = resolve(b.exclusiveMaximum);
@@ -3651,7 +3651,7 @@
 <a class="jxr_linenumber" name="L3643" href="#L3643">3643</a> 		parser = b.parser;
 <a class="jxr_linenumber" name="L3644" href="#L3644">3644</a> 		serializer = b.serializer;
 <a class="jxr_linenumber" name="L3645" href="#L3645">3645</a> 		<em class="jxr_comment">// JSON Schema Draft 2020-12 fields</em>
-<a class="jxr_linenumber" name="L3646" href="#L3646">3646</a> 		_<strong class="jxr_keyword">const</strong> = b._<strong class="jxr_keyword">const</strong>;
+<a class="jxr_linenumber" name="L3646" href="#L3646">3646</a> 		<strong class="jxr_keyword">const</strong>_ = b.<strong class="jxr_keyword">const</strong>_;
 <a class="jxr_linenumber" name="L3647" href="#L3647">3647</a> 		examples = b.examples;
 <a class="jxr_linenumber" name="L3648" href="#L3648">3648</a> 		deprecated = resolve(b.deprecated);
 <a class="jxr_linenumber" name="L3649" href="#L3649">3649</a> 		exclusiveMaximumValue = b.exclusiveMaximumValue;
@@ -3729,7 +3729,7 @@
 <a class="jxr_linenumber" name="L3721" href="#L3721">3721</a> 				<strong class="jxr_keyword">break</strong>;
 <a class="jxr_linenumber" name="L3722" href="#L3722">3722</a> 			}
 <a class="jxr_linenumber" name="L3723" href="#L3723">3723</a> 			<strong class="jxr_keyword">case</strong> BOOLEAN: {
-<a class="jxr_linenumber" name="L3724" href="#L3724">3724</a> 				notAllowed.addIf(! _enum.isEmpty(), <span class="jxr_string">"_enum"</span>)
+<a class="jxr_linenumber" name="L3724" href="#L3724">3724</a> 				notAllowed.addIf(! enum_.isEmpty(), <span class="jxr_string">"enum"</span>)
 <a class="jxr_linenumber" name="L3725" href="#L3725">3725</a> 					.addIf(nn(properties), <span class="jxr_string">"properties"</span>)
 <a class="jxr_linenumber" name="L3726" href="#L3726">3726</a> 					.addIf(nn(additionalProperties), <span class="jxr_string">"additionalProperties"</span>)
 <a class="jxr_linenumber" name="L3727" href="#L3727">3727</a> 					.addIf(exclusiveMaximum, <span class="jxr_string">"exclusiveMaximum"</span>)
@@ -3815,7 +3815,7 @@
 <a class="jxr_linenumber" name="L3807" href="#L3807">3807</a> 			errors.add(<span class="jxr_string">"Cannot specify exclusiveMaximum with maximum."</span>);
 <a class="jxr_linenumber" name="L3808" href="#L3808">3808</a> 		<strong class="jxr_keyword">if</strong> (exclusiveMinimum &amp;&amp; minimum == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L3809" href="#L3809">3809</a> 			errors.add(<span class="jxr_string">"Cannot specify exclusiveMinimum with minimum."</span>);
-<a class="jxr_linenumber" name="L3810" href="#L3810">3810</a> 		<strong class="jxr_keyword">if</strong> (required &amp;&amp; nn(_<strong class="jxr_keyword">default</strong>))
+<a class="jxr_linenumber" name="L3810" href="#L3810">3810</a> 		<strong class="jxr_keyword">if</strong> (required &amp;&amp; nn(<strong class="jxr_keyword">default</strong>_))
 <a class="jxr_linenumber" name="L3811" href="#L3811">3811</a> 			errors.add(<span class="jxr_string">"Cannot specify a default value on a required value."</span>);
 <a class="jxr_linenumber" name="L3812" href="#L3812">3812</a> 		<strong class="jxr_keyword">if</strong> (nn(minLength) &amp;&amp; nn(maxLength) &amp;&amp; maxLength &lt; minLength)
 <a class="jxr_linenumber" name="L3813" href="#L3813">3813</a> 			errors.add(<span class="jxr_string">"maxLength cannot be less than minLength."</span>);
@@ -3856,17 +3856,17 @@
 <a class="jxr_linenumber" name="L3848" href="#L3848">3848</a> <em class="jxr_javadoccomment">	 * Returns the &lt;c&gt;default&lt;/c&gt; field of this schema.</em>
 <a class="jxr_linenumber" name="L3849" href="#L3849">3849</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L3850" href="#L3850">3850</a> <em class="jxr_javadoccomment">	 * @return The default value for this schema, or &lt;jk&gt;null&lt;/jk&gt; if not specified.</em>
-<a class="jxr_linenumber" name="L3851" href="#L3851">3851</a> <em class="jxr_javadoccomment">	 * @see HttpPartSchema.Builder#_default(String)</em>
+<a class="jxr_linenumber" name="L3851" href="#L3851">3851</a> <em class="jxr_javadoccomment">	 * @see HttpPartSchema.Builder#default_(String)</em>
 <a class="jxr_linenumber" name="L3852" href="#L3852">3852</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L3853" href="#L3853">3853</a> 	<strong class="jxr_keyword">public</strong> String getDefault() { <strong class="jxr_keyword">return</strong> _<strong class="jxr_keyword">default</strong>; }
+<a class="jxr_linenumber" name="L3853" href="#L3853">3853</a> 	<strong class="jxr_keyword">public</strong> String getDefault() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">default</strong>_; }
 <a class="jxr_linenumber" name="L3854" href="#L3854">3854</a> 
 <a class="jxr_linenumber" name="L3855" href="#L3855">3855</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L3856" href="#L3856">3856</a> <em class="jxr_javadoccomment">	 * Returns the &lt;c&gt;enum&lt;/c&gt; field of this schema.</em>
 <a class="jxr_linenumber" name="L3857" href="#L3857">3857</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L3858" href="#L3858">3858</a> <em class="jxr_javadoccomment">	 * @return The &lt;c&gt;enum&lt;/c&gt; field of this schema, or &lt;jk&gt;null&lt;/jk&gt; if not specified.</em>
-<a class="jxr_linenumber" name="L3859" href="#L3859">3859</a> <em class="jxr_javadoccomment">	 * @see HttpPartSchema.Builder#_enum(Set)</em>
+<a class="jxr_linenumber" name="L3859" href="#L3859">3859</a> <em class="jxr_javadoccomment">	 * @see HttpPartSchema.Builder#enum_(Set)</em>
 <a class="jxr_linenumber" name="L3860" href="#L3860">3860</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L3861" href="#L3861">3861</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; getEnum() { <strong class="jxr_keyword">return</strong> _enum; }
+<a class="jxr_linenumber" name="L3861" href="#L3861">3861</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; getEnum() { <strong class="jxr_keyword">return</strong> enum_; }
 <a class="jxr_linenumber" name="L3862" href="#L3862">3862</a> 
 <a class="jxr_linenumber" name="L3863" href="#L3863">3863</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L3864" href="#L3864">3864</a> <em class="jxr_javadoccomment">	 * Returns the &lt;c&gt;format&lt;/c&gt; field of this schema.</em>
@@ -4140,8 +4140,8 @@
 <a class="jxr_linenumber" name="L4132" href="#L4132">4132</a> 				.appendIf(ne, <span class="jxr_string">"name"</span>, name)
 <a class="jxr_linenumber" name="L4133" href="#L4133">4133</a> 				.appendIf(ne, <span class="jxr_string">"type"</span>, type)
 <a class="jxr_linenumber" name="L4134" href="#L4134">4134</a> 				.appendIf(ne, <span class="jxr_string">"format"</span>, format)
-<a class="jxr_linenumber" name="L4135" href="#L4135">4135</a> 				.appendIf(ne, <span class="jxr_string">"default"</span>, _<strong class="jxr_keyword">default</strong>)
-<a class="jxr_linenumber" name="L4136" href="#L4136">4136</a> 				.appendIf(ne, <span class="jxr_string">"enum"</span>, _enum)
+<a class="jxr_linenumber" name="L4135" href="#L4135">4135</a> 				.appendIf(ne, <span class="jxr_string">"default"</span>, <strong class="jxr_keyword">default</strong>_)
+<a class="jxr_linenumber" name="L4136" href="#L4136">4136</a> 				.appendIf(ne, <span class="jxr_string">"enum"</span>, enum_)
 <a class="jxr_linenumber" name="L4137" href="#L4137">4137</a> 				.appendIf(ne, <span class="jxr_string">"properties"</span>, properties)
 <a class="jxr_linenumber" name="L4138" href="#L4138">4138</a> 				.appendIf(nf, <span class="jxr_string">"allowEmptyValue"</span>, allowEmptyValue)
 <a class="jxr_linenumber" name="L4139" href="#L4139">4139</a> 				.appendIf(nf, <span class="jxr_string">"exclusiveMaximum"</span>, exclusiveMaximum)
@@ -4185,11 +4185,11 @@
 <a class="jxr_linenumber" name="L4177" href="#L4177">4177</a> 			<strong class="jxr_keyword">if</strong> (! isValidAllowEmpty(in))
 <a class="jxr_linenumber" name="L4178" href="#L4178">4178</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SchemaValidationException" href="../../../../org/apache/juneau/httppart/SchemaValidationException.html#SchemaValidationException">SchemaValidationException</a>(<span class="jxr_string">"Empty value not allowed."</span>);
 <a class="jxr_linenumber" name="L4179" href="#L4179">4179</a> 			<strong class="jxr_keyword">if</strong> (! isValidConst(in))
-<a class="jxr_linenumber" name="L4180" href="#L4180">4180</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SchemaValidationException" href="../../../../org/apache/juneau/httppart/SchemaValidationException.html#SchemaValidationException">SchemaValidationException</a>(<span class="jxr_string">"Value does not match constant.  Must be: {0}"</span>, _<strong class="jxr_keyword">const</strong>);
+<a class="jxr_linenumber" name="L4180" href="#L4180">4180</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SchemaValidationException" href="../../../../org/apache/juneau/httppart/SchemaValidationException.html#SchemaValidationException">SchemaValidationException</a>(<span class="jxr_string">"Value does not match constant.  Must be: {0}"</span>, <strong class="jxr_keyword">const</strong>_);
 <a class="jxr_linenumber" name="L4181" href="#L4181">4181</a> 			<strong class="jxr_keyword">if</strong> (! isValidPattern(in))
 <a class="jxr_linenumber" name="L4182" href="#L4182">4182</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SchemaValidationException" href="../../../../org/apache/juneau/httppart/SchemaValidationException.html#SchemaValidationException">SchemaValidationException</a>(<span class="jxr_string">"Value does not match expected pattern.  Must match pattern: {0}"</span>, pattern.pattern());
 <a class="jxr_linenumber" name="L4183" href="#L4183">4183</a> 			<strong class="jxr_keyword">if</strong> (! isValidEnum(in))
-<a class="jxr_linenumber" name="L4184" href="#L4184">4184</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SchemaValidationException" href="../../../../org/apache/juneau/httppart/SchemaValidationException.html#SchemaValidationException">SchemaValidationException</a>(<span class="jxr_string">"Value does not match one of the expected values.  Must be one of the following:  {0}"</span>, toCdl(_enum));
+<a class="jxr_linenumber" name="L4184" href="#L4184">4184</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SchemaValidationException" href="../../../../org/apache/juneau/httppart/SchemaValidationException.html#SchemaValidationException">SchemaValidationException</a>(<span class="jxr_string">"Value does not match one of the expected values.  Must be one of the following:  {0}"</span>, toCdl(enum_));
 <a class="jxr_linenumber" name="L4185" href="#L4185">4185</a> 			<strong class="jxr_keyword">if</strong> (! isValidMaxLength(in))
 <a class="jxr_linenumber" name="L4186" href="#L4186">4186</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SchemaValidationException" href="../../../../org/apache/juneau/httppart/SchemaValidationException.html#SchemaValidationException">SchemaValidationException</a>(<span class="jxr_string">"Maximum length of value exceeded."</span>);
 <a class="jxr_linenumber" name="L4187" href="#L4187">4187</a> 			<strong class="jxr_keyword">if</strong> (! isValidMinLength(in))
@@ -4314,7 +4314,7 @@
 <a class="jxr_linenumber" name="L4306" href="#L4306">4306</a> 	}
 <a class="jxr_linenumber" name="L4307" href="#L4307">4307</a> 
 <a class="jxr_linenumber" name="L4308" href="#L4308">4308</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isValidConst(String x) {
-<a class="jxr_linenumber" name="L4309" href="#L4309">4309</a> 		<strong class="jxr_keyword">return</strong> _<strong class="jxr_keyword">const</strong> == <strong class="jxr_keyword">null</strong> || _<strong class="jxr_keyword">const</strong>.equals(x);
+<a class="jxr_linenumber" name="L4309" href="#L4309">4309</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">const</strong>_ == <strong class="jxr_keyword">null</strong> || <strong class="jxr_keyword">const</strong>_.equals(x);
 <a class="jxr_linenumber" name="L4310" href="#L4310">4310</a> 	}
 <a class="jxr_linenumber" name="L4311" href="#L4311">4311</a> 
 <a class="jxr_linenumber" name="L4312" href="#L4312">4312</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isValidDate(String x) {
@@ -4343,7 +4343,7 @@
 <a class="jxr_linenumber" name="L4335" href="#L4335">4335</a> 	}
 <a class="jxr_linenumber" name="L4336" href="#L4336">4336</a> 
 <a class="jxr_linenumber" name="L4337" href="#L4337">4337</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isValidEnum(String x) {
-<a class="jxr_linenumber" name="L4338" href="#L4338">4338</a> 		<strong class="jxr_keyword">return</strong> _enum.isEmpty() || _enum.contains(x);
+<a class="jxr_linenumber" name="L4338" href="#L4338">4338</a> 		<strong class="jxr_keyword">return</strong> enum_.isEmpty() || enum_.contains(x);
 <a class="jxr_linenumber" name="L4339" href="#L4339">4339</a> 	}
 <a class="jxr_linenumber" name="L4340" href="#L4340">4340</a> 
 <a class="jxr_linenumber" name="L4341" href="#L4341">4341</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isValidFormat(String x) {

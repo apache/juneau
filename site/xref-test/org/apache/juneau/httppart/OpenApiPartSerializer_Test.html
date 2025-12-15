@@ -82,7 +82,7 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  	}
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  	@Test <strong class="jxr_keyword">void</strong> a04_outputValidations_enum() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">var</strong> ps = tNone()._enum(<span class="jxr_string">"foo"</span>).allowEmptyValue().build();
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">var</strong> ps = tNone().enum_(<span class="jxr_string">"foo"</span>).allowEmptyValue().build();
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertEquals(<span class="jxr_string">"foo"</span>, serialize(ps, <span class="jxr_string">"foo"</span>));
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  		assertEquals(<span class="jxr_string">"null"</span>, serialize(ps, <strong class="jxr_keyword">null</strong>));
@@ -90,9 +90,9 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Value does not match one of the expected values.  Must be one of the following:  foo"</span>, ()-&gt;serialize(ps, <span class="jxr_string">"bar"</span>));
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Value does not match one of the expected values.  Must be one of the following:  foo"</span>, ()-&gt;serialize(ps, <span class="jxr_string">""</span>));
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		assertEquals(<span class="jxr_string">"foo"</span>, serialize(tNone()._enum((Set&lt;String&gt;)<strong class="jxr_keyword">null</strong>).build(), <span class="jxr_string">"foo"</span>));
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		assertEquals(<span class="jxr_string">"foo"</span>, serialize(tNone()._enum((Set&lt;String&gt;)<strong class="jxr_keyword">null</strong>).allowEmptyValue().build(), <span class="jxr_string">"foo"</span>));
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		assertEquals(<span class="jxr_string">"foo"</span>, serialize(tNone()._enum(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"foo"</span>).build(), <span class="jxr_string">"foo"</span>));
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		assertEquals(<span class="jxr_string">"foo"</span>, serialize(tNone().enum_((Set&lt;String&gt;)<strong class="jxr_keyword">null</strong>).build(), <span class="jxr_string">"foo"</span>));
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		assertEquals(<span class="jxr_string">"foo"</span>, serialize(tNone().enum_((Set&lt;String&gt;)<strong class="jxr_keyword">null</strong>).allowEmptyValue().build(), <span class="jxr_string">"foo"</span>));
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		assertEquals(<span class="jxr_string">"foo"</span>, serialize(tNone().enum_(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"foo"</span>).build(), <span class="jxr_string">"foo"</span>));
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  	}
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  	@Test <strong class="jxr_keyword">void</strong> a05_outputValidations_minMaxLength() <strong class="jxr_keyword">throws</strong> Exception {
@@ -147,7 +147,7 @@
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 	}
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 	@Test <strong class="jxr_keyword">void</strong> c02_stringType_<strong class="jxr_keyword">default</strong>() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">var</strong> ps = tString()._<strong class="jxr_keyword">default</strong>(<span class="jxr_string">"x"</span>).build();
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">var</strong> ps = tString().<strong class="jxr_keyword">default</strong>_(<span class="jxr_string">"x"</span>).build();
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 		assertEquals(<span class="jxr_string">"foo"</span>, serialize(ps, <span class="jxr_string">"foo"</span>));
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		assertEquals(<span class="jxr_string">"x"</span>, serialize(ps, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 	}

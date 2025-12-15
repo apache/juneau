@@ -93,7 +93,7 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  	}
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  	@Test <strong class="jxr_keyword">void</strong> a04_inputValidations_enum() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> s = tNone()._enum(<span class="jxr_string">"foo"</span>).allowEmptyValue().build();
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> s = tNone().enum_(<span class="jxr_string">"foo"</span>).allowEmptyValue().build();
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		assertEquals(<span class="jxr_string">"foo"</span>, parse(s, <span class="jxr_string">"foo"</span>, String.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		assertEquals(<strong class="jxr_keyword">null</strong>, parse(s, <strong class="jxr_keyword">null</strong>, String.<strong class="jxr_keyword">class</strong>));
@@ -101,9 +101,9 @@
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Value does not match one of the expected values.  Must be one of the following:  foo"</span>, ()-&gt;parse(s, <span class="jxr_string">"bar"</span>, String.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Value does not match one of the expected values.  Must be one of the following:  foo"</span>, ()-&gt;parse(s, <span class="jxr_string">""</span>, String.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		assertEquals(<span class="jxr_string">"foo"</span>, parse(tNone()._enum((Set&lt;String&gt;)<strong class="jxr_keyword">null</strong>).build(), <span class="jxr_string">"foo"</span>, String.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		assertEquals(<span class="jxr_string">"foo"</span>, parse(tNone()._enum((Set&lt;String&gt;)<strong class="jxr_keyword">null</strong>).allowEmptyValue().build(), <span class="jxr_string">"foo"</span>, String.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertEquals(<span class="jxr_string">"foo"</span>, parse(tNone()._enum(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"foo"</span>).build(), <span class="jxr_string">"foo"</span>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		assertEquals(<span class="jxr_string">"foo"</span>, parse(tNone().enum_((Set&lt;String&gt;)<strong class="jxr_keyword">null</strong>).build(), <span class="jxr_string">"foo"</span>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		assertEquals(<span class="jxr_string">"foo"</span>, parse(tNone().enum_((Set&lt;String&gt;)<strong class="jxr_keyword">null</strong>).allowEmptyValue().build(), <span class="jxr_string">"foo"</span>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertEquals(<span class="jxr_string">"foo"</span>, parse(tNone().enum_(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"foo"</span>).build(), <span class="jxr_string">"foo"</span>, String.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  	}
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 	@Test <strong class="jxr_keyword">void</strong> a05_inputValidations_minMaxLength() <strong class="jxr_keyword">throws</strong> Exception {
@@ -205,7 +205,7 @@
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 	}
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 	@Test <strong class="jxr_keyword">void</strong> c02_stringType_<strong class="jxr_keyword">default</strong>() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">var</strong> s = tString()._<strong class="jxr_keyword">default</strong>(<span class="jxr_string">"x"</span>).build();
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">var</strong> s = tString().<strong class="jxr_keyword">default</strong>_(<span class="jxr_string">"x"</span>).build();
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 		assertEquals(<span class="jxr_string">"foo"</span>, parse(s, <span class="jxr_string">"foo"</span>, String.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 		assertEquals(<span class="jxr_string">"x"</span>, parse(s, <strong class="jxr_keyword">null</strong>, String.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 	}

@@ -816,8 +816,8 @@
 <a class="jxr_linenumber" name="L808" href="#L808">808</a> 		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L809" href="#L809">809</a> 		<strong class="jxr_keyword">return</strong> om
 <a class="jxr_linenumber" name="L810" href="#L810">810</a> 			.appendFirst(ne, <span class="jxr_string">"collectionFormat"</span>, a.collectionFormat(), a.cf())
-<a class="jxr_linenumber" name="L811" href="#L811">811</a> 			.appendIf(ne, <span class="jxr_string">"default"</span>, joinnl(a._<strong class="jxr_keyword">default</strong>(), a.df()))
-<a class="jxr_linenumber" name="L812" href="#L812">812</a> 			.appendFirst(nec, <span class="jxr_string">"enum"</span>, toSet(a._enum()), toSet(a.e()))
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> 			.appendIf(ne, <span class="jxr_string">"default"</span>, joinnl(a.<strong class="jxr_keyword">default</strong>_(), a.df()))
+<a class="jxr_linenumber" name="L812" href="#L812">812</a> 			.appendFirst(nec, <span class="jxr_string">"enum"</span>, toSet(a.enum_()), toSet(a.e()))
 <a class="jxr_linenumber" name="L813" href="#L813">813</a> 			.appendFirst(ne, <span class="jxr_string">"format"</span>, a.format(), a.f())
 <a class="jxr_linenumber" name="L814" href="#L814">814</a> 			.appendIf(nf, <span class="jxr_string">"exclusiveMaximum"</span>, a.exclusiveMaximum() || a.emax())
 <a class="jxr_linenumber" name="L815" href="#L815">815</a> 			.appendIf(nf, <span class="jxr_string">"exclusiveMinimum"</span>, a.exclusiveMinimum() || a.emin())
@@ -869,10 +869,10 @@
 <a class="jxr_linenumber" name="L861" href="#L861">861</a> 				.appendIf(nem, <span class="jxr_string">"additionalProperties"</span>, toJsonMap(a.additionalProperties()))
 <a class="jxr_linenumber" name="L862" href="#L862">862</a> 				.appendIf(ne, <span class="jxr_string">"allOf"</span>, joinnl(a.allOf()))
 <a class="jxr_linenumber" name="L863" href="#L863">863</a> 				.appendFirst(ne, <span class="jxr_string">"collectionFormat"</span>, a.collectionFormat(), a.cf())
-<a class="jxr_linenumber" name="L864" href="#L864">864</a> 				.appendIf(ne, <span class="jxr_string">"default"</span>, joinnl(a._<strong class="jxr_keyword">default</strong>(), a.df()))
+<a class="jxr_linenumber" name="L864" href="#L864">864</a> 				.appendIf(ne, <span class="jxr_string">"default"</span>, joinnl(a.<strong class="jxr_keyword">default</strong>_(), a.df()))
 <a class="jxr_linenumber" name="L865" href="#L865">865</a> 				.appendIf(ne, <span class="jxr_string">"discriminator"</span>, a.discriminator())
 <a class="jxr_linenumber" name="L866" href="#L866">866</a> 				.appendIf(ne, <span class="jxr_string">"description"</span>, resolve(a.description(), a.d()))
-<a class="jxr_linenumber" name="L867" href="#L867">867</a> 				.appendFirst(nec, <span class="jxr_string">"enum"</span>, toSet(a._enum()), toSet(a.e()))
+<a class="jxr_linenumber" name="L867" href="#L867">867</a> 				.appendFirst(nec, <span class="jxr_string">"enum"</span>, toSet(a.enum_()), toSet(a.e()))
 <a class="jxr_linenumber" name="L868" href="#L868">868</a> 				.appendIf(nf, <span class="jxr_string">"exclusiveMaximum"</span>, a.exclusiveMaximum() || a.emax())
 <a class="jxr_linenumber" name="L869" href="#L869">869</a> 				.appendIf(nf, <span class="jxr_string">"exclusiveMinimum"</span>, a.exclusiveMinimum() || a.emin())
 <a class="jxr_linenumber" name="L870" href="#L870">870</a> 				.appendIf(nem, <span class="jxr_string">"externalDocs"</span>, merge(om.getMap(<span class="jxr_string">"externalDocs"</span>), a.externalDocs()))
@@ -916,8 +916,8 @@
 <a class="jxr_linenumber" name="L908" href="#L908">908</a> 		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L909" href="#L909">909</a> 		<strong class="jxr_keyword">return</strong> om
 <a class="jxr_linenumber" name="L910" href="#L910">910</a> 			.appendFirst(ne, <span class="jxr_string">"collectionFormat"</span>, a.collectionFormat(), a.cf())
-<a class="jxr_linenumber" name="L911" href="#L911">911</a> 			.appendIf(ne, <span class="jxr_string">"default"</span>, joinnl(a._<strong class="jxr_keyword">default</strong>(), a.df()))
-<a class="jxr_linenumber" name="L912" href="#L912">912</a> 			.appendFirst(nec, <span class="jxr_string">"enum"</span>, toSet(a._enum()), toSet(a.e()))
+<a class="jxr_linenumber" name="L911" href="#L911">911</a> 			.appendIf(ne, <span class="jxr_string">"default"</span>, joinnl(a.<strong class="jxr_keyword">default</strong>_(), a.df()))
+<a class="jxr_linenumber" name="L912" href="#L912">912</a> 			.appendFirst(nec, <span class="jxr_string">"enum"</span>, toSet(a.enum_()), toSet(a.e()))
 <a class="jxr_linenumber" name="L913" href="#L913">913</a> 			.appendIf(nf, <span class="jxr_string">"exclusiveMaximum"</span>, a.exclusiveMaximum() || a.emax())
 <a class="jxr_linenumber" name="L914" href="#L914">914</a> 			.appendIf(nf, <span class="jxr_string">"exclusiveMinimum"</span>, a.exclusiveMinimum() || a.emin())
 <a class="jxr_linenumber" name="L915" href="#L915">915</a> 			.appendFirst(ne, <span class="jxr_string">"format"</span>, a.format(), a.f())

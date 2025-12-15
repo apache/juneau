@@ -40,8 +40,8 @@
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  	SubItems a1 = SubItemsAnnotation.create()
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  		.$ref(<span class="jxr_string">"a"</span>)
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		._<strong class="jxr_keyword">default</strong>(<span class="jxr_string">"b"</span>)
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		._enum(<span class="jxr_string">"c"</span>)
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		.<strong class="jxr_keyword">default</strong>_(<span class="jxr_string">"b"</span>)
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		.enum_(<span class="jxr_string">"c"</span>)
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  		.cf(<span class="jxr_string">"d"</span>)
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  		.collectionFormat(<span class="jxr_string">"e"</span>)
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  		.description(<span class="jxr_string">"f"</span>)
@@ -77,8 +77,8 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  	SubItems a2 = SubItemsAnnotation.create()
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		.$ref(<span class="jxr_string">"a"</span>)
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		._<strong class="jxr_keyword">default</strong>(<span class="jxr_string">"b"</span>)
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		._enum(<span class="jxr_string">"c"</span>)
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		.<strong class="jxr_keyword">default</strong>_(<span class="jxr_string">"b"</span>)
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		.enum_(<span class="jxr_string">"c"</span>)
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		.cf(<span class="jxr_string">"d"</span>)
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		.collectionFormat(<span class="jxr_string">"e"</span>)
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		.description(<span class="jxr_string">"f"</span>)
@@ -113,7 +113,7 @@
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 		.build();
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 	@Test <strong class="jxr_keyword">void</strong> a01_basic() {
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertBean(a1, <span class="jxr_string">"$ref,_default,_enum,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items,max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems"</span>, <span class="jxr_string">"a,[b],[c],d,e,[f],[g],[h],true,true,true,true,i,j,[],k,2,4,1,l,3,m,6,8,5,n,7,o,p,q,r,s,t,true,true"</span>);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertBean(a1, <span class="jxr_string">"$ref,default_,enum_,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items,max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems"</span>, <span class="jxr_string">"a,[b],[c],d,e,[f],[g],[h],true,true,true,true,i,j,[],k,2,4,1,l,3,m,6,8,5,n,7,o,p,q,r,s,t,true,true"</span>);
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 	}
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 	@Test <strong class="jxr_keyword">void</strong> a02_testEquivalency() {
@@ -142,8 +142,8 @@
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 	@SubItems(
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 		$ref=<span class="jxr_string">"a"</span>,
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		_<strong class="jxr_keyword">default</strong>=<span class="jxr_string">"b"</span>,
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		_enum=<span class="jxr_string">"c"</span>,
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">default</strong>_=<span class="jxr_string">"b"</span>,
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		enum_=<span class="jxr_string">"c"</span>,
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 		cf=<span class="jxr_string">"d"</span>,
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		collectionFormat=<span class="jxr_string">"e"</span>,
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 		description={ <span class="jxr_string">"f"</span> },
@@ -181,8 +181,8 @@
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 	@SubItems(
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 		$ref=<span class="jxr_string">"a"</span>,
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		_<strong class="jxr_keyword">default</strong>=<span class="jxr_string">"b"</span>,
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		_enum=<span class="jxr_string">"c"</span>,
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">default</strong>_=<span class="jxr_string">"b"</span>,
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		enum_=<span class="jxr_string">"c"</span>,
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 		cf=<span class="jxr_string">"d"</span>,
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 		collectionFormat=<span class="jxr_string">"e"</span>,
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 		description={ <span class="jxr_string">"f"</span> },

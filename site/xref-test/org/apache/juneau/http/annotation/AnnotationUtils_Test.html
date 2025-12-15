@@ -238,8 +238,8 @@
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 		assertTrue(SchemaAnnotation.empty(x.schema()));
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 		assertTrue(SchemaAnnotation.empty((Schema)<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		assertFalse(SchemaAnnotation.empty(schema()._<strong class="jxr_keyword">default</strong>(a(<span class="jxr_string">"foo"</span>)).build()));
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		assertFalse(SchemaAnnotation.empty(schema()._enum(a(<span class="jxr_string">"foo"</span>)).build()));
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		assertFalse(SchemaAnnotation.empty(schema().<strong class="jxr_keyword">default</strong>_(a(<span class="jxr_string">"foo"</span>)).build()));
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		assertFalse(SchemaAnnotation.empty(schema().enum_(a(<span class="jxr_string">"foo"</span>)).build()));
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 		assertFalse(SchemaAnnotation.empty(schema().$ref(<span class="jxr_string">"foo"</span>).build()));
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		assertFalse(SchemaAnnotation.empty(schema().additionalProperties(a(<span class="jxr_string">"foo"</span>)).build()));
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 		assertFalse(SchemaAnnotation.empty(schema().allOf(a(<span class="jxr_string">"foo"</span>)).build()));
@@ -300,8 +300,8 @@
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 		assertTrue(SubItemsAnnotation.empty(x.subItems()));
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 		assertTrue(SubItemsAnnotation.empty((SubItems)<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		assertFalse(SubItemsAnnotation.empty(subItems()._<strong class="jxr_keyword">default</strong>(a(<span class="jxr_string">"foo"</span>)).build()));
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		assertFalse(SubItemsAnnotation.empty(subItems()._enum(a(<span class="jxr_string">"foo"</span>)).build()));
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		assertFalse(SubItemsAnnotation.empty(subItems().<strong class="jxr_keyword">default</strong>_(a(<span class="jxr_string">"foo"</span>)).build()));
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		assertFalse(SubItemsAnnotation.empty(subItems().enum_(a(<span class="jxr_string">"foo"</span>)).build()));
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 		assertFalse(SubItemsAnnotation.empty(subItems().$ref(<span class="jxr_string">"foo"</span>).build()));
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 		assertFalse(SubItemsAnnotation.empty(subItems().cf(<span class="jxr_string">"foo"</span>).build()));
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 		assertFalse(SubItemsAnnotation.empty(subItems().collectionFormat(<span class="jxr_string">"foo"</span>).build()));
@@ -343,8 +343,8 @@
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 		assertTrue(ItemsAnnotation.empty(x.items()));
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 		assertTrue(ItemsAnnotation.empty((Items)<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		assertFalse(ItemsAnnotation.empty(items()._<strong class="jxr_keyword">default</strong>(a(<span class="jxr_string">"foo"</span>)).build()));
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		assertFalse(ItemsAnnotation.empty(items()._enum(a(<span class="jxr_string">"foo"</span>)).build()));
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		assertFalse(ItemsAnnotation.empty(items().<strong class="jxr_keyword">default</strong>_(a(<span class="jxr_string">"foo"</span>)).build()));
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		assertFalse(ItemsAnnotation.empty(items().enum_(a(<span class="jxr_string">"foo"</span>)).build()));
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> 		assertFalse(ItemsAnnotation.empty(items().$ref(<span class="jxr_string">"foo"</span>).build()));
 <a class="jxr_linenumber" name="L341" href="#L341">341</a> 		assertFalse(ItemsAnnotation.empty(items().cf(<span class="jxr_string">"foo"</span>).build()));
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 		assertFalse(ItemsAnnotation.empty(items().collectionFormat(<span class="jxr_string">"foo"</span>).build()));

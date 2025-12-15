@@ -352,16 +352,16 @@
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 	<strong class="jxr_keyword">private</strong> Boolean additionalPropertiesBoolean;           <em class="jxr_comment">// Boolean representation of additionalProperties</em>
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 	<strong class="jxr_keyword">private</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> additionalPropertiesSchema;         <em class="jxr_comment">// JsonSchema representation of additionalProperties</em>
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 	<strong class="jxr_keyword">private</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> unevaluatedProperties;              <em class="jxr_comment">// Draft 2019-09+</em>
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 	<strong class="jxr_keyword">private</strong> List&lt;Object&gt; _enum;                            <em class="jxr_comment">// NOSONAR - Intentional naming. Changed to Object to support any type</em>
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	<strong class="jxr_keyword">private</strong> Object _<strong class="jxr_keyword">const</strong>;                                 <em class="jxr_comment">// NOSONAR - Intentional naming. Draft 06+</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 	<strong class="jxr_keyword">private</strong> List&lt;Object&gt; enum_;                            <em class="jxr_comment">// Changed to Object to support any type</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	<strong class="jxr_keyword">private</strong> Object <strong class="jxr_keyword">const</strong>_;                                 <em class="jxr_comment">// Draft 06+</em>
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 	<strong class="jxr_keyword">private</strong> List&lt;Object&gt; examples;                         <em class="jxr_comment">// Draft 06+</em>
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 	<strong class="jxr_keyword">private</strong> List&lt;JsonSchema&gt; allOf;
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 	<strong class="jxr_keyword">private</strong> List&lt;JsonSchema&gt; anyOf;
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 	<strong class="jxr_keyword">private</strong> List&lt;JsonSchema&gt; oneOf;
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 	<strong class="jxr_keyword">private</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> not;
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	<strong class="jxr_keyword">private</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> _<strong class="jxr_keyword">if</strong>;                                <em class="jxr_comment">// NOSONAR - Intentional naming. Draft 07+</em>
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	<strong class="jxr_keyword">private</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> _then;                              <em class="jxr_comment">// NOSONAR - Intentional naming. Draft 07+</em>
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	<strong class="jxr_keyword">private</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> _<strong class="jxr_keyword">else</strong>;                              <em class="jxr_comment">// NOSONAR - Intentional naming. Draft 07+</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	<strong class="jxr_keyword">private</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> <strong class="jxr_keyword">if</strong>_;                                <em class="jxr_comment">// Draft 07+</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	<strong class="jxr_keyword">private</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> then_;                              <em class="jxr_comment">// Draft 07+</em>
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	<strong class="jxr_keyword">private</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> <strong class="jxr_keyword">else</strong>_;                              <em class="jxr_comment">// Draft 07+</em>
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 	<strong class="jxr_keyword">private</strong> Boolean readOnly;                              <em class="jxr_comment">// Draft 07+</em>
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 	<strong class="jxr_keyword">private</strong> Boolean writeOnly;                             <em class="jxr_comment">// Draft 07+</em>
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 	<strong class="jxr_keyword">private</strong> String contentMediaType;                       <em class="jxr_comment">// Draft 07+</em>
@@ -499,14 +499,14 @@
 <a class="jxr_linenumber" name="L491" href="#L491">491</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">	 * Bean property appender:  &lt;property&gt;enum&lt;/property&gt;.</em>
 <a class="jxr_linenumber" name="L493" href="#L493">493</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> <em class="jxr_javadoccomment">	 * @param _enum The list of items to append to the &lt;property&gt;enum&lt;/property&gt; property on this bean.</em>
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> <em class="jxr_javadoccomment">	 * @param enum_ The list of items to append to the &lt;property&gt;enum&lt;/property&gt; property on this bean.</em>
 <a class="jxr_linenumber" name="L495" href="#L495">495</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L496" href="#L496">496</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> addEnum(Object..._enum) { <em class="jxr_comment">// NOSONAR - Intentional naming.</em>
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>._enum == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> 			<strong class="jxr_keyword">this</strong>._enum = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : _enum)
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> 			<strong class="jxr_keyword">this</strong>._enum.add(e);
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> addEnum(Object...enum_) {
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.enum_ == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 			<strong class="jxr_keyword">this</strong>.enum_ = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : enum_)
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 			<strong class="jxr_keyword">this</strong>.enum_.add(e);
 <a class="jxr_linenumber" name="L502" href="#L502">502</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L503" href="#L503">503</a> 	}
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> 
@@ -765,7 +765,7 @@
 <a class="jxr_linenumber" name="L757" href="#L757">757</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L758" href="#L758">758</a> <em class="jxr_javadoccomment">	 * @return The value of the &lt;property&gt;const&lt;/property&gt; property on this bean, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</em>
 <a class="jxr_linenumber" name="L759" href="#L759">759</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L760" href="#L760">760</a> 	<strong class="jxr_keyword">public</strong> Object getConst() { <strong class="jxr_keyword">return</strong> _<strong class="jxr_keyword">const</strong>; }
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> 	<strong class="jxr_keyword">public</strong> Object getConst() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">const</strong>_; }
 <a class="jxr_linenumber" name="L761" href="#L761">761</a> 
 <a class="jxr_linenumber" name="L762" href="#L762">762</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L763" href="#L763">763</a> <em class="jxr_javadoccomment">	 * Bean property getter:  &lt;property&gt;contentEncoding&lt;/property&gt;.</em>
@@ -859,14 +859,14 @@
 <a class="jxr_linenumber" name="L851" href="#L851">851</a> <em class="jxr_javadoccomment">	 * @return The value of the &lt;property&gt;else&lt;/property&gt; property on this bean, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</em>
 <a class="jxr_linenumber" name="L852" href="#L852">852</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L853" href="#L853">853</a> 	@Beanp(<span class="jxr_string">"else"</span>)
-<a class="jxr_linenumber" name="L854" href="#L854">854</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> getElse() { <strong class="jxr_keyword">return</strong> _<strong class="jxr_keyword">else</strong>; }
+<a class="jxr_linenumber" name="L854" href="#L854">854</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> getElse() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">else</strong>_; }
 <a class="jxr_linenumber" name="L855" href="#L855">855</a> 
 <a class="jxr_linenumber" name="L856" href="#L856">856</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L857" href="#L857">857</a> <em class="jxr_javadoccomment">	 * Bean property getter:  &lt;property&gt;enum&lt;/property&gt;.</em>
 <a class="jxr_linenumber" name="L858" href="#L858">858</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L859" href="#L859">859</a> <em class="jxr_javadoccomment">	 * @return The value of the &lt;property&gt;enum&lt;/property&gt; property on this bean, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</em>
 <a class="jxr_linenumber" name="L860" href="#L860">860</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L861" href="#L861">861</a> 	<strong class="jxr_keyword">public</strong> List&lt;Object&gt; getEnum() { <strong class="jxr_keyword">return</strong> _enum; }
+<a class="jxr_linenumber" name="L861" href="#L861">861</a> 	<strong class="jxr_keyword">public</strong> List&lt;Object&gt; getEnum() { <strong class="jxr_keyword">return</strong> enum_; }
 <a class="jxr_linenumber" name="L862" href="#L862">862</a> 
 <a class="jxr_linenumber" name="L863" href="#L863">863</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L864" href="#L864">864</a> <em class="jxr_javadoccomment">	 * Bean property getter:  &lt;property&gt;examples&lt;/property&gt;.</em>
@@ -941,7 +941,7 @@
 <a class="jxr_linenumber" name="L933" href="#L933">933</a> <em class="jxr_javadoccomment">	 * @return The value of the &lt;property&gt;if&lt;/property&gt; property on this bean, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</em>
 <a class="jxr_linenumber" name="L934" href="#L934">934</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L935" href="#L935">935</a> 	@Beanp(<span class="jxr_string">"if"</span>)
-<a class="jxr_linenumber" name="L936" href="#L936">936</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> getIf() { <strong class="jxr_keyword">return</strong> _<strong class="jxr_keyword">if</strong>; }
+<a class="jxr_linenumber" name="L936" href="#L936">936</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> getIf() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">if</strong>_; }
 <a class="jxr_linenumber" name="L937" href="#L937">937</a> 
 <a class="jxr_linenumber" name="L938" href="#L938">938</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L939" href="#L939">939</a> <em class="jxr_javadoccomment">	 * Bean property getter:  &lt;property&gt;items&lt;/property&gt;.</em>
@@ -1182,7 +1182,7 @@
 <a class="jxr_linenumber" name="L1174" href="#L1174">1174</a> <em class="jxr_javadoccomment">	 * @return The value of the &lt;property&gt;then&lt;/property&gt; property on this bean, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</em>
 <a class="jxr_linenumber" name="L1175" href="#L1175">1175</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1176" href="#L1176">1176</a> 	@Beanp(<span class="jxr_string">"then"</span>)
-<a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> getThen() { <strong class="jxr_keyword">return</strong> _then; }
+<a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> getThen() { <strong class="jxr_keyword">return</strong> then_; }
 <a class="jxr_linenumber" name="L1178" href="#L1178">1178</a> 
 <a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L1180" href="#L1180">1180</a> <em class="jxr_javadoccomment">	 * Bean property getter:  &lt;property&gt;title&lt;/property&gt;.</em>
@@ -1365,11 +1365,11 @@
 <a class="jxr_linenumber" name="L1357" href="#L1357">1357</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L1358" href="#L1358">1358</a> <em class="jxr_javadoccomment">	 * This property was added in Draft 06.</em>
 <a class="jxr_linenumber" name="L1359" href="#L1359">1359</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1360" href="#L1360">1360</a> <em class="jxr_javadoccomment">	 * @param _const The new value for the &lt;property&gt;const&lt;/property&gt; property on this bean.</em>
+<a class="jxr_linenumber" name="L1360" href="#L1360">1360</a> <em class="jxr_javadoccomment">	 * @param const_ The new value for the &lt;property&gt;const&lt;/property&gt; property on this bean.</em>
 <a class="jxr_linenumber" name="L1361" href="#L1361">1361</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L1362" href="#L1362">1362</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1363" href="#L1363">1363</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> setConst(Object _<strong class="jxr_keyword">const</strong>) { <em class="jxr_comment">// NOSONAR - Intentional naming.</em>
-<a class="jxr_linenumber" name="L1364" href="#L1364">1364</a> 		<strong class="jxr_keyword">this</strong>._<strong class="jxr_keyword">const</strong> = _<strong class="jxr_keyword">const</strong>;
+<a class="jxr_linenumber" name="L1363" href="#L1363">1363</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> setConst(Object <strong class="jxr_keyword">const</strong>_) {
+<a class="jxr_linenumber" name="L1364" href="#L1364">1364</a> 		<strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">const</strong>_ = <strong class="jxr_keyword">const</strong>_;
 <a class="jxr_linenumber" name="L1365" href="#L1365">1365</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1366" href="#L1366">1366</a> 	}
 <a class="jxr_linenumber" name="L1367" href="#L1367">1367</a> 
@@ -1492,24 +1492,24 @@
 <a class="jxr_linenumber" name="L1484" href="#L1484">1484</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L1485" href="#L1485">1485</a> <em class="jxr_javadoccomment">	 * This property was added in Draft 07 for conditional schema application.</em>
 <a class="jxr_linenumber" name="L1486" href="#L1486">1486</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1487" href="#L1487">1487</a> <em class="jxr_javadoccomment">	 * @param _else The new value for the &lt;property&gt;else&lt;/property&gt; property on this bean.</em>
+<a class="jxr_linenumber" name="L1487" href="#L1487">1487</a> <em class="jxr_javadoccomment">	 * @param else_ The new value for the &lt;property&gt;else&lt;/property&gt; property on this bean.</em>
 <a class="jxr_linenumber" name="L1488" href="#L1488">1488</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L1489" href="#L1489">1489</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1490" href="#L1490">1490</a> 	@Beanp(<span class="jxr_string">"else"</span>)
-<a class="jxr_linenumber" name="L1491" href="#L1491">1491</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> setElse(<a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> _<strong class="jxr_keyword">else</strong>) { <em class="jxr_comment">// NOSONAR - Intentional naming.</em>
-<a class="jxr_linenumber" name="L1492" href="#L1492">1492</a> 		<strong class="jxr_keyword">this</strong>._<strong class="jxr_keyword">else</strong> = _<strong class="jxr_keyword">else</strong>;
-<a class="jxr_linenumber" name="L1493" href="#L1493">1493</a> 		setMasterOn(_<strong class="jxr_keyword">else</strong>);
+<a class="jxr_linenumber" name="L1491" href="#L1491">1491</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> setElse(<a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> <strong class="jxr_keyword">else</strong>_) {
+<a class="jxr_linenumber" name="L1492" href="#L1492">1492</a> 		<strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">else</strong>_ = <strong class="jxr_keyword">else</strong>_;
+<a class="jxr_linenumber" name="L1493" href="#L1493">1493</a> 		setMasterOn(<strong class="jxr_keyword">else</strong>_);
 <a class="jxr_linenumber" name="L1494" href="#L1494">1494</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1495" href="#L1495">1495</a> 	}
 <a class="jxr_linenumber" name="L1496" href="#L1496">1496</a> 
 <a class="jxr_linenumber" name="L1497" href="#L1497">1497</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L1498" href="#L1498">1498</a> <em class="jxr_javadoccomment">	 * Bean property setter:  &lt;property&gt;enum&lt;/property&gt;.</em>
 <a class="jxr_linenumber" name="L1499" href="#L1499">1499</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1500" href="#L1500">1500</a> <em class="jxr_javadoccomment">	 * @param _enum The new value for the &lt;property&gt;enum&lt;/property&gt; property on this bean.</em>
+<a class="jxr_linenumber" name="L1500" href="#L1500">1500</a> <em class="jxr_javadoccomment">	 * @param enum_ The new value for the &lt;property&gt;enum&lt;/property&gt; property on this bean.</em>
 <a class="jxr_linenumber" name="L1501" href="#L1501">1501</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L1502" href="#L1502">1502</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1503" href="#L1503">1503</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> setEnum(List&lt;Object&gt; _enum) { <em class="jxr_comment">// NOSONAR - Intentional naming.</em>
-<a class="jxr_linenumber" name="L1504" href="#L1504">1504</a> 		<strong class="jxr_keyword">this</strong>._enum = _enum;
+<a class="jxr_linenumber" name="L1503" href="#L1503">1503</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> setEnum(List&lt;Object&gt; enum_) {
+<a class="jxr_linenumber" name="L1504" href="#L1504">1504</a> 		<strong class="jxr_keyword">this</strong>.enum_ = enum_;
 <a class="jxr_linenumber" name="L1505" href="#L1505">1505</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1506" href="#L1506">1506</a> 	}
 <a class="jxr_linenumber" name="L1507" href="#L1507">1507</a> 
@@ -1609,13 +1609,13 @@
 <a class="jxr_linenumber" name="L1601" href="#L1601">1601</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L1602" href="#L1602">1602</a> <em class="jxr_javadoccomment">	 * This property was added in Draft 07 for conditional schema application.</em>
 <a class="jxr_linenumber" name="L1603" href="#L1603">1603</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1604" href="#L1604">1604</a> <em class="jxr_javadoccomment">	 * @param _if The new value for the &lt;property&gt;if&lt;/property&gt; property on this bean.</em>
+<a class="jxr_linenumber" name="L1604" href="#L1604">1604</a> <em class="jxr_javadoccomment">	 * @param if_ The new value for the &lt;property&gt;if&lt;/property&gt; property on this bean.</em>
 <a class="jxr_linenumber" name="L1605" href="#L1605">1605</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L1606" href="#L1606">1606</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1607" href="#L1607">1607</a> 	@Beanp(<span class="jxr_string">"if"</span>)
-<a class="jxr_linenumber" name="L1608" href="#L1608">1608</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> setIf(<a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> _<strong class="jxr_keyword">if</strong>) { <em class="jxr_comment">// NOSONAR - Intentional naming.</em>
-<a class="jxr_linenumber" name="L1609" href="#L1609">1609</a> 		<strong class="jxr_keyword">this</strong>._<strong class="jxr_keyword">if</strong> = _<strong class="jxr_keyword">if</strong>;
-<a class="jxr_linenumber" name="L1610" href="#L1610">1610</a> 		setMasterOn(_<strong class="jxr_keyword">if</strong>);
+<a class="jxr_linenumber" name="L1608" href="#L1608">1608</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> setIf(<a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> <strong class="jxr_keyword">if</strong>_) {
+<a class="jxr_linenumber" name="L1609" href="#L1609">1609</a> 		<strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">if</strong>_ = <strong class="jxr_keyword">if</strong>_;
+<a class="jxr_linenumber" name="L1610" href="#L1610">1610</a> 		setMasterOn(<strong class="jxr_keyword">if</strong>_);
 <a class="jxr_linenumber" name="L1611" href="#L1611">1611</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1612" href="#L1612">1612</a> 	}
 <a class="jxr_linenumber" name="L1613" href="#L1613">1613</a> 
@@ -1927,13 +1927,13 @@
 <a class="jxr_linenumber" name="L1919" href="#L1919">1919</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L1920" href="#L1920">1920</a> <em class="jxr_javadoccomment">	 * This property was added in Draft 07 for conditional schema application.</em>
 <a class="jxr_linenumber" name="L1921" href="#L1921">1921</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1922" href="#L1922">1922</a> <em class="jxr_javadoccomment">	 * @param _then The new value for the &lt;property&gt;then&lt;/property&gt; property on this bean.</em>
+<a class="jxr_linenumber" name="L1922" href="#L1922">1922</a> <em class="jxr_javadoccomment">	 * @param then_ The new value for the &lt;property&gt;then&lt;/property&gt; property on this bean.</em>
 <a class="jxr_linenumber" name="L1923" href="#L1923">1923</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L1924" href="#L1924">1924</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1925" href="#L1925">1925</a> 	@Beanp(<span class="jxr_string">"then"</span>)
-<a class="jxr_linenumber" name="L1926" href="#L1926">1926</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> setThen(<a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> _then) { <em class="jxr_comment">// NOSONAR - Intentional naming.</em>
-<a class="jxr_linenumber" name="L1927" href="#L1927">1927</a> 		<strong class="jxr_keyword">this</strong>._then = _then;
-<a class="jxr_linenumber" name="L1928" href="#L1928">1928</a> 		setMasterOn(_then);
+<a class="jxr_linenumber" name="L1926" href="#L1926">1926</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> setThen(<a name="JsonSchema" href="../../../../../org/apache/juneau/bean/jsonschema/JsonSchema.html#JsonSchema">JsonSchema</a> then_) {
+<a class="jxr_linenumber" name="L1927" href="#L1927">1927</a> 		<strong class="jxr_keyword">this</strong>.then_ = then_;
+<a class="jxr_linenumber" name="L1928" href="#L1928">1928</a> 		setMasterOn(then_);
 <a class="jxr_linenumber" name="L1929" href="#L1929">1929</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1930" href="#L1930">1930</a> 	}
 <a class="jxr_linenumber" name="L1931" href="#L1931">1931</a> 
@@ -2097,12 +2097,12 @@
 <a class="jxr_linenumber" name="L2089" href="#L2089">2089</a> 			oneOf.forEach(x -&gt; x.setMaster(master));
 <a class="jxr_linenumber" name="L2090" href="#L2090">2090</a> 		<strong class="jxr_keyword">if</strong> (nn(not))
 <a class="jxr_linenumber" name="L2091" href="#L2091">2091</a> 			not.setMaster(master);
-<a class="jxr_linenumber" name="L2092" href="#L2092">2092</a> 		<strong class="jxr_keyword">if</strong> (nn(_<strong class="jxr_keyword">if</strong>))
-<a class="jxr_linenumber" name="L2093" href="#L2093">2093</a> 			_<strong class="jxr_keyword">if</strong>.setMaster(master);
-<a class="jxr_linenumber" name="L2094" href="#L2094">2094</a> 		<strong class="jxr_keyword">if</strong> (nn(_then))
-<a class="jxr_linenumber" name="L2095" href="#L2095">2095</a> 			_then.setMaster(master);
-<a class="jxr_linenumber" name="L2096" href="#L2096">2096</a> 		<strong class="jxr_keyword">if</strong> (nn(_<strong class="jxr_keyword">else</strong>))
-<a class="jxr_linenumber" name="L2097" href="#L2097">2097</a> 			_<strong class="jxr_keyword">else</strong>.setMaster(master);
+<a class="jxr_linenumber" name="L2092" href="#L2092">2092</a> 		<strong class="jxr_keyword">if</strong> (nn(<strong class="jxr_keyword">if</strong>_))
+<a class="jxr_linenumber" name="L2093" href="#L2093">2093</a> 			<strong class="jxr_keyword">if</strong>_.setMaster(master);
+<a class="jxr_linenumber" name="L2094" href="#L2094">2094</a> 		<strong class="jxr_keyword">if</strong> (nn(then_))
+<a class="jxr_linenumber" name="L2095" href="#L2095">2095</a> 			then_.setMaster(master);
+<a class="jxr_linenumber" name="L2096" href="#L2096">2096</a> 		<strong class="jxr_keyword">if</strong> (nn(<strong class="jxr_keyword">else</strong>_))
+<a class="jxr_linenumber" name="L2097" href="#L2097">2097</a> 			<strong class="jxr_keyword">else</strong>_.setMaster(master);
 <a class="jxr_linenumber" name="L2098" href="#L2098">2098</a> 	}
 <a class="jxr_linenumber" name="L2099" href="#L2099">2099</a> }
 </pre>
