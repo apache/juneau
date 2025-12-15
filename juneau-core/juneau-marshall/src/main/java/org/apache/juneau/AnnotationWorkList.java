@@ -80,8 +80,7 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	private final VarResolverSession vrs;
 
 	private AnnotationWorkList(VarResolverSession vrs) {
-		assertArgNotNull("vrs", vrs);
-		this.vrs = vrs;
+		this.vrs = assertArgNotNull("vrs", vrs);
 	}
 
 	/**

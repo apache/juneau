@@ -151,8 +151,7 @@ public class AnnotationObject implements Annotation {
 		 * @param annotationType The annotation type of the annotation implementation class.
 		 */
 		public Builder(Class<? extends Annotation> annotationType) {
-			assertArgNotNull("annotationType", annotationType);
-			this.annotationType = annotationType;
+			this.annotationType = assertArgNotNull("annotationType", annotationType);
 		}
 
 		/**

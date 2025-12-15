@@ -92,8 +92,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder beanRegistry(BeanRegistry value) {
-			assertArgNotNull("value", value);
-			beanRegistry = value;
+			beanRegistry = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -111,8 +110,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder delegateFor(BeanPropertyMeta value) {
-			assertArgNotNull("value", value);
-			delegateFor = value;
+			delegateFor = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -134,8 +132,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder rawMetaType(ClassMeta<?> value) {
-			assertArgNotNull("value", value);
-			rawTypeMeta = value;
+			rawTypeMeta = assertArgNotNull("value", value);
 			typeMeta = rawTypeMeta;
 			return this;
 		}
@@ -242,8 +239,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder setInnerField(FieldInfo value) {
-			assertArgNotNull("value", value);
-			innerField = value;
+			innerField = assertArgNotNull("value", value);
 			return this;
 		}
 
