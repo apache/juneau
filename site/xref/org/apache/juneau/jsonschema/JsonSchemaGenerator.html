@@ -24,21 +24,21 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.jsonschema;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.collections.JsonMap.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.CollectionUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.StringUtils.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.ThrowableUtils.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.lang.annotation.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.regex.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.collections.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.StringUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.ThrowableUtils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.lang.annotation.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.regex.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.collections.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.collections.FluentMap;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.function.*;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.*;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.json.*;
@@ -989,24 +989,22 @@
 <a class="jxr_linenumber" name="L981" href="#L981">981</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L982" href="#L982">982</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isUseBeanDefs() { <strong class="jxr_keyword">return</strong> useBeanDefs; }
 <a class="jxr_linenumber" name="L983" href="#L983">983</a> 
-<a class="jxr_linenumber" name="L984" href="#L984">984</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
-<a class="jxr_linenumber" name="L985" href="#L985">985</a> 	<strong class="jxr_keyword">protected</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> properties() {
-<a class="jxr_linenumber" name="L986" href="#L986">986</a> 		<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L987" href="#L987">987</a> 		<strong class="jxr_keyword">return</strong> filteredMap()
-<a class="jxr_linenumber" name="L988" href="#L988">988</a> 			.append(<span class="jxr_string">"useBeanDefs"</span>, useBeanDefs)
-<a class="jxr_linenumber" name="L989" href="#L989">989</a> 			.append(<span class="jxr_string">"allowNestedExamples"</span>, allowNestedExamples)
-<a class="jxr_linenumber" name="L990" href="#L990">990</a> 			.append(<span class="jxr_string">"allowNestedDescriptions"</span>, allowNestedDescriptions)
-<a class="jxr_linenumber" name="L991" href="#L991">991</a> 			.append(<span class="jxr_string">"beanDefMapper"</span>, beanDefMapper)
-<a class="jxr_linenumber" name="L992" href="#L992">992</a> 			.append(<span class="jxr_string">"addExamplesTo"</span>, addExamplesTo)
-<a class="jxr_linenumber" name="L993" href="#L993">993</a> 			.append(<span class="jxr_string">"addDescriptionsTo"</span>, addDescriptionsTo)
-<a class="jxr_linenumber" name="L994" href="#L994">994</a> 			.append(<span class="jxr_string">"ignoreTypes"</span>, ignoreTypes);
-<a class="jxr_linenumber" name="L995" href="#L995">995</a> 		<em class="jxr_comment">// @formatter:on</em>
-<a class="jxr_linenumber" name="L996" href="#L996">996</a> 	}
+<a class="jxr_linenumber" name="L984" href="#L984">984</a> 	@Override <em class="jxr_comment">/* Overridden from BeanTraverseContext */</em>
+<a class="jxr_linenumber" name="L985" href="#L985">985</a> 	<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
+<a class="jxr_linenumber" name="L986" href="#L986">986</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.properties()
+<a class="jxr_linenumber" name="L987" href="#L987">987</a> 			.a(<span class="jxr_string">"useBeanDefs"</span>, useBeanDefs)
+<a class="jxr_linenumber" name="L988" href="#L988">988</a> 			.a(<span class="jxr_string">"allowNestedExamples"</span>, allowNestedExamples)
+<a class="jxr_linenumber" name="L989" href="#L989">989</a> 			.a(<span class="jxr_string">"allowNestedDescriptions"</span>, allowNestedDescriptions)
+<a class="jxr_linenumber" name="L990" href="#L990">990</a> 			.a(<span class="jxr_string">"beanDefMapper"</span>, beanDefMapper)
+<a class="jxr_linenumber" name="L991" href="#L991">991</a> 			.a(<span class="jxr_string">"addExamplesTo"</span>, addExamplesTo)
+<a class="jxr_linenumber" name="L992" href="#L992">992</a> 			.a(<span class="jxr_string">"addDescriptionsTo"</span>, addDescriptionsTo)
+<a class="jxr_linenumber" name="L993" href="#L993">993</a> 			.a(<span class="jxr_string">"ignoreTypes"</span>, ignoreTypes);
+<a class="jxr_linenumber" name="L994" href="#L994">994</a> 	}
+<a class="jxr_linenumber" name="L995" href="#L995">995</a> 
+<a class="jxr_linenumber" name="L996" href="#L996">996</a> 	JsonParser getJsonParser() { <strong class="jxr_keyword">return</strong> jsonParser; }
 <a class="jxr_linenumber" name="L997" href="#L997">997</a> 
-<a class="jxr_linenumber" name="L998" href="#L998">998</a> 	JsonParser getJsonParser() { <strong class="jxr_keyword">return</strong> jsonParser; }
-<a class="jxr_linenumber" name="L999" href="#L999">999</a> 
-<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 	JsonSerializer getJsonSerializer() { <strong class="jxr_keyword">return</strong> jsonSerializer; }
-<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> }
+<a class="jxr_linenumber" name="L998" href="#L998">998</a> 	JsonSerializer getJsonSerializer() { <strong class="jxr_keyword">return</strong> jsonSerializer; }
+<a class="jxr_linenumber" name="L999" href="#L999">999</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
