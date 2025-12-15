@@ -30,7 +30,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.swagger.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.junit.bct.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.*;
@@ -139,7 +139,7 @@ import org.junit.jupiter.api.*;
  * @see BeanConverter
  * @see BasicBeanConverter
  */
-public class TestUtils extends Utils2 {
+public class TestUtils extends Utils {
 
 	private static final ThreadLocal<TimeZone> SYSTEM_TIME_ZONE = new ThreadLocal<>();
 

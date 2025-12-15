@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.uon;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StateEnum.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -30,6 +29,7 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.httppart.*;
@@ -965,8 +965,9 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		return ("null".equals(s) ? null : trim(s));
 	}
 
-	@Override /* Overridden from ContextSession */
-	protected JsonMap properties() {
-		return filteredMap("decoding", decoding);
+	@Override /* Overridden from ReaderParserSession */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("decoding", decoding);
 	}
 }

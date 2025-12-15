@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -30,7 +29,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.httppart.*;
@@ -983,9 +982,10 @@ public class SerializerSession extends BeanTraverseSession {
 		super.onError(t, msg, args);
 	}
 
-	@Override /* Overridden from ContextSession */
-	protected JsonMap properties() {
-		return filteredMap("uriResolver", uriResolver);
+	@Override /* Overridden from BeanTraverseSession */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("uriResolver", uriResolver);
 	}
 
 	/**

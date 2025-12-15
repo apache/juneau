@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.html;
 
-import static org.apache.juneau.collections.JsonMap.*;
-
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -25,7 +23,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -387,8 +385,10 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 */
 	protected final boolean isResolveBodyVars() { return ctx.resolveBodyVars; }
 
-	@Override /* Overridden from ContextSession */
-	protected JsonMap properties() {
-		return filteredMap("ctx", ctx, "varResolver", getVarResolver());
+	@Override /* Overridden from HtmlStrippedDocSerializerSession */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("ctx", ctx)
+			.a("varResolver", getVarResolver());
 	}
 }

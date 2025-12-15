@@ -17,7 +17,7 @@
 package org.apache.juneau;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -26,9 +26,9 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * A one-time-use non-thread-safe object that's meant to be used once and then thrown away.
@@ -231,7 +231,7 @@ public abstract class ContextSession {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return Utils2.toPropertyMap(this).asReadableString();
+		return r(properties());
 	}
 
 	/**
@@ -239,7 +239,8 @@ public abstract class ContextSession {
 	 *
 	 * @return The properties on this bean as a map for debugging.
 	 */
-	protected JsonMap properties() {
-		return filteredMap("debug", debug);
+	protected FluentMap<String,Object> properties() {
+		return mapb().sorted().filtered().buildFluent()
+			.a("debug", debug);
 	}
 }

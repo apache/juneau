@@ -36,6 +36,7 @@ import java.util.logging.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.time.*;
 import org.apache.juneau.commons.utils.*;
@@ -1679,5 +1680,13 @@ public class BeanSession extends ContextSession {
 			}
 		});
 		return array;
+	}
+
+	@Override /* Overridden from ContextSession */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("locale", locale)
+			.a("timeZone", timeZone)
+			.a("mediaType", mediaType);
 	}
 }

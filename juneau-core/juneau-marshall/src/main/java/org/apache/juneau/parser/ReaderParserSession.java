@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.collections.JsonMap.*;
-
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -25,7 +23,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.httppart.*;
 
 /**
@@ -269,8 +267,10 @@ public class ReaderParserSession extends ParserSession {
 	@Override /* Overridden from ParserSession */
 	public final boolean isReaderParser() { return true; }
 
-	@Override /* Overridden from ContextSession */
-	protected JsonMap properties() {
-		return filteredMap("fileCharset", fileCharset, "streamCharset", streamCharset);
+	@Override /* Overridden from ParserSession */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("fileCharset", fileCharset)
+			.a("streamCharset", streamCharset);
 	}
 }

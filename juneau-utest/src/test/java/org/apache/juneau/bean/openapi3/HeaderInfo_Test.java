@@ -254,7 +254,7 @@ class HeaderInfo_Test extends TestBase {
 				.setComponents(components().setSchemas(m(
 					"MyHeader", schemaInfo().setType("string").setDescription("My Header")
 				)));
-	
+
 			assertBean(
 				headerInfo().setRef("#/components/schemas/MyHeader").resolveRefs(openApi, new ArrayDeque<>(), 10),
 				"type,description",

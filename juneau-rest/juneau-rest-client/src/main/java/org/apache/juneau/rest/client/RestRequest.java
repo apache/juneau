@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.client;
 
 import static java.util.stream.Collectors.toList;
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
@@ -48,7 +47,7 @@ import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.params.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
@@ -2428,17 +2427,15 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return new SerializedPart(name, value, type, getPartSerializerSession(serializer), schema, skipIfEmpty);
 	}
 
-	@Override /* Overridden from ContextSession */
-	protected JsonMap properties() {
-		// @formatter:off
-		return filteredMap()
-			.append("client", client.properties())
-			.append("ignoreErrors", ignoreErrors)
-			.append("interceptors", interceptors)
-			.append("requestBodySchema", contentSchema)
-			.append("response", response)
-			.append("serializer", serializer);
-		// @formatter:on
+	@Override /* Overridden from BeanSession */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("client", client.properties())
+			.a("ignoreErrors", ignoreErrors)
+			.a("interceptors", interceptors)
+			.a("requestBodySchema", contentSchema)
+			.a("response", response)
+			.a("serializer", serializer);
 	}
 
 	RestRequest formDataArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {

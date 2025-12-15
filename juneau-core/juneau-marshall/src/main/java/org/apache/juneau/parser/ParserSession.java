@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -30,6 +29,7 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.httppart.*;
@@ -1079,9 +1079,12 @@ public class ParserSession extends BeanSession {
 			listener.onUnknownBeanProperty(this, propertyName, beanMap.getClassMeta().inner(), beanMap.getBean());
 	}
 
-	@Override /* Overridden from ContextSession */
-	protected JsonMap properties() {
-		return filteredMap("javaMethod", javaMethod, "listener", listener, "outer", outer);
+	@Override /* Overridden from BeanSession */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("javaMethod", javaMethod)
+			.a("listener", listener)
+			.a("outer", outer);
 	}
 
 	/**

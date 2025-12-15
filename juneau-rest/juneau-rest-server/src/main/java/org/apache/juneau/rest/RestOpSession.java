@@ -20,6 +20,7 @@ import java.io.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.logger.*;
@@ -210,5 +211,12 @@ public class RestOpSession extends ContextSession {
 	public RestOpSession status(StatusLine value) {
 		session.status(value);
 		return this;
+	}
+
+	@Override /* Overridden from ContextSession */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("ctx", ctx)
+			.a("session", session);
 	}
 }

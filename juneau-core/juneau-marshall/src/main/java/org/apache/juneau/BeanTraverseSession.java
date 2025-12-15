@@ -16,7 +16,6 @@
  */
 package org.apache.juneau;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -25,6 +24,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.utils.*;
 
 /**
@@ -338,9 +338,11 @@ public class BeanTraverseSession extends BeanSession {
 		isBottom = false;
 	}
 
-	@Override /* Overridden from ContextSession */
-	protected JsonMap properties() {
-		return filteredMap("indent", indent, "depth", depth);
+	@Override /* Overridden from BeanSession */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("indent", indent)
+			.a("depth", depth);
 	}
 
 	/**

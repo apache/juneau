@@ -24,6 +24,7 @@ import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
@@ -534,5 +535,12 @@ public class RestSession extends ContextSession {
 	public RestSession urlPathMatch(UrlPathMatch value) {
 		urlPathMatch = beanStore.add(UrlPathMatch.class, value);
 		return this;
+	}
+
+	@Override /* Overridden from ContextSession */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("context", context)
+			.a("resource", resource);
 	}
 }

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
@@ -26,7 +25,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.svl.*;
 
@@ -337,8 +336,11 @@ public class WriterSerializerSession extends SerializerSession {
 	 */
 	protected final boolean isUseWhitespace() { return useWhitespace; }
 
-	@Override /* Overridden from ContextSession */
-	protected JsonMap properties() {
-		return filteredMap("fileCharset", fileCharset, "streamCharset", streamCharset, "useWhitespace", useWhitespace);
+	@Override /* Overridden from SerializerSession */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("fileCharset", fileCharset)
+			.a("streamCharset", streamCharset)
+			.a("useWhitespace", useWhitespace);
 	}
 }

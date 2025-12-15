@@ -310,49 +310,49 @@ class SchemaInfo_Test extends TestBase {
 				.setComponents(components().setSchemas(m(
 					"Pet", schemaInfo().setType("object").setTitle("Pet")
 				)));
-	
+
 			assertBean(
 				schemaInfo().setRef("#/components/schemas/Pet").resolveRefs(openApi, new ArrayDeque<>(), 10),
 				"type,title",
 				"object,Pet"
 			);
 		}
-	
+
 		@Test void d02_resolveRefs_nested() {
 			var openApi = openApi()
 				.setComponents(components().setSchemas(m(
 					"Pet", schemaInfo().setType("object").setTitle("Pet"),
 					"Pets", schemaInfo().setType("array").setItems(items().setRef("#/components/schemas/Pet"))
 				)));
-	
+
 			assertBean(
 				schemaInfo().setRef("#/components/schemas/Pets").resolveRefs(openApi, new ArrayDeque<>(), 10),
 				"type,items{type,title}",
 				"array,{object,Pet}"
 			);
 		}
-	
+
 		@Test void d03_resolveRefs_maxDepth() {
 			var openApi = openApi()
 				.setComponents(components().setSchemas(m(
 					"Pet", schemaInfo().setType("object").setTitle("Pet"),
 					"Pets", schemaInfo().setType("array").setItems(items().setRef("#/components/schemas/Pet"))
 				)));
-	
+
 			assertBean(
 				schemaInfo().setRef("#/components/schemas/Pets").resolveRefs(openApi, new ArrayDeque<>(), 1),
 				"type,items{ref}",
 				"array,{#/components/schemas/Pet}"
 			);
 		}
-	
+
 		@Test void d04_resolveRefs_circular() {
 			var openApi = openApi()
 				.setComponents(components().setSchemas(m(
 					"A", schemaInfo().setType("object").setTitle("A").setProperties(m("b", schemaInfo().setRef("#/components/schemas/B"))),
 					"B", schemaInfo().setType("object").setTitle("B").setProperties(m("a", schemaInfo().setRef("#/components/schemas/A")))
 				)));
-	
+
 			assertBean(
 				schemaInfo().setRef("#/components/schemas/A").resolveRefs(openApi, new ArrayDeque<>(), 10),
 				"type,title,properties{b{type,title,properties{a{ref}}}}",

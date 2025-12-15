@@ -654,16 +654,16 @@ public abstract class Context {
 		 * <p>
 		 * When {@link #apply(AnnotationWorkList)} is called, it gets called on all registered builders.
 		 *
-		 * @param builders The builders to add to the list of builders.
+		 * @param values The builders to add to the list of builders.
 		 */
-		protected void registerBuilders(Object...builders) {
-			for (var b : builders) {
+		protected void registerBuilders(Object...values) {
+			for (var b : values) {
 				if (b == this)
-					this.builders.add(b);
+					builders.add(b);
 				else if (b instanceof Builder b2)
-					this.builders.addAll(b2.builders);
+					builders.addAll(b2.builders);
 				else
-					this.builders.add(b);
+					builders.add(b);
 			}
 		}
 
