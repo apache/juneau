@@ -1317,7 +1317,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertBean(schema, "const", "MY_CONSTANT");
 	}
 
-	@Schema(type="string", _const="MY_CONSTANT")
+	@Schema(type="string", const_="MY_CONSTANT")
 	public static class ConstBean {
 		public String value;
 	}
@@ -1476,9 +1476,9 @@ class JsonSchemaGeneratorTest extends TestBase {
 	}
 
 	@Schema(type="object",
-		_if="properties:{foo:{const:'bar'}}",
-		_then="required:['baz']",
-		_else="required:['qux']")
+		if_="properties:{foo:{const:'bar'}}",
+		then_="required:['baz']",
+		else_="required:['qux']")
 	public static class ConditionalBean {
 		public String foo;
 		public String baz;
@@ -1494,7 +1494,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 
 	@Schema(type="integer",
 		$id="https://example.com/combined",
-		_const="FIXED",
+		const_="FIXED",
 		examples={"ex1", "ex2"},
 		$comment="A comprehensive example",
 		deprecatedProperty=true,

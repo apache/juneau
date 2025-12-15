@@ -47,7 +47,7 @@ public class SubItemsAnnotation {
 			type = "";
 		private long maxItems = -1, maxLength = -1, maxi = -1, maxl = -1, minItems = -1, minLength = -1, mini = -1, minl = -1;
 		private boolean emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
-		private String[] _default = {}, _enum = {}, df = {}, e = {}, items = {};
+		private String[] default_ = {}, enum_ = {}, df = {}, e = {}, items = {};
 
 		/**
 		 * Constructor.
@@ -57,24 +57,24 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>_default</c> property on this annotation.
+		 * Sets the <c>default_</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder _default(String...value) {
-			this._default = value;
+		public Builder default_(String...value) {
+			this.default_ = value;
 			return this;
 		}
 
 		/**
-		 * Sets the <c>_enum</c> property on this annotation.
+		 * Sets the <c>enum_</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder _enum(String...value) {
-			this._enum = value;
+		public Builder enum_(String...value) {
+			this.enum_ = value;
 			return this;
 		}
 
@@ -458,14 +458,14 @@ public class SubItemsAnnotation {
 		private final boolean emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
 		private final long maxi, maxItems, maxl, maxLength, mini, minItems, minl, minLength;
 		private final String $ref, cf, collectionFormat, f, format, max, maximum, min, minimum, mo, multipleOf, p, pattern, t, type;
-		private final String[] _default, _enum, df, e, items;
+		private final String[] default_, enum_, df, e, items;
 
 		Object(SubItemsAnnotation.Builder b) {
 			super(b);
 			description = copyOf(b.description);
 			$ref = b.$ref;
-			_default = copyOf(b._default);
-			_enum = copyOf(b._enum);
+			default_ = copyOf(b.default_);
+			enum_ = copyOf(b.enum_);
 			cf = b.cf;
 			collectionFormat = b.collectionFormat;
 			df = copyOf(b.df);
@@ -500,13 +500,13 @@ public class SubItemsAnnotation {
 		}
 
 		@Override /* Overridden from SubItems */
-		public String[] _default() {
-			return _default;
+		public String[] default_() {
+			return default_;
 		}
 
 		@Override /* Overridden from SubItems */
-		public String[] _enum() {
-			return _enum;
+		public String[] enum_() {
+			return enum_;
 		}
 
 		@Override /* Overridden from SubItems */
@@ -716,8 +716,8 @@ public class SubItemsAnnotation {
 		// @formatter:off
 		return om
 			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
-			.appendIf(ne, "default", joinnl(a._default(), a.df()))
-			.appendFirst(nec, "enum", parseSet(a._enum()), parseSet(a.e()))
+			.appendIf(ne, "default", joinnl(a.default_(), a.df()))
+			.appendFirst(nec, "enum", parseSet(a.enum_()), parseSet(a.e()))
 			.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
 			.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
 			.appendFirst(ne, "format", a.format(), a.f())

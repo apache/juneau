@@ -85,7 +85,7 @@ class OpenApiPartParser_Test extends TestBase {
 	}
 
 	@Test void a04_inputValidations_enum() throws Exception {
-		var s = tNone()._enum("foo").allowEmptyValue().build();
+		var s = tNone().enum_("foo").allowEmptyValue().build();
 
 		assertEquals("foo", parse(s, "foo", String.class));
 		assertEquals(null, parse(s, null, String.class));
@@ -93,9 +93,9 @@ class OpenApiPartParser_Test extends TestBase {
 		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match one of the expected values.  Must be one of the following:  foo", ()->parse(s, "bar", String.class));
 		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match one of the expected values.  Must be one of the following:  foo", ()->parse(s, "", String.class));
 
-		assertEquals("foo", parse(tNone()._enum((Set<String>)null).build(), "foo", String.class));
-		assertEquals("foo", parse(tNone()._enum((Set<String>)null).allowEmptyValue().build(), "foo", String.class));
-		assertEquals("foo", parse(tNone()._enum("foo","foo").build(), "foo", String.class));
+		assertEquals("foo", parse(tNone().enum_((Set<String>)null).build(), "foo", String.class));
+		assertEquals("foo", parse(tNone().enum_((Set<String>)null).allowEmptyValue().build(), "foo", String.class));
+		assertEquals("foo", parse(tNone().enum_("foo","foo").build(), "foo", String.class));
 	}
 
 	@Test void a05_inputValidations_minMaxLength() throws Exception {
@@ -197,7 +197,7 @@ class OpenApiPartParser_Test extends TestBase {
 	}
 
 	@Test void c02_stringType_default() throws Exception {
-		var s = tString()._default("x").build();
+		var s = tString().default_("x").build();
 		assertEquals("foo", parse(s, "foo", String.class));
 		assertEquals("x", parse(s, null, String.class));
 	}

@@ -32,8 +32,8 @@ class SubItemsAnnotation_Test extends TestBase {
 
 	SubItems a1 = SubItemsAnnotation.create()
 		.$ref("a")
-		._default("b")
-		._enum("c")
+		.default_("b")
+		.enum_("c")
 		.cf("d")
 		.collectionFormat("e")
 		.description("f")
@@ -69,8 +69,8 @@ class SubItemsAnnotation_Test extends TestBase {
 
 	SubItems a2 = SubItemsAnnotation.create()
 		.$ref("a")
-		._default("b")
-		._enum("c")
+		.default_("b")
+		.enum_("c")
 		.cf("d")
 		.collectionFormat("e")
 		.description("f")
@@ -105,7 +105,7 @@ class SubItemsAnnotation_Test extends TestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertBean(a1, "$ref,_default,_enum,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items,max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems", "a,[b],[c],d,e,[f],[g],[h],true,true,true,true,i,j,[],k,2,4,1,l,3,m,6,8,5,n,7,o,p,q,r,s,t,true,true");
+		assertBean(a1, "$ref,default_,enum_,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items,max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems", "a,[b],[c],d,e,[f],[g],[h],true,true,true,true,i,j,[],k,2,4,1,l,3,m,6,8,5,n,7,o,p,q,r,s,t,true,true");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -134,8 +134,8 @@ class SubItemsAnnotation_Test extends TestBase {
 
 	@SubItems(
 		$ref="a",
-		_default="b",
-		_enum="c",
+		default_="b",
+		enum_="c",
 		cf="d",
 		collectionFormat="e",
 		description={ "f" },
@@ -173,8 +173,8 @@ class SubItemsAnnotation_Test extends TestBase {
 
 	@SubItems(
 		$ref="a",
-		_default="b",
-		_enum="c",
+		default_="b",
+		enum_="c",
 		cf="d",
 		collectionFormat="e",
 		description={ "f" },

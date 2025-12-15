@@ -94,11 +94,11 @@ public class SchemaAnnotation {
 		private long maxi = -1, maxItems = -1, maxl = -1, maxLength = -1, maxp = -1, maxProperties = -1, mini = -1, minItems = -1, minl = -1, minLength = -1, minp = -1, minProperties = -1;
 		private String $ref = "", cf = "", collectionFormat = "", discriminator = "", f = "", format = "", max = "", maximum = "", min = "", minimum = "", mo = "", multipleOf = "", p = "",
 			pattern = "", t = "", title = "", type = "";
-		private String[] _default = {}, _enum = {}, additionalProperties = {}, allOf = {}, d = {}, description = {}, df = {}, e = {}, properties = {}, xml = {};
+		private String[] default_ = {}, enum_ = {}, additionalProperties = {}, allOf = {}, d = {}, description = {}, df = {}, e = {}, properties = {}, xml = {};
 		private boolean deprecatedProperty;
 		private String $id = "", contentMediaType = "", contentEncoding = "", exclusiveMaximumValue = "", exclusiveMinimumValue = "";
-		private String[] _const = {}, examples = {}, $comment = {}, prefixItems = {}, unevaluatedItems = {}, unevaluatedProperties = {}, dependentSchemas = {}, dependentRequired = {}, _if = {},
-			_then = {}, _else = {}, $defs = {};
+		private String[] const_ = {}, examples = {}, $comment = {}, prefixItems = {}, unevaluatedItems = {}, unevaluatedProperties = {}, dependentSchemas = {}, dependentRequired = {}, if_ = {},
+			then_ = {}, else_ = {}, $defs = {};
 
 		/**
 		 * Constructor.
@@ -108,68 +108,68 @@ public class SchemaAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Schema#_const} property on this annotation.
+		 * Sets the {@link Schema#const_} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder _const(String...value) {
-			this._const = value;
+		public Builder const_(String...value) {
+			this.const_ = value;
 			return this;
 		}
 
 		/**
-		 * Sets the {@link Schema#_default} property on this annotation.
+		 * Sets the {@link Schema#default_} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder _default(String...value) {
-			this._default = value;
+		public Builder default_(String...value) {
+			this.default_ = value;
 			return this;
 		}
 
 		/**
-		 * Sets the {@link Schema#_else} property on this annotation.
+		 * Sets the {@link Schema#else_} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder _else(String...value) {
-			this._else = value;
+		public Builder else_(String...value) {
+			this.else_ = value;
 			return this;
 		}
 
 		/**
-		 * Sets the {@link Schema#_enum} property on this annotation.
+		 * Sets the {@link Schema#enum_} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder _enum(String...value) {
-			this._enum = value;
+		public Builder enum_(String...value) {
+			this.enum_ = value;
 			return this;
 		}
 
 		/**
-		 * Sets the {@link Schema#_if} property on this annotation.
+		 * Sets the {@link Schema#if_} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder _if(String...value) {
-			this._if = value;
+		public Builder if_(String...value) {
+			this.if_ = value;
 			return this;
 		}
 
 		/**
-		 * Sets the {@link Schema#_then} property on this annotation.
+		 * Sets the {@link Schema#then_} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder _then(String...value) {
-			this._then = value;
+		public Builder then_(String...value) {
+			this.then_ = value;
 			return this;
 		}
 
@@ -998,18 +998,18 @@ public class SchemaAnnotation {
 		private final Items items;
 		private final long maxLength, maxl, minLength, minl, maxItems, maxi, minItems, mini, maxProperties, maxp, minProperties, minp;
 		private final String $ref, format, f, title, multipleOf, mo, maximum, max, minimum, min, pattern, p, type, t, collectionFormat, cf, discriminator;
-		private final String[] d, _default, df, _enum, e, allOf, properties, additionalProperties, xml;
+		private final String[] d, default_, df, enum_, e, allOf, properties, additionalProperties, xml;
 		// JSON Schema Draft 2020-12 fields
 		private final boolean deprecatedProperty;
 		private final String $id, contentMediaType, contentEncoding, exclusiveMaximumValue, exclusiveMinimumValue;
-		private final String[] _const, examples, $comment, prefixItems, unevaluatedItems, unevaluatedProperties, dependentSchemas, dependentRequired, _if, _then, _else, $defs;
+		private final String[] const_, examples, $comment, prefixItems, unevaluatedItems, unevaluatedProperties, dependentSchemas, dependentRequired, if_, then_, else_, $defs;
 
 		Object(SchemaAnnotation.Builder b) {
 			super(b);
 			description = copyOf(b.description);
 			$ref = b.$ref;
-			_default = copyOf(b._default);
-			_enum = copyOf(b._enum);
+			default_ = copyOf(b.default_);
+			enum_ = copyOf(b.enum_);
 			additionalProperties = copyOf(b.additionalProperties);
 			allOf = copyOf(b.allOf);
 			aev = b.aev;
@@ -1068,7 +1068,7 @@ public class SchemaAnnotation {
 			contentEncoding = b.contentEncoding;
 			exclusiveMaximumValue = b.exclusiveMaximumValue;
 			exclusiveMinimumValue = b.exclusiveMinimumValue;
-			_const = copyOf(b._const);
+			const_ = copyOf(b.const_);
 			examples = copyOf(b.examples);
 			$comment = copyOf(b.$comment);
 			prefixItems = copyOf(b.prefixItems);
@@ -1076,40 +1076,40 @@ public class SchemaAnnotation {
 			unevaluatedProperties = copyOf(b.unevaluatedProperties);
 			dependentSchemas = copyOf(b.dependentSchemas);
 			dependentRequired = copyOf(b.dependentRequired);
-			_if = copyOf(b._if);
-			_then = copyOf(b._then);
-			_else = copyOf(b._else);
+			if_ = copyOf(b.if_);
+			then_ = copyOf(b.then_);
+			else_ = copyOf(b.else_);
 			$defs = copyOf(b.$defs);
 		}
 
 		@Override /* Overridden from Schema */
-		public String[] _const() {
-			return _const;
+		public String[] const_() {
+			return const_;
 		}
 
 		@Override /* Overridden from Schema */
-		public String[] _default() {
-			return _default;
+		public String[] default_() {
+			return default_;
 		}
 
 		@Override /* Overridden from Schema */
-		public String[] _else() {
-			return _else;
+		public String[] else_() {
+			return else_;
 		}
 
 		@Override /* Overridden from Schema */
-		public String[] _enum() {
-			return _enum;
+		public String[] enum_() {
+			return enum_;
 		}
 
 		@Override /* Overridden from Schema */
-		public String[] _if() {
-			return _if;
+		public String[] if_() {
+			return if_;
 		}
 
 		@Override /* Overridden from Schema */
-		public String[] _then() {
-			return _then;
+		public String[] then_() {
+			return then_;
 		}
 
 		@Override /* Overridden from Schema */
@@ -1484,10 +1484,10 @@ public class SchemaAnnotation {
 			.appendIf(nem, "additionalProperties", parseMap(a.additionalProperties()))
 			.appendIf(ne, "allOf", joinnl(a.allOf()))
 			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
-			.appendIf(ne, "default", joinnl(a._default(), a.df()))
+			.appendIf(ne, "default", joinnl(a.default_(), a.df()))
 			.appendIf(ne, "discriminator", a.discriminator())
 			.appendIf(ne, "description", joinnl(a.description(), a.d()))
-			.appendFirst(nec, "enum", parseSet(a._enum()), parseSet(a.e()))
+			.appendFirst(nec, "enum", parseSet(a.enum_()), parseSet(a.e()))
 			// Handle exclusiveMaximum with Draft 2020-12 fallback
 			.appendIf(ne, "exclusiveMaximum",
 				ne.test(a.exclusiveMaximumValue()) ? a.exclusiveMaximumValue() :
@@ -1519,7 +1519,7 @@ public class SchemaAnnotation {
 			.appendIf(ne, "xml", joinnl(a.xml()))
 			.appendIf(ne, "$ref", a.$ref())
 			// JSON Schema Draft 2020-12 properties
-			.appendIf(ne, "const", joinnl(a._const()))
+			.appendIf(ne, "const", joinnl(a.const_()))
 			.appendIf(nec, "examples", a.examples().length == 0 ? null : l(a.examples()))
 			.appendIf(ne, "$comment", joinnl(a.$comment()))
 			.appendIf(nf, "deprecated", a.deprecatedProperty())
@@ -1530,9 +1530,9 @@ public class SchemaAnnotation {
 			.appendIf(ne, "unevaluatedProperties", joinnl(a.unevaluatedProperties()))
 			.appendIf(ne, "dependentSchemas", joinnl(a.dependentSchemas()))
 			.appendIf(ne, "dependentRequired", joinnl(a.dependentRequired()))
-			.appendIf(ne, "if", joinnl(a._if()))
-			.appendIf(ne, "then", joinnl(a._then()))
-			.appendIf(ne, "else", joinnl(a._else()))
+			.appendIf(ne, "if", joinnl(a.if_()))
+			.appendIf(ne, "then", joinnl(a.then_()))
+			.appendIf(ne, "else", joinnl(a.else_()))
 			.appendIf(ne, "$defs", joinnl(a.$defs()))
 			.appendIf(ne, "$id", a.$id())
 		;
@@ -1586,7 +1586,7 @@ public class SchemaAnnotation {
 		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
 		Predicate<Boolean> nf = Utils::isTrue;
 		Predicate<Long> nm1 = Utils::isNotMinusOne;
-		return m.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf()).appendIf(ne, "default", joinnl(a._default(), a.df())).appendFirst(nec, "enum", parseSet(a._enum()), parseSet(a.e()))
+		return m.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf()).appendIf(ne, "default", joinnl(a.default_(), a.df())).appendFirst(nec, "enum", parseSet(a.enum_()), parseSet(a.e()))
 			.appendFirst(ne, "format", a.format(), a.f()).appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax()).appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
 			.appendIf(nem, "items", SubItemsAnnotation.merge(m.getMap("items"), a.items())).appendFirst(ne, "maximum", a.maximum(), a.max()).appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
 			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl()).appendFirst(ne, "minimum", a.minimum(), a.min()).appendFirst(nm1, "minItems", a.minItems(), a.mini())

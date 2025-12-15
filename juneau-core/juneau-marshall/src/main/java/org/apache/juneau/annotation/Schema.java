@@ -113,12 +113,12 @@ public @interface Schema {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// A constant string value</jc>
-	 * 	<ja>@Schema</ja>(_const=<js>"fixed-value"</js>)
+	 * 	<ja>@Schema</ja>(const_=<js>"fixed-value"</js>)
 	 * 	<jk>public</jk> String getStatus() {...}
 	 * </p>
 	 * <p class='bjava'>
 	 * 	<jc>// A constant numeric value</jc>
-	 * 	<ja>@Schema</ja>(_const=<js>"42"</js>)
+	 * 	<ja>@Schema</ja>(const_=<js>"42"</js>)
 	 * 	<jk>public int</jk> getMagicNumber() {...}
 	 * </p>
 	 *
@@ -138,7 +138,7 @@ public @interface Schema {
 	 *
 	 * @return The annotation value.
 	 */
-	String[] _const() default {};
+	String[] const_() default {};
 
 	/**
 	 * <mk>default</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
@@ -159,15 +159,15 @@ public @interface Schema {
 	 * <p class='bjava'>
 	 * 	<jk>public</jk> Order placeOrder(
 	 * 		<ja>@Header</ja>(<js>"X-PetId"</js>)
-	 * 		<ja>@Schema</ja>(_default=<js>"100"</js>)
+	 * 		<ja>@Schema</ja>(default_=<js>"100"</js>)
 	 * 		<jk>long</jk> <jv>petId</jv>,
 	 *
 	 * 		<ja>@Header</ja>(<js>"X-AdditionalInfo"</js>)
-	 * 		<ja>@Schema</ja>(format=<js>"uon"</js>, _default=<js>"(rushOrder=false)"</js>)
+	 * 		<ja>@Schema</ja>(format=<js>"uon"</js>, default_=<js>"(rushOrder=false)"</js>)
 	 * 		AdditionalInfo <jv>additionalInfo</jv>,
 	 *
 	 * 		<ja>@Header</ja>(<js>"X-Flags"</js>)
-	 * 		<ja>@Schema</ja>(collectionFormat=<js>"uon"</js>, _default=<js>"@(new-customer)"</js>)
+	 * 		<ja>@Schema</ja>(collectionFormat=<js>"uon"</js>, default_=<js>"@(new-customer)"</js>)
 	 * 		String[] <jv>flags</jv>
 	 * 	) {...}
 	 * </p>
@@ -184,7 +184,7 @@ public @interface Schema {
 	 *
 	 * @return The annotation value.
 	 */
-	String[] _default() default {};
+	String[] default_() default {};
 
 	/**
 	 * <mk>else</mk> field of the JSON Schema.
@@ -209,7 +209,7 @@ public @interface Schema {
 	 *
 	 * @return The annotation value.
 	 */
-	String[] _else() default {};
+	String[] else_() default {};
 
 	/**
 	 * <mk>enum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
@@ -231,7 +231,7 @@ public @interface Schema {
 	 * 	<jc>// Comma-delimited list</jc>
 	 * 	<jk>public</jk> Collection&lt;Pet&gt; findPetsByStatus(
 	 * 		<ja>@Header</ja>(<js>"X-Status"</js>)
-	 * 		<ja>@Schema</ja>(_enum=<js>"AVAILABLE,PENDING,SOLD"</js>)
+	 * 		<ja>@Schema</ja>(enum_=<js>"AVAILABLE,PENDING,SOLD"</js>)
 	 * 		PetStatus <jv>status</jv>
 	 * 	) {...}
 	 * </p>
@@ -248,7 +248,7 @@ public @interface Schema {
 	 *
 	 * @return The annotation value.
 	 */
-	String[] _enum() default {};
+	String[] enum_() default {};
 
 	/**
 	 * <mk>if</mk> field of the JSON Schema.
@@ -273,7 +273,7 @@ public @interface Schema {
 	 *
 	 * @return The annotation value.
 	 */
-	String[] _if() default {};
+	String[] if_() default {};
 
 	/**
 	 * <mk>then</mk> field of the JSON Schema.
@@ -298,7 +298,7 @@ public @interface Schema {
 	 *
 	 * @return The annotation value.
 	 */
-	String[] _then() default {};
+	String[] then_() default {};
 
 	/**
 	 * <mk>$comment</mk> field of the JSON Schema.
@@ -691,7 +691,7 @@ public @interface Schema {
 	String[] description() default {};
 
 	/**
-	 * Synonym for {@link #_default()}.
+	 * Synonym for {@link #default_()}.
 	 *
 	 * @return The annotation value.
 	 */
@@ -711,7 +711,7 @@ public @interface Schema {
 	String discriminator() default "";
 
 	/**
-	 * Synonym for {@link #_enum()}.
+	 * Synonym for {@link #enum_()}.
 	 *
 	 * @return The annotation value.
 	 */

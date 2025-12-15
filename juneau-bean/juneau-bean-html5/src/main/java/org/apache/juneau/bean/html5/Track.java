@@ -45,7 +45,7 @@ import org.apache.juneau.annotation.*;
  * 		.src(<js>"/media/captions-en.vtt"</js>)
  * 		.srclang(<js>"en"</js>)
  * 		.label(<js>"English Captions"</js>)
- * 		._default(<jk>true</jk>);
+ * 		.default_(<jk>true</jk>);
  *
  * 	<jc>// Descriptions track (for audio descriptions)</jc>
  * 	Track <jv>descriptions</jv> = <jsm>track</jsm>()
@@ -130,7 +130,7 @@ public class Track extends HtmlElementVoid {
 	 * @param value Whether this track should be enabled by default.
 	 * @return This object.
 	 */
-	public Track _default(String value) { // NOSONAR - Intentional naming.
+	public Track default_(String value) {
 		attr("default", value);
 		return this;
 	}

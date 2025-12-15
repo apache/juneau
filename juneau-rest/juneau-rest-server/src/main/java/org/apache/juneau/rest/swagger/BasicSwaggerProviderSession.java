@@ -808,8 +808,8 @@ public class BasicSwaggerProviderSession {
 		// @formatter:off
 		return om
 			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
-			.appendIf(ne, "default", joinnl(a._default(), a.df()))
-			.appendFirst(nec, "enum", toSet(a._enum()), toSet(a.e()))
+			.appendIf(ne, "default", joinnl(a.default_(), a.df()))
+			.appendFirst(nec, "enum", toSet(a.enum_()), toSet(a.e()))
 			.appendFirst(ne, "format", a.format(), a.f())
 			.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
 			.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
@@ -861,10 +861,10 @@ public class BasicSwaggerProviderSession {
 				.appendIf(nem, "additionalProperties", toJsonMap(a.additionalProperties()))
 				.appendIf(ne, "allOf", joinnl(a.allOf()))
 				.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
-				.appendIf(ne, "default", joinnl(a._default(), a.df()))
+				.appendIf(ne, "default", joinnl(a.default_(), a.df()))
 				.appendIf(ne, "discriminator", a.discriminator())
 				.appendIf(ne, "description", resolve(a.description(), a.d()))
-				.appendFirst(nec, "enum", toSet(a._enum()), toSet(a.e()))
+				.appendFirst(nec, "enum", toSet(a.enum_()), toSet(a.e()))
 				.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
 				.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
 				.appendIf(nem, "externalDocs", merge(om.getMap("externalDocs"), a.externalDocs()))
@@ -908,8 +908,8 @@ public class BasicSwaggerProviderSession {
 		// @formatter:off
 		return om
 			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
-			.appendIf(ne, "default", joinnl(a._default(), a.df()))
-			.appendFirst(nec, "enum", toSet(a._enum()), toSet(a.e()))
+			.appendIf(ne, "default", joinnl(a.default_(), a.df()))
+			.appendFirst(nec, "enum", toSet(a.enum_()), toSet(a.e()))
 			.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
 			.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
 			.appendFirst(ne, "format", a.format(), a.f())

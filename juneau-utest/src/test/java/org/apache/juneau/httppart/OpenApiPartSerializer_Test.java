@@ -74,7 +74,7 @@ class OpenApiPartSerializer_Test extends TestBase {
 	}
 
 	@Test void a04_outputValidations_enum() throws Exception {
-		var ps = tNone()._enum("foo").allowEmptyValue().build();
+		var ps = tNone().enum_("foo").allowEmptyValue().build();
 
 		assertEquals("foo", serialize(ps, "foo"));
 		assertEquals("null", serialize(ps, null));
@@ -82,9 +82,9 @@ class OpenApiPartSerializer_Test extends TestBase {
 		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match one of the expected values.  Must be one of the following:  foo", ()->serialize(ps, "bar"));
 		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match one of the expected values.  Must be one of the following:  foo", ()->serialize(ps, ""));
 
-		assertEquals("foo", serialize(tNone()._enum((Set<String>)null).build(), "foo"));
-		assertEquals("foo", serialize(tNone()._enum((Set<String>)null).allowEmptyValue().build(), "foo"));
-		assertEquals("foo", serialize(tNone()._enum("foo","foo").build(), "foo"));
+		assertEquals("foo", serialize(tNone().enum_((Set<String>)null).build(), "foo"));
+		assertEquals("foo", serialize(tNone().enum_((Set<String>)null).allowEmptyValue().build(), "foo"));
+		assertEquals("foo", serialize(tNone().enum_("foo","foo").build(), "foo"));
 	}
 
 	@Test void a05_outputValidations_minMaxLength() throws Exception {
@@ -139,7 +139,7 @@ class OpenApiPartSerializer_Test extends TestBase {
 	}
 
 	@Test void c02_stringType_default() throws Exception {
-		var ps = tString()._default("x").build();
+		var ps = tString().default_("x").build();
 		assertEquals("foo", serialize(ps, "foo"));
 		assertEquals("x", serialize(ps, null));
 	}

@@ -97,8 +97,8 @@ public class JsonSchemaProperty extends JsonSchema {
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty addEnum(Object..._enum) {
-		super.addEnum(_enum);
+	public JsonSchemaProperty addEnum(Object...enum_) {
+		super.addEnum(enum_);
 		return this;
 	}
 
@@ -186,8 +186,8 @@ public class JsonSchemaProperty extends JsonSchema {
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setConst(Object _const) {
-		super.setConst(_const);
+	public JsonSchemaProperty setConst(Object const_) {
+		super.setConst(const_);
 		return this;
 	}
 
@@ -234,8 +234,8 @@ public class JsonSchemaProperty extends JsonSchema {
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchemaProperty setEnum(List<Object> _enum) {
-		super.setEnum(_enum);
+	public JsonSchemaProperty setEnum(List<Object> enum_) {
+		super.setEnum(enum_);
 		return this;
 	}
 

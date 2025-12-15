@@ -132,8 +132,8 @@ public class ParameterInfo extends SwaggerElement {
 	private Boolean required, allowEmptyValue, exclusiveMaximum, exclusiveMinimum, uniqueItems;
 	private SchemaInfo schema;
 	private Items items;
-	private Object _default;  // NOSONAR - Intentional naming.
-	private Set<Object> _enum = new LinkedHashSet<>();  // NOSONAR - Intentional naming.
+	private Object default_;
+	private Set<Object> enum_ = new LinkedHashSet<>();
 	private Object example;
 	private Map<String,String> examples;
 
@@ -152,10 +152,10 @@ public class ParameterInfo extends SwaggerElement {
 
 		this.allowEmptyValue = copyFrom.allowEmptyValue;
 		this.collectionFormat = copyFrom.collectionFormat;
-		this._default = copyFrom._default;
+		this.default_ = copyFrom.default_;
 		this.description = copyFrom.description;
-		if (nn(copyFrom._enum))
-			this._enum.addAll(copyOf(copyFrom._enum));
+		if (nn(copyFrom.enum_))
+			this.enum_.addAll(copyOf(copyFrom.enum_));
 		this.example = copyFrom.example;
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
@@ -191,7 +191,7 @@ public class ParameterInfo extends SwaggerElement {
 		if (nn(value))
 			for (var v : value)
 				if (nn(v))
-					_enum.add(v);
+					enum_.add(v);
 		return this;
 	}
 
@@ -256,10 +256,10 @@ public class ParameterInfo extends SwaggerElement {
 				schema = p.schema;
 			if (nn(p.items))
 				items = p.items;
-			if (nn(p._default))
-				_default = p._default;
-			if (nn(p._enum))
-				_enum = p._enum;
+			if (nn(p.default_))
+				default_ = p.default_;
+			if (nn(p.enum_))
+				enum_ = p.enum_;
 			if (nn(p.example))
 				example = p.example;
 			if (nn(p.examples))
@@ -337,7 +337,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Object getDefault() { return _default; }
+	public Object getDefault() { return default_; }
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -354,7 +354,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<Object> getEnum() { return nullIfEmpty(_enum); }
+	public Set<Object> getEnum() { return nullIfEmpty(enum_); }
 
 	/**
 	 * Bean property getter:  <property>example</property>.
@@ -540,9 +540,9 @@ public class ParameterInfo extends SwaggerElement {
 		var s = setb(String.class)
 			.addIf(nn(allowEmptyValue), "allowEmptyValue")
 			.addIf(nn(collectionFormat), "collectionFormat")
-			.addIf(nn(_default), "default")
+			.addIf(nn(default_), "default")
 			.addIf(nn(description), "description")
-			.addIf(isNotEmpty(_enum), "enum")
+			.addIf(isNotEmpty(enum_), "enum")
 			.addIf(nn(example), "example")
 			.addIf(nn(examples), "examples")
 			.addIf(nn(exclusiveMaximum), "exclusiveMaximum")
@@ -688,7 +688,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ParameterInfo setDefault(Object value) {
-		_default = value;
+		default_ = value;
 		return this;
 	}
 
@@ -718,9 +718,9 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ParameterInfo setEnum(Collection<Object> value) {
-		_enum.clear();
+		enum_.clear();
 		if (nn(value))
-			_enum.addAll(value);
+			enum_.addAll(value);
 		return this;
 	}
 

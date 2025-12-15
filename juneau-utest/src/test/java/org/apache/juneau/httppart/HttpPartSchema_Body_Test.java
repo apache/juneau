@@ -814,7 +814,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Content
-	@Schema(_const="CONSTANT_VALUE")
+	@Schema(const_="CONSTANT_VALUE")
 	public static class D01a {}
 
 	@Test void d01a_const_valid() throws Exception {
@@ -829,7 +829,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 	}
 
 	@Content
-	@Schema(_const="CONSTANT_VALUE", required=true)
+	@Schema(const_="CONSTANT_VALUE", required=true)
 	public static class D01b {}
 
 	@Test void d01b_const_required() throws Exception {

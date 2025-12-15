@@ -83,7 +83,7 @@ class RestClient_FormData_Test extends TestBase {
 
 		client().formData(part("foo","bar",null)).build().post("/formData").run().assertContent("foo=bar");
 		client().formData(part("foo",null,null)).build().post("/formData").run().assertContent("");
-		client().formData(part("foo",null,null).skipIfEmpty().schema(HttpPartSchema.create()._default("bar").build())).build().post("/formData").run().assertContent("foo=bar");
+		client().formData(part("foo",null,null).skipIfEmpty().schema(HttpPartSchema.create().default_("bar").build())).build().post("/formData").run().assertContent("foo=bar");
 	}
 
 	@Test void a06_formData_String_Object_Schema() throws Exception {

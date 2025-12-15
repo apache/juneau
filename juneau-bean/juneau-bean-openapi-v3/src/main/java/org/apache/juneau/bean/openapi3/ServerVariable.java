@@ -73,8 +73,8 @@ import org.apache.juneau.commons.collections.*;
  */
 public class ServerVariable extends OpenApiElement {
 
-	private List<Object> _enum = list();  // NOSONAR - Intentional naming.
-	private String _default;  // NOSONAR - Intentional naming.
+	private List<Object> enum_ = list();
+	private String default_;
 	private String description;
 
 	/**
@@ -90,9 +90,9 @@ public class ServerVariable extends OpenApiElement {
 	public ServerVariable(ServerVariable copyFrom) {
 		super(copyFrom);
 
-		if (nn(copyFrom._enum))
-			this._enum.addAll(copyOf(copyFrom._enum));
-		this._default = copyFrom._default;
+		if (nn(copyFrom.enum_))
+			this.enum_.addAll(copyOf(copyFrom.enum_));
+		this.default_ = copyFrom.default_;
 		this.description = copyFrom.description;
 	}
 
@@ -108,12 +108,12 @@ public class ServerVariable extends OpenApiElement {
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
-	 * 	_enum(<js>"['foo','bar']"</js>);
+	 * 	enum_(<js>"['foo','bar']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
-	 * 	_enum(<js>"foo"</js>, <js>"bar"</js>);
+	 * 	enum_(<js>"foo"</js>, <js>"bar"</js>);
 	 * 			</p>
 	 * 	</ul>
 	 * 	<br>Ignored if <jk>null</jk>.
@@ -123,7 +123,7 @@ public class ServerVariable extends OpenApiElement {
 		if (nn(values))
 			for (var v : values)
 				if (nn(v))
-					_enum.add(v);
+					enum_.add(v);
 		return this;
 	}
 
@@ -162,7 +162,7 @@ public class ServerVariable extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getDefault() { return _default; }
+	public String getDefault() { return default_; }
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -187,15 +187,15 @@ public class ServerVariable extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getEnum() { return nullIfEmpty(_enum); }
+	public List<Object> getEnum() { return nullIfEmpty(enum_); }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(_default),"default" )
+			.addIf(nn(default_),"default" )
 			.addIf(nn(description), "description")
-			.addIf(isNotEmpty(_enum), "enum")
+			.addIf(isNotEmpty(enum_), "enum")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -235,7 +235,7 @@ public class ServerVariable extends OpenApiElement {
 	 * @return This object
 	 */
 	public ServerVariable setDefault(String value) {
-		_default = value;
+		default_ = value;
 		return this;
 	}
 
@@ -272,9 +272,9 @@ public class ServerVariable extends OpenApiElement {
 	 * @return This object
 	 */
 	public ServerVariable setEnum(Collection<Object> value) {
-		_enum.clear();
+		enum_.clear();
 		if (nn(value))
-			_enum.addAll(value);
+			enum_.addAll(value);
 		return this;
 	}
 

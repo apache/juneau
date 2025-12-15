@@ -90,9 +90,9 @@ public class HttpPartSchema {
 	 * Builder class.
 	 */
 	public static class Builder {
-		String name, _default;
+		String name, default_;
 		Set<Integer> codes;
-		Set<String> _enum;
+		Set<String> enum_;
 		Boolean allowEmptyValue, exclusiveMaximum, exclusiveMinimum, required, uniqueItems, skipIfEmpty;
 		HttpPartCollectionFormat collectionFormat = HttpPartCollectionFormat.NO_COLLECTION_FORMAT;
 		HttpPartDataType type = HttpPartDataType.NO_TYPE;
@@ -106,7 +106,7 @@ public class HttpPartSchema {
 		Class<? extends HttpPartParser> parser;
 		Class<? extends HttpPartSerializer> serializer;
 		// JSON Schema Draft 2020-12 properties
-		String _const;
+		String const_;
 		String[] examples;
 		Boolean deprecated;
 		Number exclusiveMaximumValue, exclusiveMinimumValue;
@@ -122,8 +122,8 @@ public class HttpPartSchema {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		public Builder _const(String value) {
-			this._const = value;
+		public Builder const_(String value) {
+			this.const_ = value;
 			return this;
 		}
 
@@ -148,9 +148,9 @@ public class HttpPartSchema {
 		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder _default(String value) {
+		public Builder default_(String value) {
 			if (isNotEmpty(value))
-				this._default = value;
+				this.default_ = value;
 			return this;
 		}
 
@@ -174,25 +174,25 @@ public class HttpPartSchema {
 		 * 	<br>Ignored if value is <jk>null</jk> or an empty set.
 		 * @return This object.
 		 */
-		public Builder _enum(Set<String> value) {
+		public Builder enum_(Set<String> value) {
 			if (nn(value) && ! value.isEmpty())
-				this._enum = value;
+				this.enum_ = value;
 			return this;
 		}
 
 		/**
-		 * <mk>_enum</mk> field.
+		 * <mk>enum</mk> field.
 		 *
 		 * <p>
-		 * Same as {@link #_enum(Set)} but takes in a var-args array.
+		 * Same as {@link #enum_(Set)} but takes in a var-args array.
 		 *
 		 * @param values
 		 * 	The new values for this property.
 		 * 	<br>Ignored if value is empty.
 		 * @return This object.
 		 */
-		public Builder _enum(String...values) {
-			return _enum(set(values));
+		public Builder enum_(String...values) {
+			return enum_(set(values));
 		}
 
 		/**
@@ -644,36 +644,36 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * Synonym for {@link #_default(String)}.
+		 * Synonym for {@link #default_(String)}.
 		 *
 		 * @param value
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
 		public Builder df(String value) {
-			return _default(value);
+			return default_(value);
 		}
 
 		/**
-		 * Synonym for {@link #_enum(Set)}.
+		 * Synonym for {@link #enum_(Set)}.
 		 *
 		 * @param value
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
 		public Builder e(Set<String> value) {
-			return _enum(value);
+			return enum_(value);
 		}
 
 		/**
-		 * Synonym for {@link #_enum(String...)}.
+		 * Synonym for {@link #enum_(String...)}.
 		 *
 		 * @param values
 		 * 	The new values for this property.
 		 * @return This object.
 		 */
 		public Builder e(String...values) {
-			return _enum(values);
+			return enum_(values);
 		}
 
 		/**
@@ -2574,7 +2574,7 @@ public class HttpPartSchema {
 		Builder apply(Content a) {
 			if (! SchemaAnnotation.empty(a.schema()))
 				apply(a.schema());
-			_default(a.def());
+			default_(a.def());
 			return this;
 		}
 
@@ -2582,7 +2582,7 @@ public class HttpPartSchema {
 			if (! SchemaAnnotation.empty(a.schema()))
 				apply(a.schema());
 			name(firstNonEmpty(a.name(), a.value()));
-			_default(a.def());
+			default_(a.def());
 			parser(a.parser());
 			serializer(a.serializer());
 			return this;
@@ -2602,15 +2602,15 @@ public class HttpPartSchema {
 			if (! SchemaAnnotation.empty(a.schema()))
 				apply(a.schema());
 			name(firstNonEmpty(a.name(), a.value()));
-			_default(a.def());
+			default_(a.def());
 			parser(a.parser());
 			serializer(a.serializer());
 			return this;
 		}
 
 		Builder apply(Items a) {
-			_default(joinnlOrNull(a._default(), a.df()));
-			_enum(toSet(a._enum(), a.e()));
+			default_(joinnlOrNull(a.default_(), a.df()));
+			enum_(toSet(a.enum_(), a.e()));
 			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
 			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
 			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
@@ -2635,8 +2635,8 @@ public class HttpPartSchema {
 
 		Builder apply(JsonMap m) {
 			if (nn(m) && ! m.isEmpty()) {
-				_default(m.getString("default"));
-				_enum(HttpPartSchema.toSet(m.getString("enum")));
+				default_(m.getString("default"));
+				enum_(HttpPartSchema.toSet(m.getString("enum")));
 				allowEmptyValue(m.getBoolean("allowEmptyValue"));
 				exclusiveMaximum(m.getBoolean("exclusiveMaximum"));
 				exclusiveMinimum(m.getBoolean("exclusiveMinimum"));
@@ -2671,7 +2671,7 @@ public class HttpPartSchema {
 			name(firstNonEmpty(a.name(), a.value()));
 			String def = a.def();
 			if (ne(NONE, def))
-				_default = def;  // Set directly to allow empty strings as valid defaults
+				default_ = def;  // Set directly to allow empty strings as valid defaults
 			parser(a.parser());
 			serializer(a.serializer());
 
@@ -2692,7 +2692,7 @@ public class HttpPartSchema {
 				apply(a.schema());
 			// PathRemainder is always "/*"
 			name("/*");
-			_default(a.def());
+			default_(a.def());
 			parser(a.parser());
 			serializer(a.serializer());
 
@@ -2707,7 +2707,7 @@ public class HttpPartSchema {
 			if (! SchemaAnnotation.empty(a.schema()))
 				apply(a.schema());
 			name(firstNonEmpty(a.name(), a.value()));
-			_default(a.def());
+			default_(a.def());
 			parser(a.parser());
 			serializer(a.serializer());
 			return this;
@@ -2728,8 +2728,8 @@ public class HttpPartSchema {
 
 		@SuppressWarnings("deprecation")
 		Builder apply(Schema a) {
-			_default(joinnlOrNull(a._default(), a.df()));
-			_enum(toSet(a._enum(), a.e()));
+			default_(joinnlOrNull(a.default_(), a.df()));
+			enum_(toSet(a.enum_(), a.e()));
 			additionalProperties(HttpPartSchema.toJsonMap(a.additionalProperties()));
 			allowEmptyValue(a.allowEmptyValue() || a.aev());
 			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
@@ -2769,7 +2769,7 @@ public class HttpPartSchema {
 			uniqueItems(a.uniqueItems() || a.ui());
 
 			// JSON Schema Draft 2020-12 properties
-			_const(joinnlOrNull(a._const()));
+			const_(joinnlOrNull(a.const_()));
 			examples(a.examples());
 			deprecated(a.deprecatedProperty());
 
@@ -2782,8 +2782,8 @@ public class HttpPartSchema {
 		}
 
 		Builder apply(SubItems a) {
-			_default(joinnlOrNull(a._default(), a.df()));
-			_enum(toSet(a._enum(), a.e()));
+			default_(joinnlOrNull(a.default_(), a.df()));
+			enum_(toSet(a.enum_(), a.e()));
 			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
 			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
 			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
@@ -3587,8 +3587,8 @@ public class HttpPartSchema {
 	}
 
 	final String name;
-	final String _default;
-	final Set<String> _enum;
+	final String default_;
+	final Set<String> enum_;
 	final Map<String,HttpPartSchema> properties;
 	final boolean allowEmptyValue, exclusiveMaximum, exclusiveMinimum, required, uniqueItems, skipIfEmpty;
 	final HttpPartCollectionFormat collectionFormat;
@@ -3606,7 +3606,7 @@ public class HttpPartSchema {
 	final ClassMeta<?> parsedType;
 
 	// JSON Schema Draft 2020-12 fields
-	final String _const;
+	final String const_;
 
 	final String[] examples;
 
@@ -3616,8 +3616,8 @@ public class HttpPartSchema {
 
 	HttpPartSchema(Builder b) {
 		name = b.name;
-		_default = b._default;
-		_enum = copy(b._enum);
+		default_ = b.default_;
+		enum_ = copy(b.enum_);
 		properties = build(b.properties, b.noValidate);
 		allowEmptyValue = resolve(b.allowEmptyValue);
 		exclusiveMaximum = resolve(b.exclusiveMaximum);
@@ -3643,7 +3643,7 @@ public class HttpPartSchema {
 		parser = b.parser;
 		serializer = b.serializer;
 		// JSON Schema Draft 2020-12 fields
-		_const = b._const;
+		const_ = b.const_;
 		examples = b.examples;
 		deprecated = resolve(b.deprecated);
 		exclusiveMaximumValue = b.exclusiveMaximumValue;
@@ -3721,7 +3721,7 @@ public class HttpPartSchema {
 				break;
 			}
 			case BOOLEAN: {
-				notAllowed.addIf(! _enum.isEmpty(), "_enum")
+				notAllowed.addIf(! enum_.isEmpty(), "enum")
 					.addIf(nn(properties), "properties")
 					.addIf(nn(additionalProperties), "additionalProperties")
 					.addIf(exclusiveMaximum, "exclusiveMaximum")
@@ -3807,7 +3807,7 @@ public class HttpPartSchema {
 			errors.add("Cannot specify exclusiveMaximum with maximum.");
 		if (exclusiveMinimum && minimum == null)
 			errors.add("Cannot specify exclusiveMinimum with minimum.");
-		if (required && nn(_default))
+		if (required && nn(default_))
 			errors.add("Cannot specify a default value on a required value.");
 		if (nn(minLength) && nn(maxLength) && maxLength < minLength)
 			errors.add("maxLength cannot be less than minLength.");
@@ -3848,17 +3848,17 @@ public class HttpPartSchema {
 	 * Returns the <c>default</c> field of this schema.
 	 *
 	 * @return The default value for this schema, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchema.Builder#_default(String)
+	 * @see HttpPartSchema.Builder#default_(String)
 	 */
-	public String getDefault() { return _default; }
+	public String getDefault() { return default_; }
 
 	/**
 	 * Returns the <c>enum</c> field of this schema.
 	 *
 	 * @return The <c>enum</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchema.Builder#_enum(Set)
+	 * @see HttpPartSchema.Builder#enum_(Set)
 	 */
-	public Set<String> getEnum() { return _enum; }
+	public Set<String> getEnum() { return enum_; }
 
 	/**
 	 * Returns the <c>format</c> field of this schema.
@@ -4132,8 +4132,8 @@ public class HttpPartSchema {
 				.appendIf(ne, "name", name)
 				.appendIf(ne, "type", type)
 				.appendIf(ne, "format", format)
-				.appendIf(ne, "default", _default)
-				.appendIf(ne, "enum", _enum)
+				.appendIf(ne, "default", default_)
+				.appendIf(ne, "enum", enum_)
 				.appendIf(ne, "properties", properties)
 				.appendIf(nf, "allowEmptyValue", allowEmptyValue)
 				.appendIf(nf, "exclusiveMaximum", exclusiveMaximum)
@@ -4177,11 +4177,11 @@ public class HttpPartSchema {
 			if (! isValidAllowEmpty(in))
 				throw new SchemaValidationException("Empty value not allowed.");
 			if (! isValidConst(in))
-				throw new SchemaValidationException("Value does not match constant.  Must be: {0}", _const);
+				throw new SchemaValidationException("Value does not match constant.  Must be: {0}", const_);
 			if (! isValidPattern(in))
 				throw new SchemaValidationException("Value does not match expected pattern.  Must match pattern: {0}", pattern.pattern());
 			if (! isValidEnum(in))
-				throw new SchemaValidationException("Value does not match one of the expected values.  Must be one of the following:  {0}", toCdl(_enum));
+				throw new SchemaValidationException("Value does not match one of the expected values.  Must be one of the following:  {0}", toCdl(enum_));
 			if (! isValidMaxLength(in))
 				throw new SchemaValidationException("Maximum length of value exceeded.");
 			if (! isValidMinLength(in))
@@ -4306,7 +4306,7 @@ public class HttpPartSchema {
 	}
 
 	private boolean isValidConst(String x) {
-		return _const == null || _const.equals(x);
+		return const_ == null || const_.equals(x);
 	}
 
 	private static boolean isValidDate(String x) {
@@ -4335,7 +4335,7 @@ public class HttpPartSchema {
 	}
 
 	private boolean isValidEnum(String x) {
-		return _enum.isEmpty() || _enum.contains(x);
+		return enum_.isEmpty() || enum_.contains(x);
 	}
 
 	private boolean isValidFormat(String x) {

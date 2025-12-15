@@ -42,8 +42,8 @@ import org.apache.juneau.oapi.*;
  * 			collectionFormat=<js>"csv"</js>,
  * 			items=<ja>@Items</ja>(
  * 				type=<js>"string"</js>,
- * 				_enum=<js>"AVAILABLE,PENDING,SOLD"</js>,
- * 				_default=<js>"AVAILABLE"</js>
+ * 				enum_=<js>"AVAILABLE,PENDING,SOLD"</js>,
+ * 				default_=<js>"AVAILABLE"</js>
  *			)
  *		)
  * 	)
@@ -87,7 +87,7 @@ public @interface Items {
 	 *
 	 * @return The annotation value.
 	 */
-	String[] _default() default {};
+	String[] default_() default {};
 
 	/**
 	 * <mk>enum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
@@ -99,7 +99,7 @@ public @interface Items {
 	 *
 	 * @return The annotation value.
 	 */
-	String[] _enum() default {};
+	String[] enum_() default {};
 
 	/**
 	 * <mk>$ref</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
@@ -141,14 +141,14 @@ public @interface Items {
 	String[] description() default {};
 
 	/**
-	 * Synonym for {@link #_default()}.
+	 * Synonym for {@link #default_()}.
 	 *
 	 * @return The annotation value.
 	 */
 	String[] df() default {};
 
 	/**
-	 * Synonym for {@link #_enum()}.
+	 * Synonym for {@link #enum_()}.
 	 *
 	 * @return The annotation value.
 	 */

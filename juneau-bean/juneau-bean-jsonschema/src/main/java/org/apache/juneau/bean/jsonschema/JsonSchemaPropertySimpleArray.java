@@ -95,8 +95,8 @@ public class JsonSchemaPropertySimpleArray extends JsonSchemaProperty {
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray addEnum(Object..._enum) {
-		super.addEnum(_enum);
+	public JsonSchemaPropertySimpleArray addEnum(Object...enum_) {
+		super.addEnum(enum_);
 		return this;
 	}
 
@@ -173,8 +173,8 @@ public class JsonSchemaPropertySimpleArray extends JsonSchemaProperty {
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setConst(Object _const) {
-		super.setConst(_const);
+	public JsonSchemaPropertySimpleArray setConst(Object const_) {
+		super.setConst(const_);
 		return this;
 	}
 
@@ -221,8 +221,8 @@ public class JsonSchemaPropertySimpleArray extends JsonSchemaProperty {
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setEnum(List<Object> _enum) {
-		super.setEnum(_enum);
+	public JsonSchemaPropertySimpleArray setEnum(List<Object> enum_) {
+		super.setEnum(enum_);
 		return this;
 	}
 

@@ -50,7 +50,7 @@ public @interface SubItems {
 	 *
 	 * @return The annotation value.
 	 */
-	String[] _default() default {};
+	String[] default_() default {};
 
 	/**
 	 * <mk>enum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
@@ -62,7 +62,7 @@ public @interface SubItems {
 	 *
 	 * @return The annotation value.
 	 */
-	String[] _enum() default {};
+	String[] enum_() default {};
 
 	/**
 	 * <mk>$ref</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
@@ -104,14 +104,14 @@ public @interface SubItems {
 	String[] description() default {};
 
 	/**
-	 * Synonym for {@link #_default()}.
+	 * Synonym for {@link #default_()}.
 	 *
 	 * @return The annotation value.
 	 */
 	String[] df() default {};
 
 	/**
-	 * Synonym for {@link #_enum()}.
+	 * Synonym for {@link #enum_()}.
 	 *
 	 * @return The annotation value.
 	 */

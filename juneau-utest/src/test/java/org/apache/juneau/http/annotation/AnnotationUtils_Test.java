@@ -230,8 +230,8 @@ class AnnotationUtils_Test extends TestBase {
 		assertTrue(SchemaAnnotation.empty(x.schema()));
 		assertTrue(SchemaAnnotation.empty((Schema)null));
 
-		assertFalse(SchemaAnnotation.empty(schema()._default(a("foo")).build()));
-		assertFalse(SchemaAnnotation.empty(schema()._enum(a("foo")).build()));
+		assertFalse(SchemaAnnotation.empty(schema().default_(a("foo")).build()));
+		assertFalse(SchemaAnnotation.empty(schema().enum_(a("foo")).build()));
 		assertFalse(SchemaAnnotation.empty(schema().$ref("foo").build()));
 		assertFalse(SchemaAnnotation.empty(schema().additionalProperties(a("foo")).build()));
 		assertFalse(SchemaAnnotation.empty(schema().allOf(a("foo")).build()));
@@ -292,8 +292,8 @@ class AnnotationUtils_Test extends TestBase {
 		assertTrue(SubItemsAnnotation.empty(x.subItems()));
 		assertTrue(SubItemsAnnotation.empty((SubItems)null));
 
-		assertFalse(SubItemsAnnotation.empty(subItems()._default(a("foo")).build()));
-		assertFalse(SubItemsAnnotation.empty(subItems()._enum(a("foo")).build()));
+		assertFalse(SubItemsAnnotation.empty(subItems().default_(a("foo")).build()));
+		assertFalse(SubItemsAnnotation.empty(subItems().enum_(a("foo")).build()));
 		assertFalse(SubItemsAnnotation.empty(subItems().$ref("foo").build()));
 		assertFalse(SubItemsAnnotation.empty(subItems().cf("foo").build()));
 		assertFalse(SubItemsAnnotation.empty(subItems().collectionFormat("foo").build()));
@@ -335,8 +335,8 @@ class AnnotationUtils_Test extends TestBase {
 
 		assertTrue(ItemsAnnotation.empty(x.items()));
 		assertTrue(ItemsAnnotation.empty((Items)null));
-		assertFalse(ItemsAnnotation.empty(items()._default(a("foo")).build()));
-		assertFalse(ItemsAnnotation.empty(items()._enum(a("foo")).build()));
+		assertFalse(ItemsAnnotation.empty(items().default_(a("foo")).build()));
+		assertFalse(ItemsAnnotation.empty(items().enum_(a("foo")).build()));
 		assertFalse(ItemsAnnotation.empty(items().$ref("foo").build()));
 		assertFalse(ItemsAnnotation.empty(items().cf("foo").build()));
 		assertFalse(ItemsAnnotation.empty(items().collectionFormat("foo").build()));

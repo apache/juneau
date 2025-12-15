@@ -41,7 +41,7 @@ public class ItemsAnnotation {
 		private long maxItems = -1, maxLength = -1, maxi = -1, maxl = -1, minItems = -1, minLength = -1, mini = -1, minl = -1;
 		private String $ref = "", cf = "", collectionFormat = "", f = "", format = "", max = "", maximum = "", min = "", minimum = "", mo = "", multipleOf = "", p = "", pattern = "", t = "",
 			type = "";
-		private String[] _default = {}, _enum = {}, df = {}, e = {};
+		private String[] default_ = {}, enum_ = {}, df = {}, e = {};
 		private SubItems items = SubItemsAnnotation.DEFAULT;
 
 		/**
@@ -52,24 +52,24 @@ public class ItemsAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Items#_default} property on this annotation.
+		 * Sets the {@link Items#default_} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder _default(String...value) {
-			this._default = value;
+		public Builder default_(String...value) {
+			this.default_ = value;
 			return this;
 		}
 
 		/**
-		 * Sets the {@link Items#_enum} property on this annotation.
+		 * Sets the {@link Items#enum_} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder _enum(String...value) {
-			this._enum = value;
+		public Builder enum_(String...value) {
+			this.enum_ = value;
 			return this;
 		}
 
@@ -453,15 +453,15 @@ public class ItemsAnnotation {
 		private final boolean emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
 		private final long maxi, maxItems, maxl, maxLength, mini, minItems, minl, minLength;
 		private final String $ref, cf, collectionFormat, f, format, max, maximum, min, minimum, mo, multipleOf, p, pattern, t, type;
-		private final String[] _default, _enum, df, e;
+		private final String[] default_, enum_, df, e;
 		private final SubItems items;
 
 		Object(ItemsAnnotation.Builder b) {
 			super(b);
 			description = copyOf(b.description);
 			$ref = b.$ref;
-			_default = copyOf(b._default);
-			_enum = copyOf(b._enum);
+			default_ = copyOf(b.default_);
+			enum_ = copyOf(b.enum_);
 			cf = b.cf;
 			collectionFormat = b.collectionFormat;
 			df = copyOf(b.df);
@@ -496,13 +496,13 @@ public class ItemsAnnotation {
 		}
 
 		@Override /* Overridden from Items */
-		public String[] _default() {
-			return _default;
+		public String[] default_() {
+			return default_;
 		}
 
 		@Override /* Overridden from Items */
-		public String[] _enum() {
-			return _enum;
+		public String[] enum_() {
+			return enum_;
 		}
 
 		@Override /* Overridden from Items */

@@ -112,14 +112,14 @@ class FormData_Test extends TestBase {
 				.append("f3", f3);
 		}
 		@RestPost
-		public JsonMap c(@FormData("f1") @Schema(_default="1") String f1, @FormData("f2") @Schema(_default="2") String f2, @FormData("f3") @Schema(_default="3") String f3) {
+		public JsonMap c(@FormData("f1") @Schema(default_="1") String f1, @FormData("f2") @Schema(default_="2") String f2, @FormData("f3") @Schema(default_="3") String f3) {
 			return JsonMap.create()
 				.append("f1", f1)
 				.append("f2", f2)
 				.append("f3", f3);
 		}
 		@RestPost(defaultRequestFormData={"f1:1","f2=2"," f3 : 3 "})
-		public JsonMap d(@FormData("f1") @Schema(_default="4") String f1, @FormData("f2") @Schema(_default="5") String f2, @FormData("f3") @Schema(_default="6") String f3) {
+		public JsonMap d(@FormData("f1") @Schema(default_="4") String f1, @FormData("f2") @Schema(default_="5") String f2, @FormData("f3") @Schema(default_="6") String f3) {
 			return JsonMap.create()
 				.append("f1", f1)
 				.append("f2", f2)

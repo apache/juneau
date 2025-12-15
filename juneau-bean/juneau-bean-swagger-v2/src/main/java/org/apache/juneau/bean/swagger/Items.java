@@ -87,8 +87,8 @@ public class Items extends SwaggerElement {
 	private Integer maxLength, minLength, maxItems, minItems;
 	private Boolean exclusiveMaximum, exclusiveMinimum, uniqueItems;
 	private Items items;  // NOSONAR - Intentional naming.
-	private Object _default;  // NOSONAR - Intentional naming.
-	private Set<Object> _enum = new LinkedHashSet<>();  // NOSONAR - Intentional naming.
+	private Object default_;
+	private Set<Object> enum_ = new LinkedHashSet<>();
 
 	/**
 	 * Default constructor.
@@ -104,9 +104,9 @@ public class Items extends SwaggerElement {
 		super(copyFrom);
 
 		this.collectionFormat = copyFrom.collectionFormat;
-		this._default = copyFrom._default;
-		if (nn(copyFrom._enum))
-			this._enum.addAll(copyOf(copyFrom._enum));
+		this.default_ = copyFrom.default_;
+		if (nn(copyFrom.enum_))
+			this.enum_.addAll(copyOf(copyFrom.enum_));
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
 		this.format = copyFrom.format;
@@ -136,7 +136,7 @@ public class Items extends SwaggerElement {
 		if (nn(value))
 			for (var v : value)
 				if (nn(v))
-					_enum.add(v);
+					enum_.add(v);
 		return this;
 	}
 
@@ -200,14 +200,14 @@ public class Items extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Object getDefault() { return _default; }
+	public Object getDefault() { return default_; }
 
 	/**
 	 * Bean property getter:  <property>enum</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<Object> getEnum() { return nullIfEmpty(_enum); }
+	public Set<Object> getEnum() { return nullIfEmpty(enum_); }
 
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
@@ -329,8 +329,8 @@ public class Items extends SwaggerElement {
 		// @formatter:off
 		var s = setb(String.class)
 			.addIf(nn(collectionFormat), "collectionFormat")
-			.addIf(nn(_default), "default")
-			.addIf(isNotEmpty(_enum), "enum")
+			.addIf(nn(default_), "default")
+			.addIf(isNotEmpty(enum_), "enum")
 			.addIf(nn(exclusiveMaximum), "exclusiveMaximum")
 			.addIf(nn(exclusiveMinimum), "exclusiveMinimum")
 			.addIf(nn(format), "format")
@@ -454,7 +454,7 @@ public class Items extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Items setDefault(Object value) {
-		_default = value;
+		default_ = value;
 		return this;
 	}
 
@@ -467,9 +467,9 @@ public class Items extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Items setEnum(Collection<Object> value) {
-		_enum.clear();
+		enum_.clear();
 		if (nn(value))
-			_enum.addAll(value);
+			enum_.addAll(value);
 		return this;
 	}
 

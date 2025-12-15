@@ -26,7 +26,7 @@ class Track_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Track x = track()
-			._default("a")
+			.default_("a")
 			.kind("b")
 			.label("c")
 			.src("d")

@@ -102,12 +102,12 @@ public class SchemaInfo extends SwaggerElement {
 	private Number multipleOf, maximum, minimum;
 	private Integer maxLength, minLength, maxItems, minItems, maxProperties, minProperties;
 	private Boolean exclusiveMaximum, exclusiveMinimum, uniqueItems, readOnly, required;
-	private Object _default,  // NOSONAR - Intentional naming.
+	private Object default_,
 		example;
 	private Items items;
 	private Xml xml;
 	private ExternalDocumentation externalDocs;
-	private Set<Object> _enum = new LinkedHashSet<>();  // NOSONAR - Intentional naming.
+	private Set<Object> enum_ = new LinkedHashSet<>();
 	private Set<SchemaInfo> allOf = new LinkedHashSet<>();
 	private Set<String> requiredProperties = new LinkedHashSet<>();
 	private Map<String,SchemaInfo> properties = map();
@@ -129,11 +129,11 @@ public class SchemaInfo extends SwaggerElement {
 		this.additionalProperties = copyFrom.additionalProperties == null ? null : copyFrom.additionalProperties.copy();
 		if (nn(copyFrom.allOf))
 			this.allOf.addAll(copyOf(copyFrom.allOf, SchemaInfo::copy));
-		this._default = copyFrom._default;
+		this.default_ = copyFrom.default_;
 		this.description = copyFrom.description;
 		this.discriminator = copyFrom.discriminator;
-		if (nn(copyFrom._enum))
-			this._enum.addAll(copyOf(copyFrom._enum));
+		if (nn(copyFrom.enum_))
+			this.enum_.addAll(copyOf(copyFrom.enum_));
 		this.example = copyFrom.example;
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
@@ -211,7 +211,7 @@ public class SchemaInfo extends SwaggerElement {
 	 */
 	public SchemaInfo addEnum(Collection<Object> values) {
 		if (nn(values))
-			_enum.addAll(values);
+			enum_.addAll(values);
 		return this;
 	}
 
@@ -227,7 +227,7 @@ public class SchemaInfo extends SwaggerElement {
 		if (nn(value))
 			for (var v : value)
 				if (nn(v))
-					_enum.add(v);
+					enum_.add(v);
 		return this;
 	}
 
@@ -351,7 +351,7 @@ public class SchemaInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Object getDefault() { return _default; }
+	public Object getDefault() { return default_; }
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -372,7 +372,7 @@ public class SchemaInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<Object> getEnum() { return nullIfEmpty(_enum); }
+	public Set<Object> getEnum() { return nullIfEmpty(enum_); }
 
 	/**
 	 * Bean property getter:  <property>example</property>.
@@ -559,10 +559,10 @@ public class SchemaInfo extends SwaggerElement {
 		var s = setb(String.class)
 			.addIf(nn(additionalProperties), "additionalProperties")
 			.addIf(isNotEmpty(allOf), "allOf")
-			.addIf(nn(_default), "default")
+			.addIf(nn(default_), "default")
 			.addIf(nn(description), "description")
 			.addIf(nn(discriminator), "discriminator")
-			.addIf(isNotEmpty(_enum), "enum")
+			.addIf(isNotEmpty(enum_), "enum")
 			.addIf(nn(example), "example")
 			.addIf(nn(exclusiveMaximum), "exclusiveMaximum")
 			.addIf(nn(exclusiveMinimum), "exclusiveMinimum")
@@ -726,7 +726,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setDefault(Object value) {
-		_default = value;
+		default_ = value;
 		return this;
 	}
 
@@ -766,9 +766,9 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setEnum(Collection<Object> value) {
-		_enum.clear();
+		enum_.clear();
 		if (nn(value))
-			_enum.addAll(value);
+			enum_.addAll(value);
 		return this;
 	}
 

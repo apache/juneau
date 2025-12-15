@@ -89,8 +89,8 @@ public class Items extends OpenApiElement {
 	private Integer maxLength, minLength, maxItems, minItems;
 	private Boolean exclusiveMaximum, exclusiveMinimum, uniqueItems;
 	private Items items;  // NOSONAR - Intentional naming.
-	private Object _default;  // NOSONAR - Intentional naming.
-	private List<Object> _enum = list();  // NOSONAR - Intentional naming.
+	private Object default_;
+	private List<Object> enum_ = list();
 
 	/**
 	 * Default constructor.
@@ -120,9 +120,9 @@ public class Items extends OpenApiElement {
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
 		this.uniqueItems = copyFrom.uniqueItems;
 		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
-		this._default = copyFrom._default;
-		if (nn(copyFrom._enum))
-			this._enum.addAll(copyOf(copyFrom._enum));
+		this.default_ = copyFrom.default_;
+		if (nn(copyFrom.enum_))
+			this.enum_.addAll(copyOf(copyFrom.enum_));
 		this.ref = copyFrom.ref;
 	}
 
@@ -138,7 +138,7 @@ public class Items extends OpenApiElement {
 		if (nn(values))
 			for (var v : values)
 				if (nn(v))
-					_enum.add(v);
+					enum_.add(v);
 		return this;
 	}
 
@@ -203,14 +203,14 @@ public class Items extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Object getDefault() { return _default; }
+	public Object getDefault() { return default_; }
 
 	/**
 	 * Bean property getter:  <property>enum</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getEnum() { return nullIfEmpty(_enum); }
+	public List<Object> getEnum() { return nullIfEmpty(enum_); }
 
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
@@ -333,8 +333,8 @@ public class Items extends OpenApiElement {
 		var s = setb(String.class)
 			.addIf(nn(ref), "$ref")
 			.addIf(nn(collectionFormat), "collectionFormat")
-			.addIf(nn(_default), "default")
-			.addIf(isNotEmpty(_enum), "enum")
+			.addIf(nn(default_), "default")
+			.addIf(isNotEmpty(enum_), "enum")
 			.addIf(nn(exclusiveMaximum), "exclusiveMaximum")
 			.addIf(nn(exclusiveMinimum), "exclusiveMinimum")
 			.addIf(nn(format), "format")
@@ -463,7 +463,7 @@ public class Items extends OpenApiElement {
 	 * @return This object
 	 */
 	public Items setDefault(Object value) {
-		_default = value;
+		default_ = value;
 		return this;
 	}
 
@@ -476,9 +476,9 @@ public class Items extends OpenApiElement {
 	 * @return This object
 	 */
 	public Items setEnum(Collection<Object> value) {
-		_enum.clear();
+		enum_.clear();
 		if (nn(value))
-			_enum.addAll(value);
+			enum_.addAll(value);
 		return this;
 	}
 
@@ -494,19 +494,19 @@ public class Items extends OpenApiElement {
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
-	 * 	_enum(<js>"['foo','bar']"</js>);
+	 * 	enum_(<js>"['foo','bar']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
-	 * 	_enum(<js>"foo"</js>, <js>"bar"</js>);
+	 * 	enum_(<js>"foo"</js>, <js>"bar"</js>);
 	 * 			</p>
 	 * 	</ul>
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object
 	 */
 	public Items setEnum(Object...values) {  // NOSONAR - Intentional naming.
-		_enum = listb(Object.class).sparse().addAny(_enum, values).build();
+		enum_ = listb(Object.class).sparse().addAny(enum_, values).build();
 		return this;
 	}
 

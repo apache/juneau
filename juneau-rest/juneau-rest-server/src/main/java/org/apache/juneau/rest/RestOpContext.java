@@ -1991,7 +1991,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				var def = (String)null;
 				for (var a : aa) {
 					if (a instanceof Schema a2) {
-						def = joinnlFirstNonEmptyArray(a2._default(), a2.df());
+						def = joinnlFirstNonEmptyArray(a2.default_(), a2.df());
 					}
 				}
 

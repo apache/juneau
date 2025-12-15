@@ -344,16 +344,16 @@ public class JsonSchema {
 	private Boolean additionalPropertiesBoolean;           // Boolean representation of additionalProperties
 	private JsonSchema additionalPropertiesSchema;         // JsonSchema representation of additionalProperties
 	private JsonSchema unevaluatedProperties;              // Draft 2019-09+
-	private List<Object> _enum;                            // NOSONAR - Intentional naming. Changed to Object to support any type
-	private Object _const;                                 // NOSONAR - Intentional naming. Draft 06+
+	private List<Object> enum_;                            // Changed to Object to support any type
+	private Object const_;                                 // Draft 06+
 	private List<Object> examples;                         // Draft 06+
 	private List<JsonSchema> allOf;
 	private List<JsonSchema> anyOf;
 	private List<JsonSchema> oneOf;
 	private JsonSchema not;
-	private JsonSchema _if;                                // NOSONAR - Intentional naming. Draft 07+
-	private JsonSchema _then;                              // NOSONAR - Intentional naming. Draft 07+
-	private JsonSchema _else;                              // NOSONAR - Intentional naming. Draft 07+
+	private JsonSchema if_;                                // Draft 07+
+	private JsonSchema then_;                              // Draft 07+
+	private JsonSchema else_;                              // Draft 07+
 	private Boolean readOnly;                              // Draft 07+
 	private Boolean writeOnly;                             // Draft 07+
 	private String contentMediaType;                       // Draft 07+
@@ -491,14 +491,14 @@ public class JsonSchema {
 	/**
 	 * Bean property appender:  <property>enum</property>.
 	 *
-	 * @param _enum The list of items to append to the <property>enum</property> property on this bean.
+	 * @param enum_ The list of items to append to the <property>enum</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema addEnum(Object..._enum) { // NOSONAR - Intentional naming.
-		if (this._enum == null)
-			this._enum = new LinkedList<>();
-		for (var e : _enum)
-			this._enum.add(e);
+	public JsonSchema addEnum(Object...enum_) {
+		if (this.enum_ == null)
+			this.enum_ = new LinkedList<>();
+		for (var e : enum_)
+			this.enum_.add(e);
 		return this;
 	}
 
@@ -757,7 +757,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>const</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Object getConst() { return _const; }
+	public Object getConst() { return const_; }
 
 	/**
 	 * Bean property getter:  <property>contentEncoding</property>.
@@ -851,14 +851,14 @@ public class JsonSchema {
 	 * @return The value of the <property>else</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	@Beanp("else")
-	public JsonSchema getElse() { return _else; }
+	public JsonSchema getElse() { return else_; }
 
 	/**
 	 * Bean property getter:  <property>enum</property>.
 	 *
 	 * @return The value of the <property>enum</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getEnum() { return _enum; }
+	public List<Object> getEnum() { return enum_; }
 
 	/**
 	 * Bean property getter:  <property>examples</property>.
@@ -933,7 +933,7 @@ public class JsonSchema {
 	 * @return The value of the <property>if</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	@Beanp("if")
-	public JsonSchema getIf() { return _if; }
+	public JsonSchema getIf() { return if_; }
 
 	/**
 	 * Bean property getter:  <property>items</property>.
@@ -1174,7 +1174,7 @@ public class JsonSchema {
 	 * @return The value of the <property>then</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	@Beanp("then")
-	public JsonSchema getThen() { return _then; }
+	public JsonSchema getThen() { return then_; }
 
 	/**
 	 * Bean property getter:  <property>title</property>.
@@ -1357,11 +1357,11 @@ public class JsonSchema {
 	 * <p>
 	 * This property was added in Draft 06.
 	 *
-	 * @param _const The new value for the <property>const</property> property on this bean.
+	 * @param const_ The new value for the <property>const</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setConst(Object _const) { // NOSONAR - Intentional naming.
-		this._const = _const;
+	public JsonSchema setConst(Object const_) {
+		this.const_ = const_;
 		return this;
 	}
 
@@ -1484,24 +1484,24 @@ public class JsonSchema {
 	 * <p>
 	 * This property was added in Draft 07 for conditional schema application.
 	 *
-	 * @param _else The new value for the <property>else</property> property on this bean.
+	 * @param else_ The new value for the <property>else</property> property on this bean.
 	 * @return This object.
 	 */
 	@Beanp("else")
-	public JsonSchema setElse(JsonSchema _else) { // NOSONAR - Intentional naming.
-		this._else = _else;
-		setMasterOn(_else);
+	public JsonSchema setElse(JsonSchema else_) {
+		this.else_ = else_;
+		setMasterOn(else_);
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>enum</property>.
 	 *
-	 * @param _enum The new value for the <property>enum</property> property on this bean.
+	 * @param enum_ The new value for the <property>enum</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setEnum(List<Object> _enum) { // NOSONAR - Intentional naming.
-		this._enum = _enum;
+	public JsonSchema setEnum(List<Object> enum_) {
+		this.enum_ = enum_;
 		return this;
 	}
 
@@ -1601,13 +1601,13 @@ public class JsonSchema {
 	 * <p>
 	 * This property was added in Draft 07 for conditional schema application.
 	 *
-	 * @param _if The new value for the <property>if</property> property on this bean.
+	 * @param if_ The new value for the <property>if</property> property on this bean.
 	 * @return This object.
 	 */
 	@Beanp("if")
-	public JsonSchema setIf(JsonSchema _if) { // NOSONAR - Intentional naming.
-		this._if = _if;
-		setMasterOn(_if);
+	public JsonSchema setIf(JsonSchema if_) {
+		this.if_ = if_;
+		setMasterOn(if_);
 		return this;
 	}
 
@@ -1919,13 +1919,13 @@ public class JsonSchema {
 	 * <p>
 	 * This property was added in Draft 07 for conditional schema application.
 	 *
-	 * @param _then The new value for the <property>then</property> property on this bean.
+	 * @param then_ The new value for the <property>then</property> property on this bean.
 	 * @return This object.
 	 */
 	@Beanp("then")
-	public JsonSchema setThen(JsonSchema _then) { // NOSONAR - Intentional naming.
-		this._then = _then;
-		setMasterOn(_then);
+	public JsonSchema setThen(JsonSchema then_) {
+		this.then_ = then_;
+		setMasterOn(then_);
 		return this;
 	}
 
@@ -2089,11 +2089,11 @@ public class JsonSchema {
 			oneOf.forEach(x -> x.setMaster(master));
 		if (nn(not))
 			not.setMaster(master);
-		if (nn(_if))
-			_if.setMaster(master);
-		if (nn(_then))
-			_then.setMaster(master);
-		if (nn(_else))
-			_else.setMaster(master);
+		if (nn(if_))
+			if_.setMaster(master);
+		if (nn(then_))
+			then_.setMaster(master);
+		if (nn(else_))
+			else_.setMaster(master);
 	}
 }

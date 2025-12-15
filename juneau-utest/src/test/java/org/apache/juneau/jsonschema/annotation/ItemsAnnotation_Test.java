@@ -32,8 +32,8 @@ class ItemsAnnotation_Test extends TestBase {
 
 	Items a1 = ItemsAnnotation.create()
 		.$ref("a")
-		._default("b")
-		._enum("c")
+		.default_("b")
+		.enum_("c")
 		.cf("d")
 		.collectionFormat("e")
 		.description("f")
@@ -69,8 +69,8 @@ class ItemsAnnotation_Test extends TestBase {
 
 	Items a2 = ItemsAnnotation.create()
 		.$ref("a")
-		._default("b")
-		._enum("c")
+		.default_("b")
+		.enum_("c")
 		.cf("d")
 		.collectionFormat("e")
 		.description("f")
@@ -106,7 +106,7 @@ class ItemsAnnotation_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertBean(a1,
-			"$ref,_default,_enum,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items{$ref,_default,_enum,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items,max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems",
+			"$ref,default_,enum_,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items{$ref,default_,enum_,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items,max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems",
 			"a,[b],[c],d,e,[f],[g],[h],true,true,true,true,i,j,{,[],[],,,[],[],[],false,false,false,false,,,[],,-1,-1,-1,,-1,,-1,-1,-1,,-1,,,,,,,false,false},k,2,4,1,l,3,m,6,8,5,n,7,o,p,q,r,s,t,true,true");
 	}
 
@@ -136,8 +136,8 @@ class ItemsAnnotation_Test extends TestBase {
 
 	@Items(
 		$ref="a",
-		_default="b",
-		_enum="c",
+		default_="b",
+		enum_="c",
 		cf="d",
 		collectionFormat="e",
 		description={ "f" },
@@ -175,8 +175,8 @@ class ItemsAnnotation_Test extends TestBase {
 
 	@Items(
 		$ref="a",
-		_default="b",
-		_enum="c",
+		default_="b",
+		enum_="c",
 		cf="d",
 		collectionFormat="e",
 		description={ "f" },

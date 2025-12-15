@@ -53,7 +53,7 @@ class Swagger_Path_Test extends TestBase {
 
 		@Path(
 			name="P",
-			schema=@Schema(description="a\nb",type="string",_enum={"a","b"})
+			schema=@Schema(description="a\nb",type="string",enum_={"a","b"})
 		)
 		public static class A2 {
 			public A2(String x) {}
@@ -67,7 +67,7 @@ class Swagger_Path_Test extends TestBase {
 
 		@Path(
 			name="P",
-			schema=@Schema(description="b\nc",type="string",_enum={"b","c"})
+			schema=@Schema(description="b\nc",type="string",enum_={"b","c"})
 		)
 		@Schema(
 			d={"a","b"},

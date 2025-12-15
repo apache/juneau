@@ -64,12 +64,12 @@ class SerializedHeader_Test extends TestBase {
 		assertNull(x1.getValue());
 		var x2 = serializedHeader("Foo","").skipIfEmpty();
 		assertNull(x2.getValue());
-		var x3 = serializedHeader("Foo","").schema(schema(STRING)._default("bar").build()).serializer(OAPI_SERIALIZER).skipIfEmpty();
+		var x3 = serializedHeader("Foo","").schema(schema(STRING).default_("bar").build()).serializer(OAPI_SERIALIZER).skipIfEmpty();
 		assertThrowsWithMessage(Exception.class, "Empty value not allowed.", x3::getValue);
 	}
 
 	@Test void a05_getValue_defaults() {
-		var x1 = serializedHeader("Foo",null).schema(schema(INTEGER)._default("1").build()).serializer(OAPI_SESSION);
+		var x1 = serializedHeader("Foo",null).schema(schema(INTEGER).default_("1").build()).serializer(OAPI_SESSION);
 		assertEquals("1", x1.getValue());
 
 		var x2 = serializedHeader("Foo",null).schema(schema(STRING).required().allowEmptyValue().build()).serializer(OAPI_SESSION);

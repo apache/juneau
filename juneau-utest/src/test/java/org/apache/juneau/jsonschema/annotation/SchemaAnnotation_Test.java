@@ -35,8 +35,8 @@ class SchemaAnnotation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Schema a1 = SchemaAnnotation.create()
-		._default("a")
-		._enum("b")
+		.default_("a")
+		.enum_("b")
 		.$ref("c")
 		.additionalProperties("d")
 		.allOf("e")
@@ -92,8 +92,8 @@ class SchemaAnnotation_Test extends TestBase {
 		.build();
 
 	Schema a2 = SchemaAnnotation.create()
-		._default("a")
-		._enum("b")
+		.default_("a")
+		.enum_("b")
 		.$ref("c")
 		.additionalProperties("d")
 		.allOf("e")
@@ -150,7 +150,7 @@ class SchemaAnnotation_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertBean(a1,
-			"$ref,_default,_enum,additionalProperties,aev,allOf,allowEmptyValue,cf,collectionFormat,d,description,df,discriminator,e,emax,emin,exclusiveMaximum,exclusiveMinimum,externalDocs{description,url},f,format,ignore,items{$ref,_default,_enum,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items{$ref,_default,_enum,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items,max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxProperties,maxi,maximum,maxl,maxp,min,minItems,minLength,minProperties,mini,minimum,minl,minp,mo,multipleOf,on,onClass,p,pattern,properties,r,readOnly,required,ro,sie,skipIfEmpty,t,title,type,ui,uniqueItems,xml",
+			"$ref,default_,enum_,additionalProperties,aev,allOf,allowEmptyValue,cf,collectionFormat,d,description,df,discriminator,e,emax,emin,exclusiveMaximum,exclusiveMinimum,externalDocs{description,url},f,format,ignore,items{$ref,default_,enum_,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items{$ref,default_,enum_,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items,max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxProperties,maxi,maximum,maxl,maxp,min,minItems,minLength,minProperties,mini,minimum,minl,minp,mo,multipleOf,on,onClass,p,pattern,properties,r,readOnly,required,ro,sie,skipIfEmpty,t,title,type,ui,uniqueItems,xml",
 			"c,[a],[b],[d],false,[e],false,f,g,[h],[i],[j],k,[l],true,true,true,true,{[],},m,n,true,{,[],[],,,[],[],[],false,false,false,false,,,{,[],[],,,[],[],[],false,false,false,false,,,[],,-1,-1,-1,,-1,,-1,-1,-1,,-1,,,,,,,false,false},,-1,-1,-1,,-1,,-1,-1,-1,,-1,,,,,,,false,false},o,2,4,6,1,p,3,5,q,8,10,12,7,r,9,11,s,t,[u],[X1],v,w,[x],true,true,true,true,false,false,z,aa,bb,true,true,[cc]");
 	}
 
@@ -200,8 +200,8 @@ class SchemaAnnotation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Schema(
-		_default="a",
-		_enum="b",
+		default_="a",
+		enum_="b",
 		$ref="c",
 		additionalProperties="d",
 		allOf="e",
@@ -259,8 +259,8 @@ class SchemaAnnotation_Test extends TestBase {
 	Schema d1 = D1.class.getAnnotationsByType(Schema.class)[0];
 
 	@Schema(
-		_default="a",
-		_enum="b",
+		default_="a",
+		enum_="b",
 		$ref="c",
 		additionalProperties="d",
 		allOf="e",
@@ -328,7 +328,7 @@ class SchemaAnnotation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Schema draft2020_1 = SchemaAnnotation.create()
-		._const("constantValue")
+		.const_("constantValue")
 		.examples("example1", "example2")
 		.$comment("This is a schema comment")
 		.deprecatedProperty(true)
@@ -341,15 +341,15 @@ class SchemaAnnotation_Test extends TestBase {
 		.unevaluatedProperties("false")
 		.dependentSchemas("prop1:{type:'string'}")
 		.dependentRequired("prop1:prop2,prop3")
-		._if("properties:{foo:{const:'bar'}}")
-		._then("required:['baz']")
-		._else("required:['qux']")
+		.if_("properties:{foo:{const:'bar'}}")
+		.then_("required:['baz']")
+		.else_("required:['qux']")
 		.$defs("MyDef:{type:'string'}")
 		.$id("https://example.com/schemas/my-schema")
 		.build();
 
 	Schema draft2020_2 = SchemaAnnotation.create()
-		._const("constantValue")
+		.const_("constantValue")
 		.examples("example1", "example2")
 		.$comment("This is a schema comment")
 		.deprecatedProperty(true)
@@ -362,16 +362,16 @@ class SchemaAnnotation_Test extends TestBase {
 		.unevaluatedProperties("false")
 		.dependentSchemas("prop1:{type:'string'}")
 		.dependentRequired("prop1:prop2,prop3")
-		._if("properties:{foo:{const:'bar'}}")
-		._then("required:['baz']")
-		._else("required:['qux']")
+		.if_("properties:{foo:{const:'bar'}}")
+		.then_("required:['baz']")
+		.else_("required:['qux']")
 		.$defs("MyDef:{type:'string'}")
 		.$id("https://example.com/schemas/my-schema")
 		.build();
 
 	@Test void e01_draft2020_basic() {
 		assertBean(draft2020_1,
-			"$comment,$defs,$id,_const,_else,_if,_then,contentEncoding,contentMediaType,dependentRequired,dependentSchemas,deprecatedProperty,examples,exclusiveMaximumValue,exclusiveMinimumValue,prefixItems,unevaluatedItems,unevaluatedProperties",
+			"$comment,$defs,$id,const_,else_,if_,then_,contentEncoding,contentMediaType,dependentRequired,dependentSchemas,deprecatedProperty,examples,exclusiveMaximumValue,exclusiveMinimumValue,prefixItems,unevaluatedItems,unevaluatedProperties",
 			"[This is a schema comment],[MyDef:{type:'string'}],https://example.com/schemas/my-schema,[constantValue],[required:['qux']],[properties:{foo:{const:'bar'}}],[required:['baz']],base64,application/json,[prop1:prop2,prop3],[prop1:{type:'string'}],true,[example1,example2],100,0,[string,number],[false],[false]");
 	}
 
@@ -388,7 +388,7 @@ class SchemaAnnotation_Test extends TestBase {
 	}
 
 	@Schema(
-		_const="constantValue",
+		const_="constantValue",
 		examples={"example1", "example2"},
 		$comment="This is a schema comment",
 		deprecatedProperty=true,
@@ -401,9 +401,9 @@ class SchemaAnnotation_Test extends TestBase {
 		unevaluatedProperties="false",
 		dependentSchemas="prop1:{type:'string'}",
 		dependentRequired="prop1:prop2,prop3",
-		_if="properties:{foo:{const:'bar'}}",
-		_then="required:['baz']",
-		_else="required:['qux']",
+		if_="properties:{foo:{const:'bar'}}",
+		then_="required:['baz']",
+		else_="required:['qux']",
 		$defs="MyDef:{type:'string'}",
 		$id="https://example.com/schemas/my-schema"
 	)
@@ -411,7 +411,7 @@ class SchemaAnnotation_Test extends TestBase {
 	Schema e1 = E1.class.getAnnotationsByType(Schema.class)[0];
 
 	@Schema(
-		_const="constantValue",
+		const_="constantValue",
 		examples={"example1", "example2"},
 		$comment="This is a schema comment",
 		deprecatedProperty=true,
@@ -424,9 +424,9 @@ class SchemaAnnotation_Test extends TestBase {
 		unevaluatedProperties="false",
 		dependentSchemas="prop1:{type:'string'}",
 		dependentRequired="prop1:prop2,prop3",
-		_if="properties:{foo:{const:'bar'}}",
-		_then="required:['baz']",
-		_else="required:['qux']",
+		if_="properties:{foo:{const:'bar'}}",
+		then_="required:['baz']",
+		else_="required:['qux']",
 		$defs="MyDef:{type:'string'}",
 		$id="https://example.com/schemas/my-schema"
 	)

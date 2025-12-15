@@ -102,12 +102,12 @@ public class SchemaInfo extends OpenApiElement {
 	private Number multipleOf, maximum, minimum;
 	private Integer maxLength, minLength, maxItems, minItems, maxProperties, minProperties;
 	private Boolean exclusiveMaximum, exclusiveMinimum, uniqueItems, nullable, writeOnly, readOnly, deprecated;
-	private Object _default,  // NOSONAR - Intentional naming.
+	private Object default_,
 		example;
 	private Items items;
 	private Xml xml;
 	private ExternalDocumentation externalDocs;
-	private List<Object> allOf = list(), oneOf = list(), anyOf = list(), _enum = list();  // NOSONAR - Intentional naming.
+	private List<Object> allOf = list(), oneOf = list(), anyOf = list(), enum_ = list();
 	private List<String> required = list();
 	private Discriminator discriminator;
 	private Map<String,SchemaInfo> properties;
@@ -150,13 +150,13 @@ public class SchemaInfo extends OpenApiElement {
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
 		this.uniqueItems = copyFrom.uniqueItems;
 		this.readOnly = copyFrom.readOnly;
-		this._default = copyFrom._default;
+		this.default_ = copyFrom.default_;
 		this.example = copyFrom.example;
 		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
 		this.xml = copyFrom.xml == null ? null : copyFrom.xml.copy();
 		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
-		if (nn(copyFrom._enum))
-			_enum.addAll(copyFrom._enum);
+		if (nn(copyFrom.enum_))
+			enum_.addAll(copyFrom.enum_);
 		if (nn(copyFrom.allOf))
 			allOf.addAll(copyFrom.allOf);
 		if (nn(copyFrom.required))
@@ -244,12 +244,12 @@ public class SchemaInfo extends OpenApiElement {
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
-	 * 	_enum(<js>"['foo','bar']"</js>);
+	 * 	enum_(<js>"['foo','bar']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode'>
-	 * 	_enum(<js>"foo"</js>, <js>"bar"</js>);
+	 * 	enum_(<js>"foo"</js>, <js>"bar"</js>);
 	 * 			</p>
 	 * 	</ul>
 	 * 	<br>Ignored if <jk>null</jk>.
@@ -259,7 +259,7 @@ public class SchemaInfo extends OpenApiElement {
 		if (nn(values))
 			for (var v : values)
 				if (nn(v))
-					_enum.add(v);
+					enum_.add(v);
 		return this;
 	}
 
@@ -405,7 +405,7 @@ public class SchemaInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Object getDefault() { return _default; }
+	public Object getDefault() { return default_; }
 
 	/**
 	 * Bean property getter:  <property>deprecated</property>.
@@ -433,7 +433,7 @@ public class SchemaInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getEnum() { return nullIfEmpty(_enum); }
+	public List<Object> getEnum() { return nullIfEmpty(enum_); }
 
 	/**
 	 * Bean property getter:  <property>example</property>.
@@ -643,11 +643,11 @@ public class SchemaInfo extends OpenApiElement {
 			.addIf(nn(additionalProperties), "additionalProperties")
 			.addIf(isNotEmpty(allOf), "allOf")
 			.addIf(isNotEmpty(anyOf), "anyOf")
-			.addIf(nn(_default), "default")
+			.addIf(nn(default_), "default")
 			.addIf(nn(deprecated), "deprecated")
 			.addIf(nn(description), "description")
 			.addIf(nn(discriminator), "discriminator")
-			.addIf(isNotEmpty(_enum), "enum")
+			.addIf(isNotEmpty(enum_), "enum")
 			.addIf(nn(example), "example")
 			.addIf(nn(exclusiveMaximum), "exclusiveMaximum")
 			.addIf(nn(exclusiveMinimum), "exclusiveMinimum")
@@ -822,7 +822,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setDefault(Object value) {
-		_default = value;
+		default_ = value;
 		return this;
 	}
 
@@ -874,9 +874,9 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setEnum(Collection<Object> value) {
-		_enum.clear();
+		enum_.clear();
 		if (nn(value))
-			_enum.addAll(value);
+			enum_.addAll(value);
 		return this;
 	}
 

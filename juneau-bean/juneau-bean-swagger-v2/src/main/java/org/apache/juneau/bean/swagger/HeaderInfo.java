@@ -88,8 +88,8 @@ public class HeaderInfo extends SwaggerElement {
 	private Integer maxLength, minLength, maxItems, minItems;
 	private Boolean exclusiveMaximum, exclusiveMinimum, uniqueItems;
 	private Items items;
-	private Object _default;  // NOSONAR - Intentional naming.
-	private Set<Object> _enum = new LinkedHashSet<>();  // NOSONAR - Intentional naming.
+	private Object default_;
+	private Set<Object> enum_ = new LinkedHashSet<>();
 	private Object example;
 
 	/**
@@ -106,10 +106,10 @@ public class HeaderInfo extends SwaggerElement {
 		super(copyFrom);
 
 		this.collectionFormat = copyFrom.collectionFormat;
-		this._default = copyFrom._default;
+		this.default_ = copyFrom.default_;
 		this.description = copyFrom.description;
-		if (nn(copyFrom._enum))
-			this._enum.addAll(copyOf(copyFrom._enum));
+		if (nn(copyFrom.enum_))
+			this.enum_.addAll(copyOf(copyFrom.enum_));
 		this.example = copyFrom.example;
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
@@ -140,7 +140,7 @@ public class HeaderInfo extends SwaggerElement {
 		if (nn(value))
 			for (var v : value)
 				if (nn(v))
-					_enum.add(v);
+					enum_.add(v);
 		return this;
 	}
 
@@ -206,7 +206,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Object getDefault() { return _default; }
+	public Object getDefault() { return default_; }
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -223,7 +223,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<Object> getEnum() { return nullIfEmpty(_enum); }
+	public Set<Object> getEnum() { return nullIfEmpty(enum_); }
 
 	/**
 	 * Bean property getter:  <property>example</property>.
@@ -352,9 +352,9 @@ public class HeaderInfo extends SwaggerElement {
 		// @formatter:off
 		var s = setb(String.class)
 			.addIf(nn(collectionFormat), "collectionFormat")
-			.addIf(nn(_default), "default")
+			.addIf(nn(default_), "default")
 			.addIf(nn(description), "description")
-			.addIf(isNotEmpty(_enum), "enum")
+			.addIf(isNotEmpty(enum_), "enum")
 			.addIf(nn(example), "example")
 			.addIf(nn(exclusiveMaximum), "exclusiveMaximum")
 			.addIf(nn(exclusiveMinimum), "exclusiveMinimum")
@@ -481,7 +481,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public HeaderInfo setDefault(Object value) {
-		_default = value;
+		default_ = value;
 		return this;
 	}
 
@@ -510,9 +510,9 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public HeaderInfo setEnum(Collection<Object> value) {
-		_enum.clear();
+		enum_.clear();
 		if (nn(value))
-			_enum.addAll(value);
+			enum_.addAll(value);
 		return this;
 	}
 
