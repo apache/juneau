@@ -745,9 +745,9 @@
 <a class="jxr_linenumber" name="L737" href="#L737">737</a> 	@Test <strong class="jxr_keyword">void</strong> k01_requestBean_simpleVals() {
 <a class="jxr_linenumber" name="L738" href="#L738">738</a> 		<strong class="jxr_keyword">var</strong> x1 = remote(K.<strong class="jxr_keyword">class</strong>,K1.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L739" href="#L739">739</a> 		<strong class="jxr_keyword">var</strong> x2 = client(K.<strong class="jxr_keyword">class</strong>).partSerializer(UonSerializer.<strong class="jxr_keyword">class</strong>).build().getRemote(K1.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L740" href="#L740">740</a> 		assertEquals(<span class="jxr_string">"{a:'a1',b:'b1',c:'c1',e:'',g:'true',h:'123',i1:'foo'}"</span>,x1.postX1(<strong class="jxr_keyword">new</strong> K1a()));
-<a class="jxr_linenumber" name="L741" href="#L741">741</a> 		assertEquals(<span class="jxr_string">"{a:'a1',b:'b1',c:'c1',e:'',g:'&#92;&#92;'true&#92;&#92;'',h:'&#92;&#92;'123&#92;&#92;'',i1:'foo'}"</span>,x2.postX1(<strong class="jxr_keyword">new</strong> K1a()));
-<a class="jxr_linenumber" name="L742" href="#L742">742</a> 		assertEquals(<span class="jxr_string">"{a:'xa1x',b:'xb1x',c:'xc1x',e:'xx',g:'xtruex',h:'x123x',i1:'xfoox'}"</span>,x2.postX2(<strong class="jxr_keyword">new</strong> K1a()));
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> 		assertEquals(<span class="jxr_string">"{a=a1,b=b1,c=c1,e=,g=true,h=123,i1=foo}"</span>,x1.postX1(<strong class="jxr_keyword">new</strong> K1a()));
+<a class="jxr_linenumber" name="L741" href="#L741">741</a> 		assertEquals(<span class="jxr_string">"{a=a1,b=b1,c=c1,e=,g='true',h='123',i1=foo}"</span>,x2.postX1(<strong class="jxr_keyword">new</strong> K1a()));
+<a class="jxr_linenumber" name="L742" href="#L742">742</a> 		assertEquals(<span class="jxr_string">"{a=xa1x,b=xb1x,c=xc1x,e=xx,g=xtruex,h=x123x,i1=xfoox}"</span>,x2.postX2(<strong class="jxr_keyword">new</strong> K1a()));
 <a class="jxr_linenumber" name="L743" href="#L743">743</a> 	}
 <a class="jxr_linenumber" name="L744" href="#L744">744</a> 
 <a class="jxr_linenumber" name="L745" href="#L745">745</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
@@ -770,9 +770,9 @@
 <a class="jxr_linenumber" name="L762" href="#L762">762</a> 	@Test <strong class="jxr_keyword">void</strong> k02_requestBean_maps() {
 <a class="jxr_linenumber" name="L763" href="#L763">763</a> 		<strong class="jxr_keyword">var</strong> x1 = remote(K.<strong class="jxr_keyword">class</strong>,K2.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L764" href="#L764">764</a> 		<strong class="jxr_keyword">var</strong> x2 = client(K.<strong class="jxr_keyword">class</strong>).partSerializer(UonSerializer.<strong class="jxr_keyword">class</strong>).build().getRemote(K2.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L765" href="#L765">765</a> 		assertEquals(<span class="jxr_string">"{a:'a1=v1,a2=123,a3=null,a4=',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:''}"</span>,x1.postX1(<strong class="jxr_keyword">new</strong> K2a()));
-<a class="jxr_linenumber" name="L766" href="#L766">766</a> 		assertEquals(<span class="jxr_string">"{a:'(a1=v1,a2=123,a3=null,a4=&#92;&#92;'&#92;&#92;')',b1:'&#92;&#92;'true&#92;&#92;'',b2:'&#92;&#92;'123&#92;&#92;'',b3:'&#92;&#92;'null&#92;&#92;'',c1:'v1',c2:'123',c4:''}"</span>,x2.postX1(<strong class="jxr_keyword">new</strong> K2a()));
-<a class="jxr_linenumber" name="L767" href="#L767">767</a> 		assertEquals(<span class="jxr_string">"{a:'x{a1=v1, a2=123, a3=null, a4=}x',b1:'xtruex',b2:'x123x',b3:'xnullx',c1:'xv1x',c2:'x123x',c4:'xx'}"</span>,x2.postX2(<strong class="jxr_keyword">new</strong> K2a()));
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> 		assertEquals(<span class="jxr_string">"{a=a1=v1,a2=123,a3=null,a4=,b1=true,b2=123,b3=null,c1=v1,c2=123,c4=}"</span>,x1.postX1(<strong class="jxr_keyword">new</strong> K2a()));
+<a class="jxr_linenumber" name="L766" href="#L766">766</a> 		assertEquals(<span class="jxr_string">"{a=(a1=v1,a2=123,a3=null,a4=''),b1='true',b2='123',b3='null',c1=v1,c2=123,c4=}"</span>,x2.postX1(<strong class="jxr_keyword">new</strong> K2a()));
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> 		assertEquals(<span class="jxr_string">"{a=x{a1=v1, a2=123, a3=null, a4=}x,b1=xtruex,b2=x123x,b3=xnullx,c1=xv1x,c2=x123x,c4=xx}"</span>,x2.postX2(<strong class="jxr_keyword">new</strong> K2a()));
 <a class="jxr_linenumber" name="L768" href="#L768">768</a> 	}
 <a class="jxr_linenumber" name="L769" href="#L769">769</a> 
 <a class="jxr_linenumber" name="L770" href="#L770">770</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
@@ -796,9 +796,9 @@
 <a class="jxr_linenumber" name="L788" href="#L788">788</a> 	@Test <strong class="jxr_keyword">void</strong> k03_requestBean_nameValuePairs() {
 <a class="jxr_linenumber" name="L789" href="#L789">789</a> 		<strong class="jxr_keyword">var</strong> x1 = remote(K.<strong class="jxr_keyword">class</strong>,K3.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L790" href="#L790">790</a> 		<strong class="jxr_keyword">var</strong> x2 = client(K.<strong class="jxr_keyword">class</strong>).partSerializer(UonSerializer.<strong class="jxr_keyword">class</strong>).build().getRemote(K3.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L791" href="#L791">791</a> 		assertEquals(<span class="jxr_string">"{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:'',e1:'v1',e2:'123',e4:''}"</span>,x1.postX1(<strong class="jxr_keyword">new</strong> K3a()));
-<a class="jxr_linenumber" name="L792" href="#L792">792</a> 		assertEquals(<span class="jxr_string">"{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:'',e1:'v1',e2:'123',e4:''}"</span>,x2.postX1(<strong class="jxr_keyword">new</strong> K3a()));
-<a class="jxr_linenumber" name="L793" href="#L793">793</a> 		assertEquals(<span class="jxr_string">"{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:'',e1:'v1',e2:'123',e4:''}"</span>,x2.postX2(<strong class="jxr_keyword">new</strong> K3a()));
+<a class="jxr_linenumber" name="L791" href="#L791">791</a> 		assertEquals(<span class="jxr_string">"{a1=v1,a2=123,a4=,b1=true,b2=123,b3=null,c1=v1,c2=123,c4=,e1=v1,e2=123,e4=}"</span>,x1.postX1(<strong class="jxr_keyword">new</strong> K3a()));
+<a class="jxr_linenumber" name="L792" href="#L792">792</a> 		assertEquals(<span class="jxr_string">"{a1=v1,a2=123,a4=,b1=true,b2=123,b3=null,c1=v1,c2=123,c4=,e1=v1,e2=123,e4=}"</span>,x2.postX1(<strong class="jxr_keyword">new</strong> K3a()));
+<a class="jxr_linenumber" name="L793" href="#L793">793</a> 		assertEquals(<span class="jxr_string">"{a1=v1,a2=123,a4=,b1=true,b2=123,b3=null,c1=v1,c2=123,c4=,e1=v1,e2=123,e4=}"</span>,x2.postX2(<strong class="jxr_keyword">new</strong> K3a()));
 <a class="jxr_linenumber" name="L794" href="#L794">794</a> 	}
 <a class="jxr_linenumber" name="L795" href="#L795">795</a> 
 <a class="jxr_linenumber" name="L796" href="#L796">796</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
@@ -816,7 +816,7 @@
 <a class="jxr_linenumber" name="L808" href="#L808">808</a> 
 <a class="jxr_linenumber" name="L809" href="#L809">809</a> 	@Test <strong class="jxr_keyword">void</strong> k04_requestBean_charSequence() {
 <a class="jxr_linenumber" name="L810" href="#L810">810</a> 		<strong class="jxr_keyword">var</strong> x = remote(K.<strong class="jxr_keyword">class</strong>,K4.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L811" href="#L811">811</a> 		assertEquals(<span class="jxr_string">"{foo:'bar',baz:'qux'}"</span>,x.post(<strong class="jxr_keyword">new</strong> C04_Bean()));
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> 		assertEquals(<span class="jxr_string">"{baz=qux,foo=bar}"</span>,x.post(<strong class="jxr_keyword">new</strong> C04_Bean()));
 <a class="jxr_linenumber" name="L812" href="#L812">812</a> 	}
 <a class="jxr_linenumber" name="L813" href="#L813">813</a> 
 <a class="jxr_linenumber" name="L814" href="#L814">814</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
@@ -834,7 +834,7 @@
 <a class="jxr_linenumber" name="L826" href="#L826">826</a> 
 <a class="jxr_linenumber" name="L827" href="#L827">827</a> 	@Test <strong class="jxr_keyword">void</strong> k05_requestBean_reader() {
 <a class="jxr_linenumber" name="L828" href="#L828">828</a> 		<strong class="jxr_keyword">var</strong> x = remote(K.<strong class="jxr_keyword">class</strong>,K5.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L829" href="#L829">829</a> 		assertEquals(<span class="jxr_string">"{foo:'bar',baz:'qux'}"</span>,x.post(<strong class="jxr_keyword">new</strong> K5a()));
+<a class="jxr_linenumber" name="L829" href="#L829">829</a> 		assertEquals(<span class="jxr_string">"{baz=qux,foo=bar}"</span>,x.post(<strong class="jxr_keyword">new</strong> K5a()));
 <a class="jxr_linenumber" name="L830" href="#L830">830</a> 	}
 <a class="jxr_linenumber" name="L831" href="#L831">831</a> 
 <a class="jxr_linenumber" name="L832" href="#L832">832</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
@@ -862,9 +862,9 @@
 <a class="jxr_linenumber" name="L854" href="#L854">854</a> 	@Test <strong class="jxr_keyword">void</strong> k06_requestBean_collections() {
 <a class="jxr_linenumber" name="L855" href="#L855">855</a> 		<strong class="jxr_keyword">var</strong> x1 = remote(K.<strong class="jxr_keyword">class</strong>,K6.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L856" href="#L856">856</a> 		<strong class="jxr_keyword">var</strong> x2 = client(K.<strong class="jxr_keyword">class</strong>).partSerializer(UonSerializer.<strong class="jxr_keyword">class</strong>).build().getRemote(K6.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L857" href="#L857">857</a> 		assertEquals(<span class="jxr_string">"{a:'foo,,true,123,null,true,123,null',b:'foo,,true,123,null,true,123,null',c:'xfoo||true|123|null|true|123|nullx',d:'',f:'foo,,true,123,null,true,123,null',g:'xfoo||true|123|null|true|123|nullx',h:''}"</span>, x1.postX1(<strong class="jxr_keyword">new</strong> K6a()));
-<a class="jxr_linenumber" name="L858" href="#L858">858</a> 		assertEquals(<span class="jxr_string">"{a:'@(foo,&#92;&#92;'&#92;&#92;',&#92;&#92;'true&#92;&#92;',&#92;&#92;'123&#92;&#92;',&#92;&#92;'null&#92;&#92;',true,123,null)',b:'@(foo,&#92;&#92;'&#92;&#92;',&#92;&#92;'true&#92;&#92;',&#92;&#92;'123&#92;&#92;',&#92;&#92;'null&#92;&#92;',true,123,null)',c:'xfoo||true|123|null|true|123|nullx',d:'@()',f:'@(foo,&#92;&#92;'&#92;&#92;',&#92;&#92;'true&#92;&#92;',&#92;&#92;'123&#92;&#92;',&#92;&#92;'null&#92;&#92;',true,123,null)',g:'xfoo||true|123|null|true|123|nullx',h:'@()'}"</span>, x2.postX1(<strong class="jxr_keyword">new</strong> K6a()));
-<a class="jxr_linenumber" name="L859" href="#L859">859</a> 		assertEquals(<span class="jxr_string">"{a:'xfoo||true|123|null|true|123|nullx',b:'xfoo||true|123|null|true|123|nullx',c:'xfoo||true|123|null|true|123|nullx',d:'xx',f:'xfoo||true|123|null|true|123|nullx',g:'xfoo||true|123|null|true|123|nullx',h:'xx'}"</span>, x2.postX2(<strong class="jxr_keyword">new</strong> K6a()));
+<a class="jxr_linenumber" name="L857" href="#L857">857</a> 		assertEquals(<span class="jxr_string">"{a=foo,,true,123,null,true,123,null,b=foo,,true,123,null,true,123,null,c=xfoo||true|123|null|true|123|nullx,d=,f=foo,,true,123,null,true,123,null,g=xfoo||true|123|null|true|123|nullx,h=}"</span>, x1.postX1(<strong class="jxr_keyword">new</strong> K6a()));
+<a class="jxr_linenumber" name="L858" href="#L858">858</a> 		assertEquals(<span class="jxr_string">"{a=@(foo,'','true','123','null',true,123,null),b=@(foo,'','true','123','null',true,123,null),c=xfoo||true|123|null|true|123|nullx,d=@(),f=@(foo,'','true','123','null',true,123,null),g=xfoo||true|123|null|true|123|nullx,h=@()}"</span>, x2.postX1(<strong class="jxr_keyword">new</strong> K6a()));
+<a class="jxr_linenumber" name="L859" href="#L859">859</a> 		assertEquals(<span class="jxr_string">"{a=xfoo||true|123|null|true|123|nullx,b=xfoo||true|123|null|true|123|nullx,c=xfoo||true|123|null|true|123|nullx,d=xx,f=xfoo||true|123|null|true|123|nullx,g=xfoo||true|123|null|true|123|nullx,h=xx}"</span>, x2.postX2(<strong class="jxr_keyword">new</strong> K6a()));
 <a class="jxr_linenumber" name="L860" href="#L860">860</a> 	}
 <a class="jxr_linenumber" name="L861" href="#L861">861</a> 
 <a class="jxr_linenumber" name="L862" href="#L862">862</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>

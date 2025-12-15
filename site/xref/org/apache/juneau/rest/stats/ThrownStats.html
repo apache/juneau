@@ -30,8 +30,8 @@
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.atomic.*;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.cp.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshaller.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.collections.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.cp.*;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * Represents an entry in {@link ThrownStore}.</em>
@@ -267,11 +267,26 @@
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 	}
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		<strong class="jxr_keyword">return</strong> Json5.of(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 	}
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> }
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		<strong class="jxr_keyword">return</strong> filteredBeanPropertyMap()
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			.a(<span class="jxr_string">"causedBy"</span>, causedBy.orElse(<strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			.a(<span class="jxr_string">"count"</span>, getCount())
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			.a(<span class="jxr_string">"firstMessage"</span>, firstMessage)
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			.a(<span class="jxr_string">"firstOccurrence"</span>, getFirstOccurrence())
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			.a(<span class="jxr_string">"guid"</span>, guid)
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			.a(<span class="jxr_string">"hash"</span>, hash)
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			.a(<span class="jxr_string">"lastOccurrence"</span>, getLastOccurrence())
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			.a(<span class="jxr_string">"stackTrace"</span>, stackTrace)
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			.a(<span class="jxr_string">"thrownClass"</span>, thrownClass);
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 	}
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<strong class="jxr_keyword">return</strong> r(properties());
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 	}
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

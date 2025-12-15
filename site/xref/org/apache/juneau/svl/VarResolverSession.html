@@ -438,22 +438,31 @@
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 		<strong class="jxr_keyword">return</strong> out;
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 	}
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"var="</span> + <strong class="jxr_keyword">this</strong>.context.getVarMap().keySet() + <span class="jxr_string">", context.beanStore="</span> + <strong class="jxr_keyword">this</strong>.context.beanStore + <span class="jxr_string">", session.beanStore="</span> + beanStore;
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 	}
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment">	 * Returns the {@link Var} with the specified name.</em>
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 * @param name The var name (e.g. &lt;js&gt;"S"&lt;/js&gt;).</em>
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 * @return The {@link Var} instance, or &lt;jk&gt;null&lt;/jk&gt; if no &lt;c&gt;Var&lt;/c&gt; is associated with the specified name.</em>
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 	<strong class="jxr_keyword">protected</strong> <a name="Var" href="../../../../org/apache/juneau/svl/Var.html#Var">Var</a> getVar(String name) {
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		Var v = <strong class="jxr_keyword">this</strong>.context.getVarMap().get(name);
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<strong class="jxr_keyword">return</strong> nn(v) &amp;&amp; v.canResolve(<strong class="jxr_keyword">this</strong>) ? v : <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 	}
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> }
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<strong class="jxr_keyword">return</strong> filteredBeanPropertyMap()
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 			.a(<span class="jxr_string">"var"</span>, <strong class="jxr_keyword">this</strong>.context.getVarMap().keySet())
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 			.a(<span class="jxr_string">"context.beanStore"</span>, <strong class="jxr_keyword">this</strong>.context.beanStore)
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 			.a(<span class="jxr_string">"session.beanStore"</span>, beanStore);
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 	}
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 	<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		<strong class="jxr_keyword">return</strong> r(properties());
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 	}
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">	 * Returns the {@link Var} with the specified name.</em>
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 * @param name The var name (e.g. &lt;js&gt;"S"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> <em class="jxr_javadoccomment">	 * @return The {@link Var} instance, or &lt;jk&gt;null&lt;/jk&gt; if no &lt;c&gt;Var&lt;/c&gt; is associated with the specified name.</em>
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 	<strong class="jxr_keyword">protected</strong> <a name="Var" href="../../../../org/apache/juneau/svl/Var.html#Var">Var</a> getVar(String name) {
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 		Var v = <strong class="jxr_keyword">this</strong>.context.getVarMap().get(name);
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		<strong class="jxr_keyword">return</strong> nn(v) &amp;&amp; v.canResolve(<strong class="jxr_keyword">this</strong>) ? v : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 	}
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

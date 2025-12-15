@@ -642,15 +642,15 @@
 <a class="jxr_linenumber" name="L634" href="#L634">634</a> 	}
 <a class="jxr_linenumber" name="L635" href="#L635">635</a> 
 <a class="jxr_linenumber" name="L636" href="#L636">636</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 	<em class="jxr_comment">// toMap()</em>
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 	<em class="jxr_comment">// properties()</em>
 <a class="jxr_linenumber" name="L638" href="#L638">638</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L639" href="#L639">639</a> 	@Test
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 	<strong class="jxr_keyword">void</strong> a029_toMap() {
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 	<strong class="jxr_keyword">void</strong> a029_properties() {
 <a class="jxr_linenumber" name="L641" href="#L641">641</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(TestClass.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L642" href="#L642">642</a> 		<strong class="jxr_keyword">var</strong> ai = ci.getAnnotations(TestAnnotation.<strong class="jxr_keyword">class</strong>).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L643" href="#L643">643</a> 		assertNotNull(ai);
 <a class="jxr_linenumber" name="L644" href="#L644">644</a> 
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 		<strong class="jxr_keyword">var</strong> map = ai.toMap();
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 		<strong class="jxr_keyword">var</strong> map = ai.properties();
 <a class="jxr_linenumber" name="L646" href="#L646">646</a> 		assertNotNull(map);
 <a class="jxr_linenumber" name="L647" href="#L647">647</a> 		assertTrue(map.containsKey(<span class="jxr_string">"CLASS_TYPE"</span>));
 <a class="jxr_linenumber" name="L648" href="#L648">648</a> 		assertTrue(map.containsKey(<span class="jxr_string">"@TestAnnotation"</span>));
@@ -664,7 +664,7 @@
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 		<strong class="jxr_keyword">var</strong> ai2 = ci2.getAnnotations(ToMapTestAnnotation.<strong class="jxr_keyword">class</strong>).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L657" href="#L657">657</a> 		assertNotNull(ai2);
 <a class="jxr_linenumber" name="L658" href="#L658">658</a> 
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 		<strong class="jxr_keyword">var</strong> map2 = ai2.toMap();
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 		<strong class="jxr_keyword">var</strong> map2 = ai2.properties();
 <a class="jxr_linenumber" name="L660" href="#L660">660</a> 		assertNotNull(map2);
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> 		<strong class="jxr_keyword">var</strong> annotationMap2 = (java.util.Map&lt;String,Object&gt;)map2.get(<span class="jxr_string">"@ToMapTestAnnotation"</span>);
 <a class="jxr_linenumber" name="L662" href="#L662">662</a> 		assertNotNull(annotationMap2);
@@ -714,7 +714,7 @@
 <a class="jxr_linenumber" name="L706" href="#L706">706</a> 		<strong class="jxr_keyword">var</strong> ci3 = ClassInfo.of(ToMapTestClass.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L707" href="#L707">707</a> 		<strong class="jxr_keyword">var</strong> ai3 = AnnotationInfo.of(ci3, proxyAnnotation);
 <a class="jxr_linenumber" name="L708" href="#L708">708</a> 		
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> 		<strong class="jxr_keyword">var</strong> map3 = ai3.toMap();
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 		<strong class="jxr_keyword">var</strong> map3 = ai3.properties();
 <a class="jxr_linenumber" name="L710" href="#L710">710</a> 		assertNotNull(map3);
 <a class="jxr_linenumber" name="L711" href="#L711">711</a> 		<strong class="jxr_keyword">var</strong> annotationMap3 = (java.util.Map&lt;String,Object&gt;)map3.get(<span class="jxr_string">"@ToMapTestAnnotation"</span>);
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> 		assertNotNull(annotationMap3);

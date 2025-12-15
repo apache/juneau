@@ -1151,197 +1151,208 @@
 <a class="jxr_linenumber" name="L1143" href="#L1143">1143</a> 		}
 <a class="jxr_linenumber" name="L1144" href="#L1144">1144</a> 	}
 <a class="jxr_linenumber" name="L1145" href="#L1145">1145</a> 
-<a class="jxr_linenumber" name="L1146" href="#L1146">1146</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
-<a class="jxr_linenumber" name="L1147" href="#L1147">1147</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L1148" href="#L1148">1148</a> 		<strong class="jxr_keyword">return</strong> name + <span class="jxr_string">": "</span> + cn(<strong class="jxr_keyword">this</strong>.rawTypeMeta) + <span class="jxr_string">", field=["</span> + field + <span class="jxr_string">"], getter=["</span> + getter + <span class="jxr_string">"], setter=["</span> + setter + <span class="jxr_string">"]"</span>;
-<a class="jxr_linenumber" name="L1149" href="#L1149">1149</a> 	}
-<a class="jxr_linenumber" name="L1150" href="#L1150">1150</a> 
-<a class="jxr_linenumber" name="L1151" href="#L1151">1151</a> 	<strong class="jxr_keyword">private</strong> Object applyChildPropertiesFilter(BeanSession session, <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a> cm, Object o) {
-<a class="jxr_linenumber" name="L1152" href="#L1152">1152</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1153" href="#L1153">1153</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1154" href="#L1154">1154</a> 		<strong class="jxr_keyword">if</strong> (cm.isBean())
-<a class="jxr_linenumber" name="L1155" href="#L1155">1155</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BeanMap" href="../../../org/apache/juneau/BeanMap.html#BeanMap">BeanMap</a>(session, o, <strong class="jxr_keyword">new</strong> <a name="BeanMetaFiltered" href="../../../org/apache/juneau/BeanMetaFiltered.html#BeanMetaFiltered">BeanMetaFiltered</a>(cm.getBeanMeta(), properties));
-<a class="jxr_linenumber" name="L1156" href="#L1156">1156</a> 		<strong class="jxr_keyword">if</strong> (cm.isMap()) {
-<a class="jxr_linenumber" name="L1157" href="#L1157">1157</a> 			<strong class="jxr_keyword">var</strong> propsArray = properties == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : properties.toArray(<strong class="jxr_keyword">new</strong> String[0]);
-<a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="FilteredKeyMap" href="../../../org/apache/juneau/internal/FilteredKeyMap.html#FilteredKeyMap">FilteredKeyMap</a>(cm, (Map)o, propsArray);
-<a class="jxr_linenumber" name="L1159" href="#L1159">1159</a> 		}
-<a class="jxr_linenumber" name="L1160" href="#L1160">1160</a> 		<strong class="jxr_keyword">if</strong> (cm.isObject()) {
-<a class="jxr_linenumber" name="L1161" href="#L1161">1161</a> 			<strong class="jxr_keyword">if</strong> (o instanceof Map o2) {
-<a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> 				<strong class="jxr_keyword">var</strong> propsArray = properties == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : properties.toArray(<strong class="jxr_keyword">new</strong> String[0]);
-<a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="FilteredKeyMap" href="../../../org/apache/juneau/internal/FilteredKeyMap.html#FilteredKeyMap">FilteredKeyMap</a>(cm, o2, propsArray);
-<a class="jxr_linenumber" name="L1164" href="#L1164">1164</a> 			}
-<a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> 			<strong class="jxr_keyword">var</strong> bm = bc.getBeanMeta(o.getClass());
-<a class="jxr_linenumber" name="L1166" href="#L1166">1166</a> 			<strong class="jxr_keyword">if</strong> (nn(bm))
-<a class="jxr_linenumber" name="L1167" href="#L1167">1167</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BeanMap" href="../../../org/apache/juneau/BeanMap.html#BeanMap">BeanMap</a>(session, o, <strong class="jxr_keyword">new</strong> <a name="BeanMetaFiltered" href="../../../org/apache/juneau/BeanMetaFiltered.html#BeanMetaFiltered">BeanMetaFiltered</a>(cm.getBeanMeta(), properties));
-<a class="jxr_linenumber" name="L1168" href="#L1168">1168</a> 		}
-<a class="jxr_linenumber" name="L1169" href="#L1169">1169</a> 		<strong class="jxr_keyword">return</strong> o;
-<a class="jxr_linenumber" name="L1170" href="#L1170">1170</a> 	}
-<a class="jxr_linenumber" name="L1171" href="#L1171">1171</a> 
-<a class="jxr_linenumber" name="L1172" href="#L1172">1172</a> 	<strong class="jxr_keyword">private</strong> Object getInner(BeanMap&lt;?&gt; m, String pName) {
-<a class="jxr_linenumber" name="L1173" href="#L1173">1173</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1174" href="#L1174">1174</a> 
-<a class="jxr_linenumber" name="L1175" href="#L1175">1175</a> 			<strong class="jxr_keyword">if</strong> (writeOnly)
-<a class="jxr_linenumber" name="L1176" href="#L1176">1176</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> 
-<a class="jxr_linenumber" name="L1178" href="#L1178">1178</a> 			<strong class="jxr_keyword">if</strong> (nn(overrideValue))
-<a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> 				<strong class="jxr_keyword">return</strong> overrideValue;
-<a class="jxr_linenumber" name="L1180" href="#L1180">1180</a> 
-<a class="jxr_linenumber" name="L1181" href="#L1181">1181</a> 			<em class="jxr_comment">// Read-only beans have their properties stored in a cache until getBean() is called.</em>
-<a class="jxr_linenumber" name="L1182" href="#L1182">1182</a> 			<strong class="jxr_keyword">var</strong> bean = m.bean;
-<a class="jxr_linenumber" name="L1183" href="#L1183">1183</a> 			<strong class="jxr_keyword">if</strong> (bean == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1184" href="#L1184">1184</a> 				<strong class="jxr_keyword">return</strong> m.propertyCache.get(name);
+<a class="jxr_linenumber" name="L1146" href="#L1146">1146</a> 	<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
+<a class="jxr_linenumber" name="L1147" href="#L1147">1147</a> 		<em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L1148" href="#L1148">1148</a> 		<strong class="jxr_keyword">return</strong> filteredBeanPropertyMap()
+<a class="jxr_linenumber" name="L1149" href="#L1149">1149</a> 			.a(<span class="jxr_string">"name"</span>, name)
+<a class="jxr_linenumber" name="L1150" href="#L1150">1150</a> 			.a(<span class="jxr_string">"type"</span>, cn(rawTypeMeta))
+<a class="jxr_linenumber" name="L1151" href="#L1151">1151</a> 			.a(<span class="jxr_string">"field"</span>, field)
+<a class="jxr_linenumber" name="L1152" href="#L1152">1152</a> 			.a(<span class="jxr_string">"getter"</span>, getter)
+<a class="jxr_linenumber" name="L1153" href="#L1153">1153</a> 			.a(<span class="jxr_string">"setter"</span>, setter);
+<a class="jxr_linenumber" name="L1154" href="#L1154">1154</a> 		<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L1155" href="#L1155">1155</a> 	}
+<a class="jxr_linenumber" name="L1156" href="#L1156">1156</a> 
+<a class="jxr_linenumber" name="L1157" href="#L1157">1157</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
+<a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> 	<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L1159" href="#L1159">1159</a> 		<strong class="jxr_keyword">return</strong> r(properties());
+<a class="jxr_linenumber" name="L1160" href="#L1160">1160</a> 	}
+<a class="jxr_linenumber" name="L1161" href="#L1161">1161</a> 
+<a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> 	<strong class="jxr_keyword">private</strong> Object applyChildPropertiesFilter(BeanSession session, <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a> cm, Object o) {
+<a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1164" href="#L1164">1164</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> 		<strong class="jxr_keyword">if</strong> (cm.isBean())
+<a class="jxr_linenumber" name="L1166" href="#L1166">1166</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BeanMap" href="../../../org/apache/juneau/BeanMap.html#BeanMap">BeanMap</a>(session, o, <strong class="jxr_keyword">new</strong> <a name="BeanMetaFiltered" href="../../../org/apache/juneau/BeanMetaFiltered.html#BeanMetaFiltered">BeanMetaFiltered</a>(cm.getBeanMeta(), properties));
+<a class="jxr_linenumber" name="L1167" href="#L1167">1167</a> 		<strong class="jxr_keyword">if</strong> (cm.isMap()) {
+<a class="jxr_linenumber" name="L1168" href="#L1168">1168</a> 			<strong class="jxr_keyword">var</strong> propsArray = properties == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : properties.toArray(<strong class="jxr_keyword">new</strong> String[0]);
+<a class="jxr_linenumber" name="L1169" href="#L1169">1169</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="FilteredKeyMap" href="../../../org/apache/juneau/internal/FilteredKeyMap.html#FilteredKeyMap">FilteredKeyMap</a>(cm, (Map)o, propsArray);
+<a class="jxr_linenumber" name="L1170" href="#L1170">1170</a> 		}
+<a class="jxr_linenumber" name="L1171" href="#L1171">1171</a> 		<strong class="jxr_keyword">if</strong> (cm.isObject()) {
+<a class="jxr_linenumber" name="L1172" href="#L1172">1172</a> 			<strong class="jxr_keyword">if</strong> (o instanceof Map o2) {
+<a class="jxr_linenumber" name="L1173" href="#L1173">1173</a> 				<strong class="jxr_keyword">var</strong> propsArray = properties == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : properties.toArray(<strong class="jxr_keyword">new</strong> String[0]);
+<a class="jxr_linenumber" name="L1174" href="#L1174">1174</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="FilteredKeyMap" href="../../../org/apache/juneau/internal/FilteredKeyMap.html#FilteredKeyMap">FilteredKeyMap</a>(cm, o2, propsArray);
+<a class="jxr_linenumber" name="L1175" href="#L1175">1175</a> 			}
+<a class="jxr_linenumber" name="L1176" href="#L1176">1176</a> 			<strong class="jxr_keyword">var</strong> bm = bc.getBeanMeta(o.getClass());
+<a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> 			<strong class="jxr_keyword">if</strong> (nn(bm))
+<a class="jxr_linenumber" name="L1178" href="#L1178">1178</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BeanMap" href="../../../org/apache/juneau/BeanMap.html#BeanMap">BeanMap</a>(session, o, <strong class="jxr_keyword">new</strong> <a name="BeanMetaFiltered" href="../../../org/apache/juneau/BeanMetaFiltered.html#BeanMetaFiltered">BeanMetaFiltered</a>(cm.getBeanMeta(), properties));
+<a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> 		}
+<a class="jxr_linenumber" name="L1180" href="#L1180">1180</a> 		<strong class="jxr_keyword">return</strong> o;
+<a class="jxr_linenumber" name="L1181" href="#L1181">1181</a> 	}
+<a class="jxr_linenumber" name="L1182" href="#L1182">1182</a> 
+<a class="jxr_linenumber" name="L1183" href="#L1183">1183</a> 	<strong class="jxr_keyword">private</strong> Object getInner(BeanMap&lt;?&gt; m, String pName) {
+<a class="jxr_linenumber" name="L1184" href="#L1184">1184</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L1185" href="#L1185">1185</a> 
-<a class="jxr_linenumber" name="L1186" href="#L1186">1186</a> 			<strong class="jxr_keyword">var</strong> session = m.getBeanSession();
-<a class="jxr_linenumber" name="L1187" href="#L1187">1187</a> 			<strong class="jxr_keyword">var</strong> o = getRaw(m, pName);
+<a class="jxr_linenumber" name="L1186" href="#L1186">1186</a> 			<strong class="jxr_keyword">if</strong> (writeOnly)
+<a class="jxr_linenumber" name="L1187" href="#L1187">1187</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1188" href="#L1188">1188</a> 
-<a class="jxr_linenumber" name="L1189" href="#L1189">1189</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1190" href="#L1190">1190</a> 				o = swap(session, o);
-<a class="jxr_linenumber" name="L1191" href="#L1191">1191</a> 				<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1192" href="#L1192">1192</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1193" href="#L1193">1193</a> 				<strong class="jxr_keyword">if</strong> (nn(properties)) {
-<a class="jxr_linenumber" name="L1194" href="#L1194">1194</a> 					<strong class="jxr_keyword">if</strong> (rawTypeMeta.isArray()) {
-<a class="jxr_linenumber" name="L1195" href="#L1195">1195</a> 						<strong class="jxr_keyword">var</strong> a = (Object[])o;
-<a class="jxr_linenumber" name="L1196" href="#L1196">1196</a> 						<strong class="jxr_keyword">var</strong> l1 = <strong class="jxr_keyword">new</strong> <a name="DelegateList" href="../../../org/apache/juneau/internal/DelegateList.html#DelegateList">DelegateList</a>(rawTypeMeta);
-<a class="jxr_linenumber" name="L1197" href="#L1197">1197</a> 						<strong class="jxr_keyword">var</strong> childType1 = rawTypeMeta.getElementType();
-<a class="jxr_linenumber" name="L1198" href="#L1198">1198</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c1 : a)
-<a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> 							l1.add(applyChildPropertiesFilter(session, childType1, c1));
-<a class="jxr_linenumber" name="L1200" href="#L1200">1200</a> 						<strong class="jxr_keyword">return</strong> l1;
-<a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (rawTypeMeta.isCollection()) {
-<a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> 						<strong class="jxr_keyword">var</strong> c = (Collection)o;
-<a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> 						<strong class="jxr_keyword">var</strong> l = listOfSize(c.size());
-<a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> 						<strong class="jxr_keyword">var</strong> childType = rawTypeMeta.getElementType();
-<a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> 						c.forEach(x -&gt; l.add(applyChildPropertiesFilter(session, childType, x)));
-<a class="jxr_linenumber" name="L1206" href="#L1206">1206</a> 						<strong class="jxr_keyword">return</strong> l;
-<a class="jxr_linenumber" name="L1207" href="#L1207">1207</a> 					} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L1208" href="#L1208">1208</a> 						<strong class="jxr_keyword">return</strong> applyChildPropertiesFilter(session, rawTypeMeta, o);
-<a class="jxr_linenumber" name="L1209" href="#L1209">1209</a> 					}
-<a class="jxr_linenumber" name="L1210" href="#L1210">1210</a> 				}
-<a class="jxr_linenumber" name="L1211" href="#L1211">1211</a> 				<strong class="jxr_keyword">return</strong> o;
-<a class="jxr_linenumber" name="L1212" href="#L1212">1212</a> 			} <strong class="jxr_keyword">catch</strong> (<a name="SerializeException" href="../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> e) {
-<a class="jxr_linenumber" name="L1213" href="#L1213">1213</a> 				<strong class="jxr_keyword">throw</strong> bex(e);
-<a class="jxr_linenumber" name="L1214" href="#L1214">1214</a> 			}
-<a class="jxr_linenumber" name="L1215" href="#L1215">1215</a> 
-<a class="jxr_linenumber" name="L1216" href="#L1216">1216</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable e) {
-<a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> 			<strong class="jxr_keyword">if</strong> (bc.isIgnoreInvocationExceptionsOnGetters()) {
-<a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> 				<strong class="jxr_keyword">if</strong> (rawTypeMeta.isPrimitive())
-<a class="jxr_linenumber" name="L1219" href="#L1219">1219</a> 					<strong class="jxr_keyword">return</strong> rawTypeMeta.getPrimitiveDefault();
-<a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1221" href="#L1221">1221</a> 			}
-<a class="jxr_linenumber" name="L1222" href="#L1222">1222</a> 			<strong class="jxr_keyword">throw</strong> bex(e, beanMeta.getClassMeta(), <span class="jxr_string">"Exception occurred while getting property ''{0}''"</span>, name);
-<a class="jxr_linenumber" name="L1223" href="#L1223">1223</a> 		}
-<a class="jxr_linenumber" name="L1224" href="#L1224">1224</a> 	}
-<a class="jxr_linenumber" name="L1225" href="#L1225">1225</a> 
-<a class="jxr_linenumber" name="L1226" href="#L1226">1226</a> 	<strong class="jxr_keyword">private</strong> Object invokeGetter(Object bean, String pName) <strong class="jxr_keyword">throws</strong> IllegalArgumentException {
-<a class="jxr_linenumber" name="L1227" href="#L1227">1227</a> 		<strong class="jxr_keyword">if</strong> (isDyna) {
-<a class="jxr_linenumber" name="L1228" href="#L1228">1228</a> 			<strong class="jxr_keyword">var</strong> m = (Map)<strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1229" href="#L1229">1229</a> 			<strong class="jxr_keyword">if</strong> (nn(getter)) {
-<a class="jxr_linenumber" name="L1230" href="#L1230">1230</a> 				<strong class="jxr_keyword">if</strong> (! isDynaGetterMap)
-<a class="jxr_linenumber" name="L1231" href="#L1231">1231</a> 					<strong class="jxr_keyword">return</strong> getter.invoke(bean, pName);
-<a class="jxr_linenumber" name="L1232" href="#L1232">1232</a> 				m = (Map)getter.invoke(bean);
-<a class="jxr_linenumber" name="L1233" href="#L1233">1233</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(field))
-<a class="jxr_linenumber" name="L1234" href="#L1234">1234</a> 				m = (Map)field.get(bean);
-<a class="jxr_linenumber" name="L1235" href="#L1235">1235</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L1236" href="#L1236">1236</a> 				<strong class="jxr_keyword">throw</strong> bex(beanMeta.getClassMeta(), <span class="jxr_string">"Getter or public field not defined on property ''{0}''"</span>, name);
-<a class="jxr_linenumber" name="L1237" href="#L1237">1237</a> 			<strong class="jxr_keyword">return</strong> (m == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : m.get(pName));
-<a class="jxr_linenumber" name="L1238" href="#L1238">1238</a> 		}
-<a class="jxr_linenumber" name="L1239" href="#L1239">1239</a> 		<strong class="jxr_keyword">if</strong> (nn(getter))
-<a class="jxr_linenumber" name="L1240" href="#L1240">1240</a> 			<strong class="jxr_keyword">return</strong> getter.invoke(bean);
-<a class="jxr_linenumber" name="L1241" href="#L1241">1241</a> 		<strong class="jxr_keyword">if</strong> (nn(field))
-<a class="jxr_linenumber" name="L1242" href="#L1242">1242</a> 			<strong class="jxr_keyword">return</strong> field.get(bean);
-<a class="jxr_linenumber" name="L1243" href="#L1243">1243</a> 		<strong class="jxr_keyword">throw</strong> bex(beanMeta.getClassMeta(), <span class="jxr_string">"Getter or public field not defined on property ''{0}''"</span>, name);
-<a class="jxr_linenumber" name="L1244" href="#L1244">1244</a> 	}
-<a class="jxr_linenumber" name="L1245" href="#L1245">1245</a> 
-<a class="jxr_linenumber" name="L1246" href="#L1246">1246</a> 	<strong class="jxr_keyword">private</strong> Object invokeSetter(Object bean, String pName, Object val) <strong class="jxr_keyword">throws</strong> IllegalArgumentException {
-<a class="jxr_linenumber" name="L1247" href="#L1247">1247</a> 		<strong class="jxr_keyword">if</strong> (isDyna) {
-<a class="jxr_linenumber" name="L1248" href="#L1248">1248</a> 			<strong class="jxr_keyword">if</strong> (nn(setter))
-<a class="jxr_linenumber" name="L1249" href="#L1249">1249</a> 				<strong class="jxr_keyword">return</strong> setter.invoke(bean, pName, val);
-<a class="jxr_linenumber" name="L1250" href="#L1250">1250</a> 			<strong class="jxr_keyword">var</strong> m = (Map)<strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1251" href="#L1251">1251</a> 			<strong class="jxr_keyword">if</strong> (nn(field))
-<a class="jxr_linenumber" name="L1252" href="#L1252">1252</a> 				m = (Map&lt;String,Object&gt;)field.get(bean);
-<a class="jxr_linenumber" name="L1253" href="#L1253">1253</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(getter))
-<a class="jxr_linenumber" name="L1254" href="#L1254">1254</a> 				m = (Map&lt;String,Object&gt;)getter.invoke(bean);
-<a class="jxr_linenumber" name="L1255" href="#L1255">1255</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L1256" href="#L1256">1256</a> 				<strong class="jxr_keyword">throw</strong> bex(beanMeta.getClassMeta(), <span class="jxr_string">"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null"</span>,
-<a class="jxr_linenumber" name="L1257" href="#L1257">1257</a> 					name, getClassMeta().getName(), cn(val));
-<a class="jxr_linenumber" name="L1258" href="#L1258">1258</a> 			<strong class="jxr_keyword">return</strong> (m == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : m.put(pName, val));
-<a class="jxr_linenumber" name="L1259" href="#L1259">1259</a> 		}
-<a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> 		<strong class="jxr_keyword">if</strong> (nn(setter))
-<a class="jxr_linenumber" name="L1261" href="#L1261">1261</a> 			<strong class="jxr_keyword">return</strong> setter.invoke(bean, val);
-<a class="jxr_linenumber" name="L1262" href="#L1262">1262</a> 		<strong class="jxr_keyword">if</strong> (nn(field)) {
-<a class="jxr_linenumber" name="L1263" href="#L1263">1263</a> 			field.set(bean, val);
-<a class="jxr_linenumber" name="L1264" href="#L1264">1264</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1265" href="#L1265">1265</a> 		}
-<a class="jxr_linenumber" name="L1266" href="#L1266">1266</a> 		<strong class="jxr_keyword">throw</strong> bex(beanMeta.getClassMeta(), <span class="jxr_string">"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null"</span>, name,
-<a class="jxr_linenumber" name="L1267" href="#L1267">1267</a> 			getClassMeta().getName(), cn(val));
-<a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> 	}
-<a class="jxr_linenumber" name="L1269" href="#L1269">1269</a> 
-<a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> 	<strong class="jxr_keyword">private</strong> Object swap(BeanSession session, Object o) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
-<a class="jxr_linenumber" name="L1271" href="#L1271">1271</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1272" href="#L1272">1272</a> 			<em class="jxr_comment">// First use swap defined via @Beanp.</em>
-<a class="jxr_linenumber" name="L1273" href="#L1273">1273</a> 			<strong class="jxr_keyword">if</strong> (nn(swap))
-<a class="jxr_linenumber" name="L1274" href="#L1274">1274</a> 				<strong class="jxr_keyword">return</strong> swap.swap(session, o);
-<a class="jxr_linenumber" name="L1275" href="#L1275">1275</a> 			<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1276" href="#L1276">1276</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> 			<em class="jxr_comment">// Otherwise, look it up via bean context.</em>
-<a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> 			<strong class="jxr_keyword">if</strong> (rawTypeMeta.hasChildSwaps()) {
-<a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> 				ObjectSwap f = rawTypeMeta.getChildObjectSwapForSwap(o.getClass());
-<a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> 				<strong class="jxr_keyword">if</strong> (nn(f))
-<a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> 					<strong class="jxr_keyword">return</strong> f.swap(session, o);
-<a class="jxr_linenumber" name="L1282" href="#L1282">1282</a> 			}
-<a class="jxr_linenumber" name="L1283" href="#L1283">1283</a> 			<strong class="jxr_keyword">return</strong> o;
-<a class="jxr_linenumber" name="L1284" href="#L1284">1284</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="SerializeException" href="../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> e) {
-<a class="jxr_linenumber" name="L1285" href="#L1285">1285</a> 			<strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L1286" href="#L1286">1286</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L1287" href="#L1287">1287</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(e);
-<a class="jxr_linenumber" name="L1288" href="#L1288">1288</a> 		}
-<a class="jxr_linenumber" name="L1289" href="#L1289">1289</a> 	}
-<a class="jxr_linenumber" name="L1290" href="#L1290">1290</a> 
-<a class="jxr_linenumber" name="L1291" href="#L1291">1291</a> 	<strong class="jxr_keyword">private</strong> Object unswap(BeanSession session, Object o) <strong class="jxr_keyword">throws</strong> <a name="ParseException" href="../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> {
-<a class="jxr_linenumber" name="L1292" href="#L1292">1292</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1293" href="#L1293">1293</a> 			<strong class="jxr_keyword">if</strong> (nn(swap))
-<a class="jxr_linenumber" name="L1294" href="#L1294">1294</a> 				<strong class="jxr_keyword">return</strong> swap.unswap(session, o, rawTypeMeta);
-<a class="jxr_linenumber" name="L1295" href="#L1295">1295</a> 			<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1296" href="#L1296">1296</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1297" href="#L1297">1297</a> 			<strong class="jxr_keyword">if</strong> (rawTypeMeta.hasChildSwaps()) {
-<a class="jxr_linenumber" name="L1298" href="#L1298">1298</a> 				ObjectSwap f = rawTypeMeta.getChildObjectSwapForUnswap(o.getClass());
-<a class="jxr_linenumber" name="L1299" href="#L1299">1299</a> 				<strong class="jxr_keyword">if</strong> (nn(f))
-<a class="jxr_linenumber" name="L1300" href="#L1300">1300</a> 					<strong class="jxr_keyword">return</strong> f.unswap(session, o, rawTypeMeta);
-<a class="jxr_linenumber" name="L1301" href="#L1301">1301</a> 			}
-<a class="jxr_linenumber" name="L1302" href="#L1302">1302</a> 			<strong class="jxr_keyword">return</strong> o;
-<a class="jxr_linenumber" name="L1303" href="#L1303">1303</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
-<a class="jxr_linenumber" name="L1304" href="#L1304">1304</a> 			<strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L1305" href="#L1305">1305</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L1306" href="#L1306">1306</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(e);
-<a class="jxr_linenumber" name="L1307" href="#L1307">1307</a> 		}
-<a class="jxr_linenumber" name="L1308" href="#L1308">1308</a> 	}
-<a class="jxr_linenumber" name="L1309" href="#L1309">1309</a> 
-<a class="jxr_linenumber" name="L1310" href="#L1310">1310</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1311" href="#L1311">1311</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this property is write-only.</em>
-<a class="jxr_linenumber" name="L1312" href="#L1312">1312</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1313" href="#L1313">1313</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1314" href="#L1314">1314</a> <em class="jxr_javadoccomment">	 * This implies the property MIGHT be readable, but that serializers should not serialize it.</em>
-<a class="jxr_linenumber" name="L1315" href="#L1315">1315</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1316" href="#L1316">1316</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this property is write-only.</em>
-<a class="jxr_linenumber" name="L1317" href="#L1317">1317</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1318" href="#L1318">1318</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> isWriteOnly() { <strong class="jxr_keyword">return</strong> writeOnly; }
-<a class="jxr_linenumber" name="L1319" href="#L1319">1319</a> 
-<a class="jxr_linenumber" name="L1320" href="#L1320">1320</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1321" href="#L1321">1321</a> <em class="jxr_javadoccomment">	 * Sets an array field on this bean.</em>
-<a class="jxr_linenumber" name="L1322" href="#L1322">1322</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1323" href="#L1323">1323</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1324" href="#L1324">1324</a> <em class="jxr_javadoccomment">	 * Works on both &lt;c&gt;Object&lt;/c&gt; and primitive arrays.</em>
-<a class="jxr_linenumber" name="L1325" href="#L1325">1325</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1326" href="#L1326">1326</a> <em class="jxr_javadoccomment">	 * @param bean The bean of the field.</em>
-<a class="jxr_linenumber" name="L1327" href="#L1327">1327</a> <em class="jxr_javadoccomment">	 * @param l The collection to use to set the array field.</em>
-<a class="jxr_linenumber" name="L1328" href="#L1328">1328</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException Thrown by method invocation.</em>
-<a class="jxr_linenumber" name="L1329" href="#L1329">1329</a> <em class="jxr_javadoccomment">	 * @throws IllegalAccessException Thrown by method invocation.</em>
-<a class="jxr_linenumber" name="L1330" href="#L1330">1330</a> <em class="jxr_javadoccomment">	 * @throws InvocationTargetException Thrown by method invocation.</em>
-<a class="jxr_linenumber" name="L1331" href="#L1331">1331</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1332" href="#L1332">1332</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> setArray(Object bean, List l) <strong class="jxr_keyword">throws</strong> IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-<a class="jxr_linenumber" name="L1333" href="#L1333">1333</a> 		<strong class="jxr_keyword">var</strong> array = toArray(l, <strong class="jxr_keyword">this</strong>.rawTypeMeta.getElementType().<strong class="jxr_keyword">inner</strong>());
-<a class="jxr_linenumber" name="L1334" href="#L1334">1334</a> 		invokeSetter(bean, name, array);
-<a class="jxr_linenumber" name="L1335" href="#L1335">1335</a> 	}
-<a class="jxr_linenumber" name="L1336" href="#L1336">1336</a> }
+<a class="jxr_linenumber" name="L1189" href="#L1189">1189</a> 			<strong class="jxr_keyword">if</strong> (nn(overrideValue))
+<a class="jxr_linenumber" name="L1190" href="#L1190">1190</a> 				<strong class="jxr_keyword">return</strong> overrideValue;
+<a class="jxr_linenumber" name="L1191" href="#L1191">1191</a> 
+<a class="jxr_linenumber" name="L1192" href="#L1192">1192</a> 			<em class="jxr_comment">// Read-only beans have their properties stored in a cache until getBean() is called.</em>
+<a class="jxr_linenumber" name="L1193" href="#L1193">1193</a> 			<strong class="jxr_keyword">var</strong> bean = m.bean;
+<a class="jxr_linenumber" name="L1194" href="#L1194">1194</a> 			<strong class="jxr_keyword">if</strong> (bean == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1195" href="#L1195">1195</a> 				<strong class="jxr_keyword">return</strong> m.propertyCache.get(name);
+<a class="jxr_linenumber" name="L1196" href="#L1196">1196</a> 
+<a class="jxr_linenumber" name="L1197" href="#L1197">1197</a> 			<strong class="jxr_keyword">var</strong> session = m.getBeanSession();
+<a class="jxr_linenumber" name="L1198" href="#L1198">1198</a> 			<strong class="jxr_keyword">var</strong> o = getRaw(m, pName);
+<a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> 
+<a class="jxr_linenumber" name="L1200" href="#L1200">1200</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> 				o = swap(session, o);
+<a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> 				<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> 				<strong class="jxr_keyword">if</strong> (nn(properties)) {
+<a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> 					<strong class="jxr_keyword">if</strong> (rawTypeMeta.isArray()) {
+<a class="jxr_linenumber" name="L1206" href="#L1206">1206</a> 						<strong class="jxr_keyword">var</strong> a = (Object[])o;
+<a class="jxr_linenumber" name="L1207" href="#L1207">1207</a> 						<strong class="jxr_keyword">var</strong> l1 = <strong class="jxr_keyword">new</strong> <a name="DelegateList" href="../../../org/apache/juneau/internal/DelegateList.html#DelegateList">DelegateList</a>(rawTypeMeta);
+<a class="jxr_linenumber" name="L1208" href="#L1208">1208</a> 						<strong class="jxr_keyword">var</strong> childType1 = rawTypeMeta.getElementType();
+<a class="jxr_linenumber" name="L1209" href="#L1209">1209</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c1 : a)
+<a class="jxr_linenumber" name="L1210" href="#L1210">1210</a> 							l1.add(applyChildPropertiesFilter(session, childType1, c1));
+<a class="jxr_linenumber" name="L1211" href="#L1211">1211</a> 						<strong class="jxr_keyword">return</strong> l1;
+<a class="jxr_linenumber" name="L1212" href="#L1212">1212</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (rawTypeMeta.isCollection()) {
+<a class="jxr_linenumber" name="L1213" href="#L1213">1213</a> 						<strong class="jxr_keyword">var</strong> c = (Collection)o;
+<a class="jxr_linenumber" name="L1214" href="#L1214">1214</a> 						<strong class="jxr_keyword">var</strong> l = listOfSize(c.size());
+<a class="jxr_linenumber" name="L1215" href="#L1215">1215</a> 						<strong class="jxr_keyword">var</strong> childType = rawTypeMeta.getElementType();
+<a class="jxr_linenumber" name="L1216" href="#L1216">1216</a> 						c.forEach(x -&gt; l.add(applyChildPropertiesFilter(session, childType, x)));
+<a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> 						<strong class="jxr_keyword">return</strong> l;
+<a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> 					} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L1219" href="#L1219">1219</a> 						<strong class="jxr_keyword">return</strong> applyChildPropertiesFilter(session, rawTypeMeta, o);
+<a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> 					}
+<a class="jxr_linenumber" name="L1221" href="#L1221">1221</a> 				}
+<a class="jxr_linenumber" name="L1222" href="#L1222">1222</a> 				<strong class="jxr_keyword">return</strong> o;
+<a class="jxr_linenumber" name="L1223" href="#L1223">1223</a> 			} <strong class="jxr_keyword">catch</strong> (<a name="SerializeException" href="../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> e) {
+<a class="jxr_linenumber" name="L1224" href="#L1224">1224</a> 				<strong class="jxr_keyword">throw</strong> bex(e);
+<a class="jxr_linenumber" name="L1225" href="#L1225">1225</a> 			}
+<a class="jxr_linenumber" name="L1226" href="#L1226">1226</a> 
+<a class="jxr_linenumber" name="L1227" href="#L1227">1227</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable e) {
+<a class="jxr_linenumber" name="L1228" href="#L1228">1228</a> 			<strong class="jxr_keyword">if</strong> (bc.isIgnoreInvocationExceptionsOnGetters()) {
+<a class="jxr_linenumber" name="L1229" href="#L1229">1229</a> 				<strong class="jxr_keyword">if</strong> (rawTypeMeta.isPrimitive())
+<a class="jxr_linenumber" name="L1230" href="#L1230">1230</a> 					<strong class="jxr_keyword">return</strong> rawTypeMeta.getPrimitiveDefault();
+<a class="jxr_linenumber" name="L1231" href="#L1231">1231</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1232" href="#L1232">1232</a> 			}
+<a class="jxr_linenumber" name="L1233" href="#L1233">1233</a> 			<strong class="jxr_keyword">throw</strong> bex(e, beanMeta.getClassMeta(), <span class="jxr_string">"Exception occurred while getting property ''{0}''"</span>, name);
+<a class="jxr_linenumber" name="L1234" href="#L1234">1234</a> 		}
+<a class="jxr_linenumber" name="L1235" href="#L1235">1235</a> 	}
+<a class="jxr_linenumber" name="L1236" href="#L1236">1236</a> 
+<a class="jxr_linenumber" name="L1237" href="#L1237">1237</a> 	<strong class="jxr_keyword">private</strong> Object invokeGetter(Object bean, String pName) <strong class="jxr_keyword">throws</strong> IllegalArgumentException {
+<a class="jxr_linenumber" name="L1238" href="#L1238">1238</a> 		<strong class="jxr_keyword">if</strong> (isDyna) {
+<a class="jxr_linenumber" name="L1239" href="#L1239">1239</a> 			<strong class="jxr_keyword">var</strong> m = (Map)<strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1240" href="#L1240">1240</a> 			<strong class="jxr_keyword">if</strong> (nn(getter)) {
+<a class="jxr_linenumber" name="L1241" href="#L1241">1241</a> 				<strong class="jxr_keyword">if</strong> (! isDynaGetterMap)
+<a class="jxr_linenumber" name="L1242" href="#L1242">1242</a> 					<strong class="jxr_keyword">return</strong> getter.invoke(bean, pName);
+<a class="jxr_linenumber" name="L1243" href="#L1243">1243</a> 				m = (Map)getter.invoke(bean);
+<a class="jxr_linenumber" name="L1244" href="#L1244">1244</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(field))
+<a class="jxr_linenumber" name="L1245" href="#L1245">1245</a> 				m = (Map)field.get(bean);
+<a class="jxr_linenumber" name="L1246" href="#L1246">1246</a> 			<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L1247" href="#L1247">1247</a> 				<strong class="jxr_keyword">throw</strong> bex(beanMeta.getClassMeta(), <span class="jxr_string">"Getter or public field not defined on property ''{0}''"</span>, name);
+<a class="jxr_linenumber" name="L1248" href="#L1248">1248</a> 			<strong class="jxr_keyword">return</strong> (m == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : m.get(pName));
+<a class="jxr_linenumber" name="L1249" href="#L1249">1249</a> 		}
+<a class="jxr_linenumber" name="L1250" href="#L1250">1250</a> 		<strong class="jxr_keyword">if</strong> (nn(getter))
+<a class="jxr_linenumber" name="L1251" href="#L1251">1251</a> 			<strong class="jxr_keyword">return</strong> getter.invoke(bean);
+<a class="jxr_linenumber" name="L1252" href="#L1252">1252</a> 		<strong class="jxr_keyword">if</strong> (nn(field))
+<a class="jxr_linenumber" name="L1253" href="#L1253">1253</a> 			<strong class="jxr_keyword">return</strong> field.get(bean);
+<a class="jxr_linenumber" name="L1254" href="#L1254">1254</a> 		<strong class="jxr_keyword">throw</strong> bex(beanMeta.getClassMeta(), <span class="jxr_string">"Getter or public field not defined on property ''{0}''"</span>, name);
+<a class="jxr_linenumber" name="L1255" href="#L1255">1255</a> 	}
+<a class="jxr_linenumber" name="L1256" href="#L1256">1256</a> 
+<a class="jxr_linenumber" name="L1257" href="#L1257">1257</a> 	<strong class="jxr_keyword">private</strong> Object invokeSetter(Object bean, String pName, Object val) <strong class="jxr_keyword">throws</strong> IllegalArgumentException {
+<a class="jxr_linenumber" name="L1258" href="#L1258">1258</a> 		<strong class="jxr_keyword">if</strong> (isDyna) {
+<a class="jxr_linenumber" name="L1259" href="#L1259">1259</a> 			<strong class="jxr_keyword">if</strong> (nn(setter))
+<a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> 				<strong class="jxr_keyword">return</strong> setter.invoke(bean, pName, val);
+<a class="jxr_linenumber" name="L1261" href="#L1261">1261</a> 			<strong class="jxr_keyword">var</strong> m = (Map)<strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1262" href="#L1262">1262</a> 			<strong class="jxr_keyword">if</strong> (nn(field))
+<a class="jxr_linenumber" name="L1263" href="#L1263">1263</a> 				m = (Map&lt;String,Object&gt;)field.get(bean);
+<a class="jxr_linenumber" name="L1264" href="#L1264">1264</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(getter))
+<a class="jxr_linenumber" name="L1265" href="#L1265">1265</a> 				m = (Map&lt;String,Object&gt;)getter.invoke(bean);
+<a class="jxr_linenumber" name="L1266" href="#L1266">1266</a> 			<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L1267" href="#L1267">1267</a> 				<strong class="jxr_keyword">throw</strong> bex(beanMeta.getClassMeta(), <span class="jxr_string">"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null"</span>,
+<a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> 					name, getClassMeta().getName(), cn(val));
+<a class="jxr_linenumber" name="L1269" href="#L1269">1269</a> 			<strong class="jxr_keyword">return</strong> (m == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : m.put(pName, val));
+<a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> 		}
+<a class="jxr_linenumber" name="L1271" href="#L1271">1271</a> 		<strong class="jxr_keyword">if</strong> (nn(setter))
+<a class="jxr_linenumber" name="L1272" href="#L1272">1272</a> 			<strong class="jxr_keyword">return</strong> setter.invoke(bean, val);
+<a class="jxr_linenumber" name="L1273" href="#L1273">1273</a> 		<strong class="jxr_keyword">if</strong> (nn(field)) {
+<a class="jxr_linenumber" name="L1274" href="#L1274">1274</a> 			field.set(bean, val);
+<a class="jxr_linenumber" name="L1275" href="#L1275">1275</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1276" href="#L1276">1276</a> 		}
+<a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> 		<strong class="jxr_keyword">throw</strong> bex(beanMeta.getClassMeta(), <span class="jxr_string">"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null"</span>, name,
+<a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> 			getClassMeta().getName(), cn(val));
+<a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> 	}
+<a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> 
+<a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> 	<strong class="jxr_keyword">private</strong> Object swap(BeanSession session, Object o) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
+<a class="jxr_linenumber" name="L1282" href="#L1282">1282</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L1283" href="#L1283">1283</a> 			<em class="jxr_comment">// First use swap defined via @Beanp.</em>
+<a class="jxr_linenumber" name="L1284" href="#L1284">1284</a> 			<strong class="jxr_keyword">if</strong> (nn(swap))
+<a class="jxr_linenumber" name="L1285" href="#L1285">1285</a> 				<strong class="jxr_keyword">return</strong> swap.swap(session, o);
+<a class="jxr_linenumber" name="L1286" href="#L1286">1286</a> 			<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1287" href="#L1287">1287</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1288" href="#L1288">1288</a> 			<em class="jxr_comment">// Otherwise, look it up via bean context.</em>
+<a class="jxr_linenumber" name="L1289" href="#L1289">1289</a> 			<strong class="jxr_keyword">if</strong> (rawTypeMeta.hasChildSwaps()) {
+<a class="jxr_linenumber" name="L1290" href="#L1290">1290</a> 				ObjectSwap f = rawTypeMeta.getChildObjectSwapForSwap(o.getClass());
+<a class="jxr_linenumber" name="L1291" href="#L1291">1291</a> 				<strong class="jxr_keyword">if</strong> (nn(f))
+<a class="jxr_linenumber" name="L1292" href="#L1292">1292</a> 					<strong class="jxr_keyword">return</strong> f.swap(session, o);
+<a class="jxr_linenumber" name="L1293" href="#L1293">1293</a> 			}
+<a class="jxr_linenumber" name="L1294" href="#L1294">1294</a> 			<strong class="jxr_keyword">return</strong> o;
+<a class="jxr_linenumber" name="L1295" href="#L1295">1295</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="SerializeException" href="../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> e) {
+<a class="jxr_linenumber" name="L1296" href="#L1296">1296</a> 			<strong class="jxr_keyword">throw</strong> e;
+<a class="jxr_linenumber" name="L1297" href="#L1297">1297</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L1298" href="#L1298">1298</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(e);
+<a class="jxr_linenumber" name="L1299" href="#L1299">1299</a> 		}
+<a class="jxr_linenumber" name="L1300" href="#L1300">1300</a> 	}
+<a class="jxr_linenumber" name="L1301" href="#L1301">1301</a> 
+<a class="jxr_linenumber" name="L1302" href="#L1302">1302</a> 	<strong class="jxr_keyword">private</strong> Object unswap(BeanSession session, Object o) <strong class="jxr_keyword">throws</strong> <a name="ParseException" href="../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> {
+<a class="jxr_linenumber" name="L1303" href="#L1303">1303</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L1304" href="#L1304">1304</a> 			<strong class="jxr_keyword">if</strong> (nn(swap))
+<a class="jxr_linenumber" name="L1305" href="#L1305">1305</a> 				<strong class="jxr_keyword">return</strong> swap.unswap(session, o, rawTypeMeta);
+<a class="jxr_linenumber" name="L1306" href="#L1306">1306</a> 			<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1307" href="#L1307">1307</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1308" href="#L1308">1308</a> 			<strong class="jxr_keyword">if</strong> (rawTypeMeta.hasChildSwaps()) {
+<a class="jxr_linenumber" name="L1309" href="#L1309">1309</a> 				ObjectSwap f = rawTypeMeta.getChildObjectSwapForUnswap(o.getClass());
+<a class="jxr_linenumber" name="L1310" href="#L1310">1310</a> 				<strong class="jxr_keyword">if</strong> (nn(f))
+<a class="jxr_linenumber" name="L1311" href="#L1311">1311</a> 					<strong class="jxr_keyword">return</strong> f.unswap(session, o, rawTypeMeta);
+<a class="jxr_linenumber" name="L1312" href="#L1312">1312</a> 			}
+<a class="jxr_linenumber" name="L1313" href="#L1313">1313</a> 			<strong class="jxr_keyword">return</strong> o;
+<a class="jxr_linenumber" name="L1314" href="#L1314">1314</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
+<a class="jxr_linenumber" name="L1315" href="#L1315">1315</a> 			<strong class="jxr_keyword">throw</strong> e;
+<a class="jxr_linenumber" name="L1316" href="#L1316">1316</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L1317" href="#L1317">1317</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(e);
+<a class="jxr_linenumber" name="L1318" href="#L1318">1318</a> 		}
+<a class="jxr_linenumber" name="L1319" href="#L1319">1319</a> 	}
+<a class="jxr_linenumber" name="L1320" href="#L1320">1320</a> 
+<a class="jxr_linenumber" name="L1321" href="#L1321">1321</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1322" href="#L1322">1322</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this property is write-only.</em>
+<a class="jxr_linenumber" name="L1323" href="#L1323">1323</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1324" href="#L1324">1324</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1325" href="#L1325">1325</a> <em class="jxr_javadoccomment">	 * This implies the property MIGHT be readable, but that serializers should not serialize it.</em>
+<a class="jxr_linenumber" name="L1326" href="#L1326">1326</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1327" href="#L1327">1327</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this property is write-only.</em>
+<a class="jxr_linenumber" name="L1328" href="#L1328">1328</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1329" href="#L1329">1329</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> isWriteOnly() { <strong class="jxr_keyword">return</strong> writeOnly; }
+<a class="jxr_linenumber" name="L1330" href="#L1330">1330</a> 
+<a class="jxr_linenumber" name="L1331" href="#L1331">1331</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1332" href="#L1332">1332</a> <em class="jxr_javadoccomment">	 * Sets an array field on this bean.</em>
+<a class="jxr_linenumber" name="L1333" href="#L1333">1333</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1334" href="#L1334">1334</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1335" href="#L1335">1335</a> <em class="jxr_javadoccomment">	 * Works on both &lt;c&gt;Object&lt;/c&gt; and primitive arrays.</em>
+<a class="jxr_linenumber" name="L1336" href="#L1336">1336</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1337" href="#L1337">1337</a> <em class="jxr_javadoccomment">	 * @param bean The bean of the field.</em>
+<a class="jxr_linenumber" name="L1338" href="#L1338">1338</a> <em class="jxr_javadoccomment">	 * @param l The collection to use to set the array field.</em>
+<a class="jxr_linenumber" name="L1339" href="#L1339">1339</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException Thrown by method invocation.</em>
+<a class="jxr_linenumber" name="L1340" href="#L1340">1340</a> <em class="jxr_javadoccomment">	 * @throws IllegalAccessException Thrown by method invocation.</em>
+<a class="jxr_linenumber" name="L1341" href="#L1341">1341</a> <em class="jxr_javadoccomment">	 * @throws InvocationTargetException Thrown by method invocation.</em>
+<a class="jxr_linenumber" name="L1342" href="#L1342">1342</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1343" href="#L1343">1343</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> setArray(Object bean, List l) <strong class="jxr_keyword">throws</strong> IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+<a class="jxr_linenumber" name="L1344" href="#L1344">1344</a> 		<strong class="jxr_keyword">var</strong> array = toArray(l, <strong class="jxr_keyword">this</strong>.rawTypeMeta.getElementType().<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L1345" href="#L1345">1345</a> 		invokeSetter(bean, name, array);
+<a class="jxr_linenumber" name="L1346" href="#L1346">1346</a> 	}
+<a class="jxr_linenumber" name="L1347" href="#L1347">1347</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

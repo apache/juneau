@@ -916,7 +916,7 @@
 <a class="jxr_linenumber" name="L908" href="#L908">908</a> <em class="jxr_javadoccomment">	 * @return The properties on this bean as a map for debugging.</em>
 <a class="jxr_linenumber" name="L909" href="#L909">909</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L910" href="#L910">910</a> 	<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
-<a class="jxr_linenumber" name="L911" href="#L911">911</a> 		<strong class="jxr_keyword">return</strong> mapb().filtered().sorted().buildFluent()
+<a class="jxr_linenumber" name="L911" href="#L911">911</a> 		<strong class="jxr_keyword">return</strong> filteredBeanPropertyMap()
 <a class="jxr_linenumber" name="L912" href="#L912">912</a> 			.a(<span class="jxr_string">"annotations"</span>, annotations)
 <a class="jxr_linenumber" name="L913" href="#L913">913</a> 			.a(<span class="jxr_string">"debug"</span>, debug);
 <a class="jxr_linenumber" name="L914" href="#L914">914</a> 	}

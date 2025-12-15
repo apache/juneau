@@ -297,7 +297,7 @@
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 	@Test
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 	<strong class="jxr_keyword">void</strong> e01_toMap_withOnClass() {
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">var</strong> a = T.create().onClass(TC1.<strong class="jxr_keyword">class</strong>, TC2.<strong class="jxr_keyword">class</strong>).value(<span class="jxr_string">"test"</span>).build();
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<strong class="jxr_keyword">var</strong> map = ((T)a).toMap();
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<strong class="jxr_keyword">var</strong> map = ((T)a).propertyMap();
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 		assertBean(map, <span class="jxr_string">"value,on,onClass"</span>, <span class="jxr_string">"test,[],[TC1,TC2]"</span>);
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 	}
@@ -305,7 +305,7 @@
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 	@Test
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 	<strong class="jxr_keyword">void</strong> e02_toMap_withBoth() {
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">var</strong> a = T.create().on(<span class="jxr_string">"com.example.Class1"</span>).onClass(TC1.<strong class="jxr_keyword">class</strong>).value(<span class="jxr_string">"test"</span>).build();
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">var</strong> map = ((T)a).toMap();
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">var</strong> map = ((T)a).propertyMap();
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 		assertBean(map, <span class="jxr_string">"value,on,onClass"</span>, <span class="jxr_string">"test,[com.example.Class1],[TC1]"</span>);
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 	}
@@ -313,7 +313,7 @@
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 	@Test
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 	<strong class="jxr_keyword">void</strong> e03_toMap_empty() {
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 		<strong class="jxr_keyword">var</strong> a = T.create().build();
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">var</strong> map = ((T)a).toMap();
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">var</strong> map = ((T)a).propertyMap();
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 		assertBean(map, <span class="jxr_string">"value,on,onClass"</span>, <span class="jxr_string">",[],[]"</span>);
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 	}

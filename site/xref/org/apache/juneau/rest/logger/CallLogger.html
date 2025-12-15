@@ -26,19 +26,19 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> java.util.logging.Level.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.Enablement.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.collections.JsonMap.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.CollectionUtils.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.IoUtils.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.StringUtils.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.ThrowableUtils.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.logger.CallLoggingDetail.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.util.logging.*;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.IoUtils.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.StringUtils.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.ThrowableUtils.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Utils.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.logger.CallLoggingDetail.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.util.logging.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.collections.*;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.utils.*;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.cp.*;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.annotation.*;
@@ -662,135 +662,138 @@
 <a class="jxr_linenumber" name="L654" href="#L654">654</a> 
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> 	}
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 		<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> 		<strong class="jxr_keyword">return</strong> filteredMap()
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> 			.append(<span class="jxr_string">"logger"</span>, logger)
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 			.append(<span class="jxr_string">"thrownStore"</span>, thrownStore)
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> 			.append(<span class="jxr_string">"enabled"</span>, enabled)
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> 			.append(<span class="jxr_string">"level"</span>, level)
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 			.append(<span class="jxr_string">"requestDetail"</span>, requestDetail)
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> 			.append(<span class="jxr_string">"responseDetail"</span>, responseDetail)
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> 			.append(<span class="jxr_string">"normalRules"</span>, normalRules.length == 0 ? <strong class="jxr_keyword">null</strong> : normalRules)
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> 			.append(<span class="jxr_string">"debugRules"</span>, debugRules.length == 0 ? <strong class="jxr_keyword">null</strong> : debugRules)
-<a class="jxr_linenumber" name="L669" href="#L669">669</a> 			.asReadableString();
-<a class="jxr_linenumber" name="L670" href="#L670">670</a> 		<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 	}
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> 
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> byte[] getRequestContent(HttpServletRequest req) {
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> 		<strong class="jxr_keyword">if</strong> (req instanceof <a name="CachingHttpServletRequest" href="../../../../../org/apache/juneau/rest/util/CachingHttpServletRequest.html#CachingHttpServletRequest">CachingHttpServletRequest</a> req2)
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> 			<strong class="jxr_keyword">return</strong> req2.getContent();
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> 		<strong class="jxr_keyword">return</strong> castOrNull(req.getAttribute(<span class="jxr_string">"RequestContent"</span>), byte[].<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> 	}
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> 
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> byte[] getResponseContent(HttpServletRequest req, HttpServletResponse res) {
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 		<strong class="jxr_keyword">if</strong> (res instanceof <a name="CachingHttpServletResponse" href="../../../../../org/apache/juneau/rest/util/CachingHttpServletResponse.html#CachingHttpServletResponse">CachingHttpServletResponse</a> res2)
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> 			<strong class="jxr_keyword">return</strong> res2.getContent();
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> 		<strong class="jxr_keyword">return</strong> castOrNull(req.getAttribute(<span class="jxr_string">"ResponseContent"</span>), byte[].<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L683" href="#L683">683</a> 	}
-<a class="jxr_linenumber" name="L684" href="#L684">684</a> 
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> 	<strong class="jxr_keyword">private</strong> <a name="ThrownStats" href="../../../../../org/apache/juneau/rest/stats/ThrownStats.html#ThrownStats">ThrownStats</a> getThrownStats(Throwable e) {
-<a class="jxr_linenumber" name="L686" href="#L686">686</a> 		<strong class="jxr_keyword">if</strong> (e == <strong class="jxr_keyword">null</strong> || thrownStore == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L687" href="#L687">687</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L688" href="#L688">688</a> 		<strong class="jxr_keyword">return</strong> thrownStore.add(e);
-<a class="jxr_linenumber" name="L689" href="#L689">689</a> 	}
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> 
-<a class="jxr_linenumber" name="L691" href="#L691">691</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L692" href="#L692">692</a> <em class="jxr_javadoccomment">	 * Returns the logger to use for logging REST calls.</em>
-<a class="jxr_linenumber" name="L693" href="#L693">693</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L694" href="#L694">694</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L695" href="#L695">695</a> <em class="jxr_javadoccomment">	 * Returns the logger specified in the builder, or {@link Logger#getGlobal()} if it wasn't specified.</em>
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 	<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 		<em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 		<strong class="jxr_keyword">return</strong> filteredBeanPropertyMap()
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 			.a(<span class="jxr_string">"logger"</span>, logger)
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 			.a(<span class="jxr_string">"thrownStore"</span>, thrownStore)
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 			.a(<span class="jxr_string">"enabled"</span>, enabled)
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 			.a(<span class="jxr_string">"level"</span>, level)
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 			.a(<span class="jxr_string">"requestDetail"</span>, requestDetail)
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 			.a(<span class="jxr_string">"responseDetail"</span>, responseDetail)
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 			.a(<span class="jxr_string">"normalRules"</span>, normalRules)
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 			.a(<span class="jxr_string">"debugRules"</span>, debugRules);
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 		<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 	}
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 	<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 		<strong class="jxr_keyword">return</strong> r(properties());
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 	}
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> byte[] getRequestContent(HttpServletRequest req) {
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 		<strong class="jxr_keyword">if</strong> (req instanceof <a name="CachingHttpServletRequest" href="../../../../../org/apache/juneau/rest/util/CachingHttpServletRequest.html#CachingHttpServletRequest">CachingHttpServletRequest</a> req2)
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 			<strong class="jxr_keyword">return</strong> req2.getContent();
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 		<strong class="jxr_keyword">return</strong> castOrNull(req.getAttribute(<span class="jxr_string">"RequestContent"</span>), byte[].<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 	}
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> byte[] getResponseContent(HttpServletRequest req, HttpServletResponse res) {
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 		<strong class="jxr_keyword">if</strong> (res instanceof <a name="CachingHttpServletResponse" href="../../../../../org/apache/juneau/rest/util/CachingHttpServletResponse.html#CachingHttpServletResponse">CachingHttpServletResponse</a> res2)
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 			<strong class="jxr_keyword">return</strong> res2.getContent();
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 		<strong class="jxr_keyword">return</strong> castOrNull(req.getAttribute(<span class="jxr_string">"ResponseContent"</span>), byte[].<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 	}
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 	<strong class="jxr_keyword">private</strong> <a name="ThrownStats" href="../../../../../org/apache/juneau/rest/stats/ThrownStats.html#ThrownStats">ThrownStats</a> getThrownStats(Throwable e) {
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 		<strong class="jxr_keyword">if</strong> (e == <strong class="jxr_keyword">null</strong> || thrownStore == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		<strong class="jxr_keyword">return</strong> thrownStore.add(e);
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 	}
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> <em class="jxr_javadoccomment">	 * Returns the logger to use for logging REST calls.</em>
 <a class="jxr_linenumber" name="L696" href="#L696">696</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L697" href="#L697">697</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L698" href="#L698">698</a> <em class="jxr_javadoccomment">	 * This method can be overridden in subclasses to provide a different logger.</em>
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> <em class="jxr_javadoccomment">	 * Returns the logger specified in the builder, or {@link Logger#getGlobal()} if it wasn't specified.</em>
 <a class="jxr_linenumber" name="L699" href="#L699">699</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L700" href="#L700">700</a> <em class="jxr_javadoccomment">	 * @return The logger to use for logging REST calls.</em>
-<a class="jxr_linenumber" name="L701" href="#L701">701</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L702" href="#L702">702</a> 	<strong class="jxr_keyword">protected</strong> Logger getLogger() { <strong class="jxr_keyword">return</strong> logger; }
-<a class="jxr_linenumber" name="L703" href="#L703">703</a> 
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L705" href="#L705">705</a> <em class="jxr_javadoccomment">	 * Given the specified servlet request/response, find the rule that applies to it.</em>
-<a class="jxr_linenumber" name="L706" href="#L706">706</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L707" href="#L707">707</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L708" href="#L708">708</a> <em class="jxr_javadoccomment">	 * This method can be overridden to provide specialized logic for finding rules.</em>
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> <em class="jxr_javadoccomment">	 * This method can be overridden in subclasses to provide a different logger.</em>
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> <em class="jxr_javadoccomment">	 * @return The logger to use for logging REST calls.</em>
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> 	<strong class="jxr_keyword">protected</strong> Logger getLogger() { <strong class="jxr_keyword">return</strong> logger; }
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> 
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> <em class="jxr_javadoccomment">	 * Given the specified servlet request/response, find the rule that applies to it.</em>
 <a class="jxr_linenumber" name="L709" href="#L709">709</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L710" href="#L710">710</a> <em class="jxr_javadoccomment">	 * @param req The servlet request.</em>
-<a class="jxr_linenumber" name="L711" href="#L711">711</a> <em class="jxr_javadoccomment">	 * @param res The servlet response.</em>
-<a class="jxr_linenumber" name="L712" href="#L712">712</a> <em class="jxr_javadoccomment">	 * @return The applicable logging rule, or the default rule if not found.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L713" href="#L713">713</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L714" href="#L714">714</a> 	<strong class="jxr_keyword">protected</strong> <a name="CallLoggerRule" href="../../../../../org/apache/juneau/rest/logger/CallLoggerRule.html#CallLoggerRule">CallLoggerRule</a> getRule(HttpServletRequest req, HttpServletResponse res) {
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : isDebug(req) ? debugRules : normalRules)
-<a class="jxr_linenumber" name="L716" href="#L716">716</a> 			<strong class="jxr_keyword">if</strong> (r.matches(req, res))
-<a class="jxr_linenumber" name="L717" href="#L717">717</a> 				<strong class="jxr_keyword">return</strong> r;
-<a class="jxr_linenumber" name="L718" href="#L718">718</a> 		<strong class="jxr_keyword">return</strong> DEFAULT_RULE;
-<a class="jxr_linenumber" name="L719" href="#L719">719</a> 	}
-<a class="jxr_linenumber" name="L720" href="#L720">720</a> 
-<a class="jxr_linenumber" name="L721" href="#L721">721</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L722" href="#L722">722</a> <em class="jxr_javadoccomment">	 * Initializer.</em>
-<a class="jxr_linenumber" name="L723" href="#L723">723</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L724" href="#L724">724</a> <em class="jxr_javadoccomment">	 * Subclasses should override this method to make modifications to the builder used to create this logger.</em>
-<a class="jxr_linenumber" name="L725" href="#L725">725</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L726" href="#L726">726</a> <em class="jxr_javadoccomment">	 * @param beanStore The bean store containing injectable beans for this logger.</em>
-<a class="jxr_linenumber" name="L727" href="#L727">727</a> <em class="jxr_javadoccomment">	 * @return A new builder object.</em>
-<a class="jxr_linenumber" name="L728" href="#L728">728</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L729" href="#L729">729</a> 	<strong class="jxr_keyword">protected</strong> Builder init(<a name="BeanStore" href="../../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore) {
-<a class="jxr_linenumber" name="L730" href="#L730">730</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder(beanStore).logger(beanStore.getBean(Logger.<strong class="jxr_keyword">class</strong>).orElse(<strong class="jxr_keyword">null</strong>)).thrownStore(beanStore.getBean(ThrownStore.<strong class="jxr_keyword">class</strong>).orElse(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L731" href="#L731">731</a> 	}
-<a class="jxr_linenumber" name="L732" href="#L732">732</a> 
-<a class="jxr_linenumber" name="L733" href="#L733">733</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L734" href="#L734">734</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if debug is enabled on this request.</em>
-<a class="jxr_linenumber" name="L735" href="#L735">735</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L736" href="#L736">736</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L737" href="#L737">737</a> <em class="jxr_javadoccomment">	 * Looks for the request attribute &lt;js&gt;"Debug"&lt;/js&gt; to determine whether debug is enabled.</em>
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> <em class="jxr_javadoccomment">	 * This method can be overridden to provide specialized logic for finding rules.</em>
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> <em class="jxr_javadoccomment">	 * @param req The servlet request.</em>
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> <em class="jxr_javadoccomment">	 * @param res The servlet response.</em>
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> <em class="jxr_javadoccomment">	 * @return The applicable logging rule, or the default rule if not found.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> 	<strong class="jxr_keyword">protected</strong> <a name="CallLoggerRule" href="../../../../../org/apache/juneau/rest/logger/CallLoggerRule.html#CallLoggerRule">CallLoggerRule</a> getRule(HttpServletRequest req, HttpServletResponse res) {
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : isDebug(req) ? debugRules : normalRules)
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> 			<strong class="jxr_keyword">if</strong> (r.matches(req, res))
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> 				<strong class="jxr_keyword">return</strong> r;
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> 		<strong class="jxr_keyword">return</strong> DEFAULT_RULE;
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> 	}
+<a class="jxr_linenumber" name="L723" href="#L723">723</a> 
+<a class="jxr_linenumber" name="L724" href="#L724">724</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L725" href="#L725">725</a> <em class="jxr_javadoccomment">	 * Initializer.</em>
+<a class="jxr_linenumber" name="L726" href="#L726">726</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> <em class="jxr_javadoccomment">	 * Subclasses should override this method to make modifications to the builder used to create this logger.</em>
+<a class="jxr_linenumber" name="L728" href="#L728">728</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> <em class="jxr_javadoccomment">	 * @param beanStore The bean store containing injectable beans for this logger.</em>
+<a class="jxr_linenumber" name="L730" href="#L730">730</a> <em class="jxr_javadoccomment">	 * @return A new builder object.</em>
+<a class="jxr_linenumber" name="L731" href="#L731">731</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> 	<strong class="jxr_keyword">protected</strong> Builder init(<a name="BeanStore" href="../../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore) {
+<a class="jxr_linenumber" name="L733" href="#L733">733</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder(beanStore).logger(beanStore.getBean(Logger.<strong class="jxr_keyword">class</strong>).orElse(<strong class="jxr_keyword">null</strong>)).thrownStore(beanStore.getBean(ThrownStore.<strong class="jxr_keyword">class</strong>).orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L734" href="#L734">734</a> 	}
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> 
+<a class="jxr_linenumber" name="L736" href="#L736">736</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if debug is enabled on this request.</em>
 <a class="jxr_linenumber" name="L738" href="#L738">738</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L739" href="#L739">739</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L740" href="#L740">740</a> <em class="jxr_javadoccomment">	 * This method can be overridden to provide specialized logic for determining whether debug mode is enabled on a request.</em>
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> <em class="jxr_javadoccomment">	 * Looks for the request attribute &lt;js&gt;"Debug"&lt;/js&gt; to determine whether debug is enabled.</em>
 <a class="jxr_linenumber" name="L741" href="#L741">741</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L742" href="#L742">742</a> <em class="jxr_javadoccomment">	 * @param req The HTTP request being logged.</em>
-<a class="jxr_linenumber" name="L743" href="#L743">743</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if debug is enabled on this request.</em>
-<a class="jxr_linenumber" name="L744" href="#L744">744</a> <em class="jxr_javadoccomment">	 * @see org.apache.juneau.rest.RestContext.Builder#debugEnablement()</em>
-<a class="jxr_linenumber" name="L745" href="#L745">745</a> <em class="jxr_javadoccomment">	 * @see Rest#debug()</em>
-<a class="jxr_linenumber" name="L746" href="#L746">746</a> <em class="jxr_javadoccomment">	 * @see RestOp#debug()</em>
-<a class="jxr_linenumber" name="L747" href="#L747">747</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L748" href="#L748">748</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> isDebug(HttpServletRequest req) {
-<a class="jxr_linenumber" name="L749" href="#L749">749</a> 		<strong class="jxr_keyword">return</strong> firstNonNull(castOrNull(req.getAttribute(<span class="jxr_string">"Debug"</span>), Boolean.<strong class="jxr_keyword">class</strong>), false);
-<a class="jxr_linenumber" name="L750" href="#L750">750</a> 	}
-<a class="jxr_linenumber" name="L751" href="#L751">751</a> 
-<a class="jxr_linenumber" name="L752" href="#L752">752</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L753" href="#L753">753</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if logging is enabled for this request.</em>
-<a class="jxr_linenumber" name="L754" href="#L754">754</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L755" href="#L755">755</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L756" href="#L756">756</a> <em class="jxr_javadoccomment">	 * Uses the enabled and enabled-test settings on the matched rule and this logger to determine whether a REST</em>
-<a class="jxr_linenumber" name="L757" href="#L757">757</a> <em class="jxr_javadoccomment">	 * call should be logged.</em>
-<a class="jxr_linenumber" name="L758" href="#L758">758</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L759" href="#L759">759</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L760" href="#L760">760</a> <em class="jxr_javadoccomment">	 * This method can be overridden to provide specialized logic for determining whether a REST call should be logged.</em>
+<a class="jxr_linenumber" name="L742" href="#L742">742</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L743" href="#L743">743</a> <em class="jxr_javadoccomment">	 * This method can be overridden to provide specialized logic for determining whether debug mode is enabled on a request.</em>
+<a class="jxr_linenumber" name="L744" href="#L744">744</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> <em class="jxr_javadoccomment">	 * @param req The HTTP request being logged.</em>
+<a class="jxr_linenumber" name="L746" href="#L746">746</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if debug is enabled on this request.</em>
+<a class="jxr_linenumber" name="L747" href="#L747">747</a> <em class="jxr_javadoccomment">	 * @see org.apache.juneau.rest.RestContext.Builder#debugEnablement()</em>
+<a class="jxr_linenumber" name="L748" href="#L748">748</a> <em class="jxr_javadoccomment">	 * @see Rest#debug()</em>
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> <em class="jxr_javadoccomment">	 * @see RestOp#debug()</em>
+<a class="jxr_linenumber" name="L750" href="#L750">750</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L751" href="#L751">751</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> isDebug(HttpServletRequest req) {
+<a class="jxr_linenumber" name="L752" href="#L752">752</a> 		<strong class="jxr_keyword">return</strong> firstNonNull(castOrNull(req.getAttribute(<span class="jxr_string">"Debug"</span>), Boolean.<strong class="jxr_keyword">class</strong>), false);
+<a class="jxr_linenumber" name="L753" href="#L753">753</a> 	}
+<a class="jxr_linenumber" name="L754" href="#L754">754</a> 
+<a class="jxr_linenumber" name="L755" href="#L755">755</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if logging is enabled for this request.</em>
+<a class="jxr_linenumber" name="L757" href="#L757">757</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> <em class="jxr_javadoccomment">	 * Uses the enabled and enabled-test settings on the matched rule and this logger to determine whether a REST</em>
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> <em class="jxr_javadoccomment">	 * call should be logged.</em>
 <a class="jxr_linenumber" name="L761" href="#L761">761</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L762" href="#L762">762</a> <em class="jxr_javadoccomment">	 * @param rule The first matching rule.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L763" href="#L763">763</a> <em class="jxr_javadoccomment">	 * @param req The HTTP request.</em>
-<a class="jxr_linenumber" name="L764" href="#L764">764</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if logging is enabled for this request.</em>
-<a class="jxr_linenumber" name="L765" href="#L765">765</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L766" href="#L766">766</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> isEnabled(<a name="CallLoggerRule" href="../../../../../org/apache/juneau/rest/logger/CallLoggerRule.html#CallLoggerRule">CallLoggerRule</a> rule, HttpServletRequest req) {
-<a class="jxr_linenumber" name="L767" href="#L767">767</a> 		<strong class="jxr_keyword">var</strong> enabled = firstNonNull(rule.getEnabled(), <strong class="jxr_keyword">this</strong>.enabled);
-<a class="jxr_linenumber" name="L768" href="#L768">768</a> 		<strong class="jxr_keyword">var</strong> enabledTest = firstNonNull(rule.getEnabledTest(), <strong class="jxr_keyword">this</strong>.enabledTest);
-<a class="jxr_linenumber" name="L769" href="#L769">769</a> 		<strong class="jxr_keyword">return</strong> enabled.isEnabled(enabledTest.test(req));
-<a class="jxr_linenumber" name="L770" href="#L770">770</a> 	}
-<a class="jxr_linenumber" name="L771" href="#L771">771</a> 
-<a class="jxr_linenumber" name="L772" href="#L772">772</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L773" href="#L773">773</a> <em class="jxr_javadoccomment">	 * Logs the specified message to the logger.</em>
-<a class="jxr_linenumber" name="L774" href="#L774">774</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L775" href="#L775">775</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L776" href="#L776">776</a> <em class="jxr_javadoccomment">	 * Subclasses can override this method to capture messages being sent to the logger and handle it differently.</em>
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> <em class="jxr_javadoccomment">	 * This method can be overridden to provide specialized logic for determining whether a REST call should be logged.</em>
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> <em class="jxr_javadoccomment">	 * @param rule The first matching rule.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L766" href="#L766">766</a> <em class="jxr_javadoccomment">	 * @param req The HTTP request.</em>
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if logging is enabled for this request.</em>
+<a class="jxr_linenumber" name="L768" href="#L768">768</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L769" href="#L769">769</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> isEnabled(<a name="CallLoggerRule" href="../../../../../org/apache/juneau/rest/logger/CallLoggerRule.html#CallLoggerRule">CallLoggerRule</a> rule, HttpServletRequest req) {
+<a class="jxr_linenumber" name="L770" href="#L770">770</a> 		<strong class="jxr_keyword">var</strong> enabled = firstNonNull(rule.getEnabled(), <strong class="jxr_keyword">this</strong>.enabled);
+<a class="jxr_linenumber" name="L771" href="#L771">771</a> 		<strong class="jxr_keyword">var</strong> enabledTest = firstNonNull(rule.getEnabledTest(), <strong class="jxr_keyword">this</strong>.enabledTest);
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> 		<strong class="jxr_keyword">return</strong> enabled.isEnabled(enabledTest.test(req));
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> 	}
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> 
+<a class="jxr_linenumber" name="L775" href="#L775">775</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L776" href="#L776">776</a> <em class="jxr_javadoccomment">	 * Logs the specified message to the logger.</em>
 <a class="jxr_linenumber" name="L777" href="#L777">777</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L778" href="#L778">778</a> <em class="jxr_javadoccomment">	 * @param level The log level.</em>
-<a class="jxr_linenumber" name="L779" href="#L779">779</a> <em class="jxr_javadoccomment">	 * @param msg The log message.</em>
-<a class="jxr_linenumber" name="L780" href="#L780">780</a> <em class="jxr_javadoccomment">	 * @param e The exception.</em>
-<a class="jxr_linenumber" name="L781" href="#L781">781</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L782" href="#L782">782</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> log(Level level, String msg, Throwable e) {
-<a class="jxr_linenumber" name="L783" href="#L783">783</a> 		getLogger().log(level, msg, e);
-<a class="jxr_linenumber" name="L784" href="#L784">784</a> 	}
-<a class="jxr_linenumber" name="L785" href="#L785">785</a> }
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L779" href="#L779">779</a> <em class="jxr_javadoccomment">	 * Subclasses can override this method to capture messages being sent to the logger and handle it differently.</em>
+<a class="jxr_linenumber" name="L780" href="#L780">780</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> <em class="jxr_javadoccomment">	 * @param level The log level.</em>
+<a class="jxr_linenumber" name="L782" href="#L782">782</a> <em class="jxr_javadoccomment">	 * @param msg The log message.</em>
+<a class="jxr_linenumber" name="L783" href="#L783">783</a> <em class="jxr_javadoccomment">	 * @param e The exception.</em>
+<a class="jxr_linenumber" name="L784" href="#L784">784</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> log(Level level, String msg, Throwable e) {
+<a class="jxr_linenumber" name="L786" href="#L786">786</a> 		getLogger().log(level, msg, e);
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> 	}
+<a class="jxr_linenumber" name="L788" href="#L788">788</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

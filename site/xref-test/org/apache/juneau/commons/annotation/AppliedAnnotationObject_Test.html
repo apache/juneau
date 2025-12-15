@@ -959,7 +959,7 @@
 <a class="jxr_linenumber" name="L951" href="#L951">951</a> 		<strong class="jxr_keyword">void</strong> k01_withTargets() {
 <a class="jxr_linenumber" name="L952" href="#L952">952</a> 			<strong class="jxr_keyword">var</strong> a = TAO.create().on(<span class="jxr_string">"target1"</span>, <span class="jxr_string">"target2"</span>).value(<span class="jxr_string">"test"</span>).build();
 <a class="jxr_linenumber" name="L953" href="#L953">953</a> 
-<a class="jxr_linenumber" name="L954" href="#L954">954</a> 			<strong class="jxr_keyword">var</strong> map = ((TAO)a).toMap();
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> 			<strong class="jxr_keyword">var</strong> map = ((TAO)a).propertyMap();
 <a class="jxr_linenumber" name="L955" href="#L955">955</a> 			assertBean(map, <span class="jxr_string">"on,value"</span>, <span class="jxr_string">"[target1,target2],test"</span>);
 <a class="jxr_linenumber" name="L956" href="#L956">956</a> 		}
 <a class="jxr_linenumber" name="L957" href="#L957">957</a> 	}
