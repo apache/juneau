@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -36,8 +35,8 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
@@ -2551,9 +2550,12 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	}
 
 	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		return filteredMap().append("defaultRequestFormData", defaultRequestFormData).append("defaultRequestHeaders", defaultRequestHeaders).append("defaultRequestQueryData", defaultRequestQueryData)
-			.append("httpMethod", httpMethod);
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("defaultRequestFormData", defaultRequestFormData)
+			.a("defaultRequestHeaders", defaultRequestHeaders)
+			.a("defaultRequestQueryData", defaultRequestQueryData)
+			.a("httpMethod", httpMethod);
 	}
 
 	RestConverter[] getConverters() { return converters; }

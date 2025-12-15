@@ -16,15 +16,14 @@
  */
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.utils.*;
@@ -767,8 +766,9 @@ public class OutputStreamSerializer extends Serializer {
 	 */
 	protected final BinaryFormat getBinaryFormat() { return binaryFormat; }
 
-	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		return filteredMap("binaryFormat", binaryFormat);
+	@Override /* Overridden from Serializer */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("binaryFormat", binaryFormat);
 	}
 }

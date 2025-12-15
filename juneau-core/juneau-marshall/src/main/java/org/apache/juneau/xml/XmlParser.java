@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -31,6 +30,7 @@ import javax.xml.stream.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.parser.*;
@@ -887,15 +887,13 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	 */
 	protected final boolean isValidating() { return validating; }
 
-	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		// @formatter:off
-		return filteredMap()
-			.append("validating", validating)
-			.append("preserveRootElement", preserveRootElement)
-			.append("reporter", reporter)
-			.append("resolver", resolver)
-			.append("eventAllocator", eventAllocator);
-		// @formatter:on
+	@Override /* Overridden from ReaderParser */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("validating", validating)
+			.a("preserveRootElement", preserveRootElement)
+			.a("reporter", reporter)
+			.a("resolver", resolver)
+			.a("eventAllocator", eventAllocator);
 	}
 }

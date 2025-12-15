@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.html;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -28,8 +27,8 @@ import java.util.function.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.svl.*;
@@ -1842,23 +1841,21 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 */
 	protected final boolean isNowrap() { return nowrap; }
 
-	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		// @formatter:off
-		return filteredMap()
-			.append("header", header)
-			.append("nav", nav)
-			.append("navlinks", navlinks)
-			.append("aside", aside)
-			.append("asideFloat", asideFloat)
-			.append("footer", footer)
-			.append("style", style)
-			.append("head", head)
-			.append("stylesheet", stylesheet)
-			.append("nowrap", nowrap)
-			.append("template", template)
-			.append("noResultsMessage", noResultsMessage)
-			.append("widgets", widgets);
-		// @formatter:on
+	@Override /* Overridden from HtmlSerializer */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("header", header)
+			.a("nav", nav)
+			.a("navlinks", navlinks)
+			.a("aside", aside)
+			.a("asideFloat", asideFloat)
+			.a("footer", footer)
+			.a("style", style)
+			.a("head", head)
+			.a("stylesheet", stylesheet)
+			.a("nowrap", nowrap)
+			.a("template", template)
+			.a("noResultsMessage", noResultsMessage)
+			.a("widgets", widgets);
 	}
 }

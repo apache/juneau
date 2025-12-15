@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.msgpack;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -24,8 +23,8 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.serializer.*;
@@ -819,8 +818,9 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	@Override
 	protected final boolean isAddBeanTypes() { return addBeanTypesMsgPack || super.isAddBeanTypes(); }
 
-	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		return filteredMap("addBeanTypesMsgPack", addBeanTypesMsgPack);
+	@Override /* Overridden from OutputStreamSerializer */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("addBeanTypesMsgPack", addBeanTypesMsgPack);
 	}
 }

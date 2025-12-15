@@ -18,7 +18,6 @@ package org.apache.juneau.rest.client;
 
 import static java.lang.Character.isWhitespace;
 import static java.util.logging.Level.*;
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StateEnum.*;
@@ -69,6 +68,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.cp.*;
@@ -7783,21 +7783,19 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 	}
 
-	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		// @formatter:off
-		return filteredMap()
-			.append("errorCodes", errorCodes)
-			.append("executorService", executorService)
-			.append("executorServiceShutdownOnClose", executorServiceShutdownOnClose)
-			.append("headerData", headerData)
-			.append("interceptors", interceptors)
-			.append("keepHttpClientOpen", keepHttpClientOpen)
-			.append("partParser", partParser)
-			.append("partSerializer", partSerializer)
-			.append("queryData", queryData)
-			.append("rootUrl", rootUrl);
-		// @formatter:on
+	@Override /* Overridden from BeanContextable */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("errorCodes", errorCodes)
+			.a("executorService", executorService)
+			.a("executorServiceShutdownOnClose", executorServiceShutdownOnClose)
+			.a("headerData", headerData)
+			.a("interceptors", interceptors)
+			.a("keepHttpClientOpen", keepHttpClientOpen)
+			.a("partParser", partParser)
+			.a("partSerializer", partSerializer)
+			.a("queryData", queryData)
+			.a("rootUrl", rootUrl);
 	}
 
 	/**

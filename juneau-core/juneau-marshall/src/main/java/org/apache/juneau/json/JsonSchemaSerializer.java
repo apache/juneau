@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.json;
 
-import static org.apache.juneau.collections.JsonMap.*;
-
 import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -25,8 +23,8 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.jsonschema.*;
@@ -1027,9 +1025,10 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 	@Override /* Overridden from Context */
 	public JsonSchemaSerializerSession getSession() { return createSession().build(); }
 
-	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		return filteredMap("generator", generator);
+	@Override /* Overridden from JsonSerializer */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("generator", generator);
 	}
 
 	JsonSchemaGenerator getGenerator() { return generator; }

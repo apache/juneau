@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -25,8 +24,8 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.uon.*;
@@ -1051,8 +1050,9 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	 */
 	protected final boolean isExpandedParams() { return expandedParams; }
 
-	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		return filteredMap("expandedParams", expandedParams);
+	@Override /* Overridden from UonSerializer */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("expandedParams", expandedParams);
 	}
 }

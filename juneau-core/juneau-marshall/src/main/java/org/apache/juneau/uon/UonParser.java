@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.uon;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -26,8 +25,8 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.httppart.*;
@@ -857,8 +856,10 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 */
 	protected final boolean isValidateEnd() { return validateEnd; }
 
-	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		return filteredMap("decoding", decoding, "validateEnd", validateEnd);
+	@Override /* Overridden from ReaderParser */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("decoding", decoding)
+			.a("validateEnd", validateEnd);
 	}
 }

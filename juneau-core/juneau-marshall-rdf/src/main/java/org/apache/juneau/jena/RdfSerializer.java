@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -26,8 +25,8 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.jena.annotation.*;
@@ -2036,21 +2035,19 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	 */
 	protected final boolean isUseXmlNamespaces() { return useXmlNamespaces; }
 
-	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		// @formatter:off
-		return filteredMap()
-			.append("addLiteralTypes", addLiteralTypes)
-			.append("addRootProperty", addRootProperty)
-			.append("useXmlNamespaces", useXmlNamespaces)
-			.append("looseCollections", looseCollections)
-			.append("autoDetectNamespaces", autoDetectNamespaces)
-			.append("language", language)
-			.append("juneauNs", juneauNs)
-			.append("juneauBpNs", juneauBpNs)
-			.append("collectionFormat", collectionFormat)
-			.append("namespaces", namespaces)
-			.append("addBeanTypes", addBeanTypes);
-		// @formatter:on
+	@Override /* Overridden from WriterSerializer */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("addLiteralTypes", addLiteralTypes)
+			.a("addRootProperty", addRootProperty)
+			.a("useXmlNamespaces", useXmlNamespaces)
+			.a("looseCollections", looseCollections)
+			.a("autoDetectNamespaces", autoDetectNamespaces)
+			.a("language", language)
+			.a("juneauNs", juneauNs)
+			.a("juneauBpNs", juneauBpNs)
+			.a("collectionFormat", collectionFormat)
+			.a("namespaces", namespaces)
+			.a("addBeanTypes", addBeanTypes);
 	}
 }

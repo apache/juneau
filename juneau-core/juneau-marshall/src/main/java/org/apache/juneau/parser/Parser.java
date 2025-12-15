@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -31,6 +30,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.html.*;
@@ -1409,16 +1409,14 @@ public class Parser extends BeanContextable {
 	 */
 	protected final boolean isUnbuffered() { return unbuffered; }
 
-	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		// @formatter:off
-		return filteredMap()
-			.append("autoCloseStreams", autoCloseStreams)
-			.append("debugOutputLines", debugOutputLines)
-			.append("listener", listener)
-			.append("strict", strict)
-			.append("trimStrings", trimStrings)
-			.append("unbuffered", unbuffered);
-		// @formatter:on
+	@Override /* Overridden from BeanContextable */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("autoCloseStreams", autoCloseStreams)
+			.a("debugOutputLines", debugOutputLines)
+			.a("listener", listener)
+			.a("strict", strict)
+			.a("trimStrings", trimStrings)
+			.a("unbuffered", unbuffered);
 	}
 }

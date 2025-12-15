@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -26,8 +25,8 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.*;
@@ -1331,16 +1330,14 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	 */
 	protected final boolean isEnableNamespaces() { return enableNamespaces; }
 
-	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		// @formatter:off
-		return filteredMap()
-			.append("autoDetectNamespaces", autoDetectNamespaces)
-			.append("enableNamespaces", enableNamespaces)
-			.append("addNamespaceUrlsToRoot", addNamespaceUrlsToRoot)
-			.append("defaultNamespace", defaultNamespace)
-			.append("namespaces", namespaces)
-			.append("addBeanTypes", addBeanTypes);
-		// @formatter:on
+	@Override /* Overridden from WriterSerializer */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("autoDetectNamespaces", autoDetectNamespaces)
+			.a("enableNamespaces", enableNamespaces)
+			.a("addNamespaceUrlsToRoot", addNamespaceUrlsToRoot)
+			.a("defaultNamespace", defaultNamespace)
+			.a("namespaces", namespaces)
+			.a("addBeanTypes", addBeanTypes);
 	}
 }

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.beans.*;
@@ -27,8 +26,8 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.reflect.Visibility;
@@ -2975,7 +2974,8 @@ public abstract class BeanContextable extends Context {
 	public BeanContext getBeanContext() { return beanContext; }
 
 	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		return filteredMap("beanContext", beanContext.properties());
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("beanContext", beanContext.properties());
 	}
 }

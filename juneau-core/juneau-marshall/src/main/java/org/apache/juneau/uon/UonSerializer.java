@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.uon;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -25,8 +24,8 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.httppart.*;
@@ -1192,8 +1191,11 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 */
 	protected final boolean isEncoding() { return encoding; }
 
-	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		return filteredMap("encoding", encoding, "addBeanTypes", addBeanTypes, "paramFormat", paramFormat);
+	@Override /* Overridden from WriterSerializer */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("encoding", encoding)
+			.a("addBeanTypes", addBeanTypes)
+			.a("paramFormat", paramFormat);
 	}
 }

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.html;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -25,8 +24,8 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.html.annotation.*;
@@ -1550,16 +1549,14 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	 */
 	protected final boolean isDetectLinksInStrings() { return detectLinksInStrings; }
 
-	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		// @formatter:off
-		return filteredMap()
-			.append("addBeanTypesHtml", addBeanTypesHtml)
-			.append("addKeyValueTableHeaders", addKeyValueTableHeaders)
-			.append("detectLabelParameters", detectLabelParameters)
-			.append("detectLinksInStrings", detectLinksInStrings)
-			.append("labelParameter", labelParameter)
-			.append("uriAnchorText", uriAnchorText);
-		// @formatter:on
+	@Override /* Overridden from XmlSerializer */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("addBeanTypesHtml", addBeanTypesHtml)
+			.a("addKeyValueTableHeaders", addKeyValueTableHeaders)
+			.a("detectLabelParameters", detectLabelParameters)
+			.a("detectLinksInStrings", detectLinksInStrings)
+			.a("labelParameter", labelParameter)
+			.a("uriAnchorText", uriAnchorText);
 	}
 }

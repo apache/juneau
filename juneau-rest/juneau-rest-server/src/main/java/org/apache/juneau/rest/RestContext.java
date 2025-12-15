@@ -18,7 +18,6 @@ package org.apache.juneau.rest;
 
 import static jakarta.servlet.http.HttpServletResponse.*;
 import static java.util.Collections.*;
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
@@ -45,8 +44,8 @@ import java.util.stream.*;
 import org.apache.http.Header;
 import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.Swagger;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.config.*;
@@ -6105,31 +6104,29 @@ public class RestContext extends Context {
 	}
 
 	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		// @formatter:off
-		return filteredMap()
-			.append("allowContentParam", allowContentParam)
-			.append("allowedMethodHeader", allowedMethodHeaders)
-			.append("allowedMethodParams", allowedMethodParams)
-			.append("allowedHeaderParams", allowedHeaderParams)
-			.append("beanStore", beanStore)
-			.append("clientVersionHeader", clientVersionHeader)
-			.append("consumes", consumes)
-			.append("defaultRequestHeaders", defaultRequestHeaders)
-			.append("defaultResponseHeaders", defaultResponseHeaders)
-			.append("restOpArgs", restOpArgs)
-			.append("partParser", partParser)
-			.append("partSerializer", partSerializer)
-			.append("produces", produces)
-			.append("renderResponseStackTraces", renderResponseStackTraces)
-			.append("responseProcessors", responseProcessors)
-			.append("staticFiles", staticFiles)
-			.append("swaggerProvider", swaggerProvider)
-			.append("uriAuthority", uriAuthority)
-			.append("uriContext", uriContext)
-			.append("uriRelativity", uriRelativity)
-			.append("uriResolution", uriResolution);
-		// @formatter:on
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("allowContentParam", allowContentParam)
+			.a("allowedMethodHeader", allowedMethodHeaders)
+			.a("allowedMethodParams", allowedMethodParams)
+			.a("allowedHeaderParams", allowedHeaderParams)
+			.a("beanStore", beanStore)
+			.a("clientVersionHeader", clientVersionHeader)
+			.a("consumes", consumes)
+			.a("defaultRequestHeaders", defaultRequestHeaders)
+			.a("defaultResponseHeaders", defaultResponseHeaders)
+			.a("restOpArgs", restOpArgs)
+			.a("partParser", partParser)
+			.a("partSerializer", partSerializer)
+			.a("produces", produces)
+			.a("renderResponseStackTraces", renderResponseStackTraces)
+			.a("responseProcessors", responseProcessors)
+			.a("staticFiles", staticFiles)
+			.a("swaggerProvider", swaggerProvider)
+			.a("uriAuthority", uriAuthority)
+			.a("uriContext", uriContext)
+			.a("uriRelativity", uriRelativity)
+			.a("uriResolution", uriResolution);
 	}
 
 	/**

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.jsonschema;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -31,6 +30,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.*;
@@ -981,18 +981,16 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 */
 	protected final boolean isUseBeanDefs() { return useBeanDefs; }
 
-	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		// @formatter:off
-		return filteredMap()
-			.append("useBeanDefs", useBeanDefs)
-			.append("allowNestedExamples", allowNestedExamples)
-			.append("allowNestedDescriptions", allowNestedDescriptions)
-			.append("beanDefMapper", beanDefMapper)
-			.append("addExamplesTo", addExamplesTo)
-			.append("addDescriptionsTo", addDescriptionsTo)
-			.append("ignoreTypes", ignoreTypes);
-		// @formatter:on
+	@Override /* Overridden from BeanTraverseContext */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("useBeanDefs", useBeanDefs)
+			.a("allowNestedExamples", allowNestedExamples)
+			.a("allowNestedDescriptions", allowNestedDescriptions)
+			.a("beanDefMapper", beanDefMapper)
+			.a("addExamplesTo", addExamplesTo)
+			.a("addDescriptionsTo", addDescriptionsTo)
+			.a("ignoreTypes", ignoreTypes);
 	}
 
 	JsonParser getJsonParser() { return jsonParser; }

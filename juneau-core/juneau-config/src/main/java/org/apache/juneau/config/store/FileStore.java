@@ -18,7 +18,6 @@ package org.apache.juneau.config.store;
 
 import static java.nio.file.StandardOpenOption.*;
 import static java.nio.file.StandardWatchEventKinds.*;
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.FileUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -34,8 +33,8 @@ import java.nio.file.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.utils.*;
 
 /**
@@ -581,9 +580,12 @@ public class FileStore extends ConfigStore {
 		}
 	}
 
-	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		return filteredMap("charset", charset, "extensions", extensions, "updateOnWrite", updateOnWrite);
+	@Override /* Overridden from ConfigStore */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("charset", charset)
+			.a("extensions", extensions)
+			.a("updateOnWrite", updateOnWrite);
 	}
 
 	@Override

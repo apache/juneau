@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -25,8 +24,8 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.jena.annotation.*;
@@ -1597,16 +1596,14 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	 */
 	protected final boolean isTrimWhitespace() { return trimWhitespace; }
 
-	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		// @formatter:off
-		return filteredMap()
-			.append("collectionFormat", collectionFormat)
-			.append("juneauBpNs", juneauBpNs)
-			.append("juneauNs", juneauNs)
-			.append("language", language)
-			.append("looseCollections", looseCollections)
-			.append("trimWhitespace", trimWhitespace);
-		// @formatter:on
+	@Override /* Overridden from ReaderParser */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("collectionFormat", collectionFormat)
+			.a("juneauBpNs", juneauBpNs)
+			.a("juneauNs", juneauNs)
+			.a("language", language)
+			.a("looseCollections", looseCollections)
+			.a("trimWhitespace", trimWhitespace);
 	}
 }

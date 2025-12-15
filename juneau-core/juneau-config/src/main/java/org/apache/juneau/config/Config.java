@@ -31,6 +31,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.internal.*;
@@ -1107,6 +1108,21 @@ public class Config extends Context implements ConfigEventListener {
 	 */
 	public JsonMap toMap() {
 		return configMap.asMap();
+	}
+
+	@Override /* Overridden from Context */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("name", name)
+			.a("store", store)
+			.a("serializer", serializer)
+			.a("parser", parser)
+			.a("mods", mods)
+			.a("varResolver", varResolver)
+			.a("binaryLineLength", binaryLineLength)
+			.a("binaryFormat", binaryFormat)
+			.a("multiLineValuesOnSeparateLines", multiLineValuesOnSeparateLines)
+			.a("readOnly", readOnly);
 	}
 
 	@Override /* Overridden from Object */

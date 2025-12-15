@@ -16,7 +16,6 @@
  */
 package org.apache.juneau;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.reflect.Visibility.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
@@ -33,8 +32,8 @@ import java.util.concurrent.*;
 import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.reflect.Visibility;
@@ -4171,33 +4170,31 @@ public class BeanContext extends Context {
 	}
 
 	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		// @formatter:off
-		return filteredMap()
-			.append("id", System.identityHashCode(this))
-			.append("beanClassVisibility", beanClassVisibility)
-			.append("beanConstructorVisibility", beanConstructorVisibility)
-			.append("beanDictionary", beanDictionary)
-			.append("beanFieldVisibility", beanFieldVisibility)
-			.append("beanMethodVisibility", beanMethodVisibility)
-			.append("beansRequireDefaultConstructor", beansRequireDefaultConstructor)
-			.append("beansRequireSerializable", beansRequireSerializable)
-			.append("beansRequireSettersForGetters", beansRequireSettersForGetters)
-			.append("beansRequireSomeProperties", beansRequireSomeProperties)
-			.append("ignoreTransientFields", ignoreTransientFields)
-			.append("ignoreInvocationExceptionsOnGetters", ignoreInvocationExceptionsOnGetters)
-			.append("ignoreInvocationExceptionsOnSetters", ignoreInvocationExceptionsOnSetters)
-			.append("ignoreUnknownBeanProperties", ignoreUnknownBeanProperties)
-			.append("ignoreUnknownNullBeanProperties", ignoreUnknownNullBeanProperties)
-			.append("notBeanClasses", notBeanClasses)
-			.append("notBeanPackageNames", notBeanPackageNames)
-			.append("notBeanPackagePrefixes", notBeanPackagePrefixes)
-			.append("swaps", swaps)
-			.append("sortProperties", sortProperties)
-			.append("useEnumNames", useEnumNames)
-			.append("useInterfaceProxies", useInterfaceProxies)
-			.append("useJavaBeanIntrospector", useJavaBeanIntrospector);
-		// @formatter:on
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("id", System.identityHashCode(this))
+			.a("beanClassVisibility", beanClassVisibility)
+			.a("beanConstructorVisibility", beanConstructorVisibility)
+			.a("beanDictionary", beanDictionary)
+			.a("beanFieldVisibility", beanFieldVisibility)
+			.a("beanMethodVisibility", beanMethodVisibility)
+			.a("beansRequireDefaultConstructor", beansRequireDefaultConstructor)
+			.a("beansRequireSerializable", beansRequireSerializable)
+			.a("beansRequireSettersForGetters", beansRequireSettersForGetters)
+			.a("beansRequireSomeProperties", beansRequireSomeProperties)
+			.a("ignoreTransientFields", ignoreTransientFields)
+			.a("ignoreInvocationExceptionsOnGetters", ignoreInvocationExceptionsOnGetters)
+			.a("ignoreInvocationExceptionsOnSetters", ignoreInvocationExceptionsOnSetters)
+			.a("ignoreUnknownBeanProperties", ignoreUnknownBeanProperties)
+			.a("ignoreUnknownNullBeanProperties", ignoreUnknownNullBeanProperties)
+			.a("notBeanClasses", notBeanClasses)
+			.a("notBeanPackageNames", notBeanPackageNames)
+			.a("notBeanPackagePrefixes", notBeanPackagePrefixes)
+			.a("swaps", swaps)
+			.a("sortProperties", sortProperties)
+			.a("useEnumNames", useEnumNames)
+			.a("useInterfaceProxies", useInterfaceProxies)
+			.a("useJavaBeanIntrospector", useJavaBeanIntrospector);
 	}
 
 	/**

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -29,8 +28,8 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.soap.*;
@@ -1573,22 +1572,20 @@ public class Serializer extends BeanTraverseContext {
 	 */
 	protected final boolean isTrimStrings() { return trimStrings; }
 
-	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		// @formatter:off
-		return filteredMap()
-			.append("addBeanTypes", addBeanTypes)
-			.append("keepNullProperties", keepNullProperties)
-			.append("trimEmptyCollections", trimEmptyCollections)
-			.append("trimEmptyMaps", trimEmptyMaps)
-			.append("trimStrings", trimStrings)
-			.append("sortCollections", sortCollections)
-			.append("sortMaps", sortMaps)
-			.append("addRootType", addRootType)
-			.append("uriContext", uriContext)
-			.append("uriResolution", uriResolution)
-			.append("uriRelativity", uriRelativity)
-			.append("listener", listener);
-		// @formatter:on
+	@Override /* Overridden from BeanTraverseContext */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("addBeanTypes", addBeanTypes)
+			.a("keepNullProperties", keepNullProperties)
+			.a("trimEmptyCollections", trimEmptyCollections)
+			.a("trimEmptyMaps", trimEmptyMaps)
+			.a("trimStrings", trimStrings)
+			.a("sortCollections", sortCollections)
+			.a("sortMaps", sortMaps)
+			.a("addRootType", addRootType)
+			.a("uriContext", uriContext)
+			.a("uriResolution", uriResolution)
+			.a("uriRelativity", uriRelativity)
+			.a("listener", listener);
 	}
 }

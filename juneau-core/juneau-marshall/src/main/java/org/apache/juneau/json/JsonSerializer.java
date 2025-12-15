@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.json;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -25,8 +24,8 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.serializer.*;
@@ -1137,8 +1136,11 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 */
 	protected final boolean isSimpleAttrs() { return simpleAttrs; }
 
-	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		return filteredMap("simpleAttrs", simpleAttrs, "escapeSolidus", escapeSolidus, "addBeanTypesJson", addBeanTypesJson);
+	@Override /* Overridden from WriterSerializer */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("simpleAttrs", simpleAttrs)
+			.a("escapeSolidus", escapeSolidus)
+			.a("addBeanTypesJson", addBeanTypesJson);
 	}
 }

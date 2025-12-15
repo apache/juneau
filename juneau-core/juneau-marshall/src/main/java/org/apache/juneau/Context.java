@@ -16,7 +16,6 @@
  */
 package org.apache.juneau;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -27,13 +26,11 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.csv.annotation.*;
 import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.msgpack.annotation.*;
@@ -892,7 +889,7 @@ public abstract class Context {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return Utils2.toPropertyMap(this).asReadableString();
+		return r(properties());
 	}
 
 	/**
@@ -910,7 +907,9 @@ public abstract class Context {
 	 *
 	 * @return The properties on this bean as a map for debugging.
 	 */
-	protected JsonMap properties() {
-		return filteredMap("annotations", annotations, "debug", debug);
+	protected FluentMap<String,Object> properties() {
+		return mapb().filtered().sorted().buildFluent()
+			.a("annotations", annotations)
+			.a("debug", debug);
 	}
 }

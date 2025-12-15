@@ -27,6 +27,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.config.internal.*;
 import org.apache.juneau.utils.*;
 
@@ -273,5 +274,10 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 */
 	protected String resolveName(String name) {
 		return name;
+	}
+
+	@Override /* Overridden from Context */
+	protected FluentMap<String,Object> properties() {
+		return super.properties();
 	}
 }
