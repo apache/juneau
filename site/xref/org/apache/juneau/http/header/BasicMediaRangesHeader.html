@@ -111,7 +111,7 @@
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicMediaRangesHeader" href="../../../../../org/apache/juneau/http/header/BasicMediaRangesHeader.html#BasicMediaRangesHeader">BasicMediaRangesHeader</a>(String name, String value) {
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">super</strong>(name, value);
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">this</strong>.stringValue = value;
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		stringValue = value;
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">this</strong>.value = parse(value);
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">this</strong>.supplier = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 	}
@@ -132,7 +132,7 @@
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">super</strong>(name, (String)<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">this</strong>.stringValue = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">this</strong>.value = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">this</strong>.supplier = value;
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		supplier = value;
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 	}
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 	<em class="jxr_javadoccomment">/**</em>

@@ -303,7 +303,7 @@
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 * @return This object (for method chaining).</em>
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 	<strong class="jxr_keyword">public</strong> <a name="RequestQueryParams" href="../../../../../org/apache/juneau/rest/httppart/RequestQueryParams.html#RequestQueryParams">RequestQueryParams</a> caseSensitive(<strong class="jxr_keyword">boolean</strong> value) {
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<strong class="jxr_keyword">this</strong>.caseSensitive = value;
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		caseSensitive = value;
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 	}
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 
@@ -482,7 +482,7 @@
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L476" href="#L476">476</a> 	<strong class="jxr_keyword">public</strong> <a name="RequestQueryParams" href="../../../../../org/apache/juneau/rest/httppart/RequestQueryParams.html#RequestQueryParams">RequestQueryParams</a> parser(<a name="HttpPartParserSession" href="../../../../../org/apache/juneau/httppart/HttpPartParserSession.html#HttpPartParserSession">HttpPartParserSession</a> value) {
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 		<strong class="jxr_keyword">this</strong>.parser = value;
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 		parser = value;
 <a class="jxr_linenumber" name="L478" href="#L478">478</a> 		forEach(x -&gt; x.parser(parser));
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L480" href="#L480">480</a> 	}

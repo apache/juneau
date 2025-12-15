@@ -127,7 +127,7 @@
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">public</strong> Builder description(String...value) {
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			<strong class="jxr_keyword">this</strong>.description = value;
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			description = value;
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 		}
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 
@@ -138,7 +138,7 @@
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">public</strong> Builder def(String value) {
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			<strong class="jxr_keyword">this</strong>.def = value;
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			def = value;
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 		}
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 
@@ -149,7 +149,7 @@
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">public</strong> Builder name(String value) {
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			<strong class="jxr_keyword">this</strong>.name = value;
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			name = value;
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 		}
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 
@@ -160,7 +160,7 @@
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">public</strong> Builder parser(Class&lt;? <strong class="jxr_keyword">extends</strong> HttpPartParser&gt; value) {
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			<strong class="jxr_keyword">this</strong>.parser = value;
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			parser = value;
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 		}
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 
@@ -171,7 +171,7 @@
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">public</strong> Builder schema(Schema value) {
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">this</strong>.schema = value;
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			schema = value;
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 		}
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 
@@ -182,7 +182,7 @@
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">public</strong> Builder serializer(Class&lt;? <strong class="jxr_keyword">extends</strong> HttpPartSerializer&gt; value) {
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<strong class="jxr_keyword">this</strong>.serializer = value;
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			serializer = value;
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 		}
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 
