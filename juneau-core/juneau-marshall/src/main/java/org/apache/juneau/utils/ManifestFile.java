@@ -190,7 +190,7 @@ public class ManifestFile extends JsonMap {
 	@Override /* Overridden from Object */
 	public String toString() {
 		var sb = new StringBuilder();
-		forEach((k, v) -> sb.append(k).append(": ").append(v));
+		forEach((k, v) -> sb.append(k).append(": ").append(v).append("\n"));
 		return sb.toString();
 	}
 

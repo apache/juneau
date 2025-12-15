@@ -4120,47 +4120,45 @@ public class HttpPartSchema {
 	 */
 	public boolean isUniqueItems() { return uniqueItems; }
 
-	@Override
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		Predicate<Object> ne = x -> isNotEmpty(s(x));
+		Predicate<Object> nf = x -> x instanceof Boolean && (Boolean)x;
+		Predicate<Object> nm1 = x -> x instanceof Number && ((Number)x).intValue() != -1;
+		Predicate<Object> nn = Utils::nn;
+		return mapb_so().sorted().buildFluent()
+			.ai(ne, "name", name)
+			.ai(ne, "type", type)
+			.ai(ne, "format", format)
+			.ai(ne, "default", default_)
+			.ai(ne, "enum", enum_)
+			.ai(ne, "properties", properties)
+			.ai(nf, "allowEmptyValue", allowEmptyValue)
+			.ai(nf, "exclusiveMaximum", exclusiveMaximum)
+			.ai(nf, "exclusiveMinimum", exclusiveMinimum)
+			.ai(nf, "required", required)
+			.ai(nf, "uniqueItems", uniqueItems)
+			.ai(nf, "skipIfEmpty", skipIfEmpty)
+			.ai(x -> x != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat", collectionFormat)
+			.ai(ne, "pattern", pattern)
+			.ai(nn, "items", items)
+			.ai(nn, "additionalProperties", additionalProperties)
+			.ai(nm1, "maximum", maximum)
+			.ai(nm1, "minimum", minimum)
+			.ai(nm1, "multipleOf", multipleOf)
+			.ai(nm1, "maxLength", maxLength)
+			.ai(nm1, "minLength", minLength)
+			.ai(nm1, "maxItems", maxItems)
+			.ai(nm1, "minItems", minItems)
+			.ai(nm1, "maxProperties", maxProperties)
+			.ai(nm1, "minProperties", minProperties)
+			.a("parsedType", parsedType);
+		// @formatter:on
+	}
+
+	@Override /* Overridden from Object */
 	public String toString() {
-		try {
-			Predicate<Object> ne = x -> isNotEmpty(s(x));
-			Predicate<Boolean> nf = Utils::isTrue;
-			Predicate<Number> nm1 = Utils::isNotMinusOne;
-			Predicate<Object> nn = Utils::nn;
-			// @formatter:off
-			var m = new JsonMap()
-				.appendIf(ne, "name", name)
-				.appendIf(ne, "type", type)
-				.appendIf(ne, "format", format)
-				.appendIf(ne, "default", default_)
-				.appendIf(ne, "enum", enum_)
-				.appendIf(ne, "properties", properties)
-				.appendIf(nf, "allowEmptyValue", allowEmptyValue)
-				.appendIf(nf, "exclusiveMaximum", exclusiveMaximum)
-				.appendIf(nf, "exclusiveMinimum", exclusiveMinimum)
-				.appendIf(nf, "required", required)
-				.appendIf(nf, "uniqueItems", uniqueItems)
-				.appendIf(nf, "skipIfEmpty", skipIfEmpty)
-				.appendIf(x -> x != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat", collectionFormat)
-				.appendIf(ne, "pattern", pattern)
-				.appendIf(nn, "items", items)
-				.appendIf(nn, "additionalProperties", additionalProperties)
-				.appendIf(nm1, "maximum", maximum)
-				.appendIf(nm1, "minimum", minimum)
-				.appendIf(nm1, "multipleOf", multipleOf)
-				.appendIf(nm1, "maxLength", maxLength)
-				.appendIf(nm1, "minLength", minLength)
-				.appendIf(nm1, "maxItems", maxItems)
-				.appendIf(nm1, "minItems", minItems)
-				.appendIf(nm1, "maxProperties", maxProperties)
-				.appendIf(nm1, "minProperties", minProperties)
-				.append("parsedType", parsedType)
-			;
-			// @formatter:on
-			return m.toString();
-		} catch (@SuppressWarnings("unused") Exception e) {
-			return "";
-		}
+		return r(properties());
 	}
 
 	/**

@@ -1544,6 +1544,38 @@ public class Utils {
 	}
 
 	/**
+	 * Executes a supplier that may throw an exception and returns the result or a fallback value.
+	 *
+	 * <p>
+	 * If the supplier executes successfully, returns the result.
+	 * If the supplier throws any exception, applies the exception function to get a fallback value.
+	 *
+	 * <p>
+	 * This is useful for operations that may fail but you want to handle the failure
+	 * gracefully by returning a fallback value instead of throwing an exception.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get a value with a fallback if an exception occurs</jc>
+	 * 	<jk>String</jk> <jv>value</jv> = <jsm>safeCatch</jsm>(() -&gt; <jv>riskyOperation</jv>(), <jv>e</jv> -&gt; <js>"default"</js>);
+	 * </p>
+	 *
+	 * @param <T> The return type.
+	 * @param s The supplier that may throw an exception.
+	 * @param exceptionFunction A function that converts the thrown exception into a fallback value.
+	 * @return The result of the supplier execution, or the fallback value if an exception was thrown.
+	 * @see #safe(ThrowingSupplier)
+	 * @see #safeOptCatch(ThrowingSupplier, Function)
+	 */
+	public static <T> T safeCatch(ThrowingSupplier<T> s, Function<Throwable,T> exceptionFunction) {
+		try {
+			return s.get();
+		} catch (Throwable e) {
+			return exceptionFunction.apply(e);
+		}
+	}
+
+	/**
 	 * Executes a supplier that may throw an exception and returns an Optional.
 	 *
 	 * <p>
@@ -1573,6 +1605,39 @@ public class Utils {
 			return Optional.of(s.get());
 		} catch (@SuppressWarnings("unused") Exception e) {
 			return Optional.empty();
+		}
+	}
+
+	/**
+	 * Executes a supplier that may throw an exception and returns an Optional with the result or a fallback value.
+	 *
+	 * <p>
+	 * If the supplier executes successfully, returns {@link Optional#of(Object)} with the result.
+	 * If the supplier throws any exception, applies the exception function to get a fallback value and returns it wrapped in an Optional.
+	 *
+	 * <p>
+	 * This is useful for operations that may fail but you want to handle the failure
+	 * gracefully by returning a fallback value wrapped in an Optional instead of throwing an exception.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get a value with a fallback if an exception occurs</jc>
+	 * 	<jk>Optional</jk>&lt;<jk>String</jk>&gt; <jv>value</jv> = <jsm>safeOptCatch</jsm>(() -&gt; <jv>riskyOperation</jv>(), <jv>e</jv> -&gt; <js>"default"</js>);
+	 * </p>
+	 *
+	 * @param <T> The return type.
+	 * @param s The supplier that may throw an exception.
+	 * @param exceptionFunction A function that converts the thrown exception into a fallback value.
+	 * @return An Optional containing the result if successful, or the fallback value wrapped in an Optional if an exception was thrown.
+	 * @see #safeOpt(ThrowingSupplier)
+	 * @see #safeCatch(ThrowingSupplier, Function)
+	 * @see #opt(Object)
+	 */
+	public static <T> Optional<T> safeOptCatch(ThrowingSupplier<T> s, Function<Throwable,T> exceptionFunction) {
+		try {
+			return opt(s.get());
+		} catch (Throwable e) {
+			return opt(exceptionFunction.apply(e));
 		}
 	}
 

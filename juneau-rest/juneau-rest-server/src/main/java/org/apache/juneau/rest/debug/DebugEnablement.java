@@ -17,12 +17,13 @@
 package org.apache.juneau.rest.debug;
 
 import static org.apache.juneau.Enablement.*;
-import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
@@ -273,15 +274,18 @@ public abstract class DebugEnablement {
 		return e == ALWAYS || (e == CONDITIONAL && isConditionallyEnabled(req));
 	}
 
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		return filteredBeanPropertyMap()
+			.a("defaultEnablement", defaultEnablement)
+			.a("enablementMap", enablementMap)
+			.a("conditionalPredicate", conditionalPredicate);
+		// @formatter:on
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
-		// @formatter:off
-		return filteredMap()
-			.append("defaultEnablement", defaultEnablement)
-			.append("enablementMap", enablementMap)
-			.append("conditionalPredicate", conditionalPredicate)
-			.asString();
-		// @formatter:on
+		return r(properties());
 	}
 
 	/**

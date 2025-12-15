@@ -28,7 +28,6 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.http.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.*;
@@ -553,12 +552,16 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 		return new RequestPathParams(this, names);
 	}
 
+	protected FluentMap<String,Object> properties() {
+		var m = filteredBeanPropertyMap();
+		for (var n : getNames())
+			m.a(n, get(n).asString().orElse(null));
+		return m;
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
-		var m = new JsonMap();
-		for (var n : getNames())
-			m.put(n, get(n).asString().orElse(null));
-		return m.asJson();
+		return r(properties());
 	}
 
 	private boolean eq(String s1, String s2) {

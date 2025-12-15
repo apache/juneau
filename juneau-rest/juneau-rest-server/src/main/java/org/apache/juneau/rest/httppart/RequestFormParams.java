@@ -28,7 +28,6 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.http.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.*;
@@ -545,12 +544,18 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 		return new RequestFormParams(this, names);
 	}
 
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		var m = filteredBeanPropertyMap();
+		for (var n : getNames())
+			m.a(n, get(n).asString().orElse(null));
+		return m;
+		// @formatter:on
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
-		var m = new JsonMap();
-		for (var n : getNames())
-			m.put(n, get(n).asString().orElse(null));
-		return m.asJson();
+		return r(properties());
 	}
 
 	private boolean eq(String s1, String s2) {

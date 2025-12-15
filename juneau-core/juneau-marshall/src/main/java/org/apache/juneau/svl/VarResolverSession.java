@@ -430,9 +430,18 @@ public class VarResolverSession {
 		return out;
 	}
 
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		return filteredBeanPropertyMap()
+			.a("var", this.context.getVarMap().keySet())
+			.a("context.beanStore", this.context.beanStore)
+			.a("session.beanStore", beanStore);
+		// @formatter:on
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
-		return "var=" + this.context.getVarMap().keySet() + ", context.beanStore=" + this.context.beanStore + ", session.beanStore=" + beanStore;
+		return r(properties());
 	}
 
 	/**

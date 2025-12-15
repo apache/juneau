@@ -32,7 +32,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the @SerializerConfig annotation.
  */
-class SerializerConfigAnnotationTest extends TestBase {
+class SerializerConfigAnnotation_Test extends TestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));
@@ -79,7 +79,7 @@ class SerializerConfigAnnotationTest extends TestBase {
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);
 
-	@Test void basicWriterSerializer() {
+	@Test void a01_basicWriterSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
 		var x = JsonSerializer.create().apply(al).build().getSession();
 		check("true", ((SerializerSession)x).isAddBeanTypes());
@@ -97,13 +97,13 @@ class SerializerConfigAnnotationTest extends TestBase {
 		check("true", x.isTrimEmptyMaps());
 		check("false", x.isKeepNullProperties());
 		check("true", x.isTrimStrings());
-		check("{absoluteAuthority:'/',absoluteContextRoot:'/',absolutePathInfo:'/',absolutePathInfoParent:'/',absoluteServletPath:'/',absoluteServletPathParent:'/',rootRelativeContextRoot:'/',rootRelativePathInfo:'/',rootRelativePathInfoParent:'/',rootRelativeServletPath:'/',rootRelativeServletPathParent:'/'}", x.getUriContext());
+		check("{aContextRoot=/,aPathInfo=/,aServletPath=/,rContextRoot=/,rPath=/,rResource=/}", x.getUriContext());
 		check("RESOURCE", x.getUriRelativity());
 		check("ABSOLUTE", x.getUriResolution());
 		check("true", x.isUseWhitespace());
 	}
 
-	@Test void basicOutputStreamSerializer() {
+	@Test void a02_basicOutputStreamSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
 		var x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("true", ((SerializerSession)x).isAddBeanTypes());
@@ -120,7 +120,7 @@ class SerializerConfigAnnotationTest extends TestBase {
 		check("true", x.isTrimEmptyMaps());
 		check("false", x.isKeepNullProperties());
 		check("true", x.isTrimStrings());
-		check("{absoluteAuthority:'/',absoluteContextRoot:'/',absolutePathInfo:'/',absolutePathInfoParent:'/',absoluteServletPath:'/',absoluteServletPathParent:'/',rootRelativeContextRoot:'/',rootRelativePathInfo:'/',rootRelativePathInfoParent:'/',rootRelativeServletPath:'/',rootRelativeServletPathParent:'/'}", x.getUriContext());
+		check("{aContextRoot=/,aPathInfo=/,aServletPath=/,rContextRoot=/,rPath=/,rResource=/}", x.getUriContext());
 		check("RESOURCE", x.getUriRelativity());
 		check("ABSOLUTE", x.getUriResolution());
 	}
@@ -133,7 +133,7 @@ class SerializerConfigAnnotationTest extends TestBase {
 	static class B {}
 	static ClassInfo b = ClassInfo.of(B.class);
 
-	@Test void noValuesWriterSerializer() {
+	@Test void b01_noValuesWriterSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
 		var x = JsonSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
@@ -147,13 +147,13 @@ class SerializerConfigAnnotationTest extends TestBase {
 		check("false", x.isTrimEmptyMaps());
 		check("false", x.isKeepNullProperties());
 		check("false", x.isTrimStrings());
-		check("{absoluteAuthority:'/',absoluteContextRoot:'/',absolutePathInfo:'/',absolutePathInfoParent:'/',absoluteServletPath:'/',absoluteServletPathParent:'/',rootRelativeContextRoot:'/',rootRelativePathInfo:'/',rootRelativePathInfoParent:'/',rootRelativeServletPath:'/',rootRelativeServletPathParent:'/'}", x.getUriContext());
+		check("{aContextRoot=/,aPathInfo=/,aServletPath=/,rContextRoot=/,rPath=/,rResource=/}", x.getUriContext());
 		check("RESOURCE", x.getUriRelativity());
 		check("NONE", x.getUriResolution());
 		check("false", x.isUseWhitespace());
 	}
 
-	@Test void noValuesOutputStreamSerializer() {
+	@Test void b02_noValuesOutputStreamSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
 		var x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
@@ -166,7 +166,7 @@ class SerializerConfigAnnotationTest extends TestBase {
 		check("false", x.isTrimEmptyMaps());
 		check("false", x.isKeepNullProperties());
 		check("false", x.isTrimStrings());
-		check("{absoluteAuthority:'/',absoluteContextRoot:'/',absolutePathInfo:'/',absolutePathInfoParent:'/',absoluteServletPath:'/',absoluteServletPathParent:'/',rootRelativeContextRoot:'/',rootRelativePathInfo:'/',rootRelativePathInfoParent:'/',rootRelativeServletPath:'/',rootRelativeServletPathParent:'/'}", x.getUriContext());
+		check("{aContextRoot=/,aPathInfo=/,aServletPath=/,rContextRoot=/,rPath=/,rResource=/}", x.getUriContext());
 		check("RESOURCE", x.getUriRelativity());
 		check("NONE", x.getUriResolution());
 	}
@@ -178,7 +178,7 @@ class SerializerConfigAnnotationTest extends TestBase {
 	static class C {}
 	static ClassInfo c = ClassInfo.of(C.class);
 
-	@Test void noAnnotationWriterSerializer() {
+	@Test void c01_noAnnotationWriterSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
 		var x = JsonSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
@@ -192,13 +192,13 @@ class SerializerConfigAnnotationTest extends TestBase {
 		check("false", x.isTrimEmptyMaps());
 		check("false", x.isKeepNullProperties());
 		check("false", x.isTrimStrings());
-		check("{absoluteAuthority:'/',absoluteContextRoot:'/',absolutePathInfo:'/',absolutePathInfoParent:'/',absoluteServletPath:'/',absoluteServletPathParent:'/',rootRelativeContextRoot:'/',rootRelativePathInfo:'/',rootRelativePathInfoParent:'/',rootRelativeServletPath:'/',rootRelativeServletPathParent:'/'}", x.getUriContext());
+		check("{aContextRoot=/,aPathInfo=/,aServletPath=/,rContextRoot=/,rPath=/,rResource=/}", x.getUriContext());
 		check("RESOURCE", x.getUriRelativity());
 		check("NONE", x.getUriResolution());
 		check("false", x.isUseWhitespace());
 	}
 
-	@Test void noAnnotationOutputStreamSerializer() {
+	@Test void c02_noAnnotationOutputStreamSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
 		var x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
@@ -211,7 +211,7 @@ class SerializerConfigAnnotationTest extends TestBase {
 		check("false", x.isTrimEmptyMaps());
 		check("false", x.isKeepNullProperties());
 		check("false", x.isTrimStrings());
-		check("{absoluteAuthority:'/',absoluteContextRoot:'/',absolutePathInfo:'/',absolutePathInfoParent:'/',absoluteServletPath:'/',absoluteServletPathParent:'/',rootRelativeContextRoot:'/',rootRelativePathInfo:'/',rootRelativePathInfoParent:'/',rootRelativeServletPath:'/',rootRelativeServletPathParent:'/'}", x.getUriContext());
+		check("{aContextRoot=/,aPathInfo=/,aServletPath=/,rContextRoot=/,rPath=/,rResource=/}", x.getUriContext());
 		check("RESOURCE", x.getUriRelativity());
 		check("NONE", x.getUriResolution());
 	}

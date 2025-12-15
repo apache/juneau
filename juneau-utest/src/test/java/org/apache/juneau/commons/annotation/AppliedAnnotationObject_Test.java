@@ -951,7 +951,7 @@ class AppliedAnnotationObject_Test extends TestBase {
 		void k01_withTargets() {
 			var a = TAO.create().on("target1", "target2").value("test").build();
 
-			var map = ((TAO)a).toMap();
+			var map = ((TAO)a).propertyMap();
 			assertBean(map, "on,value", "[target1,target2],test");
 		}
 	}

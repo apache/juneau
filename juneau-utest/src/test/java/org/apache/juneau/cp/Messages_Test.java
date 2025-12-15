@@ -151,6 +151,6 @@ class Messages_Test extends TestBase {
 
 	@Test void a13_toString() {
 		var x = Messages.of(Test2.class);
-		assertString("{file:'Test2.properties',yyy:'bar'}", x);
+		assertString("{file=Test2.properties,yyy=bar}", x);
 	}
 }

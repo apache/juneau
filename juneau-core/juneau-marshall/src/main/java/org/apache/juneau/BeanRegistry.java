@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -25,6 +26,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
@@ -115,13 +117,15 @@ public class BeanRegistry {
 		return nn(getClassMeta(typeName));
 	}
 
+	protected FluentMap<String,Object> properties() {
+		var m = filteredBeanPropertyMap();
+		map.forEach((k, v) -> m.a(k, v.toString(true)));
+		return m;
+	}
+
 	@Override
 	public String toString() {
-		var sb = new StringBuilder();
-		sb.append('{');
-		map.forEach((k, v) -> sb.append(k).append(":").append(v.toString(true)).append(", "));
-		sb.append('}');
-		return sb.toString();
+		return r(properties());
 	}
 
 	private void addClass(Class<?> c) {

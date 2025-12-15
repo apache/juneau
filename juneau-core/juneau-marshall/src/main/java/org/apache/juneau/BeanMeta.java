@@ -748,13 +748,17 @@ public class BeanMeta<T> {
 		return beanFilter == null ? value : beanFilter.writeProperty(bean, name, value);
 	}
 
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		return filteredBeanPropertyMap()
+			.a("class", classMeta.getName())
+			.a("properties", properties);
+		// @formatter:on
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
-		var sb = new StringBuilder(classMeta.getName());
-		sb.append(" {\n");
-		properties.values().forEach(x -> sb.append('\t').append(x.toString()).append(",\n"));
-		sb.append('}');
-		return sb.toString();
+		return r(properties());
 	}
 
 	/**

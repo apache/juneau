@@ -16,13 +16,16 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import java.util.function.Supplier;
+
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -95,8 +98,8 @@ public class UriContext {
 	@SuppressWarnings("javadoc")
 	public final String authority, contextRoot, servletPath, pathInfo, parentPath;
 
-	// Lazy-initialized fields.
-	private String aContextRoot, rContextRoot, aServletPath, rResource, aPathInfo, rPath;
+	// Memoized suppliers.
+	private final Supplier<String> aContextRoot, rContextRoot, aServletPath, rResource, aPathInfo, rPath;
 
 	/**
 	 * Default constructor.
@@ -128,6 +131,12 @@ public class UriContext {
 		this.servletPath = nullIfEmpty(trimSlashes(m.getString("servletPath")));
 		this.pathInfo = nullIfEmpty(trimSlashes(m.getString("pathInfo")));
 		this.parentPath = this.pathInfo == null || this.pathInfo.indexOf('/') == -1 ? null : this.pathInfo.substring(0, this.pathInfo.lastIndexOf('/'));
+		this.rContextRoot = memoize(() -> findRContextRoot());
+		this.rResource = memoize(() -> findRResource());
+		this.rPath = memoize(() -> findRPath());
+		this.aContextRoot = memoize(() -> findAContextRoot());
+		this.aServletPath = memoize(() -> findAServletPath());
+		this.aPathInfo = memoize(() -> findAPathInfo());
 	}
 
 	/**
@@ -155,6 +164,121 @@ public class UriContext {
 		this.servletPath = nullIfEmpty(trimSlashes(servletPath));
 		this.pathInfo = nullIfEmpty(trimSlashes(pathInfo));
 		this.parentPath = this.pathInfo == null || this.pathInfo.indexOf('/') == -1 ? null : this.pathInfo.substring(0, this.pathInfo.lastIndexOf('/'));
+		this.rContextRoot = memoize(() -> findRContextRoot());
+		this.rResource = memoize(() -> findRResource());
+		this.rPath = memoize(() -> findRPath());
+		this.aContextRoot = memoize(() -> findAContextRoot());
+		this.aServletPath = memoize(() -> findAServletPath());
+		this.aPathInfo = memoize(() -> findAPathInfo());
+	}
+
+	private String findRContextRoot() {
+		return contextRoot == null ? "/" : ('/' + contextRoot);
+	}
+
+	private String findRResource() {
+		// @formatter:off
+		if (contextRoot == null)
+			return (
+				servletPath == null
+				? "/"
+				: ('/' + servletPath)
+			);
+		return (
+			servletPath == null
+			? ('/' + contextRoot)
+			: ('/' + contextRoot + '/' + servletPath)
+		);
+		// @formatter:on
+	}
+
+	private String findRPath() {
+		// @formatter:off
+		if (contextRoot == null) {
+			if (servletPath == null)
+				return (
+					pathInfo == null
+					? "/"
+					: ('/' + pathInfo)
+				);
+			return (
+				pathInfo == null
+				? ('/' + servletPath)
+				: ('/' + servletPath + '/' + pathInfo)
+			);
+		}
+		if (servletPath == null)
+			return (
+				pathInfo == null
+				? ('/' + contextRoot)
+				: ('/' + contextRoot + '/' + pathInfo)
+			);
+		return (
+			pathInfo == null
+			? ('/' + contextRoot + '/' + servletPath)
+			: ('/' + contextRoot + '/' + servletPath + '/' + pathInfo)
+		);
+		// @formatter:on
+	}
+
+	private String findAContextRoot() {
+		// @formatter:off
+		if (authority == null)
+			return rContextRoot.get();
+		return (
+			contextRoot == null
+			? authority
+			: (authority + '/' + contextRoot)
+		);
+		// @formatter:on
+	}
+
+	private String findAServletPath() {
+		// @formatter:off
+		if (authority == null)
+			return rResource.get();
+		if (contextRoot == null)
+			return (
+				servletPath == null
+				? authority
+				: authority + '/' + servletPath
+			);
+		return (
+			servletPath == null
+			? (authority + '/' + contextRoot)
+			: (authority + '/' + contextRoot + '/' + servletPath)
+		);
+		// @formatter:on
+	}
+
+	private String findAPathInfo() {
+		// @formatter:off
+		if (authority == null)
+			return rPath.get();
+		if (contextRoot == null) {
+			if (servletPath == null)
+				return (
+					pathInfo == null
+					? authority : (authority + '/' + pathInfo)
+				);
+			return (
+				pathInfo == null
+				? (authority + '/' + servletPath)
+				: (authority + '/' + servletPath + '/' + pathInfo)
+			);
+		}
+		if (servletPath == null)
+			return (
+				pathInfo == null
+				? authority + '/' + contextRoot
+				: (authority + '/' + contextRoot + '/' + pathInfo)
+			);
+		return (
+			pathInfo == null
+			? (authority + '/' + contextRoot + '/' + servletPath)
+			: (authority + '/' + contextRoot + '/' + servletPath + '/' + pathInfo)
+		);
+		// @formatter:on
 	}
 
 	/**
@@ -183,19 +307,7 @@ public class UriContext {
 	 * 	Never <jk>null</jk>.
 	 */
 	public String getAbsoluteContextRoot() {
-		if (aContextRoot == null) {
-			if (authority == null)
-				aContextRoot = getRootRelativeContextRoot();
-			else
-				// @formatter:off
-				aContextRoot = (
-					contextRoot == null
-					? authority
-					: (authority + '/' + contextRoot)
-				);
-			// @formatter:on
-		}
-		return aContextRoot;
+		return aContextRoot.get();
 	}
 
 	/**
@@ -209,41 +321,7 @@ public class UriContext {
 	 * 	Never <jk>null</jk>.
 	 */
 	public String getAbsolutePathInfo() {
-		// @formatter:off
-		if (aPathInfo == null) {
-			if (authority == null)
-				aPathInfo = getRootRelativePathInfo();
-			else {
-				if (contextRoot == null) {
-					if (servletPath == null)
-						aPathInfo = (
-							pathInfo == null
-							? authority : (authority + '/' + pathInfo)
-						);
-					else
-						aPathInfo = (
-							pathInfo == null
-							? (authority + '/' + servletPath)
-							: (authority + '/' + servletPath + '/' + pathInfo)
-						);
-				} else {
-					if (servletPath == null)
-						aPathInfo = (
-							pathInfo == null
-							? authority + '/' + contextRoot
-							: (authority + '/' + contextRoot + '/' + pathInfo)
-						);
-					else
-						aPathInfo = (
-							pathInfo == null
-							? (authority + '/' + contextRoot + '/' + servletPath)
-							: (authority + '/' + contextRoot + '/' + servletPath + '/' + pathInfo)
-						);
-				}
-			}
-		}
-		return aPathInfo;
-		// @formatter:on
+		return aPathInfo.get();
 	}
 
 	/**
@@ -264,27 +342,7 @@ public class UriContext {
 	 * 	Never <jk>null</jk>.
 	 */
 	public String getAbsoluteServletPath() {
-		// @formatter:off
-		if (aServletPath == null) {
-			if (authority == null)
-				aServletPath = getRootRelativeServletPath();
-			else {
-				if (contextRoot == null)
-					aServletPath = (
-						servletPath == null
-						? authority
-						: authority + '/' + servletPath
-					);
-				else
-					aServletPath = (
-						servletPath == null
-						? (authority + '/' + contextRoot)
-						: (authority + '/' + contextRoot + '/' + servletPath)
-					);
-			}
-		}
-		return aServletPath;
-		// @formatter:on
+		return aServletPath.get();
 	}
 
 	/**
@@ -305,9 +363,7 @@ public class UriContext {
 	 * 	Never <jk>null</jk>.
 	 */
 	public String getRootRelativeContextRoot() {
-		if (rContextRoot == null)
-			rContextRoot = contextRoot == null ? "/" : ('/' + contextRoot);
-		return rContextRoot;
+		return rContextRoot.get();
 	}
 
 	/**
@@ -321,38 +377,7 @@ public class UriContext {
 	 * 	Never <jk>null</jk>.
 	 */
 	public String getRootRelativePathInfo() {
-		// @formatter:off
-		if (rPath == null) {
-			if (contextRoot == null) {
-				if (servletPath == null)
-					rPath = (
-						pathInfo == null
-						? "/"
-						: ('/' + pathInfo)
-					);
-				else
-					rPath = (
-						pathInfo == null
-						? ('/' + servletPath)
-						: ('/' + servletPath + '/' + pathInfo)
-					);
-			} else {
-				if (servletPath == null)
-					rPath = (
-						pathInfo == null
-						? ('/' + contextRoot)
-						: ('/' + contextRoot + '/' + pathInfo)
-					);
-				else
-					rPath = (
-						pathInfo == null
-						? ('/' + contextRoot + '/' + servletPath)
-						: ('/' + contextRoot + '/' + servletPath + '/' + pathInfo)
-					);
-			}
-		}
-		return rPath;
-		// @formatter:on
+		return rPath.get();
 	}
 
 	/**
@@ -373,23 +398,7 @@ public class UriContext {
 	 * 	Never <jk>null</jk>.
 	 */
 	public String getRootRelativeServletPath() {
-		// @formatter:off
-		if (rResource == null) {
-			if (contextRoot == null)
-				rResource = (
-					servletPath == null
-					? "/"
-					: ('/' + servletPath)
-				);
-			else
-				rResource = (
-					servletPath == null
-					? ('/' + contextRoot)
-					: ('/' + contextRoot + '/' + servletPath)
-				);
-		}
-		return rResource;
-		// @formatter:on
+		return rResource.get();
 	}
 
 	/**
@@ -399,8 +408,25 @@ public class UriContext {
 	 */
 	public String getRootRelativeServletPathParent() { return getParent(getRootRelativeServletPath()); }
 
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		return filteredBeanPropertyMap()
+			.a("authority", authority)
+			.a("contextRoot", contextRoot)
+			.a("servletPath", servletPath)
+			.a("pathInfo", pathInfo)
+			.a("parentPath", parentPath)
+			.a("aContextRoot", aContextRoot.get())
+			.a("rContextRoot", rContextRoot.get())
+			.a("aServletPath", aServletPath.get())
+			.a("rResource", rResource.get())
+			.a("aPathInfo", aPathInfo.get())
+			.a("rPath", rPath.get());
+		// @formatter:on
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
-		return Json5Serializer.DEFAULT.toString(this);
+		return r(properties());
 	}
 }

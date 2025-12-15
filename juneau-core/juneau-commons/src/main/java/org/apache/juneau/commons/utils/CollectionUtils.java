@@ -1525,6 +1525,30 @@ public class CollectionUtils {
 	}
 
 	/**
+	 * Convenience factory for a {@link Maps} builder.
+	 *
+	 * <p>
+	 * This is a shortcut for <c>Maps.create().ordered()</c>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Map&lt;String,Object&gt; <jv>map</jv> = mapb()
+	 * 		.add(<js>"foo"</js>, 1)
+	 * 		.add(<js>"bar"</js>, 2)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @return A new map builder.
+	 * @see Maps
+	 */
+	@SuppressWarnings("unchecked")
+	public static <K,V> Maps<K,V> mapb() {
+		return (Maps<K,V>)Maps.create().ordered();
+	}
+
+	/**
 	 * Convenience factory for a {@link Maps} with {@link String} keys and {@link Object} values.
 	 *
 	 * <p>
@@ -1552,8 +1576,33 @@ public class CollectionUtils {
 	 * @return A new map builder.
 	 * @see Maps
 	 */
-	public static Maps<String,Object> mapb() {
+	public static Maps<String,Object> mapb_so() {
 		return Maps.create(String.class, Object.class).ordered();
+	}
+
+	/**
+	 * Convenience factory for a filtered, sorted, fluent map with {@link String} keys and {@link Object} values.
+	 *
+	 * <p>
+	 * This is a shortcut for <c>Maps.create(String.<jk>class</jk>, Object.<jk>class</jk>).filtered().sorted().buildFluent()</c>.
+	 *
+	 * <p>
+	 * This is typically used for creating property maps in <c>toString()</c> methods that need to be sorted and filtered.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// In a properties() method</jc>
+	 * 	<jk>return</jk> filteredBeanPropertyMap()
+	 * 		.a(<js>"name"</js>, <jv>name</jv>)
+	 * 		.a(<js>"value"</js>, <jv>value</jv>);
+	 * </p>
+	 *
+	 * @return A new filtered, sorted, fluent map builder.
+	 * @see FluentMap
+	 * @see Maps
+	 */
+	public static FluentMap<String,Object> filteredBeanPropertyMap() {
+		return Maps.create(String.class, Object.class).filtered().sorted().buildFluent();
 	}
 
 	/**

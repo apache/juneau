@@ -406,6 +406,29 @@ When adding fluent setter overrides to classes:
   ```
 - **Rationale**: Maintains consistency with existing code style and improves readability
 
+#### properties() Method Formatting
+When creating a `properties()` method that uses the fluent map API with `.a()` method calls:
+
+1. **Always use `Utils.filteredBeanPropertyMap()`**: Use `filteredBeanPropertyMap()` to create the map. This method provides sorted, filtered, fluent maps specifically designed for bean property maps.
+2. **Wrap in formatter comments**: Wrap the entire method contents inside `// @formatter:off` and `// @formatter:on` comments to preserve formatting
+
+```java
+protected FluentMap<String,Object> properties() {
+	// @formatter:off
+	return filteredBeanPropertyMap()
+		.a("property1", value1)
+		.a("property2", value2)
+		.a("property3", value3);
+	// @formatter:on
+}
+```
+
+**Rationale**: 
+- `filteredBeanPropertyMap()` automatically provides sorted entries, filtered values (removes empty/null values), and a fluent API
+- Ensures consistent ordering for deterministic output
+- Provides a clean, dedicated API for building bean property maps
+- Formatter comments preserve the formatting of fluent method chains and prevent formatters from reformatting the code in ways that reduce readability
+
 ---
 
 # Documentation Guidelines for Apache Juneau

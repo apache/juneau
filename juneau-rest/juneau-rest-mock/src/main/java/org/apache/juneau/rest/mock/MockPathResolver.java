@@ -24,7 +24,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
-import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.rest.util.*;
 
@@ -118,18 +118,21 @@ class MockPathResolver {
 	 */
 	public String getURI() { return uri; }
 
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		return filteredBeanPropertyMap()
+			.a("uri", uri)
+			.a("contextPath", contextPath)
+			.a("servletPath", servletPath)
+			.a("remainder", remainder)
+			.a("target", target)
+			.a("error", error);
+		// @formatter:on
+	}
+
 	@Override
 	public String toString() {
-		// @formatter:off
-		return JsonMap.create()
-			.append("uri", uri)
-			.append("contextPath", contextPath)
-			.append("servletPath", servletPath)
-			.append("remainder", remainder)
-			.append("target", target)
-			.append("error", error)
-			.toString();
-		// @formatter:on
+		return r(properties());
 	}
 
 	private void init(String target, String contextPath, String servletPath, String pathToResolve, Map<String,Object> pathVars) {

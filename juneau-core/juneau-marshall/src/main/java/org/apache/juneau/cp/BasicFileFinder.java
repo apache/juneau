@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.cp;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.FileUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
@@ -29,6 +28,7 @@ import java.util.ResourceBundle.*;
 import java.util.concurrent.*;
 import java.util.regex.*;
 
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.io.*;
 
 /**
@@ -115,18 +115,21 @@ public class BasicFileFinder implements FileFinder {
 		return hashCode;
 	}
 
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		return filteredBeanPropertyMap()
+			.a("class", cns(getClass()))
+			.a("roots", roots)
+			.a("cachingLimit", cachingLimit)
+			.a("include", includePatterns)
+			.a("exclude", excludePatterns)
+			.a("hashCode", hashCode);
+		// @formatter:on
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
-		// @formatter:off
-		return filteredMap()
-			.append("class", cns(getClass()))
-			.append("roots", roots)
-			.append("cachingLimit", cachingLimit)
-			.append("include", includePatterns)
-			.append("exclude", excludePatterns)
-			.append("hashCode", hashCode)
-			.asReadableString();
-		// @formatter:on
+		return r(properties());
 	}
 
 	/**

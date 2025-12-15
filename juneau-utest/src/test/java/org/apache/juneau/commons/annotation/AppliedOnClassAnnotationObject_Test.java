@@ -289,7 +289,7 @@ class AppliedOnClassAnnotationObject_Test extends TestBase {
 	@Test
 	void e01_toMap_withOnClass() {
 		var a = T.create().onClass(TC1.class, TC2.class).value("test").build();
-		var map = ((T)a).toMap();
+		var map = ((T)a).propertyMap();
 
 		assertBean(map, "value,on,onClass", "test,[],[TC1,TC2]");
 	}
@@ -297,7 +297,7 @@ class AppliedOnClassAnnotationObject_Test extends TestBase {
 	@Test
 	void e02_toMap_withBoth() {
 		var a = T.create().on("com.example.Class1").onClass(TC1.class).value("test").build();
-		var map = ((T)a).toMap();
+		var map = ((T)a).propertyMap();
 
 		assertBean(map, "value,on,onClass", "test,[com.example.Class1],[TC1]");
 	}
@@ -305,7 +305,7 @@ class AppliedOnClassAnnotationObject_Test extends TestBase {
 	@Test
 	void e03_toMap_empty() {
 		var a = T.create().build();
-		var map = ((T)a).toMap();
+		var map = ((T)a).propertyMap();
 
 		assertBean(map, "value,on,onClass", ",[],[]");
 	}

@@ -908,7 +908,7 @@ public abstract class Context {
 	 * @return The properties on this bean as a map for debugging.
 	 */
 	protected FluentMap<String,Object> properties() {
-		return mapb().filtered().sorted().buildFluent()
+		return filteredBeanPropertyMap()
 			.a("annotations", annotations)
 			.a("debug", debug);
 	}

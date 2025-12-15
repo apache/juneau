@@ -200,20 +200,20 @@ class AnnotationObject_Test extends TestBase {
 	@Test
 	void c01_toMap_defaultValues() {
 		var a = T.create().build();
-		assertBean(((T)a).toMap(), "value,number,flag,array", ",0,false,[]");
+		assertBean(((T)a).propertyMap(), "value,number,flag,array", ",0,false,[]");
 	}
 
 	@Test
 	void c02_toMap_customValues() {
 		var a = T.create().value("a").number(1).flag(true).array("b1", "b2").build();
 
-		assertBean(((T)a).toMap(), "value,number,flag,array", "a,1,true,[b1,b2]");
+		assertBean(((T)a).propertyMap(), "value,number,flag,array", "a,1,true,[b1,b2]");
 	}
 
 	@Test
 	void c03_toMap_keySorted() {
 		var a = T.create().build();
-		var map = ((T)a).toMap();
+		var map = ((T)a).propertyMap();
 
 		// Map should be ordered by key name
 		assertList(map.keySet(), "array", "flag", "number", "value");

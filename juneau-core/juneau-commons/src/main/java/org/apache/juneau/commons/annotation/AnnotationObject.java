@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.commons.annotation;
 
-import static java.util.Arrays.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -208,21 +208,21 @@ public class AnnotationObject implements Annotation {
 	 *
 	 * @return This annotation as a map of key/value pairs.
 	 */
-	public Map<String,Object> toMap() {
-		var m = new LinkedHashMap<String,Object>();
+	protected Map<String,Object> propertyMap() {
 		// @formatter:off
+		var m = mapb_so().sorted().build();
 		stream(annotationType().getDeclaredMethods())
 			// Note: isAnnotation() check is defensive code. For properly-formed AnnotationObject instances,
 			// annotationType() always returns an annotation interface, so this condition is always true.
 			.filter(x->x.getParameterCount() == 0 && x.getDeclaringClass().isAnnotation())
 			.sorted(Comparator.comparing(Method::getName))
 			.forEach(x -> m.put(x.getName(), safeSupplier(()->x.invoke(this))));
-		// @formatter:on
 		return m;
+		// @formatter:on
 	}
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return toMap().toString();
+		return r(propertyMap());
 	}
 }

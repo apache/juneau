@@ -19,6 +19,7 @@ package org.apache.juneau.commons.collections;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * A fluent wrapper around an arbitrary map that provides convenient methods for adding entries.
@@ -168,6 +169,34 @@ public class FluentMap<K,V> extends AbstractMap<K,V> {
 	 */
 	public FluentMap<K,V> ai(boolean condition, K key, V value) {
 		if (condition)
+			map.put(key, value);
+		return this;
+	}
+
+	/**
+	 * Adds a key-value pair to this map if the specified predicate returns <jk>true</jk> when applied to the value.
+	 *
+	 * <p>
+	 * This method is useful for conditionally adding entries based on the value itself.
+	 * The predicate is applied to the value, and if it returns <jk>true</jk>, the entry is added.
+	 * If the predicate returns <jk>false</jk>, the entry is not added and this method returns <c>this</c>
+	 * without modifying the map.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	FluentMap&lt;String, String&gt; <jv>map</jv> = <jk>new</jk> FluentMap&lt;&gt;(<jk>new</jk> LinkedHashMap&lt;&gt;())
+	 * 		.a(<js>"host"</js>, <js>"localhost"</js>)
+	 * 		.ai(s -&gt; !s.isEmpty(), <js>"debug"</js>, <js>"true"</js>)   <jc>// Added (value is not empty)</jc>
+	 * 		.ai(s -&gt; !s.isEmpty(), <js>"test"</js>, <js>""</js>);       <jc>// Not added (value is empty)</jc>
+	 * </p>
+	 *
+	 * @param predicate The predicate to test on the value. If it returns <jk>true</jk>, the entry is added; if <jk>false</jk>, it is not.
+	 * @param key The key to add if the predicate returns <jk>true</jk>.
+	 * @param value The value to add if the predicate returns <jk>true</jk>.
+	 * @return This object for method chaining.
+	 */
+	public FluentMap<K,V> ai(Predicate<V> predicate, K key, V value) {
+		if (predicate.test(value))
 			map.put(key, value);
 		return this;
 	}

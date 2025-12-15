@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.stats;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
@@ -23,8 +24,8 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.marshaller.*;
 
 /**
  * Method execution statistics.
@@ -239,8 +240,24 @@ public class MethodExecStats {
 		return this;
 	}
 
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		return filteredBeanPropertyMap()
+			.a("avgTime", getAvgTime())
+			.a("errors", getErrors())
+			.a("guid", guid)
+			.a("maxTime", getMaxTime())
+			.a("method", method)
+			.a("minTime", getMinTime())
+			.a("running", getRunning())
+			.a("runs", getRuns())
+			.a("thrownStore", thrownStore)
+			.a("totalTime", getTotalTime());
+		// @formatter:on
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
-		return Json5.of(this);
+		return r(properties());
 	}
 }

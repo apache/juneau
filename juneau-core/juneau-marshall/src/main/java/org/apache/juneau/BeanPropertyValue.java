@@ -16,9 +16,10 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.collections.*;
 
 /**
  * Represents a simple bean property value and the meta-data associated with it.
@@ -86,15 +87,17 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 	 */
 	public final Object getValue() { return value; }
 
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		return filteredBeanPropertyMap()
+			.a("name", name)
+			.a("value", value)
+			.a("type", cns(pMeta.getClassMeta()));
+		// @formatter:on
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
-		// @formatter:off
-		return JsonMap
-			.create()
-			.append("name", name)
-			.append("value", value)
-			.append("type", cns(pMeta.getClassMeta()))
-			.toString();
-		// @formatter:on
+		return r(properties());
 	}
 }

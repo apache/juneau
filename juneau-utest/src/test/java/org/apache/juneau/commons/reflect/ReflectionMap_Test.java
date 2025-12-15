@@ -629,7 +629,7 @@ class ReflectionMap_Test extends TestBase {
 				.append("F1.myField", 4)            // field
 				.append("F1()", 5)                  // constructor
 				.build();
-			assertString("{classEntries=[{simpleName=F1, fullName=F1, value=1}], methodEntries=[{simpleClassName=F1, fullClassName=F1, methodName=toString, value=2}, {simpleClassName=F1, fullClassName=F1, methodName=toString, args=[String], value=3}, {simpleClassName=F1, fullClassName=F1, methodName=myField, value=4}], fieldEntries=[{simpleClassName=F1, fullClassName=F1, fieldName=toString, value=2}, {simpleClassName=F1, fullClassName=F1, fieldName=myField, value=4}], constructorEntries=[{simpleClassName=F1, fullClassName=F1, value=5}]}", rm);
+			assertString("{classEntries=[{fullName=F1,simpleName=F1,value=1}],constructorEntries=[{fullClassName=F1,simpleClassName=F1,value=5}],fieldEntries=[{fieldName=toString,fullClassName=F1,simpleClassName=F1,value=2},{fieldName=myField,fullClassName=F1,simpleClassName=F1,value=4}],methodEntries=[{fullClassName=F1,methodName=toString,simpleClassName=F1,value=2},{args=[String],fullClassName=F1,methodName=toString,simpleClassName=F1,value=3},{fullClassName=F1,methodName=myField,simpleClassName=F1,value=4}]}", rm);
 		}
 	}
 }

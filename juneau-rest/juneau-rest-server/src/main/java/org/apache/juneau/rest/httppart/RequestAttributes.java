@@ -23,6 +23,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
 
@@ -290,8 +291,15 @@ public class RequestAttributes {
 		return this;
 	}
 
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		return filteredBeanPropertyMap()
+			.a("attributes", asMap());
+		// @formatter:on
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
-		return asMap().toString();
+		return r(properties());
 	}
 }

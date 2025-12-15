@@ -27,6 +27,7 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.utils.*;
 
 /**
@@ -313,16 +314,18 @@ public class ReflectionMap<V> {
 			return classMatches(simpleName, fullName, c);
 		}
 
+		protected FluentMap<String,Object> properties() {
+			// @formatter:off
+			return filteredBeanPropertyMap()
+				.a("simpleName", simpleName)
+				.a("fullName", fullName)
+				.a("value", value);
+			// @formatter:on
+		}
+
 		@Override
 		public String toString() {
-			// @formatter:off
-			return mapb().filtered()
-				.add("simpleName", simpleName)
-				.add("fullName", fullName)
-				.add("value", value)
-				.build()
-				.toString();
-			// @formatter:on
+			return r(properties());
 		}
 	}
 
@@ -350,17 +353,19 @@ public class ReflectionMap<V> {
 			return classMatches(simpleClassName, fullClassName, c) && (argsMatch(args, m.getParameterTypes()));
 		}
 
+		protected FluentMap<String,Object> properties() {
+			// @formatter:off
+			return filteredBeanPropertyMap()
+				.a("simpleClassName", simpleClassName)
+				.a("fullClassName", fullClassName)
+				.a("args", args)
+				.a("value", value);
+			// @formatter:on
+		}
+
 		@Override
 		public String toString() {
-			// @formatter:off
-			return mapb().filtered()
-				.add("simpleClassName", simpleClassName)
-				.add("fullClassName", fullClassName)
-				.add("args", args)
-				.add("value", value)
-				.build()
-				.toString();
-			// @formatter:on
+			return r(properties());
 		}
 	}
 
@@ -385,17 +390,19 @@ public class ReflectionMap<V> {
 			return classMatches(simpleClassName, fullClassName, c) && (eq(f.getName(), fieldName));
 		}
 
+		protected FluentMap<String,Object> properties() {
+			// @formatter:off
+			return filteredBeanPropertyMap()
+				.a("simpleClassName", simpleClassName)
+				.a("fullClassName", fullClassName)
+				.a("fieldName", fieldName)
+				.a("value", value);
+			// @formatter:on
+		}
+
 		@Override
 		public String toString() {
-			// @formatter:off
-			return mapb().filtered()
-				.add("simpleClassName", simpleClassName)
-				.add("fullClassName", fullClassName)
-				.add("fieldName", fieldName)
-				.add("value", value)
-				.build()
-				.toString();
-			// @formatter:on
+			return r(properties());
 		}
 	}
 
@@ -434,18 +441,20 @@ public class ReflectionMap<V> {
 			// @formatter:on
 		}
 
+		protected FluentMap<String,Object> properties() {
+			// @formatter:off
+			return filteredBeanPropertyMap()
+				.a("simpleClassName", simpleClassName)
+				.a("fullClassName", fullClassName)
+				.a("methodName", methodName)
+				.a("args", opt(args).map(x -> '[' + toCdl(x) + "]").orElse(null))
+				.a("value", value);
+			// @formatter:on
+		}
+
 		@Override
 		public String toString() {
-			// @formatter:off
-			return mapb().filtered()
-				.add("simpleClassName", simpleClassName)
-				.add("fullClassName", fullClassName)
-				.add("methodName", methodName)
-				.add("args", opt(args).map(x -> '[' + toCdl(x) + "]").orElse(null))
-				.add("value", value)
-				.build()
-				.toString();
-			// @formatter:on
+			return r(properties());
 		}
 	}
 
@@ -709,16 +718,18 @@ public class ReflectionMap<V> {
 		return methodEntries.stream().filter(x -> x.matches(m)).map(x -> x.value);
 	}
 
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		return filteredBeanPropertyMap()
+			.a("classEntries", classEntries)
+			.a("methodEntries", methodEntries)
+			.a("fieldEntries", fieldEntries)
+			.a("constructorEntries", constructorEntries);
+		// @formatter:on
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
-		// @formatter:off
-		return mapb().filtered()
-			.add("classEntries", classEntries)
-			.add("methodEntries", methodEntries)
-			.add("fieldEntries", fieldEntries)
-			.add("constructorEntries", constructorEntries)
-			.build()
-			.toString();
-		// @formatter:on
+		return r(properties());
 	}
 }

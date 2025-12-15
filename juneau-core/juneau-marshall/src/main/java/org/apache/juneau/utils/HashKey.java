@@ -16,10 +16,12 @@
  */
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
+
+import org.apache.juneau.commons.collections.*;
 
 /**
  * Represents a list of objects used to compare objects for equality.
@@ -60,13 +62,16 @@ public class HashKey {
 		return hashCode;
 	}
 
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		return filteredBeanPropertyMap()
+			.a("hashCode", hashCode())
+			.a("array", array);
+		// @formatter:on
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
-		// @formatter:off
-		return filteredMap()
-			.append("hashCode", hashCode())
-			.append("array", array)
-			.asString();
-		// @formatter:on
+		return r(properties());
 	}
 }

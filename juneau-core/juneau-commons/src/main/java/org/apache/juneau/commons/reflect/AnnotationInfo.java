@@ -27,6 +27,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.collections.*;
 
 /**
  * Encapsulates information about an annotation instance and the element it's declared on.
@@ -696,25 +697,26 @@ public class AnnotationInfo<T extends Annotation> {
 	 *
 	 * @return A new map showing the attributes of this annotation info.
 	 */
-	public LinkedHashMap<String,Object> toMap() {
-		var jm = new LinkedHashMap<String,Object>();
-		jm.put(s(annotatable.getAnnotatableType()), annotatable.getLabel());
-		var ja = new LinkedHashMap<String,Object>();
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
 		var ca = info(a.annotationType());
+		var ja = mapb().sorted().buildFluent();  // NOAI
 		ca.getDeclaredMethods().stream().forEach(x -> {
-			try {
-				var v = x.invoke(a);
+			safeOptCatch(() -> {
+				var val = x.invoke(a);
 				var d = x.inner().getDefaultValue();
-				if (ne(v, d)) {
-					if (! (isArray(v) && length(v) == 0 && length(d) == 0))
-						ja.put(x.getName(), v);
+				// Add values only if they're different from the default.
+				if (ne(val, d)) {
+					if (! (isArray(val) && length(val) == 0 && isArray(d) && length(d) == 0))
+						return val;
 				}
-			} catch (Exception e) {
-				ja.put(x.getName(), lm(e));
-			}
+				return null;
+			}, e -> lm(e)).ifPresent(v -> ja.a(x.getName(), v));
 		});
-		jm.put("@" + ca.getNameSimple(), ja);
-		return jm;
+		return filteredBeanPropertyMap()
+			.a(s(annotatable.getAnnotatableType()), annotatable.getLabel())
+			.a("@" + ca.getNameSimple(), ja);
+		// @formatter:on
 	}
 
 	/**
@@ -741,12 +743,12 @@ public class AnnotationInfo<T extends Annotation> {
 	 * Returns a string representation of this annotation.
 	 *
 	 * <p>
-	 * Returns the map representation created by {@link #toMap()}.
+	 * Returns the map representation created by {@link #properties()}.
 	 *
 	 * @return A string representation of this annotation.
 	 */
 	@Override /* Overridden from Object */
 	public String toString() {
-		return toMap().toString();
+		return r(properties());
 	}
 }

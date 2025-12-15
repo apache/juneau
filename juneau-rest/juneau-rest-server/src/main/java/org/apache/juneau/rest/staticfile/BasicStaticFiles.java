@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.staticfile;
 
-import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.FileUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
@@ -26,6 +26,7 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.http.*;
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.resource.*;
@@ -150,8 +151,15 @@ public class BasicStaticFiles implements StaticFiles {
 		}
 	}
 
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		return filteredBeanPropertyMap()
+			.a("headers", headers);
+		// @formatter:on
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
-		return filteredMap().append("headers", headers).asReadableString();
+		return r(properties());
 	}
 }

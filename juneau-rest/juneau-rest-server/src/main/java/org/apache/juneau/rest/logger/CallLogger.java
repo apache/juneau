@@ -18,7 +18,6 @@ package org.apache.juneau.rest.logger;
 
 import static java.util.logging.Level.*;
 import static org.apache.juneau.Enablement.*;
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -31,6 +30,7 @@ import java.util.function.*;
 import java.util.logging.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.annotation.*;
@@ -654,20 +654,23 @@ public class CallLogger {
 
 	}
 
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		return filteredBeanPropertyMap()
+			.a("logger", logger)
+			.a("thrownStore", thrownStore)
+			.a("enabled", enabled)
+			.a("level", level)
+			.a("requestDetail", requestDetail)
+			.a("responseDetail", responseDetail)
+			.a("normalRules", normalRules)
+			.a("debugRules", debugRules);
+		// @formatter:on
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
-		// @formatter:off
-		return filteredMap()
-			.append("logger", logger)
-			.append("thrownStore", thrownStore)
-			.append("enabled", enabled)
-			.append("level", level)
-			.append("requestDetail", requestDetail)
-			.append("responseDetail", responseDetail)
-			.append("normalRules", normalRules.length == 0 ? null : normalRules)
-			.append("debugRules", debugRules.length == 0 ? null : debugRules)
-			.asReadableString();
-		// @formatter:off
+		return r(properties());
 	}
 
 	private static byte[] getRequestContent(HttpServletRequest req) {

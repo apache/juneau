@@ -240,7 +240,7 @@ public abstract class ContextSession {
 	 * @return The properties on this bean as a map for debugging.
 	 */
 	protected FluentMap<String,Object> properties() {
-		return mapb().sorted().filtered().buildFluent()
+		return filteredBeanPropertyMap()
 			.a("debug", debug);
 	}
 }

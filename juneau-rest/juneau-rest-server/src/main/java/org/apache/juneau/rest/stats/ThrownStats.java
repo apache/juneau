@@ -22,8 +22,8 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.marshaller.*;
 
 /**
  * Represents an entry in {@link ThrownStore}.
@@ -259,8 +259,23 @@ public class ThrownStats implements Cloneable {
 		return this;
 	}
 
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		return filteredBeanPropertyMap()
+			.a("causedBy", causedBy.orElse(null))
+			.a("count", getCount())
+			.a("firstMessage", firstMessage)
+			.a("firstOccurrence", getFirstOccurrence())
+			.a("guid", guid)
+			.a("hash", hash)
+			.a("lastOccurrence", getLastOccurrence())
+			.a("stackTrace", stackTrace)
+			.a("thrownClass", thrownClass);
+		// @formatter:on
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
-		return Json5.of(this);
+		return r(properties());
 	}
 }

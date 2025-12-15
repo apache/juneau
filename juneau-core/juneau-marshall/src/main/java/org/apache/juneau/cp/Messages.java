@@ -28,6 +28,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshaller.*;
@@ -466,12 +467,17 @@ public class Messages extends ResourceBundle {
 		return set;
 	}
 
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		var m = filteredBeanPropertyMap();
+		keySet().stream().forEach(x -> m.a(x, getString(x)));
+		return m;
+		// @formatter:on
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
-		var m = new JsonMap();
-		for (var k : new TreeSet<>(keySet()))
-			m.put(k, getString(k));
-		return Json5.of(m);
+		return r(properties());
 	}
 
 	@Override /* Overridden from ResourceBundle */

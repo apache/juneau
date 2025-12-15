@@ -16,13 +16,14 @@
  */
 package org.apache.juneau.rest.util;
 
-import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.utils.*;
 
 /**
@@ -97,13 +98,16 @@ public class UrlPath {
 	 */
 	public boolean isTrailingSlash() { return nn(path) && path.endsWith("/"); }
 
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		return filteredBeanPropertyMap()
+			.a("parts", parts)
+			.a("raw", path);
+		// @formatter:on
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
-		// @formatter:off
-		return filteredMap()
-			.append("raw", path)
-			.append("parts", parts)
-			.asReadableString();
-		// @formatter:on
+		return r(properties());
 	}
 }

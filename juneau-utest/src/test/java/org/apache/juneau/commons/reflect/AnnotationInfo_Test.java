@@ -634,15 +634,15 @@ class AnnotationInfo_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// toMap()
+	// properties()
 	//====================================================================================================
 	@Test
-	void a029_toMap() {
+	void a029_properties() {
 		var ci = ClassInfo.of(TestClass.class);
 		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
 		assertNotNull(ai);
 
-		var map = ai.toMap();
+		var map = ai.properties();
 		assertNotNull(map);
 		assertTrue(map.containsKey("CLASS_TYPE"));
 		assertTrue(map.containsKey("@TestAnnotation"));
@@ -656,7 +656,7 @@ class AnnotationInfo_Test extends TestBase {
 		var ai2 = ci2.getAnnotations(ToMapTestAnnotation.class).findFirst().orElse(null);
 		assertNotNull(ai2);
 
-		var map2 = ai2.toMap();
+		var map2 = ai2.properties();
 		assertNotNull(map2);
 		var annotationMap2 = (java.util.Map<String,Object>)map2.get("@ToMapTestAnnotation");
 		assertNotNull(annotationMap2);
@@ -706,7 +706,7 @@ class AnnotationInfo_Test extends TestBase {
 		var ci3 = ClassInfo.of(ToMapTestClass.class);
 		var ai3 = AnnotationInfo.of(ci3, proxyAnnotation);
 		
-		var map3 = ai3.toMap();
+		var map3 = ai3.properties();
 		assertNotNull(map3);
 		var annotationMap3 = (java.util.Map<String,Object>)map3.get("@ToMapTestAnnotation");
 		assertNotNull(annotationMap3);

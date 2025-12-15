@@ -68,8 +68,8 @@ class BeanStore_Test extends TestBase {
 	@Test void a01_builderCopyConstructor() {
 		var b1p = BeanStore.create().readOnly().threadSafe().build();
 		var b1c = BeanStore.create().parent(b1p).build();
-		assertContains("readOnly:true", b1c.toString());
-		assertContains("threadSafe:true", b1c.toString());
+		assertContains("readOnly=true", b1c.toString());
+		assertContains("threadSafe=true", b1c.toString());
 	}
 
 	@Test void a02_readOnly() {
@@ -163,10 +163,10 @@ class BeanStore_Test extends TestBase {
 			assertList(b.stream(A2.class).map(BeanStoreEntry::get), a2a);
 		}
 
-		assertMatchesGlob("{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+Utils.identity(a1a)+"'}]}", b1p);
-		assertMatchesGlob("{*,entries:[{type:'A2',bean:'"+identity(a2a)+"'}],parent:{*,entries:[{type:'A1',bean:'"+Utils.identity(a1b)+"'},{type:'A1',bean:'"+Utils.identity(a1a)+"'}]}}", b1c);
-		assertMatchesGlob("{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+Utils.identity(a1a)+"'}],threadSafe:true}", b2p);
-		assertMatchesGlob("{*,entries:[{type:'A2',bean:'"+identity(a2a)+"'}],parent:{*,entries:[{type:'A1',bean:'"+Utils.identity(a1b)+"'},{type:'A1',bean:'"+Utils.identity(a1a)+"'}],threadSafe:true},threadSafe:true}", b2c);
+		assertMatchesGlob("{entries=[{type=A1,bean="+identity(a1b)+"},{type=A1,bean="+Utils.identity(a1a)+"}],identity=*}", b1p);
+		assertMatchesGlob("{entries=[{type=A2,bean="+identity(a2a)+"}],identity=*,parent={entries=[{type=A1,bean="+Utils.identity(a1b)+"},{type=A1,bean="+Utils.identity(a1a)+"}],identity=*}}", b1c);
+		assertMatchesGlob("{entries=[{type=A1,bean="+identity(a1b)+"},{type=A1,bean="+Utils.identity(a1a)+"}],identity=*,threadSafe=true}", b2p);
+		assertMatchesGlob("{entries=[{type=A2,bean="+identity(a2a)+"}],identity=*,parent={entries=[{type=A1,bean="+Utils.identity(a1b)+"},{type=A1,bean="+Utils.identity(a1a)+"}],identity=*,threadSafe=true},threadSafe=true}", b2c);
 
 		b1p.removeBean(A1.class);
 		b1c.clear().addBean(A1.class, a1a);

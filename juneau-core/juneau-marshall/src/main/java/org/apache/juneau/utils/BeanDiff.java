@@ -22,9 +22,8 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.marshaller.*;
+import org.apache.juneau.commons.collections.*;
 
 /**
  * Utility class for comparing two versions of a POJO.
@@ -49,8 +48,8 @@ import org.apache.juneau.marshaller.*;
  * </p>
  *
  */
-@Bean(properties = "v1,v2")
 public class BeanDiff {
+
 	/**
 	 * Builder class.
 	 *
@@ -229,8 +228,16 @@ public class BeanDiff {
 		return v1.size() > 0 || v2.size() > 0;
 	}
 
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		return mapb_so().buildFluent()
+			.a("v1", v1)
+			.a("v2", v2);
+		// @formatter:on
+	}
+
 	@Override
 	public String toString() {
-		return Json5.of(this);
+		return r(properties());
 	}
 }

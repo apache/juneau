@@ -16,13 +16,14 @@
  */
 package org.apache.juneau.rest.logger;
 
-import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.function.*;
 import java.util.logging.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.cp.*;
 
 import jakarta.servlet.http.*;
@@ -389,20 +390,23 @@ public class CallLoggerRule {
 		return true;
 	}
 
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		return filteredBeanPropertyMap()
+			.a("codeFilter", statusFilter)
+			.a("enabled", enabled)
+			.a("enabledTest", enabledTest)
+			.a("exceptionFilter", exceptionFilter)
+			.a("level", level)
+			.a("requestDetail", requestDetail)
+			.a("requestFilter", requestFilter)
+			.a("responseDetail", responseDetail)
+			.a("responseFilter", responseFilter);
+		// @formatter:on
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
-		// @formatter:off
-		return filteredMap()
-			.append("codeFilter", statusFilter)
-			.append("enabled", enabled)
-			.append("enabledTest", enabledTest)
-			.append("exceptionFilter", exceptionFilter)
-			.append("level", level)
-			.append("requestDetail", requestDetail)
-			.append("requestFilter", requestFilter)
-			.append("responseDetail", responseDetail)
-			.append("responseFilter", responseFilter)
-			.asReadableString();
-		// @formatter:off
+		return r(properties());
 	}
 }

@@ -18,7 +18,6 @@ package org.apache.juneau.cp;
 
 import static java.util.stream.Collectors.*;
 import static java.util.stream.Collectors.toList;
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -30,10 +29,9 @@ import java.util.concurrent.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.marshaller.*;
 
 /**
  * Java bean store.
@@ -634,28 +632,26 @@ public class BeanStore {
 		return s;
 	}
 
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		return filteredBeanPropertyMap()
+			.a("identity", identity(this))
+			.a("entries", entries.stream().map(BeanStoreEntry::properties).collect(toList()))
+			.a("outer", identity(outer.orElse(null)))
+			.a("parent", parent.map(BeanStore::properties).orElse(null))
+			.ai(readOnly, "readOnly", readOnly)
+			.ai(threadSafe, "threadSafe", threadSafe);
+		// @formatter:on
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
-		return Json5.of(properties());
+		return r(properties());
 	}
 
 	private void assertCanWrite() {
 		if (readOnly)
 			throw new IllegalStateException("Method cannot be used because BeanStore is read-only.");
-	}
-
-	private JsonMap properties() {
-		var nf = (Predicate<Boolean>)Utils::isTrue;
-		// @formatter:off
-		return filteredMap()
-			.append("identity", identity(this))
-			.append("entries", entries.stream().map(BeanStoreEntry::properties).collect(toList()))
-			.append("outer", identity(outer.orElse(null)))
-			.append("parent", parent.map(BeanStore::properties).orElse(null))
-			.appendIf(nf, "readOnly", readOnly)
-			.appendIf(nf, "threadSafe", threadSafe)
-		;
-		// @formatter:on
 	}
 
 	/**

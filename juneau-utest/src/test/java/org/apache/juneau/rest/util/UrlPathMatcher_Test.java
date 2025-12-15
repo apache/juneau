@@ -104,7 +104,7 @@ class UrlPathMatcher_Test extends TestBase {
 	@Test void b01_simple_match() {
 		var p = of("/foo");
 		check(p, "/foo", "{}");
-		check(p, "/foo/", "{r:''}");
+		check(p, "/foo/", "{r=}");
 	}
 
 	@Test void b02_simple_noMatch() {
@@ -115,7 +115,7 @@ class UrlPathMatcher_Test extends TestBase {
 	@Test void b03_simple_match_2parts() {
 		var p = of("/foo/bar");
 		check(p, "/foo/bar", "{}");
-		check(p, "/foo/bar/", "{r:''}");
+		check(p, "/foo/bar/", "{r=}");
 	}
 
 	@Test void b04_simple_noMatch_2parts() {
@@ -125,7 +125,7 @@ class UrlPathMatcher_Test extends TestBase {
 
 	@Test void b05_simple_match_0parts() {
 		var p = of("/");
-		check(p, "/", "{r:''}");
+		check(p, "/", "{r=}");
 	}
 
 	@Test void b06_simple_noMatch_0parts() {
@@ -135,7 +135,7 @@ class UrlPathMatcher_Test extends TestBase {
 
 	@Test void b07_simple_match_blank() {
 		var p = of("");
-		check(p, "/", "{r:''}");
+		check(p, "/", "{r=}");
 	}
 
 	@Test void b08_simple_noMatch_blank() {
@@ -150,10 +150,10 @@ class UrlPathMatcher_Test extends TestBase {
 	@Test void c01_simple_withRemainder_match() {
 		var p = of("/foo/*");
 		check(p, "/foo", "{}");
-		check(p, "/foo/", "{r:''}");
-		check(p, "/foo/bar", "{r:'bar'}");
-		check(p, "/foo/bar/", "{r:'bar/'}");
-		check(p, "/foo/bar/baz", "{r:'bar/baz'}");
+		check(p, "/foo/", "{r=}");
+		check(p, "/foo/bar", "{r=bar}");
+		check(p, "/foo/bar/", "{r=bar/}");
+		check(p, "/foo/bar/baz", "{r=bar/baz}");
 	}
 
 	@Test void c02_simple_withRemainder_noMatch() {
@@ -164,8 +164,8 @@ class UrlPathMatcher_Test extends TestBase {
 	@Test void c03_simple_withRemainder_match_2parts() {
 		var p = of("/foo/bar/*");
 		check(p, "/foo/bar", "{}");
-		check(p, "/foo/bar/baz", "{r:'baz'}");
-		check(p, "/foo/bar/baz/", "{r:'baz/'}");
+		check(p, "/foo/bar/baz", "{r=baz}");
+		check(p, "/foo/bar/baz/", "{r=baz/}");
 	}
 
 	@Test void c04_simple_withRemainder_noMatch_2parts() {
@@ -175,16 +175,16 @@ class UrlPathMatcher_Test extends TestBase {
 
 	@Test void c05_simple_withRemainder_match_0parts() {
 		var p = of("/*");
-		check(p, "/", "{r:''}");
-		check(p, "/foo", "{r:'foo'}");
-		check(p, "/foo/bar", "{r:'foo/bar'}");
+		check(p, "/", "{r=}");
+		check(p, "/foo", "{r=foo}");
+		check(p, "/foo/bar", "{r=foo/bar}");
 	}
 
 	@Test void c06_simple_withRemainder_match_blank() {
 		var p = of("*");
-		check(p, "/", "{r:''}");
-		check(p, "/foo", "{r:'foo'}");
-		check(p, "/foo/bar", "{r:'foo/bar'}");
+		check(p, "/", "{r=}");
+		check(p, "/foo", "{r=foo}");
+		check(p, "/foo/bar", "{r=foo/bar}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -193,8 +193,8 @@ class UrlPathMatcher_Test extends TestBase {
 
 	@Test void d01_1part1vars_match() {
 		var p = of("/{foo}");
-		check(p, "/bar", "{v:{foo:'bar'}}");
-		check(p, "/bar/", "{v:{foo:'bar'},r:''}");
+		check(p, "/bar", "{v={foo=bar}}");
+		check(p, "/bar/", "{r=,v={foo=bar}}");
 	}
 
 	@Test void d02_1part1var_noMatch() {
@@ -204,8 +204,8 @@ class UrlPathMatcher_Test extends TestBase {
 
 	@Test void d03_2parts1var_match() {
 		var p = of("/foo/{bar}");
-		check(p, "/foo/baz", "{v:{bar:'baz'}}");
-		check(p, "/foo/baz/", "{v:{bar:'baz'},r:''}");
+		check(p, "/foo/baz", "{v={bar=baz}}");
+		check(p, "/foo/baz/", "{r=,v={bar=baz}}");
 	}
 
 	@Test void d04_2parts1var_noMatch() {
@@ -215,8 +215,8 @@ class UrlPathMatcher_Test extends TestBase {
 
 	@Test void d05_3vars_match() {
 		var p = of("/{a}/{b}/{c}");
-		check(p, "/A/B/C", "{v:{a:'A',b:'B',c:'C'}}");
-		check(p, "/A/B/C/", "{v:{a:'A',b:'B',c:'C'},r:''}");
+		check(p, "/A/B/C", "{v={a=A,b=B,c=C}}");
+		check(p, "/A/B/C/", "{r=,v={a=A,b=B,c=C}}");
 	}
 
 	@Test void d06_3vars_noMatch() {
@@ -226,8 +226,8 @@ class UrlPathMatcher_Test extends TestBase {
 
 	@Test void d07_7parts3vars_match() {
 		var p = of("/a/{a}/b/{b}/c/{c}/d");
-		check(p, "/a/A/b/B/c/C/d", "{v:{a:'A',b:'B',c:'C'}}");
-		check(p, "/a/A/b/B/c/C/d/", "{v:{a:'A',b:'B',c:'C'},r:''}");
+		check(p, "/a/A/b/B/c/C/d", "{v={a=A,b=B,c=C}}");
+		check(p, "/a/A/b/B/c/C/d/", "{r=,v={a=A,b=B,c=C}}");
 	}
 
 	@Test void d08_6parts3vars_noMatch() {
@@ -241,10 +241,10 @@ class UrlPathMatcher_Test extends TestBase {
 
 	@Test void e01_1part1vars_withRemainder_match() {
 		var p = of("/{foo}/*");
-		check(p, "/bar", "{v:{foo:'bar'}}");
-		check(p, "/bar/", "{v:{foo:'bar'},r:''}");
-		check(p, "/bar/baz", "{v:{foo:'bar'},r:'baz'}");
-		check(p, "/bar/baz/qux", "{v:{foo:'bar'},r:'baz/qux'}");
+		check(p, "/bar", "{v={foo=bar}}");
+		check(p, "/bar/", "{r=,v={foo=bar}}");
+		check(p, "/bar/baz", "{r=baz,v={foo=bar}}");
+		check(p, "/bar/baz/qux", "{r=baz/qux,v={foo=bar}}");
 	}
 
 	@Test void e02_1part1var_withRemainder_noMatch() {
@@ -254,9 +254,9 @@ class UrlPathMatcher_Test extends TestBase {
 
 	@Test void e03_2parts1var_withRemainder_match() {
 		var p = of("/foo/{bar}/*");
-		check(p, "/foo/baz", "{v:{bar:'baz'}}");
-		check(p, "/foo/baz/", "{v:{bar:'baz'},r:''}");
-		check(p, "/foo/baz/qux/", "{v:{bar:'baz'},r:'qux/'}");
+		check(p, "/foo/baz", "{v={bar=baz}}");
+		check(p, "/foo/baz/", "{r=,v={bar=baz}}");
+		check(p, "/foo/baz/qux/", "{r=qux/,v={bar=baz}}");
 	}
 
 	@Test void e04_2parts1var_withRemainder_noMatch() {
@@ -271,9 +271,9 @@ class UrlPathMatcher_Test extends TestBase {
 	@Test void f01_innerMeta_withRemainder_match() {
 		var p = of("/*/*");
 		check(p, "/bar", "{}");
-		check(p, "/bar/", "{r:''}");
-		check(p, "/bar/baz", "{r:'baz'}");
-		check(p, "/bar/baz/qux", "{r:'baz/qux'}");
+		check(p, "/bar/", "{r=}");
+		check(p, "/bar/baz", "{r=baz}");
+		check(p, "/bar/baz/qux", "{r=baz/qux}");
 	}
 
 	@Test void f02_innerMeta_withRemainder_noMatch() {
@@ -284,8 +284,8 @@ class UrlPathMatcher_Test extends TestBase {
 	@Test void f03_innerMeta_withRemainder_match() {
 		var p = of("/foo/*/bar/*");
 		check(p, "/foo/baz/bar", "{}");
-		check(p, "/foo/baz/bar/", "{r:''}");
-		check(p, "/foo/baz/bar/qux/", "{r:'qux/'}");
+		check(p, "/foo/baz/bar/", "{r=}");
+		check(p, "/foo/baz/bar/qux/", "{r=qux/}");
 	}
 
 	@Test void f04_innerMeta_withRemainder_noMatch() {
@@ -299,10 +299,10 @@ class UrlPathMatcher_Test extends TestBase {
 
 	@Test void g01_encodedVars() {
 		var p = of("/foo/{bar}/*");
-		check(p, "/foo/baz%2Fqux", "{v:{bar:'baz/qux'}}");
-		check(p, "/foo/baz+qux", "{v:{bar:'baz qux'}}");
-		check(p, "/foo/baz%2Fqux/quux%2Fquuux", "{v:{bar:'baz/qux'},r:'quux%2Fquuux'}");
-		check(p, "/foo/baz+qux/quux+quuux", "{v:{bar:'baz qux'},r:'quux+quuux'}");
+		check(p, "/foo/baz%2Fqux", "{v={bar=baz/qux}}");
+		check(p, "/foo/baz+qux", "{v={bar=baz qux}}");
+		check(p, "/foo/baz%2Fqux/quux%2Fquuux", "{r=quux%2Fquuux,v={bar=baz/qux}}");
+		check(p, "/foo/baz+qux/quux+quuux", "{r=quux+quuux,v={bar=baz qux}}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -312,19 +312,19 @@ class UrlPathMatcher_Test extends TestBase {
 	@Test void h01_notVars() {
 		var p = of("/foo/{bar/*");
 		check(p, "/foo/{bar", "{}");
-		check(p, "/foo/{bar/{baz", "{r:'{baz'}");
+		check(p, "/foo/{bar/{baz", "{r={baz}");
 	}
 
 	@Test void h02_notVars() {
 		var p = of("/foo/bar}/*");
 		check(p, "/foo/bar}", "{}");
-		check(p, "/foo/bar}/baz}", "{r:'baz}'}");
+		check(p, "/foo/bar}/baz}", "{r=baz}}");
 	}
 
 	@Test void h03_notVars() {
 		var p = of("/foo/x{bar}x/*");
 		check(p, "/foo/x{bar}x", "{}");
-		check(p, "/foo/x{bar}x/x{baz}x", "{r:'x{baz}x'}");
+		check(p, "/foo/x{bar}x/x{baz}x", "{r=x{baz}x}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

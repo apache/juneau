@@ -1143,9 +1143,20 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 	}
 
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		return filteredBeanPropertyMap()
+			.a("name", name)
+			.a("type", cn(rawTypeMeta))
+			.a("field", field)
+			.a("getter", getter)
+			.a("setter", setter);
+		// @formatter:on
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
-		return name + ": " + cn(this.rawTypeMeta) + ", field=[" + field + "], getter=[" + getter + "], setter=[" + setter + "]";
+		return r(properties());
 	}
 
 	private Object applyChildPropertiesFilter(BeanSession session, ClassMeta cm, Object o) {
