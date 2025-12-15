@@ -19,6 +19,7 @@ package org.apache.juneau.serializer;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.nio.charset.Charset;
 import java.util.function.*;
 
 import org.apache.juneau.*;
@@ -214,5 +215,65 @@ class SerializerConfigAnnotation_Test extends TestBase {
 		check("{aContextRoot=/,aPathInfo=/,aServletPath=/,rContextRoot=/,rPath=/,rResource=/}", x.getUriContext());
 		check("RESOURCE", x.getUriRelativity());
 		check("NONE", x.getUriResolution());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Error cases - invalid values
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@SerializerConfig(
+		quoteChar="$X{ab}"
+	)
+	static class D {}
+	static ClassInfo d = ClassInfo.of(D.class);
+
+	@Test void d01_invalidQuoteChar_throwsException() {
+		var al = AnnotationWorkList.of(sr, rstream(d.getAnnotations()));
+		assertThrows(ConfigException.class, () -> {
+			JsonSerializer.create().apply(al).build();
+		});
+	}
+
+	@SerializerConfig(
+		fileCharset="$X{UTF-8}",
+		streamCharset="$X{ISO-8859-1}"
+	)
+	static class E {}
+	static ClassInfo e = ClassInfo.of(E.class);
+
+	@Test void d02_charsetWithNonDefaultValue() {
+		var al = AnnotationWorkList.of(sr, rstream(e.getAnnotations()));
+		var x = JsonSerializer.create().apply(al).build().getSession();
+		check("UTF-8", x.getFileCharset().name());
+		check("ISO-8859-1", x.getStreamCharset().name());
+	}
+
+	@SerializerConfig(
+		fileCharset="$X{default}",
+		streamCharset="$X{DEFAULT}"
+	)
+	static class E2 {}
+	static ClassInfo e2 = ClassInfo.of(E2.class);
+
+	@Test void d02b_charsetWithDefaultValue() {
+		var al = AnnotationWorkList.of(sr, rstream(e2.getAnnotations()));
+		var x = JsonSerializer.create().apply(al).build().getSession();
+		check(Charset.defaultCharset().name(), x.getFileCharset().name());
+		check(Charset.defaultCharset().name(), x.getStreamCharset().name());
+	}
+
+	@SerializerConfig(
+		initialDepth="$X{abc}",
+		maxDepth="$X{xyz}",
+		maxIndent="$X{invalid}"
+	)
+	static class F {}
+	static ClassInfo f = ClassInfo.of(F.class);
+
+	@Test void d03_invalidInteger_throwsException() {
+		var al = AnnotationWorkList.of(sr, rstream(f.getAnnotations()));
+		assertThrows(ConfigException.class, () -> {
+			JsonSerializer.create().apply(al).build();
+		});
 	}
 }

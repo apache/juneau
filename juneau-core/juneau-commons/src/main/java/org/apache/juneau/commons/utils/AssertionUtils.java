@@ -19,6 +19,8 @@ package org.apache.juneau.commons.utils;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import java.util.function.*;
+
 /**
  * Utility methods for argument validation and assertion.
  *
@@ -117,6 +119,12 @@ public class AssertionUtils {
 	 */
 	public static final <T> T assertArgNotNull(String name, T o) throws IllegalArgumentException {
 		assertArg(o != null, "Argument ''{0}'' cannot be null.", name);
+		return o;
+	}
+
+	public static final <T> T assertNotNull(T o, String msg, Object...args) throws IllegalStateException {
+		if (o == null)
+			throw illegalState(msg, args);
 		return o;
 	}
 

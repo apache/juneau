@@ -16,6 +16,7 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -81,46 +82,26 @@ import org.apache.juneau.svl.*;
  * 	}
  * </p>
  *
- *
  * @param <A> The annotation that this applier reads from.
  * @param <B> The builder class to apply the annotation to.
  */
 public abstract class AnnotationApplier<A extends Annotation,B> {
 
-	/**
-	 * Represents a no-op configuration apply.
-	 */
-	public static class NoOp extends AnnotationApplier<Annotation,Object> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param r The string resolver to use for resolving strings.
-		 */
-		public NoOp(VarResolverSession r) {
-			super(Annotation.class, Object.class, r);
-		}
-
-		@Override /* Overridden from ConfigApply */
-		public void apply(AnnotationInfo<Annotation> ai, Object b) { /* no-op */ }
-	}
-
 	private final VarResolverSession vr;
 	private final Class<A> ca;
-
 	private final Class<B> cb;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param annotationClass The annotation class.
-	 * @param builderClass The annotation class.
-	 * @param vr The string resolver to use for resolving strings.
+	 * @param builderClass The builder class.
+	 * @param varResolverSession The string resolver to use for resolving strings.
 	 */
-	protected AnnotationApplier(Class<A> annotationClass, Class<B> builderClass, VarResolverSession vr) {
-		this.vr = vr == null ? VarResolver.DEFAULT.createSession() : vr;
-		this.ca = annotationClass;
-		this.cb = builderClass;
+	protected AnnotationApplier(Class<A> annotationClass, Class<B> builderClass, VarResolverSession varResolverSession) {
+		ca = assertArgNotNull("annotationClass", annotationClass);
+		cb = assertArgNotNull("builderClass", builderClass);
+		vr = assertArgNotNull("vr", varResolverSession);
 	}
 
 	/**
@@ -150,13 +131,6 @@ public abstract class AnnotationApplier<A extends Annotation,B> {
 	public boolean canApply(Object builder) {
 		return cb.isInstance(builder);
 	}
-
-	/**
-	 * Returns the builder class that this applier applies to.
-	 *
-	 * @return The builder class that this applier applies to.
-	 */
-	public Class<?> getBuilderClass() { return cb; }
 
 	private Character toCharacter(String in, String loc) {
 		if (in.length() != 1)

@@ -16,7 +16,8 @@
  */
 package org.apache.juneau;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -79,6 +80,7 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	private final VarResolverSession vrs;
 
 	private AnnotationWorkList(VarResolverSession vrs) {
+		assertArgNotNull("vrs", vrs);
 		this.vrs = vrs;
 	}
 
@@ -113,17 +115,13 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	@SuppressWarnings("unchecked")
 	private void applyAnnotation(AnnotationInfo<?> ai) {
 		try {
-			Annotation a = ai.inner();
-			ContextApply cpa = a.annotationType().getAnnotation(ContextApply.class);
+			var a = ai.inner();
+			var cpa = assertNotNull(a.annotationType().getAnnotation(ContextApply.class), "Annotation found without @ContextApply: %s", cn(ai.annotationType()));
 			Constructor<? extends AnnotationApplier<?,?>>[] applyConstructors;
 
-			if (cpa == null) {
-				applyConstructors = a(AnnotationApplier.NoOp.class.getConstructor(VarResolverSession.class));
-			} else {
-				applyConstructors = new Constructor[cpa.value().length];
-				for (var i = 0; i < cpa.value().length; i++)
-					applyConstructors[i] = (Constructor<? extends AnnotationApplier<?,?>>)cpa.value()[i].getConstructor(VarResolverSession.class);
-			}
+			applyConstructors = new Constructor[cpa.value().length];
+			for (var i = 0; i < cpa.value().length; i++)
+				applyConstructors[i] = (Constructor<? extends AnnotationApplier<?,?>>)cpa.value()[i].getConstructor(VarResolverSession.class);
 
 			for (var applyConstructor : applyConstructors) {
 				AnnotationApplier<Annotation,Object> applier = (AnnotationApplier<Annotation,Object>)applyConstructor.newInstance(vrs);

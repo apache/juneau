@@ -23,7 +23,6 @@ import java.text.*;
 /**
  * An exception that typically occurs when trying to perform an invalid operation on a configuration property.
  *
- *
  * @serial exclude
  */
 public class ConfigException extends BasicRuntimeException {
