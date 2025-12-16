@@ -187,7 +187,46 @@
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ResettableSupplier&lt;&gt;(supplier);
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ResettableSupplier&lt;&gt;(()-&gt;o.get());
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 	}
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> }
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 * If a value is present, applies the provided mapping function to it and returns a ResettableSupplier describing the result.</em>
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">	 * The returned ResettableSupplier maintains its own cache, independent of this supplier.</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">	 * Resetting the mapped supplier does not affect this supplier, and vice versa.</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">	 * @param &lt;U&gt; The type of the result of the mapping function.</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">	 * @param mapper A mapping function to apply to the value, if present. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">	 * @return A ResettableSupplier describing the result of applying a mapping function to the value of this ResettableSupplier, if a value is present, otherwise an empty ResettableSupplier.</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	@Override
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	<strong class="jxr_keyword">public</strong> &lt;U&gt; ResettableSupplier&lt;U&gt; map(Function&lt;? <strong class="jxr_keyword">super</strong> T, ? <strong class="jxr_keyword">extends</strong> U&gt; mapper) {
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		assertArgNotNull(<span class="jxr_string">"mapper"</span>, mapper);
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ResettableSupplier&lt;&gt;(() -&gt; {
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			T value = get();
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			<strong class="jxr_keyword">return</strong> nn(value) ? mapper.apply(value) : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		});
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	}
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> <em class="jxr_javadoccomment">	 * If a value is present, and the value matches the given predicate, returns a ResettableSupplier describing the value, otherwise returns an empty ResettableSupplier.</em>
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">	 * The returned ResettableSupplier maintains its own cache, independent of this supplier.</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">	 * Resetting the filtered supplier does not affect this supplier, and vice versa.</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> <em class="jxr_javadoccomment">	 * @param predicate A predicate to apply to the value, if present. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> <em class="jxr_javadoccomment">	 * @return A ResettableSupplier describing the value of this ResettableSupplier if a value is present and the value matches the given predicate, otherwise an empty ResettableSupplier.</em>
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	@Override
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	<strong class="jxr_keyword">public</strong> ResettableSupplier&lt;T&gt; filter(Predicate&lt;? <strong class="jxr_keyword">super</strong> T&gt; predicate) {
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		assertArgNotNull(<span class="jxr_string">"predicate"</span>, predicate);
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ResettableSupplier&lt;&gt;(() -&gt; {
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 			T value = get();
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			<strong class="jxr_keyword">return</strong> (nn(value) &amp;&amp; predicate.test(value)) ? value : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		});
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	}
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
