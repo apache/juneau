@@ -591,5 +591,61 @@ class ReversedList_Test extends TestBase {
 
 		assertEquals(reversed.hashCode(), regularList.hashCode());
 	}
+
+	//====================================================================================================
+	// Additional coverage for specific lines
+	//====================================================================================================
+
+	@Test
+	void l01_equals_differentLengths() {
+		// Line 320: while (e1.hasNext() && e2.hasNext())
+		// Line 326: return !(e1.hasNext() || e2.hasNext());
+		// Test when lists have different lengths - one iterator exhausted before the other
+		var original1 = new ArrayList<>(List.of("a", "b", "c"));
+		var reversed1 = new ReversedList<>(original1);
+
+		var original2 = new ArrayList<>(List.of("a", "b", "c", "d"));
+		var reversed2 = new ReversedList<>(original2);
+
+		// reversed1: ["c", "b", "a"]
+		// reversed2: ["d", "c", "b", "a"]
+		// After comparing first 3 elements, e1 is exhausted but e2 has more
+		// Line 326: return !(e1.hasNext() || e2.hasNext()) should return false
+		assertFalse(reversed1.equals(reversed2));
+		assertFalse(reversed2.equals(reversed1));
+	}
+
+	@Test
+	void l02_equals_oneExhausted() {
+		// Line 326: return !(e1.hasNext() || e2.hasNext());
+		// Test when one iterator is exhausted before the other
+		var original1 = new ArrayList<>(List.of("a", "b"));
+		var reversed1 = new ReversedList<>(original1);
+
+		var original2 = new ArrayList<>(List.of("a", "b", "c"));
+		var reversed2 = new ReversedList<>(original2);
+
+		// reversed1: ["b", "a"]
+		// reversed2: ["c", "b", "a"]
+		// After comparing first 2 elements, e1 is exhausted but e2 has more
+		assertFalse(reversed1.equals(reversed2));
+	}
+
+	@Test
+	void l03_hashCode_withNullElements() {
+		// Line 356: hashCode = 31 * hashCode + (e == null ? 0 : e.hashCode());
+		// Test hashCode with null elements
+		var original = new ArrayList<>(Arrays.asList("a", null, "c"));
+		var reversed = new ReversedList<>(original);
+
+		// Calculate expected hashCode manually (null contributes 0)
+		// Reversed order: ["c", null, "a"]
+		int expectedHashCode = 1;
+		expectedHashCode = 31 * expectedHashCode + "c".hashCode();
+		expectedHashCode = 31 * expectedHashCode + 0; // null
+		expectedHashCode = 31 * expectedHashCode + "a".hashCode();
+
+		assertEquals(expectedHashCode, reversed.hashCode());
+	}
 }
 

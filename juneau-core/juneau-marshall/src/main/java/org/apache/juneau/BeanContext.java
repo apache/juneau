@@ -226,10 +226,10 @@ public class BeanContext extends Context {
 			beanConstructorVisibility = env("BeanContext.beanConstructorVisibility", PUBLIC);
 			beanMethodVisibility = env("BeanContext.beanMethodVisibility", PUBLIC);
 			beanFieldVisibility = env("BeanContext.beanFieldVisibility", PUBLIC);
-			beanDictionary = null;
-			swaps = null;
-			notBeanClasses = null;
-			notBeanPackages = null;
+			beanDictionary = list();
+			swaps = list();
+			notBeanClasses = classSet();
+			notBeanPackages = new TreeSet<>();
 			disableBeansRequireSomeProperties = env("BeanContext.disableBeansRequireSomeProperties", false);
 			beanMapPutReturnsOldValue = env("BeanContext.beanMapPutReturnsOldValue", false);
 			beansRequireDefaultConstructor = env("BeanContext.beansRequireDefaultConstructor", false);
@@ -265,8 +265,8 @@ public class BeanContext extends Context {
 			beanConstructorVisibility = copyFrom.beanConstructorVisibility;
 			beanMethodVisibility = copyFrom.beanMethodVisibility;
 			beanFieldVisibility = copyFrom.beanFieldVisibility;
-			beanDictionary = toList(copyFrom.beanDictionary, false);
-			swaps = toList(copyFrom.swaps, true);
+			beanDictionary = copyOf(copyFrom.beanDictionary);
+			swaps = copyOf(copyFrom.swaps);
 			notBeanClasses = toClassSet(copyFrom.notBeanClasses);
 			notBeanPackages = toSortedSet(copyFrom.notBeanPackages, false);
 			disableBeansRequireSomeProperties = ! copyFrom.beansRequireSomeProperties;
@@ -459,8 +459,6 @@ public class BeanContext extends Context {
 		 * @see #beanDictionary(Class...)
 		 */
 		public List<Class<?>> beanDictionary() {
-			if (beanDictionary == null)
-				beanDictionary = list();
 			return beanDictionary;
 		}
 
@@ -2583,8 +2581,6 @@ public class BeanContext extends Context {
 		 * @see #notBeanClasses(Class...)
 		 */
 		public Set<Class<?>> notBeanClasses() {
-			if (notBeanClasses == null)
-				notBeanClasses = classSet();
 			return notBeanClasses;
 		}
 
@@ -2668,8 +2664,6 @@ public class BeanContext extends Context {
 		 * @see #notBeanPackages(String...)
 		 */
 		public Set<String> notBeanPackages() {
-			if (notBeanPackages == null)
-				notBeanPackages = new TreeSet<>();
 			return notBeanPackages;
 		}
 
@@ -3003,8 +2997,6 @@ public class BeanContext extends Context {
 		 * @see #swaps(Class...)
 		 */
 		public List<Object> swaps() {
-			if (swaps == null)
-				swaps = list();
 			return swaps;
 		}
 

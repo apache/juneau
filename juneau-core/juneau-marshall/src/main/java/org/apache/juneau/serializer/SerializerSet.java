@@ -124,7 +124,7 @@ public class SerializerSet {
 		 * @param copyFrom The serializer group that we're copying settings and serializers from.
 		 */
 		protected Builder(SerializerSet copyFrom) {
-			super(copyFrom.getClass());
+			super(copyFrom.getClass(), BeanStore.INSTANCE);
 			this.entries = list((Object[])copyFrom.entries);
 		}
 

@@ -48,15 +48,6 @@ public class BeanBuilder<T> {
 	/**
 	 * Constructor.
 	 *
-	 * @param defaultType The type of bean being created.
-	 */
-	protected BeanBuilder(Class<? extends T> defaultType) {
-		this(defaultType, BeanStore.INSTANCE);
-	}
-
-	/**
-	 * Constructor.
-	 *
 	 * @param beanStore The bean store to use for creating beans.
 	 * @param defaultType The default bean type that this builder creates.
 	 */
