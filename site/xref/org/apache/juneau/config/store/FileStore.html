@@ -72,7 +72,7 @@
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">protected</strong> Builder() {
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  			directory = env(<span class="jxr_string">"ConfigFileStore.directory"</span>, <span class="jxr_string">"."</span>);
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  			charset = env(<span class="jxr_string">"ConfigFileStore.charset"</span>, Charset.defaultCharset());
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  			charset = env(<span class="jxr_string">"ConfigFileStore.charset"</span>).map(x -&gt; Charset.forName(x)).orElse(Charset.defaultCharset());
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  			enableWatcher = env(<span class="jxr_string">"ConfigFileStore.enableWatcher"</span>, false);
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  			watcherSensitivity = env(<span class="jxr_string">"ConfigFileStore.watcherSensitivity"</span>, WatcherSensitivity.MEDIUM);
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  			updateOnWrite = env(<span class="jxr_string">"ConfigFileStore.updateOnWrite"</span>, false);

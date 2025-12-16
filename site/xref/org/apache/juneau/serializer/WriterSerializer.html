@@ -69,8 +69,8 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  			fileCharset = Charset.defaultCharset();
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  			streamCharset = UTF8;
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  			maxIndent = env(<span class="jxr_string">"WriterSerializer.maxIndent"</span>, 100);
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  			quoteChar = env(<span class="jxr_string">"WriterSerializer.quoteChar"</span>, (Character)<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			quoteCharOverride = env(<span class="jxr_string">"WriterSerializer.quoteCharOverride"</span>, (Character)<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  			quoteChar = env(<span class="jxr_string">"WriterSerializer.quoteChar"</span>).map(x -&gt; (x.length() &gt; 0 ? x.charAt(0) : <strong class="jxr_keyword">null</strong>)).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			quoteCharOverride = env(<span class="jxr_string">"WriterSerializer.quoteCharOverride"</span>).map(x -&gt; (x.length() &gt; 0 ? x.charAt(0) : <strong class="jxr_keyword">null</strong>)).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  			useWhitespace = env(<span class="jxr_string">"WriterSerializer.useWhitespace"</span>, false);
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		}
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  

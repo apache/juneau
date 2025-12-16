@@ -197,7 +197,7 @@
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 		Function&lt;K,V&gt; supplier;
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 		Builder() {
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			cacheMode = CacheMode.parse(env(<span class="jxr_string">"juneau.cache.mode"</span>, <span class="jxr_string">"FULL"</span>));
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			cacheMode = env(<span class="jxr_string">"juneau.cache.mode"</span>, CacheMode.FULL);
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 			maxSize = env(<span class="jxr_string">"juneau.cache.maxSize"</span>, 1000);
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 			logOnExit = env(<span class="jxr_string">"juneau.cache.logOnExit"</span>, false);
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 			id = <span class="jxr_string">"Cache"</span>;

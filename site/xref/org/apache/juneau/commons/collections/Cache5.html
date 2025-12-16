@@ -94,7 +94,7 @@
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		Function5&lt;K1,K2,K3,K4,K5,V&gt; supplier;
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		Builder() {
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			cacheMode = CacheMode.parse(env(<span class="jxr_string">"juneau.cache.mode"</span>, <span class="jxr_string">"FULL"</span>));
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			cacheMode = env(<span class="jxr_string">"juneau.cache.mode"</span>, CacheMode.FULL);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  			maxSize = env(<span class="jxr_string">"juneau.cache.maxSize"</span>, 1000);
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  			logOnExit = env(<span class="jxr_string">"juneau.cache.logOnExit"</span>, false);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  			id = <span class="jxr_string">"Cache5"</span>;
