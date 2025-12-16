@@ -175,6 +175,10 @@ public class BeanContext extends Context {
 		private static final Cache<HashKey,BeanContext> CACHE = Cache.of(HashKey.class, BeanContext.class).build();
 		private static final Settings SETTINGS = Settings.get();
 
+		private static <T> T env(String property, T def) {
+			return SETTINGS.get(property, def)
+;		}
+
 		private static Set<Class<?>> classSet() {
 			return new TreeSet<>(comparing(Class::getName));
 		}

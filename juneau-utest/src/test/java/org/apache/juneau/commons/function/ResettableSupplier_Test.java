@@ -257,5 +257,274 @@ class ResettableSupplier_Test extends TestBase {
 		assertEquals("computed", supplier.get());
 		assertEquals(1, callCount.get());
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// isSupplied()
+	//------------------------------------------------------------------------------------------------------------------
+	@Test void b01_isSupplied_notCalled() {
+		var supplier = new ResettableSupplier<>(() -> "value");
+		assertTrue(supplier.isSupplied()); // Not called yet
+	}
+
+	@Test void b02_isSupplied_afterGet() {
+		var supplier = new ResettableSupplier<>(() -> "value");
+		supplier.get();
+		assertFalse(supplier.isSupplied()); // Has been called
+	}
+
+	@Test void b03_isSupplied_afterReset() {
+		var supplier = new ResettableSupplier<>(() -> "value");
+		supplier.get();
+		supplier.reset();
+		assertTrue(supplier.isSupplied()); // Reset, so not supplied anymore
+	}
+
+	@Test void b04_isSupplied_afterSet() {
+		var supplier = new ResettableSupplier<>(() -> "value");
+		supplier.set("injected");
+		assertFalse(supplier.isSupplied()); // Has a value (even if set directly)
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// copy()
+	//------------------------------------------------------------------------------------------------------------------
+	@Test void c01_copy_notCalled() {
+		var callCount = new AtomicInteger();
+		var supplier = new ResettableSupplier<>(() -> {
+			callCount.incrementAndGet();
+			return "value" + callCount.get();
+		});
+		var copy = supplier.copy();
+
+		// Copy should use original supplier
+		assertEquals("value1", copy.get());
+		assertEquals(1, callCount.get());
+	}
+
+	@Test void c02_copy_afterGet() {
+		var callCount = new AtomicInteger();
+		var supplier = new ResettableSupplier<>(() -> {
+			callCount.incrementAndGet();
+			return "value" + callCount.get();
+		});
+		supplier.get(); // Cache the value
+		var copy = supplier.copy();
+
+		// Copy should use cached value
+		assertEquals("value1", copy.get());
+		assertEquals(1, callCount.get()); // Original supplier not called again
+	}
+
+	@Test void c03_copy_independent() {
+		var supplier = new ResettableSupplier<>(() -> "value");
+		var copy = supplier.copy();
+
+		// Copy is independent
+		supplier.reset();
+		assertEquals("value", copy.get()); // Copy still has cached value
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// map() - overridden to return ResettableSupplier
+	//------------------------------------------------------------------------------------------------------------------
+	@Test void d01_map_present() {
+		var supplier = new ResettableSupplier<>(() -> "hello");
+		var mapped = supplier.map(String::length);
+		assertEquals(5, mapped.get());
+	}
+
+	@Test void d02_map_empty() {
+		@SuppressWarnings("cast")
+		var supplier = new ResettableSupplier<>(() -> (String)null);
+		var mapped = supplier.map(String::length);
+		assertNull(mapped.get());
+	}
+
+	@Test void d03_map_cached() {
+		var callCount = new AtomicInteger();
+		var supplier = new ResettableSupplier<>(() -> {
+			callCount.incrementAndGet();
+			return "hello";
+		});
+		var mapped = supplier.map(String::length);
+
+		// First call
+		assertEquals(5, mapped.get());
+		assertEquals(1, callCount.get());
+
+		// Second call - should use cached value from original supplier
+		assertEquals(5, mapped.get());
+		assertEquals(1, callCount.get()); // Original supplier not called again
+	}
+
+	@Test void d04_map_independent() {
+		var supplier = new ResettableSupplier<>(() -> "hello");
+		var mapped = supplier.map(String::length);
+
+		// Reset original
+		supplier.reset();
+		// Mapped should still have cached value
+		assertEquals(5, mapped.get());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// filter() - overridden to return ResettableSupplier
+	//------------------------------------------------------------------------------------------------------------------
+	@Test void e01_filter_matches() {
+		var supplier = new ResettableSupplier<>(() -> "hello");
+		var filtered = supplier.filter(s -> s.length() > 3);
+		assertEquals("hello", filtered.get());
+	}
+
+	@Test void e02_filter_noMatch() {
+		var supplier = new ResettableSupplier<>(() -> "hi");
+		var filtered = supplier.filter(s -> s.length() > 3);
+		assertNull(filtered.get());
+	}
+
+	@Test void e03_filter_empty() {
+		@SuppressWarnings("cast")
+		var supplier = new ResettableSupplier<>(() -> (String)null);
+		var filtered = supplier.filter(s -> s.length() > 3);
+		assertNull(filtered.get());
+	}
+
+	@Test void e04_filter_cached() {
+		var callCount = new AtomicInteger();
+		var supplier = new ResettableSupplier<>(() -> {
+			callCount.incrementAndGet();
+			return "hello";
+		});
+		var filtered = supplier.filter(s -> s.length() > 3);
+
+		// First call
+		assertEquals("hello", filtered.get());
+		assertEquals(1, callCount.get());
+
+		// Second call - should use cached value
+		assertEquals("hello", filtered.get());
+		assertEquals(1, callCount.get());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// OptionalSupplier methods
+	//------------------------------------------------------------------------------------------------------------------
+	@Test void f01_isPresent() {
+		var supplier = new ResettableSupplier<>(() -> "value");
+		assertTrue(supplier.isPresent());
+		assertFalse(supplier.isEmpty());
+	}
+
+	@Test void f02_isEmpty() {
+		var supplier = new ResettableSupplier<>(() -> null);
+		assertFalse(supplier.isPresent());
+		assertTrue(supplier.isEmpty());
+	}
+
+	@Test void f03_orElse() {
+		var supplier = new ResettableSupplier<>(() -> "value");
+		assertEquals("value", supplier.orElse("default"));
+	}
+
+	@Test void f04_orElse_empty() {
+		var supplier = new ResettableSupplier<>(() -> null);
+		assertEquals("default", supplier.orElse("default"));
+	}
+
+	@Test void f05_orElseGet() {
+		var callCount = new AtomicInteger();
+		var supplier = new ResettableSupplier<>(() -> "value");
+		var result = supplier.orElseGet(() -> {
+			callCount.incrementAndGet();
+			return "default";
+		});
+		assertEquals("value", result);
+		assertEquals(0, callCount.get());
+	}
+
+	@Test void f06_orElseGet_empty() {
+		var callCount = new AtomicInteger();
+		var supplier = new ResettableSupplier<>(() -> null);
+		var result = supplier.orElseGet(() -> {
+			callCount.incrementAndGet();
+			return "default";
+		});
+		assertEquals("default", result);
+		assertEquals(1, callCount.get());
+	}
+
+	@Test void f07_orElseThrow() {
+		var supplier = new ResettableSupplier<>(() -> "value");
+		assertEquals("value", supplier.orElseThrow(() -> new RuntimeException("should not throw")));
+	}
+
+	@Test void f08_orElseThrow_empty() {
+		var supplier = new ResettableSupplier<>(() -> null);
+		assertThrows(RuntimeException.class, () -> supplier.orElseThrow(() -> new RuntimeException("expected")));
+	}
+
+	@Test void f09_ifPresent() {
+		var callCount = new AtomicInteger();
+		var supplier = new ResettableSupplier<>(() -> "value");
+		supplier.ifPresent(s -> callCount.incrementAndGet());
+		assertEquals(1, callCount.get());
+	}
+
+	@Test void f10_ifPresent_empty() {
+		var callCount = new AtomicInteger();
+		var supplier = new ResettableSupplier<>(() -> null);
+		supplier.ifPresent(s -> callCount.incrementAndGet());
+		assertEquals(0, callCount.get());
+	}
+
+	@Test void f11_ifPresentOrElse() {
+		var presentCount = new AtomicInteger();
+		var emptyCount = new AtomicInteger();
+		var supplier = new ResettableSupplier<>(() -> "value");
+		supplier.ifPresentOrElse(
+			s -> presentCount.incrementAndGet(),
+			() -> emptyCount.incrementAndGet()
+		);
+		assertEquals(1, presentCount.get());
+		assertEquals(0, emptyCount.get());
+	}
+
+	@Test void f12_ifPresentOrElse_empty() {
+		var presentCount = new AtomicInteger();
+		var emptyCount = new AtomicInteger();
+		var supplier = new ResettableSupplier<>(() -> null);
+		supplier.ifPresentOrElse(
+			s -> presentCount.incrementAndGet(),
+			() -> emptyCount.incrementAndGet()
+		);
+		assertEquals(0, presentCount.get());
+		assertEquals(1, emptyCount.get());
+	}
+
+	@Test void f13_toOptional() {
+		var supplier = new ResettableSupplier<>(() -> "value");
+		var optional = supplier.toOptional();
+		assertTrue(optional.isPresent());
+		assertEquals("value", optional.get());
+	}
+
+	@Test void f14_toOptional_empty() {
+		var supplier = new ResettableSupplier<>(() -> null);
+		var optional = supplier.toOptional();
+		assertFalse(optional.isPresent());
+	}
+
+	@Test void f15_flatMap() {
+		var supplier = new ResettableSupplier<>(() -> "hello");
+		var mapped = supplier.flatMap(s -> OptionalSupplier.ofNullable(s.length()));
+		assertEquals(5, mapped.get());
+	}
+
+	@Test void f16_flatMap_empty() {
+		@SuppressWarnings("cast")
+		var supplier = new ResettableSupplier<>(() -> (String)null);
+		var mapped = supplier.flatMap(s -> OptionalSupplier.ofNullable(s.length()));
+		assertNull(mapped.get());
+	}
 }
 

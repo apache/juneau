@@ -23,6 +23,7 @@ import java.io.File;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.function.*;
@@ -1098,6 +1099,198 @@ class Settings_Test extends TestBase {
 		var defaultCharset = Charset.forName("ISO-8859-1");
 		var result = settings.get(TEST_PROP, defaultCharset);
 		assertEquals(Charset.forName("UTF-8"), result);
+	}
+
+	//====================================================================================================
+	// StringSetting.filter()
+	//====================================================================================================
+	@Test
+	void r01_stringSetting_filter_returnsStringSetting() {
+		System.setProperty(TEST_PROP, "hello");
+		var setting = Settings.get().get(TEST_PROP);
+		var filtered = setting.filter(s -> s.length() > 3);
+		assertEquals("hello", filtered.get());
+	}
+
+	@Test
+	void r02_stringSetting_filter_noMatch() {
+		System.setProperty(TEST_PROP, "hi");
+		var setting = Settings.get().get(TEST_PROP);
+		var filtered = setting.filter(s -> s.length() > 3);
+		assertNull(filtered.get());
+	}
+
+	@Test
+	void r03_stringSetting_filter_empty() {
+		var setting = Settings.get().get("nonexistent.property");
+		var filtered = setting.filter(s -> s.length() > 3);
+		assertNull(filtered.get());
+	}
+
+	@Test
+	void r04_stringSetting_filter_cached() {
+		var callCount = new AtomicInteger();
+		var settings = Settings.create()
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.build();
+		System.setProperty(TEST_PROP, "hello");
+		var setting = settings.get(TEST_PROP);
+		var filtered = setting.filter(s -> {
+			callCount.incrementAndGet();
+			return s.length() > 3;
+		});
+
+		// First call
+		assertEquals("hello", filtered.get());
+		assertEquals(1, callCount.get());
+
+		// Second call - should use cached value
+		assertEquals("hello", filtered.get());
+		assertEquals(1, callCount.get());
+	}
+
+	@Test
+	void r05_stringSetting_filter_independent() {
+		System.setProperty(TEST_PROP, "hello");
+		var setting = Settings.get().get(TEST_PROP);
+		var filtered = setting.filter(s -> s.length() > 3);
+
+		// Reset original
+		setting.reset();
+		// Filtered should still have cached value
+		assertEquals("hello", filtered.get());
+	}
+
+	//====================================================================================================
+	// StringSetting.mapString()
+	//====================================================================================================
+	@Test
+	void s01_stringSetting_mapString_returnsStringSetting() {
+		System.setProperty(TEST_PROP, "hello");
+		var setting = Settings.get().get(TEST_PROP);
+		var mapped = setting.mapString(String::toUpperCase);
+		assertEquals("HELLO", mapped.get());
+	}
+
+	@Test
+	void s02_stringSetting_mapString_empty() {
+		var setting = Settings.get().get("nonexistent.property");
+		var mapped = setting.mapString(String::toUpperCase);
+		assertNull(mapped.get());
+	}
+
+	@Test
+	void s03_stringSetting_mapString_cached() {
+		var callCount = new AtomicInteger();
+		var settings = Settings.create()
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.build();
+		System.setProperty(TEST_PROP, "hello");
+		var setting = settings.get(TEST_PROP);
+		var mapped = setting.mapString(s -> {
+			callCount.incrementAndGet();
+			return s.toUpperCase();
+		});
+
+		// First call
+		assertEquals("HELLO", mapped.get());
+		assertEquals(1, callCount.get());
+
+		// Second call - should use cached value
+		assertEquals("HELLO", mapped.get());
+		assertEquals(1, callCount.get());
+	}
+
+	@Test
+	void s04_stringSetting_mapString_independent() {
+		System.setProperty(TEST_PROP, "hello");
+		var setting = Settings.get().get(TEST_PROP);
+		var mapped = setting.mapString(String::toUpperCase);
+
+		// Reset original
+		setting.reset();
+		// Mapped should still have cached value
+		assertEquals("HELLO", mapped.get());
+	}
+
+	@Test
+	void s05_stringSetting_mapString_returnsNull() {
+		System.setProperty(TEST_PROP, "hello");
+		var setting = Settings.get().get(TEST_PROP);
+		var mapped = setting.mapString(s -> null);
+		assertNull(mapped.get());
+	}
+
+	//====================================================================================================
+	// Setting.asOptional()
+	//====================================================================================================
+	@Test
+	void t01_setting_asOptional_present() {
+		System.setProperty(TEST_PROP, "value");
+		var setting = Settings.get().get(TEST_PROP);
+		var optional = setting.asOptional();
+		assertTrue(optional.isPresent());
+		assertEquals("value", optional.get());
+	}
+
+	@Test
+	void t02_setting_asOptional_empty() {
+		var setting = Settings.get().get("nonexistent.property");
+		var optional = setting.asOptional();
+		assertFalse(optional.isPresent());
+	}
+
+	@Test
+	void t03_setting_asOptional_snapshot() {
+		var settings = Settings.create()
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.build();
+		System.setProperty(TEST_PROP, "value1");
+		var setting = settings.get(TEST_PROP);
+		var optional1 = setting.asOptional();
+		assertTrue(optional1.isPresent());
+		assertEquals("value1", optional1.get());
+
+		// Change the value
+		System.setProperty(TEST_PROP, "value2");
+		setting.reset(); // Force recomputation
+
+		// Original Optional should still have old value (snapshot)
+		assertTrue(optional1.isPresent());
+		assertEquals("value1", optional1.get());
+
+		// New Optional should have new value
+		var optional2 = setting.asOptional();
+		assertTrue(optional2.isPresent());
+		assertEquals("value2", optional2.get());
+	}
+
+	@Test
+	void t04_setting_asOptional_resetDoesNotAffect() {
+		var settings = Settings.create()
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.build();
+		System.setProperty(TEST_PROP, "value1");
+		var setting = settings.get(TEST_PROP);
+		var optional = setting.asOptional();
+		assertTrue(optional.isPresent());
+		assertEquals("value1", optional.get());
+
+		// Reset the setting
+		setting.reset();
+
+		// Optional should still have the original value (snapshot)
+		assertTrue(optional.isPresent());
+		assertEquals("value1", optional.get());
+
+		// Getting a new Optional after reset should get the current value
+		var optional2 = setting.asOptional();
+		assertTrue(optional2.isPresent());
+		assertEquals("value1", optional2.get()); // Still value1 since system property hasn't changed
 	}
 }
 
