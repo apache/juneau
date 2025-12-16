@@ -878,8 +878,237 @@
 <a class="jxr_linenumber" name="L870" href="#L870">870</a> 		<strong class="jxr_keyword">var</strong> result = store.get(TEST_PROP);
 <a class="jxr_linenumber" name="L871" href="#L871">871</a> 		assertNull(result);
 <a class="jxr_linenumber" name="L872" href="#L872">872</a> 	}
-<a class="jxr_linenumber" name="L873" href="#L873">873</a> }
-<a class="jxr_linenumber" name="L874" href="#L874">874</a> 
+<a class="jxr_linenumber" name="L873" href="#L873">873</a> 
+<a class="jxr_linenumber" name="L874" href="#L874">874</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L875" href="#L875">875</a> 	<em class="jxr_comment">// get(String, T) - Type conversion with default value</em>
+<a class="jxr_linenumber" name="L876" href="#L876">876</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L877" href="#L877">877</a> 	@Test
+<a class="jxr_linenumber" name="L878" href="#L878">878</a> 	<strong class="jxr_keyword">void</strong> u01_get_withDefaultString_found() {
+<a class="jxr_linenumber" name="L879" href="#L879">879</a> 		System.setProperty(TEST_PROP, <span class="jxr_string">"found-value"</span>);
+<a class="jxr_linenumber" name="L880" href="#L880">880</a> 		<strong class="jxr_keyword">var</strong> result = Settings.get().get(TEST_PROP, <span class="jxr_string">"default-value"</span>);
+<a class="jxr_linenumber" name="L881" href="#L881">881</a> 		assertEquals(<span class="jxr_string">"found-value"</span>, result);
+<a class="jxr_linenumber" name="L882" href="#L882">882</a> 	}
+<a class="jxr_linenumber" name="L883" href="#L883">883</a> 
+<a class="jxr_linenumber" name="L884" href="#L884">884</a> 	@Test
+<a class="jxr_linenumber" name="L885" href="#L885">885</a> 	<strong class="jxr_keyword">void</strong> u02_get_withDefaultString_notFound() {
+<a class="jxr_linenumber" name="L886" href="#L886">886</a> 		<strong class="jxr_keyword">var</strong> result = Settings.get().get(<span class="jxr_string">"nonexistent.property"</span>, <span class="jxr_string">"default-value"</span>);
+<a class="jxr_linenumber" name="L887" href="#L887">887</a> 		assertEquals(<span class="jxr_string">"default-value"</span>, result);
+<a class="jxr_linenumber" name="L888" href="#L888">888</a> 	}
+<a class="jxr_linenumber" name="L889" href="#L889">889</a> 
+<a class="jxr_linenumber" name="L890" href="#L890">890</a> 	@Test
+<a class="jxr_linenumber" name="L891" href="#L891">891</a> 	<strong class="jxr_keyword">void</strong> u03_get_withDefaultBoolean_found() {
+<a class="jxr_linenumber" name="L892" href="#L892">892</a> 		System.setProperty(TEST_PROP, <span class="jxr_string">"true"</span>);
+<a class="jxr_linenumber" name="L893" href="#L893">893</a> 		<strong class="jxr_keyword">var</strong> result = Settings.get().get(TEST_PROP, false);
+<a class="jxr_linenumber" name="L894" href="#L894">894</a> 		assertTrue(result);
+<a class="jxr_linenumber" name="L895" href="#L895">895</a> 	}
+<a class="jxr_linenumber" name="L896" href="#L896">896</a> 
+<a class="jxr_linenumber" name="L897" href="#L897">897</a> 	@Test
+<a class="jxr_linenumber" name="L898" href="#L898">898</a> 	<strong class="jxr_keyword">void</strong> u04_get_withDefaultBoolean_notFound() {
+<a class="jxr_linenumber" name="L899" href="#L899">899</a> 		<strong class="jxr_keyword">var</strong> result = Settings.get().get(<span class="jxr_string">"nonexistent.property"</span>, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L900" href="#L900">900</a> 		assertTrue(result);
+<a class="jxr_linenumber" name="L901" href="#L901">901</a> 	}
+<a class="jxr_linenumber" name="L902" href="#L902">902</a> 
+<a class="jxr_linenumber" name="L903" href="#L903">903</a> 	@Test
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> 	<strong class="jxr_keyword">void</strong> u05_get_withDefaultBoolean_falseValue() {
+<a class="jxr_linenumber" name="L905" href="#L905">905</a> 		System.setProperty(TEST_PROP, <span class="jxr_string">"false"</span>);
+<a class="jxr_linenumber" name="L906" href="#L906">906</a> 		<strong class="jxr_keyword">var</strong> result = Settings.get().get(TEST_PROP, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> 		assertFalse(result);
+<a class="jxr_linenumber" name="L908" href="#L908">908</a> 	}
+<a class="jxr_linenumber" name="L909" href="#L909">909</a> 
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> 	@Test
+<a class="jxr_linenumber" name="L911" href="#L911">911</a> 	<strong class="jxr_keyword">void</strong> u06_get_withDefaultCharset_found() {
+<a class="jxr_linenumber" name="L912" href="#L912">912</a> 		System.setProperty(TEST_PROP, <span class="jxr_string">"ISO-8859-1"</span>);
+<a class="jxr_linenumber" name="L913" href="#L913">913</a> 		<em class="jxr_comment">// Use Charset.forName to get a Charset instance (not a concrete implementation)</em>
+<a class="jxr_linenumber" name="L914" href="#L914">914</a> 		<strong class="jxr_keyword">var</strong> defaultCharset = Charset.forName(<span class="jxr_string">"UTF-8"</span>);
+<a class="jxr_linenumber" name="L915" href="#L915">915</a> 		<strong class="jxr_keyword">var</strong> result = Settings.get().get(TEST_PROP, defaultCharset);
+<a class="jxr_linenumber" name="L916" href="#L916">916</a> 		assertEquals(Charset.forName(<span class="jxr_string">"ISO-8859-1"</span>), result);
+<a class="jxr_linenumber" name="L917" href="#L917">917</a> 	}
+<a class="jxr_linenumber" name="L918" href="#L918">918</a> 
+<a class="jxr_linenumber" name="L919" href="#L919">919</a> 	@Test
+<a class="jxr_linenumber" name="L920" href="#L920">920</a> 	<strong class="jxr_keyword">void</strong> u07_get_withDefaultCharset_notFound() {
+<a class="jxr_linenumber" name="L921" href="#L921">921</a> 		<em class="jxr_comment">// Use Charset.forName to get a Charset instance (not a concrete implementation)</em>
+<a class="jxr_linenumber" name="L922" href="#L922">922</a> 		<strong class="jxr_keyword">var</strong> defaultCharset = Charset.forName(<span class="jxr_string">"UTF-8"</span>);
+<a class="jxr_linenumber" name="L923" href="#L923">923</a> 		<strong class="jxr_keyword">var</strong> result = Settings.get().get(<span class="jxr_string">"nonexistent.property"</span>, defaultCharset);
+<a class="jxr_linenumber" name="L924" href="#L924">924</a> 		assertEquals(defaultCharset, result);
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> 	}
+<a class="jxr_linenumber" name="L926" href="#L926">926</a> 
+<a class="jxr_linenumber" name="L927" href="#L927">927</a> 	@Test
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> 	<strong class="jxr_keyword">void</strong> u08_get_withDefaultEnum_found() {
+<a class="jxr_linenumber" name="L929" href="#L929">929</a> 		enum TestEnum { VALUE1, VALUE2, VALUE3 }
+<a class="jxr_linenumber" name="L930" href="#L930">930</a> 		System.setProperty(TEST_PROP, <span class="jxr_string">"VALUE2"</span>);
+<a class="jxr_linenumber" name="L931" href="#L931">931</a> 		<strong class="jxr_keyword">var</strong> result = Settings.get().get(TEST_PROP, TestEnum.VALUE1);
+<a class="jxr_linenumber" name="L932" href="#L932">932</a> 		assertEquals(TestEnum.VALUE2, result);
+<a class="jxr_linenumber" name="L933" href="#L933">933</a> 	}
+<a class="jxr_linenumber" name="L934" href="#L934">934</a> 
+<a class="jxr_linenumber" name="L935" href="#L935">935</a> 	@Test
+<a class="jxr_linenumber" name="L936" href="#L936">936</a> 	<strong class="jxr_keyword">void</strong> u09_get_withDefaultEnum_notFound() {
+<a class="jxr_linenumber" name="L937" href="#L937">937</a> 		enum TestEnum { VALUE1, VALUE2, VALUE3 }
+<a class="jxr_linenumber" name="L938" href="#L938">938</a> 		<strong class="jxr_keyword">var</strong> result = Settings.get().get(<span class="jxr_string">"nonexistent.property"</span>, TestEnum.VALUE1);
+<a class="jxr_linenumber" name="L939" href="#L939">939</a> 		assertEquals(TestEnum.VALUE1, result);
+<a class="jxr_linenumber" name="L940" href="#L940">940</a> 	}
+<a class="jxr_linenumber" name="L941" href="#L941">941</a> 
+<a class="jxr_linenumber" name="L942" href="#L942">942</a> 	@Test
+<a class="jxr_linenumber" name="L943" href="#L943">943</a> 	<strong class="jxr_keyword">void</strong> u10_get_withDefaultString_nullDefault() {
+<a class="jxr_linenumber" name="L944" href="#L944">944</a> 		<em class="jxr_comment">// Null defaults are not allowed</em>
+<a class="jxr_linenumber" name="L945" href="#L945">945</a> 		System.setProperty(TEST_PROP, <span class="jxr_string">"found-value"</span>);
+<a class="jxr_linenumber" name="L946" href="#L946">946</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; {
+<a class="jxr_linenumber" name="L947" href="#L947">947</a> 			Settings.get().get(TEST_PROP, (String)<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> 		});
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> 	}
+<a class="jxr_linenumber" name="L950" href="#L950">950</a> 
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> 	@Test
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> 	<strong class="jxr_keyword">void</strong> u11_get_withDefaultString_nullProperty() {
+<a class="jxr_linenumber" name="L953" href="#L953">953</a> 		Settings.get().setLocal(TEST_PROP, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> 		<strong class="jxr_keyword">var</strong> result = Settings.get().get(TEST_PROP, <span class="jxr_string">"default-value"</span>);
+<a class="jxr_linenumber" name="L955" href="#L955">955</a> 		<em class="jxr_comment">// When property is set to null, get() returns Optional.empty(), so get(String, T) returns default</em>
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> 		assertEquals(<span class="jxr_string">"default-value"</span>, result);
+<a class="jxr_linenumber" name="L957" href="#L957">957</a> 	}
+<a class="jxr_linenumber" name="L958" href="#L958">958</a> 
+<a class="jxr_linenumber" name="L959" href="#L959">959</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> 	<em class="jxr_comment">// addTypeFunction() - Custom type conversion</em>
+<a class="jxr_linenumber" name="L961" href="#L961">961</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L962" href="#L962">962</a> 	@Test
+<a class="jxr_linenumber" name="L963" href="#L963">963</a> 	<strong class="jxr_keyword">void</strong> v01_addTypeFunction_customType() {
+<a class="jxr_linenumber" name="L964" href="#L964">964</a> 		<em class="jxr_comment">// Register a custom type converter for Integer</em>
+<a class="jxr_linenumber" name="L965" href="#L965">965</a> 		<strong class="jxr_keyword">var</strong> settings = Settings.create()
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> 			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+<a class="jxr_linenumber" name="L967" href="#L967">967</a> 			.addSource(Settings.SYSTEM_ENV_SOURCE)
+<a class="jxr_linenumber" name="L968" href="#L968">968</a> 			.addTypeFunction(Integer.<strong class="jxr_keyword">class</strong>, Integer::valueOf)
+<a class="jxr_linenumber" name="L969" href="#L969">969</a> 			.build();
+<a class="jxr_linenumber" name="L970" href="#L970">970</a> 
+<a class="jxr_linenumber" name="L971" href="#L971">971</a> 		System.setProperty(TEST_PROP, <span class="jxr_string">"123"</span>);
+<a class="jxr_linenumber" name="L972" href="#L972">972</a> 		<strong class="jxr_keyword">var</strong> result = settings.get(TEST_PROP, 0);
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> 		assertEquals(123, result.intValue());
+<a class="jxr_linenumber" name="L974" href="#L974">974</a> 	}
+<a class="jxr_linenumber" name="L975" href="#L975">975</a> 
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> 	@Test
+<a class="jxr_linenumber" name="L977" href="#L977">977</a> 	<strong class="jxr_keyword">void</strong> v02_addTypeFunction_customType_notFound() {
+<a class="jxr_linenumber" name="L978" href="#L978">978</a> 		<em class="jxr_comment">// Register a custom type converter for Integer</em>
+<a class="jxr_linenumber" name="L979" href="#L979">979</a> 		<strong class="jxr_keyword">var</strong> settings = Settings.create()
+<a class="jxr_linenumber" name="L980" href="#L980">980</a> 			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+<a class="jxr_linenumber" name="L981" href="#L981">981</a> 			.addSource(Settings.SYSTEM_ENV_SOURCE)
+<a class="jxr_linenumber" name="L982" href="#L982">982</a> 			.addTypeFunction(Integer.<strong class="jxr_keyword">class</strong>, Integer::valueOf)
+<a class="jxr_linenumber" name="L983" href="#L983">983</a> 			.build();
+<a class="jxr_linenumber" name="L984" href="#L984">984</a> 
+<a class="jxr_linenumber" name="L985" href="#L985">985</a> 		<strong class="jxr_keyword">var</strong> result = settings.get(<span class="jxr_string">"nonexistent.property"</span>, 999);
+<a class="jxr_linenumber" name="L986" href="#L986">986</a> 		assertEquals(999, result.intValue());
+<a class="jxr_linenumber" name="L987" href="#L987">987</a> 	}
+<a class="jxr_linenumber" name="L988" href="#L988">988</a> 
+<a class="jxr_linenumber" name="L989" href="#L989">989</a> 	@Test
+<a class="jxr_linenumber" name="L990" href="#L990">990</a> 	<strong class="jxr_keyword">void</strong> v03_addTypeFunction_overridesDefault() {
+<a class="jxr_linenumber" name="L991" href="#L991">991</a> 		<em class="jxr_comment">// Register a custom converter for Boolean that inverts the value</em>
+<a class="jxr_linenumber" name="L992" href="#L992">992</a> 		<strong class="jxr_keyword">var</strong> settings = Settings.create()
+<a class="jxr_linenumber" name="L993" href="#L993">993</a> 			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+<a class="jxr_linenumber" name="L994" href="#L994">994</a> 			.addSource(Settings.SYSTEM_ENV_SOURCE)
+<a class="jxr_linenumber" name="L995" href="#L995">995</a> 			.addTypeFunction(Boolean.<strong class="jxr_keyword">class</strong>, s -&gt; !Boolean.valueOf(s))
+<a class="jxr_linenumber" name="L996" href="#L996">996</a> 			.build();
+<a class="jxr_linenumber" name="L997" href="#L997">997</a> 
+<a class="jxr_linenumber" name="L998" href="#L998">998</a> 		System.setProperty(TEST_PROP, <span class="jxr_string">"true"</span>);
+<a class="jxr_linenumber" name="L999" href="#L999">999</a> 		<strong class="jxr_keyword">var</strong> result = settings.get(TEST_PROP, false);
+<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 		<em class="jxr_comment">// Should be inverted (true -&gt; false)</em>
+<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 		assertFalse(result);
+<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 	}
+<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 
+<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 	@Test
+<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 	<strong class="jxr_keyword">void</strong> v04_addTypeFunction_multipleTypes() {
+<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 		<em class="jxr_comment">// Register multiple custom type converters</em>
+<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 		<strong class="jxr_keyword">var</strong> settings = Settings.create()
+<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 			.addSource(Settings.SYSTEM_ENV_SOURCE)
+<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 			.addTypeFunction(Integer.<strong class="jxr_keyword">class</strong>, Integer::valueOf)
+<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 			.addTypeFunction(Long.<strong class="jxr_keyword">class</strong>, Long::valueOf)
+<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 			.build();
+<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 
+<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 		System.setProperty(TEST_PROP, <span class="jxr_string">"123"</span>);
+<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 		<strong class="jxr_keyword">var</strong> intResult = settings.get(TEST_PROP, 0);
+<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 		assertEquals(123, intResult.intValue());
+<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 
+<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 		System.setProperty(TEST_PROP_2, <span class="jxr_string">"456"</span>);
+<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 		<strong class="jxr_keyword">var</strong> longResult = settings.get(TEST_PROP_2, 0L);
+<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 		assertEquals(456L, longResult.longValue());
+<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 	}
+<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 
+<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 	@Test
+<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 	<strong class="jxr_keyword">void</strong> v05_addTypeFunction_customClass() {
+<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 		<em class="jxr_comment">// Create a custom class with a fromString method</em>
+<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 		<em class="jxr_comment">// Using a static nested class to avoid local class issues</em>
+<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 		<strong class="jxr_keyword">var</strong> settings = Settings.create()
+<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 			.addSource(Settings.SYSTEM_ENV_SOURCE)
+<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 			.addTypeFunction(String.<strong class="jxr_keyword">class</strong>, s -&gt; <span class="jxr_string">"custom-"</span> + s)
+<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 			.build();
+<a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 
+<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 		System.setProperty(TEST_PROP, <span class="jxr_string">"value"</span>);
+<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 		<em class="jxr_comment">// String is already supported, but we override it with a custom function</em>
+<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> 		<strong class="jxr_keyword">var</strong> result = settings.get(TEST_PROP, <span class="jxr_string">"default"</span>);
+<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 		assertEquals(<span class="jxr_string">"custom-value"</span>, result);
+<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> 	}
+<a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> 
+<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 	@Test
+<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 	<strong class="jxr_keyword">void</strong> v06_addTypeFunction_nullType() {
+<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; {
+<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 			Settings.create().addTypeFunction(<strong class="jxr_keyword">null</strong>, Integer::valueOf);
+<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 		});
+<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 	}
+<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 
+<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 	@Test
+<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 	<strong class="jxr_keyword">void</strong> v07_addTypeFunction_nullFunction() {
+<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; {
+<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 			Settings.create().addTypeFunction(Integer.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 		});
+<a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 	}
+<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 
+<a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 	@Test
+<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 	<strong class="jxr_keyword">void</strong> v08_addTypeFunction_unsupportedType() {
+<a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 		<em class="jxr_comment">// Try to use a type that hasn't been registered</em>
+<a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> 		<strong class="jxr_keyword">var</strong> settings = Settings.create()
+<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 			.addSource(Settings.SYSTEM_ENV_SOURCE)
+<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 			.build();
+<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 
+<a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 		System.setProperty(TEST_PROP, <span class="jxr_string">"123"</span>);
+<a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> 		assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; {
+<a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> 			settings.get(TEST_PROP, 0); <em class="jxr_comment">// Integer not registered</em>
+<a class="jxr_linenumber" name="L1064" href="#L1064">1064</a> 		});
+<a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> 	}
+<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> 
+<a class="jxr_linenumber" name="L1067" href="#L1067">1067</a> 	@Test
+<a class="jxr_linenumber" name="L1068" href="#L1068">1068</a> 	<strong class="jxr_keyword">void</strong> v09_addTypeFunction_usesDefaultWhenCustomNotRegistered() {
+<a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> 		<em class="jxr_comment">// Custom settings without Integer registered should fall back to default functions</em>
+<a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> 		<em class="jxr_comment">// But Integer is not in DEFAULT_TYPE_FUNCTIONS, so it should throw</em>
+<a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> 		<strong class="jxr_keyword">var</strong> settings = Settings.create()
+<a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> 			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+<a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> 			.addSource(Settings.SYSTEM_ENV_SOURCE)
+<a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> 			.build();
+<a class="jxr_linenumber" name="L1075" href="#L1075">1075</a> 
+<a class="jxr_linenumber" name="L1076" href="#L1076">1076</a> 		<em class="jxr_comment">// Boolean is in DEFAULT_TYPE_FUNCTIONS, so it should work</em>
+<a class="jxr_linenumber" name="L1077" href="#L1077">1077</a> 		System.setProperty(TEST_PROP, <span class="jxr_string">"true"</span>);
+<a class="jxr_linenumber" name="L1078" href="#L1078">1078</a> 		<strong class="jxr_keyword">var</strong> result = settings.get(TEST_PROP, false);
+<a class="jxr_linenumber" name="L1079" href="#L1079">1079</a> 		assertTrue(result);
+<a class="jxr_linenumber" name="L1080" href="#L1080">1080</a> 
+<a class="jxr_linenumber" name="L1081" href="#L1081">1081</a> 		<em class="jxr_comment">// Integer is not in DEFAULT_TYPE_FUNCTIONS, so it should throw</em>
+<a class="jxr_linenumber" name="L1082" href="#L1082">1082</a> 		System.setProperty(TEST_PROP_2, <span class="jxr_string">"123"</span>);
+<a class="jxr_linenumber" name="L1083" href="#L1083">1083</a> 		assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; {
+<a class="jxr_linenumber" name="L1084" href="#L1084">1084</a> 			settings.get(TEST_PROP_2, 0);
+<a class="jxr_linenumber" name="L1085" href="#L1085">1085</a> 		});
+<a class="jxr_linenumber" name="L1086" href="#L1086">1086</a> 	}
+<a class="jxr_linenumber" name="L1087" href="#L1087">1087</a> 
+<a class="jxr_linenumber" name="L1088" href="#L1088">1088</a> 	@Test
+<a class="jxr_linenumber" name="L1089" href="#L1089">1089</a> 	<strong class="jxr_keyword">void</strong> v10_addTypeFunction_charsetUsesDefault() {
+<a class="jxr_linenumber" name="L1090" href="#L1090">1090</a> 		<em class="jxr_comment">// Charset is in DEFAULT_TYPE_FUNCTIONS, so it should work without registration</em>
+<a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> 		<em class="jxr_comment">// Use Charset.forName to get a Charset instance (not a concrete implementation)</em>
+<a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 		<strong class="jxr_keyword">var</strong> settings = Settings.create()
+<a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> 			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+<a class="jxr_linenumber" name="L1094" href="#L1094">1094</a> 			.addSource(Settings.SYSTEM_ENV_SOURCE)
+<a class="jxr_linenumber" name="L1095" href="#L1095">1095</a> 			.build();
+<a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> 
+<a class="jxr_linenumber" name="L1097" href="#L1097">1097</a> 		System.setProperty(TEST_PROP, <span class="jxr_string">"UTF-8"</span>);
+<a class="jxr_linenumber" name="L1098" href="#L1098">1098</a> 		<strong class="jxr_keyword">var</strong> defaultCharset = Charset.forName(<span class="jxr_string">"ISO-8859-1"</span>);
+<a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 		<strong class="jxr_keyword">var</strong> result = settings.get(TEST_PROP, defaultCharset);
+<a class="jxr_linenumber" name="L1100" href="#L1100">1100</a> 		assertEquals(Charset.forName(<span class="jxr_string">"UTF-8"</span>), result);
+<a class="jxr_linenumber" name="L1101" href="#L1101">1101</a> 	}
+<a class="jxr_linenumber" name="L1102" href="#L1102">1102</a> }
+<a class="jxr_linenumber" name="L1103" href="#L1103">1103</a> 
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
