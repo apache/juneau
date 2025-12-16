@@ -16,7 +16,6 @@
  */
 package org.apache.juneau;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.text.*;
@@ -63,44 +62,9 @@ public class BasicRuntimeException extends RuntimeException {
 	}
 
 	@Override /* Overridden from Throwable */
-	public synchronized Throwable fillInStackTrace() {
-		assertModifiable();
-		return super.fillInStackTrace();
-	}
-
-	/**
-	 * Same as {@link #getCause()} but searches the throwable chain for an exception of the specified type.
-	 *
-	 * @param c The throwable type to search for.
-	 * @param <T> The throwable type to search for.
-	 * @return The exception, or <jk>null</jk> if not found.
-	 */
-	public <T extends Throwable> T getCause(Class<T> c) {
-		return getThrowableCause(c, this);
-	}
-
-	@Override /* Overridden from Throwable */
 	public String getMessage() {
-		if (nn(message))
-			return message;
-		String m = super.getMessage();
-		if (m == null && nn(getCause()))
-			m = getCause().getMessage();
-		return m;
+		return nn(message) ? message : super.getMessage();
 	}
-
-	@Override /* Overridden from Throwable */
-	public synchronized Throwable initCause(Throwable cause) {
-		assertModifiable();
-		return super.initCause(cause);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this bean is unmodifiable.
-	 *
-	 * @return <jk>true</jk> if this bean is unmodifiable.
-	 */
-	public boolean isUnmodifiable() { return unmodifiable; }
 
 	/**
 	 * Sets the detail message on this exception.
@@ -110,44 +74,7 @@ public class BasicRuntimeException extends RuntimeException {
 	 * @return This object.
 	 */
 	public BasicRuntimeException setMessage(String message, Object...args) {
-		assertModifiable();
 		this.message = f(message, args);
-		return this;
-	}
-
-	@Override /* Overridden from Throwable */
-	public void setStackTrace(StackTraceElement[] stackTrace) {
-		assertModifiable();
-		super.setStackTrace(stackTrace);
-	}
-
-	/**
-	 * Returns the caused-by exception if there is one.
-	 *
-	 * @return The caused-by exception if there is one, or this exception if there isn't.
-	 */
-	public Throwable unwrap() {
-		Throwable t = getCause();
-		return t == null ? this : t;
-	}
-
-	/**
-	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
-	 */
-	protected final void assertModifiable() {
-		if (unmodifiable)
-			throw unsupportedOp("Bean is read-only");
-	}
-
-	/**
-	 * Specifies whether this bean should be unmodifiable.
-	 * <p>
-	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
-	 *
-	 * @return This object.
-	 */
-	protected BasicRuntimeException setUnmodifiable() {
-		unmodifiable = true;
 		return this;
 	}
 }

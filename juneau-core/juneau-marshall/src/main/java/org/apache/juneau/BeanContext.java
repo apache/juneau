@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
+import static java.util.Comparator.*;
 
 import java.beans.*;
 import java.io.*;
@@ -37,6 +38,7 @@ import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.reflect.Visibility;
+import org.apache.juneau.commons.settings.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshaller.*;
@@ -171,39 +173,50 @@ public class BeanContext extends Context {
 	public static class Builder extends Context.Builder {
 
 		private static final Cache<HashKey,BeanContext> CACHE = Cache.of(HashKey.class, BeanContext.class).build();
+		private static final Settings SETTINGS = Settings.get();
 
 		private static Set<Class<?>> classSet() {
-			return new TreeSet<>(Comparator.comparing(Class::getName));
+			return new TreeSet<>(comparing(Class::getName));
 		}
 
-		private static Set<Class<?>> classSet(Collection<Class<?>> copy) {
-			return classSet(copy, false);
-		}
-
-		private static Set<Class<?>> classSet(Collection<Class<?>> copy, boolean nullIfEmpty) {
-			if (copy == null || (nullIfEmpty && copy.isEmpty()))
+		private static Set<Class<?>> toClassSet(Collection<Class<?>> copy) {
+			if (copy == null)
 				return null;
-			Set<Class<?>> x = classSet();
+			var x = classSet();
 			x.addAll(copy);
 			return x;
 		}
 
-		Visibility beanClassVisibility, beanConstructorVisibility, beanMethodVisibility, beanFieldVisibility;
-		boolean disableBeansRequireSomeProperties, beanMapPutReturnsOldValue, beansRequireDefaultConstructor, beansRequireSerializable, beansRequireSettersForGetters, disableIgnoreTransientFields,
-			disableIgnoreUnknownNullBeanProperties, disableIgnoreMissingSetters, disableInterfaceProxies, findFluentSetters, ignoreInvocationExceptionsOnGetters, ignoreInvocationExceptionsOnSetters,
-			ignoreUnknownBeanProperties, ignoreUnknownEnumValues, sortProperties, useEnumNames, useJavaBeanIntrospector;
-		String typePropertyName;
-		MediaType mediaType;
-		Locale locale;
-		TimeZone timeZone;
-		Class<? extends PropertyNamer> propertyNamer;
-		List<Class<?>> beanDictionary;
-
-		List<Object> swaps;
-
-		Set<Class<?>> notBeanClasses;
-
-		Set<String> notBeanPackages;
+		private Visibility beanClassVisibility;
+		private Visibility beanConstructorVisibility;
+		private Visibility beanMethodVisibility;
+		private Visibility beanFieldVisibility;
+		private boolean disableBeansRequireSomeProperties;
+		private boolean beanMapPutReturnsOldValue;
+		private boolean beansRequireDefaultConstructor;
+		private boolean beansRequireSerializable;
+		private boolean beansRequireSettersForGetters;
+		private boolean disableIgnoreTransientFields;
+		private boolean disableIgnoreUnknownNullBeanProperties;
+		private boolean disableIgnoreMissingSetters;
+		private boolean disableInterfaceProxies;
+		private boolean findFluentSetters;
+		private boolean ignoreInvocationExceptionsOnGetters;
+		private boolean ignoreInvocationExceptionsOnSetters;
+		private boolean ignoreUnknownBeanProperties;
+		private boolean ignoreUnknownEnumValues;
+		private boolean sortProperties;
+		private boolean useEnumNames;
+		private boolean useJavaBeanIntrospector;
+		private String typePropertyName;
+		private MediaType mediaType;
+		private Locale locale;
+		private TimeZone timeZone;
+		private Class<? extends PropertyNamer> propertyNamer;
+		private List<Class<?>> beanDictionary;
+		private List<Object> swaps;
+		private Set<Class<?>> notBeanClasses;
+		private Set<String> notBeanPackages;
 
 		/**
 		 * Constructor.
@@ -254,10 +267,10 @@ public class BeanContext extends Context {
 			beanConstructorVisibility = copyFrom.beanConstructorVisibility;
 			beanMethodVisibility = copyFrom.beanMethodVisibility;
 			beanFieldVisibility = copyFrom.beanFieldVisibility;
-			beanDictionary = toList(copyFrom.beanDictionary, true);
+			beanDictionary = toList(copyFrom.beanDictionary, false);
 			swaps = toList(copyFrom.swaps, true);
-			notBeanClasses = classSet(copyFrom.notBeanClasses, true);
-			notBeanPackages = toSortedSet(copyFrom.notBeanPackages, true);
+			notBeanClasses = toClassSet(copyFrom.notBeanClasses);
+			notBeanPackages = toSortedSet(copyFrom.notBeanPackages, false);
 			disableBeansRequireSomeProperties = ! copyFrom.beansRequireSomeProperties;
 			beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;
 			beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;
@@ -295,7 +308,7 @@ public class BeanContext extends Context {
 			beanFieldVisibility = copyFrom.beanFieldVisibility;
 			beanDictionary = copyOf(copyFrom.beanDictionary);
 			swaps = copyOf(copyFrom.swaps);
-			notBeanClasses = classSet(copyFrom.notBeanClasses);
+			notBeanClasses = toClassSet(copyFrom.notBeanClasses);
 			notBeanPackages = toSortedSet(copyFrom.notBeanPackages);
 			disableBeansRequireSomeProperties = copyFrom.disableBeansRequireSomeProperties;
 			beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;

@@ -216,7 +216,6 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @return The underlying builder for the headers.
 	 */
 	public HeaderList getHeaders() {
-		assertModifiable();
 		return headers;
 	}
 
@@ -314,7 +313,6 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @return This object.
 	 */
 	public BasicHttpException setContent(HttpEntity value) {
-		assertModifiable();
 		content = value;
 		return this;
 	}
@@ -332,7 +330,6 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 
 	@Override /* Overridden from HttpMessage */
 	public void setEntity(HttpEntity entity) {
-		assertModifiable();
 		this.content = entity;
 	}
 
@@ -370,7 +367,6 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @return This object.
 	 */
 	public BasicHttpException setHeaders(HeaderList value) {
-		assertModifiable();
 		headers = value.copy();
 		return this;
 	}
@@ -501,7 +497,6 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @return This object.
 	 */
 	public BasicHttpException setStatusLine(BasicStatusLine value) {
-		assertModifiable();
 		statusLine = value.copy();
 		return this;
 	}
@@ -528,9 +523,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 *
 	 * @return This object.
 	 */
-	@Override
 	public BasicHttpException setUnmodifiable() {
-		super.setUnmodifiable();
 		statusLine.setUnmodifiable();
 		return this;
 	}

@@ -870,5 +870,234 @@ class Settings_Test extends TestBase {
 		var result = store.get(TEST_PROP);
 		assertNull(result);
 	}
+
+	//====================================================================================================
+	// get(String, T) - Type conversion with default value
+	//====================================================================================================
+	@Test
+	void u01_get_withDefaultString_found() {
+		System.setProperty(TEST_PROP, "found-value");
+		var result = Settings.get().get(TEST_PROP, "default-value");
+		assertEquals("found-value", result);
+	}
+
+	@Test
+	void u02_get_withDefaultString_notFound() {
+		var result = Settings.get().get("nonexistent.property", "default-value");
+		assertEquals("default-value", result);
+	}
+
+	@Test
+	void u03_get_withDefaultBoolean_found() {
+		System.setProperty(TEST_PROP, "true");
+		var result = Settings.get().get(TEST_PROP, false);
+		assertTrue(result);
+	}
+
+	@Test
+	void u04_get_withDefaultBoolean_notFound() {
+		var result = Settings.get().get("nonexistent.property", true);
+		assertTrue(result);
+	}
+
+	@Test
+	void u05_get_withDefaultBoolean_falseValue() {
+		System.setProperty(TEST_PROP, "false");
+		var result = Settings.get().get(TEST_PROP, true);
+		assertFalse(result);
+	}
+
+	@Test
+	void u06_get_withDefaultCharset_found() {
+		System.setProperty(TEST_PROP, "ISO-8859-1");
+		// Use Charset.forName to get a Charset instance (not a concrete implementation)
+		var defaultCharset = Charset.forName("UTF-8");
+		var result = Settings.get().get(TEST_PROP, defaultCharset);
+		assertEquals(Charset.forName("ISO-8859-1"), result);
+	}
+
+	@Test
+	void u07_get_withDefaultCharset_notFound() {
+		// Use Charset.forName to get a Charset instance (not a concrete implementation)
+		var defaultCharset = Charset.forName("UTF-8");
+		var result = Settings.get().get("nonexistent.property", defaultCharset);
+		assertEquals(defaultCharset, result);
+	}
+
+	@Test
+	void u08_get_withDefaultEnum_found() {
+		enum TestEnum { VALUE1, VALUE2, VALUE3 }
+		System.setProperty(TEST_PROP, "VALUE2");
+		var result = Settings.get().get(TEST_PROP, TestEnum.VALUE1);
+		assertEquals(TestEnum.VALUE2, result);
+	}
+
+	@Test
+	void u09_get_withDefaultEnum_notFound() {
+		enum TestEnum { VALUE1, VALUE2, VALUE3 }
+		var result = Settings.get().get("nonexistent.property", TestEnum.VALUE1);
+		assertEquals(TestEnum.VALUE1, result);
+	}
+
+	@Test
+	void u10_get_withDefaultString_nullDefault() {
+		// Null defaults are not allowed
+		System.setProperty(TEST_PROP, "found-value");
+		assertThrows(IllegalArgumentException.class, () -> {
+			Settings.get().get(TEST_PROP, (String)null);
+		});
+	}
+
+	@Test
+	void u11_get_withDefaultString_nullProperty() {
+		Settings.get().setLocal(TEST_PROP, null);
+		var result = Settings.get().get(TEST_PROP, "default-value");
+		// When property is set to null, get() returns Optional.empty(), so get(String, T) returns default
+		assertEquals("default-value", result);
+	}
+
+	//====================================================================================================
+	// addTypeFunction() - Custom type conversion
+	//====================================================================================================
+	@Test
+	void v01_addTypeFunction_customType() {
+		// Register a custom type converter for Integer
+		var settings = Settings.create()
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.addTypeFunction(Integer.class, Integer::valueOf)
+			.build();
+
+		System.setProperty(TEST_PROP, "123");
+		var result = settings.get(TEST_PROP, 0);
+		assertEquals(123, result.intValue());
+	}
+
+	@Test
+	void v02_addTypeFunction_customType_notFound() {
+		// Register a custom type converter for Integer
+		var settings = Settings.create()
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.addTypeFunction(Integer.class, Integer::valueOf)
+			.build();
+
+		var result = settings.get("nonexistent.property", 999);
+		assertEquals(999, result.intValue());
+	}
+
+	@Test
+	void v03_addTypeFunction_overridesDefault() {
+		// Register a custom converter for Boolean that inverts the value
+		var settings = Settings.create()
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.addTypeFunction(Boolean.class, s -> !Boolean.valueOf(s))
+			.build();
+
+		System.setProperty(TEST_PROP, "true");
+		var result = settings.get(TEST_PROP, false);
+		// Should be inverted (true -> false)
+		assertFalse(result);
+	}
+
+	@Test
+	void v04_addTypeFunction_multipleTypes() {
+		// Register multiple custom type converters
+		var settings = Settings.create()
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.addTypeFunction(Integer.class, Integer::valueOf)
+			.addTypeFunction(Long.class, Long::valueOf)
+			.build();
+
+		System.setProperty(TEST_PROP, "123");
+		var intResult = settings.get(TEST_PROP, 0);
+		assertEquals(123, intResult.intValue());
+
+		System.setProperty(TEST_PROP_2, "456");
+		var longResult = settings.get(TEST_PROP_2, 0L);
+		assertEquals(456L, longResult.longValue());
+	}
+
+	@Test
+	void v05_addTypeFunction_customClass() {
+		// Create a custom class with a fromString method
+		// Using a static nested class to avoid local class issues
+		var settings = Settings.create()
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.addTypeFunction(String.class, s -> "custom-" + s)
+			.build();
+
+		System.setProperty(TEST_PROP, "value");
+		// String is already supported, but we override it with a custom function
+		var result = settings.get(TEST_PROP, "default");
+		assertEquals("custom-value", result);
+	}
+
+	@Test
+	void v06_addTypeFunction_nullType() {
+		assertThrows(IllegalArgumentException.class, () -> {
+			Settings.create().addTypeFunction(null, Integer::valueOf);
+		});
+	}
+
+	@Test
+	void v07_addTypeFunction_nullFunction() {
+		assertThrows(IllegalArgumentException.class, () -> {
+			Settings.create().addTypeFunction(Integer.class, null);
+		});
+	}
+
+	@Test
+	void v08_addTypeFunction_unsupportedType() {
+		// Try to use a type that hasn't been registered
+		var settings = Settings.create()
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.build();
+
+		System.setProperty(TEST_PROP, "123");
+		assertThrows(RuntimeException.class, () -> {
+			settings.get(TEST_PROP, 0); // Integer not registered
+		});
+	}
+
+	@Test
+	void v09_addTypeFunction_usesDefaultWhenCustomNotRegistered() {
+		// Custom settings without Integer registered should fall back to default functions
+		// But Integer is not in DEFAULT_TYPE_FUNCTIONS, so it should throw
+		var settings = Settings.create()
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.build();
+
+		// Boolean is in DEFAULT_TYPE_FUNCTIONS, so it should work
+		System.setProperty(TEST_PROP, "true");
+		var result = settings.get(TEST_PROP, false);
+		assertTrue(result);
+
+		// Integer is not in DEFAULT_TYPE_FUNCTIONS, so it should throw
+		System.setProperty(TEST_PROP_2, "123");
+		assertThrows(RuntimeException.class, () -> {
+			settings.get(TEST_PROP_2, 0);
+		});
+	}
+
+	@Test
+	void v10_addTypeFunction_charsetUsesDefault() {
+		// Charset is in DEFAULT_TYPE_FUNCTIONS, so it should work without registration
+		// Use Charset.forName to get a Charset instance (not a concrete implementation)
+		var settings = Settings.create()
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.addSource(Settings.SYSTEM_ENV_SOURCE)
+			.build();
+
+		System.setProperty(TEST_PROP, "UTF-8");
+		var defaultCharset = Charset.forName("ISO-8859-1");
+		var result = settings.get(TEST_PROP, defaultCharset);
+		assertEquals(Charset.forName("UTF-8"), result);
+	}
 }
 

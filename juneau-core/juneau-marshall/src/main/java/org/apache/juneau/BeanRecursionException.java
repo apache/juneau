@@ -16,6 +16,8 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.commons.utils.Utils.*;
+
 import java.text.*;
 
 /**
@@ -24,7 +26,7 @@ import java.text.*;
  *
  * @serial exclude
  */
-public class BeanRecursionException extends BasicException {
+public class BeanRecursionException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
@@ -35,6 +37,6 @@ public class BeanRecursionException extends BasicException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public BeanRecursionException(String message, Object...args) {
-		super(message, args);
+		super(f(message, args));
 	}
 }

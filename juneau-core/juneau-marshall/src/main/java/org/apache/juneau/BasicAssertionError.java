@@ -22,29 +22,10 @@ import java.text.*;
 
 /**
  * An extension of {@link AssertionError} with helper constructors for messages with message-style arguments.
- *
- *
- * @serial exclude
  */
 public class BasicAssertionError extends AssertionError {
 
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * Finds the message.
-	 *
-	 * @param cause The cause.
-	 * @param msg The message.
-	 * @param def The default value if both above are <jk>null</jk>.
-	 * @return The resolved message.
-	 */
-	protected static final String getMessage(Throwable cause, String msg, String def) {
-		if (nn(msg))
-			return msg;
-		if (nn(cause))
-			return cause.getMessage();
-		return def;
-	}
 
 	/**
 	 * Constructor.
@@ -64,7 +45,6 @@ public class BasicAssertionError extends AssertionError {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public BasicAssertionError(Throwable cause, String message, Object...args) {
-		this(getMessage(cause, message, null), args);
-		initCause(cause);
+		super(f(message, args), cause);
 	}
 }

@@ -138,6 +138,13 @@ public class Settings {
 	private static final String MSG_globalDisabled = "Global settings not enabled";
 	private static final String MSG_localDisabled = "Local settings not enabled";
 
+	private static final Map<Class<?>,Function<String,?>> DEFAULT_TYPE_FUNCTIONS = new IdentityHashMap<>();
+
+	static {
+		DEFAULT_TYPE_FUNCTIONS.put(Boolean.class, Boolean::valueOf);
+		DEFAULT_TYPE_FUNCTIONS.put(Charset.class, Charset::forName);
+	}
+
 	/**
 	 * Returns properties for this Settings object itself.
 	 * Note that these are initialized at startup and not changeable through System.setProperty().
@@ -183,6 +190,7 @@ public class Settings {
 		private Supplier<SettingStore> globalStoreSupplier = () -> new MapStore();
 		private Supplier<SettingStore> localStoreSupplier = () -> new MapStore();
 		private final List<SettingSource> sources = new ArrayList<>();
+		private final Map<Class<?>,Function<String,?>> customTypeFunctions = new IdentityHashMap<>();
 
 		/**
 		 * Sets the supplier for the global store.
@@ -245,6 +253,39 @@ public class Settings {
 		}
 
 		/**
+		 * Registers a custom type conversion function for the specified type.
+		 *
+		 * <p>
+		 * This allows you to add support for converting string values to custom types when using
+		 * {@link Settings#get(String, Object)}. The function will be used to convert string values
+		 * to the specified type.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Register a custom converter for a custom type</jc>
+		 * 	Settings <jv>custom</jv> = Settings.<jsf>create</jsf>()
+		 * 		.addTypeFunction(Integer.<jk>class</jk>, Integer::valueOf)
+		 * 		.addTypeFunction(MyCustomType.<jk>class</jk>, MyCustomType::fromString)
+		 * 		.build();
+		 *
+		 * 	<jc>// Now you can use get() with these types</jc>
+		 * 	Integer <jv>intValue</jv> = <jv>custom</jv>.get(<js>"my.int.property"</js>, 0);
+		 * 	MyCustomType <jv>customValue</jv> = <jv>custom</jv>.get(<js>"my.custom.property"</js>, MyCustomType.DEFAULT);
+		 * </p>
+		 *
+		 * @param <T> The type to register a converter for.
+		 * @param type The class type to register a converter for. Must not be <c>null</c>.
+		 * @param function The function that converts a string to the specified type. Must not be <c>null</c>.
+		 * @return This builder for method chaining.
+		 */
+		public <T> Builder addTypeFunction(Class<T> type, Function<String,T> function) {
+			assertArgNotNull("type", type);
+			assertArgNotNull("function", function);
+			customTypeFunctions.put(type, function);
+			return this;
+		}
+
+		/**
 		 * Builds a Settings instance from this builder.
 		 *
 		 * @return A new Settings instance.
@@ -271,6 +312,7 @@ public class Settings {
 	private final ResettableSupplier<SettingStore> globalStore;
 	private final ThreadLocal<SettingStore> localStore;
 	private final List<SettingSource> sources;
+	private final Map<Class<?>,Function<String,?>> customTypeFunctions;
 
 	/**
 	 * Constructor.
@@ -279,6 +321,7 @@ public class Settings {
 		this.globalStore = memoizeResettable(builder.globalStoreSupplier);
 		this.localStore = ThreadLocal.withInitial(builder.localStoreSupplier);
 		this.sources = new CopyOnWriteArrayList<>(builder.sources);
+		this.customTypeFunctions = new IdentityHashMap<>(builder.customTypeFunctions);
 	}
 
 	/**
@@ -298,6 +341,8 @@ public class Settings {
 	 * @return The property value, or {@link Optional#empty()} if not found.
 	 */
 	public Optional<String> get(String name) {
+		assertArgNotNull("name", name);
+
 		// 1. Check thread-local override
 		var v = localStore.get().get(name);
 		if (v != null)
@@ -317,6 +362,38 @@ public class Settings {
 		}
 
 		return opte();
+	}
+
+	/**
+	 * Looks up a system property, returning a default value if not found.
+	 *
+	 * <p>
+	 * This method searches for a value using the same lookup order as {@link #get(String)}.
+	 * If a value is found, it is converted to the type of the default value using {@link #toType(String, Object)}.
+	 * Supported types include {@link Boolean}, {@link Charset}, and other common types.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// System property: -Dmy.property=true</jc>
+	 * 	Boolean <jv>flag</jv> = get(<js>"my.property"</js>, <jk>false</jk>);  <jc>// true</jc>
+	 *
+	 * 	<jc>// Environment variable: MY_PROPERTY=UTF-8</jc>
+	 * 	Charset <jv>charset</jv> = get(<js>"my.property"</js>, Charset.defaultCharset());  <jc>// UTF-8</jc>
+	 *
+	 * 	<jc>// Not found, returns default</jc>
+	 * 	String <jv>value</jv> = get(<js>"nonexistent"</js>, <js>"default"</js>);  <jc>// "default"</jc>
+	 * </p>
+	 *
+	 * @param <T> The type to convert the value to.
+	 * @param name The property name.
+	 * @param def The default value to return if not found.
+	 * @return The found value (converted to type T), or the default value if not found.
+	 * @see #get(String)
+	 * @see #toType(String, Object)
+	 */
+	public <T> T get(String name, T def) {
+		assertArgNotNull("def", def);
+		return get(name).map(x -> toType(x, def)).orElse(def);
 	}
 
 	/**
@@ -570,6 +647,35 @@ public class Settings {
 	public Settings clearGlobal() {
 		globalStore.orElseThrow(()->illegalState(MSG_globalDisabled)).clear();
 		return this;
+	}
+
+	/**
+	 * Converts a string to the specified type using registered conversion functions.
+	 *
+	 * @param <T> The target type.
+	 * @param s The string to convert. Must not be <jk>null</jk>.
+	 * @param def The default value (used to determine the target type). Must not be <jk>null</jk>.
+	 * @return The converted value.
+	 * @throws RuntimeException If the type is not supported for conversion.
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private <T> T toType(String s, T def) {
+		var c = (Class<T>)def.getClass();
+		var f = (Function<String,T>)customTypeFunctions.get(c);
+		if (f == null) {
+			if (c == String.class)
+				return (T)s;
+			if (c.isEnum())
+				return (T)Enum.valueOf((Class<? extends Enum>)c, s);
+			f = (Function<String,T>)DEFAULT_TYPE_FUNCTIONS.get(c);
+			if (f == null)
+				f = customTypeFunctions.entrySet().stream().filter(x -> x.getKey().isAssignableFrom(c)).map(x -> (Function<String,T>)x.getValue()).findFirst().orElse(null);
+			if (f == null)
+				f = DEFAULT_TYPE_FUNCTIONS.entrySet().stream().filter(x -> x.getKey().isAssignableFrom(c)).map(x -> (Function<String,T>)x.getValue()).findFirst().orElse(null);
+		}
+		if (f == null)
+			throw rex("Invalid env type: {0}", c);
+		return f.apply(s);
 	}
 }
 

@@ -31,7 +31,6 @@ import org.apache.juneau.svl.*;
 /**
  * A list of {@link AnnotationWork} objects.
  *
- *
  * @serial exclude
  */
 public class AnnotationWorkList extends ArrayList<AnnotationWork> {
@@ -113,21 +112,13 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	 */
 	@SuppressWarnings("unchecked")
 	private void applyAnnotation(AnnotationInfo<?> ai) {
-		try {
-			var a = ai.inner();
-			var cpa = assertNotNull(a.annotationType().getAnnotation(ContextApply.class), "Annotation found without @ContextApply: %s", cn(ai.annotationType()));
-			Constructor<? extends AnnotationApplier<?,?>>[] applyConstructors;
-
-			applyConstructors = new Constructor[cpa.value().length];
-			for (var i = 0; i < cpa.value().length; i++)
-				applyConstructors[i] = (Constructor<? extends AnnotationApplier<?,?>>)cpa.value()[i].getConstructor(VarResolverSession.class);
-
-			for (var applyConstructor : applyConstructors) {
-				AnnotationApplier<Annotation,Object> applier = (AnnotationApplier<Annotation,Object>)applyConstructor.newInstance(vrs);
+		var a = ai.inner();
+		var cpa = assertNotNull(a.annotationType().getAnnotation(ContextApply.class), "Annotation found without @ContextApply: %s", cn(ai.annotationType()));
+		Arrays.stream(cpa.value())
+			.map(x -> safe(() -> (Constructor<? extends AnnotationApplier<?,?>>)x.getConstructor(VarResolverSession.class)))
+			.forEach(applyConstructor -> {
+				var applier = safe(() -> (AnnotationApplier<Annotation,Object>)applyConstructor.newInstance(vrs));
 				add(ai, applier);
-			}
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new ExecutableException(e);
-		}
+			});
 	}
 }
