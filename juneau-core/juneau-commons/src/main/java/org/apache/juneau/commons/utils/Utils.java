@@ -23,12 +23,12 @@ import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.text.*;
 import java.util.*;
-import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.settings.*;
 
 /**
  * Common utility methods.
@@ -53,15 +53,6 @@ import org.apache.juneau.commons.function.*;
  * </ul>
  */
 public class Utils {
-
-	private static final Map<Class<?>,Function<String,?>> ENV_FUNCTIONS = new IdentityHashMap<>();
-
-	static {
-		ENV_FUNCTIONS.put(Boolean.class, Boolean::valueOf);
-		ENV_FUNCTIONS.put(Charset.class, Charset::forName);
-	}
-
-	private static final ConcurrentHashMap<String,String> PROPERTY_TO_ENV = new ConcurrentHashMap<>();
 
 	/**
 	 * Converts an object to a boolean.
@@ -362,11 +353,8 @@ public class Utils {
 	 * @see System#getProperty(String)
 	 * @see System#getenv(String)
 	 */
-	public static Optional<String> env(String name) {
-		var s = System.getProperty(name);
-		if (s == null)
-			s = System.getenv(envName(name));
-		return opt(s);
+	public static StringSetting env(String name) {
+		return Settings.get().get(name);
 	}
 
 	/**
@@ -404,7 +392,7 @@ public class Utils {
 	 * @see #toType(String, Object)
 	 */
 	public static <T> T env(String name, T def) {
-		return env(name).map(x -> toType(x, def)).orElse(def);
+		return Settings.get().get(name, def);
 	}
 
 	/**
@@ -1777,40 +1765,6 @@ public class Utils {
 		if (o instanceof Optional<?> o2)
 			o = unwrap(o2.orElse(null));
 		return o;
-	}
-
-	/**
-	 * Converts a property name to an environment variable name.
-	 *
-	 * @param name The property name to convert.
-	 * @return The environment variable name (uppercase with dots replaced by underscores).
-	 */
-	private static String envName(String name) {
-		return PROPERTY_TO_ENV.computeIfAbsent(name, x -> x.toUpperCase().replace(".", "_"));
-	}
-
-	/**
-	 * Converts a string to the specified type using registered conversion functions.
-	 *
-	 * @param <T> The target type.
-	 * @param s The string to convert.
-	 * @param def The default value (used to determine the target type).
-	 * @return The converted value, or <jk>null</jk> if the string or default is <jk>null</jk>.
-	 * @throws RuntimeException If the type is not supported for conversion.
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static <T> T toType(String s, T def) {
-		if (s == null || def == null)
-			return null;
-		var c = (Class<T>)def.getClass();
-		if (c == String.class)
-			return (T)s;
-		if (c.isEnum())
-			return (T)Enum.valueOf((Class<? extends Enum>)c, s);
-		var f = (Function<String,T>)ENV_FUNCTIONS.get(c);
-		if (f == null)
-			throw rex("Invalid env type: {0}", c);
-		return f.apply(s);
 	}
 
 	/** Constructor - This class is meant to be subclasses. */

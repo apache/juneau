@@ -38,7 +38,6 @@ import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.reflect.Visibility;
-import org.apache.juneau.commons.settings.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshaller.*;
@@ -173,11 +172,6 @@ public class BeanContext extends Context {
 	public static class Builder extends Context.Builder {
 
 		private static final Cache<HashKey,BeanContext> CACHE = Cache.of(HashKey.class, BeanContext.class).build();
-		private static final Settings SETTINGS = Settings.get();
-
-//		private static <T> T env(String property, T def) {
-//			return SETTINGS.get(property, def);
-//		}
 
 		private static Set<Class<?>> classSet() {
 			return new TreeSet<>(comparing(Class::getName));
@@ -254,9 +248,9 @@ public class BeanContext extends Context {
 			useEnumNames = env("BeanContext.useEnumNames", false);
 			useJavaBeanIntrospector = env("BeanContext.useJavaBeanIntrospector", false);
 			typePropertyName = env("BeanContext.typePropertyName", "_type");
-			mediaType = env("BeanContext.mediaType", (MediaType)null);
-			timeZone = env("BeanContext.timeZone", (TimeZone)null);
-			locale = env("BeanContext.locale", Locale.getDefault());
+			mediaType = env("BeanContext.mediaType").map(x -> MediaType.of(x)).orElse(null);
+			timeZone = env("BeanContext.timeZone").map(x -> TimeZone.getTimeZone(x)).orElse(null);
+			locale = env("BeanContext.locale").map(x -> Locale.forLanguageTag(x)).orElse(Locale.getDefault());
 			propertyNamer = null;
 		}
 

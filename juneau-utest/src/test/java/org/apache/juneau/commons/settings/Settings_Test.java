@@ -909,15 +909,6 @@ class Settings_Test extends TestBase {
 	}
 
 	@Test
-	void u06_get_withDefaultCharset_found() {
-		System.setProperty(TEST_PROP, "ISO-8859-1");
-		// Use Charset.forName to get a Charset instance (not a concrete implementation)
-		var defaultCharset = Charset.forName("UTF-8");
-		var result = Settings.get().get(TEST_PROP, defaultCharset);
-		assertEquals(Charset.forName("ISO-8859-1"), result);
-	}
-
-	@Test
 	void u07_get_withDefaultCharset_notFound() {
 		// Use Charset.forName to get a Charset instance (not a concrete implementation)
 		var defaultCharset = Charset.forName("UTF-8");
@@ -1053,7 +1044,14 @@ class Settings_Test extends TestBase {
 
 	@Test
 	void v08_addTypeFunction_unsupportedType() {
-		// Try to use a type that hasn't been registered
+		// Try to use a type that doesn't have a static method or constructor
+		// Custom class without static method or String constructor
+		class UnsupportedType {
+			@SuppressWarnings("unused")
+			private final int value;
+			UnsupportedType(int value) { this.value = value; }
+		}
+
 		var settings = Settings.create()
 			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
 			.addSource(Settings.SYSTEM_ENV_SOURCE)
@@ -1061,44 +1059,27 @@ class Settings_Test extends TestBase {
 
 		System.setProperty(TEST_PROP, "123");
 		assertThrows(RuntimeException.class, () -> {
-			settings.get(TEST_PROP, 0); // Integer not registered
+			settings.get(TEST_PROP, new UnsupportedType(0)); // No static method or String constructor
 		});
 	}
 
 	@Test
-	void v09_addTypeFunction_usesDefaultWhenCustomNotRegistered() {
-		// Custom settings without Integer registered should fall back to default functions
-		// But Integer is not in DEFAULT_TYPE_FUNCTIONS, so it should throw
+	void v09_addTypeFunction_usesReflectionWhenCustomNotRegistered() {
+		// Types with static methods or String constructors work via reflection
 		var settings = Settings.create()
 			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
 			.addSource(Settings.SYSTEM_ENV_SOURCE)
 			.build();
 
-		// Boolean is in DEFAULT_TYPE_FUNCTIONS, so it should work
+		// Boolean has Boolean.valueOf(String) static method, so it should work
 		System.setProperty(TEST_PROP, "true");
 		var result = settings.get(TEST_PROP, false);
 		assertTrue(result);
 
-		// Integer is not in DEFAULT_TYPE_FUNCTIONS, so it should throw
+		// Integer has Integer.valueOf(String) static method, so it should work
 		System.setProperty(TEST_PROP_2, "123");
-		assertThrows(RuntimeException.class, () -> {
-			settings.get(TEST_PROP_2, 0);
-		});
-	}
-
-	@Test
-	void v10_addTypeFunction_charsetUsesDefault() {
-		// Charset is in DEFAULT_TYPE_FUNCTIONS, so it should work without registration
-		// Use Charset.forName to get a Charset instance (not a concrete implementation)
-		var settings = Settings.create()
-			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
-			.addSource(Settings.SYSTEM_ENV_SOURCE)
-			.build();
-
-		System.setProperty(TEST_PROP, "UTF-8");
-		var defaultCharset = Charset.forName("ISO-8859-1");
-		var result = settings.get(TEST_PROP, defaultCharset);
-		assertEquals(Charset.forName("UTF-8"), result);
+		var intResult = settings.get(TEST_PROP_2, 0);
+		assertEquals(123, intResult.intValue());
 	}
 
 	//====================================================================================================

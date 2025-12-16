@@ -260,13 +260,18 @@ public class RestContext extends Context {
 		private EncoderSet.Builder encoders;
 		private SerializerSet.Builder serializers;
 		private ParserSet.Builder parsers;
-		String allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"), allowedMethodHeaders = env("RestContext.allowedMethodHeaders", ""),
-			allowedMethodParams = env("RestContext.allowedMethodParams", "HEAD,OPTIONS"), clientVersionHeader = env("RestContext.clientVersionHeader", "Client-Version"),
-			debugOn = env("RestContext.debugOn", null), path = null, uriAuthority = env("RestContext.uriAuthority", (String)null), uriContext = env("RestContext.uriContext", (String)null);
+		String allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type");
+		String allowedMethodHeaders = env("RestContext.allowedMethodHeaders", "");
+		String allowedMethodParams = env("RestContext.allowedMethodParams", "HEAD,OPTIONS");
+		String clientVersionHeader = env("RestContext.clientVersionHeader", "Client-Version");
+		String debugOn = env("RestContext.debugOn").orElse(null);
+		String path = null;
+		String uriAuthority = env("RestContext.uriAuthority").orElse(null);
+		String uriContext = env("RestContext.uriContext").orElse(null);
 		UriRelativity uriRelativity = env("RestContext.uriRelativity", UriRelativity.RESOURCE);
 		UriResolution uriResolution = env("RestContext.uriResolution", UriResolution.ROOT_RELATIVE);
-		Charset defaultCharset = env("RestContext.defaultCharset", UTF8);
-		long maxInput = parseLongWithSuffix(env("RestContext.maxInput", "100M"));
+		Charset defaultCharset = env("RestContext.defaultCharset").map(Charset::forName).orElse(UTF8);
+		long maxInput = env("RestContext.maxInput").map(StringUtils::parseLongWithSuffix).orElse(100_000_000l);
 
 		List<MediaType> consumes, produces;
 		boolean disableContentParam = env("RestContext.disableContentParam", false);

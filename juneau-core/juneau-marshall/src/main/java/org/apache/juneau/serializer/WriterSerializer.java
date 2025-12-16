@@ -61,8 +61,8 @@ public class WriterSerializer extends Serializer {
 			fileCharset = Charset.defaultCharset();
 			streamCharset = UTF8;
 			maxIndent = env("WriterSerializer.maxIndent", 100);
-			quoteChar = env("WriterSerializer.quoteChar", (Character)null);
-			quoteCharOverride = env("WriterSerializer.quoteCharOverride", (Character)null);
+			quoteChar = env("WriterSerializer.quoteChar").map(x -> (x.length() > 0 ? x.charAt(0) : null)).orElse(null);
+			quoteCharOverride = env("WriterSerializer.quoteCharOverride").map(x -> (x.length() > 0 ? x.charAt(0) : null)).orElse(null);
 			useWhitespace = env("WriterSerializer.useWhitespace", false);
 		}
 

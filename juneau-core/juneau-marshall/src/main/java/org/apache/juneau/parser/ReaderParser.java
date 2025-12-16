@@ -61,7 +61,7 @@ public class ReaderParser extends Parser {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			fileCharset = env("ReaderParser.fileCharset", Charset.defaultCharset());
+			fileCharset = env("ReaderParser.fileCharset").map(x -> Charset.forName(x)).orElse(Charset.defaultCharset());
 			streamCharset = env("ReaderParser.streamCharset", UTF8);
 		}
 

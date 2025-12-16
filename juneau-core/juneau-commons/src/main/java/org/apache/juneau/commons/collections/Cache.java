@@ -189,7 +189,7 @@ public class Cache<K,V> {
 		Function<K,V> supplier;
 
 		Builder() {
-			cacheMode = CacheMode.parse(env("juneau.cache.mode", "FULL"));
+			cacheMode = env("juneau.cache.mode", CacheMode.FULL);
 			maxSize = env("juneau.cache.maxSize", 1000);
 			logOnExit = env("juneau.cache.logOnExit", false);
 			id = "Cache";

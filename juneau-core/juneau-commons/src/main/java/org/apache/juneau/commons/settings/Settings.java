@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.settings;
 
+import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -26,6 +27,7 @@ import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.reflect.*;
 
 /**
  * Encapsulates Java system properties with support for global and per-thread overrides for unit testing.
@@ -134,6 +136,8 @@ public class Settings {
 	 */
 	public static final SettingSource SYSTEM_PROPERTY_SOURCE = FunctionalSource.of(System::getProperty);
 
+	private static final Set<String> FROM_STRING_METHOD_NAMES = new LinkedHashSet<>(Arrays.asList("fromString", "parse", "forName", "valueOf"));
+
 	/**
 	 * System environment variable source that delegates to {@link System#getenv(String)}.
 	 */
@@ -143,13 +147,6 @@ public class Settings {
 	private static final String MSG_globalDisabled = "Global settings not enabled";
 	private static final String MSG_localDisabled = "Local settings not enabled";
 
-	private static final Map<Class<?>,Function<String,?>> DEFAULT_TYPE_FUNCTIONS = new IdentityHashMap<>();
-
-	static {
-		DEFAULT_TYPE_FUNCTIONS.put(Boolean.class, Boolean::valueOf);
-		DEFAULT_TYPE_FUNCTIONS.put(Charset.class, Charset::forName);
-	}
-
 	/**
 	 * Returns properties for this Settings object itself.
 	 * Note that these are initialized at startup and not changeable through System.setProperty().
@@ -158,7 +155,7 @@ public class Settings {
 		var v = SYSTEM_PROPERTY_SOURCE.get(property);
 		if (v != null)
 			return v;  // Not testable
-		v = SYSTEM_ENV_SOURCE.get(uc(property.replace('.', '_')));
+		v = SYSTEM_ENV_SOURCE.get(property.replace('.', '_').toUpperCase());
 		if (v != null)
 			return v;  // Not testable
 		return opte();
@@ -317,7 +314,7 @@ public class Settings {
 	private final ResettableSupplier<SettingStore> globalStore;
 	private final ThreadLocal<SettingStore> localStore;
 	private final List<SettingSource> sources;
-	private final Map<Class<?>,Function<String,?>> customTypeFunctions;
+	private final Map<Class<?>,Function<String,?>> toTypeFunctions;
 
 	/**
 	 * Constructor.
@@ -326,7 +323,7 @@ public class Settings {
 		this.globalStore = memoizeResettable(builder.globalStoreSupplier);
 		this.localStore = ThreadLocal.withInitial(builder.localStoreSupplier);
 		this.sources = new CopyOnWriteArrayList<>(builder.sources);
-		this.customTypeFunctions = new IdentityHashMap<>(builder.customTypeFunctions);
+		this.toTypeFunctions = new ConcurrentHashMap<>(builder.customTypeFunctions);
 	}
 
 	/**
@@ -380,8 +377,9 @@ public class Settings {
 	 *
 	 * <p>
 	 * This method searches for a value using the same lookup order as {@link #get(String)}.
-	 * If a value is found, it is converted to the type of the default value using {@link #toType(String, Object)}.
-	 * Supported types include {@link Boolean}, {@link Charset}, and other common types.
+	 * If a value is found, it is converted to the type of the default value using {@link #toType(String, Class)}.
+	 * Supported types include any type that has a static method with signature <c>public static &lt;T&gt; T anyName(String arg)</c>
+	 * or a public constructor with signature <c>public T(String arg)</c>, such as {@link Boolean}, {@link Integer}, {@link Charset}, {@link File}, etc.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -400,7 +398,7 @@ public class Settings {
 	 * @param def The default value to return if not found.
 	 * @return The found value (converted to type T), or the default value if not found.
 	 * @see #get(String)
-	 * @see #toType(String, Object)
+	 * @see #toType(String, Class)
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T get(String name, T def) {
@@ -533,29 +531,55 @@ public class Settings {
 	}
 
 	/**
-	 * Converts a string to the specified type using registered conversion functions.
+	 * Converts a string to the specified type using reflection to find conversion methods or constructors.
+	 *
+	 * <p>
+	 * This method attempts to convert a string to the specified type using the following lookup order:
+	 * <ol>
+	 * 	<li>Custom type functions registered via {@link Builder#addTypeFunction(Class, Function)}</li>
+	 * 	<li>Special handling for {@link String} (returns the string as-is)</li>
+	 * 	<li>Special handling for {@link Enum} types (uses {@link Enum#valueOf(Class, String)})</li>
+	 * 	<li>Reflection lookup for static methods with signature <c>public static &lt;T&gt; T anyName(String arg)</c>
+	 * 		on the target class</li>
+	 * 	<li>Reflection lookup for static methods on the superclass (for abstract classes like {@link Charset}
+	 * 		where concrete implementations need to use the abstract class's static method)</li>
+	 * 	<li>Reflection lookup for public constructors with signature <c>public T(String arg)</c></li>
+	 * </ol>
+	 *
+	 * <p>
+	 * When a conversion method or constructor is found via reflection, it is cached in the
+	 * <c>toTypeFunctions</c> map for future use.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><c>Boolean</c> - Uses <c>Boolean.valueOf(String)</c> static method
+	 * 	<li><c>Integer</c> - Uses <c>Integer.valueOf(String)</c> static method
+	 * 	<li><c>Charset</c> - Uses <c>Charset.forName(String)</c> static method (even for concrete implementations)
+	 * 	<li><c>File</c> - Uses <c>File(String)</c> constructor
+	 * </ul>
 	 *
 	 * @param <T> The target type.
 	 * @param s The string to convert. Must not be <jk>null</jk>.
 	 * @param c The target class. Must not be <jk>null</jk>.
 	 * @return The converted value.
-	 * @throws RuntimeException If the type is not supported for conversion.
+	 * @throws RuntimeException If the type is not supported for conversion (no static method or constructor found).
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected <T> T toType(String s, Class<T> c) {
 		assertArgNotNull("s", s);
 		assertArgNotNull("c", c);
-		var f = (Function<String,T>)customTypeFunctions.get(c);
+		var f = (Function<String,T>)toTypeFunctions.get(c);
 		if (f == null) {
 			if (c == String.class)
 				return (T)s;
 			if (c.isEnum())
 				return (T)Enum.valueOf((Class<? extends Enum>)c, s);
-			f = (Function<String,T>)DEFAULT_TYPE_FUNCTIONS.get(c);
+			ClassInfoTyped<T> ci = info(c);
+			f = ci.getDeclaredMethod(x -> x.isStatic() && x.hasParameterTypes(String.class) && x.hasReturnType(c) && FROM_STRING_METHOD_NAMES.contains(x.getName())).map(x -> (Function<String,T>)s2 -> x.invoke(null, s2)).orElse(null);
 			if (f == null)
-				f = customTypeFunctions.entrySet().stream().filter(x -> x.getKey().isAssignableFrom(c)).map(x -> (Function<String,T>)x.getValue()).findFirst().orElse(null);
-			if (f == null)
-				f = DEFAULT_TYPE_FUNCTIONS.entrySet().stream().filter(x -> x.getKey().isAssignableFrom(c)).map(x -> (Function<String,T>)x.getValue()).findFirst().orElse(null);
+				f = ci.getPublicConstructor(x -> x.hasParameterTypes(String.class)).map(x -> (Function<String,T>)s2 -> x.newInstance(s2)).orElse(null);
+			if (f != null)
+				toTypeFunctions.putIfAbsent(c, f);
 		}
 		if (f == null)
 			throw rex("Invalid env type: {0}", c);

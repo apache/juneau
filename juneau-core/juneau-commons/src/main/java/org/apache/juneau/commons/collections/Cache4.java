@@ -83,7 +83,7 @@ public class Cache4<K1,K2,K3,K4,V> {
 		Function4<K1,K2,K3,K4,V> supplier;
 
 		Builder() {
-			cacheMode = CacheMode.parse(env("juneau.cache.mode", "FULL"));
+			cacheMode = env("juneau.cache.mode", CacheMode.FULL);
 			maxSize = env("juneau.cache.maxSize", 1000);
 			logOnExit = env("juneau.cache.logOnExit", false);
 			id = "Cache4";
