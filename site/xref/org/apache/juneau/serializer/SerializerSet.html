@@ -132,7 +132,7 @@
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment">		 * @param copyFrom The serializer group that we're copying settings and serializers from.</em>
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">protected</strong> Builder(<a name="SerializerSet" href="../../../../org/apache/juneau/serializer/SerializerSet.html#SerializerSet">SerializerSet</a> copyFrom) {
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			<strong class="jxr_keyword">super</strong>(copyFrom.getClass());
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			<strong class="jxr_keyword">super</strong>(copyFrom.getClass(), BeanStore.INSTANCE);
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 			<strong class="jxr_keyword">this</strong>.entries = list((Object[])copyFrom.entries);
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		}
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 

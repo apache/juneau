@@ -521,8 +521,73 @@
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> 
 <a class="jxr_linenumber" name="L514" href="#L514">514</a> 		assertEquals(multiMap.hashCode(), regularMap.hashCode());
 <a class="jxr_linenumber" name="L515" href="#L515">515</a> 	}
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> }
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> 
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 	<em class="jxr_comment">// Additional coverage for specific lines</em>
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 	@Test
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 	<strong class="jxr_keyword">void</strong> m01_entrySet_iterator_emptyMaps() {
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 		<em class="jxr_comment">// Line 218: if (m.length &gt; 0) - when there are no maps</em>
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 		Map&lt;String, String&gt; map1 = map();
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 		Map&lt;String, String&gt; map2 = map();
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 		<strong class="jxr_keyword">var</strong> multiMap = <strong class="jxr_keyword">new</strong> MultiMap&lt;&gt;(map1, map2);
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 		<strong class="jxr_keyword">var</strong> iterator = multiMap.entrySet().iterator();
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		assertFalse(iterator.hasNext());
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 	}
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 	@Test
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 	<strong class="jxr_keyword">void</strong> m02_entrySet_iterator_next_throwsWhenNextEntryIsNull() {
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 		<em class="jxr_comment">// Line 253: throw NoSuchElementException when nextEntry == null</em>
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		Map&lt;String, String&gt; map1 = map();
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		<strong class="jxr_keyword">var</strong> multiMap = <strong class="jxr_keyword">new</strong> MultiMap&lt;&gt;(map1);
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		<strong class="jxr_keyword">var</strong> iterator = multiMap.entrySet().iterator();
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		assertThrows(NoSuchElementException.<strong class="jxr_keyword">class</strong>, iterator::next);
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 	}
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 	@Test
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 	<strong class="jxr_keyword">void</strong> m03_entrySet_iterator_remove_throwsWhenCanRemoveIsFalse() {
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 		<em class="jxr_comment">// Line 264: throw IllegalStateException when canRemove is false or lastIterator is null</em>
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 		<strong class="jxr_keyword">var</strong> map1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;(map(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"value1"</span>));
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 		<strong class="jxr_keyword">var</strong> multiMap = <strong class="jxr_keyword">new</strong> MultiMap&lt;&gt;(map1);
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 		<strong class="jxr_keyword">var</strong> iterator = multiMap.entrySet().iterator();
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 		<em class="jxr_comment">// Remove without calling next first</em>
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 		assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, iterator::remove);
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 	}
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 	@Test
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 	<strong class="jxr_keyword">void</strong> m04_entrySet_iterator_remove_throwsWhenLastIteratorIsNull() {
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 		<em class="jxr_comment">// Line 264: throw IllegalStateException when lastIterator is null</em>
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 		<strong class="jxr_keyword">var</strong> map1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;(map(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"value1"</span>));
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 		<strong class="jxr_keyword">var</strong> multiMap = <strong class="jxr_keyword">new</strong> MultiMap&lt;&gt;(map1);
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 		<strong class="jxr_keyword">var</strong> iterator = multiMap.entrySet().iterator();
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 		iterator.next(); <em class="jxr_comment">// Sets canRemove = true and lastIterator</em>
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 		iterator.remove(); <em class="jxr_comment">// First remove works</em>
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 		<em class="jxr_comment">// Now try to remove again without calling next</em>
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 		assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, iterator::remove);
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 	}
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 	@Test
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 	<strong class="jxr_keyword">void</strong> m05_values_iterator_remove() {
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 		<em class="jxr_comment">// Lines 350-351: entryIterator.remove() in values iterator</em>
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 		<em class="jxr_comment">// Test that remove() delegates to entryIterator.remove()</em>
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 		<strong class="jxr_keyword">var</strong> map1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;(map(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"value1"</span>));
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		<strong class="jxr_keyword">var</strong> multiMap = <strong class="jxr_keyword">new</strong> MultiMap&lt;&gt;(map1);
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 		<strong class="jxr_keyword">var</strong> valuesIterator = multiMap.values().iterator();
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		<em class="jxr_comment">// Get first value</em>
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		assertEquals(<span class="jxr_string">"value1"</span>, valuesIterator.next());
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 		
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 		<em class="jxr_comment">// Remove should work (delegates to entryIterator.remove() which calls entrySet iterator remove)</em>
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 		<em class="jxr_comment">// This covers lines 350-351</em>
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		valuesIterator.remove();
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 		<em class="jxr_comment">// Verify the entry was removed from the underlying map</em>
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 		assertFalse(map1.containsKey(<span class="jxr_string">"key1"</span>));
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		assertTrue(map1.isEmpty());
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 	}
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> }
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

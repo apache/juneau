@@ -599,8 +599,64 @@
 <a class="jxr_linenumber" name="L591" href="#L591">591</a> 
 <a class="jxr_linenumber" name="L592" href="#L592">592</a> 		assertEquals(reversed.hashCode(), regularList.hashCode());
 <a class="jxr_linenumber" name="L593" href="#L593">593</a> 	}
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> }
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> 
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 	<em class="jxr_comment">// Additional coverage for specific lines</em>
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 	@Test
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 	<strong class="jxr_keyword">void</strong> l01_equals_differentLengths() {
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 		<em class="jxr_comment">// Line 320: while (e1.hasNext() &amp;&amp; e2.hasNext())</em>
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		<em class="jxr_comment">// Line 326: return !(e1.hasNext() || e2.hasNext());</em>
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		<em class="jxr_comment">// Test when lists have different lengths - one iterator exhausted before the other</em>
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 		<strong class="jxr_keyword">var</strong> original1 = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>));
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 		<strong class="jxr_keyword">var</strong> reversed1 = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original1);
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		<strong class="jxr_keyword">var</strong> original2 = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>, <span class="jxr_string">"d"</span>));
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 		<strong class="jxr_keyword">var</strong> reversed2 = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original2);
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 		<em class="jxr_comment">// reversed1: ["c", "b", "a"]</em>
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 		<em class="jxr_comment">// reversed2: ["d", "c", "b", "a"]</em>
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		<em class="jxr_comment">// After comparing first 3 elements, e1 is exhausted but e2 has more</em>
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		<em class="jxr_comment">// Line 326: return !(e1.hasNext() || e2.hasNext()) should return false</em>
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		assertFalse(reversed1.equals(reversed2));
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		assertFalse(reversed2.equals(reversed1));
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 	}
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 	@Test
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 	<strong class="jxr_keyword">void</strong> l02_equals_oneExhausted() {
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		<em class="jxr_comment">// Line 326: return !(e1.hasNext() || e2.hasNext());</em>
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 		<em class="jxr_comment">// Test when one iterator is exhausted before the other</em>
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 		<strong class="jxr_keyword">var</strong> original1 = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>));
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 		<strong class="jxr_keyword">var</strong> reversed1 = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original1);
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 		<strong class="jxr_keyword">var</strong> original2 = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>));
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 		<strong class="jxr_keyword">var</strong> reversed2 = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original2);
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 		<em class="jxr_comment">// reversed1: ["b", "a"]</em>
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 		<em class="jxr_comment">// reversed2: ["c", "b", "a"]</em>
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		<em class="jxr_comment">// After comparing first 2 elements, e1 is exhausted but e2 has more</em>
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 		assertFalse(reversed1.equals(reversed2));
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 	}
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 	@Test
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 	<strong class="jxr_keyword">void</strong> l03_hashCode_withNullElements() {
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 		<em class="jxr_comment">// Line 356: hashCode = 31 * hashCode + (e == null ? 0 : e.hashCode());</em>
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 		<em class="jxr_comment">// Test hashCode with null elements</em>
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 		<strong class="jxr_keyword">var</strong> original = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(Arrays.asList(<span class="jxr_string">"a"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"c"</span>));
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 		<strong class="jxr_keyword">var</strong> reversed = <strong class="jxr_keyword">new</strong> ReversedList&lt;&gt;(original);
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		<em class="jxr_comment">// Calculate expected hashCode manually (null contributes 0)</em>
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		<em class="jxr_comment">// Reversed order: ["c", null, "a"]</em>
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		<strong class="jxr_keyword">int</strong> expectedHashCode = 1;
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 		expectedHashCode = 31 * expectedHashCode + <span class="jxr_string">"c"</span>.hashCode();
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 		expectedHashCode = 31 * expectedHashCode + 0; <em class="jxr_comment">// null</em>
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 		expectedHashCode = 31 * expectedHashCode + <span class="jxr_string">"a"</span>.hashCode();
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 		assertEquals(expectedHashCode, reversed.hashCode());
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 	}
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> }
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
