@@ -1082,5 +1082,125 @@ class FilteredMap_Test extends TestBase {
 
 		assertEquals(underlyingMap.hashCode(), map.hashCode());
 	}
+
+	//====================================================================================================
+	// addAny() method
+	//====================================================================================================
+
+	@Test
+	void x01_addAny_withMaps() {
+		var map = FilteredMap
+			.create(String.class, Integer.class)
+			.filter((k, v) -> v != null && v > 0)
+			.build();
+
+		var map1 = Map.of("a", 5, "b", -1);
+		var map2 = Map.of("c", 10);
+		map.addAny(map1, map2);  // Adds a=5, c=10 (b=-1 filtered out)
+
+		assertSize(2, map);
+		assertEquals(5, map.get("a"));
+		assertEquals(10, map.get("c"));
+		assertFalse(map.containsKey("b"));
+	}
+
+	@Test
+	void x02_addAny_withNullValues() {
+		var map = FilteredMap
+			.create(String.class, Integer.class)
+			.filter((k, v) -> v != null && v > 0)
+			.build();
+
+		var map1 = Map.of("a", 5);
+		map.addAny(null, map1, null);  // null values ignored
+
+		assertSize(1, map);
+		assertEquals(5, map.get("a"));
+	}
+
+	@Test
+	void x03_addAny_withNonMapObjects() {
+		var map = FilteredMap
+			.create(String.class, Integer.class)
+			.filter((k, v) -> v != null && v > 0)
+			.build();
+
+		var map1 = Map.of("a", 5);
+		map.addAny(map1, "not-a-map", 123);  // Non-Map objects ignored
+
+		assertSize(1, map);
+		assertEquals(5, map.get("a"));
+	}
+
+	@Test
+	void x04_addAny_emptyArray() {
+		var map = FilteredMap
+			.create(String.class, Integer.class)
+			.filter((k, v) -> v != null && v > 0)
+			.build();
+
+		map.addAny();  // Empty array, no-op
+
+		assertTrue(map.isEmpty());
+	}
+
+	//====================================================================================================
+	// addPairs() method
+	//====================================================================================================
+
+	@Test
+	void y01_addPairs_validPairs() {
+		var map = FilteredMap
+			.create(String.class, Integer.class)
+			.filter((k, v) -> v != null && v > 0)
+			.build();
+
+		map.addPairs("a", 5, "b", -1, "c", 10);  // Adds a=5, c=10 (b=-1 filtered out)
+
+		assertSize(2, map);
+		assertEquals(5, map.get("a"));
+		assertEquals(10, map.get("c"));
+		assertFalse(map.containsKey("b"));
+	}
+
+	@Test
+	void y02_addPairs_oddNumber_throwsException() {
+		var map = FilteredMap
+			.create(String.class, Integer.class)
+			.filter((k, v) -> v != null)
+			.build();
+
+		assertThrowsWithMessage(IllegalArgumentException.class, "Odd number of parameters", () -> {
+			map.addPairs("a", 5, "b");  // Odd number of parameters
+		});
+	}
+
+	@Test
+	void y03_addPairs_emptyArray() {
+		var map = FilteredMap
+			.create(String.class, Integer.class)
+			.filter((k, v) -> v != null)
+			.build();
+
+		map.addPairs();  // Empty array, no-op
+
+		assertTrue(map.isEmpty());
+	}
+
+	@Test
+	void y04_addPairs_withTypeConversion() {
+		var map = FilteredMap
+			.create(String.class, Integer.class)
+			.filter((k, v) -> v != null && v > 0)
+			.keyFunction(o -> o.toString())
+			.valueFunction(o -> Integer.parseInt(o.toString()))
+			.build();
+
+		map.addPairs(123, "5", 456, "10");  // Both key and value converted
+
+		assertSize(2, map);
+		assertEquals(5, map.get("123"));
+		assertEquals(10, map.get("456"));
+	}
 }
 

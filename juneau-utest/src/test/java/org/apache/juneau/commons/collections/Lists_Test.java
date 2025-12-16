@@ -608,5 +608,169 @@ class Lists_Test extends TestBase {
 		list.a("c").aa(l("d", "e"));
 		assertList(list, "a", "b", "c", "d", "e");
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// buildFiltered
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void o01_buildFiltered_returnsFilteredList() {
+		var list = Lists.create(String.class)
+			.add("a", "b", "c")
+			.buildFiltered();
+
+		assertNotNull(list);
+		assertSize(3, list);
+		assertList(list, "a", "b", "c");
+	}
+
+	@Test
+	void o02_buildFiltered_sparseEmpty() {
+		var list = Lists.create(String.class)
+			.sparse()
+			.buildFiltered();
+
+		assertNull(list);
+	}
+
+	@Test
+	void o03_buildFiltered_withFiltering() {
+		var list = Lists.create(Integer.class)
+			.filtered(v -> v != null && v > 0)
+			.add(5, -1, 10, 0)
+			.buildFiltered();
+
+		assertNotNull(list);
+		assertList(list, 5, 10);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// concurrent
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void p01_concurrent_createsSynchronizedList() {
+		var list = Lists.create(String.class)
+			.add("a", "b", "c")
+			.concurrent()
+			.build();
+
+		assertNotNull(list);
+		assertSize(3, list);
+		// Verify it's synchronized by checking it's wrapped (Collections.synchronizedList returns a wrapper)
+		assertList(list, "a", "b", "c");
+	}
+
+	@Test
+	void p02_concurrent_withSorted() {
+		var list = Lists.create(String.class)
+			.add("c", "a", "b")
+			.sorted()
+			.concurrent()
+			.build();
+
+		assertNotNull(list);
+		assertList(list, "a", "b", "c");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// filtered
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void q01_filtered_defaultFiltering() {
+		var list = Lists.create(Object.class)
+			.filtered()
+			.add("a", null, false, -1, new String[0], l(), m())
+			.build();
+
+		assertList(list, "a");
+	}
+
+	@Test
+	void q02_filtered_withBooleanFalse() {
+		var list = Lists.create(Boolean.class)
+			.filtered()
+			.add(true, false, true)
+			.build();
+
+		assertList(list, true, true);
+	}
+
+	@Test
+	void q03_filtered_withNumberMinusOne() {
+		var list = Lists.create(Integer.class)
+			.filtered()
+			.add(1, -1, 2, -1, 3)
+			.build();
+
+		assertList(list, 1, 2, 3);
+	}
+
+	@Test
+	void q04_filtered_withEmptyArray() {
+		var list = Lists.create(Object.class)
+			.filtered()
+			.add("a", new String[0], "b")
+			.build();
+
+		assertList(list, "a", "b");
+	}
+
+	@Test
+	void q05_filtered_withEmptyMap() {
+		var list = Lists.create(Object.class)
+			.filtered()
+			.add("a", m(), "b")
+			.build();
+
+		assertList(list, "a", "b");
+	}
+
+	@Test
+	void q06_filtered_withEmptyCollection() {
+		var list = Lists.create(Object.class)
+			.filtered()
+			.add("a", l(), "b")
+			.build();
+
+		assertList(list, "a", "b");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// filtered(Predicate)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void r01_filtered_withPredicate() {
+		var list = Lists.create(Integer.class)
+			.filtered(v -> v != null && v > 0)
+			.add(5, -1, 10, 0, 15)
+			.build();
+
+		assertList(list, 5, 10, 15);
+	}
+
+	@Test
+	void r02_filtered_multipleFilters() {
+		var list = Lists.create(Integer.class)
+			.filtered(v -> v != null)
+			.filtered(v -> v > 0)
+			.filtered(v -> v < 100)
+			.add(5, -1, 150, 0, 50, null)
+			.build();
+
+		assertList(list, 5, 50);
+	}
+
+	@Test
+	void r03_filtered_withStringPredicate() {
+		var list = Lists.create(String.class)
+			.filtered(s -> s != null && s.length() > 2)
+			.add("a", "ab", "abc", "abcd", "")
+			.build();
+
+		assertList(list, "abc", "abcd");
+	}
 }
 

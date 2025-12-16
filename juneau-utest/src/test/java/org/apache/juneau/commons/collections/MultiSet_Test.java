@@ -306,5 +306,48 @@ class MultiSet_Test extends TestBase {
 
 		assertEquals(multiSet.hashCode(), regularSet.hashCode());
 	}
+
+	//====================================================================================================
+	// Additional coverage for specific lines
+	//====================================================================================================
+
+	@Test
+	void iterator_hasNext_whenI2IsNull() {
+		// Line 213: return false when i2 == null
+		// This happens when MultiSet is created with no collections
+		var ms = new MultiSet<String>();
+		var it = ms.iterator();
+		assertFalse(it.hasNext()); // i2 is null, should return false
+	}
+
+	@Test
+	void equals_notASet_otherTypes() {
+		// Line 308: return (o instanceof Set o2) && ...
+		// Test when object is not a Set (testing the instanceof check)
+		var l1 = l(a("1", "2"));
+		var multiSet = new MultiSet<>(l1);
+		
+		// Not a Set - should return false immediately due to instanceof check
+		assertFalse(multiSet.equals("not a set"));
+		assertFalse(multiSet.equals(123));
+		assertFalse(multiSet.equals(List.of("1", "2"))); // List is not a Set
+	}
+
+	@Test
+	void hashCode_withNullElements() {
+		// Line 330: h += e == null ? 0 : e.hashCode()
+		// Test hashCode with null elements
+		var l1 = l(a("1", null));
+		var l2 = l(a("2"));
+		var multiSet = new MultiSet<>(l1, l2);
+
+		// Calculate expected hashCode manually (null contributes 0)
+		int expectedHashCode = 0;
+		expectedHashCode += "1".hashCode();
+		expectedHashCode += 0; // null
+		expectedHashCode += "2".hashCode();
+
+		assertEquals(expectedHashCode, multiSet.hashCode());
+	}
 }
 

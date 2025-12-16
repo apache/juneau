@@ -513,5 +513,70 @@ class MultiMap_Test extends TestBase {
 
 		assertEquals(multiMap.hashCode(), regularMap.hashCode());
 	}
+
+	//====================================================================================================
+	// Additional coverage for specific lines
+	//====================================================================================================
+
+	@Test
+	void m01_entrySet_iterator_emptyMaps() {
+		// Line 218: if (m.length > 0) - when there are no maps
+		Map<String, String> map1 = map();
+		Map<String, String> map2 = map();
+		var multiMap = new MultiMap<>(map1, map2);
+		var iterator = multiMap.entrySet().iterator();
+		assertFalse(iterator.hasNext());
+	}
+
+	@Test
+	void m02_entrySet_iterator_next_throwsWhenNextEntryIsNull() {
+		// Line 253: throw NoSuchElementException when nextEntry == null
+		Map<String, String> map1 = map();
+		var multiMap = new MultiMap<>(map1);
+		var iterator = multiMap.entrySet().iterator();
+		assertThrows(NoSuchElementException.class, iterator::next);
+	}
+
+	@Test
+	void m03_entrySet_iterator_remove_throwsWhenCanRemoveIsFalse() {
+		// Line 264: throw IllegalStateException when canRemove is false or lastIterator is null
+		var map1 = new LinkedHashMap<>(map("key1", "value1"));
+		var multiMap = new MultiMap<>(map1);
+		var iterator = multiMap.entrySet().iterator();
+		// Remove without calling next first
+		assertThrows(IllegalStateException.class, iterator::remove);
+	}
+
+	@Test
+	void m04_entrySet_iterator_remove_throwsWhenLastIteratorIsNull() {
+		// Line 264: throw IllegalStateException when lastIterator is null
+		var map1 = new LinkedHashMap<>(map("key1", "value1"));
+		var multiMap = new MultiMap<>(map1);
+		var iterator = multiMap.entrySet().iterator();
+		iterator.next(); // Sets canRemove = true and lastIterator
+		iterator.remove(); // First remove works
+		// Now try to remove again without calling next
+		assertThrows(IllegalStateException.class, iterator::remove);
+	}
+
+	@Test
+	void m05_values_iterator_remove() {
+		// Lines 350-351: entryIterator.remove() in values iterator
+		// Test that remove() delegates to entryIterator.remove()
+		var map1 = new LinkedHashMap<>(map("key1", "value1"));
+		var multiMap = new MultiMap<>(map1);
+		var valuesIterator = multiMap.values().iterator();
+		
+		// Get first value
+		assertEquals("value1", valuesIterator.next());
+		
+		// Remove should work (delegates to entryIterator.remove() which calls entrySet iterator remove)
+		// This covers lines 350-351
+		valuesIterator.remove();
+		
+		// Verify the entry was removed from the underlying map
+		assertFalse(map1.containsKey("key1"));
+		assertTrue(map1.isEmpty());
+	}
 }
 

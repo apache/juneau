@@ -706,6 +706,20 @@ class Maps_Test extends TestBase {
 		});
 	}
 
+	@Test
+	void k11_addAny_noKeyFunction_conversionFailure() {
+		// Test line 726: convertKey throws exception when keyFunction is null and key can't be converted
+		var inputMap = new LinkedHashMap<Object,String>();
+		inputMap.put(new Object(), "value");  // Object can't be converted to String, and no keyFunction
+
+		assertThrows(RuntimeException.class, () -> {
+			Maps.create(String.class, String.class)
+				// No keyFunction set
+				.addAny(inputMap)
+				.build();
+		});
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Concurrent
 	//-----------------------------------------------------------------------------------------------------------------

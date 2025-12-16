@@ -256,6 +256,19 @@ class FluentList_Test extends TestBase {
 	}
 
 	@Test
+	void e05b_listInterface_addAllAtIndex() {
+		var list = new FluentList<>(new ArrayList<String>());
+		list.a("item1").a("item4");
+		assertTrue(list.addAll(1, List.of("item2", "item3")));
+
+		assertSize(4, list);
+		assertEquals("item1", list.get(0));
+		assertEquals("item2", list.get(1));
+		assertEquals("item3", list.get(2));
+		assertEquals("item4", list.get(3));
+	}
+
+	@Test
 	void e06_listInterface_remove() {
 		var list = new FluentList<>(new ArrayList<String>());
 		list.a("item1").a("item2").a("item3");

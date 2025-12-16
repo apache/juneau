@@ -963,5 +963,232 @@ class FilteredList_Test extends TestBase {
 		assertEquals("value2", subList.get(0));
 		assertEquals("value3", subList.get(1));
 	}
+
+	//====================================================================================================
+	// containsAll() method
+	//====================================================================================================
+
+	@Test
+	void w01_containsAll_allPresent() {
+		var list = FilteredList
+			.create(String.class)
+			.filter(v -> v != null)
+			.build();
+
+		list.add("value1");
+		list.add("value2");
+		list.add("value3");
+
+		assertTrue(list.containsAll(List.of("value1", "value2")));
+		assertTrue(list.containsAll(List.of("value1", "value2", "value3")));
+	}
+
+	@Test
+	void w02_containsAll_someMissing() {
+		var list = FilteredList
+			.create(String.class)
+			.filter(v -> v != null)
+			.build();
+
+		list.add("value1");
+		list.add("value2");
+
+		assertFalse(list.containsAll(List.of("value1", "value4")));
+		assertFalse(list.containsAll(List.of("value4", "value5")));
+	}
+
+	@Test
+	void w03_containsAll_emptyCollection() {
+		var list = FilteredList
+			.create(String.class)
+			.filter(v -> v != null)
+			.build();
+
+		list.add("value1");
+
+		assertTrue(list.containsAll(List.of()));  // Empty collection always returns true
+	}
+
+	//====================================================================================================
+	// removeAll() method
+	//====================================================================================================
+
+	@Test
+	void x01_removeAll_someRemoved() {
+		var list = FilteredList
+			.create(String.class)
+			.filter(v -> v != null)
+			.build();
+
+		list.add("value1");
+		list.add("value2");
+		list.add("value3");
+		list.add("value4");
+
+		assertTrue(list.removeAll(List.of("value2", "value4")));
+		assertSize(2, list);
+		assertEquals("value1", list.get(0));
+		assertEquals("value3", list.get(1));
+	}
+
+	@Test
+	void x02_removeAll_noneRemoved() {
+		var list = FilteredList
+			.create(String.class)
+			.filter(v -> v != null)
+			.build();
+
+		list.add("value1");
+		list.add("value2");
+
+		assertFalse(list.removeAll(List.of("value3", "value4")));  // None present
+		assertSize(2, list);
+	}
+
+	@Test
+	void x03_removeAll_emptyCollection() {
+		var list = FilteredList
+			.create(String.class)
+			.filter(v -> v != null)
+			.build();
+
+		list.add("value1");
+		list.add("value2");
+
+		assertFalse(list.removeAll(List.of()));  // Empty collection returns false
+		assertSize(2, list);
+	}
+
+	//====================================================================================================
+	// retainAll() method
+	//====================================================================================================
+
+	@Test
+	void y01_retainAll_someRetained() {
+		var list = FilteredList
+			.create(String.class)
+			.filter(v -> v != null)
+			.build();
+
+		list.add("value1");
+		list.add("value2");
+		list.add("value3");
+		list.add("value4");
+
+		assertTrue(list.retainAll(List.of("value2", "value4")));
+		assertSize(2, list);
+		assertEquals("value2", list.get(0));
+		assertEquals("value4", list.get(1));
+	}
+
+	@Test
+	void y02_retainAll_allRetained() {
+		var list = FilteredList
+			.create(String.class)
+			.filter(v -> v != null)
+			.build();
+
+		list.add("value1");
+		list.add("value2");
+
+		assertFalse(list.retainAll(List.of("value1", "value2", "value3")));  // All retained, no change
+		assertSize(2, list);
+	}
+
+	@Test
+	void y03_retainAll_noneRetained() {
+		var list = FilteredList
+			.create(String.class)
+			.filter(v -> v != null)
+			.build();
+
+		list.add("value1");
+		list.add("value2");
+
+		assertTrue(list.retainAll(List.of("value3", "value4")));  // None retained, list cleared
+		assertTrue(list.isEmpty());
+	}
+
+	@Test
+	void y04_retainAll_emptyCollection() {
+		var list = FilteredList
+			.create(String.class)
+			.filter(v -> v != null)
+			.build();
+
+		list.add("value1");
+		list.add("value2");
+
+		assertTrue(list.retainAll(List.of()));  // Empty collection, all removed
+		assertTrue(list.isEmpty());
+	}
+
+	//====================================================================================================
+	// toArray(T[]) method
+	//====================================================================================================
+
+	@Test
+	void z01_toArrayTyped_sufficientSize() {
+		var list = FilteredList
+			.create(String.class)
+			.filter(v -> v != null)
+			.build();
+
+		list.add("value1");
+		list.add("value2");
+		list.add("value3");
+
+		var array = list.toArray(new String[3]);
+		assertEquals(3, array.length);
+		assertEquals("value1", array[0]);
+		assertEquals("value2", array[1]);
+		assertEquals("value3", array[2]);
+	}
+
+	@Test
+	void z02_toArrayTyped_insufficientSize() {
+		var list = FilteredList
+			.create(String.class)
+			.filter(v -> v != null)
+			.build();
+
+		list.add("value1");
+		list.add("value2");
+		list.add("value3");
+
+		var array = list.toArray(new String[1]);  // Array too small, should create new one
+		assertEquals(3, array.length);
+		assertEquals("value1", array[0]);
+		assertEquals("value2", array[1]);
+		assertEquals("value3", array[2]);
+	}
+
+	@Test
+	void z03_toArrayTyped_largerSize() {
+		var list = FilteredList
+			.create(String.class)
+			.filter(v -> v != null)
+			.build();
+
+		list.add("value1");
+		list.add("value2");
+
+		var array = list.toArray(new String[5]);  // Array larger than list
+		assertEquals(5, array.length);
+		assertEquals("value1", array[0]);
+		assertEquals("value2", array[1]);
+		assertNull(array[2]);  // Remaining elements set to null
+	}
+
+	@Test
+	void z04_toArrayTyped_emptyList() {
+		var list = FilteredList
+			.create(String.class)
+			.filter(v -> v != null)
+			.build();
+
+		var array = list.toArray(new String[0]);
+		assertEquals(0, array.length);
+	}
 }
 

@@ -502,6 +502,8 @@ class Sets_Test extends TestBase {
 
 	@Test
 	void m10_addAny_noElementFunction_throwsException() {
+		// Test line 698: convertElement returns null when elementFunction is null and element can't be converted
+		// This causes line 242 to throw an exception
 		// When elementFunction is null and we try to add a non-matching type, it should throw
 		assertThrows(RuntimeException.class, () -> {
 			Sets.create(Integer.class)
@@ -649,5 +651,222 @@ class Sets_Test extends TestBase {
 		// Test that FluentSet methods work
 		set.a("c").aa(l("d", "e"));
 		assertList(set, "a", "b", "c", "d", "e");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// buildFiltered
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void q01_buildFiltered_returnsFilteredSet() {
+		var set = Sets.create(String.class)
+			.add("a", "b", "c")
+			.buildFiltered();
+
+		assertNotNull(set);
+		assertSize(3, set);
+		assertList(set, "a", "b", "c");
+	}
+
+	@Test
+	void q02_buildFiltered_sparseEmpty() {
+		var set = Sets.create(String.class)
+			.sparse()
+			.buildFiltered();
+
+		assertNull(set);
+	}
+
+	@Test
+	void q03_buildFiltered_withFiltering() {
+		var set = Sets.create(Integer.class)
+			.filtered(v -> v != null && v > 0)
+			.add(5, -1, 10, 0)
+			.buildFiltered();
+
+		assertNotNull(set);
+		assertList(set, 5, 10);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// concurrent
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void r01_concurrent_createsSynchronizedSet() {
+		var set = Sets.create(String.class)
+			.add("a", "b", "c")
+			.concurrent()
+			.build();
+
+		assertNotNull(set);
+		assertSize(3, set);
+	}
+
+	@Test
+	void r02_concurrent_withSorted() {
+		var set = Sets.create(String.class)
+			.add("c", "a", "b")
+			.sorted()
+			.concurrent()
+			.build();
+
+		assertNotNull(set);
+		assertList(set, "a", "b", "c");
+	}
+
+	@Test
+	void r03_concurrent_withOrdered() {
+		var set = Sets.create(String.class)
+			.add("c", "a", "b")
+			.ordered()
+			.concurrent()
+			.build();
+
+		assertNotNull(set);
+		assertSize(3, set);
+		assertTrue(set.contains("a"));
+		assertTrue(set.contains("b"));
+		assertTrue(set.contains("c"));
+		// Order may not be preserved when concurrent is set, so we just verify all elements are present
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// concurrent(boolean)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void s01_concurrent_boolean_true() {
+		var set = Sets.create(String.class)
+			.add("a", "b", "c")
+			.concurrent(true)
+			.build();
+
+		assertNotNull(set);
+		assertSize(3, set);
+	}
+
+	@Test
+	void s02_concurrent_boolean_false() {
+		var set = Sets.create(String.class)
+			.add("a", "b", "c")
+			.concurrent(false)
+			.build();
+
+		assertNotNull(set);
+		assertSize(3, set);
+		// Should not be synchronized when false
+	}
+
+	@Test
+	void s03_concurrent_boolean_withSorted() {
+		var set = Sets.create(String.class)
+			.add("c", "a", "b")
+			.sorted()
+			.concurrent(true)
+			.build();
+
+		assertNotNull(set);
+		assertList(set, "a", "b", "c");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// filtered
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void t01_filtered_defaultFiltering() {
+		var set = Sets.create(Object.class)
+			.filtered()
+			.add("a", null, false, -1, new String[0], l(), m())
+			.build();
+
+		assertList(set, "a");
+	}
+
+	@Test
+	void t02_filtered_withBooleanFalse() {
+		var set = Sets.create(Boolean.class)
+			.filtered()
+			.add(true, false, true)
+			.build();
+
+		assertList(set, true);
+	}
+
+	@Test
+	void t03_filtered_withNumberMinusOne() {
+		var set = Sets.create(Integer.class)
+			.filtered()
+			.add(1, -1, 2, -1, 3)
+			.build();
+
+		assertList(set, 1, 2, 3);
+	}
+
+	@Test
+	void t04_filtered_withEmptyArray() {
+		var set = Sets.create(Object.class)
+			.filtered()
+			.add("a", new String[0], "b")
+			.build();
+
+		assertList(set, "a", "b");
+	}
+
+	@Test
+	void t05_filtered_withEmptyMap() {
+		var set = Sets.create(Object.class)
+			.filtered()
+			.add("a", m(), "b")
+			.build();
+
+		assertList(set, "a", "b");
+	}
+
+	@Test
+	void t06_filtered_withEmptyCollection() {
+		var set = Sets.create(Object.class)
+			.filtered()
+			.add("a", l(), "b")
+			.build();
+
+		assertList(set, "a", "b");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// filtered(Predicate)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void u01_filtered_withPredicate() {
+		var set = Sets.create(Integer.class)
+			.filtered(v -> v != null && v > 0)
+			.add(5, -1, 10, 0, 15)
+			.build();
+
+		assertList(set, 5, 10, 15);
+	}
+
+	@Test
+	void u02_filtered_multipleFilters() {
+		var set = Sets.create(Integer.class)
+			.filtered(v -> v != null)
+			.filtered(v -> v > 0)
+			.filtered(v -> v < 100)
+			.add(5, -1, 150, 0, 50, null)
+			.build();
+
+		assertList(set, 5, 50);
+	}
+
+	@Test
+	void u03_filtered_withStringPredicate() {
+		var set = Sets.create(String.class)
+			.filtered(s -> s != null && s.length() > 2)
+			.add("a", "ab", "abc", "abcd", "")
+			.build();
+
+		assertList(set, "abc", "abcd");
 	}
 }

@@ -616,5 +616,196 @@ class MultiList_Test extends TestBase {
 
 		assertEquals(multiList.hashCode(), regularList.hashCode());
 	}
+
+	//====================================================================================================
+	// Additional coverage for specific lines
+	//====================================================================================================
+
+	@Test
+	void h01_iterator_hasNext_whenI2IsNull() {
+		// Line 258: return false when i2 == null
+		// This happens when MultiList is created with no lists
+		var ml = new MultiList<String>();
+		var it = ml.iterator();
+		assertFalse(it.hasNext()); // i2 is null, should return false
+	}
+
+	@Test
+	void h02_listIterator_hasNext_whenCurrentIteratorIsNull() {
+		// Line 356: return false when currentIterator == null
+		// This can happen in edge cases with empty lists
+		List<String> l1 = l(a());
+		List<String> l2 = l(a());
+		var ml = new MultiList<>(l1, l2);
+		var li = ml.listIterator(0); // Start at beginning of empty lists
+		// After positioning, if all lists are empty, currentIterator might be null
+		assertFalse(li.hasNext());
+	}
+
+	@Test
+	void h03_listIterator_hasNext_findsNextNonEmptyList() {
+		// Lines 359-360: Loop checking for next non-empty list
+		var l1 = l(a("1", "2"));
+		List<String> l2 = l(a()); // Empty list
+		var l3 = l(a("3", "4"));
+		var ml = new MultiList<>(l1, l2, l3);
+		var li = ml.listIterator();
+
+		// Exhaust first list
+		assertEquals("1", li.next());
+		assertEquals("2", li.next());
+		// Now currentIterator.hasNext() is false, but hasNext() should find l3
+		assertTrue(li.hasNext()); // Should check remaining lists and find l3
+		assertEquals("3", li.next());
+	}
+
+	@Test
+	void h04_listIterator_next_throwsWhenCurrentIteratorIsNull() {
+		// Line 368: throw NoSuchElementException when currentIterator == null
+		// This is tricky to trigger, but can happen with edge cases
+		List<String> l1 = l(a());
+		var ml = new MultiList<>(l1);
+		var li = ml.listIterator(0);
+		// If we somehow get into a state where currentIterator is null
+		assertThrows(NoSuchElementException.class, li::next);
+	}
+
+	@Test
+	void h05_listIterator_next_throwsWhenExhausted() {
+		// Line 371: throw NoSuchElementException when no more elements
+		var l1 = l(a("1", "2"));
+		var l2 = l(a("3"));
+		var ml = new MultiList<>(l1, l2);
+		var li = ml.listIterator();
+
+		// Exhaust all elements
+		assertEquals("1", li.next());
+		assertEquals("2", li.next());
+		assertEquals("3", li.next());
+		// Now listIndex + 1 >= l.length, should throw
+		assertThrows(NoSuchElementException.class, li::next);
+	}
+
+	@Test
+	void h06_listIterator_hasPrevious_whenCurrentIteratorIsNull() {
+		// Line 382: return false when currentIterator == null
+		var l1 = l(a());
+		var ml = new MultiList<>(l1);
+		var li = ml.listIterator(0);
+		assertFalse(li.hasPrevious()); // currentIterator is null
+	}
+
+	@Test
+	void h07_listIterator_hasPrevious_findsPreviousList() {
+		// Line 387: return true when previous list has elements
+		var l1 = l(a("1", "2"));
+		List<String> l2 = l(a()); // Empty list
+		var l3 = l(a("3", "4"));
+		var ml = new MultiList<>(l1, l2, l3);
+		var li = ml.listIterator(ml.size()); // Start at end
+
+		// Move back through l3
+		assertEquals("4", li.previous());
+		assertEquals("3", li.previous());
+		// Now currentIterator.hasPrevious() is false, but hasPrevious() should find l1
+		assertTrue(li.hasPrevious()); // Should check previous lists and find l1
+		assertEquals("2", li.previous());
+	}
+
+	@Test
+	void h08_listIterator_remove_throwsWhenCurrentIteratorIsNull() {
+		// Line 418: throw IllegalStateException when currentIterator == null
+		var l1 = l(a("1"));
+		var ml = new MultiList<>(l1);
+		var li = ml.listIterator();
+		// Remove without calling next/previous first
+		assertThrows(IllegalStateException.class, li::remove);
+	}
+
+	@Test
+	void h09_listIterator_set_throwsWhenCurrentIteratorIsNull() {
+		// Line 426: throw IllegalStateException when currentIterator == null
+		var l1 = l(a("1"));
+		var ml = new MultiList<>(l1);
+		var li = ml.listIterator();
+		// Set without calling next/previous first
+		assertThrows(IllegalStateException.class, () -> li.set("x"));
+	}
+
+	@Test
+	void h10_listIterator_constructor_atEndWithNonEmptyLists() {
+		// Line 346: if (currentIterator == null && l.length > 0)
+		// This happens when index is at the end
+		var l1 = l(a("1", "2"));
+		var l2 = l(a("3", "4"));
+		var ml = new MultiList<>(l1, l2);
+		var li = ml.listIterator(ml.size()); // Index at end
+
+		// Should position at last list
+		assertTrue(li.hasPrevious());
+		assertEquals("4", li.previous());
+	}
+
+	@Test
+	void h11_equals_differentLengths() {
+		// Line 509: while (e1.hasNext() && e2.hasNext())
+		// Line 515: return !(e1.hasNext() || e2.hasNext());
+		// Test when lists have different lengths
+		var l1 = l(a("1", "2"));
+		var ml1 = new MultiList<>(l1);
+
+		var l2 = l(a("1", "2", "3"));
+		var ml2 = new MultiList<>(l2);
+
+		assertFalse(ml1.equals(ml2)); // Different lengths
+		assertFalse(ml2.equals(ml1));
+	}
+
+	@Test
+	void h12_equals_oneExhausted() {
+		// Test equals when one iterator is exhausted before the other
+		var l1 = l(a("1", "2"));
+		var ml1 = new MultiList<>(l1);
+
+		var l2 = l(a("1", "2", "3"));
+		var ml2 = new MultiList<>(l2);
+
+		// ml1 is shorter, so e1.hasNext() becomes false first
+		// Then we check e2.hasNext() which is true, so return false
+		assertFalse(ml1.equals(ml2));
+	}
+
+	@Test
+	void h13_hashCode_iteratesThroughAllElements() {
+		// Line 541: for (E e : this)
+		// Test that hashCode iterates through all elements
+		var l1 = l(a("1", "2"));
+		var l2 = l(a("3", "4"));
+		var ml = new MultiList<>(l1, l2);
+
+		// Calculate expected hashCode manually
+		int expectedHashCode = 1;
+		for (String e : ml) {
+			expectedHashCode = 31 * expectedHashCode + (e == null ? 0 : e.hashCode());
+		}
+
+		assertEquals(expectedHashCode, ml.hashCode());
+	}
+
+	@Test
+	void h14_hashCode_withNullElements() {
+		// Test hashCode with null elements
+		var l1 = l(a("1", null));
+		var l2 = l(a("2"));
+		var ml = new MultiList<>(l1, l2);
+
+		// Calculate expected hashCode manually (null contributes 0)
+		int expectedHashCode = 1;
+		expectedHashCode = 31 * expectedHashCode + "1".hashCode();
+		expectedHashCode = 31 * expectedHashCode + 0; // null
+		expectedHashCode = 31 * expectedHashCode + "2".hashCode();
+
+		assertEquals(expectedHashCode, ml.hashCode());
+	}
 }
 
