@@ -179,4 +179,43 @@ public class ResettableSupplier<T> implements OptionalSupplier<T> {
 			return new ResettableSupplier<>(supplier);
 		return new ResettableSupplier<>(()->o.get());
 	}
+
+	/**
+	 * If a value is present, applies the provided mapping function to it and returns a ResettableSupplier describing the result.
+	 *
+	 * <p>
+	 * The returned ResettableSupplier maintains its own cache, independent of this supplier.
+	 * Resetting the mapped supplier does not affect this supplier, and vice versa.
+	 *
+	 * @param <U> The type of the result of the mapping function.
+	 * @param mapper A mapping function to apply to the value, if present. Must not be <jk>null</jk>.
+	 * @return A ResettableSupplier describing the result of applying a mapping function to the value of this ResettableSupplier, if a value is present, otherwise an empty ResettableSupplier.
+	 */
+	@Override
+	public <U> ResettableSupplier<U> map(Function<? super T, ? extends U> mapper) {
+		assertArgNotNull("mapper", mapper);
+		return new ResettableSupplier<>(() -> {
+			T value = get();
+			return nn(value) ? mapper.apply(value) : null;
+		});
+	}
+
+	/**
+	 * If a value is present, and the value matches the given predicate, returns a ResettableSupplier describing the value, otherwise returns an empty ResettableSupplier.
+	 *
+	 * <p>
+	 * The returned ResettableSupplier maintains its own cache, independent of this supplier.
+	 * Resetting the filtered supplier does not affect this supplier, and vice versa.
+	 *
+	 * @param predicate A predicate to apply to the value, if present. Must not be <jk>null</jk>.
+	 * @return A ResettableSupplier describing the value of this ResettableSupplier if a value is present and the value matches the given predicate, otherwise an empty ResettableSupplier.
+	 */
+	@Override
+	public ResettableSupplier<T> filter(Predicate<? super T> predicate) {
+		assertArgNotNull("predicate", predicate);
+		return new ResettableSupplier<>(() -> {
+			T value = get();
+			return (nn(value) && predicate.test(value)) ? value : null;
+		});
+	}
 }

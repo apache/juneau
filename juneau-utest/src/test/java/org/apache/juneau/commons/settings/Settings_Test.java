@@ -117,7 +117,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void b01_getInteger_valid() {
 		System.setProperty(TEST_PROP, "123");
-		var result = Settings.get().getInteger(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP).asInteger();
 		assertTrue(result.isPresent());
 		assertEquals(123, result.get());
 	}
@@ -125,20 +125,20 @@ class Settings_Test extends TestBase {
 	@Test
 	void b02_getInteger_invalid() {
 		System.setProperty(TEST_PROP, "not-a-number");
-		var result = Settings.get().getInteger(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP).asInteger();
 		assertFalse(result.isPresent());
 	}
 
 	@Test
 	void b03_getInteger_notFound() {
-		var result = Settings.get().getInteger("nonexistent.property");
+		var result = Settings.get().get("nonexistent.property").asInteger();
 		assertFalse(result.isPresent());
 	}
 
 	@Test
 	void b04_getInteger_fromOverride() {
 		Settings.get().setLocal(TEST_PROP, "456");
-		var result = Settings.get().getInteger(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP).asInteger();
 		assertTrue(result.isPresent());
 		assertEquals(456, result.get());
 	}
@@ -149,7 +149,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void c01_getLong_valid() {
 		System.setProperty(TEST_PROP, "123456789");
-		var result = Settings.get().getLong(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP).asLong();
 		assertTrue(result.isPresent());
 		assertEquals(123456789L, result.get());
 	}
@@ -157,14 +157,14 @@ class Settings_Test extends TestBase {
 	@Test
 	void c02_getLong_invalid() {
 		System.setProperty(TEST_PROP, "not-a-number");
-		var result = Settings.get().getLong(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP).asLong();
 		assertFalse(result.isPresent());
 	}
 
 	@Test
 	void c03_getLong_fromOverride() {
 		Settings.get().setLocal(TEST_PROP, "987654321");
-		var result = Settings.get().getLong(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP).asLong();
 		assertTrue(result.isPresent());
 		assertEquals(987654321L, result.get());
 	}
@@ -175,7 +175,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void d01_getBoolean_true() {
 		System.setProperty(TEST_PROP, "true");
-		var result = Settings.get().getBoolean(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP).asBoolean();
 		assertTrue(result.isPresent());
 		assertTrue(result.get());
 	}
@@ -183,7 +183,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void d02_getBoolean_false() {
 		System.setProperty(TEST_PROP, "false");
-		var result = Settings.get().getBoolean(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP).asBoolean();
 		assertTrue(result.isPresent());
 		assertFalse(result.get());
 	}
@@ -191,7 +191,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void d03_getBoolean_caseInsensitive() {
 		System.setProperty(TEST_PROP, "TRUE");
-		var result = Settings.get().getBoolean(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP).asBoolean();
 		assertTrue(result.isPresent());
 		assertTrue(result.get());
 	}
@@ -199,14 +199,14 @@ class Settings_Test extends TestBase {
 	@Test
 	void d04_getBoolean_nonTrueValue() {
 		System.setProperty(TEST_PROP, "anything");
-		var result = Settings.get().getBoolean(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP).asBoolean();
 		assertTrue(result.isPresent());
 		assertFalse(result.get());
 	}
 
 	@Test
 	void d05_getBoolean_notFound() {
-		var result = Settings.get().getBoolean("nonexistent.property");
+		var result = Settings.get().get("nonexistent.property").asBoolean();
 		assertFalse(result.isPresent());
 	}
 
@@ -216,7 +216,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void e01_getDouble_valid() {
 		System.setProperty(TEST_PROP, "123.456");
-		var result = Settings.get().getDouble(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP).asDouble();
 		assertTrue(result.isPresent());
 		assertEquals(123.456, result.get(), 0.0001);
 	}
@@ -224,7 +224,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void e02_getDouble_invalid() {
 		System.setProperty(TEST_PROP, "not-a-number");
-		var result = Settings.get().getDouble(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP).asDouble();
 		assertFalse(result.isPresent());
 	}
 
@@ -234,7 +234,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void f01_getFloat_valid() {
 		System.setProperty(TEST_PROP, "123.456");
-		var result = Settings.get().getFloat(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP).asFloat();
 		assertTrue(result.isPresent());
 		assertEquals(123.456f, result.get(), 0.0001f);
 	}
@@ -242,7 +242,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void f02_getFloat_invalid() {
 		System.setProperty(TEST_PROP, "not-a-number");
-		var result = Settings.get().getFloat(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP).asFloat();
 		assertFalse(result.isPresent());
 	}
 
@@ -252,14 +252,14 @@ class Settings_Test extends TestBase {
 	@Test
 	void g01_getFile_valid() {
 		System.setProperty(TEST_PROP, "/tmp/test.txt");
-		var result = Settings.get().getFile(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP).asFile();
 		assertTrue(result.isPresent());
 		assertEquals(new File("/tmp/test.txt"), result.get());
 	}
 
 	@Test
 	void g02_getFile_notFound() {
-		var result = Settings.get().getFile("nonexistent.property");
+		var result = Settings.get().get("nonexistent.property").asFile();
 		assertFalse(result.isPresent());
 	}
 
@@ -269,7 +269,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void h01_getPath_valid() {
 		System.setProperty(TEST_PROP, "/tmp/test.txt");
-		var result = Settings.get().getPath(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP).asPath();
 		assertTrue(result.isPresent());
 		assertEquals(Paths.get("/tmp/test.txt"), result.get());
 	}
@@ -279,7 +279,7 @@ class Settings_Test extends TestBase {
 		// Paths.get() can throw exceptions for invalid paths on some systems
 		// This test verifies that invalid paths return empty
 		System.setProperty(TEST_PROP, "\0invalid");
-		var result = Settings.get().getPath(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP).asPath();
 		// May or may not be empty depending on OS, but should not throw
 		assertNotNull(result);
 	}
@@ -290,7 +290,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void i01_getURI_valid() {
 		System.setProperty(TEST_PROP, "http://example.com/test");
-		var result = Settings.get().getURI(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP).asURI();
 		assertTrue(result.isPresent());
 		assertEquals(URI.create("http://example.com/test"), result.get());
 	}
@@ -298,7 +298,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void i02_getURI_invalid() {
 		System.setProperty(TEST_PROP, "not a valid uri");
-		var result = Settings.get().getURI(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP).asURI();
 		assertFalse(result.isPresent());
 	}
 
@@ -308,7 +308,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void j01_getCharset_valid() {
 		System.setProperty(TEST_PROP, "UTF-8");
-		var result = Settings.get().getCharset(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP).asCharset();
 		assertTrue(result.isPresent());
 		assertEquals(Charset.forName("UTF-8"), result.get());
 	}
@@ -316,7 +316,7 @@ class Settings_Test extends TestBase {
 	@Test
 	void j02_getCharset_invalid() {
 		System.setProperty(TEST_PROP, "INVALID-CHARSET");
-		var result = Settings.get().getCharset(TEST_PROP);
+		var result = Settings.get().get(TEST_PROP).asCharset();
 		assertFalse(result.isPresent());
 	}
 

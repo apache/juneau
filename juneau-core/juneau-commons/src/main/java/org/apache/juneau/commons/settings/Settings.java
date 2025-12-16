@@ -20,10 +20,7 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.io.*;
-import java.net.*;
 import java.nio.charset.*;
-import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
@@ -62,29 +59,37 @@ import org.apache.juneau.commons.function.*;
  *
  * <h5 class='section'>Features:</h5>
  * <ul class='spaced-list'>
- * 	<li>System property access - read Java system properties with type conversion
+ * 	<li>System property access - read Java system properties with type conversion via {@link StringSetting}
  * 	<li>Global overrides - override system properties globally for all threads (stored in a {@link SettingStore})
  * 	<li>Per-thread overrides - override system properties for specific threads (stored in a per-thread {@link SettingStore})
  * 	<li>Custom sources - add arbitrary property sources (e.g., Spring properties, environment variables, config files) via the {@link Builder}
  * 	<li>Disable override support - system property to prevent new global overrides from being set
- * 	<li>Type-safe accessors - convenience methods for common types: Integer, Long, Boolean, Double, Float, File, Path, URI, Charset
+ * 	<li>Type-safe accessors - type conversion methods on {@link StringSetting} for common types: Integer, Long, Boolean, Double, Float, File, Path, URI, Charset
+ * 	<li>Resettable suppliers - settings are returned as {@link StringSetting} instances that can be reset to force recomputation
  * </ul>
  *
  * <h5 class='section'>Usage Examples:</h5>
  * <p class='bjava'>
- * 	<jc>// Get a system property as a string (using singleton instance)</jc>
- * 	Optional&lt;String&gt; <jv>value</jv> = Settings.<jsf>get</jsf>().get(<js>"my.property"</js>);
+ * 	<jc>// Get a system property as a StringSetting (using singleton instance)</jc>
+ * 	StringSetting <jv>setting</jv> = Settings.<jsf>get</jsf>().get(<js>"my.property"</js>);
+ * 	String <jv>value</jv> = <jv>setting</jv>.get();  <jc>// Get the string value</jc>
  *
- * 	<jc>// Get with type conversion</jc>
- * 	Optional&lt;Integer&gt; <jv>intValue</jv> = Settings.<jsf>get</jsf>().getInteger(<js>"my.int.property"</js>);
- * 	Optional&lt;Long&gt; <jv>longValue</jv> = Settings.<jsf>get</jsf>().getLong(<js>"my.long.property"</js>);
- * 	Optional&lt;Boolean&gt; <jv>boolValue</jv> = Settings.<jsf>get</jsf>().getBoolean(<js>"my.bool.property"</js>);
- * 	Optional&lt;Double&gt; <jv>doubleValue</jv> = Settings.<jsf>get</jsf>().getDouble(<js>"my.double.property"</js>);
- * 	Optional&lt;Float&gt; <jv>floatValue</jv> = Settings.<jsf>get</jsf>().getFloat(<js>"my.float.property"</js>);
- * 	Optional&lt;File&gt; <jv>fileValue</jv> = Settings.<jsf>get</jsf>().getFile(<js>"my.file.property"</js>);
- * 	Optional&lt;Path&gt; <jv>pathValue</jv> = Settings.<jsf>get</jsf>().getPath(<js>"my.path.property"</js>);
- * 	Optional&lt;URI&gt; <jv>uriValue</jv> = Settings.<jsf>get</jsf>().getURI(<js>"my.uri.property"</js>);
- * 	Optional&lt;Charset&gt; <jv>charsetValue</jv> = Settings.<jsf>get</jsf>().getCharset(<js>"my.charset.property"</js>);
+ * 	<jc>// Get with type conversion using StringSetting methods</jc>
+ * 	Setting&lt;Integer&gt; <jv>intSetting</jv> = Settings.<jsf>get</jsf>().get(<js>"my.int.property"</js>).asInteger();
+ * 	Setting&lt;Long&gt; <jv>longSetting</jv> = Settings.<jsf>get</jsf>().get(<js>"my.long.property"</js>).asLong();
+ * 	Setting&lt;Boolean&gt; <jv>boolSetting</jv> = Settings.<jsf>get</jsf>().get(<js>"my.bool.property"</js>).asBoolean();
+ * 	Setting&lt;Double&gt; <jv>doubleSetting</jv> = Settings.<jsf>get</jsf>().get(<js>"my.double.property"</js>).asDouble();
+ * 	Setting&lt;Float&gt; <jv>floatSetting</jv> = Settings.<jsf>get</jsf>().get(<js>"my.float.property"</js>).asFloat();
+ * 	Setting&lt;File&gt; <jv>fileSetting</jv> = Settings.<jsf>get</jsf>().get(<js>"my.file.property"</js>).asFile();
+ * 	Setting&lt;Path&gt; <jv>pathSetting</jv> = Settings.<jsf>get</jsf>().get(<js>"my.path.property"</js>).asPath();
+ * 	Setting&lt;URI&gt; <jv>uriSetting</jv> = Settings.<jsf>get</jsf>().get(<js>"my.uri.property"</js>).asURI();
+ * 	Setting&lt;Charset&gt; <jv>charsetSetting</jv> = Settings.<jsf>get</jsf>().get(<js>"my.charset.property"</js>).asCharset();
+ *
+ * 	<jc>// Use custom type conversion</jc>
+ * 	Setting&lt;MyCustomType&gt; <jv>customSetting</jv> = Settings.<jsf>get</jsf>().get(<js>"my.custom.property"</js>).asType(MyCustomType.<jk>class</jk>);
+ *
+ * 	<jc>// Reset a setting to force recomputation</jc>
+ * 	<jv>setting</jv>.reset();
  *
  * 	<jc>// Override for current thread (useful in unit tests)</jc>
  * 	Settings.<jsf>get</jsf>().setLocal(<js>"my.property"</js>, <js>"test-value"</js>);
@@ -325,7 +330,12 @@ public class Settings {
 	}
 
 	/**
-	 * Returns the value of the specified system property.
+	 * Returns a {@link StringSetting} for the specified system property.
+	 *
+	 * <p>
+	 * The returned {@link StringSetting} is a resettable supplier that caches the lookup result.
+	 * Use the {@link StringSetting#asInteger()}, {@link StringSetting#asBoolean()}, etc. methods
+	 * to convert to different types.
 	 *
 	 * <p>
 	 * The lookup order is:
@@ -337,31 +347,32 @@ public class Settings {
 	 * 	<li>System environment variable source (default, always last)
 	 * </ol>
 	 *
-	 * @param name The property name.
-	 * @return The property value, or {@link Optional#empty()} if not found.
+	 * @param name The property name. Must not be <jk>null</jk>.
+	 * @return A {@link StringSetting} that provides the property value, or <jk>null</jk> if not found.
 	 */
-	public Optional<String> get(String name) {
+	public StringSetting get(String name) {
 		assertArgNotNull("name", name);
+		return new StringSetting(this, () -> {
+			// 1. Check thread-local override
+			var v = localStore.get().get(name);
+			if (v != null)
+				return v.orElse(null); // v is Optional.empty() if key exists with null value, or Optional.of(value) if present
 
-		// 1. Check thread-local override
-		var v = localStore.get().get(name);
-		if (v != null)
-			return v; // v is Optional.empty() if key exists with null value, or Optional.of(value) if present
+			// 2. Check global override
+			v = globalStore.get().get(name);
+			if (v != null)
+				return v.orElse(null); // v is Optional.empty() if key exists with null value, or Optional.of(value) if present
 
-		// 2. Check global override
-		v = globalStore.get().get(name);
-		if (v != null)
-			return v; // v is Optional.empty() if key exists with null value, or Optional.of(value) if present
+			// 3. Check sources in reverse order (last added first)
+			for (int i = sources.size() - 1; i >= 0; i--) {
+				var source = sources.get(i);
+				var result = source.get(name);
+				if (result != null)
+					return result.orElse(null);
+			}
 
-		// 3. Check sources in reverse order (last added first)
-		for (int i = sources.size() - 1; i >= 0; i--) {
-			var source = sources.get(i);
-			var result = source.get(name);
-			if (result != null)
-				return result;
-		}
-
-		return opte();
+			return null;
+		});
 	}
 
 	/**
@@ -391,138 +402,10 @@ public class Settings {
 	 * @see #get(String)
 	 * @see #toType(String, Object)
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> T get(String name, T def) {
 		assertArgNotNull("def", def);
-		return get(name).map(x -> toType(x, def)).orElse(def);
-	}
-
-	/**
-	 * Returns the value of the specified system property as an Integer.
-	 *
-	 * <p>
-	 * The property value is parsed using {@link Integer#valueOf(String)}. If the property is not found
-	 * or cannot be parsed as an integer, returns {@link Optional#empty()}.
-	 *
-	 * @param name The property name.
-	 * @return The property value as an Integer, or {@link Optional#empty()} if not found or not a valid integer.
-	 */
-	public Optional<Integer> getInteger(String name) {
-		return get(name).map(v -> safeOrNull(()->Integer.valueOf(v))).filter(Objects::nonNull);
-	}
-
-	/**
-	 * Returns the value of the specified system property as a Long.
-	 *
-	 * <p>
-	 * The property value is parsed using {@link Long#valueOf(String)}. If the property is not found
-	 * or cannot be parsed as a long, returns {@link Optional#empty()}.
-	 *
-	 * @param name The property name.
-	 * @return The property value as a Long, or {@link Optional#empty()} if not found or not a valid long.
-	 */
-	public Optional<Long> getLong(String name) {
-		return get(name).map(v -> safeOrNull(()->Long.valueOf(v))).filter(Objects::nonNull);
-	}
-
-	/**
-	 * Returns the value of the specified system property as a Boolean.
-	 *
-	 * <p>
-	 * The property value is parsed using {@link Boolean#parseBoolean(String)}, which returns <c>true</c>
-	 * if the value is (case-insensitive) "true", otherwise <c>false</c>. Note that this method will
-	 * return <c>Optional.of(false)</c> for any non-empty value that is not "true", and
-	 * {@link Optional#empty()} only if the property is not set.
-	 *
-	 * @param name The property name.
-	 * @return The property value as a Boolean, or {@link Optional#empty()} if not found.
-	 */
-	public Optional<Boolean> getBoolean(String name) {
-		return get(name).map(v -> Boolean.parseBoolean(v));
-	}
-
-	/**
-	 * Returns the value of the specified system property as a Double.
-	 *
-	 * <p>
-	 * The property value is parsed using {@link Double#valueOf(String)}. If the property is not found
-	 * or cannot be parsed as a double, returns {@link Optional#empty()}.
-	 *
-	 * @param name The property name.
-	 * @return The property value as a Double, or {@link Optional#empty()} if not found or not a valid double.
-	 */
-	public Optional<Double> getDouble(String name) {
-		return get(name).map(v -> safeOrNull(()->Double.valueOf(v))).filter(Objects::nonNull);
-	}
-
-	/**
-	 * Returns the value of the specified system property as a Float.
-	 *
-	 * <p>
-	 * The property value is parsed using {@link Float#valueOf(String)}. If the property is not found
-	 * or cannot be parsed as a float, returns {@link Optional#empty()}.
-	 *
-	 * @param name The property name.
-	 * @return The property value as a Float, or {@link Optional#empty()} if not found or not a valid float.
-	 */
-	public Optional<Float> getFloat(String name) {
-		return get(name).map(v -> safeOrNull(()->Float.valueOf(v))).filter(Objects::nonNull);
-	}
-
-	/**
-	 * Returns the value of the specified system property as a File.
-	 *
-	 * <p>
-	 * The property value is converted to a {@link File} using the {@link File#File(String)} constructor.
-	 * If the property is not found, returns {@link Optional#empty()}. Note that this method does not
-	 * validate that the file path is valid or that the file exists.
-	 *
-	 * @param name The property name.
-	 * @return The property value as a File, or {@link Optional#empty()} if not found.
-	 */
-	public Optional<File> getFile(String name) {
-		return get(name).map(v -> new File(v));
-	}
-
-	/**
-	 * Returns the value of the specified system property as a Path.
-	 *
-	 * <p>
-	 * The property value is converted to a {@link Path} using {@link Paths#get(String, String...)}.
-	 * If the property is not found or the path string is invalid, returns {@link Optional#empty()}.
-	 *
-	 * @param name The property name.
-	 * @return The property value as a Path, or {@link Optional#empty()} if not found or not a valid path.
-	 */
-	public Optional<Path> getPath(String name) {
-		return get(name).map(v -> safeOrNull(()->Paths.get(v))).filter(Objects::nonNull);
-	}
-
-	/**
-	 * Returns the value of the specified system property as a URI.
-	 *
-	 * <p>
-	 * The property value is converted to a {@link URI} using {@link URI#create(String)}.
-	 * If the property is not found or the URI string is invalid, returns {@link Optional#empty()}.
-	 *
-	 * @param name The property name.
-	 * @return The property value as a URI, or {@link Optional#empty()} if not found or not a valid URI.
-	 */
-	public Optional<URI> getURI(String name) {
-		return get(name).map(v -> safeOrNull(()->URI.create(v))).filter(Objects::nonNull);
-	}
-
-	/**
-	 * Returns the value of the specified system property as a Charset.
-	 *
-	 * <p>
-	 * The property value is converted to a {@link Charset} using {@link Charset#forName(String)}.
-	 * If the property is not found or the charset name is not supported, returns {@link Optional#empty()}.
-	 *
-	 * @param name The property name.
-	 * @return The property value as a Charset, or {@link Optional#empty()} if not found or not a valid charset.
-	 */
-	public Optional<Charset> getCharset(String name) {
-		return get(name).map(v -> safeOrNull(()->Charset.forName(v))).filter(Objects::nonNull);
+		return get(name).asType((Class<T>)def.getClass()).orElse(def);
 	}
 
 	/**
@@ -654,13 +537,14 @@ public class Settings {
 	 *
 	 * @param <T> The target type.
 	 * @param s The string to convert. Must not be <jk>null</jk>.
-	 * @param def The default value (used to determine the target type). Must not be <jk>null</jk>.
+	 * @param c The target class. Must not be <jk>null</jk>.
 	 * @return The converted value.
 	 * @throws RuntimeException If the type is not supported for conversion.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private <T> T toType(String s, T def) {
-		var c = (Class<T>)def.getClass();
+	protected <T> T toType(String s, Class<T> c) {
+		assertArgNotNull("s", s);
+		assertArgNotNull("c", c);
 		var f = (Function<String,T>)customTypeFunctions.get(c);
 		if (f == null) {
 			if (c == String.class)

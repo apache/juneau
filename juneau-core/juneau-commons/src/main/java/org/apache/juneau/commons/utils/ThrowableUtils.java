@@ -20,7 +20,6 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.settings.*;
@@ -30,7 +29,7 @@ import org.apache.juneau.commons.settings.*;
  */
 public class ThrowableUtils {
 
-	static AtomicBoolean VERBOSE = new AtomicBoolean(Settings.get().getBoolean("juneau.enableVerboseExceptions").orElse(false));
+	static Setting<Boolean> VERBOSE = Settings.get().get("juneau.enableVerboseExceptions").asBoolean();
 
 	/**
 	 * Interface used with {@link Utils#safeSupplier(SupplierWithThrowable)}.
@@ -337,7 +336,7 @@ public class ThrowableUtils {
 	}
 
 	private static <T extends Throwable> T log(T exception) {
-		if (VERBOSE.get()) exception.printStackTrace();
+		if (VERBOSE.orElse(false)) exception.printStackTrace();
 		return exception;
 	}
 

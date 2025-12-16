@@ -19,8 +19,6 @@ package org.apache.juneau.commons.utils;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.util.function.*;
-
 /**
  * Utility methods for argument validation and assertion.
  *
@@ -122,6 +120,16 @@ public class AssertionUtils {
 		return o;
 	}
 
+	/**
+	 * Asserts that the specified object is not <jk>null</jk>, throwing an {@link IllegalStateException} if it is.
+	 *
+	 * @param <T> The type of the object.
+	 * @param o The object to check. Can be <jk>null</jk>.
+	 * @param msg The error message format string. Must not be <jk>null</jk>.
+	 * @param args The arguments for the message format string.
+	 * @return The non-null object.
+	 * @throws IllegalStateException If the object is <jk>null</jk>.
+	 */
 	public static final <T> T assertNotNull(T o, String msg, Object...args) throws IllegalStateException {
 		if (o == null)
 			throw illegalState(msg, args);
