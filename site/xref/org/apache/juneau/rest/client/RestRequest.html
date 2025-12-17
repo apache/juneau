@@ -227,12 +227,12 @@
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<strong class="jxr_keyword">this</strong>.client = client;
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">this</strong>.request = createInnerRequest(assertArgNotNull(<span class="jxr_string">"method"</span>, method), assertArgNotNull(<span class="jxr_string">"uri"</span>, uri), hasBody);
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">this</strong>.errorCodes = client.errorCodes;
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">this</strong>.uriBuilder = <strong class="jxr_keyword">new</strong> URIBuilder(request.getURI());
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">this</strong>.ignoreErrors = client.ignoreErrors;
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">this</strong>.headerData = client.createHeaderData();
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<strong class="jxr_keyword">this</strong>.queryData = client.createQueryData();
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">this</strong>.formData = client.createFormData();
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">this</strong>.pathData = client.createPathData();
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">this</strong>.formData = client.createFormData();
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">this</strong>.headerData = client.createHeaderData();
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">this</strong>.ignoreErrors = client.ignoreErrors;
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<strong class="jxr_keyword">this</strong>.pathData = client.createPathData();
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">this</strong>.queryData = client.createQueryData();
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">this</strong>.uriBuilder = <strong class="jxr_keyword">new</strong> URIBuilder(request.getURI());
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 	}
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 	<em class="jxr_javadoccomment">/**</em>

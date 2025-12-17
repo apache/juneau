@@ -186,10 +186,10 @@
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 			<strong class="jxr_keyword">super</strong>(assertArgNotNull(<span class="jxr_string">"copyFrom"</span>, copyFrom));
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 			addBeanTypesXml = copyFrom.addBeanTypesXml;
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 			addNamespaceUrisToRoot = copyFrom.addNamespaceUrisToRoot;
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			disableAutoDetectNamespaces = copyFrom.disableAutoDetectNamespaces;
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			disableJsonTags = copyFrom.disableJsonTags;
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			enableNamespaces = copyFrom.enableNamespaces;
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			defaultNamespace = copyFrom.defaultNamespace;
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			defaultNamespace = copyFrom.defaultNamespace;
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			disableAutoDetectNamespaces = copyFrom.disableAutoDetectNamespaces;
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			disableJsonTags = copyFrom.disableJsonTags;
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			enableNamespaces = copyFrom.enableNamespaces;
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 			namespaces = copyOf(copyFrom.namespaces);
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 			textNodeDelimiter = copyFrom.textNodeDelimiter;
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 		}
@@ -204,10 +204,10 @@
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<strong class="jxr_keyword">super</strong>(assertArgNotNull(<span class="jxr_string">"copyFrom"</span>, copyFrom));
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 			addBeanTypesXml = copyFrom.addBeanTypesXml;
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 			addNamespaceUrisToRoot = copyFrom.addNamespaceUrlsToRoot;
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			disableAutoDetectNamespaces = ! copyFrom.autoDetectNamespaces;
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			disableJsonTags = ! copyFrom.addJsonTags;
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			enableNamespaces = copyFrom.enableNamespaces;
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			defaultNamespace = copyFrom.defaultNamespace;
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			defaultNamespace = copyFrom.defaultNamespace;
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			disableAutoDetectNamespaces = ! copyFrom.autoDetectNamespaces;
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			disableJsonTags = ! copyFrom.addJsonTags;
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			enableNamespaces = copyFrom.enableNamespaces;
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 			namespaces = copyFrom.namespaces.length == 0 ? <strong class="jxr_keyword">null</strong> : list(copyFrom.namespaces);
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 			textNodeDelimiter = copyFrom.textNodeDelimiter;
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 		}
@@ -1246,12 +1246,12 @@
 <a class="jxr_linenumber" name="L1238" href="#L1238">1238</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1239" href="#L1239">1239</a> 	<strong class="jxr_keyword">public</strong> <a name="XmlSerializer" href="../../../../org/apache/juneau/xml/XmlSerializer.html#XmlSerializer">XmlSerializer</a>(Builder builder) {
 <a class="jxr_linenumber" name="L1240" href="#L1240">1240</a> 		<strong class="jxr_keyword">super</strong>(builder);
-<a class="jxr_linenumber" name="L1241" href="#L1241">1241</a> 		autoDetectNamespaces = ! builder.disableAutoDetectNamespaces;
-<a class="jxr_linenumber" name="L1242" href="#L1242">1242</a> 		enableNamespaces = builder.enableNamespaces;
+<a class="jxr_linenumber" name="L1241" href="#L1241">1241</a> 		addBeanTypesXml = builder.addBeanTypesXml;
+<a class="jxr_linenumber" name="L1242" href="#L1242">1242</a> 		addJsonTags = ! builder.disableJsonTags;
 <a class="jxr_linenumber" name="L1243" href="#L1243">1243</a> 		addNamespaceUrlsToRoot = builder.addNamespaceUrisToRoot;
-<a class="jxr_linenumber" name="L1244" href="#L1244">1244</a> 		addBeanTypesXml = builder.addBeanTypesXml;
-<a class="jxr_linenumber" name="L1245" href="#L1245">1245</a> 		addJsonTags = ! builder.disableJsonTags;
-<a class="jxr_linenumber" name="L1246" href="#L1246">1246</a> 		defaultNamespace = nn(builder.defaultNamespace) ? builder.defaultNamespace : DEFAULT_JUNEAU_NAMESPACE;
+<a class="jxr_linenumber" name="L1244" href="#L1244">1244</a> 		autoDetectNamespaces = ! builder.disableAutoDetectNamespaces;
+<a class="jxr_linenumber" name="L1245" href="#L1245">1245</a> 		defaultNamespace = nn(builder.defaultNamespace) ? builder.defaultNamespace : DEFAULT_JUNEAU_NAMESPACE;
+<a class="jxr_linenumber" name="L1246" href="#L1246">1246</a> 		enableNamespaces = builder.enableNamespaces;
 <a class="jxr_linenumber" name="L1247" href="#L1247">1247</a> 		namespaces = nn(builder.namespaces) ? builder.namespaces.toArray(EMPTY_NAMESPACE_ARRAY) : EMPTY_NAMESPACE_ARRAY;
 <a class="jxr_linenumber" name="L1248" href="#L1248">1248</a> 		textNodeDelimiter = builder.textNodeDelimiter;
 <a class="jxr_linenumber" name="L1249" href="#L1249">1249</a> 		addBeanTypes = addBeanTypesXml || <strong class="jxr_keyword">super</strong>.isAddBeanTypes();

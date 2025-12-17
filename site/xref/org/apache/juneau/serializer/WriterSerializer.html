@@ -1003,11 +1003,11 @@
 <a class="jxr_linenumber" name="L995" href="#L995">995</a> 	<strong class="jxr_keyword">protected</strong> <a name="WriterSerializer" href="../../../../org/apache/juneau/serializer/WriterSerializer.html#WriterSerializer">WriterSerializer</a>(Builder builder) {
 <a class="jxr_linenumber" name="L996" href="#L996">996</a> 		<strong class="jxr_keyword">super</strong>(builder);
 <a class="jxr_linenumber" name="L997" href="#L997">997</a> 
-<a class="jxr_linenumber" name="L998" href="#L998">998</a> 		maxIndent = builder.maxIndent;
-<a class="jxr_linenumber" name="L999" href="#L999">999</a> 		quoteChar = builder.quoteChar;
-<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 		quoteCharOverride = builder.quoteCharOverride;
-<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 		streamCharset = builder.streamCharset;
-<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 		fileCharset = builder.fileCharset;
+<a class="jxr_linenumber" name="L998" href="#L998">998</a> 		fileCharset = builder.fileCharset;
+<a class="jxr_linenumber" name="L999" href="#L999">999</a> 		maxIndent = builder.maxIndent;
+<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 		quoteChar = builder.quoteChar;
+<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 		quoteCharOverride = builder.quoteCharOverride;
+<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 		streamCharset = builder.streamCharset;
 <a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 		useWhitespace = builder.useWhitespace;
 <a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 
 <a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 		quoteCharValue = nn(quoteCharOverride) ? quoteCharOverride : nn(quoteChar) ? quoteChar : '&quot;';

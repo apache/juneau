@@ -2214,14 +2214,14 @@
 <a class="jxr_linenumber" name="L2206" href="#L2206">2206</a> 			bs.addBean(BeanStore.<strong class="jxr_keyword">class</strong>, bs);
 <a class="jxr_linenumber" name="L2207" href="#L2207">2207</a> 
 <a class="jxr_linenumber" name="L2208" href="#L2208">2208</a> 			beanContext = bs.add(BeanContext.<strong class="jxr_keyword">class</strong>, builder.getBeanContext().orElse(context.getBeanContext()));
-<a class="jxr_linenumber" name="L2209" href="#L2209">2209</a> 			encoders = bs.add(EncoderSet.<strong class="jxr_keyword">class</strong>, builder.getEncoders().orElse(context.getEncoders()));
-<a class="jxr_linenumber" name="L2210" href="#L2210">2210</a> 			serializers = bs.add(SerializerSet.<strong class="jxr_keyword">class</strong>, builder.getSerializers().orElse(context.getSerializers()));
-<a class="jxr_linenumber" name="L2211" href="#L2211">2211</a> 			parsers = bs.add(ParserSet.<strong class="jxr_keyword">class</strong>, builder.getParsers().orElse(context.getParsers()));
-<a class="jxr_linenumber" name="L2212" href="#L2212">2212</a> 			partSerializer = bs.add(HttpPartSerializer.<strong class="jxr_keyword">class</strong>, builder.getPartSerializer().orElse(context.getPartSerializer()));
-<a class="jxr_linenumber" name="L2213" href="#L2213">2213</a> 			partParser = bs.add(HttpPartParser.<strong class="jxr_keyword">class</strong>, builder.getPartParser().orElse(context.getPartParser()));
-<a class="jxr_linenumber" name="L2214" href="#L2214">2214</a> 			jsonSchemaGenerator = bs.add(JsonSchemaGenerator.<strong class="jxr_keyword">class</strong>, builder.getJsonSchemaGenerator().orElse(context.getJsonSchemaGenerator()));
-<a class="jxr_linenumber" name="L2215" href="#L2215">2215</a> 			converters = bs.add(<a name="RestConverter" href="../../../../org/apache/juneau/rest/converter/RestConverter.html#RestConverter">RestConverter</a>[].<strong class="jxr_keyword">class</strong>, builder.converters().build().asArray());
-<a class="jxr_linenumber" name="L2216" href="#L2216">2216</a> 			guards = bs.add(<a name="RestGuard" href="../../../../org/apache/juneau/rest/guard/RestGuard.html#RestGuard">RestGuard</a>[].<strong class="jxr_keyword">class</strong>, builder.getGuards().asArray());
+<a class="jxr_linenumber" name="L2209" href="#L2209">2209</a> 			converters = bs.add(<a name="RestConverter" href="../../../../org/apache/juneau/rest/converter/RestConverter.html#RestConverter">RestConverter</a>[].<strong class="jxr_keyword">class</strong>, builder.converters().build().asArray());
+<a class="jxr_linenumber" name="L2210" href="#L2210">2210</a> 			encoders = bs.add(EncoderSet.<strong class="jxr_keyword">class</strong>, builder.getEncoders().orElse(context.getEncoders()));
+<a class="jxr_linenumber" name="L2211" href="#L2211">2211</a> 			guards = bs.add(<a name="RestGuard" href="../../../../org/apache/juneau/rest/guard/RestGuard.html#RestGuard">RestGuard</a>[].<strong class="jxr_keyword">class</strong>, builder.getGuards().asArray());
+<a class="jxr_linenumber" name="L2212" href="#L2212">2212</a> 			jsonSchemaGenerator = bs.add(JsonSchemaGenerator.<strong class="jxr_keyword">class</strong>, builder.getJsonSchemaGenerator().orElse(context.getJsonSchemaGenerator()));
+<a class="jxr_linenumber" name="L2213" href="#L2213">2213</a> 			parsers = bs.add(ParserSet.<strong class="jxr_keyword">class</strong>, builder.getParsers().orElse(context.getParsers()));
+<a class="jxr_linenumber" name="L2214" href="#L2214">2214</a> 			partParser = bs.add(HttpPartParser.<strong class="jxr_keyword">class</strong>, builder.getPartParser().orElse(context.getPartParser()));
+<a class="jxr_linenumber" name="L2215" href="#L2215">2215</a> 			partSerializer = bs.add(HttpPartSerializer.<strong class="jxr_keyword">class</strong>, builder.getPartSerializer().orElse(context.getPartSerializer()));
+<a class="jxr_linenumber" name="L2216" href="#L2216">2216</a> 			serializers = bs.add(SerializerSet.<strong class="jxr_keyword">class</strong>, builder.getSerializers().orElse(context.getSerializers()));
 <a class="jxr_linenumber" name="L2217" href="#L2217">2217</a> 
 <a class="jxr_linenumber" name="L2218" href="#L2218">2218</a> 			<strong class="jxr_keyword">var</strong> matchers = builder.getMatchers(context);
 <a class="jxr_linenumber" name="L2219" href="#L2219">2219</a> 			optionalMatchers = matchers.getOptionalEntries();
@@ -2233,11 +2233,11 @@
 <a class="jxr_linenumber" name="L2225" href="#L2225">2225</a> 			supportedAcceptTypes = u(nn(builder.produces) ? builder.produces : serializers.getSupportedMediaTypes());
 <a class="jxr_linenumber" name="L2226" href="#L2226">2226</a> 			supportedContentTypes = u(nn(builder.consumes) ? builder.consumes : parsers.getSupportedMediaTypes());
 <a class="jxr_linenumber" name="L2227" href="#L2227">2227</a> 
-<a class="jxr_linenumber" name="L2228" href="#L2228">2228</a> 			defaultRequestHeaders = builder.defaultRequestHeaders();
-<a class="jxr_linenumber" name="L2229" href="#L2229">2229</a> 			defaultResponseHeaders = builder.defaultResponseHeaders();
-<a class="jxr_linenumber" name="L2230" href="#L2230">2230</a> 			defaultRequestQueryData = builder.defaultRequestQueryData();
-<a class="jxr_linenumber" name="L2231" href="#L2231">2231</a> 			defaultRequestFormData = builder.defaultRequestFormData();
-<a class="jxr_linenumber" name="L2232" href="#L2232">2232</a> 			defaultRequestAttributes = builder.defaultRequestAttributes();
+<a class="jxr_linenumber" name="L2228" href="#L2228">2228</a> 			defaultRequestAttributes = builder.defaultRequestAttributes();
+<a class="jxr_linenumber" name="L2229" href="#L2229">2229</a> 			defaultRequestFormData = builder.defaultRequestFormData();
+<a class="jxr_linenumber" name="L2230" href="#L2230">2230</a> 			defaultRequestHeaders = builder.defaultRequestHeaders();
+<a class="jxr_linenumber" name="L2231" href="#L2231">2231</a> 			defaultRequestQueryData = builder.defaultRequestQueryData();
+<a class="jxr_linenumber" name="L2232" href="#L2232">2232</a> 			defaultResponseHeaders = builder.defaultResponseHeaders();
 <a class="jxr_linenumber" name="L2233" href="#L2233">2233</a> 
 <a class="jxr_linenumber" name="L2234" href="#L2234">2234</a> 			<strong class="jxr_keyword">int</strong> _hierarchyDepth = 0;
 <a class="jxr_linenumber" name="L2235" href="#L2235">2235</a> 			<strong class="jxr_keyword">var</strong> sc = method.getDeclaringClass().getSuperclass();

@@ -6213,37 +6213,37 @@
 <a class="jxr_linenumber" name="L6205" href="#L6205">6205</a> 
 <a class="jxr_linenumber" name="L6206" href="#L6206">6206</a> 		beanStore = builder.beanStore.addBean(RestClient.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L6207" href="#L6207">6207</a> 
-<a class="jxr_linenumber" name="L6208" href="#L6208">6208</a> 		httpClient = builder.getHttpClient();
-<a class="jxr_linenumber" name="L6209" href="#L6209">6209</a> 		headerData = builder.headers().copy();
-<a class="jxr_linenumber" name="L6210" href="#L6210">6210</a> 		queryData = builder.queryData().copy();
-<a class="jxr_linenumber" name="L6211" href="#L6211">6211</a> 		formData = builder.formData().copy();
-<a class="jxr_linenumber" name="L6212" href="#L6212">6212</a> 		pathData = builder.pathData().copy();
-<a class="jxr_linenumber" name="L6213" href="#L6213">6213</a> 		callHandler = builder.callHandler().run();
-<a class="jxr_linenumber" name="L6214" href="#L6214">6214</a> 		skipEmptyHeaderData = builder.skipEmptyHeaderData;
-<a class="jxr_linenumber" name="L6215" href="#L6215">6215</a> 		skipEmptyQueryData = builder.skipEmptyQueryData;
-<a class="jxr_linenumber" name="L6216" href="#L6216">6216</a> 		skipEmptyFormData = builder.skipEmptyFormData;
-<a class="jxr_linenumber" name="L6217" href="#L6217">6217</a> 		rootUrl = builder.rootUrl;
-<a class="jxr_linenumber" name="L6218" href="#L6218">6218</a> 		errorCodes = builder.errorCodes;
-<a class="jxr_linenumber" name="L6219" href="#L6219">6219</a> 		connectionManager = builder.connectionManager;
-<a class="jxr_linenumber" name="L6220" href="#L6220">6220</a> 		console = nn(builder.console) ? builder.console : System.err;
-<a class="jxr_linenumber" name="L6221" href="#L6221">6221</a> 		<strong class="jxr_keyword">if</strong> (builder.executorService != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L6222" href="#L6222">6222</a> 			executorService.set(builder.executorService);
-<a class="jxr_linenumber" name="L6223" href="#L6223">6223</a> 		executorServiceShutdownOnClose = builder.executorServiceShutdownOnClose;
-<a class="jxr_linenumber" name="L6224" href="#L6224">6224</a> 		ignoreErrors = builder.ignoreErrors;
-<a class="jxr_linenumber" name="L6225" href="#L6225">6225</a> 		keepHttpClientOpen = builder.keepHttpClientOpen;
-<a class="jxr_linenumber" name="L6226" href="#L6226">6226</a> 		detectLeaks = builder.detectLeaks;
-<a class="jxr_linenumber" name="L6227" href="#L6227">6227</a> 		logger = nn(builder.logger) ? builder.logger : Logger.getLogger(cn(RestClient.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L6228" href="#L6228">6228</a> 		logToConsole = builder.logToConsole || isDebug();
-<a class="jxr_linenumber" name="L6229" href="#L6229">6229</a> 		logRequests = nn(builder.logRequests) ? builder.logRequests : isDebug() ? DetailLevel.FULL : DetailLevel.NONE;
-<a class="jxr_linenumber" name="L6230" href="#L6230">6230</a> 		logRequestsLevel = nn(builder.logRequestsLevel) ? builder.logRequestsLevel : isDebug() ? Level.WARNING : Level.OFF;
-<a class="jxr_linenumber" name="L6231" href="#L6231">6231</a> 		logRequestsPredicate = nn(builder.logRequestsPredicate) ? builder.logRequestsPredicate : LOG_REQUESTS_PREDICATE_DEFAULT;
-<a class="jxr_linenumber" name="L6232" href="#L6232">6232</a> 		interceptors = nn(builder.interceptors) ? builder.interceptors.toArray(EMPTY_REST_CALL_INTERCEPTORS) : EMPTY_REST_CALL_INTERCEPTORS;
-<a class="jxr_linenumber" name="L6233" href="#L6233">6233</a> 		serializers = builder.serializers().build();
-<a class="jxr_linenumber" name="L6234" href="#L6234">6234</a> 		parsers = builder.parsers().build();
-<a class="jxr_linenumber" name="L6235" href="#L6235">6235</a> 		partSerializer = builder.partSerializer().create();
-<a class="jxr_linenumber" name="L6236" href="#L6236">6236</a> 		partParser = builder.partParser().create();
-<a class="jxr_linenumber" name="L6237" href="#L6237">6237</a> 		urlEncodingSerializer = builder.urlEncodingSerializer().build();
-<a class="jxr_linenumber" name="L6238" href="#L6238">6238</a> 		creationStack = isDebug() ? Thread.currentThread().getStackTrace() : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L6208" href="#L6208">6208</a> 		callHandler = builder.callHandler().run();
+<a class="jxr_linenumber" name="L6209" href="#L6209">6209</a> 		connectionManager = builder.connectionManager;
+<a class="jxr_linenumber" name="L6210" href="#L6210">6210</a> 		console = nn(builder.console) ? builder.console : System.err;
+<a class="jxr_linenumber" name="L6211" href="#L6211">6211</a> 		creationStack = isDebug() ? Thread.currentThread().getStackTrace() : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L6212" href="#L6212">6212</a> 		detectLeaks = builder.detectLeaks;
+<a class="jxr_linenumber" name="L6213" href="#L6213">6213</a> 		errorCodes = builder.errorCodes;
+<a class="jxr_linenumber" name="L6214" href="#L6214">6214</a> 		formData = builder.formData().copy();
+<a class="jxr_linenumber" name="L6215" href="#L6215">6215</a> 		headerData = builder.headers().copy();
+<a class="jxr_linenumber" name="L6216" href="#L6216">6216</a> 		httpClient = builder.getHttpClient();
+<a class="jxr_linenumber" name="L6217" href="#L6217">6217</a> 		ignoreErrors = builder.ignoreErrors;
+<a class="jxr_linenumber" name="L6218" href="#L6218">6218</a> 		interceptors = nn(builder.interceptors) ? builder.interceptors.toArray(EMPTY_REST_CALL_INTERCEPTORS) : EMPTY_REST_CALL_INTERCEPTORS;
+<a class="jxr_linenumber" name="L6219" href="#L6219">6219</a> 		keepHttpClientOpen = builder.keepHttpClientOpen;
+<a class="jxr_linenumber" name="L6220" href="#L6220">6220</a> 		logger = nn(builder.logger) ? builder.logger : Logger.getLogger(cn(RestClient.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L6221" href="#L6221">6221</a> 		logRequests = nn(builder.logRequests) ? builder.logRequests : isDebug() ? DetailLevel.FULL : DetailLevel.NONE;
+<a class="jxr_linenumber" name="L6222" href="#L6222">6222</a> 		logRequestsLevel = nn(builder.logRequestsLevel) ? builder.logRequestsLevel : isDebug() ? Level.WARNING : Level.OFF;
+<a class="jxr_linenumber" name="L6223" href="#L6223">6223</a> 		logRequestsPredicate = nn(builder.logRequestsPredicate) ? builder.logRequestsPredicate : LOG_REQUESTS_PREDICATE_DEFAULT;
+<a class="jxr_linenumber" name="L6224" href="#L6224">6224</a> 		logToConsole = builder.logToConsole || isDebug();
+<a class="jxr_linenumber" name="L6225" href="#L6225">6225</a> 		parsers = builder.parsers().build();
+<a class="jxr_linenumber" name="L6226" href="#L6226">6226</a> 		partParser = builder.partParser().create();
+<a class="jxr_linenumber" name="L6227" href="#L6227">6227</a> 		partSerializer = builder.partSerializer().create();
+<a class="jxr_linenumber" name="L6228" href="#L6228">6228</a> 		pathData = builder.pathData().copy();
+<a class="jxr_linenumber" name="L6229" href="#L6229">6229</a> 		queryData = builder.queryData().copy();
+<a class="jxr_linenumber" name="L6230" href="#L6230">6230</a> 		rootUrl = builder.rootUrl;
+<a class="jxr_linenumber" name="L6231" href="#L6231">6231</a> 		serializers = builder.serializers().build();
+<a class="jxr_linenumber" name="L6232" href="#L6232">6232</a> 		skipEmptyFormData = builder.skipEmptyFormData;
+<a class="jxr_linenumber" name="L6233" href="#L6233">6233</a> 		skipEmptyHeaderData = builder.skipEmptyHeaderData;
+<a class="jxr_linenumber" name="L6234" href="#L6234">6234</a> 		skipEmptyQueryData = builder.skipEmptyQueryData;
+<a class="jxr_linenumber" name="L6235" href="#L6235">6235</a> 		urlEncodingSerializer = builder.urlEncodingSerializer().build();
+<a class="jxr_linenumber" name="L6236" href="#L6236">6236</a> 		<strong class="jxr_keyword">if</strong> (builder.executorService != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L6237" href="#L6237">6237</a> 			executorService.set(builder.executorService);
+<a class="jxr_linenumber" name="L6238" href="#L6238">6238</a> 		executorServiceShutdownOnClose = builder.executorServiceShutdownOnClose;
 <a class="jxr_linenumber" name="L6239" href="#L6239">6239</a> 
 <a class="jxr_linenumber" name="L6240" href="#L6240">6240</a> 		init();
 <a class="jxr_linenumber" name="L6241" href="#L6241">6241</a> 	}

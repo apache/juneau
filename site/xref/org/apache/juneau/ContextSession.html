@@ -184,12 +184,12 @@
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 	<strong class="jxr_keyword">protected</strong> <a name="ContextSession" href="../../../org/apache/juneau/ContextSession.html#ContextSession">ContextSession</a>(Builder builder) {
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 		assertArgNotNull(<span class="jxr_string">"builder"</span>, builder);
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 		ctx = builder.ctx;
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		unmodifiable = builder.unmodifiable;
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">var</strong> sp = builder.properties == <strong class="jxr_keyword">null</strong> ? JsonMap.EMPTY_MAP : builder.properties;
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">if</strong> (unmodifiable)
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			sp = sp.unmodifiable();
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		properties = sp;
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		debug = builder.debug;
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		debug = builder.debug;
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		unmodifiable = builder.unmodifiable;
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">var</strong> sp = builder.properties == <strong class="jxr_keyword">null</strong> ? JsonMap.EMPTY_MAP : builder.properties;
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">if</strong> (unmodifiable)
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			sp = sp.unmodifiable();
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		properties = sp;
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 	}
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 	<em class="jxr_javadoccomment">/**</em>

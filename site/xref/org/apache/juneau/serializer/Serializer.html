@@ -1311,20 +1311,20 @@
 <a class="jxr_linenumber" name="L1303" href="#L1303">1303</a> 	<strong class="jxr_keyword">protected</strong> <a name="Serializer" href="../../../../org/apache/juneau/serializer/Serializer.html#Serializer">Serializer</a>(Builder builder) {
 <a class="jxr_linenumber" name="L1304" href="#L1304">1304</a> 		<strong class="jxr_keyword">super</strong>(builder);
 <a class="jxr_linenumber" name="L1305" href="#L1305">1305</a> 
-<a class="jxr_linenumber" name="L1306" href="#L1306">1306</a> 		produces = builder.produces;
-<a class="jxr_linenumber" name="L1307" href="#L1307">1307</a> 		accept = builder.accept;
-<a class="jxr_linenumber" name="L1308" href="#L1308">1308</a> 		addBeanTypes = builder.addBeanTypes;
+<a class="jxr_linenumber" name="L1306" href="#L1306">1306</a> 		accept = builder.accept;
+<a class="jxr_linenumber" name="L1307" href="#L1307">1307</a> 		addBeanTypes = builder.addBeanTypes;
+<a class="jxr_linenumber" name="L1308" href="#L1308">1308</a> 		addRootType = builder.addRootType;
 <a class="jxr_linenumber" name="L1309" href="#L1309">1309</a> 		keepNullProperties = builder.keepNullProperties;
-<a class="jxr_linenumber" name="L1310" href="#L1310">1310</a> 		trimEmptyCollections = builder.trimEmptyCollections;
-<a class="jxr_linenumber" name="L1311" href="#L1311">1311</a> 		trimEmptyMaps = builder.trimEmptyMaps;
-<a class="jxr_linenumber" name="L1312" href="#L1312">1312</a> 		trimStrings = builder.trimStrings;
-<a class="jxr_linenumber" name="L1313" href="#L1313">1313</a> 		sortCollections = builder.sortCollections;
-<a class="jxr_linenumber" name="L1314" href="#L1314">1314</a> 		sortMaps = builder.sortMaps;
-<a class="jxr_linenumber" name="L1315" href="#L1315">1315</a> 		addRootType = builder.addRootType;
-<a class="jxr_linenumber" name="L1316" href="#L1316">1316</a> 		uriContext = builder.uriContext;
-<a class="jxr_linenumber" name="L1317" href="#L1317">1317</a> 		uriResolution = builder.uriResolution;
+<a class="jxr_linenumber" name="L1310" href="#L1310">1310</a> 		listener = builder.listener;
+<a class="jxr_linenumber" name="L1311" href="#L1311">1311</a> 		produces = builder.produces;
+<a class="jxr_linenumber" name="L1312" href="#L1312">1312</a> 		sortCollections = builder.sortCollections;
+<a class="jxr_linenumber" name="L1313" href="#L1313">1313</a> 		sortMaps = builder.sortMaps;
+<a class="jxr_linenumber" name="L1314" href="#L1314">1314</a> 		trimEmptyCollections = builder.trimEmptyCollections;
+<a class="jxr_linenumber" name="L1315" href="#L1315">1315</a> 		trimEmptyMaps = builder.trimEmptyMaps;
+<a class="jxr_linenumber" name="L1316" href="#L1316">1316</a> 		trimStrings = builder.trimStrings;
+<a class="jxr_linenumber" name="L1317" href="#L1317">1317</a> 		uriContext = builder.uriContext;
 <a class="jxr_linenumber" name="L1318" href="#L1318">1318</a> 		uriRelativity = builder.uriRelativity;
-<a class="jxr_linenumber" name="L1319" href="#L1319">1319</a> 		listener = builder.listener;
+<a class="jxr_linenumber" name="L1319" href="#L1319">1319</a> 		uriResolution = builder.uriResolution;
 <a class="jxr_linenumber" name="L1320" href="#L1320">1320</a> 
 <a class="jxr_linenumber" name="L1321" href="#L1321">1321</a> 		<strong class="jxr_keyword">this</strong>.producesMediaType = MediaType.of(produces);
 <a class="jxr_linenumber" name="L1322" href="#L1322">1322</a> 		<strong class="jxr_keyword">this</strong>.acceptRanges = nn(accept) ? MediaRanges.of(accept) : MediaRanges.of(produces);

@@ -117,9 +117,9 @@
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">protected</strong> Builder(Builder copyFrom) {
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 			assertArgNotNull(<span class="jxr_string">"copyFrom"</span>, copyFrom);
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 			debug = copyFrom.debug;
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 			type = copyFrom.type;
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			annotations = copyOf(copyFrom.annotations);
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 			annotations = copyOf(copyFrom.annotations);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 			debug = copyFrom.debug;
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			type = copyFrom.type;
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 			registerBuilders(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 		}
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 
@@ -131,9 +131,9 @@
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">protected</strong> Builder(<a name="Context" href="../../../org/apache/juneau/Context.html#Context">Context</a> copyFrom) {
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 			assertArgNotNull(<span class="jxr_string">"copyFrom"</span>, copyFrom);
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 			debug = copyFrom.debug;
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			type = copyFrom.getClass();
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 			annotations = copyOf(copyFrom.annotations);
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 			annotations = copyOf(copyFrom.annotations);
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			debug = copyFrom.debug;
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 			type = copyFrom.getClass();
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 			registerBuilders(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		}
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 
@@ -868,9 +868,9 @@
 <a class="jxr_linenumber" name="L860" href="#L860">860</a> 	<strong class="jxr_keyword">protected</strong> <a name="Context" href="../../../org/apache/juneau/Context.html#Context">Context</a>(Builder builder) {
 <a class="jxr_linenumber" name="L861" href="#L861">861</a> 		assertArgNotNull(<span class="jxr_string">"builder"</span>, builder);
 <a class="jxr_linenumber" name="L862" href="#L862">862</a> 		init(builder);
-<a class="jxr_linenumber" name="L863" href="#L863">863</a> 		debug = builder.debug;
-<a class="jxr_linenumber" name="L864" href="#L864">864</a> 		annotations = copyOf(builder.annotations);
-<a class="jxr_linenumber" name="L865" href="#L865">865</a> 		annotationProvider = AnnotationProvider.create().addRuntimeAnnotations(annotations).build();
+<a class="jxr_linenumber" name="L863" href="#L863">863</a> 		annotations = copyOf(builder.annotations);
+<a class="jxr_linenumber" name="L864" href="#L864">864</a> 		annotationProvider = AnnotationProvider.create().addRuntimeAnnotations(annotations).build();
+<a class="jxr_linenumber" name="L865" href="#L865">865</a> 		debug = builder.debug;
 <a class="jxr_linenumber" name="L866" href="#L866">866</a> 	}
 <a class="jxr_linenumber" name="L867" href="#L867">867</a> 
 <a class="jxr_linenumber" name="L868" href="#L868">868</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -879,9 +879,9 @@
 <a class="jxr_linenumber" name="L871" href="#L871">871</a> <em class="jxr_javadoccomment">	 * @param copyFrom The context to copy from.</em>
 <a class="jxr_linenumber" name="L872" href="#L872">872</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L873" href="#L873">873</a> 	<strong class="jxr_keyword">protected</strong> <a name="Context" href="../../../org/apache/juneau/Context.html#Context">Context</a>(<a name="Context" href="../../../org/apache/juneau/Context.html#Context">Context</a> copyFrom) {
-<a class="jxr_linenumber" name="L874" href="#L874">874</a> 		annotations = copyOf(copyFrom.annotations);
-<a class="jxr_linenumber" name="L875" href="#L875">875</a> 		debug = copyFrom.debug;
-<a class="jxr_linenumber" name="L876" href="#L876">876</a> 		annotationProvider = copyFrom.annotationProvider;
+<a class="jxr_linenumber" name="L874" href="#L874">874</a> 		annotationProvider = copyFrom.annotationProvider;
+<a class="jxr_linenumber" name="L875" href="#L875">875</a> 		annotations = copyOf(copyFrom.annotations);
+<a class="jxr_linenumber" name="L876" href="#L876">876</a> 		debug = copyFrom.debug;
 <a class="jxr_linenumber" name="L877" href="#L877">877</a> 	}
 <a class="jxr_linenumber" name="L878" href="#L878">878</a> 
 <a class="jxr_linenumber" name="L879" href="#L879">879</a> 	<em class="jxr_javadoccomment">/**</em>

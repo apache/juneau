@@ -5024,12 +5024,12 @@
 <a class="jxr_linenumber" name="L5016" href="#L5016">5016</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L5017" href="#L5017">5017</a> 			<strong class="jxr_keyword">this</strong>.builder = builder;
 <a class="jxr_linenumber" name="L5018" href="#L5018">5018</a> 
-<a class="jxr_linenumber" name="L5019" href="#L5019">5019</a> 			resourceClass = builder.resourceClass;
-<a class="jxr_linenumber" name="L5020" href="#L5020">5020</a> 			resource = builder.resource;
+<a class="jxr_linenumber" name="L5019" href="#L5019">5019</a> 			defaultClasses = builder.defaultClasses();
+<a class="jxr_linenumber" name="L5020" href="#L5020">5020</a> 			defaultSettings = builder.defaultSettings();
 <a class="jxr_linenumber" name="L5021" href="#L5021">5021</a> 			parentContext = builder.parentContext;
-<a class="jxr_linenumber" name="L5022" href="#L5022">5022</a> 			rootBeanStore = builder.rootBeanStore();
-<a class="jxr_linenumber" name="L5023" href="#L5023">5023</a> 			defaultClasses = builder.defaultClasses();
-<a class="jxr_linenumber" name="L5024" href="#L5024">5024</a> 			defaultSettings = builder.defaultSettings();
+<a class="jxr_linenumber" name="L5022" href="#L5022">5022</a> 			resource = builder.resource;
+<a class="jxr_linenumber" name="L5023" href="#L5023">5023</a> 			resourceClass = builder.resourceClass;
+<a class="jxr_linenumber" name="L5024" href="#L5024">5024</a> 			rootBeanStore = builder.rootBeanStore();
 <a class="jxr_linenumber" name="L5025" href="#L5025">5025</a> 
 <a class="jxr_linenumber" name="L5026" href="#L5026">5026</a> 			BeanStore bs = beanStore = builder.beanStore();
 <a class="jxr_linenumber" name="L5027" href="#L5027">5027</a> 			<em class="jxr_comment">// @formatter:off</em>
@@ -5051,16 +5051,16 @@
 <a class="jxr_linenumber" name="L5043" href="#L5043">5043</a> 
 <a class="jxr_linenumber" name="L5044" href="#L5044">5044</a> 			allowContentParam = ! builder.disableContentParam;
 <a class="jxr_linenumber" name="L5045" href="#L5045">5045</a> 			allowedHeaderParams = newCaseInsensitiveSet(opt(builder.allowedHeaderParams).map(x -&gt; <span class="jxr_string">"NONE"</span>.equals(x) ? <span class="jxr_string">""</span> : x).orElse(<span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L5046" href="#L5046">5046</a> 			allowedMethodParams = newCaseInsensitiveSet(opt(builder.allowedMethodParams).map(x -&gt; <span class="jxr_string">"NONE"</span>.equals(x) ? <span class="jxr_string">""</span> : x).orElse(<span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L5047" href="#L5047">5047</a> 			allowedMethodHeaders = newCaseInsensitiveSet(opt(builder.allowedMethodHeaders).map(x -&gt; <span class="jxr_string">"NONE"</span>.equals(x) ? <span class="jxr_string">""</span> : x).orElse(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L5046" href="#L5046">5046</a> 			allowedMethodHeaders = newCaseInsensitiveSet(opt(builder.allowedMethodHeaders).map(x -&gt; <span class="jxr_string">"NONE"</span>.equals(x) ? <span class="jxr_string">""</span> : x).orElse(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L5047" href="#L5047">5047</a> 			allowedMethodParams = newCaseInsensitiveSet(opt(builder.allowedMethodParams).map(x -&gt; <span class="jxr_string">"NONE"</span>.equals(x) ? <span class="jxr_string">""</span> : x).orElse(<span class="jxr_string">""</span>));
 <a class="jxr_linenumber" name="L5048" href="#L5048">5048</a> 			clientVersionHeader = builder.clientVersionHeader;
 <a class="jxr_linenumber" name="L5049" href="#L5049">5049</a> 			defaultCharset = builder.defaultCharset;
 <a class="jxr_linenumber" name="L5050" href="#L5050">5050</a> 			maxInput = builder.maxInput;
 <a class="jxr_linenumber" name="L5051" href="#L5051">5051</a> 			renderResponseStackTraces = builder.renderResponseStackTraces;
-<a class="jxr_linenumber" name="L5052" href="#L5052">5052</a> 			uriContext = builder.uriContext;
-<a class="jxr_linenumber" name="L5053" href="#L5053">5053</a> 			uriAuthority = builder.uriAuthority;
-<a class="jxr_linenumber" name="L5054" href="#L5054">5054</a> 			uriResolution = builder.uriResolution;
-<a class="jxr_linenumber" name="L5055" href="#L5055">5055</a> 			uriRelativity = builder.uriRelativity;
+<a class="jxr_linenumber" name="L5052" href="#L5052">5052</a> 			uriAuthority = builder.uriAuthority;
+<a class="jxr_linenumber" name="L5053" href="#L5053">5053</a> 			uriContext = builder.uriContext;
+<a class="jxr_linenumber" name="L5054" href="#L5054">5054</a> 			uriRelativity = builder.uriRelativity;
+<a class="jxr_linenumber" name="L5055" href="#L5055">5055</a> 			uriResolution = builder.uriResolution;
 <a class="jxr_linenumber" name="L5056" href="#L5056">5056</a> 
 <a class="jxr_linenumber" name="L5057" href="#L5057">5057</a> 			beanContext = bs.add(BeanContext.<strong class="jxr_keyword">class</strong>, builder.beanContext().build());
 <a class="jxr_linenumber" name="L5058" href="#L5058">5058</a> 			encoders = bs.add(EncoderSet.<strong class="jxr_keyword">class</strong>, builder.encoders().build());
