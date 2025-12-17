@@ -78,14 +78,12 @@ public abstract class Context {
 	public abstract static class Builder {
 
 		private boolean debug;
+		private final AnnotationWorkList applied = AnnotationWorkList.create();
+		private Cache<HashKey,? extends Context> cache;
 		private Class<? extends Context> type;
 		private Context impl;
 		private List<Annotation> annotations;
-
-		private Cache<HashKey,? extends Context> cache;
 		private final List<Object> builders = list();
-
-		private final AnnotationWorkList applied = AnnotationWorkList.create();
 
 		/**
 		 * Constructor.
@@ -861,7 +859,6 @@ public abstract class Context {
 	 */
 	protected Context(Builder builder) {
 		assertArgNotNull("builder", builder);
-		init(builder);
 		debug = builder.debug;
 		annotations = copyOf(builder.annotations);
 		annotationProvider = AnnotationProvider.create().addRuntimeAnnotations(annotations).build();
@@ -934,15 +931,6 @@ public abstract class Context {
 		return r(properties());
 	}
 
-	/**
-	 * Perform optional initialization on builder before it is used.
-	 *
-	 * <p>
-	 * Default behavior is a no-op.
-	 *
-	 * @param builder The builder to initialize.
-	 */
-	protected void init(Builder builder) {}
 
 	/**
 	 * Returns the properties on this bean as a map for debugging.

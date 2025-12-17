@@ -7769,16 +7769,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	protected void init() {}
 
 	/**
-	 * Perform optional initialization on builder before it is used.
-	 *
-	 * <p>
-	 * Default behavior is a no-op.
-	 *
-	 * @param builder The builder to initialize.
-	 */
-	protected void init(RestClient.Builder builder) {}
-
-	/**
 	 * Returns <jk>true</jk> if empty request form-data parameter values should be ignored.
 	 *
 	 * @return <jk>true</jk> if empty request form-data parameter values should be ignored.
