@@ -317,8 +317,8 @@ public class ReflectionMap<V> {
 		protected FluentMap<String,Object> properties() {
 			// @formatter:off
 			return filteredBeanPropertyMap()
-				.a("simpleName", simpleName)
 				.a("fullName", fullName)
+				.a("simpleName", simpleName)
 				.a("value", value);
 			// @formatter:on
 		}
@@ -356,9 +356,9 @@ public class ReflectionMap<V> {
 		protected FluentMap<String,Object> properties() {
 			// @formatter:off
 			return filteredBeanPropertyMap()
-				.a("simpleClassName", simpleClassName)
-				.a("fullClassName", fullClassName)
 				.a("args", args)
+				.a("fullClassName", fullClassName)
+				.a("simpleClassName", simpleClassName)
 				.a("value", value);
 			// @formatter:on
 		}
@@ -393,9 +393,9 @@ public class ReflectionMap<V> {
 		protected FluentMap<String,Object> properties() {
 			// @formatter:off
 			return filteredBeanPropertyMap()
-				.a("simpleClassName", simpleClassName)
-				.a("fullClassName", fullClassName)
 				.a("fieldName", fieldName)
+				.a("fullClassName", fullClassName)
+				.a("simpleClassName", simpleClassName)
 				.a("value", value);
 			// @formatter:on
 		}
@@ -444,10 +444,10 @@ public class ReflectionMap<V> {
 		protected FluentMap<String,Object> properties() {
 			// @formatter:off
 			return filteredBeanPropertyMap()
-				.a("simpleClassName", simpleClassName)
+				.a("args", opt(args).map(x -> '[' + toCdl(x) + "]").orElse(null))
 				.a("fullClassName", fullClassName)
 				.a("methodName", methodName)
-				.a("args", opt(args).map(x -> '[' + toCdl(x) + "]").orElse(null))
+				.a("simpleClassName", simpleClassName)
 				.a("value", value);
 			// @formatter:on
 		}

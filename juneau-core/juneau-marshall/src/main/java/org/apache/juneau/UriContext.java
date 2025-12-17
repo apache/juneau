@@ -411,16 +411,16 @@ public class UriContext {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
+			.a("aContextRoot", aContextRoot.get())
+			.a("aPathInfo", aPathInfo.get())
+			.a("aServletPath", aServletPath.get())
 			.a("authority", authority)
 			.a("contextRoot", contextRoot)
-			.a("servletPath", servletPath)
-			.a("pathInfo", pathInfo)
 			.a("parentPath", parentPath)
-			.a("aContextRoot", aContextRoot.get())
+			.a("pathInfo", pathInfo)
 			.a("rContextRoot", rContextRoot.get())
-			.a("aServletPath", aServletPath.get())
 			.a("rResource", rResource.get())
-			.a("aPathInfo", aPathInfo.get())
+			.a("servletPath", servletPath)
 			.a("rPath", rPath.get());
 		// @formatter:on
 	}

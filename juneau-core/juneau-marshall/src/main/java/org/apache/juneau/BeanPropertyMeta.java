@@ -1142,11 +1142,11 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("name", name)
-			.a("type", cn(rawTypeMeta))
 			.a("field", field)
 			.a("getter", getter)
-			.a("setter", setter);
+			.a("name", name)
+			.a("setter", setter)
+			.a("type", cn(rawTypeMeta));
 		// @formatter:on
 	}
 

@@ -118,11 +118,11 @@ public class BasicFileFinder implements FileFinder {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("class", cns(getClass()))
-			.a("roots", roots)
 			.a("cachingLimit", cachingLimit)
-			.a("include", includePatterns)
+			.a("class", cns(getClass()))
 			.a("exclude", excludePatterns)
+			.a("include", includePatterns)
+			.a("roots", roots)
 			.a("hashCode", hashCode);
 		// @formatter:on
 	}

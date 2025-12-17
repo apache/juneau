@@ -121,12 +121,12 @@ class MockPathResolver {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("uri", uri)
 			.a("contextPath", contextPath)
-			.a("servletPath", servletPath)
+			.a("error", error)
 			.a("remainder", remainder)
+			.a("servletPath", servletPath)
 			.a("target", target)
-			.a("error", error);
+			.a("uri", uri);
 		// @formatter:on
 	}
 

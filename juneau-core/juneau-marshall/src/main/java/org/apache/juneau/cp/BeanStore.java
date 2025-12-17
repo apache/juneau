@@ -635,8 +635,8 @@ public class BeanStore {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("identity", identity(this))
 			.a("entries", entries.stream().map(BeanStoreEntry::properties).collect(toList()))
+			.a("identity", identity(this))
 			.a("outer", identity(outer.orElse(null)))
 			.a("parent", parent.map(BeanStore::properties).orElse(null))
 			.ai(readOnly, "readOnly", readOnly)

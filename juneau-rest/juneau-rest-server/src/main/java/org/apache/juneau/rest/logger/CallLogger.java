@@ -657,14 +657,14 @@ public class CallLogger {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("logger", logger)
-			.a("thrownStore", thrownStore)
+			.a("debugRules", debugRules)
 			.a("enabled", enabled)
 			.a("level", level)
+			.a("logger", logger)
+			.a("normalRules", normalRules)
 			.a("requestDetail", requestDetail)
 			.a("responseDetail", responseDetail)
-			.a("normalRules", normalRules)
-			.a("debugRules", debugRules);
+			.a("thrownStore", thrownStore);
 		// @formatter:on
 	}
 

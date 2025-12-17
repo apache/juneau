@@ -277,9 +277,9 @@ public abstract class DebugEnablement {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
+			.a("conditionalPredicate", conditionalPredicate)
 			.a("defaultEnablement", defaultEnablement)
-			.a("enablementMap", enablementMap)
-			.a("conditionalPredicate", conditionalPredicate);
+			.a("enablementMap", enablementMap);
 		// @formatter:on
 	}
 
