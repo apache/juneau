@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.httppart;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.utils.*;
@@ -70,9 +72,10 @@ public class SimplePartParser extends BaseHttpPartParser {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 		}
 
 		@Override
@@ -111,9 +114,10 @@ public class SimplePartParser extends BaseHttpPartParser {
 	 * Constructor
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public SimplePartParser(Builder builder) {
-		super(builder);
+		super(assertArgNotNull("builder", builder));
 	}
 
 	@Override

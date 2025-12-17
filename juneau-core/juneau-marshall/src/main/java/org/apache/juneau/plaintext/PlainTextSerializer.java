@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.plaintext;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
 import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -70,18 +72,20 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 		}
 
 		/**
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(PlainTextSerializer copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 		}
 
 		@Override /* Overridden from Builder */

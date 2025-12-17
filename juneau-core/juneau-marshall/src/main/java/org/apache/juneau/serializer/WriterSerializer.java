@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.serializer;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -70,9 +71,10 @@ public class WriterSerializer extends Serializer {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			fileCharset = copyFrom.fileCharset;
 			streamCharset = copyFrom.streamCharset;
 			maxIndent = copyFrom.maxIndent;
@@ -85,9 +87,10 @@ public class WriterSerializer extends Serializer {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(WriterSerializer copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			fileCharset = copyFrom.fileCharset;
 			streamCharset = copyFrom.streamCharset;
 			maxIndent = copyFrom.maxIndent;
@@ -406,6 +409,7 @@ public class WriterSerializer extends Serializer {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is the system JVM setting.
+		 * 	<br>Can be <jk>null</jk> (defaults to system default).
 		 * @return This object.
 		 */
 		public Builder fileCharset(Charset value) {
@@ -764,6 +768,7 @@ public class WriterSerializer extends Serializer {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is the system JVM setting.
+		 * 	<br>Can be <jk>null</jk> (defaults to UTF-8).
 		 * @return This object.
 		 */
 		public Builder streamCharset(Charset value) {

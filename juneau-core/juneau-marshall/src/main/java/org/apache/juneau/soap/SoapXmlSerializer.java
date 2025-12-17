@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.soap;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
 import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -70,9 +72,10 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			soapAction = copyFrom.soapAction;
 		}
 
@@ -80,9 +83,10 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(SoapXmlSerializer copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			soapAction = copyFrom.soapAction;
 		}
 
@@ -628,10 +632,11 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is <js>"http://www.w3.org/2003/05/soap-envelope"</js>.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder soapAction(String value) {
-			soapAction = value;
+			soapAction = assertArgNotNull("value", value);
 			return this;
 		}
 

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.html;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
 import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -69,18 +71,20 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 		}
 
 		/**
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(HtmlParser copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 		}
 
 		@Override /* Overridden from Builder */

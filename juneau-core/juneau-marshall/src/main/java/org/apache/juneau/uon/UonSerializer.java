@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.uon;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -165,9 +166,10 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			addBeanTypesUon = copyFrom.addBeanTypesUon;
 			encoding = copyFrom.encoding;
 			paramFormat = copyFrom.paramFormat;
@@ -178,9 +180,10 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(UonSerializer copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			addBeanTypesUon = copyFrom.addBeanTypesUon;
 			encoding = copyFrom.encoding;
 			paramFormat = copyFrom.paramFormat;
@@ -748,10 +751,11 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default value is {@link ParamFormat#UON}.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder paramFormat(ParamFormat value) {
-			paramFormat = value;
+			paramFormat = assertArgNotNull("value", value);
 			return this;
 		}
 

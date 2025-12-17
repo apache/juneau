@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.msgpack;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -55,9 +56,10 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		 * Constructor
 		 *
 		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(MsgPackSerializer ctx) {
-			super(ctx);
+			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -177,10 +179,11 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 	 * Creates a new builder for this object.
 	 *
 	 * @param ctx The context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(MsgPackSerializer ctx) {
-		return new Builder(ctx);
+		return new Builder(assertArgNotNull("ctx", ctx));
 	}
 
 	/*

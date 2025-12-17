@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.jena;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -59,6 +60,7 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  */
 public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
+
 	/**
 	 * Builder class.
 	 */
@@ -102,9 +104,10 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			addBeanTypesRdf = copyFrom.addBeanTypesRdf;
 			addLiteralTypes = copyFrom.addLiteralTypes;
 			addRootProperty = copyFrom.addRootProperty;
@@ -123,9 +126,10 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(RdfSerializer copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			addBeanTypesRdf = copyFrom.addBeanTypesRdf;
 			addLiteralTypes = copyFrom.addLiteralTypes;
 			addRootProperty = copyFrom.addRootProperty;
@@ -462,10 +466,11 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder collectionFormat(RdfCollectionFormat value) {
-			collectionFormat = value;
+			collectionFormat = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -729,10 +734,11 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is <code>{j:<js>'http://www.apache.org/juneaubp/'</js>}</code>.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder juneauBpNs(Namespace value) {
-			juneauBpNs = value;
+			juneauBpNs = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -742,10 +748,11 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is <code>{j:<js>'http://www.apache.org/juneau/'</js>}</code>.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder juneauNs(Namespace value) {
-			juneauNs = value;
+			juneauNs = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -804,10 +811,11 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder language(String value) {
-			language = value;
+			language = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -1170,9 +1178,11 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * The default list of namespaces associated with this serializer.
 		 *
 		 * @param values The new value for this setting.
+		 * 	<br>Cannot contain <jk>null</jk> values (will throw {@link IllegalArgumentException}).
 		 * @return This object.
 		 */
 		public Builder namespaces(Namespace...values) {
+			assertVarargsNotNull("values", values);
 			namespaces = addAll(namespaces, values);
 			return this;
 		}

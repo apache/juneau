@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.csv;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -53,9 +54,10 @@ public class CsvSerializerSession extends WriterSerializerSession {
 		 * Constructor
 		 *
 		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(CsvSerializer ctx) {
-			super(ctx);
+			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -183,10 +185,11 @@ public class CsvSerializerSession extends WriterSerializerSession {
 	 * Creates a new builder for this object.
 	 *
 	 * @param ctx The context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(CsvSerializer ctx) {
-		return new Builder(ctx);
+		return new Builder(assertArgNotNull("ctx", ctx));
 	}
 
 	/**

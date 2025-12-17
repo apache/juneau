@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.msgpack;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.msgpack.DataType.*;
 
@@ -56,9 +57,10 @@ public class MsgPackParserSession extends InputStreamParserSession {
 		 * Constructor
 		 *
 		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(MsgPackParser ctx) {
-			super(ctx);
+			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -162,10 +164,11 @@ public class MsgPackParserSession extends InputStreamParserSession {
 	 * Creates a new builder for this object.
 	 *
 	 * @param ctx The context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(MsgPackParser ctx) {
-		return new Builder(ctx);
+		return new Builder(assertArgNotNull("ctx", ctx));
 	}
 
 	/**

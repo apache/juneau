@@ -18,6 +18,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.reflect.Visibility.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -394,10 +395,11 @@ public class BeanContext extends Context {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is {@link Visibility#PUBLIC}.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder beanClassVisibility(Visibility value) {
-			beanClassVisibility = value;
+			beanClassVisibility = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -442,10 +444,11 @@ public class BeanContext extends Context {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is {@link Visibility#PUBLIC}.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder beanConstructorVisibility(Visibility value) {
-			beanConstructorVisibility = value;
+			beanConstructorVisibility = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -550,9 +553,11 @@ public class BeanContext extends Context {
 		 *
 		 * @param values
 		 * 	The values to add to this setting.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder beanDictionary(Class<?>...values) {
+			assertVarargsNotNull("values", values);
 			return beanDictionary(l(values));
 		}
 
@@ -561,10 +566,12 @@ public class BeanContext extends Context {
 		 *
 		 * @param values
 		 * 	The values to add to this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 * @see #beanDictionary(Class...)
 		 */
 		public Builder beanDictionary(Collection<Class<?>> values) {
+			assertArgNotNull("values", values);
 			beanDictionary().addAll(0, values);
 			return this;
 		}
@@ -619,10 +626,11 @@ public class BeanContext extends Context {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is {@link Visibility#PUBLIC}.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder beanFieldVisibility(Visibility value) {
-			beanFieldVisibility = value;
+			beanFieldVisibility = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -672,11 +680,15 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * @param on The bean that the filter applies to.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param value
 		 * 	The new value for this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder beanInterceptor(Class<?> on, Class<? extends BeanInterceptor<?>> value) {
+			assertArgNotNull("on", on);
+			assertArgNotNull("value", value);
 			return annotations(BeanAnnotation.create(on).interceptor(value).build());
 		}
 
@@ -767,7 +779,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder beanMethodVisibility(Visibility value) {
-			beanMethodVisibility = value;
+			beanMethodVisibility = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -823,10 +835,14 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * @param beanClass The bean class.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param properties Comma-delimited list of property names.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder beanProperties(Class<?> beanClass, String properties) {
+			assertArgNotNull("beanClass", beanClass);
+			assertArgNotNull("properties", properties);
 			return annotations(BeanAnnotation.create(beanClass).p(properties).build());
 		}
 
@@ -885,9 +901,11 @@ public class BeanContext extends Context {
 		 * 	The values to add to this builder.
 		 * 	<br>Keys are bean class names which can be a simple name, fully-qualified name, or <js>"*"</js> for all beans.
 		 * 	<br>Values are comma-delimited lists of property names.  Non-String objects are first converted to Strings.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder beanProperties(Map<String,Object> values) {
+			assertArgNotNull("values", values);
 			values.forEach((k, v) -> annotations(BeanAnnotation.create(k).p(s(v)).build()));
 			return this;
 		}
@@ -947,9 +965,12 @@ public class BeanContext extends Context {
 		 * 	The bean class name.
 		 * 	<br>Can be a simple name, fully-qualified name, or <js>"*"</js> for all beans.
 		 * @param properties Comma-delimited list of property names.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder beanProperties(String beanClassName, String properties) {
+			assertArgNotNull("beanClassName", beanClassName);
+			assertArgNotNull("properties", properties);
 			return annotations(BeanAnnotation.create(beanClassName).p(properties).build());
 		}
 
@@ -997,10 +1018,14 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * @param beanClass The bean class.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param properties Comma-delimited list of property names.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+			assertArgNotNull("beanClass", beanClass);
+			assertArgNotNull("properties", properties);
 			return annotations(BeanAnnotation.create(beanClass).xp(properties).build());
 		}
 
@@ -1051,9 +1076,11 @@ public class BeanContext extends Context {
 		 * 	The values to add to this builder.
 		 * 	<br>Keys are bean class names which can be a simple name, fully-qualified name, or <js>"*"</js> for all beans.
 		 * 	<br>Values are comma-delimited lists of property names.  Non-String objects are first converted to Strings.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder beanPropertiesExcludes(Map<String,Object> values) {
+			assertArgNotNull("values", values);
 			values.forEach((k, v) -> annotations(BeanAnnotation.create(k).xp(s(v)).build()));
 			return this;
 		}
@@ -1104,10 +1131,14 @@ public class BeanContext extends Context {
 		 * @param beanClassName
 		 * 	The bean class name.
 		 * 	<br>Can be a simple name, fully-qualified name, or <js>"*"</js> for all bean classes.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param properties Comma-delimited list of property names.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
+			assertArgNotNull("beanClassName", beanClassName);
+			assertArgNotNull("properties", properties);
 			return annotations(BeanAnnotation.create(beanClassName).xp(properties).build());
 		}
 
@@ -1158,10 +1189,14 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * @param beanClass The bean class.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param properties Comma-delimited list of property names.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+			assertArgNotNull("beanClass", beanClass);
+			assertArgNotNull("properties", properties);
 			return annotations(BeanAnnotation.create(beanClass).ro(properties).build());
 		}
 
@@ -1215,9 +1250,11 @@ public class BeanContext extends Context {
 		 * 	The values to add to this builder.
 		 * 	<br>Keys are bean class names which can be a simple name, fully-qualified name, or <js>"*"</js> for all beans.
 		 * 	<br>Values are comma-delimited lists of property names.  Non-String objects are first converted to Strings.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
+			assertArgNotNull("values", values);
 			values.forEach((k, v) -> annotations(BeanAnnotation.create(k).ro(s(v)).build()));
 			return this;
 		}
@@ -1275,6 +1312,8 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
+			assertArgNotNull("beanClassName", beanClassName);
+			assertArgNotNull("properties", properties);
 			return annotations(BeanAnnotation.create(beanClassName).ro(properties).build());
 		}
 
@@ -1324,10 +1363,14 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * @param beanClass The bean class.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param properties Comma-delimited list of property names.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+			assertArgNotNull("beanClass", beanClass);
+			assertArgNotNull("properties", properties);
 			return annotations(BeanAnnotation.create(beanClass).wo(properties).build());
 		}
 
@@ -1380,9 +1423,11 @@ public class BeanContext extends Context {
 		 * 	The values to add to this builder.
 		 * 	<br>Keys are bean class names which can be a simple name, fully-qualified name, or <js>"*"</js> for all beans.
 		 * 	<br>Values are comma-delimited lists of property names.  Non-String objects are first converted to Strings.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
+			assertArgNotNull("values", values);
 			values.forEach((k, v) -> annotations(BeanAnnotation.create(k).wo(s(v)).build()));
 			return this;
 		}
@@ -1439,6 +1484,8 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
+			assertArgNotNull("beanClassName", beanClassName);
+			assertArgNotNull("properties", properties);
 			return annotations(BeanAnnotation.create(beanClassName).wo(properties).build());
 		}
 
@@ -1684,6 +1731,8 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder dictionaryOn(Class<?> on, Class<?>...values) {
+			assertArgNotNull("on", on);
+			assertVarargsNotNull("values", values);
 			return annotations(BeanAnnotation.create(on).dictionary(values).build());
 		}
 
@@ -1953,11 +2002,13 @@ public class BeanContext extends Context {
 		 *
 		 * @param <T> The POJO class type.
 		 * @param pojoClass The POJO class.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param json The JSON 5 representation of the example.
+		 * 	<br>Can be <jk>null</jk> or empty (treated as no example).
 		 * @return This object.
 		 */
 		public <T> Builder example(Class<T> pojoClass, String json) {
-			return annotations(MarshalledAnnotation.create(pojoClass).example(json).build());
+			return annotations(MarshalledAnnotation.create(assertArgNotNull("pojoClass", pojoClass)).example(json).build());
 		}
 
 		/**
@@ -2000,12 +2051,14 @@ public class BeanContext extends Context {
 		 *
 		 * @param <T> The POJO class.
 		 * @param pojoClass The POJO class.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param o
 		 * 	An instance of the POJO class used for examples.
+		 * 	<br>Can be <jk>null</jk> (will be serialized as <js>"null"</js>).
 		 * @return This object.
 		 */
 		public <T> Builder example(Class<T> pojoClass, T o) {
-			return annotations(MarshalledAnnotation.create(pojoClass).example(Json5.of(o)).build());
+			return annotations(MarshalledAnnotation.create(assertArgNotNull("pojoClass", pojoClass)).example(Json5.of(o)).build());
 		}
 
 		/**
@@ -2100,9 +2153,11 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * @param on The class that this applies to.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder findFluentSetters(Class<?> on) {
+			assertArgNotNull("on", on);
 			return annotations(BeanAnnotation.create(on).findFluentSetters(true).build());
 		}
 
@@ -2350,10 +2405,14 @@ public class BeanContext extends Context {
 		 * </p>
 		 *
 		 * @param interfaceClass The interface class.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param implClass The implementation class.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
+			assertArgNotNull("interfaceClass", interfaceClass);
+			assertArgNotNull("implClass", implClass);
 			return annotations(MarshalledAnnotation.create(interfaceClass).implClass(implClass).build());
 		}
 
@@ -2389,9 +2448,11 @@ public class BeanContext extends Context {
 		 *
 		 * @param values
 		 * 	The new value for this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder implClasses(Map<Class<?>,Class<?>> values) {
+			assertArgNotNull("values", values);
 			values.forEach((k, v) -> annotations(MarshalledAnnotation.create(k).implClass(v).build()));
 			return this;
 		}
@@ -2433,11 +2494,15 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * @param on The class that the interface class applies to.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param value
 		 * 	The new value for this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder interfaceClass(Class<?> on, Class<?> value) {
+			assertArgNotNull("on", on);
+			assertArgNotNull("value", value);
 			return annotations(BeanAnnotation.create(on).interfaceClass(value).build());
 		}
 
@@ -2479,9 +2544,11 @@ public class BeanContext extends Context {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder interfaces(Class<?>...value) {
+			assertVarargsNotNull("value", value);
 			for (var v : value)
 				annotations(BeanAnnotation.create(v).interfaceClass(v).build());
 			return this;
@@ -2522,10 +2589,11 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder locale(Locale value) {
-			locale = value;
+			locale = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -2564,6 +2632,7 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (no default media type will be set).
 		 * @return This object.
 		 */
 		public Builder mediaType(MediaType value) {
@@ -2650,6 +2719,7 @@ public class BeanContext extends Context {
 		 * @see #notBeanClasses(Class...)
 		 */
 		public Builder notBeanClasses(Collection<Class<?>> values) {
+			assertArgNotNull("values", values);
 			notBeanClasses().addAll(values);
 			return this;
 		}
@@ -2672,10 +2742,12 @@ public class BeanContext extends Context {
 		 *
 		 * @param values
 		 * 	The values to add to this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 * @see #notBeanPackages(String...)
 		 */
 		public Builder notBeanPackages(Collection<String> values) {
+			assertArgNotNull("values", values);
 			notBeanPackages().addAll(values);
 			return this;
 		}
@@ -2714,9 +2786,11 @@ public class BeanContext extends Context {
 		 * 		<li>Strings.
 		 * 		<li>Arrays and collections of anything in this list.
 		 * 	</ul>
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder notBeanPackages(String...values) {
+			assertVarargsNotNull("values", values);
 			return notBeanPackages(l(values));
 		}
 
@@ -2750,12 +2824,16 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * @param on The class that the namer applies to.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is {@link BasicPropertyNamer}.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder propertyNamer(Class<?> on, Class<? extends PropertyNamer> value) {
+			assertArgNotNull("on", on);
+			assertArgNotNull("value", value);
 			return annotations(BeanAnnotation.create(on).propertyNamer(value).build());
 		}
 
@@ -2793,7 +2871,7 @@ public class BeanContext extends Context {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * 	<br>The default is {@link BasicPropertyNamer}.
+		 * 	<br>Can be <jk>null</jk> (will use {@link BasicPropertyNamer} as the default).
 		 * @return This object.
 		 */
 		public Builder propertyNamer(Class<? extends PropertyNamer> value) {
@@ -2887,9 +2965,11 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * @param on The bean classes to sort properties on.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder sortProperties(Class<?>...on) {
+			assertVarargsNotNull("on", on);
 			for (var c : on)
 				annotations(BeanAnnotation.create(c).sort(true).build());
 			return this;
@@ -2931,11 +3011,15 @@ public class BeanContext extends Context {
 		 * </p>
 		 *
 		 * @param on The class on which the stop class is being applied.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param value
 		 * 	The new value for this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder stopClass(Class<?> on, Class<?> value) {
+			assertArgNotNull("on", on);
+			assertArgNotNull("value", value);
 			return annotations(BeanAnnotation.create(on).stopClass(value).build());
 		}
 
@@ -2954,8 +3038,11 @@ public class BeanContext extends Context {
 		 * @param <T> The object type being swapped out.
 		 * @param <S> The object type being swapped in.
 		 * @param normalClass The object type being swapped out.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param swappedClass The object type being swapped in.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param swapFunction The function to convert the object.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
@@ -2977,12 +3064,20 @@ public class BeanContext extends Context {
 		 * @param <T> The object type being swapped out.
 		 * @param <S> The object type being swapped in.
 		 * @param normalClass The object type being swapped out.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param swappedClass The object type being swapped in.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param swapFunction The function to convert the object during serialization.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param unswapFunction The function to convert the object during parsing.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+			assertArgNotNull("normalClass", normalClass);
+			assertArgNotNull("swappedClass", swappedClass);
+			assertArgNotNull("swapFunction", swapFunction);
+			assertArgNotNull("unswapFunction", unswapFunction);
 			swaps().add(0, new FunctionalSwap<>(normalClass, swappedClass, swapFunction, unswapFunction));
 			return this;
 		}
@@ -3010,9 +3105,11 @@ public class BeanContext extends Context {
 		 * 		<li>Any subclass of {@link ObjectSwap}.
 		 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
 		 * 	</ul>
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder swaps(Class<?>...values) {
+			assertVarargsNotNull("values", values);
 			swaps().addAll(0, accumulate(values));
 			return this;
 		}
@@ -3096,9 +3193,11 @@ public class BeanContext extends Context {
 		 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
 		 * 		<li>Any array/collection/stream of the objects above.
 		 * 	</ul>
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder swaps(Object...values) {
+			assertVarargsNotNull("values", values);
 			swaps().addAll(0, accumulate(values));
 			return this;
 		}
@@ -3137,6 +3236,7 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (timezone will not be set, defaults to system timezone).
 		 * @return This object.
 		 */
 		public Builder timeZone(TimeZone value) {
@@ -3146,6 +3246,7 @@ public class BeanContext extends Context {
 
 		@Override /* Overridden from Builder */
 		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+			assertArgNotNull("value", value);
 			super.type(value);
 			return this;
 		}
@@ -3187,11 +3288,15 @@ public class BeanContext extends Context {
 		 *
 		 * @param on
 		 * 	The class the type name is being defined on.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param value
 		 * 	The new value for this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder typeName(Class<?> on, String value) {
+			assertArgNotNull("on", on);
+			assertArgNotNull("value", value);
 			return annotations(BeanAnnotation.create(on).typeName(value).build());
 		}
 
@@ -3230,12 +3335,16 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * @param on The class the type property name applies to.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is <js>"_type"</js>.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder typePropertyName(Class<?> on, String value) {
+			assertArgNotNull("on", on);
+			assertArgNotNull("value", value);
 			return annotations(BeanAnnotation.create(on).typePropertyName(value).build());
 		}
 
@@ -3288,10 +3397,11 @@ public class BeanContext extends Context {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is <js>"_type"</js>.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder typePropertyName(String value) {
-			typePropertyName = value;
+			typePropertyName = assertArgNotNull("value", value);
 			return this;
 		}
 

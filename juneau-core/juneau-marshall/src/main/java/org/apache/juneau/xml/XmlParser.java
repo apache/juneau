@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -85,9 +86,10 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			preserveRootElement = copyFrom.preserveRootElement;
 			validating = copyFrom.validating;
 			eventAllocator = copyFrom.eventAllocator;
@@ -99,9 +101,10 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(XmlParser copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			preserveRootElement = copyFrom.preserveRootElement;
 			validating = copyFrom.validating;
 			eventAllocator = copyFrom.eventAllocator;
@@ -372,6 +375,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		 * Associates an {@link XMLEventAllocator} with this parser.
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (no event allocator will be used).
 		 * @return This object.
 		 */
 		public Builder eventAllocator(Class<? extends XMLEventAllocator> value) {
@@ -572,6 +576,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		 * Associates an {@link XMLReporter} with this parser.
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (no reporter will be used).
 		 * @return This object.
 		 */
 		public Builder reporter(Class<? extends XMLReporter> value) {
@@ -586,6 +591,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		 * Associates an {@link XMLResolver} with this parser.
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (no resolver will be used).
 		 * @return This object.
 		 */
 		public Builder resolver(Class<? extends XMLResolver> value) {

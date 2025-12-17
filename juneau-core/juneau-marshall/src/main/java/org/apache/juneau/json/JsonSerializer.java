@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.json;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -134,9 +135,10 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			addBeanTypesJson = copyFrom.addBeanTypesJson;
 			escapeSolidus = copyFrom.escapeSolidus;
 			simpleAttrs = copyFrom.simpleAttrs;
@@ -146,9 +148,10 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(JsonSerializer copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			addBeanTypesJson = copyFrom.addBeanTypesJson;
 			escapeSolidus = copyFrom.escapeSolidus;
 			simpleAttrs = copyFrom.simpleAttrs;

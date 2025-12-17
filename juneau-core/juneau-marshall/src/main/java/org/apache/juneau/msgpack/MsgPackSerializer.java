@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.msgpack;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -56,9 +57,10 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		 * Constructor.
 		 *
 		 * @param builder The builder for this object.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public Base64(Builder builder) {
-			super(builder.binaryFormat(BinaryFormat.BASE64));
+			super(assertArgNotNull("builder", builder).binaryFormat(BinaryFormat.BASE64));
 		}
 	}
 
@@ -83,18 +85,20 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 		}
 
 		/**
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(MsgPackSerializer copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 		}
 
 		@Override /* Overridden from Builder */

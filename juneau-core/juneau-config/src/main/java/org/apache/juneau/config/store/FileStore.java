@@ -18,6 +18,7 @@ package org.apache.juneau.config.store;
 
 import static java.nio.file.StandardOpenOption.*;
 import static java.nio.file.StandardWatchEventKinds.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.FileUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -75,9 +76,10 @@ public class FileStore extends ConfigStore {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			directory = copyFrom.directory;
 			charset = copyFrom.charset;
 			enableWatcher = copyFrom.enableWatcher;
@@ -90,9 +92,10 @@ public class FileStore extends ConfigStore {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(FileStore copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			type(copyFrom.getClass());
 			directory = copyFrom.directory;
 			charset = copyFrom.charset;
@@ -151,10 +154,11 @@ public class FileStore extends ConfigStore {
 		 * 		<li>Environment variable <js>"CONFIGFILESTORE_CHARSET"
 		 * 		<li>{@link Charset#defaultCharset()}
 		 * 	</ul>
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder charset(Charset value) {
-			charset = value;
+			charset = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -189,10 +193,11 @@ public class FileStore extends ConfigStore {
 		 * 		<li>Environment variable <js>"CONFIGFILESTORE_DIRECTORY"
 		 * 		<li><js>"."</js>.
 		 * 	</ul>
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder directory(File value) {
-			directory = value.getAbsolutePath();
+			directory = assertArgNotNull("value", value).getAbsolutePath();
 			return this;
 		}
 
@@ -210,10 +215,11 @@ public class FileStore extends ConfigStore {
 		 * 		<li>Environment variable <js>"CONFIGFILESTORE_DIRECTORY"
 		 * 		<li><js>"."</js>
 		 * 	</ul>
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder directory(String value) {
-			directory = value;
+			directory = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -256,10 +262,11 @@ public class FileStore extends ConfigStore {
 		 * 		<li>Environment variable <js>"CONFIGFILESTORE_EXTENSIONS"
 		 * 		<li><js>"cfg"</js>
 		 * 	</ul>
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder extensions(String value) {
-			extensions = value;
+			extensions = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -318,10 +325,11 @@ public class FileStore extends ConfigStore {
 		 * 		<li>Environment variable <js>"CONFIGFILESTORE_WATCHERSENSITIVITY"
 		 * 		<li>{@link WatcherSensitivity#MEDIUM}
 		 * 	</ul>
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder watcherSensitivity(WatcherSensitivity value) {
-			watcherSensitivity = value;
+			watcherSensitivity = assertArgNotNull("value", value);
 			return this;
 		}
 	}

@@ -417,6 +417,7 @@ public class Parser extends BeanContextable {
 		 * Specifies the media type that this parser consumes.
 		 *
 		 * @param value The value for this setting.
+		 * 	<br>Can be <jk>null</jk> (treated as empty string, no media types will be specified).
 		 * @return This object.
 		 */
 		public Builder consumes(String value) {
@@ -656,6 +657,7 @@ public class Parser extends BeanContextable {
 		 * </p>
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder listener(Class<? extends ParserListener> value) {

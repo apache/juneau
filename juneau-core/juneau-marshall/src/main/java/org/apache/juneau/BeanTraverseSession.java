@@ -16,6 +16,7 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -59,9 +60,10 @@ public class BeanTraverseSession extends BeanSession {
 		 * Constructor
 		 *
 		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(BeanTraverseContext ctx) {
-			super(ctx.getBeanContext());
+			super(assertArgNotNull("ctx", ctx).getBeanContext());
 			this.ctx = ctx;
 			initialDepth = ctx.initialDepth;
 		}

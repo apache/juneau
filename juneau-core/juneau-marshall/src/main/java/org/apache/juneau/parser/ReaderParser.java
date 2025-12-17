@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.parser;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -50,6 +51,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 public class ReaderParser extends Parser {
+
 	/**
 	 * Builder class.
 	 */
@@ -69,9 +71,10 @@ public class ReaderParser extends Parser {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			fileCharset = copyFrom.fileCharset;
 			streamCharset = copyFrom.streamCharset;
 		}
@@ -80,9 +83,10 @@ public class ReaderParser extends Parser {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(ReaderParser copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			fileCharset = copyFrom.fileCharset;
 			streamCharset = copyFrom.streamCharset;
 		}
@@ -379,6 +383,7 @@ public class ReaderParser extends Parser {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
+		 * 	<br>Can be <jk>null</jk> (defaults to system default).
 		 * @return This object.
 		 */
 		public Builder fileCharset(Charset value) {
@@ -547,6 +552,7 @@ public class ReaderParser extends Parser {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default value is <js>"UTF-8"</js>.
+		 * 	<br>Can be <jk>null</jk> (defaults to UTF-8).
 		 * @return This object.
 		 */
 		public Builder streamCharset(Charset value) {

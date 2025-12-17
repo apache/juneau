@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -50,6 +51,7 @@ import org.apache.juneau.xml.annotation.*;
  */
 @SuppressWarnings({ "unchecked", "rawtypes", "resource" })
 public class XmlSerializerSession extends WriterSerializerSession {
+
 	/**
 	 * Builder class.
 	 */
@@ -61,9 +63,10 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		 * Constructor
 		 *
 		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(XmlSerializer ctx) {
-			super(ctx);
+			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -226,8 +229,15 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * @param ctx The context creating this session.
 	 * @return A new builder.
 	 */
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
+	 * @return A new builder.
+	 */
 	public static Builder create(XmlSerializer ctx) {
-		return new Builder(ctx);
+		return new Builder(assertArgNotNull("ctx", ctx));
 	}
 
 	private final XmlSerializer ctx;

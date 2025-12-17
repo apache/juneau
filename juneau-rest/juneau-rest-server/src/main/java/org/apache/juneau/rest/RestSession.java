@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -60,9 +61,10 @@ public class RestSession extends ContextSession {
 		 * Constructor.
 		 *
 		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(RestContext ctx) {
-			super(ctx);
+			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -97,6 +99,7 @@ public class RestSession extends ContextSession {
 		 * Specifies the logger to use for this session.
 		 *
 		 * @param value The value for this setting.
+		 * 	<br>Can be <jk>null</jk> (will use the default logger from the context if available).
 		 * @return This object.
 		 */
 		public Builder logger(CallLogger value) {
@@ -108,6 +111,7 @@ public class RestSession extends ContextSession {
 		 * Adds resolved <c><ja>@Resource</ja>(path)</c> variable values to this call.
 		 *
 		 * @param value The variables to add to this call.
+		 * 	<br>Can be <jk>null</jk> (ignored).
 		 * @return This object.
 		 */
 		@SuppressWarnings("unchecked")
@@ -138,10 +142,11 @@ public class RestSession extends ContextSession {
 		 * Specifies the HTTP servlet request object on this call.
 		 *
 		 * @param value The value for this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder req(HttpServletRequest value) {
-			req = value;
+			req = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -158,10 +163,11 @@ public class RestSession extends ContextSession {
 		 * Specifies the HTTP servlet response object on this call.
 		 *
 		 * @param value The value for this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder res(HttpServletResponse value) {
-			res = value;
+			res = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -169,6 +175,7 @@ public class RestSession extends ContextSession {
 		 * Specifies the servlet implementation bean.
 		 *
 		 * @param value The value for this setting.
+		 * 	<br>Can be <jk>null</jk> (no outer bean will be used for instantiating inner classes).
 		 * @return This object.
 		 */
 		public Builder resource(Object value) {
@@ -186,10 +193,11 @@ public class RestSession extends ContextSession {
 	 * Creates a builder of this object.
 	 *
 	 * @param ctx The context creating this builder.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(RestContext ctx) {
-		return new Builder(ctx);
+		return new Builder(assertArgNotNull("ctx", ctx));
 	}
 
 	private final Object resource;
@@ -248,6 +256,7 @@ public class RestSession extends ContextSession {
 	 * Identifies that an exception occurred during this call.
 	 *
 	 * @param value The thrown exception.
+	 * 	<br>Can be <jk>null</jk> (will clear the exception attribute and remove the exception from the bean store).
 	 * @return This object.
 	 */
 	public RestSession exception(Throwable value) {
@@ -458,7 +467,8 @@ public class RestSession extends ContextSession {
 	/**
 	 * Sets the logger to use when logging this call.
 	 *
-	 * @param value The new value for this setting.  Can be <jk>null</jk>.
+	 * @param value The new value for this setting.
+	 * 	<br>Can be <jk>null</jk> (will use the default logger from the context if available).
 	 * @return This object.
 	 */
 	public RestSession logger(CallLogger value) {
@@ -518,6 +528,7 @@ public class RestSession extends ContextSession {
 	 * Sets the HTTP status on this call.
 	 *
 	 * @param value The status code.
+	 * 	<br>Can be <jk>null</jk> (ignored).
 	 * @return This object.
 	 */
 	public RestSession status(StatusLine value) {
@@ -530,6 +541,7 @@ public class RestSession extends ContextSession {
 	 * Sets the URL path pattern match on this call.
 	 *
 	 * @param value The match pattern.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public RestSession urlPathMatch(UrlPathMatch value) {

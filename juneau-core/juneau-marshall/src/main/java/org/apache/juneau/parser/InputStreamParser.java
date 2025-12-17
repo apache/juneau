@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.parser;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -67,9 +68,10 @@ public class InputStreamParser extends Parser {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			binaryFormat = copyFrom.binaryFormat;
 		}
 
@@ -77,9 +79,10 @@ public class InputStreamParser extends Parser {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(InputStreamParser copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			binaryFormat = copyFrom.binaryFormat;
 		}
 
@@ -286,10 +289,11 @@ public class InputStreamParser extends Parser {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default value is {@link BinaryFormat#HEX}.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder binaryFormat(BinaryFormat value) {
-			binaryFormat = value;
+			binaryFormat = assertArgNotNull("value", value);
 			return this;
 		}
 

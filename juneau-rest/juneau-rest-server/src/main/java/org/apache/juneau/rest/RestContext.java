@@ -19,6 +19,7 @@ package org.apache.juneau.rest;
 import static jakarta.servlet.http.HttpServletResponse.*;
 import static java.util.Collections.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
@@ -346,10 +347,11 @@ public class RestContext extends Context {
 		 * 		<li>Environment variable <js>"RESTCONTEXT_ALLOWEDHEADERPARAMS"
 		 * 		<li><js>"Accept,Content-Type"</js>
 		 * 	</ul>
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder allowedHeaderParams(String value) {
-			allowedHeaderParams = value;
+			allowedHeaderParams = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -408,10 +410,11 @@ public class RestContext extends Context {
 		 * 		<li>Environment variable <js>"RESTCONTEXT_ALLOWEDMETHODHEADERS"
 		 * 		<li><js>""</js>
 		 * 	</ul>
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder allowedMethodHeaders(String value) {
-			allowedMethodHeaders = value;
+			allowedMethodHeaders = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -480,10 +483,11 @@ public class RestContext extends Context {
 		 * 		<li>Environment variable <js>"RESTCONTEXT_ALLOWEDMETHODPARAMS"
 		 * 		<li><js>"HEAD,OPTIONS"</js>
 		 * 	</ul>
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder allowedMethodParams(String value) {
-			allowedMethodParams = value;
+			allowedMethodParams = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -573,7 +577,8 @@ public class RestContext extends Context {
 		 *
 		 * @param <T> The class to associate this bean with.
 		 * @param beanType The class to associate this bean with.
-		 * @param bean The bean.  Can be <jk>null</jk>.
+		 * @param bean The bean.
+		 * 	<br>Can be <jk>null</jk> (a null bean will be stored in the bean store).
 		 * @return This object.
 		 */
 		public <T> Builder beanStore(Class<T> beanType, T bean) {
@@ -596,8 +601,10 @@ public class RestContext extends Context {
 		 *
 		 * @param <T> The class to associate this bean with.
 		 * @param beanType The class to associate this bean with.
-		 * @param bean The bean.  Can be <jk>null</jk>.
-		 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
+		 * @param bean The bean.
+		 * 	<br>Can be <jk>null</jk> (a null bean will be stored in the bean store).
+		 * @param name The bean name if this is a named bean.
+		 * 	<br>Can be <jk>null</jk> (bean will be stored as an unnamed bean).
 		 * @return This object.
 		 */
 		public <T> Builder beanStore(Class<T> beanType, T bean, String name) {
@@ -709,10 +716,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder callLogger(CallLogger value) {
-			callLogger().impl(value);
+			callLogger().impl(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -731,10 +739,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder callLogger(Class<? extends CallLogger> value) {
-			callLogger().type(value);
+			callLogger().type(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -748,11 +757,12 @@ public class RestContext extends Context {
 		 * This can be used for resources that don't have a {@link Rest#path() @Rest(path)} annotation.
 		 *
 		 * @param path The child path relative to the parent resource URI.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param child The child to add to this resource.
 		 * @return This object.
 		 */
 		public Builder child(String path, Object child) {
-			children.add(new RestChild(path, child));
+			children.add(new RestChild(assertArgNotNull("path", path), child));
 			return this;
 		}
 
@@ -852,9 +862,12 @@ public class RestContext extends Context {
 		 * 		<li>An instantiated resource object (such as a servlet object instantiated by a servlet container).
 		 * 		<li>An instance of {@link RestChild} containing an instantiated resource object and a subpath.
 		 * 	</ul>
+		 * @param values The child resources to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder children(Object...values) {
+			assertVarargsNotNull("values", values);
 			addAll(children, values);
 			return this;
 		}
@@ -923,10 +936,11 @@ public class RestContext extends Context {
 		 * 		<li>Environment variable <js>"RESTCONTEXT_CLIENTVERSIONHEADER"
 		 * 		<li><js>"Client-Version"</js>
 		 * 	</ul>
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder clientVersionHeader(String value) {
-			clientVersionHeader = value;
+			clientVersionHeader = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -980,10 +994,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new config file.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder config(Config value) {
-			config = value;
+			config = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -1039,9 +1054,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param values The values to add to this setting.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder consumes(MediaType...values) {
+			assertVarargsNotNull("values", values);
 			consumes = addAll(consumes, values);
 			return this;
 		}
@@ -1070,10 +1087,11 @@ public class RestContext extends Context {
 		 * The default debug value is the enablement value if not otherwise overridden at the class or method level.
 		 *
 		 * @param value The debug default value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder debugDefault(Enablement value) {
-			defaultSettings().set("RestContext.debugDefault", value);
+			defaultSettings().set("RestContext.debugDefault", assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -1101,10 +1119,11 @@ public class RestContext extends Context {
 		 * Specifies the debug enablement class to use for this REST context.
 		 *
 		 * @param value The new value for this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder debugEnablement(Class<? extends DebugEnablement> value) {
-			debugEnablement().type(value);
+			debugEnablement().type(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -1112,10 +1131,11 @@ public class RestContext extends Context {
 		 * Specifies the debug enablement class to use for this REST context.
 		 *
 		 * @param value The new value for this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder debugEnablement(DebugEnablement value) {
-			debugEnablement().impl(value);
+			debugEnablement().impl(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -1177,10 +1197,11 @@ public class RestContext extends Context {
 		 * 		<li>Environment variable <js>"RESTCONTEXT_defaultCharset"
 		 * 		<li><js>"utf-8"</js>
 		 * 	</ul>
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder defaultCharset(Charset value) {
-			defaultCharset = value;
+			defaultCharset = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -1215,10 +1236,12 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * @param values The values to add to the list of default classes.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 * @see #defaultClasses()
 		 */
 		public Builder defaultClasses(Class<?>...values) {
+			assertVarargsNotNull("values", values);
 			defaultClasses().add(values);
 			return this;
 		}
@@ -1294,9 +1317,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param values The attributes.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder defaultRequestAttributes(NamedAttribute...values) {
+			assertVarargsNotNull("values", values);
 			defaultRequestAttributes().add(values);
 			return this;
 		}
@@ -1365,9 +1390,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param values The headers to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder defaultRequestHeaders(Header...values) {
+			assertVarargsNotNull("values", values);
 			defaultRequestHeaders().setDefault(values);
 			return this;
 		}
@@ -1432,9 +1459,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param values The headers to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder defaultResponseHeaders(Header...values) {
+			assertVarargsNotNull("values", values);
 			defaultResponseHeaders().setDefault(values);
 			return this;
 		}
@@ -1450,12 +1479,13 @@ public class RestContext extends Context {
 		 *
 		 * </p>
 		 * @param key The setting key.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param value The setting value.
 		 * @return This object.
 		 * @see #defaultSettings()
 		 */
 		public Builder defaultSetting(String key, Object value) {
-			defaultSettings().set(key, value);
+			defaultSettings().set(assertArgNotNull("key", key), value);
 			return this;
 		}
 
@@ -1594,10 +1624,12 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		@SafeVarargs
 		public final Builder encoders(Class<? extends Encoder>...value) {
+			assertVarargsNotNull("value", value);
 			encoders().add(value);
 			return this;
 		}
@@ -1617,9 +1649,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder encoders(Encoder...value) {
+			assertVarargsNotNull("value", value);
 			encoders().add(value);
 			return this;
 		}
@@ -1728,6 +1762,7 @@ public class RestContext extends Context {
 		 *
 		 * @param resource
 		 * 	The REST servlet/bean instance that this context is defined against.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 * @throws ServletException If hook method calls failed.
 		 */
@@ -1737,7 +1772,7 @@ public class RestContext extends Context {
 				return this;
 			initialized = true;
 
-			this.resource = new ResourceSupplier(resourceClass, resource);
+			this.resource = new ResourceSupplier(resourceClass, assertArgNotNull("resource", resource));
 			var r = this.resource;
 			var rc = resourceClass;
 
@@ -1862,10 +1897,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder jsonSchemaGenerator(Class<? extends JsonSchemaGenerator> value) {
-			jsonSchemaGenerator().type(value);
+			jsonSchemaGenerator().type(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -1884,10 +1920,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder jsonSchemaGenerator(JsonSchemaGenerator value) {
-			jsonSchemaGenerator().impl(value);
+			jsonSchemaGenerator().impl(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -1936,10 +1973,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The logger to use for the REST resource.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder logger(Logger value) {
-			logger = value;
+			logger = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -2000,10 +2038,11 @@ public class RestContext extends Context {
 		 * 		<li><js>"100M"</js>
 		 * 	</ul>
 		 * 	<br>The default is <js>"100M"</js>.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder maxInput(String value) {
-			maxInput = StringUtils.parseLongWithSuffix(value);
+			maxInput = StringUtils.parseLongWithSuffix(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -2121,10 +2160,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder messages(Class<? extends Messages> value) {
-			messages().type(value);
+			messages().type(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -2143,10 +2183,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder messages(Messages value) {
-			messages().impl(value);
+			messages().impl(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -2196,10 +2237,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder methodExecStore(Class<? extends MethodExecStore> value) {
-			methodExecStore().type(value);
+			methodExecStore().type(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -2218,10 +2260,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder methodExecStore(MethodExecStore value) {
-			methodExecStore().impl(value);
+			methodExecStore().impl(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -2236,10 +2279,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value for this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder parserListener(Class<? extends ParserListener> value) {
-			if (isNotVoid(value))
+			if (isNotVoid(assertArgNotNull("value", value)))
 				parsers.forEach(x -> x.listener(value));
 			return this;
 		}
@@ -2290,10 +2334,12 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		@SafeVarargs
 		public final Builder parsers(Class<? extends Parser>...value) {
+			assertVarargsNotNull("value", value);
 			parsers().add(value);
 			return this;
 		}
@@ -2313,9 +2359,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder parsers(Parser...value) {
+			assertVarargsNotNull("value", value);
 			parsers().add(value);
 			return this;
 		}
@@ -2365,10 +2413,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder partParser(Class<? extends HttpPartParser> value) {
-			partParser().type(value);
+			partParser().type(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -2387,10 +2436,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder partParser(HttpPartParser value) {
-			partParser().impl(value);
+			partParser().impl(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -2439,10 +2489,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder partSerializer(Class<? extends HttpPartSerializer> value) {
-			partSerializer().type(value);
+			partSerializer().type(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -2461,10 +2512,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder partSerializer(HttpPartSerializer value) {
-			partSerializer().impl(value);
+			partSerializer().impl(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -2522,6 +2574,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value for this setting.
+		 * 	<br>Can be <jk>null</jk> or empty (path will not be set, defaults to empty string).
 		 * @return This object.
 		 */
 		public Builder path(String value) {
@@ -2635,9 +2688,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param values The values to add to this setting.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder produces(MediaType...values) {
+			assertVarargsNotNull("values", values);
 			produces = addAll(produces, values);
 			return this;
 		}
@@ -2685,11 +2740,12 @@ public class RestContext extends Context {
 		 *
 		 * @param <T> The expected type of the resource bean.
 		 * @param type The expected type of the resource bean.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return The bean cast to that instance, or {@link Optional#empty()} if it's not the specified type.
 		 */
 		public <T> Optional<T> resourceAs(Class<T> type) {
 			var r = resource().get();
-			return opt(type.isInstance(r) ? type.cast(r) : null);
+			return opt(assertArgNotNull("type", type).isInstance(r) ? type.cast(r) : null);
 		}
 
 		/**
@@ -2808,10 +2864,12 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		@SafeVarargs
 		public final Builder responseProcessors(Class<? extends ResponseProcessor>...value) {
+			assertVarargsNotNull("value", value);
 			responseProcessors().add(value);
 			return this;
 		}
@@ -2831,9 +2889,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder responseProcessors(ResponseProcessor...value) {
+			assertVarargsNotNull("value", value);
 			responseProcessors().add(value);
 			return this;
 		}
@@ -2842,6 +2902,7 @@ public class RestContext extends Context {
 		 * Returns the REST children list.
 		 *
 		 * @param restContext The rest context.
+		 * 	<br>Can be <jk>null</jk> if the bean is a top-level resource.
 		 * @return The REST children list.
 		 * @throws Exception If a problem occurred instantiating one of the child rest contexts.
 		 */
@@ -2900,10 +2961,11 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * @param value The new value for this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder restChildrenClass(Class<? extends RestChildren> value) {
-			childrenClass = value;
+			childrenClass = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -2928,10 +2990,12 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		@SafeVarargs
 		public final Builder restOpArgs(Class<? extends RestOpArg>...value) {
+			assertVarargsNotNull("value", value);
 			restOpArgs().add(value);
 			return this;
 		}
@@ -2993,10 +3057,11 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * @param value The new value for this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder restOpContextClass(Class<? extends RestOpContext> value) {
-			opContextClass = value;
+			opContextClass = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -3004,12 +3069,13 @@ public class RestContext extends Context {
 		 * Returns the REST operations list.
 		 *
 		 * @param restContext The rest context.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return The REST operations list.
 		 * @throws ServletException If a problem occurred instantiating one of the child rest contexts.
 		 */
 		public RestOperations.Builder restOperations(RestContext restContext) throws ServletException {
 			if (restOperations == null)
-				restOperations = createRestOperations(beanStore(), resource(), restContext);
+				restOperations = createRestOperations(beanStore(), resource(), assertArgNotNull("restContext", restContext));
 			return restOperations;
 		}
 
@@ -3062,10 +3128,11 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * @param value The new value for this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder restOperationsClass(Class<? extends RestOperations> value) {
-			operationsClass = value;
+			operationsClass = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -3093,10 +3160,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value for this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder serializerListener(Class<? extends SerializerListener> value) {
-			if (isNotVoid(value))
+			if (isNotVoid(assertArgNotNull("value", value)))
 				serializers.forEach(x -> x.listener(value));
 			return this;
 		}
@@ -3147,10 +3215,12 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		@SafeVarargs
 		public final Builder serializers(Class<? extends Serializer>...value) {
+			assertVarargsNotNull("value", value);
 			serializers().add(value);
 			return this;
 		}
@@ -3170,9 +3240,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder serializers(Serializer...value) {
+			assertVarargsNotNull("value", value);
 			serializers().add(value);
 			return this;
 		}
@@ -3267,10 +3339,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder staticFiles(Class<? extends StaticFiles> value) {
-			staticFiles().type(value);
+			staticFiles().type(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -3288,10 +3361,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder staticFiles(StaticFiles value) {
-			staticFiles().impl(value);
+			staticFiles().impl(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -3316,10 +3390,11 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder swaggerProvider(Class<? extends SwaggerProvider> value) {
-			swaggerProvider().type(value);
+			swaggerProvider().type(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -3333,10 +3408,11 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder swaggerProvider(SwaggerProvider value) {
-			swaggerProvider().impl(value);
+			swaggerProvider().impl(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -3387,10 +3463,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder thrownStore(Class<? extends ThrownStore> value) {
-			thrownStore().type(value);
+			thrownStore().type(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -3409,10 +3486,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder thrownStore(ThrownStore value) {
-			thrownStore().impl(value);
+			thrownStore().impl(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -3485,10 +3563,11 @@ public class RestContext extends Context {
 		 * 		<li>Environment variable <js>"RESTCONTEXT_URIAUTHORITY"
 		 * 		<li><jk>null</jk>
 		 * 	</ul>
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder uriAuthority(String value) {
-			uriAuthority = value;
+			uriAuthority = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -3545,10 +3624,11 @@ public class RestContext extends Context {
 		 * 		<li>Environment variable <js>"RESTCONTEXT_URICONTEXT"
 		 * 		<li><jk>null</jk>
 		 * 	</ul>
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder uriContext(String value) {
-			uriContext = value;
+			uriContext = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -3603,10 +3683,11 @@ public class RestContext extends Context {
 		 * 		<li>Environment variable <js>"RESTCONTEXT_URIRELATIVITY"
 		 * 		<li>{@link UriRelativity#RESOURCE}
 		 * 	</ul>
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder uriRelativity(UriRelativity value) {
-			uriRelativity = value;
+			uriRelativity = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -3661,10 +3742,11 @@ public class RestContext extends Context {
 		 * 		<li>Environment variable <js>"RESTCONTEXT_URIRESOLUTION"
 		 * 		<li>{@link UriResolution#ROOT_RELATIVE}
 		 * 	</ul>
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder uriResolution(UriResolution value) {
-			uriResolution = value;
+			uriResolution = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -3750,10 +3832,12 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		@SafeVarargs
 		public final Builder vars(Class<? extends Var>...value) {
+			assertVarargsNotNull("value", value);
 			varResolver.vars(value);
 			return this;
 		}
@@ -3773,9 +3857,11 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder vars(Var...value) {
+			assertVarargsNotNull("value", value);
 			varResolver.vars(value);
 			return this;
 		}

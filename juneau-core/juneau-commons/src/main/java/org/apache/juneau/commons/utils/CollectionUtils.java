@@ -1894,8 +1894,13 @@ public class CollectionUtils {
 	/**
 	 * Convenience method for creating a {@link TreeSet}.
 	 *
+	 * <p>
+	 * Note: <jk>null</jk> values in the varargs array are automatically filtered out
+	 * because {@link TreeSet} does not support <jk>null</jk> elements.
+	 *
 	 * @param <E> The element type.
 	 * @param values The values to initialize the set with.
+	 * 	<br>Can contain <jk>null</jk> values (they will be filtered out).
 	 * @return A new modifiable set.
 	 */
 	@SafeVarargs
@@ -1903,7 +1908,8 @@ public class CollectionUtils {
 		assertArgNotNull("values", values);
 		var l = new TreeSet<E>();
 		for (var v : values)
-			l.add(v);
+			if (v != null)
+				l.add(v);
 		return l;
 	}
 

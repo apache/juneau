@@ -176,10 +176,11 @@ public class Config extends Context implements ConfigEventListener {
 		 * 		<li>Environment variable <js>"CONFIG_BINARYFORMAT"
 		 * 		<li>{@link BinaryFormat#BASE64}
 		 * 	</ul>
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder binaryFormat(BinaryFormat value) {
-			binaryFormat = value;
+			binaryFormat = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -260,9 +261,11 @@ public class Config extends Context implements ConfigEventListener {
 		 *
 		 * @param values
 		 * 	The mods to apply to this config.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder mods(Mod...values) {
+			assertVarargsNotNull("values", values);
 			for (var value : values)
 				mods.put(value.getId(), value);
 			return this;
@@ -305,10 +308,11 @@ public class Config extends Context implements ConfigEventListener {
 		 * 		<li>Environment variable <js>"CONFIG_NAME"
 		 * 		<li><js>"Configuration.cfg"</js>
 		 * 	</ul>
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder name(String value) {
-			name = value;
+			name = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -321,10 +325,11 @@ public class Config extends Context implements ConfigEventListener {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is {@link JsonParser#DEFAULT}.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder parser(ReaderParser value) {
-			parser = value;
+			parser = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -358,10 +363,11 @@ public class Config extends Context implements ConfigEventListener {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is {@link Json5Serializer#DEFAULT}
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder serializer(WriterSerializer value) {
-			serializer = value;
+			serializer = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -374,10 +380,11 @@ public class Config extends Context implements ConfigEventListener {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is {@link FileStore#DEFAULT}.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder store(ConfigStore value) {
-			store = value;
+			store = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -396,10 +403,11 @@ public class Config extends Context implements ConfigEventListener {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is {@link VarResolver#DEFAULT}.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder varResolver(VarResolver value) {
-			varResolver = value;
+			varResolver = assertArgNotNull("value", value);
 			return this;
 		}
 	}

@@ -17,6 +17,7 @@
 package org.apache.juneau.html;
 
 import static javax.xml.stream.XMLStreamConstants.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -65,9 +66,10 @@ public class HtmlParserSession extends XmlParserSession {
 		 * Constructor
 		 *
 		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(HtmlParser ctx) {
-			super(ctx);
+			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -185,10 +187,11 @@ public class HtmlParserSession extends XmlParserSession {
 	 * Creates a new builder for this object.
 	 *
 	 * @param ctx The context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(HtmlParser ctx) {
-		return new Builder(ctx);
+		return new Builder(assertArgNotNull("ctx", ctx));
 	}
 
 	private static String getAttribute(XmlReader r, String name, String def) {

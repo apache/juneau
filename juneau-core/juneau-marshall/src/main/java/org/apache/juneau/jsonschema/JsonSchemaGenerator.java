@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.jsonschema;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -85,9 +86,10 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			BeanContext.Builder bc = beanContext();
 			jsonSerializerBuilder = copyFrom.jsonSerializerBuilder.copy().beanContext(bc);
 			jsonParserBuilder = copyFrom.jsonParserBuilder.copy().beanContext(bc);
@@ -105,9 +107,10 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(JsonSchemaGenerator copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			BeanContext.Builder bc = beanContext();
 			jsonSerializerBuilder = copyFrom.jsonSerializer.copy().beanContext(bc);
 			jsonParserBuilder = copyFrom.jsonParser.copy().beanContext(bc);
@@ -144,9 +147,11 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * @param values
 		 * 	The values to add to this setting.
 		 * 	<br>The default is an empty string.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder addDescriptionsTo(TypeCategory...values) {
+			assertVarargsNotNull("values", values);
 			addDescriptionsTo = addAll(addDescriptionsTo, values);
 			return this;
 		}
@@ -182,9 +187,11 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * @param values
 		 * 	The values to add to this setting.
 		 * 	<br>The default is an empty string.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder addExamplesTo(TypeCategory...values) {
+			assertVarargsNotNull("values", values);
 			addExamplesTo = addAll(addExamplesTo, values);
 			return this;
 		}
@@ -296,10 +303,11 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder beanDefMapper(Class<? extends BeanDefMapper> value) {
-			beanDefMapper = value;
+			beanDefMapper = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -598,9 +606,11 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 *
 		 * @param values
 		 * 	The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder ignoreTypes(String...values) {
+			assertVarargsNotNull("values", values);
 			ignoreTypes = addAll(ignoreTypes, values);
 			return this;
 		}

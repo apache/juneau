@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.rrpc;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -52,10 +53,12 @@ public class RrpcRestOpSession extends RestOpSession {
 		 * Constructor.
 		 *
 		 * @param ctx The context object of the RRPC Java method.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param session The REST session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public Builder(RrpcRestOpContext ctx, RestSession session) {
-			super(ctx, session);
+			super(assertArgNotNull("ctx", ctx), assertArgNotNull("session", session));
 			this.ctx = ctx;
 		}
 
@@ -70,11 +73,13 @@ public class RrpcRestOpSession extends RestOpSession {
 	 * Static creator.
 	 *
 	 * @param ctx The context of the RRPC Java Method.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param session The REST session creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(RrpcRestOpContext ctx, RestSession session) {
-		return new Builder(ctx, session);
+		return new Builder(assertArgNotNull("ctx", ctx), assertArgNotNull("session", session));
 
 	}
 

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.parser;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -63,9 +64,10 @@ public class ParserSession extends BeanSession {
 		 * Constructor
 		 *
 		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Parser ctx) {
-			super(ctx.getBeanContext());
+			super(assertArgNotNull("ctx", ctx).getBeanContext());
 			this.ctx = ctx;
 			mediaTypeDefault(ctx.getPrimaryMediaType());
 		}
@@ -129,7 +131,7 @@ public class ParserSession extends BeanSession {
 		 *
 		 * @param value
 		 * 	The new property value.
-		 * 	<br>Can be <jk>null</jk>.
+		 * 	<br>Can be <jk>null</jk> (no outer object will be used, suitable for static or top-level classes).
 		 * @return This object.
 		 */
 		public Builder outer(Object value) {
@@ -157,7 +159,7 @@ public class ParserSession extends BeanSession {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>Can be <jk>null</jk>.
+		 * 	<br>Can be <jk>null</jk> (will not set the value, keeps existing schema or remains <jk>null</jk>).
 		 * @return This object.
 		 */
 		public Builder schema(HttpPartSchema value) {
@@ -171,7 +173,7 @@ public class ParserSession extends BeanSession {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
+		 * 	<br>If <jk>null</jk>, the value will not be set (keeps existing schema or remains <jk>null</jk>).
 		 * @return This object.
 		 */
 		public Builder schemaDefault(HttpPartSchema value) {
@@ -203,10 +205,11 @@ public class ParserSession extends BeanSession {
 	 * Creates a new builder for this object.
 	 *
 	 * @param ctx The context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(Parser ctx) {
-		return new Builder(ctx);
+		return new Builder(assertArgNotNull("ctx", ctx));
 	}
 
 	/**

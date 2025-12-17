@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.jena;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -97,9 +98,10 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			trimWhitespace = copyFrom.trimWhitespace;
 			looseCollections = copyFrom.looseCollections;
 			language = copyFrom.language;
@@ -113,9 +115,10 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(RdfParser copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			trimWhitespace = copyFrom.trimWhitespace;
 			looseCollections = copyFrom.looseCollections;
 			language = copyFrom.language;
@@ -333,10 +336,11 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder collectionFormat(RdfCollectionFormat value) {
-			collectionFormat = value;
+			collectionFormat = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -511,10 +515,11 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is <code>{j:<js>'http://www.apache.org/juneaubp/'</js>}</code>.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder juneauBpNs(Namespace value) {
-			juneauBpNs = value;
+			juneauBpNs = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -524,10 +529,11 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is <code>{j:<js>'http://www.apache.org/juneau/'</js>}</code>.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder juneauNs(Namespace value) {
-			juneauNs = value;
+			juneauNs = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -572,10 +578,11 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder language(String value) {
-			language = value;
+			language = assertArgNotNull("value", value);
 			return this;
 		}
 

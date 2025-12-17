@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
 /**
  * Serializes POJOs to HTTP responses as XML.
  *
@@ -46,9 +48,10 @@ public class XmlDocSerializer extends XmlSerializer {
 		 * Constructor.
 		 *
 		 * @param builder The builder for this object.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public Ns(XmlSerializer.Builder builder) {
-			super(builder.enableNamespaces());
+			super(assertArgNotNull("builder", builder).enableNamespaces());
 		}
 	}
 
@@ -65,9 +68,10 @@ public class XmlDocSerializer extends XmlSerializer {
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public XmlDocSerializer(XmlSerializer.Builder builder) {
-		super(builder);
+		super(assertArgNotNull("builder", builder));
 	}
 
 	@Override /* Overridden from Context */

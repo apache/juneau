@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.httppart;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
@@ -33,6 +35,7 @@ import org.apache.juneau.parser.*;
  * </ul>
  */
 public abstract class BaseHttpPartParser extends BeanContextable implements HttpPartParser {
+
 	/**
 	 * Builder class.
 	 */
@@ -47,9 +50,10 @@ public abstract class BaseHttpPartParser extends BeanContextable implements Http
 		 * Copy constructor.
 		 *
 		 * @param builder The builder to copy.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder builder) {
-			super(builder);
+			super(assertArgNotNull("builder", builder));
 		}
 	}
 
@@ -77,18 +81,21 @@ public abstract class BaseHttpPartParser extends BeanContextable implements Http
 	 *
 	 * @param <T> The POJO type to transform the input into.
 	 * @param partType The part type being parsed.
+	 * 	<br>Can be <jk>null</jk> (will default to {@link HttpPartType#OTHER}).
 	 * @param schema
 	 * 	Schema information about the part.
-	 * 	<br>May be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>.
 	 * 	<br>Not all part parsers use the schema information.
 	 * @param in The input being parsed.
+	 * 	<br>Can be <jk>null</jk> (will return <jk>null</jk> or use schema default if available).
 	 * @param toType The POJO type to transform the input into.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return The parsed value.
 	 * @throws ParseException Malformed input encountered.
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
-		return getPartSession().parse(partType, schema, in, getClassMeta(toType));
+		return getPartSession().parse(partType, schema, in, getClassMeta(assertArgNotNull("toType", toType)));
 	}
 
 	/**
@@ -96,18 +103,21 @@ public abstract class BaseHttpPartParser extends BeanContextable implements Http
 	 *
 	 * @param <T> The POJO type to transform the input into.
 	 * @param partType The part type being parsed.
+	 * 	<br>Can be <jk>null</jk> (will default to {@link HttpPartType#OTHER}).
 	 * @param schema
 	 * 	Schema information about the part.
-	 * 	<br>May be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>.
 	 * 	<br>Not all part parsers use the schema information.
 	 * @param in The input being parsed.
+	 * 	<br>Can be <jk>null</jk> (will return <jk>null</jk> or use schema default if available).
 	 * @param toType The POJO type to transform the input into.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return The parsed value.
 	 * @throws ParseException Malformed input encountered.
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
-		return getPartSession().parse(partType, schema, in, toType);
+		return getPartSession().parse(partType, schema, in, assertArgNotNull("toType", toType));
 	}
 
 	/**
@@ -115,18 +125,23 @@ public abstract class BaseHttpPartParser extends BeanContextable implements Http
 	 *
 	 * @param <T> The POJO type to transform the input into.
 	 * @param partType The part type being parsed.
+	 * 	<br>Can be <jk>null</jk> (will default to {@link HttpPartType#OTHER}).
 	 * @param schema
 	 * 	Schema information about the part.
-	 * 	<br>May be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>.
 	 * 	<br>Not all part parsers use the schema information.
 	 * @param in The input being parsed.
+	 * 	<br>Can be <jk>null</jk> (will return <jk>null</jk> or use schema default if available).
 	 * @param toType The POJO type to transform the input into.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param toTypeArgs The generic type arguments of the POJO type to transform the input into.
+	 * 	<br>Cannot contain <jk>null</jk> values.
 	 * @return The parsed value.
 	 * @throws ParseException Malformed input encountered.
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
-		return getPartSession().parse(partType, schema, in, getClassMeta(toType, toTypeArgs));
+		assertVarargsNotNull("toTypeArgs", toTypeArgs);
+		return getPartSession().parse(partType, schema, in, getClassMeta(assertArgNotNull("toType", toType), toTypeArgs));
 	}
 }

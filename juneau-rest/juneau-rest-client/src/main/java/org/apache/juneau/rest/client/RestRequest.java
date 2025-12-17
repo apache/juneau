@@ -213,15 +213,18 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Constructs a REST call with the specified method name.
 	 *
 	 * @param client The client that created this request.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param uri The target URI.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param method The HTTP method name (uppercase).
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param hasBody Whether this method has a body.
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 */
 	protected RestRequest(RestClient client, URI uri, String method, boolean hasBody) throws RestCallException {
-		super(client.getBeanContext().createSession());
+		super(assertArgNotNull("client", client).getBeanContext().createSession());
 		this.client = client;
-		this.request = createInnerRequest(method, uri, hasBody);
+		this.request = createInnerRequest(assertArgNotNull("method", method), assertArgNotNull("uri", uri), hasBody);
 		this.errorCodes = client.errorCodes;
 		this.uriBuilder = new URIBuilder(request.getURI());
 		this.ignoreErrors = client.ignoreErrors;
@@ -250,6 +253,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <code>header(<js>"Accept"</js>, value);</code>
 	 *
 	 * @param value The new header value.
+	 * 	<br>Can be <jk>null</jk> (header will not be set).
 	 * @return This object.
 	 * @throws RestCallException Invalid input.
 	 */
@@ -264,6 +268,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * This is a shortcut for calling <code>header(<js>"Accept-Charset"</js>, value);</code>
 	 *
 	 * @param value The new header value.
+	 * 	<br>Can be <jk>null</jk> (header will not be set).
 	 * @return This object.
 	 * @throws RestCallException Invalid input.
 	 */
@@ -281,6 +286,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * </ul>
 	 *
 	 * @param header The header to append.
+	 * 	<br>Can be <jk>null</jk> (ignored).
 	 */
 	@Override /* Overridden from HttpMessage */
 	public void addHeader(Header header) {
@@ -297,7 +303,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * </ul>
 	 *
 	 * @param name The name of the header.
+	 * 	<br>Cannot be <jk>null</jk> or empty (header will not be created).
 	 * @param value The value of the header.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
 	@Override /* Overridden from HttpMessage */
 	public void addHeader(String name, String value) {
@@ -308,6 +316,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Sets {@link Cancellable} for the ongoing operation.
 	 *
 	 * @param cancellable The cancellable object.
+	 * 	<br>Can be <jk>null</jk> (no cancellation will be available).
 	 * @return This object.
 	 */
 	public RestRequest cancellable(Cancellable cancellable) {
@@ -413,6 +422,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Sets the actual request configuration.
 	 *
 	 * @param value The new value.
+	 * 	<br>Can be <jk>null</jk> (default configuration will be used).
 	 * @return This object.
 	 */
 	public RestRequest config(RequestConfig value) {
@@ -426,6 +436,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Header values are ignored.
 	 *
 	 * @param name The header name to check for.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return <jk>true</jk> if at least one header with this name is present.
 	 */
 	@Override /* Overridden from HttpMessage */
@@ -456,6 +467,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>
 	 * 			A {@link Supplier} of anything on this list.
 	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> (no body will be sent).
 	 * @return This object.
 	 */
 	public RestRequest content(Object value) {
@@ -542,6 +554,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <code>header(<js>"Content-Type"</js>, value);</code>
 	 *
 	 * @param value The new header value.
+	 * 	<br>Can be <jk>null</jk> (header will not be set).
 	 * @return This object.
 	 * @throws RestCallException Invalid input.
 	 */
@@ -578,10 +591,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * The default error code predicate is: <code>x -&gt; x &gt;= 400</code>.
 	 *
 	 * @param value The new predicate for calculating error codes.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public RestRequest errorCodes(Predicate<Integer> value) {
-		errorCodes = value;
+		errorCodes = assertArgNotNull("value", value);
 		return this;
 	}
 
@@ -624,9 +638,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @param name
 	 * 	The parameter name.
+	 * 	<br>Cannot be <jk>null</jk> or empty (parameter will not be created).
 	 * @param value
 	 * 	The parameter value.
 	 * 	<br>Non-string values are converted to strings using the {@link HttpPartSerializer} defined on the client.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public RestRequest formData(String name, Object value) {
@@ -652,10 +668,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * </p>
 	 *
 	 * @param value The bean containing the properties to set as form-data parameter values.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public RestRequest formDataBean(Object value) {
-		assertArg(isBean(value), "Object passed into formDataBean(Object) is not a bean.");
+		assertArg(isBean(assertArgNotNull("value", value)), "Object passed into formDataBean(Object) is not a bean.");
 		var b = formData;
 		toBeanMap(value).forEach((k, v) -> b.append(createPart(FORMDATA, k, v)));
 		return this;
@@ -704,6 +721,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>
 	 * 			{@link PartList} - Converted to a URL-encoded FORM post.
 	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> (no body will be sent).
 	 * @return This object.
 	 */
 	public RestRequest formDataCustom(Object value) {
@@ -729,6 +747,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>Values can be any POJO.
 	 * 		<li>Values converted to a string using the configured part serializer.
 	 * 	</ul>
+	 * 	<br>Cannot be <jk>null</jk>.
+	 * 	<br>Must have an even number of elements (key/value pairs).
+	 * 	<br>Null keys are ignored (parameter will not be created).
+	 * 	<br>Null values are allowed.
 	 * @return This object.
 	 * @throws RestCallException Invalid input.
 	 */
@@ -766,6 +788,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <br>If there is no matching header in the message <jk>null</jk> is returned.
 	 *
 	 * @param name The name of the header to return.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return The first header whose name property equals name or <jk>null</jk> if no such header could be found.
 	 */
 	@Override /* Overridden from HttpMessage */
@@ -794,6 +817,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <br>Headers are ordered in the sequence they will be sent over a connection.
 	 *
 	 * @param name The name of the headers to return.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return The headers whose name property equals name.
 	 */
 	@Override /* Overridden from HttpMessage */
@@ -816,6 +840,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <br>If there is no matching header in the message null is returned.
 	 *
 	 * @param name The name of the header to return.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return The last header whose name property equals name or <jk>null</jk> if no such header could be found.
 	 */
 	@Override /* Overridden from HttpMessage */
@@ -875,6 +900,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * A shortcut for calling <c>run().getContent().as(<js>type</js>)</c>.
 	 *
 	 * @param type The object type to create.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param <T> The object type to create.
 	 * @see ResponseContent#as(Class)
 	 * @return The response content as a simple string.
@@ -892,10 +918,12 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param type
 	 * 	The object type to create.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param args
 	 * 	The type arguments of the class if it's a collection or map.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.
+	 * 	<br>Can contain <jk>null</jk> values (ignored).
 	 * @see ResponseContent#as(Type,Type...)
 	 * @return The response content as a simple string.
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
@@ -1011,7 +1039,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param pairs The form-data key/value pairs.
+	 * @param pairs The header key/value pairs.
+	 * 	<br>Cannot be <jk>null</jk>.
+	 * 	<br>Must have an even number of elements (key/value pairs).
+	 * 	<br>Null keys are ignored (header will not be created).
+	 * 	<br>Null values are allowed.
 	 * @return This object.
 	 */
 	public RestRequest headerPairs(String...pairs) {
@@ -1069,10 +1101,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * </p>
 	 *
 	 * @param value The bean containing the properties to set as header values.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public RestRequest headersBean(Object value) {
-		assertArg(isBean(value), "Object passed into headersBean(Object) is not a bean.");
+		assertArg(isBean(assertArgNotNull("value", value)), "Object passed into headersBean(Object) is not a bean.");
 		var b = headerData;
 		toBeanMap(value, PropertyNamerDUCS.INSTANCE).forEach((k, v) -> b.append(createHeader(k, v)));
 		return this;
@@ -1194,10 +1227,12 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Add one or more interceptors for this call only.
 	 *
 	 * @param interceptors The interceptors to add to this call.
+	 * 	<br>Cannot contain <jk>null</jk> values.
 	 * @return This object.
 	 * @throws RestCallException If init method on interceptor threw an exception.
 	 */
 	public RestRequest interceptors(RestCallInterceptor...interceptors) throws RestCallException {
+		assertVarargsNotNull("interceptors", interceptors);
 		try {
 			for (var i : interceptors) {
 				this.interceptors.add(i);
@@ -1295,8 +1330,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Logs a message.
 	 *
 	 * @param level The log level.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param msg The message with {@link MessageFormat}-style arguments.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param args The arguments.
+	 * 	<br>Can contain <jk>null</jk> values.
 	 * @return This object.
 	 */
 	public RestRequest log(Level level, String msg, Object...args) {
@@ -1308,9 +1346,13 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Logs a message.
 	 *
 	 * @param level The log level.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param t The throwable cause.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param msg The message with {@link MessageFormat}-style arguments.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param args The arguments.
+	 * 	<br>Can contain <jk>null</jk> values.
 	 * @return This object.
 	 */
 	public RestRequest log(Level level, Throwable t, String msg, Object...args) {
@@ -1322,6 +1364,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Shortcut for setting the <c>Accept</c> and <c>Content-Type</c> headers on a request.
 	 *
 	 * @param value The new header values.
+	 * 	<br>Can be <jk>null</jk> (headers will not be set).
 	 * @return This object.
 	 * @throws RestCallException Invalid input.
 	 */
@@ -1427,10 +1470,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * If the <c>Accept</c> header is not set on the request, it will be set to the media type of this parser.
 	 *
 	 * @param parser The parser used to parse POJOs from the body of the HTTP response.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public RestRequest parser(Class<? extends Parser> parser) {
-		this.parser = client.getInstance(parser);
+		this.parser = client.getInstance(assertArgNotNull("parser", parser));
 		return this;
 	}
 
@@ -1448,10 +1492,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * If the <c>Accept</c> header is not set on the request, it will be set to the media type of this parser.
 	 *
 	 * @param parser The parser used to parse POJOs from the body of the HTTP response.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public RestRequest parser(Parser parser) {
-		this.parser = parser;
+		this.parser = assertArgNotNull("parser", parser);
 		return this;
 	}
 
@@ -1494,9 +1539,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @param name
 	 * 	The parameter name.
+	 * 	<br>Cannot be <jk>null</jk> or empty (parameter will not be created).
 	 * @param value
 	 * 	The parameter value.
 	 * 	<br>Non-string values are converted to strings using the {@link HttpPartSerializer} defined on the client.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public RestRequest pathData(String name, Object value) {
@@ -1522,10 +1569,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * </p>
 	 *
 	 * @param value The bean containing the properties to set as path parameter values.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public RestRequest pathDataBean(Object value) {
-		assertArg(isBean(value), "Object passed into pathDataBean(Object) is not a bean.");
+		assertArg(isBean(assertArgNotNull("value", value)), "Object passed into pathDataBean(Object) is not a bean.");
 		var b = pathData;
 		toBeanMap(value).forEach((k, v) -> b.set(createPart(PATH, k, v)));
 		return this;
@@ -1551,6 +1599,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>Values can be any POJO.
 	 * 		<li>Values converted to a string using the configured part serializer.
 	 * 	</ul>
+	 * 	<br>Cannot be <jk>null</jk>.
+	 * 	<br>Must have an even number of elements (key/value pairs).
+	 * 	<br>Null keys are ignored (parameter will not be created).
+	 * 	<br>Null values are allowed.
 	 * @return This object.
 	 */
 	public RestRequest pathDataPairs(String...pairs) {
@@ -1599,6 +1651,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Sets the protocol version for this request.
 	 *
 	 * @param version The protocol version for this request.
+	 * 	<br>Can be <jk>null</jk> (default protocol version will be used).
 	 * @return This object.
 	 */
 	public RestRequest protocolVersion(ProtocolVersion version) {
@@ -1630,6 +1683,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>
 	 * 			{@link PartList} - Converted to a URL-encoded query.
 	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> (no custom query will be set).
 	 * @return This object.
 	 */
 	public RestRequest queryCustom(Object value) {
@@ -1673,10 +1727,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return this;
 	}
 
-	// -----------------------------------------------------------------------------------------------------------------
-	// HttpUriRequest pass-through methods.
-	// -----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Appends a query parameter to the URI of the request.
 	 *
@@ -1691,9 +1741,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @param name
 	 * 	The parameter name.
+	 * 	<br>Cannot be <jk>null</jk> or empty (parameter will not be created).
 	 * @param value
 	 * 	The parameter value.
 	 * 	<br>Non-string values are converted to strings using the {@link HttpPartSerializer} defined on the client.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public RestRequest queryData(String name, Object value) {
@@ -1719,10 +1771,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * </p>
 	 *
 	 * @param value The bean containing the properties to set as query parameter values.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public RestRequest queryDataBean(Object value) {
-		assertArg(isBean(value), "Object passed into queryDataBean(Object) is not a bean.");
+		assertArg(isBean(assertArgNotNull("value", value)), "Object passed into queryDataBean(Object) is not a bean.");
 		var b = queryData;
 		toBeanMap(value).forEach((k, v) -> b.append(createPart(QUERY, k, v)));
 		return this;
@@ -1745,6 +1798,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>Values can be any POJO.
 	 * 		<li>Values converted to a string using the configured part serializer.
 	 * 	</ul>
+	 * 	<br>Cannot be <jk>null</jk>.
+	 * 	<br>Must have an even number of elements (key/value pairs).
+	 * 	<br>Null keys are ignored (parameter will not be created).
+	 * 	<br>Null values are allowed.
 	 * @return This object.
 	 * @throws RestCallException Invalid input.
 	 */
@@ -1760,6 +1817,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Removes a header from this message.
 	 *
 	 * @param header The header to remove.
+	 * 	<br>Can be <jk>null</jk> (no-op).
 	 */
 	@Override /* Overridden from HttpMessage */
 	public void removeHeader(Header header) {
@@ -1770,6 +1828,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Removes all headers with a certain name from this message.
 	 *
 	 * @param name The name of the headers to remove.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	@Override /* Overridden from HttpMessage */
 	public void removeHeaders(String name) {
@@ -1787,6 +1846,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Can be called multiple times to append multiple rethrows.
 	 *
 	 * @param values The classes to rethrow.
+	 * 	<br>Cannot be <jk>null</jk>.
+	 * 	<br>Null elements are ignored (only non-null classes that extend {@link Throwable} are added).
 	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
@@ -2019,10 +2080,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * If the <c>Content-Type</c> header is not set on the request, it will be set to the media type of this serializer.
 	 *
 	 * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.
+	 * 	<br>Can be <jk>null</jk> (will use default serializer matching Content-Type).
 	 * @return This object.
 	 */
 	public RestRequest serializer(Class<? extends Serializer> serializer) {
-		this.serializer = client.getInstance(serializer);
+		this.serializer = serializer == null ? null : client.getInstance(serializer);
 		return this;
 	}
 
@@ -2040,6 +2102,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * If the <c>Content-Type</c> header is not set on the request, it will be set to the media type of this serializer.
 	 *
 	 * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.
+	 * 	<br>Can be <jk>null</jk> (will use default serializer matching Content-Type).
 	 * @return This object.
 	 */
 	public RestRequest serializer(Serializer serializer) {
@@ -2053,6 +2116,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * The new header will be appended to the end of the list, if no header with the given name can be found.
 	 *
 	 * @param header The header to set.
+	 * 	<br>Can be <jk>null</jk> (ignored).
 	 */
 	@Override /* Overridden from HttpMessage */
 	public void setHeader(Header header) {
@@ -2065,7 +2129,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * The new header will be appended to the end of the list, if no header with the given name can be found.
 	 *
 	 * @param name The name of the header.
+	 * 	<br>Cannot be <jk>null</jk> or empty (header will not be created).
 	 * @param value The value of the header.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
 	@Override /* Overridden from HttpMessage */
 	public void setHeader(String name, String value) {
@@ -2076,6 +2142,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Overwrites all the headers in the message.
 	 *
 	 * @param headers The array of headers to set.
+	 * 	<br>Can be <jk>null</jk> (all headers will be cleared).
+	 * 	<br>Can contain <jk>null</jk> values (ignored).
 	 */
 	@Override /* Overridden from HttpMessage */
 	public void setHeaders(Header[] headers) {
@@ -2086,6 +2154,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Provides parameters to be used for the processing of this message.
 	 *
 	 * @param params The parameters.
+	 * 	<br>Can be <jk>null</jk> (default parameters will be used).
 	 * @deprecated Use constructor parameters of configuration API provided by HttpClient.
 	 */
 	@Override /* Overridden from HttpMessage */
@@ -2180,6 +2249,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>{@link String}
 	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
 	 * 	</ul>
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return This object.
 	 * @throws RestCallException Invalid URI syntax detected.
 	 */
@@ -2205,6 +2275,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Sets the URI fragment.
 	 *
 	 * @param fragment The URI fragment.  The value is expected to be unescaped and may contain non ASCII characters.
+	 * 	<br>Can be <jk>null</jk> (fragment will be cleared).
 	 * @return This object.
 	 */
 	public RestRequest uriFragment(String fragment) {
@@ -2216,6 +2287,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Sets the URI host.
 	 *
 	 * @param host The new URI host.
+	 * 	<br>Can be <jk>null</jk> (host will be cleared).
 	 * @return This object.
 	 */
 	public RestRequest uriHost(String host) {
@@ -2237,7 +2309,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	/**
 	 * Sets the URI scheme.
 	 *
-	 * @param scheme The new URI host.
+	 * @param scheme The new URI scheme.
+	 * 	<br>Can be <jk>null</jk> (scheme will be cleared).
 	 * @return This object.
 	 */
 	public RestRequest uriScheme(String scheme) {
@@ -2249,6 +2322,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Sets the URI user info.
 	 *
 	 * @param userInfo The new URI user info.
+	 * 	<br>Can be <jk>null</jk> (user info will be cleared).
 	 * @return This object.
 	 */
 	public RestRequest uriUserInfo(String userInfo) {
@@ -2256,15 +2330,13 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return this;
 	}
 
-	// -----------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	// -----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Sets the URI user info.
 	 *
 	 * @param username The new URI username.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param password The new URI password.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public RestRequest uriUserInfo(String username, String password) {

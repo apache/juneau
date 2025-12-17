@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -167,9 +168,10 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			addBeanTypesXml = copyFrom.addBeanTypesXml;
 			addNamespaceUrisToRoot = copyFrom.addNamespaceUrisToRoot;
 			disableAutoDetectNamespaces = copyFrom.disableAutoDetectNamespaces;
@@ -184,9 +186,10 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(XmlSerializer copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			addBeanTypesXml = copyFrom.addBeanTypesXml;
 			addNamespaceUrisToRoot = copyFrom.addNamespaceUrlsToRoot;
 			disableAutoDetectNamespaces = ! copyFrom.autoDetectNamespaces;
@@ -494,6 +497,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is <js>"juneau: http://www.apache.org/2013/Juneau"</js>.
+		 * 	<br>Can be <jk>null</jk> to specify no namespace.
 		 * @return This object.
 		 */
 		public Builder defaultNamespace(Namespace value) {
@@ -814,9 +818,11 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * The default list of namespaces associated with this serializer.
 		 *
 		 * @param values The new value for this property.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder namespaces(Namespace...values) {
+			assertVarargsNotNull("values", values);
 			namespaces = addAll(namespaces, values);
 			return this;
 		}
@@ -1112,9 +1118,10 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * Constructor.
 		 *
 		 * @param builder The builder for this object.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public Ns(Builder builder) {
-			super(builder.enableNamespaces());
+			super(assertArgNotNull("builder", builder).enableNamespaces());
 		}
 	}
 
@@ -1125,9 +1132,10 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * Constructor.
 		 *
 		 * @param builder The builder for this object.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public NsSq(Builder builder) {
-			super(builder.enableNamespaces().quoteChar('\''));
+			super(assertArgNotNull("builder", builder).enableNamespaces().quoteChar('\''));
 		}
 	}
 
@@ -1138,9 +1146,10 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * Constructor.
 		 *
 		 * @param builder The builder for this object.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public NsSqReadable(Builder builder) {
-			super(builder.enableNamespaces().quoteChar('\'').useWhitespace());
+			super(assertArgNotNull("builder", builder).enableNamespaces().quoteChar('\'').useWhitespace());
 		}
 	}
 
@@ -1151,9 +1160,10 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * Constructor.
 		 *
 		 * @param builder The builder for this object.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public Sq(Builder builder) {
-			super(builder.quoteChar('\''));
+			super(assertArgNotNull("builder", builder).quoteChar('\''));
 		}
 	}
 
@@ -1164,9 +1174,10 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * Constructor.
 		 *
 		 * @param builder The builder for this object.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public SqReadable(Builder builder) {
-			super(builder.quoteChar('\'').useWhitespace());
+			super(assertArgNotNull("builder", builder).quoteChar('\'').useWhitespace());
 		}
 	}
 

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.html;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -175,9 +176,10 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			addBeanTypesHtml = copyFrom.addBeanTypesHtml;
 			addKeyValueTableHeaders = copyFrom.addKeyValueTableHeaders;
 			disableDetectLabelParameters = copyFrom.disableDetectLabelParameters;
@@ -190,9 +192,10 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(HtmlSerializer copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			addBeanTypesHtml = copyFrom.addBeanTypesHtml;
 			addKeyValueTableHeaders = copyFrom.addKeyValueTableHeaders;
 			disableDetectLabelParameters = ! copyFrom.detectLabelParameters;
@@ -922,11 +925,12 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this property.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * 	<br>The default is <js>"label"</js>.
 		 * @return This object.
 		 */
 		public Builder labelParameter(String value) {
-			labelParameter = value;
+			labelParameter = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -1319,11 +1323,12 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this property.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * 	<br>The default is {@link AnchorText#TO_STRING}.
 		 * @return This object.
 		 */
 		public Builder uriAnchorText(AnchorText value) {
-			uriAnchorText = value;
+			uriAnchorText = assertArgNotNull("value", value);
 			return this;
 		}
 

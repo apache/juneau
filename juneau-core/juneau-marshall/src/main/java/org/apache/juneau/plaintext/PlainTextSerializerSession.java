@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.plaintext;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -48,9 +50,10 @@ public class PlainTextSerializerSession extends WriterSerializerSession {
 		 * Constructor
 		 *
 		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(PlainTextSerializer ctx) {
-			super(ctx);
+			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -178,10 +181,11 @@ public class PlainTextSerializerSession extends WriterSerializerSession {
 	 * Creates a new builder for this object.
 	 *
 	 * @param ctx The context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(PlainTextSerializer ctx) {
-		return new Builder(ctx);
+		return new Builder(assertArgNotNull("ctx", ctx));
 	}
 
 	/**

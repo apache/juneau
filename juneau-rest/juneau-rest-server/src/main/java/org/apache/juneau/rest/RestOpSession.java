@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
 import java.io.*;
 
 import org.apache.http.*;
@@ -49,12 +51,14 @@ public class RestOpSession extends ContextSession {
 		 * Constructor.
 		 *
 		 * @param ctx The context object of the Java method being invoked.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param session The REST session object creating this object.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public Builder(RestOpContext ctx, RestSession session) {
-			super(ctx);
+			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
-			this.session = session;
+			this.session = assertArgNotNull("session", session);
 		}
 
 		@Override /* Overridden from Session.Builder */
@@ -77,7 +81,8 @@ public class RestOpSession extends ContextSession {
 		/**
 		 * Sets the logger to use when logging this call.
 		 *
-		 * @param value The new value for this setting.  Can be <jk>null</jk>.
+		 * @param value The new value for this setting.
+		 * 	<br>Can be <jk>null</jk> (will use the default logger from the context if available).
 		 * @return This object.
 		 */
 		public Builder logger(CallLogger value) {
@@ -90,11 +95,13 @@ public class RestOpSession extends ContextSession {
 	 * Static creator.
 	 *
 	 * @param ctx The context object of the Java method being invoked.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param session The REST session object creating this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(RestOpContext ctx, RestSession session) {
-		return new Builder(ctx, session);
+		return new Builder(assertArgNotNull("ctx", ctx), assertArgNotNull("session", session));
 	}
 
 	private final RestOpContext ctx;
@@ -206,6 +213,7 @@ public class RestOpSession extends ContextSession {
 	 * Sets the status of the response.
 	 *
 	 * @param value The new status.
+	 * 	<br>Can be <jk>null</jk> (ignored).
 	 * @return This object.
 	 */
 	public RestOpSession status(StatusLine value) {

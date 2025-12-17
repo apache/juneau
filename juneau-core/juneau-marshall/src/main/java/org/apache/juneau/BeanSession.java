@@ -67,9 +67,10 @@ public class BeanSession extends ContextSession {
 		 * Constructor
 		 *
 		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(BeanContext ctx) {
-			super(ctx);
+			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
 			timeZone = ctx.timeZone;
 			locale = ctx.locale;
@@ -153,7 +154,7 @@ public class BeanSession extends ContextSession {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>Can be <jk>null</jk>.
+		 * 	<br>Can be <jk>null</jk> (will not set the value, defaults to {@link BeanContext.Builder#mediaType(MediaType)} if set on context).
 		 * @return This object.
 		 */
 		public Builder mediaType(MediaType value) {
@@ -204,7 +205,7 @@ public class BeanSession extends ContextSession {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>Can be <jk>null</jk>.
+		 * 	<br>Can be <jk>null</jk> (will not set the value, defaults to {@link BeanContext.Builder#timeZone(TimeZone)} if set on context).
 		 * @return This object.
 		 */
 		public Builder timeZone(TimeZone value) {
@@ -240,10 +241,11 @@ public class BeanSession extends ContextSession {
 	 * Creates a builder of this object.
 	 *
 	 * @param ctx The context creating this builder.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(BeanContext ctx) {
-		return new Builder(ctx);
+		return new Builder(assertArgNotNull("ctx", ctx));
 	}
 
 	private static int getMultiplier(String s) {

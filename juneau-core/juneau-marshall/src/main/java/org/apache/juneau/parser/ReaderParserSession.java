@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.parser;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -50,9 +52,10 @@ public class ReaderParserSession extends ParserSession {
 		 * Constructor
 		 *
 		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(ReaderParser ctx) {
-			super(ctx);
+			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
 			fileCharset = ctx.fileCharset;
 			streamCharset = ctx.streamCharset;
@@ -171,7 +174,7 @@ public class ReaderParserSession extends ParserSession {
 		 *
 		 * @param value
 		 * 	The new property value.
-		 * 	<br>Can be <jk>null</jk>.
+		 * 	<br>Can be <jk>null</jk> (defaults to UTF-8).
 		 * @return This object.
 		 */
 		public Builder streamCharset(Charset value) {
@@ -202,10 +205,11 @@ public class ReaderParserSession extends ParserSession {
 	 * Creates a new builder for this object.
 	 *
 	 * @param ctx The context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(ReaderParser ctx) {
-		return new Builder(ctx);
+		return new Builder(assertArgNotNull("ctx", ctx));
 	}
 
 	private final ReaderParser ctx;

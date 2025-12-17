@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -50,9 +52,10 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 		 * Constructor
 		 *
 		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(XmlDocSerializer ctx) {
-			super(ctx);
+			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -180,10 +183,11 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 	 * Creates a new builder for this object.
 	 *
 	 * @param ctx The context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(XmlDocSerializer ctx) {
-		return new Builder(ctx);
+		return new Builder(assertArgNotNull("ctx", ctx));
 	}
 
 	/**

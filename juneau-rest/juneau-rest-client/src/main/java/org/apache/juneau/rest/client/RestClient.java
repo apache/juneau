@@ -1097,6 +1097,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param value
 		 * 	The new header value.
+		 * 	<br>Can be <jk>null</jk> (no Accept header will be added).
 		 * @return This object.
 		 * @see #headers()
 		 */
@@ -1111,6 +1112,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(AcceptCharset.<jsm>of</jsm>(<jv>value</jv>))</c>.
 		 *
 		 * @param value The new header value.
+		 * 	<br>Can be <jk>null</jk> (no Accept-Charset header will be added).
 		 * @return This object.
 		 * @see #headers()
 		 */
@@ -1179,11 +1181,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param itcp New property value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 * @see HttpClientBuilder#addInterceptorFirst(HttpRequestInterceptor)
 		 */
 		public Builder addInterceptorFirst(HttpRequestInterceptor itcp) {
-			httpClientBuilder().addInterceptorFirst(itcp);
+			httpClientBuilder().addInterceptorFirst(assertArgNotNull("itcp", itcp));
 			return this;
 		}
 
@@ -1195,11 +1198,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param itcp New property value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 * @see HttpClientBuilder#addInterceptorFirst(HttpResponseInterceptor)
 		 */
 		public Builder addInterceptorFirst(HttpResponseInterceptor itcp) {
-			httpClientBuilder().addInterceptorFirst(itcp);
+			httpClientBuilder().addInterceptorFirst(assertArgNotNull("itcp", itcp));
 			return this;
 		}
 
@@ -1211,11 +1215,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param itcp New property value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 * @see HttpClientBuilder#addInterceptorLast(HttpRequestInterceptor)
 		 */
 		public Builder addInterceptorLast(HttpRequestInterceptor itcp) {
-			httpClientBuilder().addInterceptorLast(itcp);
+			httpClientBuilder().addInterceptorLast(assertArgNotNull("itcp", itcp));
 			return this;
 		}
 
@@ -1227,11 +1232,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param itcp New property value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 * @see HttpClientBuilder#addInterceptorLast(HttpResponseInterceptor)
 		 */
 		public Builder addInterceptorLast(HttpResponseInterceptor itcp) {
-			httpClientBuilder().addInterceptorLast(itcp);
+			httpClientBuilder().addInterceptorLast(assertArgNotNull("itcp", itcp));
 			return this;
 		}
 
@@ -1316,6 +1322,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link BackoffManager} instance.
 		 *
 		 * @param backoffManager New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setBackoffManager(BackoffManager)
 		 */
@@ -1337,9 +1344,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * @param host The auth scope hostname.
+		 * 	<br>Can be <jk>null</jk> (will use <js>"*"</js> as the hostname).
 		 * @param port The auth scope port.
 		 * @param user The username.
+		 * 	<br>Can be <jk>null</jk> (will use empty string).
 		 * @param pw The password.
+		 * 	<br>Can be <jk>null</jk> (will use empty string).
 		 * @return This object.
 		 */
 		public Builder basicAuth(String host, int port, String user, String pw) {
@@ -1557,11 +1567,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param value
 		 * 	The new value for this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 * @see #callHandler()
 		 */
 		public Builder callHandler(Class<? extends RestCallHandler> value) {
-			callHandler().type(value);
+			callHandler().type(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -1572,6 +1583,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(ClientVersion.<jsm>of</jsm>(<jv>value</jv>))</c>.
 		 *
 		 * @param value The version string (e.g. <js>"1.2.3"</js>)
+		 * 	<br>Can be <jk>null</jk> (no Client-Version header will be added).
 		 * @return This object.
 		 * @see #headers()
 		 */
@@ -1583,6 +1595,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link ConnectionBackoffStrategy} instance.
 		 *
 		 * @param connectionBackoffStrategy New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setConnectionBackoffStrategy(ConnectionBackoffStrategy)
 		 */
@@ -1595,6 +1608,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link HttpClientConnectionManager} instance.
 		 *
 		 * @param value New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, a default connection manager will be created).
 		 * @return This object.
 		 * @see HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)
 		 */
@@ -1624,6 +1638,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link ConnectionReuseStrategy} instance.
 		 *
 		 * @param reuseStrategy New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setConnectionReuseStrategy(ConnectionReuseStrategy)
 		 */
@@ -1641,6 +1656,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param connTimeToLive New property value.
 		 * @param connTimeToLiveTimeUnit New property value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 * @see HttpClientBuilder#setConnectionTimeToLive(long,TimeUnit)
 		 */
@@ -1657,6 +1673,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param value
 		 * 	The new value for this setting.
+		 * 	<br>Can be <jk>null</jk> (defaults to <c>System.err</c>).
 		 * @return This object.
 		 */
 		public Builder console(PrintStream value) {
@@ -1668,6 +1685,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns a map of {@link org.apache.http.client.entity.InputStreamFactory InputStreamFactories} to be used for automatic content decompression.
 		 *
 		 * @param contentDecoderMap New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setContentDecoderRegistry(Map)
 		 */
@@ -1686,6 +1704,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This overrides the media type specified on the serializer.
 		 *
 		 * @param value The new header value.
+		 * 	<br>Can be <jk>null</jk> (no Content-Type header will be added).
 		 * @return This object.
 		 * @see #headers()
 		 */
@@ -1760,6 +1779,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns default {@link org.apache.http.auth.AuthScheme} registry which will be used for request execution if not explicitly set in the client execution context.
 		 *
 		 * @param authSchemeRegistry New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultAuthSchemeRegistry(Lookup)
 		 */
@@ -1776,6 +1796,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param config New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultConnectionConfig(ConnectionConfig)
 		 */
@@ -1788,6 +1809,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns default {@link CookieSpec} registry which will be used for request execution if not explicitly set in the client execution context.
 		 *
 		 * @param cookieSpecRegistry New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultCookieSpecRegistry(Lookup)
 		 */
@@ -1800,6 +1822,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns default {@link CookieStore} instance which will be used for request execution if not explicitly set in the client execution context.
 		 *
 		 * @param cookieStore New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultCookieStore(CookieStore)
 		 */
@@ -1812,6 +1835,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns default {@link CredentialsProvider} instance which will be used for request execution if not explicitly set in the client execution context.
 		 *
 		 * @param credentialsProvider New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultCredentialsProvider(CredentialsProvider)
 		 */
@@ -1824,6 +1848,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns default {@link RequestConfig} instance which will be used for request execution if not explicitly set in the client execution context.
 		 *
 		 * @param config New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultRequestConfig(RequestConfig)
 		 */
@@ -1840,6 +1865,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param config New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultSocketConfig(SocketConfig)
 		 */
@@ -2065,6 +2091,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default value is <code>x -&gt; x &gt;= 400</code>.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder errorCodes(Predicate<Integer> value) {
@@ -2100,6 +2127,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param maxIdleTime New property value.
 		 * @param maxIdleTimeUnit New property value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 * @see HttpClientBuilder#evictIdleConnections(long,TimeUnit)
 		 */
@@ -2155,6 +2183,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * @param executorService The executor service.
+		 * 	<br>Can be <jk>null</jk> (a default executor service will be created if needed).
 		 * @param shutdownOnClose Call {@link ExecutorService#shutdown()} when {@link RestClient#close()} is called.
 		 * @return This object.
 		 */
@@ -2229,6 +2258,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param parts
 		 * 	The form-data parameters.
+		 * 	<br>Can contain <jk>null</jk> values (ignored).
 		 * @return This object.
 		 * @see #formData()
 		 */
@@ -2252,7 +2282,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>formData().append(<jv>name</jv>,<jv>value</jv>)</c>.
 		 *
 		 * @param name The parameter name.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param value The parameter value.
+		 * 	<br>Can be <jk>null</jk> (null value will be serialized).
 		 * @return This object.
 		 * @see #formData()
 		 */
@@ -2276,7 +2308,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>formData().append(<jv>name</jv>,<jv>value</jv>)</c>.
 		 *
 		 * @param name The parameter name.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param value The parameter value supplier.
+		 * 	<br>Can be <jk>null</jk> (null value will be serialized).
 		 * @return This object.
 		 * @see #formData()
 		 */
@@ -2303,6 +2337,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>formData().setDefault(<jv>parts</jv>)</c>.
 		 *
 		 * @param parts The parts.
+		 * 	<br>Can contain <jk>null</jk> values (ignored).
 		 * @return This object.
 		 * @see #formData()
 		 */
@@ -2337,7 +2372,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(<jv>name</jv>,<jv>value</jv>)</c>.
 		 *
 		 * @param name The header name.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param value The header value.
+		 * 	<br>Can be <jk>null</jk> (null value will be serialized).
 		 * @return This object.
 		 * @see #headers()
 		 */
@@ -2361,7 +2398,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(<jv>name</jv>,<jv>value</jv>)</c>.
 		 *
 		 * @param name The header name.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param value The header value supplier.
+		 * 	<br>Can be <jk>null</jk> (null value will be serialized).
 		 * @return This object.
 		 * @see #headers()
 		 */
@@ -2431,6 +2470,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param parts
 		 * 	The header to set.
+		 * 	<br>Can contain <jk>null</jk> values (ignored).
 		 * @return This object.
 		 * @see #headers()
 		 */
@@ -2457,6 +2497,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().setDefault(<jv>parts</jv>)</c>.
 		 *
 		 * @param parts The header values.
+		 * 	<br>Can contain <jk>null</jk> values (ignored).
 		 * @return This object.
 		 * @see #headers()
 		 */
@@ -2616,6 +2657,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * @param value The {@link HttpClient} to be used to handle all HTTP communications with the target server.
+		 * 	<br>Can be <jk>null</jk> (a default client will be created).
 		 * @return This object.
 		 */
 		public Builder httpClient(CloseableHttpClient value) {
@@ -2650,6 +2692,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * @param value The {@link HttpClientBuilder} that will be used to create the {@link HttpClient} used by {@link RestClient}.
+		 * 	<br>Can be <jk>null</jk> (a default builder will be created).
 		 * @return This object.
 		 */
 		public Builder httpClientBuilder(HttpClientBuilder value) {
@@ -2883,6 +2926,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 		<li class='jic'>{@link HttpRequestInterceptor}
 		 * 		<li class='jic'>{@link HttpResponseInterceptor}
 		 * 	</ul>
+		 * 	<br>Can contain <jk>null</jk> values (ignored).
 		 * @return This object.
 		 * @throws Exception If one or more interceptors could not be created.
 		 */
@@ -2948,6 +2992,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 		<li class='jic'>{@link HttpRequestInterceptor}
 		 * 		<li class='jic'>{@link HttpResponseInterceptor}
 		 * 	</ul>
+		 * 	<br>Can contain <jk>null</jk> values (ignored).
 		 * @return This object.
 		 */
 		public Builder interceptors(Object...value) {
@@ -3078,6 +3123,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link ConnectionKeepAliveStrategy} instance.
 		 *
 		 * @param keepAliveStrategy New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setKeepAliveStrategy(ConnectionKeepAliveStrategy)
 		 */
@@ -3182,6 +3228,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * @param value The logger to use for logging.
+		 * 	<br>Can be <jk>null</jk> (defaults to <c>Logger.getLogger(RestClient.class.getName())</c>).
 		 * @return This object.
 		 */
 		public Builder logger(Logger value) {
@@ -3288,6 +3335,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * @param value The values to add to this setting.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, existing serializers and parsers will be kept).
 		 * @return This object.
 		 */
 		public Builder marshaller(Marshaller value) {
@@ -3318,6 +3366,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * @param value The values to add to this setting.
+		 * 	<br>Can contain <jk>null</jk> values (ignored).
 		 * @return This object.
 		 */
 		public Builder marshallers(Marshaller...value) {
@@ -3440,6 +3489,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(Accept.<jsm>of</jsm>(<jv>value</jv>), ContentType.<jsm>of</jsm>(<jv>value</jv>))</c>.
 		 *
 		 * @param value The new header values.
+		 * 	<br>Can be <jk>null</jk> (no Accept or Content-Type headers will be added).
 		 * @return This object.
 		 * @see #headers()
 		 */
@@ -3459,6 +3509,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(Accept.<jsm>of</jsm>(<jv>value</jv>), ContentType.<jsm>of</jsm>(<jv>value</jv>))</c>.
 		 *
 		 * @param value The new header values.
+		 * 	<br>Can be <jk>null</jk> (no Accept or Content-Type headers will be added).
 		 * @return This object.
 		 * @see #headers()
 		 */
@@ -3595,6 +3646,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default value is {@link HttpPartCollectionFormat#NO_COLLECTION_FORMAT}.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder oapiCollectionFormat(HttpPartCollectionFormat value) {
@@ -3653,6 +3705,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default value is {@link HttpPartFormat#NO_FORMAT}.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder oapiFormat(HttpPartFormat value) {
@@ -3751,6 +3804,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder paramFormat(ParamFormat value) {
@@ -3859,6 +3913,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default value is {@link JsonParser#DEFAULT}.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder parser(Parser value) {
@@ -3911,6 +3966,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder parsers(Class<? extends Parser>...value) {
+			assertVarargsNotNull("value", value);
 			parsers().add(value);
 			return this;
 		}
@@ -3949,6 +4005,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		public Builder parsers(Parser...value) {
+			assertVarargsNotNull("value", value);
 			parsers().add(value);
 			return this;
 		}
@@ -3985,10 +4042,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default value is {@link OpenApiParser}.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder partParser(Class<? extends HttpPartParser> value) {
-			partParser().type(value);
+			partParser().type(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -4013,10 +4071,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default value is {@link OpenApiParser}.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder partParser(HttpPartParser value) {
-			partParser().impl(value);
+			partParser().impl(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -4052,10 +4111,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default value is {@link OpenApiSerializer}.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder partSerializer(Class<? extends HttpPartSerializer> value) {
-			partSerializer().type(value);
+			partSerializer().type(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -4080,10 +4140,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default value is {@link OpenApiSerializer}.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder partSerializer(HttpPartSerializer value) {
-			partSerializer().impl(value);
+			partSerializer().impl(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -4140,6 +4201,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param parts
 		 * 	The path parameters.
+		 * 	<br>Can contain <jk>null</jk> values (ignored).
 		 * @return This object.
 		 * @see #pathData()
 		 */
@@ -4163,7 +4225,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>pathData().append(<jv>name</jv>,<jv>value</jv>)</c>.
 		 *
 		 * @param name The parameter name.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param value The parameter value.
+		 * 	<br>Can be <jk>null</jk> (null value will be serialized).
 		 * @return This object.
 		 * @see #pathData()
 		 */
@@ -4187,7 +4251,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>pathData().append(<jv>name</jv>,<jv>value</jv>)</c>.
 		 *
 		 * @param name The parameter name.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param value The parameter value supplier.
+		 * 	<br>Can be <jk>null</jk> (null value will be serialized).
 		 * @return This object.
 		 * @see #pathData()
 		 */
@@ -4214,6 +4280,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>pathData().setDefault(<jv>parts</jv>)</c>.
 		 *
 		 * @param parts The parts.
+		 * 	<br>Can contain <jk>null</jk> values (ignored).
 		 * @return This object.
 		 * @see #pathData()
 		 */
@@ -4308,6 +4375,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param proxy New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setProxy(HttpHost)
 		 */
@@ -4320,6 +4388,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link AuthenticationStrategy} instance for proxy authentication.
 		 *
 		 * @param proxyAuthStrategy New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setProxyAuthenticationStrategy(AuthenticationStrategy)
 		 */
@@ -4336,6 +4405,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param publicSuffixMatcher New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setPublicSuffixMatcher(PublicSuffixMatcher)
 		 */
@@ -4397,6 +4467,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param parts
 		 * 	The query parameters.
+		 * 	<br>Can contain <jk>null</jk> values (ignored).
 		 * @return This object.
 		 * @see #queryData()
 		 */
@@ -4420,7 +4491,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>queryData().append(<jv>name</jv>,<jv>value</jv>)</c>.
 		 *
 		 * @param name The parameter name.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param value The parameter value.
+		 * 	<br>Can be <jk>null</jk> (null value will be serialized).
 		 * @return This object.
 		 * @see #queryData()
 		 */
@@ -4444,7 +4517,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>queryData().append(<jv>name</jv>,<jv>value</jv>)</c>.
 		 *
 		 * @param name The parameter name.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param value The parameter value supplier.
+		 * 	<br>Can be <jk>null</jk> (null value will be serialized).
 		 * @return This object.
 		 * @see #queryData()
 		 */
@@ -4471,6 +4546,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>queryData().setDefault(<jv>parts</jv>)</c>.
 		 *
 		 * @param parts The parts.
+		 * 	<br>Can contain <jk>null</jk> values (ignored).
 		 * @return This object.
 		 * @see #queryData()
 		 */
@@ -4531,6 +4607,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param redirectStrategy New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setRedirectStrategy(RedirectStrategy)
 		 */
@@ -4543,6 +4620,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link HttpRequestExecutor} instance.
 		 *
 		 * @param requestExec New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setRequestExecutor(HttpRequestExecutor)
 		 */
@@ -4559,6 +4637,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param retryHandler New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setRetryHandler(HttpRequestRetryHandler)
 		 */
@@ -4593,6 +4672,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	The root URI to prefix to relative URI strings.
 		 * 	<br>Trailing slashes are trimmed.
 		 * 	<br>Usually a <c>String</c> but you can also pass in <c>URI</c> and <c>URL</c> objects as well.
+		 * 	<br>Can be <jk>null</jk> (no root URL will be set).
 		 * @return This object.
 		 */
 		public Builder rootUrl(Object value) {
@@ -4612,6 +4692,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link HttpRoutePlanner} instance.
 		 *
 		 * @param routePlanner New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setRoutePlanner(HttpRoutePlanner)
 		 */
@@ -4624,6 +4705,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link SchemePortResolver} instance.
 		 *
 		 * @param schemePortResolver New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setSchemePortResolver(SchemePortResolver)
 		 */
@@ -4693,6 +4775,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is {@link JsonSerializer}.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder serializer(Serializer value) {
@@ -4745,6 +4828,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder serializers(Class<? extends Serializer>...value) {
+			assertVarargsNotNull("value", value);
 			serializers().add(value);
 			return this;
 		}
@@ -4783,6 +4867,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		public Builder serializers(Serializer...value) {
+			assertVarargsNotNull("value", value);
 			serializers().add(value);
 			return this;
 		}
@@ -4791,6 +4876,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link ServiceUnavailableRetryStrategy} instance.
 		 *
 		 * @param serviceUnavailStrategy New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setServiceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy)
 		 */
@@ -5045,6 +5131,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param sslContext New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setSSLContext(SSLContext)
 		 */
@@ -5062,6 +5149,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param hostnameVerifier New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setSSLHostnameVerifier(HostnameVerifier)
 		 */
@@ -5078,6 +5166,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param sslSocketFactory New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setSSLSocketFactory(LayeredConnectionSocketFactory)
 		 */
@@ -5185,6 +5274,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link AuthenticationStrategy} instance for target host authentication.
 		 *
 		 * @param targetAuthStrategy New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setTargetAuthenticationStrategy(AuthenticationStrategy)
 		 */
@@ -5532,10 +5622,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder uriContext(UriContext value) {
-			serializers().forEach(x -> x.uriContext(value));
+			serializers().forEach(x -> x.uriContext(assertArgNotNull("value", value)));
 			return this;
 		}
 
@@ -5568,10 +5659,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is {@link UriRelativity#RESOURCE}
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder uriRelativity(UriRelativity value) {
-			serializers().forEach(x -> x.uriRelativity(value));
+			serializers().forEach(x -> x.uriRelativity(assertArgNotNull("value", value)));
 			return this;
 		}
 
@@ -5606,10 +5698,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is {@link UriResolution#NONE}
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder uriResolution(UriResolution value) {
-			serializers().forEach(x -> x.uriResolution(value));
+			serializers().forEach(x -> x.uriResolution(assertArgNotNull("value", value)));
 			return this;
 		}
 
@@ -5688,6 +5781,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param userTokenHandler New property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, default behavior will be used).
 		 * @return This object.
 		 * @see HttpClientBuilder#setUserTokenHandler(UserTokenHandler)
 		 */
@@ -6163,6 +6257,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * The payload will always be sent using a simple {@link StringEntity}.
 	 *
 	 * @param callString The call string.
+	 * 	<br>Can be <jk>null</jk> or empty (treated as empty string, will result in an invalid request).
 	 * @return
 	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
 	 * 	as a parsed object.
@@ -6784,6 +6879,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 *
 	 * @param <T> The interface to create a proxy for.
 	 * @param interfaceClass The interface to create a proxy for.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return The new proxy interface.
 	 * @throws RemoteMetadataException If the REST URI cannot be determined based on the information given.
 	 */
@@ -6800,7 +6896,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 *
 	 * @param <T> The interface to create a proxy for.
 	 * @param interfaceClass The interface to create a proxy for.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param rootUrl The URI of the REST interface.
+	 * 	<br>Can be <jk>null</jk> (will use the root URL from the client builder if set).
 	 * @return The new proxy interface.
 	 */
 	public <T> T getRemote(Class<T> interfaceClass, Object rootUrl) {
@@ -6816,9 +6914,13 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 	 * @param <T> The interface to create a proxy for.
 	 * @param interfaceClass The interface to create a proxy for.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param rootUrl The URI of the REST interface.
+	 * 	<br>Can be <jk>null</jk> (will use the root URL from the client builder if set).
 	 * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.
+	 * 	<br>Can be <jk>null</jk> (will use the default serializer from the client).
 	 * @param parser The parser used to parse POJOs from the body of the HTTP response.
+	 * 	<br>Can be <jk>null</jk> (will use the default parser from the client).
 	 * @return The new proxy interface.
 	 */
 	@SuppressWarnings({ "unchecked" })
@@ -6846,8 +6948,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				var httpMethod = rom.getHttpMethod();
 				var rc = request(httpMethod, uri, hasContent(httpMethod));
 
-				rc.serializer(serializer);
-				rc.parser(parser);
+				if (serializer != null) rc.serializer(serializer);
+				if (parser != null) rc.parser(parser);
 
 				rm.getHeaders().forEach(x -> rc.header(x));
 
@@ -7017,6 +7119,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 *
 	 * @param <T> The interface to create a proxy for.
 	 * @param interfaceClass The interface to create a proxy for.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return The new proxy interface.
 	 * @throws RemoteMetadataException If the REST URI cannot be determined based on the information given.
 	 */
@@ -7033,7 +7136,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 *
 	 * @param <T> The interface to create a proxy for.
 	 * @param interfaceClass The interface to create a proxy for.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param uri The URI of the REST interface.
+	 * 	<br>Can be <jk>null</jk> (will use the root URL from the client builder if set).
 	 * @return The new proxy interface.
 	 */
 	public <T> T getRrpcInterface(Class<T> interfaceClass, Object uri) {
@@ -7049,9 +7154,13 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 *
 	 * @param <T> The interface to create a proxy for.
 	 * @param interfaceClass The interface to create a proxy for.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param uri The URI of the REST interface.
+	 * 	<br>Can be <jk>null</jk> (will use the root URL from the client builder if set).
 	 * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.
+	 * 	<br>Can be <jk>null</jk> (will use the default serializer from the client).
 	 * @param parser The parser used to parse POJOs from the body of the HTTP response.
+	 * 	<br>Can be <jk>null</jk> (will use the default parser from the client).
 	 * @return The new proxy interface.
 	 */
 	@SuppressWarnings({ "unchecked" })
@@ -7446,6 +7555,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * Perform a generic REST call.
 	 *
 	 * @param method The HTTP method.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param uri
 	 * 	The URI of the remote REST resource.
 	 * 	<br>Can be any of the following types:
@@ -7456,6 +7566,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * 		<li>{@link String}
 	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
 	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> (will result in an invalid request).
 	 * @return
 	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
 	 * 	as a parsed object.
@@ -7473,6 +7584,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * but this method is provided to allow you to perform non-standard HTTP methods (e.g. HTTP FOO).
 	 *
 	 * @param method The method name (e.g. <js>"GET"</js>, <js>"OPTIONS"</js>).
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param uri
 	 * 	The URI of the remote REST resource.
 	 * 	<br>Can be any of the following types:
@@ -7483,6 +7595,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * 		<li>{@link String}
 	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
 	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> (will result in an invalid request).
 	 * @param hasBody Boolean flag indicating if the specified request has content associated with it.
 	 * @return
 	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
@@ -7497,6 +7610,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * Perform a generic REST call.
 	 *
 	 * @param method The HTTP method.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param uri
 	 * 	The URI of the remote REST resource.
 	 * 	<br>Can be any of the following types:
@@ -7507,6 +7621,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * 		<li>{@link String}
 	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
 	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> (will result in an invalid request).
 	 * @param body
 	 * 	The HTTP body content.
 	 * 	Can be of the following types:
@@ -7696,7 +7811,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * Logs a message.
 	 *
 	 * @param level The log level.
-	 * @param t Thrown exception.  Can be <jk>null</jk>.
+	 * @param t Thrown exception.
+	 * 	<br>Can be <jk>null</jk> (no exception stack trace will be logged).
 	 * @param msg The message.
 	 * @param args Optional message arguments.
 	 */

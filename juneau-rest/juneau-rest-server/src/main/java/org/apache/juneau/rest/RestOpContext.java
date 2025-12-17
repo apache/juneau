@@ -17,6 +17,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -217,11 +218,13 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @param <T> The class to associate this bean with.
 		 * @param beanType The class to associate this bean with.
-		 * @param bean The bean.  Can be <jk>null</jk>.
+		 * 	<br>Cannot be <jk>null</jk>.
+		 * @param bean The bean.
+		 * 	<br>Can be <jk>null</jk> (a null bean will be stored in the bean store).
 		 * @return This object.
 		 */
 		public <T> Builder beanStore(Class<T> beanType, T bean) {
-			beanStore().addBean(beanType, bean);
+			beanStore().addBean(assertArgNotNull("beanType", beanType), bean);
 			return this;
 		}
 
@@ -236,12 +239,15 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @param <T> The class to associate this bean with.
 		 * @param beanType The class to associate this bean with.
-		 * @param bean The bean.  Can be <jk>null</jk>.
-		 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
+		 * 	<br>Cannot be <jk>null</jk>.
+		 * @param bean The bean.
+		 * 	<br>Can be <jk>null</jk> (a null bean will be stored in the bean store).
+		 * @param name The bean name if this is a named bean.
+		 * 	<br>Can be <jk>null</jk> (bean will be stored as an unnamed bean).
 		 * @return This object.
 		 */
 		public <T> Builder beanStore(Class<T> beanType, T bean, String name) {
-			beanStore().addBean(beanType, bean, name);
+			beanStore().addBean(assertArgNotNull("beanType", beanType), bean, name);
 			return this;
 		}
 
@@ -330,10 +336,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </ul>
 		 *
 		 * @param value The new value for this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder clientVersion(String value) {
-			clientVersion = value;
+			clientVersion = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -359,9 +366,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </ul>
 		 *
 		 * @param values The values to add to this setting.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder consumes(MediaType...values) {
+			assertVarargsNotNull("values", values);
 			consumes = addAll(consumes, values);
 			return this;
 		}
@@ -387,10 +396,12 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		@SafeVarargs
 		public final Builder converters(Class<? extends RestConverter>...value) {
+			assertVarargsNotNull("value", value);
 			converters().append(value);
 			return this;
 		}
@@ -405,9 +416,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder converters(RestConverter...value) {
+			assertVarargsNotNull("value", value);
 			converters().append(value);
 			return this;
 		}
@@ -443,10 +456,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * If not sppecified, the debug enablement is inherited from the class context.
 		 *
 		 * @param value The new value for this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder debug(Enablement value) {
-			debug = value;
+			debug = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -473,10 +487,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 		<li>Environment variable <js>"RESTCONTEXT_defaultCharset"
 		 * 		<li><js>"utf-8"</js>
 		 * 	</ul>
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder defaultCharset(Charset value) {
-			defaultCharset = value;
+			defaultCharset = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -521,9 +536,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder defaultRequestAttributes(NamedAttribute...value) {
+			assertVarargsNotNull("value", value);
 			defaultRequestAttributes().add(value);
 			return this;
 		}
@@ -549,9 +566,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder defaultRequestFormData(NameValuePair...value) {
+			assertVarargsNotNull("value", value);
 			defaultRequestFormData().append(value);
 			return this;
 		}
@@ -577,9 +596,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder defaultRequestHeaders(org.apache.http.Header...value) {
+			assertVarargsNotNull("value", value);
 			defaultRequestHeaders().append(value);
 			return this;
 		}
@@ -605,9 +626,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder defaultRequestQueryData(NameValuePair...value) {
+			assertVarargsNotNull("value", value);
 			defaultRequestQueryData().append(value);
 			return this;
 		}
@@ -633,9 +656,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder defaultResponseHeaders(org.apache.http.Header...value) {
+			assertVarargsNotNull("value", value);
 			defaultResponseHeaders().append(value);
 			return this;
 		}
@@ -671,10 +696,12 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		@SafeVarargs
 		public final Builder encoders(Class<? extends Encoder>...value) {
+			assertVarargsNotNull("value", value);
 			encoders().add(value);
 			return this;
 		}
@@ -689,9 +716,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder encoders(Encoder...value) {
+			assertVarargsNotNull("value", value);
 			encoders().add(value);
 			return this;
 		}
@@ -717,10 +746,12 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		@SafeVarargs
 		public final Builder guards(Class<? extends RestGuard>...value) {
+			assertVarargsNotNull("value", value);
 			guards().append(value);
 			return this;
 		}
@@ -735,9 +766,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder guards(RestGuard...value) {
+			assertVarargsNotNull("value", value);
 			guards().append(value);
 			return this;
 		}
@@ -795,10 +828,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </ul>
 		 *
 		 * @param value The new value for this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder httpMethod(String value) {
-			httpMethod = value;
+			httpMethod = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -829,10 +863,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder jsonSchemaGenerator(Class<? extends JsonSchemaGenerator> value) {
-			jsonSchemaGenerator().type(value);
+			jsonSchemaGenerator().type(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -846,10 +881,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder jsonSchemaGenerator(JsonSchemaGenerator value) {
-			jsonSchemaGenerator().impl(value);
+			jsonSchemaGenerator().impl(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -874,10 +910,12 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		@SafeVarargs
 		public final Builder matchers(Class<? extends RestMatcher>...value) {
+			assertVarargsNotNull("value", value);
 			matchers().append(value);
 			return this;
 		}
@@ -892,9 +930,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder matchers(RestMatcher...value) {
+			assertVarargsNotNull("value", value);
 			matchers().append(value);
 			return this;
 		}
@@ -956,10 +996,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 		<li><js>"100M"</js>
 		 * 	</ul>
 		 * 	<br>The default is <js>"100M"</js>.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder maxInput(String value) {
-			maxInput = parseLongWithSuffix(value);
+			maxInput = parseLongWithSuffix(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -984,10 +1025,12 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		@SafeVarargs
 		public final Builder parsers(Class<? extends Parser>...value) {
+			assertVarargsNotNull("value", value);
 			parsers().add(value);
 			return this;
 		}
@@ -1002,9 +1045,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder parsers(Parser...value) {
+			assertVarargsNotNull("value", value);
 			parsers().add(value);
 			return this;
 		}
@@ -1030,10 +1075,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder partParser(Class<? extends HttpPartParser> value) {
-			partParser().type(value);
+			partParser().type(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -1047,10 +1093,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder partParser(HttpPartParser value) {
-			partParser().impl(value);
+			partParser().impl(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -1075,10 +1122,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder partSerializer(Class<? extends HttpPartSerializer> value) {
-			partSerializer().type(value);
+			partSerializer().type(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -1092,10 +1140,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * @param value The new value.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder partSerializer(HttpPartSerializer value) {
-			partSerializer().impl(value);
+			partSerializer().impl(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -1115,9 +1164,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </ul>
 		 *
 		 * @param values The new values for this setting.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder path(String...values) {
+			assertVarargsNotNull("values", values);
 			path = prependAll(path, values);
 			return this;
 		}
@@ -1146,9 +1197,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </ul>
 		 *
 		 * @param values The values to add to this setting.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder produces(MediaType...values) {
+			assertVarargsNotNull("values", values);
 			produces = addAll(produces, values);
 			return this;
 		}
@@ -1206,13 +1259,14 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </ul>
 		 *
 		 * @param value The values to add to this setting.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder roleGuard(String value) {
 			if (roleGuard == null)
-				roleGuard = set(value);
+				roleGuard = set(assertArgNotNull("value", value));
 			else
-				roleGuard.add(value);
+				roleGuard.add(assertArgNotNull("value", value));
 			return this;
 		}
 
@@ -1241,9 +1295,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </ul>
 		 *
 		 * @param values The values to add to this setting.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder rolesDeclared(String...values) {
+			assertVarargsNotNull("values", values);
 			rolesDeclared = addAll(rolesDeclared, values);
 			return this;
 		}
@@ -1269,10 +1325,12 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		@SafeVarargs
 		public final Builder serializers(Class<? extends Serializer>...value) {
+			assertVarargsNotNull("value", value);
 			serializers().add(value);
 			return this;
 		}
@@ -1287,9 +1345,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * @param value The values to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder serializers(Serializer...value) {
+			assertVarargsNotNull("value", value);
 			serializers().add(value);
 			return this;
 		}

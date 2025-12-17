@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.httppart;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
 
@@ -31,6 +33,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 public abstract class BaseHttpPartSerializer extends BeanContextable implements HttpPartSerializer {
+
 	/**
 	 * Builder class.
 	 */
@@ -44,9 +47,10 @@ public abstract class BaseHttpPartSerializer extends BeanContextable implements 
 		/**
 		 * Copy constructor.
 		 * @param builder The existing builder to copy.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder builder) {
-			super(builder);
+			super(assertArgNotNull("builder", builder));
 		}
 	}
 
@@ -67,11 +71,13 @@ public abstract class BaseHttpPartSerializer extends BeanContextable implements 
 	 * Returned values should NOT be URL-encoded.
 	 *
 	 * @param partType The category of value being serialized.
+	 * 	<br>Can be <jk>null</jk> (will default to {@link HttpPartType#OTHER}).
 	 * @param schema
 	 * 	Schema information about the part.
-	 * 	<br>May be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>.
 	 * 	<br>Not all part serializers use the schema information.
 	 * @param value The value being serialized.
+	 * 	<br>Can be <jk>null</jk> (will return <jk>null</jk>).
 	 * @return The serialized value.
 	 * @throws SerializeException If a problem occurred while trying to parse the input.
 	 * @throws SchemaValidationException If the output fails schema validation.

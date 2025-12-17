@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.msgpack;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
 import java.lang.annotation.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -44,6 +46,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvider {
+
 	/** Default parser, string input encoded as BASE64. */
 	public static class Base64 extends MsgPackParser {
 
@@ -75,18 +78,20 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 		}
 
 		/**
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(MsgPackParser copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 		}
 
 		@Override /* Overridden from Builder */

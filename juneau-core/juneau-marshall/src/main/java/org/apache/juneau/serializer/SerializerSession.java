@@ -17,6 +17,7 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -79,9 +80,10 @@ public class SerializerSession extends BeanTraverseSession {
 		 * Constructor
 		 *
 		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Serializer ctx) {
-			super(ctx);
+			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
 			uriContext = ctx.uriContext;
 			mediaTypeDefault(ctx.getResponseContentType());
@@ -109,7 +111,7 @@ public class SerializerSession extends BeanTraverseSession {
 		 *
 		 * @param value
 		 * 	The new property value.
-		 * 	<br>Can be <jk>null</jk>.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, existing value will be kept).
 		 * @return This object.
 		 */
 		public Builder javaMethod(Method value) {
@@ -162,7 +164,7 @@ public class SerializerSession extends BeanTraverseSession {
 		 *
 		 * @param value
 		 * 	The new property value.
-		 * 	<br>Can be <jk>null</jk>.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, defaults to session created by {@link VarResolver#DEFAULT} when accessed).
 		 * @return This object.
 		 */
 		public Builder resolver(VarResolverSession value) {
@@ -179,7 +181,7 @@ public class SerializerSession extends BeanTraverseSession {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>Can be <jk>null</jk>.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, existing value will be kept).
 		 * @return This object.
 		 */
 		public Builder schema(HttpPartSchema value) {
@@ -231,7 +233,7 @@ public class SerializerSession extends BeanTraverseSession {
 		 *
 		 * @param value
 		 * 	The new property value.
-		 * 	<br>Can be <jk>null</jk>.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, defaults to {@link Serializer.Builder#uriContext(UriContext)} from context).
 		 * @return This object.
 		 */
 		public Builder uriContext(UriContext value) {
@@ -245,10 +247,11 @@ public class SerializerSession extends BeanTraverseSession {
 	 * Creates a new builder for this object.
 	 *
 	 * @param ctx The context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(Serializer ctx) {
-		return new Builder(ctx);
+		return new Builder(assertArgNotNull("ctx", ctx));
 	}
 
 	/**

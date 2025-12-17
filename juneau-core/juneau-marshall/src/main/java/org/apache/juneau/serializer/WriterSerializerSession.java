@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.serializer;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
@@ -63,9 +64,10 @@ public class WriterSerializerSession extends SerializerSession {
 		 * Constructor
 		 *
 		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(WriterSerializer ctx) {
-			super(ctx);
+			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
 			useWhitespace = ctx.useWhitespace;
 			fileCharset = ctx.fileCharset;
@@ -103,7 +105,7 @@ public class WriterSerializerSession extends SerializerSession {
 		 *
 		 * @param value
 		 * 	The new property value.
-		 * 	<br>Can be <jk>null</jk>.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, defaults to JVM system default charset).
 		 * @return This object.
 		 */
 		public Builder fileCharset(Charset value) {
@@ -186,7 +188,7 @@ public class WriterSerializerSession extends SerializerSession {
 		 *
 		 * @param value
 		 * 	The new property value.
-		 * 	<br>Can be <jk>null</jk>.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, defaults to UTF-8).
 		 * @return This object.
 		 */
 		public Builder streamCharset(Charset value) {
@@ -227,7 +229,7 @@ public class WriterSerializerSession extends SerializerSession {
 		 *
 		 * @param value
 		 * 	The new property value.
-		 * 	<br>Can be <jk>null</jk>.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, existing value from context will be kept).
 		 * @return This object.
 		 */
 		public Builder useWhitespace(Boolean value) {
@@ -241,10 +243,11 @@ public class WriterSerializerSession extends SerializerSession {
 	 * Creates a new builder for this object.
 	 *
 	 * @param ctx The context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(WriterSerializer ctx) {
-		return new Builder(ctx);
+		return new Builder(assertArgNotNull("ctx", ctx));
 	}
 
 	private final WriterSerializer ctx;

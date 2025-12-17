@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.serializer;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -108,9 +109,10 @@ public class Serializer extends BeanTraverseContext {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			produces = copyFrom.produces;
 			accept = copyFrom.accept;
 			addBeanTypes = copyFrom.addBeanTypes;
@@ -131,9 +133,10 @@ public class Serializer extends BeanTraverseContext {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Serializer copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			produces = copyFrom.produces;
 			accept = copyFrom.accept;
 			addBeanTypes = copyFrom.addBeanTypes;
@@ -168,6 +171,7 @@ public class Serializer extends BeanTraverseContext {
 		 * The accept value can also contain q-values.
 		 *
 		 * @param value The value for this setting.
+		 * 	<br>Can be <jk>null</jk> (will default to the value specified by {@link #produces(String)}).
 		 * @return This object.
 		 */
 		public Builder accept(String value) {
@@ -751,6 +755,7 @@ public class Serializer extends BeanTraverseContext {
 		 *
 		 * @param value
 		 * 	The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (no listener will be used, listener methods will not be called).
 		 * @return This object.
 		 */
 		public Builder listener(Class<? extends SerializerListener> value) {
@@ -792,6 +797,7 @@ public class Serializer extends BeanTraverseContext {
 		 * Specifies the media type that this serializer produces.
 		 *
 		 * @param value The value for this setting.
+		 * 	<br>Can be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder produces(String value) {
@@ -1136,6 +1142,7 @@ public class Serializer extends BeanTraverseContext {
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (defaults to <c>UriContext.DEFAULT</c>).
 		 * @return This object.
 		 */
 		public Builder uriContext(UriContext value) {
@@ -1171,6 +1178,7 @@ public class Serializer extends BeanTraverseContext {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is {@link UriRelativity#RESOURCE}
+		 * 	<br>Can be <jk>null</jk> (defaults to <c>UriRelativity.RESOURCE</c>).
 		 * @return This object.
 		 */
 		public Builder uriRelativity(UriRelativity value) {
@@ -1208,6 +1216,7 @@ public class Serializer extends BeanTraverseContext {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is {@link UriResolution#NONE}
+		 * 	<br>Can be <jk>null</jk> (defaults to <c>UriResolution.NONE</c>).
 		 * @return This object.
 		 */
 		public Builder uriResolution(UriResolution value) {

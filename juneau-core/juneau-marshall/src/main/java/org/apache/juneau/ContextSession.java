@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static java.util.Collections.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -52,9 +53,10 @@ public abstract class ContextSession {
 		 * Constructor.
 		 *
 		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Context ctx) {
-			this.ctx = ctx;
+			this.ctx = assertArgNotNull("ctx", ctx);
 			debug = ctx.isDebug();
 		}
 
@@ -63,12 +65,14 @@ public abstract class ContextSession {
 		 *
 		 * @param <T> The expected type.
 		 * @param type The expected type.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param apply	The consumer to apply.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
-			if (type.isInstance(this))
-				apply.accept(type.cast(this));
+			if (assertArgNotNull("type", type).isInstance(this))
+				assertArgNotNull("apply", apply).accept(type.cast(this));
 			return this;
 		}
 
@@ -127,16 +131,18 @@ public abstract class ContextSession {
 		 * Adds a property to this session.
 		 *
 		 * @param key The property key.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param value The property value.
+		 * 	<br>Can be <jk>null</jk> (removes the property).
 		 * @return This object.
 		 */
 		public Builder property(String key, Object value) {
 			if (properties == null)
 				properties = JsonMap.create();
 			if (value == null) {
-				properties.remove(key);
+				properties.remove(assertArgNotNull("key", key));
 			} else {
-				properties.put(key, value);
+				properties.put(assertArgNotNull("key", key), value);
 			}
 			return this;
 		}
@@ -165,9 +171,11 @@ public abstract class ContextSession {
 	/**
 	 * Default constructor.
 	 *
-	 * @param builder The builder for this object
+	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected ContextSession(Builder builder) {
+		assertArgNotNull("builder", builder);
 		ctx = builder.ctx;
 		unmodifiable = builder.unmodifiable;
 		var sp = builder.properties == null ? JsonMap.EMPTY_MAP : builder.properties;
@@ -181,14 +189,16 @@ public abstract class ContextSession {
 	 * Logs a warning message.
 	 *
 	 * @param msg The warning message.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * 	<br>Cannot contain <jk>null</jk> values.
 	 */
 	public void addWarning(String msg, Object...args) {
 		if (unmodifiable)
 			return;
 		if (warnings == null)
 			warnings = new LinkedList<>();
-		warnings.add((warnings.size() + 1) + ": " + f(msg, args));
+		warnings.add((warnings.size() + 1) + ": " + f(assertArgNotNull("msg", msg), assertVarargsNotNull("args", args)));
 	}
 
 	/**

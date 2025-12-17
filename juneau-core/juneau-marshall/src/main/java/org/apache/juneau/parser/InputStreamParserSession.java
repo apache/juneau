@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.parser;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -47,9 +49,10 @@ public class InputStreamParserSession extends ParserSession {
 		 * Constructor
 		 *
 		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(InputStreamParser ctx) {
-			super(ctx);
+			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -153,10 +156,11 @@ public class InputStreamParserSession extends ParserSession {
 	 * Creates a new builder for this object.
 	 *
 	 * @param ctx The context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(InputStreamParser ctx) {
-		return new Builder(ctx);
+		return new Builder(assertArgNotNull("ctx", ctx));
 	}
 
 	private final InputStreamParser ctx;

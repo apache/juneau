@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.jsonschema;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.jsonschema.TypeCategory.*;
@@ -56,9 +57,10 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		 * Constructor
 		 *
 		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(JsonSchemaGenerator ctx) {
-			super(ctx);
+			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
 		}
 
@@ -138,10 +140,11 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 * Creates a new builder for this object.
 	 *
 	 * @param ctx The context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
 	public static Builder create(JsonSchemaGenerator ctx) {
-		return new Builder(ctx);
+		return new Builder(assertArgNotNull("ctx", ctx));
 	}
 
 	private final JsonSchemaGenerator ctx;
@@ -164,12 +167,14 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 * Adds a schema definition to this session.
 	 *
 	 * @param id The definition ID.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @param def The definition schema.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public JsonSchemaGeneratorSession addBeanDef(String id, JsonMap def) {
 		if (nn(defs))
-			defs.put(id, def);
+			defs.put(assertArgNotNull("id", id), assertArgNotNull("def", def));
 		return this;
 	}
 

@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -106,8 +107,10 @@ public abstract class Context {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
+			assertArgNotNull("copyFrom", copyFrom);
 			debug = copyFrom.debug;
 			type = copyFrom.type;
 			annotations = copyOf(copyFrom.annotations);
@@ -118,8 +121,10 @@ public abstract class Context {
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Context copyFrom) {
+			assertArgNotNull("copyFrom", copyFrom);
 			debug = copyFrom.debug;
 			type = copyFrom.getClass();
 			annotations = copyOf(copyFrom.annotations);
@@ -295,9 +300,11 @@ public abstract class Context {
 		 *
 		 * @param values
 		 * 	The annotations to register with the context.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder annotations(Annotation...values) {
+			assertVarargsNotNull("values", values);
 			annotations.addAll(l(values));
 			return this;
 		}
@@ -307,10 +314,11 @@ public abstract class Context {
 		 *
 		 * @param values
 		 * 	The annotations to register with the context.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder annotations(List<Annotation> values) {
-			annotations.addAll(values);
+			annotations.addAll(assertArgNotNull("values", values));
 			return this;
 		}
 
@@ -340,9 +348,11 @@ public abstract class Context {
 		 * </p>
 		 *
 		 * @param work The list of annotations and appliers to apply to this builder.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder apply(AnnotationWorkList work) {
+			assertArgNotNull("work", work);
 			applied.addAll(work);
 			work.forEach(x -> builders.forEach(x::apply));
 			return this;
@@ -352,9 +362,11 @@ public abstract class Context {
 		 * Same as {@link #applyAnnotations(Object...)} but explicitly specifies a class varargs to avoid compilation warnings.
 		 *
 		 * @param from The classes or methods on which the annotations are defined.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder applyAnnotations(Class<?>...from) {
+			assertVarargsNotNull("from", from);
 			return applyAnnotations((Object[])from);
 		}
 
@@ -438,9 +450,11 @@ public abstract class Context {
 		 * 		<li>{@link Method}
 		 * 		<li>{@link MethodInfo}
 		 *		<li>A collection/stream/array of anything on this list.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder applyAnnotations(Object...from) {
+			assertVarargsNotNull("from", from);
 			var work = AnnotationWorkList.create();
 			Arrays.stream(from).forEach(x -> traverse(work, x));
 			return apply(work);
@@ -466,10 +480,11 @@ public abstract class Context {
 		 *
 		 * @param <T> The builder subtype.
 		 * @param subtype The builder subtype class to cast to.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return An {@link Optional} containing this builder cast to the subtype, or empty if not an instance.
 		 */
 		public <T extends Builder> Optional<T> asSubtype(Class<T> subtype) {
-			return opt(subtype.isInstance(this) ? subtype.cast(this) : null);
+			return opt(assertArgNotNull("subtype", subtype).isInstance(this) ? subtype.cast(this) : null);
 		}
 
 		/**
@@ -486,11 +501,12 @@ public abstract class Context {
 		 *
 		 * @param <T> The type to cast the built object to.
 		 * @param c The type to cast the built object to.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return The built context bean.
 		 */
 		@SuppressWarnings("unchecked")
 		public final <T extends Context> T build(Class<T> c) {
-			if (type == null || ! c.isAssignableFrom(type))
+			if (type == null || ! assertArgNotNull("c", c).isAssignableFrom(type))
 				type = c;
 			return (T)innerBuild();
 		}
@@ -498,7 +514,17 @@ public abstract class Context {
 		/**
 		 * Specifies a cache to use for hashkey-based caching.
 		 *
+		 * <p>
+		 * When a cache is specified, contexts with the same hash key will be reused from the cache
+		 * instead of creating new instances.  This improves performance when building multiple contexts
+		 * with identical configurations.
+		 *
+		 * <p>
+		 * If <jk>null</jk> is specified, caching is disabled and each call to {@link #build()} will
+		 * create a new context instance.
+		 *
 		 * @param value The cache.
+		 * 	<br>Can be <jk>null</jk> (disables caching, each build creates a new instance).
 		 * @return This object.
 		 */
 		public Builder cache(Cache<HashKey,? extends Context> value) {
@@ -510,10 +536,11 @@ public abstract class Context {
 		 * Returns <jk>true</jk> if any of the annotations/appliers can be applied to this builder.
 		 *
 		 * @param work The work to check.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return <jk>true</jk> if any of the annotations/appliers can be applied to this builder.
 		 */
 		public boolean canApply(AnnotationWorkList work) {
-			return work.stream().anyMatch(x -> builders.stream().anyMatch(b -> x.canApply(b)));
+			return assertArgNotNull("work", work).stream().anyMatch(x -> builders.stream().anyMatch(b -> x.canApply(b)));
 		}
 
 		/**
@@ -616,7 +643,12 @@ public abstract class Context {
 		/**
 		 * Specifies a pre-instantiated bean for the {@link #build()} method to return.
 		 *
+		 * <p>
+		 * If a non-null value is provided and it's an instance of the context type, {@link #build()} will return
+		 * that instance instead of creating a new one.  If <jk>null</jk>, the normal build process continues.
+		 *
 		 * @param value The value for this setting.
+		 * 	<br>Can be <jk>null</jk> (normal build process will continue).
 		 * @return This object.
 		 */
 		public Builder impl(Context value) {
@@ -640,7 +672,12 @@ public abstract class Context {
 		 * <p>
 		 * By default, it's the outer class of where the builder class is defined.
 		 *
+		 * <p>
+		 * If <jk>null</jk> is set, {@link #build()} will throw an exception.  The default constructor automatically
+		 * sets this to the outer class, so <jk>null</jk> should only be set explicitly if you want to override the default.
+		 *
 		 * @param value The context class that this builder should create.
+		 * 	<br>Can be <jk>null</jk> (will cause {@link #build()} to throw an exception).
 		 * @return This object.
 		 */
 		public Builder type(Class<? extends Context> value) {
@@ -655,8 +692,10 @@ public abstract class Context {
 		 * When {@link #apply(AnnotationWorkList)} is called, it gets called on all registered builders.
 		 *
 		 * @param values The builders to add to the list of builders.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 */
 		protected void registerBuilders(Object...values) {
+			assertVarargsNotNull("values", values);
 			for (var b : values) {
 				if (b == this)
 					builders.add(b);
@@ -785,6 +824,7 @@ public abstract class Context {
 	 * @return A new builder.
 	 */
 	public static Builder createBuilder(Class<? extends Context> type) {
+		assertArgNotNull("type", type);
 		try {
 			return ((Builder)BUILDER_CREATE_METHODS.get(type).invoke(null)).type(type);
 		} catch (ExecutableException e) {
@@ -817,8 +857,10 @@ public abstract class Context {
 	 * Constructor for this class.
 	 *
 	 * @param builder The builder for this class.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected Context(Builder builder) {
+		assertArgNotNull("builder", builder);
 		init(builder);
 		debug = builder.debug;
 		annotations = copyOf(builder.annotations);

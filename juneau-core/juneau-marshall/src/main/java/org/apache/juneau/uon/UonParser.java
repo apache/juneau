@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.uon;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -76,9 +77,10 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The builder to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			decoding = copyFrom.decoding;
 			validateEnd = copyFrom.validateEnd;
 		}
@@ -87,9 +89,10 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(UonParser copyFrom) {
-			super(copyFrom);
+			super(assertArgNotNull("copyFrom", copyFrom));
 			decoding = copyFrom.decoding;
 			validateEnd = copyFrom.validateEnd;
 		}
