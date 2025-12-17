@@ -1078,15 +1078,15 @@
 <a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder();
 <a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> 	}
 <a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> 
-<a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> 	<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> encoding, addBeanTypesUon;
-<a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> 	<strong class="jxr_keyword">final</strong> <a name="ParamFormat" href="../../../../org/apache/juneau/uon/ParamFormat.html#ParamFormat">ParamFormat</a> paramFormat;
-<a class="jxr_linenumber" name="L1075" href="#L1075">1075</a> 	<strong class="jxr_keyword">final</strong> Character quoteCharUon;
-<a class="jxr_linenumber" name="L1076" href="#L1076">1076</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> addBeanTypes;
-<a class="jxr_linenumber" name="L1077" href="#L1077">1077</a> 
-<a class="jxr_linenumber" name="L1078" href="#L1078">1078</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">char</strong> quoteChar;
-<a class="jxr_linenumber" name="L1079" href="#L1079">1079</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;ClassMeta&lt;?&gt;,UonClassMeta&gt; uonClassMetas = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L1080" href="#L1080">1080</a> 
-<a class="jxr_linenumber" name="L1081" href="#L1081">1081</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;BeanPropertyMeta,UonBeanPropertyMeta&gt; uonBeanPropertyMetas = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> addBeanTypesUon;
+<a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> encoding;
+<a class="jxr_linenumber" name="L1075" href="#L1075">1075</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Character quoteCharUon;
+<a class="jxr_linenumber" name="L1076" href="#L1076">1076</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="ParamFormat" href="../../../../org/apache/juneau/uon/ParamFormat.html#ParamFormat">ParamFormat</a> paramFormat;
+<a class="jxr_linenumber" name="L1077" href="#L1077">1077</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> addBeanTypes;
+<a class="jxr_linenumber" name="L1078" href="#L1078">1078</a> 
+<a class="jxr_linenumber" name="L1079" href="#L1079">1079</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">char</strong> quoteChar;
+<a class="jxr_linenumber" name="L1080" href="#L1080">1080</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;BeanPropertyMeta,UonBeanPropertyMeta&gt; uonBeanPropertyMetas = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L1081" href="#L1081">1081</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;ClassMeta&lt;?&gt;,UonClassMeta&gt; uonClassMetas = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L1082" href="#L1082">1082</a> 
 <a class="jxr_linenumber" name="L1083" href="#L1083">1083</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L1084" href="#L1084">1084</a> <em class="jxr_javadoccomment">	 * Constructor.</em>

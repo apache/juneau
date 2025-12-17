@@ -705,77 +705,78 @@
 <a class="jxr_linenumber" name="L697" href="#L697">697</a> 		}
 <a class="jxr_linenumber" name="L698" href="#L698">698</a> 	}
 <a class="jxr_linenumber" name="L699" href="#L699">699</a> 
-<a class="jxr_linenumber" name="L700" href="#L700">700</a> 	<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> initialDepth, maxDepth;
-<a class="jxr_linenumber" name="L701" href="#L701">701</a> 	<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> detectRecursions, ignoreRecursions;
-<a class="jxr_linenumber" name="L702" href="#L702">702</a> 
-<a class="jxr_linenumber" name="L703" href="#L703">703</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> actualDetectRecursions;
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> 
-<a class="jxr_linenumber" name="L705" href="#L705">705</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L706" href="#L706">706</a> <em class="jxr_javadoccomment">	 * Constructor</em>
-<a class="jxr_linenumber" name="L707" href="#L707">707</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L708" href="#L708">708</a> <em class="jxr_javadoccomment">	 * @param builder The builder for this object.</em>
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L710" href="#L710">710</a> 	<strong class="jxr_keyword">protected</strong> <a name="BeanTraverseContext" href="../../../org/apache/juneau/BeanTraverseContext.html#BeanTraverseContext">BeanTraverseContext</a>(Builder builder) {
-<a class="jxr_linenumber" name="L711" href="#L711">711</a> 		<strong class="jxr_keyword">super</strong>(builder);
-<a class="jxr_linenumber" name="L712" href="#L712">712</a> 
-<a class="jxr_linenumber" name="L713" href="#L713">713</a> 		maxDepth = builder.maxDepth;
-<a class="jxr_linenumber" name="L714" href="#L714">714</a> 		initialDepth = builder.initialDepth;
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> 		ignoreRecursions = builder.ignoreRecursions;
-<a class="jxr_linenumber" name="L716" href="#L716">716</a> 		detectRecursions = builder.detectRecursions;
-<a class="jxr_linenumber" name="L717" href="#L717">717</a> 
-<a class="jxr_linenumber" name="L718" href="#L718">718</a> 		actualDetectRecursions = detectRecursions || ignoreRecursions || <strong class="jxr_keyword">super</strong>.isDebug();
-<a class="jxr_linenumber" name="L719" href="#L719">719</a> 	}
-<a class="jxr_linenumber" name="L720" href="#L720">720</a> 
-<a class="jxr_linenumber" name="L721" href="#L721">721</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
-<a class="jxr_linenumber" name="L722" href="#L722">722</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> Builder copy();
-<a class="jxr_linenumber" name="L723" href="#L723">723</a> 
-<a class="jxr_linenumber" name="L724" href="#L724">724</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L725" href="#L725">725</a> <em class="jxr_javadoccomment">	 * Initial depth.</em>
-<a class="jxr_linenumber" name="L726" href="#L726">726</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L727" href="#L727">727</a> <em class="jxr_javadoccomment">	 * @see Builder#initialDepth(int)</em>
-<a class="jxr_linenumber" name="L728" href="#L728">728</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L729" href="#L729">729</a> <em class="jxr_javadoccomment">	 * 	The initial indentation level at the root.</em>
-<a class="jxr_linenumber" name="L730" href="#L730">730</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L731" href="#L731">731</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> getInitialDepth() { <strong class="jxr_keyword">return</strong> initialDepth; }
-<a class="jxr_linenumber" name="L732" href="#L732">732</a> 
-<a class="jxr_linenumber" name="L733" href="#L733">733</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L734" href="#L734">734</a> <em class="jxr_javadoccomment">	 * Max traversal depth.</em>
-<a class="jxr_linenumber" name="L735" href="#L735">735</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L736" href="#L736">736</a> <em class="jxr_javadoccomment">	 * @see Builder#maxDepth(int)</em>
-<a class="jxr_linenumber" name="L737" href="#L737">737</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L738" href="#L738">738</a> <em class="jxr_javadoccomment">	 * 	The depth at which traversal is aborted if depth is reached in the POJO tree.</em>
-<a class="jxr_linenumber" name="L739" href="#L739">739</a> <em class="jxr_javadoccomment">	 *	&lt;br&gt;If this depth is exceeded, an exception is thrown.</em>
-<a class="jxr_linenumber" name="L740" href="#L740">740</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L741" href="#L741">741</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> getMaxDepth() { <strong class="jxr_keyword">return</strong> maxDepth; }
-<a class="jxr_linenumber" name="L742" href="#L742">742</a> 
-<a class="jxr_linenumber" name="L743" href="#L743">743</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L744" href="#L744">744</a> <em class="jxr_javadoccomment">	 * Automatically detect POJO recursions.</em>
-<a class="jxr_linenumber" name="L745" href="#L745">745</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L746" href="#L746">746</a> <em class="jxr_javadoccomment">	 * @see Builder#detectRecursions()</em>
-<a class="jxr_linenumber" name="L747" href="#L747">747</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L748" href="#L748">748</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if recursions should be checked for during traversal.</em>
-<a class="jxr_linenumber" name="L749" href="#L749">749</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L750" href="#L750">750</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isDetectRecursions() { <strong class="jxr_keyword">return</strong> actualDetectRecursions; }
-<a class="jxr_linenumber" name="L751" href="#L751">751</a> 
-<a class="jxr_linenumber" name="L752" href="#L752">752</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L753" href="#L753">753</a> <em class="jxr_javadoccomment">	 * Ignore recursion errors.</em>
-<a class="jxr_linenumber" name="L754" href="#L754">754</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L755" href="#L755">755</a> <em class="jxr_javadoccomment">	 * @see Builder#ignoreRecursions()</em>
-<a class="jxr_linenumber" name="L756" href="#L756">756</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L757" href="#L757">757</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if when we encounter the same object when traversing a tree, we set the value to &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L758" href="#L758">758</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Otherwise, an exception is thrown with the message &lt;js&gt;"Recursion occurred, stack=..."&lt;/js&gt;.</em>
-<a class="jxr_linenumber" name="L759" href="#L759">759</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L760" href="#L760">760</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isIgnoreRecursions() { <strong class="jxr_keyword">return</strong> ignoreRecursions; }
-<a class="jxr_linenumber" name="L761" href="#L761">761</a> 
-<a class="jxr_linenumber" name="L762" href="#L762">762</a> 	@Override <em class="jxr_comment">/* Overridden from BeanContextable */</em>
-<a class="jxr_linenumber" name="L763" href="#L763">763</a> 	<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
-<a class="jxr_linenumber" name="L764" href="#L764">764</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.properties()
-<a class="jxr_linenumber" name="L765" href="#L765">765</a> 			.a(<span class="jxr_string">"detectRecursions"</span>, detectRecursions)
-<a class="jxr_linenumber" name="L766" href="#L766">766</a> 			.a(<span class="jxr_string">"maxDepth"</span>, maxDepth)
-<a class="jxr_linenumber" name="L767" href="#L767">767</a> 			.a(<span class="jxr_string">"ignoreRecursions"</span>, ignoreRecursions)
-<a class="jxr_linenumber" name="L768" href="#L768">768</a> 			.a(<span class="jxr_string">"initialDepth"</span>, initialDepth);
-<a class="jxr_linenumber" name="L769" href="#L769">769</a> 	}
-<a class="jxr_linenumber" name="L770" href="#L770">770</a> }
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> detectRecursions;
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> ignoreRecursions;
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> initialDepth;
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> maxDepth;
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> actualDetectRecursions;
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> 
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> <em class="jxr_javadoccomment">	 * Constructor</em>
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> <em class="jxr_javadoccomment">	 * @param builder The builder for this object.</em>
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> 	<strong class="jxr_keyword">protected</strong> <a name="BeanTraverseContext" href="../../../org/apache/juneau/BeanTraverseContext.html#BeanTraverseContext">BeanTraverseContext</a>(Builder builder) {
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> 		<strong class="jxr_keyword">super</strong>(builder);
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> 
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> 		maxDepth = builder.maxDepth;
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 		initialDepth = builder.initialDepth;
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> 		ignoreRecursions = builder.ignoreRecursions;
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> 		detectRecursions = builder.detectRecursions;
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> 
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> 		actualDetectRecursions = detectRecursions || ignoreRecursions || <strong class="jxr_keyword">super</strong>.isDebug();
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> 	}
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> 
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
+<a class="jxr_linenumber" name="L723" href="#L723">723</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> Builder copy();
+<a class="jxr_linenumber" name="L724" href="#L724">724</a> 
+<a class="jxr_linenumber" name="L725" href="#L725">725</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L726" href="#L726">726</a> <em class="jxr_javadoccomment">	 * Initial depth.</em>
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L728" href="#L728">728</a> <em class="jxr_javadoccomment">	 * @see Builder#initialDepth(int)</em>
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L730" href="#L730">730</a> <em class="jxr_javadoccomment">	 * 	The initial indentation level at the root.</em>
+<a class="jxr_linenumber" name="L731" href="#L731">731</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> getInitialDepth() { <strong class="jxr_keyword">return</strong> initialDepth; }
+<a class="jxr_linenumber" name="L733" href="#L733">733</a> 
+<a class="jxr_linenumber" name="L734" href="#L734">734</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> <em class="jxr_javadoccomment">	 * Max traversal depth.</em>
+<a class="jxr_linenumber" name="L736" href="#L736">736</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> <em class="jxr_javadoccomment">	 * @see Builder#maxDepth(int)</em>
+<a class="jxr_linenumber" name="L738" href="#L738">738</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L739" href="#L739">739</a> <em class="jxr_javadoccomment">	 * 	The depth at which traversal is aborted if depth is reached in the POJO tree.</em>
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> <em class="jxr_javadoccomment">	 *	&lt;br&gt;If this depth is exceeded, an exception is thrown.</em>
+<a class="jxr_linenumber" name="L741" href="#L741">741</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L742" href="#L742">742</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> getMaxDepth() { <strong class="jxr_keyword">return</strong> maxDepth; }
+<a class="jxr_linenumber" name="L743" href="#L743">743</a> 
+<a class="jxr_linenumber" name="L744" href="#L744">744</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> <em class="jxr_javadoccomment">	 * Automatically detect POJO recursions.</em>
+<a class="jxr_linenumber" name="L746" href="#L746">746</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L747" href="#L747">747</a> <em class="jxr_javadoccomment">	 * @see Builder#detectRecursions()</em>
+<a class="jxr_linenumber" name="L748" href="#L748">748</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if recursions should be checked for during traversal.</em>
+<a class="jxr_linenumber" name="L750" href="#L750">750</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L751" href="#L751">751</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isDetectRecursions() { <strong class="jxr_keyword">return</strong> actualDetectRecursions; }
+<a class="jxr_linenumber" name="L752" href="#L752">752</a> 
+<a class="jxr_linenumber" name="L753" href="#L753">753</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L754" href="#L754">754</a> <em class="jxr_javadoccomment">	 * Ignore recursion errors.</em>
+<a class="jxr_linenumber" name="L755" href="#L755">755</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> <em class="jxr_javadoccomment">	 * @see Builder#ignoreRecursions()</em>
+<a class="jxr_linenumber" name="L757" href="#L757">757</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if when we encounter the same object when traversing a tree, we set the value to &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Otherwise, an exception is thrown with the message &lt;js&gt;"Recursion occurred, stack=..."&lt;/js&gt;.</em>
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isIgnoreRecursions() { <strong class="jxr_keyword">return</strong> ignoreRecursions; }
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> 
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> 	@Override <em class="jxr_comment">/* Overridden from BeanContextable */</em>
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> 	<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.properties()
+<a class="jxr_linenumber" name="L766" href="#L766">766</a> 			.a(<span class="jxr_string">"detectRecursions"</span>, detectRecursions)
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> 			.a(<span class="jxr_string">"maxDepth"</span>, maxDepth)
+<a class="jxr_linenumber" name="L768" href="#L768">768</a> 			.a(<span class="jxr_string">"ignoreRecursions"</span>, ignoreRecursions)
+<a class="jxr_linenumber" name="L769" href="#L769">769</a> 			.a(<span class="jxr_string">"initialDepth"</span>, initialDepth);
+<a class="jxr_linenumber" name="L770" href="#L770">770</a> 	}
+<a class="jxr_linenumber" name="L771" href="#L771">771</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -1438,144 +1438,147 @@
 <a class="jxr_linenumber" name="L1430" href="#L1430">1430</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder();
 <a class="jxr_linenumber" name="L1431" href="#L1431">1431</a> 	}
 <a class="jxr_linenumber" name="L1432" href="#L1432">1432</a> 
-<a class="jxr_linenumber" name="L1433" href="#L1433">1433</a> 	<strong class="jxr_keyword">final</strong> <a name="AnchorText" href="../../../../org/apache/juneau/html/AnchorText.html#AnchorText">AnchorText</a> uriAnchorText;
-<a class="jxr_linenumber" name="L1434" href="#L1434">1434</a> 	<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> detectLabelParameters, detectLinksInStrings, addKeyValueTableHeaders, addBeanTypesHtml;
-<a class="jxr_linenumber" name="L1435" href="#L1435">1435</a> 	<strong class="jxr_keyword">final</strong> String labelParameter;
-<a class="jxr_linenumber" name="L1436" href="#L1436">1436</a> 
-<a class="jxr_linenumber" name="L1437" href="#L1437">1437</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;ClassMeta&lt;?&gt;,HtmlClassMeta&gt; htmlClassMetas = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L1438" href="#L1438">1438</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;BeanPropertyMeta,HtmlBeanPropertyMeta&gt; htmlBeanPropertyMetas = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L1433" href="#L1433">1433</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> addBeanTypesHtml;
+<a class="jxr_linenumber" name="L1434" href="#L1434">1434</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> addKeyValueTableHeaders;
+<a class="jxr_linenumber" name="L1435" href="#L1435">1435</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> detectLabelParameters;
+<a class="jxr_linenumber" name="L1436" href="#L1436">1436</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> detectLinksInStrings;
+<a class="jxr_linenumber" name="L1437" href="#L1437">1437</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="AnchorText" href="../../../../org/apache/juneau/html/AnchorText.html#AnchorText">AnchorText</a> uriAnchorText;
+<a class="jxr_linenumber" name="L1438" href="#L1438">1438</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> String labelParameter;
 <a class="jxr_linenumber" name="L1439" href="#L1439">1439</a> 
-<a class="jxr_linenumber" name="L1440" href="#L1440">1440</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <a name="HtmlSchemaSerializer" href="../../../../org/apache/juneau/html/HtmlSchemaSerializer.html#HtmlSchemaSerializer">HtmlSchemaSerializer</a> schemaSerializer;
-<a class="jxr_linenumber" name="L1441" href="#L1441">1441</a> 
-<a class="jxr_linenumber" name="L1442" href="#L1442">1442</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1443" href="#L1443">1443</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L1444" href="#L1444">1444</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1445" href="#L1445">1445</a> <em class="jxr_javadoccomment">	 * @param builder The builder for this object.</em>
-<a class="jxr_linenumber" name="L1446" href="#L1446">1446</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1447" href="#L1447">1447</a> 	<strong class="jxr_keyword">public</strong> <a name="HtmlSerializer" href="../../../../org/apache/juneau/html/HtmlSerializer.html#HtmlSerializer">HtmlSerializer</a>(Builder builder) {
-<a class="jxr_linenumber" name="L1448" href="#L1448">1448</a> 		<strong class="jxr_keyword">super</strong>(builder);
-<a class="jxr_linenumber" name="L1449" href="#L1449">1449</a> 		detectLabelParameters = ! builder.disableDetectLabelParameters;
-<a class="jxr_linenumber" name="L1450" href="#L1450">1450</a> 		detectLinksInStrings = ! builder.disableDetectLinksInStrings;
-<a class="jxr_linenumber" name="L1451" href="#L1451">1451</a> 		addKeyValueTableHeaders = builder.addKeyValueTableHeaders;
-<a class="jxr_linenumber" name="L1452" href="#L1452">1452</a> 		labelParameter = builder.labelParameter;
-<a class="jxr_linenumber" name="L1453" href="#L1453">1453</a> 		uriAnchorText = builder.uriAnchorText;
-<a class="jxr_linenumber" name="L1454" href="#L1454">1454</a> 		addBeanTypesHtml = builder.addBeanTypesHtml;
-<a class="jxr_linenumber" name="L1455" href="#L1455">1455</a> 	}
-<a class="jxr_linenumber" name="L1456" href="#L1456">1456</a> 
-<a class="jxr_linenumber" name="L1457" href="#L1457">1457</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
-<a class="jxr_linenumber" name="L1458" href="#L1458">1458</a> 	<strong class="jxr_keyword">public</strong> Builder copy() {
-<a class="jxr_linenumber" name="L1459" href="#L1459">1459</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L1460" href="#L1460">1460</a> 	}
-<a class="jxr_linenumber" name="L1461" href="#L1461">1461</a> 
-<a class="jxr_linenumber" name="L1462" href="#L1462">1462</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
-<a class="jxr_linenumber" name="L1463" href="#L1463">1463</a> 	<strong class="jxr_keyword">public</strong> HtmlSerializerSession.Builder createSession() {
-<a class="jxr_linenumber" name="L1464" href="#L1464">1464</a> 		<strong class="jxr_keyword">return</strong> HtmlSerializerSession.create(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L1465" href="#L1465">1465</a> 	}
-<a class="jxr_linenumber" name="L1466" href="#L1466">1466</a> 
-<a class="jxr_linenumber" name="L1467" href="#L1467">1467</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlMetaProvider */</em>
-<a class="jxr_linenumber" name="L1468" href="#L1468">1468</a> 	<strong class="jxr_keyword">public</strong> <a name="HtmlBeanPropertyMeta" href="../../../../org/apache/juneau/html/HtmlBeanPropertyMeta.html#HtmlBeanPropertyMeta">HtmlBeanPropertyMeta</a> getHtmlBeanPropertyMeta(BeanPropertyMeta bpm) {
-<a class="jxr_linenumber" name="L1469" href="#L1469">1469</a> 		<strong class="jxr_keyword">if</strong> (bpm == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1470" href="#L1470">1470</a> 			<strong class="jxr_keyword">return</strong> HtmlBeanPropertyMeta.DEFAULT;
-<a class="jxr_linenumber" name="L1471" href="#L1471">1471</a> 		HtmlBeanPropertyMeta m = htmlBeanPropertyMetas.get(bpm);
-<a class="jxr_linenumber" name="L1472" href="#L1472">1472</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L1473" href="#L1473">1473</a> 			m = <strong class="jxr_keyword">new</strong> <a name="HtmlBeanPropertyMeta" href="../../../../org/apache/juneau/html/HtmlBeanPropertyMeta.html#HtmlBeanPropertyMeta">HtmlBeanPropertyMeta</a>(bpm.getDelegateFor(), <strong class="jxr_keyword">this</strong>.getAnnotationProvider(), <strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L1474" href="#L1474">1474</a> 			htmlBeanPropertyMetas.put(bpm, m);
-<a class="jxr_linenumber" name="L1475" href="#L1475">1475</a> 		}
-<a class="jxr_linenumber" name="L1476" href="#L1476">1476</a> 		<strong class="jxr_keyword">return</strong> m;
-<a class="jxr_linenumber" name="L1477" href="#L1477">1477</a> 	}
-<a class="jxr_linenumber" name="L1478" href="#L1478">1478</a> 
-<a class="jxr_linenumber" name="L1479" href="#L1479">1479</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlMetaProvider */</em>
-<a class="jxr_linenumber" name="L1480" href="#L1480">1480</a> 	<strong class="jxr_keyword">public</strong> <a name="HtmlClassMeta" href="../../../../org/apache/juneau/html/HtmlClassMeta.html#HtmlClassMeta">HtmlClassMeta</a> getHtmlClassMeta(ClassMeta&lt;?&gt; cm) {
-<a class="jxr_linenumber" name="L1481" href="#L1481">1481</a> 		HtmlClassMeta m = htmlClassMetas.get(cm);
-<a class="jxr_linenumber" name="L1482" href="#L1482">1482</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L1483" href="#L1483">1483</a> 			m = <strong class="jxr_keyword">new</strong> <a name="HtmlClassMeta" href="../../../../org/apache/juneau/html/HtmlClassMeta.html#HtmlClassMeta">HtmlClassMeta</a>(cm, <strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L1484" href="#L1484">1484</a> 			htmlClassMetas.put(cm, m);
-<a class="jxr_linenumber" name="L1485" href="#L1485">1485</a> 		}
-<a class="jxr_linenumber" name="L1486" href="#L1486">1486</a> 		<strong class="jxr_keyword">return</strong> m;
-<a class="jxr_linenumber" name="L1487" href="#L1487">1487</a> 	}
-<a class="jxr_linenumber" name="L1488" href="#L1488">1488</a> 
-<a class="jxr_linenumber" name="L1489" href="#L1489">1489</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1490" href="#L1490">1490</a> <em class="jxr_javadoccomment">	 * Returns the schema serializer.</em>
-<a class="jxr_linenumber" name="L1491" href="#L1491">1491</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1492" href="#L1492">1492</a> <em class="jxr_javadoccomment">	 * @return The schema serializer.</em>
-<a class="jxr_linenumber" name="L1493" href="#L1493">1493</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1494" href="#L1494">1494</a> 	<strong class="jxr_keyword">public</strong> <a name="HtmlSerializer" href="../../../../org/apache/juneau/html/HtmlSerializer.html#HtmlSerializer">HtmlSerializer</a> getSchemaSerializer() {
-<a class="jxr_linenumber" name="L1495" href="#L1495">1495</a> 		<strong class="jxr_keyword">if</strong> (schemaSerializer == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1496" href="#L1496">1496</a> 			schemaSerializer = HtmlSchemaSerializer.create().beanContext(getBeanContext()).build();
-<a class="jxr_linenumber" name="L1497" href="#L1497">1497</a> 		<strong class="jxr_keyword">return</strong> schemaSerializer;
-<a class="jxr_linenumber" name="L1498" href="#L1498">1498</a> 	}
-<a class="jxr_linenumber" name="L1499" href="#L1499">1499</a> 
-<a class="jxr_linenumber" name="L1500" href="#L1500">1500</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
-<a class="jxr_linenumber" name="L1501" href="#L1501">1501</a> 	<strong class="jxr_keyword">public</strong> <a name="HtmlSerializerSession" href="../../../../org/apache/juneau/html/HtmlSerializerSession.html#HtmlSerializerSession">HtmlSerializerSession</a> getSession() { <strong class="jxr_keyword">return</strong> createSession().build(); }
+<a class="jxr_linenumber" name="L1440" href="#L1440">1440</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;ClassMeta&lt;?&gt;,HtmlClassMeta&gt; htmlClassMetas = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L1441" href="#L1441">1441</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;BeanPropertyMeta,HtmlBeanPropertyMeta&gt; htmlBeanPropertyMetas = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L1442" href="#L1442">1442</a> 
+<a class="jxr_linenumber" name="L1443" href="#L1443">1443</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <a name="HtmlSchemaSerializer" href="../../../../org/apache/juneau/html/HtmlSchemaSerializer.html#HtmlSchemaSerializer">HtmlSchemaSerializer</a> schemaSerializer;
+<a class="jxr_linenumber" name="L1444" href="#L1444">1444</a> 
+<a class="jxr_linenumber" name="L1445" href="#L1445">1445</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1446" href="#L1446">1446</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
+<a class="jxr_linenumber" name="L1447" href="#L1447">1447</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1448" href="#L1448">1448</a> <em class="jxr_javadoccomment">	 * @param builder The builder for this object.</em>
+<a class="jxr_linenumber" name="L1449" href="#L1449">1449</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1450" href="#L1450">1450</a> 	<strong class="jxr_keyword">public</strong> <a name="HtmlSerializer" href="../../../../org/apache/juneau/html/HtmlSerializer.html#HtmlSerializer">HtmlSerializer</a>(Builder builder) {
+<a class="jxr_linenumber" name="L1451" href="#L1451">1451</a> 		<strong class="jxr_keyword">super</strong>(builder);
+<a class="jxr_linenumber" name="L1452" href="#L1452">1452</a> 		detectLabelParameters = ! builder.disableDetectLabelParameters;
+<a class="jxr_linenumber" name="L1453" href="#L1453">1453</a> 		detectLinksInStrings = ! builder.disableDetectLinksInStrings;
+<a class="jxr_linenumber" name="L1454" href="#L1454">1454</a> 		addKeyValueTableHeaders = builder.addKeyValueTableHeaders;
+<a class="jxr_linenumber" name="L1455" href="#L1455">1455</a> 		labelParameter = builder.labelParameter;
+<a class="jxr_linenumber" name="L1456" href="#L1456">1456</a> 		uriAnchorText = builder.uriAnchorText;
+<a class="jxr_linenumber" name="L1457" href="#L1457">1457</a> 		addBeanTypesHtml = builder.addBeanTypesHtml;
+<a class="jxr_linenumber" name="L1458" href="#L1458">1458</a> 	}
+<a class="jxr_linenumber" name="L1459" href="#L1459">1459</a> 
+<a class="jxr_linenumber" name="L1460" href="#L1460">1460</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
+<a class="jxr_linenumber" name="L1461" href="#L1461">1461</a> 	<strong class="jxr_keyword">public</strong> Builder copy() {
+<a class="jxr_linenumber" name="L1462" href="#L1462">1462</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L1463" href="#L1463">1463</a> 	}
+<a class="jxr_linenumber" name="L1464" href="#L1464">1464</a> 
+<a class="jxr_linenumber" name="L1465" href="#L1465">1465</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
+<a class="jxr_linenumber" name="L1466" href="#L1466">1466</a> 	<strong class="jxr_keyword">public</strong> HtmlSerializerSession.Builder createSession() {
+<a class="jxr_linenumber" name="L1467" href="#L1467">1467</a> 		<strong class="jxr_keyword">return</strong> HtmlSerializerSession.create(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L1468" href="#L1468">1468</a> 	}
+<a class="jxr_linenumber" name="L1469" href="#L1469">1469</a> 
+<a class="jxr_linenumber" name="L1470" href="#L1470">1470</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlMetaProvider */</em>
+<a class="jxr_linenumber" name="L1471" href="#L1471">1471</a> 	<strong class="jxr_keyword">public</strong> <a name="HtmlBeanPropertyMeta" href="../../../../org/apache/juneau/html/HtmlBeanPropertyMeta.html#HtmlBeanPropertyMeta">HtmlBeanPropertyMeta</a> getHtmlBeanPropertyMeta(BeanPropertyMeta bpm) {
+<a class="jxr_linenumber" name="L1472" href="#L1472">1472</a> 		<strong class="jxr_keyword">if</strong> (bpm == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1473" href="#L1473">1473</a> 			<strong class="jxr_keyword">return</strong> HtmlBeanPropertyMeta.DEFAULT;
+<a class="jxr_linenumber" name="L1474" href="#L1474">1474</a> 		HtmlBeanPropertyMeta m = htmlBeanPropertyMetas.get(bpm);
+<a class="jxr_linenumber" name="L1475" href="#L1475">1475</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L1476" href="#L1476">1476</a> 			m = <strong class="jxr_keyword">new</strong> <a name="HtmlBeanPropertyMeta" href="../../../../org/apache/juneau/html/HtmlBeanPropertyMeta.html#HtmlBeanPropertyMeta">HtmlBeanPropertyMeta</a>(bpm.getDelegateFor(), <strong class="jxr_keyword">this</strong>.getAnnotationProvider(), <strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L1477" href="#L1477">1477</a> 			htmlBeanPropertyMetas.put(bpm, m);
+<a class="jxr_linenumber" name="L1478" href="#L1478">1478</a> 		}
+<a class="jxr_linenumber" name="L1479" href="#L1479">1479</a> 		<strong class="jxr_keyword">return</strong> m;
+<a class="jxr_linenumber" name="L1480" href="#L1480">1480</a> 	}
+<a class="jxr_linenumber" name="L1481" href="#L1481">1481</a> 
+<a class="jxr_linenumber" name="L1482" href="#L1482">1482</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlMetaProvider */</em>
+<a class="jxr_linenumber" name="L1483" href="#L1483">1483</a> 	<strong class="jxr_keyword">public</strong> <a name="HtmlClassMeta" href="../../../../org/apache/juneau/html/HtmlClassMeta.html#HtmlClassMeta">HtmlClassMeta</a> getHtmlClassMeta(ClassMeta&lt;?&gt; cm) {
+<a class="jxr_linenumber" name="L1484" href="#L1484">1484</a> 		HtmlClassMeta m = htmlClassMetas.get(cm);
+<a class="jxr_linenumber" name="L1485" href="#L1485">1485</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L1486" href="#L1486">1486</a> 			m = <strong class="jxr_keyword">new</strong> <a name="HtmlClassMeta" href="../../../../org/apache/juneau/html/HtmlClassMeta.html#HtmlClassMeta">HtmlClassMeta</a>(cm, <strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L1487" href="#L1487">1487</a> 			htmlClassMetas.put(cm, m);
+<a class="jxr_linenumber" name="L1488" href="#L1488">1488</a> 		}
+<a class="jxr_linenumber" name="L1489" href="#L1489">1489</a> 		<strong class="jxr_keyword">return</strong> m;
+<a class="jxr_linenumber" name="L1490" href="#L1490">1490</a> 	}
+<a class="jxr_linenumber" name="L1491" href="#L1491">1491</a> 
+<a class="jxr_linenumber" name="L1492" href="#L1492">1492</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1493" href="#L1493">1493</a> <em class="jxr_javadoccomment">	 * Returns the schema serializer.</em>
+<a class="jxr_linenumber" name="L1494" href="#L1494">1494</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1495" href="#L1495">1495</a> <em class="jxr_javadoccomment">	 * @return The schema serializer.</em>
+<a class="jxr_linenumber" name="L1496" href="#L1496">1496</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1497" href="#L1497">1497</a> 	<strong class="jxr_keyword">public</strong> <a name="HtmlSerializer" href="../../../../org/apache/juneau/html/HtmlSerializer.html#HtmlSerializer">HtmlSerializer</a> getSchemaSerializer() {
+<a class="jxr_linenumber" name="L1498" href="#L1498">1498</a> 		<strong class="jxr_keyword">if</strong> (schemaSerializer == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1499" href="#L1499">1499</a> 			schemaSerializer = HtmlSchemaSerializer.create().beanContext(getBeanContext()).build();
+<a class="jxr_linenumber" name="L1500" href="#L1500">1500</a> 		<strong class="jxr_keyword">return</strong> schemaSerializer;
+<a class="jxr_linenumber" name="L1501" href="#L1501">1501</a> 	}
 <a class="jxr_linenumber" name="L1502" href="#L1502">1502</a> 
-<a class="jxr_linenumber" name="L1503" href="#L1503">1503</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1504" href="#L1504">1504</a> <em class="jxr_javadoccomment">	 * Link label parameter name.</em>
-<a class="jxr_linenumber" name="L1505" href="#L1505">1505</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1506" href="#L1506">1506</a> <em class="jxr_javadoccomment">	 * @see Builder#labelParameter(String)</em>
-<a class="jxr_linenumber" name="L1507" href="#L1507">1507</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L1508" href="#L1508">1508</a> <em class="jxr_javadoccomment">	 * 	The parameter name to look for when resolving link labels.</em>
-<a class="jxr_linenumber" name="L1509" href="#L1509">1509</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1510" href="#L1510">1510</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> String getLabelParameter() { <strong class="jxr_keyword">return</strong> labelParameter; }
-<a class="jxr_linenumber" name="L1511" href="#L1511">1511</a> 
-<a class="jxr_linenumber" name="L1512" href="#L1512">1512</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1513" href="#L1513">1513</a> <em class="jxr_javadoccomment">	 * Anchor text source.</em>
-<a class="jxr_linenumber" name="L1514" href="#L1514">1514</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1515" href="#L1515">1515</a> <em class="jxr_javadoccomment">	 * @see Builder#uriAnchorText(AnchorText)</em>
-<a class="jxr_linenumber" name="L1516" href="#L1516">1516</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L1517" href="#L1517">1517</a> <em class="jxr_javadoccomment">	 * 	When creating anchor tags (e.g. &lt;code&gt;&lt;xt&gt;&amp;lt;a&lt;/xt&gt; &lt;xa&gt;href&lt;/xa&gt;=&lt;xs&gt;'...'&lt;/xs&gt;</em>
-<a class="jxr_linenumber" name="L1518" href="#L1518">1518</a> <em class="jxr_javadoccomment">	 * 	&lt;xt&gt;&amp;gt;&lt;/xt&gt;text&lt;xt&gt;&amp;lt;/a&amp;gt;&lt;/xt&gt;&lt;/code&gt;) in HTML, this setting defines what to set the inner text to.</em>
-<a class="jxr_linenumber" name="L1519" href="#L1519">1519</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1520" href="#L1520">1520</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="AnchorText" href="../../../../org/apache/juneau/html/AnchorText.html#AnchorText">AnchorText</a> getUriAnchorText() { <strong class="jxr_keyword">return</strong> uriAnchorText; }
-<a class="jxr_linenumber" name="L1521" href="#L1521">1521</a> 
-<a class="jxr_linenumber" name="L1522" href="#L1522">1522</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1523" href="#L1523">1523</a> <em class="jxr_javadoccomment">	 * Add &lt;js&gt;"_type"&lt;/js&gt; properties when needed.</em>
-<a class="jxr_linenumber" name="L1524" href="#L1524">1524</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1525" href="#L1525">1525</a> <em class="jxr_javadoccomment">	 * @see Builder#addBeanTypesHtml()</em>
-<a class="jxr_linenumber" name="L1526" href="#L1526">1526</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L1527" href="#L1527">1527</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if &lt;js&gt;"_type"&lt;/js&gt; properties will be added to beans if their type cannot be inferred</em>
-<a class="jxr_linenumber" name="L1528" href="#L1528">1528</a> <em class="jxr_javadoccomment">	 * 	through reflection.</em>
-<a class="jxr_linenumber" name="L1529" href="#L1529">1529</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1530" href="#L1530">1530</a> 	@Override
-<a class="jxr_linenumber" name="L1531" href="#L1531">1531</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isAddBeanTypes() { <strong class="jxr_keyword">return</strong> addBeanTypesHtml || <strong class="jxr_keyword">super</strong>.isAddBeanTypes(); }
-<a class="jxr_linenumber" name="L1532" href="#L1532">1532</a> 
-<a class="jxr_linenumber" name="L1533" href="#L1533">1533</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1534" href="#L1534">1534</a> <em class="jxr_javadoccomment">	 * Add key/value headers on bean/map tables.</em>
-<a class="jxr_linenumber" name="L1535" href="#L1535">1535</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1536" href="#L1536">1536</a> <em class="jxr_javadoccomment">	 * @see Builder#addKeyValueTableHeaders()</em>
-<a class="jxr_linenumber" name="L1537" href="#L1537">1537</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L1538" href="#L1538">1538</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if &lt;bc&gt;key&lt;/bc&gt; and &lt;bc&gt;value&lt;/bc&gt; column headers are added to tables.</em>
-<a class="jxr_linenumber" name="L1539" href="#L1539">1539</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1540" href="#L1540">1540</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isAddKeyValueTableHeaders() { <strong class="jxr_keyword">return</strong> addKeyValueTableHeaders; }
-<a class="jxr_linenumber" name="L1541" href="#L1541">1541</a> 
-<a class="jxr_linenumber" name="L1542" href="#L1542">1542</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1543" href="#L1543">1543</a> <em class="jxr_javadoccomment">	 * Look for link labels in URIs.</em>
-<a class="jxr_linenumber" name="L1544" href="#L1544">1544</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1545" href="#L1545">1545</a> <em class="jxr_javadoccomment">	 * @see Builder#disableDetectLabelParameters()</em>
-<a class="jxr_linenumber" name="L1546" href="#L1546">1546</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L1547" href="#L1547">1547</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if we should look for URL label parameters (e.g. &lt;js&gt;"?label=foobar"&lt;/js&gt;).</em>
-<a class="jxr_linenumber" name="L1548" href="#L1548">1548</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1549" href="#L1549">1549</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isDetectLabelParameters() { <strong class="jxr_keyword">return</strong> detectLabelParameters; }
-<a class="jxr_linenumber" name="L1550" href="#L1550">1550</a> 
-<a class="jxr_linenumber" name="L1551" href="#L1551">1551</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1552" href="#L1552">1552</a> <em class="jxr_javadoccomment">	 * Look for URLs in {@link String Strings}.</em>
-<a class="jxr_linenumber" name="L1553" href="#L1553">1553</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1554" href="#L1554">1554</a> <em class="jxr_javadoccomment">	 * @see Builder#disableDetectLinksInStrings()</em>
-<a class="jxr_linenumber" name="L1555" href="#L1555">1555</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L1556" href="#L1556">1556</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if we should automatically convert strings to URLs if they look like a URL.</em>
-<a class="jxr_linenumber" name="L1557" href="#L1557">1557</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1558" href="#L1558">1558</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isDetectLinksInStrings() { <strong class="jxr_keyword">return</strong> detectLinksInStrings; }
-<a class="jxr_linenumber" name="L1559" href="#L1559">1559</a> 
-<a class="jxr_linenumber" name="L1560" href="#L1560">1560</a> 	@Override <em class="jxr_comment">/* Overridden from XmlSerializer */</em>
-<a class="jxr_linenumber" name="L1561" href="#L1561">1561</a> 	<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
-<a class="jxr_linenumber" name="L1562" href="#L1562">1562</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.properties()
-<a class="jxr_linenumber" name="L1563" href="#L1563">1563</a> 			.a(<span class="jxr_string">"addBeanTypesHtml"</span>, addBeanTypesHtml)
-<a class="jxr_linenumber" name="L1564" href="#L1564">1564</a> 			.a(<span class="jxr_string">"addKeyValueTableHeaders"</span>, addKeyValueTableHeaders)
-<a class="jxr_linenumber" name="L1565" href="#L1565">1565</a> 			.a(<span class="jxr_string">"detectLabelParameters"</span>, detectLabelParameters)
-<a class="jxr_linenumber" name="L1566" href="#L1566">1566</a> 			.a(<span class="jxr_string">"detectLinksInStrings"</span>, detectLinksInStrings)
-<a class="jxr_linenumber" name="L1567" href="#L1567">1567</a> 			.a(<span class="jxr_string">"labelParameter"</span>, labelParameter)
-<a class="jxr_linenumber" name="L1568" href="#L1568">1568</a> 			.a(<span class="jxr_string">"uriAnchorText"</span>, uriAnchorText);
-<a class="jxr_linenumber" name="L1569" href="#L1569">1569</a> 	}
-<a class="jxr_linenumber" name="L1570" href="#L1570">1570</a> }
+<a class="jxr_linenumber" name="L1503" href="#L1503">1503</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
+<a class="jxr_linenumber" name="L1504" href="#L1504">1504</a> 	<strong class="jxr_keyword">public</strong> <a name="HtmlSerializerSession" href="../../../../org/apache/juneau/html/HtmlSerializerSession.html#HtmlSerializerSession">HtmlSerializerSession</a> getSession() { <strong class="jxr_keyword">return</strong> createSession().build(); }
+<a class="jxr_linenumber" name="L1505" href="#L1505">1505</a> 
+<a class="jxr_linenumber" name="L1506" href="#L1506">1506</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1507" href="#L1507">1507</a> <em class="jxr_javadoccomment">	 * Link label parameter name.</em>
+<a class="jxr_linenumber" name="L1508" href="#L1508">1508</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1509" href="#L1509">1509</a> <em class="jxr_javadoccomment">	 * @see Builder#labelParameter(String)</em>
+<a class="jxr_linenumber" name="L1510" href="#L1510">1510</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L1511" href="#L1511">1511</a> <em class="jxr_javadoccomment">	 * 	The parameter name to look for when resolving link labels.</em>
+<a class="jxr_linenumber" name="L1512" href="#L1512">1512</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1513" href="#L1513">1513</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> String getLabelParameter() { <strong class="jxr_keyword">return</strong> labelParameter; }
+<a class="jxr_linenumber" name="L1514" href="#L1514">1514</a> 
+<a class="jxr_linenumber" name="L1515" href="#L1515">1515</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1516" href="#L1516">1516</a> <em class="jxr_javadoccomment">	 * Anchor text source.</em>
+<a class="jxr_linenumber" name="L1517" href="#L1517">1517</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1518" href="#L1518">1518</a> <em class="jxr_javadoccomment">	 * @see Builder#uriAnchorText(AnchorText)</em>
+<a class="jxr_linenumber" name="L1519" href="#L1519">1519</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L1520" href="#L1520">1520</a> <em class="jxr_javadoccomment">	 * 	When creating anchor tags (e.g. &lt;code&gt;&lt;xt&gt;&amp;lt;a&lt;/xt&gt; &lt;xa&gt;href&lt;/xa&gt;=&lt;xs&gt;'...'&lt;/xs&gt;</em>
+<a class="jxr_linenumber" name="L1521" href="#L1521">1521</a> <em class="jxr_javadoccomment">	 * 	&lt;xt&gt;&amp;gt;&lt;/xt&gt;text&lt;xt&gt;&amp;lt;/a&amp;gt;&lt;/xt&gt;&lt;/code&gt;) in HTML, this setting defines what to set the inner text to.</em>
+<a class="jxr_linenumber" name="L1522" href="#L1522">1522</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1523" href="#L1523">1523</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="AnchorText" href="../../../../org/apache/juneau/html/AnchorText.html#AnchorText">AnchorText</a> getUriAnchorText() { <strong class="jxr_keyword">return</strong> uriAnchorText; }
+<a class="jxr_linenumber" name="L1524" href="#L1524">1524</a> 
+<a class="jxr_linenumber" name="L1525" href="#L1525">1525</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1526" href="#L1526">1526</a> <em class="jxr_javadoccomment">	 * Add &lt;js&gt;"_type"&lt;/js&gt; properties when needed.</em>
+<a class="jxr_linenumber" name="L1527" href="#L1527">1527</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1528" href="#L1528">1528</a> <em class="jxr_javadoccomment">	 * @see Builder#addBeanTypesHtml()</em>
+<a class="jxr_linenumber" name="L1529" href="#L1529">1529</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L1530" href="#L1530">1530</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if &lt;js&gt;"_type"&lt;/js&gt; properties will be added to beans if their type cannot be inferred</em>
+<a class="jxr_linenumber" name="L1531" href="#L1531">1531</a> <em class="jxr_javadoccomment">	 * 	through reflection.</em>
+<a class="jxr_linenumber" name="L1532" href="#L1532">1532</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1533" href="#L1533">1533</a> 	@Override
+<a class="jxr_linenumber" name="L1534" href="#L1534">1534</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isAddBeanTypes() { <strong class="jxr_keyword">return</strong> addBeanTypesHtml || <strong class="jxr_keyword">super</strong>.isAddBeanTypes(); }
+<a class="jxr_linenumber" name="L1535" href="#L1535">1535</a> 
+<a class="jxr_linenumber" name="L1536" href="#L1536">1536</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1537" href="#L1537">1537</a> <em class="jxr_javadoccomment">	 * Add key/value headers on bean/map tables.</em>
+<a class="jxr_linenumber" name="L1538" href="#L1538">1538</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1539" href="#L1539">1539</a> <em class="jxr_javadoccomment">	 * @see Builder#addKeyValueTableHeaders()</em>
+<a class="jxr_linenumber" name="L1540" href="#L1540">1540</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L1541" href="#L1541">1541</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if &lt;bc&gt;key&lt;/bc&gt; and &lt;bc&gt;value&lt;/bc&gt; column headers are added to tables.</em>
+<a class="jxr_linenumber" name="L1542" href="#L1542">1542</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1543" href="#L1543">1543</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isAddKeyValueTableHeaders() { <strong class="jxr_keyword">return</strong> addKeyValueTableHeaders; }
+<a class="jxr_linenumber" name="L1544" href="#L1544">1544</a> 
+<a class="jxr_linenumber" name="L1545" href="#L1545">1545</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1546" href="#L1546">1546</a> <em class="jxr_javadoccomment">	 * Look for link labels in URIs.</em>
+<a class="jxr_linenumber" name="L1547" href="#L1547">1547</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1548" href="#L1548">1548</a> <em class="jxr_javadoccomment">	 * @see Builder#disableDetectLabelParameters()</em>
+<a class="jxr_linenumber" name="L1549" href="#L1549">1549</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L1550" href="#L1550">1550</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if we should look for URL label parameters (e.g. &lt;js&gt;"?label=foobar"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L1551" href="#L1551">1551</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1552" href="#L1552">1552</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isDetectLabelParameters() { <strong class="jxr_keyword">return</strong> detectLabelParameters; }
+<a class="jxr_linenumber" name="L1553" href="#L1553">1553</a> 
+<a class="jxr_linenumber" name="L1554" href="#L1554">1554</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1555" href="#L1555">1555</a> <em class="jxr_javadoccomment">	 * Look for URLs in {@link String Strings}.</em>
+<a class="jxr_linenumber" name="L1556" href="#L1556">1556</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1557" href="#L1557">1557</a> <em class="jxr_javadoccomment">	 * @see Builder#disableDetectLinksInStrings()</em>
+<a class="jxr_linenumber" name="L1558" href="#L1558">1558</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L1559" href="#L1559">1559</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if we should automatically convert strings to URLs if they look like a URL.</em>
+<a class="jxr_linenumber" name="L1560" href="#L1560">1560</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1561" href="#L1561">1561</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isDetectLinksInStrings() { <strong class="jxr_keyword">return</strong> detectLinksInStrings; }
+<a class="jxr_linenumber" name="L1562" href="#L1562">1562</a> 
+<a class="jxr_linenumber" name="L1563" href="#L1563">1563</a> 	@Override <em class="jxr_comment">/* Overridden from XmlSerializer */</em>
+<a class="jxr_linenumber" name="L1564" href="#L1564">1564</a> 	<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
+<a class="jxr_linenumber" name="L1565" href="#L1565">1565</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.properties()
+<a class="jxr_linenumber" name="L1566" href="#L1566">1566</a> 			.a(<span class="jxr_string">"addBeanTypesHtml"</span>, addBeanTypesHtml)
+<a class="jxr_linenumber" name="L1567" href="#L1567">1567</a> 			.a(<span class="jxr_string">"addKeyValueTableHeaders"</span>, addKeyValueTableHeaders)
+<a class="jxr_linenumber" name="L1568" href="#L1568">1568</a> 			.a(<span class="jxr_string">"detectLabelParameters"</span>, detectLabelParameters)
+<a class="jxr_linenumber" name="L1569" href="#L1569">1569</a> 			.a(<span class="jxr_string">"detectLinksInStrings"</span>, detectLinksInStrings)
+<a class="jxr_linenumber" name="L1570" href="#L1570">1570</a> 			.a(<span class="jxr_string">"labelParameter"</span>, labelParameter)
+<a class="jxr_linenumber" name="L1571" href="#L1571">1571</a> 			.a(<span class="jxr_string">"uriAnchorText"</span>, uriAnchorText);
+<a class="jxr_linenumber" name="L1572" href="#L1572">1572</a> 	}
+<a class="jxr_linenumber" name="L1573" href="#L1573">1573</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

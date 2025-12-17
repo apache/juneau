@@ -681,55 +681,56 @@
 <a class="jxr_linenumber" name="L673" href="#L673">673</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder();
 <a class="jxr_linenumber" name="L674" href="#L674">674</a> 	}
 <a class="jxr_linenumber" name="L675" href="#L675">675</a> 
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> 	<strong class="jxr_keyword">final</strong> Charset streamCharset, fileCharset;
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> 
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> <em class="jxr_javadoccomment">	 * @param builder The builder for this object.</em>
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L683" href="#L683">683</a> 	<strong class="jxr_keyword">protected</strong> <a name="ReaderParser" href="../../../../org/apache/juneau/parser/ReaderParser.html#ReaderParser">ReaderParser</a>(Builder builder) {
-<a class="jxr_linenumber" name="L684" href="#L684">684</a> 		<strong class="jxr_keyword">super</strong>(builder);
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> 		streamCharset = builder.streamCharset;
-<a class="jxr_linenumber" name="L686" href="#L686">686</a> 		fileCharset = builder.fileCharset;
-<a class="jxr_linenumber" name="L687" href="#L687">687</a> 	}
-<a class="jxr_linenumber" name="L688" href="#L688">688</a> 
-<a class="jxr_linenumber" name="L689" href="#L689">689</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> 	<strong class="jxr_keyword">public</strong> ReaderParserSession.Builder createSession() {
-<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		<strong class="jxr_keyword">return</strong> ReaderParserSession.create(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L692" href="#L692">692</a> 	}
-<a class="jxr_linenumber" name="L693" href="#L693">693</a> 
-<a class="jxr_linenumber" name="L694" href="#L694">694</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
-<a class="jxr_linenumber" name="L695" href="#L695">695</a> 	<strong class="jxr_keyword">public</strong> <a name="ReaderParserSession" href="../../../../org/apache/juneau/parser/ReaderParserSession.html#ReaderParserSession">ReaderParserSession</a> getSession() { <strong class="jxr_keyword">return</strong> createSession().build(); }
-<a class="jxr_linenumber" name="L696" href="#L696">696</a> 
-<a class="jxr_linenumber" name="L697" href="#L697">697</a> 	@Override <em class="jxr_comment">/* Overridden from Parser */</em>
-<a class="jxr_linenumber" name="L698" href="#L698">698</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isReaderParser() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>; }
-<a class="jxr_linenumber" name="L699" href="#L699">699</a> 
-<a class="jxr_linenumber" name="L700" href="#L700">700</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L701" href="#L701">701</a> <em class="jxr_javadoccomment">	 * File charset.</em>
-<a class="jxr_linenumber" name="L702" href="#L702">702</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L703" href="#L703">703</a> <em class="jxr_javadoccomment">	 * @see Builder#fileCharset(Charset)</em>
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L705" href="#L705">705</a> <em class="jxr_javadoccomment">	 * 	The character set to use for reading &lt;c&gt;Files&lt;/c&gt; from the file system.</em>
-<a class="jxr_linenumber" name="L706" href="#L706">706</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L707" href="#L707">707</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Charset getFileCharset() { <strong class="jxr_keyword">return</strong> fileCharset; }
-<a class="jxr_linenumber" name="L708" href="#L708">708</a> 
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L710" href="#L710">710</a> <em class="jxr_javadoccomment">	 * Input stream charset.</em>
-<a class="jxr_linenumber" name="L711" href="#L711">711</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L712" href="#L712">712</a> <em class="jxr_javadoccomment">	 * @see Builder#streamCharset(Charset)</em>
-<a class="jxr_linenumber" name="L713" href="#L713">713</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L714" href="#L714">714</a> <em class="jxr_javadoccomment">	 * 	The character set to use for converting &lt;c&gt;InputStreams&lt;/c&gt; and byte arrays to readers.</em>
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L716" href="#L716">716</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Charset getStreamCharset() { <strong class="jxr_keyword">return</strong> streamCharset; }
-<a class="jxr_linenumber" name="L717" href="#L717">717</a> 
-<a class="jxr_linenumber" name="L718" href="#L718">718</a> 	@Override <em class="jxr_comment">/* Overridden from Parser */</em>
-<a class="jxr_linenumber" name="L719" href="#L719">719</a> 	<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
-<a class="jxr_linenumber" name="L720" href="#L720">720</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.properties()
-<a class="jxr_linenumber" name="L721" href="#L721">721</a> 			.a(<span class="jxr_string">"fileCharset"</span>, fileCharset)
-<a class="jxr_linenumber" name="L722" href="#L722">722</a> 			.a(<span class="jxr_string">"streamCharset"</span>, streamCharset);
-<a class="jxr_linenumber" name="L723" href="#L723">723</a> 	}
-<a class="jxr_linenumber" name="L724" href="#L724">724</a> }
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Charset fileCharset;
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Charset streamCharset;
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> <em class="jxr_javadoccomment">	 * @param builder The builder for this object.</em>
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 	<strong class="jxr_keyword">protected</strong> <a name="ReaderParser" href="../../../../org/apache/juneau/parser/ReaderParser.html#ReaderParser">ReaderParser</a>(Builder builder) {
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 		<strong class="jxr_keyword">super</strong>(builder);
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 		streamCharset = builder.streamCharset;
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 		fileCharset = builder.fileCharset;
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 	}
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 	<strong class="jxr_keyword">public</strong> ReaderParserSession.Builder createSession() {
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 		<strong class="jxr_keyword">return</strong> ReaderParserSession.create(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 	}
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 	<strong class="jxr_keyword">public</strong> <a name="ReaderParserSession" href="../../../../org/apache/juneau/parser/ReaderParserSession.html#ReaderParserSession">ReaderParserSession</a> getSession() { <strong class="jxr_keyword">return</strong> createSession().build(); }
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> 
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 	@Override <em class="jxr_comment">/* Overridden from Parser */</em>
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isReaderParser() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>; }
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> 
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> <em class="jxr_javadoccomment">	 * File charset.</em>
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> <em class="jxr_javadoccomment">	 * @see Builder#fileCharset(Charset)</em>
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> <em class="jxr_javadoccomment">	 * 	The character set to use for reading &lt;c&gt;Files&lt;/c&gt; from the file system.</em>
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Charset getFileCharset() { <strong class="jxr_keyword">return</strong> fileCharset; }
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> <em class="jxr_javadoccomment">	 * Input stream charset.</em>
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> <em class="jxr_javadoccomment">	 * @see Builder#streamCharset(Charset)</em>
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> <em class="jxr_javadoccomment">	 * 	The character set to use for converting &lt;c&gt;InputStreams&lt;/c&gt; and byte arrays to readers.</em>
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Charset getStreamCharset() { <strong class="jxr_keyword">return</strong> streamCharset; }
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> 
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> 	@Override <em class="jxr_comment">/* Overridden from Parser */</em>
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> 	<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.properties()
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> 			.a(<span class="jxr_string">"fileCharset"</span>, fileCharset)
+<a class="jxr_linenumber" name="L723" href="#L723">723</a> 			.a(<span class="jxr_string">"streamCharset"</span>, streamCharset);
+<a class="jxr_linenumber" name="L724" href="#L724">724</a> 	}
+<a class="jxr_linenumber" name="L725" href="#L725">725</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

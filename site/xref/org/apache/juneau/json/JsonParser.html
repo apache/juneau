@@ -750,10 +750,10 @@
 <a class="jxr_linenumber" name="L742" href="#L742">742</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder();
 <a class="jxr_linenumber" name="L743" href="#L743">743</a> 	}
 <a class="jxr_linenumber" name="L744" href="#L744">744</a> 
-<a class="jxr_linenumber" name="L745" href="#L745">745</a> 	<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> validateEnd;
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> validateEnd;
 <a class="jxr_linenumber" name="L746" href="#L746">746</a> 
-<a class="jxr_linenumber" name="L747" href="#L747">747</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;ClassMeta&lt;?&gt;,JsonClassMeta&gt; jsonClassMetas = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L748" href="#L748">748</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;BeanPropertyMeta,JsonBeanPropertyMeta&gt; jsonBeanPropertyMetas = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L747" href="#L747">747</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;BeanPropertyMeta,JsonBeanPropertyMeta&gt; jsonBeanPropertyMetas = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L748" href="#L748">748</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;ClassMeta&lt;?&gt;,JsonClassMeta&gt; jsonClassMetas = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L749" href="#L749">749</a> 
 <a class="jxr_linenumber" name="L750" href="#L750">750</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L751" href="#L751">751</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
