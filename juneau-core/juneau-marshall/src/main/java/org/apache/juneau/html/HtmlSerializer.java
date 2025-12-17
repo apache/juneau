@@ -23,6 +23,7 @@ import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
@@ -1440,7 +1441,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	private final Map<ClassMeta<?>,HtmlClassMeta> htmlClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,HtmlBeanPropertyMeta> htmlBeanPropertyMetas = new ConcurrentHashMap<>();
 
-	private volatile HtmlSchemaSerializer schemaSerializer;
+	private final AtomicReference<HtmlSchemaSerializer> schemaSerializer = new AtomicReference<>();
 
 	/**
 	 * Constructor.
@@ -1495,9 +1496,14 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	 * @return The schema serializer.
 	 */
 	public HtmlSerializer getSchemaSerializer() {
-		if (schemaSerializer == null)
-			schemaSerializer = HtmlSchemaSerializer.create().beanContext(getBeanContext()).build();
-		return schemaSerializer;
+		HtmlSchemaSerializer result = schemaSerializer.get();
+		if (result == null) {
+			result = HtmlSchemaSerializer.create().beanContext(getBeanContext()).build();
+			if (! schemaSerializer.compareAndSet(null, result)) {
+				result = schemaSerializer.get();
+			}
+		}
+		return result;
 	}
 
 	@Override /* Overridden from Context */

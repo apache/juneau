@@ -23,6 +23,7 @@ import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
@@ -1047,7 +1048,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	private final Map<BeanPropertyMeta,JsonBeanPropertyMeta> jsonBeanPropertyMetas = new ConcurrentHashMap<>();
 	private final Map<ClassMeta<?>,JsonClassMeta> jsonClassMetas = new ConcurrentHashMap<>();
 
-	private volatile JsonSchemaSerializer schemaSerializer;
+	private final AtomicReference<JsonSchemaSerializer> schemaSerializer = new AtomicReference<>();
 
 	/**
 	 * Constructor.
@@ -1105,9 +1106,14 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 * @return The schema serializer.
 	 */
 	public JsonSchemaSerializer getSchemaSerializer() {
-		if (schemaSerializer == null)
-			schemaSerializer = JsonSchemaSerializer.create().beanContext(getBeanContext()).build();
-		return schemaSerializer;
+		JsonSchemaSerializer result = schemaSerializer.get();
+		if (result == null) {
+			result = JsonSchemaSerializer.create().beanContext(getBeanContext()).build();
+			if (! schemaSerializer.compareAndSet(null, result)) {
+				result = schemaSerializer.get();
+			}
+		}
+		return result;
 	}
 
 	@Override /* Overridden from Context */

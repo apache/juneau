@@ -23,6 +23,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.regex.*;
 
@@ -1640,7 +1641,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	private final HtmlWidget[] widgetArray;
 	private final HtmlDocTemplate templateBean;
 
-	private volatile HtmlSchemaDocSerializer schemaSerializer;
+	private final AtomicReference<HtmlSchemaDocSerializer> schemaSerializer = new AtomicReference<>();
 
 	/**
 	 * Constructor.
@@ -1683,9 +1684,14 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	@Override /* Overridden from XmlSerializer */
 	public HtmlSerializer getSchemaSerializer() {
-		if (schemaSerializer == null)
-			schemaSerializer = HtmlSchemaDocSerializer.create().beanContext(getBeanContext()).build();
-		return schemaSerializer;
+		HtmlSchemaDocSerializer result = schemaSerializer.get();
+		if (result == null) {
+			result = HtmlSchemaDocSerializer.create().beanContext(getBeanContext()).build();
+			if (! schemaSerializer.compareAndSet(null, result)) {
+				result = schemaSerializer.get();
+			}
+		}
+		return result;
 	}
 
 	@Override /* Overridden from Context */

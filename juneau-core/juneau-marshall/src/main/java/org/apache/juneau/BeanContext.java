@@ -31,6 +31,7 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
@@ -3590,7 +3591,7 @@ public class BeanContext extends Context {
 	private final BeanRegistry beanRegistry;
 	private final BeanSession defaultSession;
 	private final PropertyNamer propertyNamerBean;
-	private volatile WriterSerializer beanToStringSerializer;
+	private final AtomicReference<WriterSerializer> beanToStringSerializer = new AtomicReference<>();
 
 	/**
 	 * Constructor.
@@ -4221,12 +4222,16 @@ public class BeanContext extends Context {
 	 * @return The serializer.  May be <jk>null</jk> if all initialization has occurred.
 	 */
 	protected WriterSerializer getBeanToStringSerializer() {
-		if (beanToStringSerializer == null) {
+		WriterSerializer result = beanToStringSerializer.get();
+		if (result == null) {
 			if (JsonSerializer.DEFAULT == null)
 				return null;
-			this.beanToStringSerializer = JsonSerializer.create().beanContext(this).sq().simpleAttrs().build();
+			result = JsonSerializer.create().beanContext(this).sq().simpleAttrs().build();
+			if (! beanToStringSerializer.compareAndSet(null, result)) {
+				result = beanToStringSerializer.get();
+			}
 		}
-		return beanToStringSerializer;
+		return result;
 	}
 
 	/**

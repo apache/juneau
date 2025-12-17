@@ -40,6 +40,7 @@ import java.nio.charset.*;
 import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
 import java.util.regex.*;
@@ -6191,8 +6192,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	private final String rootUrl;
 	private final boolean executorServiceShutdownOnClose;
 	private final boolean logToConsole;
-	private volatile boolean isClosed = false;
-	private volatile ExecutorService executorService;
+	private final AtomicBoolean isClosed = new AtomicBoolean(false);
+	private final AtomicReference<ExecutorService> executorService = new AtomicReference<>();
 
 	/**
 	 * Constructor.
@@ -6217,7 +6218,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		errorCodes = builder.errorCodes;
 		connectionManager = builder.connectionManager;
 		console = nn(builder.console) ? builder.console : System.err;
-		executorService = builder.executorService;
+		if (builder.executorService != null)
+			executorService.set(builder.executorService);
 		executorServiceShutdownOnClose = builder.executorServiceShutdownOnClose;
 		ignoreErrors = builder.ignoreErrors;
 		keepHttpClientOpen = builder.keepHttpClientOpen;
@@ -6340,11 +6342,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 */
 	@Override
 	public void close() throws IOException {
-		isClosed = true;
+		isClosed.set(true);
+		ExecutorService es = executorService.get();
 		if (! keepHttpClientOpen)
 			httpClient.close();
-		if (nn(executorService) && executorServiceShutdownOnClose)
-			executorService.shutdown();
+		if (nn(es) && executorServiceShutdownOnClose)
+			es.shutdown();
 		if (nn(creationStack))
 			closedStack = Thread.currentThread().getStackTrace();
 	}
@@ -6353,12 +6356,13 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * Same as {@link #close()}, but ignores any exceptions.
 	 */
 	public void closeQuietly() {
-		isClosed = true;
+		isClosed.set(true);
 		try {
 			if (! keepHttpClientOpen)
 				httpClient.close();
-			if (nn(executorService) && executorServiceShutdownOnClose)
-				executorService.shutdown();
+			ExecutorService es = executorService.get();
+			if (nn(es) && executorServiceShutdownOnClose)
+				es.shutdown();
 		} catch (@SuppressWarnings("unused") Throwable t) {}
 		if (nn(creationStack))
 			closedStack = Thread.currentThread().getStackTrace();
@@ -7697,7 +7701,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 	@Override
 	protected void finalize() throws Throwable {
-		if (detectLeaks && ! isClosed && ! keepHttpClientOpen) {
+		if (detectLeaks && ! isClosed.get() && ! keepHttpClientOpen) {
 			var sb = new StringBuilder("WARNING:  RestClient garbage collected before it was finalized.");  // NOT DEBUG
 			if (nn(creationStack)) {
 				sb.append("\nCreation Stack:");  // NOT DEBUG
@@ -7895,7 +7899,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
 			.a("errorCodes", errorCodes)
-			.a("executorService", executorService)
+			.a("executorService", executorService.get())
 			.a("executorServiceShutdownOnClose", executorServiceShutdownOnClose)
 			.a("headerData", headerData)
 			.a("interceptors", interceptors)
@@ -7920,7 +7924,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	protected RestRequest request(RestOperation op) throws RestCallException {
-		if (isClosed) {
+		if (isClosed.get()) {
 			var e2 = (Exception)null;
 			if (nn(closedStack)) {
 				e2 = new Exception("Creation stack:");
@@ -8017,11 +8021,16 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	}
 
 	ExecutorService getExecutorService() {
-		if (nn(executorService))
-			return executorService;
+		ExecutorService result = executorService.get();
+		if (nn(result))
+			return result;
 		synchronized (this) {
-			executorService = new ThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<>(10));
-			return executorService;
+			result = executorService.get();
+			if (nn(result))
+				return result;
+			result = new ThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<>(10));
+			executorService.set(result);
+			return result;
 		}
 	}
 

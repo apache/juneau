@@ -108,7 +108,8 @@ public class MethodExecStats {
 	private final Method method;
 	private final ThrownStore thrownStore;
 
-	private volatile int minTime = -1, maxTime;
+	private final AtomicInteger maxTime = new AtomicInteger();
+	private final AtomicInteger minTime = new AtomicInteger(-1);
 
 	private AtomicInteger starts = new AtomicInteger(), finishes = new AtomicInteger(), errors = new AtomicInteger();
 
@@ -147,8 +148,13 @@ public class MethodExecStats {
 		finishes.incrementAndGet();
 		int milliTime = (int)(nanoTime / 1_000_000);
 		totalTime.addAndGet(nanoTime);
-		minTime = minTime == -1 ? milliTime : Math.min(minTime, milliTime);
-		maxTime = Math.max(maxTime, milliTime);
+		int currentMin = minTime.get();
+		if (currentMin == -1) {
+			minTime.compareAndSet(-1, milliTime);
+		} else {
+			minTime.updateAndGet(x -> Math.min(x, milliTime));
+		}
+		maxTime.updateAndGet(x -> Math.max(x, milliTime));
 		return this;
 	}
 
@@ -186,7 +192,7 @@ public class MethodExecStats {
 	 *
 	 * @return The average execution time in milliseconds.
 	 */
-	public int getMaxTime() { return maxTime; }
+	public int getMaxTime() { return maxTime.get(); }
 
 	/**
 	 * Returns the method name of these stats.
@@ -200,7 +206,10 @@ public class MethodExecStats {
 	 *
 	 * @return The average execution time in milliseconds.
 	 */
-	public int getMinTime() { return minTime == -1 ? 0 : minTime; }
+	public int getMinTime() { 
+		int value = minTime.get();
+		return value == -1 ? 0 : value;
+	}
 
 	/**
 	 * Returns the number currently running method invocations.
