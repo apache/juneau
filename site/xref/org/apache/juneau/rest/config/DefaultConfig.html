@@ -137,19 +137,18 @@
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 	swaggerProvider=SwaggerProvider.Void.<strong class="jxr_keyword">class</strong>,  <em class="jxr_comment">// Defaults to BasicSwaggerProvider.</em>
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 	<em class="jxr_comment">// Overridable context classes.</em>
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	restChildrenClass=RestChildren.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	restOperationsClass=RestOperations.<strong class="jxr_keyword">class</strong>
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> )
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> @BeanConfig(
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	<em class="jxr_comment">// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.</em>
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	ignoreUnknownBeanProperties=<span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	ignoreUnknownEnumValues=<span class="jxr_string">"true"</span>
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> )
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> @SerializerConfig(
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<em class="jxr_comment">// Enable automatic resolution of URI objects to root-relative values.</em>
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	uriResolution=<span class="jxr_string">"ROOT_RELATIVE"</span>
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> )
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> DefaultConfig {}
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	restChildrenClass=RestChildren.<strong class="jxr_keyword">class</strong>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> )
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> @BeanConfig(
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	<em class="jxr_comment">// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	ignoreUnknownBeanProperties=<span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	ignoreUnknownEnumValues=<span class="jxr_string">"true"</span>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> )
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> @SerializerConfig(
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<em class="jxr_comment">// Enable automatic resolution of URI objects to root-relative values.</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	uriResolution=<span class="jxr_string">"ROOT_RELATIVE"</span>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> )
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> DefaultConfig {}
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

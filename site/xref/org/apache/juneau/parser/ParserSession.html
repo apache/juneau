@@ -63,10 +63,10 @@
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> <strong class="jxr_keyword">extends</strong> BeanSession.Builder {
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		Parser ctx;
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		Method javaMethod;
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		Object <strong class="jxr_keyword">outer</strong>;
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		HttpPartSchema schema;
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">private</strong> <a name="HttpPartSchema" href="../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> schema;
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">private</strong> Method javaMethod;
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">private</strong> Object <strong class="jxr_keyword">outer</strong>;
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">private</strong> <a name="Parser" href="../../../../org/apache/juneau/parser/Parser.html#Parser">Parser</a> ctx;
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">		 * Constructor</em>

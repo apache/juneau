@@ -1197,368 +1197,354 @@
 <a class="jxr_linenumber" name="L1189" href="#L1189">1189</a> 	Class&lt;? <strong class="jxr_keyword">extends</strong> RestOpArg&gt;[] restOpArgs() <strong class="jxr_keyword">default</strong> {};
 <a class="jxr_linenumber" name="L1190" href="#L1190">1190</a> 
 <a class="jxr_linenumber" name="L1191" href="#L1191">1191</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1192" href="#L1192">1192</a> <em class="jxr_javadoccomment">	 * REST methods class.</em>
+<a class="jxr_linenumber" name="L1192" href="#L1192">1192</a> <em class="jxr_javadoccomment">	 * Role guard.</em>
 <a class="jxr_linenumber" name="L1193" href="#L1193">1193</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1194" href="#L1194">1194</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1195" href="#L1195">1195</a> <em class="jxr_javadoccomment">	 * Allows you to extend the {@link RestOperations} class to modify how any of the methods are implemented.</em>
+<a class="jxr_linenumber" name="L1195" href="#L1195">1195</a> <em class="jxr_javadoccomment">	 * An expression defining if a user with the specified roles are allowed to access methods on this class.</em>
 <a class="jxr_linenumber" name="L1196" href="#L1196">1196</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1197" href="#L1197">1197</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1198" href="#L1198">1198</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestContext.Builder#restOperationsClass(Class)}</em>
-<a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1200" href="#L1200">1200</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
-<a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> 	Class&lt;? <strong class="jxr_keyword">extends</strong> RestOperations&gt; restOperationsClass() <strong class="jxr_keyword">default</strong> RestOperations.Void.<strong class="jxr_keyword">class</strong>;
-<a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> 
-<a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1206" href="#L1206">1206</a> <em class="jxr_javadoccomment">	 * Role guard.</em>
-<a class="jxr_linenumber" name="L1207" href="#L1207">1207</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1208" href="#L1208">1208</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1209" href="#L1209">1209</a> <em class="jxr_javadoccomment">	 * An expression defining if a user with the specified roles are allowed to access methods on this class.</em>
+<a class="jxr_linenumber" name="L1197" href="#L1197">1197</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1198" href="#L1198">1198</a> <em class="jxr_javadoccomment">	 * This is a shortcut for specifying {@link RestOp#roleGuard()} on all the REST operations on a class.</em>
+<a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1200" href="#L1200">1200</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> <em class="jxr_javadoccomment">	 * 	&lt;ja&gt;@Rest&lt;/ja&gt;(</em>
+<a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> <em class="jxr_javadoccomment">	 * 		path=&lt;js&gt;"/foo"&lt;/js&gt;,</em>
+<a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> <em class="jxr_javadoccomment">	 * 		roleGuard=&lt;js&gt;"ROLE_ADMIN || (ROLE_READ_WRITE &amp;amp;&amp;amp; ROLE_SPECIAL)"&lt;/js&gt;</em>
+<a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> <em class="jxr_javadoccomment">	 * 	)</em>
+<a class="jxr_linenumber" name="L1206" href="#L1206">1206</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;public class&lt;/jk&gt; MyResource &lt;jk&gt;extends&lt;/jk&gt; BasicRestServlet {</em>
+<a class="jxr_linenumber" name="L1207" href="#L1207">1207</a> <em class="jxr_javadoccomment">	 * 		...</em>
+<a class="jxr_linenumber" name="L1208" href="#L1208">1208</a> <em class="jxr_javadoccomment">	 * 	}</em>
+<a class="jxr_linenumber" name="L1209" href="#L1209">1209</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1210" href="#L1210">1210</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1211" href="#L1211">1211</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1212" href="#L1212">1212</a> <em class="jxr_javadoccomment">	 * This is a shortcut for specifying {@link RestOp#roleGuard()} on all the REST operations on a class.</em>
-<a class="jxr_linenumber" name="L1213" href="#L1213">1213</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1214" href="#L1214">1214</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L1215" href="#L1215">1215</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L1216" href="#L1216">1216</a> <em class="jxr_javadoccomment">	 * 	&lt;ja&gt;@Rest&lt;/ja&gt;(</em>
-<a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> <em class="jxr_javadoccomment">	 * 		path=&lt;js&gt;"/foo"&lt;/js&gt;,</em>
-<a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> <em class="jxr_javadoccomment">	 * 		roleGuard=&lt;js&gt;"ROLE_ADMIN || (ROLE_READ_WRITE &amp;amp;&amp;amp; ROLE_SPECIAL)"&lt;/js&gt;</em>
-<a class="jxr_linenumber" name="L1219" href="#L1219">1219</a> <em class="jxr_javadoccomment">	 * 	)</em>
-<a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;public class&lt;/jk&gt; MyResource &lt;jk&gt;extends&lt;/jk&gt; BasicRestServlet {</em>
-<a class="jxr_linenumber" name="L1221" href="#L1221">1221</a> <em class="jxr_javadoccomment">	 * 		...</em>
-<a class="jxr_linenumber" name="L1222" href="#L1222">1222</a> <em class="jxr_javadoccomment">	 * 	}</em>
-<a class="jxr_linenumber" name="L1223" href="#L1223">1223</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L1224" href="#L1224">1224</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1225" href="#L1225">1225</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1226" href="#L1226">1226</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
-<a class="jxr_linenumber" name="L1227" href="#L1227">1227</a> <em class="jxr_javadoccomment">	 * 		Supports any of the following expression constructs:</em>
-<a class="jxr_linenumber" name="L1228" href="#L1228">1228</a> <em class="jxr_javadoccomment">	 * 		&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1229" href="#L1229">1229</a> <em class="jxr_javadoccomment">	 * 			&lt;li&gt;&lt;js&gt;"foo"&lt;/js&gt; - Single arguments.</em>
-<a class="jxr_linenumber" name="L1230" href="#L1230">1230</a> <em class="jxr_javadoccomment">	 * 			&lt;li&gt;&lt;js&gt;"foo,bar,baz"&lt;/js&gt; - Multiple OR'ed arguments.</em>
-<a class="jxr_linenumber" name="L1231" href="#L1231">1231</a> <em class="jxr_javadoccomment">	 * 			&lt;li&gt;&lt;js&gt;"foo | bar | baz"&lt;/js&gt; - Multiple OR'ed arguments, pipe syntax.</em>
-<a class="jxr_linenumber" name="L1232" href="#L1232">1232</a> <em class="jxr_javadoccomment">	 * 			&lt;li&gt;&lt;js&gt;"foo || bar || baz"&lt;/js&gt; - Multiple OR'ed arguments, Java-OR syntax.</em>
-<a class="jxr_linenumber" name="L1233" href="#L1233">1233</a> <em class="jxr_javadoccomment">	 * 			&lt;li&gt;&lt;js&gt;"fo*"&lt;/js&gt; - Patterns including &lt;js&gt;'*'&lt;/js&gt; and &lt;js&gt;'?'&lt;/js&gt;.</em>
-<a class="jxr_linenumber" name="L1234" href="#L1234">1234</a> <em class="jxr_javadoccomment">	 * 			&lt;li&gt;&lt;js&gt;"fo* &amp;amp; *oo"&lt;/js&gt; - Multiple AND'ed arguments, ampersand syntax.</em>
-<a class="jxr_linenumber" name="L1235" href="#L1235">1235</a> <em class="jxr_javadoccomment">	 * 			&lt;li&gt;&lt;js&gt;"fo* &amp;amp;&amp;amp; *oo"&lt;/js&gt; - Multiple AND'ed arguments, Java-AND syntax.</em>
-<a class="jxr_linenumber" name="L1236" href="#L1236">1236</a> <em class="jxr_javadoccomment">	 * 			&lt;li&gt;&lt;js&gt;"fo* || (*oo || bar)"&lt;/js&gt; - Parenthesis.</em>
-<a class="jxr_linenumber" name="L1237" href="#L1237">1237</a> <em class="jxr_javadoccomment">	 * 		&lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1238" href="#L1238">1238</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;</em>
-<a class="jxr_linenumber" name="L1239" href="#L1239">1239</a> <em class="jxr_javadoccomment">	 * 		AND operations take precedence over OR operations (as expected).</em>
-<a class="jxr_linenumber" name="L1240" href="#L1240">1240</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;</em>
-<a class="jxr_linenumber" name="L1241" href="#L1241">1241</a> <em class="jxr_javadoccomment">	 * 		Whitespace is ignored.</em>
-<a class="jxr_linenumber" name="L1242" href="#L1242">1242</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;</em>
-<a class="jxr_linenumber" name="L1243" href="#L1243">1243</a> <em class="jxr_javadoccomment">	 * 		&lt;jk&gt;null&lt;/jk&gt; or empty expressions always match as &lt;jk&gt;false&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1244" href="#L1244">1244</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;</em>
-<a class="jxr_linenumber" name="L1245" href="#L1245">1245</a> <em class="jxr_javadoccomment">	 * 		If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()} or {@link org.apache.juneau.rest.RestOpContext.Builder#rolesDeclared(String...)}.</em>
-<a class="jxr_linenumber" name="L1246" href="#L1246">1246</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;</em>
-<a class="jxr_linenumber" name="L1247" href="#L1247">1247</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;SVL Variables&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L1248" href="#L1248">1248</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</em>
-<a class="jxr_linenumber" name="L1249" href="#L1249">1249</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1211" href="#L1211">1211</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1212" href="#L1212">1212</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
+<a class="jxr_linenumber" name="L1213" href="#L1213">1213</a> <em class="jxr_javadoccomment">	 * 		Supports any of the following expression constructs:</em>
+<a class="jxr_linenumber" name="L1214" href="#L1214">1214</a> <em class="jxr_javadoccomment">	 * 		&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1215" href="#L1215">1215</a> <em class="jxr_javadoccomment">	 * 			&lt;li&gt;&lt;js&gt;"foo"&lt;/js&gt; - Single arguments.</em>
+<a class="jxr_linenumber" name="L1216" href="#L1216">1216</a> <em class="jxr_javadoccomment">	 * 			&lt;li&gt;&lt;js&gt;"foo,bar,baz"&lt;/js&gt; - Multiple OR'ed arguments.</em>
+<a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> <em class="jxr_javadoccomment">	 * 			&lt;li&gt;&lt;js&gt;"foo | bar | baz"&lt;/js&gt; - Multiple OR'ed arguments, pipe syntax.</em>
+<a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> <em class="jxr_javadoccomment">	 * 			&lt;li&gt;&lt;js&gt;"foo || bar || baz"&lt;/js&gt; - Multiple OR'ed arguments, Java-OR syntax.</em>
+<a class="jxr_linenumber" name="L1219" href="#L1219">1219</a> <em class="jxr_javadoccomment">	 * 			&lt;li&gt;&lt;js&gt;"fo*"&lt;/js&gt; - Patterns including &lt;js&gt;'*'&lt;/js&gt; and &lt;js&gt;'?'&lt;/js&gt;.</em>
+<a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> <em class="jxr_javadoccomment">	 * 			&lt;li&gt;&lt;js&gt;"fo* &amp;amp; *oo"&lt;/js&gt; - Multiple AND'ed arguments, ampersand syntax.</em>
+<a class="jxr_linenumber" name="L1221" href="#L1221">1221</a> <em class="jxr_javadoccomment">	 * 			&lt;li&gt;&lt;js&gt;"fo* &amp;amp;&amp;amp; *oo"&lt;/js&gt; - Multiple AND'ed arguments, Java-AND syntax.</em>
+<a class="jxr_linenumber" name="L1222" href="#L1222">1222</a> <em class="jxr_javadoccomment">	 * 			&lt;li&gt;&lt;js&gt;"fo* || (*oo || bar)"&lt;/js&gt; - Parenthesis.</em>
+<a class="jxr_linenumber" name="L1223" href="#L1223">1223</a> <em class="jxr_javadoccomment">	 * 		&lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1224" href="#L1224">1224</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;</em>
+<a class="jxr_linenumber" name="L1225" href="#L1225">1225</a> <em class="jxr_javadoccomment">	 * 		AND operations take precedence over OR operations (as expected).</em>
+<a class="jxr_linenumber" name="L1226" href="#L1226">1226</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;</em>
+<a class="jxr_linenumber" name="L1227" href="#L1227">1227</a> <em class="jxr_javadoccomment">	 * 		Whitespace is ignored.</em>
+<a class="jxr_linenumber" name="L1228" href="#L1228">1228</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;</em>
+<a class="jxr_linenumber" name="L1229" href="#L1229">1229</a> <em class="jxr_javadoccomment">	 * 		&lt;jk&gt;null&lt;/jk&gt; or empty expressions always match as &lt;jk&gt;false&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1230" href="#L1230">1230</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;</em>
+<a class="jxr_linenumber" name="L1231" href="#L1231">1231</a> <em class="jxr_javadoccomment">	 * 		If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()} or {@link org.apache.juneau.rest.RestOpContext.Builder#rolesDeclared(String...)}.</em>
+<a class="jxr_linenumber" name="L1232" href="#L1232">1232</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;</em>
+<a class="jxr_linenumber" name="L1233" href="#L1233">1233</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;SVL Variables&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L1234" href="#L1234">1234</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L1235" href="#L1235">1235</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1236" href="#L1236">1236</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1237" href="#L1237">1237</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1238" href="#L1238">1238</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestOpContext.Builder#roleGuard(String)}</em>
+<a class="jxr_linenumber" name="L1239" href="#L1239">1239</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1240" href="#L1240">1240</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1241" href="#L1241">1241</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
+<a class="jxr_linenumber" name="L1242" href="#L1242">1242</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1243" href="#L1243">1243</a> 	String roleGuard() <strong class="jxr_keyword">default</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L1244" href="#L1244">1244</a> 
+<a class="jxr_linenumber" name="L1245" href="#L1245">1245</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1246" href="#L1246">1246</a> <em class="jxr_javadoccomment">	 * Declared roles.</em>
+<a class="jxr_linenumber" name="L1247" href="#L1247">1247</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1248" href="#L1248">1248</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1249" href="#L1249">1249</a> <em class="jxr_javadoccomment">	 * A comma-delimited list of all possible user roles.</em>
 <a class="jxr_linenumber" name="L1250" href="#L1250">1250</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1251" href="#L1251">1251</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1252" href="#L1252">1252</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestOpContext.Builder#roleGuard(String)}</em>
-<a class="jxr_linenumber" name="L1253" href="#L1253">1253</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1254" href="#L1254">1254</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1255" href="#L1255">1255</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
-<a class="jxr_linenumber" name="L1256" href="#L1256">1256</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1257" href="#L1257">1257</a> 	String roleGuard() <strong class="jxr_keyword">default</strong> <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L1258" href="#L1258">1258</a> 
-<a class="jxr_linenumber" name="L1259" href="#L1259">1259</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> <em class="jxr_javadoccomment">	 * Declared roles.</em>
-<a class="jxr_linenumber" name="L1261" href="#L1261">1261</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1262" href="#L1262">1262</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1263" href="#L1263">1263</a> <em class="jxr_javadoccomment">	 * A comma-delimited list of all possible user roles.</em>
-<a class="jxr_linenumber" name="L1264" href="#L1264">1264</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1265" href="#L1265">1265</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1266" href="#L1266">1266</a> <em class="jxr_javadoccomment">	 * Used in conjunction with {@link #roleGuard()} is used with patterns.</em>
+<a class="jxr_linenumber" name="L1251" href="#L1251">1251</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1252" href="#L1252">1252</a> <em class="jxr_javadoccomment">	 * Used in conjunction with {@link #roleGuard()} is used with patterns.</em>
+<a class="jxr_linenumber" name="L1253" href="#L1253">1253</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1254" href="#L1254">1254</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1255" href="#L1255">1255</a> <em class="jxr_javadoccomment">	 * This is a shortcut for specifying {@link RestOp#rolesDeclared()} on all the REST operations on a class.</em>
+<a class="jxr_linenumber" name="L1256" href="#L1256">1256</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1257" href="#L1257">1257</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1258" href="#L1258">1258</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L1259" href="#L1259">1259</a> <em class="jxr_javadoccomment">	 * 	&lt;ja&gt;@Rest&lt;/ja&gt;(</em>
+<a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> <em class="jxr_javadoccomment">	 * 		rolesDeclared=&lt;js&gt;"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"&lt;/js&gt;,</em>
+<a class="jxr_linenumber" name="L1261" href="#L1261">1261</a> <em class="jxr_javadoccomment">	 * 		roleGuard=&lt;js&gt;"ROLE_ADMIN || (ROLE_READ_WRITE &amp;amp;&amp;amp; ROLE_SPECIAL)"&lt;/js&gt;</em>
+<a class="jxr_linenumber" name="L1262" href="#L1262">1262</a> <em class="jxr_javadoccomment">	 * 	)</em>
+<a class="jxr_linenumber" name="L1263" href="#L1263">1263</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;public class&lt;/jk&gt; MyResource &lt;jk&gt;extends&lt;/jk&gt; BasicRestServlet {</em>
+<a class="jxr_linenumber" name="L1264" href="#L1264">1264</a> <em class="jxr_javadoccomment">	 * 		...</em>
+<a class="jxr_linenumber" name="L1265" href="#L1265">1265</a> <em class="jxr_javadoccomment">	 * 	}</em>
+<a class="jxr_linenumber" name="L1266" href="#L1266">1266</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1267" href="#L1267">1267</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1269" href="#L1269">1269</a> <em class="jxr_javadoccomment">	 * This is a shortcut for specifying {@link RestOp#rolesDeclared()} on all the REST operations on a class.</em>
-<a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1271" href="#L1271">1271</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L1272" href="#L1272">1272</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L1273" href="#L1273">1273</a> <em class="jxr_javadoccomment">	 * 	&lt;ja&gt;@Rest&lt;/ja&gt;(</em>
-<a class="jxr_linenumber" name="L1274" href="#L1274">1274</a> <em class="jxr_javadoccomment">	 * 		rolesDeclared=&lt;js&gt;"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"&lt;/js&gt;,</em>
-<a class="jxr_linenumber" name="L1275" href="#L1275">1275</a> <em class="jxr_javadoccomment">	 * 		roleGuard=&lt;js&gt;"ROLE_ADMIN || (ROLE_READ_WRITE &amp;amp;&amp;amp; ROLE_SPECIAL)"&lt;/js&gt;</em>
-<a class="jxr_linenumber" name="L1276" href="#L1276">1276</a> <em class="jxr_javadoccomment">	 * 	)</em>
-<a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;public class&lt;/jk&gt; MyResource &lt;jk&gt;extends&lt;/jk&gt; BasicRestServlet {</em>
-<a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> <em class="jxr_javadoccomment">	 * 		...</em>
-<a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> <em class="jxr_javadoccomment">	 * 	}</em>
-<a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1282" href="#L1282">1282</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1283" href="#L1283">1283</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestOpContext.Builder#rolesDeclared(String...)}</em>
-<a class="jxr_linenumber" name="L1284" href="#L1284">1284</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1285" href="#L1285">1285</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1286" href="#L1286">1286</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
-<a class="jxr_linenumber" name="L1287" href="#L1287">1287</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1288" href="#L1288">1288</a> 	String rolesDeclared() <strong class="jxr_keyword">default</strong> <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L1289" href="#L1289">1289</a> 
-<a class="jxr_linenumber" name="L1290" href="#L1290">1290</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1291" href="#L1291">1291</a> <em class="jxr_javadoccomment">	 * Specifies the serializers for POJOs into HTTP response bodies.</em>
+<a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1269" href="#L1269">1269</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestOpContext.Builder#rolesDeclared(String...)}</em>
+<a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1271" href="#L1271">1271</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1272" href="#L1272">1272</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
+<a class="jxr_linenumber" name="L1273" href="#L1273">1273</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1274" href="#L1274">1274</a> 	String rolesDeclared() <strong class="jxr_keyword">default</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L1275" href="#L1275">1275</a> 
+<a class="jxr_linenumber" name="L1276" href="#L1276">1276</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> <em class="jxr_javadoccomment">	 * Specifies the serializers for POJOs into HTTP response bodies.</em>
+<a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> <em class="jxr_javadoccomment">	 * Serializer are used to convert POJOs to HTTP response bodies.</em>
+<a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;Any of the Juneau framework serializers can be used in this setting.</em>
+<a class="jxr_linenumber" name="L1282" href="#L1282">1282</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;The serializer selected is based on the request &lt;c&gt;Accept&lt;/c&gt; header matched against the values returned by the following method</em>
+<a class="jxr_linenumber" name="L1283" href="#L1283">1283</a> <em class="jxr_javadoccomment">	 * using a best-match algorithm:</em>
+<a class="jxr_linenumber" name="L1284" href="#L1284">1284</a> <em class="jxr_javadoccomment">	 * &lt;ul class='javatree'&gt;</em>
+<a class="jxr_linenumber" name="L1285" href="#L1285">1285</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link Serializer#getMediaTypeRanges()}</em>
+<a class="jxr_linenumber" name="L1286" href="#L1286">1286</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1287" href="#L1287">1287</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1288" href="#L1288">1288</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1289" href="#L1289">1289</a> <em class="jxr_javadoccomment">	 * Serializers are automatically inherited from {@link Rest#serializers()} annotations on parent classes with the serializers on child classes</em>
+<a class="jxr_linenumber" name="L1290" href="#L1290">1290</a> <em class="jxr_javadoccomment">	 * prepended to the serializer group.</em>
+<a class="jxr_linenumber" name="L1291" href="#L1291">1291</a> <em class="jxr_javadoccomment">	 * The {@link org.apache.juneau.serializer.SerializerSet.NoInherit} class can be used to prevent inheriting from the parent class.</em>
 <a class="jxr_linenumber" name="L1292" href="#L1292">1292</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1293" href="#L1293">1293</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1294" href="#L1294">1294</a> <em class="jxr_javadoccomment">	 * Serializer are used to convert POJOs to HTTP response bodies.</em>
-<a class="jxr_linenumber" name="L1295" href="#L1295">1295</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;Any of the Juneau framework serializers can be used in this setting.</em>
-<a class="jxr_linenumber" name="L1296" href="#L1296">1296</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;The serializer selected is based on the request &lt;c&gt;Accept&lt;/c&gt; header matched against the values returned by the following method</em>
-<a class="jxr_linenumber" name="L1297" href="#L1297">1297</a> <em class="jxr_javadoccomment">	 * using a best-match algorithm:</em>
-<a class="jxr_linenumber" name="L1298" href="#L1298">1298</a> <em class="jxr_javadoccomment">	 * &lt;ul class='javatree'&gt;</em>
-<a class="jxr_linenumber" name="L1299" href="#L1299">1299</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link Serializer#getMediaTypeRanges()}</em>
-<a class="jxr_linenumber" name="L1300" href="#L1300">1300</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1301" href="#L1301">1301</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1302" href="#L1302">1302</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1303" href="#L1303">1303</a> <em class="jxr_javadoccomment">	 * Serializers are automatically inherited from {@link Rest#serializers()} annotations on parent classes with the serializers on child classes</em>
-<a class="jxr_linenumber" name="L1304" href="#L1304">1304</a> <em class="jxr_javadoccomment">	 * prepended to the serializer group.</em>
-<a class="jxr_linenumber" name="L1305" href="#L1305">1305</a> <em class="jxr_javadoccomment">	 * The {@link org.apache.juneau.serializer.SerializerSet.NoInherit} class can be used to prevent inheriting from the parent class.</em>
+<a class="jxr_linenumber" name="L1293" href="#L1293">1293</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1294" href="#L1294">1294</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L1295" href="#L1295">1295</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Define a REST resource that can produce JSON and XML.&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1296" href="#L1296">1296</a> <em class="jxr_javadoccomment">	 * 	&lt;ja&gt;@Rest&lt;/ja&gt;(</em>
+<a class="jxr_linenumber" name="L1297" href="#L1297">1297</a> <em class="jxr_javadoccomment">	 * 		serializers={</em>
+<a class="jxr_linenumber" name="L1298" href="#L1298">1298</a> <em class="jxr_javadoccomment">	 * 			JsonParser.&lt;jk&gt;class&lt;/jk&gt;,</em>
+<a class="jxr_linenumber" name="L1299" href="#L1299">1299</a> <em class="jxr_javadoccomment">	 * 			XmlParser.&lt;jk&gt;class&lt;/jk&gt;</em>
+<a class="jxr_linenumber" name="L1300" href="#L1300">1300</a> <em class="jxr_javadoccomment">	 * 		}</em>
+<a class="jxr_linenumber" name="L1301" href="#L1301">1301</a> <em class="jxr_javadoccomment">	 * 	)</em>
+<a class="jxr_linenumber" name="L1302" href="#L1302">1302</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;public class&lt;/jk&gt; MyResource {</em>
+<a class="jxr_linenumber" name="L1303" href="#L1303">1303</a> <em class="jxr_javadoccomment">	 * 		...</em>
+<a class="jxr_linenumber" name="L1304" href="#L1304">1304</a> <em class="jxr_javadoccomment">	 * 	}</em>
+<a class="jxr_linenumber" name="L1305" href="#L1305">1305</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1306" href="#L1306">1306</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1307" href="#L1307">1307</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L1308" href="#L1308">1308</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L1309" href="#L1309">1309</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Define a REST resource that can produce JSON and XML.&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1310" href="#L1310">1310</a> <em class="jxr_javadoccomment">	 * 	&lt;ja&gt;@Rest&lt;/ja&gt;(</em>
-<a class="jxr_linenumber" name="L1311" href="#L1311">1311</a> <em class="jxr_javadoccomment">	 * 		serializers={</em>
-<a class="jxr_linenumber" name="L1312" href="#L1312">1312</a> <em class="jxr_javadoccomment">	 * 			JsonParser.&lt;jk&gt;class&lt;/jk&gt;,</em>
-<a class="jxr_linenumber" name="L1313" href="#L1313">1313</a> <em class="jxr_javadoccomment">	 * 			XmlParser.&lt;jk&gt;class&lt;/jk&gt;</em>
-<a class="jxr_linenumber" name="L1314" href="#L1314">1314</a> <em class="jxr_javadoccomment">	 * 		}</em>
-<a class="jxr_linenumber" name="L1315" href="#L1315">1315</a> <em class="jxr_javadoccomment">	 * 	)</em>
-<a class="jxr_linenumber" name="L1316" href="#L1316">1316</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;public class&lt;/jk&gt; MyResource {</em>
-<a class="jxr_linenumber" name="L1317" href="#L1317">1317</a> <em class="jxr_javadoccomment">	 * 		...</em>
-<a class="jxr_linenumber" name="L1318" href="#L1318">1318</a> <em class="jxr_javadoccomment">	 * 	}</em>
-<a class="jxr_linenumber" name="L1319" href="#L1319">1319</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L1320" href="#L1320">1320</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1321" href="#L1321">1321</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1322" href="#L1322">1322</a> <em class="jxr_javadoccomment">	 * The serializers can also be tailored at the method level using {@link RestOp#serializers()} (and related annotations).</em>
-<a class="jxr_linenumber" name="L1323" href="#L1323">1323</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1324" href="#L1324">1324</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1325" href="#L1325">1325</a> <em class="jxr_javadoccomment">	 * The programmatic equivalent to this annotation is:</em>
-<a class="jxr_linenumber" name="L1326" href="#L1326">1326</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L1327" href="#L1327">1327</a> <em class="jxr_javadoccomment">	 * 	RestContext.Builder &lt;jv&gt;builder&lt;/jv&gt; = RestContext.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;jv&gt;resource&lt;/jv&gt;);</em>
-<a class="jxr_linenumber" name="L1328" href="#L1328">1328</a> <em class="jxr_javadoccomment">	 * 	&lt;jv&gt;builder&lt;/jv&gt;.getSerializers().add(&lt;jv&gt;classes&lt;/jv&gt;);</em>
-<a class="jxr_linenumber" name="L1329" href="#L1329">1329</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L1330" href="#L1330">1330</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1331" href="#L1331">1331</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Inheritance Rules&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L1332" href="#L1332">1332</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1333" href="#L1333">1333</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Serializers on child override those on parent class.</em>
-<a class="jxr_linenumber" name="L1334" href="#L1334">1334</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link org.apache.juneau.serializer.SerializerSet.Inherit} class can be used to inherit and augment values from parent.</em>
-<a class="jxr_linenumber" name="L1335" href="#L1335">1335</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link org.apache.juneau.serializer.SerializerSet.NoInherit} class can be used to suppress inheriting from parent.</em>
-<a class="jxr_linenumber" name="L1336" href="#L1336">1336</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Serializers on methods take precedence over those on classes.</em>
-<a class="jxr_linenumber" name="L1337" href="#L1337">1337</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1307" href="#L1307">1307</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1308" href="#L1308">1308</a> <em class="jxr_javadoccomment">	 * The serializers can also be tailored at the method level using {@link RestOp#serializers()} (and related annotations).</em>
+<a class="jxr_linenumber" name="L1309" href="#L1309">1309</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1310" href="#L1310">1310</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1311" href="#L1311">1311</a> <em class="jxr_javadoccomment">	 * The programmatic equivalent to this annotation is:</em>
+<a class="jxr_linenumber" name="L1312" href="#L1312">1312</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L1313" href="#L1313">1313</a> <em class="jxr_javadoccomment">	 * 	RestContext.Builder &lt;jv&gt;builder&lt;/jv&gt; = RestContext.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;jv&gt;resource&lt;/jv&gt;);</em>
+<a class="jxr_linenumber" name="L1314" href="#L1314">1314</a> <em class="jxr_javadoccomment">	 * 	&lt;jv&gt;builder&lt;/jv&gt;.getSerializers().add(&lt;jv&gt;classes&lt;/jv&gt;);</em>
+<a class="jxr_linenumber" name="L1315" href="#L1315">1315</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L1316" href="#L1316">1316</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1317" href="#L1317">1317</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Inheritance Rules&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1318" href="#L1318">1318</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1319" href="#L1319">1319</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Serializers on child override those on parent class.</em>
+<a class="jxr_linenumber" name="L1320" href="#L1320">1320</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link org.apache.juneau.serializer.SerializerSet.Inherit} class can be used to inherit and augment values from parent.</em>
+<a class="jxr_linenumber" name="L1321" href="#L1321">1321</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link org.apache.juneau.serializer.SerializerSet.NoInherit} class can be used to suppress inheriting from parent.</em>
+<a class="jxr_linenumber" name="L1322" href="#L1322">1322</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Serializers on methods take precedence over those on classes.</em>
+<a class="jxr_linenumber" name="L1323" href="#L1323">1323</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1324" href="#L1324">1324</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1325" href="#L1325">1325</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1326" href="#L1326">1326</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/Marshalling" target="alexandria_uri">https://juneau.apache.org/docs/topics/Marshalling</a>"&gt;Marshalling&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L1327" href="#L1327">1327</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1328" href="#L1328">1328</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1329" href="#L1329">1329</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
+<a class="jxr_linenumber" name="L1330" href="#L1330">1330</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1331" href="#L1331">1331</a> 	Class&lt;? <strong class="jxr_keyword">extends</strong> Serializer&gt;[] serializers() <strong class="jxr_keyword">default</strong> {};
+<a class="jxr_linenumber" name="L1332" href="#L1332">1332</a> 
+<a class="jxr_linenumber" name="L1333" href="#L1333">1333</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1334" href="#L1334">1334</a> <em class="jxr_javadoccomment">	 * Optional site name.</em>
+<a class="jxr_linenumber" name="L1335" href="#L1335">1335</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1336" href="#L1336">1336</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1337" href="#L1337">1337</a> <em class="jxr_javadoccomment">	 * The site name is intended to be a title that can be applied to the entire site.</em>
 <a class="jxr_linenumber" name="L1338" href="#L1338">1338</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1339" href="#L1339">1339</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1340" href="#L1340">1340</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/Marshalling" target="alexandria_uri">https://juneau.apache.org/docs/topics/Marshalling</a>"&gt;Marshalling&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L1341" href="#L1341">1341</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1342" href="#L1342">1342</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1343" href="#L1343">1343</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
-<a class="jxr_linenumber" name="L1344" href="#L1344">1344</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1345" href="#L1345">1345</a> 	Class&lt;? <strong class="jxr_keyword">extends</strong> Serializer&gt;[] serializers() <strong class="jxr_keyword">default</strong> {};
-<a class="jxr_linenumber" name="L1346" href="#L1346">1346</a> 
-<a class="jxr_linenumber" name="L1347" href="#L1347">1347</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1348" href="#L1348">1348</a> <em class="jxr_javadoccomment">	 * Optional site name.</em>
-<a class="jxr_linenumber" name="L1349" href="#L1349">1349</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1350" href="#L1350">1350</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1351" href="#L1351">1351</a> <em class="jxr_javadoccomment">	 * The site name is intended to be a title that can be applied to the entire site.</em>
-<a class="jxr_linenumber" name="L1352" href="#L1352">1352</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1353" href="#L1353">1353</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1354" href="#L1354">1354</a> <em class="jxr_javadoccomment">	 * One possible use is if you want to add the same title to the top of all pages by defining a header on a</em>
-<a class="jxr_linenumber" name="L1355" href="#L1355">1355</a> <em class="jxr_javadoccomment">	 * common parent class like so:</em>
-<a class="jxr_linenumber" name="L1356" href="#L1356">1356</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L1357" href="#L1357">1357</a> <em class="jxr_javadoccomment">	 *  &lt;ja&gt;@HtmlDocConfig&lt;/ja&gt;(</em>
-<a class="jxr_linenumber" name="L1358" href="#L1358">1358</a> <em class="jxr_javadoccomment">	 * 		header={</em>
-<a class="jxr_linenumber" name="L1359" href="#L1359">1359</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"&amp;lt;h1&amp;gt;$RS{siteName}&amp;lt;/h1&amp;gt;"&lt;/js&gt;,</em>
-<a class="jxr_linenumber" name="L1360" href="#L1360">1360</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"&amp;lt;h2&amp;gt;$RS{title}&amp;lt;/h2&amp;gt;"&lt;/js&gt;</em>
-<a class="jxr_linenumber" name="L1361" href="#L1361">1361</a> <em class="jxr_javadoccomment">	 * 		}</em>
-<a class="jxr_linenumber" name="L1362" href="#L1362">1362</a> <em class="jxr_javadoccomment">	 * 	)</em>
-<a class="jxr_linenumber" name="L1363" href="#L1363">1363</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L1364" href="#L1364">1364</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1365" href="#L1365">1365</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1366" href="#L1366">1366</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
-<a class="jxr_linenumber" name="L1367" href="#L1367">1367</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;SVL Variables&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L1368" href="#L1368">1368</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</em>
-<a class="jxr_linenumber" name="L1369" href="#L1369">1369</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1370" href="#L1370">1370</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1371" href="#L1371">1371</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
-<a class="jxr_linenumber" name="L1372" href="#L1372">1372</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1373" href="#L1373">1373</a> 	String siteName() <strong class="jxr_keyword">default</strong> <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L1374" href="#L1374">1374</a> 
-<a class="jxr_linenumber" name="L1375" href="#L1375">1375</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1376" href="#L1376">1376</a> <em class="jxr_javadoccomment">	 * Static files.</em>
-<a class="jxr_linenumber" name="L1377" href="#L1377">1377</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1378" href="#L1378">1378</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1379" href="#L1379">1379</a> <em class="jxr_javadoccomment">	 * Used to retrieve localized files to be served up as static files through the REST API via the following</em>
-<a class="jxr_linenumber" name="L1380" href="#L1380">1380</a> <em class="jxr_javadoccomment">	 * predefined methods:</em>
-<a class="jxr_linenumber" name="L1381" href="#L1381">1381</a> <em class="jxr_javadoccomment">	 * &lt;ul class='javatree'&gt;</em>
-<a class="jxr_linenumber" name="L1382" href="#L1382">1382</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link BasicRestObject#getHtdoc(String, Locale)}.</em>
-<a class="jxr_linenumber" name="L1383" href="#L1383">1383</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link BasicRestServlet#getHtdoc(String, Locale)}.</em>
-<a class="jxr_linenumber" name="L1384" href="#L1384">1384</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1385" href="#L1385">1385</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1386" href="#L1386">1386</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1387" href="#L1387">1387</a> <em class="jxr_javadoccomment">	 * The static file finder can be accessed through the following methods:</em>
-<a class="jxr_linenumber" name="L1388" href="#L1388">1388</a> <em class="jxr_javadoccomment">	 * &lt;ul class='javatree'&gt;</em>
-<a class="jxr_linenumber" name="L1389" href="#L1389">1389</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link RestContext#getStaticFiles()}</em>
-<a class="jxr_linenumber" name="L1390" href="#L1390">1390</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link RestRequest#getStaticFiles()}</em>
-<a class="jxr_linenumber" name="L1391" href="#L1391">1391</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1392" href="#L1392">1392</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1393" href="#L1393">1393</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Inheritance Rules&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L1394" href="#L1394">1394</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1395" href="#L1395">1395</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Static files on child are combined with those on parent class.</em>
-<a class="jxr_linenumber" name="L1396" href="#L1396">1396</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Static files are are executed child-to-parent in the order they appear in the annotation.</em>
-<a class="jxr_linenumber" name="L1397" href="#L1397">1397</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1398" href="#L1398">1398</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1399" href="#L1399">1399</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
-<a class="jxr_linenumber" name="L1400" href="#L1400">1400</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1401" href="#L1401">1401</a> 	Class&lt;? <strong class="jxr_keyword">extends</strong> StaticFiles&gt; staticFiles() <strong class="jxr_keyword">default</strong> StaticFiles.Void.<strong class="jxr_keyword">class</strong>;
-<a class="jxr_linenumber" name="L1402" href="#L1402">1402</a> 
-<a class="jxr_linenumber" name="L1403" href="#L1403">1403</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1404" href="#L1404">1404</a> <em class="jxr_javadoccomment">	 * Provides swagger-specific metadata on this resource.</em>
-<a class="jxr_linenumber" name="L1405" href="#L1405">1405</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1406" href="#L1406">1406</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1407" href="#L1407">1407</a> <em class="jxr_javadoccomment">	 * Used to populate the auto-generated OPTIONS swagger documentation.</em>
-<a class="jxr_linenumber" name="L1408" href="#L1408">1408</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1409" href="#L1409">1409</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L1410" href="#L1410">1410</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L1411" href="#L1411">1411</a> <em class="jxr_javadoccomment">	 * 	&lt;ja&gt;@Rest&lt;/ja&gt;(</em>
-<a class="jxr_linenumber" name="L1412" href="#L1412">1412</a> <em class="jxr_javadoccomment">	 * 		path=&lt;js&gt;"/addressBook"&lt;/js&gt;,</em>
-<a class="jxr_linenumber" name="L1413" href="#L1413">1413</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1414" href="#L1414">1414</a> <em class="jxr_javadoccomment">	 * 		&lt;jc&gt;// Swagger info.&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L1415" href="#L1415">1415</a> <em class="jxr_javadoccomment">	 * 		swagger=@Swagger({</em>
-<a class="jxr_linenumber" name="L1416" href="#L1416">1416</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"contact:{name:'John Smith',email:'john@smith.com'},"&lt;/js&gt;,</em>
-<a class="jxr_linenumber" name="L1417" href="#L1417">1417</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"license:{name:'Apache 2.0',url:'<a href="http://www.apache.org/licenses/LICENSE-2.0.html'" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0.html'</a>},"&lt;/js&gt;,</em>
-<a class="jxr_linenumber" name="L1418" href="#L1418">1418</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"version:'2.0',&lt;/js&gt;,</em>
-<a class="jxr_linenumber" name="L1419" href="#L1419">1419</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"termsOfService:'You are on your own.',"&lt;/js&gt;,</em>
-<a class="jxr_linenumber" name="L1420" href="#L1420">1420</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"tags:[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'<a href="http://juneau.apache.org'" target="alexandria_uri">http://juneau.apache.org'</a>}}],"&lt;/js&gt;,</em>
-<a class="jxr_linenumber" name="L1421" href="#L1421">1421</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"externalDocs:{description:'Home page',url:'<a href="http://juneau.apache.org'" target="alexandria_uri">http://juneau.apache.org'</a>}"&lt;/js&gt;</em>
-<a class="jxr_linenumber" name="L1422" href="#L1422">1422</a> <em class="jxr_javadoccomment">	 * 		})</em>
-<a class="jxr_linenumber" name="L1423" href="#L1423">1423</a> <em class="jxr_javadoccomment">	 * 	)</em>
-<a class="jxr_linenumber" name="L1424" href="#L1424">1424</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L1425" href="#L1425">1425</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1426" href="#L1426">1426</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1427" href="#L1427">1427</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Swagger}</em>
-<a class="jxr_linenumber" name="L1428" href="#L1428">1428</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1429" href="#L1429">1429</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1430" href="#L1430">1430</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
-<a class="jxr_linenumber" name="L1431" href="#L1431">1431</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1432" href="#L1432">1432</a> 	Swagger swagger() <strong class="jxr_keyword">default</strong> @Swagger;
-<a class="jxr_linenumber" name="L1433" href="#L1433">1433</a> 
-<a class="jxr_linenumber" name="L1434" href="#L1434">1434</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1435" href="#L1435">1435</a> <em class="jxr_javadoccomment">	 * Swagger provider.</em>
+<a class="jxr_linenumber" name="L1339" href="#L1339">1339</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1340" href="#L1340">1340</a> <em class="jxr_javadoccomment">	 * One possible use is if you want to add the same title to the top of all pages by defining a header on a</em>
+<a class="jxr_linenumber" name="L1341" href="#L1341">1341</a> <em class="jxr_javadoccomment">	 * common parent class like so:</em>
+<a class="jxr_linenumber" name="L1342" href="#L1342">1342</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L1343" href="#L1343">1343</a> <em class="jxr_javadoccomment">	 *  &lt;ja&gt;@HtmlDocConfig&lt;/ja&gt;(</em>
+<a class="jxr_linenumber" name="L1344" href="#L1344">1344</a> <em class="jxr_javadoccomment">	 * 		header={</em>
+<a class="jxr_linenumber" name="L1345" href="#L1345">1345</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"&amp;lt;h1&amp;gt;$RS{siteName}&amp;lt;/h1&amp;gt;"&lt;/js&gt;,</em>
+<a class="jxr_linenumber" name="L1346" href="#L1346">1346</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"&amp;lt;h2&amp;gt;$RS{title}&amp;lt;/h2&amp;gt;"&lt;/js&gt;</em>
+<a class="jxr_linenumber" name="L1347" href="#L1347">1347</a> <em class="jxr_javadoccomment">	 * 		}</em>
+<a class="jxr_linenumber" name="L1348" href="#L1348">1348</a> <em class="jxr_javadoccomment">	 * 	)</em>
+<a class="jxr_linenumber" name="L1349" href="#L1349">1349</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L1350" href="#L1350">1350</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1351" href="#L1351">1351</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1352" href="#L1352">1352</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
+<a class="jxr_linenumber" name="L1353" href="#L1353">1353</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;SVL Variables&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L1354" href="#L1354">1354</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L1355" href="#L1355">1355</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1356" href="#L1356">1356</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1357" href="#L1357">1357</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
+<a class="jxr_linenumber" name="L1358" href="#L1358">1358</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1359" href="#L1359">1359</a> 	String siteName() <strong class="jxr_keyword">default</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L1360" href="#L1360">1360</a> 
+<a class="jxr_linenumber" name="L1361" href="#L1361">1361</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1362" href="#L1362">1362</a> <em class="jxr_javadoccomment">	 * Static files.</em>
+<a class="jxr_linenumber" name="L1363" href="#L1363">1363</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1364" href="#L1364">1364</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1365" href="#L1365">1365</a> <em class="jxr_javadoccomment">	 * Used to retrieve localized files to be served up as static files through the REST API via the following</em>
+<a class="jxr_linenumber" name="L1366" href="#L1366">1366</a> <em class="jxr_javadoccomment">	 * predefined methods:</em>
+<a class="jxr_linenumber" name="L1367" href="#L1367">1367</a> <em class="jxr_javadoccomment">	 * &lt;ul class='javatree'&gt;</em>
+<a class="jxr_linenumber" name="L1368" href="#L1368">1368</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link BasicRestObject#getHtdoc(String, Locale)}.</em>
+<a class="jxr_linenumber" name="L1369" href="#L1369">1369</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link BasicRestServlet#getHtdoc(String, Locale)}.</em>
+<a class="jxr_linenumber" name="L1370" href="#L1370">1370</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1371" href="#L1371">1371</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1372" href="#L1372">1372</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1373" href="#L1373">1373</a> <em class="jxr_javadoccomment">	 * The static file finder can be accessed through the following methods:</em>
+<a class="jxr_linenumber" name="L1374" href="#L1374">1374</a> <em class="jxr_javadoccomment">	 * &lt;ul class='javatree'&gt;</em>
+<a class="jxr_linenumber" name="L1375" href="#L1375">1375</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link RestContext#getStaticFiles()}</em>
+<a class="jxr_linenumber" name="L1376" href="#L1376">1376</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link RestRequest#getStaticFiles()}</em>
+<a class="jxr_linenumber" name="L1377" href="#L1377">1377</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1378" href="#L1378">1378</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1379" href="#L1379">1379</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Inheritance Rules&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1380" href="#L1380">1380</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1381" href="#L1381">1381</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Static files on child are combined with those on parent class.</em>
+<a class="jxr_linenumber" name="L1382" href="#L1382">1382</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Static files are are executed child-to-parent in the order they appear in the annotation.</em>
+<a class="jxr_linenumber" name="L1383" href="#L1383">1383</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1384" href="#L1384">1384</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1385" href="#L1385">1385</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
+<a class="jxr_linenumber" name="L1386" href="#L1386">1386</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1387" href="#L1387">1387</a> 	Class&lt;? <strong class="jxr_keyword">extends</strong> StaticFiles&gt; staticFiles() <strong class="jxr_keyword">default</strong> StaticFiles.Void.<strong class="jxr_keyword">class</strong>;
+<a class="jxr_linenumber" name="L1388" href="#L1388">1388</a> 
+<a class="jxr_linenumber" name="L1389" href="#L1389">1389</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1390" href="#L1390">1390</a> <em class="jxr_javadoccomment">	 * Provides swagger-specific metadata on this resource.</em>
+<a class="jxr_linenumber" name="L1391" href="#L1391">1391</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1392" href="#L1392">1392</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1393" href="#L1393">1393</a> <em class="jxr_javadoccomment">	 * Used to populate the auto-generated OPTIONS swagger documentation.</em>
+<a class="jxr_linenumber" name="L1394" href="#L1394">1394</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1395" href="#L1395">1395</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1396" href="#L1396">1396</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L1397" href="#L1397">1397</a> <em class="jxr_javadoccomment">	 * 	&lt;ja&gt;@Rest&lt;/ja&gt;(</em>
+<a class="jxr_linenumber" name="L1398" href="#L1398">1398</a> <em class="jxr_javadoccomment">	 * 		path=&lt;js&gt;"/addressBook"&lt;/js&gt;,</em>
+<a class="jxr_linenumber" name="L1399" href="#L1399">1399</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1400" href="#L1400">1400</a> <em class="jxr_javadoccomment">	 * 		&lt;jc&gt;// Swagger info.&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1401" href="#L1401">1401</a> <em class="jxr_javadoccomment">	 * 		swagger=@Swagger({</em>
+<a class="jxr_linenumber" name="L1402" href="#L1402">1402</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"contact:{name:'John Smith',email:'john@smith.com'},"&lt;/js&gt;,</em>
+<a class="jxr_linenumber" name="L1403" href="#L1403">1403</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"license:{name:'Apache 2.0',url:'<a href="http://www.apache.org/licenses/LICENSE-2.0.html'" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0.html'</a>},"&lt;/js&gt;,</em>
+<a class="jxr_linenumber" name="L1404" href="#L1404">1404</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"version:'2.0',&lt;/js&gt;,</em>
+<a class="jxr_linenumber" name="L1405" href="#L1405">1405</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"termsOfService:'You are on your own.',"&lt;/js&gt;,</em>
+<a class="jxr_linenumber" name="L1406" href="#L1406">1406</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"tags:[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'<a href="http://juneau.apache.org'" target="alexandria_uri">http://juneau.apache.org'</a>}}],"&lt;/js&gt;,</em>
+<a class="jxr_linenumber" name="L1407" href="#L1407">1407</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"externalDocs:{description:'Home page',url:'<a href="http://juneau.apache.org'" target="alexandria_uri">http://juneau.apache.org'</a>}"&lt;/js&gt;</em>
+<a class="jxr_linenumber" name="L1408" href="#L1408">1408</a> <em class="jxr_javadoccomment">	 * 		})</em>
+<a class="jxr_linenumber" name="L1409" href="#L1409">1409</a> <em class="jxr_javadoccomment">	 * 	)</em>
+<a class="jxr_linenumber" name="L1410" href="#L1410">1410</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L1411" href="#L1411">1411</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1412" href="#L1412">1412</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1413" href="#L1413">1413</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Swagger}</em>
+<a class="jxr_linenumber" name="L1414" href="#L1414">1414</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1415" href="#L1415">1415</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1416" href="#L1416">1416</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
+<a class="jxr_linenumber" name="L1417" href="#L1417">1417</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1418" href="#L1418">1418</a> 	Swagger swagger() <strong class="jxr_keyword">default</strong> @Swagger;
+<a class="jxr_linenumber" name="L1419" href="#L1419">1419</a> 
+<a class="jxr_linenumber" name="L1420" href="#L1420">1420</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1421" href="#L1421">1421</a> <em class="jxr_javadoccomment">	 * Swagger provider.</em>
+<a class="jxr_linenumber" name="L1422" href="#L1422">1422</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1423" href="#L1423">1423</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1424" href="#L1424">1424</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestContext.Builder#swaggerProvider(Class)}</em>
+<a class="jxr_linenumber" name="L1425" href="#L1425">1425</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1426" href="#L1426">1426</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1427" href="#L1427">1427</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
+<a class="jxr_linenumber" name="L1428" href="#L1428">1428</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1429" href="#L1429">1429</a> 	Class&lt;? <strong class="jxr_keyword">extends</strong> SwaggerProvider&gt; swaggerProvider() <strong class="jxr_keyword">default</strong> SwaggerProvider.Void.<strong class="jxr_keyword">class</strong>;
+<a class="jxr_linenumber" name="L1430" href="#L1430">1430</a> 
+<a class="jxr_linenumber" name="L1431" href="#L1431">1431</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1432" href="#L1432">1432</a> <em class="jxr_javadoccomment">	 * Optional servlet title.</em>
+<a class="jxr_linenumber" name="L1433" href="#L1433">1433</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1434" href="#L1434">1434</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1435" href="#L1435">1435</a> <em class="jxr_javadoccomment">	 * It is used to populate the Swagger title field.</em>
 <a class="jxr_linenumber" name="L1436" href="#L1436">1436</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1437" href="#L1437">1437</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1438" href="#L1438">1438</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestContext.Builder#swaggerProvider(Class)}</em>
-<a class="jxr_linenumber" name="L1439" href="#L1439">1439</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1440" href="#L1440">1440</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1441" href="#L1441">1441</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
-<a class="jxr_linenumber" name="L1442" href="#L1442">1442</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1443" href="#L1443">1443</a> 	Class&lt;? <strong class="jxr_keyword">extends</strong> SwaggerProvider&gt; swaggerProvider() <strong class="jxr_keyword">default</strong> SwaggerProvider.Void.<strong class="jxr_keyword">class</strong>;
-<a class="jxr_linenumber" name="L1444" href="#L1444">1444</a> 
-<a class="jxr_linenumber" name="L1445" href="#L1445">1445</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1446" href="#L1446">1446</a> <em class="jxr_javadoccomment">	 * Optional servlet title.</em>
-<a class="jxr_linenumber" name="L1447" href="#L1447">1447</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1448" href="#L1448">1448</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1449" href="#L1449">1449</a> <em class="jxr_javadoccomment">	 * It is used to populate the Swagger title field.</em>
-<a class="jxr_linenumber" name="L1450" href="#L1450">1450</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1451" href="#L1451">1451</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Inheritance Rules&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L1452" href="#L1452">1452</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1453" href="#L1453">1453</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Label is searched for in child-to-parent order.</em>
-<a class="jxr_linenumber" name="L1454" href="#L1454">1454</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1455" href="#L1455">1455</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1456" href="#L1456">1456</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1457" href="#L1457">1457</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
-<a class="jxr_linenumber" name="L1458" href="#L1458">1458</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;SVL Variables&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L1459" href="#L1459">1459</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</em>
-<a class="jxr_linenumber" name="L1460" href="#L1460">1460</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
-<a class="jxr_linenumber" name="L1461" href="#L1461">1461</a> <em class="jxr_javadoccomment">	 * 		Corresponds to the swagger field &lt;c&gt;/info/title&lt;/c&gt;.</em>
-<a class="jxr_linenumber" name="L1462" href="#L1462">1462</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1463" href="#L1463">1463</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1464" href="#L1464">1464</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
-<a class="jxr_linenumber" name="L1465" href="#L1465">1465</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1466" href="#L1466">1466</a> 	String[] title() <strong class="jxr_keyword">default</strong> {};
-<a class="jxr_linenumber" name="L1467" href="#L1467">1467</a> 
-<a class="jxr_linenumber" name="L1468" href="#L1468">1468</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1469" href="#L1469">1469</a> <em class="jxr_javadoccomment">	 * Resource authority path.</em>
-<a class="jxr_linenumber" name="L1470" href="#L1470">1470</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1471" href="#L1471">1471</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1472" href="#L1472">1472</a> <em class="jxr_javadoccomment">	 * Overrides the authority path value for this resource and any child resources.</em>
-<a class="jxr_linenumber" name="L1473" href="#L1473">1473</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1474" href="#L1474">1474</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1475" href="#L1475">1475</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
-<a class="jxr_linenumber" name="L1476" href="#L1476">1476</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;SVL Variables&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L1477" href="#L1477">1477</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</em>
-<a class="jxr_linenumber" name="L1478" href="#L1478">1478</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1437" href="#L1437">1437</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Inheritance Rules&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1438" href="#L1438">1438</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1439" href="#L1439">1439</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Label is searched for in child-to-parent order.</em>
+<a class="jxr_linenumber" name="L1440" href="#L1440">1440</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1441" href="#L1441">1441</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1442" href="#L1442">1442</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1443" href="#L1443">1443</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
+<a class="jxr_linenumber" name="L1444" href="#L1444">1444</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;SVL Variables&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L1445" href="#L1445">1445</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L1446" href="#L1446">1446</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
+<a class="jxr_linenumber" name="L1447" href="#L1447">1447</a> <em class="jxr_javadoccomment">	 * 		Corresponds to the swagger field &lt;c&gt;/info/title&lt;/c&gt;.</em>
+<a class="jxr_linenumber" name="L1448" href="#L1448">1448</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1449" href="#L1449">1449</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1450" href="#L1450">1450</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
+<a class="jxr_linenumber" name="L1451" href="#L1451">1451</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1452" href="#L1452">1452</a> 	String[] title() <strong class="jxr_keyword">default</strong> {};
+<a class="jxr_linenumber" name="L1453" href="#L1453">1453</a> 
+<a class="jxr_linenumber" name="L1454" href="#L1454">1454</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1455" href="#L1455">1455</a> <em class="jxr_javadoccomment">	 * Resource authority path.</em>
+<a class="jxr_linenumber" name="L1456" href="#L1456">1456</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1457" href="#L1457">1457</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1458" href="#L1458">1458</a> <em class="jxr_javadoccomment">	 * Overrides the authority path value for this resource and any child resources.</em>
+<a class="jxr_linenumber" name="L1459" href="#L1459">1459</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1460" href="#L1460">1460</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1461" href="#L1461">1461</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
+<a class="jxr_linenumber" name="L1462" href="#L1462">1462</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;SVL Variables&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L1463" href="#L1463">1463</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L1464" href="#L1464">1464</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1465" href="#L1465">1465</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1466" href="#L1466">1466</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1467" href="#L1467">1467</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestContext.Builder#uriAuthority(String)}</em>
+<a class="jxr_linenumber" name="L1468" href="#L1468">1468</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1469" href="#L1469">1469</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1470" href="#L1470">1470</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
+<a class="jxr_linenumber" name="L1471" href="#L1471">1471</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1472" href="#L1472">1472</a> 	String uriAuthority() <strong class="jxr_keyword">default</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L1473" href="#L1473">1473</a> 
+<a class="jxr_linenumber" name="L1474" href="#L1474">1474</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1475" href="#L1475">1475</a> <em class="jxr_javadoccomment">	 * Resource context path.</em>
+<a class="jxr_linenumber" name="L1476" href="#L1476">1476</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1477" href="#L1477">1477</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1478" href="#L1478">1478</a> <em class="jxr_javadoccomment">	 * Overrides the context path value for this resource and any child resources.</em>
 <a class="jxr_linenumber" name="L1479" href="#L1479">1479</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1480" href="#L1480">1480</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1481" href="#L1481">1481</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestContext.Builder#uriAuthority(String)}</em>
-<a class="jxr_linenumber" name="L1482" href="#L1482">1482</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1483" href="#L1483">1483</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1484" href="#L1484">1484</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
-<a class="jxr_linenumber" name="L1485" href="#L1485">1485</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1486" href="#L1486">1486</a> 	String uriAuthority() <strong class="jxr_keyword">default</strong> <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L1487" href="#L1487">1487</a> 
-<a class="jxr_linenumber" name="L1488" href="#L1488">1488</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1489" href="#L1489">1489</a> <em class="jxr_javadoccomment">	 * Resource context path.</em>
-<a class="jxr_linenumber" name="L1490" href="#L1490">1490</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1491" href="#L1491">1491</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1492" href="#L1492">1492</a> <em class="jxr_javadoccomment">	 * Overrides the context path value for this resource and any child resources.</em>
-<a class="jxr_linenumber" name="L1493" href="#L1493">1493</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1494" href="#L1494">1494</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1495" href="#L1495">1495</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
-<a class="jxr_linenumber" name="L1496" href="#L1496">1496</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;SVL Variables&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L1497" href="#L1497">1497</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</em>
-<a class="jxr_linenumber" name="L1498" href="#L1498">1498</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1480" href="#L1480">1480</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1481" href="#L1481">1481</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
+<a class="jxr_linenumber" name="L1482" href="#L1482">1482</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;SVL Variables&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L1483" href="#L1483">1483</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L1484" href="#L1484">1484</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1485" href="#L1485">1485</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1486" href="#L1486">1486</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1487" href="#L1487">1487</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestContext.Builder#uriContext(String)}</em>
+<a class="jxr_linenumber" name="L1488" href="#L1488">1488</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1489" href="#L1489">1489</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1490" href="#L1490">1490</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
+<a class="jxr_linenumber" name="L1491" href="#L1491">1491</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1492" href="#L1492">1492</a> 	String uriContext() <strong class="jxr_keyword">default</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L1493" href="#L1493">1493</a> 
+<a class="jxr_linenumber" name="L1494" href="#L1494">1494</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1495" href="#L1495">1495</a> <em class="jxr_javadoccomment">	 * URI-resolution relativity.</em>
+<a class="jxr_linenumber" name="L1496" href="#L1496">1496</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1497" href="#L1497">1497</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1498" href="#L1498">1498</a> <em class="jxr_javadoccomment">	 * Specifies how relative URIs should be interpreted by serializers.</em>
 <a class="jxr_linenumber" name="L1499" href="#L1499">1499</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1500" href="#L1500">1500</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1501" href="#L1501">1501</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestContext.Builder#uriContext(String)}</em>
-<a class="jxr_linenumber" name="L1502" href="#L1502">1502</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1503" href="#L1503">1503</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1504" href="#L1504">1504</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
-<a class="jxr_linenumber" name="L1505" href="#L1505">1505</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1506" href="#L1506">1506</a> 	String uriContext() <strong class="jxr_keyword">default</strong> <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L1507" href="#L1507">1507</a> 
-<a class="jxr_linenumber" name="L1508" href="#L1508">1508</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1509" href="#L1509">1509</a> <em class="jxr_javadoccomment">	 * URI-resolution relativity.</em>
-<a class="jxr_linenumber" name="L1510" href="#L1510">1510</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1511" href="#L1511">1511</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1512" href="#L1512">1512</a> <em class="jxr_javadoccomment">	 * Specifies how relative URIs should be interpreted by serializers.</em>
-<a class="jxr_linenumber" name="L1513" href="#L1513">1513</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1514" href="#L1514">1514</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1515" href="#L1515">1515</a> <em class="jxr_javadoccomment">	 * See {@link UriResolution} for possible values.</em>
-<a class="jxr_linenumber" name="L1516" href="#L1516">1516</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1517" href="#L1517">1517</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1518" href="#L1518">1518</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
-<a class="jxr_linenumber" name="L1519" href="#L1519">1519</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;SVL Variables&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L1520" href="#L1520">1520</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</em>
-<a class="jxr_linenumber" name="L1521" href="#L1521">1521</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1500" href="#L1500">1500</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1501" href="#L1501">1501</a> <em class="jxr_javadoccomment">	 * See {@link UriResolution} for possible values.</em>
+<a class="jxr_linenumber" name="L1502" href="#L1502">1502</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1503" href="#L1503">1503</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1504" href="#L1504">1504</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
+<a class="jxr_linenumber" name="L1505" href="#L1505">1505</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;SVL Variables&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L1506" href="#L1506">1506</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L1507" href="#L1507">1507</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1508" href="#L1508">1508</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1509" href="#L1509">1509</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1510" href="#L1510">1510</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestContext.Builder#uriRelativity(UriRelativity)}</em>
+<a class="jxr_linenumber" name="L1511" href="#L1511">1511</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1512" href="#L1512">1512</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1513" href="#L1513">1513</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
+<a class="jxr_linenumber" name="L1514" href="#L1514">1514</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1515" href="#L1515">1515</a> 	String uriRelativity() <strong class="jxr_keyword">default</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L1516" href="#L1516">1516</a> 
+<a class="jxr_linenumber" name="L1517" href="#L1517">1517</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1518" href="#L1518">1518</a> <em class="jxr_javadoccomment">	 * URI-resolution.</em>
+<a class="jxr_linenumber" name="L1519" href="#L1519">1519</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1520" href="#L1520">1520</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1521" href="#L1521">1521</a> <em class="jxr_javadoccomment">	 * Specifies how relative URIs should be interpreted by serializers.</em>
 <a class="jxr_linenumber" name="L1522" href="#L1522">1522</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1523" href="#L1523">1523</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1524" href="#L1524">1524</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestContext.Builder#uriRelativity(UriRelativity)}</em>
-<a class="jxr_linenumber" name="L1525" href="#L1525">1525</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1526" href="#L1526">1526</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1527" href="#L1527">1527</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
-<a class="jxr_linenumber" name="L1528" href="#L1528">1528</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1529" href="#L1529">1529</a> 	String uriRelativity() <strong class="jxr_keyword">default</strong> <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L1530" href="#L1530">1530</a> 
-<a class="jxr_linenumber" name="L1531" href="#L1531">1531</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1532" href="#L1532">1532</a> <em class="jxr_javadoccomment">	 * URI-resolution.</em>
-<a class="jxr_linenumber" name="L1533" href="#L1533">1533</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1534" href="#L1534">1534</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1535" href="#L1535">1535</a> <em class="jxr_javadoccomment">	 * Specifies how relative URIs should be interpreted by serializers.</em>
-<a class="jxr_linenumber" name="L1536" href="#L1536">1536</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1537" href="#L1537">1537</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1538" href="#L1538">1538</a> <em class="jxr_javadoccomment">	 * See {@link UriResolution} for possible values.</em>
-<a class="jxr_linenumber" name="L1539" href="#L1539">1539</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1540" href="#L1540">1540</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1541" href="#L1541">1541</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
-<a class="jxr_linenumber" name="L1542" href="#L1542">1542</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;SVL Variables&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L1543" href="#L1543">1543</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</em>
-<a class="jxr_linenumber" name="L1544" href="#L1544">1544</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1545" href="#L1545">1545</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1546" href="#L1546">1546</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1547" href="#L1547">1547</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestContext.Builder#uriResolution(UriResolution)}</em>
-<a class="jxr_linenumber" name="L1548" href="#L1548">1548</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1549" href="#L1549">1549</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1550" href="#L1550">1550</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
-<a class="jxr_linenumber" name="L1551" href="#L1551">1551</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1552" href="#L1552">1552</a> 	String uriResolution() <strong class="jxr_keyword">default</strong> <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L1553" href="#L1553">1553</a> }
+<a class="jxr_linenumber" name="L1523" href="#L1523">1523</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1524" href="#L1524">1524</a> <em class="jxr_javadoccomment">	 * See {@link UriResolution} for possible values.</em>
+<a class="jxr_linenumber" name="L1525" href="#L1525">1525</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1526" href="#L1526">1526</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1527" href="#L1527">1527</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
+<a class="jxr_linenumber" name="L1528" href="#L1528">1528</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;SVL Variables&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L1529" href="#L1529">1529</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L1530" href="#L1530">1530</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1531" href="#L1531">1531</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1532" href="#L1532">1532</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1533" href="#L1533">1533</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestContext.Builder#uriResolution(UriResolution)}</em>
+<a class="jxr_linenumber" name="L1534" href="#L1534">1534</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1535" href="#L1535">1535</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1536" href="#L1536">1536</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
+<a class="jxr_linenumber" name="L1537" href="#L1537">1537</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1538" href="#L1538">1538</a> 	String uriResolution() <strong class="jxr_keyword">default</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L1539" href="#L1539">1539</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
