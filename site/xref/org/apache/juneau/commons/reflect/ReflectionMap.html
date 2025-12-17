@@ -325,8 +325,8 @@
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 			<strong class="jxr_keyword">return</strong> filteredBeanPropertyMap()
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 				.a(<span class="jxr_string">"simpleName"</span>, simpleName)
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 				.a(<span class="jxr_string">"fullName"</span>, fullName)
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 				.a(<span class="jxr_string">"fullName"</span>, fullName)
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 				.a(<span class="jxr_string">"simpleName"</span>, simpleName)
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 				.a(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 		}
@@ -364,9 +364,9 @@
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 			<strong class="jxr_keyword">return</strong> filteredBeanPropertyMap()
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 				.a(<span class="jxr_string">"simpleClassName"</span>, simpleClassName)
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 				.a(<span class="jxr_string">"args"</span>, args)
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 				.a(<span class="jxr_string">"fullClassName"</span>, fullClassName)
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 				.a(<span class="jxr_string">"args"</span>, args)
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 				.a(<span class="jxr_string">"simpleClassName"</span>, simpleClassName)
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 				.a(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 		}
@@ -401,9 +401,9 @@
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 			<strong class="jxr_keyword">return</strong> filteredBeanPropertyMap()
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 				.a(<span class="jxr_string">"simpleClassName"</span>, simpleClassName)
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 				.a(<span class="jxr_string">"fieldName"</span>, fieldName)
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 				.a(<span class="jxr_string">"fullClassName"</span>, fullClassName)
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 				.a(<span class="jxr_string">"fieldName"</span>, fieldName)
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 				.a(<span class="jxr_string">"simpleClassName"</span>, simpleClassName)
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 				.a(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 		}
@@ -452,10 +452,10 @@
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 		<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 			<strong class="jxr_keyword">return</strong> filteredBeanPropertyMap()
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 				.a(<span class="jxr_string">"simpleClassName"</span>, simpleClassName)
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 				.a(<span class="jxr_string">"args"</span>, opt(args).map(x -&gt; '[' + toCdl(x) + <span class="jxr_string">"]"</span>).orElse(<strong class="jxr_keyword">null</strong>))
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 				.a(<span class="jxr_string">"fullClassName"</span>, fullClassName)
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> 				.a(<span class="jxr_string">"methodName"</span>, methodName)
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 				.a(<span class="jxr_string">"args"</span>, opt(args).map(x -&gt; '[' + toCdl(x) + <span class="jxr_string">"]"</span>).orElse(<strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 				.a(<span class="jxr_string">"simpleClassName"</span>, simpleClassName)
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> 				.a(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> 		}
