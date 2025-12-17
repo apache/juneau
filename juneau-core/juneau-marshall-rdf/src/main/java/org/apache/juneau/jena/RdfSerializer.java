@@ -111,13 +111,13 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			addBeanTypesRdf = copyFrom.addBeanTypesRdf;
 			addLiteralTypes = copyFrom.addLiteralTypes;
 			addRootProperty = copyFrom.addRootProperty;
+			collectionFormat = copyFrom.collectionFormat;
 			disableAutoDetectNamespaces = copyFrom.disableAutoDetectNamespaces;
 			disableUseXmlNamespaces = copyFrom.disableUseXmlNamespaces;
-			looseCollections = copyFrom.looseCollections;
-			language = copyFrom.language;
-			collectionFormat = copyFrom.collectionFormat;
-			juneauNs = copyFrom.juneauNs;
 			juneauBpNs = copyFrom.juneauBpNs;
+			juneauNs = copyFrom.juneauNs;
+			language = copyFrom.language;
+			looseCollections = copyFrom.looseCollections;
 			namespaces = copyFrom.namespaces;
 			jenaSettings = new TreeMap<>(copyFrom.jenaSettings);
 		}
@@ -133,13 +133,13 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			addBeanTypesRdf = copyFrom.addBeanTypesRdf;
 			addLiteralTypes = copyFrom.addLiteralTypes;
 			addRootProperty = copyFrom.addRootProperty;
+			collectionFormat = copyFrom.collectionFormat;
 			disableAutoDetectNamespaces = ! copyFrom.autoDetectNamespaces;
 			disableUseXmlNamespaces = ! copyFrom.useXmlNamespaces;
-			looseCollections = copyFrom.looseCollections;
-			language = copyFrom.language;
-			collectionFormat = copyFrom.collectionFormat;
-			juneauNs = copyFrom.juneauNs;
 			juneauBpNs = copyFrom.juneauBpNs;
+			juneauNs = copyFrom.juneauNs;
+			language = copyFrom.language;
+			looseCollections = copyFrom.looseCollections;
 			namespaces = copyFrom.namespaces.length == 0 ? null : list(copyFrom.namespaces);
 			jenaSettings = new TreeMap<>(copyFrom.jenaSettings);
 		}

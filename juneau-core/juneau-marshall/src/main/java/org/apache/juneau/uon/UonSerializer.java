@@ -1089,8 +1089,8 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	public UonSerializer(Builder builder) {
 		super(builder);
 
-		encoding = builder.encoding;
 		addBeanTypesUon = builder.addBeanTypesUon;
+		encoding = builder.encoding;
 		paramFormat = builder.paramFormat;
 		quoteCharUon = builder.quoteCharUon;
 

@@ -1450,12 +1450,12 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	 */
 	public HtmlSerializer(Builder builder) {
 		super(builder);
+		addBeanTypesHtml = builder.addBeanTypesHtml;
+		addKeyValueTableHeaders = builder.addKeyValueTableHeaders;
 		detectLabelParameters = ! builder.disableDetectLabelParameters;
 		detectLinksInStrings = ! builder.disableDetectLinksInStrings;
-		addKeyValueTableHeaders = builder.addKeyValueTableHeaders;
 		labelParameter = builder.labelParameter;
 		uriAnchorText = builder.uriAnchorText;
-		addBeanTypesHtml = builder.addBeanTypesHtml;
 	}
 
 	@Override /* Overridden from Context */

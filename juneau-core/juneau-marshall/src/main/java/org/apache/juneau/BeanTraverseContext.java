@@ -711,10 +711,10 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	protected BeanTraverseContext(Builder builder) {
 		super(builder);
 
-		maxDepth = builder.maxDepth;
-		initialDepth = builder.initialDepth;
-		ignoreRecursions = builder.ignoreRecursions;
 		detectRecursions = builder.detectRecursions;
+		ignoreRecursions = builder.ignoreRecursions;
+		initialDepth = builder.initialDepth;
+		maxDepth = builder.maxDepth;
 
 		actualDetectRecursions = detectRecursions || ignoreRecursions || super.isDebug();
 	}

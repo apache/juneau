@@ -225,11 +225,11 @@ public class RestSession extends ContextSession {
 		resource = builder.resource;
 		beanStore = BeanStore.of(context.getBeanStore(), resource).addBean(RestContext.class, context);
 
+		logger = beanStore.add(CallLogger.class, builder.logger);
+		pathInfoUndecoded = builder.pathInfoUndecoded;
 		req = beanStore.add(HttpServletRequest.class, builder.req);
 		res = beanStore.add(HttpServletResponse.class, builder.res);
-		logger = beanStore.add(CallLogger.class, builder.logger);
 		urlPath = beanStore.add(UrlPath.class, builder.urlPath);
-		pathInfoUndecoded = builder.pathInfoUndecoded;
 	}
 
 	/**

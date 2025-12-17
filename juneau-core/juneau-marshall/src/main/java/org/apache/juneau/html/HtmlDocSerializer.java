@@ -131,18 +131,18 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);
 			aside = copy(copyFrom.aside);
+			asideFloat = copyFrom.asideFloat;
 			footer = copy(copyFrom.footer);
 			head = copy(copyFrom.head);
 			header = copy(copyFrom.header);
 			nav = copy(copyFrom.nav);
 			navlinks = copy(copyFrom.navlinks);
-			script = copy(copyFrom.script);
-			style = copy(copyFrom.style);
-			stylesheet = copy(copyFrom.stylesheet);
-			asideFloat = copyFrom.asideFloat;
 			noResultsMessage = copyFrom.noResultsMessage;
 			nowrap = copyFrom.nowrap;
 			resolveBodyVars = copyFrom.resolveBodyVars;
+			script = copy(copyFrom.script);
+			style = copy(copyFrom.style);
+			stylesheet = copy(copyFrom.stylesheet);
 			template = copyFrom.template;
 			widgets = copy(copyFrom.widgets);
 		}
@@ -155,18 +155,18 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		protected Builder(HtmlDocSerializer copyFrom) {
 			super(copyFrom);
 			aside = copy(copyFrom.aside);
+			asideFloat = copyFrom.asideFloat;
 			footer = copy(copyFrom.footer);
 			head = copy(copyFrom.head);
 			header = copy(copyFrom.header);
 			nav = copy(copyFrom.nav);
 			navlinks = copy(copyFrom.navlinks);
-			script = copy(copyFrom.script);
-			style = copy(copyFrom.style);
-			stylesheet = copy(copyFrom.stylesheet);
-			asideFloat = copyFrom.asideFloat;
 			noResultsMessage = copyFrom.noResultsMessage;
 			nowrap = copyFrom.nowrap;
 			resolveBodyVars = copyFrom.resolveBodyVars;
+			script = copy(copyFrom.script);
+			style = copy(copyFrom.style);
+			stylesheet = copy(copyFrom.stylesheet);
 			template = copyFrom.template;
 			widgets = copy(copyFrom.widgets);
 		}
@@ -1650,19 +1650,19 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 */
 	public HtmlDocSerializer(Builder builder) {
 		super(builder);
-		style = nn(builder.style) ? toArray(builder.style) : EMPTY_ARRAY;
-		stylesheet = nn(builder.stylesheet) ? toArray(builder.stylesheet) : EMPTY_ARRAY;
-		script = nn(builder.script) ? toArray(builder.script) : EMPTY_ARRAY;
+		aside = nn(builder.aside) ? toArray(builder.aside) : EMPTY_ARRAY;
+		asideFloat = builder.asideFloat;
+		footer = nn(builder.footer) ? toArray(builder.footer) : EMPTY_ARRAY;
 		head = nn(builder.head) ? toArray(builder.head) : EMPTY_ARRAY;
 		header = nn(builder.header) ? toArray(builder.header) : EMPTY_ARRAY;
 		nav = nn(builder.nav) ? toArray(builder.nav) : EMPTY_ARRAY;
-		aside = nn(builder.aside) ? toArray(builder.aside) : EMPTY_ARRAY;
-		footer = nn(builder.footer) ? toArray(builder.footer) : EMPTY_ARRAY;
 		navlinks = nn(builder.navlinks) ? toArray(builder.navlinks) : EMPTY_ARRAY;
-		asideFloat = builder.asideFloat;
 		noResultsMessage = builder.noResultsMessage;
 		nowrap = builder.nowrap;
 		resolveBodyVars = builder.resolveBodyVars;
+		script = nn(builder.script) ? toArray(builder.script) : EMPTY_ARRAY;
+		style = nn(builder.style) ? toArray(builder.style) : EMPTY_ARRAY;
+		stylesheet = nn(builder.stylesheet) ? toArray(builder.stylesheet) : EMPTY_ARRAY;
 		template = builder.template;
 		widgets = builder.widgets == null ? Collections.emptyList() : copyOf(builder.widgets);
 

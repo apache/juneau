@@ -109,9 +109,9 @@ public abstract class Context {
 		 */
 		protected Builder(Builder copyFrom) {
 			assertArgNotNull("copyFrom", copyFrom);
+			annotations = copyOf(copyFrom.annotations);
 			debug = copyFrom.debug;
 			type = copyFrom.type;
-			annotations = copyOf(copyFrom.annotations);
 			registerBuilders(this);
 		}
 
@@ -123,9 +123,9 @@ public abstract class Context {
 		 */
 		protected Builder(Context copyFrom) {
 			assertArgNotNull("copyFrom", copyFrom);
+			annotations = copyOf(copyFrom.annotations);
 			debug = copyFrom.debug;
 			type = copyFrom.getClass();
-			annotations = copyOf(copyFrom.annotations);
 			registerBuilders(this);
 		}
 
@@ -860,9 +860,9 @@ public abstract class Context {
 	protected Context(Builder builder) {
 		assertArgNotNull("builder", builder);
 		init(builder);
-		debug = builder.debug;
 		annotations = copyOf(builder.annotations);
 		annotationProvider = AnnotationProvider.create().addRuntimeAnnotations(annotations).build();
+		debug = builder.debug;
 	}
 
 	/**
@@ -871,9 +871,9 @@ public abstract class Context {
 	 * @param copyFrom The context to copy from.
 	 */
 	protected Context(Context copyFrom) {
+		annotationProvider = copyFrom.annotationProvider;
 		annotations = copyOf(copyFrom.annotations);
 		debug = copyFrom.debug;
-		annotationProvider = copyFrom.annotationProvider;
 	}
 
 	/**

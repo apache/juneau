@@ -178,10 +178,10 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 			super(assertArgNotNull("copyFrom", copyFrom));
 			addBeanTypesXml = copyFrom.addBeanTypesXml;
 			addNamespaceUrisToRoot = copyFrom.addNamespaceUrisToRoot;
+			defaultNamespace = copyFrom.defaultNamespace;
 			disableAutoDetectNamespaces = copyFrom.disableAutoDetectNamespaces;
 			disableJsonTags = copyFrom.disableJsonTags;
 			enableNamespaces = copyFrom.enableNamespaces;
-			defaultNamespace = copyFrom.defaultNamespace;
 			namespaces = copyOf(copyFrom.namespaces);
 			textNodeDelimiter = copyFrom.textNodeDelimiter;
 		}
@@ -196,10 +196,10 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 			super(assertArgNotNull("copyFrom", copyFrom));
 			addBeanTypesXml = copyFrom.addBeanTypesXml;
 			addNamespaceUrisToRoot = copyFrom.addNamespaceUrlsToRoot;
+			defaultNamespace = copyFrom.defaultNamespace;
 			disableAutoDetectNamespaces = ! copyFrom.autoDetectNamespaces;
 			disableJsonTags = ! copyFrom.addJsonTags;
 			enableNamespaces = copyFrom.enableNamespaces;
-			defaultNamespace = copyFrom.defaultNamespace;
 			namespaces = copyFrom.namespaces.length == 0 ? null : list(copyFrom.namespaces);
 			textNodeDelimiter = copyFrom.textNodeDelimiter;
 		}
@@ -1238,12 +1238,12 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	 */
 	public XmlSerializer(Builder builder) {
 		super(builder);
-		autoDetectNamespaces = ! builder.disableAutoDetectNamespaces;
-		enableNamespaces = builder.enableNamespaces;
-		addNamespaceUrlsToRoot = builder.addNamespaceUrisToRoot;
 		addBeanTypesXml = builder.addBeanTypesXml;
 		addJsonTags = ! builder.disableJsonTags;
+		addNamespaceUrlsToRoot = builder.addNamespaceUrisToRoot;
+		autoDetectNamespaces = ! builder.disableAutoDetectNamespaces;
 		defaultNamespace = nn(builder.defaultNamespace) ? builder.defaultNamespace : DEFAULT_JUNEAU_NAMESPACE;
+		enableNamespaces = builder.enableNamespaces;
 		namespaces = nn(builder.namespaces) ? builder.namespaces.toArray(EMPTY_NAMESPACE_ARRAY) : EMPTY_NAMESPACE_ARRAY;
 		textNodeDelimiter = builder.textNodeDelimiter;
 		addBeanTypes = addBeanTypesXml || super.isAddBeanTypes();

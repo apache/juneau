@@ -995,11 +995,11 @@ public class WriterSerializer extends Serializer {
 	protected WriterSerializer(Builder builder) {
 		super(builder);
 
+		fileCharset = builder.fileCharset;
 		maxIndent = builder.maxIndent;
 		quoteChar = builder.quoteChar;
 		quoteCharOverride = builder.quoteCharOverride;
 		streamCharset = builder.streamCharset;
-		fileCharset = builder.fileCharset;
 		useWhitespace = builder.useWhitespace;
 
 		quoteCharValue = nn(quoteCharOverride) ? quoteCharOverride : nn(quoteChar) ? quoteChar : '"';

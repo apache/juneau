@@ -101,9 +101,9 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 			addExamplesTo = copyFrom.addExamplesTo == null ? null : new TreeSet<>(copyFrom.addExamplesTo);
 			allowNestedDescriptions = copyFrom.allowNestedDescriptions;
 			allowNestedExamples = copyFrom.allowNestedExamples;
-			useBeanDefs = copyFrom.useBeanDefs;
 			beanDefMapper = copyFrom.beanDefMapper;
 			ignoreTypes = copyFrom.ignoreTypes == null ? null : new TreeSet<>(copyFrom.ignoreTypes);
+			useBeanDefs = copyFrom.useBeanDefs;
 		}
 
 		/**
@@ -122,9 +122,9 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 			addExamplesTo = copyFrom.addExamplesTo.isEmpty() ? null : new TreeSet<>(copyFrom.addExamplesTo);
 			allowNestedDescriptions = copyFrom.allowNestedDescriptions;
 			allowNestedExamples = copyFrom.allowNestedExamples;
-			useBeanDefs = copyFrom.useBeanDefs;
 			beanDefMapper = copyFrom.beanDefMapper;
 			ignoreTypes = copyFrom.ignoreTypes.isEmpty() ? null : new TreeSet<>(copyFrom.ignoreTypes);
+			useBeanDefs = copyFrom.useBeanDefs;
 		}
 
 		/**
@@ -861,13 +861,13 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	public JsonSchemaGenerator(Builder builder) {
 		super(builder.detectRecursions().ignoreRecursions());
 
-		useBeanDefs = builder.useBeanDefs;
-		allowNestedExamples = builder.allowNestedExamples;
-		allowNestedDescriptions = builder.allowNestedDescriptions;
-		beanDefMapper = builder.beanDefMapper;
-		addExamplesTo = builder.addExamplesTo == null ? Collections.emptySet() : new TreeSet<>(builder.addExamplesTo);
 		addDescriptionsTo = builder.addDescriptionsTo == null ? Collections.emptySet() : new TreeSet<>(builder.addDescriptionsTo);
+		addExamplesTo = builder.addExamplesTo == null ? Collections.emptySet() : new TreeSet<>(builder.addExamplesTo);
+		allowNestedDescriptions = builder.allowNestedDescriptions;
+		allowNestedExamples = builder.allowNestedExamples;
+		beanDefMapper = builder.beanDefMapper;
 		ignoreTypes = builder.ignoreTypes == null ? Collections.emptySet() : new TreeSet<>(builder.ignoreTypes);
+		useBeanDefs = builder.useBeanDefs;
 
 		Set<Pattern> ignoreTypePatterns = set();
 		ignoreTypes.forEach(y -> split(y, x -> ignoreTypePatterns.add(Pattern.compile(x.replace(".", "\\.").replace("*", ".*")))));

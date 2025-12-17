@@ -683,8 +683,8 @@ public class ReaderParser extends Parser {
 	 */
 	protected ReaderParser(Builder builder) {
 		super(builder);
-		streamCharset = builder.streamCharset;
 		fileCharset = builder.fileCharset;
+		streamCharset = builder.streamCharset;
 	}
 
 	@Override /* Overridden from Context */

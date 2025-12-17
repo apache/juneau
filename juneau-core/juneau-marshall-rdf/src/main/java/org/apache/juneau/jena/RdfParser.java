@@ -102,12 +102,12 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 */
 		protected Builder(Builder copyFrom) {
 			super(assertArgNotNull("copyFrom", copyFrom));
-			trimWhitespace = copyFrom.trimWhitespace;
-			looseCollections = copyFrom.looseCollections;
-			language = copyFrom.language;
 			collectionFormat = copyFrom.collectionFormat;
-			juneauNs = copyFrom.juneauNs;
 			juneauBpNs = copyFrom.juneauBpNs;
+			juneauNs = copyFrom.juneauNs;
+			language = copyFrom.language;
+			looseCollections = copyFrom.looseCollections;
+			trimWhitespace = copyFrom.trimWhitespace;
 			jenaSettings = new TreeMap<>(copyFrom.jenaSettings);
 		}
 
@@ -119,12 +119,12 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 */
 		protected Builder(RdfParser copyFrom) {
 			super(assertArgNotNull("copyFrom", copyFrom));
-			trimWhitespace = copyFrom.trimWhitespace;
-			looseCollections = copyFrom.looseCollections;
-			language = copyFrom.language;
 			collectionFormat = copyFrom.collectionFormat;
-			juneauNs = copyFrom.juneauNs;
 			juneauBpNs = copyFrom.juneauBpNs;
+			juneauNs = copyFrom.juneauNs;
+			language = copyFrom.language;
+			looseCollections = copyFrom.looseCollections;
+			trimWhitespace = copyFrom.trimWhitespace;
 			jenaSettings = new TreeMap<>(copyFrom.jenaSettings);
 		}
 
@@ -1460,12 +1460,12 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	public RdfParser(Builder builder) {
 		super(builder.consumes(getConsumes(builder)));
 
-		trimWhitespace = builder.trimWhitespace;
-		looseCollections = builder.looseCollections;
-		language = builder.language;
-		juneauNs = builder.juneauNs;
-		juneauBpNs = builder.juneauBpNs;
 		collectionFormat = builder.collectionFormat;
+		juneauBpNs = builder.juneauBpNs;
+		juneauNs = builder.juneauNs;
+		language = builder.language;
+		looseCollections = builder.looseCollections;
+		trimWhitespace = builder.trimWhitespace;
 		jenaSettings = new TreeMap<>(builder.jenaSettings);
 	}
 

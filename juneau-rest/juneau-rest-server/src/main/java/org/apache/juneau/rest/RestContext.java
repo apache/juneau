@@ -5016,12 +5016,12 @@ public class RestContext extends Context {
 		try {
 			this.builder = builder;
 
-			resourceClass = builder.resourceClass;
-			resource = builder.resource;
-			parentContext = builder.parentContext;
-			rootBeanStore = builder.rootBeanStore();
 			defaultClasses = builder.defaultClasses();
 			defaultSettings = builder.defaultSettings();
+			parentContext = builder.parentContext;
+			resource = builder.resource;
+			resourceClass = builder.resourceClass;
+			rootBeanStore = builder.rootBeanStore();
 
 			BeanStore bs = beanStore = builder.beanStore();
 			// @formatter:off
@@ -5043,16 +5043,16 @@ public class RestContext extends Context {
 
 			allowContentParam = ! builder.disableContentParam;
 			allowedHeaderParams = newCaseInsensitiveSet(opt(builder.allowedHeaderParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
-			allowedMethodParams = newCaseInsensitiveSet(opt(builder.allowedMethodParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
 			allowedMethodHeaders = newCaseInsensitiveSet(opt(builder.allowedMethodHeaders).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
+			allowedMethodParams = newCaseInsensitiveSet(opt(builder.allowedMethodParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
 			clientVersionHeader = builder.clientVersionHeader;
 			defaultCharset = builder.defaultCharset;
 			maxInput = builder.maxInput;
 			renderResponseStackTraces = builder.renderResponseStackTraces;
-			uriContext = builder.uriContext;
 			uriAuthority = builder.uriAuthority;
-			uriResolution = builder.uriResolution;
+			uriContext = builder.uriContext;
 			uriRelativity = builder.uriRelativity;
+			uriResolution = builder.uriResolution;
 
 			beanContext = bs.add(BeanContext.class, builder.beanContext().build());
 			encoders = bs.add(EncoderSet.class, builder.encoders().build());

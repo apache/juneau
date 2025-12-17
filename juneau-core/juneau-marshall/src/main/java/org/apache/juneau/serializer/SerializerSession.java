@@ -85,8 +85,8 @@ public class SerializerSession extends BeanTraverseSession {
 		protected Builder(Serializer ctx) {
 			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
-			uriContext = ctx.uriContext;
 			mediaTypeDefault(ctx.getResponseContentType());
+			uriContext = ctx.uriContext;
 		}
 
 		@Override /* Overridden from Builder */
@@ -328,11 +328,11 @@ public class SerializerSession extends BeanTraverseSession {
 		super(builder);
 		ctx = builder.ctx;
 		javaMethod = builder.javaMethod;
+		schema = builder.schema;
 		UriContext uriContext = builder.uriContext;
 		uriResolver = UriResolver.of(ctx.getUriResolution(), ctx.getUriRelativity(), uriContext);
-		listener = BeanCreator.of(SerializerListener.class).type(ctx.getListener()).orElse(null);
 		vrs = builder.resolver;
-		schema = builder.schema;
+		listener = BeanCreator.of(SerializerListener.class).type(ctx.getListener()).orElse(null);
 	}
 
 	/**

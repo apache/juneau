@@ -786,11 +786,11 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	 */
 	public XmlParser(Builder builder) {
 		super(builder);
-		validating = builder.validating;
+		eventAllocator = builder.eventAllocator;
 		preserveRootElement = builder.preserveRootElement;
 		reporter = builder.reporter;
 		resolver = builder.resolver;
-		eventAllocator = builder.eventAllocator;
+		validating = builder.validating;
 
 		reporterImpl = nn(reporter) ? newInstance(reporter) : null;
 		resolverImpl = nn(resolver) ? newInstance(resolver) : null;

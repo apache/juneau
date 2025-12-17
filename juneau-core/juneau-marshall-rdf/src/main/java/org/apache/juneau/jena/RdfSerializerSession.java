@@ -237,8 +237,8 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		super(builder);
 		ctx = builder.ctx;
 
-		namespaces = ctx.namespaces;
 		model = ModelFactory.createDefaultModel();
+		namespaces = ctx.namespaces;
 		addModelPrefix(ctx.getJuneauNs());
 		addModelPrefix(ctx.getJuneauBpNs());
 		for (var ns : this.namespaces)

@@ -226,34 +226,34 @@ public class BeanContext extends Context {
 		protected Builder() {
 			beanClassVisibility = env("BeanContext.beanClassVisibility", PUBLIC);
 			beanConstructorVisibility = env("BeanContext.beanConstructorVisibility", PUBLIC);
-			beanMethodVisibility = env("BeanContext.beanMethodVisibility", PUBLIC);
-			beanFieldVisibility = env("BeanContext.beanFieldVisibility", PUBLIC);
 			beanDictionary = list();
-			swaps = list();
-			notBeanClasses = classSet();
-			notBeanPackages = new TreeSet<>();
-			disableBeansRequireSomeProperties = env("BeanContext.disableBeansRequireSomeProperties", false);
+			beanFieldVisibility = env("BeanContext.beanFieldVisibility", PUBLIC);
 			beanMapPutReturnsOldValue = env("BeanContext.beanMapPutReturnsOldValue", false);
+			beanMethodVisibility = env("BeanContext.beanMethodVisibility", PUBLIC);
 			beansRequireDefaultConstructor = env("BeanContext.beansRequireDefaultConstructor", false);
 			beansRequireSerializable = env("BeanContext.beansRequireSerializable", false);
 			beansRequireSettersForGetters = env("BeanContext.beansRequireSettersForGetters", false);
+			disableBeansRequireSomeProperties = env("BeanContext.disableBeansRequireSomeProperties", false);
+			disableIgnoreMissingSetters = env("BeanContext.disableIgnoreMissingSetters", false);
 			disableIgnoreTransientFields = env("BeanContext.disableIgnoreTransientFields", false);
 			disableIgnoreUnknownNullBeanProperties = env("BeanContext.disableIgnoreUnknownNullBeanProperties", false);
-			disableIgnoreMissingSetters = env("BeanContext.disableIgnoreMissingSetters", false);
 			disableInterfaceProxies = env("BeanContext.disableInterfaceProxies", false);
 			findFluentSetters = env("BeanContext.findFluentSetters", false);
 			ignoreInvocationExceptionsOnGetters = env("BeanContext.ignoreInvocationExceptionsOnGetters", false);
 			ignoreInvocationExceptionsOnSetters = env("BeanContext.ignoreInvocationExceptionsOnSetters", false);
 			ignoreUnknownBeanProperties = env("BeanContext.ignoreUnknownBeanProperties", false);
 			ignoreUnknownEnumValues = env("BeanContext.ignoreUnknownEnumValues", false);
+			locale = env("BeanContext.locale").map(x -> Locale.forLanguageTag(x)).orElse(Locale.getDefault());
+			mediaType = env("BeanContext.mediaType").map(x -> MediaType.of(x)).orElse(null);
+			notBeanClasses = classSet();
+			notBeanPackages = new TreeSet<>();
+			propertyNamer = null;
 			sortProperties = env("BeanContext.sortProperties", false);
+			swaps = list();
+			timeZone = env("BeanContext.timeZone").map(x -> TimeZone.getTimeZone(x)).orElse(null);
+			typePropertyName = env("BeanContext.typePropertyName", "_type");
 			useEnumNames = env("BeanContext.useEnumNames", false);
 			useJavaBeanIntrospector = env("BeanContext.useJavaBeanIntrospector", false);
-			typePropertyName = env("BeanContext.typePropertyName", "_type");
-			mediaType = env("BeanContext.mediaType").map(x -> MediaType.of(x)).orElse(null);
-			timeZone = env("BeanContext.timeZone").map(x -> TimeZone.getTimeZone(x)).orElse(null);
-			locale = env("BeanContext.locale").map(x -> Locale.forLanguageTag(x)).orElse(Locale.getDefault());
-			propertyNamer = null;
 		}
 
 		/**
@@ -265,34 +265,34 @@ public class BeanContext extends Context {
 			super(copyFrom);
 			beanClassVisibility = copyFrom.beanClassVisibility;
 			beanConstructorVisibility = copyFrom.beanConstructorVisibility;
-			beanMethodVisibility = copyFrom.beanMethodVisibility;
-			beanFieldVisibility = copyFrom.beanFieldVisibility;
 			beanDictionary = copyOf(copyFrom.beanDictionary);
-			swaps = copyOf(copyFrom.swaps);
-			notBeanClasses = toClassSet(copyFrom.notBeanClasses);
-			notBeanPackages = toSortedSet(copyFrom.notBeanPackages, false);
-			disableBeansRequireSomeProperties = ! copyFrom.beansRequireSomeProperties;
+			beanFieldVisibility = copyFrom.beanFieldVisibility;
 			beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;
+			beanMethodVisibility = copyFrom.beanMethodVisibility;
 			beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;
 			beansRequireSerializable = copyFrom.beansRequireSerializable;
 			beansRequireSettersForGetters = copyFrom.beansRequireSettersForGetters;
+			disableBeansRequireSomeProperties = ! copyFrom.beansRequireSomeProperties;
+			disableIgnoreMissingSetters = ! copyFrom.ignoreMissingSetters;
 			disableIgnoreTransientFields = ! copyFrom.ignoreTransientFields;
 			disableIgnoreUnknownNullBeanProperties = ! copyFrom.ignoreUnknownNullBeanProperties;
-			disableIgnoreMissingSetters = ! copyFrom.ignoreMissingSetters;
 			disableInterfaceProxies = ! copyFrom.useInterfaceProxies;
 			findFluentSetters = copyFrom.findFluentSetters;
 			ignoreInvocationExceptionsOnGetters = copyFrom.ignoreInvocationExceptionsOnGetters;
 			ignoreInvocationExceptionsOnSetters = copyFrom.ignoreInvocationExceptionsOnSetters;
 			ignoreUnknownBeanProperties = copyFrom.ignoreUnknownBeanProperties;
 			ignoreUnknownEnumValues = copyFrom.ignoreUnknownEnumValues;
+			locale = copyFrom.locale;
+			mediaType = copyFrom.mediaType;
+			notBeanClasses = toClassSet(copyFrom.notBeanClasses);
+			notBeanPackages = toSortedSet(copyFrom.notBeanPackages, false);
+			propertyNamer = copyFrom.propertyNamer;
 			sortProperties = copyFrom.sortProperties;
+			swaps = copyOf(copyFrom.swaps);
+			timeZone = copyFrom.timeZone;
+			typePropertyName = copyFrom.typePropertyName;
 			useEnumNames = copyFrom.useEnumNames;
 			useJavaBeanIntrospector = copyFrom.useJavaBeanIntrospector;
-			typePropertyName = copyFrom.typePropertyName;
-			mediaType = copyFrom.mediaType;
-			timeZone = copyFrom.timeZone;
-			locale = copyFrom.locale;
-			propertyNamer = copyFrom.propertyNamer;
 		}
 
 		/**
@@ -304,34 +304,34 @@ public class BeanContext extends Context {
 			super(copyFrom);
 			beanClassVisibility = copyFrom.beanClassVisibility;
 			beanConstructorVisibility = copyFrom.beanConstructorVisibility;
-			beanMethodVisibility = copyFrom.beanMethodVisibility;
-			beanFieldVisibility = copyFrom.beanFieldVisibility;
 			beanDictionary = copyOf(copyFrom.beanDictionary);
-			swaps = copyOf(copyFrom.swaps);
-			notBeanClasses = toClassSet(copyFrom.notBeanClasses);
-			notBeanPackages = toSortedSet(copyFrom.notBeanPackages);
-			disableBeansRequireSomeProperties = copyFrom.disableBeansRequireSomeProperties;
+			beanFieldVisibility = copyFrom.beanFieldVisibility;
 			beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;
+			beanMethodVisibility = copyFrom.beanMethodVisibility;
 			beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;
 			beansRequireSerializable = copyFrom.beansRequireSerializable;
 			beansRequireSettersForGetters = copyFrom.beansRequireSettersForGetters;
+			disableBeansRequireSomeProperties = copyFrom.disableBeansRequireSomeProperties;
+			disableIgnoreMissingSetters = copyFrom.disableIgnoreMissingSetters;
 			disableIgnoreTransientFields = copyFrom.disableIgnoreTransientFields;
 			disableIgnoreUnknownNullBeanProperties = copyFrom.disableIgnoreUnknownNullBeanProperties;
-			disableIgnoreMissingSetters = copyFrom.disableIgnoreMissingSetters;
 			disableInterfaceProxies = copyFrom.disableInterfaceProxies;
 			findFluentSetters = copyFrom.findFluentSetters;
 			ignoreInvocationExceptionsOnGetters = copyFrom.ignoreInvocationExceptionsOnGetters;
 			ignoreInvocationExceptionsOnSetters = copyFrom.ignoreInvocationExceptionsOnSetters;
 			ignoreUnknownBeanProperties = copyFrom.ignoreUnknownBeanProperties;
 			ignoreUnknownEnumValues = copyFrom.ignoreUnknownEnumValues;
+			locale = copyFrom.locale;
+			mediaType = copyFrom.mediaType;
+			notBeanClasses = toClassSet(copyFrom.notBeanClasses);
+			notBeanPackages = toSortedSet(copyFrom.notBeanPackages);
+			propertyNamer = copyFrom.propertyNamer;
 			sortProperties = copyFrom.sortProperties;
+			swaps = copyOf(copyFrom.swaps);
+			timeZone = copyFrom.timeZone;
+			typePropertyName = copyFrom.typePropertyName;
 			useEnumNames = copyFrom.useEnumNames;
 			useJavaBeanIntrospector = copyFrom.useJavaBeanIntrospector;
-			typePropertyName = copyFrom.typePropertyName;
-			mediaType = copyFrom.mediaType;
-			timeZone = copyFrom.timeZone;
-			locale = copyFrom.locale;
-			propertyNamer = copyFrom.propertyNamer;
 		}
 
 		@Override /* Overridden from Builder */
@@ -3601,38 +3601,37 @@ public class BeanContext extends Context {
 	public BeanContext(Builder builder) {
 		super(builder);
 
-		hashKey = builder.hashKey();
-
-		beanConstructorVisibility = builder.beanConstructorVisibility;
 		beanClassVisibility = builder.beanClassVisibility;
-		beanMethodVisibility = builder.beanMethodVisibility;
+		beanConstructorVisibility = builder.beanConstructorVisibility;
+		beanDictionary = opt(builder.beanDictionary).map(Collections::unmodifiableList).orElse(l());
 		beanFieldVisibility = builder.beanFieldVisibility;
+		beanMapPutReturnsOldValue = builder.beanMapPutReturnsOldValue;
+		beanMethodVisibility = builder.beanMethodVisibility;
 		beansRequireDefaultConstructor = builder.beansRequireDefaultConstructor;
 		beansRequireSerializable = builder.beansRequireSerializable;
 		beansRequireSettersForGetters = builder.beansRequireSettersForGetters;
 		beansRequireSomeProperties = ! builder.disableBeansRequireSomeProperties;
-		beanMapPutReturnsOldValue = builder.beanMapPutReturnsOldValue;
-		useEnumNames = builder.useEnumNames;
-		useInterfaceProxies = ! builder.disableInterfaceProxies;
-		ignoreUnknownBeanProperties = builder.ignoreUnknownBeanProperties;
-		ignoreUnknownNullBeanProperties = ! builder.disableIgnoreUnknownNullBeanProperties;
-		ignoreUnknownEnumValues = builder.ignoreUnknownEnumValues;
-		ignoreMissingSetters = ! builder.disableIgnoreMissingSetters;
-		ignoreTransientFields = ! builder.disableIgnoreTransientFields;
+		findFluentSetters = builder.findFluentSetters;
+		hashKey = builder.hashKey();
 		ignoreInvocationExceptionsOnGetters = builder.ignoreInvocationExceptionsOnGetters;
 		ignoreInvocationExceptionsOnSetters = builder.ignoreInvocationExceptionsOnSetters;
-		useJavaBeanIntrospector = builder.useJavaBeanIntrospector;
-		sortProperties = builder.sortProperties;
-		findFluentSetters = builder.findFluentSetters;
-		typePropertyName = nn(builder.typePropertyName) ? builder.typePropertyName : "_type";
+		ignoreMissingSetters = ! builder.disableIgnoreMissingSetters;
+		ignoreTransientFields = ! builder.disableIgnoreTransientFields;
+		ignoreUnknownBeanProperties = builder.ignoreUnknownBeanProperties;
+		ignoreUnknownEnumValues = builder.ignoreUnknownEnumValues;
+		ignoreUnknownNullBeanProperties = ! builder.disableIgnoreUnknownNullBeanProperties;
 		locale = nn(builder.locale) ? builder.locale : Locale.getDefault();
-		timeZone = builder.timeZone;
 		mediaType = builder.mediaType;
-		beanDictionary = opt(builder.beanDictionary).map(Collections::unmodifiableList).orElse(l());
-		swaps = opt(builder.swaps).map(Collections::unmodifiableList).orElse(l());
 		notBeanClasses = opt(builder.notBeanClasses).map(ArrayList::new).map(Collections::unmodifiableList).orElse(l());
 		notBeanPackages = opt(builder.notBeanPackages).map(ArrayList::new).map(Collections::unmodifiableList).orElse(l());
 		propertyNamer = nn(builder.propertyNamer) ? builder.propertyNamer : BasicPropertyNamer.class;
+		sortProperties = builder.sortProperties;
+		swaps = opt(builder.swaps).map(Collections::unmodifiableList).orElse(l());
+		timeZone = builder.timeZone;
+		typePropertyName = nn(builder.typePropertyName) ? builder.typePropertyName : "_type";
+		useEnumNames = builder.useEnumNames;
+		useInterfaceProxies = ! builder.disableInterfaceProxies;
+		useJavaBeanIntrospector = builder.useJavaBeanIntrospector;
 
 		notBeanClassesArray = notBeanClasses.isEmpty() ? DEFAULT_NOTBEAN_CLASSES : Stream.of(notBeanClasses, l(DEFAULT_NOTBEAN_CLASSES)).flatMap(Collection::stream).toArray(Class[]::new);
 

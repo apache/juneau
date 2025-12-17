@@ -72,9 +72,9 @@ public class BeanSession extends ContextSession {
 		protected Builder(BeanContext ctx) {
 			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
-			timeZone = ctx.timeZone;
 			locale = ctx.locale;
 			mediaType = ctx.mediaType;
+			timeZone = ctx.timeZone;
 		}
 
 		@Override /* Overridden from Builder */
@@ -280,8 +280,8 @@ public class BeanSession extends ContextSession {
 		super(builder);
 		ctx = builder.ctx;
 		locale = builder.locale;
-		timeZone = builder.timeZone;
 		mediaType = builder.mediaType;
+		timeZone = builder.timeZone;
 	}
 
 	/**

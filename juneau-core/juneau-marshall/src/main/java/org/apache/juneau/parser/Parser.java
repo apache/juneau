@@ -1007,13 +1007,13 @@ public class Parser extends BeanContextable {
 	protected Parser(Builder builder) {
 		super(builder);
 
-		consumes = builder.consumes;
-		trimStrings = builder.trimStrings;
-		strict = builder.strict;
 		autoCloseStreams = builder.autoCloseStreams;
+		consumes = builder.consumes;
 		debugOutputLines = builder.debugOutputLines;
-		unbuffered = builder.unbuffered;
 		listener = builder.listener;
+		strict = builder.strict;
+		trimStrings = builder.trimStrings;
+		unbuffered = builder.unbuffered;
 
 		String[] _consumes = splita(nn(consumes) ? consumes : "");
 		this.consumesArray = new MediaType[_consumes.length];

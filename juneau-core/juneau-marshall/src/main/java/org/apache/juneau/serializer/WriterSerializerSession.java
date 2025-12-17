@@ -70,9 +70,9 @@ public class WriterSerializerSession extends SerializerSession {
 		protected Builder(WriterSerializer ctx) {
 			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
-			useWhitespace = ctx.useWhitespace;
 			fileCharset = ctx.fileCharset;
 			streamCharset = ctx.streamCharset;
+			useWhitespace = ctx.useWhitespace;
 		}
 
 		@Override /* Overridden from Builder */
@@ -264,8 +264,8 @@ public class WriterSerializerSession extends SerializerSession {
 	protected WriterSerializerSession(Builder builder) {
 		super(builder);
 		ctx = builder.ctx;
-		streamCharset = builder.streamCharset;
 		fileCharset = builder.fileCharset;
+		streamCharset = builder.streamCharset;
 		useWhitespace = builder.useWhitespace;
 	}
 

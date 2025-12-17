@@ -253,8 +253,8 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	protected XmlSerializerSession(Builder builder) {
 		super(builder);
 		ctx = builder.ctx;
-		namespaces = ctx.getNamespaces();
 		defaultNamespace = findDefaultNamespace(ctx.getDefaultNamespace());
+		namespaces = ctx.getNamespaces();
 		textNodeDelimiter = ctx.textNodeDelimiter;
 	}
 

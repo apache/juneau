@@ -206,10 +206,10 @@ public class RdfParserSession extends ReaderParserSession {
 		model = ModelFactory.createDefaultModel();
 		addModelPrefix(ctx.getJuneauNs());
 		addModelPrefix(ctx.getJuneauBpNs());
-		pRoot = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_ROOT);
-		pValue = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_VALUE);
-		pType = model.createProperty(ctx.getJuneauBpNs().getUri(), RDF_juneauNs_TYPE);
 		pRdfType = model.createProperty("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
+		pRoot = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_ROOT);
+		pType = model.createProperty(ctx.getJuneauBpNs().getUri(), RDF_juneauNs_TYPE);
+		pValue = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_VALUE);
 		rdfReader = model.getReader(ctx.getLanguage());
 
 		// Note: NTripleReader throws an exception if you try to set any properties on it.

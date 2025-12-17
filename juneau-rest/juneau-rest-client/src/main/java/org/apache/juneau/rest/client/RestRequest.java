@@ -219,12 +219,12 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		this.client = client;
 		this.request = createInnerRequest(assertArgNotNull("method", method), assertArgNotNull("uri", uri), hasBody);
 		this.errorCodes = client.errorCodes;
-		this.uriBuilder = new URIBuilder(request.getURI());
-		this.ignoreErrors = client.ignoreErrors;
-		this.headerData = client.createHeaderData();
-		this.queryData = client.createQueryData();
 		this.formData = client.createFormData();
+		this.headerData = client.createHeaderData();
+		this.ignoreErrors = client.ignoreErrors;
 		this.pathData = client.createPathData();
+		this.queryData = client.createQueryData();
+		this.uriBuilder = new URIBuilder(request.getURI());
 	}
 
 	/**

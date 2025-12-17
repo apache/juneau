@@ -1303,20 +1303,20 @@ public class Serializer extends BeanTraverseContext {
 	protected Serializer(Builder builder) {
 		super(builder);
 
-		produces = builder.produces;
 		accept = builder.accept;
 		addBeanTypes = builder.addBeanTypes;
+		addRootType = builder.addRootType;
 		keepNullProperties = builder.keepNullProperties;
+		listener = builder.listener;
+		produces = builder.produces;
+		sortCollections = builder.sortCollections;
+		sortMaps = builder.sortMaps;
 		trimEmptyCollections = builder.trimEmptyCollections;
 		trimEmptyMaps = builder.trimEmptyMaps;
 		trimStrings = builder.trimStrings;
-		sortCollections = builder.sortCollections;
-		sortMaps = builder.sortMaps;
-		addRootType = builder.addRootType;
 		uriContext = builder.uriContext;
-		uriResolution = builder.uriResolution;
 		uriRelativity = builder.uriRelativity;
-		listener = builder.listener;
+		uriResolution = builder.uriResolution;
 
 		this.producesMediaType = MediaType.of(produces);
 		this.acceptRanges = nn(accept) ? MediaRanges.of(accept) : MediaRanges.of(produces);

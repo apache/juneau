@@ -1058,8 +1058,8 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	public JsonSerializer(Builder builder) {
 		super(builder);
 		addBeanTypesJson = builder.addBeanTypesJson;
-		simpleAttrs = builder.simpleAttrs;
 		escapeSolidus = builder.escapeSolidus;
+		simpleAttrs = builder.simpleAttrs;
 
 		addBeanTypes = addBeanTypesJson || super.isAddBeanTypes();
 	}

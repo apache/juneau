@@ -2206,14 +2206,14 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			bs.addBean(BeanStore.class, bs);
 
 			beanContext = bs.add(BeanContext.class, builder.getBeanContext().orElse(context.getBeanContext()));
-			encoders = bs.add(EncoderSet.class, builder.getEncoders().orElse(context.getEncoders()));
-			serializers = bs.add(SerializerSet.class, builder.getSerializers().orElse(context.getSerializers()));
-			parsers = bs.add(ParserSet.class, builder.getParsers().orElse(context.getParsers()));
-			partSerializer = bs.add(HttpPartSerializer.class, builder.getPartSerializer().orElse(context.getPartSerializer()));
-			partParser = bs.add(HttpPartParser.class, builder.getPartParser().orElse(context.getPartParser()));
-			jsonSchemaGenerator = bs.add(JsonSchemaGenerator.class, builder.getJsonSchemaGenerator().orElse(context.getJsonSchemaGenerator()));
 			converters = bs.add(RestConverter[].class, builder.converters().build().asArray());
+			encoders = bs.add(EncoderSet.class, builder.getEncoders().orElse(context.getEncoders()));
 			guards = bs.add(RestGuard[].class, builder.getGuards().asArray());
+			jsonSchemaGenerator = bs.add(JsonSchemaGenerator.class, builder.getJsonSchemaGenerator().orElse(context.getJsonSchemaGenerator()));
+			parsers = bs.add(ParserSet.class, builder.getParsers().orElse(context.getParsers()));
+			partParser = bs.add(HttpPartParser.class, builder.getPartParser().orElse(context.getPartParser()));
+			partSerializer = bs.add(HttpPartSerializer.class, builder.getPartSerializer().orElse(context.getPartSerializer()));
+			serializers = bs.add(SerializerSet.class, builder.getSerializers().orElse(context.getSerializers()));
 
 			var matchers = builder.getMatchers(context);
 			optionalMatchers = matchers.getOptionalEntries();
@@ -2225,11 +2225,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			supportedAcceptTypes = u(nn(builder.produces) ? builder.produces : serializers.getSupportedMediaTypes());
 			supportedContentTypes = u(nn(builder.consumes) ? builder.consumes : parsers.getSupportedMediaTypes());
 
-			defaultRequestHeaders = builder.defaultRequestHeaders();
-			defaultResponseHeaders = builder.defaultResponseHeaders();
-			defaultRequestQueryData = builder.defaultRequestQueryData();
-			defaultRequestFormData = builder.defaultRequestFormData();
 			defaultRequestAttributes = builder.defaultRequestAttributes();
+			defaultRequestFormData = builder.defaultRequestFormData();
+			defaultRequestHeaders = builder.defaultRequestHeaders();
+			defaultRequestQueryData = builder.defaultRequestQueryData();
+			defaultResponseHeaders = builder.defaultResponseHeaders();
 
 			int _hierarchyDepth = 0;
 			var sc = method.getDeclaringClass().getSuperclass();

@@ -6205,37 +6205,37 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 		beanStore = builder.beanStore.addBean(RestClient.class, this);
 
-		httpClient = builder.getHttpClient();
-		headerData = builder.headers().copy();
-		queryData = builder.queryData().copy();
-		formData = builder.formData().copy();
-		pathData = builder.pathData().copy();
 		callHandler = builder.callHandler().run();
-		skipEmptyHeaderData = builder.skipEmptyHeaderData;
-		skipEmptyQueryData = builder.skipEmptyQueryData;
-		skipEmptyFormData = builder.skipEmptyFormData;
-		rootUrl = builder.rootUrl;
-		errorCodes = builder.errorCodes;
 		connectionManager = builder.connectionManager;
 		console = nn(builder.console) ? builder.console : System.err;
-		if (builder.executorService != null)
-			executorService.set(builder.executorService);
-		executorServiceShutdownOnClose = builder.executorServiceShutdownOnClose;
-		ignoreErrors = builder.ignoreErrors;
-		keepHttpClientOpen = builder.keepHttpClientOpen;
+		creationStack = isDebug() ? Thread.currentThread().getStackTrace() : null;
 		detectLeaks = builder.detectLeaks;
+		errorCodes = builder.errorCodes;
+		formData = builder.formData().copy();
+		headerData = builder.headers().copy();
+		httpClient = builder.getHttpClient();
+		ignoreErrors = builder.ignoreErrors;
+		interceptors = nn(builder.interceptors) ? builder.interceptors.toArray(EMPTY_REST_CALL_INTERCEPTORS) : EMPTY_REST_CALL_INTERCEPTORS;
+		keepHttpClientOpen = builder.keepHttpClientOpen;
 		logger = nn(builder.logger) ? builder.logger : Logger.getLogger(cn(RestClient.class));
-		logToConsole = builder.logToConsole || isDebug();
 		logRequests = nn(builder.logRequests) ? builder.logRequests : isDebug() ? DetailLevel.FULL : DetailLevel.NONE;
 		logRequestsLevel = nn(builder.logRequestsLevel) ? builder.logRequestsLevel : isDebug() ? Level.WARNING : Level.OFF;
 		logRequestsPredicate = nn(builder.logRequestsPredicate) ? builder.logRequestsPredicate : LOG_REQUESTS_PREDICATE_DEFAULT;
-		interceptors = nn(builder.interceptors) ? builder.interceptors.toArray(EMPTY_REST_CALL_INTERCEPTORS) : EMPTY_REST_CALL_INTERCEPTORS;
-		serializers = builder.serializers().build();
+		logToConsole = builder.logToConsole || isDebug();
 		parsers = builder.parsers().build();
-		partSerializer = builder.partSerializer().create();
 		partParser = builder.partParser().create();
+		partSerializer = builder.partSerializer().create();
+		pathData = builder.pathData().copy();
+		queryData = builder.queryData().copy();
+		rootUrl = builder.rootUrl;
+		serializers = builder.serializers().build();
+		skipEmptyFormData = builder.skipEmptyFormData;
+		skipEmptyHeaderData = builder.skipEmptyHeaderData;
+		skipEmptyQueryData = builder.skipEmptyQueryData;
 		urlEncodingSerializer = builder.urlEncodingSerializer().build();
-		creationStack = isDebug() ? Thread.currentThread().getStackTrace() : null;
+		if (builder.executorService != null)
+			executorService.set(builder.executorService);
+		executorServiceShutdownOnClose = builder.executorServiceShutdownOnClose;
 
 		init();
 	}

@@ -76,17 +76,17 @@ public class Config extends Context implements ConfigEventListener {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			name = env("Config.name", "Configuration.cfg");
-			store = FileStore.DEFAULT;
-			serializer = Json5Serializer.DEFAULT;
-			parser = JsonParser.DEFAULT;
+			binaryFormat = env("Config.binaryFormat", BinaryFormat.BASE64);
+			binaryLineLength = env("Config.binaryLineLength", -1);
 			mods = map();
 			mods(XorEncodeMod.INSTANCE);
-			varResolver = VarResolver.DEFAULT;
-			binaryLineLength = env("Config.binaryLineLength", -1);
-			binaryFormat = env("Config.binaryFormat", BinaryFormat.BASE64);
 			multiLineValuesOnSeparateLines = env("Config.multiLineValuesOnSeparateLines", false);
+			name = env("Config.name", "Configuration.cfg");
+			parser = JsonParser.DEFAULT;
 			readOnly = env("Config.readOnly", false);
+			serializer = Json5Serializer.DEFAULT;
+			store = FileStore.DEFAULT;
+			varResolver = VarResolver.DEFAULT;
 		}
 
 		/**
@@ -96,16 +96,16 @@ public class Config extends Context implements ConfigEventListener {
 		 */
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);
-			name = copyFrom.name;
-			store = copyFrom.store;
-			serializer = copyFrom.serializer;
-			parser = copyFrom.parser;
-			mods = copyOf(copyFrom.mods);
-			varResolver = copyFrom.varResolver;
-			binaryLineLength = copyFrom.binaryLineLength;
 			binaryFormat = copyFrom.binaryFormat;
+			binaryLineLength = copyFrom.binaryLineLength;
+			mods = copyOf(copyFrom.mods);
 			multiLineValuesOnSeparateLines = copyFrom.multiLineValuesOnSeparateLines;
+			name = copyFrom.name;
+			parser = copyFrom.parser;
 			readOnly = copyFrom.readOnly;
+			serializer = copyFrom.serializer;
+			store = copyFrom.store;
+			varResolver = copyFrom.varResolver;
 		}
 
 		/**
@@ -115,16 +115,16 @@ public class Config extends Context implements ConfigEventListener {
 		 */
 		protected Builder(Config copyFrom) {
 			super(copyFrom);
-			name = copyFrom.name;
-			store = copyFrom.store;
-			serializer = copyFrom.serializer;
-			parser = copyFrom.parser;
-			mods = copyOf(copyFrom.mods);
-			varResolver = copyFrom.varResolver;
-			binaryLineLength = copyFrom.binaryLineLength;
 			binaryFormat = copyFrom.binaryFormat;
+			binaryLineLength = copyFrom.binaryLineLength;
+			mods = copyOf(copyFrom.mods);
 			multiLineValuesOnSeparateLines = copyFrom.multiLineValuesOnSeparateLines;
+			name = copyFrom.name;
+			parser = copyFrom.parser;
 			readOnly = copyFrom.readOnly;
+			serializer = copyFrom.serializer;
+			store = copyFrom.store;
+			varResolver = copyFrom.varResolver;
 		}
 
 		@Override /* Overridden from Builder */
@@ -586,38 +586,38 @@ public class Config extends Context implements ConfigEventListener {
 	public Config(Builder builder) throws IOException {
 		super(builder);
 
+		binaryFormat = builder.binaryFormat;
+		binaryLineLength = builder.binaryLineLength;
+		mods = u(copyOf(builder.mods));
+		multiLineValuesOnSeparateLines = builder.multiLineValuesOnSeparateLines;
 		name = builder.name;
+		parser = builder.parser;
+		readOnly = builder.readOnly;
+		serializer = builder.serializer;
 		store = builder.store;
+		varResolver = builder.varResolver;
 		configMap = store.getMap(name);
 		configMap.register(this);
-		serializer = builder.serializer;
-		parser = builder.parser;
 		beanSession = parser.getBeanContext().getSession();
-		mods = u(copyOf(builder.mods));
-		varResolver = builder.varResolver;
 		varSession = varResolver.copy().vars(ConfigVar.class).bean(Config.class, this).build().createSession();
-		binaryLineLength = builder.binaryLineLength;
-		binaryFormat = builder.binaryFormat;
-		multiLineValuesOnSeparateLines = builder.multiLineValuesOnSeparateLines;
-		readOnly = builder.readOnly;
 	}
 
 	Config(Config copyFrom, VarResolverSession varSession) {
 		super(copyFrom);
-		name = copyFrom.name;
-		store = copyFrom.store;
+		beanSession = copyFrom.beanSession;
+		binaryFormat = copyFrom.binaryFormat;
+		binaryLineLength = copyFrom.binaryLineLength;
 		configMap = copyFrom.configMap;
 		configMap.register(this);
-		serializer = copyFrom.serializer;
-		parser = copyFrom.parser;
 		mods = copyFrom.mods;
-		varResolver = copyFrom.varResolver;
-		this.varSession = varSession;
-		binaryLineLength = copyFrom.binaryLineLength;
-		binaryFormat = copyFrom.binaryFormat;
 		multiLineValuesOnSeparateLines = copyFrom.multiLineValuesOnSeparateLines;
+		name = copyFrom.name;
+		parser = copyFrom.parser;
 		readOnly = copyFrom.readOnly;
-		beanSession = copyFrom.beanSession;
+		serializer = copyFrom.serializer;
+		store = copyFrom.store;
+		this.varSession = varSession;
+		varResolver = copyFrom.varResolver;
 	}
 
 	/**

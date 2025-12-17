@@ -66,12 +66,12 @@ public class FileStore extends ConfigStore {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			directory = env("ConfigFileStore.directory", ".");
 			charset = env("ConfigFileStore.charset").map(x -> Charset.forName(x)).orElse(Charset.defaultCharset());
+			directory = env("ConfigFileStore.directory", ".");
 			enableWatcher = env("ConfigFileStore.enableWatcher", false);
-			watcherSensitivity = env("ConfigFileStore.watcherSensitivity", WatcherSensitivity.MEDIUM);
-			updateOnWrite = env("ConfigFileStore.updateOnWrite", false);
 			extensions = env("ConfigFileStore.extensions", "cfg");
+			updateOnWrite = env("ConfigFileStore.updateOnWrite", false);
+			watcherSensitivity = env("ConfigFileStore.watcherSensitivity", WatcherSensitivity.MEDIUM);
 		}
 
 		/**
@@ -82,12 +82,12 @@ public class FileStore extends ConfigStore {
 		 */
 		protected Builder(Builder copyFrom) {
 			super(assertArgNotNull("copyFrom", copyFrom));
-			directory = copyFrom.directory;
 			charset = copyFrom.charset;
+			directory = copyFrom.directory;
 			enableWatcher = copyFrom.enableWatcher;
-			watcherSensitivity = copyFrom.watcherSensitivity;
-			updateOnWrite = copyFrom.updateOnWrite;
 			extensions = copyFrom.extensions;
+			updateOnWrite = copyFrom.updateOnWrite;
+			watcherSensitivity = copyFrom.watcherSensitivity;
 		}
 
 		/**
@@ -99,12 +99,12 @@ public class FileStore extends ConfigStore {
 		protected Builder(FileStore copyFrom) {
 			super(assertArgNotNull("copyFrom", copyFrom));
 			type(copyFrom.getClass());
-			directory = copyFrom.directory;
 			charset = copyFrom.charset;
+			directory = copyFrom.directory;
 			enableWatcher = copyFrom.enableWatcher;
-			watcherSensitivity = copyFrom.watcherSensitivity;
-			updateOnWrite = copyFrom.updateOnWrite;
 			extensions = copyFrom.extensions;
+			updateOnWrite = copyFrom.updateOnWrite;
+			watcherSensitivity = copyFrom.watcherSensitivity;
 		}
 
 		@Override /* Overridden from Builder */
