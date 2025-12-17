@@ -1277,13 +1277,20 @@ public class Serializer extends BeanTraverseContext {
 		return (Builder)Context.createBuilder(c);
 	}
 
-	final String produces, accept;
-	final boolean addBeanTypes, keepNullProperties, trimEmptyCollections, trimEmptyMaps, trimStrings, sortCollections, sortMaps, addRootType;
-	final UriContext uriContext;
-	final UriResolution uriResolution;
-	final UriRelativity uriRelativity;
-	final Class<? extends SerializerListener> listener;
-
+	protected final boolean addBeanTypes;
+	protected final boolean addRootType;
+	protected final boolean keepNullProperties;
+	protected final boolean sortCollections;
+	protected final boolean sortMaps;
+	protected final boolean trimEmptyCollections;
+	protected final boolean trimEmptyMaps;
+	protected final boolean trimStrings;
+	protected final Class<? extends SerializerListener> listener;
+	protected final String accept;
+	protected final String produces;
+	protected final UriContext uriContext;
+	protected final UriRelativity uriRelativity;
+	protected final UriResolution uriResolution;
 	private final MediaRanges acceptRanges;
 	private final MediaType[] acceptMediaTypes;
 	private final MediaType producesMediaType;

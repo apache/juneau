@@ -1430,9 +1430,12 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		return new Builder();
 	}
 
-	final AnchorText uriAnchorText;
-	final boolean detectLabelParameters, detectLinksInStrings, addKeyValueTableHeaders, addBeanTypesHtml;
-	final String labelParameter;
+	protected final boolean addBeanTypesHtml;
+	protected final boolean addKeyValueTableHeaders;
+	protected final boolean detectLabelParameters;
+	protected final boolean detectLinksInStrings;
+	protected final AnchorText uriAnchorText;
+	protected final String labelParameter;
 
 	private final Map<ClassMeta<?>,HtmlClassMeta> htmlClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,HtmlBeanPropertyMeta> htmlBeanPropertyMetas = new ConcurrentHashMap<>();

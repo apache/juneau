@@ -312,18 +312,12 @@ public class SerializerSession extends BeanTraverseSession {
 		return l((Object[])array);
 	}
 
-	private final Serializer ctx;
-
-	private final UriResolver uriResolver;
-
 	private final HttpPartSchema schema;
-
-	private VarResolverSession vrs;
-
 	private final Method javaMethod;                                                // Java method that invoked this serializer.
-
-	// Writable properties
+	private final Serializer ctx;
 	private final SerializerListener listener;
+	private final UriResolver uriResolver;
+	private VarResolverSession vrs;
 
 	/**
 	 * Constructor.

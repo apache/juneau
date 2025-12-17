@@ -159,18 +159,13 @@ public class BeanTraverseSession extends BeanSession {
 	}
 
 	private final BeanTraverseContext ctx;
-	private final Map<Object,Object> set;                                           // Contains the current objects in the current branch of the model.
-
 	private final LinkedList<StackElement> stack = new LinkedList<>();              // Contains the current objects in the current branch of the model.
-	// Writable properties
-	private boolean isBottom;                                                       // If 'true', then we're at a leaf in the model (i.e. a String, Number, Boolean, or null).
+	private final Map<Object,Object> set;                                           // Contains the current objects in the current branch of the model.
 	private BeanPropertyMeta currentProperty;
-
 	private ClassMeta<?> currentClass;
-
+	private boolean isBottom;                                                       // If 'true', then we're at a leaf in the model (i.e. a String, Number, Boolean, or null).
 	/** The current indentation depth into the model. */
 	public int indent;
-
 	private int depth;
 
 	/**

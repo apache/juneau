@@ -133,8 +133,8 @@ public abstract class ConfigStore extends Context implements Closeable {
 		}
 	}
 
-	private final ConcurrentHashMap<String,Set<ConfigStoreListener>> listeners = new ConcurrentHashMap<>();
 	private final ConcurrentHashMap<String,ConfigMap> configMaps = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<String,Set<ConfigStoreListener>> listeners = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.

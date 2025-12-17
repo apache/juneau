@@ -742,10 +742,10 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		return new Builder();
 	}
 
-	final boolean validateEnd;
+	protected final boolean validateEnd;
 
-	private final Map<ClassMeta<?>,JsonClassMeta> jsonClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,JsonBeanPropertyMeta> jsonBeanPropertyMetas = new ConcurrentHashMap<>();
+	private final Map<ClassMeta<?>,JsonClassMeta> jsonClassMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.

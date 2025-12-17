@@ -184,28 +184,21 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 	final RestClient client;                               // The client that created this call.
 	private final HttpRequestBase request;                 // The request.
-	private RestResponse response;                         // The response.
-	List<RestCallInterceptor> interceptors = list();   // Used for intercepting and altering requests.
-	private HeaderList headerData;
-	private PartList queryData, formData, pathData;
 	private boolean ignoreErrors, suppressLogging;
-	private Object content;
-	private Serializer serializer;
-
-	private Parser parser;
-
-	private HttpPartSchema contentSchema;
-
-	private URIBuilder uriBuilder;
-	private Predicate<Integer> errorCodes;
-
-	private HttpHost target;
-
 	private HttpContext context;
-
-	private List<Class<? extends Throwable>> rethrow;
-
+	private HttpHost target;
+	private HttpPartSchema contentSchema;
 	private HttpPartSerializerSession partSerializerSession;
+	private HeaderList headerData;
+	private List<Class<? extends Throwable>> rethrow;
+	List<RestCallInterceptor> interceptors = list();   // Used for intercepting and altering requests.
+	private Object content;
+	private Parser parser;
+	private PartList formData, pathData, queryData;
+	private Predicate<Integer> errorCodes;
+	private RestResponse response;                         // The response.
+	private Serializer serializer;
+	private URIBuilder uriBuilder;
 
 	private final Map<HttpPartSerializer,HttpPartSerializerSession> partSerializerSessions = new IdentityHashMap<>();
 

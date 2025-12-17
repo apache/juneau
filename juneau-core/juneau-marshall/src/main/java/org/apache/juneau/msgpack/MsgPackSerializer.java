@@ -769,10 +769,10 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		return new Builder();
 	}
 
-	final boolean addBeanTypesMsgPack;
+	protected final boolean addBeanTypesMsgPack;
 
-	private final Map<ClassMeta<?>,MsgPackClassMeta> msgPackClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,MsgPackBeanPropertyMeta> msgPackBeanPropertyMetas = new ConcurrentHashMap<>();
+	private final Map<ClassMeta<?>,MsgPackClassMeta> msgPackClassMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.

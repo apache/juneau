@@ -240,12 +240,10 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		return new Builder(assertArgNotNull("ctx", ctx));
 	}
 
+	private final String textNodeDelimiter;
 	private final XmlSerializer ctx;
 	private Namespace defaultNamespace;
-
 	private Namespace[] namespaces = {};
-
-	private final String textNodeDelimiter;
 
 	/**
 	 * Constructor.

@@ -765,17 +765,18 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		return new Builder();
 	}
 
-	final boolean validating, preserveRootElement;
-	final Class<? extends XMLEventAllocator> eventAllocator;
-	final Class<? extends XMLReporter> reporter;
-	final Class<? extends XMLResolver> resolver;
+	protected final boolean preserveRootElement;
+	protected final boolean validating;
+	protected final Class<? extends XMLEventAllocator> eventAllocator;
+	protected final Class<? extends XMLReporter> reporter;
+	protected final Class<? extends XMLResolver> resolver;
 
+	private final XMLEventAllocator eventAllocatorImpl;
 	private final XMLReporter reporterImpl;
 	private final XMLResolver resolverImpl;
-	private final XMLEventAllocator eventAllocatorImpl;
-	private final Map<ClassMeta<?>,XmlClassMeta> xmlClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanMeta<?>,XmlBeanMeta> xmlBeanMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,XmlBeanPropertyMeta> xmlBeanPropertyMetas = new ConcurrentHashMap<>();
+	private final Map<ClassMeta<?>,XmlClassMeta> xmlClassMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.

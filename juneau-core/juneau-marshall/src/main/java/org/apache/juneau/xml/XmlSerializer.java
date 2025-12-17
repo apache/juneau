@@ -1216,11 +1216,14 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		return new Builder();
 	}
 
-	final boolean autoDetectNamespaces, enableNamespaces, addNamespaceUrlsToRoot, addBeanTypesXml, addJsonTags;
-
-	final Namespace defaultNamespace;
-	final Namespace[] namespaces;
-	final String textNodeDelimiter;
+	protected final boolean addBeanTypesXml;
+	protected final boolean addJsonTags;
+	protected final boolean addNamespaceUrlsToRoot;
+	protected final boolean autoDetectNamespaces;
+	protected final boolean enableNamespaces;
+	protected final Namespace defaultNamespace;
+	protected final Namespace[] namespaces;
+	protected final String textNodeDelimiter;
 
 	private final boolean addBeanTypes;
 	private final Map<ClassMeta<?>,XmlClassMeta> xmlClassMetas = new ConcurrentHashMap<>();

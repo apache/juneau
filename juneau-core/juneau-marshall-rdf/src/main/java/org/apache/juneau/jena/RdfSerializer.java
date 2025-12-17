@@ -1818,10 +1818,16 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		};
 	}
 
-	final boolean addLiteralTypes, addRootProperty, useXmlNamespaces, looseCollections, autoDetectNamespaces, addBeanTypesRdf;
-	final String language;
-	final Namespace juneauNs, juneauBpNs;
-	final RdfCollectionFormat collectionFormat;
+	protected final boolean addBeanTypesRdf;
+	protected final boolean addLiteralTypes;
+	protected final boolean addRootProperty;
+	protected final boolean autoDetectNamespaces;
+	protected final boolean looseCollections;
+	protected final boolean useXmlNamespaces;
+	protected final Namespace juneauBpNs;
+	protected final Namespace juneauNs;
+	protected final RdfCollectionFormat collectionFormat;
+	protected final String language;
 
 	final Map<String,Object> jenaSettings;
 	final Namespace[] namespaces;

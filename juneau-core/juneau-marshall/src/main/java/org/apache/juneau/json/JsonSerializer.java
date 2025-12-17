@@ -1039,11 +1039,13 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		return new Builder();
 	}
 
-	final boolean addBeanTypesJson, escapeSolidus, simpleAttrs;
+	protected final boolean addBeanTypesJson;
+	protected final boolean escapeSolidus;
+	protected final boolean simpleAttrs;
 
 	private final boolean addBeanTypes;
-	private final Map<ClassMeta<?>,JsonClassMeta> jsonClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,JsonBeanPropertyMeta> jsonBeanPropertyMetas = new ConcurrentHashMap<>();
+	private final Map<ClassMeta<?>,JsonClassMeta> jsonClassMetas = new ConcurrentHashMap<>();
 
 	private volatile JsonSchemaSerializer schemaSerializer;
 

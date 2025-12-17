@@ -6157,45 +6157,42 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		return new Builder();
 	}
 
-	final HeaderList headerData;
-
-	final PartList queryData, formData, pathData;
-	final CloseableHttpClient httpClient;
-	private final HttpClientConnectionManager connectionManager;
-	private final boolean keepHttpClientOpen, detectLeaks, skipEmptyHeaderData, skipEmptyQueryData, skipEmptyFormData;
-	private final BeanStore beanStore;
-	private final UrlEncodingSerializer urlEncodingSerializer;  // Used for form posts only.
-	final HttpPartSerializer partSerializer;
-	final HttpPartParser partParser;
-	private final RestCallHandler callHandler;
-	private final String rootUrl;
-	private volatile boolean isClosed = false;
-	private final StackTraceElement[] creationStack;
-	private final Logger logger;
-	final DetailLevel logRequests;
-	final BiPredicate<RestRequest,RestResponse> logRequestsPredicate;
-	final Level logRequestsLevel;
-	final boolean ignoreErrors;
-	private final boolean logToConsole;
-	private final PrintStream console;
-
-	private StackTraceElement[] closedStack;
-	// These are read directly by RestCall.
-	final SerializerSet serializers;
-	final ParserSet parsers;
-
+	protected final boolean detectLeaks;
+	protected final boolean ignoreErrors;
+	protected final boolean keepHttpClientOpen;
+	protected final boolean skipEmptyFormData;
+	protected final boolean skipEmptyHeaderData;
+	protected final boolean skipEmptyQueryData;
+	protected final BiPredicate<RestRequest,RestResponse> logRequestsPredicate;
+	protected final CloseableHttpClient httpClient;
+	protected final DetailLevel logRequests;
+	protected final HeaderList headerData;
+	protected final HttpPartParser partParser;
+	protected final HttpPartSerializer partSerializer;
+	protected final Level logRequestsLevel;
+	protected final PartList formData;
+	protected final PartList pathData;
+	protected final PartList queryData;
+	protected final ParserSet parsers;
+	protected final RestCallInterceptor[] interceptors;
+	protected final SerializerSet serializers;
+	protected final UrlEncodingSerializer urlEncodingSerializer;  // Used for form posts only.
 	Predicate<Integer> errorCodes;
-
-	final RestCallInterceptor[] interceptors;
+	private final BeanStore beanStore;
+	private final HttpClientConnectionManager connectionManager;
+	private final Logger logger;
 	private final Map<Class<?>,HttpPartParser> partParsers = new ConcurrentHashMap<>();
-
 	private final Map<Class<?>,HttpPartSerializer> partSerializers = new ConcurrentHashMap<>();
-	// This is lazy-created.
-	private volatile ExecutorService executorService;
-
+	private final Pattern absUrlPattern = Pattern.compile("^\\w+\\:\\/\\/.*");
+	private final PrintStream console;
+	private final RestCallHandler callHandler;
+	private StackTraceElement[] closedStack;
+	private final StackTraceElement[] creationStack;
+	private final String rootUrl;
 	private final boolean executorServiceShutdownOnClose;
-
-	private Pattern absUrlPattern = Pattern.compile("^\\w+\\:\\/\\/.*");
+	private final boolean logToConsole;
+	private volatile boolean isClosed = false;
+	private volatile ExecutorService executorService;
 
 	/**
 	 * Constructor.

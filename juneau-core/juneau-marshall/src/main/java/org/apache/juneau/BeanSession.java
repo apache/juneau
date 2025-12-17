@@ -267,12 +267,9 @@ public class BeanSession extends ContextSession {
 	}
 
 	private final BeanContext ctx;
-
 	private final Locale locale;
-
-	private final TimeZone timeZone;
-
 	private final MediaType mediaType;
+	private final TimeZone timeZone;
 
 	/**
 	 * Constructor.

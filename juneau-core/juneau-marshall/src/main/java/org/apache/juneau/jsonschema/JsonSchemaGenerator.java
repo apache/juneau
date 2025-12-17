@@ -839,17 +839,19 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		return new Builder();
 	}
 
-	final boolean useBeanDefs, allowNestedExamples, allowNestedDescriptions;
-	final Set<TypeCategory> addExamplesTo, addDescriptionsTo;
-	final Class<? extends BeanDefMapper> beanDefMapper;
-	final Set<String> ignoreTypes;
-
+	protected final boolean allowNestedDescriptions;
+	protected final boolean allowNestedExamples;
+	protected final boolean useBeanDefs;
+	protected final Class<? extends BeanDefMapper> beanDefMapper;
+	protected final JsonParser jsonParser;
+	protected final JsonSerializer jsonSerializer;
+	protected final Set<TypeCategory> addDescriptionsTo;
+	protected final Set<TypeCategory> addExamplesTo;
+	protected final Set<String> ignoreTypes;
 	private final BeanDefMapper beanDefMapperBean;
-	final JsonSerializer jsonSerializer;
-	final JsonParser jsonParser;
-	private final Pattern[] ignoreTypePatterns;
-	private final Map<ClassMeta<?>,JsonSchemaClassMeta> jsonSchemaClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,JsonSchemaBeanPropertyMeta> jsonSchemaBeanPropertyMetas = new ConcurrentHashMap<>();
+	private final Map<ClassMeta<?>,JsonSchemaClassMeta> jsonSchemaClassMetas = new ConcurrentHashMap<>();
+	private final Pattern[] ignoreTypePatterns;
 
 	/**
 	 * Constructor.

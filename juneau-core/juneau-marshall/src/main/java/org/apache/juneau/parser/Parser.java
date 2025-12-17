@@ -990,12 +990,13 @@ public class Parser extends BeanContextable {
 		return (Builder)Context.createBuilder(c);
 	}
 
-	final boolean trimStrings, strict, autoCloseStreams, unbuffered;
-	final int debugOutputLines;
-	final String consumes;
-	final Class<? extends ParserListener> listener;
-
-	/** General parser properties currently set on this parser. */
+	protected final boolean autoCloseStreams;
+	protected final boolean strict;
+	protected final boolean trimStrings;
+	protected final boolean unbuffered;
+	protected final int debugOutputLines;
+	protected final Class<? extends ParserListener> listener;
+	protected final String consumes;
 	private final MediaType[] consumesArray;
 
 	/**

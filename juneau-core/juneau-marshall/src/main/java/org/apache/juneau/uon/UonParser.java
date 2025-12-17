@@ -718,10 +718,11 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		return new Builder();
 	}
 
-	final boolean decoding, validateEnd;
+	protected final boolean decoding;
+	protected final boolean validateEnd;
 
-	private final Map<ClassMeta<?>,UonClassMeta> uonClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,UonBeanPropertyMeta> uonBeanPropertyMetas = new ConcurrentHashMap<>();
+	private final Map<ClassMeta<?>,UonClassMeta> uonClassMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.

@@ -3027,7 +3027,7 @@ public abstract class BeanContextable extends Context {
 		}
 	}
 
-	final BeanContext beanContext;
+	protected final BeanContext beanContext;
 
 	/**
 	 * Constructor.

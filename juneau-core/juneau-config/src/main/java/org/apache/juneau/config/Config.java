@@ -560,23 +560,21 @@ public class Config extends Context implements ConfigEventListener {
 			return "";
 		return key.substring(0, i);
 	}
-	final String name;
-	final ConfigStore store;
-	final WriterSerializer serializer;
-	final ReaderParser parser;
-	final Map<Character,Mod> mods;
-	final VarResolver varResolver;
-	final int binaryLineLength;
 
-	final BinaryFormat binaryFormat;
-	final boolean multiLineValuesOnSeparateLines, readOnly;
-
-	final BeanSession beanSession;
-
-	final VarResolverSession varSession;
+	protected final boolean multiLineValuesOnSeparateLines;
+	protected final boolean readOnly;
+	protected final int binaryLineLength;
+	protected final BinaryFormat binaryFormat;
+	protected final BeanSession beanSession;
+	protected final ConfigStore store;
+	protected final Map<Character,Mod> mods;
+	protected final ReaderParser parser;
+	protected final String name;
+	protected final VarResolver varResolver;
+	protected final VarResolverSession varSession;
+	protected final WriterSerializer serializer;
 
 	private final ConfigMap configMap;
-
 	private final List<ConfigEventListener> listeners = synced(new LinkedList<>());
 
 	/**

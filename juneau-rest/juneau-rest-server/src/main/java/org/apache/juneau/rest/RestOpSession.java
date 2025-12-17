@@ -105,9 +105,9 @@ public class RestOpSession extends ContextSession {
 	}
 
 	private final RestOpContext ctx;
-	private final RestSession session;
 	private final RestRequest req;
 	private final RestResponse res;
+	private final RestSession session;
 
 	/**
 	 * Constructor.

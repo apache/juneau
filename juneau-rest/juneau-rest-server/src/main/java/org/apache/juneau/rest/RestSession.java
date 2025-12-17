@@ -200,20 +200,18 @@ public class RestSession extends ContextSession {
 		return new Builder(assertArgNotNull("ctx", ctx));
 	}
 
-	private final Object resource;
-	private final RestContext context;
+	private final long startTime = System.currentTimeMillis();
+	private final BeanStore beanStore;
+	private CallLogger logger;
 	private HttpServletRequest req;
 	private HttpServletResponse res;
-
-	private CallLogger logger;
-	private UrlPath urlPath;
-	private String pathInfoUndecoded;
-	private long startTime = System.currentTimeMillis();
-	private BeanStore beanStore;
 	private Map<String,String[]> queryParams;
-	private String method;
+	private final Object resource;
+	private final RestContext context;
 	private RestOpSession opSession;
-
+	private String method;
+	private String pathInfoUndecoded;
+	private UrlPath urlPath;
 	private UrlPathMatch urlPathMatch;
 
 	/**

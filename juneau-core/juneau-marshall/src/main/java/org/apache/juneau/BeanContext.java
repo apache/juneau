@@ -3548,32 +3548,48 @@ public class BeanContext extends Context {
 		return new Builder();
 	}
 
-	final boolean beansRequireDefaultConstructor, beansRequireSerializable, beansRequireSettersForGetters, beansRequireSomeProperties, beanMapPutReturnsOldValue, useInterfaceProxies,
-		ignoreUnknownBeanProperties, ignoreUnknownNullBeanProperties, ignoreUnknownEnumValues, ignoreMissingSetters, ignoreTransientFields, ignoreInvocationExceptionsOnGetters,
-		ignoreInvocationExceptionsOnSetters, useJavaBeanIntrospector, useEnumNames, sortProperties, findFluentSetters;
-	final Visibility beanConstructorVisibility, beanClassVisibility, beanMethodVisibility, beanFieldVisibility;
-	final String typePropertyName;
-	final Locale locale;
-	final TimeZone timeZone;
-	final MediaType mediaType;
-	final Class<? extends PropertyNamer> propertyNamer;
-	final List<Class<?>> beanDictionary, notBeanClasses;
-	final List<Object> swaps;
-	final List<String> notBeanPackages;
-	final HashKey hashKey;
-
-	final Map<Class,ClassMeta> cmCache;
-
-	private final String[] notBeanPackageNames, notBeanPackagePrefixes;
+	protected final boolean beanMapPutReturnsOldValue;
+	protected final boolean beansRequireDefaultConstructor;
+	protected final boolean beansRequireSerializable;
+	protected final boolean beansRequireSettersForGetters;
+	protected final boolean beansRequireSomeProperties;
+	protected final boolean findFluentSetters;
+	protected final boolean ignoreInvocationExceptionsOnGetters;
+	protected final boolean ignoreInvocationExceptionsOnSetters;
+	protected final boolean ignoreMissingSetters;
+	protected final boolean ignoreTransientFields;
+	protected final boolean ignoreUnknownBeanProperties;
+	protected final boolean ignoreUnknownEnumValues;
+	protected final boolean ignoreUnknownNullBeanProperties;
+	protected final boolean sortProperties;
+	protected final boolean useEnumNames;
+	protected final boolean useInterfaceProxies;
+	protected final boolean useJavaBeanIntrospector;
+	protected final Class<? extends PropertyNamer> propertyNamer;
+	protected final Class<?>[] notBeanClassesArray;
+	protected final ClassMeta<Class> cmClass;  // Reusable ClassMeta that represents general Classes.
+	protected final ClassMeta<Object> cmObject;  // Reusable ClassMeta that represents general Objects.
+	protected final ClassMeta<String> cmString;  // Reusable ClassMeta that represents general Strings.
+	protected final HashKey hashKey;
+	protected final List<Class<?>> beanDictionary;
+	protected final List<Class<?>> notBeanClasses;
+	protected final List<Object> swaps;
+	protected final List<String> notBeanPackages;
+	protected final Locale locale;
+	protected final Map<Class,ClassMeta> cmCache;
+	protected final MediaType mediaType;
+	protected final ObjectSwap[] swapArray;
+	protected final String typePropertyName;
+	protected final String[] notBeanPackageNames;
+	protected final String[] notBeanPackagePrefixes;
+	protected final TimeZone timeZone;
+	protected final Visibility beanClassVisibility;
+	protected final Visibility beanConstructorVisibility;
+	protected final Visibility beanFieldVisibility;
+	protected final Visibility beanMethodVisibility;
 	private final BeanRegistry beanRegistry;
-	private final PropertyNamer propertyNamerBean;
-	private final ObjectSwap[] swapArray;
-	private final Class<?>[] notBeanClassesArray;
-	private final ClassMeta<Object> cmObject;  // Reusable ClassMeta that represents general Objects.
-	private final ClassMeta<String> cmString;  // Reusable ClassMeta that represents general Strings.
-	private final ClassMeta<Class> cmClass;  // Reusable ClassMeta that represents general Classes.
-
 	private final BeanSession defaultSession;
+	private final PropertyNamer propertyNamerBean;
 	private volatile WriterSerializer beanToStringSerializer;
 
 	/**

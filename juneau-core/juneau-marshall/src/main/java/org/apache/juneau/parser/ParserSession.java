@@ -245,19 +245,14 @@ public class ParserSession extends BeanSession {
 			m.set(o, parent);
 	}
 
-	private final Parser ctx;
+	private final HttpPartSchema schema;
 	private final Method javaMethod;
 	private final Object outer;
-
-	private final Stack<StringBuilder> sbStack;
-	private final HttpPartSchema schema;
-	// Writable properties.
-	private BeanPropertyMeta currentProperty;
-
-	private ClassMeta<?> currentClass;
-
+	private final Parser ctx;
 	private final ParserListener listener;
-
+	private final Stack<StringBuilder> sbStack;
+	private BeanPropertyMeta currentProperty;
+	private ClassMeta<?> currentClass;
 	private Position mark = new Position(-1);
 	private ParserPipe pipe;
 

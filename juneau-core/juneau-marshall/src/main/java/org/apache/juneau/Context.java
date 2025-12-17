@@ -847,9 +847,9 @@ public abstract class Context {
 		return work;
 	}
 
-	private final List<Annotation> annotations;
-	private final boolean debug;
 	private final AnnotationProvider annotationProvider;
+	private final boolean debug;
+	private final List<Annotation> annotations;
 
 	/**
 	 * Constructor for this class.

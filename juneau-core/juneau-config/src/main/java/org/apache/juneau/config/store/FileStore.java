@@ -402,16 +402,18 @@ public class FileStore extends ConfigStore {
 		return new Builder();
 	}
 
-	final String directory, extensions;
-	final Charset charset;
-	final boolean enableWatcher, updateOnWrite;
-	final WatcherSensitivity watcherSensitivity;
+	protected final boolean enableWatcher;
+	protected final boolean updateOnWrite;
+	protected final Charset charset;
+	protected final String directory;
+	protected final String extensions;
+	protected final WatcherSensitivity watcherSensitivity;
 
-	private final File dir;
-	private final WatcherThread watcher;
 	private final ConcurrentHashMap<String,String> cache = new ConcurrentHashMap<>();
 	private final ConcurrentHashMap<String,String> nameCache = new ConcurrentHashMap<>();
+	private final File dir;
 	private final String[] exts;
+	private final WatcherThread watcher;
 
 	/**
 	 * Constructor.

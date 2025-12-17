@@ -697,9 +697,10 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		}
 	}
 
-	final int initialDepth, maxDepth;
-	final boolean detectRecursions, ignoreRecursions;
-
+	protected final boolean detectRecursions;
+	protected final boolean ignoreRecursions;
+	protected final int initialDepth;
+	protected final int maxDepth;
 	private final boolean actualDetectRecursions;
 
 	/**

@@ -161,12 +161,11 @@ public abstract class ContextSession {
 		}
 	}
 
-	private final JsonMap properties;
-	private List<String> warnings;	// Any warnings encountered.
-
-	private final Context ctx;
 	private final boolean debug;
 	private final boolean unmodifiable;
+	private final Context ctx;
+	private final JsonMap properties;
+	private List<String> warnings;	// Any warnings encountered.
 
 	/**
 	 * Default constructor.

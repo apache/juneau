@@ -189,10 +189,10 @@ public class RdfParserSession extends ReaderParserSession {
 		return new Builder(ctx);
 	}
 
-	private final RdfParser ctx;
-	private final Property pRoot, pValue, pType, pRdfType;
 	private final Model model;
+	private final Property pRoot, pValue, pType, pRdfType;
 	private final RDFReader rdfReader;
+	private final RdfParser ctx;
 	private final Set<Resource> urisVisited = new HashSet<>();
 
 	/**

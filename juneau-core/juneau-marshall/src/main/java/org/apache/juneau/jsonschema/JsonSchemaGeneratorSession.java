@@ -149,8 +149,8 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 	private final JsonSchemaGenerator ctx;
 	private final Map<String,JsonMap> defs;
-	private JsonSerializerSession jsSession;
 	private JsonParserSession jpSession;
+	private JsonSerializerSession jsSession;
 
 	/**
 	 * Constructor.

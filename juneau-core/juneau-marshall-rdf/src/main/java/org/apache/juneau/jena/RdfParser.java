@@ -1435,10 +1435,12 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		};
 	}
 
-	final boolean trimWhitespace, looseCollections;
-	final String language;
-	final Namespace juneauNs, juneauBpNs;
-	final RdfCollectionFormat collectionFormat;
+	protected final boolean looseCollections;
+	protected final boolean trimWhitespace;
+	protected final Namespace juneauBpNs;
+	protected final Namespace juneauNs;
+	protected final RdfCollectionFormat collectionFormat;
+	protected final String language;
 
 	final Map<String,Object> jenaSettings;
 	private final Map<ClassMeta<?>,RdfClassMeta> rdfClassMetas = new ConcurrentHashMap<>();

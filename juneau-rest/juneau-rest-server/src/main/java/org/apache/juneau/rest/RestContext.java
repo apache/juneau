@@ -4936,66 +4936,67 @@ public class RestContext extends Context {
 		return new ServletException(f(msg, args), t);
 	}
 
+	protected final boolean allowContentParam;
+	protected final boolean renderResponseStackTraces;
+	protected final long maxInput;
+	protected final AtomicBoolean initialized = new AtomicBoolean(false);
+	protected final BasicHttpException initException;
+	protected final BeanContext beanContext;
+	protected final BeanStore beanStore;
+	protected final BeanStore rootBeanStore;
+	protected final Builder builder;
+	protected final CallLogger callLogger;
+	protected final Charset defaultCharset;
+	protected final Class<?> resourceClass;
+	protected final Class<? extends RestOpArg>[] restOpArgs;
+	protected final ConcurrentHashMap<Locale,Swagger> swaggerCache = new ConcurrentHashMap<>();
+	protected final Config config;
+	protected final DebugEnablement debugEnablement;
+	protected final DefaultClassList defaultClasses;
+	protected final DefaultSettingsMap defaultSettings;
+	protected final EncoderSet encoders;
+	protected final HeaderList defaultRequestHeaders;
+	protected final HeaderList defaultResponseHeaders;
+	protected final HttpPartParser partParser;
+	protected final HttpPartSerializer partSerializer;
+	protected final Instant startTime;
+	protected final JsonSchemaGenerator jsonSchemaGenerator;
+	protected final List<MediaType> consumes;
+	protected final List<MediaType> produces;
+	protected final Logger logger;
+	protected final Messages messages;
+	protected final MethodExecStore methodExecStore;
+	protected final NamedAttributeMap defaultRequestAttributes;
+	protected final ParserSet parsers;
+	protected final RestChildren restChildren;
+	protected final RestContext parentContext;
+	protected final RestOperations restOperations;
+	protected final ResponseProcessor[] responseProcessors;
+	protected final SerializerSet serializers;
+	protected final Set<String> allowedHeaderParams;
+	protected final Set<String> allowedMethodHeaders;
+	protected final Set<String> allowedMethodParams;
+	protected final StaticFiles staticFiles;
+	protected final String clientVersionHeader;
+	protected final String fullPath;
+	protected final String path;
+	protected final String uriAuthority;
+	protected final String uriContext;
+	protected final SwaggerProvider swaggerProvider;
+	protected final ThrownStore thrownStore;
+	protected final ThreadLocal<RestSession> localSession = new ThreadLocal<>();
+	protected final UriRelativity uriRelativity;
+	protected final UriResolution uriResolution;
+	protected final UrlPathMatcher pathMatcher;
+	protected final VarResolver varResolver;
+	private final MethodInvoker[] destroyMethods;
+	private final MethodInvoker[] endCallMethods;
+	private final MethodInvoker[] postInitChildFirstMethods;
+	private final MethodInvoker[] postInitMethods;
+	private final MethodInvoker[] startCallMethods;
+	private final MethodList postCallMethods;
+	private final MethodList preCallMethods;
 	private final Supplier<?> resource;
-	private final Class<?> resourceClass;
-	final Builder builder;
-	private final boolean allowContentParam, renderResponseStackTraces;
-	private final String clientVersionHeader, uriAuthority, uriContext;
-
-	private final String path, fullPath;
-
-	private final UrlPathMatcher pathMatcher;
-	private final Set<String> allowedMethodParams, allowedHeaderParams, allowedMethodHeaders;
-	private final Class<? extends RestOpArg>[] restOpArgs;
-	private final BeanContext beanContext;
-	private final EncoderSet encoders;
-	private final SerializerSet serializers;
-	private final ParserSet parsers;
-	private final HttpPartSerializer partSerializer;
-	private final HttpPartParser partParser;
-	private final JsonSchemaGenerator jsonSchemaGenerator;
-	private final List<MediaType> consumes, produces;
-	private final HeaderList defaultRequestHeaders, defaultResponseHeaders;
-	private final NamedAttributeMap defaultRequestAttributes;
-	private final ResponseProcessor[] responseProcessors;
-	private final Messages messages;
-	private final Config config;
-	private final VarResolver varResolver;
-	private final RestOperations restOperations;
-	private final RestChildren restChildren;
-	private final Logger logger;
-	private final SwaggerProvider swaggerProvider;
-	private final BasicHttpException initException;
-	private final RestContext parentContext;
-	private final BeanStore beanStore;
-	private final UriResolution uriResolution;
-	private final UriRelativity uriRelativity;
-	private final MethodExecStore methodExecStore;
-	private final ThrownStore thrownStore;
-	private final ConcurrentHashMap<Locale,Swagger> swaggerCache = new ConcurrentHashMap<>();
-	private final Instant startTime;
-
-	final Charset defaultCharset;
-	final long maxInput;
-	final DefaultClassList defaultClasses;
-
-	final DefaultSettingsMap defaultSettings;
-
-	final BeanStore rootBeanStore;
-
-	// Lifecycle methods
-	private final MethodInvoker[] postInitMethods, postInitChildFirstMethods, startCallMethods, endCallMethods, destroyMethods;
-	private final MethodList preCallMethods, postCallMethods;
-	private final StaticFiles staticFiles;
-
-	private final CallLogger callLogger;
-
-	private final DebugEnablement debugEnablement;
-
-	private final ThreadLocal<RestSession> localSession = new ThreadLocal<>();
-
-	// Gets set when postInitChildFirst() gets called.
-	private final AtomicBoolean initialized = new AtomicBoolean(false);
 
 	/**
 	 * Constructor.

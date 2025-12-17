@@ -2140,37 +2140,41 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		return BeanCreator.of(HttpPartSerializer.class).type(c).orElse(_default);
 	}
 
-	private final String httpMethod;
-	private final UrlPathMatcher[] pathMatchers;
-	private final RestGuard[] guards;
-	private final RestMatcher[] requiredMatchers, optionalMatchers;
-	private final RestConverter[] converters;
-	private final RestContext context;
-	private final Method method;
-	private final RestOpInvoker methodInvoker;
-	private final RestOpInvoker[] preCallMethods, postCallMethods;
-	private final MethodInfo mi;
-	private final BeanContext beanContext;
-	private final SerializerSet serializers;
-	private final ParserSet parsers;
-	private final EncoderSet encoders;
-	private final HttpPartSerializer partSerializer;
-	private final HttpPartParser partParser;
-	private final JsonSchemaGenerator jsonSchemaGenerator;
-	private final HeaderList defaultRequestHeaders, defaultResponseHeaders;
-	private final PartList defaultRequestQueryData, defaultRequestFormData;
-	private final NamedAttributeMap defaultRequestAttributes;
-	private final Charset defaultCharset;
-	private final long maxInput;
-	private final List<MediaType> supportedAcceptTypes, supportedContentTypes;
-
-	private final CallLogger callLogger;
-	private final Map<Class<?>,ResponseBeanMeta> responseBeanMetas = new ConcurrentHashMap<>();
-	private final Map<Class<?>,ResponsePartMeta> headerPartMetas = new ConcurrentHashMap<>();
-	private final ResponseBeanMeta responseMeta;
-	private final int hierarchyDepth;
-
-	private final DebugEnablement debug;
+	protected final boolean dotAll;
+	protected final int hierarchyDepth;
+	protected final long maxInput;
+	protected final BeanContext beanContext;
+	protected final CallLogger callLogger;
+	protected final Charset defaultCharset;
+	protected final DebugEnablement debug;
+	protected final EncoderSet encoders;
+	protected final HeaderList defaultRequestHeaders;
+	protected final HeaderList defaultResponseHeaders;
+	protected final HttpPartParser partParser;
+	protected final HttpPartSerializer partSerializer;
+	protected final JsonSchemaGenerator jsonSchemaGenerator;
+	protected final List<MediaType> supportedAcceptTypes;
+	protected final List<MediaType> supportedContentTypes;
+	protected final Map<Class<?>,ResponseBeanMeta> responseBeanMetas = new ConcurrentHashMap<>();
+	protected final Map<Class<?>,ResponsePartMeta> headerPartMetas = new ConcurrentHashMap<>();
+	protected final Method method;
+	protected final MethodInfo mi;
+	protected final NamedAttributeMap defaultRequestAttributes;
+	protected final PartList defaultRequestFormData;
+	protected final PartList defaultRequestQueryData;
+	protected final ParserSet parsers;
+	protected final RestContext context;
+	protected final RestConverter[] converters;
+	protected final RestGuard[] guards;
+	protected final RestMatcher[] optionalMatchers;
+	protected final RestMatcher[] requiredMatchers;
+	protected final RestOpInvoker methodInvoker;
+	protected final RestOpInvoker[] postCallMethods;
+	protected final RestOpInvoker[] preCallMethods;
+	protected final ResponseBeanMeta responseMeta;
+	protected final SerializerSet serializers;
+	protected final String httpMethod;
+	protected final UrlPathMatcher[] pathMatchers;
 
 	/**
 	 * Context constructor.
@@ -2243,6 +2247,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			httpMethod = _httpMethod.toUpperCase(Locale.ENGLISH);
 
 			defaultCharset = nn(builder.defaultCharset) ? builder.defaultCharset : context.defaultCharset;
+			dotAll = builder.dotAll;
 			maxInput = nn(builder.maxInput) ? builder.maxInput : context.maxInput;
 
 			responseMeta = ResponseBeanMeta.create(mi, builder.getApplied());

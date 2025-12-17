@@ -222,10 +222,10 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		return new Builder(assertArgNotNull("ctx", ctx));
 	}
 
-	private final RdfSerializer ctx;
-	private final Property pRoot, pValue;
 	private final Model model;
+	private final Property pRoot, pValue;
 	private final RDFWriter writer;
+	private final RdfSerializer ctx;
 	private final Namespace[] namespaces;
 
 	/**

@@ -1070,15 +1070,15 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		return new Builder();
 	}
 
-	final boolean encoding, addBeanTypesUon;
-	final ParamFormat paramFormat;
-	final Character quoteCharUon;
+	protected final boolean addBeanTypesUon;
+	protected final boolean encoding;
+	protected final Character quoteCharUon;
+	protected final ParamFormat paramFormat;
 	private final boolean addBeanTypes;
 
 	private final char quoteChar;
-	private final Map<ClassMeta<?>,UonClassMeta> uonClassMetas = new ConcurrentHashMap<>();
-
 	private final Map<BeanPropertyMeta,UonBeanPropertyMeta> uonBeanPropertyMetas = new ConcurrentHashMap<>();
+	private final Map<ClassMeta<?>,UonClassMeta> uonClassMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.

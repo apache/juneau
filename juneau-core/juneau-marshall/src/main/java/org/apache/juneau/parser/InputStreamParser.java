@@ -628,7 +628,7 @@ public class InputStreamParser extends Parser {
 		return new Builder();
 	}
 
-	final BinaryFormat binaryFormat;
+	protected final BinaryFormat binaryFormat;
 
 	/**
 	 * Constructor.

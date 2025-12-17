@@ -977,10 +977,12 @@ public class WriterSerializer extends Serializer {
 		return new Builder();
 	}
 
-	final Charset fileCharset, streamCharset;
-	final int maxIndent;
-	final Character quoteChar, quoteCharOverride;
-	final boolean useWhitespace;
+	protected final boolean useWhitespace;
+	protected final Character quoteChar;
+	protected final Character quoteCharOverride;
+	protected final Charset fileCharset;
+	protected final Charset streamCharset;
+	protected final int maxIndent;
 
 	private final char quoteCharValue;
 
