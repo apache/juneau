@@ -764,8 +764,8 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
 			.a("detectRecursions", detectRecursions)
-			.a("maxDepth", maxDepth)
 			.a("ignoreRecursions", ignoreRecursions)
-			.a("initialDepth", initialDepth);
+			.a("initialDepth", initialDepth)
+			.a("maxDepth", maxDepth);
 	}
 }

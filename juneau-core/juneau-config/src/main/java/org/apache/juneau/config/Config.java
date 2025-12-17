@@ -1120,16 +1120,16 @@ public class Config extends Context implements ConfigEventListener {
 	@Override /* Overridden from Context */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("name", name)
-			.a("store", store)
-			.a("serializer", serializer)
-			.a("parser", parser)
-			.a("mods", mods)
-			.a("varResolver", varResolver)
-			.a("binaryLineLength", binaryLineLength)
 			.a("binaryFormat", binaryFormat)
+			.a("binaryLineLength", binaryLineLength)
+			.a("mods", mods)
 			.a("multiLineValuesOnSeparateLines", multiLineValuesOnSeparateLines)
-			.a("readOnly", readOnly);
+			.a("name", name)
+			.a("parser", parser)
+			.a("readOnly", readOnly)
+			.a("serializer", serializer)
+			.a("store", store)
+			.a("varResolver", varResolver);
 	}
 
 	@Override /* Overridden from Object */

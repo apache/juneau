@@ -1199,8 +1199,8 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	@Override /* Overridden from WriterSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("encoding", encoding)
 			.a("addBeanTypes", addBeanTypes)
+			.a("encoding", encoding)
 			.a("paramFormat", paramFormat);
 	}
 }

@@ -2054,16 +2054,16 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	@Override /* Overridden from WriterSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
+			.a("addBeanTypes", addBeanTypes)
 			.a("addLiteralTypes", addLiteralTypes)
 			.a("addRootProperty", addRootProperty)
-			.a("useXmlNamespaces", useXmlNamespaces)
-			.a("looseCollections", looseCollections)
 			.a("autoDetectNamespaces", autoDetectNamespaces)
-			.a("language", language)
-			.a("juneauNs", juneauNs)
-			.a("juneauBpNs", juneauBpNs)
 			.a("collectionFormat", collectionFormat)
+			.a("juneauBpNs", juneauBpNs)
+			.a("juneauNs", juneauNs)
+			.a("language", language)
+			.a("looseCollections", looseCollections)
 			.a("namespaces", namespaces)
-			.a("addBeanTypes", addBeanTypes);
+			.a("useXmlNamespaces", useXmlNamespaces);
 	}
 }

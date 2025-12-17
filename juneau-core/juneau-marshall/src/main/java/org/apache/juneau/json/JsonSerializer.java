@@ -1152,8 +1152,8 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	@Override /* Overridden from WriterSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("simpleAttrs", simpleAttrs)
+			.a("addBeanTypesJson", addBeanTypesJson)
 			.a("escapeSolidus", escapeSolidus)
-			.a("addBeanTypesJson", addBeanTypesJson);
+			.a("simpleAttrs", simpleAttrs);
 	}
 }

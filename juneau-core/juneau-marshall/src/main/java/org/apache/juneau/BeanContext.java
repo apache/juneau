@@ -4305,7 +4305,6 @@ public class BeanContext extends Context {
 	@Override /* Overridden from Context */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("id", System.identityHashCode(this))
 			.a("beanClassVisibility", beanClassVisibility)
 			.a("beanConstructorVisibility", beanConstructorVisibility)
 			.a("beanDictionary", beanDictionary)
@@ -4315,16 +4314,17 @@ public class BeanContext extends Context {
 			.a("beansRequireSerializable", beansRequireSerializable)
 			.a("beansRequireSettersForGetters", beansRequireSettersForGetters)
 			.a("beansRequireSomeProperties", beansRequireSomeProperties)
-			.a("ignoreTransientFields", ignoreTransientFields)
+			.a("id", System.identityHashCode(this))
 			.a("ignoreInvocationExceptionsOnGetters", ignoreInvocationExceptionsOnGetters)
 			.a("ignoreInvocationExceptionsOnSetters", ignoreInvocationExceptionsOnSetters)
+			.a("ignoreTransientFields", ignoreTransientFields)
 			.a("ignoreUnknownBeanProperties", ignoreUnknownBeanProperties)
 			.a("ignoreUnknownNullBeanProperties", ignoreUnknownNullBeanProperties)
 			.a("notBeanClasses", notBeanClasses)
 			.a("notBeanPackageNames", notBeanPackageNames)
 			.a("notBeanPackagePrefixes", notBeanPackagePrefixes)
-			.a("swaps", swaps)
 			.a("sortProperties", sortProperties)
+			.a("swaps", swaps)
 			.a("useEnumNames", useEnumNames)
 			.a("useInterfaceProxies", useInterfaceProxies)
 			.a("useJavaBeanIntrospector", useJavaBeanIntrospector);

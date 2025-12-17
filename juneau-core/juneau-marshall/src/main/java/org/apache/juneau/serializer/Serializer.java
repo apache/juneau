@@ -1600,16 +1600,16 @@ public class Serializer extends BeanTraverseContext {
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
 			.a("addBeanTypes", addBeanTypes)
+			.a("addRootType", addRootType)
 			.a("keepNullProperties", keepNullProperties)
+			.a("listener", listener)
+			.a("sortCollections", sortCollections)
+			.a("sortMaps", sortMaps)
 			.a("trimEmptyCollections", trimEmptyCollections)
 			.a("trimEmptyMaps", trimEmptyMaps)
 			.a("trimStrings", trimStrings)
-			.a("sortCollections", sortCollections)
-			.a("sortMaps", sortMaps)
-			.a("addRootType", addRootType)
 			.a("uriContext", uriContext)
-			.a("uriResolution", uriResolution)
 			.a("uriRelativity", uriRelativity)
-			.a("listener", listener);
+			.a("uriResolution", uriResolution);
 	}
 }

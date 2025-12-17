@@ -1351,11 +1351,11 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	@Override /* Overridden from WriterSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("autoDetectNamespaces", autoDetectNamespaces)
-			.a("enableNamespaces", enableNamespaces)
+			.a("addBeanTypes", addBeanTypes)
 			.a("addNamespaceUrlsToRoot", addNamespaceUrlsToRoot)
+			.a("autoDetectNamespaces", autoDetectNamespaces)
 			.a("defaultNamespace", defaultNamespace)
-			.a("namespaces", namespaces)
-			.a("addBeanTypes", addBeanTypes);
+			.a("enableNamespaces", enableNamespaces)
+			.a("namespaces", namespaces);
 	}
 }

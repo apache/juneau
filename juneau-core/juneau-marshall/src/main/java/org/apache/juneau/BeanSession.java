@@ -1685,7 +1685,7 @@ public class BeanSession extends ContextSession {
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
 			.a("locale", locale)
-			.a("timeZone", timeZone)
-			.a("mediaType", mediaType);
+			.a("mediaType", mediaType)
+			.a("timeZone", timeZone);
 	}
 }

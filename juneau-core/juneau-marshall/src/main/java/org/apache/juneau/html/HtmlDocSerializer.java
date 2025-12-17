@@ -1850,18 +1850,18 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	@Override /* Overridden from HtmlSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("header", header)
-			.a("nav", nav)
-			.a("navlinks", navlinks)
 			.a("aside", aside)
 			.a("asideFloat", asideFloat)
 			.a("footer", footer)
-			.a("style", style)
 			.a("head", head)
-			.a("stylesheet", stylesheet)
-			.a("nowrap", nowrap)
-			.a("template", template)
+			.a("header", header)
+			.a("nav", nav)
+			.a("navlinks", navlinks)
 			.a("noResultsMessage", noResultsMessage)
+			.a("nowrap", nowrap)
+			.a("style", style)
+			.a("stylesheet", stylesheet)
+			.a("template", template)
 			.a("widgets", widgets);
 	}
 }

@@ -999,13 +999,13 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	@Override /* Overridden from BeanTraverseContext */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("useBeanDefs", useBeanDefs)
-			.a("allowNestedExamples", allowNestedExamples)
-			.a("allowNestedDescriptions", allowNestedDescriptions)
-			.a("beanDefMapper", beanDefMapper)
-			.a("addExamplesTo", addExamplesTo)
 			.a("addDescriptionsTo", addDescriptionsTo)
-			.a("ignoreTypes", ignoreTypes);
+			.a("addExamplesTo", addExamplesTo)
+			.a("allowNestedDescriptions", allowNestedDescriptions)
+			.a("allowNestedExamples", allowNestedExamples)
+			.a("beanDefMapper", beanDefMapper)
+			.a("ignoreTypes", ignoreTypes)
+			.a("useBeanDefs", useBeanDefs);
 	}
 
 	JsonParser getJsonParser() { return jsonParser; }

@@ -898,10 +898,10 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	@Override /* Overridden from ReaderParser */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("validating", validating)
+			.a("eventAllocator", eventAllocator)
 			.a("preserveRootElement", preserveRootElement)
 			.a("reporter", reporter)
 			.a("resolver", resolver)
-			.a("eventAllocator", eventAllocator);
+			.a("validating", validating);
 	}
 }
