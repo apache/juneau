@@ -46,8 +46,6 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 	 */
 	public static class Builder extends XmlSerializerSession.Builder {
 
-		XmlDocSerializer ctx;
-
 		/**
 		 * Constructor
 		 *
@@ -56,7 +54,6 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 		 */
 		protected Builder(XmlDocSerializer ctx) {
 			super(assertArgNotNull("ctx", ctx));
-			this.ctx = ctx;
 		}
 
 		@Override /* Overridden from Builder */

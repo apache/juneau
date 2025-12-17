@@ -60,7 +60,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 */
 	public static class Builder extends XmlSerializerSession.Builder {
 
-		HtmlSerializer ctx;
+		private HtmlSerializer ctx;
 
 		/**
 		 * Constructor

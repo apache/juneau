@@ -147,9 +147,10 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 
 		private static final Cache<HashKey,UonSerializer> CACHE = Cache.of(HashKey.class, UonSerializer.class).build();
 
-		boolean addBeanTypesUon, encoding;
-		ParamFormat paramFormat;
-		Character quoteCharUon;
+		private boolean addBeanTypesUon;
+		private boolean encoding;
+		private ParamFormat paramFormat;
+		private Character quoteCharUon;
 
 		/**
 		 * Constructor, default settings.

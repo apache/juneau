@@ -55,8 +55,8 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 */
 	public static class Builder extends ReaderParserSession.Builder {
 
-		UonParser ctx;
-		boolean decoding;
+		private boolean decoding;
+		private UonParser ctx;
 
 		/**
 		 * Constructor

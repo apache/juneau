@@ -90,36 +90,36 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 */
 	public static class Builder extends Context.Builder {
 
-		RestContext restContext;
-		RestContext.Builder parent;
-		Method restMethod;
-		String httpMethod, clientVersion;
-		Enablement debug;
-		List<String> path;
-
-		private RestConverterList.Builder converters;
 		private BeanContext.Builder beanContext;
-		private RestGuardList.Builder guards;
-		private EncoderSet.Builder encoders;
-		private SerializerSet.Builder serializers;
-		private ParserSet.Builder parsers;
-		private HttpPartSerializer.Creator partSerializer;
-		private HttpPartParser.Creator partParser;
-		private RestMatcherList.Builder matchers;
-		private JsonSchemaGenerator.Builder jsonSchemaGenerator;
-
-		PartList defaultRequestFormData, defaultRequestQueryData;
-		NamedAttributeMap defaultRequestAttributes;
-		HeaderList defaultRequestHeaders, defaultResponseHeaders;
-		RestMatcherList.Builder restMatchers;
-		List<MediaType> produces, consumes;
-		Set<String> roleGuard, rolesDeclared;
-		boolean dotAll;
-
-		Charset defaultCharset;
-		Long maxInput;
-
 		private BeanStore beanStore;
+		private boolean dotAll;
+		private Charset defaultCharset;
+		private EncoderSet.Builder encoders;
+		private Enablement debug;
+		private HeaderList defaultRequestHeaders;
+		private HeaderList defaultResponseHeaders;
+		private HttpPartParser.Creator partParser;
+		private HttpPartSerializer.Creator partSerializer;
+		private JsonSchemaGenerator.Builder jsonSchemaGenerator;
+		private List<MediaType> consumes;
+		private List<MediaType> produces;
+		private List<String> path;
+		private Long maxInput;
+		private Method restMethod;
+		private NamedAttributeMap defaultRequestAttributes;
+		private ParserSet.Builder parsers;
+		private PartList defaultRequestFormData;
+		private PartList defaultRequestQueryData;
+		private RestContext restContext;
+		private RestContext.Builder parent;
+		private RestConverterList.Builder converters;
+		private RestGuardList.Builder guards;
+		private RestMatcherList.Builder matchers;
+		private SerializerSet.Builder serializers;
+		private Set<String> roleGuard;
+		private Set<String> rolesDeclared;
+		private String clientVersion;
+		private String httpMethod;
 
 		Builder(java.lang.reflect.Method method, RestContext context) {
 

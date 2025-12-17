@@ -47,8 +47,6 @@ public class HtmlStrippedDocSerializerSession extends HtmlSerializerSession {
 	 */
 	public static class Builder extends HtmlSerializerSession.Builder {
 
-		HtmlStrippedDocSerializer ctx;
-
 		/**
 		 * Constructor
 		 *
@@ -56,7 +54,6 @@ public class HtmlStrippedDocSerializerSession extends HtmlSerializerSession {
 		 */
 		protected Builder(HtmlStrippedDocSerializer ctx) {
 			super(ctx);
-			this.ctx = ctx;
 		}
 
 		@Override /* Overridden from Builder */

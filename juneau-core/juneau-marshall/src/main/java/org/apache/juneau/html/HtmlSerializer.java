@@ -155,9 +155,12 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 
 		private static final Cache<HashKey,HtmlSerializer> CACHE = Cache.of(HashKey.class, HtmlSerializer.class).build();
 
-		boolean addBeanTypesHtml, addKeyValueTableHeaders, disableDetectLabelParameters, disableDetectLinksInStrings;
-		String labelParameter;
-		AnchorText uriAnchorText;
+		private boolean addBeanTypesHtml;
+		private boolean addKeyValueTableHeaders;
+		private boolean disableDetectLabelParameters;
+		private boolean disableDetectLinksInStrings;
+		private String labelParameter;
+		private AnchorText uriAnchorText;
 
 		/**
 		 * Constructor, default settings.

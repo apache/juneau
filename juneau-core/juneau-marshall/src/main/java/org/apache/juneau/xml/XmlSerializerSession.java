@@ -57,7 +57,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 */
 	public static class Builder extends WriterSerializerSession.Builder {
 
-		XmlSerializer ctx;
+		private XmlSerializer ctx;
 
 		/**
 		 * Constructor

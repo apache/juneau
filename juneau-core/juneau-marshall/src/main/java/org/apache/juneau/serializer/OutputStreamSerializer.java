@@ -47,7 +47,7 @@ public class OutputStreamSerializer extends Serializer {
 	 */
 	public static class Builder extends Serializer.Builder {
 
-		BinaryFormat binaryFormat;
+		private BinaryFormat binaryFormat;
 
 		/**
 		 * Constructor, default settings.

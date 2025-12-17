@@ -50,7 +50,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 */
 	public static class Builder extends UonSerializerSession.Builder {
 
-		UrlEncodingSerializer ctx;
+		private UrlEncodingSerializer ctx;
 
 		/**
 		 * Constructor
@@ -76,12 +76,6 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		@Override /* Overridden from Builder */
 		public Builder debug(Boolean value) {
 			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder encoding(boolean value) {
-			super.encoding(value);
 			return this;
 		}
 

@@ -57,7 +57,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	 */
 	public static class Builder extends UonSerializerSession.Builder {
 
-		OpenApiSerializer ctx;
+		private OpenApiSerializer ctx;
 
 		/**
 		 * Constructor
@@ -83,12 +83,6 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		@Override /* Overridden from Builder */
 		public Builder debug(Boolean value) {
 			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder encoding(boolean value) {
-			super.encoding(value);
 			return this;
 		}
 
@@ -285,7 +279,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	 * @param builder The builder for this object.
 	 */
 	protected OpenApiSerializerSession(Builder builder) {
-		super(builder.encoding(false));
+		super(builder);
 		ctx = builder.ctx;
 	}
 

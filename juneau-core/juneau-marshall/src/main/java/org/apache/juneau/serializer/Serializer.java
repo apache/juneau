@@ -78,12 +78,20 @@ public class Serializer extends BeanTraverseContext {
 	 */
 	public static class Builder extends BeanTraverseContext.Builder {
 
-		boolean addBeanTypes, addRootType, keepNullProperties, sortCollections, sortMaps, trimEmptyCollections, trimEmptyMaps, trimStrings;
-		String produces, accept;
-		UriContext uriContext;
-		UriRelativity uriRelativity;
-		UriResolution uriResolution;
-		Class<? extends SerializerListener> listener;
+		private boolean addBeanTypes;
+		private boolean addRootType;
+		private boolean keepNullProperties;
+		private boolean sortCollections;
+		private boolean sortMaps;
+		private boolean trimEmptyCollections;
+		private boolean trimEmptyMaps;
+		private boolean trimStrings;
+		private Class<? extends SerializerListener> listener;
+		private String accept;
+		private String produces;
+		private UriContext uriContext;
+		private UriRelativity uriRelativity;
+		private UriResolution uriResolution;
 
 		/**
 		 * Constructor, default settings.

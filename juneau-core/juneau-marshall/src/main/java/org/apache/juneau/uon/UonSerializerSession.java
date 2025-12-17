@@ -53,8 +53,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	 */
 	public static class Builder extends WriterSerializerSession.Builder {
 
-		UonSerializer ctx;
-		boolean encoding;
+		private UonSerializer ctx;
 
 		/**
 		 * Constructor
@@ -65,7 +64,6 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		protected Builder(UonSerializer ctx) {
 			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
-			encoding = ctx.encoding;
 		}
 
 		@Override /* Overridden from Builder */
@@ -82,17 +80,6 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		@Override /* Overridden from Builder */
 		public Builder debug(Boolean value) {
 			super.debug(value);
-			return this;
-		}
-
-		/**
-		 * Overrides the encoding setting for this session.
-		 *
-		 * @param value The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder encoding(boolean value) {
-			encoding = value;
 			return this;
 		}
 

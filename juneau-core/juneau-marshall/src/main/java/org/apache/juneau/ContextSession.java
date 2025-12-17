@@ -44,10 +44,10 @@ public abstract class ContextSession {
 	 * Builder class.
 	 */
 	public static abstract class Builder {
-		Context ctx;
-		JsonMap properties;
-		boolean unmodifiable;
-		Boolean debug;
+		private Boolean debug;
+		private boolean unmodifiable;
+		private Context ctx;
+		private JsonMap properties;
 
 		/**
 		 * Constructor.

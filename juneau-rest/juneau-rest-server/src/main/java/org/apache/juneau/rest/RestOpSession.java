@@ -44,8 +44,8 @@ public class RestOpSession extends ContextSession {
 	 */
 	public static class Builder extends ContextSession.Builder {
 
-		final RestOpContext ctx;
-		final RestSession session;
+		protected final RestOpContext ctx;
+		protected final RestSession session;
 
 		/**
 		 * Constructor.

@@ -73,7 +73,6 @@ public class RestAnnotation {
 		private Class<? extends RestOpArg>[] restOpArgs = new Class[0];
 		private Class<? extends BeanStore> beanStore = BeanStore.Void.class;
 		private Class<? extends RestChildren> restChildrenClass = RestChildren.Void.class;
-		private Class<? extends RestOperations> restOperationsClass = RestOperations.Void.class;
 		private Class<? extends DebugEnablement> debugEnablement = DebugEnablement.Void.class;
 		private Class<? extends Serializer>[] serializers = new Class[0];
 		private Class<?>[] children = {}, parsers = {};
@@ -483,17 +482,6 @@ public class RestAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Rest#restOperationsClass()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder restOperationsClass(Class<? extends RestOperations> value) {
-			restOperationsClass = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link Rest#roleGuard()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -642,7 +630,7 @@ public class RestAnnotation {
 			super.onClass(value);
 			return this;
 		}
-	
+
 		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
 		public Builder on(ClassInfo...value) {
 			super.on(value);
@@ -701,7 +689,6 @@ public class RestAnnotation {
 			type(a.callLogger()).ifPresent(x -> b.callLogger().type(x));
 			type(a.swaggerProvider()).ifPresent(x -> b.swaggerProvider(x));
 			type(a.restChildrenClass()).ifPresent(x -> b.restChildrenClass(x));
-			type(a.restOperationsClass()).ifPresent(x -> b.restOperationsClass(x));
 			type(a.debugEnablement()).ifPresent(x -> b.debugEnablement().type(x));
 			string(a.disableContentParam()).map(Boolean::parseBoolean).ifPresent(x -> b.disableContentParam(x));
 			string(a.allowedHeaderParams()).ifPresent(x -> b.allowedHeaderParams(x));
@@ -755,7 +742,6 @@ public class RestAnnotation {
 		private final Class<? extends RestOpArg>[] restOpArgs;
 		private final Class<? extends BeanStore> beanStore;
 		private final Class<? extends RestChildren> restChildrenClass;
-		private final Class<? extends RestOperations> restOperationsClass;
 		private final Class<? extends DebugEnablement> debugEnablement;
 		private final Class<? extends Serializer>[] serializers;
 		private final Class<?>[] children, parsers;
@@ -803,7 +789,6 @@ public class RestAnnotation {
 			renderResponseStackTraces = b.renderResponseStackTraces;
 			responseProcessors = copyOf(b.responseProcessors);
 			restChildrenClass = b.restChildrenClass;
-			restOperationsClass = b.restOperationsClass;
 			restOpArgs = copyOf(b.restOpArgs);
 			roleGuard = b.roleGuard;
 			rolesDeclared = b.rolesDeclared;
@@ -1006,11 +991,6 @@ public class RestAnnotation {
 		@Override /* Overridden from Rest */
 		public Class<? extends RestOpArg>[] restOpArgs() {
 			return restOpArgs;
-		}
-
-		@Override /* Overridden from Rest */
-		public Class<? extends RestOperations> restOperationsClass() {
-			return restOperationsClass;
 		}
 
 		@Override /* Overridden from Rest */

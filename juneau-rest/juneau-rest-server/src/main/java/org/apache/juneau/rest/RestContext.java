@@ -225,66 +225,64 @@ public class RestContext extends Context {
 			return nn(x) && x.methodScope().length == 0 && x.name().equals(name);
 		}
 
+		private BeanContext.Builder beanContext;
+		private BeanCreator<CallLogger> callLogger;
+		private BeanCreator<DebugEnablement> debugEnablement;
+		private BeanCreator<StaticFiles> staticFiles;
+		private BeanCreator<SwaggerProvider> swaggerProvider;
+		private BeanStore beanStore;
+		private BeanStore rootBeanStore;
+		private boolean disableContentParam = env("RestContext.disableContentParam", false);
 		private boolean initialized;
-		ResourceSupplier resource;
-		ServletContext servletContext;
-
-		final ServletConfig inner;
-		final Class<?> resourceClass;
-
-		final RestContext parentContext;
+		private boolean renderResponseStackTraces = env("RestContext.renderResponseStackTraces", false);
+		private Charset defaultCharset = env("RestContext.defaultCharset").map(Charset::forName).orElse(UTF8);
+		private Class<? extends RestChildren> childrenClass = RestChildren.class;
+		private Class<? extends RestOpContext> opContextClass = RestOpContext.class;
+		private final Class<?> resourceClass;
+		private Config config;
 		private DefaultClassList defaultClasses;
 		private DefaultSettingsMap defaultSettings;
-		private BeanStore rootBeanStore, beanStore;
-		private Config config;
-		private VarResolver.Builder varResolver;
-		private Logger logger;
-		private ThrownStore.Builder thrownStore;
-		private MethodExecStore.Builder methodExecStore;
-		private Messages.Builder messages;
-		private ResponseProcessorList.Builder responseProcessors;
-		private BeanCreator<CallLogger> callLogger;
-		private HttpPartSerializer.Creator partSerializer;
-		private HttpPartParser.Creator partParser;
-		private JsonSchemaGenerator.Builder jsonSchemaGenerator;
-		private BeanCreator<StaticFiles> staticFiles;
-		private HeaderList defaultRequestHeaders, defaultResponseHeaders;
-		private NamedAttributeMap defaultRequestAttributes;
-		private RestOpArgList.Builder restOpArgs;
-		private BeanCreator<DebugEnablement> debugEnablement;
-		private MethodList startCallMethods, endCallMethods, postInitMethods, postInitChildFirstMethods, destroyMethods, preCallMethods, postCallMethods;
-		private RestOperations.Builder restOperations;
-		private RestChildren.Builder restChildren;
-		private BeanCreator<SwaggerProvider> swaggerProvider;
-		private BeanContext.Builder beanContext;
-
 		private EncoderSet.Builder encoders;
-		private SerializerSet.Builder serializers;
+		private HeaderList defaultRequestHeaders;
+		private HeaderList defaultResponseHeaders;
+		private HttpPartParser.Creator partParser;
+		private HttpPartSerializer.Creator partSerializer;
+		private JsonSchemaGenerator.Builder jsonSchemaGenerator;
+		private List<MediaType> consumes;
+		private List<MediaType> produces;
+		private List<Object> children = list();
+		private Logger logger;
+		private long maxInput = env("RestContext.maxInput").map(StringUtils::parseLongWithSuffix).orElse(100_000_000l);
+		private MethodExecStore.Builder methodExecStore;
+		private MethodList destroyMethods;
+		private MethodList endCallMethods;
+		private MethodList postCallMethods;
+		private MethodList postInitChildFirstMethods;
+		private MethodList postInitMethods;
+		private MethodList preCallMethods;
+		private MethodList startCallMethods;
+		private Messages.Builder messages;
+		private NamedAttributeMap defaultRequestAttributes;
 		private ParserSet.Builder parsers;
-		String allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type");
-		String allowedMethodHeaders = env("RestContext.allowedMethodHeaders", "");
-		String allowedMethodParams = env("RestContext.allowedMethodParams", "HEAD,OPTIONS");
-		String clientVersionHeader = env("RestContext.clientVersionHeader", "Client-Version");
-		String debugOn = env("RestContext.debugOn").orElse(null);
-		String path = null;
-		String uriAuthority = env("RestContext.uriAuthority").orElse(null);
-		String uriContext = env("RestContext.uriContext").orElse(null);
-		UriRelativity uriRelativity = env("RestContext.uriRelativity", UriRelativity.RESOURCE);
-		UriResolution uriResolution = env("RestContext.uriResolution", UriResolution.ROOT_RELATIVE);
-		Charset defaultCharset = env("RestContext.defaultCharset").map(Charset::forName).orElse(UTF8);
-		long maxInput = env("RestContext.maxInput").map(StringUtils::parseLongWithSuffix).orElse(100_000_000l);
-
-		List<MediaType> consumes, produces;
-		boolean disableContentParam = env("RestContext.disableContentParam", false);
-		boolean renderResponseStackTraces = env("RestContext.renderResponseStackTraces", false);
-
-		Class<? extends RestChildren> childrenClass = RestChildren.class;
-
-		Class<? extends RestOpContext> opContextClass = RestOpContext.class;
-
-		Class<? extends RestOperations> operationsClass = RestOperations.class;
-
-		List<Object> children = list();
+		private final RestContext parentContext;
+		private RestChildren.Builder restChildren;
+		private RestOpArgList.Builder restOpArgs;
+		private RestOperations.Builder restOperations;
+		private ResponseProcessorList.Builder responseProcessors;
+		private ResourceSupplier resource;
+		private SerializerSet.Builder serializers;
+		private final ServletConfig inner;
+		private String allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type");
+		private String allowedMethodHeaders = env("RestContext.allowedMethodHeaders", "");
+		private String allowedMethodParams = env("RestContext.allowedMethodParams", "HEAD,OPTIONS");
+		private String clientVersionHeader = env("RestContext.clientVersionHeader", "Client-Version");
+		private String path = null;
+		private String uriAuthority = env("RestContext.uriAuthority").orElse(null);
+		private String uriContext = env("RestContext.uriContext").orElse(null);
+		private ThrownStore.Builder thrownStore;
+		private UriRelativity uriRelativity = env("RestContext.uriRelativity", UriRelativity.RESOURCE);
+		private UriResolution uriResolution = env("RestContext.uriResolution", UriResolution.ROOT_RELATIVE);
+		private VarResolver.Builder varResolver;
 
 		/**
 		 * Constructor.
@@ -3077,63 +3075,6 @@ public class RestContext extends Context {
 			if (restOperations == null)
 				restOperations = createRestOperations(beanStore(), resource(), assertArgNotNull("restContext", restContext));
 			return restOperations;
-		}
-
-		/**
-		 * REST operations class.
-		 *
-		 * <p>
-		 * Allows you to extend the {@link RestOperations} class to modify how any of the methods are implemented.
-		 *
-		 * <p>
-		 * The subclass must have a public constructor that takes in any of the following arguments:
-		 * <ul>
-		 * 	<li>{@link RestOperations.Builder} - The builder for the object.
-		 * 	<li>Any beans found in the specified bean store.
-		 * 	<li>Any {@link Optional} beans that may or may not be found in the specified bean store.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Our extended context class</jc>
-		 * 	<jk>public</jk> MyRestOperations <jk>extends</jk> RestOperations {
-		 * 		<jk>public</jk> MyRestOperations(RestOperations.Builder <jv>builder</jv>, ARequiredSpringBean <jv>bean1</jv>, Optional&lt;AnOptionalSpringBean&gt; <jv>bean2</jv>) {
-		 * 			<jk>super</jk>(<jv>builder</jv>);
-		 * 		}
-		 *
-		 * 		<jc>// Override any methods.</jc>
-		 *
-		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> RestOpContext findMethod(RestCall <jv>call</jv>) <jk>throws</jk> MethodNotAllowed, PreconditionFailed, NotFound {
-		 * 			String <jv>path</jv> = <jv>call</jv>.getPathInfo();
-		 * 			<jk>if</jk> (<jv>path</jv>.endsWith(<js>"/foo"</js>)) {
-		 * 				<jc>// Do our own special handling.</jc>
-		 * 			}
-		 * 			<jk>return super</jk>.findMethod(<jv>call</jv>);
-		 * 		}
-		 * 	}
-		 * </p>
-		 * <p class='bjava'>
-		 * 	<jc>// Option #1 - Defined via annotation.</jc>
-		 * 	<ja>@Rest</ja>(restMethodsClass=MyRestOperations.<jk>class</jk>)
-		 * 	<jk>public class</jk> MyResource {
-		 * 		...
-		 *
-		 * 		<jc>// Option #2 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.restMethodsClass(MyRestOperations.<jk>class</jk>);
-		 * 		}
-		 * 	}
-		 * </p>
-		 *
-		 * @param value The new value for this setting.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder restOperationsClass(Class<? extends RestOperations> value) {
-			operationsClass = assertArgNotNull("value", value);
-			return this;
 		}
 
 		/**

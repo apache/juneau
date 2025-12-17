@@ -53,7 +53,7 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	 */
 	public static class Builder extends SerializerSession.Builder {
 
-		OutputStreamSerializer ctx;
+		private OutputStreamSerializer ctx;
 
 		/**
 		 * Constructor

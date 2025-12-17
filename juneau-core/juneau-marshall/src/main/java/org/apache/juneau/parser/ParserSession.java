@@ -55,10 +55,10 @@ public class ParserSession extends BeanSession {
 	 */
 	public static class Builder extends BeanSession.Builder {
 
-		Parser ctx;
-		Method javaMethod;
-		Object outer;
-		HttpPartSchema schema;
+		private HttpPartSchema schema;
+		private Method javaMethod;
+		private Object outer;
+		private Parser ctx;
 
 		/**
 		 * Constructor

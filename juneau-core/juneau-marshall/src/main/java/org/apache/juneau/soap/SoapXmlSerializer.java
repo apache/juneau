@@ -57,7 +57,7 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 
 		private static final Cache<HashKey,SoapXmlSerializer> CACHE = Cache.of(HashKey.class, SoapXmlSerializer.class).build();
 
-		String soapAction;
+		private String soapAction;
 
 		/**
 		 * Constructor, default settings.

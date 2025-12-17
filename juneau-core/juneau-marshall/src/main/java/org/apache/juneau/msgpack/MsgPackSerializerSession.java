@@ -50,7 +50,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 	 */
 	public static class Builder extends OutputStreamSerializerSession.Builder {
 
-		MsgPackSerializer ctx;
+		private MsgPackSerializer ctx;
 
 		/**
 		 * Constructor

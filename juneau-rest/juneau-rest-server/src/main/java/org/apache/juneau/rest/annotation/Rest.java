@@ -1189,20 +1189,6 @@ public @interface Rest {
 	Class<? extends RestOpArg>[] restOpArgs() default {};
 
 	/**
-	 * REST methods class.
-	 *
-	 * <p>
-	 * Allows you to extend the {@link RestOperations} class to modify how any of the methods are implemented.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#restOperationsClass(Class)}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	Class<? extends RestOperations> restOperationsClass() default RestOperations.Void.class;
-
-	/**
 	 * Role guard.
 	 *
 	 * <p>

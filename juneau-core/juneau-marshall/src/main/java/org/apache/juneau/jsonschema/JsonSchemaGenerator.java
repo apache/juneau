@@ -57,13 +57,16 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 
 		private static final Cache<HashKey,JsonSchemaGenerator> CACHE = Cache.of(HashKey.class, JsonSchemaGenerator.class).build();
 
-		final JsonSerializer.Builder jsonSerializerBuilder;
-		final JsonParser.Builder jsonParserBuilder;
+		protected final JsonParser.Builder jsonParserBuilder;
+		protected final JsonSerializer.Builder jsonSerializerBuilder;
 
-		SortedSet<TypeCategory> addDescriptionsTo, addExamplesTo;
-		boolean allowNestedDescriptions, allowNestedExamples, useBeanDefs;
-		Class<? extends BeanDefMapper> beanDefMapper;
-		SortedSet<String> ignoreTypes;
+		private boolean allowNestedDescriptions;
+		private boolean allowNestedExamples;
+		private boolean useBeanDefs;
+		private Class<? extends BeanDefMapper> beanDefMapper;
+		private SortedSet<TypeCategory> addDescriptionsTo;
+		private SortedSet<TypeCategory> addExamplesTo;
+		private SortedSet<String> ignoreTypes;
 
 		/**
 		 * Constructor, default settings.

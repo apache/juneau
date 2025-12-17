@@ -51,8 +51,6 @@ public class MsgPackParserSession extends InputStreamParserSession {
 	 */
 	public static class Builder extends InputStreamParserSession.Builder {
 
-		MsgPackParser ctx;
-
 		/**
 		 * Constructor
 		 *
@@ -61,7 +59,6 @@ public class MsgPackParserSession extends InputStreamParserSession {
 		 */
 		protected Builder(MsgPackParser ctx) {
 			super(assertArgNotNull("ctx", ctx));
-			this.ctx = ctx;
 		}
 
 		@Override /* Overridden from Builder */

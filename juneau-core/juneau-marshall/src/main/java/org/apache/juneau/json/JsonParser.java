@@ -132,7 +132,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 
 		private static final Cache<HashKey,JsonParser> CACHE = Cache.of(HashKey.class, JsonParser.class).build();
 
-		boolean validateEnd;
+		private boolean validateEnd;
 
 		/**
 		 * Constructor, default settings.

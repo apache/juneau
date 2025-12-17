@@ -144,10 +144,14 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 
 		private static final Cache<HashKey,XmlSerializer> CACHE = Cache.of(HashKey.class, XmlSerializer.class).build();
 
-		boolean addBeanTypesXml, addNamespaceUrisToRoot, disableAutoDetectNamespaces, disableJsonTags, enableNamespaces;
-		Namespace defaultNamespace;
-		List<Namespace> namespaces;
-		String textNodeDelimiter;
+		private boolean addBeanTypesXml;
+		private boolean addNamespaceUrisToRoot;
+		private boolean disableAutoDetectNamespaces;
+		private boolean disableJsonTags;
+		private boolean enableNamespaces;
+		private Namespace defaultNamespace;
+		private List<Namespace> namespaces;
+		private String textNodeDelimiter;
 
 		/**
 		 * Constructor, default settings.

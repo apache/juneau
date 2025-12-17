@@ -44,8 +44,6 @@ public class PlainTextSerializerSession extends WriterSerializerSession {
 	 */
 	public static class Builder extends WriterSerializerSession.Builder {
 
-		PlainTextSerializer ctx;
-
 		/**
 		 * Constructor
 		 *
@@ -54,7 +52,6 @@ public class PlainTextSerializerSession extends WriterSerializerSession {
 		 */
 		protected Builder(PlainTextSerializer ctx) {
 			super(assertArgNotNull("ctx", ctx));
-			this.ctx = ctx;
 		}
 
 		@Override /* Overridden from Builder */

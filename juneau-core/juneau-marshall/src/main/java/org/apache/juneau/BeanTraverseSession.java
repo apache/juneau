@@ -53,8 +53,8 @@ public class BeanTraverseSession extends BeanSession {
 	 */
 	public static abstract class Builder extends BeanSession.Builder {
 
-		BeanTraverseContext ctx;
-		int initialDepth;
+		private BeanTraverseContext ctx;
+		private int initialDepth;
 
 		/**
 		 * Constructor

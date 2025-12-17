@@ -55,7 +55,7 @@ public class InputStreamParser extends Parser {
 	 */
 	public static class Builder extends Parser.Builder {
 
-		BinaryFormat binaryFormat;
+		private BinaryFormat binaryFormat;
 
 		/**
 		 * Constructor, default settings.

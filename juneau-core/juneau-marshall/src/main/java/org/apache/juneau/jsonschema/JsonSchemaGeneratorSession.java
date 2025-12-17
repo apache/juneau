@@ -51,7 +51,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 */
 	public static class Builder extends BeanTraverseSession.Builder {
 
-		JsonSchemaGenerator ctx;
+		private JsonSchemaGenerator ctx;
 
 		/**
 		 * Constructor

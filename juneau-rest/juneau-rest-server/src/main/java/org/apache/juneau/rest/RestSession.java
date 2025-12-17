@@ -49,13 +49,13 @@ public class RestSession extends ContextSession {
 	 */
 	public static class Builder extends ContextSession.Builder {
 
-		RestContext ctx;
-		Object resource;
-		HttpServletRequest req;
-		HttpServletResponse res;
-		CallLogger logger;
-		String pathInfoUndecoded;
-		UrlPath urlPath;
+		private CallLogger logger;
+		private HttpServletRequest req;
+		private HttpServletResponse res;
+		private Object resource;
+		private RestContext ctx;
+		private String pathInfoUndecoded;
+		private UrlPath urlPath;
 
 		/**
 		 * Constructor.

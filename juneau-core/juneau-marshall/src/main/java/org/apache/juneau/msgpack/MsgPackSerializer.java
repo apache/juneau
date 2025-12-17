@@ -71,7 +71,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 
 		private static final Cache<HashKey,MsgPackSerializer> CACHE = Cache.of(HashKey.class, MsgPackSerializer.class).build();
 
-		boolean addBeanTypesMsgPack;
+		private boolean addBeanTypesMsgPack;
 
 		/**
 		 * Constructor, default settings.

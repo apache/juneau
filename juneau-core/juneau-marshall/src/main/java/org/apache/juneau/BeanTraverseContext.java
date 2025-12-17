@@ -45,8 +45,10 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	 */
 	public abstract static class Builder extends BeanContextable.Builder {
 
-		boolean detectRecursions, ignoreRecursions;
-		int initialDepth, maxDepth;
+		private boolean detectRecursions;
+		private boolean ignoreRecursions;
+		private int initialDepth;
+		private int maxDepth;
 
 		/**
 		 * Constructor, default settings.

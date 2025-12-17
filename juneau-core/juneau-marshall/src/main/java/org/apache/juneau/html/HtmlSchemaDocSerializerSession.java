@@ -45,7 +45,7 @@ public class HtmlSchemaDocSerializerSession extends HtmlDocSerializerSession {
 	 */
 	public static class Builder extends HtmlDocSerializerSession.Builder {
 
-		HtmlSchemaDocSerializer ctx;
+		private HtmlSchemaDocSerializer ctx;
 
 		/**
 		 * Constructor

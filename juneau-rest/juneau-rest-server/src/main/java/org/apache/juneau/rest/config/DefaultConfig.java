@@ -129,8 +129,7 @@ import org.apache.juneau.serializer.annotation.*;
 	swaggerProvider=SwaggerProvider.Void.class,  // Defaults to BasicSwaggerProvider.
 
 	// Overridable context classes.
-	restChildrenClass=RestChildren.class,
-	restOperationsClass=RestOperations.class
+	restChildrenClass=RestChildren.class
 )
 @BeanConfig(
 	// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.

@@ -146,10 +146,13 @@ public class Parser extends BeanContextable {
 	 */
 	public static class Builder extends BeanContextable.Builder {
 
-		boolean autoCloseStreams, strict, trimStrings, unbuffered;
-		String consumes;
-		int debugOutputLines;
-		Class<? extends ParserListener> listener;
+		private boolean autoCloseStreams;
+		private boolean strict;
+		private boolean trimStrings;
+		private boolean unbuffered;
+		private Class<? extends ParserListener> listener;
+		private int debugOutputLines;
+		private String consumes;
 
 		/**
 		 * Constructor, default settings.

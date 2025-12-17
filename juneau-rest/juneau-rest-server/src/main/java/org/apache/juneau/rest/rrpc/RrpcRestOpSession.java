@@ -47,7 +47,7 @@ public class RrpcRestOpSession extends RestOpSession {
 	 */
 	public static class Builder extends RestOpSession.Builder {
 
-		RrpcRestOpContext ctx;
+		private RrpcRestOpContext ctx;
 
 		/**
 		 * Constructor.

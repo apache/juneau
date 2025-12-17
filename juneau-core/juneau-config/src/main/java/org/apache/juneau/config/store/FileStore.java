@@ -55,10 +55,12 @@ public class FileStore extends ConfigStore {
 	 */
 	public static class Builder extends ConfigStore.Builder {
 
-		String directory, extensions;
-		Charset charset;
-		boolean enableWatcher, updateOnWrite;
-		WatcherSensitivity watcherSensitivity;
+		private Charset charset;
+		private boolean enableWatcher;
+		private boolean updateOnWrite;
+		private String directory;
+		private String extensions;
+		private WatcherSensitivity watcherSensitivity;
 
 		/**
 		 * Constructor, default settings.

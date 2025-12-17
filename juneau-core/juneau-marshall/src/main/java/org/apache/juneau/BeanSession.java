@@ -58,10 +58,10 @@ public class BeanSession extends ContextSession {
 	 */
 	public static class Builder extends ContextSession.Builder {
 
-		BeanContext ctx;
-		TimeZone timeZone;
-		Locale locale;
-		MediaType mediaType;
+		private BeanContext ctx;
+		private Locale locale;
+		private MediaType mediaType;
+		private TimeZone timeZone;
 
 		/**
 		 * Constructor

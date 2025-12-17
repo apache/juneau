@@ -50,7 +50,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 */
 	public static class Builder extends WriterSerializerSession.Builder {
 
-		JsonSerializer ctx;
+		private JsonSerializer ctx;
 
 		/**
 		 * Constructor

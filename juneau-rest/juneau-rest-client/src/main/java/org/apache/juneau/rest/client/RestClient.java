@@ -1056,32 +1056,37 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 */
 	public static class Builder extends BeanContextable.Builder {
 
-		BeanStore beanStore = BeanStore.create().build();
-
-		private HttpClientBuilder httpClientBuilder;
-		private CloseableHttpClient httpClient;
-
-		private HeaderList headerData;
-		private PartList queryData, formData, pathData;
 		private BeanCreator<RestCallHandler> callHandler;
-		private SerializerSet.Builder serializers;
-		private ParserSet.Builder parsers;
-		private HttpPartSerializer.Creator partSerializer;
-		private HttpPartParser.Creator partParser;
-		private UrlEncodingSerializer.Builder urlEncodingSerializer;
-
+		private BeanStore beanStore = BeanStore.create().build();
+		private BiPredicate<RestRequest,RestResponse> logRequestsPredicate;
+		private boolean detectLeaks;
+		private boolean executorServiceShutdownOnClose;
+		private boolean ignoreErrors;
+		private boolean keepHttpClientOpen;
+		private boolean logToConsole;
 		private boolean pooled;
-
-		String rootUrl;
-		boolean skipEmptyHeaderData, skipEmptyFormData, skipEmptyQueryData, executorServiceShutdownOnClose, ignoreErrors, keepHttpClientOpen, detectLeaks, logToConsole;
-		Logger logger;
-		DetailLevel logRequests;
-		Level logRequestsLevel;
-		BiPredicate<RestRequest,RestResponse> logRequestsPredicate;
-		Predicate<Integer> errorCodes = x -> x <= 0 || x >= 400;
-		HttpClientConnectionManager connectionManager;
-		PrintStream console;
-		ExecutorService executorService;
+		private boolean skipEmptyFormData;
+		private boolean skipEmptyHeaderData;
+		private boolean skipEmptyQueryData;
+		private CloseableHttpClient httpClient;
+		private DetailLevel logRequests;
+		private ExecutorService executorService;
+		private HeaderList headerData;
+		private HttpClientBuilder httpClientBuilder;
+		private HttpClientConnectionManager connectionManager;
+		private HttpPartParser.Creator partParser;
+		private HttpPartSerializer.Creator partSerializer;
+		private Level logRequestsLevel;
+		private Logger logger;
+		private PartList formData;
+		private PartList pathData;
+		private PartList queryData;
+		private ParserSet.Builder parsers;
+		private Predicate<Integer> errorCodes = x -> x <= 0 || x >= 400;
+		private PrintStream console;
+		private SerializerSet.Builder serializers;
+		private String rootUrl;
+		private UrlEncodingSerializer.Builder urlEncodingSerializer;
 		List<RestCallInterceptor> interceptors;
 
 		/**

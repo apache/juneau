@@ -52,7 +52,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 	 */
 	public static class Builder extends UonParserSession.Builder {
 
-		UrlEncodingParser ctx;
+		private UrlEncodingParser ctx;
 
 		/**
 		 * Constructor

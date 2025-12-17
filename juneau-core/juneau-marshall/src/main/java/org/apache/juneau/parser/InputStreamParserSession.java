@@ -43,7 +43,7 @@ public class InputStreamParserSession extends ParserSession {
 	 */
 	public static class Builder extends ParserSession.Builder {
 
-		InputStreamParser ctx;
+		private InputStreamParser ctx;
 
 		/**
 		 * Constructor

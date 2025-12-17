@@ -56,9 +56,10 @@ public class WriterSerializerSession extends SerializerSession {
 	 */
 	public static class Builder extends SerializerSession.Builder {
 
-		WriterSerializer ctx;
-		boolean useWhitespace;
-		Charset fileCharset, streamCharset;
+		private boolean useWhitespace;
+		private Charset fileCharset;
+		private Charset streamCharset;
+		private WriterSerializer ctx;
 
 		/**
 		 * Constructor
@@ -252,7 +253,8 @@ public class WriterSerializerSession extends SerializerSession {
 
 	private final WriterSerializer ctx;
 	private final boolean useWhitespace;
-	private final Charset streamCharset, fileCharset;
+	private final Charset fileCharset;
+	private final Charset streamCharset;
 
 	/**
 	 * Constructor.

@@ -70,11 +70,11 @@ public class SerializerSession extends BeanTraverseSession {
 	 */
 	public static class Builder extends BeanTraverseSession.Builder {
 
-		Serializer ctx;
-		Method javaMethod;
-		VarResolverSession resolver;
-		UriContext uriContext;
-		HttpPartSchema schema;
+		private HttpPartSchema schema;
+		private Method javaMethod;
+		private Serializer ctx;
+		private UriContext uriContext;
+		private VarResolverSession resolver;
 
 		/**
 		 * Constructor

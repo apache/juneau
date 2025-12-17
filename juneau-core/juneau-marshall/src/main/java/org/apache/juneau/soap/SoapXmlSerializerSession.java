@@ -46,7 +46,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 	 */
 	public static class Builder extends XmlSerializerSession.Builder {
 
-		SoapXmlSerializer ctx;
+		private SoapXmlSerializer ctx;
 
 		/**
 		 * Constructor

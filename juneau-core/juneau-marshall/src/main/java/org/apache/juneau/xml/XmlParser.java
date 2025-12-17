@@ -65,10 +65,11 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 
 		private static final Cache<HashKey,XmlParser> CACHE = Cache.of(HashKey.class, XmlParser.class).build();
 
-		boolean preserveRootElement, validating;
-		Class<? extends XMLEventAllocator> eventAllocator;
-		Class<? extends XMLReporter> reporter;
-		Class<? extends XMLResolver> resolver;
+		private boolean preserveRootElement;
+		private boolean validating;
+		private Class<? extends XMLEventAllocator> eventAllocator;
+		private Class<? extends XMLReporter> reporter;
+		private Class<? extends XMLResolver> resolver;
 
 		/**
 		 * Constructor, default settings.

@@ -40,8 +40,6 @@ public class CsvParserSession extends ReaderParserSession {
 	 */
 	public static class Builder extends ReaderParserSession.Builder {
 
-		CsvParser ctx;
-
 		/**
 		 * Constructor
 		 *
@@ -49,7 +47,6 @@ public class CsvParserSession extends ReaderParserSession {
 		 */
 		protected Builder(CsvParser ctx) {
 			super(ctx);
-			this.ctx = ctx;
 		}
 
 		@Override /* Overridden from Builder */

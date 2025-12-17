@@ -62,7 +62,8 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 
 		private static final Cache<HashKey,UonParser> CACHE = Cache.of(HashKey.class, UonParser.class).build();
 
-		boolean decoding, validateEnd;
+		private boolean decoding;
+		private boolean validateEnd;
 
 		/**
 		 * Constructor, default settings.

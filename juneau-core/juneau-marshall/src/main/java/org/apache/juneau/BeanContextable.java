@@ -53,8 +53,8 @@ public abstract class BeanContextable extends Context {
 	 */
 	public abstract static class Builder extends Context.Builder {
 
-		BeanContext.Builder bcBuilder;
-		BeanContext bc;
+		private BeanContext.Builder bcBuilder;
+		private BeanContext bc;
 
 		/**
 		 * Constructor.

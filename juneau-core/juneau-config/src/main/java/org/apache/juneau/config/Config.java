@@ -61,15 +61,16 @@ public class Config extends Context implements ConfigEventListener {
 	 */
 	public static class Builder extends Context.Builder {
 
-		String name;
-		ConfigStore store;
-		WriterSerializer serializer;
-		ReaderParser parser;
-		Map<Character,Mod> mods;
-		VarResolver varResolver;
-		int binaryLineLength;
-		BinaryFormat binaryFormat;
-		boolean multiLineValuesOnSeparateLines, readOnly;
+		private BinaryFormat binaryFormat;
+		private boolean multiLineValuesOnSeparateLines;
+		private boolean readOnly;
+		private ConfigStore store;
+		private int binaryLineLength;
+		private Map<Character,Mod> mods;
+		private ReaderParser parser;
+		private String name;
+		private VarResolver varResolver;
+		private WriterSerializer serializer;
 
 		/**
 		 * Constructor, default settings.

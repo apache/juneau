@@ -50,10 +50,12 @@ public class WriterSerializer extends Serializer {
 	 */
 	public static class Builder extends Serializer.Builder {
 
-		boolean useWhitespace;
-		Charset fileCharset, streamCharset;
-		int maxIndent;
-		Character quoteChar, quoteCharOverride;
+		private boolean useWhitespace;
+		private Character quoteChar;
+		private Character quoteCharOverride;
+		private Charset fileCharset;
+		private Charset streamCharset;
+		private int maxIndent;
 
 		/**
 		 * Constructor, default settings.

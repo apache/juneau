@@ -49,7 +49,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 */
 	public static class Builder extends HtmlStrippedDocSerializerSession.Builder {
 
-		HtmlDocSerializer ctx;
+		private HtmlDocSerializer ctx;
 
 		/**
 		 * Constructor

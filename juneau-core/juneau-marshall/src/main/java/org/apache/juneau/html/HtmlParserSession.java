@@ -60,7 +60,7 @@ public class HtmlParserSession extends XmlParserSession {
 	 */
 	public static class Builder extends XmlParserSession.Builder {
 
-		HtmlParser ctx;
+		private HtmlParser ctx;
 
 		/**
 		 * Constructor

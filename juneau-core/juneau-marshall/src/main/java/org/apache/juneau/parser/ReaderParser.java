@@ -57,7 +57,8 @@ public class ReaderParser extends Parser {
 	 */
 	public static class Builder extends Parser.Builder {
 
-		Charset fileCharset, streamCharset;
+		private Charset fileCharset;
+		private Charset streamCharset;
 
 		/**
 		 * Constructor, default settings.

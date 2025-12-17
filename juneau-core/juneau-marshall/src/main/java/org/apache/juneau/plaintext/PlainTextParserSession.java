@@ -44,8 +44,6 @@ public class PlainTextParserSession extends ReaderParserSession {
 	 */
 	public static class Builder extends ReaderParserSession.Builder {
 
-		PlainTextParser ctx;
-
 		/**
 		 * Constructor
 		 *
@@ -53,7 +51,6 @@ public class PlainTextParserSession extends ReaderParserSession {
 		 */
 		protected Builder(PlainTextParser ctx) {
 			super(ctx);
-			this.ctx = ctx;
 		}
 
 		@Override /* Overridden from Builder */

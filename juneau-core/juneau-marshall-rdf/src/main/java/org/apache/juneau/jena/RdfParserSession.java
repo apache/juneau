@@ -59,7 +59,7 @@ public class RdfParserSession extends ReaderParserSession {
 	 */
 	public static class Builder extends ReaderParserSession.Builder {
 
-		RdfParser ctx;
+		private RdfParser ctx;
 
 		/**
 		 * Constructor

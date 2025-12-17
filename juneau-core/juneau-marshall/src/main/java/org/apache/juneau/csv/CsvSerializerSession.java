@@ -48,8 +48,6 @@ public class CsvSerializerSession extends WriterSerializerSession {
 	 */
 	public static class Builder extends WriterSerializerSession.Builder {
 
-		CsvSerializer ctx;
-
 		/**
 		 * Constructor
 		 *
@@ -58,7 +56,6 @@ public class CsvSerializerSession extends WriterSerializerSession {
 		 */
 		protected Builder(CsvSerializer ctx) {
 			super(assertArgNotNull("ctx", ctx));
-			this.ctx = ctx;
 		}
 
 		@Override /* Overridden from Builder */

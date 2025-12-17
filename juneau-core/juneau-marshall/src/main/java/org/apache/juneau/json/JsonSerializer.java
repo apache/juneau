@@ -118,7 +118,9 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 
 		private static final Cache<HashKey,JsonSerializer> CACHE = Cache.of(HashKey.class, JsonSerializer.class).build();
 
-		boolean addBeanTypesJson, escapeSolidus, simpleAttrs;
+		private boolean addBeanTypesJson;
+		private boolean escapeSolidus;
+		private boolean simpleAttrs;
 
 		/**
 		 * Constructor, default settings.

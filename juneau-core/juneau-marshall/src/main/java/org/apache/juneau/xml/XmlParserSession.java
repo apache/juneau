@@ -58,7 +58,7 @@ public class XmlParserSession extends ReaderParserSession {
 	 */
 	public static class Builder extends ReaderParserSession.Builder {
 
-		XmlParser ctx;
+		private XmlParser ctx;
 
 		/**
 		 * Constructor
