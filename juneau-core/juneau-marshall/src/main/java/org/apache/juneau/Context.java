@@ -859,6 +859,7 @@ public abstract class Context {
 	 */
 	protected Context(Builder builder) {
 		assertArgNotNull("builder", builder);
+		init(builder);
 		debug = builder.debug;
 		annotations = copyOf(builder.annotations);
 		annotationProvider = AnnotationProvider.create().addRuntimeAnnotations(annotations).build();
@@ -931,6 +932,15 @@ public abstract class Context {
 		return r(properties());
 	}
 
+	/**
+	 * Perform optional initialization on builder before it is used.
+	 *
+	 * <p>
+	 * Default behavior is a no-op.
+	 *
+	 * @param builder The builder to initialize.
+	 */
+	protected void init(Builder builder) {}
 
 	/**
 	 * Returns the properties on this bean as a map for debugging.
