@@ -378,7 +378,7 @@
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">public</strong> Builder consumes(MediaType...values) {
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			assertVarargsNotNull(<span class="jxr_string">"values"</span>, values);
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			assertArgNoNulls(<span class="jxr_string">"values"</span>, values);
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 			consumes = addAll(consumes, values);
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 		}
@@ -409,7 +409,7 @@
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 		@SafeVarargs
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> Builder converters(Class&lt;? <strong class="jxr_keyword">extends</strong> RestConverter&gt;...value) {
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 			assertVarargsNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 			assertArgNoNulls(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 			converters().append(value);
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 		}
@@ -428,7 +428,7 @@
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<strong class="jxr_keyword">public</strong> Builder converters(RestConverter...value) {
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			assertVarargsNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			assertArgNoNulls(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 			converters().append(value);
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 		}
@@ -548,7 +548,7 @@
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L542" href="#L542">542</a> 		<strong class="jxr_keyword">public</strong> Builder defaultRequestAttributes(NamedAttribute...value) {
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 			assertVarargsNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 			assertArgNoNulls(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L544" href="#L544">544</a> 			defaultRequestAttributes().add(value);
 <a class="jxr_linenumber" name="L545" href="#L545">545</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L546" href="#L546">546</a> 		}
@@ -578,7 +578,7 @@
 <a class="jxr_linenumber" name="L570" href="#L570">570</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L571" href="#L571">571</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L572" href="#L572">572</a> 		<strong class="jxr_keyword">public</strong> Builder defaultRequestFormData(NameValuePair...value) {
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 			assertVarargsNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 			assertArgNoNulls(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L574" href="#L574">574</a> 			defaultRequestFormData().append(value);
 <a class="jxr_linenumber" name="L575" href="#L575">575</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L576" href="#L576">576</a> 		}
@@ -608,7 +608,7 @@
 <a class="jxr_linenumber" name="L600" href="#L600">600</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L601" href="#L601">601</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L602" href="#L602">602</a> 		<strong class="jxr_keyword">public</strong> Builder defaultRequestHeaders(org.apache.http.Header...value) {
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> 			assertVarargsNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 			assertArgNoNulls(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L604" href="#L604">604</a> 			defaultRequestHeaders().append(value);
 <a class="jxr_linenumber" name="L605" href="#L605">605</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L606" href="#L606">606</a> 		}
@@ -638,7 +638,7 @@
 <a class="jxr_linenumber" name="L630" href="#L630">630</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L631" href="#L631">631</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L632" href="#L632">632</a> 		<strong class="jxr_keyword">public</strong> Builder defaultRequestQueryData(NameValuePair...value) {
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> 			assertVarargsNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 			assertArgNoNulls(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L634" href="#L634">634</a> 			defaultRequestQueryData().append(value);
 <a class="jxr_linenumber" name="L635" href="#L635">635</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L636" href="#L636">636</a> 		}
@@ -668,7 +668,7 @@
 <a class="jxr_linenumber" name="L660" href="#L660">660</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L662" href="#L662">662</a> 		<strong class="jxr_keyword">public</strong> Builder defaultResponseHeaders(org.apache.http.Header...value) {
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> 			assertVarargsNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 			assertArgNoNulls(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L664" href="#L664">664</a> 			defaultResponseHeaders().append(value);
 <a class="jxr_linenumber" name="L665" href="#L665">665</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L666" href="#L666">666</a> 		}
@@ -709,7 +709,7 @@
 <a class="jxr_linenumber" name="L701" href="#L701">701</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L702" href="#L702">702</a> 		@SafeVarargs
 <a class="jxr_linenumber" name="L703" href="#L703">703</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> Builder encoders(Class&lt;? <strong class="jxr_keyword">extends</strong> Encoder&gt;...value) {
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> 			assertVarargsNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 			assertArgNoNulls(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L705" href="#L705">705</a> 			encoders().add(value);
 <a class="jxr_linenumber" name="L706" href="#L706">706</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L707" href="#L707">707</a> 		}
@@ -728,7 +728,7 @@
 <a class="jxr_linenumber" name="L720" href="#L720">720</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L721" href="#L721">721</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L722" href="#L722">722</a> 		<strong class="jxr_keyword">public</strong> Builder encoders(Encoder...value) {
-<a class="jxr_linenumber" name="L723" href="#L723">723</a> 			assertVarargsNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L723" href="#L723">723</a> 			assertArgNoNulls(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L724" href="#L724">724</a> 			encoders().add(value);
 <a class="jxr_linenumber" name="L725" href="#L725">725</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L726" href="#L726">726</a> 		}
@@ -759,7 +759,7 @@
 <a class="jxr_linenumber" name="L751" href="#L751">751</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L752" href="#L752">752</a> 		@SafeVarargs
 <a class="jxr_linenumber" name="L753" href="#L753">753</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> Builder guards(Class&lt;? <strong class="jxr_keyword">extends</strong> RestGuard&gt;...value) {
-<a class="jxr_linenumber" name="L754" href="#L754">754</a> 			assertVarargsNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L754" href="#L754">754</a> 			assertArgNoNulls(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L755" href="#L755">755</a> 			guards().append(value);
 <a class="jxr_linenumber" name="L756" href="#L756">756</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L757" href="#L757">757</a> 		}
@@ -778,7 +778,7 @@
 <a class="jxr_linenumber" name="L770" href="#L770">770</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L771" href="#L771">771</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L772" href="#L772">772</a> 		<strong class="jxr_keyword">public</strong> Builder guards(RestGuard...value) {
-<a class="jxr_linenumber" name="L773" href="#L773">773</a> 			assertVarargsNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> 			assertArgNoNulls(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L774" href="#L774">774</a> 			guards().append(value);
 <a class="jxr_linenumber" name="L775" href="#L775">775</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L776" href="#L776">776</a> 		}
@@ -923,7 +923,7 @@
 <a class="jxr_linenumber" name="L915" href="#L915">915</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L916" href="#L916">916</a> 		@SafeVarargs
 <a class="jxr_linenumber" name="L917" href="#L917">917</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> Builder matchers(Class&lt;? <strong class="jxr_keyword">extends</strong> RestMatcher&gt;...value) {
-<a class="jxr_linenumber" name="L918" href="#L918">918</a> 			assertVarargsNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L918" href="#L918">918</a> 			assertArgNoNulls(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L919" href="#L919">919</a> 			matchers().append(value);
 <a class="jxr_linenumber" name="L920" href="#L920">920</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L921" href="#L921">921</a> 		}
@@ -942,7 +942,7 @@
 <a class="jxr_linenumber" name="L934" href="#L934">934</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L935" href="#L935">935</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L936" href="#L936">936</a> 		<strong class="jxr_keyword">public</strong> Builder matchers(RestMatcher...value) {
-<a class="jxr_linenumber" name="L937" href="#L937">937</a> 			assertVarargsNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L937" href="#L937">937</a> 			assertArgNoNulls(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L938" href="#L938">938</a> 			matchers().append(value);
 <a class="jxr_linenumber" name="L939" href="#L939">939</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L940" href="#L940">940</a> 		}
@@ -1038,7 +1038,7 @@
 <a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 		@SafeVarargs
 <a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> Builder parsers(Class&lt;? <strong class="jxr_keyword">extends</strong> Parser&gt;...value) {
-<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 			assertVarargsNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 			assertArgNoNulls(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 			parsers().add(value);
 <a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 		}
@@ -1057,7 +1057,7 @@
 <a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 		<strong class="jxr_keyword">public</strong> Builder parsers(Parser...value) {
-<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 			assertVarargsNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 			assertArgNoNulls(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 			parsers().add(value);
 <a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 		}
@@ -1176,7 +1176,7 @@
 <a class="jxr_linenumber" name="L1168" href="#L1168">1168</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L1169" href="#L1169">1169</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L1170" href="#L1170">1170</a> 		<strong class="jxr_keyword">public</strong> Builder path(String...values) {
-<a class="jxr_linenumber" name="L1171" href="#L1171">1171</a> 			assertVarargsNotNull(<span class="jxr_string">"values"</span>, values);
+<a class="jxr_linenumber" name="L1171" href="#L1171">1171</a> 			assertArgNoNulls(<span class="jxr_string">"values"</span>, values);
 <a class="jxr_linenumber" name="L1172" href="#L1172">1172</a> 			path = prependAll(path, values);
 <a class="jxr_linenumber" name="L1173" href="#L1173">1173</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1174" href="#L1174">1174</a> 		}
@@ -1209,7 +1209,7 @@
 <a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> 		<strong class="jxr_keyword">public</strong> Builder produces(MediaType...values) {
-<a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> 			assertVarargsNotNull(<span class="jxr_string">"values"</span>, values);
+<a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> 			assertArgNoNulls(<span class="jxr_string">"values"</span>, values);
 <a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> 			produces = addAll(produces, values);
 <a class="jxr_linenumber" name="L1206" href="#L1206">1206</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1207" href="#L1207">1207</a> 		}
@@ -1307,7 +1307,7 @@
 <a class="jxr_linenumber" name="L1299" href="#L1299">1299</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L1300" href="#L1300">1300</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L1301" href="#L1301">1301</a> 		<strong class="jxr_keyword">public</strong> Builder rolesDeclared(String...values) {
-<a class="jxr_linenumber" name="L1302" href="#L1302">1302</a> 			assertVarargsNotNull(<span class="jxr_string">"values"</span>, values);
+<a class="jxr_linenumber" name="L1302" href="#L1302">1302</a> 			assertArgNoNulls(<span class="jxr_string">"values"</span>, values);
 <a class="jxr_linenumber" name="L1303" href="#L1303">1303</a> 			rolesDeclared = addAll(rolesDeclared, values);
 <a class="jxr_linenumber" name="L1304" href="#L1304">1304</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1305" href="#L1305">1305</a> 		}
@@ -1338,7 +1338,7 @@
 <a class="jxr_linenumber" name="L1330" href="#L1330">1330</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L1331" href="#L1331">1331</a> 		@SafeVarargs
 <a class="jxr_linenumber" name="L1332" href="#L1332">1332</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> Builder serializers(Class&lt;? <strong class="jxr_keyword">extends</strong> Serializer&gt;...value) {
-<a class="jxr_linenumber" name="L1333" href="#L1333">1333</a> 			assertVarargsNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L1333" href="#L1333">1333</a> 			assertArgNoNulls(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L1334" href="#L1334">1334</a> 			serializers().add(value);
 <a class="jxr_linenumber" name="L1335" href="#L1335">1335</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1336" href="#L1336">1336</a> 		}
@@ -1357,7 +1357,7 @@
 <a class="jxr_linenumber" name="L1349" href="#L1349">1349</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L1350" href="#L1350">1350</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L1351" href="#L1351">1351</a> 		<strong class="jxr_keyword">public</strong> Builder serializers(Serializer...value) {
-<a class="jxr_linenumber" name="L1352" href="#L1352">1352</a> 			assertVarargsNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L1352" href="#L1352">1352</a> 			assertArgNoNulls(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L1353" href="#L1353">1353</a> 			serializers().add(value);
 <a class="jxr_linenumber" name="L1354" href="#L1354">1354</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1355" href="#L1355">1355</a> 		}

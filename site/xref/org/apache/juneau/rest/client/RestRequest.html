@@ -1233,7 +1233,7 @@
 <a class="jxr_linenumber" name="L1225" href="#L1225">1225</a> <em class="jxr_javadoccomment">	 * @throws RestCallException If init method on interceptor threw an exception.</em>
 <a class="jxr_linenumber" name="L1226" href="#L1226">1226</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1227" href="#L1227">1227</a> 	<strong class="jxr_keyword">public</strong> <a name="RestRequest" href="../../../../../org/apache/juneau/rest/client/RestRequest.html#RestRequest">RestRequest</a> interceptors(RestCallInterceptor...interceptors) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
-<a class="jxr_linenumber" name="L1228" href="#L1228">1228</a> 		assertVarargsNotNull(<span class="jxr_string">"interceptors"</span>, interceptors);
+<a class="jxr_linenumber" name="L1228" href="#L1228">1228</a> 		assertArgNoNulls(<span class="jxr_string">"interceptors"</span>, interceptors);
 <a class="jxr_linenumber" name="L1229" href="#L1229">1229</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L1230" href="#L1230">1230</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i : interceptors) {
 <a class="jxr_linenumber" name="L1231" href="#L1231">1231</a> 				<strong class="jxr_keyword">this</strong>.interceptors.add(i);

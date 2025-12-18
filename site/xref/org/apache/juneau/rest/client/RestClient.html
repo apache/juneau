@@ -3980,7 +3980,7 @@
 <a class="jxr_linenumber" name="L3972" href="#L3972">3972</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L3973" href="#L3973">3973</a> 		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L3974" href="#L3974">3974</a> 		<strong class="jxr_keyword">public</strong> Builder parsers(Class&lt;? <strong class="jxr_keyword">extends</strong> Parser&gt;...value) {
-<a class="jxr_linenumber" name="L3975" href="#L3975">3975</a> 			assertVarargsNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L3975" href="#L3975">3975</a> 			assertArgNoNulls(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L3976" href="#L3976">3976</a> 			parsers().add(value);
 <a class="jxr_linenumber" name="L3977" href="#L3977">3977</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L3978" href="#L3978">3978</a> 		}
@@ -4019,7 +4019,7 @@
 <a class="jxr_linenumber" name="L4011" href="#L4011">4011</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L4012" href="#L4012">4012</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L4013" href="#L4013">4013</a> 		<strong class="jxr_keyword">public</strong> Builder parsers(Parser...value) {
-<a class="jxr_linenumber" name="L4014" href="#L4014">4014</a> 			assertVarargsNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L4014" href="#L4014">4014</a> 			assertArgNoNulls(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L4015" href="#L4015">4015</a> 			parsers().add(value);
 <a class="jxr_linenumber" name="L4016" href="#L4016">4016</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L4017" href="#L4017">4017</a> 		}
@@ -4842,7 +4842,7 @@
 <a class="jxr_linenumber" name="L4834" href="#L4834">4834</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L4835" href="#L4835">4835</a> 		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L4836" href="#L4836">4836</a> 		<strong class="jxr_keyword">public</strong> Builder serializers(Class&lt;? <strong class="jxr_keyword">extends</strong> Serializer&gt;...value) {
-<a class="jxr_linenumber" name="L4837" href="#L4837">4837</a> 			assertVarargsNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L4837" href="#L4837">4837</a> 			assertArgNoNulls(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L4838" href="#L4838">4838</a> 			serializers().add(value);
 <a class="jxr_linenumber" name="L4839" href="#L4839">4839</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L4840" href="#L4840">4840</a> 		}
@@ -4881,7 +4881,7 @@
 <a class="jxr_linenumber" name="L4873" href="#L4873">4873</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L4874" href="#L4874">4874</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L4875" href="#L4875">4875</a> 		<strong class="jxr_keyword">public</strong> Builder serializers(Serializer...value) {
-<a class="jxr_linenumber" name="L4876" href="#L4876">4876</a> 			assertVarargsNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L4876" href="#L4876">4876</a> 			assertArgNoNulls(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L4877" href="#L4877">4877</a> 			serializers().add(value);
 <a class="jxr_linenumber" name="L4878" href="#L4878">4878</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L4879" href="#L4879">4879</a> 		}

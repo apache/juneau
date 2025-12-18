@@ -162,7 +162,7 @@
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">public</strong> Builder addDescriptionsTo(TypeCategory...values) {
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			assertVarargsNotNull(<span class="jxr_string">"values"</span>, values);
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			assertArgNoNulls(<span class="jxr_string">"values"</span>, values);
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 			addDescriptionsTo = addAll(addDescriptionsTo, values);
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 		}
@@ -202,7 +202,7 @@
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">public</strong> Builder addExamplesTo(TypeCategory...values) {
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			assertVarargsNotNull(<span class="jxr_string">"values"</span>, values);
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			assertArgNoNulls(<span class="jxr_string">"values"</span>, values);
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 			addExamplesTo = addAll(addExamplesTo, values);
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 		}
@@ -621,7 +621,7 @@
 <a class="jxr_linenumber" name="L613" href="#L613">613</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L614" href="#L614">614</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L615" href="#L615">615</a> 		<strong class="jxr_keyword">public</strong> Builder ignoreTypes(String...values) {
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 			assertVarargsNotNull(<span class="jxr_string">"values"</span>, values);
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 			assertArgNoNulls(<span class="jxr_string">"values"</span>, values);
 <a class="jxr_linenumber" name="L617" href="#L617">617</a> 			ignoreTypes = addAll(ignoreTypes, values);
 <a class="jxr_linenumber" name="L618" href="#L618">618</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L619" href="#L619">619</a> 		}
@@ -859,7 +859,7 @@
 <a class="jxr_linenumber" name="L851" href="#L851">851</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="BeanDefMapper" href="../../../../org/apache/juneau/jsonschema/BeanDefMapper.html#BeanDefMapper">BeanDefMapper</a> beanDefMapperBean;
 <a class="jxr_linenumber" name="L852" href="#L852">852</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;BeanPropertyMeta,JsonSchemaBeanPropertyMeta&gt; jsonSchemaBeanPropertyMetas = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L853" href="#L853">853</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;ClassMeta&lt;?&gt;,JsonSchemaClassMeta&gt; jsonSchemaClassMetas = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L854" href="#L854">854</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Pattern[] ignoreTypePatterns;
+<a class="jxr_linenumber" name="L854" href="#L854">854</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;Pattern&gt; ignoreTypePatterns;
 <a class="jxr_linenumber" name="L855" href="#L855">855</a> 
 <a class="jxr_linenumber" name="L856" href="#L856">856</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L857" href="#L857">857</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
@@ -879,7 +879,7 @@
 <a class="jxr_linenumber" name="L871" href="#L871">871</a> 
 <a class="jxr_linenumber" name="L872" href="#L872">872</a> 		Set&lt;Pattern&gt; ignoreTypePatterns = set();
 <a class="jxr_linenumber" name="L873" href="#L873">873</a> 		ignoreTypes.forEach(y -&gt; split(y, x -&gt; ignoreTypePatterns.add(Pattern.compile(x.replace(<span class="jxr_string">"."</span>, <span class="jxr_string">"&#92;&#92;."</span>).replace(<span class="jxr_string">"*"</span>, <span class="jxr_string">".*"</span>)))));
-<a class="jxr_linenumber" name="L874" href="#L874">874</a> 		<strong class="jxr_keyword">this</strong>.ignoreTypePatterns = ignoreTypePatterns.toArray(<strong class="jxr_keyword">new</strong> Pattern[ignoreTypePatterns.size()]);
+<a class="jxr_linenumber" name="L874" href="#L874">874</a> 		<strong class="jxr_keyword">this</strong>.ignoreTypePatterns = u(<strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(ignoreTypePatterns));
 <a class="jxr_linenumber" name="L875" href="#L875">875</a> 
 <a class="jxr_linenumber" name="L876" href="#L876">876</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L877" href="#L877">877</a> 			beanDefMapperBean = beanDefMapper.getDeclaredConstructor().newInstance();
@@ -907,119 +907,121 @@
 <a class="jxr_linenumber" name="L899" href="#L899">899</a> <em class="jxr_javadoccomment">	 * @see Builder#ignoreTypes(String...)</em>
 <a class="jxr_linenumber" name="L900" href="#L900">900</a> <em class="jxr_javadoccomment">	 * @return</em>
 <a class="jxr_linenumber" name="L901" href="#L901">901</a> <em class="jxr_javadoccomment">	 * 	Custom schema information for particular class types.</em>
-<a class="jxr_linenumber" name="L902" href="#L902">902</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L903" href="#L903">903</a> 	<strong class="jxr_keyword">public</strong> List&lt;Pattern&gt; getIgnoreTypes() { <strong class="jxr_keyword">return</strong> l(ignoreTypePatterns); }
-<a class="jxr_linenumber" name="L904" href="#L904">904</a> 
-<a class="jxr_linenumber" name="L905" href="#L905">905</a> 	@Override
-<a class="jxr_linenumber" name="L906" href="#L906">906</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchemaBeanPropertyMeta" href="../../../../org/apache/juneau/jsonschema/JsonSchemaBeanPropertyMeta.html#JsonSchemaBeanPropertyMeta">JsonSchemaBeanPropertyMeta</a> getJsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {
-<a class="jxr_linenumber" name="L907" href="#L907">907</a> 		JsonSchemaBeanPropertyMeta m = jsonSchemaBeanPropertyMetas.get(bpm);
-<a class="jxr_linenumber" name="L908" href="#L908">908</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L909" href="#L909">909</a> 			m = <strong class="jxr_keyword">new</strong> <a name="JsonSchemaBeanPropertyMeta" href="../../../../org/apache/juneau/jsonschema/JsonSchemaBeanPropertyMeta.html#JsonSchemaBeanPropertyMeta">JsonSchemaBeanPropertyMeta</a>(bpm, <strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L910" href="#L910">910</a> 			jsonSchemaBeanPropertyMetas.put(bpm, m);
-<a class="jxr_linenumber" name="L911" href="#L911">911</a> 		}
-<a class="jxr_linenumber" name="L912" href="#L912">912</a> 		<strong class="jxr_keyword">return</strong> m;
-<a class="jxr_linenumber" name="L913" href="#L913">913</a> 	}
-<a class="jxr_linenumber" name="L914" href="#L914">914</a> 
-<a class="jxr_linenumber" name="L915" href="#L915">915</a> 	@Override
-<a class="jxr_linenumber" name="L916" href="#L916">916</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchemaClassMeta" href="../../../../org/apache/juneau/jsonschema/JsonSchemaClassMeta.html#JsonSchemaClassMeta">JsonSchemaClassMeta</a> getJsonSchemaClassMeta(ClassMeta&lt;?&gt; cm) {
-<a class="jxr_linenumber" name="L917" href="#L917">917</a> 		JsonSchemaClassMeta m = jsonSchemaClassMetas.get(cm);
-<a class="jxr_linenumber" name="L918" href="#L918">918</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L919" href="#L919">919</a> 			m = <strong class="jxr_keyword">new</strong> <a name="JsonSchemaClassMeta" href="../../../../org/apache/juneau/jsonschema/JsonSchemaClassMeta.html#JsonSchemaClassMeta">JsonSchemaClassMeta</a>(cm, <strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L920" href="#L920">920</a> 			jsonSchemaClassMetas.put(cm, m);
-<a class="jxr_linenumber" name="L921" href="#L921">921</a> 		}
-<a class="jxr_linenumber" name="L922" href="#L922">922</a> 		<strong class="jxr_keyword">return</strong> m;
-<a class="jxr_linenumber" name="L923" href="#L923">923</a> 	}
-<a class="jxr_linenumber" name="L924" href="#L924">924</a> 
-<a class="jxr_linenumber" name="L925" href="#L925">925</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
-<a class="jxr_linenumber" name="L926" href="#L926">926</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchemaGeneratorSession" href="../../../../org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#JsonSchemaGeneratorSession">JsonSchemaGeneratorSession</a> getSession() { <strong class="jxr_keyword">return</strong> createSession().build(); }
-<a class="jxr_linenumber" name="L927" href="#L927">927</a> 
-<a class="jxr_linenumber" name="L928" href="#L928">928</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L929" href="#L929">929</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified type is ignored.</em>
-<a class="jxr_linenumber" name="L930" href="#L930">930</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L931" href="#L931">931</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L932" href="#L932">932</a> <em class="jxr_javadoccomment">	 * The type is ignored if it's specified in the {@link Builder#ignoreTypes(String...)} setting.</em>
-<a class="jxr_linenumber" name="L933" href="#L933">933</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;Ignored types return &lt;jk&gt;null&lt;/jk&gt; on the call to {@link JsonSchemaGeneratorSession#getSchema(ClassMeta)}.</em>
-<a class="jxr_linenumber" name="L934" href="#L934">934</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L935" href="#L935">935</a> <em class="jxr_javadoccomment">	 * @param cm The type to check.</em>
-<a class="jxr_linenumber" name="L936" href="#L936">936</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified type is ignored.</em>
-<a class="jxr_linenumber" name="L937" href="#L937">937</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L938" href="#L938">938</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isIgnoredType(ClassMeta&lt;?&gt; cm) {
-<a class="jxr_linenumber" name="L939" href="#L939">939</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : ignoreTypePatterns)
-<a class="jxr_linenumber" name="L940" href="#L940">940</a> 			<strong class="jxr_keyword">if</strong> (p.matcher(cm.getNameSimple()).matches() || p.matcher(cm.getName()).matches())
-<a class="jxr_linenumber" name="L941" href="#L941">941</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L942" href="#L942">942</a> 		<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L943" href="#L943">943</a> 	}
-<a class="jxr_linenumber" name="L944" href="#L944">944</a> 
-<a class="jxr_linenumber" name="L945" href="#L945">945</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L946" href="#L946">946</a> <em class="jxr_javadoccomment">	 * Add descriptions to types.</em>
-<a class="jxr_linenumber" name="L947" href="#L947">947</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L948" href="#L948">948</a> <em class="jxr_javadoccomment">	 * @see Builder#addDescriptionsTo(TypeCategory...)</em>
-<a class="jxr_linenumber" name="L949" href="#L949">949</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L950" href="#L950">950</a> <em class="jxr_javadoccomment">	 * 	Set of categories of types that descriptions should be automatically added to generated schemas.</em>
-<a class="jxr_linenumber" name="L951" href="#L951">951</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L952" href="#L952">952</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Set&lt;TypeCategory&gt; getAddDescriptionsTo() { <strong class="jxr_keyword">return</strong> addDescriptionsTo; }
-<a class="jxr_linenumber" name="L953" href="#L953">953</a> 
-<a class="jxr_linenumber" name="L954" href="#L954">954</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L955" href="#L955">955</a> <em class="jxr_javadoccomment">	 * Add examples.</em>
-<a class="jxr_linenumber" name="L956" href="#L956">956</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L957" href="#L957">957</a> <em class="jxr_javadoccomment">	 * @see Builder#addExamplesTo(TypeCategory...)</em>
-<a class="jxr_linenumber" name="L958" href="#L958">958</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L959" href="#L959">959</a> <em class="jxr_javadoccomment">	 * 	Set of categories of types that examples should be automatically added to generated schemas.</em>
-<a class="jxr_linenumber" name="L960" href="#L960">960</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L961" href="#L961">961</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Set&lt;TypeCategory&gt; getAddExamplesTo() { <strong class="jxr_keyword">return</strong> addExamplesTo; }
-<a class="jxr_linenumber" name="L962" href="#L962">962</a> 
-<a class="jxr_linenumber" name="L963" href="#L963">963</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L964" href="#L964">964</a> <em class="jxr_javadoccomment">	 * Bean schema definition mapper.</em>
-<a class="jxr_linenumber" name="L965" href="#L965">965</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L966" href="#L966">966</a> <em class="jxr_javadoccomment">	 * @see Builder#beanDefMapper(Class)</em>
-<a class="jxr_linenumber" name="L967" href="#L967">967</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L968" href="#L968">968</a> <em class="jxr_javadoccomment">	 * 	Interface to use for converting Bean classes to definition IDs and URIs.</em>
-<a class="jxr_linenumber" name="L969" href="#L969">969</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L970" href="#L970">970</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="BeanDefMapper" href="../../../../org/apache/juneau/jsonschema/BeanDefMapper.html#BeanDefMapper">BeanDefMapper</a> getBeanDefMapper() { <strong class="jxr_keyword">return</strong> beanDefMapperBean; }
-<a class="jxr_linenumber" name="L971" href="#L971">971</a> 
-<a class="jxr_linenumber" name="L972" href="#L972">972</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L973" href="#L973">973</a> <em class="jxr_javadoccomment">	 * Allow nested descriptions.</em>
-<a class="jxr_linenumber" name="L974" href="#L974">974</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L975" href="#L975">975</a> <em class="jxr_javadoccomment">	 * @see Builder#allowNestedDescriptions()</em>
-<a class="jxr_linenumber" name="L976" href="#L976">976</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L977" href="#L977">977</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if nested descriptions are allowed in schema definitions.</em>
-<a class="jxr_linenumber" name="L978" href="#L978">978</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L979" href="#L979">979</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isAllowNestedDescriptions() { <strong class="jxr_keyword">return</strong> allowNestedDescriptions; }
-<a class="jxr_linenumber" name="L980" href="#L980">980</a> 
-<a class="jxr_linenumber" name="L981" href="#L981">981</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L982" href="#L982">982</a> <em class="jxr_javadoccomment">	 * Allow nested examples.</em>
-<a class="jxr_linenumber" name="L983" href="#L983">983</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L984" href="#L984">984</a> <em class="jxr_javadoccomment">	 * @see Builder#allowNestedExamples()</em>
-<a class="jxr_linenumber" name="L985" href="#L985">985</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L986" href="#L986">986</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if nested examples are allowed in schema definitions.</em>
-<a class="jxr_linenumber" name="L987" href="#L987">987</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L988" href="#L988">988</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isAllowNestedExamples() { <strong class="jxr_keyword">return</strong> allowNestedExamples; }
-<a class="jxr_linenumber" name="L989" href="#L989">989</a> 
-<a class="jxr_linenumber" name="L990" href="#L990">990</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L991" href="#L991">991</a> <em class="jxr_javadoccomment">	 * Use bean definitions.</em>
-<a class="jxr_linenumber" name="L992" href="#L992">992</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L993" href="#L993">993</a> <em class="jxr_javadoccomment">	 * @see Builder#useBeanDefs()</em>
-<a class="jxr_linenumber" name="L994" href="#L994">994</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L995" href="#L995">995</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if schemas on beans will be serialized with &lt;js&gt;'$ref'&lt;/js&gt; tags.</em>
-<a class="jxr_linenumber" name="L996" href="#L996">996</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L997" href="#L997">997</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isUseBeanDefs() { <strong class="jxr_keyword">return</strong> useBeanDefs; }
-<a class="jxr_linenumber" name="L998" href="#L998">998</a> 
-<a class="jxr_linenumber" name="L999" href="#L999">999</a> 	@Override <em class="jxr_comment">/* Overridden from BeanTraverseContext */</em>
-<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 	<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
-<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.properties()
-<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 			.a(<span class="jxr_string">"addDescriptionsTo"</span>, addDescriptionsTo)
-<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 			.a(<span class="jxr_string">"addExamplesTo"</span>, addExamplesTo)
-<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 			.a(<span class="jxr_string">"allowNestedDescriptions"</span>, allowNestedDescriptions)
-<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 			.a(<span class="jxr_string">"allowNestedExamples"</span>, allowNestedExamples)
-<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 			.a(<span class="jxr_string">"beanDefMapper"</span>, beanDefMapper)
-<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 			.a(<span class="jxr_string">"ignoreTypes"</span>, ignoreTypes)
-<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 			.a(<span class="jxr_string">"useBeanDefs"</span>, useBeanDefs);
-<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 	}
-<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 
-<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 	JsonParser getJsonParser() { <strong class="jxr_keyword">return</strong> jsonParser; }
+<a class="jxr_linenumber" name="L902" href="#L902">902</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L903" href="#L903">903</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;List is unmodifiable.</em>
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L905" href="#L905">905</a> 	<strong class="jxr_keyword">public</strong> List&lt;Pattern&gt; getIgnoreTypes() { <strong class="jxr_keyword">return</strong> ignoreTypePatterns; }
+<a class="jxr_linenumber" name="L906" href="#L906">906</a> 
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> 	@Override
+<a class="jxr_linenumber" name="L908" href="#L908">908</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchemaBeanPropertyMeta" href="../../../../org/apache/juneau/jsonschema/JsonSchemaBeanPropertyMeta.html#JsonSchemaBeanPropertyMeta">JsonSchemaBeanPropertyMeta</a> getJsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {
+<a class="jxr_linenumber" name="L909" href="#L909">909</a> 		JsonSchemaBeanPropertyMeta m = jsonSchemaBeanPropertyMetas.get(bpm);
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L911" href="#L911">911</a> 			m = <strong class="jxr_keyword">new</strong> <a name="JsonSchemaBeanPropertyMeta" href="../../../../org/apache/juneau/jsonschema/JsonSchemaBeanPropertyMeta.html#JsonSchemaBeanPropertyMeta">JsonSchemaBeanPropertyMeta</a>(bpm, <strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L912" href="#L912">912</a> 			jsonSchemaBeanPropertyMetas.put(bpm, m);
+<a class="jxr_linenumber" name="L913" href="#L913">913</a> 		}
+<a class="jxr_linenumber" name="L914" href="#L914">914</a> 		<strong class="jxr_keyword">return</strong> m;
+<a class="jxr_linenumber" name="L915" href="#L915">915</a> 	}
+<a class="jxr_linenumber" name="L916" href="#L916">916</a> 
+<a class="jxr_linenumber" name="L917" href="#L917">917</a> 	@Override
+<a class="jxr_linenumber" name="L918" href="#L918">918</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchemaClassMeta" href="../../../../org/apache/juneau/jsonschema/JsonSchemaClassMeta.html#JsonSchemaClassMeta">JsonSchemaClassMeta</a> getJsonSchemaClassMeta(ClassMeta&lt;?&gt; cm) {
+<a class="jxr_linenumber" name="L919" href="#L919">919</a> 		JsonSchemaClassMeta m = jsonSchemaClassMetas.get(cm);
+<a class="jxr_linenumber" name="L920" href="#L920">920</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L921" href="#L921">921</a> 			m = <strong class="jxr_keyword">new</strong> <a name="JsonSchemaClassMeta" href="../../../../org/apache/juneau/jsonschema/JsonSchemaClassMeta.html#JsonSchemaClassMeta">JsonSchemaClassMeta</a>(cm, <strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L922" href="#L922">922</a> 			jsonSchemaClassMetas.put(cm, m);
+<a class="jxr_linenumber" name="L923" href="#L923">923</a> 		}
+<a class="jxr_linenumber" name="L924" href="#L924">924</a> 		<strong class="jxr_keyword">return</strong> m;
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> 	}
+<a class="jxr_linenumber" name="L926" href="#L926">926</a> 
+<a class="jxr_linenumber" name="L927" href="#L927">927</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchemaGeneratorSession" href="../../../../org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#JsonSchemaGeneratorSession">JsonSchemaGeneratorSession</a> getSession() { <strong class="jxr_keyword">return</strong> createSession().build(); }
+<a class="jxr_linenumber" name="L929" href="#L929">929</a> 
+<a class="jxr_linenumber" name="L930" href="#L930">930</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L931" href="#L931">931</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified type is ignored.</em>
+<a class="jxr_linenumber" name="L932" href="#L932">932</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L933" href="#L933">933</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L934" href="#L934">934</a> <em class="jxr_javadoccomment">	 * The type is ignored if it's specified in the {@link Builder#ignoreTypes(String...)} setting.</em>
+<a class="jxr_linenumber" name="L935" href="#L935">935</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;Ignored types return &lt;jk&gt;null&lt;/jk&gt; on the call to {@link JsonSchemaGeneratorSession#getSchema(ClassMeta)}.</em>
+<a class="jxr_linenumber" name="L936" href="#L936">936</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L937" href="#L937">937</a> <em class="jxr_javadoccomment">	 * @param cm The type to check.</em>
+<a class="jxr_linenumber" name="L938" href="#L938">938</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified type is ignored.</em>
+<a class="jxr_linenumber" name="L939" href="#L939">939</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L940" href="#L940">940</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isIgnoredType(ClassMeta&lt;?&gt; cm) {
+<a class="jxr_linenumber" name="L941" href="#L941">941</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : ignoreTypePatterns)
+<a class="jxr_linenumber" name="L942" href="#L942">942</a> 			<strong class="jxr_keyword">if</strong> (p.matcher(cm.getNameSimple()).matches() || p.matcher(cm.getName()).matches())
+<a class="jxr_linenumber" name="L943" href="#L943">943</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L944" href="#L944">944</a> 		<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L945" href="#L945">945</a> 	}
+<a class="jxr_linenumber" name="L946" href="#L946">946</a> 
+<a class="jxr_linenumber" name="L947" href="#L947">947</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> <em class="jxr_javadoccomment">	 * Add descriptions to types.</em>
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L950" href="#L950">950</a> <em class="jxr_javadoccomment">	 * @see Builder#addDescriptionsTo(TypeCategory...)</em>
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> <em class="jxr_javadoccomment">	 * 	Set of categories of types that descriptions should be automatically added to generated schemas.</em>
+<a class="jxr_linenumber" name="L953" href="#L953">953</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Set&lt;TypeCategory&gt; getAddDescriptionsTo() { <strong class="jxr_keyword">return</strong> addDescriptionsTo; }
+<a class="jxr_linenumber" name="L955" href="#L955">955</a> 
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L957" href="#L957">957</a> <em class="jxr_javadoccomment">	 * Add examples.</em>
+<a class="jxr_linenumber" name="L958" href="#L958">958</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L959" href="#L959">959</a> <em class="jxr_javadoccomment">	 * @see Builder#addExamplesTo(TypeCategory...)</em>
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L961" href="#L961">961</a> <em class="jxr_javadoccomment">	 * 	Set of categories of types that examples should be automatically added to generated schemas.</em>
+<a class="jxr_linenumber" name="L962" href="#L962">962</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L963" href="#L963">963</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Set&lt;TypeCategory&gt; getAddExamplesTo() { <strong class="jxr_keyword">return</strong> addExamplesTo; }
+<a class="jxr_linenumber" name="L964" href="#L964">964</a> 
+<a class="jxr_linenumber" name="L965" href="#L965">965</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> <em class="jxr_javadoccomment">	 * Bean schema definition mapper.</em>
+<a class="jxr_linenumber" name="L967" href="#L967">967</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L968" href="#L968">968</a> <em class="jxr_javadoccomment">	 * @see Builder#beanDefMapper(Class)</em>
+<a class="jxr_linenumber" name="L969" href="#L969">969</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L970" href="#L970">970</a> <em class="jxr_javadoccomment">	 * 	Interface to use for converting Bean classes to definition IDs and URIs.</em>
+<a class="jxr_linenumber" name="L971" href="#L971">971</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L972" href="#L972">972</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="BeanDefMapper" href="../../../../org/apache/juneau/jsonschema/BeanDefMapper.html#BeanDefMapper">BeanDefMapper</a> getBeanDefMapper() { <strong class="jxr_keyword">return</strong> beanDefMapperBean; }
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> 
+<a class="jxr_linenumber" name="L974" href="#L974">974</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L975" href="#L975">975</a> <em class="jxr_javadoccomment">	 * Allow nested descriptions.</em>
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L977" href="#L977">977</a> <em class="jxr_javadoccomment">	 * @see Builder#allowNestedDescriptions()</em>
+<a class="jxr_linenumber" name="L978" href="#L978">978</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L979" href="#L979">979</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if nested descriptions are allowed in schema definitions.</em>
+<a class="jxr_linenumber" name="L980" href="#L980">980</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L981" href="#L981">981</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isAllowNestedDescriptions() { <strong class="jxr_keyword">return</strong> allowNestedDescriptions; }
+<a class="jxr_linenumber" name="L982" href="#L982">982</a> 
+<a class="jxr_linenumber" name="L983" href="#L983">983</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L984" href="#L984">984</a> <em class="jxr_javadoccomment">	 * Allow nested examples.</em>
+<a class="jxr_linenumber" name="L985" href="#L985">985</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L986" href="#L986">986</a> <em class="jxr_javadoccomment">	 * @see Builder#allowNestedExamples()</em>
+<a class="jxr_linenumber" name="L987" href="#L987">987</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L988" href="#L988">988</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if nested examples are allowed in schema definitions.</em>
+<a class="jxr_linenumber" name="L989" href="#L989">989</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L990" href="#L990">990</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isAllowNestedExamples() { <strong class="jxr_keyword">return</strong> allowNestedExamples; }
+<a class="jxr_linenumber" name="L991" href="#L991">991</a> 
+<a class="jxr_linenumber" name="L992" href="#L992">992</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L993" href="#L993">993</a> <em class="jxr_javadoccomment">	 * Use bean definitions.</em>
+<a class="jxr_linenumber" name="L994" href="#L994">994</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L995" href="#L995">995</a> <em class="jxr_javadoccomment">	 * @see Builder#useBeanDefs()</em>
+<a class="jxr_linenumber" name="L996" href="#L996">996</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L997" href="#L997">997</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if schemas on beans will be serialized with &lt;js&gt;'$ref'&lt;/js&gt; tags.</em>
+<a class="jxr_linenumber" name="L998" href="#L998">998</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L999" href="#L999">999</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isUseBeanDefs() { <strong class="jxr_keyword">return</strong> useBeanDefs; }
+<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 
+<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 	@Override <em class="jxr_comment">/* Overridden from BeanTraverseContext */</em>
+<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 	<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
+<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.properties()
+<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 			.a(<span class="jxr_string">"addDescriptionsTo"</span>, addDescriptionsTo)
+<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 			.a(<span class="jxr_string">"addExamplesTo"</span>, addExamplesTo)
+<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 			.a(<span class="jxr_string">"allowNestedDescriptions"</span>, allowNestedDescriptions)
+<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 			.a(<span class="jxr_string">"allowNestedExamples"</span>, allowNestedExamples)
+<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 			.a(<span class="jxr_string">"beanDefMapper"</span>, beanDefMapper)
+<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 			.a(<span class="jxr_string">"ignoreTypes"</span>, ignoreTypes)
+<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 			.a(<span class="jxr_string">"useBeanDefs"</span>, useBeanDefs);
+<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 	}
 <a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 
-<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 	JsonSerializer getJsonSerializer() { <strong class="jxr_keyword">return</strong> jsonSerializer; }
-<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> }
+<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 	JsonParser getJsonParser() { <strong class="jxr_keyword">return</strong> jsonParser; }
+<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 
+<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 	JsonSerializer getJsonSerializer() { <strong class="jxr_keyword">return</strong> jsonSerializer; }
+<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

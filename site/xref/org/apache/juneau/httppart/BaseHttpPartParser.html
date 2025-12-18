@@ -149,7 +149,7 @@
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.</em>
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T parse(<a name="HttpPartType" href="../../../../org/apache/juneau/httppart/HttpPartType.html#HttpPartType">HttpPartType</a> partType, <a name="HttpPartSchema" href="../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> schema, String in, Type toType, Type...toTypeArgs) <strong class="jxr_keyword">throws</strong> ParseException, <a name="SchemaValidationException" href="../../../../org/apache/juneau/httppart/SchemaValidationException.html#SchemaValidationException">SchemaValidationException</a> {
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		assertVarargsNotNull(<span class="jxr_string">"toTypeArgs"</span>, toTypeArgs);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		assertArgNoNulls(<span class="jxr_string">"toTypeArgs"</span>, toTypeArgs);
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">return</strong> getPartSession().parse(partType, schema, in, getClassMeta(assertArgNotNull(<span class="jxr_string">"toType"</span>, toType), toTypeArgs));
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> }

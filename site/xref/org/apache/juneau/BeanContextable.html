@@ -366,7 +366,7 @@
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> beanDictionary(Class&lt;?&gt;...values) {
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			assertVarargsNotNull(<span class="jxr_string">"values"</span>, values);
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			assertArgNoNulls(<span class="jxr_string">"values"</span>, values);
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 			bcBuilder.beanDictionary(values);
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 		}
@@ -1473,7 +1473,7 @@
 <a class="jxr_linenumber" name="L1465" href="#L1465">1465</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L1466" href="#L1466">1466</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L1467" href="#L1467">1467</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> dictionaryOn(Class&lt;?&gt; on, Class&lt;?&gt;...values) {
-<a class="jxr_linenumber" name="L1468" href="#L1468">1468</a> 			assertVarargsNotNull(<span class="jxr_string">"values"</span>, values);
+<a class="jxr_linenumber" name="L1468" href="#L1468">1468</a> 			assertArgNoNulls(<span class="jxr_string">"values"</span>, values);
 <a class="jxr_linenumber" name="L1469" href="#L1469">1469</a> 			bcBuilder.dictionaryOn(assertArgNotNull(<span class="jxr_string">"on"</span>, on), values);
 <a class="jxr_linenumber" name="L1470" href="#L1470">1470</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1471" href="#L1471">1471</a> 		}
@@ -1857,7 +1857,7 @@
 <a class="jxr_linenumber" name="L1849" href="#L1849">1849</a> 			<strong class="jxr_keyword">return</strong> HashKey.of(
 <a class="jxr_linenumber" name="L1850" href="#L1850">1850</a> 				<strong class="jxr_keyword">super</strong>.hashKey(),
 <a class="jxr_linenumber" name="L1851" href="#L1851">1851</a> 				bcBuilder.hashKey(),
-<a class="jxr_linenumber" name="L1852" href="#L1852">1852</a> 				bc == <strong class="jxr_keyword">null</strong> ? 0 : bc.hashKey
+<a class="jxr_linenumber" name="L1852" href="#L1852">1852</a> 				bc == <strong class="jxr_keyword">null</strong> ? 0 : bc.getHashKey()
 <a class="jxr_linenumber" name="L1853" href="#L1853">1853</a> 			);
 <a class="jxr_linenumber" name="L1854" href="#L1854">1854</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L1855" href="#L1855">1855</a> 		}
@@ -2169,7 +2169,7 @@
 <a class="jxr_linenumber" name="L2161" href="#L2161">2161</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L2162" href="#L2162">2162</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L2163" href="#L2163">2163</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> interfaces(Class&lt;?&gt;...value) {
-<a class="jxr_linenumber" name="L2164" href="#L2164">2164</a> 			assertVarargsNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L2164" href="#L2164">2164</a> 			assertArgNoNulls(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L2165" href="#L2165">2165</a> 			bcBuilder.interfaces(value);
 <a class="jxr_linenumber" name="L2166" href="#L2166">2166</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L2167" href="#L2167">2167</a> 		}
@@ -2318,7 +2318,7 @@
 <a class="jxr_linenumber" name="L2310" href="#L2310">2310</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L2311" href="#L2311">2311</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L2312" href="#L2312">2312</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> notBeanClasses(Class&lt;?&gt;...values) {
-<a class="jxr_linenumber" name="L2313" href="#L2313">2313</a> 			assertVarargsNotNull(<span class="jxr_string">"values"</span>, values);
+<a class="jxr_linenumber" name="L2313" href="#L2313">2313</a> 			assertArgNoNulls(<span class="jxr_string">"values"</span>, values);
 <a class="jxr_linenumber" name="L2314" href="#L2314">2314</a> 			bcBuilder.notBeanClasses(values);
 <a class="jxr_linenumber" name="L2315" href="#L2315">2315</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L2316" href="#L2316">2316</a> 		}
@@ -2365,7 +2365,7 @@
 <a class="jxr_linenumber" name="L2357" href="#L2357">2357</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L2358" href="#L2358">2358</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L2359" href="#L2359">2359</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> notBeanPackages(String...values) {
-<a class="jxr_linenumber" name="L2360" href="#L2360">2360</a> 			assertVarargsNotNull(<span class="jxr_string">"values"</span>, values);
+<a class="jxr_linenumber" name="L2360" href="#L2360">2360</a> 			assertArgNoNulls(<span class="jxr_string">"values"</span>, values);
 <a class="jxr_linenumber" name="L2361" href="#L2361">2361</a> 			bcBuilder.notBeanPackages(values);
 <a class="jxr_linenumber" name="L2362" href="#L2362">2362</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L2363" href="#L2363">2363</a> 		}
@@ -2542,7 +2542,7 @@
 <a class="jxr_linenumber" name="L2534" href="#L2534">2534</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L2535" href="#L2535">2535</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L2536" href="#L2536">2536</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> sortProperties(Class&lt;?&gt;...on) {
-<a class="jxr_linenumber" name="L2537" href="#L2537">2537</a> 			assertVarargsNotNull(<span class="jxr_string">"on"</span>, on);
+<a class="jxr_linenumber" name="L2537" href="#L2537">2537</a> 			assertArgNoNulls(<span class="jxr_string">"on"</span>, on);
 <a class="jxr_linenumber" name="L2538" href="#L2538">2538</a> 			bcBuilder.sortProperties(on);
 <a class="jxr_linenumber" name="L2539" href="#L2539">2539</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L2540" href="#L2540">2540</a> 		}
@@ -2664,7 +2664,7 @@
 <a class="jxr_linenumber" name="L2656" href="#L2656">2656</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L2657" href="#L2657">2657</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L2658" href="#L2658">2658</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> swaps(Class&lt;?&gt;...values) {
-<a class="jxr_linenumber" name="L2659" href="#L2659">2659</a> 			assertVarargsNotNull(<span class="jxr_string">"values"</span>, values);
+<a class="jxr_linenumber" name="L2659" href="#L2659">2659</a> 			assertArgNoNulls(<span class="jxr_string">"values"</span>, values);
 <a class="jxr_linenumber" name="L2660" href="#L2660">2660</a> 			bcBuilder.swaps(values);
 <a class="jxr_linenumber" name="L2661" href="#L2661">2661</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L2662" href="#L2662">2662</a> 		}
@@ -2756,7 +2756,7 @@
 <a class="jxr_linenumber" name="L2748" href="#L2748">2748</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L2749" href="#L2749">2749</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L2750" href="#L2750">2750</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> swaps(Object...values) {
-<a class="jxr_linenumber" name="L2751" href="#L2751">2751</a> 			assertVarargsNotNull(<span class="jxr_string">"values"</span>, values);
+<a class="jxr_linenumber" name="L2751" href="#L2751">2751</a> 			assertArgNoNulls(<span class="jxr_string">"values"</span>, values);
 <a class="jxr_linenumber" name="L2752" href="#L2752">2752</a> 			bcBuilder.swaps(values);
 <a class="jxr_linenumber" name="L2753" href="#L2753">2753</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L2754" href="#L2754">2754</a> 		}

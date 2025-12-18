@@ -400,39 +400,39 @@
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 	<strong class="jxr_keyword">void</strong> a012_assertVarargsNotNull() {
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<em class="jxr_comment">// Should not throw when array and elements are not null</em>
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 		<strong class="jxr_keyword">var</strong> array = a(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>);
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		<strong class="jxr_keyword">var</strong> result = assertVarargsNotNull(<span class="jxr_string">"arg"</span>, array);
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		<strong class="jxr_keyword">var</strong> result = assertArgNoNulls(<span class="jxr_string">"arg"</span>, array);
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 		assertSame(array, result);
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 		
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<em class="jxr_comment">// Should not throw with empty array</em>
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<strong class="jxr_keyword">var</strong> emptyArray = <strong class="jxr_keyword">new</strong> String[0];
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<strong class="jxr_keyword">var</strong> result2 = assertVarargsNotNull(<span class="jxr_string">"arg"</span>, emptyArray);
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<strong class="jxr_keyword">var</strong> result2 = assertArgNoNulls(<span class="jxr_string">"arg"</span>, emptyArray);
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 		assertSame(emptyArray, result2);
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 		
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 		<em class="jxr_comment">// Should work with integer array</em>
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<strong class="jxr_keyword">var</strong> intArray = a(1, 2, 3);
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		<strong class="jxr_keyword">var</strong> result3 = assertVarargsNotNull(<span class="jxr_string">"arg"</span>, intArray);
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		<strong class="jxr_keyword">var</strong> result3 = assertArgNoNulls(<span class="jxr_string">"arg"</span>, intArray);
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 		assertSame(intArray, result3);
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 		
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<em class="jxr_comment">// Should work with object array</em>
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">var</strong> objArray = a(<strong class="jxr_keyword">new</strong> Object(), <strong class="jxr_keyword">new</strong> Object());
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		<strong class="jxr_keyword">var</strong> result4 = assertVarargsNotNull(<span class="jxr_string">"arg"</span>, objArray);
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		<strong class="jxr_keyword">var</strong> result4 = assertArgNoNulls(<span class="jxr_string">"arg"</span>, objArray);
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 		assertSame(objArray, result4);
 <a class="jxr_linenumber" name="L412" href="#L412">412</a> 		
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<em class="jxr_comment">// Should throw when array is null</em>
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, l(<span class="jxr_string">"arg"</span>, <span class="jxr_string">"cannot be null"</span>), () -&gt; {
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			assertVarargsNotNull(<span class="jxr_string">"arg"</span>, (String[])<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			assertArgNoNulls(<span class="jxr_string">"arg"</span>, (String[])<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 		});
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 		
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 		<em class="jxr_comment">// Should throw when element is null</em>
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<strong class="jxr_keyword">var</strong> nullElementArray = a(<span class="jxr_string">"a"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"c"</span>);
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, l(<span class="jxr_string">"arg"</span>, <span class="jxr_string">"parameter"</span>, <span class="jxr_string">"1"</span>), () -&gt; {
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 			assertVarargsNotNull(<span class="jxr_string">"arg"</span>, nullElementArray);
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 			assertArgNoNulls(<span class="jxr_string">"arg"</span>, nullElementArray);
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 		});
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 		
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<em class="jxr_comment">// Should fail on first null when multiple elements are null</em>
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">var</strong> multipleNullArray = a(<span class="jxr_string">"a"</span>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"d"</span>);
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"1"</span>, () -&gt; {
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			assertVarargsNotNull(<span class="jxr_string">"arg"</span>, multipleNullArray);
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			assertArgNoNulls(<span class="jxr_string">"arg"</span>, multipleNullArray);
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 		});
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 	}
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> }

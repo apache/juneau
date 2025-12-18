@@ -1300,7 +1300,7 @@
 <a class="jxr_linenumber" name="L1292" href="#L1292">1292</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="UriRelativity" href="../../../../org/apache/juneau/UriRelativity.html#UriRelativity">UriRelativity</a> uriRelativity;
 <a class="jxr_linenumber" name="L1293" href="#L1293">1293</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="UriResolution" href="../../../../org/apache/juneau/UriResolution.html#UriResolution">UriResolution</a> uriResolution;
 <a class="jxr_linenumber" name="L1294" href="#L1294">1294</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="MediaRanges" href="../../../../org/apache/juneau/MediaRanges.html#MediaRanges">MediaRanges</a> acceptRanges;
-<a class="jxr_linenumber" name="L1295" href="#L1295">1295</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="MediaType" href="../../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a>[] acceptMediaTypes;
+<a class="jxr_linenumber" name="L1295" href="#L1295">1295</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;MediaType&gt; acceptMediaTypes;
 <a class="jxr_linenumber" name="L1296" href="#L1296">1296</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="MediaType" href="../../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> producesMediaType;
 <a class="jxr_linenumber" name="L1297" href="#L1297">1297</a> 
 <a class="jxr_linenumber" name="L1298" href="#L1298">1298</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -1328,7 +1328,7 @@
 <a class="jxr_linenumber" name="L1320" href="#L1320">1320</a> 
 <a class="jxr_linenumber" name="L1321" href="#L1321">1321</a> 		<strong class="jxr_keyword">this</strong>.producesMediaType = MediaType.of(produces);
 <a class="jxr_linenumber" name="L1322" href="#L1322">1322</a> 		<strong class="jxr_keyword">this</strong>.acceptRanges = nn(accept) ? MediaRanges.of(accept) : MediaRanges.of(produces);
-<a class="jxr_linenumber" name="L1323" href="#L1323">1323</a> 		<strong class="jxr_keyword">this</strong>.acceptMediaTypes = nn(builder.accept) ? MediaType.ofAll(splita(builder.accept)) : a(<strong class="jxr_keyword">this</strong>.producesMediaType);
+<a class="jxr_linenumber" name="L1323" href="#L1323">1323</a> 		<strong class="jxr_keyword">this</strong>.acceptMediaTypes = u(nn(builder.accept) ? l(MediaType.ofAll(splita(builder.accept))) : l(<strong class="jxr_keyword">this</strong>.producesMediaType));
 <a class="jxr_linenumber" name="L1324" href="#L1324">1324</a> 	}
 <a class="jxr_linenumber" name="L1325" href="#L1325">1325</a> 
 <a class="jxr_linenumber" name="L1326" href="#L1326">1326</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
@@ -1374,7 +1374,7 @@
 <a class="jxr_linenumber" name="L1366" href="#L1366">1366</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1367" href="#L1367">1367</a> <em class="jxr_javadoccomment">	 * @return The media type.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L1368" href="#L1368">1368</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1369" href="#L1369">1369</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a name="MediaType" href="../../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> getPrimaryMediaType() { <strong class="jxr_keyword">return</strong> acceptMediaTypes[0]; }
+<a class="jxr_linenumber" name="L1369" href="#L1369">1369</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a name="MediaType" href="../../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> getPrimaryMediaType() { <strong class="jxr_keyword">return</strong> acceptMediaTypes.get(0); }
 <a class="jxr_linenumber" name="L1370" href="#L1370">1370</a> 
 <a class="jxr_linenumber" name="L1371" href="#L1371">1371</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L1372" href="#L1372">1372</a> <em class="jxr_javadoccomment">	 * Optional method that returns the response &lt;c&gt;Content-Type&lt;/c&gt; for this serializer if it is different from</em>

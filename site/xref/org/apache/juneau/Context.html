@@ -310,7 +310,7 @@
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<strong class="jxr_keyword">public</strong> Builder annotations(Annotation...values) {
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			assertVarargsNotNull(<span class="jxr_string">"values"</span>, values);
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			assertArgNoNulls(<span class="jxr_string">"values"</span>, values);
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 			annotations.addAll(l(values));
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 		}
@@ -320,11 +320,11 @@
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">		 * @param values</em>
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">		 * 	The annotations to register with the context.</em>
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">		 * 	&lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">		 * 	&lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; values.</em>
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<strong class="jxr_keyword">public</strong> Builder annotations(List&lt;Annotation&gt; values) {
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 			annotations.addAll(assertArgNotNull(<span class="jxr_string">"values"</span>, values));
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 			annotations.addAll(assertArgNoNulls(<span class="jxr_string">"values"</span>, values));
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 		}
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 
@@ -372,7 +372,7 @@
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">public</strong> Builder applyAnnotations(Class&lt;?&gt;...from) {
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 			assertVarargsNotNull(<span class="jxr_string">"from"</span>, from);
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 			assertArgNoNulls(<span class="jxr_string">"from"</span>, from);
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 			<strong class="jxr_keyword">return</strong> applyAnnotations((Object[])from);
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 		}
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 
@@ -460,7 +460,7 @@
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 		<strong class="jxr_keyword">public</strong> Builder applyAnnotations(Object...from) {
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			assertVarargsNotNull(<span class="jxr_string">"from"</span>, from);
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			assertArgNoNulls(<span class="jxr_string">"from"</span>, from);
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 			<strong class="jxr_keyword">var</strong> work = AnnotationWorkList.create();
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 			Arrays.stream(from).forEach(x -&gt; traverse(work, x));
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 			<strong class="jxr_keyword">return</strong> apply(work);
@@ -701,7 +701,7 @@
 <a class="jxr_linenumber" name="L693" href="#L693">693</a> <em class="jxr_javadoccomment">		 * 	&lt;br&gt;Cannot contain &lt;jk&gt;null&lt;/jk&gt; values.</em>
 <a class="jxr_linenumber" name="L694" href="#L694">694</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L695" href="#L695">695</a> 		<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> registerBuilders(Object...values) {
-<a class="jxr_linenumber" name="L696" href="#L696">696</a> 			assertVarargsNotNull(<span class="jxr_string">"values"</span>, values);
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 			assertArgNoNulls(<span class="jxr_string">"values"</span>, values);
 <a class="jxr_linenumber" name="L697" href="#L697">697</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> b : values) {
 <a class="jxr_linenumber" name="L698" href="#L698">698</a> 				<strong class="jxr_keyword">if</strong> (b == <strong class="jxr_keyword">this</strong>)
 <a class="jxr_linenumber" name="L699" href="#L699">699</a> 					builders.add(b);

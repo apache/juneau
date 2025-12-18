@@ -193,8 +193,8 @@
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">this</strong>.cat = <strong class="jxr_keyword">new</strong> Categories();
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<em class="jxr_comment">// We always immediately add this class meta to the bean context cache so that we can resolve recursive references.</em>
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">if</strong> (nn(beanContext) &amp;&amp; nn(beanContext.cmCache) &amp;&amp; isCacheable(innerClass))
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			beanContext.cmCache.put(innerClass, <strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">if</strong> (nn(beanContext) &amp;&amp; nn(beanContext.getCmCache()) &amp;&amp; isCacheable(innerClass))
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			beanContext.getCmCache().put(innerClass, <strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">var</strong> ap = beanContext.getAnnotationProvider();
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 
@@ -1367,7 +1367,7 @@
 <a class="jxr_linenumber" name="L1359" href="#L1359">1359</a> 
 <a class="jxr_linenumber" name="L1360" href="#L1360">1360</a> 		<strong class="jxr_keyword">var</strong> list = <strong class="jxr_keyword">new</strong> ArrayList&lt;ObjectSwap&lt;T,?&gt;&gt;();
 <a class="jxr_linenumber" name="L1361" href="#L1361">1361</a> 		<strong class="jxr_keyword">var</strong> swapArray = beanContext.getSwaps();
-<a class="jxr_linenumber" name="L1362" href="#L1362">1362</a> 		<strong class="jxr_keyword">if</strong> (swapArray != <strong class="jxr_keyword">null</strong> &amp;&amp; swapArray.length &gt; 0) {
+<a class="jxr_linenumber" name="L1362" href="#L1362">1362</a> 		<strong class="jxr_keyword">if</strong> (! swapArray.isEmpty()) {
 <a class="jxr_linenumber" name="L1363" href="#L1363">1363</a> 			<strong class="jxr_keyword">var</strong> innerClass = <strong class="jxr_keyword">inner</strong>();
 <a class="jxr_linenumber" name="L1364" href="#L1364">1364</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : swapArray)
 <a class="jxr_linenumber" name="L1365" href="#L1365">1365</a> 				<strong class="jxr_keyword">if</strong> (f.getNormalClass().isParentOf(innerClass))
@@ -1396,7 +1396,7 @@
 <a class="jxr_linenumber" name="L1388" href="#L1388">1388</a> 		<strong class="jxr_keyword">if</strong> (beanContext == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1389" href="#L1389">1389</a> 			<strong class="jxr_keyword">return</strong> l();
 <a class="jxr_linenumber" name="L1390" href="#L1390">1390</a> 		<strong class="jxr_keyword">var</strong> swapArray = beanContext.getSwaps();
-<a class="jxr_linenumber" name="L1391" href="#L1391">1391</a> 		<strong class="jxr_keyword">if</strong> (swapArray == <strong class="jxr_keyword">null</strong> || swapArray.length == 0)
+<a class="jxr_linenumber" name="L1391" href="#L1391">1391</a> 		<strong class="jxr_keyword">if</strong> (swapArray.isEmpty())
 <a class="jxr_linenumber" name="L1392" href="#L1392">1392</a> 			<strong class="jxr_keyword">return</strong> l();
 <a class="jxr_linenumber" name="L1393" href="#L1393">1393</a> 		<strong class="jxr_keyword">var</strong> list = <strong class="jxr_keyword">new</strong> ArrayList&lt;ObjectSwap&lt;?,?&gt;&gt;();
 <a class="jxr_linenumber" name="L1394" href="#L1394">1394</a> 		<strong class="jxr_keyword">var</strong> innerClass = <strong class="jxr_keyword">inner</strong>();
