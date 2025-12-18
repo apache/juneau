@@ -101,8 +101,8 @@
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">protected</strong> Builder(<a name="WriterSerializer" href="../../../../org/apache/juneau/serializer/WriterSerializer.html#WriterSerializer">WriterSerializer</a> copyFrom) {
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  			<strong class="jxr_keyword">super</strong>(assertArgNotNull(<span class="jxr_string">"copyFrom"</span>, copyFrom));
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			fileCharset = copyFrom.fileCharset;
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  			streamCharset = copyFrom.streamCharset;
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			fileCharset = copyFrom.getFileCharset();
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  			streamCharset = copyFrom.getStreamCharset();
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  			maxIndent = copyFrom.maxIndent;
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  			quoteChar = copyFrom.quoteChar;
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 			quoteCharOverride = copyFrom.quoteCharOverride;
@@ -988,8 +988,8 @@
 <a class="jxr_linenumber" name="L980" href="#L980">980</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> useWhitespace;
 <a class="jxr_linenumber" name="L981" href="#L981">981</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Character quoteChar;
 <a class="jxr_linenumber" name="L982" href="#L982">982</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Character quoteCharOverride;
-<a class="jxr_linenumber" name="L983" href="#L983">983</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Charset fileCharset;
-<a class="jxr_linenumber" name="L984" href="#L984">984</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Charset streamCharset;
+<a class="jxr_linenumber" name="L983" href="#L983">983</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Charset fileCharset;
+<a class="jxr_linenumber" name="L984" href="#L984">984</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Charset streamCharset;
 <a class="jxr_linenumber" name="L985" href="#L985">985</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> maxIndent;
 <a class="jxr_linenumber" name="L986" href="#L986">986</a> 
 <a class="jxr_linenumber" name="L987" href="#L987">987</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">char</strong> quoteCharValue;

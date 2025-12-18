@@ -163,9 +163,9 @@
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 			trimEmptyCollections = copyFrom.trimEmptyCollections;
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 			trimEmptyMaps = copyFrom.trimEmptyMaps;
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 			trimStrings = copyFrom.trimStrings;
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			uriContext = copyFrom.uriContext;
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			uriRelativity = copyFrom.uriRelativity;
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			uriResolution = copyFrom.uriResolution;
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			uriContext = copyFrom.getUriContext();
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			uriRelativity = copyFrom.getUriRelativity();
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			uriResolution = copyFrom.getUriResolution();
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			listener = copyFrom.listener;
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		}
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 
@@ -1296,9 +1296,9 @@
 <a class="jxr_linenumber" name="L1288" href="#L1288">1288</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Class&lt;? <strong class="jxr_keyword">extends</strong> SerializerListener&gt; listener;
 <a class="jxr_linenumber" name="L1289" href="#L1289">1289</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> String accept;
 <a class="jxr_linenumber" name="L1290" href="#L1290">1290</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> String produces;
-<a class="jxr_linenumber" name="L1291" href="#L1291">1291</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="UriContext" href="../../../../org/apache/juneau/UriContext.html#UriContext">UriContext</a> uriContext;
-<a class="jxr_linenumber" name="L1292" href="#L1292">1292</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="UriRelativity" href="../../../../org/apache/juneau/UriRelativity.html#UriRelativity">UriRelativity</a> uriRelativity;
-<a class="jxr_linenumber" name="L1293" href="#L1293">1293</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="UriResolution" href="../../../../org/apache/juneau/UriResolution.html#UriResolution">UriResolution</a> uriResolution;
+<a class="jxr_linenumber" name="L1291" href="#L1291">1291</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="UriContext" href="../../../../org/apache/juneau/UriContext.html#UriContext">UriContext</a> uriContext;
+<a class="jxr_linenumber" name="L1292" href="#L1292">1292</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="UriRelativity" href="../../../../org/apache/juneau/UriRelativity.html#UriRelativity">UriRelativity</a> uriRelativity;
+<a class="jxr_linenumber" name="L1293" href="#L1293">1293</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="UriResolution" href="../../../../org/apache/juneau/UriResolution.html#UriResolution">UriResolution</a> uriResolution;
 <a class="jxr_linenumber" name="L1294" href="#L1294">1294</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="MediaRanges" href="../../../../org/apache/juneau/MediaRanges.html#MediaRanges">MediaRanges</a> acceptRanges;
 <a class="jxr_linenumber" name="L1295" href="#L1295">1295</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;MediaType&gt; acceptMediaTypes;
 <a class="jxr_linenumber" name="L1296" href="#L1296">1296</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="MediaType" href="../../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> producesMediaType;
