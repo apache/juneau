@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.utils;
 
+import java.util.Collection;
+
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -349,11 +351,39 @@ public class AssertionUtils {
 	 * @return The same object.
 	 * @throws IllegalArgumentException Thrown if the specified varargs array or any of its elements are <jk>null</jk>.
 	 */
-	public static final <T> T[] assertVarargsNotNull(String name, T[] o) throws IllegalArgumentException {
+	public static final <T> T[] assertArgNoNulls(String name, T[] o) throws IllegalArgumentException {
 		assertArgNotNull(name, o);
 		for (var i = 0; i < o.length; i++)
 			assertArg(nn(o[i]), "Argument ''{0}'' parameter {1} cannot be null.", name, i);
 		return o;
+	}
+
+	/**
+	 * Throws an {@link IllegalArgumentException} if the specified collection or any of its elements are <jk>null</jk>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.AssertionUtils.*;
+	 *
+	 *	<jk>public</jk> <jk>void</jk> setValues(List&lt;String&gt; <jv>values</jv>) {
+	 *		<jsm>assertCollectionArgNotNull</jsm>(<js>"values"</js>, <jv>values</jv>);
+	 *		...
+	 *	}
+	 * </p>
+	 *
+	 * @param <T> The element type.
+	 * @param <C> The collection type.
+	 * @param name The argument name.
+	 * @param collection The collection to check.
+	 * @return The same collection.
+	 * @throws IllegalArgumentException Thrown if the specified collection or any of its elements are <jk>null</jk>.
+	 */
+	public static final <T, C extends Collection<T>> C assertArgNoNulls(String name, C collection) throws IllegalArgumentException {
+		assertArgNotNull(name, collection);
+		var i = 0;
+		for (var element : collection)
+			assertArg(nn(element), "Argument ''{0}'' element at index {1} cannot be null.", name, i++);
+		return collection;
 	}
 
 }

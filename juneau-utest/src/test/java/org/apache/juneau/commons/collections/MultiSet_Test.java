@@ -320,13 +320,14 @@ class MultiSet_Test extends TestBase {
 		assertFalse(it.hasNext()); // i2 is null, should return false
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	@Test
 	void equals_notASet_otherTypes() {
 		// Line 308: return (o instanceof Set o2) && ...
 		// Test when object is not a Set (testing the instanceof check)
 		var l1 = l(a("1", "2"));
 		var multiSet = new MultiSet<>(l1);
-		
+
 		// Not a Set - should return false immediately due to instanceof check
 		assertFalse(multiSet.equals("not a set"));
 		assertFalse(multiSet.equals(123));

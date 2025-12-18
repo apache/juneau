@@ -23,7 +23,6 @@ import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static java.util.Comparator.*;
 
 import java.beans.*;
 import java.io.*;
@@ -175,18 +174,6 @@ public class BeanContext extends Context {
 
 		private static final Cache<HashKey,BeanContext> CACHE = Cache.of(HashKey.class, BeanContext.class).build();
 
-		private static Set<Class<?>> classSet() {
-			return new TreeSet<>(comparing(Class::getName));
-		}
-
-		private static Set<Class<?>> toClassSet(Collection<Class<?>> copy) {
-			if (copy == null)
-				return null;
-			var x = classSet();
-			x.addAll(copy);
-			return x;
-		}
-
 		private Visibility beanClassVisibility;
 		private Visibility beanConstructorVisibility;
 		private Visibility beanMethodVisibility;
@@ -213,9 +200,9 @@ public class BeanContext extends Context {
 		private Locale locale;
 		private TimeZone timeZone;
 		private Class<? extends PropertyNamer> propertyNamer;
-		private List<Class<?>> beanDictionary;
+		private List<ClassInfo> beanDictionary;
 		private List<Object> swaps;
-		private Set<Class<?>> notBeanClasses;
+		private Set<ClassInfo> notBeanClasses;
 		private Set<String> notBeanPackages;
 
 		/**
@@ -245,7 +232,7 @@ public class BeanContext extends Context {
 			ignoreUnknownEnumValues = env("BeanContext.ignoreUnknownEnumValues", false);
 			locale = env("BeanContext.locale").map(x -> Locale.forLanguageTag(x)).orElse(Locale.getDefault());
 			mediaType = env("BeanContext.mediaType").map(x -> MediaType.of(x)).orElse(null);
-			notBeanClasses = classSet();
+			notBeanClasses = new TreeSet<>();
 			notBeanPackages = new TreeSet<>();
 			propertyNamer = null;
 			sortProperties = env("BeanContext.sortProperties", false);
@@ -284,7 +271,7 @@ public class BeanContext extends Context {
 			ignoreUnknownEnumValues = copyFrom.ignoreUnknownEnumValues;
 			locale = copyFrom.locale;
 			mediaType = copyFrom.mediaType;
-			notBeanClasses = toClassSet(copyFrom.notBeanClasses);
+			notBeanClasses = new TreeSet<>(copyFrom.notBeanClasses);
 			notBeanPackages = toSortedSet(copyFrom.notBeanPackages, false);
 			propertyNamer = copyFrom.propertyNamer;
 			sortProperties = copyFrom.sortProperties;
@@ -323,7 +310,7 @@ public class BeanContext extends Context {
 			ignoreUnknownEnumValues = copyFrom.ignoreUnknownEnumValues;
 			locale = copyFrom.locale;
 			mediaType = copyFrom.mediaType;
-			notBeanClasses = toClassSet(copyFrom.notBeanClasses);
+			notBeanClasses = new TreeSet<>(copyFrom.notBeanClasses);
 			notBeanPackages = toSortedSet(copyFrom.notBeanPackages);
 			propertyNamer = copyFrom.propertyNamer;
 			sortProperties = copyFrom.sortProperties;
@@ -462,7 +449,7 @@ public class BeanContext extends Context {
 		 * @return The bean dictionary list.
 		 * @see #beanDictionary(Class...)
 		 */
-		public List<Class<?>> beanDictionary() {
+		public List<ClassInfo> beanDictionary() {
 			return beanDictionary;
 		}
 
@@ -549,7 +536,7 @@ public class BeanContext extends Context {
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.Beanp#dictionary()}
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary_replace()}
-		 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
+		 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(ClassInfo...)}
 		 * </ul>
 		 *
 		 * @param values
@@ -557,24 +544,38 @@ public class BeanContext extends Context {
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public Builder beanDictionary(Class<?>...values) {
-			assertVarargsNotNull("values", values);
+		public Builder beanDictionary(ClassInfo...values) {
+			assertArgNoNulls("values", values);
 			return beanDictionary(l(values));
 		}
 
 		/**
-		 * Same as {@link #beanDictionary(Class...)} but allows you to pass in a collection of classes.
+		 * Same as {@link #beanDictionary(ClassInfo...)} but allows you to pass in a collection of class info objects.
 		 *
 		 * @param values
 		 * 	The values to add to this setting.
-		 * 	<br>Cannot be <jk>null</jk>.
+		 * 	<br>Cannot be <jk>null</jk> or contain <jk>null</jk> values.
 		 * @return This object.
-		 * @see #beanDictionary(Class...)
+		 * @see #beanDictionary(ClassInfo...)
 		 */
-		public Builder beanDictionary(Collection<Class<?>> values) {
-			assertArgNotNull("values", values);
+		public Builder beanDictionary(Collection<ClassInfo> values) {
+			assertArgNoNulls("values", values);
 			beanDictionary().addAll(0, values);
 			return this;
+		}
+
+		/**
+		 * Convenience method for {@link #beanDictionary(ClassInfo...)} that accepts {@link Class} objects.
+		 *
+		 * @param values
+		 * 	The values to add to this setting.
+		 * 	<br>Cannot contain <jk>null</jk> values.
+		 * @return This object.
+		 * @see #beanDictionary(ClassInfo...)
+		 */
+		public Builder beanDictionary(Class<?>...values) {
+			assertArgNoNulls("values", values);
+			return beanDictionary(Stream.of(values).map(ReflectionUtils::info).toArray(ClassInfo[]::new));
 		}
 
 		/**
@@ -1733,7 +1734,7 @@ public class BeanContext extends Context {
 		 */
 		public Builder dictionaryOn(Class<?> on, Class<?>...values) {
 			assertArgNotNull("on", on);
-			assertVarargsNotNull("values", values);
+			assertArgNoNulls("values", values);
 			return annotations(BeanAnnotation.create(on).dictionary(values).build());
 		}
 
@@ -2549,7 +2550,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder interfaces(Class<?>...value) {
-			assertVarargsNotNull("value", value);
+			assertArgNoNulls("value", value);
 			for (var v : value)
 				annotations(BeanAnnotation.create(v).interfaceClass(v).build());
 			return this;
@@ -2642,15 +2643,15 @@ public class BeanContext extends Context {
 		}
 
 		/**
-		 * Returns the list of not-bean classes.
+		 * Returns the set of not-bean classes.
 		 *
 		 * <p>
-		 * Gives access to the inner list if you need to make more than simple additions via {@link #notBeanClasses(Class...)}.
+		 * Gives access to the inner set if you need to make more than simple additions via {@link #notBeanClasses(ClassInfo...)}.
 		 *
-		 * @return The list of not-bean classes.
-		 * @see #notBeanClasses(Class...)
+		 * @return The set of not-bean classes.
+		 * @see #notBeanClasses(ClassInfo...)
 		 */
-		public Set<Class<?>> notBeanClasses() {
+		public Set<ClassInfo> notBeanClasses() {
 			return notBeanClasses;
 		}
 
@@ -2700,29 +2701,42 @@ public class BeanContext extends Context {
 		 *
 		 * @param values
 		 * 	The values to add to this setting.
-		 * 	<br>Values can consist of any of the following types:
-		 * 	<ul>
-		 * 		<li>Classes.
-		 * 		<li>Arrays and collections of classes.
-		 * 	</ul>
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public Builder notBeanClasses(Class<?>...values) {
-			return notBeanClasses(l(values));
+		public Builder notBeanClasses(ClassInfo...values) {
+			assertArgNoNulls("values", values);
+			notBeanClasses().addAll(l(values));
+			return this;
 		}
 
 		/**
-		 * Same as {@link #notBeanClasses(Class...)} but allows you to pass in a collection of classes.
+		 * Same as {@link #notBeanClasses(ClassInfo...)} but allows you to pass in a collection of class info objects.
 		 *
 		 * @param values
 		 * 	The values to add to this setting.
+		 * 	<br>Cannot be <jk>null</jk> or contain <jk>null</jk> values.
 		 * @return This object.
-		 * @see #notBeanClasses(Class...)
+		 * @see #notBeanClasses(ClassInfo...)
 		 */
-		public Builder notBeanClasses(Collection<Class<?>> values) {
-			assertArgNotNull("values", values);
+		public Builder notBeanClasses(Collection<ClassInfo> values) {
+			assertArgNoNulls("values", values);
 			notBeanClasses().addAll(values);
 			return this;
+		}
+
+		/**
+		 * Convenience method for {@link #notBeanClasses(ClassInfo...)} that accepts {@link Class} objects.
+		 *
+		 * @param values
+		 * 	The values to add to this setting.
+		 * 	<br>Cannot contain <jk>null</jk> values.
+		 * @return This object.
+		 * @see #notBeanClasses(ClassInfo...)
+		 */
+		public Builder notBeanClasses(Class<?>...values) {
+			assertArgNoNulls("values", values);
+			return notBeanClasses(Stream.of(values).map(ReflectionUtils::info).toArray(ClassInfo[]::new));
 		}
 
 		/**
@@ -2743,12 +2757,12 @@ public class BeanContext extends Context {
 		 *
 		 * @param values
 		 * 	The values to add to this setting.
-		 * 	<br>Cannot be <jk>null</jk>.
+		 * 	<br>Cannot be <jk>null</jk> or contain <jk>null</jk> values.
 		 * @return This object.
 		 * @see #notBeanPackages(String...)
 		 */
 		public Builder notBeanPackages(Collection<String> values) {
-			assertArgNotNull("values", values);
+			assertArgNoNulls("values", values);
 			notBeanPackages().addAll(values);
 			return this;
 		}
@@ -2791,7 +2805,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder notBeanPackages(String...values) {
-			assertVarargsNotNull("values", values);
+			assertArgNoNulls("values", values);
 			return notBeanPackages(l(values));
 		}
 
@@ -2970,7 +2984,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder sortProperties(Class<?>...on) {
-			assertVarargsNotNull("on", on);
+			assertArgNoNulls("on", on);
 			for (var c : on)
 				annotations(BeanAnnotation.create(c).sort(true).build());
 			return this;
@@ -3110,7 +3124,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder swaps(Class<?>...values) {
-			assertVarargsNotNull("values", values);
+			assertArgNoNulls("values", values);
 			swaps().addAll(0, accumulate(values));
 			return this;
 		}
@@ -3198,7 +3212,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder swaps(Object...values) {
-			assertVarargsNotNull("values", values);
+			assertArgNoNulls("values", values);
 			swaps().addAll(0, accumulate(values));
 			return this;
 		}
@@ -3503,7 +3517,7 @@ public class BeanContext extends Context {
 	 * Any beans in packages in this list will not be considered beans.
 	 */
 	// @formatter:off
-	private static final String[] DEFAULT_NOTBEAN_PACKAGES = {
+	private static final List<String> DEFAULT_NOTBEAN_PACKAGES = l(
 		"java.lang",
 		"java.lang.annotation",
 		"java.lang.ref",
@@ -3512,7 +3526,7 @@ public class BeanContext extends Context {
 		"java.net",
 		"java.nio.*",
 		"java.util.*"
-	};
+	);
 	// @formatter:on
 
 	/*
@@ -3520,15 +3534,15 @@ public class BeanContext extends Context {
 	 * Anything in this list will not be considered beans.
 	 */
 	// @formatter:off
-	private static final Class<?>[] DEFAULT_NOTBEAN_CLASSES = {
-		Map.class,
-		Collection.class,
-		Reader.class,
-		Writer.class,
-		InputStream.class,
-		OutputStream.class,
-		Throwable.class
-	};
+	private static final List<ClassInfo> DEFAULT_NOTBEAN_CLASSES = l(
+		info(Map.class),
+		info(Collection.class),
+		info(Reader.class),
+		info(Writer.class),
+		info(InputStream.class),
+		info(OutputStream.class),
+		info(Throwable.class)
+	);
 	// @formatter:on
 
 	/** Default config.  All default settings. */
@@ -3549,49 +3563,48 @@ public class BeanContext extends Context {
 		return new Builder();
 	}
 
-	protected final boolean beanMapPutReturnsOldValue;
-	protected final boolean beansRequireDefaultConstructor;
-	protected final boolean beansRequireSerializable;
-	protected final boolean beansRequireSettersForGetters;
-	protected final boolean beansRequireSomeProperties;
-	protected final boolean findFluentSetters;
-	protected final boolean ignoreInvocationExceptionsOnGetters;
-	protected final boolean ignoreInvocationExceptionsOnSetters;
-	protected final boolean ignoreMissingSetters;
-	protected final boolean ignoreTransientFields;
-	protected final boolean ignoreUnknownBeanProperties;
-	protected final boolean ignoreUnknownEnumValues;
-	protected final boolean ignoreUnknownNullBeanProperties;
-	protected final boolean sortProperties;
-	protected final boolean useEnumNames;
-	protected final boolean useInterfaceProxies;
-	protected final boolean useJavaBeanIntrospector;
-	protected final Class<? extends PropertyNamer> propertyNamer;
-	protected final Class<?>[] notBeanClassesArray;
-	protected final ClassMeta<Class> cmClass;  // Reusable ClassMeta that represents general Classes.
-	protected final ClassMeta<Object> cmObject;  // Reusable ClassMeta that represents general Objects.
-	protected final ClassMeta<String> cmString;  // Reusable ClassMeta that represents general Strings.
-	protected final HashKey hashKey;
-	protected final List<Class<?>> beanDictionary;
-	protected final List<Class<?>> notBeanClasses;
-	protected final List<Object> swaps;
-	protected final List<String> notBeanPackages;
-	protected final Locale locale;
-	protected final Map<Class,ClassMeta> cmCache;
-	protected final MediaType mediaType;
-	protected final ObjectSwap[] swapArray;
-	protected final String typePropertyName;
-	protected final String[] notBeanPackageNames;
-	protected final String[] notBeanPackagePrefixes;
-	protected final TimeZone timeZone;
-	protected final Visibility beanClassVisibility;
-	protected final Visibility beanConstructorVisibility;
-	protected final Visibility beanFieldVisibility;
-	protected final Visibility beanMethodVisibility;
+	private final AtomicReference<WriterSerializer> beanToStringSerializer = new AtomicReference<>();
 	private final BeanRegistry beanRegistry;
 	private final BeanSession defaultSession;
+	private final boolean beanMapPutReturnsOldValue;
+	private final boolean beansRequireDefaultConstructor;
+	private final boolean beansRequireSerializable;
+	private final boolean beansRequireSettersForGetters;
+	private final boolean beansRequireSomeProperties;
+	private final boolean findFluentSetters;
+	private final boolean ignoreInvocationExceptionsOnGetters;
+	private final boolean ignoreInvocationExceptionsOnSetters;
+	private final boolean ignoreMissingSetters;
+	private final boolean ignoreTransientFields;
+	private final boolean ignoreUnknownBeanProperties;
+	private final boolean ignoreUnknownEnumValues;
+	private final boolean ignoreUnknownNullBeanProperties;
+	private final boolean sortProperties;
+	private final boolean useEnumNames;
+	private final boolean useInterfaceProxies;
+	private final boolean useJavaBeanIntrospector;
+	private final Class<? extends PropertyNamer> propertyNamer;
+	private final ClassMeta<Class> cmClass;  // Reusable ClassMeta that represents general Classes.
+	private final ClassMeta<Object> cmObject;  // Reusable ClassMeta that represents general Objects.
+	private final ClassMeta<String> cmString;  // Reusable ClassMeta that represents general Strings.
+	private final HashKey hashKey;
+	private final List<ClassInfo> beanDictionary;
+	private final List<ClassInfo> notBeanClasses;
+	private final List<Object> swaps;
+	private final List<String> notBeanPackages;
+	private final Locale locale;
+	private final Map<Class,ClassMeta> cmCache;
+	private final MediaType mediaType;
+	private final List<ObjectSwap<?,?>> objectSwaps;
 	private final PropertyNamer propertyNamerBean;
-	private final AtomicReference<WriterSerializer> beanToStringSerializer = new AtomicReference<>();
+	private final String typePropertyName;
+	private final Set<String> notBeanPackageNames;
+	private final List<String> notBeanPackagePrefixes;
+	private final TimeZone timeZone;
+	private final Visibility beanClassVisibility;
+	private final Visibility beanConstructorVisibility;
+	private final Visibility beanFieldVisibility;
+	private final Visibility beanMethodVisibility;
 
 	/**
 	 * Constructor.
@@ -3603,7 +3616,7 @@ public class BeanContext extends Context {
 
 		beanClassVisibility = builder.beanClassVisibility;
 		beanConstructorVisibility = builder.beanConstructorVisibility;
-		beanDictionary = opt(builder.beanDictionary).map(Collections::unmodifiableList).orElse(l());
+		beanDictionary = u(copyOf(builder.beanDictionary));
 		beanFieldVisibility = builder.beanFieldVisibility;
 		beanMapPutReturnsOldValue = builder.beanMapPutReturnsOldValue;
 		beanMethodVisibility = builder.beanMethodVisibility;
@@ -3622,22 +3635,23 @@ public class BeanContext extends Context {
 		ignoreUnknownNullBeanProperties = ! builder.disableIgnoreUnknownNullBeanProperties;
 		locale = nn(builder.locale) ? builder.locale : Locale.getDefault();
 		mediaType = builder.mediaType;
-		notBeanClasses = opt(builder.notBeanClasses).map(ArrayList::new).map(Collections::unmodifiableList).orElse(l());
-		notBeanPackages = opt(builder.notBeanPackages).map(ArrayList::new).map(Collections::unmodifiableList).orElse(l());
+		notBeanPackages = u(new ArrayList<>(builder.notBeanPackages));
 		propertyNamer = nn(builder.propertyNamer) ? builder.propertyNamer : BasicPropertyNamer.class;
 		sortProperties = builder.sortProperties;
-		swaps = opt(builder.swaps).map(Collections::unmodifiableList).orElse(l());
+		swaps = u(copyOf(builder.swaps));
 		timeZone = builder.timeZone;
 		typePropertyName = nn(builder.typePropertyName) ? builder.typePropertyName : "_type";
 		useEnumNames = builder.useEnumNames;
 		useInterfaceProxies = ! builder.disableInterfaceProxies;
 		useJavaBeanIntrospector = builder.useJavaBeanIntrospector;
 
-		notBeanClassesArray = notBeanClasses.isEmpty() ? DEFAULT_NOTBEAN_CLASSES : Stream.of(notBeanClasses, l(DEFAULT_NOTBEAN_CLASSES)).flatMap(Collection::stream).toArray(Class[]::new);
+		var builderNotBeanClasses = new ArrayList<>(builder.notBeanClasses);
+		notBeanClasses = builderNotBeanClasses.isEmpty() ? DEFAULT_NOTBEAN_CLASSES : Stream.concat(builderNotBeanClasses.stream(), DEFAULT_NOTBEAN_CLASSES.stream()).distinct().toList();
 
-		String[] _notBeanPackages = notBeanPackages.isEmpty() ? DEFAULT_NOTBEAN_PACKAGES : Stream.of(notBeanPackages, l(DEFAULT_NOTBEAN_PACKAGES)).flatMap(Collection::stream).toArray(String[]::new);
-		notBeanPackageNames = Stream.of(_notBeanPackages).filter(x -> ! x.endsWith(".*")).toArray(String[]::new);
-		notBeanPackagePrefixes = Stream.of(_notBeanPackages).filter(x -> x.endsWith(".*")).map(x -> x.substring(0, x.length() - 2)).toArray(String[]::new);
+		List<String> _notBeanPackages = notBeanPackages.isEmpty() ? DEFAULT_NOTBEAN_PACKAGES : Stream.concat(notBeanPackages.stream(), DEFAULT_NOTBEAN_PACKAGES.stream()).toList();
+		LinkedHashSet<String> _notBeanPackageNames = _notBeanPackages.stream().filter(x -> ! x.endsWith(".*")).collect(Collectors.toCollection(LinkedHashSet::new));
+		notBeanPackageNames = u(_notBeanPackageNames);
+		notBeanPackagePrefixes = _notBeanPackages.stream().filter(x -> x.endsWith(".*")).map(x -> x.substring(0, x.length() - 2)).toList();
 
 		try {
 			propertyNamerBean = propertyNamer.getDeclaredConstructor().newInstance();
@@ -3645,21 +3659,21 @@ public class BeanContext extends Context {
 			throw toRex(e);
 		}
 
-		LinkedList<ObjectSwap<?,?>> _swaps = new LinkedList<>();
+		var _objectSwaps = new LinkedList<ObjectSwap<?,?>>();
 		swaps.forEach(x -> {
 			if (x instanceof ObjectSwap<?,?> os) {
-				_swaps.add(os);
+				_objectSwaps.add(os);
 			} else {
 				var ci = info((Class<?>)x);
 				if (ci.isChildOf(ObjectSwap.class))
-					_swaps.add(BeanCreator.of(ObjectSwap.class).type(ci).run());
+					_objectSwaps.add(BeanCreator.of(ObjectSwap.class).type(ci).run());
 				else if (ci.isChildOf(Surrogate.class))
-					_swaps.addAll(SurrogateSwap.findObjectSwaps(ci.inner(), this));
+					_objectSwaps.addAll(SurrogateSwap.findObjectSwaps(ci.inner(), this));
 				else
 					throw rex("Invalid class {0} specified in BeanContext.swaps property.  Must be a subclass of ObjectSwap or Surrogate.", cn(ci.inner()));
 			}
 		});
-		swapArray = _swaps.toArray(new ObjectSwap[_swaps.size()]);
+		objectSwaps = u(_objectSwaps);
 
 		cmCache = new ConcurrentHashMap<>();
 		cmCache.put(String.class, new ClassMeta(String.class, this));
@@ -3668,7 +3682,7 @@ public class BeanContext extends Context {
 		cmObject = cmCache.get(Object.class);
 		cmClass = cmCache.get(Class.class);
 
-		beanRegistry = new BeanRegistry(this, null);
+		beanRegistry = new BeanRegistry(this, null, list());
 		defaultSession = createSession().unmodifiable().build();
 	}
 
@@ -3762,8 +3776,10 @@ public class BeanContext extends Context {
 	 * @see BeanContext.Builder#beanDictionary()
 	 * @return
 	 * 	The list of classes that make up the bean dictionary in this bean context.
+	 * 	<br>Never <jk>null</jk>.
+	 * 	<br>List is unmodifiable.
 	 */
-	public final List<Class<?>> getBeanDictionary() { return beanDictionary; }
+	public final List<ClassInfo> getBeanDictionary() { return beanDictionary; }
 
 	/**
 	 * Minimum bean field visibility.
@@ -3780,13 +3796,13 @@ public class BeanContext extends Context {
 	 *
 	 * @param <T> The class type to get the meta-data on.
 	 * @param c The class to get the meta-data on.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return
 	 * 	The {@link BeanMeta} for the specified class, or <jk>null</jk> if the class is not a bean per the settings on
 	 * 	this context.
 	 */
 	public final <T> BeanMeta<T> getBeanMeta(Class<T> c) {
-		if (c == null)
-			return null;
+		assertArgNotNull("c", c);
 		return getClassMeta(c).getBeanMeta();
 	}
 
@@ -3876,11 +3892,11 @@ public class BeanContext extends Context {
 	 *
 	 * @param <T> The class of the object being passed in.
 	 * @param o The class to find the class type for.
-	 * @return The ClassMeta object, or <jk>null</jk> if {@code o} is <jk>null</jk>.
+	 * 	<br>Cannot be <jk>null</jk>.
+	 * @return The ClassMeta object.
 	 */
 	public final <T> ClassMeta<T> getClassMetaForObject(T o) {
-		if (o == null)
-			return null;
+		assertArgNotNull("o", o);
 		return (ClassMeta<T>)getClassMeta(o.getClass());
 	}
 
@@ -3903,6 +3919,41 @@ public class BeanContext extends Context {
 	public final MediaType getDefaultMediaType() { return mediaType; }
 
 	/**
+	 * Hash key.
+	 *
+	 * @return The hash key.
+	 */
+	protected final HashKey getHashKey() { return hashKey; }
+
+	/**
+	 * Class metadata cache.
+	 *
+	 * @return The class metadata cache.
+	 */
+	protected final Map<Class,ClassMeta> getCmCache() { return cmCache; }
+
+	/**
+	 * Locale.
+	 *
+	 * @return The locale.
+	 */
+	protected final Locale getLocale() { return locale; }
+
+	/**
+	 * Media type.
+	 *
+	 * @return The media type.
+	 */
+	protected final MediaType getMediaType() { return mediaType; }
+
+	/**
+	 * Time zone.
+	 *
+	 * @return The time zone.
+	 */
+	protected final TimeZone getTimeZone() { return timeZone; }
+
+	/**
 	 * Time zone.
 	 *
 	 * @see BeanContext.Builder#timeZone(TimeZone)
@@ -3916,9 +3967,12 @@ public class BeanContext extends Context {
 	 *
 	 * @see BeanContext.Builder#notBeanPackages(String...)
 	 * @return
-	 * 	The list of fully-qualified package names to exclude from being classified as beans.
+	 * 	The set of fully-qualified package names to exclude from being classified as beans.
+	 * 	<br>Never <jk>null</jk>.
+	 * 	<br>Set is unmodifiable.
+	 * 	<br>Backed by a {@link LinkedHashSet} to preserve insertion order.
 	 */
-	public final String[] getNotBeanPackagesNames() { return notBeanPackageNames; }
+	public final Set<String> getNotBeanPackagesNames() { return notBeanPackageNames; }
 
 	/**
 	 * Bean property namer.
@@ -3938,8 +3992,10 @@ public class BeanContext extends Context {
 	 * @see BeanContext.Builder#swaps(Class...)
 	 * @return
 	 * 	The list POJO swaps defined.
+	 * 	<br>Never <jk>null</jk>.
+	 * 	<br>List is unmodifiable.
 	 */
-	public final ObjectSwap<?,?>[] getSwaps() { return swapArray; }
+	public final List<ObjectSwap<?,?>> getSwaps() { return objectSwaps; }
 
 	/**
 	 * Returns <jk>true</jk> if the specified bean context shares the same cache as this bean context.
@@ -3948,22 +4004,12 @@ public class BeanContext extends Context {
 	 * Useful for testing purposes.
 	 *
 	 * @param bc The bean context to compare to.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return <jk>true</jk> if the bean contexts have equivalent settings and thus share caches.
 	 */
 	public final boolean hasSameCache(BeanContext bc) {
-		return bc.cmCache == this.cmCache;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified object is a bean.
-	 *
-	 * @param o The object to test.
-	 * @return <jk>true</jk> if the specified object is a bean.  <jk>false</jk> if the bean is <jk>null</jk>.
-	 */
-	public boolean isBean(Object o) {
-		if (o == null)
-			return false;
-		return getClassMetaForObject(o).isBean();
+		assertArgNotNull("bc", bc);
+		return bc.getCmCache() == this.getCmCache();
 	}
 
 	/**
@@ -4135,10 +4181,12 @@ public class BeanContext extends Context {
 	 *
 	 * @param <T> The class of the object being wrapped.
 	 * @param c The name of the class to create a new instance of.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new instance of the class.
 	 * @see BeanSession#newBeanMap(Class)
 	 */
 	public <T> BeanMap<T> newBeanMap(Class<T> c) {
+		assertArgNotNull("c", c);
 		return defaultSession.newBeanMap(c);
 	}
 
@@ -4155,11 +4203,13 @@ public class BeanContext extends Context {
 	 * </p>
 	 *
 	 * @param <T> The class of the object being wrapped.
-	 * @param object The object to wrap in a map interface.  Must not be null.
+	 * @param object The object to wrap in a map interface.
+	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return The wrapped object.
 	 * @see BeanSession#toBeanMap(Object)
 	 */
 	public <T> BeanMap<T> toBeanMap(T object) {
+		assertArgNotNull("object", object);
 		return defaultSession.toBeanMap(object);
 	}
 
@@ -4168,7 +4218,7 @@ public class BeanContext extends Context {
 	 * Resolves the 'genericized' class meta at the specified position in the ClassMeta array.
 	 */
 	private ClassMeta<?> getTypedClassMeta(ClassMeta<?>[] c, int pos) {
-		ClassMeta<?> cm = c[pos++];
+		var cm = c[pos++];
 		if (cm.isCollection() || cm.isOptional()) {
 			var ce = c.length == pos ? object() : getTypedClassMeta(c, pos);
 			return (ce.isObject() ? cm : new ClassMeta(cm, null, null, ce));
@@ -4183,7 +4233,7 @@ public class BeanContext extends Context {
 	private ClassMeta<?> resolveType(Type...t) {
 		for (var tt : t) {
 			if (nn(tt)) {
-				ClassMeta<?> cm = getClassMeta(tt);
+				var cm = getClassMeta(tt);
 				if (tt != cmObject)
 					return cm;
 			}
@@ -4221,7 +4271,7 @@ public class BeanContext extends Context {
 	 * @return The serializer.  May be <jk>null</jk> if all initialization has occurred.
 	 */
 	protected WriterSerializer getBeanToStringSerializer() {
-		WriterSerializer result = beanToStringSerializer.get();
+		var result = beanToStringSerializer.get();
 		if (result == null) {
 			if (JsonSerializer.DEFAULT == null)
 				return null;
@@ -4236,11 +4286,13 @@ public class BeanContext extends Context {
 	/**
 	 * Bean class exclusions.
 	 *
-	 * @see BeanContext.Builder#notBeanClasses(Class...)
+	 * @see BeanContext.Builder#notBeanClasses(ClassInfo...)
 	 * @return
 	 * 	The list of classes that are explicitly not beans.
+	 * 	<br>Never <jk>null</jk>.
+	 * 	<br>List is unmodifiable.
 	 */
-	protected final Class<?>[] getNotBeanClasses() { return notBeanClassesArray; }
+	protected final List<ClassInfo> getNotBeanClasses() { return notBeanClasses; }
 
 	/**
 	 * Bean package exclusions.
@@ -4248,8 +4300,10 @@ public class BeanContext extends Context {
 	 * @see BeanContext.Builder#notBeanPackages(String...)
 	 * @return
 	 * 	The list of package name prefixes to exclude from being classified as beans.
+	 * 	<br>Never <jk>null</jk>.
+	 * 	<br>List is unmodifiable.
 	 */
-	protected final String[] getNotBeanPackagesPrefixes() { return notBeanPackagePrefixes; }
+	protected final List<String> getNotBeanPackagesPrefixes() { return notBeanPackagePrefixes; }
 
 	/**
 	 * Ignore transient fields.
@@ -4280,7 +4334,7 @@ public class BeanContext extends Context {
 				if (pn.startsWith(p2))
 					return true;
 		}
-		for (var exclude : notBeanClassesArray)
+		for (var exclude : notBeanClasses)
 			if (ci.isChildOf(exclude))
 				return true;
 		return false;
@@ -4343,8 +4397,8 @@ public class BeanContext extends Context {
 	 * @return The new {@code ClassMeta} object wrapped around the type.
 	 */
 	protected final <T> ClassMeta<T> resolveClassMeta(AnnotationInfo<Beanp> p, ClassInfo ci, TypeVariables typeVarImpls) {
-		ClassMeta<T> cm = resolveClassMeta(ci, typeVarImpls);
-		ClassMeta<T> cm2 = cm;
+		var cm = resolveClassMeta(ci, typeVarImpls);
+		var cm2 = cm;
 
 		if (nn(p)) {
 			var beanp = p.inner();
@@ -4353,21 +4407,21 @@ public class BeanContext extends Context {
 				cm2 = resolveClassMeta(beanp.type(), typeVarImpls);
 
 			if (cm2.isMap()) {
-				Class<?>[] pParams = (beanp.params().length == 0 ? a(Object.class, Object.class) : beanp.params());
+				var pParams = (beanp.params().length == 0 ? a(Object.class, Object.class) : beanp.params());
 				if (pParams.length != 2)
 					throw rex("Invalid number of parameters specified for Map (must be 2): {0}", pParams.length);
-				ClassMeta<?> keyType = resolveType(pParams[0], cm2.getKeyType(), cm.getKeyType());
-				ClassMeta<?> valueType = resolveType(pParams[1], cm2.getValueType(), cm.getValueType());
+				var keyType = resolveType(pParams[0], cm2.getKeyType(), cm.getKeyType());
+				var valueType = resolveType(pParams[1], cm2.getValueType(), cm.getValueType());
 				if (keyType.isObject() && valueType.isObject())
 					return cm2;
 				return new ClassMeta<>(cm2, keyType, valueType, null);
 			}
 
 			if (cm2.isCollection() || cm2.isOptional()) {
-				Class<?>[] pParams = (beanp.params().length == 0 ? a(Object.class) : beanp.params());
+				var pParams = (beanp.params().length == 0 ? a(Object.class) : beanp.params());
 				if (pParams.length != 1)
 					throw rex("Invalid number of parameters specified for {1} (must be 1): {0}", pParams.length, (cm2.isCollection() ? "Collection" : cm2.isOptional() ? "Optional" : "Array"));
-				ClassMeta<?> elementType = resolveType(pParams[0], cm2.getElementType(), cm.getElementType());
+				var elementType = resolveType(pParams[0], cm2.getElementType(), cm.getElementType());
 				if (elementType.isObject())
 					return cm2;
 				return new ClassMeta<>(cm2, null, null, elementType);
@@ -4416,7 +4470,7 @@ public class BeanContext extends Context {
 
 		if (o instanceof ParameterizedType o2) {
 			if (! o2.getRawType().equals(Enum.class)) {
-				List<ClassMeta<?>> l = new LinkedList<>();
+				var l = new LinkedList<ClassMeta<?>>();
 				for (var pt2 : o2.getActualTypeArguments()) {
 					if (pt2 instanceof WildcardType || pt2 instanceof TypeVariable)
 						return null;
@@ -4482,20 +4536,20 @@ public class BeanContext extends Context {
 			return resolveClassMeta(ci.innerType(), typeVars);
 		}
 
-		Class<?> c = TypeVariables.resolve(o, typeVars);
+		var c = TypeVariables.resolve(o, typeVars);
 
 		// This can happen when trying to resolve the "E getFirst()" method on LinkedList, whose type is a TypeVariable
 		// These should just resolve to Object.
 		if (c == null)
 			return object();
 
-		ClassMeta rawType = getClassMeta(c);
+		var rawType = getClassMeta(c);
 
 		// If this is a Map or Collection, and the parameter types aren't part
 		// of the class definition itself (e.g. class AddressBook extends List<Person>),
 		// then we need to figure out the parameters.
 		if (rawType.isMap() || rawType.isCollection() || rawType.isOptional()) {
-			ClassMeta[] params = findParameters(o, c);
+			var params = findParameters(o, c);
 			if (params == null)
 				return rawType;
 			if (rawType.isMap()) {
@@ -4512,7 +4566,7 @@ public class BeanContext extends Context {
 
 		if (rawType.isArray()) {
 			if (o instanceof GenericArrayType o2) {
-				ClassMeta elementType = resolveClassMeta(o2.getGenericComponentType(), typeVars);
+				var elementType = resolveClassMeta(o2.getGenericComponentType(), typeVars);
 				return new ClassMeta(rawType, null, null, elementType);
 			}
 		}

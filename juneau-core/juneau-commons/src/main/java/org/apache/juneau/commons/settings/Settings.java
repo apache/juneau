@@ -224,7 +224,7 @@ public class Settings {
 		 */
 		@SafeVarargs
 		public final Builder setSources(SettingSource...sources) {
-			assertVarargsNotNull("sources", sources);
+			assertArgNoNulls("sources", sources);
 			this.sources.clear();
 			for (var source : sources) {
 				this.sources.add(source);

@@ -19,7 +19,11 @@ package org.apache.juneau;
 import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Locale;
+import java.util.TimeZone;
+
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.settings.Settings;
 import org.apache.juneau.json.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
@@ -28,6 +32,11 @@ class BeanContext_Test extends TestBase {
 
 	BeanContext bc = BeanContext.DEFAULT;
 	BeanSession bs = BeanContext.DEFAULT_SESSION;
+
+	@AfterEach
+	void tearDown() {
+		Settings.get().clearLocal();
+	}
 
 	public interface A1 {
 		int getF1();
@@ -65,5 +74,105 @@ class BeanContext_Test extends TestBase {
 
 		var p2 = JsonParser.create().ignoreUnknownEnumValues().build();
 		assertNull(p2.parse("'UNKNOWN'", TestEnum.class));
+	}
+
+	//====================================================================================================
+	// BeanContext.Builder locale, mediaType, and timeZone from Settings
+	//====================================================================================================
+
+	@Test void c01_locale_fromSettings() {
+		Settings.get().setLocal("BeanContext.locale", "fr-CA");
+		try {
+			var bc = BeanContext.create().build();
+			assertEquals(Locale.forLanguageTag("fr-CA"), bc.getLocale());
+		} finally {
+			Settings.get().clearLocal();
+		}
+	}
+
+	@Test void c02_locale_defaultWhenNotSet() {
+		var bc = BeanContext.create().build();
+		assertEquals(Locale.getDefault(), bc.getLocale());
+	}
+
+	@Test void c03_mediaType_fromSettings() {
+		Settings.get().setLocal("BeanContext.mediaType", "application/json");
+		try {
+			var bc = BeanContext.create().build();
+			assertEquals(MediaType.of("application/json"), bc.getMediaType());
+		} finally {
+			Settings.get().clearLocal();
+		}
+	}
+
+	@Test void c04_mediaType_nullWhenNotSet() {
+		var bc = BeanContext.create().build();
+		assertNull(bc.getMediaType());
+	}
+
+	@Test void c05_timeZone_fromSettings() {
+		Settings.get().setLocal("BeanContext.timeZone", "America/New_York");
+		try {
+			var bc = BeanContext.create().build();
+			assertEquals(TimeZone.getTimeZone("America/New_York"), bc.getTimeZone());
+		} finally {
+			Settings.get().clearLocal();
+		}
+	}
+
+	@Test void c06_timeZone_nullWhenNotSet() {
+		var bc = BeanContext.create().build();
+		assertNull(bc.getTimeZone());
+	}
+
+	//====================================================================================================
+	// BeanContext.copy() - Copy constructor coverage
+	//====================================================================================================
+
+	@Test void d01_copy() {
+		// Create a BeanContext with some properties set to exercise the copy constructor
+		var original = BeanContext.create()
+			.sortProperties()
+			.locale(Locale.CANADA)
+			.mediaType(MediaType.JSON)
+			.timeZone(TimeZone.getTimeZone("America/New_York"))
+			.build();
+
+		// Call copy() which uses the copy constructor Builder(BeanContext copyFrom)
+		// This exercises lines 273-277 which convert boolean fields from BeanContext to Builder disable flags
+		var builder = original.copy();
+
+		// Build a new context from the copied builder
+		var copied = builder.build();
+
+		// Verify the copied context has the same values
+		assertEquals(original.getBeanClassVisibility(), copied.getBeanClassVisibility());
+		assertEquals(original.getBeanConstructorVisibility(), copied.getBeanConstructorVisibility());
+		assertEquals(original.getBeanFieldVisibility(), copied.getBeanFieldVisibility());
+		assertEquals(original.getBeanMethodVisibility(), copied.getBeanMethodVisibility());
+		assertEquals(original.getBeanDictionary(), copied.getBeanDictionary());
+		assertEquals(original.getLocale(), copied.getLocale());
+		assertEquals(original.getMediaType(), copied.getMediaType());
+		assertEquals(original.getTimeZone(), copied.getTimeZone());
+	}
+
+	//====================================================================================================
+	// BeanContext.Builder.impl() - Line 2372 coverage
+	//====================================================================================================
+
+	@Test void e01_impl() {
+		// Create a BeanContext to use as the implementation
+		var impl = BeanContext.create()
+			.sortProperties()
+			.locale(Locale.CANADA)
+			.build();
+
+		// Call impl() which exercises line 2372: super.impl(value);
+		var builder = BeanContext.create()
+			.impl(impl);
+
+		// Build should return the pre-instantiated context
+		var result = builder.build();
+		assertSame(impl, result);
 	}
 }

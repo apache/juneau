@@ -185,8 +185,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.cat = new Categories();
 
 		// We always immediately add this class meta to the bean context cache so that we can resolve recursive references.
-		if (nn(beanContext) && nn(beanContext.cmCache) && isCacheable(innerClass))
-			beanContext.cmCache.put(innerClass, this);
+		if (nn(beanContext) && nn(beanContext.getCmCache()) && isCacheable(innerClass))
+			beanContext.getCmCache().put(innerClass, this);
 
 		var ap = beanContext.getAnnotationProvider();
 
@@ -1359,7 +1359,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 		var list = new ArrayList<ObjectSwap<T,?>>();
 		var swapArray = beanContext.getSwaps();
-		if (swapArray != null && swapArray.length > 0) {
+		if (! swapArray.isEmpty()) {
 			var innerClass = inner();
 			for (var f : swapArray)
 				if (f.getNormalClass().isParentOf(innerClass))
@@ -1388,7 +1388,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (beanContext == null)
 			return l();
 		var swapArray = beanContext.getSwaps();
-		if (swapArray == null || swapArray.length == 0)
+		if (swapArray.isEmpty())
 			return l();
 		var list = new ArrayList<ObjectSwap<?,?>>();
 		var innerClass = inner();

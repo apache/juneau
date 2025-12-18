@@ -1292,7 +1292,7 @@ public class Serializer extends BeanTraverseContext {
 	protected final UriRelativity uriRelativity;
 	protected final UriResolution uriResolution;
 	private final MediaRanges acceptRanges;
-	private final MediaType[] acceptMediaTypes;
+	private final List<MediaType> acceptMediaTypes;
 	private final MediaType producesMediaType;
 
 	/**
@@ -1320,7 +1320,7 @@ public class Serializer extends BeanTraverseContext {
 
 		this.producesMediaType = MediaType.of(produces);
 		this.acceptRanges = nn(accept) ? MediaRanges.of(accept) : MediaRanges.of(produces);
-		this.acceptMediaTypes = nn(builder.accept) ? MediaType.ofAll(splita(builder.accept)) : a(this.producesMediaType);
+		this.acceptMediaTypes = u(nn(builder.accept) ? l(MediaType.ofAll(splita(builder.accept))) : l(this.producesMediaType));
 	}
 
 	@Override /* Overridden from Context */
@@ -1366,7 +1366,7 @@ public class Serializer extends BeanTraverseContext {
 	 *
 	 * @return The media type.  Never <jk>null</jk>.
 	 */
-	public final MediaType getPrimaryMediaType() { return acceptMediaTypes[0]; }
+	public final MediaType getPrimaryMediaType() { return acceptMediaTypes.get(0); }
 
 	/**
 	 * Optional method that returns the response <c>Content-Type</c> for this serializer if it is different from

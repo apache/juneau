@@ -31,6 +31,11 @@ This document outlines the rules, guidelines, and best practices that AI assista
 
 ## Core Working Principles
 
+### 0. Change Evaluation
+- After each code modification, provide a brief (1-2 sentence) evaluation of the change
+- Explain what was changed and why it improves the codebase
+- This helps document the reasoning behind modifications and ensures changes are intentional
+
 ### 1. Code Quality and Consistency
 - Follow existing code patterns and conventions
 - Maintain consistency with the existing codebase

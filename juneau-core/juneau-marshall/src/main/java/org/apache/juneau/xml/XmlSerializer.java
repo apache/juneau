@@ -182,7 +182,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 			disableAutoDetectNamespaces = copyFrom.disableAutoDetectNamespaces;
 			disableJsonTags = copyFrom.disableJsonTags;
 			enableNamespaces = copyFrom.enableNamespaces;
-			namespaces = copyOf(copyFrom.namespaces);
+			namespaces = copyFrom.namespaces == null ? null : new ArrayList<>(copyFrom.namespaces);
 			textNodeDelimiter = copyFrom.textNodeDelimiter;
 		}
 
@@ -200,7 +200,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 			disableAutoDetectNamespaces = ! copyFrom.autoDetectNamespaces;
 			disableJsonTags = ! copyFrom.addJsonTags;
 			enableNamespaces = copyFrom.enableNamespaces;
-			namespaces = copyFrom.namespaces.length == 0 ? null : list(copyFrom.namespaces);
+			namespaces = copyFrom.namespaces.isEmpty() ? null : new ArrayList<>(copyFrom.namespaces);
 			textNodeDelimiter = copyFrom.textNodeDelimiter;
 		}
 
@@ -826,7 +826,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * @return This object.
 		 */
 		public Builder namespaces(Namespace...values) {
-			assertVarargsNotNull("values", values);
+			assertArgNoNulls("values", values);
 			namespaces = addAll(namespaces, values);
 			return this;
 		}
@@ -1185,7 +1185,6 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		}
 	}
 
-	private static final Namespace[] EMPTY_NAMESPACE_ARRAY = {};
 
 	/** Default serializer without namespaces. */
 	public static final XmlSerializer DEFAULT = new XmlSerializer(create());
@@ -1222,7 +1221,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	protected final boolean autoDetectNamespaces;
 	protected final boolean enableNamespaces;
 	protected final Namespace defaultNamespace;
-	protected final Namespace[] namespaces;
+	protected final List<Namespace> namespaces;
 	protected final String textNodeDelimiter;
 
 	private final boolean addBeanTypes;
@@ -1244,7 +1243,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		autoDetectNamespaces = ! builder.disableAutoDetectNamespaces;
 		defaultNamespace = nn(builder.defaultNamespace) ? builder.defaultNamespace : DEFAULT_JUNEAU_NAMESPACE;
 		enableNamespaces = builder.enableNamespaces;
-		namespaces = nn(builder.namespaces) ? builder.namespaces.toArray(EMPTY_NAMESPACE_ARRAY) : EMPTY_NAMESPACE_ARRAY;
+		namespaces = u(nn(builder.namespaces) ? new ArrayList<>(builder.namespaces) : new ArrayList<>());
 		textNodeDelimiter = builder.textNodeDelimiter;
 		addBeanTypes = addBeanTypesXml || super.isAddBeanTypes();
 	}
@@ -1307,8 +1306,10 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	 * @see Builder#namespaces(Namespace...)
 	 * @return
 	 * 	The default list of namespaces associated with this serializer.
+	 * 	<br>Never <jk>null</jk>.
+	 * 	<br>List is unmodifiable.
 	 */
-	protected final Namespace[] getNamespaces() { return namespaces; }
+	protected final List<Namespace> getNamespaces() { return namespaces; }
 
 	/**
 	 * Add <js>"_type"</js> properties when needed.

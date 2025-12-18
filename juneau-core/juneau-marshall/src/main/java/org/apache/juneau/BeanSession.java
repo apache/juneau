@@ -72,9 +72,9 @@ public class BeanSession extends ContextSession {
 		protected Builder(BeanContext ctx) {
 			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
-			locale = ctx.locale;
-			mediaType = ctx.mediaType;
-			timeZone = ctx.timeZone;
+			locale = ctx.getLocale();
+			mediaType = ctx.getMediaType();
+			timeZone = ctx.getTimeZone();
 		}
 
 		@Override /* Overridden from Builder */
@@ -535,8 +535,10 @@ public class BeanSession extends ContextSession {
 	 * @see BeanContext.Builder#beanDictionary(Class...)
 	 * @return
 	 * 	The list of classes that make up the bean dictionary in this bean context.
+	 * 	<br>Never <jk>null</jk>.
+	 * 	<br>List is unmodifiable.
 	 */
-	public final List<Class<?>> getBeanDictionary() { return ctx.getBeanDictionary(); }
+	public final List<ClassInfo> getBeanDictionary() { return ctx.getBeanDictionary(); }
 
 	/**
 	 * Minimum bean field visibility.
@@ -714,20 +716,24 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Bean class exclusions.
 	 *
-	 * @see BeanContext.Builder#notBeanClasses(Class...)
+	 * @see BeanContext.Builder#notBeanClasses(ClassInfo...)
 	 * @return
 	 * 	The list of classes that are explicitly not beans.
+	 * 	<br>Never <jk>null</jk>.
+	 * 	<br>List is unmodifiable.
 	 */
-	public final Class<?>[] getNotBeanClasses() { return ctx.getNotBeanClasses(); }
+	public final List<ClassInfo> getNotBeanClasses() { return ctx.getNotBeanClasses(); }
 
 	/**
 	 * Bean package exclusions.
 	 *
 	 * @see BeanContext.Builder#notBeanPackages(String...)
 	 * @return
-	 * 	The list of fully-qualified package names to exclude from being classified as beans.
+	 * 	The set of fully-qualified package names to exclude from being classified as beans.
+	 * 	<br>Never <jk>null</jk>.
+	 * 	<br>Set is unmodifiable.
 	 */
-	public final String[] getNotBeanPackagesNames() { return ctx.getNotBeanPackagesNames(); }
+	public final Set<String> getNotBeanPackagesNames() { return ctx.getNotBeanPackagesNames(); }
 
 	/**
 	 * Bean property namer.
@@ -744,8 +750,10 @@ public class BeanSession extends ContextSession {
 	 * @see BeanContext.Builder#swaps(Class...)
 	 * @return
 	 * 	The list POJO swaps defined.
+	 * 	<br>Never <jk>null</jk>.
+	 * 	<br>List is unmodifiable.
 	 */
-	public final ObjectSwap<?,?>[] getSwaps() { return ctx.getSwaps(); }
+	public final List<ObjectSwap<?,?>> getSwaps() { return ctx.getSwaps(); }
 
 	/**
 	 * Time zone.
@@ -1626,8 +1634,10 @@ public class BeanSession extends ContextSession {
 	 * @see BeanContext.Builder#notBeanPackages(String...)
 	 * @return
 	 * 	The list of package name prefixes to exclude from being classified as beans.
+	 * 	<br>Never <jk>null</jk>.
+	 * 	<br>List is unmodifiable.
 	 */
-	protected final String[] getNotBeanPackagesPrefixes() { return ctx.getNotBeanPackagesPrefixes(); }
+	protected final List<String> getNotBeanPackagesPrefixes() { return ctx.getNotBeanPackagesPrefixes(); }
 
 	/**
 	 * Creates either an {@link JsonMap} or {@link LinkedHashMap} depending on whether the key type is

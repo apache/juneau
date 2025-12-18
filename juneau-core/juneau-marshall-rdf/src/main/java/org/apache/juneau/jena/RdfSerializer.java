@@ -1182,7 +1182,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * @return This object.
 		 */
 		public Builder namespaces(Namespace...values) {
-			assertVarargsNotNull("values", values);
+			assertArgNoNulls("values", values);
 			namespaces = addAll(namespaces, values);
 			return this;
 		}

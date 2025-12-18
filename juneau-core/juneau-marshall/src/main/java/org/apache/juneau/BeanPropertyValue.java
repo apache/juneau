@@ -23,7 +23,6 @@ import org.apache.juneau.commons.collections.*;
 
 /**
  * Represents a simple bean property value and the meta-data associated with it.
- *
  */
 public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 

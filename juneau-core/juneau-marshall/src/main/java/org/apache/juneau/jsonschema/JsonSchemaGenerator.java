@@ -154,7 +154,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * @return This object.
 		 */
 		public Builder addDescriptionsTo(TypeCategory...values) {
-			assertVarargsNotNull("values", values);
+			assertArgNoNulls("values", values);
 			addDescriptionsTo = addAll(addDescriptionsTo, values);
 			return this;
 		}
@@ -194,7 +194,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * @return This object.
 		 */
 		public Builder addExamplesTo(TypeCategory...values) {
-			assertVarargsNotNull("values", values);
+			assertArgNoNulls("values", values);
 			addExamplesTo = addAll(addExamplesTo, values);
 			return this;
 		}
@@ -613,7 +613,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * @return This object.
 		 */
 		public Builder ignoreTypes(String...values) {
-			assertVarargsNotNull("values", values);
+			assertArgNoNulls("values", values);
 			ignoreTypes = addAll(ignoreTypes, values);
 			return this;
 		}
@@ -851,7 +851,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	private final BeanDefMapper beanDefMapperBean;
 	private final Map<BeanPropertyMeta,JsonSchemaBeanPropertyMeta> jsonSchemaBeanPropertyMetas = new ConcurrentHashMap<>();
 	private final Map<ClassMeta<?>,JsonSchemaClassMeta> jsonSchemaClassMetas = new ConcurrentHashMap<>();
-	private final Pattern[] ignoreTypePatterns;
+	private final List<Pattern> ignoreTypePatterns;
 
 	/**
 	 * Constructor.
@@ -871,7 +871,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 
 		Set<Pattern> ignoreTypePatterns = set();
 		ignoreTypes.forEach(y -> split(y, x -> ignoreTypePatterns.add(Pattern.compile(x.replace(".", "\\.").replace("*", ".*")))));
-		this.ignoreTypePatterns = ignoreTypePatterns.toArray(new Pattern[ignoreTypePatterns.size()]);
+		this.ignoreTypePatterns = u(new ArrayList<>(ignoreTypePatterns));
 
 		try {
 			beanDefMapperBean = beanDefMapper.getDeclaredConstructor().newInstance();
@@ -899,8 +899,10 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * @see Builder#ignoreTypes(String...)
 	 * @return
 	 * 	Custom schema information for particular class types.
+	 * 	<br>Never <jk>null</jk>.
+	 * 	<br>List is unmodifiable.
 	 */
-	public List<Pattern> getIgnoreTypes() { return l(ignoreTypePatterns); }
+	public List<Pattern> getIgnoreTypes() { return ignoreTypePatterns; }
 
 	@Override
 	public JsonSchemaBeanPropertyMeta getJsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {

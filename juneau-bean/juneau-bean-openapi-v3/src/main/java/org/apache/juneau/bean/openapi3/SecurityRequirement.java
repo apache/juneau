@@ -60,7 +60,7 @@ public class SecurityRequirement extends OpenApiElement {
 	 */
 	public SecurityRequirement addRequirement(String schemeName, String...scopes) {
 		assertArgNotNull("schemeName", schemeName);
-		assertVarargsNotNull("scopes", scopes);
+		assertArgNoNulls("scopes", scopes);
 		if (requirements == null)
 			requirements = new LinkedHashMap<>();
 		requirements.put(schemeName, l(scopes));

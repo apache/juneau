@@ -997,7 +997,7 @@ public class Parser extends BeanContextable {
 	protected final int debugOutputLines;
 	protected final Class<? extends ParserListener> listener;
 	protected final String consumes;
-	private final MediaType[] consumesArray;
+	private final List<MediaType> consumesArray;
 
 	/**
 	 * Constructor.
@@ -1016,10 +1016,11 @@ public class Parser extends BeanContextable {
 		unbuffered = builder.unbuffered;
 
 		String[] _consumes = splita(nn(consumes) ? consumes : "");
-		this.consumesArray = new MediaType[_consumes.length];
-		for (var i = 0; i < _consumes.length; i++) {
-			this.consumesArray[i] = MediaType.of(_consumes[i]);
+		List<MediaType> _consumesList = new ArrayList<>();
+		for (var consume : _consumes) {
+			_consumesList.add(MediaType.of(consume));
 		}
+		this.consumesArray = u(_consumesList);
 	}
 
 	/**
@@ -1074,14 +1075,14 @@ public class Parser extends BeanContextable {
 	 *
 	 * @return The list of media types.  Never <jk>null</jk>.
 	 */
-	public final List<MediaType> getMediaTypes() { return l(consumesArray); }
+	public final List<MediaType> getMediaTypes() { return consumesArray; }
 
 	/**
 	 * Returns the first media type handled based on the values passed to the <c>consumes</c> constructor parameter.
 	 *
 	 * @return The media type.
 	 */
-	public final MediaType getPrimaryMediaType() { return consumesArray == null || consumesArray.length == 0 ? null : consumesArray[0]; }
+	public final MediaType getPrimaryMediaType() { return consumesArray.isEmpty() ? null : consumesArray.get(0); }
 
 	@Override /* Overridden from Context */
 	public ParserSession getSession() { return createSession().build(); }

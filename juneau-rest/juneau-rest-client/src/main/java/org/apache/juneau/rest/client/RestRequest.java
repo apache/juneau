@@ -1225,7 +1225,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException If init method on interceptor threw an exception.
 	 */
 	public RestRequest interceptors(RestCallInterceptor...interceptors) throws RestCallException {
-		assertVarargsNotNull("interceptors", interceptors);
+		assertArgNoNulls("interceptors", interceptors);
 		try {
 			for (var i : interceptors) {
 				this.interceptors.add(i);

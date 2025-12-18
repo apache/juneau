@@ -302,7 +302,7 @@ public abstract class Context {
 		 * @return This object.
 		 */
 		public Builder annotations(Annotation...values) {
-			assertVarargsNotNull("values", values);
+			assertArgNoNulls("values", values);
 			annotations.addAll(l(values));
 			return this;
 		}
@@ -312,11 +312,11 @@ public abstract class Context {
 		 *
 		 * @param values
 		 * 	The annotations to register with the context.
-		 * 	<br>Cannot be <jk>null</jk>.
+		 * 	<br>Cannot be <jk>null</jk> or contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder annotations(List<Annotation> values) {
-			annotations.addAll(assertArgNotNull("values", values));
+			annotations.addAll(assertArgNoNulls("values", values));
 			return this;
 		}
 
@@ -364,7 +364,7 @@ public abstract class Context {
 		 * @return This object.
 		 */
 		public Builder applyAnnotations(Class<?>...from) {
-			assertVarargsNotNull("from", from);
+			assertArgNoNulls("from", from);
 			return applyAnnotations((Object[])from);
 		}
 
@@ -452,7 +452,7 @@ public abstract class Context {
 		 * @return This object.
 		 */
 		public Builder applyAnnotations(Object...from) {
-			assertVarargsNotNull("from", from);
+			assertArgNoNulls("from", from);
 			var work = AnnotationWorkList.create();
 			Arrays.stream(from).forEach(x -> traverse(work, x));
 			return apply(work);
@@ -693,7 +693,7 @@ public abstract class Context {
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 */
 		protected void registerBuilders(Object...values) {
-			assertVarargsNotNull("values", values);
+			assertArgNoNulls("values", values);
 			for (var b : values) {
 				if (b == this)
 					builders.add(b);

@@ -243,7 +243,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	private final String textNodeDelimiter;
 	private final XmlSerializer ctx;
 	private Namespace defaultNamespace;
-	private Namespace[] namespaces = {};
+	private List<Namespace> namespaces = new ArrayList<>();
 
 	/**
 	 * Constructor.
@@ -254,7 +254,8 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		super(builder);
 		ctx = builder.ctx;
 		defaultNamespace = findDefaultNamespace(ctx.getDefaultNamespace());
-		namespaces = ctx.getNamespaces();
+		var ctxNamespaces = ctx.getNamespaces();
+		namespaces = ctxNamespaces == null ? new ArrayList<>() : new ArrayList<>(ctxNamespaces);
 		textNodeDelimiter = ctx.textNodeDelimiter;
 	}
 
@@ -676,8 +677,10 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * @see XmlSerializer.Builder#namespaces(Namespace...)
 	 * @return
 	 * 	The default list of namespaces associated with this serializer.
+	 * 	<br>Never <jk>null</jk>.
+	 * 	<br>List is modifiable (namespaces can be added during serialization).
 	 */
-	protected final Namespace[] getNamespaces() { return namespaces; }
+	protected final List<Namespace> getNamespaces() { return namespaces == null ? l() : namespaces; }
 
 	/**
 	 * Add <js>"_type"</js> properties when needed.

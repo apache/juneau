@@ -141,7 +141,7 @@ public abstract class BaseHttpPartParser extends BeanContextable implements Http
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
-		assertVarargsNotNull("toTypeArgs", toTypeArgs);
+		assertArgNoNulls("toTypeArgs", toTypeArgs);
 		return getPartSession().parse(partType, schema, in, getClassMeta(assertArgNotNull("toType", toType), toTypeArgs));
 	}
 }

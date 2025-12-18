@@ -42,13 +42,18 @@ class BeanConfigAnnotation_Test extends TestBase {
 		assertEquals(expected, TO_STRING.apply(o));
 	}
 
-	private static final Function<Object,String> TO_STRING = new Function<>() {
+		private static final Function<Object,String> TO_STRING = new Function<>() {
 		@Override
 		public String apply(Object t) {
 			if (t == null)
 				return null;
 			if (t instanceof List)
 				return ((List<?>)t)
+					.stream()
+					.map(TO_STRING)
+					.collect(Collectors.joining(","));
+			if (t instanceof Set)
+				return ((Set<?>)t)
 					.stream()
 					.map(TO_STRING)
 					.collect(Collectors.joining(","));

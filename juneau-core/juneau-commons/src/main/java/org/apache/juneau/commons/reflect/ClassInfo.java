@@ -65,7 +65,7 @@ import org.apache.juneau.commons.collections.*;
  *
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public class ClassInfo extends ElementInfo implements Annotatable, Type {
+public class ClassInfo extends ElementInfo implements Annotatable, Type, Comparable<ClassInfo> {
 
 	private static final Cache<Class,ClassInfoTyped> CACHE = Cache.of(Class.class, ClassInfoTyped.class).build();
 
@@ -493,6 +493,13 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type {
 	@Override
 	public boolean equals(Object o) {
 		return (o instanceof ClassInfo o2) && eq(this, o2, (x, y) -> eq(x.innerType, y.innerType));
+	}
+
+	@Override
+	public int compareTo(ClassInfo o) {
+		if (o == null)
+			return 1;
+		return getName().compareTo(o.getName());
 	}
 
 	/**

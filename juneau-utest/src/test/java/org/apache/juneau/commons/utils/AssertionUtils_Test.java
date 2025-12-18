@@ -392,39 +392,39 @@ class AssertionUtils_Test extends TestBase {
 	void a012_assertVarargsNotNull() {
 		// Should not throw when array and elements are not null
 		var array = a("a", "b", "c");
-		var result = assertVarargsNotNull("arg", array);
+		var result = assertArgNoNulls("arg", array);
 		assertSame(array, result);
 		
 		// Should not throw with empty array
 		var emptyArray = new String[0];
-		var result2 = assertVarargsNotNull("arg", emptyArray);
+		var result2 = assertArgNoNulls("arg", emptyArray);
 		assertSame(emptyArray, result2);
 		
 		// Should work with integer array
 		var intArray = a(1, 2, 3);
-		var result3 = assertVarargsNotNull("arg", intArray);
+		var result3 = assertArgNoNulls("arg", intArray);
 		assertSame(intArray, result3);
 		
 		// Should work with object array
 		var objArray = a(new Object(), new Object());
-		var result4 = assertVarargsNotNull("arg", objArray);
+		var result4 = assertArgNoNulls("arg", objArray);
 		assertSame(objArray, result4);
 		
 		// Should throw when array is null
 		assertThrowsWithMessage(IllegalArgumentException.class, l("arg", "cannot be null"), () -> {
-			assertVarargsNotNull("arg", (String[])null);
+			assertArgNoNulls("arg", (String[])null);
 		});
 		
 		// Should throw when element is null
 		var nullElementArray = a("a", null, "c");
 		assertThrowsWithMessage(IllegalArgumentException.class, l("arg", "parameter", "1"), () -> {
-			assertVarargsNotNull("arg", nullElementArray);
+			assertArgNoNulls("arg", nullElementArray);
 		});
 		
 		// Should fail on first null when multiple elements are null
 		var multipleNullArray = a("a", null, null, "d");
 		assertThrowsWithMessage(IllegalArgumentException.class, "1", () -> {
-			assertVarargsNotNull("arg", multipleNullArray);
+			assertArgNoNulls("arg", multipleNullArray);
 		});
 	}
 }

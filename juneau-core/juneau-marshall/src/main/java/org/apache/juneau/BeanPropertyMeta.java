@@ -36,6 +36,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.reflect.ReflectionUtils;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -351,7 +352,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (rawTypeMeta == null)
 				return false;
 
-			beanRegistry = new BeanRegistry(bc, parentBeanRegistry, bdClasses.toArray(new Class<?>[0]));
+			beanRegistry = new BeanRegistry(bc, parentBeanRegistry, bdClasses.stream().map(ReflectionUtils::info).toList());
 
 			isDyna = "*".equals(name);
 

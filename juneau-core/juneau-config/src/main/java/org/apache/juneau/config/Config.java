@@ -266,7 +266,7 @@ public class Config extends Context implements ConfigEventListener {
 		 * @return This object.
 		 */
 		public Builder mods(Mod...values) {
-			assertVarargsNotNull("values", values);
+			assertArgNoNulls("values", values);
 			for (var value : values)
 				mods.put(value.getId(), value);
 			return this;

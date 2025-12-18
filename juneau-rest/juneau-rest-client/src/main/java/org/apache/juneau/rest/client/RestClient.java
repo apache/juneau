@@ -3972,7 +3972,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder parsers(Class<? extends Parser>...value) {
-			assertVarargsNotNull("value", value);
+			assertArgNoNulls("value", value);
 			parsers().add(value);
 			return this;
 		}
@@ -4011,7 +4011,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		public Builder parsers(Parser...value) {
-			assertVarargsNotNull("value", value);
+			assertArgNoNulls("value", value);
 			parsers().add(value);
 			return this;
 		}
@@ -4834,7 +4834,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder serializers(Class<? extends Serializer>...value) {
-			assertVarargsNotNull("value", value);
+			assertArgNoNulls("value", value);
 			serializers().add(value);
 			return this;
 		}
@@ -4873,7 +4873,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		public Builder serializers(Serializer...value) {
-			assertVarargsNotNull("value", value);
+			assertArgNoNulls("value", value);
 			serializers().add(value);
 			return this;
 		}

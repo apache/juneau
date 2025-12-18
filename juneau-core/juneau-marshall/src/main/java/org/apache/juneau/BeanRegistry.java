@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -58,8 +59,9 @@ public class BeanRegistry {
 	private final AnnotationProvider ap;
 	private final boolean isEmpty;
 
-	// TODO - Convert classes to use ClassInfo.
-	BeanRegistry(BeanContext bc, BeanRegistry parent, Class<?>...classes) {
+	BeanRegistry(BeanContext bc, BeanRegistry parent, List<ClassInfo> classes) {
+		assertArgNotNull("bc", bc);
+		assertArgNotNull("classes", classes);
 		this.bc = bc;
 		this.ap = bc.getAnnotationProvider();
 		this.map = new ConcurrentHashMap<>();
@@ -67,8 +69,7 @@ public class BeanRegistry {
 		bc.getBeanDictionary().forEach(this::addClass);
 		if (nn(parent))
 			parent.map.forEach(this::addToMap);
-		for (var c : classes)
-			addClass(c);
+		classes.forEach(this::addClass);
 		isEmpty = map.isEmpty();
 	}
 
@@ -128,17 +129,16 @@ public class BeanRegistry {
 		return r(properties());
 	}
 
-	private void addClass(Class<?> c) {
+	private void addClass(ClassInfo ci) {
 		try {
-			if (nn(c)) {
-				var ci = info(c);
+			if (nn(ci) && nn(ci.inner())) {
 				if (ci.isChildOf(Collection.class)) {
 					Collection<?> cc = BeanCreator.of(Collection.class).type(ci).run();
 					cc.forEach(x -> {
-						if (x instanceof Class x2)
-							addClass(x2);
+						if (x instanceof Class<?> x2)
+							addClass(info(x2));
 						else
-							throw bex("Collection class ''{0}'' passed to BeanRegistry does not contain Class objects.", cn(c));
+							throw bex("Collection class ''{0}'' passed to BeanRegistry does not contain Class objects.", ci.getName());
 					});
 				} else if (ci.isChildOf(Map.class)) {
 					Map<?,?> m = BeanCreator.of(Map.class).type(ci).run();
@@ -150,7 +150,7 @@ public class BeanRegistry {
 						else if (isArray(v))
 							val = getTypedClassMeta(v);
 						else
-							throw bex("Class ''{0}'' was passed to BeanRegistry but value of type ''{1}'' found in map is not a Type object.", cn(c), cn(v));
+							throw bex("Class ''{0}'' was passed to BeanRegistry but value of type ''{1}'' found in map is not a Type object.", ci.getName(), cn(v));
 						addToMap(typeName, val);
 					});
 				} else {
@@ -160,9 +160,9 @@ public class BeanRegistry {
 						.map(x -> x.inner().typeName())
 						.filter(Utils::isNotEmpty)
 						.findFirst()
-						.orElseThrow(() -> bex("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined.", cn(c)));
+						.orElseThrow(() -> bex("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined.", ci.getName()));
 					// @formatter:on
-					addToMap(typeName, bc.getClassMeta(c));
+					addToMap(typeName, bc.getClassMeta(ci.inner()));
 				}
 			}
 		} catch (BeanRuntimeException e) {
