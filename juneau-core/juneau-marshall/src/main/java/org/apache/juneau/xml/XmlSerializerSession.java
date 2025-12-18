@@ -106,12 +106,6 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder localeDefault(Locale value) {
-			super.localeDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder mediaType(MediaType value) {
 			super.mediaType(value);
 			return this;
@@ -256,7 +250,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		defaultNamespace = findDefaultNamespace(ctx.getDefaultNamespace());
 		var ctxNamespaces = ctx.getNamespaces();
 		namespaces = ctxNamespaces == null ? new ArrayList<>() : new ArrayList<>(ctxNamespaces);
-		textNodeDelimiter = ctx.textNodeDelimiter;
+		textNodeDelimiter = ctx.getTextNodeDelimiter();
 	}
 
 	/**
@@ -966,16 +960,16 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				rc = serializeBeanMap(out, toBeanMap(o), elementNamespace, isCollapsed, isMixedOrText);
 			} else if (sType.isCollection() || (nn(wType) && wType.isCollection())) {
 				if (isCollapsed)
-					this.indent--;
+					indent--;
 				serializeCollection(out, o, sType, eType, pMeta, isMixedOrText);
 				if (isCollapsed)
-					this.indent++;
+					indent++;
 			} else if (sType.isArray()) {
 				if (isCollapsed)
-					this.indent--;
+					indent--;
 				serializeCollection(out, o, sType, eType, pMeta, isMixedOrText);
 				if (isCollapsed)
-					this.indent++;
+					indent++;
 			} else if (sType.isReader()) {
 				pipe((Reader)o, out, SerializerSession::handleThrown);
 			} else if (sType.isInputStream()) {

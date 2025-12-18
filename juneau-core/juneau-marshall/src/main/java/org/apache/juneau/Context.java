@@ -303,7 +303,7 @@ public abstract class Context {
 		 */
 		public Builder annotations(Annotation...values) {
 			assertArgNoNulls("values", values);
-			annotations.addAll(l(values));
+			annotations(l(values));
 			return this;
 		}
 

@@ -67,10 +67,10 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 */
 		protected Builder(BeanTraverseContext copyFrom) {
 			super(copyFrom);
-			detectRecursions = copyFrom.detectRecursions;
-			ignoreRecursions = copyFrom.ignoreRecursions;
-			initialDepth = copyFrom.initialDepth;
-			maxDepth = copyFrom.maxDepth;
+			detectRecursions = copyFrom.getDetectRecursions();
+			ignoreRecursions = copyFrom.getIgnoreRecursions();
+			initialDepth = copyFrom.getInitialDepth();
+			maxDepth = copyFrom.getMaxDepth();
 		}
 
 		/**
@@ -697,10 +697,10 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		}
 	}
 
-	protected final boolean detectRecursions;
-	protected final boolean ignoreRecursions;
-	protected final int initialDepth;
-	protected final int maxDepth;
+	private final boolean detectRecursions;
+	private final boolean ignoreRecursions;
+	private final int initialDepth;
+	private final int maxDepth;
 	private final boolean actualDetectRecursions;
 
 	/**
@@ -759,6 +759,20 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	 * 	<br>Otherwise, an exception is thrown with the message <js>"Recursion occurred, stack=..."</js>.
 	 */
 	public final boolean isIgnoreRecursions() { return ignoreRecursions; }
+
+	/**
+	 * Detect recursions flag (raw value).
+	 *
+	 * @return The detect recursions flag.
+	 */
+	protected final boolean getDetectRecursions() { return detectRecursions; }
+
+	/**
+	 * Ignore recursions flag (raw value).
+	 *
+	 * @return The ignore recursions flag.
+	 */
+	protected final boolean getIgnoreRecursions() { return ignoreRecursions; }
 
 	@Override /* Overridden from BeanContextable */
 	protected FluentMap<String,Object> properties() {

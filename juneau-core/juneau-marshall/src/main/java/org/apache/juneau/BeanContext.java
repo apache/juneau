@@ -29,8 +29,6 @@ import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.*;
 import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
@@ -174,6 +172,12 @@ public class BeanContext extends Context {
 
 		private static final Cache<HashKey,BeanContext> CACHE = Cache.of(HashKey.class, BeanContext.class).build();
 
+		private static int integer(boolean...values) {
+			var n = 0;
+			for (var b : values)
+				n = (n << 1) | (b ? 1 : 0);
+			return n;
+		}
 		private Visibility beanClassVisibility;
 		private Visibility beanConstructorVisibility;
 		private Visibility beanMethodVisibility;
@@ -203,6 +207,7 @@ public class BeanContext extends Context {
 		private List<ClassInfo> beanDictionary;
 		private List<Object> swaps;
 		private Set<ClassInfo> notBeanClasses;
+
 		private Set<String> notBeanPackages;
 
 		/**
@@ -454,6 +459,20 @@ public class BeanContext extends Context {
 		}
 
 		/**
+		 * Convenience method for {@link #beanDictionary(ClassInfo...)} that accepts {@link Class} objects.
+		 *
+		 * @param values
+		 * 	The values to add to this setting.
+		 * 	<br>Cannot contain <jk>null</jk> values.
+		 * @return This object.
+		 * @see #beanDictionary(ClassInfo...)
+		 */
+		public Builder beanDictionary(Class<?>...values) {
+			assertArgNoNulls("values", values);
+			return beanDictionary(Stream.of(values).map(ReflectionUtils::info).toArray(ClassInfo[]::new));
+		}
+
+		/**
 		 * Bean dictionary.
 		 *
 		 * <p>
@@ -562,20 +581,6 @@ public class BeanContext extends Context {
 			assertArgNoNulls("values", values);
 			beanDictionary().addAll(0, values);
 			return this;
-		}
-
-		/**
-		 * Convenience method for {@link #beanDictionary(ClassInfo...)} that accepts {@link Class} objects.
-		 *
-		 * @param values
-		 * 	The values to add to this setting.
-		 * 	<br>Cannot contain <jk>null</jk> values.
-		 * @return This object.
-		 * @see #beanDictionary(ClassInfo...)
-		 */
-		public Builder beanDictionary(Class<?>...values) {
-			assertArgNoNulls("values", values);
-			return beanDictionary(Stream.of(values).map(ReflectionUtils::info).toArray(ClassInfo[]::new));
 		}
 
 		/**
@@ -2656,6 +2661,20 @@ public class BeanContext extends Context {
 		}
 
 		/**
+		 * Convenience method for {@link #notBeanClasses(ClassInfo...)} that accepts {@link Class} objects.
+		 *
+		 * @param values
+		 * 	The values to add to this setting.
+		 * 	<br>Cannot contain <jk>null</jk> values.
+		 * @return This object.
+		 * @see #notBeanClasses(ClassInfo...)
+		 */
+		public Builder notBeanClasses(Class<?>...values) {
+			assertArgNoNulls("values", values);
+			return notBeanClasses(Stream.of(values).map(ReflectionUtils::info).toArray(ClassInfo[]::new));
+		}
+
+		/**
 		 * Bean class exclusions.
 		 *
 		 * <p>
@@ -2723,20 +2742,6 @@ public class BeanContext extends Context {
 			assertArgNoNulls("values", values);
 			notBeanClasses().addAll(values);
 			return this;
-		}
-
-		/**
-		 * Convenience method for {@link #notBeanClasses(ClassInfo...)} that accepts {@link Class} objects.
-		 *
-		 * @param values
-		 * 	The values to add to this setting.
-		 * 	<br>Cannot contain <jk>null</jk> values.
-		 * @return This object.
-		 * @see #notBeanClasses(ClassInfo...)
-		 */
-		public Builder notBeanClasses(Class<?>...values) {
-			assertArgNoNulls("values", values);
-			return notBeanClasses(Stream.of(values).map(ReflectionUtils::info).toArray(ClassInfo[]::new));
 		}
 
 		/**
@@ -3503,13 +3508,6 @@ public class BeanContext extends Context {
 			useJavaBeanIntrospector = value;
 			return this;
 		}
-
-		private static int integer(boolean...values) {
-			var n = 0;
-			for (var b : values)
-				n = (n << 1) | (b ? 1 : 0);
-			return n;
-		}
 	}
 
 	/*
@@ -3563,7 +3561,27 @@ public class BeanContext extends Context {
 		return new Builder();
 	}
 
-	private final AtomicReference<WriterSerializer> beanToStringSerializer = new AtomicReference<>();
+	/**
+	 * Checks if the specified class should be cached.
+	 *
+	 * <p>
+	 * Generated classes (proxies, lambda expressions, etc.) shouldn't be cacheable to prevent
+	 * needlessly filling up the cache.
+	 *
+	 * @param c The class to check.
+	 * @return <jk>true</jk> if the class should be cached.
+	 */
+	private static boolean isCacheable(Class<?> c) {
+		var n = c.getName();
+		var x = n.charAt(n.length() - 1);  // All generated classes appear to end with digits.
+		if (x >= '0' && x <= '9') {
+			if (n.indexOf("$$") != -1 || n.startsWith("sun") || n.startsWith("com.sun") || n.indexOf("$Proxy") != -1)
+				return false;
+		}
+		return true;
+	}
+
+	private final OptionalSupplier<WriterSerializer> beanToStringSerializer;
 	private final BeanRegistry beanRegistry;
 	private final BeanSession defaultSession;
 	private final boolean beanMapPutReturnsOldValue;
@@ -3584,7 +3602,6 @@ public class BeanContext extends Context {
 	private final boolean useInterfaceProxies;
 	private final boolean useJavaBeanIntrospector;
 	private final Class<? extends PropertyNamer> propertyNamer;
-	private final ClassMeta<Class> cmClass;  // Reusable ClassMeta that represents general Classes.
 	private final ClassMeta<Object> cmObject;  // Reusable ClassMeta that represents general Objects.
 	private final ClassMeta<String> cmString;  // Reusable ClassMeta that represents general Strings.
 	private final HashKey hashKey;
@@ -3593,7 +3610,7 @@ public class BeanContext extends Context {
 	private final List<Object> swaps;
 	private final List<String> notBeanPackages;
 	private final Locale locale;
-	private final Map<Class,ClassMeta> cmCache;
+	private final Cache<Class,ClassMeta> cmCache;
 	private final MediaType mediaType;
 	private final List<ObjectSwap<?,?>> objectSwaps;
 	private final PropertyNamer propertyNamerBean;
@@ -3633,14 +3650,14 @@ public class BeanContext extends Context {
 		ignoreUnknownBeanProperties = builder.ignoreUnknownBeanProperties;
 		ignoreUnknownEnumValues = builder.ignoreUnknownEnumValues;
 		ignoreUnknownNullBeanProperties = ! builder.disableIgnoreUnknownNullBeanProperties;
-		locale = nn(builder.locale) ? builder.locale : Locale.getDefault();
+		locale = opt(builder.locale).orElse(Locale.getDefault());
 		mediaType = builder.mediaType;
 		notBeanPackages = u(new ArrayList<>(builder.notBeanPackages));
 		propertyNamer = nn(builder.propertyNamer) ? builder.propertyNamer : BasicPropertyNamer.class;
 		sortProperties = builder.sortProperties;
 		swaps = u(copyOf(builder.swaps));
 		timeZone = builder.timeZone;
-		typePropertyName = nn(builder.typePropertyName) ? builder.typePropertyName : "_type";
+		typePropertyName = opt(builder.typePropertyName).orElse("_type");
 		useEnumNames = builder.useEnumNames;
 		useInterfaceProxies = ! builder.disableInterfaceProxies;
 		useJavaBeanIntrospector = builder.useJavaBeanIntrospector;
@@ -3653,11 +3670,7 @@ public class BeanContext extends Context {
 		notBeanPackageNames = u(_notBeanPackageNames);
 		notBeanPackagePrefixes = _notBeanPackages.stream().filter(x -> x.endsWith(".*")).map(x -> x.substring(0, x.length() - 2)).toList();
 
-		try {
-			propertyNamerBean = propertyNamer.getDeclaredConstructor().newInstance();
-		} catch (Exception e) {
-			throw toRex(e);
-		}
+		propertyNamerBean = safe(()->propertyNamer.getDeclaredConstructor().newInstance());
 
 		var _objectSwaps = new LinkedList<ObjectSwap<?,?>>();
 		swaps.forEach(x -> {
@@ -3675,36 +3688,13 @@ public class BeanContext extends Context {
 		});
 		objectSwaps = u(_objectSwaps);
 
-		cmCache = new ConcurrentHashMap<>();
-		cmCache.put(String.class, new ClassMeta(String.class, this));
-		cmCache.put(Object.class, new ClassMeta(Object.class, this));
+		cmCache = Cache.<Class,ClassMeta>create().supplier(type -> new ClassMeta<>(type, this)).build();
 		cmString = cmCache.get(String.class);
 		cmObject = cmCache.get(Object.class);
-		cmClass = cmCache.get(Class.class);
 
 		beanRegistry = new BeanRegistry(this, null, list());
 		defaultSession = createSession().unmodifiable().build();
-	}
-
-	/**
-	 * Same as {@link #convertToType(Object, Class)}, except used for instantiating inner member classes that must
-	 * be instantiated within another class instance.
-	 *
-	 * <p>
-	 * This is a shortcut for the following code:  <c>createSession().build().convertToMemberType(<jv>outer</jv>, <jv>value</jv>, <jv>type</jv>);</c>
-	 *
-	 * @param <T> The class type to convert the value to.
-	 * @param outer
-	 * 	If class is a member class, this is the instance of the containing class.
-	 * 	Should be <jk>null</jk> if not a member class.
-	 * @param value The value to convert.
-	 * @param type The class type to convert the value to.
-	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
-	 * @return The converted value.
-	 * @see BeanSession#convertToMemberType(Object, Object, Class)
-	 */
-	public final <T> T convertToMemberType(Object outer, Object value, Class<T> type) throws InvalidDataConversionException {
-		return defaultSession.convertToMemberType(outer, value, getClassMeta(type));
+		beanToStringSerializer = memoize(() -> JsonSerializer.create().beanContext(this).sq().simpleAttrs().build());
 	}
 
 	/**
@@ -3722,24 +3712,6 @@ public class BeanContext extends Context {
 	 */
 	public final <T> T convertToType(Object value, Class<T> type) throws InvalidDataConversionException {
 		return defaultSession.convertToType(value, type);
-	}
-
-	/**
-	 * Same as {@link #convertToType(Object, Class)}, but allows for complex data types consisting of collections or maps.
-	 *
-	 * <p>
-	 * This is a shortcut for the following code:  <c>createSession().build().convertToType(<jv>value</jv>, <jv>type</jv>, <jv>args</jv>);</c>
-	 *
-	 * @param <T> The class type to convert the value to.
-	 * @param value The value to be converted.
-	 * @param type The target object type.
-	 * @param args The target object parameter types.
-	 * @return The converted type.
-	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
-	 * @see BeanSession#convertToType(Object, Type, Type...)
-	 */
-	public final <T> T convertToType(Object value, Type type, Type...args) throws InvalidDataConversionException {
-		return (T)defaultSession.convertToMemberType(null, value, getClassMeta(type, args));
 	}
 
 	@Override /* Overridden from Context */
@@ -3815,6 +3787,7 @@ public class BeanContext extends Context {
 	 */
 	public final Visibility getBeanMethodVisibility() { return beanMethodVisibility; }
 
+
 	/**
 	 * Bean type property name.
 	 *
@@ -3824,6 +3797,21 @@ public class BeanContext extends Context {
 	 */
 	public final String getBeanTypePropertyName() { return typePropertyName; }
 
+	/**
+	 * Construct a {@code ClassMeta} wrapper around a {@link Class} object.
+	 *
+	 * @param <T> The class type being wrapped.
+	 * @param type The class to resolve.
+	 * @return
+	 * 	If the class is not an array, returns a cached {@link ClassMeta} object.
+	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
+	 */
+	public final <T> ClassMeta<T> getClassMeta(Class<T> type) {
+		// Non-cacheable classes (proxies, generated classes) should not be cached
+		if (! isCacheable(type))
+			return new ClassMeta<>(type, this);
+		return cmCache.get(type);
+	}
 
 	/**
 	 * Used to resolve <c>ClassMetas</c> of type <c>Collection</c> and <c>Map</c> that have
@@ -3917,41 +3905,6 @@ public class BeanContext extends Context {
 	 * 	The default media type value for serializer and parser sessions.
 	 */
 	public final MediaType getDefaultMediaType() { return mediaType; }
-
-	/**
-	 * Hash key.
-	 *
-	 * @return The hash key.
-	 */
-	protected final HashKey getHashKey() { return hashKey; }
-
-	/**
-	 * Class metadata cache.
-	 *
-	 * @return The class metadata cache.
-	 */
-	protected final Map<Class,ClassMeta> getCmCache() { return cmCache; }
-
-	/**
-	 * Locale.
-	 *
-	 * @return The locale.
-	 */
-	protected final Locale getLocale() { return locale; }
-
-	/**
-	 * Media type.
-	 *
-	 * @return The media type.
-	 */
-	protected final MediaType getMediaType() { return mediaType; }
-
-	/**
-	 * Time zone.
-	 *
-	 * @return The time zone.
-	 */
-	protected final TimeZone getTimeZone() { return timeZone; }
 
 	/**
 	 * Time zone.
@@ -4213,50 +4166,6 @@ public class BeanContext extends Context {
 		return defaultSession.toBeanMap(object);
 	}
 
-
-	/*
-	 * Resolves the 'genericized' class meta at the specified position in the ClassMeta array.
-	 */
-	private ClassMeta<?> getTypedClassMeta(ClassMeta<?>[] c, int pos) {
-		var cm = c[pos++];
-		if (cm.isCollection() || cm.isOptional()) {
-			var ce = c.length == pos ? object() : getTypedClassMeta(c, pos);
-			return (ce.isObject() ? cm : new ClassMeta(cm, null, null, ce));
-		} else if (cm.isMap()) {
-			var ck = c.length == pos ? object() : c[pos++];
-			var cv = c.length == pos ? object() : getTypedClassMeta(c, pos);
-			return (ck.isObject() && cv.isObject() ? cm : new ClassMeta(cm, ck, cv, null));
-		}
-		return cm;
-	}
-
-	private ClassMeta<?> resolveType(Type...t) {
-		for (var tt : t) {
-			if (nn(tt)) {
-				var cm = getClassMeta(tt);
-				if (tt != cmObject)
-					return cm;
-			}
-		}
-		return cmObject;
-	}
-
-	/**
-	 * Returns a reusable {@link ClassMeta} representation for the class <c>Class</c>.
-	 *
-	 * <p>
-	 * This <c>ClassMeta</c> is often used to represent key types in maps.
-	 *
-	 * <p>
-	 * This method is identical to calling <code>getClassMeta(Class.<jk>class</jk>)</code> but uses a cached copy to
-	 * avoid a hashmap lookup.
-	 *
-	 * @return The {@link ClassMeta} object associated with the <c>String</c> class.
-	 */
-	protected final ClassMeta<Class> _class() {
-		return cmClass;
-	}
-
 	/**
 	 * Returns the lookup table for resolving bean types by name.
 	 *
@@ -4271,17 +4180,37 @@ public class BeanContext extends Context {
 	 * @return The serializer.  May be <jk>null</jk> if all initialization has occurred.
 	 */
 	protected WriterSerializer getBeanToStringSerializer() {
-		var result = beanToStringSerializer.get();
-		if (result == null) {
-			if (JsonSerializer.DEFAULT == null)
-				return null;
-			result = JsonSerializer.create().beanContext(this).sq().simpleAttrs().build();
-			if (! beanToStringSerializer.compareAndSet(null, result)) {
-				result = beanToStringSerializer.get();
-			}
-		}
-		return result;
+		return beanToStringSerializer.get();
 	}
+
+	/**
+	 * Class metadata cache.
+	 *
+	 * @return The class metadata cache.
+	 */
+	protected final Cache<Class,ClassMeta> getCmCache() { return cmCache; }
+
+
+	/**
+	 * Hash key.
+	 *
+	 * @return The hash key.
+	 */
+	protected final HashKey getHashKey() { return hashKey; }
+
+	/**
+	 * Locale.
+	 *
+	 * @return The locale.
+	 */
+	protected final Locale getLocale() { return locale; }
+
+	/**
+	 * Media type.
+	 *
+	 * @return The media type.
+	 */
+	protected final MediaType getMediaType() { return mediaType; }
 
 	/**
 	 * Bean class exclusions.
@@ -4295,15 +4224,11 @@ public class BeanContext extends Context {
 	protected final List<ClassInfo> getNotBeanClasses() { return notBeanClasses; }
 
 	/**
-	 * Bean package exclusions.
+	 * Time zone.
 	 *
-	 * @see BeanContext.Builder#notBeanPackages(String...)
-	 * @return
-	 * 	The list of package name prefixes to exclude from being classified as beans.
-	 * 	<br>Never <jk>null</jk>.
-	 * 	<br>List is unmodifiable.
+	 * @return The time zone.
 	 */
-	protected final List<String> getNotBeanPackagesPrefixes() { return notBeanPackagePrefixes; }
+	protected final TimeZone getTimeZone() { return timeZone; }
 
 	/**
 	 * Ignore transient fields.
@@ -4485,35 +4410,6 @@ public class BeanContext extends Context {
 		return null;
 	}
 
-	/**
-	 * Construct a {@code ClassMeta} wrapper around a {@link Class} object.
-	 *
-	 * @param <T> The class type being wrapped.
-	 * @param type The class to resolve.
-	 * @return
-	 * 	If the class is not an array, returns a cached {@link ClassMeta} object.
-	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
-	 */
-	public final <T> ClassMeta<T> getClassMeta(Class<T> type) {
-
-		// This can happen if we have transforms defined against String or Object.
-		if (cmCache == null)
-			return null;
-
-		var cm = cmCache.get(type);
-		if (cm == null) {
-
-			synchronized (this) {
-				// Make sure someone didn't already set it while this thread was blocked.
-				cm = cmCache.get(type);
-				if (cm == null)
-					cm = new ClassMeta<>(type, this);
-			}
-		}
-		return cm;
-	}
-
-
 	final ClassMeta resolveClassMeta(Type o, TypeVariables typeVars) {
 		if (o == null)
 			return null;
@@ -4572,5 +4468,33 @@ public class BeanContext extends Context {
 		}
 
 		return rawType;
+	}
+
+	/*
+	 * Resolves the 'genericized' class meta at the specified position in the ClassMeta array.
+	 */
+	private ClassMeta<?> getTypedClassMeta(ClassMeta<?>[] c, int pos) {
+		var cm = c[pos++];
+		if (cm.isCollection() || cm.isOptional()) {
+			var ce = c.length == pos ? object() : getTypedClassMeta(c, pos);
+			return (ce.isObject() ? cm : new ClassMeta(cm, null, null, ce));
+		} else if (cm.isMap()) {
+			var ck = c.length == pos ? object() : c[pos++];
+			var cv = c.length == pos ? object() : getTypedClassMeta(c, pos);
+			return (ck.isObject() && cv.isObject() ? cm : new ClassMeta(cm, ck, cv, null));
+		}
+		return cm;
+	}
+
+
+	private ClassMeta<?> resolveType(Type...t) {
+		for (var tt : t) {
+			if (nn(tt)) {
+				var cm = getClassMeta(tt);
+				if (tt != cmObject)
+					return cm;
+			}
+		}
+		return cmObject;
 	}
 }

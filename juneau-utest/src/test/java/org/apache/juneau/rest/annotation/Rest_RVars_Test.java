@@ -68,8 +68,8 @@ class Rest_RVars_Test extends TestBase {
 			public static String out(SerializerSession s) {
 				var sp = s.getSessionProperties();
 				return format("A1=%s,A2=%s,B1=%s,B2=%s,C=%s,R1a=%s,R1b=%s,R2=%s,R3=%s,R4=%s,R5=%s,R6=%s",
-					sp.get("A1",null), sp.get("A2",null), sp.get("B1",null), sp.get("B2",null), sp.get("C",null),
-					sp.get("R1a",null), sp.get("R1b",null), sp.get("R2",null), sp.get("R3",null), sp.get("R4",null), sp.get("R5",null), sp.get("R6",null));
+					sp.get("A1"), sp.get("A2"), sp.get("B1"), sp.get("B2"), sp.get("C"),
+					sp.get("R1a"), sp.get("R1b"), sp.get("R2"), sp.get("R3"), sp.get("R4"), sp.get("R5"), sp.get("R6"));
 			}
 		}
 	}

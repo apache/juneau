@@ -18,6 +18,7 @@ package org.apache.juneau.rest;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.Swagger;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
@@ -53,7 +54,7 @@ class Nls_Test extends TestBase {
 		}
 
 		public static String out(SerializerSession s) {
-			return s.getSessionProperties().getString("TestProperty",null);
+			return Utils.s(s.getSessionProperties().get("TestProperty"));
 		}
 	}
 

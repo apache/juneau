@@ -53,6 +53,7 @@ import org.apache.juneau.swap.*;
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class BeanSession extends ContextSession {
+
 	/**
 	 * Builder class.
 	 */
@@ -72,7 +73,6 @@ public class BeanSession extends ContextSession {
 		protected Builder(BeanContext ctx) {
 			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
-			locale = ctx.getLocale();
 			mediaType = ctx.getMediaType();
 			timeZone = ctx.getTimeZone();
 		}
@@ -115,26 +115,11 @@ public class BeanSession extends ContextSession {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
+		 * 	<br>If <jk>null</jk> defaults to {@link BeanContext#getLocale()}
 		 * @return This object.
 		 */
 		public Builder locale(Locale value) {
-			if (nn(value))
-				locale = value;
-			return this;
-		}
-
-		/**
-		 * Same as {@link #locale(Locale)} but doesn't overwrite the value if it is already set.
-		 *
-		 * @param value
-		 * 	The new value for this property.
-		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
-		 * @return This object.
-		 */
-		public Builder localeDefault(Locale value) {
-			if (nn(value) && locale == null)
-				locale = value;
+			locale = value;
 			return this;
 		}
 
@@ -154,12 +139,11 @@ public class BeanSession extends ContextSession {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>Can be <jk>null</jk> (will not set the value, defaults to {@link BeanContext.Builder#mediaType(MediaType)} if set on context).
+		 * 	<br>If <jk>null</jk> defaults to {@link BeanContext#getMediaType()}.
 		 * @return This object.
 		 */
 		public Builder mediaType(MediaType value) {
-			if (nn(value))
-				mediaType = value;
+			mediaType = value;
 			return this;
 		}
 
@@ -172,7 +156,7 @@ public class BeanSession extends ContextSession {
 		 * @return This object.
 		 */
 		public Builder mediaTypeDefault(MediaType value) {
-			if (nn(value) && mediaType == null)
+			if (mediaType == null)
 				mediaType = value;
 			return this;
 		}
@@ -205,12 +189,11 @@ public class BeanSession extends ContextSession {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>Can be <jk>null</jk> (will not set the value, defaults to {@link BeanContext.Builder#timeZone(TimeZone)} if set on context).
+		 * 	<br>If <jk>null</jk> defaults to {@link BeanContext#getTimeZone()}.
 		 * @return This object.
 		 */
 		public Builder timeZone(TimeZone value) {
-			if (nn(value))
-				timeZone = value;
+			timeZone = value;
 			return this;
 		}
 
@@ -223,7 +206,7 @@ public class BeanSession extends ContextSession {
 		 * @return This object.
 		 */
 		public Builder timeZoneDefault(TimeZone value) {
-			if (nn(value) && timeZone == null)
+			if (timeZone == null)
 				timeZone = value;
 			return this;
 		}
@@ -248,6 +231,16 @@ public class BeanSession extends ContextSession {
 		return new Builder(assertArgNotNull("ctx", ctx));
 	}
 
+	/**
+	 * Returns the name property name.
+	 *
+	 * <p>
+	 * Currently this always returns <js>"_name"</js>.
+	 *
+	 * @return The name property name.  Never <jk>null</jk>.
+	 */
+	public final static String getNamePropertyName() { return "_name"; }
+
 	private static int getMultiplier(String s) {
 		if (s.endsWith("G"))
 			return 1024 * 1024 * 1024;
@@ -265,10 +258,10 @@ public class BeanSession extends ContextSession {
 	private static final boolean isNullOrEmpty(Object o) {
 		return o == null || o.toString().isEmpty() || o.toString().equals("null");
 	}
-
 	private final BeanContext ctx;
 	private final Locale locale;
 	private final MediaType mediaType;
+
 	private final TimeZone timeZone;
 
 	/**
@@ -279,34 +272,9 @@ public class BeanSession extends ContextSession {
 	protected BeanSession(Builder builder) {
 		super(builder);
 		ctx = builder.ctx;
-		locale = builder.locale;
-		mediaType = builder.mediaType;
-		timeZone = builder.timeZone;
-	}
-
-	/**
-	 * Returns a reusable {@link ClassMeta} representation for the class <c>Class</c>.
-	 *
-	 * <p>
-	 * This <c>ClassMeta</c> is often used to represent key types in maps.
-	 *
-	 * <p>
-	 * This method is identical to calling <code>getClassMeta(Class.<jk>class</jk>)</code> but uses a cached copy to
-	 * avoid a hashmap lookup.
-	 *
-	 * @return The {@link ClassMeta} object associated with the <c>String</c> class.
-	 */
-	public final ClassMeta<Class> _class() {
-		return ctx._class();
-	}
-
-	/**
-	 * Returns the annotation provider for this session.
-	 *
-	 * @return The annotation provider for this session.
-	 */
-	public AnnotationProvider getAnnotationProvider() {
-		return ctx.getAnnotationProvider();
+		locale = opt(builder.locale).orElse(ctx.getLocale());
+		mediaType = opt(builder.mediaType).orElse(builder.mediaType);
+		timeZone = opt(builder.timeZone).orElse(builder.timeZone);
 	}
 
 	/**
@@ -512,6 +480,15 @@ public class BeanSession extends ContextSession {
 	}
 
 	/**
+	 * Returns the annotation provider for this session.
+	 *
+	 * @return The annotation provider for this session.
+	 */
+	public AnnotationProvider getAnnotationProvider() {
+		return ctx.getAnnotationProvider();
+	}
+
+	/**
 	 * Minimum bean class visibility.
 	 *
 	 * @see BeanContext.Builder#beanClassVisibility(Visibility)
@@ -532,7 +509,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Bean dictionary.
 	 *
-	 * @see BeanContext.Builder#beanDictionary(Class...)
+	 * @see BeanContext.Builder#beanDictionary(ClassInfo...)
 	 * @return
 	 * 	The list of classes that make up the bean dictionary in this bean context.
 	 * 	<br>Never <jk>null</jk>.
@@ -575,7 +552,7 @@ public class BeanSession extends ContextSession {
 	public final Visibility getBeanMethodVisibility() { return ctx.getBeanMethodVisibility(); }
 
 	/**
-	 * Returns the bean registry defined in this bean context defined by {@link BeanContext.Builder#beanDictionary(Class...)}.
+	 * Returns the bean registry defined in this bean context defined by {@link BeanContext.Builder#beanDictionary(ClassInfo...)}.
 	 *
 	 * @return The bean registry defined in this bean context.  Never <jk>null</jk>.
 	 */
@@ -702,16 +679,6 @@ public class BeanSession extends ContextSession {
 	 * @return The media type for this session, or <jk>null</jk> if not specified.
 	 */
 	public final MediaType getMediaType() { return mediaType; }
-
-	/**
-	 * Returns the name property name.
-	 *
-	 * <p>
-	 * Currently this always returns <js>"_name"</js>.
-	 *
-	 * @return The name property name.  Never <jk>null</jk>.
-	 */
-	public final static String getNamePropertyName() { return "_name"; }
 
 	/**
 	 * Bean class exclusions.
@@ -1629,17 +1596,6 @@ public class BeanSession extends ContextSession {
 	}
 
 	/**
-	 * Bean package exclusions.
-	 *
-	 * @see BeanContext.Builder#notBeanPackages(String...)
-	 * @return
-	 * 	The list of package name prefixes to exclude from being classified as beans.
-	 * 	<br>Never <jk>null</jk>.
-	 * 	<br>List is unmodifiable.
-	 */
-	protected final List<String> getNotBeanPackagesPrefixes() { return ctx.getNotBeanPackagesPrefixes(); }
-
-	/**
 	 * Creates either an {@link JsonMap} or {@link LinkedHashMap} depending on whether the key type is
 	 * String or something else.
 	 *
@@ -1649,6 +1605,14 @@ public class BeanSession extends ContextSession {
 	protected Map newGenericMap(ClassMeta mapMeta) {
 		var k = mapMeta.getKeyType();
 		return (k == null || k.isString()) ? new JsonMap(this) : map();
+	}
+
+	@Override /* Overridden from ContextSession */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("locale", locale)
+			.a("mediaType", mediaType)
+			.a("timeZone", timeZone);
 	}
 
 	/**
@@ -1682,20 +1646,8 @@ public class BeanSession extends ContextSession {
 				else
 					x2 = convertToType(x, componentType);
 			}
-			try {
-				Array.set(array, i.getAndIncrement(), x2);
-			} catch (IllegalArgumentException e) {
-				throw e;
-			}
+			Array.set(array, i.getAndIncrement(), x2);
 		});
 		return array;
-	}
-
-	@Override /* Overridden from ContextSession */
-	protected FluentMap<String,Object> properties() {
-		return super.properties()
-			.a("locale", locale)
-			.a("mediaType", mediaType)
-			.a("timeZone", timeZone);
 	}
 }

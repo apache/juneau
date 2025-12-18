@@ -58,8 +58,8 @@ public class ReaderParserSession extends ParserSession {
 		protected Builder(ReaderParser ctx) {
 			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
-			fileCharset = ctx.fileCharset;
-			streamCharset = ctx.streamCharset;
+			fileCharset = ctx.getFileCharset();
+			streamCharset = ctx.getStreamCharset();
 		}
 
 		@Override /* Overridden from Builder */
@@ -110,12 +110,6 @@ public class ReaderParserSession extends ParserSession {
 		@Override /* Overridden from Builder */
 		public Builder locale(Locale value) {
 			super.locale(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder localeDefault(Locale value) {
-			super.localeDefault(value);
 			return this;
 		}
 

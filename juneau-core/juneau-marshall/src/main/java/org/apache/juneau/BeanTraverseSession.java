@@ -65,7 +65,7 @@ public class BeanTraverseSession extends BeanSession {
 		protected Builder(BeanTraverseContext ctx) {
 			super(assertArgNotNull("ctx", ctx).getBeanContext());
 			this.ctx = ctx;
-			initialDepth = ctx.initialDepth;
+			initialDepth = ctx.getInitialDepth();
 		}
 
 		@Override /* Overridden from Builder */
@@ -86,11 +86,6 @@ public class BeanTraverseSession extends BeanSession {
 			return this;
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder localeDefault(Locale value) {
-			super.localeDefault(value);
-			return this;
-		}
 
 		@Override /* Overridden from Builder */
 		public Builder mediaType(MediaType value) {

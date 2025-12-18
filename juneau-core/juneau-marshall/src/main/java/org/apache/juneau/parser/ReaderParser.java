@@ -673,8 +673,8 @@ public class ReaderParser extends Parser {
 		return new Builder();
 	}
 
-	protected final Charset fileCharset;
-	protected final Charset streamCharset;
+	private final Charset fileCharset;
+	private final Charset streamCharset;
 
 	/**
 	 * Constructor.

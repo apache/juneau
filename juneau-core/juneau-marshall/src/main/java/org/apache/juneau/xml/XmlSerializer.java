@@ -196,12 +196,13 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 			super(assertArgNotNull("copyFrom", copyFrom));
 			addBeanTypesXml = copyFrom.addBeanTypesXml;
 			addNamespaceUrisToRoot = copyFrom.addNamespaceUrlsToRoot;
-			defaultNamespace = copyFrom.defaultNamespace;
+			defaultNamespace = copyFrom.getDefaultNamespace();
 			disableAutoDetectNamespaces = ! copyFrom.autoDetectNamespaces;
 			disableJsonTags = ! copyFrom.addJsonTags;
 			enableNamespaces = copyFrom.enableNamespaces;
-			namespaces = copyFrom.namespaces.isEmpty() ? null : new ArrayList<>(copyFrom.namespaces);
-			textNodeDelimiter = copyFrom.textNodeDelimiter;
+			var ctxNamespaces = copyFrom.getNamespaces();
+			namespaces = ctxNamespaces.isEmpty() ? null : new ArrayList<>(ctxNamespaces);
+			textNodeDelimiter = copyFrom.getTextNodeDelimiter();
 		}
 
 		@Override /* Overridden from Builder */
@@ -1220,9 +1221,9 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	protected final boolean addNamespaceUrlsToRoot;
 	protected final boolean autoDetectNamespaces;
 	protected final boolean enableNamespaces;
-	protected final Namespace defaultNamespace;
-	protected final List<Namespace> namespaces;
-	protected final String textNodeDelimiter;
+	private final Namespace defaultNamespace;
+	private final List<Namespace> namespaces;
+	private final String textNodeDelimiter;
 
 	private final boolean addBeanTypes;
 	private final Map<ClassMeta<?>,XmlClassMeta> xmlClassMetas = new ConcurrentHashMap<>();
@@ -1310,6 +1311,16 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	 * 	<br>List is unmodifiable.
 	 */
 	protected final List<Namespace> getNamespaces() { return namespaces; }
+
+	/**
+	 * Text node delimiter.
+	 *
+	 * @see Builder#textNodeDelimiter(String)
+	 * @return
+	 * 	The delimiter string to insert between consecutive text nodes.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	protected final String getTextNodeDelimiter() { return textNodeDelimiter; }
 
 	/**
 	 * Add <js>"_type"</js> properties when needed.

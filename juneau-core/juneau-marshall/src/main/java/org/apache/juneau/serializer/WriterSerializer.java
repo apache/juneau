@@ -93,8 +93,8 @@ public class WriterSerializer extends Serializer {
 		 */
 		protected Builder(WriterSerializer copyFrom) {
 			super(assertArgNotNull("copyFrom", copyFrom));
-			fileCharset = copyFrom.fileCharset;
-			streamCharset = copyFrom.streamCharset;
+			fileCharset = copyFrom.getFileCharset();
+			streamCharset = copyFrom.getStreamCharset();
 			maxIndent = copyFrom.maxIndent;
 			quoteChar = copyFrom.quoteChar;
 			quoteCharOverride = copyFrom.quoteCharOverride;
@@ -980,8 +980,8 @@ public class WriterSerializer extends Serializer {
 	protected final boolean useWhitespace;
 	protected final Character quoteChar;
 	protected final Character quoteCharOverride;
-	protected final Charset fileCharset;
-	protected final Charset streamCharset;
+	private final Charset fileCharset;
+	private final Charset streamCharset;
 	protected final int maxIndent;
 
 	private final char quoteCharValue;

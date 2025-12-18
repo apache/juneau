@@ -19,6 +19,7 @@ package org.apache.juneau;
 import static java.util.Collections.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -26,10 +27,9 @@ import java.text.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.commons.utils.*;
 
 /**
  * A one-time-use non-thread-safe object that's meant to be used once and then thrown away.
@@ -40,6 +40,7 @@ import org.apache.juneau.commons.utils.*;
  *
  */
 public abstract class ContextSession {
+
 	/**
 	 * Builder class.
 	 */
@@ -47,7 +48,7 @@ public abstract class ContextSession {
 		private Boolean debug;
 		private boolean unmodifiable;
 		private Context ctx;
-		private JsonMap properties;
+		private ResettableSupplier<LinkedHashMap<String,Object>> properties;
 
 		/**
 		 * Constructor.
@@ -57,7 +58,7 @@ public abstract class ContextSession {
 		 */
 		protected Builder(Context ctx) {
 			this.ctx = assertArgNotNull("ctx", ctx);
-			debug = ctx.isDebug();
+			this.properties = memoizeResettable(LinkedHashMap::new);
 		}
 
 		/**
@@ -101,12 +102,11 @@ public abstract class ContextSession {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>Can be <jk>null</jk>.  Value will be ignored.
+		 * 	<br>If <jk>null</jk>, defaults to {@link Context#isDebug()}.
 		 * @return This object.
 		 */
 		public Builder debug(Boolean value) {
-			if (nn(value))
-				debug = value;
+			debug = value;
 			return this;
 		}
 
@@ -119,11 +119,13 @@ public abstract class ContextSession {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>Can be <jk>null</jk>.
+		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder properties(Map<String,Object> value) {
-			properties = JsonMap.of(value);
+			assertArgNotNull("value", value);
+			properties.reset();
+			properties.get().putAll(value);
 			return this;
 		}
 
@@ -137,12 +139,12 @@ public abstract class ContextSession {
 		 * @return This object.
 		 */
 		public Builder property(String key, Object value) {
-			if (properties == null)
-				properties = JsonMap.create();
+			assertArgNotNull("key", key);
+			var map = properties.get();
 			if (value == null) {
-				properties.remove(assertArgNotNull("key", key));
+				map.remove(key);
 			} else {
-				properties.put(assertArgNotNull("key", key), value);
+				map.put(key, value);
 			}
 			return this;
 		}
@@ -164,7 +166,7 @@ public abstract class ContextSession {
 	private final boolean debug;
 	private final boolean unmodifiable;
 	private final Context ctx;
-	private final JsonMap properties;
+	private final Map<String,Object> properties;
 	private List<String> warnings;	// Any warnings encountered.
 
 	/**
@@ -176,12 +178,14 @@ public abstract class ContextSession {
 	protected ContextSession(Builder builder) {
 		assertArgNotNull("builder", builder);
 		ctx = builder.ctx;
-		debug = builder.debug;
+		debug = opt(builder.debug).orElse(ctx.isDebug());
 		unmodifiable = builder.unmodifiable;
-		var sp = builder.properties == null ? JsonMap.EMPTY_MAP : builder.properties;
-		if (unmodifiable)
-			sp = sp.unmodifiable();
-		properties = sp;
+		var sp = builder.properties.get();
+		if (unmodifiable) {
+			properties = sp.isEmpty() ? Collections.emptyMap() : u(sp);
+		} else {
+			properties = sp;
+		}
 	}
 
 	/**
@@ -193,11 +197,12 @@ public abstract class ContextSession {
 	 * 	<br>Cannot contain <jk>null</jk> values.
 	 */
 	public void addWarning(String msg, Object...args) {
+		assertArgsNotNull("msg", msg, "args", args);
 		if (unmodifiable)
 			return;
 		if (warnings == null)
 			warnings = new LinkedList<>();
-		warnings.add((warnings.size() + 1) + ": " + f(assertArgNotNull("msg", msg), assertArgNoNulls("args", args)));
+		warnings.add((warnings.size() + 1) + ": " + f(msg, args));
 	}
 
 	/**
@@ -205,7 +210,7 @@ public abstract class ContextSession {
 	 */
 	public void checkForWarnings() {
 		if (debug && ! getWarnings().isEmpty())
-			throw bex("Warnings occurred in session: \n" + StringUtils.join(getWarnings(), "\n"));
+			throw bex("Warnings occurred in session: \n" + join(getWarnings(), "\n"));
 	}
 
 	/**
@@ -220,7 +225,7 @@ public abstract class ContextSession {
 	 *
 	 * @return The session properties on this session.  Never <jk>null</jk>.
 	 */
-	public final JsonMap getSessionProperties() { return properties; }
+	public final Map<String,Object> getSessionProperties() { return properties; }
 
 	/**
 	 * Returns the warnings that occurred in this session.

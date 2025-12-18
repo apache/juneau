@@ -86,7 +86,7 @@ public class SerializerSession extends BeanTraverseSession {
 			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
 			mediaTypeDefault(ctx.getResponseContentType());
-			uriContext = ctx.uriContext;
+			uriContext = ctx.getUriContext();
 		}
 
 		@Override /* Overridden from Builder */
@@ -123,12 +123,6 @@ public class SerializerSession extends BeanTraverseSession {
 		@Override /* Overridden from Builder */
 		public Builder locale(Locale value) {
 			super.locale(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder localeDefault(Locale value) {
-			super.localeDefault(value);
 			return this;
 		}
 

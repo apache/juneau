@@ -155,9 +155,9 @@ public class Serializer extends BeanTraverseContext {
 			trimEmptyCollections = copyFrom.trimEmptyCollections;
 			trimEmptyMaps = copyFrom.trimEmptyMaps;
 			trimStrings = copyFrom.trimStrings;
-			uriContext = copyFrom.uriContext;
-			uriRelativity = copyFrom.uriRelativity;
-			uriResolution = copyFrom.uriResolution;
+			uriContext = copyFrom.getUriContext();
+			uriRelativity = copyFrom.getUriRelativity();
+			uriResolution = copyFrom.getUriResolution();
 			listener = copyFrom.listener;
 		}
 
@@ -1288,9 +1288,9 @@ public class Serializer extends BeanTraverseContext {
 	protected final Class<? extends SerializerListener> listener;
 	protected final String accept;
 	protected final String produces;
-	protected final UriContext uriContext;
-	protected final UriRelativity uriRelativity;
-	protected final UriResolution uriResolution;
+	private final UriContext uriContext;
+	private final UriRelativity uriRelativity;
+	private final UriResolution uriResolution;
 	private final MediaRanges acceptRanges;
 	private final List<MediaType> acceptMediaTypes;
 	private final MediaType producesMediaType;

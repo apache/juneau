@@ -70,8 +70,8 @@ public class WriterSerializerSession extends SerializerSession {
 		protected Builder(WriterSerializer ctx) {
 			super(assertArgNotNull("ctx", ctx));
 			this.ctx = ctx;
-			fileCharset = ctx.fileCharset;
-			streamCharset = ctx.streamCharset;
+			fileCharset = ctx.getFileCharset();
+			streamCharset = ctx.getStreamCharset();
 			useWhitespace = ctx.useWhitespace;
 		}
 
@@ -124,12 +124,6 @@ public class WriterSerializerSession extends SerializerSession {
 		@Override /* Overridden from Builder */
 		public Builder locale(Locale value) {
 			super.locale(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder localeDefault(Locale value) {
-			super.localeDefault(value);
 			return this;
 		}
 

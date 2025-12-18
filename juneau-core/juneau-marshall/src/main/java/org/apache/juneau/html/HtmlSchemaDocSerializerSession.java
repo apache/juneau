@@ -93,12 +93,6 @@ public class HtmlSchemaDocSerializerSession extends HtmlDocSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder localeDefault(Locale value) {
-			super.localeDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder mediaType(MediaType value) {
 			super.mediaType(value);
 			return this;

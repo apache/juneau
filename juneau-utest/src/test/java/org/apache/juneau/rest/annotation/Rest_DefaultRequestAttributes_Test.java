@@ -84,7 +84,7 @@ class Rest_DefaultRequestAttributes_Test extends TestBase {
 
 		private static Object in(ReaderParserSession session) {
 			var sp = session.getSessionProperties();
-			return "p1="+sp.get("p1",null)+",p2="+sp.get("p2",null)+",p3="+sp.get("p3",null)+",p4="+sp.get("p4",null)+",p5="+sp.get("p5",null);
+			return "p1="+sp.get("p1")+",p2="+sp.get("p2")+",p3="+sp.get("p3")+",p4="+sp.get("p4")+",p5="+sp.get("p5");
 
 		}
 	}
@@ -154,12 +154,12 @@ class Rest_DefaultRequestAttributes_Test extends TestBase {
 		}
 		public static String out(SerializerSession s) {
 			var sp = s.getSessionProperties();
-			return "p1="+sp.get("p1",null)+",p2="+sp.get("p2",null)+",p3="+sp.get("p3",null)+",p4="+sp.get("p4",null)+",p5="+sp.get("p5",null);
+			return "p1="+sp.get("p1")+",p2="+sp.get("p2")+",p3="+sp.get("p3")+",p4="+sp.get("p4")+",p5="+sp.get("p5");
 		}
 		public static Map<String,String> headers(SerializerSession s) {
 			var sp = s.getSessionProperties();
 			if (sp.containsKey("Override-Content-Type"))
-				return m("Content-Type",sp.getString("Override-Content-Type",null));
+				return m("Content-Type",sp.get("Override-Content-Type").toString());
 			return emptyMap();
 		}
 	}
