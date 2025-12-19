@@ -190,10 +190,10 @@
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; keySet() {
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">var</strong> s = setb(String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			.addIf(nn(schema), <span class="jxr_string">"schema"</span>)
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			.addIf(nn(example), <span class="jxr_string">"x-example"</span>)
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			.addIf(isNotEmpty(encoding), <span class="jxr_string">"encoding"</span>)
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 			.addIf(isNotEmpty(examples), <span class="jxr_string">"examples"</span>)
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			.addIf(isNotEmpty(encoding), <span class="jxr_string">"encoding"</span>)
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			.addIf(isNotEmpty(examples), <span class="jxr_string">"examples"</span>)
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			.addIf(nn(schema), <span class="jxr_string">"schema"</span>)
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 			.addIf(nn(example), <span class="jxr_string">"x-example"</span>)
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 			.build();
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> MultiSet&lt;&gt;(s, <strong class="jxr_keyword">super</strong>.keySet());
