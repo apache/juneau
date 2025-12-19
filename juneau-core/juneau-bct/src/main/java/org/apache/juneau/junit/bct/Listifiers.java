@@ -20,6 +20,7 @@ import static java.util.Collections.*;
 import static java.util.Spliterators.*;
 import static java.util.stream.StreamSupport.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.junit.bct.BctConfiguration.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -134,7 +135,7 @@ public class Listifiers {
 	@SuppressWarnings("unchecked")
 	public static Listifier<Collection> collectionListifier() {
 		return (bc, collection) -> {
-			if (collection instanceof Set && ! (collection instanceof SortedSet) && ! (collection instanceof LinkedHashSet)) {
+			if (collection instanceof Set && ! (collection instanceof SortedSet) && ! (collection instanceof LinkedHashSet) && BctConfiguration.get(BCT_SORT_COLLECTIONS, false)) {
 				// TODO - This is too unreliable.
 				var collection2 = new TreeSet<>(flexibleComparator(bc));
 				collection2.addAll(collection);
@@ -314,8 +315,7 @@ public class Listifiers {
 	@SuppressWarnings("unchecked")
 	public static Listifier<Map> mapListifier() {
 		return (bc, map) -> {
-			if (! (map instanceof SortedMap) && ! (map instanceof LinkedHashMap)) {
-				// TODO - This is too unreliable.
+			if (! (map instanceof SortedMap) && ! (map instanceof LinkedHashMap) && BctConfiguration.get(BCT_SORT_MAPS, false)) {
 				var map2 = new TreeMap<>(flexibleComparator(bc));
 				map2.putAll(map);
 				map = map2;

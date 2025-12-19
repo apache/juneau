@@ -271,7 +271,7 @@ class Items_Test extends TestBase {
 		}
 
 		@Test void c07_keySet() {
-			assertList(TESTER.bean().keySet(), "additionalItems", "allOf", "collectionFormat", "default", "discriminator", "enum", "example", "exclusiveMaximum", "exclusiveMinimum", "externalDocs", "format", "items", "maxItems", "maxLength", "maxProperties", "maximum", "minItems", "minLength", "minProperties", "minimum", "multipleOf", "pattern", "properties", "readOnly", "required", "title", "type", "uniqueItems", "x1", "x2", "xml");
+			assertList(TESTER.bean().keySet(), "collectionFormat", "default", "enum", "exclusiveMaximum", "exclusiveMinimum", "format", "items", "maxItems", "maxLength", "maximum", "minItems", "minLength", "minimum", "multipleOf", "pattern", "type", "uniqueItems", "additionalItems", "allOf", "discriminator", "example", "externalDocs", "maxProperties", "minProperties", "properties", "readOnly", "required", "title", "xml", "x1", "x2");
 		}
 
 		@Test void c08_get() {

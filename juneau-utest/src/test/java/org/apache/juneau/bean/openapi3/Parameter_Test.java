@@ -228,7 +228,7 @@ class Parameter_Test extends TestBase {
 		}
 
 		@Test void c07_keySet() {
-			assertList(TESTER.bean().keySet(), "allowEmptyValue", "allowReserved", "content", "deprecated", "description", "example", "examples", "explode", "in", "name", "required", "schema", "style", "x1", "x2");
+			assertList(TESTER.bean().keySet(), "allowEmptyValue", "allowReserved", "deprecated", "description", "example", "examples", "explode", "in", "name", "required", "schema", "style", "content", "x1", "x2");
 		}
 
 		@Test void c08_get() {

@@ -277,7 +277,7 @@ class SchemaInfo_Test extends TestBase {
 		}
 
 		@Test void c07_keySet() {
-			assertList(TESTER.bean().keySet(), "additionalItems", "additionalProperties", "allOf", "anyOf", "default", "description", "discriminator", "enum", "example", "exclusiveMaximum", "exclusiveMinimum", "externalDocs", "format", "items", "maxItems", "maxLength", "maxProperties", "maximum", "minItems", "minLength", "minProperties", "minimum", "multipleOf", "not", "nullable", "oneOf", "pattern", "properties", "readOnly", "required", "title", "type", "uniqueItems", "writeOnly", "x1", "x2", "xml");
+			assertList(TESTER.bean().keySet(), "additionalProperties", "allOf", "anyOf", "default", "description", "discriminator", "enum", "example", "exclusiveMaximum", "exclusiveMinimum", "externalDocs", "format", "items", "maxItems", "maxLength", "maxProperties", "maximum", "minItems", "minLength", "minProperties", "minimum", "multipleOf", "not", "nullable", "oneOf", "pattern", "properties", "readOnly", "required", "title", "type", "uniqueItems", "writeOnly", "xml", "additionalItems", "x1", "x2");
 		}
 
 		@Test void c08_get() {

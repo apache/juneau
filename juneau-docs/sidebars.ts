@@ -863,28 +863,40 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
-          id: 'topics/07.01.01.Stringifiers',
-          label: '7.1.1. Stringifiers',
+          id: 'topics/07.02.00.CustomErrorMessages',
+          label: '7.2. Custom Error Messages',
         },
         {
-          type: 'doc',
-          id: 'topics/07.01.02.Listifiers',
-          label: '7.1.2. Listifiers',
-        },
-        {
-          type: 'doc',
-          id: 'topics/07.01.03.Swappers',
-          label: '7.1.3. Swappers',
+          type: 'category',
+          label: '7.3. Customization',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'topics/07.03.00.Customization',
+              label: '7.3. Customization',
+            },
+            {
+              type: 'doc',
+              id: 'topics/07.03.01.Stringifiers',
+              label: '7.3.1. Stringifiers',
+            },
+            {
+              type: 'doc',
+              id: 'topics/07.03.02.Listifiers',
+              label: '7.3.2. Listifiers',
+            },
+            {
+              type: 'doc',
+              id: 'topics/07.03.03.Swappers',
+              label: '7.3.3. Swappers',
+            },
+          ],
         },
         {
           type: 'doc',
           id: 'topics/07.01.04.PropertyExtractors',
           label: '7.1.4. Property Extractors',
-        },
-        {
-          type: 'doc',
-          id: 'topics/07.01.05.CustomErrorMessages',
-          label: '7.1.5. Custom Error Messages',
         },
       ],
     },

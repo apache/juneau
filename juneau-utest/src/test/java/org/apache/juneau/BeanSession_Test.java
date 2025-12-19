@@ -16,8 +16,6 @@
  */
 package org.apache.juneau;
 
-import org.junit.jupiter.api.*;
-
 class BeanSession_Test extends TestBase {
 	// Test class for BeanSession
 }

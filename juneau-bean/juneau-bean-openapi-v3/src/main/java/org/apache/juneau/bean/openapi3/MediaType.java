@@ -182,10 +182,10 @@ public class MediaType extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(schema), "schema")
-			.addIf(nn(example), "x-example")
 			.addIf(isNotEmpty(encoding), "encoding")
 			.addIf(isNotEmpty(examples), "examples")
+			.addIf(nn(schema), "schema")
+			.addIf(nn(example), "x-example")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());

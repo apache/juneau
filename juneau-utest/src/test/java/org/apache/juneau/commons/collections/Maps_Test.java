@@ -16,12 +16,14 @@
  */
 package org.apache.juneau.commons.collections;
 
+import static org.apache.juneau.commons.lang.TriState.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.junit.bct.annotations.*;
 import org.junit.jupiter.api.*;
 
 class Maps_Test extends TestBase {
@@ -92,6 +94,7 @@ class Maps_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
+	@BctConfig(sortMaps = TRUE)
 	void b01_addPairs() {
 		var map = Maps.create(String.class, String.class)
 			.addPairs("host", "localhost", "port", "8080", "protocol", "https")

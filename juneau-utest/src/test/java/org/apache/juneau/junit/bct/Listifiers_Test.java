@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.junit.bct;
 
+import static org.apache.juneau.commons.lang.TriState.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
@@ -25,6 +26,7 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.junit.bct.annotations.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -46,20 +48,21 @@ class Listifiers_Test extends TestBase {
 		}
 
 		@Test
+		@BctConfig(sortCollections = TRUE)
 		void a02_listifySet() {
 			var listifier = Listifiers.collectionListifier();
 			var input = Set.of("z", "a", "m"); // Unordered input
 			var result = listifier.apply(null, input);
-
-			// TreeSet conversion ensures natural ordering
 			assertList(result, "a", "m", "z");
 		}
 
 		@Test
+		@BctConfig(sortCollections = TRUE)
 		void a02a_listifySetTypes() {
 			var listifier = Listifiers.collectionListifier();
 
 			// HashSet (unordered) -> converted to TreeSet for natural ordering
+			BctConfiguration.set(BctConfiguration.BCT_SORT_MAPS, true);
 			var hashSet = new HashSet<>(l("z", "a", "m"));
 			var hashResult = listifier.apply(null, hashSet);
 			assertList(hashResult, "a", "m", "z");
@@ -298,6 +301,7 @@ class Listifiers_Test extends TestBase {
 	class F_mapListifier extends TestBase {
 
 		@Test
+		@BctConfig(sortMaps = TRUE)
 		void f01_listifyMap() {
 			var listifier = Listifiers.mapListifier();
 			var input = m("z", "value1", "a", "value2"); // Unordered input
@@ -314,6 +318,7 @@ class Listifiers_Test extends TestBase {
 		}
 
 		@Test
+		@BctConfig(sortMaps = TRUE)
 		void f01a_listifyMapTypes() {
 			var listifier = Listifiers.mapListifier();
 

@@ -20,12 +20,14 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.commons.lang.TriState.*;
 
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.junit.bct.annotations.*;
 import org.junit.jupiter.api.*;
 import org.opentest4j.*;
 
@@ -392,6 +394,7 @@ class BctAssertions_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
+	@BctConfig(sortMaps = TRUE)
 	class H_assertMap extends TestBase {
 
 		@Test

@@ -27,7 +27,6 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.utils.*;
 import org.opentest4j.*;
 
@@ -118,53 +117,53 @@ import org.opentest4j.*;
  *       <js>"prop1,prop2"</js>, <js>"value1,value2"</js>);
  * </p>
  *
-	 * <h5 class='section'>Customizing the Default Converter:</h5>
-	 * <p>The default bean converter can be customized on a per-thread basis using:</p>
-	 * <ul>
-	 *    <li><b>{@link #setConverter(BeanConverter)}:</b> Set a custom converter for the current thread</li>
-	 *    <li><b>{@link #resetConverter()}:</b> Reset to the system default converter</li>
-	 * </ul>
-	 *
-	 * <p class='bjava'>
-	 *    <jc>// Example: Set custom converter in @BeforeEach method</jc>
-	 *    <ja>@BeforeEach</ja>
-	 *    <jk>void</jk> <jsm>setUp</jsm>() {
-	 *       <jk>var</jk> <jv>customConverter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
-	 *          .defaultSettings()
-	 *          .addStringifier(LocalDate.<jk>class</jk>, <jp>date</jp> -> <jp>date</jp>.format(DateTimeFormatter.<jsf>ISO_LOCAL_DATE</jsf>))
-	 *          .addStringifier(MyType.<jk>class</jk>, <jp>obj</jp> -> <jp>obj</jp>.customFormat())
-	 *          .build();
-	 *       BctAssertions.<jsm>setConverter</jsm>(<jv>customConverter</jv>);
-	 *    }
-	 *
-	 *    <jc>// All assertions in this test class now use the custom converter</jc>
-	 *    <ja>@Test</ja>
-	 *    <jk>void</jk> <jsm>testWithCustomConverter</jsm>() {
-	 *       <jsm>assertBean</jsm>(<jv>myObject</jv>, <js>"date,property"</js>, <js>"2023-12-01,value"</js>);
-	 *    }
-	 *
-	 *    <jc>// Clean up in @AfterEach method</jc>
-	 *    <ja>@AfterEach</ja>
-	 *    <jk>void</jk> <jsm>tearDown</jsm>() {
-	 *       BctAssertions.<jsm>resetConverter</jsm>();
-	 *    }
-	 * </p>
-	 *
-	 * <p class='bjava'>
-	 *    <jc>// Example: Per-test method converter override</jc>
-	 *    <ja>@Test</ja>
-	 *    <jk>void</jk> <jsm>testSpecificFormat</jsm>() {
-	 *       <jk>var</jk> <jv>dateConverter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
-	 *          .defaultSettings()
-	 *          .addStringifier(LocalDateTime.<jk>class</jk>, <jp>dt</jp> -> <jp>dt</jp>.format(DateTimeFormatter.<jsf>ISO_DATE_TIME</jsf>))
-	 *          .build();
-	 *       BctAssertions.<jsm>setConverter</jsm>(<jv>dateConverter</jv>);
-	 *       <jkt>try</jkt> {
-	 *          <jsm>assertBean</jsm>(<jv>event</jv>, <js>"timestamp"</js>, <js>"2023-12-01T10:30:00"</js>);
-	 *       } <jkt>finally</jkt> {
-	 *          BctAssertions.<jsm>resetConverter</jsm>();
-	 *       }
-	 *    }
+ * <h5 class='section'>Customizing the Default Converter:</h5>
+ * <p>The default bean converter can be customized on a per-thread basis using:</p>
+ * <ul>
+ *    <li><b>{@link #setConverter(BeanConverter)}:</b> Set a custom converter for the current thread</li>
+ *    <li><b>{@link #resetConverter()}:</b> Reset to the system default converter</li>
+ * </ul>
+ *
+ * <p class='bjava'>
+ *    <jc>// Example: Set custom converter in @BeforeEach method</jc>
+ *    <ja>@BeforeEach</ja>
+ *    <jk>void</jk> <jsm>setUp</jsm>() {
+ *       <jk>var</jk> <jv>customConverter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
+ *          .defaultSettings()
+ *          .addStringifier(LocalDate.<jk>class</jk>, <jp>date</jp> -> <jp>date</jp>.format(DateTimeFormatter.<jsf>ISO_LOCAL_DATE</jsf>))
+ *          .addStringifier(MyType.<jk>class</jk>, <jp>obj</jp> -> <jp>obj</jp>.customFormat())
+ *          .build();
+ *       BctAssertions.<jsm>setConverter</jsm>(<jv>customConverter</jv>);
+ *    }
+ *
+ *    <jc>// All assertions in this test class now use the custom converter</jc>
+ *    <ja>@Test</ja>
+ *    <jk>void</jk> <jsm>testWithCustomConverter</jsm>() {
+ *       <jsm>assertBean</jsm>(<jv>myObject</jv>, <js>"date,property"</js>, <js>"2023-12-01,value"</js>);
+ *    }
+ *
+ *    <jc>// Clean up in @AfterEach method</jc>
+ *    <ja>@AfterEach</ja>
+ *    <jk>void</jk> <jsm>tearDown</jsm>() {
+ *       BctAssertions.<jsm>resetConverter</jsm>();
+ *    }
+ * </p>
+ *
+ * <p class='bjava'>
+ *    <jc>// Example: Per-test method converter override</jc>
+ *    <ja>@Test</ja>
+ *    <jk>void</jk> <jsm>testSpecificFormat</jsm>() {
+ *       <jk>var</jk> <jv>dateConverter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
+ *          .defaultSettings()
+ *          .addStringifier(LocalDateTime.<jk>class</jk>, <jp>dt</jp> -> <jp>dt</jp>.format(DateTimeFormatter.<jsf>ISO_DATE_TIME</jsf>))
+ *          .build();
+ *       BctAssertions.<jsm>setConverter</jsm>(<jv>dateConverter</jv>);
+ *       <jkt>try</jkt> {
+ *          <jsm>assertBean</jsm>(<jv>event</jv>, <js>"timestamp"</js>, <js>"2023-12-01T10:30:00"</js>);
+ *       } <jkt>finally</jkt> {
+ *          BctAssertions.<jsm>resetConverter</jsm>();
+ *       }
+ *    }
  * </p>
  *
  * <h5 class='section'>Performance and Thread Safety:</h5>
@@ -182,12 +181,6 @@ import org.opentest4j.*;
  * @see #resetConverter()
  */
 public class BctAssertions {
-
-	// Thread-local memoized supplier for default converter (defaults to BasicBeanConverter.DEFAULT)
-	private static final ThreadLocal<ResettableSupplier<BeanConverter>> CONVERTER_SUPPLIER = ThreadLocal.withInitial(() -> memoizeResettable(() -> BasicBeanConverter.DEFAULT));
-
-	// Thread-local override for method-level converter customization
-	private static final ThreadLocal<BeanConverter> CONVERTER_OVERRIDE = new ThreadLocal<>();
 
 	/**
 	 * Asserts that the fields/properties on the specified bean are the specified values after being converted to strings.
@@ -391,7 +384,7 @@ public class BctAssertions {
 		assertNotNull(actual, "Actual was null.");
 		assertArgNotNull("fields", fields);
 		assertArgNotNull("expected", expected);
-		var converter = getConverter();
+		var converter = BctConfiguration.getConverter();
 		assertEquals(expected, tokenize(fields).stream().map(x -> converter.getNested(actual, x)).collect(joining(",")), composeMessage(message, "Bean assertion failed."));
 	}
 
@@ -473,7 +466,7 @@ public class BctAssertions {
 		assertArgNotNull("fields", fields);
 		assertArgNotNull("expected", expected);
 
-		var converter = getConverter();
+		var converter = BctConfiguration.getConverter();
 		var tokens = tokenize(fields);
 		var errors = new ArrayList<AssertionFailedError>();
 		List<Object> actualList = converter.listify(actual);
@@ -549,7 +542,7 @@ public class BctAssertions {
 		assertArgNotNull("actual", actual);
 		assertNotNull(actual, "Value was null.");
 
-		var a = getConverter().stringify(actual);
+		var a = BctConfiguration.getConverter().stringify(actual);
 		assertTrue(a.contains(expected), composeMessage(message, "String did not contain expected substring.  ==> expected: <{0}> but was: <{1}>", expected, a));
 	}
 
@@ -596,7 +589,7 @@ public class BctAssertions {
 		assertArgNotNull("expected", expected);
 		assertNotNull(actual, "Value was null.");
 
-		var a = getConverter().stringify(actual);
+		var a = BctConfiguration.getConverter().stringify(actual);
 		var errors = new ArrayList<AssertionFailedError>();
 
 		for (var e : expected) {
@@ -683,7 +676,7 @@ public class BctAssertions {
 	 */
 	public static void assertEmpty(Supplier<String> message, Object value) {
 		assertNotNull(value, "Value was null.");
-		var size = getConverter().size(value);
+		var size = BctConfiguration.getConverter().size(value);
 		assertEquals(0, size, composeMessage(message, "Value was not empty. Size=<{0}>", size));
 	}
 
@@ -761,7 +754,7 @@ public class BctAssertions {
 		assertArgNotNull("expected", expected);
 		assertArgNotNull("actual", actual);
 
-		var converter = getConverter();
+		var converter = BctConfiguration.getConverter();
 		List<Object> list = converter.listify(actual);
 		var errors = new ArrayList<AssertionFailedError>();
 
@@ -990,7 +983,7 @@ public class BctAssertions {
 		assertArgNotNull("pattern", pattern);
 		assertNotNull(value, "Value was null.");
 
-		var v = getConverter().stringify(value);
+		var v = BctConfiguration.getConverter().stringify(value);
 		var m = StringUtils.getGlobMatchPattern(pattern).matcher(v);
 		assertTrue(m.matches(), composeMessage(message, "Pattern didn''t match. ==> pattern: <{0}> but was: <{1}>", pattern, v));
 	}
@@ -1056,7 +1049,7 @@ public class BctAssertions {
 	 */
 	public static void assertNotEmpty(Supplier<String> message, Object value) {
 		assertNotNull(value, "Value was null.");
-		int size = getConverter().size(value);
+		int size = BctConfiguration.getConverter().size(value);
 		assertTrue(size > 0, composeMessage(message, "Value was empty."));
 	}
 
@@ -1102,7 +1095,7 @@ public class BctAssertions {
 	 */
 	public static void assertSize(Supplier<String> message, int expected, Object actual) {
 		assertNotNull(actual, "Value was null.");
-		var size = getConverter().size(actual);
+		var size = BctConfiguration.getConverter().size(actual);
 		assertEquals(expected, size, composeMessage(message, "Value not expected size."));
 	}
 
@@ -1153,67 +1146,7 @@ public class BctAssertions {
 		assertNotNull(actual, "Value was null.");
 
 		var messageSupplier = message != null ? message : fs("");
-		assertEquals(expected, getConverter().stringify(actual), messageSupplier);
-	}
-
-	/**
-	 * Resets the bean converter for the current thread to the system default.
-	 *
-	 * <p>This method clears any thread-local converter override set via {@link #setConverter(BeanConverter)},
-	 * restoring the default converter ({@link BasicBeanConverter#DEFAULT}) for subsequent assertions.</p>
-	 *
-	 * <p>This is typically called in test teardown methods (e.g., {@code @AfterEach}) to clean up after tests
-	 * that set a custom converter.</p>
-	 *
-	 * <h5 class='section'>Usage Example:</h5>
-	 * <p class='bjava'>
-	 *    <jc>// In @AfterEach method</jc>
-	 *    BctAssertions.<jsm>resetConverter</jsm>();
-	 * </p>
-	 *
-	 * <h5 class='section'>Thread Safety:</h5>
-	 * <p>This method is thread-safe and only affects the current thread's converter.</p>
-	 *
-	 * @see #setConverter(BeanConverter)
-	 */
-	public static void resetConverter() {
-		CONVERTER_OVERRIDE.remove();
-		CONVERTER_SUPPLIER.get().reset();
-	}
-
-	/**
-	 * Sets a custom bean converter for the current thread.
-	 *
-	 * <p>This method allows you to override the default converter for all assertions in the current test method.
-	 * The converter will be used by all assertion methods in the current thread.</p>
-	 *
-	 * <p>This is particularly useful in test setup methods (e.g., {@code @BeforeEach}) to configure a custom converter
-	 * for all tests in a test class or method.</p>
-	 *
-	 * <h5 class='section'>Usage Example:</h5>
-	 * <p class='bjava'>
-	 *    <jc>// In @BeforeEach method</jc>
-	 *    <jk>var</jk> <jv>customConverter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
-	 *       .defaultSettings()
-	 *       .addStringifier(LocalDate.<jk>class</jk>, <jp>date</jp> -> <jp>date</jp>.format(DateTimeFormatter.<jsf>ISO_LOCAL_DATE</jsf>))
-	 *       .build();
-	 *    BctAssertions.<jsm>setConverter</jsm>(<jv>customConverter</jv>);
-	 *
-	 *    <jc>// All subsequent assertions in this test method will use the custom converter</jc>
-	 *    <jsm>assertBean</jsm>(<jv>event</jv>, <js>"date"</js>, <js>"2023-12-01"</js>);
-	 * </p>
-	 *
-	 * <h5 class='section'>Thread Safety:</h5>
-	 * <p>This method is thread-safe and uses thread-local storage. Each test method running in parallel
-	 * will have its own converter instance, preventing cross-thread interference.</p>
-	 *
-	 * @param converter The bean converter to use for the current thread. Must not be <jk>null</jk>.
-	 * @throws IllegalArgumentException If converter is <jk>null</jk>.
-	 * @see #resetConverter()
-	 */
-	public static void setConverter(BeanConverter converter) {
-		assertArgNotNull("converter", converter);
-		CONVERTER_OVERRIDE.set(converter);
+		assertEquals(expected, BctConfiguration.getConverter().stringify(actual), messageSupplier);
 	}
 
 	/**
@@ -1232,22 +1165,6 @@ public class BctAssertions {
 			return fs(defaultMessage, defaultArgs);
 		}
 		return fs("{0}, Caused by: {1}", customMessage.get(), f(defaultMessage, defaultArgs));
-	}
-
-	/**
-	 * Gets the bean converter for the current thread.
-	 *
-	 * <p>Returns the thread-local converter override if set, otherwise returns the memoized default converter.
-	 * This method is used internally by all assertion methods to get the current thread-local converter.</p>
-	 *
-	 * @return The bean converter to use for the current thread.
-	 */
-	private static BeanConverter getConverter() {
-		var override = CONVERTER_OVERRIDE.get();
-		if (override != null) {
-			return override;
-		}
-		return CONVERTER_SUPPLIER.get().get();
 	}
 
 	private BctAssertions() {}

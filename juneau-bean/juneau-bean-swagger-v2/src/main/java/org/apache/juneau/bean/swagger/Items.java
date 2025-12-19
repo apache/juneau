@@ -328,6 +328,7 @@ public class Items extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
+			.addIf(nn(ref), "$ref")
 			.addIf(nn(collectionFormat), "collectionFormat")
 			.addIf(nn(default_), "default")
 			.addIf(isNotEmpty(enum_), "enum")
@@ -335,15 +336,14 @@ public class Items extends SwaggerElement {
 			.addIf(nn(exclusiveMinimum), "exclusiveMinimum")
 			.addIf(nn(format), "format")
 			.addIf(nn(items), "items")
-			.addIf(nn(maximum), "maximum")
 			.addIf(nn(maxItems), "maxItems")
 			.addIf(nn(maxLength), "maxLength")
-			.addIf(nn(minimum), "minimum")
+			.addIf(nn(maximum), "maximum")
 			.addIf(nn(minItems), "minItems")
 			.addIf(nn(minLength), "minLength")
+			.addIf(nn(minimum), "minimum")
 			.addIf(nn(multipleOf), "multipleOf")
 			.addIf(nn(pattern), "pattern")
-			.addIf(nn(ref), "$ref")
 			.addIf(nn(type), "type")
 			.addIf(nn(uniqueItems), "uniqueItems")
 			.build();

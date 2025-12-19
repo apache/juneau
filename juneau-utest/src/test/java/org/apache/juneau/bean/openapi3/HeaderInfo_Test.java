@@ -221,7 +221,7 @@ class HeaderInfo_Test extends TestBase {
 		}
 
 		@Test void c07_keySet() {
-			assertList(TESTER.bean().keySet(), "allowEmptyValue", "allowReserved", "deprecated", "description", "examples", "explode", "required", "schema", "style", "x-example", "x1", "x2");
+			assertList(TESTER.bean().keySet(), "allowEmptyValue", "allowReserved", "deprecated", "description", "examples", "explode", "required", "schema", "x-example", "style", "x1", "x2");
 		}
 
 		@Test void c08_get() {

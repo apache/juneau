@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.junit.bct;
 
+import static org.apache.juneau.commons.lang.TriState.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BasicBeanConverter.*;
@@ -29,6 +30,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.junit.bct.annotations.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -172,6 +174,7 @@ class BasicBeanConverter_Test extends TestBase {
 
 		@Test
 		@DisplayName("b04_stringify() handles collections")
+		@BctConfig(sortCollections = TRUE)
 		void b04_stringify_handlesCollections() {
 			assertEquals("[1,2,3]", converter.stringify(l(1, 2, 3)));
 			assertEquals("[]", converter.stringify(Collections.emptyList()));
@@ -216,6 +219,7 @@ class BasicBeanConverter_Test extends TestBase {
 
 		@Test
 		@DisplayName("b09_listify() handles collections")
+		@BctConfig(sortCollections = TRUE)
 		void b09_listify_handlesCollections() {
 			var set = Set.of("z", "a", "m");
 			var result = converter.listify(set);

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.collections;
 
+import static org.apache.juneau.commons.lang.TriState.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.junit.bct.annotations.*;
 import org.junit.jupiter.api.*;
 
 class Sets_Test extends TestBase {
@@ -849,6 +851,7 @@ class Sets_Test extends TestBase {
 	}
 
 	@Test
+	@BctConfig(sortCollections = TRUE)
 	void u02_filtered_multipleFilters() {
 		var set = Sets.create(Integer.class)
 			.filtered(v -> v != null)
