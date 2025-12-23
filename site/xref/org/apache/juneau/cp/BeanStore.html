@@ -38,8 +38,8 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.util.stream.*;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.collections.*;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.*;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.utils.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.concurrent.*;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.*;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * Java bean store.</em>
@@ -268,7 +268,7 @@
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 	<strong class="jxr_keyword">final</strong> Optional&lt;BeanStore&gt; parent;
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 	<strong class="jxr_keyword">final</strong> Optional&lt;Object&gt; <strong class="jxr_keyword">outer</strong>;
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 	<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> readOnly, threadSafe;
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 	<strong class="jxr_keyword">final</strong> <a name="SimpleReadWriteLock" href="../../../../org/apache/juneau/commons/utils/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a> lock;
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 	<strong class="jxr_keyword">final</strong> <a name="SimpleReadWriteLock" href="../../../../org/apache/juneau/commons/concurrent/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a> lock;
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
@@ -280,7 +280,7 @@
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 		<strong class="jxr_keyword">outer</strong> = opt(builder.<strong class="jxr_keyword">outer</strong>);
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 		readOnly = builder.readOnly;
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 		threadSafe = builder.threadSafe;
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		lock = threadSafe ? <strong class="jxr_keyword">new</strong> <a name="SimpleReadWriteLock" href="../../../../org/apache/juneau/commons/utils/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a>() : SimpleReadWriteLock.NO_OP;
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		lock = threadSafe ? <strong class="jxr_keyword">new</strong> <a name="SimpleReadWriteLock" href="../../../../org/apache/juneau/commons/concurrent/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a>() : SimpleReadWriteLock.NO_OP;
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 		entries = threadSafe ? <strong class="jxr_keyword">new</strong> ConcurrentLinkedDeque&lt;&gt;() : <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 		unnamedEntries = threadSafe ? <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;() : map();
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 	}
