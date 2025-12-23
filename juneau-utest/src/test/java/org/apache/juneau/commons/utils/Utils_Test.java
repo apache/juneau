@@ -26,8 +26,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.lang.*;
 import org.junit.jupiter.api.*;
 
 @Retention(RetentionPolicy.RUNTIME)

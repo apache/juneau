@@ -334,7 +334,7 @@ class Lists_Test extends TestBase {
 
 	@Test
 	void k02_elementFunction_withConverter() {
-		var converter = new org.apache.juneau.commons.utils.Converter() {
+		var converter = new org.apache.juneau.commons.conversion.Converter() {
 			@Override
 			public <T> T convertTo(Class<T> type, Object o) {
 				if (type == Integer.class && o instanceof String) {
@@ -354,14 +354,14 @@ class Lists_Test extends TestBase {
 
 	@Test
 	void k03_elementFunction_multipleConverters() {
-		var converter1 = new org.apache.juneau.commons.utils.Converter() {
+		var converter1 = new org.apache.juneau.commons.conversion.Converter() {
 			@Override
 			public <T> T convertTo(Class<T> type, Object o) {
 				return null;  // Doesn't handle this
 			}
 		};
 
-		var converter2 = new org.apache.juneau.commons.utils.Converter() {
+		var converter2 = new org.apache.juneau.commons.conversion.Converter() {
 			@Override
 			public <T> T convertTo(Class<T> type, Object o) {
 				if (type == Integer.class && o instanceof String) {

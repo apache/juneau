@@ -26,8 +26,8 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.header.Date;
 import org.apache.juneau.http.part.*;

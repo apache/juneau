@@ -17,14 +17,14 @@
 package org.apache.juneau.objecttools;
 
 import static java.time.temporal.ChronoField.*;
-import static org.apache.juneau.commons.utils.StateEnum.*;
+import static org.apache.juneau.commons.lang.StateEnum.*;
 
 import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.time.*;
-import org.apache.juneau.commons.utils.*;
 
 /**
  * Date/time matcher factory for the {@link ObjectSearcher} class.

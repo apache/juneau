@@ -22,7 +22,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
 

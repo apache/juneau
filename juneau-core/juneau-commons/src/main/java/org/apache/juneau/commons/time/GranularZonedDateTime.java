@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.commons.time;
 
+import static org.apache.juneau.commons.lang.StateEnum.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.StateEnum.*;
 
 import java.time.*;
 import java.time.format.*;

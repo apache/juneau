@@ -20,7 +20,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.Optional;
 
-import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.commons.lang.*;
 
 /**
  * Represents a simple tuple of 3 objects.

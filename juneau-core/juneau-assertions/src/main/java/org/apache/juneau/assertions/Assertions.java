@@ -24,7 +24,7 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.commons.lang.*;
 
 /**
  * Main class for creation of assertions for stand-alone testing.

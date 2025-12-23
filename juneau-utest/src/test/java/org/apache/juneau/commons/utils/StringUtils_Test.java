@@ -29,6 +29,7 @@ import java.util.concurrent.atomic.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.lang.*;
 import org.junit.jupiter.api.*;
 
 class StringUtils_Test extends TestBase {

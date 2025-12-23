@@ -26,8 +26,8 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
-import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.settings.*;
 
 /**

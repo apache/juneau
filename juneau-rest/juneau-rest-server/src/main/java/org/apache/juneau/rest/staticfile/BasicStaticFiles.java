@@ -27,7 +27,7 @@ import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.commons.io.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;

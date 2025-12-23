@@ -26,7 +26,7 @@ import java.util.*;
 import javax.xml.stream.*;
 
 import org.apache.juneau.commons.io.*;
-import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**

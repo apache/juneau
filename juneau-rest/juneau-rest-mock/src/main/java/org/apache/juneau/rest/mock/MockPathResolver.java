@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.rest.mock;
 
+import static org.apache.juneau.commons.lang.StateEnum.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.StateEnum.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -25,7 +25,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.rest.util.*;
 
 /**

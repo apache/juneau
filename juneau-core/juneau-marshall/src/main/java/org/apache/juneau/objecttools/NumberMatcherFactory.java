@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.objecttools;
 
-import static org.apache.juneau.commons.utils.StateEnum.*;
+import static org.apache.juneau.commons.lang.StateEnum.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.commons.lang.*;
 
 /**
  * Number matcher factory for the {@link ObjectSearcher} class.

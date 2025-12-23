@@ -22,7 +22,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.lang.*;
 
 /**
  * REST response status annotation.

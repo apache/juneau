@@ -23,7 +23,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.commons.lang.*;
 
 /**
  * Represents a single entry in a configuration.

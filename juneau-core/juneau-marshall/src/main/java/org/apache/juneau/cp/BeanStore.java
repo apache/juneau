@@ -30,8 +30,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.concurrent.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.commons.utils.*;
 
 /**
  * Java bean store.

@@ -19,10 +19,10 @@ package org.apache.juneau.commons.utils;
 import static java.lang.Character.*;
 import static java.nio.charset.StandardCharsets.*;
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.commons.lang.StateEnum.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
-import static org.apache.juneau.commons.utils.StateEnum.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -43,6 +43,7 @@ import java.util.stream.*;
 import java.util.zip.*;
 
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 
 /**

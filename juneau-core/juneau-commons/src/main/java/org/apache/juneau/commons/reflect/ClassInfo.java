@@ -36,6 +36,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.lang.*;
 
 /**
  * Lightweight utility class for introspecting information about a class.

@@ -27,7 +27,7 @@ import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.*;

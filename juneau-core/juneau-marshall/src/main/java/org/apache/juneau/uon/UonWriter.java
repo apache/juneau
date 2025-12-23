@@ -21,7 +21,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import java.io.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.serializer.*;
 
 /**

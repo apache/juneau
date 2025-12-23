@@ -28,6 +28,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.lang.*;
 
 /**
  * Enhanced annotation provider that returns {@link AnnotationInfo} objects and supports runtime annotations.

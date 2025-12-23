@@ -19,7 +19,7 @@ package org.apache.juneau.assertions;
 import java.io.*;
 import java.util.function.*;
 
-import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.serializer.*;
 
 /**

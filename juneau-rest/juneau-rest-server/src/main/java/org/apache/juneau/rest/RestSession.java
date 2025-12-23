@@ -26,7 +26,7 @@ import java.util.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.FluentMap;
-import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
