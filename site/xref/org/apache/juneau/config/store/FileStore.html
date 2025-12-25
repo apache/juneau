@@ -541,7 +541,7 @@
 <a class="jxr_linenumber" name="L533" href="#L533">533</a> 							}
 <a class="jxr_linenumber" name="L534" href="#L534">534</a> 							currentContents = sb.toString();
 <a class="jxr_linenumber" name="L535" href="#L535">535</a> 						}
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> 						<strong class="jxr_keyword">if</strong> (nn(expectedContents) &amp;&amp; ne(currentContents, expectedContents)) {
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 						<strong class="jxr_keyword">if</strong> (nn(expectedContents) &amp;&amp; neq(currentContents, expectedContents)) {
 <a class="jxr_linenumber" name="L537" href="#L537">537</a> 							<strong class="jxr_keyword">if</strong> (currentContents == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 								cache.remove(name);
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 							<strong class="jxr_keyword">else</strong>
@@ -594,7 +594,7 @@
 <a class="jxr_linenumber" name="L586" href="#L586">586</a> 		cache.remove(fn);
 <a class="jxr_linenumber" name="L587" href="#L587">587</a> 		<strong class="jxr_keyword">var</strong> newContents = read(fn);
 <a class="jxr_linenumber" name="L588" href="#L588">588</a> 
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> 		<strong class="jxr_keyword">if</strong> (ne(oldContents, newContents)) {
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 		<strong class="jxr_keyword">if</strong> (neq(oldContents, newContents)) {
 <a class="jxr_linenumber" name="L590" href="#L590">590</a> 			update(fn, newContents);
 <a class="jxr_linenumber" name="L591" href="#L591">591</a> 		}
 <a class="jxr_linenumber" name="L592" href="#L592">592</a> 	}

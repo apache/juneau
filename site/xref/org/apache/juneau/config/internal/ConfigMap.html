@@ -486,7 +486,7 @@
 <a class="jxr_linenumber" name="L478" href="#L478">478</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onChange(String newContents) {
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> 		<strong class="jxr_keyword">var</strong> changes2 = (<a name="ConfigEvents" href="../../../../../org/apache/juneau/config/event/ConfigEvents.html#ConfigEvents">ConfigEvents</a>)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L480" href="#L480">480</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> x = lock.write()) {
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 			<strong class="jxr_keyword">if</strong> (ne(contents, newContents)) {
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 			<strong class="jxr_keyword">if</strong> (neq(contents, newContents)) {
 <a class="jxr_linenumber" name="L482" href="#L482">482</a> 				changes2 = findDiffs(newContents);
 <a class="jxr_linenumber" name="L483" href="#L483">483</a> 				load(newContents);
 <a class="jxr_linenumber" name="L484" href="#L484">484</a> 
@@ -774,7 +774,7 @@
 <a class="jxr_linenumber" name="L766" href="#L766">766</a> 			} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L767" href="#L767">767</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ne : ns.oentries.values()) {
 <a class="jxr_linenumber" name="L768" href="#L768">768</a> 					<strong class="jxr_keyword">var</strong> e = s.oentries.get(ne.key);
-<a class="jxr_linenumber" name="L769" href="#L769">769</a> 					<strong class="jxr_keyword">if</strong> (e == <strong class="jxr_keyword">null</strong> || ne(e.value, ne.value)) {
+<a class="jxr_linenumber" name="L769" href="#L769">769</a> 					<strong class="jxr_keyword">if</strong> (e == <strong class="jxr_keyword">null</strong> || neq(e.value, ne.value)) {
 <a class="jxr_linenumber" name="L770" href="#L770">770</a> 						changes2.add(ConfigEvent.setEntry(name, s.name, ne.key, ne.value, ne.modifiers, ne.comment, ne.preLines));
 <a class="jxr_linenumber" name="L771" href="#L771">771</a> 					}
 <a class="jxr_linenumber" name="L772" href="#L772">772</a> 				}

@@ -378,7 +378,7 @@
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">private</strong> Object copyBuilder(Object o) {
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 			<strong class="jxr_keyword">if</strong> (o instanceof Serializer.Builder x) {
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 				Serializer.Builder x2 = x.copy();
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 				<strong class="jxr_keyword">if</strong> (ne(x.getClass(), x2.getClass()))
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 				<strong class="jxr_keyword">if</strong> (neq(x.getClass(), x2.getClass()))
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 					<strong class="jxr_keyword">throw</strong> rex(<span class="jxr_string">"Copy method not implemented on class {0}"</span>, cn(x));
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 				x = x2;
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 				<strong class="jxr_keyword">if</strong> (nn(bcBuilder))

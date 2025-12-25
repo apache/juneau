@@ -362,7 +362,7 @@
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">return</strong> AP.find(Header.<strong class="jxr_keyword">class</strong>, pi)
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 			.stream()
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 			.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 			.filter(x -&gt; isNotEmpty(x.def()) &amp;&amp; ne(NONE, x.def()))
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 			.filter(x -&gt; isNotEmpty(x.def()) &amp;&amp; neq(NONE, x.def()))
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 			.findFirst()
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 			.map(x -&gt; x.def());
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<em class="jxr_comment">// @formatter:on</em>

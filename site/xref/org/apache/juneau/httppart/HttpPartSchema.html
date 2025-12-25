@@ -2679,7 +2679,7 @@
 <a class="jxr_linenumber" name="L2671" href="#L2671">2671</a> 				apply(a.schema());
 <a class="jxr_linenumber" name="L2672" href="#L2672">2672</a> 			name(firstNonEmpty(a.name(), a.value()));
 <a class="jxr_linenumber" name="L2673" href="#L2673">2673</a> 			String def = a.def();
-<a class="jxr_linenumber" name="L2674" href="#L2674">2674</a> 			<strong class="jxr_keyword">if</strong> (ne(NONE, def))
+<a class="jxr_linenumber" name="L2674" href="#L2674">2674</a> 			<strong class="jxr_keyword">if</strong> (neq(NONE, def))
 <a class="jxr_linenumber" name="L2675" href="#L2675">2675</a> 				<strong class="jxr_keyword">default</strong>_ = def;  <em class="jxr_comment">// Set directly to allow empty strings as valid defaults</em>
 <a class="jxr_linenumber" name="L2676" href="#L2676">2676</a> 			parser(a.parser());
 <a class="jxr_linenumber" name="L2677" href="#L2677">2677</a> 			serializer(a.serializer());

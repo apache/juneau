@@ -90,7 +90,7 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  			<strong class="jxr_keyword">var</strong> o = objectSupplier.get();
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  			<strong class="jxr_keyword">var</strong> s = swap.swap(beanSession, o);
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			<strong class="jxr_keyword">if</strong> (ne(expected, s)) {
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			<strong class="jxr_keyword">if</strong> (neq(expected, s)) {
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  				<strong class="jxr_keyword">if</strong> (expected.isEmpty()) {
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  					<strong class="jxr_keyword">if</strong> (! label.startsWith(<span class="jxr_string">"[]"</span>))
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  						System.err.println(label.substring(0, label.indexOf(']')+1) + <span class="jxr_string">" "</span>+s);  <em class="jxr_comment">// NOT DEBUG</em>

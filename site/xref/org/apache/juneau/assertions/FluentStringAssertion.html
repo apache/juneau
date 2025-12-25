@@ -341,7 +341,7 @@
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 	@Override
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 	<strong class="jxr_keyword">public</strong> R is(String value) <strong class="jxr_keyword">throws</strong> AssertionError {
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<strong class="jxr_keyword">var</strong> s = orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">if</strong> (ne(value, s))
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">if</strong> (neq(value, s))
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_stringDifferedAtPosition, diffPosition(value, s), fix(value), fix(s));
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> 	}
@@ -399,7 +399,7 @@
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 	<strong class="jxr_keyword">public</strong> R isIc(String value) <strong class="jxr_keyword">throws</strong> AssertionError {
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">var</strong> s = orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		<strong class="jxr_keyword">if</strong> (neic(value, s))
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		<strong class="jxr_keyword">if</strong> (neqic(value, s))
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_stringDifferedAtPosition, diffPositionIc(value, s), fix(value), fix(s));
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 	}
@@ -430,7 +430,7 @@
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 		assertArgNotNull(<span class="jxr_string">"lines"</span>, lines);
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">var</strong> v = join(lines, '\n');
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">var</strong> s = value();
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">if</strong> (ne(v, s))
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">if</strong> (neq(v, s))
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_stringDifferedAtPosition, diffPosition(v, s), fix(v), fix(s));
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 	}

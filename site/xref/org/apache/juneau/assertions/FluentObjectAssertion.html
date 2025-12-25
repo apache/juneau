@@ -467,7 +467,7 @@
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> 	<strong class="jxr_keyword">public</strong> R isSameSerializedAs(Object o, <a name="WriterSerializer" href="../../../../org/apache/juneau/serializer/WriterSerializer.html#WriterSerializer">WriterSerializer</a> serializer) {
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> 		<strong class="jxr_keyword">var</strong> s1 = serializer.toString(value);
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> 		<strong class="jxr_keyword">var</strong> s2 = serializer.toString(o);
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 		<strong class="jxr_keyword">if</strong> (ne(s1, s2))
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 		<strong class="jxr_keyword">if</strong> (neq(s1, s2))
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_unexpectedComparison, s2, s1);
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 	}

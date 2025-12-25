@@ -714,7 +714,7 @@
 <a class="jxr_linenumber" name="L706" href="#L706">706</a> 				<strong class="jxr_keyword">var</strong> val = x.invoke(a);
 <a class="jxr_linenumber" name="L707" href="#L707">707</a> 				<strong class="jxr_keyword">var</strong> d = x.<strong class="jxr_keyword">inner</strong>().getDefaultValue();
 <a class="jxr_linenumber" name="L708" href="#L708">708</a> 				<em class="jxr_comment">// Add values only if they're different from the default.</em>
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> 				<strong class="jxr_keyword">if</strong> (ne(val, d)) {
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 				<strong class="jxr_keyword">if</strong> (neq(val, d)) {
 <a class="jxr_linenumber" name="L710" href="#L710">710</a> 					<strong class="jxr_keyword">if</strong> (! (isArray(val) &amp;&amp; length(val) == 0 &amp;&amp; isArray(d) &amp;&amp; length(d) == 0))
 <a class="jxr_linenumber" name="L711" href="#L711">711</a> 						<strong class="jxr_keyword">return</strong> val;
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> 				}

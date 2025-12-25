@@ -184,7 +184,7 @@
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 			rstream(AP.find(Path.<strong class="jxr_keyword">class</strong>, mi))
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 				.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 				.filter(x -&gt; isAnyNotEmpty(x.name(), x.value()) &amp;&amp; ne(NONE, x.def()))
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 				.filter(x -&gt; isAnyNotEmpty(x.name(), x.value()) &amp;&amp; neq(NONE, x.def()))
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 				.forEach(x -&gt; defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		}

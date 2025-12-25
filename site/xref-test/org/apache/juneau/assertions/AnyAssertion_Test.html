@@ -85,14 +85,14 @@
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  	@Test <strong class="jxr_keyword">void</strong> ba01a_asString() {
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">var</strong> x = 1;
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> nil = n(Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> nil = no(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		test(x).asString().is(<span class="jxr_string">"1"</span>);
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		test(nil).asString().isNull();
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@Test <strong class="jxr_keyword">void</strong> ba01b_asString_wSerializer() {
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">var</strong> x = 1;
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> nil = n(Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> nil = no(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> s = Json5Serializer.DEFAULT;
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		test(x).asString(s).is(<span class="jxr_string">"1"</span>);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		test(nil).asString(s).is(<span class="jxr_string">"null"</span>);
@@ -105,7 +105,7 @@
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  	@Test <strong class="jxr_keyword">void</strong> ba02_asJson() {
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<strong class="jxr_keyword">var</strong> x = 1;
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">var</strong> nil = n(Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">var</strong> nil = no(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 		test(x).asJson().is(<span class="jxr_string">"1"</span>);
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 		test(nil).asJson().is(<span class="jxr_string">"null"</span>);
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 		assertThrown(()-&gt;test(<strong class="jxr_keyword">new</strong> A2()).asJson()).asMessages().isAny(contains(<span class="jxr_string">"Could not call getValue() on property 'foo'"</span>));
@@ -202,7 +202,7 @@
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 	@Test <strong class="jxr_keyword">void</strong> bb10_asBoolean() {
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">var</strong> x1 = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">var</strong> nil = n(Boolean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">var</strong> nil = no(Boolean.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<strong class="jxr_keyword">var</strong> x2 = <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 		test(x1).asBoolean().isString(<span class="jxr_string">"true"</span>);
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 		test(nil).asBoolean().isNull();
@@ -238,7 +238,7 @@
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 	@Test <strong class="jxr_keyword">void</strong> bb14_asComparable() {
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<strong class="jxr_keyword">var</strong> x1 = 1;
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		<strong class="jxr_keyword">var</strong> nil = n(Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		<strong class="jxr_keyword">var</strong> nil = no(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 		<strong class="jxr_keyword">var</strong> x2 = list();
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 		test(x1).asComparable().isString(<span class="jxr_string">"1"</span>);
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		test(nil).asComparable().isNull();
@@ -247,7 +247,7 @@
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 	@Test <strong class="jxr_keyword">void</strong> bb15_asDate() {
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">var</strong> x1 = date(<span class="jxr_string">"2000-06-01T12:34:56Z"</span>);
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">var</strong> nil = n(Date.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">var</strong> nil = no(Date.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<strong class="jxr_keyword">var</strong> x2 = <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 		test(x1).asDate().asString().isMatches(<span class="jxr_string">"*2000*"</span>);
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 		test(nil).asDate().isNull();
@@ -256,7 +256,7 @@
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 	@Test <strong class="jxr_keyword">void</strong> bb16_asInteger() {
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">var</strong> x1 = 1;
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">var</strong> nil = n(Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">var</strong> nil = no(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<strong class="jxr_keyword">var</strong> x2 = <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 		test(x1).asInteger().isString(<span class="jxr_string">"1"</span>);
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 		test(nil).asInteger().isNull();
@@ -265,7 +265,7 @@
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 	@Test <strong class="jxr_keyword">void</strong> bb17_asLong() {
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<strong class="jxr_keyword">var</strong> x1 = 1L;
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		<strong class="jxr_keyword">var</strong> nil = n(Long.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		<strong class="jxr_keyword">var</strong> nil = no(Long.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<strong class="jxr_keyword">var</strong> x2 = <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 		test(x1).asLong().isString(<span class="jxr_string">"1"</span>);
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 		test(nil).asLong().isNull();
@@ -320,7 +320,7 @@
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 	@Test <strong class="jxr_keyword">void</strong> bb23_asBean_wType() {
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">var</strong> x1 = A1;
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">var</strong> nil = n(A1.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">var</strong> nil = no(A1.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<strong class="jxr_keyword">var</strong> x2 = <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 		test(x1).asBean().isString(<span class="jxr_string">"a=1,b=2"</span>);
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 		test(nil).asBean(A1.<strong class="jxr_keyword">class</strong>).isNull();
@@ -340,7 +340,7 @@
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 	@Test <strong class="jxr_keyword">void</strong> bb25_asZonedDateTime() {
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<strong class="jxr_keyword">var</strong> x1 = zdt(<span class="jxr_string">"2000-06-01T12:34:56Z"</span>);
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<strong class="jxr_keyword">var</strong> nil = n(Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<strong class="jxr_keyword">var</strong> nil = no(Object.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">var</strong> x2 = <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 		test(x1).asZonedDateTime().asString().isMatches(<span class="jxr_string">"2000*"</span>);
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> 		test(nil).asZonedDateTime().isNull();
@@ -362,21 +362,21 @@
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 	@Test <strong class="jxr_keyword">void</strong> ca01_exists() {
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<strong class="jxr_keyword">var</strong> x = 1;
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">var</strong> nil = n(Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">var</strong> nil = no(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 		test(x).isExists().isExists();
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 		assertThrowsWithMessage(BasicAssertionError.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Value was null."</span>, ()-&gt;test(nil).isExists());
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 	}
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 	@Test <strong class="jxr_keyword">void</strong> ca02_isNull() {
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 		<strong class="jxr_keyword">var</strong> x = 1;
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">var</strong> nil = n(Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">var</strong> nil = no(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> 		test(nil).isNull();
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> 		assertThrowsWithMessage(BasicAssertionError.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Value was not null."</span>, ()-&gt;test(x).isNull());
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 	}
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 	@Test <strong class="jxr_keyword">void</strong> ca03_isNotNull() {
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">var</strong> x = 1;
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">var</strong> nil = n(Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">var</strong> nil = no(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 		test(x).isNotNull();
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 		assertThrowsWithMessage(BasicAssertionError.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Value was null."</span>, ()-&gt;test(nil).isNotNull());
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 	}
@@ -385,7 +385,7 @@
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<strong class="jxr_keyword">var</strong> x1 = 1;
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">var</strong> x1a = 1;
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 		<strong class="jxr_keyword">var</strong> x2 = 2;
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		<strong class="jxr_keyword">var</strong> nil = n(Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		<strong class="jxr_keyword">var</strong> nil = no(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 		test(x1).is(x1);
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 		test(x1).is(x1a);
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 		test(nil).is(nil);
@@ -405,7 +405,7 @@
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 		<strong class="jxr_keyword">var</strong> x1 = 1;
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<strong class="jxr_keyword">var</strong> x1a = 1;
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<strong class="jxr_keyword">var</strong> x2 = 2;
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<strong class="jxr_keyword">var</strong> nil = n(Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<strong class="jxr_keyword">var</strong> nil = no(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 		test(x1).isNot(x2);
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 		test(x1).isNot(nil);
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 		test(nil).isNot(x1);
@@ -417,7 +417,7 @@
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">var</strong> x1 = 1;
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 		<strong class="jxr_keyword">var</strong> x1a = 1;
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<strong class="jxr_keyword">var</strong> x2 = 2;
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<strong class="jxr_keyword">var</strong> nil = n(Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<strong class="jxr_keyword">var</strong> nil = no(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 		test(x1).isAny(x1a, x2);
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 		assertThrown(()-&gt;test(x1).isAny(x2)).asMessage().asOneLine().is(<span class="jxr_string">"Expected value not found.  Expect='[2]'.  Actual='1'."</span>);
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 		assertThrown(()-&gt;test(x1).isAny()).asMessage().asOneLine().is(<span class="jxr_string">"Expected value not found.  Expect='[]'.  Actual='1'."</span>);
@@ -428,7 +428,7 @@
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 		<strong class="jxr_keyword">var</strong> x1 = 1;
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<strong class="jxr_keyword">var</strong> x1a = 1;
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<strong class="jxr_keyword">var</strong> x2 = 2;
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">var</strong> nil = n(Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">var</strong> nil = no(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 		test(x1).isNotAny(x2);
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 		test(x1).isNotAny();
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 		test(nil).isNotAny(x2);
@@ -439,7 +439,7 @@
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 	@Test <strong class="jxr_keyword">void</strong> ca08_isSame() {
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<strong class="jxr_keyword">var</strong> x1 = Integer.valueOf(999);
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 		<strong class="jxr_keyword">var</strong> x1a = Integer.valueOf(999);
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<strong class="jxr_keyword">var</strong> nil = n(Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<strong class="jxr_keyword">var</strong> nil = no(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 		test(x1).isSame(x1);
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 		test(nil).isSame(nil);
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 		assertThrown(()-&gt;test(x1).isSame(x1a)).asMessage().asOneLine().isMatches(<span class="jxr_string">"Not the same value.  Expect='999(Integer@*)'.  Actual='999(Integer@*)'."</span>);
@@ -451,7 +451,7 @@
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<strong class="jxr_keyword">var</strong> x1 = 1;
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 		<strong class="jxr_keyword">var</strong> x1a = 1;
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 		<strong class="jxr_keyword">var</strong> x2 = 2;
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<strong class="jxr_keyword">var</strong> nil = n(Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<strong class="jxr_keyword">var</strong> nil = no(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 		test(x1).isSameJsonAs(x1a);
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 		test(nil).isSameJsonAs(nil);
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> 		assertThrown(()-&gt;test(x1a).isSameJsonAs(x2)).asMessage().asOneLine().is(<span class="jxr_string">"Unexpected comparison.  Expect='2'.  Actual='1'."</span>);
@@ -463,7 +463,7 @@
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 		<strong class="jxr_keyword">var</strong> x1 = 1;
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 		<strong class="jxr_keyword">var</strong> x1a = 1;
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 		<strong class="jxr_keyword">var</strong> x2 = 2;
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		<strong class="jxr_keyword">var</strong> nil = n(Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		<strong class="jxr_keyword">var</strong> nil = no(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> 		test(x1).isSameSortedJsonAs(x1a);
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> 		test(nil).isSameSortedJsonAs(nil);
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> 		assertThrown(()-&gt;test(x1a).isSameSortedJsonAs(x2)).asMessage().asOneLine().is(<span class="jxr_string">"Unexpected comparison.  Expect='2'.  Actual='1'."</span>);
@@ -475,7 +475,7 @@
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 		<strong class="jxr_keyword">var</strong> x1 = 1;
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> 		<strong class="jxr_keyword">var</strong> x1a = 1;
 <a class="jxr_linenumber" name="L469" href="#L469">469</a> 		<strong class="jxr_keyword">var</strong> x2 = 2;
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		<strong class="jxr_keyword">var</strong> nil = n(Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		<strong class="jxr_keyword">var</strong> nil = no(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 		<strong class="jxr_keyword">var</strong> s = Json5Serializer.DEFAULT;
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 		test(x1).isSameSerializedAs(x1a, s);
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 		test(nil).isSameSerializedAs(nil, s);
@@ -486,7 +486,7 @@
 <a class="jxr_linenumber" name="L478" href="#L478">478</a> 
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> 	@Test <strong class="jxr_keyword">void</strong> ca12_isType() {
 <a class="jxr_linenumber" name="L480" href="#L480">480</a> 		<strong class="jxr_keyword">var</strong> x = 1;
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		<strong class="jxr_keyword">var</strong> nil = n(Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		<strong class="jxr_keyword">var</strong> nil = no(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L482" href="#L482">482</a> 		test(x).isType(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L483" href="#L483">483</a> 		test(x).isType(Object.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L484" href="#L484">484</a> 		assertThrown(()-&gt;test(x).isType(String.<strong class="jxr_keyword">class</strong>)).asMessage().asOneLine().is(<span class="jxr_string">"Unexpected type.  Expect='java.lang.String'.  Actual='java.lang.Integer'."</span>);
@@ -496,7 +496,7 @@
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> 
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> 	@Test <strong class="jxr_keyword">void</strong> ca13_isExactType() {
 <a class="jxr_linenumber" name="L490" href="#L490">490</a> 		<strong class="jxr_keyword">var</strong> x = 1;
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> 		<strong class="jxr_keyword">var</strong> nil = n(Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 		<strong class="jxr_keyword">var</strong> nil = no(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L492" href="#L492">492</a> 		test(x).isExactType(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L493" href="#L493">493</a> 		assertThrown(()-&gt;test(x).isExactType(Object.<strong class="jxr_keyword">class</strong>)).asMessage().asOneLine().is(<span class="jxr_string">"Unexpected type.  Expect='java.lang.Object'.  Actual='java.lang.Integer'."</span>);
 <a class="jxr_linenumber" name="L494" href="#L494">494</a> 		assertThrown(()-&gt;test(x).isExactType(String.<strong class="jxr_keyword">class</strong>)).asMessage().asOneLine().is(<span class="jxr_string">"Unexpected type.  Expect='java.lang.String'.  Actual='java.lang.Integer'."</span>);
@@ -506,7 +506,7 @@
 <a class="jxr_linenumber" name="L498" href="#L498">498</a> 
 <a class="jxr_linenumber" name="L499" href="#L499">499</a> 	@Test <strong class="jxr_keyword">void</strong> ca14_isString() {
 <a class="jxr_linenumber" name="L500" href="#L500">500</a> 		<strong class="jxr_keyword">var</strong> x = 1;
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> 		<strong class="jxr_keyword">var</strong> nil = n(Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 		<strong class="jxr_keyword">var</strong> nil = no(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L502" href="#L502">502</a> 		test(x).isString(<span class="jxr_string">"1"</span>);
 <a class="jxr_linenumber" name="L503" href="#L503">503</a> 		test(nil).isString(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> 		assertThrown(()-&gt;test(x).isString(<span class="jxr_string">"bad"</span>)).asMessage().asOneLine().is(<span class="jxr_string">"String differed at position 0.  Expect='bad'.  Actual='1'."</span>);
@@ -516,7 +516,7 @@
 <a class="jxr_linenumber" name="L508" href="#L508">508</a> 
 <a class="jxr_linenumber" name="L509" href="#L509">509</a> 	@Test <strong class="jxr_keyword">void</strong> ca15_isJson() {
 <a class="jxr_linenumber" name="L510" href="#L510">510</a> 		<strong class="jxr_keyword">var</strong> x = 1;
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		<strong class="jxr_keyword">var</strong> nil = n(Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		<strong class="jxr_keyword">var</strong> nil = no(Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L512" href="#L512">512</a> 		test(x).isJson(<span class="jxr_string">"1"</span>);
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> 		test(nil).isJson(<span class="jxr_string">"null"</span>);
 <a class="jxr_linenumber" name="L514" href="#L514">514</a> 		assertThrown(()-&gt;test(x).isJson(<span class="jxr_string">"bad"</span>)).asMessage().asOneLine().is(<span class="jxr_string">"String differed at position 0.  Expect='bad'.  Actual='1'."</span>);

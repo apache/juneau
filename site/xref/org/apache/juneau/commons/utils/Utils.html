@@ -453,7 +453,7 @@
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 			<strong class="jxr_keyword">if</strong> (l1 != l2)
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 				<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; l1; i++)
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 				<strong class="jxr_keyword">if</strong> (ne(Array.get(o1, i), Array.get(o2, i)))
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 				<strong class="jxr_keyword">if</strong> (neq(Array.get(o1, i), Array.get(o2, i)))
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> 					<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> 		}
@@ -1197,7 +1197,7 @@
 <a class="jxr_linenumber" name="L1189" href="#L1189">1189</a> <em class="jxr_javadoccomment">	 * @param type The type class (unused, but helps with type inference).</em>
 <a class="jxr_linenumber" name="L1190" href="#L1190">1190</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L1191" href="#L1191">1191</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1192" href="#L1192">1192</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T n(Class&lt;T&gt; type) {
+<a class="jxr_linenumber" name="L1192" href="#L1192">1192</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T no(Class&lt;T&gt; type) {
 <a class="jxr_linenumber" name="L1193" href="#L1193">1193</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1194" href="#L1194">1194</a> 	}
 <a class="jxr_linenumber" name="L1195" href="#L1195">1195</a> 
@@ -1223,7 +1223,7 @@
 <a class="jxr_linenumber" name="L1215" href="#L1215">1215</a> <em class="jxr_javadoccomment">	 * @see #eq(Object, Object)</em>
 <a class="jxr_linenumber" name="L1216" href="#L1216">1216</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> 	<em class="jxr_comment">// TODO - Rename this to neq, then add a ne for not-empty</em>
-<a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; <strong class="jxr_keyword">boolean</strong> ne(T s1, T s2) {
+<a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; <strong class="jxr_keyword">boolean</strong> neq(T s1, T s2) {
 <a class="jxr_linenumber" name="L1219" href="#L1219">1219</a> 		<strong class="jxr_keyword">return</strong> ! eq(s1, s2);
 <a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> 	}
 <a class="jxr_linenumber" name="L1221" href="#L1221">1221</a> 
@@ -1250,7 +1250,7 @@
 <a class="jxr_linenumber" name="L1242" href="#L1242">1242</a> <em class="jxr_javadoccomment">	 * @see #eq(Object, Object, BiPredicate)</em>
 <a class="jxr_linenumber" name="L1243" href="#L1243">1243</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1244" href="#L1244">1244</a> 	<em class="jxr_comment">// TODO - Rename this to neq, then add a ne for not-empty</em>
-<a class="jxr_linenumber" name="L1245" href="#L1245">1245</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T,U&gt; <strong class="jxr_keyword">boolean</strong> ne(T o1, U o2, BiPredicate&lt;T,U&gt; test) {
+<a class="jxr_linenumber" name="L1245" href="#L1245">1245</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T,U&gt; <strong class="jxr_keyword">boolean</strong> neq(T o1, U o2, BiPredicate&lt;T,U&gt; test) {
 <a class="jxr_linenumber" name="L1246" href="#L1246">1246</a> 		<strong class="jxr_keyword">if</strong> (o1 == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1247" href="#L1247">1247</a> 			<strong class="jxr_keyword">return</strong> nn(o2);
 <a class="jxr_linenumber" name="L1248" href="#L1248">1248</a> 		<strong class="jxr_keyword">if</strong> (o2 == <strong class="jxr_keyword">null</strong>)
@@ -1280,7 +1280,7 @@
 <a class="jxr_linenumber" name="L1272" href="#L1272">1272</a> <em class="jxr_javadoccomment">	 * @see #eqic(String, String)</em>
 <a class="jxr_linenumber" name="L1273" href="#L1273">1273</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1274" href="#L1274">1274</a> 	<em class="jxr_comment">// TODO - Rename this to neqic, then add a ne for not-empty</em>
-<a class="jxr_linenumber" name="L1275" href="#L1275">1275</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> neic(String s1, String s2) {
+<a class="jxr_linenumber" name="L1275" href="#L1275">1275</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> neqic(String s1, String s2) {
 <a class="jxr_linenumber" name="L1276" href="#L1276">1276</a> 		<strong class="jxr_keyword">return</strong> ! eqic(s1, s2);
 <a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> 	}
 <a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> 

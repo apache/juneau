@@ -209,7 +209,7 @@
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> <em class="jxr_javadoccomment">	 * @throws AssertionError If assertion failed.</em>
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 	<strong class="jxr_keyword">public</strong> R is(Date value, ChronoUnit precision) <strong class="jxr_keyword">throws</strong> AssertionError {
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">if</strong> (ne(value(), value, (x, y) -&gt; x.toInstant().truncatedTo(precision).equals(y.toInstant().truncatedTo(precision))))
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">if</strong> (neq(value(), value, (x, y) -&gt; x.toInstant().truncatedTo(precision).equals(y.toInstant().truncatedTo(precision))))
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_unexpectedValue, value, value());
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 	}

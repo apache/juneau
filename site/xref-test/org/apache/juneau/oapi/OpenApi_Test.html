@@ -81,7 +81,7 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  	}
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  	@Test <strong class="jxr_keyword">void</strong> a01b_noType_formatDefault_<strong class="jxr_keyword">null</strong>() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">var</strong> in = n(String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">var</strong> in = no(String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">var</strong> ps = T_NONE;
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">var</strong> s = serialize(ps, in);
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertEquals(<span class="jxr_string">"null"</span>, s);
@@ -97,7 +97,7 @@
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  	@Test <strong class="jxr_keyword">void</strong> a02b_noType_formatByte_<strong class="jxr_keyword">null</strong>() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">var</strong> in = n(String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">var</strong> in = no(String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">var</strong> ps = tNone().fByte().build();
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">var</strong> s = serialize(ps, in);
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		assertEquals(<span class="jxr_string">"null"</span>, s);
@@ -113,7 +113,7 @@
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 	}
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 	@Test <strong class="jxr_keyword">void</strong> a03b_noType_formatBinary_<strong class="jxr_keyword">null</strong>() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">var</strong> in = n(String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">var</strong> in = no(String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">var</strong> ps = tNone().fBinary().build();
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">var</strong> s = serialize(ps, in);
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 		assertEquals(<span class="jxr_string">"null"</span>, s);
@@ -131,7 +131,7 @@
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 	}
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 	@Test <strong class="jxr_keyword">void</strong> a04b_noType_formatBinarySpaced_<strong class="jxr_keyword">null</strong>() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">var</strong> in = n(String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">var</strong> in = no(String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">var</strong> ps = tNone().fBinarySpaced().build();
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">var</strong> s = serialize(ps, in);
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		assertEquals(<span class="jxr_string">"null"</span>, s);
@@ -188,7 +188,7 @@
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 	}
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 	@Test <strong class="jxr_keyword">void</strong> a10_noType_formatDate_<strong class="jxr_keyword">null</strong>() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">var</strong> in = n(String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">var</strong> in = no(String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">var</strong> ps = tNone().fDate().build();
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">var</strong> s = serialize(ps, in);
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 		assertEquals(<span class="jxr_string">"null"</span>, s);
@@ -245,7 +245,7 @@
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 	}
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 	@Test <strong class="jxr_keyword">void</strong> a16_noType_formatDate_<strong class="jxr_keyword">null</strong>() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">var</strong> in = n(String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">var</strong> in = no(String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">var</strong> ps = tNone().fDateTime().build();
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">var</strong> s = serialize(ps, in);
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 		assertEquals(<span class="jxr_string">"null"</span>, s);
@@ -351,7 +351,7 @@
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 	}
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 	@Test <strong class="jxr_keyword">void</strong> b10_typeString_formatDate_<strong class="jxr_keyword">null</strong>() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		<strong class="jxr_keyword">var</strong> in = n(String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		<strong class="jxr_keyword">var</strong> in = no(String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 		<strong class="jxr_keyword">var</strong> ps = T_DATE;
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 		<strong class="jxr_keyword">var</strong> s = serialize(ps, in);
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 		assertEquals(<span class="jxr_string">"null"</span>, s);
@@ -408,7 +408,7 @@
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 	}
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 	@Test <strong class="jxr_keyword">void</strong> b16_typeString_formatDate_<strong class="jxr_keyword">null</strong>() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		<strong class="jxr_keyword">var</strong> in = n(String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		<strong class="jxr_keyword">var</strong> in = no(String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<strong class="jxr_keyword">var</strong> ps = T_DATETIME;
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 		<strong class="jxr_keyword">var</strong> s = serialize(ps, in);
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 		assertEquals(<span class="jxr_string">"null"</span>, s);

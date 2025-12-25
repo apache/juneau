@@ -87,7 +87,7 @@
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  			<strong class="jxr_keyword">var</strong> o = objectSupplier.get();
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  			<strong class="jxr_keyword">var</strong> s = swap.swap(beanSession, o);
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			<strong class="jxr_keyword">if</strong> (ne(expected, s)) {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			<strong class="jxr_keyword">if</strong> (neq(expected, s)) {
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  				<strong class="jxr_keyword">if</strong> (expected.isEmpty()) {
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  					<strong class="jxr_keyword">if</strong> (! label.startsWith(<span class="jxr_string">"[]"</span>))
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  						System.err.println(label.substring(0, label.indexOf(']')+1) + <span class="jxr_string">" "</span>+s);  <em class="jxr_comment">// NOT DEBUG</em>
@@ -113,7 +113,7 @@
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 			<strong class="jxr_keyword">var</strong> s = swap.swap(beanSession, o);
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 			<strong class="jxr_keyword">var</strong> o2 = swap.unswap(beanSession, s, beanSession.getClassMetaForObject(o));
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 			<strong class="jxr_keyword">var</strong> s2 = swap.swap(beanSession, o2);
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			<strong class="jxr_keyword">if</strong> (ne(s, s2)) {
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			<strong class="jxr_keyword">if</strong> (neq(s, s2)) {
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 				<strong class="jxr_keyword">if</strong> (expected.isEmpty())
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 					fail(<span class="jxr_string">"Test ["</span> + label + <span class="jxr_string">" unswap] failed - expected was empty"</span>);
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 				fail(<span class="jxr_string">"Test ["</span> + label + <span class="jxr_string">" unswap] failed. Expected=["</span> + s + <span class="jxr_string">"], Actual=["</span> + s2 + <span class="jxr_string">"]"</span>);

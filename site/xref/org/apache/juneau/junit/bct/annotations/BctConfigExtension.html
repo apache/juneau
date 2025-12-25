@@ -52,9 +52,9 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		clear();
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		al.stream().map(x -&gt; x.sortMaps()).filter(x -&gt; ne(x, UNSET)).findFirst().ifPresent(x -&gt; set(BCT_SORT_MAPS, x == TRUE));
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		al.stream().map(x -&gt; x.sortCollections()).filter(x -&gt; ne(x, UNSET)).findFirst().ifPresent(x -&gt; set(BCT_SORT_COLLECTIONS, x == TRUE));
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		al.stream().map(x -&gt; x.beanConverter()).filter(x -&gt; ne(x, BeanConverter.<strong class="jxr_keyword">class</strong>)).findFirst().map(x -&gt; eq(x, BasicBeanConverter.<strong class="jxr_keyword">class</strong>) ? <strong class="jxr_keyword">null</strong> : x).ifPresent(x -&gt; setConverter(x));
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		al.stream().map(x -&gt; x.sortMaps()).filter(x -&gt; neq(x, UNSET)).findFirst().ifPresent(x -&gt; set(BCT_SORT_MAPS, x == TRUE));
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		al.stream().map(x -&gt; x.sortCollections()).filter(x -&gt; neq(x, UNSET)).findFirst().ifPresent(x -&gt; set(BCT_SORT_COLLECTIONS, x == TRUE));
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		al.stream().map(x -&gt; x.beanConverter()).filter(x -&gt; neq(x, BeanConverter.<strong class="jxr_keyword">class</strong>)).findFirst().map(x -&gt; eq(x, BasicBeanConverter.<strong class="jxr_keyword">class</strong>) ? <strong class="jxr_keyword">null</strong> : x).ifPresent(x -&gt; setConverter(x));
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  	}
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setConverter(Class&lt;? <strong class="jxr_keyword">extends</strong> BeanConverter&gt; x) {

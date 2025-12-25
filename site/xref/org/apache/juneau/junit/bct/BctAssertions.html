@@ -479,14 +479,14 @@
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 		<strong class="jxr_keyword">var</strong> errors = <strong class="jxr_keyword">new</strong> ArrayList&lt;AssertionFailedError&gt;();
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 		List&lt;Object&gt; actualList = converter.listify(actual);
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		<strong class="jxr_keyword">if</strong> (ne(expected.length, actualList.size())) {
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		<strong class="jxr_keyword">if</strong> (neq(expected.length, actualList.size())) {
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> 			errors.add(assertEqualsFailed(expected.length, actualList.size(), composeMessage(message, <span class="jxr_string">"Wrong number of beans."</span>)));
 <a class="jxr_linenumber" name="L476" href="#L476">476</a> 		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L477" href="#L477">477</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; actualList.size(); i++) {
 <a class="jxr_linenumber" name="L478" href="#L478">478</a> 				<strong class="jxr_keyword">var</strong> i2 = i;
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> 				<strong class="jxr_keyword">var</strong> e = converter.stringify(expected[i]);
 <a class="jxr_linenumber" name="L480" href="#L480">480</a> 				<strong class="jxr_keyword">var</strong> a = tokens.stream().map(x -&gt; converter.getNested(actualList.get(i2), x)).collect(joining(<span class="jxr_string">","</span>));
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 				<strong class="jxr_keyword">if</strong> (ne(e, a)) {
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 				<strong class="jxr_keyword">if</strong> (neq(e, a)) {
 <a class="jxr_linenumber" name="L482" href="#L482">482</a> 					errors.add(assertEqualsFailed(e, a, composeMessage(message, <span class="jxr_string">"Bean at row &lt;{0}&gt; did not match."</span>, i)));
 <a class="jxr_linenumber" name="L483" href="#L483">483</a> 				}
 <a class="jxr_linenumber" name="L484" href="#L484">484</a> 			}
@@ -766,14 +766,14 @@
 <a class="jxr_linenumber" name="L758" href="#L758">758</a> 		List&lt;Object&gt; list = converter.listify(actual);
 <a class="jxr_linenumber" name="L759" href="#L759">759</a> 		<strong class="jxr_keyword">var</strong> errors = <strong class="jxr_keyword">new</strong> ArrayList&lt;AssertionFailedError&gt;();
 <a class="jxr_linenumber" name="L760" href="#L760">760</a> 
-<a class="jxr_linenumber" name="L761" href="#L761">761</a> 		<strong class="jxr_keyword">if</strong> (ne(expected.length, list.size())) {
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 		<strong class="jxr_keyword">if</strong> (neq(expected.length, list.size())) {
 <a class="jxr_linenumber" name="L762" href="#L762">762</a> 			errors.add(assertEqualsFailed(expected.length, list.size(), composeMessage(message, <span class="jxr_string">"Wrong list length."</span>)));
 <a class="jxr_linenumber" name="L763" href="#L763">763</a> 		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L764" href="#L764">764</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; expected.length; i++) {
 <a class="jxr_linenumber" name="L765" href="#L765">765</a> 				<strong class="jxr_keyword">var</strong> x = list.get(i);
 <a class="jxr_linenumber" name="L766" href="#L766">766</a> 				<strong class="jxr_keyword">var</strong> e = expected[i];
 <a class="jxr_linenumber" name="L767" href="#L767">767</a> 				<strong class="jxr_keyword">if</strong> (e instanceof String e2) {
-<a class="jxr_linenumber" name="L768" href="#L768">768</a> 					<strong class="jxr_keyword">if</strong> (ne(e2, converter.stringify(x))) {
+<a class="jxr_linenumber" name="L768" href="#L768">768</a> 					<strong class="jxr_keyword">if</strong> (neq(e2, converter.stringify(x))) {
 <a class="jxr_linenumber" name="L769" href="#L769">769</a> 						errors.add(assertEqualsFailed(e2, converter.stringify(x), composeMessage(message, <span class="jxr_string">"Element at index {0} did not match."</span>, i)));
 <a class="jxr_linenumber" name="L770" href="#L770">770</a> 					}
 <a class="jxr_linenumber" name="L771" href="#L771">771</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (e instanceof Predicate e2) { <em class="jxr_comment">// NOSONAR</em>
@@ -781,7 +781,7 @@
 <a class="jxr_linenumber" name="L773" href="#L773">773</a> 						errors.add(<strong class="jxr_keyword">new</strong> AssertionFailedError(composeMessage(message, <span class="jxr_string">"Element at index {0} did not pass predicate.  ==&gt; actual: &lt;{1}&gt;"</span>, i, converter.stringify(x)).get()));
 <a class="jxr_linenumber" name="L774" href="#L774">774</a> 					}
 <a class="jxr_linenumber" name="L775" href="#L775">775</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L776" href="#L776">776</a> 					<strong class="jxr_keyword">if</strong> (ne(e, x)) {
+<a class="jxr_linenumber" name="L776" href="#L776">776</a> 					<strong class="jxr_keyword">if</strong> (neq(e, x)) {
 <a class="jxr_linenumber" name="L777" href="#L777">777</a> 						errors.add(assertEqualsFailed(e, x, composeMessage(message, <span class="jxr_string">"Element at index {0} did not match.  ==&gt; expected: &lt;{1}({2})&gt; but was: &lt;{3}({4})&gt;"</span>, i, e, cns(e), x, cns(x))));
 <a class="jxr_linenumber" name="L778" href="#L778">778</a> 					}
 <a class="jxr_linenumber" name="L779" href="#L779">779</a> 				}
