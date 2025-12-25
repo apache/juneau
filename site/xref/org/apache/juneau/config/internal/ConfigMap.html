@@ -927,7 +927,7 @@
 <a class="jxr_linenumber" name="L919" href="#L919">919</a> 	}
 <a class="jxr_linenumber" name="L920" href="#L920">920</a> 
 <a class="jxr_linenumber" name="L921" href="#L921">921</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> signal(<a name="ConfigEvents" href="../../../../../org/apache/juneau/config/event/ConfigEvents.html#ConfigEvents">ConfigEvents</a> changes) {
-<a class="jxr_linenumber" name="L922" href="#L922">922</a> 		<strong class="jxr_keyword">if</strong> (isNotEmpty(changes))
+<a class="jxr_linenumber" name="L922" href="#L922">922</a> 		<strong class="jxr_keyword">if</strong> (ne(changes))
 <a class="jxr_linenumber" name="L923" href="#L923">923</a> 			listeners.forEach(x -&gt; x.onConfigChange(changes));
 <a class="jxr_linenumber" name="L924" href="#L924">924</a> 	}
 <a class="jxr_linenumber" name="L925" href="#L925">925</a> 

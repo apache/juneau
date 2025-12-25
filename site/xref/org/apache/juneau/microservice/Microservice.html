@@ -965,7 +965,7 @@
 <a class="jxr_linenumber" name="L957" href="#L957">957</a> 			<strong class="jxr_keyword">this</strong>.logger = Logger.getLogger(<span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L958" href="#L958">958</a> 			<strong class="jxr_keyword">var</strong> logFile = firstNonNull(logConfig.logFile, config.get(<span class="jxr_string">"Logging/logFile"</span>).orElse(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L959" href="#L959">959</a> 
-<a class="jxr_linenumber" name="L960" href="#L960">960</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(logFile)) {
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> 			<strong class="jxr_keyword">if</strong> (ne(logFile)) {
 <a class="jxr_linenumber" name="L961" href="#L961">961</a> 				<strong class="jxr_keyword">var</strong> logDir = firstNonNull(logConfig.logDir, config.get(<span class="jxr_string">"Logging/logDir"</span>).orElse(<span class="jxr_string">"."</span>));
 <a class="jxr_linenumber" name="L962" href="#L962">962</a> 				<strong class="jxr_keyword">var</strong> logDirFile = resolveFile(logDir);
 <a class="jxr_linenumber" name="L963" href="#L963">963</a> 				mkdirs(logDirFile, false);

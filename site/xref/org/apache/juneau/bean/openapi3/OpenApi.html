@@ -353,9 +353,9 @@
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 			.addIf(nn(info), <span class="jxr_string">"info"</span>)
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 			.addIf(nn(openapi), <span class="jxr_string">"openapi"</span>)
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 			.addIf(nn(paths), <span class="jxr_string">"paths"</span>)
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			.addIf(isNotEmpty(security), <span class="jxr_string">"security"</span>)
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			.addIf(isNotEmpty(servers), <span class="jxr_string">"servers"</span>)
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 			.addIf(isNotEmpty(tags), <span class="jxr_string">"tags"</span>)
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			.addIf(ne(security), <span class="jxr_string">"security"</span>)
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			.addIf(ne(servers), <span class="jxr_string">"servers"</span>)
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 			.addIf(ne(tags), <span class="jxr_string">"tags"</span>)
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 			.build();
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> MultiSet&lt;&gt;(s, <strong class="jxr_keyword">super</strong>.keySet());

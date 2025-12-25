@@ -55,7 +55,7 @@
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">	 * @return A new {@link BasicDatePart} object, or &lt;jk&gt;null&lt;/jk&gt; if the name or supplier is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="BasicDatePart" href="../../../../../org/apache/juneau/http/part/BasicDatePart.html#BasicDatePart">BasicDatePart</a> of(String name, Supplier&lt;ZonedDateTime&gt; value) {
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">if</strong> (isEmpty(name) || value == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">if</strong> (e(name) || value == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BasicDatePart" href="../../../../../org/apache/juneau/http/part/BasicDatePart.html#BasicDatePart">BasicDatePart</a>(name, value);
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  	}
@@ -68,7 +68,7 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 * @return A new {@link BasicDatePart} object, or &lt;jk&gt;null&lt;/jk&gt; if the name or value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="BasicDatePart" href="../../../../../org/apache/juneau/http/part/BasicDatePart.html#BasicDatePart">BasicDatePart</a> of(String name, ZonedDateTime value) {
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">if</strong> (isEmpty(name) || value == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">if</strong> (e(name) || value == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BasicDatePart" href="../../../../../org/apache/juneau/http/part/BasicDatePart.html#BasicDatePart">BasicDatePart</a>(name, value);
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	}
@@ -88,7 +88,7 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<strong class="jxr_keyword">public</strong> <a name="BasicDatePart" href="../../../../../org/apache/juneau/http/part/BasicDatePart.html#BasicDatePart">BasicDatePart</a>(String name, String value) {
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">super</strong>(name, value);
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">this</strong>.value = isEmpty(value) ? <strong class="jxr_keyword">null</strong> : ZonedDateTime.from(ISO_DATE_TIME.parse(value)).truncatedTo(SECONDS);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">this</strong>.value = e(value) ? <strong class="jxr_keyword">null</strong> : ZonedDateTime.from(ISO_DATE_TIME.parse(value)).truncatedTo(SECONDS);
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">this</strong>.supplier = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  	}
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  

@@ -169,7 +169,7 @@
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 				<strong class="jxr_keyword">if</strong> ((def == <strong class="jxr_keyword">null</strong> &amp;&amp; ! schema.isRequired()) || (def == <strong class="jxr_keyword">null</strong> &amp;&amp; schema.isAllowEmptyValue()))
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 			}
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<strong class="jxr_keyword">if</strong> (isEmpty(s(v)) &amp;&amp; skipIfEmpty &amp;&amp; def == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<strong class="jxr_keyword">if</strong> (e(s(v)) &amp;&amp; skipIfEmpty &amp;&amp; def == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">return</strong> serializer == <strong class="jxr_keyword">null</strong> ? s(v) : serializer.serialize(type, schema, v);
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="SchemaValidationException" href="../../../../../org/apache/juneau/httppart/SchemaValidationException.html#SchemaValidationException">SchemaValidationException</a> e) {

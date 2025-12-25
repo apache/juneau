@@ -155,9 +155,9 @@
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		assertArgNotNull(<span class="jxr_string">"inner"</span>, <strong class="jxr_keyword">inner</strong>);
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">this</strong>.declaringClass = declaringClass;
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">inner</strong> = <strong class="jxr_keyword">inner</strong>;
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">this</strong>.type = memoize(() -&gt; ClassInfo.of(<strong class="jxr_keyword">inner</strong>.getType(), <strong class="jxr_keyword">inner</strong>.getGenericType()));
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">this</strong>.annotations = memoize(() -&gt; stream(<strong class="jxr_keyword">inner</strong>.getAnnotations()).flatMap(a -&gt; AnnotationUtils.streamRepeated(a)).map(a -&gt; ai(<strong class="jxr_keyword">this</strong>, a)).toList());
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">this</strong>.fullName = memoize(<strong class="jxr_keyword">this</strong>::findFullName);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">this</strong>.type = mem(() -&gt; ClassInfo.of(<strong class="jxr_keyword">inner</strong>.getType(), <strong class="jxr_keyword">inner</strong>.getGenericType()));
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">this</strong>.annotations = mem(() -&gt; stream(<strong class="jxr_keyword">inner</strong>.getAnnotations()).flatMap(a -&gt; AnnotationUtils.streamRepeated(a)).map(a -&gt; ai(<strong class="jxr_keyword">this</strong>, a)).toList());
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">this</strong>.fullName = mem(<strong class="jxr_keyword">this</strong>::findFullName);
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 	}
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 	<em class="jxr_javadoccomment">/**</em>

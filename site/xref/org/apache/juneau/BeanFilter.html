@@ -130,7 +130,7 @@
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 					readOnlyProperties(x.readOnlyProperties(), x.ro());
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 				<strong class="jxr_keyword">if</strong> (isAnyNotEmpty(x.writeOnlyProperties(), x.wo()))
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 					writeOnlyProperties(x.writeOnlyProperties(), x.wo());
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 				<strong class="jxr_keyword">if</strong> (isNotEmpty(x.typeName()))
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 				<strong class="jxr_keyword">if</strong> (ne(x.typeName()))
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 					typeName(x.typeName());
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 				<strong class="jxr_keyword">if</strong> (isNotVoid(x.propertyNamer()))
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 					propertyNamer(x.propertyNamer());
@@ -144,7 +144,7 @@
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 					implClass(x.implClass());
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 				<strong class="jxr_keyword">if</strong> (isNotEmptyArray(x.dictionary()))
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 					dictionary(x.dictionary());
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 				<strong class="jxr_keyword">if</strong> (isNotEmpty(x.example()))
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 				<strong class="jxr_keyword">if</strong> (ne(x.example()))
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 					example(x.example());
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 			});
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;

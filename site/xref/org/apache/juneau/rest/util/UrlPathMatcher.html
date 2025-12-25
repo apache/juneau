@@ -86,7 +86,7 @@
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		PathMatcher(String patternString) {
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  			<strong class="jxr_keyword">super</strong>(patternString);
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			<strong class="jxr_keyword">this</strong>.pattern = isEmpty(patternString) ? <span class="jxr_string">"/"</span> : patternString.charAt(0) != '/' ? '/' + patternString : patternString;
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			<strong class="jxr_keyword">this</strong>.pattern = e(patternString) ? <span class="jxr_string">"/"</span> : patternString.charAt(0) != '/' ? '/' + patternString : patternString;
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  			<strong class="jxr_keyword">var</strong> c = patternString.replaceAll(<span class="jxr_string">"&#92;&#92;{[^&#92;&#92;}]+&#92;&#92;}"</span>, <span class="jxr_string">"."</span>).replaceAll(<span class="jxr_string">"&#92;&#92;w+"</span>, <span class="jxr_string">"X"</span>).replaceAll(<span class="jxr_string">"&#92;&#92;."</span>, <span class="jxr_string">"W"</span>);
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  			<strong class="jxr_keyword">if</strong> (c.isEmpty())

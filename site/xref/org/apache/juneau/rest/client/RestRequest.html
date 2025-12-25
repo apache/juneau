@@ -138,7 +138,7 @@
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 				value = x3.copyWith(getPartSerializerSession(), <strong class="jxr_keyword">null</strong>).getValue();
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 			} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 				<strong class="jxr_keyword">var</strong> v = x.getValue();
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 				value = (isEmpty(v) &amp;&amp; skipIfEmpty) ? <strong class="jxr_keyword">null</strong> : v;
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 				value = (e(v) &amp;&amp; skipIfEmpty) ? <strong class="jxr_keyword">null</strong> : v;
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 			}
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 		}
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 
@@ -149,7 +149,7 @@
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">public</strong> String getValue() { <strong class="jxr_keyword">return</strong> value; }
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">boolean</strong> isValid() {
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			<strong class="jxr_keyword">if</strong> (isEmpty(name) || value == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			<strong class="jxr_keyword">if</strong> (e(name) || value == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 				<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		}
@@ -2430,7 +2430,7 @@
 <a class="jxr_linenumber" name="L2422" href="#L2422">2422</a> 		<strong class="jxr_keyword">var</strong> h = request.getFirstHeader(<span class="jxr_string">"Content-Type"</span>);
 <a class="jxr_linenumber" name="L2423" href="#L2423">2423</a> 		<strong class="jxr_keyword">if</strong> (nn(h)) {
 <a class="jxr_linenumber" name="L2424" href="#L2424">2424</a> 			<strong class="jxr_keyword">var</strong> s = h.getValue();
-<a class="jxr_linenumber" name="L2425" href="#L2425">2425</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(s))
+<a class="jxr_linenumber" name="L2425" href="#L2425">2425</a> 			<strong class="jxr_keyword">if</strong> (ne(s))
 <a class="jxr_linenumber" name="L2426" href="#L2426">2426</a> 				<strong class="jxr_keyword">return</strong> ContentType.of(s);
 <a class="jxr_linenumber" name="L2427" href="#L2427">2427</a> 		}
 <a class="jxr_linenumber" name="L2428" href="#L2428">2428</a> 		<strong class="jxr_keyword">return</strong> def;
@@ -2447,7 +2447,7 @@
 <a class="jxr_linenumber" name="L2439" href="#L2439">2439</a> <em class="jxr_javadoccomment">	 * @return A new header.</em>
 <a class="jxr_linenumber" name="L2440" href="#L2440">2440</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L2441" href="#L2441">2441</a> 	<strong class="jxr_keyword">protected</strong> Header createHeader(String name, Object value, <a name="HttpPartSerializer" href="../../../../../org/apache/juneau/httppart/HttpPartSerializer.html#HttpPartSerializer">HttpPartSerializer</a> serializer, <a name="HttpPartSchema" href="../../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> schema, Boolean skipIfEmpty) {
-<a class="jxr_linenumber" name="L2442" href="#L2442">2442</a> 		<strong class="jxr_keyword">if</strong> (isEmpty(name))
+<a class="jxr_linenumber" name="L2442" href="#L2442">2442</a> 		<strong class="jxr_keyword">if</strong> (e(name))
 <a class="jxr_linenumber" name="L2443" href="#L2443">2443</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L2444" href="#L2444">2444</a> 		<strong class="jxr_keyword">if</strong> (skipIfEmpty == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L2445" href="#L2445">2445</a> 			skipIfEmpty = client.isSkipEmptyHeaderData();
@@ -2485,7 +2485,7 @@
 <a class="jxr_linenumber" name="L2477" href="#L2477">2477</a> <em class="jxr_javadoccomment">	 * @return A new part.</em>
 <a class="jxr_linenumber" name="L2478" href="#L2478">2478</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L2479" href="#L2479">2479</a> 	<strong class="jxr_keyword">protected</strong> NameValuePair createPart(String name, Object value, <a name="HttpPartType" href="../../../../../org/apache/juneau/httppart/HttpPartType.html#HttpPartType">HttpPartType</a> type, <a name="HttpPartSerializer" href="../../../../../org/apache/juneau/httppart/HttpPartSerializer.html#HttpPartSerializer">HttpPartSerializer</a> serializer, <a name="HttpPartSchema" href="../../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> schema, Boolean skipIfEmpty) {
-<a class="jxr_linenumber" name="L2480" href="#L2480">2480</a> 		<strong class="jxr_keyword">if</strong> (isEmpty(name))
+<a class="jxr_linenumber" name="L2480" href="#L2480">2480</a> 		<strong class="jxr_keyword">if</strong> (e(name))
 <a class="jxr_linenumber" name="L2481" href="#L2481">2481</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L2482" href="#L2482">2482</a> 		<strong class="jxr_keyword">if</strong> (skipIfEmpty == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L2483" href="#L2483">2483</a> 			<strong class="jxr_keyword">if</strong> (type == QUERY)
@@ -2512,10 +2512,10 @@
 <a class="jxr_linenumber" name="L2504" href="#L2504">2504</a> 	}
 <a class="jxr_linenumber" name="L2505" href="#L2505">2505</a> 
 <a class="jxr_linenumber" name="L2506" href="#L2506">2506</a> 	RestRequest formDataArg(String name, Object value, <a name="HttpPartSchema" href="../../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> schema, <a name="HttpPartSerializer" href="../../../../../org/apache/juneau/httppart/HttpPartSerializer.html#HttpPartSerializer">HttpPartSerializer</a> serializer, <strong class="jxr_keyword">boolean</strong> skipIfEmpty) {
-<a class="jxr_linenumber" name="L2507" href="#L2507">2507</a> 		<strong class="jxr_keyword">var</strong> isMulti = isEmpty(name) || <span class="jxr_string">"*"</span>.equals(name) || value instanceof <a name="PartList" href="../../../../../org/apache/juneau/http/part/PartList.html#PartList">PartList</a> || isNameValuePairArray(value);
+<a class="jxr_linenumber" name="L2507" href="#L2507">2507</a> 		<strong class="jxr_keyword">var</strong> isMulti = e(name) || <span class="jxr_string">"*"</span>.equals(name) || value instanceof <a name="PartList" href="../../../../../org/apache/juneau/http/part/PartList.html#PartList">PartList</a> || isNameValuePairArray(value);
 <a class="jxr_linenumber" name="L2508" href="#L2508">2508</a> 
 <a class="jxr_linenumber" name="L2509" href="#L2509">2509</a> 		<strong class="jxr_keyword">if</strong> (! isMulti) {
-<a class="jxr_linenumber" name="L2510" href="#L2510">2510</a> 			<strong class="jxr_keyword">if</strong> (! (skipIfEmpty &amp;&amp; isEmpty(s(value))))
+<a class="jxr_linenumber" name="L2510" href="#L2510">2510</a> 			<strong class="jxr_keyword">if</strong> (! (skipIfEmpty &amp;&amp; e(s(value))))
 <a class="jxr_linenumber" name="L2511" href="#L2511">2511</a> 				<strong class="jxr_keyword">return</strong> formData(createPart(name, value, FORMDATA, serializer, schema, skipIfEmpty));
 <a class="jxr_linenumber" name="L2512" href="#L2512">2512</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L2513" href="#L2513">2513</a> 		}
@@ -2541,7 +2541,7 @@
 <a class="jxr_linenumber" name="L2533" href="#L2533">2533</a> 		}
 <a class="jxr_linenumber" name="L2534" href="#L2534">2534</a> 
 <a class="jxr_linenumber" name="L2535" href="#L2535">2535</a> 		<strong class="jxr_keyword">if</strong> (skipIfEmpty)
-<a class="jxr_linenumber" name="L2536" href="#L2536">2536</a> 			l.removeIf(x -&gt; isEmpty(x.getValue()));
+<a class="jxr_linenumber" name="L2536" href="#L2536">2536</a> 			l.removeIf(x -&gt; e(x.getValue()));
 <a class="jxr_linenumber" name="L2537" href="#L2537">2537</a> 
 <a class="jxr_linenumber" name="L2538" href="#L2538">2538</a> 		formData.append(l);
 <a class="jxr_linenumber" name="L2539" href="#L2539">2539</a> 
@@ -2555,10 +2555,10 @@
 <a class="jxr_linenumber" name="L2547" href="#L2547">2547</a> 	}
 <a class="jxr_linenumber" name="L2548" href="#L2548">2548</a> 
 <a class="jxr_linenumber" name="L2549" href="#L2549">2549</a> 	RestRequest headerArg(String name, Object value, <a name="HttpPartSchema" href="../../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> schema, <a name="HttpPartSerializer" href="../../../../../org/apache/juneau/httppart/HttpPartSerializer.html#HttpPartSerializer">HttpPartSerializer</a> serializer, <strong class="jxr_keyword">boolean</strong> skipIfEmpty) {
-<a class="jxr_linenumber" name="L2550" href="#L2550">2550</a> 		<strong class="jxr_keyword">var</strong> isMulti = isEmpty(name) || <span class="jxr_string">"*"</span>.equals(name) || value instanceof <a name="HeaderList" href="../../../../../org/apache/juneau/http/header/HeaderList.html#HeaderList">HeaderList</a> || isHeaderArray(value);
+<a class="jxr_linenumber" name="L2550" href="#L2550">2550</a> 		<strong class="jxr_keyword">var</strong> isMulti = e(name) || <span class="jxr_string">"*"</span>.equals(name) || value instanceof <a name="HeaderList" href="../../../../../org/apache/juneau/http/header/HeaderList.html#HeaderList">HeaderList</a> || isHeaderArray(value);
 <a class="jxr_linenumber" name="L2551" href="#L2551">2551</a> 
 <a class="jxr_linenumber" name="L2552" href="#L2552">2552</a> 		<strong class="jxr_keyword">if</strong> (! isMulti) {
-<a class="jxr_linenumber" name="L2553" href="#L2553">2553</a> 			<strong class="jxr_keyword">if</strong> (! (skipIfEmpty &amp;&amp; isEmpty(s(value))))
+<a class="jxr_linenumber" name="L2553" href="#L2553">2553</a> 			<strong class="jxr_keyword">if</strong> (! (skipIfEmpty &amp;&amp; e(s(value))))
 <a class="jxr_linenumber" name="L2554" href="#L2554">2554</a> 				<strong class="jxr_keyword">return</strong> header(createHeader(name, value, serializer, schema, skipIfEmpty));
 <a class="jxr_linenumber" name="L2555" href="#L2555">2555</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L2556" href="#L2556">2556</a> 		}
@@ -2583,7 +2583,7 @@
 <a class="jxr_linenumber" name="L2575" href="#L2575">2575</a> 		}
 <a class="jxr_linenumber" name="L2576" href="#L2576">2576</a> 
 <a class="jxr_linenumber" name="L2577" href="#L2577">2577</a> 		<strong class="jxr_keyword">if</strong> (skipIfEmpty)
-<a class="jxr_linenumber" name="L2578" href="#L2578">2578</a> 			l.removeIf(x -&gt; isEmpty(x.getValue()));
+<a class="jxr_linenumber" name="L2578" href="#L2578">2578</a> 			l.removeIf(x -&gt; e(x.getValue()));
 <a class="jxr_linenumber" name="L2579" href="#L2579">2579</a> 
 <a class="jxr_linenumber" name="L2580" href="#L2580">2580</a> 		headerData.append(l);
 <a class="jxr_linenumber" name="L2581" href="#L2581">2581</a> 
@@ -2593,7 +2593,7 @@
 <a class="jxr_linenumber" name="L2585" href="#L2585">2585</a> 	<strong class="jxr_keyword">boolean</strong> isLoggingSuppressed() { <strong class="jxr_keyword">return</strong> suppressLogging; }
 <a class="jxr_linenumber" name="L2586" href="#L2586">2586</a> 
 <a class="jxr_linenumber" name="L2587" href="#L2587">2587</a> 	RestRequest pathArg(String name, Object value, <a name="HttpPartSchema" href="../../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> schema, <a name="HttpPartSerializer" href="../../../../../org/apache/juneau/httppart/HttpPartSerializer.html#HttpPartSerializer">HttpPartSerializer</a> serializer) {
-<a class="jxr_linenumber" name="L2588" href="#L2588">2588</a> 		<strong class="jxr_keyword">var</strong> isMulti = isEmpty(name) || <span class="jxr_string">"*"</span>.equals(name) || value instanceof <a name="PartList" href="../../../../../org/apache/juneau/http/part/PartList.html#PartList">PartList</a> || isNameValuePairArray(value);
+<a class="jxr_linenumber" name="L2588" href="#L2588">2588</a> 		<strong class="jxr_keyword">var</strong> isMulti = e(name) || <span class="jxr_string">"*"</span>.equals(name) || value instanceof <a name="PartList" href="../../../../../org/apache/juneau/http/part/PartList.html#PartList">PartList</a> || isNameValuePairArray(value);
 <a class="jxr_linenumber" name="L2589" href="#L2589">2589</a> 
 <a class="jxr_linenumber" name="L2590" href="#L2590">2590</a> 		<strong class="jxr_keyword">if</strong> (! isMulti)
 <a class="jxr_linenumber" name="L2591" href="#L2591">2591</a> 			<strong class="jxr_keyword">return</strong> pathData(createPart(name, value, PATH, serializer, schema, false));
@@ -2623,10 +2623,10 @@
 <a class="jxr_linenumber" name="L2615" href="#L2615">2615</a> 	}
 <a class="jxr_linenumber" name="L2616" href="#L2616">2616</a> 
 <a class="jxr_linenumber" name="L2617" href="#L2617">2617</a> 	RestRequest queryArg(String name, Object value, <a name="HttpPartSchema" href="../../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> schema, <a name="HttpPartSerializer" href="../../../../../org/apache/juneau/httppart/HttpPartSerializer.html#HttpPartSerializer">HttpPartSerializer</a> serializer, <strong class="jxr_keyword">boolean</strong> skipIfEmpty) {
-<a class="jxr_linenumber" name="L2618" href="#L2618">2618</a> 		<strong class="jxr_keyword">var</strong> isMulti = isEmpty(name) || <span class="jxr_string">"*"</span>.equals(name) || value instanceof <a name="PartList" href="../../../../../org/apache/juneau/http/part/PartList.html#PartList">PartList</a> || isNameValuePairArray(value);
+<a class="jxr_linenumber" name="L2618" href="#L2618">2618</a> 		<strong class="jxr_keyword">var</strong> isMulti = e(name) || <span class="jxr_string">"*"</span>.equals(name) || value instanceof <a name="PartList" href="../../../../../org/apache/juneau/http/part/PartList.html#PartList">PartList</a> || isNameValuePairArray(value);
 <a class="jxr_linenumber" name="L2619" href="#L2619">2619</a> 
 <a class="jxr_linenumber" name="L2620" href="#L2620">2620</a> 		<strong class="jxr_keyword">if</strong> (! isMulti) {
-<a class="jxr_linenumber" name="L2621" href="#L2621">2621</a> 			<strong class="jxr_keyword">if</strong> (! (skipIfEmpty &amp;&amp; isEmpty(s(value))))
+<a class="jxr_linenumber" name="L2621" href="#L2621">2621</a> 			<strong class="jxr_keyword">if</strong> (! (skipIfEmpty &amp;&amp; e(s(value))))
 <a class="jxr_linenumber" name="L2622" href="#L2622">2622</a> 				<strong class="jxr_keyword">return</strong> queryData(createPart(name, value, QUERY, serializer, schema, skipIfEmpty));
 <a class="jxr_linenumber" name="L2623" href="#L2623">2623</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L2624" href="#L2624">2624</a> 		}
@@ -2652,7 +2652,7 @@
 <a class="jxr_linenumber" name="L2644" href="#L2644">2644</a> 		}
 <a class="jxr_linenumber" name="L2645" href="#L2645">2645</a> 
 <a class="jxr_linenumber" name="L2646" href="#L2646">2646</a> 		<strong class="jxr_keyword">if</strong> (skipIfEmpty)
-<a class="jxr_linenumber" name="L2647" href="#L2647">2647</a> 			l.removeIf(x -&gt; isEmpty(x.getValue()));
+<a class="jxr_linenumber" name="L2647" href="#L2647">2647</a> 			l.removeIf(x -&gt; e(x.getValue()));
 <a class="jxr_linenumber" name="L2648" href="#L2648">2648</a> 
 <a class="jxr_linenumber" name="L2649" href="#L2649">2649</a> 		queryData.append(l);
 <a class="jxr_linenumber" name="L2650" href="#L2650">2650</a> 

@@ -286,7 +286,7 @@
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">	 * @return The built list, or {@code null} if {@link #sparse()} is set and the list is empty.</em>
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 	<strong class="jxr_keyword">public</strong> List&lt;E&gt; build() {
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<strong class="jxr_keyword">if</strong> (sparse &amp;&amp; isEmpty(list))
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<strong class="jxr_keyword">if</strong> (sparse &amp;&amp; e(list))
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<strong class="jxr_keyword">var</strong> list2 = (List&lt;E&gt;)<strong class="jxr_keyword">null</strong>;

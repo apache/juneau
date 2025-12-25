@@ -114,7 +114,7 @@
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">this</strong>.session = session;
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">this</strong>.bean = bean;
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">this</strong>.meta = meta;
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">if</strong> (isNotEmpty(meta.getConstructorArgs()))
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">if</strong> (ne(meta.getConstructorArgs()))
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 			propertyCache = <strong class="jxr_keyword">new</strong> TreeMap&lt;&gt;();
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">this</strong>.typePropertyName = session.getBeanTypePropertyName(meta.getClassMeta());
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 	}
@@ -430,7 +430,7 @@
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 	<strong class="jxr_keyword">public</strong> T getBean(<strong class="jxr_keyword">boolean</strong> create) {
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<em class="jxr_javadoccomment">/** If this is a read-only bean, then we need to create it. */</em>
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">if</strong> (bean == <strong class="jxr_keyword">null</strong> &amp;&amp; create &amp;&amp; isNotEmpty(meta.getConstructorArgs())) {
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">if</strong> (bean == <strong class="jxr_keyword">null</strong> &amp;&amp; create &amp;&amp; ne(meta.getConstructorArgs())) {
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 			<strong class="jxr_keyword">var</strong> props = meta.getConstructorArgs();
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 			<strong class="jxr_keyword">var</strong> c = meta.getConstructor();
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 			<strong class="jxr_keyword">var</strong> args = <strong class="jxr_keyword">new</strong> Object[props.size()];

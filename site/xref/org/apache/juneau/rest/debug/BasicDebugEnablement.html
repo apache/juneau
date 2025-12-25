@@ -99,7 +99,7 @@
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  				rstream(ap.find(x))
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  					.filter(REST_OP_GROUP)
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  					.flatMap(ai -&gt; ai.getValue(String.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"debug"</span>).stream())
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  					.filter(Utils::isNotEmpty)
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  					.filter(Utils::ne)
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  					.map(varResolver::resolve)
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  					.map(Enablement::fromString)
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  					.filter(Objects::nonNull)

@@ -110,7 +110,7 @@
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicUriHeader" href="../../../../../org/apache/juneau/http/header/BasicUriHeader.html#BasicUriHeader">BasicUriHeader</a>(String name, String value) {
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<strong class="jxr_keyword">super</strong>(name, value);
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">this</strong>.value = isEmpty(value) ? <strong class="jxr_keyword">null</strong> : URI.create(value);
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">this</strong>.value = e(value) ? <strong class="jxr_keyword">null</strong> : URI.create(value);
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">this</strong>.supplier = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 	}
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 

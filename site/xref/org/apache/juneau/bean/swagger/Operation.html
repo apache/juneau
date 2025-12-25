@@ -662,18 +662,18 @@
 <a class="jxr_linenumber" name="L654" href="#L654">654</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; keySet() {
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> 		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 		<strong class="jxr_keyword">var</strong> s = setb(String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 			.addIf(isNotEmpty(consumes), <span class="jxr_string">"consumes"</span>)
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 			.addIf(ne(consumes), <span class="jxr_string">"consumes"</span>)
 <a class="jxr_linenumber" name="L658" href="#L658">658</a> 			.addIf(nn(deprecated), <span class="jxr_string">"deprecated"</span>)
 <a class="jxr_linenumber" name="L659" href="#L659">659</a> 			.addIf(nn(description), <span class="jxr_string">"description"</span>)
 <a class="jxr_linenumber" name="L660" href="#L660">660</a> 			.addIf(nn(externalDocs), <span class="jxr_string">"externalDocs"</span>)
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> 			.addIf(nn(operationId), <span class="jxr_string">"operationId"</span>)
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 			.addIf(isNotEmpty(parameters), <span class="jxr_string">"parameters"</span>)
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> 			.addIf(isNotEmpty(produces), <span class="jxr_string">"produces"</span>)
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> 			.addIf(isNotEmpty(responses), <span class="jxr_string">"responses"</span>)
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 			.addIf(isNotEmpty(schemes), <span class="jxr_string">"schemes"</span>)
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> 			.addIf(isNotEmpty(security), <span class="jxr_string">"security"</span>)
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 			.addIf(ne(parameters), <span class="jxr_string">"parameters"</span>)
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 			.addIf(ne(produces), <span class="jxr_string">"produces"</span>)
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 			.addIf(ne(responses), <span class="jxr_string">"responses"</span>)
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 			.addIf(ne(schemes), <span class="jxr_string">"schemes"</span>)
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 			.addIf(ne(security), <span class="jxr_string">"security"</span>)
 <a class="jxr_linenumber" name="L667" href="#L667">667</a> 			.addIf(nn(summary), <span class="jxr_string">"summary"</span>)
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> 			.addIf(isNotEmpty(tags), <span class="jxr_string">"tags"</span>)
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 			.addIf(ne(tags), <span class="jxr_string">"tags"</span>)
 <a class="jxr_linenumber" name="L669" href="#L669">669</a> 			.build();
 <a class="jxr_linenumber" name="L670" href="#L670">670</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L671" href="#L671">671</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> MultiSet&lt;&gt;(s, <strong class="jxr_keyword">super</strong>.keySet());

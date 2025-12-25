@@ -48,7 +48,7 @@
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">	 * @return A new {@link BasicStringPart} object, or &lt;jk&gt;null&lt;/jk&gt; if the name or value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="BasicStringPart" href="../../../../../org/apache/juneau/http/part/BasicStringPart.html#BasicStringPart">BasicStringPart</a> of(String name, String value) {
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		<strong class="jxr_keyword">if</strong> (isEmpty(name) || value == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		<strong class="jxr_keyword">if</strong> (e(name) || value == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BasicStringPart" href="../../../../../org/apache/juneau/http/part/BasicStringPart.html#BasicStringPart">BasicStringPart</a>(name, value);
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  	}
@@ -64,7 +64,7 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">	 * @return A new {@link BasicStringPart} object, or &lt;jk&gt;null&lt;/jk&gt; if the name or supplier is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="BasicStringPart" href="../../../../../org/apache/juneau/http/part/BasicStringPart.html#BasicStringPart">BasicStringPart</a> of(String name, Supplier&lt;String&gt; value) {
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">if</strong> (isEmpty(name) || value == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">if</strong> (e(name) || value == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BasicStringPart" href="../../../../../org/apache/juneau/http/part/BasicStringPart.html#BasicStringPart">BasicStringPart</a>(name, value);
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  	}

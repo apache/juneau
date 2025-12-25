@@ -170,7 +170,7 @@
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">var</strong> s = setb(String.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 			.addIf(nn(description), <span class="jxr_string">"description"</span>)
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 			.addIf(nn(url), <span class="jxr_string">"url"</span>)
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			.addIf(isNotEmpty(variables), <span class="jxr_string">"variables"</span>)
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			.addIf(ne(variables), <span class="jxr_string">"variables"</span>)
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 			.build();
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> MultiSet&lt;&gt;(s, <strong class="jxr_keyword">super</strong>.keySet());

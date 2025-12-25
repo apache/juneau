@@ -147,7 +147,7 @@
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> merge(<a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> m, <a name="ExternalDocs" href="../../../../org/apache/juneau/annotation/ExternalDocs.html#ExternalDocs">ExternalDocs</a> a) <strong class="jxr_keyword">throws</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> {
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">if</strong> (ExternalDocsAnnotation.empty(a))
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">return</strong> m;
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		Predicate&lt;String&gt; ne = Utils::isNotEmpty;
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		Predicate&lt;String&gt; ne = Utils::ne;
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">return</strong> m
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 			.appendIf(ne, <span class="jxr_string">"description"</span>, joinnl(a.description()))

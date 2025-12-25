@@ -49,7 +49,7 @@
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  		x = t.roundTrip(x, PrimitiveObjectsBean.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  		<em class="jxr_comment">// primitives</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		assertEquals(b(<strong class="jxr_keyword">true</strong>), x.poBoolean);
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		assertEquals(bool(<strong class="jxr_keyword">true</strong>), x.poBoolean);
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		assertEquals(Byte.valueOf((byte)1), x.poByte);
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  		assertEquals(Character.valueOf('a'), x.poChar);
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  		assertEquals(Short.valueOf(<span class="jxr_string">"2"</span>), x.poShort);
@@ -75,7 +75,7 @@
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		assertNull(x.pouBigDecimal);
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<em class="jxr_comment">// primitive arrays</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertEquals(b(false), x.poaBoolean[1][0]);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertEquals(bool(false), x.poaBoolean[1][0]);
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		assertEquals(Byte.valueOf((byte)2), x.poaByte[1][0]);
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertEquals(Character.valueOf('b'), x.poaChar[1][0]);
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		assertEquals(Short.valueOf(<span class="jxr_string">"2"</span>), x.poaShort[1][0]);
@@ -112,7 +112,7 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 		assertNull(x.poauBigDecimal);
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<em class="jxr_comment">// anonymous list of object primitive arrays</em>
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertEquals(b(<strong class="jxr_keyword">true</strong>), x.poalBoolean.get(0)[0]);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertEquals(bool(<strong class="jxr_keyword">true</strong>), x.poalBoolean.get(0)[0]);
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertEquals(Byte.valueOf((byte)1), x.poalByte.get(0)[0]);
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		assertEquals(Character.valueOf('a'), x.poalChar.get(0)[0]);
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertEquals(Short.valueOf((<strong class="jxr_keyword">short</strong>)1), x.poalShort.get(0)[0]);
@@ -135,7 +135,7 @@
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertNull(x.poalBigDecimal.get(1));
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<em class="jxr_comment">// regular list of object primitive arrays</em>
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		assertEquals(b(<strong class="jxr_keyword">true</strong>), x.polBoolean.get(0)[0]);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		assertEquals(bool(<strong class="jxr_keyword">true</strong>), x.polBoolean.get(0)[0]);
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertEquals(Byte.valueOf((byte)1), x.polByte.get(0)[0]);
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		assertEquals(Character.valueOf('a'), x.polChar.get(0)[0]);
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		assertEquals(Short.valueOf((<strong class="jxr_keyword">short</strong>)1), x.polShort.get(0)[0]);

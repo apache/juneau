@@ -158,7 +158,7 @@
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">public</strong> Builder <strong class="jxr_keyword">default</strong>_(String value) {
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(value))
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			<strong class="jxr_keyword">if</strong> (ne(value))
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 				<strong class="jxr_keyword">default</strong>_ = value;
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 		}
@@ -628,7 +628,7 @@
 <a class="jxr_linenumber" name="L620" href="#L620">620</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L621" href="#L621">621</a> 		<strong class="jxr_keyword">public</strong> Builder collectionFormat(String value) {
 <a class="jxr_linenumber" name="L622" href="#L622">622</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 				<strong class="jxr_keyword">if</strong> (isNotEmpty(value))
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 				<strong class="jxr_keyword">if</strong> (ne(value))
 <a class="jxr_linenumber" name="L624" href="#L624">624</a> 					<strong class="jxr_keyword">this</strong>.collectionFormat = HttpPartCollectionFormat.fromString(value);
 <a class="jxr_linenumber" name="L625" href="#L625">625</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
 <a class="jxr_linenumber" name="L626" href="#L626">626</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ContextRuntimeException" href="../../../../org/apache/juneau/ContextRuntimeException.html#ContextRuntimeException">ContextRuntimeException</a>(e, <span class="jxr_string">"Invalid value ''{0}'' passed in as collectionFormat value.  Valid values: {1}"</span>, value, HttpPartCollectionFormat.values());
@@ -1176,7 +1176,7 @@
 <a class="jxr_linenumber" name="L1168" href="#L1168">1168</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L1169" href="#L1169">1169</a> 		<strong class="jxr_keyword">public</strong> Builder format(String value) {
 <a class="jxr_linenumber" name="L1170" href="#L1170">1170</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1171" href="#L1171">1171</a> 				<strong class="jxr_keyword">if</strong> (isNotEmpty(value))
+<a class="jxr_linenumber" name="L1171" href="#L1171">1171</a> 				<strong class="jxr_keyword">if</strong> (ne(value))
 <a class="jxr_linenumber" name="L1172" href="#L1172">1172</a> 					format = HttpPartFormat.fromString(value);
 <a class="jxr_linenumber" name="L1173" href="#L1173">1173</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
 <a class="jxr_linenumber" name="L1174" href="#L1174">1174</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ContextRuntimeException" href="../../../../org/apache/juneau/ContextRuntimeException.html#ContextRuntimeException">ContextRuntimeException</a>(e, <span class="jxr_string">"Invalid value ''{0}'' passed in as format value.  Valid values: {1}"</span>, value, HttpPartFormat.values());
@@ -1810,7 +1810,7 @@
 <a class="jxr_linenumber" name="L1802" href="#L1802">1802</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L1803" href="#L1803">1803</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L1804" href="#L1804">1804</a> 		<strong class="jxr_keyword">public</strong> Builder name(String value) {
-<a class="jxr_linenumber" name="L1805" href="#L1805">1805</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(value))
+<a class="jxr_linenumber" name="L1805" href="#L1805">1805</a> 			<strong class="jxr_keyword">if</strong> (ne(value))
 <a class="jxr_linenumber" name="L1806" href="#L1806">1806</a> 				name = value;
 <a class="jxr_linenumber" name="L1807" href="#L1807">1807</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1808" href="#L1808">1808</a> 		}
@@ -1929,7 +1929,7 @@
 <a class="jxr_linenumber" name="L1921" href="#L1921">1921</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L1922" href="#L1922">1922</a> 		<strong class="jxr_keyword">public</strong> Builder pattern(String value) {
 <a class="jxr_linenumber" name="L1923" href="#L1923">1923</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1924" href="#L1924">1924</a> 				<strong class="jxr_keyword">if</strong> (isNotEmpty(value))
+<a class="jxr_linenumber" name="L1924" href="#L1924">1924</a> 				<strong class="jxr_keyword">if</strong> (ne(value))
 <a class="jxr_linenumber" name="L1925" href="#L1925">1925</a> 					<strong class="jxr_keyword">this</strong>.pattern = Pattern.compile(value);
 <a class="jxr_linenumber" name="L1926" href="#L1926">1926</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
 <a class="jxr_linenumber" name="L1927" href="#L1927">1927</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ContextRuntimeException" href="../../../../org/apache/juneau/ContextRuntimeException.html#ContextRuntimeException">ContextRuntimeException</a>(e, <span class="jxr_string">"Invalid value {0} passed in as pattern value.  Must be a valid regular expression."</span>, value);
@@ -2386,7 +2386,7 @@
 <a class="jxr_linenumber" name="L2378" href="#L2378">2378</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L2379" href="#L2379">2379</a> 		<strong class="jxr_keyword">public</strong> Builder type(String value) {
 <a class="jxr_linenumber" name="L2380" href="#L2380">2380</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L2381" href="#L2381">2381</a> 				<strong class="jxr_keyword">if</strong> (isNotEmpty(value))
+<a class="jxr_linenumber" name="L2381" href="#L2381">2381</a> 				<strong class="jxr_keyword">if</strong> (ne(value))
 <a class="jxr_linenumber" name="L2382" href="#L2382">2382</a> 					type = HttpPartDataType.fromString(value);
 <a class="jxr_linenumber" name="L2383" href="#L2383">2383</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
 <a class="jxr_linenumber" name="L2384" href="#L2384">2384</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ContextRuntimeException" href="../../../../org/apache/juneau/ContextRuntimeException.html#ContextRuntimeException">ContextRuntimeException</a>(e, <span class="jxr_string">"Invalid value ''{0}'' passed in as type value.  Valid values: {1}"</span>, value, HttpPartDataType.values());
@@ -2542,7 +2542,7 @@
 <a class="jxr_linenumber" name="L2534" href="#L2534">2534</a> 		}
 <a class="jxr_linenumber" name="L2535" href="#L2535">2535</a> 
 <a class="jxr_linenumber" name="L2536" href="#L2536">2536</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Boolean resolve(String newValue, Boolean oldValue) {
-<a class="jxr_linenumber" name="L2537" href="#L2537">2537</a> 			<strong class="jxr_keyword">return</strong> isEmpty(newValue) ? oldValue : b(newValue);
+<a class="jxr_linenumber" name="L2537" href="#L2537">2537</a> 			<strong class="jxr_keyword">return</strong> isEmpty(newValue) ? oldValue : bool(newValue);
 <a class="jxr_linenumber" name="L2538" href="#L2538">2538</a> 		}
 <a class="jxr_linenumber" name="L2539" href="#L2539">2539</a> 
 <a class="jxr_linenumber" name="L2540" href="#L2540">2540</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Long resolve(String newValue, Long oldValue) {
@@ -2745,7 +2745,7 @@
 <a class="jxr_linenumber" name="L2737" href="#L2737">2737</a> 
 <a class="jxr_linenumber" name="L2738" href="#L2738">2738</a> 			<em class="jxr_comment">// Handle exclusiveMaximum with fallback from Draft 2020-12 to Draft 04</em>
 <a class="jxr_linenumber" name="L2739" href="#L2739">2739</a> 			String exMaxVal = a.exclusiveMaximumValue();
-<a class="jxr_linenumber" name="L2740" href="#L2740">2740</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(exMaxVal)) {
+<a class="jxr_linenumber" name="L2740" href="#L2740">2740</a> 			<strong class="jxr_keyword">if</strong> (ne(exMaxVal)) {
 <a class="jxr_linenumber" name="L2741" href="#L2741">2741</a> 				exclusiveMaximumValue(toNumber(exMaxVal));
 <a class="jxr_linenumber" name="L2742" href="#L2742">2742</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (a.exclusiveMaximum() || a.emax()) {
 <a class="jxr_linenumber" name="L2743" href="#L2743">2743</a> 				exclusiveMaximum(<strong class="jxr_keyword">true</strong>);
@@ -2753,7 +2753,7 @@
 <a class="jxr_linenumber" name="L2745" href="#L2745">2745</a> 
 <a class="jxr_linenumber" name="L2746" href="#L2746">2746</a> 			<em class="jxr_comment">// Handle exclusiveMinimum with fallback from Draft 2020-12 to Draft 04</em>
 <a class="jxr_linenumber" name="L2747" href="#L2747">2747</a> 			String exMinVal = a.exclusiveMinimumValue();
-<a class="jxr_linenumber" name="L2748" href="#L2748">2748</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(exMinVal)) {
+<a class="jxr_linenumber" name="L2748" href="#L2748">2748</a> 			<strong class="jxr_keyword">if</strong> (ne(exMinVal)) {
 <a class="jxr_linenumber" name="L2749" href="#L2749">2749</a> 				exclusiveMinimumValue(toNumber(exMinVal));
 <a class="jxr_linenumber" name="L2750" href="#L2750">2750</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (a.exclusiveMinimum() || a.emin()) {
 <a class="jxr_linenumber" name="L2751" href="#L2751">2751</a> 				exclusiveMinimum(<strong class="jxr_keyword">true</strong>);
@@ -3561,7 +3561,7 @@
 <a class="jxr_linenumber" name="L3553" href="#L3553">3553</a> 	<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">static</strong> Number toNumber(String...s) {
 <a class="jxr_linenumber" name="L3554" href="#L3554">3554</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L3555" href="#L3555">3555</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ss : s)
-<a class="jxr_linenumber" name="L3556" href="#L3556">3556</a> 				<strong class="jxr_keyword">if</strong> (isNotEmpty(ss))
+<a class="jxr_linenumber" name="L3556" href="#L3556">3556</a> 				<strong class="jxr_keyword">if</strong> (ne(ss))
 <a class="jxr_linenumber" name="L3557" href="#L3557">3557</a> 					<strong class="jxr_keyword">return</strong> parseNumber(ss, Number.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L3558" href="#L3558">3558</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L3559" href="#L3559">3559</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
@@ -4131,7 +4131,7 @@
 <a class="jxr_linenumber" name="L4123" href="#L4123">4123</a> 
 <a class="jxr_linenumber" name="L4124" href="#L4124">4124</a> 	<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
 <a class="jxr_linenumber" name="L4125" href="#L4125">4125</a> 		<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L4126" href="#L4126">4126</a> 		Predicate&lt;Object&gt; ne = x -&gt; isNotEmpty(s(x));
+<a class="jxr_linenumber" name="L4126" href="#L4126">4126</a> 		Predicate&lt;Object&gt; ne = x -&gt; ne(s(x));
 <a class="jxr_linenumber" name="L4127" href="#L4127">4127</a> 		Predicate&lt;Object&gt; nf = x -&gt; x instanceof Boolean &amp;&amp; (Boolean)x;
 <a class="jxr_linenumber" name="L4128" href="#L4128">4128</a> 		Predicate&lt;Object&gt; nm1 = x -&gt; x instanceof Number &amp;&amp; ((Number)x).intValue() != -1;
 <a class="jxr_linenumber" name="L4129" href="#L4129">4129</a> 		Predicate&lt;Object&gt; nn = Utils::nn;
@@ -4309,7 +4309,7 @@
 <a class="jxr_linenumber" name="L4301" href="#L4301">4301</a> 	}
 <a class="jxr_linenumber" name="L4302" href="#L4302">4302</a> 
 <a class="jxr_linenumber" name="L4303" href="#L4303">4303</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isValidAllowEmpty(String x) {
-<a class="jxr_linenumber" name="L4304" href="#L4304">4304</a> 		<strong class="jxr_keyword">return</strong> allowEmptyValue || isNotEmpty(x);
+<a class="jxr_linenumber" name="L4304" href="#L4304">4304</a> 		<strong class="jxr_keyword">return</strong> allowEmptyValue || ne(x);
 <a class="jxr_linenumber" name="L4305" href="#L4305">4305</a> 	}
 <a class="jxr_linenumber" name="L4306" href="#L4306">4306</a> 
 <a class="jxr_linenumber" name="L4307" href="#L4307">4307</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isValidConst(String x) {

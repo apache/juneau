@@ -166,7 +166,7 @@
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 					<strong class="jxr_keyword">var</strong> typeName = ap.find(Bean.<strong class="jxr_keyword">class</strong>, ci)
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 						.stream()
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 						.map(x -&gt; x.<strong class="jxr_keyword">inner</strong>().typeName())
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 						.filter(Utils::isNotEmpty)
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 						.filter(Utils::ne)
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 						.findFirst()
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 						.orElseThrow(() -&gt; bex(<span class="jxr_string">"Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined."</span>, ci.getName()));
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 					<em class="jxr_comment">// @formatter:on</em>

@@ -4690,7 +4690,7 @@
 <a class="jxr_linenumber" name="L4682" href="#L4682">4682</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L4683" href="#L4683">4683</a> 		<strong class="jxr_keyword">public</strong> Builder rootUrl(Object value) {
 <a class="jxr_linenumber" name="L4684" href="#L4684">4684</a> 			<strong class="jxr_keyword">var</strong> s = s(value);
-<a class="jxr_linenumber" name="L4685" href="#L4685">4685</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(s))
+<a class="jxr_linenumber" name="L4685" href="#L4685">4685</a> 			<strong class="jxr_keyword">if</strong> (ne(s))
 <a class="jxr_linenumber" name="L4686" href="#L4686">4686</a> 				s = s.replaceAll(<span class="jxr_string">"&#92;&#92;/$"</span>, <span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L4687" href="#L4687">4687</a> 			<strong class="jxr_keyword">if</strong> (isEmpty(s))
 <a class="jxr_linenumber" name="L4688" href="#L4688">4688</a> 				rootUrl = <strong class="jxr_keyword">null</strong>;
@@ -6328,10 +6328,10 @@
 <a class="jxr_linenumber" name="L6320" href="#L6320">6320</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a>(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"Invalid format for call string.  State={0}"</span>, state);
 <a class="jxr_linenumber" name="L6321" href="#L6321">6321</a> 
 <a class="jxr_linenumber" name="L6322" href="#L6322">6322</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L6323" href="#L6323">6323</a> 			<strong class="jxr_keyword">var</strong> req = request(method, uri, isNotEmpty(content));
+<a class="jxr_linenumber" name="L6323" href="#L6323">6323</a> 			<strong class="jxr_keyword">var</strong> req = request(method, uri, ne(content));
 <a class="jxr_linenumber" name="L6324" href="#L6324">6324</a> 			<strong class="jxr_keyword">if</strong> (nn(headers))
 <a class="jxr_linenumber" name="L6325" href="#L6325">6325</a> 				JsonMap.ofJson(headers).forEach((k, v) -&gt; req.header(stringHeader(k, s(v))));
-<a class="jxr_linenumber" name="L6326" href="#L6326">6326</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(content))
+<a class="jxr_linenumber" name="L6326" href="#L6326">6326</a> 			<strong class="jxr_keyword">if</strong> (ne(content))
 <a class="jxr_linenumber" name="L6327" href="#L6327">6327</a> 				req.contentString(content);
 <a class="jxr_linenumber" name="L6328" href="#L6328">6328</a> 			<strong class="jxr_keyword">return</strong> req;
 <a class="jxr_linenumber" name="L6329" href="#L6329">6329</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {

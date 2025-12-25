@@ -265,7 +265,7 @@
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T parse(<a name="HttpPartType" href="../../../../org/apache/juneau/httppart/HttpPartType.html#HttpPartType">HttpPartType</a> partType, <a name="HttpPartSchema" href="../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> schema, String in, ClassMeta&lt;T&gt; toType) <strong class="jxr_keyword">throws</strong> ParseException, <a name="SchemaValidationException" href="../../../../org/apache/juneau/httppart/SchemaValidationException.html#SchemaValidationException">SchemaValidationException</a> {
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<strong class="jxr_keyword">if</strong> (in == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		<strong class="jxr_keyword">if</strong> (toType.isString() &amp;&amp; isNotEmpty(in)) {
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		<strong class="jxr_keyword">if</strong> (toType.isString() &amp;&amp; ne(in)) {
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 			<em class="jxr_comment">// Shortcut - If we're returning a string and the value doesn't start with "'" or is "null", then</em>
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 			<em class="jxr_comment">// just return the string since it's a plain value.</em>
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 			<em class="jxr_comment">// This allows us to bypass the creation of a UonParserSession object.</em>
@@ -350,7 +350,7 @@
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 				<strong class="jxr_keyword">var</strong> s = parseString(r, isUrlParamValue);
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 				<strong class="jxr_keyword">if</strong> (c != '\'') {
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 					<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"true"</span>.equals(s) || <span class="jxr_string">"false"</span>.equals(s))
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 						o = b(s);
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 						o = bool(s);
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 					<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (! <span class="jxr_string">"null"</span>.equals(s)) {
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 						<strong class="jxr_keyword">if</strong> (isNumeric(s))
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 							o = StringUtils.parseNumber(s, Number.<strong class="jxr_keyword">class</strong>);

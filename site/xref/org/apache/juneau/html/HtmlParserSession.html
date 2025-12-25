@@ -263,8 +263,8 @@
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">if</strong> (nn(beanType) &amp;&amp; getAnnotationProvider().has(HtmlLink.<strong class="jxr_keyword">class</strong>, beanType)) {
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 			<strong class="jxr_keyword">var</strong> uriProperty = Value.&lt;String&gt;empty();
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 			<strong class="jxr_keyword">var</strong> nameProperty = Value.&lt;String&gt;empty();
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			beanType.forEachAnnotation(HtmlLink.<strong class="jxr_keyword">class</strong>, x -&gt; isNotEmpty(x.uriProperty()), x -&gt; uriProperty.set(x.uriProperty()));
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			beanType.forEachAnnotation(HtmlLink.<strong class="jxr_keyword">class</strong>, x -&gt; isNotEmpty(x.nameProperty()), x -&gt; nameProperty.set(x.nameProperty()));
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			beanType.forEachAnnotation(HtmlLink.<strong class="jxr_keyword">class</strong>, x -&gt; ne(x.uriProperty()), x -&gt; uriProperty.set(x.uriProperty()));
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			beanType.forEachAnnotation(HtmlLink.<strong class="jxr_keyword">class</strong>, x -&gt; ne(x.nameProperty()), x -&gt; nameProperty.set(x.nameProperty()));
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 			BeanMap&lt;T&gt; m = newBeanMap(beanType.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 			m.put(uriProperty.orElse(<span class="jxr_string">""</span>), href);
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 			m.put(nameProperty.orElse(<span class="jxr_string">""</span>), name);
@@ -838,7 +838,7 @@
 <a class="jxr_linenumber" name="L830" href="#L830">830</a> 					et = r.next();
 <a class="jxr_linenumber" name="L831" href="#L831">831</a> 					<strong class="jxr_keyword">if</strong> (et == CHARACTERS) {
 <a class="jxr_linenumber" name="L832" href="#L832">832</a> 						String s = r.getText();
-<a class="jxr_linenumber" name="L833" href="#L833">833</a> 						<strong class="jxr_keyword">if</strong> (isNotEmpty(s)) {
+<a class="jxr_linenumber" name="L833" href="#L833">833</a> 						<strong class="jxr_keyword">if</strong> (ne(s)) {
 <a class="jxr_linenumber" name="L834" href="#L834">834</a> 							<strong class="jxr_keyword">var</strong> c = r.getText().charAt(0);
 <a class="jxr_linenumber" name="L835" href="#L835">835</a> 							<strong class="jxr_keyword">if</strong> (c == '\u2003')
 <a class="jxr_linenumber" name="L836" href="#L836">836</a> 								c = '\t';

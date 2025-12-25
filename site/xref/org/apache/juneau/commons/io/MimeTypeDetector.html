@@ -161,11 +161,11 @@
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">public</strong> Builder addTypes(String...mimeTypesLines) {
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> input : mimeTypesLines) {
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 				<strong class="jxr_keyword">if</strong> (isNotEmpty(input)) {
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 				<strong class="jxr_keyword">if</strong> (ne(input)) {
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 					<em class="jxr_comment">// Split on newlines to handle both individual lines and file contents</em>
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 					<strong class="jxr_keyword">var</strong> lines = input.split(<span class="jxr_string">"&#92;&#92;r?&#92;&#92;n"</span>);
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> line : lines) {
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 						<strong class="jxr_keyword">if</strong> (isNotEmpty(line) &amp;&amp; ! line.trim().startsWith(<span class="jxr_string">"#"</span>)) {
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 						<strong class="jxr_keyword">if</strong> (ne(line) &amp;&amp; ! line.trim().startsWith(<span class="jxr_string">"#"</span>)) {
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 							<strong class="jxr_keyword">var</strong> parts = line.trim().split(<span class="jxr_string">"&#92;&#92;s+"</span>);
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 							<strong class="jxr_keyword">if</strong> (parts.length &gt;= 2) {
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 								<strong class="jxr_keyword">var</strong> mimeType = parts[0];
@@ -327,7 +327,7 @@
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">	 * @return The MIME type of the file, or the default type if unknown.</em>
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 	<strong class="jxr_keyword">public</strong> String getContentType(String fileName) {
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<strong class="jxr_keyword">if</strong> (isEmpty(fileName)) {
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<strong class="jxr_keyword">if</strong> (e(fileName)) {
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 			<strong class="jxr_keyword">return</strong> defaultType;
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 		}
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 
@@ -354,7 +354,7 @@
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 				<strong class="jxr_keyword">var</strong> path = Paths.get(fileName);
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 				<strong class="jxr_keyword">if</strong> (Files.exists(path)) {
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 					<strong class="jxr_keyword">var</strong> contentType = Files.probeContentType(path);
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 					<strong class="jxr_keyword">if</strong> (isNotEmpty(contentType)) {
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 					<strong class="jxr_keyword">if</strong> (ne(contentType)) {
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 						<strong class="jxr_keyword">return</strong> contentType;
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 					}
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 				}
@@ -365,7 +365,7 @@
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 		<em class="jxr_comment">// Fall back to extension-based detection</em>
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">var</strong> extension = getFileExtension(fileName);
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<strong class="jxr_keyword">if</strong> (isNotEmpty(extension)) {
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<strong class="jxr_keyword">if</strong> (ne(extension)) {
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 			<strong class="jxr_keyword">var</strong> mimeType = extMap.get(extension.toLowerCase());
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 			<strong class="jxr_keyword">if</strong> (nn(mimeType)) {
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 				<strong class="jxr_keyword">return</strong> mimeType;

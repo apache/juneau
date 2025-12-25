@@ -77,13 +77,13 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">var</strong> headers = HeaderList.create().resolving();
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : remotes) {
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  			<strong class="jxr_keyword">if</strong> (isNotEmpty(r.path()))
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  			<strong class="jxr_keyword">if</strong> (ne(r.path()))
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  				path = trimSlashes(resolve(r.path()));
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> h : r.headers())
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  				headers.append(stringHeader(resolve(h)));
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			<strong class="jxr_keyword">if</strong> (isNotEmpty(r.version()))
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			<strong class="jxr_keyword">if</strong> (ne(r.version()))
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  				clientVersion = resolve(r.version());
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			<strong class="jxr_keyword">if</strong> (isNotEmpty(r.versionHeader()))
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			<strong class="jxr_keyword">if</strong> (ne(r.versionHeader()))
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  				versionHeader = resolve(r.versionHeader());
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  			<strong class="jxr_keyword">if</strong> (isNotVoid(r.headerList())) {
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  				<strong class="jxr_keyword">try</strong> {

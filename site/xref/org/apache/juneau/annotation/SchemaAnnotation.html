@@ -1482,11 +1482,11 @@
 <a class="jxr_linenumber" name="L1474" href="#L1474">1474</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
 <a class="jxr_linenumber" name="L1475" href="#L1475">1475</a> 		<strong class="jxr_keyword">if</strong> (SchemaAnnotation.empty(a))
 <a class="jxr_linenumber" name="L1476" href="#L1476">1476</a> 			<strong class="jxr_keyword">return</strong> m;
-<a class="jxr_linenumber" name="L1477" href="#L1477">1477</a> 		Predicate&lt;String&gt; ne = Utils::isNotEmpty;
-<a class="jxr_linenumber" name="L1478" href="#L1478">1478</a> 		Predicate&lt;Collection&lt;?&gt;&gt; nec = Utils::isNotEmpty;
-<a class="jxr_linenumber" name="L1479" href="#L1479">1479</a> 		Predicate&lt;Map&lt;?,?&gt;&gt; nem = Utils::isNotEmpty;
+<a class="jxr_linenumber" name="L1477" href="#L1477">1477</a> 		Predicate&lt;String&gt; ne = Utils::ne;
+<a class="jxr_linenumber" name="L1478" href="#L1478">1478</a> 		Predicate&lt;Collection&lt;?&gt;&gt; nec = Utils::ne;
+<a class="jxr_linenumber" name="L1479" href="#L1479">1479</a> 		Predicate&lt;Map&lt;?,?&gt;&gt; nem = Utils::ne;
 <a class="jxr_linenumber" name="L1480" href="#L1480">1480</a> 		Predicate&lt;Boolean&gt; nf = Utils::isTrue;
-<a class="jxr_linenumber" name="L1481" href="#L1481">1481</a> 		Predicate&lt;Long&gt; nm1 = Utils::isNotMinusOne;
+<a class="jxr_linenumber" name="L1481" href="#L1481">1481</a> 		Predicate&lt;Long&gt; nm1 = Utils::nm1;
 <a class="jxr_linenumber" name="L1482" href="#L1482">1482</a> 		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L1483" href="#L1483">1483</a> 		<strong class="jxr_keyword">return</strong> m
 <a class="jxr_linenumber" name="L1484" href="#L1484">1484</a> 			.appendIf(nem, <span class="jxr_string">"additionalProperties"</span>, parseMap(a.additionalProperties()))
@@ -1589,11 +1589,11 @@
 <a class="jxr_linenumber" name="L1581" href="#L1581">1581</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> merge(<a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> m, <a name="Items" href="../../../../org/apache/juneau/annotation/Items.html#Items">Items</a> a) <strong class="jxr_keyword">throws</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> {
 <a class="jxr_linenumber" name="L1582" href="#L1582">1582</a> 		<strong class="jxr_keyword">if</strong> (ItemsAnnotation.empty(a))
 <a class="jxr_linenumber" name="L1583" href="#L1583">1583</a> 			<strong class="jxr_keyword">return</strong> m;
-<a class="jxr_linenumber" name="L1584" href="#L1584">1584</a> 		Predicate&lt;String&gt; ne = Utils::isNotEmpty;
-<a class="jxr_linenumber" name="L1585" href="#L1585">1585</a> 		Predicate&lt;Collection&lt;?&gt;&gt; nec = Utils::isNotEmpty;
-<a class="jxr_linenumber" name="L1586" href="#L1586">1586</a> 		Predicate&lt;Map&lt;?,?&gt;&gt; nem = Utils::isNotEmpty;
+<a class="jxr_linenumber" name="L1584" href="#L1584">1584</a> 		Predicate&lt;String&gt; ne = Utils::ne;
+<a class="jxr_linenumber" name="L1585" href="#L1585">1585</a> 		Predicate&lt;Collection&lt;?&gt;&gt; nec = Utils::ne;
+<a class="jxr_linenumber" name="L1586" href="#L1586">1586</a> 		Predicate&lt;Map&lt;?,?&gt;&gt; nem = Utils::ne;
 <a class="jxr_linenumber" name="L1587" href="#L1587">1587</a> 		Predicate&lt;Boolean&gt; nf = Utils::isTrue;
-<a class="jxr_linenumber" name="L1588" href="#L1588">1588</a> 		Predicate&lt;Long&gt; nm1 = Utils::isNotMinusOne;
+<a class="jxr_linenumber" name="L1588" href="#L1588">1588</a> 		Predicate&lt;Long&gt; nm1 = Utils::nm1;
 <a class="jxr_linenumber" name="L1589" href="#L1589">1589</a> 		<strong class="jxr_keyword">return</strong> m.appendFirst(ne, <span class="jxr_string">"collectionFormat"</span>, a.collectionFormat(), a.cf()).appendIf(ne, <span class="jxr_string">"default"</span>, joinnl(a.<strong class="jxr_keyword">default</strong>_(), a.df())).appendFirst(nec, <span class="jxr_string">"enum"</span>, parseSet(a.enum_()), parseSet(a.e()))
 <a class="jxr_linenumber" name="L1590" href="#L1590">1590</a> 			.appendFirst(ne, <span class="jxr_string">"format"</span>, a.format(), a.f()).appendIf(nf, <span class="jxr_string">"exclusiveMaximum"</span>, a.exclusiveMaximum() || a.emax()).appendIf(nf, <span class="jxr_string">"exclusiveMinimum"</span>, a.exclusiveMinimum() || a.emin())
 <a class="jxr_linenumber" name="L1591" href="#L1591">1591</a> 			.appendIf(nem, <span class="jxr_string">"items"</span>, SubItemsAnnotation.merge(m.getMap(<span class="jxr_string">"items"</span>), a.items())).appendFirst(ne, <span class="jxr_string">"maximum"</span>, a.maximum(), a.max()).appendFirst(nm1, <span class="jxr_string">"maxItems"</span>, a.maxItems(), a.maxi())

@@ -84,7 +84,7 @@
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  			path = _path.orElse(<span class="jxr_string">""</span>).trim();
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  			Value&lt;String&gt; value = Value.empty();
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			al.stream().filter(x -&gt; x.isType(RemoteOp.<strong class="jxr_keyword">class</strong>) &amp;&amp; isNotEmpty(((<a name="RemoteOp" href="../../../../../../org/apache/juneau/http/remote/RemoteOp.html#RemoteOp">RemoteOp</a>)x.<strong class="jxr_keyword">inner</strong>()).value().trim())).forEach(x -&gt; value.set(((<a name="RemoteOp" href="../../../../../../org/apache/juneau/http/remote/RemoteOp.html#RemoteOp">RemoteOp</a>)x.<strong class="jxr_keyword">inner</strong>()).value().trim()));
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			al.stream().filter(x -&gt; x.isType(RemoteOp.<strong class="jxr_keyword">class</strong>) &amp;&amp; ne(((<a name="RemoteOp" href="../../../../../../org/apache/juneau/http/remote/RemoteOp.html#RemoteOp">RemoteOp</a>)x.<strong class="jxr_keyword">inner</strong>()).value().trim())).forEach(x -&gt; value.set(((<a name="RemoteOp" href="../../../../../../org/apache/juneau/http/remote/RemoteOp.html#RemoteOp">RemoteOp</a>)x.<strong class="jxr_keyword">inner</strong>()).value().trim()));
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  			<strong class="jxr_keyword">if</strong> (value.isPresent()) {
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  				<strong class="jxr_keyword">var</strong> v = value.get();
@@ -96,7 +96,7 @@
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  					path = v.substring(i).trim();
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  				}
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  				al.stream().filter(x -&gt; ! x.isType(RemoteOp.<strong class="jxr_keyword">class</strong>) &amp;&amp; isNotEmpty(x.getValue(String.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"value"</span>).filter(NOT_EMPTY).orElse(<span class="jxr_string">""</span>).trim()))
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  				al.stream().filter(x -&gt; ! x.isType(RemoteOp.<strong class="jxr_keyword">class</strong>) &amp;&amp; ne(x.getValue(String.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"value"</span>).filter(NOT_EMPTY).orElse(<span class="jxr_string">""</span>).trim()))
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  					.forEach(x -&gt; value.set(x.getValue(String.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"value"</span>).filter(NOT_EMPTY).get().trim()));
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  				<strong class="jxr_keyword">if</strong> (value.isPresent())
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  					path = value.get();
@@ -166,7 +166,7 @@
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 			rstream(AP.find(FormData.<strong class="jxr_keyword">class</strong>, mi))
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 				.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 				.filter(x -&gt; isAnyNotEmpty(x.name(), x.value()) &amp;&amp; isNotEmpty(x.def()))
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 				.filter(x -&gt; isAnyNotEmpty(x.name(), x.value()) &amp;&amp; ne(x.def()))
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 				.forEach(x -&gt; defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		}
@@ -175,7 +175,7 @@
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 			rstream(AP.find(Header.<strong class="jxr_keyword">class</strong>, mi))
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 				.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 				.filter(x -&gt; isAnyNotEmpty(x.name(), x.value()) &amp;&amp; isNotEmpty(x.def()))
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 				.filter(x -&gt; isAnyNotEmpty(x.name(), x.value()) &amp;&amp; ne(x.def()))
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 				.forEach(x -&gt; defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 		}
@@ -193,7 +193,7 @@
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 			rstream(AP.find(Query.<strong class="jxr_keyword">class</strong>, mi))
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 				.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 				.filter(x -&gt; isAnyNotEmpty(x.name(), x.value()) &amp;&amp; isNotEmpty(x.def()))
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 				.filter(x -&gt; isAnyNotEmpty(x.name(), x.value()) &amp;&amp; ne(x.def()))
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 				.forEach(x -&gt; defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 		}

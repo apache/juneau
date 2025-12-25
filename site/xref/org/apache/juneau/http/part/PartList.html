@@ -320,7 +320,7 @@
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 		assertArgNotNull(<span class="jxr_string">"type"</span>, type);
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">var</strong> name = PartBeanMeta.of(type).getSchema().getName();
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		assertArg(isNotNull(name), <span class="jxr_string">"Part name could not be found on bean type ''{0}''"</span>, cn(type));
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		assertArg(nn(name), <span class="jxr_string">"Part name could not be found on bean type ''{0}''"</span>, cn(type));
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">return</strong> get(name, type);
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 	}

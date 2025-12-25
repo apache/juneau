@@ -3700,7 +3700,7 @@
 <a class="jxr_linenumber" name="L3692" href="#L3692">3692</a> 
 <a class="jxr_linenumber" name="L3693" href="#L3693">3693</a> 		beanRegistry = <strong class="jxr_keyword">new</strong> <a name="BeanRegistry" href="../../../org/apache/juneau/BeanRegistry.html#BeanRegistry">BeanRegistry</a>(<strong class="jxr_keyword">this</strong>, <strong class="jxr_keyword">null</strong>, list());
 <a class="jxr_linenumber" name="L3694" href="#L3694">3694</a> 		defaultSession = createSession().unmodifiable().build();
-<a class="jxr_linenumber" name="L3695" href="#L3695">3695</a> 		beanToStringSerializer = memoize(() -&gt; JsonSerializer.create().beanContext(<strong class="jxr_keyword">this</strong>).sq().simpleAttrs().build());
+<a class="jxr_linenumber" name="L3695" href="#L3695">3695</a> 		beanToStringSerializer = mem(() -&gt; JsonSerializer.create().beanContext(<strong class="jxr_keyword">this</strong>).sq().simpleAttrs().build());
 <a class="jxr_linenumber" name="L3696" href="#L3696">3696</a> 	}
 <a class="jxr_linenumber" name="L3697" href="#L3697">3697</a> 
 <a class="jxr_linenumber" name="L3698" href="#L3698">3698</a> 	<em class="jxr_javadoccomment">/**</em>

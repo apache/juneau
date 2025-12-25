@@ -99,7 +99,7 @@
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String NEWLINE = <span class="jxr_string">"\n"</span>;
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<em class="jxr_javadoccomment">/** Predicate that filters out {@code null} and empty strings. */</em>
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Predicate&lt;String&gt; NOT_EMPTY = Utils::isNotEmpty;
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Predicate&lt;String&gt; NOT_EMPTY = Utils::ne;
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<em class="jxr_javadoccomment">/** Characters that can appear anywhere in a numeric literal. */</em>
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="AsciiSet" href="../../../../../org/apache/juneau/commons/lang/AsciiSet.html#AsciiSet">AsciiSet</a> NUMBER_CHARS = AsciiSet.of(<span class="jxr_string">"-xX.+-#pP0123456789abcdefABCDEF"</span>);
@@ -271,7 +271,7 @@
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">	 * @return The same StringBuilder instance for method chaining, or a new StringBuilder if &lt;c&gt;sb&lt;/c&gt; was &lt;jk&gt;null&lt;/jk&gt; and an append occurred, or &lt;jk&gt;null&lt;/jk&gt; if &lt;c&gt;sb&lt;/c&gt; was &lt;jk&gt;null&lt;/jk&gt; and no append occurred.</em>
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> StringBuilder appendIfNotEmpty(StringBuilder sb, String str) {
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">if</strong> (isNotEmpty(str)) {
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">if</strong> (ne(str)) {
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 			<strong class="jxr_keyword">if</strong> (sb == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 				sb = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 			sb.append(str);
@@ -1958,7 +1958,7 @@
 <a class="jxr_linenumber" name="L1950" href="#L1950">1950</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1951" href="#L1951">1951</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L1952" href="#L1952">1952</a> <em class="jxr_javadoccomment">	 * This method iterates through the provided strings and returns the first one that is not &lt;jk&gt;null&lt;/jk&gt;</em>
-<a class="jxr_linenumber" name="L1953" href="#L1953">1953</a> <em class="jxr_javadoccomment">	 * and not empty (as determined by {@link #isNotEmpty(String)}).</em>
+<a class="jxr_linenumber" name="L1953" href="#L1953">1953</a> <em class="jxr_javadoccomment">	 * and not empty (as determined by {@link #ne(String)}).</em>
 <a class="jxr_linenumber" name="L1954" href="#L1954">1954</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1955" href="#L1955">1955</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L1956" href="#L1956">1956</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
@@ -1971,11 +1971,11 @@
 <a class="jxr_linenumber" name="L1963" href="#L1963">1963</a> <em class="jxr_javadoccomment">	 * @param s The strings to test.</em>
 <a class="jxr_linenumber" name="L1964" href="#L1964">1964</a> <em class="jxr_javadoccomment">	 * @return The first non-empty string in the list, or &lt;jk&gt;null&lt;/jk&gt; if they were all &lt;jk&gt;null&lt;/jk&gt; or empty.</em>
 <a class="jxr_linenumber" name="L1965" href="#L1965">1965</a> <em class="jxr_javadoccomment">	 * @see #firstNonBlank(String...)</em>
-<a class="jxr_linenumber" name="L1966" href="#L1966">1966</a> <em class="jxr_javadoccomment">	 * @see #isNotEmpty(String)</em>
+<a class="jxr_linenumber" name="L1966" href="#L1966">1966</a> <em class="jxr_javadoccomment">	 * @see #ne(String)</em>
 <a class="jxr_linenumber" name="L1967" href="#L1967">1967</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1968" href="#L1968">1968</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String firstNonEmpty(String...s) {
 <a class="jxr_linenumber" name="L1969" href="#L1969">1969</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ss : s)
-<a class="jxr_linenumber" name="L1970" href="#L1970">1970</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(ss))
+<a class="jxr_linenumber" name="L1970" href="#L1970">1970</a> 			<strong class="jxr_keyword">if</strong> (ne(ss))
 <a class="jxr_linenumber" name="L1971" href="#L1971">1971</a> 				<strong class="jxr_keyword">return</strong> ss;
 <a class="jxr_linenumber" name="L1972" href="#L1972">1972</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1973" href="#L1973">1973</a> 	}
@@ -6573,8 +6573,8 @@
 <a class="jxr_linenumber" name="L6565" href="#L6565">6565</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;An empty string results in an empty array.</em>
 <a class="jxr_linenumber" name="L6566" href="#L6566">6566</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L6567" href="#L6567">6567</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; splitNestedInner(String s) {
-<a class="jxr_linenumber" name="L6568" href="#L6568">6568</a> 		assertArg(isNotNull(s), <span class="jxr_string">"String was null."</span>);
-<a class="jxr_linenumber" name="L6569" href="#L6569">6569</a> 		assertArg(isNotEmpty(s), <span class="jxr_string">"String was empty."</span>);
+<a class="jxr_linenumber" name="L6568" href="#L6568">6568</a> 		assertArg(nn(s), <span class="jxr_string">"String was null."</span>);
+<a class="jxr_linenumber" name="L6569" href="#L6569">6569</a> 		assertArg(ne(s), <span class="jxr_string">"String was empty."</span>);
 <a class="jxr_linenumber" name="L6570" href="#L6570">6570</a> 
 <a class="jxr_linenumber" name="L6571" href="#L6571">6571</a> 		<em class="jxr_comment">// S1: Looking for '{'</em>
 <a class="jxr_linenumber" name="L6572" href="#L6572">6572</a> 		<em class="jxr_comment">// S2: Found '{', looking for '}'</em>
@@ -7281,7 +7281,7 @@
 <a class="jxr_linenumber" name="L7273" href="#L7273">7273</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L7274" href="#L7274">7274</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String trimEnd(String s) {
 <a class="jxr_linenumber" name="L7275" href="#L7275">7275</a> 		<strong class="jxr_keyword">if</strong> (nn(s))
-<a class="jxr_linenumber" name="L7276" href="#L7276">7276</a> 			<strong class="jxr_keyword">while</strong> (isNotEmpty(s) &amp;&amp; isWhitespace(s.charAt(s.length() - 1)))
+<a class="jxr_linenumber" name="L7276" href="#L7276">7276</a> 			<strong class="jxr_keyword">while</strong> (ne(s) &amp;&amp; isWhitespace(s.charAt(s.length() - 1)))
 <a class="jxr_linenumber" name="L7277" href="#L7277">7277</a> 				s = s.substring(0, s.length() - 1);
 <a class="jxr_linenumber" name="L7278" href="#L7278">7278</a> 		<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L7279" href="#L7279">7279</a> 	}
@@ -7295,7 +7295,7 @@
 <a class="jxr_linenumber" name="L7287" href="#L7287">7287</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String trimLeadingSlashes(String s) {
 <a class="jxr_linenumber" name="L7288" href="#L7288">7288</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L7289" href="#L7289">7289</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L7290" href="#L7290">7290</a> 		<strong class="jxr_keyword">while</strong> (isNotEmpty(s) &amp;&amp; s.charAt(0) == '/')
+<a class="jxr_linenumber" name="L7290" href="#L7290">7290</a> 		<strong class="jxr_keyword">while</strong> (ne(s) &amp;&amp; s.charAt(0) == '/')
 <a class="jxr_linenumber" name="L7291" href="#L7291">7291</a> 			s = s.substring(1);
 <a class="jxr_linenumber" name="L7292" href="#L7292">7292</a> 		<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L7293" href="#L7293">7293</a> 	}
@@ -7313,7 +7313,7 @@
 <a class="jxr_linenumber" name="L7305" href="#L7305">7305</a> 			<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L7306" href="#L7306">7306</a> 		<strong class="jxr_keyword">while</strong> (endsWith(s, '/'))
 <a class="jxr_linenumber" name="L7307" href="#L7307">7307</a> 			s = s.substring(0, s.length() - 1);
-<a class="jxr_linenumber" name="L7308" href="#L7308">7308</a> 		<strong class="jxr_keyword">while</strong> (isNotEmpty(s) &amp;&amp; s.charAt(0) == '/')  <em class="jxr_comment">// NOSONAR - NPE not possible here.</em>
+<a class="jxr_linenumber" name="L7308" href="#L7308">7308</a> 		<strong class="jxr_keyword">while</strong> (ne(s) &amp;&amp; s.charAt(0) == '/')  <em class="jxr_comment">// NOSONAR - NPE not possible here.</em>
 <a class="jxr_linenumber" name="L7309" href="#L7309">7309</a> 			s = s.substring(1);
 <a class="jxr_linenumber" name="L7310" href="#L7310">7310</a> 		<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L7311" href="#L7311">7311</a> 	}
@@ -7327,9 +7327,9 @@
 <a class="jxr_linenumber" name="L7319" href="#L7319">7319</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String trimSlashesAndSpaces(String s) {
 <a class="jxr_linenumber" name="L7320" href="#L7320">7320</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L7321" href="#L7321">7321</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L7322" href="#L7322">7322</a> 		<strong class="jxr_keyword">while</strong> (isNotEmpty(s) &amp;&amp; (s.charAt(s.length() - 1) == '/' || isWhitespace(s.charAt(s.length() - 1))))
+<a class="jxr_linenumber" name="L7322" href="#L7322">7322</a> 		<strong class="jxr_keyword">while</strong> (ne(s) &amp;&amp; (s.charAt(s.length() - 1) == '/' || isWhitespace(s.charAt(s.length() - 1))))
 <a class="jxr_linenumber" name="L7323" href="#L7323">7323</a> 			s = s.substring(0, s.length() - 1);
-<a class="jxr_linenumber" name="L7324" href="#L7324">7324</a> 		<strong class="jxr_keyword">while</strong> (isNotEmpty(s) &amp;&amp; (s.charAt(0) == '/' || isWhitespace(s.charAt(0))))
+<a class="jxr_linenumber" name="L7324" href="#L7324">7324</a> 		<strong class="jxr_keyword">while</strong> (ne(s) &amp;&amp; (s.charAt(0) == '/' || isWhitespace(s.charAt(0))))
 <a class="jxr_linenumber" name="L7325" href="#L7325">7325</a> 			s = s.substring(1);
 <a class="jxr_linenumber" name="L7326" href="#L7326">7326</a> 		<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L7327" href="#L7327">7327</a> 	}
@@ -7342,7 +7342,7 @@
 <a class="jxr_linenumber" name="L7334" href="#L7334">7334</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L7335" href="#L7335">7335</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String trimStart(String s) {
 <a class="jxr_linenumber" name="L7336" href="#L7336">7336</a> 		<strong class="jxr_keyword">if</strong> (nn(s))
-<a class="jxr_linenumber" name="L7337" href="#L7337">7337</a> 			<strong class="jxr_keyword">while</strong> (isNotEmpty(s) &amp;&amp; isWhitespace(s.charAt(0)))
+<a class="jxr_linenumber" name="L7337" href="#L7337">7337</a> 			<strong class="jxr_keyword">while</strong> (ne(s) &amp;&amp; isWhitespace(s.charAt(0)))
 <a class="jxr_linenumber" name="L7338" href="#L7338">7338</a> 				s = s.substring(1);
 <a class="jxr_linenumber" name="L7339" href="#L7339">7339</a> 		<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L7340" href="#L7340">7340</a> 	}

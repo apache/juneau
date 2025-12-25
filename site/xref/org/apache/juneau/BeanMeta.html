@@ -331,13 +331,13 @@
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String name(AnnotationInfo&lt;?&gt; ai) {
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">if</strong> (ai.isType(Beanp.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 			<strong class="jxr_keyword">var</strong> p = ai.<strong class="jxr_keyword">cast</strong>(Beanp.<strong class="jxr_keyword">class</strong>).<strong class="jxr_keyword">inner</strong>();
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(p.name()))
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			<strong class="jxr_keyword">if</strong> (ne(p.name()))
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 				<strong class="jxr_keyword">return</strong> p.name();
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(p.value()))
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			<strong class="jxr_keyword">if</strong> (ne(p.value()))
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 				<strong class="jxr_keyword">return</strong> p.value();
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 			<strong class="jxr_keyword">var</strong> n = ai.<strong class="jxr_keyword">cast</strong>(Name.<strong class="jxr_keyword">class</strong>).<strong class="jxr_keyword">inner</strong>();
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(n.value()))
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			<strong class="jxr_keyword">if</strong> (ne(n.value()))
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 				<strong class="jxr_keyword">return</strong> n.value();
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 		}
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -401,8 +401,8 @@
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 		implClassConstructor = opt(implClass).map(x -&gt; x.getPublicConstructor(x2 -&gt; x2.hasNumParameters(0)).orElse(<strong class="jxr_keyword">null</strong>)).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 		fluentSetters = beanContext.isFindFluentSetters() || (nn(bf) &amp;&amp; bf.isFluentSetters());
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 		stopClass = opt(bf).map(x -&gt; x.getStopClass()).orElse(info(Object.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		beanRegistry = memoize(()-&gt;findBeanRegistry());
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		classHierarchy = memoize(()-&gt;findClassHierarchy());
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		beanRegistry = mem(()-&gt;findBeanRegistry());
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		classHierarchy = mem(()-&gt;findClassHierarchy());
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 		beanConstructor = findBeanConstructor();
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<em class="jxr_comment">// Local variables for initialization</em>
@@ -419,7 +419,7 @@
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<strong class="jxr_keyword">var</strong> ba = ap.find(Bean.<strong class="jxr_keyword">class</strong>, cm);
 <a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<strong class="jxr_keyword">var</strong> propertyNamer = opt(bf).map(x -&gt; x.getPropertyNamer()).orElse(beanContext.getPropertyNamer());
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">this</strong>.typePropertyName = ba.stream().map(x -&gt; x.<strong class="jxr_keyword">inner</strong>().typePropertyName()).filter(Utils::isNotEmpty).findFirst().orElseGet(() -&gt; beanContext.getBeanTypePropertyName());
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">this</strong>.typePropertyName = ba.stream().map(x -&gt; x.<strong class="jxr_keyword">inner</strong>().typePropertyName()).filter(Utils::ne).findFirst().orElseGet(() -&gt; beanContext.getBeanTypePropertyName());
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<em class="jxr_comment">// Check if constructor is required but not found</em>
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">if</strong> (! beanConstructor.constructor().isPresent() &amp;&amp; bf == <strong class="jxr_keyword">null</strong> &amp;&amp; beanContext.isBeansRequireDefaultConstructor())
@@ -598,8 +598,8 @@
 <a class="jxr_linenumber" name="L590" href="#L590">590</a> 		dynaProperty = _dynaProperty.get();
 <a class="jxr_linenumber" name="L591" href="#L591">591</a> 		sortProperties = _sortProperties;
 <a class="jxr_linenumber" name="L592" href="#L592">592</a> 		typeProperty = BeanPropertyMeta.builder(<strong class="jxr_keyword">this</strong>, typePropertyName).canRead().canWrite().rawMetaType(beanContext.string()).beanRegistry(beanRegistry.get()).build();
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> 		dictionaryName = memoize(()-&gt;findDictionaryName());
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> 		beanProxyInvocationHandler = memoize(()-&gt;beanContext.isUseInterfaceProxies() &amp;&amp; c.isInterface() ? <strong class="jxr_keyword">new</strong> BeanProxyInvocationHandler&lt;&gt;(<strong class="jxr_keyword">this</strong>) : <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 		dictionaryName = mem(()-&gt;findDictionaryName());
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 		beanProxyInvocationHandler = mem(()-&gt;beanContext.isUseInterfaceProxies() &amp;&amp; c.isInterface() ? <strong class="jxr_keyword">new</strong> BeanProxyInvocationHandler&lt;&gt;(<strong class="jxr_keyword">this</strong>) : <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L595" href="#L595">595</a> 	}
 <a class="jxr_linenumber" name="L596" href="#L596">596</a> 
 <a class="jxr_linenumber" name="L597" href="#L597">597</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
@@ -969,7 +969,7 @@
 <a class="jxr_linenumber" name="L961" href="#L961">961</a> 			<strong class="jxr_keyword">var</strong> con = l.get(0).accessible();
 <a class="jxr_linenumber" name="L962" href="#L962">962</a> 			<strong class="jxr_keyword">var</strong> args = ap.find(Beanc.<strong class="jxr_keyword">class</strong>, con).stream().map(x -&gt; x.<strong class="jxr_keyword">inner</strong>().properties()).filter(StringUtils::isNotBlank).map(x -&gt; split(x)).findFirst().orElse(liste());
 <a class="jxr_linenumber" name="L963" href="#L963">963</a> 			<strong class="jxr_keyword">if</strong> (! con.hasNumParameters(args.size())) {
-<a class="jxr_linenumber" name="L964" href="#L964">964</a> 				<strong class="jxr_keyword">if</strong> (isNotEmpty(args))
+<a class="jxr_linenumber" name="L964" href="#L964">964</a> 				<strong class="jxr_keyword">if</strong> (ne(args))
 <a class="jxr_linenumber" name="L965" href="#L965">965</a> 					<strong class="jxr_keyword">throw</strong> bex(ci, <span class="jxr_string">"Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor."</span>);
 <a class="jxr_linenumber" name="L966" href="#L966">966</a> 				args = con.getParameters().stream().map(x -&gt; x.getName()).toList();
 <a class="jxr_linenumber" name="L967" href="#L967">967</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; args.size(); i++) {
@@ -1091,7 +1091,7 @@
 <a class="jxr_linenumber" name="L1083" href="#L1083">1083</a> 				<strong class="jxr_keyword">var</strong> beanps = ap.find(Beanp.<strong class="jxr_keyword">class</strong>, m).stream().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).toList();
 <a class="jxr_linenumber" name="L1084" href="#L1084">1084</a> 				<strong class="jxr_keyword">var</strong> names = ap.find(Name.<strong class="jxr_keyword">class</strong>, m).stream().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).toList();
 <a class="jxr_linenumber" name="L1085" href="#L1085">1085</a> 
-<a class="jxr_linenumber" name="L1086" href="#L1086">1086</a> 				<strong class="jxr_keyword">if</strong> (! (m.isVisible(v) || isNotEmpty(beanps) || isNotEmpty(names)))
+<a class="jxr_linenumber" name="L1086" href="#L1086">1086</a> 				<strong class="jxr_keyword">if</strong> (! (m.isVisible(v) || ne(beanps) || ne(names)))
 <a class="jxr_linenumber" name="L1087" href="#L1087">1087</a> 					<strong class="jxr_keyword">continue</strong>;
 <a class="jxr_linenumber" name="L1088" href="#L1088">1088</a> 
 <a class="jxr_linenumber" name="L1089" href="#L1089">1089</a> 				<strong class="jxr_keyword">var</strong> n = m.getSimpleName();
@@ -1209,7 +1209,7 @@
 <a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> 
 <a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> 		<em class="jxr_comment">// Bean dictionary from @Bean(typeName) annotation.</em>
 <a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> 		<strong class="jxr_keyword">var</strong> ba = beanContext.getAnnotationProvider().find(Bean.<strong class="jxr_keyword">class</strong>, classMeta);
-<a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> 		ba.stream().map(x -&gt; x.<strong class="jxr_keyword">inner</strong>().typeName()).filter(Utils::isNotEmpty).findFirst().ifPresent(x -&gt; beanDictionaryClasses.add(classMeta));
+<a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> 		ba.stream().map(x -&gt; x.<strong class="jxr_keyword">inner</strong>().typeName()).filter(Utils::ne).findFirst().ifPresent(x -&gt; beanDictionaryClasses.add(classMeta));
 <a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> 
 <a class="jxr_linenumber" name="L1206" href="#L1206">1206</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRegistry" href="../../../org/apache/juneau/BeanRegistry.html#BeanRegistry">BeanRegistry</a>(beanContext, <strong class="jxr_keyword">null</strong>, beanDictionaryClasses);
 <a class="jxr_linenumber" name="L1207" href="#L1207">1207</a> 	}

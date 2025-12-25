@@ -304,7 +304,7 @@
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">	 * @return The built set, or {@code null} if {@link #sparse()} is set and the set is empty.</em>
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 	<strong class="jxr_keyword">public</strong> Set&lt;E&gt; build() {
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">if</strong> (sparse &amp;&amp; isEmpty(set))
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">if</strong> (sparse &amp;&amp; e(set))
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">var</strong> set2 = (Set&lt;E&gt;)<strong class="jxr_keyword">null</strong>;

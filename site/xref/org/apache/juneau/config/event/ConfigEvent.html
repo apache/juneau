@@ -217,7 +217,7 @@
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 				<strong class="jxr_keyword">if</strong> (val.indexOf('#') != -1)
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 					val = val.replace(<span class="jxr_string">"#"</span>, <span class="jxr_string">"&#92;&#92;#"</span>);
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 				out.append(val);
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 				<strong class="jxr_keyword">if</strong> (isNotEmpty(comment))
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 				<strong class="jxr_keyword">if</strong> (ne(comment))
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 					out.append(<span class="jxr_string">" # "</span>).append(comment);
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 				out.append(')');
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 				yield out.toString();

@@ -941,8 +941,8 @@
 <a class="jxr_linenumber" name="L933" href="#L933">933</a> 				<strong class="jxr_keyword">if</strong> (getAnnotationProvider().has(HtmlLink.<strong class="jxr_keyword">class</strong>, aType)) {
 <a class="jxr_linenumber" name="L934" href="#L934">934</a> 					<strong class="jxr_keyword">var</strong> uriProperty = Value.&lt;String&gt;empty();
 <a class="jxr_linenumber" name="L935" href="#L935">935</a> 					<strong class="jxr_keyword">var</strong> nameProperty = Value.&lt;String&gt;empty();
-<a class="jxr_linenumber" name="L936" href="#L936">936</a> 					aType.forEachAnnotation(HtmlLink.<strong class="jxr_keyword">class</strong>, x -&gt; isNotEmpty(x.uriProperty()), x -&gt; uriProperty.set(x.uriProperty()));
-<a class="jxr_linenumber" name="L937" href="#L937">937</a> 					aType.forEachAnnotation(HtmlLink.<strong class="jxr_keyword">class</strong>, x -&gt; isNotEmpty(x.nameProperty()), x -&gt; nameProperty.set(x.nameProperty()));
+<a class="jxr_linenumber" name="L936" href="#L936">936</a> 					aType.forEachAnnotation(HtmlLink.<strong class="jxr_keyword">class</strong>, x -&gt; ne(x.uriProperty()), x -&gt; uriProperty.set(x.uriProperty()));
+<a class="jxr_linenumber" name="L937" href="#L937">937</a> 					aType.forEachAnnotation(HtmlLink.<strong class="jxr_keyword">class</strong>, x -&gt; ne(x.nameProperty()), x -&gt; nameProperty.set(x.nameProperty()));
 <a class="jxr_linenumber" name="L938" href="#L938">938</a> 					Object urlProp = m.get(uriProperty.orElse(<span class="jxr_string">""</span>));
 <a class="jxr_linenumber" name="L939" href="#L939">939</a> 					Object nameProp = m.get(nameProperty.orElse(<span class="jxr_string">""</span>));
 <a class="jxr_linenumber" name="L940" href="#L940">940</a> 

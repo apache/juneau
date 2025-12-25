@@ -78,7 +78,7 @@
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified version string matches this version range.</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> matches(String v) {
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">if</strong> (isEmpty(v))
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">if</strong> (e(v))
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  			<strong class="jxr_keyword">return</strong> (minVersion == <strong class="jxr_keyword">null</strong> &amp;&amp; maxVersion == <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">var</strong> ver = <strong class="jxr_keyword">new</strong> <a name="Version" href="../../../../../org/apache/juneau/commons/lang/Version.html#Version">Version</a>(v);
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">if</strong> ((nn(minVersion) &amp;&amp; ! ver.isAtLeast(minVersion, minExclusive)) || (nn(maxVersion) &amp;&amp; ! ver.isAtMost(maxVersion, maxExclusive)))

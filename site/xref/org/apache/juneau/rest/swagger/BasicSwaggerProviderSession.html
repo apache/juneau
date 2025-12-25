@@ -151,9 +151,9 @@
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">var</strong> ap = <strong class="jxr_keyword">this</strong>.context.getBeanContext().getAnnotationProvider();
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		Predicate&lt;String&gt; ne = Utils::isNotEmpty;
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		Predicate&lt;Collection&lt;?&gt;&gt; nec = Utils::isNotEmpty;
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		Predicate&lt;Map&lt;?,?&gt;&gt; nem = Utils::isNotEmpty;
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		Predicate&lt;String&gt; ne = Utils::ne;
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		Predicate&lt;Collection&lt;?&gt;&gt; nec = Utils::ne;
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		Predicate&lt;Map&lt;?,?&gt;&gt; nem = Utils::ne;
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<em class="jxr_comment">// Load swagger JSON from classpath.</em>
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">var</strong> omSwagger = Json5.DEFAULT.read(is, JsonMap.<strong class="jxr_keyword">class</strong>);
@@ -695,7 +695,7 @@
 <a class="jxr_linenumber" name="L687" href="#L687">687</a> 	@SafeVarargs
 <a class="jxr_linenumber" name="L688" href="#L688">688</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T firstNonEmpty(T...t) {
 <a class="jxr_linenumber" name="L689" href="#L689">689</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> oo : t)
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(oo))
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 			<strong class="jxr_keyword">if</strong> (ne(oo))
 <a class="jxr_linenumber" name="L691" href="#L691">691</a> 				<strong class="jxr_keyword">return</strong> oo;
 <a class="jxr_linenumber" name="L692" href="#L692">692</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L693" href="#L693">693</a> 	}
@@ -782,7 +782,7 @@
 <a class="jxr_linenumber" name="L774" href="#L774">774</a> 		<strong class="jxr_keyword">if</strong> (ExternalDocsAnnotation.empty(a))
 <a class="jxr_linenumber" name="L775" href="#L775">775</a> 			<strong class="jxr_keyword">return</strong> om;
 <a class="jxr_linenumber" name="L776" href="#L776">776</a> 		om = newMap(om);
-<a class="jxr_linenumber" name="L777" href="#L777">777</a> 		Predicate&lt;String&gt; ne = Utils::isNotEmpty;
+<a class="jxr_linenumber" name="L777" href="#L777">777</a> 		Predicate&lt;String&gt; ne = Utils::ne;
 <a class="jxr_linenumber" name="L778" href="#L778">778</a> 		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L779" href="#L779">779</a> 		<strong class="jxr_keyword">return</strong> om
 <a class="jxr_linenumber" name="L780" href="#L780">780</a> 			.appendIf(ne, <span class="jxr_string">"description"</span>, resolve(a.description()))
@@ -808,11 +808,11 @@
 <a class="jxr_linenumber" name="L800" href="#L800">800</a> 		<strong class="jxr_keyword">if</strong> (ItemsAnnotation.empty(a))
 <a class="jxr_linenumber" name="L801" href="#L801">801</a> 			<strong class="jxr_keyword">return</strong> om;
 <a class="jxr_linenumber" name="L802" href="#L802">802</a> 		om = newMap(om);
-<a class="jxr_linenumber" name="L803" href="#L803">803</a> 		Predicate&lt;String&gt; ne = Utils::isNotEmpty;
-<a class="jxr_linenumber" name="L804" href="#L804">804</a> 		Predicate&lt;Collection&lt;?&gt;&gt; nec = Utils::isNotEmpty;
-<a class="jxr_linenumber" name="L805" href="#L805">805</a> 		Predicate&lt;Map&lt;?,?&gt;&gt; nem = Utils::isNotEmpty;
+<a class="jxr_linenumber" name="L803" href="#L803">803</a> 		Predicate&lt;String&gt; ne = Utils::ne;
+<a class="jxr_linenumber" name="L804" href="#L804">804</a> 		Predicate&lt;Collection&lt;?&gt;&gt; nec = Utils::ne;
+<a class="jxr_linenumber" name="L805" href="#L805">805</a> 		Predicate&lt;Map&lt;?,?&gt;&gt; nem = Utils::ne;
 <a class="jxr_linenumber" name="L806" href="#L806">806</a> 		Predicate&lt;Boolean&gt; nf = Utils::isTrue;
-<a class="jxr_linenumber" name="L807" href="#L807">807</a> 		Predicate&lt;Long&gt; nm1 = Utils::isNotMinusOne;
+<a class="jxr_linenumber" name="L807" href="#L807">807</a> 		Predicate&lt;Long&gt; nm1 = Utils::nm1;
 <a class="jxr_linenumber" name="L808" href="#L808">808</a> 		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L809" href="#L809">809</a> 		<strong class="jxr_keyword">return</strong> om
 <a class="jxr_linenumber" name="L810" href="#L810">810</a> 			.appendFirst(ne, <span class="jxr_string">"collectionFormat"</span>, a.collectionFormat(), a.cf())
@@ -841,7 +841,7 @@
 <a class="jxr_linenumber" name="L833" href="#L833">833</a> 		<strong class="jxr_keyword">if</strong> (ResponseAnnotation.empty(a))
 <a class="jxr_linenumber" name="L834" href="#L834">834</a> 			<strong class="jxr_keyword">return</strong> om;
 <a class="jxr_linenumber" name="L835" href="#L835">835</a> 		om = newMap(om);
-<a class="jxr_linenumber" name="L836" href="#L836">836</a> 		Predicate&lt;Map&lt;?,?&gt;&gt; nem = Utils::isNotEmpty;
+<a class="jxr_linenumber" name="L836" href="#L836">836</a> 		Predicate&lt;Map&lt;?,?&gt;&gt; nem = Utils::ne;
 <a class="jxr_linenumber" name="L837" href="#L837">837</a> 		<strong class="jxr_keyword">if</strong> (! SchemaAnnotation.empty(a.schema()))
 <a class="jxr_linenumber" name="L838" href="#L838">838</a> 			merge(om, a.schema());
 <a class="jxr_linenumber" name="L839" href="#L839">839</a> 		<em class="jxr_comment">// @formatter:off</em>
@@ -859,11 +859,11 @@
 <a class="jxr_linenumber" name="L851" href="#L851">851</a> 			<strong class="jxr_keyword">if</strong> (SchemaAnnotation.empty(a))
 <a class="jxr_linenumber" name="L852" href="#L852">852</a> 				<strong class="jxr_keyword">return</strong> om;
 <a class="jxr_linenumber" name="L853" href="#L853">853</a> 			om = newMap(om);
-<a class="jxr_linenumber" name="L854" href="#L854">854</a> 			Predicate&lt;String&gt; ne = Utils::isNotEmpty;
-<a class="jxr_linenumber" name="L855" href="#L855">855</a> 			Predicate&lt;Collection&lt;?&gt;&gt; nec = Utils::isNotEmpty;
-<a class="jxr_linenumber" name="L856" href="#L856">856</a> 			Predicate&lt;Map&lt;?,?&gt;&gt; nem = Utils::isNotEmpty;
+<a class="jxr_linenumber" name="L854" href="#L854">854</a> 			Predicate&lt;String&gt; ne = Utils::ne;
+<a class="jxr_linenumber" name="L855" href="#L855">855</a> 			Predicate&lt;Collection&lt;?&gt;&gt; nec = Utils::ne;
+<a class="jxr_linenumber" name="L856" href="#L856">856</a> 			Predicate&lt;Map&lt;?,?&gt;&gt; nem = Utils::ne;
 <a class="jxr_linenumber" name="L857" href="#L857">857</a> 			Predicate&lt;Boolean&gt; nf = Utils::isTrue;
-<a class="jxr_linenumber" name="L858" href="#L858">858</a> 			Predicate&lt;Long&gt; nm1 = Utils::isNotMinusOne;
+<a class="jxr_linenumber" name="L858" href="#L858">858</a> 			Predicate&lt;Long&gt; nm1 = Utils::nm1;
 <a class="jxr_linenumber" name="L859" href="#L859">859</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L860" href="#L860">860</a> 			<strong class="jxr_keyword">return</strong> om
 <a class="jxr_linenumber" name="L861" href="#L861">861</a> 				.appendIf(nem, <span class="jxr_string">"additionalProperties"</span>, toJsonMap(a.additionalProperties()))
@@ -908,11 +908,11 @@
 <a class="jxr_linenumber" name="L900" href="#L900">900</a> 		<strong class="jxr_keyword">if</strong> (SubItemsAnnotation.empty(a))
 <a class="jxr_linenumber" name="L901" href="#L901">901</a> 			<strong class="jxr_keyword">return</strong> om;
 <a class="jxr_linenumber" name="L902" href="#L902">902</a> 		om = newMap(om);
-<a class="jxr_linenumber" name="L903" href="#L903">903</a> 		Predicate&lt;String&gt; ne = Utils::isNotEmpty;
-<a class="jxr_linenumber" name="L904" href="#L904">904</a> 		Predicate&lt;Collection&lt;?&gt;&gt; nec = Utils::isNotEmpty;
-<a class="jxr_linenumber" name="L905" href="#L905">905</a> 		Predicate&lt;Map&lt;?,?&gt;&gt; nem = Utils::isNotEmpty;
+<a class="jxr_linenumber" name="L903" href="#L903">903</a> 		Predicate&lt;String&gt; ne = Utils::ne;
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> 		Predicate&lt;Collection&lt;?&gt;&gt; nec = Utils::ne;
+<a class="jxr_linenumber" name="L905" href="#L905">905</a> 		Predicate&lt;Map&lt;?,?&gt;&gt; nem = Utils::ne;
 <a class="jxr_linenumber" name="L906" href="#L906">906</a> 		Predicate&lt;Boolean&gt; nf = Utils::isTrue;
-<a class="jxr_linenumber" name="L907" href="#L907">907</a> 		Predicate&lt;Long&gt; nm1 = Utils::isNotMinusOne;
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> 		Predicate&lt;Long&gt; nm1 = Utils::nm1;
 <a class="jxr_linenumber" name="L908" href="#L908">908</a> 		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L909" href="#L909">909</a> 		<strong class="jxr_keyword">return</strong> om
 <a class="jxr_linenumber" name="L910" href="#L910">910</a> 			.appendFirst(ne, <span class="jxr_string">"collectionFormat"</span>, a.collectionFormat(), a.cf())
@@ -1007,7 +1007,7 @@
 <a class="jxr_linenumber" name="L999" href="#L999">999</a> 
 <a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> pushupSchemaFields(<a name="RestPartType" href="../../../../../org/apache/juneau/rest/httppart/RestPartType.html#RestPartType">RestPartType</a> type, <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> param, <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> schema) {
 <a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 		<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 		Predicate&lt;Object&gt; ne = Utils::isNotEmpty;
+<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 		Predicate&lt;Object&gt; ne = Utils::ne;
 <a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 		<strong class="jxr_keyword">if</strong> (nn(schema) &amp;&amp; ! schema.isEmpty()) {
 <a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 			<strong class="jxr_keyword">if</strong> (type == BODY || type == RESPONSE) {
 <a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 				param
@@ -1130,7 +1130,7 @@
 <a class="jxr_linenumber" name="L1122" href="#L1122">1122</a> 	<strong class="jxr_keyword">private</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> toMap(<a name="Contact" href="../../../../../org/apache/juneau/http/annotation/Contact.html#Contact">Contact</a> a, String location, Object...locationArgs) {
 <a class="jxr_linenumber" name="L1123" href="#L1123">1123</a> 		<strong class="jxr_keyword">if</strong> (ContactAnnotation.empty(a))
 <a class="jxr_linenumber" name="L1124" href="#L1124">1124</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1125" href="#L1125">1125</a> 		Predicate&lt;String&gt; ne = Utils::isNotEmpty;
+<a class="jxr_linenumber" name="L1125" href="#L1125">1125</a> 		Predicate&lt;String&gt; ne = Utils::ne;
 <a class="jxr_linenumber" name="L1126" href="#L1126">1126</a> 		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L1127" href="#L1127">1127</a> 		<strong class="jxr_keyword">var</strong> om = JsonMap.create()
 <a class="jxr_linenumber" name="L1128" href="#L1128">1128</a> 			.appendIf(ne, <span class="jxr_string">"name"</span>, resolve(a.name()))
@@ -1143,7 +1143,7 @@
 <a class="jxr_linenumber" name="L1135" href="#L1135">1135</a> 	<strong class="jxr_keyword">private</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> toMap(<a name="ExternalDocs" href="../../../../../org/apache/juneau/annotation/ExternalDocs.html#ExternalDocs">ExternalDocs</a> a, String location, Object...locationArgs) {
 <a class="jxr_linenumber" name="L1136" href="#L1136">1136</a> 		<strong class="jxr_keyword">if</strong> (ExternalDocsAnnotation.empty(a))
 <a class="jxr_linenumber" name="L1137" href="#L1137">1137</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1138" href="#L1138">1138</a> 		Predicate&lt;String&gt; ne = Utils::isNotEmpty;
+<a class="jxr_linenumber" name="L1138" href="#L1138">1138</a> 		Predicate&lt;String&gt; ne = Utils::ne;
 <a class="jxr_linenumber" name="L1139" href="#L1139">1139</a> 		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L1140" href="#L1140">1140</a> 		<strong class="jxr_keyword">var</strong> om = JsonMap.create()
 <a class="jxr_linenumber" name="L1141" href="#L1141">1141</a> 			.appendIf(ne, <span class="jxr_string">"description"</span>, resolve(joinnl(a.description())))
@@ -1155,7 +1155,7 @@
 <a class="jxr_linenumber" name="L1147" href="#L1147">1147</a> 	<strong class="jxr_keyword">private</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> toMap(<a name="License" href="../../../../../org/apache/juneau/http/annotation/License.html#License">License</a> a, String location, Object...locationArgs) {
 <a class="jxr_linenumber" name="L1148" href="#L1148">1148</a> 		<strong class="jxr_keyword">if</strong> (LicenseAnnotation.empty(a))
 <a class="jxr_linenumber" name="L1149" href="#L1149">1149</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1150" href="#L1150">1150</a> 		Predicate&lt;String&gt; ne = Utils::isNotEmpty;
+<a class="jxr_linenumber" name="L1150" href="#L1150">1150</a> 		Predicate&lt;String&gt; ne = Utils::ne;
 <a class="jxr_linenumber" name="L1151" href="#L1151">1151</a> 		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L1152" href="#L1152">1152</a> 		<strong class="jxr_keyword">var</strong> om = JsonMap.create()
 <a class="jxr_linenumber" name="L1153" href="#L1153">1153</a> 			.appendIf(ne, <span class="jxr_string">"name"</span>, resolve(a.name()))
@@ -1166,8 +1166,8 @@
 <a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> 
 <a class="jxr_linenumber" name="L1159" href="#L1159">1159</a> 	<strong class="jxr_keyword">private</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> toMap(<a name="Tag" href="../../../../../org/apache/juneau/http/annotation/Tag.html#Tag">Tag</a> a, String location, Object...locationArgs) {
 <a class="jxr_linenumber" name="L1160" href="#L1160">1160</a> 		<strong class="jxr_keyword">var</strong> om = JsonMap.create();
-<a class="jxr_linenumber" name="L1161" href="#L1161">1161</a> 		Predicate&lt;String&gt; ne = Utils::isNotEmpty;
-<a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> 		Predicate&lt;Map&lt;?,?&gt;&gt; nem = Utils::isNotEmpty;
+<a class="jxr_linenumber" name="L1161" href="#L1161">1161</a> 		Predicate&lt;String&gt; ne = Utils::ne;
+<a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> 		Predicate&lt;Map&lt;?,?&gt;&gt; nem = Utils::ne;
 <a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> 		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L1164" href="#L1164">1164</a> 		om
 <a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> 			.appendIf(ne, <span class="jxr_string">"name"</span>, resolve(a.name()))

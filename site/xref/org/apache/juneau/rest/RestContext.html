@@ -1153,7 +1153,7 @@
 <a class="jxr_linenumber" name="L1145" href="#L1145">1145</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L1146" href="#L1146">1146</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L1147" href="#L1147">1147</a> 		<strong class="jxr_keyword">public</strong> Builder defaultAccept(String value) {
-<a class="jxr_linenumber" name="L1148" href="#L1148">1148</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(value))
+<a class="jxr_linenumber" name="L1148" href="#L1148">1148</a> 			<strong class="jxr_keyword">if</strong> (ne(value))
 <a class="jxr_linenumber" name="L1149" href="#L1149">1149</a> 				defaultRequestHeaders(accept(value));
 <a class="jxr_linenumber" name="L1150" href="#L1150">1150</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1151" href="#L1151">1151</a> 		}
@@ -1260,7 +1260,7 @@
 <a class="jxr_linenumber" name="L1252" href="#L1252">1252</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L1253" href="#L1253">1253</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L1254" href="#L1254">1254</a> 		<strong class="jxr_keyword">public</strong> Builder defaultContentType(String value) {
-<a class="jxr_linenumber" name="L1255" href="#L1255">1255</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(value))
+<a class="jxr_linenumber" name="L1255" href="#L1255">1255</a> 			<strong class="jxr_keyword">if</strong> (ne(value))
 <a class="jxr_linenumber" name="L1256" href="#L1256">1256</a> 				defaultRequestHeaders(contentType(value));
 <a class="jxr_linenumber" name="L1257" href="#L1257">1257</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1258" href="#L1258">1258</a> 		}
@@ -2584,7 +2584,7 @@
 <a class="jxr_linenumber" name="L2576" href="#L2576">2576</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L2577" href="#L2577">2577</a> 		<strong class="jxr_keyword">public</strong> Builder path(String value) {
 <a class="jxr_linenumber" name="L2578" href="#L2578">2578</a> 			value = trimLeadingSlashes(value);
-<a class="jxr_linenumber" name="L2579" href="#L2579">2579</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(value))
+<a class="jxr_linenumber" name="L2579" href="#L2579">2579</a> 			<strong class="jxr_keyword">if</strong> (ne(value))
 <a class="jxr_linenumber" name="L2580" href="#L2580">2580</a> 				path = value;
 <a class="jxr_linenumber" name="L2581" href="#L2581">2581</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L2582" href="#L2582">2582</a> 		}
@@ -3953,7 +3953,7 @@
 <a class="jxr_linenumber" name="L3945" href="#L3945">3945</a> 			<em class="jxr_comment">// Find our config file.  It's the last non-empty @RestResource(config).</em>
 <a class="jxr_linenumber" name="L3946" href="#L3946">3946</a> 			<strong class="jxr_keyword">var</strong> vr = beanStore.getBean(VarResolver.<strong class="jxr_keyword">class</strong>).orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"VarResolver not found."</span>));
 <a class="jxr_linenumber" name="L3947" href="#L3947">3947</a> 			<strong class="jxr_keyword">var</strong> cfv = Value.&lt;String&gt;empty();
-<a class="jxr_linenumber" name="L3948" href="#L3948">3948</a> 			rstream(AP.find(Rest.<strong class="jxr_keyword">class</strong>, info(resourceClass))).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>().config()).filter(Utils::isNotEmpty).forEach(x -&gt; cfv.set(vr.resolve(x)));
+<a class="jxr_linenumber" name="L3948" href="#L3948">3948</a> 			rstream(AP.find(Rest.<strong class="jxr_keyword">class</strong>, info(resourceClass))).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>().config()).filter(Utils::ne).forEach(x -&gt; cfv.set(vr.resolve(x)));
 <a class="jxr_linenumber" name="L3949" href="#L3949">3949</a> 			<strong class="jxr_keyword">var</strong> cf = cfv.orElse(<span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L3950" href="#L3950">3950</a> 
 <a class="jxr_linenumber" name="L3951" href="#L3951">3951</a> 			<em class="jxr_comment">// If not specified or value is set to SYSTEM_DEFAULT, use system default config.</em>

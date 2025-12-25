@@ -428,9 +428,9 @@
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 	<strong class="jxr_keyword">public</strong> String getPathInfo() {
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<strong class="jxr_keyword">if</strong> (pathInfo == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 			pathInfo = getRequestURI();
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(contextPath))
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			<strong class="jxr_keyword">if</strong> (ne(contextPath))
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 				pathInfo = pathInfo.substring(contextPath.length());
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(servletPath))
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			<strong class="jxr_keyword">if</strong> (ne(servletPath))
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 				pathInfo = pathInfo.substring(servletPath.length());
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 		}
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<strong class="jxr_keyword">return</strong> nullIfEmpty(urlDecode(pathInfo));

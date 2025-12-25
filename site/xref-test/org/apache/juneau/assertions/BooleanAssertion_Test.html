@@ -182,8 +182,8 @@
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 	@Test <strong class="jxr_keyword">void</strong> ca08_isSame() {
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<em class="jxr_comment">// Note that even the following returns the same object sometimes.</em>
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">var</strong> x1 = b(<strong class="jxr_keyword">new</strong> String(<span class="jxr_string">"true"</span>));
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">var</strong> x1a = b(<strong class="jxr_keyword">new</strong> String(<span class="jxr_string">"true"</span>));
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">var</strong> x1 = bool(<strong class="jxr_keyword">new</strong> String(<span class="jxr_string">"true"</span>));
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">var</strong> x1a = bool(<strong class="jxr_keyword">new</strong> String(<span class="jxr_string">"true"</span>));
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">var</strong> nil = no(Boolean.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 		test(x1).isSame(x1);
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 		test(nil).isSame(nil);

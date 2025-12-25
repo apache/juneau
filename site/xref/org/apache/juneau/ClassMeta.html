@@ -243,27 +243,27 @@
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 			cat.set(INPUTSTREAM);
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		}
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		beanMeta = memoize(()-&gt;findBeanMeta());
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		builderSwap = memoize(()-&gt;findBuilderSwap());
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		beanMeta = mem(()-&gt;findBeanMeta());
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		builderSwap = mem(()-&gt;findBuilderSwap());
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 		childSwapMap = Cache.&lt;Class&lt;?&gt;,ObjectSwap&lt;?,?&gt;&gt;create().supplier(x -&gt; findSwap(x)).build();
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		childSwaps = memoize(()-&gt;findChildSwaps());
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		childSwaps = mem(()-&gt;findChildSwaps());
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 		childUnswapMap = Cache.&lt;Class&lt;?&gt;,ObjectSwap&lt;?,?&gt;&gt;create().supplier(x -&gt; findUnswap(x)).build();
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		beanDictionaryName = memoize(()-&gt;findBeanDictionaryName());
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		elementType = memoize(()-&gt;findElementType());
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		enumValues = memoize(()-&gt;findEnumValues());
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		example = memoize(()-&gt;findExample());
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		exampleField = memoize(()-&gt;findExampleField());
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		exampleMethod = memoize(()-&gt;findExampleMethod());
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		fromStringMethod = memoize(()-&gt;findFromStringMethod());
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		implClass = memoize(()-&gt;findImplClass());
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		keyValueTypes = memoize(()-&gt;findKeyValueTypes());
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		marshalledFilter = memoize(()-&gt;findMarshalledFilter());
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		nameProperty = memoize(()-&gt;findNameProperty());
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		noArgConstructor = memoize(()-&gt;findNoArgConstructor());
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		parentProperty = memoize(()-&gt;findParentProperty());
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		beanDictionaryName = mem(()-&gt;findBeanDictionaryName());
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		elementType = mem(()-&gt;findElementType());
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		enumValues = mem(()-&gt;findEnumValues());
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		example = mem(()-&gt;findExample());
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		exampleField = mem(()-&gt;findExampleField());
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		exampleMethod = mem(()-&gt;findExampleMethod());
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		fromStringMethod = mem(()-&gt;findFromStringMethod());
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		implClass = mem(()-&gt;findImplClass());
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		keyValueTypes = mem(()-&gt;findKeyValueTypes());
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		marshalledFilter = mem(()-&gt;findMarshalledFilter());
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		nameProperty = mem(()-&gt;findNameProperty());
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		noArgConstructor = mem(()-&gt;findNoArgConstructor());
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		parentProperty = mem(()-&gt;findParentProperty());
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 		properties = Cache.&lt;String,Optional&lt;?&gt;&gt;create().build();
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		stringConstructor = memoize(()-&gt;findStringConstructor());
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		swaps = memoize(()-&gt;findSwaps());
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		stringConstructor = mem(()-&gt;findStringConstructor());
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		swaps = mem(()-&gt;findSwaps());
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 		<strong class="jxr_keyword">this</strong>.args = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<strong class="jxr_keyword">this</strong>.stringMutater = Mutaters.get(String.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">inner</strong>());
@@ -285,30 +285,30 @@
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 	ClassMeta(List&lt;ClassMeta&lt;?&gt;&gt; args) {
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 		<strong class="jxr_keyword">super</strong>((Class&lt;T&gt;)Object[].<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<strong class="jxr_keyword">this</strong>.args = args;
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<strong class="jxr_keyword">this</strong>.childSwaps = memoize(()-&gt;findChildSwaps());
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<strong class="jxr_keyword">this</strong>.childSwaps = mem(()-&gt;findChildSwaps());
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<strong class="jxr_keyword">this</strong>.childSwapMap = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<strong class="jxr_keyword">this</strong>.childUnswapMap = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<strong class="jxr_keyword">this</strong>.cat = <strong class="jxr_keyword">new</strong> Categories().set(ARGS);
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<strong class="jxr_keyword">this</strong>.beanContext = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">this</strong>.elementType = memoize(()-&gt;findElementType());
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		<strong class="jxr_keyword">this</strong>.keyValueTypes = memoize(()-&gt;findKeyValueTypes());
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<strong class="jxr_keyword">this</strong>.beanMeta = memoize(()-&gt;findBeanMeta());
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">this</strong>.swaps = memoize(()-&gt;findSwaps());
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">this</strong>.elementType = mem(()-&gt;findElementType());
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		<strong class="jxr_keyword">this</strong>.keyValueTypes = mem(()-&gt;findKeyValueTypes());
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<strong class="jxr_keyword">this</strong>.beanMeta = mem(()-&gt;findBeanMeta());
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">this</strong>.swaps = mem(()-&gt;findSwaps());
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<strong class="jxr_keyword">this</strong>.stringMutater = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<strong class="jxr_keyword">this</strong>.fromStringMethod = memoize(()-&gt;findFromStringMethod());
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">this</strong>.exampleMethod = memoize(()-&gt;findExampleMethod());
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<strong class="jxr_keyword">this</strong>.parentProperty = memoize(()-&gt;findParentProperty());
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		<strong class="jxr_keyword">this</strong>.nameProperty = memoize(()-&gt;findNameProperty());
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">this</strong>.exampleField = memoize(()-&gt;findExampleField());
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		<strong class="jxr_keyword">this</strong>.noArgConstructor = memoize(()-&gt;findNoArgConstructor());
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<strong class="jxr_keyword">this</strong>.fromStringMethod = mem(()-&gt;findFromStringMethod());
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">this</strong>.exampleMethod = mem(()-&gt;findExampleMethod());
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<strong class="jxr_keyword">this</strong>.parentProperty = mem(()-&gt;findParentProperty());
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		<strong class="jxr_keyword">this</strong>.nameProperty = mem(()-&gt;findNameProperty());
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">this</strong>.exampleField = mem(()-&gt;findExampleField());
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		<strong class="jxr_keyword">this</strong>.noArgConstructor = mem(()-&gt;findNoArgConstructor());
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 		<strong class="jxr_keyword">this</strong>.properties = Cache.&lt;String,Optional&lt;?&gt;&gt;create().build();
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">this</strong>.stringConstructor = memoize(()-&gt;findStringConstructor());
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<strong class="jxr_keyword">this</strong>.marshalledFilter = memoize(()-&gt;findMarshalledFilter());
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">this</strong>.builderSwap = memoize(()-&gt;findBuilderSwap());
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">this</strong>.example = memoize(()-&gt;findExample());
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<strong class="jxr_keyword">this</strong>.implClass = memoize(()-&gt;findImplClass());
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">this</strong>.enumValues = memoize(()-&gt;findEnumValues());
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<strong class="jxr_keyword">this</strong>.beanDictionaryName = memoize(()-&gt;findBeanDictionaryName());
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">this</strong>.stringConstructor = mem(()-&gt;findStringConstructor());
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<strong class="jxr_keyword">this</strong>.marshalledFilter = mem(()-&gt;findMarshalledFilter());
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">this</strong>.builderSwap = mem(()-&gt;findBuilderSwap());
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">this</strong>.example = mem(()-&gt;findExample());
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<strong class="jxr_keyword">this</strong>.implClass = mem(()-&gt;findImplClass());
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">this</strong>.enumValues = mem(()-&gt;findEnumValues());
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<strong class="jxr_keyword">this</strong>.beanDictionaryName = mem(()-&gt;findBeanDictionaryName());
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 	}
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -325,8 +325,8 @@
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">this</strong>.cat = mainType.cat;
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<strong class="jxr_keyword">this</strong>.fromStringMethod = mainType.fromStringMethod;
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">this</strong>.beanContext = mainType.beanContext;
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		<strong class="jxr_keyword">this</strong>.elementType = elementType != <strong class="jxr_keyword">null</strong> ? memoize(()-&gt;elementType) : mainType.elementType;
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<strong class="jxr_keyword">this</strong>.keyValueTypes = (keyType != <strong class="jxr_keyword">null</strong> || valueType != <strong class="jxr_keyword">null</strong>) ? memoize(()-&gt;<strong class="jxr_keyword">new</strong> KeyValueTypes(keyType, valueType)) : mainType.keyValueTypes;
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		<strong class="jxr_keyword">this</strong>.elementType = elementType != <strong class="jxr_keyword">null</strong> ? mem(()-&gt;elementType) : mainType.elementType;
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<strong class="jxr_keyword">this</strong>.keyValueTypes = (keyType != <strong class="jxr_keyword">null</strong> || valueType != <strong class="jxr_keyword">null</strong>) ? mem(()-&gt;<strong class="jxr_keyword">new</strong> KeyValueTypes(keyType, valueType)) : mainType.keyValueTypes;
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<strong class="jxr_keyword">this</strong>.beanMeta = mainType.beanMeta;
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">this</strong>.swaps = mainType.swaps;
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">this</strong>.exampleMethod = mainType.exampleMethod;
@@ -1428,7 +1428,7 @@
 <a class="jxr_linenumber" name="L1420" href="#L1420">1420</a> 			example = marshalledFilter.map(x -&gt; x.getExample()).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1421" href="#L1421">1421</a> 
 <a class="jxr_linenumber" name="L1422" href="#L1422">1422</a> 		<strong class="jxr_keyword">if</strong> (example == <strong class="jxr_keyword">null</strong> &amp;&amp; nn(beanContext))
-<a class="jxr_linenumber" name="L1423" href="#L1423">1423</a> 			example = beanContext.getAnnotationProvider().find(Example.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>).stream().map(x -&gt; x.<strong class="jxr_keyword">inner</strong>().value()).filter(Utils::isNotEmpty).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1423" href="#L1423">1423</a> 			example = beanContext.getAnnotationProvider().find(Example.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>).stream().map(x -&gt; x.<strong class="jxr_keyword">inner</strong>().value()).filter(Utils::ne).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1424" href="#L1424">1424</a> 
 <a class="jxr_linenumber" name="L1425" href="#L1425">1425</a> 		<strong class="jxr_keyword">if</strong> (example == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L1426" href="#L1426">1426</a> 			<strong class="jxr_keyword">if</strong> (isAny(<strong class="jxr_keyword">boolean</strong>.<strong class="jxr_keyword">class</strong>, Boolean.<strong class="jxr_keyword">class</strong>)) {

@@ -243,10 +243,10 @@
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; keySet() {
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">var</strong> s = setb(String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 			.addIf(isNotEmpty(content), <span class="jxr_string">"content"</span>)
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 			.addIf(ne(content), <span class="jxr_string">"content"</span>)
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 			.addIf(nn(description), <span class="jxr_string">"description"</span>)
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 			.addIf(isNotEmpty(headers), <span class="jxr_string">"headers"</span>)
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			.addIf(isNotEmpty(links), <span class="jxr_string">"links"</span>)
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 			.addIf(ne(headers), <span class="jxr_string">"headers"</span>)
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			.addIf(ne(links), <span class="jxr_string">"links"</span>)
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 			.build();
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> MultiSet&lt;&gt;(s, <strong class="jxr_keyword">super</strong>.keySet());

@@ -411,7 +411,7 @@
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 		out.append(jscm.getSchema());
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		Predicate&lt;String&gt; ne = Utils::isNotEmpty;
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		Predicate&lt;String&gt; ne = Utils::ne;
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 		out.appendIfAbsentIf(ne, <span class="jxr_string">"type"</span>, type);
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 		out.appendIfAbsentIf(ne, <span class="jxr_string">"format"</span>, format);
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 
@@ -461,7 +461,7 @@
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> 
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 		out.append(jscm.getSchema());
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		Predicate&lt;Object&gt; neo = Utils::isNotEmpty;
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		Predicate&lt;Object&gt; neo = Utils::ne;
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 		out.appendIfAbsentIf(neo, <span class="jxr_string">"description"</span>, description);
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 		out.appendIfAbsentIf(neo, <span class="jxr_string">"example"</span>, example);
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> 

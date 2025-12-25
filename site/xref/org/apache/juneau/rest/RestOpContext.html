@@ -2019,7 +2019,7 @@
 <a class="jxr_linenumber" name="L2011" href="#L2011">2011</a> 					httpMethod = AP.find(RestOp.<strong class="jxr_keyword">class</strong>, mi)
 <a class="jxr_linenumber" name="L2012" href="#L2012">2012</a> 						.stream()
 <a class="jxr_linenumber" name="L2013" href="#L2013">2013</a> 						.map(x -&gt; x.<strong class="jxr_keyword">inner</strong>().method())
-<a class="jxr_linenumber" name="L2014" href="#L2014">2014</a> 						.filter(Utils::isNotEmpty)
+<a class="jxr_linenumber" name="L2014" href="#L2014">2014</a> 						.filter(Utils::ne)
 <a class="jxr_linenumber" name="L2015" href="#L2015">2015</a> 						.findFirst()
 <a class="jxr_linenumber" name="L2016" href="#L2016">2016</a> 						.orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L2017" href="#L2017">2017</a> 					<em class="jxr_comment">// @formatter:on</em>
@@ -2283,38 +2283,38 @@
 <a class="jxr_linenumber" name="L2275" href="#L2275">2275</a> 				<strong class="jxr_keyword">return</strong> c;
 <a class="jxr_linenumber" name="L2276" href="#L2276">2276</a> 		}
 <a class="jxr_linenumber" name="L2277" href="#L2277">2277</a> 
-<a class="jxr_linenumber" name="L2278" href="#L2278">2278</a> 		c = compare(o.hierarchyDepth, hierarchyDepth);
+<a class="jxr_linenumber" name="L2278" href="#L2278">2278</a> 		c = cmp(o.hierarchyDepth, hierarchyDepth);
 <a class="jxr_linenumber" name="L2279" href="#L2279">2279</a> 		<strong class="jxr_keyword">if</strong> (c != 0)
 <a class="jxr_linenumber" name="L2280" href="#L2280">2280</a> 			<strong class="jxr_keyword">return</strong> c;
 <a class="jxr_linenumber" name="L2281" href="#L2281">2281</a> 
-<a class="jxr_linenumber" name="L2282" href="#L2282">2282</a> 		c = compare(o.requiredMatchers.length, requiredMatchers.length);
+<a class="jxr_linenumber" name="L2282" href="#L2282">2282</a> 		c = cmp(o.requiredMatchers.length, requiredMatchers.length);
 <a class="jxr_linenumber" name="L2283" href="#L2283">2283</a> 		<strong class="jxr_keyword">if</strong> (c != 0)
 <a class="jxr_linenumber" name="L2284" href="#L2284">2284</a> 			<strong class="jxr_keyword">return</strong> c;
 <a class="jxr_linenumber" name="L2285" href="#L2285">2285</a> 
-<a class="jxr_linenumber" name="L2286" href="#L2286">2286</a> 		c = compare(o.optionalMatchers.length, optionalMatchers.length);
+<a class="jxr_linenumber" name="L2286" href="#L2286">2286</a> 		c = cmp(o.optionalMatchers.length, optionalMatchers.length);
 <a class="jxr_linenumber" name="L2287" href="#L2287">2287</a> 		<strong class="jxr_keyword">if</strong> (c != 0)
 <a class="jxr_linenumber" name="L2288" href="#L2288">2288</a> 			<strong class="jxr_keyword">return</strong> c;
 <a class="jxr_linenumber" name="L2289" href="#L2289">2289</a> 
-<a class="jxr_linenumber" name="L2290" href="#L2290">2290</a> 		c = compare(o.guards.length, guards.length);
+<a class="jxr_linenumber" name="L2290" href="#L2290">2290</a> 		c = cmp(o.guards.length, guards.length);
 <a class="jxr_linenumber" name="L2291" href="#L2291">2291</a> 
 <a class="jxr_linenumber" name="L2292" href="#L2292">2292</a> 		<strong class="jxr_keyword">if</strong> (c != 0)
 <a class="jxr_linenumber" name="L2293" href="#L2293">2293</a> 			<strong class="jxr_keyword">return</strong> c;
 <a class="jxr_linenumber" name="L2294" href="#L2294">2294</a> 
-<a class="jxr_linenumber" name="L2295" href="#L2295">2295</a> 		c = compare(method.getName(), o.method.getName());
+<a class="jxr_linenumber" name="L2295" href="#L2295">2295</a> 		c = cmp(method.getName(), o.method.getName());
 <a class="jxr_linenumber" name="L2296" href="#L2296">2296</a> 		<strong class="jxr_keyword">if</strong> (c != 0)
 <a class="jxr_linenumber" name="L2297" href="#L2297">2297</a> 			<strong class="jxr_keyword">return</strong> c;
 <a class="jxr_linenumber" name="L2298" href="#L2298">2298</a> 
-<a class="jxr_linenumber" name="L2299" href="#L2299">2299</a> 		c = compare(method.getParameterCount(), o.method.getParameterCount());
+<a class="jxr_linenumber" name="L2299" href="#L2299">2299</a> 		c = cmp(method.getParameterCount(), o.method.getParameterCount());
 <a class="jxr_linenumber" name="L2300" href="#L2300">2300</a> 		<strong class="jxr_keyword">if</strong> (c != 0)
 <a class="jxr_linenumber" name="L2301" href="#L2301">2301</a> 			<strong class="jxr_keyword">return</strong> c;
 <a class="jxr_linenumber" name="L2302" href="#L2302">2302</a> 
 <a class="jxr_linenumber" name="L2303" href="#L2303">2303</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; method.getParameterCount(); i++) {
-<a class="jxr_linenumber" name="L2304" href="#L2304">2304</a> 			c = compare(method.getParameterTypes()[i].getName(), o.method.getParameterTypes()[i].getName());
+<a class="jxr_linenumber" name="L2304" href="#L2304">2304</a> 			c = cmp(method.getParameterTypes()[i].getName(), o.method.getParameterTypes()[i].getName());
 <a class="jxr_linenumber" name="L2305" href="#L2305">2305</a> 			<strong class="jxr_keyword">if</strong> (c != 0)
 <a class="jxr_linenumber" name="L2306" href="#L2306">2306</a> 				<strong class="jxr_keyword">return</strong> c;
 <a class="jxr_linenumber" name="L2307" href="#L2307">2307</a> 		}
 <a class="jxr_linenumber" name="L2308" href="#L2308">2308</a> 
-<a class="jxr_linenumber" name="L2309" href="#L2309">2309</a> 		c = compare(method.getReturnType().getName(), o.method.getReturnType().getName());
+<a class="jxr_linenumber" name="L2309" href="#L2309">2309</a> 		c = cmp(method.getReturnType().getName(), o.method.getReturnType().getName());
 <a class="jxr_linenumber" name="L2310" href="#L2310">2310</a> 		<strong class="jxr_keyword">if</strong> (c != 0)
 <a class="jxr_linenumber" name="L2311" href="#L2311">2311</a> 			<strong class="jxr_keyword">return</strong> c;
 <a class="jxr_linenumber" name="L2312" href="#L2312">2312</a> 
