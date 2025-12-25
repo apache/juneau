@@ -243,7 +243,7 @@ public class SecurityScheme extends SwaggerElement {
 			.addIf(nn(flow), "flow")
 			.addIf(nn(in), "in")
 			.addIf(nn(name), "name")
-			.addIf(isNotEmpty(scopes), "scopes")
+			.addIf(ne(scopes), "scopes")
 			.addIf(nn(tokenUrl), "tokenUrl")
 			.addIf(nn(type), "type")
 			.build();

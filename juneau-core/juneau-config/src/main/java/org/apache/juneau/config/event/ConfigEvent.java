@@ -209,7 +209,7 @@ public class ConfigEvent {
 				if (val.indexOf('#') != -1)
 					val = val.replace("#", "\\#");
 				out.append(val);
-				if (isNotEmpty(comment))
+				if (ne(comment))
 					out.append(" # ").append(comment);
 				out.append(')');
 				yield out.toString();

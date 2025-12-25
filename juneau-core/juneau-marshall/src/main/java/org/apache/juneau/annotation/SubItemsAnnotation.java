@@ -708,11 +708,11 @@ public class SubItemsAnnotation {
 	public static JsonMap merge(JsonMap om, SubItems a) throws ParseException {
 		if (SubItemsAnnotation.empty(a))
 			return om;
-		Predicate<String> ne = Utils::isNotEmpty;
-		Predicate<Collection<?>> nec = Utils::isNotEmpty;
-		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
+		Predicate<String> ne = Utils::ne;
+		Predicate<Collection<?>> nec = Utils::ne;
+		Predicate<Map<?,?>> nem = Utils::ne;
 		Predicate<Boolean> nf = Utils::isTrue;
-		Predicate<Long> nm1 = Utils::isNotMinusOne;
+		Predicate<Long> nm1 = Utils::nm1;
 		// @formatter:off
 		return om
 			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())

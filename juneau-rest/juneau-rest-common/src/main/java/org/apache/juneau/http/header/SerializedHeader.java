@@ -230,7 +230,7 @@ public class SerializedHeader extends BasicHeader {
 				if ((def == null && ! schema.isRequired()) || (def == null && schema.isAllowEmptyValue()))
 					return null;
 			}
-			if (isEmpty(s(v)) && skipIfEmpty && def == null)
+			if (e(s(v)) && skipIfEmpty && def == null)
 				return null;
 			return serializer == null ? s(v) : serializer.serialize(HttpPartType.HEADER, schema, v);
 		} catch (SchemaValidationException e) {

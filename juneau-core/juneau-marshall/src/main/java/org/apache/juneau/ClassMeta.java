@@ -235,27 +235,27 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			cat.set(INPUTSTREAM);
 		}
 
-		beanMeta = memoize(()->findBeanMeta());
-		builderSwap = memoize(()->findBuilderSwap());
+		beanMeta = mem(()->findBeanMeta());
+		builderSwap = mem(()->findBuilderSwap());
 		childSwapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findSwap(x)).build();
-		childSwaps = memoize(()->findChildSwaps());
+		childSwaps = mem(()->findChildSwaps());
 		childUnswapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findUnswap(x)).build();
-		beanDictionaryName = memoize(()->findBeanDictionaryName());
-		elementType = memoize(()->findElementType());
-		enumValues = memoize(()->findEnumValues());
-		example = memoize(()->findExample());
-		exampleField = memoize(()->findExampleField());
-		exampleMethod = memoize(()->findExampleMethod());
-		fromStringMethod = memoize(()->findFromStringMethod());
-		implClass = memoize(()->findImplClass());
-		keyValueTypes = memoize(()->findKeyValueTypes());
-		marshalledFilter = memoize(()->findMarshalledFilter());
-		nameProperty = memoize(()->findNameProperty());
-		noArgConstructor = memoize(()->findNoArgConstructor());
-		parentProperty = memoize(()->findParentProperty());
+		beanDictionaryName = mem(()->findBeanDictionaryName());
+		elementType = mem(()->findElementType());
+		enumValues = mem(()->findEnumValues());
+		example = mem(()->findExample());
+		exampleField = mem(()->findExampleField());
+		exampleMethod = mem(()->findExampleMethod());
+		fromStringMethod = mem(()->findFromStringMethod());
+		implClass = mem(()->findImplClass());
+		keyValueTypes = mem(()->findKeyValueTypes());
+		marshalledFilter = mem(()->findMarshalledFilter());
+		nameProperty = mem(()->findNameProperty());
+		noArgConstructor = mem(()->findNoArgConstructor());
+		parentProperty = mem(()->findParentProperty());
 		properties = Cache.<String,Optional<?>>create().build();
-		stringConstructor = memoize(()->findStringConstructor());
-		swaps = memoize(()->findSwaps());
+		stringConstructor = mem(()->findStringConstructor());
+		swaps = mem(()->findSwaps());
 
 		this.args = null;
 		this.stringMutater = Mutaters.get(String.class, inner());
@@ -277,30 +277,30 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	ClassMeta(List<ClassMeta<?>> args) {
 		super((Class<T>)Object[].class);
 		this.args = args;
-		this.childSwaps = memoize(()->findChildSwaps());
+		this.childSwaps = mem(()->findChildSwaps());
 		this.childSwapMap = null;
 		this.childUnswapMap = null;
 		this.cat = new Categories().set(ARGS);
 		this.beanContext = null;
-		this.elementType = memoize(()->findElementType());
-		this.keyValueTypes = memoize(()->findKeyValueTypes());
-		this.beanMeta = memoize(()->findBeanMeta());
-		this.swaps = memoize(()->findSwaps());
+		this.elementType = mem(()->findElementType());
+		this.keyValueTypes = mem(()->findKeyValueTypes());
+		this.beanMeta = mem(()->findBeanMeta());
+		this.swaps = mem(()->findSwaps());
 		this.stringMutater = null;
-		this.fromStringMethod = memoize(()->findFromStringMethod());
-		this.exampleMethod = memoize(()->findExampleMethod());
-		this.parentProperty = memoize(()->findParentProperty());
-		this.nameProperty = memoize(()->findNameProperty());
-		this.exampleField = memoize(()->findExampleField());
-		this.noArgConstructor = memoize(()->findNoArgConstructor());
+		this.fromStringMethod = mem(()->findFromStringMethod());
+		this.exampleMethod = mem(()->findExampleMethod());
+		this.parentProperty = mem(()->findParentProperty());
+		this.nameProperty = mem(()->findNameProperty());
+		this.exampleField = mem(()->findExampleField());
+		this.noArgConstructor = mem(()->findNoArgConstructor());
 		this.properties = Cache.<String,Optional<?>>create().build();
-		this.stringConstructor = memoize(()->findStringConstructor());
-		this.marshalledFilter = memoize(()->findMarshalledFilter());
-		this.builderSwap = memoize(()->findBuilderSwap());
-		this.example = memoize(()->findExample());
-		this.implClass = memoize(()->findImplClass());
-		this.enumValues = memoize(()->findEnumValues());
-		this.beanDictionaryName = memoize(()->findBeanDictionaryName());
+		this.stringConstructor = mem(()->findStringConstructor());
+		this.marshalledFilter = mem(()->findMarshalledFilter());
+		this.builderSwap = mem(()->findBuilderSwap());
+		this.example = mem(()->findExample());
+		this.implClass = mem(()->findImplClass());
+		this.enumValues = mem(()->findEnumValues());
+		this.beanDictionaryName = mem(()->findBeanDictionaryName());
 	}
 
 	/**
@@ -317,8 +317,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.cat = mainType.cat;
 		this.fromStringMethod = mainType.fromStringMethod;
 		this.beanContext = mainType.beanContext;
-		this.elementType = elementType != null ? memoize(()->elementType) : mainType.elementType;
-		this.keyValueTypes = (keyType != null || valueType != null) ? memoize(()->new KeyValueTypes(keyType, valueType)) : mainType.keyValueTypes;
+		this.elementType = elementType != null ? mem(()->elementType) : mainType.elementType;
+		this.keyValueTypes = (keyType != null || valueType != null) ? mem(()->new KeyValueTypes(keyType, valueType)) : mainType.keyValueTypes;
 		this.beanMeta = mainType.beanMeta;
 		this.swaps = mainType.swaps;
 		this.exampleMethod = mainType.exampleMethod;
@@ -1420,7 +1420,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			example = marshalledFilter.map(x -> x.getExample()).orElse(null);
 
 		if (example == null && nn(beanContext))
-			example = beanContext.getAnnotationProvider().find(Example.class, this).stream().map(x -> x.inner().value()).filter(Utils::isNotEmpty).findFirst().orElse(null);
+			example = beanContext.getAnnotationProvider().find(Example.class, this).stream().map(x -> x.inner().value()).filter(Utils::ne).findFirst().orElse(null);
 
 		if (example == null) {
 			if (isAny(boolean.class, Boolean.class)) {

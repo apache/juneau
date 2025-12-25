@@ -80,7 +80,7 @@ public class UrlPathMatch {
 	 */
 	public String getRemainder() {
 		var suffix = getSuffix();
-		if (isNotEmpty(suffix) && suffix.charAt(0) == '/')
+		if (ne(suffix) && suffix.charAt(0) == '/')
 			suffix = suffix.substring(1);
 		return suffix;
 	}

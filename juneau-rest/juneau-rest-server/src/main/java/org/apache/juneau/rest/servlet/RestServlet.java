@@ -115,7 +115,7 @@ public abstract class RestServlet extends HttpServlet {
 		// @formatter:off
 		return rstream(AP.find(Rest.class, ci))
 			.map(x -> x.inner().path())
-			.filter(Utils::isNotEmpty)
+			.filter(Utils::ne)
 			.map(StringUtils::trimSlashes)
 			.findFirst()
 			.orElse("");

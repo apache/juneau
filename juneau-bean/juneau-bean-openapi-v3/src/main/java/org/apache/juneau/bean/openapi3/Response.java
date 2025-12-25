@@ -235,10 +235,10 @@ public class Response extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(isNotEmpty(content), "content")
+			.addIf(ne(content), "content")
 			.addIf(nn(description), "description")
-			.addIf(isNotEmpty(headers), "headers")
-			.addIf(isNotEmpty(links), "links")
+			.addIf(ne(headers), "headers")
+			.addIf(ne(links), "links")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());

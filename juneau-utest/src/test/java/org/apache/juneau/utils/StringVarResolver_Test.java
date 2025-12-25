@@ -169,7 +169,7 @@ class StringVarResolver_Test extends TestBase {
 	@Test void a07_test$E() {
 		var t = "$E{PATH}";
 
-		assertFalse(org.apache.juneau.commons.utils.Utils.isEmpty(VarResolver.DEFAULT.resolve(t)));  // NOAI
+		assertFalse(org.apache.juneau.commons.utils.Utils.e(VarResolver.DEFAULT.resolve(t)));  // NOAI
 	}
 
 	//====================================================================================================

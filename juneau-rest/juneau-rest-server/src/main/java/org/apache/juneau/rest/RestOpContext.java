@@ -2011,7 +2011,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 					httpMethod = AP.find(RestOp.class, mi)
 						.stream()
 						.map(x -> x.inner().method())
-						.filter(Utils::isNotEmpty)
+						.filter(Utils::ne)
 						.findFirst()
 						.orElse(null);
 					// @formatter:on
@@ -2275,38 +2275,38 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				return c;
 		}
 
-		c = compare(o.hierarchyDepth, hierarchyDepth);
+		c = cmp(o.hierarchyDepth, hierarchyDepth);
 		if (c != 0)
 			return c;
 
-		c = compare(o.requiredMatchers.length, requiredMatchers.length);
+		c = cmp(o.requiredMatchers.length, requiredMatchers.length);
 		if (c != 0)
 			return c;
 
-		c = compare(o.optionalMatchers.length, optionalMatchers.length);
+		c = cmp(o.optionalMatchers.length, optionalMatchers.length);
 		if (c != 0)
 			return c;
 
-		c = compare(o.guards.length, guards.length);
+		c = cmp(o.guards.length, guards.length);
 
 		if (c != 0)
 			return c;
 
-		c = compare(method.getName(), o.method.getName());
+		c = cmp(method.getName(), o.method.getName());
 		if (c != 0)
 			return c;
 
-		c = compare(method.getParameterCount(), o.method.getParameterCount());
+		c = cmp(method.getParameterCount(), o.method.getParameterCount());
 		if (c != 0)
 			return c;
 
 		for (var i = 0; i < method.getParameterCount(); i++) {
-			c = compare(method.getParameterTypes()[i].getName(), o.method.getParameterTypes()[i].getName());
+			c = cmp(method.getParameterTypes()[i].getName(), o.method.getParameterTypes()[i].getName());
 			if (c != 0)
 				return c;
 		}
 
-		c = compare(method.getReturnType().getName(), o.method.getReturnType().getName());
+		c = cmp(method.getReturnType().getName(), o.method.getReturnType().getName());
 		if (c != 0)
 			return c;
 

@@ -933,8 +933,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				if (getAnnotationProvider().has(HtmlLink.class, aType)) {
 					var uriProperty = Value.<String>empty();
 					var nameProperty = Value.<String>empty();
-					aType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
-					aType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
+					aType.forEachAnnotation(HtmlLink.class, x -> ne(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
+					aType.forEachAnnotation(HtmlLink.class, x -> ne(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
 					Object urlProp = m.get(uriProperty.orElse(""));
 					Object nameProp = m.get(nameProperty.orElse(""));
 

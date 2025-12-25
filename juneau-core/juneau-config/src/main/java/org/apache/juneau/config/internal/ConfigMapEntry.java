@@ -149,7 +149,7 @@ public class ConfigMapEntry {
 				}
 			}
 
-			if (isNotEmpty(comment))
+			if (ne(comment))
 				w.append(" # ").append(comment);
 
 			w.append('\n');

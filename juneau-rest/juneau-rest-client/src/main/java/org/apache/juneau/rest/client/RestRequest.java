@@ -130,7 +130,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				value = x3.copyWith(getPartSerializerSession(), null).getValue();
 			} else {
 				var v = x.getValue();
-				value = (isEmpty(v) && skipIfEmpty) ? null : v;
+				value = (e(v) && skipIfEmpty) ? null : v;
 			}
 		}
 
@@ -141,7 +141,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		public String getValue() { return value; }
 
 		boolean isValid() {
-			if (isEmpty(name) || value == null)
+			if (e(name) || value == null)
 				return false;
 			return true;
 		}
@@ -2422,7 +2422,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		var h = request.getFirstHeader("Content-Type");
 		if (nn(h)) {
 			var s = h.getValue();
-			if (isNotEmpty(s))
+			if (ne(s))
 				return ContentType.of(s);
 		}
 		return def;
@@ -2439,7 +2439,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return A new header.
 	 */
 	protected Header createHeader(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema, Boolean skipIfEmpty) {
-		if (isEmpty(name))
+		if (e(name))
 			return null;
 		if (skipIfEmpty == null)
 			skipIfEmpty = client.isSkipEmptyHeaderData();
@@ -2477,7 +2477,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return A new part.
 	 */
 	protected NameValuePair createPart(String name, Object value, HttpPartType type, HttpPartSerializer serializer, HttpPartSchema schema, Boolean skipIfEmpty) {
-		if (isEmpty(name))
+		if (e(name))
 			return null;
 		if (skipIfEmpty == null) {
 			if (type == QUERY)
@@ -2504,10 +2504,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	RestRequest formDataArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {
-		var isMulti = isEmpty(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
+		var isMulti = e(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
 
 		if (! isMulti) {
-			if (! (skipIfEmpty && isEmpty(s(value))))
+			if (! (skipIfEmpty && e(s(value))))
 				return formData(createPart(name, value, FORMDATA, serializer, schema, skipIfEmpty));
 			return this;
 		}
@@ -2533,7 +2533,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		}
 
 		if (skipIfEmpty)
-			l.removeIf(x -> isEmpty(x.getValue()));
+			l.removeIf(x -> e(x.getValue()));
 
 		formData.append(l);
 
@@ -2547,10 +2547,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	RestRequest headerArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {
-		var isMulti = isEmpty(name) || "*".equals(name) || value instanceof HeaderList || isHeaderArray(value);
+		var isMulti = e(name) || "*".equals(name) || value instanceof HeaderList || isHeaderArray(value);
 
 		if (! isMulti) {
-			if (! (skipIfEmpty && isEmpty(s(value))))
+			if (! (skipIfEmpty && e(s(value))))
 				return header(createHeader(name, value, serializer, schema, skipIfEmpty));
 			return this;
 		}
@@ -2575,7 +2575,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		}
 
 		if (skipIfEmpty)
-			l.removeIf(x -> isEmpty(x.getValue()));
+			l.removeIf(x -> e(x.getValue()));
 
 		headerData.append(l);
 
@@ -2585,7 +2585,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	boolean isLoggingSuppressed() { return suppressLogging; }
 
 	RestRequest pathArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) {
-		var isMulti = isEmpty(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
+		var isMulti = e(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
 
 		if (! isMulti)
 			return pathData(createPart(name, value, PATH, serializer, schema, false));
@@ -2615,10 +2615,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	RestRequest queryArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {
-		var isMulti = isEmpty(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
+		var isMulti = e(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
 
 		if (! isMulti) {
-			if (! (skipIfEmpty && isEmpty(s(value))))
+			if (! (skipIfEmpty && e(s(value))))
 				return queryData(createPart(name, value, QUERY, serializer, schema, skipIfEmpty));
 			return this;
 		}
@@ -2644,7 +2644,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		}
 
 		if (skipIfEmpty)
-			l.removeIf(x -> isEmpty(x.getValue()));
+			l.removeIf(x -> e(x.getValue()));
 
 		queryData.append(l);
 

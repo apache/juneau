@@ -1474,11 +1474,11 @@ public class SchemaAnnotation {
 		var m = new JsonMap();
 		if (SchemaAnnotation.empty(a))
 			return m;
-		Predicate<String> ne = Utils::isNotEmpty;
-		Predicate<Collection<?>> nec = Utils::isNotEmpty;
-		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
+		Predicate<String> ne = Utils::ne;
+		Predicate<Collection<?>> nec = Utils::ne;
+		Predicate<Map<?,?>> nem = Utils::ne;
 		Predicate<Boolean> nf = Utils::isTrue;
-		Predicate<Long> nm1 = Utils::isNotMinusOne;
+		Predicate<Long> nm1 = Utils::nm1;
 		// @formatter:off
 		return m
 			.appendIf(nem, "additionalProperties", parseMap(a.additionalProperties()))
@@ -1581,11 +1581,11 @@ public class SchemaAnnotation {
 	private static JsonMap merge(JsonMap m, Items a) throws ParseException {
 		if (ItemsAnnotation.empty(a))
 			return m;
-		Predicate<String> ne = Utils::isNotEmpty;
-		Predicate<Collection<?>> nec = Utils::isNotEmpty;
-		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
+		Predicate<String> ne = Utils::ne;
+		Predicate<Collection<?>> nec = Utils::ne;
+		Predicate<Map<?,?>> nem = Utils::ne;
 		Predicate<Boolean> nf = Utils::isTrue;
-		Predicate<Long> nm1 = Utils::isNotMinusOne;
+		Predicate<Long> nm1 = Utils::nm1;
 		return m.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf()).appendIf(ne, "default", joinnl(a.default_(), a.df())).appendFirst(nec, "enum", parseSet(a.enum_()), parseSet(a.e()))
 			.appendFirst(ne, "format", a.format(), a.f()).appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax()).appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
 			.appendIf(nem, "items", SubItemsAnnotation.merge(m.getMap("items"), a.items())).appendFirst(ne, "maximum", a.maximum(), a.max()).appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())

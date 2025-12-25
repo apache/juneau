@@ -106,7 +106,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		this.session = session;
 		this.bean = bean;
 		this.meta = meta;
-		if (isNotEmpty(meta.getConstructorArgs()))
+		if (ne(meta.getConstructorArgs()))
 			propertyCache = new TreeMap<>();
 		this.typePropertyName = session.getBeanTypePropertyName(meta.getClassMeta());
 	}
@@ -422,7 +422,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 */
 	public T getBean(boolean create) {
 		/** If this is a read-only bean, then we need to create it. */
-		if (bean == null && create && isNotEmpty(meta.getConstructorArgs())) {
+		if (bean == null && create && ne(meta.getConstructorArgs())) {
 			var props = meta.getConstructorArgs();
 			var c = meta.getConstructor();
 			var args = new Object[props.size()];

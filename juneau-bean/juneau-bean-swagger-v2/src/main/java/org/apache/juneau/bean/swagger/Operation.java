@@ -654,18 +654,18 @@ public class Operation extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(isNotEmpty(consumes), "consumes")
+			.addIf(ne(consumes), "consumes")
 			.addIf(nn(deprecated), "deprecated")
 			.addIf(nn(description), "description")
 			.addIf(nn(externalDocs), "externalDocs")
 			.addIf(nn(operationId), "operationId")
-			.addIf(isNotEmpty(parameters), "parameters")
-			.addIf(isNotEmpty(produces), "produces")
-			.addIf(isNotEmpty(responses), "responses")
-			.addIf(isNotEmpty(schemes), "schemes")
-			.addIf(isNotEmpty(security), "security")
+			.addIf(ne(parameters), "parameters")
+			.addIf(ne(produces), "produces")
+			.addIf(ne(responses), "responses")
+			.addIf(ne(schemes), "schemes")
+			.addIf(ne(security), "security")
 			.addIf(nn(summary), "summary")
-			.addIf(isNotEmpty(tags), "tags")
+			.addIf(ne(tags), "tags")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());

@@ -104,7 +104,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * <p>
 	 * The supplier can be reset for testing purposes using {@link #resetDisableParamNameDetection()}.
 	 */
-	static final ResettableSupplier<Boolean> DISABLE_PARAM_NAME_DETECTION = memoizeResettable(() -> Boolean.getBoolean("juneau.disableParamNameDetection"));
+	static final ResettableSupplier<Boolean> DISABLE_PARAM_NAME_DETECTION = memr(() -> Boolean.getBoolean("juneau.disableParamNameDetection"));
 
 	/**
 	 * Creates a ParameterInfo wrapper for the specified parameter.
@@ -149,9 +149,9 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	private final Supplier<List<AnnotationInfo<Annotation>>> annotations;  // All annotations declared directly on this parameter.
 	private final Supplier<List<ParameterInfo>> matchingParameters;  // Matching parameters in parent methods.
 
-	private final ResettableSupplier<String> resolvedName = memoizeResettable(this::findNameInternal);  // Resolved name from @Name annotation or bytecode.
+	private final ResettableSupplier<String> resolvedName = memr(this::findNameInternal);  // Resolved name from @Name annotation or bytecode.
 
-	private final ResettableSupplier<String> resolvedQualifier = memoizeResettable(this::findQualifierInternal);  // Resolved qualifier from @Named annotation.
+	private final ResettableSupplier<String> resolvedQualifier = memr(this::findQualifierInternal);  // Resolved qualifier from @Named annotation.
 
 	/**
 	 * Constructor.
@@ -173,8 +173,8 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		this.inner = inner;
 		this.index = index;
 		this.type = type;
-		this.annotations = memoize(() -> stream(inner.getAnnotations()).flatMap(a -> AnnotationUtils.streamRepeated(a)).map(a -> ai(this, a)).toList());
-		this.matchingParameters = memoize(this::findMatchingParameters);
+		this.annotations = mem(() -> stream(inner.getAnnotations()).flatMap(a -> AnnotationUtils.streamRepeated(a)).map(a -> ai(this, a)).toList());
+		this.matchingParameters = mem(this::findMatchingParameters);
 	}
 
 	/**

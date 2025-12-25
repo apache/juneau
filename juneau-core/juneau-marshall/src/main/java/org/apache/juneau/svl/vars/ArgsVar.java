@@ -84,7 +84,7 @@ public class ArgsVar extends DefaultingVar {
 			this.args = ARGS;
 		else {
 			var s = System.getProperty("sun.java.command");
-			if (isNotEmpty(s)) {
+			if (ne(s)) {
 				var i = s.indexOf(' ');
 				args = new Args(i == -1 ? "" : s.substring(i + 1));
 			} else {

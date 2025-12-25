@@ -434,7 +434,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	public R isSame(T value) throws AssertionError {
 		if (this.value == value)
 			return returns();
-		throw error(MSG_notTheSameValue, r(value), identity(value), r(this.value), identity(this.value));
+		throw error(MSG_notTheSameValue, r(value), id(value), r(this.value), id(this.value));
 	}
 
 	/**

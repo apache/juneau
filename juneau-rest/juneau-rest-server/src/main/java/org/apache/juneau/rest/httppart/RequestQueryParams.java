@@ -235,7 +235,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 		for (var p : pairs) {
 			var name = p.getName();
 			var l = stream(name);
-			var hasAllBlanks = l.allMatch(x -> Utils.isEmpty(x.getValue()));
+			var hasAllBlanks = l.allMatch(x -> Utils.e(x.getValue()));
 			if (hasAllBlanks) {
 				removeAll(getAll(name));
 				add(new RequestQueryParam(req, name, vs.resolve(p.getValue())));

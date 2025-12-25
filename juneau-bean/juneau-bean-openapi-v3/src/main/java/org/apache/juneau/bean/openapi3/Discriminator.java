@@ -151,7 +151,7 @@ public class Discriminator extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(isNotEmpty(mapping), "mapping")
+			.addIf(ne(mapping), "mapping")
 			.addIf(nn(propertyName), "propertyName")
 			.build();
 		// @formatter:on

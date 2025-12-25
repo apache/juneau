@@ -158,7 +158,7 @@ public class RequestBodyInfo extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(isNotEmpty(content), "content")
+			.addIf(ne(content), "content")
 			.addIf(nn(description), "description")
 			.addIf(nn(required), "required")
 			.build();

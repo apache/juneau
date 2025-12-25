@@ -76,7 +76,7 @@ public class RemoteOperationMeta {
 			path = _path.orElse("").trim();
 
 			Value<String> value = Value.empty();
-			al.stream().filter(x -> x.isType(RemoteOp.class) && isNotEmpty(((RemoteOp)x.inner()).value().trim())).forEach(x -> value.set(((RemoteOp)x.inner()).value().trim()));
+			al.stream().filter(x -> x.isType(RemoteOp.class) && ne(((RemoteOp)x.inner()).value().trim())).forEach(x -> value.set(((RemoteOp)x.inner()).value().trim()));
 
 			if (value.isPresent()) {
 				var v = value.get();
@@ -88,7 +88,7 @@ public class RemoteOperationMeta {
 					path = v.substring(i).trim();
 				}
 			} else {
-				al.stream().filter(x -> ! x.isType(RemoteOp.class) && isNotEmpty(x.getValue(String.class, "value").filter(NOT_EMPTY).orElse("").trim()))
+				al.stream().filter(x -> ! x.isType(RemoteOp.class) && ne(x.getValue(String.class, "value").filter(NOT_EMPTY).orElse("").trim()))
 					.forEach(x -> value.set(x.getValue(String.class, "value").filter(NOT_EMPTY).get().trim()));
 				if (value.isPresent())
 					path = value.get();
@@ -158,7 +158,7 @@ public class RemoteOperationMeta {
 			// @formatter:off
 			rstream(AP.find(FormData.class, mi))
 				.map(AnnotationInfo::inner)
-				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && isNotEmpty(x.def()))
+				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && ne(x.def()))
 				.forEach(x -> defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
 			// @formatter:on
 		}
@@ -167,7 +167,7 @@ public class RemoteOperationMeta {
 			// @formatter:off
 			rstream(AP.find(Header.class, mi))
 				.map(AnnotationInfo::inner)
-				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && isNotEmpty(x.def()))
+				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && ne(x.def()))
 				.forEach(x -> defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
 			// @formatter:on
 		}
@@ -185,7 +185,7 @@ public class RemoteOperationMeta {
 			// @formatter:off
 			rstream(AP.find(Query.class, mi))
 				.map(AnnotationInfo::inner)
-				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && isNotEmpty(x.def()))
+				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && ne(x.def()))
 				.forEach(x -> defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
 			// @formatter:on
 		}

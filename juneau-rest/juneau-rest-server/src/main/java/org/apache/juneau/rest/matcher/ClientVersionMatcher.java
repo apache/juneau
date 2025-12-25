@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.matcher;
 
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 
 import org.apache.juneau.commons.lang.*;

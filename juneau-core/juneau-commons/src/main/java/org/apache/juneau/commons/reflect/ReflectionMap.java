@@ -254,7 +254,7 @@ public class ReflectionMap<V> {
 		 * @throws RuntimeException If the key pattern is invalid or empty.
 		 */
 		public Builder<V> append(String key, V value) {
-			if (Utils.isEmpty(key))  // NOAI
+			if (Utils.e(key))  // NOAI
 				throw rex("Invalid reflection signature: [{0}]", key);
 			try {
 				splitNames(key, k -> {

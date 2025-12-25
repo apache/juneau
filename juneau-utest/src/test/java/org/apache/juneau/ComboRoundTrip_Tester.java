@@ -208,7 +208,7 @@ public class ComboRoundTrip_Tester<T> {
 	private void verify(T o, String testName) {
 		for (var v : verify) {
 			var s = v.apply(o);
-			if (isNotEmpty(s)) {
+			if (ne(s)) {
 				throw new BasicAssertionError("Verification failed on test {0}/{1}: {2}", label, testName, s);
 			}
 		}

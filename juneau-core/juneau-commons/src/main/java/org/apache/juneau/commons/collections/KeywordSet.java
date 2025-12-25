@@ -213,6 +213,6 @@ public class KeywordSet {
 	 */
 	@Override
 	public int hashCode() {
-		return hash((Object[])store);
+		return h((Object[])store);
 	}
 }

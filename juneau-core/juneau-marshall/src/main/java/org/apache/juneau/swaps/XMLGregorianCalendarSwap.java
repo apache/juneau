@@ -66,7 +66,7 @@ public class XMLGregorianCalendarSwap extends StringSwap<XMLGregorianCalendar> {
 	 */
 	@Override /* Overridden from ObjectSwap */
 	public XMLGregorianCalendar unswap(BeanSession session, String s, ClassMeta<?> hint) throws Exception {
-		if (isEmpty(s))
+		if (e(s))
 			return null;
 		return dtf.newXMLGregorianCalendar(s);
 	}

@@ -557,7 +557,7 @@ public class Entry {
 		return isPresent() ? config.varSession.resolve(value) : null;
 	}
 
-	private boolean isEmpty() { return Utils.isEmpty(value); }  // NOAI
+	private boolean isEmpty() { return Utils.e(value); }  // NOAI
 
 	private boolean isNull() { return value == null; }
 }

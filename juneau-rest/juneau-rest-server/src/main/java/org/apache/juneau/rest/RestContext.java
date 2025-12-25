@@ -1145,7 +1145,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder defaultAccept(String value) {
-			if (isNotEmpty(value))
+			if (ne(value))
 				defaultRequestHeaders(accept(value));
 			return this;
 		}
@@ -1252,7 +1252,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder defaultContentType(String value) {
-			if (isNotEmpty(value))
+			if (ne(value))
 				defaultRequestHeaders(contentType(value));
 			return this;
 		}
@@ -2576,7 +2576,7 @@ public class RestContext extends Context {
 		 */
 		public Builder path(String value) {
 			value = trimLeadingSlashes(value);
-			if (isNotEmpty(value))
+			if (ne(value))
 				path = value;
 			return this;
 		}
@@ -3945,7 +3945,7 @@ public class RestContext extends Context {
 			// Find our config file.  It's the last non-empty @RestResource(config).
 			var vr = beanStore.getBean(VarResolver.class).orElseThrow(() -> new IllegalArgumentException("VarResolver not found."));
 			var cfv = Value.<String>empty();
-			rstream(AP.find(Rest.class, info(resourceClass))).map(x -> x.inner().config()).filter(Utils::isNotEmpty).forEach(x -> cfv.set(vr.resolve(x)));
+			rstream(AP.find(Rest.class, info(resourceClass))).map(x -> x.inner().config()).filter(Utils::ne).forEach(x -> cfv.set(vr.resolve(x)));
 			var cf = cfv.orElse("");
 
 			// If not specified or value is set to SYSTEM_DEFAULT, use system default config.

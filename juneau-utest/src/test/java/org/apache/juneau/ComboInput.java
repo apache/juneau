@@ -253,7 +253,7 @@ public class ComboInput<T> {
 	public void verify(T o, String testName) {
 		for (var f : verify) {
 			var s = f.apply(o);
-			if (isNotEmpty(s)) {
+			if (ne(s)) {
 				throw new BasicAssertionError("Verification failed on test {0}/{1}: {2}", label, testName, s);
 			}
 		}

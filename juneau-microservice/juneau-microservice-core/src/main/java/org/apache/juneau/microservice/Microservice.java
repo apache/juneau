@@ -957,7 +957,7 @@ public class Microservice implements ConfigEventListener {
 			this.logger = Logger.getLogger("");
 			var logFile = firstNonNull(logConfig.logFile, config.get("Logging/logFile").orElse(null));
 
-			if (isNotEmpty(logFile)) {
+			if (ne(logFile)) {
 				var logDir = firstNonNull(logConfig.logDir, config.get("Logging/logDir").orElse("."));
 				var logDirFile = resolveFile(logDir);
 				mkdirs(logDirFile, false);

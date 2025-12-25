@@ -353,7 +353,7 @@ public class FormDataAnnotation {
 		return AP.find(FormData.class, pi)
 			.stream()
 			.map(AnnotationInfo::inner)
-			.filter(x -> isNotEmpty(x.def()))
+			.filter(x -> ne(x.def()))
 			.findFirst()
 			.map(x -> x.def());
 		// @formatter:on

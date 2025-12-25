@@ -479,7 +479,7 @@ public class RequestContent {
 	private Encoder getEncoder() throws UnsupportedMediaType {
 		if (encoder == null) {
 			var ce = req.getHeaderParam("content-encoding").orElse(null);
-			if (isNotEmpty(ce)) {
+			if (ne(ce)) {
 				ce = ce.trim();
 				encoder = encoders.getEncoder(ce);
 				if (encoder == null)

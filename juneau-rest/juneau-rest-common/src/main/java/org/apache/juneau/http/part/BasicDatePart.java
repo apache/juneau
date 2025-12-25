@@ -47,7 +47,7 @@ public class BasicDatePart extends BasicPart {
 	 * @return A new {@link BasicDatePart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
 	public static BasicDatePart of(String name, Supplier<ZonedDateTime> value) {
-		if (isEmpty(name) || value == null)
+		if (e(name) || value == null)
 			return null;
 		return new BasicDatePart(name, value);
 	}
@@ -60,7 +60,7 @@ public class BasicDatePart extends BasicPart {
 	 * @return A new {@link BasicDatePart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicDatePart of(String name, ZonedDateTime value) {
-		if (isEmpty(name) || value == null)
+		if (e(name) || value == null)
 			return null;
 		return new BasicDatePart(name, value);
 	}
@@ -80,7 +80,7 @@ public class BasicDatePart extends BasicPart {
 	 */
 	public BasicDatePart(String name, String value) {
 		super(name, value);
-		this.value = isEmpty(value) ? null : ZonedDateTime.from(ISO_DATE_TIME.parse(value)).truncatedTo(SECONDS);
+		this.value = e(value) ? null : ZonedDateTime.from(ISO_DATE_TIME.parse(value)).truncatedTo(SECONDS);
 		this.supplier = null;
 	}
 

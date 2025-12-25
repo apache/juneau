@@ -103,7 +103,7 @@ public class AnnotationInfo<T extends Annotation> {
 
 	private T a;  // Effectively final
 
-	private final Supplier<List<MethodInfo>> methods = memoize(() -> stream(a.annotationType().getMethods()).map(m -> MethodInfo.of(info(a.annotationType()), m)).toList());
+	private final Supplier<List<MethodInfo>> methods = mem(() -> stream(a.annotationType().getMethods()).map(m -> MethodInfo.of(info(a.annotationType()), m)).toList());
 
 	/**
 	 * Constructor.

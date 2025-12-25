@@ -158,7 +158,7 @@ public class BeanRegistry {
 					var typeName = ap.find(Bean.class, ci)
 						.stream()
 						.map(x -> x.inner().typeName())
-						.filter(Utils::isNotEmpty)
+						.filter(Utils::ne)
 						.findFirst()
 						.orElseThrow(() -> bex("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined.", ci.getName()));
 					// @formatter:on

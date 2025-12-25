@@ -69,7 +69,7 @@ import java.util.function.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jm'>{@link org.apache.juneau.commons.utils.Utils#memoizeResettable(Supplier)}
+ * 	<li class='jm'>{@link org.apache.juneau.commons.utils.Utils#memr(Supplier)}
  * 	<li class='jc'>{@link OptionalSupplier} - Base interface providing Optional-like methods
  * </ul>
  *

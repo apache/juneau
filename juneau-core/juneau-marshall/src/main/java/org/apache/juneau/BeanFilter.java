@@ -122,7 +122,7 @@ public class BeanFilter {
 					readOnlyProperties(x.readOnlyProperties(), x.ro());
 				if (isAnyNotEmpty(x.writeOnlyProperties(), x.wo()))
 					writeOnlyProperties(x.writeOnlyProperties(), x.wo());
-				if (isNotEmpty(x.typeName()))
+				if (ne(x.typeName()))
 					typeName(x.typeName());
 				if (isNotVoid(x.propertyNamer()))
 					propertyNamer(x.propertyNamer());
@@ -136,7 +136,7 @@ public class BeanFilter {
 					implClass(x.implClass());
 				if (isNotEmptyArray(x.dictionary()))
 					dictionary(x.dictionary());
-				if (isNotEmpty(x.example()))
+				if (ne(x.example()))
 					example(x.example());
 			});
 			return this;

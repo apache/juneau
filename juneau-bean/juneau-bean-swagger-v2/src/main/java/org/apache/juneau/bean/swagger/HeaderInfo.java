@@ -355,7 +355,7 @@ public class HeaderInfo extends SwaggerElement {
 			.addIf(nn(collectionFormat), "collectionFormat")
 			.addIf(nn(default_), "default")
 			.addIf(nn(description), "description")
-			.addIf(isNotEmpty(enum_), "enum")
+			.addIf(ne(enum_), "enum")
 			.addIf(nn(example), "example")
 			.addIf(nn(exclusiveMaximum), "exclusiveMaximum")
 			.addIf(nn(exclusiveMinimum), "exclusiveMinimum")

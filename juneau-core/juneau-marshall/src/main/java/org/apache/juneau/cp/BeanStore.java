@@ -359,7 +359,7 @@ public class BeanStore {
 		var e = createEntry(beanType, bean, name);
 		try (var x = lock.write()) {
 			entries.addFirst(e);
-			if (isEmpty(name))
+			if (e(name))
 				unnamedEntries.put(beanType, e);
 		}
 		return this;
@@ -636,8 +636,8 @@ public class BeanStore {
 		// @formatter:off
 		return filteredBeanPropertyMap()
 			.a("entries", entries.stream().map(BeanStoreEntry::properties).collect(toList()))
-			.a("identity", identity(this))
-			.a("outer", identity(outer.orElse(null)))
+			.a("identity", id(this))
+			.a("outer", id(outer.orElse(null)))
 			.a("parent", parent.map(BeanStore::properties).orElse(null))
 			.ai(readOnly, "readOnly", readOnly)
 			.ai(threadSafe, "threadSafe", threadSafe);

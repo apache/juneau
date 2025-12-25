@@ -345,9 +345,9 @@ public class OpenApi extends OpenApiElement {
 			.addIf(nn(info), "info")
 			.addIf(nn(openapi), "openapi")
 			.addIf(nn(paths), "paths")
-			.addIf(isNotEmpty(security), "security")
-			.addIf(isNotEmpty(servers), "servers")
-			.addIf(isNotEmpty(tags), "tags")
+			.addIf(ne(security), "security")
+			.addIf(ne(servers), "servers")
+			.addIf(ne(tags), "tags")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());

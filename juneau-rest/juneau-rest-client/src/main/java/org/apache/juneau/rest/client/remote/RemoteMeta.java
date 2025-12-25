@@ -69,13 +69,13 @@ public class RemoteMeta {
 		var headers = HeaderList.create().resolving();
 
 		for (var r : remotes) {
-			if (isNotEmpty(r.path()))
+			if (ne(r.path()))
 				path = trimSlashes(resolve(r.path()));
 			for (var h : r.headers())
 				headers.append(stringHeader(resolve(h)));
-			if (isNotEmpty(r.version()))
+			if (ne(r.version()))
 				clientVersion = resolve(r.version());
-			if (isNotEmpty(r.versionHeader()))
+			if (ne(r.versionHeader()))
 				versionHeader = resolve(r.versionHeader());
 			if (isNotVoid(r.headerList())) {
 				try {

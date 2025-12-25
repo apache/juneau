@@ -167,7 +167,7 @@ public class AnnotationObject implements Annotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private final Class<? extends Annotation> annotationType;
-	private Supplier<Integer> hashCode = memoize(() -> AnnotationUtils.hash(this));
+	private Supplier<Integer> hashCode = mem(() -> AnnotationUtils.hash(this));
 
 	/**
 	 * Constructor.

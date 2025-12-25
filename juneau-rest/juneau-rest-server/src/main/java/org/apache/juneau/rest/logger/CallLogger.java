@@ -553,8 +553,8 @@ public class CallLogger {
 		if (level == Level.OFF)
 			return;
 
-		var e = castOrNull(req.getAttribute("Exception"), Throwable.class);
-		var execTime = castOrNull(req.getAttribute("ExecTime"), Long.class);
+		var e = cast(Throwable.class, req.getAttribute("Exception"));
+		var execTime = cast(Long.class, req.getAttribute("ExecTime"));
 
 		var reqd = firstNonNull(rule.getRequestDetail(), requestDetail);
 		var resd = firstNonNull(rule.getResponseDetail(), responseDetail);
@@ -676,13 +676,13 @@ public class CallLogger {
 	private static byte[] getRequestContent(HttpServletRequest req) {
 		if (req instanceof CachingHttpServletRequest req2)
 			return req2.getContent();
-		return castOrNull(req.getAttribute("RequestContent"), byte[].class);
+		return cast(byte[].class, req.getAttribute("RequestContent"));
 	}
 
 	private static byte[] getResponseContent(HttpServletRequest req, HttpServletResponse res) {
 		if (res instanceof CachingHttpServletResponse res2)
 			return res2.getContent();
-		return castOrNull(req.getAttribute("ResponseContent"), byte[].class);
+		return cast(byte[].class, req.getAttribute("ResponseContent"));
 	}
 
 	private ThrownStats getThrownStats(Throwable e) {
@@ -749,7 +749,7 @@ public class CallLogger {
 	 * @see RestOp#debug()
 	 */
 	protected boolean isDebug(HttpServletRequest req) {
-		return firstNonNull(castOrNull(req.getAttribute("Debug"), Boolean.class), false);
+		return firstNonNull(cast(Boolean.class, req.getAttribute("Debug")), false);
 	}
 
 	/**

@@ -49,7 +49,7 @@ public enum CallLoggingDetail {
 	 * @return The resolved value.
 	 */
 	public static CallLoggingDetail fromString(String s) {
-		if (isNotEmpty(s)) {
+		if (ne(s)) {
 			try {
 				return valueOf(s.toUpperCase());
 			} catch (@SuppressWarnings("unused") IllegalArgumentException e) {}

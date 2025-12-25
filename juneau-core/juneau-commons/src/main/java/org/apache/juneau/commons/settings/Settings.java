@@ -320,7 +320,7 @@ public class Settings {
 	 * Constructor.
 	 */
 	private Settings(Builder builder) {
-		this.globalStore = memoizeResettable(builder.globalStoreSupplier);
+		this.globalStore = memr(builder.globalStoreSupplier);
 		this.localStore = ThreadLocal.withInitial(builder.localStoreSupplier);
 		this.sources = new CopyOnWriteArrayList<>(builder.sources);
 		this.toTypeFunctions = new ConcurrentHashMap<>(builder.customTypeFunctions);

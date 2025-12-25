@@ -147,9 +147,9 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		assertArgNotNull("inner", inner);
 		this.declaringClass = declaringClass;
 		this.inner = inner;
-		this.type = memoize(() -> ClassInfo.of(inner.getType(), inner.getGenericType()));
-		this.annotations = memoize(() -> stream(inner.getAnnotations()).flatMap(a -> AnnotationUtils.streamRepeated(a)).map(a -> ai(this, a)).toList());
-		this.fullName = memoize(this::findFullName);
+		this.type = mem(() -> ClassInfo.of(inner.getType(), inner.getGenericType()));
+		this.annotations = mem(() -> stream(inner.getAnnotations()).flatMap(a -> AnnotationUtils.streamRepeated(a)).map(a -> ai(this, a)).toList());
+		this.fullName = mem(this::findFullName);
 	}
 
 	/**

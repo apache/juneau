@@ -91,7 +91,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 				rstream(ap.find(x))
 					.filter(REST_OP_GROUP)
 					.flatMap(ai -> ai.getValue(String.class, "debug").stream())
-					.filter(Utils::isNotEmpty)
+					.filter(Utils::ne)
 					.map(varResolver::resolve)
 					.map(Enablement::fromString)
 					.filter(Objects::nonNull)

@@ -91,7 +91,7 @@ public class StringUtils {
 	public static final String NEWLINE = "\n";
 
 	/** Predicate that filters out {@code null} and empty strings. */
-	public static final Predicate<String> NOT_EMPTY = Utils::isNotEmpty;
+	public static final Predicate<String> NOT_EMPTY = Utils::ne;
 
 	/** Characters that can appear anywhere in a numeric literal. */
 	public static final AsciiSet NUMBER_CHARS = AsciiSet.of("-xX.+-#pP0123456789abcdefABCDEF");
@@ -263,7 +263,7 @@ public class StringUtils {
 	 * @return The same StringBuilder instance for method chaining, or a new StringBuilder if <c>sb</c> was <jk>null</jk> and an append occurred, or <jk>null</jk> if <c>sb</c> was <jk>null</jk> and no append occurred.
 	 */
 	public static StringBuilder appendIfNotEmpty(StringBuilder sb, String str) {
-		if (isNotEmpty(str)) {
+		if (ne(str)) {
 			if (sb == null)
 				sb = new StringBuilder();
 			sb.append(str);
@@ -1950,7 +1950,7 @@ public class StringUtils {
 	 *
 	 * <p>
 	 * This method iterates through the provided strings and returns the first one that is not <jk>null</jk>
-	 * and not empty (as determined by {@link #isNotEmpty(String)}).
+	 * and not empty (as determined by {@link #ne(String)}).
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -1963,11 +1963,11 @@ public class StringUtils {
 	 * @param s The strings to test.
 	 * @return The first non-empty string in the list, or <jk>null</jk> if they were all <jk>null</jk> or empty.
 	 * @see #firstNonBlank(String...)
-	 * @see #isNotEmpty(String)
+	 * @see #ne(String)
 	 */
 	public static String firstNonEmpty(String...s) {
 		for (var ss : s)
-			if (isNotEmpty(ss))
+			if (ne(ss))
 				return ss;
 		return null;
 	}
@@ -6565,8 +6565,8 @@ public class StringUtils {
 	 * 	<br>An empty string results in an empty array.
 	 */
 	public static List<String> splitNestedInner(String s) {
-		assertArg(isNotNull(s), "String was null.");
-		assertArg(isNotEmpty(s), "String was empty.");
+		assertArg(nn(s), "String was null.");
+		assertArg(ne(s), "String was empty.");
 
 		// S1: Looking for '{'
 		// S2: Found '{', looking for '}'
@@ -7273,7 +7273,7 @@ public class StringUtils {
 	 */
 	public static String trimEnd(String s) {
 		if (nn(s))
-			while (isNotEmpty(s) && isWhitespace(s.charAt(s.length() - 1)))
+			while (ne(s) && isWhitespace(s.charAt(s.length() - 1)))
 				s = s.substring(0, s.length() - 1);
 		return s;
 	}
@@ -7287,7 +7287,7 @@ public class StringUtils {
 	public static String trimLeadingSlashes(String s) {
 		if (s == null)
 			return null;
-		while (isNotEmpty(s) && s.charAt(0) == '/')
+		while (ne(s) && s.charAt(0) == '/')
 			s = s.substring(1);
 		return s;
 	}
@@ -7305,7 +7305,7 @@ public class StringUtils {
 			return s;
 		while (endsWith(s, '/'))
 			s = s.substring(0, s.length() - 1);
-		while (isNotEmpty(s) && s.charAt(0) == '/')  // NOSONAR - NPE not possible here.
+		while (ne(s) && s.charAt(0) == '/')  // NOSONAR - NPE not possible here.
 			s = s.substring(1);
 		return s;
 	}
@@ -7319,9 +7319,9 @@ public class StringUtils {
 	public static String trimSlashesAndSpaces(String s) {
 		if (s == null)
 			return null;
-		while (isNotEmpty(s) && (s.charAt(s.length() - 1) == '/' || isWhitespace(s.charAt(s.length() - 1))))
+		while (ne(s) && (s.charAt(s.length() - 1) == '/' || isWhitespace(s.charAt(s.length() - 1))))
 			s = s.substring(0, s.length() - 1);
-		while (isNotEmpty(s) && (s.charAt(0) == '/' || isWhitespace(s.charAt(0))))
+		while (ne(s) && (s.charAt(0) == '/' || isWhitespace(s.charAt(0))))
 			s = s.substring(1);
 		return s;
 	}
@@ -7334,7 +7334,7 @@ public class StringUtils {
 	 */
 	public static String trimStart(String s) {
 		if (nn(s))
-			while (isNotEmpty(s) && isWhitespace(s.charAt(0)))
+			while (ne(s) && isWhitespace(s.charAt(0)))
 				s = s.substring(1);
 		return s;
 	}

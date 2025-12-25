@@ -278,7 +278,7 @@ public class Lists<E> {
 	 * @return The built list, or {@code null} if {@link #sparse()} is set and the list is empty.
 	 */
 	public List<E> build() {
-		if (sparse && isEmpty(list))
+		if (sparse && e(list))
 			return null;
 
 		var list2 = (List<E>)null;

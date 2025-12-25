@@ -58,7 +58,7 @@ public abstract class ContextSession {
 		 */
 		protected Builder(Context ctx) {
 			this.ctx = assertArgNotNull("ctx", ctx);
-			this.properties = memoizeResettable(LinkedHashMap::new);
+			this.properties = memr(LinkedHashMap::new);
 		}
 
 		/**

@@ -255,8 +255,8 @@ public class HtmlParserSession extends XmlParserSession {
 		if (nn(beanType) && getAnnotationProvider().has(HtmlLink.class, beanType)) {
 			var uriProperty = Value.<String>empty();
 			var nameProperty = Value.<String>empty();
-			beanType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
-			beanType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
+			beanType.forEachAnnotation(HtmlLink.class, x -> ne(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
+			beanType.forEachAnnotation(HtmlLink.class, x -> ne(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
 			BeanMap<T> m = newBeanMap(beanType.inner());
 			m.put(uriProperty.orElse(""), href);
 			m.put(nameProperty.orElse(""), name);
@@ -830,7 +830,7 @@ public class HtmlParserSession extends XmlParserSession {
 					et = r.next();
 					if (et == CHARACTERS) {
 						String s = r.getText();
-						if (isNotEmpty(s)) {
+						if (ne(s)) {
 							var c = r.getText().charAt(0);
 							if (c == '\u2003')
 								c = '\t';

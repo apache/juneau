@@ -514,7 +514,7 @@ public class FileStore extends ConfigStore {
 		var exists = Files.exists(p);
 
 		// Don't create the file if we're not going to match.
-		if ((! exists) && isNotEmpty(expectedContents))
+		if ((! exists) && ne(expectedContents))
 			return "";
 
 		if (isWritable(p)) {

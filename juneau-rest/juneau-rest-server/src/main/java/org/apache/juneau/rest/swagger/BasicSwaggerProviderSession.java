@@ -143,9 +143,9 @@ public class BasicSwaggerProviderSession {
 
 		var ap = this.context.getBeanContext().getAnnotationProvider();
 
-		Predicate<String> ne = Utils::isNotEmpty;
-		Predicate<Collection<?>> nec = Utils::isNotEmpty;
-		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
+		Predicate<String> ne = Utils::ne;
+		Predicate<Collection<?>> nec = Utils::ne;
+		Predicate<Map<?,?>> nem = Utils::ne;
 
 		// Load swagger JSON from classpath.
 		var omSwagger = Json5.DEFAULT.read(is, JsonMap.class);
@@ -687,7 +687,7 @@ public class BasicSwaggerProviderSession {
 	@SafeVarargs
 	private final static <T> T firstNonEmpty(T...t) {
 		for (var oo : t)
-			if (isNotEmpty(oo))
+			if (ne(oo))
 				return oo;
 		return null;
 	}
@@ -774,7 +774,7 @@ public class BasicSwaggerProviderSession {
 		if (ExternalDocsAnnotation.empty(a))
 			return om;
 		om = newMap(om);
-		Predicate<String> ne = Utils::isNotEmpty;
+		Predicate<String> ne = Utils::ne;
 		// @formatter:off
 		return om
 			.appendIf(ne, "description", resolve(a.description()))
@@ -800,11 +800,11 @@ public class BasicSwaggerProviderSession {
 		if (ItemsAnnotation.empty(a))
 			return om;
 		om = newMap(om);
-		Predicate<String> ne = Utils::isNotEmpty;
-		Predicate<Collection<?>> nec = Utils::isNotEmpty;
-		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
+		Predicate<String> ne = Utils::ne;
+		Predicate<Collection<?>> nec = Utils::ne;
+		Predicate<Map<?,?>> nem = Utils::ne;
 		Predicate<Boolean> nf = Utils::isTrue;
-		Predicate<Long> nm1 = Utils::isNotMinusOne;
+		Predicate<Long> nm1 = Utils::nm1;
 		// @formatter:off
 		return om
 			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
@@ -833,7 +833,7 @@ public class BasicSwaggerProviderSession {
 		if (ResponseAnnotation.empty(a))
 			return om;
 		om = newMap(om);
-		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
+		Predicate<Map<?,?>> nem = Utils::ne;
 		if (! SchemaAnnotation.empty(a.schema()))
 			merge(om, a.schema());
 		// @formatter:off
@@ -851,11 +851,11 @@ public class BasicSwaggerProviderSession {
 			if (SchemaAnnotation.empty(a))
 				return om;
 			om = newMap(om);
-			Predicate<String> ne = Utils::isNotEmpty;
-			Predicate<Collection<?>> nec = Utils::isNotEmpty;
-			Predicate<Map<?,?>> nem = Utils::isNotEmpty;
+			Predicate<String> ne = Utils::ne;
+			Predicate<Collection<?>> nec = Utils::ne;
+			Predicate<Map<?,?>> nem = Utils::ne;
 			Predicate<Boolean> nf = Utils::isTrue;
-			Predicate<Long> nm1 = Utils::isNotMinusOne;
+			Predicate<Long> nm1 = Utils::nm1;
 			// @formatter:off
 			return om
 				.appendIf(nem, "additionalProperties", toJsonMap(a.additionalProperties()))
@@ -900,11 +900,11 @@ public class BasicSwaggerProviderSession {
 		if (SubItemsAnnotation.empty(a))
 			return om;
 		om = newMap(om);
-		Predicate<String> ne = Utils::isNotEmpty;
-		Predicate<Collection<?>> nec = Utils::isNotEmpty;
-		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
+		Predicate<String> ne = Utils::ne;
+		Predicate<Collection<?>> nec = Utils::ne;
+		Predicate<Map<?,?>> nem = Utils::ne;
 		Predicate<Boolean> nf = Utils::isTrue;
-		Predicate<Long> nm1 = Utils::isNotMinusOne;
+		Predicate<Long> nm1 = Utils::nm1;
 		// @formatter:off
 		return om
 			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
@@ -999,7 +999,7 @@ public class BasicSwaggerProviderSession {
 
 	private static JsonMap pushupSchemaFields(RestPartType type, JsonMap param, JsonMap schema) {
 		// @formatter:off
-		Predicate<Object> ne = Utils::isNotEmpty;
+		Predicate<Object> ne = Utils::ne;
 		if (nn(schema) && ! schema.isEmpty()) {
 			if (type == BODY || type == RESPONSE) {
 				param
@@ -1122,7 +1122,7 @@ public class BasicSwaggerProviderSession {
 	private JsonMap toMap(Contact a, String location, Object...locationArgs) {
 		if (ContactAnnotation.empty(a))
 			return null;
-		Predicate<String> ne = Utils::isNotEmpty;
+		Predicate<String> ne = Utils::ne;
 		// @formatter:off
 		var om = JsonMap.create()
 			.appendIf(ne, "name", resolve(a.name()))
@@ -1135,7 +1135,7 @@ public class BasicSwaggerProviderSession {
 	private JsonMap toMap(ExternalDocs a, String location, Object...locationArgs) {
 		if (ExternalDocsAnnotation.empty(a))
 			return null;
-		Predicate<String> ne = Utils::isNotEmpty;
+		Predicate<String> ne = Utils::ne;
 		// @formatter:off
 		var om = JsonMap.create()
 			.appendIf(ne, "description", resolve(joinnl(a.description())))
@@ -1147,7 +1147,7 @@ public class BasicSwaggerProviderSession {
 	private JsonMap toMap(License a, String location, Object...locationArgs) {
 		if (LicenseAnnotation.empty(a))
 			return null;
-		Predicate<String> ne = Utils::isNotEmpty;
+		Predicate<String> ne = Utils::ne;
 		// @formatter:off
 		var om = JsonMap.create()
 			.appendIf(ne, "name", resolve(a.name()))
@@ -1158,8 +1158,8 @@ public class BasicSwaggerProviderSession {
 
 	private JsonMap toMap(Tag a, String location, Object...locationArgs) {
 		var om = JsonMap.create();
-		Predicate<String> ne = Utils::isNotEmpty;
-		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
+		Predicate<String> ne = Utils::ne;
+		Predicate<Map<?,?>> nem = Utils::ne;
 		// @formatter:off
 		om
 			.appendIf(ne, "name", resolve(a.name()))

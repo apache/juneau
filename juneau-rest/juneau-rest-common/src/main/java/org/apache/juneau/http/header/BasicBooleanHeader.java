@@ -122,7 +122,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	 */
 	public BasicBooleanHeader(String name, String value) {
 		super(name, value);
-		this.value = isEmpty(value) ? null : b(value);
+		this.value = e(value) ? null : bool(value);
 		this.supplier = null;
 	}
 

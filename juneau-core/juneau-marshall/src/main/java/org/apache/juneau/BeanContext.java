@@ -3692,7 +3692,7 @@ public class BeanContext extends Context {
 
 		beanRegistry = new BeanRegistry(this, null, list());
 		defaultSession = createSession().unmodifiable().build();
-		beanToStringSerializer = memoize(() -> JsonSerializer.create().beanContext(this).sq().simpleAttrs().build());
+		beanToStringSerializer = mem(() -> JsonSerializer.create().beanContext(this).sq().simpleAttrs().build());
 	}
 
 	/**

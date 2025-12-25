@@ -323,13 +323,13 @@ public class BeanMeta<T> {
 	private static String name(AnnotationInfo<?> ai) {
 		if (ai.isType(Beanp.class)) {
 			var p = ai.cast(Beanp.class).inner();
-			if (isNotEmpty(p.name()))
+			if (ne(p.name()))
 				return p.name();
-			if (isNotEmpty(p.value()))
+			if (ne(p.value()))
 				return p.value();
 		} else {
 			var n = ai.cast(Name.class).inner();
-			if (isNotEmpty(n.value()))
+			if (ne(n.value()))
 				return n.value();
 		}
 		return null;
@@ -393,8 +393,8 @@ public class BeanMeta<T> {
 		implClassConstructor = opt(implClass).map(x -> x.getPublicConstructor(x2 -> x2.hasNumParameters(0)).orElse(null)).orElse(null);
 		fluentSetters = beanContext.isFindFluentSetters() || (nn(bf) && bf.isFluentSetters());
 		stopClass = opt(bf).map(x -> x.getStopClass()).orElse(info(Object.class));
-		beanRegistry = memoize(()->findBeanRegistry());
-		classHierarchy = memoize(()->findClassHierarchy());
+		beanRegistry = mem(()->findBeanRegistry());
+		classHierarchy = mem(()->findClassHierarchy());
 		beanConstructor = findBeanConstructor();
 
 		// Local variables for initialization
@@ -411,7 +411,7 @@ public class BeanMeta<T> {
 		var ba = ap.find(Bean.class, cm);
 		var propertyNamer = opt(bf).map(x -> x.getPropertyNamer()).orElse(beanContext.getPropertyNamer());
 
-		this.typePropertyName = ba.stream().map(x -> x.inner().typePropertyName()).filter(Utils::isNotEmpty).findFirst().orElseGet(() -> beanContext.getBeanTypePropertyName());
+		this.typePropertyName = ba.stream().map(x -> x.inner().typePropertyName()).filter(Utils::ne).findFirst().orElseGet(() -> beanContext.getBeanTypePropertyName());
 
 		// Check if constructor is required but not found
 		if (! beanConstructor.constructor().isPresent() && bf == null && beanContext.isBeansRequireDefaultConstructor())
@@ -590,8 +590,8 @@ public class BeanMeta<T> {
 		dynaProperty = _dynaProperty.get();
 		sortProperties = _sortProperties;
 		typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(beanContext.string()).beanRegistry(beanRegistry.get()).build();
-		dictionaryName = memoize(()->findDictionaryName());
-		beanProxyInvocationHandler = memoize(()->beanContext.isUseInterfaceProxies() && c.isInterface() ? new BeanProxyInvocationHandler<>(this) : null);
+		dictionaryName = mem(()->findDictionaryName());
+		beanProxyInvocationHandler = mem(()->beanContext.isUseInterfaceProxies() && c.isInterface() ? new BeanProxyInvocationHandler<>(this) : null);
 	}
 
 	@Override /* Overridden from Object */
@@ -961,7 +961,7 @@ public class BeanMeta<T> {
 			var con = l.get(0).accessible();
 			var args = ap.find(Beanc.class, con).stream().map(x -> x.inner().properties()).filter(StringUtils::isNotBlank).map(x -> split(x)).findFirst().orElse(liste());
 			if (! con.hasNumParameters(args.size())) {
-				if (isNotEmpty(args))
+				if (ne(args))
 					throw bex(ci, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
 				args = con.getParameters().stream().map(x -> x.getName()).toList();
 				for (int i = 0; i < args.size(); i++) {
@@ -1083,7 +1083,7 @@ public class BeanMeta<T> {
 				var beanps = ap.find(Beanp.class, m).stream().map(AnnotationInfo::inner).toList();
 				var names = ap.find(Name.class, m).stream().map(AnnotationInfo::inner).toList();
 
-				if (! (m.isVisible(v) || isNotEmpty(beanps) || isNotEmpty(names)))
+				if (! (m.isVisible(v) || ne(beanps) || ne(names)))
 					continue;
 
 				var n = m.getSimpleName();
@@ -1201,7 +1201,7 @@ public class BeanMeta<T> {
 
 		// Bean dictionary from @Bean(typeName) annotation.
 		var ba = beanContext.getAnnotationProvider().find(Bean.class, classMeta);
-		ba.stream().map(x -> x.inner().typeName()).filter(Utils::isNotEmpty).findFirst().ifPresent(x -> beanDictionaryClasses.add(classMeta));
+		ba.stream().map(x -> x.inner().typeName()).filter(Utils::ne).findFirst().ifPresent(x -> beanDictionaryClasses.add(classMeta));
 
 		return new BeanRegistry(beanContext, null, beanDictionaryClasses);
 	}

@@ -41,7 +41,7 @@ class PrimitiveObjectBeans_RoundTripTest extends RoundTripTest_Base {
 		x = t.roundTrip(x, PrimitiveObjectsBean.class);
 
 		// primitives
-		assertEquals(b(true), x.poBoolean);
+		assertEquals(bool(true), x.poBoolean);
 		assertEquals(Byte.valueOf((byte)1), x.poByte);
 		assertEquals(Character.valueOf('a'), x.poChar);
 		assertEquals(Short.valueOf("2"), x.poShort);
@@ -67,7 +67,7 @@ class PrimitiveObjectBeans_RoundTripTest extends RoundTripTest_Base {
 		assertNull(x.pouBigDecimal);
 
 		// primitive arrays
-		assertEquals(b(false), x.poaBoolean[1][0]);
+		assertEquals(bool(false), x.poaBoolean[1][0]);
 		assertEquals(Byte.valueOf((byte)2), x.poaByte[1][0]);
 		assertEquals(Character.valueOf('b'), x.poaChar[1][0]);
 		assertEquals(Short.valueOf("2"), x.poaShort[1][0]);
@@ -104,7 +104,7 @@ class PrimitiveObjectBeans_RoundTripTest extends RoundTripTest_Base {
 		assertNull(x.poauBigDecimal);
 
 		// anonymous list of object primitive arrays
-		assertEquals(b(true), x.poalBoolean.get(0)[0]);
+		assertEquals(bool(true), x.poalBoolean.get(0)[0]);
 		assertEquals(Byte.valueOf((byte)1), x.poalByte.get(0)[0]);
 		assertEquals(Character.valueOf('a'), x.poalChar.get(0)[0]);
 		assertEquals(Short.valueOf((short)1), x.poalShort.get(0)[0]);
@@ -127,7 +127,7 @@ class PrimitiveObjectBeans_RoundTripTest extends RoundTripTest_Base {
 		assertNull(x.poalBigDecimal.get(1));
 
 		// regular list of object primitive arrays
-		assertEquals(b(true), x.polBoolean.get(0)[0]);
+		assertEquals(bool(true), x.polBoolean.get(0)[0]);
 		assertEquals(Byte.valueOf((byte)1), x.polByte.get(0)[0]);
 		assertEquals(Character.valueOf('a'), x.polChar.get(0)[0]);
 		assertEquals(Short.valueOf((short)1), x.polShort.get(0)[0]);

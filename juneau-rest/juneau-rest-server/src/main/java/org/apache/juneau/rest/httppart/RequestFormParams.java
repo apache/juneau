@@ -262,7 +262,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 		for (var p : pairs) {
 			var name = p.getName();
 			var l = stream(name);
-			var hasAllBlanks = l.allMatch(x -> Utils.isEmpty(x.getValue()));  // NOAI
+			var hasAllBlanks = l.allMatch(x -> Utils.e(x.getValue()));  // NOAI
 			if (hasAllBlanks) {
 				removeAll(getAll(name));
 				add(new RequestFormParam(req, name, vs.resolve(p.getValue())));

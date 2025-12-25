@@ -217,7 +217,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 		for (var p : pairs) {
 			var name = p.getName();
 			var l = stream(name);
-			var hasAllBlanks = l.allMatch(x -> Utils.isEmpty(x.getValue()));
+			var hasAllBlanks = l.allMatch(x -> Utils.e(x.getValue()));
 			if (hasAllBlanks) {
 				removeAll(getAll(name));
 				add(new RequestPathParam(req, name, vs.resolve(p.getValue())));

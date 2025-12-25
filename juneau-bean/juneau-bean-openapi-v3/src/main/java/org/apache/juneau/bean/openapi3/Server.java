@@ -162,7 +162,7 @@ public class Server extends OpenApiElement {
 		var s = setb(String.class)
 			.addIf(nn(description), "description")
 			.addIf(nn(url), "url")
-			.addIf(isNotEmpty(variables), "variables")
+			.addIf(ne(variables), "variables")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());

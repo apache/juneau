@@ -542,7 +542,7 @@ public class ParameterInfo extends SwaggerElement {
 			.addIf(nn(collectionFormat), "collectionFormat")
 			.addIf(nn(default_), "default")
 			.addIf(nn(description), "description")
-			.addIf(isNotEmpty(enum_), "enum")
+			.addIf(ne(enum_), "enum")
 			.addIf(nn(example), "example")
 			.addIf(nn(examples), "examples")
 			.addIf(nn(exclusiveMaximum), "exclusiveMaximum")

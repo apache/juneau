@@ -123,7 +123,7 @@ public class BeanStoreEntry<T> {
 		// @formatter:off
 		return filteredMap()
 			.append("type", cns(getType()))
-			.append("bean", identity(get()))
+			.append("bean", id(get()))
 			.append("name", getName());
 		// @formatter:on
 	}

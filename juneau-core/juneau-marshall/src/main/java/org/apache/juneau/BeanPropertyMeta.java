@@ -288,7 +288,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 			if (nn(innerField)) {
 				var lp = ap.find(Beanp.class, ifi);
-				if (nn(field) || isNotEmpty(lp)) {
+				if (nn(field) || ne(lp)) {
 					// Only use field type if it's a bean property or has @Beanp annotation.
 					// Otherwise, we want to infer the type from the getter or setter.
 					rawTypeMeta = bc.resolveClassMeta(opt(last(lp)).orElse(null), innerField.getFieldType(), typeVarImpls);
@@ -298,13 +298,13 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					var beanp = x.inner();
 					if (swap == null)
 						swap = beanpSwap(x);
-					if (isNotEmpty(beanp.properties()))
+					if (ne(beanp.properties()))
 						properties = split(beanp.properties());
 					bdClasses.addAll(l(beanp.dictionary()));
-					if (isNotEmpty(beanp.ro()))
-						readOnly = b(beanp.ro());
-					if (isNotEmpty(beanp.wo()))
-						writeOnly = b(beanp.wo());
+					if (ne(beanp.ro()))
+						readOnly = bool(beanp.ro());
+					if (ne(beanp.wo()))
+						writeOnly = bool(beanp.wo());
 				});
 				ap.find(Swap.class, ifi).stream().findFirst().ifPresent(x -> swap = swapSwap(x));
 				isUri |= ap.has(Uri.class, ifi);
@@ -319,13 +319,13 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					var beanp = x.inner();
 					if (swap == null)
 						swap = beanpSwap(x);
-					if (nn(properties) && isNotEmpty(beanp.properties()))
+					if (nn(properties) && ne(beanp.properties()))
 						properties = split(beanp.properties());
 					bdClasses.addAll(l(beanp.dictionary()));
-					if (isNotEmpty(beanp.ro()))
-						readOnly = b(beanp.ro());
-					if (isNotEmpty(beanp.wo()))
-						writeOnly = b(beanp.wo());
+					if (ne(beanp.ro()))
+						readOnly = bool(beanp.ro());
+					if (ne(beanp.wo()))
+						writeOnly = bool(beanp.wo());
 				});
 				ap.find(Swap.class, gi).stream().forEach(x -> swap = swapSwap(x));
 			}
@@ -339,13 +339,13 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					var beanp = x.inner();
 					if (swap == null)
 						swap = beanpSwap(x);
-					if (nn(properties) && isNotEmpty(beanp.properties()))
+					if (nn(properties) && ne(beanp.properties()))
 						properties = split(beanp.properties());
 					bdClasses.addAll(l(beanp.dictionary()));
-					if (isNotEmpty(beanp.ro()))
-						readOnly = b(beanp.ro());
-					if (isNotEmpty(beanp.wo()))
-						writeOnly = b(beanp.wo());
+					if (ne(beanp.ro()))
+						readOnly = bool(beanp.ro());
+					if (ne(beanp.wo()))
+						writeOnly = bool(beanp.wo());
 				});
 				ap.find(Swap.class, si).stream().forEach(x -> swap = swapSwap(x));
 			}
@@ -362,7 +362,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (nn(getter)) {
 				var pt = getter.getParameterTypes();
 				if (isDyna) {
-					if (ci.isChildOf(Map.class) && isEmpty(pt)) {
+					if (ci.isChildOf(Map.class) && e(pt)) {
 						isDynaGetterMap = true;
 					} else if (pt.size() == 1 && pt.get(0).is(String.class)) {
 						// OK.
@@ -463,7 +463,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @param b The builder to copy fields from.
 	 */
 	protected BeanPropertyMeta(Builder b) {
-		annotations = memoize(() -> findAnnotations());
+		annotations = mem(() -> findAnnotations());
 		bc = b.bc;
 		beanMeta = b.beanMeta;
 		beanRegistry = b.beanRegistry;
@@ -488,7 +488,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		writeOnly = b.writeOnly;
 
 		ap = bc.getAnnotationProvider();
-		hashCode = hash(beanMeta, name);
+		hashCode = h(beanMeta, name);
 	}
 
 	/**

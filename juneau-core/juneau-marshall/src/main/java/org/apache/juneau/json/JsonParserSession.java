@@ -318,7 +318,7 @@ public class JsonParserSession extends ReaderParserSession {
 	private Boolean parseBoolean(ParserReader r) throws IOException, ParseException {
 		int c = r.peek();
 		if (c == '\'' || c == '"')
-			return b(parseString(r));
+			return bool(parseString(r));
 		if (c == 't') {
 			parseKeyword("true", r);
 			return Boolean.TRUE;

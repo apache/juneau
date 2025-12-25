@@ -165,7 +165,7 @@ class BeanConfig_Test extends TestBase {
 
 		@Override /* Overridden from Object */
 		public int hashCode() {
-			return hash(street, city, state, zip);
+			return h(street, city, state, zip);
 		}
 
 		@Override /* Overridden from Object */

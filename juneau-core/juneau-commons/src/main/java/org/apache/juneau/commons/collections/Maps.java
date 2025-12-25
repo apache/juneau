@@ -292,7 +292,7 @@ public class Maps<K,V> {
 	 */
 	public Map<K,V> build() {
 
-		if (sparse && isEmpty(map))
+		if (sparse && e(map))
 			return null;
 
 		var map2 = (Map<K,V>)null;

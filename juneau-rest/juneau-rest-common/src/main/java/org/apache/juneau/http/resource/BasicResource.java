@@ -114,7 +114,7 @@ public class BasicResource implements HttpResource {
 			if (nn(h)) {
 				var n = h.getName();
 				var v = h.getValue();
-				if (isNotEmpty(n)) {
+				if (ne(n)) {
 					if (eqic(n, "content-type"))
 						setContentType(v);
 					else if (eqic(n, "content-encoding"))
@@ -398,7 +398,7 @@ public class BasicResource implements HttpResource {
 			if (nn(h)) {
 				var n = h.getName();
 				var v = h.getValue();
-				if (isNotEmpty(n)) {
+				if (ne(n)) {
 					if (eqic(n, "content-type"))
 						setContentType(v);
 					else if (eqic(n, "content-encoding"))

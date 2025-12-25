@@ -185,7 +185,7 @@ public class ObjectRest {
 			url = "";
 
 		// Strip off leading slash if present.
-		if (isNotEmpty(url) && url.charAt(0) == '/')
+		if (ne(url) && url.charAt(0) == '/')
 			url = url.substring(1);
 
 		return url;

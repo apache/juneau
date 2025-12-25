@@ -120,7 +120,7 @@ public class Tuple2<A,B> {
 	public Tuple2(A a, B b) {
 		this.a = a;
 		this.b = b;
-		this.hashCode = hash(a, b);
+		this.hashCode = h(a, b);
 	}
 
 	@Override /* Overridden from Object */

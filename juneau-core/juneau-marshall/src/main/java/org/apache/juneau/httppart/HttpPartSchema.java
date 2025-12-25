@@ -150,7 +150,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder default_(String value) {
-			if (isNotEmpty(value))
+			if (ne(value))
 				default_ = value;
 			return this;
 		}
@@ -620,7 +620,7 @@ public class HttpPartSchema {
 		 */
 		public Builder collectionFormat(String value) {
 			try {
-				if (isNotEmpty(value))
+				if (ne(value))
 					this.collectionFormat = HttpPartCollectionFormat.fromString(value);
 			} catch (Exception e) {
 				throw new ContextRuntimeException(e, "Invalid value ''{0}'' passed in as collectionFormat value.  Valid values: {1}", value, HttpPartCollectionFormat.values());
@@ -1168,7 +1168,7 @@ public class HttpPartSchema {
 		 */
 		public Builder format(String value) {
 			try {
-				if (isNotEmpty(value))
+				if (ne(value))
 					format = HttpPartFormat.fromString(value);
 			} catch (Exception e) {
 				throw new ContextRuntimeException(e, "Invalid value ''{0}'' passed in as format value.  Valid values: {1}", value, HttpPartFormat.values());
@@ -1802,7 +1802,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder name(String value) {
-			if (isNotEmpty(value))
+			if (ne(value))
 				name = value;
 			return this;
 		}
@@ -1921,7 +1921,7 @@ public class HttpPartSchema {
 		 */
 		public Builder pattern(String value) {
 			try {
-				if (isNotEmpty(value))
+				if (ne(value))
 					this.pattern = Pattern.compile(value);
 			} catch (Exception e) {
 				throw new ContextRuntimeException(e, "Invalid value {0} passed in as pattern value.  Must be a valid regular expression.", value);
@@ -2378,7 +2378,7 @@ public class HttpPartSchema {
 		 */
 		public Builder type(String value) {
 			try {
-				if (isNotEmpty(value))
+				if (ne(value))
 					type = HttpPartDataType.fromString(value);
 			} catch (Exception e) {
 				throw new ContextRuntimeException(e, "Invalid value ''{0}'' passed in as type value.  Valid values: {1}", value, HttpPartDataType.values());
@@ -2534,7 +2534,7 @@ public class HttpPartSchema {
 		}
 
 		private static Boolean resolve(String newValue, Boolean oldValue) {
-			return isEmpty(newValue) ? oldValue : b(newValue);
+			return isEmpty(newValue) ? oldValue : bool(newValue);
 		}
 
 		private static Long resolve(String newValue, Long oldValue) {
@@ -2737,7 +2737,7 @@ public class HttpPartSchema {
 
 			// Handle exclusiveMaximum with fallback from Draft 2020-12 to Draft 04
 			String exMaxVal = a.exclusiveMaximumValue();
-			if (isNotEmpty(exMaxVal)) {
+			if (ne(exMaxVal)) {
 				exclusiveMaximumValue(toNumber(exMaxVal));
 			} else if (a.exclusiveMaximum() || a.emax()) {
 				exclusiveMaximum(true);
@@ -2745,7 +2745,7 @@ public class HttpPartSchema {
 
 			// Handle exclusiveMinimum with fallback from Draft 2020-12 to Draft 04
 			String exMinVal = a.exclusiveMinimumValue();
-			if (isNotEmpty(exMinVal)) {
+			if (ne(exMinVal)) {
 				exclusiveMinimumValue(toNumber(exMinVal));
 			} else if (a.exclusiveMinimum() || a.emin()) {
 				exclusiveMinimum(true);
@@ -3553,7 +3553,7 @@ public class HttpPartSchema {
 	final static Number toNumber(String...s) {
 		try {
 			for (var ss : s)
-				if (isNotEmpty(ss))
+				if (ne(ss))
 					return parseNumber(ss, Number.class);
 			return null;
 		} catch (ParseException e) {
@@ -4123,7 +4123,7 @@ public class HttpPartSchema {
 
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
-		Predicate<Object> ne = x -> isNotEmpty(s(x));
+		Predicate<Object> ne = x -> ne(s(x));
 		Predicate<Object> nf = x -> x instanceof Boolean && (Boolean)x;
 		Predicate<Object> nm1 = x -> x instanceof Number && ((Number)x).intValue() != -1;
 		Predicate<Object> nn = Utils::nn;
@@ -4301,7 +4301,7 @@ public class HttpPartSchema {
 	}
 
 	private boolean isValidAllowEmpty(String x) {
-		return allowEmptyValue || isNotEmpty(x);
+		return allowEmptyValue || ne(x);
 	}
 
 	private boolean isValidConst(String x) {

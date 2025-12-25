@@ -163,10 +163,10 @@ class BeanStore_Test extends TestBase {
 			assertList(b.stream(A2.class).map(BeanStoreEntry::get), a2a);
 		}
 
-		assertMatchesGlob("{entries=[{type=A1,bean="+identity(a1b)+"},{type=A1,bean="+Utils.identity(a1a)+"}],identity=*}", b1p);
-		assertMatchesGlob("{entries=[{type=A2,bean="+identity(a2a)+"}],identity=*,parent={entries=[{type=A1,bean="+Utils.identity(a1b)+"},{type=A1,bean="+Utils.identity(a1a)+"}],identity=*}}", b1c);
-		assertMatchesGlob("{entries=[{type=A1,bean="+identity(a1b)+"},{type=A1,bean="+Utils.identity(a1a)+"}],identity=*,threadSafe=true}", b2p);
-		assertMatchesGlob("{entries=[{type=A2,bean="+identity(a2a)+"}],identity=*,parent={entries=[{type=A1,bean="+Utils.identity(a1b)+"},{type=A1,bean="+Utils.identity(a1a)+"}],identity=*,threadSafe=true},threadSafe=true}", b2c);
+		assertMatchesGlob("{entries=[{type=A1,bean="+Utils.id(a1b)+"},{type=A1,bean="+Utils.id(a1a)+"}],identity=*}", b1p);
+		assertMatchesGlob("{entries=[{type=A2,bean="+Utils.id(a2a)+"}],identity=*,parent={entries=[{type=A1,bean="+Utils.id(a1b)+"},{type=A1,bean="+Utils.id(a1a)+"}],identity=*}}", b1c);
+		assertMatchesGlob("{entries=[{type=A1,bean="+Utils.id(a1b)+"},{type=A1,bean="+Utils.id(a1a)+"}],identity=*,threadSafe=true}", b2p);
+		assertMatchesGlob("{entries=[{type=A2,bean="+Utils.id(a2a)+"}],identity=*,parent={entries=[{type=A1,bean="+Utils.id(a1b)+"},{type=A1,bean="+Utils.id(a1a)+"}],identity=*,threadSafe=true},threadSafe=true}", b2c);
 
 		b1p.removeBean(A1.class);
 		b1c.clear().addBean(A1.class, a1a);

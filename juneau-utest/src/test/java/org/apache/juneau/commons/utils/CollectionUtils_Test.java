@@ -1561,4 +1561,106 @@ class CollectionUtils_Test extends TestBase {
 		assertThrows(UnsupportedOperationException.class, () -> result.add("c"));
 		assertNull(u((Set<String>)null));
 	}
+
+	//====================================================================================================
+	// al(T...) - ArrayList creation
+	//====================================================================================================
+	@Test
+	void a092_al() {
+		ArrayList<String> list = al("a", "b", "c");
+		assertNotNull(list);
+		assertEquals(3, list.size());
+		assertEquals("a", list.get(0));
+		assertEquals("b", list.get(1));
+		assertEquals("c", list.get(2));
+
+		// Empty list
+		ArrayList<String> empty = al();
+		assertNotNull(empty);
+		assertEquals(0, empty.size());
+
+		// Modifiable
+		list.add("d");
+		assertEquals(4, list.size());
+	}
+
+	//====================================================================================================
+	// ll(T...) - LinkedList creation
+	//====================================================================================================
+	@Test
+	void a093_ll() {
+		LinkedList<String> list = ll("a", "b", "c");
+		assertNotNull(list);
+		assertEquals(3, list.size());
+		assertEquals("a", list.get(0));
+		assertEquals("b", list.get(1));
+		assertEquals("c", list.get(2));
+
+		// Empty list
+		LinkedList<String> empty = ll();
+		assertNotNull(empty);
+		assertEquals(0, empty.size());
+
+		// Modifiable
+		list.add("d");
+		assertEquals(4, list.size());
+	}
+
+	//====================================================================================================
+	// hs(T...) - HashSet creation
+	//====================================================================================================
+	@Test
+	void a094_hs() {
+		HashSet<String> set = hs("a", "b", "c");
+		assertNotNull(set);
+		assertEquals(3, set.size());
+		assertTrue(set.contains("a"));
+		assertTrue(set.contains("b"));
+		assertTrue(set.contains("c"));
+
+		// Empty set
+		HashSet<String> empty = hs();
+		assertNotNull(empty);
+		assertEquals(0, empty.size());
+
+		// Modifiable
+		set.add("d");
+		assertEquals(4, set.size());
+
+		// No duplicates
+		set.add("a");
+		assertEquals(4, set.size());
+	}
+
+	//====================================================================================================
+	// ts(T...) - TreeSet creation
+	//====================================================================================================
+	@Test
+	void a095_ts() {
+		TreeSet<String> set = ts("c", "a", "b");
+		assertNotNull(set);
+		assertEquals(3, set.size());
+		// TreeSet is sorted
+		assertEquals("a", set.first());
+		assertEquals("c", set.last());
+
+		// Empty set
+		TreeSet<String> empty = ts();
+		assertNotNull(empty);
+		assertEquals(0, empty.size());
+
+		// Modifiable
+		set.add("d");
+		assertEquals(4, set.size());
+		assertEquals("d", set.last());
+
+		// No duplicates
+		set.add("a");
+		assertEquals(4, set.size());
+
+		// Sorted order
+		TreeSet<Integer> intSet = ts(3, 1, 2);
+		assertEquals(1, intSet.first());
+		assertEquals(3, intSet.last());
+	}
 }

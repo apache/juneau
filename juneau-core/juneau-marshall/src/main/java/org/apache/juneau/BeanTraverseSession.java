@@ -145,7 +145,7 @@ public class BeanTraverseSession extends BeanSession {
 
 		String toString(boolean simple) {
 			var sb = new StringBuilder().append('[').append(depth).append(']').append(' ');
-			sb.append(isEmpty(name) ? "<noname>" : name).append(':');
+			sb.append(e(name) ? "<noname>" : name).append(':');
 			sb.append(aType.toString(simple));
 			if (aType != aType.getSerializedClassMeta(BeanTraverseSession.this))
 				sb.append('/').append(aType.getSerializedClassMeta(BeanTraverseSession.this).toString(simple));
@@ -195,7 +195,7 @@ public class BeanTraverseSession extends BeanSession {
 	 */
 	public final JsonMap getLastLocation() {
 		Predicate<Object> nn = Utils::nn;
-		Predicate<Collection<?>> nec = Utils::isNotEmpty;
+		Predicate<Collection<?>> nec = Utils::ne;
 		// @formatter:off
 		return JsonMap
 			.create()

@@ -420,9 +420,9 @@ public class MockServletRequest implements HttpServletRequest {
 	public String getPathInfo() {
 		if (pathInfo == null) {
 			pathInfo = getRequestURI();
-			if (isNotEmpty(contextPath))
+			if (ne(contextPath))
 				pathInfo = pathInfo.substring(contextPath.length());
-			if (isNotEmpty(servletPath))
+			if (ne(servletPath))
 				pathInfo = pathInfo.substring(servletPath.length());
 		}
 		return nullIfEmpty(urlDecode(pathInfo));

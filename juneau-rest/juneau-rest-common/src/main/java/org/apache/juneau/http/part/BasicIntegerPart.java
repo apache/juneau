@@ -40,7 +40,7 @@ public class BasicIntegerPart extends BasicPart {
 	 * @return A new {@link BasicIntegerPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicIntegerPart of(String name, Integer value) {
-		if (isEmpty(name) || value == null)
+		if (e(name) || value == null)
 			return null;
 		return new BasicIntegerPart(name, value);
 	}
@@ -56,7 +56,7 @@ public class BasicIntegerPart extends BasicPart {
 	 * @return A new {@link BasicIntegerPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
 	public static BasicIntegerPart of(String name, Supplier<Integer> value) {
-		if (isEmpty(name) || value == null)
+		if (e(name) || value == null)
 			return null;
 		return new BasicIntegerPart(name, value);
 	}
@@ -88,7 +88,7 @@ public class BasicIntegerPart extends BasicPart {
 	 */
 	public BasicIntegerPart(String name, String value) {
 		super(name, value);
-		this.value = isEmpty(value) ? null : Integer.valueOf(value);
+		this.value = e(value) ? null : Integer.valueOf(value);
 		this.supplier = null;
 	}
 

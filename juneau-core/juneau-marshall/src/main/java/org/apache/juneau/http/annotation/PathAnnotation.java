@@ -354,7 +354,7 @@ public class PathAnnotation {
 		return AP.find(Header.class, pi)
 			.stream()
 			.map(AnnotationInfo::inner)
-			.filter(x -> isNotEmpty(x.def()) && neq(NONE, x.def()))
+			.filter(x -> ne(x.def()) && neq(NONE, x.def()))
 			.findFirst()
 			.map(x -> x.def());
 		// @formatter:on

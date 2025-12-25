@@ -60,16 +60,16 @@ class Utils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a001_b() {
-		assertTrue(b(true));
-		assertTrue(b("true"));
-		assertTrue(b("TRUE"));
-		assertFalse(b(false));
-		assertFalse(b("false"));
-		assertFalse(b("FALSE"));
-		assertFalse(b(null));
-		assertFalse(b(""));
-		assertFalse(b(123));
-		assertFalse(b(new Object()));
+		assertTrue(bool(true));
+		assertTrue(bool("true"));
+		assertTrue(bool("TRUE"));
+		assertFalse(bool(false));
+		assertFalse(bool("false"));
+		assertFalse(bool("FALSE"));
+		assertFalse(bool(null));
+		assertFalse(bool(""));
+		assertFalse(bool(123));
+		assertFalse(bool(new Object()));
 	}
 
 	//====================================================================================================
@@ -86,16 +86,21 @@ class Utils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// castOrNull(Object, Class<T>)
+	// cast(Class<T>, Object) - Additional tests for incorrect instance types
 	//====================================================================================================
 	@Test
-	void a003_castOrNull() {
+	void a003_cast_additionalTests() {
 		var obj = "Hello";
-		assertEquals("Hello", castOrNull(obj, String.class));
-		assertNull(castOrNull(obj, Integer.class));
-		assertNull(castOrNull(null, String.class));
-		assertEquals(123, castOrNull(123, Integer.class));
-		assertNull(castOrNull(123, String.class));
+		// Test that incorrect instance types return null without throwing exception
+		assertNull(cast(Integer.class, obj));
+		assertNull(cast(String.class, 123));
+
+		// Test with different types
+		assertEquals(123, cast(Integer.class, 123));
+		assertNull(cast(String.class, 123));
+
+		// Test with null
+		assertNull(cast(String.class, null));
 	}
 
 	//====================================================================================================
@@ -144,26 +149,26 @@ class Utils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// compare(Object, Object)
+	// cmp(Object, Object)
 	//====================================================================================================
 	@Test
-	void a007_compare() {
-		assertTrue(compare("apple", "banana") < 0);
-		assertTrue(compare("banana", "apple") > 0);
-		assertEquals(0, compare("apple", "apple"));
-		assertEquals(0, compare(null, null));
-		assertTrue(compare(null, "apple") < 0);
-		assertTrue(compare("apple", null) > 0);
-		assertTrue(compare(5, 10) < 0);
-		assertTrue(compare(10, 5) > 0);
-		assertEquals(0, compare(5, 5));
-		assertEquals(0, compare("apple", 5)); // Different types, cannot compare
+	void a007_cmp() {
+		assertTrue(cmp("apple", "banana") < 0);
+		assertTrue(cmp("banana", "apple") > 0);
+		assertEquals(0, cmp("apple", "apple"));
+		assertEquals(0, cmp(null, null));
+		assertTrue(cmp(null, "apple") < 0);
+		assertTrue(cmp("apple", null) > 0);
+		assertTrue(cmp(5, 10) < 0);
+		assertTrue(cmp(10, 5) > 0);
+		assertEquals(0, cmp(5, 5));
+		assertEquals(0, cmp("apple", 5)); // Different types, cannot compare
 
 		// Test line 285 branch: same class but not Comparable
 		class NotComparable {}
 		var nc1 = new NotComparable();
 		var nc2 = new NotComparable();
-		assertEquals(0, compare(nc1, nc2)); // Same class, but not Comparable - covers missing branch
+		assertEquals(0, cmp(nc1, nc2)); // Same class, but not Comparable - covers missing branch
 	}
 
 	//====================================================================================================
@@ -389,37 +394,37 @@ class Utils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// hash(Object...)
+	// h(Object...)
 	//====================================================================================================
 	@Test
 	void a020_hash() {
-		var hash1 = hash("Hello", 123, true);
-		var hash2 = hash("Hello", 123, true);
+		var hash1 = h("Hello", 123, true);
+		var hash2 = h("Hello", 123, true);
 		assertEquals(hash1, hash2);
 
-		var hash3 = hash("Hello", 123, false);
+		var hash3 = h("Hello", 123, false);
 		assertNotEquals(hash1, hash3);
 
 		// Test with annotations
 		@TestAnnotation("test")
 		class T {}
 		var a1 = T.class.getAnnotation(TestAnnotation.class);
-		var hash4 = hash(a1, "value");
+		var hash4 = h(a1, "value");
 		assertNotNull(hash4);
 	}
 
 	//====================================================================================================
-	// identity(Object)
+	// id(Object)
 	//====================================================================================================
 	@Test
 	void a021_identity() {
 		var obj = "test";
-		var identity = identity(obj);
+		var identity = id(obj);
 		assertNotNull(identity);
 		assertTrue(identity.contains("String"));
 		assertTrue(identity.contains("@"));
-		assertNull(identity(null));
-		assertNotNull(identity(Optional.of("test")));
+		assertNull(id(null));
+		assertNotNull(id(Optional.of("test")));
 	}
 
 	//====================================================================================================
@@ -449,149 +454,138 @@ class Utils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// isEmpty(CharSequence)
+	// e(CharSequence)
 	//====================================================================================================
 	@Test
 	void a024_isEmpty_CharSequence() {
-		assertTrue(isEmpty((String)null));
-		assertTrue(isEmpty(""));
-		assertFalse(isEmpty("   "));
-		assertFalse(isEmpty("hello"));
-		assertFalse(isEmpty("a"));
+		assertTrue(e((String)null));
+		assertTrue(e(""));
+		assertFalse(e("   "));
+		assertFalse(e("hello"));
+		assertFalse(e("a"));
 	}
 
 	//====================================================================================================
-	// isEmpty(Collection<?>)
+	// e(Collection<?>)
 	//====================================================================================================
 	@Test
 	void a025_isEmpty_Collection() {
-		assertTrue(isEmpty((Collection<?>)null));
-		assertTrue(isEmpty(Collections.emptyList()));
-		assertTrue(isEmpty(new ArrayList<>()));
-		assertFalse(isEmpty(Arrays.asList(1, 2, 3)));
-		assertFalse(isEmpty(Collections.singletonList("test")));
+		assertTrue(e((Collection<?>)null));
+		assertTrue(e(Collections.emptyList()));
+		assertTrue(e(new ArrayList<>()));
+		assertFalse(e(Arrays.asList(1, 2, 3)));
+		assertFalse(e(Collections.singletonList("test")));
 	}
 
 	//====================================================================================================
-	// isEmpty(Map<?,?>)
+	// e(Map<?,?>)
 	//====================================================================================================
 	@Test
 	void a026_isEmpty_Map() {
-		assertTrue(isEmpty((Map<?,?>)null));
-		assertTrue(isEmpty(Collections.emptyMap()));
-		assertTrue(isEmpty(new HashMap<>()));
-		assertFalse(isEmpty(Map.of("key", "value")));
-		assertFalse(isEmpty(Collections.singletonMap("key", "value")));
+		assertTrue(e((Map<?,?>)null));
+		assertTrue(e(Collections.emptyMap()));
+		assertTrue(e(new HashMap<>()));
+		assertFalse(e(Map.of("key", "value")));
+		assertFalse(e(Collections.singletonMap("key", "value")));
 	}
 
 	//====================================================================================================
-	// isEmpty(Object)
+	// e(Object)
 	//====================================================================================================
 	@Test
 	void a027_isEmpty_Object() {
-		assertTrue(isEmpty((Object)null));
-		assertTrue(isEmpty((Object)""));
+		assertTrue(e((Object)null));
+		assertTrue(e((Object)""));
 		// Test line 834: Collection branch
-		assertTrue(isEmpty((Object)Collections.emptyList()));
-		assertFalse(isEmpty((Object)Arrays.asList(1, 2)));  // Non-empty collection
+		assertTrue(e((Object)Collections.emptyList()));
+		assertFalse(e((Object)Arrays.asList(1, 2)));  // Non-empty collection
 		// Test line 836: Map branch
-		assertTrue(isEmpty((Object)Collections.emptyMap()));
-		assertFalse(isEmpty((Object)Map.of("key", "value")));  // Non-empty map
-		assertTrue(isEmpty(new int[0]));
-		assertTrue(isEmpty(new String[0]));
-		assertFalse(isEmpty((Object)"hello"));
-		assertFalse(isEmpty(a(1, 2)));
-		assertTrue(isEmpty(new Object() {
+		assertTrue(e((Object)Collections.emptyMap()));
+		assertFalse(e((Object)Map.of("key", "value")));  // Non-empty map
+		assertTrue(e(new int[0]));
+		assertTrue(e(new String[0]));
+		assertFalse(e((Object)"hello"));
+		assertFalse(e(a(1, 2)));
+		assertTrue(e(new Object() {
 			@Override public String toString() { return ""; }
 		}));
 	}
 
 	//====================================================================================================
-	// isNotEmpty(CharSequence)
+	// ne(CharSequence)
 	//====================================================================================================
 	@Test
 	void a028_isNotEmpty_CharSequence() {
-		assertFalse(isNotEmpty((String)null));
-		assertFalse(isNotEmpty(""));
-		assertTrue(isNotEmpty("   "));
-		assertTrue(isNotEmpty("hello"));
-		assertTrue(isNotEmpty("a"));
+		assertFalse(ne((String)null));
+		assertFalse(ne(""));
+		assertTrue(ne("   "));
+		assertTrue(ne("hello"));
+		assertTrue(ne("a"));
 	}
 
 	//====================================================================================================
-	// isNotEmpty(Collection<?>)
+	// ne(Collection<?>)
 	//====================================================================================================
 	@Test
 	void a029_isNotEmpty_Collection() {
-		assertFalse(isNotEmpty((Collection<?>)null));
-		assertFalse(isNotEmpty(Collections.emptyList()));
-		assertFalse(isNotEmpty(new ArrayList<>()));
-		assertTrue(isNotEmpty(Arrays.asList(1, 2, 3)));
-		assertTrue(isNotEmpty(Collections.singletonList("test")));
+		assertFalse(ne((Collection<?>)null));
+		assertFalse(ne(Collections.emptyList()));
+		assertFalse(ne(new ArrayList<>()));
+		assertTrue(ne(Arrays.asList(1, 2, 3)));
+		assertTrue(ne(Collections.singletonList("test")));
 	}
 
 	//====================================================================================================
-	// isNotEmpty(Map<?,?>)
+	// ne(Map<?,?>)
 	//====================================================================================================
 	@Test
 	void a030_isNotEmpty_Map() {
-		assertFalse(isNotEmpty((Map<?,?>)null));
-		assertFalse(isNotEmpty(Collections.emptyMap()));
-		assertFalse(isNotEmpty(new HashMap<>()));
-		assertTrue(isNotEmpty(Map.of("key", "value")));
-		assertTrue(isNotEmpty(Collections.singletonMap("key", "value")));
+		assertFalse(ne((Map<?,?>)null));
+		assertFalse(ne(Collections.emptyMap()));
+		assertFalse(ne(new HashMap<>()));
+		assertTrue(ne(Map.of("key", "value")));
+		assertTrue(ne(Collections.singletonMap("key", "value")));
 	}
 
 	//====================================================================================================
-	// isNotEmpty(Object)
+	// ne(Object)
 	//====================================================================================================
 	@Test
 	void a031_isNotEmpty_Object() {
-		assertFalse(isNotEmpty((Object)null));
+		assertFalse(ne((Object)null));
 		// Test line 939: CharSequence branch
-		assertFalse(isNotEmpty((Object)""));
-		assertTrue(isNotEmpty((Object)"hello"));  // Non-empty CharSequence
+		assertFalse(ne((Object)""));
+		assertTrue(ne((Object)"hello"));  // Non-empty CharSequence
 		// Test line 941: Collection branch
-		assertFalse(isNotEmpty((Object)Collections.emptyList()));
-		assertTrue(isNotEmpty((Object)Arrays.asList(1, 2)));  // Non-empty collection
+		assertFalse(ne((Object)Collections.emptyList()));
+		assertTrue(ne((Object)Arrays.asList(1, 2)));  // Non-empty collection
 		// Test line 943: Map branch
-		assertFalse(isNotEmpty((Object)Collections.emptyMap()));
-		assertTrue(isNotEmpty((Object)Map.of("key", "value")));  // Non-empty map
-		assertFalse(isNotEmpty(new int[0]));
-		assertFalse(isNotEmpty(new String[0]));
-		assertTrue(isNotEmpty(a(1, 2)));
+		assertFalse(ne((Object)Collections.emptyMap()));
+		assertTrue(ne((Object)Map.of("key", "value")));  // Non-empty map
+		assertFalse(ne(new int[0]));
+		assertFalse(ne(new String[0]));
+		assertTrue(ne(a(1, 2)));
 		// Test line 946: fallback case (non-String, non-Collection, non-Map, non-Array)
-		assertTrue(isNotEmpty(new Object() {
+		assertTrue(ne(new Object() {
 			@Override public String toString() { return "test"; }
 		}));
-		assertFalse(isNotEmpty(new Object() {
+		assertFalse(ne(new Object() {
 			@Override public String toString() { return ""; }
 		}));
 	}
 
 	//====================================================================================================
-	// isNotMinusOne(T)
+	// nm1(T)
 	//====================================================================================================
 	@Test
 	void a032_isNotMinusOne() {
-		assertTrue(isNotMinusOne(5));
-		assertTrue(isNotMinusOne(0));
-		assertTrue(isNotMinusOne(100));
-		assertFalse(isNotMinusOne(-1));
-		assertFalse(isNotMinusOne((Integer)null));
-		assertTrue(isNotMinusOne(5L));
-		assertFalse(isNotMinusOne(-1L));
-	}
-
-	//====================================================================================================
-	// isNotNull(T)
-	//====================================================================================================
-	@Test
-	void a033_isNotNull() {
-		assertTrue(isNotNull("Hello"));
-		assertTrue(isNotNull(123));
-		assertTrue(isNotNull(new Object()));
-		assertFalse(isNotNull(null));
+		assertTrue(nm1(5));
+		assertTrue(nm1(0));
+		assertTrue(nm1(100));
+		assertFalse(nm1(-1));
+		assertFalse(nm1((Integer)null));
+		assertTrue(nm1(5L));
+		assertFalse(nm1(-1L));
 	}
 
 	//====================================================================================================
@@ -617,12 +611,12 @@ class Utils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// memoize(Supplier<T>)
+	// mem(Supplier<T>)
 	//====================================================================================================
 	@Test
 	void a036_memoize() {
 		var callCount = new AtomicInteger(0);
-		var supplier = memoize(() -> {
+		var supplier = mem(() -> {
 			callCount.incrementAndGet();
 			return "result";
 		});
@@ -638,12 +632,12 @@ class Utils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// memoizeResettable(Supplier<T>)
+	// memr(Supplier<T>)
 	//====================================================================================================
 	@Test
 	void a037_memoizeResettable() {
 		var callCount = new AtomicInteger(0);
-		var supplier = memoizeResettable(() -> {
+		var supplier = memr(() -> {
 			callCount.incrementAndGet();
 			return "result";
 		});
@@ -1146,6 +1140,303 @@ class Utils_Test extends TestBase {
 		assertNotNull(nullIfEmpty(nonEmpty));
 		assertSame(nonEmpty, nullIfEmpty(nonEmpty));
 		assertEquals(1, nullIfEmpty(nonEmpty).size());
+	}
+
+	//====================================================================================================
+	// e(Object) - Empty check
+	//====================================================================================================
+	@Test
+	void a063_e() {
+		assertTrue(e((String)null));
+		assertTrue(e(""));
+		assertTrue(e(Collections.emptyList()));
+		assertTrue(e(Collections.emptyMap()));
+		assertTrue(e(new String[0]));
+		assertFalse(e("Hello"));
+		assertFalse(e(Arrays.asList(1, 2)));
+		assertFalse(e(Map.of("key", "value")));
+		assertFalse(e(new String[]{"a"}));
+	}
+
+	//====================================================================================================
+	// ne(Object) - Not-empty check
+	//====================================================================================================
+	@Test
+	void a064_ne() {
+		assertFalse(ne((String)null));
+		assertFalse(ne(""));
+		assertFalse(ne(Collections.emptyList()));
+		assertFalse(ne(Collections.emptyMap()));
+		assertFalse(ne(new String[0]));
+		assertTrue(ne("Hello"));
+		assertTrue(ne(Arrays.asList(1, 2)));
+		assertTrue(ne(Map.of("key", "value")));
+		assertTrue(ne(new String[]{"a"}));
+	}
+
+	//====================================================================================================
+	// n(Object) - Null check
+	//====================================================================================================
+	@Test
+	void a065_n() {
+		assertTrue(n((Object)null));
+		assertFalse(n("Hello"));
+		assertFalse(n(123));
+		assertFalse(n(new Object()));
+	}
+
+
+	//====================================================================================================
+	// lt(T, T) - Less than
+	//====================================================================================================
+	@Test
+	void a067_lt() {
+		assertTrue(lt(5, 10));
+		assertTrue(lt("apple", "banana"));
+		assertFalse(lt(10, 5));
+		assertFalse(lt(5, 5));
+		assertFalse(lt("banana", "apple"));
+		assertTrue(lt(null, "apple")); // null is less than non-null
+		assertFalse(lt("apple", null));
+	}
+
+	//====================================================================================================
+	// lte(T, T) - Less than or equal
+	//====================================================================================================
+	@Test
+	void a068_lte() {
+		assertTrue(lte(5, 10));
+		assertTrue(lte(5, 5));
+		assertFalse(lte(10, 5));
+		assertTrue(lte("apple", "banana"));
+		assertTrue(lte("apple", "apple"));
+		assertTrue(lte(null, null)); // null equals null
+		assertTrue(lte(null, "apple")); // null is less than non-null
+		assertFalse(lte("apple", null));
+	}
+
+	//====================================================================================================
+	// gt(T, T) - Greater than
+	//====================================================================================================
+	@Test
+	void a069_gt() {
+		assertTrue(gt(10, 5));
+		assertTrue(gt("banana", "apple"));
+		assertFalse(gt(5, 10));
+		assertFalse(gt(5, 5));
+		assertFalse(gt("apple", "banana"));
+		assertFalse(gt(null, "apple")); // null is not greater
+		assertTrue(gt("apple", null)); // non-null is greater than null
+	}
+
+	//====================================================================================================
+	// gte(T, T) - Greater than or equal
+	//====================================================================================================
+	@Test
+	void a070_gte() {
+		assertTrue(gte(10, 5));
+		assertTrue(gte(5, 5));
+		assertFalse(gte(5, 10));
+		assertTrue(gte("banana", "apple"));
+		assertTrue(gte("apple", "apple"));
+		assertTrue(gte(null, null)); // null equals null
+		assertFalse(gte(null, "apple")); // null is not greater
+		assertTrue(gte("apple", null)); // non-null is greater than null
+	}
+
+	//====================================================================================================
+	// b(String) - Blank check
+	//====================================================================================================
+	@Test
+	void a071_b() {
+		assertTrue(b(null));
+		assertTrue(b(""));
+		assertTrue(b("   "));
+		assertTrue(b("\t\n"));
+		assertFalse(b("hello"));
+		assertFalse(b("  hello  "));
+	}
+
+	//====================================================================================================
+	// nb(String) - Not-blank check
+	//====================================================================================================
+	@Test
+	void a072_nb() {
+		assertFalse(nb(null));
+		assertFalse(nb(""));
+		assertFalse(nb("   "));
+		assertFalse(nb("\t\n"));
+		assertTrue(nb("hello"));
+		assertTrue(nb("  hello  "));
+	}
+
+	//====================================================================================================
+	// tr(String) - Trim
+	//====================================================================================================
+	@Test
+	void a073_tr() {
+		assertEquals("hello", tr("  hello  "));
+		assertEquals("hello", tr("hello"));
+		assertNull(tr(null));
+		assertEquals("", tr("   "));
+		assertEquals("a b", tr("  a b  "));
+	}
+
+	//====================================================================================================
+	// sw(String, String) - Starts with
+	//====================================================================================================
+	@Test
+	void a074_sw() {
+		assertTrue(sw("hello", "he"));
+		assertTrue(sw("hello", "hello"));
+		assertFalse(sw("hello", "lo"));
+		assertFalse(sw("hello", "xyz"));
+		assertFalse(sw(null, "he"));
+		assertFalse(sw("hello", null));
+		assertFalse(sw(null, null));
+	}
+
+	//====================================================================================================
+	// ew(String, String) - Ends with
+	//====================================================================================================
+	@Test
+	void a075_ew() {
+		assertTrue(ew("hello", "lo"));
+		assertTrue(ew("hello", "hello"));
+		assertFalse(ew("hello", "he"));
+		assertFalse(ew("hello", "xyz"));
+		assertFalse(ew(null, "lo"));
+		assertFalse(ew("hello", null));
+		assertFalse(ew(null, null));
+	}
+
+	//====================================================================================================
+	// co(String, String) - Contains
+	//====================================================================================================
+	@Test
+	void a076_co() {
+		assertTrue(co("hello", "ell"));
+		assertTrue(co("hello", "hello"));
+		assertTrue(co("hello", "h"));
+		assertTrue(co("hello", "o"));
+		assertFalse(co("hello", "xyz"));
+		assertFalse(co(null, "ell"));
+		assertFalse(co("hello", null));
+		assertFalse(co(null, null));
+	}
+
+	//====================================================================================================
+	// or(T...) - First non-null
+	//====================================================================================================
+	@Test
+	void a077_or() {
+		// Use explicit type parameters to avoid ambiguity with or(boolean...)
+		assertEquals("Hello", Utils.<String>or(null, null, "Hello", "World"));
+		assertEquals("Hello", Utils.<String>or("Hello", "World"));
+		assertNull(Utils.<String>or(null, null));
+		assertNull(Utils.<String>or((String[])null));
+		assertEquals("First", Utils.<String>or("First", "Second"));
+		assertEquals(123, Utils.<Integer>or(null, 123, 456));
+	}
+
+	//====================================================================================================
+	// def(T, T) - Default value
+	//====================================================================================================
+	@Test
+	void a078_def() {
+		assertEquals("Hello", def("Hello", "World"));
+		assertEquals("World", def(null, "World"));
+		assertEquals(123, def(123, 456));
+		assertEquals(456, def(null, 456));
+		assertNull(def(null, null));
+	}
+
+	//====================================================================================================
+	// and(boolean...) - Boolean AND
+	//====================================================================================================
+	@Test
+	void a079_and() {
+		assertTrue(and(true, true, true));
+		assertFalse(and(true, false, true));
+		assertFalse(and(false, false, false));
+		assertTrue(and()); // Empty array (vacuous truth)
+		assertTrue(and(true));
+		assertFalse(and(false));
+	}
+
+	//====================================================================================================
+	// or(boolean...) - Boolean OR
+	//====================================================================================================
+	@Test
+	void a080_or_boolean() {
+		// Use explicit boolean array to avoid ambiguity with or(T...)
+		boolean[] arr1 = {true, false, false};
+		assertTrue(or(arr1));
+		boolean[] arr2 = {false, true, false};
+		assertTrue(or(arr2));
+		boolean[] arr3 = {false, false, false};
+		assertFalse(or(arr3));
+		boolean[] arr4 = {};
+		assertFalse(or(arr4)); // Empty array
+		boolean[] arr5 = {true};
+		assertTrue(or(arr5));
+		boolean[] arr6 = {false};
+		assertFalse(or(arr6));
+	}
+
+	//====================================================================================================
+	// not(boolean) - Boolean NOT
+	//====================================================================================================
+	@Test
+	void a081_not() {
+		assertFalse(not(true));
+		assertTrue(not(false));
+	}
+
+	//====================================================================================================
+	// min(T, T) - Minimum
+	//====================================================================================================
+	@Test
+	void a082_min() {
+		assertEquals(5, min(5, 10));
+		assertEquals(5, min(10, 5));
+		assertEquals(5, min(5, 5));
+		assertEquals("apple", min("apple", "banana"));
+		assertEquals("apple", min("banana", "apple"));
+		assertEquals(10, min(null, 10));
+		assertEquals(10, min(10, null));
+		assertNull(min(null, null));
+	}
+
+	//====================================================================================================
+	// max(T, T) - Maximum
+	//====================================================================================================
+	@Test
+	void a083_max() {
+		assertEquals(10, max(5, 10));
+		assertEquals(10, max(10, 5));
+		assertEquals(10, max(10, 10));
+		assertEquals("banana", max("apple", "banana"));
+		assertEquals("banana", max("banana", "apple"));
+		assertEquals(10, max(null, 10));
+		assertEquals(10, max(10, null));
+		assertNull(max(null, null));
+	}
+
+	//====================================================================================================
+	// abs(Number) - Absolute value
+	//====================================================================================================
+	@Test
+	void a084_abs() {
+		assertEquals(5, abs(-5));
+		assertEquals(5, abs(5));
+		assertEquals(3.14, abs(-3.14));
+		assertEquals(3.14, abs(3.14));
+		assertEquals(10L, abs(-10L));
+		assertEquals(10L, abs(10L));
+		assertEquals((short)5, abs((short)-5));
+		assertEquals((byte)5, abs((byte)-5));
+		assertNull(abs(null));
 	}
 }
 

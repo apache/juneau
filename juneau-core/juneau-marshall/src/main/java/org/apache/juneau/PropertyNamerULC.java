@@ -37,7 +37,7 @@ public class PropertyNamerULC implements PropertyNamer {
 
 	@Override /* Overridden from PropertyNamer */
 	public String getPropertyName(String name) {
-		if (isEmpty(name))
+		if (e(name))
 			return name;
 
 		var numUCs = 0;

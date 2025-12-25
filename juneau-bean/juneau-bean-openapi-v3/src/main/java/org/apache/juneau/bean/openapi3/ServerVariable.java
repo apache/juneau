@@ -195,7 +195,7 @@ public class ServerVariable extends OpenApiElement {
 		var s = setb(String.class)
 			.addIf(nn(default_),"default" )
 			.addIf(nn(description), "description")
-			.addIf(isNotEmpty(enum_), "enum")
+			.addIf(ne(enum_), "enum")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());

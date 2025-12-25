@@ -413,10 +413,10 @@ public class Config extends Context implements ConfigEventListener {
 	}
 
 	// Use set(T)/reset() for testing.
-	static final ResettableSupplier<Boolean> DISABLE_AUTO_SYSTEM_PROPS = memoizeResettable(() -> Boolean.getBoolean("juneau.disableAutoSystemProps"));
+	static final ResettableSupplier<Boolean> DISABLE_AUTO_SYSTEM_PROPS = memr(() -> Boolean.getBoolean("juneau.disableAutoSystemProps"));
 
 	// Use set(T)/reset() for testing.
-	static final ResettableSupplier<Config> SYSTEM_DEFAULT = memoizeResettable(() -> findSystemDefault());
+	static final ResettableSupplier<Config> SYSTEM_DEFAULT = memr(() -> findSystemDefault());
 
 	/**
 	 * Creates a new builder for this object.
@@ -696,7 +696,7 @@ public class Config extends Context implements ConfigEventListener {
 	 * @return <jk>true</jk> if this section contains the specified key and the key has a non-blank value.
 	 */
 	public boolean exists(String key) {
-		return isNotEmpty(get(key).as(String.class).orElse(null));
+		return ne(get(key).as(String.class).orElse(null));
 	}
 
 	/**

@@ -359,7 +359,7 @@ public class AnnotationProvider {
 		 * @return A new immutable {@link AnnotationProvider} instance.
 		 */
 		public AnnotationProvider build() {
-			if (isEmpty(runtimeAnnotations) && INSTANCE != null)  // HTT
+			if (e(runtimeAnnotations) && INSTANCE != null)  // HTT
 				return INSTANCE;
 			return new AnnotationProvider(this);
 		}
@@ -429,7 +429,7 @@ public class AnnotationProvider {
 	 * <br>Valid values: <c>TRUE</c>, <c>FALSE</c> (case-insensitive)
 	 * <br>Default: <c>FALSE</c>
 	 */
-	private static final boolean LOG_ON_EXIT = b(System.getProperty("juneau.annotationProvider.caching.logOnExit"));
+	private static final boolean LOG_ON_EXIT = bool(System.getProperty("juneau.annotationProvider.caching.logOnExit"));
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Builder

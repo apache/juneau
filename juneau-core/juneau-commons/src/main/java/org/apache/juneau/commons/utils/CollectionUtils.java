@@ -717,7 +717,7 @@ public class CollectionUtils {
 	 * @return The first element in the list, or <jk>null</jk> if the list is <jk>null</jk> or empty.
 	 */
 	public static <E> E first(List<E> l) {
-		return isEmpty(l) ? null : l.get(0);
+		return e(l) ? null : l.get(0);
 	}
 
 	/**
@@ -849,7 +849,7 @@ public class CollectionUtils {
 	 * @return The last element, or <jk>null</jk> if the list is <jk>null</jk> or empty.
 	 */
 	public static <E> E last(List<E> l) {
-		return isEmpty(l) ? null : l.get(l.size() - 1);
+		return e(l) ? null : l.get(l.size() - 1);
 	}
 
 	/**
@@ -889,6 +889,88 @@ public class CollectionUtils {
 	@SafeVarargs
 	public static <T> List<T> list(T...values) {  // NOSONAR
 		return new ArrayList<>(l(values));
+	}
+
+	/**
+	 * Shortcut for creating an ArrayList from the specified values.
+	 *
+	 * <p>
+	 * This is a convenience method that creates a modifiable ArrayList.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	List&lt;String&gt; <jv>list</jv> = al(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
+	 * </p>
+	 *
+	 * @param <T> The element type.
+	 * @param values The values to add to the list.
+	 * @return A new modifiable ArrayList containing the specified values.
+	 * @see #list(Object...)
+	 */
+	@SafeVarargs
+	public static <T> ArrayList<T> al(T...values) {  // NOSONAR
+		return new ArrayList<>(l(values));
+	}
+
+	/**
+	 * Shortcut for creating a LinkedList from the specified values.
+	 *
+	 * <p>
+	 * This is a convenience method that creates a modifiable LinkedList.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	List&lt;String&gt; <jv>list</jv> = ll(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
+	 * </p>
+	 *
+	 * @param <T> The element type.
+	 * @param values The values to add to the list.
+	 * @return A new modifiable LinkedList containing the specified values.
+	 */
+	@SafeVarargs
+	public static <T> LinkedList<T> ll(T...values) {  // NOSONAR
+		return new LinkedList<>(l(values));
+	}
+
+	/**
+	 * Shortcut for creating a HashSet from the specified values.
+	 *
+	 * <p>
+	 * This is a convenience method that creates a modifiable HashSet.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Set&lt;String&gt; <jv>set</jv> = hs(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
+	 * </p>
+	 *
+	 * @param <T> The element type.
+	 * @param values The values to add to the set.
+	 * @return A new modifiable HashSet containing the specified values.
+	 */
+	@SafeVarargs
+	public static <T> HashSet<T> hs(T...values) {  // NOSONAR
+		return new HashSet<>(Arrays.asList(values));
+	}
+
+	/**
+	 * Shortcut for creating a TreeSet from the specified values.
+	 *
+	 * <p>
+	 * This is a convenience method that creates a modifiable TreeSet.
+	 * Values must be comparable.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Set&lt;String&gt; <jv>set</jv> = ts(<js>"c"</js>, <js>"a"</js>, <js>"b"</js>);  <jc>// Sorted: a, b, c</jc>
+	 * </p>
+	 *
+	 * @param <T> The element type (must be Comparable).
+	 * @param values The values to add to the set.
+	 * @return A new modifiable TreeSet containing the specified values.
+	 */
+	@SafeVarargs
+	public static <T extends Comparable<T>> TreeSet<T> ts(T...values) {  // NOSONAR
+		return new TreeSet<>(Arrays.asList(values));
 	}
 
 	/**

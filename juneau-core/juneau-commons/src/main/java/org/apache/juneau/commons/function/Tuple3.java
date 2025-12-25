@@ -79,7 +79,7 @@ public class Tuple3<A,B,C> {
 		this.a = a;
 		this.b = b;
 		this.c = c;
-		this.hashCode = hash(a, b, c);
+		this.hashCode = h(a, b, c);
 	}
 
 	@Override /* Overridden from Object */

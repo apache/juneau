@@ -334,7 +334,7 @@ public class Items extends OpenApiElement {
 			.addIf(nn(ref), "$ref")
 			.addIf(nn(collectionFormat), "collectionFormat")
 			.addIf(nn(default_), "default")
-			.addIf(isNotEmpty(enum_), "enum")
+			.addIf(ne(enum_), "enum")
 			.addIf(nn(exclusiveMaximum), "exclusiveMaximum")
 			.addIf(nn(exclusiveMinimum), "exclusiveMinimum")
 			.addIf(nn(format), "format")

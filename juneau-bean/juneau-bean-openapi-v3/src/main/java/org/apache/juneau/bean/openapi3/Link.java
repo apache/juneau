@@ -198,7 +198,7 @@ public class Link extends OpenApiElement {
 			.addIf(nn(description), "description")
 			.addIf(nn(operationId), "operationId")
 			.addIf(nn(operationRef), "operationRef")
-			.addIf(isNotEmpty(parameters), "parameters")
+			.addIf(ne(parameters), "parameters")
 			.addIf(nn(requestBody), "requestBody")
 			.addIf(nn(server), "server")
 			.build();

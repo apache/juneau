@@ -4682,7 +4682,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		public Builder rootUrl(Object value) {
 			var s = s(value);
-			if (isNotEmpty(s))
+			if (ne(s))
 				s = s.replaceAll("\\/$", "");
 			if (isEmpty(s))
 				rootUrl = null;
@@ -6320,10 +6320,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			throw new RestCallException(null, null, "Invalid format for call string.  State={0}", state);
 
 		try {
-			var req = request(method, uri, isNotEmpty(content));
+			var req = request(method, uri, ne(content));
 			if (nn(headers))
 				JsonMap.ofJson(headers).forEach((k, v) -> req.header(stringHeader(k, s(v))));
-			if (isNotEmpty(content))
+			if (ne(content))
 				req.contentString(content);
 			return req;
 		} catch (ParseException e) {

@@ -238,8 +238,8 @@ public class ResponseInfo extends SwaggerElement {
 		// @formatter:off
 		var s = setb(String.class)
 			.addIf(nn(description), "description")
-			.addIf(isNotEmpty(examples), "examples")
-			.addIf(isNotEmpty(headers), "headers")
+			.addIf(ne(examples), "examples")
+			.addIf(ne(headers), "headers")
 			.addIf(nn(schema), "schema")
 			.build();
 		// @formatter:on

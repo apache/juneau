@@ -296,7 +296,7 @@ public class Sets<E> {
 	 * @return The built set, or {@code null} if {@link #sparse()} is set and the set is empty.
 	 */
 	public Set<E> build() {
-		if (sparse && isEmpty(set))
+		if (sparse && e(set))
 			return null;
 
 		var set2 = (Set<E>)null;

@@ -183,7 +183,7 @@ public class OAuthFlow extends OpenApiElement {
 		var s = setb(String.class)
 			.addIf(nn(authorizationUrl), "authorizationUrl")
 			.addIf(nn(refreshUrl), "refreshUrl")
-			.addIf(isNotEmpty(scopes), "scopes")
+			.addIf(ne(scopes), "scopes")
 			.addIf(nn(tokenUrl), "tokenUrl")
 			.build();
 		// @formatter:on

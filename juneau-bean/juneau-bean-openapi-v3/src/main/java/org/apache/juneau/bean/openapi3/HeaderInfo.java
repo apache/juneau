@@ -252,7 +252,7 @@ public class HeaderInfo extends OpenApiElement {
 			.addIf(nn(allowReserved), "allowReserved")
 			.addIf(nn(deprecated), "deprecated")
 			.addIf(nn(description), "description")
-			.addIf(isNotEmpty(examples), "examples")
+			.addIf(ne(examples), "examples")
 			.addIf(nn(explode), "explode")
 			.addIf(nn(required), "required")
 			.addIf(nn(schema), "schema")

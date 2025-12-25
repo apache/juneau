@@ -182,8 +182,8 @@ public class MediaType extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(isNotEmpty(encoding), "encoding")
-			.addIf(isNotEmpty(examples), "examples")
+			.addIf(ne(encoding), "encoding")
+			.addIf(ne(examples), "examples")
 			.addIf(nn(schema), "schema")
 			.addIf(nn(example), "x-example")
 			.build();

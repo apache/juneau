@@ -474,18 +474,18 @@ public class Operation extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(isNotEmpty(callbacks), "callbacks")
+			.addIf(ne(callbacks), "callbacks")
 			.addIf(nn(deprecated), "deprecated")
 			.addIf(nn(description), "description")
 			.addIf(nn(externalDocs), "externalDocs")
 			.addIf(nn(operationId), "operationId")
-			.addIf(isNotEmpty(parameters), "parameters")
+			.addIf(ne(parameters), "parameters")
 			.addIf(nn(requestBody), "requestBody")
-			.addIf(isNotEmpty(responses), "responses")
-			.addIf(isNotEmpty(security), "security")
-			.addIf(isNotEmpty(servers), "servers")
+			.addIf(ne(responses), "responses")
+			.addIf(ne(security), "security")
+			.addIf(ne(servers), "servers")
 			.addIf(nn(summary), "summary")
-			.addIf(isNotEmpty(tags), "tags")
+			.addIf(ne(tags), "tags")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());

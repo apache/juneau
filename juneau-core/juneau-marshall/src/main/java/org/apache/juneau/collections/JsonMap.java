@@ -345,7 +345,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		this(p == null ? BeanContext.DEFAULT_SESSION : p.getBeanContext().getSession());
 		if (p == null)
 			p = JsonParser.DEFAULT;
-		if (isNotEmpty(in))
+		if (ne(in))
 			p.parseIntoMap(in, this, bs().string(), bs().object());
 	}
 

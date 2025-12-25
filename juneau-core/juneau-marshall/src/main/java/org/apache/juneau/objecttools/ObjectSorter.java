@@ -74,8 +74,8 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 		@Override
 		public int compareTo(Object o) {
 			if (isDesc)
-				return compare(((SortEntry)o).sortVal, this.sortVal);
-			return compare(this.sortVal, ((SortEntry)o).sortVal);
+				return cmp(((SortEntry)o).sortVal, this.sortVal);
+			return cmp(this.sortVal, ((SortEntry)o).sortVal);
 		}
 
 		void setSort(String sortCol, boolean isDesc) {

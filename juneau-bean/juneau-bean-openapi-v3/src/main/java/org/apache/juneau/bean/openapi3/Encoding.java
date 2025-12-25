@@ -190,7 +190,7 @@ public class Encoding extends OpenApiElement {
 			.addIf(nn(allowReserved), "allowReserved")
 			.addIf(nn(contentType), "contentType")
 			.addIf(nn(explode), "explode")
-			.addIf(isNotEmpty(headers), "headers")
+			.addIf(ne(headers), "headers")
 			.addIf(nn(style), "style")
 			.build();
 		// @formatter:on

@@ -156,9 +156,9 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	protected MethodInfo(ClassInfo declaringClass, Method inner) {
 		super(declaringClass, inner);
 		this.inner = inner;
-		this.returnType = memoize(() -> ClassInfo.of(inner.getReturnType(), inner.getGenericReturnType()));
-		this.matchingMethods = memoize(this::findMatchingMethods);
-		this.annotations = memoize(() -> getMatchingMethods().stream().flatMap(m -> m.getDeclaredAnnotations().stream()).toList());
+		this.returnType = mem(() -> ClassInfo.of(inner.getReturnType(), inner.getGenericReturnType()));
+		this.matchingMethods = mem(this::findMatchingMethods);
+		this.annotations = mem(() -> getMatchingMethods().stream().flatMap(m -> m.getDeclaredAnnotations().stream()).toList());
 	}
 
 	@Override /* Overridden from ExecutableInfo */
