@@ -297,7 +297,7 @@
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<strong class="jxr_keyword">var</strong> hc = HashCode.create();
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 		hc.add(arr);
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<em class="jxr_comment">// Nested arrays are treated as Object[], so use Arrays.hashCode</em>
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		assertEquals(31 * 1 + Arrays.hashCode(arr), hc.get());
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		assertEquals(31 * 1 + Arrays.deepHashCode(arr), hc.get());
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 	}
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 	<em class="jxr_comment">//====================================================================================================</em>
