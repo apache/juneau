@@ -289,7 +289,7 @@ class HashCode_Test extends TestBase {
 		var hc = HashCode.create();
 		hc.add(arr);
 		// Nested arrays are treated as Object[], so use Arrays.hashCode
-		assertEquals(31 * 1 + Arrays.hashCode(arr), hc.get());
+		assertEquals(31 * 1 + Arrays.deepHashCode(arr), hc.get());
 	}
 
 	//====================================================================================================

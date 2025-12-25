@@ -16,7 +16,10 @@
  */
 package org.apache.juneau.commons.lang;
 
+import static java.util.Arrays.*;
+
 import java.lang.annotation.*;
+import java.util.*;
 
 import org.apache.juneau.commons.utils.*;
 
@@ -116,24 +119,24 @@ public class HashCode {
 			add(AnnotationUtils.hash(a));
 		} else if (o.getClass().isArray()) {
 			// Use content-based hashcode for arrays
-			if (o instanceof Object[])
-				add(java.util.Arrays.hashCode((Object[])o));
-			else if (o instanceof int[])
-				add(java.util.Arrays.hashCode((int[])o));
-			else if (o instanceof long[])
-				add(java.util.Arrays.hashCode((long[])o));
-			else if (o instanceof short[])
-				add(java.util.Arrays.hashCode((short[])o));
-			else if (o instanceof byte[])
-				add(java.util.Arrays.hashCode((byte[])o));
-			else if (o instanceof char[])
-				add(java.util.Arrays.hashCode((char[])o));
-			else if (o instanceof boolean[])
-				add(java.util.Arrays.hashCode((boolean[])o));
-			else if (o instanceof float[])
-				add(java.util.Arrays.hashCode((float[])o));
-			else if (o instanceof double[])
-				add(java.util.Arrays.hashCode((double[])o));
+			if (o instanceof Object[] o2)
+				add(deepHashCode(o2));
+			else if (o instanceof int[] o2)
+				add(Arrays.hashCode(o2));
+			else if (o instanceof long[] o2)
+				add(Arrays.hashCode(o2));
+			else if (o instanceof short[] o2)
+				add(Arrays.hashCode(o2));
+			else if (o instanceof byte[] o2)
+				add(Arrays.hashCode(o2));
+			else if (o instanceof char[] o2)
+				add(Arrays.hashCode(o2));
+			else if (o instanceof boolean[] o2)
+				add(Arrays.hashCode(o2));
+			else if (o instanceof float[] o2)
+				add(java.util.Arrays.hashCode(o2));
+			else if (o instanceof double[] o2)
+				add(java.util.Arrays.hashCode(o2));
 		} else {
 			add(o.hashCode());
 		}
