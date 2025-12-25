@@ -478,7 +478,7 @@ public class ConfigMap implements ConfigStoreListener {
 	public void onChange(String newContents) {
 		var changes2 = (ConfigEvents)null;
 		try (var x = lock.write()) {
-			if (ne(contents, newContents)) {
+			if (neq(contents, newContents)) {
 				changes2 = findDiffs(newContents);
 				load(newContents);
 
@@ -766,7 +766,7 @@ public class ConfigMap implements ConfigStoreListener {
 			} else {
 				for (var ne : ns.oentries.values()) {
 					var e = s.oentries.get(ne.key);
-					if (e == null || ne(e.value, ne.value)) {
+					if (e == null || neq(e.value, ne.value)) {
 						changes2.add(ConfigEvent.setEntry(name, s.name, ne.key, ne.value, ne.modifiers, ne.comment, ne.preLines));
 					}
 				}

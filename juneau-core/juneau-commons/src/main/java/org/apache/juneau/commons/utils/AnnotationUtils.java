@@ -100,7 +100,7 @@ public class AnnotationUtils {
 		if (a1.length != a2.length)
 			return false;
 		for (var i = 0; i < a1.length; i++)
-			if (ne(a1[i], a2[i]))
+			if (neq(a1[i], a2[i]))
 				return false;
 		return true;
 	}

@@ -666,9 +666,9 @@ class Utils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a038_n() {
-		assertNull(n(String.class));
-		assertNull(n(Integer.class));
-		assertNull(n(List.class));
+		assertNull(no(String.class));
+		assertNull(no(Integer.class));
+		assertNull(no(List.class));
 	}
 
 	//====================================================================================================
@@ -676,13 +676,13 @@ class Utils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a039_ne() {
-		assertTrue(ne("Hello", "World"));
-		assertFalse(ne("Hello", "Hello"));
-		assertFalse(ne(null, null));
-		assertTrue(ne("Hello", null));
-		assertTrue(ne(null, "Hello"));
-		assertTrue(ne(123, 456));
-		assertFalse(ne(123, 123));
+		assertTrue(neq("Hello", "World"));
+		assertFalse(neq("Hello", "Hello"));
+		assertFalse(neq(null, null));
+		assertTrue(neq("Hello", null));
+		assertTrue(neq(null, "Hello"));
+		assertTrue(neq(123, 456));
+		assertFalse(neq(123, 123));
 	}
 
 	//====================================================================================================
@@ -700,12 +700,12 @@ class Utils_Test extends TestBase {
 		var r2 = new Role(1, "admin");
 		var r3 = new Role(2, "user");
 
-		assertFalse(ne(r1, r2, (x, y) -> x.id == y.id && x.name.equals(y.name)));
-		assertTrue(ne(r1, r3, (x, y) -> x.id == y.id && x.name.equals(y.name)));
-		assertFalse(ne(null, null, (x, y) -> true));
-		assertTrue(ne(r1, null, (x, y) -> false));
-		assertTrue(ne(null, r2, (x, y) -> false));
-		assertFalse(ne(r1, r1, (x, y) -> true)); // Same reference
+		assertFalse(neq(r1, r2, (x, y) -> x.id == y.id && x.name.equals(y.name)));
+		assertTrue(neq(r1, r3, (x, y) -> x.id == y.id && x.name.equals(y.name)));
+		assertFalse(neq(null, null, (x, y) -> true));
+		assertTrue(neq(r1, null, (x, y) -> false));
+		assertTrue(neq(null, r2, (x, y) -> false));
+		assertFalse(neq(r1, r1, (x, y) -> true)); // Same reference
 	}
 
 	//====================================================================================================
@@ -713,12 +713,12 @@ class Utils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a041_neic() {
-		assertTrue(neic("Hello", "World"));
-		assertFalse(neic("Hello", "hello"));
-		assertFalse(neic("Hello", "HELLO"));
-		assertFalse(neic(null, null));
-		assertTrue(neic("Hello", null));
-		assertTrue(neic(null, "Hello"));
+		assertTrue(neqic("Hello", "World"));
+		assertFalse(neqic("Hello", "hello"));
+		assertFalse(neqic("Hello", "HELLO"));
+		assertFalse(neqic(null, null));
+		assertTrue(neqic("Hello", null));
+		assertTrue(neqic(null, "Hello"));
 	}
 
 	//====================================================================================================

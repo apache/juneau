@@ -533,7 +533,7 @@ public class FileStore extends ConfigStore {
 							}
 							currentContents = sb.toString();
 						}
-						if (nn(expectedContents) && ne(currentContents, expectedContents)) {
+						if (nn(expectedContents) && neq(currentContents, expectedContents)) {
 							if (currentContents == null)
 								cache.remove(name);
 							else
@@ -586,7 +586,7 @@ public class FileStore extends ConfigStore {
 		cache.remove(fn);
 		var newContents = read(fn);
 
-		if (ne(oldContents, newContents)) {
+		if (neq(oldContents, newContents)) {
 			update(fn, newContents);
 		}
 	}

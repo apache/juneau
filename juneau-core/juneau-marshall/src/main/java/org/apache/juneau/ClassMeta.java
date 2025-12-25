@@ -1495,7 +1495,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (is(Object.class))
 			return null;
 
-		var v = beanContext.getAnnotationProvider().find(Bean.class, this).stream().map(x -> x.inner()).filter(x -> ne(x.implClass(), void.class)).map(x -> ClassInfo.of(x)).findFirst().orElse(null);
+		var v = beanContext.getAnnotationProvider().find(Bean.class, this).stream().map(x -> x.inner()).filter(x -> neq(x.implClass(), void.class)).map(x -> ClassInfo.of(x)).findFirst().orElse(null);
 
 		if (v == null)
 			v = marshalledFilter.map(x -> x.getImplClass()).map(ReflectionUtils::info).orElse(null);

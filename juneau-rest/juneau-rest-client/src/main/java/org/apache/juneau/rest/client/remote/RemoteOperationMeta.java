@@ -176,7 +176,7 @@ public class RemoteOperationMeta {
 			// @formatter:off
 			rstream(AP.find(Path.class, mi))
 				.map(AnnotationInfo::inner)
-				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && ne(NONE, x.def()))
+				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && neq(NONE, x.def()))
 				.forEach(x -> defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
 			// @formatter:on
 		}

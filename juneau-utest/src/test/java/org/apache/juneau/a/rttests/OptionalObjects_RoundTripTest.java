@@ -383,7 +383,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void b07c_arrayOfOptionalIntegers_listWithNull(RoundTrip_Tester t) throws Exception {
 		var x = new B07();
-		x.f1 = a(n(Optional.class));
+		x.f1 = a(no(Optional.class));
 		x = t.roundTrip(x);
 		if (t.isValidationOnly())
 			return;

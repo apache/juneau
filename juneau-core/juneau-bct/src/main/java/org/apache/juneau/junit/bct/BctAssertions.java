@@ -471,14 +471,14 @@ public class BctAssertions {
 		var errors = new ArrayList<AssertionFailedError>();
 		List<Object> actualList = converter.listify(actual);
 
-		if (ne(expected.length, actualList.size())) {
+		if (neq(expected.length, actualList.size())) {
 			errors.add(assertEqualsFailed(expected.length, actualList.size(), composeMessage(message, "Wrong number of beans.")));
 		} else {
 			for (var i = 0; i < actualList.size(); i++) {
 				var i2 = i;
 				var e = converter.stringify(expected[i]);
 				var a = tokens.stream().map(x -> converter.getNested(actualList.get(i2), x)).collect(joining(","));
-				if (ne(e, a)) {
+				if (neq(e, a)) {
 					errors.add(assertEqualsFailed(e, a, composeMessage(message, "Bean at row <{0}> did not match.", i)));
 				}
 			}
@@ -758,14 +758,14 @@ public class BctAssertions {
 		List<Object> list = converter.listify(actual);
 		var errors = new ArrayList<AssertionFailedError>();
 
-		if (ne(expected.length, list.size())) {
+		if (neq(expected.length, list.size())) {
 			errors.add(assertEqualsFailed(expected.length, list.size(), composeMessage(message, "Wrong list length.")));
 		} else {
 			for (var i = 0; i < expected.length; i++) {
 				var x = list.get(i);
 				var e = expected[i];
 				if (e instanceof String e2) {
-					if (ne(e2, converter.stringify(x))) {
+					if (neq(e2, converter.stringify(x))) {
 						errors.add(assertEqualsFailed(e2, converter.stringify(x), composeMessage(message, "Element at index {0} did not match.", i)));
 					}
 				} else if (e instanceof Predicate e2) { // NOSONAR
@@ -773,7 +773,7 @@ public class BctAssertions {
 						errors.add(new AssertionFailedError(composeMessage(message, "Element at index {0} did not pass predicate.  ==> actual: <{1}>", i, converter.stringify(x)).get()));
 					}
 				} else {
-					if (ne(e, x)) {
+					if (neq(e, x)) {
 						errors.add(assertEqualsFailed(e, x, composeMessage(message, "Element at index {0} did not match.  ==> expected: <{1}({2})> but was: <{3}({4})>", i, e, cns(e), x, cns(x))));
 					}
 				}

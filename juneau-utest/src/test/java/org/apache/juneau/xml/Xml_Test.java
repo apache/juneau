@@ -344,7 +344,7 @@ class Xml_Test extends TestBase {
 		var s = XmlSerializer.create().sq();
 		var p = XmlParser.DEFAULT;
 		var t = new M();
-		var r = n(String.class);
+		var r = no(String.class);
 		r = s.build().serialize(t);
 		assertEquals("<object f1='1' f2='2' f3='3'/>", r);
 		s.enableNamespaces().addNamespaceUrisToRoot().keepNullProperties();

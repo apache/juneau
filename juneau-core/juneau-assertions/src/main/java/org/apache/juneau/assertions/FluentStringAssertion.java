@@ -333,7 +333,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	@Override
 	public R is(String value) throws AssertionError {
 		var s = orElse(null);
-		if (ne(value, s))
+		if (neq(value, s))
 			throw error(MSG_stringDifferedAtPosition, diffPosition(value, s), fix(value), fix(s));
 		return returns();
 	}
@@ -391,7 +391,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public R isIc(String value) throws AssertionError {
 		var s = orElse(null);
-		if (neic(value, s))
+		if (neqic(value, s))
 			throw error(MSG_stringDifferedAtPosition, diffPositionIc(value, s), fix(value), fix(s));
 		return returns();
 	}
@@ -422,7 +422,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		assertArgNotNull("lines", lines);
 		var v = join(lines, '\n');
 		var s = value();
-		if (ne(v, s))
+		if (neq(v, s))
 			throw error(MSG_stringDifferedAtPosition, diffPosition(v, s), fix(v), fix(s));
 		return returns();
 	}

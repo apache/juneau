@@ -171,7 +171,7 @@ public class PathArg implements RestOpArg {
 
 		// Use merged path annotation for all lookups
 		var pathDef = nn(mergedPath) ? mergedPath.def() : null;
-		this.def = nn(pathDef) && ne(NONE, pathDef) ? pathDef : findDef(paramInfo).orElse(null);
+		this.def = nn(pathDef) && neq(NONE, pathDef) ? pathDef : findDef(paramInfo).orElse(null);
 		this.type = paramInfo.getParameterType().innerType();
 		this.schema = nn(mergedPath) ? HttpPartSchema.create(mergedPath) : HttpPartSchema.create(Path.class, paramInfo);
 		var pp = schema.getParser();

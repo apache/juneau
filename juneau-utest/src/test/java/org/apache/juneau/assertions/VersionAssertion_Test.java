@@ -57,14 +57,14 @@ class VersionAssertion_Test extends TestBase {
 
 	@Test void ba01a_asString() {
 		var x = of("1");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x).asString().is("1");
 		test(nil).asString().isNull();
 	}
 
 	@Test void ba01b_asString_wSerializer() {
 		var x = of("1");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		var s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("{maintenance:null,major:1,minor:null}");
 		test(nil).asString(s).is("null");
@@ -77,14 +77,14 @@ class VersionAssertion_Test extends TestBase {
 
 	@Test void ba02_asJson() {
 		var x = of("1");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x).asJson().is("{maintenance:null,major:1,minor:null}");
 		test(nil).asJson().is("null");
 	}
 
 	@Test void ba03_asJsonSorted() {
 		var x = of("1");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x).asJsonSorted().is("{maintenance:null,major:1,minor:null}");
 		test(nil).asJsonSorted().is("null");
 	}
@@ -97,7 +97,7 @@ class VersionAssertion_Test extends TestBase {
 
 	@Test void bc01_part() {
 		var x = of("1.2.3");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x).asPart(-1).isNull();
 		test(x).asPart(0).is(1);
 		test(x).asPart(1).is(2);
@@ -108,21 +108,21 @@ class VersionAssertion_Test extends TestBase {
 
 	@Test void bc02_major() {
 		var x = of("1.2.3");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x).asMajor().is(1);
 		test(nil).asMajor().isNull();
 	}
 
 	@Test void bc03_minor() {
 		var x = of("1.2.3");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x).asMinor().is(2);
 		test(nil).asMinor().isNull();
 	}
 
 	@Test void bc04_maintenance() {
 		var x = of("1.2.3");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x).asMaintenance().is(3);
 		test(nil).asMaintenance().isNull();
 	}
@@ -133,21 +133,21 @@ class VersionAssertion_Test extends TestBase {
 
 	@Test void ca01_exists() {
 		var x = of("1");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x).isExists().isExists();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
 	}
 
 	@Test void ca02_isNull() {
 		var x = of("1");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(nil).isNull();
 		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
 	}
 
 	@Test void ca03_isNotNull() {
 		var x = of("1");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x).isNotNull();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
 	}
@@ -156,7 +156,7 @@ class VersionAssertion_Test extends TestBase {
 		var x1 = of("1");
 		var x1a = of("1");
 		var x2 = of("2");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
@@ -176,7 +176,7 @@ class VersionAssertion_Test extends TestBase {
 		var x1 = of("1");
 		var x1a = of("1");
 		var x2 = of("2");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
@@ -188,7 +188,7 @@ class VersionAssertion_Test extends TestBase {
 		var x1 = of("1");
 		var x1a = of("1");
 		var x2 = of("2");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[2]'.  Actual='1'.");
 		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='1'.");
@@ -199,7 +199,7 @@ class VersionAssertion_Test extends TestBase {
 		var x1 = of("1");
 		var x1a = of("1");
 		var x2 = of("2");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
@@ -210,7 +210,7 @@ class VersionAssertion_Test extends TestBase {
 	@Test void ca08_isSame() {
 		var x1 = of("1");
 		var x1a = of("1");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
 		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='1(Version@*)'.  Actual='1(Version@*)'.");
@@ -222,7 +222,7 @@ class VersionAssertion_Test extends TestBase {
 		var x1 = of("1");
 		var x1a = of("1");
 		var x2 = of("2");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
 		assertThrown(()->test(x1a).isSameJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='{maintenance:null,major:2,minor:null}'.  Actual='{maintenance:null,major:1,minor:null}'.");
@@ -234,7 +234,7 @@ class VersionAssertion_Test extends TestBase {
 		var x1 = of("1");
 		var x1a = of("1");
 		var x2 = of("2");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
 		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='{maintenance:null,major:2,minor:null}'.  Actual='{maintenance:null,major:1,minor:null}'.");
@@ -246,7 +246,7 @@ class VersionAssertion_Test extends TestBase {
 		var x1 = of("1");
 		var x1a = of("1");
 		var x2 = of("2");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		var s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
@@ -257,7 +257,7 @@ class VersionAssertion_Test extends TestBase {
 
 	@Test void ca12_isType() {
 		var x = of("1");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x).isType(Version.class);
 		test(x).isType(Object.class);
 		assertThrown(()->test(x).isType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='org.apache.juneau.commons.lang.Version'.");
@@ -267,7 +267,7 @@ class VersionAssertion_Test extends TestBase {
 
 	@Test void ca13_isExactType() {
 		var x = of("1");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x).isExactType(Version.class);
 		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='org.apache.juneau.commons.lang.Version'.");
 		assertThrown(()->test(x).isExactType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='org.apache.juneau.commons.lang.Version'.");
@@ -277,7 +277,7 @@ class VersionAssertion_Test extends TestBase {
 
 	@Test void ca14_isString() {
 		var x = of("1");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x).isString("1");
 		test(nil).isString(null);
 		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='1'.");
@@ -287,7 +287,7 @@ class VersionAssertion_Test extends TestBase {
 
 	@Test void ca15_isJson() {
 		var x = of("1");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x).isJson("{maintenance:null,major:1,minor:null}");
 		test(nil).isJson("null");
 		assertThrown(()->test(x).isJson("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='{maintenance:null,major:1,minor:null}'.");
@@ -298,7 +298,7 @@ class VersionAssertion_Test extends TestBase {
 	@Test void cb01_isGt() {
 		var x1 = of("1");
 		var x2 = of("2");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x2).isGt(x1);
 		assertThrown(()->test(x1).isGt(x1)).asMessage().asOneLine().is("Value was not greater than expected.  Expect='1'.  Actual='1'.");
 		assertThrown(()->test(x1).isGt(x2)).asMessage().asOneLine().is("Value was not greater than expected.  Expect='2'.  Actual='1'.");
@@ -309,7 +309,7 @@ class VersionAssertion_Test extends TestBase {
 	@Test void cb02_isGte() {
 		var x1 = of("1");
 		var x2 = of("2");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x2).isGte(x1);
 		test(x1).isGte(x1);
 		assertThrown(()->test(x1).isGte(x2)).asMessage().asOneLine().is("Value was not greater than or equals to expected.  Expect='2'.  Actual='1'.");
@@ -320,7 +320,7 @@ class VersionAssertion_Test extends TestBase {
 	@Test void cb03_isLt() {
 		var x1 = of("1");
 		var x2 = of("2");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x1).isLt(x2);
 		assertThrown(()->test(x1).isLt(x1)).asMessage().asOneLine().is("Value was not less than expected.  Expect='1'.  Actual='1'.");
 		assertThrown(()->test(x2).isLt(x1)).asMessage().asOneLine().is("Value was not less than expected.  Expect='1'.  Actual='2'.");
@@ -331,7 +331,7 @@ class VersionAssertion_Test extends TestBase {
 	@Test void cb04_isLte() {
 		var x1 = of("1");
 		var x2 = of("2");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x1).isLte(x2);
 		test(x1).isLte(x1);
 		assertThrown(()->test(x2).isLte(x1)).asMessage().asOneLine().is("Value was not less than or equals to expected.  Expect='1'.  Actual='2'.");
@@ -344,7 +344,7 @@ class VersionAssertion_Test extends TestBase {
 		var x2 = of("2");
 		var x3 = of("3");
 		var x4 = of("4");
-		var nil = n(Version.class);
+		var nil = no(Version.class);
 		test(x1).isBetween(x1, x3);
 		test(x2).isBetween(x1, x3);
 		test(x3).isBetween(x1, x3);

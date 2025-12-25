@@ -28,7 +28,7 @@ class ObjectIntrospector_Test extends TestBase {
 	// testBasic
 	//====================================================================================================
 	@Test void a01_Basic() throws Exception {
-		var in = n(String.class);
+		var in = no(String.class);
 
 		var r = new ObjectIntrospector(in, null).invokeMethod("substring(int,int)", "[3,6]");
 		assertNull(r);

@@ -489,6 +489,20 @@ java-method-annotation,
 java-project,
 java-doc { font-family: monospace; font-size: medium; }
 
+h3 java-package, h4 java-package,
+h3 java-annotation, h4 java-annotation,
+h3 java-class, h4 java-class,
+h3 java-abstract-class, h4 java-abstract-class,
+h3 java-interface, h4 java-interface,
+h3 java-enum, h4 java-enum,
+h3 java-field, h4 java-field,
+h3 java-field-private, h4 java-field-private,
+h3 java-method, h4 java-method,
+h3 java-method-private, h4 java-method-private,
+h3 java-method-annotation, h4 java-method-annotation,
+h3 java-project, h4 java-project,
+h3 java-doc, h4 java-doc { font-family: monospace; font-size: large; }
+
 /* Custom node elements for hierarchy levels */
 node-0 { display: block; margin-left: 0em; }
 node-1 { display: block; margin-left: 2em; }

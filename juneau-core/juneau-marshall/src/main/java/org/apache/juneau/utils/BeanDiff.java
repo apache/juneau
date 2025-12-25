@@ -195,7 +195,7 @@ public class BeanDiff {
 			if ((include == null || include.contains(k)) && (exclude == null || ! exclude.contains(k))) {
 				var o1 = bm1 == null ? null : bm1.get(k);
 				var o2 = bm2 == null ? null : bm2.get(k);
-				if (ne(o1, o2)) {
+				if (neq(o1, o2)) {
 					if (nn(o1))
 						v1.put(k, o1);
 					if (nn(o2))

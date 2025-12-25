@@ -844,6 +844,43 @@ const sidebars: SidebarsConfig = {
 							id: 'topics/06.01.00.JuneauCommonsBasics',
 							label: '6.1. juneau-commons Basics',
 						},
+						{
+							type: 'category',
+							label: '6.1. Packages',
+							collapsed: true,
+							items: [
+								{
+									type: 'doc',
+									id: 'topics/06.01.01.JuneauCommonsCollections',
+									label: '6.1.1. Collections Package',
+								},
+								{
+									type: 'doc',
+									id: 'topics/06.01.02.JuneauCommonsUtils',
+									label: '6.1.2. Utils Package',
+								},
+								{
+									type: 'doc',
+									id: 'topics/06.01.03.JuneauCommonsReflection',
+									label: '6.1.3. Reflection Package',
+								},
+								{
+									type: 'doc',
+									id: 'topics/06.01.04.JuneauCommonsSettings',
+									label: '6.1.4. Settings Package',
+								},
+								{
+									type: 'doc',
+									id: 'topics/06.01.05.JuneauCommonsLang',
+									label: '6.1.5. Lang Package',
+								},
+								{
+									type: 'doc',
+									id: 'topics/06.01.06.JuneauCommonsIO',
+									label: '6.1.6. I/O Package',
+								},
+							],
+						},
 					],
 				},
 				{

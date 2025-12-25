@@ -706,7 +706,7 @@ public class AnnotationInfo<T extends Annotation> {
 				var val = x.invoke(a);
 				var d = x.inner().getDefaultValue();
 				// Add values only if they're different from the default.
-				if (ne(val, d)) {
+				if (neq(val, d)) {
 					if (! (isArray(val) && length(val) == 0 && isArray(d) && length(d) == 0))
 						return val;
 				}

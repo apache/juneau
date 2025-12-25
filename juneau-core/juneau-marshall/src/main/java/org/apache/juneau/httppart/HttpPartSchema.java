@@ -2671,7 +2671,7 @@ public class HttpPartSchema {
 				apply(a.schema());
 			name(firstNonEmpty(a.name(), a.value()));
 			String def = a.def();
-			if (ne(NONE, def))
+			if (neq(NONE, def))
 				default_ = def;  // Set directly to allow empty strings as valid defaults
 			parser(a.parser());
 			serializer(a.serializer());

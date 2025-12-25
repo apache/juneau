@@ -68,14 +68,14 @@ class ThrowableAssertion_Test extends TestBase {
 
 	@Test void ba01a_asString() {
 		var x = throwable("1");
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x).asString().is("java.lang.RuntimeException: 1");
 		test(nil).asString().isNull();
 	}
 
 	@Test void ba01b_asString_wSerializer() {
 		var x = throwable("1");
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		var s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("'java.lang.RuntimeException: 1'");
 		test(nil).asString(s).is("null");
@@ -88,14 +88,14 @@ class ThrowableAssertion_Test extends TestBase {
 
 	@Test void ba02_asJson() {
 		var x = throwable("1");
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x).asJson().is("'java.lang.RuntimeException: 1'");
 		test(nil).asJson().is("null");
 	}
 
 	@Test void ba03_asJsonSorted() {
 		var x1 = throwable("1");
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x1).asJsonSorted().is("'java.lang.RuntimeException: 1'");
 		test(nil).asJsonSorted().is("null");
 	}
@@ -109,7 +109,7 @@ class ThrowableAssertion_Test extends TestBase {
 	@Test void bb01_message() {
 		var x1 = throwable("1");
 		var x2 = throwable();
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x1).asMessage().is("1");
 		test(x2).asMessage().isNull();
 		test(nil).asMessage().isNull();
@@ -118,7 +118,7 @@ class ThrowableAssertion_Test extends TestBase {
 	@Test void bb02_messages() {
 		var x1 = throwable("1");
 		var x2 = throwable(x1);
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x1).asMessages().isString("[1]");
 		test(x2).asMessages().isString("[java.lang.RuntimeException: 1,1]");
 		test(nil).asMessages().isNull();
@@ -127,7 +127,7 @@ class ThrowableAssertion_Test extends TestBase {
 	@Test void bb03_localizedMessage() {
 		var x1 = throwable("1");
 		var x2 = throwable();
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x1).asLocalizedMessage().is("1");
 		test(x2).asLocalizedMessage().isNull();
 		test(nil).asLocalizedMessage().isNull();
@@ -136,7 +136,7 @@ class ThrowableAssertion_Test extends TestBase {
 	@Test void bb04_localizedMessages() {
 		var x1 = throwable("1");
 		var x2 = throwable(x1);
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x1).asLocalizedMessages().isString("[1]");
 		test(x2).asLocalizedMessages().isString("[java.lang.RuntimeException: 1,1]");
 		test(nil).asLocalizedMessages().isNull();
@@ -144,7 +144,7 @@ class ThrowableAssertion_Test extends TestBase {
 
 	@Test void bb05_stackTrace() {
 		var x1 = throwable();
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x1).asStackTrace().asJoin().isContains("RuntimeException");
 		test(nil).asStackTrace().isNull();
 	}
@@ -152,7 +152,7 @@ class ThrowableAssertion_Test extends TestBase {
 	@Test void bb06a_causedBy() {
 		var x1 = throwable(throwable("1"));
 		var x2 = throwable();
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x1).asCausedBy().asMessage().is("1");
 		test(x2).asMessage().isNull();
 		test(nil).asCausedBy().asMessage().isNull();
@@ -161,7 +161,7 @@ class ThrowableAssertion_Test extends TestBase {
 	@Test void bb06b_causedBy_wType() {
 		var x1 = throwable(throwable("1"));
 		var x2 = throwable();
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x1).asCausedBy(RuntimeException.class).asMessage().is("1");
 		test(x2).asCausedBy(RuntimeException.class).isNull();
 		test(nil).asCausedBy(RuntimeException.class).isNull();
@@ -171,7 +171,7 @@ class ThrowableAssertion_Test extends TestBase {
 	@Test void bb07_find() {
 		var x1 = throwable(new IOException());
 		var x2 = throwable();
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x1).asFind(RuntimeException.class).isExists();
 		test(x1).asFind(IOException.class).isExists();
 		test(x1).asFind(Exception.class).isExists();
@@ -187,21 +187,21 @@ class ThrowableAssertion_Test extends TestBase {
 
 	@Test void ca01_exists() {
 		var x = throwable();
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x).isExists().isExists();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Exception was not thrown.");
 	}
 
 	@Test void ca02_isNull() {
 		var x = throwable();
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(nil).isNull();
 		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
 	}
 
 	@Test void ca03_isNotNull() {
 		var x = throwable();
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x).isNotNull();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
 	}
@@ -210,7 +210,7 @@ class ThrowableAssertion_Test extends TestBase {
 		var x1 = throwable("1");
 		var x1a = throwable("1");
 		var x2 = throwable("2");
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
@@ -230,7 +230,7 @@ class ThrowableAssertion_Test extends TestBase {
 		var x1 = throwable("1");
 		var x1a = throwable("1");
 		var x2 = throwable("2");
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
@@ -242,7 +242,7 @@ class ThrowableAssertion_Test extends TestBase {
 		var x1 = throwable("1");
 		var x1a = throwable("1");
 		var x2 = throwable("2");
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[java.lang.RuntimeException: 2]'.  Actual='java.lang.RuntimeException: 1'.");
 		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='java.lang.RuntimeException: 1'.");
@@ -253,7 +253,7 @@ class ThrowableAssertion_Test extends TestBase {
 		var x1 = throwable("1");
 		var x1a = throwable("1");
 		var x2 = throwable("2");
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
@@ -264,7 +264,7 @@ class ThrowableAssertion_Test extends TestBase {
 	@Test void ca08_isSame() {
 		var x1 = throwable("1");
 		var x1a = throwable("1");
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
 		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='java.lang.RuntimeException: 1(RuntimeException@*)'.  Actual='java.lang.RuntimeException: 1(RuntimeException@*)'.");
@@ -276,7 +276,7 @@ class ThrowableAssertion_Test extends TestBase {
 		var x1 = throwable("1");
 		var x1a = throwable("1");
 		var x2 = throwable("2");
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
 		assertThrown(()->test(x1a).isSameJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect=''java.lang.RuntimeException: 2''.  Actual=''java.lang.RuntimeException: 1''.");
@@ -288,7 +288,7 @@ class ThrowableAssertion_Test extends TestBase {
 		var x1 = throwable("1");
 		var x1a = throwable("1");
 		var x2 = throwable("2");
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
 		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect=''java.lang.RuntimeException: 2''.  Actual=''java.lang.RuntimeException: 1''.");
@@ -300,7 +300,7 @@ class ThrowableAssertion_Test extends TestBase {
 		var x1 = throwable("1");
 		var x1a = throwable("1");
 		var x2 = throwable("2");
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		var s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
@@ -311,7 +311,7 @@ class ThrowableAssertion_Test extends TestBase {
 
 	@Test void ca12_isType() {
 		var x = throwable();
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x).isType(Exception.class);
 		test(x).isType(Object.class);
 		assertThrown(()->test(x).isType(String.class)).asMessage().asOneLine().is("Exception was not expected type.  Expect='java.lang.String'.  Actual='java.lang.RuntimeException'.");
@@ -321,7 +321,7 @@ class ThrowableAssertion_Test extends TestBase {
 
 	@Test void ca13_isExactType() {
 		var x = throwable();
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x).isExactType(RuntimeException.class);
 		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Exception was not expected type.  Expect='java.lang.Object'.  Actual='java.lang.RuntimeException'.");
 		assertThrown(()->test(x).isExactType(String.class)).asMessage().asOneLine().is("Exception was not expected type.  Expect='java.lang.String'.  Actual='java.lang.RuntimeException'.");
@@ -331,7 +331,7 @@ class ThrowableAssertion_Test extends TestBase {
 
 	@Test void ca14_isString() {
 		var x = throwable("1");
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x).isString("java.lang.RuntimeException: 1");
 		test(nil).isString(null);
 		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='java.lang.RuntimeException: 1'.");
@@ -341,7 +341,7 @@ class ThrowableAssertion_Test extends TestBase {
 
 	@Test void ca15_isJson() {
 		var x = throwable("1");
-		var nil = n(Throwable.class);
+		var nil = no(Throwable.class);
 		test(x).isJson("'java.lang.RuntimeException: 1'");
 		test(nil).isJson("null");
 		assertThrown(()->test(x).isJson("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual=''java.lang.RuntimeException: 1''.");

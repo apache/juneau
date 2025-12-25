@@ -203,7 +203,7 @@ public class SqlStore extends ConfigStore {
 
 		var currentContents = read(name);
 
-		if (expectedContents != null && ne(currentContents, expectedContents))
+		if (expectedContents != null && neq(currentContents, expectedContents))
 			return currentContents;
 
 		update(name, newContents);

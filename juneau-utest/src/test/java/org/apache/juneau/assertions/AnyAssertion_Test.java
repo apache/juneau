@@ -77,14 +77,14 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void ba01a_asString() {
 		var x = 1;
-		var nil = n(Integer.class);
+		var nil = no(Integer.class);
 		test(x).asString().is("1");
 		test(nil).asString().isNull();
 	}
 
 	@Test void ba01b_asString_wSerializer() {
 		var x = 1;
-		var nil = n(Integer.class);
+		var nil = no(Integer.class);
 		var s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("1");
 		test(nil).asString(s).is("null");
@@ -97,7 +97,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void ba02_asJson() {
 		var x = 1;
-		var nil = n(Integer.class);
+		var nil = no(Integer.class);
 		test(x).asJson().is("1");
 		test(nil).asJson().is("null");
 		assertThrown(()->test(new A2()).asJson()).asMessages().isAny(contains("Could not call getValue() on property 'foo'"));
@@ -194,7 +194,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void bb10_asBoolean() {
 		var x1 = true;
-		var nil = n(Boolean.class);
+		var nil = no(Boolean.class);
 		var x2 = "";
 		test(x1).asBoolean().isString("true");
 		test(nil).asBoolean().isNull();
@@ -230,7 +230,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void bb14_asComparable() {
 		var x1 = 1;
-		var nil = n(Integer.class);
+		var nil = no(Integer.class);
 		var x2 = list();
 		test(x1).asComparable().isString("1");
 		test(nil).asComparable().isNull();
@@ -239,7 +239,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void bb15_asDate() {
 		var x1 = date("2000-06-01T12:34:56Z");
-		var nil = n(Date.class);
+		var nil = no(Date.class);
 		var x2 = "";
 		test(x1).asDate().asString().isMatches("*2000*");
 		test(nil).asDate().isNull();
@@ -248,7 +248,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void bb16_asInteger() {
 		var x1 = 1;
-		var nil = n(Integer.class);
+		var nil = no(Integer.class);
 		var x2 = "";
 		test(x1).asInteger().isString("1");
 		test(nil).asInteger().isNull();
@@ -257,7 +257,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void bb17_asLong() {
 		var x1 = 1L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		var x2 = "";
 		test(x1).asLong().isString("1");
 		test(nil).asLong().isNull();
@@ -312,7 +312,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void bb23_asBean_wType() {
 		var x1 = A1;
-		var nil = n(A1.class);
+		var nil = no(A1.class);
 		var x2 = "";
 		test(x1).asBean().isString("a=1,b=2");
 		test(nil).asBean(A1.class).isNull();
@@ -332,7 +332,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void bb25_asZonedDateTime() {
 		var x1 = zdt("2000-06-01T12:34:56Z");
-		var nil = n(Object.class);
+		var nil = no(Object.class);
 		var x2 = "";
 		test(x1).asZonedDateTime().asString().isMatches("2000*");
 		test(nil).asZonedDateTime().isNull();
@@ -354,21 +354,21 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void ca01_exists() {
 		var x = 1;
-		var nil = n(Integer.class);
+		var nil = no(Integer.class);
 		test(x).isExists().isExists();
 		assertThrowsWithMessage(BasicAssertionError.class, "Value was null.", ()->test(nil).isExists());
 	}
 
 	@Test void ca02_isNull() {
 		var x = 1;
-		var nil = n(Integer.class);
+		var nil = no(Integer.class);
 		test(nil).isNull();
 		assertThrowsWithMessage(BasicAssertionError.class, "Value was not null.", ()->test(x).isNull());
 	}
 
 	@Test void ca03_isNotNull() {
 		var x = 1;
-		var nil = n(Integer.class);
+		var nil = no(Integer.class);
 		test(x).isNotNull();
 		assertThrowsWithMessage(BasicAssertionError.class, "Value was null.", ()->test(nil).isNotNull());
 	}
@@ -377,7 +377,7 @@ class AnyAssertion_Test extends TestBase {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
-		var nil = n(Integer.class);
+		var nil = no(Integer.class);
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
@@ -397,7 +397,7 @@ class AnyAssertion_Test extends TestBase {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
-		var nil = n(Integer.class);
+		var nil = no(Integer.class);
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
@@ -409,7 +409,7 @@ class AnyAssertion_Test extends TestBase {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
-		var nil = n(Integer.class);
+		var nil = no(Integer.class);
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[2]'.  Actual='1'.");
 		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='1'.");
@@ -420,7 +420,7 @@ class AnyAssertion_Test extends TestBase {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
-		var nil = n(Integer.class);
+		var nil = no(Integer.class);
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
@@ -431,7 +431,7 @@ class AnyAssertion_Test extends TestBase {
 	@Test void ca08_isSame() {
 		var x1 = Integer.valueOf(999);
 		var x1a = Integer.valueOf(999);
-		var nil = n(Integer.class);
+		var nil = no(Integer.class);
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
 		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='999(Integer@*)'.  Actual='999(Integer@*)'.");
@@ -443,7 +443,7 @@ class AnyAssertion_Test extends TestBase {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
-		var nil = n(Integer.class);
+		var nil = no(Integer.class);
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
 		assertThrown(()->test(x1a).isSameJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='2'.  Actual='1'.");
@@ -455,7 +455,7 @@ class AnyAssertion_Test extends TestBase {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
-		var nil = n(Integer.class);
+		var nil = no(Integer.class);
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
 		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='2'.  Actual='1'.");
@@ -467,7 +467,7 @@ class AnyAssertion_Test extends TestBase {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
-		var nil = n(Integer.class);
+		var nil = no(Integer.class);
 		var s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
@@ -478,7 +478,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void ca12_isType() {
 		var x = 1;
-		var nil = n(Integer.class);
+		var nil = no(Integer.class);
 		test(x).isType(Integer.class);
 		test(x).isType(Object.class);
 		assertThrown(()->test(x).isType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.lang.Integer'.");
@@ -488,7 +488,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void ca13_isExactType() {
 		var x = 1;
-		var nil = n(Integer.class);
+		var nil = no(Integer.class);
 		test(x).isExactType(Integer.class);
 		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.lang.Integer'.");
 		assertThrown(()->test(x).isExactType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.lang.Integer'.");
@@ -498,7 +498,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void ca14_isString() {
 		var x = 1;
-		var nil = n(Integer.class);
+		var nil = no(Integer.class);
 		test(x).isString("1");
 		test(nil).isString(null);
 		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='1'.");
@@ -508,7 +508,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void ca15_isJson() {
 		var x = 1;
-		var nil = n(Integer.class);
+		var nil = no(Integer.class);
 		test(x).isJson("1");
 		test(nil).isJson("null");
 		assertThrown(()->test(x).isJson("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='1'.");

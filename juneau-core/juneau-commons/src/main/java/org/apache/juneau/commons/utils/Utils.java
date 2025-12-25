@@ -445,7 +445,7 @@ public class Utils {
 			if (l1 != l2)
 				return false;
 			for (var i = 0; i < l1; i++)
-				if (ne(Array.get(o1, i), Array.get(o2, i)))
+				if (neq(Array.get(o1, i), Array.get(o2, i)))
 					return false;
 			return true;
 		}
@@ -1189,7 +1189,7 @@ public class Utils {
 	 * @param type The type class (unused, but helps with type inference).
 	 * @return <jk>null</jk>.
 	 */
-	public static <T> T n(Class<T> type) {
+	public static <T> T no(Class<T> type) {
 		return null;
 	}
 
@@ -1215,7 +1215,7 @@ public class Utils {
 	 * @see #eq(Object, Object)
 	 */
 	// TODO - Rename this to neq, then add a ne for not-empty
-	public static <T> boolean ne(T s1, T s2) {
+	public static <T> boolean neq(T s1, T s2) {
 		return ! eq(s1, s2);
 	}
 
@@ -1242,7 +1242,7 @@ public class Utils {
 	 * @see #eq(Object, Object, BiPredicate)
 	 */
 	// TODO - Rename this to neq, then add a ne for not-empty
-	public static <T,U> boolean ne(T o1, U o2, BiPredicate<T,U> test) {
+	public static <T,U> boolean neq(T o1, U o2, BiPredicate<T,U> test) {
 		if (o1 == null)
 			return nn(o2);
 		if (o2 == null)
@@ -1272,7 +1272,7 @@ public class Utils {
 	 * @see #eqic(String, String)
 	 */
 	// TODO - Rename this to neqic, then add a ne for not-empty
-	public static boolean neic(String s1, String s2) {
+	public static boolean neqic(String s1, String s2) {
 		return ! eqic(s1, s2);
 	}
 

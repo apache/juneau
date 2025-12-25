@@ -374,7 +374,7 @@ public class ParserSet {
 		private Object copyBuilder(Object o) {
 			if (o instanceof Parser.Builder x) {
 				Parser.Builder x2 = x.copy();
-				if (ne(x.getClass(), x2.getClass()))
+				if (neq(x.getClass(), x2.getClass()))
 					throw rex("Copy method not implemented on class {0}", cn(x));
 				x = x2;
 				if (nn(bcBuilder))

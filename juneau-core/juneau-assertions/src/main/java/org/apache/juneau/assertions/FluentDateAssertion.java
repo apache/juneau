@@ -201,7 +201,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R is(Date value, ChronoUnit precision) throws AssertionError {
-		if (ne(value(), value, (x, y) -> x.toInstant().truncatedTo(precision).equals(y.toInstant().truncatedTo(precision))))
+		if (neq(value(), value, (x, y) -> x.toInstant().truncatedTo(precision).equals(y.toInstant().truncatedTo(precision))))
 			throw error(MSG_unexpectedValue, value, value());
 		return returns();
 	}

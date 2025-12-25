@@ -73,7 +73,7 @@ public class OpenApi_Test extends TestBase {
 	}
 
 	@Test void a01b_noType_formatDefault_null() throws Exception {
-		var in = n(String.class);
+		var in = no(String.class);
 		var ps = T_NONE;
 		var s = serialize(ps, in);
 		assertEquals("null", s);
@@ -89,7 +89,7 @@ public class OpenApi_Test extends TestBase {
 	}
 
 	@Test void a02b_noType_formatByte_null() throws Exception {
-		var in = n(String.class);
+		var in = no(String.class);
 		var ps = tNone().fByte().build();
 		var s = serialize(ps, in);
 		assertEquals("null", s);
@@ -105,7 +105,7 @@ public class OpenApi_Test extends TestBase {
 	}
 
 	@Test void a03b_noType_formatBinary_null() throws Exception {
-		var in = n(String.class);
+		var in = no(String.class);
 		var ps = tNone().fBinary().build();
 		var s = serialize(ps, in);
 		assertEquals("null", s);
@@ -123,7 +123,7 @@ public class OpenApi_Test extends TestBase {
 	}
 
 	@Test void a04b_noType_formatBinarySpaced_null() throws Exception {
-		var in = n(String.class);
+		var in = no(String.class);
 		var ps = tNone().fBinarySpaced().build();
 		var s = serialize(ps, in);
 		assertEquals("null", s);
@@ -180,7 +180,7 @@ public class OpenApi_Test extends TestBase {
 	}
 
 	@Test void a10_noType_formatDate_null() throws Exception {
-		var in = n(String.class);
+		var in = no(String.class);
 		var ps = tNone().fDate().build();
 		var s = serialize(ps, in);
 		assertEquals("null", s);
@@ -237,7 +237,7 @@ public class OpenApi_Test extends TestBase {
 	}
 
 	@Test void a16_noType_formatDate_null() throws Exception {
-		var in = n(String.class);
+		var in = no(String.class);
 		var ps = tNone().fDateTime().build();
 		var s = serialize(ps, in);
 		assertEquals("null", s);
@@ -343,7 +343,7 @@ public class OpenApi_Test extends TestBase {
 	}
 
 	@Test void b10_typeString_formatDate_null() throws Exception {
-		var in = n(String.class);
+		var in = no(String.class);
 		var ps = T_DATE;
 		var s = serialize(ps, in);
 		assertEquals("null", s);
@@ -400,7 +400,7 @@ public class OpenApi_Test extends TestBase {
 	}
 
 	@Test void b16_typeString_formatDate_null() throws Exception {
-		var in = n(String.class);
+		var in = no(String.class);
 		var ps = T_DATETIME;
 		var s = serialize(ps, in);
 		assertEquals("null", s);

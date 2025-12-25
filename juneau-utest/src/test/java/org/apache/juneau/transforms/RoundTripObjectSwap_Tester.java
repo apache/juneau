@@ -82,7 +82,7 @@ public class RoundTripObjectSwap_Tester<T,S> {
 		try {
 			var o = objectSupplier.get();
 			var s = swap.swap(beanSession, o);
-			if (ne(expected, s)) {
+			if (neq(expected, s)) {
 				fail("Test [" + label + " swap] failed. Expected=[" + expected + "], Actual=[" + s + "]");
 			}
 		} catch (AssertionError e) {
@@ -102,7 +102,7 @@ public class RoundTripObjectSwap_Tester<T,S> {
 			var s = swap.swap(beanSession, o);
 			var o2 = swap.unswap(beanSession, s, beanSession.getClassMetaForObject(o));
 			var s2 = swap.swap(beanSession, o2);
-			if (ne(s, s2)) {
+			if (neq(s, s2)) {
 				System.err.println("s=["+s+"], o=["+o+"], o.type=["+o.getClass().getName()+"], o2=["+o2+"], o2.type=["+o2.getClass().getName()+"]");  // NOT DEBUG
 				fail("Test [" + label + " unswap] failed. Expected=[" + s + "], Actual=[" + s2 + "]");
 			}

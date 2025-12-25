@@ -199,7 +199,7 @@ public class MemoryStore extends ConfigStore {
 
 		var currentContents = read(name);
 
-		if (nn(expectedContents) && ne(currentContents, expectedContents))
+		if (nn(expectedContents) && neq(currentContents, expectedContents))
 			return currentContents;
 
 		update(name, newContents);

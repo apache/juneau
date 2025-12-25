@@ -55,14 +55,14 @@ class LongAssertion_Test extends TestBase {
 
 	@Test void ba01a_asString() {
 		var x = 1L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		test(x).asString().is("1");
 		test(nil).asString().isNull();
 	}
 
 	@Test void ba01b_asString_wSerializer() {
 		var x = 1L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		var s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("1");
 		test(nil).asString(s).is("null");
@@ -75,14 +75,14 @@ class LongAssertion_Test extends TestBase {
 
 	@Test void ba02_asJson() {
 		var x = 1L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		test(x).asJson().is("1");
 		test(nil).asJson().is("null");
 	}
 
 	@Test void ba03_asJsonSorted() {
 		var x1 = 1L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		test(x1).asJsonSorted().is("1");
 		test(nil).asJsonSorted().is("null");
 	}
@@ -95,7 +95,7 @@ class LongAssertion_Test extends TestBase {
 
 	@Test void bc01_asInteger() {
 		var x1 = 1L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		test(x1).asInteger().is(1);
 		test(nil).asInteger().isNull();
 	}
@@ -106,21 +106,21 @@ class LongAssertion_Test extends TestBase {
 
 	@Test void ca01_exists() {
 		var x = 1L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		test(x).isExists().isExists();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
 	}
 
 	@Test void ca02_isNull() {
 		var x = 1L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		test(nil).isNull();
 		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
 	}
 
 	@Test void ca03_isNotNull() {
 		var x = 1L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		test(x).isNotNull();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
 	}
@@ -129,7 +129,7 @@ class LongAssertion_Test extends TestBase {
 		var x1 = 1L;
 		var x1a = 1L;
 		var x2 = 2L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
@@ -149,7 +149,7 @@ class LongAssertion_Test extends TestBase {
 		var x1 = 1L;
 		var x1a = 1L;
 		var x2 = 2L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
@@ -161,7 +161,7 @@ class LongAssertion_Test extends TestBase {
 		var x1 = 1L;
 		var x1a = 1L;
 		var x2 = 2L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[2]'.  Actual='1'.");
 		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='1'.");
@@ -172,7 +172,7 @@ class LongAssertion_Test extends TestBase {
 		var x1 = 1L;
 		var x1a = 1L;
 		var x2 = 2L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
@@ -193,7 +193,7 @@ class LongAssertion_Test extends TestBase {
 		var x1 = 1L;
 		var x1a = 1L;
 		var x2 = 2L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
 		assertThrown(()->test(x1a).isSameJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='2'.  Actual='1'.");
@@ -205,7 +205,7 @@ class LongAssertion_Test extends TestBase {
 		var x1 = 1L;
 		var x1a = 1L;
 		var x2 = 2L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
 		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='2'.  Actual='1'.");
@@ -217,7 +217,7 @@ class LongAssertion_Test extends TestBase {
 		var x1 = 1L;
 		var x1a = 1L;
 		var x2 = 2L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		var s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
@@ -228,7 +228,7 @@ class LongAssertion_Test extends TestBase {
 
 	@Test void ca12_isType() {
 		var x = 1L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		test(x).isType(Long.class);
 		test(x).isType(Object.class);
 		assertThrown(()->test(x).isType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.lang.Long'.");
@@ -238,7 +238,7 @@ class LongAssertion_Test extends TestBase {
 
 	@Test void ca13_isExactType() {
 		var x = 1L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		test(x).isExactType(Long.class);
 		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.lang.Long'.");
 		assertThrown(()->test(x).isExactType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.lang.Long'.");
@@ -248,7 +248,7 @@ class LongAssertion_Test extends TestBase {
 
 	@Test void ca14_isString() {
 		var x = 1L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		test(x).isString("1");
 		test(nil).isString(null);
 		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='1'.");
@@ -258,7 +258,7 @@ class LongAssertion_Test extends TestBase {
 
 	@Test void ca15_isJson() {
 		var x = 1L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		test(x).isJson("1");
 		test(nil).isJson("null");
 		assertThrown(()->test(x).isJson("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='1'.");
@@ -269,7 +269,7 @@ class LongAssertion_Test extends TestBase {
 	@Test void cb01_isGt() {
 		var x1 = 1L;
 		var x2 = 2L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		test(x2).isGt(x1);
 		assertThrown(()->test(x1).isGt(x1)).asMessage().asOneLine().is("Value was not greater than expected.  Expect='1'.  Actual='1'.");
 		assertThrown(()->test(x1).isGt(x2)).asMessage().asOneLine().is("Value was not greater than expected.  Expect='2'.  Actual='1'.");
@@ -280,7 +280,7 @@ class LongAssertion_Test extends TestBase {
 	@Test void cb02_isGte() {
 		var x1 = 1L;
 		var x2 = 2L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		test(x2).isGte(x1);
 		test(x1).isGte(x1);
 		assertThrown(()->test(x1).isGte(x2)).asMessage().asOneLine().is("Value was not greater than or equals to expected.  Expect='2'.  Actual='1'.");
@@ -291,7 +291,7 @@ class LongAssertion_Test extends TestBase {
 	@Test void cb03_isLt() {
 		var x1 = 1L;
 		var x2 = 2L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		test(x1).isLt(x2);
 		assertThrown(()->test(x1).isLt(x1)).asMessage().asOneLine().is("Value was not less than expected.  Expect='1'.  Actual='1'.");
 		assertThrown(()->test(x2).isLt(x1)).asMessage().asOneLine().is("Value was not less than expected.  Expect='1'.  Actual='2'.");
@@ -302,7 +302,7 @@ class LongAssertion_Test extends TestBase {
 	@Test void cb04_isLte() {
 		var x1 = 1L;
 		var x2 = 2L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		test(x1).isLte(x2);
 		test(x1).isLte(x1);
 		assertThrown(()->test(x2).isLte(x1)).asMessage().asOneLine().is("Value was not less than or equals to expected.  Expect='1'.  Actual='2'.");
@@ -315,7 +315,7 @@ class LongAssertion_Test extends TestBase {
 		var x2 = 2L;
 		var x3 = 3L;
 		var x4 = 4L;
-		var nil = n(Long.class);
+		var nil = no(Long.class);
 		test(x1).isBetween(x1, x3);
 		test(x2).isBetween(x1, x3);
 		test(x3).isBetween(x1, x3);

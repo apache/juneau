@@ -79,7 +79,7 @@ public class StringSwap_Tester<T> {
 		try {
 			var o = objectSupplier.get();
 			var s = swap.swap(beanSession, o);
-			if (ne(expected, s)) {
+			if (neq(expected, s)) {
 				if (expected.isEmpty()) {
 					if (! label.startsWith("[]"))
 						System.err.println(label.substring(0, label.indexOf(']')+1) + " "+s);  // NOT DEBUG
@@ -105,7 +105,7 @@ public class StringSwap_Tester<T> {
 			var s = swap.swap(beanSession, o);
 			var o2 = swap.unswap(beanSession, s, beanSession.getClassMetaForObject(o));
 			var s2 = swap.swap(beanSession, o2);
-			if (ne(s, s2)) {
+			if (neq(s, s2)) {
 				if (expected.isEmpty())
 					fail("Test [" + label + " unswap] failed - expected was empty");
 				fail("Test [" + label + " unswap] failed. Expected=[" + s + "], Actual=[" + s2 + "]");

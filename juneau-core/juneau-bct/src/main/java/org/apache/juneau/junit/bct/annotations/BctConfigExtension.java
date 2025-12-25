@@ -44,9 +44,9 @@ public class BctConfigExtension implements BeforeEachCallback, AfterEachCallback
 
 		clear();
 
-		al.stream().map(x -> x.sortMaps()).filter(x -> ne(x, UNSET)).findFirst().ifPresent(x -> set(BCT_SORT_MAPS, x == TRUE));
-		al.stream().map(x -> x.sortCollections()).filter(x -> ne(x, UNSET)).findFirst().ifPresent(x -> set(BCT_SORT_COLLECTIONS, x == TRUE));
-		al.stream().map(x -> x.beanConverter()).filter(x -> ne(x, BeanConverter.class)).findFirst().map(x -> eq(x, BasicBeanConverter.class) ? null : x).ifPresent(x -> setConverter(x));
+		al.stream().map(x -> x.sortMaps()).filter(x -> neq(x, UNSET)).findFirst().ifPresent(x -> set(BCT_SORT_MAPS, x == TRUE));
+		al.stream().map(x -> x.sortCollections()).filter(x -> neq(x, UNSET)).findFirst().ifPresent(x -> set(BCT_SORT_COLLECTIONS, x == TRUE));
+		al.stream().map(x -> x.beanConverter()).filter(x -> neq(x, BeanConverter.class)).findFirst().map(x -> eq(x, BasicBeanConverter.class) ? null : x).ifPresent(x -> setConverter(x));
 	}
 
 	private static void setConverter(Class<? extends BeanConverter> x) {
