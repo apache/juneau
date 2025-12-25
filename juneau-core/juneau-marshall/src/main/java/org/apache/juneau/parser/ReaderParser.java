@@ -26,10 +26,8 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Subclass of {@link Parser} for characters-based parsers.

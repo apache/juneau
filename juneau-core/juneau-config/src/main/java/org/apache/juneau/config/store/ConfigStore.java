@@ -29,7 +29,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.config.internal.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Represents a storage location for configuration files.

@@ -30,7 +30,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.html.*;
@@ -40,7 +39,6 @@ import org.apache.juneau.objecttools.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.swaps.*;
 import org.apache.juneau.uon.*;
-import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 
 /**

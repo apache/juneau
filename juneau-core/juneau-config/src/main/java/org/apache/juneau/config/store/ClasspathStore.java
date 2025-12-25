@@ -26,7 +26,6 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Classpath-based storage location for configuration files.

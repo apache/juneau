@@ -81,8 +81,6 @@ import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.*;
-import org.apache.juneau.utils.*;
-
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 

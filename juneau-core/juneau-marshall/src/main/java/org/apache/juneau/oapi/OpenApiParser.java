@@ -28,7 +28,6 @@ import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.uon.*;
-import org.apache.juneau.utils.*;
 
 /**
  * OpenAPI part parser.

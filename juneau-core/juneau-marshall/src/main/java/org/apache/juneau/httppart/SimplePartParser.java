@@ -20,7 +20,6 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.utils.*;
 
 /**
  * An implementation of {@link HttpPartParser} that takes in the strings and tries to convert them to POJOs using constructors and static create methods.

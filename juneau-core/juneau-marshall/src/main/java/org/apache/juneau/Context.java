@@ -43,7 +43,6 @@ import org.apache.juneau.soap.annotation.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.annotation.*;
 import org.apache.juneau.urlencoding.annotation.*;
-import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**

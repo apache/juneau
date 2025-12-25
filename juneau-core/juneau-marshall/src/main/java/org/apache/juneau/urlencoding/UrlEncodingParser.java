@@ -25,11 +25,9 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.uon.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Parses URL-encoded text into POJO models.

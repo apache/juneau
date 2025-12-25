@@ -27,11 +27,9 @@ import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Serializes POJO models to JSON.

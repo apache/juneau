@@ -29,7 +29,6 @@ import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Parsers HTTP plain text request bodies into Group 5 POJOs.

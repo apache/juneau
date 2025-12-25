@@ -28,7 +28,6 @@ import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.utils.*;
 
 /**
  * TODO - Work in progress.  CSV parser.

@@ -29,7 +29,6 @@ import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Serializes POJOs to plain text using just the <c>toString()</c> method on the serialized object.
