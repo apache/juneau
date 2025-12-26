@@ -478,7 +478,7 @@
 <a class="jxr_linenumber" name="L470" href="#L470">470</a> 		}
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 		<strong class="jxr_keyword">var</strong> cmd = System.getProperty(<span class="jxr_string">"sun.java.command"</span>, <span class="jxr_string">"not_found"</span>).split(<span class="jxr_string">"&#92;&#92;s+"</span>)[0];
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		<strong class="jxr_keyword">if</strong> (cmd.endsWith(<span class="jxr_string">".jar"</span>) &amp;&amp; ! cmd.contains(<span class="jxr_string">"surefirebooter"</span>)) {
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		<strong class="jxr_keyword">if</strong> (cmd.endsWith(<span class="jxr_string">".jar"</span>) &amp;&amp; ! co(cmd, <span class="jxr_string">"surefirebooter"</span>)) {
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> 			cmd = cmd.replaceAll(<span class="jxr_string">".*?([^&#92;&#92;&#92;&#92;&#92;&#92;/]+)&#92;&#92;.jar$"</span>, <span class="jxr_string">"$1"</span>);
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> 			l.add(cmd + <span class="jxr_string">".cfg"</span>);
 <a class="jxr_linenumber" name="L476" href="#L476">476</a> 			cmd = cmd.replaceAll(<span class="jxr_string">"[&#92;&#92;.&#92;&#92;_].*$"</span>, <span class="jxr_string">""</span>);  <em class="jxr_comment">// Try also without version in jar name.</em>
@@ -1244,7 +1244,7 @@
 <a class="jxr_linenumber" name="L1236" href="#L1236">1236</a> 
 <a class="jxr_linenumber" name="L1237" href="#L1237">1237</a> 	Mod getMod(<strong class="jxr_keyword">char</strong> id) {
 <a class="jxr_linenumber" name="L1238" href="#L1238">1238</a> 		<strong class="jxr_keyword">var</strong> x = mods.get(id);
-<a class="jxr_linenumber" name="L1239" href="#L1239">1239</a> 		<strong class="jxr_keyword">return</strong> x == <strong class="jxr_keyword">null</strong> ? Mod.NO_OP : x;
+<a class="jxr_linenumber" name="L1239" href="#L1239">1239</a> 		<strong class="jxr_keyword">return</strong> def(x, Mod.NO_OP);
 <a class="jxr_linenumber" name="L1240" href="#L1240">1240</a> 	}
 <a class="jxr_linenumber" name="L1241" href="#L1241">1241</a> 
 <a class="jxr_linenumber" name="L1242" href="#L1242">1242</a> 	String removeMods(String mods, String x) {

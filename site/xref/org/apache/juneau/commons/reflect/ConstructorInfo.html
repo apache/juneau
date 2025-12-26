@@ -77,7 +77,7 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link ClassInfo} - Class introspection</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link MethodInfo} - Method introspection</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link FieldInfo} - Field introspection</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/JuneauCommonsReflect" target="alexandria_uri">https://juneau.apache.org/docs/topics/JuneauCommonsReflect</a>"&gt;juneau-commons-reflect&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection" target="alexandria_uri">https://juneau.apache.org/docs/topics/JuneauCommonsReflection</a>"&gt;Reflection Package&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="ConstructorInfo" href="../../../../../org/apache/juneau/commons/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> <strong class="jxr_keyword">extends</strong> <a name="ExecutableInfo" href="../../../../../org/apache/juneau/commons/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> <strong class="jxr_keyword">implements</strong> Comparable&lt;ConstructorInfo&gt;, <a name="Annotatable" href="../../../../../org/apache/juneau/commons/reflect/Annotatable.html#Annotatable">Annotatable</a> {
@@ -147,14 +147,14 @@
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 	@Override
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compareTo(<a name="ConstructorInfo" href="../../../../../org/apache/juneau/commons/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> o) {
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">int</strong> i = getSimpleName().compareTo(o.getSimpleName());
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">int</strong> i = cmp(getSimpleName(), o.getSimpleName());
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">if</strong> (i == 0) {
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 			i = getParameterCount() - o.getParameterCount();
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<strong class="jxr_keyword">if</strong> (i == 0) {
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 				<strong class="jxr_keyword">var</strong> params = getParameters();
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 				<strong class="jxr_keyword">var</strong> oParams = o.getParameters();
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> j = 0; j &lt; params.size() &amp;&amp; i == 0; j++) {
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 					i = params.get(j).getParameterType().getName().compareTo(oParams.get(j).getParameterType().getName());
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 					i = cmp(params.get(j).getParameterType().getName(), oParams.get(j).getParameterType().getName());
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 				}
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 			}
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		}

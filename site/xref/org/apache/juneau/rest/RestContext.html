@@ -5908,10 +5908,10 @@
 <a class="jxr_linenumber" name="L5900" href="#L5900">5900</a> 
 <a class="jxr_linenumber" name="L5901" href="#L5901">5901</a> 		String n = cn(t);
 <a class="jxr_linenumber" name="L5902" href="#L5902">5902</a> 
-<a class="jxr_linenumber" name="L5903" href="#L5903">5903</a> 		<strong class="jxr_keyword">if</strong> (n.contains(<span class="jxr_string">"AccessDenied"</span>) || n.contains(<span class="jxr_string">"Unauthorized"</span>))
+<a class="jxr_linenumber" name="L5903" href="#L5903">5903</a> 		<strong class="jxr_keyword">if</strong> (co(n, <span class="jxr_string">"AccessDenied"</span>) || co(n, <span class="jxr_string">"Unauthorized"</span>))
 <a class="jxr_linenumber" name="L5904" href="#L5904">5904</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="Unauthorized" href="../../../../org/apache/juneau/http/response/Unauthorized.html#Unauthorized">Unauthorized</a>(t);
 <a class="jxr_linenumber" name="L5905" href="#L5905">5905</a> 
-<a class="jxr_linenumber" name="L5906" href="#L5906">5906</a> 		<strong class="jxr_keyword">if</strong> (n.contains(<span class="jxr_string">"Empty"</span>) || n.contains(<span class="jxr_string">"NotFound"</span>))
+<a class="jxr_linenumber" name="L5906" href="#L5906">5906</a> 		<strong class="jxr_keyword">if</strong> (co(n, <span class="jxr_string">"Empty"</span>) || co(n, <span class="jxr_string">"NotFound"</span>))
 <a class="jxr_linenumber" name="L5907" href="#L5907">5907</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="NotFound" href="../../../../org/apache/juneau/http/response/NotFound.html#NotFound">NotFound</a>(t);
 <a class="jxr_linenumber" name="L5908" href="#L5908">5908</a> 
 <a class="jxr_linenumber" name="L5909" href="#L5909">5909</a> 		<strong class="jxr_keyword">return</strong> t;

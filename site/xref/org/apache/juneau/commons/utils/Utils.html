@@ -2083,7 +2083,7 @@
 <a class="jxr_linenumber" name="L2075" href="#L2075">2075</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the string starts with the prefix.</em>
 <a class="jxr_linenumber" name="L2076" href="#L2076">2076</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L2077" href="#L2077">2077</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> sw(String str, String prefix) {
-<a class="jxr_linenumber" name="L2078" href="#L2078">2078</a> 		<strong class="jxr_keyword">return</strong> nn(str) &amp;&amp; nn(prefix) &amp;&amp; str.startsWith(prefix);
+<a class="jxr_linenumber" name="L2078" href="#L2078">2078</a> 		<strong class="jxr_keyword">return</strong> and(nn(str), nn(prefix)) &amp;&amp; str.startsWith(prefix);
 <a class="jxr_linenumber" name="L2079" href="#L2079">2079</a> 	}
 <a class="jxr_linenumber" name="L2080" href="#L2080">2080</a> 
 <a class="jxr_linenumber" name="L2081" href="#L2081">2081</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -2104,7 +2104,7 @@
 <a class="jxr_linenumber" name="L2096" href="#L2096">2096</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the string ends with the suffix.</em>
 <a class="jxr_linenumber" name="L2097" href="#L2097">2097</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L2098" href="#L2098">2098</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> ew(String str, String suffix) {
-<a class="jxr_linenumber" name="L2099" href="#L2099">2099</a> 		<strong class="jxr_keyword">return</strong> nn(str) &amp;&amp; nn(suffix) &amp;&amp; str.endsWith(suffix);
+<a class="jxr_linenumber" name="L2099" href="#L2099">2099</a> 		<strong class="jxr_keyword">return</strong> and(nn(str), nn(suffix)) &amp;&amp; str.endsWith(suffix);
 <a class="jxr_linenumber" name="L2100" href="#L2100">2100</a> 	}
 <a class="jxr_linenumber" name="L2101" href="#L2101">2101</a> 
 <a class="jxr_linenumber" name="L2102" href="#L2102">2102</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -2125,7 +2125,7 @@
 <a class="jxr_linenumber" name="L2117" href="#L2117">2117</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the string contains the substring.</em>
 <a class="jxr_linenumber" name="L2118" href="#L2118">2118</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L2119" href="#L2119">2119</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> co(String str, String substring) {
-<a class="jxr_linenumber" name="L2120" href="#L2120">2120</a> 		<strong class="jxr_keyword">return</strong> nn(str) &amp;&amp; nn(substring) &amp;&amp; str.contains(substring);
+<a class="jxr_linenumber" name="L2120" href="#L2120">2120</a> 		<strong class="jxr_keyword">return</strong> and(nn(str), nn(substring)) &amp;&amp; str.contains(substring);
 <a class="jxr_linenumber" name="L2121" href="#L2121">2121</a> 	}
 <a class="jxr_linenumber" name="L2122" href="#L2122">2122</a> 
 <a class="jxr_linenumber" name="L2123" href="#L2123">2123</a> 	<em class="jxr_javadoccomment">/**</em>

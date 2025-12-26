@@ -136,7 +136,7 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 * Generated classes shouldn't be cacheable to prevent needlessly filling up the cache.</em>
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isCacheable(Class&lt;?&gt; c) {
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">var</strong> n = c.getName();
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">var</strong> n = cn(c);
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">var</strong> x = n.charAt(n.length() - 1);  <em class="jxr_comment">// All generated classes appear to end with digits.</em>
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">if</strong> (x &gt;= '0' &amp;&amp; x &lt;= '9') {
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 			<strong class="jxr_keyword">if</strong> (n.indexOf(<span class="jxr_string">"$$"</span>) != -1 || n.startsWith(<span class="jxr_string">"sun"</span>) || n.startsWith(<span class="jxr_string">"com.sun"</span>) || n.indexOf(<span class="jxr_string">"$Proxy"</span>) != -1)
@@ -1217,7 +1217,7 @@
 <a class="jxr_linenumber" name="L1209" href="#L1209">1209</a> 		<strong class="jxr_keyword">if</strong> (isEnum()) {
 <a class="jxr_linenumber" name="L1210" href="#L1210">1210</a> 			<strong class="jxr_keyword">var</strong> t = (T)enumValues.get().getKey(arg);
 <a class="jxr_linenumber" name="L1211" href="#L1211">1211</a> 			<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong> &amp;&amp; ! beanContext.isIgnoreUnknownEnumValues())
-<a class="jxr_linenumber" name="L1212" href="#L1212">1212</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"Could not resolve enum value ''{0}'' on class ''{1}''"</span>, arg, <strong class="jxr_keyword">inner</strong>().getName());
+<a class="jxr_linenumber" name="L1212" href="#L1212">1212</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"Could not resolve enum value ''{0}'' on class ''{1}''"</span>, arg, cn(<strong class="jxr_keyword">inner</strong>()));
 <a class="jxr_linenumber" name="L1213" href="#L1213">1213</a> 			<strong class="jxr_keyword">return</strong> t;
 <a class="jxr_linenumber" name="L1214" href="#L1214">1214</a> 		}
 <a class="jxr_linenumber" name="L1215" href="#L1215">1215</a> 
@@ -1229,7 +1229,7 @@
 <a class="jxr_linenumber" name="L1221" href="#L1221">1221</a> 				<strong class="jxr_keyword">return</strong> stringConstructor.get().&lt;T&gt;newInstance(<strong class="jxr_keyword">outer</strong>, arg);
 <a class="jxr_linenumber" name="L1222" href="#L1222">1222</a> 			<strong class="jxr_keyword">return</strong> stringConstructor.get().&lt;T&gt;newInstance(arg);
 <a class="jxr_linenumber" name="L1223" href="#L1223">1223</a> 		}
-<a class="jxr_linenumber" name="L1224" href="#L1224">1224</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"No string constructor or valueOf(String) method found for class '"</span> + <strong class="jxr_keyword">inner</strong>().getName() + <span class="jxr_string">"'"</span>);
+<a class="jxr_linenumber" name="L1224" href="#L1224">1224</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"No string constructor or valueOf(String) method found for class '"</span> + cn(<strong class="jxr_keyword">inner</strong>()) + <span class="jxr_string">"'"</span>);
 <a class="jxr_linenumber" name="L1225" href="#L1225">1225</a> 	}
 <a class="jxr_linenumber" name="L1226" href="#L1226">1226</a> 
 <a class="jxr_linenumber" name="L1227" href="#L1227">1227</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -1747,30 +1747,26 @@
 <a class="jxr_linenumber" name="L1739" href="#L1739">1739</a> <em class="jxr_javadoccomment">	 * @return The passed-in string builder.</em>
 <a class="jxr_linenumber" name="L1740" href="#L1740">1740</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1741" href="#L1741">1741</a> 	<strong class="jxr_keyword">protected</strong> StringBuilder toString(StringBuilder sb, <strong class="jxr_keyword">boolean</strong> simple) {
-<a class="jxr_linenumber" name="L1742" href="#L1742">1742</a> 		<strong class="jxr_keyword">var</strong> n = <strong class="jxr_keyword">inner</strong>().getName();
-<a class="jxr_linenumber" name="L1743" href="#L1743">1743</a> 		<strong class="jxr_keyword">if</strong> (simple) {
-<a class="jxr_linenumber" name="L1744" href="#L1744">1744</a> 			<strong class="jxr_keyword">var</strong> i = n.lastIndexOf('.');
-<a class="jxr_linenumber" name="L1745" href="#L1745">1745</a> 			n = n.substring(i == -1 ? 0 : i + 1).replace('$', '.');
-<a class="jxr_linenumber" name="L1746" href="#L1746">1746</a> 		}
-<a class="jxr_linenumber" name="L1747" href="#L1747">1747</a> 		<strong class="jxr_keyword">if</strong> (cat.is(ARRAY))
-<a class="jxr_linenumber" name="L1748" href="#L1748">1748</a> 			<strong class="jxr_keyword">return</strong> elementType.get().toString(sb, simple).append('[').append(']');
-<a class="jxr_linenumber" name="L1749" href="#L1749">1749</a> 		<strong class="jxr_keyword">if</strong> (cat.is(BEANMAP))
-<a class="jxr_linenumber" name="L1750" href="#L1750">1750</a> 			<strong class="jxr_keyword">return</strong> sb.append(cn(BeanMap.<strong class="jxr_keyword">class</strong>)).append('&lt;').append(n).append('&gt;');
-<a class="jxr_linenumber" name="L1751" href="#L1751">1751</a> 		<strong class="jxr_keyword">if</strong> (cat.is(MAP)) {
-<a class="jxr_linenumber" name="L1752" href="#L1752">1752</a> 			<strong class="jxr_keyword">var</strong> kvTypes = keyValueTypes.get();
-<a class="jxr_linenumber" name="L1753" href="#L1753">1753</a> 			<strong class="jxr_keyword">var</strong> kt = kvTypes.optKeyType();
-<a class="jxr_linenumber" name="L1754" href="#L1754">1754</a> 			<strong class="jxr_keyword">var</strong> vt = kvTypes.optValueType();
-<a class="jxr_linenumber" name="L1755" href="#L1755">1755</a> 			<strong class="jxr_keyword">if</strong> (kt.isPresent() &amp;&amp; vt.isPresent() &amp;&amp; kt.get().isObject() &amp;&amp; vt.get().isObject())
-<a class="jxr_linenumber" name="L1756" href="#L1756">1756</a> 				<strong class="jxr_keyword">return</strong> sb.append(n);
-<a class="jxr_linenumber" name="L1757" href="#L1757">1757</a> 			<strong class="jxr_keyword">return</strong> sb.append(n).append('&lt;').append(kt.map(x -&gt; x.toString(simple)).orElse(<span class="jxr_string">"?"</span>)).append(',').append(vt.map(x -&gt; x.toString(simple)).orElse(<span class="jxr_string">"?"</span>)).append('&gt;');
+<a class="jxr_linenumber" name="L1742" href="#L1742">1742</a> 		<strong class="jxr_keyword">var</strong> n = simple ? cnsq(<strong class="jxr_keyword">inner</strong>()) : cn(<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L1743" href="#L1743">1743</a> 		<strong class="jxr_keyword">if</strong> (cat.is(ARRAY))
+<a class="jxr_linenumber" name="L1744" href="#L1744">1744</a> 			<strong class="jxr_keyword">return</strong> elementType.get().toString(sb, simple).append('[').append(']');
+<a class="jxr_linenumber" name="L1745" href="#L1745">1745</a> 		<strong class="jxr_keyword">if</strong> (cat.is(BEANMAP))
+<a class="jxr_linenumber" name="L1746" href="#L1746">1746</a> 			<strong class="jxr_keyword">return</strong> sb.append(cn(BeanMap.<strong class="jxr_keyword">class</strong>)).append('&lt;').append(n).append('&gt;');
+<a class="jxr_linenumber" name="L1747" href="#L1747">1747</a> 		<strong class="jxr_keyword">if</strong> (cat.is(MAP)) {
+<a class="jxr_linenumber" name="L1748" href="#L1748">1748</a> 			<strong class="jxr_keyword">var</strong> kvTypes = keyValueTypes.get();
+<a class="jxr_linenumber" name="L1749" href="#L1749">1749</a> 			<strong class="jxr_keyword">var</strong> kt = kvTypes.optKeyType();
+<a class="jxr_linenumber" name="L1750" href="#L1750">1750</a> 			<strong class="jxr_keyword">var</strong> vt = kvTypes.optValueType();
+<a class="jxr_linenumber" name="L1751" href="#L1751">1751</a> 			<strong class="jxr_keyword">if</strong> (kt.isPresent() &amp;&amp; vt.isPresent() &amp;&amp; kt.get().isObject() &amp;&amp; vt.get().isObject())
+<a class="jxr_linenumber" name="L1752" href="#L1752">1752</a> 				<strong class="jxr_keyword">return</strong> sb.append(n);
+<a class="jxr_linenumber" name="L1753" href="#L1753">1753</a> 			<strong class="jxr_keyword">return</strong> sb.append(n).append('&lt;').append(kt.map(x -&gt; x.toString(simple)).orElse(<span class="jxr_string">"?"</span>)).append(',').append(vt.map(x -&gt; x.toString(simple)).orElse(<span class="jxr_string">"?"</span>)).append('&gt;');
+<a class="jxr_linenumber" name="L1754" href="#L1754">1754</a> 		}
+<a class="jxr_linenumber" name="L1755" href="#L1755">1755</a> 		<strong class="jxr_keyword">if</strong> (cat.is(COLLECTION) || is(Optional.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L1756" href="#L1756">1756</a> 			<strong class="jxr_keyword">var</strong> et = elementType.get();
+<a class="jxr_linenumber" name="L1757" href="#L1757">1757</a> 			<strong class="jxr_keyword">return</strong> sb.append(n).append(et != <strong class="jxr_keyword">null</strong> &amp;&amp; et.isObject() ? <span class="jxr_string">""</span> : <span class="jxr_string">"&lt;"</span> + (et == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">"?"</span> : et.toString(simple)) + <span class="jxr_string">"&gt;"</span>);
 <a class="jxr_linenumber" name="L1758" href="#L1758">1758</a> 		}
-<a class="jxr_linenumber" name="L1759" href="#L1759">1759</a> 		<strong class="jxr_keyword">if</strong> (cat.is(COLLECTION) || is(Optional.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L1760" href="#L1760">1760</a> 			<strong class="jxr_keyword">var</strong> et = elementType.get();
-<a class="jxr_linenumber" name="L1761" href="#L1761">1761</a> 			<strong class="jxr_keyword">return</strong> sb.append(n).append(et != <strong class="jxr_keyword">null</strong> &amp;&amp; et.isObject() ? <span class="jxr_string">""</span> : <span class="jxr_string">"&lt;"</span> + (et == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">"?"</span> : et.toString(simple)) + <span class="jxr_string">"&gt;"</span>);
-<a class="jxr_linenumber" name="L1762" href="#L1762">1762</a> 		}
-<a class="jxr_linenumber" name="L1763" href="#L1763">1763</a> 		<strong class="jxr_keyword">return</strong> sb.append(n);
-<a class="jxr_linenumber" name="L1764" href="#L1764">1764</a> 	}
-<a class="jxr_linenumber" name="L1765" href="#L1765">1765</a> }
+<a class="jxr_linenumber" name="L1759" href="#L1759">1759</a> 		<strong class="jxr_keyword">return</strong> sb.append(n);
+<a class="jxr_linenumber" name="L1760" href="#L1760">1760</a> 	}
+<a class="jxr_linenumber" name="L1761" href="#L1761">1761</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

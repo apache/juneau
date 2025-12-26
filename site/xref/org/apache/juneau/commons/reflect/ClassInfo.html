@@ -508,7 +508,7 @@
 <a class="jxr_linenumber" name="L500" href="#L500">500</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compareTo(ClassInfo o) {
 <a class="jxr_linenumber" name="L501" href="#L501">501</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L502" href="#L502">502</a> 			<strong class="jxr_keyword">return</strong> 1;
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		<strong class="jxr_keyword">return</strong> getName().compareTo(o.getName());
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		<strong class="jxr_keyword">return</strong> cmp(getName(), o.getName());
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> 	}
 <a class="jxr_linenumber" name="L505" href="#L505">505</a> 
 <a class="jxr_linenumber" name="L506" href="#L506">506</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -1991,7 +1991,7 @@
 <a class="jxr_linenumber" name="L1983" href="#L1983">1983</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this class is a child or the same as &lt;c&gt;parent&lt;/c&gt;.</em>
 <a class="jxr_linenumber" name="L1984" href="#L1984">1984</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1985" href="#L1985">1985</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isChildOf(Class&lt;?&gt; parent) {
-<a class="jxr_linenumber" name="L1986" href="#L1986">1986</a> 		<strong class="jxr_keyword">return</strong> nn(<strong class="jxr_keyword">inner</strong>) &amp;&amp; nn(parent) &amp;&amp; parent.isAssignableFrom(<strong class="jxr_keyword">inner</strong>);
+<a class="jxr_linenumber" name="L1986" href="#L1986">1986</a> 		<strong class="jxr_keyword">return</strong> and(nn(<strong class="jxr_keyword">inner</strong>), nn(parent)) &amp;&amp; parent.isAssignableFrom(<strong class="jxr_keyword">inner</strong>);
 <a class="jxr_linenumber" name="L1987" href="#L1987">1987</a> 	}
 <a class="jxr_linenumber" name="L1988" href="#L1988">1988</a> 
 <a class="jxr_linenumber" name="L1989" href="#L1989">1989</a> 	<em class="jxr_javadoccomment">/**</em>

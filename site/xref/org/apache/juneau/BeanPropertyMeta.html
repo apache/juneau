@@ -683,7 +683,7 @@
 <a class="jxr_linenumber" name="L675" href="#L675">675</a> 
 <a class="jxr_linenumber" name="L676" href="#L676">676</a> 	@Override <em class="jxr_comment">/* Overridden from Comparable */</em>
 <a class="jxr_linenumber" name="L677" href="#L677">677</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compareTo(BeanPropertyMeta o) {
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> 		<strong class="jxr_keyword">return</strong> name.compareTo(o.name);
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 		<strong class="jxr_keyword">return</strong> cmp(name, o.name);
 <a class="jxr_linenumber" name="L679" href="#L679">679</a> 	}
 <a class="jxr_linenumber" name="L680" href="#L680">680</a> 
 <a class="jxr_linenumber" name="L681" href="#L681">681</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
@@ -806,7 +806,7 @@
 <a class="jxr_linenumber" name="L798" href="#L798">798</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L799" href="#L799">799</a> <em class="jxr_javadoccomment">	 * @return the metadata on the property that this metadata is a delegate for, or this object if it's not a delegate.</em>
 <a class="jxr_linenumber" name="L800" href="#L800">800</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L801" href="#L801">801</a> 	<strong class="jxr_keyword">public</strong> BeanPropertyMeta getDelegateFor() { <strong class="jxr_keyword">return</strong> nn(delegateFor) ? delegateFor : <strong class="jxr_keyword">this</strong>; }
+<a class="jxr_linenumber" name="L801" href="#L801">801</a> 	<strong class="jxr_keyword">public</strong> BeanPropertyMeta getDelegateFor() { <strong class="jxr_keyword">return</strong> def(delegateFor, <strong class="jxr_keyword">this</strong>); }
 <a class="jxr_linenumber" name="L802" href="#L802">802</a> 
 <a class="jxr_linenumber" name="L803" href="#L803">803</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L804" href="#L804">804</a> <em class="jxr_javadoccomment">	 * Returns the {@link Map} object returned by the DynaBean getter.</em>
