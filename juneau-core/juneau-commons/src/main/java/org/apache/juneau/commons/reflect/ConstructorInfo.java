@@ -139,14 +139,14 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 
 	@Override
 	public int compareTo(ConstructorInfo o) {
-		int i = getSimpleName().compareTo(o.getSimpleName());
+		int i = cmp(getSimpleName(), o.getSimpleName());
 		if (i == 0) {
 			i = getParameterCount() - o.getParameterCount();
 			if (i == 0) {
 				var params = getParameters();
 				var oParams = o.getParameters();
 				for (var j = 0; j < params.size() && i == 0; j++) {
-					i = params.get(j).getParameterType().getName().compareTo(oParams.get(j).getParameterType().getName());
+					i = cmp(params.get(j).getParameterType().getName(), oParams.get(j).getParameterType().getName());
 				}
 			}
 		}

@@ -470,7 +470,7 @@ public class Config extends Context implements ConfigEventListener {
 		}
 
 		var cmd = System.getProperty("sun.java.command", "not_found").split("\\s+")[0];
-		if (cmd.endsWith(".jar") && ! cmd.contains("surefirebooter")) {
+		if (cmd.endsWith(".jar") && ! co(cmd, "surefirebooter")) {
 			cmd = cmd.replaceAll(".*?([^\\\\\\/]+)\\.jar$", "$1");
 			l.add(cmd + ".cfg");
 			cmd = cmd.replaceAll("[\\.\\_].*$", "");  // Try also without version in jar name.
@@ -1236,7 +1236,7 @@ public class Config extends Context implements ConfigEventListener {
 
 	Mod getMod(char id) {
 		var x = mods.get(id);
-		return x == null ? Mod.NO_OP : x;
+		return def(x, Mod.NO_OP);
 	}
 
 	String removeMods(String mods, String x) {

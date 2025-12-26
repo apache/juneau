@@ -2075,7 +2075,7 @@ public class Utils {
 	 * @return <jk>true</jk> if the string starts with the prefix.
 	 */
 	public static boolean sw(String str, String prefix) {
-		return nn(str) && nn(prefix) && str.startsWith(prefix);
+		return and(nn(str), nn(prefix)) && str.startsWith(prefix);
 	}
 
 	/**
@@ -2096,7 +2096,7 @@ public class Utils {
 	 * @return <jk>true</jk> if the string ends with the suffix.
 	 */
 	public static boolean ew(String str, String suffix) {
-		return nn(str) && nn(suffix) && str.endsWith(suffix);
+		return and(nn(str), nn(suffix)) && str.endsWith(suffix);
 	}
 
 	/**
@@ -2117,7 +2117,7 @@ public class Utils {
 	 * @return <jk>true</jk> if the string contains the substring.
 	 */
 	public static boolean co(String str, String substring) {
-		return nn(str) && nn(substring) && str.contains(substring);
+		return and(nn(str), nn(substring)) && str.contains(substring);
 	}
 
 	/**

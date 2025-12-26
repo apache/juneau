@@ -169,14 +169,14 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 
 	@Override
 	public int compareTo(MethodInfo o) {
-		int i = getSimpleName().compareTo(o.getSimpleName());
+		int i = cmp(getSimpleName(), o.getSimpleName());
 		if (i == 0) {
 			var params = getParameters();
 			var oParams = o.getParameters();
 			i = params.size() - oParams.size();
 			if (i == 0) {
 				for (var j = 0; j < params.size() && i == 0; j++) {
-					i = params.get(j).getParameterType().getName().compareTo(oParams.get(j).getParameterType().getName());
+					i = cmp(params.get(j).getParameterType().getName(), oParams.get(j).getParameterType().getName());
 				}
 			}
 		}

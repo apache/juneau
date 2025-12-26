@@ -66,12 +66,22 @@ jobs:
     - name: Generate Maven Site
       run: |
         mvn clean site
+        # Explicitly generate aggregate javadocs (may be skipped during site generation)
+        mvn javadoc:aggregate
         
     - name: Copy Maven Site to build directory
       run: |
         mkdir -p juneau-docs/build/site
         cp -r target/site/* juneau-docs/build/site/
         cp .asf.yaml juneau-docs/build
+        # Verify apidocs were generated
+        if [ ! -d "target/site/apidocs" ]; then
+          echo "ERROR: target/site/apidocs directory not found after generation!"
+          echo "Contents of target/site:"
+          ls -la target/site/ || true
+          exit 1
+        fi
+        echo "✓ Javadocs found in target/site/apidocs"
         
     - name: Deploy to staging branch
       uses: peaceiris/actions-gh-pages@v4

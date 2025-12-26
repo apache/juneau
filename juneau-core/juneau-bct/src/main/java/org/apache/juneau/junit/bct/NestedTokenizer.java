@@ -94,7 +94,7 @@ class NestedTokenizer {
 		 * @param value The token value
 		 */
 		public Token(String value) {
-			this.value = nn(value) ? value : "";
+			this.value = def(value, "");
 		}
 
 		@Override
@@ -208,7 +208,7 @@ class NestedTokenizer {
 						var value = currentValue.toString().trim();
 						var nestedContent = in.substring(nestedStart, pos);
 						var token = new Token(value);
-						if (! nestedContent.trim().isEmpty()) {
+						if (nb(nestedContent)) {
 							token.setNested(tokenize(nestedContent));
 						}
 						tokens.add(token);

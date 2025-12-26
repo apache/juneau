@@ -675,7 +675,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 	@Override /* Overridden from Comparable */
 	public int compareTo(BeanPropertyMeta o) {
-		return name.compareTo(o.name);
+		return cmp(name, o.name);
 	}
 
 	@Override /* Overridden from Object */
@@ -798,7 +798,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 *
 	 * @return the metadata on the property that this metadata is a delegate for, or this object if it's not a delegate.
 	 */
-	public BeanPropertyMeta getDelegateFor() { return nn(delegateFor) ? delegateFor : this; }
+	public BeanPropertyMeta getDelegateFor() { return def(delegateFor, this); }
 
 	/**
 	 * Returns the {@link Map} object returned by the DynaBean getter.

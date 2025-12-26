@@ -500,7 +500,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	public int compareTo(ClassInfo o) {
 		if (o == null)
 			return 1;
-		return getName().compareTo(o.getName());
+		return cmp(getName(), o.getName());
 	}
 
 	/**
@@ -1983,7 +1983,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * @return <jk>true</jk> if this class is a child or the same as <c>parent</c>.
 	 */
 	public boolean isChildOf(Class<?> parent) {
-		return nn(inner) && nn(parent) && parent.isAssignableFrom(inner);
+		return and(nn(inner), nn(parent)) && parent.isAssignableFrom(inner);
 	}
 
 	/**

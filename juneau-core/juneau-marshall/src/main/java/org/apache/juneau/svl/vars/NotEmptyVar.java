@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.svl.vars;
 
+import static org.apache.juneau.commons.utils.Utils.*;
+
 import org.apache.juneau.svl.*;
 
 /**
@@ -49,6 +51,6 @@ public class NotEmptyVar extends SimpleVar {
 
 	@Override /* Overridden from Parameter */
 	public String resolve(VarResolverSession session, String key) {
-		return String.valueOf(! key.trim().isEmpty());
+		return String.valueOf(nb(key));
 	}
 }

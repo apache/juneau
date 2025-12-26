@@ -20,6 +20,7 @@ import static java.util.Collections.*;
 import static java.util.Spliterators.*;
 import static java.util.stream.StreamSupport.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctConfiguration.*;
 
 import java.util.*;
@@ -392,36 +393,19 @@ public class Listifiers {
 	 * @param converter The bean converter to use for stringification
 	 * @return A comparator that can handle any object type
 	 */
-	@SuppressWarnings("unchecked")
 	private static Comparator<Object> flexibleComparator(BeanConverter converter) {
+		// Use default converter if null is passed
+		BeanConverter conv = converter != null ? converter : BasicBeanConverter.DEFAULT;
 		return (o1, o2) -> {
-			// Handle nulls
-			if (o1 == null && o2 == null)
-				return 0;
-			if (o1 == null)
-				return -1;
-			if (o2 == null)
-				return 1;
-
-			// Try natural ordering if both are Comparable
-			if (o1 instanceof Comparable o1c && o2 instanceof Comparable o2c) {
-				try {
-					return o1c.compareTo(o2c);
-				} catch (@SuppressWarnings("unused") ClassCastException e) {
-					// Comparing different types.  Fall back to string comparison below.
-				}
-			}
+			// Try natural ordering using cmp() (handles nulls and Comparable objects)
+			int result = cmp(o1, o2);
+			if (result != 0)
+				return result;
 
 			// Fall back to string comparison
-			var s1 = converter.stringify(o1);
-			var s2 = converter.stringify(o2);
-			if (s1 == null && s2 == null)
-				return 0;
-			if (s1 == null)
-				return -1;
-			if (s2 == null)
-				return 1;
-			return s1.compareTo(s2);
+			var s1 = conv.stringify(o1);
+			var s2 = conv.stringify(o2);
+			return cmp(s1, s2);
 		};
 	}
 

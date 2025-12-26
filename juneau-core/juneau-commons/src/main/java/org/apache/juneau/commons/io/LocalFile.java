@@ -79,7 +79,7 @@ import java.nio.file.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link LocalDir} - Directory counterpart for resolving files within directories
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">juneau-commons-io</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">I/O Package</a>
  * </ul>
  */
 @SuppressWarnings("resource")
@@ -248,7 +248,7 @@ public class LocalFile {
 		if (nn(clazz)) {
 			var is = clazz.getResourceAsStream(clazzPath);
 			if (is == null)
-				throw new IOException("Classpath resource not found: " + clazzPath + " (relative to " + clazz.getName() + ")");
+				throw new IOException("Classpath resource not found: " + clazzPath + " (relative to " + cn(clazz) + ")");
 			return is;
 		}
 		return Files.newInputStream(path);

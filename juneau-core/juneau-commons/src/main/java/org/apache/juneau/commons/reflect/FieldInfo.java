@@ -164,7 +164,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 
 	@Override
 	public int compareTo(FieldInfo o) {
-		return getName().compareTo(o.getName());
+		return cmp(getName(), o.getName());
 	}
 
 	/**

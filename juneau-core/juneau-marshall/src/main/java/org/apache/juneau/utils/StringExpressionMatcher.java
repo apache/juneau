@@ -26,7 +26,6 @@ import java.util.*;
 import java.util.regex.*;
 
 import org.apache.juneau.commons.lang.*;
-import org.apache.juneau.commons.utils.*;
 
 /**
  * Utility class for matching strings against string expressions.
@@ -230,7 +229,7 @@ public class StringExpressionMatcher {
 	}
 
 	private Exp parse(String expression) throws ParseException {
-		if (StringUtils.isBlank(expression))
+		if (b(expression))
 			return new Never();
 
 		expression = expression.trim();

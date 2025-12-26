@@ -128,7 +128,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * Generated classes shouldn't be cacheable to prevent needlessly filling up the cache.
 	 */
 	private static boolean isCacheable(Class<?> c) {
-		var n = c.getName();
+		var n = cn(c);
 		var x = n.charAt(n.length() - 1);  // All generated classes appear to end with digits.
 		if (x >= '0' && x <= '9') {
 			if (n.indexOf("$$") != -1 || n.startsWith("sun") || n.startsWith("com.sun") || n.indexOf("$Proxy") != -1)
@@ -1209,7 +1209,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (isEnum()) {
 			var t = (T)enumValues.get().getKey(arg);
 			if (t == null && ! beanContext.isIgnoreUnknownEnumValues())
-				throw new ExecutableException("Could not resolve enum value ''{0}'' on class ''{1}''", arg, inner().getName());
+				throw new ExecutableException("Could not resolve enum value ''{0}'' on class ''{1}''", arg, cn(inner()));
 			return t;
 		}
 
@@ -1221,7 +1221,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 				return stringConstructor.get().<T>newInstance(outer, arg);
 			return stringConstructor.get().<T>newInstance(arg);
 		}
-		throw new ExecutableException("No string constructor or valueOf(String) method found for class '" + inner().getName() + "'");
+		throw new ExecutableException("No string constructor or valueOf(String) method found for class '" + cn(inner()) + "'");
 	}
 
 	/**
@@ -1739,11 +1739,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return The passed-in string builder.
 	 */
 	protected StringBuilder toString(StringBuilder sb, boolean simple) {
-		var n = inner().getName();
-		if (simple) {
-			var i = n.lastIndexOf('.');
-			n = n.substring(i == -1 ? 0 : i + 1).replace('$', '.');
-		}
+		var n = simple ? cnsq(inner()) : cn(inner());
 		if (cat.is(ARRAY))
 			return elementType.get().toString(sb, simple).append('[').append(']');
 		if (cat.is(BEANMAP))

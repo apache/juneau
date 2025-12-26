@@ -5900,10 +5900,10 @@ public class RestContext extends Context {
 
 		String n = cn(t);
 
-		if (n.contains("AccessDenied") || n.contains("Unauthorized"))
+		if (co(n, "AccessDenied") || co(n, "Unauthorized"))
 			return new Unauthorized(t);
 
-		if (n.contains("Empty") || n.contains("NotFound"))
+		if (co(n, "Empty") || co(n, "NotFound"))
 			return new NotFound(t);
 
 		return t;
