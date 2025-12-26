@@ -167,6 +167,9 @@
 						<configuration>
 							<skipEmptyPackages>true</skipEmptyPackages>
 							<failOnError>false</failOnError>
+							<additionalOptions>
+								<additionalOption>-quiet</additionalOption>
+							</additionalOptions>
 						</configuration>
 					</execution>
 				</executions>
@@ -215,6 +218,9 @@
 							<additionalJOption>-header</additionalJOption>
 							<additionalJOption>&lt;a href="http://juneau.apache.org" target="_blank"&gt;&lt;img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;"&gt;Apache Juneau&lt;/a&gt;</additionalJOption>
 						</additionalJOptions>
+						<additionalOptions>
+							<additionalOption>-quiet</additionalOption>
+						</additionalOptions>
 						<show>protected</show>
 						<windowtitle>Apache Juneau ${project.version}</windowtitle>
 						<author>true</author>
