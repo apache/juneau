@@ -154,26 +154,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>aggregate-javadocs</id>
-						<goals>
-							<goal>aggregate</goal>
-						</goals>
-						<phase>site</phase>
-						<configuration>
-							<skipEmptyPackages>true</skipEmptyPackages>
-							<failOnError>false</failOnError>
-							<additionalOptions>
-								<additionalOption>-quiet</additionalOption>
-							</additionalOptions>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 
 			<!-- Topic Link Checker Plugin -->
 			<plugin>
@@ -207,6 +187,7 @@
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<version>3.12.0</version>
 					<configuration>
+						<skip>false</skip>
 						<release>${maven.compiler.target}</release>
 						<sourcetab>3</sourcetab>
 						<verbose>true</verbose>
@@ -304,6 +285,14 @@
 						</reports>
 					</reportSet>
 				</reportSets>
+				<configuration>
+					<skip>false</skip>
+					<failOnError>false</failOnError>
+					<detectJavaApiLink>false</detectJavaApiLink>
+					<additionalOptions>
+						<additionalOption>-quiet</additionalOption>
+					</additionalOptions>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

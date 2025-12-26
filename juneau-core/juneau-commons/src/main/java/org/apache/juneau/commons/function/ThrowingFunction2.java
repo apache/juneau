@@ -81,7 +81,7 @@ import java.util.function.*;
  * 	<li class='jc'>{@link ThrowingFunction3} - Three-argument function that throws exceptions
  * 	<li class='jc'>{@link ThrowingFunction4} - Four-argument function that throws exceptions
  * 	<li class='jc'>{@link ThrowingFunction5} - Five-argument function that throws exceptions
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsFunction">juneau-commons-function</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsBasics">juneau-commons Basics</a>
  * </ul>
  *
  * @param <A> The type of the first argument to the function.

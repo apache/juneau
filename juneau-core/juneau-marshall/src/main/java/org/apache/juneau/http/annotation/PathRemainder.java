@@ -69,7 +69,6 @@ import org.apache.juneau.oapi.*;
  * Annotation applied to Java method arguments of interface proxies to denote that they represent the path remainder on the request.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/PathRemainder">@PathRemainder</a>
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>

@@ -73,7 +73,7 @@ import org.apache.juneau.commons.function.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link FieldInfo} - Field introspection
  * 	<li class='jc'>{@link MethodInfo} - Method introspection
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflect">juneau-commons-reflect</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection">Reflection Package</a>
  * </ul>
  *
  * @param <T> The object type.

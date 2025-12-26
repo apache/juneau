@@ -79,7 +79,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * 	<li class='jc'>{@link ThrowingConsumer2} - Two-argument consumer that throws exceptions
  * 	<li class='jc'>{@link ThrowingConsumer4} - Four-argument consumer that throws exceptions
  * 	<li class='jc'>{@link ThrowingConsumer5} - Five-argument consumer that throws exceptions
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsFunction">juneau-commons-function</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsBasics">juneau-commons Basics</a>
  * </ul>
  *
  * @param <A> The type of the first argument to the operation.
