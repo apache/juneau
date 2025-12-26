@@ -65,7 +65,10 @@ jobs:
         
     - name: Generate Maven Site
       run: |
-        mvn clean site
+        # Compile all modules first to ensure sources are available
+        mvn clean compile
+        # Generate site and aggregate javadocs
+        mvn site
         # Explicitly generate aggregate javadocs (may be skipped during site generation)
         mvn javadoc:aggregate
         

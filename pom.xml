@@ -164,6 +164,10 @@
 							<goal>aggregate</goal>
 						</goals>
 						<phase>site</phase>
+						<configuration>
+							<skipEmptyPackages>true</skipEmptyPackages>
+							<failOnError>false</failOnError>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
