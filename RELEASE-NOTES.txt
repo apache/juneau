@@ -35,6 +35,7 @@ Release Notes - Juneau - Version 9.2.0
     * Bump express from 4.21.2 to 4.22.1 in /juneau-docs #287
       Security fix for CVE-2024-51999 (GHSA-pj86-cfqh-vqx6).
     * Bump org.codehaus.mojo:exec-maven-plugin from 3.6.2 to 3.6.3 #301.
+    * Bump org.apache.maven.plugins:maven-source-plugin from 3.2.1 to 3.4.0 #290.
 
 ** New Features - Multi-Key Cache and Concurrent Map Classes
 
