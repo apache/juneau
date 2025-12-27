@@ -93,7 +93,6 @@ import java.util.MissingFormatArgumentException;
  * </p>
  *
  * @see StringUtils#format(String, Object...)
- * @see StringUtils#mformat(String, Object...)
  */
 public final class StringFormat {
 

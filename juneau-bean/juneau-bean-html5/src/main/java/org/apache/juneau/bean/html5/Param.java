@@ -52,7 +52,7 @@ import org.apache.juneau.annotation.*;
  * 	<jc>// Parameter with special characters</jc>
  * 	Param <jv>param3</jv> = <jsm>param</jsm>()
  * 		.name(<js>"config"</js>)
- * 		.value(<js>"width=800&height=600&theme=dark"</js>);
+ * 		.value(<js>"width=800&amp;height=600&amp;theme=dark"</js>);
  * </p>
  *
  * <p>

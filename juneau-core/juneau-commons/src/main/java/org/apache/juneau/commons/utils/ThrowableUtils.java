@@ -345,7 +345,7 @@ public class ThrowableUtils {
 	 *
 	 * <p>
 	 * This is a convenience method for creating state exceptions with formatted messages.
-	 * The message is formatted using {@link #f(String, Object...)}.
+	 * The message is formatted using {@link Utils#f(String, Object...)}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -355,7 +355,7 @@ public class ThrowableUtils {
 	 * @param msg The message format string.
 	 * @param args The arguments for the message format string.
 	 * @return A new IllegalStateException with the formatted message.
-	 * @see #f(String, Object...)
+	 * @see Utils#f(String, Object...)
 	 * @see #illegalArg(String, Object...)
 	 */
 	public static IllegalStateException illegalState(String msg, Object...args) {

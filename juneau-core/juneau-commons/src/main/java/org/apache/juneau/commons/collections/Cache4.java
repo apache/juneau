@@ -32,7 +32,7 @@ import org.apache.juneau.commons.function.*;
  *
  * <h5 class='section'>Overview:</h5>
  * <p>
- * This class extends {@link ConcurrentHashMap4Key} to provide a thread-safe caching layer with automatic
+ * This class uses {@link java.util.concurrent.ConcurrentHashMap} internally to provide a thread-safe caching layer with automatic
  * value computation, cache eviction, and statistics tracking for four-part composite keys. It's designed for
  * caching expensive-to-compute or frequently-accessed objects indexed by four keys.
  *
@@ -53,7 +53,7 @@ import org.apache.juneau.commons.function.*;
  * 	<li class='jc'>{@link Cache}
  * 	<li class='jc'>{@link Cache2}
  * 	<li class='jc'>{@link Cache3}
- * 	<li class='jc'>{@link ConcurrentHashMap4Key}
+ * 	<li class='jc'>{@link java.util.concurrent.ConcurrentHashMap}
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">Overview &gt; juneau-commons</a>
  * </ul>
  *

@@ -130,7 +130,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 *
 		 * <p>
 		 * Identifies which categories of types that descriptions should be automatically added to generated schemas.
-		 * The description is the result of calling {@link ClassMeta#getFullName()}.
+		 * The description is the result of calling {@link ClassMeta#getName()}.
 		 * The format is a comma-delimited list of any of the following values:
 		 *
 		 * <ul class='javatree'>

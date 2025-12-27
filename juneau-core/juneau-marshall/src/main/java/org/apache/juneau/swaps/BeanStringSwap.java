@@ -25,7 +25,7 @@ import org.apache.juneau.swap.*;
  * <p>
  * Allows you to specify classes that should just be converted to {@code Strings} instead of potentially
  * being turned into Maps by the {@link BeanContext} (or worse, throwing
- * {@link BeanRuntimeException BeanRuntimeExceptions}).
+ * {@link org.apache.juneau.commons.reflect.BeanRuntimeException BeanRuntimeExceptions}).
  *
  * <p>
  * This is usually a one-way transform.

@@ -29,7 +29,7 @@ import org.apache.juneau.commons.function.ResettableSupplier;
  *
  * <p>
  * This class extends {@link ResettableSupplier} to provide methods to convert the string value
- * to various types, similar to the {@link Settings#getInteger(String)}, {@link Settings#getBoolean(String)}, etc. methods.
+ * to various types, similar to the {@link StringSetting#asInteger()}, {@link StringSetting#asBoolean()}, etc. methods.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>

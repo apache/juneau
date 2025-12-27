@@ -585,7 +585,7 @@ public class Maps<K,V> {
 	 * The thread-safety implementation depends on other settings:
 	 * <ul>
 	 * 	<li>If {@link #sorted()} is set: Uses {@link java.util.concurrent.ConcurrentSkipListMap}
-	 * 	<li>If {@link #ordered()} is set: Uses {@link Collections#synchronizedMap(LinkedHashMap)}
+	 * 	<li>If {@link #ordered()} is set: Uses {@link java.util.Collections#synchronizedMap(java.util.Map)}
 	 * 	<li>Otherwise: Uses {@link java.util.concurrent.ConcurrentHashMap}
 	 * </ul>
 	 *
@@ -625,7 +625,7 @@ public class Maps<K,V> {
 	 * The thread-safety implementation depends on other settings:
 	 * <ul>
 	 * 	<li>If {@link #sorted()} is set: Uses {@link java.util.concurrent.ConcurrentSkipListMap}
-	 * 	<li>If {@link #ordered()} is set: Uses {@link Collections#synchronizedMap(LinkedHashMap)}
+	 * 	<li>If {@link #ordered()} is set: Uses {@link java.util.Collections#synchronizedMap(java.util.Map)}
 	 * 	<li>Otherwise: Uses {@link java.util.concurrent.ConcurrentHashMap}
 	 * </ul>
 	 *

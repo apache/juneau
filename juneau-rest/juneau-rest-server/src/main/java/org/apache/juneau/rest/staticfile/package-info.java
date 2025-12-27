@@ -14,8 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.staticfile;
-
 /**
  * REST Static Files Support
  */
+package org.apache.juneau.rest.staticfile;

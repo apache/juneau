@@ -34,7 +34,7 @@ import org.apache.juneau.commons.function.*;
  *
  * <h5 class='section'>Overview:</h5>
  * <p>
- * This class uses {@link ConcurrentHashMap1Key} internally to provide a thread-safe caching layer with automatic
+ * This class uses {@link java.util.concurrent.ConcurrentHashMap} internally to provide a thread-safe caching layer with automatic
  * value computation, cache eviction, and statistics tracking. It's designed for caching expensive-to-compute
  * or frequently-accessed objects to improve performance.
  *
@@ -69,7 +69,7 @@ import org.apache.juneau.commons.function.*;
  * <h5 class='section'>Array Support:</h5>
  * <p>
  * Unlike standard {@link java.util.HashMap} which uses identity-based equality for array keys,
- * this class properly handles arrays using content-based comparison via {@link ConcurrentHashMap1Key}:
+ * this class properly handles arrays using content-based comparison:
  *
  * <p class='bjava'>
  * 	<jc>// Arrays work correctly as keys</jc>

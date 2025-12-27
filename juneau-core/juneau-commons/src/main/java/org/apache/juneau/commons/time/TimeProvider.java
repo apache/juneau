@@ -24,7 +24,7 @@ import java.time.*;
  * <p>
  * This class abstracts time-related operations to allow for easier testing and customization.
  * By default, it delegates to the system's time and timezone, but can be extended or replaced
- * for testing purposes (e.g., using a {@link org.apache.juneau.utest.utils.FakeTimeProvider}).
+ * for testing purposes (e.g., using a custom implementation that provides fixed times).
  *
  * <h5 class='section'>Usage:</h5>
  * <p class='bjava'>
@@ -39,7 +39,6 @@ import java.time.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jm'>{@link org.apache.juneau.utest.utils.FakeTimeProvider}
  * 	<li class='jm'>{@link GranularZonedDateTime}
  * </ul>
  */

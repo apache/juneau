@@ -337,7 +337,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	/**
 	 * Returns <jk>true</jk> if all specified flags are applicable to this field.
 	 *
-	 * @param flags The flags to test for.
+	 * @param flag The flag to test for.
 	 * @return <jk>true</jk> if all specified flags are applicable to this field.
 	 */
 	@Override

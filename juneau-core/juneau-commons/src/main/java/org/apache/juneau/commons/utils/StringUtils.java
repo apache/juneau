@@ -1950,7 +1950,7 @@ public class StringUtils {
 	 *
 	 * <p>
 	 * This method iterates through the provided strings and returns the first one that is not <jk>null</jk>
-	 * and not empty (as determined by {@link #ne(String)}).
+	 * and not empty (as determined by {@link Utils#ne(CharSequence)}).
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -1963,7 +1963,7 @@ public class StringUtils {
 	 * @param s The strings to test.
 	 * @return The first non-empty string in the list, or <jk>null</jk> if they were all <jk>null</jk> or empty.
 	 * @see #firstNonBlank(String...)
-	 * @see #ne(String)
+	 * @see Utils#ne(CharSequence)
 	 */
 	public static String firstNonEmpty(String...s) {
 		for (var ss : s)
@@ -2133,7 +2133,7 @@ public class StringUtils {
 	 *
 	 * <h5 class='section'>Comparison with mformat():</h5>
 	 * <p>
-	 * This method supports both formats, while {@link #mformat(String, Object...)} only supports MessageFormat-style.
+	 * This method supports both MessageFormat-style and printf-style formats.
 	 * </p>
 	 * <p class='bjava'>
 	 * 	<jc>// Both styles supported (this method)</jc>
@@ -2157,7 +2157,7 @@ public class StringUtils {
 	 * @throws java.util.IllegalFormatException If the format string is invalid or arguments don't match the format specifiers.
 	 * @see StringFormat for detailed format specification
 	 * @see String#format(String, Object...)
-	 * @see #mformat(String, Object...) for MessageFormat-only formatting
+	 * @see StringFormat for detailed format specification
 	 */
 	public static String format(String pattern, Object...args) {
 		return StringFormat.format(pattern, args);
@@ -5460,7 +5460,7 @@ public class StringUtils {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	randomAscii(<jk>10</jk>);  <jc>// "!@#$%^&*()"</jc>
+	 * 	randomAscii(<jk>10</jk>);  <jc>// "!@#$%^&amp;*()"</jc>
 	 * </p>
 	 *
 	 * @param length The length of the generated string.

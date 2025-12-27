@@ -466,7 +466,7 @@ public class MultiList<E> extends AbstractList<E> {
 	 *
 	 * <p>
 	 * The format is <c>"[[...],[...],...]"</c> where each <c>[...]</c> is the standard
-	 * {@link List#toString()} representation of each underlying list.
+	 * standard string representation of each underlying list (as returned by {@link Object#toString()}).
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>

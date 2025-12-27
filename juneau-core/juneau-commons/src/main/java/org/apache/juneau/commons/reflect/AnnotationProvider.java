@@ -46,7 +46,7 @@ import org.apache.juneau.commons.lang.*;
  *
  * <h5 class='section'>Annotation Order of Precedence:</h5>
  *
- * <h6 class='topic'>For Classes ({@link #xfind(Class)}):</h6>
+ * <h6 class='topic'>For Classes ({@link #find(Class, ClassInfo, AnnotationTraversal...)}):</h6>
  * <p>
  * Annotations are returned in <b>child-to-parent</b> order with the following precedence:
  * <ol>
@@ -71,7 +71,7 @@ import org.apache.juneau.commons.lang.*;
  * 	<jc>// 7. @Annotation on package-info.java</jc>
  * </p>
  *
- * <h6 class='topic'>For Methods ({@link #xfind(Method)}):</h6>
+ * <h6 class='topic'>For Methods ({@link #find(Class, MethodInfo, AnnotationTraversal...)}):</h6>
  * <p>
  * Annotations are returned in <b>child-to-parent</b> order with the following precedence:
  * <ol>
@@ -81,7 +81,7 @@ import org.apache.juneau.commons.lang.*;
  * 	<li><b>Declared annotations</b> on overridden parent methods (child-to-parent order)
  * </ol>
  *
- * <h6 class='topic'>For Fields ({@link #xfind(Field)}):</h6>
+ * <h6 class='topic'>For Fields ({@link #find(Class, FieldInfo, AnnotationTraversal...)}):</h6>
  * <p>
  * Annotations are returned with the following precedence:
  * <ol>
@@ -89,7 +89,7 @@ import org.apache.juneau.commons.lang.*;
  * 	<li><b>Declared annotations</b> on the field
  * </ol>
  *
- * <h6 class='topic'>For Constructors ({@link #xfind(Constructor)}):</h6>
+ * <h6 class='topic'>For Constructors ({@link #find(Class, ConstructorInfo, AnnotationTraversal...)}):</h6>
  * <p>
  * Annotations are returned with the following precedence:
  * <ol>

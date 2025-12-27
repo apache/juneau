@@ -14,8 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.examples.core.svl;
-
 /**
  * SVL (Simple Variable Language) Examples
  *
@@ -24,3 +22,4 @@ package org.apache.juneau.examples.core.svl;
  * These examples show various variable resolution and template processing scenarios.
  * </p>
  */
+package org.apache.juneau.examples.core.svl;

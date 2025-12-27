@@ -46,16 +46,6 @@ jobs:
         cache: 'npm'
         cache-dependency-path: juneau-docs/package-lock.json
         
-    - name: Install dependencies
-      run: |
-        cd juneau-docs
-        npm ci
-        
-    - name: Build Docusaurus
-      run: |
-        cd juneau-docs
-        npm run build
-        
     - name: Setup Java
       uses: actions/setup-java@v5
       with:
@@ -63,28 +53,9 @@ jobs:
         java-version: '17'
         cache: 'maven'
         
-    - name: Generate Maven Site
+    - name: Build Documentation
       run: |
-        # Compile all modules first to ensure sources are available
-        mvn clean compile
-        # Generate site and aggregate javadocs
-        mvn site
-        # Explicitly generate aggregate javadocs (may be skipped during site generation)
-        mvn javadoc:aggregate
-        
-    - name: Copy Maven Site to build directory
-      run: |
-        mkdir -p juneau-docs/build/site
-        cp -r target/site/* juneau-docs/build/site/
-        cp .asf.yaml juneau-docs/build
-        # Verify apidocs were generated
-        if [ ! -d "target/site/apidocs" ]; then
-          echo "ERROR: target/site/apidocs directory not found after generation!"
-          echo "Contents of target/site:"
-          ls -la target/site/ || true
-          exit 1
-        fi
-        echo "✓ Javadocs found in target/site/apidocs"
+        python3 scripts/build-docs.py
         
     - name: Deploy to staging branch
       uses: peaceiris/actions-gh-pages@v4

@@ -14,8 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.examples.core.config.store;
-
 /**
  * Configuration Store Examples
  *
@@ -24,3 +22,4 @@ package org.apache.juneau.examples.core.config.store;
  * These examples show various configuration management and storage scenarios.
  * </p>
  */
+package org.apache.juneau.examples.core.config.store;

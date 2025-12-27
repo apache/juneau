@@ -14,8 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.examples.core.oapi;
-
 /**
  * OpenAPI Examples
  *
@@ -24,3 +22,4 @@ package org.apache.juneau.examples.core.oapi;
  * These examples show various OpenAPI specification serialization and parsing scenarios.
  * </p>
  */
+package org.apache.juneau.examples.core.oapi;

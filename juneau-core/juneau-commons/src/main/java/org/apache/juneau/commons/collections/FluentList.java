@@ -67,7 +67,7 @@ import java.util.*;
  * <ul class='spaced-list'>
  * 	<li>All list operations are delegated to the underlying list
  * 	<li>The fluent methods ({@link #a(Object)}, {@link #aa(Collection)}, {@link #ai(boolean, Object)}) return <c>this</c> for chaining
- * 	<li>If a <jk>null</jk> collection is passed to {@link #a(Collection)}, it is treated as a no-op
+ * 	<li>If a <jk>null</jk> collection is passed to {@link #aa(Collection)}, it is treated as a no-op
  * 	<li>The underlying list is stored by reference (not copied), so modifications affect the original list
  * </ul>
  *

@@ -139,9 +139,6 @@
 				<artifactId>maven-bundle-plugin</artifactId>
 				<extensions>true</extensions>
 				<configuration>
-					<instructions>
-						<Automatic-Module-Name>org.apache.juneau.core.test</Automatic-Module-Name>
-					</instructions>
 					<supportIncrementalBuild>true</supportIncrementalBuild>
 				</configuration>
 				<executions>

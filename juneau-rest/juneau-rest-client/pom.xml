@@ -55,9 +55,6 @@
 				<extensions>true</extensions>
 				<configuration>
 					<supportIncrementalBuild>true</supportIncrementalBuild>
-					<instructions>
-						<Automatic-Module-Name>org.apache.juneau.rest.client</Automatic-Module-Name>
-					</instructions>
 				</configuration>
 				<executions>
 				<execution>

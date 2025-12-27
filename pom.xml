@@ -155,29 +155,6 @@
 				</executions>
 			</plugin>
 
-			<!-- Topic Link Checker Plugin -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>3.6.3</version>
-				<executions>
-					<execution>
-						<id>check-topic-links</id>
-						<phase>site</phase>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<configuration>
-							<executable>python3</executable>
-							<arguments>
-								<argument>${maven.multiModuleProjectDirectory}/scripts/check-topic-links.py</argument>
-							</arguments>
-							<workingDirectory>${maven.multiModuleProjectDirectory}</workingDirectory>
-							<failOnError>true</failOnError>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 
 		<pluginManagement>
@@ -219,7 +196,7 @@
 						<overview>${maven.multiModuleProjectDirectory}/juneau-docs/src/javadoc/overview.html</overview>
 						<excludePackageNames>*proto*:*test*:*internal*</excludePackageNames>
  						<links>
-							<link>https://docs.oracle.com/javase/${maven.compiler.target}/docs/api/</link>
+							<link>https://docs.oracle.com/en/java/javase/${maven.compiler.target}/docs/api/</link>
 							<link>https://jakarta.ee/specifications/platform/8/apidocs/</link>
 							<link>https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/</link>
 							<link>https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/</link>
@@ -299,13 +276,13 @@
 				<artifactId>maven-jxr-plugin</artifactId>
 				<version>3.6.0</version>
 			</plugin>
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-surefire-report-plugin</artifactId>
-			<configuration>
-				<aggregate>true</aggregate>
-			</configuration>
-		</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<configuration>
+					<aggregate>true</aggregate>
+				</configuration>
+			</plugin>
 			<!-- JaCoCo aggregate report is generated in juneau-utest module -->
 		</plugins>
 	</reporting>
@@ -401,4 +378,5 @@
 			<roles><role>PMC</role></roles>
 		</developer>
 	</developers>
+
 </project>

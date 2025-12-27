@@ -385,7 +385,7 @@ public class MultiMap<K,V> extends AbstractMap<K,V> {
 	 *
 	 * <p>
 	 * The format is <c>"[{...},{...},...]"</c> where each <c>{...}</c> is the standard
-	 * {@link Map#toString()} representation of each underlying map.
+	 * standard string representation of each underlying map (as returned by {@link Object#toString()}).
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>

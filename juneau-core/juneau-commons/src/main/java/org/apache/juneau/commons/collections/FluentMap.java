@@ -68,7 +68,7 @@ import java.util.function.Predicate;
  * <ul class='spaced-list'>
  * 	<li>All map operations are delegated to the underlying map
  * 	<li>The fluent methods ({@link #a(Object, Object)}, {@link #aa(Map)}, {@link #ai(boolean, Object, Object)}) return <c>this</c> for chaining
- * 	<li>If a <jk>null</jk> map is passed to {@link #a(Map)}, it is treated as a no-op
+ * 	<li>If a <jk>null</jk> map is passed to {@link #aa(Map)}, it is treated as a no-op
  * 	<li>The underlying map is stored by reference (not copied), so modifications affect the original map
  * </ul>
  *

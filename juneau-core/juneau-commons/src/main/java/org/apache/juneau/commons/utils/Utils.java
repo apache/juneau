@@ -446,7 +446,7 @@ public class Utils {
 	 * </ol>
 	 *
 	 * <p>
-	 * If a value is found, it is converted to the type of the default value using {@link #toType(String, Object)}.
+	 * If a value is found, it is converted to the type of the default value using the Settings framework.
 	 * Supported types include {@link Boolean}, {@link Charset}, and other common types.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -466,7 +466,6 @@ public class Utils {
 	 * @param def The default value to return if not found.
 	 * @return The found value (converted to type T), or the default value if not found.
 	 * @see #env(String)
-	 * @see #toType(String, Object)
 	 */
 	public static <T> T env(String name, T def) {
 		return Settings.get().get(name, def);
@@ -492,7 +491,7 @@ public class Utils {
 	 * @param s1 String 1.
 	 * @param s2 String 2.
 	 * @return <jk>true</jk> if the strings are equal (according to the case sensitivity setting).
-	 * @see #eq(String, String)
+	 * @see #eq(Object, Object)
 	 * @see #eqic(String, String)
 	 */
 	public static boolean eq(boolean caseInsensitive, String s1, String s2) {
@@ -503,14 +502,14 @@ public class Utils {
 	 * Tests two objects for equality, gracefully handling nulls and arrays.
 	 *
 	 * <p>
-	 * This method handles annotations specially by delegating to {@link AnnotationUtils#equals(Annotation, Annotation)}
-	 * to ensure proper annotation comparison according to the annotation equality contract.
-	 *
-	 * @param <T> The value types.
-	 * @param o1 Object 1.
-	 * @param o2 Object 2.
-	 * @return <jk>true</jk> if both objects are equal based on the {@link Object#equals(Object)} method.
-	 * @see AnnotationUtils#equals(Annotation, Annotation)
+ * This method handles annotations specially by delegating to {@link org.apache.juneau.commons.utils.AnnotationUtils#equals(java.lang.annotation.Annotation, java.lang.annotation.Annotation)}
+ * to ensure proper annotation comparison according to the annotation equality contract.
+ *
+ * @param <T> The value types.
+ * @param o1 Object 1.
+ * @param o2 Object 2.
+ * @return <jk>true</jk> if both objects are equal based on the {@link Object#equals(Object)} method.
+ * @see org.apache.juneau.commons.utils.AnnotationUtils#equals(java.lang.annotation.Annotation, java.lang.annotation.Annotation)
 	 */
 	public static <T> boolean eq(T o1, T o2) {
 		// Handle annotations specially
@@ -646,7 +645,7 @@ public class Utils {
 	 * @return The formatted string.
 	 * @see StringUtils#format(String, Object...)
 	 * @see StringFormat for detailed format specification
-	 * @see #mf(String, Object...) for MessageFormat-only formatting
+	 * @see StringUtils#format(String, Object...) for formatting details
 	 */
 	public static String f(String pattern, Object...args) {
 		return format(pattern, args);
@@ -902,7 +901,7 @@ public class Utils {
 	 * @return A {@link Supplier} that will format the string when {@code get()} is called.
 	 * @see StringUtils#format(String, Object...)
 	 * @see #f(String, Object...) for format specification details
-	 * @see #mfs(String, Object...) for MessageFormat-only formatting
+	 * @see StringUtils#format(String, Object...) for formatting details
 	 */
 	public static Supplier<String> fs(String pattern, Object...args) {
 		return () -> format(pattern, args);
@@ -918,7 +917,7 @@ public class Utils {
 	 * <p>
 	 * Special handling is provided for:
 	 * <ul>
-	 * 	<li><b>Annotations:</b> Uses {@link AnnotationUtils#hash(Annotation)} to ensure consistent hashing
+	 * 	<li><b>Annotations:</b> Uses {@link org.apache.juneau.commons.utils.AnnotationUtils#hash(java.lang.annotation.Annotation)} to ensure consistent hashing
 	 * 		according to the {@link java.lang.annotation.Annotation#hashCode()} contract.
 	 * 	<li><b>Arrays:</b> Uses content-based hashing via {@link java.util.Arrays#hashCode(Object[])}
 	 * 		instead of identity-based hashing.
@@ -945,7 +944,7 @@ public class Utils {
 	 * @param values The values to hash.
 	 * @return A hash code value for the given values.
 	 * @see HashCode#of(Object...)
-	 * @see AnnotationUtils#hash(Annotation)
+	 * @see org.apache.juneau.commons.utils.AnnotationUtils#hash(java.lang.annotation.Annotation)
 	 * @see Objects#hash(Object...)
 	 */
 	public static final int h(Object...values) {
@@ -1740,7 +1739,7 @@ public class Utils {
 	 *
 	 * <p>
 	 * This method allows you to define a function that converts any thrown exception into a runtime exception.
-	 * This is useful when you need to wrap exceptions in a specific runtime exception type (e.g., {@link ExecutableException}).
+	 * This is useful when you need to wrap exceptions in a specific runtime exception type (e.g., {@link org.apache.juneau.commons.reflect.ExecutableException}).
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>

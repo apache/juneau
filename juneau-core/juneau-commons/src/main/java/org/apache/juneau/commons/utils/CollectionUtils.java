@@ -1694,7 +1694,6 @@ public class CollectionUtils {
 	 * @param <V> The value type.
 	 * @param keyType The key type.
 	 * @param valueType The value type.
-	 * @param converters Optional converters to use for converting values.
 	 * @return A new map builder.
 	 */
 	public static <K,V> Maps<K,V> mapb(Class<K> keyType, Class<V> valueType) {

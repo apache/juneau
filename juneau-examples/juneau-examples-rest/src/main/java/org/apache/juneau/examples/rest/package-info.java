@@ -14,8 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.examples.rest;
-
 /**
  * REST Server Examples
  *
@@ -24,3 +22,4 @@ package org.apache.juneau.examples.rest;
  * These examples show various REST API creation and deployment scenarios.
  * </p>
  */
+package org.apache.juneau.examples.rest;

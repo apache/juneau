@@ -80,9 +80,6 @@
 				<extensions>true</extensions>
 				<configuration>
 					<supportIncrementalBuild>true</supportIncrementalBuild>
-					<instructions>
-						<Automatic-Module-Name>org.apache.juneau.examples.core</Automatic-Module-Name>
-					</instructions>
 				</configuration>
 				<executions>
 				<execution>

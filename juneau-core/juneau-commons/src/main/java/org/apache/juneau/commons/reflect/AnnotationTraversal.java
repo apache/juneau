@@ -21,7 +21,7 @@ package org.apache.juneau.commons.reflect;
  *
  * <p>
  * These enums configure what elements to traverse and in what order when searching for annotations.
- * They are used with {@link AnnotationProvider#search(Class, ClassInfo, AnnotationTraversal...)} 
+ * They are used with {@link AnnotationProvider#find(Class, ClassInfo, AnnotationTraversal...)} 
  * and related methods.
  *
  * <p>
@@ -40,9 +40,9 @@ package org.apache.juneau.commons.reflect;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link AnnotationProvider}
- * 	<li class='jm'>{@link AnnotationProvider#search(Class, ClassInfo, AnnotationTraversal...)}
- * 	<li class='jm'>{@link AnnotationProvider#search(Class, MethodInfo, AnnotationTraversal...)}
- * 	<li class='jm'>{@link AnnotationProvider#search(Class, ParameterInfo, AnnotationTraversal...)}
+ * 	<li class='jm'>{@link AnnotationProvider#find(Class, ClassInfo, AnnotationTraversal...)}
+ * 	<li class='jm'>{@link AnnotationProvider#find(Class, MethodInfo, AnnotationTraversal...)}
+ * 	<li class='jm'>{@link AnnotationProvider#find(Class, ParameterInfo, AnnotationTraversal...)}
  * </ul>
  */
 public enum AnnotationTraversal {

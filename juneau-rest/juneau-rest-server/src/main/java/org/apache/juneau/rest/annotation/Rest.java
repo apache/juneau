@@ -347,7 +347,7 @@ public @interface Rest {
 	 * Debug enablement bean.
 	 *
 	 * <p>
-	 * Specifies a custom {@link org.apache.juneau.rest.DebugEnablement} implementation class to use for determining whether debug mode is enabled.
+	 * Specifies a custom {@link org.apache.juneau.rest.debug.DebugEnablement} implementation class to use for determining whether debug mode is enabled.
 	 * This allows for more sophisticated control over when debug features are enabled beyond simple boolean flags.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>

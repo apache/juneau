@@ -14,8 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.rrpc;
-
 /**
  * REST Remote Procedure Call API
  */
+package org.apache.juneau.rest.rrpc;

@@ -14,8 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.httppart;
-
 /**
  * REST HTTP Parts
  */
+package org.apache.juneau.rest.httppart;

@@ -22,7 +22,7 @@ import java.lang.annotation.*;
  *
  * <p>
  * This annotation is used to specify which named bean should be injected into a constructor
- * or method parameter. It serves the same purpose as {@link javax.inject.Named} but without
+ * or method parameter. It serves the same purpose as the standard {@code javax.inject.Named} annotation but without
  * requiring a dependency on the javax.inject module.
  *
  * <h5 class='section'>Example:</h5>

@@ -1838,7 +1838,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	/**
 	 * Returns <jk>true</jk> if all specified flags are applicable to this class.
 	 *
-	 * @param flags The flags to test for.
+	 * @param flag The flag to test for.
 	 * @return <jk>true</jk> if all specified flags are applicable to this class.
 	 */
 	@Override

@@ -69,7 +69,7 @@ public class AnnotationUtils {
 	 * or a singleton stream with the same annotation if not.
 	 *
 	 * <p>
-	 * This method is a stream-based alternative to {@link #splitRepeated(Annotation)} that avoids creating intermediate arrays.
+	 * This method is a stream-based alternative to splitting repeated annotations that avoids creating intermediate arrays.
 	 *
 	 * <p>
 	 * <b>Example:</b>

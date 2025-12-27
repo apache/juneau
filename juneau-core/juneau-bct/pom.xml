@@ -61,9 +61,6 @@
 				<extensions>true</extensions>
 				<configuration>
 					<supportIncrementalBuild>true</supportIncrementalBuild>
-					<instructions>
-						<Automatic-Module-Name>org.apache.juneau.assertions</Automatic-Module-Name>
-					</instructions>
 				</configuration>
 				<executions>
 					<execution>

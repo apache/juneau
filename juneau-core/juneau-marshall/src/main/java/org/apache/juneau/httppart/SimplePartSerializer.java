@@ -25,7 +25,7 @@ import org.apache.juneau.commons.collections.*;
  * An implementation of {@link HttpPartSerializer} that simply serializes everything using {@link Object#toString()}.
  *
  * <p>
- * More precisely, uses the {@link Mutaters#toString(Object)} method to stringify objects.
+ * More precisely, uses the {@link org.apache.juneau.reflect.Mutaters#toString(Object)} method to stringify objects.
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.

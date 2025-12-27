@@ -95,7 +95,12 @@ public class RestOperations {
 	}
 
 	/**
-	 * Represents a null value for the {@link Rest#restOperationsClass()} annotation.
+	 * Represents a null value for the RestOperations class.
+	 * 
+	 * <p>
+	 * This is used internally when no custom RestOperations implementation is specified.
+	 * The {@code Void} class is used as a placeholder when the {@link Rest} annotation
+	 * does not specify a custom {@code RestOperations} class.
 	 */
 	@SuppressWarnings("javadoc")
 	public final class Void extends RestOperations {

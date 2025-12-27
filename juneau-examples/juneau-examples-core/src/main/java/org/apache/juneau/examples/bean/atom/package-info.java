@@ -14,8 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.examples.bean.atom;
-
 /**
  * ATOM Bean Examples
  *
@@ -24,3 +22,4 @@ package org.apache.juneau.examples.bean.atom;
  * These examples show how to serialize and parse ATOM feed and entry objects.
  * </p>
  */
+package org.apache.juneau.examples.bean.atom;

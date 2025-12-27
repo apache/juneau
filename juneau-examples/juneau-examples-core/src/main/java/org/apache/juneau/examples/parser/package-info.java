@@ -14,8 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.examples.parser;
-
 /**
  * Parser Examples
  *
@@ -24,3 +22,4 @@ package org.apache.juneau.examples.parser;
  * These examples show various content parsing scenarios and techniques.
  * </p>
  */
+package org.apache.juneau.examples.parser;

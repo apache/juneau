@@ -50,7 +50,7 @@ import org.apache.juneau.*;
  *
  * <p>
  * Attempting to call {@link BeanMap#put(String,Object)} on a read-only property after calling {@link BeanMap#getBean()}
- * will result in a {@link BeanRuntimeException} being thrown.
+ * will result in a {@link org.apache.juneau.commons.reflect.BeanRuntimeException} being thrown.
  * Multiple calls to {@link BeanMap#getBean()} will return the same bean instance.
  *
  * <h5 class='section'>See Also:</h5><ul>

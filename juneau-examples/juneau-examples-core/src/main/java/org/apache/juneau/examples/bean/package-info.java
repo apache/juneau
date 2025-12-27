@@ -14,8 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.examples.bean;
-
 /**
  * Bean Examples
  *
@@ -24,3 +22,4 @@ package org.apache.juneau.examples.bean;
  * These examples show various POJO serialization and parsing scenarios.
  * </p>
  */
+package org.apache.juneau.examples.bean;

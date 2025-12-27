@@ -14,8 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.bean.swagger;
 
 /**
  * Swagger Data Transfer Objects
  */
+package org.apache.juneau.bean.swagger;

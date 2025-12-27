@@ -198,12 +198,10 @@ public class BeanMeta<T> {
 	 * 	}
 	 * </p>
 	 *
-	 * @param <T> The class type.
-	 * @param cm The class metadata for the class to create bean metadata for.
-	 * @param implClass
-	 * @param bf Optional bean filter to apply. Can be <jk>null</jk>.
-	 * @param implClassConstructor Optional constructor to use if one cannot be found. Can be <jk>null</jk>.
-	 * @return A {@link BeanMetaValue} containing the bean metadata (if successful) or a reason why it's not a bean.
+ * @param <T> The class type.
+ * @param cm The class metadata for the class to create bean metadata for.
+ * @param implClass The implementation class info.
+ * @return A {@link BeanMetaValue} containing the bean metadata (if successful) or a reason why it's not a bean.
 	 */
 	public static <T> BeanMetaValue<T> create(ClassMeta<T> cm, ClassInfo implClass) {
 		try {

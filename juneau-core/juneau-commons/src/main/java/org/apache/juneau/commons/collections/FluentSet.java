@@ -68,7 +68,7 @@ import java.util.*;
  * <ul class='spaced-list'>
  * 	<li>All set operations are delegated to the underlying set
  * 	<li>The fluent methods ({@link #a(Object)}, {@link #aa(Collection)}, {@link #ai(boolean, Object)}) return <c>this</c> for chaining
- * 	<li>If a <jk>null</jk> collection is passed to {@link #a(Collection)}, it is treated as a no-op
+ * 	<li>If a <jk>null</jk> collection is passed to {@link #aa(Collection)}, it is treated as a no-op
  * 	<li>The underlying set is stored by reference (not copied), so modifications affect the original set
  * 	<li>Duplicate elements are automatically handled by the underlying set (only one occurrence is stored)
  * </ul>

@@ -14,8 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.examples.rest.jetty;
-
 /**
  * REST Jetty Examples
  *
@@ -24,3 +22,4 @@ package org.apache.juneau.examples.rest.jetty;
  * These examples show various Jetty-based REST API deployment scenarios.
  * </p>
  */
+package org.apache.juneau.examples.rest.jetty;

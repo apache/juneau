@@ -207,7 +207,7 @@ public class ByteValue extends Value<Byte> {
 	 * Checks if the current value is equal to the specified value.
 	 *
 	 * <p>
-	 * Uses {@link Utils#eq(Object, Object)} for deep equality comparison, which handles nulls safely.
+	 * Uses {@link org.apache.juneau.commons.utils.Utils#eq(Object, Object)} for deep equality comparison, which handles nulls safely.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -227,7 +227,7 @@ public class ByteValue extends Value<Byte> {
 	 * Checks if the current value matches any of the specified values.
 	 *
 	 * <p>
-	 * Uses {@link Utils#eq(Object, Object)} for deep equality comparison of each value.
+	 * Uses {@link org.apache.juneau.commons.utils.Utils#eq(Object, Object)} for deep equality comparison of each value.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>

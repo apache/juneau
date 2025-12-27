@@ -458,7 +458,7 @@ public @interface BeanConfig {
 	 * <p>
 	 * Disables the feature where interfaces will be instantiated as proxy classes through the use of an
 	 * {@link InvocationHandler} if there is no other way of instantiating them.
-	 * <br>Setting this to <js>"true"</js> causes this to be a {@link BeanRuntimeException}.
+	 * <br>Setting this to <js>"true"</js> causes this to be a {@link org.apache.juneau.commons.reflect.BeanRuntimeException}.
 	 *
 	 * <ul class='values'>
 	 * 	<li><js>"true"</js>

@@ -60,9 +60,6 @@
 				<extensions>true</extensions>
 				<configuration>
 					<supportIncrementalBuild>true</supportIncrementalBuild>
-					<instructions>
-						<Automatic-Module-Name>org.apache.juneau.marshall.rdf</Automatic-Module-Name>
-					</instructions>
 				</configuration>
 				<executions>
 				<execution>

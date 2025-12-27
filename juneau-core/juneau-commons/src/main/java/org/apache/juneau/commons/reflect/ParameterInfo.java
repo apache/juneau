@@ -36,7 +36,7 @@ import org.apache.juneau.commons.utils.*;
  * This class provides a convenient wrapper around {@link Parameter} that extends the standard Java reflection
  * API with additional functionality for parameter introspection, annotation handling, and name resolution.
  * It supports resolving parameter names from bytecode (when compiled with <c>-parameters</c>) or from
- * {@link org.apache.juneau.annotation.Name @Name} annotations.
+ * {@link org.apache.juneau.annotation.Name Name} annotations.
  *
  * <h5 class='section'>Features:</h5>
  * <ul class='spaced-list'>
@@ -77,7 +77,7 @@ import org.apache.juneau.commons.utils.*;
 	 * <p>
 	 * Parameter names are resolved in the following order:
 	 * <ol class='spaced-list'>
-	 * 	<li>{@link org.apache.juneau.annotation.Name @Name} annotation value (if present)
+	 * 	<li>{@link org.apache.juneau.annotation.Name Name} annotation value (if present)
 	 * 	<li>Bytecode parameter names (if compiled with <c>-parameters</c> flag)
 	 * 	<li><c>arg0</c>, <c>arg1</c>, etc. (fallback if names unavailable)
 	 * </ol>
@@ -400,7 +400,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * <p>
 	 * Searches for the parameter name in the following order:
 	 * <ol>
-	 * 	<li>{@link org.apache.juneau.annotation.Name @Name} annotation value
+	 * 	<li>{@link org.apache.juneau.annotation.Name Name} annotation value
 	 * 	<li>Bytecode parameter name (if available and not disabled via system property)
 	 * 	<li>Matching parameters in parent classes/interfaces
 	 * </ol>
@@ -409,7 +409,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * This method is used for mapping constructor parameters to bean properties.
 	 *
 	 * <p>
-	 * <b>Note:</b> This is different from {@link #getResolvedQualifier()} which looks for {@link org.apache.juneau.annotation.Named @Named}
+	 * <b>Note:</b> This is different from {@link #getResolvedQualifier()} which looks for {@link org.apache.juneau.annotation.Named Named}
 	 * annotations for bean injection purposes.
 	 *
 	 * @return The parameter name if found, or <jk>null</jk> if not available.
@@ -422,14 +422,14 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * Finds the bean injection qualifier for this parameter.
 	 *
 	 * <p>
-	 * Searches for the {@link org.apache.juneau.annotation.Named @Named} annotation value to determine
+	 * Searches for the {@link org.apache.juneau.annotation.Named Named} annotation value to determine
 	 * which named bean should be injected.
 	 *
 	 * <p>
 	 * This method is used by the {@link org.apache.juneau.cp.BeanStore} for bean injection.
 	 *
 	 * <p>
-	 * <b>Note:</b> This is different from {@link #getResolvedName()} which looks for {@link org.apache.juneau.annotation.Name @Name}
+	 * <b>Note:</b> This is different from {@link #getResolvedName()} which looks for {@link org.apache.juneau.annotation.Name Name}
 	 * annotations for bean property mapping.
 	 *
 	 * @return The bean qualifier name if {@code @Named} annotation is found, or <jk>null</jk> if not annotated.

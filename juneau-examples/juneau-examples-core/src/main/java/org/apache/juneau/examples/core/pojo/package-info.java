@@ -14,8 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.examples.core.pojo;
-
 /**
  * POJO Marshalling Examples
  *
@@ -24,3 +22,4 @@ package org.apache.juneau.examples.core.pojo;
  * These examples show various Plain Old Java Object serialization and parsing scenarios.
  * </p>
  */
+package org.apache.juneau.examples.core.pojo;

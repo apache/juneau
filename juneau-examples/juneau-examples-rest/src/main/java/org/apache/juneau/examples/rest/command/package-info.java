@@ -14,8 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.examples.rest.command;
-
 /**
  * REST Command Examples
  *
@@ -24,3 +22,4 @@ package org.apache.juneau.examples.rest.command;
  * These examples show various command-based REST API scenarios.
  * </p>
  */
+package org.apache.juneau.examples.rest.command;

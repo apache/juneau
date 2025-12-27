@@ -272,7 +272,7 @@ public class MultiSet<E> extends AbstractSet<E> {
 	 *
 	 * <p>
 	 * The format is <c>"[[...],[...],...]"</c> where each <c>[...]</c> is the standard
-	 * {@link Collection#toString()} representation of each underlying collection.
+	 * standard string representation of each underlying collection (as returned by {@link Object#toString()}).
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>

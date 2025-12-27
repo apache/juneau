@@ -537,7 +537,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	/**
 	 * Returns <jk>true</jk> if all specified flags are applicable to this method.
 	 *
-	 * @param flags The flags to test for.
+	 * @param flag The flag to test for.
 	 * @return <jk>true</jk> if all specified flags are applicable to this method.
 	 */
 	@Override

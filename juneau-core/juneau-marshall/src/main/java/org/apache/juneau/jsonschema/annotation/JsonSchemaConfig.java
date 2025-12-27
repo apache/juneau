@@ -51,7 +51,7 @@ public @interface JsonSchemaConfig {
 	 * Identifies which categories of types that descriptions should be automatically added to generated schemas.
 	 *
 	 * <p>
-	 * The description is the result of calling {@link ClassMeta#getFullName()}.
+	 * The description is the result of calling {@link ClassMeta#getName()}.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>

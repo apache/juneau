@@ -339,7 +339,7 @@ public class Settings {
 	 * <ol>
 	 * 	<li>Per-thread override (if set via {@link #setLocal(String, String)})
 	 * 	<li>Global override (if set via {@link #setGlobal(String, String)})
-	 * 	<li>Sources in reverse order (last source added via {@link #addSource(SettingSource)} is checked first)
+	 * 	<li>Sources in reverse order (last source added via {@link Builder#addSource(SettingSource)} is checked first)
 	 * 	<li>System property source (default, always second-to-last)
 	 * 	<li>System environment variable source (default, always last)
 	 * </ol>
@@ -379,7 +379,7 @@ public class Settings {
 	 * This method searches for a value using the same lookup order as {@link #get(String)}.
 	 * If a value is found, it is converted to the type of the default value using {@link #toType(String, Class)}.
 	 * Supported types include any type that has a static method with signature <c>public static &lt;T&gt; T anyName(String arg)</c>
-	 * or a public constructor with signature <c>public T(String arg)</c>, such as {@link Boolean}, {@link Integer}, {@link Charset}, {@link File}, etc.
+	 * or a public constructor with signature <c>public T(String arg)</c>, such as {@link Boolean}, {@link Integer}, {@link java.nio.charset.Charset}, {@link java.io.File}, etc.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>

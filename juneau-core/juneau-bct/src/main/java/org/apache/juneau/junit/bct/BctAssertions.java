@@ -120,8 +120,8 @@ import org.opentest4j.*;
  * <h5 class='section'>Customizing the Default Converter:</h5>
  * <p>The default bean converter can be customized on a per-thread basis using:</p>
  * <ul>
- *    <li><b>{@link #setConverter(BeanConverter)}:</b> Set a custom converter for the current thread</li>
- *    <li><b>{@link #resetConverter()}:</b> Reset to the system default converter</li>
+ *    <li><b>{@link BctConfiguration#set(BeanConverter)}:</b> Set a custom converter for the current thread</li>
+ *    <li><b>{@link BctConfiguration#clear()}:</b> Reset to the system default converter</li>
  * </ul>
  *
  * <p class='bjava'>
@@ -177,8 +177,8 @@ import org.opentest4j.*;
  *
  * @see BeanConverter
  * @see BasicBeanConverter
- * @see #setConverter(BeanConverter)
- * @see #resetConverter()
+ * @see BctConfiguration#set(BeanConverter)
+ * @see BctConfiguration#clear()
  */
 public class BctAssertions {
 
@@ -205,7 +205,7 @@ public class BctAssertions {
 	 * patterns including nested objects, collections, arrays, method chaining, direct field access, collection iteration
 	 * with <js>"#{property}"</js> syntax, and universal <js>"length"</js>/<js>"size"</js> properties for all collection types.</p>
 	 *
-	 * <p>The method uses the default converter (set via {@link #setConverter(BeanConverter)}) for object introspection
+	 * <p>The method uses the default converter (set via {@link BctConfiguration#set(BeanConverter)}) for object introspection
 	 * and value extraction. The converter provides sophisticated property access through the {@link BeanConverter}
 	 * interface, supporting multiple fallback mechanisms for accessing object properties and values.</p>
 	 *
@@ -377,7 +377,7 @@ public class BctAssertions {
 	 * @throws AssertionError if any property values don't match expected values
 	 * @see BeanConverter
 	 * @see BasicBeanConverter
-	 * @see #setConverter(BeanConverter)
+	 * @see BctConfiguration#set(BeanConverter)
 	 * @see org.apache.juneau.commons.utils.Utils#fs(String, Object...)
 	 */
 	public static void assertBean(Supplier<String> message, Object actual, String fields, String expected) {

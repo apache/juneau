@@ -49,12 +49,12 @@ public interface Annotatable {
 	 * <p>
 	 * The label format depends on the type of annotatable:
 	 * <ul>
-	 * 	<li>{@link AnnotatableType#CLASS CLASS} - Simple class name (e.g., <js>"MyClass"</js>)
-	 * 	<li>{@link AnnotatableType#METHOD METHOD} - Class and method with parameter types (e.g., <js>"MyClass.myMethod(String,int)"</js>)
-	 * 	<li>{@link AnnotatableType#FIELD FIELD} - Class and field name (e.g., <js>"MyClass.myField"</js>)
-	 * 	<li>{@link AnnotatableType#CONSTRUCTOR CONSTRUCTOR} - Class and constructor with parameter types (e.g., <js>"MyClass.MyClass(String)"</js>)
-	 * 	<li>{@link AnnotatableType#PARAMETER PARAMETER} - Class, method/constructor, and parameter index (e.g., <js>"MyClass.myMethod[0]"</js>)
-	 * 	<li>{@link AnnotatableType#PACKAGE PACKAGE} - Package name (e.g., <js>"com.example.package"</js>)
+	 * 	<li>{@link AnnotatableType#CLASS_TYPE CLASS_TYPE} - Simple class name (e.g., <js>"MyClass"</js>)
+	 * 	<li>{@link AnnotatableType#METHOD_TYPE METHOD_TYPE} - Class and method with parameter types (e.g., <js>"MyClass.myMethod(String,int)"</js>)
+	 * 	<li>{@link AnnotatableType#FIELD_TYPE FIELD_TYPE} - Class and field name (e.g., <js>"MyClass.myField"</js>)
+	 * 	<li>{@link AnnotatableType#CONSTRUCTOR_TYPE CONSTRUCTOR_TYPE} - Class and constructor with parameter types (e.g., <js>"MyClass.MyClass(String)"</js>)
+	 * 	<li>{@link AnnotatableType#PARAMETER_TYPE PARAMETER_TYPE} - Class, method/constructor, and parameter index (e.g., <js>"MyClass.myMethod[0]"</js>)
+	 * 	<li>{@link AnnotatableType#PACKAGE_TYPE PACKAGE_TYPE} - Package name (e.g., <js>"com.example.package"</js>)
 	 * </ul>
 	 *
 	 * @return The human-readable label for this annotatable element.

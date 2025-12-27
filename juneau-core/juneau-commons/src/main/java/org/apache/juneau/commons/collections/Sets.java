@@ -123,7 +123,6 @@ public class Sets<E> {
 	 *
 	 * @param <E> The element type.
 	 * @param elementType The element type. Must not be <jk>null</jk>.
-	 * @param elementTypeArgs Optional element type arguments.
 	 * @return A new builder.
 	 */
 	public static <E> Sets<E> create(Class<E> elementType) {
@@ -142,7 +141,6 @@ public class Sets<E> {
 	 * Constructor.
 	 *
 	 * @param elementType The element type. Must not be <jk>null</jk>.
-	 * @param elementTypeArgs The element type generic arguments if there are any.
 	 */
 	public Sets(Class<E> elementType) {
 		this.elementType = assertArgNotNull("elementType", elementType);

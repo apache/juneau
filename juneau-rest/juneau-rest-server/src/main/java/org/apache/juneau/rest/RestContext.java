@@ -851,16 +851,14 @@ public class RestContext extends Context {
 		 * 	<li class='ja'>{@link Rest#children()}
 		 * </ul>
 		 *
-		 * @param values
-		 * 	The values to add to this setting.
+		 * @param values The child resources to add.
+		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * 	<br>Objects can be any of the specified types:
 		 * 	<ul>
 		 * 		<li>A class that has a constructor described above.
 		 * 		<li>An instantiated resource object (such as a servlet object instantiated by a servlet container).
 		 * 		<li>An instance of {@link RestChild} containing an instantiated resource object and a subpath.
 		 * 	</ul>
-		 * @param values The child resources to add.
-		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
 		public Builder children(Object...values) {

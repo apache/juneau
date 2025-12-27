@@ -32,7 +32,7 @@ import org.apache.juneau.commons.function.*;
  *
  * <h5 class='section'>Overview:</h5>
  * <p>
- * This class extends {@link ConcurrentHashMap2Key} to provide a thread-safe caching layer with automatic
+ * This class uses {@link java.util.concurrent.ConcurrentHashMap} internally to provide a thread-safe caching layer with automatic
  * value computation, cache eviction, and statistics tracking for two-part composite keys. It's designed for
  * caching expensive-to-compute or frequently-accessed objects indexed by two keys.
  *

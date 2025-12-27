@@ -25,7 +25,7 @@ import org.apache.juneau.commons.utils.*;
  * Encapsulates type variable implementations for a class hierarchy.
  *
  * <p>
- * This class provides a type-safe wrapper around the map returned by {@link ClassUtils#findTypeVarImpls(Type)},
+ * This class provides a type-safe wrapper around type variable implementations,
  * using {@link List} instead of arrays for better API consistency.
  *
  * <h5 class='section'>Example:</h5>
@@ -45,7 +45,7 @@ import org.apache.juneau.commons.utils.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li>{@link ClassUtils#findTypeVarImpls(Type)}
+ * 	<li>{@link #of(Type)}
  * </ul>
  */
 public class TypeVariables {

@@ -40,7 +40,7 @@ import org.apache.juneau.commons.collections.*;
  *
  * <p>
  * This class is thread-safe and can be used as a drop-in replacement for
- * {@link MimetypesFileTypeMap} without requiring Jakarta Activation.
+ * <c>javax.activation.MimetypesFileTypeMap</c> without requiring Jakarta Activation.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -59,7 +59,7 @@ import org.apache.juneau.commons.collections.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jm'>{@link Files#probeContentType(Path)}
- * 	<li class='jm'>{@link MimetypesFileTypeMap}
+ * 	<li class='jm'><c>javax.activation.MimetypesFileTypeMap</c> (legacy class, not available in Java 11+)
  * </ul>
  */
 public class MimeTypeDetector {

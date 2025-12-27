@@ -436,9 +436,9 @@ public class ResponseContent implements HttpEntity {
 	 * @param type The object type to create.
 	 * @return The future object.
 	 * @throws RestCallException If the executor service was not defined.
-	 * @see
-	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
-	 * 	{@link Future Futures}.
+ * @see
+ * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
+ * 	Future instances.
 	 */
 	public <T> Future<T> asFuture(Class<T> type) throws RestCallException {
 		return client.getExecutorService().submit(() -> as(type));
@@ -462,9 +462,9 @@ public class ResponseContent implements HttpEntity {
 	 * @param type The object type to create.
 	 * @return The future object.
 	 * @throws RestCallException If the executor service was not defined.
-	 * @see
-	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
-	 * 	{@link Future Futures}.
+ * @see
+ * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
+ * 	Future instances.
 	 */
 	public <T> Future<T> asFuture(ClassMeta<T> type) throws RestCallException {
 		return client.getExecutorService().submit(() -> as(type));
@@ -494,9 +494,9 @@ public class ResponseContent implements HttpEntity {
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The future object.
 	 * @throws RestCallException If the executor service was not defined.
-	 * @see
-	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
-	 * 	{@link Future Futures}.
+ * @see
+ * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
+ * 	Future instances.
 	 */
 	public <T> Future<T> asFuture(Type type, Type...args) throws RestCallException {
 		return client.getExecutorService().submit(() -> as(type, args));
@@ -951,9 +951,9 @@ public class ResponseContent implements HttpEntity {
 	 *
 	 * @return The future object.
 	 * @throws RestCallException If the executor service was not defined.
-	 * @see
-	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
-	 * 	{@link Future Futures}.
+ * @see
+ * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
+ * 	Future instances.
 	 */
 	public Future<String> asStringFuture() throws RestCallException {
 		return client.getExecutorService().submit(this::asString);

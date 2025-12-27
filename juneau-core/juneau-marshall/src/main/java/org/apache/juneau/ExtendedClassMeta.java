@@ -44,7 +44,7 @@ public class ExtendedClassMeta extends ExtendedMeta {
 	protected ClassMeta<?> getClassMeta() { return cm; }
 
 	/**
-	 * Convenience method for calling {@link ClassMeta#getInnerClass()} on the metadata passed to the constructor.
+	 * Convenience method for calling {@link ClassMeta#inner()} on the metadata passed to the constructor.
 	 *
 	 * @return The class wrapped by this metadata.
 	 */
