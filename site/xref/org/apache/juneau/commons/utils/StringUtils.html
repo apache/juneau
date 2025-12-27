@@ -1958,7 +1958,7 @@
 <a class="jxr_linenumber" name="L1950" href="#L1950">1950</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1951" href="#L1951">1951</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L1952" href="#L1952">1952</a> <em class="jxr_javadoccomment">	 * This method iterates through the provided strings and returns the first one that is not &lt;jk&gt;null&lt;/jk&gt;</em>
-<a class="jxr_linenumber" name="L1953" href="#L1953">1953</a> <em class="jxr_javadoccomment">	 * and not empty (as determined by {@link #ne(String)}).</em>
+<a class="jxr_linenumber" name="L1953" href="#L1953">1953</a> <em class="jxr_javadoccomment">	 * and not empty (as determined by {@link Utils#ne(CharSequence)}).</em>
 <a class="jxr_linenumber" name="L1954" href="#L1954">1954</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1955" href="#L1955">1955</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L1956" href="#L1956">1956</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
@@ -1971,7 +1971,7 @@
 <a class="jxr_linenumber" name="L1963" href="#L1963">1963</a> <em class="jxr_javadoccomment">	 * @param s The strings to test.</em>
 <a class="jxr_linenumber" name="L1964" href="#L1964">1964</a> <em class="jxr_javadoccomment">	 * @return The first non-empty string in the list, or &lt;jk&gt;null&lt;/jk&gt; if they were all &lt;jk&gt;null&lt;/jk&gt; or empty.</em>
 <a class="jxr_linenumber" name="L1965" href="#L1965">1965</a> <em class="jxr_javadoccomment">	 * @see #firstNonBlank(String...)</em>
-<a class="jxr_linenumber" name="L1966" href="#L1966">1966</a> <em class="jxr_javadoccomment">	 * @see #ne(String)</em>
+<a class="jxr_linenumber" name="L1966" href="#L1966">1966</a> <em class="jxr_javadoccomment">	 * @see Utils#ne(CharSequence)</em>
 <a class="jxr_linenumber" name="L1967" href="#L1967">1967</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1968" href="#L1968">1968</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String firstNonEmpty(String...s) {
 <a class="jxr_linenumber" name="L1969" href="#L1969">1969</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ss : s)
@@ -2141,7 +2141,7 @@
 <a class="jxr_linenumber" name="L2133" href="#L2133">2133</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L2134" href="#L2134">2134</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Comparison with mformat():&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L2135" href="#L2135">2135</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L2136" href="#L2136">2136</a> <em class="jxr_javadoccomment">	 * This method supports both formats, while {@link #mformat(String, Object...)} only supports MessageFormat-style.</em>
+<a class="jxr_linenumber" name="L2136" href="#L2136">2136</a> <em class="jxr_javadoccomment">	 * This method supports both MessageFormat-style and printf-style formats.</em>
 <a class="jxr_linenumber" name="L2137" href="#L2137">2137</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L2138" href="#L2138">2138</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L2139" href="#L2139">2139</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Both styles supported (this method)&lt;/jc&gt;</em>
@@ -2165,7 +2165,7 @@
 <a class="jxr_linenumber" name="L2157" href="#L2157">2157</a> <em class="jxr_javadoccomment">	 * @throws java.util.IllegalFormatException If the format string is invalid or arguments don't match the format specifiers.</em>
 <a class="jxr_linenumber" name="L2158" href="#L2158">2158</a> <em class="jxr_javadoccomment">	 * @see StringFormat for detailed format specification</em>
 <a class="jxr_linenumber" name="L2159" href="#L2159">2159</a> <em class="jxr_javadoccomment">	 * @see String#format(String, Object...)</em>
-<a class="jxr_linenumber" name="L2160" href="#L2160">2160</a> <em class="jxr_javadoccomment">	 * @see #mformat(String, Object...) for MessageFormat-only formatting</em>
+<a class="jxr_linenumber" name="L2160" href="#L2160">2160</a> <em class="jxr_javadoccomment">	 * @see StringFormat for detailed format specification</em>
 <a class="jxr_linenumber" name="L2161" href="#L2161">2161</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L2162" href="#L2162">2162</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String format(String pattern, Object...args) {
 <a class="jxr_linenumber" name="L2163" href="#L2163">2163</a> 		<strong class="jxr_keyword">return</strong> StringFormat.format(pattern, args);
@@ -5468,7 +5468,7 @@
 <a class="jxr_linenumber" name="L5460" href="#L5460">5460</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L5461" href="#L5461">5461</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L5462" href="#L5462">5462</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L5463" href="#L5463">5463</a> <em class="jxr_javadoccomment">	 * 	randomAscii(&lt;jk&gt;10&lt;/jk&gt;);  &lt;jc&gt;// "!@#$%^&amp;*()"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L5463" href="#L5463">5463</a> <em class="jxr_javadoccomment">	 * 	randomAscii(&lt;jk&gt;10&lt;/jk&gt;);  &lt;jc&gt;// "!@#$%^&amp;amp;*()"&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L5464" href="#L5464">5464</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L5465" href="#L5465">5465</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L5466" href="#L5466">5466</a> <em class="jxr_javadoccomment">	 * @param length The length of the generated string.</em>

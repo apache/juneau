@@ -444,9 +444,9 @@
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> <em class="jxr_javadoccomment">	 * @param type The object type to create.</em>
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> <em class="jxr_javadoccomment">	 * @return The future object.</em>
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> <em class="jxr_javadoccomment">	 * @throws RestCallException If the executor service was not defined.</em>
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment">	 * @see</em>
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating</em>
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 * 	{@link Future Futures}.</em>
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment"> * @see</em>
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment"> * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating</em>
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment"> * 	Future instances.</em>
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; Future&lt;T&gt; asFuture(Class&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 		<strong class="jxr_keyword">return</strong> client.getExecutorService().submit(() -&gt; as(type));
@@ -470,9 +470,9 @@
 <a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">	 * @param type The object type to create.</em>
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> <em class="jxr_javadoccomment">	 * @return The future object.</em>
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> <em class="jxr_javadoccomment">	 * @throws RestCallException If the executor service was not defined.</em>
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> <em class="jxr_javadoccomment">	 * @see</em>
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> <em class="jxr_javadoccomment">	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating</em>
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment">	 * 	{@link Future Futures}.</em>
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> <em class="jxr_javadoccomment"> * @see</em>
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> <em class="jxr_javadoccomment"> * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating</em>
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment"> * 	Future instances.</em>
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L469" href="#L469">469</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; Future&lt;T&gt; asFuture(ClassMeta&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L470" href="#L470">470</a> 		<strong class="jxr_keyword">return</strong> client.getExecutorService().submit(() -&gt; as(type));
@@ -502,9 +502,9 @@
 <a class="jxr_linenumber" name="L494" href="#L494">494</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Ignored if the main type is not a map or collection.</em>
 <a class="jxr_linenumber" name="L495" href="#L495">495</a> <em class="jxr_javadoccomment">	 * @return The future object.</em>
 <a class="jxr_linenumber" name="L496" href="#L496">496</a> <em class="jxr_javadoccomment">	 * @throws RestCallException If the executor service was not defined.</em>
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> <em class="jxr_javadoccomment">	 * @see</em>
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> <em class="jxr_javadoccomment">	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating</em>
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> <em class="jxr_javadoccomment">	 * 	{@link Future Futures}.</em>
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> <em class="jxr_javadoccomment"> * @see</em>
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> <em class="jxr_javadoccomment"> * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating</em>
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> <em class="jxr_javadoccomment"> * 	Future instances.</em>
 <a class="jxr_linenumber" name="L500" href="#L500">500</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L501" href="#L501">501</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; Future&lt;T&gt; asFuture(Type type, Type...args) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L502" href="#L502">502</a> 		<strong class="jxr_keyword">return</strong> client.getExecutorService().submit(() -&gt; as(type, args));
@@ -959,9 +959,9 @@
 <a class="jxr_linenumber" name="L951" href="#L951">951</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L952" href="#L952">952</a> <em class="jxr_javadoccomment">	 * @return The future object.</em>
 <a class="jxr_linenumber" name="L953" href="#L953">953</a> <em class="jxr_javadoccomment">	 * @throws RestCallException If the executor service was not defined.</em>
-<a class="jxr_linenumber" name="L954" href="#L954">954</a> <em class="jxr_javadoccomment">	 * @see</em>
-<a class="jxr_linenumber" name="L955" href="#L955">955</a> <em class="jxr_javadoccomment">	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating</em>
-<a class="jxr_linenumber" name="L956" href="#L956">956</a> <em class="jxr_javadoccomment">	 * 	{@link Future Futures}.</em>
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> <em class="jxr_javadoccomment"> * @see</em>
+<a class="jxr_linenumber" name="L955" href="#L955">955</a> <em class="jxr_javadoccomment"> * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating</em>
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> <em class="jxr_javadoccomment"> * 	Future instances.</em>
 <a class="jxr_linenumber" name="L957" href="#L957">957</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L958" href="#L958">958</a> 	<strong class="jxr_keyword">public</strong> Future&lt;String&gt; asStringFuture() <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L959" href="#L959">959</a> 		<strong class="jxr_keyword">return</strong> client.getExecutorService().submit(<strong class="jxr_keyword">this</strong>::asString);
