@@ -11,12 +11,10 @@ The script performs the following steps:
 1. **Installs npm dependencies** - Runs `npm ci` in the `juneau-docs` directory
 2. **Compiles Java modules** - Runs `mvn clean install -DskipTests` to build all modules
 3. **Generates Maven site** - Runs `mvn site -DskipTests` to generate the Maven project site (includes aggregate javadocs)
-4. **Copies current javadocs** - Copies generated javadocs to `juneau-docs/javadocs/<current-release>/`
+4. **Copies current javadocs** - Copies generated javadocs to `juneau-docs/static/javadocs/<current-release>/`
 5. **Updates javadocs index** - Updates `releases.json` with version information
-6. **Creates build directory** - Creates `juneau-docs/build/` directory
-7. **Copies Maven site** - Copies the generated site to `juneau-docs/build/site/`
-8. **Copies javadocs** - Copies javadocs to `juneau-docs/build/javadocs/`
-9. **Builds Docusaurus** - Runs `npm run build` to generate the static Docusaurus site
+6. **Copies Maven site** - Copies the generated site to `juneau-docs/static/site/` (Docusaurus will copy to build)
+7. **Builds Docusaurus** - Runs `npm run build` to generate the static Docusaurus site (copies static/ to build/)
 10. **Copies .asf.yaml** - Copies the ASF configuration file to the build directory
 11. **Verifies apidocs** - Checks that the javadocs were successfully generated
 12. **Checks topic links** - Validates all documentation links
@@ -57,7 +55,7 @@ python3 scripts/build-docs.py --skip-npm --skip-copy
 
 - `--skip-npm` - Skip npm install and Docusaurus build
 - `--skip-maven` - Skip Maven compilation and site generation
-- `--skip-copy` - Skip copying Maven site to build directory
+- `--skip-copy` - Skip copying Maven site to static directory
 - `--staging` - Build for staging (sets SITE_URL to juneau.staged.apache.org)
 
 ## Prerequisites
@@ -77,7 +75,7 @@ After successful execution, the documentation will be available in:
 
 - **Docusaurus docs**: `juneau-docs/build/`
 - **Maven site**: `juneau-docs/build/site/`
-- **Javadocs**: `juneau-docs/build/javadocs/` (versioned) and `juneau-docs/build/site/apidocs/` (current)
+- **Javadocs**: `juneau-docs/build/javadocs/` (versioned, copied from static/javadocs) and `juneau-docs/build/site/apidocs/` (current)
 - **Javadocs index**: `juneau-docs/build/javadocs/index.html` (dynamically loads from `releases.json`)
 
 The script will also verify that the javadocs were generated and report the number of HTML files found.
@@ -158,7 +156,7 @@ If you want to test the build process without modifying the build directory:
 python3 scripts/build-docs.py --skip-copy
 ```
 
-The Maven site will still be generated in `target/site/`, but won't be copied to `juneau-docs/build/`.
+The Maven site will still be generated in `target/site/`, but won't be copied to `juneau-docs/static/site/`.
 
 ## Troubleshooting
 
@@ -218,7 +216,7 @@ If the script reports that apidocs were not found:
 
 ## Build Order
 
-The script now copies Maven site and javadocs **before** building Docusaurus. This prevents Docusaurus from showing broken links during startup, as the static files are already in place.
+The script copies Maven site to `static/site/` and updates javadocs in `static/javadocs/` **before** building Docusaurus. Docusaurus automatically copies everything from the `static/` directory to the `build/` directory during the build process, so the files are available when Docusaurus processes links, preventing broken link warnings.
 
 ## Integration with CI/CD
 

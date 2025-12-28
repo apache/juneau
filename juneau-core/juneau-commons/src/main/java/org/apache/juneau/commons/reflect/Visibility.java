@@ -31,10 +31,10 @@ import java.lang.reflect.*;
  * <p>
  * Used in conjunction with the following bean context properties:
  * <ul class='javatree'>
- * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanConstructorVisibility(org.apache.juneau.commons.reflect.Visibility)}
- * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanClassVisibility(org.apache.juneau.commons.reflect.Visibility)}
- * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanFieldVisibility(org.apache.juneau.commons.reflect.Visibility)}
- * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanMethodVisibility(org.apache.juneau.commons.reflect.Visibility)}
+ * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanConstructorVisibility(Visibility)}
+ * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanClassVisibility(Visibility)}
+ * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanFieldVisibility(Visibility)}
+ * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanMethodVisibility(Visibility)}
  * </ul>
  *
  */

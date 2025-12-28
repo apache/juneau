@@ -54,6 +54,11 @@ def run_command(cmd, cwd=None, check=True, description=None):
             capture_output=False,
             text=True
         )
+        # Check return code even if check=False
+        if result.returncode != 0:
+            if description:
+                print(f"❌ {description} - FAILED (exit code: {result.returncode})")
+            return False
         if description:
             print(f"✅ {description} - SUCCESS")
         return True
@@ -182,6 +187,7 @@ def main():
     build_script = script_dir / 'build-docs.py'
     if not build_script.exists():
         print(f"❌ ERROR: {build_script} not found")
+        play_sound(success=False)
         sys.exit(1)
     
     if not run_command(
@@ -190,11 +196,13 @@ def main():
         description="Building documentation for staging"
     ):
         print("\n❌ Documentation build failed. Aborting.")
+        play_sound(success=False)
         sys.exit(1)
     
     if not build_dir.exists():
         print(f"❌ ERROR: Build directory not found at {build_dir}")
         print("   Documentation build may have failed.")
+        play_sound(success=False)
         sys.exit(1)
     
     # Step 2: Create temp directory and checkout asf-staging
@@ -204,6 +212,7 @@ def main():
     remote_url = get_git_remote_url()
     if not remote_url:
         print("❌ ERROR: Could not determine git remote URL")
+        play_sound(success=False)
         sys.exit(1)
     
     # Create temp directory
@@ -217,6 +226,7 @@ def main():
             description="Cloning repository to temp directory"
         ):
             print("\n❌ Failed to clone repository")
+            play_sound(success=False)
             sys.exit(1)
         
         # Fetch asf-staging branch
@@ -245,6 +255,7 @@ def main():
                 description="Creating new asf-staging branch"
             ):
                 print("\n❌ Failed to create asf-staging branch")
+                play_sound(success=False)
                 sys.exit(1)
         else:
             print("✅ Checked out asf-staging branch")
@@ -309,6 +320,7 @@ def main():
             description="Adding all files"
         ):
             print("\n❌ Failed to add files")
+            play_sound(success=False)
             sys.exit(1)
         
         # Check if there are changes to commit
@@ -325,6 +337,7 @@ def main():
                 description=f"Committing changes: {args.commit_message}"
             ):
                 print("\n❌ Failed to commit changes")
+                play_sound(success=False)
                 sys.exit(1)
         else:
             print("ℹ️  No changes to commit")
@@ -338,6 +351,7 @@ def main():
                 description="Pushing to remote"
             ):
                 print("\n❌ Failed to push to remote")
+                play_sound(success=False)
                 sys.exit(1)
         else:
             print("\n⏭️  Skipping push (--no-push flag set)")
@@ -358,11 +372,13 @@ def main():
         
     except KeyboardInterrupt:
         print("\n\n⚠️  Process interrupted by user")
+        play_sound(success=False)
         sys.exit(1)
     except Exception as e:
         print(f"\n❌ ERROR: {e}")
         import traceback
         traceback.print_exc()
+        play_sound(success=False)
         sys.exit(1)
     finally:
         # Clean up temp directory if push was successful

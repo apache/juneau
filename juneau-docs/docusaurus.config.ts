@@ -102,9 +102,9 @@ const baseThemeConfig: Preset.ThemeConfig = {
         position: 'right',
       },
       {
-        // Use relative path with /index.html to ensure Docusaurus treats it as a static file
-        // rather than trying to route it as an internal page
-        href: '/javadocs/index.html',
+        // Use pathname:// protocol to tell Docusaurus this is an external link
+        // (even though it's on the same domain) to bypass link validation
+        href: 'pathname:///javadocs/index.html',
         label: 'Javadocs',
         position: 'right',
       },
@@ -126,7 +126,7 @@ const baseThemeConfig: Preset.ThemeConfig = {
           },
           {
             label: 'Javadocs',
-            href: '/site/apidocs/index.html',
+            href: 'pathname:///site/apidocs/index.html',
           },
         ],
       },

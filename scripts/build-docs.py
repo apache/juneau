@@ -21,9 +21,9 @@ Steps performed:
 1. Install npm dependencies in juneau-docs
 2. Compile and install all Java modules to local Maven repository
 3. Generate Maven site (includes aggregate javadocs via reporting section)
-4. Build Docusaurus documentation (creates build directory)
-5. Copy Maven site directly to juneau-docs/build/site
-6. Copy javadocs to juneau-docs/build/javadocs
+4. Copy current javadocs to juneau-docs/static/javadocs/<version> (updates versioned javadocs)
+5. Copy Maven site to juneau-docs/static/site (Docusaurus will copy to build)
+6. Build Docusaurus documentation (copies static/ contents to build/)
 7. Copy .asf.yaml to juneau-docs/build (needed for deployment)
 8. Verify that apidocs were generated
 9. Check topic links (validates all documentation links)
@@ -34,7 +34,7 @@ Usage:
 Options:
     --skip-npm      Skip npm install and Docusaurus build
     --skip-maven    Skip Maven compilation and site generation
-    --skip-copy     Skip copying Maven site to build directory
+    --skip-copy     Skip copying Maven site to static directory
 """
 
 import argparse
@@ -101,27 +101,26 @@ def generate_maven_site(project_root):
     run_command(['mvn', 'site', '-DskipTests'], cwd=project_root)
 
 def copy_maven_site(project_root, docs_dir):
-    """Copy Maven site directly to build directory."""
-    print("\n=== Copying Maven site to build directory ===")
+    """Copy Maven site to static directory (Docusaurus will copy it to build)."""
+    print("\n=== Copying Maven site to static directory ===")
     
     source_site = Path(project_root) / 'target' / 'site'
-    build_dir = Path(docs_dir) / 'build'
-    build_site = build_dir / 'site'
+    static_dir = Path(docs_dir) / 'static'
+    static_site = static_dir / 'site'
     
     if not source_site.exists():
         print(f"ERROR: Maven site not found at {source_site}")
         sys.exit(1)
     
-    if not build_dir.exists():
-        print(f"ERROR: Build directory not found at {build_dir}. Docusaurus must be built first.")
-        sys.exit(1)
+    # Create static directory if it doesn't exist
+    static_dir.mkdir(parents=True, exist_ok=True)
     
-    # Copy site contents directly to build/site
-    print(f"Copying {source_site} to {build_site}")
-    if build_site.exists():
-        shutil.rmtree(build_site)
-    shutil.copytree(source_site, build_site)
-    print(f"✓ Maven site copied to {build_site}")
+    # Copy site contents to static/site (Docusaurus will copy to build during build)
+    print(f"Copying {source_site} to {static_site}")
+    if static_site.exists():
+        shutil.rmtree(static_site)
+    shutil.copytree(source_site, static_site)
+    print(f"✓ Maven site copied to {static_site}")
 
 def verify_apidocs(project_root):
     """Verify that apidocs were generated."""
@@ -173,7 +172,7 @@ def copy_current_javadocs(project_root, docs_dir):
         return
     
     source_apidocs = Path(project_root) / 'target' / 'site' / 'apidocs'
-    javadocs_dir = Path(docs_dir) / 'javadocs'
+    javadocs_dir = Path(docs_dir) / 'static' / 'javadocs'
     versioned_javadocs = javadocs_dir / current_version
     
     if not source_apidocs.exists():
@@ -197,7 +196,7 @@ def update_javadocs_json(docs_dir, current_version):
     """Update or create JSON file with javadoc release information."""
     print("\n=== Updating javadocs release index ===")
     
-    javadocs_dir = Path(docs_dir) / 'javadocs'
+    javadocs_dir = Path(docs_dir) / 'static' / 'javadocs'
     json_file = javadocs_dir / 'releases.json'
     
     # Load existing releases if file exists
@@ -266,7 +265,7 @@ def main():
     parser = argparse.ArgumentParser(description='Build Apache Juneau documentation')
     parser.add_argument('--skip-npm', action='store_true', help='Skip npm install and Docusaurus build')
     parser.add_argument('--skip-maven', action='store_true', help='Skip Maven compilation and site generation')
-    parser.add_argument('--skip-copy', action='store_true', help='Skip copying Maven site to build directory')
+    parser.add_argument('--skip-copy', action='store_true', help='Skip copying Maven site to static directory')
     parser.add_argument('--staging', action='store_true', help='Build for staging (sets SITE_URL to juneau.staged.apache.org)')
     
     args = parser.parse_args()
@@ -312,32 +311,16 @@ def main():
         else:
             print("\n=== Skipping Maven steps ===")
         
-        # Create build directory and copy Maven site/javadocs BEFORE building Docusaurus
-        # This prevents Docusaurus from showing broken links during startup
+        # Copy Maven site to static directory BEFORE building Docusaurus
+        # (Docusaurus will automatically copy static/ contents to build/ during build)
+        # Note: javadocs are already in static/javadocs, so no copy needed
         if not args.skip_copy:
-            build_dir.mkdir(parents=True, exist_ok=True)
-            
-            # Copy Maven site to build directory
+            # Copy Maven site to static directory
             copy_maven_site(project_root, docs_dir)
-            
-            # Copy javadocs to build directory
-            source_javadocs = Path(docs_dir) / 'javadocs'
-            build_javadocs = build_dir / 'javadocs'
-            
-            if source_javadocs.exists():
-                print(f"\n=== Copying javadocs to build directory ===")
-                print(f"Copying {source_javadocs} to {build_javadocs}")
-                if build_javadocs.exists():
-                    shutil.rmtree(build_javadocs)
-                shutil.copytree(source_javadocs, build_javadocs)
-                print(f"✓ Javadocs copied successfully")
-            else:
-                print(f"\n=== WARNING: Javadocs directory not found at {source_javadocs} ===")
-                print("Skipping javadocs copy step")
         else:
             print("\n=== Skipping copy step ===")
         
-        # Build Docusaurus documentation (build directory already exists with site/javadocs)
+        # Build Docusaurus documentation (will copy static/ contents to build/)
         if not args.skip_npm:
             build_docusaurus(docs_dir, staging=args.staging)
         else:
@@ -345,8 +328,8 @@ def main():
         
         # Copy .asf.yaml to build directory (needed for deployment)
         if not args.skip_copy:
-            asf_yaml = Path(project_root) / '.asf.yaml'
             build_dir = Path(docs_dir) / 'build'
+            asf_yaml = Path(project_root) / '.asf.yaml'
             if asf_yaml.exists() and build_dir.exists():
                 print(f"\n=== Copying .asf.yaml to build directory ===")
                 shutil.copy2(asf_yaml, build_dir)
