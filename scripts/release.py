@@ -51,7 +51,6 @@ import sys
 import time
 import urllib.request
 import xml.etree.ElementTree as ET
-import zipfile
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, Optional, List
@@ -827,54 +826,15 @@ class ReleaseScript:
         for extra_sha512 in release_source_dir.glob('*.sha512'):
             extra_sha512.unlink()
         
-        # Rename and process source files
+        # Rename source zip file
         source_zip = release_source_dir / f"juneau-{version}-source-release.zip"
         if source_zip.exists():
             target_zip = release_source_dir / f"apache-juneau-{version}-src.zip"
             
-            # Extract, exclude docs, and re-zip
-            print(f"Extracting source zip to exclude docs...")
-            extract_dir = release_source_dir / "extracted-src"
-            if extract_dir.exists():
-                shutil.rmtree(extract_dir)
-            extract_dir.mkdir()
-            
-            with zipfile.ZipFile(source_zip, 'r') as zip_ref:
-                zip_ref.extractall(extract_dir)
-            
-            # Find and remove docs directory
-            # The zip typically contains: juneau-{version}-source-release/docs/
-            docs_dir = None
-            for root, dirs, files in os.walk(extract_dir):
-                root_path = Path(root)
-                if root_path.name == "docs" and root_path.is_dir():
-                    docs_dir = root_path
-                    break
-            
-            if docs_dir and docs_dir.exists():
-                print(f"Removing {docs_dir} from source release...")
-                shutil.rmtree(docs_dir)
-                print("✓ docs excluded from source release")
-            else:
-                print("⚠ Warning: docs directory not found in source zip (may have already been excluded)")
-            
-            # Re-zip the contents, preserving the directory structure
-            print(f"Creating new source zip without docs...")
-            with zipfile.ZipFile(target_zip, 'w', zipfile.ZIP_DEFLATED) as zip_ref:
-                for root, dirs, files in os.walk(extract_dir):
-                    # Skip docs if it still exists (shouldn't happen, but be safe)
-                    if 'docs' in dirs:
-                        dirs.remove('docs')
-                    for file in files:
-                        file_path = Path(root) / file
-                        arcname = file_path.relative_to(extract_dir)
-                        zip_ref.write(file_path, arcname)
-            
-            # Clean up extracted directory
-            shutil.rmtree(extract_dir)
-            
-            # Remove original source zip
-            source_zip.unlink()
+            # Simply rename the zip file (docs is already excluded by maven-source-plugin)
+            print(f"Renaming source zip: {source_zip.name} -> {target_zip.name}")
+            source_zip.rename(target_zip)
+            print(f"✓ Source zip renamed to {target_zip.name}")
             
             # Process .asc file
             asc_file = release_source_dir / f"juneau-{version}-source-release.zip.asc"
