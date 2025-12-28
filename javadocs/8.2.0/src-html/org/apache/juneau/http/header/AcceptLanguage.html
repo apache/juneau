@@ -1,0 +1,266 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.http.header;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import static org.apache.juneau.http.Constants.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span><a name="line.16"></a>
+<span class="sourceLineNo">017</span>import java.util.function.*;<a name="line.17"></a>
+<span class="sourceLineNo">018</span><a name="line.18"></a>
+<span class="sourceLineNo">019</span>import org.apache.juneau.http.*;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>import org.apache.juneau.http.annotation.*;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>import org.apache.juneau.internal.*;<a name="line.21"></a>
+<span class="sourceLineNo">022</span><a name="line.22"></a>
+<span class="sourceLineNo">023</span>/**<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * Represents a parsed &lt;l&gt;Accept-Language&lt;/l&gt; HTTP request header.<a name="line.24"></a>
+<span class="sourceLineNo">025</span> *<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * &lt;p&gt;<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * List of acceptable human languages for response.<a name="line.27"></a>
+<span class="sourceLineNo">028</span> *<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * &lt;h5 class='figure'&gt;Example&lt;/h5&gt;<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * &lt;p class='bcode w800'&gt;<a name="line.30"></a>
+<span class="sourceLineNo">031</span> *    Accept-Language: en-US<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * &lt;/p&gt;<a name="line.32"></a>
+<span class="sourceLineNo">033</span> *<a name="line.33"></a>
+<span class="sourceLineNo">034</span> * &lt;h5 class='topic'&gt;RFC2616 Specification&lt;/h5&gt;<a name="line.34"></a>
+<span class="sourceLineNo">035</span> *<a name="line.35"></a>
+<span class="sourceLineNo">036</span> * The Accept-Language request-header field is similar to Accept, but restricts the set of natural languages that are<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * preferred as a response to the request.<a name="line.37"></a>
+<span class="sourceLineNo">038</span> * Language tags are defined in section 3.10.<a name="line.38"></a>
+<span class="sourceLineNo">039</span> *<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * &lt;p class='bcode w800'&gt;<a name="line.40"></a>
+<span class="sourceLineNo">041</span> *    Accept-Language = "Accept-Language" ":"<a name="line.41"></a>
+<span class="sourceLineNo">042</span> *                      1#( language-range [ ";" "q" "=" qvalue ] )<a name="line.42"></a>
+<span class="sourceLineNo">043</span> *    language-range  = ( ( 1*8ALPHA *( "-" 1*8ALPHA ) ) | "*" )<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * &lt;/p&gt;<a name="line.44"></a>
+<span class="sourceLineNo">045</span> *<a name="line.45"></a>
+<span class="sourceLineNo">046</span> * &lt;p&gt;<a name="line.46"></a>
+<span class="sourceLineNo">047</span> * Each language-range MAY be given an associated quality value which represents an estimate of the user's preference<a name="line.47"></a>
+<span class="sourceLineNo">048</span> * for the languages specified by that range.<a name="line.48"></a>
+<span class="sourceLineNo">049</span> * The quality value defaults to "q=1".<a name="line.49"></a>
+<span class="sourceLineNo">050</span> * For example...<a name="line.50"></a>
+<span class="sourceLineNo">051</span> * &lt;p class='bcode w800'&gt;<a name="line.51"></a>
+<span class="sourceLineNo">052</span> *    Accept-Language: da, en-gb;q=0.8, en;q=0.7<a name="line.52"></a>
+<span class="sourceLineNo">053</span> * &lt;/p&gt;<a name="line.53"></a>
+<span class="sourceLineNo">054</span> * &lt;p&gt;<a name="line.54"></a>
+<span class="sourceLineNo">055</span> * ...would mean: "I prefer Danish, but will accept British English and other types of English."<a name="line.55"></a>
+<span class="sourceLineNo">056</span> *<a name="line.56"></a>
+<span class="sourceLineNo">057</span> * &lt;p&gt;<a name="line.57"></a>
+<span class="sourceLineNo">058</span> * A language-range matches a language-tag if it exactly equals the tag, or if it exactly equals a prefix of the tag<a name="line.58"></a>
+<span class="sourceLineNo">059</span> * such that the first tag character following the prefix is "-".<a name="line.59"></a>
+<span class="sourceLineNo">060</span> *<a name="line.60"></a>
+<span class="sourceLineNo">061</span> * &lt;p&gt;<a name="line.61"></a>
+<span class="sourceLineNo">062</span> * The special range "*", if present in the Accept-Language field, matches every tag not matched by any other range<a name="line.62"></a>
+<span class="sourceLineNo">063</span> * present in the Accept-Language field.<a name="line.63"></a>
+<span class="sourceLineNo">064</span> *<a name="line.64"></a>
+<span class="sourceLineNo">065</span> * &lt;p&gt;<a name="line.65"></a>
+<span class="sourceLineNo">066</span> * Note: This use of a prefix matching rule does not imply that language tags are assigned to languages in such a way<a name="line.66"></a>
+<span class="sourceLineNo">067</span> * that it is always true that if a user understands a language with a certain<a name="line.67"></a>
+<span class="sourceLineNo">068</span> * tag, then this user will also understand all languages with tags for which this tag is a prefix.<a name="line.68"></a>
+<span class="sourceLineNo">069</span> * The prefix rule simply allows the use of prefix tags if this is the case.<a name="line.69"></a>
+<span class="sourceLineNo">070</span> *<a name="line.70"></a>
+<span class="sourceLineNo">071</span> * &lt;p&gt;<a name="line.71"></a>
+<span class="sourceLineNo">072</span> * The language quality factor assigned to a language-tag by the Accept-Language field is the quality value of the<a name="line.72"></a>
+<span class="sourceLineNo">073</span> * longest language- range in the field that matches the language-tag.<a name="line.73"></a>
+<span class="sourceLineNo">074</span> *<a name="line.74"></a>
+<span class="sourceLineNo">075</span> * &lt;p&gt;<a name="line.75"></a>
+<span class="sourceLineNo">076</span> * If no language- range in the field matches the tag, the language quality factor assigned is 0.<a name="line.76"></a>
+<span class="sourceLineNo">077</span> *<a name="line.77"></a>
+<span class="sourceLineNo">078</span> * &lt;p&gt;<a name="line.78"></a>
+<span class="sourceLineNo">079</span> * If no Accept-Language header is present in the request, the server SHOULD assume that all languages are equally<a name="line.79"></a>
+<span class="sourceLineNo">080</span> * acceptable.<a name="line.80"></a>
+<span class="sourceLineNo">081</span> *<a name="line.81"></a>
+<span class="sourceLineNo">082</span> * &lt;p&gt;<a name="line.82"></a>
+<span class="sourceLineNo">083</span> * If an Accept-Language header is present, then all languages which are assigned a quality factor greater than 0 are<a name="line.83"></a>
+<span class="sourceLineNo">084</span> * acceptable.<a name="line.84"></a>
+<span class="sourceLineNo">085</span> *<a name="line.85"></a>
+<span class="sourceLineNo">086</span> * &lt;p&gt;<a name="line.86"></a>
+<span class="sourceLineNo">087</span> * It might be contrary to the privacy expectations of the user to send an Accept-Language header with the complete<a name="line.87"></a>
+<span class="sourceLineNo">088</span> * linguistic preferences of the user in every request.<a name="line.88"></a>
+<span class="sourceLineNo">089</span> * For a discussion of this issue, see section 15.1.4.<a name="line.89"></a>
+<span class="sourceLineNo">090</span> *<a name="line.90"></a>
+<span class="sourceLineNo">091</span> * &lt;p&gt;<a name="line.91"></a>
+<span class="sourceLineNo">092</span> * As intelligibility is highly dependent on the individual user, it is recommended that client applications make the<a name="line.92"></a>
+<span class="sourceLineNo">093</span> * choice of linguistic preference available to the user.<a name="line.93"></a>
+<span class="sourceLineNo">094</span> * If the choice is not made available, then the Accept-Language header field MUST NOT be given in the request.<a name="line.94"></a>
+<span class="sourceLineNo">095</span> *<a name="line.95"></a>
+<span class="sourceLineNo">096</span> * &lt;p&gt;<a name="line.96"></a>
+<span class="sourceLineNo">097</span> * Note: When making the choice of linguistic preference available to the user, we remind implementors of the fact that<a name="line.97"></a>
+<span class="sourceLineNo">098</span> * users are not familiar with the details of language matching as described above, and should provide appropriate<a name="line.98"></a>
+<span class="sourceLineNo">099</span> * guidance.<a name="line.99"></a>
+<span class="sourceLineNo">100</span> * As an example, users might assume that on selecting "en-gb", they will be served any kind of English document if<a name="line.100"></a>
+<span class="sourceLineNo">101</span> * British English is not available.<a name="line.101"></a>
+<span class="sourceLineNo">102</span> * A user agent might suggest in such a case to add "en" to get the best matching behavior.<a name="line.102"></a>
+<span class="sourceLineNo">103</span> *<a name="line.103"></a>
+<span class="sourceLineNo">104</span> * &lt;ul class='seealso'&gt;<a name="line.104"></a>
+<span class="sourceLineNo">105</span> *    &lt;li class='extlink'&gt;{@doc ExtRFC2616}<a name="line.105"></a>
+<span class="sourceLineNo">106</span> * &lt;/ul&gt;<a name="line.106"></a>
+<span class="sourceLineNo">107</span> */<a name="line.107"></a>
+<span class="sourceLineNo">108</span>@Header("Accept-Language")<a name="line.108"></a>
+<span class="sourceLineNo">109</span>public class AcceptLanguage extends BasicStringRangeArrayHeader {<a name="line.109"></a>
+<span class="sourceLineNo">110</span><a name="line.110"></a>
+<span class="sourceLineNo">111</span>   private static final long serialVersionUID = 1L;<a name="line.111"></a>
+<span class="sourceLineNo">112</span><a name="line.112"></a>
+<span class="sourceLineNo">113</span>   private static final Cache&lt;String,AcceptLanguage&gt; CACHE = new Cache&lt;&gt;(NOCACHE, CACHE_MAX_SIZE);<a name="line.113"></a>
+<span class="sourceLineNo">114</span><a name="line.114"></a>
+<span class="sourceLineNo">115</span>   /**<a name="line.115"></a>
+<span class="sourceLineNo">116</span>    * Returns a parsed and cached header.<a name="line.116"></a>
+<span class="sourceLineNo">117</span>    *<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    * @param value<a name="line.118"></a>
+<span class="sourceLineNo">119</span>    *    The header value.<a name="line.119"></a>
+<span class="sourceLineNo">120</span>    * @return A cached {@link AcceptLanguage} object.<a name="line.120"></a>
+<span class="sourceLineNo">121</span>    */<a name="line.121"></a>
+<span class="sourceLineNo">122</span>   public static AcceptLanguage of(String value) {<a name="line.122"></a>
+<span class="sourceLineNo">123</span>      if (value == null)<a name="line.123"></a>
+<span class="sourceLineNo">124</span>         return null;<a name="line.124"></a>
+<span class="sourceLineNo">125</span>      AcceptLanguage x = CACHE.get(value);<a name="line.125"></a>
+<span class="sourceLineNo">126</span>      if (x == null)<a name="line.126"></a>
+<span class="sourceLineNo">127</span>         x = CACHE.put(value, new AcceptLanguage(value));<a name="line.127"></a>
+<span class="sourceLineNo">128</span>      return x;<a name="line.128"></a>
+<span class="sourceLineNo">129</span>   }<a name="line.129"></a>
+<span class="sourceLineNo">130</span><a name="line.130"></a>
+<span class="sourceLineNo">131</span>   /**<a name="line.131"></a>
+<span class="sourceLineNo">132</span>    * Convenience creator.<a name="line.132"></a>
+<span class="sourceLineNo">133</span>    *<a name="line.133"></a>
+<span class="sourceLineNo">134</span>    * @param value<a name="line.134"></a>
+<span class="sourceLineNo">135</span>    *    The header value.<a name="line.135"></a>
+<span class="sourceLineNo">136</span>    *    &lt;br&gt;Can be any of the following:<a name="line.136"></a>
+<span class="sourceLineNo">137</span>    *    &lt;ul&gt;<a name="line.137"></a>
+<span class="sourceLineNo">138</span>    *       &lt;li&gt;{@link String} - Converted using {@link StringRanges#of(String)}.<a name="line.138"></a>
+<span class="sourceLineNo">139</span>    *       &lt;li&gt;&lt;c&gt;StringRange[]&lt;/c&gt; - Left as-is.<a name="line.139"></a>
+<span class="sourceLineNo">140</span>    *       &lt;li&gt;Anything else - Converted to &lt;c&gt;String&lt;/c&gt; then parsed.<a name="line.140"></a>
+<span class="sourceLineNo">141</span>    *    &lt;/ul&gt;<a name="line.141"></a>
+<span class="sourceLineNo">142</span>    * @return A new {@link AcceptLanguage} object.<a name="line.142"></a>
+<span class="sourceLineNo">143</span>    */<a name="line.143"></a>
+<span class="sourceLineNo">144</span>   public static AcceptLanguage of(Object value) {<a name="line.144"></a>
+<span class="sourceLineNo">145</span>      return new AcceptLanguage(value);<a name="line.145"></a>
+<span class="sourceLineNo">146</span>   }<a name="line.146"></a>
+<span class="sourceLineNo">147</span><a name="line.147"></a>
+<span class="sourceLineNo">148</span>   /**<a name="line.148"></a>
+<span class="sourceLineNo">149</span>    * Convenience creator using supplier.<a name="line.149"></a>
+<span class="sourceLineNo">150</span>    *<a name="line.150"></a>
+<span class="sourceLineNo">151</span>    * &lt;p&gt;<a name="line.151"></a>
+<span class="sourceLineNo">152</span>    * Header value is re-evaluated on each call to {@link #getValue()}.<a name="line.152"></a>
+<span class="sourceLineNo">153</span>    *<a name="line.153"></a>
+<span class="sourceLineNo">154</span>    * @param value<a name="line.154"></a>
+<span class="sourceLineNo">155</span>    *    The header value supplier.<a name="line.155"></a>
+<span class="sourceLineNo">156</span>    *    &lt;br&gt;Can be any of the following:<a name="line.156"></a>
+<span class="sourceLineNo">157</span>    *    &lt;ul&gt;<a name="line.157"></a>
+<span class="sourceLineNo">158</span>    *       &lt;li&gt;{@link String} - Converted using {@link StringRanges#of(String)}.<a name="line.158"></a>
+<span class="sourceLineNo">159</span>    *       &lt;li&gt;&lt;c&gt;StringRange[]&lt;/c&gt; - Left as-is.<a name="line.159"></a>
+<span class="sourceLineNo">160</span>    *       &lt;li&gt;Anything else - Converted to &lt;c&gt;String&lt;/c&gt; then parsed.<a name="line.160"></a>
+<span class="sourceLineNo">161</span>    *    &lt;/ul&gt;<a name="line.161"></a>
+<span class="sourceLineNo">162</span>    * @return A new {@link AcceptLanguage} object.<a name="line.162"></a>
+<span class="sourceLineNo">163</span>    */<a name="line.163"></a>
+<span class="sourceLineNo">164</span>   public static AcceptLanguage of(Supplier&lt;?&gt; value) {<a name="line.164"></a>
+<span class="sourceLineNo">165</span>      return new AcceptLanguage(value);<a name="line.165"></a>
+<span class="sourceLineNo">166</span>   }<a name="line.166"></a>
+<span class="sourceLineNo">167</span><a name="line.167"></a>
+<span class="sourceLineNo">168</span>   /**<a name="line.168"></a>
+<span class="sourceLineNo">169</span>    * Constructor<a name="line.169"></a>
+<span class="sourceLineNo">170</span>    *<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    * @param value<a name="line.171"></a>
+<span class="sourceLineNo">172</span>    *    The header value.<a name="line.172"></a>
+<span class="sourceLineNo">173</span>    *    &lt;br&gt;Can be any of the following:<a name="line.173"></a>
+<span class="sourceLineNo">174</span>    *    &lt;ul&gt;<a name="line.174"></a>
+<span class="sourceLineNo">175</span>    *       &lt;li&gt;{@link String} - Converted using {@link StringRanges#of(String)}.<a name="line.175"></a>
+<span class="sourceLineNo">176</span>    *       &lt;li&gt;&lt;c&gt;StringRange[]&lt;/c&gt; - Left as-is.<a name="line.176"></a>
+<span class="sourceLineNo">177</span>    *       &lt;li&gt;Anything else - Converted to &lt;c&gt;String&lt;/c&gt; then parsed.<a name="line.177"></a>
+<span class="sourceLineNo">178</span>    *       &lt;li&gt;A {@link Supplier} of anything on this list.<a name="line.178"></a>
+<span class="sourceLineNo">179</span>    *    &lt;/ul&gt;<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    */<a name="line.180"></a>
+<span class="sourceLineNo">181</span>   public AcceptLanguage(Object value) {<a name="line.181"></a>
+<span class="sourceLineNo">182</span>      super("Accept-Language", value);<a name="line.182"></a>
+<span class="sourceLineNo">183</span>   }<a name="line.183"></a>
+<span class="sourceLineNo">184</span><a name="line.184"></a>
+<span class="sourceLineNo">185</span>   /**<a name="line.185"></a>
+<span class="sourceLineNo">186</span>    * Constructor<a name="line.186"></a>
+<span class="sourceLineNo">187</span>    *<a name="line.187"></a>
+<span class="sourceLineNo">188</span>    * @param value<a name="line.188"></a>
+<span class="sourceLineNo">189</span>    *    The header value.<a name="line.189"></a>
+<span class="sourceLineNo">190</span>    */<a name="line.190"></a>
+<span class="sourceLineNo">191</span>   public AcceptLanguage(String value) {<a name="line.191"></a>
+<span class="sourceLineNo">192</span>      this((Object)value);<a name="line.192"></a>
+<span class="sourceLineNo">193</span>   }<a name="line.193"></a>
+<span class="sourceLineNo">194</span>}<a name="line.194"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

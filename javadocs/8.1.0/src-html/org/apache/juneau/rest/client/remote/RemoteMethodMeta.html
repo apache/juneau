@@ -1,0 +1,339 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.rest.client.remote;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import static org.apache.juneau.internal.StringUtils.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>import static org.apache.juneau.internal.ClassUtils.*;<a name="line.16"></a>
+<span class="sourceLineNo">017</span>import static org.apache.juneau.httppart.HttpPartType.*;<a name="line.17"></a>
+<span class="sourceLineNo">018</span><a name="line.18"></a>
+<span class="sourceLineNo">019</span>import java.lang.reflect.*;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>import java.util.*;<a name="line.20"></a>
+<span class="sourceLineNo">021</span><a name="line.21"></a>
+<span class="sourceLineNo">022</span>import org.apache.juneau.*;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>import org.apache.juneau.http.annotation.*;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>import org.apache.juneau.httppart.*;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>import org.apache.juneau.httppart.bean.*;<a name="line.25"></a>
+<span class="sourceLineNo">026</span>import org.apache.juneau.internal.*;<a name="line.26"></a>
+<span class="sourceLineNo">027</span>import org.apache.juneau.reflect.*;<a name="line.27"></a>
+<span class="sourceLineNo">028</span><a name="line.28"></a>
+<span class="sourceLineNo">029</span>/**<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * Contains the meta-data about a Java method on a REST proxy class.<a name="line.30"></a>
+<span class="sourceLineNo">031</span> *<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * &lt;p&gt;<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * Captures the information in {@link RemoteMethod @RemoteMethod} annotations for caching and reuse.<a name="line.33"></a>
+<span class="sourceLineNo">034</span> *<a name="line.34"></a>
+<span class="sourceLineNo">035</span> * &lt;ul class='seealso'&gt;<a name="line.35"></a>
+<span class="sourceLineNo">036</span> *    &lt;li class='link'&gt;{@doc juneau-rest-client.RestProxies}<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * &lt;/ul&gt;<a name="line.37"></a>
+<span class="sourceLineNo">038</span> */<a name="line.38"></a>
+<span class="sourceLineNo">039</span>public class RemoteMethodMeta {<a name="line.39"></a>
+<span class="sourceLineNo">040</span><a name="line.40"></a>
+<span class="sourceLineNo">041</span>   private final String httpMethod;<a name="line.41"></a>
+<span class="sourceLineNo">042</span>   private final String fullPath, path;<a name="line.42"></a>
+<span class="sourceLineNo">043</span>   private final RemoteMethodArg[] pathArgs, queryArgs, headerArgs, formDataArgs, otherArgs;<a name="line.43"></a>
+<span class="sourceLineNo">044</span>   private final RemoteMethodBeanArg[] requestArgs;<a name="line.44"></a>
+<span class="sourceLineNo">045</span>   private final RemoteMethodArg bodyArg;<a name="line.45"></a>
+<span class="sourceLineNo">046</span>   private final RemoteMethodReturn methodReturn;<a name="line.46"></a>
+<span class="sourceLineNo">047</span>   private final Method method;<a name="line.47"></a>
+<span class="sourceLineNo">048</span>   private final Class&lt;?&gt;[] exceptions;<a name="line.48"></a>
+<span class="sourceLineNo">049</span><a name="line.49"></a>
+<span class="sourceLineNo">050</span>   /**<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    * Constructor.<a name="line.51"></a>
+<span class="sourceLineNo">052</span>    *<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    * @param parentPath The absolute URL of the REST interface backing the interface proxy.<a name="line.53"></a>
+<span class="sourceLineNo">054</span>    * @param m The Java method.<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    * @param useMethodSignatures If &lt;jk&gt;true&lt;/jk&gt; then the default path for the method should be the full method signature.<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    * @param defaultMethod The default HTTP method if not specified through annotation.<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    */<a name="line.57"></a>
+<span class="sourceLineNo">058</span>   public RemoteMethodMeta(final String parentPath, Method m, boolean useMethodSignatures, String defaultMethod) {<a name="line.58"></a>
+<span class="sourceLineNo">059</span>      Builder b = new Builder(parentPath, m, useMethodSignatures, defaultMethod);<a name="line.59"></a>
+<span class="sourceLineNo">060</span>      this.method = m;<a name="line.60"></a>
+<span class="sourceLineNo">061</span>      this.httpMethod = b.httpMethod;<a name="line.61"></a>
+<span class="sourceLineNo">062</span>      this.path = b.path;<a name="line.62"></a>
+<span class="sourceLineNo">063</span>      this.fullPath = b.fullPath;<a name="line.63"></a>
+<span class="sourceLineNo">064</span>      this.pathArgs = b.pathArgs.toArray(new RemoteMethodArg[b.pathArgs.size()]);<a name="line.64"></a>
+<span class="sourceLineNo">065</span>      this.queryArgs = b.queryArgs.toArray(new RemoteMethodArg[b.queryArgs.size()]);<a name="line.65"></a>
+<span class="sourceLineNo">066</span>      this.formDataArgs = b.formDataArgs.toArray(new RemoteMethodArg[b.formDataArgs.size()]);<a name="line.66"></a>
+<span class="sourceLineNo">067</span>      this.headerArgs = b.headerArgs.toArray(new RemoteMethodArg[b.headerArgs.size()]);<a name="line.67"></a>
+<span class="sourceLineNo">068</span>      this.requestArgs = b.requestArgs.toArray(new RemoteMethodBeanArg[b.requestArgs.size()]);<a name="line.68"></a>
+<span class="sourceLineNo">069</span>      this.otherArgs = b.otherArgs.toArray(new RemoteMethodArg[b.otherArgs.size()]);<a name="line.69"></a>
+<span class="sourceLineNo">070</span>      this.bodyArg = b.bodyArg;<a name="line.70"></a>
+<span class="sourceLineNo">071</span>      this.methodReturn = b.methodReturn;<a name="line.71"></a>
+<span class="sourceLineNo">072</span>      this.exceptions = m.getExceptionTypes();<a name="line.72"></a>
+<span class="sourceLineNo">073</span>   }<a name="line.73"></a>
+<span class="sourceLineNo">074</span><a name="line.74"></a>
+<span class="sourceLineNo">075</span>   private static final class Builder {<a name="line.75"></a>
+<span class="sourceLineNo">076</span>      String httpMethod, fullPath, path;<a name="line.76"></a>
+<span class="sourceLineNo">077</span>      List&lt;RemoteMethodArg&gt;<a name="line.77"></a>
+<span class="sourceLineNo">078</span>         pathArgs = new LinkedList&lt;&gt;(),<a name="line.78"></a>
+<span class="sourceLineNo">079</span>         queryArgs = new LinkedList&lt;&gt;(),<a name="line.79"></a>
+<span class="sourceLineNo">080</span>         headerArgs = new LinkedList&lt;&gt;(),<a name="line.80"></a>
+<span class="sourceLineNo">081</span>         formDataArgs = new LinkedList&lt;&gt;(),<a name="line.81"></a>
+<span class="sourceLineNo">082</span>         otherArgs = new LinkedList&lt;&gt;();<a name="line.82"></a>
+<span class="sourceLineNo">083</span>      List&lt;RemoteMethodBeanArg&gt;<a name="line.83"></a>
+<span class="sourceLineNo">084</span>         requestArgs = new LinkedList&lt;&gt;();<a name="line.84"></a>
+<span class="sourceLineNo">085</span>      RemoteMethodArg bodyArg;<a name="line.85"></a>
+<span class="sourceLineNo">086</span>      RemoteMethodReturn methodReturn;<a name="line.86"></a>
+<span class="sourceLineNo">087</span><a name="line.87"></a>
+<span class="sourceLineNo">088</span>      Builder(String parentPath, Method m, boolean useMethodSignatures, String defaultMethod) {<a name="line.88"></a>
+<span class="sourceLineNo">089</span><a name="line.89"></a>
+<span class="sourceLineNo">090</span>         MethodInfo mi = getMethodInfo(m);<a name="line.90"></a>
+<span class="sourceLineNo">091</span><a name="line.91"></a>
+<span class="sourceLineNo">092</span>         RemoteMethod rm = mi.getAnnotation(RemoteMethod.class);<a name="line.92"></a>
+<span class="sourceLineNo">093</span><a name="line.93"></a>
+<span class="sourceLineNo">094</span>         httpMethod = rm == null ? "" : rm.method();<a name="line.94"></a>
+<span class="sourceLineNo">095</span>         path = rm == null ? "" : rm.path();<a name="line.95"></a>
+<span class="sourceLineNo">096</span><a name="line.96"></a>
+<span class="sourceLineNo">097</span>         if (path.isEmpty()) {<a name="line.97"></a>
+<span class="sourceLineNo">098</span>            path = HttpUtils.detectHttpPath(m, ! useMethodSignatures);<a name="line.98"></a>
+<span class="sourceLineNo">099</span>            if (useMethodSignatures)<a name="line.99"></a>
+<span class="sourceLineNo">100</span>               path += HttpUtils.getMethodArgsSignature(m, true);<a name="line.100"></a>
+<span class="sourceLineNo">101</span>         }<a name="line.101"></a>
+<span class="sourceLineNo">102</span>         if (httpMethod.isEmpty())<a name="line.102"></a>
+<span class="sourceLineNo">103</span>            httpMethod = HttpUtils.detectHttpMethod(m, ! useMethodSignatures, defaultMethod);<a name="line.103"></a>
+<span class="sourceLineNo">104</span><a name="line.104"></a>
+<span class="sourceLineNo">105</span>         path = trimSlashes(path);<a name="line.105"></a>
+<span class="sourceLineNo">106</span><a name="line.106"></a>
+<span class="sourceLineNo">107</span>         if (! isOneOf(httpMethod, "DELETE", "GET", "POST", "PUT", "OPTIONS", "HEAD", "CONNECT", "TRACE", "PATCH"))<a name="line.107"></a>
+<span class="sourceLineNo">108</span>            throw new RemoteMetadataException(m,<a name="line.108"></a>
+<span class="sourceLineNo">109</span>               "Invalid value specified for @RemoteMethod(httpMethod) annotation.  Valid values are [DELTE,GET,POST,PUT].");<a name="line.109"></a>
+<span class="sourceLineNo">110</span><a name="line.110"></a>
+<span class="sourceLineNo">111</span>         methodReturn = new RemoteMethodReturn(mi);<a name="line.111"></a>
+<span class="sourceLineNo">112</span><a name="line.112"></a>
+<span class="sourceLineNo">113</span>         fullPath = path.indexOf("://") != -1 ? path : (parentPath.isEmpty() ? urlEncodePath(path) : (trimSlashes(parentPath) + '/' + urlEncodePath(path)));<a name="line.113"></a>
+<span class="sourceLineNo">114</span><a name="line.114"></a>
+<span class="sourceLineNo">115</span>         for (ParamInfo mpi : mi.getParams()) {<a name="line.115"></a>
+<span class="sourceLineNo">116</span>            RemoteMethodArg rma = RemoteMethodArg.create(mpi);<a name="line.116"></a>
+<span class="sourceLineNo">117</span>            boolean annotated = false;<a name="line.117"></a>
+<span class="sourceLineNo">118</span>            if (rma != null) {<a name="line.118"></a>
+<span class="sourceLineNo">119</span>               annotated = true;<a name="line.119"></a>
+<span class="sourceLineNo">120</span>               HttpPartType pt = rma.getPartType();<a name="line.120"></a>
+<span class="sourceLineNo">121</span>               if (pt == HEADER)<a name="line.121"></a>
+<span class="sourceLineNo">122</span>                  headerArgs.add(rma);<a name="line.122"></a>
+<span class="sourceLineNo">123</span>               else if (pt == QUERY)<a name="line.123"></a>
+<span class="sourceLineNo">124</span>                  queryArgs.add(rma);<a name="line.124"></a>
+<span class="sourceLineNo">125</span>               else if (pt == FORMDATA)<a name="line.125"></a>
+<span class="sourceLineNo">126</span>                  formDataArgs.add(rma);<a name="line.126"></a>
+<span class="sourceLineNo">127</span>               else if (pt == PATH)<a name="line.127"></a>
+<span class="sourceLineNo">128</span>                  pathArgs.add(rma);<a name="line.128"></a>
+<span class="sourceLineNo">129</span>               else if (pt == BODY)<a name="line.129"></a>
+<span class="sourceLineNo">130</span>                  bodyArg = rma;<a name="line.130"></a>
+<span class="sourceLineNo">131</span>               else<a name="line.131"></a>
+<span class="sourceLineNo">132</span>                  annotated = false;<a name="line.132"></a>
+<span class="sourceLineNo">133</span>            }<a name="line.133"></a>
+<span class="sourceLineNo">134</span>            RequestBeanMeta rmba = RequestBeanMeta.create(mpi, PropertyStore.DEFAULT);<a name="line.134"></a>
+<span class="sourceLineNo">135</span>            if (rmba != null) {<a name="line.135"></a>
+<span class="sourceLineNo">136</span>               annotated = true;<a name="line.136"></a>
+<span class="sourceLineNo">137</span>               requestArgs.add(new RemoteMethodBeanArg(mpi.getIndex(), null, rmba));<a name="line.137"></a>
+<span class="sourceLineNo">138</span>            }<a name="line.138"></a>
+<span class="sourceLineNo">139</span>            if (! annotated) {<a name="line.139"></a>
+<span class="sourceLineNo">140</span>               otherArgs.add(new RemoteMethodArg(mpi.getIndex(), BODY, null));<a name="line.140"></a>
+<span class="sourceLineNo">141</span>            }<a name="line.141"></a>
+<span class="sourceLineNo">142</span>         }<a name="line.142"></a>
+<span class="sourceLineNo">143</span>      }<a name="line.143"></a>
+<span class="sourceLineNo">144</span>   }<a name="line.144"></a>
+<span class="sourceLineNo">145</span><a name="line.145"></a>
+<span class="sourceLineNo">146</span>   /**<a name="line.146"></a>
+<span class="sourceLineNo">147</span>    * Returns the value of the {@link RemoteMethod#method() @RemoteMethod(httpMethod)} annotation on this Java method.<a name="line.147"></a>
+<span class="sourceLineNo">148</span>    *<a name="line.148"></a>
+<span class="sourceLineNo">149</span>    * @return The value of the annotation, never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.149"></a>
+<span class="sourceLineNo">150</span>    */<a name="line.150"></a>
+<span class="sourceLineNo">151</span>   public String getHttpMethod() {<a name="line.151"></a>
+<span class="sourceLineNo">152</span>      return httpMethod;<a name="line.152"></a>
+<span class="sourceLineNo">153</span>   }<a name="line.153"></a>
+<span class="sourceLineNo">154</span><a name="line.154"></a>
+<span class="sourceLineNo">155</span>   /**<a name="line.155"></a>
+<span class="sourceLineNo">156</span>    * Returns the absolute URL of the REST interface invoked by this Java method.<a name="line.156"></a>
+<span class="sourceLineNo">157</span>    *<a name="line.157"></a>
+<span class="sourceLineNo">158</span>    * @return The absolute URL of the REST interface, never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.158"></a>
+<span class="sourceLineNo">159</span>    */<a name="line.159"></a>
+<span class="sourceLineNo">160</span>   public String getFullPath() {<a name="line.160"></a>
+<span class="sourceLineNo">161</span>      return fullPath;<a name="line.161"></a>
+<span class="sourceLineNo">162</span>   }<a name="line.162"></a>
+<span class="sourceLineNo">163</span><a name="line.163"></a>
+<span class="sourceLineNo">164</span>   /**<a name="line.164"></a>
+<span class="sourceLineNo">165</span>    * Returns the {@link Path @Path} annotated arguments on this Java method.<a name="line.165"></a>
+<span class="sourceLineNo">166</span>    *<a name="line.166"></a>
+<span class="sourceLineNo">167</span>    * @return A map of {@link Path#value() @Path(value)} names to zero-indexed argument indices.<a name="line.167"></a>
+<span class="sourceLineNo">168</span>    */<a name="line.168"></a>
+<span class="sourceLineNo">169</span>   public RemoteMethodArg[] getPathArgs() {<a name="line.169"></a>
+<span class="sourceLineNo">170</span>      return pathArgs;<a name="line.170"></a>
+<span class="sourceLineNo">171</span>   }<a name="line.171"></a>
+<span class="sourceLineNo">172</span><a name="line.172"></a>
+<span class="sourceLineNo">173</span>   /**<a name="line.173"></a>
+<span class="sourceLineNo">174</span>    * Returns the {@link Query @Query} annotated arguments on this Java method.<a name="line.174"></a>
+<span class="sourceLineNo">175</span>    *<a name="line.175"></a>
+<span class="sourceLineNo">176</span>    * @return A map of {@link Query#value() @Query(value)} names to zero-indexed argument indices.<a name="line.176"></a>
+<span class="sourceLineNo">177</span>    */<a name="line.177"></a>
+<span class="sourceLineNo">178</span>   public RemoteMethodArg[] getQueryArgs() {<a name="line.178"></a>
+<span class="sourceLineNo">179</span>      return queryArgs;<a name="line.179"></a>
+<span class="sourceLineNo">180</span>   }<a name="line.180"></a>
+<span class="sourceLineNo">181</span><a name="line.181"></a>
+<span class="sourceLineNo">182</span>   /**<a name="line.182"></a>
+<span class="sourceLineNo">183</span>    * Returns the {@link FormData @FormData} annotated arguments on this Java method.<a name="line.183"></a>
+<span class="sourceLineNo">184</span>    *<a name="line.184"></a>
+<span class="sourceLineNo">185</span>    * @return A map of {@link FormData#value() @FormData(value)} names to zero-indexed argument indices.<a name="line.185"></a>
+<span class="sourceLineNo">186</span>    */<a name="line.186"></a>
+<span class="sourceLineNo">187</span>   public RemoteMethodArg[] getFormDataArgs() {<a name="line.187"></a>
+<span class="sourceLineNo">188</span>      return formDataArgs;<a name="line.188"></a>
+<span class="sourceLineNo">189</span>   }<a name="line.189"></a>
+<span class="sourceLineNo">190</span><a name="line.190"></a>
+<span class="sourceLineNo">191</span>   /**<a name="line.191"></a>
+<span class="sourceLineNo">192</span>    * Returns the {@link Header @Header} annotated arguments on this Java method.<a name="line.192"></a>
+<span class="sourceLineNo">193</span>    *<a name="line.193"></a>
+<span class="sourceLineNo">194</span>    * @return A map of {@link Header#value() @Header(value)} names to zero-indexed argument indices.<a name="line.194"></a>
+<span class="sourceLineNo">195</span>    */<a name="line.195"></a>
+<span class="sourceLineNo">196</span>   public RemoteMethodArg[] getHeaderArgs() {<a name="line.196"></a>
+<span class="sourceLineNo">197</span>      return headerArgs;<a name="line.197"></a>
+<span class="sourceLineNo">198</span>   }<a name="line.198"></a>
+<span class="sourceLineNo">199</span><a name="line.199"></a>
+<span class="sourceLineNo">200</span>   /**<a name="line.200"></a>
+<span class="sourceLineNo">201</span>    * Returns the {@link Request @Request} annotated arguments on this Java method.<a name="line.201"></a>
+<span class="sourceLineNo">202</span>    *<a name="line.202"></a>
+<span class="sourceLineNo">203</span>    * @return A list of zero-indexed argument indices.<a name="line.203"></a>
+<span class="sourceLineNo">204</span>    */<a name="line.204"></a>
+<span class="sourceLineNo">205</span>   public RemoteMethodBeanArg[] getRequestArgs() {<a name="line.205"></a>
+<span class="sourceLineNo">206</span>      return requestArgs;<a name="line.206"></a>
+<span class="sourceLineNo">207</span>   }<a name="line.207"></a>
+<span class="sourceLineNo">208</span><a name="line.208"></a>
+<span class="sourceLineNo">209</span>   /**<a name="line.209"></a>
+<span class="sourceLineNo">210</span>    * Returns the remaining non-annotated arguments on this Java method.<a name="line.210"></a>
+<span class="sourceLineNo">211</span>    *<a name="line.211"></a>
+<span class="sourceLineNo">212</span>    * @return A list of zero-indexed argument indices.<a name="line.212"></a>
+<span class="sourceLineNo">213</span>    */<a name="line.213"></a>
+<span class="sourceLineNo">214</span>   public RemoteMethodArg[] getOtherArgs() {<a name="line.214"></a>
+<span class="sourceLineNo">215</span>      return otherArgs;<a name="line.215"></a>
+<span class="sourceLineNo">216</span>   }<a name="line.216"></a>
+<span class="sourceLineNo">217</span><a name="line.217"></a>
+<span class="sourceLineNo">218</span>   /**<a name="line.218"></a>
+<span class="sourceLineNo">219</span>    * Returns the argument annotated with {@link Body @Body}.<a name="line.219"></a>
+<span class="sourceLineNo">220</span>    *<a name="line.220"></a>
+<span class="sourceLineNo">221</span>    * @return A index of the argument with the {@link Body @Body} annotation, or &lt;jk&gt;null&lt;/jk&gt; if no argument exists.<a name="line.221"></a>
+<span class="sourceLineNo">222</span>    */<a name="line.222"></a>
+<span class="sourceLineNo">223</span>   public RemoteMethodArg getBodyArg() {<a name="line.223"></a>
+<span class="sourceLineNo">224</span>      return bodyArg;<a name="line.224"></a>
+<span class="sourceLineNo">225</span>   }<a name="line.225"></a>
+<span class="sourceLineNo">226</span><a name="line.226"></a>
+<span class="sourceLineNo">227</span>   /**<a name="line.227"></a>
+<span class="sourceLineNo">228</span>    * Returns whether the method returns the HTTP response body or status code.<a name="line.228"></a>
+<span class="sourceLineNo">229</span>    *<a name="line.229"></a>
+<span class="sourceLineNo">230</span>    * @return Whether the method returns the HTTP response body or status code.<a name="line.230"></a>
+<span class="sourceLineNo">231</span>    */<a name="line.231"></a>
+<span class="sourceLineNo">232</span>   public RemoteMethodReturn getReturns() {<a name="line.232"></a>
+<span class="sourceLineNo">233</span>      return methodReturn;<a name="line.233"></a>
+<span class="sourceLineNo">234</span>   }<a name="line.234"></a>
+<span class="sourceLineNo">235</span><a name="line.235"></a>
+<span class="sourceLineNo">236</span>   /**<a name="line.236"></a>
+<span class="sourceLineNo">237</span>    * Returns the HTTP path of this method.<a name="line.237"></a>
+<span class="sourceLineNo">238</span>    *<a name="line.238"></a>
+<span class="sourceLineNo">239</span>    * @return<a name="line.239"></a>
+<span class="sourceLineNo">240</span>    *    The HTTP path of this method relative to the parent interface.<a name="line.240"></a>
+<span class="sourceLineNo">241</span>    *    &lt;br&gt;Never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.241"></a>
+<span class="sourceLineNo">242</span>    *    &lt;br&gt;Never has leading or trailing slashes.<a name="line.242"></a>
+<span class="sourceLineNo">243</span>    */<a name="line.243"></a>
+<span class="sourceLineNo">244</span>   public String getPath() {<a name="line.244"></a>
+<span class="sourceLineNo">245</span>      return path;<a name="line.245"></a>
+<span class="sourceLineNo">246</span>   }<a name="line.246"></a>
+<span class="sourceLineNo">247</span><a name="line.247"></a>
+<span class="sourceLineNo">248</span>   /**<a name="line.248"></a>
+<span class="sourceLineNo">249</span>    * Returns the underlying Java method that this metadata is about.<a name="line.249"></a>
+<span class="sourceLineNo">250</span>    *<a name="line.250"></a>
+<span class="sourceLineNo">251</span>    * @return<a name="line.251"></a>
+<span class="sourceLineNo">252</span>    *    The underlying Java method that this metadata is about.<a name="line.252"></a>
+<span class="sourceLineNo">253</span>    *    &lt;br&gt;Never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.253"></a>
+<span class="sourceLineNo">254</span>    */<a name="line.254"></a>
+<span class="sourceLineNo">255</span>   public Method getJavaMethod() {<a name="line.255"></a>
+<span class="sourceLineNo">256</span>      return method;<a name="line.256"></a>
+<span class="sourceLineNo">257</span>   }<a name="line.257"></a>
+<span class="sourceLineNo">258</span><a name="line.258"></a>
+<span class="sourceLineNo">259</span>   /**<a name="line.259"></a>
+<span class="sourceLineNo">260</span>    * Returns the exceptions thrown by this method.<a name="line.260"></a>
+<span class="sourceLineNo">261</span>    *<a name="line.261"></a>
+<span class="sourceLineNo">262</span>    * @return The exceptions thrown by this method.  Never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.262"></a>
+<span class="sourceLineNo">263</span>    */<a name="line.263"></a>
+<span class="sourceLineNo">264</span>   public Class&lt;?&gt;[] getExceptions() {<a name="line.264"></a>
+<span class="sourceLineNo">265</span>      return exceptions;<a name="line.265"></a>
+<span class="sourceLineNo">266</span>   }<a name="line.266"></a>
+<span class="sourceLineNo">267</span>}<a name="line.267"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.rest;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import static org.apache.juneau.internal.StringUtils.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>import static org.apache.juneau.internal.StateMachineState.*;<a name="line.16"></a>
+<span class="sourceLineNo">017</span>import static java.lang.Character.*;<a name="line.17"></a>
+<span class="sourceLineNo">018</span><a name="line.18"></a>
+<span class="sourceLineNo">019</span>import java.util.*;<a name="line.19"></a>
+<span class="sourceLineNo">020</span><a name="line.20"></a>
+<span class="sourceLineNo">021</span>import org.apache.juneau.*;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>import org.apache.juneau.collections.*;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>import org.apache.juneau.cp.*;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>import org.apache.juneau.internal.*;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>import org.apache.juneau.json.*;<a name="line.25"></a>
+<span class="sourceLineNo">026</span>import org.apache.juneau.parser.*;<a name="line.26"></a>
+<span class="sourceLineNo">027</span>import org.apache.juneau.rest.annotation.*;<a name="line.27"></a>
+<span class="sourceLineNo">028</span><a name="line.28"></a>
+<span class="sourceLineNo">029</span>/**<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * Static file mapping.<a name="line.30"></a>
+<span class="sourceLineNo">031</span> *<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * &lt;p&gt;<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * Used to define paths and locations of statically-served files such as images or HTML documents.<a name="line.33"></a>
+<span class="sourceLineNo">034</span> *<a name="line.34"></a>
+<span class="sourceLineNo">035</span> * &lt;p&gt;<a name="line.35"></a>
+<span class="sourceLineNo">036</span> * An example where this class is used is in the {@link Rest#staticFiles} annotation:<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * &lt;p class='bcode w800'&gt;<a name="line.37"></a>
+<span class="sourceLineNo">038</span> * &lt;jk&gt;package&lt;/jk&gt; com.foo.mypackage;<a name="line.38"></a>
+<span class="sourceLineNo">039</span> *<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * &lt;ja&gt;@Rest&lt;/ja&gt;(<a name="line.40"></a>
+<span class="sourceLineNo">041</span> *    path=&lt;js&gt;"/myresource"&lt;/js&gt;,<a name="line.41"></a>
+<span class="sourceLineNo">042</span> *    staticFiles={&lt;js&gt;"htdocs:docs"&lt;/js&gt;}<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * )<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * &lt;jk&gt;public class&lt;/jk&gt; MyResource &lt;jk&gt;extends&lt;/jk&gt; BasicRestServlet {...}<a name="line.44"></a>
+<span class="sourceLineNo">045</span> * &lt;/p&gt;<a name="line.45"></a>
+<span class="sourceLineNo">046</span> *<a name="line.46"></a>
+<span class="sourceLineNo">047</span> * &lt;p&gt;<a name="line.47"></a>
+<span class="sourceLineNo">048</span> * Static files are found by using the {@link ResourceFinder} defined on the resource.<a name="line.48"></a>
+<span class="sourceLineNo">049</span> *<a name="line.49"></a>
+<span class="sourceLineNo">050</span> * &lt;p&gt;<a name="line.50"></a>
+<span class="sourceLineNo">051</span> * In the example above, given a GET request to &lt;l&gt;/myresource/htdocs/foobar.html&lt;/l&gt;, the servlet will attempt to find<a name="line.51"></a>
+<span class="sourceLineNo">052</span> * the &lt;l&gt;foobar.html&lt;/l&gt; file in the following ordered locations:<a name="line.52"></a>
+<span class="sourceLineNo">053</span> * &lt;ol&gt;<a name="line.53"></a>
+<span class="sourceLineNo">054</span> *    &lt;li&gt;&lt;l&gt;com.foo.mypackage.docs&lt;/l&gt; package.<a name="line.54"></a>
+<span class="sourceLineNo">055</span> *    &lt;li&gt;&lt;l&gt;org.apache.juneau.rest.docs&lt;/l&gt; package (since &lt;l&gt;BasicRestServlet&lt;/l&gt; is in &lt;l&gt;org.apache.juneau.rest&lt;/l&gt;).<a name="line.55"></a>
+<span class="sourceLineNo">056</span> *    &lt;li&gt;&lt;l&gt;[working-dir]/docs&lt;/l&gt; directory.<a name="line.56"></a>
+<span class="sourceLineNo">057</span> * &lt;/ol&gt;<a name="line.57"></a>
+<span class="sourceLineNo">058</span> *<a name="line.58"></a>
+<span class="sourceLineNo">059</span> * &lt;ul class='notes'&gt;<a name="line.59"></a>
+<span class="sourceLineNo">060</span> *    &lt;li&gt;<a name="line.60"></a>
+<span class="sourceLineNo">061</span> *       Mappings are cumulative from parent to child.  Child resources can override mappings made on parent resources.<a name="line.61"></a>
+<span class="sourceLineNo">062</span> *    &lt;li&gt;<a name="line.62"></a>
+<span class="sourceLineNo">063</span> *       The media type on the response is determined by the {@link org.apache.juneau.rest.RestContext#getMediaTypeForName(String)} method.<a name="line.63"></a>
+<span class="sourceLineNo">064</span> * &lt;/ul&gt;<a name="line.64"></a>
+<span class="sourceLineNo">065</span> *<a name="line.65"></a>
+<span class="sourceLineNo">066</span> * &lt;ul class='seealso'&gt;<a name="line.66"></a>
+<span class="sourceLineNo">067</span> *    &lt;li class='link'&gt;{@doc RestStaticFiles}<a name="line.67"></a>
+<span class="sourceLineNo">068</span> * &lt;/ul&gt;<a name="line.68"></a>
+<span class="sourceLineNo">069</span> */<a name="line.69"></a>
+<span class="sourceLineNo">070</span>public class StaticFileMapping {<a name="line.70"></a>
+<span class="sourceLineNo">071</span><a name="line.71"></a>
+<span class="sourceLineNo">072</span>   final Class&lt;?&gt; resourceClass;<a name="line.72"></a>
+<span class="sourceLineNo">073</span>   final String path, location;<a name="line.73"></a>
+<span class="sourceLineNo">074</span>   final Map&lt;String,Object&gt; responseHeaders;<a name="line.74"></a>
+<span class="sourceLineNo">075</span><a name="line.75"></a>
+<span class="sourceLineNo">076</span>   /**<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    * Constructor.<a name="line.77"></a>
+<span class="sourceLineNo">078</span>    *<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    * @param resourceClass<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    *    The resource/servlet class which serves as the base location of the location below.<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    * @param path<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    *    The mapped URI path.<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    *    &lt;br&gt;Leading and trailing slashes are trimmed.<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    * @param location<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    *    The location relative to the resource class.<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    *    &lt;br&gt;Leading and trailing slashes are trimmed.<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    * @param responseHeaders<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    *    The response headers.<a name="line.88"></a>
+<span class="sourceLineNo">089</span>    *    Can be &lt;jk&gt;null&lt;/jk&gt;.<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    */<a name="line.90"></a>
+<span class="sourceLineNo">091</span>   public StaticFileMapping(Class&lt;?&gt; resourceClass, String path, String location, Map&lt;String,Object&gt; responseHeaders) {<a name="line.91"></a>
+<span class="sourceLineNo">092</span>      this.resourceClass = resourceClass;<a name="line.92"></a>
+<span class="sourceLineNo">093</span>      this.path = trimSlashes(path);<a name="line.93"></a>
+<span class="sourceLineNo">094</span>      this.location = trimTrailingSlashes(location);<a name="line.94"></a>
+<span class="sourceLineNo">095</span>      this.responseHeaders = AMap.unmodifiable(responseHeaders);<a name="line.95"></a>
+<span class="sourceLineNo">096</span>   }<a name="line.96"></a>
+<span class="sourceLineNo">097</span><a name="line.97"></a>
+<span class="sourceLineNo">098</span>   /**<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    * Create one or more &lt;c&gt;StaticFileMappings&lt;/c&gt; from the specified comma-delimited list of mappings.<a name="line.99"></a>
+<span class="sourceLineNo">100</span>    *<a name="line.100"></a>
+<span class="sourceLineNo">101</span>    * &lt;p&gt;<a name="line.101"></a>
+<span class="sourceLineNo">102</span>    * Mapping string must be one of these formats:<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    * &lt;ul&gt;<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    *    &lt;li&gt;&lt;js&gt;"path:location"&lt;/js&gt; (e.g. &lt;js&gt;"foodocs:docs/foo"&lt;/js&gt;)<a name="line.104"></a>
+<span class="sourceLineNo">105</span>    *    &lt;li&gt;&lt;js&gt;"path:location:headers-json"&lt;/js&gt; (e.g. &lt;js&gt;"foodocs:docs/foo:{'Cache-Control':'max-age=86400, public'}"&lt;/js&gt;)<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    * &lt;/ul&gt;<a name="line.106"></a>
+<span class="sourceLineNo">107</span>    *<a name="line.107"></a>
+<span class="sourceLineNo">108</span>    * @param resourceClass<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    *    The resource/servlet class which serves as the base location of the location below.<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    * @param mapping<a name="line.110"></a>
+<span class="sourceLineNo">111</span>    *    The mapping string that represents the path/location mapping.<a name="line.111"></a>
+<span class="sourceLineNo">112</span>    *    &lt;br&gt;Leading and trailing slashes and whitespace are trimmed from path and location.<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    * @return A list of parsed mappings.  Never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.113"></a>
+<span class="sourceLineNo">114</span>    * @throws ParseException If mapping was malformed.<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    */<a name="line.115"></a>
+<span class="sourceLineNo">116</span>   public static AList&lt;StaticFileMapping&gt; parse(Class&lt;?&gt; resourceClass, String mapping) throws ParseException {<a name="line.116"></a>
+<span class="sourceLineNo">117</span><a name="line.117"></a>
+<span class="sourceLineNo">118</span>      mapping = trim(mapping);<a name="line.118"></a>
+<span class="sourceLineNo">119</span>      if (isEmpty(mapping))<a name="line.119"></a>
+<span class="sourceLineNo">120</span>         return new AList&lt;&gt;(0);<a name="line.120"></a>
+<span class="sourceLineNo">121</span><a name="line.121"></a>
+<span class="sourceLineNo">122</span>      // States:<a name="line.122"></a>
+<span class="sourceLineNo">123</span>      // S01 = In path, looking for :<a name="line.123"></a>
+<span class="sourceLineNo">124</span>      // S02 = Found path:, looking for : or , or end<a name="line.124"></a>
+<span class="sourceLineNo">125</span>      // S03 = Found path:location:, looking for {<a name="line.125"></a>
+<span class="sourceLineNo">126</span>      // S04 = Found path:location:{, looking for }<a name="line.126"></a>
+<span class="sourceLineNo">127</span>      // S05 = Found path:location:{headers}, looking for , or end<a name="line.127"></a>
+<span class="sourceLineNo">128</span>      // S06 = Found path:location:{headers} , looking for start of path<a name="line.128"></a>
+<span class="sourceLineNo">129</span><a name="line.129"></a>
+<span class="sourceLineNo">130</span>      StateMachineState state = S01;<a name="line.130"></a>
+<span class="sourceLineNo">131</span>      int mark = 0;<a name="line.131"></a>
+<span class="sourceLineNo">132</span><a name="line.132"></a>
+<span class="sourceLineNo">133</span>      String path = null, location = null;<a name="line.133"></a>
+<span class="sourceLineNo">134</span>      AList&lt;StaticFileMapping&gt; l = AList.of();<a name="line.134"></a>
+<span class="sourceLineNo">135</span>      String s = mapping;<a name="line.135"></a>
+<span class="sourceLineNo">136</span>      int jsonDepth = 0;<a name="line.136"></a>
+<span class="sourceLineNo">137</span>      for (int i = 0; i &lt; s.length(); i++) {<a name="line.137"></a>
+<span class="sourceLineNo">138</span>         char c = s.charAt(i);<a name="line.138"></a>
+<span class="sourceLineNo">139</span>         if (state == S01) {<a name="line.139"></a>
+<span class="sourceLineNo">140</span>            if (c == ':') {<a name="line.140"></a>
+<span class="sourceLineNo">141</span>               path = trim(s.substring(mark, i));<a name="line.141"></a>
+<span class="sourceLineNo">142</span>               mark = i+1;<a name="line.142"></a>
+<span class="sourceLineNo">143</span>               state = S02;<a name="line.143"></a>
+<span class="sourceLineNo">144</span>            }<a name="line.144"></a>
+<span class="sourceLineNo">145</span>         } else if (state == S02) {<a name="line.145"></a>
+<span class="sourceLineNo">146</span>            if (c == ':') {<a name="line.146"></a>
+<span class="sourceLineNo">147</span>               location = trim(s.substring(mark, i));<a name="line.147"></a>
+<span class="sourceLineNo">148</span>               mark = i+1;<a name="line.148"></a>
+<span class="sourceLineNo">149</span>               state = S03;<a name="line.149"></a>
+<span class="sourceLineNo">150</span>            } else if (c == ',') {<a name="line.150"></a>
+<span class="sourceLineNo">151</span>               location = trim(s.substring(mark, i));<a name="line.151"></a>
+<span class="sourceLineNo">152</span>               l.add(new StaticFileMapping(resourceClass, path, location, null));<a name="line.152"></a>
+<span class="sourceLineNo">153</span>               mark = i+1;<a name="line.153"></a>
+<span class="sourceLineNo">154</span>               state = S01;<a name="line.154"></a>
+<span class="sourceLineNo">155</span>               path = null;<a name="line.155"></a>
+<span class="sourceLineNo">156</span>               location = null;<a name="line.156"></a>
+<span class="sourceLineNo">157</span>            }<a name="line.157"></a>
+<span class="sourceLineNo">158</span>         } else if (state == S03) {<a name="line.158"></a>
+<span class="sourceLineNo">159</span>            if (c == '{') {<a name="line.159"></a>
+<span class="sourceLineNo">160</span>               mark = i;<a name="line.160"></a>
+<span class="sourceLineNo">161</span>               state = S04;<a name="line.161"></a>
+<span class="sourceLineNo">162</span>            } else if (! isWhitespace(c)) {<a name="line.162"></a>
+<span class="sourceLineNo">163</span>               throw new ParseException("Invalid staticFiles mapping.  Expected '{' at beginning of headers.  mapping=[{0}]", mapping);<a name="line.163"></a>
+<span class="sourceLineNo">164</span>            }<a name="line.164"></a>
+<span class="sourceLineNo">165</span>         } else if (state == S04) {<a name="line.165"></a>
+<span class="sourceLineNo">166</span>            if (c == '{') {<a name="line.166"></a>
+<span class="sourceLineNo">167</span>               jsonDepth++;<a name="line.167"></a>
+<span class="sourceLineNo">168</span>            } else if (c == '}') {<a name="line.168"></a>
+<span class="sourceLineNo">169</span>               if (jsonDepth &gt; 0) {<a name="line.169"></a>
+<span class="sourceLineNo">170</span>                  jsonDepth--;<a name="line.170"></a>
+<span class="sourceLineNo">171</span>               } else {<a name="line.171"></a>
+<span class="sourceLineNo">172</span>                  String json = s.substring(mark, i+1);<a name="line.172"></a>
+<span class="sourceLineNo">173</span>                  l.add(new StaticFileMapping(resourceClass, path, location, OMap.ofJson(json)));<a name="line.173"></a>
+<span class="sourceLineNo">174</span>                  state = S05;<a name="line.174"></a>
+<span class="sourceLineNo">175</span>                  path = null;<a name="line.175"></a>
+<span class="sourceLineNo">176</span>                  location = null;<a name="line.176"></a>
+<span class="sourceLineNo">177</span>               }<a name="line.177"></a>
+<span class="sourceLineNo">178</span>            }<a name="line.178"></a>
+<span class="sourceLineNo">179</span>         } else if (state == S05) {<a name="line.179"></a>
+<span class="sourceLineNo">180</span>            if (c == ',') {<a name="line.180"></a>
+<span class="sourceLineNo">181</span>               state = S06;<a name="line.181"></a>
+<span class="sourceLineNo">182</span>            } else if (! isWhitespace(c)) {<a name="line.182"></a>
+<span class="sourceLineNo">183</span>               throw new ParseException("Invalid staticFiles mapping.  Invalid text following headers.  mapping=[{0}]", mapping);<a name="line.183"></a>
+<span class="sourceLineNo">184</span>            }<a name="line.184"></a>
+<span class="sourceLineNo">185</span>         } else /* state == S06 */ {<a name="line.185"></a>
+<span class="sourceLineNo">186</span>            if (! isWhitespace(c)) {<a name="line.186"></a>
+<span class="sourceLineNo">187</span>               mark = i;<a name="line.187"></a>
+<span class="sourceLineNo">188</span>               state = S01;<a name="line.188"></a>
+<span class="sourceLineNo">189</span>            }<a name="line.189"></a>
+<span class="sourceLineNo">190</span>         }<a name="line.190"></a>
+<span class="sourceLineNo">191</span>      }<a name="line.191"></a>
+<span class="sourceLineNo">192</span><a name="line.192"></a>
+<span class="sourceLineNo">193</span>      if (state == S01) {<a name="line.193"></a>
+<span class="sourceLineNo">194</span>         throw new ParseException("Invalid staticFiles mapping.  Couldn''t find '':'' following path.  mapping=[{0}]", mapping);<a name="line.194"></a>
+<span class="sourceLineNo">195</span>      } else if (state == S02) {<a name="line.195"></a>
+<span class="sourceLineNo">196</span>         location = trim(s.substring(mark, s.length()));<a name="line.196"></a>
+<span class="sourceLineNo">197</span>         l.add(new StaticFileMapping(resourceClass, path, location, null));<a name="line.197"></a>
+<span class="sourceLineNo">198</span>      } else if (state == S03) {<a name="line.198"></a>
+<span class="sourceLineNo">199</span>         throw new ParseException("Invalid staticFiles mapping.  Found extra '':'' following location.  mapping=[{0}]", mapping);<a name="line.199"></a>
+<span class="sourceLineNo">200</span>      } else if (state == S04) {<a name="line.200"></a>
+<span class="sourceLineNo">201</span>         throw new ParseException("Invalid staticFiles mapping.  Malformed headers.  mapping=[{0}]", mapping);<a name="line.201"></a>
+<span class="sourceLineNo">202</span>      }<a name="line.202"></a>
+<span class="sourceLineNo">203</span><a name="line.203"></a>
+<span class="sourceLineNo">204</span>      return l;<a name="line.204"></a>
+<span class="sourceLineNo">205</span>   }<a name="line.205"></a>
+<span class="sourceLineNo">206</span><a name="line.206"></a>
+<span class="sourceLineNo">207</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.207"></a>
+<span class="sourceLineNo">208</span>   // Other methods<a name="line.208"></a>
+<span class="sourceLineNo">209</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.209"></a>
+<span class="sourceLineNo">210</span><a name="line.210"></a>
+<span class="sourceLineNo">211</span>   @Override /* Object */<a name="line.211"></a>
+<span class="sourceLineNo">212</span>   public String toString() {<a name="line.212"></a>
+<span class="sourceLineNo">213</span>      return SimpleJsonSerializer.DEFAULT_READABLE.toString(toMap());<a name="line.213"></a>
+<span class="sourceLineNo">214</span>   }<a name="line.214"></a>
+<span class="sourceLineNo">215</span><a name="line.215"></a>
+<span class="sourceLineNo">216</span>   /**<a name="line.216"></a>
+<span class="sourceLineNo">217</span>    * Returns the properties defined on this bean as a simple map for debugging purposes.<a name="line.217"></a>
+<span class="sourceLineNo">218</span>    *<a name="line.218"></a>
+<span class="sourceLineNo">219</span>    * @return A new map containing the properties defined on this bean.<a name="line.219"></a>
+<span class="sourceLineNo">220</span>    */<a name="line.220"></a>
+<span class="sourceLineNo">221</span>   public OMap toMap() {<a name="line.221"></a>
+<span class="sourceLineNo">222</span>      return new DefaultFilteringOMap()<a name="line.222"></a>
+<span class="sourceLineNo">223</span>         .append("resourceClass", resourceClass)<a name="line.223"></a>
+<span class="sourceLineNo">224</span>         .append("path", path)<a name="line.224"></a>
+<span class="sourceLineNo">225</span>         .append("location", location)<a name="line.225"></a>
+<span class="sourceLineNo">226</span>         .append("responseHeaders", responseHeaders)<a name="line.226"></a>
+<span class="sourceLineNo">227</span>      ;<a name="line.227"></a>
+<span class="sourceLineNo">228</span>   }<a name="line.228"></a>
+<span class="sourceLineNo">229</span>}<a name="line.229"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

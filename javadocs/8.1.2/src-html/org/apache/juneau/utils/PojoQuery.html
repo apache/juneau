@@ -1,0 +1,1268 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.utils;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import static java.util.Calendar.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>import static org.apache.juneau.internal.StringUtils.*;<a name="line.16"></a>
+<span class="sourceLineNo">017</span><a name="line.17"></a>
+<span class="sourceLineNo">018</span>import java.lang.reflect.*;<a name="line.18"></a>
+<span class="sourceLineNo">019</span>import java.text.*;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>import java.util.*;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>import java.util.regex.*;<a name="line.21"></a>
+<span class="sourceLineNo">022</span><a name="line.22"></a>
+<span class="sourceLineNo">023</span>import org.apache.juneau.*;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>import org.apache.juneau.internal.*;<a name="line.24"></a>
+<span class="sourceLineNo">025</span><a name="line.25"></a>
+<span class="sourceLineNo">026</span>/**<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * Designed to provide search/view/sort/paging filtering on tabular in-memory POJO models.<a name="line.27"></a>
+<span class="sourceLineNo">028</span> *<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * &lt;p&gt;<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * It can also perform just view filtering on beans/maps.<a name="line.30"></a>
+<span class="sourceLineNo">031</span> *<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * &lt;p&gt;<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * Examples of tabular POJO models:<a name="line.33"></a>
+<span class="sourceLineNo">034</span> * &lt;ul&gt;<a name="line.34"></a>
+<span class="sourceLineNo">035</span> *    &lt;li&gt;&lt;tt&gt;Collection{@code &lt;Map&gt;}&lt;/tt&gt;<a name="line.35"></a>
+<span class="sourceLineNo">036</span> *    &lt;li&gt;&lt;tt&gt;Collection{@code &lt;Bean&gt;}&lt;/tt&gt;<a name="line.36"></a>
+<span class="sourceLineNo">037</span> *    &lt;li&gt;&lt;tt&gt;Map[]&lt;/tt&gt;<a name="line.37"></a>
+<span class="sourceLineNo">038</span> *    &lt;li&gt;&lt;tt&gt;Bean[]&lt;/tt&gt;<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * &lt;/ul&gt;<a name="line.39"></a>
+<span class="sourceLineNo">040</span> *<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * &lt;p&gt;<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * Tabular POJO models can be thought of as tables of data.  For example, a list of the following beans...<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * &lt;p class='bcode w800'&gt;<a name="line.43"></a>
+<span class="sourceLineNo">044</span> *    &lt;jk&gt;public&lt;/jk&gt; MyBean {<a name="line.44"></a>
+<span class="sourceLineNo">045</span> *       &lt;jk&gt;public int&lt;/jk&gt; myInt;<a name="line.45"></a>
+<span class="sourceLineNo">046</span> *       &lt;jk&gt;public&lt;/jk&gt; String myString;<a name="line.46"></a>
+<span class="sourceLineNo">047</span> *       &lt;jk&gt;public&lt;/jk&gt; Date myDate;<a name="line.47"></a>
+<span class="sourceLineNo">048</span> *    }<a name="line.48"></a>
+<span class="sourceLineNo">049</span> * &lt;p&gt;<a name="line.49"></a>
+<span class="sourceLineNo">050</span> *    ... can be thought of a table containing the following columns...<a name="line.50"></a>
+<span class="sourceLineNo">051</span> * &lt;p&gt;<a name="line.51"></a>
+<span class="sourceLineNo">052</span> * &lt;table class='styled code'&gt;<a name="line.52"></a>
+<span class="sourceLineNo">053</span> *    &lt;tr&gt;&lt;th&gt;myInt&lt;/th&gt;&lt;th&gt;myString&lt;/th&gt;&lt;th&gt;myDate&lt;/th&gt;&lt;/tr&gt;<a name="line.53"></a>
+<span class="sourceLineNo">054</span> *    &lt;tr&gt;&lt;td&gt;123&lt;/td&gt;&lt;td&gt;'foobar'&lt;/td&gt;&lt;td&gt;yyyy/MM/dd HH:mm:ss&lt;/td&gt;&lt;/tr&gt;<a name="line.54"></a>
+<span class="sourceLineNo">055</span> *    &lt;tr&gt;&lt;td colspan=3&gt;...&lt;/td&gt;&lt;/tr&gt;<a name="line.55"></a>
+<span class="sourceLineNo">056</span> * &lt;/table&gt;<a name="line.56"></a>
+<span class="sourceLineNo">057</span> *<a name="line.57"></a>
+<span class="sourceLineNo">058</span> * &lt;p&gt;<a name="line.58"></a>
+<span class="sourceLineNo">059</span> * From this table, you can perform the following functions:<a name="line.59"></a>
+<span class="sourceLineNo">060</span> * &lt;ul class='spaced-list'&gt;<a name="line.60"></a>
+<span class="sourceLineNo">061</span> *    &lt;li&gt;<a name="line.61"></a>
+<span class="sourceLineNo">062</span> *       Search - Return only rows where a search pattern matches.<a name="line.62"></a>
+<span class="sourceLineNo">063</span> *    &lt;li&gt;<a name="line.63"></a>
+<span class="sourceLineNo">064</span> *       View - Return only the specified subset of columns in the specified order.<a name="line.64"></a>
+<span class="sourceLineNo">065</span> *    &lt;li&gt;<a name="line.65"></a>
+<span class="sourceLineNo">066</span> *       Sort - Sort the table by one or more columns.<a name="line.66"></a>
+<span class="sourceLineNo">067</span> *    &lt;li&gt;<a name="line.67"></a>
+<span class="sourceLineNo">068</span> *       Position/limit - Only return a subset of rows.<a name="line.68"></a>
+<span class="sourceLineNo">069</span> * &lt;/ul&gt;<a name="line.69"></a>
+<span class="sourceLineNo">070</span> *<a name="line.70"></a>
+<span class="sourceLineNo">071</span> * &lt;h5 class='topic'&gt;Search&lt;/h5&gt;<a name="line.71"></a>
+<span class="sourceLineNo">072</span> *<a name="line.72"></a>
+<span class="sourceLineNo">073</span> * The search capabilities allow you to filter based on query patterns against strings, dates, and numbers.<a name="line.73"></a>
+<span class="sourceLineNo">074</span> * Queries take the form of a Map with column names as keys, and search patterns as values.<a name="line.74"></a>
+<span class="sourceLineNo">075</span> * &lt;br&gt;Multiple search patterns are ANDed (i.e. all patterns must match for the row to be returned).<a name="line.75"></a>
+<span class="sourceLineNo">076</span> *<a name="line.76"></a>
+<span class="sourceLineNo">077</span> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.77"></a>
+<span class="sourceLineNo">078</span> * &lt;ul class='spaced-list'&gt;<a name="line.78"></a>
+<span class="sourceLineNo">079</span> *    &lt;li&gt;<a name="line.79"></a>
+<span class="sourceLineNo">080</span> *       &lt;tt&gt;{myInt:'123'}&lt;/tt&gt; - Return only rows where the &lt;tt&gt;myInt&lt;/tt&gt; column is 123.<a name="line.80"></a>
+<span class="sourceLineNo">081</span> *    &lt;li&gt;<a name="line.81"></a>
+<span class="sourceLineNo">082</span> *       &lt;tt&gt;{myString:'foobar'}&lt;/tt&gt; - Return only rows where the &lt;tt&gt;myString&lt;/tt&gt; column is 'foobar'.<a name="line.82"></a>
+<span class="sourceLineNo">083</span> *    &lt;li&gt;<a name="line.83"></a>
+<span class="sourceLineNo">084</span> *       &lt;tt&gt;{myDate:'2001'}&lt;/tt&gt; - Return only rows where the &lt;tt&gt;myDate&lt;/tt&gt; column have dates in the year 2001.<a name="line.84"></a>
+<span class="sourceLineNo">085</span> * &lt;/ul&gt;<a name="line.85"></a>
+<span class="sourceLineNo">086</span> *<a name="line.86"></a>
+<span class="sourceLineNo">087</span> * &lt;h5 class='topic'&gt;String Patterns&lt;/h5&gt;<a name="line.87"></a>
+<span class="sourceLineNo">088</span> *<a name="line.88"></a>
+<span class="sourceLineNo">089</span> * Any objects can be queried against using string patterns.<a name="line.89"></a>
+<span class="sourceLineNo">090</span> * If the objects being searched are not strings, then the patterns are matched against whatever is return by the<a name="line.90"></a>
+<span class="sourceLineNo">091</span> * {@code Object#toString()} method.<a name="line.91"></a>
+<span class="sourceLineNo">092</span> *<a name="line.92"></a>
+<span class="sourceLineNo">093</span> * &lt;h5 class='topic'&gt;Example string query patterns:&lt;/h5&gt;<a name="line.93"></a>
+<span class="sourceLineNo">094</span> * &lt;ul&gt;<a name="line.94"></a>
+<span class="sourceLineNo">095</span> *    &lt;li&gt;&lt;tt&gt;foo&lt;/tt&gt; - The string 'foo'<a name="line.95"></a>
+<span class="sourceLineNo">096</span> *    &lt;li&gt;&lt;tt&gt;foo bar&lt;/tt&gt; - The string 'foo' or the string 'bar'<a name="line.96"></a>
+<span class="sourceLineNo">097</span> *    &lt;li&gt;&lt;tt&gt;'foo bar'&lt;/tt&gt; - The phrase 'foo bar'<a name="line.97"></a>
+<span class="sourceLineNo">098</span> *    &lt;li&gt;&lt;tt&gt;"foo bar"&lt;/tt&gt; - The phrase 'foo bar'<a name="line.98"></a>
+<span class="sourceLineNo">099</span> *    &lt;li&gt;&lt;tt&gt;foo*&lt;/tt&gt; - &lt;tt&gt;*&lt;/tt&gt; matches zero-or-more characters.<a name="line.99"></a>
+<span class="sourceLineNo">100</span> *    &lt;li&gt;&lt;tt&gt;foo?&lt;/tt&gt; - &lt;tt&gt;?&lt;/tt&gt; matches exactly one character<a name="line.100"></a>
+<span class="sourceLineNo">101</span> * &lt;/ul&gt;<a name="line.101"></a>
+<span class="sourceLineNo">102</span> *<a name="line.102"></a>
+<span class="sourceLineNo">103</span> * &lt;ul class='notes'&gt;<a name="line.103"></a>
+<span class="sourceLineNo">104</span> *    &lt;li&gt;<a name="line.104"></a>
+<span class="sourceLineNo">105</span> *       Whitespace is ignored around search patterns.<a name="line.105"></a>
+<span class="sourceLineNo">106</span> *    &lt;li&gt;<a name="line.106"></a>
+<span class="sourceLineNo">107</span> *       Prepend &lt;tt&gt;+&lt;/tt&gt; to tokens that must match.  (e.g. &lt;tt&gt;+foo* +*bar&lt;/tt&gt;)<a name="line.107"></a>
+<span class="sourceLineNo">108</span> *    &lt;li&gt;<a name="line.108"></a>
+<span class="sourceLineNo">109</span> *       Prepend &lt;tt&gt;-&lt;/tt&gt; to tokens that must not match.  (e.g. &lt;tt&gt;+foo* -*bar&lt;/tt&gt;)<a name="line.109"></a>
+<span class="sourceLineNo">110</span> * &lt;/ul&gt;<a name="line.110"></a>
+<span class="sourceLineNo">111</span> *<a name="line.111"></a>
+<span class="sourceLineNo">112</span> * &lt;h5 class='topic'&gt;Numeric Patterns&lt;/h5&gt;<a name="line.112"></a>
+<span class="sourceLineNo">113</span> *<a name="line.113"></a>
+<span class="sourceLineNo">114</span> * Any object of type {@link Number} (or numeric primitives) can be searched using numeric patterns.<a name="line.114"></a>
+<span class="sourceLineNo">115</span> *<a name="line.115"></a>
+<span class="sourceLineNo">116</span> * &lt;h5 class='topic'&gt;Example numeric query patterns:&lt;/h5&gt;<a name="line.116"></a>
+<span class="sourceLineNo">117</span> * &lt;ul&gt;<a name="line.117"></a>
+<span class="sourceLineNo">118</span> *    &lt;li&gt;&lt;tt&gt;123&lt;/tt&gt; - The single number 123<a name="line.118"></a>
+<span class="sourceLineNo">119</span> *    &lt;li&gt;&lt;tt&gt;1 2 3&lt;/tt&gt;   - 1, 2, or 3<a name="line.119"></a>
+<span class="sourceLineNo">120</span> *    &lt;li&gt;&lt;tt&gt;1-100&lt;/tt&gt; - Between 1 and 100<a name="line.120"></a>
+<span class="sourceLineNo">121</span> *    &lt;li&gt;&lt;tt&gt;1 - 100&lt;/tt&gt; - Between 1 and 100<a name="line.121"></a>
+<span class="sourceLineNo">122</span> *    &lt;li&gt;&lt;tt&gt;1 - 100 200-300&lt;/tt&gt; - Between 1 and 100 or between 200 and 300<a name="line.122"></a>
+<span class="sourceLineNo">123</span> *    &lt;li&gt;&lt;tt&gt;&amp;gt; 100&lt;/tt&gt; - Greater than 100<a name="line.123"></a>
+<span class="sourceLineNo">124</span> *    &lt;li&gt;&lt;tt&gt;&amp;gt;= 100&lt;/tt&gt; - Greater than or equal to 100<a name="line.124"></a>
+<span class="sourceLineNo">125</span> *    &lt;li&gt;&lt;tt&gt;!123&lt;/tt&gt; - Not 123<a name="line.125"></a>
+<span class="sourceLineNo">126</span> * &lt;/ul&gt;<a name="line.126"></a>
+<span class="sourceLineNo">127</span> *<a name="line.127"></a>
+<span class="sourceLineNo">128</span> * &lt;ul class='notes'&gt;<a name="line.128"></a>
+<span class="sourceLineNo">129</span> *    &lt;li&gt;<a name="line.129"></a>
+<span class="sourceLineNo">130</span> *       Whitespace is ignored in search patterns.<a name="line.130"></a>
+<span class="sourceLineNo">131</span> *    &lt;li&gt;<a name="line.131"></a>
+<span class="sourceLineNo">132</span> *       Negative numbers are supported.<a name="line.132"></a>
+<span class="sourceLineNo">133</span> * &lt;/ul&gt;<a name="line.133"></a>
+<span class="sourceLineNo">134</span> *<a name="line.134"></a>
+<span class="sourceLineNo">135</span> * &lt;h5 class='topic'&gt;Date Patterns&lt;/h5&gt;<a name="line.135"></a>
+<span class="sourceLineNo">136</span> *<a name="line.136"></a>
+<span class="sourceLineNo">137</span> * Any object of type {@link Date} or {@link Calendar} can be searched using date patterns.<a name="line.137"></a>
+<span class="sourceLineNo">138</span> *<a name="line.138"></a>
+<span class="sourceLineNo">139</span> * &lt;p&gt;<a name="line.139"></a>
+<span class="sourceLineNo">140</span> * The default valid input timestamp formats (which can be overridden via the {@link #setValidTimestampFormats(String...)}<a name="line.140"></a>
+<span class="sourceLineNo">141</span> * method are...<a name="line.141"></a>
+<span class="sourceLineNo">142</span> *<a name="line.142"></a>
+<span class="sourceLineNo">143</span> * &lt;ul&gt;<a name="line.143"></a>
+<span class="sourceLineNo">144</span> *    &lt;li&gt;&lt;tt&gt;yyyy.MM.dd.HH.mm.ss&lt;/tt&gt;<a name="line.144"></a>
+<span class="sourceLineNo">145</span> *    &lt;li&gt;&lt;tt&gt;yyyy.MM.dd.HH.mm&lt;/tt&gt;<a name="line.145"></a>
+<span class="sourceLineNo">146</span> *    &lt;li&gt;&lt;tt&gt;yyyy.MM.dd.HH&lt;/tt&gt;<a name="line.146"></a>
+<span class="sourceLineNo">147</span> *    &lt;li&gt;&lt;tt&gt;yyyy.MM.dd&lt;/tt&gt;<a name="line.147"></a>
+<span class="sourceLineNo">148</span> *    &lt;li&gt;&lt;tt&gt;yyyy.MM&lt;/tt&gt;<a name="line.148"></a>
+<span class="sourceLineNo">149</span> *    &lt;li&gt;&lt;tt&gt;yyyy&lt;/tt&gt;<a name="line.149"></a>
+<span class="sourceLineNo">150</span> * &lt;/ul&gt;<a name="line.150"></a>
+<span class="sourceLineNo">151</span> *<a name="line.151"></a>
+<span class="sourceLineNo">152</span> * &lt;h5 class='topic'&gt;Example date query patterns:&lt;/h5&gt;<a name="line.152"></a>
+<span class="sourceLineNo">153</span> * &lt;ul&gt;<a name="line.153"></a>
+<span class="sourceLineNo">154</span> *    &lt;li&gt;&lt;tt&gt;2001&lt;/tt&gt; - A specific year.<a name="line.154"></a>
+<span class="sourceLineNo">155</span> *    &lt;li&gt;&lt;tt&gt;2001.01.01.10.50&lt;/tt&gt; - A specific time.<a name="line.155"></a>
+<span class="sourceLineNo">156</span> *    &lt;li&gt;&lt;tt&gt;&amp;gt;2001&lt;/tt&gt;   - After a specific year.<a name="line.156"></a>
+<span class="sourceLineNo">157</span> *    &lt;li&gt;&lt;tt&gt;&amp;gt;=2001&lt;/tt&gt; - During or after a specific year.<a name="line.157"></a>
+<span class="sourceLineNo">158</span> *    &lt;li&gt;&lt;tt&gt;2001 - 2003.06.30&lt;/tt&gt;   - A date range.<a name="line.158"></a>
+<span class="sourceLineNo">159</span> *    &lt;li&gt;&lt;tt&gt;2001 2003 2005&lt;/tt&gt;   - Multiple date patterns are ORed.<a name="line.159"></a>
+<span class="sourceLineNo">160</span> * &lt;/ul&gt;<a name="line.160"></a>
+<span class="sourceLineNo">161</span> *<a name="line.161"></a>
+<span class="sourceLineNo">162</span> * &lt;ul class='notes'&gt;<a name="line.162"></a>
+<span class="sourceLineNo">163</span> *    &lt;li&gt;<a name="line.163"></a>
+<span class="sourceLineNo">164</span> *       Whitespace is ignored in search patterns.<a name="line.164"></a>
+<span class="sourceLineNo">165</span> * &lt;/ul&gt;<a name="line.165"></a>
+<span class="sourceLineNo">166</span> *<a name="line.166"></a>
+<span class="sourceLineNo">167</span> * &lt;h5 class='topic'&gt;View&lt;/h5&gt;<a name="line.167"></a>
+<span class="sourceLineNo">168</span> *<a name="line.168"></a>
+<span class="sourceLineNo">169</span> * The view capability allows you to return only the specified subset of columns in the specified order.<a name="line.169"></a>
+<span class="sourceLineNo">170</span> * &lt;br&gt;The view parameter is a list of either &lt;tt&gt;Strings&lt;/tt&gt; or &lt;tt&gt;Maps&lt;/tt&gt;.<a name="line.170"></a>
+<span class="sourceLineNo">171</span> *<a name="line.171"></a>
+<span class="sourceLineNo">172</span> * &lt;h5 class='topic'&gt;Example view parameters:&lt;/h5&gt;<a name="line.172"></a>
+<span class="sourceLineNo">173</span> * &lt;ul&gt;<a name="line.173"></a>
+<span class="sourceLineNo">174</span> *    &lt;li&gt;&lt;tt&gt;column1&lt;/tt&gt; - Return only column 'column1'.<a name="line.174"></a>
+<span class="sourceLineNo">175</span> *    &lt;li&gt;&lt;tt&gt;column2, column1&lt;/tt&gt; - Return only columns 'column2' and 'column1' in that order.<a name="line.175"></a>
+<span class="sourceLineNo">176</span> * &lt;/ul&gt;<a name="line.176"></a>
+<span class="sourceLineNo">177</span> *<a name="line.177"></a>
+<span class="sourceLineNo">178</span> * &lt;h5 class='topic'&gt;Sort&lt;/h5&gt;<a name="line.178"></a>
+<span class="sourceLineNo">179</span> *<a name="line.179"></a>
+<span class="sourceLineNo">180</span> * The sort capability allows you to sort values by the specified rows.<a name="line.180"></a>
+<span class="sourceLineNo">181</span> * &lt;br&gt;The sort parameter is a list of strings with an optional &lt;js&gt;'+'&lt;/js&gt; or &lt;js&gt;'-'&lt;/js&gt; suffix representing<a name="line.181"></a>
+<span class="sourceLineNo">182</span> * ascending and descending order accordingly.<a name="line.182"></a>
+<span class="sourceLineNo">183</span> *<a name="line.183"></a>
+<span class="sourceLineNo">184</span> * &lt;h5 class='topic'&gt;Example sort parameters:&lt;/h5&gt;<a name="line.184"></a>
+<span class="sourceLineNo">185</span> * &lt;ul&gt;<a name="line.185"></a>
+<span class="sourceLineNo">186</span> *    &lt;li&gt;&lt;tt&gt;column1&lt;/tt&gt; - Sort rows by column 'column1' ascending.<a name="line.186"></a>
+<span class="sourceLineNo">187</span> *    &lt;li&gt;&lt;tt&gt;column1+&lt;/tt&gt; - Sort rows by column 'column1' ascending.<a name="line.187"></a>
+<span class="sourceLineNo">188</span> *    &lt;li&gt;&lt;tt&gt;column1-&lt;/tt&gt; - Sort rows by column 'column1' descending.<a name="line.188"></a>
+<span class="sourceLineNo">189</span> *    &lt;li&gt;&lt;tt&gt;column1, column2-&lt;/tt&gt; - Sort rows by column 'column1' ascending, then 'column2' descending.<a name="line.189"></a>
+<span class="sourceLineNo">190</span> * &lt;/ul&gt;<a name="line.190"></a>
+<span class="sourceLineNo">191</span> *<a name="line.191"></a>
+<span class="sourceLineNo">192</span> * &lt;h5 class='topic'&gt;Paging&lt;/h5&gt;<a name="line.192"></a>
+<span class="sourceLineNo">193</span> *<a name="line.193"></a>
+<span class="sourceLineNo">194</span> * Use the &lt;tt&gt;position&lt;/tt&gt; and &lt;tt&gt;limit&lt;/tt&gt; parameters to specify a subset of rows to return.<a name="line.194"></a>
+<span class="sourceLineNo">195</span> */<a name="line.195"></a>
+<span class="sourceLineNo">196</span>@SuppressWarnings({"unchecked","rawtypes"})<a name="line.196"></a>
+<span class="sourceLineNo">197</span>public final class PojoQuery {<a name="line.197"></a>
+<span class="sourceLineNo">198</span><a name="line.198"></a>
+<span class="sourceLineNo">199</span>   private Object input;<a name="line.199"></a>
+<span class="sourceLineNo">200</span>   private ClassMeta type;<a name="line.200"></a>
+<span class="sourceLineNo">201</span>   private BeanSession session;<a name="line.201"></a>
+<span class="sourceLineNo">202</span><a name="line.202"></a>
+<span class="sourceLineNo">203</span>   /**<a name="line.203"></a>
+<span class="sourceLineNo">204</span>    * Constructor.<a name="line.204"></a>
+<span class="sourceLineNo">205</span>    *<a name="line.205"></a>
+<span class="sourceLineNo">206</span>    * @param input The POJO we're going to be filtering.<a name="line.206"></a>
+<span class="sourceLineNo">207</span>    * @param session The bean session to use to create bean maps for beans.<a name="line.207"></a>
+<span class="sourceLineNo">208</span>    */<a name="line.208"></a>
+<span class="sourceLineNo">209</span>   public PojoQuery(Object input, BeanSession session) {<a name="line.209"></a>
+<span class="sourceLineNo">210</span>      this.input = input;<a name="line.210"></a>
+<span class="sourceLineNo">211</span>      this.type = session.getClassMetaForObject(input);<a name="line.211"></a>
+<span class="sourceLineNo">212</span>      this.session = session;<a name="line.212"></a>
+<span class="sourceLineNo">213</span>   }<a name="line.213"></a>
+<span class="sourceLineNo">214</span><a name="line.214"></a>
+<span class="sourceLineNo">215</span>   /**<a name="line.215"></a>
+<span class="sourceLineNo">216</span>    * Filters the input object as a collection of maps.<a name="line.216"></a>
+<span class="sourceLineNo">217</span>    *<a name="line.217"></a>
+<span class="sourceLineNo">218</span>    * @param args The search arguments.<a name="line.218"></a>
+<span class="sourceLineNo">219</span>    * @return The filtered collection.<a name="line.219"></a>
+<span class="sourceLineNo">220</span>    * Returns the unaltered input if the input is not a collection or array of objects.<a name="line.220"></a>
+<span class="sourceLineNo">221</span>    */<a name="line.221"></a>
+<span class="sourceLineNo">222</span>   public List filter(SearchArgs args) {<a name="line.222"></a>
+<span class="sourceLineNo">223</span><a name="line.223"></a>
+<span class="sourceLineNo">224</span>      if (input == null)<a name="line.224"></a>
+<span class="sourceLineNo">225</span>         return null;<a name="line.225"></a>
+<span class="sourceLineNo">226</span><a name="line.226"></a>
+<span class="sourceLineNo">227</span>      if (! type.isCollectionOrArray())<a name="line.227"></a>
+<span class="sourceLineNo">228</span>         throw new FormattedRuntimeException("Cannot call filterCollection() on class type ''{0}''", type);<a name="line.228"></a>
+<span class="sourceLineNo">229</span><a name="line.229"></a>
+<span class="sourceLineNo">230</span>      // Create a new ObjectList<a name="line.230"></a>
+<span class="sourceLineNo">231</span>      ObjectList l = (ObjectList)replaceWithMutables(input);<a name="line.231"></a>
+<span class="sourceLineNo">232</span><a name="line.232"></a>
+<span class="sourceLineNo">233</span>      // Do the search<a name="line.233"></a>
+<span class="sourceLineNo">234</span>      CollectionFilter filter = new CollectionFilter(args.getSearch(), args.isIgnoreCase());<a name="line.234"></a>
+<span class="sourceLineNo">235</span>      filter.doQuery(l);<a name="line.235"></a>
+<span class="sourceLineNo">236</span><a name="line.236"></a>
+<span class="sourceLineNo">237</span>      // If sort or view isn't empty, then we need to make sure that all entries in the<a name="line.237"></a>
+<span class="sourceLineNo">238</span>      // list are maps.<a name="line.238"></a>
+<span class="sourceLineNo">239</span>      Map&lt;String,Boolean&gt; sort = args.getSort();<a name="line.239"></a>
+<span class="sourceLineNo">240</span>      List&lt;String&gt; view = args.getView();<a name="line.240"></a>
+<span class="sourceLineNo">241</span><a name="line.241"></a>
+<span class="sourceLineNo">242</span>      if ((! sort.isEmpty()) || (! view.isEmpty())) {<a name="line.242"></a>
+<span class="sourceLineNo">243</span>         if (! sort.isEmpty())<a name="line.243"></a>
+<span class="sourceLineNo">244</span>            doSort(l, sort);<a name="line.244"></a>
+<span class="sourceLineNo">245</span>         if (! view.isEmpty())<a name="line.245"></a>
+<span class="sourceLineNo">246</span>            doView(l, view);<a name="line.246"></a>
+<span class="sourceLineNo">247</span>      }<a name="line.247"></a>
+<span class="sourceLineNo">248</span><a name="line.248"></a>
+<span class="sourceLineNo">249</span>      // Do the paging.<a name="line.249"></a>
+<span class="sourceLineNo">250</span>      int pos = args.getPosition();<a name="line.250"></a>
+<span class="sourceLineNo">251</span>      int limit = args.getLimit();<a name="line.251"></a>
+<span class="sourceLineNo">252</span>      if (pos != 0 || limit != 0) {<a name="line.252"></a>
+<span class="sourceLineNo">253</span>         int end = (limit == 0 || limit+pos &gt;= l.size()) ? l.size() : limit + pos;<a name="line.253"></a>
+<span class="sourceLineNo">254</span>         pos = Math.min(pos, l.size());<a name="line.254"></a>
+<span class="sourceLineNo">255</span>         ObjectList l2 = new DelegateList(((DelegateList)l).getClassMeta());<a name="line.255"></a>
+<span class="sourceLineNo">256</span>         l2.addAll(l.subList(pos, end));<a name="line.256"></a>
+<span class="sourceLineNo">257</span>         l = l2;<a name="line.257"></a>
+<span class="sourceLineNo">258</span>      }<a name="line.258"></a>
+<span class="sourceLineNo">259</span><a name="line.259"></a>
+<span class="sourceLineNo">260</span>      return l;<a name="line.260"></a>
+<span class="sourceLineNo">261</span>   }<a name="line.261"></a>
+<span class="sourceLineNo">262</span><a name="line.262"></a>
+<span class="sourceLineNo">263</span>   /*<a name="line.263"></a>
+<span class="sourceLineNo">264</span>    * If there are any non-Maps in the specified list, replaces them with BeanMaps.<a name="line.264"></a>
+<span class="sourceLineNo">265</span>    */<a name="line.265"></a>
+<span class="sourceLineNo">266</span>   private Object replaceWithMutables(Object o) {<a name="line.266"></a>
+<span class="sourceLineNo">267</span>      if (o == null)<a name="line.267"></a>
+<span class="sourceLineNo">268</span>         return null;<a name="line.268"></a>
+<span class="sourceLineNo">269</span>      ClassMeta cm = session.getClassMetaForObject(o);<a name="line.269"></a>
+<span class="sourceLineNo">270</span>      if (cm.isCollection()) {<a name="line.270"></a>
+<span class="sourceLineNo">271</span>         ObjectList l = new DelegateList(session.getClassMetaForObject(o));<a name="line.271"></a>
+<span class="sourceLineNo">272</span>         for (Object o2 : (Collection)o)<a name="line.272"></a>
+<span class="sourceLineNo">273</span>            l.add(replaceWithMutables(o2));<a name="line.273"></a>
+<span class="sourceLineNo">274</span>         return l;<a name="line.274"></a>
+<span class="sourceLineNo">275</span>      }<a name="line.275"></a>
+<span class="sourceLineNo">276</span>      if (cm.isMap() &amp;&amp; o instanceof BeanMap) {<a name="line.276"></a>
+<span class="sourceLineNo">277</span>         BeanMap bm = (BeanMap)o;<a name="line.277"></a>
+<span class="sourceLineNo">278</span>         DelegateBeanMap dbm = new DelegateBeanMap(bm.getBean(), session);<a name="line.278"></a>
+<span class="sourceLineNo">279</span>         for (Object key : bm.keySet())<a name="line.279"></a>
+<span class="sourceLineNo">280</span>            dbm.addKey(key.toString());<a name="line.280"></a>
+<span class="sourceLineNo">281</span>         return dbm;<a name="line.281"></a>
+<span class="sourceLineNo">282</span>      }<a name="line.282"></a>
+<span class="sourceLineNo">283</span>      if (cm.isBean()) {<a name="line.283"></a>
+<span class="sourceLineNo">284</span>         BeanMap bm = session.toBeanMap(o);<a name="line.284"></a>
+<span class="sourceLineNo">285</span>         DelegateBeanMap dbm = new DelegateBeanMap(bm.getBean(), session);<a name="line.285"></a>
+<span class="sourceLineNo">286</span>         for (Object key : bm.keySet())<a name="line.286"></a>
+<span class="sourceLineNo">287</span>            dbm.addKey(key.toString());<a name="line.287"></a>
+<span class="sourceLineNo">288</span>         return dbm;<a name="line.288"></a>
+<span class="sourceLineNo">289</span>      }<a name="line.289"></a>
+<span class="sourceLineNo">290</span>      if (cm.isMap()) {<a name="line.290"></a>
+<span class="sourceLineNo">291</span>         Map m = (Map)o;<a name="line.291"></a>
+<span class="sourceLineNo">292</span>         DelegateMap dm = new DelegateMap(m, session);<a name="line.292"></a>
+<span class="sourceLineNo">293</span>         for (Map.Entry e : (Set&lt;Map.Entry&gt;)m.entrySet())<a name="line.293"></a>
+<span class="sourceLineNo">294</span>            dm.put(e.getKey().toString(), e.getValue());<a name="line.294"></a>
+<span class="sourceLineNo">295</span>         return dm;<a name="line.295"></a>
+<span class="sourceLineNo">296</span>      }<a name="line.296"></a>
+<span class="sourceLineNo">297</span>      if (cm.isArray()) {<a name="line.297"></a>
+<span class="sourceLineNo">298</span>         return replaceWithMutables(Arrays.asList((Object[])o));<a name="line.298"></a>
+<span class="sourceLineNo">299</span>      }<a name="line.299"></a>
+<span class="sourceLineNo">300</span>      return o;<a name="line.300"></a>
+<span class="sourceLineNo">301</span>   }<a name="line.301"></a>
+<span class="sourceLineNo">302</span><a name="line.302"></a>
+<span class="sourceLineNo">303</span>   /*<a name="line.303"></a>
+<span class="sourceLineNo">304</span>    * Sorts the specified list by the sort list.<a name="line.304"></a>
+<span class="sourceLineNo">305</span>    */<a name="line.305"></a>
+<span class="sourceLineNo">306</span>   private static void doSort(List list, Map&lt;String,Boolean&gt; sortList) {<a name="line.306"></a>
+<span class="sourceLineNo">307</span><a name="line.307"></a>
+<span class="sourceLineNo">308</span>      // We reverse the list and sort last to first.<a name="line.308"></a>
+<span class="sourceLineNo">309</span>      List&lt;String&gt; columns = new ArrayList&lt;&gt;(sortList.keySet());<a name="line.309"></a>
+<span class="sourceLineNo">310</span>      Collections.reverse(columns);<a name="line.310"></a>
+<span class="sourceLineNo">311</span><a name="line.311"></a>
+<span class="sourceLineNo">312</span>      for (final String c : columns) {<a name="line.312"></a>
+<span class="sourceLineNo">313</span>         final boolean isDesc = sortList.get(c);<a name="line.313"></a>
+<span class="sourceLineNo">314</span><a name="line.314"></a>
+<span class="sourceLineNo">315</span>         Comparator comp = new Comparator&lt;Map&gt;() {<a name="line.315"></a>
+<span class="sourceLineNo">316</span>            @Override /* Comparator */<a name="line.316"></a>
+<span class="sourceLineNo">317</span>            public int compare(Map m1, Map m2) {<a name="line.317"></a>
+<span class="sourceLineNo">318</span>               Comparable v1 = toComparable(m1.get(c)), v2 = toComparable(m2.get(c));<a name="line.318"></a>
+<span class="sourceLineNo">319</span>               if (v1 == null &amp;&amp; v2 == null)<a name="line.319"></a>
+<span class="sourceLineNo">320</span>                  return 0;<a name="line.320"></a>
+<span class="sourceLineNo">321</span>               if (v1 == null)<a name="line.321"></a>
+<span class="sourceLineNo">322</span>                  return (isDesc ? -1 : 1);<a name="line.322"></a>
+<span class="sourceLineNo">323</span>               if (v2 == null)<a name="line.323"></a>
+<span class="sourceLineNo">324</span>                  return (isDesc ? 1 : -1);<a name="line.324"></a>
+<span class="sourceLineNo">325</span>               return (isDesc ? v2.compareTo(v1) : v1.compareTo(v2));<a name="line.325"></a>
+<span class="sourceLineNo">326</span>            }<a name="line.326"></a>
+<span class="sourceLineNo">327</span>         };<a name="line.327"></a>
+<span class="sourceLineNo">328</span>         Collections.sort(list, comp);<a name="line.328"></a>
+<span class="sourceLineNo">329</span>      }<a name="line.329"></a>
+<span class="sourceLineNo">330</span>   }<a name="line.330"></a>
+<span class="sourceLineNo">331</span><a name="line.331"></a>
+<span class="sourceLineNo">332</span>   static final Comparable toComparable(Object o) {<a name="line.332"></a>
+<span class="sourceLineNo">333</span>      if (o == null)<a name="line.333"></a>
+<span class="sourceLineNo">334</span>         return null;<a name="line.334"></a>
+<span class="sourceLineNo">335</span>      if (o instanceof Comparable)<a name="line.335"></a>
+<span class="sourceLineNo">336</span>         return (Comparable)o;<a name="line.336"></a>
+<span class="sourceLineNo">337</span>      if (o instanceof Map)<a name="line.337"></a>
+<span class="sourceLineNo">338</span>         return ((Map)o).size();<a name="line.338"></a>
+<span class="sourceLineNo">339</span>      if (o.getClass().isArray())<a name="line.339"></a>
+<span class="sourceLineNo">340</span>         return Array.getLength(o);<a name="line.340"></a>
+<span class="sourceLineNo">341</span>      return o.toString();<a name="line.341"></a>
+<span class="sourceLineNo">342</span>   }<a name="line.342"></a>
+<span class="sourceLineNo">343</span><a name="line.343"></a>
+<span class="sourceLineNo">344</span>   /*<a name="line.344"></a>
+<span class="sourceLineNo">345</span>    * Filters all but the specified view columns on all entries in the specified list.<a name="line.345"></a>
+<span class="sourceLineNo">346</span>    */<a name="line.346"></a>
+<span class="sourceLineNo">347</span>   private static void doView(List list, List&lt;String&gt; view) {<a name="line.347"></a>
+<span class="sourceLineNo">348</span>      for (ListIterator i = list.listIterator(); i.hasNext();) {<a name="line.348"></a>
+<span class="sourceLineNo">349</span>         Object o = i.next();<a name="line.349"></a>
+<span class="sourceLineNo">350</span>         Map m = (Map)o;<a name="line.350"></a>
+<span class="sourceLineNo">351</span>         doView(m, view);<a name="line.351"></a>
+<span class="sourceLineNo">352</span>      }<a name="line.352"></a>
+<span class="sourceLineNo">353</span>   }<a name="line.353"></a>
+<span class="sourceLineNo">354</span><a name="line.354"></a>
+<span class="sourceLineNo">355</span>   /*<a name="line.355"></a>
+<span class="sourceLineNo">356</span>    * Creates a new Map with only the entries specified in the view list.<a name="line.356"></a>
+<span class="sourceLineNo">357</span>    */<a name="line.357"></a>
+<span class="sourceLineNo">358</span>   private static Map doView(Map m, List&lt;String&gt; view) {<a name="line.358"></a>
+<span class="sourceLineNo">359</span>      if (m instanceof DelegateMap)<a name="line.359"></a>
+<span class="sourceLineNo">360</span>         ((DelegateMap)m).filterKeys(view);<a name="line.360"></a>
+<span class="sourceLineNo">361</span>      else<a name="line.361"></a>
+<span class="sourceLineNo">362</span>         ((DelegateBeanMap)m).filterKeys(view);<a name="line.362"></a>
+<span class="sourceLineNo">363</span>      return m;<a name="line.363"></a>
+<span class="sourceLineNo">364</span>   }<a name="line.364"></a>
+<span class="sourceLineNo">365</span><a name="line.365"></a>
+<span class="sourceLineNo">366</span><a name="line.366"></a>
+<span class="sourceLineNo">367</span>   //====================================================================================================<a name="line.367"></a>
+<span class="sourceLineNo">368</span>   // CollectionFilter<a name="line.368"></a>
+<span class="sourceLineNo">369</span>   //====================================================================================================<a name="line.369"></a>
+<span class="sourceLineNo">370</span>   private class CollectionFilter {<a name="line.370"></a>
+<span class="sourceLineNo">371</span>      IMatcher entryMatcher;<a name="line.371"></a>
+<span class="sourceLineNo">372</span><a name="line.372"></a>
+<span class="sourceLineNo">373</span>      public CollectionFilter(Map query, boolean ignoreCase) {<a name="line.373"></a>
+<span class="sourceLineNo">374</span>         if (query != null &amp;&amp; ! query.isEmpty())<a name="line.374"></a>
+<span class="sourceLineNo">375</span>            entryMatcher = new MapMatcher(query, ignoreCase);<a name="line.375"></a>
+<span class="sourceLineNo">376</span>      }<a name="line.376"></a>
+<span class="sourceLineNo">377</span><a name="line.377"></a>
+<span class="sourceLineNo">378</span>      public void doQuery(List in) {<a name="line.378"></a>
+<span class="sourceLineNo">379</span>         if (in == null || entryMatcher == null)<a name="line.379"></a>
+<span class="sourceLineNo">380</span>            return;<a name="line.380"></a>
+<span class="sourceLineNo">381</span>         for (Iterator i = in.iterator(); i.hasNext();) {<a name="line.381"></a>
+<span class="sourceLineNo">382</span>            Object o = i.next();<a name="line.382"></a>
+<span class="sourceLineNo">383</span>            if (! entryMatcher.matches(o))<a name="line.383"></a>
+<span class="sourceLineNo">384</span>               i.remove();<a name="line.384"></a>
+<span class="sourceLineNo">385</span>         }<a name="line.385"></a>
+<span class="sourceLineNo">386</span>      }<a name="line.386"></a>
+<span class="sourceLineNo">387</span>   }<a name="line.387"></a>
+<span class="sourceLineNo">388</span><a name="line.388"></a>
+<span class="sourceLineNo">389</span>   //====================================================================================================<a name="line.389"></a>
+<span class="sourceLineNo">390</span>   // IMatcher<a name="line.390"></a>
+<span class="sourceLineNo">391</span>   //====================================================================================================<a name="line.391"></a>
+<span class="sourceLineNo">392</span>   private interface IMatcher&lt;E&gt; {<a name="line.392"></a>
+<span class="sourceLineNo">393</span>      public boolean matches(E o);<a name="line.393"></a>
+<span class="sourceLineNo">394</span>   }<a name="line.394"></a>
+<span class="sourceLineNo">395</span><a name="line.395"></a>
+<span class="sourceLineNo">396</span>   //====================================================================================================<a name="line.396"></a>
+<span class="sourceLineNo">397</span>   // MapMatcher<a name="line.397"></a>
+<span class="sourceLineNo">398</span>   //====================================================================================================<a name="line.398"></a>
+<span class="sourceLineNo">399</span>   /*<a name="line.399"></a>
+<span class="sourceLineNo">400</span>    * Matches on a Map only if all specified entry matchers match.<a name="line.400"></a>
+<span class="sourceLineNo">401</span>    */<a name="line.401"></a>
+<span class="sourceLineNo">402</span>   private class MapMatcher implements IMatcher&lt;Map&gt; {<a name="line.402"></a>
+<span class="sourceLineNo">403</span><a name="line.403"></a>
+<span class="sourceLineNo">404</span>      Map&lt;String,IMatcher&gt; entryMatchers = new HashMap&lt;&gt;();<a name="line.404"></a>
+<span class="sourceLineNo">405</span><a name="line.405"></a>
+<span class="sourceLineNo">406</span>      public MapMatcher(Map query, boolean ignoreCase) {<a name="line.406"></a>
+<span class="sourceLineNo">407</span>         for (Map.Entry e : (Set&lt;Map.Entry&gt;)query.entrySet())<a name="line.407"></a>
+<span class="sourceLineNo">408</span>            if (e.getKey() != null &amp;&amp; e.getValue() != null)<a name="line.408"></a>
+<span class="sourceLineNo">409</span>               entryMatchers.put(e.getKey().toString(), new ObjectMatcher(e.getValue().toString(), ignoreCase));<a name="line.409"></a>
+<span class="sourceLineNo">410</span>      }<a name="line.410"></a>
+<span class="sourceLineNo">411</span><a name="line.411"></a>
+<span class="sourceLineNo">412</span>      @Override /* IMatcher */<a name="line.412"></a>
+<span class="sourceLineNo">413</span>      public boolean matches(Map m) {<a name="line.413"></a>
+<span class="sourceLineNo">414</span>         if (m == null)<a name="line.414"></a>
+<span class="sourceLineNo">415</span>            return false;<a name="line.415"></a>
+<span class="sourceLineNo">416</span>         for (Map.Entry&lt;String,IMatcher&gt; e : entryMatchers.entrySet()) {<a name="line.416"></a>
+<span class="sourceLineNo">417</span>            String key = e.getKey();<a name="line.417"></a>
+<span class="sourceLineNo">418</span>            Object val = null;<a name="line.418"></a>
+<span class="sourceLineNo">419</span>            if (m instanceof BeanMap) {<a name="line.419"></a>
+<span class="sourceLineNo">420</span>               val = ((BeanMap)m).getRaw(key);<a name="line.420"></a>
+<span class="sourceLineNo">421</span>            } else {<a name="line.421"></a>
+<span class="sourceLineNo">422</span>               val = m.get(key);<a name="line.422"></a>
+<span class="sourceLineNo">423</span>            }<a name="line.423"></a>
+<span class="sourceLineNo">424</span>            if (! e.getValue().matches(val))<a name="line.424"></a>
+<span class="sourceLineNo">425</span>               return false;<a name="line.425"></a>
+<span class="sourceLineNo">426</span>         }<a name="line.426"></a>
+<span class="sourceLineNo">427</span>         return true;<a name="line.427"></a>
+<span class="sourceLineNo">428</span>      }<a name="line.428"></a>
+<span class="sourceLineNo">429</span>   }<a name="line.429"></a>
+<span class="sourceLineNo">430</span><a name="line.430"></a>
+<span class="sourceLineNo">431</span>   //====================================================================================================<a name="line.431"></a>
+<span class="sourceLineNo">432</span>   // ObjectMatcher<a name="line.432"></a>
+<span class="sourceLineNo">433</span>   //====================================================================================================<a name="line.433"></a>
+<span class="sourceLineNo">434</span>   /*<a name="line.434"></a>
+<span class="sourceLineNo">435</span>    * Matcher that uses the correct matcher based on object type.<a name="line.435"></a>
+<span class="sourceLineNo">436</span>    * Used for objects when we can't determine the object type beforehand.<a name="line.436"></a>
+<span class="sourceLineNo">437</span>    */<a name="line.437"></a>
+<span class="sourceLineNo">438</span>   private class ObjectMatcher implements IMatcher&lt;Object&gt; {<a name="line.438"></a>
+<span class="sourceLineNo">439</span><a name="line.439"></a>
+<span class="sourceLineNo">440</span>      String searchPattern;<a name="line.440"></a>
+<span class="sourceLineNo">441</span>      boolean ignoreCase;<a name="line.441"></a>
+<span class="sourceLineNo">442</span>      DateMatcher dateMatcher;<a name="line.442"></a>
+<span class="sourceLineNo">443</span>      NumberMatcher numberMatcher;<a name="line.443"></a>
+<span class="sourceLineNo">444</span>      StringMatcher stringMatcher;<a name="line.444"></a>
+<span class="sourceLineNo">445</span><a name="line.445"></a>
+<span class="sourceLineNo">446</span>      ObjectMatcher(String searchPattern, boolean ignoreCase) {<a name="line.446"></a>
+<span class="sourceLineNo">447</span>         this.searchPattern = searchPattern;<a name="line.447"></a>
+<span class="sourceLineNo">448</span>         this.ignoreCase = ignoreCase;<a name="line.448"></a>
+<span class="sourceLineNo">449</span>      }<a name="line.449"></a>
+<span class="sourceLineNo">450</span><a name="line.450"></a>
+<span class="sourceLineNo">451</span>      @Override /* IMatcher */<a name="line.451"></a>
+<span class="sourceLineNo">452</span>      public boolean matches(Object o) {<a name="line.452"></a>
+<span class="sourceLineNo">453</span>         if (o instanceof Collection) {<a name="line.453"></a>
+<span class="sourceLineNo">454</span>            for (Object o2 : (Collection)o)<a name="line.454"></a>
+<span class="sourceLineNo">455</span>               if (matches(o2))<a name="line.455"></a>
+<span class="sourceLineNo">456</span>                  return true;<a name="line.456"></a>
+<span class="sourceLineNo">457</span>            return false;<a name="line.457"></a>
+<span class="sourceLineNo">458</span>         }<a name="line.458"></a>
+<span class="sourceLineNo">459</span>         if (o != null &amp;&amp; o.getClass().isArray()) {<a name="line.459"></a>
+<span class="sourceLineNo">460</span>            for (int i = 0; i &lt; Array.getLength(o); i++)<a name="line.460"></a>
+<span class="sourceLineNo">461</span>               if (matches(Array.get(o, i)))<a name="line.461"></a>
+<span class="sourceLineNo">462</span>                  return true;<a name="line.462"></a>
+<span class="sourceLineNo">463</span>            return false;<a name="line.463"></a>
+<span class="sourceLineNo">464</span>         }<a name="line.464"></a>
+<span class="sourceLineNo">465</span>         if (o instanceof Map) {<a name="line.465"></a>
+<span class="sourceLineNo">466</span>            for (Object o2 : ((Map)o).values())<a name="line.466"></a>
+<span class="sourceLineNo">467</span>               if (matches(o2))<a name="line.467"></a>
+<span class="sourceLineNo">468</span>                  return true;<a name="line.468"></a>
+<span class="sourceLineNo">469</span>            return false;<a name="line.469"></a>
+<span class="sourceLineNo">470</span>         }<a name="line.470"></a>
+<span class="sourceLineNo">471</span>         if (o instanceof Number)<a name="line.471"></a>
+<span class="sourceLineNo">472</span>            return getNumberMatcher().matches(o);<a name="line.472"></a>
+<span class="sourceLineNo">473</span>         if (o instanceof Date || o instanceof Calendar)<a name="line.473"></a>
+<span class="sourceLineNo">474</span>            return getDateMatcher().matches(o);<a name="line.474"></a>
+<span class="sourceLineNo">475</span>         return getStringMatcher().matches(o);<a name="line.475"></a>
+<span class="sourceLineNo">476</span>      }<a name="line.476"></a>
+<span class="sourceLineNo">477</span><a name="line.477"></a>
+<span class="sourceLineNo">478</span>      private IMatcher getNumberMatcher() {<a name="line.478"></a>
+<span class="sourceLineNo">479</span>         if (numberMatcher == null)<a name="line.479"></a>
+<span class="sourceLineNo">480</span>            numberMatcher = new NumberMatcher(searchPattern);<a name="line.480"></a>
+<span class="sourceLineNo">481</span>         return numberMatcher;<a name="line.481"></a>
+<span class="sourceLineNo">482</span>      }<a name="line.482"></a>
+<span class="sourceLineNo">483</span><a name="line.483"></a>
+<span class="sourceLineNo">484</span>      private IMatcher getStringMatcher() {<a name="line.484"></a>
+<span class="sourceLineNo">485</span>         if (stringMatcher == null)<a name="line.485"></a>
+<span class="sourceLineNo">486</span>            stringMatcher = new StringMatcher(searchPattern, ignoreCase);<a name="line.486"></a>
+<span class="sourceLineNo">487</span>         return stringMatcher;<a name="line.487"></a>
+<span class="sourceLineNo">488</span>      }<a name="line.488"></a>
+<span class="sourceLineNo">489</span><a name="line.489"></a>
+<span class="sourceLineNo">490</span>      private IMatcher getDateMatcher() {<a name="line.490"></a>
+<span class="sourceLineNo">491</span>         if (dateMatcher == null)<a name="line.491"></a>
+<span class="sourceLineNo">492</span>            dateMatcher = new DateMatcher(searchPattern);<a name="line.492"></a>
+<span class="sourceLineNo">493</span>         return dateMatcher;<a name="line.493"></a>
+<span class="sourceLineNo">494</span>      }<a name="line.494"></a>
+<span class="sourceLineNo">495</span>   }<a name="line.495"></a>
+<span class="sourceLineNo">496</span><a name="line.496"></a>
+<span class="sourceLineNo">497</span>   //====================================================================================================<a name="line.497"></a>
+<span class="sourceLineNo">498</span>   // NumberMatcher<a name="line.498"></a>
+<span class="sourceLineNo">499</span>   //====================================================================================================<a name="line.499"></a>
+<span class="sourceLineNo">500</span>   private static class NumberMatcher implements IMatcher&lt;Number&gt; {<a name="line.500"></a>
+<span class="sourceLineNo">501</span><a name="line.501"></a>
+<span class="sourceLineNo">502</span>      private NumberPattern[] numberPatterns;<a name="line.502"></a>
+<span class="sourceLineNo">503</span><a name="line.503"></a>
+<span class="sourceLineNo">504</span>      /**<a name="line.504"></a>
+<span class="sourceLineNo">505</span>       * Construct a number matcher for the given search pattern.<a name="line.505"></a>
+<span class="sourceLineNo">506</span>       *<a name="line.506"></a>
+<span class="sourceLineNo">507</span>       * @param searchPattern A date search paattern.  See class usage for a description.<a name="line.507"></a>
+<span class="sourceLineNo">508</span>       */<a name="line.508"></a>
+<span class="sourceLineNo">509</span>      public NumberMatcher(String searchPattern) {<a name="line.509"></a>
+<span class="sourceLineNo">510</span>         numberPatterns = new NumberPattern[1];<a name="line.510"></a>
+<span class="sourceLineNo">511</span>         numberPatterns[0] = new NumberPattern(searchPattern);<a name="line.511"></a>
+<span class="sourceLineNo">512</span><a name="line.512"></a>
+<span class="sourceLineNo">513</span>      }<a name="line.513"></a>
+<span class="sourceLineNo">514</span><a name="line.514"></a>
+<span class="sourceLineNo">515</span>      /**<a name="line.515"></a>
+<span class="sourceLineNo">516</span>       * Returns 'true' if this integer matches the pattern(s).<a name="line.516"></a>
+<span class="sourceLineNo">517</span>       */<a name="line.517"></a>
+<span class="sourceLineNo">518</span>      @Override /* IMatcher */<a name="line.518"></a>
+<span class="sourceLineNo">519</span>      public boolean matches(Number in) {<a name="line.519"></a>
+<span class="sourceLineNo">520</span>         for (int i = 0; i &lt; numberPatterns.length; i++) {<a name="line.520"></a>
+<span class="sourceLineNo">521</span>            if (! numberPatterns[i].matches(in))<a name="line.521"></a>
+<span class="sourceLineNo">522</span>               return false;<a name="line.522"></a>
+<span class="sourceLineNo">523</span>         }<a name="line.523"></a>
+<span class="sourceLineNo">524</span>         return true;<a name="line.524"></a>
+<span class="sourceLineNo">525</span>      }<a name="line.525"></a>
+<span class="sourceLineNo">526</span><a name="line.526"></a>
+<span class="sourceLineNo">527</span>   }<a name="line.527"></a>
+<span class="sourceLineNo">528</span><a name="line.528"></a>
+<span class="sourceLineNo">529</span>   /**<a name="line.529"></a>
+<span class="sourceLineNo">530</span>    * A construct representing a single search pattern.<a name="line.530"></a>
+<span class="sourceLineNo">531</span>    */<a name="line.531"></a>
+<span class="sourceLineNo">532</span>   private static class NumberPattern {<a name="line.532"></a>
+<span class="sourceLineNo">533</span>      NumberRange[] numberRanges;<a name="line.533"></a>
+<span class="sourceLineNo">534</span><a name="line.534"></a>
+<span class="sourceLineNo">535</span>      public NumberPattern(String searchPattern) {<a name="line.535"></a>
+<span class="sourceLineNo">536</span><a name="line.536"></a>
+<span class="sourceLineNo">537</span>         List&lt;NumberRange&gt; l = new LinkedList&lt;&gt;();<a name="line.537"></a>
+<span class="sourceLineNo">538</span><a name="line.538"></a>
+<span class="sourceLineNo">539</span>         for (String s : breakUpTokens(searchPattern)) {<a name="line.539"></a>
+<span class="sourceLineNo">540</span>            boolean isNot = (s.charAt(0) == '!');<a name="line.540"></a>
+<span class="sourceLineNo">541</span>            String token = s.substring(1);<a name="line.541"></a>
+<span class="sourceLineNo">542</span>            Pattern p = Pattern.compile("(([&lt;&gt;]=?)?)(-?\\d+)(-?(-?\\d+)?)");<a name="line.542"></a>
+<span class="sourceLineNo">543</span><a name="line.543"></a>
+<span class="sourceLineNo">544</span>            // Possible patterns:<a name="line.544"></a>
+<span class="sourceLineNo">545</span>            // 123, &gt;123, &lt;123, &gt;=123, &lt;=123, &gt;-123, &gt;=-123, 123-456, -123--456<a name="line.545"></a>
+<span class="sourceLineNo">546</span>            // Regular expression used:  (([&lt;&gt;]=?)?)(-?\d+)(-??(-?\d+))<a name="line.546"></a>
+<span class="sourceLineNo">547</span>            Matcher m = p.matcher(token);<a name="line.547"></a>
+<span class="sourceLineNo">548</span><a name="line.548"></a>
+<span class="sourceLineNo">549</span>            // If a non-numeric value was passed in for a numeric value, just set the value to '0'.<a name="line.549"></a>
+<span class="sourceLineNo">550</span>            // (I think this might resolve a workaround in custom queries).<a name="line.550"></a>
+<span class="sourceLineNo">551</span>            if (! m.matches())<a name="line.551"></a>
+<span class="sourceLineNo">552</span>               throw new FormattedRuntimeException("Numeric value didn't match pattern:  ''{0}''", token);<a name="line.552"></a>
+<span class="sourceLineNo">553</span>               //m = numericPattern.matcher("0");<a name="line.553"></a>
+<span class="sourceLineNo">554</span><a name="line.554"></a>
+<span class="sourceLineNo">555</span>            String arg1 = m.group(1);<a name="line.555"></a>
+<span class="sourceLineNo">556</span>            String start = m.group(3);<a name="line.556"></a>
+<span class="sourceLineNo">557</span>            String end = m.group(5);<a name="line.557"></a>
+<span class="sourceLineNo">558</span><a name="line.558"></a>
+<span class="sourceLineNo">559</span>            l.add(new NumberRange(arg1, start, end, isNot));<a name="line.559"></a>
+<span class="sourceLineNo">560</span>         }<a name="line.560"></a>
+<span class="sourceLineNo">561</span><a name="line.561"></a>
+<span class="sourceLineNo">562</span>         numberRanges = l.toArray(new NumberRange[l.size()]);<a name="line.562"></a>
+<span class="sourceLineNo">563</span>      }<a name="line.563"></a>
+<span class="sourceLineNo">564</span><a name="line.564"></a>
+<span class="sourceLineNo">565</span>      private static List&lt;String&gt; breakUpTokens(String s) {<a name="line.565"></a>
+<span class="sourceLineNo">566</span>         // Get rid of whitespace in "123 - 456"<a name="line.566"></a>
+<span class="sourceLineNo">567</span>         s = s.replaceAll("(-?\\d+)\\s*-\\s*(-?\\d+)", "$1-$2");<a name="line.567"></a>
+<span class="sourceLineNo">568</span>         // Get rid of whitespace in "&gt;= 123"<a name="line.568"></a>
+<span class="sourceLineNo">569</span>         s = s.replaceAll("([&lt;&gt;]=?)\\s+(-?\\d+)", "$1$2");<a name="line.569"></a>
+<span class="sourceLineNo">570</span>         // Get rid of whitespace in "! 123"<a name="line.570"></a>
+<span class="sourceLineNo">571</span>         s = s.replaceAll("(!)\\s+(-?\\d+)", "$1$2");<a name="line.571"></a>
+<span class="sourceLineNo">572</span><a name="line.572"></a>
+<span class="sourceLineNo">573</span>         // Replace all commas with whitespace<a name="line.573"></a>
+<span class="sourceLineNo">574</span>         // Allows for alternate notation of: 123,456...<a name="line.574"></a>
+<span class="sourceLineNo">575</span>         s = s.replaceAll(",", " ");<a name="line.575"></a>
+<span class="sourceLineNo">576</span><a name="line.576"></a>
+<span class="sourceLineNo">577</span>         String[] s2 = s.split("\\s+");<a name="line.577"></a>
+<span class="sourceLineNo">578</span><a name="line.578"></a>
+<span class="sourceLineNo">579</span>         // Make all tokens 'ORed'.  There is no way to AND numeric tokens.<a name="line.579"></a>
+<span class="sourceLineNo">580</span>         for (int i = 0; i &lt; s2.length; i++)<a name="line.580"></a>
+<span class="sourceLineNo">581</span>            if (! startsWith(s2[i], '!'))<a name="line.581"></a>
+<span class="sourceLineNo">582</span>               s2[i] = "^"+s2[i];<a name="line.582"></a>
+<span class="sourceLineNo">583</span><a name="line.583"></a>
+<span class="sourceLineNo">584</span>         List&lt;String&gt; l = new LinkedList&lt;&gt;();<a name="line.584"></a>
+<span class="sourceLineNo">585</span>         l.addAll(Arrays.asList(s2));<a name="line.585"></a>
+<span class="sourceLineNo">586</span>         return l;<a name="line.586"></a>
+<span class="sourceLineNo">587</span>      }<a name="line.587"></a>
+<span class="sourceLineNo">588</span><a name="line.588"></a>
+<span class="sourceLineNo">589</span>      public boolean matches(Number number) {<a name="line.589"></a>
+<span class="sourceLineNo">590</span>         if (numberRanges.length == 0) return true;<a name="line.590"></a>
+<span class="sourceLineNo">591</span>         for (int i = 0; i &lt; numberRanges.length; i++)<a name="line.591"></a>
+<span class="sourceLineNo">592</span>            if (numberRanges[i].matches(number))<a name="line.592"></a>
+<span class="sourceLineNo">593</span>               return true;<a name="line.593"></a>
+<span class="sourceLineNo">594</span>         return false;<a name="line.594"></a>
+<span class="sourceLineNo">595</span>      }<a name="line.595"></a>
+<span class="sourceLineNo">596</span>   }<a name="line.596"></a>
+<span class="sourceLineNo">597</span><a name="line.597"></a>
+<span class="sourceLineNo">598</span>   /**<a name="line.598"></a>
+<span class="sourceLineNo">599</span>    * A construct representing a single search range in a single search pattern.<a name="line.599"></a>
+<span class="sourceLineNo">600</span>    * All possible forms of search patterns are boiled down to these number ranges.<a name="line.600"></a>
+<span class="sourceLineNo">601</span>    */<a name="line.601"></a>
+<span class="sourceLineNo">602</span>   private static class NumberRange {<a name="line.602"></a>
+<span class="sourceLineNo">603</span>      int start;<a name="line.603"></a>
+<span class="sourceLineNo">604</span>      int end;<a name="line.604"></a>
+<span class="sourceLineNo">605</span>      boolean isNot;<a name="line.605"></a>
+<span class="sourceLineNo">606</span><a name="line.606"></a>
+<span class="sourceLineNo">607</span>      public NumberRange(String arg, String start, String end, boolean isNot) {<a name="line.607"></a>
+<span class="sourceLineNo">608</span><a name="line.608"></a>
+<span class="sourceLineNo">609</span>         this.isNot = isNot;<a name="line.609"></a>
+<span class="sourceLineNo">610</span><a name="line.610"></a>
+<span class="sourceLineNo">611</span>         // 123, &gt;123, &lt;123, &gt;=123, &lt;=123, &gt;-123, &gt;=-123, 123-456, -123--456<a name="line.611"></a>
+<span class="sourceLineNo">612</span>         if (arg.equals("") &amp;&amp; end == null) { // 123<a name="line.612"></a>
+<span class="sourceLineNo">613</span>            this.start = Integer.parseInt(start);<a name="line.613"></a>
+<span class="sourceLineNo">614</span>            this.end = this.start;<a name="line.614"></a>
+<span class="sourceLineNo">615</span>         } else if (arg.equals("&gt;")) {<a name="line.615"></a>
+<span class="sourceLineNo">616</span>            this.start = Integer.parseInt(start)+1;<a name="line.616"></a>
+<span class="sourceLineNo">617</span>            this.end = Integer.MAX_VALUE;<a name="line.617"></a>
+<span class="sourceLineNo">618</span>         } else if (arg.equals("&gt;=")) {<a name="line.618"></a>
+<span class="sourceLineNo">619</span>            this.start = Integer.parseInt(start);<a name="line.619"></a>
+<span class="sourceLineNo">620</span>            this.end = Integer.MAX_VALUE;<a name="line.620"></a>
+<span class="sourceLineNo">621</span>         } else if (arg.equals("&lt;")) {<a name="line.621"></a>
+<span class="sourceLineNo">622</span>            this.start = Integer.MIN_VALUE;<a name="line.622"></a>
+<span class="sourceLineNo">623</span>            this.end = Integer.parseInt(start)-1;<a name="line.623"></a>
+<span class="sourceLineNo">624</span>         } else if (arg.equals("&lt;=")) {<a name="line.624"></a>
+<span class="sourceLineNo">625</span>            this.start = Integer.MIN_VALUE;<a name="line.625"></a>
+<span class="sourceLineNo">626</span>            this.end = Integer.parseInt(start);<a name="line.626"></a>
+<span class="sourceLineNo">627</span>         } else {<a name="line.627"></a>
+<span class="sourceLineNo">628</span>            this.start = Integer.parseInt(start);<a name="line.628"></a>
+<span class="sourceLineNo">629</span>            this.end = Integer.parseInt(end);<a name="line.629"></a>
+<span class="sourceLineNo">630</span>         }<a name="line.630"></a>
+<span class="sourceLineNo">631</span>      }<a name="line.631"></a>
+<span class="sourceLineNo">632</span><a name="line.632"></a>
+<span class="sourceLineNo">633</span>      public boolean matches(Number n) {<a name="line.633"></a>
+<span class="sourceLineNo">634</span>         long i = n.longValue();<a name="line.634"></a>
+<span class="sourceLineNo">635</span>         boolean b = (i&gt;=start &amp;&amp; i&lt;=end);<a name="line.635"></a>
+<span class="sourceLineNo">636</span>         if (isNot) b = !b;<a name="line.636"></a>
+<span class="sourceLineNo">637</span>         return b;<a name="line.637"></a>
+<span class="sourceLineNo">638</span>      }<a name="line.638"></a>
+<span class="sourceLineNo">639</span>   }<a name="line.639"></a>
+<span class="sourceLineNo">640</span><a name="line.640"></a>
+<span class="sourceLineNo">641</span>   //====================================================================================================<a name="line.641"></a>
+<span class="sourceLineNo">642</span>   // DateMatcher<a name="line.642"></a>
+<span class="sourceLineNo">643</span>   //====================================================================================================<a name="line.643"></a>
+<span class="sourceLineNo">644</span>   /** The list of all valid timestamp formats */<a name="line.644"></a>
+<span class="sourceLineNo">645</span>   private SimpleDateFormat[] validTimestampFormats = new SimpleDateFormat[0];<a name="line.645"></a>
+<span class="sourceLineNo">646</span>   {<a name="line.646"></a>
+<span class="sourceLineNo">647</span>      setValidTimestampFormats("yyyy.MM.dd.HH.mm.ss","yyyy.MM.dd.HH.mm","yyyy.MM.dd.HH","yyyy.MM.dd","yyyy.MM","yyyy");<a name="line.647"></a>
+<span class="sourceLineNo">648</span>   }<a name="line.648"></a>
+<span class="sourceLineNo">649</span><a name="line.649"></a>
+<span class="sourceLineNo">650</span>   /**<a name="line.650"></a>
+<span class="sourceLineNo">651</span>    * Use this method to override the allowed search patterns when used in locales where time formats are different.<a name="line.651"></a>
+<span class="sourceLineNo">652</span>    *<a name="line.652"></a>
+<span class="sourceLineNo">653</span>    * @param s A comma-delimited list of valid time formats.<a name="line.653"></a>
+<span class="sourceLineNo">654</span>    */<a name="line.654"></a>
+<span class="sourceLineNo">655</span>   public void setValidTimestampFormats(String...s) {<a name="line.655"></a>
+<span class="sourceLineNo">656</span>      validTimestampFormats = new SimpleDateFormat[s.length];<a name="line.656"></a>
+<span class="sourceLineNo">657</span>      for (int i = 0; i &lt; s.length; i++)<a name="line.657"></a>
+<span class="sourceLineNo">658</span>         validTimestampFormats[i] = new SimpleDateFormat(s[i]);<a name="line.658"></a>
+<span class="sourceLineNo">659</span>   }<a name="line.659"></a>
+<span class="sourceLineNo">660</span><a name="line.660"></a>
+<span class="sourceLineNo">661</span>   private class DateMatcher implements IMatcher&lt;Object&gt; {<a name="line.661"></a>
+<span class="sourceLineNo">662</span><a name="line.662"></a>
+<span class="sourceLineNo">663</span>      private TimestampPattern[] patterns;<a name="line.663"></a>
+<span class="sourceLineNo">664</span><a name="line.664"></a>
+<span class="sourceLineNo">665</span>      /**<a name="line.665"></a>
+<span class="sourceLineNo">666</span>       * Construct a timestamp matcher for the given search pattern.<a name="line.666"></a>
+<span class="sourceLineNo">667</span>       *<a name="line.667"></a>
+<span class="sourceLineNo">668</span>       * @param searchPattern The search pattern.<a name="line.668"></a>
+<span class="sourceLineNo">669</span>       */<a name="line.669"></a>
+<span class="sourceLineNo">670</span>      DateMatcher(String searchPattern) {<a name="line.670"></a>
+<span class="sourceLineNo">671</span>         patterns = new TimestampPattern[1];<a name="line.671"></a>
+<span class="sourceLineNo">672</span>         patterns[0] = new TimestampPattern(searchPattern);<a name="line.672"></a>
+<span class="sourceLineNo">673</span><a name="line.673"></a>
+<span class="sourceLineNo">674</span>      }<a name="line.674"></a>
+<span class="sourceLineNo">675</span><a name="line.675"></a>
+<span class="sourceLineNo">676</span>      /**<a name="line.676"></a>
+<span class="sourceLineNo">677</span>       * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified date matches the pattern passed in through the constructor.<a name="line.677"></a>
+<span class="sourceLineNo">678</span>       *<a name="line.678"></a>
+<span class="sourceLineNo">679</span>       * &lt;p&gt;<a name="line.679"></a>
+<span class="sourceLineNo">680</span>       * &lt;br&gt;The Object can be of type {@link Date} or {@link Calendar}.<a name="line.680"></a>
+<span class="sourceLineNo">681</span>       * &lt;br&gt;Always returns &lt;jk&gt;false&lt;/jk&gt; on &lt;jk&gt;null&lt;/jk&gt; input.<a name="line.681"></a>
+<span class="sourceLineNo">682</span>       */<a name="line.682"></a>
+<span class="sourceLineNo">683</span>      @Override /* IMatcher */<a name="line.683"></a>
+<span class="sourceLineNo">684</span>      public boolean matches(Object in) {<a name="line.684"></a>
+<span class="sourceLineNo">685</span>         if (in == null) return false;<a name="line.685"></a>
+<span class="sourceLineNo">686</span><a name="line.686"></a>
+<span class="sourceLineNo">687</span>         Calendar c = null;<a name="line.687"></a>
+<span class="sourceLineNo">688</span>         if (in instanceof Calendar)<a name="line.688"></a>
+<span class="sourceLineNo">689</span>            c = (Calendar)in;<a name="line.689"></a>
+<span class="sourceLineNo">690</span>         else if (in instanceof Date) {<a name="line.690"></a>
+<span class="sourceLineNo">691</span>            c = Calendar.getInstance();<a name="line.691"></a>
+<span class="sourceLineNo">692</span>            c.setTime((Date)in);<a name="line.692"></a>
+<span class="sourceLineNo">693</span>         } else {<a name="line.693"></a>
+<span class="sourceLineNo">694</span>            return false;<a name="line.694"></a>
+<span class="sourceLineNo">695</span>         }<a name="line.695"></a>
+<span class="sourceLineNo">696</span>         for (int i = 0; i &lt; patterns.length; i++) {<a name="line.696"></a>
+<span class="sourceLineNo">697</span>            if (! patterns[i].matches(c))<a name="line.697"></a>
+<span class="sourceLineNo">698</span>               return false;<a name="line.698"></a>
+<span class="sourceLineNo">699</span>         }<a name="line.699"></a>
+<span class="sourceLineNo">700</span>         return true;<a name="line.700"></a>
+<span class="sourceLineNo">701</span>      }<a name="line.701"></a>
+<span class="sourceLineNo">702</span>   }<a name="line.702"></a>
+<span class="sourceLineNo">703</span><a name="line.703"></a>
+<span class="sourceLineNo">704</span>   /**<a name="line.704"></a>
+<span class="sourceLineNo">705</span>    * A construct representing a single search pattern.<a name="line.705"></a>
+<span class="sourceLineNo">706</span>    */<a name="line.706"></a>
+<span class="sourceLineNo">707</span>   private class TimestampPattern {<a name="line.707"></a>
+<span class="sourceLineNo">708</span>      TimestampRange[] ranges;<a name="line.708"></a>
+<span class="sourceLineNo">709</span>      List&lt;TimestampRange&gt; l = new LinkedList&lt;&gt;();<a name="line.709"></a>
+<span class="sourceLineNo">710</span><a name="line.710"></a>
+<span class="sourceLineNo">711</span>      public TimestampPattern(String s) {<a name="line.711"></a>
+<span class="sourceLineNo">712</span><a name="line.712"></a>
+<span class="sourceLineNo">713</span>         // Handle special case where timestamp is enclosed in quotes.<a name="line.713"></a>
+<span class="sourceLineNo">714</span>         // This can occur on hyperlinks created by group-by queries.<a name="line.714"></a>
+<span class="sourceLineNo">715</span>         // e.g. '2007/01/29 04:17:43 PM'<a name="line.715"></a>
+<span class="sourceLineNo">716</span>         if (s.charAt(0) == '\'' &amp;&amp; s.charAt(s.length()-1) == '\'')<a name="line.716"></a>
+<span class="sourceLineNo">717</span>            s = s.substring(1, s.length()-1);<a name="line.717"></a>
+<span class="sourceLineNo">718</span><a name="line.718"></a>
+<span class="sourceLineNo">719</span>         // Pattern for finding &lt;,&gt;,&lt;=,&gt;=<a name="line.719"></a>
+<span class="sourceLineNo">720</span>         Pattern p1 = Pattern.compile("^\\s*([&lt;&gt;](?:=)?)\\s*(\\S+.*)$");<a name="line.720"></a>
+<span class="sourceLineNo">721</span>         // Pattern for finding range dash (e.g. xxx - yyy)<a name="line.721"></a>
+<span class="sourceLineNo">722</span>         Pattern p2 = Pattern.compile("^(\\s*-\\s*)(\\S+.*)$");<a name="line.722"></a>
+<span class="sourceLineNo">723</span><a name="line.723"></a>
+<span class="sourceLineNo">724</span>         // States are...<a name="line.724"></a>
+<span class="sourceLineNo">725</span>         // 1 - Looking for &lt;,&gt;,&lt;=,&gt;=<a name="line.725"></a>
+<span class="sourceLineNo">726</span>         // 2 - Looking for single date.<a name="line.726"></a>
+<span class="sourceLineNo">727</span>         // 3 - Looking for start date.<a name="line.727"></a>
+<span class="sourceLineNo">728</span>         // 4 - Looking for -<a name="line.728"></a>
+<span class="sourceLineNo">729</span>         // 5 - Looking for end date.<a name="line.729"></a>
+<span class="sourceLineNo">730</span>         int state = 1;<a name="line.730"></a>
+<span class="sourceLineNo">731</span><a name="line.731"></a>
+<span class="sourceLineNo">732</span>         String op = null;<a name="line.732"></a>
+<span class="sourceLineNo">733</span>         CalendarP startDate = null;<a name="line.733"></a>
+<span class="sourceLineNo">734</span><a name="line.734"></a>
+<span class="sourceLineNo">735</span>         ParsePosition pp = new ParsePosition(0);<a name="line.735"></a>
+<span class="sourceLineNo">736</span>         Matcher m = null;<a name="line.736"></a>
+<span class="sourceLineNo">737</span>         String seg = s;<a name="line.737"></a>
+<span class="sourceLineNo">738</span><a name="line.738"></a>
+<span class="sourceLineNo">739</span>         while (! seg.equals("") || state != 1) {<a name="line.739"></a>
+<span class="sourceLineNo">740</span>            if (state == 1) {<a name="line.740"></a>
+<span class="sourceLineNo">741</span>               m = p1.matcher(seg);<a name="line.741"></a>
+<span class="sourceLineNo">742</span>               if (m.matches()) {<a name="line.742"></a>
+<span class="sourceLineNo">743</span>                  op = m.group(1);<a name="line.743"></a>
+<span class="sourceLineNo">744</span>                  seg = m.group(2);<a name="line.744"></a>
+<span class="sourceLineNo">745</span>                  state = 2;<a name="line.745"></a>
+<span class="sourceLineNo">746</span>               } else {<a name="line.746"></a>
+<span class="sourceLineNo">747</span>                  state = 3;<a name="line.747"></a>
+<span class="sourceLineNo">748</span>               }<a name="line.748"></a>
+<span class="sourceLineNo">749</span>            } else if (state == 2) {<a name="line.749"></a>
+<span class="sourceLineNo">750</span>               l.add(new TimestampRange(op, parseDate(seg, pp)));<a name="line.750"></a>
+<span class="sourceLineNo">751</span>               //tokens.add("^"+op + parseTimestamp(seg, pp));<a name="line.751"></a>
+<span class="sourceLineNo">752</span>               seg = seg.substring(pp.getIndex()).trim();<a name="line.752"></a>
+<span class="sourceLineNo">753</span>               pp.setIndex(0);<a name="line.753"></a>
+<span class="sourceLineNo">754</span>               state = 1;<a name="line.754"></a>
+<span class="sourceLineNo">755</span>            } else if (state == 3) {<a name="line.755"></a>
+<span class="sourceLineNo">756</span>               startDate = parseDate(seg, pp);<a name="line.756"></a>
+<span class="sourceLineNo">757</span>               seg = seg.substring(pp.getIndex()).trim();<a name="line.757"></a>
+<span class="sourceLineNo">758</span>               pp.setIndex(0);<a name="line.758"></a>
+<span class="sourceLineNo">759</span>               state = 4;<a name="line.759"></a>
+<span class="sourceLineNo">760</span>            } else if (state == 4) {<a name="line.760"></a>
+<span class="sourceLineNo">761</span>               // Look for '-'<a name="line.761"></a>
+<span class="sourceLineNo">762</span>               m = p2.matcher(seg);<a name="line.762"></a>
+<span class="sourceLineNo">763</span>               if (m.matches()) {<a name="line.763"></a>
+<span class="sourceLineNo">764</span>                  state = 5;<a name="line.764"></a>
+<span class="sourceLineNo">765</span>                  seg = m.group(2);<a name="line.765"></a>
+<span class="sourceLineNo">766</span>               } else {<a name="line.766"></a>
+<span class="sourceLineNo">767</span>                  // This is a single date (e.g. 2002/01/01)<a name="line.767"></a>
+<span class="sourceLineNo">768</span>                  l.add(new TimestampRange(startDate));<a name="line.768"></a>
+<span class="sourceLineNo">769</span>                  state = 1;<a name="line.769"></a>
+<span class="sourceLineNo">770</span>               }<a name="line.770"></a>
+<span class="sourceLineNo">771</span>            } else if (state == 5) {<a name="line.771"></a>
+<span class="sourceLineNo">772</span>               l.add(new TimestampRange(startDate, parseDate(seg, pp)));<a name="line.772"></a>
+<span class="sourceLineNo">773</span>               seg = seg.substring(pp.getIndex()).trim();<a name="line.773"></a>
+<span class="sourceLineNo">774</span>               pp.setIndex(0);<a name="line.774"></a>
+<span class="sourceLineNo">775</span>               state = 1;<a name="line.775"></a>
+<span class="sourceLineNo">776</span>            }<a name="line.776"></a>
+<span class="sourceLineNo">777</span>         }<a name="line.777"></a>
+<span class="sourceLineNo">778</span><a name="line.778"></a>
+<span class="sourceLineNo">779</span>         ranges = l.toArray(new TimestampRange[l.size()]);<a name="line.779"></a>
+<span class="sourceLineNo">780</span>      }<a name="line.780"></a>
+<span class="sourceLineNo">781</span><a name="line.781"></a>
+<span class="sourceLineNo">782</span>      public boolean matches(Calendar c) {<a name="line.782"></a>
+<span class="sourceLineNo">783</span>         if (ranges.length == 0) return true;<a name="line.783"></a>
+<span class="sourceLineNo">784</span>         for (int i = 0; i &lt; ranges.length; i++)<a name="line.784"></a>
+<span class="sourceLineNo">785</span>            if (ranges[i].matches(c))<a name="line.785"></a>
+<span class="sourceLineNo">786</span>               return true;<a name="line.786"></a>
+<span class="sourceLineNo">787</span>         return false;<a name="line.787"></a>
+<span class="sourceLineNo">788</span>      }<a name="line.788"></a>
+<span class="sourceLineNo">789</span>   }<a name="line.789"></a>
+<span class="sourceLineNo">790</span><a name="line.790"></a>
+<span class="sourceLineNo">791</span>   /**<a name="line.791"></a>
+<span class="sourceLineNo">792</span>    * A construct representing a single search range in a single search pattern.<a name="line.792"></a>
+<span class="sourceLineNo">793</span>    * All possible forms of search patterns are boiled down to these timestamp ranges.<a name="line.793"></a>
+<span class="sourceLineNo">794</span>    */<a name="line.794"></a>
+<span class="sourceLineNo">795</span>   private static class TimestampRange {<a name="line.795"></a>
+<span class="sourceLineNo">796</span>      Calendar start;<a name="line.796"></a>
+<span class="sourceLineNo">797</span>      Calendar end;<a name="line.797"></a>
+<span class="sourceLineNo">798</span><a name="line.798"></a>
+<span class="sourceLineNo">799</span>      public TimestampRange(CalendarP start, CalendarP end) {<a name="line.799"></a>
+<span class="sourceLineNo">800</span>         this.start = start.copy().roll(MILLISECOND, -1).getCalendar();<a name="line.800"></a>
+<span class="sourceLineNo">801</span>         this.end = end.roll(1).getCalendar();<a name="line.801"></a>
+<span class="sourceLineNo">802</span>      }<a name="line.802"></a>
+<span class="sourceLineNo">803</span><a name="line.803"></a>
+<span class="sourceLineNo">804</span>      public TimestampRange(CalendarP singleDate) {<a name="line.804"></a>
+<span class="sourceLineNo">805</span>         this.start = singleDate.copy().roll(MILLISECOND, -1).getCalendar();<a name="line.805"></a>
+<span class="sourceLineNo">806</span>         this.end = singleDate.roll(1).getCalendar();<a name="line.806"></a>
+<span class="sourceLineNo">807</span>      }<a name="line.807"></a>
+<span class="sourceLineNo">808</span><a name="line.808"></a>
+<span class="sourceLineNo">809</span>      public TimestampRange(String op, CalendarP singleDate) {<a name="line.809"></a>
+<span class="sourceLineNo">810</span>         if (op.equals("&gt;")) {<a name="line.810"></a>
+<span class="sourceLineNo">811</span>            this.start = singleDate.roll(1).roll(MILLISECOND, -1).getCalendar();<a name="line.811"></a>
+<span class="sourceLineNo">812</span>            this.end = new CalendarP(new Date(Long.MAX_VALUE), 0).getCalendar();<a name="line.812"></a>
+<span class="sourceLineNo">813</span>         } else if (op.equals("&lt;")) {<a name="line.813"></a>
+<span class="sourceLineNo">814</span>            this.start = new CalendarP(new Date(0), 0).getCalendar();<a name="line.814"></a>
+<span class="sourceLineNo">815</span>            this.end = singleDate.getCalendar();<a name="line.815"></a>
+<span class="sourceLineNo">816</span>         } else if (op.equals("&gt;=")) {<a name="line.816"></a>
+<span class="sourceLineNo">817</span>            this.start = singleDate.roll(MILLISECOND, -1).getCalendar();<a name="line.817"></a>
+<span class="sourceLineNo">818</span>            this.end = new CalendarP(new Date(Long.MAX_VALUE), 0).getCalendar();<a name="line.818"></a>
+<span class="sourceLineNo">819</span>         } else if (op.equals("&lt;=")) {<a name="line.819"></a>
+<span class="sourceLineNo">820</span>            this.start = new CalendarP(new Date(0), 0).getCalendar();<a name="line.820"></a>
+<span class="sourceLineNo">821</span>            this.end = singleDate.roll(1).getCalendar();<a name="line.821"></a>
+<span class="sourceLineNo">822</span>         }<a name="line.822"></a>
+<span class="sourceLineNo">823</span>      }<a name="line.823"></a>
+<span class="sourceLineNo">824</span><a name="line.824"></a>
+<span class="sourceLineNo">825</span>      public boolean matches(Calendar c) {<a name="line.825"></a>
+<span class="sourceLineNo">826</span>         boolean b = (c.after(start) &amp;&amp; c.before(end));<a name="line.826"></a>
+<span class="sourceLineNo">827</span>         return b;<a name="line.827"></a>
+<span class="sourceLineNo">828</span>      }<a name="line.828"></a>
+<span class="sourceLineNo">829</span>   }<a name="line.829"></a>
+<span class="sourceLineNo">830</span><a name="line.830"></a>
+<span class="sourceLineNo">831</span>   private static int getPrecisionField(String pattern) {<a name="line.831"></a>
+<span class="sourceLineNo">832</span>      if (pattern.indexOf('s') != -1)<a name="line.832"></a>
+<span class="sourceLineNo">833</span>         return SECOND;<a name="line.833"></a>
+<span class="sourceLineNo">834</span>      if (pattern.indexOf('m') != -1)<a name="line.834"></a>
+<span class="sourceLineNo">835</span>         return MINUTE;<a name="line.835"></a>
+<span class="sourceLineNo">836</span>      if (pattern.indexOf('H') != -1)<a name="line.836"></a>
+<span class="sourceLineNo">837</span>         return HOUR_OF_DAY;<a name="line.837"></a>
+<span class="sourceLineNo">838</span>      if (pattern.indexOf('d') != -1)<a name="line.838"></a>
+<span class="sourceLineNo">839</span>         return DAY_OF_MONTH;<a name="line.839"></a>
+<span class="sourceLineNo">840</span>      if (pattern.indexOf('M') != -1)<a name="line.840"></a>
+<span class="sourceLineNo">841</span>         return MONTH;<a name="line.841"></a>
+<span class="sourceLineNo">842</span>      if (pattern.indexOf('y') != -1)<a name="line.842"></a>
+<span class="sourceLineNo">843</span>         return YEAR;<a name="line.843"></a>
+<span class="sourceLineNo">844</span>      return Calendar.MILLISECOND;<a name="line.844"></a>
+<span class="sourceLineNo">845</span>   }<a name="line.845"></a>
+<span class="sourceLineNo">846</span><a name="line.846"></a>
+<span class="sourceLineNo">847</span><a name="line.847"></a>
+<span class="sourceLineNo">848</span>   /**<a name="line.848"></a>
+<span class="sourceLineNo">849</span>    * Parses a timestamp string off the beginning of the string segment 'seg'.<a name="line.849"></a>
+<span class="sourceLineNo">850</span>    * Goes through each possible valid timestamp format until it finds a match.<a name="line.850"></a>
+<span class="sourceLineNo">851</span>    * The position where the parsing left off is stored in pp.<a name="line.851"></a>
+<span class="sourceLineNo">852</span>    *<a name="line.852"></a>
+<span class="sourceLineNo">853</span>    * @param seg The string segment being parsed.<a name="line.853"></a>
+<span class="sourceLineNo">854</span>    * @param pp Where parsing last left off.<a name="line.854"></a>
+<span class="sourceLineNo">855</span>    * @return An object representing a timestamp.<a name="line.855"></a>
+<span class="sourceLineNo">856</span>    */<a name="line.856"></a>
+<span class="sourceLineNo">857</span>   CalendarP parseDate(String seg, ParsePosition pp) {<a name="line.857"></a>
+<span class="sourceLineNo">858</span><a name="line.858"></a>
+<span class="sourceLineNo">859</span>      CalendarP cal = null;<a name="line.859"></a>
+<span class="sourceLineNo">860</span><a name="line.860"></a>
+<span class="sourceLineNo">861</span>      for (int i = 0; i &lt; validTimestampFormats.length &amp;&amp; cal == null; i++) {<a name="line.861"></a>
+<span class="sourceLineNo">862</span>         pp.setIndex(0);<a name="line.862"></a>
+<span class="sourceLineNo">863</span>         SimpleDateFormat f = validTimestampFormats[i];<a name="line.863"></a>
+<span class="sourceLineNo">864</span>         Date d = f.parse(seg, pp);<a name="line.864"></a>
+<span class="sourceLineNo">865</span>         int idx = pp.getIndex();<a name="line.865"></a>
+<span class="sourceLineNo">866</span>         if (idx != 0) {<a name="line.866"></a>
+<span class="sourceLineNo">867</span>            // it only counts if the next character is '-', 'space', or end-of-string.<a name="line.867"></a>
+<span class="sourceLineNo">868</span>            char c = (seg.length() == idx ? 0 : seg.charAt(idx));<a name="line.868"></a>
+<span class="sourceLineNo">869</span>            if (c == 0 || c == '-' || Character.isWhitespace(c))<a name="line.869"></a>
+<span class="sourceLineNo">870</span>               cal = new CalendarP(d, getPrecisionField(f.toPattern()));<a name="line.870"></a>
+<span class="sourceLineNo">871</span>         }<a name="line.871"></a>
+<span class="sourceLineNo">872</span>      }<a name="line.872"></a>
+<span class="sourceLineNo">873</span><a name="line.873"></a>
+<span class="sourceLineNo">874</span>      if (cal == null)<a name="line.874"></a>
+<span class="sourceLineNo">875</span>         throw new FormattedRuntimeException("Invalid date encountered:  ''{0}''", seg);<a name="line.875"></a>
+<span class="sourceLineNo">876</span><a name="line.876"></a>
+<span class="sourceLineNo">877</span>      return cal;<a name="line.877"></a>
+<span class="sourceLineNo">878</span>   }<a name="line.878"></a>
+<span class="sourceLineNo">879</span><a name="line.879"></a>
+<span class="sourceLineNo">880</span>   /**<a name="line.880"></a>
+<span class="sourceLineNo">881</span>    * Combines a Calendar with a precision identifier.<a name="line.881"></a>
+<span class="sourceLineNo">882</span>    */<a name="line.882"></a>
+<span class="sourceLineNo">883</span>   private static class CalendarP {<a name="line.883"></a>
+<span class="sourceLineNo">884</span>      public Calendar c;<a name="line.884"></a>
+<span class="sourceLineNo">885</span>      public int precision;<a name="line.885"></a>
+<span class="sourceLineNo">886</span><a name="line.886"></a>
+<span class="sourceLineNo">887</span>      public CalendarP(Date date, int precision) {<a name="line.887"></a>
+<span class="sourceLineNo">888</span>         c = Calendar.getInstance();<a name="line.888"></a>
+<span class="sourceLineNo">889</span>         c.setTime(date);<a name="line.889"></a>
+<span class="sourceLineNo">890</span>         this.precision = precision;<a name="line.890"></a>
+<span class="sourceLineNo">891</span>      }<a name="line.891"></a>
+<span class="sourceLineNo">892</span><a name="line.892"></a>
+<span class="sourceLineNo">893</span>      public CalendarP copy() {<a name="line.893"></a>
+<span class="sourceLineNo">894</span>         return new CalendarP(c.getTime(), precision);<a name="line.894"></a>
+<span class="sourceLineNo">895</span>      }<a name="line.895"></a>
+<span class="sourceLineNo">896</span><a name="line.896"></a>
+<span class="sourceLineNo">897</span>      public CalendarP roll(int field, int amount) {<a name="line.897"></a>
+<span class="sourceLineNo">898</span>         c.add(field, amount);<a name="line.898"></a>
+<span class="sourceLineNo">899</span>         return this;<a name="line.899"></a>
+<span class="sourceLineNo">900</span>      }<a name="line.900"></a>
+<span class="sourceLineNo">901</span><a name="line.901"></a>
+<span class="sourceLineNo">902</span>      public CalendarP roll(int amount) {<a name="line.902"></a>
+<span class="sourceLineNo">903</span>         return roll(precision, amount);<a name="line.903"></a>
+<span class="sourceLineNo">904</span>      }<a name="line.904"></a>
+<span class="sourceLineNo">905</span><a name="line.905"></a>
+<span class="sourceLineNo">906</span>      public Calendar getCalendar() {<a name="line.906"></a>
+<span class="sourceLineNo">907</span>         return c;<a name="line.907"></a>
+<span class="sourceLineNo">908</span>      }<a name="line.908"></a>
+<span class="sourceLineNo">909</span>   }<a name="line.909"></a>
+<span class="sourceLineNo">910</span><a name="line.910"></a>
+<span class="sourceLineNo">911</span>   //====================================================================================================<a name="line.911"></a>
+<span class="sourceLineNo">912</span>   // StringMatcher<a name="line.912"></a>
+<span class="sourceLineNo">913</span>   //====================================================================================================<a name="line.913"></a>
+<span class="sourceLineNo">914</span>   private static class StringMatcher implements IMatcher&lt;Object&gt; {<a name="line.914"></a>
+<span class="sourceLineNo">915</span><a name="line.915"></a>
+<span class="sourceLineNo">916</span>      private SearchPattern[] searchPatterns;<a name="line.916"></a>
+<span class="sourceLineNo">917</span><a name="line.917"></a>
+<span class="sourceLineNo">918</span>      /**<a name="line.918"></a>
+<span class="sourceLineNo">919</span>       * Construct a string matcher for the given search pattern.<a name="line.919"></a>
+<span class="sourceLineNo">920</span>       *<a name="line.920"></a>
+<span class="sourceLineNo">921</span>       * @param searchPattern The search pattern.  See class usage for details.<a name="line.921"></a>
+<span class="sourceLineNo">922</span>       * @param ignoreCase If &lt;jk&gt;true&lt;/jk&gt;, use case-insensitive matching.<a name="line.922"></a>
+<span class="sourceLineNo">923</span>       */<a name="line.923"></a>
+<span class="sourceLineNo">924</span>      public StringMatcher(String searchPattern, boolean ignoreCase) {<a name="line.924"></a>
+<span class="sourceLineNo">925</span>         this.searchPatterns = new SearchPattern[1];<a name="line.925"></a>
+<span class="sourceLineNo">926</span>         this.searchPatterns[0] = new SearchPattern(searchPattern, ignoreCase);<a name="line.926"></a>
+<span class="sourceLineNo">927</span>      }<a name="line.927"></a>
+<span class="sourceLineNo">928</span><a name="line.928"></a>
+<span class="sourceLineNo">929</span>      /**<a name="line.929"></a>
+<span class="sourceLineNo">930</span>       * Returns 'true' if this string matches the pattern(s).<a name="line.930"></a>
+<span class="sourceLineNo">931</span>       * Always returns false on null input.<a name="line.931"></a>
+<span class="sourceLineNo">932</span>       */<a name="line.932"></a>
+<span class="sourceLineNo">933</span>      @Override /* IMatcher */<a name="line.933"></a>
+<span class="sourceLineNo">934</span>      public boolean matches(Object in) {<a name="line.934"></a>
+<span class="sourceLineNo">935</span>         if (in == null) return false;<a name="line.935"></a>
+<span class="sourceLineNo">936</span>         for (int i = 0; i &lt; searchPatterns.length; i++) {<a name="line.936"></a>
+<span class="sourceLineNo">937</span>            if (! searchPatterns[i].matches(in.toString()))<a name="line.937"></a>
+<span class="sourceLineNo">938</span>               return false;<a name="line.938"></a>
+<span class="sourceLineNo">939</span>         }<a name="line.939"></a>
+<span class="sourceLineNo">940</span>         return true;<a name="line.940"></a>
+<span class="sourceLineNo">941</span>      }<a name="line.941"></a>
+<span class="sourceLineNo">942</span><a name="line.942"></a>
+<span class="sourceLineNo">943</span>   }<a name="line.943"></a>
+<span class="sourceLineNo">944</span>   /**<a name="line.944"></a>
+<span class="sourceLineNo">945</span>    * A construct representing a single search pattern.<a name="line.945"></a>
+<span class="sourceLineNo">946</span>    */<a name="line.946"></a>
+<span class="sourceLineNo">947</span>   private static class SearchPattern {<a name="line.947"></a>
+<span class="sourceLineNo">948</span>      Pattern[] orPatterns, andPatterns, notPatterns;<a name="line.948"></a>
+<span class="sourceLineNo">949</span><a name="line.949"></a>
+<span class="sourceLineNo">950</span>      public SearchPattern(String searchPattern, boolean ignoreCase) {<a name="line.950"></a>
+<span class="sourceLineNo">951</span><a name="line.951"></a>
+<span class="sourceLineNo">952</span>         List&lt;Pattern&gt; ors = new LinkedList&lt;&gt;();<a name="line.952"></a>
+<span class="sourceLineNo">953</span>         List&lt;Pattern&gt; ands = new LinkedList&lt;&gt;();<a name="line.953"></a>
+<span class="sourceLineNo">954</span>         List&lt;Pattern&gt; nots = new LinkedList&lt;&gt;();<a name="line.954"></a>
+<span class="sourceLineNo">955</span><a name="line.955"></a>
+<span class="sourceLineNo">956</span>         for (String arg : breakUpTokens(searchPattern)) {<a name="line.956"></a>
+<span class="sourceLineNo">957</span>            char prefix = arg.charAt(0);<a name="line.957"></a>
+<span class="sourceLineNo">958</span>            String token = arg.substring(1);<a name="line.958"></a>
+<span class="sourceLineNo">959</span><a name="line.959"></a>
+<span class="sourceLineNo">960</span>            token = token.replaceAll("([\\?\\*\\+\\\\\\[\\]\\{\\}\\(\\)\\^\\$\\.])", "\\\\$1");<a name="line.960"></a>
+<span class="sourceLineNo">961</span>            token = token.replace("\u9997", ".*");<a name="line.961"></a>
+<span class="sourceLineNo">962</span>            token = token.replace("\u9996", ".?");<a name="line.962"></a>
+<span class="sourceLineNo">963</span><a name="line.963"></a>
+<span class="sourceLineNo">964</span>            if (! token.startsWith(".*"))<a name="line.964"></a>
+<span class="sourceLineNo">965</span>               token = "^" + token;<a name="line.965"></a>
+<span class="sourceLineNo">966</span>            if (! token.endsWith(".*"))<a name="line.966"></a>
+<span class="sourceLineNo">967</span>               token = token + "$";<a name="line.967"></a>
+<span class="sourceLineNo">968</span><a name="line.968"></a>
+<span class="sourceLineNo">969</span>            int flags = Pattern.DOTALL;<a name="line.969"></a>
+<span class="sourceLineNo">970</span>            if (ignoreCase)<a name="line.970"></a>
+<span class="sourceLineNo">971</span>               flags |= Pattern.CASE_INSENSITIVE;<a name="line.971"></a>
+<span class="sourceLineNo">972</span><a name="line.972"></a>
+<span class="sourceLineNo">973</span>            Pattern p = Pattern.compile(token, flags);<a name="line.973"></a>
+<span class="sourceLineNo">974</span><a name="line.974"></a>
+<span class="sourceLineNo">975</span>            if (prefix == '^')<a name="line.975"></a>
+<span class="sourceLineNo">976</span>               ors.add(p);<a name="line.976"></a>
+<span class="sourceLineNo">977</span>            else if (prefix == '+')<a name="line.977"></a>
+<span class="sourceLineNo">978</span>               ands.add(p);<a name="line.978"></a>
+<span class="sourceLineNo">979</span>            else if (prefix == '-')<a name="line.979"></a>
+<span class="sourceLineNo">980</span>               nots.add(p);<a name="line.980"></a>
+<span class="sourceLineNo">981</span>         }<a name="line.981"></a>
+<span class="sourceLineNo">982</span>         orPatterns = ors.toArray(new Pattern[ors.size()]);<a name="line.982"></a>
+<span class="sourceLineNo">983</span>         andPatterns = ands.toArray(new Pattern[ands.size()]);<a name="line.983"></a>
+<span class="sourceLineNo">984</span>         notPatterns = nots.toArray(new Pattern[nots.size()]);<a name="line.984"></a>
+<span class="sourceLineNo">985</span>      }<a name="line.985"></a>
+<span class="sourceLineNo">986</span><a name="line.986"></a>
+<span class="sourceLineNo">987</span>      /**<a name="line.987"></a>
+<span class="sourceLineNo">988</span>       * Break up search pattern into separate tokens.<a name="line.988"></a>
+<span class="sourceLineNo">989</span>       */<a name="line.989"></a>
+<span class="sourceLineNo">990</span>      private static List&lt;String&gt; breakUpTokens(String s) {<a name="line.990"></a>
+<span class="sourceLineNo">991</span><a name="line.991"></a>
+<span class="sourceLineNo">992</span>         // If the string is null or all whitespace, return an empty vector.<a name="line.992"></a>
+<span class="sourceLineNo">993</span>         if (s == null || s.trim().length() == 0)<a name="line.993"></a>
+<span class="sourceLineNo">994</span>            return Collections.emptyList();<a name="line.994"></a>
+<span class="sourceLineNo">995</span><a name="line.995"></a>
+<span class="sourceLineNo">996</span>         // Pad with spaces.<a name="line.996"></a>
+<span class="sourceLineNo">997</span>         s = " " + s + " ";<a name="line.997"></a>
+<span class="sourceLineNo">998</span><a name="line.998"></a>
+<span class="sourceLineNo">999</span>         // Replace instances of [+] and [-] inside single and double quotes with<a name="line.999"></a>
+<span class="sourceLineNo">1000</span>         // \u2001 and \u2002 for later replacement.<a name="line.1000"></a>
+<span class="sourceLineNo">1001</span>         int escapeCount = 0;<a name="line.1001"></a>
+<span class="sourceLineNo">1002</span>         boolean inSingleQuote = false;<a name="line.1002"></a>
+<span class="sourceLineNo">1003</span>         boolean inDoubleQuote = false;<a name="line.1003"></a>
+<span class="sourceLineNo">1004</span>         char[] ca = s.toCharArray();<a name="line.1004"></a>
+<span class="sourceLineNo">1005</span>         for (int i = 0; i &lt; ca.length; i++) {<a name="line.1005"></a>
+<span class="sourceLineNo">1006</span>            if (ca[i] == '\\') escapeCount++;<a name="line.1006"></a>
+<span class="sourceLineNo">1007</span>            else if (escapeCount % 2 == 0) {<a name="line.1007"></a>
+<span class="sourceLineNo">1008</span>               if (ca[i] == '\'') inSingleQuote = ! inSingleQuote;<a name="line.1008"></a>
+<span class="sourceLineNo">1009</span>               else if (ca[i] == '"') inDoubleQuote = ! inDoubleQuote;<a name="line.1009"></a>
+<span class="sourceLineNo">1010</span>               else if (ca[i] == '+' &amp;&amp; (inSingleQuote || inDoubleQuote)) ca[i] = '\u9999';<a name="line.1010"></a>
+<span class="sourceLineNo">1011</span>               else if (ca[i] == '-' &amp;&amp; (inSingleQuote || inDoubleQuote)) ca[i] = '\u9998';<a name="line.1011"></a>
+<span class="sourceLineNo">1012</span>            }<a name="line.1012"></a>
+<span class="sourceLineNo">1013</span>            if (ca[i] != '\\') escapeCount = 0;<a name="line.1013"></a>
+<span class="sourceLineNo">1014</span>         }<a name="line.1014"></a>
+<span class="sourceLineNo">1015</span>         s = new String(ca);<a name="line.1015"></a>
+<span class="sourceLineNo">1016</span><a name="line.1016"></a>
+<span class="sourceLineNo">1017</span>         // Remove spaces between '+' or '-' and the keyword.<a name="line.1017"></a>
+<span class="sourceLineNo">1018</span>         //s = perl5Util.substitute("s/([\\+\\-])\\s+/$1/g", s);<a name="line.1018"></a>
+<span class="sourceLineNo">1019</span>         s = s.replaceAll("([\\+\\-])\\s+", "$1");<a name="line.1019"></a>
+<span class="sourceLineNo">1020</span><a name="line.1020"></a>
+<span class="sourceLineNo">1021</span>         // Replace:  [*]-&gt;[\u3001] as placeholder for '%', ignore escaped.<a name="line.1021"></a>
+<span class="sourceLineNo">1022</span>         s = replace(s, '*', '\u9997', true);<a name="line.1022"></a>
+<span class="sourceLineNo">1023</span>         // Replace:  [?]-&gt;[\u3002] as placeholder for '_', ignore escaped.<a name="line.1023"></a>
+<span class="sourceLineNo">1024</span>         s = replace(s, '?', '\u9996', true);<a name="line.1024"></a>
+<span class="sourceLineNo">1025</span>         // Replace:  [\*]-&gt;[*], [\?]-&gt;[?]<a name="line.1025"></a>
+<span class="sourceLineNo">1026</span>         s = unEscapeChars(s, new char[]{'*','?'});<a name="line.1026"></a>
+<span class="sourceLineNo">1027</span><a name="line.1027"></a>
+<span class="sourceLineNo">1028</span>         // Remove spaces<a name="line.1028"></a>
+<span class="sourceLineNo">1029</span>         s = s.trim();<a name="line.1029"></a>
+<span class="sourceLineNo">1030</span><a name="line.1030"></a>
+<span class="sourceLineNo">1031</span>         // Re-replace the [+] and [-] characters inside quotes.<a name="line.1031"></a>
+<span class="sourceLineNo">1032</span>         s = s.replace('\u9999', '+');<a name="line.1032"></a>
+<span class="sourceLineNo">1033</span>         s = s.replace('\u9998', '-');<a name="line.1033"></a>
+<span class="sourceLineNo">1034</span><a name="line.1034"></a>
+<span class="sourceLineNo">1035</span>         String[] sa = splitQuoted(s, ' ');<a name="line.1035"></a>
+<span class="sourceLineNo">1036</span>         List&lt;String&gt; l = new ArrayList&lt;&gt;(sa.length);<a name="line.1036"></a>
+<span class="sourceLineNo">1037</span>         int numOrs = 0;<a name="line.1037"></a>
+<span class="sourceLineNo">1038</span>         for (int i = 0; i &lt; sa.length; i++) {<a name="line.1038"></a>
+<span class="sourceLineNo">1039</span>            String token = sa[i];<a name="line.1039"></a>
+<span class="sourceLineNo">1040</span>            int len = token.length();<a name="line.1040"></a>
+<span class="sourceLineNo">1041</span>            if (len &gt; 0) {<a name="line.1041"></a>
+<span class="sourceLineNo">1042</span>               char c = token.charAt(0);<a name="line.1042"></a>
+<span class="sourceLineNo">1043</span>               String s2 = null;<a name="line.1043"></a>
+<span class="sourceLineNo">1044</span>               if ((c == '+' || c == '-') &amp;&amp; len &gt; 1)<a name="line.1044"></a>
+<span class="sourceLineNo">1045</span>                  s2 = token.substring(1);<a name="line.1045"></a>
+<span class="sourceLineNo">1046</span>               else {<a name="line.1046"></a>
+<span class="sourceLineNo">1047</span>                  s2 = token;<a name="line.1047"></a>
+<span class="sourceLineNo">1048</span>                  c = '^';<a name="line.1048"></a>
+<span class="sourceLineNo">1049</span>                  numOrs++;<a name="line.1049"></a>
+<span class="sourceLineNo">1050</span>               }<a name="line.1050"></a>
+<span class="sourceLineNo">1051</span>               // Trim off leading and trailing single and double quotes.<a name="line.1051"></a>
+<span class="sourceLineNo">1052</span>               if (s2.matches("\".*\"") || s2.matches("'.*'"))<a name="line.1052"></a>
+<span class="sourceLineNo">1053</span>                  s2 = s2.substring(1, s2.length()-1);<a name="line.1053"></a>
+<span class="sourceLineNo">1054</span><a name="line.1054"></a>
+<span class="sourceLineNo">1055</span>               // Replace:  [\"]-&gt;["]<a name="line.1055"></a>
+<span class="sourceLineNo">1056</span>               s2 = unEscapeChars(s2, new char[]{'"','\''});<a name="line.1056"></a>
+<span class="sourceLineNo">1057</span><a name="line.1057"></a>
+<span class="sourceLineNo">1058</span>               // Un-escape remaining escaped backslashes.<a name="line.1058"></a>
+<span class="sourceLineNo">1059</span>               s2 = unEscapeChars(s2, new char[]{'\\'});<a name="line.1059"></a>
+<span class="sourceLineNo">1060</span><a name="line.1060"></a>
+<span class="sourceLineNo">1061</span>               l.add(c + s2);<a name="line.1061"></a>
+<span class="sourceLineNo">1062</span>            }<a name="line.1062"></a>
+<span class="sourceLineNo">1063</span>         }<a name="line.1063"></a>
+<span class="sourceLineNo">1064</span><a name="line.1064"></a>
+<span class="sourceLineNo">1065</span>         // If there's a single OR clause, turn it into an AND clause (makes the SQL cleaner).<a name="line.1065"></a>
+<span class="sourceLineNo">1066</span>         if (numOrs == 1) {<a name="line.1066"></a>
+<span class="sourceLineNo">1067</span>            int ii = l.size();<a name="line.1067"></a>
+<span class="sourceLineNo">1068</span>            for (int i = 0; i &lt; ii; i++) {<a name="line.1068"></a>
+<span class="sourceLineNo">1069</span>               String x = l.get(i);<a name="line.1069"></a>
+<span class="sourceLineNo">1070</span>               if (x.charAt(0) == '^')<a name="line.1070"></a>
+<span class="sourceLineNo">1071</span>                  l.set(i, '+'+x.substring(1));<a name="line.1071"></a>
+<span class="sourceLineNo">1072</span>            }<a name="line.1072"></a>
+<span class="sourceLineNo">1073</span>         }<a name="line.1073"></a>
+<span class="sourceLineNo">1074</span>         return l;<a name="line.1074"></a>
+<span class="sourceLineNo">1075</span>      }<a name="line.1075"></a>
+<span class="sourceLineNo">1076</span><a name="line.1076"></a>
+<span class="sourceLineNo">1077</span>      public boolean matches(String input) {<a name="line.1077"></a>
+<span class="sourceLineNo">1078</span>         if (input == null) return false;<a name="line.1078"></a>
+<span class="sourceLineNo">1079</span>         for (int i = 0; i &lt; andPatterns.length; i++)<a name="line.1079"></a>
+<span class="sourceLineNo">1080</span>            if (! andPatterns[i].matcher(input).matches())<a name="line.1080"></a>
+<span class="sourceLineNo">1081</span>               return false;<a name="line.1081"></a>
+<span class="sourceLineNo">1082</span>         for (int i = 0; i &lt; notPatterns.length; i++)<a name="line.1082"></a>
+<span class="sourceLineNo">1083</span>            if (notPatterns[i].matcher(input).matches())<a name="line.1083"></a>
+<span class="sourceLineNo">1084</span>               return false;<a name="line.1084"></a>
+<span class="sourceLineNo">1085</span>         for (int i = 0; i &lt; orPatterns.length; i++)<a name="line.1085"></a>
+<span class="sourceLineNo">1086</span>            if (orPatterns[i].matcher(input).matches())<a name="line.1086"></a>
+<span class="sourceLineNo">1087</span>               return true;<a name="line.1087"></a>
+<span class="sourceLineNo">1088</span>         return orPatterns.length == 0;<a name="line.1088"></a>
+<span class="sourceLineNo">1089</span>      }<a name="line.1089"></a>
+<span class="sourceLineNo">1090</span><a name="line.1090"></a>
+<span class="sourceLineNo">1091</span>   }<a name="line.1091"></a>
+<span class="sourceLineNo">1092</span><a name="line.1092"></a>
+<span class="sourceLineNo">1093</span>   /*<a name="line.1093"></a>
+<span class="sourceLineNo">1094</span>    * Same as split(String, char), but does not split on characters inside<a name="line.1094"></a>
+<span class="sourceLineNo">1095</span>    * single quotes.<a name="line.1095"></a>
+<span class="sourceLineNo">1096</span>    * Does not split on escaped delimiters, and escaped quotes are also ignored.<a name="line.1096"></a>
+<span class="sourceLineNo">1097</span>    * Example:<a name="line.1097"></a>
+<span class="sourceLineNo">1098</span>    * split("a,b,c",',') -&gt; {"a","b","c"}<a name="line.1098"></a>
+<span class="sourceLineNo">1099</span>    * split("a,'b,b,b',c",',') -&gt; {"a","'b,b,b'","c"}<a name="line.1099"></a>
+<span class="sourceLineNo">1100</span>    */<a name="line.1100"></a>
+<span class="sourceLineNo">1101</span>   static final String[] splitQuoted(String s, char c) {<a name="line.1101"></a>
+<span class="sourceLineNo">1102</span><a name="line.1102"></a>
+<span class="sourceLineNo">1103</span>      if (s == null || s.matches("\\s*"))<a name="line.1103"></a>
+<span class="sourceLineNo">1104</span>         return new String[0];<a name="line.1104"></a>
+<span class="sourceLineNo">1105</span><a name="line.1105"></a>
+<span class="sourceLineNo">1106</span>      List&lt;String&gt; l = new LinkedList&lt;&gt;();<a name="line.1106"></a>
+<span class="sourceLineNo">1107</span>      char[] sArray = s.toCharArray();<a name="line.1107"></a>
+<span class="sourceLineNo">1108</span>      int x1 = 0;<a name="line.1108"></a>
+<span class="sourceLineNo">1109</span>      int escapeCount = 0;<a name="line.1109"></a>
+<span class="sourceLineNo">1110</span>      boolean inSingleQuote = false;<a name="line.1110"></a>
+<span class="sourceLineNo">1111</span>      boolean inDoubleQuote = false;<a name="line.1111"></a>
+<span class="sourceLineNo">1112</span>      for (int i = 0; i &lt; sArray.length; i++) {<a name="line.1112"></a>
+<span class="sourceLineNo">1113</span>         if (sArray[i] == '\\') escapeCount++;<a name="line.1113"></a>
+<span class="sourceLineNo">1114</span>         else if (escapeCount % 2 == 0) {<a name="line.1114"></a>
+<span class="sourceLineNo">1115</span>            if (sArray[i] == '\'' &amp;&amp; ! inDoubleQuote) inSingleQuote = ! inSingleQuote;<a name="line.1115"></a>
+<span class="sourceLineNo">1116</span>            else if (sArray[i] == '"' &amp;&amp; ! inSingleQuote) inDoubleQuote = ! inDoubleQuote;<a name="line.1116"></a>
+<span class="sourceLineNo">1117</span>            else if (sArray[i] == c &amp;&amp; ! inSingleQuote &amp;&amp; ! inDoubleQuote) {<a name="line.1117"></a>
+<span class="sourceLineNo">1118</span>               String s2 = new String(sArray, x1, i-x1).trim();<a name="line.1118"></a>
+<span class="sourceLineNo">1119</span>               l.add(s2);<a name="line.1119"></a>
+<span class="sourceLineNo">1120</span>               x1 = i+1;<a name="line.1120"></a>
+<span class="sourceLineNo">1121</span>            }<a name="line.1121"></a>
+<span class="sourceLineNo">1122</span>         }<a name="line.1122"></a>
+<span class="sourceLineNo">1123</span>         if (sArray[i] != '\\') escapeCount = 0;<a name="line.1123"></a>
+<span class="sourceLineNo">1124</span>      }<a name="line.1124"></a>
+<span class="sourceLineNo">1125</span>      String s2 = new String(sArray, x1, sArray.length-x1).trim();<a name="line.1125"></a>
+<span class="sourceLineNo">1126</span>      l.add(s2);<a name="line.1126"></a>
+<span class="sourceLineNo">1127</span><a name="line.1127"></a>
+<span class="sourceLineNo">1128</span>      return l.toArray(new String[l.size()]);<a name="line.1128"></a>
+<span class="sourceLineNo">1129</span>   }<a name="line.1129"></a>
+<span class="sourceLineNo">1130</span><a name="line.1130"></a>
+<span class="sourceLineNo">1131</span>   /**<a name="line.1131"></a>
+<span class="sourceLineNo">1132</span>    * Replaces tokens in a string with a different token.<a name="line.1132"></a>
+<span class="sourceLineNo">1133</span>    *<a name="line.1133"></a>
+<span class="sourceLineNo">1134</span>    * &lt;p&gt;<a name="line.1134"></a>
+<span class="sourceLineNo">1135</span>    * replace("A and B and C", "and", "or") -&gt; "A or B or C"<a name="line.1135"></a>
+<span class="sourceLineNo">1136</span>    * replace("andandand", "and", "or") -&gt; "ororor"<a name="line.1136"></a>
+<span class="sourceLineNo">1137</span>    * replace(null, "and", "or") -&gt; null<a name="line.1137"></a>
+<span class="sourceLineNo">1138</span>    * replace("andandand", null, "or") -&gt; "andandand"<a name="line.1138"></a>
+<span class="sourceLineNo">1139</span>    * replace("andandand", "", "or") -&gt; "andandand"<a name="line.1139"></a>
+<span class="sourceLineNo">1140</span>    * replace("A and B and C", "and", null) -&gt; "A  B  C"<a name="line.1140"></a>
+<span class="sourceLineNo">1141</span>    * @param ignoreEscapedChars Specify 'true' if escaped 'from' characters should be ignored.<a name="line.1141"></a>
+<span class="sourceLineNo">1142</span>    */<a name="line.1142"></a>
+<span class="sourceLineNo">1143</span>   static String replace(String s, char from, char to, boolean ignoreEscapedChars) {<a name="line.1143"></a>
+<span class="sourceLineNo">1144</span>      if (s == null) return null;<a name="line.1144"></a>
+<span class="sourceLineNo">1145</span><a name="line.1145"></a>
+<span class="sourceLineNo">1146</span>      char[] sArray = s.toCharArray();<a name="line.1146"></a>
+<span class="sourceLineNo">1147</span><a name="line.1147"></a>
+<span class="sourceLineNo">1148</span>      int escapeCount = 0;<a name="line.1148"></a>
+<span class="sourceLineNo">1149</span>      int singleQuoteCount = 0;<a name="line.1149"></a>
+<span class="sourceLineNo">1150</span>      int doubleQuoteCount = 0;<a name="line.1150"></a>
+<span class="sourceLineNo">1151</span>      for (int i = 0; i &lt; sArray.length; i++) {<a name="line.1151"></a>
+<span class="sourceLineNo">1152</span>         char c = sArray[i];<a name="line.1152"></a>
+<span class="sourceLineNo">1153</span>         if (c == '\\' &amp;&amp; ignoreEscapedChars)<a name="line.1153"></a>
+<span class="sourceLineNo">1154</span>            escapeCount++;<a name="line.1154"></a>
+<span class="sourceLineNo">1155</span>         else if (escapeCount % 2 == 0) {<a name="line.1155"></a>
+<span class="sourceLineNo">1156</span>            if (c == from &amp;&amp; singleQuoteCount % 2 == 0 &amp;&amp; doubleQuoteCount % 2 == 0)<a name="line.1156"></a>
+<span class="sourceLineNo">1157</span>            sArray[i] = to;<a name="line.1157"></a>
+<span class="sourceLineNo">1158</span>         }<a name="line.1158"></a>
+<span class="sourceLineNo">1159</span>         if (sArray[i] != '\\') escapeCount = 0;<a name="line.1159"></a>
+<span class="sourceLineNo">1160</span>      }<a name="line.1160"></a>
+<span class="sourceLineNo">1161</span>      return new String(sArray);<a name="line.1161"></a>
+<span class="sourceLineNo">1162</span>   }<a name="line.1162"></a>
+<span class="sourceLineNo">1163</span><a name="line.1163"></a>
+<span class="sourceLineNo">1164</span>   /**<a name="line.1164"></a>
+<span class="sourceLineNo">1165</span>    * Removes escape characters (specified by escapeChar) from the specified characters.<a name="line.1165"></a>
+<span class="sourceLineNo">1166</span>    */<a name="line.1166"></a>
+<span class="sourceLineNo">1167</span>   static String unEscapeChars(String s, char[] toEscape) {<a name="line.1167"></a>
+<span class="sourceLineNo">1168</span>      char escapeChar = '\\';<a name="line.1168"></a>
+<span class="sourceLineNo">1169</span>      if (s == null) return null;<a name="line.1169"></a>
+<span class="sourceLineNo">1170</span>      if (s.length() == 0) return s;<a name="line.1170"></a>
+<span class="sourceLineNo">1171</span>      StringBuffer sb = new StringBuffer(s.length());<a name="line.1171"></a>
+<span class="sourceLineNo">1172</span>      char[] sArray = s.toCharArray();<a name="line.1172"></a>
+<span class="sourceLineNo">1173</span>      for (int i = 0; i &lt; sArray.length; i++) {<a name="line.1173"></a>
+<span class="sourceLineNo">1174</span>         char c = sArray[i];<a name="line.1174"></a>
+<span class="sourceLineNo">1175</span><a name="line.1175"></a>
+<span class="sourceLineNo">1176</span>         if (c == escapeChar) {<a name="line.1176"></a>
+<span class="sourceLineNo">1177</span>            if (i+1 != sArray.length) {<a name="line.1177"></a>
+<span class="sourceLineNo">1178</span>               char c2 = sArray[i+1];<a name="line.1178"></a>
+<span class="sourceLineNo">1179</span>               boolean isOneOf = false;<a name="line.1179"></a>
+<span class="sourceLineNo">1180</span>               for (int j = 0; j &lt; toEscape.length &amp;&amp; ! isOneOf; j++)<a name="line.1180"></a>
+<span class="sourceLineNo">1181</span>                  isOneOf = (c2 == toEscape[j]);<a name="line.1181"></a>
+<span class="sourceLineNo">1182</span>               if (isOneOf) {<a name="line.1182"></a>
+<span class="sourceLineNo">1183</span>                  i++;<a name="line.1183"></a>
+<span class="sourceLineNo">1184</span>               } else if (c2 == escapeChar) {<a name="line.1184"></a>
+<span class="sourceLineNo">1185</span>                  sb.append(escapeChar);<a name="line.1185"></a>
+<span class="sourceLineNo">1186</span>                  i++;<a name="line.1186"></a>
+<span class="sourceLineNo">1187</span>               }<a name="line.1187"></a>
+<span class="sourceLineNo">1188</span>            }<a name="line.1188"></a>
+<span class="sourceLineNo">1189</span>         }<a name="line.1189"></a>
+<span class="sourceLineNo">1190</span>         sb.append(sArray[i]);<a name="line.1190"></a>
+<span class="sourceLineNo">1191</span>      }<a name="line.1191"></a>
+<span class="sourceLineNo">1192</span>      return sb.toString();<a name="line.1192"></a>
+<span class="sourceLineNo">1193</span>   }<a name="line.1193"></a>
+<span class="sourceLineNo">1194</span>}<a name="line.1194"></a>
+<span class="sourceLineNo">1195</span><a name="line.1195"></a>
+<span class="sourceLineNo">1196</span><a name="line.1196"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.microservice.jetty;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import static org.apache.juneau.internal.SystemUtils.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>import static org.apache.juneau.internal.StringUtils.*;<a name="line.16"></a>
+<span class="sourceLineNo">017</span>import java.io.*;<a name="line.17"></a>
+<span class="sourceLineNo">018</span>import java.net.*;<a name="line.18"></a>
+<span class="sourceLineNo">019</span>import java.util.*;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>import java.util.logging.*;<a name="line.20"></a>
+<span class="sourceLineNo">021</span><a name="line.21"></a>
+<span class="sourceLineNo">022</span>import javax.servlet.*;<a name="line.22"></a>
+<span class="sourceLineNo">023</span><a name="line.23"></a>
+<span class="sourceLineNo">024</span>import org.apache.juneau.*;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>import org.apache.juneau.config.*;<a name="line.25"></a>
+<span class="sourceLineNo">026</span>import org.apache.juneau.internal.*;<a name="line.26"></a>
+<span class="sourceLineNo">027</span>import org.apache.juneau.microservice.*;<a name="line.27"></a>
+<span class="sourceLineNo">028</span>import org.apache.juneau.parser.ParseException;<a name="line.28"></a>
+<span class="sourceLineNo">029</span>import org.apache.juneau.reflect.ClassInfo;<a name="line.29"></a>
+<span class="sourceLineNo">030</span>import org.apache.juneau.rest.*;<a name="line.30"></a>
+<span class="sourceLineNo">031</span>import org.apache.juneau.svl.*;<a name="line.31"></a>
+<span class="sourceLineNo">032</span>import org.apache.juneau.utils.*;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>import org.eclipse.jetty.server.*;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>import org.eclipse.jetty.server.Handler;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>import org.eclipse.jetty.server.handler.*;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>import org.eclipse.jetty.servlet.*;<a name="line.36"></a>
+<span class="sourceLineNo">037</span><a name="line.37"></a>
+<span class="sourceLineNo">038</span>/**<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * Entry point for Juneau microservice that implements a REST interface using Jetty on a single port.<a name="line.39"></a>
+<span class="sourceLineNo">040</span> *<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * &lt;h5 class='topic'&gt;Jetty Server Details&lt;/h5&gt;<a name="line.41"></a>
+<span class="sourceLineNo">042</span> *<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * The Jetty server is created by the {@link #createServer()} method and started with the {@link #startServer()} method.<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * These methods can be overridden to provided customized behavior.<a name="line.44"></a>
+<span class="sourceLineNo">045</span> *<a name="line.45"></a>
+<span class="sourceLineNo">046</span> * &lt;h5 class='topic'&gt;Defining REST Resources&lt;/h5&gt;<a name="line.46"></a>
+<span class="sourceLineNo">047</span> *<a name="line.47"></a>
+<span class="sourceLineNo">048</span> * Top-level REST resources are defined in the &lt;c&gt;jetty.xml&lt;/c&gt; file as normal servlets.<a name="line.48"></a>
+<span class="sourceLineNo">049</span> */<a name="line.49"></a>
+<span class="sourceLineNo">050</span>public class JettyMicroservice extends Microservice {<a name="line.50"></a>
+<span class="sourceLineNo">051</span><a name="line.51"></a>
+<span class="sourceLineNo">052</span>   private static volatile JettyMicroservice INSTANCE;<a name="line.52"></a>
+<span class="sourceLineNo">053</span><a name="line.53"></a>
+<span class="sourceLineNo">054</span>   private static void setInstance(JettyMicroservice m) {<a name="line.54"></a>
+<span class="sourceLineNo">055</span>      synchronized(JettyMicroservice.class) {<a name="line.55"></a>
+<span class="sourceLineNo">056</span>         INSTANCE = m;<a name="line.56"></a>
+<span class="sourceLineNo">057</span>      }<a name="line.57"></a>
+<span class="sourceLineNo">058</span>   }<a name="line.58"></a>
+<span class="sourceLineNo">059</span><a name="line.59"></a>
+<span class="sourceLineNo">060</span>   /**<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    * Returns the Microservice instance.<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    * &lt;p&gt;<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    * This method only works if there's only one Microservice instance in a JVM.<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    * Otherwise, it's just overwritten by the last instantiated microservice.<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    *<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    * @return The Microservice instance, or &lt;jk&gt;null&lt;/jk&gt; if there isn't one.<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    */<a name="line.67"></a>
+<span class="sourceLineNo">068</span>   public static JettyMicroservice getInstance() {<a name="line.68"></a>
+<span class="sourceLineNo">069</span>      synchronized(JettyMicroservice.class) {<a name="line.69"></a>
+<span class="sourceLineNo">070</span>         return INSTANCE;<a name="line.70"></a>
+<span class="sourceLineNo">071</span>      }<a name="line.71"></a>
+<span class="sourceLineNo">072</span>   }<a name="line.72"></a>
+<span class="sourceLineNo">073</span><a name="line.73"></a>
+<span class="sourceLineNo">074</span>   /**<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    * Entry-point method.<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    *<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    * @param args Command line arguments.<a name="line.77"></a>
+<span class="sourceLineNo">078</span>    * @throws Exception Error occurred.<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    */<a name="line.79"></a>
+<span class="sourceLineNo">080</span>   public static void main(String[] args) throws Exception {<a name="line.80"></a>
+<span class="sourceLineNo">081</span>      JettyMicroservice<a name="line.81"></a>
+<span class="sourceLineNo">082</span>         .create()<a name="line.82"></a>
+<span class="sourceLineNo">083</span>         .args(args)<a name="line.83"></a>
+<span class="sourceLineNo">084</span>         .build()<a name="line.84"></a>
+<span class="sourceLineNo">085</span>         .start()<a name="line.85"></a>
+<span class="sourceLineNo">086</span>         .startConsole()<a name="line.86"></a>
+<span class="sourceLineNo">087</span>         .join();<a name="line.87"></a>
+<span class="sourceLineNo">088</span>   }<a name="line.88"></a>
+<span class="sourceLineNo">089</span><a name="line.89"></a>
+<span class="sourceLineNo">090</span>   final MessageBundle messages = MessageBundle.create(JettyMicroservice.class);<a name="line.90"></a>
+<span class="sourceLineNo">091</span><a name="line.91"></a>
+<span class="sourceLineNo">092</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.92"></a>
+<span class="sourceLineNo">093</span>   // Properties set in constructor<a name="line.93"></a>
+<span class="sourceLineNo">094</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.94"></a>
+<span class="sourceLineNo">095</span>   private final JettyMicroserviceBuilder builder;<a name="line.95"></a>
+<span class="sourceLineNo">096</span>   final JettyMicroserviceListener listener;<a name="line.96"></a>
+<span class="sourceLineNo">097</span>   private final JettyServerFactory factory;<a name="line.97"></a>
+<span class="sourceLineNo">098</span><a name="line.98"></a>
+<span class="sourceLineNo">099</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.99"></a>
+<span class="sourceLineNo">100</span>   // Properties set in constructor<a name="line.100"></a>
+<span class="sourceLineNo">101</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.101"></a>
+<span class="sourceLineNo">102</span>   volatile Server server;<a name="line.102"></a>
+<span class="sourceLineNo">103</span><a name="line.103"></a>
+<span class="sourceLineNo">104</span>   /**<a name="line.104"></a>
+<span class="sourceLineNo">105</span>    * Creates a new microservice builder.<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    *<a name="line.106"></a>
+<span class="sourceLineNo">107</span>    * @return A new microservice builder.<a name="line.107"></a>
+<span class="sourceLineNo">108</span>    */<a name="line.108"></a>
+<span class="sourceLineNo">109</span>   public static JettyMicroserviceBuilder create() {<a name="line.109"></a>
+<span class="sourceLineNo">110</span>      return new JettyMicroserviceBuilder();<a name="line.110"></a>
+<span class="sourceLineNo">111</span>   }<a name="line.111"></a>
+<span class="sourceLineNo">112</span><a name="line.112"></a>
+<span class="sourceLineNo">113</span>   /**<a name="line.113"></a>
+<span class="sourceLineNo">114</span>    * Constructor.<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    *<a name="line.115"></a>
+<span class="sourceLineNo">116</span>    * @param builder The constructor arguments.<a name="line.116"></a>
+<span class="sourceLineNo">117</span>    * @throws IOException Problem occurred reading file.<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    * @throws ParseException Malformed content found in config file.<a name="line.118"></a>
+<span class="sourceLineNo">119</span>    */<a name="line.119"></a>
+<span class="sourceLineNo">120</span>   protected JettyMicroservice(JettyMicroserviceBuilder builder) throws ParseException, IOException {<a name="line.120"></a>
+<span class="sourceLineNo">121</span>      super(builder);<a name="line.121"></a>
+<span class="sourceLineNo">122</span>      setInstance(this);<a name="line.122"></a>
+<span class="sourceLineNo">123</span>      this.builder = builder.copy();<a name="line.123"></a>
+<span class="sourceLineNo">124</span>      this.listener = builder.listener != null ? builder.listener : new BasicJettyMicroserviceListener();<a name="line.124"></a>
+<span class="sourceLineNo">125</span>      this.factory = builder.factory != null ? builder.factory : new BasicJettyServerFactory();<a name="line.125"></a>
+<span class="sourceLineNo">126</span>   }<a name="line.126"></a>
+<span class="sourceLineNo">127</span><a name="line.127"></a>
+<span class="sourceLineNo">128</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.128"></a>
+<span class="sourceLineNo">129</span>   // Methods implemented on Microservice API<a name="line.129"></a>
+<span class="sourceLineNo">130</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.130"></a>
+<span class="sourceLineNo">131</span><a name="line.131"></a>
+<span class="sourceLineNo">132</span>   @Override /* Microservice */<a name="line.132"></a>
+<span class="sourceLineNo">133</span>   public synchronized JettyMicroservice init() throws ParseException, IOException {<a name="line.133"></a>
+<span class="sourceLineNo">134</span>      super.init();<a name="line.134"></a>
+<span class="sourceLineNo">135</span>      return this;<a name="line.135"></a>
+<span class="sourceLineNo">136</span>   }<a name="line.136"></a>
+<span class="sourceLineNo">137</span><a name="line.137"></a>
+<span class="sourceLineNo">138</span>   @Override /* Microservice */<a name="line.138"></a>
+<span class="sourceLineNo">139</span>   public synchronized JettyMicroservice startConsole() throws Exception {<a name="line.139"></a>
+<span class="sourceLineNo">140</span>      super.startConsole();<a name="line.140"></a>
+<span class="sourceLineNo">141</span>      return this;<a name="line.141"></a>
+<span class="sourceLineNo">142</span>   }<a name="line.142"></a>
+<span class="sourceLineNo">143</span><a name="line.143"></a>
+<span class="sourceLineNo">144</span>   @Override /* Microservice */<a name="line.144"></a>
+<span class="sourceLineNo">145</span>   public synchronized JettyMicroservice stopConsole() throws Exception {<a name="line.145"></a>
+<span class="sourceLineNo">146</span>      super.stopConsole();<a name="line.146"></a>
+<span class="sourceLineNo">147</span>      return this;<a name="line.147"></a>
+<span class="sourceLineNo">148</span>   }<a name="line.148"></a>
+<span class="sourceLineNo">149</span><a name="line.149"></a>
+<span class="sourceLineNo">150</span>   @Override /* Microservice */<a name="line.150"></a>
+<span class="sourceLineNo">151</span>   public synchronized JettyMicroservice start() throws Exception {<a name="line.151"></a>
+<span class="sourceLineNo">152</span>      super.start();<a name="line.152"></a>
+<span class="sourceLineNo">153</span>      createServer();<a name="line.153"></a>
+<span class="sourceLineNo">154</span>      startServer();<a name="line.154"></a>
+<span class="sourceLineNo">155</span>      return this;<a name="line.155"></a>
+<span class="sourceLineNo">156</span>   }<a name="line.156"></a>
+<span class="sourceLineNo">157</span><a name="line.157"></a>
+<span class="sourceLineNo">158</span>   @Override /* Microservice */<a name="line.158"></a>
+<span class="sourceLineNo">159</span>   public JettyMicroservice join() throws Exception {<a name="line.159"></a>
+<span class="sourceLineNo">160</span>      server.join();<a name="line.160"></a>
+<span class="sourceLineNo">161</span>      return this;<a name="line.161"></a>
+<span class="sourceLineNo">162</span>   }<a name="line.162"></a>
+<span class="sourceLineNo">163</span><a name="line.163"></a>
+<span class="sourceLineNo">164</span>   @Override /* Microservice */<a name="line.164"></a>
+<span class="sourceLineNo">165</span>   public synchronized JettyMicroservice stop() throws Exception {<a name="line.165"></a>
+<span class="sourceLineNo">166</span>      final Logger logger = getLogger();<a name="line.166"></a>
+<span class="sourceLineNo">167</span>      final MessageBundle mb2 = messages;<a name="line.167"></a>
+<span class="sourceLineNo">168</span>      Thread t = new Thread("JettyMicroserviceStop") {<a name="line.168"></a>
+<span class="sourceLineNo">169</span>         @Override /* Thread */<a name="line.169"></a>
+<span class="sourceLineNo">170</span>         public void run() {<a name="line.170"></a>
+<span class="sourceLineNo">171</span>            try {<a name="line.171"></a>
+<span class="sourceLineNo">172</span>               if (server == null || server.isStopping() || server.isStopped())<a name="line.172"></a>
+<span class="sourceLineNo">173</span>                  return;<a name="line.173"></a>
+<span class="sourceLineNo">174</span>               listener.onStopServer(JettyMicroservice.this);<a name="line.174"></a>
+<span class="sourceLineNo">175</span>               out(mb2, "StoppingServer");<a name="line.175"></a>
+<span class="sourceLineNo">176</span>               server.stop();<a name="line.176"></a>
+<span class="sourceLineNo">177</span>               out(mb2, "ServerStopped");<a name="line.177"></a>
+<span class="sourceLineNo">178</span>               listener.onPostStopServer(JettyMicroservice.this);<a name="line.178"></a>
+<span class="sourceLineNo">179</span>            } catch (Exception e) {<a name="line.179"></a>
+<span class="sourceLineNo">180</span>               logger.log(Level.WARNING, e.getLocalizedMessage(), e);<a name="line.180"></a>
+<span class="sourceLineNo">181</span>            }<a name="line.181"></a>
+<span class="sourceLineNo">182</span>         }<a name="line.182"></a>
+<span class="sourceLineNo">183</span>      };<a name="line.183"></a>
+<span class="sourceLineNo">184</span>      t.start();<a name="line.184"></a>
+<span class="sourceLineNo">185</span>      try {<a name="line.185"></a>
+<span class="sourceLineNo">186</span>         t.join();<a name="line.186"></a>
+<span class="sourceLineNo">187</span>      } catch (InterruptedException e) {<a name="line.187"></a>
+<span class="sourceLineNo">188</span>         e.printStackTrace();<a name="line.188"></a>
+<span class="sourceLineNo">189</span>      }<a name="line.189"></a>
+<span class="sourceLineNo">190</span>      super.stop();<a name="line.190"></a>
+<span class="sourceLineNo">191</span><a name="line.191"></a>
+<span class="sourceLineNo">192</span>      return this;<a name="line.192"></a>
+<span class="sourceLineNo">193</span>   }<a name="line.193"></a>
+<span class="sourceLineNo">194</span><a name="line.194"></a>
+<span class="sourceLineNo">195</span><a name="line.195"></a>
+<span class="sourceLineNo">196</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.196"></a>
+<span class="sourceLineNo">197</span>   // JettyMicroservice API methods.<a name="line.197"></a>
+<span class="sourceLineNo">198</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.198"></a>
+<span class="sourceLineNo">199</span><a name="line.199"></a>
+<span class="sourceLineNo">200</span>   /**<a name="line.200"></a>
+<span class="sourceLineNo">201</span>    * Returns the port that this microservice started up on.<a name="line.201"></a>
+<span class="sourceLineNo">202</span>    * &lt;p&gt;<a name="line.202"></a>
+<span class="sourceLineNo">203</span>    * The value is determined by looking at the &lt;c&gt;Server/Connectors[ServerConnector]/port&lt;/c&gt; value in the<a name="line.203"></a>
+<span class="sourceLineNo">204</span>    * Jetty configuration.<a name="line.204"></a>
+<span class="sourceLineNo">205</span>    *<a name="line.205"></a>
+<span class="sourceLineNo">206</span>    * @return The port that this microservice started up on.<a name="line.206"></a>
+<span class="sourceLineNo">207</span>    */<a name="line.207"></a>
+<span class="sourceLineNo">208</span>   public int getPort() {<a name="line.208"></a>
+<span class="sourceLineNo">209</span>      for (Connector c : getServer().getConnectors())<a name="line.209"></a>
+<span class="sourceLineNo">210</span>         if (c instanceof ServerConnector)<a name="line.210"></a>
+<span class="sourceLineNo">211</span>            return ((ServerConnector)c).getPort();<a name="line.211"></a>
+<span class="sourceLineNo">212</span>      throw new RuntimeException("Could not locate ServerConnector in Jetty server.");<a name="line.212"></a>
+<span class="sourceLineNo">213</span>   }<a name="line.213"></a>
+<span class="sourceLineNo">214</span><a name="line.214"></a>
+<span class="sourceLineNo">215</span>   /**<a name="line.215"></a>
+<span class="sourceLineNo">216</span>    * Returns the context path that this microservice is using.<a name="line.216"></a>
+<span class="sourceLineNo">217</span>    * &lt;p&gt;<a name="line.217"></a>
+<span class="sourceLineNo">218</span>    * The value is determined by looking at the &lt;c&gt;Server/Handlers[ServletContextHandler]/contextPath&lt;/c&gt; value<a name="line.218"></a>
+<span class="sourceLineNo">219</span>    * in the Jetty configuration.<a name="line.219"></a>
+<span class="sourceLineNo">220</span>    *<a name="line.220"></a>
+<span class="sourceLineNo">221</span>    * @return The context path that this microservice is using.<a name="line.221"></a>
+<span class="sourceLineNo">222</span>    */<a name="line.222"></a>
+<span class="sourceLineNo">223</span>   public String getContextPath() {<a name="line.223"></a>
+<span class="sourceLineNo">224</span>      for (Handler h : getServer().getHandlers()) {<a name="line.224"></a>
+<span class="sourceLineNo">225</span>         if (h instanceof HandlerCollection)<a name="line.225"></a>
+<span class="sourceLineNo">226</span>            for (Handler h2 : ((HandlerCollection)h).getChildHandlers())<a name="line.226"></a>
+<span class="sourceLineNo">227</span>               if (h2 instanceof ServletContextHandler)<a name="line.227"></a>
+<span class="sourceLineNo">228</span>                  return ((ServletContextHandler)h2).getContextPath();<a name="line.228"></a>
+<span class="sourceLineNo">229</span>         if (h instanceof ServletContextHandler)<a name="line.229"></a>
+<span class="sourceLineNo">230</span>            return ((ServletContextHandler)h).getContextPath();<a name="line.230"></a>
+<span class="sourceLineNo">231</span>      }<a name="line.231"></a>
+<span class="sourceLineNo">232</span>      throw new RuntimeException("Could not locate ServletContextHandler in Jetty server.");<a name="line.232"></a>
+<span class="sourceLineNo">233</span>   }<a name="line.233"></a>
+<span class="sourceLineNo">234</span><a name="line.234"></a>
+<span class="sourceLineNo">235</span>   /**<a name="line.235"></a>
+<span class="sourceLineNo">236</span>    * Returns whether this microservice is using &lt;js&gt;"http"&lt;/js&gt; or &lt;js&gt;"https"&lt;/js&gt;.<a name="line.236"></a>
+<span class="sourceLineNo">237</span>    * &lt;p&gt;<a name="line.237"></a>
+<span class="sourceLineNo">238</span>    * The value is determined by looking for the existence of an SSL Connection Factorie by looking for the<a name="line.238"></a>
+<span class="sourceLineNo">239</span>    * &lt;c&gt;Server/Connectors[ServerConnector]/ConnectionFactories[SslConnectionFactory]&lt;/c&gt; value in the Jetty<a name="line.239"></a>
+<span class="sourceLineNo">240</span>    * configuration.<a name="line.240"></a>
+<span class="sourceLineNo">241</span>    *<a name="line.241"></a>
+<span class="sourceLineNo">242</span>    * @return Whether this microservice is using &lt;js&gt;"http"&lt;/js&gt; or &lt;js&gt;"https"&lt;/js&gt;.<a name="line.242"></a>
+<span class="sourceLineNo">243</span>    */<a name="line.243"></a>
+<span class="sourceLineNo">244</span>   public String getProtocol() {<a name="line.244"></a>
+<span class="sourceLineNo">245</span>      for (Connector c : getServer().getConnectors())<a name="line.245"></a>
+<span class="sourceLineNo">246</span>         if (c instanceof ServerConnector)<a name="line.246"></a>
+<span class="sourceLineNo">247</span>            for (ConnectionFactory cf : ((ServerConnector)c).getConnectionFactories())<a name="line.247"></a>
+<span class="sourceLineNo">248</span>               if (cf instanceof SslConnectionFactory)<a name="line.248"></a>
+<span class="sourceLineNo">249</span>                  return "https";<a name="line.249"></a>
+<span class="sourceLineNo">250</span>      return "http";<a name="line.250"></a>
+<span class="sourceLineNo">251</span>   }<a name="line.251"></a>
+<span class="sourceLineNo">252</span><a name="line.252"></a>
+<span class="sourceLineNo">253</span>   /**<a name="line.253"></a>
+<span class="sourceLineNo">254</span>    * Returns the hostname of this microservice.<a name="line.254"></a>
+<span class="sourceLineNo">255</span>    * &lt;p&gt;<a name="line.255"></a>
+<span class="sourceLineNo">256</span>    * Simply uses &lt;c&gt;InetAddress.getLocalHost().getHostName()&lt;/c&gt;.<a name="line.256"></a>
+<span class="sourceLineNo">257</span>    *<a name="line.257"></a>
+<span class="sourceLineNo">258</span>    * @return The hostname of this microservice.<a name="line.258"></a>
+<span class="sourceLineNo">259</span>    */<a name="line.259"></a>
+<span class="sourceLineNo">260</span>   public String getHostName() {<a name="line.260"></a>
+<span class="sourceLineNo">261</span>      String hostname = "localhost";<a name="line.261"></a>
+<span class="sourceLineNo">262</span>      try {<a name="line.262"></a>
+<span class="sourceLineNo">263</span>         hostname = InetAddress.getLocalHost().getHostName();<a name="line.263"></a>
+<span class="sourceLineNo">264</span>      } catch (UnknownHostException e) {}<a name="line.264"></a>
+<span class="sourceLineNo">265</span>      return hostname;<a name="line.265"></a>
+<span class="sourceLineNo">266</span>   }<a name="line.266"></a>
+<span class="sourceLineNo">267</span><a name="line.267"></a>
+<span class="sourceLineNo">268</span>   /**<a name="line.268"></a>
+<span class="sourceLineNo">269</span>    * Returns the URI where this microservice is listening on.<a name="line.269"></a>
+<span class="sourceLineNo">270</span>    *<a name="line.270"></a>
+<span class="sourceLineNo">271</span>    * @return The URI where this microservice is listening on.<a name="line.271"></a>
+<span class="sourceLineNo">272</span>    */<a name="line.272"></a>
+<span class="sourceLineNo">273</span>   public URI getURI() {<a name="line.273"></a>
+<span class="sourceLineNo">274</span>      String cp = getContextPath();<a name="line.274"></a>
+<span class="sourceLineNo">275</span>      try {<a name="line.275"></a>
+<span class="sourceLineNo">276</span>         return new URI(getProtocol(), null, getHostName(), getPort(), "/".equals(cp) ? null : cp, null, null);<a name="line.276"></a>
+<span class="sourceLineNo">277</span>      } catch (URISyntaxException e) {<a name="line.277"></a>
+<span class="sourceLineNo">278</span>         throw new RuntimeException(e);<a name="line.278"></a>
+<span class="sourceLineNo">279</span>      }<a name="line.279"></a>
+<span class="sourceLineNo">280</span>   }<a name="line.280"></a>
+<span class="sourceLineNo">281</span><a name="line.281"></a>
+<span class="sourceLineNo">282</span>   /**<a name="line.282"></a>
+<span class="sourceLineNo">283</span>    * Method used to create (but not start) an instance of a Jetty server.<a name="line.283"></a>
+<span class="sourceLineNo">284</span>    *<a name="line.284"></a>
+<span class="sourceLineNo">285</span>    * &lt;p&gt;<a name="line.285"></a>
+<span class="sourceLineNo">286</span>    * Subclasses can override this method to customize the Jetty server before it is started.<a name="line.286"></a>
+<span class="sourceLineNo">287</span>    *<a name="line.287"></a>
+<span class="sourceLineNo">288</span>    * &lt;p&gt;<a name="line.288"></a>
+<span class="sourceLineNo">289</span>    * The default implementation is configured by the following values in the config file<a name="line.289"></a>
+<span class="sourceLineNo">290</span>    * if a jetty.xml is not specified via a &lt;c&gt;REST/jettyXml&lt;/c&gt; setting:<a name="line.290"></a>
+<span class="sourceLineNo">291</span>    * &lt;p class='bcode w800'&gt;<a name="line.291"></a>
+<span class="sourceLineNo">292</span>    *    &lt;cc&gt;#================================================================================<a name="line.292"></a>
+<span class="sourceLineNo">293</span>    *    # Jetty settings<a name="line.293"></a>
+<span class="sourceLineNo">294</span>    *    #================================================================================&lt;/cc&gt;<a name="line.294"></a>
+<span class="sourceLineNo">295</span>    *    &lt;cs&gt;[Jetty]&lt;/cs&gt;<a name="line.295"></a>
+<span class="sourceLineNo">296</span>    *<a name="line.296"></a>
+<span class="sourceLineNo">297</span>    *    &lt;cc&gt;# Path of the jetty.xml file used to configure the Jetty server.&lt;/cc&gt;<a name="line.297"></a>
+<span class="sourceLineNo">298</span>    *    &lt;ck&gt;config&lt;/ck&gt; = jetty.xml<a name="line.298"></a>
+<span class="sourceLineNo">299</span>    *<a name="line.299"></a>
+<span class="sourceLineNo">300</span>    *    &lt;cc&gt;# Resolve Juneau variables in the jetty.xml file.&lt;/cc&gt;<a name="line.300"></a>
+<span class="sourceLineNo">301</span>    *    &lt;ck&gt;resolveVars&lt;/ck&gt; = true<a name="line.301"></a>
+<span class="sourceLineNo">302</span>    *<a name="line.302"></a>
+<span class="sourceLineNo">303</span>    *    &lt;cc&gt;# Port to use for the jetty server.<a name="line.303"></a>
+<span class="sourceLineNo">304</span>    *    # You can specify multiple ports.  The first available will be used.  '0' indicates to try a random port.<a name="line.304"></a>
+<span class="sourceLineNo">305</span>    *    # The resulting available port gets set as the system property "availablePort" which can be referenced in the<a name="line.305"></a>
+<span class="sourceLineNo">306</span>    *    # jetty.xml file as "$S{availablePort}" (assuming resolveVars is enabled).&lt;/cc&gt;<a name="line.306"></a>
+<span class="sourceLineNo">307</span>    *    &lt;ck&gt;port&lt;/ck&gt; = 10000,0,0,0<a name="line.307"></a>
+<span class="sourceLineNo">308</span>    * &lt;/p&gt;<a name="line.308"></a>
+<span class="sourceLineNo">309</span>    *<a name="line.309"></a>
+<span class="sourceLineNo">310</span>    * @return The newly-created server.<a name="line.310"></a>
+<span class="sourceLineNo">311</span>    * @throws ParseException Configuration file contains malformed input.<a name="line.311"></a>
+<span class="sourceLineNo">312</span>    * @throws IOException File could not be read.<a name="line.312"></a>
+<span class="sourceLineNo">313</span>    * @throws ExecutableException Exception occurred on invoked constructor/method/field.<a name="line.313"></a>
+<span class="sourceLineNo">314</span>    */<a name="line.314"></a>
+<span class="sourceLineNo">315</span>   public Server createServer() throws ParseException, IOException, ExecutableException {<a name="line.315"></a>
+<span class="sourceLineNo">316</span>      listener.onCreateServer(this);<a name="line.316"></a>
+<span class="sourceLineNo">317</span><a name="line.317"></a>
+<span class="sourceLineNo">318</span>      Config cf = getConfig();<a name="line.318"></a>
+<span class="sourceLineNo">319</span>      ObjectMap mf = getManifest();<a name="line.319"></a>
+<span class="sourceLineNo">320</span>      VarResolver vr = getVarResolver();<a name="line.320"></a>
+<span class="sourceLineNo">321</span><a name="line.321"></a>
+<span class="sourceLineNo">322</span>      int[] ports = ObjectUtils.firstNonNull(builder.ports, cf.getObjectWithDefault("Jetty/port", mf.getWithDefault("Jetty-Port", new int[]{8000}, int[].class), int[].class));<a name="line.322"></a>
+<span class="sourceLineNo">323</span>      int availablePort = findOpenPort(ports);<a name="line.323"></a>
+<span class="sourceLineNo">324</span>      setProperty("availablePort", availablePort, false);<a name="line.324"></a>
+<span class="sourceLineNo">325</span><a name="line.325"></a>
+<span class="sourceLineNo">326</span>      String jettyXml = builder.jettyXml;<a name="line.326"></a>
+<span class="sourceLineNo">327</span>      String jettyConfig = cf.getString("Jetty/config", mf.getString("Jetty-Config", "jetty.xml"));<a name="line.327"></a>
+<span class="sourceLineNo">328</span>      boolean resolveVars = ObjectUtils.firstNonNull(builder.jettyXmlResolveVars, cf.getBoolean("Jetty/resolveVars"));<a name="line.328"></a>
+<span class="sourceLineNo">329</span><a name="line.329"></a>
+<span class="sourceLineNo">330</span>      if (jettyXml == null)<a name="line.330"></a>
+<span class="sourceLineNo">331</span>         jettyXml = IOUtils.loadSystemResourceAsString("jetty.xml", ".", "files");<a name="line.331"></a>
+<span class="sourceLineNo">332</span>      if (jettyXml == null)<a name="line.332"></a>
+<span class="sourceLineNo">333</span>         throw new FormattedRuntimeException("jetty.xml file ''{0}'' was not found on the file system or classpath.", jettyConfig);<a name="line.333"></a>
+<span class="sourceLineNo">334</span><a name="line.334"></a>
+<span class="sourceLineNo">335</span>      if (resolveVars)<a name="line.335"></a>
+<span class="sourceLineNo">336</span>         jettyXml = vr.resolve(jettyXml);<a name="line.336"></a>
+<span class="sourceLineNo">337</span><a name="line.337"></a>
+<span class="sourceLineNo">338</span>      getLogger().info(jettyXml);<a name="line.338"></a>
+<span class="sourceLineNo">339</span><a name="line.339"></a>
+<span class="sourceLineNo">340</span>      try {<a name="line.340"></a>
+<span class="sourceLineNo">341</span>         server = factory.create(jettyXml);<a name="line.341"></a>
+<span class="sourceLineNo">342</span>      } catch (Exception e2) {<a name="line.342"></a>
+<span class="sourceLineNo">343</span>         throw new ExecutableException(e2);<a name="line.343"></a>
+<span class="sourceLineNo">344</span>      }<a name="line.344"></a>
+<span class="sourceLineNo">345</span><a name="line.345"></a>
+<span class="sourceLineNo">346</span>      for (String s : cf.getStringArray("Jetty/servlets", new String[0])) {<a name="line.346"></a>
+<span class="sourceLineNo">347</span>         try {<a name="line.347"></a>
+<span class="sourceLineNo">348</span>            ClassInfo c = ClassInfo.of(Class.forName(s));<a name="line.348"></a>
+<span class="sourceLineNo">349</span>            if (c.isChildOf(RestServlet.class)) {<a name="line.349"></a>
+<span class="sourceLineNo">350</span>               RestServlet rs = (RestServlet)c.newInstance();<a name="line.350"></a>
+<span class="sourceLineNo">351</span>               addServlet(rs, rs.getPath());<a name="line.351"></a>
+<span class="sourceLineNo">352</span>            } else {<a name="line.352"></a>
+<span class="sourceLineNo">353</span>               throw new FormattedRuntimeException("Invalid servlet specified in Jetty/servlets.  Must be a subclass of RestServlet.", s);<a name="line.353"></a>
+<span class="sourceLineNo">354</span>            }<a name="line.354"></a>
+<span class="sourceLineNo">355</span>         } catch (ClassNotFoundException e1) {<a name="line.355"></a>
+<span class="sourceLineNo">356</span>            throw new ExecutableException(e1);<a name="line.356"></a>
+<span class="sourceLineNo">357</span>         }<a name="line.357"></a>
+<span class="sourceLineNo">358</span>      }<a name="line.358"></a>
+<span class="sourceLineNo">359</span><a name="line.359"></a>
+<span class="sourceLineNo">360</span>      for (Map.Entry&lt;String,Object&gt; e : cf.getObjectMap("Jetty/servletMap", ObjectMap.EMPTY_MAP).entrySet()) {<a name="line.360"></a>
+<span class="sourceLineNo">361</span>         try {<a name="line.361"></a>
+<span class="sourceLineNo">362</span>            ClassInfo c = ClassInfo.of(Class.forName(e.getValue().toString()));<a name="line.362"></a>
+<span class="sourceLineNo">363</span>            if (c.isChildOf(Servlet.class)) {<a name="line.363"></a>
+<span class="sourceLineNo">364</span>               Servlet rs = (Servlet)c.newInstance();<a name="line.364"></a>
+<span class="sourceLineNo">365</span>               addServlet(rs, e.getKey());<a name="line.365"></a>
+<span class="sourceLineNo">366</span>            } else {<a name="line.366"></a>
+<span class="sourceLineNo">367</span>               throw new FormattedRuntimeException("Invalid servlet specified in Jetty/servletMap.  Must be a subclass of Servlet.", e.getValue());<a name="line.367"></a>
+<span class="sourceLineNo">368</span>            }<a name="line.368"></a>
+<span class="sourceLineNo">369</span>         } catch (ClassNotFoundException e1) {<a name="line.369"></a>
+<span class="sourceLineNo">370</span>            throw new ExecutableException(e1);<a name="line.370"></a>
+<span class="sourceLineNo">371</span>         }<a name="line.371"></a>
+<span class="sourceLineNo">372</span>      }<a name="line.372"></a>
+<span class="sourceLineNo">373</span><a name="line.373"></a>
+<span class="sourceLineNo">374</span>      for (Map.Entry&lt;String,Object&gt; e : cf.getObjectMap("Jetty/servletAttributes", ObjectMap.EMPTY_MAP).entrySet())<a name="line.374"></a>
+<span class="sourceLineNo">375</span>         addServletAttribute(e.getKey(), e.getValue());<a name="line.375"></a>
+<span class="sourceLineNo">376</span><a name="line.376"></a>
+<span class="sourceLineNo">377</span>      for (Map.Entry&lt;String,Servlet&gt; e : builder.servlets.entrySet())<a name="line.377"></a>
+<span class="sourceLineNo">378</span>         addServlet(e.getValue(), e.getKey());<a name="line.378"></a>
+<span class="sourceLineNo">379</span><a name="line.379"></a>
+<span class="sourceLineNo">380</span>      for (Map.Entry&lt;String,Object&gt; e : builder.servletAttributes.entrySet())<a name="line.380"></a>
+<span class="sourceLineNo">381</span>         addServletAttribute(e.getKey(), e.getValue());<a name="line.381"></a>
+<span class="sourceLineNo">382</span><a name="line.382"></a>
+<span class="sourceLineNo">383</span>      setProperty("juneau.serverPort", availablePort, false);<a name="line.383"></a>
+<span class="sourceLineNo">384</span><a name="line.384"></a>
+<span class="sourceLineNo">385</span>      return server;<a name="line.385"></a>
+<span class="sourceLineNo">386</span>   }<a name="line.386"></a>
+<span class="sourceLineNo">387</span><a name="line.387"></a>
+<span class="sourceLineNo">388</span>   /**<a name="line.388"></a>
+<span class="sourceLineNo">389</span>    * Calls {@link Server#destroy()} on the underlying Jetty server if it exists.<a name="line.389"></a>
+<span class="sourceLineNo">390</span>    *<a name="line.390"></a>
+<span class="sourceLineNo">391</span>    * @throws Exception Error occurred.<a name="line.391"></a>
+<span class="sourceLineNo">392</span>    */<a name="line.392"></a>
+<span class="sourceLineNo">393</span>   public void destroyServer() throws Exception {<a name="line.393"></a>
+<span class="sourceLineNo">394</span>      if (server != null)<a name="line.394"></a>
+<span class="sourceLineNo">395</span>         server.destroy();<a name="line.395"></a>
+<span class="sourceLineNo">396</span>      server = null;<a name="line.396"></a>
+<span class="sourceLineNo">397</span>   }<a name="line.397"></a>
+<span class="sourceLineNo">398</span><a name="line.398"></a>
+<span class="sourceLineNo">399</span>   /**<a name="line.399"></a>
+<span class="sourceLineNo">400</span>    * Adds an arbitrary servlet to this microservice.<a name="line.400"></a>
+<span class="sourceLineNo">401</span>    *<a name="line.401"></a>
+<span class="sourceLineNo">402</span>    * @param servlet The servlet instance.<a name="line.402"></a>
+<span class="sourceLineNo">403</span>    * @param pathSpec The context path of the servlet.<a name="line.403"></a>
+<span class="sourceLineNo">404</span>    * @return This object (for method chaining).<a name="line.404"></a>
+<span class="sourceLineNo">405</span>    * @throws RuntimeException if {@link #createServer()} has not previously been called.<a name="line.405"></a>
+<span class="sourceLineNo">406</span>    */<a name="line.406"></a>
+<span class="sourceLineNo">407</span>   public JettyMicroservice addServlet(Servlet servlet, String pathSpec) {<a name="line.407"></a>
+<span class="sourceLineNo">408</span>      ServletHolder sh = new ServletHolder(servlet);<a name="line.408"></a>
+<span class="sourceLineNo">409</span>      if (pathSpec != null &amp;&amp; ! pathSpec.endsWith("/*"))<a name="line.409"></a>
+<span class="sourceLineNo">410</span>         pathSpec = trimTrailingSlashes(pathSpec) + "/*";<a name="line.410"></a>
+<span class="sourceLineNo">411</span>      getServletContextHandler().addServlet(sh, pathSpec);<a name="line.411"></a>
+<span class="sourceLineNo">412</span>      return this;<a name="line.412"></a>
+<span class="sourceLineNo">413</span>   }<a name="line.413"></a>
+<span class="sourceLineNo">414</span><a name="line.414"></a>
+<span class="sourceLineNo">415</span>   /**<a name="line.415"></a>
+<span class="sourceLineNo">416</span>    * Finds and returns the servlet context handler define in the Jetty container.<a name="line.416"></a>
+<span class="sourceLineNo">417</span>    *<a name="line.417"></a>
+<span class="sourceLineNo">418</span>    * @return The servlet context handler.<a name="line.418"></a>
+<span class="sourceLineNo">419</span>    * @throws RuntimeException if context handler is not defined.<a name="line.419"></a>
+<span class="sourceLineNo">420</span>    */<a name="line.420"></a>
+<span class="sourceLineNo">421</span>   protected ServletContextHandler getServletContextHandler() {<a name="line.421"></a>
+<span class="sourceLineNo">422</span>      for (Handler h : getServer().getHandlers()) {<a name="line.422"></a>
+<span class="sourceLineNo">423</span>         ServletContextHandler sch = getServletContextHandler(h);<a name="line.423"></a>
+<span class="sourceLineNo">424</span>         if (sch != null)<a name="line.424"></a>
+<span class="sourceLineNo">425</span>            return sch;<a name="line.425"></a>
+<span class="sourceLineNo">426</span>      }<a name="line.426"></a>
+<span class="sourceLineNo">427</span>      throw new RuntimeException("Servlet context handler not found in jetty server.");<a name="line.427"></a>
+<span class="sourceLineNo">428</span>   }<a name="line.428"></a>
+<span class="sourceLineNo">429</span><a name="line.429"></a>
+<span class="sourceLineNo">430</span>   /**<a name="line.430"></a>
+<span class="sourceLineNo">431</span>    * Adds a servlet attribute to the Jetty server.<a name="line.431"></a>
+<span class="sourceLineNo">432</span>    *<a name="line.432"></a>
+<span class="sourceLineNo">433</span>    * @param name The server attribute name.<a name="line.433"></a>
+<span class="sourceLineNo">434</span>    * @param value The context path of the servlet.<a name="line.434"></a>
+<span class="sourceLineNo">435</span>    * @return This object (for method chaining).<a name="line.435"></a>
+<span class="sourceLineNo">436</span>    * @throws RuntimeException if {@link #createServer()} has not previously been called.<a name="line.436"></a>
+<span class="sourceLineNo">437</span>    */<a name="line.437"></a>
+<span class="sourceLineNo">438</span>   public JettyMicroservice addServletAttribute(String name, Object value) {<a name="line.438"></a>
+<span class="sourceLineNo">439</span>      getServer().setAttribute(name, value);<a name="line.439"></a>
+<span class="sourceLineNo">440</span>      return this;<a name="line.440"></a>
+<span class="sourceLineNo">441</span>   }<a name="line.441"></a>
+<span class="sourceLineNo">442</span><a name="line.442"></a>
+<span class="sourceLineNo">443</span>   /**<a name="line.443"></a>
+<span class="sourceLineNo">444</span>    * Returns the underlying Jetty server.<a name="line.444"></a>
+<span class="sourceLineNo">445</span>    *<a name="line.445"></a>
+<span class="sourceLineNo">446</span>    * @return The underlying Jetty server, or &lt;jk&gt;null&lt;/jk&gt; if {@link #createServer()} has not yet been called.<a name="line.446"></a>
+<span class="sourceLineNo">447</span>    */<a name="line.447"></a>
+<span class="sourceLineNo">448</span>   public Server getServer() {<a name="line.448"></a>
+<span class="sourceLineNo">449</span>      if (server == null)<a name="line.449"></a>
+<span class="sourceLineNo">450</span>         throw new RuntimeException("Server not found.  createServer() must be called first.");<a name="line.450"></a>
+<span class="sourceLineNo">451</span>      return server;<a name="line.451"></a>
+<span class="sourceLineNo">452</span>   }<a name="line.452"></a>
+<span class="sourceLineNo">453</span><a name="line.453"></a>
+<span class="sourceLineNo">454</span>   /**<a name="line.454"></a>
+<span class="sourceLineNo">455</span>    * Method used to start the Jetty server created by {@link #createServer()}.<a name="line.455"></a>
+<span class="sourceLineNo">456</span>    *<a name="line.456"></a>
+<span class="sourceLineNo">457</span>    * &lt;p&gt;<a name="line.457"></a>
+<span class="sourceLineNo">458</span>    * Subclasses can override this method to customize server startup.<a name="line.458"></a>
+<span class="sourceLineNo">459</span>    *<a name="line.459"></a>
+<span class="sourceLineNo">460</span>    * @return The port that this server started on.<a name="line.460"></a>
+<span class="sourceLineNo">461</span>    * @throws Exception Error occurred.<a name="line.461"></a>
+<span class="sourceLineNo">462</span>    */<a name="line.462"></a>
+<span class="sourceLineNo">463</span>   protected int startServer() throws Exception {<a name="line.463"></a>
+<span class="sourceLineNo">464</span>      listener.onStartServer(this);<a name="line.464"></a>
+<span class="sourceLineNo">465</span>      server.start();<a name="line.465"></a>
+<span class="sourceLineNo">466</span>      out(messages, "ServerStarted", getPort());<a name="line.466"></a>
+<span class="sourceLineNo">467</span>      listener.onPostStartServer(this);<a name="line.467"></a>
+<span class="sourceLineNo">468</span>      return getPort();<a name="line.468"></a>
+<span class="sourceLineNo">469</span>   }<a name="line.469"></a>
+<span class="sourceLineNo">470</span><a name="line.470"></a>
+<span class="sourceLineNo">471</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.471"></a>
+<span class="sourceLineNo">472</span>   // Utility methods.<a name="line.472"></a>
+<span class="sourceLineNo">473</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.473"></a>
+<span class="sourceLineNo">474</span><a name="line.474"></a>
+<span class="sourceLineNo">475</span>   private static ServletContextHandler getServletContextHandler(Handler h) {<a name="line.475"></a>
+<span class="sourceLineNo">476</span>      if (h instanceof ServletContextHandler)<a name="line.476"></a>
+<span class="sourceLineNo">477</span>         return (ServletContextHandler)h;<a name="line.477"></a>
+<span class="sourceLineNo">478</span>      if (h instanceof HandlerCollection) {<a name="line.478"></a>
+<span class="sourceLineNo">479</span>         for (Handler h2 : ((HandlerCollection)h).getHandlers()) {<a name="line.479"></a>
+<span class="sourceLineNo">480</span>            ServletContextHandler sch = getServletContextHandler(h2);<a name="line.480"></a>
+<span class="sourceLineNo">481</span>            if (sch != null)<a name="line.481"></a>
+<span class="sourceLineNo">482</span>               return sch;<a name="line.482"></a>
+<span class="sourceLineNo">483</span>         }<a name="line.483"></a>
+<span class="sourceLineNo">484</span>      }<a name="line.484"></a>
+<span class="sourceLineNo">485</span>      return null;<a name="line.485"></a>
+<span class="sourceLineNo">486</span>   }<a name="line.486"></a>
+<span class="sourceLineNo">487</span><a name="line.487"></a>
+<span class="sourceLineNo">488</span>   private static int findOpenPort(int[] ports) {<a name="line.488"></a>
+<span class="sourceLineNo">489</span>      for (int port : ports) {<a name="line.489"></a>
+<span class="sourceLineNo">490</span>         // If port is 0, try a random port between ports[0] and 32767.<a name="line.490"></a>
+<span class="sourceLineNo">491</span>         if (port == 0)<a name="line.491"></a>
+<span class="sourceLineNo">492</span>            port = new Random().nextInt(32767 - ports[0] + 1) + ports[0];<a name="line.492"></a>
+<span class="sourceLineNo">493</span>         try (ServerSocket ss = new ServerSocket(port)) {<a name="line.493"></a>
+<span class="sourceLineNo">494</span>            return port;<a name="line.494"></a>
+<span class="sourceLineNo">495</span>         } catch (IOException e) {}<a name="line.495"></a>
+<span class="sourceLineNo">496</span>      }<a name="line.496"></a>
+<span class="sourceLineNo">497</span>      return 0;<a name="line.497"></a>
+<span class="sourceLineNo">498</span>   }<a name="line.498"></a>
+<span class="sourceLineNo">499</span>}<a name="line.499"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

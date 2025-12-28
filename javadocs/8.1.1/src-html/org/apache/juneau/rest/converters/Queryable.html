@@ -1,0 +1,230 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.rest.converters;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import org.apache.juneau.rest.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>import org.apache.juneau.utils.*;<a name="line.16"></a>
+<span class="sourceLineNo">017</span><a name="line.17"></a>
+<span class="sourceLineNo">018</span>/**<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * Converter for enabling of {@link PojoQuery} support on response objects returned by a &lt;c&gt;@RestMethod&lt;/c&gt; method.<a name="line.19"></a>
+<span class="sourceLineNo">020</span> *<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * &lt;p&gt;<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * When enabled, objects in a POJO tree can be filtered using the functionality described in the {@link PojoQuery}<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * class.<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * &lt;p&gt;<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * The following HTTP request parameters are available for tabular data (e.g. {@code Collections} of {@code Maps},<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * arrays of beans, etc...):<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * &lt;ul class='spaced-list'&gt;<a name="line.28"></a>
+<span class="sourceLineNo">029</span> *    &lt;li&gt;<a name="line.29"></a>
+<span class="sourceLineNo">030</span> *       &lt;c&gt;&amp;amp;s=&lt;/c&gt; Search arguments.<a name="line.30"></a>
+<span class="sourceLineNo">031</span> *       &lt;br&gt;Comma-delimited list of key/value pairs representing column names and search tokens.<a name="line.31"></a>
+<span class="sourceLineNo">032</span> *       &lt;br&gt;Example:<a name="line.32"></a>
+<span class="sourceLineNo">033</span> *       &lt;p class='bcode w800'&gt;<a name="line.33"></a>
+<span class="sourceLineNo">034</span> *    &amp;amp;s=name=Bill*,birthDate&amp;gt;2000<a name="line.34"></a>
+<span class="sourceLineNo">035</span> *       &lt;/p&gt;<a name="line.35"></a>
+<span class="sourceLineNo">036</span> *    &lt;li&gt;<a name="line.36"></a>
+<span class="sourceLineNo">037</span> *       &lt;c&gt;&amp;amp;v=&lt;/c&gt; Visible columns.<a name="line.37"></a>
+<span class="sourceLineNo">038</span> *       &lt;br&gt;Comma-delimited list of column names to display.<a name="line.38"></a>
+<span class="sourceLineNo">039</span> *       &lt;br&gt;Example:<a name="line.39"></a>
+<span class="sourceLineNo">040</span> *       &lt;p class='bcode w800'&gt;<a name="line.40"></a>
+<span class="sourceLineNo">041</span> *    &amp;amp;v=name,birthDate<a name="line.41"></a>
+<span class="sourceLineNo">042</span> *       &lt;/p&gt;<a name="line.42"></a>
+<span class="sourceLineNo">043</span> *    &lt;li&gt;<a name="line.43"></a>
+<span class="sourceLineNo">044</span> *       &lt;c&gt;&amp;amp;o=&lt;/c&gt; Sort commands.<a name="line.44"></a>
+<span class="sourceLineNo">045</span> *       &lt;br&gt;Comma-delimited list of columns to sort by.<a name="line.45"></a>
+<span class="sourceLineNo">046</span> *       &lt;br&gt;Column names can be suffixed with &lt;js&gt;'+'&lt;/js&gt; or &lt;js&gt;'-'&lt;/js&gt; to indicate ascending or descending order.<a name="line.46"></a>
+<span class="sourceLineNo">047</span> *       &lt;br&gt;The default is ascending order.<a name="line.47"></a>
+<span class="sourceLineNo">048</span> *       &lt;br&gt;Example:<a name="line.48"></a>
+<span class="sourceLineNo">049</span> *       &lt;p class='bcode w800'&gt;<a name="line.49"></a>
+<span class="sourceLineNo">050</span> *    &amp;amp;o=name,birthDate-<a name="line.50"></a>
+<span class="sourceLineNo">051</span> *       &lt;/p&gt;<a name="line.51"></a>
+<span class="sourceLineNo">052</span> *    &lt;li&gt;<a name="line.52"></a>
+<span class="sourceLineNo">053</span> *       &lt;c&gt;&amp;amp;i=&lt;/c&gt; Case-insensitive parameter.<a name="line.53"></a>
+<span class="sourceLineNo">054</span> *       &lt;br&gt;Boolean flag for case-insensitive matching on the search parameters.<a name="line.54"></a>
+<span class="sourceLineNo">055</span> *    &lt;li&gt;<a name="line.55"></a>
+<span class="sourceLineNo">056</span> *       &lt;c&gt;&amp;amp;p=&lt;/c&gt; - Position parameter.<a name="line.56"></a>
+<span class="sourceLineNo">057</span> *       &lt;br&gt;Only return rows starting at the specified index position (zero-indexed).<a name="line.57"></a>
+<span class="sourceLineNo">058</span> *       &lt;br&gt;Default is {@code 0}.<a name="line.58"></a>
+<span class="sourceLineNo">059</span> *    &lt;li&gt;<a name="line.59"></a>
+<span class="sourceLineNo">060</span> *       &lt;c&gt;&amp;amp;l=&lt;/c&gt; Limit parameter.<a name="line.60"></a>
+<span class="sourceLineNo">061</span> *       &lt;br&gt;Only return the specified number of rows.<a name="line.61"></a>
+<span class="sourceLineNo">062</span> *       &lt;br&gt;Default is {@code 0} (meaning return all rows).<a name="line.62"></a>
+<span class="sourceLineNo">063</span> * &lt;/ul&gt;<a name="line.63"></a>
+<span class="sourceLineNo">064</span> *<a name="line.64"></a>
+<span class="sourceLineNo">065</span> * &lt;ul class='seealso'&gt;<a name="line.65"></a>
+<span class="sourceLineNo">066</span> *    &lt;li class='jc'&gt;{@link PojoQuery} - Additional information on filtering POJO models.<a name="line.66"></a>
+<span class="sourceLineNo">067</span> *    &lt;li class='jf'&gt;{@link RestContext#REST_converters} - Registering converters with REST resources.<a name="line.67"></a>
+<span class="sourceLineNo">068</span> *    &lt;li class='link'&gt;{@doc juneau-rest-server.Converters}<a name="line.68"></a>
+<span class="sourceLineNo">069</span> * &lt;/ul&gt;<a name="line.69"></a>
+<span class="sourceLineNo">070</span> */<a name="line.70"></a>
+<span class="sourceLineNo">071</span>public final class Queryable implements RestConverter {<a name="line.71"></a>
+<span class="sourceLineNo">072</span><a name="line.72"></a>
+<span class="sourceLineNo">073</span>   /**<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    * Swagger parameters for this converter.<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    */<a name="line.75"></a>
+<span class="sourceLineNo">076</span>   public static final String SWAGGER_PARAMS=""<a name="line.76"></a>
+<span class="sourceLineNo">077</span>      + "{"<a name="line.77"></a>
+<span class="sourceLineNo">078</span>         + "in:'query',"<a name="line.78"></a>
+<span class="sourceLineNo">079</span>         + "name:'s',"<a name="line.79"></a>
+<span class="sourceLineNo">080</span>         + "description:'"<a name="line.80"></a>
+<span class="sourceLineNo">081</span>            + "Search.\n"<a name="line.81"></a>
+<span class="sourceLineNo">082</span>            + "Key/value pairs representing column names and search tokens.\n"<a name="line.82"></a>
+<span class="sourceLineNo">083</span>            + "\\'*\\' and \\'?\\' can be used as meta-characters in string fields.\n"<a name="line.83"></a>
+<span class="sourceLineNo">084</span>            + "\\'&gt;\\', \\'&gt;=\\', \\'&lt;\\', and \\'&lt;=\\' can be used as limits on numeric and date fields.\n"<a name="line.84"></a>
+<span class="sourceLineNo">085</span>            + "Date fields can be matched with partial dates (e.g. \\'2018\\' to match any date in the year 2018)."<a name="line.85"></a>
+<span class="sourceLineNo">086</span>         + "',"<a name="line.86"></a>
+<span class="sourceLineNo">087</span>         + "type:'array',"<a name="line.87"></a>
+<span class="sourceLineNo">088</span>         + "collectionFormat:'csv',"<a name="line.88"></a>
+<span class="sourceLineNo">089</span>         + "x-examples:{example:'?s=Bill*,birthDate&gt;2000'}"<a name="line.89"></a>
+<span class="sourceLineNo">090</span>      + "},"<a name="line.90"></a>
+<span class="sourceLineNo">091</span>      + "{"<a name="line.91"></a>
+<span class="sourceLineNo">092</span>         + "in:'query',"<a name="line.92"></a>
+<span class="sourceLineNo">093</span>         + "name:'v',"<a name="line.93"></a>
+<span class="sourceLineNo">094</span>         + "description:'"<a name="line.94"></a>
+<span class="sourceLineNo">095</span>            + "View.\n"<a name="line.95"></a>
+<span class="sourceLineNo">096</span>            + "Column names to display."<a name="line.96"></a>
+<span class="sourceLineNo">097</span>         + "',"<a name="line.97"></a>
+<span class="sourceLineNo">098</span>         + "type:'array',"<a name="line.98"></a>
+<span class="sourceLineNo">099</span>         + "collectionFormat:'csv',"<a name="line.99"></a>
+<span class="sourceLineNo">100</span>         + "x-examples:{example:'?v=name,birthDate'}"<a name="line.100"></a>
+<span class="sourceLineNo">101</span>      + "},"<a name="line.101"></a>
+<span class="sourceLineNo">102</span>      + "{"<a name="line.102"></a>
+<span class="sourceLineNo">103</span>         + "in:'query',"<a name="line.103"></a>
+<span class="sourceLineNo">104</span>         + "name:'o',"<a name="line.104"></a>
+<span class="sourceLineNo">105</span>         + "description:'"<a name="line.105"></a>
+<span class="sourceLineNo">106</span>            + "Order by.\n"<a name="line.106"></a>
+<span class="sourceLineNo">107</span>            + "Columns to sort by.\n"<a name="line.107"></a>
+<span class="sourceLineNo">108</span>            + "Column names can be suffixed with \\'+\\' or \\'-\\' to indicate ascending or descending order.\n"<a name="line.108"></a>
+<span class="sourceLineNo">109</span>            + "The default is ascending order."<a name="line.109"></a>
+<span class="sourceLineNo">110</span>         + "',"<a name="line.110"></a>
+<span class="sourceLineNo">111</span>         + "type:'array',"<a name="line.111"></a>
+<span class="sourceLineNo">112</span>         + "collectionFormat:'csv',"<a name="line.112"></a>
+<span class="sourceLineNo">113</span>         + "x-examples:{example:'?o=name,birthDate-'}"<a name="line.113"></a>
+<span class="sourceLineNo">114</span>      + "},"<a name="line.114"></a>
+<span class="sourceLineNo">115</span>      + "{"<a name="line.115"></a>
+<span class="sourceLineNo">116</span>         + "in:'query',"<a name="line.116"></a>
+<span class="sourceLineNo">117</span>         + "name:'i',"<a name="line.117"></a>
+<span class="sourceLineNo">118</span>         + "description:'"<a name="line.118"></a>
+<span class="sourceLineNo">119</span>            + "Case-insensitive.\n"<a name="line.119"></a>
+<span class="sourceLineNo">120</span>            + "Flag for case-insensitive matching on the search parameters."<a name="line.120"></a>
+<span class="sourceLineNo">121</span>         + "',"<a name="line.121"></a>
+<span class="sourceLineNo">122</span>         + "type:'boolean',"<a name="line.122"></a>
+<span class="sourceLineNo">123</span>         + "x-examples:{example:'?i=true'}"<a name="line.123"></a>
+<span class="sourceLineNo">124</span>      + "},"<a name="line.124"></a>
+<span class="sourceLineNo">125</span>      + "{"<a name="line.125"></a>
+<span class="sourceLineNo">126</span>         + "in:'query',"<a name="line.126"></a>
+<span class="sourceLineNo">127</span>         + "name:'p',"<a name="line.127"></a>
+<span class="sourceLineNo">128</span>         + "description:'"<a name="line.128"></a>
+<span class="sourceLineNo">129</span>            + "Position.\n"<a name="line.129"></a>
+<span class="sourceLineNo">130</span>            + "Only return rows starting at the specified index position (zero-indexed).\n"<a name="line.130"></a>
+<span class="sourceLineNo">131</span>            + "Default is 0"<a name="line.131"></a>
+<span class="sourceLineNo">132</span>         + "',"<a name="line.132"></a>
+<span class="sourceLineNo">133</span>         + "type:'integer',"<a name="line.133"></a>
+<span class="sourceLineNo">134</span>         + "x-examples:{example:'?p=100'}"<a name="line.134"></a>
+<span class="sourceLineNo">135</span>      + "},"<a name="line.135"></a>
+<span class="sourceLineNo">136</span>      + "{"<a name="line.136"></a>
+<span class="sourceLineNo">137</span>         + "in:'query',"<a name="line.137"></a>
+<span class="sourceLineNo">138</span>         + "name:'l',"<a name="line.138"></a>
+<span class="sourceLineNo">139</span>         + "description:'"<a name="line.139"></a>
+<span class="sourceLineNo">140</span>            + "Limit.\n"<a name="line.140"></a>
+<span class="sourceLineNo">141</span>            + "Only return the specified number of rows.\n"<a name="line.141"></a>
+<span class="sourceLineNo">142</span>            + "Default is 0 (meaning return all rows)."<a name="line.142"></a>
+<span class="sourceLineNo">143</span>         + "',"<a name="line.143"></a>
+<span class="sourceLineNo">144</span>         + "type:'integer',"<a name="line.144"></a>
+<span class="sourceLineNo">145</span>         + "x-examples:{example:'?l=100'}"<a name="line.145"></a>
+<span class="sourceLineNo">146</span>      + "}"<a name="line.146"></a>
+<span class="sourceLineNo">147</span>   ;<a name="line.147"></a>
+<span class="sourceLineNo">148</span><a name="line.148"></a>
+<span class="sourceLineNo">149</span>   @Override /* RestConverter */<a name="line.149"></a>
+<span class="sourceLineNo">150</span>   public Object convert(RestRequest req, Object o) {<a name="line.150"></a>
+<span class="sourceLineNo">151</span>      if (o == null)<a name="line.151"></a>
+<span class="sourceLineNo">152</span>         return null;<a name="line.152"></a>
+<span class="sourceLineNo">153</span>      SearchArgs searchArgs = req.getQuery().getSearchArgs();<a name="line.153"></a>
+<span class="sourceLineNo">154</span>      if (searchArgs == null)<a name="line.154"></a>
+<span class="sourceLineNo">155</span>         return o;<a name="line.155"></a>
+<span class="sourceLineNo">156</span>      return new PojoQuery(o, req.getBeanSession()).filter(searchArgs);<a name="line.156"></a>
+<span class="sourceLineNo">157</span>   }<a name="line.157"></a>
+<span class="sourceLineNo">158</span>}<a name="line.158"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

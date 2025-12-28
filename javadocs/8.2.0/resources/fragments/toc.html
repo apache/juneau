@@ -1,0 +1,429 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+-->
+<ol class='toc'>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#Introduction'>Introduction</a></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#Introduction.Features'>Features</a><span class='update'>8.1.0-updated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#Introduction.Components'>Components</a></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall'>juneau-marshall</a></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.Serializers'>Serializers</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.Parsers'>Parsers</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.Marshalls'>Marshalls</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.JavaBeansSupport'>Java Beans Support</a><span class='update'><b>8.2.0-new</b></span></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.JavaBeansSupport.BeanAnnotation'>@Bean Annotation</a><span class='update'><b>8.2.0-updated</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.JavaBeansSupport.BeanpAnnotation'>@Beanp Annotation</a><span class='update'>8.1.0-updated, 8.1.2-updated</span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.JavaBeansSupport.BeancAnnotation'>@Beanc Annotation</a><span class='update'>8.1.0-updated, 8.1.2-updated</span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.JavaBeansSupport.BeanIgnoreAnnotation'>@BeanIgnore Annotation</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.JavaBeansSupport.NamePropertyAnnotation'>@NameProperty Annotation</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.JavaBeansSupport.ParentPropertyAnnotation'>@ParentProperty Annotation</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.JavaBeansSupport.PojoBuilders'>POJO Builders</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.JavaBeansSupport.BeanFilters'>BeanFilter Class</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.JavaBeansSupport.InterfaceFilters'>Interface Filters</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.JavaBeansSupport.StopClasses'>Stop Classes</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.JavaBeansSupport.BypassSerialization'>Bypass Serialization using Readers and InputStreams</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.HttpPartSerializers'>HTTP Part Serializers</a><span class='update'><b>8.2.0-updated</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.HttpPartParsers'>HTTP Part Parsers</a><span class='update'><b>8.2.0-updated</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.MarshallConfigurableProperties'>Configurable Properties</a><span class='update'>8.1.3-updated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.ConfigurableAnnotations'>Configurable Annotations</a><span class='update'>8.1.0-new, 8.1.3-updated, <b>8.2.0-updated</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.OMap'>OMap and OList</a><span class='update'>updated-8.2.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.Groups'>SerializerGroups and ParserGroups</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.ContextsBuildersSessionsPropertyStores'>Contexts, Builders, Sessions, and PropertyStores</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.Transforms'>Transforms</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.Transforms.PojoSwaps'>Swaps</a><span class='update'>8.1.0-updated,<b>8.2.0-updated</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.Transforms.DefaultPojoSwaps'>Default PojoSwaps</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.Transforms.AutoPojoSwaps'>Auto-detected POJO swaps</a><span class='update'>8.1.0-new</span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.Transforms.PerMediaTypePojoSwaps'>Per-media-type Swaps</a><span class='update'>8.1.0-updated,<b>8.2.0-updated</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.Transforms.OneWayPojoSwaps'>One-way Swaps</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.Transforms.SwapAnnotation'>@Swap Annotation</a><span class='update'>8.0.0-updated</span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.Transforms.TemplatedSwaps'>Templated Swaps</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.Transforms.SurrogateClasses'>Surrogate Classes</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.DynamicallyAppliedAnnotations'>Dynamically Applied Annotations</a><span class='update'>8.1.3-new</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.BeanDictionaries'>Bean Names and Dictionaries</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.BeanDictionaries.BeanSubTypes'>Bean Subtypes</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.VirtualBeans'>Virtual Beans</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.Recursion'>Non-Tree Models and Recursion Detection</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.ParsingIntoGenericModels'>Parsing into Generic Models</a><span class='update'>updated-8.2.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.ReadingContinuousStreams'>Reading Continuous Streams</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.MarshallingUris'>URIs</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.JacksonComparison'>Comparison with Jackson</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.PojoCategories'>POJO Categories</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.JsonDetails'>JSON Details</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.JsonDetails.JsonMethodology'>JSON Methodology</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.JsonDetails.JsonSerializers'>JSON Serializers</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.JsonDetails.JsonParsers'>JSON Parsers</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.JsonDetails.JsonAnnotation'>@Json Annotation</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.JsonDetails.JsonSchema'>JSON-Schema Support</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.XmlDetails'>XML Details</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.XmlDetails.XmlMethodology'>XML Methodology</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.XmlDetails.XmlSerializers'>XML Serializers</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.XmlDetails.XmlParsers'>XML Parsers</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.XmlDetails.XmlBeanTypeNameAnnotation'>@Bean(typeName) Annotation</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.XmlDetails.XmlChildNameAnnotation'>@Xml(childName) Annotation</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.XmlDetails.XmlFormatAnnotation'>@Xml(format) Annotation</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.XmlDetails.XmlNamespaces'>Namespaces</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.HtmlDetails'>HTML Details</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.HtmlDetails.HtmlMethodology'>HTML Methodology</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.HtmlDetails.HtmlSerializers'>HTML Serializers</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.HtmlDetails.HtmlParsers'>HTML Parsers</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.HtmlDetails.HtmlAnnotation'>@Html Annotation</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.HtmlDetails.HtmlRenderAnnotation'>@Html(render) Annotation</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.HtmlDetails.HtmlDocSerializer'>HtmlDocSerializer</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.HtmlDetails.BasicHtmlDocTemplate'>BasicHtmlDocTemplate</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.HtmlDetails.HtmlCustomTemplates'>Custom Templates</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.HtmlDetails.HtmlSchema'>HTML-Schema Support</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.UonDetails'>UON Details</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.UonDetails.UonMethodology'>UON Methodology</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.UonDetails.UonSerializers'>UON Serializers</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.UonDetails.UonParsers'>UON Parsers</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.UrlEncodingDetails'>URL-Encoding Details</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.UrlEncodingDetails.UrlEncMethodology'>URL-Encoding Methodology</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.UrlEncodingDetails.UrlEncSerializers'>URL-Encoding Serializers</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.UrlEncodingDetails.UrlEncParsers'>URL-Encoding Parsers</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.UrlEncodingDetails.UrlEncodingAnnotation'>@UrlEncoding Annotation</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.MsgPackDetails'>MessagePack Details</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.MsgPackDetails.MsgPackSerializers'>MessagePack Serializers</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.MsgPackDetails.MsgPackParsers'>MessagePack Parsers</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.OpenApiDetails'>OpenAPI Details</a><span class='update'><b>8.2.0-updated</b></span></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.OpenApiDetails.OpenApiMethodology'>OpenAPI Methodology</a><span class='update'><b>8.2.0-updated</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.OpenApiDetails.OpenApiSerializers'>OpenAPI Serializers</a><span class='update'><b>8.2.0-updated</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.OpenApiDetails.OpenApiParsers'>OpenAPI Parsers</a><span class='update'><b>8.2.0-updated</b></span></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.SimpleVariableLanguage'>Simple Variable Language</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.SimpleVariableLanguage.SvlVariables'>SVL Variables</a><span class='update'>8.0.0-updated, 8.1.0-updated</span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.SimpleVariableLanguage.VarResolvers'>VarResolvers and VarResolverSessions</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.SimpleVariableLanguage.DefaultVarResolver'>VarResolver.DEFAULT</a><span class='update'>8.1.0-new</span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.SimpleVariableLanguage.SvlOtherNotes'>Other Notes</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall.BestPractices'>Best Practices</a></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall-rdf'>juneau-marshall-rdf</a></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall-rdf.RdfDetails'>RDF Details</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall-rdf.RdfDetails.RdfSerializers'>RDF Serializers</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall-rdf.RdfDetails.RdfParsers'>RDF Parsers</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall-rdf.RdfDetails.RdfAnnotation'>@Rdf Annotation</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall-rdf.RdfDetails.RdfNamespaces'>Namespaces</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall-rdf.RdfDetails.RdfUriProperties'>URI Properties</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall-rdf.RdfDetails.RdfRootProperty'>Root Property</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall-rdf.RdfDetails.RdfTypedLiterals'>Typed Literals</a></p>
+		</ol>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-dto'>juneau-dto</a></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-dto.DtoHtml5'>HTML5</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-dto.DtoAtom'>Atom</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-dto.DtoSwagger'>Swagger</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-dto.DtoSwaggerUi'>Swagger UI</a></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-config'>juneau-config</a></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigOverview'>Overview</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigEntryTypes'>Entry Types</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigEntryTypes.ConfigPrimitiveTypes'>Primitive Types</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigEntryTypes.ConfigPojos'>POJOs</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigEntryTypes.ConfigArrays'>Arrays</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigEntryTypes.ConfigCollections'>Collections</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigEntryTypes.ConfigBinaryData'>Binary Data</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigVariables'>Variables</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigVariables.ConfigLogicVariables'>Logic Variables</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigEncodedEntries'>Encoded Entries</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigSectionMaps'>Section Maps</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigSectionBeans'>Section Beans</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigSectionInterfaces'>Section Interfaces</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigSettingValues'>Setting Values</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigSettingValues.ConfigFileSystemChanges'>File System Changes</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigSettingValues.ConfigCustomEntrySerialization'>Custom Entry Serialization</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigSettingValues.ConfigBulkSettingValues'>Setting Values in Bulk</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigListeners'>Listeners</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigSerializing'>Serializing</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigImports'>Imports</a><span class='update'>8.1.0-updated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigStores'>Config Stores</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigStores.ConfigMemoryStore'>ConfigMemoryStore</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigStores.ConfigFileStore'>ConfigFileStore</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigStores.CustomConfigStores'>Custom ConfigStores</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ConfigStores.ConfigStoreListeners'>ConfigStore Listeners</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ReadOnlyConfigs'>Read-only Configs</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.ClosingConfigs'>Closing Configs</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-config.SystemDefaultConfig'>System Default Config</a><span class='update'>8.0.0-new, 8.1.0-updated</span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server'>juneau-rest-server</a></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHelloWorldExample'>Hello World Example</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestClassHierarchy'>Class Hierarchy</a><span class='update'>8.1.0-updated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestInstantiation'>Instantiation</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestInstantiation.RestServlet'>RestServlet</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestInstantiation.BasicRestServlet'>BasicRestServlet</a><span class='update'>8.1.0-updated</span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestInstantiation.BasicRest'>BasicRest</a><span class='update'>8.1.0-new</span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestInstantiation.RestChildren'>Children</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestInstantiation.BasicRestServletGroup'>BasicRestServletGroup</a><span class='update'>8.1.0-updated</span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestInstantiation.BasicRestGroup'>BasicRestGroup</a><span class='update'>8.1.0-new</span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestInstantiation.RestResourceResolvers'>Resource Resolvers</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestInstantiation.RestLifecycleHooks'>Lifecycle Hooks</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestAnnotation'>@Rest</a><span class='update'>8.1.2-updated</span></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestAnnotation.RestAnnotationInheritance'>Annotation Inheritance</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestAnnotation.RestPath'>@Rest(path)</a><span class='update'>8.1.0-new, 8.1.2-updated</span></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestContext'>RestContext</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestMethod'>@RestMethod</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestMethod.RestmParameters'>Java Method Parameters</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestMethod.RestmRestRequest'>RestRequest</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestMethod.RestmRestResponse'>RestResponse</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestMethod.RestmRequestBody'>RequestBody</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestMethod.RestmRequestHeaders'>RequestHeaders</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestMethod.RestmRequestAttributes'>RequestAttributes</a><span class='update'>8.1.0-new</span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestMethod.RestmRequestQuery'>RequestQuery</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestMethod.RestmRequestFormData'>RequestFormData</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestMethod.RestmPath'>@RestMethod(path)</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestMethod.RestmRequestPathMatch'>RequestPathMatch</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestMethod.RestmReturnTypes'>Method Return Types</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestMethod.RestmReaderResource'>ReaderResource (TODO)</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestMethod.RestmStreamResource'>StreamResource (TODO)</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestMethod.RestmMatchers'>@RestMethod(matchers)</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestMethod.RestmPredefinedResponses'>Predefined Responses</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestMethod.RestmPredefinedExceptions'>Predefined Exceptions</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestMethod.RestmPredefinedHelperBeans'>Predefined Helper Beans</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestRpc'>REST/RPC</a><span class='update'>8.0.0-updated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestOpenApiSchemaPartParsing'>OpenAPI Schema Part Parsing</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestOpenApiSchemaPartSerializing'>OpenAPI Schema Part Serializing</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHttpPartAnnotations'>HTTP-Part Annotations</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHttpPartAnnotations.RestBodyAnnotation'>@Body</a><span class='update'>8.1.0-updated</span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHttpPartAnnotations.RestFormDataAnnotation'>@FormData</a><span class='update'>8.1.0-updated</span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHttpPartAnnotations.RestHasFormDataAnnotation'>@HasFormData</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHttpPartAnnotations.RestQueryAnnotation'>@Query</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHttpPartAnnotations.RestHasQueryAnnotation'>@HasQuery</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHttpPartAnnotations.RestHeaderAnnotation'>@Header</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHttpPartAnnotations.RestPathAnnotation'>@Path</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHttpPartAnnotations.RestRequestAnnotation'>@Request</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHttpPartAnnotations.RestResponseAnnotation'>@Response</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHttpPartAnnotations.RestResponseHeaderAnnotation'>@ResponseHeader</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHttpPartAnnotations.RestResponseStatusAnnotation'>@ResponseStatus</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHandlingFormPosts'>Handling Form Posts</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHandlingMultiPartFormPosts'>Handling Multi-Part Form Posts</a><span class='update'>8.0.0-updated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestSerializers'>Serializers</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestParsers'>Parsers</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestConfigurableProperties'>Configurable Properties</a><span class='update'>8.1.0-updated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestConfigurableAnnotations'>Configurable Annotations</a><span class='update'>8.1.0-new</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestTransforms'>Transforms</a><span class='update'>8.1.0-updated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHandlingUris'>URIs</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestGuards'>Guards</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestRoleGuards'>Role guards</a><span class='update'>8.1.0-new</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestConverters'>Converters</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestMessages'>Messages</a><span class='update'><b>8.2.0-updated</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestEncoders'>Encoders</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestSvlVariables'>SVL Variables</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestConfigurationFiles'>Configuration Files</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestStaticFiles'>Static files</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestClientVersioning'>Client Versioning</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestInfoProvider'>RestInfoProvider</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestInfoProvider.BasicRestInfoProvider'>BasicRestInfoProvider</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestSwagger'>Swagger</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestSwagger.RestSwaggerBasicRestServlet'>BasicRestServlet</a><span class='update'>8.1.0-updated</span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestSwagger.RestSwaggerBasicSwaggerInfo'>Basic Swagger Info</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestSwagger.RestSwaggerTags'>Tags</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestSwagger.RestSwaggerOperations'>Operations</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestSwagger.RestSwaggerParameters'>Parameters</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestSwagger.RestSwaggerParameterExamples'>Parameter Examples</a><span class='update'>8.1.0-updated</span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestSwagger.RestSwaggerResponses'>Responses</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestSwagger.RestSwaggerResponseExamples'>Response Examples</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestSwagger.RestSwaggerModels'>Models</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestSwagger.RestSwaggerStylesheet'>SwaggerUI.css</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestExecutionStatistics'>REST method execution statistics</a><span class='update'>8.1.3-new</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHtmlDocAnnotation'>@HtmlDocConfig</a><span class='update'>8.1.0-updated</span></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHtmlDocAnnotation.RestHtmlUIvsDI'>User Interfaces (UI) vs. Developer Interfaces (DI)</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHtmlDocAnnotation.RestHtmlWidgets'>Widgets</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHtmlDocAnnotation.RestHtmlPredefinedWidgets'>Predefined Widgets</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHtmlDocAnnotation.RestHtmlUiCustomization'>UI Customization</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHtmlDocAnnotation.RestHtmlStylesheets'>Stylesheets</a><span class='update'>8.1.0-updated</span></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestDefaultHeaders'>Default Headers</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestLoggingAndDebugging'>Logging / Debugging</a><span class='update'>8.1.0-new,<b>8.2.0-updated</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHttpStatusCodes'>HTTP Status Codes</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestOverloadingHttpMethods'>Overloading HTTP Methods</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestBuiltInParameters'>Built-in Parameters</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestCustomSerializersAndParsers'>Custom Serializers and Parsers</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestUsingWithOsgi'>Using with OSGi</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestInjection'>Using with Spring and Injection frameworks</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestHttp2'>Using HTTP/2 features</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server.RestOtherNotes'>Other Notes</a></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server-jaxrs'>juneau-rest-server-jaxrs</a></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server-jaxrs.JaxrsBaseProvider'>Juneau JAX-RS Provider</a></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server-springboot'>juneau-rest-server-springboot</a><span class='update'>8.0.0-new</span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server-springboot.SpringBootOverview'>Overview</a><span class='update'>8.0.0-new</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server-springboot.SpringBootChildResources'>Child Resources</a><span class='update'>8.1.0-new</span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client'>juneau-rest-client</a><span class='update'><b>8.2.0-updated</b></span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcPojoMarshalling'>POJO Marshalling</a><span class='update'><b>8.2.0-new</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcRequestHeaders'>Request Headers</a><span class='update'><b>8.2.0-new</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcRequestQueryParameters'>Request Query Parameters</a><span class='update'><b>8.2.0-new</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcRequestFormData'>Request Form Data</a><span class='update'><b>8.2.0-new</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcRequestBody'>Request Body</a><span class='update'><b>8.2.0-new</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcResponseStatus'>Response Status</a><span class='update'><b>8.2.0-new</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcResponseHeaders'>Response Headers</a><span class='update'><b>8.2.0-new</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcResponseBody'>Response Body</a><span class='update'><b>8.2.0-new</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcCustomCallHandlers'>Custom Call Handlers</a><span class='update'><b>8.2.0-new</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcInterceptors'>Interceptors</a><span class='update'><b>8.2.0-new</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcProxies'>REST Proxies</a><span class='update'><b>8.2.0-updated</b></span></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcProxies.RestcRemote'>@Remote</a><span class='update'>8.1.2-updated,<b>8.2.0-updated</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcProxies.RestcRemoteMethod'>@RemoteMethod</a><span class='update'><b>8.2.0-updated</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcProxies.RestcBody'>@Body</a><span class='update'><b>8.2.0-updated</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcProxies.RestcFormData'>@FormData</a><span class='update'><b>8.2.0-updated</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcProxies.RestcQuery'>@Query</a><span class='update'><b>8.2.0-updated</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcProxies.RestcHeader'>@Header</a><span class='update'><b>8.2.0-updated</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcProxies.RestcPath'>@Path</a><span class='update'><b>8.2.0-updated</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcProxies.RestcRequest'>@Request</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcProxies.RestcResponse'>@Response</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcProxies.RestcDualPurposeInterfaces'>Dual-purpose (end-to-end) interfaces</a><span class='update'>8.0.0-new</span></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcLoggingAndDebugging'>Logging and Debugging</a><span class='update'><b>8.2.0-new</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcCustomizingHttpClient'>Customizing HttpClient</a><span class='update'><b>8.2.0-new</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestcExtendingRestClient'>Extending RestClient</a><span class='update'><b>8.2.0-new</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client.RestAuthentication'>Authentication</a><span class='update'><b>8.2.0-updated</b></span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-mock'>juneau-rest-mock</a><span class='update'>8.1.0-new,<b>8.2.0-updated</b></span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-mock.MockRestClient'>MockRestClient</a><span class='update'><b>8.2.0-new</b></span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-microservice-core'>juneau-microservice-core</a><span class='update'>8.0.0-new, 8.1.2-deprecated</span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-microservice-core.MicroserviceCoreOverview'>Microservice Overview</a><span class='update'>8.0.0-new, 8.1.2-deprecated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-microservice-core.MicroserviceLifecycleMethods'>Lifecycle Methods</a><span class='update'>8.0.0-new, 8.1.2-deprecated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-microservice-core.MicroserviceArgs'>Args</a><span class='update'>8.0.0-new, 8.1.2-deprecated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-microservice-core.MicroserviceManifest'>Manifest</a><span class='update'>8.0.0-new, 8.1.2-deprecated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-microservice-core.MicroserviceConfig'>Config</a><span class='update'>8.0.0-new, 8.1.2-deprecated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-microservice-core.MicroserviceSystemProperties'>System properties</a><span class='update'>8.0.0-new, 8.1.2-deprecated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-microservice-core.MicroserviceVarResolver'>VarResolver</a><span class='update'>8.0.0-new, 8.1.2-deprecated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-microservice-core.MicroserviceConsoleCommands'>Console Commands</a><span class='update'>8.0.0-new, 8.1.2-deprecated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-microservice-core.MicroserviceLogging'>Logging</a><span class='update'>8.0.0-new, 8.1.2-deprecated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-microservice-core.MicroserviceListeners'>Listeners</a><span class='update'>8.0.0-new, 8.1.2-deprecated</span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-microservice-jetty'>juneau-microservice-jetty</a><span class='update'>8.0.0-new, 8.1.2-deprecated</span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-microservice-jetty.MicroserviceJettyOverview'>Overview</a><span class='update'>8.0.0-new, 8.1.2-deprecated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-microservice-jetty.MicroserviceJettyLifecycleMethods'>Lifecycle Methods</a><span class='update'>8.0.0-new, 8.1.2-deprecated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-microservice-jetty.MicroserviceJettyResourceClasses'>Resource Classes</a><span class='update'>8.0.0-new, 8.1.2-deprecated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-microservice-jetty.MicroserviceJettyPredefinedResourceClasses'>Predefined Resource Classes</a><span class='update'>8.0.0-new, 8.1.2-deprecated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-microservice-jetty.MicroserviceJettyConfig'>Config</a><span class='update'>8.0.0-new, 8.1.2-deprecated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-microservice-jetty.MicroserviceJettyXml'>Jetty.xml file</a><span class='update'>8.0.0-new, 8.1.2-deprecated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-microservice-jetty.MicroserviceJettyUiCustomization'>UI Customization</a><span class='update'>8.0.0-new, 8.1.2-deprecated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-microservice-jetty.MicroserviceJettyExtending'>Extending JettyMicroservice</a><span class='update'>8.0.0-new, 8.1.2-deprecated</span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#my-jetty-microservice'>my-jetty-microservice</a><span class='update'>8.0.0-new, 8.1.2-deprecated</span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#my-jetty-microservice.MyJettyMicroserviceInstalling'>Installing in Eclipse</a><span class='update'>8.0.0-updated, 8.1.2-deprecated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#my-jetty-microservice.MyJettyMicroserviceRunning'>Running in Eclipse</a><span class='update'>8.0.0-updated, 8.1.2-deprecated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#my-jetty-microservice.MyJettyMicroserviceBuilding'>Building and Running from Command-Line</a><span class='update'>8.0.0-updated, 8.1.2-deprecated</span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#my-springboot-microservice'>my-springboot-microservice</a><span class='update'>8.0.0-new</span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#my-springboot-microservice.MySpringBootMicroserviceInstalling'>Installing in Eclipse</a><span class='update'>8.0.0-new</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#my-springboot-microservice.MySpringBootMicroserviceRunning'>Running in Eclipse</a><span class='update'>8.0.0-new</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#my-springboot-microservice.MySpringBootMicroserviceBuilding'>Building and Running from Command-Line</a><span class='update'>8.0.0-new</span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-examples-core'>juneau-examples-core</a><span class='update'>8.0.0-updated</span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-examples-core.CoreExamplesInstalling'>Installing in Eclipse</a><span class='update'>8.0.0-new</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-examples-core.CoreExamples'>Examples</a><span class='update'>8.0.0-new</span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-examples-rest'>juneau-examples-rest</a><span class='update'>8.0.0-updated</span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-examples-rest.RestExamplesRootResources'>RootResources</a><span class='update'>8.0.0-updated, 8.1.0-updated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-examples-rest.RestExamplesHelloWorldResource'>HelloWorldResource</a><span class='update'>8.0.0-updated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-examples-rest.RestExamplesDtoExamples'>DtoExamples</a><span class='update'>8.0.0-new, 8.1.0-updated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-examples-rest.RestExamplesConfigResource'>ConfigResource</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-examples-rest.RestExamplesLogsResource'>LogsResource</a></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-examples-rest-jetty'>juneau-examples-rest-jetty</a><span class='update'>8.0.0-new, 8.1.2-deprecated</span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-examples-rest-jetty.RestJettyExamplesInstalling'>Installing in Eclipse</a><span class='update'>8.0.0-new,8.1.2-deprecated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-examples-rest-jetty.RestJettyExamplesRunning'>Running in Eclipse</a><span class='update'>8.0.0-new,8.1.2-deprecated</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-examples-rest-jetty.RestJettyExamplesBuilding'>Building and Running from Command-Line</a><span class='update'>8.0.0-new,8.1.2-deprecated</span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-examples-rest-springboot'>juneau-examples-rest-springboot</a><span class='update'>8.0.0-new</span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-examples-rest-springboot.RestSpringBootExamplesInstalling'>Installing in Eclipse</a><span class='update'>8.0.0-new</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-examples-rest-springboot.RestSpringBootExamplesRunning'>Running in Eclipse</a><span class='update'>8.0.0-new</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-examples-rest-springboot.RestSpringBootExamplesBuilding'>Building and Running from Command-Line</a><span class='update'>8.0.0-new</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-examples-rest-springboot.RestSpringBootExamplesDeployingToHeroku'>Deploying to Heroku</a><span class='update'>8.0.0-new</span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-petstore'>juneau-pestore</a><span class='update'><b>8.2.0-new</b></span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-petstore.PetStoreInstalling'>Installing in Eclipse</a><span class='update'><b>8.2.0-new</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-petstore.PetStoreRunning'>Running Petstore manually</a><span class='update'><b>8.2.0-new</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-petstore.PetStoreBuilding'>Building and Running from Command-Line (Using Dockerfiles)</a><span class='update'><b>8.2.0-new</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#juneau-petstore.PetstoreApp'>About Petstore App <br></a><span class='update'><b>8.2.0-new</b></span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#Glossaries'>Glossaries</a><span class='update'>8.1.3-new</span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#Glossaries.GlossaryLanguageSupport'>Language Support</a><span class='update'>8.1.3-new</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#Glossaries.GlossaryAnnotations'>Annotations</a><span class='update'>8.1.3-new</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#Glossaries.GlossaryConfigurableProperties'>Configurable Properties</a><span class='update'>8.1.3-new</span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#Security'>Security Best-Practices</a></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#Security.SecurityMarshall'>juneau-marshall</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#Security.SecuritySvl'>juneau-svl</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#Security.SecurityRest'>juneau-rest-server</a></p>
+	</ol>
+</ol>

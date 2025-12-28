@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.xml;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import java.util.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span><a name="line.16"></a>
+<span class="sourceLineNo">017</span>import org.apache.juneau.*;<a name="line.17"></a>
+<span class="sourceLineNo">018</span>import org.apache.juneau.xml.annotation.*;<a name="line.18"></a>
+<span class="sourceLineNo">019</span><a name="line.19"></a>
+<span class="sourceLineNo">020</span>/**<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * Metadata on bean properties specific to the XML serializers and parsers pulled from the {@link Xml @Xml} annotation<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * on the bean property.<a name="line.22"></a>
+<span class="sourceLineNo">023</span> */<a name="line.23"></a>
+<span class="sourceLineNo">024</span>public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {<a name="line.24"></a>
+<span class="sourceLineNo">025</span><a name="line.25"></a>
+<span class="sourceLineNo">026</span>   /**<a name="line.26"></a>
+<span class="sourceLineNo">027</span>    * Default instance.<a name="line.27"></a>
+<span class="sourceLineNo">028</span>    */<a name="line.28"></a>
+<span class="sourceLineNo">029</span>   public static final XmlBeanPropertyMeta DEFAULT = new XmlBeanPropertyMeta();<a name="line.29"></a>
+<span class="sourceLineNo">030</span><a name="line.30"></a>
+<span class="sourceLineNo">031</span>   private Namespace namespace = null;<a name="line.31"></a>
+<span class="sourceLineNo">032</span>   private XmlFormat xmlFormat = XmlFormat.DEFAULT;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>   private String childName;<a name="line.33"></a>
+<span class="sourceLineNo">034</span><a name="line.34"></a>
+<span class="sourceLineNo">035</span>   /**<a name="line.35"></a>
+<span class="sourceLineNo">036</span>    * Constructor.<a name="line.36"></a>
+<span class="sourceLineNo">037</span>    *<a name="line.37"></a>
+<span class="sourceLineNo">038</span>    * @param bpm The metadata of the bean property of this additional metadata.<a name="line.38"></a>
+<span class="sourceLineNo">039</span>    */<a name="line.39"></a>
+<span class="sourceLineNo">040</span>   public XmlBeanPropertyMeta(BeanPropertyMeta bpm) {<a name="line.40"></a>
+<span class="sourceLineNo">041</span>      super(bpm);<a name="line.41"></a>
+<span class="sourceLineNo">042</span><a name="line.42"></a>
+<span class="sourceLineNo">043</span>      if (bpm.getInnerField() != null)<a name="line.43"></a>
+<span class="sourceLineNo">044</span>         findXmlInfo(bpm.getInnerField().getAnnotation(Xml.class));<a name="line.44"></a>
+<span class="sourceLineNo">045</span>      if (bpm.getGetter() != null)<a name="line.45"></a>
+<span class="sourceLineNo">046</span>         findXmlInfo(bpm.getGetter().getAnnotation(Xml.class));<a name="line.46"></a>
+<span class="sourceLineNo">047</span>      if (bpm.getSetter() != null)<a name="line.47"></a>
+<span class="sourceLineNo">048</span>         findXmlInfo(bpm.getSetter().getAnnotation(Xml.class));<a name="line.48"></a>
+<span class="sourceLineNo">049</span><a name="line.49"></a>
+<span class="sourceLineNo">050</span>      if (namespace == null)<a name="line.50"></a>
+<span class="sourceLineNo">051</span>         namespace = bpm.getBeanMeta().getClassMeta().getExtendedMeta(XmlClassMeta.class).getNamespace();<a name="line.51"></a>
+<span class="sourceLineNo">052</span>   }<a name="line.52"></a>
+<span class="sourceLineNo">053</span><a name="line.53"></a>
+<span class="sourceLineNo">054</span>   private XmlBeanPropertyMeta() {<a name="line.54"></a>
+<span class="sourceLineNo">055</span>      super(null);<a name="line.55"></a>
+<span class="sourceLineNo">056</span>   }<a name="line.56"></a>
+<span class="sourceLineNo">057</span><a name="line.57"></a>
+<span class="sourceLineNo">058</span>   /**<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    * Returns the XML namespace associated with this bean property.<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    *<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    * &lt;p&gt;<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    * Namespace is determined in the following order of {@link Xml#prefix() @Xml(prefix)} annotation:<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    * &lt;ol&gt;<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    *    &lt;li&gt;Bean property field.<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    *    &lt;li&gt;Bean getter.<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    *    &lt;li&gt;Bean setter.<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    *    &lt;li&gt;Bean class.<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    *    &lt;li&gt;Bean package.<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    *    &lt;li&gt;Bean superclasses.<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    *    &lt;li&gt;Bean superclass packages.<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    *    &lt;li&gt;Bean interfaces.<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    *    &lt;li&gt;Bean interface packages.<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    * &lt;/ol&gt;<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    *<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    * @return The namespace associated with this bean property, or &lt;jk&gt;null&lt;/jk&gt; if no namespace is associated with it.<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    */<a name="line.76"></a>
+<span class="sourceLineNo">077</span>   public Namespace getNamespace() {<a name="line.77"></a>
+<span class="sourceLineNo">078</span>      return namespace;<a name="line.78"></a>
+<span class="sourceLineNo">079</span>   }<a name="line.79"></a>
+<span class="sourceLineNo">080</span><a name="line.80"></a>
+<span class="sourceLineNo">081</span>   /**<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    * Returns the XML format of this property from the {@link Xml#format} annotation on this bean property.<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    *<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    * @return The XML format, or {@link XmlFormat#DEFAULT} if annotation not specified.<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    */<a name="line.85"></a>
+<span class="sourceLineNo">086</span>   public XmlFormat getXmlFormat() {<a name="line.86"></a>
+<span class="sourceLineNo">087</span>      return xmlFormat;<a name="line.87"></a>
+<span class="sourceLineNo">088</span>   }<a name="line.88"></a>
+<span class="sourceLineNo">089</span><a name="line.89"></a>
+<span class="sourceLineNo">090</span>   /**<a name="line.90"></a>
+<span class="sourceLineNo">091</span>    * Returns the child element of this property from the {@link Xml#childName} annotation on this bean property.<a name="line.91"></a>
+<span class="sourceLineNo">092</span>    *<a name="line.92"></a>
+<span class="sourceLineNo">093</span>    * @return The child element, or &lt;jk&gt;null&lt;/jk&gt; if annotation not specified.<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    */<a name="line.94"></a>
+<span class="sourceLineNo">095</span>   public String getChildName() {<a name="line.95"></a>
+<span class="sourceLineNo">096</span>      return childName;<a name="line.96"></a>
+<span class="sourceLineNo">097</span>   }<a name="line.97"></a>
+<span class="sourceLineNo">098</span><a name="line.98"></a>
+<span class="sourceLineNo">099</span>   private void findXmlInfo(Xml xml) {<a name="line.99"></a>
+<span class="sourceLineNo">100</span>      if (xml == null)<a name="line.100"></a>
+<span class="sourceLineNo">101</span>         return;<a name="line.101"></a>
+<span class="sourceLineNo">102</span>      BeanPropertyMeta bpm = getBeanPropertyMeta();<a name="line.102"></a>
+<span class="sourceLineNo">103</span>      ClassMeta&lt;?&gt; cmProperty = bpm.getClassMeta();<a name="line.103"></a>
+<span class="sourceLineNo">104</span>      ClassMeta&lt;?&gt; cmBean = bpm.getBeanMeta().getClassMeta();<a name="line.104"></a>
+<span class="sourceLineNo">105</span>      String name = bpm.getName();<a name="line.105"></a>
+<span class="sourceLineNo">106</span><a name="line.106"></a>
+<span class="sourceLineNo">107</span>      List&lt;Xml&gt; xmls = bpm.findAnnotations(Xml.class);<a name="line.107"></a>
+<span class="sourceLineNo">108</span>      List&lt;XmlSchema&gt; schemas = bpm.findAnnotations(XmlSchema.class);<a name="line.108"></a>
+<span class="sourceLineNo">109</span>      namespace = XmlUtils.findNamespace(xmls, schemas);<a name="line.109"></a>
+<span class="sourceLineNo">110</span><a name="line.110"></a>
+<span class="sourceLineNo">111</span>      if (xmlFormat == XmlFormat.DEFAULT)<a name="line.111"></a>
+<span class="sourceLineNo">112</span>         xmlFormat = xml.format();<a name="line.112"></a>
+<span class="sourceLineNo">113</span><a name="line.113"></a>
+<span class="sourceLineNo">114</span>      boolean isCollection = cmProperty.isCollectionOrArray();<a name="line.114"></a>
+<span class="sourceLineNo">115</span><a name="line.115"></a>
+<span class="sourceLineNo">116</span>      String cen = xml.childName();<a name="line.116"></a>
+<span class="sourceLineNo">117</span>      if ((! cen.isEmpty()) &amp;&amp; (! isCollection))<a name="line.117"></a>
+<span class="sourceLineNo">118</span>         throw new BeanRuntimeException(cmProperty.getInnerClass(),<a name="line.118"></a>
+<span class="sourceLineNo">119</span>            "Annotation error on property ''{0}''.  @Xml.childName can only be specified on collections and arrays.", name);<a name="line.119"></a>
+<span class="sourceLineNo">120</span><a name="line.120"></a>
+<span class="sourceLineNo">121</span>      if (xmlFormat == XmlFormat.COLLAPSED) {<a name="line.121"></a>
+<span class="sourceLineNo">122</span>         if (isCollection) {<a name="line.122"></a>
+<span class="sourceLineNo">123</span>            if (cen.isEmpty())<a name="line.123"></a>
+<span class="sourceLineNo">124</span>               cen = cmProperty.getExtendedMeta(XmlClassMeta.class).getChildName();<a name="line.124"></a>
+<span class="sourceLineNo">125</span>            if (cen == null || cen.isEmpty())<a name="line.125"></a>
+<span class="sourceLineNo">126</span>               cen = cmProperty.getElementType().getDictionaryName();<a name="line.126"></a>
+<span class="sourceLineNo">127</span>            if (cen == null || cen.isEmpty())<a name="line.127"></a>
+<span class="sourceLineNo">128</span>               cen = name;<a name="line.128"></a>
+<span class="sourceLineNo">129</span>         } else {<a name="line.129"></a>
+<span class="sourceLineNo">130</span>            throw new BeanRuntimeException(cmBean.getInnerClass(),<a name="line.130"></a>
+<span class="sourceLineNo">131</span>               "Annotation error on property ''{0}''.  @Xml.format=COLLAPSED can only be specified on collections and arrays.", name);<a name="line.131"></a>
+<span class="sourceLineNo">132</span>         }<a name="line.132"></a>
+<span class="sourceLineNo">133</span>         if (cen.isEmpty() &amp;&amp; isCollection)<a name="line.133"></a>
+<span class="sourceLineNo">134</span>            cen = cmProperty.getDictionaryName();<a name="line.134"></a>
+<span class="sourceLineNo">135</span>      }<a name="line.135"></a>
+<span class="sourceLineNo">136</span><a name="line.136"></a>
+<span class="sourceLineNo">137</span>      if (! cen.isEmpty())<a name="line.137"></a>
+<span class="sourceLineNo">138</span>         childName = cen;<a name="line.138"></a>
+<span class="sourceLineNo">139</span>   }<a name="line.139"></a>
+<span class="sourceLineNo">140</span>}<a name="line.140"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

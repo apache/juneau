@@ -1,0 +1,642 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.rest;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import static org.apache.juneau.internal.StringUtils.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span><a name="line.16"></a>
+<span class="sourceLineNo">017</span>import java.io.*;<a name="line.17"></a>
+<span class="sourceLineNo">018</span>import java.nio.charset.*;<a name="line.18"></a>
+<span class="sourceLineNo">019</span>import java.util.*;<a name="line.19"></a>
+<span class="sourceLineNo">020</span><a name="line.20"></a>
+<span class="sourceLineNo">021</span>import javax.servlet.*;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>import javax.servlet.http.*;<a name="line.22"></a>
+<span class="sourceLineNo">023</span><a name="line.23"></a>
+<span class="sourceLineNo">024</span>import org.apache.juneau.*;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>import org.apache.juneau.encoders.*;<a name="line.25"></a>
+<span class="sourceLineNo">026</span>import org.apache.juneau.http.*;<a name="line.26"></a>
+<span class="sourceLineNo">027</span>import org.apache.juneau.httppart.*;<a name="line.27"></a>
+<span class="sourceLineNo">028</span>import org.apache.juneau.httppart.bean.*;<a name="line.28"></a>
+<span class="sourceLineNo">029</span>import org.apache.juneau.rest.annotation.*;<a name="line.29"></a>
+<span class="sourceLineNo">030</span>import org.apache.juneau.rest.exception.*;<a name="line.30"></a>
+<span class="sourceLineNo">031</span>import org.apache.juneau.rest.util.*;<a name="line.31"></a>
+<span class="sourceLineNo">032</span>import org.apache.juneau.serializer.*;<a name="line.32"></a>
+<span class="sourceLineNo">033</span><a name="line.33"></a>
+<span class="sourceLineNo">034</span>/**<a name="line.34"></a>
+<span class="sourceLineNo">035</span> * Represents an HTTP response for a REST resource.<a name="line.35"></a>
+<span class="sourceLineNo">036</span> *<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * &lt;p&gt;<a name="line.37"></a>
+<span class="sourceLineNo">038</span> * Essentially an extended {@link HttpServletResponse} with some special convenience methods that allow you to easily<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * output POJOs as responses.<a name="line.39"></a>
+<span class="sourceLineNo">040</span> *<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * &lt;p&gt;<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * Since this class extends {@link HttpServletResponse}, developers are free to use these convenience methods, or<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * revert to using lower level methods like any other servlet response.<a name="line.43"></a>
+<span class="sourceLineNo">044</span> *<a name="line.44"></a>
+<span class="sourceLineNo">045</span> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.45"></a>
+<span class="sourceLineNo">046</span> * &lt;p class='bcode w800'&gt;<a name="line.46"></a>
+<span class="sourceLineNo">047</span> *    &lt;ja&gt;@RestMethod&lt;/ja&gt;(name=&lt;jsf&gt;GET&lt;/jsf&gt;)<a name="line.47"></a>
+<span class="sourceLineNo">048</span> *    &lt;jk&gt;public void&lt;/jk&gt; doGet(RestRequest req, RestResponse res) {<a name="line.48"></a>
+<span class="sourceLineNo">049</span> *       res.setOutput(&lt;js&gt;"Simple string response"&lt;/js&gt;);<a name="line.49"></a>
+<span class="sourceLineNo">050</span> *    }<a name="line.50"></a>
+<span class="sourceLineNo">051</span> * &lt;/p&gt;<a name="line.51"></a>
+<span class="sourceLineNo">052</span> *<a name="line.52"></a>
+<span class="sourceLineNo">053</span> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;<a name="line.53"></a>
+<span class="sourceLineNo">054</span> * &lt;ul&gt;<a name="line.54"></a>
+<span class="sourceLineNo">055</span> *    &lt;li class='link'&gt;{@doc juneau-rest-server.RestMethod.RestResponse}<a name="line.55"></a>
+<span class="sourceLineNo">056</span> * &lt;/ul&gt;<a name="line.56"></a>
+<span class="sourceLineNo">057</span> */<a name="line.57"></a>
+<span class="sourceLineNo">058</span>public final class RestResponse extends HttpServletResponseWrapper {<a name="line.58"></a>
+<span class="sourceLineNo">059</span><a name="line.59"></a>
+<span class="sourceLineNo">060</span>   private final RestRequest request;<a name="line.60"></a>
+<span class="sourceLineNo">061</span>   private RestJavaMethod restJavaMethod;<a name="line.61"></a>
+<span class="sourceLineNo">062</span>   private Object output;                       // The POJO being sent to the output.<a name="line.62"></a>
+<span class="sourceLineNo">063</span>   private boolean isNullOutput;                // The output is null (as opposed to not being set at all)<a name="line.63"></a>
+<span class="sourceLineNo">064</span>   private RequestProperties properties;                // Response properties<a name="line.64"></a>
+<span class="sourceLineNo">065</span>   private ServletOutputStream sos;<a name="line.65"></a>
+<span class="sourceLineNo">066</span>   private FinishableServletOutputStream os;<a name="line.66"></a>
+<span class="sourceLineNo">067</span>   private FinishablePrintWriter w;<a name="line.67"></a>
+<span class="sourceLineNo">068</span>   private HtmlDocBuilder htmlDocBuilder;<a name="line.68"></a>
+<span class="sourceLineNo">069</span><a name="line.69"></a>
+<span class="sourceLineNo">070</span>   private ResponseBeanMeta responseMeta;<a name="line.70"></a>
+<span class="sourceLineNo">071</span><a name="line.71"></a>
+<span class="sourceLineNo">072</span>   /**<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    * Constructor.<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    */<a name="line.74"></a>
+<span class="sourceLineNo">075</span>   RestResponse(RestContext context, RestRequest req, HttpServletResponse res) throws BadRequest {<a name="line.75"></a>
+<span class="sourceLineNo">076</span>      super(res);<a name="line.76"></a>
+<span class="sourceLineNo">077</span>      this.request = req;<a name="line.77"></a>
+<span class="sourceLineNo">078</span><a name="line.78"></a>
+<span class="sourceLineNo">079</span>      for (Map.Entry&lt;String,Object&gt; e : context.getDefaultResponseHeaders().entrySet())<a name="line.79"></a>
+<span class="sourceLineNo">080</span>         setHeader(e.getKey(), asString(e.getValue()));<a name="line.80"></a>
+<span class="sourceLineNo">081</span><a name="line.81"></a>
+<span class="sourceLineNo">082</span>      try {<a name="line.82"></a>
+<span class="sourceLineNo">083</span>         String passThroughHeaders = req.getHeader("x-response-headers");<a name="line.83"></a>
+<span class="sourceLineNo">084</span>         if (passThroughHeaders != null) {<a name="line.84"></a>
+<span class="sourceLineNo">085</span>            HttpPartParser p = context.getPartParser();<a name="line.85"></a>
+<span class="sourceLineNo">086</span>            ObjectMap m = p.createPartSession(req.getParserSessionArgs()).parse(HttpPartType.HEADER, null, passThroughHeaders, context.getBeanContext().getClassMeta(ObjectMap.class));<a name="line.86"></a>
+<span class="sourceLineNo">087</span>            for (Map.Entry&lt;String,Object&gt; e : m.entrySet())<a name="line.87"></a>
+<span class="sourceLineNo">088</span>               setHeader(e.getKey(), e.getValue().toString());<a name="line.88"></a>
+<span class="sourceLineNo">089</span>         }<a name="line.89"></a>
+<span class="sourceLineNo">090</span>      } catch (Exception e1) {<a name="line.90"></a>
+<span class="sourceLineNo">091</span>         throw new BadRequest(e1, "Invalid format for header 'x-response-headers'.  Must be in URL-encoded format.");<a name="line.91"></a>
+<span class="sourceLineNo">092</span>      }<a name="line.92"></a>
+<span class="sourceLineNo">093</span>   }<a name="line.93"></a>
+<span class="sourceLineNo">094</span><a name="line.94"></a>
+<span class="sourceLineNo">095</span>   /*<a name="line.95"></a>
+<span class="sourceLineNo">096</span>    * Called from RestServlet after a match has been made but before the guard or method invocation.<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    */<a name="line.97"></a>
+<span class="sourceLineNo">098</span>   final void init(RestJavaMethod rjm, RequestProperties properties) throws NotAcceptable {<a name="line.98"></a>
+<span class="sourceLineNo">099</span>      this.restJavaMethod = rjm;<a name="line.99"></a>
+<span class="sourceLineNo">100</span>      this.properties = properties;<a name="line.100"></a>
+<span class="sourceLineNo">101</span><a name="line.101"></a>
+<span class="sourceLineNo">102</span>      // Find acceptable charset<a name="line.102"></a>
+<span class="sourceLineNo">103</span>      String h = request.getHeader("accept-charset");<a name="line.103"></a>
+<span class="sourceLineNo">104</span>      String charset = null;<a name="line.104"></a>
+<span class="sourceLineNo">105</span>      if (h == null)<a name="line.105"></a>
+<span class="sourceLineNo">106</span>         charset = rjm.defaultCharset;<a name="line.106"></a>
+<span class="sourceLineNo">107</span>      else for (MediaTypeRange r : MediaTypeRange.parse(h)) {<a name="line.107"></a>
+<span class="sourceLineNo">108</span>         if (r.getQValue() &gt; 0) {<a name="line.108"></a>
+<span class="sourceLineNo">109</span>            MediaType mt = r.getMediaType();<a name="line.109"></a>
+<span class="sourceLineNo">110</span>            if (mt.getType().equals("*"))<a name="line.110"></a>
+<span class="sourceLineNo">111</span>               charset = rjm.defaultCharset;<a name="line.111"></a>
+<span class="sourceLineNo">112</span>            else if (Charset.isSupported(mt.getType()))<a name="line.112"></a>
+<span class="sourceLineNo">113</span>               charset = mt.getType();<a name="line.113"></a>
+<span class="sourceLineNo">114</span>            if (charset != null)<a name="line.114"></a>
+<span class="sourceLineNo">115</span>               break;<a name="line.115"></a>
+<span class="sourceLineNo">116</span>         }<a name="line.116"></a>
+<span class="sourceLineNo">117</span>      }<a name="line.117"></a>
+<span class="sourceLineNo">118</span><a name="line.118"></a>
+<span class="sourceLineNo">119</span>      if (charset == null)<a name="line.119"></a>
+<span class="sourceLineNo">120</span>         throw new NotAcceptable("No supported charsets in header ''Accept-Charset'': ''{0}''", request.getHeader("Accept-Charset"));<a name="line.120"></a>
+<span class="sourceLineNo">121</span>      super.setCharacterEncoding(charset);<a name="line.121"></a>
+<span class="sourceLineNo">122</span><a name="line.122"></a>
+<span class="sourceLineNo">123</span>      this.responseMeta = rjm.responseMeta;<a name="line.123"></a>
+<span class="sourceLineNo">124</span>   }<a name="line.124"></a>
+<span class="sourceLineNo">125</span><a name="line.125"></a>
+<span class="sourceLineNo">126</span>   /**<a name="line.126"></a>
+<span class="sourceLineNo">127</span>    * Gets the serializer group for the response.<a name="line.127"></a>
+<span class="sourceLineNo">128</span>    *<a name="line.128"></a>
+<span class="sourceLineNo">129</span>    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;<a name="line.129"></a>
+<span class="sourceLineNo">130</span>    * &lt;ul&gt;<a name="line.130"></a>
+<span class="sourceLineNo">131</span>    *    &lt;li class='link'&gt;{@doc juneau-rest-server.Serializers}<a name="line.131"></a>
+<span class="sourceLineNo">132</span>    * &lt;/ul&gt;<a name="line.132"></a>
+<span class="sourceLineNo">133</span>    *<a name="line.133"></a>
+<span class="sourceLineNo">134</span>    * @return The serializer group for the response.<a name="line.134"></a>
+<span class="sourceLineNo">135</span>    */<a name="line.135"></a>
+<span class="sourceLineNo">136</span>   public SerializerGroup getSerializers() {<a name="line.136"></a>
+<span class="sourceLineNo">137</span>      return restJavaMethod == null ? SerializerGroup.EMPTY : restJavaMethod.serializers;<a name="line.137"></a>
+<span class="sourceLineNo">138</span>   }<a name="line.138"></a>
+<span class="sourceLineNo">139</span><a name="line.139"></a>
+<span class="sourceLineNo">140</span>   /**<a name="line.140"></a>
+<span class="sourceLineNo">141</span>    * Returns the media types that are valid for &lt;code&gt;Accept&lt;/code&gt; headers on the request.<a name="line.141"></a>
+<span class="sourceLineNo">142</span>    *<a name="line.142"></a>
+<span class="sourceLineNo">143</span>    * @return The set of media types registered in the parser group of this request.<a name="line.143"></a>
+<span class="sourceLineNo">144</span>    */<a name="line.144"></a>
+<span class="sourceLineNo">145</span>   public List&lt;MediaType&gt; getSupportedMediaTypes() {<a name="line.145"></a>
+<span class="sourceLineNo">146</span>      return restJavaMethod == null ? Collections.&lt;MediaType&gt;emptyList() : restJavaMethod.supportedAcceptTypes;<a name="line.146"></a>
+<span class="sourceLineNo">147</span>   }<a name="line.147"></a>
+<span class="sourceLineNo">148</span><a name="line.148"></a>
+<span class="sourceLineNo">149</span>   /**<a name="line.149"></a>
+<span class="sourceLineNo">150</span>    * Returns the codings that are valid for &lt;code&gt;Accept-Encoding&lt;/code&gt; and &lt;code&gt;Content-Encoding&lt;/code&gt; headers on<a name="line.150"></a>
+<span class="sourceLineNo">151</span>    * the request.<a name="line.151"></a>
+<span class="sourceLineNo">152</span>    *<a name="line.152"></a>
+<span class="sourceLineNo">153</span>    * @return The set of media types registered in the parser group of this request.<a name="line.153"></a>
+<span class="sourceLineNo">154</span>    * @throws RestServletException<a name="line.154"></a>
+<span class="sourceLineNo">155</span>    */<a name="line.155"></a>
+<span class="sourceLineNo">156</span>   public List&lt;String&gt; getSupportedEncodings() throws RestServletException {<a name="line.156"></a>
+<span class="sourceLineNo">157</span>      return restJavaMethod == null ? Collections.&lt;String&gt;emptyList() : restJavaMethod.encoders.getSupportedEncodings();<a name="line.157"></a>
+<span class="sourceLineNo">158</span>   }<a name="line.158"></a>
+<span class="sourceLineNo">159</span><a name="line.159"></a>
+<span class="sourceLineNo">160</span>   /**<a name="line.160"></a>
+<span class="sourceLineNo">161</span>    * Sets the HTTP output on the response.<a name="line.161"></a>
+<span class="sourceLineNo">162</span>    *<a name="line.162"></a>
+<span class="sourceLineNo">163</span>    * &lt;p&gt;<a name="line.163"></a>
+<span class="sourceLineNo">164</span>    * The object type can be anything allowed by the registered response handlers.<a name="line.164"></a>
+<span class="sourceLineNo">165</span>    *<a name="line.165"></a>
+<span class="sourceLineNo">166</span>    * &lt;p&gt;<a name="line.166"></a>
+<span class="sourceLineNo">167</span>    * Calling this method is functionally equivalent to returning the object in the REST Java method.<a name="line.167"></a>
+<span class="sourceLineNo">168</span>    *<a name="line.168"></a>
+<span class="sourceLineNo">169</span>    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.169"></a>
+<span class="sourceLineNo">170</span>    * &lt;p class='bcode w800'&gt;<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    *    &lt;ja&gt;@RestMethod&lt;/ja&gt;(..., path=&lt;js&gt;"/example2/{personId}"&lt;/js&gt;)<a name="line.171"></a>
+<span class="sourceLineNo">172</span>    *    &lt;jk&gt;public void&lt;/jk&gt; doGet2(RestResponse res, &lt;ja&gt;@Path&lt;/ja&gt; UUID personId) {<a name="line.172"></a>
+<span class="sourceLineNo">173</span>    *       Person p = getPersonById(personId);<a name="line.173"></a>
+<span class="sourceLineNo">174</span>    *       res.setOutput(p);<a name="line.174"></a>
+<span class="sourceLineNo">175</span>    *    }<a name="line.175"></a>
+<span class="sourceLineNo">176</span>    * &lt;/p&gt;<a name="line.176"></a>
+<span class="sourceLineNo">177</span>    *<a name="line.177"></a>
+<span class="sourceLineNo">178</span>    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;<a name="line.178"></a>
+<span class="sourceLineNo">179</span>    * &lt;ul class='spaced-list'&gt;<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    *    &lt;li&gt;<a name="line.180"></a>
+<span class="sourceLineNo">181</span>    *       Calling this method with a &lt;jk&gt;null&lt;/jk&gt; value is NOT the same as not calling this method at all.<a name="line.181"></a>
+<span class="sourceLineNo">182</span>    *       &lt;br&gt;A &lt;jk&gt;null&lt;/jk&gt; output value means we want to serialize &lt;jk&gt;null&lt;/jk&gt; as a response (e.g. as a JSON &lt;code&gt;null&lt;/code&gt;).<a name="line.182"></a>
+<span class="sourceLineNo">183</span>    *       &lt;br&gt;Not calling this method or returning a value means you're handing the response yourself via the underlying stream or writer.<a name="line.183"></a>
+<span class="sourceLineNo">184</span>    *       &lt;br&gt;This distinction affects the {@link #hasOutput()} method behavior.<a name="line.184"></a>
+<span class="sourceLineNo">185</span>    * &lt;/ul&gt;<a name="line.185"></a>
+<span class="sourceLineNo">186</span>    *<a name="line.186"></a>
+<span class="sourceLineNo">187</span>    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;<a name="line.187"></a>
+<span class="sourceLineNo">188</span>    * &lt;ul&gt;<a name="line.188"></a>
+<span class="sourceLineNo">189</span>    *    &lt;li class='jf'&gt;{@link RestContext#REST_responseHandlers}<a name="line.189"></a>
+<span class="sourceLineNo">190</span>    *    &lt;li class='link'&gt;{@doc juneau-rest-server.RestMethod.MethodReturnTypes}<a name="line.190"></a>
+<span class="sourceLineNo">191</span>    * &lt;/ul&gt;<a name="line.191"></a>
+<span class="sourceLineNo">192</span>    *<a name="line.192"></a>
+<span class="sourceLineNo">193</span>    * @param output The output to serialize to the connection.<a name="line.193"></a>
+<span class="sourceLineNo">194</span>    * @return This object (for method chaining).<a name="line.194"></a>
+<span class="sourceLineNo">195</span>    */<a name="line.195"></a>
+<span class="sourceLineNo">196</span>   public RestResponse setOutput(Object output) {<a name="line.196"></a>
+<span class="sourceLineNo">197</span>      this.output = output;<a name="line.197"></a>
+<span class="sourceLineNo">198</span>      this.isNullOutput = output == null;<a name="line.198"></a>
+<span class="sourceLineNo">199</span>      return this;<a name="line.199"></a>
+<span class="sourceLineNo">200</span>   }<a name="line.200"></a>
+<span class="sourceLineNo">201</span><a name="line.201"></a>
+<span class="sourceLineNo">202</span>   /**<a name="line.202"></a>
+<span class="sourceLineNo">203</span>    * Returns a programmatic interface for setting properties for the HTML doc view.<a name="line.203"></a>
+<span class="sourceLineNo">204</span>    *<a name="line.204"></a>
+<span class="sourceLineNo">205</span>    * &lt;p&gt;<a name="line.205"></a>
+<span class="sourceLineNo">206</span>    * This is the programmatic equivalent to the {@link RestMethod#htmldoc() @RestMethod(htmldoc)} annotation.<a name="line.206"></a>
+<span class="sourceLineNo">207</span>    *<a name="line.207"></a>
+<span class="sourceLineNo">208</span>    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.208"></a>
+<span class="sourceLineNo">209</span>    * &lt;p class='bcode w800'&gt;<a name="line.209"></a>
+<span class="sourceLineNo">210</span>    *    &lt;jc&gt;// Declarative approach.&lt;/jc&gt;<a name="line.210"></a>
+<span class="sourceLineNo">211</span>    *    &lt;ja&gt;@RestMethod&lt;/ja&gt;(<a name="line.211"></a>
+<span class="sourceLineNo">212</span>    *       htmldoc=&lt;ja&gt;@HtmlDoc&lt;/ja&gt;(<a name="line.212"></a>
+<span class="sourceLineNo">213</span>    *          header={<a name="line.213"></a>
+<span class="sourceLineNo">214</span>    *             &lt;js&gt;"&amp;lt;p&amp;gt;This is my REST interface&amp;lt;/p&amp;gt;"&lt;/js&gt;<a name="line.214"></a>
+<span class="sourceLineNo">215</span>    *          },<a name="line.215"></a>
+<span class="sourceLineNo">216</span>    *          aside={<a name="line.216"></a>
+<span class="sourceLineNo">217</span>    *             &lt;js&gt;"&amp;lt;p&amp;gt;Custom aside content&amp;lt;/p&amp;gt;"&lt;/js&gt;<a name="line.217"></a>
+<span class="sourceLineNo">218</span>    *          }<a name="line.218"></a>
+<span class="sourceLineNo">219</span>    *       )<a name="line.219"></a>
+<span class="sourceLineNo">220</span>    *    )<a name="line.220"></a>
+<span class="sourceLineNo">221</span>    *    &lt;jk&gt;public&lt;/jk&gt; Object doGet(RestResponse res) {<a name="line.221"></a>
+<span class="sourceLineNo">222</span>    *<a name="line.222"></a>
+<span class="sourceLineNo">223</span>    *       &lt;jc&gt;// Equivalent programmatic approach.&lt;/jc&gt;<a name="line.223"></a>
+<span class="sourceLineNo">224</span>    *       res.getHtmlDocBuilder()<a name="line.224"></a>
+<span class="sourceLineNo">225</span>    *          .header(&lt;js&gt;"&amp;lt;p&amp;gt;This is my REST interface&amp;lt;/p&amp;gt;"&lt;/js&gt;)<a name="line.225"></a>
+<span class="sourceLineNo">226</span>    *          .aside(&lt;js&gt;"&amp;lt;p&amp;gt;Custom aside content&amp;lt;/p&amp;gt;"&lt;/js&gt;);<a name="line.226"></a>
+<span class="sourceLineNo">227</span>    *    }<a name="line.227"></a>
+<span class="sourceLineNo">228</span>    * &lt;/p&gt;<a name="line.228"></a>
+<span class="sourceLineNo">229</span>    *<a name="line.229"></a>
+<span class="sourceLineNo">230</span>    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;<a name="line.230"></a>
+<span class="sourceLineNo">231</span>    * &lt;ul&gt;<a name="line.231"></a>
+<span class="sourceLineNo">232</span>    *    &lt;li class='ja'&gt;{@link RestMethod#htmldoc()}<a name="line.232"></a>
+<span class="sourceLineNo">233</span>    *    &lt;li class='link'&gt;{@doc juneau-rest-server.HtmlDocAnnotation}<a name="line.233"></a>
+<span class="sourceLineNo">234</span>    * &lt;/ul&gt;<a name="line.234"></a>
+<span class="sourceLineNo">235</span>    *<a name="line.235"></a>
+<span class="sourceLineNo">236</span>    * @return A new programmatic interface for setting properties for the HTML doc view.<a name="line.236"></a>
+<span class="sourceLineNo">237</span>    */<a name="line.237"></a>
+<span class="sourceLineNo">238</span>   public HtmlDocBuilder getHtmlDocBuilder() {<a name="line.238"></a>
+<span class="sourceLineNo">239</span>      if (htmlDocBuilder == null)<a name="line.239"></a>
+<span class="sourceLineNo">240</span>         htmlDocBuilder = new HtmlDocBuilder(properties);<a name="line.240"></a>
+<span class="sourceLineNo">241</span>      return htmlDocBuilder;<a name="line.241"></a>
+<span class="sourceLineNo">242</span>   }<a name="line.242"></a>
+<span class="sourceLineNo">243</span><a name="line.243"></a>
+<span class="sourceLineNo">244</span>   /**<a name="line.244"></a>
+<span class="sourceLineNo">245</span>    * Retrieve the properties active for this request.<a name="line.245"></a>
+<span class="sourceLineNo">246</span>    *<a name="line.246"></a>
+<span class="sourceLineNo">247</span>    * &lt;p&gt;<a name="line.247"></a>
+<span class="sourceLineNo">248</span>    * This contains all resource and method level properties from the following:<a name="line.248"></a>
+<span class="sourceLineNo">249</span>    * &lt;ul&gt;<a name="line.249"></a>
+<span class="sourceLineNo">250</span>    *    &lt;li class='ja'&gt;{@link RestResource#properties()}<a name="line.250"></a>
+<span class="sourceLineNo">251</span>    *    &lt;li class='ja'&gt;{@link RestMethod#properties()}<a name="line.251"></a>
+<span class="sourceLineNo">252</span>    *    &lt;li class='jm'&gt;{@link RestContextBuilder#set(String, Object)}<a name="line.252"></a>
+<span class="sourceLineNo">253</span>    * &lt;/ul&gt;<a name="line.253"></a>
+<span class="sourceLineNo">254</span>    *<a name="line.254"></a>
+<span class="sourceLineNo">255</span>    * &lt;p&gt;<a name="line.255"></a>
+<span class="sourceLineNo">256</span>    * The returned object is modifiable and allows you to override session-level properties before<a name="line.256"></a>
+<span class="sourceLineNo">257</span>    * they get passed to the serializers.<a name="line.257"></a>
+<span class="sourceLineNo">258</span>    * &lt;br&gt;However, properties are open-ended, and can be used for any purpose.<a name="line.258"></a>
+<span class="sourceLineNo">259</span>    *<a name="line.259"></a>
+<span class="sourceLineNo">260</span>    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.260"></a>
+<span class="sourceLineNo">261</span>    * &lt;p class='bcode w800'&gt;<a name="line.261"></a>
+<span class="sourceLineNo">262</span>    *    &lt;ja&gt;@RestMethod&lt;/ja&gt;(<a name="line.262"></a>
+<span class="sourceLineNo">263</span>    *       properties={<a name="line.263"></a>
+<span class="sourceLineNo">264</span>    *          &lt;ja&gt;@Property&lt;/ja&gt;(name=&lt;jsf&gt;SERIALIZER_sortMaps&lt;/jsf&gt;, value=&lt;js&gt;"false"&lt;/js&gt;)<a name="line.264"></a>
+<span class="sourceLineNo">265</span>    *       }<a name="line.265"></a>
+<span class="sourceLineNo">266</span>    *    )<a name="line.266"></a>
+<span class="sourceLineNo">267</span>    *    &lt;jk&gt;public&lt;/jk&gt; Map doGet(RestResponse res, &lt;ja&gt;@Query&lt;/ja&gt;(&lt;js&gt;"sortMaps"&lt;/js&gt;) Boolean sortMaps) {<a name="line.267"></a>
+<span class="sourceLineNo">268</span>    *<a name="line.268"></a>
+<span class="sourceLineNo">269</span>    *       &lt;jc&gt;// Override value if specified through query parameter.&lt;/jc&gt;<a name="line.269"></a>
+<span class="sourceLineNo">270</span>    *       &lt;jk&gt;if&lt;/jk&gt; (sortMaps != &lt;jk&gt;null&lt;/jk&gt;)<a name="line.270"></a>
+<span class="sourceLineNo">271</span>    *          res.getProperties().put(&lt;jsf&gt;SERIALIZER_sortMaps&lt;/jsf&gt;, sortMaps);<a name="line.271"></a>
+<span class="sourceLineNo">272</span>    *<a name="line.272"></a>
+<span class="sourceLineNo">273</span>    *       &lt;jk&gt;return&lt;/jk&gt; &lt;jsm&gt;getMyMap&lt;/jsm&gt;();<a name="line.273"></a>
+<span class="sourceLineNo">274</span>    *    }<a name="line.274"></a>
+<span class="sourceLineNo">275</span>    * &lt;/p&gt;<a name="line.275"></a>
+<span class="sourceLineNo">276</span>    *<a name="line.276"></a>
+<span class="sourceLineNo">277</span>    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;<a name="line.277"></a>
+<span class="sourceLineNo">278</span>    * &lt;ul&gt;<a name="line.278"></a>
+<span class="sourceLineNo">279</span>    *    &lt;li class='jm'&gt;{@link #prop(String, Object)}<a name="line.279"></a>
+<span class="sourceLineNo">280</span>    *    &lt;li class='link'&gt;{@doc juneau-rest-server.Properties}<a name="line.280"></a>
+<span class="sourceLineNo">281</span>    * &lt;/ul&gt;<a name="line.281"></a>
+<span class="sourceLineNo">282</span>    *<a name="line.282"></a>
+<span class="sourceLineNo">283</span>    * @return The properties active for this request.<a name="line.283"></a>
+<span class="sourceLineNo">284</span>    */<a name="line.284"></a>
+<span class="sourceLineNo">285</span>   public RequestProperties getProperties() {<a name="line.285"></a>
+<span class="sourceLineNo">286</span>      return properties;<a name="line.286"></a>
+<span class="sourceLineNo">287</span>   }<a name="line.287"></a>
+<span class="sourceLineNo">288</span><a name="line.288"></a>
+<span class="sourceLineNo">289</span>   /**<a name="line.289"></a>
+<span class="sourceLineNo">290</span>    * Shortcut for calling &lt;code&gt;getProperties().append(name, value);&lt;/code&gt; fluently.<a name="line.290"></a>
+<span class="sourceLineNo">291</span>    *<a name="line.291"></a>
+<span class="sourceLineNo">292</span>    * @param name The property name.<a name="line.292"></a>
+<span class="sourceLineNo">293</span>    * @param value The property value.<a name="line.293"></a>
+<span class="sourceLineNo">294</span>    * @return This object (for method chaining).<a name="line.294"></a>
+<span class="sourceLineNo">295</span>    */<a name="line.295"></a>
+<span class="sourceLineNo">296</span>   public RestResponse prop(String name, Object value) {<a name="line.296"></a>
+<span class="sourceLineNo">297</span>      this.properties.append(name, value);<a name="line.297"></a>
+<span class="sourceLineNo">298</span>      return this;<a name="line.298"></a>
+<span class="sourceLineNo">299</span>   }<a name="line.299"></a>
+<span class="sourceLineNo">300</span><a name="line.300"></a>
+<span class="sourceLineNo">301</span>   /**<a name="line.301"></a>
+<span class="sourceLineNo">302</span>    * Shortcut method that allows you to use var-args to simplify setting array output.<a name="line.302"></a>
+<span class="sourceLineNo">303</span>    *<a name="line.303"></a>
+<span class="sourceLineNo">304</span>    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.304"></a>
+<span class="sourceLineNo">305</span>    * &lt;p class='bcode w800'&gt;<a name="line.305"></a>
+<span class="sourceLineNo">306</span>    *    &lt;jc&gt;// Instead of...&lt;/jc&gt;<a name="line.306"></a>
+<span class="sourceLineNo">307</span>    *    response.setOutput(&lt;jk&gt;new&lt;/jk&gt; Object[]{x,y,z});<a name="line.307"></a>
+<span class="sourceLineNo">308</span>    *<a name="line.308"></a>
+<span class="sourceLineNo">309</span>    *    &lt;jc&gt;// ...call this...&lt;/jc&gt;<a name="line.309"></a>
+<span class="sourceLineNo">310</span>    *    response.setOutput(x,y,z);<a name="line.310"></a>
+<span class="sourceLineNo">311</span>    * &lt;/p&gt;<a name="line.311"></a>
+<span class="sourceLineNo">312</span>    *<a name="line.312"></a>
+<span class="sourceLineNo">313</span>    * @param output The output to serialize to the connection.<a name="line.313"></a>
+<span class="sourceLineNo">314</span>    * @return This object (for method chaining).<a name="line.314"></a>
+<span class="sourceLineNo">315</span>    */<a name="line.315"></a>
+<span class="sourceLineNo">316</span>   public RestResponse setOutputs(Object...output) {<a name="line.316"></a>
+<span class="sourceLineNo">317</span>      this.output = output;<a name="line.317"></a>
+<span class="sourceLineNo">318</span>      return this;<a name="line.318"></a>
+<span class="sourceLineNo">319</span>   }<a name="line.319"></a>
+<span class="sourceLineNo">320</span><a name="line.320"></a>
+<span class="sourceLineNo">321</span>   /**<a name="line.321"></a>
+<span class="sourceLineNo">322</span>    * Returns the output that was set by calling {@link #setOutput(Object)}.<a name="line.322"></a>
+<span class="sourceLineNo">323</span>    *<a name="line.323"></a>
+<span class="sourceLineNo">324</span>    * @return The output object.<a name="line.324"></a>
+<span class="sourceLineNo">325</span>    */<a name="line.325"></a>
+<span class="sourceLineNo">326</span>   public Object getOutput() {<a name="line.326"></a>
+<span class="sourceLineNo">327</span>      return output;<a name="line.327"></a>
+<span class="sourceLineNo">328</span>   }<a name="line.328"></a>
+<span class="sourceLineNo">329</span><a name="line.329"></a>
+<span class="sourceLineNo">330</span>   /**<a name="line.330"></a>
+<span class="sourceLineNo">331</span>    * Returns &lt;jk&gt;true&lt;/jk&gt; if this response has any output associated with it.<a name="line.331"></a>
+<span class="sourceLineNo">332</span>    *<a name="line.332"></a>
+<span class="sourceLineNo">333</span>    * @return &lt;jk&gt;true&lt;/jk&gt; if {@link #setOutput(Object)} has been called, even if the value passed was &lt;jk&gt;null&lt;/jk&gt;.<a name="line.333"></a>
+<span class="sourceLineNo">334</span>    */<a name="line.334"></a>
+<span class="sourceLineNo">335</span>   public boolean hasOutput() {<a name="line.335"></a>
+<span class="sourceLineNo">336</span>      return output != null || isNullOutput;<a name="line.336"></a>
+<span class="sourceLineNo">337</span>   }<a name="line.337"></a>
+<span class="sourceLineNo">338</span><a name="line.338"></a>
+<span class="sourceLineNo">339</span>   /**<a name="line.339"></a>
+<span class="sourceLineNo">340</span>    * Sets the output to a plain-text message regardless of the content type.<a name="line.340"></a>
+<span class="sourceLineNo">341</span>    *<a name="line.341"></a>
+<span class="sourceLineNo">342</span>    * @param text The output text to send.<a name="line.342"></a>
+<span class="sourceLineNo">343</span>    * @return This object (for method chaining).<a name="line.343"></a>
+<span class="sourceLineNo">344</span>    * @throws IOException If a problem occurred trying to write to the writer.<a name="line.344"></a>
+<span class="sourceLineNo">345</span>    */<a name="line.345"></a>
+<span class="sourceLineNo">346</span>   public RestResponse sendPlainText(String text) throws IOException {<a name="line.346"></a>
+<span class="sourceLineNo">347</span>      setContentType("text/plain");<a name="line.347"></a>
+<span class="sourceLineNo">348</span>      getNegotiatedWriter().write(text);<a name="line.348"></a>
+<span class="sourceLineNo">349</span>      return this;<a name="line.349"></a>
+<span class="sourceLineNo">350</span>   }<a name="line.350"></a>
+<span class="sourceLineNo">351</span><a name="line.351"></a>
+<span class="sourceLineNo">352</span>   /**<a name="line.352"></a>
+<span class="sourceLineNo">353</span>    * Equivalent to {@link HttpServletResponse#getOutputStream()}, except wraps the output stream if an {@link Encoder}<a name="line.353"></a>
+<span class="sourceLineNo">354</span>    * was found that matched the &lt;code&gt;Accept-Encoding&lt;/code&gt; header.<a name="line.354"></a>
+<span class="sourceLineNo">355</span>    *<a name="line.355"></a>
+<span class="sourceLineNo">356</span>    * @return A negotiated output stream.<a name="line.356"></a>
+<span class="sourceLineNo">357</span>    * @throws NotAcceptable If unsupported Accept-Encoding value specified.<a name="line.357"></a>
+<span class="sourceLineNo">358</span>    * @throws IOException<a name="line.358"></a>
+<span class="sourceLineNo">359</span>    */<a name="line.359"></a>
+<span class="sourceLineNo">360</span>   public FinishableServletOutputStream getNegotiatedOutputStream() throws NotAcceptable, IOException {<a name="line.360"></a>
+<span class="sourceLineNo">361</span>      if (os == null) {<a name="line.361"></a>
+<span class="sourceLineNo">362</span>         Encoder encoder = null;<a name="line.362"></a>
+<span class="sourceLineNo">363</span>         EncoderGroup encoders = restJavaMethod == null ? EncoderGroup.DEFAULT : restJavaMethod.encoders;<a name="line.363"></a>
+<span class="sourceLineNo">364</span><a name="line.364"></a>
+<span class="sourceLineNo">365</span>         String ae = request.getHeader("Accept-Encoding");<a name="line.365"></a>
+<span class="sourceLineNo">366</span>         if (! (ae == null || ae.isEmpty())) {<a name="line.366"></a>
+<span class="sourceLineNo">367</span>            EncoderMatch match = encoders.getEncoderMatch(ae);<a name="line.367"></a>
+<span class="sourceLineNo">368</span>            if (match == null) {<a name="line.368"></a>
+<span class="sourceLineNo">369</span>               // Identity should always match unless "identity;q=0" or "*;q=0" is specified.<a name="line.369"></a>
+<span class="sourceLineNo">370</span>               if (ae.matches(".*(identity|\\*)\\s*;\\s*q\\s*=\\s*(0(?!\\.)|0\\.0).*")) {<a name="line.370"></a>
+<span class="sourceLineNo">371</span>                  throw new NotAcceptable(<a name="line.371"></a>
+<span class="sourceLineNo">372</span>                     "Unsupported encoding in request header ''Accept-Encoding'': ''{0}''\n\tSupported codings: {1}",<a name="line.372"></a>
+<span class="sourceLineNo">373</span>                     ae, encoders.getSupportedEncodings()<a name="line.373"></a>
+<span class="sourceLineNo">374</span>                  );<a name="line.374"></a>
+<span class="sourceLineNo">375</span>               }<a name="line.375"></a>
+<span class="sourceLineNo">376</span>            } else {<a name="line.376"></a>
+<span class="sourceLineNo">377</span>               encoder = match.getEncoder();<a name="line.377"></a>
+<span class="sourceLineNo">378</span>               String encoding = match.getEncoding().toString();<a name="line.378"></a>
+<span class="sourceLineNo">379</span><a name="line.379"></a>
+<span class="sourceLineNo">380</span>               // Some clients don't recognize identity as an encoding, so don't set it.<a name="line.380"></a>
+<span class="sourceLineNo">381</span>               if (! encoding.equals("identity"))<a name="line.381"></a>
+<span class="sourceLineNo">382</span>                  setHeader("content-encoding", encoding);<a name="line.382"></a>
+<span class="sourceLineNo">383</span>            }<a name="line.383"></a>
+<span class="sourceLineNo">384</span>         }<a name="line.384"></a>
+<span class="sourceLineNo">385</span>         @SuppressWarnings("resource")<a name="line.385"></a>
+<span class="sourceLineNo">386</span>         ServletOutputStream sos = getOutputStream();<a name="line.386"></a>
+<span class="sourceLineNo">387</span>         os = new FinishableServletOutputStream(encoder == null ? sos : encoder.getOutputStream(sos));<a name="line.387"></a>
+<span class="sourceLineNo">388</span>      }<a name="line.388"></a>
+<span class="sourceLineNo">389</span>      return os;<a name="line.389"></a>
+<span class="sourceLineNo">390</span>   }<a name="line.390"></a>
+<span class="sourceLineNo">391</span><a name="line.391"></a>
+<span class="sourceLineNo">392</span>   @Override /* ServletResponse */<a name="line.392"></a>
+<span class="sourceLineNo">393</span>   public ServletOutputStream getOutputStream() throws IOException {<a name="line.393"></a>
+<span class="sourceLineNo">394</span>      if (sos == null)<a name="line.394"></a>
+<span class="sourceLineNo">395</span>         sos = super.getOutputStream();<a name="line.395"></a>
+<span class="sourceLineNo">396</span>      return sos;<a name="line.396"></a>
+<span class="sourceLineNo">397</span>   }<a name="line.397"></a>
+<span class="sourceLineNo">398</span><a name="line.398"></a>
+<span class="sourceLineNo">399</span>   /**<a name="line.399"></a>
+<span class="sourceLineNo">400</span>    * Returns &lt;jk&gt;true&lt;/jk&gt; if {@link #getOutputStream()} has been called.<a name="line.400"></a>
+<span class="sourceLineNo">401</span>    *<a name="line.401"></a>
+<span class="sourceLineNo">402</span>    * @return &lt;jk&gt;true&lt;/jk&gt; if {@link #getOutputStream()} has been called.<a name="line.402"></a>
+<span class="sourceLineNo">403</span>    */<a name="line.403"></a>
+<span class="sourceLineNo">404</span>   public boolean getOutputStreamCalled() {<a name="line.404"></a>
+<span class="sourceLineNo">405</span>      return sos != null;<a name="line.405"></a>
+<span class="sourceLineNo">406</span>   }<a name="line.406"></a>
+<span class="sourceLineNo">407</span><a name="line.407"></a>
+<span class="sourceLineNo">408</span>   /**<a name="line.408"></a>
+<span class="sourceLineNo">409</span>    * Returns the writer to the response body.<a name="line.409"></a>
+<span class="sourceLineNo">410</span>    *<a name="line.410"></a>
+<span class="sourceLineNo">411</span>    * &lt;p&gt;<a name="line.411"></a>
+<span class="sourceLineNo">412</span>    * This methods bypasses any specified encoders and returns a regular unbuffered writer.<a name="line.412"></a>
+<span class="sourceLineNo">413</span>    * Use the {@link #getNegotiatedWriter()} method if you want to use the matched encoder (if any).<a name="line.413"></a>
+<span class="sourceLineNo">414</span>    */<a name="line.414"></a>
+<span class="sourceLineNo">415</span>   @Override /* ServletResponse */<a name="line.415"></a>
+<span class="sourceLineNo">416</span>   public PrintWriter getWriter() throws IOException {<a name="line.416"></a>
+<span class="sourceLineNo">417</span>      return getWriter(true);<a name="line.417"></a>
+<span class="sourceLineNo">418</span>   }<a name="line.418"></a>
+<span class="sourceLineNo">419</span><a name="line.419"></a>
+<span class="sourceLineNo">420</span>   /**<a name="line.420"></a>
+<span class="sourceLineNo">421</span>    * Convenience method meant to be used when rendering directly to a browser with no buffering.<a name="line.421"></a>
+<span class="sourceLineNo">422</span>    *<a name="line.422"></a>
+<span class="sourceLineNo">423</span>    * &lt;p&gt;<a name="line.423"></a>
+<span class="sourceLineNo">424</span>    * Sets the header &lt;js&gt;"x-content-type-options=nosniff"&lt;/js&gt; so that output is rendered immediately on IE and Chrome<a name="line.424"></a>
+<span class="sourceLineNo">425</span>    * without any buffering for content-type sniffing.<a name="line.425"></a>
+<span class="sourceLineNo">426</span>    *<a name="line.426"></a>
+<span class="sourceLineNo">427</span>    * &lt;p&gt;<a name="line.427"></a>
+<span class="sourceLineNo">428</span>    * This can be useful if you want to render a streaming 'console' on a web page.<a name="line.428"></a>
+<span class="sourceLineNo">429</span>    *<a name="line.429"></a>
+<span class="sourceLineNo">430</span>    * @param contentType The value to set as the &lt;code&gt;Content-Type&lt;/code&gt; on the response.<a name="line.430"></a>
+<span class="sourceLineNo">431</span>    * @return The raw writer.<a name="line.431"></a>
+<span class="sourceLineNo">432</span>    * @throws IOException<a name="line.432"></a>
+<span class="sourceLineNo">433</span>    */<a name="line.433"></a>
+<span class="sourceLineNo">434</span>   public PrintWriter getDirectWriter(String contentType) throws IOException {<a name="line.434"></a>
+<span class="sourceLineNo">435</span>      setContentType(contentType);<a name="line.435"></a>
+<span class="sourceLineNo">436</span>      setHeader("X-Content-Type-Options", "nosniff");<a name="line.436"></a>
+<span class="sourceLineNo">437</span>      setHeader("Content-Encoding", "identity");<a name="line.437"></a>
+<span class="sourceLineNo">438</span>      return getWriter();<a name="line.438"></a>
+<span class="sourceLineNo">439</span>   }<a name="line.439"></a>
+<span class="sourceLineNo">440</span><a name="line.440"></a>
+<span class="sourceLineNo">441</span>   /**<a name="line.441"></a>
+<span class="sourceLineNo">442</span>    * Equivalent to {@link HttpServletResponse#getWriter()}, except wraps the output stream if an {@link Encoder} was<a name="line.442"></a>
+<span class="sourceLineNo">443</span>    * found that matched the &lt;code&gt;Accept-Encoding&lt;/code&gt; header and sets the &lt;code&gt;Content-Encoding&lt;/code&gt;<a name="line.443"></a>
+<span class="sourceLineNo">444</span>    * header to the appropriate value.<a name="line.444"></a>
+<span class="sourceLineNo">445</span>    *<a name="line.445"></a>
+<span class="sourceLineNo">446</span>    * @return The negotiated writer.<a name="line.446"></a>
+<span class="sourceLineNo">447</span>    * @throws NotAcceptable If unsupported charset in request header Accept-Charset.<a name="line.447"></a>
+<span class="sourceLineNo">448</span>    * @throws IOException<a name="line.448"></a>
+<span class="sourceLineNo">449</span>    */<a name="line.449"></a>
+<span class="sourceLineNo">450</span>   public FinishablePrintWriter getNegotiatedWriter() throws NotAcceptable, IOException {<a name="line.450"></a>
+<span class="sourceLineNo">451</span>      return getWriter(false);<a name="line.451"></a>
+<span class="sourceLineNo">452</span>   }<a name="line.452"></a>
+<span class="sourceLineNo">453</span><a name="line.453"></a>
+<span class="sourceLineNo">454</span>   @SuppressWarnings("resource")<a name="line.454"></a>
+<span class="sourceLineNo">455</span>   private FinishablePrintWriter getWriter(boolean raw) throws NotAcceptable, IOException {<a name="line.455"></a>
+<span class="sourceLineNo">456</span>      if (w != null)<a name="line.456"></a>
+<span class="sourceLineNo">457</span>         return w;<a name="line.457"></a>
+<span class="sourceLineNo">458</span><a name="line.458"></a>
+<span class="sourceLineNo">459</span>      // If plain text requested, override it now.<a name="line.459"></a>
+<span class="sourceLineNo">460</span>      if (request.isPlainText())<a name="line.460"></a>
+<span class="sourceLineNo">461</span>         setHeader("Content-Type", "text/plain");<a name="line.461"></a>
+<span class="sourceLineNo">462</span><a name="line.462"></a>
+<span class="sourceLineNo">463</span>      try {<a name="line.463"></a>
+<span class="sourceLineNo">464</span>         OutputStream out = (raw ? getOutputStream() : getNegotiatedOutputStream());<a name="line.464"></a>
+<span class="sourceLineNo">465</span>         w = new FinishablePrintWriter(out, getCharacterEncoding());<a name="line.465"></a>
+<span class="sourceLineNo">466</span>         return w;<a name="line.466"></a>
+<span class="sourceLineNo">467</span>      } catch (UnsupportedEncodingException e) {<a name="line.467"></a>
+<span class="sourceLineNo">468</span>         String ce = getCharacterEncoding();<a name="line.468"></a>
+<span class="sourceLineNo">469</span>         setCharacterEncoding("UTF-8");<a name="line.469"></a>
+<span class="sourceLineNo">470</span>         throw new NotAcceptable("Unsupported charset in request header ''Accept-Charset'': ''{0}''", ce);<a name="line.470"></a>
+<span class="sourceLineNo">471</span>      }<a name="line.471"></a>
+<span class="sourceLineNo">472</span>   }<a name="line.472"></a>
+<span class="sourceLineNo">473</span><a name="line.473"></a>
+<span class="sourceLineNo">474</span>   /**<a name="line.474"></a>
+<span class="sourceLineNo">475</span>    * Returns the &lt;code&gt;Content-Type&lt;/code&gt; header stripped of the charset attribute if present.<a name="line.475"></a>
+<span class="sourceLineNo">476</span>    *<a name="line.476"></a>
+<span class="sourceLineNo">477</span>    * @return The &lt;code&gt;media-type&lt;/code&gt; portion of the &lt;code&gt;Content-Type&lt;/code&gt; header.<a name="line.477"></a>
+<span class="sourceLineNo">478</span>    */<a name="line.478"></a>
+<span class="sourceLineNo">479</span>   public MediaType getMediaType() {<a name="line.479"></a>
+<span class="sourceLineNo">480</span>      return MediaType.forString(getContentType());<a name="line.480"></a>
+<span class="sourceLineNo">481</span>   }<a name="line.481"></a>
+<span class="sourceLineNo">482</span><a name="line.482"></a>
+<span class="sourceLineNo">483</span>   /**<a name="line.483"></a>
+<span class="sourceLineNo">484</span>    * Redirects to the specified URI.<a name="line.484"></a>
+<span class="sourceLineNo">485</span>    *<a name="line.485"></a>
+<span class="sourceLineNo">486</span>    * &lt;p&gt;<a name="line.486"></a>
+<span class="sourceLineNo">487</span>    * Relative URIs are always interpreted as relative to the context root.<a name="line.487"></a>
+<span class="sourceLineNo">488</span>    * This is similar to how WAS handles redirect requests, and is different from how Tomcat handles redirect requests.<a name="line.488"></a>
+<span class="sourceLineNo">489</span>    */<a name="line.489"></a>
+<span class="sourceLineNo">490</span>   @Override /* ServletResponse */<a name="line.490"></a>
+<span class="sourceLineNo">491</span>   public void sendRedirect(String uri) throws IOException {<a name="line.491"></a>
+<span class="sourceLineNo">492</span>      char c = (uri.length() &gt; 0 ? uri.charAt(0) : 0);<a name="line.492"></a>
+<span class="sourceLineNo">493</span>      if (c != '/' &amp;&amp; uri.indexOf("://") == -1)<a name="line.493"></a>
+<span class="sourceLineNo">494</span>         uri = request.getContextPath() + '/' + uri;<a name="line.494"></a>
+<span class="sourceLineNo">495</span>      super.sendRedirect(uri);<a name="line.495"></a>
+<span class="sourceLineNo">496</span>   }<a name="line.496"></a>
+<span class="sourceLineNo">497</span><a name="line.497"></a>
+<span class="sourceLineNo">498</span>   @Override /* ServletResponse */<a name="line.498"></a>
+<span class="sourceLineNo">499</span>   public void setHeader(String name, String value) {<a name="line.499"></a>
+<span class="sourceLineNo">500</span>      // Jetty doesn't set the content type correctly if set through this method.<a name="line.500"></a>
+<span class="sourceLineNo">501</span>      // Tomcat/WAS does.<a name="line.501"></a>
+<span class="sourceLineNo">502</span>      if (name.equalsIgnoreCase("Content-Type"))<a name="line.502"></a>
+<span class="sourceLineNo">503</span>         super.setContentType(value);<a name="line.503"></a>
+<span class="sourceLineNo">504</span>      else<a name="line.504"></a>
+<span class="sourceLineNo">505</span>         super.setHeader(name, value);<a name="line.505"></a>
+<span class="sourceLineNo">506</span>   }<a name="line.506"></a>
+<span class="sourceLineNo">507</span><a name="line.507"></a>
+<span class="sourceLineNo">508</span>   /**<a name="line.508"></a>
+<span class="sourceLineNo">509</span>    * Same as {@link #setHeader(String, String)} but header is defined as a response part<a name="line.509"></a>
+<span class="sourceLineNo">510</span>    *<a name="line.510"></a>
+<span class="sourceLineNo">511</span>    * @param h Header to set.<a name="line.511"></a>
+<span class="sourceLineNo">512</span>    * @throws SchemaValidationException<a name="line.512"></a>
+<span class="sourceLineNo">513</span>    * @throws SerializeException<a name="line.513"></a>
+<span class="sourceLineNo">514</span>    */<a name="line.514"></a>
+<span class="sourceLineNo">515</span>   public void setHeader(HttpPart h) throws SchemaValidationException, SerializeException {<a name="line.515"></a>
+<span class="sourceLineNo">516</span>      setHeader(h.getName(), h.asString());<a name="line.516"></a>
+<span class="sourceLineNo">517</span>   }<a name="line.517"></a>
+<span class="sourceLineNo">518</span><a name="line.518"></a>
+<span class="sourceLineNo">519</span>   /**<a name="line.519"></a>
+<span class="sourceLineNo">520</span>    * Returns the metadata about this response.<a name="line.520"></a>
+<span class="sourceLineNo">521</span>    *<a name="line.521"></a>
+<span class="sourceLineNo">522</span>    * @return<a name="line.522"></a>
+<span class="sourceLineNo">523</span>    *    The metadata about this response.<a name="line.523"></a>
+<span class="sourceLineNo">524</span>    *    &lt;jk&gt;Never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.524"></a>
+<span class="sourceLineNo">525</span>    */<a name="line.525"></a>
+<span class="sourceLineNo">526</span>   public ResponseBeanMeta getResponseMeta() {<a name="line.526"></a>
+<span class="sourceLineNo">527</span>      return responseMeta;<a name="line.527"></a>
+<span class="sourceLineNo">528</span>   }<a name="line.528"></a>
+<span class="sourceLineNo">529</span><a name="line.529"></a>
+<span class="sourceLineNo">530</span>   /**<a name="line.530"></a>
+<span class="sourceLineNo">531</span>    * Sets metadata about this response.<a name="line.531"></a>
+<span class="sourceLineNo">532</span>    *<a name="line.532"></a>
+<span class="sourceLineNo">533</span>    * @param rbm The metadata about this response.<a name="line.533"></a>
+<span class="sourceLineNo">534</span>    * @return This object (for method chaining).<a name="line.534"></a>
+<span class="sourceLineNo">535</span>    */<a name="line.535"></a>
+<span class="sourceLineNo">536</span>   public RestResponse setResponseMeta(ResponseBeanMeta rbm) {<a name="line.536"></a>
+<span class="sourceLineNo">537</span>      this.responseMeta = rbm;<a name="line.537"></a>
+<span class="sourceLineNo">538</span>      return this;<a name="line.538"></a>
+<span class="sourceLineNo">539</span>   }<a name="line.539"></a>
+<span class="sourceLineNo">540</span><a name="line.540"></a>
+<span class="sourceLineNo">541</span>   /**<a name="line.541"></a>
+<span class="sourceLineNo">542</span>    * Returns &lt;jk&gt;true&lt;/jk&gt; if this response object is of the specified type.<a name="line.542"></a>
+<span class="sourceLineNo">543</span>    *<a name="line.543"></a>
+<span class="sourceLineNo">544</span>    * @param c The type to check against.<a name="line.544"></a>
+<span class="sourceLineNo">545</span>    * @return &lt;jk&gt;true&lt;/jk&gt; if this response object is of the specified type.<a name="line.545"></a>
+<span class="sourceLineNo">546</span>    */<a name="line.546"></a>
+<span class="sourceLineNo">547</span>   public boolean isOutputType(Class&lt;?&gt; c) {<a name="line.547"></a>
+<span class="sourceLineNo">548</span>      return c.isInstance(output);<a name="line.548"></a>
+<span class="sourceLineNo">549</span>   }<a name="line.549"></a>
+<span class="sourceLineNo">550</span><a name="line.550"></a>
+<span class="sourceLineNo">551</span>   /**<a name="line.551"></a>
+<span class="sourceLineNo">552</span>    * Returns this value cast to the specified class.<a name="line.552"></a>
+<span class="sourceLineNo">553</span>    *<a name="line.553"></a>
+<span class="sourceLineNo">554</span>    * @param c The class to cast to.<a name="line.554"></a>
+<span class="sourceLineNo">555</span>    * @return This value cast to the specified class.<a name="line.555"></a>
+<span class="sourceLineNo">556</span>    */<a name="line.556"></a>
+<span class="sourceLineNo">557</span>   @SuppressWarnings("unchecked")<a name="line.557"></a>
+<span class="sourceLineNo">558</span>   public &lt;T&gt; T getOutput(Class&lt;T&gt; c) {<a name="line.558"></a>
+<span class="sourceLineNo">559</span>      return (T)output;<a name="line.559"></a>
+<span class="sourceLineNo">560</span>   }<a name="line.560"></a>
+<span class="sourceLineNo">561</span><a name="line.561"></a>
+<span class="sourceLineNo">562</span>   @Override /* ServletResponse */<a name="line.562"></a>
+<span class="sourceLineNo">563</span>   public void flushBuffer() throws IOException {<a name="line.563"></a>
+<span class="sourceLineNo">564</span>      if (w != null)<a name="line.564"></a>
+<span class="sourceLineNo">565</span>         w.flush();<a name="line.565"></a>
+<span class="sourceLineNo">566</span>      if (os != null)<a name="line.566"></a>
+<span class="sourceLineNo">567</span>         os.flush();<a name="line.567"></a>
+<span class="sourceLineNo">568</span>      super.flushBuffer();<a name="line.568"></a>
+<span class="sourceLineNo">569</span>   }<a name="line.569"></a>
+<span class="sourceLineNo">570</span>}<a name="line.570"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

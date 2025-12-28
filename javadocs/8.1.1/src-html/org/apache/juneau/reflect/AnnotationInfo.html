@@ -1,0 +1,303 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.reflect;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import java.lang.annotation.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>import java.lang.reflect.*;<a name="line.16"></a>
+<span class="sourceLineNo">017</span>import java.util.*;<a name="line.17"></a>
+<span class="sourceLineNo">018</span><a name="line.18"></a>
+<span class="sourceLineNo">019</span>import org.apache.juneau.*;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>import org.apache.juneau.annotation.*;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>import org.apache.juneau.internal.*;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>import org.apache.juneau.marshall.*;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>import org.apache.juneau.svl.*;<a name="line.23"></a>
+<span class="sourceLineNo">024</span><a name="line.24"></a>
+<span class="sourceLineNo">025</span>/**<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * Represents an annotation instance on a class and the class it was found on.<a name="line.26"></a>
+<span class="sourceLineNo">027</span> *<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * @param &lt;T&gt; The annotation type.<a name="line.28"></a>
+<span class="sourceLineNo">029</span> */<a name="line.29"></a>
+<span class="sourceLineNo">030</span>public class AnnotationInfo&lt;T extends Annotation&gt; {<a name="line.30"></a>
+<span class="sourceLineNo">031</span><a name="line.31"></a>
+<span class="sourceLineNo">032</span>   private final ClassInfo c;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>   private final MethodInfo m;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>   private final Package p;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>   private final T a;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>   final int rank;<a name="line.36"></a>
+<span class="sourceLineNo">037</span><a name="line.37"></a>
+<span class="sourceLineNo">038</span>   /**<a name="line.38"></a>
+<span class="sourceLineNo">039</span>    * Constructor.<a name="line.39"></a>
+<span class="sourceLineNo">040</span>    *<a name="line.40"></a>
+<span class="sourceLineNo">041</span>    * @param c The class where the annotation was found.<a name="line.41"></a>
+<span class="sourceLineNo">042</span>    * @param m The method where the annotation was found.<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    * @param p The package where the annotation was found.<a name="line.43"></a>
+<span class="sourceLineNo">044</span>    * @param a The annotation found.<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    */<a name="line.45"></a>
+<span class="sourceLineNo">046</span>   protected AnnotationInfo(ClassInfo c, MethodInfo m, Package p, T a) {<a name="line.46"></a>
+<span class="sourceLineNo">047</span>      this.c = c;<a name="line.47"></a>
+<span class="sourceLineNo">048</span>      this.m = m;<a name="line.48"></a>
+<span class="sourceLineNo">049</span>      this.p = p;<a name="line.49"></a>
+<span class="sourceLineNo">050</span>      this.a = a;<a name="line.50"></a>
+<span class="sourceLineNo">051</span>      this.rank = getRank(a);<a name="line.51"></a>
+<span class="sourceLineNo">052</span>   }<a name="line.52"></a>
+<span class="sourceLineNo">053</span><a name="line.53"></a>
+<span class="sourceLineNo">054</span>   private static int getRank(Object a) {<a name="line.54"></a>
+<span class="sourceLineNo">055</span>      ClassInfo ci = ClassInfo.ofc(a);<a name="line.55"></a>
+<span class="sourceLineNo">056</span>      MethodInfo mi = ci.getPublicMethod("rank");<a name="line.56"></a>
+<span class="sourceLineNo">057</span>      if (mi != null &amp;&amp; mi.hasReturnType(int.class)) {<a name="line.57"></a>
+<span class="sourceLineNo">058</span>         try {<a name="line.58"></a>
+<span class="sourceLineNo">059</span>            return (int)mi.invoke(a);<a name="line.59"></a>
+<span class="sourceLineNo">060</span>         } catch (ExecutableException e) {<a name="line.60"></a>
+<span class="sourceLineNo">061</span>            e.printStackTrace();<a name="line.61"></a>
+<span class="sourceLineNo">062</span>         }<a name="line.62"></a>
+<span class="sourceLineNo">063</span>      }<a name="line.63"></a>
+<span class="sourceLineNo">064</span>      return 0;<a name="line.64"></a>
+<span class="sourceLineNo">065</span>   }<a name="line.65"></a>
+<span class="sourceLineNo">066</span><a name="line.66"></a>
+<span class="sourceLineNo">067</span>   /**<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    * Convenience constructor when annotation is found on a class.<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    *<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    * @param c The class where the annotation was found.<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    * @param a The annotation found.<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    * @return A new {@link AnnotationInfo} object.<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    */<a name="line.73"></a>
+<span class="sourceLineNo">074</span>   public static &lt;T extends Annotation&gt; AnnotationInfo&lt;T&gt; of(ClassInfo c, T a) {<a name="line.74"></a>
+<span class="sourceLineNo">075</span>      return new AnnotationInfo&lt;&gt;(c, null, null, a);<a name="line.75"></a>
+<span class="sourceLineNo">076</span>   }<a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span>   /**<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    * Convenience constructor when annotation is found on a method.<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    *<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    * @param m The method where the annotation was found.<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    * @param a The annotation found.<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    * @return A new {@link AnnotationInfo} object.<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    */<a name="line.84"></a>
+<span class="sourceLineNo">085</span>   public static &lt;T extends Annotation&gt; AnnotationInfo&lt;T&gt; of(MethodInfo m, T a) {<a name="line.85"></a>
+<span class="sourceLineNo">086</span>      return new AnnotationInfo&lt;&gt;(null, m, null, a);<a name="line.86"></a>
+<span class="sourceLineNo">087</span>   }<a name="line.87"></a>
+<span class="sourceLineNo">088</span><a name="line.88"></a>
+<span class="sourceLineNo">089</span>   /**<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    * Convenience constructor when annotation is found on a package.<a name="line.90"></a>
+<span class="sourceLineNo">091</span>    *<a name="line.91"></a>
+<span class="sourceLineNo">092</span>    * @param p The package where the annotation was found.<a name="line.92"></a>
+<span class="sourceLineNo">093</span>    * @param a The annotation found.<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    * @return A new {@link AnnotationInfo} object.<a name="line.94"></a>
+<span class="sourceLineNo">095</span>    */<a name="line.95"></a>
+<span class="sourceLineNo">096</span>   public static &lt;T extends Annotation&gt; AnnotationInfo&lt;T&gt; of(Package p, T a) {<a name="line.96"></a>
+<span class="sourceLineNo">097</span>      return new AnnotationInfo&lt;&gt;(null, null, p, a);<a name="line.97"></a>
+<span class="sourceLineNo">098</span>   }<a name="line.98"></a>
+<span class="sourceLineNo">099</span><a name="line.99"></a>
+<span class="sourceLineNo">100</span>   /**<a name="line.100"></a>
+<span class="sourceLineNo">101</span>    * Returns the class where the annotation was found.<a name="line.101"></a>
+<span class="sourceLineNo">102</span>    *<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    * @return the class where the annotation was found, or &lt;jk&gt;null&lt;/jk&gt; if it wasn't found on a method.<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    */<a name="line.104"></a>
+<span class="sourceLineNo">105</span>   public ClassInfo getClassOn() {<a name="line.105"></a>
+<span class="sourceLineNo">106</span>      return c;<a name="line.106"></a>
+<span class="sourceLineNo">107</span>   }<a name="line.107"></a>
+<span class="sourceLineNo">108</span><a name="line.108"></a>
+<span class="sourceLineNo">109</span>   /**<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    * Returns the method where the annotation was found.<a name="line.110"></a>
+<span class="sourceLineNo">111</span>    *<a name="line.111"></a>
+<span class="sourceLineNo">112</span>    * @return the method where the annotation was found, or &lt;jk&gt;null&lt;/jk&gt; if it wasn't found on a method.<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    */<a name="line.113"></a>
+<span class="sourceLineNo">114</span>   public MethodInfo getMethodOn() {<a name="line.114"></a>
+<span class="sourceLineNo">115</span>      return m;<a name="line.115"></a>
+<span class="sourceLineNo">116</span>   }<a name="line.116"></a>
+<span class="sourceLineNo">117</span><a name="line.117"></a>
+<span class="sourceLineNo">118</span>   /**<a name="line.118"></a>
+<span class="sourceLineNo">119</span>    * Returns the package where the annotation was found.<a name="line.119"></a>
+<span class="sourceLineNo">120</span>    *<a name="line.120"></a>
+<span class="sourceLineNo">121</span>    * @return the package where the annotation was found, or &lt;jk&gt;null&lt;/jk&gt; if it wasn't found on a package.<a name="line.121"></a>
+<span class="sourceLineNo">122</span>    */<a name="line.122"></a>
+<span class="sourceLineNo">123</span>   public Package getPackageOn() {<a name="line.123"></a>
+<span class="sourceLineNo">124</span>      return p;<a name="line.124"></a>
+<span class="sourceLineNo">125</span>   }<a name="line.125"></a>
+<span class="sourceLineNo">126</span><a name="line.126"></a>
+<span class="sourceLineNo">127</span>   /**<a name="line.127"></a>
+<span class="sourceLineNo">128</span>    * Returns the annotation found.<a name="line.128"></a>
+<span class="sourceLineNo">129</span>    *<a name="line.129"></a>
+<span class="sourceLineNo">130</span>    * @return The annotation found.<a name="line.130"></a>
+<span class="sourceLineNo">131</span>    */<a name="line.131"></a>
+<span class="sourceLineNo">132</span>   public T getAnnotation() {<a name="line.132"></a>
+<span class="sourceLineNo">133</span>      return a;<a name="line.133"></a>
+<span class="sourceLineNo">134</span>   }<a name="line.134"></a>
+<span class="sourceLineNo">135</span><a name="line.135"></a>
+<span class="sourceLineNo">136</span>   /**<a name="line.136"></a>
+<span class="sourceLineNo">137</span>    * Converts this object to a readable JSON object for debugging purposes.<a name="line.137"></a>
+<span class="sourceLineNo">138</span>    *<a name="line.138"></a>
+<span class="sourceLineNo">139</span>    * @return A new map showing the attributes of this object as a JSON object.<a name="line.139"></a>
+<span class="sourceLineNo">140</span>    */<a name="line.140"></a>
+<span class="sourceLineNo">141</span>   public ObjectMap toObjectMap() {<a name="line.141"></a>
+<span class="sourceLineNo">142</span>      ObjectMap om = new ObjectMap();<a name="line.142"></a>
+<span class="sourceLineNo">143</span>      if (c != null)<a name="line.143"></a>
+<span class="sourceLineNo">144</span>         om.put("class", c.getSimpleName());<a name="line.144"></a>
+<span class="sourceLineNo">145</span>      if (m != null)<a name="line.145"></a>
+<span class="sourceLineNo">146</span>         om.put("method", m.getShortName());<a name="line.146"></a>
+<span class="sourceLineNo">147</span>      if (p != null)<a name="line.147"></a>
+<span class="sourceLineNo">148</span>         om.put("package", p.getName());<a name="line.148"></a>
+<span class="sourceLineNo">149</span>      ObjectMap oa = new ObjectMap();<a name="line.149"></a>
+<span class="sourceLineNo">150</span>      Class&lt;?&gt; ca = a.annotationType();<a name="line.150"></a>
+<span class="sourceLineNo">151</span>      for (Method m : ca.getDeclaredMethods()) {<a name="line.151"></a>
+<span class="sourceLineNo">152</span>         try {<a name="line.152"></a>
+<span class="sourceLineNo">153</span>            Object v = m.invoke(a);<a name="line.153"></a>
+<span class="sourceLineNo">154</span>            Object d = m.getDefaultValue();<a name="line.154"></a>
+<span class="sourceLineNo">155</span>            if (! Objects.equals(v, d)) {<a name="line.155"></a>
+<span class="sourceLineNo">156</span>               if (! (ArrayUtils.isArray(v) &amp;&amp; Array.getLength(v) == 0 &amp;&amp; Array.getLength(d) == 0))<a name="line.156"></a>
+<span class="sourceLineNo">157</span>                  oa.put(m.getName(), v);<a name="line.157"></a>
+<span class="sourceLineNo">158</span>            }<a name="line.158"></a>
+<span class="sourceLineNo">159</span>         } catch (Exception e) {<a name="line.159"></a>
+<span class="sourceLineNo">160</span>            oa.put(m.getName(), e.getLocalizedMessage());<a name="line.160"></a>
+<span class="sourceLineNo">161</span>         }<a name="line.161"></a>
+<span class="sourceLineNo">162</span>      }<a name="line.162"></a>
+<span class="sourceLineNo">163</span>      om.put("@" + ca.getSimpleName(), oa);<a name="line.163"></a>
+<span class="sourceLineNo">164</span>      return om;<a name="line.164"></a>
+<span class="sourceLineNo">165</span>   }<a name="line.165"></a>
+<span class="sourceLineNo">166</span><a name="line.166"></a>
+<span class="sourceLineNo">167</span>   private Constructor&lt;? extends ConfigApply&lt;?&gt;&gt; configApplyConstructor;<a name="line.167"></a>
+<span class="sourceLineNo">168</span><a name="line.168"></a>
+<span class="sourceLineNo">169</span>   /**<a name="line.169"></a>
+<span class="sourceLineNo">170</span>    * If this annotation has a {@link PropertyStoreApply} annotation, returns an instance of the specified {@link ConfigApply} class.<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    *<a name="line.171"></a>
+<span class="sourceLineNo">172</span>    * @param vrs Variable resolver passed to the {@link ConfigApply} object.<a name="line.172"></a>
+<span class="sourceLineNo">173</span>    * @return A new {@link ConfigApply} object.  Never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.173"></a>
+<span class="sourceLineNo">174</span>    * @throws ExecutableException Exception occurred on invoked constructor/method/field.<a name="line.174"></a>
+<span class="sourceLineNo">175</span>    */<a name="line.175"></a>
+<span class="sourceLineNo">176</span>   @SuppressWarnings("unchecked")<a name="line.176"></a>
+<span class="sourceLineNo">177</span>   public ConfigApply&lt;Annotation&gt; getConfigApply(VarResolverSession vrs) throws ExecutableException {<a name="line.177"></a>
+<span class="sourceLineNo">178</span>      try {<a name="line.178"></a>
+<span class="sourceLineNo">179</span>         if (configApplyConstructor == null) {<a name="line.179"></a>
+<span class="sourceLineNo">180</span>            PropertyStoreApply psa = a.annotationType().getAnnotation(PropertyStoreApply.class);<a name="line.180"></a>
+<span class="sourceLineNo">181</span>            if (psa != null)<a name="line.181"></a>
+<span class="sourceLineNo">182</span>               configApplyConstructor = (Constructor&lt;? extends ConfigApply&lt;?&gt;&gt;)psa.value().getConstructor(Class.class, VarResolverSession.class);<a name="line.182"></a>
+<span class="sourceLineNo">183</span>            if (configApplyConstructor == null)<a name="line.183"></a>
+<span class="sourceLineNo">184</span>               throw new NoSuchFieldError("Could not find ConfigApply constructor for annotation:\n" + toString());<a name="line.184"></a>
+<span class="sourceLineNo">185</span>         }<a name="line.185"></a>
+<span class="sourceLineNo">186</span>         ClassInfo ci = getClassInfo();<a name="line.186"></a>
+<span class="sourceLineNo">187</span>         return (ConfigApply&lt;Annotation&gt;) configApplyConstructor.newInstance(ci == null ? null : ci.inner(), vrs);<a name="line.187"></a>
+<span class="sourceLineNo">188</span>      } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {<a name="line.188"></a>
+<span class="sourceLineNo">189</span>         throw new ExecutableException(e);<a name="line.189"></a>
+<span class="sourceLineNo">190</span>      }<a name="line.190"></a>
+<span class="sourceLineNo">191</span>   }<a name="line.191"></a>
+<span class="sourceLineNo">192</span><a name="line.192"></a>
+<span class="sourceLineNo">193</span>   /**<a name="line.193"></a>
+<span class="sourceLineNo">194</span>    * Returns the class that this annotation was found on.<a name="line.194"></a>
+<span class="sourceLineNo">195</span>    *<a name="line.195"></a>
+<span class="sourceLineNo">196</span>    * @return The class that this annotation was found on, or &lt;jk&gt;null&lt;/jk&gt; if it was found on a package.<a name="line.196"></a>
+<span class="sourceLineNo">197</span>    */<a name="line.197"></a>
+<span class="sourceLineNo">198</span>   public ClassInfo getClassInfo() {<a name="line.198"></a>
+<span class="sourceLineNo">199</span>      if (this.c != null)<a name="line.199"></a>
+<span class="sourceLineNo">200</span>         return this.c;<a name="line.200"></a>
+<span class="sourceLineNo">201</span>      if (this.m != null)<a name="line.201"></a>
+<span class="sourceLineNo">202</span>         return this.m.getDeclaringClass();<a name="line.202"></a>
+<span class="sourceLineNo">203</span>      return null;<a name="line.203"></a>
+<span class="sourceLineNo">204</span>   }<a name="line.204"></a>
+<span class="sourceLineNo">205</span><a name="line.205"></a>
+<span class="sourceLineNo">206</span>   /**<a name="line.206"></a>
+<span class="sourceLineNo">207</span>    * Returns &lt;jk&gt;true&lt;/jk&gt; if this annotation is the specified type.<a name="line.207"></a>
+<span class="sourceLineNo">208</span>    *<a name="line.208"></a>
+<span class="sourceLineNo">209</span>    * @param a The type to test against.<a name="line.209"></a>
+<span class="sourceLineNo">210</span>    * @return &lt;jk&gt;true&lt;/jk&gt; if this annotation is the specified type.<a name="line.210"></a>
+<span class="sourceLineNo">211</span>    */<a name="line.211"></a>
+<span class="sourceLineNo">212</span>   public boolean isType(Class&lt;? extends Annotation&gt; a) {<a name="line.212"></a>
+<span class="sourceLineNo">213</span>      Class&lt;? extends Annotation&gt; at = this.a.annotationType();<a name="line.213"></a>
+<span class="sourceLineNo">214</span>      return at == a;<a name="line.214"></a>
+<span class="sourceLineNo">215</span>   }<a name="line.215"></a>
+<span class="sourceLineNo">216</span><a name="line.216"></a>
+<span class="sourceLineNo">217</span>   /**<a name="line.217"></a>
+<span class="sourceLineNo">218</span>    * Returns &lt;jk&gt;true&lt;/jk&gt; if this annotation has the specified annotation defined on it.<a name="line.218"></a>
+<span class="sourceLineNo">219</span>    *<a name="line.219"></a>
+<span class="sourceLineNo">220</span>    * @param a The annotation to test for.<a name="line.220"></a>
+<span class="sourceLineNo">221</span>    * @return &lt;jk&gt;true&lt;/jk&gt; if this annotation has the specified annotation defined on it.<a name="line.221"></a>
+<span class="sourceLineNo">222</span>    */<a name="line.222"></a>
+<span class="sourceLineNo">223</span>   public boolean hasAnnotation(Class&lt;? extends Annotation&gt; a) {<a name="line.223"></a>
+<span class="sourceLineNo">224</span>      return this.a.annotationType().getAnnotation(a) != null;<a name="line.224"></a>
+<span class="sourceLineNo">225</span>   }<a name="line.225"></a>
+<span class="sourceLineNo">226</span><a name="line.226"></a>
+<span class="sourceLineNo">227</span>   @Override<a name="line.227"></a>
+<span class="sourceLineNo">228</span>   public String toString() {<a name="line.228"></a>
+<span class="sourceLineNo">229</span>      return SimpleJson.DEFAULT_READABLE.toString(toObjectMap());<a name="line.229"></a>
+<span class="sourceLineNo">230</span>   }<a name="line.230"></a>
+<span class="sourceLineNo">231</span>}<a name="line.231"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

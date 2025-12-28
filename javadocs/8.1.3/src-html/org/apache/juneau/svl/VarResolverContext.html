@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.svl;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import static org.apache.juneau.internal.ClassUtils.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>import static org.apache.juneau.internal.CollectionUtils.*;<a name="line.16"></a>
+<span class="sourceLineNo">017</span><a name="line.17"></a>
+<span class="sourceLineNo">018</span>import java.util.*;<a name="line.18"></a>
+<span class="sourceLineNo">019</span>import java.util.concurrent.*;<a name="line.19"></a>
+<span class="sourceLineNo">020</span><a name="line.20"></a>
+<span class="sourceLineNo">021</span>import org.apache.juneau.reflect.*;<a name="line.21"></a>
+<span class="sourceLineNo">022</span><a name="line.22"></a>
+<span class="sourceLineNo">023</span>/**<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * Configurable properties on the {@link VarResolver} class.<a name="line.24"></a>
+<span class="sourceLineNo">025</span> *<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * &lt;p&gt;<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * Used to associate {@link Var Vars} and context objects with {@link VarResolver VarResolvers}.<a name="line.27"></a>
+<span class="sourceLineNo">028</span> *<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * &lt;ul class='seealso'&gt;<a name="line.29"></a>
+<span class="sourceLineNo">030</span> *    &lt;li class='link'&gt;{@doc juneau-marshall.SimpleVariableLanguage.VarResolvers}<a name="line.30"></a>
+<span class="sourceLineNo">031</span> * &lt;/ul&gt;<a name="line.31"></a>
+<span class="sourceLineNo">032</span> */<a name="line.32"></a>
+<span class="sourceLineNo">033</span>public class VarResolverContext {<a name="line.33"></a>
+<span class="sourceLineNo">034</span><a name="line.34"></a>
+<span class="sourceLineNo">035</span>   private final Class&lt;?&gt;[] vars;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>   private final Map&lt;String,Var&gt; varMap;<a name="line.36"></a>
+<span class="sourceLineNo">037</span>   private final Map&lt;String,Object&gt; contextObjects;<a name="line.37"></a>
+<span class="sourceLineNo">038</span><a name="line.38"></a>
+<span class="sourceLineNo">039</span>   /**<a name="line.39"></a>
+<span class="sourceLineNo">040</span>    * Constructor.<a name="line.40"></a>
+<span class="sourceLineNo">041</span>    *<a name="line.41"></a>
+<span class="sourceLineNo">042</span>    * @param vars The Var classes used for resolving string variables.<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    * @param contextObjects Read-only context objects.<a name="line.43"></a>
+<span class="sourceLineNo">044</span>    */<a name="line.44"></a>
+<span class="sourceLineNo">045</span>   public VarResolverContext(Class&lt;? extends Var&gt;[] vars, Map&lt;String,Object&gt; contextObjects) {<a name="line.45"></a>
+<span class="sourceLineNo">046</span><a name="line.46"></a>
+<span class="sourceLineNo">047</span>      this.vars = Arrays.copyOf(vars, vars.length);<a name="line.47"></a>
+<span class="sourceLineNo">048</span><a name="line.48"></a>
+<span class="sourceLineNo">049</span>      Map&lt;String,Var&gt; m = new ConcurrentSkipListMap&lt;&gt;();<a name="line.49"></a>
+<span class="sourceLineNo">050</span>      for (Class&lt;?&gt; c : vars) {<a name="line.50"></a>
+<span class="sourceLineNo">051</span>         ClassInfo ci = ClassInfo.of(c);<a name="line.51"></a>
+<span class="sourceLineNo">052</span>         if (! ci.isChildOf(Var.class))<a name="line.52"></a>
+<span class="sourceLineNo">053</span>            throw new VarResolverException("Invalid variable class ''{0}''.  Must extend from Var.", ci);<a name="line.53"></a>
+<span class="sourceLineNo">054</span>         Var v = castOrCreate(Var.class, c);<a name="line.54"></a>
+<span class="sourceLineNo">055</span>         m.put(v.getName(), v);<a name="line.55"></a>
+<span class="sourceLineNo">056</span>      }<a name="line.56"></a>
+<span class="sourceLineNo">057</span><a name="line.57"></a>
+<span class="sourceLineNo">058</span>      this.varMap = unmodifiableMap(m);<a name="line.58"></a>
+<span class="sourceLineNo">059</span>      this.contextObjects = immutableMap(contextObjects);<a name="line.59"></a>
+<span class="sourceLineNo">060</span>   }<a name="line.60"></a>
+<span class="sourceLineNo">061</span><a name="line.61"></a>
+<span class="sourceLineNo">062</span>   /**<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    * Returns an unmodifiable map of {@link Var Vars} associated with this context.<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    *<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    * @return A map whose keys are var names (e.g. &lt;js&gt;"S"&lt;/js&gt;) and values are {@link Var} instances.<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    */<a name="line.66"></a>
+<span class="sourceLineNo">067</span>   protected Map&lt;String,Var&gt; getVarMap() {<a name="line.67"></a>
+<span class="sourceLineNo">068</span>      return varMap;<a name="line.68"></a>
+<span class="sourceLineNo">069</span>   }<a name="line.69"></a>
+<span class="sourceLineNo">070</span><a name="line.70"></a>
+<span class="sourceLineNo">071</span>   /**<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    * Returns an array of variables define in this variable resolver context.<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    *<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    * @return A new array containing the variables in this context.<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    */<a name="line.75"></a>
+<span class="sourceLineNo">076</span>   protected Class&lt;?&gt;[] getVars() {<a name="line.76"></a>
+<span class="sourceLineNo">077</span>      return Arrays.copyOf(vars, vars.length);<a name="line.77"></a>
+<span class="sourceLineNo">078</span>   }<a name="line.78"></a>
+<span class="sourceLineNo">079</span><a name="line.79"></a>
+<span class="sourceLineNo">080</span>   /**<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    * Returns the context object with the specified name.<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    *<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    * @param name The name of the context object.<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    * @return The context object, or &lt;jk&gt;null&lt;/jk&gt; if no context object is specified with that name.<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    */<a name="line.85"></a>
+<span class="sourceLineNo">086</span>   protected Object getContextObject(String name) {<a name="line.86"></a>
+<span class="sourceLineNo">087</span>      return contextObjects == null ? null : contextObjects.get(name);<a name="line.87"></a>
+<span class="sourceLineNo">088</span>   }<a name="line.88"></a>
+<span class="sourceLineNo">089</span><a name="line.89"></a>
+<span class="sourceLineNo">090</span>   /**<a name="line.90"></a>
+<span class="sourceLineNo">091</span>    * Returns the context map of this variable resolver context.<a name="line.91"></a>
+<span class="sourceLineNo">092</span>    *<a name="line.92"></a>
+<span class="sourceLineNo">093</span>    * @return An unmodifiable map of the context objects of this variable resolver context.<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    */<a name="line.94"></a>
+<span class="sourceLineNo">095</span>   protected Map&lt;String,Object&gt; getContextObjects() {<a name="line.95"></a>
+<span class="sourceLineNo">096</span>      return contextObjects;<a name="line.96"></a>
+<span class="sourceLineNo">097</span>   }<a name="line.97"></a>
+<span class="sourceLineNo">098</span>}<a name="line.98"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

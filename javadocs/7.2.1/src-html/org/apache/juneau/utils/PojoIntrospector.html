@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.utils;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import java.io.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>import java.lang.reflect.*;<a name="line.16"></a>
+<span class="sourceLineNo">017</span><a name="line.17"></a>
+<span class="sourceLineNo">018</span>import org.apache.juneau.internal.*;<a name="line.18"></a>
+<span class="sourceLineNo">019</span>import org.apache.juneau.json.*;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>import org.apache.juneau.parser.*;<a name="line.20"></a>
+<span class="sourceLineNo">021</span><a name="line.21"></a>
+<span class="sourceLineNo">022</span>/**<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * Used to invoke methods on {@code Objects} using arguments in serialized form.<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * &lt;p class='bcode w800'&gt;<a name="line.26"></a>
+<span class="sourceLineNo">027</span> *    String s = &lt;js&gt;"foobar"&lt;/js&gt;;<a name="line.27"></a>
+<span class="sourceLineNo">028</span> *    String s2 = (String)&lt;jk&gt;new&lt;/jk&gt; PojoIntrospector(s)<a name="line.28"></a>
+<span class="sourceLineNo">029</span> *       .invoke(&lt;js&gt;"substring(int,int)"&lt;/js&gt;, &lt;js&gt;"[3,6]"&lt;/js&gt;);  &lt;jc&gt;// "bar"&lt;/jc&gt;<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * &lt;/p&gt;<a name="line.30"></a>
+<span class="sourceLineNo">031</span> */<a name="line.31"></a>
+<span class="sourceLineNo">032</span>public final class PojoIntrospector {<a name="line.32"></a>
+<span class="sourceLineNo">033</span><a name="line.33"></a>
+<span class="sourceLineNo">034</span>   private final Object o;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>   private final ReaderParser p;<a name="line.35"></a>
+<span class="sourceLineNo">036</span><a name="line.36"></a>
+<span class="sourceLineNo">037</span>   /**<a name="line.37"></a>
+<span class="sourceLineNo">038</span>    * Constructor.<a name="line.38"></a>
+<span class="sourceLineNo">039</span>    *<a name="line.39"></a>
+<span class="sourceLineNo">040</span>    * @param o The object on which Java methods will be invoked.<a name="line.40"></a>
+<span class="sourceLineNo">041</span>    * @param p The parser to use to parse the method arguments.<a name="line.41"></a>
+<span class="sourceLineNo">042</span>    * If &lt;jk&gt;null&lt;/jk&gt;, {@link JsonParser#DEFAULT} is used.<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    */<a name="line.43"></a>
+<span class="sourceLineNo">044</span>   public PojoIntrospector(Object o, ReaderParser p) {<a name="line.44"></a>
+<span class="sourceLineNo">045</span>      if (p == null)<a name="line.45"></a>
+<span class="sourceLineNo">046</span>         p = JsonParser.DEFAULT;<a name="line.46"></a>
+<span class="sourceLineNo">047</span>      this.o = o;<a name="line.47"></a>
+<span class="sourceLineNo">048</span>      this.p = p;<a name="line.48"></a>
+<span class="sourceLineNo">049</span>   }<a name="line.49"></a>
+<span class="sourceLineNo">050</span><a name="line.50"></a>
+<span class="sourceLineNo">051</span>   /**<a name="line.51"></a>
+<span class="sourceLineNo">052</span>    * Shortcut for calling &lt;code&gt;&lt;jk&gt;new&lt;/jk&gt; PojoIntrospector(o, &lt;jk&gt;null&lt;/jk&gt;);&lt;/code&gt;<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    *<a name="line.53"></a>
+<span class="sourceLineNo">054</span>    * @param o The object on which Java methods will be invoked.<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    */<a name="line.55"></a>
+<span class="sourceLineNo">056</span>   public PojoIntrospector(Object o) {<a name="line.56"></a>
+<span class="sourceLineNo">057</span>      this(o, null);<a name="line.57"></a>
+<span class="sourceLineNo">058</span>   }<a name="line.58"></a>
+<span class="sourceLineNo">059</span><a name="line.59"></a>
+<span class="sourceLineNo">060</span>   /**<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    * Primary method.<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    *<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    * &lt;p&gt;<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    * Invokes the specified method on this bean.<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    *<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    * @param method The method being invoked.<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    * @param args<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    *    The arguments to pass as parameters to the method.<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    *    These will automatically be converted to the appropriate object type if possible.<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    *    Can be &lt;jk&gt;null&lt;/jk&gt; if method has no arguments.<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    * @return The object returned by the call to the method, or &lt;jk&gt;null&lt;/jk&gt; if target object is &lt;jk&gt;null&lt;/jk&gt;.<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    * @throws IllegalAccessException<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    *    If the &lt;code&gt;Constructor&lt;/code&gt; object enforces Java language access control and the underlying constructor is<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    *    inaccessible.<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    * @throws IllegalArgumentException<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    *    If one of the following occurs:<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    *    &lt;ul class='spaced-list'&gt;<a name="line.77"></a>
+<span class="sourceLineNo">078</span>    *       &lt;li&gt;<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    *          The number of actual and formal parameters differ.<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    *       &lt;li&gt;<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    *          An unwrapping conversion for primitive arguments fails.<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    *       &lt;li&gt;<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    *          A parameter value cannot be converted to the corresponding formal parameter type by a method invocation<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    *          conversion.<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    *       &lt;li&gt;<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    *          The constructor pertains to an enum type.<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    *    &lt;/ul&gt;<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    * @throws InvocationTargetException If the underlying constructor throws an exception.<a name="line.88"></a>
+<span class="sourceLineNo">089</span>    * @throws ParseException If the input contains a syntax error or is malformed.<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    * @throws IOException<a name="line.90"></a>
+<span class="sourceLineNo">091</span>    */<a name="line.91"></a>
+<span class="sourceLineNo">092</span>   public Object invokeMethod(Method method, Reader args) throws InvocationTargetException, IllegalArgumentException,<a name="line.92"></a>
+<span class="sourceLineNo">093</span>         IllegalAccessException, ParseException, IOException {<a name="line.93"></a>
+<span class="sourceLineNo">094</span>      if (o == null)<a name="line.94"></a>
+<span class="sourceLineNo">095</span>         return null;<a name="line.95"></a>
+<span class="sourceLineNo">096</span>      Object[] params = args == null ? null : p.parseArgs(args, method.getGenericParameterTypes());<a name="line.96"></a>
+<span class="sourceLineNo">097</span>      return method.invoke(o, params);<a name="line.97"></a>
+<span class="sourceLineNo">098</span>   }<a name="line.98"></a>
+<span class="sourceLineNo">099</span><a name="line.99"></a>
+<span class="sourceLineNo">100</span>   /**<a name="line.100"></a>
+<span class="sourceLineNo">101</span>    * Convenience method for invoking argument from method signature (@see {@link ClassUtils#getMethodSignature(Method)}.<a name="line.101"></a>
+<span class="sourceLineNo">102</span>    *<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    * @param method The method being invoked.<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    * @param args<a name="line.104"></a>
+<span class="sourceLineNo">105</span>    *    The arguments to pass as parameters to the method.<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    *    These will automatically be converted to the appropriate object type if possible.<a name="line.106"></a>
+<span class="sourceLineNo">107</span>    *    Can be &lt;jk&gt;null&lt;/jk&gt; if method has no arguments.<a name="line.107"></a>
+<span class="sourceLineNo">108</span>    * @return The object returned by the call to the method, or &lt;jk&gt;null&lt;/jk&gt; if target object is &lt;jk&gt;null&lt;/jk&gt;.<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    * @throws NoSuchMethodException If method does not exist.<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    * @throws IllegalAccessException<a name="line.110"></a>
+<span class="sourceLineNo">111</span>    *    If the &lt;code&gt;Constructor&lt;/code&gt; object enforces Java language access control and<a name="line.111"></a>
+<span class="sourceLineNo">112</span>    *    the underlying constructor is inaccessible.<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    * @throws IllegalArgumentException<a name="line.113"></a>
+<span class="sourceLineNo">114</span>    *    If one of the following occurs:<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    *    &lt;ul class='spaced-list'&gt;<a name="line.115"></a>
+<span class="sourceLineNo">116</span>    *       &lt;li&gt;<a name="line.116"></a>
+<span class="sourceLineNo">117</span>    *          The number of actual and formal parameters differ.<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    *       &lt;li&gt;<a name="line.118"></a>
+<span class="sourceLineNo">119</span>    *          An unwrapping conversion for primitive arguments fails.<a name="line.119"></a>
+<span class="sourceLineNo">120</span>    *       &lt;li&gt;<a name="line.120"></a>
+<span class="sourceLineNo">121</span>    *          A parameter value cannot be converted to the corresponding formal parameter type by a method invocation<a name="line.121"></a>
+<span class="sourceLineNo">122</span>    *          conversion.<a name="line.122"></a>
+<span class="sourceLineNo">123</span>    *       &lt;li&gt;<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    *          The constructor pertains to an enum type.<a name="line.124"></a>
+<span class="sourceLineNo">125</span>    *    &lt;/ul&gt;<a name="line.125"></a>
+<span class="sourceLineNo">126</span>    * @throws InvocationTargetException If the underlying constructor throws an exception.<a name="line.126"></a>
+<span class="sourceLineNo">127</span>    * @throws ParseException If the input contains a syntax error or is malformed.<a name="line.127"></a>
+<span class="sourceLineNo">128</span>    * @throws IOException<a name="line.128"></a>
+<span class="sourceLineNo">129</span>    */<a name="line.129"></a>
+<span class="sourceLineNo">130</span>   public Object invokeMethod(String method, String args) throws NoSuchMethodException, IllegalArgumentException,<a name="line.130"></a>
+<span class="sourceLineNo">131</span>         InvocationTargetException, IllegalAccessException, ParseException, IOException {<a name="line.131"></a>
+<span class="sourceLineNo">132</span>      if (o == null)<a name="line.132"></a>
+<span class="sourceLineNo">133</span>         return null;<a name="line.133"></a>
+<span class="sourceLineNo">134</span>      Method m = p.getClassMeta(o.getClass()).getPublicMethods().get(method);<a name="line.134"></a>
+<span class="sourceLineNo">135</span>      if (m == null)<a name="line.135"></a>
+<span class="sourceLineNo">136</span>         throw new NoSuchMethodException(method);<a name="line.136"></a>
+<span class="sourceLineNo">137</span>      return invokeMethod(m, args == null ? null : new StringReader(args));<a name="line.137"></a>
+<span class="sourceLineNo">138</span>   }<a name="line.138"></a>
+<span class="sourceLineNo">139</span>}<a name="line.139"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

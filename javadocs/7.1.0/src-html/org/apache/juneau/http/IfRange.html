@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.http;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import static org.apache.juneau.internal.StringUtils.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span><a name="line.16"></a>
+<span class="sourceLineNo">017</span>import org.apache.juneau.internal.*;<a name="line.17"></a>
+<span class="sourceLineNo">018</span><a name="line.18"></a>
+<span class="sourceLineNo">019</span>/**<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * Represents a parsed &lt;l&gt;If-Range&lt;/l&gt; HTTP request header.<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * <a name="line.21"></a>
+<span class="sourceLineNo">022</span> * &lt;p&gt;<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * If the entity is unchanged, send me the part(s) that I am missing; otherwise, send me the entire new entity.<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * <a name="line.24"></a>
+<span class="sourceLineNo">025</span> * &lt;h5 class='figure'&gt;Example&lt;/h5&gt;<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * &lt;p class='bcode'&gt;<a name="line.26"></a>
+<span class="sourceLineNo">027</span> *    If-Range: "737060cd8c284d8af7ad3082f209582d"<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * &lt;/p&gt;<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * <a name="line.29"></a>
+<span class="sourceLineNo">030</span> * &lt;h5 class='topic'&gt;RFC2616 Specification&lt;/h5&gt;<a name="line.30"></a>
+<span class="sourceLineNo">031</span> * <a name="line.31"></a>
+<span class="sourceLineNo">032</span> * If a client has a partial copy of an entity in its cache, and wishes to have an up-to-date copy of the entire entity<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * in its cache, it could use the Range request-header with a conditional GET (using either or both of<a name="line.33"></a>
+<span class="sourceLineNo">034</span> * If-Unmodified-Since and If-Match.)<a name="line.34"></a>
+<span class="sourceLineNo">035</span> * However, if the condition fails because the entity has been modified, the client would then have to make a second<a name="line.35"></a>
+<span class="sourceLineNo">036</span> * request to obtain the entire current entity-body.<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * <a name="line.37"></a>
+<span class="sourceLineNo">038</span> * &lt;p&gt;<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * The If-Range header allows a client to "short-circuit" the second request.<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * Informally, its meaning is `if the entity is unchanged, send me the part(s) that I am missing; otherwise, send me<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * the entire new entity'.<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * &lt;p class='bcode'&gt;<a name="line.42"></a>
+<span class="sourceLineNo">043</span> *    If-Range = "If-Range" ":" ( entity-tag | HTTP-date )<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * &lt;/p&gt;<a name="line.44"></a>
+<span class="sourceLineNo">045</span> * <a name="line.45"></a>
+<span class="sourceLineNo">046</span> * &lt;p&gt;<a name="line.46"></a>
+<span class="sourceLineNo">047</span> * If the client has no entity tag for an entity, but does have a Last- Modified date, it MAY use that date in an<a name="line.47"></a>
+<span class="sourceLineNo">048</span> * If-Range header.<a name="line.48"></a>
+<span class="sourceLineNo">049</span> * (The server can distinguish between a valid HTTP-date and any form of entity-tag by examining no more than two<a name="line.49"></a>
+<span class="sourceLineNo">050</span> * characters.)<a name="line.50"></a>
+<span class="sourceLineNo">051</span> * The If-Range header SHOULD only be used together with a Range header, and MUST be ignored if the request does not<a name="line.51"></a>
+<span class="sourceLineNo">052</span> * include a Range header, or if the server does not support the sub-range operation.<a name="line.52"></a>
+<span class="sourceLineNo">053</span> * <a name="line.53"></a>
+<span class="sourceLineNo">054</span> * &lt;p&gt;<a name="line.54"></a>
+<span class="sourceLineNo">055</span> * If the entity tag given in the If-Range header matches the current entity tag for the entity, then the server SHOULD<a name="line.55"></a>
+<span class="sourceLineNo">056</span> * provide the specified sub-range of the entity using a 206 (Partial content) response.<a name="line.56"></a>
+<span class="sourceLineNo">057</span> * If the entity tag does not match, then the server SHOULD return the entire entity using a 200 (OK) response.<a name="line.57"></a>
+<span class="sourceLineNo">058</span> * <a name="line.58"></a>
+<span class="sourceLineNo">059</span> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;<a name="line.59"></a>
+<span class="sourceLineNo">060</span> * &lt;ul class='doctree'&gt;<a name="line.60"></a>
+<span class="sourceLineNo">061</span> *    &lt;li class='extlink'&gt;&lt;a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'&gt;Hypertext Transfer Protocol -- HTTP/1.1&lt;/a&gt;<a name="line.61"></a>
+<span class="sourceLineNo">062</span> * &lt;/ul&gt;<a name="line.62"></a>
+<span class="sourceLineNo">063</span> */<a name="line.63"></a>
+<span class="sourceLineNo">064</span>public final class IfRange extends HeaderString {<a name="line.64"></a>
+<span class="sourceLineNo">065</span><a name="line.65"></a>
+<span class="sourceLineNo">066</span>   /**<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    * Returns a parsed &lt;code&gt;If-Range&lt;/code&gt; header.<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    * <a name="line.68"></a>
+<span class="sourceLineNo">069</span>    * @param value The &lt;code&gt;If-Range&lt;/code&gt; header string.<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    * @return The parsed &lt;code&gt;If-Range&lt;/code&gt; header, or &lt;jk&gt;null&lt;/jk&gt; if the string was null.<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    */<a name="line.71"></a>
+<span class="sourceLineNo">072</span>   public static IfRange forString(String value) {<a name="line.72"></a>
+<span class="sourceLineNo">073</span>      if (value == null)<a name="line.73"></a>
+<span class="sourceLineNo">074</span>         return null;<a name="line.74"></a>
+<span class="sourceLineNo">075</span>      return new IfRange(value);<a name="line.75"></a>
+<span class="sourceLineNo">076</span>   }<a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span>   private IfRange(String value) {<a name="line.78"></a>
+<span class="sourceLineNo">079</span>      super(value);<a name="line.79"></a>
+<span class="sourceLineNo">080</span>   }<a name="line.80"></a>
+<span class="sourceLineNo">081</span><a name="line.81"></a>
+<span class="sourceLineNo">082</span>   /**<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    * Returns this header value as a {@link java.util.Date} object.<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    * <a name="line.84"></a>
+<span class="sourceLineNo">085</span>    * @return This header value as a {@link java.util.Date} object, or &lt;jk&gt;null&lt;/jk&gt; if the value is not a date.<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    */<a name="line.86"></a>
+<span class="sourceLineNo">087</span>   public java.util.Date asDate() {<a name="line.87"></a>
+<span class="sourceLineNo">088</span>      char c0 = charAt(value, 0), c1 = charAt(value, 1);<a name="line.88"></a>
+<span class="sourceLineNo">089</span>      if (c0 == '*' || c0 == '"' || (c0 == 'W' &amp;&amp; c1 == '/'))<a name="line.89"></a>
+<span class="sourceLineNo">090</span>         return null;<a name="line.90"></a>
+<span class="sourceLineNo">091</span>      return DateUtils.parseDate(toString());<a name="line.91"></a>
+<span class="sourceLineNo">092</span>   }<a name="line.92"></a>
+<span class="sourceLineNo">093</span><a name="line.93"></a>
+<span class="sourceLineNo">094</span>   /**<a name="line.94"></a>
+<span class="sourceLineNo">095</span>    * Returns this header value as an {@link EntityValidator} object.<a name="line.95"></a>
+<span class="sourceLineNo">096</span>    * <a name="line.96"></a>
+<span class="sourceLineNo">097</span>    * @return<a name="line.97"></a>
+<span class="sourceLineNo">098</span>    *    This header value as a {@link EntityValidator} object, or &lt;jk&gt;null&lt;/jk&gt; if the value is not an entity<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    *    validator.<a name="line.99"></a>
+<span class="sourceLineNo">100</span>    */<a name="line.100"></a>
+<span class="sourceLineNo">101</span>   public EntityValidator asValidator() {<a name="line.101"></a>
+<span class="sourceLineNo">102</span>      char c0 = charAt(value, 0), c1 = charAt(value, 1);<a name="line.102"></a>
+<span class="sourceLineNo">103</span>      if (c0 == '*' || c0 == '"' || (c0 == 'W' &amp;&amp; c1 == '/'))<a name="line.103"></a>
+<span class="sourceLineNo">104</span>         return new EntityValidator(value);<a name="line.104"></a>
+<span class="sourceLineNo">105</span>      return null;<a name="line.105"></a>
+<span class="sourceLineNo">106</span>   }<a name="line.106"></a>
+<span class="sourceLineNo">107</span>}<a name="line.107"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

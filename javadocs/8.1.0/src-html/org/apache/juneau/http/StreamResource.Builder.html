@@ -1,0 +1,345 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.http;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import static org.apache.juneau.internal.CollectionUtils.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>import static org.apache.juneau.internal.IOUtils.*;<a name="line.16"></a>
+<span class="sourceLineNo">017</span><a name="line.17"></a>
+<span class="sourceLineNo">018</span>import java.io.*;<a name="line.18"></a>
+<span class="sourceLineNo">019</span>import java.nio.*;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>import java.util.*;<a name="line.20"></a>
+<span class="sourceLineNo">021</span><a name="line.21"></a>
+<span class="sourceLineNo">022</span>import org.apache.juneau.*;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>import org.apache.juneau.http.annotation.*;<a name="line.23"></a>
+<span class="sourceLineNo">024</span><a name="line.24"></a>
+<span class="sourceLineNo">025</span>/**<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * Represents the contents of a byte stream file with convenience methods for adding HTTP response headers.<a name="line.26"></a>
+<span class="sourceLineNo">027</span> *<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * &lt;p&gt;<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * &lt;br&gt;These objects can to be returned as responses by REST methods.<a name="line.29"></a>
+<span class="sourceLineNo">030</span> *<a name="line.30"></a>
+<span class="sourceLineNo">031</span> * &lt;p&gt;<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * &lt;l&gt;StreamResources&lt;/l&gt; are meant to be thread-safe and reusable objects.<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * &lt;br&gt;The contents of the request passed into the constructor are immediately converted to read-only byte arrays.<a name="line.33"></a>
+<span class="sourceLineNo">034</span> *<a name="line.34"></a>
+<span class="sourceLineNo">035</span> * &lt;p&gt;<a name="line.35"></a>
+<span class="sourceLineNo">036</span> * Instances of this class can be built using {@link Builder}.<a name="line.36"></a>
+<span class="sourceLineNo">037</span> *<a name="line.37"></a>
+<span class="sourceLineNo">038</span> * &lt;ul class='seealso'&gt;<a name="line.38"></a>
+<span class="sourceLineNo">039</span> *    &lt;li class='link'&gt;{@doc juneau-rest-server.RestMethod.StreamResource}<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * &lt;/ul&gt;<a name="line.40"></a>
+<span class="sourceLineNo">041</span> */<a name="line.41"></a>
+<span class="sourceLineNo">042</span>@Response<a name="line.42"></a>
+<span class="sourceLineNo">043</span>public class StreamResource implements Streamable {<a name="line.43"></a>
+<span class="sourceLineNo">044</span><a name="line.44"></a>
+<span class="sourceLineNo">045</span>   private final MediaType mediaType;<a name="line.45"></a>
+<span class="sourceLineNo">046</span>   private final Object[] contents;<a name="line.46"></a>
+<span class="sourceLineNo">047</span>   private final Map&lt;String,Object&gt; headers;<a name="line.47"></a>
+<span class="sourceLineNo">048</span><a name="line.48"></a>
+<span class="sourceLineNo">049</span>   StreamResource(Builder b) throws IOException {<a name="line.49"></a>
+<span class="sourceLineNo">050</span>      this(b.mediaType, b.headers, b.cached, b.contents.toArray());<a name="line.50"></a>
+<span class="sourceLineNo">051</span>   }<a name="line.51"></a>
+<span class="sourceLineNo">052</span><a name="line.52"></a>
+<span class="sourceLineNo">053</span>   /**<a name="line.53"></a>
+<span class="sourceLineNo">054</span>    * Constructor.<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    *<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    * @param mediaType The resource media type.<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    * @param headers The HTTP response headers for this streamed resource.<a name="line.57"></a>
+<span class="sourceLineNo">058</span>    * @param cached<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    *    Identifies if this stream resource is cached in memory.<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    *    &lt;br&gt;If &lt;jk&gt;true&lt;/jk&gt;, the contents will be loaded into a byte array for fast retrieval.<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    * @param contents<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    *    The resource contents.<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    *    &lt;br&gt;If multiple contents are specified, the results will be concatenated.<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    *    &lt;br&gt;Contents can be any of the following:<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    *    &lt;ul&gt;<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    *       &lt;li&gt;&lt;code&gt;&lt;jk&gt;byte&lt;/jk&gt;[]&lt;/code&gt;<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    *       &lt;li&gt;&lt;c&gt;InputStream&lt;/c&gt;<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    *       &lt;li&gt;&lt;c&gt;Reader&lt;/c&gt; - Converted to UTF-8 bytes.<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    *       &lt;li&gt;&lt;c&gt;File&lt;/c&gt;<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    *       &lt;li&gt;&lt;c&gt;CharSequence&lt;/c&gt; - Converted to UTF-8 bytes.<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    *    &lt;/ul&gt;<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    * @throws IOException Thrown by underlying stream.<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    */<a name="line.73"></a>
+<span class="sourceLineNo">074</span>   public StreamResource(MediaType mediaType, Map&lt;String,Object&gt; headers, boolean cached, Object...contents) throws IOException {<a name="line.74"></a>
+<span class="sourceLineNo">075</span>      this.mediaType = mediaType;<a name="line.75"></a>
+<span class="sourceLineNo">076</span>      this.headers = immutableMap(headers);<a name="line.76"></a>
+<span class="sourceLineNo">077</span>      this.contents = cached ? new Object[]{readBytes(contents)} : contents;<a name="line.77"></a>
+<span class="sourceLineNo">078</span>   }<a name="line.78"></a>
+<span class="sourceLineNo">079</span><a name="line.79"></a>
+<span class="sourceLineNo">080</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.80"></a>
+<span class="sourceLineNo">081</span>   // Builder<a name="line.81"></a>
+<span class="sourceLineNo">082</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.82"></a>
+<span class="sourceLineNo">083</span><a name="line.83"></a>
+<span class="sourceLineNo">084</span>   /**<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    * Creates a new instance of a {@link Builder} for this class.<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    *<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    * @return A new instance of a {@link Builder}.<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    */<a name="line.88"></a>
+<span class="sourceLineNo">089</span>   public static Builder create() {<a name="line.89"></a>
+<span class="sourceLineNo">090</span>      return new Builder();<a name="line.90"></a>
+<span class="sourceLineNo">091</span>   }<a name="line.91"></a>
+<span class="sourceLineNo">092</span><a name="line.92"></a>
+<span class="sourceLineNo">093</span>   /**<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    * Builder class for constructing {@link StreamResource} objects.<a name="line.94"></a>
+<span class="sourceLineNo">095</span>    *<a name="line.95"></a>
+<span class="sourceLineNo">096</span>    * &lt;ul class='seealso'&gt;<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    *    &lt;li class='link'&gt;{@doc juneau-rest-server.RestMethod.StreamResource}<a name="line.97"></a>
+<span class="sourceLineNo">098</span>    * &lt;/ul&gt;<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    */<a name="line.99"></a>
+<span class="sourceLineNo">100</span>   public static class Builder {<a name="line.100"></a>
+<span class="sourceLineNo">101</span>      ArrayList&lt;Object&gt; contents = new ArrayList&lt;&gt;();<a name="line.101"></a>
+<span class="sourceLineNo">102</span>      MediaType mediaType;<a name="line.102"></a>
+<span class="sourceLineNo">103</span>      Map&lt;String,Object&gt; headers = new LinkedHashMap&lt;&gt;();<a name="line.103"></a>
+<span class="sourceLineNo">104</span>      boolean cached;<a name="line.104"></a>
+<span class="sourceLineNo">105</span><a name="line.105"></a>
+<span class="sourceLineNo">106</span>      /**<a name="line.106"></a>
+<span class="sourceLineNo">107</span>       * Specifies the resource media type string.<a name="line.107"></a>
+<span class="sourceLineNo">108</span>       *<a name="line.108"></a>
+<span class="sourceLineNo">109</span>       * @param mediaType The resource media type string.<a name="line.109"></a>
+<span class="sourceLineNo">110</span>       * @return This object (for method chaining).<a name="line.110"></a>
+<span class="sourceLineNo">111</span>       */<a name="line.111"></a>
+<span class="sourceLineNo">112</span>      public Builder mediaType(String mediaType) {<a name="line.112"></a>
+<span class="sourceLineNo">113</span>         this.mediaType = MediaType.forString(mediaType);<a name="line.113"></a>
+<span class="sourceLineNo">114</span>         return this;<a name="line.114"></a>
+<span class="sourceLineNo">115</span>      }<a name="line.115"></a>
+<span class="sourceLineNo">116</span><a name="line.116"></a>
+<span class="sourceLineNo">117</span>      /**<a name="line.117"></a>
+<span class="sourceLineNo">118</span>       * Specifies the resource media type string.<a name="line.118"></a>
+<span class="sourceLineNo">119</span>       *<a name="line.119"></a>
+<span class="sourceLineNo">120</span>       * @param mediaType The resource media type string.<a name="line.120"></a>
+<span class="sourceLineNo">121</span>       * @return This object (for method chaining).<a name="line.121"></a>
+<span class="sourceLineNo">122</span>       */<a name="line.122"></a>
+<span class="sourceLineNo">123</span>      public Builder mediaType(MediaType mediaType) {<a name="line.123"></a>
+<span class="sourceLineNo">124</span>         this.mediaType = mediaType;<a name="line.124"></a>
+<span class="sourceLineNo">125</span>         return this;<a name="line.125"></a>
+<span class="sourceLineNo">126</span>      }<a name="line.126"></a>
+<span class="sourceLineNo">127</span><a name="line.127"></a>
+<span class="sourceLineNo">128</span>      /**<a name="line.128"></a>
+<span class="sourceLineNo">129</span>       * Specifies the contents for this resource.<a name="line.129"></a>
+<span class="sourceLineNo">130</span>       *<a name="line.130"></a>
+<span class="sourceLineNo">131</span>       * &lt;p&gt;<a name="line.131"></a>
+<span class="sourceLineNo">132</span>       * This method can be called multiple times to add more content.<a name="line.132"></a>
+<span class="sourceLineNo">133</span>       *<a name="line.133"></a>
+<span class="sourceLineNo">134</span>       * @param contents<a name="line.134"></a>
+<span class="sourceLineNo">135</span>       *    The resource contents.<a name="line.135"></a>
+<span class="sourceLineNo">136</span>       *    &lt;br&gt;If multiple contents are specified, the results will be concatenated.<a name="line.136"></a>
+<span class="sourceLineNo">137</span>       *    &lt;br&gt;Contents can be any of the following:<a name="line.137"></a>
+<span class="sourceLineNo">138</span>       *    &lt;ul&gt;<a name="line.138"></a>
+<span class="sourceLineNo">139</span>       *       &lt;li&gt;&lt;code&gt;&lt;jk&gt;byte&lt;/jk&gt;[]&lt;/code&gt;<a name="line.139"></a>
+<span class="sourceLineNo">140</span>       *       &lt;li&gt;&lt;c&gt;InputStream&lt;/c&gt;<a name="line.140"></a>
+<span class="sourceLineNo">141</span>       *       &lt;li&gt;&lt;c&gt;Reader&lt;/c&gt; - Converted to UTF-8 bytes.<a name="line.141"></a>
+<span class="sourceLineNo">142</span>       *       &lt;li&gt;&lt;c&gt;File&lt;/c&gt;<a name="line.142"></a>
+<span class="sourceLineNo">143</span>       *       &lt;li&gt;&lt;c&gt;CharSequence&lt;/c&gt; - Converted to UTF-8 bytes.<a name="line.143"></a>
+<span class="sourceLineNo">144</span>       *    &lt;/ul&gt;<a name="line.144"></a>
+<span class="sourceLineNo">145</span>       * @return This object (for method chaining).<a name="line.145"></a>
+<span class="sourceLineNo">146</span>       */<a name="line.146"></a>
+<span class="sourceLineNo">147</span>      public Builder contents(Object...contents) {<a name="line.147"></a>
+<span class="sourceLineNo">148</span>         this.contents.addAll(Arrays.asList(contents));<a name="line.148"></a>
+<span class="sourceLineNo">149</span>         return this;<a name="line.149"></a>
+<span class="sourceLineNo">150</span>      }<a name="line.150"></a>
+<span class="sourceLineNo">151</span><a name="line.151"></a>
+<span class="sourceLineNo">152</span>      /**<a name="line.152"></a>
+<span class="sourceLineNo">153</span>       * Specifies an HTTP response header value.<a name="line.153"></a>
+<span class="sourceLineNo">154</span>       *<a name="line.154"></a>
+<span class="sourceLineNo">155</span>       * @param name The HTTP header name.<a name="line.155"></a>
+<span class="sourceLineNo">156</span>       * @param value<a name="line.156"></a>
+<span class="sourceLineNo">157</span>       *    The HTTP header value.<a name="line.157"></a>
+<span class="sourceLineNo">158</span>       *    &lt;br&gt;Will be converted to a &lt;c&gt;String&lt;/c&gt; using {@link Object#toString()}.<a name="line.158"></a>
+<span class="sourceLineNo">159</span>       * @return This object (for method chaining).<a name="line.159"></a>
+<span class="sourceLineNo">160</span>       */<a name="line.160"></a>
+<span class="sourceLineNo">161</span>      public Builder header(String name, Object value) {<a name="line.161"></a>
+<span class="sourceLineNo">162</span>         this.headers.put(name, value);<a name="line.162"></a>
+<span class="sourceLineNo">163</span>         return this;<a name="line.163"></a>
+<span class="sourceLineNo">164</span>      }<a name="line.164"></a>
+<span class="sourceLineNo">165</span><a name="line.165"></a>
+<span class="sourceLineNo">166</span>      /**<a name="line.166"></a>
+<span class="sourceLineNo">167</span>       * Specifies HTTP response header values.<a name="line.167"></a>
+<span class="sourceLineNo">168</span>       *<a name="line.168"></a>
+<span class="sourceLineNo">169</span>       * @param headers<a name="line.169"></a>
+<span class="sourceLineNo">170</span>       *    The HTTP headers.<a name="line.170"></a>
+<span class="sourceLineNo">171</span>       *    &lt;br&gt;Values will be converted to &lt;c&gt;Strings&lt;/c&gt; using {@link Object#toString()}.<a name="line.171"></a>
+<span class="sourceLineNo">172</span>       * @return This object (for method chaining).<a name="line.172"></a>
+<span class="sourceLineNo">173</span>       */<a name="line.173"></a>
+<span class="sourceLineNo">174</span>      public Builder headers(Map&lt;String,Object&gt; headers) {<a name="line.174"></a>
+<span class="sourceLineNo">175</span>         this.headers.putAll(headers);<a name="line.175"></a>
+<span class="sourceLineNo">176</span>         return this;<a name="line.176"></a>
+<span class="sourceLineNo">177</span>      }<a name="line.177"></a>
+<span class="sourceLineNo">178</span><a name="line.178"></a>
+<span class="sourceLineNo">179</span>      /**<a name="line.179"></a>
+<span class="sourceLineNo">180</span>       * Specifies that this resource is intended to be cached.<a name="line.180"></a>
+<span class="sourceLineNo">181</span>       *<a name="line.181"></a>
+<span class="sourceLineNo">182</span>       * &lt;p&gt;<a name="line.182"></a>
+<span class="sourceLineNo">183</span>       * This will trigger the contents to be loaded into a byte array for fast serializing.<a name="line.183"></a>
+<span class="sourceLineNo">184</span>       *<a name="line.184"></a>
+<span class="sourceLineNo">185</span>       * @return This object (for method chaining).<a name="line.185"></a>
+<span class="sourceLineNo">186</span>       */<a name="line.186"></a>
+<span class="sourceLineNo">187</span>      public Builder cached() {<a name="line.187"></a>
+<span class="sourceLineNo">188</span>         this.cached = true;<a name="line.188"></a>
+<span class="sourceLineNo">189</span>         return this;<a name="line.189"></a>
+<span class="sourceLineNo">190</span>      }<a name="line.190"></a>
+<span class="sourceLineNo">191</span><a name="line.191"></a>
+<span class="sourceLineNo">192</span>      /**<a name="line.192"></a>
+<span class="sourceLineNo">193</span>       * Create a new {@link StreamResource} using values in this builder.<a name="line.193"></a>
+<span class="sourceLineNo">194</span>       *<a name="line.194"></a>
+<span class="sourceLineNo">195</span>       * @return A new immutable {@link StreamResource} object.<a name="line.195"></a>
+<span class="sourceLineNo">196</span>       * @throws IOException Thrown by underlying stream.<a name="line.196"></a>
+<span class="sourceLineNo">197</span>       */<a name="line.197"></a>
+<span class="sourceLineNo">198</span>      public StreamResource build() throws IOException {<a name="line.198"></a>
+<span class="sourceLineNo">199</span>         return new StreamResource(this);<a name="line.199"></a>
+<span class="sourceLineNo">200</span>      }<a name="line.200"></a>
+<span class="sourceLineNo">201</span>   }<a name="line.201"></a>
+<span class="sourceLineNo">202</span><a name="line.202"></a>
+<span class="sourceLineNo">203</span>   /**<a name="line.203"></a>
+<span class="sourceLineNo">204</span>    * Get the HTTP response headers.<a name="line.204"></a>
+<span class="sourceLineNo">205</span>    *<a name="line.205"></a>
+<span class="sourceLineNo">206</span>    * @return<a name="line.206"></a>
+<span class="sourceLineNo">207</span>    *    The HTTP response headers.<a name="line.207"></a>
+<span class="sourceLineNo">208</span>    *    &lt;br&gt;An unmodifiable map.<a name="line.208"></a>
+<span class="sourceLineNo">209</span>    *    &lt;br&gt;Never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.209"></a>
+<span class="sourceLineNo">210</span>    */<a name="line.210"></a>
+<span class="sourceLineNo">211</span>   @ResponseHeader("*")<a name="line.211"></a>
+<span class="sourceLineNo">212</span>   public Map&lt;String,Object&gt; getHeaders() {<a name="line.212"></a>
+<span class="sourceLineNo">213</span>      return headers;<a name="line.213"></a>
+<span class="sourceLineNo">214</span>   }<a name="line.214"></a>
+<span class="sourceLineNo">215</span><a name="line.215"></a>
+<span class="sourceLineNo">216</span>   @ResponseBody<a name="line.216"></a>
+<span class="sourceLineNo">217</span>   @Override /* Streamable */<a name="line.217"></a>
+<span class="sourceLineNo">218</span>   public void streamTo(OutputStream os) throws IOException {<a name="line.218"></a>
+<span class="sourceLineNo">219</span>      for (Object c : contents)<a name="line.219"></a>
+<span class="sourceLineNo">220</span>         pipe(c, os);<a name="line.220"></a>
+<span class="sourceLineNo">221</span>      os.flush();<a name="line.221"></a>
+<span class="sourceLineNo">222</span>   }<a name="line.222"></a>
+<span class="sourceLineNo">223</span><a name="line.223"></a>
+<span class="sourceLineNo">224</span>   @ResponseHeader("Content-Type")<a name="line.224"></a>
+<span class="sourceLineNo">225</span>   @Override /* Streamable */<a name="line.225"></a>
+<span class="sourceLineNo">226</span>   public MediaType getMediaType() {<a name="line.226"></a>
+<span class="sourceLineNo">227</span>      return mediaType;<a name="line.227"></a>
+<span class="sourceLineNo">228</span>   }<a name="line.228"></a>
+<span class="sourceLineNo">229</span><a name="line.229"></a>
+<span class="sourceLineNo">230</span>   /**<a name="line.230"></a>
+<span class="sourceLineNo">231</span>    * Returns the contents of this stream resource.<a name="line.231"></a>
+<span class="sourceLineNo">232</span>    *<a name="line.232"></a>
+<span class="sourceLineNo">233</span>    * @return The contents of this stream resource.<a name="line.233"></a>
+<span class="sourceLineNo">234</span>    * @throws IOException Thrown by underlying stream.<a name="line.234"></a>
+<span class="sourceLineNo">235</span>    */<a name="line.235"></a>
+<span class="sourceLineNo">236</span>   public InputStream getContents() throws IOException {<a name="line.236"></a>
+<span class="sourceLineNo">237</span>      if (contents.length == 1) {<a name="line.237"></a>
+<span class="sourceLineNo">238</span>         Object c = contents[0];<a name="line.238"></a>
+<span class="sourceLineNo">239</span>         if (c != null) {<a name="line.239"></a>
+<span class="sourceLineNo">240</span>            if (c instanceof byte[])<a name="line.240"></a>
+<span class="sourceLineNo">241</span>               return new ByteArrayInputStream((byte[])c);<a name="line.241"></a>
+<span class="sourceLineNo">242</span>            else if (c instanceof InputStream)<a name="line.242"></a>
+<span class="sourceLineNo">243</span>               return (InputStream)c;<a name="line.243"></a>
+<span class="sourceLineNo">244</span>            else if (c instanceof File)<a name="line.244"></a>
+<span class="sourceLineNo">245</span>               return new FileInputStream((File)c);<a name="line.245"></a>
+<span class="sourceLineNo">246</span>            else if (c instanceof CharSequence)<a name="line.246"></a>
+<span class="sourceLineNo">247</span>               return new ByteArrayInputStream((((CharSequence)c).toString().getBytes(UTF8)));<a name="line.247"></a>
+<span class="sourceLineNo">248</span>         }<a name="line.248"></a>
+<span class="sourceLineNo">249</span>      }<a name="line.249"></a>
+<span class="sourceLineNo">250</span>      byte[][] bc = new byte[contents.length][];<a name="line.250"></a>
+<span class="sourceLineNo">251</span>      int c = 0;<a name="line.251"></a>
+<span class="sourceLineNo">252</span>      for (int i = 0; i &lt; contents.length; i++) {<a name="line.252"></a>
+<span class="sourceLineNo">253</span>         Object o = contents[i];<a name="line.253"></a>
+<span class="sourceLineNo">254</span>         if (o == null)<a name="line.254"></a>
+<span class="sourceLineNo">255</span>            bc[i] = new byte[0];<a name="line.255"></a>
+<span class="sourceLineNo">256</span>         else if (o instanceof byte[])<a name="line.256"></a>
+<span class="sourceLineNo">257</span>            bc[i] = (byte[])o;<a name="line.257"></a>
+<span class="sourceLineNo">258</span>         else if (o instanceof InputStream)<a name="line.258"></a>
+<span class="sourceLineNo">259</span>            bc[i] = readBytes((InputStream)o, 1024);<a name="line.259"></a>
+<span class="sourceLineNo">260</span>         else if (o instanceof Reader)<a name="line.260"></a>
+<span class="sourceLineNo">261</span>            bc[i] = read((Reader)o).getBytes(UTF8);<a name="line.261"></a>
+<span class="sourceLineNo">262</span>         else if (o instanceof File)<a name="line.262"></a>
+<span class="sourceLineNo">263</span>            bc[i] = readBytes((File)o);<a name="line.263"></a>
+<span class="sourceLineNo">264</span>         else if (o instanceof CharSequence)<a name="line.264"></a>
+<span class="sourceLineNo">265</span>            bc[i] = ((CharSequence)o).toString().getBytes(UTF8);<a name="line.265"></a>
+<span class="sourceLineNo">266</span>         c += bc[i].length;<a name="line.266"></a>
+<span class="sourceLineNo">267</span>      }<a name="line.267"></a>
+<span class="sourceLineNo">268</span>      ByteBuffer bb = ByteBuffer.allocate(c);<a name="line.268"></a>
+<span class="sourceLineNo">269</span>      for (byte[] b : bc)<a name="line.269"></a>
+<span class="sourceLineNo">270</span>         bb.put(b);<a name="line.270"></a>
+<span class="sourceLineNo">271</span>      return new ByteArrayInputStream(bb.array());<a name="line.271"></a>
+<span class="sourceLineNo">272</span>   }<a name="line.272"></a>
+<span class="sourceLineNo">273</span>}<a name="line.273"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

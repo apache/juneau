@@ -1,0 +1,261 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.annotation;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import static org.apache.juneau.BeanContext.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>import static org.apache.juneau.BeanTraverseContext.*;<a name="line.16"></a>
+<span class="sourceLineNo">017</span><a name="line.17"></a>
+<span class="sourceLineNo">018</span>import java.util.*;<a name="line.18"></a>
+<span class="sourceLineNo">019</span><a name="line.19"></a>
+<span class="sourceLineNo">020</span>import org.apache.juneau.*;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>import org.apache.juneau.http.*;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>import org.apache.juneau.marshall.*;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>import org.apache.juneau.parser.*;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>import org.apache.juneau.reflect.*;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>import org.apache.juneau.svl.*;<a name="line.25"></a>
+<span class="sourceLineNo">026</span><a name="line.26"></a>
+<span class="sourceLineNo">027</span>/**<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * Applies {@link BeanConfig} annotations to a {@link PropertyStoreBuilder}.<a name="line.28"></a>
+<span class="sourceLineNo">029</span> */<a name="line.29"></a>
+<span class="sourceLineNo">030</span>public class BeanConfigApply extends ConfigApply&lt;BeanConfig&gt; {<a name="line.30"></a>
+<span class="sourceLineNo">031</span><a name="line.31"></a>
+<span class="sourceLineNo">032</span>   /**<a name="line.32"></a>
+<span class="sourceLineNo">033</span>    * Constructor.<a name="line.33"></a>
+<span class="sourceLineNo">034</span>    *<a name="line.34"></a>
+<span class="sourceLineNo">035</span>    * @param c The annotation class.<a name="line.35"></a>
+<span class="sourceLineNo">036</span>    * @param r The resolver for resolving values in annotations.<a name="line.36"></a>
+<span class="sourceLineNo">037</span>    */<a name="line.37"></a>
+<span class="sourceLineNo">038</span>   public BeanConfigApply(Class&lt;BeanConfig&gt; c, VarResolverSession r) {<a name="line.38"></a>
+<span class="sourceLineNo">039</span>      super(c, r);<a name="line.39"></a>
+<span class="sourceLineNo">040</span>   }<a name="line.40"></a>
+<span class="sourceLineNo">041</span><a name="line.41"></a>
+<span class="sourceLineNo">042</span>   @SuppressWarnings("deprecation")<a name="line.42"></a>
+<span class="sourceLineNo">043</span>   @Override<a name="line.43"></a>
+<span class="sourceLineNo">044</span>   public void apply(AnnotationInfo&lt;BeanConfig&gt; ai, PropertyStoreBuilder psb) {<a name="line.44"></a>
+<span class="sourceLineNo">045</span>      BeanConfig a = ai.getAnnotation();<a name="line.45"></a>
+<span class="sourceLineNo">046</span><a name="line.46"></a>
+<span class="sourceLineNo">047</span>      for (CS e : a.excludeProperties())<a name="line.47"></a>
+<span class="sourceLineNo">048</span>         psb.addTo(BEAN_bpx, e.k().getName(), string(e.v()));<a name="line.48"></a>
+<span class="sourceLineNo">049</span>      for (CS e : a.includeProperties())<a name="line.49"></a>
+<span class="sourceLineNo">050</span>         psb.addTo(BEAN_bpi, e.k().getName(), string(e.v()));<a name="line.50"></a>
+<span class="sourceLineNo">051</span>      if (a.beanDictionary().length != 0)<a name="line.51"></a>
+<span class="sourceLineNo">052</span>         psb.addTo(BEAN_beanDictionary, a.beanDictionary());<a name="line.52"></a>
+<span class="sourceLineNo">053</span>      if (a.beanDictionary_replace().length != 0)<a name="line.53"></a>
+<span class="sourceLineNo">054</span>         psb.set(BEAN_beanDictionary, a.beanDictionary_replace());<a name="line.54"></a>
+<span class="sourceLineNo">055</span>      if (a.beanDictionary_remove().length != 0)<a name="line.55"></a>
+<span class="sourceLineNo">056</span>         psb.removeFrom(BEAN_beanDictionary, a.beanDictionary_remove());<a name="line.56"></a>
+<span class="sourceLineNo">057</span><a name="line.57"></a>
+<span class="sourceLineNo">058</span>      if (! a.beanClassVisibility().isEmpty())<a name="line.58"></a>
+<span class="sourceLineNo">059</span>         psb.set(BEAN_beanClassVisibility, visibility(a.beanClassVisibility(), "beanClassVisibility"));<a name="line.59"></a>
+<span class="sourceLineNo">060</span>      if (! a.beanConstructorVisibility().isEmpty())<a name="line.60"></a>
+<span class="sourceLineNo">061</span>         psb.set(BEAN_beanConstructorVisibility, visibility(a.beanConstructorVisibility(), "beanConstructorVisibility"));<a name="line.61"></a>
+<span class="sourceLineNo">062</span>      if (a.dictionary().length != 0)<a name="line.62"></a>
+<span class="sourceLineNo">063</span>         psb.addTo(BEAN_beanDictionary, a.dictionary());<a name="line.63"></a>
+<span class="sourceLineNo">064</span>      if (a.dictionary_replace().length != 0)<a name="line.64"></a>
+<span class="sourceLineNo">065</span>         psb.set(BEAN_beanDictionary, a.dictionary_replace());<a name="line.65"></a>
+<span class="sourceLineNo">066</span>      if (a.dictionary_remove().length != 0)<a name="line.66"></a>
+<span class="sourceLineNo">067</span>         psb.removeFrom(BEAN_beanDictionary, a.dictionary_remove());<a name="line.67"></a>
+<span class="sourceLineNo">068</span>      if (! a.beanFieldVisibility().isEmpty())<a name="line.68"></a>
+<span class="sourceLineNo">069</span>         psb.set(BEAN_beanFieldVisibility, visibility(a.beanFieldVisibility(), "beanFieldVisibility"));<a name="line.69"></a>
+<span class="sourceLineNo">070</span>      if (a.beanFilters().length != 0)<a name="line.70"></a>
+<span class="sourceLineNo">071</span>         psb.addTo(BEAN_beanFilters, a.beanFilters());<a name="line.71"></a>
+<span class="sourceLineNo">072</span>      if (a.beanFilters_replace().length != 0)<a name="line.72"></a>
+<span class="sourceLineNo">073</span>         psb.set(BEAN_beanFilters, a.beanFilters_replace());<a name="line.73"></a>
+<span class="sourceLineNo">074</span>      if (a.beanFilters_remove().length != 0)<a name="line.74"></a>
+<span class="sourceLineNo">075</span>         psb.removeFrom(BEAN_beanFilters, a.beanFilters_remove());<a name="line.75"></a>
+<span class="sourceLineNo">076</span>      if (! a.beanMapPutReturnsOldValue().isEmpty())<a name="line.76"></a>
+<span class="sourceLineNo">077</span>         psb.set(BEAN_beanMapPutReturnsOldValue, bool(a.beanMapPutReturnsOldValue()));<a name="line.77"></a>
+<span class="sourceLineNo">078</span>      if (! a.beanMethodVisibility().isEmpty())<a name="line.78"></a>
+<span class="sourceLineNo">079</span>         psb.set(BEAN_beanMethodVisibility, visibility(a.beanMethodVisibility(), "beanMethodVisibility"));<a name="line.79"></a>
+<span class="sourceLineNo">080</span>      if (! a.beansRequireDefaultConstructor().isEmpty())<a name="line.80"></a>
+<span class="sourceLineNo">081</span>         psb.set(BEAN_beansRequireDefaultConstructor, bool(a.beansRequireDefaultConstructor()));<a name="line.81"></a>
+<span class="sourceLineNo">082</span>      if (! a.beansRequireSerializable().isEmpty())<a name="line.82"></a>
+<span class="sourceLineNo">083</span>         psb.set(BEAN_beansRequireSerializable, bool(a.beansRequireSerializable()));<a name="line.83"></a>
+<span class="sourceLineNo">084</span>      if (! a.beansRequireSettersForGetters().isEmpty())<a name="line.84"></a>
+<span class="sourceLineNo">085</span>         psb.set(BEAN_beansRequireSettersForGetters, bool(a.beansRequireSettersForGetters()));<a name="line.85"></a>
+<span class="sourceLineNo">086</span>      if (! a.beansRequireSomeProperties().isEmpty())<a name="line.86"></a>
+<span class="sourceLineNo">087</span>         psb.set(BEAN_beansRequireSomeProperties, bool(a.beansRequireSomeProperties()));<a name="line.87"></a>
+<span class="sourceLineNo">088</span>      if (! a.beanTypePropertyName().isEmpty())<a name="line.88"></a>
+<span class="sourceLineNo">089</span>         psb.set(BEAN_beanTypePropertyName, string(a.beanTypePropertyName()));<a name="line.89"></a>
+<span class="sourceLineNo">090</span>      if (a.bpi().length &gt; 0)<a name="line.90"></a>
+<span class="sourceLineNo">091</span>         psb.addTo(BEAN_bpi, stringsMap(a.bpi(), "bpi"));<a name="line.91"></a>
+<span class="sourceLineNo">092</span>      for (CS e : a.bpiMap())<a name="line.92"></a>
+<span class="sourceLineNo">093</span>         psb.addTo(BEAN_bpi, e.k().getName(), string(e.v()));<a name="line.93"></a>
+<span class="sourceLineNo">094</span>      if (a.bpx().length &gt; 0)<a name="line.94"></a>
+<span class="sourceLineNo">095</span>         psb.addTo(BEAN_bpx, stringsMap(a.bpi(), "bpx"));<a name="line.95"></a>
+<span class="sourceLineNo">096</span>      for (CS e : a.bpxMap())<a name="line.96"></a>
+<span class="sourceLineNo">097</span>         psb.addTo(BEAN_bpx, e.k().getName(), string(e.v()));<a name="line.97"></a>
+<span class="sourceLineNo">098</span>      if (a.bpro().length &gt; 0)<a name="line.98"></a>
+<span class="sourceLineNo">099</span>         psb.addTo(BEAN_bpro, stringsMap(a.bpro(), "bpro"));<a name="line.99"></a>
+<span class="sourceLineNo">100</span>      for (CS e : a.bproMap())<a name="line.100"></a>
+<span class="sourceLineNo">101</span>         psb.addTo(BEAN_bpro, e.k().getName(), string(e.v()));<a name="line.101"></a>
+<span class="sourceLineNo">102</span>      if (a.bpwo().length &gt; 0)<a name="line.102"></a>
+<span class="sourceLineNo">103</span>         psb.addTo(BEAN_bpwo, stringsMap(a.bpi(), "bpwo"));<a name="line.103"></a>
+<span class="sourceLineNo">104</span>      for (CS e : a.bpwoMap())<a name="line.104"></a>
+<span class="sourceLineNo">105</span>         psb.addTo(BEAN_bpwo, e.k().getName(), string(e.v()));<a name="line.105"></a>
+<span class="sourceLineNo">106</span>      if (! a.debug().isEmpty())<a name="line.106"></a>
+<span class="sourceLineNo">107</span>         psb.set(BEAN_debug, bool(a.debug()));<a name="line.107"></a>
+<span class="sourceLineNo">108</span>      for (CS e : a.example())<a name="line.108"></a>
+<span class="sourceLineNo">109</span>         psb.addTo(BEAN_examples, e.k().getName(), parse(e.k(), e.v(), "example"));<a name="line.109"></a>
+<span class="sourceLineNo">110</span>      if (a.examples().length &gt; 0)<a name="line.110"></a>
+<span class="sourceLineNo">111</span>         psb.addTo(BEAN_examples, objectMap(a.examples(), "examples"));<a name="line.111"></a>
+<span class="sourceLineNo">112</span>      if (! a.fluentSetters().isEmpty())<a name="line.112"></a>
+<span class="sourceLineNo">113</span>         psb.set(BEAN_fluentSetters, bool(a.fluentSetters()));<a name="line.113"></a>
+<span class="sourceLineNo">114</span>      if (! a.ignoreInvocationExceptionsOnGetters().isEmpty())<a name="line.114"></a>
+<span class="sourceLineNo">115</span>         psb.set(BEAN_ignoreInvocationExceptionsOnGetters, bool(a.ignoreInvocationExceptionsOnGetters()));<a name="line.115"></a>
+<span class="sourceLineNo">116</span>      if (! a.ignoreInvocationExceptionsOnSetters().isEmpty())<a name="line.116"></a>
+<span class="sourceLineNo">117</span>         psb.set(BEAN_ignoreInvocationExceptionsOnSetters, bool(a.ignoreInvocationExceptionsOnSetters()));<a name="line.117"></a>
+<span class="sourceLineNo">118</span>      if (! a.ignorePropertiesWithoutSetters().isEmpty())<a name="line.118"></a>
+<span class="sourceLineNo">119</span>         psb.set(BEAN_ignorePropertiesWithoutSetters, bool(a.ignorePropertiesWithoutSetters()));<a name="line.119"></a>
+<span class="sourceLineNo">120</span>      if (! a.ignoreUnknownBeanProperties().isEmpty())<a name="line.120"></a>
+<span class="sourceLineNo">121</span>         psb.set(BEAN_ignoreUnknownBeanProperties, bool(a.ignoreUnknownBeanProperties()));<a name="line.121"></a>
+<span class="sourceLineNo">122</span>      if (! a.ignoreUnknownNullBeanProperties().isEmpty())<a name="line.122"></a>
+<span class="sourceLineNo">123</span>         psb.set(BEAN_ignoreUnknownNullBeanProperties, bool(a.ignoreUnknownNullBeanProperties()));<a name="line.123"></a>
+<span class="sourceLineNo">124</span>      for (CC e : a.implClasses())<a name="line.124"></a>
+<span class="sourceLineNo">125</span>         psb.addTo(BEAN_implClasses, e.k().getName(), e.v());<a name="line.125"></a>
+<span class="sourceLineNo">126</span>      if (! a.locale().isEmpty())<a name="line.126"></a>
+<span class="sourceLineNo">127</span>         psb.set(BEAN_locale, locale(a.locale()));<a name="line.127"></a>
+<span class="sourceLineNo">128</span>      if (! a.mediaType().isEmpty())<a name="line.128"></a>
+<span class="sourceLineNo">129</span>         psb.set(BEAN_mediaType, mediaType(a.mediaType()));<a name="line.129"></a>
+<span class="sourceLineNo">130</span>      if (a.notBeanClasses().length != 0)<a name="line.130"></a>
+<span class="sourceLineNo">131</span>         psb.addTo(BEAN_notBeanClasses, a.notBeanClasses());<a name="line.131"></a>
+<span class="sourceLineNo">132</span>      if (a.notBeanClasses_replace().length != 0)<a name="line.132"></a>
+<span class="sourceLineNo">133</span>         psb.set(BEAN_notBeanClasses, a.notBeanClasses_replace());<a name="line.133"></a>
+<span class="sourceLineNo">134</span>      if (a.notBeanClasses_remove().length != 0)<a name="line.134"></a>
+<span class="sourceLineNo">135</span>         psb.removeFrom(BEAN_notBeanClasses, a.notBeanClasses_remove());<a name="line.135"></a>
+<span class="sourceLineNo">136</span>      if (a.notBeanPackages().length != 0)<a name="line.136"></a>
+<span class="sourceLineNo">137</span>         psb.addTo(BEAN_notBeanPackages, strings(a.notBeanPackages()));<a name="line.137"></a>
+<span class="sourceLineNo">138</span>      if (a.notBeanPackages_replace().length != 0)<a name="line.138"></a>
+<span class="sourceLineNo">139</span>         psb.set(BEAN_notBeanPackages, strings(a.notBeanPackages_replace()));<a name="line.139"></a>
+<span class="sourceLineNo">140</span>      if (a.notBeanPackages_remove().length != 0)<a name="line.140"></a>
+<span class="sourceLineNo">141</span>         psb.removeFrom(BEAN_notBeanPackages, strings(a.notBeanPackages_remove()));<a name="line.141"></a>
+<span class="sourceLineNo">142</span>      if (a.pojoSwaps().length != 0)<a name="line.142"></a>
+<span class="sourceLineNo">143</span>         psb.addTo(BEAN_pojoSwaps, a.pojoSwaps());<a name="line.143"></a>
+<span class="sourceLineNo">144</span>      if (a.pojoSwaps_replace().length != 0)<a name="line.144"></a>
+<span class="sourceLineNo">145</span>         psb.set(BEAN_pojoSwaps, a.pojoSwaps_replace());<a name="line.145"></a>
+<span class="sourceLineNo">146</span>      if (a.pojoSwaps_remove().length != 0)<a name="line.146"></a>
+<span class="sourceLineNo">147</span>         psb.removeFrom(BEAN_pojoSwaps, a.pojoSwaps_remove());<a name="line.147"></a>
+<span class="sourceLineNo">148</span>      if (a.propertyNamer() != PropertyNamer.Null.class)<a name="line.148"></a>
+<span class="sourceLineNo">149</span>         psb.set(BEAN_propertyNamer, a.propertyNamer());<a name="line.149"></a>
+<span class="sourceLineNo">150</span>      if (! a.sortProperties().isEmpty())<a name="line.150"></a>
+<span class="sourceLineNo">151</span>         psb.set(BEAN_sortProperties, bool(a.sortProperties()));<a name="line.151"></a>
+<span class="sourceLineNo">152</span>      if (! a.timeZone().isEmpty())<a name="line.152"></a>
+<span class="sourceLineNo">153</span>         psb.set(BEAN_timeZone, timeZone(a.timeZone()));<a name="line.153"></a>
+<span class="sourceLineNo">154</span>      if (! a.useEnumNames().isEmpty())<a name="line.154"></a>
+<span class="sourceLineNo">155</span>         psb.set(BEAN_useEnumNames, bool(a.useEnumNames()));<a name="line.155"></a>
+<span class="sourceLineNo">156</span>      if (! a.useInterfaceProxies().isEmpty())<a name="line.156"></a>
+<span class="sourceLineNo">157</span>         psb.set(BEAN_useInterfaceProxies, bool(a.useInterfaceProxies()));<a name="line.157"></a>
+<span class="sourceLineNo">158</span>      if (! a.useJavaBeanIntrospector().isEmpty())<a name="line.158"></a>
+<span class="sourceLineNo">159</span>         psb.set(BEAN_useJavaBeanIntrospector, bool(a.useJavaBeanIntrospector()));<a name="line.159"></a>
+<span class="sourceLineNo">160</span>      if (! a.detectRecursions().isEmpty())<a name="line.160"></a>
+<span class="sourceLineNo">161</span>         psb.set(BEANTRAVERSE_detectRecursions, bool(a.detectRecursions()));<a name="line.161"></a>
+<span class="sourceLineNo">162</span>      if (! a.ignoreRecursions().isEmpty())<a name="line.162"></a>
+<span class="sourceLineNo">163</span>         psb.set(BEANTRAVERSE_ignoreRecursions, bool(a.ignoreRecursions()));<a name="line.163"></a>
+<span class="sourceLineNo">164</span>      if (! a.initialDepth().isEmpty())<a name="line.164"></a>
+<span class="sourceLineNo">165</span>         psb.set(BEANTRAVERSE_initialDepth, integer(a.initialDepth(), "initialDepth"));<a name="line.165"></a>
+<span class="sourceLineNo">166</span>      if (! a.maxDepth().isEmpty())<a name="line.166"></a>
+<span class="sourceLineNo">167</span>         psb.set(BEANTRAVERSE_maxDepth, integer(a.maxDepth(), "maxDepth"));<a name="line.167"></a>
+<span class="sourceLineNo">168</span>   }<a name="line.168"></a>
+<span class="sourceLineNo">169</span><a name="line.169"></a>
+<span class="sourceLineNo">170</span>   private Locale locale(String in) {<a name="line.170"></a>
+<span class="sourceLineNo">171</span>      return Locale.forLanguageTag(string(in));<a name="line.171"></a>
+<span class="sourceLineNo">172</span>   }<a name="line.172"></a>
+<span class="sourceLineNo">173</span><a name="line.173"></a>
+<span class="sourceLineNo">174</span>   private MediaType mediaType(String in) {<a name="line.174"></a>
+<span class="sourceLineNo">175</span>      return MediaType.forString(string(in));<a name="line.175"></a>
+<span class="sourceLineNo">176</span>   }<a name="line.176"></a>
+<span class="sourceLineNo">177</span><a name="line.177"></a>
+<span class="sourceLineNo">178</span>   private TimeZone timeZone(String in) {<a name="line.178"></a>
+<span class="sourceLineNo">179</span>      return TimeZone.getTimeZone(string(in));<a name="line.179"></a>
+<span class="sourceLineNo">180</span>   }<a name="line.180"></a>
+<span class="sourceLineNo">181</span><a name="line.181"></a>
+<span class="sourceLineNo">182</span>   private &lt;T&gt; T parse(Class&lt;T&gt; c, String in, String loc) {<a name="line.182"></a>
+<span class="sourceLineNo">183</span>      try {<a name="line.183"></a>
+<span class="sourceLineNo">184</span>         return SimpleJson.DEFAULT.read(string(in), c);<a name="line.184"></a>
+<span class="sourceLineNo">185</span>      } catch (ParseException e) {<a name="line.185"></a>
+<span class="sourceLineNo">186</span>         throw new ConfigException("Invalid syntax for visibility on annotation @BeanConfig({0}): {1}", loc, in);<a name="line.186"></a>
+<span class="sourceLineNo">187</span>      }<a name="line.187"></a>
+<span class="sourceLineNo">188</span>   }<a name="line.188"></a>
+<span class="sourceLineNo">189</span>}<a name="line.189"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

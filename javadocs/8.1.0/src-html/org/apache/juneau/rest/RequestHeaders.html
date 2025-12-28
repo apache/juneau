@@ -1,0 +1,1046 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.rest;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import static org.apache.juneau.internal.ArrayUtils.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>import static org.apache.juneau.internal.StringUtils.*;<a name="line.16"></a>
+<span class="sourceLineNo">017</span><a name="line.17"></a>
+<span class="sourceLineNo">018</span>import java.lang.reflect.*;<a name="line.18"></a>
+<span class="sourceLineNo">019</span>import java.util.*;<a name="line.19"></a>
+<span class="sourceLineNo">020</span><a name="line.20"></a>
+<span class="sourceLineNo">021</span>import org.apache.juneau.*;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>import org.apache.juneau.http.*;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>import org.apache.juneau.http.Date;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>import org.apache.juneau.httppart.*;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>import org.apache.juneau.internal.*;<a name="line.25"></a>
+<span class="sourceLineNo">026</span>import org.apache.juneau.json.*;<a name="line.26"></a>
+<span class="sourceLineNo">027</span>import org.apache.juneau.oapi.*;<a name="line.27"></a>
+<span class="sourceLineNo">028</span>import org.apache.juneau.parser.*;<a name="line.28"></a>
+<span class="sourceLineNo">029</span>import org.apache.juneau.rest.exception.*;<a name="line.29"></a>
+<span class="sourceLineNo">030</span><a name="line.30"></a>
+<span class="sourceLineNo">031</span>/**<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * Represents the headers in an HTTP request.<a name="line.32"></a>
+<span class="sourceLineNo">033</span> *<a name="line.33"></a>
+<span class="sourceLineNo">034</span> * &lt;p&gt;<a name="line.34"></a>
+<span class="sourceLineNo">035</span> * Entries are stored in a case-insensitive map.<a name="line.35"></a>
+<span class="sourceLineNo">036</span> *<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * &lt;ul class='seealso'&gt;<a name="line.37"></a>
+<span class="sourceLineNo">038</span> *    &lt;li class='link'&gt;{@doc juneau-rest-server.RestMethod.RequestHeaders}<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * &lt;/ul&gt;<a name="line.39"></a>
+<span class="sourceLineNo">040</span> */<a name="line.40"></a>
+<span class="sourceLineNo">041</span>public class RequestHeaders extends TreeMap&lt;String,String[]&gt; {<a name="line.41"></a>
+<span class="sourceLineNo">042</span>   private static final long serialVersionUID = 1L;<a name="line.42"></a>
+<span class="sourceLineNo">043</span><a name="line.43"></a>
+<span class="sourceLineNo">044</span>   private final RestRequest req;<a name="line.44"></a>
+<span class="sourceLineNo">045</span>   private HttpPartParser parser;<a name="line.45"></a>
+<span class="sourceLineNo">046</span>   private RequestQuery queryParams;<a name="line.46"></a>
+<span class="sourceLineNo">047</span>   private Set&lt;String&gt; allowedQueryParams;<a name="line.47"></a>
+<span class="sourceLineNo">048</span><a name="line.48"></a>
+<span class="sourceLineNo">049</span>   RequestHeaders(RestRequest req) {<a name="line.49"></a>
+<span class="sourceLineNo">050</span>      super(String.CASE_INSENSITIVE_ORDER);<a name="line.50"></a>
+<span class="sourceLineNo">051</span>      this.req = req;<a name="line.51"></a>
+<span class="sourceLineNo">052</span>   }<a name="line.52"></a>
+<span class="sourceLineNo">053</span><a name="line.53"></a>
+<span class="sourceLineNo">054</span>   RequestHeaders parser(HttpPartParser parser) {<a name="line.54"></a>
+<span class="sourceLineNo">055</span>      this.parser = parser;<a name="line.55"></a>
+<span class="sourceLineNo">056</span>      return this;<a name="line.56"></a>
+<span class="sourceLineNo">057</span>   }<a name="line.57"></a>
+<span class="sourceLineNo">058</span><a name="line.58"></a>
+<span class="sourceLineNo">059</span>   RequestHeaders queryParams(RequestQuery queryParams, Set&lt;String&gt; allowedQueryParams) {<a name="line.59"></a>
+<span class="sourceLineNo">060</span>      this.queryParams = queryParams;<a name="line.60"></a>
+<span class="sourceLineNo">061</span>      this.allowedQueryParams = allowedQueryParams;<a name="line.61"></a>
+<span class="sourceLineNo">062</span>      return this;<a name="line.62"></a>
+<span class="sourceLineNo">063</span>   }<a name="line.63"></a>
+<span class="sourceLineNo">064</span><a name="line.64"></a>
+<span class="sourceLineNo">065</span>   /**<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    * Adds default entries to these headers.<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    *<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    * &lt;p&gt;<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    * Similar to {@link #put(String, Object)} but doesn't override existing values.<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    *<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    * @param defaultEntries<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    *    The default entries.<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    * @return This object (for method chaining).<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    */<a name="line.75"></a>
+<span class="sourceLineNo">076</span>   public RequestHeaders addDefault(Map&lt;String,Object&gt; defaultEntries) {<a name="line.76"></a>
+<span class="sourceLineNo">077</span>      if (defaultEntries != null) {<a name="line.77"></a>
+<span class="sourceLineNo">078</span>         for (Map.Entry&lt;String,Object&gt; e : defaultEntries.entrySet()) {<a name="line.78"></a>
+<span class="sourceLineNo">079</span>            String key = e.getKey();<a name="line.79"></a>
+<span class="sourceLineNo">080</span>            Object value = e.getValue();<a name="line.80"></a>
+<span class="sourceLineNo">081</span>            String[] v = get(key);<a name="line.81"></a>
+<span class="sourceLineNo">082</span>            if (v == null || v.length == 0 || StringUtils.isEmpty(v[0]))<a name="line.82"></a>
+<span class="sourceLineNo">083</span>               put(key, stringifyAll(value));<a name="line.83"></a>
+<span class="sourceLineNo">084</span>         }<a name="line.84"></a>
+<span class="sourceLineNo">085</span>      }<a name="line.85"></a>
+<span class="sourceLineNo">086</span>      return this;<a name="line.86"></a>
+<span class="sourceLineNo">087</span>   }<a name="line.87"></a>
+<span class="sourceLineNo">088</span><a name="line.88"></a>
+<span class="sourceLineNo">089</span>   /**<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    * Adds a default header value on this request.<a name="line.90"></a>
+<span class="sourceLineNo">091</span>    *<a name="line.91"></a>
+<span class="sourceLineNo">092</span>    * &lt;p&gt;<a name="line.92"></a>
+<span class="sourceLineNo">093</span>    * Similar to {@link #put(String, Object)} but doesn't override existing values.<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    *<a name="line.94"></a>
+<span class="sourceLineNo">095</span>    * @param name<a name="line.95"></a>
+<span class="sourceLineNo">096</span>    *    The header name.<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    * @param value<a name="line.97"></a>
+<span class="sourceLineNo">098</span>    *    The header value.<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    *    &lt;br&gt;Converted to a String using &lt;c&gt;toString()&lt;/c&gt;.<a name="line.99"></a>
+<span class="sourceLineNo">100</span>    *    &lt;br&gt;Ignored if value is &lt;jk&gt;null&lt;/jk&gt; or blank.<a name="line.100"></a>
+<span class="sourceLineNo">101</span>    * @return This object (for method chaining).<a name="line.101"></a>
+<span class="sourceLineNo">102</span>    */<a name="line.102"></a>
+<span class="sourceLineNo">103</span>   public RequestHeaders addDefault(String name, Object value) {<a name="line.103"></a>
+<span class="sourceLineNo">104</span>      return addDefault(Collections.singletonMap(name, value));<a name="line.104"></a>
+<span class="sourceLineNo">105</span>   }<a name="line.105"></a>
+<span class="sourceLineNo">106</span><a name="line.106"></a>
+<span class="sourceLineNo">107</span>   /**<a name="line.107"></a>
+<span class="sourceLineNo">108</span>    * Adds a set of header values to this object.<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    *<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    * @param name The header name.<a name="line.110"></a>
+<span class="sourceLineNo">111</span>    * @param values The header values.<a name="line.111"></a>
+<span class="sourceLineNo">112</span>    * @return This object (for method chaining).<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    */<a name="line.113"></a>
+<span class="sourceLineNo">114</span>   public RequestHeaders put(String name, Enumeration&lt;String&gt; values) {<a name="line.114"></a>
+<span class="sourceLineNo">115</span>      // Optimized for enumerations of one entry, the most-common case.<a name="line.115"></a>
+<span class="sourceLineNo">116</span>      if (values.hasMoreElements()) {<a name="line.116"></a>
+<span class="sourceLineNo">117</span>         String v = values.nextElement();<a name="line.117"></a>
+<span class="sourceLineNo">118</span>         String[] s = new String[]{v};<a name="line.118"></a>
+<span class="sourceLineNo">119</span>         while (values.hasMoreElements())<a name="line.119"></a>
+<span class="sourceLineNo">120</span>            s = append(s, values.nextElement());<a name="line.120"></a>
+<span class="sourceLineNo">121</span>         put(name, s);<a name="line.121"></a>
+<span class="sourceLineNo">122</span>      }<a name="line.122"></a>
+<span class="sourceLineNo">123</span>      return this;<a name="line.123"></a>
+<span class="sourceLineNo">124</span>   }<a name="line.124"></a>
+<span class="sourceLineNo">125</span><a name="line.125"></a>
+<span class="sourceLineNo">126</span>   /**<a name="line.126"></a>
+<span class="sourceLineNo">127</span>    * Returns the specified header value as a string.<a name="line.127"></a>
+<span class="sourceLineNo">128</span>    *<a name="line.128"></a>
+<span class="sourceLineNo">129</span>    * &lt;ul class='notes'&gt;<a name="line.129"></a>
+<span class="sourceLineNo">130</span>    *    &lt;li&gt;<a name="line.130"></a>
+<span class="sourceLineNo">131</span>    *       If {@code allowHeaderParams} init parameter is &lt;jk&gt;true&lt;/jk&gt;, then first looks for {@code &amp;HeaderName=x} in the URL query string.<a name="line.131"></a>
+<span class="sourceLineNo">132</span>    * &lt;/ul&gt;<a name="line.132"></a>
+<span class="sourceLineNo">133</span>    *<a name="line.133"></a>
+<span class="sourceLineNo">134</span>    * @param name The header name.<a name="line.134"></a>
+<span class="sourceLineNo">135</span>    * @return The header value, or &lt;jk&gt;null&lt;/jk&gt; if it doesn't exist.<a name="line.135"></a>
+<span class="sourceLineNo">136</span>    */<a name="line.136"></a>
+<span class="sourceLineNo">137</span>   public String getString(String name) {<a name="line.137"></a>
+<span class="sourceLineNo">138</span>      String[] v = null;<a name="line.138"></a>
+<span class="sourceLineNo">139</span>      if (queryParams != null)<a name="line.139"></a>
+<span class="sourceLineNo">140</span>         if (allowedQueryParams.contains("*") || allowedQueryParams.contains(name))<a name="line.140"></a>
+<span class="sourceLineNo">141</span>            v = queryParams.get(name, true);<a name="line.141"></a>
+<span class="sourceLineNo">142</span>      if (v == null || v.length == 0)<a name="line.142"></a>
+<span class="sourceLineNo">143</span>         v = get(name);<a name="line.143"></a>
+<span class="sourceLineNo">144</span>      if (v == null || v.length == 0)<a name="line.144"></a>
+<span class="sourceLineNo">145</span>         return null;<a name="line.145"></a>
+<span class="sourceLineNo">146</span>      return v[0];<a name="line.146"></a>
+<span class="sourceLineNo">147</span>   }<a name="line.147"></a>
+<span class="sourceLineNo">148</span><a name="line.148"></a>
+<span class="sourceLineNo">149</span>   /**<a name="line.149"></a>
+<span class="sourceLineNo">150</span>    * Returns the specified header value as a string.<a name="line.150"></a>
+<span class="sourceLineNo">151</span>    *<a name="line.151"></a>
+<span class="sourceLineNo">152</span>    * &lt;ul class='notes'&gt;<a name="line.152"></a>
+<span class="sourceLineNo">153</span>    *    &lt;li&gt;<a name="line.153"></a>
+<span class="sourceLineNo">154</span>    *       If {@code allowHeaderParams} init parameter is &lt;jk&gt;true&lt;/jk&gt;, then first looks for {@code &amp;HeaderName=x} in the URL query string.<a name="line.154"></a>
+<span class="sourceLineNo">155</span>    * &lt;/ul&gt;<a name="line.155"></a>
+<span class="sourceLineNo">156</span>    *<a name="line.156"></a>
+<span class="sourceLineNo">157</span>    * @param name The HTTP header name.<a name="line.157"></a>
+<span class="sourceLineNo">158</span>    * @param def The default value to return if the header value isn't found.<a name="line.158"></a>
+<span class="sourceLineNo">159</span>    * @return The header value, or the default value if the header isn't present.<a name="line.159"></a>
+<span class="sourceLineNo">160</span>    */<a name="line.160"></a>
+<span class="sourceLineNo">161</span>   public String getString(String name, String def) {<a name="line.161"></a>
+<span class="sourceLineNo">162</span>      String s = getString(name);<a name="line.162"></a>
+<span class="sourceLineNo">163</span>      return StringUtils.isEmpty(s) ? def : s;<a name="line.163"></a>
+<span class="sourceLineNo">164</span>   }<a name="line.164"></a>
+<span class="sourceLineNo">165</span><a name="line.165"></a>
+<span class="sourceLineNo">166</span>   /**<a name="line.166"></a>
+<span class="sourceLineNo">167</span>    * Same as {@link #getString(String)} but converts the value to an integer.<a name="line.167"></a>
+<span class="sourceLineNo">168</span>    *<a name="line.168"></a>
+<span class="sourceLineNo">169</span>    * @param name The HTTP header name.<a name="line.169"></a>
+<span class="sourceLineNo">170</span>    * @return The header value, or the default value if the header isn't present.<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    */<a name="line.171"></a>
+<span class="sourceLineNo">172</span>   public int getInt(String name) {<a name="line.172"></a>
+<span class="sourceLineNo">173</span>      return getInt(name, 0);<a name="line.173"></a>
+<span class="sourceLineNo">174</span>   }<a name="line.174"></a>
+<span class="sourceLineNo">175</span><a name="line.175"></a>
+<span class="sourceLineNo">176</span>   /**<a name="line.176"></a>
+<span class="sourceLineNo">177</span>    * Same as {@link #getString(String,String)} but converts the value to an integer.<a name="line.177"></a>
+<span class="sourceLineNo">178</span>    *<a name="line.178"></a>
+<span class="sourceLineNo">179</span>    * @param name The HTTP header name.<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    * @param def The default value to return if the header value isn't found.<a name="line.180"></a>
+<span class="sourceLineNo">181</span>    * @return The header value, or the default value if the header isn't present.<a name="line.181"></a>
+<span class="sourceLineNo">182</span>    */<a name="line.182"></a>
+<span class="sourceLineNo">183</span>   public int getInt(String name, int def) {<a name="line.183"></a>
+<span class="sourceLineNo">184</span>      String s = getString(name);<a name="line.184"></a>
+<span class="sourceLineNo">185</span>      return StringUtils.isEmpty(s) ? def : Integer.parseInt(s);<a name="line.185"></a>
+<span class="sourceLineNo">186</span>   }<a name="line.186"></a>
+<span class="sourceLineNo">187</span><a name="line.187"></a>
+<span class="sourceLineNo">188</span>   /**<a name="line.188"></a>
+<span class="sourceLineNo">189</span>    * Same as {@link #getString(String)} but converts the value to a boolean.<a name="line.189"></a>
+<span class="sourceLineNo">190</span>    *<a name="line.190"></a>
+<span class="sourceLineNo">191</span>    * @param name The HTTP header name.<a name="line.191"></a>
+<span class="sourceLineNo">192</span>    * @return The header value, or the default value if the header isn't present.<a name="line.192"></a>
+<span class="sourceLineNo">193</span>    */<a name="line.193"></a>
+<span class="sourceLineNo">194</span>   public boolean getBoolean(String name) {<a name="line.194"></a>
+<span class="sourceLineNo">195</span>      return getBoolean(name, false);<a name="line.195"></a>
+<span class="sourceLineNo">196</span>   }<a name="line.196"></a>
+<span class="sourceLineNo">197</span><a name="line.197"></a>
+<span class="sourceLineNo">198</span>   /**<a name="line.198"></a>
+<span class="sourceLineNo">199</span>    * Same as {@link #getString(String,String)} but converts the value to a boolean.<a name="line.199"></a>
+<span class="sourceLineNo">200</span>    *<a name="line.200"></a>
+<span class="sourceLineNo">201</span>    * @param name The HTTP header name.<a name="line.201"></a>
+<span class="sourceLineNo">202</span>    * @param def The default value to return if the header value isn't found.<a name="line.202"></a>
+<span class="sourceLineNo">203</span>    * @return The header value, or the default value if the header isn't present.<a name="line.203"></a>
+<span class="sourceLineNo">204</span>    */<a name="line.204"></a>
+<span class="sourceLineNo">205</span>   public boolean getBoolean(String name, boolean def) {<a name="line.205"></a>
+<span class="sourceLineNo">206</span>      String s = getString(name);<a name="line.206"></a>
+<span class="sourceLineNo">207</span>      return StringUtils.isEmpty(s) ? def : Boolean.parseBoolean(s);<a name="line.207"></a>
+<span class="sourceLineNo">208</span>   }<a name="line.208"></a>
+<span class="sourceLineNo">209</span><a name="line.209"></a>
+<span class="sourceLineNo">210</span>   /**<a name="line.210"></a>
+<span class="sourceLineNo">211</span>    * Sets a request header value.<a name="line.211"></a>
+<span class="sourceLineNo">212</span>    *<a name="line.212"></a>
+<span class="sourceLineNo">213</span>    * &lt;p&gt;<a name="line.213"></a>
+<span class="sourceLineNo">214</span>    * This overwrites any previous value.<a name="line.214"></a>
+<span class="sourceLineNo">215</span>    *<a name="line.215"></a>
+<span class="sourceLineNo">216</span>    * @param name The header name.<a name="line.216"></a>
+<span class="sourceLineNo">217</span>    * @param value The header value.<a name="line.217"></a>
+<span class="sourceLineNo">218</span>    */<a name="line.218"></a>
+<span class="sourceLineNo">219</span>   public void put(String name, Object value) {<a name="line.219"></a>
+<span class="sourceLineNo">220</span>      super.put(name, stringifyAll(value));<a name="line.220"></a>
+<span class="sourceLineNo">221</span>   }<a name="line.221"></a>
+<span class="sourceLineNo">222</span><a name="line.222"></a>
+<span class="sourceLineNo">223</span>   /**<a name="line.223"></a>
+<span class="sourceLineNo">224</span>    * Returns the specified header value converted to a POJO using the {@link HttpPartParser} registered with the resource.<a name="line.224"></a>
+<span class="sourceLineNo">225</span>    *<a name="line.225"></a>
+<span class="sourceLineNo">226</span>    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;<a name="line.226"></a>
+<span class="sourceLineNo">227</span>    * &lt;p class='bcode w800'&gt;<a name="line.227"></a>
+<span class="sourceLineNo">228</span>    *    &lt;jc&gt;// Parse into an integer.&lt;/jc&gt;<a name="line.228"></a>
+<span class="sourceLineNo">229</span>    *    &lt;jk&gt;int&lt;/jk&gt; myheader = req.getHeader(&lt;js&gt;"My-Header"&lt;/js&gt;, &lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);<a name="line.229"></a>
+<span class="sourceLineNo">230</span>    *<a name="line.230"></a>
+<span class="sourceLineNo">231</span>    *    &lt;jc&gt;// Parse a UUID.&lt;/jc&gt;<a name="line.231"></a>
+<span class="sourceLineNo">232</span>    *    UUID myheader = req.getHeader(&lt;js&gt;"My-Header"&lt;/js&gt;, UUID.&lt;jk&gt;class&lt;/jk&gt;);<a name="line.232"></a>
+<span class="sourceLineNo">233</span>    * &lt;/p&gt;<a name="line.233"></a>
+<span class="sourceLineNo">234</span>    *<a name="line.234"></a>
+<span class="sourceLineNo">235</span>    * &lt;ul class='notes'&gt;<a name="line.235"></a>
+<span class="sourceLineNo">236</span>    *    &lt;li&gt;<a name="line.236"></a>
+<span class="sourceLineNo">237</span>    *       If {@code allowHeaderParams} init parameter is &lt;jk&gt;true&lt;/jk&gt;, then first looks for {@code &amp;HeaderName=x} in the URL query string.<a name="line.237"></a>
+<span class="sourceLineNo">238</span>    * &lt;/ul&gt;<a name="line.238"></a>
+<span class="sourceLineNo">239</span>    *<a name="line.239"></a>
+<span class="sourceLineNo">240</span>    * &lt;ul class='seealso'&gt;<a name="line.240"></a>
+<span class="sourceLineNo">241</span>    *    &lt;li class='jf'&gt;{@link RestContext#REST_partParser}<a name="line.241"></a>
+<span class="sourceLineNo">242</span>    * &lt;/ul&gt;<a name="line.242"></a>
+<span class="sourceLineNo">243</span>    *<a name="line.243"></a>
+<span class="sourceLineNo">244</span>    * @param name The HTTP header name.<a name="line.244"></a>
+<span class="sourceLineNo">245</span>    * @param type The class type to convert the header value to.<a name="line.245"></a>
+<span class="sourceLineNo">246</span>    * @param &lt;T&gt; The class type to convert the header value to.<a name="line.246"></a>
+<span class="sourceLineNo">247</span>    * @return The parameter value converted to the specified class type.<a name="line.247"></a>
+<span class="sourceLineNo">248</span>    * @throws BadRequest Thrown if input could not be parsed.<a name="line.248"></a>
+<span class="sourceLineNo">249</span>    * @throws InternalServerError Thrown if any other exception occurs.<a name="line.249"></a>
+<span class="sourceLineNo">250</span>    */<a name="line.250"></a>
+<span class="sourceLineNo">251</span>   public &lt;T&gt; T get(String name, Class&lt;T&gt; type) throws BadRequest, InternalServerError {<a name="line.251"></a>
+<span class="sourceLineNo">252</span>      return getInner(null, null, name, null, getClassMeta(type));<a name="line.252"></a>
+<span class="sourceLineNo">253</span>   }<a name="line.253"></a>
+<span class="sourceLineNo">254</span><a name="line.254"></a>
+<span class="sourceLineNo">255</span>   /**<a name="line.255"></a>
+<span class="sourceLineNo">256</span>    * Same as {@link #get(String, Class)} but allows you to override the part parser used.<a name="line.256"></a>
+<span class="sourceLineNo">257</span>    *<a name="line.257"></a>
+<span class="sourceLineNo">258</span>    * @param parser<a name="line.258"></a>
+<span class="sourceLineNo">259</span>    *    The parser to use for parsing the string header.<a name="line.259"></a>
+<span class="sourceLineNo">260</span>    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, uses the part parser defined on the resource/method.<a name="line.260"></a>
+<span class="sourceLineNo">261</span>    * @param schema<a name="line.261"></a>
+<span class="sourceLineNo">262</span>    *    The schema object that defines the format of the input.<a name="line.262"></a>
+<span class="sourceLineNo">263</span>    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, defaults to the schema defined on the parser.<a name="line.263"></a>
+<span class="sourceLineNo">264</span>    *    &lt;br&gt;If that's also &lt;jk&gt;null&lt;/jk&gt;, defaults to {@link HttpPartSchema#DEFAULT}.<a name="line.264"></a>
+<span class="sourceLineNo">265</span>    *    &lt;br&gt;Only used if parser is schema-aware (e.g. {@link OpenApiParser}).<a name="line.265"></a>
+<span class="sourceLineNo">266</span>    * @param name The HTTP header name.<a name="line.266"></a>
+<span class="sourceLineNo">267</span>    * @param type The class type to convert the header value to.<a name="line.267"></a>
+<span class="sourceLineNo">268</span>    * @param &lt;T&gt; The class type to convert the header value to.<a name="line.268"></a>
+<span class="sourceLineNo">269</span>    * @return The parameter value converted to the specified class type.<a name="line.269"></a>
+<span class="sourceLineNo">270</span>    * @throws BadRequest Thrown if input could not be parsed or fails schema validation.<a name="line.270"></a>
+<span class="sourceLineNo">271</span>    * @throws InternalServerError Thrown if any other exception occurs.<a name="line.271"></a>
+<span class="sourceLineNo">272</span>    */<a name="line.272"></a>
+<span class="sourceLineNo">273</span>   public &lt;T&gt; T get(HttpPartParser parser, HttpPartSchema schema, String name, Class&lt;T&gt; type) throws BadRequest, InternalServerError {<a name="line.273"></a>
+<span class="sourceLineNo">274</span>      return getInner(parser, schema, name, null, getClassMeta(type));<a name="line.274"></a>
+<span class="sourceLineNo">275</span>   }<a name="line.275"></a>
+<span class="sourceLineNo">276</span><a name="line.276"></a>
+<span class="sourceLineNo">277</span>   /**<a name="line.277"></a>
+<span class="sourceLineNo">278</span>    * Same as {@link #get(String, Class)} but returns a default value if not found.<a name="line.278"></a>
+<span class="sourceLineNo">279</span>    *<a name="line.279"></a>
+<span class="sourceLineNo">280</span>    * @param name The HTTP header name.<a name="line.280"></a>
+<span class="sourceLineNo">281</span>    * @param def The default value if the header was not specified or is &lt;jk&gt;null&lt;/jk&gt;.<a name="line.281"></a>
+<span class="sourceLineNo">282</span>    * @param type The class type to convert the header value to.<a name="line.282"></a>
+<span class="sourceLineNo">283</span>    * @param &lt;T&gt; The class type to convert the header value to.<a name="line.283"></a>
+<span class="sourceLineNo">284</span>    * @return The parameter value converted to the specified class type.<a name="line.284"></a>
+<span class="sourceLineNo">285</span>    * @throws BadRequest Thrown if input could not be parsed.<a name="line.285"></a>
+<span class="sourceLineNo">286</span>    * @throws InternalServerError Thrown if any other exception occurs.<a name="line.286"></a>
+<span class="sourceLineNo">287</span>    */<a name="line.287"></a>
+<span class="sourceLineNo">288</span>   public &lt;T&gt; T get(String name, T def, Class&lt;T&gt; type) throws BadRequest, InternalServerError {<a name="line.288"></a>
+<span class="sourceLineNo">289</span>      return getInner(null, null, name, def, getClassMeta(type));<a name="line.289"></a>
+<span class="sourceLineNo">290</span>   }<a name="line.290"></a>
+<span class="sourceLineNo">291</span><a name="line.291"></a>
+<span class="sourceLineNo">292</span>   /**<a name="line.292"></a>
+<span class="sourceLineNo">293</span>    * Same as {@link #get(String, Object, Class)} but allows you to override the part parser used.<a name="line.293"></a>
+<span class="sourceLineNo">294</span>    *<a name="line.294"></a>
+<span class="sourceLineNo">295</span>    * @param parser<a name="line.295"></a>
+<span class="sourceLineNo">296</span>    *    The parser to use for parsing the string header.<a name="line.296"></a>
+<span class="sourceLineNo">297</span>    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, uses the part parser defined on the resource/method.<a name="line.297"></a>
+<span class="sourceLineNo">298</span>    * @param schema<a name="line.298"></a>
+<span class="sourceLineNo">299</span>    *    The schema object that defines the format of the input.<a name="line.299"></a>
+<span class="sourceLineNo">300</span>    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, defaults to the schema defined on the parser.<a name="line.300"></a>
+<span class="sourceLineNo">301</span>    *    &lt;br&gt;If that's also &lt;jk&gt;null&lt;/jk&gt;, defaults to {@link HttpPartSchema#DEFAULT}.<a name="line.301"></a>
+<span class="sourceLineNo">302</span>    *    &lt;br&gt;Only used if parser is schema-aware (e.g. {@link OpenApiParser}).<a name="line.302"></a>
+<span class="sourceLineNo">303</span>    * @param name The HTTP header name.<a name="line.303"></a>
+<span class="sourceLineNo">304</span>    * @param def The default value if the header was not specified or is &lt;jk&gt;null&lt;/jk&gt;.<a name="line.304"></a>
+<span class="sourceLineNo">305</span>    * @param type The class type to convert the header value to.<a name="line.305"></a>
+<span class="sourceLineNo">306</span>    * @param &lt;T&gt; The class type to convert the header value to.<a name="line.306"></a>
+<span class="sourceLineNo">307</span>    * @return The parameter value converted to the specified class type.<a name="line.307"></a>
+<span class="sourceLineNo">308</span>    * @throws BadRequest Thrown if input could not be parsed or fails schema validation.<a name="line.308"></a>
+<span class="sourceLineNo">309</span>    * @throws InternalServerError Thrown if any other exception occurs.<a name="line.309"></a>
+<span class="sourceLineNo">310</span>    */<a name="line.310"></a>
+<span class="sourceLineNo">311</span>   public &lt;T&gt; T get(HttpPartParser parser, HttpPartSchema schema, String name, T def, Class&lt;T&gt; type) throws BadRequest, InternalServerError {<a name="line.311"></a>
+<span class="sourceLineNo">312</span>      return getInner(parser, schema, name, def, getClassMeta(type));<a name="line.312"></a>
+<span class="sourceLineNo">313</span>   }<a name="line.313"></a>
+<span class="sourceLineNo">314</span><a name="line.314"></a>
+<span class="sourceLineNo">315</span>   /**<a name="line.315"></a>
+<span class="sourceLineNo">316</span>    * Returns the specified header value converted to a POJO using the {@link HttpPartParser} registered with the resource.<a name="line.316"></a>
+<span class="sourceLineNo">317</span>    *<a name="line.317"></a>
+<span class="sourceLineNo">318</span>    * &lt;p&gt;<a name="line.318"></a>
+<span class="sourceLineNo">319</span>    * Similar to {@link #get(String,Class)} but allows for complex collections of POJOs to be created.<a name="line.319"></a>
+<span class="sourceLineNo">320</span>    *<a name="line.320"></a>
+<span class="sourceLineNo">321</span>    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;<a name="line.321"></a>
+<span class="sourceLineNo">322</span>    * &lt;p class='bcode w800'&gt;<a name="line.322"></a>
+<span class="sourceLineNo">323</span>    *    &lt;jc&gt;// Parse into a linked-list of strings.&lt;/jc&gt;<a name="line.323"></a>
+<span class="sourceLineNo">324</span>    *    List&amp;lt;String&amp;gt; myheader = req.getHeader(&lt;js&gt;"My-Header"&lt;/js&gt;, LinkedList.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;);<a name="line.324"></a>
+<span class="sourceLineNo">325</span>    * &lt;/p&gt;<a name="line.325"></a>
+<span class="sourceLineNo">326</span>    *<a name="line.326"></a>
+<span class="sourceLineNo">327</span>    * &lt;ul class='notes'&gt;<a name="line.327"></a>
+<span class="sourceLineNo">328</span>    *    &lt;li&gt;<a name="line.328"></a>
+<span class="sourceLineNo">329</span>    *       &lt;c&gt;Collections&lt;/c&gt; must be followed by zero or one parameter representing the value type.<a name="line.329"></a>
+<span class="sourceLineNo">330</span>    *    &lt;li&gt;<a name="line.330"></a>
+<span class="sourceLineNo">331</span>    *       &lt;c&gt;Maps&lt;/c&gt; must be followed by zero or two parameters representing the key and value types.<a name="line.331"></a>
+<span class="sourceLineNo">332</span>    *    &lt;li&gt;<a name="line.332"></a>
+<span class="sourceLineNo">333</span>    *       If {@code allowHeaderParams} init parameter is &lt;jk&gt;true&lt;/jk&gt;, then first looks for {@code &amp;HeaderName=x} in the URL query string.<a name="line.333"></a>
+<span class="sourceLineNo">334</span>    * &lt;/ul&gt;<a name="line.334"></a>
+<span class="sourceLineNo">335</span>    *<a name="line.335"></a>
+<span class="sourceLineNo">336</span>    * &lt;ul class='seealso'&gt;<a name="line.336"></a>
+<span class="sourceLineNo">337</span>    *    &lt;li class='jf'&gt;{@link RestContext#REST_partParser}<a name="line.337"></a>
+<span class="sourceLineNo">338</span>    * &lt;/ul&gt;<a name="line.338"></a>
+<span class="sourceLineNo">339</span>    *<a name="line.339"></a>
+<span class="sourceLineNo">340</span>    * @param name The HTTP header name.<a name="line.340"></a>
+<span class="sourceLineNo">341</span>    * @param type<a name="line.341"></a>
+<span class="sourceLineNo">342</span>    *    The type of object to create.<a name="line.342"></a>
+<span class="sourceLineNo">343</span>    *    &lt;br&gt;Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}<a name="line.343"></a>
+<span class="sourceLineNo">344</span>    * @param args<a name="line.344"></a>
+<span class="sourceLineNo">345</span>    *    The type arguments of the class if it's a collection or map.<a name="line.345"></a>
+<span class="sourceLineNo">346</span>    *    &lt;br&gt;Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}<a name="line.346"></a>
+<span class="sourceLineNo">347</span>    *    &lt;br&gt;Ignored if the main type is not a map or collection.<a name="line.347"></a>
+<span class="sourceLineNo">348</span>    * @param &lt;T&gt; The class type to convert the header value to.<a name="line.348"></a>
+<span class="sourceLineNo">349</span>    * @return The parameter value converted to the specified class type.<a name="line.349"></a>
+<span class="sourceLineNo">350</span>    * @throws BadRequest Thrown if input could not be parsed.<a name="line.350"></a>
+<span class="sourceLineNo">351</span>    * @throws InternalServerError Thrown if any other exception occurs.<a name="line.351"></a>
+<span class="sourceLineNo">352</span>    */<a name="line.352"></a>
+<span class="sourceLineNo">353</span>   public &lt;T&gt; T get(String name, Type type, Type...args) throws BadRequest, InternalServerError {<a name="line.353"></a>
+<span class="sourceLineNo">354</span>      return getInner(null, null, name, null, this.&lt;T&gt;getClassMeta(type, args));<a name="line.354"></a>
+<span class="sourceLineNo">355</span>   }<a name="line.355"></a>
+<span class="sourceLineNo">356</span><a name="line.356"></a>
+<span class="sourceLineNo">357</span>   /**<a name="line.357"></a>
+<span class="sourceLineNo">358</span>    * Same as {@link #get(String, Type, Type...)} but allows you to override the part parser used.<a name="line.358"></a>
+<span class="sourceLineNo">359</span>    *<a name="line.359"></a>
+<span class="sourceLineNo">360</span>    * @param parser<a name="line.360"></a>
+<span class="sourceLineNo">361</span>    *    The parser to use for parsing the string header.<a name="line.361"></a>
+<span class="sourceLineNo">362</span>    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, uses the part parser defined on the resource/method.<a name="line.362"></a>
+<span class="sourceLineNo">363</span>    * @param schema<a name="line.363"></a>
+<span class="sourceLineNo">364</span>    *    The schema object that defines the format of the input.<a name="line.364"></a>
+<span class="sourceLineNo">365</span>    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, defaults to the schema defined on the parser.<a name="line.365"></a>
+<span class="sourceLineNo">366</span>    *    &lt;br&gt;If that's also &lt;jk&gt;null&lt;/jk&gt;, defaults to {@link HttpPartSchema#DEFAULT}.<a name="line.366"></a>
+<span class="sourceLineNo">367</span>    *    &lt;br&gt;Only used if parser is schema-aware (e.g. {@link OpenApiParser}).<a name="line.367"></a>
+<span class="sourceLineNo">368</span>    * @param name<a name="line.368"></a>
+<span class="sourceLineNo">369</span>    *    The HTTP header name.<a name="line.369"></a>
+<span class="sourceLineNo">370</span>    * @param type<a name="line.370"></a>
+<span class="sourceLineNo">371</span>    *    The type of object to create.<a name="line.371"></a>
+<span class="sourceLineNo">372</span>    *    &lt;br&gt;Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}<a name="line.372"></a>
+<span class="sourceLineNo">373</span>    * @param args<a name="line.373"></a>
+<span class="sourceLineNo">374</span>    *    The type arguments of the class if it's a collection or map.<a name="line.374"></a>
+<span class="sourceLineNo">375</span>    *    &lt;br&gt;Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}<a name="line.375"></a>
+<span class="sourceLineNo">376</span>    *    &lt;br&gt;Ignored if the main type is not a map or collection.<a name="line.376"></a>
+<span class="sourceLineNo">377</span>    * @param &lt;T&gt; The class type to convert the header value to.<a name="line.377"></a>
+<span class="sourceLineNo">378</span>    * @return The parameter value converted to the specified class type.<a name="line.378"></a>
+<span class="sourceLineNo">379</span>    * @throws BadRequest Thrown if input could not be parsed or fails schema validation.<a name="line.379"></a>
+<span class="sourceLineNo">380</span>    * @throws InternalServerError Thrown if any other exception occurs.<a name="line.380"></a>
+<span class="sourceLineNo">381</span>    */<a name="line.381"></a>
+<span class="sourceLineNo">382</span>   public &lt;T&gt; T get(HttpPartParser parser, HttpPartSchema schema, String name, Type type, Type...args) throws BadRequest, InternalServerError {<a name="line.382"></a>
+<span class="sourceLineNo">383</span>      return getInner(parser, schema, name, null, this.&lt;T&gt;getClassMeta(type, args));<a name="line.383"></a>
+<span class="sourceLineNo">384</span>   }<a name="line.384"></a>
+<span class="sourceLineNo">385</span><a name="line.385"></a>
+<span class="sourceLineNo">386</span>   /* Workhorse method */<a name="line.386"></a>
+<span class="sourceLineNo">387</span>   private &lt;T&gt; T getInner(HttpPartParser parser, HttpPartSchema schema, String name, T def, ClassMeta&lt;T&gt; cm) throws BadRequest, InternalServerError {<a name="line.387"></a>
+<span class="sourceLineNo">388</span>      try {<a name="line.388"></a>
+<span class="sourceLineNo">389</span>         if (cm.isMapOrBean() &amp;&amp; isOneOf(name, "*", "")) {<a name="line.389"></a>
+<span class="sourceLineNo">390</span>            ObjectMap m = new ObjectMap();<a name="line.390"></a>
+<span class="sourceLineNo">391</span>            for (Map.Entry&lt;String,String[]&gt; e : this.entrySet()) {<a name="line.391"></a>
+<span class="sourceLineNo">392</span>               String k = e.getKey();<a name="line.392"></a>
+<span class="sourceLineNo">393</span>               HttpPartSchema pschema = schema == null ? null : schema.getProperty(k);<a name="line.393"></a>
+<span class="sourceLineNo">394</span>               ClassMeta&lt;?&gt; cm2 = cm.getValueType();<a name="line.394"></a>
+<span class="sourceLineNo">395</span>               m.put(k, getInner(parser, pschema, k, null, cm2));<a name="line.395"></a>
+<span class="sourceLineNo">396</span>            }<a name="line.396"></a>
+<span class="sourceLineNo">397</span>            return req.getBeanSession().convertToType(m, cm);<a name="line.397"></a>
+<span class="sourceLineNo">398</span>         }<a name="line.398"></a>
+<span class="sourceLineNo">399</span>         T t = parse(parser, schema, getString(name), cm);<a name="line.399"></a>
+<span class="sourceLineNo">400</span>         return (t == null ? def : t);<a name="line.400"></a>
+<span class="sourceLineNo">401</span>      } catch (SchemaValidationException e) {<a name="line.401"></a>
+<span class="sourceLineNo">402</span>         throw new BadRequest(e, "Validation failed on header ''{0}''. ", name);<a name="line.402"></a>
+<span class="sourceLineNo">403</span>      } catch (ParseException e) {<a name="line.403"></a>
+<span class="sourceLineNo">404</span>         throw new BadRequest(e, "Could not parse header ''{0}''.", name) ;<a name="line.404"></a>
+<span class="sourceLineNo">405</span>      } catch (Exception e) {<a name="line.405"></a>
+<span class="sourceLineNo">406</span>         throw new InternalServerError(e, "Could not parse header ''{0}''.", name);<a name="line.406"></a>
+<span class="sourceLineNo">407</span>      }<a name="line.407"></a>
+<span class="sourceLineNo">408</span>   }<a name="line.408"></a>
+<span class="sourceLineNo">409</span><a name="line.409"></a>
+<span class="sourceLineNo">410</span>   /* Workhorse method */<a name="line.410"></a>
+<span class="sourceLineNo">411</span>   private &lt;T&gt; T parse(HttpPartParser parser, HttpPartSchema schema, String val, ClassMeta&lt;T&gt; cm) throws SchemaValidationException, ParseException {<a name="line.411"></a>
+<span class="sourceLineNo">412</span>      if (parser == null)<a name="line.412"></a>
+<span class="sourceLineNo">413</span>         parser = this.parser;<a name="line.413"></a>
+<span class="sourceLineNo">414</span>      return parser.createPartSession(req.getParserSessionArgs()).parse(HttpPartType.HEADER, schema, val, cm);<a name="line.414"></a>
+<span class="sourceLineNo">415</span>   }<a name="line.415"></a>
+<span class="sourceLineNo">416</span><a name="line.416"></a>
+<span class="sourceLineNo">417</span>   /**<a name="line.417"></a>
+<span class="sourceLineNo">418</span>    * Returns a copy of this object but only with the specified header names copied.<a name="line.418"></a>
+<span class="sourceLineNo">419</span>    *<a name="line.419"></a>
+<span class="sourceLineNo">420</span>    * @param headers The headers to include in the copy.<a name="line.420"></a>
+<span class="sourceLineNo">421</span>    * @return A new headers object.<a name="line.421"></a>
+<span class="sourceLineNo">422</span>    */<a name="line.422"></a>
+<span class="sourceLineNo">423</span>   public RequestHeaders subset(String...headers) {<a name="line.423"></a>
+<span class="sourceLineNo">424</span>      RequestHeaders rh2 = new RequestHeaders(req).parser(parser).queryParams(queryParams, allowedQueryParams);<a name="line.424"></a>
+<span class="sourceLineNo">425</span>      for (String h : headers)<a name="line.425"></a>
+<span class="sourceLineNo">426</span>         if (containsKey(h))<a name="line.426"></a>
+<span class="sourceLineNo">427</span>            rh2.put(h, get(h));<a name="line.427"></a>
+<span class="sourceLineNo">428</span>      return rh2;<a name="line.428"></a>
+<span class="sourceLineNo">429</span>   }<a name="line.429"></a>
+<span class="sourceLineNo">430</span><a name="line.430"></a>
+<span class="sourceLineNo">431</span>   /**<a name="line.431"></a>
+<span class="sourceLineNo">432</span>    * Same as {@link #subset(String...)} but allows you to specify header names as a comma-delimited list.<a name="line.432"></a>
+<span class="sourceLineNo">433</span>    *<a name="line.433"></a>
+<span class="sourceLineNo">434</span>    * @param headers The headers to include in the copy.<a name="line.434"></a>
+<span class="sourceLineNo">435</span>    * @return A new headers object.<a name="line.435"></a>
+<span class="sourceLineNo">436</span>    */<a name="line.436"></a>
+<span class="sourceLineNo">437</span>   public RequestHeaders subset(String headers) {<a name="line.437"></a>
+<span class="sourceLineNo">438</span>      return subset(split(headers));<a name="line.438"></a>
+<span class="sourceLineNo">439</span>   }<a name="line.439"></a>
+<span class="sourceLineNo">440</span><a name="line.440"></a>
+<span class="sourceLineNo">441</span>   /**<a name="line.441"></a>
+<span class="sourceLineNo">442</span>    * Returns the &lt;c&gt;Accept&lt;/c&gt; header on the request.<a name="line.442"></a>
+<span class="sourceLineNo">443</span>    *<a name="line.443"></a>
+<span class="sourceLineNo">444</span>    * &lt;p&gt;<a name="line.444"></a>
+<span class="sourceLineNo">445</span>    * Content-Types that are acceptable for the response.<a name="line.445"></a>
+<span class="sourceLineNo">446</span>    *<a name="line.446"></a>
+<span class="sourceLineNo">447</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.447"></a>
+<span class="sourceLineNo">448</span>    * &lt;p class='bcode w800'&gt;<a name="line.448"></a>
+<span class="sourceLineNo">449</span>    *    Accept: text/plain<a name="line.449"></a>
+<span class="sourceLineNo">450</span>    * &lt;/p&gt;<a name="line.450"></a>
+<span class="sourceLineNo">451</span>    *<a name="line.451"></a>
+<span class="sourceLineNo">452</span>    * @return The parsed &lt;c&gt;Accept&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.452"></a>
+<span class="sourceLineNo">453</span>    */<a name="line.453"></a>
+<span class="sourceLineNo">454</span>   public Accept getAccept() {<a name="line.454"></a>
+<span class="sourceLineNo">455</span>      return Accept.forString(getString("Accept"));<a name="line.455"></a>
+<span class="sourceLineNo">456</span>   }<a name="line.456"></a>
+<span class="sourceLineNo">457</span><a name="line.457"></a>
+<span class="sourceLineNo">458</span>   /**<a name="line.458"></a>
+<span class="sourceLineNo">459</span>    * Returns the &lt;c&gt;Accept-Charset&lt;/c&gt; header on the request.<a name="line.459"></a>
+<span class="sourceLineNo">460</span>    *<a name="line.460"></a>
+<span class="sourceLineNo">461</span>    * &lt;p&gt;<a name="line.461"></a>
+<span class="sourceLineNo">462</span>    * Character sets that are acceptable.<a name="line.462"></a>
+<span class="sourceLineNo">463</span>    *<a name="line.463"></a>
+<span class="sourceLineNo">464</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.464"></a>
+<span class="sourceLineNo">465</span>    * &lt;p class='bcode w800'&gt;<a name="line.465"></a>
+<span class="sourceLineNo">466</span>    *    Accept-Charset: utf-8<a name="line.466"></a>
+<span class="sourceLineNo">467</span>    * &lt;/p&gt;<a name="line.467"></a>
+<span class="sourceLineNo">468</span>    *<a name="line.468"></a>
+<span class="sourceLineNo">469</span>    * @return The parsed &lt;c&gt;Accept-Charset&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.469"></a>
+<span class="sourceLineNo">470</span>    */<a name="line.470"></a>
+<span class="sourceLineNo">471</span>   public AcceptCharset getAcceptCharset() {<a name="line.471"></a>
+<span class="sourceLineNo">472</span>      return AcceptCharset.forString(getString("Accept-Charset"));<a name="line.472"></a>
+<span class="sourceLineNo">473</span>   }<a name="line.473"></a>
+<span class="sourceLineNo">474</span><a name="line.474"></a>
+<span class="sourceLineNo">475</span>   /**<a name="line.475"></a>
+<span class="sourceLineNo">476</span>    * Returns the &lt;c&gt;Accept-Encoding&lt;/c&gt; header on the request.<a name="line.476"></a>
+<span class="sourceLineNo">477</span>    *<a name="line.477"></a>
+<span class="sourceLineNo">478</span>    * &lt;p&gt;<a name="line.478"></a>
+<span class="sourceLineNo">479</span>    * List of acceptable encodings.<a name="line.479"></a>
+<span class="sourceLineNo">480</span>    *<a name="line.480"></a>
+<span class="sourceLineNo">481</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.481"></a>
+<span class="sourceLineNo">482</span>    * &lt;p class='bcode w800'&gt;<a name="line.482"></a>
+<span class="sourceLineNo">483</span>    *    Accept-Encoding: gzip, deflate<a name="line.483"></a>
+<span class="sourceLineNo">484</span>    * &lt;/p&gt;<a name="line.484"></a>
+<span class="sourceLineNo">485</span>    *<a name="line.485"></a>
+<span class="sourceLineNo">486</span>    * @return The parsed &lt;c&gt;Accept-Encoding&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.486"></a>
+<span class="sourceLineNo">487</span>    */<a name="line.487"></a>
+<span class="sourceLineNo">488</span>   public AcceptEncoding getAcceptEncoding() {<a name="line.488"></a>
+<span class="sourceLineNo">489</span>      return AcceptEncoding.forString(getString("Accept-Encoding"));<a name="line.489"></a>
+<span class="sourceLineNo">490</span>   }<a name="line.490"></a>
+<span class="sourceLineNo">491</span><a name="line.491"></a>
+<span class="sourceLineNo">492</span>   /**<a name="line.492"></a>
+<span class="sourceLineNo">493</span>    * Returns the &lt;c&gt;Accept-Language&lt;/c&gt; header on the request.<a name="line.493"></a>
+<span class="sourceLineNo">494</span>    *<a name="line.494"></a>
+<span class="sourceLineNo">495</span>    * &lt;p&gt;<a name="line.495"></a>
+<span class="sourceLineNo">496</span>    * List of acceptable human languages for response.<a name="line.496"></a>
+<span class="sourceLineNo">497</span>    *<a name="line.497"></a>
+<span class="sourceLineNo">498</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.498"></a>
+<span class="sourceLineNo">499</span>    * &lt;p class='bcode w800'&gt;<a name="line.499"></a>
+<span class="sourceLineNo">500</span>    *    Accept-Language: en-US<a name="line.500"></a>
+<span class="sourceLineNo">501</span>    * &lt;/p&gt;<a name="line.501"></a>
+<span class="sourceLineNo">502</span>    *<a name="line.502"></a>
+<span class="sourceLineNo">503</span>    * @return The parsed &lt;c&gt;Accept-Language&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.503"></a>
+<span class="sourceLineNo">504</span>    */<a name="line.504"></a>
+<span class="sourceLineNo">505</span>   public AcceptLanguage getAcceptLanguage() {<a name="line.505"></a>
+<span class="sourceLineNo">506</span>      return AcceptLanguage.forString(getString("Accept-Language"));<a name="line.506"></a>
+<span class="sourceLineNo">507</span>   }<a name="line.507"></a>
+<span class="sourceLineNo">508</span><a name="line.508"></a>
+<span class="sourceLineNo">509</span>   /**<a name="line.509"></a>
+<span class="sourceLineNo">510</span>    * Returns the &lt;c&gt;Authorization&lt;/c&gt; header on the request.<a name="line.510"></a>
+<span class="sourceLineNo">511</span>    *<a name="line.511"></a>
+<span class="sourceLineNo">512</span>    * &lt;p&gt;<a name="line.512"></a>
+<span class="sourceLineNo">513</span>    * Authentication credentials for HTTP authentication.<a name="line.513"></a>
+<span class="sourceLineNo">514</span>    *<a name="line.514"></a>
+<span class="sourceLineNo">515</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.515"></a>
+<span class="sourceLineNo">516</span>    * &lt;p class='bcode w800'&gt;<a name="line.516"></a>
+<span class="sourceLineNo">517</span>    *    Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==<a name="line.517"></a>
+<span class="sourceLineNo">518</span>    * &lt;/p&gt;<a name="line.518"></a>
+<span class="sourceLineNo">519</span>    *<a name="line.519"></a>
+<span class="sourceLineNo">520</span>    * @return The parsed &lt;c&gt;Authorization&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.520"></a>
+<span class="sourceLineNo">521</span>    */<a name="line.521"></a>
+<span class="sourceLineNo">522</span>   public Authorization getAuthorization() {<a name="line.522"></a>
+<span class="sourceLineNo">523</span>      return Authorization.forString(getString("Authorization"));<a name="line.523"></a>
+<span class="sourceLineNo">524</span>   }<a name="line.524"></a>
+<span class="sourceLineNo">525</span><a name="line.525"></a>
+<span class="sourceLineNo">526</span>   /**<a name="line.526"></a>
+<span class="sourceLineNo">527</span>    * Returns the &lt;c&gt;Cache-Control&lt;/c&gt; header on the request.<a name="line.527"></a>
+<span class="sourceLineNo">528</span>    *<a name="line.528"></a>
+<span class="sourceLineNo">529</span>    * &lt;p&gt;<a name="line.529"></a>
+<span class="sourceLineNo">530</span>    * Used to specify directives that must be obeyed by all caching mechanisms along the request-response chain.<a name="line.530"></a>
+<span class="sourceLineNo">531</span>    *<a name="line.531"></a>
+<span class="sourceLineNo">532</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.532"></a>
+<span class="sourceLineNo">533</span>    * &lt;p class='bcode w800'&gt;<a name="line.533"></a>
+<span class="sourceLineNo">534</span>    *    Cache-Control: no-cache<a name="line.534"></a>
+<span class="sourceLineNo">535</span>    * &lt;/p&gt;<a name="line.535"></a>
+<span class="sourceLineNo">536</span>    *<a name="line.536"></a>
+<span class="sourceLineNo">537</span>    * @return The parsed &lt;c&gt;Cache-Control&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.537"></a>
+<span class="sourceLineNo">538</span>    */<a name="line.538"></a>
+<span class="sourceLineNo">539</span>   public CacheControl getCacheControl() {<a name="line.539"></a>
+<span class="sourceLineNo">540</span>      return CacheControl.forString(getString("Cache-Control"));<a name="line.540"></a>
+<span class="sourceLineNo">541</span>   }<a name="line.541"></a>
+<span class="sourceLineNo">542</span><a name="line.542"></a>
+<span class="sourceLineNo">543</span>   /**<a name="line.543"></a>
+<span class="sourceLineNo">544</span>    * Returns the &lt;c&gt;Connection&lt;/c&gt; header on the request.<a name="line.544"></a>
+<span class="sourceLineNo">545</span>    *<a name="line.545"></a>
+<span class="sourceLineNo">546</span>    * &lt;p&gt;<a name="line.546"></a>
+<span class="sourceLineNo">547</span>    * Control options for the current connection and list of hop-by-hop request fields.<a name="line.547"></a>
+<span class="sourceLineNo">548</span>    *<a name="line.548"></a>
+<span class="sourceLineNo">549</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.549"></a>
+<span class="sourceLineNo">550</span>    * &lt;p class='bcode w800'&gt;<a name="line.550"></a>
+<span class="sourceLineNo">551</span>    *    Connection: keep-alive<a name="line.551"></a>
+<span class="sourceLineNo">552</span>    *    Connection: Upgrade<a name="line.552"></a>
+<span class="sourceLineNo">553</span>    * &lt;/p&gt;<a name="line.553"></a>
+<span class="sourceLineNo">554</span>    *<a name="line.554"></a>
+<span class="sourceLineNo">555</span>    * @return The parsed &lt;code&gt;&lt;/code&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.555"></a>
+<span class="sourceLineNo">556</span>    */<a name="line.556"></a>
+<span class="sourceLineNo">557</span>   public Connection getConnection() {<a name="line.557"></a>
+<span class="sourceLineNo">558</span>      return Connection.forString(getString("Connection"));<a name="line.558"></a>
+<span class="sourceLineNo">559</span>   }<a name="line.559"></a>
+<span class="sourceLineNo">560</span><a name="line.560"></a>
+<span class="sourceLineNo">561</span>   /**<a name="line.561"></a>
+<span class="sourceLineNo">562</span>    * Returns the &lt;c&gt;Content-Length&lt;/c&gt; header on the request.<a name="line.562"></a>
+<span class="sourceLineNo">563</span>    *<a name="line.563"></a>
+<span class="sourceLineNo">564</span>    * &lt;p&gt;<a name="line.564"></a>
+<span class="sourceLineNo">565</span>    * The length of the request body in octets (8-bit bytes).<a name="line.565"></a>
+<span class="sourceLineNo">566</span>    *<a name="line.566"></a>
+<span class="sourceLineNo">567</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.567"></a>
+<span class="sourceLineNo">568</span>    * &lt;p class='bcode w800'&gt;<a name="line.568"></a>
+<span class="sourceLineNo">569</span>    *    Content-Length: 348<a name="line.569"></a>
+<span class="sourceLineNo">570</span>    * &lt;/p&gt;<a name="line.570"></a>
+<span class="sourceLineNo">571</span>    *<a name="line.571"></a>
+<span class="sourceLineNo">572</span>    * @return The parsed &lt;c&gt;Content-Length&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.572"></a>
+<span class="sourceLineNo">573</span>    */<a name="line.573"></a>
+<span class="sourceLineNo">574</span>   public ContentLength getContentLength() {<a name="line.574"></a>
+<span class="sourceLineNo">575</span>      return ContentLength.forString(getString("Content-Length"));<a name="line.575"></a>
+<span class="sourceLineNo">576</span>   }<a name="line.576"></a>
+<span class="sourceLineNo">577</span><a name="line.577"></a>
+<span class="sourceLineNo">578</span>   /**<a name="line.578"></a>
+<span class="sourceLineNo">579</span>    * Returns the &lt;c&gt;Content-Type&lt;/c&gt; header on the request.<a name="line.579"></a>
+<span class="sourceLineNo">580</span>    *<a name="line.580"></a>
+<span class="sourceLineNo">581</span>    * &lt;p&gt;<a name="line.581"></a>
+<span class="sourceLineNo">582</span>    * The MIME type of the body of the request (used with POST and PUT requests).<a name="line.582"></a>
+<span class="sourceLineNo">583</span>    *<a name="line.583"></a>
+<span class="sourceLineNo">584</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.584"></a>
+<span class="sourceLineNo">585</span>    * &lt;p class='bcode w800'&gt;<a name="line.585"></a>
+<span class="sourceLineNo">586</span>    *    Content-Type: application/x-www-form-urlencoded<a name="line.586"></a>
+<span class="sourceLineNo">587</span>    * &lt;/p&gt;<a name="line.587"></a>
+<span class="sourceLineNo">588</span>    *<a name="line.588"></a>
+<span class="sourceLineNo">589</span>    * @return The parsed &lt;c&gt;Content-Type&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.589"></a>
+<span class="sourceLineNo">590</span>    */<a name="line.590"></a>
+<span class="sourceLineNo">591</span>   public ContentType getContentType() {<a name="line.591"></a>
+<span class="sourceLineNo">592</span>      return ContentType.forString(getString("Content-Type"));<a name="line.592"></a>
+<span class="sourceLineNo">593</span>   }<a name="line.593"></a>
+<span class="sourceLineNo">594</span><a name="line.594"></a>
+<span class="sourceLineNo">595</span>   /**<a name="line.595"></a>
+<span class="sourceLineNo">596</span>    * Returns the &lt;c&gt;Date&lt;/c&gt; header on the request.<a name="line.596"></a>
+<span class="sourceLineNo">597</span>    *<a name="line.597"></a>
+<span class="sourceLineNo">598</span>    * &lt;p&gt;<a name="line.598"></a>
+<span class="sourceLineNo">599</span>    * The date and time that the message was originated (in "HTTP-date" format as defined by RFC 7231 Date/Time Formats).<a name="line.599"></a>
+<span class="sourceLineNo">600</span>    *<a name="line.600"></a>
+<span class="sourceLineNo">601</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.601"></a>
+<span class="sourceLineNo">602</span>    * &lt;p class='bcode w800'&gt;<a name="line.602"></a>
+<span class="sourceLineNo">603</span>    *    Date: Tue, 15 Nov 1994 08:12:31 GMT<a name="line.603"></a>
+<span class="sourceLineNo">604</span>    * &lt;/p&gt;<a name="line.604"></a>
+<span class="sourceLineNo">605</span>    *<a name="line.605"></a>
+<span class="sourceLineNo">606</span>    * @return The parsed &lt;c&gt;Date&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.606"></a>
+<span class="sourceLineNo">607</span>    */<a name="line.607"></a>
+<span class="sourceLineNo">608</span>   public Date getDate() {<a name="line.608"></a>
+<span class="sourceLineNo">609</span>      return Date.forString(getString("Date"));<a name="line.609"></a>
+<span class="sourceLineNo">610</span>   }<a name="line.610"></a>
+<span class="sourceLineNo">611</span><a name="line.611"></a>
+<span class="sourceLineNo">612</span>   /**<a name="line.612"></a>
+<span class="sourceLineNo">613</span>    * Returns the &lt;c&gt;Expect&lt;/c&gt; header on the request.<a name="line.613"></a>
+<span class="sourceLineNo">614</span>    *<a name="line.614"></a>
+<span class="sourceLineNo">615</span>    * &lt;p&gt;<a name="line.615"></a>
+<span class="sourceLineNo">616</span>    * Indicates that particular server behaviors are required by the client.<a name="line.616"></a>
+<span class="sourceLineNo">617</span>    *<a name="line.617"></a>
+<span class="sourceLineNo">618</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.618"></a>
+<span class="sourceLineNo">619</span>    * &lt;p class='bcode w800'&gt;<a name="line.619"></a>
+<span class="sourceLineNo">620</span>    *    Expect: 100-continue<a name="line.620"></a>
+<span class="sourceLineNo">621</span>    * &lt;/p&gt;<a name="line.621"></a>
+<span class="sourceLineNo">622</span>    *<a name="line.622"></a>
+<span class="sourceLineNo">623</span>    * @return The parsed &lt;c&gt;Expect&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.623"></a>
+<span class="sourceLineNo">624</span>    */<a name="line.624"></a>
+<span class="sourceLineNo">625</span>   public Expect getExpect() {<a name="line.625"></a>
+<span class="sourceLineNo">626</span>      return Expect.forString(getString("Expect"));<a name="line.626"></a>
+<span class="sourceLineNo">627</span>   }<a name="line.627"></a>
+<span class="sourceLineNo">628</span><a name="line.628"></a>
+<span class="sourceLineNo">629</span>   /**<a name="line.629"></a>
+<span class="sourceLineNo">630</span>    * Returns the &lt;c&gt;From&lt;/c&gt; header on the request.<a name="line.630"></a>
+<span class="sourceLineNo">631</span>    *<a name="line.631"></a>
+<span class="sourceLineNo">632</span>    * &lt;p&gt;<a name="line.632"></a>
+<span class="sourceLineNo">633</span>    * The email address of the user making the request.<a name="line.633"></a>
+<span class="sourceLineNo">634</span>    *<a name="line.634"></a>
+<span class="sourceLineNo">635</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.635"></a>
+<span class="sourceLineNo">636</span>    * &lt;p class='bcode w800'&gt;<a name="line.636"></a>
+<span class="sourceLineNo">637</span>    *    From: user@example.com<a name="line.637"></a>
+<span class="sourceLineNo">638</span>    * &lt;/p&gt;<a name="line.638"></a>
+<span class="sourceLineNo">639</span>    *<a name="line.639"></a>
+<span class="sourceLineNo">640</span>    * @return The parsed &lt;c&gt;From&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.640"></a>
+<span class="sourceLineNo">641</span>    */<a name="line.641"></a>
+<span class="sourceLineNo">642</span>   public From getFrom() {<a name="line.642"></a>
+<span class="sourceLineNo">643</span>      return From.forString(getString("From"));<a name="line.643"></a>
+<span class="sourceLineNo">644</span>   }<a name="line.644"></a>
+<span class="sourceLineNo">645</span><a name="line.645"></a>
+<span class="sourceLineNo">646</span>   /**<a name="line.646"></a>
+<span class="sourceLineNo">647</span>    * Returns the &lt;c&gt;Host&lt;/c&gt; header on the request.<a name="line.647"></a>
+<span class="sourceLineNo">648</span>    *<a name="line.648"></a>
+<span class="sourceLineNo">649</span>    * &lt;p&gt;<a name="line.649"></a>
+<span class="sourceLineNo">650</span>    * The domain name of the server (for virtual hosting), and the TCP port number on which the server is listening.<a name="line.650"></a>
+<span class="sourceLineNo">651</span>    * The port number may be omitted if the port is the standard port for the service requested.<a name="line.651"></a>
+<span class="sourceLineNo">652</span>    *<a name="line.652"></a>
+<span class="sourceLineNo">653</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.653"></a>
+<span class="sourceLineNo">654</span>    * &lt;p class='bcode w800'&gt;<a name="line.654"></a>
+<span class="sourceLineNo">655</span>    *    Host: en.wikipedia.org:8080<a name="line.655"></a>
+<span class="sourceLineNo">656</span>    *    Host: en.wikipedia.org<a name="line.656"></a>
+<span class="sourceLineNo">657</span>    * &lt;/p&gt;<a name="line.657"></a>
+<span class="sourceLineNo">658</span>    *<a name="line.658"></a>
+<span class="sourceLineNo">659</span>    * @return The parsed &lt;c&gt;Host&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.659"></a>
+<span class="sourceLineNo">660</span>    */<a name="line.660"></a>
+<span class="sourceLineNo">661</span>   public Host getHost() {<a name="line.661"></a>
+<span class="sourceLineNo">662</span>      return Host.forString(getString("Host"));<a name="line.662"></a>
+<span class="sourceLineNo">663</span>   }<a name="line.663"></a>
+<span class="sourceLineNo">664</span><a name="line.664"></a>
+<span class="sourceLineNo">665</span>   /**<a name="line.665"></a>
+<span class="sourceLineNo">666</span>    * Returns the &lt;c&gt;If-Match&lt;/c&gt; header on the request.<a name="line.666"></a>
+<span class="sourceLineNo">667</span>    *<a name="line.667"></a>
+<span class="sourceLineNo">668</span>    * &lt;p&gt;<a name="line.668"></a>
+<span class="sourceLineNo">669</span>    * Only perform the action if the client supplied entity matches the same entity on the server.<a name="line.669"></a>
+<span class="sourceLineNo">670</span>    * This is mainly for methods like PUT to only update a resource if it has not been modified since the user last<a name="line.670"></a>
+<span class="sourceLineNo">671</span>    * updated it.<a name="line.671"></a>
+<span class="sourceLineNo">672</span>    *<a name="line.672"></a>
+<span class="sourceLineNo">673</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.673"></a>
+<span class="sourceLineNo">674</span>    * &lt;p class='bcode w800'&gt;<a name="line.674"></a>
+<span class="sourceLineNo">675</span>    *    If-Match: "737060cd8c284d8af7ad3082f209582d"<a name="line.675"></a>
+<span class="sourceLineNo">676</span>    * &lt;/p&gt;<a name="line.676"></a>
+<span class="sourceLineNo">677</span>    *<a name="line.677"></a>
+<span class="sourceLineNo">678</span>    * @return The parsed &lt;c&gt;If-Match&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.678"></a>
+<span class="sourceLineNo">679</span>    */<a name="line.679"></a>
+<span class="sourceLineNo">680</span>   public IfMatch getIfMatch() {<a name="line.680"></a>
+<span class="sourceLineNo">681</span>      return IfMatch.forString(getString("If-Match"));<a name="line.681"></a>
+<span class="sourceLineNo">682</span>   }<a name="line.682"></a>
+<span class="sourceLineNo">683</span><a name="line.683"></a>
+<span class="sourceLineNo">684</span>   /**<a name="line.684"></a>
+<span class="sourceLineNo">685</span>    * Returns the &lt;c&gt;If-Modified-Since&lt;/c&gt; header on the request.<a name="line.685"></a>
+<span class="sourceLineNo">686</span>    *<a name="line.686"></a>
+<span class="sourceLineNo">687</span>    * &lt;p&gt;<a name="line.687"></a>
+<span class="sourceLineNo">688</span>    * Allows a 304 Not Modified to be returned if content is unchanged.<a name="line.688"></a>
+<span class="sourceLineNo">689</span>    *<a name="line.689"></a>
+<span class="sourceLineNo">690</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.690"></a>
+<span class="sourceLineNo">691</span>    * &lt;p class='bcode w800'&gt;<a name="line.691"></a>
+<span class="sourceLineNo">692</span>    *    If-Modified-Since: Sat, 29 Oct 1994 19:43:31 GMT<a name="line.692"></a>
+<span class="sourceLineNo">693</span>    * &lt;/p&gt;<a name="line.693"></a>
+<span class="sourceLineNo">694</span>    *<a name="line.694"></a>
+<span class="sourceLineNo">695</span>    * @return The parsed &lt;c&gt;If-Modified-Since&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.695"></a>
+<span class="sourceLineNo">696</span>    */<a name="line.696"></a>
+<span class="sourceLineNo">697</span>   public IfModifiedSince getIfModifiedSince() {<a name="line.697"></a>
+<span class="sourceLineNo">698</span>      return IfModifiedSince.forString(getString("If-Modified-Since"));<a name="line.698"></a>
+<span class="sourceLineNo">699</span>   }<a name="line.699"></a>
+<span class="sourceLineNo">700</span><a name="line.700"></a>
+<span class="sourceLineNo">701</span>   /**<a name="line.701"></a>
+<span class="sourceLineNo">702</span>    * Returns the &lt;c&gt;If-None-Match&lt;/c&gt; header on the request.<a name="line.702"></a>
+<span class="sourceLineNo">703</span>    *<a name="line.703"></a>
+<span class="sourceLineNo">704</span>    * &lt;p&gt;<a name="line.704"></a>
+<span class="sourceLineNo">705</span>    * Allows a 304 Not Modified to be returned if content is unchanged, see HTTP ETag.<a name="line.705"></a>
+<span class="sourceLineNo">706</span>    *<a name="line.706"></a>
+<span class="sourceLineNo">707</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.707"></a>
+<span class="sourceLineNo">708</span>    * &lt;p class='bcode w800'&gt;<a name="line.708"></a>
+<span class="sourceLineNo">709</span>    *    If-None-Match: "737060cd8c284d8af7ad3082f209582d"<a name="line.709"></a>
+<span class="sourceLineNo">710</span>    * &lt;/p&gt;<a name="line.710"></a>
+<span class="sourceLineNo">711</span>    *<a name="line.711"></a>
+<span class="sourceLineNo">712</span>    * @return The parsed &lt;c&gt;If-None-Match&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.712"></a>
+<span class="sourceLineNo">713</span>    */<a name="line.713"></a>
+<span class="sourceLineNo">714</span>   public IfNoneMatch getIfNoneMatch() {<a name="line.714"></a>
+<span class="sourceLineNo">715</span>      return IfNoneMatch.forString(getString("If-None-Match"));<a name="line.715"></a>
+<span class="sourceLineNo">716</span>   }<a name="line.716"></a>
+<span class="sourceLineNo">717</span><a name="line.717"></a>
+<span class="sourceLineNo">718</span>   /**<a name="line.718"></a>
+<span class="sourceLineNo">719</span>    * Returns the &lt;c&gt;If-Range&lt;/c&gt; header on the request.<a name="line.719"></a>
+<span class="sourceLineNo">720</span>    *<a name="line.720"></a>
+<span class="sourceLineNo">721</span>    * &lt;p&gt;<a name="line.721"></a>
+<span class="sourceLineNo">722</span>    * If the entity is unchanged, send me the part(s) that I am missing; otherwise, send me the entire new entity.<a name="line.722"></a>
+<span class="sourceLineNo">723</span>    *<a name="line.723"></a>
+<span class="sourceLineNo">724</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.724"></a>
+<span class="sourceLineNo">725</span>    * &lt;p class='bcode w800'&gt;<a name="line.725"></a>
+<span class="sourceLineNo">726</span>    *    If-Range: "737060cd8c284d8af7ad3082f209582d"<a name="line.726"></a>
+<span class="sourceLineNo">727</span>    * &lt;/p&gt;<a name="line.727"></a>
+<span class="sourceLineNo">728</span>    *<a name="line.728"></a>
+<span class="sourceLineNo">729</span>    * @return The parsed &lt;c&gt;If-Range&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.729"></a>
+<span class="sourceLineNo">730</span>    */<a name="line.730"></a>
+<span class="sourceLineNo">731</span>   public IfRange getIfRange() {<a name="line.731"></a>
+<span class="sourceLineNo">732</span>      return IfRange.forString(getString("If-Range"));<a name="line.732"></a>
+<span class="sourceLineNo">733</span>   }<a name="line.733"></a>
+<span class="sourceLineNo">734</span><a name="line.734"></a>
+<span class="sourceLineNo">735</span>   /**<a name="line.735"></a>
+<span class="sourceLineNo">736</span>    * Returns the &lt;c&gt;If-Unmodified-Since&lt;/c&gt; header on the request.<a name="line.736"></a>
+<span class="sourceLineNo">737</span>    *<a name="line.737"></a>
+<span class="sourceLineNo">738</span>    * &lt;p&gt;<a name="line.738"></a>
+<span class="sourceLineNo">739</span>    * Only send the response if the entity has not been modified since a specific time.<a name="line.739"></a>
+<span class="sourceLineNo">740</span>    *<a name="line.740"></a>
+<span class="sourceLineNo">741</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.741"></a>
+<span class="sourceLineNo">742</span>    * &lt;p class='bcode w800'&gt;<a name="line.742"></a>
+<span class="sourceLineNo">743</span>    *    If-Unmodified-Since: Sat, 29 Oct 1994 19:43:31 GMT<a name="line.743"></a>
+<span class="sourceLineNo">744</span>    * &lt;/p&gt;<a name="line.744"></a>
+<span class="sourceLineNo">745</span>    *<a name="line.745"></a>
+<span class="sourceLineNo">746</span>    * @return The parsed &lt;c&gt;If-Unmodified-Since&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.746"></a>
+<span class="sourceLineNo">747</span>    */<a name="line.747"></a>
+<span class="sourceLineNo">748</span>   public IfUnmodifiedSince getIfUnmodifiedSince() {<a name="line.748"></a>
+<span class="sourceLineNo">749</span>      return IfUnmodifiedSince.forString(getString("If-Unmodified-Since"));<a name="line.749"></a>
+<span class="sourceLineNo">750</span>   }<a name="line.750"></a>
+<span class="sourceLineNo">751</span><a name="line.751"></a>
+<span class="sourceLineNo">752</span>   /**<a name="line.752"></a>
+<span class="sourceLineNo">753</span>    * Returns the &lt;c&gt;Max-Forwards&lt;/c&gt; header on the request.<a name="line.753"></a>
+<span class="sourceLineNo">754</span>    *<a name="line.754"></a>
+<span class="sourceLineNo">755</span>    * &lt;p&gt;<a name="line.755"></a>
+<span class="sourceLineNo">756</span>    * Limit the number of times the message can be forwarded through proxies or gateways.<a name="line.756"></a>
+<span class="sourceLineNo">757</span>    *<a name="line.757"></a>
+<span class="sourceLineNo">758</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.758"></a>
+<span class="sourceLineNo">759</span>    * &lt;p class='bcode w800'&gt;<a name="line.759"></a>
+<span class="sourceLineNo">760</span>    *    Max-Forwards: 10<a name="line.760"></a>
+<span class="sourceLineNo">761</span>    * &lt;/p&gt;<a name="line.761"></a>
+<span class="sourceLineNo">762</span>    *<a name="line.762"></a>
+<span class="sourceLineNo">763</span>    * @return The parsed &lt;c&gt;Max-Forwards&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.763"></a>
+<span class="sourceLineNo">764</span>    */<a name="line.764"></a>
+<span class="sourceLineNo">765</span>   public MaxForwards getMaxForwards() {<a name="line.765"></a>
+<span class="sourceLineNo">766</span>      return MaxForwards.forString(getString("Max-Forwards"));<a name="line.766"></a>
+<span class="sourceLineNo">767</span>   }<a name="line.767"></a>
+<span class="sourceLineNo">768</span><a name="line.768"></a>
+<span class="sourceLineNo">769</span>   /**<a name="line.769"></a>
+<span class="sourceLineNo">770</span>    * Returns the &lt;c&gt;Pragma&lt;/c&gt; header on the request.<a name="line.770"></a>
+<span class="sourceLineNo">771</span>    *<a name="line.771"></a>
+<span class="sourceLineNo">772</span>    * &lt;p&gt;<a name="line.772"></a>
+<span class="sourceLineNo">773</span>    * Implementation-specific fields that may have various effects anywhere along the request-response chain.<a name="line.773"></a>
+<span class="sourceLineNo">774</span>    *<a name="line.774"></a>
+<span class="sourceLineNo">775</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.775"></a>
+<span class="sourceLineNo">776</span>    * &lt;p class='bcode w800'&gt;<a name="line.776"></a>
+<span class="sourceLineNo">777</span>    *    Pragma: no-cache<a name="line.777"></a>
+<span class="sourceLineNo">778</span>    * &lt;/p&gt;<a name="line.778"></a>
+<span class="sourceLineNo">779</span>    *<a name="line.779"></a>
+<span class="sourceLineNo">780</span>    * @return The parsed &lt;c&gt;Pragma&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.780"></a>
+<span class="sourceLineNo">781</span>    */<a name="line.781"></a>
+<span class="sourceLineNo">782</span>   public Pragma getPragma() {<a name="line.782"></a>
+<span class="sourceLineNo">783</span>      return Pragma.forString(getString("Pragma"));<a name="line.783"></a>
+<span class="sourceLineNo">784</span>   }<a name="line.784"></a>
+<span class="sourceLineNo">785</span><a name="line.785"></a>
+<span class="sourceLineNo">786</span>   /**<a name="line.786"></a>
+<span class="sourceLineNo">787</span>    * Returns the &lt;c&gt;Proxy-Authorization&lt;/c&gt; header on the request.<a name="line.787"></a>
+<span class="sourceLineNo">788</span>    *<a name="line.788"></a>
+<span class="sourceLineNo">789</span>    * &lt;p&gt;<a name="line.789"></a>
+<span class="sourceLineNo">790</span>    * Authorization credentials for connecting to a proxy.<a name="line.790"></a>
+<span class="sourceLineNo">791</span>    *<a name="line.791"></a>
+<span class="sourceLineNo">792</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.792"></a>
+<span class="sourceLineNo">793</span>    * &lt;p class='bcode w800'&gt;<a name="line.793"></a>
+<span class="sourceLineNo">794</span>    *    Proxy-Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==<a name="line.794"></a>
+<span class="sourceLineNo">795</span>    * &lt;/p&gt;<a name="line.795"></a>
+<span class="sourceLineNo">796</span>    *<a name="line.796"></a>
+<span class="sourceLineNo">797</span>    * @return The parsed &lt;c&gt;Proxy-Authorization&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.797"></a>
+<span class="sourceLineNo">798</span>    */<a name="line.798"></a>
+<span class="sourceLineNo">799</span>   public ProxyAuthorization getProxyAuthorization() {<a name="line.799"></a>
+<span class="sourceLineNo">800</span>      return ProxyAuthorization.forString(getString("Proxy-Authorization"));<a name="line.800"></a>
+<span class="sourceLineNo">801</span>   }<a name="line.801"></a>
+<span class="sourceLineNo">802</span><a name="line.802"></a>
+<span class="sourceLineNo">803</span>   /**<a name="line.803"></a>
+<span class="sourceLineNo">804</span>    * Returns the &lt;c&gt;Range&lt;/c&gt; header on the request.<a name="line.804"></a>
+<span class="sourceLineNo">805</span>    *<a name="line.805"></a>
+<span class="sourceLineNo">806</span>    * &lt;p&gt;<a name="line.806"></a>
+<span class="sourceLineNo">807</span>    * Request only part of an entity. Bytes are numbered from 0.<a name="line.807"></a>
+<span class="sourceLineNo">808</span>    *<a name="line.808"></a>
+<span class="sourceLineNo">809</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.809"></a>
+<span class="sourceLineNo">810</span>    * &lt;p class='bcode w800'&gt;<a name="line.810"></a>
+<span class="sourceLineNo">811</span>    *    Range: bytes=500-999<a name="line.811"></a>
+<span class="sourceLineNo">812</span>    * &lt;/p&gt;<a name="line.812"></a>
+<span class="sourceLineNo">813</span>    *<a name="line.813"></a>
+<span class="sourceLineNo">814</span>    * @return The parsed &lt;c&gt;Range&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.814"></a>
+<span class="sourceLineNo">815</span>    */<a name="line.815"></a>
+<span class="sourceLineNo">816</span>   public Range getRange() {<a name="line.816"></a>
+<span class="sourceLineNo">817</span>      return Range.forString(getString("Range"));<a name="line.817"></a>
+<span class="sourceLineNo">818</span>   }<a name="line.818"></a>
+<span class="sourceLineNo">819</span><a name="line.819"></a>
+<span class="sourceLineNo">820</span>   /**<a name="line.820"></a>
+<span class="sourceLineNo">821</span>    * Returns the &lt;c&gt;Referer&lt;/c&gt; header on the request.<a name="line.821"></a>
+<span class="sourceLineNo">822</span>    *<a name="line.822"></a>
+<span class="sourceLineNo">823</span>    * &lt;p&gt;<a name="line.823"></a>
+<span class="sourceLineNo">824</span>    * This is the address of the previous web page from which a link to the currently requested page was followed.<a name="line.824"></a>
+<span class="sourceLineNo">825</span>    *<a name="line.825"></a>
+<span class="sourceLineNo">826</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.826"></a>
+<span class="sourceLineNo">827</span>    * &lt;p class='bcode w800'&gt;<a name="line.827"></a>
+<span class="sourceLineNo">828</span>    *    Referer: http://en.wikipedia.org/wiki/Main_Page<a name="line.828"></a>
+<span class="sourceLineNo">829</span>    * &lt;/p&gt;<a name="line.829"></a>
+<span class="sourceLineNo">830</span>    *<a name="line.830"></a>
+<span class="sourceLineNo">831</span>    * @return The parsed &lt;c&gt;Referer&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.831"></a>
+<span class="sourceLineNo">832</span>    */<a name="line.832"></a>
+<span class="sourceLineNo">833</span>   public Referer getReferer() {<a name="line.833"></a>
+<span class="sourceLineNo">834</span>      return Referer.forString(getString("Referer"));<a name="line.834"></a>
+<span class="sourceLineNo">835</span>   }<a name="line.835"></a>
+<span class="sourceLineNo">836</span><a name="line.836"></a>
+<span class="sourceLineNo">837</span>   /**<a name="line.837"></a>
+<span class="sourceLineNo">838</span>    * Returns the &lt;c&gt;TE&lt;/c&gt; header on the request.<a name="line.838"></a>
+<span class="sourceLineNo">839</span>    *<a name="line.839"></a>
+<span class="sourceLineNo">840</span>    * &lt;p&gt;<a name="line.840"></a>
+<span class="sourceLineNo">841</span>    * The transfer encodings the user agent is willing to accept: the same values as for the response header field<a name="line.841"></a>
+<span class="sourceLineNo">842</span>    * Transfer-Encoding can be used, plus the "trailers" value (related to the "chunked" transfer method) to notify the<a name="line.842"></a>
+<span class="sourceLineNo">843</span>    * server it expects to receive additional fields in the trailer after the last, zero-sized, chunk.<a name="line.843"></a>
+<span class="sourceLineNo">844</span>    *<a name="line.844"></a>
+<span class="sourceLineNo">845</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.845"></a>
+<span class="sourceLineNo">846</span>    * &lt;p class='bcode w800'&gt;<a name="line.846"></a>
+<span class="sourceLineNo">847</span>    *    TE: trailers, deflate<a name="line.847"></a>
+<span class="sourceLineNo">848</span>    * &lt;/p&gt;<a name="line.848"></a>
+<span class="sourceLineNo">849</span>    *<a name="line.849"></a>
+<span class="sourceLineNo">850</span>    * @return The parsed &lt;c&gt;TE&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.850"></a>
+<span class="sourceLineNo">851</span>    */<a name="line.851"></a>
+<span class="sourceLineNo">852</span>   public TE getTE() {<a name="line.852"></a>
+<span class="sourceLineNo">853</span>      return TE.forString(getString("TE"));<a name="line.853"></a>
+<span class="sourceLineNo">854</span>   }<a name="line.854"></a>
+<span class="sourceLineNo">855</span><a name="line.855"></a>
+<span class="sourceLineNo">856</span>   /**<a name="line.856"></a>
+<span class="sourceLineNo">857</span>    * Returns the &lt;c&gt;Time-Zone&lt;/c&gt; header value on the request if there is one.<a name="line.857"></a>
+<span class="sourceLineNo">858</span>    *<a name="line.858"></a>
+<span class="sourceLineNo">859</span>    * &lt;p&gt;<a name="line.859"></a>
+<span class="sourceLineNo">860</span>    * Example: &lt;js&gt;"GMT"&lt;/js&gt;.<a name="line.860"></a>
+<span class="sourceLineNo">861</span>    *<a name="line.861"></a>
+<span class="sourceLineNo">862</span>    * @return The &lt;c&gt;Time-Zone&lt;/c&gt; header value on the request, or &lt;jk&gt;null&lt;/jk&gt; if not present.<a name="line.862"></a>
+<span class="sourceLineNo">863</span>    */<a name="line.863"></a>
+<span class="sourceLineNo">864</span>   public TimeZone getTimeZone() {<a name="line.864"></a>
+<span class="sourceLineNo">865</span>      String tz = getString("Time-Zone");<a name="line.865"></a>
+<span class="sourceLineNo">866</span>      if (tz != null)<a name="line.866"></a>
+<span class="sourceLineNo">867</span>         return TimeZone.getTimeZone(tz);<a name="line.867"></a>
+<span class="sourceLineNo">868</span>      return null;<a name="line.868"></a>
+<span class="sourceLineNo">869</span>   }<a name="line.869"></a>
+<span class="sourceLineNo">870</span><a name="line.870"></a>
+<span class="sourceLineNo">871</span>   /**<a name="line.871"></a>
+<span class="sourceLineNo">872</span>    * Returns the &lt;c&gt;User-Agent&lt;/c&gt; header on the request.<a name="line.872"></a>
+<span class="sourceLineNo">873</span>    *<a name="line.873"></a>
+<span class="sourceLineNo">874</span>    * &lt;p&gt;<a name="line.874"></a>
+<span class="sourceLineNo">875</span>    * The user agent string of the user agent.<a name="line.875"></a>
+<span class="sourceLineNo">876</span>    *<a name="line.876"></a>
+<span class="sourceLineNo">877</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.877"></a>
+<span class="sourceLineNo">878</span>    * &lt;p class='bcode w800'&gt;<a name="line.878"></a>
+<span class="sourceLineNo">879</span>    *    User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/21.0<a name="line.879"></a>
+<span class="sourceLineNo">880</span>    * &lt;/p&gt;<a name="line.880"></a>
+<span class="sourceLineNo">881</span>    *<a name="line.881"></a>
+<span class="sourceLineNo">882</span>    * @return The parsed &lt;c&gt;User-Agent&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.882"></a>
+<span class="sourceLineNo">883</span>    */<a name="line.883"></a>
+<span class="sourceLineNo">884</span>   public UserAgent getUserAgent() {<a name="line.884"></a>
+<span class="sourceLineNo">885</span>      return UserAgent.forString(getString("User-Agent"));<a name="line.885"></a>
+<span class="sourceLineNo">886</span>   }<a name="line.886"></a>
+<span class="sourceLineNo">887</span><a name="line.887"></a>
+<span class="sourceLineNo">888</span>   /**<a name="line.888"></a>
+<span class="sourceLineNo">889</span>    * Returns the &lt;c&gt;Upgrade&lt;/c&gt; header on the request.<a name="line.889"></a>
+<span class="sourceLineNo">890</span>    *<a name="line.890"></a>
+<span class="sourceLineNo">891</span>    * &lt;p&gt;<a name="line.891"></a>
+<span class="sourceLineNo">892</span>    * Ask the server to upgrade to another protocol.<a name="line.892"></a>
+<span class="sourceLineNo">893</span>    *<a name="line.893"></a>
+<span class="sourceLineNo">894</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.894"></a>
+<span class="sourceLineNo">895</span>    * &lt;p class='bcode w800'&gt;<a name="line.895"></a>
+<span class="sourceLineNo">896</span>    *    Upgrade: HTTP/2.0, HTTPS/1.3, IRC/6.9, RTA/x11, websocket<a name="line.896"></a>
+<span class="sourceLineNo">897</span>    * &lt;/p&gt;<a name="line.897"></a>
+<span class="sourceLineNo">898</span>    *<a name="line.898"></a>
+<span class="sourceLineNo">899</span>    * @return The parsed &lt;c&gt;Upgrade&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.899"></a>
+<span class="sourceLineNo">900</span>    */<a name="line.900"></a>
+<span class="sourceLineNo">901</span>   public Upgrade getUpgrade() {<a name="line.901"></a>
+<span class="sourceLineNo">902</span>      return Upgrade.forString(getString("Upgrade"));<a name="line.902"></a>
+<span class="sourceLineNo">903</span>   }<a name="line.903"></a>
+<span class="sourceLineNo">904</span><a name="line.904"></a>
+<span class="sourceLineNo">905</span>   /**<a name="line.905"></a>
+<span class="sourceLineNo">906</span>    * Returns the &lt;c&gt;Via&lt;/c&gt; header on the request.<a name="line.906"></a>
+<span class="sourceLineNo">907</span>    *<a name="line.907"></a>
+<span class="sourceLineNo">908</span>    * &lt;p&gt;<a name="line.908"></a>
+<span class="sourceLineNo">909</span>    * Informs the server of proxies through which the request was sent.<a name="line.909"></a>
+<span class="sourceLineNo">910</span>    *<a name="line.910"></a>
+<span class="sourceLineNo">911</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.911"></a>
+<span class="sourceLineNo">912</span>    * &lt;p class='bcode w800'&gt;<a name="line.912"></a>
+<span class="sourceLineNo">913</span>    *    Via: 1.0 fred, 1.1 example.com (Apache/1.1)<a name="line.913"></a>
+<span class="sourceLineNo">914</span>    * &lt;/p&gt;<a name="line.914"></a>
+<span class="sourceLineNo">915</span>    *<a name="line.915"></a>
+<span class="sourceLineNo">916</span>    * @return The parsed &lt;c&gt;Via&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.916"></a>
+<span class="sourceLineNo">917</span>    */<a name="line.917"></a>
+<span class="sourceLineNo">918</span>   public Via getVia() {<a name="line.918"></a>
+<span class="sourceLineNo">919</span>      return Via.forString(getString("Via"));<a name="line.919"></a>
+<span class="sourceLineNo">920</span>   }<a name="line.920"></a>
+<span class="sourceLineNo">921</span><a name="line.921"></a>
+<span class="sourceLineNo">922</span>   /**<a name="line.922"></a>
+<span class="sourceLineNo">923</span>    * Returns the &lt;c&gt;Warning&lt;/c&gt; header on the request.<a name="line.923"></a>
+<span class="sourceLineNo">924</span>    *<a name="line.924"></a>
+<span class="sourceLineNo">925</span>    * &lt;p&gt;<a name="line.925"></a>
+<span class="sourceLineNo">926</span>    * A general warning about possible problems with the entity body.<a name="line.926"></a>
+<span class="sourceLineNo">927</span>    *<a name="line.927"></a>
+<span class="sourceLineNo">928</span>    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;<a name="line.928"></a>
+<span class="sourceLineNo">929</span>    * &lt;p class='bcode w800'&gt;<a name="line.929"></a>
+<span class="sourceLineNo">930</span>    *    Warning: 199 Miscellaneous warning<a name="line.930"></a>
+<span class="sourceLineNo">931</span>    * &lt;/p&gt;<a name="line.931"></a>
+<span class="sourceLineNo">932</span>    *<a name="line.932"></a>
+<span class="sourceLineNo">933</span>    * @return The parsed &lt;c&gt;Warning&lt;/c&gt; header on the request, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.933"></a>
+<span class="sourceLineNo">934</span>    */<a name="line.934"></a>
+<span class="sourceLineNo">935</span>   public Warning getWarning() {<a name="line.935"></a>
+<span class="sourceLineNo">936</span>      return Warning.forString(getString("Warning"));<a name="line.936"></a>
+<span class="sourceLineNo">937</span>   }<a name="line.937"></a>
+<span class="sourceLineNo">938</span><a name="line.938"></a>
+<span class="sourceLineNo">939</span>   /**<a name="line.939"></a>
+<span class="sourceLineNo">940</span>    * Converts the headers to a readable string.<a name="line.940"></a>
+<span class="sourceLineNo">941</span>    *<a name="line.941"></a>
+<span class="sourceLineNo">942</span>    * @param sorted Sort the headers by name.<a name="line.942"></a>
+<span class="sourceLineNo">943</span>    * @return A JSON string containing the contents of the headers.<a name="line.943"></a>
+<span class="sourceLineNo">944</span>    */<a name="line.944"></a>
+<span class="sourceLineNo">945</span>   public String toString(boolean sorted) {<a name="line.945"></a>
+<span class="sourceLineNo">946</span>      Map&lt;String,Object&gt; m = null;<a name="line.946"></a>
+<span class="sourceLineNo">947</span>      if (sorted)<a name="line.947"></a>
+<span class="sourceLineNo">948</span>         m = new TreeMap&lt;&gt;();<a name="line.948"></a>
+<span class="sourceLineNo">949</span>      else<a name="line.949"></a>
+<span class="sourceLineNo">950</span>         m = new LinkedHashMap&lt;&gt;();<a name="line.950"></a>
+<span class="sourceLineNo">951</span>      for (Map.Entry&lt;String,String[]&gt; e : this.entrySet()) {<a name="line.951"></a>
+<span class="sourceLineNo">952</span>         String[] v = e.getValue();<a name="line.952"></a>
+<span class="sourceLineNo">953</span>         m.put(e.getKey(), v.length == 1 ? v[0] : v);<a name="line.953"></a>
+<span class="sourceLineNo">954</span>      }<a name="line.954"></a>
+<span class="sourceLineNo">955</span>      return SimpleJsonSerializer.DEFAULT.toString(m);<a name="line.955"></a>
+<span class="sourceLineNo">956</span>   }<a name="line.956"></a>
+<span class="sourceLineNo">957</span><a name="line.957"></a>
+<span class="sourceLineNo">958</span>   @Override /* Object */<a name="line.958"></a>
+<span class="sourceLineNo">959</span>   public String toString() {<a name="line.959"></a>
+<span class="sourceLineNo">960</span>      return toString(false);<a name="line.960"></a>
+<span class="sourceLineNo">961</span>   }<a name="line.961"></a>
+<span class="sourceLineNo">962</span><a name="line.962"></a>
+<span class="sourceLineNo">963</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.963"></a>
+<span class="sourceLineNo">964</span>   // Helper methods<a name="line.964"></a>
+<span class="sourceLineNo">965</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.965"></a>
+<span class="sourceLineNo">966</span><a name="line.966"></a>
+<span class="sourceLineNo">967</span>   private &lt;T&gt; ClassMeta&lt;T&gt; getClassMeta(Type type, Type...args) {<a name="line.967"></a>
+<span class="sourceLineNo">968</span>      return req.getBeanSession().getClassMeta(type, args);<a name="line.968"></a>
+<span class="sourceLineNo">969</span>   }<a name="line.969"></a>
+<span class="sourceLineNo">970</span><a name="line.970"></a>
+<span class="sourceLineNo">971</span>   private &lt;T&gt; ClassMeta&lt;T&gt; getClassMeta(Class&lt;T&gt; type) {<a name="line.971"></a>
+<span class="sourceLineNo">972</span>      return req.getBeanSession().getClassMeta(type);<a name="line.972"></a>
+<span class="sourceLineNo">973</span>   }<a name="line.973"></a>
+<span class="sourceLineNo">974</span>}<a name="line.974"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

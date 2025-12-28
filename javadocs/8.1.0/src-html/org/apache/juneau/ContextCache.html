@@ -1,0 +1,255 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import static org.apache.juneau.internal.ClassUtils.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>import java.util.*;<a name="line.16"></a>
+<span class="sourceLineNo">017</span>import java.util.concurrent.*;<a name="line.17"></a>
+<span class="sourceLineNo">018</span><a name="line.18"></a>
+<span class="sourceLineNo">019</span>import org.apache.juneau.annotation.*;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>import org.apache.juneau.reflect.*;<a name="line.20"></a>
+<span class="sourceLineNo">021</span><a name="line.21"></a>
+<span class="sourceLineNo">022</span>/**<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * Stores a cache of {@link Context} instances mapped by the property stores used to create them.<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * &lt;p&gt;<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * The purpose of this class is to reuse instances of bean contexts, serializers, and parsers when they're being<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * re-created with previously-used property stores.<a name="line.27"></a>
+<span class="sourceLineNo">028</span> *<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * &lt;p&gt;<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * Since serializers and parsers are immutable and thread-safe, we reuse them whenever possible.<a name="line.30"></a>
+<span class="sourceLineNo">031</span> */<a name="line.31"></a>
+<span class="sourceLineNo">032</span>@SuppressWarnings("unchecked")<a name="line.32"></a>
+<span class="sourceLineNo">033</span>public class ContextCache {<a name="line.33"></a>
+<span class="sourceLineNo">034</span><a name="line.34"></a>
+<span class="sourceLineNo">035</span>   /**<a name="line.35"></a>
+<span class="sourceLineNo">036</span>    * Reusable cache instance.<a name="line.36"></a>
+<span class="sourceLineNo">037</span>    */<a name="line.37"></a>
+<span class="sourceLineNo">038</span>   public static final ContextCache INSTANCE = new ContextCache();<a name="line.38"></a>
+<span class="sourceLineNo">039</span><a name="line.39"></a>
+<span class="sourceLineNo">040</span>   private final static boolean USE_DEEP_MATCHING = Boolean.getBoolean("ContextCache.useDeepMatching");<a name="line.40"></a>
+<span class="sourceLineNo">041</span><a name="line.41"></a>
+<span class="sourceLineNo">042</span>   private final ConcurrentHashMap&lt;Class&lt;?&gt;,ConcurrentHashMap&lt;Integer,CacheEntry&gt;&gt; contextCache = new ConcurrentHashMap&lt;&gt;();<a name="line.42"></a>
+<span class="sourceLineNo">043</span>   private final ConcurrentHashMap&lt;Class&lt;?&gt;,String[]&gt; prefixCache = new ConcurrentHashMap&lt;&gt;();<a name="line.43"></a>
+<span class="sourceLineNo">044</span><a name="line.44"></a>
+<span class="sourceLineNo">045</span>   // When enabled, this will spit out cache-hit metrics to the console on shutdown.<a name="line.45"></a>
+<span class="sourceLineNo">046</span>   private static final boolean TRACK_CACHE_HITS = Boolean.getBoolean("juneau.trackCacheHits");<a name="line.46"></a>
+<span class="sourceLineNo">047</span>   static final Map&lt;String,CacheHit&gt; CACHE_HITS = new ConcurrentHashMap&lt;&gt;();<a name="line.47"></a>
+<span class="sourceLineNo">048</span>   static {<a name="line.48"></a>
+<span class="sourceLineNo">049</span>      if (TRACK_CACHE_HITS) {<a name="line.49"></a>
+<span class="sourceLineNo">050</span>         Runtime.getRuntime().addShutdownHook(<a name="line.50"></a>
+<span class="sourceLineNo">051</span>            new Thread() {<a name="line.51"></a>
+<span class="sourceLineNo">052</span>               @Override<a name="line.52"></a>
+<span class="sourceLineNo">053</span>               public void run() {<a name="line.53"></a>
+<span class="sourceLineNo">054</span>                  int creates=0, cached=0;<a name="line.54"></a>
+<span class="sourceLineNo">055</span>                  System.out.println("Cache Hits:  [CacheObject] = [numCreated,numCached,cacheHitPercentage]");<a name="line.55"></a>
+<span class="sourceLineNo">056</span>                  for (Map.Entry&lt;String,CacheHit&gt; e : CACHE_HITS.entrySet()) {<a name="line.56"></a>
+<span class="sourceLineNo">057</span>                     CacheHit ch = e.getValue();<a name="line.57"></a>
+<span class="sourceLineNo">058</span>                     System.out.println("["+e.getKey()+"] = ["+ch.creates+","+ch.cached+","+((ch.cached*100)/(ch.creates+ch.cached))+"%]");<a name="line.58"></a>
+<span class="sourceLineNo">059</span>                     creates += ch.creates;<a name="line.59"></a>
+<span class="sourceLineNo">060</span>                     cached += ch.cached;<a name="line.60"></a>
+<span class="sourceLineNo">061</span>                  }<a name="line.61"></a>
+<span class="sourceLineNo">062</span>                  if (creates + cached &gt; 0)<a name="line.62"></a>
+<span class="sourceLineNo">063</span>                     System.out.println("[total] = ["+creates+","+cached+","+((cached*100)/(creates+cached))+"%]");<a name="line.63"></a>
+<span class="sourceLineNo">064</span>               }<a name="line.64"></a>
+<span class="sourceLineNo">065</span>            }<a name="line.65"></a>
+<span class="sourceLineNo">066</span>         );<a name="line.66"></a>
+<span class="sourceLineNo">067</span>      }<a name="line.67"></a>
+<span class="sourceLineNo">068</span>   }<a name="line.68"></a>
+<span class="sourceLineNo">069</span><a name="line.69"></a>
+<span class="sourceLineNo">070</span>   static void logCache(Class&lt;?&gt; contextClass, boolean wasCached) {<a name="line.70"></a>
+<span class="sourceLineNo">071</span>      if (TRACK_CACHE_HITS) {<a name="line.71"></a>
+<span class="sourceLineNo">072</span>         synchronized(ContextCache.class) {<a name="line.72"></a>
+<span class="sourceLineNo">073</span>            String c = contextClass.getSimpleName();<a name="line.73"></a>
+<span class="sourceLineNo">074</span>            CacheHit ch = CACHE_HITS.get(c);<a name="line.74"></a>
+<span class="sourceLineNo">075</span>            if (ch == null)<a name="line.75"></a>
+<span class="sourceLineNo">076</span>               ch = new CacheHit();<a name="line.76"></a>
+<span class="sourceLineNo">077</span>            if (wasCached)<a name="line.77"></a>
+<span class="sourceLineNo">078</span>               ch.cached++;<a name="line.78"></a>
+<span class="sourceLineNo">079</span>            else<a name="line.79"></a>
+<span class="sourceLineNo">080</span>               ch.creates++;<a name="line.80"></a>
+<span class="sourceLineNo">081</span>            ch = CACHE_HITS.put(c, ch);<a name="line.81"></a>
+<span class="sourceLineNo">082</span>         }<a name="line.82"></a>
+<span class="sourceLineNo">083</span>      }<a name="line.83"></a>
+<span class="sourceLineNo">084</span>   }<a name="line.84"></a>
+<span class="sourceLineNo">085</span><a name="line.85"></a>
+<span class="sourceLineNo">086</span>   static class CacheHit {<a name="line.86"></a>
+<span class="sourceLineNo">087</span>      public int creates, cached;<a name="line.87"></a>
+<span class="sourceLineNo">088</span>   }<a name="line.88"></a>
+<span class="sourceLineNo">089</span><a name="line.89"></a>
+<span class="sourceLineNo">090</span>   ContextCache() {}<a name="line.90"></a>
+<span class="sourceLineNo">091</span><a name="line.91"></a>
+<span class="sourceLineNo">092</span>   /**<a name="line.92"></a>
+<span class="sourceLineNo">093</span>    * Creates a new instance of the specified context-based class, or an existing instance if one with the same<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    * property store was already created.<a name="line.94"></a>
+<span class="sourceLineNo">095</span>    *<a name="line.95"></a>
+<span class="sourceLineNo">096</span>    * @param c The instance of the class to create.<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    * @param ps The property store to use to create the class.<a name="line.97"></a>
+<span class="sourceLineNo">098</span>    * @return The<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    */<a name="line.99"></a>
+<span class="sourceLineNo">100</span>   public &lt;T extends Context&gt; T create(Class&lt;T&gt; c, PropertyStore ps) {<a name="line.100"></a>
+<span class="sourceLineNo">101</span>      String[] prefixes = getPrefixes(c);<a name="line.101"></a>
+<span class="sourceLineNo">102</span><a name="line.102"></a>
+<span class="sourceLineNo">103</span>      if (prefixes == null)<a name="line.103"></a>
+<span class="sourceLineNo">104</span>         return instantiate(c, ps);<a name="line.104"></a>
+<span class="sourceLineNo">105</span><a name="line.105"></a>
+<span class="sourceLineNo">106</span>      ConcurrentHashMap&lt;Integer,CacheEntry&gt; m = getContextCache(c);<a name="line.106"></a>
+<span class="sourceLineNo">107</span><a name="line.107"></a>
+<span class="sourceLineNo">108</span>      Integer hashCode = ps.hashCode(prefixes);<a name="line.108"></a>
+<span class="sourceLineNo">109</span>      CacheEntry ce = m.get(hashCode);<a name="line.109"></a>
+<span class="sourceLineNo">110</span><a name="line.110"></a>
+<span class="sourceLineNo">111</span>      if (ce != null &amp;&amp; USE_DEEP_MATCHING &amp;&amp; ! ce.ps.equals(ps))<a name="line.111"></a>
+<span class="sourceLineNo">112</span>         throw new ContextRuntimeException("Property store hashcode mismatch!", new Object[0]);<a name="line.112"></a>
+<span class="sourceLineNo">113</span><a name="line.113"></a>
+<span class="sourceLineNo">114</span>      logCache(c, ce != null);<a name="line.114"></a>
+<span class="sourceLineNo">115</span><a name="line.115"></a>
+<span class="sourceLineNo">116</span>      if (ce == null) {<a name="line.116"></a>
+<span class="sourceLineNo">117</span>         ce = new CacheEntry(ps, instantiate(c, ps));<a name="line.117"></a>
+<span class="sourceLineNo">118</span>         m.putIfAbsent(hashCode, ce);<a name="line.118"></a>
+<span class="sourceLineNo">119</span>      }<a name="line.119"></a>
+<span class="sourceLineNo">120</span><a name="line.120"></a>
+<span class="sourceLineNo">121</span>      return (T)ce.context;<a name="line.121"></a>
+<span class="sourceLineNo">122</span>   }<a name="line.122"></a>
+<span class="sourceLineNo">123</span><a name="line.123"></a>
+<span class="sourceLineNo">124</span>   private &lt;T extends Context&gt; T instantiate(Class&lt;T&gt; c, PropertyStore ps) {<a name="line.124"></a>
+<span class="sourceLineNo">125</span>      try {<a name="line.125"></a>
+<span class="sourceLineNo">126</span>         return newInstance(c, ps);<a name="line.126"></a>
+<span class="sourceLineNo">127</span>      } catch (ContextRuntimeException e) {<a name="line.127"></a>
+<span class="sourceLineNo">128</span>         throw e;<a name="line.128"></a>
+<span class="sourceLineNo">129</span>      } catch (Exception e) {<a name="line.129"></a>
+<span class="sourceLineNo">130</span>         throw new ContextRuntimeException(e, "Could not create instance of class ''{0}''", c);<a name="line.130"></a>
+<span class="sourceLineNo">131</span>      }<a name="line.131"></a>
+<span class="sourceLineNo">132</span>   }<a name="line.132"></a>
+<span class="sourceLineNo">133</span><a name="line.133"></a>
+<span class="sourceLineNo">134</span>   private ConcurrentHashMap&lt;Integer,CacheEntry&gt; getContextCache(Class&lt;?&gt; c) {<a name="line.134"></a>
+<span class="sourceLineNo">135</span>      ConcurrentHashMap&lt;Integer,CacheEntry&gt; m = contextCache.get(c);<a name="line.135"></a>
+<span class="sourceLineNo">136</span>      if (m == null) {<a name="line.136"></a>
+<span class="sourceLineNo">137</span>         m = new ConcurrentHashMap&lt;&gt;();<a name="line.137"></a>
+<span class="sourceLineNo">138</span>         ConcurrentHashMap&lt;Integer,CacheEntry&gt; m2 = contextCache.putIfAbsent(c, m);<a name="line.138"></a>
+<span class="sourceLineNo">139</span>         if (m2 != null)<a name="line.139"></a>
+<span class="sourceLineNo">140</span>            m = m2;<a name="line.140"></a>
+<span class="sourceLineNo">141</span>      }<a name="line.141"></a>
+<span class="sourceLineNo">142</span>      return m;<a name="line.142"></a>
+<span class="sourceLineNo">143</span>   }<a name="line.143"></a>
+<span class="sourceLineNo">144</span><a name="line.144"></a>
+<span class="sourceLineNo">145</span>   private String[] getPrefixes(Class&lt;?&gt; c) {<a name="line.145"></a>
+<span class="sourceLineNo">146</span>      String[] prefixes = prefixCache.get(c);<a name="line.146"></a>
+<span class="sourceLineNo">147</span>      if (prefixes == null) {<a name="line.147"></a>
+<span class="sourceLineNo">148</span>         Set&lt;String&gt; ps = new HashSet&lt;&gt;();<a name="line.148"></a>
+<span class="sourceLineNo">149</span>         for (ClassInfo c2 : getClassInfo(c).getAllParents()) {<a name="line.149"></a>
+<span class="sourceLineNo">150</span>            ConfigurableContext cc = c2.getAnnotation(ConfigurableContext.class);<a name="line.150"></a>
+<span class="sourceLineNo">151</span>            if (cc != null) {<a name="line.151"></a>
+<span class="sourceLineNo">152</span>               if (cc.nocache()) {<a name="line.152"></a>
+<span class="sourceLineNo">153</span>                  prefixes = new String[0];<a name="line.153"></a>
+<span class="sourceLineNo">154</span>                  break;<a name="line.154"></a>
+<span class="sourceLineNo">155</span>               }<a name="line.155"></a>
+<span class="sourceLineNo">156</span>               if (cc.prefixes().length == 0)<a name="line.156"></a>
+<span class="sourceLineNo">157</span>                  ps.add(c2.getSimpleName());<a name="line.157"></a>
+<span class="sourceLineNo">158</span>               else<a name="line.158"></a>
+<span class="sourceLineNo">159</span>                  ps.addAll(Arrays.asList(cc.prefixes()));<a name="line.159"></a>
+<span class="sourceLineNo">160</span>            }<a name="line.160"></a>
+<span class="sourceLineNo">161</span>         }<a name="line.161"></a>
+<span class="sourceLineNo">162</span>         prefixes = ps.toArray(new String[ps.size()]);<a name="line.162"></a>
+<span class="sourceLineNo">163</span>         String[] p2 = prefixCache.putIfAbsent(c, prefixes);<a name="line.163"></a>
+<span class="sourceLineNo">164</span>         if (p2 != null)<a name="line.164"></a>
+<span class="sourceLineNo">165</span>            prefixes = p2;<a name="line.165"></a>
+<span class="sourceLineNo">166</span>      }<a name="line.166"></a>
+<span class="sourceLineNo">167</span>      return prefixes.length == 0 ? null : prefixes;<a name="line.167"></a>
+<span class="sourceLineNo">168</span>   }<a name="line.168"></a>
+<span class="sourceLineNo">169</span><a name="line.169"></a>
+<span class="sourceLineNo">170</span>   private &lt;T&gt; T newInstance(Class&lt;T&gt; cc, PropertyStore ps) throws Exception {<a name="line.170"></a>
+<span class="sourceLineNo">171</span>      return (T)castOrCreate(Context.class, cc, true, ps);<a name="line.171"></a>
+<span class="sourceLineNo">172</span>   }<a name="line.172"></a>
+<span class="sourceLineNo">173</span><a name="line.173"></a>
+<span class="sourceLineNo">174</span>   private static class CacheEntry {<a name="line.174"></a>
+<span class="sourceLineNo">175</span>      final PropertyStore ps;<a name="line.175"></a>
+<span class="sourceLineNo">176</span>      final Context context;<a name="line.176"></a>
+<span class="sourceLineNo">177</span><a name="line.177"></a>
+<span class="sourceLineNo">178</span>      CacheEntry(PropertyStore ps, Context context) {<a name="line.178"></a>
+<span class="sourceLineNo">179</span>         this.ps = ps;<a name="line.179"></a>
+<span class="sourceLineNo">180</span>         this.context = context;<a name="line.180"></a>
+<span class="sourceLineNo">181</span>      }<a name="line.181"></a>
+<span class="sourceLineNo">182</span>   }<a name="line.182"></a>
+<span class="sourceLineNo">183</span>}<a name="line.183"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

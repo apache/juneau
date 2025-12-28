@@ -1,0 +1,533 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.json;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import java.util.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span><a name="line.16"></a>
+<span class="sourceLineNo">017</span>import org.apache.juneau.*;<a name="line.17"></a>
+<span class="sourceLineNo">018</span>import org.apache.juneau.serializer.*;<a name="line.18"></a>
+<span class="sourceLineNo">019</span><a name="line.19"></a>
+<span class="sourceLineNo">020</span>/**<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * Serializes POJO models to JSON.<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * <a name="line.22"></a>
+<span class="sourceLineNo">023</span> * &lt;h5 class='topic'&gt;Media types&lt;/h5&gt;<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * <a name="line.24"></a>
+<span class="sourceLineNo">025</span> * Handles &lt;code&gt;Accept&lt;/code&gt; types:  &lt;code&gt;&lt;b&gt;application/json, text/json&lt;/b&gt;&lt;/code&gt;<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * &lt;p&gt;<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * Produces &lt;code&gt;Content-Type&lt;/code&gt; types:  &lt;code&gt;&lt;b&gt;application/json&lt;/b&gt;&lt;/code&gt;<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * <a name="line.28"></a>
+<span class="sourceLineNo">029</span> * &lt;h5 class='topic'&gt;Description&lt;/h5&gt;<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * <a name="line.30"></a>
+<span class="sourceLineNo">031</span> * The conversion is as follows...<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * &lt;ul class='spaced-list'&gt;<a name="line.32"></a>
+<span class="sourceLineNo">033</span> *    &lt;li&gt;<a name="line.33"></a>
+<span class="sourceLineNo">034</span> *       Maps (e.g. {@link HashMap HashMaps}, {@link TreeMap TreeMaps}) are converted to JSON objects.<a name="line.34"></a>
+<span class="sourceLineNo">035</span> *    &lt;li&gt;<a name="line.35"></a>
+<span class="sourceLineNo">036</span> *       Collections (e.g. {@link HashSet HashSets}, {@link LinkedList LinkedLists}) and Java arrays are converted to<a name="line.36"></a>
+<span class="sourceLineNo">037</span> *       JSON arrays.<a name="line.37"></a>
+<span class="sourceLineNo">038</span> *    &lt;li&gt;<a name="line.38"></a>
+<span class="sourceLineNo">039</span> *       {@link String Strings} are converted to JSON strings.<a name="line.39"></a>
+<span class="sourceLineNo">040</span> *    &lt;li&gt;<a name="line.40"></a>
+<span class="sourceLineNo">041</span> *       {@link Number Numbers} (e.g. {@link Integer}, {@link Long}, {@link Double}) are converted to JSON numbers.<a name="line.41"></a>
+<span class="sourceLineNo">042</span> *    &lt;li&gt;<a name="line.42"></a>
+<span class="sourceLineNo">043</span> *       {@link Boolean Booleans} are converted to JSON booleans.<a name="line.43"></a>
+<span class="sourceLineNo">044</span> *    &lt;li&gt;<a name="line.44"></a>
+<span class="sourceLineNo">045</span> *       {@code nulls} are converted to JSON nulls.<a name="line.45"></a>
+<span class="sourceLineNo">046</span> *    &lt;li&gt;<a name="line.46"></a>
+<span class="sourceLineNo">047</span> *       {@code arrays} are converted to JSON arrays.<a name="line.47"></a>
+<span class="sourceLineNo">048</span> *    &lt;li&gt;<a name="line.48"></a>
+<span class="sourceLineNo">049</span> *       {@code beans} are converted to JSON objects.<a name="line.49"></a>
+<span class="sourceLineNo">050</span> * &lt;/ul&gt;<a name="line.50"></a>
+<span class="sourceLineNo">051</span> * <a name="line.51"></a>
+<span class="sourceLineNo">052</span> * &lt;p&gt;<a name="line.52"></a>
+<span class="sourceLineNo">053</span> * The types above are considered "JSON-primitive" object types.<a name="line.53"></a>
+<span class="sourceLineNo">054</span> * Any non-JSON-primitive object types are transformed into JSON-primitive object types through<a name="line.54"></a>
+<span class="sourceLineNo">055</span> * {@link org.apache.juneau.transform.PojoSwap PojoSwaps} associated through the<a name="line.55"></a>
+<span class="sourceLineNo">056</span> * {@link BeanContextBuilder#pojoSwaps(Class...)} method.<a name="line.56"></a>
+<span class="sourceLineNo">057</span> * Several default transforms are provided for transforming Dates, Enums, Iterators, etc...<a name="line.57"></a>
+<span class="sourceLineNo">058</span> * <a name="line.58"></a>
+<span class="sourceLineNo">059</span> * &lt;p&gt;<a name="line.59"></a>
+<span class="sourceLineNo">060</span> * This serializer provides several serialization options.<a name="line.60"></a>
+<span class="sourceLineNo">061</span> * Typically, one of the predefined DEFAULT serializers will be sufficient.<a name="line.61"></a>
+<span class="sourceLineNo">062</span> * However, custom serializers can be constructed to fine-tune behavior.<a name="line.62"></a>
+<span class="sourceLineNo">063</span> * <a name="line.63"></a>
+<span class="sourceLineNo">064</span> * &lt;h5 class='topic'&gt;Behavior-specific subclasses&lt;/h5&gt;<a name="line.64"></a>
+<span class="sourceLineNo">065</span> * <a name="line.65"></a>
+<span class="sourceLineNo">066</span> * The following direct subclasses are provided for convenience:<a name="line.66"></a>
+<span class="sourceLineNo">067</span> * &lt;ul class='spaced-list'&gt;<a name="line.67"></a>
+<span class="sourceLineNo">068</span> *    &lt;li&gt;<a name="line.68"></a>
+<span class="sourceLineNo">069</span> *       {@link Simple} - Default serializer, single quotes, simple mode.<a name="line.69"></a>
+<span class="sourceLineNo">070</span> *    &lt;li&gt;<a name="line.70"></a>
+<span class="sourceLineNo">071</span> *       {@link SimpleReadable} - Default serializer, single quotes, simple mode, with whitespace.<a name="line.71"></a>
+<span class="sourceLineNo">072</span> * &lt;/ul&gt;<a name="line.72"></a>
+<span class="sourceLineNo">073</span> * <a name="line.73"></a>
+<span class="sourceLineNo">074</span> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.74"></a>
+<span class="sourceLineNo">075</span> * &lt;p class='bcode'&gt;<a name="line.75"></a>
+<span class="sourceLineNo">076</span> *    &lt;jc&gt;// Use one of the default serializers to serialize a POJO&lt;/jc&gt;<a name="line.76"></a>
+<span class="sourceLineNo">077</span> *    String json = JsonSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.serialize(someObject);<a name="line.77"></a>
+<span class="sourceLineNo">078</span> * <a name="line.78"></a>
+<span class="sourceLineNo">079</span> *    &lt;jc&gt;// Create a custom serializer for lax syntax using single quote characters&lt;/jc&gt;<a name="line.79"></a>
+<span class="sourceLineNo">080</span> *    JsonSerializer serializer = JsonSerializer.&lt;jsm&gt;create&lt;/jsm&gt;().simple().sq().build();<a name="line.80"></a>
+<span class="sourceLineNo">081</span> * <a name="line.81"></a>
+<span class="sourceLineNo">082</span> *    &lt;jc&gt;// Clone an existing serializer and modify it to use single-quotes&lt;/jc&gt;<a name="line.82"></a>
+<span class="sourceLineNo">083</span> *    JsonSerializer serializer = JsonSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.builder().sq().build();<a name="line.83"></a>
+<span class="sourceLineNo">084</span> * <a name="line.84"></a>
+<span class="sourceLineNo">085</span> *    &lt;jc&gt;// Serialize a POJO to JSON&lt;/jc&gt;<a name="line.85"></a>
+<span class="sourceLineNo">086</span> *    String json = serializer.serialize(someObject);<a name="line.86"></a>
+<span class="sourceLineNo">087</span> * &lt;/p&gt;<a name="line.87"></a>
+<span class="sourceLineNo">088</span> */<a name="line.88"></a>
+<span class="sourceLineNo">089</span>public class JsonSerializer extends WriterSerializer {<a name="line.89"></a>
+<span class="sourceLineNo">090</span><a name="line.90"></a>
+<span class="sourceLineNo">091</span>   //-------------------------------------------------------------------------------------------------------------------<a name="line.91"></a>
+<span class="sourceLineNo">092</span>   // Configurable properties<a name="line.92"></a>
+<span class="sourceLineNo">093</span>   //-------------------------------------------------------------------------------------------------------------------<a name="line.93"></a>
+<span class="sourceLineNo">094</span><a name="line.94"></a>
+<span class="sourceLineNo">095</span>   private static final String PREFIX = "JsonSerializer.";<a name="line.95"></a>
+<span class="sourceLineNo">096</span><a name="line.96"></a>
+<span class="sourceLineNo">097</span>   /**<a name="line.97"></a>
+<span class="sourceLineNo">098</span>    * Configuration property:  Add &lt;js&gt;"_type"&lt;/js&gt; properties when needed.<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    * <a name="line.99"></a>
+<span class="sourceLineNo">100</span>    * &lt;h5 class='section'&gt;Property:&lt;/h5&gt;<a name="line.100"></a>
+<span class="sourceLineNo">101</span>    * &lt;ul&gt;<a name="line.101"></a>
+<span class="sourceLineNo">102</span>    *    &lt;li&gt;&lt;b&gt;Name:&lt;/b&gt;  &lt;js&gt;"JsonSerializer.addBeanTypeProperties.b"&lt;/js&gt;<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    *    &lt;li&gt;&lt;b&gt;Data type:&lt;/b&gt;  &lt;code&gt;Boolean&lt;/code&gt;<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    *    &lt;li&gt;&lt;b&gt;Default:&lt;/b&gt;  &lt;jk&gt;false&lt;/jk&gt;<a name="line.104"></a>
+<span class="sourceLineNo">105</span>    *    &lt;li&gt;&lt;b&gt;Session-overridable:&lt;/b&gt;  &lt;jk&gt;true&lt;/jk&gt;<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    *    &lt;li&gt;&lt;b&gt;Methods:&lt;/b&gt; <a name="line.106"></a>
+<span class="sourceLineNo">107</span>    *       &lt;ul&gt;<a name="line.107"></a>
+<span class="sourceLineNo">108</span>    *          &lt;li class='jm'&gt;{@link JsonSerializerBuilder#addBeanTypeProperties(boolean)}<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    *       &lt;/ul&gt;<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    * &lt;/ul&gt;<a name="line.110"></a>
+<span class="sourceLineNo">111</span>    * <a name="line.111"></a>
+<span class="sourceLineNo">112</span>    * &lt;h5 class='section'&gt;Description:&lt;/h5&gt;<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    * &lt;p&gt;<a name="line.113"></a>
+<span class="sourceLineNo">114</span>    * If &lt;jk&gt;true&lt;/jk&gt;, then &lt;js&gt;"_type"&lt;/js&gt; properties will be added to beans if their type cannot be inferred<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    * through reflection.<a name="line.115"></a>
+<span class="sourceLineNo">116</span>    * <a name="line.116"></a>
+<span class="sourceLineNo">117</span>    * &lt;p&gt;<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is<a name="line.118"></a>
+<span class="sourceLineNo">119</span>    * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.<a name="line.119"></a>
+<span class="sourceLineNo">120</span>    */<a name="line.120"></a>
+<span class="sourceLineNo">121</span>   public static final String JSON_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";<a name="line.121"></a>
+<span class="sourceLineNo">122</span><a name="line.122"></a>
+<span class="sourceLineNo">123</span>   /**<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    * Configuration property:  Prefix solidus &lt;js&gt;'/'&lt;/js&gt; characters with escapes.<a name="line.124"></a>
+<span class="sourceLineNo">125</span>    * <a name="line.125"></a>
+<span class="sourceLineNo">126</span>    * &lt;h5 class='section'&gt;Property:&lt;/h5&gt;<a name="line.126"></a>
+<span class="sourceLineNo">127</span>    * &lt;ul&gt;<a name="line.127"></a>
+<span class="sourceLineNo">128</span>    *    &lt;li&gt;&lt;b&gt;Name:&lt;/b&gt;  &lt;js&gt;"JsonSerializer.escapeSolidus.b"&lt;/js&gt;<a name="line.128"></a>
+<span class="sourceLineNo">129</span>    *    &lt;li&gt;&lt;b&gt;Data type:&lt;/b&gt;  &lt;code&gt;Boolean&lt;/code&gt;<a name="line.129"></a>
+<span class="sourceLineNo">130</span>    *    &lt;li&gt;&lt;b&gt;Default:&lt;/b&gt;  &lt;jk&gt;false&lt;/jk&gt;<a name="line.130"></a>
+<span class="sourceLineNo">131</span>    *    &lt;li&gt;&lt;b&gt;Session-overridable:&lt;/b&gt;  &lt;jk&gt;true&lt;/jk&gt;<a name="line.131"></a>
+<span class="sourceLineNo">132</span>    *    &lt;li&gt;&lt;b&gt;Methods:&lt;/b&gt; <a name="line.132"></a>
+<span class="sourceLineNo">133</span>    *       &lt;ul&gt;<a name="line.133"></a>
+<span class="sourceLineNo">134</span>    *          &lt;li class='jm'&gt;{@link JsonSerializerBuilder#escapeSolidus(boolean)}<a name="line.134"></a>
+<span class="sourceLineNo">135</span>    *          &lt;li class='jm'&gt;{@link JsonSerializerBuilder#escapeSolidus()}<a name="line.135"></a>
+<span class="sourceLineNo">136</span>    *       &lt;/ul&gt;<a name="line.136"></a>
+<span class="sourceLineNo">137</span>    * &lt;/ul&gt;<a name="line.137"></a>
+<span class="sourceLineNo">138</span>    * <a name="line.138"></a>
+<span class="sourceLineNo">139</span>    * &lt;h5 class='section'&gt;Description:&lt;/h5&gt;<a name="line.139"></a>
+<span class="sourceLineNo">140</span>    * &lt;p&gt;<a name="line.140"></a>
+<span class="sourceLineNo">141</span>    * If &lt;jk&gt;true&lt;/jk&gt;, solidus (e.g. slash) characters should be escaped.<a name="line.141"></a>
+<span class="sourceLineNo">142</span>    * The JSON specification allows for either format.<a name="line.142"></a>
+<span class="sourceLineNo">143</span>    * &lt;br&gt;However, if you're embedding JSON in an HTML script tag, this setting prevents confusion when trying to serialize<a name="line.143"></a>
+<span class="sourceLineNo">144</span>    * &lt;xt&gt;&amp;lt;\/script&amp;gt;&lt;/xt&gt;.<a name="line.144"></a>
+<span class="sourceLineNo">145</span>    * <a name="line.145"></a>
+<span class="sourceLineNo">146</span>    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.146"></a>
+<span class="sourceLineNo">147</span>    * &lt;p class='bcode'&gt;<a name="line.147"></a>
+<span class="sourceLineNo">148</span>    *    &lt;jc&gt;// Create a JSON serializer that escapes solidus characters.&lt;/jc&gt;<a name="line.148"></a>
+<span class="sourceLineNo">149</span>    *    WriterSerializer s = JsonSerializer<a name="line.149"></a>
+<span class="sourceLineNo">150</span>    *       .&lt;jsm&gt;create&lt;/jsm&gt;()<a name="line.150"></a>
+<span class="sourceLineNo">151</span>    *       .simple()<a name="line.151"></a>
+<span class="sourceLineNo">152</span>    *       .escapeSolidus()<a name="line.152"></a>
+<span class="sourceLineNo">153</span>    *       .build();<a name="line.153"></a>
+<span class="sourceLineNo">154</span>    *    <a name="line.154"></a>
+<span class="sourceLineNo">155</span>    *    &lt;jc&gt;// Same, but use property.&lt;/jc&gt;<a name="line.155"></a>
+<span class="sourceLineNo">156</span>    *    WriterSerializer s = JsonSerializer<a name="line.156"></a>
+<span class="sourceLineNo">157</span>    *       .&lt;jsm&gt;create&lt;/jsm&gt;()<a name="line.157"></a>
+<span class="sourceLineNo">158</span>    *       .simple()<a name="line.158"></a>
+<span class="sourceLineNo">159</span>    *       .set(&lt;jsf&gt;JSON_escapeSolidus&lt;/jsf&gt;, &lt;jk&gt;true&lt;/jk&gt;)<a name="line.159"></a>
+<span class="sourceLineNo">160</span>    *       .build();<a name="line.160"></a>
+<span class="sourceLineNo">161</span>    * <a name="line.161"></a>
+<span class="sourceLineNo">162</span>    *    &lt;jc&gt;// Produces: "{foo:'&amp;lt;\/bar&amp;gt;'"&lt;/jc&gt;<a name="line.162"></a>
+<span class="sourceLineNo">163</span>    *    String json = s.serialize(&lt;jk&gt;new&lt;/jk&gt; ObjectMap().append(&lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"&amp;lt;/bar&amp;gt;"&lt;/js&gt;);<a name="line.163"></a>
+<span class="sourceLineNo">164</span>    * &lt;/p&gt;<a name="line.164"></a>
+<span class="sourceLineNo">165</span>    */<a name="line.165"></a>
+<span class="sourceLineNo">166</span>   public static final String JSON_escapeSolidus = PREFIX + "escapeSolidus.b";<a name="line.166"></a>
+<span class="sourceLineNo">167</span><a name="line.167"></a>
+<span class="sourceLineNo">168</span>   /**<a name="line.168"></a>
+<span class="sourceLineNo">169</span>    * Configuration property:  Simple JSON mode.<a name="line.169"></a>
+<span class="sourceLineNo">170</span>    * <a name="line.170"></a>
+<span class="sourceLineNo">171</span>    * &lt;h5 class='section'&gt;Property:&lt;/h5&gt;<a name="line.171"></a>
+<span class="sourceLineNo">172</span>    * &lt;ul&gt;<a name="line.172"></a>
+<span class="sourceLineNo">173</span>    *    &lt;li&gt;&lt;b&gt;Name:&lt;/b&gt;  &lt;js&gt;"JsonSerializer.simpleMode.b"&lt;/js&gt;<a name="line.173"></a>
+<span class="sourceLineNo">174</span>    *    &lt;li&gt;&lt;b&gt;Data type:&lt;/b&gt;  &lt;code&gt;Boolean&lt;/code&gt;<a name="line.174"></a>
+<span class="sourceLineNo">175</span>    *    &lt;li&gt;&lt;b&gt;Default:&lt;/b&gt;  &lt;jk&gt;false&lt;/jk&gt;<a name="line.175"></a>
+<span class="sourceLineNo">176</span>    *    &lt;li&gt;&lt;b&gt;Session-overridable:&lt;/b&gt;  &lt;jk&gt;true&lt;/jk&gt;<a name="line.176"></a>
+<span class="sourceLineNo">177</span>    *    &lt;li&gt;&lt;b&gt;Methods:&lt;/b&gt; <a name="line.177"></a>
+<span class="sourceLineNo">178</span>    *       &lt;ul&gt;<a name="line.178"></a>
+<span class="sourceLineNo">179</span>    *          &lt;li class='jm'&gt;{@link JsonSerializerBuilder#simple(boolean)}<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    *          &lt;li class='jm'&gt;{@link JsonSerializerBuilder#simple()}<a name="line.180"></a>
+<span class="sourceLineNo">181</span>    *          &lt;li class='jm'&gt;{@link JsonSerializerBuilder#ssq()}<a name="line.181"></a>
+<span class="sourceLineNo">182</span>    *       &lt;/ul&gt;<a name="line.182"></a>
+<span class="sourceLineNo">183</span>    * &lt;/ul&gt;<a name="line.183"></a>
+<span class="sourceLineNo">184</span>    * <a name="line.184"></a>
+<span class="sourceLineNo">185</span>    * &lt;h5 class='section'&gt;Description:&lt;/h5&gt;<a name="line.185"></a>
+<span class="sourceLineNo">186</span>    * &lt;p&gt;<a name="line.186"></a>
+<span class="sourceLineNo">187</span>    * If &lt;jk&gt;true&lt;/jk&gt;, JSON attribute names will only be quoted when necessary.<a name="line.187"></a>
+<span class="sourceLineNo">188</span>    * &lt;br&gt;Otherwise, they are always quoted.<a name="line.188"></a>
+<span class="sourceLineNo">189</span>    * <a name="line.189"></a>
+<span class="sourceLineNo">190</span>    * &lt;p&gt;<a name="line.190"></a>
+<span class="sourceLineNo">191</span>    * Attributes do not need to be quoted when they conform to the following:<a name="line.191"></a>
+<span class="sourceLineNo">192</span>    * &lt;ol class='spaced-list'&gt;<a name="line.192"></a>
+<span class="sourceLineNo">193</span>    *    &lt;li&gt;They start with an ASCII character or &lt;js&gt;'_'&lt;/js&gt;.<a name="line.193"></a>
+<span class="sourceLineNo">194</span>    *    &lt;li&gt;They contain only ASCII characters or numbers or &lt;js&gt;'_'&lt;/js&gt;.<a name="line.194"></a>
+<span class="sourceLineNo">195</span>    *    &lt;li&gt;They are not one of the following reserved words:<a name="line.195"></a>
+<span class="sourceLineNo">196</span>    *       &lt;p class='bcode'&gt;<a name="line.196"></a>
+<span class="sourceLineNo">197</span>    *    arguments, break, case, catch, class, const, continue, debugger, default, <a name="line.197"></a>
+<span class="sourceLineNo">198</span>    *    delete, do, else, enum, eval, export, extends, false, finally, for, function, <a name="line.198"></a>
+<span class="sourceLineNo">199</span>    *    if, implements, import, in, instanceof, interface, let, new, null, package,<a name="line.199"></a>
+<span class="sourceLineNo">200</span>    *    private, protected, public, return, static, super, switch, this, throw,<a name="line.200"></a>
+<span class="sourceLineNo">201</span>    *    true, try, typeof, var, void, while, with, undefined, yield<a name="line.201"></a>
+<span class="sourceLineNo">202</span>    *       &lt;/p&gt;<a name="line.202"></a>
+<span class="sourceLineNo">203</span>    * &lt;/ol&gt;<a name="line.203"></a>
+<span class="sourceLineNo">204</span>    * <a name="line.204"></a>
+<span class="sourceLineNo">205</span>    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.205"></a>
+<span class="sourceLineNo">206</span>    * &lt;p class='bcode'&gt;<a name="line.206"></a>
+<span class="sourceLineNo">207</span>    *    &lt;jc&gt;// Create a JSON serializer in normal mode.&lt;/jc&gt;<a name="line.207"></a>
+<span class="sourceLineNo">208</span>    *    WriterSerializer s1 = JsonSerializer<a name="line.208"></a>
+<span class="sourceLineNo">209</span>    *       .&lt;jsm&gt;create&lt;/jsm&gt;()<a name="line.209"></a>
+<span class="sourceLineNo">210</span>    *       .build();<a name="line.210"></a>
+<span class="sourceLineNo">211</span>    *    <a name="line.211"></a>
+<span class="sourceLineNo">212</span>    *    &lt;jc&gt;// Create a JSON serializer in simple mode.&lt;/jc&gt;<a name="line.212"></a>
+<span class="sourceLineNo">213</span>    *    WriterSerializer s2 = JsonSerializer<a name="line.213"></a>
+<span class="sourceLineNo">214</span>    *       .&lt;jsm&gt;create&lt;/jsm&gt;()<a name="line.214"></a>
+<span class="sourceLineNo">215</span>    *       .simple()<a name="line.215"></a>
+<span class="sourceLineNo">216</span>    *       .build();<a name="line.216"></a>
+<span class="sourceLineNo">217</span>    *    <a name="line.217"></a>
+<span class="sourceLineNo">218</span>    *    ObjectMap m = &lt;jk&gt;new&lt;/jk&gt; ObjectMap()<a name="line.218"></a>
+<span class="sourceLineNo">219</span>    *       .append(&lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"x1"&lt;/js&gt;)<a name="line.219"></a>
+<span class="sourceLineNo">220</span>    *       .append(&lt;js&gt;"_bar"&lt;/js&gt;, &lt;js&gt;"x2"&lt;/js&gt;)<a name="line.220"></a>
+<span class="sourceLineNo">221</span>    *       .append(&lt;js&gt;" baz "&lt;/js&gt;, &lt;js&gt;"x3"&lt;/js&gt;)<a name="line.221"></a>
+<span class="sourceLineNo">222</span>    *       .append(&lt;js&gt;"123"&lt;/js&gt;, &lt;js&gt;"x4"&lt;/js&gt;)<a name="line.222"></a>
+<span class="sourceLineNo">223</span>    *       .append(&lt;js&gt;"return"&lt;/js&gt;, &lt;js&gt;"x5"&lt;/js&gt;);<a name="line.223"></a>
+<span class="sourceLineNo">224</span>    *       .append(&lt;js&gt;""&lt;/js&gt;, &lt;js&gt;"x6"&lt;/js&gt;);<a name="line.224"></a>
+<span class="sourceLineNo">225</span>    * <a name="line.225"></a>
+<span class="sourceLineNo">226</span>    *    &lt;jc&gt;// Produces:&lt;/jc&gt;<a name="line.226"></a>
+<span class="sourceLineNo">227</span>    *    &lt;jc&gt;// {&lt;/jc&gt;<a name="line.227"></a>
+<span class="sourceLineNo">228</span>    *    &lt;jc&gt;//   "foo": "x1"&lt;/jc&gt;<a name="line.228"></a>
+<span class="sourceLineNo">229</span>    *    &lt;jc&gt;//   "_bar": "x2"&lt;/jc&gt;<a name="line.229"></a>
+<span class="sourceLineNo">230</span>    *    &lt;jc&gt;//   " baz ": "x3"&lt;/jc&gt;<a name="line.230"></a>
+<span class="sourceLineNo">231</span>    *    &lt;jc&gt;//   "123": "x4"&lt;/jc&gt;<a name="line.231"></a>
+<span class="sourceLineNo">232</span>    *    &lt;jc&gt;//   "return": "x5"&lt;/jc&gt;<a name="line.232"></a>
+<span class="sourceLineNo">233</span>    *    &lt;jc&gt;//   "": "x6"&lt;/jc&gt;<a name="line.233"></a>
+<span class="sourceLineNo">234</span>    *    &lt;jc&gt;// }&lt;/jc&gt;<a name="line.234"></a>
+<span class="sourceLineNo">235</span>    *    String json1 = s1.serialize(m);<a name="line.235"></a>
+<span class="sourceLineNo">236</span>    * <a name="line.236"></a>
+<span class="sourceLineNo">237</span>    *    &lt;jc&gt;// Produces:&lt;/jc&gt;<a name="line.237"></a>
+<span class="sourceLineNo">238</span>    *    &lt;jc&gt;// {&lt;/jc&gt;<a name="line.238"></a>
+<span class="sourceLineNo">239</span>    *    &lt;jc&gt;//   foo: "x1"&lt;/jc&gt;<a name="line.239"></a>
+<span class="sourceLineNo">240</span>    *    &lt;jc&gt;//   _bar: "x2"&lt;/jc&gt;<a name="line.240"></a>
+<span class="sourceLineNo">241</span>    *    &lt;jc&gt;//   " baz ": "x3"&lt;/jc&gt;<a name="line.241"></a>
+<span class="sourceLineNo">242</span>    *    &lt;jc&gt;//   "123": "x4"&lt;/jc&gt;<a name="line.242"></a>
+<span class="sourceLineNo">243</span>    *    &lt;jc&gt;//   "return": "x5"&lt;/jc&gt;<a name="line.243"></a>
+<span class="sourceLineNo">244</span>    *    &lt;jc&gt;//   "": "x6"&lt;/jc&gt;<a name="line.244"></a>
+<span class="sourceLineNo">245</span>    *    &lt;jc&gt;// }&lt;/jc&gt;<a name="line.245"></a>
+<span class="sourceLineNo">246</span>    *    String json2 = s2.serialize(m);<a name="line.246"></a>
+<span class="sourceLineNo">247</span>    * &lt;/p&gt;<a name="line.247"></a>
+<span class="sourceLineNo">248</span>    */<a name="line.248"></a>
+<span class="sourceLineNo">249</span>   public static final String JSON_simpleMode = PREFIX + "simpleMode.b";<a name="line.249"></a>
+<span class="sourceLineNo">250</span><a name="line.250"></a>
+<span class="sourceLineNo">251</span><a name="line.251"></a>
+<span class="sourceLineNo">252</span>   //-------------------------------------------------------------------------------------------------------------------<a name="line.252"></a>
+<span class="sourceLineNo">253</span>   // Predefined instances<a name="line.253"></a>
+<span class="sourceLineNo">254</span>   //-------------------------------------------------------------------------------------------------------------------<a name="line.254"></a>
+<span class="sourceLineNo">255</span><a name="line.255"></a>
+<span class="sourceLineNo">256</span>   /** Default serializer, all default settings.*/<a name="line.256"></a>
+<span class="sourceLineNo">257</span>   public static final JsonSerializer DEFAULT = new JsonSerializer(PropertyStore.DEFAULT);<a name="line.257"></a>
+<span class="sourceLineNo">258</span><a name="line.258"></a>
+<span class="sourceLineNo">259</span>   /** Default serializer, all default settings.*/<a name="line.259"></a>
+<span class="sourceLineNo">260</span>   public static final JsonSerializer DEFAULT_READABLE = new Readable(PropertyStore.DEFAULT);<a name="line.260"></a>
+<span class="sourceLineNo">261</span><a name="line.261"></a>
+<span class="sourceLineNo">262</span>   /** Default serializer, single quotes, simple mode. */<a name="line.262"></a>
+<span class="sourceLineNo">263</span>   public static final JsonSerializer DEFAULT_LAX = new Simple(PropertyStore.DEFAULT);<a name="line.263"></a>
+<span class="sourceLineNo">264</span><a name="line.264"></a>
+<span class="sourceLineNo">265</span>   /** Default serializer, single quotes, simple mode, with whitespace. */<a name="line.265"></a>
+<span class="sourceLineNo">266</span>   public static final JsonSerializer DEFAULT_LAX_READABLE = new SimpleReadable(PropertyStore.DEFAULT);<a name="line.266"></a>
+<span class="sourceLineNo">267</span><a name="line.267"></a>
+<span class="sourceLineNo">268</span>   /**<a name="line.268"></a>
+<span class="sourceLineNo">269</span>    * Default serializer, single quotes, simple mode, with whitespace and recursion detection.<a name="line.269"></a>
+<span class="sourceLineNo">270</span>    * Note that recursion detection introduces a small performance penalty.<a name="line.270"></a>
+<span class="sourceLineNo">271</span>    */<a name="line.271"></a>
+<span class="sourceLineNo">272</span>   public static final JsonSerializer DEFAULT_LAX_READABLE_SAFE = new SimpleReadableSafe(PropertyStore.DEFAULT);<a name="line.272"></a>
+<span class="sourceLineNo">273</span><a name="line.273"></a>
+<span class="sourceLineNo">274</span><a name="line.274"></a>
+<span class="sourceLineNo">275</span>   //-------------------------------------------------------------------------------------------------------------------<a name="line.275"></a>
+<span class="sourceLineNo">276</span>   // Predefined subclasses<a name="line.276"></a>
+<span class="sourceLineNo">277</span>   //-------------------------------------------------------------------------------------------------------------------<a name="line.277"></a>
+<span class="sourceLineNo">278</span><a name="line.278"></a>
+<span class="sourceLineNo">279</span>   /** Default serializer, with whitespace. */<a name="line.279"></a>
+<span class="sourceLineNo">280</span>   public static class Readable extends JsonSerializer {<a name="line.280"></a>
+<span class="sourceLineNo">281</span><a name="line.281"></a>
+<span class="sourceLineNo">282</span>      /**<a name="line.282"></a>
+<span class="sourceLineNo">283</span>       * Constructor.<a name="line.283"></a>
+<span class="sourceLineNo">284</span>       * <a name="line.284"></a>
+<span class="sourceLineNo">285</span>       * @param ps The property store containing all the settings for this object.<a name="line.285"></a>
+<span class="sourceLineNo">286</span>       */<a name="line.286"></a>
+<span class="sourceLineNo">287</span>      public Readable(PropertyStore ps) {<a name="line.287"></a>
+<span class="sourceLineNo">288</span>         super(<a name="line.288"></a>
+<span class="sourceLineNo">289</span>            ps.builder().set(SERIALIZER_useWhitespace, true).build()<a name="line.289"></a>
+<span class="sourceLineNo">290</span>         );<a name="line.290"></a>
+<span class="sourceLineNo">291</span>      }<a name="line.291"></a>
+<span class="sourceLineNo">292</span>   }<a name="line.292"></a>
+<span class="sourceLineNo">293</span><a name="line.293"></a>
+<span class="sourceLineNo">294</span>   /** Default serializer, single quotes, simple mode. */<a name="line.294"></a>
+<span class="sourceLineNo">295</span>   public static class Simple extends JsonSerializer {<a name="line.295"></a>
+<span class="sourceLineNo">296</span><a name="line.296"></a>
+<span class="sourceLineNo">297</span>      /**<a name="line.297"></a>
+<span class="sourceLineNo">298</span>       * Constructor.<a name="line.298"></a>
+<span class="sourceLineNo">299</span>       * <a name="line.299"></a>
+<span class="sourceLineNo">300</span>       * @param ps The property store containing all the settings for this object.<a name="line.300"></a>
+<span class="sourceLineNo">301</span>       */<a name="line.301"></a>
+<span class="sourceLineNo">302</span>      public Simple(PropertyStore ps) {<a name="line.302"></a>
+<span class="sourceLineNo">303</span>         super(<a name="line.303"></a>
+<span class="sourceLineNo">304</span>            ps.builder()<a name="line.304"></a>
+<span class="sourceLineNo">305</span>               .set(JSON_simpleMode, true)<a name="line.305"></a>
+<span class="sourceLineNo">306</span>               .set(SERIALIZER_quoteChar, '\'')<a name="line.306"></a>
+<span class="sourceLineNo">307</span>               .build(),<a name="line.307"></a>
+<span class="sourceLineNo">308</span>            "application/json",<a name="line.308"></a>
+<span class="sourceLineNo">309</span>            "application/json+simple", "text/json+simple"<a name="line.309"></a>
+<span class="sourceLineNo">310</span>         );<a name="line.310"></a>
+<span class="sourceLineNo">311</span>      }<a name="line.311"></a>
+<span class="sourceLineNo">312</span>   }<a name="line.312"></a>
+<span class="sourceLineNo">313</span><a name="line.313"></a>
+<span class="sourceLineNo">314</span>   /** Default serializer, single quotes, simple mode, with whitespace. */<a name="line.314"></a>
+<span class="sourceLineNo">315</span>   public static class SimpleReadable extends JsonSerializer {<a name="line.315"></a>
+<span class="sourceLineNo">316</span><a name="line.316"></a>
+<span class="sourceLineNo">317</span>      /**<a name="line.317"></a>
+<span class="sourceLineNo">318</span>       * Constructor.<a name="line.318"></a>
+<span class="sourceLineNo">319</span>       * <a name="line.319"></a>
+<span class="sourceLineNo">320</span>       * @param ps The property store containing all the settings for this object.<a name="line.320"></a>
+<span class="sourceLineNo">321</span>       */<a name="line.321"></a>
+<span class="sourceLineNo">322</span>      public SimpleReadable(PropertyStore ps) {<a name="line.322"></a>
+<span class="sourceLineNo">323</span>         super(<a name="line.323"></a>
+<span class="sourceLineNo">324</span>            ps.builder()<a name="line.324"></a>
+<span class="sourceLineNo">325</span>               .set(JSON_simpleMode, true)<a name="line.325"></a>
+<span class="sourceLineNo">326</span>               .set(SERIALIZER_quoteChar, '\'')<a name="line.326"></a>
+<span class="sourceLineNo">327</span>               .set(SERIALIZER_useWhitespace, true)<a name="line.327"></a>
+<span class="sourceLineNo">328</span>               .build()<a name="line.328"></a>
+<span class="sourceLineNo">329</span>         );<a name="line.329"></a>
+<span class="sourceLineNo">330</span>      }<a name="line.330"></a>
+<span class="sourceLineNo">331</span>   }<a name="line.331"></a>
+<span class="sourceLineNo">332</span><a name="line.332"></a>
+<span class="sourceLineNo">333</span>   /**<a name="line.333"></a>
+<span class="sourceLineNo">334</span>    * Default serializer, single quotes, simple mode, with whitespace and recursion detection.<a name="line.334"></a>
+<span class="sourceLineNo">335</span>    * Note that recursion detection introduces a small performance penalty.<a name="line.335"></a>
+<span class="sourceLineNo">336</span>    */<a name="line.336"></a>
+<span class="sourceLineNo">337</span>   public static class SimpleReadableSafe extends JsonSerializer {<a name="line.337"></a>
+<span class="sourceLineNo">338</span><a name="line.338"></a>
+<span class="sourceLineNo">339</span>      /**<a name="line.339"></a>
+<span class="sourceLineNo">340</span>       * Constructor.<a name="line.340"></a>
+<span class="sourceLineNo">341</span>       * <a name="line.341"></a>
+<span class="sourceLineNo">342</span>       * @param ps The property store containing all the settings for this object.<a name="line.342"></a>
+<span class="sourceLineNo">343</span>       */<a name="line.343"></a>
+<span class="sourceLineNo">344</span>      public SimpleReadableSafe(PropertyStore ps) {<a name="line.344"></a>
+<span class="sourceLineNo">345</span>         super(<a name="line.345"></a>
+<span class="sourceLineNo">346</span>            ps.builder()<a name="line.346"></a>
+<span class="sourceLineNo">347</span>               .set(JSON_simpleMode, true)<a name="line.347"></a>
+<span class="sourceLineNo">348</span>               .set(SERIALIZER_quoteChar, '\'')<a name="line.348"></a>
+<span class="sourceLineNo">349</span>               .set(SERIALIZER_useWhitespace, true)<a name="line.349"></a>
+<span class="sourceLineNo">350</span>               .set(SERIALIZER_detectRecursions, true)<a name="line.350"></a>
+<span class="sourceLineNo">351</span>               .build()<a name="line.351"></a>
+<span class="sourceLineNo">352</span>         );<a name="line.352"></a>
+<span class="sourceLineNo">353</span>      }<a name="line.353"></a>
+<span class="sourceLineNo">354</span>   }<a name="line.354"></a>
+<span class="sourceLineNo">355</span><a name="line.355"></a>
+<span class="sourceLineNo">356</span><a name="line.356"></a>
+<span class="sourceLineNo">357</span>   //-------------------------------------------------------------------------------------------------------------------<a name="line.357"></a>
+<span class="sourceLineNo">358</span>   // Instance<a name="line.358"></a>
+<span class="sourceLineNo">359</span>   //-------------------------------------------------------------------------------------------------------------------<a name="line.359"></a>
+<span class="sourceLineNo">360</span><a name="line.360"></a>
+<span class="sourceLineNo">361</span>   final boolean<a name="line.361"></a>
+<span class="sourceLineNo">362</span>      simpleMode,<a name="line.362"></a>
+<span class="sourceLineNo">363</span>      escapeSolidus,<a name="line.363"></a>
+<span class="sourceLineNo">364</span>      addBeanTypeProperties;<a name="line.364"></a>
+<span class="sourceLineNo">365</span><a name="line.365"></a>
+<span class="sourceLineNo">366</span>   private volatile JsonSchemaSerializer schemaSerializer;<a name="line.366"></a>
+<span class="sourceLineNo">367</span><a name="line.367"></a>
+<span class="sourceLineNo">368</span>   /**<a name="line.368"></a>
+<span class="sourceLineNo">369</span>    * Constructor.<a name="line.369"></a>
+<span class="sourceLineNo">370</span>    * <a name="line.370"></a>
+<span class="sourceLineNo">371</span>    * @param ps<a name="line.371"></a>
+<span class="sourceLineNo">372</span>    *    The property store containing all the settings for this object.<a name="line.372"></a>
+<span class="sourceLineNo">373</span>    */<a name="line.373"></a>
+<span class="sourceLineNo">374</span>   public JsonSerializer(PropertyStore ps) {<a name="line.374"></a>
+<span class="sourceLineNo">375</span>      this(ps, "application/json", "application/json", "text/json");<a name="line.375"></a>
+<span class="sourceLineNo">376</span>   }<a name="line.376"></a>
+<span class="sourceLineNo">377</span><a name="line.377"></a>
+<span class="sourceLineNo">378</span>   /**<a name="line.378"></a>
+<span class="sourceLineNo">379</span>    * Constructor.<a name="line.379"></a>
+<span class="sourceLineNo">380</span>    * <a name="line.380"></a>
+<span class="sourceLineNo">381</span>    * @param ps<a name="line.381"></a>
+<span class="sourceLineNo">382</span>    *    The property store containing all the settings for this object.<a name="line.382"></a>
+<span class="sourceLineNo">383</span>    * @param produces<a name="line.383"></a>
+<span class="sourceLineNo">384</span>    *    The media type that this serializer produces.<a name="line.384"></a>
+<span class="sourceLineNo">385</span>    * @param accept<a name="line.385"></a>
+<span class="sourceLineNo">386</span>    *    The accept media types that the serializer can handle.<a name="line.386"></a>
+<span class="sourceLineNo">387</span>    *    &lt;p&gt;<a name="line.387"></a>
+<span class="sourceLineNo">388</span>    *    Can contain meta-characters per the &lt;code&gt;media-type&lt;/code&gt; specification of<a name="line.388"></a>
+<span class="sourceLineNo">389</span>    *    &lt;a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1"&gt;RFC2616/14.1&lt;/a&gt;<a name="line.389"></a>
+<span class="sourceLineNo">390</span>    *    &lt;p&gt;<a name="line.390"></a>
+<span class="sourceLineNo">391</span>    *    If empty, then assumes the only media type supported is &lt;code&gt;produces&lt;/code&gt;.<a name="line.391"></a>
+<span class="sourceLineNo">392</span>    *    &lt;p&gt;<a name="line.392"></a>
+<span class="sourceLineNo">393</span>    *    For example, if this serializer produces &lt;js&gt;"application/json"&lt;/js&gt; but should handle media types of<a name="line.393"></a>
+<span class="sourceLineNo">394</span>    *    &lt;js&gt;"application/json"&lt;/js&gt; and &lt;js&gt;"text/json"&lt;/js&gt;, then the arguments should be:<a name="line.394"></a>
+<span class="sourceLineNo">395</span>    *    &lt;p class='bcode'&gt;<a name="line.395"></a>
+<span class="sourceLineNo">396</span>    *    &lt;jk&gt;super&lt;/jk&gt;(ps, &lt;js&gt;"application/json"&lt;/js&gt;, &lt;js&gt;"application/json"&lt;/js&gt;, &lt;js&gt;"text/json"&lt;/js&gt;);<a name="line.396"></a>
+<span class="sourceLineNo">397</span>    *    &lt;/p&gt;<a name="line.397"></a>
+<span class="sourceLineNo">398</span>    *    &lt;br&gt;...or...<a name="line.398"></a>
+<span class="sourceLineNo">399</span>    *    &lt;p class='bcode'&gt;<a name="line.399"></a>
+<span class="sourceLineNo">400</span>    *    &lt;jk&gt;super&lt;/jk&gt;(ps, &lt;js&gt;"application/json"&lt;/js&gt;, &lt;js&gt;"*&amp;#8203;/json"&lt;/js&gt;);<a name="line.400"></a>
+<span class="sourceLineNo">401</span>    *    &lt;/p&gt;<a name="line.401"></a>
+<span class="sourceLineNo">402</span>    */<a name="line.402"></a>
+<span class="sourceLineNo">403</span>   public JsonSerializer(PropertyStore ps, String produces, String...accept) {<a name="line.403"></a>
+<span class="sourceLineNo">404</span>      super(ps, produces, accept);<a name="line.404"></a>
+<span class="sourceLineNo">405</span>      <a name="line.405"></a>
+<span class="sourceLineNo">406</span>      simpleMode = getBooleanProperty(JSON_simpleMode, false);<a name="line.406"></a>
+<span class="sourceLineNo">407</span>      escapeSolidus = getBooleanProperty(JSON_escapeSolidus, false);<a name="line.407"></a>
+<span class="sourceLineNo">408</span>      addBeanTypeProperties = getBooleanProperty(JSON_addBeanTypeProperties, getBooleanProperty(SERIALIZER_addBeanTypeProperties, true));<a name="line.408"></a>
+<span class="sourceLineNo">409</span>   }<a name="line.409"></a>
+<span class="sourceLineNo">410</span><a name="line.410"></a>
+<span class="sourceLineNo">411</span>   @Override /* Context */<a name="line.411"></a>
+<span class="sourceLineNo">412</span>   public JsonSerializerBuilder builder() {<a name="line.412"></a>
+<span class="sourceLineNo">413</span>      return new JsonSerializerBuilder(getPropertyStore());<a name="line.413"></a>
+<span class="sourceLineNo">414</span>   }<a name="line.414"></a>
+<span class="sourceLineNo">415</span>   <a name="line.415"></a>
+<span class="sourceLineNo">416</span>   /**<a name="line.416"></a>
+<span class="sourceLineNo">417</span>    * Instantiates a new clean-slate {@link JsonSerializerBuilder} object.<a name="line.417"></a>
+<span class="sourceLineNo">418</span>    * <a name="line.418"></a>
+<span class="sourceLineNo">419</span>    * &lt;p&gt;<a name="line.419"></a>
+<span class="sourceLineNo">420</span>    * This is equivalent to simply calling &lt;code&gt;&lt;jk&gt;new&lt;/jk&gt; JsonSerializerBuilder()&lt;/code&gt;.<a name="line.420"></a>
+<span class="sourceLineNo">421</span>    * <a name="line.421"></a>
+<span class="sourceLineNo">422</span>    * @return A new {@link JsonSerializerBuilder} object.<a name="line.422"></a>
+<span class="sourceLineNo">423</span>    */<a name="line.423"></a>
+<span class="sourceLineNo">424</span>   public static JsonSerializerBuilder create() {<a name="line.424"></a>
+<span class="sourceLineNo">425</span>      return new JsonSerializerBuilder();<a name="line.425"></a>
+<span class="sourceLineNo">426</span>   }<a name="line.426"></a>
+<span class="sourceLineNo">427</span><a name="line.427"></a>
+<span class="sourceLineNo">428</span>   /**<a name="line.428"></a>
+<span class="sourceLineNo">429</span>    * Returns the schema serializer based on the settings of this serializer.<a name="line.429"></a>
+<span class="sourceLineNo">430</span>    * <a name="line.430"></a>
+<span class="sourceLineNo">431</span>    * &lt;p&gt;<a name="line.431"></a>
+<span class="sourceLineNo">432</span>    * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies <a name="line.432"></a>
+<span class="sourceLineNo">433</span>    * the settings of the object called on.<a name="line.433"></a>
+<span class="sourceLineNo">434</span>    * <a name="line.434"></a>
+<span class="sourceLineNo">435</span>    * @return The schema serializer.<a name="line.435"></a>
+<span class="sourceLineNo">436</span>    */<a name="line.436"></a>
+<span class="sourceLineNo">437</span>   public JsonSchemaSerializer getSchemaSerializer() {<a name="line.437"></a>
+<span class="sourceLineNo">438</span>      if (schemaSerializer == null)<a name="line.438"></a>
+<span class="sourceLineNo">439</span>         schemaSerializer = builder().build(JsonSchemaSerializer.class);<a name="line.439"></a>
+<span class="sourceLineNo">440</span>      return schemaSerializer;<a name="line.440"></a>
+<span class="sourceLineNo">441</span>   }<a name="line.441"></a>
+<span class="sourceLineNo">442</span><a name="line.442"></a>
+<span class="sourceLineNo">443</span>   //--------------------------------------------------------------------------------<a name="line.443"></a>
+<span class="sourceLineNo">444</span>   // Entry point methods<a name="line.444"></a>
+<span class="sourceLineNo">445</span>   //--------------------------------------------------------------------------------<a name="line.445"></a>
+<span class="sourceLineNo">446</span><a name="line.446"></a>
+<span class="sourceLineNo">447</span>   @Override /* Serializer */<a name="line.447"></a>
+<span class="sourceLineNo">448</span>   public WriterSerializerSession createSession(SerializerSessionArgs args) {<a name="line.448"></a>
+<span class="sourceLineNo">449</span>      return new JsonSerializerSession(this, args);<a name="line.449"></a>
+<span class="sourceLineNo">450</span>   }<a name="line.450"></a>
+<span class="sourceLineNo">451</span><a name="line.451"></a>
+<span class="sourceLineNo">452</span>   @Override /* Context */<a name="line.452"></a>
+<span class="sourceLineNo">453</span>   public ObjectMap asMap() {<a name="line.453"></a>
+<span class="sourceLineNo">454</span>      return super.asMap()<a name="line.454"></a>
+<span class="sourceLineNo">455</span>         .append("JsonSerializer", new ObjectMap()<a name="line.455"></a>
+<span class="sourceLineNo">456</span>            .append("simpleMode", simpleMode)<a name="line.456"></a>
+<span class="sourceLineNo">457</span>            .append("escapeSolidus", escapeSolidus)<a name="line.457"></a>
+<span class="sourceLineNo">458</span>            .append("addBeanTypeProperties", addBeanTypeProperties)<a name="line.458"></a>
+<span class="sourceLineNo">459</span>         );<a name="line.459"></a>
+<span class="sourceLineNo">460</span>   }<a name="line.460"></a>
+<span class="sourceLineNo">461</span>}<a name="line.461"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

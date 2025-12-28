@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.serializer;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import static org.apache.juneau.serializer.WriterSerializer.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span><a name="line.16"></a>
+<span class="sourceLineNo">017</span>import java.io.*;<a name="line.17"></a>
+<span class="sourceLineNo">018</span>import java.nio.charset.*;<a name="line.18"></a>
+<span class="sourceLineNo">019</span><a name="line.19"></a>
+<span class="sourceLineNo">020</span>import org.apache.juneau.*;<a name="line.20"></a>
+<span class="sourceLineNo">021</span><a name="line.21"></a>
+<span class="sourceLineNo">022</span>/**<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * Subclass of {@link SerializerSession} for character-based serializers.<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * &lt;h5 class='topic'&gt;Description&lt;/h5&gt;<a name="line.25"></a>
+<span class="sourceLineNo">026</span> *<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * This class is typically the parent class of all character-based serializers.<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * &lt;br&gt;It has 1 abstract method to implement...<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * &lt;ul class='spaced-list'&gt;<a name="line.29"></a>
+<span class="sourceLineNo">030</span> *    &lt;li&gt;<a name="line.30"></a>
+<span class="sourceLineNo">031</span> *       {@link #doSerialize(SerializerPipe, Object)}<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * &lt;/ul&gt;<a name="line.32"></a>
+<span class="sourceLineNo">033</span> *<a name="line.33"></a>
+<span class="sourceLineNo">034</span> * &lt;p&gt;<a name="line.34"></a>
+<span class="sourceLineNo">035</span> * This class is NOT thread safe.<a name="line.35"></a>
+<span class="sourceLineNo">036</span> * It is typically discarded after one-time use although it can be reused within the same thread.<a name="line.36"></a>
+<span class="sourceLineNo">037</span> */<a name="line.37"></a>
+<span class="sourceLineNo">038</span>public abstract class WriterSerializerSession extends SerializerSession {<a name="line.38"></a>
+<span class="sourceLineNo">039</span><a name="line.39"></a>
+<span class="sourceLineNo">040</span>   private final WriterSerializer ctx;<a name="line.40"></a>
+<span class="sourceLineNo">041</span>   private final boolean useWhitespace;<a name="line.41"></a>
+<span class="sourceLineNo">042</span>   private final Charset streamCharset, fileCharset;<a name="line.42"></a>
+<span class="sourceLineNo">043</span><a name="line.43"></a>
+<span class="sourceLineNo">044</span>   /**<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    * Create a new session using properties specified in the context.<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    *<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    * @param ctx<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    *    The context creating this session object.<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    *    The context contains all the configuration settings for this object.<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    * @param args<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    *    Runtime arguments.<a name="line.51"></a>
+<span class="sourceLineNo">052</span>    *    These specify session-level information such as locale and URI context.<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    *    It also include session-level properties that override the properties defined on the bean and<a name="line.53"></a>
+<span class="sourceLineNo">054</span>    *    serializer contexts.<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    */<a name="line.55"></a>
+<span class="sourceLineNo">056</span>   protected WriterSerializerSession(WriterSerializer ctx, SerializerSessionArgs args) {<a name="line.56"></a>
+<span class="sourceLineNo">057</span>      super(ctx, args);<a name="line.57"></a>
+<span class="sourceLineNo">058</span>      this.ctx = ctx;<a name="line.58"></a>
+<span class="sourceLineNo">059</span>      this.streamCharset = getProperty(WSERIALIZER_streamCharset, Charset.class, ctx.getStreamCharset());<a name="line.59"></a>
+<span class="sourceLineNo">060</span>      this.fileCharset = getProperty(WSERIALIZER_fileCharset, Charset.class, ctx.getFileCharset());<a name="line.60"></a>
+<span class="sourceLineNo">061</span>      this.useWhitespace = getProperty(WSERIALIZER_useWhitespace, Boolean.class, ctx.isUseWhitespace());<a name="line.61"></a>
+<span class="sourceLineNo">062</span>   }<a name="line.62"></a>
+<span class="sourceLineNo">063</span><a name="line.63"></a>
+<span class="sourceLineNo">064</span>   /**<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    * Constructor for sessions that don't require context.<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    *<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    * @param args<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    *    Runtime session arguments.<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    */<a name="line.69"></a>
+<span class="sourceLineNo">070</span>   protected WriterSerializerSession(SerializerSessionArgs args) {<a name="line.70"></a>
+<span class="sourceLineNo">071</span>      this(WriterSerializer.DEFAULT, args);<a name="line.71"></a>
+<span class="sourceLineNo">072</span>   }<a name="line.72"></a>
+<span class="sourceLineNo">073</span><a name="line.73"></a>
+<span class="sourceLineNo">074</span>   @Override /* SerializerSession */<a name="line.74"></a>
+<span class="sourceLineNo">075</span>   public final boolean isWriterSerializer() {<a name="line.75"></a>
+<span class="sourceLineNo">076</span>      return true;<a name="line.76"></a>
+<span class="sourceLineNo">077</span>   }<a name="line.77"></a>
+<span class="sourceLineNo">078</span><a name="line.78"></a>
+<span class="sourceLineNo">079</span>   @Override /* SerializerSession */<a name="line.79"></a>
+<span class="sourceLineNo">080</span>   protected SerializerPipe createPipe(Object output) {<a name="line.80"></a>
+<span class="sourceLineNo">081</span>      return new SerializerPipe(output, streamCharset, fileCharset);<a name="line.81"></a>
+<span class="sourceLineNo">082</span>   }<a name="line.82"></a>
+<span class="sourceLineNo">083</span><a name="line.83"></a>
+<span class="sourceLineNo">084</span>   /**<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    * Convenience method for serializing an object to a &lt;c&gt;String&lt;/c&gt;.<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    *<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    * @param o The object to serialize.<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    * @return The output serialized to a string.<a name="line.88"></a>
+<span class="sourceLineNo">089</span>    * @throws SerializeException If a problem occurred trying to convert the output.<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    */<a name="line.90"></a>
+<span class="sourceLineNo">091</span>   @Override /* SerializerSession */<a name="line.91"></a>
+<span class="sourceLineNo">092</span>   public final String serialize(Object o) throws SerializeException {<a name="line.92"></a>
+<span class="sourceLineNo">093</span>      StringWriter w = new StringWriter();<a name="line.93"></a>
+<span class="sourceLineNo">094</span>      try {<a name="line.94"></a>
+<span class="sourceLineNo">095</span>         serialize(o, w);<a name="line.95"></a>
+<span class="sourceLineNo">096</span>      } catch (IOException e) {<a name="line.96"></a>
+<span class="sourceLineNo">097</span>         throw new SerializeException(e); // Shouldn't happen.<a name="line.97"></a>
+<span class="sourceLineNo">098</span>      }<a name="line.98"></a>
+<span class="sourceLineNo">099</span>      return w.toString();<a name="line.99"></a>
+<span class="sourceLineNo">100</span>   }<a name="line.100"></a>
+<span class="sourceLineNo">101</span><a name="line.101"></a>
+<span class="sourceLineNo">102</span>   @Override /* SerializerSession */<a name="line.102"></a>
+<span class="sourceLineNo">103</span>   public final String serializeToString(Object o) throws SerializeException {<a name="line.103"></a>
+<span class="sourceLineNo">104</span>      return serialize(o);<a name="line.104"></a>
+<span class="sourceLineNo">105</span>   }<a name="line.105"></a>
+<span class="sourceLineNo">106</span><a name="line.106"></a>
+<span class="sourceLineNo">107</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.107"></a>
+<span class="sourceLineNo">108</span>   // Properties<a name="line.108"></a>
+<span class="sourceLineNo">109</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.109"></a>
+<span class="sourceLineNo">110</span><a name="line.110"></a>
+<span class="sourceLineNo">111</span>   /**<a name="line.111"></a>
+<span class="sourceLineNo">112</span>    * Configuration property:  Maximum indentation.<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    *<a name="line.113"></a>
+<span class="sourceLineNo">114</span>    * @see WriterSerializer#WSERIALIZER_maxIndent<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    * @return<a name="line.115"></a>
+<span class="sourceLineNo">116</span>    *    The maximum indentation level in the serialized document.<a name="line.116"></a>
+<span class="sourceLineNo">117</span>    */<a name="line.117"></a>
+<span class="sourceLineNo">118</span>   protected final int getMaxIndent() {<a name="line.118"></a>
+<span class="sourceLineNo">119</span>      return ctx.getMaxIndent();<a name="line.119"></a>
+<span class="sourceLineNo">120</span>   }<a name="line.120"></a>
+<span class="sourceLineNo">121</span><a name="line.121"></a>
+<span class="sourceLineNo">122</span>   /**<a name="line.122"></a>
+<span class="sourceLineNo">123</span>    * Configuration property:  Quote character.<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    *<a name="line.124"></a>
+<span class="sourceLineNo">125</span>    * @see WriterSerializer#WSERIALIZER_quoteChar<a name="line.125"></a>
+<span class="sourceLineNo">126</span>    * @return<a name="line.126"></a>
+<span class="sourceLineNo">127</span>    *    The character used for quoting attributes and values.<a name="line.127"></a>
+<span class="sourceLineNo">128</span>    */<a name="line.128"></a>
+<span class="sourceLineNo">129</span>   protected final char getQuoteChar() {<a name="line.129"></a>
+<span class="sourceLineNo">130</span>      return ctx.getQuoteChar();<a name="line.130"></a>
+<span class="sourceLineNo">131</span>   }<a name="line.131"></a>
+<span class="sourceLineNo">132</span><a name="line.132"></a>
+<span class="sourceLineNo">133</span>   /**<a name="line.133"></a>
+<span class="sourceLineNo">134</span>    * Configuration property:  Use whitespace.<a name="line.134"></a>
+<span class="sourceLineNo">135</span>    *<a name="line.135"></a>
+<span class="sourceLineNo">136</span>    * @see WriterSerializer#WSERIALIZER_useWhitespace<a name="line.136"></a>
+<span class="sourceLineNo">137</span>    * @return<a name="line.137"></a>
+<span class="sourceLineNo">138</span>    *    The character used for quoting attributes and values.<a name="line.138"></a>
+<span class="sourceLineNo">139</span>    */<a name="line.139"></a>
+<span class="sourceLineNo">140</span>   protected final boolean isUseWhitespace() {<a name="line.140"></a>
+<span class="sourceLineNo">141</span>      return useWhitespace;<a name="line.141"></a>
+<span class="sourceLineNo">142</span>   }<a name="line.142"></a>
+<span class="sourceLineNo">143</span><a name="line.143"></a>
+<span class="sourceLineNo">144</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.144"></a>
+<span class="sourceLineNo">145</span>   // Other methods<a name="line.145"></a>
+<span class="sourceLineNo">146</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.146"></a>
+<span class="sourceLineNo">147</span><a name="line.147"></a>
+<span class="sourceLineNo">148</span>   @Override /* Session */<a name="line.148"></a>
+<span class="sourceLineNo">149</span>   public ObjectMap toMap() {<a name="line.149"></a>
+<span class="sourceLineNo">150</span>      return super.toMap()<a name="line.150"></a>
+<span class="sourceLineNo">151</span>         .append("WriterSerializerSession", new DefaultFilteringObjectMap()<a name="line.151"></a>
+<span class="sourceLineNo">152</span>         );<a name="line.152"></a>
+<span class="sourceLineNo">153</span>   }<a name="line.153"></a>
+<span class="sourceLineNo">154</span>}<a name="line.154"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

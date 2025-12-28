@@ -1,0 +1,158 @@
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+ * with the License.  You may obtain a copy of the License at                                                              *
+ *                                                                                                                         *
+ *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+ *                                                                                                                         *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+ * specific language governing permissions and limitations under the License.                                              *
+ ***************************************************************************************************************************/
+/***************************************************************************************************************************
+ * Styles for embedded highlighted code.
+ * 
+ * Allows you to embed paragraphs of highlighted code into HTML documents.
+ * For example:
+ * 	<p class='bcode w800'>
+ *		<jk>public static void</jk> myMethod(<jk>int</jk> foo, String bar) <jk>throws</jk> Exception {
+ *			System.<jsm>err</jsm>.println(<js>"Hello world!"</js>);
+ *		}
+ * 	</p>
+ *
+ * The various tags can also be used outside of code blocks.
+ * For example:
+ * 	<div>This is how you represent a java <jk>int</jk>.</div> 
+ * 
+ * Available classes:
+ * 	code - Unbordered code block
+ * 	bcode - Bordered code block
+ * 
+ * Available tags:
+ *	<jc> - Java comment
+ *	<jd> - Javadoc comment
+ *	<jt> - Javadoc tag
+ *	<jk> - Java keyword
+ *	<js> - Java string
+ *	<jf> - Java field
+ *	<jsf> - Java static field
+ *	<jsm> - Java static method
+ *	<ja> - Java annotation
+ * 	<xt> - XML tag
+ * 	<xa> - XML attribute
+ * 	<xc> - XML comment
+ * 	<xs> - XML string
+ * 	<xv> - XML value
+ * 	<mk> - Manifest file key
+ * 	<mv> - Manifest file value
+ *  <cc> - Config file comment	
+ * 	<cs> - Config file section
+ * 	<ck> - Config file key
+ * 	<cv> - Config file value
+ * 	<c> - Synonym for <code>
+ * 	<dc> - Synonym for <code><del>
+ * 	<bc> - <code><b>
+ ***************************************************************************************************************************/
+
+/* Monospaced font size */
+.code,
+.bcode,
+.bpcode,
+jc,jd,jt,jk,js,jf,jsf,jsm,ja, 
+xt,xa,xc,xs,
+mc,mk,mv,
+cc,cs,ck,ce,
+c,dc,bc {
+	font-size: 10pt;
+	white-space: pre;
+	font-family: monospace;
+	tab-size: 3;
+	-moz-tab-size: 3;
+	-o-tab-size: 3;
+}
+
+/* Deleted code */
+dc {
+	text-decoration: line-through;
+}
+
+/* Bold code */
+bc {
+	font-weight: bold;
+}
+
+/*--- Bordered code ---*/
+p.bcode,
+p.bpcode {
+	border: 1px solid black;
+	margin: 0px 20px;
+	border-radius: 10px;
+	overflow: hidden;
+	background-color: #f8f8f8;
+	border-color: #cccccc;
+	box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.5);
+}
+
+p.bpcode {
+	padding-bottom: 15px;
+}
+
+/*--- Bordered code in a section of a method doc ---*/
+dd p.bcode {
+	margin-left:0px;
+	margin-right:20px;
+}
+
+/* Override padding bottom in javadoc comments. */
+.blockList p.bcode {
+	padding-bottom: 0px !important;
+}
+
+/*--- Unbordered code ---*/
+p.code {
+	padding-bottom: 15px;
+	margin: -15px;
+}
+
+/*--- Java code effects ---*/
+jc { color: green; }
+jd { color: #3f5fbf; }
+jt { color: #7f9fbf; font-weight: bold; }
+jk { color: #7f0055; font-weight: bold; }
+js { color: #00B; }
+jf { color: DarkBlue; }
+jsf { color: DarkBlue; font-style: italic; }
+jsm { font-style: italic; }
+ja { color: grey; }
+
+/*--- JSON code effects ---*/
+joc { color: green; }
+jok { color: purple; }
+jov { color: #00B; }
+
+/*--- XML code effects ---*/
+xt { color: DarkCyan; }
+xa { color: purple; }
+xc { color: mediumblue; }
+xs { color: #00B; font-style: italic; }
+xv { color: black; }
+
+/*--- URLEncoding/UON code effects ---*/
+ua { color: black; } /* Attribute name */
+uk { color: #7f0055; font-weight: bold; } /* true/false/null */
+un { color: DarkBlue; } /* Number value */
+us { color: #00B; } /* String value */
+
+/*--- Manifest-file code effects ---*/
+mc { color: green; }
+mk { color: DarkRed; font-weight: bold; }
+mv { color: DarkBlue;}
+mi { color: DarkBlue; font-style: italic; }
+
+/*--- Config file effects ---*/
+cc { color: green; }
+cs { color: DarkRed;font-weight: bold;}
+ck { color: DarkRed; }
+cv { color: DarkBlue; }
+ci { color: DarkRed; font-weight: bold; font-style: italic; }

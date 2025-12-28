@@ -1,0 +1,302 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.rest;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import static org.apache.juneau.internal.StringUtils.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span><a name="line.16"></a>
+<span class="sourceLineNo">017</span>import java.text.*;<a name="line.17"></a>
+<span class="sourceLineNo">018</span>import java.util.logging.*;<a name="line.18"></a>
+<span class="sourceLineNo">019</span><a name="line.19"></a>
+<span class="sourceLineNo">020</span>import javax.servlet.http.*;<a name="line.20"></a>
+<span class="sourceLineNo">021</span><a name="line.21"></a>
+<span class="sourceLineNo">022</span>import org.apache.juneau.internal.*;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>import org.apache.juneau.json.*;<a name="line.23"></a>
+<span class="sourceLineNo">024</span><a name="line.24"></a>
+<span class="sourceLineNo">025</span>/**<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * Logging utility class.<a name="line.26"></a>
+<span class="sourceLineNo">027</span> *<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * &lt;div class='warn'&gt;<a name="line.28"></a>
+<span class="sourceLineNo">029</span> *    &lt;b&gt;Deprecated&lt;/b&gt; - Use {@link BasicRestCallLogger}<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * &lt;/div&gt;<a name="line.30"></a>
+<span class="sourceLineNo">031</span> *<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * &lt;p&gt;<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * Subclasses can override these methods to tailor logging of HTTP requests.<a name="line.33"></a>
+<span class="sourceLineNo">034</span> * &lt;br&gt;Subclasses MUST implement a no-arg public constructor.<a name="line.34"></a>
+<span class="sourceLineNo">035</span> *<a name="line.35"></a>
+<span class="sourceLineNo">036</span> * &lt;ul class='seealso'&gt;<a name="line.36"></a>
+<span class="sourceLineNo">037</span> *    &lt;li class='link'&gt;{@doc RestLoggingAndDebugging}<a name="line.37"></a>
+<span class="sourceLineNo">038</span> * &lt;/ul&gt;<a name="line.38"></a>
+<span class="sourceLineNo">039</span> */<a name="line.39"></a>
+<span class="sourceLineNo">040</span>@Deprecated<a name="line.40"></a>
+<span class="sourceLineNo">041</span>public class BasicRestLogger implements RestLogger {<a name="line.41"></a>
+<span class="sourceLineNo">042</span><a name="line.42"></a>
+<span class="sourceLineNo">043</span>   private final JuneauLogger logger;<a name="line.43"></a>
+<span class="sourceLineNo">044</span>   private final RestContext context;<a name="line.44"></a>
+<span class="sourceLineNo">045</span><a name="line.45"></a>
+<span class="sourceLineNo">046</span><a name="line.46"></a>
+<span class="sourceLineNo">047</span>   /**<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    * Constructor.<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    *<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    * @param context The context of the resource object.<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    */<a name="line.51"></a>
+<span class="sourceLineNo">052</span>   public BasicRestLogger(RestContext context) {<a name="line.52"></a>
+<span class="sourceLineNo">053</span>      this.context = context;<a name="line.53"></a>
+<span class="sourceLineNo">054</span>      this.logger = JuneauLogger.getLogger(getLoggerName());<a name="line.54"></a>
+<span class="sourceLineNo">055</span>   }<a name="line.55"></a>
+<span class="sourceLineNo">056</span><a name="line.56"></a>
+<span class="sourceLineNo">057</span>   /**<a name="line.57"></a>
+<span class="sourceLineNo">058</span>    * Returns the logger name.<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    *<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    * &lt;p&gt;<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    * By default returns the class name of the servlet class passed in to the context.<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    *<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    * &lt;p&gt;<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    * Subclasses can override this to provide their own customized logger names.<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    *<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    * @return The logger name.<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    */<a name="line.67"></a>
+<span class="sourceLineNo">068</span>   protected String getLoggerName() {<a name="line.68"></a>
+<span class="sourceLineNo">069</span>      return context == null ? getClass().getName() : context.getResource().getClass().getName();<a name="line.69"></a>
+<span class="sourceLineNo">070</span>   }<a name="line.70"></a>
+<span class="sourceLineNo">071</span><a name="line.71"></a>
+<span class="sourceLineNo">072</span>   /**<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    * Returns the Java logger used for logging.<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    *<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    * &lt;p&gt;<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    * Subclasses can provide their own logger.<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    * The default implementation returns the logger created using &lt;c&gt;Logger.getLogger(getClass())&lt;/c&gt;.<a name="line.77"></a>
+<span class="sourceLineNo">078</span>    *<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    * @return The logger used for logging.<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    */<a name="line.80"></a>
+<span class="sourceLineNo">081</span>   protected Logger getLogger() {<a name="line.81"></a>
+<span class="sourceLineNo">082</span>      return logger;<a name="line.82"></a>
+<span class="sourceLineNo">083</span>   }<a name="line.83"></a>
+<span class="sourceLineNo">084</span><a name="line.84"></a>
+<span class="sourceLineNo">085</span>   @Override /* RestLogger */<a name="line.85"></a>
+<span class="sourceLineNo">086</span>   public void setLevel(Level level) {<a name="line.86"></a>
+<span class="sourceLineNo">087</span>      getLogger().setLevel(level);<a name="line.87"></a>
+<span class="sourceLineNo">088</span>   }<a name="line.88"></a>
+<span class="sourceLineNo">089</span><a name="line.89"></a>
+<span class="sourceLineNo">090</span>   /**<a name="line.90"></a>
+<span class="sourceLineNo">091</span>    * Log a message to the logger.<a name="line.91"></a>
+<span class="sourceLineNo">092</span>    *<a name="line.92"></a>
+<span class="sourceLineNo">093</span>    * &lt;p&gt;<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    * Subclasses can override this method if they wish to log messages using a library other than Java Logging<a name="line.94"></a>
+<span class="sourceLineNo">095</span>    * (e.g. Apache Commons Logging).<a name="line.95"></a>
+<span class="sourceLineNo">096</span>    *<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    * @param level The log level.<a name="line.97"></a>
+<span class="sourceLineNo">098</span>    * @param cause The cause.<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    * @param msg The message to log.<a name="line.99"></a>
+<span class="sourceLineNo">100</span>    * @param args Optional {@link MessageFormat}-style arguments.<a name="line.100"></a>
+<span class="sourceLineNo">101</span>    */<a name="line.101"></a>
+<span class="sourceLineNo">102</span>   @Override /* RestLogger */<a name="line.102"></a>
+<span class="sourceLineNo">103</span>   public void log(Level level, Throwable cause, String msg, Object...args) {<a name="line.103"></a>
+<span class="sourceLineNo">104</span>      msg = format(msg, args);<a name="line.104"></a>
+<span class="sourceLineNo">105</span>      getLogger().log(level, msg, cause);<a name="line.105"></a>
+<span class="sourceLineNo">106</span>   }<a name="line.106"></a>
+<span class="sourceLineNo">107</span><a name="line.107"></a>
+<span class="sourceLineNo">108</span>   /**<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    * Log a message.<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    *<a name="line.110"></a>
+<span class="sourceLineNo">111</span>    * &lt;p&gt;<a name="line.111"></a>
+<span class="sourceLineNo">112</span>    * Equivalent to calling &lt;code&gt;log(level, &lt;jk&gt;null&lt;/jk&gt;, msg, args);&lt;/code&gt;<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    *<a name="line.113"></a>
+<span class="sourceLineNo">114</span>    * @param level The log level.<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    * @param msg The message to log.<a name="line.115"></a>
+<span class="sourceLineNo">116</span>    * @param args Optional {@link MessageFormat}-style arguments.<a name="line.116"></a>
+<span class="sourceLineNo">117</span>    */<a name="line.117"></a>
+<span class="sourceLineNo">118</span>   @Override /* RestLogger */<a name="line.118"></a>
+<span class="sourceLineNo">119</span>   public void log(Level level, String msg, Object...args) {<a name="line.119"></a>
+<span class="sourceLineNo">120</span>      log(level, null, msg, args);<a name="line.120"></a>
+<span class="sourceLineNo">121</span>   }<a name="line.121"></a>
+<span class="sourceLineNo">122</span><a name="line.122"></a>
+<span class="sourceLineNo">123</span>   /**<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    * Same as {@link #log(Level, String, Object...)} excepts runs the arguments through {@link JsonSerializer#DEFAULT_READABLE}.<a name="line.124"></a>
+<span class="sourceLineNo">125</span>    *<a name="line.125"></a>
+<span class="sourceLineNo">126</span>    * &lt;p&gt;<a name="line.126"></a>
+<span class="sourceLineNo">127</span>    * Serialization of arguments do not occur if message is not logged, so it's safe to use this method from within<a name="line.127"></a>
+<span class="sourceLineNo">128</span>    * debug log statements.<a name="line.128"></a>
+<span class="sourceLineNo">129</span>    *<a name="line.129"></a>
+<span class="sourceLineNo">130</span>    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.130"></a>
+<span class="sourceLineNo">131</span>    * &lt;p class='bcode w800'&gt;<a name="line.131"></a>
+<span class="sourceLineNo">132</span>    *    logObjects(&lt;jsf&gt;DEBUG&lt;/jsf&gt;, &lt;js&gt;"Pojo contents:\n{0}"&lt;/js&gt;, myPojo);<a name="line.132"></a>
+<span class="sourceLineNo">133</span>    * &lt;/p&gt;<a name="line.133"></a>
+<span class="sourceLineNo">134</span>    *<a name="line.134"></a>
+<span class="sourceLineNo">135</span>    * @param level The log level.<a name="line.135"></a>
+<span class="sourceLineNo">136</span>    * @param msg The message to log.<a name="line.136"></a>
+<span class="sourceLineNo">137</span>    * @param args Optional {@link MessageFormat}-style arguments.<a name="line.137"></a>
+<span class="sourceLineNo">138</span>    */<a name="line.138"></a>
+<span class="sourceLineNo">139</span>   @Override /* RestLogger */<a name="line.139"></a>
+<span class="sourceLineNo">140</span>   public void logObjects(Level level, String msg, Object...args) {<a name="line.140"></a>
+<span class="sourceLineNo">141</span>      for (int i = 0; i &lt; args.length; i++)<a name="line.141"></a>
+<span class="sourceLineNo">142</span>         args[i] = SimpleJsonSerializer.DEFAULT_READABLE.toStringObject(args[i]);<a name="line.142"></a>
+<span class="sourceLineNo">143</span>      log(level, null, msg, args);<a name="line.143"></a>
+<span class="sourceLineNo">144</span>   }<a name="line.144"></a>
+<span class="sourceLineNo">145</span><a name="line.145"></a>
+<span class="sourceLineNo">146</span>   /**<a name="line.146"></a>
+<span class="sourceLineNo">147</span>    * Callback method for logging errors during HTTP requests.<a name="line.147"></a>
+<span class="sourceLineNo">148</span>    *<a name="line.148"></a>
+<span class="sourceLineNo">149</span>    * &lt;p&gt;<a name="line.149"></a>
+<span class="sourceLineNo">150</span>    * Typically, subclasses will override this method and log errors themselves.<a name="line.150"></a>
+<span class="sourceLineNo">151</span>    *<a name="line.151"></a>
+<span class="sourceLineNo">152</span>    * &lt;p&gt;<a name="line.152"></a>
+<span class="sourceLineNo">153</span>    * The default implementation simply logs errors to the &lt;c&gt;RestServlet&lt;/c&gt; logger.<a name="line.153"></a>
+<span class="sourceLineNo">154</span>    *<a name="line.154"></a>
+<span class="sourceLineNo">155</span>    * &lt;p&gt;<a name="line.155"></a>
+<span class="sourceLineNo">156</span>    * Here's a typical implementation showing how stack trace hashing can be used to reduce log file sizes...<a name="line.156"></a>
+<span class="sourceLineNo">157</span>    * &lt;p class='bcode w800'&gt;<a name="line.157"></a>
+<span class="sourceLineNo">158</span>    *    &lt;jk&gt;protected void&lt;/jk&gt; onError(HttpServletRequest req, HttpServletResponse res, RestException e, &lt;jk&gt;boolean&lt;/jk&gt; noTrace) {<a name="line.158"></a>
+<span class="sourceLineNo">159</span>    *       String qs = req.getQueryString();<a name="line.159"></a>
+<span class="sourceLineNo">160</span>    *       String msg = &lt;js&gt;"HTTP "&lt;/js&gt; + req.getMethod() + &lt;js&gt;" "&lt;/js&gt; + e.getStatus() + &lt;js&gt;" "&lt;/js&gt; + req.getRequestURI() + (qs == &lt;jk&gt;null&lt;/jk&gt; ? &lt;js&gt;""&lt;/js&gt; : &lt;js&gt;"?"&lt;/js&gt; + qs);<a name="line.160"></a>
+<span class="sourceLineNo">161</span>    *       &lt;jk&gt;int&lt;/jk&gt; c = e.getOccurrence();<a name="line.161"></a>
+<span class="sourceLineNo">162</span>    *<a name="line.162"></a>
+<span class="sourceLineNo">163</span>    *       &lt;jc&gt;// REST_useStackTraceHashes is disabled, so we have to log the exception every time.&lt;/jc&gt;<a name="line.163"></a>
+<span class="sourceLineNo">164</span>    *       &lt;jk&gt;if&lt;/jk&gt; (c == 0)<a name="line.164"></a>
+<span class="sourceLineNo">165</span>    *          myLogger.log(Level.&lt;jsf&gt;WARNING&lt;/jsf&gt;, &lt;jsm&gt;format&lt;/jsm&gt;(&lt;js&gt;"[%s] %s"&lt;/js&gt;, e.getStatus(), msg), e);<a name="line.165"></a>
+<span class="sourceLineNo">166</span>    *<a name="line.166"></a>
+<span class="sourceLineNo">167</span>    *       &lt;jc&gt;// This is the first time we've countered this error, so log a stack trace<a name="line.167"></a>
+<span class="sourceLineNo">168</span>    *       // unless ?noTrace was passed in as a URL parameter.&lt;/jc&gt;<a name="line.168"></a>
+<span class="sourceLineNo">169</span>    *       &lt;jk&gt;else if&lt;/jk&gt; (c == 1 &amp;amp;&amp;amp; ! noTrace)<a name="line.169"></a>
+<span class="sourceLineNo">170</span>    *          myLogger.log(Level.&lt;jsf&gt;WARNING&lt;/jsf&gt;, &lt;jsm&gt;format&lt;/jsm&gt;(&lt;js&gt;"[%h.%s.%s] %s"&lt;/js&gt;, e.hashCode(), e.getStatus(), c, msg), e);<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    *<a name="line.171"></a>
+<span class="sourceLineNo">172</span>    *       &lt;jc&gt;// This error occurred before.<a name="line.172"></a>
+<span class="sourceLineNo">173</span>    *       // Only log the message, not the stack trace.&lt;/jc&gt;<a name="line.173"></a>
+<span class="sourceLineNo">174</span>    *       &lt;jk&gt;else&lt;/jk&gt;<a name="line.174"></a>
+<span class="sourceLineNo">175</span>    *          myLogger.log(Level.&lt;jsf&gt;WARNING&lt;/jsf&gt;, &lt;jsm&gt;format&lt;/jsm&gt;(&lt;js&gt;"[%h.%s.%s] %s, %s"&lt;/js&gt;, e.hashCode(), e.getStatus(), c, msg, e.getLocalizedMessage()));<a name="line.175"></a>
+<span class="sourceLineNo">176</span>    *    }<a name="line.176"></a>
+<span class="sourceLineNo">177</span>    * &lt;/p&gt;<a name="line.177"></a>
+<span class="sourceLineNo">178</span>    *<a name="line.178"></a>
+<span class="sourceLineNo">179</span>    * @param req The servlet request object.<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    * @param res The servlet response object.<a name="line.180"></a>
+<span class="sourceLineNo">181</span>    * @param e Exception indicating what error occurred.<a name="line.181"></a>
+<span class="sourceLineNo">182</span>    */<a name="line.182"></a>
+<span class="sourceLineNo">183</span>   @Override /* RestLogger */<a name="line.183"></a>
+<span class="sourceLineNo">184</span>   public void onError(HttpServletRequest req, HttpServletResponse res, RestException e) {<a name="line.184"></a>
+<span class="sourceLineNo">185</span>      // No-op<a name="line.185"></a>
+<span class="sourceLineNo">186</span>   }<a name="line.186"></a>
+<span class="sourceLineNo">187</span><a name="line.187"></a>
+<span class="sourceLineNo">188</span>   /**<a name="line.188"></a>
+<span class="sourceLineNo">189</span>    * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified exception should be logged.<a name="line.189"></a>
+<span class="sourceLineNo">190</span>    *<a name="line.190"></a>
+<span class="sourceLineNo">191</span>    * &lt;p&gt;<a name="line.191"></a>
+<span class="sourceLineNo">192</span>    * Subclasses can override this method to provide their own logic for determining when exceptions are logged.<a name="line.192"></a>
+<span class="sourceLineNo">193</span>    *<a name="line.193"></a>
+<span class="sourceLineNo">194</span>    * &lt;p&gt;<a name="line.194"></a>
+<span class="sourceLineNo">195</span>    * The default implementation will return &lt;jk&gt;false&lt;/jk&gt; if &lt;js&gt;"noTrace=true"&lt;/js&gt; is passed in the query string<a name="line.195"></a>
+<span class="sourceLineNo">196</span>    * or &lt;c&gt;No-Trace: true&lt;/c&gt; is specified in the header.<a name="line.196"></a>
+<span class="sourceLineNo">197</span>    *<a name="line.197"></a>
+<span class="sourceLineNo">198</span>    * @param req The HTTP request.<a name="line.198"></a>
+<span class="sourceLineNo">199</span>    * @param res The HTTP response.<a name="line.199"></a>
+<span class="sourceLineNo">200</span>    * @param e The exception.<a name="line.200"></a>
+<span class="sourceLineNo">201</span>    * @return &lt;jk&gt;true&lt;/jk&gt; if exception should be logged.<a name="line.201"></a>
+<span class="sourceLineNo">202</span>    */<a name="line.202"></a>
+<span class="sourceLineNo">203</span>   protected boolean shouldLog(HttpServletRequest req, HttpServletResponse res, RestException e) {<a name="line.203"></a>
+<span class="sourceLineNo">204</span>      return false;<a name="line.204"></a>
+<span class="sourceLineNo">205</span>   }<a name="line.205"></a>
+<span class="sourceLineNo">206</span><a name="line.206"></a>
+<span class="sourceLineNo">207</span>   /**<a name="line.207"></a>
+<span class="sourceLineNo">208</span>    * Returns &lt;jk&gt;true&lt;/jk&gt; if a stack trace should be logged for this exception.<a name="line.208"></a>
+<span class="sourceLineNo">209</span>    *<a name="line.209"></a>
+<span class="sourceLineNo">210</span>    * &lt;p&gt;<a name="line.210"></a>
+<span class="sourceLineNo">211</span>    * Subclasses can override this method to provide their own logic for determining when stack traces are logged.<a name="line.211"></a>
+<span class="sourceLineNo">212</span>    *<a name="line.212"></a>
+<span class="sourceLineNo">213</span>    * &lt;p&gt;<a name="line.213"></a>
+<span class="sourceLineNo">214</span>    * The default implementation will only log a stack trace if {@link RestException#getOccurrence()} returns<a name="line.214"></a>
+<span class="sourceLineNo">215</span>    * &lt;c&gt;1&lt;/c&gt; and the exception is not one of the following:<a name="line.215"></a>
+<span class="sourceLineNo">216</span>    * &lt;ul&gt;<a name="line.216"></a>
+<span class="sourceLineNo">217</span>    *    &lt;li&gt;{@link HttpServletResponse#SC_UNAUTHORIZED}<a name="line.217"></a>
+<span class="sourceLineNo">218</span>    *    &lt;li&gt;{@link HttpServletResponse#SC_FORBIDDEN}<a name="line.218"></a>
+<span class="sourceLineNo">219</span>    *    &lt;li&gt;{@link HttpServletResponse#SC_NOT_FOUND}<a name="line.219"></a>
+<span class="sourceLineNo">220</span>    * &lt;/ul&gt;<a name="line.220"></a>
+<span class="sourceLineNo">221</span>    *<a name="line.221"></a>
+<span class="sourceLineNo">222</span>    * @param req The HTTP request.<a name="line.222"></a>
+<span class="sourceLineNo">223</span>    * @param res The HTTP response.<a name="line.223"></a>
+<span class="sourceLineNo">224</span>    * @param e The exception.<a name="line.224"></a>
+<span class="sourceLineNo">225</span>    * @return &lt;jk&gt;true&lt;/jk&gt; if stack trace should be logged.<a name="line.225"></a>
+<span class="sourceLineNo">226</span>    */<a name="line.226"></a>
+<span class="sourceLineNo">227</span>   protected boolean shouldLogStackTrace(HttpServletRequest req, HttpServletResponse res, RestException e) {<a name="line.227"></a>
+<span class="sourceLineNo">228</span>      return false;<a name="line.228"></a>
+<span class="sourceLineNo">229</span>   }<a name="line.229"></a>
+<span class="sourceLineNo">230</span>}<a name="line.230"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.http;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>/**<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * Represents a parsed &lt;l&gt;Content-Range&lt;/l&gt; HTTP response header.<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * <a name="line.17"></a>
+<span class="sourceLineNo">018</span> * &lt;p&gt;<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * Where in a full body message this partial message belongs.<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * <a name="line.20"></a>
+<span class="sourceLineNo">021</span> * &lt;h5 class='figure'&gt;Example&lt;/h5&gt;<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * &lt;p class='bcode'&gt;<a name="line.22"></a>
+<span class="sourceLineNo">023</span> *    Content-Range: bytes 21010-47021/47022<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * &lt;/p&gt;<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * <a name="line.25"></a>
+<span class="sourceLineNo">026</span> * &lt;h5 class='topic'&gt;RFC2616 Specification&lt;/h5&gt;<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * <a name="line.27"></a>
+<span class="sourceLineNo">028</span> * The Content-Range entity-header is sent with a partial entity-body to specify where in the full entity-body the<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * partial body should be applied.<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * Range units are defined in section 3.12.<a name="line.30"></a>
+<span class="sourceLineNo">031</span> * &lt;p class='bcode'&gt;<a name="line.31"></a>
+<span class="sourceLineNo">032</span> *    Content-Range = "Content-Range" ":" content-range-spec<a name="line.32"></a>
+<span class="sourceLineNo">033</span> *    content-range-spec      = byte-content-range-spec<a name="line.33"></a>
+<span class="sourceLineNo">034</span> *    byte-content-range-spec = bytes-unit SP<a name="line.34"></a>
+<span class="sourceLineNo">035</span> *                              byte-range-resp-spec "/"<a name="line.35"></a>
+<span class="sourceLineNo">036</span> *                              ( instance-length | "*" )<a name="line.36"></a>
+<span class="sourceLineNo">037</span> *    byte-range-resp-spec = (first-byte-pos "-" last-byte-pos)<a name="line.37"></a>
+<span class="sourceLineNo">038</span> *                                   | "*"<a name="line.38"></a>
+<span class="sourceLineNo">039</span> *    instance-length           = 1*DIGIT<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * &lt;/p&gt;<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * <a name="line.41"></a>
+<span class="sourceLineNo">042</span> * &lt;p&gt;<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * The header SHOULD indicate the total length of the full entity-body, unless this length is unknown or difficult to<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * determine.<a name="line.44"></a>
+<span class="sourceLineNo">045</span> * The asterisk "*" character means that the instance-length is unknown at the time when the response was generated.<a name="line.45"></a>
+<span class="sourceLineNo">046</span> * <a name="line.46"></a>
+<span class="sourceLineNo">047</span> * &lt;p&gt;<a name="line.47"></a>
+<span class="sourceLineNo">048</span> * Unlike byte-ranges-specifier values (see section 14.35.1), a byte- range-resp-spec MUST only specify one range, and<a name="line.48"></a>
+<span class="sourceLineNo">049</span> * MUST contain absolute byte positions for both the first and last byte of the range.<a name="line.49"></a>
+<span class="sourceLineNo">050</span> * <a name="line.50"></a>
+<span class="sourceLineNo">051</span> * &lt;p&gt;<a name="line.51"></a>
+<span class="sourceLineNo">052</span> * A byte-content-range-spec with a byte-range-resp-spec whose last- byte-pos value is less than its first-byte-pos<a name="line.52"></a>
+<span class="sourceLineNo">053</span> * value, or whose instance-length value is less than or equal to its last-byte-pos value, is invalid.<a name="line.53"></a>
+<span class="sourceLineNo">054</span> * The recipient of an invalid byte-content-range- spec MUST ignore it and any content transferred along with it.<a name="line.54"></a>
+<span class="sourceLineNo">055</span> * <a name="line.55"></a>
+<span class="sourceLineNo">056</span> * &lt;p&gt;<a name="line.56"></a>
+<span class="sourceLineNo">057</span> * A server sending a response with status code 416 (Requested range not satisfiable) SHOULD include a Content-Range<a name="line.57"></a>
+<span class="sourceLineNo">058</span> * field with a byte-range- resp-spec of "*".<a name="line.58"></a>
+<span class="sourceLineNo">059</span> * The instance-length specifies the current length of the selected resource.<a name="line.59"></a>
+<span class="sourceLineNo">060</span> * A response with status code 206 (Partial Content) MUST NOT include a Content-Range field with a byte-range-resp-spec<a name="line.60"></a>
+<span class="sourceLineNo">061</span> * of "*".<a name="line.61"></a>
+<span class="sourceLineNo">062</span> * <a name="line.62"></a>
+<span class="sourceLineNo">063</span> * &lt;p&gt;<a name="line.63"></a>
+<span class="sourceLineNo">064</span> * Examples of byte-content-range-spec values, assuming that the entity contains a total of 1234 bytes:<a name="line.64"></a>
+<span class="sourceLineNo">065</span> * &lt;p class='bcode'&gt;<a name="line.65"></a>
+<span class="sourceLineNo">066</span> *    The first 500 bytes:<a name="line.66"></a>
+<span class="sourceLineNo">067</span> *     bytes 0-499/1234<a name="line.67"></a>
+<span class="sourceLineNo">068</span> *    The second 500 bytes:<a name="line.68"></a>
+<span class="sourceLineNo">069</span> *     bytes 500-999/1234<a name="line.69"></a>
+<span class="sourceLineNo">070</span> *    All except for the first 500 bytes:<a name="line.70"></a>
+<span class="sourceLineNo">071</span> *     bytes 500-1233/1234<a name="line.71"></a>
+<span class="sourceLineNo">072</span> *    The last 500 bytes:<a name="line.72"></a>
+<span class="sourceLineNo">073</span> *     bytes 734-1233/1234<a name="line.73"></a>
+<span class="sourceLineNo">074</span> * &lt;/p&gt;<a name="line.74"></a>
+<span class="sourceLineNo">075</span> * <a name="line.75"></a>
+<span class="sourceLineNo">076</span> * &lt;p&gt;<a name="line.76"></a>
+<span class="sourceLineNo">077</span> * When an HTTP message includes the content of a single range (for example, a response to a request for a single range,<a name="line.77"></a>
+<span class="sourceLineNo">078</span> * or to a request for a set of ranges that overlap without any holes), this content is transmitted with a Content-Range<a name="line.78"></a>
+<span class="sourceLineNo">079</span> * header, and a Content-Length header showing the number of bytes actually transferred.<a name="line.79"></a>
+<span class="sourceLineNo">080</span> * For example:<a name="line.80"></a>
+<span class="sourceLineNo">081</span> * &lt;p class='bcode'&gt;<a name="line.81"></a>
+<span class="sourceLineNo">082</span> *    HTTP/1.1 206 Partial content<a name="line.82"></a>
+<span class="sourceLineNo">083</span> *    Date: Wed, 15 Nov 1995 06:25:24 GMT<a name="line.83"></a>
+<span class="sourceLineNo">084</span> *    Last-Modified: Wed, 15 Nov 1995 04:58:08 GMT<a name="line.84"></a>
+<span class="sourceLineNo">085</span> *    Content-Range: bytes 21010-47021/47022<a name="line.85"></a>
+<span class="sourceLineNo">086</span> *    Content-Length: 26012<a name="line.86"></a>
+<span class="sourceLineNo">087</span> *    Content-Type: image/gif<a name="line.87"></a>
+<span class="sourceLineNo">088</span> * &lt;/p&gt;<a name="line.88"></a>
+<span class="sourceLineNo">089</span> * <a name="line.89"></a>
+<span class="sourceLineNo">090</span> * &lt;p&gt;<a name="line.90"></a>
+<span class="sourceLineNo">091</span> * When an HTTP message includes the content of multiple ranges (for example, a response to a request for multiple<a name="line.91"></a>
+<span class="sourceLineNo">092</span> * non-overlapping ranges), these are transmitted as a multipart message.<a name="line.92"></a>
+<span class="sourceLineNo">093</span> * The multipart media type used for this purpose is "multipart/byteranges" as defined in appendix 19.2.<a name="line.93"></a>
+<span class="sourceLineNo">094</span> * See appendix 19.6.3 for a compatibility issue.<a name="line.94"></a>
+<span class="sourceLineNo">095</span> * <a name="line.95"></a>
+<span class="sourceLineNo">096</span> * &lt;p&gt;<a name="line.96"></a>
+<span class="sourceLineNo">097</span> * A response to a request for a single range MUST NOT be sent using the multipart/byteranges media type.<a name="line.97"></a>
+<span class="sourceLineNo">098</span> * A response to a request for multiple ranges, whose result is a single range, MAY be sent as a multipart/byteranges<a name="line.98"></a>
+<span class="sourceLineNo">099</span> * media type with one part.<a name="line.99"></a>
+<span class="sourceLineNo">100</span> * A client that cannot decode a multipart/byteranges message MUST NOT ask for multiple byte-ranges in a single request.<a name="line.100"></a>
+<span class="sourceLineNo">101</span> * <a name="line.101"></a>
+<span class="sourceLineNo">102</span> * &lt;p&gt;<a name="line.102"></a>
+<span class="sourceLineNo">103</span> * When a client requests multiple byte-ranges in one request, the server SHOULD return them in the order that they<a name="line.103"></a>
+<span class="sourceLineNo">104</span> * appeared in the request.<a name="line.104"></a>
+<span class="sourceLineNo">105</span> * <a name="line.105"></a>
+<span class="sourceLineNo">106</span> * &lt;p&gt;<a name="line.106"></a>
+<span class="sourceLineNo">107</span> * If the server ignores a byte-range-spec because it is syntactically invalid, the server SHOULD treat the request as<a name="line.107"></a>
+<span class="sourceLineNo">108</span> * if the invalid Range header field did not exist.<a name="line.108"></a>
+<span class="sourceLineNo">109</span> * (Normally, this means return a 200 response containing the full entity).<a name="line.109"></a>
+<span class="sourceLineNo">110</span> * <a name="line.110"></a>
+<span class="sourceLineNo">111</span> * &lt;p&gt;<a name="line.111"></a>
+<span class="sourceLineNo">112</span> * If the server receives a request (other than one including an If- Range request-header field) with an unsatisfiable<a name="line.112"></a>
+<span class="sourceLineNo">113</span> * Range request- header field<a name="line.113"></a>
+<span class="sourceLineNo">114</span> * (that is, all of whose byte-range-spec values have a first-byte-pos value greater than the current length of the<a name="line.114"></a>
+<span class="sourceLineNo">115</span> * selected resource),<a name="line.115"></a>
+<span class="sourceLineNo">116</span> * it SHOULD return a response code of 416 (Requested range not satisfiable) (section 10.4.17).<a name="line.116"></a>
+<span class="sourceLineNo">117</span> * <a name="line.117"></a>
+<span class="sourceLineNo">118</span> * &lt;p&gt;<a name="line.118"></a>
+<span class="sourceLineNo">119</span> * Note: clients cannot depend on servers to send a 416 (Requested range not satisfiable) response instead of a 200 (OK)<a name="line.119"></a>
+<span class="sourceLineNo">120</span> * response for<a name="line.120"></a>
+<span class="sourceLineNo">121</span> * an unsatisfiable Range request-header, since not all servers implement this request-header.<a name="line.121"></a>
+<span class="sourceLineNo">122</span> * <a name="line.122"></a>
+<span class="sourceLineNo">123</span> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;<a name="line.123"></a>
+<span class="sourceLineNo">124</span> * &lt;ul class='doctree'&gt;<a name="line.124"></a>
+<span class="sourceLineNo">125</span> *    &lt;li class='extlink'&gt;&lt;a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'&gt;Hypertext Transfer Protocol -- HTTP/1.1&lt;/a&gt;<a name="line.125"></a>
+<span class="sourceLineNo">126</span> * &lt;/ul&gt;<a name="line.126"></a>
+<span class="sourceLineNo">127</span> */<a name="line.127"></a>
+<span class="sourceLineNo">128</span>public final class ContentRange extends HeaderString {<a name="line.128"></a>
+<span class="sourceLineNo">129</span><a name="line.129"></a>
+<span class="sourceLineNo">130</span>   /**<a name="line.130"></a>
+<span class="sourceLineNo">131</span>    * Returns a parsed &lt;code&gt;Content-Range&lt;/code&gt; header.<a name="line.131"></a>
+<span class="sourceLineNo">132</span>    * <a name="line.132"></a>
+<span class="sourceLineNo">133</span>    * @param value The &lt;code&gt;Content-Range&lt;/code&gt; header string.<a name="line.133"></a>
+<span class="sourceLineNo">134</span>    * @return The parsed &lt;code&gt;Content-Range&lt;/code&gt; header, or &lt;jk&gt;null&lt;/jk&gt; if the string was null.<a name="line.134"></a>
+<span class="sourceLineNo">135</span>    */<a name="line.135"></a>
+<span class="sourceLineNo">136</span>   public static ContentRange forString(String value) {<a name="line.136"></a>
+<span class="sourceLineNo">137</span>      if (value == null)<a name="line.137"></a>
+<span class="sourceLineNo">138</span>         return null;<a name="line.138"></a>
+<span class="sourceLineNo">139</span>      return new ContentRange(value);<a name="line.139"></a>
+<span class="sourceLineNo">140</span>   }<a name="line.140"></a>
+<span class="sourceLineNo">141</span><a name="line.141"></a>
+<span class="sourceLineNo">142</span>   private ContentRange(String value) {<a name="line.142"></a>
+<span class="sourceLineNo">143</span>      super(value);<a name="line.143"></a>
+<span class="sourceLineNo">144</span>   }<a name="line.144"></a>
+<span class="sourceLineNo">145</span>}<a name="line.145"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

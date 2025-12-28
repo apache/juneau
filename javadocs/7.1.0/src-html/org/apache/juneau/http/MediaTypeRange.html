@@ -1,0 +1,350 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.http;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import static org.apache.juneau.internal.CollectionUtils.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span><a name="line.16"></a>
+<span class="sourceLineNo">017</span>import java.util.*;<a name="line.17"></a>
+<span class="sourceLineNo">018</span>import java.util.Map.*;<a name="line.18"></a>
+<span class="sourceLineNo">019</span><a name="line.19"></a>
+<span class="sourceLineNo">020</span>import org.apache.juneau.annotation.*;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>import org.apache.juneau.internal.*;<a name="line.21"></a>
+<span class="sourceLineNo">022</span><a name="line.22"></a>
+<span class="sourceLineNo">023</span>/**<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * Describes a single type used in content negotiation between an HTTP client and server, as described in<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * Section 14.1 and 14.7 of RFC2616 (the HTTP/1.1 specification).<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * <a name="line.26"></a>
+<span class="sourceLineNo">027</span> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * &lt;ul class='doctree'&gt;<a name="line.28"></a>
+<span class="sourceLineNo">029</span> *    &lt;li class='extlink'&gt;&lt;a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'&gt;Hypertext Transfer Protocol -- HTTP/1.1&lt;/a&gt;<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * &lt;/ul&gt;<a name="line.30"></a>
+<span class="sourceLineNo">031</span> */<a name="line.31"></a>
+<span class="sourceLineNo">032</span>@BeanIgnore<a name="line.32"></a>
+<span class="sourceLineNo">033</span>public final class MediaTypeRange implements Comparable&lt;MediaTypeRange&gt;  {<a name="line.33"></a>
+<span class="sourceLineNo">034</span><a name="line.34"></a>
+<span class="sourceLineNo">035</span>   private static final MediaTypeRange[] DEFAULT = new MediaTypeRange[]{new MediaTypeRange("*/*")};<a name="line.35"></a>
+<span class="sourceLineNo">036</span><a name="line.36"></a>
+<span class="sourceLineNo">037</span>   private final MediaType mediaType;<a name="line.37"></a>
+<span class="sourceLineNo">038</span>   private final Float qValue;<a name="line.38"></a>
+<span class="sourceLineNo">039</span>   private final Map&lt;String,Set&lt;String&gt;&gt; extensions;<a name="line.39"></a>
+<span class="sourceLineNo">040</span><a name="line.40"></a>
+<span class="sourceLineNo">041</span>   /**<a name="line.41"></a>
+<span class="sourceLineNo">042</span>    * Parses an &lt;code&gt;Accept&lt;/code&gt; header value into an array of media ranges.<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    * <a name="line.43"></a>
+<span class="sourceLineNo">044</span>    * &lt;p&gt;<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    * The returned media ranges are sorted such that the most acceptable media is available at ordinal position<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    * &lt;js&gt;'0'&lt;/js&gt;, and the least acceptable at position n-1.<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    * <a name="line.47"></a>
+<span class="sourceLineNo">048</span>    * &lt;p&gt;<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    * The syntax expected to be found in the referenced &lt;code&gt;value&lt;/code&gt; complies with the syntax described in<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    * RFC2616, Section 14.1, as described below:<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    * &lt;p class='bcode'&gt;<a name="line.51"></a>
+<span class="sourceLineNo">052</span>    *    Accept         = "Accept" ":"<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    *                      #( media-range [ accept-params ] )<a name="line.53"></a>
+<span class="sourceLineNo">054</span>    * <a name="line.54"></a>
+<span class="sourceLineNo">055</span>    *    media-range    = ( "*\/*"<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    *                      | ( type "/" "*" )<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    *                      | ( type "/" subtype )<a name="line.57"></a>
+<span class="sourceLineNo">058</span>    *                      ) *( ";" parameter )<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    *    accept-params  = ";" "q" "=" qvalue *( accept-extension )<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    *    accept-extension = ";" token [ "=" ( token | quoted-string ) ]<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    * &lt;/p&gt;<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    * <a name="line.62"></a>
+<span class="sourceLineNo">063</span>    * @param value<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    *    The value to parse.<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    *    If &lt;jk&gt;null&lt;/jk&gt; or empty, returns a single &lt;code&gt;MediaTypeRange&lt;/code&gt; is returned that represents all types.<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    * @return<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    *    The media ranges described by the string.<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    *    The ranges are sorted such that the most acceptable media is available at ordinal position &lt;js&gt;'0'&lt;/js&gt;, and<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    *    the least acceptable at position n-1.<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    */<a name="line.70"></a>
+<span class="sourceLineNo">071</span>   public static MediaTypeRange[] parse(String value) {<a name="line.71"></a>
+<span class="sourceLineNo">072</span><a name="line.72"></a>
+<span class="sourceLineNo">073</span>      if (value == null || value.length() == 0)<a name="line.73"></a>
+<span class="sourceLineNo">074</span>         return DEFAULT;<a name="line.74"></a>
+<span class="sourceLineNo">075</span><a name="line.75"></a>
+<span class="sourceLineNo">076</span>      if (value.indexOf(',') == -1)<a name="line.76"></a>
+<span class="sourceLineNo">077</span>         return new MediaTypeRange[]{new MediaTypeRange(value)};<a name="line.77"></a>
+<span class="sourceLineNo">078</span><a name="line.78"></a>
+<span class="sourceLineNo">079</span>      Set&lt;MediaTypeRange&gt; ranges = new TreeSet&lt;&gt;();<a name="line.79"></a>
+<span class="sourceLineNo">080</span><a name="line.80"></a>
+<span class="sourceLineNo">081</span>      for (String r : StringUtils.split(value)) {<a name="line.81"></a>
+<span class="sourceLineNo">082</span>         r = r.trim();<a name="line.82"></a>
+<span class="sourceLineNo">083</span><a name="line.83"></a>
+<span class="sourceLineNo">084</span>         if (r.isEmpty())<a name="line.84"></a>
+<span class="sourceLineNo">085</span>            continue;<a name="line.85"></a>
+<span class="sourceLineNo">086</span><a name="line.86"></a>
+<span class="sourceLineNo">087</span>         ranges.add(new MediaTypeRange(r));<a name="line.87"></a>
+<span class="sourceLineNo">088</span>      }<a name="line.88"></a>
+<span class="sourceLineNo">089</span><a name="line.89"></a>
+<span class="sourceLineNo">090</span>      return ranges.toArray(new MediaTypeRange[ranges.size()]);<a name="line.90"></a>
+<span class="sourceLineNo">091</span>   }<a name="line.91"></a>
+<span class="sourceLineNo">092</span><a name="line.92"></a>
+<span class="sourceLineNo">093</span>   private MediaTypeRange(String token) {<a name="line.93"></a>
+<span class="sourceLineNo">094</span>      Builder b = new Builder(token);<a name="line.94"></a>
+<span class="sourceLineNo">095</span>      this.mediaType = b.mediaType;<a name="line.95"></a>
+<span class="sourceLineNo">096</span>      this.qValue = b.qValue;<a name="line.96"></a>
+<span class="sourceLineNo">097</span>      this.extensions = unmodifiableMap(b.extensions);<a name="line.97"></a>
+<span class="sourceLineNo">098</span>   }<a name="line.98"></a>
+<span class="sourceLineNo">099</span><a name="line.99"></a>
+<span class="sourceLineNo">100</span>   static final class Builder {<a name="line.100"></a>
+<span class="sourceLineNo">101</span>      MediaType mediaType;<a name="line.101"></a>
+<span class="sourceLineNo">102</span>      Float qValue = 1f;<a name="line.102"></a>
+<span class="sourceLineNo">103</span>      Map&lt;String,Set&lt;String&gt;&gt; extensions;<a name="line.103"></a>
+<span class="sourceLineNo">104</span><a name="line.104"></a>
+<span class="sourceLineNo">105</span>      Builder(String token) {<a name="line.105"></a>
+<span class="sourceLineNo">106</span><a name="line.106"></a>
+<span class="sourceLineNo">107</span>         token = token.trim();<a name="line.107"></a>
+<span class="sourceLineNo">108</span><a name="line.108"></a>
+<span class="sourceLineNo">109</span>         int i = token.indexOf(";q=");<a name="line.109"></a>
+<span class="sourceLineNo">110</span><a name="line.110"></a>
+<span class="sourceLineNo">111</span>         if (i == -1) {<a name="line.111"></a>
+<span class="sourceLineNo">112</span>            mediaType = MediaType.forString(token);<a name="line.112"></a>
+<span class="sourceLineNo">113</span>            return;<a name="line.113"></a>
+<span class="sourceLineNo">114</span>         }<a name="line.114"></a>
+<span class="sourceLineNo">115</span><a name="line.115"></a>
+<span class="sourceLineNo">116</span>         mediaType = MediaType.forString(token.substring(0, i));<a name="line.116"></a>
+<span class="sourceLineNo">117</span><a name="line.117"></a>
+<span class="sourceLineNo">118</span>         String[] tokens = token.substring(i+1).split(";");<a name="line.118"></a>
+<span class="sourceLineNo">119</span><a name="line.119"></a>
+<span class="sourceLineNo">120</span>         // Only the type of the range is specified<a name="line.120"></a>
+<span class="sourceLineNo">121</span>         if (tokens.length &gt; 0) {<a name="line.121"></a>
+<span class="sourceLineNo">122</span>            boolean isInExtensions = false;<a name="line.122"></a>
+<span class="sourceLineNo">123</span>            for (int j = 0; j &lt; tokens.length; j++) {<a name="line.123"></a>
+<span class="sourceLineNo">124</span>               String[] parm = tokens[j].split("=");<a name="line.124"></a>
+<span class="sourceLineNo">125</span>               if (parm.length == 2) {<a name="line.125"></a>
+<span class="sourceLineNo">126</span>                  String k = parm[0], v = parm[1];<a name="line.126"></a>
+<span class="sourceLineNo">127</span>                  if (isInExtensions) {<a name="line.127"></a>
+<span class="sourceLineNo">128</span>                     if (extensions == null)<a name="line.128"></a>
+<span class="sourceLineNo">129</span>                        extensions = new TreeMap&lt;&gt;();<a name="line.129"></a>
+<span class="sourceLineNo">130</span>                     if (! extensions.containsKey(k))<a name="line.130"></a>
+<span class="sourceLineNo">131</span>                        extensions.put(k, new TreeSet&lt;String&gt;());<a name="line.131"></a>
+<span class="sourceLineNo">132</span>                     extensions.get(k).add(v);<a name="line.132"></a>
+<span class="sourceLineNo">133</span>                  } else if (k.equals("q")) {<a name="line.133"></a>
+<span class="sourceLineNo">134</span>                     qValue = new Float(v);<a name="line.134"></a>
+<span class="sourceLineNo">135</span>                     isInExtensions = true;<a name="line.135"></a>
+<span class="sourceLineNo">136</span>                  }<a name="line.136"></a>
+<span class="sourceLineNo">137</span>               }<a name="line.137"></a>
+<span class="sourceLineNo">138</span>            }<a name="line.138"></a>
+<span class="sourceLineNo">139</span>         }<a name="line.139"></a>
+<span class="sourceLineNo">140</span>      }<a name="line.140"></a>
+<span class="sourceLineNo">141</span>   }<a name="line.141"></a>
+<span class="sourceLineNo">142</span><a name="line.142"></a>
+<span class="sourceLineNo">143</span>   /**<a name="line.143"></a>
+<span class="sourceLineNo">144</span>    * Returns the media type enclosed by this media range.<a name="line.144"></a>
+<span class="sourceLineNo">145</span>    * <a name="line.145"></a>
+<span class="sourceLineNo">146</span>    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;<a name="line.146"></a>
+<span class="sourceLineNo">147</span>    * &lt;ul&gt;<a name="line.147"></a>
+<span class="sourceLineNo">148</span>    *    &lt;li&gt;&lt;js&gt;"text/html"&lt;/js&gt;<a name="line.148"></a>
+<span class="sourceLineNo">149</span>    *    &lt;li&gt;&lt;js&gt;"text/*"&lt;/js&gt;<a name="line.149"></a>
+<span class="sourceLineNo">150</span>    *    &lt;li&gt;&lt;js&gt;"*\/*"&lt;/js&gt;<a name="line.150"></a>
+<span class="sourceLineNo">151</span>    * &lt;/ul&gt;<a name="line.151"></a>
+<span class="sourceLineNo">152</span>    * <a name="line.152"></a>
+<span class="sourceLineNo">153</span>    * @return The media type of this media range, lowercased, never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.153"></a>
+<span class="sourceLineNo">154</span>    */<a name="line.154"></a>
+<span class="sourceLineNo">155</span>   public MediaType getMediaType() {<a name="line.155"></a>
+<span class="sourceLineNo">156</span>      return mediaType;<a name="line.156"></a>
+<span class="sourceLineNo">157</span>   }<a name="line.157"></a>
+<span class="sourceLineNo">158</span><a name="line.158"></a>
+<span class="sourceLineNo">159</span>   /**<a name="line.159"></a>
+<span class="sourceLineNo">160</span>    * Returns the &lt;js&gt;'q'&lt;/js&gt; (quality) value for this type, as described in Section 3.9 of RFC2616.<a name="line.160"></a>
+<span class="sourceLineNo">161</span>    * <a name="line.161"></a>
+<span class="sourceLineNo">162</span>    * &lt;p&gt;<a name="line.162"></a>
+<span class="sourceLineNo">163</span>    * The quality value is a float between &lt;code&gt;0.0&lt;/code&gt; (unacceptable) and &lt;code&gt;1.0&lt;/code&gt; (most acceptable).<a name="line.163"></a>
+<span class="sourceLineNo">164</span>    * <a name="line.164"></a>
+<span class="sourceLineNo">165</span>    * &lt;p&gt;<a name="line.165"></a>
+<span class="sourceLineNo">166</span>    * If 'q' value doesn't make sense for the context (e.g. this range was extracted from a &lt;js&gt;"content-*"&lt;/js&gt;<a name="line.166"></a>
+<span class="sourceLineNo">167</span>    * header, as opposed to &lt;js&gt;"accept-*"&lt;/js&gt; header, its value will always be &lt;js&gt;"1"&lt;/js&gt;.<a name="line.167"></a>
+<span class="sourceLineNo">168</span>    * <a name="line.168"></a>
+<span class="sourceLineNo">169</span>    * @return The 'q' value for this type, never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.169"></a>
+<span class="sourceLineNo">170</span>    */<a name="line.170"></a>
+<span class="sourceLineNo">171</span>   public Float getQValue() {<a name="line.171"></a>
+<span class="sourceLineNo">172</span>      return qValue;<a name="line.172"></a>
+<span class="sourceLineNo">173</span>   }<a name="line.173"></a>
+<span class="sourceLineNo">174</span><a name="line.174"></a>
+<span class="sourceLineNo">175</span>   /**<a name="line.175"></a>
+<span class="sourceLineNo">176</span>    * Returns the optional set of custom extensions defined for this type.<a name="line.176"></a>
+<span class="sourceLineNo">177</span>    * <a name="line.177"></a>
+<span class="sourceLineNo">178</span>    * &lt;p&gt;<a name="line.178"></a>
+<span class="sourceLineNo">179</span>    * Values are lowercase and never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    * <a name="line.180"></a>
+<span class="sourceLineNo">181</span>    * @return The optional list of extensions, never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.181"></a>
+<span class="sourceLineNo">182</span>    */<a name="line.182"></a>
+<span class="sourceLineNo">183</span>   public Map&lt;String,Set&lt;String&gt;&gt; getExtensions() {<a name="line.183"></a>
+<span class="sourceLineNo">184</span>      return extensions;<a name="line.184"></a>
+<span class="sourceLineNo">185</span>   }<a name="line.185"></a>
+<span class="sourceLineNo">186</span><a name="line.186"></a>
+<span class="sourceLineNo">187</span>   /**<a name="line.187"></a>
+<span class="sourceLineNo">188</span>    * Provides a string representation of this media range, suitable for use as an &lt;code&gt;Accept&lt;/code&gt; header value.<a name="line.188"></a>
+<span class="sourceLineNo">189</span>    * <a name="line.189"></a>
+<span class="sourceLineNo">190</span>    * &lt;p&gt;<a name="line.190"></a>
+<span class="sourceLineNo">191</span>    * The literal text generated will be all lowercase.<a name="line.191"></a>
+<span class="sourceLineNo">192</span>    * <a name="line.192"></a>
+<span class="sourceLineNo">193</span>    * @return A media range suitable for use as an Accept header value, never &lt;code&gt;null&lt;/code&gt;.<a name="line.193"></a>
+<span class="sourceLineNo">194</span>    */<a name="line.194"></a>
+<span class="sourceLineNo">195</span>   @Override /* Object */<a name="line.195"></a>
+<span class="sourceLineNo">196</span>   public String toString() {<a name="line.196"></a>
+<span class="sourceLineNo">197</span>      StringBuffer sb = new StringBuffer().append(mediaType);<a name="line.197"></a>
+<span class="sourceLineNo">198</span><a name="line.198"></a>
+<span class="sourceLineNo">199</span>      // '1' is equivalent to specifying no qValue. If there's no extensions, then we won't include a qValue.<a name="line.199"></a>
+<span class="sourceLineNo">200</span>      if (qValue.floatValue() == 1.0) {<a name="line.200"></a>
+<span class="sourceLineNo">201</span>         if (! extensions.isEmpty()) {<a name="line.201"></a>
+<span class="sourceLineNo">202</span>            sb.append(";q=").append(qValue);<a name="line.202"></a>
+<span class="sourceLineNo">203</span>            for (Entry&lt;String,Set&lt;String&gt;&gt; e : extensions.entrySet()) {<a name="line.203"></a>
+<span class="sourceLineNo">204</span>               String k = e.getKey();<a name="line.204"></a>
+<span class="sourceLineNo">205</span>               for (String v : e.getValue())<a name="line.205"></a>
+<span class="sourceLineNo">206</span>                  sb.append(';').append(k).append('=').append(v);<a name="line.206"></a>
+<span class="sourceLineNo">207</span>            }<a name="line.207"></a>
+<span class="sourceLineNo">208</span>         }<a name="line.208"></a>
+<span class="sourceLineNo">209</span>      } else {<a name="line.209"></a>
+<span class="sourceLineNo">210</span>         sb.append(";q=").append(qValue);<a name="line.210"></a>
+<span class="sourceLineNo">211</span>         for (Entry&lt;String,Set&lt;String&gt;&gt; e : extensions.entrySet()) {<a name="line.211"></a>
+<span class="sourceLineNo">212</span>            String k = e.getKey();<a name="line.212"></a>
+<span class="sourceLineNo">213</span>            for (String v : e.getValue())<a name="line.213"></a>
+<span class="sourceLineNo">214</span>               sb.append(';').append(k).append('=').append(v);<a name="line.214"></a>
+<span class="sourceLineNo">215</span>         }<a name="line.215"></a>
+<span class="sourceLineNo">216</span>      }<a name="line.216"></a>
+<span class="sourceLineNo">217</span>      return sb.toString();<a name="line.217"></a>
+<span class="sourceLineNo">218</span>   }<a name="line.218"></a>
+<span class="sourceLineNo">219</span><a name="line.219"></a>
+<span class="sourceLineNo">220</span>   /**<a name="line.220"></a>
+<span class="sourceLineNo">221</span>    * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified object is also a &lt;code&gt;MediaType&lt;/code&gt;, and has the same qValue, type,<a name="line.221"></a>
+<span class="sourceLineNo">222</span>    * parameters, and extensions.<a name="line.222"></a>
+<span class="sourceLineNo">223</span>    * <a name="line.223"></a>
+<span class="sourceLineNo">224</span>    * @return &lt;jk&gt;true&lt;/jk&gt; if object is equivalent.<a name="line.224"></a>
+<span class="sourceLineNo">225</span>    */<a name="line.225"></a>
+<span class="sourceLineNo">226</span>   @Override /* Object */<a name="line.226"></a>
+<span class="sourceLineNo">227</span>   public boolean equals(Object o) {<a name="line.227"></a>
+<span class="sourceLineNo">228</span><a name="line.228"></a>
+<span class="sourceLineNo">229</span>      if (o == null || !(o instanceof MediaTypeRange))<a name="line.229"></a>
+<span class="sourceLineNo">230</span>         return false;<a name="line.230"></a>
+<span class="sourceLineNo">231</span><a name="line.231"></a>
+<span class="sourceLineNo">232</span>      if (this == o)<a name="line.232"></a>
+<span class="sourceLineNo">233</span>         return true;<a name="line.233"></a>
+<span class="sourceLineNo">234</span><a name="line.234"></a>
+<span class="sourceLineNo">235</span>      MediaTypeRange o2 = (MediaTypeRange) o;<a name="line.235"></a>
+<span class="sourceLineNo">236</span>      return qValue.equals(o2.qValue)<a name="line.236"></a>
+<span class="sourceLineNo">237</span>         &amp;&amp; mediaType.equals(o2.mediaType)<a name="line.237"></a>
+<span class="sourceLineNo">238</span>         &amp;&amp; extensions.equals(o2.extensions);<a name="line.238"></a>
+<span class="sourceLineNo">239</span>   }<a name="line.239"></a>
+<span class="sourceLineNo">240</span><a name="line.240"></a>
+<span class="sourceLineNo">241</span>   /**<a name="line.241"></a>
+<span class="sourceLineNo">242</span>    * Returns a hash based on this instance's &lt;code&gt;media-type&lt;/code&gt;.<a name="line.242"></a>
+<span class="sourceLineNo">243</span>    * <a name="line.243"></a>
+<span class="sourceLineNo">244</span>    * @return A hash based on this instance's &lt;code&gt;media-type&lt;/code&gt;.<a name="line.244"></a>
+<span class="sourceLineNo">245</span>    */<a name="line.245"></a>
+<span class="sourceLineNo">246</span>   @Override /* Object */<a name="line.246"></a>
+<span class="sourceLineNo">247</span>   public int hashCode() {<a name="line.247"></a>
+<span class="sourceLineNo">248</span>      return mediaType.hashCode();<a name="line.248"></a>
+<span class="sourceLineNo">249</span>   }<a name="line.249"></a>
+<span class="sourceLineNo">250</span><a name="line.250"></a>
+<span class="sourceLineNo">251</span>   /**<a name="line.251"></a>
+<span class="sourceLineNo">252</span>    * Compares two MediaRanges for equality.<a name="line.252"></a>
+<span class="sourceLineNo">253</span>    * <a name="line.253"></a>
+<span class="sourceLineNo">254</span>    * &lt;p&gt;<a name="line.254"></a>
+<span class="sourceLineNo">255</span>    * The values are first compared according to &lt;code&gt;qValue&lt;/code&gt; values.<a name="line.255"></a>
+<span class="sourceLineNo">256</span>    * Should those values be equal, the &lt;code&gt;type&lt;/code&gt; is then lexicographically compared (case-insensitive) in<a name="line.256"></a>
+<span class="sourceLineNo">257</span>    * ascending order, with the &lt;js&gt;"*"&lt;/js&gt; type demoted last in that order.<a name="line.257"></a>
+<span class="sourceLineNo">258</span>    * &lt;code&gt;MediaRanges&lt;/code&gt; with the same type but different sub-types are compared - a more specific subtype is<a name="line.258"></a>
+<span class="sourceLineNo">259</span>    * promoted over the 'wildcard' subtype.<a name="line.259"></a>
+<span class="sourceLineNo">260</span>    * &lt;code&gt;MediaRanges&lt;/code&gt; with the same types but with extensions are promoted over those same types with no<a name="line.260"></a>
+<span class="sourceLineNo">261</span>    * extensions.<a name="line.261"></a>
+<span class="sourceLineNo">262</span>    * <a name="line.262"></a>
+<span class="sourceLineNo">263</span>    * @param o The range to compare to.  Never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.263"></a>
+<span class="sourceLineNo">264</span>    */<a name="line.264"></a>
+<span class="sourceLineNo">265</span>   @Override /* Comparable */<a name="line.265"></a>
+<span class="sourceLineNo">266</span>   public int compareTo(MediaTypeRange o) {<a name="line.266"></a>
+<span class="sourceLineNo">267</span><a name="line.267"></a>
+<span class="sourceLineNo">268</span>      // Compare q-values.<a name="line.268"></a>
+<span class="sourceLineNo">269</span>      int qCompare = Float.compare(o.qValue, qValue);<a name="line.269"></a>
+<span class="sourceLineNo">270</span>      if (qCompare != 0)<a name="line.270"></a>
+<span class="sourceLineNo">271</span>         return qCompare;<a name="line.271"></a>
+<span class="sourceLineNo">272</span><a name="line.272"></a>
+<span class="sourceLineNo">273</span>      // Compare media-types.<a name="line.273"></a>
+<span class="sourceLineNo">274</span>      // Note that '*' comes alphabetically before letters, so just do a reverse-alphabetical comparison.<a name="line.274"></a>
+<span class="sourceLineNo">275</span>      int i = o.mediaType.toString().compareTo(mediaType.toString());<a name="line.275"></a>
+<span class="sourceLineNo">276</span>      return i;<a name="line.276"></a>
+<span class="sourceLineNo">277</span>   }<a name="line.277"></a>
+<span class="sourceLineNo">278</span>}<a name="line.278"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

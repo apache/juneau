@@ -1,0 +1,1960 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.rest;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import static java.util.Collections.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>import static java.util.logging.Level.*;<a name="line.16"></a>
+<span class="sourceLineNo">017</span>import static org.apache.juneau.html.HtmlDocSerializer.*;<a name="line.17"></a>
+<span class="sourceLineNo">018</span>import static org.apache.juneau.httppart.HttpPartType.*;<a name="line.18"></a>
+<span class="sourceLineNo">019</span>import static org.apache.juneau.internal.IOUtils.*;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>import static org.apache.juneau.serializer.Serializer.*;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>import static org.apache.juneau.rest.Enablement.*;<a name="line.21"></a>
+<span class="sourceLineNo">022</span><a name="line.22"></a>
+<span class="sourceLineNo">023</span>import java.io.*;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>import java.lang.reflect.*;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>import java.lang.reflect.Method;<a name="line.25"></a>
+<span class="sourceLineNo">026</span>import java.lang.reflect.Proxy;<a name="line.26"></a>
+<span class="sourceLineNo">027</span>import java.net.*;<a name="line.27"></a>
+<span class="sourceLineNo">028</span>import java.nio.charset.*;<a name="line.28"></a>
+<span class="sourceLineNo">029</span>import java.text.*;<a name="line.29"></a>
+<span class="sourceLineNo">030</span>import java.util.*;<a name="line.30"></a>
+<span class="sourceLineNo">031</span>import java.util.logging.*;<a name="line.31"></a>
+<span class="sourceLineNo">032</span><a name="line.32"></a>
+<span class="sourceLineNo">033</span>import javax.servlet.*;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>import javax.servlet.http.*;<a name="line.34"></a>
+<span class="sourceLineNo">035</span><a name="line.35"></a>
+<span class="sourceLineNo">036</span>import org.apache.juneau.*;<a name="line.36"></a>
+<span class="sourceLineNo">037</span>import org.apache.juneau.config.*;<a name="line.37"></a>
+<span class="sourceLineNo">038</span>import org.apache.juneau.dto.swagger.*;<a name="line.38"></a>
+<span class="sourceLineNo">039</span>import org.apache.juneau.http.*;<a name="line.39"></a>
+<span class="sourceLineNo">040</span>import org.apache.juneau.http.ReaderResource;<a name="line.40"></a>
+<span class="sourceLineNo">041</span>import org.apache.juneau.http.StreamResource;<a name="line.41"></a>
+<span class="sourceLineNo">042</span>import org.apache.juneau.http.annotation.*;<a name="line.42"></a>
+<span class="sourceLineNo">043</span>import org.apache.juneau.http.annotation.Body;<a name="line.43"></a>
+<span class="sourceLineNo">044</span>import org.apache.juneau.http.annotation.FormData;<a name="line.44"></a>
+<span class="sourceLineNo">045</span>import org.apache.juneau.http.annotation.Header;<a name="line.45"></a>
+<span class="sourceLineNo">046</span>import org.apache.juneau.http.annotation.Path;<a name="line.46"></a>
+<span class="sourceLineNo">047</span>import org.apache.juneau.http.annotation.Query;<a name="line.47"></a>
+<span class="sourceLineNo">048</span>import org.apache.juneau.http.annotation.Response;<a name="line.48"></a>
+<span class="sourceLineNo">049</span>import org.apache.juneau.httppart.*;<a name="line.49"></a>
+<span class="sourceLineNo">050</span>import org.apache.juneau.httppart.bean.*;<a name="line.50"></a>
+<span class="sourceLineNo">051</span>import org.apache.juneau.internal.*;<a name="line.51"></a>
+<span class="sourceLineNo">052</span>import org.apache.juneau.jsonschema.*;<a name="line.52"></a>
+<span class="sourceLineNo">053</span>import org.apache.juneau.marshall.*;<a name="line.53"></a>
+<span class="sourceLineNo">054</span>import org.apache.juneau.oapi.*;<a name="line.54"></a>
+<span class="sourceLineNo">055</span>import org.apache.juneau.parser.*;<a name="line.55"></a>
+<span class="sourceLineNo">056</span>import org.apache.juneau.remote.*;<a name="line.56"></a>
+<span class="sourceLineNo">057</span>import org.apache.juneau.rest.annotation.*;<a name="line.57"></a>
+<span class="sourceLineNo">058</span>import org.apache.juneau.rest.exception.*;<a name="line.58"></a>
+<span class="sourceLineNo">059</span>import org.apache.juneau.rest.helper.*;<a name="line.59"></a>
+<span class="sourceLineNo">060</span>import org.apache.juneau.rest.util.*;<a name="line.60"></a>
+<span class="sourceLineNo">061</span>import org.apache.juneau.rest.widget.*;<a name="line.61"></a>
+<span class="sourceLineNo">062</span>import org.apache.juneau.serializer.*;<a name="line.62"></a>
+<span class="sourceLineNo">063</span>import org.apache.juneau.svl.*;<a name="line.63"></a>
+<span class="sourceLineNo">064</span>import org.apache.juneau.uon.*;<a name="line.64"></a>
+<span class="sourceLineNo">065</span>import org.apache.juneau.utils.*;<a name="line.65"></a>
+<span class="sourceLineNo">066</span><a name="line.66"></a>
+<span class="sourceLineNo">067</span>/**<a name="line.67"></a>
+<span class="sourceLineNo">068</span> * Represents an HTTP request for a REST resource.<a name="line.68"></a>
+<span class="sourceLineNo">069</span> *<a name="line.69"></a>
+<span class="sourceLineNo">070</span> * &lt;p&gt;<a name="line.70"></a>
+<span class="sourceLineNo">071</span> * Equivalent to {@link HttpServletRequest} except with some additional convenience methods.<a name="line.71"></a>
+<span class="sourceLineNo">072</span> *<a name="line.72"></a>
+<span class="sourceLineNo">073</span> * &lt;p&gt;<a name="line.73"></a>
+<span class="sourceLineNo">074</span> * For reference, given the URL &lt;js&gt;"http://localhost:9080/contextRoot/servletPath/foo?bar=baz#qux"&lt;/js&gt;, the<a name="line.74"></a>
+<span class="sourceLineNo">075</span> * following methods return the following values....<a name="line.75"></a>
+<span class="sourceLineNo">076</span> * &lt;table class='styled'&gt;<a name="line.76"></a>
+<span class="sourceLineNo">077</span> *    &lt;tr&gt;&lt;th&gt;Method&lt;/th&gt;&lt;th&gt;Value&lt;/th&gt;&lt;/tr&gt;<a name="line.77"></a>
+<span class="sourceLineNo">078</span> *    &lt;tr&gt;&lt;td&gt;{@code getContextPath()}&lt;/td&gt;&lt;td&gt;{@code /contextRoot}&lt;/td&gt;&lt;/tr&gt;<a name="line.78"></a>
+<span class="sourceLineNo">079</span> *    &lt;tr&gt;&lt;td&gt;{@code getPathInfo()}&lt;/td&gt;&lt;td&gt;{@code /foo}&lt;/td&gt;&lt;/tr&gt;<a name="line.79"></a>
+<span class="sourceLineNo">080</span> *    &lt;tr&gt;&lt;td&gt;{@code getPathTranslated()}&lt;/td&gt;&lt;td&gt;{@code path-to-deployed-war-on-filesystem/foo}&lt;/td&gt;&lt;/tr&gt;<a name="line.80"></a>
+<span class="sourceLineNo">081</span> *    &lt;tr&gt;&lt;td&gt;{@code getQueryString()}&lt;/td&gt;&lt;td&gt;{@code bar=baz}&lt;/td&gt;&lt;/tr&gt;<a name="line.81"></a>
+<span class="sourceLineNo">082</span> *    &lt;tr&gt;&lt;td&gt;{@code getRequestURI()}&lt;/td&gt;&lt;td&gt;{@code /contextRoot/servletPath/foo}&lt;/td&gt;&lt;/tr&gt;<a name="line.82"></a>
+<span class="sourceLineNo">083</span> *    &lt;tr&gt;&lt;td&gt;{@code getRequestURL()}&lt;/td&gt;&lt;td&gt;{@code http://localhost:9080/contextRoot/servletPath/foo}&lt;/td&gt;&lt;/tr&gt;<a name="line.83"></a>
+<span class="sourceLineNo">084</span> *    &lt;tr&gt;&lt;td&gt;{@code getServletPath()}&lt;/td&gt;&lt;td&gt;{@code /servletPath}&lt;/td&gt;&lt;/tr&gt;<a name="line.84"></a>
+<span class="sourceLineNo">085</span> * &lt;/table&gt;<a name="line.85"></a>
+<span class="sourceLineNo">086</span> *<a name="line.86"></a>
+<span class="sourceLineNo">087</span> * &lt;ul class='seealso'&gt;<a name="line.87"></a>
+<span class="sourceLineNo">088</span> *    &lt;li class='link'&gt;{@doc juneau-rest-server.RestMethod.RestRequest}<a name="line.88"></a>
+<span class="sourceLineNo">089</span> * &lt;/ul&gt;<a name="line.89"></a>
+<span class="sourceLineNo">090</span> */<a name="line.90"></a>
+<span class="sourceLineNo">091</span>@SuppressWarnings({ "unchecked", "unused" })<a name="line.91"></a>
+<span class="sourceLineNo">092</span>public final class RestRequest extends HttpServletRequestWrapper {<a name="line.92"></a>
+<span class="sourceLineNo">093</span><a name="line.93"></a>
+<span class="sourceLineNo">094</span>   private HttpServletRequest inner;<a name="line.94"></a>
+<span class="sourceLineNo">095</span>   private final RestContext context;<a name="line.95"></a>
+<span class="sourceLineNo">096</span>   private RestMethodContext restJavaMethod;<a name="line.96"></a>
+<span class="sourceLineNo">097</span><a name="line.97"></a>
+<span class="sourceLineNo">098</span>   private final String method;<a name="line.98"></a>
+<span class="sourceLineNo">099</span>   private RequestBody body;<a name="line.99"></a>
+<span class="sourceLineNo">100</span>   private Method javaMethod;<a name="line.100"></a>
+<span class="sourceLineNo">101</span>   @SuppressWarnings("deprecation")<a name="line.101"></a>
+<span class="sourceLineNo">102</span>   private RequestProperties properties;<a name="line.102"></a>
+<span class="sourceLineNo">103</span>   private BeanSession beanSession;<a name="line.103"></a>
+<span class="sourceLineNo">104</span>   private VarResolverSession varSession;<a name="line.104"></a>
+<span class="sourceLineNo">105</span>   private final RequestQuery queryParams;<a name="line.105"></a>
+<span class="sourceLineNo">106</span>   private RequestFormData formData;<a name="line.106"></a>
+<span class="sourceLineNo">107</span>   private RequestPath pathParams;<a name="line.107"></a>
+<span class="sourceLineNo">108</span>   private boolean isPost;<a name="line.108"></a>
+<span class="sourceLineNo">109</span>   private UriContext uriContext;<a name="line.109"></a>
+<span class="sourceLineNo">110</span>   private String charset, authorityPath;<a name="line.110"></a>
+<span class="sourceLineNo">111</span>   private RequestHeaders headers;<a name="line.111"></a>
+<span class="sourceLineNo">112</span>   private RequestAttributes attributes;<a name="line.112"></a>
+<span class="sourceLineNo">113</span>   private Config cf;<a name="line.113"></a>
+<span class="sourceLineNo">114</span>   private Swagger swagger;<a name="line.114"></a>
+<span class="sourceLineNo">115</span>   private SerializerSessionArgs serializerSessionArgs;<a name="line.115"></a>
+<span class="sourceLineNo">116</span>   private ParserSessionArgs parserSessionArgs;<a name="line.116"></a>
+<span class="sourceLineNo">117</span>   private RestResponse res;<a name="line.117"></a>
+<span class="sourceLineNo">118</span><a name="line.118"></a>
+<span class="sourceLineNo">119</span>   /**<a name="line.119"></a>
+<span class="sourceLineNo">120</span>    * Constructor.<a name="line.120"></a>
+<span class="sourceLineNo">121</span>    */<a name="line.121"></a>
+<span class="sourceLineNo">122</span>   RestRequest(RestContext context, HttpServletRequest req) throws ServletException {<a name="line.122"></a>
+<span class="sourceLineNo">123</span>      super(req);<a name="line.123"></a>
+<span class="sourceLineNo">124</span>      this.inner = req;<a name="line.124"></a>
+<span class="sourceLineNo">125</span>      this.context = context;<a name="line.125"></a>
+<span class="sourceLineNo">126</span><a name="line.126"></a>
+<span class="sourceLineNo">127</span>      try {<a name="line.127"></a>
+<span class="sourceLineNo">128</span>         isPost = req.getMethod().equalsIgnoreCase("POST");<a name="line.128"></a>
+<span class="sourceLineNo">129</span><a name="line.129"></a>
+<span class="sourceLineNo">130</span>         // If this is a POST, we want to parse the query parameters ourselves to prevent<a name="line.130"></a>
+<span class="sourceLineNo">131</span>         // the servlet code from processing the HTTP body as URL-Encoded parameters.<a name="line.131"></a>
+<span class="sourceLineNo">132</span>         queryParams = new RequestQuery(this);<a name="line.132"></a>
+<span class="sourceLineNo">133</span>         if (isPost)<a name="line.133"></a>
+<span class="sourceLineNo">134</span>            RestUtils.parseQuery(getQueryString(), queryParams);<a name="line.134"></a>
+<span class="sourceLineNo">135</span>         else<a name="line.135"></a>
+<span class="sourceLineNo">136</span>            queryParams.putAll(req.getParameterMap());<a name="line.136"></a>
+<span class="sourceLineNo">137</span><a name="line.137"></a>
+<span class="sourceLineNo">138</span>         // Get the HTTP method.<a name="line.138"></a>
+<span class="sourceLineNo">139</span>         // Can be overridden through a "method" GET attribute.<a name="line.139"></a>
+<span class="sourceLineNo">140</span>         String _method = super.getMethod();<a name="line.140"></a>
+<span class="sourceLineNo">141</span><a name="line.141"></a>
+<span class="sourceLineNo">142</span>         String m = getQuery().getString("method");<a name="line.142"></a>
+<span class="sourceLineNo">143</span>         if (m != null) {<a name="line.143"></a>
+<span class="sourceLineNo">144</span>            Set&lt;String&gt; s = context.getAllowedMethodParams();<a name="line.144"></a>
+<span class="sourceLineNo">145</span>            if (! s.isEmpty() &amp;&amp; (s.contains("*") || s.contains(m)))<a name="line.145"></a>
+<span class="sourceLineNo">146</span>               _method = m;<a name="line.146"></a>
+<span class="sourceLineNo">147</span>         }<a name="line.147"></a>
+<span class="sourceLineNo">148</span><a name="line.148"></a>
+<span class="sourceLineNo">149</span>         m = req.getHeader("X-Method");<a name="line.149"></a>
+<span class="sourceLineNo">150</span>         if (m != null) {<a name="line.150"></a>
+<span class="sourceLineNo">151</span>            Set&lt;String&gt; s = context.getAllowedMethodHeaders();<a name="line.151"></a>
+<span class="sourceLineNo">152</span>            if (! s.isEmpty() &amp;&amp; (s.contains("*") || s.contains(m)))<a name="line.152"></a>
+<span class="sourceLineNo">153</span>               _method = m;<a name="line.153"></a>
+<span class="sourceLineNo">154</span>         }<a name="line.154"></a>
+<span class="sourceLineNo">155</span><a name="line.155"></a>
+<span class="sourceLineNo">156</span>         method = _method;<a name="line.156"></a>
+<span class="sourceLineNo">157</span><a name="line.157"></a>
+<span class="sourceLineNo">158</span>         headers = new RequestHeaders(this);<a name="line.158"></a>
+<span class="sourceLineNo">159</span>         for (Enumeration&lt;String&gt; e = getHeaderNames(); e.hasMoreElements();) {<a name="line.159"></a>
+<span class="sourceLineNo">160</span>            String name = e.nextElement();<a name="line.160"></a>
+<span class="sourceLineNo">161</span>            headers.put(name, super.getHeaders(name));<a name="line.161"></a>
+<span class="sourceLineNo">162</span>         }<a name="line.162"></a>
+<span class="sourceLineNo">163</span><a name="line.163"></a>
+<span class="sourceLineNo">164</span>         body = new RequestBody(this);<a name="line.164"></a>
+<span class="sourceLineNo">165</span><a name="line.165"></a>
+<span class="sourceLineNo">166</span>         if (context.isAllowBodyParam()) {<a name="line.166"></a>
+<span class="sourceLineNo">167</span>            String b = getQuery().getString("body");<a name="line.167"></a>
+<span class="sourceLineNo">168</span>            if (b != null) {<a name="line.168"></a>
+<span class="sourceLineNo">169</span>               headers.put("Content-Type", UonSerializer.DEFAULT.getResponseContentType());<a name="line.169"></a>
+<span class="sourceLineNo">170</span>               body.load(MediaType.UON, UonParser.DEFAULT, b.getBytes(UTF8));<a name="line.170"></a>
+<span class="sourceLineNo">171</span>            }<a name="line.171"></a>
+<span class="sourceLineNo">172</span>         }<a name="line.172"></a>
+<span class="sourceLineNo">173</span><a name="line.173"></a>
+<span class="sourceLineNo">174</span>         Set&lt;String&gt; s = context.getAllowedHeaderParams();<a name="line.174"></a>
+<span class="sourceLineNo">175</span>         if (! s.isEmpty())<a name="line.175"></a>
+<span class="sourceLineNo">176</span>            headers.queryParams(queryParams, s);<a name="line.176"></a>
+<span class="sourceLineNo">177</span><a name="line.177"></a>
+<span class="sourceLineNo">178</span>         this.pathParams = new RequestPath(this);<a name="line.178"></a>
+<span class="sourceLineNo">179</span><a name="line.179"></a>
+<span class="sourceLineNo">180</span>      } catch (RestException e) {<a name="line.180"></a>
+<span class="sourceLineNo">181</span>         throw e;<a name="line.181"></a>
+<span class="sourceLineNo">182</span>      } catch (Exception e) {<a name="line.182"></a>
+<span class="sourceLineNo">183</span>         throw new ServletException(e);<a name="line.183"></a>
+<span class="sourceLineNo">184</span>      }<a name="line.184"></a>
+<span class="sourceLineNo">185</span>   }<a name="line.185"></a>
+<span class="sourceLineNo">186</span><a name="line.186"></a>
+<span class="sourceLineNo">187</span>   /*<a name="line.187"></a>
+<span class="sourceLineNo">188</span>    * Called from RestServlet after a match has been made but before the guard or method invocation.<a name="line.188"></a>
+<span class="sourceLineNo">189</span>    */<a name="line.189"></a>
+<span class="sourceLineNo">190</span>   final void init(RestMethodContext rjm, @SuppressWarnings("deprecation") RequestProperties properties) throws IOException {<a name="line.190"></a>
+<span class="sourceLineNo">191</span>      this.restJavaMethod = rjm;<a name="line.191"></a>
+<span class="sourceLineNo">192</span>      this.javaMethod = rjm.method;<a name="line.192"></a>
+<span class="sourceLineNo">193</span>      this.properties = properties;<a name="line.193"></a>
+<span class="sourceLineNo">194</span>      this.beanSession = rjm.createSession();<a name="line.194"></a>
+<span class="sourceLineNo">195</span>      this.pathParams<a name="line.195"></a>
+<span class="sourceLineNo">196</span>         .parser(rjm.partParser);<a name="line.196"></a>
+<span class="sourceLineNo">197</span>      this.queryParams<a name="line.197"></a>
+<span class="sourceLineNo">198</span>         .addDefault(rjm.defaultQuery)<a name="line.198"></a>
+<span class="sourceLineNo">199</span>         .parser(rjm.partParser);<a name="line.199"></a>
+<span class="sourceLineNo">200</span>      this.headers<a name="line.200"></a>
+<span class="sourceLineNo">201</span>         .addDefault(rjm.defaultRequestHeaders)<a name="line.201"></a>
+<span class="sourceLineNo">202</span>         .addDefault(context.getDefaultRequestHeaders())<a name="line.202"></a>
+<span class="sourceLineNo">203</span>         .parser(rjm.partParser);<a name="line.203"></a>
+<span class="sourceLineNo">204</span>      this.attributes = new RequestAttributes(this, rjm.defaultRequestAttributes);<a name="line.204"></a>
+<span class="sourceLineNo">205</span>      this.body<a name="line.205"></a>
+<span class="sourceLineNo">206</span>         .encoders(rjm.encoders)<a name="line.206"></a>
+<span class="sourceLineNo">207</span>         .parsers(rjm.parsers)<a name="line.207"></a>
+<span class="sourceLineNo">208</span>         .headers(headers)<a name="line.208"></a>
+<span class="sourceLineNo">209</span>         .maxInput(rjm.maxInput);<a name="line.209"></a>
+<span class="sourceLineNo">210</span><a name="line.210"></a>
+<span class="sourceLineNo">211</span>      if (isDebug()) {<a name="line.211"></a>
+<span class="sourceLineNo">212</span>         setDebug();<a name="line.212"></a>
+<span class="sourceLineNo">213</span>      }<a name="line.213"></a>
+<span class="sourceLineNo">214</span><a name="line.214"></a>
+<span class="sourceLineNo">215</span>      String stylesheet = getQuery().getString("stylesheet");<a name="line.215"></a>
+<span class="sourceLineNo">216</span>      if (stylesheet != null)<a name="line.216"></a>
+<span class="sourceLineNo">217</span>         getSession().setAttribute("stylesheet", stylesheet.replace(' ', '$'));  // Prevent SVL insertion.<a name="line.217"></a>
+<span class="sourceLineNo">218</span>      stylesheet = (String)getSession().getAttribute("stylesheet");<a name="line.218"></a>
+<span class="sourceLineNo">219</span>      if (stylesheet != null)<a name="line.219"></a>
+<span class="sourceLineNo">220</span>         properties.put(HTMLDOC_stylesheet, new String[]{stylesheet});<a name="line.220"></a>
+<span class="sourceLineNo">221</span><a name="line.221"></a>
+<span class="sourceLineNo">222</span>   }<a name="line.222"></a>
+<span class="sourceLineNo">223</span><a name="line.223"></a>
+<span class="sourceLineNo">224</span>   RestRequest setResponse(RestResponse res) {<a name="line.224"></a>
+<span class="sourceLineNo">225</span>      this.res = res;<a name="line.225"></a>
+<span class="sourceLineNo">226</span>      return this;<a name="line.226"></a>
+<span class="sourceLineNo">227</span>   }<a name="line.227"></a>
+<span class="sourceLineNo">228</span><a name="line.228"></a>
+<span class="sourceLineNo">229</span>   /**<a name="line.229"></a>
+<span class="sourceLineNo">230</span>    * Returns a string of the form &lt;js&gt;"HTTP method-name full-url"&lt;/js&gt;<a name="line.230"></a>
+<span class="sourceLineNo">231</span>    *<a name="line.231"></a>
+<span class="sourceLineNo">232</span>    * @return A description string of the request.<a name="line.232"></a>
+<span class="sourceLineNo">233</span>    */<a name="line.233"></a>
+<span class="sourceLineNo">234</span>   public String getDescription() {<a name="line.234"></a>
+<span class="sourceLineNo">235</span>      String qs = getQueryString();<a name="line.235"></a>
+<span class="sourceLineNo">236</span>      return "HTTP " + getMethod() + " " + getRequestURI() + (qs == null ? "" : "?" + qs);<a name="line.236"></a>
+<span class="sourceLineNo">237</span>   }<a name="line.237"></a>
+<span class="sourceLineNo">238</span><a name="line.238"></a>
+<span class="sourceLineNo">239</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.239"></a>
+<span class="sourceLineNo">240</span>   // Properties<a name="line.240"></a>
+<span class="sourceLineNo">241</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.241"></a>
+<span class="sourceLineNo">242</span><a name="line.242"></a>
+<span class="sourceLineNo">243</span>   /**<a name="line.243"></a>
+<span class="sourceLineNo">244</span>    * Retrieve the properties active for this request.<a name="line.244"></a>
+<span class="sourceLineNo">245</span>    *<a name="line.245"></a>
+<span class="sourceLineNo">246</span>    * &lt;p&gt;<a name="line.246"></a>
+<span class="sourceLineNo">247</span>    * This contains all resource and method level properties from the following:<a name="line.247"></a>
+<span class="sourceLineNo">248</span>    * &lt;ul class='javatree'&gt;<a name="line.248"></a>
+<span class="sourceLineNo">249</span>    *    &lt;li class='ja'&gt;{@link RestResource#properties()}<a name="line.249"></a>
+<span class="sourceLineNo">250</span>    *    &lt;li class='ja'&gt;{@link RestMethod#properties()}<a name="line.250"></a>
+<span class="sourceLineNo">251</span>    *    &lt;li class='jm'&gt;{@link RestContextBuilder#set(String, Object)}<a name="line.251"></a>
+<span class="sourceLineNo">252</span>    * &lt;/ul&gt;<a name="line.252"></a>
+<span class="sourceLineNo">253</span>    *<a name="line.253"></a>
+<span class="sourceLineNo">254</span>    * &lt;p&gt;<a name="line.254"></a>
+<span class="sourceLineNo">255</span>    * The returned object is modifiable and allows you to override session-level properties before<a name="line.255"></a>
+<span class="sourceLineNo">256</span>    * they get passed to the serializers.<a name="line.256"></a>
+<span class="sourceLineNo">257</span>    * &lt;br&gt;However, properties are open-ended, and can be used for any purpose.<a name="line.257"></a>
+<span class="sourceLineNo">258</span>    *<a name="line.258"></a>
+<span class="sourceLineNo">259</span>    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.259"></a>
+<span class="sourceLineNo">260</span>    * &lt;p class='bcode w800'&gt;<a name="line.260"></a>
+<span class="sourceLineNo">261</span>    *    &lt;ja&gt;@RestMethod&lt;/ja&gt;(<a name="line.261"></a>
+<span class="sourceLineNo">262</span>    *       properties={<a name="line.262"></a>
+<span class="sourceLineNo">263</span>    *          &lt;ja&gt;@Property&lt;/ja&gt;(name=&lt;jsf&gt;SERIALIZER_sortMaps&lt;/jsf&gt;, value=&lt;js&gt;"false"&lt;/js&gt;)<a name="line.263"></a>
+<span class="sourceLineNo">264</span>    *       }<a name="line.264"></a>
+<span class="sourceLineNo">265</span>    *    )<a name="line.265"></a>
+<span class="sourceLineNo">266</span>    *    &lt;jk&gt;public&lt;/jk&gt; Map doGet(RestRequest req, &lt;ja&gt;@Query&lt;/ja&gt;(&lt;js&gt;"sortMaps"&lt;/js&gt;) Boolean sortMaps) {<a name="line.266"></a>
+<span class="sourceLineNo">267</span>    *<a name="line.267"></a>
+<span class="sourceLineNo">268</span>    *       &lt;jc&gt;// Override value if specified through query parameter.&lt;/jc&gt;<a name="line.268"></a>
+<span class="sourceLineNo">269</span>    *       &lt;jk&gt;if&lt;/jk&gt; (sortMaps != &lt;jk&gt;null&lt;/jk&gt;)<a name="line.269"></a>
+<span class="sourceLineNo">270</span>    *          req.getProperties().put(&lt;jsf&gt;SERIALIZER_sortMaps&lt;/jsf&gt;, sortMaps);<a name="line.270"></a>
+<span class="sourceLineNo">271</span>    *<a name="line.271"></a>
+<span class="sourceLineNo">272</span>    *       &lt;jk&gt;return&lt;/jk&gt; &lt;jsm&gt;getMyMap&lt;/jsm&gt;();<a name="line.272"></a>
+<span class="sourceLineNo">273</span>    *    }<a name="line.273"></a>
+<span class="sourceLineNo">274</span>    * &lt;/p&gt;<a name="line.274"></a>
+<span class="sourceLineNo">275</span>    *<a name="line.275"></a>
+<span class="sourceLineNo">276</span>    * &lt;ul class='seealso'&gt;<a name="line.276"></a>
+<span class="sourceLineNo">277</span>    *    &lt;li class='jm'&gt;{@link #prop(String, Object)}<a name="line.277"></a>
+<span class="sourceLineNo">278</span>    *    &lt;li class='link'&gt;{@doc juneau-rest-server.ConfigurableProperties}<a name="line.278"></a>
+<span class="sourceLineNo">279</span>    * &lt;/ul&gt;<a name="line.279"></a>
+<span class="sourceLineNo">280</span>    *<a name="line.280"></a>
+<span class="sourceLineNo">281</span>    * @return The properties active for this request.<a name="line.281"></a>
+<span class="sourceLineNo">282</span>    * @deprecated Use {@link #getAttributes()}<a name="line.282"></a>
+<span class="sourceLineNo">283</span>    */<a name="line.283"></a>
+<span class="sourceLineNo">284</span>   @Deprecated<a name="line.284"></a>
+<span class="sourceLineNo">285</span>   public RequestProperties getProperties() {<a name="line.285"></a>
+<span class="sourceLineNo">286</span>      return this.properties;<a name="line.286"></a>
+<span class="sourceLineNo">287</span>   }<a name="line.287"></a>
+<span class="sourceLineNo">288</span><a name="line.288"></a>
+<span class="sourceLineNo">289</span>   /**<a name="line.289"></a>
+<span class="sourceLineNo">290</span>    * Shortcut for calling &lt;c&gt;getProperties().append(name, value);&lt;/c&gt; fluently.<a name="line.290"></a>
+<span class="sourceLineNo">291</span>    *<a name="line.291"></a>
+<span class="sourceLineNo">292</span>    * @param name The property name.<a name="line.292"></a>
+<span class="sourceLineNo">293</span>    * @param value The property value.<a name="line.293"></a>
+<span class="sourceLineNo">294</span>    * @return This object (for method chaining).<a name="line.294"></a>
+<span class="sourceLineNo">295</span>    * @deprecated Use {@link RequestAttributes#put(String, Object)} or {@link #setAttribute(String, Object)}.<a name="line.295"></a>
+<span class="sourceLineNo">296</span>    */<a name="line.296"></a>
+<span class="sourceLineNo">297</span>   @Deprecated<a name="line.297"></a>
+<span class="sourceLineNo">298</span>   public RestRequest prop(String name, Object value) {<a name="line.298"></a>
+<span class="sourceLineNo">299</span>      this.properties.append(name, value);<a name="line.299"></a>
+<span class="sourceLineNo">300</span>      return this;<a name="line.300"></a>
+<span class="sourceLineNo">301</span>   }<a name="line.301"></a>
+<span class="sourceLineNo">302</span><a name="line.302"></a>
+<span class="sourceLineNo">303</span><a name="line.303"></a>
+<span class="sourceLineNo">304</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.304"></a>
+<span class="sourceLineNo">305</span>   // Headers<a name="line.305"></a>
+<span class="sourceLineNo">306</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.306"></a>
+<span class="sourceLineNo">307</span><a name="line.307"></a>
+<span class="sourceLineNo">308</span>   /**<a name="line.308"></a>
+<span class="sourceLineNo">309</span>    * Request headers.<a name="line.309"></a>
+<span class="sourceLineNo">310</span>    *<a name="line.310"></a>
+<span class="sourceLineNo">311</span>    * &lt;p&gt;<a name="line.311"></a>
+<span class="sourceLineNo">312</span>    * Returns a {@link RequestHeaders} object that encapsulates access to HTTP headers on the request.<a name="line.312"></a>
+<span class="sourceLineNo">313</span>    *<a name="line.313"></a>
+<span class="sourceLineNo">314</span>    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.314"></a>
+<span class="sourceLineNo">315</span>    * &lt;p class='bcode w800'&gt;<a name="line.315"></a>
+<span class="sourceLineNo">316</span>    *    &lt;ja&gt;@RestMethod&lt;/ja&gt;(...)<a name="line.316"></a>
+<span class="sourceLineNo">317</span>    *    &lt;jk&gt;public&lt;/jk&gt; Object myMethod(RestRequest req) {<a name="line.317"></a>
+<span class="sourceLineNo">318</span>    *<a name="line.318"></a>
+<span class="sourceLineNo">319</span>    *       &lt;jc&gt;// Get access to headers.&lt;/jc&gt;<a name="line.319"></a>
+<span class="sourceLineNo">320</span>    *       RequestHeaders h = req.getHeaders();<a name="line.320"></a>
+<span class="sourceLineNo">321</span>    *<a name="line.321"></a>
+<span class="sourceLineNo">322</span>    *       &lt;jc&gt;// Add a default value.&lt;/jc&gt;<a name="line.322"></a>
+<span class="sourceLineNo">323</span>    *       h.addDefault(&lt;js&gt;"ETag"&lt;/js&gt;, &lt;jsf&gt;DEFAULT_UUID&lt;/jsf&gt;);<a name="line.323"></a>
+<span class="sourceLineNo">324</span>    *<a name="line.324"></a>
+<span class="sourceLineNo">325</span>    *    &lt;jc&gt;// Get a header value as a POJO.&lt;/jc&gt;<a name="line.325"></a>
+<span class="sourceLineNo">326</span>    *       UUID etag = h.get(&lt;js&gt;"ETag"&lt;/js&gt;, UUID.&lt;jk&gt;class&lt;/jk&gt;);<a name="line.326"></a>
+<span class="sourceLineNo">327</span>    *<a name="line.327"></a>
+<span class="sourceLineNo">328</span>    *       &lt;jc&gt;// Get a standard header.&lt;/jc&gt;<a name="line.328"></a>
+<span class="sourceLineNo">329</span>    *       CacheControl = h.getCacheControl();<a name="line.329"></a>
+<span class="sourceLineNo">330</span>    *    }<a name="line.330"></a>
+<span class="sourceLineNo">331</span>    * &lt;/p&gt;<a name="line.331"></a>
+<span class="sourceLineNo">332</span>    *<a name="line.332"></a>
+<span class="sourceLineNo">333</span>    * &lt;ul class='notes'&gt;<a name="line.333"></a>
+<span class="sourceLineNo">334</span>    *    &lt;li&gt;<a name="line.334"></a>
+<span class="sourceLineNo">335</span>    *       This object is modifiable.<a name="line.335"></a>
+<span class="sourceLineNo">336</span>    *    &lt;li&gt;<a name="line.336"></a>
+<span class="sourceLineNo">337</span>    *       Values are converted from strings using the registered {@link RestContext#REST_partParser part-parser} on the resource class.<a name="line.337"></a>
+<span class="sourceLineNo">338</span>    *    &lt;li&gt;<a name="line.338"></a>
+<span class="sourceLineNo">339</span>    *       The {@link RequestHeaders} object can also be passed as a parameter on the method.<a name="line.339"></a>
+<span class="sourceLineNo">340</span>    *    &lt;li&gt;<a name="line.340"></a>
+<span class="sourceLineNo">341</span>    *       The {@link Header @Header} annotation can be used to access individual header values.<a name="line.341"></a>
+<span class="sourceLineNo">342</span>    * &lt;/ul&gt;<a name="line.342"></a>
+<span class="sourceLineNo">343</span>    *<a name="line.343"></a>
+<span class="sourceLineNo">344</span>    * &lt;ul class='seealso'&gt;<a name="line.344"></a>
+<span class="sourceLineNo">345</span>    *    &lt;li class='link'&gt;{@doc juneau-rest-server.RestMethod.RequestHeaders}<a name="line.345"></a>
+<span class="sourceLineNo">346</span>    * &lt;/ul&gt;<a name="line.346"></a>
+<span class="sourceLineNo">347</span>    *<a name="line.347"></a>
+<span class="sourceLineNo">348</span>    * @return<a name="line.348"></a>
+<span class="sourceLineNo">349</span>    *    The headers on this request.<a name="line.349"></a>
+<span class="sourceLineNo">350</span>    *    &lt;br&gt;Never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.350"></a>
+<span class="sourceLineNo">351</span>    */<a name="line.351"></a>
+<span class="sourceLineNo">352</span>   public RequestHeaders getHeaders() {<a name="line.352"></a>
+<span class="sourceLineNo">353</span>      return headers;<a name="line.353"></a>
+<span class="sourceLineNo">354</span>   }<a name="line.354"></a>
+<span class="sourceLineNo">355</span><a name="line.355"></a>
+<span class="sourceLineNo">356</span>   @Override /* ServletRequest */<a name="line.356"></a>
+<span class="sourceLineNo">357</span>   public String getHeader(String name) {<a name="line.357"></a>
+<span class="sourceLineNo">358</span>      return getHeaders().getString(name);<a name="line.358"></a>
+<span class="sourceLineNo">359</span>   }<a name="line.359"></a>
+<span class="sourceLineNo">360</span><a name="line.360"></a>
+<span class="sourceLineNo">361</span>   @Override /* ServletRequest */<a name="line.361"></a>
+<span class="sourceLineNo">362</span>   public Enumeration&lt;String&gt; getHeaders(String name) {<a name="line.362"></a>
+<span class="sourceLineNo">363</span>      String[] v = headers.get(name);<a name="line.363"></a>
+<span class="sourceLineNo">364</span>      if (v == null || v.length == 0)<a name="line.364"></a>
+<span class="sourceLineNo">365</span>         return Collections.enumeration(Collections.EMPTY_LIST);<a name="line.365"></a>
+<span class="sourceLineNo">366</span>      return Collections.enumeration(Arrays.asList(v));<a name="line.366"></a>
+<span class="sourceLineNo">367</span>   }<a name="line.367"></a>
+<span class="sourceLineNo">368</span><a name="line.368"></a>
+<span class="sourceLineNo">369</span>   /**<a name="line.369"></a>
+<span class="sourceLineNo">370</span>    * Returns the media types that are valid for &lt;c&gt;Accept&lt;/c&gt; headers on the request.<a name="line.370"></a>
+<span class="sourceLineNo">371</span>    *<a name="line.371"></a>
+<span class="sourceLineNo">372</span>    * @return The set of media types registered in the serializer group of this request.<a name="line.372"></a>
+<span class="sourceLineNo">373</span>    */<a name="line.373"></a>
+<span class="sourceLineNo">374</span>   public List&lt;MediaType&gt; getProduces() {<a name="line.374"></a>
+<span class="sourceLineNo">375</span>      return restJavaMethod == null ? Collections.&lt;MediaType&gt;emptyList() : restJavaMethod.supportedAcceptTypes;<a name="line.375"></a>
+<span class="sourceLineNo">376</span>   }<a name="line.376"></a>
+<span class="sourceLineNo">377</span><a name="line.377"></a>
+<span class="sourceLineNo">378</span>   /**<a name="line.378"></a>
+<span class="sourceLineNo">379</span>    * Returns the media types that are valid for &lt;c&gt;Content-Type&lt;/c&gt; headers on the request.<a name="line.379"></a>
+<span class="sourceLineNo">380</span>    *<a name="line.380"></a>
+<span class="sourceLineNo">381</span>    * @return The set of media types registered in the parser group of this request.<a name="line.381"></a>
+<span class="sourceLineNo">382</span>    */<a name="line.382"></a>
+<span class="sourceLineNo">383</span>   public List&lt;MediaType&gt; getConsumes() {<a name="line.383"></a>
+<span class="sourceLineNo">384</span>      return restJavaMethod == null ? Collections.&lt;MediaType&gt;emptyList() : restJavaMethod.supportedContentTypes;<a name="line.384"></a>
+<span class="sourceLineNo">385</span>   }<a name="line.385"></a>
+<span class="sourceLineNo">386</span><a name="line.386"></a>
+<span class="sourceLineNo">387</span>   /**<a name="line.387"></a>
+<span class="sourceLineNo">388</span>    * Returns the {@link PropertyStore} for this request.<a name="line.388"></a>
+<span class="sourceLineNo">389</span>    *<a name="line.389"></a>
+<span class="sourceLineNo">390</span>    * &lt;p&gt;<a name="line.390"></a>
+<span class="sourceLineNo">391</span>    * Consists of a read-only roll-up of all configuration properties defined on this method and class.<a name="line.391"></a>
+<span class="sourceLineNo">392</span>    *<a name="line.392"></a>
+<span class="sourceLineNo">393</span>    * @return<a name="line.393"></a>
+<span class="sourceLineNo">394</span>    *    The property store for this request.<a name="line.394"></a>
+<span class="sourceLineNo">395</span>    *    &lt;br&gt;Never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.395"></a>
+<span class="sourceLineNo">396</span>    */<a name="line.396"></a>
+<span class="sourceLineNo">397</span>   public PropertyStore getPropertyStore() {<a name="line.397"></a>
+<span class="sourceLineNo">398</span>      return restJavaMethod == null ? PropertyStore.DEFAULT : restJavaMethod.getPropertyStore();<a name="line.398"></a>
+<span class="sourceLineNo">399</span>   }<a name="line.399"></a>
+<span class="sourceLineNo">400</span><a name="line.400"></a>
+<span class="sourceLineNo">401</span>   /**<a name="line.401"></a>
+<span class="sourceLineNo">402</span>    * Sets the charset to expect on the request body.<a name="line.402"></a>
+<span class="sourceLineNo">403</span>    */<a name="line.403"></a>
+<span class="sourceLineNo">404</span>   @Override /* ServletRequest */<a name="line.404"></a>
+<span class="sourceLineNo">405</span>   public void setCharacterEncoding(String charset) {<a name="line.405"></a>
+<span class="sourceLineNo">406</span>      this.charset = charset;<a name="line.406"></a>
+<span class="sourceLineNo">407</span>   }<a name="line.407"></a>
+<span class="sourceLineNo">408</span><a name="line.408"></a>
+<span class="sourceLineNo">409</span>   /**<a name="line.409"></a>
+<span class="sourceLineNo">410</span>    * Returns the charset specified on the &lt;c&gt;Content-Type&lt;/c&gt; header, or &lt;js&gt;"UTF-8"&lt;/js&gt; if not specified.<a name="line.410"></a>
+<span class="sourceLineNo">411</span>    */<a name="line.411"></a>
+<span class="sourceLineNo">412</span>   @Override /* ServletRequest */<a name="line.412"></a>
+<span class="sourceLineNo">413</span>   public String getCharacterEncoding() throws UnsupportedMediaType {<a name="line.413"></a>
+<span class="sourceLineNo">414</span>      if (charset == null) {<a name="line.414"></a>
+<span class="sourceLineNo">415</span>         // Determine charset<a name="line.415"></a>
+<span class="sourceLineNo">416</span>         // NOTE:  Don't use super.getCharacterEncoding() because the spec is implemented inconsistently.<a name="line.416"></a>
+<span class="sourceLineNo">417</span>         // Jetty returns the default charset instead of null if the character is not specified on the request.<a name="line.417"></a>
+<span class="sourceLineNo">418</span>         String h = getHeader("Content-Type");<a name="line.418"></a>
+<span class="sourceLineNo">419</span>         if (h != null) {<a name="line.419"></a>
+<span class="sourceLineNo">420</span>            int i = h.indexOf(";charset=");<a name="line.420"></a>
+<span class="sourceLineNo">421</span>            if (i &gt; 0)<a name="line.421"></a>
+<span class="sourceLineNo">422</span>               charset = h.substring(i+9).trim();<a name="line.422"></a>
+<span class="sourceLineNo">423</span>         }<a name="line.423"></a>
+<span class="sourceLineNo">424</span>         if (charset == null &amp;&amp; restJavaMethod != null)<a name="line.424"></a>
+<span class="sourceLineNo">425</span>            charset = restJavaMethod.defaultCharset;<a name="line.425"></a>
+<span class="sourceLineNo">426</span>         if (charset == null)<a name="line.426"></a>
+<span class="sourceLineNo">427</span>            charset = "UTF-8";<a name="line.427"></a>
+<span class="sourceLineNo">428</span>         if (! Charset.isSupported(charset))<a name="line.428"></a>
+<span class="sourceLineNo">429</span>            throw new UnsupportedMediaType("Unsupported charset in header ''Content-Type'': ''{0}''", h);<a name="line.429"></a>
+<span class="sourceLineNo">430</span>      }<a name="line.430"></a>
+<span class="sourceLineNo">431</span>      return charset;<a name="line.431"></a>
+<span class="sourceLineNo">432</span>   }<a name="line.432"></a>
+<span class="sourceLineNo">433</span><a name="line.433"></a>
+<span class="sourceLineNo">434</span>   /**<a name="line.434"></a>
+<span class="sourceLineNo">435</span>    * Wrapper around {@link #getCharacterEncoding()} that converts the value to a {@link Charset}.<a name="line.435"></a>
+<span class="sourceLineNo">436</span>    *<a name="line.436"></a>
+<span class="sourceLineNo">437</span>    * @return The request character encoding converted to a {@link Charset}.<a name="line.437"></a>
+<span class="sourceLineNo">438</span>    */<a name="line.438"></a>
+<span class="sourceLineNo">439</span>   public Charset getCharset() {<a name="line.439"></a>
+<span class="sourceLineNo">440</span>      String s = getCharacterEncoding();<a name="line.440"></a>
+<span class="sourceLineNo">441</span>      return s == null ? null : Charset.forName(s);<a name="line.441"></a>
+<span class="sourceLineNo">442</span>   }<a name="line.442"></a>
+<span class="sourceLineNo">443</span><a name="line.443"></a>
+<span class="sourceLineNo">444</span>   @Override /* ServletRequest */<a name="line.444"></a>
+<span class="sourceLineNo">445</span>   public Locale getLocale() {<a name="line.445"></a>
+<span class="sourceLineNo">446</span>      String h = headers.getString("Accept-Language");<a name="line.446"></a>
+<span class="sourceLineNo">447</span>      if (h != null) {<a name="line.447"></a>
+<span class="sourceLineNo">448</span>         MediaTypeRange[] mr = MediaTypeRange.parse(h);<a name="line.448"></a>
+<span class="sourceLineNo">449</span>         if (mr.length &gt; 0)<a name="line.449"></a>
+<span class="sourceLineNo">450</span>            return toLocale(mr[0].getMediaType().getType());<a name="line.450"></a>
+<span class="sourceLineNo">451</span>      }<a name="line.451"></a>
+<span class="sourceLineNo">452</span>      return super.getLocale();<a name="line.452"></a>
+<span class="sourceLineNo">453</span>   }<a name="line.453"></a>
+<span class="sourceLineNo">454</span><a name="line.454"></a>
+<span class="sourceLineNo">455</span>   @Override /* ServletRequest */<a name="line.455"></a>
+<span class="sourceLineNo">456</span>   public Enumeration&lt;Locale&gt; getLocales() {<a name="line.456"></a>
+<span class="sourceLineNo">457</span>      String h = headers.getString("Accept-Language");<a name="line.457"></a>
+<span class="sourceLineNo">458</span>      if (h != null) {<a name="line.458"></a>
+<span class="sourceLineNo">459</span>         MediaTypeRange[] mr = MediaTypeRange.parse(h);<a name="line.459"></a>
+<span class="sourceLineNo">460</span>         if (mr.length &gt; 0) {<a name="line.460"></a>
+<span class="sourceLineNo">461</span>            List&lt;Locale&gt; l = new ArrayList&lt;&gt;(mr.length);<a name="line.461"></a>
+<span class="sourceLineNo">462</span>            for (MediaTypeRange r : mr)<a name="line.462"></a>
+<span class="sourceLineNo">463</span>               l.add(toLocale(r.getMediaType().getType()));<a name="line.463"></a>
+<span class="sourceLineNo">464</span>            return enumeration(l);<a name="line.464"></a>
+<span class="sourceLineNo">465</span>         }<a name="line.465"></a>
+<span class="sourceLineNo">466</span>      }<a name="line.466"></a>
+<span class="sourceLineNo">467</span>      return super.getLocales();<a name="line.467"></a>
+<span class="sourceLineNo">468</span>   }<a name="line.468"></a>
+<span class="sourceLineNo">469</span><a name="line.469"></a>
+<span class="sourceLineNo">470</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.470"></a>
+<span class="sourceLineNo">471</span>   // Attributes<a name="line.471"></a>
+<span class="sourceLineNo">472</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.472"></a>
+<span class="sourceLineNo">473</span><a name="line.473"></a>
+<span class="sourceLineNo">474</span>   /**<a name="line.474"></a>
+<span class="sourceLineNo">475</span>    * Request attributes.<a name="line.475"></a>
+<span class="sourceLineNo">476</span>    *<a name="line.476"></a>
+<span class="sourceLineNo">477</span>    * &lt;p&gt;<a name="line.477"></a>
+<span class="sourceLineNo">478</span>    * Returns a {@link RequestAttributes} object that encapsulates access to attributes on the request.<a name="line.478"></a>
+<span class="sourceLineNo">479</span>    *<a name="line.479"></a>
+<span class="sourceLineNo">480</span>    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.480"></a>
+<span class="sourceLineNo">481</span>    * &lt;p class='bcode w800'&gt;<a name="line.481"></a>
+<span class="sourceLineNo">482</span>    *    &lt;ja&gt;@RestMethod&lt;/ja&gt;(...)<a name="line.482"></a>
+<span class="sourceLineNo">483</span>    *    &lt;jk&gt;public&lt;/jk&gt; Object myMethod(RestRequest req) {<a name="line.483"></a>
+<span class="sourceLineNo">484</span>    *<a name="line.484"></a>
+<span class="sourceLineNo">485</span>    *       &lt;jc&gt;// Get access to attributes.&lt;/jc&gt;<a name="line.485"></a>
+<span class="sourceLineNo">486</span>    *       RequestAttributes a = req.getAttributes();<a name="line.486"></a>
+<span class="sourceLineNo">487</span>    *<a name="line.487"></a>
+<span class="sourceLineNo">488</span>    *    &lt;jc&gt;// Get a header value as a POJO.&lt;/jc&gt;<a name="line.488"></a>
+<span class="sourceLineNo">489</span>    *       UUID etag = a.get(&lt;js&gt;"ETag"&lt;/js&gt;, UUID.&lt;jk&gt;class&lt;/jk&gt;);<a name="line.489"></a>
+<span class="sourceLineNo">490</span>    *    }<a name="line.490"></a>
+<span class="sourceLineNo">491</span>    * &lt;/p&gt;<a name="line.491"></a>
+<span class="sourceLineNo">492</span>    *<a name="line.492"></a>
+<span class="sourceLineNo">493</span>    * &lt;ul class='notes'&gt;<a name="line.493"></a>
+<span class="sourceLineNo">494</span>    *    &lt;li&gt;<a name="line.494"></a>
+<span class="sourceLineNo">495</span>    *       This object is modifiable.<a name="line.495"></a>
+<span class="sourceLineNo">496</span>    *    &lt;li&gt;<a name="line.496"></a>
+<span class="sourceLineNo">497</span>    *       Values are converted from strings using the registered {@link RestContext#REST_partParser part-parser} on the resource class.<a name="line.497"></a>
+<span class="sourceLineNo">498</span>    *    &lt;li&gt;<a name="line.498"></a>
+<span class="sourceLineNo">499</span>    *       The {@link RequestAttributes} object can also be passed as a parameter on the method.<a name="line.499"></a>
+<span class="sourceLineNo">500</span>    *    &lt;li&gt;<a name="line.500"></a>
+<span class="sourceLineNo">501</span>    *       The {@link Attr @Attr} annotation can be used to access individual attribute values.<a name="line.501"></a>
+<span class="sourceLineNo">502</span>    * &lt;/ul&gt;<a name="line.502"></a>
+<span class="sourceLineNo">503</span>    *<a name="line.503"></a>
+<span class="sourceLineNo">504</span>    * &lt;ul class='seealso'&gt;<a name="line.504"></a>
+<span class="sourceLineNo">505</span>    *    &lt;li class='link'&gt;{@doc juneau-rest-server.RestMethod.RequestAttributes}<a name="line.505"></a>
+<span class="sourceLineNo">506</span>    * &lt;/ul&gt;<a name="line.506"></a>
+<span class="sourceLineNo">507</span>    *<a name="line.507"></a>
+<span class="sourceLineNo">508</span>    * @return<a name="line.508"></a>
+<span class="sourceLineNo">509</span>    *    The headers on this request.<a name="line.509"></a>
+<span class="sourceLineNo">510</span>    *    &lt;br&gt;Never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.510"></a>
+<span class="sourceLineNo">511</span>    */<a name="line.511"></a>
+<span class="sourceLineNo">512</span>   public RequestAttributes getAttributes() {<a name="line.512"></a>
+<span class="sourceLineNo">513</span>      return attributes;<a name="line.513"></a>
+<span class="sourceLineNo">514</span>   }<a name="line.514"></a>
+<span class="sourceLineNo">515</span><a name="line.515"></a>
+<span class="sourceLineNo">516</span>   /**<a name="line.516"></a>
+<span class="sourceLineNo">517</span>    * Same as {@link #getAttribute(String)} but returns a default value if not found.<a name="line.517"></a>
+<span class="sourceLineNo">518</span>    *<a name="line.518"></a>
+<span class="sourceLineNo">519</span>    * @param name The request attribute name.<a name="line.519"></a>
+<span class="sourceLineNo">520</span>    * @param def The default value if the attribute doesn't exist.<a name="line.520"></a>
+<span class="sourceLineNo">521</span>    * @return The request attribute value.<a name="line.521"></a>
+<span class="sourceLineNo">522</span>    */<a name="line.522"></a>
+<span class="sourceLineNo">523</span>   public Object getAttribute(String name, Object def) {<a name="line.523"></a>
+<span class="sourceLineNo">524</span>      Object o = super.getAttribute(name);<a name="line.524"></a>
+<span class="sourceLineNo">525</span>      return (o == null ? def : o);<a name="line.525"></a>
+<span class="sourceLineNo">526</span>   }<a name="line.526"></a>
+<span class="sourceLineNo">527</span><a name="line.527"></a>
+<span class="sourceLineNo">528</span>   /**<a name="line.528"></a>
+<span class="sourceLineNo">529</span>    * Shorthand method for calling {@link #setAttribute(String, Object)} fluently.<a name="line.529"></a>
+<span class="sourceLineNo">530</span>    *<a name="line.530"></a>
+<span class="sourceLineNo">531</span>    * @param name The request attribute name.<a name="line.531"></a>
+<span class="sourceLineNo">532</span>    * @param value The request attribute value.<a name="line.532"></a>
+<span class="sourceLineNo">533</span>    * @return This object (for method chaining).<a name="line.533"></a>
+<span class="sourceLineNo">534</span>    */<a name="line.534"></a>
+<span class="sourceLineNo">535</span>   public RestRequest attr(String name, Object value) {<a name="line.535"></a>
+<span class="sourceLineNo">536</span>      setAttribute(name, value);<a name="line.536"></a>
+<span class="sourceLineNo">537</span>      return this;<a name="line.537"></a>
+<span class="sourceLineNo">538</span>   }<a name="line.538"></a>
+<span class="sourceLineNo">539</span><a name="line.539"></a>
+<span class="sourceLineNo">540</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.540"></a>
+<span class="sourceLineNo">541</span>   // Query parameters<a name="line.541"></a>
+<span class="sourceLineNo">542</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.542"></a>
+<span class="sourceLineNo">543</span><a name="line.543"></a>
+<span class="sourceLineNo">544</span>   /**<a name="line.544"></a>
+<span class="sourceLineNo">545</span>    * Query parameters.<a name="line.545"></a>
+<span class="sourceLineNo">546</span>    *<a name="line.546"></a>
+<span class="sourceLineNo">547</span>    * &lt;p&gt;<a name="line.547"></a>
+<span class="sourceLineNo">548</span>    * Returns a {@link RequestQuery} object that encapsulates access to URL GET parameters.<a name="line.548"></a>
+<span class="sourceLineNo">549</span>    *<a name="line.549"></a>
+<span class="sourceLineNo">550</span>    * &lt;p&gt;<a name="line.550"></a>
+<span class="sourceLineNo">551</span>    * Similar to {@link #getParameterMap()} but only looks for query parameters in the URL and not form posts.<a name="line.551"></a>
+<span class="sourceLineNo">552</span>    *<a name="line.552"></a>
+<span class="sourceLineNo">553</span>    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.553"></a>
+<span class="sourceLineNo">554</span>    * &lt;p class='bcode w800'&gt;<a name="line.554"></a>
+<span class="sourceLineNo">555</span>    *    &lt;ja&gt;@RestMethod&lt;/ja&gt;(...)<a name="line.555"></a>
+<span class="sourceLineNo">556</span>    *    &lt;jk&gt;public void&lt;/jk&gt; doGet(RestRequest req) {<a name="line.556"></a>
+<span class="sourceLineNo">557</span>    *<a name="line.557"></a>
+<span class="sourceLineNo">558</span>    *       &lt;jc&gt;// Get access to query parameters on the URL.&lt;/jc&gt;<a name="line.558"></a>
+<span class="sourceLineNo">559</span>    *       RequestQuery q = req.getQuery();<a name="line.559"></a>
+<span class="sourceLineNo">560</span>    *<a name="line.560"></a>
+<span class="sourceLineNo">561</span>    *       &lt;jc&gt;// Get query parameters converted to various types.&lt;/jc&gt;<a name="line.561"></a>
+<span class="sourceLineNo">562</span>    *       &lt;jk&gt;int&lt;/jk&gt; p1 = q.get(&lt;js&gt;"p1"&lt;/js&gt;, 0, &lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);<a name="line.562"></a>
+<span class="sourceLineNo">563</span>    *       String p2 = q.get(&lt;js&gt;"p2"&lt;/js&gt;, String.&lt;jk&gt;class&lt;/jk&gt;);<a name="line.563"></a>
+<span class="sourceLineNo">564</span>    *       UUID p3 = q.get(&lt;js&gt;"p3"&lt;/js&gt;, UUID.&lt;jk&gt;class&lt;/jk&gt;);<a name="line.564"></a>
+<span class="sourceLineNo">565</span>    *    }<a name="line.565"></a>
+<span class="sourceLineNo">566</span>    * &lt;/p&gt;<a name="line.566"></a>
+<span class="sourceLineNo">567</span>    *<a name="line.567"></a>
+<span class="sourceLineNo">568</span>    * &lt;ul class='notes'&gt;<a name="line.568"></a>
+<span class="sourceLineNo">569</span>    *    &lt;li&gt;<a name="line.569"></a>
+<span class="sourceLineNo">570</span>    *       This object is modifiable.<a name="line.570"></a>
+<span class="sourceLineNo">571</span>    *    &lt;li&gt;<a name="line.571"></a>
+<span class="sourceLineNo">572</span>    *       This method can be used to retrieve query parameters without triggering the underlying servlet API to load and parse the request body.<a name="line.572"></a>
+<span class="sourceLineNo">573</span>    *    &lt;li&gt;<a name="line.573"></a>
+<span class="sourceLineNo">574</span>    *       Values are converted from strings using the registered {@link RestContext#REST_partParser part-parser} on the resource class.<a name="line.574"></a>
+<span class="sourceLineNo">575</span>    *    &lt;li&gt;<a name="line.575"></a>
+<span class="sourceLineNo">576</span>    *       The {@link RequestQuery} object can also be passed as a parameter on the method.<a name="line.576"></a>
+<span class="sourceLineNo">577</span>    *    &lt;li&gt;<a name="line.577"></a>
+<span class="sourceLineNo">578</span>    *       The {@link Query @Query} annotation can be used to access individual query parameter values.<a name="line.578"></a>
+<span class="sourceLineNo">579</span>    * &lt;/ul&gt;<a name="line.579"></a>
+<span class="sourceLineNo">580</span>    *<a name="line.580"></a>
+<span class="sourceLineNo">581</span>    * &lt;ul class='seealso'&gt;<a name="line.581"></a>
+<span class="sourceLineNo">582</span>    *    &lt;li class='link'&gt;{@doc juneau-rest-server.RestMethod.RequestQuery}<a name="line.582"></a>
+<span class="sourceLineNo">583</span>    * &lt;/ul&gt;<a name="line.583"></a>
+<span class="sourceLineNo">584</span>    *<a name="line.584"></a>
+<span class="sourceLineNo">585</span>    * @return<a name="line.585"></a>
+<span class="sourceLineNo">586</span>    *    The query parameters as a modifiable map.<a name="line.586"></a>
+<span class="sourceLineNo">587</span>    *    &lt;br&gt;Never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.587"></a>
+<span class="sourceLineNo">588</span>    */<a name="line.588"></a>
+<span class="sourceLineNo">589</span>   public RequestQuery getQuery() {<a name="line.589"></a>
+<span class="sourceLineNo">590</span>      return queryParams;<a name="line.590"></a>
+<span class="sourceLineNo">591</span>   }<a name="line.591"></a>
+<span class="sourceLineNo">592</span><a name="line.592"></a>
+<span class="sourceLineNo">593</span>   /**<a name="line.593"></a>
+<span class="sourceLineNo">594</span>    * Shortcut for calling &lt;c&gt;getQuery().getString(name)&lt;/c&gt;.<a name="line.594"></a>
+<span class="sourceLineNo">595</span>    *<a name="line.595"></a>
+<span class="sourceLineNo">596</span>    * @param name The query parameter name.<a name="line.596"></a>
+<span class="sourceLineNo">597</span>    * @return The query parameter value, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.597"></a>
+<span class="sourceLineNo">598</span>    */<a name="line.598"></a>
+<span class="sourceLineNo">599</span>   public String getQuery(String name) {<a name="line.599"></a>
+<span class="sourceLineNo">600</span>      return getQuery().getString(name);<a name="line.600"></a>
+<span class="sourceLineNo">601</span>   }<a name="line.601"></a>
+<span class="sourceLineNo">602</span><a name="line.602"></a>
+<span class="sourceLineNo">603</span><a name="line.603"></a>
+<span class="sourceLineNo">604</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.604"></a>
+<span class="sourceLineNo">605</span>   // Form data parameters<a name="line.605"></a>
+<span class="sourceLineNo">606</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.606"></a>
+<span class="sourceLineNo">607</span><a name="line.607"></a>
+<span class="sourceLineNo">608</span>   /**<a name="line.608"></a>
+<span class="sourceLineNo">609</span>    * Form-data.<a name="line.609"></a>
+<span class="sourceLineNo">610</span>    *<a name="line.610"></a>
+<span class="sourceLineNo">611</span>    * &lt;p&gt;<a name="line.611"></a>
+<span class="sourceLineNo">612</span>    * Returns a {@link RequestFormData} object that encapsulates access to form post parameters.<a name="line.612"></a>
+<span class="sourceLineNo">613</span>    *<a name="line.613"></a>
+<span class="sourceLineNo">614</span>    * &lt;p&gt;<a name="line.614"></a>
+<span class="sourceLineNo">615</span>    * Similar to {@link #getParameterMap()}, but only looks for form data in the HTTP body.<a name="line.615"></a>
+<span class="sourceLineNo">616</span>    *<a name="line.616"></a>
+<span class="sourceLineNo">617</span>    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.617"></a>
+<span class="sourceLineNo">618</span>    * &lt;p class='bcode w800'&gt;<a name="line.618"></a>
+<span class="sourceLineNo">619</span>    *    &lt;ja&gt;@RestMethod&lt;/ja&gt;(...)<a name="line.619"></a>
+<span class="sourceLineNo">620</span>    *    &lt;jk&gt;public void&lt;/jk&gt; doPost(RestRequest req) {<a name="line.620"></a>
+<span class="sourceLineNo">621</span>    *<a name="line.621"></a>
+<span class="sourceLineNo">622</span>    *       &lt;jc&gt;// Get access to parsed form data parameters.&lt;/jc&gt;<a name="line.622"></a>
+<span class="sourceLineNo">623</span>    *       RequestFormData fd = req.getFormData();<a name="line.623"></a>
+<span class="sourceLineNo">624</span>    *<a name="line.624"></a>
+<span class="sourceLineNo">625</span>    *       &lt;jc&gt;// Get form data parameters converted to various types.&lt;/jc&gt;<a name="line.625"></a>
+<span class="sourceLineNo">626</span>    *       &lt;jk&gt;int&lt;/jk&gt; p1 = fd.get(&lt;js&gt;"p1"&lt;/js&gt;, 0, &lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);<a name="line.626"></a>
+<span class="sourceLineNo">627</span>    *       String p2 = fd.get(&lt;js&gt;"p2"&lt;/js&gt;, String.&lt;jk&gt;class&lt;/jk&gt;);<a name="line.627"></a>
+<span class="sourceLineNo">628</span>    *       UUID p3 = fd.get(&lt;js&gt;"p3"&lt;/js&gt;, UUID.&lt;jk&gt;class&lt;/jk&gt;);<a name="line.628"></a>
+<span class="sourceLineNo">629</span>    *    }<a name="line.629"></a>
+<span class="sourceLineNo">630</span>    * &lt;/p&gt;<a name="line.630"></a>
+<span class="sourceLineNo">631</span>    *<a name="line.631"></a>
+<span class="sourceLineNo">632</span>    * &lt;ul class='notes'&gt;<a name="line.632"></a>
+<span class="sourceLineNo">633</span>    *    &lt;li&gt;<a name="line.633"></a>
+<span class="sourceLineNo">634</span>    *       This object is modifiable.<a name="line.634"></a>
+<span class="sourceLineNo">635</span>    *    &lt;li&gt;<a name="line.635"></a>
+<span class="sourceLineNo">636</span>    *       Values are converted from strings using the registered {@link RestContext#REST_partParser part-parser} on the resource class.<a name="line.636"></a>
+<span class="sourceLineNo">637</span>    *    &lt;li&gt;<a name="line.637"></a>
+<span class="sourceLineNo">638</span>    *       The {@link RequestFormData} object can also be passed as a parameter on the method.<a name="line.638"></a>
+<span class="sourceLineNo">639</span>    *    &lt;li&gt;<a name="line.639"></a>
+<span class="sourceLineNo">640</span>    *       The {@link FormData @FormDAta} annotation can be used to access individual form data parameter values.<a name="line.640"></a>
+<span class="sourceLineNo">641</span>    * &lt;/ul&gt;<a name="line.641"></a>
+<span class="sourceLineNo">642</span>    *<a name="line.642"></a>
+<span class="sourceLineNo">643</span>    * &lt;ul class='seealso'&gt;<a name="line.643"></a>
+<span class="sourceLineNo">644</span>    *    &lt;li class='link'&gt;{@doc juneau-rest-server.RestMethod.RequestFormData}<a name="line.644"></a>
+<span class="sourceLineNo">645</span>    * &lt;/ul&gt;<a name="line.645"></a>
+<span class="sourceLineNo">646</span>    *<a name="line.646"></a>
+<span class="sourceLineNo">647</span>    * @return<a name="line.647"></a>
+<span class="sourceLineNo">648</span>    *    The URL-encoded form data from the request.<a name="line.648"></a>
+<span class="sourceLineNo">649</span>    *    &lt;br&gt;Never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.649"></a>
+<span class="sourceLineNo">650</span>    * @throws InternalServerError If query parameters could not be parsed.<a name="line.650"></a>
+<span class="sourceLineNo">651</span>    * @see org.apache.juneau.http.annotation.FormData<a name="line.651"></a>
+<span class="sourceLineNo">652</span>    */<a name="line.652"></a>
+<span class="sourceLineNo">653</span>   public RequestFormData getFormData() throws InternalServerError {<a name="line.653"></a>
+<span class="sourceLineNo">654</span>      try {<a name="line.654"></a>
+<span class="sourceLineNo">655</span>         if (formData == null) {<a name="line.655"></a>
+<span class="sourceLineNo">656</span>            formData = new RequestFormData(this, restJavaMethod == null ? OpenApiParser.DEFAULT : restJavaMethod.partParser);<a name="line.656"></a>
+<span class="sourceLineNo">657</span>            if (! body.isLoaded()) {<a name="line.657"></a>
+<span class="sourceLineNo">658</span>               formData.putAll(getParameterMap());<a name="line.658"></a>
+<span class="sourceLineNo">659</span>            } else {<a name="line.659"></a>
+<span class="sourceLineNo">660</span>               Map&lt;String,String[]&gt; m = RestUtils.parseQuery(body.getReader());<a name="line.660"></a>
+<span class="sourceLineNo">661</span>               for (Map.Entry&lt;String,String[]&gt; e : m.entrySet()) {<a name="line.661"></a>
+<span class="sourceLineNo">662</span>                  for (String v : e.getValue())<a name="line.662"></a>
+<span class="sourceLineNo">663</span>                     formData.put(e.getKey(), v);<a name="line.663"></a>
+<span class="sourceLineNo">664</span>               }<a name="line.664"></a>
+<span class="sourceLineNo">665</span>            }<a name="line.665"></a>
+<span class="sourceLineNo">666</span>         }<a name="line.666"></a>
+<span class="sourceLineNo">667</span>         formData.addDefault(restJavaMethod == null ? null : restJavaMethod.defaultFormData);<a name="line.667"></a>
+<span class="sourceLineNo">668</span>         return formData;<a name="line.668"></a>
+<span class="sourceLineNo">669</span>      } catch (Exception e) {<a name="line.669"></a>
+<span class="sourceLineNo">670</span>         throw new InternalServerError(e);<a name="line.670"></a>
+<span class="sourceLineNo">671</span>      }<a name="line.671"></a>
+<span class="sourceLineNo">672</span>   }<a name="line.672"></a>
+<span class="sourceLineNo">673</span><a name="line.673"></a>
+<span class="sourceLineNo">674</span>   /**<a name="line.674"></a>
+<span class="sourceLineNo">675</span>    * Shortcut for calling &lt;c&gt;getFormData().getString(name)&lt;/c&gt;.<a name="line.675"></a>
+<span class="sourceLineNo">676</span>    *<a name="line.676"></a>
+<span class="sourceLineNo">677</span>    * @param name The form data parameter name.<a name="line.677"></a>
+<span class="sourceLineNo">678</span>    * @return The form data parameter value, or &lt;jk&gt;null&lt;jk&gt; if not found.<a name="line.678"></a>
+<span class="sourceLineNo">679</span>    */<a name="line.679"></a>
+<span class="sourceLineNo">680</span>   public String getFormData(String name) {<a name="line.680"></a>
+<span class="sourceLineNo">681</span>      return getFormData().getString(name);<a name="line.681"></a>
+<span class="sourceLineNo">682</span>   }<a name="line.682"></a>
+<span class="sourceLineNo">683</span><a name="line.683"></a>
+<span class="sourceLineNo">684</span><a name="line.684"></a>
+<span class="sourceLineNo">685</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.685"></a>
+<span class="sourceLineNo">686</span>   // Path parameters<a name="line.686"></a>
+<span class="sourceLineNo">687</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.687"></a>
+<span class="sourceLineNo">688</span><a name="line.688"></a>
+<span class="sourceLineNo">689</span>   /**<a name="line.689"></a>
+<span class="sourceLineNo">690</span>    * Request path match.<a name="line.690"></a>
+<span class="sourceLineNo">691</span>    *<a name="line.691"></a>
+<span class="sourceLineNo">692</span>    * &lt;p&gt;<a name="line.692"></a>
+<span class="sourceLineNo">693</span>    * Returns a {@link RequestPath} object that encapsulates access to everything related to the URL path.<a name="line.693"></a>
+<span class="sourceLineNo">694</span>    *<a name="line.694"></a>
+<span class="sourceLineNo">695</span>    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.695"></a>
+<span class="sourceLineNo">696</span>    * &lt;p class='bcode w800'&gt;<a name="line.696"></a>
+<span class="sourceLineNo">697</span>    *    &lt;ja&gt;@RestMethod&lt;/ja&gt;(..., path=&lt;js&gt;"/{foo}/{bar}/{baz}/*"&lt;/js&gt;)<a name="line.697"></a>
+<span class="sourceLineNo">698</span>    *    &lt;jk&gt;public void&lt;/jk&gt; doGet(RestRequest req) {<a name="line.698"></a>
+<span class="sourceLineNo">699</span>    *<a name="line.699"></a>
+<span class="sourceLineNo">700</span>    *       &lt;jc&gt;// Get access to path data.&lt;/jc&gt;<a name="line.700"></a>
+<span class="sourceLineNo">701</span>    *       RequestPathMatch pm = req.getPathMatch();<a name="line.701"></a>
+<span class="sourceLineNo">702</span>    *<a name="line.702"></a>
+<span class="sourceLineNo">703</span>    *       &lt;jc&gt;// Example URL:  /123/qux/true/quux&lt;/jc&gt;<a name="line.703"></a>
+<span class="sourceLineNo">704</span>    *<a name="line.704"></a>
+<span class="sourceLineNo">705</span>    *       &lt;jk&gt;int&lt;/jk&gt; foo = pm.getInt(&lt;js&gt;"foo"&lt;/js&gt;);  &lt;jc&gt;// =123&lt;/jc&gt;<a name="line.705"></a>
+<span class="sourceLineNo">706</span>    *       String bar = pm.getString(&lt;js&gt;"bar"&lt;/js&gt;);  &lt;jc&gt;// =qux&lt;/jc&gt;<a name="line.706"></a>
+<span class="sourceLineNo">707</span>    *       &lt;jk&gt;boolean&lt;/jk&gt; baz = pm.getBoolean(&lt;js&gt;"baz"&lt;/js&gt;);  &lt;jc&gt;// =true&lt;/jc&gt;<a name="line.707"></a>
+<span class="sourceLineNo">708</span>    *       String remainder = pm.getRemainder();  &lt;jc&gt;// =quux&lt;/jc&gt;<a name="line.708"></a>
+<span class="sourceLineNo">709</span>    *    }<a name="line.709"></a>
+<span class="sourceLineNo">710</span>    * &lt;/p&gt;<a name="line.710"></a>
+<span class="sourceLineNo">711</span>    *<a name="line.711"></a>
+<span class="sourceLineNo">712</span>    * &lt;ul class='notes'&gt;<a name="line.712"></a>
+<span class="sourceLineNo">713</span>    *    &lt;li&gt;<a name="line.713"></a>
+<span class="sourceLineNo">714</span>    *       This object is modifiable.<a name="line.714"></a>
+<span class="sourceLineNo">715</span>    *    &lt;li&gt;<a name="line.715"></a>
+<span class="sourceLineNo">716</span>    *       Values are converted from strings using the registered {@link RestContext#REST_partParser part-parser} on the resource class.<a name="line.716"></a>
+<span class="sourceLineNo">717</span>    *    &lt;li&gt;<a name="line.717"></a>
+<span class="sourceLineNo">718</span>    *       The {@link RequestPath} object can also be passed as a parameter on the method.<a name="line.718"></a>
+<span class="sourceLineNo">719</span>    *    &lt;li&gt;<a name="line.719"></a>
+<span class="sourceLineNo">720</span>    *       The {@link Path @Path} annotation can be used to access individual values.<a name="line.720"></a>
+<span class="sourceLineNo">721</span>    * &lt;/ul&gt;<a name="line.721"></a>
+<span class="sourceLineNo">722</span>    *<a name="line.722"></a>
+<span class="sourceLineNo">723</span>    * &lt;ul class='seealso'&gt;<a name="line.723"></a>
+<span class="sourceLineNo">724</span>    *    &lt;li class='link'&gt;{@doc juneau-rest-server.RestMethod.RequestPathMatch}<a name="line.724"></a>
+<span class="sourceLineNo">725</span>    * &lt;/ul&gt;<a name="line.725"></a>
+<span class="sourceLineNo">726</span>    *<a name="line.726"></a>
+<span class="sourceLineNo">727</span>    * @return<a name="line.727"></a>
+<span class="sourceLineNo">728</span>    *    The path data from the URL.<a name="line.728"></a>
+<span class="sourceLineNo">729</span>    *    &lt;br&gt;Never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.729"></a>
+<span class="sourceLineNo">730</span>    */<a name="line.730"></a>
+<span class="sourceLineNo">731</span>   public RequestPath getPathMatch() {<a name="line.731"></a>
+<span class="sourceLineNo">732</span>      return pathParams;<a name="line.732"></a>
+<span class="sourceLineNo">733</span>   }<a name="line.733"></a>
+<span class="sourceLineNo">734</span><a name="line.734"></a>
+<span class="sourceLineNo">735</span>   /**<a name="line.735"></a>
+<span class="sourceLineNo">736</span>    * Shortcut for calling &lt;c&gt;getPathMatch().get(name)&lt;/c&gt;.<a name="line.736"></a>
+<span class="sourceLineNo">737</span>    *<a name="line.737"></a>
+<span class="sourceLineNo">738</span>    * @param name The path variable name.<a name="line.738"></a>
+<span class="sourceLineNo">739</span>    * @return The path variable value, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.739"></a>
+<span class="sourceLineNo">740</span>    */<a name="line.740"></a>
+<span class="sourceLineNo">741</span>   public String getPath(String name) {<a name="line.741"></a>
+<span class="sourceLineNo">742</span>      return getPathMatch().get(name);<a name="line.742"></a>
+<span class="sourceLineNo">743</span>   }<a name="line.743"></a>
+<span class="sourceLineNo">744</span><a name="line.744"></a>
+<span class="sourceLineNo">745</span>   /**<a name="line.745"></a>
+<span class="sourceLineNo">746</span>    * Shortcut for calling &lt;c&gt;getPathMatch().getRemainder()&lt;/c&gt;.<a name="line.746"></a>
+<span class="sourceLineNo">747</span>    *<a name="line.747"></a>
+<span class="sourceLineNo">748</span>    * @return The path remainder value, or &lt;jk&gt;null&lt;/jk&gt; if not found.<a name="line.748"></a>
+<span class="sourceLineNo">749</span>    */<a name="line.749"></a>
+<span class="sourceLineNo">750</span>   public String getPathRemainder() {<a name="line.750"></a>
+<span class="sourceLineNo">751</span>      return getPathMatch().getRemainder();<a name="line.751"></a>
+<span class="sourceLineNo">752</span>   }<a name="line.752"></a>
+<span class="sourceLineNo">753</span><a name="line.753"></a>
+<span class="sourceLineNo">754</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.754"></a>
+<span class="sourceLineNo">755</span>   // Body methods<a name="line.755"></a>
+<span class="sourceLineNo">756</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.756"></a>
+<span class="sourceLineNo">757</span><a name="line.757"></a>
+<span class="sourceLineNo">758</span>   /**<a name="line.758"></a>
+<span class="sourceLineNo">759</span>    * Request body.<a name="line.759"></a>
+<span class="sourceLineNo">760</span>    *<a name="line.760"></a>
+<span class="sourceLineNo">761</span>    * &lt;p&gt;<a name="line.761"></a>
+<span class="sourceLineNo">762</span>    * Returns a {@link RequestBody} object that encapsulates access to the HTTP request body.<a name="line.762"></a>
+<span class="sourceLineNo">763</span>    *<a name="line.763"></a>
+<span class="sourceLineNo">764</span>    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.764"></a>
+<span class="sourceLineNo">765</span>    * &lt;p class='bcode w800'&gt;<a name="line.765"></a>
+<span class="sourceLineNo">766</span>    *    &lt;ja&gt;@RestMethod&lt;/ja&gt;(...)<a name="line.766"></a>
+<span class="sourceLineNo">767</span>    *    &lt;jk&gt;public void&lt;/jk&gt; doPost2(RestRequest req) {<a name="line.767"></a>
+<span class="sourceLineNo">768</span>    *<a name="line.768"></a>
+<span class="sourceLineNo">769</span>    *       &lt;jc&gt;// Convert body to a linked list of Person objects.&lt;/jc&gt;<a name="line.769"></a>
+<span class="sourceLineNo">770</span>    *       List&amp;lt;Person&amp;gt; l = req.getBody().asType(LinkedList.&lt;jk&gt;class&lt;/jk&gt;, Person.&lt;jk&gt;class&lt;/jk&gt;);<a name="line.770"></a>
+<span class="sourceLineNo">771</span>    *       ..<a name="line.771"></a>
+<span class="sourceLineNo">772</span>    *    }<a name="line.772"></a>
+<span class="sourceLineNo">773</span>    * &lt;/p&gt;<a name="line.773"></a>
+<span class="sourceLineNo">774</span>    *<a name="line.774"></a>
+<span class="sourceLineNo">775</span>    * &lt;ul class='notes'&gt;<a name="line.775"></a>
+<span class="sourceLineNo">776</span>    *    &lt;li&gt;<a name="line.776"></a>
+<span class="sourceLineNo">777</span>    *       The {@link RequestBody} object can also be passed as a parameter on the method.<a name="line.777"></a>
+<span class="sourceLineNo">778</span>    *    &lt;li&gt;<a name="line.778"></a>
+<span class="sourceLineNo">779</span>    *       The {@link Body @Body} annotation can be used to access the body as well.<a name="line.779"></a>
+<span class="sourceLineNo">780</span>    * &lt;/ul&gt;<a name="line.780"></a>
+<span class="sourceLineNo">781</span>    *<a name="line.781"></a>
+<span class="sourceLineNo">782</span>    * &lt;ul class='seealso'&gt;<a name="line.782"></a>
+<span class="sourceLineNo">783</span>    *    &lt;li class='link'&gt;{@doc juneau-rest-server.RestMethod.RequestBody}<a name="line.783"></a>
+<span class="sourceLineNo">784</span>    * &lt;/ul&gt;<a name="line.784"></a>
+<span class="sourceLineNo">785</span>    *<a name="line.785"></a>
+<span class="sourceLineNo">786</span>    * @return<a name="line.786"></a>
+<span class="sourceLineNo">787</span>    *    The body of this HTTP request.<a name="line.787"></a>
+<span class="sourceLineNo">788</span>    *    &lt;br&gt;Never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.788"></a>
+<span class="sourceLineNo">789</span>    */<a name="line.789"></a>
+<span class="sourceLineNo">790</span>   public RequestBody getBody() {<a name="line.790"></a>
+<span class="sourceLineNo">791</span>      return body;<a name="line.791"></a>
+<span class="sourceLineNo">792</span>   }<a name="line.792"></a>
+<span class="sourceLineNo">793</span><a name="line.793"></a>
+<span class="sourceLineNo">794</span>   /**<a name="line.794"></a>
+<span class="sourceLineNo">795</span>    * Returns the HTTP body content as a {@link Reader}.<a name="line.795"></a>
+<span class="sourceLineNo">796</span>    *<a name="line.796"></a>
+<span class="sourceLineNo">797</span>    * &lt;p&gt;<a name="line.797"></a>
+<span class="sourceLineNo">798</span>    * If {@code allowHeaderParams} init parameter is true, then first looks for {@code &amp;body=xxx} in the URL query<a name="line.798"></a>
+<span class="sourceLineNo">799</span>    * string.<a name="line.799"></a>
+<span class="sourceLineNo">800</span>    *<a name="line.800"></a>
+<span class="sourceLineNo">801</span>    * &lt;p&gt;<a name="line.801"></a>
+<span class="sourceLineNo">802</span>    * Automatically handles GZipped input streams.<a name="line.802"></a>
+<span class="sourceLineNo">803</span>    */<a name="line.803"></a>
+<span class="sourceLineNo">804</span>   @Override /* ServletRequest */<a name="line.804"></a>
+<span class="sourceLineNo">805</span>   public BufferedReader getReader() throws IOException {<a name="line.805"></a>
+<span class="sourceLineNo">806</span>      return getBody().getReader();<a name="line.806"></a>
+<span class="sourceLineNo">807</span>   }<a name="line.807"></a>
+<span class="sourceLineNo">808</span><a name="line.808"></a>
+<span class="sourceLineNo">809</span>   /**<a name="line.809"></a>
+<span class="sourceLineNo">810</span>    * Returns the HTTP body content as an {@link InputStream}.<a name="line.810"></a>
+<span class="sourceLineNo">811</span>    *<a name="line.811"></a>
+<span class="sourceLineNo">812</span>    * &lt;p&gt;<a name="line.812"></a>
+<span class="sourceLineNo">813</span>    * Automatically handles GZipped input streams.<a name="line.813"></a>
+<span class="sourceLineNo">814</span>    *<a name="line.814"></a>
+<span class="sourceLineNo">815</span>    * @return The negotiated input stream.<a name="line.815"></a>
+<span class="sourceLineNo">816</span>    * @throws IOException If any error occurred while trying to get the input stream or wrap it in the GZIP wrapper.<a name="line.816"></a>
+<span class="sourceLineNo">817</span>    */<a name="line.817"></a>
+<span class="sourceLineNo">818</span>   @Override /* ServletRequest */<a name="line.818"></a>
+<span class="sourceLineNo">819</span>   public ServletInputStream getInputStream() throws IOException {<a name="line.819"></a>
+<span class="sourceLineNo">820</span>      return getBody().getInputStream();<a name="line.820"></a>
+<span class="sourceLineNo">821</span>   }<a name="line.821"></a>
+<span class="sourceLineNo">822</span><a name="line.822"></a>
+<span class="sourceLineNo">823</span>   ServletInputStream getRawInputStream() throws IOException {<a name="line.823"></a>
+<span class="sourceLineNo">824</span>      return inner.getInputStream();<a name="line.824"></a>
+<span class="sourceLineNo">825</span>   }<a name="line.825"></a>
+<span class="sourceLineNo">826</span><a name="line.826"></a>
+<span class="sourceLineNo">827</span><a name="line.827"></a>
+<span class="sourceLineNo">828</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.828"></a>
+<span class="sourceLineNo">829</span>   // URI-related methods<a name="line.829"></a>
+<span class="sourceLineNo">830</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.830"></a>
+<span class="sourceLineNo">831</span><a name="line.831"></a>
+<span class="sourceLineNo">832</span>   @Override /* HttpServletRequest */<a name="line.832"></a>
+<span class="sourceLineNo">833</span>   public String getContextPath() {<a name="line.833"></a>
+<span class="sourceLineNo">834</span>      String cp = context.getUriContext();<a name="line.834"></a>
+<span class="sourceLineNo">835</span>      return cp == null ? super.getContextPath() : cp;<a name="line.835"></a>
+<span class="sourceLineNo">836</span>   }<a name="line.836"></a>
+<span class="sourceLineNo">837</span><a name="line.837"></a>
+<span class="sourceLineNo">838</span>   /**<a name="line.838"></a>
+<span class="sourceLineNo">839</span>    * Returns the URI authority portion of the request.<a name="line.839"></a>
+<span class="sourceLineNo">840</span>    *<a name="line.840"></a>
+<span class="sourceLineNo">841</span>    * @return The URI authority portion of the request.<a name="line.841"></a>
+<span class="sourceLineNo">842</span>    */<a name="line.842"></a>
+<span class="sourceLineNo">843</span>   public String getAuthorityPath() {<a name="line.843"></a>
+<span class="sourceLineNo">844</span>      if (authorityPath == null)<a name="line.844"></a>
+<span class="sourceLineNo">845</span>         authorityPath = context.getUriAuthority();<a name="line.845"></a>
+<span class="sourceLineNo">846</span>      if (authorityPath == null) {<a name="line.846"></a>
+<span class="sourceLineNo">847</span>         String scheme = getScheme();<a name="line.847"></a>
+<span class="sourceLineNo">848</span>         int port = getServerPort();<a name="line.848"></a>
+<span class="sourceLineNo">849</span>         StringBuilder sb = new StringBuilder(getScheme()).append("://").append(getServerName());<a name="line.849"></a>
+<span class="sourceLineNo">850</span>         if (! (port == 80 &amp;&amp; "http".equals(scheme) || port == 443 &amp;&amp; "https".equals(scheme)))<a name="line.850"></a>
+<span class="sourceLineNo">851</span>            sb.append(':').append(port);<a name="line.851"></a>
+<span class="sourceLineNo">852</span>         authorityPath = sb.toString();<a name="line.852"></a>
+<span class="sourceLineNo">853</span>      }<a name="line.853"></a>
+<span class="sourceLineNo">854</span>      return authorityPath;<a name="line.854"></a>
+<span class="sourceLineNo">855</span>   }<a name="line.855"></a>
+<span class="sourceLineNo">856</span><a name="line.856"></a>
+<span class="sourceLineNo">857</span>   @Override /* HttpServletRequest */<a name="line.857"></a>
+<span class="sourceLineNo">858</span>   public String getServletPath() {<a name="line.858"></a>
+<span class="sourceLineNo">859</span>      String cp = context.getUriContext();<a name="line.859"></a>
+<span class="sourceLineNo">860</span>      String sp = super.getServletPath();<a name="line.860"></a>
+<span class="sourceLineNo">861</span>      return cp == null || ! sp.startsWith(cp) ? sp : sp.substring(cp.length());<a name="line.861"></a>
+<span class="sourceLineNo">862</span>   }<a name="line.862"></a>
+<span class="sourceLineNo">863</span><a name="line.863"></a>
+<span class="sourceLineNo">864</span>   /**<a name="line.864"></a>
+<span class="sourceLineNo">865</span>    * Returns the URI context of the request.<a name="line.865"></a>
+<span class="sourceLineNo">866</span>    *<a name="line.866"></a>
+<span class="sourceLineNo">867</span>    * &lt;p&gt;<a name="line.867"></a>
+<span class="sourceLineNo">868</span>    * The URI context contains all the information about the URI of the request, such as the servlet URI, context<a name="line.868"></a>
+<span class="sourceLineNo">869</span>    * path, etc...<a name="line.869"></a>
+<span class="sourceLineNo">870</span>    *<a name="line.870"></a>
+<span class="sourceLineNo">871</span>    * @return The URI context of the request.<a name="line.871"></a>
+<span class="sourceLineNo">872</span>    */<a name="line.872"></a>
+<span class="sourceLineNo">873</span>   public UriContext getUriContext() {<a name="line.873"></a>
+<span class="sourceLineNo">874</span>      if (uriContext == null)<a name="line.874"></a>
+<span class="sourceLineNo">875</span>         uriContext = new UriContext(getAuthorityPath(), getContextPath(), getServletPath(), StringUtils.urlEncodePath(super.getPathInfo()));<a name="line.875"></a>
+<span class="sourceLineNo">876</span>      return uriContext;<a name="line.876"></a>
+<span class="sourceLineNo">877</span>   }<a name="line.877"></a>
+<span class="sourceLineNo">878</span><a name="line.878"></a>
+<span class="sourceLineNo">879</span>   /**<a name="line.879"></a>
+<span class="sourceLineNo">880</span>    * Returns a URI resolver that can be used to convert URIs to absolute or root-relative form.<a name="line.880"></a>
+<span class="sourceLineNo">881</span>    *<a name="line.881"></a>
+<span class="sourceLineNo">882</span>    * @param resolution The URI resolution rule.<a name="line.882"></a>
+<span class="sourceLineNo">883</span>    * @param relativity The relative URI relativity rule.<a name="line.883"></a>
+<span class="sourceLineNo">884</span>    * @return The URI resolver for this request.<a name="line.884"></a>
+<span class="sourceLineNo">885</span>    */<a name="line.885"></a>
+<span class="sourceLineNo">886</span>   public UriResolver getUriResolver(UriResolution resolution, UriRelativity relativity) {<a name="line.886"></a>
+<span class="sourceLineNo">887</span>      return new UriResolver(resolution, relativity, getUriContext());<a name="line.887"></a>
+<span class="sourceLineNo">888</span>   }<a name="line.888"></a>
+<span class="sourceLineNo">889</span><a name="line.889"></a>
+<span class="sourceLineNo">890</span>   /**<a name="line.890"></a>
+<span class="sourceLineNo">891</span>    * Shortcut for calling {@link #getUriResolver()} using {@link UriResolution#ROOT_RELATIVE} and<a name="line.891"></a>
+<span class="sourceLineNo">892</span>    * {@link UriRelativity#RESOURCE}<a name="line.892"></a>
+<span class="sourceLineNo">893</span>    *<a name="line.893"></a>
+<span class="sourceLineNo">894</span>    * @return The URI resolver for this request.<a name="line.894"></a>
+<span class="sourceLineNo">895</span>    */<a name="line.895"></a>
+<span class="sourceLineNo">896</span>   public UriResolver getUriResolver() {<a name="line.896"></a>
+<span class="sourceLineNo">897</span>      return new UriResolver(context.getUriResolution(), context.getUriRelativity(), getUriContext());<a name="line.897"></a>
+<span class="sourceLineNo">898</span>   }<a name="line.898"></a>
+<span class="sourceLineNo">899</span><a name="line.899"></a>
+<span class="sourceLineNo">900</span>   /**<a name="line.900"></a>
+<span class="sourceLineNo">901</span>    * Returns the URI for this request.<a name="line.901"></a>
+<span class="sourceLineNo">902</span>    *<a name="line.902"></a>
+<span class="sourceLineNo">903</span>    * &lt;p&gt;<a name="line.903"></a>
+<span class="sourceLineNo">904</span>    * Similar to {@link #getRequestURI()} but returns the value as a {@link URI}.<a name="line.904"></a>
+<span class="sourceLineNo">905</span>    * It also gives you the capability to override the query parameters (e.g. add new query parameters to the existing<a name="line.905"></a>
+<span class="sourceLineNo">906</span>    * URI).<a name="line.906"></a>
+<span class="sourceLineNo">907</span>    *<a name="line.907"></a>
+<span class="sourceLineNo">908</span>    * @param includeQuery If &lt;jk&gt;true&lt;/jk&gt; include the query parameters on the request.<a name="line.908"></a>
+<span class="sourceLineNo">909</span>    * @param addQueryParams Augment the request URI with the specified query parameters.<a name="line.909"></a>
+<span class="sourceLineNo">910</span>    * @return A new URI.<a name="line.910"></a>
+<span class="sourceLineNo">911</span>    */<a name="line.911"></a>
+<span class="sourceLineNo">912</span>   public URI getUri(boolean includeQuery, Map&lt;String,?&gt; addQueryParams) {<a name="line.912"></a>
+<span class="sourceLineNo">913</span>      String uri = getRequestURI();<a name="line.913"></a>
+<span class="sourceLineNo">914</span>      if (includeQuery || addQueryParams != null) {<a name="line.914"></a>
+<span class="sourceLineNo">915</span>         StringBuilder sb = new StringBuilder(uri);<a name="line.915"></a>
+<span class="sourceLineNo">916</span>         RequestQuery rq = this.queryParams.copy();<a name="line.916"></a>
+<span class="sourceLineNo">917</span>         if (addQueryParams != null)<a name="line.917"></a>
+<span class="sourceLineNo">918</span>            for (Map.Entry&lt;String,?&gt; e : addQueryParams.entrySet())<a name="line.918"></a>
+<span class="sourceLineNo">919</span>               rq.put(e.getKey(), e.getValue());<a name="line.919"></a>
+<span class="sourceLineNo">920</span>         if (! rq.isEmpty())<a name="line.920"></a>
+<span class="sourceLineNo">921</span>            sb.append('?').append(rq.toQueryString());<a name="line.921"></a>
+<span class="sourceLineNo">922</span>         uri = sb.toString();<a name="line.922"></a>
+<span class="sourceLineNo">923</span>      }<a name="line.923"></a>
+<span class="sourceLineNo">924</span>      try {<a name="line.924"></a>
+<span class="sourceLineNo">925</span>         return new URI(uri);<a name="line.925"></a>
+<span class="sourceLineNo">926</span>      } catch (URISyntaxException e) {<a name="line.926"></a>
+<span class="sourceLineNo">927</span>         // Shouldn't happen.<a name="line.927"></a>
+<span class="sourceLineNo">928</span>         throw new RuntimeException(e);<a name="line.928"></a>
+<span class="sourceLineNo">929</span>      }<a name="line.929"></a>
+<span class="sourceLineNo">930</span>   }<a name="line.930"></a>
+<span class="sourceLineNo">931</span><a name="line.931"></a>
+<span class="sourceLineNo">932</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.932"></a>
+<span class="sourceLineNo">933</span>   // Labels<a name="line.933"></a>
+<span class="sourceLineNo">934</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.934"></a>
+<span class="sourceLineNo">935</span><a name="line.935"></a>
+<span class="sourceLineNo">936</span>   /**<a name="line.936"></a>
+<span class="sourceLineNo">937</span>    * Resource information provider.<a name="line.937"></a>
+<span class="sourceLineNo">938</span>    *<a name="line.938"></a>
+<span class="sourceLineNo">939</span>    * &lt;p&gt;<a name="line.939"></a>
+<span class="sourceLineNo">940</span>    * Returns a {@link RestInfoProvider} object that encapsulates all the textual meta-data on this resource such as<a name="line.940"></a>
+<span class="sourceLineNo">941</span>    * descriptions, titles, and Swagger documentation.<a name="line.941"></a>
+<span class="sourceLineNo">942</span>    *<a name="line.942"></a>
+<span class="sourceLineNo">943</span>    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.943"></a>
+<span class="sourceLineNo">944</span>    * &lt;p class='bcode w800'&gt;<a name="line.944"></a>
+<span class="sourceLineNo">945</span>    *    &lt;ja&gt;@RestMethod&lt;/ja&gt;(...)<a name="line.945"></a>
+<span class="sourceLineNo">946</span>    *    &lt;jk&gt;public void&lt;/jk&gt; doGet(RestRequest req) {<a name="line.946"></a>
+<span class="sourceLineNo">947</span>    *<a name="line.947"></a>
+<span class="sourceLineNo">948</span>    *       &lt;jc&gt;// Get information provider.&lt;/jc&gt;<a name="line.948"></a>
+<span class="sourceLineNo">949</span>    *       RestInfoProvider p = req.getInfoProvider();<a name="line.949"></a>
+<span class="sourceLineNo">950</span>    *<a name="line.950"></a>
+<span class="sourceLineNo">951</span>    *       &lt;jc&gt;// Get localized strings.&lt;/jc&gt;<a name="line.951"></a>
+<span class="sourceLineNo">952</span>    *       String resourceTitle = p.getTitle(req);<a name="line.952"></a>
+<span class="sourceLineNo">953</span>    *       String methodDescription = p.getMethodDescription(req.getMethod(), req);<a name="line.953"></a>
+<span class="sourceLineNo">954</span>    *       Contact contact = p.getContact(req);<a name="line.954"></a>
+<span class="sourceLineNo">955</span>    *       ..<a name="line.955"></a>
+<span class="sourceLineNo">956</span>    *    }<a name="line.956"></a>
+<span class="sourceLineNo">957</span>    * &lt;/p&gt;<a name="line.957"></a>
+<span class="sourceLineNo">958</span>    *<a name="line.958"></a>
+<span class="sourceLineNo">959</span>    * &lt;ul class='notes'&gt;<a name="line.959"></a>
+<span class="sourceLineNo">960</span>    *    &lt;li&gt;<a name="line.960"></a>
+<span class="sourceLineNo">961</span>    *       The {@link RestInfoProvider} object can also be passed as a parameter on the method.<a name="line.961"></a>
+<span class="sourceLineNo">962</span>    * &lt;/ul&gt;<a name="line.962"></a>
+<span class="sourceLineNo">963</span>    *<a name="line.963"></a>
+<span class="sourceLineNo">964</span>    * &lt;ul class='seealso'&gt;<a name="line.964"></a>
+<span class="sourceLineNo">965</span>    *    &lt;li class='jf'&gt;{@link org.apache.juneau.rest.RestContext#REST_infoProvider}<a name="line.965"></a>
+<span class="sourceLineNo">966</span>    *    &lt;li class='jic'&gt;{@link org.apache.juneau.rest.RestInfoProvider}<a name="line.966"></a>
+<span class="sourceLineNo">967</span>    *    &lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestRequest#getSiteName()}<a name="line.967"></a>
+<span class="sourceLineNo">968</span>    *    &lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestRequest#getResourceTitle()}<a name="line.968"></a>
+<span class="sourceLineNo">969</span>    *    &lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestRequest#getResourceDescription()}<a name="line.969"></a>
+<span class="sourceLineNo">970</span>    *    &lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestRequest#getMethodSummary()}<a name="line.970"></a>
+<span class="sourceLineNo">971</span>    *    &lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestRequest#getMethodDescription()}<a name="line.971"></a>
+<span class="sourceLineNo">972</span>    *    &lt;li class='link'&gt;{@doc juneau-rest-server.Swagger}<a name="line.972"></a>
+<span class="sourceLineNo">973</span>    * &lt;/ul&gt;<a name="line.973"></a>
+<span class="sourceLineNo">974</span>    *<a name="line.974"></a>
+<span class="sourceLineNo">975</span>    * @return<a name="line.975"></a>
+<span class="sourceLineNo">976</span>    *    The info provider on the resource.<a name="line.976"></a>
+<span class="sourceLineNo">977</span>    *    &lt;br&gt;Never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.977"></a>
+<span class="sourceLineNo">978</span>    */<a name="line.978"></a>
+<span class="sourceLineNo">979</span>   public RestInfoProvider getInfoProvider() {<a name="line.979"></a>
+<span class="sourceLineNo">980</span>      return context.getInfoProvider();<a name="line.980"></a>
+<span class="sourceLineNo">981</span>   }<a name="line.981"></a>
+<span class="sourceLineNo">982</span><a name="line.982"></a>
+<span class="sourceLineNo">983</span>   /**<a name="line.983"></a>
+<span class="sourceLineNo">984</span>    * Returns the localized swagger associated with the resource.<a name="line.984"></a>
+<span class="sourceLineNo">985</span>    *<a name="line.985"></a>
+<span class="sourceLineNo">986</span>    * &lt;p&gt;<a name="line.986"></a>
+<span class="sourceLineNo">987</span>    * A shortcut for calling &lt;c&gt;getInfoProvider().getSwagger(request);&lt;/c&gt;<a name="line.987"></a>
+<span class="sourceLineNo">988</span>    *<a name="line.988"></a>
+<span class="sourceLineNo">989</span>    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.989"></a>
+<span class="sourceLineNo">990</span>    * &lt;p class='bcode w800'&gt;<a name="line.990"></a>
+<span class="sourceLineNo">991</span>    *    &lt;ja&gt;@RestMethod&lt;/ja&gt;(...)<a name="line.991"></a>
+<span class="sourceLineNo">992</span>    *    &lt;jk&gt;public&lt;/jk&gt; List&amp;lt;Tag&amp;gt; getSwaggerTags(RestRequest req) {<a name="line.992"></a>
+<span class="sourceLineNo">993</span>    *       &lt;jk&gt;return&lt;/jk&gt; req.getSwagger().getTags();<a name="line.993"></a>
+<span class="sourceLineNo">994</span>    *    }<a name="line.994"></a>
+<span class="sourceLineNo">995</span>    * &lt;/p&gt;<a name="line.995"></a>
+<span class="sourceLineNo">996</span>    *<a name="line.996"></a>
+<span class="sourceLineNo">997</span>    * &lt;ul class='notes'&gt;<a name="line.997"></a>
+<span class="sourceLineNo">998</span>    *    &lt;li&gt;<a name="line.998"></a>
+<span class="sourceLineNo">999</span>    *       The {@link Swagger} object can also be passed as a parameter on the method.<a name="line.999"></a>
+<span class="sourceLineNo">1000</span>    * &lt;/ul&gt;<a name="line.1000"></a>
+<span class="sourceLineNo">1001</span>    *<a name="line.1001"></a>
+<span class="sourceLineNo">1002</span>    * &lt;ul class='seealso'&gt;<a name="line.1002"></a>
+<span class="sourceLineNo">1003</span>    *    &lt;li class='jf'&gt;{@link org.apache.juneau.rest.RestContext#REST_infoProvider}<a name="line.1003"></a>
+<span class="sourceLineNo">1004</span>    *    &lt;li class='jic'&gt;{@link org.apache.juneau.rest.RestInfoProvider}<a name="line.1004"></a>
+<span class="sourceLineNo">1005</span>    *    &lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestRequest#getInfoProvider()}<a name="line.1005"></a>
+<span class="sourceLineNo">1006</span>    *    &lt;li class='link'&gt;{@doc juneau-rest-server.Swagger}<a name="line.1006"></a>
+<span class="sourceLineNo">1007</span>    * &lt;/ul&gt;<a name="line.1007"></a>
+<span class="sourceLineNo">1008</span>    *<a name="line.1008"></a>
+<span class="sourceLineNo">1009</span>    * @return<a name="line.1009"></a>
+<span class="sourceLineNo">1010</span>    *    The swagger associated with the resource.<a name="line.1010"></a>
+<span class="sourceLineNo">1011</span>    *    &lt;br&gt;Never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.1011"></a>
+<span class="sourceLineNo">1012</span>    */<a name="line.1012"></a>
+<span class="sourceLineNo">1013</span>   public Swagger getSwagger() {<a name="line.1013"></a>
+<span class="sourceLineNo">1014</span>      try {<a name="line.1014"></a>
+<span class="sourceLineNo">1015</span>         if (swagger == null)<a name="line.1015"></a>
+<span class="sourceLineNo">1016</span>            swagger = context.getInfoProvider().getSwagger(this);<a name="line.1016"></a>
+<span class="sourceLineNo">1017</span>         return swagger;<a name="line.1017"></a>
+<span class="sourceLineNo">1018</span>      } catch (RestException e) {<a name="line.1018"></a>
+<span class="sourceLineNo">1019</span>         throw e;<a name="line.1019"></a>
+<span class="sourceLineNo">1020</span>      } catch (Exception e) {<a name="line.1020"></a>
+<span class="sourceLineNo">1021</span>         throw new InternalServerError(e);<a name="line.1021"></a>
+<span class="sourceLineNo">1022</span>      }<a name="line.1022"></a>
+<span class="sourceLineNo">1023</span>   }<a name="line.1023"></a>
+<span class="sourceLineNo">1024</span><a name="line.1024"></a>
+<span class="sourceLineNo">1025</span>   /**<a name="line.1025"></a>
+<span class="sourceLineNo">1026</span>    * Returns the localized site name.<a name="line.1026"></a>
+<span class="sourceLineNo">1027</span>    *<a name="line.1027"></a>
+<span class="sourceLineNo">1028</span>    * &lt;p&gt;<a name="line.1028"></a>
+<span class="sourceLineNo">1029</span>    * The site name is intended to be a title that can be applied to the entire site.<a name="line.1029"></a>
+<span class="sourceLineNo">1030</span>    *<a name="line.1030"></a>
+<span class="sourceLineNo">1031</span>    * &lt;p&gt;<a name="line.1031"></a>
+<span class="sourceLineNo">1032</span>    * One possible use is if you want to add the same title to the top of all pages by defining a header on a<a name="line.1032"></a>
+<span class="sourceLineNo">1033</span>    * common parent class like so:<a name="line.1033"></a>
+<span class="sourceLineNo">1034</span>    * &lt;p class='bcode w800'&gt;<a name="line.1034"></a>
+<span class="sourceLineNo">1035</span>    *    htmldoc=&lt;ja&gt;@HtmlDoc&lt;/ja&gt;(<a name="line.1035"></a>
+<span class="sourceLineNo">1036</span>    *       header={<a name="line.1036"></a>
+<span class="sourceLineNo">1037</span>    *          &lt;js&gt;"&amp;lt;h1&amp;gt;$R{siteName}&amp;lt;/h1&amp;gt;"&lt;/js&gt;,<a name="line.1037"></a>
+<span class="sourceLineNo">1038</span>    *          &lt;js&gt;"&amp;lt;h2&amp;gt;$R{resourceTitle}&amp;lt;/h2&amp;gt;"&lt;/js&gt;<a name="line.1038"></a>
+<span class="sourceLineNo">1039</span>    *       }<a name="line.1039"></a>
+<span class="sourceLineNo">1040</span>    *    )<a name="line.1040"></a>
+<span class="sourceLineNo">1041</span>    * &lt;/p&gt;<a name="line.1041"></a>
+<span class="sourceLineNo">1042</span>    *<a name="line.1042"></a>
+<span class="sourceLineNo">1043</span>    * &lt;p&gt;<a name="line.1043"></a>
+<span class="sourceLineNo">1044</span>    * Equivalent to calling {@link RestInfoProvider#getSiteName(RestRequest)} with this object.<a name="line.1044"></a>
+<span class="sourceLineNo">1045</span>    *<a name="line.1045"></a>
+<span class="sourceLineNo">1046</span>    * @return The localized site name.<a name="line.1046"></a>
+<span class="sourceLineNo">1047</span>    */<a name="line.1047"></a>
+<span class="sourceLineNo">1048</span>   public String getSiteName() {<a name="line.1048"></a>
+<span class="sourceLineNo">1049</span>      try {<a name="line.1049"></a>
+<span class="sourceLineNo">1050</span>         return context.getInfoProvider().getSiteName(this);<a name="line.1050"></a>
+<span class="sourceLineNo">1051</span>      } catch (RestException e) {<a name="line.1051"></a>
+<span class="sourceLineNo">1052</span>         throw e;<a name="line.1052"></a>
+<span class="sourceLineNo">1053</span>      } catch (Exception e) {<a name="line.1053"></a>
+<span class="sourceLineNo">1054</span>         throw new InternalServerError(e);<a name="line.1054"></a>
+<span class="sourceLineNo">1055</span>      }<a name="line.1055"></a>
+<span class="sourceLineNo">1056</span>   }<a name="line.1056"></a>
+<span class="sourceLineNo">1057</span><a name="line.1057"></a>
+<span class="sourceLineNo">1058</span>   /**<a name="line.1058"></a>
+<span class="sourceLineNo">1059</span>    * Returns the localized resource title.<a name="line.1059"></a>
+<span class="sourceLineNo">1060</span>    *<a name="line.1060"></a>
+<span class="sourceLineNo">1061</span>    * &lt;p&gt;<a name="line.1061"></a>
+<span class="sourceLineNo">1062</span>    * Equivalent to calling {@link RestInfoProvider#getTitle(RestRequest)} with this object.<a name="line.1062"></a>
+<span class="sourceLineNo">1063</span>    *<a name="line.1063"></a>
+<span class="sourceLineNo">1064</span>    * @return The localized resource title.<a name="line.1064"></a>
+<span class="sourceLineNo">1065</span>    */<a name="line.1065"></a>
+<span class="sourceLineNo">1066</span>   public String getResourceTitle() {<a name="line.1066"></a>
+<span class="sourceLineNo">1067</span>      try {<a name="line.1067"></a>
+<span class="sourceLineNo">1068</span>         return context.getInfoProvider().getTitle(this);<a name="line.1068"></a>
+<span class="sourceLineNo">1069</span>      } catch (RestException e) {<a name="line.1069"></a>
+<span class="sourceLineNo">1070</span>         throw e;<a name="line.1070"></a>
+<span class="sourceLineNo">1071</span>      } catch (Exception e) {<a name="line.1071"></a>
+<span class="sourceLineNo">1072</span>         throw new InternalServerError(e);<a name="line.1072"></a>
+<span class="sourceLineNo">1073</span>      }<a name="line.1073"></a>
+<span class="sourceLineNo">1074</span>   }<a name="line.1074"></a>
+<span class="sourceLineNo">1075</span><a name="line.1075"></a>
+<span class="sourceLineNo">1076</span>   /**<a name="line.1076"></a>
+<span class="sourceLineNo">1077</span>    * Returns the localized resource description.<a name="line.1077"></a>
+<span class="sourceLineNo">1078</span>    *<a name="line.1078"></a>
+<span class="sourceLineNo">1079</span>    * &lt;p&gt;<a name="line.1079"></a>
+<span class="sourceLineNo">1080</span>    * Equivalent to calling {@link RestInfoProvider#getDescription(RestRequest)} with this object.<a name="line.1080"></a>
+<span class="sourceLineNo">1081</span>    *<a name="line.1081"></a>
+<span class="sourceLineNo">1082</span>    * @return The localized resource description.<a name="line.1082"></a>
+<span class="sourceLineNo">1083</span>    */<a name="line.1083"></a>
+<span class="sourceLineNo">1084</span>   public String getResourceDescription() {<a name="line.1084"></a>
+<span class="sourceLineNo">1085</span>      try {<a name="line.1085"></a>
+<span class="sourceLineNo">1086</span>         return context.getInfoProvider().getDescription(this);<a name="line.1086"></a>
+<span class="sourceLineNo">1087</span>      } catch (RestException e) {<a name="line.1087"></a>
+<span class="sourceLineNo">1088</span>         throw e;<a name="line.1088"></a>
+<span class="sourceLineNo">1089</span>      } catch (Exception e) {<a name="line.1089"></a>
+<span class="sourceLineNo">1090</span>         throw new InternalServerError(e);<a name="line.1090"></a>
+<span class="sourceLineNo">1091</span>      }<a name="line.1091"></a>
+<span class="sourceLineNo">1092</span>   }<a name="line.1092"></a>
+<span class="sourceLineNo">1093</span><a name="line.1093"></a>
+<span class="sourceLineNo">1094</span>   /**<a name="line.1094"></a>
+<span class="sourceLineNo">1095</span>    * Returns the localized method summary.<a name="line.1095"></a>
+<span class="sourceLineNo">1096</span>    *<a name="line.1096"></a>
+<span class="sourceLineNo">1097</span>    * &lt;p&gt;<a name="line.1097"></a>
+<span class="sourceLineNo">1098</span>    * Equivalent to calling {@link RestInfoProvider#getMethodSummary(Method, RestRequest)} with this object.<a name="line.1098"></a>
+<span class="sourceLineNo">1099</span>    *<a name="line.1099"></a>
+<span class="sourceLineNo">1100</span>    * @return The localized method description.<a name="line.1100"></a>
+<span class="sourceLineNo">1101</span>    */<a name="line.1101"></a>
+<span class="sourceLineNo">1102</span>   public String getMethodSummary() {<a name="line.1102"></a>
+<span class="sourceLineNo">1103</span>      try {<a name="line.1103"></a>
+<span class="sourceLineNo">1104</span>         return context.getInfoProvider().getMethodSummary(javaMethod, this);<a name="line.1104"></a>
+<span class="sourceLineNo">1105</span>      } catch (RestException e) {<a name="line.1105"></a>
+<span class="sourceLineNo">1106</span>         throw e;<a name="line.1106"></a>
+<span class="sourceLineNo">1107</span>      } catch (Exception e) {<a name="line.1107"></a>
+<span class="sourceLineNo">1108</span>         throw new InternalServerError(e);<a name="line.1108"></a>
+<span class="sourceLineNo">1109</span>      }<a name="line.1109"></a>
+<span class="sourceLineNo">1110</span>   }<a name="line.1110"></a>
+<span class="sourceLineNo">1111</span><a name="line.1111"></a>
+<span class="sourceLineNo">1112</span>   /**<a name="line.1112"></a>
+<span class="sourceLineNo">1113</span>    * Returns the localized method description.<a name="line.1113"></a>
+<span class="sourceLineNo">1114</span>    *<a name="line.1114"></a>
+<span class="sourceLineNo">1115</span>    * &lt;p&gt;<a name="line.1115"></a>
+<span class="sourceLineNo">1116</span>    * Equivalent to calling {@link RestInfoProvider#getMethodDescription(Method, RestRequest)} with this object.<a name="line.1116"></a>
+<span class="sourceLineNo">1117</span>    *<a name="line.1117"></a>
+<span class="sourceLineNo">1118</span>    * @return The localized method description.<a name="line.1118"></a>
+<span class="sourceLineNo">1119</span>    */<a name="line.1119"></a>
+<span class="sourceLineNo">1120</span>   public String getMethodDescription() {<a name="line.1120"></a>
+<span class="sourceLineNo">1121</span>      try {<a name="line.1121"></a>
+<span class="sourceLineNo">1122</span>         return context.getInfoProvider().getMethodDescription(javaMethod, this);<a name="line.1122"></a>
+<span class="sourceLineNo">1123</span>      } catch (RestException e) {<a name="line.1123"></a>
+<span class="sourceLineNo">1124</span>         throw e;<a name="line.1124"></a>
+<span class="sourceLineNo">1125</span>      } catch (Exception e) {<a name="line.1125"></a>
+<span class="sourceLineNo">1126</span>         throw new InternalServerError(e);<a name="line.1126"></a>
+<span class="sourceLineNo">1127</span>      }<a name="line.1127"></a>
+<span class="sourceLineNo">1128</span>   }<a name="line.1128"></a>
+<span class="sourceLineNo">1129</span><a name="line.1129"></a>
+<span class="sourceLineNo">1130</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.1130"></a>
+<span class="sourceLineNo">1131</span>   // Other methods<a name="line.1131"></a>
+<span class="sourceLineNo">1132</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.1132"></a>
+<span class="sourceLineNo">1133</span><a name="line.1133"></a>
+<span class="sourceLineNo">1134</span>   /**<a name="line.1134"></a>
+<span class="sourceLineNo">1135</span>    * Returns the serializers associated with this request.<a name="line.1135"></a>
+<span class="sourceLineNo">1136</span>    *<a name="line.1136"></a>
+<span class="sourceLineNo">1137</span>    * &lt;ul class='seealso'&gt;<a name="line.1137"></a>
+<span class="sourceLineNo">1138</span>    *    &lt;li class='link'&gt;{@doc juneau-rest-server.Serializers}<a name="line.1138"></a>
+<span class="sourceLineNo">1139</span>    * &lt;/ul&gt;<a name="line.1139"></a>
+<span class="sourceLineNo">1140</span>    *<a name="line.1140"></a>
+<span class="sourceLineNo">1141</span>    * @return The serializers associated with this request.<a name="line.1141"></a>
+<span class="sourceLineNo">1142</span>    */<a name="line.1142"></a>
+<span class="sourceLineNo">1143</span>   public SerializerGroup getSerializers() {<a name="line.1143"></a>
+<span class="sourceLineNo">1144</span>      return restJavaMethod == null ? SerializerGroup.EMPTY : restJavaMethod.serializers;<a name="line.1144"></a>
+<span class="sourceLineNo">1145</span>   }<a name="line.1145"></a>
+<span class="sourceLineNo">1146</span><a name="line.1146"></a>
+<span class="sourceLineNo">1147</span>   /**<a name="line.1147"></a>
+<span class="sourceLineNo">1148</span>    * Returns the parsers associated with this request.<a name="line.1148"></a>
+<span class="sourceLineNo">1149</span>    *<a name="line.1149"></a>
+<span class="sourceLineNo">1150</span>    * &lt;ul class='seealso'&gt;<a name="line.1150"></a>
+<span class="sourceLineNo">1151</span>    *    &lt;li class='link'&gt;{@doc juneau-rest-server.Parsers}<a name="line.1151"></a>
+<span class="sourceLineNo">1152</span>    * &lt;/ul&gt;<a name="line.1152"></a>
+<span class="sourceLineNo">1153</span>    *<a name="line.1153"></a>
+<span class="sourceLineNo">1154</span>    * @return The parsers associated with this request.<a name="line.1154"></a>
+<span class="sourceLineNo">1155</span>    */<a name="line.1155"></a>
+<span class="sourceLineNo">1156</span>   public ParserGroup getParsers() {<a name="line.1156"></a>
+<span class="sourceLineNo">1157</span>      return restJavaMethod == null ? ParserGroup.EMPTY : restJavaMethod.parsers;<a name="line.1157"></a>
+<span class="sourceLineNo">1158</span>   }<a name="line.1158"></a>
+<span class="sourceLineNo">1159</span><a name="line.1159"></a>
+<span class="sourceLineNo">1160</span>   /**<a name="line.1160"></a>
+<span class="sourceLineNo">1161</span>    * Returns the part serializer associated with this request.<a name="line.1161"></a>
+<span class="sourceLineNo">1162</span>    *<a name="line.1162"></a>
+<span class="sourceLineNo">1163</span>    * @return The part serializer associated with this request.<a name="line.1163"></a>
+<span class="sourceLineNo">1164</span>    */<a name="line.1164"></a>
+<span class="sourceLineNo">1165</span>   public HttpPartParser getPartParser() {<a name="line.1165"></a>
+<span class="sourceLineNo">1166</span>      return restJavaMethod == null ? OpenApiParser.DEFAULT : restJavaMethod.partParser;<a name="line.1166"></a>
+<span class="sourceLineNo">1167</span>   }<a name="line.1167"></a>
+<span class="sourceLineNo">1168</span><a name="line.1168"></a>
+<span class="sourceLineNo">1169</span>   /**<a name="line.1169"></a>
+<span class="sourceLineNo">1170</span>    * Returns the part serializer associated with this request.<a name="line.1170"></a>
+<span class="sourceLineNo">1171</span>    *<a name="line.1171"></a>
+<span class="sourceLineNo">1172</span>    * @return The part serializer associated with this request.<a name="line.1172"></a>
+<span class="sourceLineNo">1173</span>    */<a name="line.1173"></a>
+<span class="sourceLineNo">1174</span>   public HttpPartSerializer getPartSerializer() {<a name="line.1174"></a>
+<span class="sourceLineNo">1175</span>      return restJavaMethod == null ? OpenApiSerializer.DEFAULT : restJavaMethod.partSerializer;<a name="line.1175"></a>
+<span class="sourceLineNo">1176</span>   }<a name="line.1176"></a>
+<span class="sourceLineNo">1177</span><a name="line.1177"></a>
+<span class="sourceLineNo">1178</span>   /**<a name="line.1178"></a>
+<span class="sourceLineNo">1179</span>    * Returns the method of this request.<a name="line.1179"></a>
+<span class="sourceLineNo">1180</span>    *<a name="line.1180"></a>
+<span class="sourceLineNo">1181</span>    * &lt;p&gt;<a name="line.1181"></a>
+<span class="sourceLineNo">1182</span>    * If &lt;c&gt;allowHeaderParams&lt;/c&gt; init parameter is &lt;jk&gt;true&lt;/jk&gt;, then first looks for<a name="line.1182"></a>
+<span class="sourceLineNo">1183</span>    * &lt;c&gt;&amp;amp;method=xxx&lt;/c&gt; in the URL query string.<a name="line.1183"></a>
+<span class="sourceLineNo">1184</span>    */<a name="line.1184"></a>
+<span class="sourceLineNo">1185</span>   @Override /* ServletRequest */<a name="line.1185"></a>
+<span class="sourceLineNo">1186</span>   public String getMethod() {<a name="line.1186"></a>
+<span class="sourceLineNo">1187</span>      return method;<a name="line.1187"></a>
+<span class="sourceLineNo">1188</span>   }<a name="line.1188"></a>
+<span class="sourceLineNo">1189</span><a name="line.1189"></a>
+<span class="sourceLineNo">1190</span>   /**<a name="line.1190"></a>
+<span class="sourceLineNo">1191</span>    * Returns the HTTP 1.1 method name of the request as an enum.<a name="line.1191"></a>
+<span class="sourceLineNo">1192</span>    *<a name="line.1192"></a>
+<span class="sourceLineNo">1193</span>    * &lt;p&gt;<a name="line.1193"></a>
+<span class="sourceLineNo">1194</span>    * Note that non-RFC2616 method names resolve as {@link HttpMethod#OTHER}.<a name="line.1194"></a>
+<span class="sourceLineNo">1195</span>    *<a name="line.1195"></a>
+<span class="sourceLineNo">1196</span>    * @return The HTTP method.<a name="line.1196"></a>
+<span class="sourceLineNo">1197</span>    */<a name="line.1197"></a>
+<span class="sourceLineNo">1198</span>   public HttpMethod getHttpMethod() {<a name="line.1198"></a>
+<span class="sourceLineNo">1199</span>      return HttpMethod.forString(method);<a name="line.1199"></a>
+<span class="sourceLineNo">1200</span>   }<a name="line.1200"></a>
+<span class="sourceLineNo">1201</span><a name="line.1201"></a>
+<span class="sourceLineNo">1202</span>   @Override /* ServletRequest */<a name="line.1202"></a>
+<span class="sourceLineNo">1203</span>   public int getContentLength() {<a name="line.1203"></a>
+<span class="sourceLineNo">1204</span>      return getBody().getContentLength();<a name="line.1204"></a>
+<span class="sourceLineNo">1205</span>   }<a name="line.1205"></a>
+<span class="sourceLineNo">1206</span><a name="line.1206"></a>
+<span class="sourceLineNo">1207</span>   int getRawContentLength() {<a name="line.1207"></a>
+<span class="sourceLineNo">1208</span>      return super.getContentLength();<a name="line.1208"></a>
+<span class="sourceLineNo">1209</span>   }<a name="line.1209"></a>
+<span class="sourceLineNo">1210</span><a name="line.1210"></a>
+<span class="sourceLineNo">1211</span>   /**<a name="line.1211"></a>
+<span class="sourceLineNo">1212</span>    * Returns &lt;jk&gt;true&lt;/jk&gt; if &lt;c&gt;&amp;amp;plainText=true&lt;/c&gt; was specified as a URL parameter.<a name="line.1212"></a>
+<span class="sourceLineNo">1213</span>    *<a name="line.1213"></a>
+<span class="sourceLineNo">1214</span>    * &lt;p&gt;<a name="line.1214"></a>
+<span class="sourceLineNo">1215</span>    * This indicates that the &lt;c&gt;Content-Type&lt;/c&gt; of the output should always be set to &lt;js&gt;"text/plain"&lt;/js&gt;<a name="line.1215"></a>
+<span class="sourceLineNo">1216</span>    * to make it easy to render in a browser.<a name="line.1216"></a>
+<span class="sourceLineNo">1217</span>    *<a name="line.1217"></a>
+<span class="sourceLineNo">1218</span>    * &lt;p&gt;<a name="line.1218"></a>
+<span class="sourceLineNo">1219</span>    * This feature is useful for debugging.<a name="line.1219"></a>
+<span class="sourceLineNo">1220</span>    *<a name="line.1220"></a>
+<span class="sourceLineNo">1221</span>    * @return &lt;jk&gt;true&lt;/jk&gt; if {@code &amp;amp;plainText=true} was specified as a URL parameter<a name="line.1221"></a>
+<span class="sourceLineNo">1222</span>    */<a name="line.1222"></a>
+<span class="sourceLineNo">1223</span>   public boolean isPlainText() {<a name="line.1223"></a>
+<span class="sourceLineNo">1224</span>      return "true".equals(getQuery().getString("plainText", "false"));<a name="line.1224"></a>
+<span class="sourceLineNo">1225</span>   }<a name="line.1225"></a>
+<span class="sourceLineNo">1226</span><a name="line.1226"></a>
+<span class="sourceLineNo">1227</span>   /**<a name="line.1227"></a>
+<span class="sourceLineNo">1228</span>    * Returns the resource bundle for the request locale.<a name="line.1228"></a>
+<span class="sourceLineNo">1229</span>    *<a name="line.1229"></a>
+<span class="sourceLineNo">1230</span>    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.1230"></a>
+<span class="sourceLineNo">1231</span>    * &lt;p class='bcode w800'&gt;<a name="line.1231"></a>
+<span class="sourceLineNo">1232</span>    *    &lt;ja&gt;@RestMethod&lt;/ja&gt;(...)<a name="line.1232"></a>
+<span class="sourceLineNo">1233</span>    *    &lt;jk&gt;public&lt;/jk&gt; String sayHello(RestRequest req, &lt;ja&gt;@Query&lt;/ja&gt;(&lt;js&gt;"user"&lt;/js&gt;) String user) {<a name="line.1233"></a>
+<span class="sourceLineNo">1234</span>    *<a name="line.1234"></a>
+<span class="sourceLineNo">1235</span>    *       &lt;jc&gt;// Get message bundle.&lt;/jc&gt;<a name="line.1235"></a>
+<span class="sourceLineNo">1236</span>    *       MessageBundle mb = req.getMessageBundle();<a name="line.1236"></a>
+<span class="sourceLineNo">1237</span>    *<a name="line.1237"></a>
+<span class="sourceLineNo">1238</span>    *       &lt;jc&gt;// Return a localized message.&lt;/jc&gt;<a name="line.1238"></a>
+<span class="sourceLineNo">1239</span>    *       &lt;jk&gt;return&lt;/jk&gt; mb.getString(&lt;js&gt;"hello.message"&lt;/js&gt;, user);<a name="line.1239"></a>
+<span class="sourceLineNo">1240</span>    *    }<a name="line.1240"></a>
+<span class="sourceLineNo">1241</span>    * &lt;/p&gt;<a name="line.1241"></a>
+<span class="sourceLineNo">1242</span>    *<a name="line.1242"></a>
+<span class="sourceLineNo">1243</span>    * &lt;ul class='notes'&gt;<a name="line.1243"></a>
+<span class="sourceLineNo">1244</span>    *    &lt;li&gt;<a name="line.1244"></a>
+<span class="sourceLineNo">1245</span>    *       The {@link MessageBundle} object can also be passed as a parameter on the method.<a name="line.1245"></a>
+<span class="sourceLineNo">1246</span>    * &lt;/ul&gt;<a name="line.1246"></a>
+<span class="sourceLineNo">1247</span>    *<a name="line.1247"></a>
+<span class="sourceLineNo">1248</span>    * &lt;ul class='seealso'&gt;<a name="line.1248"></a>
+<span class="sourceLineNo">1249</span>    *    &lt;li class='jf'&gt;{@link org.apache.juneau.rest.RestContext#REST_messages}<a name="line.1249"></a>
+<span class="sourceLineNo">1250</span>    *    &lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestRequest#getMessage(String,Object...)}<a name="line.1250"></a>
+<span class="sourceLineNo">1251</span>    *    &lt;li class='link'&gt;{@doc juneau-rest-server.Messages}<a name="line.1251"></a>
+<span class="sourceLineNo">1252</span>    * &lt;/ul&gt;<a name="line.1252"></a>
+<span class="sourceLineNo">1253</span>    *<a name="line.1253"></a>
+<span class="sourceLineNo">1254</span>    * @return<a name="line.1254"></a>
+<span class="sourceLineNo">1255</span>    *    The resource bundle.<a name="line.1255"></a>
+<span class="sourceLineNo">1256</span>    *    &lt;br&gt;Never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.1256"></a>
+<span class="sourceLineNo">1257</span>    */<a name="line.1257"></a>
+<span class="sourceLineNo">1258</span>   public MessageBundle getMessageBundle() {<a name="line.1258"></a>
+<span class="sourceLineNo">1259</span>      return context.getMessages().getBundle(getLocale());<a name="line.1259"></a>
+<span class="sourceLineNo">1260</span>   }<a name="line.1260"></a>
+<span class="sourceLineNo">1261</span><a name="line.1261"></a>
+<span class="sourceLineNo">1262</span>   /**<a name="line.1262"></a>
+<span class="sourceLineNo">1263</span>    * Shortcut method for calling {@link MessageBundle#getString(Locale, String, Object...)} based on the request locale.<a name="line.1263"></a>
+<span class="sourceLineNo">1264</span>    *<a name="line.1264"></a>
+<span class="sourceLineNo">1265</span>    * @param key The message key.<a name="line.1265"></a>
+<span class="sourceLineNo">1266</span>    * @param args Optional {@link MessageFormat}-style arguments.<a name="line.1266"></a>
+<span class="sourceLineNo">1267</span>    * @return The localized message.<a name="line.1267"></a>
+<span class="sourceLineNo">1268</span>    */<a name="line.1268"></a>
+<span class="sourceLineNo">1269</span>   public String getMessage(String key, Object...args) {<a name="line.1269"></a>
+<span class="sourceLineNo">1270</span>      return context.getMessages().getString(getLocale(), key, args);<a name="line.1270"></a>
+<span class="sourceLineNo">1271</span>   }<a name="line.1271"></a>
+<span class="sourceLineNo">1272</span><a name="line.1272"></a>
+<span class="sourceLineNo">1273</span>   /**<a name="line.1273"></a>
+<span class="sourceLineNo">1274</span>    * Returns the resource context handling the request.<a name="line.1274"></a>
+<span class="sourceLineNo">1275</span>    *<a name="line.1275"></a>
+<span class="sourceLineNo">1276</span>    * &lt;p&gt;<a name="line.1276"></a>
+<span class="sourceLineNo">1277</span>    * Can be used to access servlet-init parameters or annotations during requests, such as in calls to<a name="line.1277"></a>
+<span class="sourceLineNo">1278</span>    * {@link RestGuard#guard(RestRequest, RestResponse)}..<a name="line.1278"></a>
+<span class="sourceLineNo">1279</span>    *<a name="line.1279"></a>
+<span class="sourceLineNo">1280</span>    * @return The resource context handling the request.<a name="line.1280"></a>
+<span class="sourceLineNo">1281</span>    */<a name="line.1281"></a>
+<span class="sourceLineNo">1282</span>   public RestContext getContext() {<a name="line.1282"></a>
+<span class="sourceLineNo">1283</span>      return context;<a name="line.1283"></a>
+<span class="sourceLineNo">1284</span>   }<a name="line.1284"></a>
+<span class="sourceLineNo">1285</span><a name="line.1285"></a>
+<span class="sourceLineNo">1286</span>   /**<a name="line.1286"></a>
+<span class="sourceLineNo">1287</span>    * Returns the java method handling the request.<a name="line.1287"></a>
+<span class="sourceLineNo">1288</span>    *<a name="line.1288"></a>
+<span class="sourceLineNo">1289</span>    * &lt;p&gt;<a name="line.1289"></a>
+<span class="sourceLineNo">1290</span>    * Can be used to access the method name or method annotations during requests, such as in calls to<a name="line.1290"></a>
+<span class="sourceLineNo">1291</span>    * {@link RestGuard#guard(RestRequest, RestResponse)}.<a name="line.1291"></a>
+<span class="sourceLineNo">1292</span>    *<a name="line.1292"></a>
+<span class="sourceLineNo">1293</span>    * &lt;ul class='notes'&gt;<a name="line.1293"></a>
+<span class="sourceLineNo">1294</span>    *    &lt;li&gt;<a name="line.1294"></a>
+<span class="sourceLineNo">1295</span>    *       This returns &lt;jk&gt;null&lt;/jk&gt; when evaluating servlet-level guards since the method has not been resolved at that<a name="line.1295"></a>
+<span class="sourceLineNo">1296</span>    *       point of execution.<a name="line.1296"></a>
+<span class="sourceLineNo">1297</span>    * &lt;/ul&gt;<a name="line.1297"></a>
+<span class="sourceLineNo">1298</span>    *<a name="line.1298"></a>
+<span class="sourceLineNo">1299</span>    * @return The Java method handling the request, or &lt;c&gt;null&lt;/c&gt; if the method has not yet been resolved.<a name="line.1299"></a>
+<span class="sourceLineNo">1300</span>    */<a name="line.1300"></a>
+<span class="sourceLineNo">1301</span>   public Method getJavaMethod() {<a name="line.1301"></a>
+<span class="sourceLineNo">1302</span>      return javaMethod;<a name="line.1302"></a>
+<span class="sourceLineNo">1303</span>   }<a name="line.1303"></a>
+<span class="sourceLineNo">1304</span><a name="line.1304"></a>
+<span class="sourceLineNo">1305</span>   /**<a name="line.1305"></a>
+<span class="sourceLineNo">1306</span>    * Returns the {@link BeanSession} associated with this request.<a name="line.1306"></a>
+<span class="sourceLineNo">1307</span>    *<a name="line.1307"></a>
+<span class="sourceLineNo">1308</span>    * @return The request bean session.<a name="line.1308"></a>
+<span class="sourceLineNo">1309</span>    */<a name="line.1309"></a>
+<span class="sourceLineNo">1310</span>   public BeanSession getBeanSession() {<a name="line.1310"></a>
+<span class="sourceLineNo">1311</span>      return beanSession;<a name="line.1311"></a>
+<span class="sourceLineNo">1312</span>   }<a name="line.1312"></a>
+<span class="sourceLineNo">1313</span><a name="line.1313"></a>
+<span class="sourceLineNo">1314</span>   /**<a name="line.1314"></a>
+<span class="sourceLineNo">1315</span>    * Returns &lt;jk&gt;true&lt;/jk&gt; if debug mode is enabled.<a name="line.1315"></a>
+<span class="sourceLineNo">1316</span>    *<a name="line.1316"></a>
+<span class="sourceLineNo">1317</span>    * Debug mode is enabled by simply adding &lt;js&gt;"?debug=true"&lt;/js&gt; to the query string or adding a &lt;c&gt;Debug: true&lt;/c&gt; header on the request.<a name="line.1317"></a>
+<span class="sourceLineNo">1318</span>    *<a name="line.1318"></a>
+<span class="sourceLineNo">1319</span>    * @return &lt;jk&gt;true&lt;/jk&gt; if debug mode is enabled.<a name="line.1319"></a>
+<span class="sourceLineNo">1320</span>    */<a name="line.1320"></a>
+<span class="sourceLineNo">1321</span>   public boolean isDebug() {<a name="line.1321"></a>
+<span class="sourceLineNo">1322</span>      Boolean b = ObjectUtils.castOrNull(getAttribute("Debug"), Boolean.class);<a name="line.1322"></a>
+<span class="sourceLineNo">1323</span>      if (b != null)<a name="line.1323"></a>
+<span class="sourceLineNo">1324</span>         return b;<a name="line.1324"></a>
+<span class="sourceLineNo">1325</span>      Enablement e = context.getDebug();<a name="line.1325"></a>
+<span class="sourceLineNo">1326</span>      if (e == TRUE)<a name="line.1326"></a>
+<span class="sourceLineNo">1327</span>         return true;<a name="line.1327"></a>
+<span class="sourceLineNo">1328</span>      if (e == FALSE)<a name="line.1328"></a>
+<span class="sourceLineNo">1329</span>         return false;<a name="line.1329"></a>
+<span class="sourceLineNo">1330</span>      return "true".equalsIgnoreCase(getHeader("X-Debug"));<a name="line.1330"></a>
+<span class="sourceLineNo">1331</span>   }<a name="line.1331"></a>
+<span class="sourceLineNo">1332</span><a name="line.1332"></a>
+<span class="sourceLineNo">1333</span>   /**<a name="line.1333"></a>
+<span class="sourceLineNo">1334</span>    * Sets the &lt;js&gt;"Exception"&lt;/js&gt; attribute to the specified throwable.<a name="line.1334"></a>
+<span class="sourceLineNo">1335</span>    *<a name="line.1335"></a>
+<span class="sourceLineNo">1336</span>    * &lt;p&gt;<a name="line.1336"></a>
+<span class="sourceLineNo">1337</span>    * This exception is used by {@link BasicRestCallLogger} for logging purposes.<a name="line.1337"></a>
+<span class="sourceLineNo">1338</span>    *<a name="line.1338"></a>
+<span class="sourceLineNo">1339</span>    * @param t The attribute value.<a name="line.1339"></a>
+<span class="sourceLineNo">1340</span>    * @return This object (for method chaining).<a name="line.1340"></a>
+<span class="sourceLineNo">1341</span>    */<a name="line.1341"></a>
+<span class="sourceLineNo">1342</span>   public RestRequest setException(Throwable t) {<a name="line.1342"></a>
+<span class="sourceLineNo">1343</span>      setAttribute("Exception", t);<a name="line.1343"></a>
+<span class="sourceLineNo">1344</span>      return this;<a name="line.1344"></a>
+<span class="sourceLineNo">1345</span>   }<a name="line.1345"></a>
+<span class="sourceLineNo">1346</span><a name="line.1346"></a>
+<span class="sourceLineNo">1347</span>   /**<a name="line.1347"></a>
+<span class="sourceLineNo">1348</span>    * Sets the &lt;js&gt;"NoTrace"&lt;/js&gt; attribute to the specified boolean.<a name="line.1348"></a>
+<span class="sourceLineNo">1349</span>    *<a name="line.1349"></a>
+<span class="sourceLineNo">1350</span>    * &lt;p&gt;<a name="line.1350"></a>
+<span class="sourceLineNo">1351</span>    * This flag is used by {@link BasicRestCallLogger} and tells it not to log the current request.<a name="line.1351"></a>
+<span class="sourceLineNo">1352</span>    *<a name="line.1352"></a>
+<span class="sourceLineNo">1353</span>    * @param b The attribute value.<a name="line.1353"></a>
+<span class="sourceLineNo">1354</span>    * @return This object (for method chaining).<a name="line.1354"></a>
+<span class="sourceLineNo">1355</span>    */<a name="line.1355"></a>
+<span class="sourceLineNo">1356</span>   public RestRequest setNoTrace(Boolean b) {<a name="line.1356"></a>
+<span class="sourceLineNo">1357</span>      setAttribute("NoTrace", b);<a name="line.1357"></a>
+<span class="sourceLineNo">1358</span>      return this;<a name="line.1358"></a>
+<span class="sourceLineNo">1359</span>   }<a name="line.1359"></a>
+<span class="sourceLineNo">1360</span><a name="line.1360"></a>
+<span class="sourceLineNo">1361</span>   /**<a name="line.1361"></a>
+<span class="sourceLineNo">1362</span>    * Shortcut for calling &lt;c&gt;setNoTrace(&lt;jk&gt;true&lt;/jk&gt;)&lt;/c&gt;.<a name="line.1362"></a>
+<span class="sourceLineNo">1363</span>    *<a name="line.1363"></a>
+<span class="sourceLineNo">1364</span>    * @return This object (for method chaining).<a name="line.1364"></a>
+<span class="sourceLineNo">1365</span>    */<a name="line.1365"></a>
+<span class="sourceLineNo">1366</span>   public RestRequest setNoTrace() {<a name="line.1366"></a>
+<span class="sourceLineNo">1367</span>      return setNoTrace(true);<a name="line.1367"></a>
+<span class="sourceLineNo">1368</span>   }<a name="line.1368"></a>
+<span class="sourceLineNo">1369</span><a name="line.1369"></a>
+<span class="sourceLineNo">1370</span>   /**<a name="line.1370"></a>
+<span class="sourceLineNo">1371</span>    * Sets the &lt;js&gt;"Debug"&lt;/js&gt; attribute to the specified boolean.<a name="line.1371"></a>
+<span class="sourceLineNo">1372</span>    *<a name="line.1372"></a>
+<span class="sourceLineNo">1373</span>    * &lt;p&gt;<a name="line.1373"></a>
+<span class="sourceLineNo">1374</span>    * This flag is used by {@link BasicRestCallLogger} to help determine how a request should be logged.<a name="line.1374"></a>
+<span class="sourceLineNo">1375</span>    *<a name="line.1375"></a>
+<span class="sourceLineNo">1376</span>    * @param b The attribute value.<a name="line.1376"></a>
+<span class="sourceLineNo">1377</span>    * @return This object (for method chaining).<a name="line.1377"></a>
+<span class="sourceLineNo">1378</span>    * @throws IOException If body could not be cached.<a name="line.1378"></a>
+<span class="sourceLineNo">1379</span>    */<a name="line.1379"></a>
+<span class="sourceLineNo">1380</span>   public RestRequest setDebug(Boolean b) throws IOException {<a name="line.1380"></a>
+<span class="sourceLineNo">1381</span>      setAttribute("Debug", b);<a name="line.1381"></a>
+<span class="sourceLineNo">1382</span>      if (b)<a name="line.1382"></a>
+<span class="sourceLineNo">1383</span>         inner = CachingHttpServletRequest.wrap(inner);<a name="line.1383"></a>
+<span class="sourceLineNo">1384</span>      return this;<a name="line.1384"></a>
+<span class="sourceLineNo">1385</span>   }<a name="line.1385"></a>
+<span class="sourceLineNo">1386</span><a name="line.1386"></a>
+<span class="sourceLineNo">1387</span>   /**<a name="line.1387"></a>
+<span class="sourceLineNo">1388</span>    * Shortcut for calling &lt;c&gt;setDebug(&lt;jk&gt;true&lt;/jk&gt;)&lt;/c&gt;.<a name="line.1388"></a>
+<span class="sourceLineNo">1389</span>    *<a name="line.1389"></a>
+<span class="sourceLineNo">1390</span>    * @return This object (for method chaining).<a name="line.1390"></a>
+<span class="sourceLineNo">1391</span>    * @throws IOException If body could not be cached.<a name="line.1391"></a>
+<span class="sourceLineNo">1392</span>    */<a name="line.1392"></a>
+<span class="sourceLineNo">1393</span>   public RestRequest setDebug() throws IOException {<a name="line.1393"></a>
+<span class="sourceLineNo">1394</span>      return setDebug(true);<a name="line.1394"></a>
+<span class="sourceLineNo">1395</span>   }<a name="line.1395"></a>
+<span class="sourceLineNo">1396</span><a name="line.1396"></a>
+<span class="sourceLineNo">1397</span>   /**<a name="line.1397"></a>
+<span class="sourceLineNo">1398</span>    * Request-level variable resolver session.<a name="line.1398"></a>
+<span class="sourceLineNo">1399</span>    *<a name="line.1399"></a>
+<span class="sourceLineNo">1400</span>    * &lt;p&gt;<a name="line.1400"></a>
+<span class="sourceLineNo">1401</span>    * Used to resolve SVL variables in text.<a name="line.1401"></a>
+<span class="sourceLineNo">1402</span>    *<a name="line.1402"></a>
+<span class="sourceLineNo">1403</span>    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.1403"></a>
+<span class="sourceLineNo">1404</span>    * &lt;p class='bcode w800'&gt;<a name="line.1404"></a>
+<span class="sourceLineNo">1405</span>    *    &lt;ja&gt;@RestMethod&lt;/ja&gt;(...)<a name="line.1405"></a>
+<span class="sourceLineNo">1406</span>    *    &lt;jk&gt;public&lt;/jk&gt; String sayHello(RestRequest req) {<a name="line.1406"></a>
+<span class="sourceLineNo">1407</span>    *<a name="line.1407"></a>
+<span class="sourceLineNo">1408</span>    *       &lt;jc&gt;// Get var resolver session.&lt;/jc&gt;<a name="line.1408"></a>
+<span class="sourceLineNo">1409</span>    *       VarResolverSession session = getVarResolverSession();<a name="line.1409"></a>
+<span class="sourceLineNo">1410</span>    *<a name="line.1410"></a>
+<span class="sourceLineNo">1411</span>    *       &lt;jc&gt;// Use it to construct a customized message from a query parameter.&lt;/jc&gt;<a name="line.1411"></a>
+<span class="sourceLineNo">1412</span>    *       &lt;jk&gt;return&lt;/jk&gt; session.resolve(&lt;js&gt;"Hello $RQ{user}!"&lt;/js&gt;);<a name="line.1412"></a>
+<span class="sourceLineNo">1413</span>    *    }<a name="line.1413"></a>
+<span class="sourceLineNo">1414</span>    * &lt;/p&gt;<a name="line.1414"></a>
+<span class="sourceLineNo">1415</span>    *<a name="line.1415"></a>
+<span class="sourceLineNo">1416</span>    * &lt;ul class='notes'&gt;<a name="line.1416"></a>
+<span class="sourceLineNo">1417</span>    *    &lt;li&gt;<a name="line.1417"></a>
+<span class="sourceLineNo">1418</span>    *       The {@link VarResolverSession} object can also be passed as a parameter on the method.<a name="line.1418"></a>
+<span class="sourceLineNo">1419</span>    * &lt;/ul&gt;<a name="line.1419"></a>
+<span class="sourceLineNo">1420</span>    *<a name="line.1420"></a>
+<span class="sourceLineNo">1421</span>    * &lt;ul class='seealso'&gt;<a name="line.1421"></a>
+<span class="sourceLineNo">1422</span>    *    &lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestContext#getVarResolver()}<a name="line.1422"></a>
+<span class="sourceLineNo">1423</span>    *    &lt;li class='link'&gt;{@doc juneau-rest-server.SvlVariables}<a name="line.1423"></a>
+<span class="sourceLineNo">1424</span>    * &lt;/ul&gt;<a name="line.1424"></a>
+<span class="sourceLineNo">1425</span>    *<a name="line.1425"></a>
+<span class="sourceLineNo">1426</span>    * @return The variable resolver for this request.<a name="line.1426"></a>
+<span class="sourceLineNo">1427</span>    */<a name="line.1427"></a>
+<span class="sourceLineNo">1428</span>   public VarResolverSession getVarResolverSession() {<a name="line.1428"></a>
+<span class="sourceLineNo">1429</span>      if (varSession == null)<a name="line.1429"></a>
+<span class="sourceLineNo">1430</span>         varSession = context<a name="line.1430"></a>
+<span class="sourceLineNo">1431</span>            .getVarResolver()<a name="line.1431"></a>
+<span class="sourceLineNo">1432</span>            .createSession(context.getCallHandler().getSessionObjects(this, context.getResponse()))<a name="line.1432"></a>
+<span class="sourceLineNo">1433</span>            .sessionObject("req", this)<a name="line.1433"></a>
+<span class="sourceLineNo">1434</span>            .sessionObject("res", res);<a name="line.1434"></a>
+<span class="sourceLineNo">1435</span>      return varSession;<a name="line.1435"></a>
+<span class="sourceLineNo">1436</span>   }<a name="line.1436"></a>
+<span class="sourceLineNo">1437</span><a name="line.1437"></a>
+<span class="sourceLineNo">1438</span>   /**<a name="line.1438"></a>
+<span class="sourceLineNo">1439</span>    * Returns an instance of a {@link ReaderResource} that represents the contents of a resource text file from the<a name="line.1439"></a>
+<span class="sourceLineNo">1440</span>    * classpath.<a name="line.1440"></a>
+<span class="sourceLineNo">1441</span>    *<a name="line.1441"></a>
+<span class="sourceLineNo">1442</span>    * &lt;p&gt;<a name="line.1442"></a>
+<span class="sourceLineNo">1443</span>    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.1443"></a>
+<span class="sourceLineNo">1444</span>    * &lt;p class='bcode w800'&gt;<a name="line.1444"></a>
+<span class="sourceLineNo">1445</span>    *    &lt;jc&gt;// A rest method that (unsafely!) returns the contents of a localized file &lt;/jc&gt;<a name="line.1445"></a>
+<span class="sourceLineNo">1446</span>    * &lt;jc&gt;// from the classpath and resolves any SVL variables embedded in it.&lt;/jc&gt;<a name="line.1446"></a>
+<span class="sourceLineNo">1447</span>    *    &lt;ja&gt;@RestMethod&lt;/ja&gt;(...)<a name="line.1447"></a>
+<span class="sourceLineNo">1448</span>    *    &lt;jk&gt;public&lt;/jk&gt; String myMethod(RestRequest req, &lt;ja&gt;@Query&lt;/ja&gt;(&lt;js&gt;"file"&lt;/js&gt;) String file) {<a name="line.1448"></a>
+<span class="sourceLineNo">1449</span>    *       &lt;jk&gt;return&lt;/jk&gt; req.getClasspathResourceAsString(file, &lt;jk&gt;true&lt;/jk&gt;);<a name="line.1449"></a>
+<span class="sourceLineNo">1450</span>    *    }<a name="line.1450"></a>
+<span class="sourceLineNo">1451</span>    * &lt;/p&gt;<a name="line.1451"></a>
+<span class="sourceLineNo">1452</span>    *<a name="line.1452"></a>
+<span class="sourceLineNo">1453</span>    * &lt;ul class='seealso'&gt;<a name="line.1453"></a>
+<span class="sourceLineNo">1454</span>    *    &lt;li class='jf'&gt;{@link org.apache.juneau.rest.RestContext#REST_classpathResourceFinder}<a name="line.1454"></a>
+<span class="sourceLineNo">1455</span>    *    &lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String, boolean)}<a name="line.1455"></a>
+<span class="sourceLineNo">1456</span>    *    &lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String)}<a name="line.1456"></a>
+<span class="sourceLineNo">1457</span>    * &lt;/ul&gt;<a name="line.1457"></a>
+<span class="sourceLineNo">1458</span>    *<a name="line.1458"></a>
+<span class="sourceLineNo">1459</span>    * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.<a name="line.1459"></a>
+<span class="sourceLineNo">1460</span>    * @param resolveVars<a name="line.1460"></a>
+<span class="sourceLineNo">1461</span>    *    If &lt;jk&gt;true&lt;/jk&gt;, any SVL variables will be<a name="line.1461"></a>
+<span class="sourceLineNo">1462</span>    *    resolved by the variable resolver returned by {@link #getVarResolverSession()}.<a name="line.1462"></a>
+<span class="sourceLineNo">1463</span>    *    &lt;br&gt;See {@link RestContext#getVarResolver()} for the list of supported variables.<a name="line.1463"></a>
+<span class="sourceLineNo">1464</span>    * @param mediaType The value to set as the &lt;js&gt;"Content-Type"&lt;/js&gt; header for this object.<a name="line.1464"></a>
+<span class="sourceLineNo">1465</span>    * @param cached If &lt;jk&gt;true&lt;/jk&gt;, the resource will be read into a byte array for fast serialization.<a name="line.1465"></a>
+<span class="sourceLineNo">1466</span>    * @return A new reader resource, or &lt;jk&gt;null&lt;/jk&gt; if resource could not be found.<a name="line.1466"></a>
+<span class="sourceLineNo">1467</span>    * @throws IOException Thrown by underlying stream.<a name="line.1467"></a>
+<span class="sourceLineNo">1468</span>    */<a name="line.1468"></a>
+<span class="sourceLineNo">1469</span>   public ReaderResource getClasspathReaderResource(String name, boolean resolveVars, MediaType mediaType, boolean cached) throws IOException {<a name="line.1469"></a>
+<span class="sourceLineNo">1470</span>      String s = context.getClasspathResourceAsString(name, getLocale());<a name="line.1470"></a>
+<span class="sourceLineNo">1471</span>      if (s == null)<a name="line.1471"></a>
+<span class="sourceLineNo">1472</span>         return null;<a name="line.1472"></a>
+<span class="sourceLineNo">1473</span>      ResolvingReaderResource.Builder b = ResolvingReaderResource.create().mediaType(mediaType).contents(s);<a name="line.1473"></a>
+<span class="sourceLineNo">1474</span>      if (resolveVars)<a name="line.1474"></a>
+<span class="sourceLineNo">1475</span>         b.varResolver(getVarResolverSession());<a name="line.1475"></a>
+<span class="sourceLineNo">1476</span>      if (cached)<a name="line.1476"></a>
+<span class="sourceLineNo">1477</span>         b.cached();<a name="line.1477"></a>
+<span class="sourceLineNo">1478</span>      return b.build();<a name="line.1478"></a>
+<span class="sourceLineNo">1479</span>   }<a name="line.1479"></a>
+<span class="sourceLineNo">1480</span><a name="line.1480"></a>
+<span class="sourceLineNo">1481</span>   /**<a name="line.1481"></a>
+<span class="sourceLineNo">1482</span>    * Same as {@link #getClasspathReaderResource(String, boolean, MediaType, boolean)} except uses the resource mime-type map<a name="line.1482"></a>
+<span class="sourceLineNo">1483</span>    * constructed using {@link RestContextBuilder#mimeTypes(String...)} to determine the media type.<a name="line.1483"></a>
+<span class="sourceLineNo">1484</span>    *<a name="line.1484"></a>
+<span class="sourceLineNo">1485</span>    * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.<a name="line.1485"></a>
+<span class="sourceLineNo">1486</span>    * @param resolveVars<a name="line.1486"></a>
+<span class="sourceLineNo">1487</span>    *    If &lt;jk&gt;true&lt;/jk&gt;, any SVL variables will be<a name="line.1487"></a>
+<span class="sourceLineNo">1488</span>    *    resolved by the variable resolver returned by {@link #getVarResolverSession()}.<a name="line.1488"></a>
+<span class="sourceLineNo">1489</span>    *    &lt;br&gt;See {@link RestContext#getVarResolver()} for the list of supported variables.<a name="line.1489"></a>
+<span class="sourceLineNo">1490</span>    * @return A new reader resource, or &lt;jk&gt;null&lt;/jk&gt; if resource could not be found.<a name="line.1490"></a>
+<span class="sourceLineNo">1491</span>    * @throws IOException Thrown by underlying stream.<a name="line.1491"></a>
+<span class="sourceLineNo">1492</span>    */<a name="line.1492"></a>
+<span class="sourceLineNo">1493</span>   public ReaderResource getClasspathReaderResource(String name, boolean resolveVars) throws IOException {<a name="line.1493"></a>
+<span class="sourceLineNo">1494</span>      return getClasspathReaderResource(name, resolveVars, MediaType.forString(context.getMediaTypeForName(name)), false);<a name="line.1494"></a>
+<span class="sourceLineNo">1495</span>   }<a name="line.1495"></a>
+<span class="sourceLineNo">1496</span><a name="line.1496"></a>
+<span class="sourceLineNo">1497</span>   /**<a name="line.1497"></a>
+<span class="sourceLineNo">1498</span>    * Same as {@link #getClasspathReaderResource(String, boolean)} with &lt;code&gt;resolveVars == &lt;jk&gt;false&lt;/jk&gt;&lt;/code&gt;<a name="line.1498"></a>
+<span class="sourceLineNo">1499</span>    *<a name="line.1499"></a>
+<span class="sourceLineNo">1500</span>    * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.<a name="line.1500"></a>
+<span class="sourceLineNo">1501</span>    * @return A new reader resource, or &lt;jk&gt;null&lt;/jk&gt; if resource could not be found.<a name="line.1501"></a>
+<span class="sourceLineNo">1502</span>    * @throws IOException Thrown by underlying stream.<a name="line.1502"></a>
+<span class="sourceLineNo">1503</span>    */<a name="line.1503"></a>
+<span class="sourceLineNo">1504</span>   public ReaderResource getClasspathReaderResource(String name) throws IOException {<a name="line.1504"></a>
+<span class="sourceLineNo">1505</span>      return getClasspathReaderResource(name, false, MediaType.forString(context.getMediaTypeForName(name)), false);<a name="line.1505"></a>
+<span class="sourceLineNo">1506</span>   }<a name="line.1506"></a>
+<span class="sourceLineNo">1507</span><a name="line.1507"></a>
+<span class="sourceLineNo">1508</span>   /**<a name="line.1508"></a>
+<span class="sourceLineNo">1509</span>    * Returns an instance of a {@link StreamResource} that represents the contents of a resource binary file from the<a name="line.1509"></a>
+<span class="sourceLineNo">1510</span>    * classpath.<a name="line.1510"></a>
+<span class="sourceLineNo">1511</span>    *<a name="line.1511"></a>
+<span class="sourceLineNo">1512</span>    * &lt;ul class='seealso'&gt;<a name="line.1512"></a>
+<span class="sourceLineNo">1513</span>    *    &lt;li class='jf'&gt;{@link org.apache.juneau.rest.RestContext#REST_classpathResourceFinder}<a name="line.1513"></a>
+<span class="sourceLineNo">1514</span>    *    &lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestRequest#getClasspathStreamResource(String)}<a name="line.1514"></a>
+<span class="sourceLineNo">1515</span>    * &lt;/ul&gt;<a name="line.1515"></a>
+<span class="sourceLineNo">1516</span>    *<a name="line.1516"></a>
+<span class="sourceLineNo">1517</span>    * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.<a name="line.1517"></a>
+<span class="sourceLineNo">1518</span>    * @param mediaType The value to set as the &lt;js&gt;"Content-Type"&lt;/js&gt; header for this object.<a name="line.1518"></a>
+<span class="sourceLineNo">1519</span>    * @param cached If &lt;jk&gt;true&lt;/jk&gt;, the resource will be read into a byte array for fast serialization.<a name="line.1519"></a>
+<span class="sourceLineNo">1520</span>    * @return A new stream resource, or &lt;jk&gt;null&lt;/jk&gt; if resource could not be found.<a name="line.1520"></a>
+<span class="sourceLineNo">1521</span>    * @throws IOException Thrown by underlying stream.<a name="line.1521"></a>
+<span class="sourceLineNo">1522</span>    */<a name="line.1522"></a>
+<span class="sourceLineNo">1523</span>   @SuppressWarnings("resource")<a name="line.1523"></a>
+<span class="sourceLineNo">1524</span>   public StreamResource getClasspathStreamResource(String name, MediaType mediaType, boolean cached) throws IOException {<a name="line.1524"></a>
+<span class="sourceLineNo">1525</span>      InputStream is = context.getClasspathResource(name, getLocale());<a name="line.1525"></a>
+<span class="sourceLineNo">1526</span>      if (is == null)<a name="line.1526"></a>
+<span class="sourceLineNo">1527</span>         return null;<a name="line.1527"></a>
+<span class="sourceLineNo">1528</span>      StreamResource.Builder b = StreamResource.create().mediaType(mediaType).contents(is);<a name="line.1528"></a>
+<span class="sourceLineNo">1529</span>      if (cached)<a name="line.1529"></a>
+<span class="sourceLineNo">1530</span>         b.cached();<a name="line.1530"></a>
+<span class="sourceLineNo">1531</span>      return b.build();<a name="line.1531"></a>
+<span class="sourceLineNo">1532</span>   }<a name="line.1532"></a>
+<span class="sourceLineNo">1533</span><a name="line.1533"></a>
+<span class="sourceLineNo">1534</span>   /**<a name="line.1534"></a>
+<span class="sourceLineNo">1535</span>    * Same as {@link #getClasspathStreamResource(String, MediaType, boolean)} except uses the resource mime-type map<a name="line.1535"></a>
+<span class="sourceLineNo">1536</span>    * constructed using {@link RestContextBuilder#mimeTypes(String...)} to determine the media type.<a name="line.1536"></a>
+<span class="sourceLineNo">1537</span>    *<a name="line.1537"></a>
+<span class="sourceLineNo">1538</span>    * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.<a name="line.1538"></a>
+<span class="sourceLineNo">1539</span>    * @return A new stream resource, or &lt;jk&gt;null&lt;/jk&gt; if resource could not be found.<a name="line.1539"></a>
+<span class="sourceLineNo">1540</span>    * @throws IOException Thrown by underlying stream.<a name="line.1540"></a>
+<span class="sourceLineNo">1541</span>    */<a name="line.1541"></a>
+<span class="sourceLineNo">1542</span>   public StreamResource getClasspathStreamResource(String name) throws IOException {<a name="line.1542"></a>
+<span class="sourceLineNo">1543</span>      return getClasspathStreamResource(name, MediaType.forString(context.getMediaTypeForName(name)), false);<a name="line.1543"></a>
+<span class="sourceLineNo">1544</span>   }<a name="line.1544"></a>
+<span class="sourceLineNo">1545</span><a name="line.1545"></a>
+<span class="sourceLineNo">1546</span>   /**<a name="line.1546"></a>
+<span class="sourceLineNo">1547</span>    * Config file associated with the resource.<a name="line.1547"></a>
+<span class="sourceLineNo">1548</span>    *<a name="line.1548"></a>
+<span class="sourceLineNo">1549</span>    * &lt;p&gt;<a name="line.1549"></a>
+<span class="sourceLineNo">1550</span>    * Returns a config file with session-level variable resolution.<a name="line.1550"></a>
+<span class="sourceLineNo">1551</span>    *<a name="line.1551"></a>
+<span class="sourceLineNo">1552</span>    * The config file is identified via one of the following:<a name="line.1552"></a>
+<span class="sourceLineNo">1553</span>    * &lt;ul class='javatree'&gt;<a name="line.1553"></a>
+<span class="sourceLineNo">1554</span>    *    &lt;li class='ja'&gt;{@link RestResource#config()}<a name="line.1554"></a>
+<span class="sourceLineNo">1555</span>    *    &lt;li class='jm'&gt;{@link RestContextBuilder#config(Config)}<a name="line.1555"></a>
+<span class="sourceLineNo">1556</span>    * &lt;/ul&gt;<a name="line.1556"></a>
+<span class="sourceLineNo">1557</span>    *<a name="line.1557"></a>
+<span class="sourceLineNo">1558</span>    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.1558"></a>
+<span class="sourceLineNo">1559</span>    * &lt;p class='bcode w800'&gt;<a name="line.1559"></a>
+<span class="sourceLineNo">1560</span>    *    &lt;ja&gt;@RestMethod&lt;/ja&gt;(...)<a name="line.1560"></a>
+<span class="sourceLineNo">1561</span>    *    &lt;jk&gt;public void&lt;/jk&gt; doGet(RestRequest req) {<a name="line.1561"></a>
+<span class="sourceLineNo">1562</span>    *<a name="line.1562"></a>
+<span class="sourceLineNo">1563</span>    *       &lt;jc&gt;// Get config file.&lt;/jc&gt;<a name="line.1563"></a>
+<span class="sourceLineNo">1564</span>    *       Config cf = req.getConfig();<a name="line.1564"></a>
+<span class="sourceLineNo">1565</span>    *<a name="line.1565"></a>
+<span class="sourceLineNo">1566</span>    *       &lt;jc&gt;// Get simple values from config file.&lt;/jc&gt;<a name="line.1566"></a>
+<span class="sourceLineNo">1567</span>    *       &lt;jk&gt;int&lt;/jk&gt; timeout = cf.getInt(&lt;js&gt;"MyResource/timeout"&lt;/js&gt;, 10000);<a name="line.1567"></a>
+<span class="sourceLineNo">1568</span>    *<a name="line.1568"></a>
+<span class="sourceLineNo">1569</span>    *       &lt;jc&gt;// Get complex values from config file.&lt;/jc&gt;<a name="line.1569"></a>
+<span class="sourceLineNo">1570</span>    *       MyBean b = cf.getObject(&lt;js&gt;"MyResource/myBean"&lt;/js&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);<a name="line.1570"></a>
+<span class="sourceLineNo">1571</span>    *    }<a name="line.1571"></a>
+<span class="sourceLineNo">1572</span>    * &lt;/p&gt;<a name="line.1572"></a>
+<span class="sourceLineNo">1573</span>    *<a name="line.1573"></a>
+<span class="sourceLineNo">1574</span>    * &lt;ul class='notes'&gt;<a name="line.1574"></a>
+<span class="sourceLineNo">1575</span>    *    &lt;li&gt;<a name="line.1575"></a>
+<span class="sourceLineNo">1576</span>    *       The {@link Config} object can also be passed as a parameter on the method.<a name="line.1576"></a>
+<span class="sourceLineNo">1577</span>    * &lt;/ul&gt;<a name="line.1577"></a>
+<span class="sourceLineNo">1578</span>    *<a name="line.1578"></a>
+<span class="sourceLineNo">1579</span>    * &lt;ul class='seealso'&gt;<a name="line.1579"></a>
+<span class="sourceLineNo">1580</span>    *    &lt;li class='link'&gt;{@doc juneau-rest-server.ConfigurationFiles}<a name="line.1580"></a>
+<span class="sourceLineNo">1581</span>    * &lt;/ul&gt;<a name="line.1581"></a>
+<span class="sourceLineNo">1582</span>    *<a name="line.1582"></a>
+<span class="sourceLineNo">1583</span>    * @return<a name="line.1583"></a>
+<span class="sourceLineNo">1584</span>    *    The config file associated with the resource, or &lt;jk&gt;null&lt;/jk&gt; if resource does not have a config file<a name="line.1584"></a>
+<span class="sourceLineNo">1585</span>    *    associated with it.<a name="line.1585"></a>
+<span class="sourceLineNo">1586</span>    */<a name="line.1586"></a>
+<span class="sourceLineNo">1587</span>   public Config getConfig() {<a name="line.1587"></a>
+<span class="sourceLineNo">1588</span>      if (cf == null)<a name="line.1588"></a>
+<span class="sourceLineNo">1589</span>         cf = context.getConfig().resolving(getVarResolverSession());<a name="line.1589"></a>
+<span class="sourceLineNo">1590</span>      return cf;<a name="line.1590"></a>
+<span class="sourceLineNo">1591</span>   }<a name="line.1591"></a>
+<span class="sourceLineNo">1592</span><a name="line.1592"></a>
+<span class="sourceLineNo">1593</span>   /**<a name="line.1593"></a>
+<span class="sourceLineNo">1594</span>    * Returns the widgets used for resolving &lt;js&gt;"$W{...}"&lt;/js&gt; string variables.<a name="line.1594"></a>
+<span class="sourceLineNo">1595</span>    *<a name="line.1595"></a>
+<span class="sourceLineNo">1596</span>    * @return<a name="line.1596"></a>
+<span class="sourceLineNo">1597</span>    *    The widgets used for resolving &lt;js&gt;"$W{...}"&lt;/js&gt; string variables.<a name="line.1597"></a>
+<span class="sourceLineNo">1598</span>    *    Never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.1598"></a>
+<span class="sourceLineNo">1599</span>    *<a name="line.1599"></a>
+<span class="sourceLineNo">1600</span>    * @deprecated No replacement.<a name="line.1600"></a>
+<span class="sourceLineNo">1601</span>    */<a name="line.1601"></a>
+<span class="sourceLineNo">1602</span>   @Deprecated<a name="line.1602"></a>
+<span class="sourceLineNo">1603</span>   public Map&lt;String,Widget&gt; getWidgets() {<a name="line.1603"></a>
+<span class="sourceLineNo">1604</span>      return restJavaMethod == null ? Collections.&lt;String,Widget&gt;emptyMap() : restJavaMethod.widgets;<a name="line.1604"></a>
+<span class="sourceLineNo">1605</span>   }<a name="line.1605"></a>
+<span class="sourceLineNo">1606</span><a name="line.1606"></a>
+<span class="sourceLineNo">1607</span>   /**<a name="line.1607"></a>
+<span class="sourceLineNo">1608</span>    * Creates a proxy interface to retrieve HTTP parts of this request as a proxy bean.<a name="line.1608"></a>
+<span class="sourceLineNo">1609</span>    *<a name="line.1609"></a>
+<span class="sourceLineNo">1610</span>    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;<a name="line.1610"></a>
+<span class="sourceLineNo">1611</span>    * &lt;p class='bcode w800'&gt;<a name="line.1611"></a>
+<span class="sourceLineNo">1612</span>    *    &lt;ja&gt;@RestMethod&lt;/ja&gt;(path=&lt;js&gt;"/mypath/{p1}/{p2}/*"&lt;/js&gt;)<a name="line.1612"></a>
+<span class="sourceLineNo">1613</span>    *    &lt;jk&gt;public void&lt;/jk&gt; myMethod(@Request MyRequest rb) {...}<a name="line.1613"></a>
+<span class="sourceLineNo">1614</span>    *<a name="line.1614"></a>
+<span class="sourceLineNo">1615</span>    *    &lt;jk&gt;public interface&lt;/jk&gt; MyRequest {<a name="line.1615"></a>
+<span class="sourceLineNo">1616</span>    *<a name="line.1616"></a>
+<span class="sourceLineNo">1617</span>    *       &lt;ja&gt;@Path&lt;/ja&gt; &lt;jc&gt;// Path variable name inferred from getter.&lt;/jc&gt;<a name="line.1617"></a>
+<span class="sourceLineNo">1618</span>    *       String getP1();<a name="line.1618"></a>
+<span class="sourceLineNo">1619</span>    *<a name="line.1619"></a>
+<span class="sourceLineNo">1620</span>    *       &lt;ja&gt;@Path&lt;/ja&gt;(&lt;js&gt;"p2"&lt;/js&gt;)<a name="line.1620"></a>
+<span class="sourceLineNo">1621</span>    *       String getX();<a name="line.1621"></a>
+<span class="sourceLineNo">1622</span>    *<a name="line.1622"></a>
+<span class="sourceLineNo">1623</span>    *       &lt;ja&gt;@Path&lt;/ja&gt;(&lt;js&gt;"/*"&lt;/js&gt;)<a name="line.1623"></a>
+<span class="sourceLineNo">1624</span>    *       String getRemainder();<a name="line.1624"></a>
+<span class="sourceLineNo">1625</span>    *<a name="line.1625"></a>
+<span class="sourceLineNo">1626</span>    *       &lt;ja&gt;@Query&lt;/ja&gt;<a name="line.1626"></a>
+<span class="sourceLineNo">1627</span>    *       String getQ1();<a name="line.1627"></a>
+<span class="sourceLineNo">1628</span>    *<a name="line.1628"></a>
+<span class="sourceLineNo">1629</span>    *    &lt;jc&gt;// Schema-based query parameter:  Pipe-delimited lists of comma-delimited lists of integers.&lt;/jc&gt;<a name="line.1629"></a>
+<span class="sourceLineNo">1630</span>    *       &lt;ja&gt;@Query&lt;/ja&gt;(<a name="line.1630"></a>
+<span class="sourceLineNo">1631</span>    *          collectionFormat=&lt;js&gt;"pipes"&lt;/js&gt;<a name="line.1631"></a>
+<span class="sourceLineNo">1632</span>    *          items=&lt;ja&gt;@Items&lt;/ja&gt;(<a name="line.1632"></a>
+<span class="sourceLineNo">1633</span>    *             items=&lt;ja&gt;@SubItems&lt;/ja&gt;(<a name="line.1633"></a>
+<span class="sourceLineNo">1634</span>    *                collectionFormat=&lt;js&gt;"csv"&lt;/js&gt;<a name="line.1634"></a>
+<span class="sourceLineNo">1635</span>    *                type=&lt;js&gt;"integer"&lt;/js&gt;<a name="line.1635"></a>
+<span class="sourceLineNo">1636</span>    *             )<a name="line.1636"></a>
+<span class="sourceLineNo">1637</span>    *          )<a name="line.1637"></a>
+<span class="sourceLineNo">1638</span>    *       )<a name="line.1638"></a>
+<span class="sourceLineNo">1639</span>    *       &lt;jk&gt;int&lt;/jk&gt;[][] getQ3();<a name="line.1639"></a>
+<span class="sourceLineNo">1640</span>    *<a name="line.1640"></a>
+<span class="sourceLineNo">1641</span>    *       &lt;ja&gt;@Header&lt;/ja&gt;(&lt;js&gt;"*"&lt;/js&gt;)<a name="line.1641"></a>
+<span class="sourceLineNo">1642</span>    *       Map&amp;lt;String,Object&amp;gt; getHeaders();<a name="line.1642"></a>
+<span class="sourceLineNo">1643</span>    * &lt;/p&gt;<a name="line.1643"></a>
+<span class="sourceLineNo">1644</span>    *<a name="line.1644"></a>
+<span class="sourceLineNo">1645</span>    * @param c The request bean interface to instantiate.<a name="line.1645"></a>
+<span class="sourceLineNo">1646</span>    * @return A new request bean proxy for this REST request.<a name="line.1646"></a>
+<span class="sourceLineNo">1647</span>    */<a name="line.1647"></a>
+<span class="sourceLineNo">1648</span>   public &lt;T&gt; T getRequest(Class&lt;T&gt; c) {<a name="line.1648"></a>
+<span class="sourceLineNo">1649</span>      return getRequest(RequestBeanMeta.create(c, getContext().getPropertyStore()));<a name="line.1649"></a>
+<span class="sourceLineNo">1650</span>   }<a name="line.1650"></a>
+<span class="sourceLineNo">1651</span><a name="line.1651"></a>
+<span class="sourceLineNo">1652</span>   /**<a name="line.1652"></a>
+<span class="sourceLineNo">1653</span>    * Same as {@link #getRequest(Class)} but used on pre-instantiated {@link RequestBeanMeta} objects.<a name="line.1653"></a>
+<span class="sourceLineNo">1654</span>    *<a name="line.1654"></a>
+<span class="sourceLineNo">1655</span>    * @param rbm The metadata about the request bean interface to create.<a name="line.1655"></a>
+<span class="sourceLineNo">1656</span>    * @return A new request bean proxy for this REST request.<a name="line.1656"></a>
+<span class="sourceLineNo">1657</span>    */<a name="line.1657"></a>
+<span class="sourceLineNo">1658</span>   public &lt;T&gt; T getRequest(final RequestBeanMeta rbm) {<a name="line.1658"></a>
+<span class="sourceLineNo">1659</span>      try {<a name="line.1659"></a>
+<span class="sourceLineNo">1660</span>         Class&lt;T&gt; c = (Class&lt;T&gt;)rbm.getClassMeta().getInnerClass();<a name="line.1660"></a>
+<span class="sourceLineNo">1661</span>         final BeanMeta&lt;T&gt; bm = getBeanSession().getBeanMeta(c);<a name="line.1661"></a>
+<span class="sourceLineNo">1662</span>         return (T)Proxy.newProxyInstance(<a name="line.1662"></a>
+<span class="sourceLineNo">1663</span>            c.getClassLoader(),<a name="line.1663"></a>
+<span class="sourceLineNo">1664</span>            new Class[] { c },<a name="line.1664"></a>
+<span class="sourceLineNo">1665</span>            new InvocationHandler() {<a name="line.1665"></a>
+<span class="sourceLineNo">1666</span>               @Override /* InvocationHandler */<a name="line.1666"></a>
+<span class="sourceLineNo">1667</span>               public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {<a name="line.1667"></a>
+<span class="sourceLineNo">1668</span>                  RequestBeanPropertyMeta pm = rbm.getProperty(method.getName());<a name="line.1668"></a>
+<span class="sourceLineNo">1669</span>                  if (pm != null) {<a name="line.1669"></a>
+<span class="sourceLineNo">1670</span>                     HttpPartParser pp = pm.getParser(getPartParser());<a name="line.1670"></a>
+<span class="sourceLineNo">1671</span>                     HttpPartSchema schema = pm.getSchema();<a name="line.1671"></a>
+<span class="sourceLineNo">1672</span>                     String name = pm.getPartName();<a name="line.1672"></a>
+<span class="sourceLineNo">1673</span>                     ClassMeta&lt;?&gt; type = getContext().getClassMeta(method.getGenericReturnType());<a name="line.1673"></a>
+<span class="sourceLineNo">1674</span>                     HttpPartType pt = pm.getPartType();<a name="line.1674"></a>
+<span class="sourceLineNo">1675</span>                     if (pt == HttpPartType.BODY)<a name="line.1675"></a>
+<span class="sourceLineNo">1676</span>                        return getBody().schema(schema).asType(type);<a name="line.1676"></a>
+<span class="sourceLineNo">1677</span>                     if (pt == QUERY)<a name="line.1677"></a>
+<span class="sourceLineNo">1678</span>                        return getQuery().get(pp, schema, name, type);<a name="line.1678"></a>
+<span class="sourceLineNo">1679</span>                     if (pt == FORMDATA)<a name="line.1679"></a>
+<span class="sourceLineNo">1680</span>                        return getFormData().get(pp, schema, name, type);<a name="line.1680"></a>
+<span class="sourceLineNo">1681</span>                     if (pt == HEADER)<a name="line.1681"></a>
+<span class="sourceLineNo">1682</span>                        return getHeaders().get(pp, schema, name, type);<a name="line.1682"></a>
+<span class="sourceLineNo">1683</span>                     if (pt == PATH)<a name="line.1683"></a>
+<span class="sourceLineNo">1684</span>                        return getPathMatch().get(pp, schema, name, type);<a name="line.1684"></a>
+<span class="sourceLineNo">1685</span>                  }<a name="line.1685"></a>
+<span class="sourceLineNo">1686</span>                  return null;<a name="line.1686"></a>
+<span class="sourceLineNo">1687</span>               }<a name="line.1687"></a>
+<span class="sourceLineNo">1688</span><a name="line.1688"></a>
+<span class="sourceLineNo">1689</span>         });<a name="line.1689"></a>
+<span class="sourceLineNo">1690</span>      } catch (Exception e) {<a name="line.1690"></a>
+<span class="sourceLineNo">1691</span>         throw new RuntimeException(e);<a name="line.1691"></a>
+<span class="sourceLineNo">1692</span>      }<a name="line.1692"></a>
+<span class="sourceLineNo">1693</span>   }<a name="line.1693"></a>
+<span class="sourceLineNo">1694</span><a name="line.1694"></a>
+<span class="sourceLineNo">1695</span>   @Override /* Object */<a name="line.1695"></a>
+<span class="sourceLineNo">1696</span>   public String toString() {<a name="line.1696"></a>
+<span class="sourceLineNo">1697</span>      StringBuilder sb = new StringBuilder("\n").append(getDescription()).append("\n");<a name="line.1697"></a>
+<span class="sourceLineNo">1698</span>      sb.append("---Headers---\n");<a name="line.1698"></a>
+<span class="sourceLineNo">1699</span>      for (Enumeration&lt;String&gt; e = getHeaderNames(); e.hasMoreElements();) {<a name="line.1699"></a>
+<span class="sourceLineNo">1700</span>         String h = e.nextElement();<a name="line.1700"></a>
+<span class="sourceLineNo">1701</span>         sb.append("\t").append(h).append(": ").append(getHeader(h)).append("\n");<a name="line.1701"></a>
+<span class="sourceLineNo">1702</span>      }<a name="line.1702"></a>
+<span class="sourceLineNo">1703</span>      sb.append("---Default Servlet Headers---\n");<a name="line.1703"></a>
+<span class="sourceLineNo">1704</span>      for (Map.Entry&lt;String,Object&gt; e : context.getDefaultRequestHeaders().entrySet()) {<a name="line.1704"></a>
+<span class="sourceLineNo">1705</span>         sb.append("\t").append(e.getKey()).append(": ").append(e.getValue()).append("\n");<a name="line.1705"></a>
+<span class="sourceLineNo">1706</span>      }<a name="line.1706"></a>
+<span class="sourceLineNo">1707</span>      if (javaMethod == null) {<a name="line.1707"></a>
+<span class="sourceLineNo">1708</span>         sb.append("***init() not called yet!***\n");<a name="line.1708"></a>
+<span class="sourceLineNo">1709</span>      } else if (method.equals("PUT") || method.equals("POST")) {<a name="line.1709"></a>
+<span class="sourceLineNo">1710</span>         try {<a name="line.1710"></a>
+<span class="sourceLineNo">1711</span>            sb.append("---Body UTF-8---\n");<a name="line.1711"></a>
+<span class="sourceLineNo">1712</span>            sb.append(body.asString()).append("\n");<a name="line.1712"></a>
+<span class="sourceLineNo">1713</span>            sb.append("---Body Hex---\n");<a name="line.1713"></a>
+<span class="sourceLineNo">1714</span>            sb.append(body.asSpacedHex()).append("\n");<a name="line.1714"></a>
+<span class="sourceLineNo">1715</span>         } catch (Exception e1) {<a name="line.1715"></a>
+<span class="sourceLineNo">1716</span>            sb.append(e1.getLocalizedMessage());<a name="line.1716"></a>
+<span class="sourceLineNo">1717</span>         }<a name="line.1717"></a>
+<span class="sourceLineNo">1718</span>      }<a name="line.1718"></a>
+<span class="sourceLineNo">1719</span>      return sb.toString();<a name="line.1719"></a>
+<span class="sourceLineNo">1720</span>   }<a name="line.1720"></a>
+<span class="sourceLineNo">1721</span><a name="line.1721"></a>
+<span class="sourceLineNo">1722</span>   /**<a name="line.1722"></a>
+<span class="sourceLineNo">1723</span>    * Returns the session arguments to pass to serializers.<a name="line.1723"></a>
+<span class="sourceLineNo">1724</span>    *<a name="line.1724"></a>
+<span class="sourceLineNo">1725</span>    * @return The session arguments to pass to serializers.<a name="line.1725"></a>
+<span class="sourceLineNo">1726</span>    */<a name="line.1726"></a>
+<span class="sourceLineNo">1727</span>   public SerializerSessionArgs getSerializerSessionArgs() {<a name="line.1727"></a>
+<span class="sourceLineNo">1728</span>      if (serializerSessionArgs == null)<a name="line.1728"></a>
+<span class="sourceLineNo">1729</span>         serializerSessionArgs = SerializerSessionArgs<a name="line.1729"></a>
+<span class="sourceLineNo">1730</span>            .create()<a name="line.1730"></a>
+<span class="sourceLineNo">1731</span>            .properties(getProperties())<a name="line.1731"></a>
+<span class="sourceLineNo">1732</span>            .javaMethod(getJavaMethod())<a name="line.1732"></a>
+<span class="sourceLineNo">1733</span>            .locale(getLocale())<a name="line.1733"></a>
+<span class="sourceLineNo">1734</span>            .timeZone(getHeaders().getTimeZone())<a name="line.1734"></a>
+<span class="sourceLineNo">1735</span>            .debug(isDebug() ? true : null)<a name="line.1735"></a>
+<span class="sourceLineNo">1736</span>            .uriContext(getUriContext())<a name="line.1736"></a>
+<span class="sourceLineNo">1737</span>            .resolver(getVarResolverSession())<a name="line.1737"></a>
+<span class="sourceLineNo">1738</span>            .useWhitespace(isPlainText() ? true : null);<a name="line.1738"></a>
+<span class="sourceLineNo">1739</span>      return serializerSessionArgs;<a name="line.1739"></a>
+<span class="sourceLineNo">1740</span>   }<a name="line.1740"></a>
+<span class="sourceLineNo">1741</span><a name="line.1741"></a>
+<span class="sourceLineNo">1742</span>   /**<a name="line.1742"></a>
+<span class="sourceLineNo">1743</span>    * Returns the session arguments to pass to parsers.<a name="line.1743"></a>
+<span class="sourceLineNo">1744</span>    *<a name="line.1744"></a>
+<span class="sourceLineNo">1745</span>    * @return The session arguments to pass to parsers.<a name="line.1745"></a>
+<span class="sourceLineNo">1746</span>    */<a name="line.1746"></a>
+<span class="sourceLineNo">1747</span>   public ParserSessionArgs getParserSessionArgs() {<a name="line.1747"></a>
+<span class="sourceLineNo">1748</span>      if (parserSessionArgs == null)<a name="line.1748"></a>
+<span class="sourceLineNo">1749</span>         parserSessionArgs =<a name="line.1749"></a>
+<span class="sourceLineNo">1750</span>            ParserSessionArgs<a name="line.1750"></a>
+<span class="sourceLineNo">1751</span>               .create()<a name="line.1751"></a>
+<span class="sourceLineNo">1752</span>               .properties(getProperties())<a name="line.1752"></a>
+<span class="sourceLineNo">1753</span>               .javaMethod(getJavaMethod())<a name="line.1753"></a>
+<span class="sourceLineNo">1754</span>               .locale(getLocale())<a name="line.1754"></a>
+<span class="sourceLineNo">1755</span>               .timeZone(getHeaders().getTimeZone())<a name="line.1755"></a>
+<span class="sourceLineNo">1756</span>               .debug(isDebug() ? true : null);<a name="line.1756"></a>
+<span class="sourceLineNo">1757</span>      return parserSessionArgs;<a name="line.1757"></a>
+<span class="sourceLineNo">1758</span>   }<a name="line.1758"></a>
+<span class="sourceLineNo">1759</span><a name="line.1759"></a>
+<span class="sourceLineNo">1760</span>   /**<a name="line.1760"></a>
+<span class="sourceLineNo">1761</span>    * Logger.<a name="line.1761"></a>
+<span class="sourceLineNo">1762</span>    *<a name="line.1762"></a>
+<span class="sourceLineNo">1763</span>    * &lt;p&gt;<a name="line.1763"></a>
+<span class="sourceLineNo">1764</span>    * Shortcut for calling &lt;c&gt;getContext().getLogger()&lt;/c&gt;.<a name="line.1764"></a>
+<span class="sourceLineNo">1765</span>    *<a name="line.1765"></a>
+<span class="sourceLineNo">1766</span>    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;<a name="line.1766"></a>
+<span class="sourceLineNo">1767</span>    * &lt;p class='bcode w800'&gt;<a name="line.1767"></a>
+<span class="sourceLineNo">1768</span>    *    &lt;ja&gt;@RestMethod&lt;/ja&gt;(...)<a name="line.1768"></a>
+<span class="sourceLineNo">1769</span>    *    &lt;jk&gt;public void&lt;/jk&gt; doGet(RestRequest req) {<a name="line.1769"></a>
+<span class="sourceLineNo">1770</span>    *<a name="line.1770"></a>
+<span class="sourceLineNo">1771</span>    *       req.getLogger().logObjects(&lt;jsf&gt;FINE&lt;/jsf&gt;, &lt;js&gt;"Request query parameters = {0}"&lt;/js&gt;, req.getQuery());<a name="line.1771"></a>
+<span class="sourceLineNo">1772</span>    *    }<a name="line.1772"></a>
+<span class="sourceLineNo">1773</span>    * &lt;/p&gt;<a name="line.1773"></a>
+<span class="sourceLineNo">1774</span>    *<a name="line.1774"></a>
+<span class="sourceLineNo">1775</span>    * &lt;ul class='notes'&gt;<a name="line.1775"></a>
+<span class="sourceLineNo">1776</span>    *    &lt;li&gt;<a name="line.1776"></a>
+<span class="sourceLineNo">1777</span>    *       The {@link RestLogger} object can also be passed as a parameter on the method.<a name="line.1777"></a>
+<span class="sourceLineNo">1778</span>    * &lt;/ul&gt;<a name="line.1778"></a>
+<span class="sourceLineNo">1779</span>    *<a name="line.1779"></a>
+<span class="sourceLineNo">1780</span>    * &lt;ul class='seealso'&gt;<a name="line.1780"></a>
+<span class="sourceLineNo">1781</span>    *    &lt;li class='jf'&gt;{@link org.apache.juneau.rest.RestContext#REST_logger}<a name="line.1781"></a>
+<span class="sourceLineNo">1782</span>    *    &lt;li class='jac'&gt;{@link org.apache.juneau.rest.RestLogger}<a name="line.1782"></a>
+<span class="sourceLineNo">1783</span>    *    &lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestServlet#log(Level, String, Object...)}<a name="line.1783"></a>
+<span class="sourceLineNo">1784</span>    *    &lt;li class='jm'&gt;{@link org.apache.juneau.rest.RestServlet#logObjects(Level, String, Object...)}<a name="line.1784"></a>
+<span class="sourceLineNo">1785</span>    *    &lt;li class='link'&gt;{@doc juneau-rest-server.LoggingAndDebugging}<a name="line.1785"></a>
+<span class="sourceLineNo">1786</span>    * &lt;/ul&gt;<a name="line.1786"></a>
+<span class="sourceLineNo">1787</span>    *<a name="line.1787"></a>
+<span class="sourceLineNo">1788</span>    * @return<a name="line.1788"></a>
+<span class="sourceLineNo">1789</span>    *    The logger associated with the resource context.<a name="line.1789"></a>
+<span class="sourceLineNo">1790</span>    *    &lt;br&gt;Never &lt;jk&gt;null&lt;/jk&gt;.<a name="line.1790"></a>
+<span class="sourceLineNo">1791</span>    *<a name="line.1791"></a>
+<span class="sourceLineNo">1792</span>    * @deprecated Use standard logging APIs.<a name="line.1792"></a>
+<span class="sourceLineNo">1793</span>    */<a name="line.1793"></a>
+<span class="sourceLineNo">1794</span>   @Deprecated<a name="line.1794"></a>
+<span class="sourceLineNo">1795</span>   public RestCallLogger getLogger() {<a name="line.1795"></a>
+<span class="sourceLineNo">1796</span>      return null;<a name="line.1796"></a>
+<span class="sourceLineNo">1797</span>   }<a name="line.1797"></a>
+<span class="sourceLineNo">1798</span><a name="line.1798"></a>
+<span class="sourceLineNo">1799</span>   /**<a name="line.1799"></a>
+<span class="sourceLineNo">1800</span>    * Returns the logging configuration defined on the Java method that this request is executing against.<a name="line.1800"></a>
+<span class="sourceLineNo">1801</span>    *<a name="line.1801"></a>
+<span class="sourceLineNo">1802</span>    * @return The logging configuration defined on the Java method that this request is executing against.<a name="line.1802"></a>
+<span class="sourceLineNo">1803</span>    */<a name="line.1803"></a>
+<span class="sourceLineNo">1804</span>   public RestCallLoggerConfig getCallLoggerConfig() {<a name="line.1804"></a>
+<span class="sourceLineNo">1805</span>      if (restJavaMethod != null)<a name="line.1805"></a>
+<span class="sourceLineNo">1806</span>         return restJavaMethod.getCallLoggerConfig();<a name="line.1806"></a>
+<span class="sourceLineNo">1807</span>      return RestCallLoggerConfig.DEFAULT;<a name="line.1807"></a>
+<span class="sourceLineNo">1808</span>   }<a name="line.1808"></a>
+<span class="sourceLineNo">1809</span><a name="line.1809"></a>
+<span class="sourceLineNo">1810</span>   void close() {<a name="line.1810"></a>
+<span class="sourceLineNo">1811</span>      if (cf != null) {<a name="line.1811"></a>
+<span class="sourceLineNo">1812</span>         try {<a name="line.1812"></a>
+<span class="sourceLineNo">1813</span>            cf.close();<a name="line.1813"></a>
+<span class="sourceLineNo">1814</span>         } catch (IOException e) {<a name="line.1814"></a>
+<span class="sourceLineNo">1815</span>            e.printStackTrace();<a name="line.1815"></a>
+<span class="sourceLineNo">1816</span>         }<a name="line.1816"></a>
+<span class="sourceLineNo">1817</span>      }<a name="line.1817"></a>
+<span class="sourceLineNo">1818</span>   }<a name="line.1818"></a>
+<span class="sourceLineNo">1819</span><a name="line.1819"></a>
+<span class="sourceLineNo">1820</span>   /**<a name="line.1820"></a>
+<span class="sourceLineNo">1821</span>    * Returns metadata about the specified response object if it's annotated with {@link Response @Response}.<a name="line.1821"></a>
+<span class="sourceLineNo">1822</span>    *<a name="line.1822"></a>
+<span class="sourceLineNo">1823</span>    * @param o The response POJO.<a name="line.1823"></a>
+<span class="sourceLineNo">1824</span>    * @return Metadata about the specified response object, or &lt;jk&gt;null&lt;/jk&gt; if it's not annotated with {@link Response @Response}.<a name="line.1824"></a>
+<span class="sourceLineNo">1825</span>    */<a name="line.1825"></a>
+<span class="sourceLineNo">1826</span>   public ResponseBeanMeta getResponseBeanMeta(Object o) {<a name="line.1826"></a>
+<span class="sourceLineNo">1827</span>      return restJavaMethod == null ? null : restJavaMethod.getResponseBeanMeta(o);<a name="line.1827"></a>
+<span class="sourceLineNo">1828</span>   }<a name="line.1828"></a>
+<span class="sourceLineNo">1829</span><a name="line.1829"></a>
+<span class="sourceLineNo">1830</span>   /**<a name="line.1830"></a>
+<span class="sourceLineNo">1831</span>    * Returns metadata about the specified response object if it's annotated with {@link ResponseHeader @ResponseHeader}.<a name="line.1831"></a>
+<span class="sourceLineNo">1832</span>    *<a name="line.1832"></a>
+<span class="sourceLineNo">1833</span>    * @param o The response POJO.<a name="line.1833"></a>
+<span class="sourceLineNo">1834</span>    * @return Metadata about the specified response object, or &lt;jk&gt;null&lt;/jk&gt; if it's not annotated with {@link ResponseHeader @ResponseHeader}.<a name="line.1834"></a>
+<span class="sourceLineNo">1835</span>    */<a name="line.1835"></a>
+<span class="sourceLineNo">1836</span>   public ResponsePartMeta getResponseHeaderMeta(Object o) {<a name="line.1836"></a>
+<span class="sourceLineNo">1837</span>      return restJavaMethod == null ? null : restJavaMethod.getResponseHeaderMeta(o);<a name="line.1837"></a>
+<span class="sourceLineNo">1838</span>   }<a name="line.1838"></a>
+<span class="sourceLineNo">1839</span><a name="line.1839"></a>
+<span class="sourceLineNo">1840</span>   /**<a name="line.1840"></a>
+<span class="sourceLineNo">1841</span>    * Returns metadata about the specified response object if it's annotated with {@link ResponseBody @ResponseBody}.<a name="line.1841"></a>
+<span class="sourceLineNo">1842</span>    *<a name="line.1842"></a>
+<span class="sourceLineNo">1843</span>    * @param o The response POJO.<a name="line.1843"></a>
+<span class="sourceLineNo">1844</span>    * @return Metadata about the specified response object, or &lt;jk&gt;null&lt;/jk&gt; if it's not annotated with {@link ResponseBody @ResponseBody}.<a name="line.1844"></a>
+<span class="sourceLineNo">1845</span>    */<a name="line.1845"></a>
+<span class="sourceLineNo">1846</span>   public ResponsePartMeta getResponseBodyMeta(Object o) {<a name="line.1846"></a>
+<span class="sourceLineNo">1847</span>      return restJavaMethod == null ? null : restJavaMethod.getResponseBodyMeta(o);<a name="line.1847"></a>
+<span class="sourceLineNo">1848</span>   }<a name="line.1848"></a>
+<span class="sourceLineNo">1849</span><a name="line.1849"></a>
+<span class="sourceLineNo">1850</span>   /**<a name="line.1850"></a>
+<span class="sourceLineNo">1851</span>    * Returns the schema generator with settings assigned on this method and class.<a name="line.1851"></a>
+<span class="sourceLineNo">1852</span>    *<a name="line.1852"></a>
+<span class="sourceLineNo">1853</span>    * @return The schema generator.<a name="line.1853"></a>
+<span class="sourceLineNo">1854</span>    */<a name="line.1854"></a>
+<span class="sourceLineNo">1855</span>   public JsonSchemaGenerator getJsonSchemaGenerator() {<a name="line.1855"></a>
+<span class="sourceLineNo">1856</span>      return restJavaMethod == null ? context.getJsonSchemaGenerator() : restJavaMethod.getJsonSchemaGenerator();<a name="line.1856"></a>
+<span class="sourceLineNo">1857</span>   }<a name="line.1857"></a>
+<span class="sourceLineNo">1858</span><a name="line.1858"></a>
+<span class="sourceLineNo">1859</span>   /**<a name="line.1859"></a>
+<span class="sourceLineNo">1860</span>    * Returns the wrapped servlet request.<a name="line.1860"></a>
+<span class="sourceLineNo">1861</span>    *<a name="line.1861"></a>
+<span class="sourceLineNo">1862</span>    * @return The wrapped servlet request.<a name="line.1862"></a>
+<span class="sourceLineNo">1863</span>    */<a name="line.1863"></a>
+<span class="sourceLineNo">1864</span>   protected HttpServletRequest getInner() {<a name="line.1864"></a>
+<span class="sourceLineNo">1865</span>      return inner;<a name="line.1865"></a>
+<span class="sourceLineNo">1866</span>   }<a name="line.1866"></a>
+<span class="sourceLineNo">1867</span><a name="line.1867"></a>
+<span class="sourceLineNo">1868</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.1868"></a>
+<span class="sourceLineNo">1869</span>   // Utility methods<a name="line.1869"></a>
+<span class="sourceLineNo">1870</span>   //-----------------------------------------------------------------------------------------------------------------<a name="line.1870"></a>
+<span class="sourceLineNo">1871</span><a name="line.1871"></a>
+<span class="sourceLineNo">1872</span>   /*<a name="line.1872"></a>
+<span class="sourceLineNo">1873</span>    * Converts an Accept-Language value entry to a Locale.<a name="line.1873"></a>
+<span class="sourceLineNo">1874</span>    */<a name="line.1874"></a>
+<span class="sourceLineNo">1875</span>   private static Locale toLocale(String lang) {<a name="line.1875"></a>
+<span class="sourceLineNo">1876</span>      String country = "";<a name="line.1876"></a>
+<span class="sourceLineNo">1877</span>      int i = lang.indexOf('-');<a name="line.1877"></a>
+<span class="sourceLineNo">1878</span>      if (i &gt; -1) {<a name="line.1878"></a>
+<span class="sourceLineNo">1879</span>         country = lang.substring(i+1).trim();<a name="line.1879"></a>
+<span class="sourceLineNo">1880</span>         lang = lang.substring(0,i).trim();<a name="line.1880"></a>
+<span class="sourceLineNo">1881</span>      }<a name="line.1881"></a>
+<span class="sourceLineNo">1882</span>      return new Locale(lang, country);<a name="line.1882"></a>
+<span class="sourceLineNo">1883</span>   }<a name="line.1883"></a>
+<span class="sourceLineNo">1884</span><a name="line.1884"></a>
+<span class="sourceLineNo">1885</span>   void setJavaMethod(Method method) {<a name="line.1885"></a>
+<span class="sourceLineNo">1886</span>      this.javaMethod = method;<a name="line.1886"></a>
+<span class="sourceLineNo">1887</span>   }<a name="line.1887"></a>
+<span class="sourceLineNo">1888</span>}<a name="line.1888"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

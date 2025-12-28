@@ -1,0 +1,234 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.utils;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import static org.apache.juneau.internal.FileUtils.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span><a name="line.16"></a>
+<span class="sourceLineNo">017</span>import java.io.*;<a name="line.17"></a>
+<span class="sourceLineNo">018</span>import java.util.*;<a name="line.18"></a>
+<span class="sourceLineNo">019</span>import java.util.ResourceBundle.*;<a name="line.19"></a>
+<span class="sourceLineNo">020</span><a name="line.20"></a>
+<span class="sourceLineNo">021</span>import org.apache.juneau.cp.*;<a name="line.21"></a>
+<span class="sourceLineNo">022</span><a name="line.22"></a>
+<span class="sourceLineNo">023</span>/**<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * Utility class for finding resources for a class.<a name="line.24"></a>
+<span class="sourceLineNo">025</span> *<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * &lt;p&gt;<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * Same as {@link Class#getResourceAsStream(String)} except looks for resources with localized file names.<a name="line.27"></a>
+<span class="sourceLineNo">028</span> *<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * &lt;p&gt;<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * If the &lt;c&gt;locale&lt;/c&gt; is specified, then we look for resources whose name matches that locale.<a name="line.30"></a>
+<span class="sourceLineNo">031</span> * For example, if looking for the resource &lt;js&gt;"MyResource.txt"&lt;/js&gt; for the Japanese locale, we will look for<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * files in the following order:<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * &lt;ol&gt;<a name="line.33"></a>
+<span class="sourceLineNo">034</span> *    &lt;li&gt;&lt;js&gt;"MyResource_ja_JP.txt"&lt;/js&gt;<a name="line.34"></a>
+<span class="sourceLineNo">035</span> *    &lt;li&gt;&lt;js&gt;"MyResource_ja.txt"&lt;/js&gt;<a name="line.35"></a>
+<span class="sourceLineNo">036</span> *    &lt;li&gt;&lt;js&gt;"MyResource.txt"&lt;/js&gt;<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * &lt;/ol&gt;<a name="line.37"></a>
+<span class="sourceLineNo">038</span> *<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * @deprecated Use {@link SimpleResourceFinder}.<a name="line.39"></a>
+<span class="sourceLineNo">040</span> */<a name="line.40"></a>
+<span class="sourceLineNo">041</span>@Deprecated<a name="line.41"></a>
+<span class="sourceLineNo">042</span>public class ClasspathResourceFinderSimple implements ClasspathResourceFinder {<a name="line.42"></a>
+<span class="sourceLineNo">043</span><a name="line.43"></a>
+<span class="sourceLineNo">044</span>   /**<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    * Reusable instance.<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    */<a name="line.46"></a>
+<span class="sourceLineNo">047</span>   public static final ClasspathResourceFinderSimple INSTANCE = new ClasspathResourceFinderSimple();<a name="line.47"></a>
+<span class="sourceLineNo">048</span><a name="line.48"></a>
+<span class="sourceLineNo">049</span>   private static final ResourceBundle.Control RB_CONTROL = ResourceBundle.Control.getControl(Control.FORMAT_DEFAULT);<a name="line.49"></a>
+<span class="sourceLineNo">050</span>   private static final List&lt;Locale&gt; ROOT_LOCALE = Arrays.asList(Locale.ROOT);<a name="line.50"></a>
+<span class="sourceLineNo">051</span><a name="line.51"></a>
+<span class="sourceLineNo">052</span><a name="line.52"></a>
+<span class="sourceLineNo">053</span>   @Override /* ClasspathResourceFinder */<a name="line.53"></a>
+<span class="sourceLineNo">054</span>   public InputStream findResource(Class&lt;?&gt; baseClass, String name, Locale locale) throws IOException {<a name="line.54"></a>
+<span class="sourceLineNo">055</span>      return findClasspathResource(baseClass, name, locale);<a name="line.55"></a>
+<span class="sourceLineNo">056</span>   }<a name="line.56"></a>
+<span class="sourceLineNo">057</span><a name="line.57"></a>
+<span class="sourceLineNo">058</span>   /**<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    * Workhorse method for retrieving a resource from the classpath.<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    *<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    * &lt;p&gt;<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    * This method can be overridden by subclasses to provide customized handling of resource retrieval from the classpath.<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    *<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    * @param baseClass The base class providing the classloader.<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    * @param name The resource name.<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    * @param locale<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    *    The resource locale.<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, won't look for localized file names.<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    * @return The resource stream, or &lt;jk&gt;null&lt;/jk&gt; if it couldn't be found.<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    * @throws IOException Thrown by underlying stream.<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    */<a name="line.71"></a>
+<span class="sourceLineNo">072</span>   protected InputStream findClasspathResource(Class&lt;?&gt; baseClass, String name, Locale locale) throws IOException {<a name="line.72"></a>
+<span class="sourceLineNo">073</span><a name="line.73"></a>
+<span class="sourceLineNo">074</span>      if (locale == null)<a name="line.74"></a>
+<span class="sourceLineNo">075</span>         return getResourceAsStream(baseClass, name);<a name="line.75"></a>
+<span class="sourceLineNo">076</span><a name="line.76"></a>
+<span class="sourceLineNo">077</span>      for (String n : getCandidateFileNames(name, locale)) {<a name="line.77"></a>
+<span class="sourceLineNo">078</span>         InputStream is = getResourceAsStream(baseClass, n);<a name="line.78"></a>
+<span class="sourceLineNo">079</span>         if (is != null)<a name="line.79"></a>
+<span class="sourceLineNo">080</span>            return is;<a name="line.80"></a>
+<span class="sourceLineNo">081</span>      }<a name="line.81"></a>
+<span class="sourceLineNo">082</span>      return null;<a name="line.82"></a>
+<span class="sourceLineNo">083</span>   }<a name="line.83"></a>
+<span class="sourceLineNo">084</span><a name="line.84"></a>
+<span class="sourceLineNo">085</span>   private InputStream getResourceAsStream(Class&lt;?&gt; baseClass, String name) {<a name="line.85"></a>
+<span class="sourceLineNo">086</span>      return baseClass.getResourceAsStream(name);<a name="line.86"></a>
+<span class="sourceLineNo">087</span>   }<a name="line.87"></a>
+<span class="sourceLineNo">088</span><a name="line.88"></a>
+<span class="sourceLineNo">089</span>   /**<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    * Returns the candidate file names for the specified file name in the specified locale.<a name="line.90"></a>
+<span class="sourceLineNo">091</span>    *<a name="line.91"></a>
+<span class="sourceLineNo">092</span>    * &lt;p&gt;<a name="line.92"></a>
+<span class="sourceLineNo">093</span>    * For example, if looking for the &lt;js&gt;"MyResource.txt"&lt;/js&gt; file in the Japanese locale, the iterator will return<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    * names in the following order:<a name="line.94"></a>
+<span class="sourceLineNo">095</span>    * &lt;ol&gt;<a name="line.95"></a>
+<span class="sourceLineNo">096</span>    *    &lt;li&gt;&lt;js&gt;"MyResource_ja_JP.txt"&lt;/js&gt;<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    *    &lt;li&gt;&lt;js&gt;"MyResource_ja.txt"&lt;/js&gt;<a name="line.97"></a>
+<span class="sourceLineNo">098</span>    *    &lt;li&gt;&lt;js&gt;"MyResource.txt"&lt;/js&gt;<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    * &lt;/ol&gt;<a name="line.99"></a>
+<span class="sourceLineNo">100</span>    *<a name="line.100"></a>
+<span class="sourceLineNo">101</span>    * &lt;p&gt;<a name="line.101"></a>
+<span class="sourceLineNo">102</span>    * If the locale is &lt;jk&gt;null&lt;/jk&gt;, then it will only return &lt;js&gt;"MyResource.txt"&lt;/js&gt;.<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    *<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    * @param fileName The name of the file to get candidate file names on.<a name="line.104"></a>
+<span class="sourceLineNo">105</span>    * @param l<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    *    The locale.<a name="line.106"></a>
+<span class="sourceLineNo">107</span>    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, won't look for localized file names.<a name="line.107"></a>
+<span class="sourceLineNo">108</span>    * @return An iterator of file names to look at.<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    */<a name="line.109"></a>
+<span class="sourceLineNo">110</span>   protected static Iterable&lt;String&gt; getCandidateFileNames(final String fileName, final Locale l) {<a name="line.110"></a>
+<span class="sourceLineNo">111</span>      return new Iterable&lt;String&gt;() {<a name="line.111"></a>
+<span class="sourceLineNo">112</span>         @Override<a name="line.112"></a>
+<span class="sourceLineNo">113</span>         public Iterator&lt;String&gt; iterator() {<a name="line.113"></a>
+<span class="sourceLineNo">114</span>            return new Iterator&lt;String&gt;() {<a name="line.114"></a>
+<span class="sourceLineNo">115</span>               final Iterator&lt;Locale&gt; locales = getCandidateLocales(l).iterator();<a name="line.115"></a>
+<span class="sourceLineNo">116</span>               String baseName, ext;<a name="line.116"></a>
+<span class="sourceLineNo">117</span><a name="line.117"></a>
+<span class="sourceLineNo">118</span>               @Override<a name="line.118"></a>
+<span class="sourceLineNo">119</span>               public boolean hasNext() {<a name="line.119"></a>
+<span class="sourceLineNo">120</span>                  return locales.hasNext();<a name="line.120"></a>
+<span class="sourceLineNo">121</span>               }<a name="line.121"></a>
+<span class="sourceLineNo">122</span><a name="line.122"></a>
+<span class="sourceLineNo">123</span>               @Override<a name="line.123"></a>
+<span class="sourceLineNo">124</span>               public String next() {<a name="line.124"></a>
+<span class="sourceLineNo">125</span>                  Locale l2 = locales.next();<a name="line.125"></a>
+<span class="sourceLineNo">126</span>                  if (l2.toString().isEmpty())<a name="line.126"></a>
+<span class="sourceLineNo">127</span>                     return fileName;<a name="line.127"></a>
+<span class="sourceLineNo">128</span>                  if (baseName == null)<a name="line.128"></a>
+<span class="sourceLineNo">129</span>                     baseName = getBaseName(fileName);<a name="line.129"></a>
+<span class="sourceLineNo">130</span>                  if (ext == null)<a name="line.130"></a>
+<span class="sourceLineNo">131</span>                     ext = getExtension(fileName);<a name="line.131"></a>
+<span class="sourceLineNo">132</span>                  return baseName + "_" + l2.toString() + (ext.isEmpty() ? "" : ('.' + ext));<a name="line.132"></a>
+<span class="sourceLineNo">133</span>               }<a name="line.133"></a>
+<span class="sourceLineNo">134</span>               @Override<a name="line.134"></a>
+<span class="sourceLineNo">135</span>               public void remove() {<a name="line.135"></a>
+<span class="sourceLineNo">136</span>                  throw new UnsupportedOperationException();<a name="line.136"></a>
+<span class="sourceLineNo">137</span>               }<a name="line.137"></a>
+<span class="sourceLineNo">138</span>            };<a name="line.138"></a>
+<span class="sourceLineNo">139</span>         }<a name="line.139"></a>
+<span class="sourceLineNo">140</span>      };<a name="line.140"></a>
+<span class="sourceLineNo">141</span>   }<a name="line.141"></a>
+<span class="sourceLineNo">142</span><a name="line.142"></a>
+<span class="sourceLineNo">143</span>   /**<a name="line.143"></a>
+<span class="sourceLineNo">144</span>    * Returns the candidate locales for the specified locale.<a name="line.144"></a>
+<span class="sourceLineNo">145</span>    *<a name="line.145"></a>
+<span class="sourceLineNo">146</span>    * &lt;p&gt;<a name="line.146"></a>
+<span class="sourceLineNo">147</span>    * For example, if &lt;c&gt;locale&lt;/c&gt; is &lt;js&gt;"ja_JP"&lt;/js&gt;, then this method will return:<a name="line.147"></a>
+<span class="sourceLineNo">148</span>    * &lt;ol&gt;<a name="line.148"></a>
+<span class="sourceLineNo">149</span>    *    &lt;li&gt;&lt;js&gt;"ja_JP"&lt;/js&gt;<a name="line.149"></a>
+<span class="sourceLineNo">150</span>    *    &lt;li&gt;&lt;js&gt;"ja"&lt;/js&gt;<a name="line.150"></a>
+<span class="sourceLineNo">151</span>    *    &lt;li&gt;&lt;js&gt;""&lt;/js&gt;<a name="line.151"></a>
+<span class="sourceLineNo">152</span>    * &lt;/ol&gt;<a name="line.152"></a>
+<span class="sourceLineNo">153</span>    *<a name="line.153"></a>
+<span class="sourceLineNo">154</span>    * @param locale The locale to get the list of candidate locales for.<a name="line.154"></a>
+<span class="sourceLineNo">155</span>    * @return The list of candidate locales.<a name="line.155"></a>
+<span class="sourceLineNo">156</span>    */<a name="line.156"></a>
+<span class="sourceLineNo">157</span>   static final List&lt;Locale&gt; getCandidateLocales(Locale locale) {<a name="line.157"></a>
+<span class="sourceLineNo">158</span>      if (locale == null)<a name="line.158"></a>
+<span class="sourceLineNo">159</span>         return ROOT_LOCALE;<a name="line.159"></a>
+<span class="sourceLineNo">160</span>      return RB_CONTROL.getCandidateLocales("", locale);<a name="line.160"></a>
+<span class="sourceLineNo">161</span>   }<a name="line.161"></a>
+<span class="sourceLineNo">162</span>}<a name="line.162"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

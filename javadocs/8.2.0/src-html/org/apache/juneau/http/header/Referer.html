@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.http.header;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import java.util.function.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span><a name="line.16"></a>
+<span class="sourceLineNo">017</span>import org.apache.juneau.http.annotation.*;<a name="line.17"></a>
+<span class="sourceLineNo">018</span><a name="line.18"></a>
+<span class="sourceLineNo">019</span>/**<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * Represents a parsed &lt;l&gt;Referer&lt;/l&gt; HTTP request header.<a name="line.20"></a>
+<span class="sourceLineNo">021</span> *<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * &lt;p&gt;<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * This is the address of the previous web page from which a link to the currently requested page was followed.<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * (The word “referrer” has been misspelled in the RFC as well as in most implementations to the point that it has<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * become standard usage and is considered correct terminology)<a name="line.25"></a>
+<span class="sourceLineNo">026</span> *<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * &lt;h5 class='figure'&gt;Example&lt;/h5&gt;<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * &lt;p class='bcode w800'&gt;<a name="line.28"></a>
+<span class="sourceLineNo">029</span> *    Referer: http://en.wikipedia.org/wiki/Main_Page<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * &lt;/p&gt;<a name="line.30"></a>
+<span class="sourceLineNo">031</span> *<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * &lt;h5 class='topic'&gt;RFC2616 Specification&lt;/h5&gt;<a name="line.32"></a>
+<span class="sourceLineNo">033</span> *<a name="line.33"></a>
+<span class="sourceLineNo">034</span> * The Referer[sic] request-header field allows the client to specify, for the server's benefit, the address (URI) of<a name="line.34"></a>
+<span class="sourceLineNo">035</span> * the resource from which the Request-URI was obtained (the "referrer", although the header field is misspelled.)<a name="line.35"></a>
+<span class="sourceLineNo">036</span> * The Referer request-header allows a server to generate lists of back-links to resources for interest, logging,<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * optimized caching, etc.<a name="line.37"></a>
+<span class="sourceLineNo">038</span> * It also allows obsolete or mistyped links to be traced for maintenance.<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * The Referer field MUST NOT be sent if the Request-URI was obtained from a source that does not have its own URI,<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * such as input from the user keyboard.<a name="line.40"></a>
+<span class="sourceLineNo">041</span> *<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * &lt;p class='bcode w800'&gt;<a name="line.42"></a>
+<span class="sourceLineNo">043</span> *    Referer        = "Referer" ":" ( absoluteURI | relativeURI )<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * &lt;/p&gt;<a name="line.44"></a>
+<span class="sourceLineNo">045</span> *<a name="line.45"></a>
+<span class="sourceLineNo">046</span> * &lt;p&gt;<a name="line.46"></a>
+<span class="sourceLineNo">047</span> * Example:<a name="line.47"></a>
+<span class="sourceLineNo">048</span> * &lt;p class='bcode w800'&gt;<a name="line.48"></a>
+<span class="sourceLineNo">049</span> *    Referer: http://www.w3.org/hypertext/DataSources/Overview.html<a name="line.49"></a>
+<span class="sourceLineNo">050</span> * &lt;/p&gt;<a name="line.50"></a>
+<span class="sourceLineNo">051</span> *<a name="line.51"></a>
+<span class="sourceLineNo">052</span> * &lt;p&gt;<a name="line.52"></a>
+<span class="sourceLineNo">053</span> * If the field value is a relative URI, it SHOULD be interpreted relative to the Request-URI.<a name="line.53"></a>
+<span class="sourceLineNo">054</span> * The URI MUST NOT include a fragment. See section 15.1.3 for security considerations.<a name="line.54"></a>
+<span class="sourceLineNo">055</span> *<a name="line.55"></a>
+<span class="sourceLineNo">056</span> * &lt;ul class='seealso'&gt;<a name="line.56"></a>
+<span class="sourceLineNo">057</span> *    &lt;li class='extlink'&gt;{@doc ExtRFC2616}<a name="line.57"></a>
+<span class="sourceLineNo">058</span> * &lt;/ul&gt;<a name="line.58"></a>
+<span class="sourceLineNo">059</span> */<a name="line.59"></a>
+<span class="sourceLineNo">060</span>@Header("Referer")<a name="line.60"></a>
+<span class="sourceLineNo">061</span>public class Referer extends BasicUriHeader {<a name="line.61"></a>
+<span class="sourceLineNo">062</span><a name="line.62"></a>
+<span class="sourceLineNo">063</span>   private static final long serialVersionUID = 1L;<a name="line.63"></a>
+<span class="sourceLineNo">064</span><a name="line.64"></a>
+<span class="sourceLineNo">065</span>   /**<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    * Convenience creator.<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    *<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    * @param value<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    *    The header value.<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    *    &lt;br&gt;Can be any of the following:<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    *    &lt;ul&gt;<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    *       &lt;li&gt;{@link String}<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    *       &lt;li&gt;Anything else - Converted to &lt;c&gt;String&lt;/c&gt; then parsed.<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    *    &lt;/ul&gt;<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    * @return A new {@link Referer} object.<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    */<a name="line.76"></a>
+<span class="sourceLineNo">077</span>   public static Referer of(Object value) {<a name="line.77"></a>
+<span class="sourceLineNo">078</span>      if (value == null)<a name="line.78"></a>
+<span class="sourceLineNo">079</span>         return null;<a name="line.79"></a>
+<span class="sourceLineNo">080</span>      return new Referer(value);<a name="line.80"></a>
+<span class="sourceLineNo">081</span>   }<a name="line.81"></a>
+<span class="sourceLineNo">082</span><a name="line.82"></a>
+<span class="sourceLineNo">083</span>   /**<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    * Convenience creator using supplier.<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    *<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    * &lt;p&gt;<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    * Header value is re-evaluated on each call to {@link #getValue()}.<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    *<a name="line.88"></a>
+<span class="sourceLineNo">089</span>    * @param value<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    *    The header value supplier.<a name="line.90"></a>
+<span class="sourceLineNo">091</span>    *    &lt;br&gt;Can be any of the following:<a name="line.91"></a>
+<span class="sourceLineNo">092</span>    *    &lt;ul&gt;<a name="line.92"></a>
+<span class="sourceLineNo">093</span>    *       &lt;li&gt;{@link String}<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    *       &lt;li&gt;Anything else - Converted to &lt;c&gt;String&lt;/c&gt; then parsed.<a name="line.94"></a>
+<span class="sourceLineNo">095</span>    *    &lt;/ul&gt;<a name="line.95"></a>
+<span class="sourceLineNo">096</span>    * @return A new {@link Referer} object.<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    */<a name="line.97"></a>
+<span class="sourceLineNo">098</span>   public static Referer of(Supplier&lt;?&gt; value) {<a name="line.98"></a>
+<span class="sourceLineNo">099</span>      if (value == null)<a name="line.99"></a>
+<span class="sourceLineNo">100</span>         return null;<a name="line.100"></a>
+<span class="sourceLineNo">101</span>      return new Referer(value);<a name="line.101"></a>
+<span class="sourceLineNo">102</span>   }<a name="line.102"></a>
+<span class="sourceLineNo">103</span><a name="line.103"></a>
+<span class="sourceLineNo">104</span>   /**<a name="line.104"></a>
+<span class="sourceLineNo">105</span>    * Constructor<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    *<a name="line.106"></a>
+<span class="sourceLineNo">107</span>    * @param value<a name="line.107"></a>
+<span class="sourceLineNo">108</span>    *    The header value.<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    *    &lt;br&gt;Can be any of the following:<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    *    &lt;ul&gt;<a name="line.110"></a>
+<span class="sourceLineNo">111</span>    *       &lt;li&gt;{@link String}<a name="line.111"></a>
+<span class="sourceLineNo">112</span>    *       &lt;li&gt;Anything else - Converted to &lt;c&gt;String&lt;/c&gt; then parsed.<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    *       &lt;li&gt;A {@link Supplier} of anything on this list.<a name="line.113"></a>
+<span class="sourceLineNo">114</span>    *    &lt;/ul&gt;<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    */<a name="line.115"></a>
+<span class="sourceLineNo">116</span>   public Referer(Object value) {<a name="line.116"></a>
+<span class="sourceLineNo">117</span>      super("Referer", value);<a name="line.117"></a>
+<span class="sourceLineNo">118</span>   }<a name="line.118"></a>
+<span class="sourceLineNo">119</span><a name="line.119"></a>
+<span class="sourceLineNo">120</span>   /**<a name="line.120"></a>
+<span class="sourceLineNo">121</span>    * Constructor<a name="line.121"></a>
+<span class="sourceLineNo">122</span>    *<a name="line.122"></a>
+<span class="sourceLineNo">123</span>    * @param value<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    *    The header value.<a name="line.124"></a>
+<span class="sourceLineNo">125</span>    */<a name="line.125"></a>
+<span class="sourceLineNo">126</span>   public Referer(String value) {<a name="line.126"></a>
+<span class="sourceLineNo">127</span>      this((Object)value);<a name="line.127"></a>
+<span class="sourceLineNo">128</span>   }<a name="line.128"></a>
+<span class="sourceLineNo">129</span>}<a name="line.129"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

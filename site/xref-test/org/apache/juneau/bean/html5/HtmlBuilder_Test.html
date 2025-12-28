@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>HtmlBuilder_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/org/apache/juneau/bean/html5/HtmlBuilder_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.bean.html5;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.bean.html5.HtmlBuilder.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.junit.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">class</strong> <a name="HtmlBuilder_Test" href="../../../../../org/apache/juneau/bean/html5/HtmlBuilder_Test.html#HtmlBuilder_Test">HtmlBuilder_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  	@Test <strong class="jxr_keyword">void</strong> a01_allStaticMethods() {
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  		assertString(<span class="jxr_string">"&lt;a&gt;&lt;/a&gt;"</span>, a());
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  		assertString(<span class="jxr_string">"&lt;abbr&gt;&lt;/abbr&gt;"</span>, abbr());
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  		assertString(<span class="jxr_string">"&lt;address&gt;&lt;/address&gt;"</span>, address());
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  		assertString(<span class="jxr_string">"&lt;area/&gt;"</span>, area());
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  		assertString(<span class="jxr_string">"&lt;article&gt;&lt;/article&gt;"</span>, article());
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		assertString(<span class="jxr_string">"&lt;aside&gt;&lt;/aside&gt;"</span>, aside());
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  		assertString(<span class="jxr_string">"&lt;audio&gt;&lt;/audio&gt;"</span>, audio());
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		assertString(<span class="jxr_string">"&lt;b&gt;&lt;/b&gt;"</span>, b());
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		assertString(<span class="jxr_string">"&lt;base/&gt;"</span>, base());
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		assertString(<span class="jxr_string">"&lt;bdi&gt;&lt;/bdi&gt;"</span>, bdi());
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		assertString(<span class="jxr_string">"&lt;bdo&gt;&lt;/bdo&gt;"</span>, bdo());
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		assertString(<span class="jxr_string">"&lt;blockquote&gt;&lt;/blockquote&gt;"</span>, blockquote());
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		assertString(<span class="jxr_string">"&lt;body&gt;&lt;/body&gt;"</span>, body());
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		assertString(<span class="jxr_string">"&lt;br/&gt;"</span>, br());
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		assertString(<span class="jxr_string">"&lt;button&gt;&lt;/button&gt;"</span>, button());
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		assertString(<span class="jxr_string">"&lt;canvas&gt;&lt;/canvas&gt;"</span>, canvas());
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		assertString(<span class="jxr_string">"&lt;caption&gt;&lt;/caption&gt;"</span>, caption());
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		assertString(<span class="jxr_string">"&lt;cite&gt;&lt;/cite&gt;"</span>, cite());
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		assertString(<span class="jxr_string">"&lt;code&gt;&lt;/code&gt;"</span>, code());
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		assertString(<span class="jxr_string">"&lt;col/&gt;"</span>, col());
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		assertString(<span class="jxr_string">"&lt;colgroup&gt;&lt;/colgroup&gt;"</span>, colgroup());
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		assertString(<span class="jxr_string">"&lt;data&gt;&lt;/data&gt;"</span>, data());
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		assertString(<span class="jxr_string">"&lt;datalist&gt;&lt;/datalist&gt;"</span>, datalist());
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		assertString(<span class="jxr_string">"&lt;dd&gt;&lt;/dd&gt;"</span>, dd());
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		assertString(<span class="jxr_string">"&lt;del&gt;&lt;/del&gt;"</span>, del());
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		assertString(<span class="jxr_string">"&lt;dfn&gt;&lt;/dfn&gt;"</span>, dfn());
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		assertString(<span class="jxr_string">"&lt;div&gt;&lt;/div&gt;"</span>, div());
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		assertString(<span class="jxr_string">"&lt;dl&gt;&lt;/dl&gt;"</span>, dl());
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		assertString(<span class="jxr_string">"&lt;dt&gt;&lt;/dt&gt;"</span>, dt());
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		assertString(<span class="jxr_string">"&lt;em&gt;&lt;/em&gt;"</span>, em());
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		assertString(<span class="jxr_string">"&lt;embed/&gt;"</span>, embed());
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		assertString(<span class="jxr_string">"&lt;fieldset&gt;&lt;/fieldset&gt;"</span>, fieldset());
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		assertString(<span class="jxr_string">"&lt;figcaption&gt;&lt;/figcaption&gt;"</span>, figcaption());
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		assertString(<span class="jxr_string">"&lt;figure&gt;&lt;/figure&gt;"</span>, figure());
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		assertString(<span class="jxr_string">"&lt;footer&gt;&lt;/footer&gt;"</span>, footer());
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		assertString(<span class="jxr_string">"&lt;form&gt;&lt;/form&gt;"</span>, form());
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		assertString(<span class="jxr_string">"&lt;h1&gt;&lt;/h1&gt;"</span>, h1());
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		assertString(<span class="jxr_string">"&lt;h2&gt;&lt;/h2&gt;"</span>, h2());
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		assertString(<span class="jxr_string">"&lt;h3&gt;&lt;/h3&gt;"</span>, h3());
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		assertString(<span class="jxr_string">"&lt;h4&gt;&lt;/h4&gt;"</span>, h4());
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertString(<span class="jxr_string">"&lt;h5&gt;&lt;/h5&gt;"</span>, h5());
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		assertString(<span class="jxr_string">"&lt;h6&gt;&lt;/h6&gt;"</span>, h6());
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertString(<span class="jxr_string">"&lt;head&gt;&lt;/head&gt;"</span>, head());
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		assertString(<span class="jxr_string">"&lt;header&gt;&lt;/header&gt;"</span>, header());
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertString(<span class="jxr_string">"&lt;hr/&gt;"</span>, hr());
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		assertString(<span class="jxr_string">"&lt;html&gt;&lt;/html&gt;"</span>, html());
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertString(<span class="jxr_string">"&lt;i&gt;&lt;/i&gt;"</span>, i());
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		assertString(<span class="jxr_string">"&lt;iframe&gt;&lt;/iframe&gt;"</span>, iframe());
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertString(<span class="jxr_string">"&lt;img/&gt;"</span>, img());
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertString(<span class="jxr_string">"&lt;input/&gt;"</span>, input());
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		assertString(<span class="jxr_string">"&lt;ins&gt;&lt;/ins&gt;"</span>, ins());
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertString(<span class="jxr_string">"&lt;kbd&gt;&lt;/kbd&gt;"</span>, kbd());
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		assertString(<span class="jxr_string">"&lt;keygen/&gt;"</span>, keygen());
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		assertString(<span class="jxr_string">"&lt;label&gt;&lt;/label&gt;"</span>, label());
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		assertString(<span class="jxr_string">"&lt;legend&gt;&lt;/legend&gt;"</span>, legend());
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		assertString(<span class="jxr_string">"&lt;li&gt;&lt;/li&gt;"</span>, li());
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		assertString(<span class="jxr_string">"&lt;link/&gt;"</span>, link());
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		assertString(<span class="jxr_string">"&lt;main&gt;&lt;/main&gt;"</span>, main());
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		assertString(<span class="jxr_string">"&lt;map&gt;&lt;/map&gt;"</span>, map());
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		assertString(<span class="jxr_string">"&lt;mark&gt;&lt;/mark&gt;"</span>, mark());
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		assertString(<span class="jxr_string">"&lt;meta/&gt;"</span>, meta());
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		assertString(<span class="jxr_string">"&lt;meter&gt;&lt;/meter&gt;"</span>, meter());
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		assertString(<span class="jxr_string">"&lt;nav&gt;&lt;/nav&gt;"</span>, nav());
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		assertString(<span class="jxr_string">"&lt;noscript&gt;&lt;/noscript&gt;"</span>, noscript());
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertString(<span class="jxr_string">"&lt;object&gt;&lt;/object&gt;"</span>, object());
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertString(<span class="jxr_string">"&lt;ol&gt;&lt;/ol&gt;"</span>, ol());
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertString(<span class="jxr_string">"&lt;optgroup&gt;&lt;/optgroup&gt;"</span>, optgroup());
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		assertString(<span class="jxr_string">"&lt;option&gt;&lt;/option&gt;"</span>, option());
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		assertString(<span class="jxr_string">"&lt;output&gt;&lt;/output&gt;"</span>, output());
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		assertString(<span class="jxr_string">"&lt;p&gt;&lt;/p&gt;"</span>, p());
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertString(<span class="jxr_string">"&lt;param/&gt;"</span>, param());
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertString(<span class="jxr_string">"&lt;pre&gt;&lt;/pre&gt;"</span>, pre());
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		assertString(<span class="jxr_string">"&lt;progress&gt;&lt;/progress&gt;"</span>, progress());
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		assertString(<span class="jxr_string">"&lt;q&gt;&lt;/q&gt;"</span>, q());
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		assertString(<span class="jxr_string">"&lt;rb&gt;&lt;/rb&gt;"</span>, rb());
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		assertString(<span class="jxr_string">"&lt;rp&gt;&lt;/rp&gt;"</span>, rp());
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		assertString(<span class="jxr_string">"&lt;rt&gt;&lt;/rt&gt;"</span>, rt());
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		assertString(<span class="jxr_string">"&lt;rtc&gt;&lt;/rtc&gt;"</span>, rtc());
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		assertString(<span class="jxr_string">"&lt;ruby&gt;&lt;/ruby&gt;"</span>, ruby());
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertString(<span class="jxr_string">"&lt;s&gt;&lt;/s&gt;"</span>, s());
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertString(<span class="jxr_string">"&lt;samp&gt;&lt;/samp&gt;"</span>, samp());
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		assertString(<span class="jxr_string">"&lt;script&gt;&lt;/script&gt;"</span>, script());
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertString(<span class="jxr_string">"&lt;section&gt;&lt;/section&gt;"</span>, section());
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		assertString(<span class="jxr_string">"&lt;select&gt;&lt;/select&gt;"</span>, select());
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		assertString(<span class="jxr_string">"&lt;small&gt;&lt;/small&gt;"</span>, small());
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		assertString(<span class="jxr_string">"&lt;source/&gt;"</span>, source());
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertString(<span class="jxr_string">"&lt;span&gt;&lt;/span&gt;"</span>, span());
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		assertString(<span class="jxr_string">"&lt;strong&gt;&lt;/strong&gt;"</span>, strong());
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		assertString(<span class="jxr_string">"&lt;style&gt;&lt;/style&gt;"</span>, style());
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		assertString(<span class="jxr_string">"&lt;sub&gt;&lt;/sub&gt;"</span>, sub());
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		assertString(<span class="jxr_string">"&lt;sup&gt;&lt;/sup&gt;"</span>, sup());
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		assertString(<span class="jxr_string">"&lt;table&gt;&lt;/table&gt;"</span>, table());
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		assertString(<span class="jxr_string">"&lt;tbody&gt;&lt;/tbody&gt;"</span>, tbody());
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		assertString(<span class="jxr_string">"&lt;td&gt;&lt;/td&gt;"</span>, td());
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		assertString(<span class="jxr_string">"&lt;template&gt;&lt;/template&gt;"</span>, template());
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertString(<span class="jxr_string">"&lt;textarea&gt;&lt;/textarea&gt;"</span>, textarea());
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertString(<span class="jxr_string">"&lt;tfoot&gt;&lt;/tfoot&gt;"</span>, tfoot());
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		assertString(<span class="jxr_string">"&lt;th&gt;&lt;/th&gt;"</span>, th());
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		assertString(<span class="jxr_string">"&lt;thead&gt;&lt;/thead&gt;"</span>, thead());
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertString(<span class="jxr_string">"&lt;time&gt;&lt;/time&gt;"</span>, time());
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		assertString(<span class="jxr_string">"&lt;title&gt;&lt;/title&gt;"</span>, title());
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		assertString(<span class="jxr_string">"&lt;tr&gt;&lt;/tr&gt;"</span>, tr());
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		assertString(<span class="jxr_string">"&lt;track/&gt;"</span>, track());
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertString(<span class="jxr_string">"&lt;u&gt;&lt;/u&gt;"</span>, u());
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		assertString(<span class="jxr_string">"&lt;ul&gt;&lt;/ul&gt;"</span>, ul());
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		assertString(<span class="jxr_string">"&lt;var&gt;&lt;/var&gt;"</span>, <strong class="jxr_keyword">var</strong>());
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertString(<span class="jxr_string">"&lt;video&gt;&lt;/video&gt;"</span>, video());
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		assertString(<span class="jxr_string">"&lt;wbr/&gt;"</span>, wbr());
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		assertString(<span class="jxr_string">"&lt;a href='url'&gt;text&lt;/a&gt;"</span>, a(<span class="jxr_string">"url"</span>, <span class="jxr_string">"text"</span>));
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		assertString(<span class="jxr_string">"&lt;form action='submit'&gt;&lt;input/&gt;&lt;/form&gt;"</span>, form(<span class="jxr_string">"submit"</span>, input()));
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		assertString(<span class="jxr_string">"&lt;button type='submit'&gt;Click&lt;/button&gt;"</span>, button(<span class="jxr_string">"submit"</span>, <span class="jxr_string">"Click"</span>));
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		assertString(<span class="jxr_string">"&lt;input type='text'/&gt;"</span>, input(<span class="jxr_string">"text"</span>));
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		assertString(<span class="jxr_string">"&lt;option value='v'&gt;text&lt;/option&gt;"</span>, option(<span class="jxr_string">"v"</span>, <span class="jxr_string">"text"</span>));
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertString(<span class="jxr_string">"&lt;select name='test'&gt;&lt;option&gt;&lt;/option&gt;&lt;/select&gt;"</span>, select(<span class="jxr_string">"test"</span>, option()));
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		assertString(<span class="jxr_string">"&lt;textarea name='test'&gt;content&lt;/textarea&gt;"</span>, textarea(<span class="jxr_string">"test"</span>, <span class="jxr_string">"content"</span>));
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		assertString(<span class="jxr_string">"&lt;canvas width='100' height='100'&gt;&lt;/canvas&gt;"</span>, canvas(100, 100));
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		assertString(<span class="jxr_string">"&lt;audio src='test.mp3'&gt;&lt;/audio&gt;"</span>, audio(<span class="jxr_string">"test.mp3"</span>));
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertString(<span class="jxr_string">"&lt;colgroup&gt;&lt;col/&gt;&lt;/colgroup&gt;"</span>, colgroup(col()));
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		assertString(<span class="jxr_string">"&lt;datalist id='test'&gt;&lt;option&gt;&lt;/option&gt;&lt;/datalist&gt;"</span>, datalist(<span class="jxr_string">"test"</span>, option()));
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		assertString(<span class="jxr_string">"&lt;dl&gt;&lt;dt&gt;&lt;/dt&gt;&lt;/dl&gt;"</span>, dl(dt()));
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		assertString(<span class="jxr_string">"&lt;figure&gt;&lt;img/&gt;&lt;/figure&gt;"</span>, figure(img()));
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		assertString(<span class="jxr_string">"&lt;html&gt;en&lt;/html&gt;"</span>, html(<span class="jxr_string">"en"</span>));
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		assertString(<span class="jxr_string">"&lt;main&gt;&lt;p&gt;&lt;/p&gt;&lt;/main&gt;"</span>, main(p()));
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		assertString(<span class="jxr_string">"&lt;map&gt;test&lt;/map&gt;"</span>, map(<span class="jxr_string">"test"</span>));
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		assertString(<span class="jxr_string">"&lt;ol&gt;&lt;li&gt;&lt;/li&gt;&lt;/ol&gt;"</span>, ol(li()));
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		assertString(<span class="jxr_string">"&lt;optgroup&gt;test&lt;option&gt;&lt;/option&gt;&lt;/optgroup&gt;"</span>, optgroup(<span class="jxr_string">"test"</span>, option()));
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		assertString(<span class="jxr_string">"&lt;tbody&gt;&lt;tr&gt;&lt;/tr&gt;&lt;/tbody&gt;"</span>, tbody(tr()));
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		assertString(<span class="jxr_string">"&lt;tfoot&gt;&lt;tr&gt;&lt;/tr&gt;&lt;/tfoot&gt;"</span>, tfoot(tr()));
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		assertString(<span class="jxr_string">"&lt;thead&gt;&lt;tr&gt;&lt;/tr&gt;&lt;/thead&gt;"</span>, thead(tr()));
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		assertString(<span class="jxr_string">"&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;"</span>, tr(td()));
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		assertString(<span class="jxr_string">"&lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;"</span>, ul(li()));
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		assertString(<span class="jxr_string">"&lt;video src='test.mp4'&gt;&lt;/video&gt;"</span>, video(<span class="jxr_string">"test.mp4"</span>));
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		assertString(<span class="jxr_string">"&lt;abbr title='test'&gt;content&lt;/abbr&gt;"</span>, abbr(<span class="jxr_string">"test"</span>, <span class="jxr_string">"content"</span>));
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		assertString(<span class="jxr_string">"&lt;area shape='rect' coords='0,0,100,100' href='url'/&gt;"</span>, area(<span class="jxr_string">"rect"</span>, <span class="jxr_string">"0,0,100,100"</span>, <span class="jxr_string">"url"</span>));
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		assertString(<span class="jxr_string">"&lt;bdo dir='rtl'&gt;text&lt;/bdo&gt;"</span>, bdo(<span class="jxr_string">"rtl"</span>, <span class="jxr_string">"text"</span>));
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		assertString(<span class="jxr_string">"&lt;data value='12345'&gt;Product&lt;/data&gt;"</span>, data(<span class="jxr_string">"12345"</span>, <span class="jxr_string">"Product"</span>));
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		assertString(<span class="jxr_string">"&lt;param name='autoplay' value='true'/&gt;"</span>, param(<span class="jxr_string">"autoplay"</span>, <span class="jxr_string">"true"</span>));
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		assertString(<span class="jxr_string">"&lt;script type='text/javascript'&gt;alert('test');&lt;/script&gt;"</span>, script(<span class="jxr_string">"text/javascript"</span>, <span class="jxr_string">"alert('test');"</span>));
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		assertString(<span class="jxr_string">"&lt;source src='video.mp4' type='video/mp4'/&gt;"</span>, source(<span class="jxr_string">"video.mp4"</span>, <span class="jxr_string">"video/mp4"</span>));
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		assertString(<span class="jxr_string">"&lt;template id='test'&gt;&lt;p&gt;&lt;/p&gt;&lt;/template&gt;"</span>, template(<span class="jxr_string">"test"</span>, p()));
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		assertString(<span class="jxr_string">"&lt;track src='captions.vtt' kind='captions'/&gt;"</span>, track(<span class="jxr_string">"captions.vtt"</span>, <span class="jxr_string">"captions"</span>));
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		assertString(<span class="jxr_string">"&lt;address&gt;text&lt;strong&gt;bold&lt;/strong&gt;&lt;/address&gt;"</span>, address(<span class="jxr_string">"text"</span>, strong(<span class="jxr_string">"bold"</span>)));
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		assertString(<span class="jxr_string">"&lt;time&gt;10:00&lt;span&gt;AM&lt;/span&gt;&lt;/time&gt;"</span>, time(<span class="jxr_string">"10:00"</span>, span(<span class="jxr_string">"AM"</span>)));
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		assertString(<span class="jxr_string">"&lt;bdi&gt;text&lt;/bdi&gt;"</span>, bdi(<span class="jxr_string">"text"</span>));
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		assertString(<span class="jxr_string">"&lt;button type='submit'&gt;&lt;/button&gt;"</span>, button(<span class="jxr_string">"submit"</span>));
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		assertString(<span class="jxr_string">"&lt;col span='2'/&gt;"</span>, col(2));
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		assertString(<span class="jxr_string">"&lt;form action='submit'&gt;&lt;/form&gt;"</span>, form(<span class="jxr_string">"submit"</span>));
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		assertString(<span class="jxr_string">"&lt;embed src='file.swf'/&gt;"</span>, embed(<span class="jxr_string">"file.swf"</span>));
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		assertString(<span class="jxr_string">"&lt;img src='image.jpg'/&gt;"</span>, img(<span class="jxr_string">"image.jpg"</span>));
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		assertString(<span class="jxr_string">"&lt;link href='style.css'/&gt;"</span>, link(<span class="jxr_string">"style.css"</span>));
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		assertString(<span class="jxr_string">"&lt;option&gt;text&lt;/option&gt;"</span>, option(<span class="jxr_string">"text"</span>));
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		assertString(<span class="jxr_string">"&lt;output name='result'&gt;&lt;/output&gt;"</span>, output(<span class="jxr_string">"result"</span>));
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		assertString(<span class="jxr_string">"&lt;style&gt;body { color: red; }&lt;/style&gt;"</span>, style(<span class="jxr_string">"body { color: red; }"</span>));
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		assertString(<span class="jxr_string">"&lt;style&gt;body { color: red; }\ndiv { color: blue; }&lt;/style&gt;"</span>, style(<span class="jxr_string">"body { color: red; }"</span>, <span class="jxr_string">"div { color: blue; }"</span>));
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertString(<span class="jxr_string">"&lt;title&gt;Page Title&lt;/title&gt;"</span>, title(<span class="jxr_string">"Page Title"</span>));
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		assertString(<span class="jxr_string">"&lt;h1&gt;Heading 1&lt;/h1&gt;"</span>, h1(<span class="jxr_string">"Heading 1"</span>));
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		assertString(<span class="jxr_string">"&lt;h2&gt;Heading 2&lt;/h2&gt;"</span>, h2(<span class="jxr_string">"Heading 2"</span>));
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		assertString(<span class="jxr_string">"&lt;h3&gt;Heading 3&lt;/h3&gt;"</span>, h3(<span class="jxr_string">"Heading 3"</span>));
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		assertString(<span class="jxr_string">"&lt;h4&gt;Heading 4&lt;/h4&gt;"</span>, h4(<span class="jxr_string">"Heading 4"</span>));
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		assertString(<span class="jxr_string">"&lt;h5&gt;Heading 5&lt;/h5&gt;"</span>, h5(<span class="jxr_string">"Heading 5"</span>));
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		assertString(<span class="jxr_string">"&lt;h6&gt;Heading 6&lt;/h6&gt;"</span>, h6(<span class="jxr_string">"Heading 6"</span>));
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	}
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

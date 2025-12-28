@@ -1,0 +1,362 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+-->
+<ol class='toc'>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#Overview'>Overview</a></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#o.Marshalling'>Marshalling</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#o.EndToEndRest'>End-to-End REST</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#o.RestServer'>REST Server</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#o.RestClient'>REST Client</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#o.Dtos'>DTOs</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#o.ConfigFiles'>Config Files</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#o.FluentAssertions'>Fluent Assertions</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#o.GeneralDesign'>General Design</a><span class='update'>created: <b>9.0.0</b></span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall'>juneau-marshall</a></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.Marshallers'>Marshallers</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.SerializersAndParsers'>Serializers and Parsers</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.BeanContexts'>Bean Contexts</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.JavaBeansSupport'>Java Beans Support</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.BeanAnnotation'>@Bean Annotation</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.BeanpAnnotation'>@Beanp Annotation</a><span class='update'>updated: 8.1.0,8.1.2,<b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.BeancAnnotation'>@Beanc Annotation</a><span class='update'>updated: 8.1.0,8.1.2</span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.BeanIgnoreAnnotation'>@BeanIgnore Annotation</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.NamePropertyAnnotation'>@NameProperty Annotation</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.ParentPropertyAnnotation'>@ParentProperty Annotation</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.PojoBuilders'>POJO Builders</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.BypassSerialization'>Bypass Serialization using Readers and InputStreams</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.HttpPartSerializersParsers'>HTTP Part Serializers and Parsers</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.ContextSettings'>Context Settings</a><span class='update'>updated: 8.1.3,<b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.ContextAnnotations'>Context Annotations</a><span class='update'>created: 8.1.0, updated: 8.1.3,8.2.0,<b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.JsonMap'>JsonMap and JsonList</a><span class='update'>updated: 8.2.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.ComplexDataTypes'>Complex Data Types</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.SerializerSetsParserSets'>SerializerSets and ParserSets</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.Swaps'>Swaps</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.DefaultSwaps'>Default Swaps</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.AutoSwaps'>Auto-detected swaps</a><span class='update'>created: 8.1.0</span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.PerMediaTypeSwaps'>Per-media-type Swaps</a><span class='update'>updated: 8.1.0,8.2.0</span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.OneWaySwaps'>One-way Swaps</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.SwapAnnotation'>@Swap Annotation</a><span class='update'>updated: 8.0.0,<b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.TemplatedSwaps'>Templated Swaps</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.SurrogateClasses'>Surrogate Classes</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.DynamicallyAppliedAnnotations'>Dynamically Applied Annotations</a><span class='update'>created: 8.1.3, updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.BeanDictionaries'>Bean Names and Dictionaries</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.BeanSubTypes'>Bean Subtypes</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.VirtualBeans'>Virtual Beans</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.Recursion'>Non-Tree Models and Recursion Detection</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.ParsingIntoGenericModels'>Parsing into Generic Models</a><span class='update'>updated: 8.2.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.ReadingContinuousStreams'>Reading Continuous Streams</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.MarshallingUris'>URIs</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.JacksonComparison'>Comparison with Jackson</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.PojoCategories'>POJO Categories</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.SimpleVariableLanguage'>Simple Variable Language</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.SvlVariables'>SVL Variables</a><span class='update'>updated: 8.0.0,8.1.0</span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.VarResolvers'>VarResolvers and VarResolverSessions</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.DefaultVarResolver'>VarResolver.DEFAULT</a><span class='update'>created: 8.1.0</span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.SvlOtherNotes'>Other Notes</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.Encoders'>Encoders</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.ObjectTools'>Object Tools</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.JsonDetails'>JSON Details</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.JsonMethodology'>JSON Methodology</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.JsonSerializers'>JSON Serializers</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.Json5'>JSON 5</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.JsonParsers'>JSON Parsers</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.JsonAnnotation'>@Json Annotation</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.JsonSchemaDetails'>JSON-Schema Support</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.XmlDetails'>XML Details</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.XmlMethodology'>XML Methodology</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.XmlSerializers'>XML Serializers</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.XmlParsers'>XML Parsers</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.XmlBeanTypeNameAnnotation'>@Bean(typeName) Annotation</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.XmlChildNameAnnotation'>@Xml(childName) Annotation</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.XmlFormatAnnotation'>@Xml(format) Annotation</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.XmlNamespaces'>Namespaces</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.HtmlDetails'>HTML Details</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.HtmlMethodology'>HTML Methodology</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.HtmlSerializers'>HTML Serializers</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.HtmlParsers'>HTML Parsers</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.HtmlAnnotation'>@Html Annotation</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.HtmlRenderAnnotation'>@Html(render) Annotation</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.HtmlDocSerializer'>HtmlDocSerializer</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.BasicHtmlDocTemplate'>BasicHtmlDocTemplate</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.HtmlCustomTemplates'>Custom Templates</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.HtmlSchema'>HTML-Schema Support</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.UonDetails'>UON Details</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.UonMethodology'>UON Methodology</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.UonSerializers'>UON Serializers</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.UonParsers'>UON Parsers</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.UrlEncodingDetails'>URL-Encoding Details</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.UrlEncMethodology'>URL-Encoding Methodology</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.UrlEncSerializers'>URL-Encoding Serializers</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.UrlEncParsers'>URL-Encoding Parsers</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.UrlEncodingAnnotation'>@UrlEncoding Annotation</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.MsgPackDetails'>MessagePack Details</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.MsgPackSerializers'>MessagePack Serializers</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.MsgPackParsers'>MessagePack Parsers</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.OpenApiDetails'>OpenAPI Details</a><span class='update'>updated: 8.2.0</span></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.OpenApiMethodology'>OpenAPI Methodology</a><span class='update'>updated: 8.2.0</span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.OpenApiSerializers'>OpenAPI Serializers</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.OpenApiParsers'>OpenAPI Parsers</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jm.BestPractices'>Best Practices</a></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-marshall-rdf'>juneau-marshall-rdf</a></p>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-dto'>juneau-dto</a></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jd.Html5'>HTML5</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jd.Atom'>Atom</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jd.Swagger'>Swagger</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jd.SwaggerUi'>Swagger UI</a></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-config'>juneau-config</a></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.Overview'>Overview</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.SyntaxRules'>Syntax Rules</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.ReadingEntries'>Reading Entries</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.Pojos'>POJOs</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.Arrays'>Arrays</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.JCFObjects'>Java Collection Framework Objects</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.BinaryData'>Binary Data</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.Variables'>Variables</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.LogicVariables'>Logic Variables</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.ModdedEntries'>Modded/Encoded Entries</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.Sections'>Sections</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.SettingValues'>Setting Values</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.FileSystemChanges'>File System Changes</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.CustomEntrySerialization'>Custom Entry Serialization</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.BulkSettingValues'>Setting Values in Bulk</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.Listeners'>Listeners</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.SerializingConfigs'>Serializing</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.ConfigImports'>Imports</a><span class='update'>updated: 8.1.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.ConfigStores'>Config Stores</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.MemoryStore'>MemoryStore</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.FileStore'>FileStore</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.CustomStores'>Custom ConfigStores</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.StoreListeners'>ConfigStore Listeners</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.ReadOnlyConfigs'>Read-only Configs</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.ClosingConfigs'>Closing Configs</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jc.SystemDefaultConfig'>System Default Config</a><span class='update'>created: 8.0.0, updated: 8.1.0</span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-assertions'>juneau-assertions</a><span class='update'>created: <b>9.0.0</b></span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#ja.Overview'>Overview</a><span class='update'>created: <b>9.0.0</b></span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-common'>juneau-rest-common</a><span class='update'>created: <b>9.0.0</b></span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.HelperClasses'>Helper Classes</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.Annotations'>Annotations</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.HttpHeaders'>HTTP Headers</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.HttpParts'>HTTP Parts</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#HttpEntitiesAndResources'>HTTP Entities and Resources</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.HttpResponses'>HTTP Responses</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.RemoteProxyInterfaces'>Remote Proxy Interfaces</a><span class='update'>created: <b>9.0.0</b></span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server'>juneau-rest-server</a><span class='update'>updated: <b>9.0.0</b></span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.Overview'>Overview</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.AnnotatedClasses'>@Rest-Annotated Classes</a><span class='update'>updated: 8.1.2,<b>9.0.0</b></span></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.PredefinedClasses'>Predefined Classes</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.ChildResources'>Child Resources</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.PathVariables'>Path Variables</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.Deployment'>Deployment</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.LifecycleHooks'>Lifecycle Hooks</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.RestOpAnnotatedMethods'>@RestOp-Annotated Methods</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.InferredHttpMethodsAndPaths'>Inferred HTTP Methods and Paths</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.JavaMethodParameters'>Java Method Parameters</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.JavaMethodReturnTypes'>Java Method Return Types</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.JavaMethodThrowableTypes'>Java Method Throwable Types</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.PathPatterns'>Path Patterns</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.Matchers'>Matchers</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.OverloadingHttpMethods'>Overloading HTTP Methods</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.AdditionalInformation'>Additional Information</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.HttpParts'>HTTP Parts</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.PartMarshallers'>Part Marshallers</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.HttpPartAnnotations'>HTTP Part Annotations</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.DefaultParts'>Default Parts</a><span class='update'>created: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.RequestBeans'>@Request Beans</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.ResponseBeans'>@Response Beans</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.HttpPartApis'>HTTP Part APIs</a><span class='update'>created: <b>9.0.0</b></span></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.Marshalling'>Marshalling</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.HandlingFormPosts'>Form Posts</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.Guards'>Guards</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.Converters'>Converters</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.LocalizedMessages'>Localized Messages</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.Encoders'>Encoders</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.ConfigurationFiles'>Configuration Files</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.SvlVariables'>SVL Variables</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.StaticFiles'>Static files</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.ClientVersioning'>Client Versioning</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.Swagger'>Swagger</a></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.BasicRestServletSwagger'>BasicRestServlet/BasicRestObject</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.BasicSwaggerInfo'>Basic Swagger Info</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.SwaggerTags'>Tags</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.SwaggerOperations'>Operations</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.SwaggerParameters'>Parameters</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.SwaggerResponses'>Responses</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.SwaggerModels'>Models</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.SwaggerStylesheet'>SwaggerUI.css</a></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.ExecutionStatistics'>REST method execution statistics</a><span class='update'>created: 8.1.3, updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.HtmlDocAnnotation'>@HtmlDocConfig</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.HtmlUIvsDI'>User Interfaces (UI) vs. Developer Interfaces (DI)</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.HtmlWidgets'>Widgets</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.HtmlPredefinedWidgets'>Predefined Widgets</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.HtmlUiCustomization'>UI Customization</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.HtmlStylesheets'>Stylesheets</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.LoggingAndDebugging'>Logging / Debugging</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.HttpStatusCodes'>HTTP Status Codes</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.BuiltInParameters'>Built-in Parameters</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.UsingWithOsgi'>Using with OSGi</a></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.RestContext'>RestContext</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.RestOpContext'>RestOpContext</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.ResponseProcessors'>Response Processors</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.RestRpc'>REST/RPC</a><span class='update'>updated: 8.0.0,<b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.SerializingUris'>Serializing URIs</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.UtilityBeans'>Utility Beans</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.HtmlBeans'>Using with HTML Beans</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrs.OtherNotes'>Other Notes</a></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-server-springboot'>juneau-rest-server-springboot</a><span class='update'>created: 8.0.0, updated: <b>9.0.0</b></span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrss.Overview'>Overview</a><span class='update'>created: 8.0.0, updated: <b>9.0.0</b></span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-client'>juneau-rest-client</a><span class='update'>updated: <b>9.0.0</b></span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.PojoMarshalling'>POJO Marshalling</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.RequestParts'>Request Parts</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.RequestContent'>Request Content</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.ResponseStatus'>Response Status</a><span class='update'>created: 8.1.0, updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.ResponseHeaders'>Response Headers</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.ResponseContent'>Response Content</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.CustomCallHandlers'>Custom Call Handlers</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.Interceptors'>Interceptors</a><span class='update'>created: 8.2.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.Proxies'>REST Proxies</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.Remote'>@Remote</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.RemoteMethod'>@RemoteOp</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.Content'>@Content</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.FormData'>@FormData</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.Query'>@Query</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.Header'>@Header</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.Path'>@Path</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.Request'>@Request</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.Response'>@Response</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.DualPurposeInterfaces'>Dual-purpose (end-to-end) interfaces</a><span class='update'>created: 8.0.0</span></p>
+		</ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.LoggingAndDebugging'>Logging and Debugging</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.CustomizingHttpClient'>Customizing HttpClient</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.ExtendingRestClient'>Extending RestClient</a><span class='update'>created: 8.2.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.Authentication'>Authentication</a><span class='update'>updated: 8.2.0</span></p>
+		<ol>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.AuthenticationBASIC'>BASIC Authentication</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.AuthenticationForm'>FORM-based Authentication</a></p>
+			<li><p><a class='doclink' href='{OVERVIEW_URL}#jrc.AuthenticationOIDC'>OIDC Authentication</a></p>
+		</ol>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-rest-mock'>juneau-rest-mock</a><span class='update'>created: 8.1.0, updated: 8.2.0</span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jrm.MockRestClient'>MockRestClient</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-microservice-core'>juneau-microservice-core</a><span class='update'>created: 8.1.0</span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jmc.Overview'>Microservice Overview</a><span class='update'>created: 8.0.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jmc.LifecycleMethods'>Lifecycle Methods</a><span class='update'>created: 8.0.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jmc.Args'>Args</a><span class='update'>created: 8.0.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jmc.Manifest'>Manifest</a><span class='update'>created: 8.0.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jmc.Config'>Config</a><span class='update'>created: 8.0.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jmc.SystemProperties'>System properties</a><span class='update'>created: 8.0.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jmc.VarResolver'>VarResolver</a><span class='update'>created: 8.0.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jmc.ConsoleCommands'>Console Commands</a><span class='update'>created: 8.0.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jmc.Listeners'>Listeners</a><span class='update'>created: 8.0.0</span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-microservice-jetty'>juneau-microservice-jetty</a><span class='update'>created: 8.1.0</span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jmj.Overview'>Overview</a><span class='update'>created: 8.0.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jmj.LifecycleMethods'>Lifecycle Methods</a><span class='update'>created: 8.0.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jmj.ResourceClasses'>Resource Classes</a><span class='update'>created: 8.0.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jmj.PredefinedResourceClasses'>Predefined Resource Classes</a><span class='update'>created: 8.0.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jmj.Config'>Config</a><span class='update'>created: 8.0.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jmj.JettyXml'>Jetty.xml file</a><span class='update'>created: 8.0.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jmj.UiCustomization'>UI Customization</a><span class='update'>created: 8.0.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jmj.Extending'>Extending JettyMicroservice</a><span class='update'>created: 8.0.0</span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#my-jetty-microservice'>my-jetty-microservice</a><span class='update'>created: 8.1.0</span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#mjm.Installing'>Installing in Eclipse</a><span class='update'>created: 8.0.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#mjm.Running'>Running in Eclipse</a><span class='update'>created: 8.0.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#mjm.Building'>Building and Running from Command-Line</a><span class='update'>created: 8.0.0</span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#my-springboot-microservice'>my-springboot-microservice</a><span class='update'>created: 8.0.0</span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#msm.Installing'>Installing in Eclipse</a><span class='update'>created: 8.0.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#msm.Running'>Running in Eclipse</a><span class='update'>created: 8.0.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#msm.Building'>Building and Running from Command-Line</a><span class='update'>created: 8.0.0</span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#juneau-petstore'>juneau-petstore</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jp.RunningTheApp'>Running the Pet Store App</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jp.juneau-petstore-api'>juneau-petstore-api</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jp.juneau-petstore-client'>juneau-petstore-client</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#jp.juneau-petstore-server'>juneau-petstore-server</a><span class='update'>created: <b>9.0.0</b></span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#Security'>Security Best-Practices</a></p>
+	<ol>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#s.Marshall'>juneau-marshall</a><span class='update'>created: 8.2.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#s.Svl'>juneau-svl</a><span class='update'>created: 8.2.0</span></p>
+		<li><p><a class='doclink' href='{OVERVIEW_URL}#s.Rest'>juneau-rest-server</a><span class='update'>created: 8.2.0</span></p>
+	</ol>
+	<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#v9.0-migration-guide'>v9.0 Migration Guide</a></p>
+</ol>

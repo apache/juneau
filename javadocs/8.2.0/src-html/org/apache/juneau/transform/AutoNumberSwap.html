@@ -1,0 +1,301 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.transform;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import static org.apache.juneau.internal.ClassUtils.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span><a name="line.16"></a>
+<span class="sourceLineNo">017</span>import java.lang.reflect.*;<a name="line.17"></a>
+<span class="sourceLineNo">018</span>import java.util.*;<a name="line.18"></a>
+<span class="sourceLineNo">019</span><a name="line.19"></a>
+<span class="sourceLineNo">020</span>import org.apache.juneau.*;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>import org.apache.juneau.annotation.*;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>import org.apache.juneau.collections.*;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>import org.apache.juneau.internal.*;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>import org.apache.juneau.parser.*;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>import org.apache.juneau.reflect.*;<a name="line.25"></a>
+<span class="sourceLineNo">026</span>import org.apache.juneau.serializer.*;<a name="line.26"></a>
+<span class="sourceLineNo">027</span><a name="line.27"></a>
+<span class="sourceLineNo">028</span>/**<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * A dynamic POJO swap based on reflection of a Java class that converts POJOs to Number serializable objects.<a name="line.29"></a>
+<span class="sourceLineNo">030</span> *<a name="line.30"></a>
+<span class="sourceLineNo">031</span> * &lt;p&gt;<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * Looks for methods on the class that can be called to swap-in surrogate Number objects before serialization and swap-out<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * surrogate Number objects after parsing.<a name="line.33"></a>
+<span class="sourceLineNo">034</span> *<a name="line.34"></a>
+<span class="sourceLineNo">035</span> * &lt;h5 class='figure'&gt;Valid surrogate objects&lt;/h5&gt;<a name="line.35"></a>
+<span class="sourceLineNo">036</span> * &lt;ul&gt;<a name="line.36"></a>
+<span class="sourceLineNo">037</span> *    &lt;li class='jc'&gt;Any subclass of {@link Number}<a name="line.37"></a>
+<span class="sourceLineNo">038</span> *    &lt;li class='jc'&gt;Any number primitive<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * &lt;/ul&gt;<a name="line.39"></a>
+<span class="sourceLineNo">040</span> *<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * &lt;h5 class='figure'&gt;Valid swap methods (S = Swapped type)&lt;/h5&gt;<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * &lt;ul&gt;<a name="line.42"></a>
+<span class="sourceLineNo">043</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public&lt;/jk&gt; S toNumber()&lt;/c&gt;<a name="line.43"></a>
+<span class="sourceLineNo">044</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public&lt;/jk&gt; S toNumber(BeanSession)&lt;/c&gt;<a name="line.44"></a>
+<span class="sourceLineNo">045</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public&lt;/jk&gt; S toInteger()&lt;/c&gt;<a name="line.45"></a>
+<span class="sourceLineNo">046</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public&lt;/jk&gt; S toInteger(BeanSession)&lt;/c&gt;<a name="line.46"></a>
+<span class="sourceLineNo">047</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public&lt;/jk&gt; S toInt()&lt;/c&gt;<a name="line.47"></a>
+<span class="sourceLineNo">048</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public&lt;/jk&gt; S toInt(BeanSession)&lt;/c&gt;<a name="line.48"></a>
+<span class="sourceLineNo">049</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public&lt;/jk&gt; S toLong()&lt;/c&gt;<a name="line.49"></a>
+<span class="sourceLineNo">050</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public&lt;/jk&gt; S toLong(BeanSession)&lt;/c&gt;<a name="line.50"></a>
+<span class="sourceLineNo">051</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public&lt;/jk&gt; S toFloat()&lt;/c&gt;<a name="line.51"></a>
+<span class="sourceLineNo">052</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public&lt;/jk&gt; S toFloat(BeanSession)&lt;/c&gt;<a name="line.52"></a>
+<span class="sourceLineNo">053</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public&lt;/jk&gt; S toDouble()&lt;/c&gt;<a name="line.53"></a>
+<span class="sourceLineNo">054</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public&lt;/jk&gt; S toDouble(BeanSession)&lt;/c&gt;<a name="line.54"></a>
+<span class="sourceLineNo">055</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public&lt;/jk&gt; S toShort()&lt;/c&gt;<a name="line.55"></a>
+<span class="sourceLineNo">056</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public&lt;/jk&gt; S toShort(BeanSession)&lt;/c&gt;<a name="line.56"></a>
+<span class="sourceLineNo">057</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public&lt;/jk&gt; S toByte()&lt;/c&gt;<a name="line.57"></a>
+<span class="sourceLineNo">058</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public&lt;/jk&gt; S toByte(BeanSession)&lt;/c&gt;<a name="line.58"></a>
+<span class="sourceLineNo">059</span> * &lt;/ul&gt;<a name="line.59"></a>
+<span class="sourceLineNo">060</span> *<a name="line.60"></a>
+<span class="sourceLineNo">061</span> * &lt;h5 class='figure'&gt;Valid unswap methods (N = Normal type, S = Swapped type)&lt;/h5&gt;<a name="line.61"></a>
+<span class="sourceLineNo">062</span> * &lt;ul&gt;<a name="line.62"></a>
+<span class="sourceLineNo">063</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public static&lt;/jk&gt; N fromInteger(S)&lt;/c&gt;<a name="line.63"></a>
+<span class="sourceLineNo">064</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public static&lt;/jk&gt; N fromInteger(BeanSession, S)&lt;/c&gt;<a name="line.64"></a>
+<span class="sourceLineNo">065</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public static&lt;/jk&gt; N fromInt(S)&lt;/c&gt;<a name="line.65"></a>
+<span class="sourceLineNo">066</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public static&lt;/jk&gt; N fromInt(BeanSession, S)&lt;/c&gt;<a name="line.66"></a>
+<span class="sourceLineNo">067</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public static&lt;/jk&gt; N fromLong(S)&lt;/c&gt;<a name="line.67"></a>
+<span class="sourceLineNo">068</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public static&lt;/jk&gt; N fromLong(BeanSession, S)&lt;/c&gt;<a name="line.68"></a>
+<span class="sourceLineNo">069</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public static&lt;/jk&gt; N fromFloat(S)&lt;/c&gt;<a name="line.69"></a>
+<span class="sourceLineNo">070</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public static&lt;/jk&gt; N fromFloat(BeanSession, S)&lt;/c&gt;<a name="line.70"></a>
+<span class="sourceLineNo">071</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public static&lt;/jk&gt; N fromDouble(S)&lt;/c&gt;<a name="line.71"></a>
+<span class="sourceLineNo">072</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public static&lt;/jk&gt; N fromDouble(BeanSession, S)&lt;/c&gt;<a name="line.72"></a>
+<span class="sourceLineNo">073</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public static&lt;/jk&gt; N fromShort(S)&lt;/c&gt;<a name="line.73"></a>
+<span class="sourceLineNo">074</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public static&lt;/jk&gt; N fromShort(BeanSession, S)&lt;/c&gt;<a name="line.74"></a>
+<span class="sourceLineNo">075</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public static&lt;/jk&gt; N fromByte(S)&lt;/c&gt;<a name="line.75"></a>
+<span class="sourceLineNo">076</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public static&lt;/jk&gt; N fromByte(BeanSession, S)&lt;/c&gt;<a name="line.76"></a>
+<span class="sourceLineNo">077</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public static&lt;/jk&gt; N create(S)&lt;/c&gt;<a name="line.77"></a>
+<span class="sourceLineNo">078</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public static&lt;/jk&gt; N create(BeanSession, S)&lt;/c&gt;<a name="line.78"></a>
+<span class="sourceLineNo">079</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public static&lt;/jk&gt; N valueOf(S)&lt;/c&gt;<a name="line.79"></a>
+<span class="sourceLineNo">080</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public static&lt;/jk&gt; N valueOf(BeanSession, S)&lt;/c&gt;<a name="line.80"></a>
+<span class="sourceLineNo">081</span> *    &lt;li class='jm'&gt;&lt;c&gt;&lt;jk&gt;public&lt;/jk&gt; N(S)&lt;/c&gt;<a name="line.81"></a>
+<span class="sourceLineNo">082</span> * &lt;/ul&gt;<a name="line.82"></a>
+<span class="sourceLineNo">083</span> * &lt;p&gt;<a name="line.83"></a>
+<span class="sourceLineNo">084</span> * Classes are ignored if any of the following are true:<a name="line.84"></a>
+<span class="sourceLineNo">085</span> * &lt;ul&gt;<a name="line.85"></a>
+<span class="sourceLineNo">086</span> *    &lt;li&gt;Classes annotated with {@link BeanIgnore @BeanIgnore}.<a name="line.86"></a>
+<span class="sourceLineNo">087</span> *    &lt;li&gt;Non-static member classes.<a name="line.87"></a>
+<span class="sourceLineNo">088</span> * &lt;/ul&gt;<a name="line.88"></a>
+<span class="sourceLineNo">089</span> *<a name="line.89"></a>
+<span class="sourceLineNo">090</span> * &lt;p&gt;<a name="line.90"></a>
+<span class="sourceLineNo">091</span> * Members/constructors are ignored if any of the following are true:<a name="line.91"></a>
+<span class="sourceLineNo">092</span> * &lt;ul&gt;<a name="line.92"></a>
+<span class="sourceLineNo">093</span> *    &lt;li&gt;Members/constructors annotated with {@link BeanIgnore @BeanIgnore}.<a name="line.93"></a>
+<span class="sourceLineNo">094</span> *    &lt;li&gt;Deprecated members/constructors.<a name="line.94"></a>
+<span class="sourceLineNo">095</span> * &lt;/ul&gt;<a name="line.95"></a>
+<span class="sourceLineNo">096</span> *<a name="line.96"></a>
+<span class="sourceLineNo">097</span> * @param &lt;T&gt; The normal class type.<a name="line.97"></a>
+<span class="sourceLineNo">098</span> */<a name="line.98"></a>
+<span class="sourceLineNo">099</span>public class AutoNumberSwap&lt;T&gt; extends PojoSwap&lt;T,Number&gt; {<a name="line.99"></a>
+<span class="sourceLineNo">100</span><a name="line.100"></a>
+<span class="sourceLineNo">101</span>   private static final Set&lt;String&gt;<a name="line.101"></a>
+<span class="sourceLineNo">102</span>      SWAP_METHOD_NAMES = ASet.unmodifiable("toNumber", "toInteger", "toInt", "toLong", "toFloat", "toDouble", "toShort", "toByte"),<a name="line.102"></a>
+<span class="sourceLineNo">103</span>      UNSWAP_METHOD_NAMES = ASet.unmodifiable("fromInteger", "fromInt", "fromLong", "fromFloat", "fromDouble", "fromShort", "fromByte", "create", "valueOf");<a name="line.103"></a>
+<span class="sourceLineNo">104</span><a name="line.104"></a>
+<span class="sourceLineNo">105</span>   /**<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    * Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.<a name="line.106"></a>
+<span class="sourceLineNo">107</span>    *<a name="line.107"></a>
+<span class="sourceLineNo">108</span>    * @param bc The bean context to use for looking up annotations.<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    * @param ci The class to try to constructor a dynamic swap on.<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    * @return A POJO swap instance, or &lt;jk&gt;null&lt;/jk&gt; if one could not be created.<a name="line.110"></a>
+<span class="sourceLineNo">111</span>    */<a name="line.111"></a>
+<span class="sourceLineNo">112</span>   @SuppressWarnings({ "rawtypes" })<a name="line.112"></a>
+<span class="sourceLineNo">113</span>   public static PojoSwap&lt;?,?&gt; find(BeanContext bc, ClassInfo ci) {<a name="line.113"></a>
+<span class="sourceLineNo">114</span><a name="line.114"></a>
+<span class="sourceLineNo">115</span>      if (shouldIgnore(bc, ci))<a name="line.115"></a>
+<span class="sourceLineNo">116</span>         return null;<a name="line.116"></a>
+<span class="sourceLineNo">117</span><a name="line.117"></a>
+<span class="sourceLineNo">118</span>      // Find swap() method if present.<a name="line.118"></a>
+<span class="sourceLineNo">119</span>      for (MethodInfo m : ci.getAllMethods()) {<a name="line.119"></a>
+<span class="sourceLineNo">120</span><a name="line.120"></a>
+<span class="sourceLineNo">121</span>         if (isSwapMethod(bc, m)) {<a name="line.121"></a>
+<span class="sourceLineNo">122</span><a name="line.122"></a>
+<span class="sourceLineNo">123</span>            ClassInfo rt = m.getReturnType();<a name="line.123"></a>
+<span class="sourceLineNo">124</span><a name="line.124"></a>
+<span class="sourceLineNo">125</span>            for (MethodInfo m2 : ci.getAllMethods())<a name="line.125"></a>
+<span class="sourceLineNo">126</span>               if (isUnswapMethod(bc, m2, ci, rt))<a name="line.126"></a>
+<span class="sourceLineNo">127</span>                  return new AutoNumberSwap(bc, ci, m, m2, null);<a name="line.127"></a>
+<span class="sourceLineNo">128</span><a name="line.128"></a>
+<span class="sourceLineNo">129</span>            for (ConstructorInfo cs : ci.getDeclaredConstructors())<a name="line.129"></a>
+<span class="sourceLineNo">130</span>               if (isUnswapConstructor(bc, cs, rt))<a name="line.130"></a>
+<span class="sourceLineNo">131</span>                  return new AutoNumberSwap(bc, ci, m, null, cs);<a name="line.131"></a>
+<span class="sourceLineNo">132</span><a name="line.132"></a>
+<span class="sourceLineNo">133</span>            return new AutoNumberSwap(bc, ci, m, null, null);<a name="line.133"></a>
+<span class="sourceLineNo">134</span>         }<a name="line.134"></a>
+<span class="sourceLineNo">135</span>      }<a name="line.135"></a>
+<span class="sourceLineNo">136</span><a name="line.136"></a>
+<span class="sourceLineNo">137</span>      return null;<a name="line.137"></a>
+<span class="sourceLineNo">138</span>   }<a name="line.138"></a>
+<span class="sourceLineNo">139</span><a name="line.139"></a>
+<span class="sourceLineNo">140</span>   private static boolean shouldIgnore(BeanContext bc, ClassInfo ci) {<a name="line.140"></a>
+<span class="sourceLineNo">141</span>      return<a name="line.141"></a>
+<span class="sourceLineNo">142</span>         bc.hasAnnotation(BeanIgnore.class, ci)<a name="line.142"></a>
+<span class="sourceLineNo">143</span>         || ci.isNonStaticMemberClass()<a name="line.143"></a>
+<span class="sourceLineNo">144</span>         || ci.isPrimitive()<a name="line.144"></a>
+<span class="sourceLineNo">145</span>         || ci.isChildOf(Number.class);<a name="line.145"></a>
+<span class="sourceLineNo">146</span>   }<a name="line.146"></a>
+<span class="sourceLineNo">147</span><a name="line.147"></a>
+<span class="sourceLineNo">148</span>   private static boolean isSwapMethod(BeanContext bc, MethodInfo mi) {<a name="line.148"></a>
+<span class="sourceLineNo">149</span>      ClassInfo rt = mi.getReturnType();<a name="line.149"></a>
+<span class="sourceLineNo">150</span>      return<a name="line.150"></a>
+<span class="sourceLineNo">151</span>         mi.isNotDeprecated()<a name="line.151"></a>
+<span class="sourceLineNo">152</span>         &amp;&amp; mi.isNotStatic()<a name="line.152"></a>
+<span class="sourceLineNo">153</span>         &amp;&amp; mi.isVisible(bc.getBeanMethodVisibility())<a name="line.153"></a>
+<span class="sourceLineNo">154</span>         &amp;&amp; (rt.isChildOf(Number.class) || (rt.isPrimitive() &amp;&amp; rt.isAny(int.class, short.class, long.class, float.class, double.class, byte.class)))<a name="line.154"></a>
+<span class="sourceLineNo">155</span>         &amp;&amp; mi.hasName(SWAP_METHOD_NAMES)<a name="line.155"></a>
+<span class="sourceLineNo">156</span>         &amp;&amp; mi.hasFuzzyParamTypes(BeanSession.class)<a name="line.156"></a>
+<span class="sourceLineNo">157</span>         &amp;&amp; ! bc.hasAnnotation(BeanIgnore.class, mi);<a name="line.157"></a>
+<span class="sourceLineNo">158</span>   }<a name="line.158"></a>
+<span class="sourceLineNo">159</span><a name="line.159"></a>
+<span class="sourceLineNo">160</span>   private static boolean isUnswapMethod(BeanContext bc, MethodInfo mi, ClassInfo ci, ClassInfo rt) {<a name="line.160"></a>
+<span class="sourceLineNo">161</span>      return<a name="line.161"></a>
+<span class="sourceLineNo">162</span>         mi.isNotDeprecated()<a name="line.162"></a>
+<span class="sourceLineNo">163</span>         &amp;&amp; mi.isStatic()<a name="line.163"></a>
+<span class="sourceLineNo">164</span>         &amp;&amp; mi.isVisible(bc.getBeanMethodVisibility())<a name="line.164"></a>
+<span class="sourceLineNo">165</span>         &amp;&amp; mi.hasName(UNSWAP_METHOD_NAMES)<a name="line.165"></a>
+<span class="sourceLineNo">166</span>         &amp;&amp; mi.hasFuzzyParamTypes(BeanSession.class, rt.inner())<a name="line.166"></a>
+<span class="sourceLineNo">167</span>         &amp;&amp; mi.hasReturnTypeParent(ci)<a name="line.167"></a>
+<span class="sourceLineNo">168</span>         &amp;&amp; ! bc.hasAnnotation(BeanIgnore.class, mi);<a name="line.168"></a>
+<span class="sourceLineNo">169</span>   }<a name="line.169"></a>
+<span class="sourceLineNo">170</span><a name="line.170"></a>
+<span class="sourceLineNo">171</span>   private static boolean isUnswapConstructor(BeanContext bc, ConstructorInfo cs, ClassInfo rt) {<a name="line.171"></a>
+<span class="sourceLineNo">172</span>      return<a name="line.172"></a>
+<span class="sourceLineNo">173</span>         cs.isNotDeprecated()<a name="line.173"></a>
+<span class="sourceLineNo">174</span>         &amp;&amp; cs.isVisible(bc.getBeanConstructorVisibility())<a name="line.174"></a>
+<span class="sourceLineNo">175</span>         &amp;&amp; cs.hasMatchingParamTypes(rt)<a name="line.175"></a>
+<span class="sourceLineNo">176</span>         &amp;&amp; ! bc.hasAnnotation(BeanIgnore.class, cs);<a name="line.176"></a>
+<span class="sourceLineNo">177</span>   }<a name="line.177"></a>
+<span class="sourceLineNo">178</span><a name="line.178"></a>
+<span class="sourceLineNo">179</span>   //------------------------------------------------------------------------------------------------------------------<a name="line.179"></a>
+<span class="sourceLineNo">180</span><a name="line.180"></a>
+<span class="sourceLineNo">181</span>   private final Method swapMethod, unswapMethod;<a name="line.181"></a>
+<span class="sourceLineNo">182</span>   private final Constructor&lt;?&gt; unswapConstructor;<a name="line.182"></a>
+<span class="sourceLineNo">183</span>   private final Class&lt;?&gt; unswapType;<a name="line.183"></a>
+<span class="sourceLineNo">184</span><a name="line.184"></a>
+<span class="sourceLineNo">185</span>   private AutoNumberSwap(BeanContext bc, ClassInfo ci, MethodInfo swapMethod, MethodInfo unswapMethod, ConstructorInfo unswapConstructor) {<a name="line.185"></a>
+<span class="sourceLineNo">186</span>      super(ci.inner(), swapMethod.inner().getReturnType());<a name="line.186"></a>
+<span class="sourceLineNo">187</span>      this.swapMethod = bc.getBeanMethodVisibility().transform(swapMethod.inner());<a name="line.187"></a>
+<span class="sourceLineNo">188</span>      this.unswapMethod = unswapMethod == null ? null : bc.getBeanMethodVisibility().transform(unswapMethod.inner());<a name="line.188"></a>
+<span class="sourceLineNo">189</span>      this.unswapConstructor = unswapConstructor == null ? null : bc.getBeanConstructorVisibility().transform(unswapConstructor.inner());<a name="line.189"></a>
+<span class="sourceLineNo">190</span><a name="line.190"></a>
+<span class="sourceLineNo">191</span>      Class&lt;?&gt; unswapType = null;<a name="line.191"></a>
+<span class="sourceLineNo">192</span>      if (unswapMethod != null) {<a name="line.192"></a>
+<span class="sourceLineNo">193</span>         for (ParamInfo pi : unswapMethod.getParams())<a name="line.193"></a>
+<span class="sourceLineNo">194</span>            if (! pi.getParameterType().is(BeanSession.class))<a name="line.194"></a>
+<span class="sourceLineNo">195</span>               unswapType = pi.getParameterType().getWrapperIfPrimitive();<a name="line.195"></a>
+<span class="sourceLineNo">196</span>      } else if (unswapConstructor != null) {<a name="line.196"></a>
+<span class="sourceLineNo">197</span>         for (ParamInfo pi : unswapConstructor.getParams())<a name="line.197"></a>
+<span class="sourceLineNo">198</span>            if (! pi.getParameterType().is(BeanSession.class))<a name="line.198"></a>
+<span class="sourceLineNo">199</span>               unswapType = pi.getParameterType().getWrapperIfPrimitive();<a name="line.199"></a>
+<span class="sourceLineNo">200</span>      }<a name="line.200"></a>
+<span class="sourceLineNo">201</span>      this.unswapType = unswapType;<a name="line.201"></a>
+<span class="sourceLineNo">202</span>   }<a name="line.202"></a>
+<span class="sourceLineNo">203</span><a name="line.203"></a>
+<span class="sourceLineNo">204</span>   @Override /* PojoSwap */<a name="line.204"></a>
+<span class="sourceLineNo">205</span>   public Number swap(BeanSession session, Object o) throws SerializeException {<a name="line.205"></a>
+<span class="sourceLineNo">206</span>      try {<a name="line.206"></a>
+<span class="sourceLineNo">207</span>         return (Number)swapMethod.invoke(o, getMatchingArgs(swapMethod.getParameterTypes(), session));<a name="line.207"></a>
+<span class="sourceLineNo">208</span>      } catch (Exception e) {<a name="line.208"></a>
+<span class="sourceLineNo">209</span>         throw SerializeException.create(e);<a name="line.209"></a>
+<span class="sourceLineNo">210</span>      }<a name="line.210"></a>
+<span class="sourceLineNo">211</span>   }<a name="line.211"></a>
+<span class="sourceLineNo">212</span><a name="line.212"></a>
+<span class="sourceLineNo">213</span>   @SuppressWarnings("unchecked")<a name="line.213"></a>
+<span class="sourceLineNo">214</span>   @Override /* PojoSwap */<a name="line.214"></a>
+<span class="sourceLineNo">215</span>   public T unswap(BeanSession session, Number o, ClassMeta&lt;?&gt; hint) throws ParseException {<a name="line.215"></a>
+<span class="sourceLineNo">216</span>      if (unswapType == null)<a name="line.216"></a>
+<span class="sourceLineNo">217</span>         throw new ParseException("No unparse methodology found for object.");<a name="line.217"></a>
+<span class="sourceLineNo">218</span>      try {<a name="line.218"></a>
+<span class="sourceLineNo">219</span>         Object o2 = ConverterUtils.toType(o, unswapType);<a name="line.219"></a>
+<span class="sourceLineNo">220</span>         if (unswapMethod != null)<a name="line.220"></a>
+<span class="sourceLineNo">221</span>            return (T)unswapMethod.invoke(null, getMatchingArgs(unswapMethod.getParameterTypes(), session, o2));<a name="line.221"></a>
+<span class="sourceLineNo">222</span>         if (unswapConstructor != null)<a name="line.222"></a>
+<span class="sourceLineNo">223</span>            return (T)unswapConstructor.newInstance(o2);<a name="line.223"></a>
+<span class="sourceLineNo">224</span>         return super.unswap(session, o, hint);<a name="line.224"></a>
+<span class="sourceLineNo">225</span>      } catch (Exception e) {<a name="line.225"></a>
+<span class="sourceLineNo">226</span>         throw ParseException.create(e);<a name="line.226"></a>
+<span class="sourceLineNo">227</span>      }<a name="line.227"></a>
+<span class="sourceLineNo">228</span>   }<a name="line.228"></a>
+<span class="sourceLineNo">229</span>}<a name="line.229"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>// ***************************************************************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span>// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *<a name="line.2"></a>
+<span class="sourceLineNo">003</span>// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *<a name="line.3"></a>
+<span class="sourceLineNo">004</span>// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *<a name="line.4"></a>
+<span class="sourceLineNo">005</span>// * with the License.  You may obtain a copy of the License at                                                              *<a name="line.5"></a>
+<span class="sourceLineNo">006</span>// *                                                                                                                         *<a name="line.6"></a>
+<span class="sourceLineNo">007</span>// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *<a name="line.7"></a>
+<span class="sourceLineNo">008</span>// *                                                                                                                         *<a name="line.8"></a>
+<span class="sourceLineNo">009</span>// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *<a name="line.9"></a>
+<span class="sourceLineNo">010</span>// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *<a name="line.10"></a>
+<span class="sourceLineNo">011</span>// * specific language governing permissions and limitations under the License.                                              *<a name="line.11"></a>
+<span class="sourceLineNo">012</span>// ***************************************************************************************************************************<a name="line.12"></a>
+<span class="sourceLineNo">013</span>package org.apache.juneau.http.annotation;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import static java.lang.annotation.RetentionPolicy.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span><a name="line.16"></a>
+<span class="sourceLineNo">017</span>import java.lang.annotation.*;<a name="line.17"></a>
+<span class="sourceLineNo">018</span><a name="line.18"></a>
+<span class="sourceLineNo">019</span>/**<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * Swagger contact annotation.<a name="line.20"></a>
+<span class="sourceLineNo">021</span> *<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * &lt;p&gt;<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * The contact information for the exposed API.<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * &lt;p&gt;<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * Used to populate the auto-generated Swagger documentation and UI for server-side &lt;ja&gt;@RestResource&lt;/ja&gt;-annotated classes.<a name="line.26"></a>
+<span class="sourceLineNo">027</span> *<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * &lt;p class='bcode w800'&gt;<a name="line.29"></a>
+<span class="sourceLineNo">030</span> *    &lt;jc&gt;// Normal&lt;/jc&gt;<a name="line.30"></a>
+<span class="sourceLineNo">031</span> *    &lt;ja&gt;@RestResource&lt;/ja&gt;(<a name="line.31"></a>
+<span class="sourceLineNo">032</span> *       swagger=&lt;ja&gt;@ResourceSwagger&lt;/ja&gt;(<a name="line.32"></a>
+<span class="sourceLineNo">033</span> *          contact=&lt;ja&gt;@Contact&lt;/ja&gt;(<a name="line.33"></a>
+<span class="sourceLineNo">034</span> *             name=&lt;js&gt;"Juneau Development Team"&lt;/js&gt;,<a name="line.34"></a>
+<span class="sourceLineNo">035</span> *             email=&lt;js&gt;"dev@juneau.apache.org"&lt;/js&gt;,<a name="line.35"></a>
+<span class="sourceLineNo">036</span> *             url=&lt;js&gt;"http://juneau.apache.org"&lt;/js&gt;<a name="line.36"></a>
+<span class="sourceLineNo">037</span> *          )<a name="line.37"></a>
+<span class="sourceLineNo">038</span> *       )<a name="line.38"></a>
+<span class="sourceLineNo">039</span> *    )<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * &lt;/p&gt;<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * &lt;p class='bcode w800'&gt;<a name="line.41"></a>
+<span class="sourceLineNo">042</span> *    &lt;jc&gt;// Free-form&lt;/jc&gt;<a name="line.42"></a>
+<span class="sourceLineNo">043</span> *    &lt;ja&gt;@RestResource&lt;/ja&gt;(<a name="line.43"></a>
+<span class="sourceLineNo">044</span> *       swagger=&lt;ja&gt;@ResourceSwagger&lt;/ja&gt;(<a name="line.44"></a>
+<span class="sourceLineNo">045</span> *          contact=&lt;ja&gt;@Contact&lt;/ja&gt;({<a name="line.45"></a>
+<span class="sourceLineNo">046</span> *             &lt;js&gt;"name:'Juneau Development Team',"&lt;/js&gt;,<a name="line.46"></a>
+<span class="sourceLineNo">047</span> *             &lt;js&gt;"email:'dev@juneau.apache.org',"&lt;/js&gt;,<a name="line.47"></a>
+<span class="sourceLineNo">048</span> *             &lt;js&gt;"url:'http://juneau.apache.org',"&lt;/js&gt;,<a name="line.48"></a>
+<span class="sourceLineNo">049</span> *             &lt;js&gt;"x-extra:'extra field'"&lt;/js&gt;<a name="line.49"></a>
+<span class="sourceLineNo">050</span> *          })<a name="line.50"></a>
+<span class="sourceLineNo">051</span> *       )<a name="line.51"></a>
+<span class="sourceLineNo">052</span> *    )<a name="line.52"></a>
+<span class="sourceLineNo">053</span> * &lt;/p&gt;<a name="line.53"></a>
+<span class="sourceLineNo">054</span> *<a name="line.54"></a>
+<span class="sourceLineNo">055</span> * &lt;ul class='seealso'&gt;<a name="line.55"></a>
+<span class="sourceLineNo">056</span> *    &lt;li class='link'&gt;{@doc juneau-rest-server.Swagger}<a name="line.56"></a>
+<span class="sourceLineNo">057</span> *    &lt;li class='extlink'&gt;{@doc SwaggerContactObject}<a name="line.57"></a>
+<span class="sourceLineNo">058</span> * &lt;/ul&gt;<a name="line.58"></a>
+<span class="sourceLineNo">059</span> */<a name="line.59"></a>
+<span class="sourceLineNo">060</span>@Documented<a name="line.60"></a>
+<span class="sourceLineNo">061</span>@Retention(RUNTIME)<a name="line.61"></a>
+<span class="sourceLineNo">062</span>public @interface Contact {<a name="line.62"></a>
+<span class="sourceLineNo">063</span><a name="line.63"></a>
+<span class="sourceLineNo">064</span>   /**<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    * &lt;mk&gt;name&lt;/mk&gt; field of the {@doc SwaggerContactObject}.<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    *<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    * &lt;p&gt;<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    * The identifying name of the contact person/organization.<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    *<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    * &lt;ul class='notes'&gt;<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    *    &lt;li&gt;<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    *       The format is a plain-text string.<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    *    &lt;li&gt;<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    *       Supports {@doc DefaultRestSvlVariables}<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    *       (e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    * &lt;/ul&gt;<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    */<a name="line.77"></a>
+<span class="sourceLineNo">078</span>   String name() default "";<a name="line.78"></a>
+<span class="sourceLineNo">079</span><a name="line.79"></a>
+<span class="sourceLineNo">080</span>   /**<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    * &lt;mk&gt;url&lt;/mk&gt; field of the {@doc SwaggerContactObject}.<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    *<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    * &lt;p&gt;<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    * The URL pointing to the contact information. MUST be in the format of a URL.<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    *<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    * &lt;ul class='notes'&gt;<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    *    &lt;li&gt;<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    *       The format is a URL string.<a name="line.88"></a>
+<span class="sourceLineNo">089</span>    *    &lt;li&gt;<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    *       Supports {@doc DefaultRestSvlVariables}<a name="line.90"></a>
+<span class="sourceLineNo">091</span>    *       (e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).<a name="line.91"></a>
+<span class="sourceLineNo">092</span>    * &lt;/ul&gt;<a name="line.92"></a>
+<span class="sourceLineNo">093</span>    */<a name="line.93"></a>
+<span class="sourceLineNo">094</span>   String url() default "";<a name="line.94"></a>
+<span class="sourceLineNo">095</span><a name="line.95"></a>
+<span class="sourceLineNo">096</span>   /**<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    * &lt;mk&gt;email&lt;/mk&gt; field of the {@doc SwaggerContactObject}.<a name="line.97"></a>
+<span class="sourceLineNo">098</span>    *<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    * &lt;p&gt;<a name="line.99"></a>
+<span class="sourceLineNo">100</span>    * The email address of the contact person/organization. MUST be in the format of an email address.<a name="line.100"></a>
+<span class="sourceLineNo">101</span>    *<a name="line.101"></a>
+<span class="sourceLineNo">102</span>    * &lt;ul class='notes'&gt;<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    *    &lt;li&gt;<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    *       The format is an email string.<a name="line.104"></a>
+<span class="sourceLineNo">105</span>    *    &lt;li&gt;<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    *       Supports {@doc DefaultRestSvlVariables}<a name="line.106"></a>
+<span class="sourceLineNo">107</span>    *       (e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).<a name="line.107"></a>
+<span class="sourceLineNo">108</span>    * &lt;/ul&gt;<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    */<a name="line.109"></a>
+<span class="sourceLineNo">110</span>   String email() default "";<a name="line.110"></a>
+<span class="sourceLineNo">111</span><a name="line.111"></a>
+<span class="sourceLineNo">112</span>   /**<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    * Free-form value for the {@doc SwaggerContactObject}.<a name="line.113"></a>
+<span class="sourceLineNo">114</span>    *<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    * &lt;p&gt;<a name="line.115"></a>
+<span class="sourceLineNo">116</span>    * This is a JSON object that makes up the swagger information for this field.<a name="line.116"></a>
+<span class="sourceLineNo">117</span>    *<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    * &lt;p&gt;<a name="line.118"></a>
+<span class="sourceLineNo">119</span>    * The following are completely equivalent ways of defining the swagger description of the contact information:<a name="line.119"></a>
+<span class="sourceLineNo">120</span>    * &lt;p class='bcode w800'&gt;<a name="line.120"></a>
+<span class="sourceLineNo">121</span>    *    &lt;jc&gt;// Normal&lt;/jc&gt;<a name="line.121"></a>
+<span class="sourceLineNo">122</span>    *    &lt;ja&gt;@RestResource&lt;/ja&gt;(<a name="line.122"></a>
+<span class="sourceLineNo">123</span>    *       swagger=&lt;ja&gt;@ResourceSwagger&lt;/ja&gt;(<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    *          contact=&lt;ja&gt;@Contact&lt;/ja&gt;(<a name="line.124"></a>
+<span class="sourceLineNo">125</span>    *             name=&lt;js&gt;"Juneau Development Team"&lt;/js&gt;,<a name="line.125"></a>
+<span class="sourceLineNo">126</span>    *             email=&lt;js&gt;"dev@juneau.apache.org"&lt;/js&gt;,<a name="line.126"></a>
+<span class="sourceLineNo">127</span>    *             url=&lt;js&gt;"http://juneau.apache.org"&lt;/js&gt;<a name="line.127"></a>
+<span class="sourceLineNo">128</span>    *          )<a name="line.128"></a>
+<span class="sourceLineNo">129</span>    *       )<a name="line.129"></a>
+<span class="sourceLineNo">130</span>    *    )<a name="line.130"></a>
+<span class="sourceLineNo">131</span>    * &lt;/p&gt;<a name="line.131"></a>
+<span class="sourceLineNo">132</span>    * &lt;p class='bcode w800'&gt;<a name="line.132"></a>
+<span class="sourceLineNo">133</span>    *    &lt;jc&gt;// Free-form&lt;/jc&gt;<a name="line.133"></a>
+<span class="sourceLineNo">134</span>    *    &lt;ja&gt;@RestResource&lt;/ja&gt;(<a name="line.134"></a>
+<span class="sourceLineNo">135</span>    *       swagger=&lt;ja&gt;@ResourceSwagger&lt;/ja&gt;(<a name="line.135"></a>
+<span class="sourceLineNo">136</span>    *          contact=&lt;ja&gt;@Contact&lt;/ja&gt;({<a name="line.136"></a>
+<span class="sourceLineNo">137</span>    *             &lt;js&gt;"name: 'Juneau Development Team',"&lt;/js&gt;,<a name="line.137"></a>
+<span class="sourceLineNo">138</span>    *             &lt;js&gt;"email: 'dev@juneau.apache.org',"&lt;/js&gt;,<a name="line.138"></a>
+<span class="sourceLineNo">139</span>    *             &lt;js&gt;"url: 'http://juneau.apache.org'"&lt;/js&gt;,<a name="line.139"></a>
+<span class="sourceLineNo">140</span>    *          })<a name="line.140"></a>
+<span class="sourceLineNo">141</span>    *       )<a name="line.141"></a>
+<span class="sourceLineNo">142</span>    *    )<a name="line.142"></a>
+<span class="sourceLineNo">143</span>    * &lt;/p&gt;<a name="line.143"></a>
+<span class="sourceLineNo">144</span>    * &lt;p class='bcode w800'&gt;<a name="line.144"></a>
+<span class="sourceLineNo">145</span>    *    &lt;jc&gt;// Free-form with variables&lt;/jc&gt;<a name="line.145"></a>
+<span class="sourceLineNo">146</span>    *    &lt;ja&gt;@RestResource&lt;/ja&gt;(<a name="line.146"></a>
+<span class="sourceLineNo">147</span>    *       swagger=&lt;ja&gt;@ResourceSwagger&lt;/ja&gt;(<a name="line.147"></a>
+<span class="sourceLineNo">148</span>    *          contact=&lt;ja&gt;@Contact&lt;/ja&gt;(&lt;js&gt;"$L{contactSwagger}"&lt;/js&gt;)<a name="line.148"></a>
+<span class="sourceLineNo">149</span>    *    )<a name="line.149"></a>
+<span class="sourceLineNo">150</span>    * &lt;/p&gt;<a name="line.150"></a>
+<span class="sourceLineNo">151</span>    * &lt;p class='bcode w800'&gt;<a name="line.151"></a>
+<span class="sourceLineNo">152</span>    *    &lt;mc&gt;// Contents of MyResource.properties&lt;/mc&gt;<a name="line.152"></a>
+<span class="sourceLineNo">153</span>    *    &lt;mk&gt;contactSwagger&lt;/mk&gt; = &lt;mv&gt;{ name: "Juneau Development Team", email: "dev@juneau.apache.org", url: "http://juneau.apache.org" }&lt;/mv&gt;<a name="line.153"></a>
+<span class="sourceLineNo">154</span>    * &lt;/p&gt;<a name="line.154"></a>
+<span class="sourceLineNo">155</span>    *<a name="line.155"></a>
+<span class="sourceLineNo">156</span>    * &lt;p&gt;<a name="line.156"></a>
+<span class="sourceLineNo">157</span>    *    The reasons why you may want to use this field include:<a name="line.157"></a>
+<span class="sourceLineNo">158</span>    * &lt;ul&gt;<a name="line.158"></a>
+<span class="sourceLineNo">159</span>    *    &lt;li&gt;You want to pull in the entire Swagger JSON definition for this field from an external source such as a properties file.<a name="line.159"></a>
+<span class="sourceLineNo">160</span>    *    &lt;li&gt;You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.<a name="line.160"></a>
+<span class="sourceLineNo">161</span>    * &lt;/ul&gt;<a name="line.161"></a>
+<span class="sourceLineNo">162</span>    *<a name="line.162"></a>
+<span class="sourceLineNo">163</span>    * &lt;ul class='notes'&gt;<a name="line.163"></a>
+<span class="sourceLineNo">164</span>    *    &lt;li&gt;<a name="line.164"></a>
+<span class="sourceLineNo">165</span>    *       The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.<a name="line.165"></a>
+<span class="sourceLineNo">166</span>    *    &lt;li&gt;<a name="line.166"></a>
+<span class="sourceLineNo">167</span>    *       The leading/trailing &lt;c&gt;{ }&lt;/c&gt; characters are optional.<a name="line.167"></a>
+<span class="sourceLineNo">168</span>    *       &lt;br&gt;The following two example are considered equivalent:<a name="line.168"></a>
+<span class="sourceLineNo">169</span>    *       &lt;p class='bcode w800'&gt;<a name="line.169"></a>
+<span class="sourceLineNo">170</span>    *    &lt;ja&gt;@Contact&lt;/ja&gt;(&lt;js&gt;"{name: 'Juneau Development Team'}"&lt;/js&gt;)<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    *       &lt;/p&gt;<a name="line.171"></a>
+<span class="sourceLineNo">172</span>    *       &lt;p class='bcode w800'&gt;<a name="line.172"></a>
+<span class="sourceLineNo">173</span>    *    &lt;ja&gt;@Contact&lt;/ja&gt;(&lt;js&gt;"name: 'Juneau Development Team'"&lt;/js&gt;)<a name="line.173"></a>
+<span class="sourceLineNo">174</span>    *       &lt;/p&gt;<a name="line.174"></a>
+<span class="sourceLineNo">175</span>    *    &lt;li&gt;<a name="line.175"></a>
+<span class="sourceLineNo">176</span>    *       Multiple lines are concatenated with newlines so that you can format the value to be readable.<a name="line.176"></a>
+<span class="sourceLineNo">177</span>    *    &lt;li&gt;<a name="line.177"></a>
+<span class="sourceLineNo">178</span>    *       Supports {@doc DefaultRestSvlVariables}<a name="line.178"></a>
+<span class="sourceLineNo">179</span>    *       (e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    *    &lt;li&gt;<a name="line.180"></a>
+<span class="sourceLineNo">181</span>    *       Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.<a name="line.181"></a>
+<span class="sourceLineNo">182</span>    * &lt;/ul&gt;<a name="line.182"></a>
+<span class="sourceLineNo">183</span>    */<a name="line.183"></a>
+<span class="sourceLineNo">184</span>   String[] value() default {};<a name="line.184"></a>
+<span class="sourceLineNo">185</span>}<a name="line.185"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>
