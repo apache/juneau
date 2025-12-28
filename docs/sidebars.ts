@@ -1945,6 +1945,158 @@ const sidebars: SidebarsConfig = {
 				},
 			],
 		},
+		// Developer Info section
+		{
+			type: 'category',
+			label: 'Developer Info',
+			collapsed: false,
+			items: [
+				{
+					type: 'doc',
+					id: 'developer-info/01.00.DeveloperLinks',
+					label: '1. Developer Links',
+				},
+				{
+					type: 'category',
+					label: '2. How-to Articles',
+					collapsed: false,
+					items: [
+						{
+							type: 'doc',
+							id: 'developer-info/02.01.BecomingAContributor',
+							label: '2.1. Becoming a contributor',
+						},
+						{
+							type: 'doc',
+							id: 'developer-info/02.02.NonCommittersContribute',
+							label: '2.2. How non-committers can contribute code',
+						},
+						{
+							type: 'doc',
+							id: 'developer-info/02.03.NewMemberGuidelines',
+							label: '2.3. New member guidelines',
+						},
+						{
+							type: 'doc',
+							id: 'developer-info/02.04.NewReleaseGuidelines',
+							label: '2.4. New release guidelines',
+						},
+						{
+							type: 'doc',
+							id: 'developer-info/02.05.VersioningGuidelines',
+							label: '2.5. Versioning guidelines',
+						},
+						{
+							type: 'doc',
+							id: 'developer-info/02.06.CodeFormattingStylesheet',
+							label: '2.6. Using the code formatting stylesheet',
+						},
+						{
+							type: 'doc',
+							id: 'developer-info/02.08.DevelopmentWishList',
+							label: '2.7. Development wish list',
+						},
+					],
+				},
+				{
+					type: 'doc',
+					id: 'developer-info/03.00.CurrentMembers',
+					label: '3. Current Members',
+				},
+				{
+					type: 'category',
+					label: '4. Blog',
+					collapsed: false,
+					items: [
+						{
+							type: 'doc',
+							id: 'developer-info/04.00.BlogIndex',
+							label: '4.0. Blog Posts',
+						},
+						{
+							type: 'doc',
+							id: 'developer-info/04.01.JUnitTestResults',
+							label: '4.1. JUnit Test Results (2018-05-11)',
+						},
+						{
+							type: 'doc',
+							id: 'developer-info/04.02.RESTMediaTypeLessPOJORequests',
+							label: '4.2. REST Media-Type-less POJO requests (2018-05-15)',
+						},
+						{
+							type: 'doc',
+							id: 'developer-info/04.03.Juneau720DocumentationPreview',
+							label: '4.3. Juneau 7.2.0 documentation preview (2018-07-25)',
+						},
+						{
+							type: 'doc',
+							id: 'developer-info/04.04.SupportForAutoValidationInSwaggerAnnotations',
+							label: '4.4. Support for auto-validation in Swagger annotations (2018-07-25)',
+						},
+						{
+							type: 'doc',
+							id: 'developer-info/04.05.DocumentationReorg',
+							label: '4.5. Documentation reorg (2018-07-25)',
+						},
+						{
+							type: 'doc',
+							id: 'developer-info/04.06.BehaviorChangeOnDefaultRestMethodPath',
+							label: '4.6. Behavior change on default @RestMethod(path) (2018-07-29)',
+						},
+						{
+							type: 'doc',
+							id: 'developer-info/04.07.DualPurposeRESTJavaInterfaces',
+							label: '4.7. Dual-purpose REST Java interfaces (2018-10-07)',
+						},
+						{
+							type: 'doc',
+							id: 'developer-info/04.08.PetStoreApplicationNowUsesJPA',
+							label: '4.8. Pet Store application now uses JPA (2018-10-07)',
+						},
+						{
+							type: 'doc',
+							id: 'developer-info/04.09.NewArticleDualPurposeInterfaces',
+							label: '4.9. New article: Dual-purpose interfaces (2018-10-19)',
+						},
+						{
+							type: 'doc',
+							id: 'developer-info/04.10.DefaultSystemConfiguration',
+							label: '4.10. Default system configuration (2018-12-06)',
+						},
+						{
+							type: 'doc',
+							id: 'developer-info/04.11.SpringBootIntegration',
+							label: '4.11. Spring Boot Integration (2018-12-07)',
+						},
+						{
+							type: 'doc',
+							id: 'developer-info/04.12.SourceJavadocTag',
+							label: '4.12. Source javadoc tag (2018-12-08)',
+						},
+						{
+							type: 'doc',
+							id: 'developer-info/04.13.ImportStatementsInConfigurationFiles',
+							label: '4.13. Import statements in configuration files (2018-12-31)',
+						},
+						{
+							type: 'doc',
+							id: 'developer-info/04.14.SerializerAndParserConfigurationAnnotations',
+							label: '4.14. Serializer and parser configuration annotations (2019-05-14)',
+						},
+						{
+							type: 'doc',
+							id: 'developer-info/04.15.NewAndImprovedRestClient',
+							label: '4.15. New and Improved RestClient (2020-07-22)',
+						},
+					],
+				},
+				{
+					type: 'doc',
+					id: 'developer-info/05.00.ArticlesIndex',
+					label: '5. Articles',
+				},
+			],
+		},
 		// Release Notes section 
 		{
 			type: 'category',
@@ -1955,6 +2107,21 @@ const sidebars: SidebarsConfig = {
 					type: 'category',
 					label: 'Version 9.x',
 					items: [
+						{
+							type: 'doc',
+							id: 'release-notes/9.2.0',
+							label: '9.2.0',
+						},
+						{
+							type: 'doc',
+							id: 'release-notes/9.1.0',
+							label: '9.1.0',
+						},
+						{
+							type: 'doc',
+							id: 'release-notes/9.0.1',
+							label: '9.0.1',
+						},
 						{
 							type: 'doc',
 							id: 'release-notes/9.0.0',
