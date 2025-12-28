@@ -154,94 +154,14 @@
 
         <h2>Available Versions</h2>
 
-        <div class="version-grid">
+        <div class="version-grid" id="version-grid">
             <!-- Latest Version (Current Build) -->
             <div class="version-card latest">
                 <h3>Current</h3>
                 <p>Latest Development Build</p>
                 <a href="/site/apidocs/">View Javadocs →</a>
             </div>
-
-            <!-- Version 9.x -->
-            <div class="version-card">
-                <h3>9.1.0</h3>
-                <p>Released: 2024</p>
-                <a href="9.1.0/">View Javadocs →</a>
-            </div>
-
-            <div class="version-card">
-                <h3>9.0.1</h3>
-                <p>Released: 2024</p>
-                <a href="9.0.1/">View Javadocs →</a>
-            </div>
-
-            <div class="version-card">
-                <h3>9.0.0</h3>
-                <p>Released: 2024</p>
-                <a href="9.0.0/">View Javadocs →</a>
-            </div>
-
-            <!-- Version 8.x -->
-            <div class="version-card">
-                <h3>8.2.0</h3>
-                <p>Released: 2020</p>
-                <a href="8.2.0/">View Javadocs →</a>
-            </div>
-
-            <div class="version-card">
-                <h3>8.1.3</h3>
-                <p>Released: 2019</p>
-                <a href="8.1.3/">View Javadocs →</a>
-            </div>
-
-            <div class="version-card">
-                <h3>8.1.2</h3>
-                <p>Released: 2019</p>
-                <a href="8.1.2/">View Javadocs →</a>
-            </div>
-
-            <div class="version-card">
-                <h3>8.1.1</h3>
-                <p>Released: 2019</p>
-                <a href="8.1.1/">View Javadocs →</a>
-            </div>
-
-            <div class="version-card">
-                <h3>8.1.0</h3>
-                <p>Released: 2019</p>
-                <a href="8.1.0/">View Javadocs →</a>
-            </div>
-
-            <div class="version-card">
-                <h3>8.0.0</h3>
-                <p>Released: 2018</p>
-                <a href="8.0.0/">View Javadocs →</a>
-            </div>
-
-            <!-- Version 7.x -->
-            <div class="version-card">
-                <h3>7.2.2</h3>
-                <p>Released: 2018</p>
-                <a href="7.2.2/">View Javadocs →</a>
-            </div>
-
-            <div class="version-card">
-                <h3>7.2.1</h3>
-                <p>Released: 2018</p>
-                <a href="7.2.1/">View Javadocs →</a>
-            </div>
-
-            <div class="version-card">
-                <h3>7.2.0</h3>
-                <p>Released: 2018</p>
-                <a href="7.2.0/">View Javadocs →</a>
-            </div>
-
-            <div class="version-card">
-                <h3>7.1.0</h3>
-                <p>Released: 2017</p>
-                <a href="7.1.0/">View Javadocs →</a>
-            </div>
+            <!-- Versions will be loaded dynamically from releases.json -->
         </div>
 
         <h2>Release Notes</h2>
@@ -261,17 +181,48 @@
     </div>
 
     <script>
-        // Auto-hide placeholder if there are other version cards
+        // Load and display versions from releases.json
         window.addEventListener('DOMContentLoaded', function() {
-            const versionCards = document.querySelectorAll('.version-card:not(#placeholder)');
-            const placeholder = document.getElementById('placeholder');
+            const versionGrid = document.getElementById('version-grid');
             
-            // Count only non-latest version cards (exclude the "latest" card as it's a symlink)
-            const realVersions = Array.from(versionCards).filter(card => !card.classList.contains('latest'));
-            
-            if (realVersions.length > 0) {
-                placeholder.style.display = 'none';
-            }
+            // Load releases.json
+            fetch('releases.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Could not load releases.json');
+                    }
+                    return response.json();
+                })
+                .then(releases => {
+                    // Create version cards for each release
+                    releases.forEach(release => {
+                        const card = document.createElement('div');
+                        card.className = 'version-card';
+                        
+                        const version = release.version;
+                        const released = release.released || 'Unknown';
+                        const path = release.path || `${version}/`;
+                        
+                        // Extract year from release date
+                        const year = released.split('-')[0] || 'Unknown';
+                        
+                        card.innerHTML = `
+                            <h3>${version}</h3>
+                            <p>Released: ${year}</p>
+                            <a href="${path}">View Javadocs →</a>
+                        `;
+                        
+                        versionGrid.appendChild(card);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading releases:', error);
+                    // Show a message if releases.json cannot be loaded
+                    const errorMsg = document.createElement('div');
+                    errorMsg.className = 'note';
+                    errorMsg.innerHTML = '<strong>Note:</strong> Could not load release information. Please check that releases.json exists.';
+                    versionGrid.parentNode.insertBefore(errorMsg, versionGrid.nextSibling);
+                });
         });
     </script>
 </body>
