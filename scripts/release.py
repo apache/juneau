@@ -19,7 +19,6 @@ This script automates the release process for Apache Juneau, including:
 - Maven repository cleanup
 - Git repository cloning
 - Build and verification
-- Javadoc generation
 - Test workspace creation
 - Maven deploy and release
 - Binary artifact creation
@@ -29,10 +28,7 @@ The script supports resuming from any step, allowing you to restart at arbitrary
 in the release process.
 
 Usage:
-    python3 scripts/release.py --rc RC_NUMBER [--start-step STEP_NAME] [--list-steps] [--skip-step STEP_NAME]
-
-Required Options:
-    --rc RC_NUMBER            Release candidate number (e.g., --rc 1 for RC1)
+    python3 scripts/release.py [--start-step STEP_NAME] [--list-steps] [--skip-step STEP_NAME] [--resume]
 
 Options:
     --start-step STEP_NAME    Start execution from the specified step (skips all previous steps)
@@ -113,9 +109,9 @@ class ReleaseState:
 class ReleaseScript:
     """Main release script class."""
     
-    def __init__(self, rc: int, start_step: Optional[str] = None, skip_steps: List[str] = None, resume: bool = False, load_env: bool = True):
+    def __init__(self, rc: Optional[int] = None, start_step: Optional[str] = None, skip_steps: List[str] = None, resume: bool = False, load_env: bool = True):
         self.state = ReleaseState()
-        self.rc = rc
+        self.rc = rc  # Will be set during _load_env if not provided
         self.start_step = start_step
         self.skip_steps = set(skip_steps or [])
         self.resume = resume
@@ -136,11 +132,8 @@ class ReleaseScript:
             'clone_juneau',
             'configure_git',
             'run_clean_verify',
-            'run_javadoc_aggregate',
-            'create_test_workspace',
             'run_deploy',
             'run_release_prepare',
-            'run_git_diff',
             'run_release_perform',
             'create_binary_artifacts',
             'verify_distribution',
@@ -250,7 +243,34 @@ class ReleaseScript:
             print("Last run: Never (first run for this version)")
         print('=' * 79 + '\n')
         
-        # Use RC number from command line argument
+        # Prompt for RC number if not already set
+        if self.rc is None:
+            # Try to get default from history
+            default_rc = None
+            if history.get('X_RELEASE_CANDIDATE'):
+                rc_match = re.search(r'RC(\d+)', history.get('X_RELEASE_CANDIDATE', ''))
+                if rc_match:
+                    default_rc = rc_match.group(1)
+            
+            rc_prompt = "Release candidate number"
+            if default_rc:
+                rc_prompt += f" [{default_rc}]"
+            rc_prompt += ": "
+            
+            while True:
+                rc_input = input(rc_prompt).strip()
+                if rc_input:
+                    try:
+                        self.rc = int(rc_input)
+                        break
+                    except ValueError:
+                        print("Please enter a valid number.")
+                elif default_rc:
+                    self.rc = int(default_rc)
+                    break
+                else:
+                    print("Release candidate number is required. Please enter a value.")
+        
         release_candidate = f"RC{self.rc}"
         
         staging = self._prompt_with_default(
@@ -637,22 +657,6 @@ class ReleaseScript:
         
         self.end_timer()
         self.state.set_last_step('run_clean_verify')
-    
-    def run_javadoc_aggregate(self):
-        """Run javadoc:aggregate."""
-        self.message("Running javadoc:aggregate")
-        self.start_timer()
-        
-        staging = Path(os.environ.get('X_STAGING', '~/tmp/dist-release-juneau')).expanduser()
-        juneau_dir = staging / 'git' / 'juneau'
-        
-        self.run_command(['mvn', 'javadoc:aggregate'], cwd=juneau_dir)
-        
-        if not self.yprompt("Is the javadoc generation clean?"):
-            self.fail("Javadoc generation check failed")
-        
-        self.end_timer()
-        self.state.set_last_step('run_javadoc_aggregate')
     
     def create_test_workspace(self):
         """Create test workspace."""
@@ -1135,11 +1139,11 @@ Anyone can participate in testing and voting, not just committers, please feel f
             except KeyboardInterrupt:
                 print("\n\nScript interrupted by user")
                 print(f"Last completed step: {step_name}")
-                print(f"To resume, run: python3 scripts/release.py --rc {self.rc} --start-step {step_name}")
+                print(f"To resume, run: python3 scripts/release.py --start-step {step_name}")
                 sys.exit(1)
             except Exception as e:
                 print(f"\nError in step {step_name}: {e}")
-                print(f"To resume, run: python3 scripts/release.py --rc {self.rc} --start-step {step_name}")
+                print(f"To resume, run: python3 scripts/release.py --start-step {step_name}")
                 raise
         
         self.success()
@@ -1149,11 +1153,6 @@ def main():
         description='Apache Juneau Release Script',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__
-    )
-    parser.add_argument(
-        '--rc',
-        type=int,
-        help='Release candidate number (e.g., 1 for RC1). Required to start the release process.'
     )
     parser.add_argument(
         '--start-step',
@@ -1178,16 +1177,16 @@ def main():
     
     args = parser.parse_args()
     
-    # If just listing steps, don't require --rc
+    # If just listing steps, don't require RC
     if args.list_steps:
         # Create a dummy script just to call list_steps (don't load env)
-        script = ReleaseScript(rc=1, start_step=None, skip_steps=[], resume=False, load_env=False)
+        script = ReleaseScript(rc=None, start_step=None, skip_steps=[], resume=False, load_env=False)
         script.list_steps()
         return
     
-    # Try to determine RC from context if not provided
-    rc = args.rc
-    if rc is None:
+    # Try to determine RC from context if resuming (will prompt if not found)
+    rc = None
+    if args.resume or args.start_step:
         # Try to extract from X_RELEASE environment variable
         x_release = os.environ.get('X_RELEASE')
         if x_release:
@@ -1243,23 +1242,6 @@ def main():
                             print(f"📌 Detected RC number from history file: {rc}")
                 except Exception:
                     pass
-    
-    # For all other operations, --rc is required (or must be determined from context)
-    if rc is None:
-        print("=" * 79)
-        print("Apache Juneau Release Script")
-        print("=" * 79)
-        print("\nTo start the release process, you must specify a release candidate number.")
-        print("\nExample:")
-        print("  python3 scripts/release.py --rc 1")
-        print("\nOther options:")
-        print("  --list-steps              List all available steps")
-        print("  --start-step STEP_NAME     Start from a specific step")
-        print("  --skip-step STEP_NAME    Skip a specific step")
-        print("  --resume                  Resume from last checkpoint")
-        print("\nFor more information, use: python3 scripts/release.py --help")
-        print("=" * 79)
-        sys.exit(1)
     
     script = ReleaseScript(
         rc=rc,

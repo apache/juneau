@@ -21,13 +21,11 @@ Build and Push Script for Juneau
 This script automates the build, test, and deployment workflow:
 1. Runs all tests
 2. Builds and installs the project
-3. Generates Javadocs
-4. Commits changes to Git
-5. Pushes to remote repository
+3. Commits changes to Git
+4. Pushes to remote repository
 
 Usage: python3 push.py "commit message"
        python3 push.py "commit message" --skip-tests
-       python3 push.py "commit message" --skip-javadoc
 """
 
 import argparse
@@ -297,8 +295,7 @@ def main():
 Examples:
   python3 push.py "Fixed bug in RestClient"
   python3 push.py "Updated documentation" --skip-tests
-  python3 push.py "Minor formatting changes" --skip-javadoc
-  python3 push.py "Quick fix" --skip-tests --skip-javadoc
+  python3 push.py "Quick fix" --skip-tests
         """
     )
     
@@ -311,12 +308,6 @@ Examples:
         "--skip-tests",
         action="store_true",
         help="Skip running tests (useful for documentation-only changes)"
-    )
-    
-    parser.add_argument(
-        "--skip-javadoc",
-        action="store_true",
-        help="Skip Javadoc generation"
     )
     
     parser.add_argument(
@@ -338,8 +329,6 @@ Examples:
     print(f"Commit message: '{args.message}'")
     if args.skip_tests:
         print("⚠ Tests will be SKIPPED")
-    if args.skip_javadoc:
-        print("⚠ Javadoc generation will be SKIPPED")
     if args.dry_run:
         print("🔍 DRY RUN MODE - No actual changes will be made")
     print("=" * 70)
@@ -354,9 +343,6 @@ Examples:
             step_num += 1
         print(f"  {step_num}. Build and install: mvn clean package install")
         step_num += 1
-        if not args.skip_javadoc:
-            print(f"  {step_num}. Generate Javadocs: mvn javadoc:javadoc")
-            step_num += 1
         print(f"  {step_num}. Commit changes: git add . && git commit -m \"{args.message}\"")
         step_num += 1
         print(f"  {step_num}. Push to remote: git push")
@@ -421,21 +407,6 @@ Examples:
         play_sound(success=False)
         return 1
     step_num += 1
-    
-    # Step 3: Generate Javadocs (optional)
-    if not args.skip_javadoc:
-        if not run_command(
-            ["mvn", "javadoc:javadoc"],
-            f"📚 Step {step_num}: Generating Javadocs...",
-            juneau_root
-        ):
-            print("\n❌ Build process aborted due to Javadoc generation failure.")
-            play_sound(success=False)
-            return 1
-        step_num += 1
-    else:
-        print(f"\n⏭️  Step {step_num}: Skipping Javadoc generation (--skip-javadoc flag)")
-        step_num += 1
     
     # Check if there are changes to commit
     if not check_git_status(juneau_root):
