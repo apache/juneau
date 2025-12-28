@@ -2,7 +2,7 @@
 
 ## Overview
 
-`build-and-push.py` automates the complete build, test, and deployment workflow for Juneau, ensuring code quality before pushing changes to the remote repository.
+`push.py` automates the complete build, test, and deployment workflow for Juneau, ensuring code quality before pushing changes to the remote repository.
 
 ## What It Does
 
@@ -22,31 +22,31 @@ If any step fails, the script stops immediately and reports the failure.
 
 ```bash
 cd /Users/james.bognar/git/juneau
-python3 scripts/build-and-push.py "Your commit message here"
+python3 scripts/push.py "Your commit message here"
 ```
 
 ### Skip Tests (for documentation-only changes)
 
 ```bash
-python3 scripts/build-and-push.py "Updated README" --skip-tests
+python3 scripts/push.py "Updated README" --skip-tests
 ```
 
 ### Skip Javadoc Generation
 
 ```bash
-python3 scripts/build-and-push.py "Minor code fix" --skip-javadoc
+python3 scripts/push.py "Minor code fix" --skip-javadoc
 ```
 
 ### Skip Both Tests and Javadoc
 
 ```bash
-python3 scripts/build-and-push.py "Quick formatting fix" --skip-tests --skip-javadoc
+python3 scripts/push.py "Quick formatting fix" --skip-tests --skip-javadoc
 ```
 
 ### Dry Run (see what would happen without actually doing it)
 
 ```bash
-python3 scripts/build-and-push.py "Testing changes" --dry-run
+python3 scripts/push.py "Testing changes" --dry-run
 ```
 
 ## Command-Line Options
@@ -66,7 +66,7 @@ python3 scripts/build-and-push.py "Testing changes" --dry-run
 ### Example 1: Full Build and Push
 
 ```bash
-python3 scripts/build-and-push.py "Fixed bug in RestClient connection handling"
+python3 scripts/push.py "Fixed bug in RestClient connection handling"
 ```
 
 Output:
@@ -112,19 +112,19 @@ Running: git push
 ### Example 2: Documentation Changes (Skip Tests)
 
 ```bash
-python3 scripts/build-and-push.py "Updated REST client documentation" --skip-tests
+python3 scripts/push.py "Updated REST client documentation" --skip-tests
 ```
 
 ### Example 3: Formatting Changes (Skip Tests and Javadoc)
 
 ```bash
-python3 scripts/build-and-push.py "Fixed code formatting in BeanContext" --skip-tests --skip-javadoc
+python3 scripts/push.py "Fixed code formatting in BeanContext" --skip-tests --skip-javadoc
 ```
 
 ### Example 4: Dry Run
 
 ```bash
-python3 scripts/build-and-push.py "Testing my changes" --dry-run
+python3 scripts/push.py "Testing my changes" --dry-run
 ```
 
 Output:

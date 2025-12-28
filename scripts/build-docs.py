@@ -312,34 +312,36 @@ def main():
         else:
             print("\n=== Skipping Maven steps ===")
         
-        # Build Docusaurus documentation first (creates build directory)
-        if not args.skip_npm:
-            build_docusaurus(docs_dir, staging=args.staging)
-        else:
-            print("\n=== Skipping Docusaurus build ===")
-        
-        # Copy Maven site directly to build directory (after Docusaurus creates it)
+        # Create build directory and copy Maven site/javadocs BEFORE building Docusaurus
+        # This prevents Docusaurus from showing broken links during startup
         if not args.skip_copy:
+            build_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Copy Maven site to build directory
             copy_maven_site(project_root, docs_dir)
-        else:
-            print("\n=== Skipping copy step ===")
-        
-        # Copy javadocs to build directory (after Docusaurus build)
-        if not args.skip_copy:
+            
+            # Copy javadocs to build directory
             source_javadocs = Path(docs_dir) / 'javadocs'
-            build_dir = Path(docs_dir) / 'build'
             build_javadocs = build_dir / 'javadocs'
             
-            if source_javadocs.exists() and build_dir.exists():
+            if source_javadocs.exists():
                 print(f"\n=== Copying javadocs to build directory ===")
                 print(f"Copying {source_javadocs} to {build_javadocs}")
                 if build_javadocs.exists():
                     shutil.rmtree(build_javadocs)
                 shutil.copytree(source_javadocs, build_javadocs)
                 print(f"✓ Javadocs copied successfully")
-            elif not source_javadocs.exists():
+            else:
                 print(f"\n=== WARNING: Javadocs directory not found at {source_javadocs} ===")
                 print("Skipping javadocs copy step")
+        else:
+            print("\n=== Skipping copy step ===")
+        
+        # Build Docusaurus documentation (build directory already exists with site/javadocs)
+        if not args.skip_npm:
+            build_docusaurus(docs_dir, staging=args.staging)
+        else:
+            print("\n=== Skipping Docusaurus build ===")
         
         # Copy .asf.yaml to build directory (needed for deployment)
         if not args.skip_copy:

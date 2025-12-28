@@ -9,13 +9,17 @@
 The script performs the following steps:
 
 1. **Installs npm dependencies** - Runs `npm ci` in the `juneau-docs` directory
-2. **Builds Docusaurus** - Runs `npm run build` to generate the static Docusaurus site
-3. **Compiles Java modules** - Runs `mvn clean compile` to ensure all source files are available
-4. **Generates Maven site** - Runs `mvn site` to generate the Maven project site
-5. **Generates aggregate javadocs** - Runs `mvn javadoc:aggregate` to create aggregated API documentation
-6. **Copies Maven site** - Copies the generated site to `juneau-docs/build/site/`
-7. **Copies .asf.yaml** - Copies the ASF configuration file to the build directory
-8. **Verifies apidocs** - Checks that the javadocs were successfully generated
+2. **Compiles Java modules** - Runs `mvn clean install -DskipTests` to build all modules
+3. **Generates Maven site** - Runs `mvn site -DskipTests` to generate the Maven project site (includes aggregate javadocs)
+4. **Copies current javadocs** - Copies generated javadocs to `juneau-docs/javadocs/<current-release>/`
+5. **Updates javadocs index** - Updates `releases.json` with version information
+6. **Creates build directory** - Creates `juneau-docs/build/` directory
+7. **Copies Maven site** - Copies the generated site to `juneau-docs/build/site/`
+8. **Copies javadocs** - Copies javadocs to `juneau-docs/build/javadocs/`
+9. **Builds Docusaurus** - Runs `npm run build` to generate the static Docusaurus site
+10. **Copies .asf.yaml** - Copies the ASF configuration file to the build directory
+11. **Verifies apidocs** - Checks that the javadocs were successfully generated
+12. **Checks topic links** - Validates all documentation links
 
 ## Usage
 
@@ -42,9 +46,19 @@ python3 scripts/build-docs.py --skip-maven
 # Skip copying step (useful for testing without updating build directory)
 python3 scripts/build-docs.py --skip-copy
 
+# Build for staging (sets SITE_URL for staging environment)
+python3 scripts/build-docs.py --staging
+
 # Combine options
 python3 scripts/build-docs.py --skip-npm --skip-copy
 ```
+
+## Command-Line Options
+
+- `--skip-npm` - Skip npm install and Docusaurus build
+- `--skip-maven` - Skip Maven compilation and site generation
+- `--skip-copy` - Skip copying Maven site to build directory
+- `--staging` - Build for staging (sets SITE_URL to juneau.staged.apache.org)
 
 ## Prerequisites
 
@@ -63,7 +77,8 @@ After successful execution, the documentation will be available in:
 
 - **Docusaurus docs**: `juneau-docs/build/`
 - **Maven site**: `juneau-docs/build/site/`
-- **Javadocs**: `juneau-docs/build/site/apidocs/`
+- **Javadocs**: `juneau-docs/build/javadocs/` (versioned) and `juneau-docs/build/site/apidocs/` (current)
+- **Javadocs index**: `juneau-docs/build/javadocs/index.html` (dynamically loads from `releases.json`)
 
 The script will also verify that the javadocs were generated and report the number of HTML files found.
 
@@ -88,8 +103,7 @@ Running: mvn clean compile -DskipTests
 === Generating Maven site ===
 Running: mvn site -DskipTests
 
-=== Generating aggregate javadocs ===
-Running: mvn javadoc:aggregate -DskipTests
+=== Copying current javadocs to versioned folder ===
 
 === Verifying apidocs generation ===
 ✓ Javadocs found in /path/to/juneau/target/site/apidocs
@@ -202,15 +216,18 @@ If the script reports that apidocs were not found:
 - The build directory (`juneau-docs/build/`) will be created if it doesn't exist
 - Existing site contents will be replaced when copying
 
+## Build Order
+
+The script now copies Maven site and javadocs **before** building Docusaurus. This prevents Docusaurus from showing broken links during startup, as the static files are already in place.
+
 ## Integration with CI/CD
 
-This script is used by the GitHub Actions workflow (`.github/workflows/deploy-docs.yml`) to build documentation. The workflow runs:
+This script is used by the documentation release scripts:
+- `release-docs-stage.py` - Calls `build-docs.py --staging` to build for staging
+- `release-docs.py` - Promotes already-built documentation from staging to production
 
-```yaml
-- name: Build Documentation
-  run: |
-    python3 scripts/build-docs.py
-```
+## Related Scripts
 
-This ensures that the same build process is used both locally and in CI/CD.
+- `release-docs-stage.py` - Deploys built documentation to `asf-staging` branch
+- `release-docs.py` - Promotes documentation from `asf-staging` to `asf-site` branch
 

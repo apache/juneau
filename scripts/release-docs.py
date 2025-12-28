@@ -12,21 +12,22 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 """
-Release Documentation to Staging Branch
+Promote Documentation from Staging to Production
 
-This script:
-1. Runs build-docs.py to build the documentation
-2. Checks out the asf-staging branch to a temporary directory
-3. Copies the contents of juneau-docs/build to the temp directory
-4. Adds and commits the changes
-5. Pushes to the remote asf-staging branch
+This script promotes the documentation from the asf-staging branch to the asf-site branch.
+This makes the documentation live on the production website.
+
+The script:
+1. Fetches the asf-staging branch
+2. Switches to a detached HEAD at origin/asf-staging
+3. Force pushes to the asf-site branch
 
 Usage:
-    python3 scripts/release-docs-stage.py [--no-push] [--commit-message MESSAGE]
+    python3 scripts/release-docs.py [--no-push] [--commit-message MESSAGE]
     
 Options:
-    --no-push          Build and commit but don't push to remote
-    --commit-message   Custom commit message (default: "Deploy documentation staging")
+    --no-push          Perform all steps except the final git push
+    --commit-message   Not used (kept for consistency with release-docs-stage.py)
 """
 
 import argparse
@@ -149,56 +150,33 @@ def play_sound(success=True):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Release documentation to asf-staging branch",
+        description="Promote documentation from asf-staging to asf-site branch",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__
     )
     parser.add_argument(
         '--no-push',
         action='store_true',
-        help='Build and commit but don\'t push to remote'
+        help='Perform all steps except the final git push'
     )
     parser.add_argument(
         '--commit-message',
         type=str,
-        default='Deploy documentation staging',
-        help='Custom commit message (default: "Deploy documentation staging")'
+        help='Not used (kept for consistency with release-docs-stage.py)'
     )
     
     args = parser.parse_args()
     
     script_dir = Path(__file__).parent
     project_root = script_dir.parent
-    docs_dir = project_root / 'juneau-docs'
-    build_dir = docs_dir / 'build'
     
     print("=" * 79)
-    print("Release Documentation to Staging Branch")
+    print("Promote Documentation to Production (asf-site branch)")
     print("=" * 79)
     print()
-    
-    # Step 1: Run build-docs.py with --staging flag
-    print("Step 1: Building documentation for staging...")
-    build_script = script_dir / 'build-docs.py'
-    if not build_script.exists():
-        print(f"❌ ERROR: {build_script} not found")
-        sys.exit(1)
-    
-    if not run_command(
-        [sys.executable, str(build_script), '--staging'],
-        cwd=project_root,
-        description="Building documentation for staging"
-    ):
-        print("\n❌ Documentation build failed. Aborting.")
-        sys.exit(1)
-    
-    if not build_dir.exists():
-        print(f"❌ ERROR: Build directory not found at {build_dir}")
-        print("   Documentation build may have failed.")
-        sys.exit(1)
-    
-    # Step 2: Create temp directory and checkout asf-staging
-    print("\nStep 2: Setting up temporary directory with asf-staging branch...")
+    print("⚠️  WARNING: This will promote documentation from asf-staging to asf-site,")
+    print("   making it live on the production website.")
+    print()
     
     # Get git remote URL
     remote_url = get_git_remote_url()
@@ -207,11 +185,11 @@ def main():
         sys.exit(1)
     
     # Create temp directory
-    temp_dir = Path(tempfile.mkdtemp(prefix='juneau-docs-staging-'))
+    temp_dir = Path(tempfile.mkdtemp(prefix='juneau-docs-promote-'))
     print(f"Temporary directory: {temp_dir}")
     
     try:
-        # Clone repository to temp directory
+        # Step 1: Clone repository to temp directory
         if not run_command(
             ["git", "clone", remote_url, str(temp_dir)],
             description="Cloning repository to temp directory"
@@ -219,67 +197,32 @@ def main():
             print("\n❌ Failed to clone repository")
             sys.exit(1)
         
-        # Fetch asf-staging branch
+        # Step 2: Fetch asf-staging branch
         if not run_command(
             ["git", "fetch", "origin", "asf-staging"],
             cwd=temp_dir,
-            check=False,  # Don't fail if branch doesn't exist yet
             description="Fetching asf-staging branch"
         ):
-            print("⚠ Warning: Could not fetch asf-staging (branch may not exist yet)")
+            print("\n❌ Failed to fetch asf-staging branch")
+            sys.exit(1)
         
-        # Checkout or create asf-staging branch
-        result = subprocess.run(
-            ["git", "checkout", "-B", "asf-staging", "origin/asf-staging"],
+        # Step 3: Switch to detached HEAD at origin/asf-staging
+        if not run_command(
+            ["git", "switch", "--detach", "origin/asf-staging"],
             cwd=temp_dir,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True
-        )
+            description="Switching to detached HEAD at origin/asf-staging"
+        ):
+            print("\n❌ Failed to switch to asf-staging branch")
+            sys.exit(1)
         
-        if result.returncode != 0:
-            # Branch doesn't exist, create it
-            if not run_command(
-                ["git", "checkout", "-b", "asf-staging"],
-                cwd=temp_dir,
-                description="Creating new asf-staging branch"
-            ):
-                print("\n❌ Failed to create asf-staging branch")
-                sys.exit(1)
-        else:
-            print("✅ Checked out asf-staging branch")
-        
-        # Step 3: Remove all existing files (except .git)
-        print("\nStep 3: Cleaning temp directory...")
-        for item in temp_dir.iterdir():
-            if item.name != '.git':
-                if item.is_dir():
-                    shutil.rmtree(item)
-                else:
-                    item.unlink()
-        print("✅ Cleaned temp directory")
-        
-        # Step 4: Copy build directory contents
-        print("\nStep 4: Copying build directory contents...")
-        for item in build_dir.iterdir():
-            dest = temp_dir / item.name
-            if item.is_dir():
-                shutil.copytree(item, dest)
-            else:
-                shutil.copy2(item, dest)
-        print(f"✅ Copied contents from {build_dir} to {temp_dir}")
-        
-        # Step 5: Add and commit changes
-        print("\nStep 5: Committing changes...")
-        
-        # Set git user (use current user's git config or defaults)
+        # Step 4: Set git user (use current user's git config or defaults)
         try:
             result = subprocess.run(
                 ["git", "config", "--get", "user.name"],
                 capture_output=True,
                 text=True
             )
-            git_user = result.stdout.strip() if result.returncode == 0 else "Documentation Builder"
+            git_user = result.stdout.strip() if result.returncode == 0 else "Documentation Promoter"
             
             result = subprocess.run(
                 ["git", "config", "--get", "user.email"],
@@ -288,7 +231,7 @@ def main():
             )
             git_email = result.stdout.strip() if result.returncode == 0 else "docs@juneau.apache.org"
         except Exception:
-            git_user = "Documentation Builder"
+            git_user = "Documentation Promoter"
             git_email = "docs@juneau.apache.org"
         
         run_command(
@@ -302,52 +245,25 @@ def main():
             description="Setting git user email"
         )
         
-        # Add all files
-        if not run_command(
-            ["git", "add", "-A"],
-            cwd=temp_dir,
-            description="Adding all files"
-        ):
-            print("\n❌ Failed to add files")
-            sys.exit(1)
-        
-        # Check if there are changes to commit
-        result = subprocess.run(
-            ["git", "diff", "--staged", "--quiet"],
-            cwd=temp_dir
-        )
-        
-        if result.returncode != 0:
-            # There are changes, commit them
-            if not run_command(
-                ["git", "commit", "-m", args.commit_message],
-                cwd=temp_dir,
-                description=f"Committing changes: {args.commit_message}"
-            ):
-                print("\n❌ Failed to commit changes")
-                sys.exit(1)
-        else:
-            print("ℹ️  No changes to commit")
-        
-        # Step 6: Push to remote (if not --no-push)
+        # Step 5: Push to asf-site branch (if not --no-push)
         if not args.no_push:
-            print("\nStep 6: Pushing to remote asf-staging branch...")
+            print("\nStep 5: Pushing to remote asf-site branch...")
             if not run_command(
-                ["git", "push", "origin", "asf-staging", "--force"],
+                ["git", "push", "origin", "HEAD:asf-site", "--force"],
                 cwd=temp_dir,
-                description="Pushing to remote"
+                description="Pushing to asf-site branch"
             ):
-                print("\n❌ Failed to push to remote")
+                print("\n❌ Failed to push to asf-site branch")
                 sys.exit(1)
         else:
             print("\n⏭️  Skipping push (--no-push flag set)")
-            print(f"   Changes are in: {temp_dir}")
+            print(f"   Changes are ready in: {temp_dir}")
             print("   You can manually push with:")
             print(f"   cd {temp_dir}")
-            print("   git push origin asf-staging --force")
+            print("   git push origin HEAD:asf-site --force")
         
         print("\n" + "=" * 79)
-        print("✅ Documentation staging deployment complete!")
+        print("✅ Documentation promotion to production complete!")
         print("=" * 79)
         if args.no_push:
             print(f"\nTemporary directory: {temp_dir}")

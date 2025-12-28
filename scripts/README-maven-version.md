@@ -1,0 +1,53 @@
+# Maven Version Script
+
+## Overview
+
+`maven-version.py` extracts the Maven major version number from the output of `mvn -version`.
+
+## What It Does
+
+The script:
+1. Runs `mvn -version`
+2. Parses the output to extract the major version number
+3. Prints the major version (e.g., "3") to stdout
+
+## Usage
+
+```bash
+python3 scripts/maven-version.py
+```
+
+## Output
+
+Prints the major version number (e.g., "3") to stdout.
+
+### Example
+
+```bash
+$ python3 scripts/maven-version.py
+3
+```
+
+## Exit Codes
+
+- `0` - Success, version printed to stdout
+- `1` - Error, could not determine Maven version or Maven not found
+
+## Use Cases
+
+This script is typically used by other scripts (like `release.py`) to:
+- Check if Maven meets minimum version requirements
+- Verify Maven installation
+
+## Requirements
+
+- Python 3.6 or higher
+- Maven (mvn command must be in PATH)
+- No external Python dependencies (uses only standard library)
+
+## Notes
+
+- The script looks for patterns like "Apache Maven 3.9.5" or "Maven 3.9.5"
+- Returns only the major version number (e.g., "3" from "3.9.5")
+- Exits with error if Maven is not found or version cannot be parsed
+

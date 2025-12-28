@@ -102,10 +102,9 @@ const baseThemeConfig: Preset.ThemeConfig = {
         position: 'right',
       },
       {
-        // Use full URL to avoid Docusaurus routing it as an internal page
-        // The javadocs are static files served from /javadocs/ directory
-        // Environment-aware: uses SITE_URL env var or defaults to production URL
-        href: `${siteUrl}/javadocs/`,
+        // Use relative path with /index.html to ensure Docusaurus treats it as a static file
+        // rather than trying to route it as an internal page
+        href: '/javadocs/index.html',
         label: 'Javadocs',
         position: 'right',
       },

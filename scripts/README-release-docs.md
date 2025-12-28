@@ -1,0 +1,67 @@
+# Promote Documentation to Production Script
+
+## Overview
+
+`release-docs.py` promotes documentation from the `asf-staging` branch to the `asf-site` branch, making it live on the production website.
+
+## What It Does
+
+The script:
+1. Clones the repository to a temporary directory
+2. Fetches the `asf-staging` branch
+3. Switches to a detached HEAD at `origin/asf-staging`
+4. Force pushes to the `asf-site` branch
+
+## Usage
+
+### Promote to Production
+
+```bash
+python3 scripts/release-docs.py
+```
+
+**⚠️  WARNING:** This will make the documentation live on the production website.
+
+### Test Without Pushing
+
+```bash
+python3 scripts/release-docs.py --no-push
+```
+
+## Command-Line Options
+
+- `--no-push` - Perform all steps except the final git push
+- `--commit-message` - Not used (kept for consistency with release-docs-stage.py)
+
+## Prerequisites
+
+- Python 3.6 or higher
+- Git (git command must be in PATH)
+- Write access to the remote repository
+
+## Exit Codes
+
+- `0` - Success
+- `1` - Error occurred
+
+## Notes
+
+- The script uses a temporary directory for git operations
+- The temp directory is automatically cleaned up after successful push
+- If `--no-push` is used, the temp directory is not cleaned up (for manual inspection)
+- A success sound is played when the script completes successfully
+- This script does NOT build documentation - it only promotes what's already in `asf-staging`
+
+## Workflow
+
+This script is typically used as the final step in the documentation release workflow:
+
+1. Make documentation changes
+2. Run `release-docs-stage.py` to deploy to staging
+3. Review the staging site at `https://juneau.staged.apache.org`
+4. Run `release-docs.py` to promote to production at `https://juneau.apache.org`
+
+## Safety
+
+The script includes a warning message before promoting to production to ensure you understand the impact.
+
