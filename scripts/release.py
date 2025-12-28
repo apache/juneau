@@ -51,6 +51,7 @@ import sys
 import time
 import urllib.request
 import xml.etree.ElementTree as ET
+import zipfile
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, Optional, List
@@ -524,12 +525,11 @@ class ReleaseScript:
         if result.stderr:
             print(result.stderr)
         
-        # Parse version from output
-        version_text = result.stdout or result.stderr
-        maven_version = self._parse_maven_version(version_text)
+        # Get Maven version using maven-version.py script
+        maven_version = self._get_maven_version()
         
         if maven_version is None:
-            self.fail("Could not determine Maven version from output")
+            self.fail("Could not determine Maven version")
         
         if maven_version < MIN_MAVEN_VERSION:
             self.fail(f"Maven version {maven_version} detected. Maven {MIN_MAVEN_VERSION} or higher is required.")
@@ -537,24 +537,22 @@ class ReleaseScript:
         print(f"✅ Maven version {maven_version} detected (Maven {MIN_MAVEN_VERSION}+ required)")
         self.state.set_last_step('check_maven_version')
     
-    def _parse_maven_version(self, version_text: str) -> Optional[int]:
-        """Parse Maven version from mvn -version output."""
-        # Maven version output format: "Apache Maven 3.9.5 (..."
-        # We need to extract the major version number
+    def _get_maven_version(self) -> Optional[int]:
+        """Get Maven version using maven-version.py script."""
+        script_dir = Path(__file__).parent
+        maven_version_script = script_dir / 'maven-version.py'
         
-        # Pattern: "Apache Maven 3.9.5" or "Maven 3.9.5"
-        match = re.search(r'Maven\s+(\d+)\.(\d+)', version_text)
-        if match:
-            major = int(match.group(1))
-            return major
-        
-        # Fallback: try to find just a version number at the start
-        match = re.search(r'^(\d+)\.(\d+)', version_text)
-        if match:
-            major = int(match.group(1))
-            return major
-        
-        return None
+        try:
+            result = subprocess.run(
+                [sys.executable, str(maven_version_script)],
+                capture_output=True,
+                text=True,
+                check=True
+            )
+            return int(result.stdout.strip())
+        except Exception as e:
+            print(f"Warning: Could not determine Maven version using maven-version.py: {e}")
+            return None
     
     def clean_maven_repo(self):
         """Clean Maven repository."""
@@ -825,11 +823,58 @@ class ReleaseScript:
             '-A', '*-source-release*', repo_url
         ], cwd=release_source_dir)
         
+        # Clean up any extra .sha512 files that might have been downloaded
+        for extra_sha512 in release_source_dir.glob('*.sha512'):
+            extra_sha512.unlink()
+        
         # Rename and process source files
         source_zip = release_source_dir / f"juneau-{version}-source-release.zip"
         if source_zip.exists():
             target_zip = release_source_dir / f"apache-juneau-{version}-src.zip"
-            source_zip.rename(target_zip)
+            
+            # Extract, exclude juneau-docs, and re-zip
+            print(f"Extracting source zip to exclude juneau-docs...")
+            extract_dir = release_source_dir / "extracted-src"
+            if extract_dir.exists():
+                shutil.rmtree(extract_dir)
+            extract_dir.mkdir()
+            
+            with zipfile.ZipFile(source_zip, 'r') as zip_ref:
+                zip_ref.extractall(extract_dir)
+            
+            # Find and remove juneau-docs directory
+            # The zip typically contains: juneau-{version}-source-release/juneau-docs/
+            juneau_docs_dir = None
+            for root, dirs, files in os.walk(extract_dir):
+                root_path = Path(root)
+                if root_path.name == "juneau-docs" and root_path.is_dir():
+                    juneau_docs_dir = root_path
+                    break
+            
+            if juneau_docs_dir and juneau_docs_dir.exists():
+                print(f"Removing {juneau_docs_dir} from source release...")
+                shutil.rmtree(juneau_docs_dir)
+                print("✓ juneau-docs excluded from source release")
+            else:
+                print("⚠ Warning: juneau-docs directory not found in source zip (may have already been excluded)")
+            
+            # Re-zip the contents, preserving the directory structure
+            print(f"Creating new source zip without juneau-docs...")
+            with zipfile.ZipFile(target_zip, 'w', zipfile.ZIP_DEFLATED) as zip_ref:
+                for root, dirs, files in os.walk(extract_dir):
+                    # Skip juneau-docs if it still exists (shouldn't happen, but be safe)
+                    if 'juneau-docs' in dirs:
+                        dirs.remove('juneau-docs')
+                    for file in files:
+                        file_path = Path(root) / file
+                        arcname = file_path.relative_to(extract_dir)
+                        zip_ref.write(file_path, arcname)
+            
+            # Clean up extracted directory
+            shutil.rmtree(extract_dir)
+            
+            # Remove original source zip
+            source_zip.unlink()
             
             # Process .asc file
             asc_file = release_source_dir / f"juneau-{version}-source-release.zip.asc"

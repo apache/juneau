@@ -46,12 +46,12 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-def run_command(cmd, cwd=None, check=True):
+def run_command(cmd, cwd=None, check=True, env=None):
     """Run a shell command and return the result."""
     print(f"Running: {' '.join(cmd)}")
     if cwd:
         print(f"  (in directory: {cwd})")
-    result = subprocess.run(cmd, cwd=cwd, check=check, capture_output=False)
+    result = subprocess.run(cmd, cwd=cwd, check=check, capture_output=False, env=env)
     return result
 
 def check_prerequisites():
@@ -81,10 +81,14 @@ def install_npm_dependencies(docs_dir):
     print("\n=== Installing npm dependencies ===")
     run_command(['npm', 'ci'], cwd=docs_dir)
 
-def build_docusaurus(docs_dir):
+def build_docusaurus(docs_dir, staging=False):
     """Build Docusaurus documentation."""
     print("\n=== Building Docusaurus ===")
-    run_command(['npm', 'run', 'build'], cwd=docs_dir)
+    env = os.environ.copy()
+    if staging:
+        env['SITE_URL'] = 'https://juneau.staged.apache.org'
+        print("  Setting SITE_URL for staging build")
+    run_command(['npm', 'run', 'build'], cwd=docs_dir, env=env)
 
 def compile_java_modules(project_root):
     """Compile and install all Java modules to local repository."""
@@ -263,6 +267,7 @@ def main():
     parser.add_argument('--skip-npm', action='store_true', help='Skip npm install and Docusaurus build')
     parser.add_argument('--skip-maven', action='store_true', help='Skip Maven compilation and site generation')
     parser.add_argument('--skip-copy', action='store_true', help='Skip copying Maven site to build directory')
+    parser.add_argument('--staging', action='store_true', help='Build for staging (sets SITE_URL to juneau.staged.apache.org)')
     
     args = parser.parse_args()
     
@@ -309,7 +314,7 @@ def main():
         
         # Build Docusaurus documentation first (creates build directory)
         if not args.skip_npm:
-            build_docusaurus(docs_dir)
+            build_docusaurus(docs_dir, staging=args.staging)
         else:
             print("\n=== Skipping Docusaurus build ===")
         

@@ -23,6 +23,9 @@ type ThemeConfigWithGiscus = Preset.ThemeConfig & {
   giscus?: GiscusThemeConfig;
 };
 
+// Site URL - used for external links that need to be environment-aware
+const siteUrl = process.env.SITE_URL || 'https://juneau.apache.org';
+
 const giscusConfig: GiscusThemeConfig = {
   repo: 'apache/juneau',
   repoId: process.env.GISCUS_REPO_ID ?? 'MDEwOlJlcG9zaXRvcnk2NDczMjY2NQ==',
@@ -99,7 +102,10 @@ const baseThemeConfig: Preset.ThemeConfig = {
         position: 'right',
       },
       {
-        href: '/javadocs/',
+        // Use full URL to avoid Docusaurus routing it as an internal page
+        // The javadocs are static files served from /javadocs/ directory
+        // Environment-aware: uses SITE_URL env var or defaults to production URL
+        href: `${siteUrl}/javadocs/`,
         label: 'Javadocs',
         position: 'right',
       },
@@ -186,7 +192,7 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://juneau.apache.org',
+  url: siteUrl,
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
