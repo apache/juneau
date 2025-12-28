@@ -1,0 +1,115 @@
+#
+# ***************************************************************************************************************************
+# * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+# * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+# * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+# * with the License.  You may obtain a copy of the License at                                                              *
+# *                                                                                                                         *
+# *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+# *                                                                                                                         *
+# * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+# * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+# * specific language governing permissions and limitations under the License.                                              *
+# ***************************************************************************************************************************
+#
+name: Promote Docs to Live
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'juneau-docs/**'
+      - 'juneau-core/**'
+      - 'juneau-rest/**'
+      - 'juneau-microservice/**'
+      - 'juneau-bean/**'
+      - 'juneau-examples/**'
+      - '.github/workflows/deploy-docs.yml'
+  workflow_dispatch: 
+
+permissions:
+  contents: write  # Need write access to push to asf-staging
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: juneau-docs/package-lock.json
+        
+    - name: Setup Java
+      uses: actions/setup-java@v5
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        cache: 'maven'
+        
+    - name: Build Documentation
+      run: |
+        python3 scripts/build-docs.py
+        
+    - name: Set up Git identity
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+    
+    - name: Deploy to staging branch
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Configure git to use token for authentication
+        git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
+        
+        # Fetch latest from remote to avoid ref-lock errors
+        git fetch origin asf-staging || true
+        
+        # Create or switch to asf-staging branch
+        git checkout -B asf-staging origin/asf-staging 2>/dev/null || git checkout -b asf-staging
+        
+        # Remove all existing files (except .git)
+        find . -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+        
+        # Copy built docs
+        cp -r juneau-docs/build/* .
+        
+        # Add all files
+        git add -A
+        
+        # Commit if there are changes
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "Deploy documentation staging from ${{ github.sha }}"
+          
+          # Force push to handle concurrent updates
+          git push origin asf-staging --force
+        fi
+
+  promote-docs:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    needs: build-docs
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Promote staging → site
+        run: |
+          git fetch origin asf-staging
+          git switch --detach origin/asf-staging
+          git push origin HEAD:asf-site --force

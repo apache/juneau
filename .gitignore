@@ -19,3 +19,6 @@ cursor-*
 /coverage.csv
 /coverage.exec
 /AI_SESSION.md
+
+# Release script generated history files
+scripts/release-history-*.json

@@ -289,56 +289,6 @@ def play_sound(success=True):
         pass
 
 
-def prompt_pgp_passphrase():
-    """
-    Make a dummy PGP call to prompt for passphrase early in the execution.
-    
-    This ensures the user is prompted for their PGP passphrase at the beginning
-    rather than waiting until signing is needed near the end of the process.
-    """
-    print("\n🔐 Prompting for PGP passphrase (dummy call)...")
-    try:
-        # Create a small dummy file to sign
-        import tempfile
-        import os
-        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.txt') as tmp:
-            tmp.write("dummy")
-            tmp_path = tmp.name
-        
-        try:
-            # Attempt to sign the dummy file (this will prompt for passphrase)
-            # Don't use --batch so it will prompt interactively for passphrase
-            # Use --yes to auto-confirm overwrite prompts, but allow passphrase prompt
-            result = subprocess.run(
-                ["gpg", "--yes", "--clearsign", tmp_path],
-                capture_output=False,  # Don't capture output so user can see the prompt
-                text=True,
-                timeout=60  # 60 second timeout for passphrase entry
-            )
-            # Clean up the dummy file and signature
-            try:
-                os.unlink(tmp_path)
-                if os.path.exists(tmp_path + ".asc"):
-                    os.unlink(tmp_path + ".asc")
-            except:
-                pass
-            print("✅ PGP passphrase entered successfully")
-            return True
-        except subprocess.TimeoutExpired:
-            print("⚠ PGP passphrase prompt timed out (this is okay if signing isn't needed)")
-            return True
-        except FileNotFoundError:
-            print("⚠ gpg command not found - skipping PGP passphrase prompt")
-            return True
-        except Exception as e:
-            # If signing fails for any reason, that's okay - we're just trying to prompt early
-            print(f"⚠ Could not prompt for PGP passphrase: {e}")
-            return True
-    except Exception as e:
-        print(f"⚠ Could not set up PGP passphrase prompt: {e}")
-        return True
-
-
 def main():
     parser = argparse.ArgumentParser(
         description="Build, test, and push Juneau project to Git repository",
@@ -414,7 +364,15 @@ Examples:
         return 0
     
     # Prompt for PGP passphrase early (before any time-consuming operations)
-    prompt_pgp_passphrase()
+    prompt_script = script_dir / 'prompt-pgp-passphrase.py'
+    if prompt_script.exists():
+        try:
+            subprocess.run(
+                [sys.executable, str(prompt_script)],
+                check=False  # Don't fail if this doesn't work
+            )
+        except Exception as e:
+            print(f"⚠ Could not run PGP passphrase prompt: {e}")
     
     step_num = 1
     

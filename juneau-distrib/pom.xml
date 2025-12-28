@@ -46,37 +46,37 @@
 						<configuration>
 							<artifactItems>
 
-						<!-- Shaded artifacts -->
-						<artifactItem>
-							<outputDirectory>${project.build.directory}/bin/shaded</outputDirectory>
-							<groupId>org.apache.juneau</groupId>
-							<artifactId>juneau-shaded-core</artifactId>
-							<version>${project.version}</version>
-						</artifactItem>
-						<artifactItem>
-							<outputDirectory>${project.build.directory}/bin/shaded</outputDirectory>
-							<groupId>org.apache.juneau</groupId>
-							<artifactId>juneau-shaded-rest-client</artifactId>
-							<version>${project.version}</version>
-						</artifactItem>
-						<artifactItem>
-							<outputDirectory>${project.build.directory}/bin/shaded</outputDirectory>
-							<groupId>org.apache.juneau</groupId>
-							<artifactId>juneau-shaded-rest-server</artifactId>
-							<version>${project.version}</version>
-						</artifactItem>
-						<artifactItem>
-							<outputDirectory>${project.build.directory}/bin/shaded</outputDirectory>
-							<groupId>org.apache.juneau</groupId>
-							<artifactId>juneau-shaded-rest-server-springboot</artifactId>
-							<version>${project.version}</version>
-						</artifactItem>
-						<artifactItem>
-							<outputDirectory>${project.build.directory}/bin/shaded</outputDirectory>
-							<groupId>org.apache.juneau</groupId>
-							<artifactId>juneau-shaded-all</artifactId>
-							<version>${project.version}</version>
-						</artifactItem>
+								<!-- Shaded artifacts -->
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/shaded</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-shaded-core</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/shaded</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-shaded-rest-client</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/shaded</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-shaded-rest-server</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/shaded</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-shaded-rest-server-springboot</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/shaded</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-shaded-all</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
 
 								<!-- juneau-marshall -->
 								<artifactItem>
@@ -352,52 +352,6 @@
 									<artifactId>juneau-microservice-core</artifactId>
 									<version>${project.version}</version>
 									<destFileName>org.apache.juneau.microservice.core_${project.version}.jar</destFileName>
-								</artifactItem>
-
-								<!-- juneau-sc-server -->
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-sc-server</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
-									<classifier>sources</classifier>
-								</artifactItem>
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-sc-server</artifactId>
-									<version>${project.version}</version>
-								</artifactItem>
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-sc-server</artifactId>
-									<version>${project.version}</version>
-									<destFileName>org.apache.juneau.sc.server_${project.version}.jar</destFileName>
-								</artifactItem>
-
-								<!-- juneau-sc-client -->
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-sc-client</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
-									<classifier>sources</classifier>
-								</artifactItem>
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-sc-client</artifactId>
-									<version>${project.version}</version>
-								</artifactItem>
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-sc-client</artifactId>
-									<version>${project.version}</version>
-									<destFileName>org.apache.juneau.sc.client_${project.version}.jar</destFileName>
 								</artifactItem>
 
 								<!-- juneau-microservice-jetty -->
