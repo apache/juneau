@@ -1836,6 +1836,113 @@ const sidebars: SidebarsConfig = {
 						},
 					],
 				},
+				{
+					type: 'category',
+					label: '23. Scripts',
+					collapsed: true,
+					items: [
+						{
+							type: 'doc',
+							id: 'topics/23.00.00.Scripts',
+							label: '23.0. Scripts Overview',
+						},
+						{
+							type: 'doc',
+							id: 'topics/23.01.00.ScriptTest',
+							label: '23.1. test.py',
+						},
+						{
+							type: 'doc',
+							id: 'topics/23.02.00.ScriptPush',
+							label: '23.2. push.py',
+						},
+						{
+							type: 'doc',
+							id: 'topics/23.03.00.ScriptRelease',
+							label: '23.3. release.py',
+						},
+						{
+							type: 'doc',
+							id: 'topics/23.04.00.ScriptReleaseDocsStage',
+							label: '23.4. release-docs-stage.py',
+						},
+						{
+							type: 'doc',
+							id: 'topics/23.05.00.ScriptReleaseDocs',
+							label: '23.5. release-docs.py',
+						},
+						{
+							type: 'doc',
+							id: 'topics/23.06.00.ScriptPromptPgpPassphrase',
+							label: '23.6. prompt-pgp-passphrase.py',
+						},
+						{
+							type: 'doc',
+							id: 'topics/23.07.00.ScriptCurrentRelease',
+							label: '23.7. current-release.py',
+						},
+						{
+							type: 'doc',
+							id: 'topics/23.08.00.ScriptMavenVersion',
+							label: '23.8. maven-version.py',
+						},
+						{
+							type: 'doc',
+							id: 'topics/23.09.00.ScriptBuildDocs',
+							label: '23.9. build-docs.py',
+						},
+						{
+							type: 'doc',
+							id: 'topics/23.10.00.ScriptCreateMvnSite',
+							label: '23.10. create-mvn-site.py',
+						},
+						{
+							type: 'doc',
+							id: 'topics/23.11.00.ScriptStartDocusaurus',
+							label: '23.11. start-docusaurus.py',
+						},
+						{
+							type: 'doc',
+							id: 'topics/23.12.00.ScriptCheckTopicLinks',
+							label: '23.12. check-topic-links.py',
+						},
+						{
+							type: 'doc',
+							id: 'topics/23.13.00.ScriptApplyEclipsePrefs',
+							label: '23.13. apply-eclipse-prefs.py',
+						},
+						{
+							type: 'doc',
+							id: 'topics/23.14.00.ScriptCleanupWhitespace',
+							label: '23.14. cleanup-whitespace.py',
+						},
+						{
+							type: 'doc',
+							id: 'topics/23.15.00.ScriptCheckFluentSetterOverrides',
+							label: '23.15. check-fluent-setter-overrides.py',
+						},
+						{
+							type: 'doc',
+							id: 'topics/23.16.00.ScriptRevertStaged',
+							label: '23.16. revert-staged.py',
+						},
+						{
+							type: 'doc',
+							id: 'topics/23.17.00.ScriptRevertUnstaged',
+							label: '23.17. revert-unstaged.py',
+						},
+						{
+							type: 'doc',
+							id: 'topics/23.18.00.ScriptStartExamplesRestJetty',
+							label: '23.18. start-examples-rest-jetty.py',
+						},
+						{
+							type: 'doc',
+							id: 'topics/23.19.00.ScriptStartExamplesRestSpringboot',
+							label: '23.19. start-examples-rest-springboot.py',
+						},
+					],
+				},
 			],
 		},
 		// Release Notes section 
