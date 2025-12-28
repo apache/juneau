@@ -17,7 +17,7 @@ Release Documentation to Staging Branch
 This script:
 1. Runs build-docs.py to build the documentation
 2. Checks out the asf-staging branch to a temporary directory
-3. Copies the contents of juneau-docs/build to the temp directory
+3. Copies the contents of docs/build to the temp directory
 4. Adds and commits the changes
 5. Pushes to the remote asf-staging branch
 
@@ -35,7 +35,7 @@ import platform
 import shutil
 import subprocess
 import sys
-import tempfile
+import webbrowser
 from pathlib import Path
 
 
@@ -174,7 +174,7 @@ def main():
     
     script_dir = Path(__file__).parent
     project_root = script_dir.parent
-    docs_dir = project_root / 'juneau-docs'
+    docs_dir = project_root / 'docs'
     build_dir = docs_dir / 'build'
     
     print("=" * 79)
@@ -205,8 +205,8 @@ def main():
         play_sound(success=False)
         sys.exit(1)
     
-    # Step 2: Create temp directory and checkout asf-staging
-    print("\nStep 2: Setting up temporary directory with asf-staging branch...")
+    # Step 2: Setup sibling directory and checkout asf-staging
+    print("\nStep 2: Setting up sibling directory with asf-staging branch...")
     
     # Get git remote URL
     remote_url = get_git_remote_url()
@@ -215,24 +215,41 @@ def main():
         play_sound(success=False)
         sys.exit(1)
     
-    # Create temp directory
-    temp_dir = Path(tempfile.mkdtemp(prefix='juneau-docs-staging-'))
-    print(f"Temporary directory: {temp_dir}")
+    # Use sibling directory instead of temp directory
+    staging_dir = project_root.parent / 'juneau-asf-staging'
+    print(f"Staging directory: {staging_dir}")
     
     try:
-        # Clone repository to temp directory
-        if not run_command(
-            ["git", "clone", remote_url, str(temp_dir)],
-            description="Cloning repository to temp directory"
-        ):
-            print("\n❌ Failed to clone repository")
-            play_sound(success=False)
-            sys.exit(1)
+        # Check if directory already exists
+        if staging_dir.exists() and (staging_dir / '.git').exists():
+            # Directory exists and is a git repo, update it
+            print("📁 Staging directory already exists, updating...")
+            if not run_command(
+                ["git", "fetch", "origin"],
+                cwd=staging_dir,
+                description="Fetching latest changes"
+            ):
+                print("\n❌ Failed to fetch latest changes")
+                play_sound(success=False)
+                sys.exit(1)
+        else:
+            # Directory doesn't exist or isn't a git repo, clone it
+            if staging_dir.exists():
+                print(f"⚠️  Directory exists but is not a git repository. Removing: {staging_dir}")
+                shutil.rmtree(staging_dir)
+            
+            if not run_command(
+                ["git", "clone", remote_url, str(staging_dir)],
+                description="Cloning repository to staging directory"
+            ):
+                print("\n❌ Failed to clone repository")
+                play_sound(success=False)
+                sys.exit(1)
         
         # Fetch asf-staging branch
         if not run_command(
             ["git", "fetch", "origin", "asf-staging"],
-            cwd=temp_dir,
+            cwd=staging_dir,
             check=False,  # Don't fail if branch doesn't exist yet
             description="Fetching asf-staging branch"
         ):
@@ -241,7 +258,7 @@ def main():
         # Checkout or create asf-staging branch
         result = subprocess.run(
             ["git", "checkout", "-B", "asf-staging", "origin/asf-staging"],
-            cwd=temp_dir,
+            cwd=staging_dir,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True
@@ -251,7 +268,7 @@ def main():
             # Branch doesn't exist, create it
             if not run_command(
                 ["git", "checkout", "-b", "asf-staging"],
-                cwd=temp_dir,
+                cwd=staging_dir,
                 description="Creating new asf-staging branch"
             ):
                 print("\n❌ Failed to create asf-staging branch")
@@ -261,24 +278,24 @@ def main():
             print("✅ Checked out asf-staging branch")
         
         # Step 3: Remove all existing files (except .git)
-        print("\nStep 3: Cleaning temp directory...")
-        for item in temp_dir.iterdir():
+        print("\nStep 3: Cleaning staging directory...")
+        for item in staging_dir.iterdir():
             if item.name != '.git':
                 if item.is_dir():
                     shutil.rmtree(item)
                 else:
                     item.unlink()
-        print("✅ Cleaned temp directory")
+        print("✅ Cleaned staging directory")
         
         # Step 4: Copy build directory contents
         print("\nStep 4: Copying build directory contents...")
         for item in build_dir.iterdir():
-            dest = temp_dir / item.name
+            dest = staging_dir / item.name
             if item.is_dir():
                 shutil.copytree(item, dest)
             else:
                 shutil.copy2(item, dest)
-        print(f"✅ Copied contents from {build_dir} to {temp_dir}")
+        print(f"✅ Copied contents from {build_dir} to {staging_dir}")
         
         # Step 5: Add and commit changes
         print("\nStep 5: Committing changes...")
@@ -304,19 +321,19 @@ def main():
         
         run_command(
             ["git", "config", "user.name", git_user],
-            cwd=temp_dir,
+            cwd=staging_dir,
             description="Setting git user name"
         )
         run_command(
             ["git", "config", "user.email", git_email],
-            cwd=temp_dir,
+            cwd=staging_dir,
             description="Setting git user email"
         )
         
         # Add all files
         if not run_command(
             ["git", "add", "-A"],
-            cwd=temp_dir,
+            cwd=staging_dir,
             description="Adding all files"
         ):
             print("\n❌ Failed to add files")
@@ -326,14 +343,14 @@ def main():
         # Check if there are changes to commit
         result = subprocess.run(
             ["git", "diff", "--staged", "--quiet"],
-            cwd=temp_dir
+            cwd=staging_dir
         )
         
         if result.returncode != 0:
             # There are changes, commit them
             if not run_command(
                 ["git", "commit", "-m", args.commit_message],
-                cwd=temp_dir,
+                cwd=staging_dir,
                 description=f"Committing changes: {args.commit_message}"
             ):
                 print("\n❌ Failed to commit changes")
@@ -347,7 +364,7 @@ def main():
             print("\nStep 6: Pushing to remote asf-staging branch...")
             if not run_command(
                 ["git", "push", "origin", "asf-staging", "--force"],
-                cwd=temp_dir,
+                cwd=staging_dir,
                 description="Pushing to remote"
             ):
                 print("\n❌ Failed to push to remote")
@@ -355,20 +372,29 @@ def main():
                 sys.exit(1)
         else:
             print("\n⏭️  Skipping push (--no-push flag set)")
-            print(f"   Changes are in: {temp_dir}")
+            print(f"   Changes are in: {staging_dir}")
             print("   You can manually push with:")
-            print(f"   cd {temp_dir}")
+            print(f"   cd {staging_dir}")
             print("   git push origin asf-staging --force")
         
         print("\n" + "=" * 79)
         print("✅ Documentation staging deployment complete!")
         print("=" * 79)
-        if args.no_push:
-            print(f"\nTemporary directory: {temp_dir}")
-            print("(This directory will not be automatically cleaned up)")
+        print(f"\nStaging directory: {staging_dir}")
+        print("(This directory is persistent and will be reused for future deployments)")
         
         # Play success sound
         play_sound(success=True)
+        
+        # Open staging URL in browser (only if push was successful)
+        if not args.no_push:
+            staging_url = "http://juneau.staged.apache.org"
+            print(f"\n🌐 Opening staging site in browser: {staging_url}")
+            try:
+                webbrowser.open(staging_url)
+            except Exception as e:
+                print(f"⚠️  Could not open browser automatically: {e}")
+                print(f"   Please visit {staging_url} manually")
         
     except KeyboardInterrupt:
         print("\n\n⚠️  Process interrupted by user")
@@ -380,12 +406,6 @@ def main():
         traceback.print_exc()
         play_sound(success=False)
         sys.exit(1)
-    finally:
-        # Clean up temp directory if push was successful
-        if not args.no_push and temp_dir.exists():
-            print(f"\nCleaning up temporary directory: {temp_dir}")
-            shutil.rmtree(temp_dir)
-            print("✅ Cleanup complete")
 
 
 if __name__ == '__main__':

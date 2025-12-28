@@ -242,6 +242,7 @@
 					<configuration>
 						<excludes>
 							<exclude>docs/**</exclude>
+							<exclude>scripts/**</exclude>
 						</excludes>
 					</configuration>
 				</plugin>

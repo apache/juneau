@@ -11,7 +11,7 @@ The script:
 2. Clones the repository to a temporary directory
 3. Checks out the `asf-staging` branch (or creates it if it doesn't exist)
 4. Removes all existing files (except `.git`)
-5. Copies the built documentation from `juneau-docs/build` to the temp directory
+5. Copies the built documentation from `docs/build` to the temp directory
 6. Adds and commits the changes
 7. Pushes to the remote `asf-staging` branch
 

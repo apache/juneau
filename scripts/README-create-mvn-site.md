@@ -11,7 +11,7 @@ The script performs these operations:
 1. **Detects Version** - Automatically gets the project version from POM
 2. **Cleans Old Site** - Removes existing `target/site` directory
 3. **Generates Site** - Runs `mvn clean compile site` to create the Maven site
-4. **Copies to Docusaurus** - Moves site to `/juneau-docs/static/site/`
+4. **Copies to Docusaurus** - Moves site to `/docs/static/site/`
 5. **Logs Output** - Creates `create-mvn-site.log` in project root
 
 ## Usage
@@ -44,7 +44,7 @@ Running Maven site generation...
 Found Maven site in: /Users/james.bognar/git/juneau/target/site
 
 Setting up local testing directory for Docusaurus...
-Removing existing static site directory: /Users/james.bognar/git/juneau/juneau-docs/static/site
+Removing existing static site directory: /Users/james.bognar/git/juneau/docs/static/site
 
 Copying entire Maven site to Docusaurus static directory...
 Copying directory: apidocs/
@@ -56,7 +56,7 @@ Copying file: index.html
 ***** SUCCESS *****************************************************************
 *******************************************************************************
 Maven site has been generated and copied successfully!
-Complete Maven site is now available in: /Users/james.bognar/git/juneau/juneau-docs/static/site/
+Complete Maven site is now available in: /Users/james.bognar/git/juneau/docs/static/site/
 This includes javadocs, project reports, and all other site content.
 You can now access it at: http://localhost:3000/site/
 Ready for broken link testing in your Docusaurus documentation!
@@ -118,7 +118,7 @@ open http://localhost:3000/site/apidocs/index.html
 After running the script:
 
 ```
-juneau-docs/
+docs/
 └── static/
     └── site/              # Maven site (temporary, for testing)
         ├── apidocs/       # Javadocs
@@ -194,7 +194,7 @@ Check the log for specific Javadoc errors.
 
 1. Make sure Docusaurus is running: `python3 scripts/start-docusaurus.py`
 2. Clear browser cache
-3. Check that files exist: `ls -la juneau-docs/static/site/`
+3. Check that files exist: `ls -la docs/static/site/`
 4. Visit directly: `http://localhost:3000/site/index.html`
 
 ## Requirements
@@ -206,7 +206,7 @@ Check the log for specific Javadoc errors.
 
 ## Replacing the Old Script
 
-This Python script replaces `/juneau-docs/create-mvn-site.sh` with:
+This Python script replaces `/docs/create-mvn-site.sh` with:
 - ✅ No dependency on `juneau-env.sh`
 - ✅ Automatic version detection from POM
 - ✅ Better error handling

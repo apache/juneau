@@ -217,12 +217,12 @@ const config: Config = {
       'classic',
       {
         docs: {
-          path: './docs',
+          path: './pages',
           sidebarPath: './sidebars.ts',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/apache/juneau/tree/master/juneau-docs/',
+            'https://github.com/apache/juneau/tree/master/docs/',
         },
         blog: {
           showReadingTime: true,

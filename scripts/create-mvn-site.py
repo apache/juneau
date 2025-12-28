@@ -101,7 +101,7 @@ def main():
     # Get directories
     script_dir = Path(__file__).parent
     juneau_root = script_dir.parent
-    docs_dir = juneau_root / "juneau-docs"
+    docs_dir = juneau_root / "docs"
     site_dir = juneau_root / "target" / "site"
     static_site_dir = docs_dir / "static" / "site"
     

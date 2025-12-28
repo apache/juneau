@@ -127,7 +127,7 @@ The email is printed to the console.
 
 ## Notes
 
-- The script automatically excludes `juneau-docs` from the source release zip
+- The script automatically excludes `docs` from the source release zip
 - Source and binary artifacts are downloaded from Maven staging repository
 - Distribution verification checks for expected files on Apache distribution site
 - The script uses `current-release.py` and `maven-version.py` for version detection

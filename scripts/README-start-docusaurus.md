@@ -30,7 +30,7 @@ Press `Ctrl+C` to stop the server.
 
 ```
 🔄 Starting Docusaurus server...
-📁 Working directory: /Users/james.bognar/git/juneau/juneau-docs
+📁 Working directory: /Users/james.bognar/git/juneau/docs
 🔍 Checking for existing processes on port 3000...
 ⚡ Killing existing process on port 3000 (PID: 12345)
 🧹 Clearing cache...
@@ -96,10 +96,10 @@ If you see permission errors when deleting cache directories:
 
 ```bash
 # Fix permissions (macOS/Linux)
-sudo chown -R $USER:$USER juneau-docs/.docusaurus juneau-docs/build
+sudo chown -R $USER:$USER docs/.docusaurus docs/build
 
 # Or manually delete
-rm -rf juneau-docs/.docusaurus juneau-docs/build juneau-docs/node_modules/.cache
+rm -rf docs/.docusaurus docs/build docs/node_modules/.cache
 ```
 
 ### npm Command Not Found
@@ -125,11 +125,11 @@ The script expects to run from the Juneau root directory. Make sure you're in:
 - **Python**: 3.6 or higher
 - **Node.js**: 14.x or higher
 - **npm**: 6.x or higher
-- **Dependencies**: Run `npm install` in `/juneau-docs` directory first
+- **Dependencies**: Run `npm install` in `/docs` directory first
 
 ## Replacing the Old Script
 
-This Python script replaces `/juneau-docs/start-server.sh` with:
+This Python script replaces `/docs/start-server.sh` with:
 - ✅ Better process management
 - ✅ Cross-platform compatibility
 - ✅ Automatic cache clearing
@@ -144,7 +144,7 @@ This Python script replaces `/juneau-docs/start-server.sh` with:
 # Start the server
 python3 scripts/start-docusaurus.py
 
-# Edit documentation files in juneau-docs/docs/
+# Edit documentation files in docs/pages/
 # Browser auto-reloads as you save changes
 
 # When done, press Ctrl+C to stop
@@ -152,7 +152,7 @@ python3 scripts/start-docusaurus.py
 
 ## Notes
 
-- The script automatically detects the `/juneau-docs` directory
+- The script automatically detects the `/docs` directory
 - Cache clearing is automatic - no flags needed
 - The server supports hot-reloading (changes appear immediately in browser)
 - Port 3000 is the default Docusaurus port

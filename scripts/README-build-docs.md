@@ -8,12 +8,12 @@
 
 The script performs the following steps:
 
-1. **Installs npm dependencies** - Runs `npm ci` in the `juneau-docs` directory
+1. **Installs npm dependencies** - Runs `npm ci` in the `docs` directory
 2. **Compiles Java modules** - Runs `mvn clean install -DskipTests` to build all modules
 3. **Generates Maven site** - Runs `mvn site -DskipTests` to generate the Maven project site (includes aggregate javadocs)
-4. **Copies current javadocs** - Copies generated javadocs to `juneau-docs/static/javadocs/<current-release>/`
+4. **Copies current javadocs** - Copies generated javadocs to `docs/static/javadocs/<current-release>/`
 5. **Updates javadocs index** - Updates `releases.json` with version information
-6. **Copies Maven site** - Copies the generated site to `juneau-docs/static/site/` (Docusaurus will copy to build)
+6. **Copies Maven site** - Copies the generated site to `docs/static/site/` (Docusaurus will copy to build)
 7. **Builds Docusaurus** - Runs `npm run build` to generate the static Docusaurus site (copies static/ to build/)
 10. **Copies .asf.yaml** - Copies the ASF configuration file to the build directory
 11. **Verifies apidocs** - Checks that the javadocs were successfully generated
@@ -73,10 +73,10 @@ The script will check for these prerequisites and exit with an error message if 
 
 After successful execution, the documentation will be available in:
 
-- **Docusaurus docs**: `juneau-docs/build/`
-- **Maven site**: `juneau-docs/build/site/`
-- **Javadocs**: `juneau-docs/build/javadocs/` (versioned, copied from static/javadocs) and `juneau-docs/build/site/apidocs/` (current)
-- **Javadocs index**: `juneau-docs/build/javadocs/index.html` (dynamically loads from `releases.json`)
+- **Docusaurus docs**: `docs/build/`
+- **Maven site**: `docs/build/site/`
+- **Javadocs**: `docs/build/javadocs/` (versioned, copied from static/javadocs) and `docs/build/site/apidocs/` (current)
+- **Javadocs index**: `docs/build/javadocs/index.html` (dynamically loads from `releases.json`)
 
 The script will also verify that the javadocs were generated and report the number of HTML files found.
 
@@ -84,16 +84,16 @@ The script will also verify that the javadocs were generated and report the numb
 
 ```
 Project root: /path/to/juneau
-Docs directory: /path/to/juneau/juneau-docs
+Docs directory: /path/to/juneau/docs
 ✓ All required tools are available
 
 === Installing npm dependencies ===
 Running: npm ci
-  (in directory: /path/to/juneau/juneau-docs)
+  (in directory: /path/to/juneau/docs)
 
 === Building Docusaurus ===
 Running: npm run build
-  (in directory: /path/to/juneau/juneau-docs)
+  (in directory: /path/to/juneau/docs)
 
 === Compiling Java modules ===
 Running: mvn clean compile -DskipTests
@@ -108,11 +108,11 @@ Running: mvn site -DskipTests
 ✓ Found 1234 HTML files in apidocs
 
 === Copying Maven site to build directory ===
-Copying /path/to/juneau/target/site to /path/to/juneau/juneau-docs/build/site
-Copying /path/to/juneau/.asf.yaml to /path/to/juneau/juneau-docs/build
+Copying /path/to/juneau/target/site to /path/to/juneau/docs/build/site
+Copying /path/to/juneau/.asf.yaml to /path/to/juneau/docs/build
 
 === Documentation build complete ===
-Documentation is available in: /path/to/juneau/juneau-docs/build
+Documentation is available in: /path/to/juneau/docs/build
 ```
 
 ## Exit Codes
@@ -156,7 +156,7 @@ If you want to test the build process without modifying the build directory:
 python3 scripts/build-docs.py --skip-copy
 ```
 
-The Maven site will still be generated in `target/site/`, but won't be copied to `juneau-docs/static/site/`.
+The Maven site will still be generated in `target/site/`, but won't be copied to `docs/static/site/`.
 
 ## Troubleshooting
 
@@ -176,7 +176,7 @@ Install the missing tools and ensure they're in your PATH.
 If `npm ci` fails, try:
 
 ```bash
-cd juneau-docs
+cd docs
 rm -rf node_modules package-lock.json
 npm install
 ```
@@ -211,7 +211,7 @@ If the script reports that apidocs were not found:
 - The script automatically skips tests (`-DskipTests`) to speed up the build
 - All commands are run from the project root directory
 - The script will exit immediately if any command fails (unless using `--skip-*` options)
-- The build directory (`juneau-docs/build/`) will be created if it doesn't exist
+- The build directory (`docs/build/`) will be created if it doesn't exist
 - Existing site contents will be replaced when copying
 
 ## Build Order

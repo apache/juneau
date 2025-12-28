@@ -185,7 +185,7 @@ def main():
         sys.exit(1)
     
     # Create temp directory
-    temp_dir = Path(tempfile.mkdtemp(prefix='juneau-docs-promote-'))
+    temp_dir = Path(tempfile.mkdtemp(prefix='docs-promote-'))
     print(f"Temporary directory: {temp_dir}")
     
     try:

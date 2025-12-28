@@ -15,7 +15,7 @@
 Script to check for correct topic links in the Juneau source tree.
 
 This script:
-1. Scans /juneau-docs/docs/topics for all markdown files
+1. Scans /docs/pages/topics for all markdown files
 2. Extracts slug names and titles from the frontmatter
 3. Scans the entire source tree for links to https://juneau.apache.org/docs/topics/SLUG">TITLE</a>
 4. Reports any mismatches between expected and actual slug/title combinations
@@ -29,7 +29,7 @@ from pathlib import Path
 def extract_topic_info(docs_dir):
     """Extract slug and title information from all topic markdown files."""
     topics = {}
-    topics_dir = Path(docs_dir) / "docs" / "topics"
+    topics_dir = Path(docs_dir) / "pages" / "topics"
     
     if not topics_dir.exists():
         print(f"ERROR: Topics directory not found: {topics_dir}")
@@ -91,6 +91,17 @@ def find_topic_links(source_dir):
                 try:
                     with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
                         content = f.read()
+                        
+                        # For markdown files, exclude code blocks
+                        if file.endswith('.md'):
+                            # Remove code blocks (```...```) from content before searching
+                            import re as re_module
+                            code_block_pattern = re_module.compile(r'```.*?```', re_module.DOTALL)
+                            content = code_block_pattern.sub('', content)
+                            # Also remove inline code (`...`)
+                            inline_code_pattern = re_module.compile(r'`[^`]+`')
+                            content = inline_code_pattern.sub('', content)
+                        
                         for match in link_pattern.finditer(content):
                             slug = match.group(1)
                             title = match.group(2)
@@ -142,17 +153,17 @@ def main():
     # Get the script directory (should be /juneau/scripts)
     script_dir = Path(__file__).parent
     juneau_root = script_dir.parent
-    docs_dir = juneau_root / "juneau-docs"
+    docs_dir = juneau_root / "docs"
     
     print("Juneau Topic Link Checker")
     print("=" * 50)
     
     # Extract topic information
-    print("\nExtracting topic information from juneau-docs...")
+    print("\nExtracting topic information from docs...")
     topics = extract_topic_info(docs_dir)
     
     if not topics:
-        print("ERROR: No topics found. Check if juneau-docs directory exists and contains topic files.")
+        print("ERROR: No topics found. Check if docs directory exists and contains topic files.")
         sys.exit(1)
     
     print(f"\nFound {len(topics)} topics")

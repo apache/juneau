@@ -832,8 +832,8 @@ class ReleaseScript:
         if source_zip.exists():
             target_zip = release_source_dir / f"apache-juneau-{version}-src.zip"
             
-            # Extract, exclude juneau-docs, and re-zip
-            print(f"Extracting source zip to exclude juneau-docs...")
+            # Extract, exclude docs, and re-zip
+            print(f"Extracting source zip to exclude docs...")
             extract_dir = release_source_dir / "extracted-src"
             if extract_dir.exists():
                 shutil.rmtree(extract_dir)
@@ -842,29 +842,29 @@ class ReleaseScript:
             with zipfile.ZipFile(source_zip, 'r') as zip_ref:
                 zip_ref.extractall(extract_dir)
             
-            # Find and remove juneau-docs directory
-            # The zip typically contains: juneau-{version}-source-release/juneau-docs/
-            juneau_docs_dir = None
+            # Find and remove docs directory
+            # The zip typically contains: juneau-{version}-source-release/docs/
+            docs_dir = None
             for root, dirs, files in os.walk(extract_dir):
                 root_path = Path(root)
-                if root_path.name == "juneau-docs" and root_path.is_dir():
-                    juneau_docs_dir = root_path
+                if root_path.name == "docs" and root_path.is_dir():
+                    docs_dir = root_path
                     break
             
-            if juneau_docs_dir and juneau_docs_dir.exists():
-                print(f"Removing {juneau_docs_dir} from source release...")
-                shutil.rmtree(juneau_docs_dir)
-                print("✓ juneau-docs excluded from source release")
+            if docs_dir and docs_dir.exists():
+                print(f"Removing {docs_dir} from source release...")
+                shutil.rmtree(docs_dir)
+                print("✓ docs excluded from source release")
             else:
-                print("⚠ Warning: juneau-docs directory not found in source zip (may have already been excluded)")
+                print("⚠ Warning: docs directory not found in source zip (may have already been excluded)")
             
             # Re-zip the contents, preserving the directory structure
-            print(f"Creating new source zip without juneau-docs...")
+            print(f"Creating new source zip without docs...")
             with zipfile.ZipFile(target_zip, 'w', zipfile.ZIP_DEFLATED) as zip_ref:
                 for root, dirs, files in os.walk(extract_dir):
-                    # Skip juneau-docs if it still exists (shouldn't happen, but be safe)
-                    if 'juneau-docs' in dirs:
-                        dirs.remove('juneau-docs')
+                    # Skip docs if it still exists (shouldn't happen, but be safe)
+                    if 'docs' in dirs:
+                        dirs.remove('docs')
                     for file in files:
                         file_path = Path(root) / file
                         arcname = file_path.relative_to(extract_dir)

@@ -8,7 +8,7 @@
 
 The script performs three main operations:
 
-1. **Extracts Topic Information** - Scans `/juneau-docs/docs/topics` for all markdown files and extracts:
+1. **Extracts Topic Information** - Scans `/docs/pages/topics` for all markdown files and extracts:
    - Slug names from the frontmatter
    - Page titles from the frontmatter
 
@@ -31,7 +31,7 @@ python3 scripts/check-topic-links.py
 ```
 
 The script will automatically:
-- Scan `/juneau-docs/docs/topics` for topic definitions
+- Scan `/docs/pages/topics` for topic definitions
 - Scan the entire Juneau source tree for topic links
 - Report any issues found
 
@@ -63,7 +63,7 @@ The script automatically skips:
 Juneau Topic Link Checker
 ==================================================
 
-Extracting topic information from juneau-docs...
+Extracting topic information from docs...
 Found topic: BeanSubTypes -> Bean Subtypes
 Found topic: Guards -> Guards
 ...

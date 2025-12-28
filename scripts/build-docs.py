@@ -18,13 +18,13 @@ This script replicates the documentation generation steps from the GitHub Action
 allowing the documentation to be built locally for testing and verification.
 
 Steps performed:
-1. Install npm dependencies in juneau-docs
+1. Install npm dependencies in docs
 2. Compile and install all Java modules to local Maven repository
 3. Generate Maven site (includes aggregate javadocs via reporting section)
-4. Copy current javadocs to juneau-docs/static/javadocs/<version> (updates versioned javadocs)
-5. Copy Maven site to juneau-docs/static/site (Docusaurus will copy to build)
+4. Copy current javadocs to docs/static/javadocs/<version> (updates versioned javadocs)
+5. Copy Maven site to docs/static/site (Docusaurus will copy to build)
 6. Build Docusaurus documentation (copies static/ contents to build/)
-7. Copy .asf.yaml to juneau-docs/build (needed for deployment)
+7. Copy .asf.yaml to docs/build (needed for deployment)
 8. Verify that apidocs were generated
 9. Check topic links (validates all documentation links)
 
@@ -273,7 +273,7 @@ def main():
     # Determine project root (parent of scripts directory)
     script_dir = Path(__file__).parent.absolute()
     project_root = script_dir.parent
-    docs_dir = project_root / 'juneau-docs'
+    docs_dir = project_root / 'docs'
     
     print(f"Project root: {project_root}")
     print(f"Docs directory: {docs_dir}")
