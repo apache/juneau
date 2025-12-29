@@ -46,43 +46,6 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-
-def find_master_branch_sibling(script_dir):
-    """
-    Find the master branch sibling folder.
-    
-    The docs branch and master branch should be sibling folders:
-    - /git/apache/juneau/docs/
-    - /git/apache/juneau/master/
-    
-    Args:
-        script_dir: Path to the scripts directory (should be in docs/scripts)
-        
-    Returns:
-        Path to the master branch folder
-        
-    Raises:
-        SystemExit: If the master branch sibling folder doesn't exist
-    """
-    # Get the parent of the docs folder (should be /git/apache/juneau/)
-    docs_dir = script_dir.parent  # docs/
-    parent_dir = docs_dir.parent  # /git/apache/juneau/
-    master_dir = parent_dir / 'master'
-    
-    if not master_dir.exists():
-        print(f"ERROR: Master branch sibling folder not found at {master_dir}")
-        print(f"Expected structure:")
-        print(f"  {parent_dir}/docs/  (current)")
-        print(f"  {parent_dir}/master/  (missing)")
-        print("\nPlease ensure the master branch is cloned as a sibling folder.")
-        sys.exit(1)
-    
-    if not (master_dir / '.git').exists():
-        print(f"ERROR: {master_dir} exists but is not a git repository")
-        sys.exit(1)
-    
-    return master_dir
-
 def run_command(cmd, cwd=None, check=True, env=None):
     """Run a shell command and return the result."""
     print(f"Running: {' '.join(cmd)}")
@@ -127,21 +90,21 @@ def build_docusaurus(docs_dir, staging=False):
         print("  Setting SITE_URL for staging build")
     run_command(['npm', 'run', 'build'], cwd=docs_dir, env=env)
 
-def compile_java_modules(master_root):
+def compile_java_modules(project_root):
     """Compile and install all Java modules to local repository."""
     print("\n=== Compiling and installing Java modules ===")
-    run_command(['mvn', 'clean', 'install', '-DskipTests'], cwd=master_root)
+    run_command(['mvn', 'clean', 'install', '-DskipTests'], cwd=project_root)
 
-def generate_maven_site(master_root):
+def generate_maven_site(project_root):
     """Generate Maven site."""
     print("\n=== Generating Maven site ===")
-    run_command(['mvn', 'site', '-DskipTests'], cwd=master_root)
+    run_command(['mvn', 'site', '-DskipTests'], cwd=project_root)
 
-def copy_maven_site(master_root, docs_dir):
+def copy_maven_site(project_root, docs_dir):
     """Copy Maven site to static directory (Docusaurus will copy it to build)."""
     print("\n=== Copying Maven site to static directory ===")
     
-    source_site = Path(master_root) / 'target' / 'site'
+    source_site = Path(project_root) / 'target' / 'site'
     static_dir = Path(docs_dir) / 'static'
     static_site = static_dir / 'site'
     
@@ -159,16 +122,16 @@ def copy_maven_site(master_root, docs_dir):
     shutil.copytree(source_site, static_site)
     print(f"✓ Maven site copied to {static_site}")
 
-def verify_apidocs(master_root):
+def verify_apidocs(project_root):
     """Verify that apidocs were generated."""
     print("\n=== Verifying apidocs generation ===")
     
-    apidocs_dir = Path(master_root) / 'target' / 'site' / 'apidocs'
+    apidocs_dir = Path(project_root) / 'target' / 'site' / 'apidocs'
     
     if not apidocs_dir.exists():
         print(f"ERROR: target/site/apidocs directory not found after generation!")
         print(f"Contents of target/site:")
-        site_dir = Path(master_root) / 'target' / 'site'
+        site_dir = Path(project_root) / 'target' / 'site'
         if site_dir.exists():
             for item in site_dir.iterdir():
                 print(f"  {item.name}")
@@ -180,20 +143,15 @@ def verify_apidocs(master_root):
     file_count = sum(1 for _ in apidocs_dir.rglob('*.html'))
     print(f"✓ Found {file_count} HTML files in apidocs")
 
-def get_current_release(master_root):
-    """Get current release version using current-release.py script from master branch."""
+def get_current_release(project_root):
+    """Get current release version using current-release.py script."""
     script_dir = Path(__file__).parent
-    master_scripts_dir = master_root / 'scripts'
-    current_release_script = master_scripts_dir / 'current-release.py'
-    
-    if not current_release_script.exists():
-        print(f"WARNING: current-release.py not found at {current_release_script}")
-        return None
+    current_release_script = script_dir / 'current-release.py'
     
     try:
         result = subprocess.run(
             [sys.executable, str(current_release_script)],
-            cwd=master_root,
+            cwd=project_root,
             capture_output=True,
             text=True,
             check=True
@@ -203,17 +161,17 @@ def get_current_release(master_root):
         print(f"WARNING: Could not get current release: {e}")
         return None
 
-def copy_current_javadocs(master_root, docs_dir):
+def copy_current_javadocs(project_root, docs_dir):
     """Copy current javadocs to versioned folder and update JSON index."""
     print("\n=== Copying current javadocs to versioned folder ===")
     
     # Get current release version
-    current_version = get_current_release(master_root)
+    current_version = get_current_release(project_root)
     if not current_version:
         print("WARNING: Could not determine current version, skipping javadocs copy")
         return
     
-    source_apidocs = Path(master_root) / 'target' / 'site' / 'apidocs'
+    source_apidocs = Path(project_root) / 'target' / 'site' / 'apidocs'
     javadocs_dir = Path(docs_dir) / 'static' / 'javadocs'
     versioned_javadocs = javadocs_dir / current_version
     
@@ -292,20 +250,16 @@ def update_javadocs_json(docs_dir, current_version):
     except Exception as e:
         print(f"Warning: Could not save releases.json: {e}")
 
-def check_topic_links(master_root, docs_dir):
+def check_topic_links(project_root):
     """Run the topic link checker to validate documentation links."""
     print("\n=== Checking topic links ===")
-    # Use the checker script from docs/scripts (it's already there)
-    script_dir = Path(__file__).parent
-    checker_script = script_dir / 'check-topic-links.py'
+    checker_script = Path(project_root) / 'scripts' / 'check-topic-links.py'
     
     if not checker_script.exists():
         print(f"WARNING: Topic link checker not found at {checker_script}")
         return
     
-    # The checker script needs both master_root and docs_dir
-    # It will scan master_root for links and docs_dir for topics
-    run_command(['python3', str(checker_script)], cwd=docs_dir)
+    run_command(['python3', str(checker_script)], cwd=project_root)
 
 def main():
     parser = argparse.ArgumentParser(description='Build Apache Juneau documentation')
@@ -316,19 +270,19 @@ def main():
     
     args = parser.parse_args()
     
-    # Determine script directory and find master branch sibling
+    # Determine project root (parent of scripts directory)
     script_dir = Path(__file__).parent.absolute()
-    docs_dir = script_dir.parent  # docs/
-    master_root = find_master_branch_sibling(script_dir)
+    project_root = script_dir.parent
+    docs_dir = project_root / 'docs'
     
-    print(f"Master branch root: {master_root}")
+    print(f"Project root: {project_root}")
     print(f"Docs directory: {docs_dir}")
     
     # Check prerequisites
     check_prerequisites()
     
-    # Change to docs directory for npm operations
-    os.chdir(docs_dir)
+    # Change to project root
+    os.chdir(project_root)
     
     # Delete build directory to ensure fresh build
     build_dir = Path(docs_dir) / 'build'
@@ -348,12 +302,12 @@ def main():
         # Generate Maven site and javadocs (must be done before building Docusaurus)
         # Note: Aggregate javadocs are now generated automatically as part of mvn site via the reporting section
         if not args.skip_maven:
-            compile_java_modules(master_root)
-            generate_maven_site(master_root)
-            verify_apidocs(master_root)
+            compile_java_modules(project_root)
+            generate_maven_site(project_root)
+            verify_apidocs(project_root)
             
             # Copy current javadocs to versioned folder
-            copy_current_javadocs(master_root, docs_dir)
+            copy_current_javadocs(project_root, docs_dir)
         else:
             print("\n=== Skipping Maven steps ===")
         
@@ -362,7 +316,7 @@ def main():
         # Note: javadocs are already in static/javadocs, so no copy needed
         if not args.skip_copy:
             # Copy Maven site to static directory
-            copy_maven_site(master_root, docs_dir)
+            copy_maven_site(project_root, docs_dir)
         else:
             print("\n=== Skipping copy step ===")
         
@@ -375,13 +329,13 @@ def main():
         # Copy .asf.yaml to build directory (needed for deployment)
         if not args.skip_copy:
             build_dir = Path(docs_dir) / 'build'
-            asf_yaml = Path(master_root) / '.asf.yaml'
+            asf_yaml = Path(project_root) / '.asf.yaml'
             if asf_yaml.exists() and build_dir.exists():
                 print(f"\n=== Copying .asf.yaml to build directory ===")
                 shutil.copy2(asf_yaml, build_dir)
         
         # Check topic links (runs once at the end)
-        check_topic_links(master_root, docs_dir)
+        check_topic_links(project_root)
         
         print("\n=== Documentation build complete ===")
         print(f"Documentation is available in: {docs_dir / 'build'}")

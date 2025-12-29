@@ -1,0 +1,1248 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.config;
+
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
+
+import java.io.*;
+import java.lang.annotation.*;
+import java.lang.reflect.*;
+import java.util.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.collections.FluentMap;
+import org.apache.juneau.commons.function.*;
+import org.apache.juneau.config.event.*;
+import org.apache.juneau.config.internal.*;
+import org.apache.juneau.config.mod.*;
+import org.apache.juneau.config.store.*;
+import org.apache.juneau.config.vars.*;
+import org.apache.juneau.json.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.serializer.*;
+import org.apache.juneau.svl.*;
+
+/**
+ * Main configuration API class.
+ *
+ * <h5 class='section'>Notes:</h5><ul>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauConfigBasics">juneau-config Basics</a>
+ * </ul>
+ */
+public class Config extends Context implements ConfigEventListener {
+	/**
+	 * Builder class.
+	 */
+	public static class Builder extends Context.Builder {
+
+		private BinaryFormat binaryFormat;
+		private boolean multiLineValuesOnSeparateLines;
+		private boolean readOnly;
+		private ConfigStore store;
+		private int binaryLineLength;
+		private Map<Character,Mod> mods;
+		private ReaderParser parser;
+		private String name;
+		private VarResolver varResolver;
+		private WriterSerializer serializer;
+
+		/**
+		 * Constructor, default settings.
+		 */
+		protected Builder() {
+			binaryFormat = env("Config.binaryFormat", BinaryFormat.BASE64);
+			binaryLineLength = env("Config.binaryLineLength", -1);
+			mods = map();
+			mods(XorEncodeMod.INSTANCE);
+			multiLineValuesOnSeparateLines = env("Config.multiLineValuesOnSeparateLines", false);
+			name = env("Config.name", "Configuration.cfg");
+			parser = JsonParser.DEFAULT;
+			readOnly = env("Config.readOnly", false);
+			serializer = Json5Serializer.DEFAULT;
+			store = FileStore.DEFAULT;
+			varResolver = VarResolver.DEFAULT;
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder to copy from.
+		 */
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
+			binaryFormat = copyFrom.binaryFormat;
+			binaryLineLength = copyFrom.binaryLineLength;
+			mods = copyOf(copyFrom.mods);
+			multiLineValuesOnSeparateLines = copyFrom.multiLineValuesOnSeparateLines;
+			name = copyFrom.name;
+			parser = copyFrom.parser;
+			readOnly = copyFrom.readOnly;
+			serializer = copyFrom.serializer;
+			store = copyFrom.store;
+			varResolver = copyFrom.varResolver;
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The bean to copy from.
+		 */
+		protected Builder(Config copyFrom) {
+			super(copyFrom);
+			binaryFormat = copyFrom.binaryFormat;
+			binaryLineLength = copyFrom.binaryLineLength;
+			mods = copyOf(copyFrom.mods);
+			multiLineValuesOnSeparateLines = copyFrom.multiLineValuesOnSeparateLines;
+			name = copyFrom.name;
+			parser = copyFrom.parser;
+			readOnly = copyFrom.readOnly;
+			serializer = copyFrom.serializer;
+			store = copyFrom.store;
+			varResolver = copyFrom.varResolver;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder annotations(Annotation...values) {
+			super.annotations(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder annotations(List<Annotation> values) {
+			super.annotations(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder apply(AnnotationWorkList work) {
+			super.apply(work);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
+			return this;
+		}
+
+		/**
+		 * Binary value format.
+		 *
+		 * <p>
+		 * The format to use when persisting byte arrays.
+		 *
+		 * <ul class='values'>
+		 * 	<li>{@link BinaryFormat#BASE64} - BASE64-encoded string.
+		 * 	<li>{@link BinaryFormat#HEX} - Hexadecimal.
+		 * 	<li>{@link BinaryFormat#SPACED_HEX} - Hexadecimal with spaces between bytes.
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is the first value found:
+		 * 	<ul>
+		 * 		<li>System property <js>"Config.binaryFormat"
+		 * 		<li>Environment variable <js>"CONFIG_BINARYFORMAT"
+		 * 		<li>{@link BinaryFormat#BASE64}
+		 * 	</ul>
+		 * 	<br>Cannot be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder binaryFormat(BinaryFormat value) {
+			binaryFormat = assertArgNotNull("value", value);
+			return this;
+		}
+
+		/**
+		 * Binary value line length.
+		 *
+		 * <p>
+		 * When serializing binary values, lines will be split after this many characters.
+		 * <br>Use <c>-1</c> to represent no line splitting.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is the first value found:
+		 * 	<ul>
+		 * 		<li>System property <js>"Config.binaryLineLength"
+		 * 		<li>Environment variable <js>"CONFIG_BINARYLINELENGTH"
+		 * 		<li><c>-1</c>
+		 * 	</ul>
+		 * @return This object.
+		 */
+		public Builder binaryLineLength(int value) {
+			binaryLineLength = value;
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Config build() {
+			return build(Config.class);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug(boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder impl(Context value) {
+			super.impl(value);
+			return this;
+		}
+
+		/**
+		 * Configuration store.
+		 *
+		 * <p>
+		 * Convenience method for calling <code>store(ConfigMemoryStore.<jsf>DEFAULT</jsf>)</code>.
+		 *
+		 * @return This object.
+		 */
+		public Builder memStore() {
+			store = MemoryStore.DEFAULT;
+			return this;
+		}
+
+		/**
+		 * Adds a value modifier.
+		 *
+		 * <p>
+		 * Modifiers are used to modify entry value before being persisted.
+		 *
+		 * @param values
+		 * 	The mods to apply to this config.
+		 * 	<br>Cannot contain <jk>null</jk> values.
+		 * @return This object.
+		 */
+		public Builder mods(Mod...values) {
+			assertArgNoNulls("values", values);
+			for (var value : values)
+				mods.put(value.getId(), value);
+			return this;
+		}
+
+		/**
+		 * Multi-line values on separate lines.
+		 *
+		 * <p>
+		 * When enabled, multi-line values will always be placed on a separate line from the key.
+		 *
+		 * <p>
+		 * The default is the first value found:
+		 * 	<ul>
+		 * 		<li>System property <js>"Config.multiLineValuesOnSeparateLine"
+		 * 		<li>Environment variable <js>"CONFIG_MULTILINEVALUESONSEPARATELINE"
+		 * 		<li><jk>false</jk>
+		 * 	</ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder multiLineValuesOnSeparateLines() {
+			multiLineValuesOnSeparateLines = true;
+			return this;
+		}
+
+		/**
+		 * Configuration name.
+		 *
+		 * <p>
+		 * Specifies the configuration name.
+		 * <br>This is typically the configuration file name, although
+		 * the name can be anything identifiable by the {@link ConfigStore} used for retrieving and storing the configuration.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is the first value found:
+		 * 	<ul>
+		 * 		<li>System property <js>"Config.name"
+		 * 		<li>Environment variable <js>"CONFIG_NAME"
+		 * 		<li><js>"Configuration.cfg"</js>
+		 * 	</ul>
+		 * 	<br>Cannot be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder name(String value) {
+			name = assertArgNotNull("value", value);
+			return this;
+		}
+
+		/**
+		 * POJO parser.
+		 *
+		 * <p>
+		 * The parser to use for parsing values to POJOs.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is {@link JsonParser#DEFAULT}.
+		 * 	<br>Cannot be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder parser(ReaderParser value) {
+			parser = assertArgNotNull("value", value);
+			return this;
+		}
+
+		/**
+		 * Read-only mode.
+		 *
+		 * <p>
+		 * When enabled, attempts to call any setters on this object will throw an {@link UnsupportedOperationException}.
+		 *
+		 * <p>
+		 * 	The default is the first value found:
+		 * 	<ul>
+		 * 		<li>System property <js>"Config.readOnly"
+		 * 		<li>Environment variable <js>"CONFIG_READONLY"
+		 * 		<li><jk>false</jk>
+		 * 	</ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder readOnly() {
+			readOnly = true;
+			return this;
+		}
+
+		/**
+		 * POJO serializer.
+		 *
+		 * <p>
+		 * The serializer to use for serializing POJO values.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is {@link Json5Serializer#DEFAULT}
+		 * 	<br>Cannot be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder serializer(WriterSerializer value) {
+			serializer = assertArgNotNull("value", value);
+			return this;
+		}
+
+		/**
+		 * Configuration store.
+		 *
+		 * <p>
+		 * The configuration store used for retrieving and storing configurations.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is {@link FileStore#DEFAULT}.
+		 * 	<br>Cannot be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder store(ConfigStore value) {
+			store = assertArgNotNull("value", value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+			super.type(value);
+			return this;
+		}
+
+		/**
+		 * SVL variable resolver.
+		 *
+		 * <p>
+		 * The resolver to use for resolving SVL variables.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is {@link VarResolver#DEFAULT}.
+		 * 	<br>Cannot be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder varResolver(VarResolver value) {
+			varResolver = assertArgNotNull("value", value);
+			return this;
+		}
+	}
+
+	// Use set(T)/reset() for testing.
+	static final ResettableSupplier<Boolean> DISABLE_AUTO_SYSTEM_PROPS = memr(() -> Boolean.getBoolean("juneau.disableAutoSystemProps"));
+
+	// Use set(T)/reset() for testing.
+	static final ResettableSupplier<Config> SYSTEM_DEFAULT = memr(() -> findSystemDefault());
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+
+	/**
+	 * Same as {@link #create()} but initializes the builder with the specified config name.
+	 *
+	 * @param name The configuration name.
+	 * @return A new builder.
+	 */
+	public static Builder create(String name) {
+		return new Builder().name(name);
+	}
+
+	/**
+	 * Returns the list of candidate system default configuration file names.
+	 *
+	 * <p>
+	 * If the <js>"juneau.configFile"</js> system property is set, returns a singleton of that value.
+	 * <br>Otherwise, returns a list consisting of the following values:
+	 * <ol>
+	 * 	<li>File with same name as jar file but with <js>".cfg"</js> extension.  (e.g. <js>"myjar.cfg"</js>)
+	 * 	<li>Any file ending in <js>".cfg"</js> in the home directory (names ordered alphabetically).
+	 * 	<li><js>"juneau.cfg"</js>
+	 * 	<li><js>"default.cfg"</js>
+	 * 	<li><js>"application.cfg"</js>
+	 * 	<li><js>"app.cfg"</js>
+	 * 	<li><js>"settings.cfg"</js>
+	 * 	<li><js>"application.properties"</js>
+	 * </ol>
+	 * <p>
+	 *
+	 * @return
+	 * 	A list of candidate file names.
+	 * 	<br>The returned list is modifiable.
+	 * 	<br>Each call constructs a new list.
+	 */
+	public static synchronized List<String> getCandidateSystemDefaultConfigNames() {
+		var l = listOf(String.class);
+
+		var s = System.getProperty("juneau.configFile");
+		if (nn(s)) {
+			l.add(s);
+			return l;
+		}
+
+		var cmd = System.getProperty("sun.java.command", "not_found").split("\\s+")[0];
+		if (cmd.endsWith(".jar") && ! co(cmd, "surefirebooter")) {
+			cmd = cmd.replaceAll(".*?([^\\\\\\/]+)\\.jar$", "$1");
+			l.add(cmd + ".cfg");
+			cmd = cmd.replaceAll("[\\.\\_].*$", "");  // Try also without version in jar name.
+			l.add(cmd + ".cfg");
+		}
+
+		var fileArray = new File(".").listFiles();
+		if (fileArray != null) {
+			for (var f : fileArray)
+				if (f.getName().endsWith(".cfg"))
+					l.add(f.getName());
+		}
+
+		l.add("juneau.cfg");
+		l.add("default.cfg");
+		l.add("application.cfg");
+		l.add("app.cfg");
+		l.add("settings.cfg");
+		l.add("application.properties");
+
+		return l;
+	}
+
+	/**
+	 * Returns the system default configuration.
+	 *
+	 * @return The system default configuration, or <jk>null</jk> if it doesn't exist.
+	 */
+	public static synchronized Config getSystemDefault() { return SYSTEM_DEFAULT.get(); }
+
+	/**
+	 * Sets a system default configuration.
+	 *
+	 * @param systemDefault The new system default configuration.
+	 */
+	public static synchronized void setSystemDefault(Config systemDefault) {
+		SYSTEM_DEFAULT.set(systemDefault);
+	}
+
+	private static synchronized Config find(String name) {
+		if (name == null)
+			return null;
+		if (FileStore.DEFAULT.exists(name))
+			return Config.create(name).store(FileStore.DEFAULT).build();
+		if (ClasspathStore.DEFAULT.exists(name))
+			return Config.create(name).store(ClasspathStore.DEFAULT).build();
+		return null;
+	}
+
+	private static synchronized Config findSystemDefault() {
+
+		for (var n : getCandidateSystemDefaultConfigNames()) {
+			var config = find(n);
+			if (nn(config)) {
+				if (! DISABLE_AUTO_SYSTEM_PROPS.get())
+					config.setSystemProperties();
+				return config;
+			}
+		}
+
+		return null;
+	}
+
+	private static boolean isSimpleType(Type t) {
+		if (! (t instanceof Class))
+			return false;
+		var c = (Class<?>)t;
+		return (c == String.class || c.isPrimitive() || c.isAssignableFrom(Number.class) || c == Boolean.class || c.isEnum());
+	}
+	private static String section(String section) {
+		assertArgNotNull("section", section);
+		if (isEmpty(section))
+			return "";
+		return section;
+	}
+	private static String skey(String key) {
+		var i = key.indexOf('/');
+		if (i == -1)
+			return key;
+		return key.substring(i + 1);
+	}
+	private static String sname(String key) {
+		assertArgNotNull("key", key);
+		var i = key.indexOf('/');
+		if (i == -1)
+			return "";
+		return key.substring(0, i);
+	}
+
+	protected final boolean multiLineValuesOnSeparateLines;
+	protected final boolean readOnly;
+	protected final int binaryLineLength;
+	protected final BinaryFormat binaryFormat;
+	protected final BeanSession beanSession;
+	protected final ConfigStore store;
+	protected final Map<Character,Mod> mods;
+	protected final ReaderParser parser;
+	protected final String name;
+	protected final VarResolver varResolver;
+	protected final VarResolverSession varSession;
+	protected final WriterSerializer serializer;
+
+	private final ConfigMap configMap;
+	private final List<ConfigEventListener> listeners = synced(new LinkedList<>());
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this object.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public Config(Builder builder) throws IOException {
+		super(builder);
+
+		binaryFormat = builder.binaryFormat;
+		binaryLineLength = builder.binaryLineLength;
+		mods = u(copyOf(builder.mods));
+		multiLineValuesOnSeparateLines = builder.multiLineValuesOnSeparateLines;
+		name = builder.name;
+		parser = builder.parser;
+		readOnly = builder.readOnly;
+		serializer = builder.serializer;
+		store = builder.store;
+		varResolver = builder.varResolver;
+		configMap = store.getMap(name);
+		configMap.register(this);
+		beanSession = parser.getBeanContext().getSession();
+		varSession = varResolver.copy().vars(ConfigVar.class).bean(Config.class, this).build().createSession();
+	}
+
+	Config(Config copyFrom, VarResolverSession varSession) {
+		super(copyFrom);
+		beanSession = copyFrom.beanSession;
+		binaryFormat = copyFrom.binaryFormat;
+		binaryLineLength = copyFrom.binaryLineLength;
+		configMap = copyFrom.configMap;
+		configMap.register(this);
+		mods = copyFrom.mods;
+		multiLineValuesOnSeparateLines = copyFrom.multiLineValuesOnSeparateLines;
+		name = copyFrom.name;
+		parser = copyFrom.parser;
+		readOnly = copyFrom.readOnly;
+		serializer = copyFrom.serializer;
+		store = copyFrom.store;
+		this.varSession = varSession;
+		varResolver = copyFrom.varResolver;
+	}
+
+	/**
+	 * Add a listener to this config to react to modification events.
+	 *
+	 * <p>
+	 * Listeners should be removed using {@link #removeListener(ConfigEventListener)}.
+	 *
+	 * @param listener The new listener to add.
+	 * @return This object.
+	 */
+	public synchronized Config addListener(ConfigEventListener listener) {
+		listeners.add(listener);
+		return this;
+	}
+
+	/**
+	 * Encodes and unencoded entries in this config.
+	 *
+	 * <p>
+	 * If any entries in the config are marked as encoded but not actually encoded,
+	 * this will encode them.
+	 *
+	 * @return This object.
+	 * @throws UnsupportedOperationException If configuration is read only.
+	 */
+	public Config applyMods() {
+		checkWrite();
+		for (var section : configMap.getSections()) {
+			for (var key : configMap.getKeys(section)) {
+				var ce = configMap.getEntry(section, key);
+				if (nn(ce.getModifiers())) {
+					var mods2 = ce.getModifiers();
+					var value = ce.getValue();
+					for (var i = 0; i < mods2.length(); i++) {
+						var mod = getMod(mods2.charAt(i));
+						if (! mod.isApplied(value)) {
+							configMap.setEntry(section, key, mod.apply(value), null, null, null);
+						}
+					}
+				}
+			}
+		}
+
+		return this;
+	}
+
+	/**
+	 * Closes this configuration object by unregistering it from the underlying config map.
+	 */
+	public void close() {
+		configMap.unregister(this);
+	}
+
+	/**
+	 * Commit the changes in this config to the store.
+	 *
+	 * @return This object.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws UnsupportedOperationException If configuration is read only.
+	 */
+	public Config commit() throws IOException {
+		checkWrite();
+		configMap.commit();
+		return this;
+	}
+
+	@Override /* Overridden from Context */
+	public Builder copy() {
+		return new Builder(this);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this section contains the specified key and the key has a non-blank value.
+	 *
+	 * @param key The key.
+	 * @return <jk>true</jk> if this section contains the specified key and the key has a non-blank value.
+	 */
+	public boolean exists(String key) {
+		return ne(get(key).as(String.class).orElse(null));
+	}
+
+	/**
+	 * Gets the entry with the specified key.
+	 *
+	 * <p>
+	 * The key can be in one of the following formats...
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"key"</js> - A value in the default section (i.e. defined above any <c>[section]</c> header).
+	 * 	<li>
+	 * 		<js>"section/key"</js> - A value from the specified section.
+	 * </ul>
+	 *
+	 * <p>
+	 * If entry does not exist, returns an empty {@link Entry} object.
+	 *
+	 * @param key The key.
+	 * @return The entry bean, never <jk>null</jk>.
+	 */
+	public Entry get(String key) {
+		return new Entry(this, configMap, sname(key), skey(key));
+	}
+
+	/**
+	 * Returns the keys of the entries in the specified section.
+	 *
+	 * @param section
+	 * 	The section name to write from.
+	 * 	<br>If empty, refers to the default section.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @return
+	 * 	An unmodifiable set of keys, or an empty set if the section doesn't exist.
+	 */
+	public Set<String> getKeys(String section) {
+		return configMap.getKeys(section(section));
+	}
+
+	/**
+	 * Returns the name associated with this config (usually a file name).
+	 *
+	 * @return The name associated with this config, or <jk>null</jk> if it has no name.
+	 */
+	public String getName() { return name; }
+
+	/**
+	 * Gets the section with the specified name.
+	 *
+	 * <p>
+	 * If section does not exist, returns an empty {@link Section} object.
+	 *
+	 * @param name The section name.  <jk>null</jk> and blank refer to the default section.
+	 * @return The section bean, never <jk>null</jk>.
+	 */
+	public Section getSection(String name) {
+		return new Section(this, configMap, emptyIfNull(name));
+	}
+
+	/**
+	 * Returns the section names defined in this config.
+	 *
+	 * @return The section names defined in this config.
+	 */
+	public Set<String> getSectionNames() { return u(configMap.getSections()); }
+
+	/**
+	 * Gets the entry with the specified key.
+	 *
+	 * <p>
+	 * The key can be in one of the following formats...
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"key"</js> - A value in the default section (i.e. defined above any <c>[section]</c> header).
+	 * 	<li>
+	 * 		<js>"section/key"</js> - A value from the specified section.
+	 * </ul>
+	 *
+	 * <p>
+	 * If entry does not exist, returns <jk>null</jk>.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>This method is equivalent to calling <c>get(<jv>key</jv>).orElse(<jk>null</jk>);</c>.
+	 * </ul>
+	 *
+	 * @param key The key.
+	 * @return The entry value, or <jk>null</jk> if it doesn't exist.
+	 */
+	public String getString(String key) {
+		return new Entry(this, configMap, sname(key), skey(key)).orElse(null);
+	}
+
+	/**
+	 * Loads the contents of the specified map of maps into this config.
+	 *
+	 * @param m The maps to load.
+	 * @return This object.
+	 * @throws SerializeException Value could not be serialized.
+	 */
+	public Config load(Map<String,Map<String,Object>> m) throws SerializeException {
+		if (nn(m))
+			for (var e : m.entrySet()) {
+				setSection(e.getKey(), null, e.getValue());
+			}
+		return this;
+	}
+
+	/**
+	 * Overwrites the contents of the config file.
+	 *
+	 * @param contents The new contents of the config file.
+	 * @param synchronous Wait until the change has been persisted before returning this map.
+	 * @return This object.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws InterruptedException Thread was interrupted.
+	 * @throws UnsupportedOperationException If configuration is read only.
+	 */
+	public Config load(Reader contents, boolean synchronous) throws IOException, InterruptedException {
+		checkWrite();
+		configMap.load(read(contents), synchronous);
+		return this;
+	}
+
+	/**
+	 * Overwrites the contents of the config file.
+	 *
+	 * @param contents The new contents of the config file.
+	 * @param synchronous Wait until the change has been persisted before returning this map.
+	 * @return This object.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws InterruptedException Thread was interrupted.
+	 * @throws UnsupportedOperationException If configuration is read only.
+	 */
+	public Config load(String contents, boolean synchronous) throws IOException, InterruptedException {
+		checkWrite();
+		configMap.load(contents, synchronous);
+		return this;
+	}
+
+	@Override /* Overridden from ConfigEventListener */
+	public synchronized void onConfigChange(ConfigEvents events) {
+		listeners.forEach(x -> x.onConfigChange(events));
+	}
+
+	/**
+	 * Removes an entry with the specified key.
+	 *
+	 * @param key The key.
+	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
+	 * @throws UnsupportedOperationException If configuration is read only.
+	 */
+	public Config remove(String key) {
+		checkWrite();
+		var sname = sname(key);
+		var skey = skey(key);
+		configMap.removeEntry(sname, skey);
+		return this;
+	}
+
+	/**
+	 * Removes the import statement with the specified name from the specified section.
+	 *
+	 * @param sectionName
+	 * 	The section name where to place the import statement.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Use blank for the default section.
+	 * @param importName
+	 * 	The import name.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @return This object.
+	 * @throws UnsupportedOperationException If configuration is read only.
+	 */
+	public Config removeImport(String sectionName, String importName) {
+		checkWrite();
+		configMap.removeImport(sectionName, importName);
+		return this;
+	}
+
+	/**
+	 * Removes a listener from this config.
+	 *
+	 * @param listener The listener to remove.
+	 * @return This object.
+	 */
+	public synchronized Config removeListener(ConfigEventListener listener) {
+		listeners.remove(listener);
+		return this;
+	}
+
+	/**
+	 * Removes the section with the specified name.
+	 *
+	 * @param name The name of the section to remove
+	 * @return This object.
+	 * @throws UnsupportedOperationException If configuration is read only.
+	 */
+	public Config removeSection(String name) {
+		checkWrite();
+		configMap.removeSection(name);
+		return this;
+	}
+
+	/**
+	 * Creates a copy of this config using the specified var session for resolving variables.
+	 *
+	 * <p>
+	 * This creates a shallow copy of the config but replacing the variable resolver.
+	 *
+	 * @param varSession The var session used for resolving string variables.
+	 * @return A new config object.
+	 */
+	public Config resolving(VarResolverSession varSession) {
+		return new Config(this, varSession);
+	}
+
+	/**
+	 * Does a rollback of any changes on this config currently in memory.
+	 *
+	 * @return This object.
+	 * @throws UnsupportedOperationException If configuration is read only.
+	 */
+	public Config rollback() {
+		checkWrite();
+		configMap.rollback();
+		return this;
+	}
+
+	/**
+	 * Adds or replaces an entry with the specified key with a POJO serialized to a string using the registered
+	 * serializer.
+	 *
+	 * <p>
+	 * Equivalent to calling <c>put(key, value, isEncoded(key))</c>.
+	 *
+	 * @param key The key.
+	 * @param value The new value POJO.
+	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
+	 * @throws SerializeException
+	 * 	If serializer could not serialize the value or if a serializer is not registered with this config file.
+	 * @throws UnsupportedOperationException If configuration is read only.
+	 */
+	public Config set(String key, Object value) throws SerializeException {
+		return set(key, value, null);
+	}
+
+	/**
+	 * Same as {@link #set(String, Object)} but allows you to specify the serializer to use to serialize the
+	 * value.
+	 *
+	 * @param key The key.
+	 * @param value The new value.
+	 * @param serializer
+	 * 	The serializer to use for serializing the object.
+	 * 	If <jk>null</jk>, then uses the predefined serializer on the config file.
+	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
+	 * @throws SerializeException
+	 * 	If serializer could not serialize the value or if a serializer is not registered with this config file.
+	 * @throws UnsupportedOperationException If configuration is read only.
+	 */
+	public Config set(String key, Object value, Serializer serializer) throws SerializeException {
+		return set(key, serialize(value, serializer));
+	}
+
+	/**
+	 * Same as {@link #set(String, Object)} but allows you to specify all aspects of a value.
+	 *
+	 * @param key The key.
+	 * @param value The new value.
+	 * @param serializer
+	 * 	The serializer to use for serializing the object.
+	 * 	If <jk>null</jk>, then uses the predefined serializer on the config file.
+	 * @param modifiers
+	 * 	Optional modifiers to apply to the value.
+	 * 	<br>If <jk>null</jk>, then previous value will not be replaced.
+	 * @param comment
+	 * 	Optional same-line comment to add to this value.
+	 * 	<br>If <jk>null</jk>, then previous value will not be replaced.
+	 * @param preLines
+	 * 	Optional comment or blank lines to add before this entry.
+	 * 	<br>If <jk>null</jk>, then previous value will not be replaced.
+	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
+	 * @throws SerializeException
+	 * 	If serializer could not serialize the value or if a serializer is not registered with this config file.
+	 * @throws UnsupportedOperationException If configuration is read only.
+	 */
+	public Config set(String key, Object value, Serializer serializer, String modifiers, String comment, List<String> preLines) throws SerializeException {
+		checkWrite();
+		assertArgNotNull("key", key);
+		var sname = sname(key);
+		var skey = skey(key);
+		modifiers = nullIfEmpty(modifiers);
+
+		var s = applyMods(modifiers, serialize(value, serializer));
+
+		configMap.setEntry(sname, skey, s, modifiers, comment, preLines);
+		return this;
+	}
+
+	/**
+	 * Sets a value in this config.
+	 *
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object.
+	 * @throws UnsupportedOperationException If configuration is read only.
+	 */
+	public Config set(String key, String value) {
+		checkWrite();
+		assertArgNotNull("key", key);
+		var sname = sname(key);
+		var skey = skey(key);
+
+		var ce = configMap.getEntry(sname, skey);
+		if (ce == null && value == null)
+			return this;
+
+		var s = applyMods(ce == null ? null : ce.getModifiers(), s(value));
+
+		configMap.setEntry(sname, skey, s, null, null, null);
+		return this;
+	}
+
+	/**
+	 * Creates the specified import statement if it doesn't exist.
+	 *
+	 * @param sectionName
+	 * 	The section name where to place the import statement.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Use blank for the default section.
+	 * @param importName
+	 * 	The import name.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @param preLines
+	 * 	Optional comment and blank lines to add immediately before the import statement.
+	 * 	<br>If <jk>null</jk>, previous pre-lines will not be replaced.
+	 * @return The appended or existing import statement.
+	 * @throws UnsupportedOperationException If configuration is read only.
+	 */
+	public Config setImport(String sectionName, String importName, List<String> preLines) {
+		checkWrite();
+		configMap.setImport(section(name), importName, preLines);
+		return this;
+	}
+
+	/**
+	 * Creates the specified section if it doesn't exist.
+	 *
+	 * <p>
+	 * Returns the existing section if it already exists.
+	 *
+	 * @param name
+	 * 	The section name.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Use blank for the default section.
+	 * @param preLines
+	 * 	Optional comment and blank lines to add immediately before the section.
+	 * 	<br>If <jk>null</jk>, previous pre-lines will not be replaced.
+	 * @return The appended or existing section.
+	 * @throws UnsupportedOperationException If configuration is read only.
+	 */
+	public Config setSection(String name, List<String> preLines) {
+		try {
+			return setSection(section(name), preLines, null);
+		} catch (SerializeException e) {
+			throw toRex(e);  // Impossible.
+		}
+	}
+
+	/**
+	 * Creates the specified section if it doesn't exist.
+	 *
+	 * @param name
+	 * 	The section name.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Use blank for the default section.
+	 * @param preLines
+	 * 	Optional comment and blank lines to add immediately before the section.
+	 * 	<br>If <jk>null</jk>, previous pre-lines will not be replaced.
+	 * @param contents
+	 * 	Values to set in the new section.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return The appended or existing section.
+	 * @throws SerializeException Contents could not be serialized.
+	 * @throws UnsupportedOperationException If configuration is read only.
+	 */
+	public Config setSection(String name, List<String> preLines, Map<String,Object> contents) throws SerializeException {
+		checkWrite();
+		configMap.setSection(section(name), preLines);
+
+		if (nn(contents))
+			for (var e : contents.entrySet())
+				set(section(name) + '/' + e.getKey(), e.getValue());
+
+		return this;
+	}
+
+	/**
+	 * Takes the settings defined in this configuration and sets them as system properties.
+	 *
+	 * @return This object.
+	 */
+	public Config setSystemProperties() {
+		for (var section : getSectionNames()) {
+			for (var key : getKeys(section)) {
+				var k = (section.isEmpty() ? key : section + '/' + key);
+				System.setProperty(k, getRaw(k));
+			}
+		}
+		return this;
+	}
+
+	/**
+	 * Returns the contents of this config as a simple map.
+	 *
+	 * @return The contents of this config as a simple map.
+	 */
+	public JsonMap toMap() {
+		return configMap.asMap();
+	}
+
+	@Override /* Overridden from Context */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a("binaryFormat", binaryFormat)
+			.a("binaryLineLength", binaryLineLength)
+			.a("mods", mods)
+			.a("multiLineValuesOnSeparateLines", multiLineValuesOnSeparateLines)
+			.a("name", name)
+			.a("parser", parser)
+			.a("readOnly", readOnly)
+			.a("serializer", serializer)
+			.a("store", store)
+			.a("varResolver", varResolver);
+	}
+
+	@Override /* Overridden from Object */
+	public String toString() {
+		return configMap.toString();
+	}
+
+	/**
+	 * Saves this config file to the specified writer as an INI file.
+	 *
+	 * <p>
+	 * The writer will automatically be closed.
+	 *
+	 * @param w The writer to send the output to.
+	 * @return This object.
+	 * @throws IOException If a problem occurred trying to send contents to the writer.
+	 */
+	public Writer writeTo(Writer w) throws IOException {
+		return configMap.writeTo(w);
+	}
+
+	/**
+	 * Returns the specified value as a string from the config file.
+	 *
+	 * <p>
+	 * Unlike {@link #getString(String)}, this method doesn't replace SVL variables.
+	 *
+	 * @param key The key.
+	 * @return The value, or <jk>null</jk> if the section or value doesn't exist.
+	 */
+	private String getRaw(String key) {
+
+		var sname = sname(key);
+		var skey = skey(key);
+
+		var ce = configMap.getEntry(sname, skey);
+
+		if (ce == null)
+			return null;
+
+		return removeMods(ce.getModifiers(), ce.getValue());
+	}
+
+	private String nlIfMl(CharSequence cs) {
+		var s = cs.toString();
+		if (s.indexOf('\n') != -1 && multiLineValuesOnSeparateLines)
+			return "\n" + s;
+		return s;
+	}
+
+	private String serialize(Object value, Serializer serializer) throws SerializeException {
+		if (value == null)
+			return "";
+		if (serializer == null)
+			serializer = this.serializer;
+		var c = value.getClass();
+		if (value instanceof CharSequence cs)
+			return nlIfMl(cs);
+		if (isSimpleType(c))
+			return value.toString();
+
+		if (value instanceof byte[] b) {
+			var s = (String)null;
+			if (binaryFormat == BinaryFormat.HEX)
+				s = toHex(b);
+			else if (binaryFormat == BinaryFormat.SPACED_HEX)
+				s = toSpacedHex(b);
+			else
+				s = base64Encode(b);
+			var l = binaryLineLength;
+			if (l <= 0 || s.length() <= l)
+				return s;
+			var sb = new StringBuilder();
+			for (var i = 0; i < s.length(); i += l)
+				sb.append(binaryLineLength > 0 ? "\n" : "").append(s.substring(i, Math.min(s.length(), i + l)));
+			return sb.toString();
+		}
+
+		var r = (String)null;
+		if (multiLineValuesOnSeparateLines)
+			r = "\n" + (String)serializer.serialize(value);
+		else
+			r = (String)serializer.serialize(value);
+
+		if (r.startsWith("'"))
+			return r.substring(1, r.length() - 1);
+		return r;
+	}
+
+	String applyMods(String mods, String x) {
+		if (nn(mods) && nn(x))
+			for (var i = 0; i < mods.length(); i++)
+				x = getMod(mods.charAt(i)).doApply(x);
+		return x;
+	}
+
+	void checkWrite() {
+		if (readOnly)
+			throw unsupportedOp("Cannot call this method on a read-only configuration.");
+	}
+
+	ConfigMap getConfigMap() { return configMap; }
+
+	List<ConfigEventListener> getListeners() { return u(listeners); }
+
+	Mod getMod(char id) {
+		var x = mods.get(id);
+		return def(x, Mod.NO_OP);
+	}
+
+	String removeMods(String mods, String x) {
+		if (nn(mods) && nn(x))
+			for (var i = mods.length() - 1; i > -1; i--)
+				x = getMod(mods.charAt(i)).doRemove(x);
+		return x;
+	}
+}

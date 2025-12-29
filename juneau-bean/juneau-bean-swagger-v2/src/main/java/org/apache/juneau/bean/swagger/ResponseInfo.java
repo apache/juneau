@@ -1,0 +1,384 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.bean.swagger;
+
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
+
+import java.util.*;
+
+import org.apache.juneau.commons.collections.*;
+
+/**
+ * Describes a single response from an API operation.
+ *
+ * <p>
+ * The Response Object describes a single response from a Swagger 2.0 API operation, including a description,
+ * schema, headers, and examples. Responses are associated with HTTP status codes (e.g., 200, 404, 500).
+ *
+ * <h5 class='section'>Swagger Specification:</h5>
+ * <p>
+ * The Response Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>description</c> (string, REQUIRED) - A short description of the response
+ * 	<li><c>schema</c> ({@link SchemaInfo}) - A definition of the response structure
+ * 	<li><c>headers</c> (map of {@link HeaderInfo}) - Maps a header name to its definition
+ * 	<li><c>examples</c> (map of any) - An example of the response message (keys are media types)
+ * </ul>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Construct using SwaggerBuilder.</jc>
+ * 	ResponseInfo <jv>info</jv> = <jsm>responseInfo</jsm>(<js>"A complex object array response"</js>)
+ * 		.schema(
+ * 			<jsm>schemaInfo</jsm>
+ * 				.type(<js>"array"</js>)
+ * 				.items(
+ * 					<jsm>items</jsm>()
+ * 						.set(<js>"$ref"</js>, <js>"#/definitions/VeryComplexType"</js>)
+ * 				)
+ * 		);
+ *
+ * 	<jc>// Serialize using JsonSerializer.</jc>
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>info</jv>);
+ *
+ * 	<jc>// Or just use toString() which does the same as above.</jc>
+ * 	<jv>json</jv> = <jv>info</jv>.toString();
+ * </p>
+ * <p class='bjson'>
+ * 	<jc>// Output</jc>
+ * 	{
+ * 		<js>"description"</js>: <js>"A complex object array response"</js>,
+ * 		<js>"schema"</js>: {
+ * 			<js>"type"</js>: <js>"array"</js>,
+ * 			<js>"items"</js>: {
+ * 				<js>"$ref"</js>: <js>"#/definitions/VeryComplexType"</js>
+ * 			}
+ * 		}
+ * 	}
+ * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#response-object">Swagger 2.0 Specification &gt; Response Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/describing-responses/">Swagger Describing Responses</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
+ * </ul>
+ */
+public class ResponseInfo extends SwaggerElement {
+
+	private String description;
+	private SchemaInfo schema;
+	private Map<String,HeaderInfo> headers = map();
+	private Map<String,Object> examples = map();
+
+	/**
+	 * Default constructor.
+	 */
+	public ResponseInfo() {}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The object to copy.
+	 */
+	public ResponseInfo(ResponseInfo copyFrom) {
+		super(copyFrom);
+
+		this.description = copyFrom.description;
+		this.schema = copyFrom.schema == null ? null : copyFrom.schema.copy();
+		if (nn(copyFrom.examples))
+			examples.putAll(copyOf(copyFrom.examples));
+		if (nn(copyFrom.headers))
+			headers.putAll(copyOf(copyFrom.headers, HeaderInfo::copy));
+	}
+
+	/**
+	 * Bean property appender:  <property>examples</property>.
+	 *
+	 * <p>
+	 * Adds a single value to the <property>examples</property> property.
+	 *
+	 * @param mimeType The mime-type string.  Must not be <jk>null</jk>.
+	 * @param example The example.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public ResponseInfo addExample(String mimeType, Object example) {
+		assertArgNotNull("mimeType", mimeType);
+		assertArgNotNull("example", example);
+		examples.put(mimeType, example);
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>headers</property>.
+	 *
+	 * @param name The header name.  Must not be <jk>null</jk>.
+	 * @param header The header descriptions  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public ResponseInfo addHeader(String name, HeaderInfo header) {
+		assertArgNotNull("name", name);
+		assertArgNotNull("header", header);
+		headers.put(name, header);
+		return this;
+	}
+
+	/**
+	 * Make a deep copy of this object.
+	 *
+	 * @return A deep copy of this object.
+	 */
+	public ResponseInfo copy() {
+		return new ResponseInfo(this);
+	}
+
+	/**
+	 * Copies any non-null fields from the specified object to this object.
+	 *
+	 * @param r
+	 * 	The object to copy fields from.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public ResponseInfo copyFrom(ResponseInfo r) {
+		if (nn(r)) {
+			if (nn(r.description))
+				description = r.description;
+			if (nn(r.schema))
+				schema = r.schema;
+			if (nn(r.headers))
+				headers = r.headers;
+			if (nn(r.examples))
+				examples = r.examples;
+		}
+		return this;
+	}
+
+	@Override /* Overridden from SwaggerElement */
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "description" -> toType(getDescription(), type);
+			case "examples" -> toType(getExamples(), type);
+			case "headers" -> toType(getHeaders(), type);
+			case "schema" -> toType(getSchema(), type);
+			default -> super.get(property, type);
+		};
+	}
+
+	/**
+	 * Bean property getter:  <property>description</property>.
+	 *
+	 * <p>
+	 * A short description of the response.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getDescription() { return description; }
+
+	/**
+	 * Bean property getter:  <property>examples</property>.
+	 *
+	 * <p>
+	 * An example of the response message.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String,Object> getExamples() { return nullIfEmpty(examples); }
+
+	/**
+	 * Returns the header information with the specified name.
+	 *
+	 * @param name The header name.  Must not be <jk>null</jk>.
+	 * @return The header info, or <jk>null</jk> if not found.
+	 */
+	public HeaderInfo getHeader(String name) {
+		assertArgNotNull("name", name);
+		return headers.get(name);
+	}
+
+	/**
+	 * Bean property getter:  <property>headers</property>.
+	 *
+	 * <p>
+	 * A list of headers that are sent with the response.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String,HeaderInfo> getHeaders() { return nullIfEmpty(headers); }
+
+	/**
+	 * Bean property getter:  <property>schema</property>.
+	 *
+	 * <p>
+	 * A definition of the response structure.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public SchemaInfo getSchema() { return schema; }
+
+	@Override /* Overridden from SwaggerElement */
+	public Set<String> keySet() {
+		// @formatter:off
+		var s = setb(String.class)
+			.addIf(nn(description), "description")
+			.addIf(ne(examples), "examples")
+			.addIf(ne(headers), "headers")
+			.addIf(nn(schema), "schema")
+			.build();
+		// @formatter:on
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	/**
+	 * Resolves any <js>"$ref"</js> attributes in this element.
+	 *
+	 * @param swagger The swagger document containing the definitions.
+	 * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.
+	 * @param maxDepth
+	 * 	The maximum depth to resolve references.
+	 * 	<br>After that level is reached, <c>$ref</c> references will be left alone.
+	 * 	<br>Useful if you have very complex models and you don't want your swagger page to be overly-complex.
+	 * @return
+	 * 	This object with references resolved.
+	 * 	<br>May or may not be the same object.
+	 */
+	public ResponseInfo resolveRefs(Swagger swagger, Deque<String> refStack, int maxDepth) {
+
+		if (nn(schema))
+			schema = schema.resolveRefs(swagger, refStack, maxDepth);
+
+		headers.entrySet().forEach(x -> x.setValue(x.getValue().resolveRefs(swagger, refStack, maxDepth)));
+
+		return this;
+	}
+
+	@Override /* Overridden from SwaggerElement */
+	public ResponseInfo set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "description" -> setDescription(s(value));
+			case "examples" -> setExamples(toMapBuilder(value, String.class, Object.class).sparse().build());
+			case "headers" -> setHeaders(toMapBuilder(value, String.class, HeaderInfo.class).sparse().build());
+			case "schema" -> setSchema(toType(value, SchemaInfo.class));
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
+	}
+
+	/**
+	 * Bean property setter:  <property>description</property>.
+	 *
+	 * <p>
+	 * A short description of the response.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
+	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ResponseInfo setDescription(String value) {
+		description = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>examples</property>.
+	 *
+	 * <p>
+	 * An example of the response message.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Keys must be MIME-type strings.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ResponseInfo setExamples(Map<String,Object> value) {
+		examples.clear();
+		if (nn(value))
+			examples.putAll(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>headers</property>.
+	 *
+	 * <p>
+	 * A list of headers that are sent with the response.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ResponseInfo setHeaders(Map<String,HeaderInfo> value) {
+		headers.clear();
+		if (nn(value))
+			headers.putAll(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>schema</property>.
+	 *
+	 * <p>
+	 * A definition of the response structure.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>It can be a primitive, an array or an object.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ResponseInfo setSchema(SchemaInfo value) {
+		schema = value;
+		return this;
+	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @return This object.
+	 */
+	@Override
+	public ResponseInfo strict() {
+		super.strict();
+		return this;
+	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).
+	 * @return This object.
+	 */
+	@Override
+	public ResponseInfo strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+}

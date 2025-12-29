@@ -1,0 +1,384 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.rest.client.remote;
+
+import static org.apache.juneau.Constants.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.http.remote.RemoteUtils.*;
+import static org.apache.juneau.httppart.HttpPartType.*;
+
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.function.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.commons.lang.*;
+import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.remote.*;
+import org.apache.juneau.httppart.bean.*;
+import org.apache.juneau.rest.common.utils.*;
+
+/**
+ * Contains the meta-data about a Java method on a REST proxy class.
+ *
+ * <p>
+ * Captures the information in {@link RemoteOp @RemoteOp} annotations for caching and reuse.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxyBasics">REST Proxy Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
+ * </ul>
+ */
+public class RemoteOperationMeta {
+
+	private static class Builder {
+		String httpMethod, fullPath, path;
+		List<RemoteOperationArg> pathArgs = new LinkedList<>(), queryArgs = new LinkedList<>(), headerArgs = new LinkedList<>(), formDataArgs = new LinkedList<>();
+		List<RemoteOperationBeanArg> requestArgs = new LinkedList<>();
+		RemoteOperationArg bodyArg;
+		RemoteOperationReturn methodReturn;
+		Map<String,String> pathDefaults = new LinkedHashMap<>(), queryDefaults = new LinkedHashMap<>(), headerDefaults = new LinkedHashMap<>(), formDataDefaults = new LinkedHashMap<>();
+		String contentDefault = null;
+		static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
+
+		Builder(String parentPath, Method m, String defaultMethod) {
+
+			var mi = MethodInfo.of(m);
+
+			var al = rstream(AP.find(mi)).filter(REMOTE_OP_GROUP).toList();
+			if (al.isEmpty())
+				al = rstream(AP.find(mi.getReturnType().unwrap(Value.class, Optional.class))).filter(REMOTE_OP_GROUP).toList();
+
+			var _httpMethod = Value.<String>empty();
+			var _path = Value.<String>empty();
+			al.stream().map(x -> x.getName().substring(6).toUpperCase()).filter(x -> ! x.equals("OP")).forEach(x -> _httpMethod.set(x));
+			al.forEach(ai -> ai.getValue(String.class, "method").filter(NOT_EMPTY).ifPresent(x -> _httpMethod.set(x.trim().toUpperCase())));
+			al.forEach(ai -> ai.getValue(String.class, "path").filter(NOT_EMPTY).ifPresent(x -> _path.set(x.trim())));
+			httpMethod = _httpMethod.orElse("").trim();
+			path = _path.orElse("").trim();
+
+			Value<String> value = Value.empty();
+			al.stream().filter(x -> x.isType(RemoteOp.class) && ne(((RemoteOp)x.inner()).value().trim())).forEach(x -> value.set(((RemoteOp)x.inner()).value().trim()));
+
+			if (value.isPresent()) {
+				var v = value.get();
+				var i = v.indexOf(' ');
+				if (i == -1) {
+					httpMethod = v;
+				} else {
+					httpMethod = v.substring(0, i).trim();
+					path = v.substring(i).trim();
+				}
+			} else {
+				al.stream().filter(x -> ! x.isType(RemoteOp.class) && ne(x.getValue(String.class, "value").filter(NOT_EMPTY).orElse("").trim()))
+					.forEach(x -> value.set(x.getValue(String.class, "value").filter(NOT_EMPTY).get().trim()));
+				if (value.isPresent())
+					path = value.get();
+			}
+
+			if (path.isEmpty()) {
+				path = HttpUtils.detectHttpPath(m, nullIfEmpty(httpMethod));
+			}
+			if (httpMethod.isEmpty())
+				httpMethod = HttpUtils.detectHttpMethod(m, true, defaultMethod);
+
+			path = trimSlashes(path);
+
+			if (! isOneOf(httpMethod, "DELETE", "GET", "POST", "PUT", "OPTIONS", "HEAD", "CONNECT", "TRACE", "PATCH"))
+				throw new RemoteMetadataException(m,
+					"Invalid value specified for @RemoteOp(httpMethod) annotation: '" + httpMethod + "'.  Valid values are [DELETE,GET,POST,PUT,OPTIONS,HEAD,CONNECT,TRACE,PATCH].");
+
+			methodReturn = new RemoteOperationReturn(mi);
+
+			fullPath = path.indexOf("://") != -1 ? path : (parentPath.isEmpty() ? urlEncodePath(path) : (trimSlashes(parentPath) + '/' + urlEncodePath(path)));
+
+			mi.getParameters().forEach(x -> {
+				var rma = RemoteOperationArg.create(x);
+				if (nn(rma)) {
+					var pt = rma.getPartType();
+					if (pt == HEADER)
+						headerArgs.add(rma);
+					else if (pt == QUERY)
+						queryArgs.add(rma);
+					else if (pt == FORMDATA)
+						formDataArgs.add(rma);
+					else if (pt == PATH)
+						pathArgs.add(rma);
+					else
+						bodyArg = rma;
+				}
+				var rmba = RequestBeanMeta.create(x, AnnotationWorkList.create());
+				if (nn(rmba)) {
+					requestArgs.add(new RemoteOperationBeanArg(x.getIndex(), rmba));
+				}
+			});
+
+			// Process method-level annotations for defaults (9.2.0)
+			// Note: We need to handle both individual annotations and repeated annotation arrays
+			processHeaderDefaults(mi, headerDefaults);
+			processQueryDefaults(mi, queryDefaults);
+			processFormDataDefaults(mi, formDataDefaults);
+			processPathDefaults(mi, pathDefaults);
+			processContentDefaults(mi);
+		}
+
+		// Helper methods to process method-level annotations with defaults (9.2.0)
+		// These handle both individual annotations and repeated annotation arrays
+
+		private void processContentDefaults(MethodInfo mi) {
+			// @formatter:off
+			AP.find(Content.class, mi)
+				.stream()
+				.map(x -> x.inner().def())
+				.filter(StringUtils::isNotBlank)
+				.findFirst()
+				.ifPresent(x -> contentDefault = x);
+			// @formatter:on
+		}
+
+		private static void processFormDataDefaults(MethodInfo mi, Map<String,String> defaults) {
+			// @formatter:off
+			rstream(AP.find(FormData.class, mi))
+				.map(AnnotationInfo::inner)
+				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && ne(x.def()))
+				.forEach(x -> defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
+			// @formatter:on
+		}
+
+		private static void processHeaderDefaults(MethodInfo mi, Map<String,String> defaults) {
+			// @formatter:off
+			rstream(AP.find(Header.class, mi))
+				.map(AnnotationInfo::inner)
+				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && ne(x.def()))
+				.forEach(x -> defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
+			// @formatter:on
+		}
+
+		private static void processPathDefaults(MethodInfo mi, Map<String,String> defaults) {
+			// @formatter:off
+			rstream(AP.find(Path.class, mi))
+				.map(AnnotationInfo::inner)
+				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && neq(NONE, x.def()))
+				.forEach(x -> defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
+			// @formatter:on
+		}
+
+		private static void processQueryDefaults(MethodInfo mi, Map<String,String> defaults) {
+			// @formatter:off
+			rstream(AP.find(Query.class, mi))
+				.map(AnnotationInfo::inner)
+				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && ne(x.def()))
+				.forEach(x -> defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
+			// @formatter:on
+		}
+	}
+
+	private final String httpMethod;
+	private final String fullPath;
+	private final RemoteOperationArg[] pathArgs, queryArgs, headerArgs, formDataArgs;
+	private final RemoteOperationBeanArg[] requestArgs;
+	private final RemoteOperationArg contentArg;
+	private final RemoteOperationReturn methodReturn;
+
+	private final Class<?>[] exceptions;
+	// Method-level annotations with defaults (9.2.0)
+	private final Map<String,String> pathDefaults, queryDefaults, headerDefaults, formDataDefaults;
+
+	private final String contentDefault;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param parentPath The absolute URI of the REST interface backing the interface proxy.
+	 * @param m The Java method.
+	 * @param defaultMethod The default HTTP method if not specified through annotation.
+	 */
+	public RemoteOperationMeta(String parentPath, Method m, String defaultMethod) {
+		var b = new Builder(parentPath, m, defaultMethod);
+		httpMethod = b.httpMethod;
+		fullPath = b.fullPath;
+		pathArgs = b.pathArgs.toArray(new RemoteOperationArg[b.pathArgs.size()]);
+		queryArgs = b.queryArgs.toArray(new RemoteOperationArg[b.queryArgs.size()]);
+		formDataArgs = b.formDataArgs.toArray(new RemoteOperationArg[b.formDataArgs.size()]);
+		headerArgs = b.headerArgs.toArray(new RemoteOperationArg[b.headerArgs.size()]);
+		requestArgs = b.requestArgs.toArray(new RemoteOperationBeanArg[b.requestArgs.size()]);
+		contentArg = b.bodyArg;
+		methodReturn = b.methodReturn;
+		exceptions = m.getExceptionTypes();
+		pathDefaults = Collections.unmodifiableMap(b.pathDefaults);
+		queryDefaults = Collections.unmodifiableMap(b.queryDefaults);
+		headerDefaults = Collections.unmodifiableMap(b.headerDefaults);
+		formDataDefaults = Collections.unmodifiableMap(b.formDataDefaults);
+		contentDefault = b.contentDefault;
+	}
+
+	/**
+	 * Performs an action on the exceptions thrown by this method.
+	 *
+	 * @param action The action to perform.
+	 * @return This object.
+	 */
+	public RemoteOperationMeta forEachException(Consumer<Class<?>> action) {
+		for (var e : exceptions)
+			action.accept(e);
+		return this;
+	}
+
+	/**
+	 * Performs an action on the {@link FormData @FormData} annotated arguments on this Java method.
+	 *
+	 * @param action The action to perform.
+	 * @return This object.
+	 */
+	public RemoteOperationMeta forEachFormDataArg(Consumer<RemoteOperationArg> action) {
+		for (var a : formDataArgs)
+			action.accept(a);
+		return this;
+	}
+
+	/**
+	 * Performs an action on the {@link Header @Header} annotated arguments on this Java method.
+	 *
+	 * @param action The action to perform.
+	 * @return This object.
+	 */
+	public RemoteOperationMeta forEachHeaderArg(Consumer<RemoteOperationArg> action) {
+		for (var a : headerArgs)
+			action.accept(a);
+		return this;
+	}
+
+	/**
+	 * Performs an action on the {@link Path @Path} annotated arguments on this Java method.
+	 *
+	 * @param action The action to perform.
+	 * @return This object.
+	 */
+	public RemoteOperationMeta forEachPathArg(Consumer<RemoteOperationArg> action) {
+		for (var a : pathArgs)
+			action.accept(a);
+		return this;
+	}
+
+	/**
+	 * Performs an action on the {@link Query @Query} annotated arguments on this Java method.
+	 *
+	 * @param action The action to perform.
+	 * @return This object.
+	 */
+	public RemoteOperationMeta forEachQueryArg(Consumer<RemoteOperationArg> action) {
+		for (var a : queryArgs)
+			action.accept(a);
+		return this;
+	}
+
+	/**
+	 * Performs an action on the {@link Request @Request} annotated arguments on this Java method.
+	 *
+	 * @param action The action to perform.
+	 * @return This object.
+	 */
+	public RemoteOperationMeta forEachRequestArg(Consumer<RemoteOperationBeanArg> action) {
+		for (var a : requestArgs)
+			action.accept(a);
+		return this;
+	}
+
+	/**
+	 * Returns the argument annotated with {@link Content @Content}.
+	 *
+	 * @return A index of the argument with the {@link Content @Content} annotation, or <jk>null</jk> if no argument exists.
+	 */
+	public RemoteOperationArg getContentArg() { return contentArg; }
+
+	/**
+	 * Returns the default value for a {@link Content @Content} annotation on the method.
+	 *
+	 * @return The default value, or <jk>null</jk> if not specified.
+	 * @since 9.2.0
+	 */
+	public String getContentDefault() { return contentDefault; }
+
+	/**
+	 * Returns the default value for a {@link FormData @FormData} annotation on the method.
+	 *
+	 * @param name The form data parameter name.
+	 * @return The default value, or <jk>null</jk> if not specified.
+	 * @since 9.2.0
+	 */
+	public String getFormDataDefault(String name) {
+		return formDataDefaults.get(name);
+	}
+
+	/**
+	 * Returns the absolute URI of the REST interface invoked by this Java method.
+	 *
+	 * @return The absolute URI of the REST interface, never <jk>null</jk>.
+	 */
+	public String getFullPath() { return fullPath; }
+
+	/**
+	 * Returns the default value for a {@link Header @Header} annotation on the method.
+	 *
+	 * @param name The header name.
+	 * @return The default value, or <jk>null</jk> if not specified.
+	 * @since 9.2.0
+	 */
+	public String getHeaderDefault(String name) {
+		return headerDefaults.get(name);
+	}
+
+	/**
+	 * Returns the value of the {@link RemoteOp#method() @RemoteOp(method)} annotation on this Java method.
+	 *
+	 * @return The value of the annotation, never <jk>null</jk>.
+	 */
+	public String getHttpMethod() { return httpMethod; }
+
+	/**
+	 * Returns the default value for a {@link Path @Path} annotation on the method.
+	 *
+	 * @param name The path parameter name.
+	 * @return The default value, or <jk>null</jk> if not specified.
+	 * @since 9.2.0
+	 */
+	public String getPathDefault(String name) {
+		return pathDefaults.get(name);
+	}
+
+	/**
+	 * Returns the default value for a {@link Query @Query} annotation on the method.
+	 *
+	 * @param name The query parameter name.
+	 * @return The default value, or <jk>null</jk> if not specified.
+	 * @since 9.2.0
+	 */
+	public String getQueryDefault(String name) {
+		return queryDefaults.get(name);
+	}
+
+	/**
+	 * Returns whether the method returns the HTTP response body or status code.
+	 *
+	 * @return Whether the method returns the HTTP response body or status code.
+	 */
+	public RemoteOperationReturn getReturns() { return methodReturn; }
+}

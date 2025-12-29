@@ -1,0 +1,430 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.cp;
+
+import static java.util.stream.Collectors.*;
+import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
+import static org.apache.juneau.commons.reflect.Visibility.*;
+import static org.apache.juneau.commons.utils.Utils.*;
+
+import java.util.*;
+import java.util.function.*;
+
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.lang.*;
+import org.apache.juneau.commons.reflect.*;
+
+/**
+ * Utility class for creating beans through constructors, creator methods, and builders.
+ *
+ * <p>
+ * Uses a {@link BeanStore} to find available ways to construct beans via injection of beans from the store.
+ *
+ * <p>
+ * This class is instantiated through the following method:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link BeanStore}
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link BeanStore#createBean(Class)}
+ * 		</ul>
+ * 	</li>
+ * </ul>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Construct and throw a RuntimeException using a bean store.</jc>
+ * 	<jk>throw</jk> BeanStore
+ * 		.<jsm>create</jsm>()
+ * 		.build()
+ * 		.addBean(Throwable.<jk>class</jk>, <jv>cause</jv>)
+ * 		.addBean(String.<jk>class</jk>, <jv>msg</jv>)
+ * 		.addBean(Object[].<jk>class</jk>, <jv>args</jv>)
+ * 		.createBean(RuntimeException.<jk>class</jk>)
+ * 		.run();
+ * </p>
+ *
+ * <p>
+ * Looks for the following methods for creating a bean:
+ * <ol class='spaced-list'>
+ * 	<li>Looks for a singleton no-arg method of the form:
+ * 		<p class='bjava'>
+ * 	<jk>public static</jk> MyClass <jsm>getInstance</jsm>();
+ * 		</p>
+ * 		<ul>
+ * 			<li>Deprecated and {@link BeanIgnore @BeanIgnore-annotated} methods are ignored.
+ *		</ul>
+ * 	<li>Looks for a static creator method of the form:
+ * 		<p class='bjava'>
+ * 	<jk>public static</jk> MyClass <jsm>create</jsm>(<ja>&lt;args&gt;</ja>);
+ * 		</p>
+ * 		<ul>
+ * 			<li>All arguments except {@link Optional} and {@link List} parameters must have beans available in the store.
+ * 			<li>If multiple methods are found, the one with the most matching parameters is used.
+ * 			<li>Deprecated and {@link BeanIgnore @BeanIgnore-annotated} methods are ignored.
+ * 		</ul>
+ * 	<li>Looks for a public constructor of the form:
+ * 		<p class='bjava'>
+ * 	<jk>public</jk> MyClass(<ja>&lt;args&gt;</ja>);
+ * 		</p>
+ * 		<ul>
+ * 			<li>All arguments except {@link Optional} and {@link List} parameters must have beans available in the store.
+ * 			<li>If multiple methods are found, the one with the most matching parameters is used.
+ * 			<li>Deprecated and {@link BeanIgnore @BeanIgnore-annotated} methods are ignored.
+ *		</ul>
+ * 	<li>Looks for a protected constructor of the form:
+ * 		<p class='bjava'>
+ * 	<jk>protected</jk> MyClass(<ja>&lt;args&gt;</ja>);
+ * 		</p>
+ * 		<ul>
+ * 			<li>All arguments except {@link Optional} and {@link List} parameters must have beans available in the store.
+ * 			<li>If multiple methods are found, the one with the most matching parameters is used.
+ * 			<li>Deprecated and {@link BeanIgnore @BeanIgnore-annotated} methods are ignored.
+ *		</ul>
+ * 	<li>Looks for a static no-arg create method that returns a builder object that can be passed in to a protected constructor.
+ * 		<p class='bjava'>
+ * 	<jk>public static</jk> MyClass.Builder <jsm>create</jsm>();
+ *
+ * 	<jk>protected</jk> MyClass(MyClass.Builder <jv>builder</jv>);
+ * 		</p>
+ * 		<ul>
+ * 			<li>Deprecated and {@link BeanIgnore @BeanIgnore-annotated} methods are ignored.
+ *		</ul>
+ * </ol>
+ *
+ * <h5 class='section'>Notes:</h5><ul>
+ * 	<li class='note'>The {@link #builder(Class,Object)} method can be used to set an existing initialized builder object to pass to a constructor.
+ * 	<li class='note'>An existing initialized builder can be set using the {@link #builder(Class,Object)} method.
+ * </ul>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='jc'>{@link BeanStore}
+ * </ul>
+ *
+ * @param <T> The bean type being created.
+ */
+public class BeanCreator<T> {
+	static class Match<T extends ExecutableInfo> {
+		T executable = null;
+		int numMatches = -1;
+
+		@SuppressWarnings("unchecked")
+		void add(T ei) {
+			if (ei.getParameterCount() > numMatches) {
+				numMatches = ei.getParameterCount();
+				executable = (T)ei.accessible();
+			}
+		}
+
+		T get() {
+			return executable;
+		}
+
+		boolean isPresent() { return nn(executable); }
+	}
+
+	/**
+	 * Shortcut for calling <c>BeanStore.INSTANCE.createBean(beanType)</c>.
+	 *
+	 * @param <T> The bean type to create.
+	 * @param beanType The bean type to create.
+	 * @return A new creator.
+	 */
+	public static <T> BeanCreator<T> of(Class<T> beanType) {
+		return BeanStore.INSTANCE.createBean(beanType);
+	}
+
+	private final BeanStore store;
+	private ClassInfo type;
+	private Object builder;
+	private T impl;
+
+	private boolean silent;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param type The bean type being created.
+	 * @param store The bean store creating this creator.
+	 */
+	protected BeanCreator(Class<T> type, BeanStore store) {
+		this.type = info(type);
+		this.store = BeanStore.of(store, store.outer.orElse(null));
+	}
+
+	/**
+	 * Adds an argument to this creator.
+	 *
+	 * @param <T2> The parameter type.
+	 * @param beanType The parameter type.
+	 * @param bean The parameter value.
+	 * @return This object.
+	 */
+	public <T2> BeanCreator<T> arg(Class<T2> beanType, T2 bean) {
+		store.add(beanType, bean);
+		return this;
+	}
+
+	/**
+	 * Specifies a builder object for the bean type.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>When specified, we don't look for a static creator method.
+	 * </ul>
+	 *
+	 * @param <B> The class type of the builder.
+	 * @param type The class type of the builder.
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@SuppressWarnings("unchecked")
+	public <B> BeanCreator<T> builder(Class<B> type, B value) {
+		builder = value;
+		var t = value.getClass();
+		do {
+			store.add((Class<T>)t, (T)value);
+			t = t.getSuperclass();
+		} while (nn(t) && ! t.equals(type));
+		return this;
+	}
+
+	/**
+	 * Same as {@link #run()} but returns the value wrapped in an {@link Optional}.
+	 *
+	 * @return A new bean wrapped in an {@link Optional}.
+	 */
+	public Optional<T> execute() {
+		return opt(silent().run());
+	}
+
+	/**
+	 * Allows you to specify a specific instance for the build method to return.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	public BeanCreator<T> impl(T value) {
+		impl = value;
+		return this;
+	}
+
+	/**
+	 * Same as {@link #run()} but returns the alternate value if a method of creation could not be found.
+	 *
+	 * @param other The other bean to use.
+	 * @return Either the created or other bean.
+	 */
+	public T orElse(T other) {
+		return execute().orElse(other);
+	}
+
+	/**
+	 * Creates the bean.
+	 *
+	 * @return A new bean.
+	 * @throws ExecutableException if bean could not be created and {@link #silent()} was not enabled.
+	 */
+	public T run() {
+
+		if (nn(impl))
+			return impl;
+
+		if (type == null)
+			return null;
+
+		var found = Value.<String>empty();
+
+		// Look for getInstance(Builder).
+		if (nn(builder)) {
+			// @formatter:off
+			var result = type.getPublicMethod(
+				x -> x.isStatic()
+				&& x.isNotDeprecated()
+				&& x.hasNumParameters(1)
+				&& x.getParameter(0).canAccept(builder)
+				&& x.hasReturnType(type)
+				&& ! x.hasAnnotation(BeanIgnore.class)
+				&& x.hasName("getInstance")
+			).map(m -> m.<T>invoke(null, builder));
+			// @formatter:on
+			if (result.isPresent())
+				return result.get();
+		}
+
+		// Look for getInstance().
+		if (builder == null) {
+			// @formatter:off
+			var result = type.getPublicMethod(
+				x -> x.isStatic()
+				&& x.isNotDeprecated()
+				&& x.getParameterCount() == 0
+				&& x.hasReturnType(type)
+				&& ! x.hasAnnotation(BeanIgnore.class)
+				&& x.hasName("getInstance")
+			).map(m -> m.<T>invoke(null));
+			// @formatter:on
+			if (result.isPresent())
+				return result.get();
+		}
+
+		if (builder == null) {
+			// Look for static creator methods.
+
+			var match = new Match<MethodInfo>();
+
+			// Look for static creator method.
+			type.getPublicMethods().stream().filter(x -> isStaticCreateMethod(x)).forEach(x -> {
+				found.set("STATIC_CREATOR");
+				if (hasAllParams(x))
+					match.add(x);
+			});
+
+			if (match.isPresent())
+				return match.get().invoke(null, getParams(match.get()));
+		}
+
+		if (type.isInterface()) {
+			if (silent)
+				return null;
+			throw new ExecutableException("Could not instantiate class {0}: {1}.", type.getName(), "Class is an interface");
+		}
+
+		if (type.isAbstract()) {
+			if (silent)
+				return null;
+			throw new ExecutableException("Could not instantiate class {0}: {1}.", type.getName(), "Class is abstract");
+		}
+
+		// Look for public constructor.
+		var constructorMatch = new Match<ConstructorInfo>();
+		type.getPublicConstructors().stream().forEach(x -> {
+			found.setIfEmpty("PUBLIC_CONSTRUCTOR");
+			if (hasAllParams(x))
+				constructorMatch.add(x);
+		});
+
+		// Look for protected constructor.
+		if (! constructorMatch.isPresent()) {
+			type.getDeclaredConstructors().stream().filter(ConstructorInfo::isProtected).forEach(x -> {
+				found.setIfEmpty("PROTECTED_CONSTRUCTOR");
+				if (hasAllParams(x))
+					constructorMatch.add(x);
+			});
+		}
+
+		// Execute.
+		if (constructorMatch.isPresent())
+			return constructorMatch.get().newInstance(getParams(constructorMatch.get()));
+
+		if (builder == null) {
+			// Look for static-builder/protected-constructor pair.
+			var value = Value.<T>empty();
+			type.getDeclaredConstructors().stream().filter(x -> x.hasNumParameters(1) && x.isVisible(PROTECTED)).forEach(x -> {
+				var pt = x.getParameter(0).getParameterType().inner();
+				type.getPublicMethod(y -> isStaticCreateMethod(y, pt)).ifPresent(m -> {
+					Object b = m.invoke(null);
+					value.set(x.accessible().newInstance(b));
+				});
+			});
+			if (value.isPresent())
+				return value.get();
+		}
+
+		if (silent)
+			return null;
+
+		var msg = (String)null;
+		if (found.isEmpty()) {
+			msg = "No public/protected constructors found";
+		} else if (found.get().equals("STATIC_CREATOR")) {
+			msg = "Static creator found but could not find prerequisites: "
+				+ type.getPublicMethods().stream().filter(x -> isStaticCreateMethod(x)).map(x -> getMissingParams(x)).sorted().collect(joining(" or "));
+		} else if (found.get().equals("PUBLIC_CONSTRUCTOR")) {
+			msg = "Public constructor found but could not find prerequisites: " + type.getPublicConstructors().stream().map(x -> getMissingParams(x)).sorted().collect(joining(" or "));
+		} else {
+			msg = "Protected constructor found but could not find prerequisites: "
+				+ type.getDeclaredConstructors().stream().filter(ConstructorInfo::isProtected).map(x -> getMissingParams(x)).sorted().collect(joining(" or "));
+		}
+		throw new ExecutableException("Could not instantiate class {0}: {1}.", type.getName(), msg);
+	}
+
+	/**
+	 * Suppresses throwing of {@link ExecutableException ExecutableExceptions} from the {@link #run()} method when
+	 * a form of creation cannot be found.
+	 *
+	 * @return This object.
+	 */
+	public BeanCreator<T> silent() {
+		silent = true;
+		return this;
+	}
+
+	/**
+	 * Converts this creator into a supplier.
+	 *
+	 * @return A supplier that returns the results of the {@link #run()} method.
+	 */
+	public Supplier<T> supplier() {
+		return () -> run();
+	}
+
+	/**
+	 * Allows you to specify a subclass of the specified bean type to create.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	public BeanCreator<T> type(Class<?> value) {
+		type = opt(value).map(x -> info(x)).orElse(null);
+		return this;
+	}
+
+	/**
+	 * Allows you to specify a subclass of the specified bean type to create.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	public BeanCreator<T> type(ClassInfo value) {
+		return type(value == null ? null : value.inner());
+	}
+
+	private String getMissingParams(ExecutableInfo ei) {
+		return store.getMissingParams(ei);
+	}
+
+	private Object[] getParams(ExecutableInfo ei) {
+		return store.getParams(ei);
+	}
+
+	private boolean hasAllParams(ExecutableInfo ei) {
+		return store.hasAllParams(ei);
+	}
+
+	private boolean isStaticCreateMethod(MethodInfo m) {
+		return isStaticCreateMethod(m, type.inner());
+	}
+
+	private static boolean isStaticCreateMethod(MethodInfo m, Class<?> type) {
+		// @formatter:off
+		return m.isStatic()
+			&& m.isNotDeprecated()
+			&& m.hasReturnType(type)
+			&& ! m.hasAnnotation(BeanIgnore.class)
+			&& (m.hasName("create") || m.hasName("builder"));
+		// @formatter:on
+	}
+}

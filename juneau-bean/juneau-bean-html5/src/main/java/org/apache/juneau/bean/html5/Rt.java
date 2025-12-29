@@ -1,0 +1,491 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.bean.html5;
+
+import org.apache.juneau.annotation.*;
+
+/**
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-rt-element">&lt;rt&gt;</a>
+ * element.
+ *
+ * <p>
+ * The rt element represents the ruby text component of a ruby annotation. It is used within
+ * a ruby element to mark up the annotation text that provides pronunciation or translation
+ * information for the base text. The rt element is part of the ruby annotation system and
+ * is used to provide annotations above or below the base text in languages that use complex
+ * writing systems, such as Japanese, Chinese, or Korean. It is typically used with rb (ruby
+ * base) elements to provide complete ruby annotations.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ *
+ * 	<jc>// Simple ruby text</jc>
+ * 	Rt <jv>simple</jv> = <jsm>rt</jsm>(<js>"かんじ"</js>);
+ *
+ * 	<jc>// Rt with styling</jc>
+ * 	Rt <jv>styled</jv> = <jsm>rt</jsm>(<js>"にほんご"</js>)
+ * 		._class(<js>"ruby-text"</js>);
+ *
+ * 	<jc>// Rt with complex content</jc>
+ * 	Rt <jv>complex</jv> = <jsm>rt</jsm>(
+ * 		<js>"ふくざつな"</js>,
+ * 		<jsm>strong</jsm>(<js>"かんじ"</js>),
+ * 		<js>"のれい"</js>
+ * 	);
+ *
+ * 	<jc>// Rt with ID</jc>
+ * 	Rt <jv>withId</jv> = <jsm>rt</jsm>(<js>"かんじ"</js>)
+ * 		.id(<js>"ruby-text-1"</js>);
+ *
+ * 	<jc>// Rt with styling</jc>
+ * 	Rt <jv>styled2</jv> = <jsm>rt</jsm>(<js>"かんじ"</js>)
+ * 		.style(<js>"font-size: 0.8em; color: #666;"</js>);
+ *
+ * 	<jc>// Rt with multiple elements</jc>
+ * 	Rt <jv>multiple</jv> = <jsm>rt</jsm>(
+ * 		<js>"ふくざつな"</js>,
+ * 		<jsm>rt</jsm>(<js>"かんじ"</js>),
+ * 		<js>"の"</js>,
+ * 		<jsm>rt</jsm>(<js>"れい"</js>)
+ * 		);
+ *
+ * 	// Rt with links
+ * 	Rt withLinks = new Rt()
+ * 		.children(
+ * 			"かんじ",
+ * 			new A().href("/dictionary/kanji").children("じしょ")
+ * 		);
+ * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
+ * </ul>
+ */
+@Bean(typeName = "rt")
+public class Rt extends HtmlElementMixed {
+
+	/**
+	 * Creates an empty {@link Rt} element.
+	 */
+	public Rt() {}
+
+	/**
+	 * Creates a {@link Rt} element with the specified {@link Rt#children(Object[])} nodes.
+	 *
+	 * @param children The {@link Rt#children(Object[])} nodes.
+	 */
+	public Rt(Object...children) {
+		children(children);
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt _class(String value) { // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Rt child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Rt children(Object...value) {
+		super.children(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt contenteditable(Object value) {
+		super.contenteditable(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt dir(String value) {
+		super.dir(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt hidden(Object value) {
+		super.hidden(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt id(String value) {
+		super.id(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt lang(String value) {
+		super.lang(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onabort(String value) {
+		super.onabort(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onblur(String value) {
+		super.onblur(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt oncancel(String value) {
+		super.oncancel(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt oncanplay(String value) {
+		super.oncanplay(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt oncanplaythrough(String value) {
+		super.oncanplaythrough(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onchange(String value) {
+		super.onchange(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onclick(String value) {
+		super.onclick(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt oncuechange(String value) {
+		super.oncuechange(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt ondblclick(String value) {
+		super.ondblclick(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt ondurationchange(String value) {
+		super.ondurationchange(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onemptied(String value) {
+		super.onemptied(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onended(String value) {
+		super.onended(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onerror(String value) {
+		super.onerror(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onfocus(String value) {
+		super.onfocus(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt oninput(String value) {
+		super.oninput(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt oninvalid(String value) {
+		super.oninvalid(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onkeydown(String value) {
+		super.onkeydown(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onkeypress(String value) {
+		super.onkeypress(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onkeyup(String value) {
+		super.onkeyup(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onload(String value) {
+		super.onload(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onloadeddata(String value) {
+		super.onloadeddata(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onloadedmetadata(String value) {
+		super.onloadedmetadata(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onloadstart(String value) {
+		super.onloadstart(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onmousedown(String value) {
+		super.onmousedown(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onmouseenter(String value) {
+		super.onmouseenter(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onmouseleave(String value) {
+		super.onmouseleave(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onmousemove(String value) {
+		super.onmousemove(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onmouseout(String value) {
+		super.onmouseout(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onmouseover(String value) {
+		super.onmouseover(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onmouseup(String value) {
+		super.onmouseup(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onmousewheel(String value) {
+		super.onmousewheel(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onpause(String value) {
+		super.onpause(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onplay(String value) {
+		super.onplay(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onplaying(String value) {
+		super.onplaying(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onprogress(String value) {
+		super.onprogress(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onratechange(String value) {
+		super.onratechange(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onreset(String value) {
+		super.onreset(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onresize(String value) {
+		super.onresize(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onscroll(String value) {
+		super.onscroll(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onseeked(String value) {
+		super.onseeked(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onseeking(String value) {
+		super.onseeking(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onselect(String value) {
+		super.onselect(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onshow(String value) {
+		super.onshow(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onstalled(String value) {
+		super.onstalled(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onsubmit(String value) {
+		super.onsubmit(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onsuspend(String value) {
+		super.onsuspend(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt ontimeupdate(String value) {
+		super.ontimeupdate(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt ontoggle(String value) {
+		super.ontoggle(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onvolumechange(String value) {
+		super.onvolumechange(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt onwaiting(String value) {
+		super.onwaiting(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt spellcheck(Object value) {
+		super.spellcheck(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt style(String value) {
+		super.style(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt tabindex(Object value) {
+		super.tabindex(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt title(String value) {
+		super.title(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rt translate(Object value) {
+		super.translate(value);
+		return this;
+	}
+}

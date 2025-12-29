@@ -1,0 +1,171 @@
+// ***************************************************************************************************************************
+// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+// * with the License.  You may obtain a copy of the License at                                                              *
+// *                                                                                                                         *
+// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+// *                                                                                                                         *
+// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+// * specific language governing permissions and limitations under the License.                                              *
+// ***************************************************************************************************************************
+
+{
+	swagger: '0.0',
+	info: {
+		title: 's-title',
+		description: 's-description',
+		version: '0.0.0',
+		termsOfService: 's-termsOfService',
+		contact: {
+			name: 's-name',
+			url: 's-url',
+			email: 's-email'
+		},
+		license: {
+			name: 's-name',
+			url: 's-url'
+		}
+	},
+	host: 's-host',
+	basePath: 's-basePath',
+	tags: [
+		{
+			name: 's-name',
+			description: 's-description',
+			externalDocs: {
+				description: 's-description',
+				url: 's-url'
+			}
+		}
+	],
+	schemes: [
+		's-scheme'
+	],
+	externalDocs: {
+		description: 's-description',
+		url: 's-url'
+	},
+	paths: {
+		'/path/{foo}': {
+			get: {
+				summary: 's-summary',
+				description: 's-description',
+				operationId: 's-operationId',
+				deprecated: true,
+				consumes: ['s-consumes'],
+				produces: ['s-produces'],
+				tags: ['s-tag'],
+				schemes: ['s-scheme'],
+				externalDocs: {
+					description: 's-description',
+					url: 's-url'
+				}
+			}
+		},
+		'/path/{foo}/query': {
+			get: {
+				parameters: [
+					{
+						name: 'foo',
+						in: 'query',
+						description: 's-description',
+						type: 'string',
+						format: 's-format',
+						pattern: 's-pattern',
+						collectionFormat: 's-collectionFormat',
+						minimum: 1.0,
+						maximum: 1.0,
+						multipleOf: 1.0,
+						minLength: 1,
+						maxLength: 1,
+						minItems: 1,
+						maxItems: 1,
+						required: true,
+						allowEmptyValue: true,
+						exclusiveMinimum: true,
+						exclusiveMaximum: true,
+						uniqueItems: true,						
+						schema: {
+							$ref: '#/definitions/Foo'
+						},
+						example: "{id:1}"
+					}
+				]
+			}
+		},
+		'/path/{foo}/body': {
+			get: {
+				parameters: [
+					{
+						in: 'body',
+						description: 's-description',
+						type: 'string',
+						format: 's-format',
+						pattern: 's-pattern',
+						collectionFormat: 's-collectionFormat',
+						minimum: 1.0,
+						maximum: 1.0,
+						multipleOf: 1.0,
+						minLength: 1,
+						maxLength: 1,
+						minItems: 1,
+						maxItems: 1,
+						allowEmptyValue: true,
+						exclusiveMinimum: true,
+						exclusiveMaximum: true,
+						uniqueItems: true,						
+						schema: {
+							$ref: '#/definitions/Foo'
+						},						
+						example: "{id:1}",
+						examples: {
+							foo: 'a'
+						}						
+					}
+				]
+			}
+		},
+		'/path/{foo}/responses/100': {
+			get: {
+				responses: {
+					100: {
+						description:'s-100-description',
+						schema: {
+							type: 'array',
+							items: {
+								$ref: '#/definitions/Foo'
+							}
+						},
+						headers: {
+							X-Foo: {
+								type: 'integer',
+								format: 'int32',
+								description: 's-description'
+							}
+						},
+						example: "{foo:'a'}",
+						examples: {
+							foo: 'a'
+						}
+					}
+				}
+			} 
+		}
+	},
+	definitions: {
+		Foo: {
+			type: 'object',
+			properties: {
+				id: {
+					type: 'integer',
+					format: 'int64'
+				}
+			},
+			xml: {
+				name: 'Foo'
+			}
+		}
+	}
+}

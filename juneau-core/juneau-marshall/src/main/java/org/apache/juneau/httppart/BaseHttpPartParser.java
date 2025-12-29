@@ -1,0 +1,147 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.httppart;
+
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
+import java.lang.reflect.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.parser.*;
+
+/**
+ * Base class for implementations of {@link HttpPartParser}
+ *
+ * <h5 class='section'>Notes:</h5><ul>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpPartSerializersParsers">HTTP Part Serializers and Parsers</a>
+ * </ul>
+ */
+public abstract class BaseHttpPartParser extends BeanContextable implements HttpPartParser {
+
+	/**
+	 * Builder class.
+	 */
+	public abstract static class Builder extends BeanContextable.Builder {
+
+		/**
+		 * Constructor.
+		 */
+		protected Builder() {}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param builder The builder to copy.
+		 * 	<br>Cannot be <jk>null</jk>.
+		 */
+		protected Builder(Builder builder) {
+			super(assertArgNotNull("builder", builder));
+		}
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected BaseHttpPartParser(Builder builder) {
+		super(builder);
+	}
+
+	@Override /* Overridden from HttpPartParser */
+	public <T> ClassMeta<T> getClassMeta(Class<T> c) {
+		return BeanContext.DEFAULT.getClassMeta(c);
+	}
+
+	@Override /* Overridden from HttpPartParser */
+	public <T> ClassMeta<T> getClassMeta(Type t, Type...args) {
+		return BeanContext.DEFAULT.getClassMeta(t, args);
+	}
+
+	/**
+	 * Converts the specified input to the specified class type.
+	 *
+	 * @param <T> The POJO type to transform the input into.
+	 * @param partType The part type being parsed.
+	 * 	<br>Can be <jk>null</jk> (will default to {@link HttpPartType#OTHER}).
+	 * @param schema
+	 * 	Schema information about the part.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Not all part parsers use the schema information.
+	 * @param in The input being parsed.
+	 * 	<br>Can be <jk>null</jk> (will return <jk>null</jk> or use schema default if available).
+	 * @param toType The POJO type to transform the input into.
+	 * 	<br>Cannot be <jk>null</jk>.
+	 * @return The parsed value.
+	 * @throws ParseException Malformed input encountered.
+	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
+	 */
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
+		return getPartSession().parse(partType, schema, in, getClassMeta(assertArgNotNull("toType", toType)));
+	}
+
+	/**
+	 * Converts the specified input to the specified class type.
+	 *
+	 * @param <T> The POJO type to transform the input into.
+	 * @param partType The part type being parsed.
+	 * 	<br>Can be <jk>null</jk> (will default to {@link HttpPartType#OTHER}).
+	 * @param schema
+	 * 	Schema information about the part.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Not all part parsers use the schema information.
+	 * @param in The input being parsed.
+	 * 	<br>Can be <jk>null</jk> (will return <jk>null</jk> or use schema default if available).
+	 * @param toType The POJO type to transform the input into.
+	 * 	<br>Cannot be <jk>null</jk>.
+	 * @return The parsed value.
+	 * @throws ParseException Malformed input encountered.
+	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
+	 */
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
+		return getPartSession().parse(partType, schema, in, assertArgNotNull("toType", toType));
+	}
+
+	/**
+	 * Converts the specified input to the specified class type.
+	 *
+	 * @param <T> The POJO type to transform the input into.
+	 * @param partType The part type being parsed.
+	 * 	<br>Can be <jk>null</jk> (will default to {@link HttpPartType#OTHER}).
+	 * @param schema
+	 * 	Schema information about the part.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Not all part parsers use the schema information.
+	 * @param in The input being parsed.
+	 * 	<br>Can be <jk>null</jk> (will return <jk>null</jk> or use schema default if available).
+	 * @param toType The POJO type to transform the input into.
+	 * 	<br>Cannot be <jk>null</jk>.
+	 * @param toTypeArgs The generic type arguments of the POJO type to transform the input into.
+	 * 	<br>Cannot contain <jk>null</jk> values.
+	 * @return The parsed value.
+	 * @throws ParseException Malformed input encountered.
+	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
+	 */
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
+		assertArgNoNulls("toTypeArgs", toTypeArgs);
+		return getPartSession().parse(partType, schema, in, getClassMeta(assertArgNotNull("toType", toType), toTypeArgs));
+	}
+}

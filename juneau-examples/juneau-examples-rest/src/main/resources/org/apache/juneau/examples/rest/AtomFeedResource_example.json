@@ -1,0 +1,86 @@
+// ***************************************************************************************************************************
+// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+// * with the License.  You may obtain a copy of the License at                                                              *
+// *                                                                                                                         *
+// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+// *                                                                                                                         *
+// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+// * specific language governing permissions and limitations under the License.                                              *
+// ***************************************************************************************************************************
+{
+	id: {
+		text: 'tag:juneau.sample.com,2013:1'
+	},
+	title: {
+		text: 'Juneau ATOM specification'
+	},
+	links: [
+		{
+			type: 'text/html',
+			href: 'http://www.sample.com/',
+			hreflang: 'en',
+			rel: 'alternate'
+		},
+		{
+			type: 'application/atom+xml',
+			href: 'http://www.sample.com/feed.atom',
+			rel: 'self'
+		}
+	],
+	updated: '2013-05-08T12:29:29Z',
+	entries: [
+		{
+			id: {
+				text: 'tag:juneau.sample.com,2013:1.2345'
+			},
+			title: {
+				text: 'Juneau ATOM specification snapshot'
+			},
+			links: [
+				{
+					type: 'text/html',
+					href: 'http://www.sample.com/2012/05/08/juneau.atom',
+					rel: 'alternate'
+				},
+				{
+					type: 'audio/mpeg',
+					length: 1337,
+					href: 'http://www.sample.com/audio/juneau_podcast.mp3',
+					rel: 'enclosure'
+				}
+			],
+			authors: [
+				{
+					name: 'James Bognar',
+					uri: 'http://www.sample.com/',
+					email: 'jamesbognar@apache.org'
+				}
+			],
+			contributors: [
+				{
+					name: 'Barry M. Caceres'
+				}
+			],
+			updated: '2013-05-08T12:29:29Z',
+			content: {
+				base: 'http://www.apache.org/',
+				lang: 'en',
+				type: 'xhtml',
+				text: '<div><p>[Update: Juneau supports ATOM.]</p></div>'
+			},
+			published: '2013-05-08T12:29:29Z'
+		}
+	],
+	generator: {
+		version: '1.0',
+		uri: 'http://juneau.apache.org/',
+		text: 'Juneau'
+	},
+	subtitle: {
+		type: 'html',
+		text: 'A <em>lot</em> of effort went into making this effortless'
+	}
+}

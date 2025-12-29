@@ -1,0 +1,150 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.annotation;
+
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.jsonschema.SchemaUtils.*;
+
+import java.lang.annotation.*;
+import java.util.function.*;
+
+import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.parser.*;
+
+/**
+ * Utility classes and methods for the {@link ExternalDocs @ExternalDocs} annotation.
+ *
+ */
+public class ExternalDocsAnnotation {
+	/**
+	 * Builder class.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
+	 * </ul>
+	 */
+	public static class Builder extends AnnotationObject.Builder {
+
+		private String[] description = {};
+		private String url = "";
+
+		/**
+		 * Constructor.
+		 */
+		protected Builder() {
+			super(ExternalDocs.class);
+		}
+
+		/**
+		 * Instantiates a new {@link ExternalDocs @ExternalDocs} object initialized with this builder.
+		 *
+		 * @return A new {@link ExternalDocs @ExternalDocs} object.
+		 */
+		public ExternalDocs build() {
+			return new Object(this);
+		}
+
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			description = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link ExternalDocs#url} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder url(String value) {
+			url = value;
+			return this;
+		}
+
+	}
+
+	private static class Object extends AnnotationObject implements ExternalDocs {
+
+		private final String[] description;
+		private final String url;
+
+		Object(ExternalDocsAnnotation.Builder b) {
+			super(b);
+			description = copyOf(b.description);
+			url = b.url;
+		}
+
+		@Override
+		public String url() {
+			return url;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
+		}
+	}
+
+	/** Default value */
+	public static final ExternalDocs DEFAULT = create().build();
+
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean empty(ExternalDocs a) {
+		return a == null || DEFAULT.equals(a);
+	}
+
+	/**
+	 * Merges the contents of the specified annotation into the specified generic map.
+	 *
+	 * @param m The map to copy the contents to.
+	 * @param a The annotation to apply.
+	 * @return The same map with the annotation contents applied.
+	 * @throws ParseException Invalid JSON found in value.
+	 */
+	public static JsonMap merge(JsonMap m, ExternalDocs a) throws ParseException {
+		if (ExternalDocsAnnotation.empty(a))
+			return m;
+		Predicate<String> ne = Utils::ne;
+		// @formatter:off
+		return m
+			.appendIf(ne, "description", joinnl(a.description()))
+			.appendIf(ne, "url", a.url())
+		;
+		// @formatter:on
+	}
+}

@@ -1,0 +1,259 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.rest.annotation;
+
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+
+import java.lang.annotation.*;
+
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.http.annotation.*;
+
+/**
+ * Utility classes and methods for the {@link Swagger @Swagger} annotation.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
+ * </ul>
+ */
+public class SwaggerAnnotation {
+	/**
+	 * Builder class.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
+	 * </ul>
+	 */
+	public static class Builder extends AnnotationObject.Builder {
+
+		private String[] description = {};
+		private Contact contact = ContactAnnotation.DEFAULT;
+		private ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
+		private License license = LicenseAnnotation.DEFAULT;
+		private String version = "";
+		private String[] termsOfService = {}, title = {}, value = {};
+		private Tag[] tags = {};
+
+		/**
+		 * Constructor.
+		 */
+		protected Builder() {
+			super(Swagger.class);
+		}
+
+		/**
+		 * Instantiates a new {@link Swagger @Swagger} object initialized with this builder.
+		 *
+		 * @return A new {@link Swagger @Swagger} object.
+		 */
+		public Swagger build() {
+			return new Object(this);
+		}
+
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			description = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Swagger#contact()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder contact(Contact value) {
+			contact = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Swagger#externalDocs()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder externalDocs(ExternalDocs value) {
+			externalDocs = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Swagger#license()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder license(License value) {
+			license = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Swagger#tags()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder tags(Tag...value) {
+			tags = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Swagger#termsOfService()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder termsOfService(String...value) {
+			termsOfService = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Swagger#title()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder title(String...value) {
+			title = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Swagger#value()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder value(String...value) {
+			this.value = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Swagger#version()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder version(String value) {
+			version = value;
+			return this;
+		}
+
+	}
+
+	private static class Object extends AnnotationObject implements Swagger {
+
+		private final String[] description;
+		private final Contact contact;
+		private final ExternalDocs externalDocs;
+		private final License license;
+		private final String version;
+		private final String[] termsOfService, title, value;
+		private final Tag[] tags;
+
+		Object(SwaggerAnnotation.Builder b) {
+			super(b);
+			description = copyOf(b.description);
+			contact = b.contact;
+			externalDocs = b.externalDocs;
+			license = b.license;
+			tags = copyOf(b.tags);
+			termsOfService = copyOf(b.termsOfService);
+			title = copyOf(b.title);
+			value = copyOf(b.value);
+			version = b.version;
+		}
+
+		@Override /* Overridden from Swagger */
+		public Contact contact() {
+			return contact;
+		}
+
+		@Override /* Overridden from Swagger */
+		public ExternalDocs externalDocs() {
+			return externalDocs;
+		}
+
+		@Override /* Overridden from Swagger */
+		public License license() {
+			return license;
+		}
+
+		@Override /* Overridden from Swagger */
+		public Tag[] tags() {
+			return tags;
+		}
+
+		@Override /* Overridden from Swagger */
+		public String[] termsOfService() {
+			return termsOfService;
+		}
+
+		@Override /* Overridden from Swagger */
+		public String[] title() {
+			return title;
+		}
+
+		@Override /* Overridden from Swagger */
+		public String[] value() {
+			return value;
+		}
+
+		@Override /* Overridden from Swagger */
+		public String version() {
+			return version;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
+		}
+	}
+
+	/** Default value */
+	public static final Swagger DEFAULT = create().build();
+
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean empty(Swagger a) {
+		return a == null || DEFAULT.equals(a);
+	}
+}

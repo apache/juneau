@@ -1,0 +1,1035 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.bean.swagger;
+
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
+
+import java.util.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.commons.collections.*;
+
+/**
+ * Describes a single API operation on a path.
+ *
+ * <p>
+ * The Operation Object describes a single operation (such as GET, POST, PUT, DELETE) that can be performed on a path
+ * in Swagger 2.0. Operations define what actions can be taken, what parameters they accept, what they consume/produce,
+ * and what responses they return.
+ *
+ * <h5 class='section'>Swagger Specification:</h5>
+ * <p>
+ * The Operation Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>tags</c> (array of string) - A list of tags for API documentation control
+ * 	<li><c>summary</c> (string) - A short summary of what the operation does
+ * 	<li><c>description</c> (string) - A verbose explanation of the operation behavior
+ * 	<li><c>externalDocs</c> ({@link ExternalDocumentation}) - Additional external documentation for this operation
+ * 	<li><c>operationId</c> (string) - Unique string used to identify the operation
+ * 	<li><c>consumes</c> (array of string) - A list of MIME types the operation can consume
+ * 	<li><c>produces</c> (array of string) - A list of MIME types the operation can produce
+ * 	<li><c>parameters</c> (array of {@link ParameterInfo}) - A list of parameters that are applicable for this operation
+ * 	<li><c>responses</c> (map of {@link ResponseInfo}, REQUIRED) - The list of possible responses as they are returned from executing this operation
+ * 	<li><c>schemes</c> (array of string) - The transfer protocol for the operation (overrides the Swagger-level schemes)
+ * 	<li><c>deprecated</c> (boolean) - Declares this operation to be deprecated
+ * 	<li><c>security</c> (array of map) - A declaration of which security schemes are applied for this operation
+ * </ul>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Construct using SwaggerBuilder.</jc>
+ * 	Operation <jv>operation</jv> = <jsm>operation</jsm>()
+ * 		.tags(<js>"pet"</js>)
+ * 		.summary(<js>"Updates a pet in the store with form data"</js>)
+ * 		.description(<js>""</js>)
+ * 		.operationId(<js>"updatePetWithForm"</js>)
+ * 		.consumes(<js>"application/x-www-form-urlencoded"</js>)
+ * 		.produces(<js>"application/json"</js>, <js>"application/xml"</js>)
+ * 		.parameters(
+ * 			<jsm>parameter</jsm>()
+ * 				.name(<js>"petId"</js>)
+ * 				.in(<js>"path"</js>)
+ * 				.description(<js>"ID of pet that needs to be updated"</js>)
+ * 				.required(<jk>true</jk>)
+ * 				.type(<js>"string"</js>),
+ * 			<jsm>parameter</jsm>()
+ * 				.name(<js>"name"</js>)
+ * 				.in(<js>"formData"</js>)
+ * 				.description(<js>"Updated name of the pet"</js>)
+ * 				.required(<jk>false</jk>)
+ * 				.type(<js>"string"</js>),
+ * 			<jsm>parameter</jsm>()
+ * 				.name(<js>"status"</js>)
+ * 				.in(<js>"formData"</js>)
+ * 				.description(<js>"Updated status of the pet"</js>)
+ * 				.required(<jk>false</jk>)
+ * 				.type(<js>"string"</js>)
+ * 		)
+ * 		.response(200, <jsm>responseInfo</jsm>(<js>"Pet updated."</js>))
+ * 		.response(405, <jsm>responseInfo</jsm>(<js>"Invalid input."</js>))
+ * 		.security(<js>"petstore_auth"</js>, <js>"write:pets"</js>, <js>"read:pets"</js>);
+ *
+ * 	<jc>// Serialize using JsonSerializer.</jc>
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>operation</jv>);
+ *
+ * 	<jc>// Or just use toString() which does the same as above.</jc>
+ * 	<jv>json</jv> = <jv>operation</jv>.toString();
+ * </p>
+ * <p class='bjson'>
+ * 	<jc>// Output</jc>
+ * 	{
+ * 		<js>"tags"</js>: [
+ * 			<js>"pet"</js>
+ * 		],
+ * 		<js>"summary"</js>: <js>"Updates a pet in the store with form data"</js>,
+ * 		<js>"description"</js>: <js>""</js>,
+ * 		<js>"operationId"</js>: <js>"updatePetWithForm"</js>,
+ * 		<js>"consumes"</js>: [
+ * 			<js>"application/x-www-form-urlencoded"</js>
+ * 		],
+ * 		<js>"produces"</js>: [
+ * 			<js>"application/json"</js>,
+ * 			<js>"application/xml"</js>
+ * 		],
+ * 		<js>"parameters"</js>: [
+ * 			{
+ * 				<js>"name"</js>: <js>"petId"</js>,
+ * 				<js>"in"</js>: <js>"path"</js>,
+ * 				<js>"description"</js>: <js>"ID of pet that needs to be updated"</js>,
+ * 				<js>"required"</js>: <jk>true</jk>,
+ * 				<js>"type"</js>: <js>"string"</js>
+ * 			},
+ * 			{
+ * 				<js>"name"</js>: <js>"name"</js>,
+ * 				<js>"in"</js>: <js>"formData"</js>,
+ * 				<js>"description"</js>: <js>"Updated name of the pet"</js>,
+ * 				<js>"required"</js>: <jk>false</jk>,
+ * 				<js>"type"</js>: <js>"string"</js>
+ * 			},
+ * 			{
+ * 				<js>"name"</js>: <js>"status"</js>,
+ * 				<js>"in"</js>: <js>"formData"</js>,
+ * 				<js>"description"</js>: <js>"Updated status of the pet"</js>,
+ * 				<js>"required"</js>: <jk>false</jk>,
+ * 				<js>"type"</js>: <js>"string"</js>
+ * 			}
+ * 		],
+ * 		<js>"responses"</js>: {
+ * 			<js>"200"</js>: {
+ * 				<js>"description"</js>: <js>"Pet updated."</js>
+ * 			},
+ * 			<js>"405"</js>: {
+ * 				<js>"description"</js>: <js>"Invalid input"</js>
+ * 			}
+ * 		},
+ * 		<js>"security"</js>: [
+ * 			{
+ * 				<js>"petstore_auth"</js>: [
+ * 					<js>"write:pets"</js>,
+ * 					<js>"read:pets"</js>
+ * 				]
+ * 			}
+ * 		]
+ * 	}
+ * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#operation-object">Swagger 2.0 Specification &gt; Operation Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/paths-and-operations/">Swagger Paths and Operations</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
+ * </ul>
+ */
+public class Operation extends SwaggerElement {
+
+	private interface MapStringList extends Map<String,List<String>> {}
+
+	private String summary, description, operationId;
+	private Boolean deprecated;
+	private ExternalDocumentation externalDocs;
+	private Set<String> tags = new LinkedHashSet<>(), schemes = new LinkedHashSet<>();
+	private Set<MediaType> consumes = new LinkedHashSet<>(), produces = new LinkedHashSet<>();
+	private List<ParameterInfo> parameters = list();
+	private List<Map<String,List<String>>> security = list();
+
+	private Map<String,ResponseInfo> responses = map();
+
+	/**
+	 * Default constructor.
+	 */
+	public Operation() {}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The object to copy.
+	 */
+	public Operation(Operation copyFrom) {
+		super(copyFrom);
+
+		if (nn(copyFrom.consumes))
+			this.consumes.addAll(copyOf(copyFrom.consumes));
+		this.deprecated = copyFrom.deprecated;
+		this.description = copyFrom.description;
+		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
+		this.operationId = copyFrom.operationId;
+		if (nn(copyFrom.produces))
+			this.produces.addAll(copyOf(copyFrom.produces));
+		if (nn(copyFrom.schemes))
+			this.schemes.addAll(copyOf(copyFrom.schemes));
+		this.summary = copyFrom.summary;
+		if (nn(copyFrom.tags))
+			this.tags.addAll(copyOf(copyFrom.tags));
+
+		if (nn(copyFrom.parameters))
+			parameters.addAll(copyOf(copyFrom.parameters, ParameterInfo::copy));
+
+		if (nn(copyFrom.responses))
+			copyFrom.responses.forEach((k, v) -> responses.put(k, v.copy()));
+
+		if (nn(copyFrom.security))
+			copyFrom.security.forEach(x -> {
+				Map<String,List<String>> m2 = map();
+				x.forEach((k, v) -> m2.put(k, copyOf(v)));
+				security.add(m2);
+			});
+	}
+
+	/**
+	 * Bean property appender:  <property>consumes</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the operation can consume.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addConsumes(Collection<MediaType> values) {
+		if (nn(values))
+			consumes.addAll(values);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>consumes</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the operation can consume.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object.
+	 */
+	public Operation addConsumes(MediaType...value) {
+		if (nn(value))
+			for (var v : value)
+				if (nn(v))
+					consumes.add(v);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>parameters</property>.
+	 *
+	 * <p>
+	 * The parameters needed to send a valid API call.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addParameters(Collection<ParameterInfo> values) {
+		if (nn(values))
+			parameters.addAll(values);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>parameters</property>.
+	 *
+	 * <p>
+	 * A list of parameters that are applicable for this operation.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object.
+	 */
+	public Operation addParameters(ParameterInfo...value) {
+		if (nn(value))
+			for (var v : value)
+				if (nn(v))
+					parameters.add(v);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>produces</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the operation can produce.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addProduces(Collection<MediaType> values) {
+		if (nn(values))
+			produces.addAll(values);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>produces</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the operation can produce.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object.
+	 */
+	public Operation addProduces(MediaType...value) {
+		if (nn(value))
+			for (var v : value)
+				if (nn(v))
+					produces.add(v);
+		return this;
+	}
+
+	/**
+	 * Adds a single value to the <property>responses</property> property.
+	 *
+	 * @param statusCode The HTTP status code.  Must not be <jk>null</jk>.
+	 * @param response The response description.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addResponse(String statusCode, ResponseInfo response) {
+		assertArgNotNull("statusCode", statusCode);
+		assertArgNotNull("response", response);
+		responses.put(statusCode, response);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>schemes</property>.
+	 *
+	 * <p>
+	 * The transfer protocol for the operation.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addSchemes(Collection<String> values) {
+		if (nn(values))
+			schemes.addAll(values);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>schemes</property>.
+	 *
+	 * <p>
+	 * The transfer protocol for the operation.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>String values can also be JSON arrays.
+	 * @return This object.
+	 */
+	public Operation addSchemes(String...value) {
+		if (nn(value))
+			for (var v : value)
+				if (nn(v))
+					schemes.add(v);
+		return this;
+	}
+
+	/**
+	 * Bean property adder:  <property>security</property>.
+	 *
+	 * <p>
+	 * A declaration of which security schemes are applied for this operation.
+	 *
+	 * @param value
+	 * 	The values to add to this property.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addSecurity(Collection<Map<String,List<String>>> value) {
+		assertArgNotNull("value", value);
+		security.addAll(value);
+		return this;
+	}
+
+	/**
+	 * Same as {@link #addSecurity(String, String...)}.
+	 *
+	 * @param scheme
+	 * 	The scheme name.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @param alternatives
+	 * 	The list of values describes alternative security schemes that can be used (that is, there is a logical OR
+	 * 	between the security requirements).
+	 * @return This object.
+	 */
+	public Operation addSecurity(String scheme, String...alternatives) {
+		assertArgNotNull("scheme", scheme);
+		Map<String,List<String>> m = map();
+		m.put(scheme, l(alternatives));
+		security.add(m);
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>tags</property>.
+	 *
+	 * <p>
+	 * A list of tags for API documentation control.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addTags(Collection<String> values) {
+		if (nn(values))
+			tags.addAll(values);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent adder:  <property>tags</property>.
+	 *
+	 * <p>
+	 * A list of tags for API documentation control.
+	 * <br>Tags can be used for logical grouping of operations by resources or any other qualifier.
+	 *
+	 * @param value
+	 * 	The values to add to this property.
+	 * @return This object.
+	 */
+	public Operation addTags(String...value) {
+		if (nn(value))
+			for (var v : value)
+				if (nn(v))
+					tags.add(v);
+		return this;
+	}
+
+	/**
+	 * Make a deep copy of this object.
+	 *
+	 * @return A deep copy of this object.
+	 */
+	public Operation copy() {
+		return new Operation(this);
+	}
+
+	@Override /* Overridden from SwaggerElement */
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "consumes" -> toType(getConsumes(), type);
+			case "deprecated" -> toType(getDeprecated(), type);
+			case "description" -> toType(getDescription(), type);
+			case "externalDocs" -> toType(getExternalDocs(), type);
+			case "operationId" -> toType(getOperationId(), type);
+			case "parameters" -> toType(getParameters(), type);
+			case "produces" -> toType(getProduces(), type);
+			case "responses" -> toType(getResponses(), type);
+			case "schemes" -> toType(getSchemes(), type);
+			case "security" -> toType(getSecurity(), type);
+			case "summary" -> toType(getSummary(), type);
+			case "tags" -> toType(getTags(), type);
+			default -> super.get(property, type);
+		};
+	}
+
+	/**
+	 * Bean property getter:  <property>consumes</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the operation can consume.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Set<MediaType> getConsumes() { return nullIfEmpty(consumes); }
+
+	/**
+	 * Bean property getter:  <property>deprecated</property>.
+	 *
+	 * <p>
+	 * Declares this operation to be deprecated.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getDeprecated() { return deprecated; }
+
+	/**
+	 * Bean property getter:  <property>description</property>.
+	 *
+	 * <p>
+	 * A verbose explanation of the operation behavior.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getDescription() { return description; }
+
+	/**
+	 * Bean property getter:  <property>externalDocs</property>.
+	 *
+	 * <p>
+	 * Additional external documentation for this operation.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public ExternalDocumentation getExternalDocs() { return externalDocs; }
+
+	/**
+	 * Bean property getter:  <property>operationId</property>.
+	 *
+	 * <p>
+	 * Unique string used to identify the operation.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getOperationId() { return operationId; }
+
+	/**
+	 * Returns the parameter with the specified type and name.
+	 *
+	 * @param in The parameter in.  Must not be <jk>null</jk>.
+	 * @param name The parameter name.  Can be <jk>null</jk> for parameter type <c>body</c>.
+	 * @return The matching parameter info, or <jk>null</jk> if not found.
+	 */
+	public ParameterInfo getParameter(String in, String name) {
+		assertArgNotNull("in", in);
+		// Note: name can be null for "body" parameters
+		for (var pi : parameters)
+			if (eq(pi.getIn(), in) && (eq(pi.getName(), name) || "body".equals(pi.getIn())))
+				return pi;
+		return null;
+	}
+
+	/**
+	 * Bean property getter:  <property>parameters</property>.
+	 *
+	 * <p>
+	 * A list of parameters that are applicable for this operation.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		If a parameter is already defined at the <a class="doclink" href="https://swagger.io/specification#pathItemObject">Path Item</a>,
+	 * 		the new definition will override it, but can never remove it.
+	 * 	<li class='note'>
+	 * 		The list MUST NOT include duplicated parameters.
+	 * 	<li class='note'>
+	 * 		A unique parameter is defined by a combination of a <c>name</c> and <c>location</c>.
+	 * 	<li class='note'>
+	 * 		The list can use the <a class="doclink" href="https://swagger.io/specification#referenceObject">Swagger Reference Object</a>
+	 * 		to link to parameters that are defined at the <a class='doclink' href='https://swagger.io/specification/v2#parameterObject'>Swagger Object's parameters</a>.
+	 * 	<li class='note'>
+	 * 		There can be one <js>"body"</js> parameter at most.
+	 * </ul>
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public List<ParameterInfo> getParameters() { return nullIfEmpty(parameters); }
+
+	/**
+	 * Bean property getter:  <property>produces</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the operation can produce.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Set<MediaType> getProduces() { return nullIfEmpty(produces); }
+
+	/**
+	 * Returns the response info with the given status code.
+	 *
+	 * @param status The HTTP status code.
+	 * @return The response info, or <jk>null</jk> if not found.
+	 */
+	public ResponseInfo getResponse(int status) {
+		return getResponse(String.valueOf(status));
+	}
+
+	/**
+	 * Returns the response info with the given status code.
+	 *
+	 * @param status The HTTP status code.  Must not be <jk>null</jk>.
+	 * @return The response info, or <jk>null</jk> if not found.
+	 */
+	public ResponseInfo getResponse(String status) {
+		assertArgNotNull("status", status);
+		return responses.get(status);
+	}
+
+	/**
+	 * Bean property getter:  <property>responses</property>.
+	 *
+	 * <p>
+	 * The list of possible responses as they are returned from executing this operation.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String,ResponseInfo> getResponses() { return nullIfEmpty(responses); }
+
+	/**
+	 * Bean property getter:  <property>schemes</property>.
+	 *
+	 * <p>
+	 * The transfer protocol for the operation.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Set<String> getSchemes() { return nullIfEmpty(schemes); }
+
+	/**
+	 * Bean property getter:  <property>security</property>.
+	 *
+	 * <p>
+	 * A declaration of which security schemes are applied for this operation.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public List<Map<String,List<String>>> getSecurity() { return nullIfEmpty(security); }
+
+	/**
+	 * Bean property getter:  <property>summary</property>.
+	 *
+	 * <p>
+	 * A short summary of what the operation does.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getSummary() { return summary; }
+
+	/**
+	 * Bean property getter:  <property>tags</property>.
+	 *
+	 * <p>
+	 * A list of tags for API documentation control.
+	 * <br>Tags can be used for logical grouping of operations by resources or any other qualifier.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Set<String> getTags() { return nullIfEmpty(tags); }
+
+	/**
+	 * Bean property getter:  <property>deprecated</property>.
+	 *
+	 * <p>
+	 * Declares this operation to be deprecated.
+	 *
+	 * @return The property value, or <jk>false</jk> if it is not set.
+	 */
+	public boolean isDeprecated() { return nn(deprecated) && deprecated; }
+
+	@Override /* Overridden from SwaggerElement */
+	public Set<String> keySet() {
+		// @formatter:off
+		var s = setb(String.class)
+			.addIf(ne(consumes), "consumes")
+			.addIf(nn(deprecated), "deprecated")
+			.addIf(nn(description), "description")
+			.addIf(nn(externalDocs), "externalDocs")
+			.addIf(nn(operationId), "operationId")
+			.addIf(ne(parameters), "parameters")
+			.addIf(ne(produces), "produces")
+			.addIf(ne(responses), "responses")
+			.addIf(ne(schemes), "schemes")
+			.addIf(ne(security), "security")
+			.addIf(nn(summary), "summary")
+			.addIf(ne(tags), "tags")
+			.build();
+		// @formatter:on
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override /* Overridden from SwaggerElement */
+	public Operation set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "consumes" -> setConsumes(toListBuilder(value, MediaType.class).sparse().build());
+			case "deprecated" -> setDeprecated(toBoolean(value));
+			case "description" -> setDescription(s(value));
+			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			case "operationId" -> setOperationId(s(value));
+			case "parameters" -> setParameters(toListBuilder(value, ParameterInfo.class).sparse().build());
+			case "produces" -> setProduces(toListBuilder(value, MediaType.class).sparse().build());
+			case "responses" -> setResponses(toMapBuilder(value, String.class, ResponseInfo.class).sparse().build());
+			case "schemes" -> setSchemes(toListBuilder(value, String.class).sparse().addAny(value).build());
+			case "security" -> setSecurity((List)toListBuilder(value, MapStringList.class).sparse().build());
+			case "summary" -> setSummary(s(value));
+			case "tags" -> setTags(toListBuilder(value, String.class).sparse().build());
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
+	}
+
+	/**
+	 * Bean property setter:  <property>consumes</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the operation can consume.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Values MUST be as described under <a class="doclink" href="https://swagger.io/specification#mimeTypes">Swagger Mime Types</a>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Operation setConsumes(Collection<MediaType> value) {
+		consumes.clear();
+		if (nn(value))
+			consumes.addAll(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>consumes</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the operation can consume.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Values MUST be as described under <a class="doclink" href="https://swagger.io/specification#mimeTypes">Swagger Mime Types</a>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Operation setConsumes(MediaType...value) {
+		return setConsumes(l(value));
+	}
+
+	/**
+	 * Bean property setter:  <property>deprecated</property>.
+	 *
+	 * <p>
+	 * Declares this operation to be deprecated.
+	 *
+	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Operation setDeprecated(Boolean value) {
+		deprecated = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>description</property>.
+	 *
+	 * <p>
+	 * A verbose explanation of the operation behavior.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Operation setDescription(String value) {
+		description = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>externalDocs</property>.
+	 *
+	 * <p>
+	 * Additional external documentation for this operation.
+	 *
+	 * @param value
+	 * 	The values to add to this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Operation setExternalDocs(ExternalDocumentation value) {
+		externalDocs = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>operationId</property>.
+	 *
+	 * <p>
+	 * Unique string used to identify the operation.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The id MUST be unique among all operations described in the API.
+	 * 	<br>Tools and libraries MAY use the operationId to uniquely identify an operation, therefore, it is recommended to
+	 * 	follow common programming naming conventions.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Operation setOperationId(String value) {
+		operationId = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>parameters</property>.
+	 *
+	 * <p>
+	 * A list of parameters that are applicable for this operation.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Operation setParameters(Collection<ParameterInfo> value) {
+		parameters = toList(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>parameters</property>.
+	 *
+	 * <p>
+	 * A list of parameters that are applicable for this operation.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Operation setParameters(ParameterInfo...value) {
+		return setParameters(l(value));
+	}
+
+	/**
+	 * Bean property setter:  <property>produces</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the operation can produce.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Value MUST be as described under <a class="doclink" href="https://swagger.io/specification#mimeTypes">Swagger Mime Types</a>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Operation setProduces(Collection<MediaType> value) {
+		produces.clear();
+		if (nn(value))
+			produces.addAll(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>produces</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the operation can produce.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Value MUST be as described under <a class="doclink" href="https://swagger.io/specification#mimeTypes">Swagger Mime Types</a>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Operation setProduces(MediaType...value) {
+		return setProduces(l(value));
+	}
+
+	/**
+	 * Bean property setter:  <property>responses</property>.
+	 *
+	 * <p>
+	 * The list of possible responses as they are returned from executing this operation.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Operation setResponses(Map<String,ResponseInfo> value) {
+		responses.clear();
+		if (nn(value))
+			responses.putAll(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>schemes</property>.
+	 *
+	 * <p>
+	 * The transfer protocol for the operation.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"http"</js>
+	 * 		<li><js>"https"</js>
+	 * 		<li><js>"ws"</js>
+	 * 		<li><js>"wss"</js>
+	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Operation setSchemes(Collection<String> value) {
+		schemes.clear();
+		if (nn(value))
+			schemes.addAll(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>schemes</property>.
+	 *
+	 * <p>
+	 * The transfer protocol for the operation.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Operation setSchemes(String...value) {
+		setSchemes(setb(String.class).sparse().add(value).build());
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>security</property>.
+	 *
+	 * <p>
+	 * A declaration of which security schemes are applied for this operation.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Operation setSecurity(Collection<Map<String,List<String>>> value) {
+		security = toList(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>security</property>.
+	 *
+	 * <p>
+	 * A declaration of which security schemes are applied for this operation.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	@SafeVarargs
+	public final Operation setSecurity(Map<String,List<String>>...value) {
+		security = l(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>summary</property>.
+	 *
+	 * <p>
+	 * A short summary of what the operation does.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Operation setSummary(String value) {
+		summary = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>tags</property>.
+	 *
+	 * <p>
+	 * A list of tags for API documentation control.
+	 * <br>Tags can be used for logical grouping of operations by resources or any other qualifier.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Operation setTags(Collection<String> value) {
+		tags.clear();
+		if (nn(value))
+			tags.addAll(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>tags</property>.
+	 *
+	 * <p>
+	 * A list of tags for API documentation control.
+	 * <br>Tags can be used for logical grouping of operations by resources or any other qualifier.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object.
+	 */
+	public Operation setTags(String...value) {
+		setTags(setb(String.class).sparse().add(value).build());
+		return this;
+	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @return This object.
+	 */
+	@Override
+	public Operation strict() {
+		super.strict();
+		return this;
+	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).
+	 * @return This object.
+	 */
+	@Override
+	public Operation strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+}

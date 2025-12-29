@@ -1,0 +1,274 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.swap;
+
+import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
+
+import java.lang.reflect.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.commons.lang.*;
+import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.utils.*;
+
+/**
+ * Specialized transform for builder classes.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/PojoBuilders">POJO Builders</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
+
+ * </ul>
+ *
+ * @param <T> The bean class.
+ * @param <B> The builder class.
+ */
+@SuppressWarnings("unchecked")
+public class BuilderSwap<T,B> {
+
+	/**
+	 * Creates a BuilderSwap from the specified builder class if it qualifies as one.
+	 *
+	 * @param builderClass The potential builder class.
+	 * @param cVis Minimum constructor visibility.
+	 * @param mVis Minimum method visibility.
+	 * @return A new swap instance, or <jk>null</jk> if class wasn't a builder class.
+	 */
+	@SuppressWarnings("rawtypes")
+	public static BuilderSwap<?,?> findSwapFromBuilderClass(Class<?> builderClass, Visibility cVis, Visibility mVis) {
+		var bci = info(builderClass);
+		if (bci.isNotPublic())
+			return null;
+
+		var objectClass = info(builderClass).getParameterType(0, Builder.class);
+
+		MethodInfo createObjectMethod, createBuilderMethod;
+		ConstructorInfo objectConstructor;
+		ConstructorInfo builderConstructor;
+
+		createObjectMethod = getBuilderBuildMethod(bci);
+		if (nn(createObjectMethod))
+			objectClass = createObjectMethod.getReturnType().inner();
+
+		if (objectClass == null)
+			return null;
+
+		var pci = info(objectClass);
+
+		objectConstructor = pci.getDeclaredConstructor(x -> x.isVisible(cVis) && x.hasParameterTypes(builderClass)).orElse(null);
+		if (objectConstructor == null)
+			return null;
+
+		builderConstructor = bci.getNoArgConstructor(cVis).orElse(null);
+		createBuilderMethod = getBuilderCreateMethod(pci);
+		if (builderConstructor == null && createBuilderMethod == null)
+			return null;
+
+		return new BuilderSwap(objectClass, builderClass, objectConstructor.inner(), builderConstructor == null ? null : builderConstructor.inner(), createBuilderMethod, createObjectMethod);
+	}
+
+	/**
+	 * Creates a BuilderSwap from the specified object class if it has one.
+	 *
+	 * @param bc The bean context to use to look up annotations.
+	 * @param objectClass The object class to check.
+	 * @param cVis Minimum constructor visibility.
+	 * @param mVis Minimum method visibility.
+	 * @return A new swap instance, or <jk>null</jk> if class didn't have a builder class.
+	 */
+	@SuppressWarnings("rawtypes")
+	public static BuilderSwap<?,?> findSwapFromObjectClass(BeanContext bc, Class<?> objectClass, Visibility cVis, Visibility mVis) {
+		var builderClass = Value.<Class<?>>empty();
+		MethodInfo objectCreateMethod, builderCreateMethod;
+		var objectConstructor = (ConstructorInfo)null;
+		ConstructorInfo builderConstructor;
+		var pci = info(objectClass);
+
+		bc.getAnnotationProvider().find(org.apache.juneau.annotation.Builder.class, pci).stream().map(x -> x.inner().value()).filter(ClassUtils::isNotVoid).forEach(x -> builderClass.set(x));
+
+		builderCreateMethod = getBuilderCreateMethod(pci);
+
+		if (builderClass.isEmpty() && nn(builderCreateMethod))
+			builderClass.set(builderCreateMethod.getReturnType().inner());
+
+		if (builderClass.isEmpty()) {
+			// @formatter:off
+			var cc = pci.getPublicConstructor(
+				x -> x.isVisible(cVis)
+				&& x.hasNumParameters(1)
+				&& x.getParameter(0).getParameterType().isChildOf(Builder.class)
+			).orElse(null);
+			// @formatter:on
+			if (nn(cc)) {
+				objectConstructor = cc;
+				builderClass.set(cc.getParameter(0).getParameterType().inner());
+			}
+		}
+
+		if (builderClass.isEmpty())
+			return null;
+
+		var bci = info(builderClass.get());
+		builderConstructor = bci.getNoArgConstructor(cVis).orElse(null);
+		if (builderConstructor == null && builderCreateMethod == null)
+			return null;
+
+		objectCreateMethod = getBuilderBuildMethod(bci);
+		var builderClass2 = builderClass.get();
+		if (objectConstructor == null)
+			objectConstructor = pci.getDeclaredConstructor(x -> x.isVisible(cVis) && x.hasParameterTypes(builderClass2)).orElse(null);
+
+		if (objectConstructor == null && objectCreateMethod == null)
+			return null;
+
+		return new BuilderSwap(objectClass, builderClass.get(), objectConstructor == null ? null : objectConstructor.inner(), builderConstructor == null ? null : builderConstructor.inner(),
+			builderCreateMethod, objectCreateMethod);
+	}
+
+	private static MethodInfo getBuilderBuildMethod(ClassInfo c) {
+		// @formatter:off
+		return c.getDeclaredMethod(
+			x -> x.isNotStatic()
+			&& x.getParameterCount() == 0
+			&& (!x.hasReturnType(void.class))
+			&& x.hasName("build")
+		).orElse(null);
+		// @formatter:on
+	}
+
+	private static MethodInfo getBuilderCreateMethod(ClassInfo c) {
+		// @formatter:off
+		return c.getPublicMethod(
+			x -> x.isStatic()
+			&& (x.hasName("create") || x.hasName("builder"))
+			&& ! x.hasReturnType(c)
+			&& hasConstructorThatTakesType(c, x.getReturnType())
+		).orElse(null);
+		// @formatter:on
+	}
+
+	private static boolean hasConstructorThatTakesType(ClassInfo c, ClassInfo argType) {
+		// @formatter:off
+		return nn(c.getPublicConstructor(
+			x -> x.hasNumParameters(1)
+			&& x.hasParameterTypes(argType)
+		));
+		// @formatter:on
+	}
+
+	private final Class<T> objectClass;
+	private final Class<B> builderClass;
+
+	private final Constructor<T> objectConstructor;          // public Pojo(Builder);
+
+	private final Constructor<B> builderConstructor;       // protected Builder();
+
+	private final MethodInfo createBuilderMethod;          // Builder create();
+
+	private final MethodInfo createObjectMethod;             // Pojo build();
+
+	private ClassMeta<?> builderClassMeta;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param objectClass The object class created by the builder class.
+	 * @param builderClass The builder class.
+	 * @param objectConstructor The object constructor that takes in a builder as a parameter.
+	 * @param builderConstructor The builder no-arg constructor.
+	 * @param createBuilderMethod The static create() method on the object class.
+	 * @param createObjectMethod The build() method on the builder class.
+	 */
+	protected BuilderSwap(Class<T> objectClass, Class<B> builderClass, Constructor<T> objectConstructor, Constructor<B> builderConstructor, MethodInfo createBuilderMethod,
+		MethodInfo createObjectMethod) {
+		this.objectClass = objectClass;
+		this.builderClass = builderClass;
+		this.objectConstructor = objectConstructor;
+		this.builderConstructor = builderConstructor;
+		this.createBuilderMethod = createBuilderMethod;
+		this.createObjectMethod = createObjectMethod;
+	}
+
+	/**
+	 * Creates a new object from the specified builder.
+	 *
+	 * @param session The current bean session.
+	 * @param builder The object builder.
+	 * @param hint A hint about the class type.
+	 * @return A new object.
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
+	 */
+	public T build(BeanSession session, B builder, ClassMeta<?> hint) throws ExecutableException {
+		if (nn(createObjectMethod))
+			return (T)createObjectMethod.invoke(builder);
+		try {
+			return objectConstructor.newInstance(builder);
+		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+			throw new ExecutableException(e);
+		}
+	}
+
+	/**
+	 * Creates a new builder object.
+	 *
+	 * @param session The current bean session.
+	 * @param hint A hint about the class type.
+	 * @return A new object.
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
+	 */
+	public B create(BeanSession session, ClassMeta<?> hint) throws ExecutableException {
+		if (nn(createBuilderMethod))
+			return (B)createBuilderMethod.invoke(null);
+		try {
+			return builderConstructor.newInstance();
+		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+			throw new ExecutableException(e);
+		}
+	}
+
+	/**
+	 * The builder class.
+	 *
+	 * @return The builder class.
+	 */
+	public Class<B> getBuilderClass() { return builderClass; }
+
+	/**
+	 * Returns the {@link ClassMeta} of the transformed class type.
+	 *
+	 * <p>
+	 * This value is cached for quick lookup.
+	 *
+	 * @param session
+	 * 	The bean context to use to get the class meta.
+	 * 	This is always going to be the same bean context that created this swap.
+	 * @return The {@link ClassMeta} of the transformed class type.
+	 */
+	public ClassMeta<?> getBuilderClassMeta(BeanSession session) {
+		if (builderClassMeta == null)
+			builderClassMeta = session.getClassMeta(getBuilderClass());
+		return builderClassMeta;
+	}
+
+	/**
+	 * The object class.
+	 *
+	 * @return The object class.
+	 */
+	public Class<T> getObjectClass() { return objectClass; }
+}

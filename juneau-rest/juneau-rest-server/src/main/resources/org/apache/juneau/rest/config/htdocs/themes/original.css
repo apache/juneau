@@ -1,0 +1,236 @@
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+ * with the License.  You may obtain a copy of the License at                                                              *
+ *                                                                                                                         *
+ *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+ *                                                                                                                         *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+ * specific language governing permissions and limitations under the License.                                              *
+ ***************************************************************************************************************************/
+
+/** Original look-and-feel */ 
+ 
+/**********************************************************************************************************************/
+/**  Body                                                                                                            **/
+/**********************************************************************************************************************/
+
+body {
+	background-image: linear-gradient(top, #CDDDDF 0, #EAEDED 20px, #FFFFFF 70px);
+	background-image: -webkit-linear-gradient(top, #CDDDDF 0, #EAEDED 20px, #FFFFFF 70px);
+	background-attachment: fixed;
+	font-family: Sans-Serif;
+	color: #2c4557;
+	height: 100%;
+	margin: 0px;
+}
+
+body * {
+	font-size: 12px;
+}
+
+body textarea, body pre {
+	-moz-tab-size: 3; 
+	-o-tab-size: 3; 
+	-webkit-tab-size: 3; 
+	tab-size: 3; 
+}
+
+/**********************************************************************************************************************/
+/**  Header                                                                                                          **/
+/**********************************************************************************************************************/
+
+header {
+	padding: 10px 20px;
+}
+
+header h1 {
+    font-size: 16px;
+	margin-bottom: 10px;
+	margin-right: 40px;
+	padding: 5px 30px;
+	border-radius: 15px;
+	text-decoration: none;
+	font-weight: normal;
+	background: linear-gradient(to bottom, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
+	background: -webkit-gradient(linear, left top, left bottom, from(#F5F5F5), to(#DEE3E9));
+}
+
+header h2 {
+	font-weight: normal;
+	margin-left: 20px;
+}
+
+/**********************************************************************************************************************/
+/**  Nav                                                                                                             **/
+/**********************************************************************************************************************/
+
+nav {
+	margin: 0px 25px;	
+}
+
+nav>ol {
+	list-style-type: none;
+	margin: 0px 10px;
+	padding: 0px;
+}
+
+nav>ol>li {
+	display: inline;
+}
+
+nav li:not(:first-child):before {
+    content: " - ";
+}
+
+nav a {
+	text-decoration: underline;
+	cursor: pointer;
+	color: -webkit-link;
+}
+
+/**********************************************************************************************************************/
+/**  Content                                                                                                        **/
+/**********************************************************************************************************************/
+
+section {
+	display: table;
+	width: 100%;
+}
+
+article {
+	display: table-cell;
+	padding: 20px 40px;
+}
+
+aside {
+	display: table-cell;
+	vertical-align: top;
+	padding: 20px 20px;
+}
+
+article div.data {
+	padding: 0px;
+	margin: 0px;
+	display: inline-block;
+	font-family: sans-serif;
+}
+
+article table {
+	border:1px solid #CCCC99;
+	border-collapse: collapse;
+	margin: 5px 0px;
+	width: 100%;
+}
+
+article th {
+	border-top: 1px solid #CCCC99;
+	padding: 3px 5px;
+	color: #666666;
+	text-align: center;
+	background-image: linear-gradient(top, #FBF9E4 0%, #F3F2C2 100%);
+	background-image: -webkit-linear-gradient(top, #FBF9E4 0%, #F3F2C2 100%);
+}
+
+article td {
+	border: 1px solid #E9EACB;
+	padding: 2px 5px;
+	color: #005C87;
+	vertical-align: top;
+}
+
+article td:last-child {
+    width: 100%;
+}
+
+article ul {
+	margin: 0px;
+	padding-left: 20px;
+}
+
+/**********************************************************************************************************************/
+/**  Footer                                                                                                          **/
+/**********************************************************************************************************************/
+
+footer { 
+	display: none;
+}
+
+/**********************************************************************************************************************/
+/**  Popup windows                                                                                                   **/
+/**********************************************************************************************************************/
+
+.popup-content {
+	display: none;
+	position: absolute;
+	background-color: #eef3f7;
+	white-space: nowrap;
+	padding: 5px;
+	box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+	z-index: 1;
+	margin-top: 10px;
+	border-radius: 4px;
+}
+
+.popup-content * {
+	font-size: 9pt;
+}
+
+.popup-content a:hover {
+	color: #94A3AB;
+}
+
+.popup-show {
+	display: block;
+}
+
+/**********************************************************************************************************************/
+/**  Tooltips                                                                                                        **/
+/**********************************************************************************************************************/
+
+.tooltip {
+	position: relative;
+	display: inline-block;	    
+}
+
+.tooltip .tooltiptext {
+	visibility: hidden;
+	background-color: #FEF9E7;
+	color: black;
+	padding: 5px;
+	border-radius: 6px;
+	position: absolute;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	margin-left: 30px;
+	box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.5);
+	opacity: 0;
+	transition: opacity 0.5s;
+	font-weight: normal;
+}
+
+.tooltip:hover .tooltiptext {
+	visibility: visible;
+	opacity: 1;
+}	
+
+.tooltiptext {
+	white-space: nowrap;
+	float: left;
+	border: 1px solid black;
+}
+
+/**********************************************************************************************************************/
+/**  Other classes                                                                                                   **/
+/**********************************************************************************************************************/
+
+.table {display:table;}
+.row {display:table-row;}
+.cell {display:table-cell;}
+.monospace {font-family:monospace;}
+.link { color: #94A3AB; text-decoration: none; cursor: pointer;}
+.link:hover { text-decoration: underline; }
+

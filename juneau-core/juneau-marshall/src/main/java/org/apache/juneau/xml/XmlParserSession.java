@@ -1,0 +1,938 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.xml;
+
+import static javax.xml.stream.XMLStreamConstants.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.xml.annotation.XmlFormat.*;
+
+import java.io.*;
+import java.lang.reflect.*;
+import java.nio.charset.*;
+import java.util.*;
+import java.util.function.*;
+
+import javax.xml.stream.*;
+import javax.xml.stream.util.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.swap.*;
+
+/**
+ * Session object that lives for the duration of a single use of {@link XmlParser}.
+ *
+ * <h5 class='section'>Notes:</h5><ul>
+ * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
+ * </ul>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
+
+ * </ul>
+ */
+@SuppressWarnings({ "unchecked", "rawtypes" })
+public class XmlParserSession extends ReaderParserSession {
+	/**
+	 * Builder class.
+	 */
+	public static class Builder extends ReaderParserSession.Builder {
+
+		private XmlParser ctx;
+
+		/**
+		 * Constructor
+		 *
+		 * @param ctx The context creating this session.
+		 */
+		protected Builder(XmlParser ctx) {
+			super(ctx);
+			this.ctx = ctx;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
+			super.apply(type, apply);
+			return this;
+		}
+
+		@Override
+		public XmlParserSession build() {
+			return new XmlParserSession(this);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug(Boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder mediaTypeDefault(MediaType value) {
+			super.mediaTypeDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder schema(HttpPartSchema value) {
+			super.schema(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder schemaDefault(HttpPartSchema value) {
+			super.schemaDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder streamCharset(Charset value) {
+			super.streamCharset(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZoneDefault(TimeZone value) {
+			super.timeZoneDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+	}
+
+	private static final int UNKNOWN = 0, OBJECT = 1, ARRAY = 2, STRING = 3, NUMBER = 4, BOOLEAN = 5, NULL = 6;
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(XmlParser ctx) {
+		return new Builder(ctx);
+	}
+
+	private static int getJsonType(String s) {
+		if (s == null)
+			return UNKNOWN;
+		var c = s.charAt(0);
+		return switch (c) {
+			case 'o' -> (s.equals("object") ? OBJECT : UNKNOWN);
+			case 'a' -> (s.equals("array") ? ARRAY : UNKNOWN);
+			case 's' -> (s.equals("string") ? STRING : UNKNOWN);
+			case 'b' -> (s.equals("boolean") ? BOOLEAN : UNKNOWN);
+			case 'n' -> {
+				c = s.charAt(2);
+				yield switch (c) {
+					case 'm' -> (s.equals("number") ? NUMBER : UNKNOWN);
+					case 'l' -> (s.equals("null") ? NULL : UNKNOWN);
+					default -> NUMBER;
+				};
+			}
+			default -> UNKNOWN;
+		};
+	}
+
+	private final XmlParser ctx;
+
+	private final StringBuilder rsb = new StringBuilder();  // Reusable string builder used in this class.
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected XmlParserSession(Builder builder) {
+		super(builder);
+		ctx = builder.ctx;
+	}
+
+	/*
+	 * Returns the name of the specified attribute on the current XML element.
+	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
+	 */
+	private String getAttributeName(XmlReader r, int i) {
+		return decodeString(r.getAttributeLocalName(i));
+	}
+
+	/*
+	 * Returns the value of the specified attribute on the current XML element.
+	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
+	 */
+	private String getAttributeValue(XmlReader r, int i) {
+		return decodeString(r.getAttributeValue(i));
+	}
+
+	/*
+	 * Takes the element being read from the XML stream reader and reconstructs it as XML.
+	 * Used when reconstructing bean properties of type {@link XmlFormat#XMLTEXT}.
+	 */
+	private String getElementAsString(XmlReader r) {
+		int t = r.getEventType();
+		if (t > 2)
+			throw rex("Invalid event type on stream reader for elementToString() method: ''{0}''", XmlUtils.toReadableEvent(r));
+		rsb.setLength(0);
+		rsb.append("<").append(t == 1 ? "" : "/").append(r.getLocalName());
+		if (t == 1)
+			for (var i = 0; i < r.getAttributeCount(); i++)
+				rsb.append(' ').append(r.getAttributeName(i)).append('=').append('\'').append(r.getAttributeValue(i)).append('\'');
+		rsb.append('>');
+		return rsb.toString();
+	}
+
+	/*
+	 * Returns the name of the current XML element.
+	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
+	 */
+	private String getElementName(XmlReader r) {
+		return decodeString(r.getLocalName());
+	}
+
+	/*
+	 * Returns the _name attribute value.
+	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
+	 */
+	private String getNameProperty(XmlReader r) {
+		return decodeString(r.getAttributeValue(null, getNamePropertyName()));
+	}
+
+	/*
+	 * Shortcut for calling <code>getText(r, <jk>true</jk>);</code>.
+	 */
+	private String getText(XmlReader r) {
+		return getText(r, true);
+	}
+
+	/*
+	 * Returns the content of the current CHARACTERS node.
+	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
+	 * Leading and trailing whitespace (unencoded) will be trimmed from the result.
+	 */
+	private String getText(XmlReader r, boolean trim) {
+		var s = r.getText();
+		if (trim)
+			s = s.trim();
+		if (s.isEmpty())
+			return null;
+		return decodeString(s);
+	}
+
+	@SuppressWarnings("null")
+	private Object getUnknown(XmlReader r) throws IOException, ParseException, ExecutableException, XMLStreamException {
+		if (r.getEventType() != START_ELEMENT) {
+			throw new ParseException(this, "Parser must be on START_ELEMENT to read next text.");
+		}
+		var m = (JsonMap)null;
+
+		// If this element has attributes, then it's always a JsonMap.
+		if (r.getAttributeCount() > 0) {
+			m = new JsonMap(this);
+			for (var i = 0; i < r.getAttributeCount(); i++) {
+				var key = getAttributeName(r, i);
+				var val = r.getAttributeValue(i);
+				if (! isSpecialAttr(key))
+					m.put(key, val);
+			}
+		}
+		int eventType = r.next();
+		var sb = getStringBuilder();
+		while (eventType != END_ELEMENT) {
+			if (eventType == CHARACTERS || eventType == CDATA || eventType == XMLStreamConstants.SPACE || eventType == ENTITY_REFERENCE) {
+				sb.append(r.getText());
+			} else if (eventType == PROCESSING_INSTRUCTION || eventType == COMMENT) {
+				// skipping
+			} else if (eventType == END_DOCUMENT) {
+				throw new ParseException(this, "Unexpected end of document when reading element text content");
+			} else if (eventType == START_ELEMENT) {
+				// Oops...this has an element in it.
+				// Parse it as a map.
+				if (m == null)
+					m = new JsonMap(this);
+				int depth = 0;
+				do {
+					int event = (eventType == -1 ? r.nextTag() : eventType);
+					String currAttr;
+					if (event == START_ELEMENT) {
+						depth++;
+						currAttr = getNameProperty(r);
+						if (currAttr == null)
+							currAttr = getElementName(r);
+						String key = convertAttrToType(null, currAttr, string());
+						var value = parseAnything(object(), currAttr, r, null, false, null);
+						if (m.containsKey(key)) {
+							var o = m.get(key);
+							if (o instanceof JsonList o2)
+								o2.add(value);
+							else
+								m.put(key, new JsonList(o, value).setBeanSession(this));
+						} else {
+							m.put(key, value);
+						}
+
+					} else if (event == END_ELEMENT) {
+						depth--;
+						break;
+					}
+					eventType = -1;
+				} while (depth > 0);
+				break;
+			} else {
+				throw new ParseException(this, "Unexpected event type ''{0}''", eventType);
+			}
+			eventType = r.next();
+		}
+		var s = sb.toString().trim();
+		returnStringBuilder(sb);
+		s = decodeString(s);
+		if (nn(m)) {
+			if (! s.isEmpty())
+				m.put("contents", s);
+			return m;
+		}
+		return s;
+	}
+
+	private boolean isSpecialAttr(String key) {
+		return key.equals(getBeanTypePropertyName(null)) || key.equals(getNamePropertyName());
+	}
+
+	@SuppressWarnings("null")
+	private <T> BeanMap<T> parseIntoBean(XmlReader r, BeanMap<T> m, boolean isNil) throws IOException, ParseException, ExecutableException, XMLStreamException {
+		var bMeta = m.getMeta();
+		var xmlMeta = getXmlBeanMeta(bMeta);
+
+		for (var i = 0; i < r.getAttributeCount(); i++) {
+			String key = getAttributeName(r, i);
+			if (! ("nil".equals(key) || isSpecialAttr(key))) {
+				var val = r.getAttributeValue(i);
+				var ns = r.getAttributeNamespace(i);
+				var bpm = xmlMeta.getPropertyMeta(key);
+				if (bpm == null) {
+					if (nn(xmlMeta.getAttrsProperty())) {
+						xmlMeta.getAttrsProperty().add(m, key, key, val);
+					} else if (ns == null) {
+						onUnknownProperty(key, m, val);
+					}
+				} else {
+					try {
+						bpm.set(m, key, val);
+					} catch (BeanRuntimeException e) {
+						onBeanSetterException(bpm, e);
+						throw e;
+					}
+				}
+			}
+		}
+
+		var cp = xmlMeta.getContentProperty();
+		var cpf = xmlMeta.getContentFormat();
+		var trim = cp == null || ! cpf.isOneOf(MIXED_PWS, TEXT_PWS);
+		var cpcm = (cp == null ? object() : cp.getClassMeta());
+		var sb = (StringBuilder)null;
+		var breg = cp == null ? null : cp.getBeanRegistry();
+		var l = (LinkedList<Object>)null;
+
+		int depth = 0;
+		do {
+			var event = r.next();
+			String currAttr;
+			// We only care about text in MIXED mode.
+			// Ignore if in ELEMENTS mode.
+			if (event == CHARACTERS) {
+				if (nn(cp) && cpf.isOneOf(MIXED, MIXED_PWS)) {
+					if (cpcm.isCollectionOrArray()) {
+						if (l == null)
+							l = new LinkedList<>();
+						l.add(getText(r, false));
+					} else {
+						cp.set(m, null, getText(r, trim));
+					}
+				} else if (cpf != ELEMENTS) {
+					var s = getText(r, trim);
+					if (nn(s)) {
+						if (sb == null)
+							sb = getStringBuilder();
+						sb.append(s);
+					}
+				} else {
+					// Do nothing...we're in ELEMENTS mode.
+				}
+			} else if (event == START_ELEMENT) {
+				if (nn(cp) && cpf.isOneOf(TEXT, TEXT_PWS)) {
+					var s = parseText(r);
+					if (nn(s)) {
+						if (sb == null)
+							sb = getStringBuilder();
+						sb.append(s);
+					}
+					depth--;
+				} else if (cpf == XMLTEXT) {
+					if (sb == null)
+						sb = getStringBuilder();
+					sb.append(getElementAsString(r));
+					depth++;
+				} else if (nn(cp) && cpf.isOneOf(MIXED, MIXED_PWS)) {
+					if (isWhitespaceElement(r) && (breg == null || ! breg.hasName(r.getLocalName()))) {
+						if (cpcm.isCollectionOrArray()) {
+							if (l == null)
+								l = new LinkedList<>();
+							l.add(parseWhitespaceElement(r));
+						} else {
+							cp.set(m, null, parseWhitespaceElement(r));
+						}
+					} else {
+						if (cpcm.isCollectionOrArray()) {
+							if (l == null)
+								l = new LinkedList<>();
+							l.add(parseAnything(cpcm.getElementType(), cp.getName(), r, m.getBean(false), false, cp));
+						} else {
+							cp.set(m, null, parseAnything(cpcm, cp.getName(), r, m.getBean(false), false, cp));
+						}
+					}
+				} else if (nn(cp) && cpf == ELEMENTS) {
+					cp.add(m, null, parseAnything(cpcm.getElementType(), cp.getName(), r, m.getBean(false), false, cp));
+				} else {
+					currAttr = getNameProperty(r);
+					if (currAttr == null)
+						currAttr = getElementName(r);
+					var pMeta = xmlMeta.getPropertyMeta(currAttr);
+					if (pMeta == null) {
+						var value = parseAnything(object(), currAttr, r, m.getBean(false), false, null);
+						onUnknownProperty(currAttr, m, value);
+					} else {
+						setCurrentProperty(pMeta);
+						var xf = getXmlBeanPropertyMeta(pMeta).getXmlFormat();
+						if (xf == COLLAPSED) {
+							var et = pMeta.getClassMeta().getElementType();
+							var value = parseAnything(et, currAttr, r, m.getBean(false), false, pMeta);
+							setName(et, value, currAttr);
+							pMeta.add(m, currAttr, value);
+						} else if (xf == ATTR) {
+							pMeta.set(m, currAttr, getAttributeValue(r, 0));
+							r.nextTag();
+						} else {
+							var cm = pMeta.getClassMeta();
+							var value = parseAnything(cm, currAttr, r, m.getBean(false), false, pMeta);
+							setName(cm, value, currAttr);
+							pMeta.set(m, currAttr, value);
+						}
+						setCurrentProperty(null);
+					}
+				}
+			} else if (event == END_ELEMENT) {
+				if (depth > 0) {
+					if (cpf == XMLTEXT) {
+						if (sb == null)
+							sb = getStringBuilder();
+						sb.append(getElementAsString(r));
+					} else
+						throw new ParseException("End element found where one was not expected.  {0}", XmlUtils.toReadableEvent(r));
+				}
+				depth--;
+			} else if (event == COMMENT) {
+				// Ignore comments.
+			} else {
+				throw new ParseException("Unexpected event type: {0}", XmlUtils.toReadableEvent(r));
+			}
+		} while (depth >= 0);
+
+		if (nn(cp) && ! isNil) {
+			if (nn(sb))
+				cp.set(m, null, sb.toString());
+			else if (nn(l))
+				cp.set(m, null, XmlUtils.collapseTextNodes(l));
+			else if (cpcm.isCollectionOrArray()) {
+				var o = cp.get(m, null);
+				if (o == null)
+					cp.set(m, cp.getName(), list());
+			}
+		}
+
+		returnStringBuilder(sb);
+		return m;
+	}
+
+	private <E> Collection<E> parseIntoCollection(XmlReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
+		int depth = 0;
+		int argIndex = 0;
+		do {
+			var event = r.nextTag();
+			if (event == START_ELEMENT) {
+				depth++;
+				var elementType = type == null ? object() : type.isArgs() ? type.getArg(argIndex++) : type.getElementType();
+				E value = (E)parseAnything(elementType, null, r, l, false, pMeta);
+				l.add(value);
+			} else if (event == END_ELEMENT) {
+				depth--;
+				return l;
+			}
+		} while (depth > 0);
+		return l;
+	}
+
+	private <K,V> Map<K,V> parseIntoMap(XmlReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta)
+		throws IOException, ParseException, ExecutableException, XMLStreamException {
+		int depth = 0;
+		for (var i = 0; i < r.getAttributeCount(); i++) {
+			var a = r.getAttributeLocalName(i);
+			// TODO - Need better handling of namespaces here.
+			if (! isSpecialAttr(a)) {
+				K key = trim(convertAttrToType(m, a, keyType));
+				V value = trim(convertAttrToType(m, r.getAttributeValue(i), valueType));
+				setName(valueType, value, key);
+				m.put(key, value);
+			}
+		}
+		do {
+			var event = r.nextTag();
+			String currAttr;
+			if (event == START_ELEMENT) {
+				depth++;
+				currAttr = getNameProperty(r);
+				if (currAttr == null)
+					currAttr = getElementName(r);
+				K key = convertAttrToType(m, currAttr, keyType);
+				V value = parseAnything(valueType, currAttr, r, m, false, pMeta);
+				setName(valueType, value, currAttr);
+				if (valueType.isObject() && m.containsKey(key)) {
+					var o = m.get(key);
+					if (o instanceof List o2)
+						o2.add(value);
+					else
+						m.put(key, (V)new JsonList(o, value).setBeanSession(this));
+				} else {
+					m.put(key, value);
+				}
+			} else if (event == END_ELEMENT) {
+				depth--;
+				return m;
+			}
+		} while (depth > 0);
+		return m;
+	}
+
+	/**
+	 * Decodes and trims the specified string.
+	 *
+	 * <p>
+	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
+	 *
+	 * @param s The string to be decoded.
+	 * @return The decoded string.
+	 */
+	protected final String decodeString(String s) {
+		if (s == null)
+			return null;
+		rsb.setLength(0);
+		s = XmlUtils.decode(s, rsb);
+		if (isTrimStrings())
+			s = s.trim();
+		return s;
+	}
+
+	@Override /* Overridden from ParserSession */
+	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+		try {
+			return parseAnything(type, null, getXmlReader(pipe), getOuter(), true, null);
+		} catch (XMLStreamException e) {
+			throw new ParseException(e);
+		}
+	}
+
+	@Override /* Overridden from ReaderParserSession */
+	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
+		var cm = getClassMeta(c.getClass(), elementType);
+		return parseIntoCollection(pipe, c, cm.getElementType());
+	}
+
+	@Override /* Overridden from ReaderParserSession */
+	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
+		var cm = getClassMeta(m.getClass(), keyType, valueType);
+		return parseIntoMap(pipe, m, cm.getKeyType(), cm.getValueType());
+	}
+
+	/**
+	 * Returns the text content of the current XML element.
+	 *
+	 * <p>
+	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
+	 *
+	 * <p>
+	 * Leading and trailing whitespace (unencoded) will be trimmed from the result.
+	 *
+	 * @param r The reader to read the element text from.
+	 * @return The decoded text.  <jk>null</jk> if the text consists of the sequence <js>'_x0000_'</js>.
+	 * @throws XMLStreamException Thrown by underlying reader.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	protected String getElementText(XmlReader r) throws XMLStreamException, IOException, ParseException {
+		return decodeString(r.getElementText().trim());
+	}
+
+	/**
+	 * XML event allocator.
+	 *
+	 * @see XmlParser.Builder#eventAllocator(Class)
+	 * @return
+	 * 	The {@link XMLEventAllocator} associated with this parser, or <jk>null</jk> if there isn't one.
+	 */
+	protected final XMLEventAllocator getEventAllocator() { return ctx.getEventAllocator(); }
+
+	/**
+	 * XML reporter.
+	 *
+	 * @see XmlParser.Builder#reporter(Class)
+	 * @return
+	 * 	The {@link XMLReporter} associated with this parser, or <jk>null</jk> if there isn't one.
+	 */
+	protected final XMLReporter getReporter() { return ctx.getReporter(); }
+
+	/**
+	 * XML resolver.
+	 *
+	 * @see XmlParser.Builder#resolver(Class)
+	 * @return
+	 * 	The {@link XMLResolver} associated with this parser, or <jk>null</jk> if there isn't one.
+	 */
+	protected final XMLResolver getResolver() { return ctx.getResolver(); }
+
+	/**
+	 * Returns the language-specific metadata on the specified bean.
+	 *
+	 * @param bm The bean to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected XmlBeanMeta getXmlBeanMeta(BeanMeta<?> bm) {
+		return ctx.getXmlBeanMeta(bm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified bean property.
+	 *
+	 * @param bpm The bean property to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
+		return ctx.getXmlBeanPropertyMeta(bpm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected XmlClassMeta getXmlClassMeta(ClassMeta<?> cm) {
+		return ctx.getXmlClassMeta(cm);
+	}
+
+	/**
+	 * Wrap the specified reader in a STAX reader based on settings in this context.
+	 *
+	 * @param pipe The parser input.
+	 * @return The new STAX reader.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws XMLStreamException Unexpected XML processing error.
+	 */
+	protected final XmlReader getXmlReader(ParserPipe pipe) throws IOException, XMLStreamException {
+		return new XmlReader(pipe, isValidating(), getReporter(), getResolver(), getEventAllocator());
+	}
+
+	/**
+	 * Preserve root element during generalized parsing.
+	 *
+	 * @see XmlParser.Builder#preserveRootElement()
+	 * @return
+	 * 	<jk>true</jk> if when parsing into a generic {@link JsonMap}, the map will contain a single entry whose key
+	 * 	is the root element name.
+	 */
+	protected final boolean isPreserveRootElement() { return ctx.isPreserveRootElement(); }
+
+	/**
+	 * Enable validation.
+	 *
+	 * @see XmlParser.Builder#validating()
+	 * @return
+	 * 	<jk>true</jk> if XML document will be validated.
+	 */
+	protected final boolean isValidating() { return ctx.isValidating(); }
+
+	/**
+	 * Returns <jk>true</jk> if the current element is a whitespace element.
+	 *
+	 * <p>
+	 * For the XML parser, this always returns <jk>false</jk>.
+	 * However, the HTML parser defines various whitespace elements such as <js>"br"</js> and <js>"sp"</js>.
+	 *
+	 * @param r The XML stream reader to read the current event from.
+	 * @return <jk>true</jk> if the current element is a whitespace element.
+	 */
+	protected boolean isWhitespaceElement(XmlReader r) {
+		return false;
+	}
+
+	/**
+	 * Workhorse method.
+	 *
+	 * @param <T> The expected type of object.
+	 * @param eType The expected type of object.
+	 * @param currAttr The current bean property name.
+	 * @param r The reader.
+	 * @param outer The outer object.
+	 * @param isRoot If <jk>true</jk>, then we're serializing a root element in the document.
+	 * @param pMeta The bean property metadata.
+	 * @return The parsed object.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws ParseException Malformed input encountered.
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
+	 * @throws XMLStreamException Malformed XML encountered.
+	 */
+	@SuppressWarnings("null")
+	protected <T> T parseAnything(ClassMeta<T> eType, String currAttr, XmlReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta)
+		throws IOException, ParseException, ExecutableException, XMLStreamException {
+
+		if (eType == null)
+			eType = (ClassMeta<T>)object();
+		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
+		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
+		var sType = (ClassMeta<?>)null;
+		if (nn(builder))
+			sType = builder.getBuilderClassMeta(this);
+		else if (nn(swap))
+			sType = swap.getSwapClassMeta(this);
+		else
+			sType = eType;
+
+		if (sType.isOptional())
+			return (T)opt(parseAnything(eType.getElementType(), currAttr, r, outer, isRoot, pMeta));
+
+		setCurrentClass(sType);
+
+		var wrapperAttr = (isRoot && isPreserveRootElement()) ? r.getName().getLocalPart() : null;
+		var typeAttr = r.getAttributeValue(null, getBeanTypePropertyName(eType));
+		var isNil = "true".equals(r.getAttributeValue(null, "nil"));
+		var jsonType = getJsonType(typeAttr);
+		var elementName = getElementName(r);
+		if (jsonType == 0) {
+			if (elementName == null || elementName.equals(currAttr))
+				jsonType = UNKNOWN;
+			else {
+				typeAttr = elementName;
+				jsonType = getJsonType(elementName);
+			}
+		}
+
+		ClassMeta tcm = getClassMeta(typeAttr, pMeta, eType);
+		if (tcm == null && nn(elementName) && ! elementName.equals(currAttr))
+			tcm = getClassMeta(elementName, pMeta, eType);
+		if (nn(tcm))
+			sType = eType = tcm;
+
+		var o = (Object)null;
+
+		if (jsonType == NULL) {
+			r.nextTag();	// Discard end tag
+			return null;
+		}
+
+		if (sType.isObject()) {
+			if (jsonType == OBJECT) {
+				var m = new JsonMap(this);
+				parseIntoMap(r, m, string(), object(), pMeta);
+				if (nn(wrapperAttr))
+					m = new JsonMap(this).append(wrapperAttr, m);
+				o = cast(m, pMeta, eType);
+			} else if (jsonType == ARRAY)
+				o = parseIntoCollection(r, new JsonList(this), null, pMeta);
+			else if (jsonType == STRING) {
+				o = getElementText(r);
+				if (sType.isChar())
+					o = parseCharacter(o);
+			} else if (jsonType == NUMBER)
+				o = parseNumber(getElementText(r), null);
+			else if (jsonType == BOOLEAN)
+				o = Boolean.parseBoolean(getElementText(r));
+			else if (jsonType == UNKNOWN)
+				o = getUnknown(r);
+		} else if (sType.isBoolean()) {
+			o = Boolean.parseBoolean(getElementText(r));
+		} else if (sType.isCharSequence()) {
+			o = getElementText(r);
+		} else if (sType.isChar()) {
+			o = parseCharacter(getElementText(r));
+		} else if (sType.isMap()) {
+			var m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
+			o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
+			if (nn(wrapperAttr))
+				o = new JsonMap(this).append(wrapperAttr, m);
+		} else if (sType.isCollection()) {
+			var l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new JsonList(this));
+			o = parseIntoCollection(r, l, sType, pMeta);
+		} else if (sType.isNumber()) {
+			o = parseNumber(getElementText(r), (Class<? extends Number>)sType.inner());
+		} else if (nn(builder) || sType.canCreateNewBean(outer)) {
+			if (getXmlClassMeta(sType).getFormat() == COLLAPSED) {
+				var fieldName = r.getLocalName();
+				var m = nn(builder) ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.inner());
+				var bpm = getXmlBeanMeta(m.getMeta()).getPropertyMeta(fieldName);
+				var cm = m.getMeta().getClassMeta();
+				Object value = parseAnything(cm, currAttr, r, m.getBean(false), false, null);
+				setName(cm, value, currAttr);
+				bpm.set(m, currAttr, value);
+				o = nn(builder) ? builder.build(this, m.getBean(), eType) : m.getBean();
+			} else {
+				var m = nn(builder) ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.inner());
+				m = parseIntoBean(r, m, isNil);
+				o = nn(builder) ? builder.build(this, m.getBean(), eType) : m.getBean();
+			}
+		} else if (sType.isArray() || sType.isArgs()) {
+			var l = (ArrayList)parseIntoCollection(r, list(), sType, pMeta);
+			o = toArray(sType, l);
+		} else if (sType.canCreateNewInstanceFromString(outer)) {
+			o = sType.newInstanceFromString(outer, getElementText(r));
+		} else if (nn(sType.getProxyInvocationHandler())) {
+			var m = new JsonMap(this);
+			parseIntoMap(r, m, string(), object(), pMeta);
+			if (nn(wrapperAttr))
+				m = new JsonMap(this).append(wrapperAttr, m);
+			o = newBeanMap(outer, sType.inner()).load(m).getBean();
+		} else {
+			throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}'', property: ''{2}''", cn(sType), sType.getNotABeanReason(),
+				pMeta == null ? null : pMeta.getName());
+		}
+
+		if (nn(swap) && nn(o))
+			o = unswap(swap, o, eType);
+
+		if (nn(outer))
+			setParent(eType, o, outer);
+
+		return (T)o;
+	}
+
+	/**
+	 * Parses the current element as text.
+	 *
+	 * @param r The input reader.
+	 * @return The parsed text.
+	 * @throws XMLStreamException Thrown by underlying reader.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	protected String parseText(XmlReader r) throws IOException, XMLStreamException, ParseException {
+		// Note that this is different than {@link #getText(XmlReader)} since it assumes that we're pointing to a
+		// whitespace element.
+
+		var sb2 = getStringBuilder();
+
+		int depth = 0;
+		while (true) {
+			var et = r.getEventType();
+			if (et == START_ELEMENT) {
+				sb2.append(getElementAsString(r));
+				depth++;
+			} else if (et == CHARACTERS) {
+				sb2.append(getText(r));
+			} else if (et == END_ELEMENT) {
+				sb2.append(getElementAsString(r));
+				depth--;
+				if (depth <= 0)
+					break;
+			}
+			et = r.next();
+		}
+		var s = sb2.toString();
+		returnStringBuilder(sb2);
+		return s;
+	}
+
+	/**
+	 * Parses the current whitespace element.
+	 *
+	 * <p>
+	 * For the XML parser, this always returns <jk>null</jk> since there is no concept of a whitespace element.
+	 * However, the HTML parser defines various whitespace elements such as <js>"br"</js> and <js>"sp"</js>.
+	 *
+	 * @param r The XML stream reader to read the current event from.
+	 * @return The whitespace character or characters.
+	 * @throws XMLStreamException Thrown by underlying reader.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	protected String parseWhitespaceElement(XmlReader r) throws IOException, XMLStreamException, ParseException {
+		return null;
+	}
+}

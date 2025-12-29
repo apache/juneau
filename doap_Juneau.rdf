@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl"?>
+<rdf:RDF xml:lang="en"
+         xmlns="http://usefulinc.com/ns/doap#" 
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+         xmlns:asfext="http://projects.apache.org/ns/asfext#"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/">
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+   
+         https://www.apache.org/licenses/LICENSE-2.0
+   
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+  <Project rdf:about="https://juneau.apache.org">
+    <created>2023-09-07</created>
+    <license rdf:resource="https://spdx.org/licenses/Apache-2.0" />
+    <name>Apache Juneau</name>
+    <homepage rdf:resource="https://juneau.apache.org" />
+    <asfext:pmc rdf:resource="https://juneau.apache.org" />
+    <shortdesc>Java Marshalling and REST APIs</shortdesc>
+    <description>Java Marshalling and REST APIs</description>
+    <bug-database rdf:resource="https://github.com/apache/juneau/issues" />
+    <mailing-list rdf:resource="https://lists.apache.org/list.html?dev@juneau.apache.org" />
+    <download-page rdf:resource="https://juneau.apache.org/#downloads.html" />
+    <programming-language>Java</programming-language>
+    <category rdf:resource="https://projects.apache.org/category/javaee" />
+    <release>
+      <Version>
+        <name>9.0.0</name>
+        <created>2023-02-27</created>
+        <revision>9.0.0</revision>
+      </Version>
+    </release>
+    <repository>
+      <GitRepository>
+        <location rdf:resource="https://github.com/apache/juneau"/>
+        <browse rdf:resource="https://github.com/apache/juneau"/>
+      </GitRepository>
+    </repository>
+    <maintainer>
+      <foaf:Person>
+        <foaf:name>James Bognar</foaf:name>
+          <foaf:mbox rdf:resource="mailto:jamesbognar@apache.org"/>
+      </foaf:Person>
+    </maintainer>
+  </Project>
+</rdf:RDF>
+

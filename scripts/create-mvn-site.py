@@ -81,49 +81,12 @@ def run_maven_command(command, description, cwd):
         return False
 
 
-def find_master_branch_sibling(script_dir):
-    """
-    Find the master branch sibling folder.
-    
-    The docs branch and master branch should be sibling folders:
-    - /git/apache/juneau/docs/
-    - /git/apache/juneau/master/
-    
-    Args:
-        script_dir: Path to the scripts directory (should be in docs/scripts)
-        
-    Returns:
-        Path to the master branch folder
-        
-    Raises:
-        SystemExit: If the master branch sibling folder doesn't exist
-    """
-    # Get the parent of the docs folder (should be /git/apache/juneau/)
-    docs_dir = script_dir.parent  # docs/
-    parent_dir = docs_dir.parent  # /git/apache/juneau/
-    master_dir = parent_dir / 'master'
-    
-    if not master_dir.exists():
-        print(f"ERROR: Master branch sibling folder not found at {master_dir}")
-        print(f"Expected structure:")
-        print(f"  {parent_dir}/docs/  (current)")
-        print(f"  {parent_dir}/master/  (missing)")
-        print("\nPlease ensure the master branch is cloned as a sibling folder.")
-        sys.exit(1)
-    
-    if not (master_dir / '.git').exists():
-        print(f"ERROR: {master_dir} exists but is not a git repository")
-        sys.exit(1)
-    
-    return master_dir
-
-
-def get_project_version(master_root):
+def get_project_version(juneau_root):
     """Get the project version from Maven POM."""
     try:
         result = subprocess.run(
             ["mvn", "help:evaluate", "-Dexpression=project.version", "-q", "-DforceStdout"],
-            cwd=master_root,
+            cwd=juneau_root,
             capture_output=True,
             text=True,
             check=True
@@ -137,17 +100,16 @@ def get_project_version(master_root):
 def main():
     # Get directories
     script_dir = Path(__file__).parent
-    docs_dir = script_dir.parent  # docs/
-    master_root = find_master_branch_sibling(script_dir)
-    site_dir = master_root / "target" / "site"
+    juneau_root = script_dir.parent
+    docs_dir = juneau_root / "docs"
+    site_dir = juneau_root / "target" / "site"
     static_site_dir = docs_dir / "static" / "site"
     
     print("Creating Maven site with javadocs for local testing...")
-    print(f"Master branch: {master_root}")
-    print(f"Docs directory: {docs_dir}")
+    print(f"Working from: {juneau_root}")
     
     # Get project version
-    project_version = get_project_version(master_root)
+    project_version = get_project_version(juneau_root)
     print(f"Detected project version: {project_version}")
     
     # Generate Maven site
@@ -162,7 +124,7 @@ def main():
     if not run_maven_command(
         ["mvn", "clean", "compile", "site"],
         "Running Maven site generation...",
-        master_root
+        juneau_root
     ):
         fail_with_message("Maven site generation failed")
     

@@ -1,0 +1,1194 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.rest.mock;
+
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+
+import java.net.*;
+import java.security.*;
+import java.util.*;
+import java.util.function.*;
+
+import org.apache.http.*;
+import org.apache.http.client.config.*;
+import org.apache.http.concurrent.*;
+import org.apache.http.protocol.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.rest.client.*;
+import org.apache.juneau.serializer.*;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+
+/**
+ * A subclass of {@link RestRequest} with additional features for mocked testing.
+ *
+ * <p>
+ * Instances of this class are instantiated through methods on {@link MockRestClient} such as {@link MockRestClient#post(Object,Object)}
+ *
+ * <h5 class='section'>Notes:</h5><ul>
+ * 	<li class='warn'>This class is not thread safe.
+ * </ul>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics">juneau-rest-mock Basics</a>
+ * </ul>
+ */
+@SuppressWarnings("resource")
+public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
+	private Map<String,Object> attributeMap = map();
+	private Map<String,RequestDispatcher> requestDispatcherMap = map();
+	private String characterEncoding, protocol, scheme, serverName, remoteAddr, remoteHost, localName, localAddr, pathInfo, pathTranslated, contextPath, queryString, remoteUser, requestedSessionId,
+		requestURI, servletPath, authType;
+	private Integer serverPort, remotePort, localPort;
+	private Locale locale;
+	private ServletContext servletContext;
+	private DispatcherType dispatcherType;
+	private Cookie[] cookies;
+	private Principal userPrincipal;
+	private HttpSession httpSession;
+	private String[] roles;
+
+	/**
+	 * Constructs a REST call with the specified method name.
+	 *
+	 * @param client The client that created this request.
+	 * @param uri The target URI.
+	 * @param method The HTTP method name (uppercase).
+	 * @param hasBody Whether this method has a body.
+	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
+	 */
+	protected MockRestRequest(RestClient client, URI uri, String method, boolean hasBody) throws RestCallException {
+		super(client, uri, method, hasBody);
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest accept(String value) throws RestCallException {
+		super.accept(value);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest acceptCharset(String value) throws RestCallException {
+		super.acceptCharset(value);
+		return this;
+	}
+
+	/**
+	 * Adds an attribute to the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param name The servlet request attribute name.
+	 * @param value The servlet request attribute value.
+	 * @return This object.
+	 */
+	public MockRestRequest attribute(String name, Object value) {
+		this.attributeMap.put(name, value);
+		return this;
+	}
+
+	/**
+	 * Replaces the attributes on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new servlet attribute values.
+	 * @return This object.
+	 */
+	public MockRestRequest attributes(Map<String,Object> value) {
+		this.attributeMap.clear();
+		this.attributeMap.putAll(value);
+		return this;
+	}
+
+	/**
+	 * Overrides the authorization type value on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getAuthType()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest authType(String value) {
+		authType = value;
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest cancellable(Cancellable cancellable) {
+		super.cancellable(cancellable);
+		return this;
+	}
+
+	/**
+	 * Overrides the character encoding value on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getCharacterEncoding()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest characterEncoding(String value) {
+		characterEncoding = value;
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest config(RequestConfig value) {
+		super.config(value);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest content(Object value) {
+		super.content(value);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest content(Object input, HttpPartSchema schema) {
+		super.content(input, schema);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest contentString(Object input) throws RestCallException {
+		super.contentString(input);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest contentType(String value) throws RestCallException {
+		super.contentType(value);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest context(HttpContext context) {
+		super.context(context);
+		return this;
+	}
+
+	/**
+	 * Overrides the context path on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getContextPath()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest contextPath(String value) {
+		contextPath = value;
+		return this;
+	}
+
+	/**
+	 * Overrides the cookies on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getCookies()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest cookies(Cookie[] value) {
+		cookies = value;
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest debug() throws RestCallException {
+		super.debug();
+		return this;
+	}
+
+	/**
+	 * Overrides the dispatcher type value on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getDispatcherType()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest dispatcherType(DispatcherType value) {
+		dispatcherType = value;
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest errorCodes(Predicate<Integer> value) {
+		super.errorCodes(value);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest formData(NameValuePair...parts) {
+		super.formData(parts);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest formData(String name, Object value) {
+		super.formData(name, value);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest formDataBean(Object value) {
+		super.formDataBean(value);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest formDataCustom(Object value) {
+		super.formDataCustom(value);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest formDataPairs(String...pairs) throws RestCallException {
+		super.formDataPairs(pairs);
+		return this;
+	}
+
+	/**
+	 * Returns the attributes to add to the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The attributes to add to the underlying {@link HttpServletRequest} object.
+	 */
+	public Map<String,Object> getAttributeMap() { return attributeMap; }
+
+	/**
+	 * Returns the authorization type value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The authorization type value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getAuthType() { return authType; }
+
+	/**
+	 * Returns the value to set for the return value on the underlying {@link HttpServletRequest#getCharacterEncoding()} method.
+	 *
+	 * @return The value to set for the return value on the underlying {@link HttpServletRequest#getCharacterEncoding()} method.
+	 */
+	public String getCharacterEncoding() { return characterEncoding; }
+
+	/**
+	 * Returns the context path to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The context path to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getContextPath() { return contextPath; }
+
+	/**
+	 * Returns the cookies to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The cookies to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public Cookie[] getCookies() { return cookies; }
+
+	/**
+	 * Returns the dispatcher type value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The dispatcher type value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public DispatcherType getDispatcherType() { return dispatcherType; }
+
+	/**
+	 * Returns the HTTP session to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The HTTP session to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public HttpSession getHttpSession() { return httpSession; }
+
+	/**
+	 * Returns the local address value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The local address value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getLocalAddr() { return localAddr; }
+
+	/**
+	 * Returns the locale to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The locale to set on the underlying {@link HttpServletRequest} object.
+	 */
+	@Override
+	public Locale getLocale() { return locale; }
+
+	/**
+	 * Returns the local name value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The local name value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getLocalName() { return localName; }
+
+	/**
+	 * Returns the local port value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The local port value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public Integer getLocalPort() { return localPort; }
+
+	/**
+	 * Returns the path-info value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The path-info value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getPathInfo() { return pathInfo; }
+
+	/**
+	 * Returns the path-translated value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The path-translated value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getPathTranslated() { return pathTranslated; }
+
+	/**
+	 * Returns the HTTP protocol value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The HTTP protocol value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getProtocol() { return protocol; }
+
+	/**
+	 * Returns the query string to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The query string to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getQueryString() { return queryString; }
+
+	/**
+	 * Returns the remote address value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The remote address value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getRemoteAddr() { return remoteAddr; }
+
+	/**
+	 * Returns the remote host value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The remote host value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getRemoteHost() { return remoteHost; }
+
+	/**
+	 * Returns the remote port value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The remote port value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public Integer getRemotePort() { return remotePort; }
+
+	/**
+	 * Returns the remote user to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The remote user to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getRemoteUser() { return remoteUser; }
+
+	/**
+	 * Returns the request dispatcher to set on the underlying {@link HttpServletRequest} obhject.
+	 *
+	 * @return The value of the <property>requestDispatcherMap</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String,RequestDispatcher> getRequestDispatcherMap() { return requestDispatcherMap; }
+
+	/**
+	 * Returns the requested session ID to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The requested session ID to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getRequestedSessionId() { return requestedSessionId; }
+
+	/**
+	 * Returns the request URI to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The request URI to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getRequestURI() { return requestURI; }
+
+	/**
+	 * Returns the user roles to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The user roles to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String[] getRoles() { return roles; }
+
+	/**
+	 * Returns the HTTP schema value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The HTTP schema value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getScheme() { return scheme; }
+
+	/**
+	 * Returns the server name value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The server name value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getServerName() { return serverName; }
+
+	/**
+	 * Returns the server port value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The server port value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public Integer getServerPort() { return serverPort; }
+
+	/**
+	 * Returns the servlet context to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The servlet context to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public ServletContext getServletContext() { return servletContext; }
+
+	/**
+	 * Returns the servlet path to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The servlet path to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getServletPath() { return servletPath; }
+
+	/**
+	 * Returns the user principal to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The user principal to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public Principal getUserPrincipal() { return userPrincipal; }
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest header(Header part) {
+		super.header(part);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest header(String name, Object value) {
+		super.header(name, value);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest headerPairs(String...pairs) {
+		super.headerPairs(pairs);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest headers(Header...parts) {
+		super.headers(parts);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest headersBean(Object value) {
+		super.headersBean(value);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest html() {
+		super.html();
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest htmlDoc() {
+		super.htmlDoc();
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest htmlStrippedDoc() {
+		super.htmlStrippedDoc();
+		return this;
+	}
+
+	/**
+	 * Overrides the HTTP session on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getSession()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest httpSession(HttpSession value) {
+		httpSession = value;
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest ignoreErrors() {
+		super.ignoreErrors();
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest interceptors(RestCallInterceptor...interceptors) throws RestCallException {
+		super.interceptors(interceptors);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest json() {
+		super.json();
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest json5() {
+		super.json5();
+		return this;
+	}
+
+	/**
+	 * Overrides the local address value on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getLocalAddr()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest localAddr(String value) {
+		localAddr = value;
+		return this;
+	}
+
+	/**
+	 * Overrides the locale on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getLocale()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest locale(Locale value) {
+		locale = value;
+		return this;
+	}
+
+	/**
+	 * Overrides the local name value on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getLocalName()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest localName(String value) {
+		localName = value;
+		return this;
+	}
+
+	/**
+	 * Overrides the local port value on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getLocalPort()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest localPort(int value) {
+		localPort = value;
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest mediaType(String value) throws RestCallException {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest msgPack() {
+		super.msgPack();
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest noTrace() throws RestCallException {
+		super.noTrace();
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest openApi() {
+		super.openApi();
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest parser(Class<? extends org.apache.juneau.parser.Parser> parser) {
+		super.parser(parser);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest parser(Parser parser) {
+		super.parser(parser);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest pathData(NameValuePair...parts) {
+		super.pathData(parts);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest pathData(String name, Object value) {
+		super.pathData(name, value);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest pathDataBean(Object value) {
+		super.pathDataBean(value);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest pathDataPairs(String...pairs) {
+		super.pathDataPairs(pairs);
+		return this;
+	}
+
+	/**
+	 * Overrides the path-info value on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getPathInfo()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest pathInfo(String value) {
+		pathInfo = value;
+		return this;
+	}
+
+	/**
+	 * Overrides the path-translated value on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getPathTranslated()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest pathTranslated(String value) {
+		pathTranslated = value;
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest plainText() {
+		super.plainText();
+		return this;
+	}
+
+	/**
+	 * Overrides the HTTP protocol value on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getProtocol()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest protocol(String value) {
+		protocol = value;
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest protocolVersion(ProtocolVersion version) {
+		super.protocolVersion(version);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest queryCustom(Object value) {
+		super.queryCustom(value);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest queryData(NameValuePair...parts) {
+		super.queryData(parts);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest queryData(String name, Object value) {
+		super.queryData(name, value);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest queryDataBean(Object value) {
+		super.queryDataBean(value);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest queryDataPairs(String...pairs) throws RestCallException {
+		super.queryDataPairs(pairs);
+		return this;
+	}
+
+	/**
+	 * Overrides the query string on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getQueryString()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest queryString(String value) {
+		queryString = value;
+		return this;
+	}
+
+	/**
+	 * Overrides the remote address value on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getRemoteAddr()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest remoteAddr(String value) {
+		remoteAddr = value;
+		return this;
+	}
+
+	/**
+	 * Overrides the remote host value on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getRemoteHost()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest remoteHost(String value) {
+		remoteHost = value;
+		return this;
+	}
+
+	/**
+	 * Overrides the remote port value on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getRemotePort()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest remotePort(int value) {
+		remotePort = value;
+		return this;
+	}
+
+	/**
+	 * Overrides the remote user on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getRemoteUser()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest remoteUser(String value) {
+		remoteUser = value;
+		return this;
+	}
+
+	/**
+	 * Overrides the request dispatcher on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getRequestDispatcher(String)}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param path The path to the resource being resolved.
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest requestDispatcher(String path, RequestDispatcher value) {
+		this.requestDispatcherMap.put(path, value);
+		return this;
+	}
+
+	/**
+	 * Overrides the requested session ID on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getRequestedSessionId()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest requestedSessionId(String value) {
+		requestedSessionId = value;
+		return this;
+	}
+
+	/**
+	 * Overrides the request URI on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getRequestURI()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest requestURI(String value) {
+		requestURI = value;
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest rethrow(java.lang.Class<?>...values) {
+		super.rethrow(values);
+		return this;
+	}
+
+	/**
+	 * Specifies the value for the security roles on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#isUserInRole(String)}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param role The role to add to this request (e.g. <js>"ROLE_ADMIN"</js>).
+	 * @return This object.
+	 */
+	public MockRestRequest role(String role) {
+		this.roles = a(role);
+		return this;
+	}
+
+	/**
+	 * Specifies the user roles on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#isUserInRole(String)}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param roles The roles to add to this request (e.g. <js>"ROLE_ADMIN"</js>).
+	 * @return This object.
+	 */
+	public MockRestRequest roles(String...roles) {
+		this.roles = roles;
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest serializer(Class<? extends org.apache.juneau.serializer.Serializer> serializer) {
+		super.serializer(serializer);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest serializer(Serializer serializer) {
+		super.serializer(serializer);
+		return this;
+	}
+
+	/**
+	 * Overrides the server name value on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getServerName()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest serverName(String value) {
+		serverName = value;
+		return this;
+	}
+
+	/**
+	 * Overrides the server port value on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getServerPort()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest serverPort(int value) {
+		serverPort = value;
+		return this;
+	}
+
+	/**
+	 * Overrides the servlet context on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getServletContext()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest servletContext(ServletContext value) {
+		servletContext = value;
+		return this;
+	}
+
+	/**
+	 * Overrides the servlet path on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getServletPath()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest servletPath(String value) {
+		servletPath = value;
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest suppressLogging() {
+		super.suppressLogging();
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest target(HttpHost target) {
+		super.target(target);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest uon() {
+		super.uon();
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest uri(Object uri) throws RestCallException {
+		super.uri(uri);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest uriFragment(String fragment) {
+		super.uriFragment(fragment);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest uriHost(String host) {
+		super.uriHost(host);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest uriPort(int port) {
+		super.uriPort(port);
+		return this;
+	}
+
+	/**
+	 * Overrides the HTTP schema value on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getScheme()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	@Override
+	public MockRestRequest uriScheme(String value) {
+		super.uriScheme(value);
+		scheme = value;
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest uriUserInfo(String userInfo) {
+		super.uriUserInfo(userInfo);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest uriUserInfo(String username, String password) {
+		super.uriUserInfo(username, password);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest urlEnc() {
+		super.urlEnc();
+		return this;
+	}
+
+	/**
+	 * Overrides the user principal on the underlying {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpServletRequest#getUserPrincipal()}.
+	 *
+	 * <p>
+	 * This value gets copied to the servlet request after the call to {@link HttpClientConnection#sendRequestHeader(HttpRequest)}
+	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockRestRequest userPrincipal(Principal value) {
+		userPrincipal = value;
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest xml() {
+		super.xml();
+		return this;
+	}
+}

@@ -1,0 +1,121 @@
+<!--
+ ***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ *
+ ***************************************************************************************************************************
+ -->
+<form style='margin:0px'>
+	<table>
+		<tr>
+			<th>Search:</th>
+			<td>
+				<input name="s" size="50" value='$RQ{s}'>
+			</td>
+			<td>
+				<div class="tooltip">
+					<small>&#x2753;</small>
+					<span class="tooltiptext">
+						Comma-delimited list of key/value pair search terms.
+						<br>
+						<br>Keys are column names.  Values are search terms.
+						<br>
+						<br><b>Example:</b>&nbsp;&nbsp;<code>[column1=foo*, column2&lt;100, column3=2013-2016.06.30]</code>
+						<br>
+						<br><b>String fields:</b>
+						<br> - <code>'*'</code> represents any character
+						<br> - <code>'?'</code> represents one character
+						<br> - Use single or double quotes for phrases
+						<br>&nbsp;&nbsp;&nbsp;e.g. <code>[column='foo bar']</code> - The term 'foo bar'
+						<br> - Multiple search terms are ORed 
+						<br>&nbsp;&nbsp;&nbsp;e.g. <code>[column=foo bar]</code> - 'foo' OR 'bar'
+						<br> - Prepend <code>'+'</code> on tokens that must match
+						<br>&nbsp;&nbsp;&nbsp;e.g. <code>[column=+foo* +*bar]</code> - Start with 'foo' AND end with 'bar'.
+						<br> - Prepend <code>'-'</code> on tokens that must not match 
+						<br>&nbsp;&nbsp;&nbsp;e.g. <code>[column=+foo* -*bar]</code> - Start with 'foo' AND does not end with 'bar'.
+						<br>
+						<br><b>Numeric fields:</b>
+						<br><code>[column=123]</code> - A single number
+						<br><code>[column=1 2 3]</code>	- Multiple numbers
+						<br><code>[column=1-100]</code> - Between two numbers
+						<br><code>[column=1-100 200-300]</code> - Two ranges of numbers
+						<br><code>[column&gt;100]</code> - Greater than a number
+						<br><code>[column&gt;=100]</code> - Greater than or equal to a number
+						<br><code>[column=!123]</code> - Not a specific number
+						<br>
+						<br><b>Date/Calendar fields:</b>
+						<br><code>[column=2001]</code> - A specific year
+						<br><code>[column=2001.01.01.10.50]</code> - A specific time
+						<br><code>[column&gt;2001]</code> - After a specific year
+						<br><code>[column&gt;=2001]</code> - During or after a specific year
+						<br><code>[column=2001-2003.06.30]</code> - A date range
+						<br><code>[column=2001 2003 2005]</code> - Multiple ORed dates
+					</span>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<th>View:</th>
+			<td>
+				<input name="v" size="50" value='$RQ{v}'>
+			</td>
+			<td>
+				<div class="tooltip">
+					<small>&#x2753;</small>
+					<span class="tooltiptext">
+						Comma-delimited list of columns to display.
+						<br>
+						<br><b>Example:</b>&nbsp;&nbsp;<code>[column1, column2]</code>
+					</span>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<th>Sort:</th>
+			<td>
+				<input name="o" size="50" value='$RQ{o}'>
+			</td>
+			<td>
+				<div class="tooltip">
+					<small>&#x2753;</small>
+					<span class="tooltiptext">
+						Comma-delimited list of columns to sort by.
+						<br>Columns can be suffixed with '-' to indicate descending order.
+						<br>
+						<br><b>Example:</b>&nbsp;&nbsp;<code>[column1, column2-]</code>
+						<br>
+						<br><b>Notes:</b>
+						<br> - Columns containing collections/arrays/lists are sorted by size.
+					</span>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<th>Page:</th>
+			<td>
+				Position: <input name='p' type='number' style='width:50px' step=20 min=0 value='$RQ{p}'>
+				Limit: <input name='l' type='number' style='width:50px' step=20 min=0 value='$RQ{l}'>
+				<span style='float:right'>Ignore-case: <input name='i' type='checkbox' value='true'></span>
+			</td>
+			<td>
+			</td>
+		</tr> 
+		<tr>
+			<th>
+				&nbsp;
+			</th>
+			<td colspan='2' style='text-align:right'>
+				<input type='reset' value='Reset'>
+				<input type="submit" value='Submit'>
+			</td>
+		</tr>
+	</table>
+</form>

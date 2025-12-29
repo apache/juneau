@@ -1,0 +1,452 @@
+***************************************************************************************************************************
+* Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+* distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+* to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+* with the License.  You may obtain a copy of the License at                                                              *
+*                                                                                                                         *
+*  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+*                                                                                                                         *
+* Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+* specific language governing permissions and limitations under the License.                                              *
+***************************************************************************************************************************
+
+Release Notes - Juneau - Version 9.2.0
+
+** Changes
+
+    * Bump org.springframework.boot:spring-boot-maven-plugin from 3.4.5 to 4.0.1 #218, #224, #232, #278, #298.
+    * Bump org.springframework.boot:spring-boot-starter-web from 3.4.5 to 4.0.1 #217, #225, #239, #260, #277, #288, #298.
+    * Bump org.apache:apache from 34 to 35 #220.
+    * Bump org.eclipse.jgit:org.eclipse.jgit from 7.2.1.202505142326-r to 7.5.0.202512021534-r #221, #296.
+    * Bump jetty.version from 12.0.21 to 12.1.5 #222, #228, #229, #275, #294.
+    * Bump org.junit.vintage:junit-vintage-engine from 5.12.2 to 6.0.1 #223, #257, #280.
+    * Bump junit-jupiter from 5.13.4 to 6.0.1.
+    * Bump org.apache.maven.plugins:maven-javadoc-plugin from 3.11.2 to 3.12.0 #237m #255.
+    * Annotations associated with a subclass of org.apache.juneau.annotation.AnnotationBuilder that didn't carry an `String[] description()` attribute now do.
+        For example: org.apache.juneau.http.annotation.Path.
+        The current use case is for developers to further annotate their code with documentation.
+    * Bump org.apache.maven.plugins:maven-compiler-plugin from 3.14.0 to 3.14.1 #271.
+    * Bump org.jacoco:jacoco-maven-plugin from 0.8.13 to 0.8.14 #273.
+    * Bump js-yaml from 3.14.1 to 3.14.2 in /juneau-docs #282.
+    * Bump node-forge from 1.3.1 to 1.3.2 in /juneau-docs #283, fixes CVE-2025-12816.
+    * Bump mdast-util-to-hast from 13.2.0 to 13.2.1 in /juneau-docs #286, fixes Dependabot alerts #17 mdast-util-to-hast has unsanitized class attribute.
+    * Bump org.apache.maven.plugins:maven-shade-plugin from 3.5.1 to 3.6.1 #284.
+    * Bump express from 4.21.2 to 4.22.1 in /juneau-docs #287
+      Security fix for CVE-2024-51999 (GHSA-pj86-cfqh-vqx6).
+    * Bump org.codehaus.mojo:exec-maven-plugin from 3.6.2 to 3.6.3 #301.
+    * Bump org.apache.maven.plugins:maven-source-plugin from 3.2.1 to 3.4.0 #290.
+
+** New Features - Multi-Key Cache and Concurrent Map Classes
+
+    * Renamed multi-key concurrent map classes for better consistency:
+        - Concurrent2KeyHashMap -> ConcurrentHashMap2Key
+        - Concurrent3KeyHashMap -> ConcurrentHashMap3Key
+        - Concurrent4KeyHashMap -> ConcurrentHashMap4Key
+        - Concurrent5KeyHashMap -> ConcurrentHashMap5Key
+
+    * Refactored ConcurrentHashMapXKey classes to remove caching functionality:
+        - Removed 'disabled' and 'supplier' parameters from constructors
+        - Now pure multi-key concurrent hash maps extending ConcurrentHashMap
+        - Added null key validation (throws IllegalArgumentException for null keys)
+        - Simplified get() and put() methods to use Tuple classes directly
+
+    * New Cache classes extending ConcurrentHashMap for single-key caching:
+        - Cache extends ConcurrentHashMap<K,V>
+        - Provides builder pattern with configurable options
+        - Features: disableCaching, maxSize, logOnExit, default supplier
+        - Support for both default supplier and per-call supplier override
+        - Built-in cache hit tracking via getCacheHits()
+        - Automatic cache eviction when maxSize is exceeded
+
+    * New multi-key Cache classes for composite key caching:
+        - Cache2<K1,K2,V> extends ConcurrentHashMap2Key<K1,K2,V>
+        - Cache3<K1,K2,K3,V> extends ConcurrentHashMap3Key<K1,K2,K3,V>
+        - Cache4<K1,K2,K3,K4,V> extends ConcurrentHashMap4Key<K1,K2,K3,K4,V>
+        - Cache5<K1,K2,K3,K4,K5,V> extends ConcurrentHashMap5Key<K1,K2,K3,K4,K5,V>
+        - Each supports builder pattern with same features as Cache
+        - Default suppliers use FunctionX interfaces (Function2, Function3, etc.)
+        - Null key validation for all key components
+
+    * Example usage:
+        Cache2<ClassLoader,Class<?>,ClassMeta> metaCache = Cache2
+            .of(ClassLoader.class, Class.class, ClassMeta.class)
+            .maxSize(500)
+            .supplier((cl, clazz) -> computeMeta(cl, clazz))
+            .build();
+
+        ClassMeta meta = metaCache.get(classLoader, MyClass.class);
+
+    * Migration notes:
+        - Code using Concurrent2KeyHashMap with disabled/supplier should migrate to Cache2
+        - Code using ConcurrentXKeyHashMap without caching features requires no changes
+        - Null keys are no longer allowed (previously bypassed cache, now throws exception)
+
+Release Notes - Juneau - Version 9.1.0
+
+** Changes
+
+    * Bump Java platform requirement from Java 11 to 17.
+    * [JUNEAU-253] - Bump springboot.version from 3.2.2 to 3.4.4.
+    * [JUNEAU-254] - Bump jetty.version from 11.0.16 to 11.0.21, #207, #208.
+    * [JUNEAU-255] - Bump org.apache:apache from 29 to 31.
+    * [JUNEAU-256] - Bump org.apache.maven.plugins:maven-javadoc-plugin from 3.5.0 to 3.10.1
+    * [JUNEAU-257] - Bump maven-bundle-plugin from 5.1.8 to 5.1.9.
+    * [JUNEAU-258] - Bump maven-jxr-plugin from 3.3.0 to 3.5.0.
+    * [JUNEAU-259] - Bump from Junit 4.13.2 to JUnit 5.12.0 Vintage Engine.
+    * [JUNEAU-260] - Bump maven-surefire-report-plugin from 2.22.2 to 3.1.2.
+    * [JUNEAU-261] - Bump org.apache.derby:derby from 10.16.1.1 to 10.17.1.0 #118.
+    * [JUNEAU-263] - Remove Google Analytics from the Juneau Website.
+    * [JUNEAU-262] Port Jetty from 11.0.20 to 12.0.20 #148, #156, #160, #165, #169, #175, #183, #201.
+    * [JUNEAU-252] Bump org.eclipse.jgit:org.eclipse.jgit from 6.6.1.202309021850-r to 7.2.1.202505142326-r #112, #123, #137, #152, #166, #184, #191, #209.
+    * [JUNEAU-253] Bump springboot.version from 3.1.3 to 3.4.5 #136, #138, #142, #146, #153, #158, #162, #167, #172, #177, #186, #187, #188, #193, #198.
+    * [JUNEAU-254] Bump jetty.version from 11.0.16 to 11.0.20.
+    * [JUNEAU-255] Bump org.apache:apache from 29 to 34 #143, #202.
+    * [JUNEAU-256] Bump maven-javadoc-plugin from 3.5.0 to 3.11.2 #149, #159, #164, #170, #181.
+    * [JUNEAU-257] Bump maven-bundle-plugin from 5.1.8 to 5.1.9 to 6.0.0 #178.
+    * [JUNEAU-258] Bump maven-jxr-plugin from 3.3.0 to 3.6.0 #150, #163, #174.
+    * [JUNEAU-259] Bump from Junit 4.13.2 to JUnit 5.12.2 Vintage Engine #189, #197.
+    * [JUNEAU-260] Bump maven-surefire-report-plugin from 2.22.2 to 3.1.2.
+    * [JUNEAU-261] Bump org.apache.derby:derby from 10.16.1.1 to 10.17.1.0.
+    * Project requires minimum Maven version for build of 3.6.3.
+    * Bump org.apache.maven.plugins:maven-compiler-plugin from 3.11.0 to 3.14.0 #139, #190. 
+    * Bump org.apache.maven.plugins:maven-shade-plugin from 3.4.1 to 3.6.0 #135, #144, #147.
+    * Bump org.jacoco:jacoco-maven-plugin from 0.8.11 to 0.8.13 #140, 204.
+    * Bump org.apache.maven.plugins:maven-source-plugin from 3.2.1 to 3.3.1 #141.
+    * Bump jakarta.servlet:jakarta.servlet-api 6.1.0 from 6.0.0 to 6.1.0.
+    * Bump org.apache:apache from 32 to 33 #157.
+    * Add org.apache.juneau.rest.mock.MockServletResponse.sendRedirect(String, int, boolean) for jakarta.servlet:jakarta.servlet-api 6.1.0.
+    * Bump org.junit:junit-bom from 5.10.3 to 5.11.4 #161, #168, #171, #173, #185.
+    * Flip console output logic on shutdown from a system property called 'SystemUtils.quiet' to 'SystemUtils.verbose'.
+    * org.apache.juneau.microservice.jetty.JettyMicroservice.Builder.jettyXml(Object, boolean) now handles java.nio.file.Path.
+    * Add org.apache.juneau.common.internal.PathReaderBuilder
+    * Add org.apache.juneau.common.internal.IOUtils.read(Path)
+    * org.apache.juneau.microservice.Microservice.Builder.manifest(Object) now handles java.nio.file.Path.
+    
+Release Notes - Juneau - Version 9.0.1
+
+** Improvement
+
+    * [JUNEAU-243] Bump jetty.version from 11.0.13 to 11.0.16.
+    * [JUNEAU-244] Bump springboot.version from 3.0.1 to 3.1.3 #97, #102, #104, #106.
+    * [JUNEAU-245] Bump hibernate.version from 5.6.14.Final to 5.6.15.Final #95.
+    * [JUNEAU-246] Bump org.eclipse.jgit from 6.4.0.202211300538-r to 6.6.1.202309021850-r #101, #105, #110.
+    * [JUNEAU-250] Bump org.codehaus.groovy:groovy from 3.0.18 to 3.0.19 #145.
+
+Release Notes - Juneau - Version 9.0.0
+
+** Placeholder
+
+Release Notes - Juneau - Version 8.2.0
+
+** Bug
+    * [JUNEAU-168] - Serializer/Parser handling of proxy beans.
+    * [JUNEAU-184] - HtmlSerializer doesn't property serialize Collection<A> objects.
+    * [JUNEAU-187] - HtmlSerializer does not honor @Bean(bpi) on collections of beans with null values in first row.
+    * [JUNEAU-189] - @ReestMethod(debug="true") does not appear to cause HTTP requests to be logged.
+    * [JUNEAU-195] - @Beanp("*") not working correctly?
+    * [JUNEAU-196] - @Html(noTableHeaders) should work on Collections of beans.
+    * [JUNEAU-197] - @BeanConfig(bpi) does not override @Bean(bpi)
+    * [JUNEAU-201] - JettyMicroserviceBuilder logConfig method is a NO-OP
+    * [JUNEAU-216] - BEANTRAVERSE_initialDepth not setting indentation correctly on first line.
+    * [JUNEAU-232] - BEAN_isIgnoreUnknownNullBeanProperties doesn't always work correctly.
+    * [JUNEAU-233] - JsonParser is not instantiating interface proxies.
+    * [JUNEAU-234] - BEAN_ignoreInvocationExceptionsOnGetters is not working.
+
+** New Feature
+    * [JUNEAU-242] - Framework should recognize "withX" fluent setters.
+
+** Improvement
+    * [JUNEAU-180] - Incorrect Swagger on Spring Boot methods that return Collections of beans.
+    * [JUNEAU-181] - JuneauRestInitializer needs a no-arg constructor.
+    * [JUNEAU-182] - Add a RestCallHandler interface to the RestClient API
+    * [JUNEAU-183] - Remote methods should support Future return types.
+    * [JUNEAU-185] - ResourceDescriptions needs an append(url, label, description) method.
+    * [JUNEAU-186] - REST classes should allow themselves to implement helper classes.
+    * [JUNEAU-188] - @Bean annotation should override class visibility rules.
+    * [JUNEAU-190] - Need ability to define actions for unauthorized requests via the @Rest(roleGuard).
+    * [JUNEAU-191] - <aside> elements in HtmlDocSerializer should allow to float left/right/top/bottom instead of just right.
+    * [JUNEAU-192] - HtmlElement beans should have convenience constructors or creators.
+    * [JUNEAU-193] - RestClient should support all languages by default.
+    * [JUNEAU-194] - Provide a simple Hyperlink bean.
+    * [JUNEAU-198] - Need improved ability to turn on debug in REST via environment variables.
+    * [JUNEAU-199] - New ContentDisposition header bean.
+    * [JUNEAU-200] - StreamResource/ReaderResource classes should take in HttpHeader beans.
+    * [JUNEAU-202] - Add option for ignoring @Transient properties during marshalling.
+    * [JUNEAU-203] - Bean copy constructor can be confused with builder constructor.
+    * [JUNEAU-204] - Add @RestMethod(paths) to allow matching multiple paths.
+    * [JUNEAU-205] - Add @Path(required=boolean) annotation to allow path variables to be optionally matched.
+    * [JUNEAU-208] - Version 7.2.2 is missing from https://juneau.apache.org/#whatsnew.html
+    * [JUNEAU-227] - BEAN_methodVisibility and BEAN_constructorVisibility doesn't affect swap methods.
+    * [JUNEAU-228] - Make it easier to create bean filters programmatically.
+    * [JUNEAU-235] - New BeanInterceptor API for intercepting calls to getters/setters.
+    * [JUNEAU-236] - BEAN_addRootType doesn't work without BEAN_addBeanTypes
+    * [JUNEAU-240] - RestContext should be subclassible.
+    
+
+Release Notes - Juneau - Version 8.1.3
+
+** Bug
+    * [JUNEAU-169] - Dynamic annotations.
+    * [JUNEAU-170] - @RestMethod(name="*") doesn't always work.
+    * [JUNEAU-172] - @RestResource(debug=true) doesn't work if REST method not matched.
+    * [JUNEAU-173] - Undeprecate HttpClientBuilder convenience methods in RestClientBuilder.
+    * [JUNEAU-174] - Allow configuration properties to be set globally using system properties or env vars.
+    * [JUNEAU-176] - Race condition when parsing into array types.
+
+** New Feature
+    * [JUNEAU-175] - Execution statistics for REST methods.
+
+** Improvement
+    * [JUNEAU-154] - [PetStore] Add mock testing.
+    * [JUNEAU-177] - Allow REST methods at specific paths to be overridden by methods in child classes.
+    
+
+Release Notes - Juneau - Version 8.1.2
+
+** Bug
+    * [JUNEAU-156] - Test Fails on ko_KR Locale.
+    * [JUNEAU-158] - The KEYS link should have KEYS as the text
+    * [JUNEAU-160] - Setting bean properties of type list don't use setters.
+    * [JUNEAU-161] - Exeption-Message header can contain CR/LF characters.
+    * [JUNEAU-162] - RestClient class should be extensible.
+    * [JUNEAU-163] - Request Exception-Message response header should be truncated to some reasonable value.
+    * [JUNEAU-164] - Stacktrace hashing should take proxies and lamba expressions into account.
+
+** Improvement
+    * [JUNEAU-155] - Split bpi/bpx into serializer and parser configuration properties.
+
+** Task
+    * [JUNEAU-159] - Package pet store application in jar format.
+
+
+Release Notes - Juneau - Version 8.1.1
+
+** Bug
+    * [JUNEAU-143] - Static files mapping doesn't properly handle override scenarios.
+    * [JUNEAU-147] - Error in Swagger generator when @Example used on bean class.
+
+** Improvement
+    * [JUNEAU-144] - Add support for absolute paths on @RestResource(staticFiles)
+    * [JUNEAU-145] - @RestResource(staticFiles) should handle multiple mappings.
+    * [JUNEAU-146] - Add ranks to @Config annotations.
+
+** Task
+    * [JUNEAU-132] - Various HTTP parameter annotations should support Optional.
+    * [JUNEAU-133] - Serializers/parsers should support Optional objects and properties.
+    * [JUNEAU-134] - Parsers not correctly finding generic types on complex types involving arrays.
+    * [JUNEAU-135] - @RestMethod(debug=true) is not causing requests to be logged.
+    * [JUNEAU-136] - Juneau cannot reflect parameterized types on Spring bean methods.
+    * [JUNEAU-137] - Juneau cannot reflect parameterized types on Spring bean methods.
+    * [JUNEAU-138] - Move REST response/exception beans into juneau-marshall.
+    * [JUNEAU-139] - juneau-rest-client should not have dependency on juneau-rest-server.
+    * [JUNEAU-140] - Provide initial contents of PetStore modules.
+    * [JUNEAU-141] - Move @RemoteResource/@RemoteMethod annotations into juneau-marshall.
+    * [JUNEAU-142] - BasicRest subclasses need programmatic access to RestRequest/RestResponse
+
+
+Release Notes - Juneau - Version 8.1.0
+
+** Bug
+    * [JUNEAU-29] - Replace @BeanConstructor with @BeanParameter annotations.
+    * [JUNEAU-94] - Fix build warnings on Java 11
+    * [JUNEAU-105] - UrlPathPattern should use a state machine.
+    * [JUNEAU-107] - IllegalArgumentException in DefaultHandler.handle()
+    * [JUNEAU-124] - Serializers and parsers should throw specific exceptions.
+    * [JUNEAU-129] - LocalizedDatesTest failures during build
+
+** New Feature
+    * [JUNEAU-96] - Add Automatic-Module-Name metadata
+    * [JUNEAU-98] - Add @RestMethod(allowMethodParam/allowMethodHead) annotations
+    * [JUNEAU-99] - @RestMethod(roleGuard="xxx") annotation.
+    * [JUNEAU-100] - REST_allowedMethodHeaders / @RestResource(allowedMethodHeaders) / @RestMethod(allowedMethodHeaders)
+    * [JUNEAU-101] - Update handling of dates to use new Java 8 libraries.
+    * [JUNEAU-102] - Expanded REST annotations
+    * [JUNEAU-103] - Add POJO diff tool
+    * [JUNEAU-104] - Support for using named method parameters.
+
+** Improvement
+    * [JUNEAU-50] - Publish a contributors guide
+    * [JUNEAU-56] - Build microservices with Maven
+    * [JUNEAU-93] - Use constructor argument names as bean property names.
+    * [JUNEAU-97] - Path Parameter in Parent RestResource
+    * [JUNEAU-106] - Improved REST debugging.
+    * [JUNEAU-108] - AccessDeniedException should cause HTTP 401 response.
+    * [JUNEAU-109] - BasicRestLogger should take in Servlet class so that logging can be based on that class.
+
+** Task
+    * [JUNEAU-126] - Serializers should serialize Iterators and Enumerations by default.
+    * [JUNEAU-127] - Clean up usage of PojoSwaps in ClassMeta
+    * [JUNEAU-128] - Code improvements around DynamicSwaps
+    
+
+Release Notes - Juneau - Version 8.0.0
+
+** Improvement
+    * [JUNEAU-91] - Update Jetty to jetty-9.4.13.v20181111
+
+
+Release Notes - Juneau - Version 7.2.2
+
+** Bug
+    * [JUNEAU-88] - AddressBookResourceTest fails with org.apache.juneau.rest.client.RestCallException: Software caused connection abort: recv failed
+    * [JUNEAU-89] - errors in juneau-examples-rest
+    * [JUNEAU-90] - Could not instantiate class  org.apache.juneau.svl.Var
+    
+
+Release Notes - Juneau - Version 7.2.1
+
+** Bug
+    * [JUNEAU-85] - Don't break compatibility with 7.1.0
+    * [JUNEAU-86] - Avoid NPE stopping RestMicroservice
+    * [JUNEAU-87] - Tests should not use hard-wired line-endings.
+
+
+Release Notes - Juneau - Version 7.2.0
+
+** Bug
+    * [JUNEAU-83] - Cannot subclass RestClient and RestClientBuilder
+    * [JUNEAU-82] - Config and Logs resource pages should have configurable look-and-feel.
+
+** New Feature
+    * [JUNEAU-60] - @RestMethod parameter annotation to populate a POJO using RequestBean format
+
+** Improvement
+    * [JUNEAU-81] - Update Jetty to 9.4.9
+    * [JUNEAU-84] - Upgrade to Jetty 9.4.12
+
+
+Release Notes - Juneau - Version 7.1.0
+
+** Bug
+    * [JUNEAU-75] - Documentation not clear on how to customize htdocs folder
+    * [JUNEAU-78] - Is org.apache.juneau.dto.swagger.SchemaInfo missing a $ref field?
+    * [JUNEAU-79] - org.apache.juneau.microservice.RestMicroservice.stop() should not dump stack traces on the console
+    * [JUNEAU-80] - RestCallHandlerDefault service method calls handleResponse which seems to close output stream right before it runs res.flushbuffer which throws an IO exception because the stream is closed.
+
+** Improvement
+    * [JUNEAU-76] - Improvements to Context/Builder APIs
+    * [JUNEAU-77] - Document how to customize the favicon
+
+
+Release Notes - Juneau - Version 7.0.1
+
+** Bug
+    * [JUNEAU-68] - Add BoundedReader to REST input
+    * [JUNEAU-69] - XML parser should ignore comments.
+    * [JUNEAU-71] - No git tag for release 7.0.0
+
+** Improvement
+    * [JUNEAU-72] - Offer an option to disable console IO from org.apache.juneau.microservice.Microservice.start()
+    * [JUNEAU-73] - Update Jetty from 9.4.7.v20170914 to 9.4.8.v20171121
+    * [JUNEAU-74] - Update Apache HttpClient from 4.5.3 to 4.5.4
+
+
+Release Notes - Juneau - Version 7.0.0
+
+** Improvement
+
+** New Feature
+
+
+Release Notes - Juneau - Version 6.4.0
+
+** Improvement
+    * [JUNEAU-46] - Remove references to wink
+    * [JUNEAU-64] - Support advanced annotated variables on methods implementing onPreCall and onPostCall
+
+** New Feature
+    * [JUNEAU-62] - Support complete customization of jetty runtime
+    * [JUNEAU-65] - utility for merging two like POJOs
+    
+    
+Release Notes - Juneau - Version 6.3.1
+
+** Bug
+    * [JUNEAU-59] - Fix "Copyright (c) 2016, Apache Foundation" year in documentation.
+
+** Improvement
+    * [JUNEAU-58] - Embed HTML in @HtmlDoc.description
+
+
+Release Notes - Juneau - Version 6.3.0
+
+** Bug
+    * [JUNEAU-38] - Testcase failure in UK
+    * [JUNEAU-45] - Rebrand web pages with new incubator logo.
+    * [JUNEAU-47] - Fix RAT check failure with logs generated during build
+    * [JUNEAU-51] - properties added to rest client, serializer, and parser are not available during POJO swap and unswap methods
+
+** Improvement
+    * [JUNEAU-57] - seamless serialization and parsing of string fields to/from enum
+
+
+Release Notes - Juneau - Version 6.2.0
+
+** Bug
+    * [JUNEAU-37] - REST Testcases can fail with ports 10000. 10001 in use.
+    * [JUNEAU-39] - Add "Incubator" to NOTICE file.
+
+** Improvement
+    * [JUNEAU-32] - Improvements to BeanMeta class
+    * [JUNEAU-41] - Prerequisites usage is deprecated for non Maven-plugin projects
+    * [JUNEAU-42] - More powerful RetryOn interface
+    * [JUNEAU-43] - Removed superfluous property encoding
+    * [JUNEAU-44] - Simplify the configuration for apache-rat-plugin
+
+
+Release Notes - Juneau - Version 6.1.0
+
+** Bug
+    * [JUNEAU-25] - Minor release issues in 6.0.1 RC3
+    * [JUNEAU-28] - Separate out RDF-code into separate juneau.core.rdf project.
+
+** Improvement
+    * [JUNEAU-26] - Add support for date localization.
+    * [JUNEAU-27] - Rename projects.
+    * [JUNEAU-31] - Separate out JAX-RS support from server/rest component
+    * [JUNEAU-34] - Remove <string> tags from HTML serialization.
+    * [JUNEAU-35] - Add StringSwap and MapSwap convenience classes.
+    * [JUNEAU-36] - Examples improvements
+
+** New Feature
+    * [JUNEAU-33] - HTML5 DOM objects.
+    
+
+Release Notes - Juneau - Version 6.0.1
+
+** Bug
+    * [JUNEAU-17] - Resolve various small issues pointed out during release of 6.0.0
+    * [JUNEAU-19] - Fix various JSON parser edge cases
+    * [JUNEAU-21] - Scrub references to IBM from code.
+    * [JUNEAU-22] - Localization bugs in CalendarSwap JUnits
+    * [JUNEAU-23] - Fix various Maven build warnings.
+    * [JUNEAU-24] - Fix release issues discovered by Stian
+
+** Improvement
+    * [JUNEAU-18] - Add HtmlDocSerializer.DEFAULT field.
+
+** Task
+    * [JUNEAU-20] - Remove references to ibm.com from website
+
+
+Release Notes - Juneau - Version 6.0.0
+
+** Bug
+    * [JUNEAU-1] - Cannot run org.apache.juneau.samples unit tests.
+    * [JUNEAU-2] - org.apache.juneau.jena.CT_Rdf.testLooseCollectionsOfBeans()
+    * [JUNEAU-4] - Test case failure: CT_Visibility.testClassDefault
+
+** Improvement
+    * [JUNEAU-13] - Rename PojoTransform to PojoSwap
+
+** Task
+    * [JUNEAU-5] - Update root README.md file.
+    * [JUNEAU-6] - Complete work on Juneau website (http://juneau.incubator.apache.org/)
+    * [JUNEAU-7] - Complete work on setting up Confluence workspace (https://cwiki.apache.org/confluence/display/JUNEAU/Juneau+Home)
+    * [JUNEAU-8] - Update contents of incubator status page (http://incubator.apache.org/projects/juneau.html)
+    * [JUNEAU-9] - Set up Jenkins builds for Juneau artifacts.
+    * [JUNEAU-10] - Figure out hosting options for generated Javadocs.
+    * [JUNEAU-11] - Create root pom.xml
+    * [JUNEAU-12] - Add Maven instructions to Dev setup guide.
+    * [JUNEAU-14] - Add SerializerGroup and ParserGroup info to web site about page.

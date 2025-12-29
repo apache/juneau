@@ -1,0 +1,103 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.httppart;
+
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.commons.collections.*;
+
+/**
+ * An implementation of {@link HttpPartSerializer} that simply serializes everything using {@link Object#toString()}.
+ *
+ * <p>
+ * More precisely, uses the {@link org.apache.juneau.reflect.Mutaters#toString(Object)} method to stringify objects.
+ *
+ * <h5 class='section'>Notes:</h5><ul>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpPartSerializersParsers">HTTP Part Serializers and Parsers</a>
+
+ * </ul>
+ */
+public class SimplePartSerializer extends BaseHttpPartSerializer {
+	/**
+	 * Builder class.
+	 */
+	public static class Builder extends BaseHttpPartSerializer.Builder {
+
+		private static final Cache<HashKey,SimplePartSerializer> CACHE = Cache.of(HashKey.class, SimplePartSerializer.class).build();
+
+		/**
+		 * Constructor.
+		 */
+		protected Builder() {}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder to copy.
+		 * 	<br>Cannot be <jk>null</jk>.
+		 */
+		protected Builder(Builder copyFrom) {
+			super(assertArgNotNull("copyFrom", copyFrom));
+		}
+
+		@Override
+		public SimplePartSerializer build() {
+			return cache(CACHE).build(SimplePartSerializer.class);
+		}
+
+		@Override /* Overridden from Context */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override
+		public Builder copy() {
+			return new Builder(this);
+		}
+	}
+
+	/** Reusable instance of {@link SimplePartSerializer}, all default settings. */
+	public static final SimplePartSerializer DEFAULT = create().build();
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+
+	/**
+	 * Constructor
+	 *
+	 * @param builder The builder for this object.
+	 * 	<br>Cannot be <jk>null</jk>.
+	 */
+	public SimplePartSerializer(Builder builder) {
+		super(assertArgNotNull("builder", builder));
+	}
+
+	@Override
+	public SimplePartSerializerSession getPartSession() { return new SimplePartSerializerSession(); }
+}
