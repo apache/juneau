@@ -33,10 +33,8 @@ Options:
 import argparse
 import os
 import platform
-import shutil
 import subprocess
 import sys
-import tempfile
 from pathlib import Path
 
 
@@ -168,7 +166,7 @@ def main():
     args = parser.parse_args()
     
     script_dir = Path(__file__).parent
-    project_root = script_dir.parent
+    docs_dir = script_dir.parent  # docs/
     
     print("=" * 79)
     print("Promote Documentation to Production (asf-site branch)")
@@ -184,23 +182,52 @@ def main():
         print("❌ ERROR: Could not determine git remote URL")
         sys.exit(1)
     
-    # Create temp directory
-    temp_dir = Path(tempfile.mkdtemp(prefix='docs-promote-'))
-    print(f"Temporary directory: {temp_dir}")
+    # Use sibling directory structure: /git/apache/juneau/asf-site
+    parent_dir = docs_dir.parent  # /git/apache/juneau/
+    site_dir = parent_dir / 'asf-site'
+    print(f"Site directory: {site_dir}")
+    
+    # Verify parent directory structure
+    if not parent_dir.exists():
+        print(f"❌ ERROR: Parent directory not found: {parent_dir}")
+        print("Expected structure:")
+        print(f"  {parent_dir}/docs/  (current)")
+        print(f"  {parent_dir}/asf-site/  (will be created)")
+        sys.exit(1)
     
     try:
-        # Step 1: Clone repository to temp directory
-        if not run_command(
-            ["git", "clone", remote_url, str(temp_dir)],
-            description="Cloning repository to temp directory"
-        ):
-            print("\n❌ Failed to clone repository")
-            sys.exit(1)
+        # Step 1: Setup sibling directory with asf-site branch
+        print("\nStep 1: Setting up sibling directory with asf-site branch...")
+        
+        # Check if directory already exists
+        if site_dir.exists() and (site_dir / '.git').exists():
+            # Directory exists and is a git repo, update it
+            print("📁 Site directory already exists, updating...")
+            if not run_command(
+                ["git", "fetch", "origin"],
+                cwd=site_dir,
+                description="Fetching latest changes"
+            ):
+                print("\n❌ Failed to fetch latest changes")
+                sys.exit(1)
+        else:
+            # Directory doesn't exist or isn't a git repo, clone it
+            if site_dir.exists():
+                print(f"⚠️  Directory exists but is not a git repository. Removing: {site_dir}")
+                import shutil
+                shutil.rmtree(site_dir)
+            
+            if not run_command(
+                ["git", "clone", remote_url, str(site_dir)],
+                description="Cloning repository to site directory"
+            ):
+                print("\n❌ Failed to clone repository")
+                sys.exit(1)
         
         # Step 2: Fetch asf-staging branch
         if not run_command(
             ["git", "fetch", "origin", "asf-staging"],
-            cwd=temp_dir,
+            cwd=site_dir,
             description="Fetching asf-staging branch"
         ):
             print("\n❌ Failed to fetch asf-staging branch")
@@ -209,7 +236,7 @@ def main():
         # Step 3: Switch to detached HEAD at origin/asf-staging
         if not run_command(
             ["git", "switch", "--detach", "origin/asf-staging"],
-            cwd=temp_dir,
+            cwd=site_dir,
             description="Switching to detached HEAD at origin/asf-staging"
         ):
             print("\n❌ Failed to switch to asf-staging branch")
@@ -236,12 +263,12 @@ def main():
         
         run_command(
             ["git", "config", "user.name", git_user],
-            cwd=temp_dir,
+            cwd=site_dir,
             description="Setting git user name"
         )
         run_command(
             ["git", "config", "user.email", git_email],
-            cwd=temp_dir,
+            cwd=site_dir,
             description="Setting git user email"
         )
         
@@ -250,24 +277,23 @@ def main():
             print("\nStep 5: Pushing to remote asf-site branch...")
             if not run_command(
                 ["git", "push", "origin", "HEAD:asf-site", "--force"],
-                cwd=temp_dir,
+                cwd=site_dir,
                 description="Pushing to asf-site branch"
             ):
                 print("\n❌ Failed to push to asf-site branch")
                 sys.exit(1)
         else:
             print("\n⏭️  Skipping push (--no-push flag set)")
-            print(f"   Changes are ready in: {temp_dir}")
+            print(f"   Changes are ready in: {site_dir}")
             print("   You can manually push with:")
-            print(f"   cd {temp_dir}")
+            print(f"   cd {site_dir}")
             print("   git push origin HEAD:asf-site --force")
         
         print("\n" + "=" * 79)
         print("✅ Documentation promotion to production complete!")
         print("=" * 79)
-        if args.no_push:
-            print(f"\nTemporary directory: {temp_dir}")
-            print("(This directory will not be automatically cleaned up)")
+        print(f"\nSite directory: {site_dir}")
+        print("(This directory is persistent and will be reused for future deployments)")
         
         # Play success sound
         play_sound(success=True)
@@ -280,12 +306,6 @@ def main():
         import traceback
         traceback.print_exc()
         sys.exit(1)
-    finally:
-        # Clean up temp directory if push was successful
-        if not args.no_push and temp_dir.exists():
-            print(f"\nCleaning up temporary directory: {temp_dir}")
-            shutil.rmtree(temp_dir)
-            print("✅ Cleanup complete")
 
 
 if __name__ == '__main__':

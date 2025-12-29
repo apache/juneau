@@ -173,8 +173,7 @@ def main():
     args = parser.parse_args()
     
     script_dir = Path(__file__).parent
-    project_root = script_dir.parent
-    docs_dir = project_root / 'docs'
+    docs_dir = script_dir.parent  # docs/
     build_dir = docs_dir / 'build'
     
     print("=" * 79)
@@ -192,7 +191,7 @@ def main():
     
     if not run_command(
         [sys.executable, str(build_script), '--staging'],
-        cwd=project_root,
+        cwd=docs_dir,
         description="Building documentation for staging"
     ):
         print("\n❌ Documentation build failed. Aborting.")
@@ -215,9 +214,19 @@ def main():
         play_sound(success=False)
         sys.exit(1)
     
-    # Use sibling directory instead of temp directory
-    staging_dir = project_root.parent / 'juneau-asf-staging'
+    # Use sibling directory structure: /git/apache/juneau/asf-staging
+    parent_dir = docs_dir.parent  # /git/apache/juneau/
+    staging_dir = parent_dir / 'asf-staging'
     print(f"Staging directory: {staging_dir}")
+    
+    # Verify parent directory structure
+    if not parent_dir.exists():
+        print(f"❌ ERROR: Parent directory not found: {parent_dir}")
+        print("Expected structure:")
+        print(f"  {parent_dir}/docs/  (current)")
+        print(f"  {parent_dir}/asf-staging/  (will be created)")
+        play_sound(success=False)
+        sys.exit(1)
     
     try:
         # Check if directory already exists
