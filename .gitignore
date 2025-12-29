@@ -1,24 +1,26 @@
-**/target/
-**/.DS_Store
-**/.classpath
-**/.project
-**/.settings/
-/bin/
-derby.log
+# Dependencies
+/node_modules
 
-# Temporary cursor assistant scripts
-cursor-*
+# Production
+/build
 
-# Maven Shade Plugin generated files
-**/dependency-reduced-pom.xml
+# Generated files
+.docusaurus
+.cache-loader
 
-# Note: Maven site generation creates target/site/ (already ignored by **/target/ above)
-/juneau.code-workspace
-/create-mvn-site.log
-/coverage/
-/coverage.csv
-/coverage.exec
-/AI_SESSION.md
+# Preprocessing staging directory
+/docs-staging
 
-# Release script generated history files
-scripts/release-history-*.json
+# Generated files copied to static (Docusaurus will copy to build)
+/static/site
+
+# Misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
