@@ -1114,6 +1114,17 @@ Anyone can participate in testing and voting, not just committers, please feel f
         staging = Path(os.environ.get('X_STAGING', '~/tmp/dist-release-juneau')).expanduser()
         git_dir = staging / 'git' / 'juneau'
         
+        # Pull latest changes from git
+        print("\nPulling latest changes from git...")
+        if git_dir.exists() and (git_dir / '.git').exists():
+            try:
+                self.run_command(['git', 'pull'], cwd=git_dir)
+                print("  ✓ Git pull completed")
+            except Exception as e:
+                print(f"  Warning: Could not pull from git: {e}")
+        else:
+            print(f"  Warning: Git directory not found at {git_dir}, skipping git pull")
+        
         # Step 1: Delete the git tag
         print("\nStep 1: Deleting git tag...")
         tag_name = release  # e.g., "juneau-9.2.0-RC2"
