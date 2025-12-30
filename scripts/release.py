@@ -733,7 +733,26 @@ class ReleaseScript:
         # Check that the current POM version is a SNAPSHOT (required by release:prepare)
         pom_path = juneau_dir / 'pom.xml'
         if pom_path.exists():
-            current_version = self._get_version_from_pom(pom_path)
+            # Read version directly from POM (don't use current-release.py as it strips SNAPSHOT)
+            try:
+                import xml.etree.ElementTree as ET
+                tree = ET.parse(pom_path)
+                root = tree.getroot()
+                # Handle namespace
+                ns_uri = root.tag.split('}')[0].strip('{') if '}' in root.tag else ''
+                if ns_uri:
+                    ns = {'maven': ns_uri}
+                    version_elem = root.find('maven:version', ns)
+                else:
+                    version_elem = root.find('version')
+                
+                if version_elem is not None and version_elem.text:
+                    current_version = version_elem.text.strip()
+                else:
+                    self.fail("Could not find version element in pom.xml")
+            except Exception as e:
+                self.fail(f"Could not parse version from pom.xml: {e}")
+            
             if not current_version.endswith('-SNAPSHOT'):
                 self.fail(
                     f"Current version in POM is '{current_version}', but release:prepare requires a SNAPSHOT version.\n"
