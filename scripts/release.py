@@ -324,6 +324,7 @@ class ReleaseScript:
         
         # Save history for next time
         history_values = {
+            'X_VERSION': version,
             'X_RELEASE_CANDIDATE': release_candidate,
             'X_STAGING': staging,
             'X_USERNAME': username,
@@ -826,10 +827,6 @@ class ReleaseScript:
             '-A', '*-source-release*', repo_url
         ], cwd=release_source_dir)
         
-        # Clean up any extra .sha512 files that might have been downloaded
-        for extra_sha512 in release_source_dir.glob('*.sha512'):
-            extra_sha512.unlink()
-        
         # Rename source zip file
         source_zip = release_source_dir / f"juneau-{version}-source-release.zip"
         if source_zip.exists():
@@ -845,12 +842,10 @@ class ReleaseScript:
             if asc_file.exists():
                 asc_file.rename(release_source_dir / f"apache-juneau-{version}-src.zip.asc")
             
-            # Generate SHA512
-            sha512_file = release_source_dir / f"apache-juneau-{version}-src.zip.sha512"
-            with open(sha512_file, 'w') as f:
-                subprocess.run([
-                    'gpg', '--print-md', 'SHA512', str(target_zip)
-                ], cwd=release_source_dir, stdout=f, check=True)
+            # Process .sha512 file (copy as-is, same as .asc)
+            sha512_file = release_source_dir / f"juneau-{version}-source-release.zip.sha512"
+            if sha512_file.exists():
+                sha512_file.rename(release_source_dir / f"apache-juneau-{version}-src.zip.sha512")
             
             # Remove old hash files
             for old_hash in release_source_dir.glob('*.sha1'):
@@ -875,12 +870,10 @@ class ReleaseScript:
             if bin_asc.exists():
                 bin_asc.rename(release_binaries_dir / f"apache-juneau-{version}-bin.zip.asc")
             
-            # Generate SHA512
-            sha512_file = release_binaries_dir / f"apache-juneau-{version}-bin.zip.sha512"
-            with open(sha512_file, 'w') as f:
-                subprocess.run([
-                    'gpg', '--print-md', 'SHA512', str(target_bin)
-                ], cwd=release_binaries_dir, stdout=f, check=True)
+            # Process .sha512 file (copy as-is, same as .asc)
+            bin_sha512 = release_binaries_dir / f"juneau-distrib-{version}-bin.zip.sha512"
+            if bin_sha512.exists():
+                bin_sha512.rename(release_binaries_dir / f"apache-juneau-{version}-bin.zip.sha512")
             
             # Remove old hash files
             for old_hash in release_binaries_dir.glob('*.sha1'):
@@ -1098,6 +1091,137 @@ Anyone can participate in testing and voting, not just committers, please feel f
             print(f"  {i:2d}. {step}")
         print()
     
+    def revert_release(self):
+        """Revert a release by deleting the tag, reverting Maven versions, and cleaning up SVN files."""
+        self.message("Reverting release")
+        self.start_timer()
+        
+        # Get version and release from state or environment
+        version = self.state.get('X_VERSION') or os.environ.get('X_VERSION')
+        release = self.state.get('X_RELEASE') or os.environ.get('X_RELEASE')
+        
+        if not version or not release:
+            self.fail("X_VERSION and X_RELEASE must be set. Cannot determine what to revert.")
+        
+        print(f"Version: {version}")
+        print(f"Release: {release}")
+        
+        # Confirm with user
+        if not self.yprompt(f"Are you sure you want to revert release {release}? This will delete the git tag and clean up SVN files."):
+            print("Revert cancelled.")
+            return
+        
+        staging = Path(os.environ.get('X_STAGING', '~/tmp/dist-release-juneau')).expanduser()
+        git_dir = staging / 'git' / 'juneau'
+        
+        # Step 1: Delete the git tag
+        print("\nStep 1: Deleting git tag...")
+        tag_name = release  # e.g., "juneau-9.2.0-RC2"
+        if git_dir.exists() and (git_dir / '.git').exists():
+            try:
+                # Check if tag exists locally
+                result = subprocess.run(
+                    ['git', 'tag', '-l', tag_name],
+                    cwd=git_dir,
+                    capture_output=True,
+                    text=True,
+                    check=False
+                )
+                if result.stdout.strip():
+                    print(f"  Found local tag: {tag_name}")
+                    self.run_command(['git', 'tag', '-d', tag_name], cwd=git_dir, check=False)
+                
+                # Delete remote tag
+                print(f"  Deleting remote tag: {tag_name}")
+                self.run_command(['git', 'push', 'origin', f':{tag_name}'], cwd=git_dir, check=False)
+                print("  ✓ Git tag deleted")
+            except Exception as e:
+                print(f"  Warning: Could not delete git tag: {e}")
+        else:
+            print(f"  Warning: Git directory not found at {git_dir}, skipping tag deletion")
+        
+        # Step 2: Revert Maven versions
+        print("\nStep 2: Reverting Maven versions...")
+        development_version = f"{version}-SNAPSHOT"
+        if git_dir.exists() and (git_dir / 'pom.xml').exists():
+            try:
+                print(f"  Reverting to development version: {development_version}")
+                self.run_command([
+                    'mvn', 'release:update-versions',
+                    '-DautoVersionSubmodules=true',
+                    f'-DdevelopmentVersion={development_version}'
+                ], cwd=git_dir)
+                print("  ✓ Maven versions reverted")
+            except Exception as e:
+                print(f"  Warning: Could not revert Maven versions: {e}")
+        else:
+            print(f"  Warning: Git directory or pom.xml not found at {git_dir}, skipping Maven version revert")
+        
+        # Step 3: Clean up SVN files
+        print("\nStep 3: Cleaning up SVN files...")
+        dist_dir = staging / 'dist'
+        if dist_dir.exists() and (dist_dir / '.svn').exists():
+            try:
+                # Update SVN first
+                self.run_command(['svn', 'update'], cwd=dist_dir, check=False)
+                
+                # Find and remove RC directories
+                binaries_dir = dist_dir / 'binaries'
+                source_dir = dist_dir / 'source'
+                
+                removed_any = False
+                
+                # Remove from binaries
+                if binaries_dir.exists():
+                    for item in binaries_dir.iterdir():
+                        if item.is_dir() and 'RC' in item.name:
+                            print(f"  Removing: binaries/{item.name}")
+                            self.run_command(['svn', 'rm', str(item.relative_to(dist_dir))], cwd=dist_dir, check=False)
+                            removed_any = True
+                
+                # Remove from source
+                if source_dir.exists():
+                    for item in source_dir.iterdir():
+                        if item.is_dir() and 'RC' in item.name:
+                            print(f"  Removing: source/{item.name}")
+                            self.run_command(['svn', 'rm', str(item.relative_to(dist_dir))], cwd=dist_dir, check=False)
+                            removed_any = True
+                
+                if removed_any:
+                    # Check status
+                    result = subprocess.run(
+                        ['svn', 'status'],
+                        cwd=dist_dir,
+                        capture_output=True,
+                        text=True,
+                        check=False
+                    )
+                    if result.stdout and 'D' in result.stdout:
+                        print("\n  SVN changes ready to commit:")
+                        print(result.stdout)
+                        if self.yprompt("Commit SVN deletions?"):
+                            self.run_command(['svn', 'commit', '-m', f'Remove {release} release candidate'], cwd=dist_dir)
+                            print("  ✓ SVN files cleaned up and committed")
+                        else:
+                            print("  SVN deletions staged but not committed")
+                    else:
+                        print("  No SVN changes to commit")
+                else:
+                    print("  No RC directories found in SVN")
+            except Exception as e:
+                print(f"  Warning: Could not clean up SVN files: {e}")
+        else:
+            print(f"  Warning: SVN directory not found at {dist_dir}, skipping SVN cleanup")
+        
+        self.end_timer()
+        print("\n" + "=" * 79)
+        print("✅ Release revert complete!")
+        print("=" * 79)
+        print(f"\nNote: You may need to manually:")
+        print(f"  - Reset your local git repository if needed")
+        print(f"  - Verify Maven versions were reverted correctly")
+        print(f"  - Check SVN repository for any remaining files")
+    
     def run(self):
         """Run the release script."""
         # Prompt for PGP passphrase early (before any time-consuming operations)
@@ -1174,6 +1298,11 @@ def main():
         action='store_true',
         help='Resume from the last checkpoint (if available)'
     )
+    parser.add_argument(
+        '--revert',
+        action='store_true',
+        help='Revert a release by deleting the git tag, reverting Maven versions, and cleaning up SVN files'
+    )
     
     args = parser.parse_args()
     
@@ -1182,6 +1311,133 @@ def main():
         # Create a dummy script just to call list_steps (don't load env)
         script = ReleaseScript(rc=None, start_step=None, skip_steps=[], resume=False, load_env=False)
         script.list_steps()
+        return
+    
+    # If reverting, handle it separately
+    if args.revert:
+        # Try to determine RC and load state
+        rc = None
+        state_data = {}
+        
+        # Try to extract from X_RELEASE environment variable
+        x_release = os.environ.get('X_RELEASE')
+        if x_release:
+            rc_match = re.search(r'RC(\d+)', x_release)
+            if rc_match:
+                rc = int(rc_match.group(1))
+                print(f"📌 Detected RC number from X_RELEASE: {rc}")
+        
+        # Try to extract from state file
+        state_file = STATE_FILE
+        if state_file.exists():
+            try:
+                with open(state_file, 'r') as f:
+                    state_data = json.load(f)
+                x_release = state_data.get('X_RELEASE')
+                if x_release and rc is None:
+                    rc_match = re.search(r'RC(\d+)', x_release)
+                    if rc_match:
+                        rc = int(rc_match.group(1))
+                        print(f"📌 Detected RC number from state file: {rc}")
+                
+                # Set environment variables from state to avoid prompts
+                if state_data.get('X_VERSION'):
+                    os.environ['X_VERSION'] = state_data['X_VERSION']
+                if state_data.get('X_RELEASE'):
+                    os.environ['X_RELEASE'] = state_data['X_RELEASE']
+                if state_data.get('X_STAGING'):
+                    os.environ['X_STAGING'] = state_data['X_STAGING']
+            except Exception as e:
+                print(f"Warning: Could not load state file: {e}")
+        
+        # Get version - from state, environment, or pom.xml
+        version = state_data.get('X_VERSION') or os.environ.get('X_VERSION')
+        release = None
+        
+        if not version:
+            # Try to get version from pom.xml
+            script_dir = Path(__file__).parent
+            juneau_root = script_dir.parent
+            pom_path = juneau_root / 'pom.xml'
+            if pom_path.exists():
+                try:
+                    result = subprocess.run(
+                        ["mvn", "help:evaluate", "-Dexpression=project.version", "-q", "-DforceStdout"],
+                        cwd=pom_path.parent,
+                        capture_output=True,
+                        text=True,
+                        check=True
+                    )
+                    version = result.stdout.strip()
+                    if version.endswith('-SNAPSHOT'):
+                        version = version[:-9]
+                    print(f"📌 Detected version from pom.xml: {version}")
+                except Exception:
+                    pass
+        
+        # If we have version but no RC, try to get RC from history file
+        if version and rc is None:
+            script_dir = Path(__file__).parent
+            history_file = script_dir / f'release-history-{version}.json'
+            if history_file.exists():
+                try:
+                    with open(history_file, 'r') as f:
+                        history = json.load(f)
+                    release_candidate = history.get('X_RELEASE_CANDIDATE', '')
+                    if release_candidate:
+                        rc_match = re.search(r'RC(\d+)', release_candidate)
+                        if rc_match:
+                            rc = int(rc_match.group(1))
+                            print(f"📌 Detected RC number from history file: {rc}")
+                except Exception as e:
+                    print(f"Warning: Could not load history file: {e}")
+        
+        # If we still don't have RC, prompt for it
+        if version and rc is None:
+            while True:
+                rc_input = input("Release candidate number: ").strip()
+                if rc_input:
+                    try:
+                        rc = int(rc_input)
+                        break
+                    except ValueError:
+                        print("Please enter a valid number.")
+                else:
+                    print("Release candidate number is required.")
+        
+        # Construct X_RELEASE if we have version and RC
+        if version and rc:
+            release = f"juneau-{version}-RC{rc}"
+            os.environ['X_RELEASE'] = release
+            print(f"📌 Constructed release: {release}")
+        
+        # Set version in environment if we have it
+        if version:
+            os.environ['X_VERSION'] = version
+        
+        # Create script without loading env (we'll set what we need manually)
+        script = ReleaseScript(rc=rc, start_step=None, skip_steps=[], resume=False, load_env=False)
+        
+        # Ensure state and environment have the necessary info
+        if version:
+            script.state.set('X_VERSION', version)
+            os.environ['X_VERSION'] = version
+        if release:
+            script.state.set('X_RELEASE', release)
+            os.environ['X_RELEASE'] = release
+        elif state_data.get('X_RELEASE'):
+            # Use release from state if we couldn't construct it
+            release = state_data.get('X_RELEASE')
+            script.state.set('X_RELEASE', release)
+            os.environ['X_RELEASE'] = release
+        if state_data.get('X_STAGING'):
+            script.state.set('X_STAGING', state_data['X_STAGING'])
+            os.environ['X_STAGING'] = state_data['X_STAGING']
+        elif not os.environ.get('X_STAGING'):
+            # Set default staging if not set
+            os.environ['X_STAGING'] = '~/tmp/dist-release-juneau'
+        
+        script.revert_release()
         return
     
     # Try to determine RC from context if resuming (will prompt if not found)
