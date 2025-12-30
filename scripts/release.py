@@ -728,6 +728,18 @@ class ReleaseScript:
         release = os.environ.get('X_RELEASE')
         next_version = os.environ.get('X_NEXT_VERSION')
         
+        # Check that the current POM version is a SNAPSHOT (required by release:prepare)
+        pom_path = juneau_dir / 'pom.xml'
+        if pom_path.exists():
+            current_version = self._get_version_from_pom(pom_path)
+            if not current_version.endswith('-SNAPSHOT'):
+                self.fail(
+                    f"Current version in POM is '{current_version}', but release:prepare requires a SNAPSHOT version.\n"
+                    f"This usually means a previous release attempt already changed the version.\n"
+                    f"Please ensure the git repository is in the correct state (e.g., checkout the master branch)."
+                )
+            print(f"✓ Current POM version is SNAPSHOT: {current_version}")
+        
         # run_command will automatically fail if the command doesn't succeed (check=True by default)
         self.run_command([
             'mvn', 'release:prepare',
