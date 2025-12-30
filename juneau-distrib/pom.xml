@@ -52,30 +52,110 @@
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-shaded-core</artifactId>
 									<version>${project.version}</version>
+									<destFileName>apache-juneau-shaded-core-${project.version}.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/shaded</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-shaded-rest-client</artifactId>
 									<version>${project.version}</version>
+									<destFileName>apache-juneau-shaded-rest-client-${project.version}.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/shaded</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-shaded-rest-server</artifactId>
 									<version>${project.version}</version>
+									<destFileName>apache-juneau-shaded-rest-server-${project.version}.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/shaded</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-shaded-rest-server-springboot</artifactId>
 									<version>${project.version}</version>
+									<destFileName>apache-juneau-shaded-rest-server-springboot-${project.version}.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/shaded</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-shaded-all</artifactId>
 									<version>${project.version}</version>
+									<destFileName>apache-juneau-shaded-all-${project.version}.jar</destFileName>
+								</artifactItem>
+
+								<!-- juneau-commons -->
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-commons</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+									<destFileName>apache-juneau-commons-${project.version}-sources.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-commons</artifactId>
+									<version>${project.version}</version>
+									<destFileName>apache-juneau-commons-${project.version}.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-commons</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.commons_${project.version}.jar</destFileName>
+								</artifactItem>
+
+								<!-- juneau-assertions -->
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-assertions</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+									<destFileName>apache-juneau-assertions-${project.version}-sources.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-assertions</artifactId>
+									<version>${project.version}</version>
+									<destFileName>apache-juneau-assertions-${project.version}.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-assertions</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.assertions_${project.version}.jar</destFileName>
+								</artifactItem>
+
+								<!-- juneau-bct -->
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bct</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+									<destFileName>apache-juneau-bct-${project.version}-sources.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bct</artifactId>
+									<version>${project.version}</version>
+									<destFileName>apache-juneau-bct-${project.version}.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bct</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.bct_${project.version}.jar</destFileName>
 								</artifactItem>
 
 								<!-- juneau-marshall -->
@@ -86,12 +166,14 @@
 									<version>${project.version}</version>
 									<type>jar</type>
 									<classifier>sources</classifier>
+									<destFileName>apache-juneau-marshall-${project.version}-sources.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-marshall</artifactId>
 									<version>${project.version}</version>
+									<destFileName>apache-juneau-marshall-${project.version}.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
@@ -109,12 +191,14 @@
 									<version>${project.version}</version>
 									<type>jar</type>
 									<classifier>sources</classifier>
+									<destFileName>apache-juneau-config-${project.version}-sources.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-config</artifactId>
 									<version>${project.version}</version>
+									<destFileName>apache-juneau-config-${project.version}.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
@@ -132,12 +216,14 @@
 									<version>${project.version}</version>
 									<type>jar</type>
 									<classifier>sources</classifier>
+									<destFileName>apache-juneau-bean-atom-${project.version}-sources.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-bean-atom</artifactId>
 									<version>${project.version}</version>
+									<destFileName>apache-juneau-bean-atom-${project.version}.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
@@ -155,12 +241,14 @@
 									<version>${project.version}</version>
 									<type>jar</type>
 									<classifier>sources</classifier>
+									<destFileName>apache-juneau-bean-common-${project.version}-sources.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-bean-common</artifactId>
 									<version>${project.version}</version>
+									<destFileName>apache-juneau-bean-common-${project.version}.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
@@ -178,12 +266,14 @@
 									<version>${project.version}</version>
 									<type>jar</type>
 									<classifier>sources</classifier>
+									<destFileName>apache-juneau-bean-html5-${project.version}-sources.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-bean-html5</artifactId>
 									<version>${project.version}</version>
+									<destFileName>apache-juneau-bean-html5-${project.version}.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
@@ -201,12 +291,14 @@
 									<version>${project.version}</version>
 									<type>jar</type>
 									<classifier>sources</classifier>
+									<destFileName>apache-juneau-bean-jsonschema-${project.version}-sources.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-bean-jsonschema</artifactId>
 									<version>${project.version}</version>
+									<destFileName>apache-juneau-bean-jsonschema-${project.version}.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
@@ -224,12 +316,14 @@
 									<version>${project.version}</version>
 									<type>jar</type>
 									<classifier>sources</classifier>
+									<destFileName>apache-juneau-bean-openapi-v3-${project.version}-sources.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-bean-openapi-v3</artifactId>
 									<version>${project.version}</version>
+									<destFileName>apache-juneau-bean-openapi-v3-${project.version}.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
@@ -237,6 +331,56 @@
 									<artifactId>juneau-bean-openapi-v3</artifactId>
 									<version>${project.version}</version>
 									<destFileName>org.apache.juneau.bean.openapi.v3_${project.version}.jar</destFileName>
+								</artifactItem>
+
+								<!-- juneau-bean-swagger-v2 -->
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bean-swagger-v2</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+									<destFileName>apache-juneau-bean-swagger-v2-${project.version}-sources.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bean-swagger-v2</artifactId>
+									<version>${project.version}</version>
+									<destFileName>apache-juneau-bean-swagger-v2-${project.version}.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bean-swagger-v2</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.bean.swagger.v2_${project.version}.jar</destFileName>
+								</artifactItem>
+
+								<!-- juneau-rest-common -->
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-common</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+									<destFileName>apache-juneau-rest-common-${project.version}-sources.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-common</artifactId>
+									<version>${project.version}</version>
+									<destFileName>apache-juneau-rest-common-${project.version}.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-common</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.rest.common_${project.version}.jar</destFileName>
 								</artifactItem>
 
 								<!-- juneau-rest-server -->
@@ -247,12 +391,14 @@
 									<version>${project.version}</version>
 									<type>jar</type>
 									<classifier>sources</classifier>
+									<destFileName>apache-juneau-rest-server-${project.version}-sources.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-rest-server</artifactId>
 									<version>${project.version}</version>
+									<destFileName>apache-juneau-rest-server-${project.version}.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
@@ -270,12 +416,14 @@
 									<version>${project.version}</version>
 									<type>jar</type>
 									<classifier>sources</classifier>
+									<destFileName>apache-juneau-rest-server-springboot-${project.version}-sources.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-rest-server-springboot</artifactId>
 									<version>${project.version}</version>
+									<destFileName>apache-juneau-rest-server-springboot-${project.version}.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
@@ -293,12 +441,14 @@
 									<version>${project.version}</version>
 									<type>jar</type>
 									<classifier>sources</classifier>
+									<destFileName>apache-juneau-rest-client-${project.version}-sources.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-rest-client</artifactId>
 									<version>${project.version}</version>
+									<destFileName>apache-juneau-rest-client-${project.version}.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
@@ -316,12 +466,14 @@
 									<version>${project.version}</version>
 									<type>jar</type>
 									<classifier>sources</classifier>
+									<destFileName>apache-juneau-rest-mock-${project.version}-sources.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-rest-mock</artifactId>
 									<version>${project.version}</version>
+									<destFileName>apache-juneau-rest-mock-${project.version}.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
@@ -339,12 +491,14 @@
 									<version>${project.version}</version>
 									<type>jar</type>
 									<classifier>sources</classifier>
+									<destFileName>apache-juneau-microservice-core-${project.version}-sources.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-microservice-core</artifactId>
 									<version>${project.version}</version>
+									<destFileName>apache-juneau-microservice-core-${project.version}.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
@@ -362,12 +516,14 @@
 									<version>${project.version}</version>
 									<type>jar</type>
 									<classifier>sources</classifier>
+									<destFileName>apache-juneau-microservice-jetty-${project.version}-sources.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-microservice-jetty</artifactId>
 									<version>${project.version}</version>
+									<destFileName>apache-juneau-microservice-jetty-${project.version}.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
@@ -375,6 +531,56 @@
 									<artifactId>juneau-microservice-jetty</artifactId>
 									<version>${project.version}</version>
 									<destFileName>org.apache.juneau.microservice.jetty_${project.version}.jar</destFileName>
+								</artifactItem>
+
+								<!-- juneau-sc-client -->
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-sc-client</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+									<destFileName>apache-juneau-sc-client-${project.version}-sources.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-sc-client</artifactId>
+									<version>${project.version}</version>
+									<destFileName>apache-juneau-sc-client-${project.version}.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-sc-client</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.sc.client_${project.version}.jar</destFileName>
+								</artifactItem>
+
+								<!-- juneau-sc-server -->
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-sc-server</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+									<destFileName>apache-juneau-sc-server-${project.version}-sources.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-sc-server</artifactId>
+									<version>${project.version}</version>
+									<destFileName>apache-juneau-sc-server-${project.version}.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-sc-server</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.sc.server_${project.version}.jar</destFileName>
 								</artifactItem>
 
 								<!-- juneau-examples-core -->
@@ -385,7 +591,7 @@
 									<classifier>bin</classifier>
 									<type>zip</type>
 									<version>${project.version}</version>
-									<destFileName>juneau-examples-core-${project.version}.zip</destFileName>
+									<destFileName>apache-juneau-examples-core-${project.version}.zip</destFileName>
 								</artifactItem>
 
 								<!-- juneau-examples-rest-jetty -->
@@ -396,7 +602,7 @@
 									<classifier>bin</classifier>
 									<type>zip</type>
 									<version>${project.version}</version>
-									<destFileName>juneau-examples-rest-jetty-${project.version}.zip</destFileName>
+									<destFileName>apache-juneau-examples-rest-jetty-${project.version}.zip</destFileName>
 								</artifactItem>
 
 								<!-- juneau-examples-springboot -->
@@ -407,7 +613,7 @@
 									<classifier>bin</classifier>
 									<type>zip</type>
 									<version>${project.version}</version>
-									<destFileName>juneau-examples-rest-springboot-${project.version}.zip</destFileName>
+									<destFileName>apache-juneau-examples-rest-springboot-${project.version}.zip</destFileName>
 								</artifactItem>
 
 								<!-- juneau-my-jetty-microservice -->
@@ -418,7 +624,7 @@
 									<classifier>bin</classifier>
 									<type>zip</type>
 									<version>${project.version}</version>
-									<destFileName>my-jetty-microservice-${project.version}.zip</destFileName>
+									<destFileName>apache-juneau-my-jetty-microservice-${project.version}.zip</destFileName>
 								</artifactItem>
 
 								<!-- juneau-my-springboot-microservice -->
@@ -429,7 +635,7 @@
 									<classifier>bin</classifier>
 									<type>zip</type>
 									<version>${project.version}</version>
-									<destFileName>my-springboot-microservice-${project.version}.zip</destFileName>
+									<destFileName>apache-juneau-my-springboot-microservice-${project.version}.zip</destFileName>
 								</artifactItem>
 
 							</artifactItems>

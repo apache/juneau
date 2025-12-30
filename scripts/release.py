@@ -712,7 +712,7 @@ class ReleaseScript:
         staging = Path(os.environ.get('X_STAGING', '~/tmp/dist-release-juneau')).expanduser()
         juneau_dir = staging / 'git' / 'juneau'
         
-        self.run_command(['mvn', 'deploy'], cwd=juneau_dir)
+        self.run_command(['mvn', 'deploy', '-Daether.checksums.algorithms=SHA-512'], cwd=juneau_dir)
         
         self.end_timer()
         self.state.set_last_step('run_deploy')
@@ -761,7 +761,7 @@ class ReleaseScript:
         staging = Path(os.environ.get('X_STAGING', '~/tmp/dist-release-juneau')).expanduser()
         juneau_dir = staging / 'git' / 'juneau'
         
-        self.run_command(['mvn', 'release:perform'], cwd=juneau_dir)
+        self.run_command(['mvn', 'release:perform', '-Daether.checksums.algorithms=SHA-512'], cwd=juneau_dir)
         
         # Open Nexus staging repositories page
         subprocess.Popen(['open', 'https://repository.apache.org/#stagingRepositories'])

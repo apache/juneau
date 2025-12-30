@@ -37,6 +37,9 @@
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 
+		<!-- Configure checksum algorithms: only SHA-512 (disable MD5 and SHA-1) -->
+		<aether.checksums.algorithms>SHA-512</aether.checksums.algorithms>
+
 		<juneau.compare.version>9.0.1</juneau.compare.version>
 		<junit.version>5.13.4</junit.version>
 		<javadoc.plugin.version>3.11.3</javadoc.plugin.version>
