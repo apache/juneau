@@ -599,11 +599,15 @@ class ReleaseScript:
         self.start_timer()
         
         staging = Path(os.environ.get('X_STAGING', '~/tmp/dist-release-juneau')).expanduser()
+        
+        # Clean up entire staging directory to start fresh (avoids issues from previous runs)
+        if staging.exists():
+            print(f"  Removing existing staging directory: {staging}")
+            shutil.rmtree(staging)
+        
         staging.mkdir(parents=True, exist_ok=True)
         
         git_dir = staging / 'git'
-        if git_dir.exists():
-            shutil.rmtree(git_dir)
         git_dir.mkdir(parents=True)
         
         self.end_timer()
@@ -618,13 +622,11 @@ class ReleaseScript:
         git_dir = staging / 'git'
         
         juneau_dir = git_dir / 'juneau'
-        if juneau_dir.exists():
-            print(f"Repository already exists at {juneau_dir}, skipping clone")
-        else:
-            self.run_command(
-                ['git', 'clone', 'https://gitbox.apache.org/repos/asf/juneau.git'],
-                cwd=git_dir
-            )
+        # Since we clean up the staging directory in make_git_folder, this should always be a fresh clone
+        self.run_command(
+            ['git', 'clone', 'https://gitbox.apache.org/repos/asf/juneau.git'],
+            cwd=git_dir
+        )
         
         self.end_timer()
         self.state.set_last_step('clone_juneau')
