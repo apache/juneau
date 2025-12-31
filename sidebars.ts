@@ -41,57 +41,57 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/01.01.00.JuneauEcosystemOverview',
+							id: 'topics/01.01.JuneauEcosystemOverview',
 							label: '1.1. Juneau Ecosystem Overview',
 						},
 						{
 							type: 'doc',
-							id: 'topics/01.02.00.Marshalling',
+							id: 'topics/01.02.Marshalling',
 							label: '1.2. Marshalling',
 						},
 						{
 							type: 'doc',
-							id: 'topics/01.03.00.EndToEndRest',
+							id: 'topics/01.03.EndToEndRest',
 							label: '1.3. End-to-End REST',
 						},
 						{
 							type: 'doc',
-							id: 'topics/01.04.00.RestServer',
+							id: 'topics/01.04.RestServer',
 							label: '1.4. REST Server',
 						},
 						{
 							type: 'doc',
-							id: 'topics/01.05.00.RestClient',
+							id: 'topics/01.05.RestClient',
 							label: '1.5. REST Client',
 						},
 						{
 							type: 'doc',
-							id: 'topics/01.06.00.DtoBeans',
+							id: 'topics/01.06.DtoBeans',
 							label: '1.6. DTO Beans',
 						},
 						{
 							type: 'doc',
-							id: 'topics/01.07.00.ConfigFiles',
+							id: 'topics/01.07.ConfigFiles',
 							label: '1.7. Config Files',
 						},
 						{
 							type: 'doc',
-							id: 'topics/01.08.00.FluentAssertions',
+							id: 'topics/01.08.FluentAssertions',
 							label: '1.8. Fluent Assertions',
 						},
 						{
 							type: 'doc',
-							id: 'topics/01.09.00.GeneralDesign',
+							id: 'topics/01.09.GeneralDesign',
 							label: '1.9. General Design',
 						},
 						{
 							type: 'doc',
-							id: 'topics/01.10.00.FrameworkComparisons',
+							id: 'topics/01.10.FrameworkComparisons',
 							label: '1.10. Framework Comparisons',
 						},
 						{
 							type: 'doc',
-							id: 'topics/01.11.00.WhyJuneau',
+							id: 'topics/01.11.WhyJuneau',
 							label: '1.11. Why Choose Juneau?',
 						},
 					],
@@ -103,17 +103,17 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/02.01.00.JuneauMarshallBasics',
+							id: 'topics/02.01.JuneauMarshallBasics',
 							label: '2.1. juneau-marshall Basics',
 						},
 						{
 							type: 'doc',
-							id: 'topics/02.02.00.Marshallers',
+							id: 'topics/02.02.Marshallers',
 							label: '2.2. Marshallers',
 						},
 						{
 							type: 'doc',
-							id: 'topics/02.03.00.SerializersAndParsers',
+							id: 'topics/02.03.SerializersAndParsers',
 							label: '2.3. Serializers and Parsers',
 						},
 						{
@@ -175,32 +175,32 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
-							id: 'topics/02.05.00.HttpPartSerializersParsers',
+							id: 'topics/02.05.HttpPartSerializersParsers',
 							label: '2.5. HTTP Part Serializers/Parsers',
 						},
 						{
 							type: 'doc',
-							id: 'topics/02.06.00.ContextSettings',
+							id: 'topics/02.06.ContextSettings',
 							label: '2.6. Context Settings',
 						},
 						{
 							type: 'doc',
-							id: 'topics/02.07.00.ContextAnnotations',
+							id: 'topics/02.07.ContextAnnotations',
 							label: '2.7. Context Annotations',
 						},
 						{
 							type: 'doc',
-							id: 'topics/02.08.00.JsonMap',
+							id: 'topics/02.08.JsonMap',
 							label: '2.8. JsonMap',
 						},
 						{
 							type: 'doc',
-							id: 'topics/02.09.00.ComplexDataTypes',
+							id: 'topics/02.09.ComplexDataTypes',
 							label: '2.9. Complex Data Types',
 						},
 						{
 							type: 'doc',
-							id: 'topics/02.10.00.SerializerSetsParserSets',
+							id: 'topics/02.10.SerializerSetsParserSets',
 							label: '2.10. Serializer/Parser Sets',
 						},
 						{
@@ -252,7 +252,7 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
-							id: 'topics/02.12.00.DynamicallyAppliedAnnotations',
+							id: 'topics/02.12.DynamicallyAppliedAnnotations',
 							label: '2.12. Dynamically Applied Annotations',
 						},
 						{
@@ -274,37 +274,37 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
-							id: 'topics/02.14.00.VirtualBeans',
+							id: 'topics/02.14.VirtualBeans',
 							label: '2.14. Virtual Beans',
 						},
 						{
 							type: 'doc',
-							id: 'topics/02.15.00.Recursion',
+							id: 'topics/02.15.Recursion',
 							label: '2.15. Recursion',
 						},
 						{
 							type: 'doc',
-							id: 'topics/02.16.00.ParsingIntoGenericModels',
+							id: 'topics/02.16.ParsingIntoGenericModels',
 							label: '2.16. Parsing into Generic Models',
 						},
 						{
 							type: 'doc',
-							id: 'topics/02.17.00.ReadingContinuousStreams',
+							id: 'topics/02.17.ReadingContinuousStreams',
 							label: '2.17. Reading Continuous Streams',
 						},
 						{
 							type: 'doc',
-							id: 'topics/02.18.00.MarshallingUris',
+							id: 'topics/02.18.MarshallingUris',
 							label: '2.18. Marshalling URIs',
 						},
 						{
 							type: 'doc',
-							id: 'topics/02.19.00.JacksonComparison',
+							id: 'topics/02.19.JacksonComparison',
 							label: '2.19. Jackson Comparison',
 						},
 						{
 							type: 'doc',
-							id: 'topics/02.20.00.PojoCategories',
+							id: 'topics/02.20.PojoCategories',
 							label: '2.20. POJO Categories',
 						},
 						{
@@ -341,12 +341,12 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
-							id: 'topics/02.22.00.Encoders',
+							id: 'topics/02.22.Encoders',
 							label: '2.22. Encoders',
 						},
 						{
 							type: 'doc',
-							id: 'topics/02.23.00.ObjectTools',
+							id: 'topics/02.23.ObjectTools',
 							label: '2.23. Object Tools',
 						},
 						{
@@ -388,7 +388,7 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
-							id: 'topics/02.25.00.JsonSchemaDetails',
+							id: 'topics/02.25.JsonSchemaDetails',
 							label: '2.25. JSON Schema Support',
 						},
 						{
@@ -492,7 +492,7 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
-							id: 'topics/02.28.00.HtmlSchemaSupport',
+							id: 'topics/02.28.HtmlSchemaSupport',
 							label: '2.28. HTML-Schema Support',
 						},
 						{
@@ -605,14 +605,14 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
-							id: 'topics/02.33.00.BestPractices',
+							id: 'topics/02.33.BestPractices',
 							label: '2.33. Best Practices',
 						},
 					],
 				},
 				{
 					type: 'doc',
-					id: 'topics/03.01.00.Module-juneau-marshall-rdf',
+					id: 'topics/03.Module-juneau-marshall-rdf',
 					label: '3. juneau-marshall-rdf',
 				},
 				{
@@ -622,37 +622,37 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/04.01.00.JuneauBeanBasics',
+							id: 'topics/04.01.JuneauBeanBasics',
 							label: '4.1. juneau-bean Basics',
 						},
 						{
 							type: 'doc',
-							id: 'topics/04.02.00.JuneauBeanHtml5',
+							id: 'topics/04.02.JuneauBeanHtml5',
 							label: '4.2. juneau-bean-html5',
 						},
 						{
 							type: 'doc',
-							id: 'topics/04.03.00.JuneauBeanAtom',
+							id: 'topics/04.03.JuneauBeanAtom',
 							label: '4.3. juneau-bean-atom',
 						},
 						{
 							type: 'doc',
-							id: 'topics/04.04.00.JuneauBeanJsonSchema',
+							id: 'topics/04.04.JuneauBeanJsonSchema',
 							label: '4.4. juneau-bean-jsonschema',
 						},
 						{
 							type: 'doc',
-							id: 'topics/04.05.00.JuneauBeanOpenApi3',
+							id: 'topics/04.05.JuneauBeanOpenApi3',
 							label: '4.5. juneau-bean-openapi-v3',
 						},
 						{
 							type: 'doc',
-							id: 'topics/04.06.00.JuneauBeanCommon',
+							id: 'topics/04.06.JuneauBeanCommon',
 							label: '4.6. juneau-bean-common',
 						},
 						{
 							type: 'doc',
-							id: 'topics/04.07.00.JuneauBeanSwagger2',
+							id: 'topics/04.07.JuneauBeanSwagger2',
 							label: '4.7. juneau-bean-swagger-v2',
 						},
 					],
@@ -664,7 +664,7 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/05.01.00.JuneauConfigBasics',
+							id: 'topics/05.01.JuneauConfigBasics',
 							label: '5.1. juneau-config Basics',
 						},
 						{
@@ -735,12 +735,12 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
-							id: 'topics/05.05.00.ModdedEntries',
+							id: 'topics/05.05.ModdedEntries',
 							label: '5.5. Modded/Encoded Entries',
 						},
 						{
 							type: 'doc',
-							id: 'topics/05.06.00.Sections',
+							id: 'topics/05.06.Sections',
 							label: '5.6. Sections',
 						},
 						{
@@ -772,17 +772,17 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
-							id: 'topics/05.08.00.Listeners',
+							id: 'topics/05.08.Listeners',
 							label: '5.8. Listeners',
 						},
 						{
 							type: 'doc',
-							id: 'topics/05.09.00.SerializingConfigs',
+							id: 'topics/05.09.SerializingConfigs',
 							label: '5.9. Serializing Configs',
 						},
 						{
 							type: 'doc',
-							id: 'topics/05.10.00.Imports',
+							id: 'topics/05.10.Imports',
 							label: '5.10. Imports',
 						},
 						{
@@ -819,70 +819,70 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
-							id: 'topics/05.12.00.ReadOnlyConfigs',
+							id: 'topics/05.12.ReadOnlyConfigs',
 							label: '5.12. Read-only Configs',
 						},
 						{
 							type: 'doc',
-							id: 'topics/05.13.00.ClosingConfigs',
+							id: 'topics/05.13.ClosingConfigs',
 							label: '5.13. Closing Configs',
 						},
 						{
 							type: 'doc',
-							id: 'topics/05.14.00.SystemDefaultConfig',
+							id: 'topics/05.14.SystemDefaultConfig',
 							label: '5.14. System Default Config',
 						},
 					],
 				},
-				{
-					type: 'category',
-					label: '6. juneau-commons',
-					collapsed: true,
-					items: [
-						{
-							type: 'doc',
-							id: 'topics/06.01.00.JuneauCommonsBasics',
-							label: '6.1. juneau-commons Basics',
-						},
-						{
-							type: 'category',
-							label: '6.1. Packages',
-							collapsed: true,
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/06.01.01.JuneauCommonsCollections',
-									label: '6.1.1. Collections Package',
-								},
-								{
-									type: 'doc',
-									id: 'topics/06.01.02.JuneauCommonsUtils',
-									label: '6.1.2. Utils Package',
-								},
-								{
-									type: 'doc',
-									id: 'topics/06.01.03.JuneauCommonsReflection',
-									label: '6.1.3. Reflection Package',
-								},
-								{
-									type: 'doc',
-									id: 'topics/06.01.04.JuneauCommonsSettings',
-									label: '6.1.4. Settings Package',
-								},
-								{
-									type: 'doc',
-									id: 'topics/06.01.05.JuneauCommonsLang',
-									label: '6.1.5. Lang Package',
-								},
-								{
-									type: 'doc',
-									id: 'topics/06.01.06.JuneauCommonsIO',
-									label: '6.1.6. I/O Package',
-								},
-							],
-						},
-					],
-				},
+					{
+						type: 'category',
+						label: '6. juneau-commons',
+						collapsed: true,
+						items: [
+							{
+								type: 'doc',
+								id: 'topics/06.01.JuneauCommonsBasics',
+								label: '6.1. juneau-commons Basics',
+							},
+							{
+								type: 'category',
+								label: '6.2. Packages',
+								collapsed: true,
+								items: [
+									{
+										type: 'doc',
+										id: 'topics/06.02.01.JuneauCommonsCollections',
+										label: '6.2.1. Collections Package',
+									},
+									{
+										type: 'doc',
+										id: 'topics/06.02.02.JuneauCommonsUtils',
+										label: '6.2.2. Utils Package',
+									},
+									{
+										type: 'doc',
+										id: 'topics/06.02.03.JuneauCommonsReflection',
+										label: '6.2.3. Reflection Package',
+									},
+									{
+										type: 'doc',
+										id: 'topics/06.02.04.JuneauCommonsSettings',
+										label: '6.2.4. Settings Package',
+									},
+									{
+										type: 'doc',
+										id: 'topics/06.02.05.JuneauCommonsLang',
+										label: '6.2.5. Lang Package',
+									},
+									{
+										type: 'doc',
+										id: 'topics/06.02.06.JuneauCommonsIO',
+										label: '6.2.6. I/O Package',
+									},
+								],
+							},
+						],
+					},
 				{
 					type: 'category',
 					label: '7. juneau-assertions',
@@ -890,12 +890,12 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/07.01.00.JuneauAssertionBasics',
+							id: 'topics/07.01.JuneauAssertionBasics',
 							label: '7.1. juneau-assertions Basics',
 						},
 						{
 							type: 'doc',
-							id: 'topics/07.02.00.AssertionsOverview',
+							id: 'topics/07.02.AssertionsOverview',
 							label: '7.2. Assertions Overview',
 						},
 					],
@@ -907,12 +907,12 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/08.01.00.JuneauBctBasics',
+							id: 'topics/08.01.JuneauBctBasics',
 							label: '8.1. juneau-bct Basics',
 						},
 						{
 							type: 'doc',
-							id: 'topics/08.02.00.CustomErrorMessages',
+							id: 'topics/08.02.CustomErrorMessages',
 							label: '8.2. Custom Error Messages',
 						},
 						{
@@ -922,30 +922,30 @@ const sidebars: SidebarsConfig = {
 							items: [
 								{
 									type: 'doc',
-									id: 'topics/08.03.00.Customization',
-									label: '8.3. Customization',
+									id: 'topics/08.03.01.Customization',
+									label: '8.3.1. Customization',
 								},
 								{
 									type: 'doc',
-									id: 'topics/08.03.01.Stringifiers',
-									label: '8.3.1. Stringifiers',
+									id: 'topics/08.03.02.Stringifiers',
+									label: '8.3.2. Stringifiers',
 								},
 								{
 									type: 'doc',
-									id: 'topics/08.03.02.Listifiers',
-									label: '8.3.2. Listifiers',
+									id: 'topics/08.03.03.Listifiers',
+									label: '8.3.3. Listifiers',
 								},
 								{
 									type: 'doc',
-									id: 'topics/08.03.03.Swappers',
-									label: '8.3.3. Swappers',
+									id: 'topics/08.03.04.Swappers',
+									label: '8.3.4. Swappers',
+								},
+								{
+									type: 'doc',
+									id: 'topics/08.03.05.PropertyExtractors',
+									label: '8.3.5. Property Extractors',
 								},
 							],
-						},
-						{
-							type: 'doc',
-							id: 'topics/08.01.04.PropertyExtractors',
-							label: '8.1.4. Property Extractors',
 						},
 					],
 				},
@@ -956,42 +956,42 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/09.01.00.JuneauRestCommonBasics',
+							id: 'topics/09.01.JuneauRestCommonBasics',
 							label: '9.1. juneau-rest-common Basics',
 						},
 						{
 							type: 'doc',
-							id: 'topics/09.02.00.HelperClasses',
+							id: 'topics/09.02.HelperClasses',
 							label: '9.2. Helper Classes',
 						},
 						{
 							type: 'doc',
-							id: 'topics/09.03.00.Annotations',
+							id: 'topics/09.03.Annotations',
 							label: '9.3. Annotations',
 						},
 						{
 							type: 'doc',
-							id: 'topics/09.04.00.HttpHeaders',
+							id: 'topics/09.04.HttpHeaders',
 							label: '9.4. HTTP Headers',
 						},
 						{
 							type: 'doc',
-							id: 'topics/09.05.00.HttpParts',
+							id: 'topics/09.05.HttpParts',
 							label: '9.5. HTTP Parts',
 						},
 						{
 							type: 'doc',
-							id: 'topics/09.06.00.HttpEntitiesAndResources',
+							id: 'topics/09.06.HttpEntitiesAndResources',
 							label: '9.6. HTTP Entities and Resources',
 						},
 						{
 							type: 'doc',
-							id: 'topics/09.07.00.HttpResponses',
+							id: 'topics/09.07.HttpResponses',
 							label: '9.7. HTTP Responses',
 						},
 						{
 							type: 'doc',
-							id: 'topics/09.08.00.RemoteProxyInterfaces',
+							id: 'topics/09.08.RemoteProxyInterfaces',
 							label: '9.8. Remote Proxy Interfaces',
 						},
 					],
@@ -1003,12 +1003,12 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/10.01.00.JuneauRestServerBasics',
+							id: 'topics/10.01.JuneauRestServerBasics',
 							label: '10.1. juneau-rest-server Basics',
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.02.00.RestServerOverview',
+							id: 'topics/10.02.RestServerOverview',
 							label: '10.2. REST Server Overview',
 						},
 						{
@@ -1149,52 +1149,52 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.06.00.Marshalling',
+							id: 'topics/10.06.Marshalling',
 							label: '10.6. Marshalling',
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.07.00.HandlingFormPosts',
+							id: 'topics/10.07.HandlingFormPosts',
 							label: '10.7. Handling Form Posts',
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.08.00.Guards',
+							id: 'topics/10.08.Guards',
 							label: '10.8. Guards',
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.09.00.Converters',
+							id: 'topics/10.09.Converters',
 							label: '10.9. Converters',
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.10.00.LocalizedMessages',
+							id: 'topics/10.10.LocalizedMessages',
 							label: '10.10. Localized Messages',
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.11.00.Encoders',
+							id: 'topics/10.11.Encoders',
 							label: '10.11. Encoders',
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.12.00.ConfigurationFiles',
+							id: 'topics/10.12.ConfigurationFiles',
 							label: '10.12. Configuration Files',
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.13.00.SvlVariables',
+							id: 'topics/10.13.SvlVariables',
 							label: '10.13. SVL Variables',
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.14.00.StaticFiles',
+							id: 'topics/10.14.StaticFiles',
 							label: '10.14. Static Files',
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.15.00.ClientVersioning',
+							id: 'topics/10.15.ClientVersioning',
 							label: '10.15. Client Versioning',
 						},
 						{
@@ -1251,7 +1251,7 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.17.00.ExecutionStatistics',
+							id: 'topics/10.17.ExecutionStatistics',
 							label: '10.17. REST method execution statistics',
 						},
 						{
@@ -1293,67 +1293,67 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.19.00.LoggingAndDebugging',
+							id: 'topics/10.19.LoggingAndDebugging',
 							label: '10.19. Logging and Debugging',
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.20.00.HttpStatusCodes',
+							id: 'topics/10.20.HttpStatusCodes',
 							label: '10.20. HTTP Status Codes',
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.21.00.BuiltInParameters',
+							id: 'topics/10.21.BuiltInParameters',
 							label: '10.21. Built-In Parameters',
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.22.00.UsingWithOsgi',
+							id: 'topics/10.22.UsingWithOsgi',
 							label: '10.22. Using with OSGi',
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.23.00.RestContext',
+							id: 'topics/10.23.RestContext',
 							label: '10.23. REST Context',
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.24.00.RestOpContext',
+							id: 'topics/10.24.RestOpContext',
 							label: '10.24. RestOp Context',
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.25.00.ResponseProcessors',
+							id: 'topics/10.25.ResponseProcessors',
 							label: '10.25. Response Processors',
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.26.00.RestRpc',
+							id: 'topics/10.26.RestRpc',
 							label: '10.26. REST RPC',
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.27.00.SerializingUris',
+							id: 'topics/10.27.SerializingUris',
 							label: '10.27. Serializing URIs',
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.28.00.UtilityBeans',
+							id: 'topics/10.28.UtilityBeans',
 							label: '10.28. Utility Beans',
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.29.00.HtmlBeans',
+							id: 'topics/10.29.HtmlBeans',
 							label: '10.29. HTML Beans',
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.30.00.OtherNotes',
+							id: 'topics/10.30.OtherNotes',
 							label: '10.30. Other Notes',
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.31.00.Log4j',
+							id: 'topics/10.31.Log4j',
 							label: '10.31. Log4J',
 						},
 					],
@@ -1365,12 +1365,12 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/11.01.00.JuneauRestServerSpringbootBasics',
+							id: 'topics/11.01.JuneauRestServerSpringbootBasics',
 							label: '11.1. juneau-rest-server-springboot Basics',
 						},
 						{
 							type: 'doc',
-							id: 'topics/11.02.00.SpringBootOverview',
+							id: 'topics/11.02.SpringBootOverview',
 							label: '11.2. Spring Boot Overview',
 						},
 					],
@@ -1382,47 +1382,47 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/12.01.00.JuneauRestClientBasics',
+							id: 'topics/12.01.JuneauRestClientBasics',
 							label: '12.1. juneau-rest-client Basics',
 						},
 						{
 							type: 'doc',
-							id: 'topics/12.02.00.PojoMarshalling',
+							id: 'topics/12.02.PojoMarshalling',
 							label: '12.2. POJO Marshalling',
 						},
 						{
 							type: 'doc',
-							id: 'topics/12.03.00.RequestParts',
+							id: 'topics/12.03.RequestParts',
 							label: '12.3. Request Parts',
 						},
 						{
 							type: 'doc',
-							id: 'topics/12.04.00.RequestContent',
+							id: 'topics/12.04.RequestContent',
 							label: '12.4. Request Content',
 						},
 						{
 							type: 'doc',
-							id: 'topics/12.05.00.ResponseStatus',
+							id: 'topics/12.05.ResponseStatus',
 							label: '12.5. Response Status',
 						},
 						{
 							type: 'doc',
-							id: 'topics/12.06.00.ResponseHeaders',
+							id: 'topics/12.06.ResponseHeaders',
 							label: '12.6. Response Headers',
 						},
 						{
 							type: 'doc',
-							id: 'topics/12.07.00.ResponseContent',
+							id: 'topics/12.07.ResponseContent',
 							label: '12.7. Response Content',
 						},
 						{
 							type: 'doc',
-							id: 'topics/12.08.00.CustomCallHandlers',
+							id: 'topics/12.08.CustomCallHandlers',
 							label: '12.8. Custom Call Handlers',
 						},
 						{
 							type: 'doc',
-							id: 'topics/12.09.00.Interceptors',
+							id: 'topics/12.09.Interceptors',
 							label: '12.9. Interceptors',
 						},
 						{
@@ -1489,17 +1489,17 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
-							id: 'topics/12.11.00.LoggingAndDebugging',
+							id: 'topics/12.11.LoggingAndDebugging',
 							label: '12.11. Logging and Debugging',
 						},
 						{
 							type: 'doc',
-							id: 'topics/12.12.00.CustomizingHttpClient',
+							id: 'topics/12.12.CustomizingHttpClient',
 							label: '12.12. Customizing HTTP Client',
 						},
 						{
 							type: 'doc',
-							id: 'topics/12.13.00.ExtendingRestClient',
+							id: 'topics/12.13.ExtendingRestClient',
 							label: '12.13. Extending REST Client',
 						},
 						{
@@ -1538,12 +1538,12 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/13.01.00.JuneauRestMockBasics',
+							id: 'topics/13.01.JuneauRestMockBasics',
 							label: '13.1. juneau-rest-mock Basics',
 						},
 						{
 							type: 'doc',
-							id: 'topics/13.02.00.MockRestClientOverview',
+							id: 'topics/13.02.MockRestClientOverview',
 							label: '13.2. Mock REST Client Overview',
 						},
 					],
@@ -1555,43 +1555,43 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/14.01.00.JuneauMicroserviceCoreBasics',
+							id: 'topics/14.01.JuneauMicroserviceCoreBasics',
 							label: '14.1. juneau-microservice-core Basics',
 						},
 						{
 							type: 'doc',
-							id: 'topics/14.02.00.MicroserviceCoreOverview',
+							id: 'topics/14.02.MicroserviceCoreOverview',
 							label: '14.2. Microservice Core Overview',
 						},
 						{
 							type: 'doc',
-							id: 'topics/14.04.00.Args',
-							label: '14.4. Args',
+							id: 'topics/14.03.Args',
+							label: '14.3. Args',
 						},
 						{
 							type: 'doc',
-							id: 'topics/14.05.00.Manifest',
-							label: '14.5. Manifest',
+							id: 'topics/14.04.Manifest',
+							label: '14.4. Manifest',
 						},
 						{
 							type: 'doc',
-							id: 'topics/14.07.00.SystemProperties',
-							label: '14.7. System Properties',
+							id: 'topics/14.05.SystemProperties',
+							label: '14.5. System Properties',
 						},
 						{
 							type: 'doc',
-							id: 'topics/14.08.00.VarResolver',
-							label: '14.8. Var Resolver',
+							id: 'topics/14.06.VarResolver',
+							label: '14.6. Var Resolver',
 						},
 						{
 							type: 'doc',
-							id: 'topics/14.09.00.ConsoleCommands',
-							label: '14.9. Console Commands',
+							id: 'topics/14.07.ConsoleCommands',
+							label: '14.7. Console Commands',
 						},
 						{
 							type: 'doc',
-							id: 'topics/14.10.00.Listeners',
-							label: '14.10. Listeners',
+							id: 'topics/14.08.Listeners',
+							label: '14.8. Listeners',
 						},
 					],
 				},
@@ -1602,47 +1602,47 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/15.01.00.JuneauMicroserviceJettyBasics',
+							id: 'topics/15.01.JuneauMicroserviceJettyBasics',
 							label: '15.1. juneau-microservice-jetty Basics',
 						},
 						{
 							type: 'doc',
-							id: 'topics/15.02.00.MicroserviceJettyOverview',
+							id: 'topics/15.02.MicroserviceJettyOverview',
 							label: '15.2. Microservice Jetty Overview',
 						},
 						{
 							type: 'doc',
-							id: 'topics/15.03.00.LifecycleMethods',
+							id: 'topics/15.03.LifecycleMethods',
 							label: '15.3. Lifecycle Methods',
 						},
 						{
 							type: 'doc',
-							id: 'topics/15.04.00.ResourceClasses',
+							id: 'topics/15.04.ResourceClasses',
 							label: '15.4. Resource Classes',
 						},
 						{
 							type: 'doc',
-							id: 'topics/15.05.00.PredefinedResourceClasses',
+							id: 'topics/15.05.PredefinedResourceClasses',
 							label: '15.5. Predefined Resource Classes',
 						},
 						{
 							type: 'doc',
-							id: 'topics/15.06.00.Config',
+							id: 'topics/15.06.Config',
 							label: '15.6. Config',
 						},
 						{
 							type: 'doc',
-							id: 'topics/15.07.00.JettyXml',
+							id: 'topics/15.07.JettyXml',
 							label: '15.7. Jetty XML',
 						},
 						{
 							type: 'doc',
-							id: 'topics/15.08.00.UiCustomization',
+							id: 'topics/15.08.UiCustomization',
 							label: '15.8. UI Customization',
 						},
 						{
 							type: 'doc',
-							id: 'topics/15.09.00.Extending',
+							id: 'topics/15.09.Extending',
 							label: '15.9. Extending',
 						},
 					],
@@ -1654,22 +1654,22 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/16.01.00.MyJettyMicroserviceBasics',
+							id: 'topics/16.01.MyJettyMicroserviceBasics',
 							label: '16.1. My Jetty Microservice Basics',
 						},
 						{
 							type: 'doc',
-							id: 'topics/16.02.00.MyJettyMicroserviceInstalling',
+							id: 'topics/16.02.MyJettyMicroserviceInstalling',
 							label: '16.2. Installing',
 						},
 						{
 							type: 'doc',
-							id: 'topics/16.03.00.MyJettyMicroserviceRunning',
+							id: 'topics/16.03.MyJettyMicroserviceRunning',
 							label: '16.3. Running',
 						},
 						{
 							type: 'doc',
-							id: 'topics/16.04.00.MyJettyMicroserviceBuilding',
+							id: 'topics/16.04.MyJettyMicroserviceBuilding',
 							label: '16.4. Building',
 						},
 					],
@@ -1681,22 +1681,22 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/17.01.00.MySpringBootMicroserviceBasics',
+							id: 'topics/17.01.MySpringBootMicroserviceBasics',
 							label: '17.1. My SpringBoot Microservice Basics',
 						},
 						{
 							type: 'doc',
-							id: 'topics/17.02.00.MySpringBootMicroserviceInstalling',
+							id: 'topics/17.02.MySpringBootMicroserviceInstalling',
 							label: '17.2. Installing',
 						},
 						{
 							type: 'doc',
-							id: 'topics/17.03.00.MySpringBootMicroserviceRunning',
+							id: 'topics/17.03.MySpringBootMicroserviceRunning',
 							label: '17.3. Running',
 						},
 						{
 							type: 'doc',
-							id: 'topics/17.04.00.MySpringBootMicroserviceBuilding',
+							id: 'topics/17.04.MySpringBootMicroserviceBuilding',
 							label: '17.4. Building',
 						},
 					],
@@ -1708,27 +1708,27 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/18.01.00.JuneauPetstoreBasics',
+							id: 'topics/18.01.JuneauPetstoreBasics',
 							label: '18.1. juneau-petstore Basics',
 						},
 						{
 							type: 'doc',
-							id: 'topics/18.02.00.JuneauPetstoreRunning',
+							id: 'topics/18.02.JuneauPetstoreRunning',
 							label: '18.2. Running the App',
 						},
 						{
 							type: 'doc',
-							id: 'topics/18.03.00.JuneauPetstoreApi',
+							id: 'topics/18.03.JuneauPetstoreApi',
 							label: '18.3. juneau-petstore-api',
 						},
 						{
 							type: 'doc',
-							id: 'topics/18.04.00.JuneauPetstoreClient',
+							id: 'topics/18.04.JuneauPetstoreClient',
 							label: '18.4. juneau-petstore-client',
 						},
 						{
 							type: 'doc',
-							id: 'topics/18.05.00.JuneauPetstoreServer',
+							id: 'topics/18.05.JuneauPetstoreServer',
 							label: '18.5. juneau-petstore-server',
 						},
 					],
@@ -1740,22 +1740,22 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/19.01.00.JuneauExamplesCore',
+							id: 'topics/19.01.JuneauExamplesCore',
 							label: '19.1. juneau-examples-core',
 						},
 						{
 							type: 'doc',
-							id: 'topics/19.02.00.JuneauExamplesRest',
+							id: 'topics/19.02.JuneauExamplesRest',
 							label: '19.2. juneau-examples-rest',
 						},
 						{
 							type: 'doc',
-							id: 'topics/19.03.00.JuneauExamplesRestJetty',
+							id: 'topics/19.03.JuneauExamplesRestJetty',
 							label: '19.3. juneau-examples-rest-jetty',
 						},
 						{
 							type: 'doc',
-							id: 'topics/19.04.00.JuneauExamplesRestSpringboot',
+							id: 'topics/19.04.JuneauExamplesRestSpringboot',
 							label: '19.4. juneau-examples-rest-springboot',
 						},
 					],
@@ -1767,32 +1767,32 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/20.01.00.JuneauShadedOverview',
+							id: 'topics/20.01.JuneauShadedOverview',
 							label: '20.1. Juneau Shaded Overview',
 						},
 						{
 							type: 'doc',
-							id: 'topics/20.02.00.JuneauShadedCore',
+							id: 'topics/20.02.JuneauShadedCore',
 							label: '20.2. juneau-shaded-core',
 						},
 						{
 							type: 'doc',
-							id: 'topics/20.03.00.JuneauShadedRestClient',
+							id: 'topics/20.03.JuneauShadedRestClient',
 							label: '20.3. juneau-shaded-rest-client',
 						},
 						{
 							type: 'doc',
-							id: 'topics/20.04.00.JuneauShadedRestServer',
+							id: 'topics/20.04.JuneauShadedRestServer',
 							label: '20.4. juneau-shaded-rest-server',
 						},
 						{
 							type: 'doc',
-							id: 'topics/20.05.00.JuneauShadedRestServerSpringboot',
+							id: 'topics/20.05.JuneauShadedRestServerSpringboot',
 							label: '20.5. juneau-shaded-rest-server-springboot',
 						},
 						{
 							type: 'doc',
-							id: 'topics/20.06.00.JuneauShadedAll',
+							id: 'topics/20.06.JuneauShadedAll',
 							label: '20.6. juneau-shaded-all',
 						},
 					],
@@ -1804,22 +1804,22 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/21.01.00.SecurityBasics',
+							id: 'topics/21.01.SecurityBasics',
 							label: '21.1. Security Basics',
 						},
 						{
 							type: 'doc',
-							id: 'topics/21.02.00.MarshallingSecurity',
+							id: 'topics/21.02.MarshallingSecurity',
 							label: '21.2. Marshalling Security',
 						},
 						{
 							type: 'doc',
-							id: 'topics/21.03.00.SvlSecurity',
+							id: 'topics/21.03.SvlSecurity',
 							label: '21.3. SVL Security',
 						},
 						{
 							type: 'doc',
-							id: 'topics/21.04.00.RestSecurity',
+							id: 'topics/21.04.RestSecurity',
 							label: '21.4. REST Security',
 						},
 					],
@@ -1831,115 +1831,8 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/22.01.00.V9.0-migration-guide',
+							id: 'topics/22.01.V9.0-migration-guide',
 							label: '22.1. V9.0 Migration Guide',
-						},
-					],
-				},
-				{
-					type: 'category',
-					label: '23. Scripts',
-					collapsed: true,
-					items: [
-						{
-							type: 'doc',
-							id: 'topics/23.00.00.Scripts',
-							label: '23.0. Scripts Overview',
-						},
-						{
-							type: 'doc',
-							id: 'topics/23.01.00.ScriptTest',
-							label: '23.1. test.py',
-						},
-						{
-							type: 'doc',
-							id: 'topics/23.02.00.ScriptPush',
-							label: '23.2. push.py',
-						},
-						{
-							type: 'doc',
-							id: 'topics/23.03.00.ScriptRelease',
-							label: '23.3. release.py',
-						},
-						{
-							type: 'doc',
-							id: 'topics/23.04.00.ScriptReleaseDocsStage',
-							label: '23.4. release-docs-stage.py',
-						},
-						{
-							type: 'doc',
-							id: 'topics/23.05.00.ScriptReleaseDocs',
-							label: '23.5. release-docs.py',
-						},
-						{
-							type: 'doc',
-							id: 'topics/23.06.00.ScriptPromptPgpPassphrase',
-							label: '23.6. prompt-pgp-passphrase.py',
-						},
-						{
-							type: 'doc',
-							id: 'topics/23.07.00.ScriptCurrentRelease',
-							label: '23.7. current-release.py',
-						},
-						{
-							type: 'doc',
-							id: 'topics/23.08.00.ScriptMavenVersion',
-							label: '23.8. maven-version.py',
-						},
-						{
-							type: 'doc',
-							id: 'topics/23.09.00.ScriptBuildDocs',
-							label: '23.9. build-docs.py',
-						},
-						{
-							type: 'doc',
-							id: 'topics/23.10.00.ScriptCreateMvnSite',
-							label: '23.10. create-mvn-site.py',
-						},
-						{
-							type: 'doc',
-							id: 'topics/23.11.00.ScriptStartDocusaurus',
-							label: '23.11. start-docusaurus.py',
-						},
-						{
-							type: 'doc',
-							id: 'topics/23.12.00.ScriptCheckTopicLinks',
-							label: '23.12. check-topic-links.py',
-						},
-						{
-							type: 'doc',
-							id: 'topics/23.13.00.ScriptApplyEclipsePrefs',
-							label: '23.13. apply-eclipse-prefs.py',
-						},
-						{
-							type: 'doc',
-							id: 'topics/23.14.00.ScriptCleanupWhitespace',
-							label: '23.14. cleanup-whitespace.py',
-						},
-						{
-							type: 'doc',
-							id: 'topics/23.15.00.ScriptCheckFluentSetterOverrides',
-							label: '23.15. check-fluent-setter-overrides.py',
-						},
-						{
-							type: 'doc',
-							id: 'topics/23.16.00.ScriptRevertStaged',
-							label: '23.16. revert-staged.py',
-						},
-						{
-							type: 'doc',
-							id: 'topics/23.17.00.ScriptRevertUnstaged',
-							label: '23.17. revert-unstaged.py',
-						},
-						{
-							type: 'doc',
-							id: 'topics/23.18.00.ScriptStartExamplesRestJetty',
-							label: '23.18. start-examples-rest-jetty.py',
-						},
-						{
-							type: 'doc',
-							id: 'topics/23.19.00.ScriptStartExamplesRestSpringboot',
-							label: '23.19. start-examples-rest-springboot.py',
 						},
 					],
 				},
@@ -1953,7 +1846,7 @@ const sidebars: SidebarsConfig = {
 			items: [
 				{
 					type: 'doc',
-					id: 'developer-info/01.00.DeveloperLinks',
+					id: 'developer-info/01.DeveloperLinks',
 					label: '1. Developer Links',
 				},
 				{
@@ -2000,99 +1893,133 @@ const sidebars: SidebarsConfig = {
 				},
 				{
 					type: 'doc',
-					id: 'developer-info/03.00.CurrentMembers',
+					id: 'developer-info/03.CurrentMembers',
 					label: '3. Current Members',
 				},
 				{
 					type: 'category',
-					label: '4. Blog',
+					label: '4. Scripts',
 					collapsed: false,
 					items: [
 						{
 							type: 'doc',
-							id: 'developer-info/04.00.BlogIndex',
-							label: '4.0. Blog Posts',
+							id: 'developer-info/04.01.Scripts',
+							label: '4.1. Scripts Overview',
 						},
 						{
-							type: 'doc',
-							id: 'developer-info/04.01.JUnitTestResults',
-							label: '4.1. JUnit Test Results (2018-05-11)',
+							type: 'category',
+							label: '4.2. Code Scripts',
+							collapsed: false,
+							items: [
+								{
+									type: 'doc',
+									id: 'developer-info/04.02.01.ScriptTest',
+									label: '4.2.1. test.py',
+								},
+								{
+									type: 'doc',
+									id: 'developer-info/04.02.02.ScriptPush',
+									label: '4.2.2. push.py',
+								},
+								{
+									type: 'doc',
+									id: 'developer-info/04.02.03.ScriptRelease',
+									label: '4.2.3. release.py',
+								},
+								{
+									type: 'doc',
+									id: 'developer-info/04.02.04.ScriptPromptPgpPassphrase',
+									label: '4.2.4. prompt-pgp-passphrase.py',
+								},
+								{
+									type: 'doc',
+									id: 'developer-info/04.02.05.ScriptCurrentRelease',
+									label: '4.2.5. current-release.py',
+								},
+								{
+									type: 'doc',
+									id: 'developer-info/04.02.06.ScriptMavenVersion',
+									label: '4.2.6. maven-version.py',
+								},
+								{
+									type: 'doc',
+									id: 'developer-info/04.02.07.ScriptApplyEclipsePrefs',
+									label: '4.2.7. apply-eclipse-prefs.py',
+								},
+								{
+									type: 'doc',
+									id: 'developer-info/04.02.08.ScriptCleanupWhitespace',
+									label: '4.2.8. cleanup-whitespace.py',
+								},
+								{
+									type: 'doc',
+									id: 'developer-info/04.02.09.ScriptCheckFluentSetterOverrides',
+									label: '4.2.9. check-fluent-setter-overrides.py',
+								},
+								{
+									type: 'doc',
+									id: 'developer-info/04.02.10.ScriptRevertStaged',
+									label: '4.2.10. revert-staged.py',
+								},
+								{
+									type: 'doc',
+									id: 'developer-info/04.02.11.ScriptRevertUnstaged',
+									label: '4.2.11. revert-unstaged.py',
+								},
+								{
+									type: 'doc',
+									id: 'developer-info/04.02.12.ScriptStartExamplesRestJetty',
+									label: '4.2.12. start-examples-rest-jetty.py',
+								},
+								{
+									type: 'doc',
+									id: 'developer-info/04.02.13.ScriptStartExamplesRestSpringboot',
+									label: '4.2.13. start-examples-rest-springboot.py',
+								},
+							],
 						},
 						{
-							type: 'doc',
-							id: 'developer-info/04.02.RESTMediaTypeLessPOJORequests',
-							label: '4.2. REST Media-Type-less POJO requests (2018-05-15)',
-						},
-						{
-							type: 'doc',
-							id: 'developer-info/04.03.Juneau720DocumentationPreview',
-							label: '4.3. Juneau 7.2.0 documentation preview (2018-07-25)',
-						},
-						{
-							type: 'doc',
-							id: 'developer-info/04.04.SupportForAutoValidationInSwaggerAnnotations',
-							label: '4.4. Support for auto-validation in Swagger annotations (2018-07-25)',
-						},
-						{
-							type: 'doc',
-							id: 'developer-info/04.05.DocumentationReorg',
-							label: '4.5. Documentation reorg (2018-07-25)',
-						},
-						{
-							type: 'doc',
-							id: 'developer-info/04.06.BehaviorChangeOnDefaultRestMethodPath',
-							label: '4.6. Behavior change on default @RestMethod(path) (2018-07-29)',
-						},
-						{
-							type: 'doc',
-							id: 'developer-info/04.07.DualPurposeRESTJavaInterfaces',
-							label: '4.7. Dual-purpose REST Java interfaces (2018-10-07)',
-						},
-						{
-							type: 'doc',
-							id: 'developer-info/04.08.PetStoreApplicationNowUsesJPA',
-							label: '4.8. Pet Store application now uses JPA (2018-10-07)',
-						},
-						{
-							type: 'doc',
-							id: 'developer-info/04.09.NewArticleDualPurposeInterfaces',
-							label: '4.9. New article: Dual-purpose interfaces (2018-10-19)',
-						},
-						{
-							type: 'doc',
-							id: 'developer-info/04.10.DefaultSystemConfiguration',
-							label: '4.10. Default system configuration (2018-12-06)',
-						},
-						{
-							type: 'doc',
-							id: 'developer-info/04.11.SpringBootIntegration',
-							label: '4.11. Spring Boot Integration (2018-12-07)',
-						},
-						{
-							type: 'doc',
-							id: 'developer-info/04.12.SourceJavadocTag',
-							label: '4.12. Source javadoc tag (2018-12-08)',
-						},
-						{
-							type: 'doc',
-							id: 'developer-info/04.13.ImportStatementsInConfigurationFiles',
-							label: '4.13. Import statements in configuration files (2018-12-31)',
-						},
-						{
-							type: 'doc',
-							id: 'developer-info/04.14.SerializerAndParserConfigurationAnnotations',
-							label: '4.14. Serializer and parser configuration annotations (2019-05-14)',
-						},
-						{
-							type: 'doc',
-							id: 'developer-info/04.15.NewAndImprovedRestClient',
-							label: '4.15. New and Improved RestClient (2020-07-22)',
+							type: 'category',
+							label: '4.3. Doc Scripts',
+							collapsed: false,
+							items: [
+								{
+									type: 'doc',
+									id: 'developer-info/04.03.01.ScriptReleaseDocsStage',
+									label: '4.3.1. release-docs-stage.py',
+								},
+								{
+									type: 'doc',
+									id: 'developer-info/04.03.02.ScriptReleaseDocs',
+									label: '4.3.2. release-docs.py',
+								},
+								{
+									type: 'doc',
+									id: 'developer-info/04.03.03.ScriptBuildDocs',
+									label: '4.3.3. build-docs.py',
+								},
+								{
+									type: 'doc',
+									id: 'developer-info/04.03.04.ScriptCreateMvnSite',
+									label: '4.3.4. create-mvn-site.py',
+								},
+								{
+									type: 'doc',
+									id: 'developer-info/04.03.05.ScriptStartDocusaurus',
+									label: '4.3.5. start-docusaurus.py',
+								},
+								{
+									type: 'doc',
+									id: 'developer-info/04.03.06.ScriptCheckTopicLinks',
+									label: '4.3.6. check-topic-links.py',
+								},
+							],
 						},
 					],
 				},
 				{
 					type: 'doc',
-					id: 'developer-info/05.00.ArticlesIndex',
+					id: 'developer-info/05.ArticlesIndex',
 					label: '5. Articles',
 				},
 			],

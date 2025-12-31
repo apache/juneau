@@ -102,6 +102,24 @@ def clear_caches(docs_dir):
                 print(f"   Warning: Could not remove {cache_dir.name}: {e}")
 
 
+def install_dependencies(docs_dir):
+    """Install npm dependencies if node_modules doesn't exist."""
+    node_modules = docs_dir / "node_modules"
+    if not node_modules.exists():
+        print_step("📦 Installing dependencies (this may take a few minutes)...")
+        try:
+            subprocess.run(
+                ["npm", "install"],
+                cwd=docs_dir,
+                check=True
+            )
+            print_step("✅ Dependencies installed successfully")
+        except subprocess.CalledProcessError:
+            print("❌ ERROR: Failed to install dependencies")
+            return False
+    return True
+
+
 def main():
     # Get directories
     script_dir = Path(__file__).parent
@@ -114,6 +132,10 @@ def main():
     package_json = docs_dir / "package.json"
     if not package_json.exists():
         print(f"❌ ERROR: package.json not found in {docs_dir}")
+        return 1
+    
+    # Install dependencies if needed
+    if not install_dependencies(docs_dir):
         return 1
     
     # Kill any existing process on port 3000
