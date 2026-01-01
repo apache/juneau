@@ -24,12 +24,10 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
-import java.util.regex.*;
 
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.uon.*;
 
 import jakarta.servlet.http.*;
@@ -88,8 +86,6 @@ public class RestUtils {
 	;
 	// @formatter:on
 
-	private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");
-
 	/**
 	 * Returns readable text for an HTTP response code.
 	 *
@@ -115,88 +111,168 @@ public class RestUtils {
 	}
 
 	/**
-	 * Parses a string that can consist of a simple string or JSON object/array.
+	 * Parses a string as JSON if it appears to be JSON, otherwise returns the string as-is.
 	 *
-	 * @param value The string to parse.
-	 * @return The parsed value, or <jk>null</jk> if the input is null.
-	 * @throws ParseException Invalid JSON in string.
+	 * <p>
+	 * This method attempts to intelligently detect whether the input string is JSON or plain text.
+	 * If the string appears to be JSON (starts with <c>{</c>, <c>[</c>, or other JSON indicators),
+	 * it is parsed and returned as a Java object (<jk>Map</jk>, <jk>List</jk>, <jk>String</jk>, <jk>Number</jk>, etc.).
+	 * Otherwise, the original string is returned unchanged.
+	 *
+	 * <p>
+	 * This is useful when processing input that could be either a JSON value or a plain string,
+	 * such as configuration values or user input that may or may not be JSON-encoded.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// JSON object is parsed</jc>
+	 * 	Object <jv>result1</jv> = parseIfJson(<js>"{\"name\":\"John\"}"</js>);
+	 * 	<jc>// Returns a Map with key "name" and value "John"</jc>
+	 *
+	 * 	<jc>// JSON array is parsed</jc>
+	 * 	Object <jv>result2</jv> = parseIfJson(<js>"[1,2,3]"</js>);
+	 * 	<jc>// Returns a List containing [1, 2, 3]</jc>
+	 *
+	 * 	<jc>// Plain string is returned as-is</jc>
+	 * 	Object <jv>result3</jv> = parseIfJson(<js>"hello world"</js>);
+	 * 	<jc>// Returns the string "hello world"</jc>
+	 * </p>
+	 *
+	 * @param value The string to parse. Can be <jk>null</jk>.
+	 * @return
+	 * 	The parsed JSON object (if the string was JSON), or the original string (if it was not JSON).
+	 * 	Returns <jk>null</jk> if the input is <jk>null</jk>.
+	 * 	<br>Return type can be: <jk>Map</jk>, <jk>List</jk>, <jk>String</jk>, <jk>Number</jk>, <jk>Boolean</jk>, or <jk>null</jk>.
+	 * @throws ParseException If the string appears to be JSON but contains invalid JSON syntax.
 	 */
 	public static Object parseIfJson(String value) throws ParseException {
 		return isProbablyJson(value) ? JsonParser.DEFAULT.parse(value, Object.class) : value;
 	}
 
 	/**
-	 * Parses a URL query string or form-data content.
+	 * Parses a URL query string or form-data content from a string.
 	 *
-	 * @param qs A reader or string containing the query string to parse.
-	 * @return A new map containing the parsed query.
+	 * <p>
+	 * Parses key-value pairs from a query string format (e.g., <c>key1=value1&key2=value2</c>).
+	 * Supports multiple values for the same key, which are collected into a <jk>List</jk>.
+	 *
+	 * <p>
+	 * Special cases:
+	 * <ul>
+	 * 	<li>Empty or <jk>null</jk> strings return an empty map</li>
+	 * 	<li>Keys without values (e.g., <c>key1&key2</c>) are stored with <jk>null</jk> values</li>
+	 * 	<li>Keys with empty values (e.g., <c>key=</c>) are stored with empty strings</li>
+	 * 	<li>Multiple occurrences of the same key append values to the list</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Map&lt;String,List&lt;String&gt;&gt; <jv>params</jv> = parseQuery(<js>"f1=v1&f2=v2&f1=v3"</js>);
+	 * 	<jv>params</jv>.get(<js>"f1"</js>);  <jc>// Returns [v1, v3]</jc>
+	 * 	<jv>params</jv>.get(<js>"f2"</js>);  <jc>// Returns [v2]</jc>
+	 * </p>
+	 *
+	 * @param qs The query string to parse. Can be <jk>null</jk> or empty.
+	 * @return A map of parameter names to lists of values. Returns an empty map if the input is <jk>null</jk> or empty.
 	 */
-	public static Map<String,String[]> parseQuery(Object qs) {
+	public static Map<String,List<String>> parseQuery(String qs) {
+		if (isEmpty(qs)) return Collections.emptyMap();
+		return parseQuery((Object)qs);
+	}
 
-		try {
-			var m = CollectionUtils.<String,String[]>map();
+	/**
+	 * Parses a URL query string or form-data content from a reader.
+	 *
+	 * <p>
+	 * Parses key-value pairs from a query string format (e.g., <c>key1=value1&key2=value2</c>).
+	 * Supports multiple values for the same key, which are collected into a <jk>List</jk>.
+	 *
+	 * <p>
+	 * Special cases:
+	 * <ul>
+	 * 	<li><jk>null</jk> readers return an empty map</li>
+	 * 	<li>Keys without values (e.g., <c>key1&key2</c>) are stored with <jk>null</jk> values</li>
+	 * 	<li>Keys with empty values (e.g., <c>key=</c>) are stored with empty strings</li>
+	 * 	<li>Multiple occurrences of the same key append values to the list</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Parse from a reader</jc>
+	 * 	Reader <jv>reader</jv> = <jk>new</jk> StringReader(<js>"f1=v1&f2=v2"</js>);
+	 * 	Map&lt;String,List&lt;String&gt;&gt; <jv>params</jv> = parseQuery(<jv>reader</jv>);
+	 * 	<jv>params</jv>.get(<js>"f1"</js>);  <jc>// Returns [v1]</jc>
+	 * </p>
+	 *
+	 * @param qs The reader containing the query string to parse. Can be <jk>null</jk>.
+	 * @return A map of parameter names to lists of values. Returns an empty map if the input is <jk>null</jk>.
+	 */
+	public static Map<String,List<String>> parseQuery(Reader qs) {
+		if (n(qs)) return Collections.emptyMap();
+		return parseQuery((Object)qs);
+	}
 
-			if (qs == null || ((qs instanceof CharSequence) && isEmpty(s(qs))))
-				return m;
+	private static Map<String,List<String>> parseQuery(Object qs) {
 
-			try (var p = new ParserPipe(qs)) {
+		var m = CollectionUtils.<String,List<String>>map();
 
-				// S1: Looking for attrName start.
-				// S2: Found attrName start, looking for = or & or end.
-				// S3: Found =, looking for valStart or &.
-				// S4: Found valStart, looking for & or end.
+		try (var p = new ParserPipe(qs)) {
 
-				try (var r = new UonReader(p, true)) {
-					var c = r.peekSkipWs();
-					if (c == '?')
-						r.read();
+			// S1: Looking for attrName start.
+			// S2: Found attrName start, looking for = or & or end.
+			// S3: Found =, looking for valStart or &.
+			// S4: Found valStart, looking for & or end.
 
-					var state = S1;
-					var currAttr = (String)null;
-					while (c != -1) {
-						c = r.read();
-						if (state == S1) {
-							if (c != -1) {
-								r.unread();
-								r.mark();
-								state = S2;
-							}
-						} else if (state == S2) {
-							if (c == -1) {
-								add(m, r.getMarked(), null);
-							} else if (c == '\u0001') {
-								add(m, r.getMarked(0, -1), null);
-								state = S1;
-							} else if (c == '\u0002') {
-								currAttr = r.getMarked(0, -1);
-								state = S3;
-							}
-						} else if (state == S3) {
-							if (c == -1 || c == '\u0001') {
-								add(m, currAttr, "");
-								state = S1;
-							} else {
-								if (c == '\u0002')
-									r.replace('=');
-								r.unread();
-								r.mark();
-								state = S4;
-							}
-						} else if (state == S4) {
-							if (c == -1) {
-								add(m, currAttr, r.getMarked());
-							} else if (c == '\u0001') {
-								add(m, currAttr, r.getMarked(0, -1));
-								state = S1;
-							} else if (c == '\u0002') {
+			try (var r = new UonReader(p, true)) {
+				var c = r.peekSkipWs();
+				if (c == '?')
+					r.read();
+
+				var state = S1;
+				var currAttr = (String)null;
+				while (c != -1) {
+					c = r.read();
+					if (state == S1) {
+						if (c != -1) {
+							r.unread();
+							r.mark();
+							state = S2;
+						}
+					} else if (state == S2) {
+						if (c == -1) {
+							add(m, r.getMarked(), null);
+						} else if (c == '\u0001') {
+							add(m, r.getMarked(0, -1), null);
+							state = S1;
+						} else if (c == '\u0002') {
+							currAttr = r.getMarked(0, -1);
+							state = S3;
+						}
+					} else if (state == S3) {
+						if (c == -1 || c == '\u0001') {
+							add(m, currAttr, "");
+							state = S1;
+						} else {
+							if (c == '\u0002')
 								r.replace('=');
-							}
+							r.unread();
+							r.mark();
+							state = S4;
+						}
+					} else if (state == S4) {
+						if (c == -1) {
+							add(m, currAttr, r.getMarked());
+						} else if (c == '\u0001') {
+							add(m, currAttr, r.getMarked(0, -1));
+							state = S1;
+						} else if (c == '\u0002') {
+							r.replace('=');
 						}
 					}
 				}
-
-				return m;
 			}
+
+			return m;
 		} catch (IOException e) {
 			throw toRex(e); // Should never happen.
 		}
@@ -273,7 +349,7 @@ public class RestUtils {
 		return value;
 	}
 
-	private static void add(Map<String,String[]> m, String key, String val) {
+	private static void add(Map<String,List<String>> m, String key, String val) {
 		if (val == null) {
 			if (! m.containsKey(key))
 				m.put(key, null);
@@ -281,7 +357,7 @@ public class RestUtils {
 			m.compute(key, (k, existing) -> {
 				if (existing != null)
 					return addAll(existing, val);
-				return a(val);
+				return list(val);
 			});
 		}
 	}

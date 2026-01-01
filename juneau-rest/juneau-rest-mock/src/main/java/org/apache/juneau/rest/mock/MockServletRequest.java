@@ -393,8 +393,16 @@ public class MockServletRequest implements HttpServletRequest {
 	@Override /* Overridden from HttpServletRequest */
 	public Map<String,String[]> getParameterMap() {
 		if ("POST".equalsIgnoreCase(method)) {
-			if (formDataMap == null)
-				formDataMap = RestUtils.parseQuery(read(content));
+			if (formDataMap == null) {
+				var listMap = RestUtils.parseQuery(read(content));
+				formDataMap = map();
+				for (var e : listMap.entrySet()) {
+					if (e.getValue() == null)
+						formDataMap.put(e.getKey(), null);
+					else
+						formDataMap.put(e.getKey(), array(e.getValue(), String.class));
+				}
+			}
 			return formDataMap;
 		}
 		return queryDataMap;
@@ -928,7 +936,13 @@ public class MockServletRequest implements HttpServletRequest {
 			if (qs.indexOf('#') != -1)
 				qs = qs.substring(0, qs.indexOf('#'));
 			queryString = qs;
-			queryDataMap.putAll(RestUtils.parseQuery(qs));
+			var listMap = RestUtils.parseQuery(qs);
+			for (var e : listMap.entrySet()) {
+				if (e.getValue() == null)
+					queryDataMap.put(e.getKey(), null);
+				else
+					queryDataMap.put(e.getKey(), array(e.getValue(), String.class));
+			}
 		}
 
 		return this;

@@ -401,9 +401,16 @@ public class RestSession extends ContextSession {
 	 */
 	public Map<String,String[]> getQueryParams() {
 		if (queryParams == null) {
-			if (req.getMethod().equalsIgnoreCase("POST"))
-				queryParams = RestUtils.parseQuery(req.getQueryString());
-			else
+			if (req.getMethod().equalsIgnoreCase("POST")) {
+				var listMap = RestUtils.parseQuery(req.getQueryString());
+				queryParams = map();
+				for (var e : listMap.entrySet()) {
+					if (e.getValue() == null)
+						queryParams.put(e.getKey(), null);
+					else
+						queryParams.put(e.getKey(), array(e.getValue(), String.class));
+				}
+			} else
 				queryParams = req.getParameterMap();
 		}
 		return queryParams;

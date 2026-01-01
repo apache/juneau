@@ -86,21 +86,21 @@ class RestUtils_Test extends TestBase {
 	@Test void g01_testParseIntoSimpleMap() {
 		var s = "?f1=,()=&f2a=$b(true)&f2b=true&f3a=$n(123)&f3b=123&f4=$s(foo)";
 		var m = parseQuery(s);
-		assertEquals(",()=", m.get("f1")[0]);
-		assertEquals("$b(true)", m.get("f2a")[0]);
-		assertEquals("true", m.get("f2b")[0]);
-		assertEquals("$n(123)", m.get("f3a")[0]);
-		assertEquals("123", m.get("f3b")[0]);
-		assertEquals("$s(foo)", m.get("f4")[0]);
+		assertEquals(",()=", m.get("f1").get(0));
+		assertEquals("$b(true)", m.get("f2a").get(0));
+		assertEquals("true", m.get("f2b").get(0));
+		assertEquals("$n(123)", m.get("f3a").get(0));
+		assertEquals("123", m.get("f3b").get(0));
+		assertEquals("$s(foo)", m.get("f4").get(0));
 
 		s = "f1=v1&=";
 		m = parseQuery(s);
-		assertEquals("v1", m.get("f1")[0]);
-		assertEquals("", m.get("")[0]);
+		assertEquals("v1", m.get("f1").get(0));
+		assertEquals("", m.get("").get(0));
 
 		s = "f1=v1&f2&f3";
 		m = parseQuery(s);
-		assertEquals("v1", m.get("f1")[0]);
+		assertEquals("v1", m.get("f1").get(0));
 		assertTrue(m.containsKey("f2"));
 		assertTrue(m.containsKey("f3"));
 		assertNull(m.get("f2"));

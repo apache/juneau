@@ -140,9 +140,16 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 		var c = (Collection<Part>)null;
 
 		RequestContent content = req.getContent();
-		if (content.isLoaded() || ! req.getHeader(ContentType.class).orElse(ContentType.NULL).equalsIgnoreCase("multipart/form-data"))
-			m = RestUtils.parseQuery(content.getReader());
-		else {
+		if (content.isLoaded() || ! req.getHeader(ContentType.class).orElse(ContentType.NULL).equalsIgnoreCase("multipart/form-data")) {
+			var listMap = RestUtils.parseQuery(content.getReader());
+			m = map();
+			for (var e : listMap.entrySet()) {
+				if (e.getValue() == null)
+					m.put(e.getKey(), null);
+				else
+					m.put(e.getKey(), array(e.getValue(), String.class));
+			}
+		} else {
 			c = req.getHttpServletRequest().getParts();
 			if (c == null || c.isEmpty())
 				m = req.getHttpServletRequest().getParameterMap();
