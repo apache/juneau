@@ -313,6 +313,20 @@ Juneau is packed with features that may not be obvious at first. Users are encou
    * juneau-rest-client - Apache HttpClient 4.5+.
 * Built on top of Servlet and Apache HttpClient APIs that allow you to use the newest HTTP/2 features such as request/response multiplexing and server push.
 
+## Repository Structure
+
+This repository uses multiple branches to separate different concerns:
+
+* **`master`** - Contains the main source code for Apache Juneau
+* **`docs`** - Contains the Docusaurus-based documentation site
+* **`asf-staging`** - Contains the staging/preview version of the website
+* **`asf-site`** - Contains the production version of the website
+
+When working with the repository, ensure you're on the correct branch for your task:
+- For code changes, work in the `master` branch
+- For documentation updates, work in the `docs` branch
+- The `asf-staging` and `asf-site` branches are automatically updated during the release process
+
 ## Building
 Building requires:
 * [Apache Maven](https://maven.apache.org/)

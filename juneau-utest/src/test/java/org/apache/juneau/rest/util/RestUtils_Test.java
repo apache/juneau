@@ -50,63 +50,6 @@ class RestUtils_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// trimPathInfo(String,String)
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Test void c01_testGetServletURI() {
-		var e = "http://hostname";
-		var sp = "";
-		var cp = "";
-
-		for (var s : a("http://hostname", "http://hostname/foo", "http://hostname?foo", "http://hostname/?foo"))
-			assertEquals(e, trimPathInfo(new StringBuffer(s), cp, sp).toString());
-
-		for (var s : a("http:/hostname?foo")) {
-			assertThrows(Exception.class, ()->trimPathInfo(new StringBuffer(s), "", ""));
-		}
-
-		e = "http://hostname";
-		sp = "/";
-		cp = "/";
-
-		for (var s : a("http://hostname", "http://hostname/foo", "http://hostname?foo", "http://hostname/?foo"))
-			assertEquals(e, trimPathInfo(new StringBuffer(s), cp, sp).toString());
-
-		e = "http://hostname/foo";
-		sp = "/foo";
-		cp = "/";
-
-		for (var s : a("http://hostname/foo", "http://hostname/foo/bar", "http://hostname/foo?bar"))
-			assertEquals(e, trimPathInfo(new StringBuffer(s), cp, sp).toString());
-
-		for (var s : a("http://hostname/foo2", "http://hostname/fo2", "http://hostname?foo", "http://hostname/fo?bar", "http:/hostname/foo")) {
-			assertThrows(Exception.class, ()->trimPathInfo(new StringBuffer(s), "/", "/foo"));
-		}
-
-		e = "http://hostname/foo/bar";
-		sp = "/foo/bar";
-		cp = "/";
-
-		for (var s : a("http://hostname/foo/bar", "http://hostname/foo/bar/baz", "http://hostname/foo/bar?baz"))
-			assertEquals(e, trimPathInfo(new StringBuffer(s), cp, sp).toString());
-
-		for (var s : a("http://hostname/foo2/bar", "http://hostname/foo/bar2")) {
-			assertThrows(Exception.class, ()->trimPathInfo(new StringBuffer(s), "/foo/bar", "/foo/bar"));
-		}
-
-		e = "http://hostname/foo/bar";
-		sp = "/bar";
-		cp = "/foo";
-
-		for (var s : a("http://hostname/foo/bar", "http://hostname/foo/bar/baz", "http://hostname/foo/bar?baz"))
-			assertEquals(e, trimPathInfo(new StringBuffer(s), cp, sp).toString());
-
-		for (var s : a("http://hostname/foo2/bar", "http://hostname/foo/bar2")) {
-			assertThrows(Exception.class, ()->trimPathInfo(new StringBuffer(s), "/foo", "/bar"));
-		}
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
 	// trimSlashes(String)
 	//------------------------------------------------------------------------------------------------------------------
 
@@ -184,49 +127,5 @@ class RestUtils_Test extends TestBase {
 
 	public static class B {
 		public String f1 = "f1";
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Other tests
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Test void i01_testTrimContextPath() {
-		assertEquals("/bar", trimContextPath("/foo", "/bar"));
-		assertEquals("/", trimContextPath("/foo", "/"));
-		assertEquals("", trimContextPath("/foo", ""));
-		assertEquals(null, trimContextPath("/foo", null));
-
-		assertEquals("/bar", trimContextPath("/foo", "/foo/bar"));
-		assertEquals("/bar/baz", trimContextPath("/foo", "/foo/bar/baz"));
-		assertEquals("/bar/", trimContextPath("/foo", "/foo/bar/"));
-		assertEquals("/", trimContextPath("/foo", "/foo/"));
-		assertEquals("/", trimContextPath("/foo", "/foo"));
-	}
-
-	@Test void i02_testIsValidContextPath() {
-		assertTrue(isValidContextPath(""));
-		assertTrue(isValidContextPath("/foo"));
-		assertFalse(isValidContextPath("/"));
-		assertFalse(isValidContextPath("/foo/"));
-		assertFalse(isValidContextPath(null));
-		assertFalse(isValidContextPath("foo"));
-	}
-
-	@Test void i03_testIsValidServletPath() {
-		assertTrue(isValidServletPath(""));
-		assertTrue(isValidServletPath("/foo"));
-		assertFalse(isValidServletPath("/"));
-		assertFalse(isValidServletPath("/foo/"));
-		assertFalse(isValidServletPath(null));
-		assertFalse(isValidServletPath("foo"));
-	}
-
-	@Test void i04_testIsValidPathInfo() {
-		assertFalse(isValidPathInfo(""));
-		assertTrue(isValidPathInfo("/foo"));
-		assertTrue(isValidPathInfo("/"));
-		assertTrue(isValidPathInfo("/foo/"));
-		assertTrue(isValidPathInfo(null));
-		assertFalse(isValidPathInfo("foo"));
 	}
 }

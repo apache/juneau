@@ -28,6 +28,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 import static org.apache.juneau.rest.processor.ResponseProcessor.*;
+import static org.apache.juneau.rest.util.RestUtils.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -5170,10 +5171,21 @@ public class RestContext extends Context {
 				var pi = sb.getPathInfoUndecoded();
 				var upi2 = UrlPath.of(pi == null ? sp : sp + pi);
 				var uppm = pathMatcher.match(upi2);
-				if (nn(uppm) && ! uppm.hasEmptyVars()) {
-					sb.pathVars(uppm.getVars());
-					sb.req(new OverrideableHttpServletRequest(sb.req()).pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix()))).servletPath(uppm.getPrefix()));
-				} else {
+			if (nn(uppm) && ! uppm.hasEmptyVars()) {
+				sb.pathVars(uppm.getVars());
+				var pathInfo = opt(validatePathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))).orElse("\u0000");
+				var servletPath = validateServletPath(uppm.getPrefix());
+				sb.req(new HttpServletRequestWrapper(sb.req()) {
+					@Override
+					public String getPathInfo() {
+						return pathInfo.charAt(0) == (char)0 ? null : pathInfo;
+					}
+					@Override
+					public String getServletPath() {
+						return servletPath;
+					}
+				});
+			} else {
 					var call = sb.build();
 					call.debug(isDebug(call)).status(SC_NOT_FOUND).finish();
 					return;
@@ -5187,8 +5199,18 @@ public class RestContext extends Context {
 				var rc = childMatch.get().getChildContext();
 				if (! uppm.hasEmptyVars()) {
 					sb.pathVars(uppm.getVars());
-					var childRequest = new OverrideableHttpServletRequest(sb.req()).pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
-						.servletPath(sb.req().getServletPath() + uppm.getPrefix());
+					var pathInfo = opt(validatePathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))).orElse("\u0000");
+					var servletPath = validateServletPath(sb.req().getServletPath() + uppm.getPrefix());
+					var childRequest = new HttpServletRequestWrapper(sb.req()) {
+						@Override
+						public String getPathInfo() {
+							return pathInfo.charAt(0) == (char)0 ? null : pathInfo;
+						}
+						@Override
+						public String getServletPath() {
+							return servletPath;
+						}
+					};
 					rc.execute(rc.getResource(), childRequest, sb.res());
 				} else {
 					var call = sb.build();

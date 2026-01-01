@@ -2057,7 +2057,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 					if (a instanceof Header a2) {
 						if (nn(def)) {
 							try {
-								defaultRequestHeaders().set(basicHeader(firstNonEmpty(a2.name(), a2.value()), parseAnything(def)));
+								defaultRequestHeaders().set(basicHeader(firstNonEmpty(a2.name(), a2.value()), parseIfJson(def)));
 							} catch (ParseException e) {
 								throw new ConfigException(e, "Malformed @Header annotation");
 							}
@@ -2066,7 +2066,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 					if (a instanceof Query a2) {
 						if (nn(def)) {
 							try {
-								defaultRequestQueryData().setDefault(basicPart(firstNonEmpty(a2.name(), a2.value()), parseAnything(def)));
+								defaultRequestQueryData().setDefault(basicPart(firstNonEmpty(a2.name(), a2.value()), parseIfJson(def)));
 							} catch (ParseException e) {
 								throw new ConfigException(e, "Malformed @Query annotation");
 							}
@@ -2075,7 +2075,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 					if (a instanceof FormData a2) {
 						if (nn(def)) {
 							try {
-								defaultRequestFormData().setDefault(basicPart(firstNonEmpty(a2.name(), a2.value()), parseAnything(def)));
+								defaultRequestFormData().setDefault(basicPart(firstNonEmpty(a2.name(), a2.value()), parseIfJson(def)));
 							} catch (ParseException e) {
 								throw new ConfigException(e, "Malformed @FormData annotation");
 							}
