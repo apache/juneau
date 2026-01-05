@@ -276,6 +276,9 @@ public class BasicBeanStore {
 		lock = threadSafe ? new SimpleReadWriteLock() : SimpleReadWriteLock.NO_OP;
 		entries = threadSafe ? new ConcurrentLinkedDeque<>() : new LinkedList<>();
 		unnamedEntries = threadSafe ? new ConcurrentHashMap<>() : map();
+		var e = createEntry(BasicBeanStore.class, ()->this, null);
+		entries.addFirst(e);
+		unnamedEntries.put(BasicBeanStore.class, e);
 	}
 
 	BasicBeanStore() {
@@ -468,16 +471,10 @@ public class BasicBeanStore {
 		for (var i = 0; i < executable.getParameterCount(); i++) {
 			var pi = executable.getParameter(i);
 			var pt = pi.getParameterType();
-			if (i == 0 && outer.isPresent() && pt.isInstance(outer.get())) {
-				o[i] = outer.get();
-			} else if (pt.is(BasicBeanStore.class)) {
-				o[i] = this;
-			} else {
-				var beanQualifier = pi.getResolvedQualifier();
-				var ptc = pt.unwrap(Optional.class).inner();
-				var o2 = beanQualifier == null ? getBean(ptc) : getBean(ptc, beanQualifier);
-				o[i] = pt.is(Optional.class) ? o2 : o2.orElse(null);
-			}
+			var beanQualifier = pi.getResolvedQualifier();
+			var ptc = pt.unwrap(Optional.class).inner();
+			var o2 = beanQualifier == null ? getBean(ptc) : getBean(ptc, beanQualifier);
+			o[i] = pt.is(Optional.class) ? o2 : o2.orElse(null);
 		}
 		return o;
 	}

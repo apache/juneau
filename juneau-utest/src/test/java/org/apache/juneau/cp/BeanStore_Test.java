@@ -30,7 +30,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.annotation.Named;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.commons.utils.*;
 import org.junit.jupiter.api.*;
 
 class BeanStore_Test extends TestBase {
@@ -269,9 +268,9 @@ class BeanStore_Test extends TestBase {
 
 		var outer = new B1(null, null, null);
 
-		var b1p = BasicBeanStore.create().outer(outer).build();
+		var b1p = BasicBeanStore.create().outer(outer).build().addBean(B1.class, outer);
 		var b1c = BasicBeanStore.create().outer(outer).parent(b1p).build();
-		var b2p = BasicBeanStore.create().outer(outer).threadSafe().build();
+		var b2p = BasicBeanStore.create().outer(outer).threadSafe().build().addBean(B1.class, outer);
 		var b2c = BasicBeanStore.create().outer(outer).parent(b1p).threadSafe().build();
 
 		var ci = ClassInfo.of(B1.class);
@@ -403,10 +402,10 @@ class BeanStore_Test extends TestBase {
 		Predicate<Object> pA1a = x -> x==a1a;
 		Predicate<Object> pA2a = x -> ((Optional<?>)x).get()==a2a;
 
-		var b1p = BasicBeanStore.create().outer(this).build();
-		var b1c = BasicBeanStore.create().outer(this).parent(b1p).build();
-		var b2p = BasicBeanStore.create().outer(this).threadSafe().build();
-		var b2c = BasicBeanStore.create().outer(this).parent(b1p).threadSafe().build();
+		var b1p = BasicBeanStore.create().build().addBean(BeanStore_Test.class, this);
+		var b1c = BasicBeanStore.create().parent(b1p).build();
+		var b2p = BasicBeanStore.create().threadSafe().build().addBean(BeanStore_Test.class, this);
+		var b2c = BasicBeanStore.create().parent(b1p).threadSafe().build();
 
 		var ci = ClassInfo.of(B2.class);
 		var c1 = ci.getPublicConstructor(x -> x.hasParameterTypes(BeanStore_Test.class, A1.class, Optional.class, BasicBeanStore.class)).get();
