@@ -49,7 +49,7 @@ public interface StaticFiles extends FileFinder {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BeanStore beanStore) {
+		protected Builder(BasicBeanStore beanStore) {
 			super(BasicStaticFiles.class, beanStore);
 			headers = list();
 			fileFinder = FileFinder.create(beanStore);
@@ -191,7 +191,7 @@ public interface StaticFiles extends FileFinder {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	static Builder create(BeanStore beanStore) {
+	static Builder create(BasicBeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 

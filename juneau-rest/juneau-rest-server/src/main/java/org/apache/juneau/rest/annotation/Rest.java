@@ -167,7 +167,7 @@ public @interface Rest {
 	 *
 	 * @return The annotation value.
 	 */
-	Class<? extends BeanStore> beanStore() default BeanStore.Void.class;
+	Class<? extends BasicBeanStore> beanStore() default BasicBeanStore.Void.class;
 
 	/**
 	 * Specifies the logger to use for logging of HTTP requests and responses.

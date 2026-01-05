@@ -84,7 +84,7 @@ public class BasicTestCaptureCallLogger extends CallLogger {
 	 * Uses the same settings as {@link CallLogger}.
 	 */
 	public BasicTestCaptureCallLogger() {
-		super(BeanStore.INSTANCE);
+		super(BasicBeanStore.INSTANCE);
 	}
 
 	/**
@@ -92,7 +92,7 @@ public class BasicTestCaptureCallLogger extends CallLogger {
 	 *
 	 * @param beanStore The bean store containing injectable beans for this logger.
 	 */
-	public BasicTestCaptureCallLogger(BeanStore beanStore) {
+	public BasicTestCaptureCallLogger(BasicBeanStore beanStore) {
 		super(beanStore);
 	}
 
@@ -175,7 +175,7 @@ public class BasicTestCaptureCallLogger extends CallLogger {
 	}
 
 	@Override
-	protected Builder init(BeanStore beanStore) {
+	protected Builder init(BasicBeanStore beanStore) {
 		// @formatter:off
 		return super.init(beanStore)
 			.normalRules(  // Rules when debugging is not enabled.

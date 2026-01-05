@@ -122,7 +122,7 @@ import org.apache.juneau.serializer.annotation.*;
 	title="$S{j.title,$E{J_TITLE,}}",
 
 	// Injectable/overridable beans.
-	beanStore=BeanStore.Void.class,  // Defaults to BeanStore.
+	beanStore=BasicBeanStore.Void.class,  // Defaults to BasicBeanStore.
 	callLogger=CallLogger.Void.class,  // Defaults to BasicCallLogger.
 	debugEnablement=DebugEnablement.Void.class,  // Defaults to BasicDefaultEnablement.
 	staticFiles=StaticFiles.Void.class,  // Defaults to BasicStaticFiles.

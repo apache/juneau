@@ -32,7 +32,7 @@ public class BeanBuilder<T> {
 
 	private Class<? extends T> type, defaultType;
 	private T impl;
-	private final BeanStore beanStore;
+	private final BasicBeanStore beanStore;
 
 	/**
 	 * Copy constructor.
@@ -51,7 +51,7 @@ public class BeanBuilder<T> {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @param defaultType The default bean type that this builder creates.
 	 */
-	protected BeanBuilder(Class<? extends T> defaultType, BeanStore beanStore) {
+	protected BeanBuilder(Class<? extends T> defaultType, BasicBeanStore beanStore) {
 		this.defaultType = type = defaultType;
 		this.beanStore = beanStore;
 	}
@@ -61,7 +61,7 @@ public class BeanBuilder<T> {
 	 *
 	 * @return The bean store passed in through the constructor.
 	 */
-	public BeanStore beanStore() {
+	public BasicBeanStore beanStore() {
 		return beanStore;
 	}
 

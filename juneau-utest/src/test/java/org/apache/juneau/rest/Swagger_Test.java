@@ -67,7 +67,7 @@ class Swagger_Test extends TestBase {
 	public static class TestClasspathFileFinder extends BasicStaticFiles {
 
 		public TestClasspathFileFinder() {
-			super(StaticFiles.create(BeanStore.INSTANCE).cp(Swagger_Test.class, null, false));
+			super(StaticFiles.create(BasicBeanStore.INSTANCE).cp(Swagger_Test.class, null, false));
 		}
 
 		@Override /* FileFinder */

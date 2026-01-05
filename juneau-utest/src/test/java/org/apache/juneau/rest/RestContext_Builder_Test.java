@@ -37,23 +37,23 @@ class RestContext_Builder_Test extends TestBase {
 
 	@Rest
 	public static class A1 {
-		@RestInject static BeanStore beanStore;
+		@RestInject static BasicBeanStore beanStore;
 	}
 
 	@Test void a01_createBeanStore_default() {
 		MockRestClient.buildLax(A1.class);
-		assertEquals("BeanStore", A1.beanStore.getClass().getSimpleName());
+		assertEquals("BasicBeanStore", A1.beanStore.getClass().getSimpleName());
 	}
 
-	public static class MyBeanStore extends BeanStore {
+	public static class MyBeanStore extends BasicBeanStore {
 		protected MyBeanStore(Builder builder) {
-			super(builder.parent(BeanStore.create().build().addBean(A.class, new A())));
+			super(builder.parent(BasicBeanStore.create().build().addBean(A.class, new A())));
 		}
 	}
 
 	@Rest(beanStore=MyBeanStore.class)
 	public static class A2 {
-		@RestInject static BeanStore beanStore;
+		@RestInject static BasicBeanStore beanStore;
 	}
 
 	@Test void a02_createBeanStore_annotation() {
@@ -63,9 +63,9 @@ class RestContext_Builder_Test extends TestBase {
 
 	@Rest
 	public static class A3 {
-		@RestInject static BeanStore beanStore;
+		@RestInject static BasicBeanStore beanStore;
 
-		@RestInject BeanStore.Builder beanStore(BeanStore.Builder b) {
+		@RestInject BasicBeanStore.Builder beanStore(BasicBeanStore.Builder b) {
 			return b.type(MyBeanStore.class);
 		}
 	}
@@ -77,10 +77,10 @@ class RestContext_Builder_Test extends TestBase {
 
 	@Rest
 	public static class A4 {
-		@RestInject static BeanStore beanStore;
+		@RestInject static BasicBeanStore beanStore;
 
-		@RestInject BeanStore beanStore() {
-			return BeanStore.create().type(MyBeanStore.class).build();
+		@RestInject BasicBeanStore beanStore() {
+			return BasicBeanStore.create().type(MyBeanStore.class).build();
 		}
 	}
 

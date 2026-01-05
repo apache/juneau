@@ -50,7 +50,7 @@ public class MethodExecStats {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BeanStore beanStore) {
+		protected Builder(BasicBeanStore beanStore) {
 			super(MethodExecStats.class, beanStore);
 		}
 
@@ -100,7 +100,7 @@ public class MethodExecStats {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(BeanStore beanStore) {
+	public static Builder create(BasicBeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 

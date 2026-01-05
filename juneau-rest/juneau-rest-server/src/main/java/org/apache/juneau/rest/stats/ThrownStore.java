@@ -53,7 +53,7 @@ public class ThrownStore {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BeanStore beanStore) {
+		protected Builder(BasicBeanStore beanStore) {
 			super(ThrownStore.class, beanStore);
 		}
 
@@ -124,7 +124,7 @@ public class ThrownStore {
 	 * @return A new builder for this object.
 	 */
 	public static Builder create() {
-		return new Builder(BeanStore.INSTANCE);
+		return new Builder(BasicBeanStore.INSTANCE);
 	}
 
 	/**
@@ -133,13 +133,13 @@ public class ThrownStore {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(BeanStore beanStore) {
+	public static Builder create(BasicBeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 
 	private final ConcurrentHashMap<Long,ThrownStats> db = new ConcurrentHashMap<>();
 	private final Optional<ThrownStore> parent;
-	private final BeanStore beanStore;
+	private final BasicBeanStore beanStore;
 	private final Class<? extends ThrownStats> statsImplClass;
 	private final Set<String> ignoreClasses;
 
@@ -147,7 +147,7 @@ public class ThrownStore {
 	 * Constructor.
 	 */
 	public ThrownStore() {
-		this(create(BeanStore.INSTANCE));
+		this(create(BasicBeanStore.INSTANCE));
 	}
 
 	/**

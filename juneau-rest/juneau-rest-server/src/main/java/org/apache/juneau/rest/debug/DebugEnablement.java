@@ -55,7 +55,7 @@ public abstract class DebugEnablement {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BeanStore beanStore) {
+		protected Builder(BasicBeanStore beanStore) {
 			mapBuilder = ReflectionMap.create(Enablement.class);
 			defaultEnablement = NEVER;
 			conditional = x -> eqic("true", x.getHeader("Debug"));
@@ -195,7 +195,7 @@ public abstract class DebugEnablement {
 	 * Represents no DebugEnablement.
 	 */
 	public abstract class Void extends DebugEnablement {
-		Void(BeanStore beanStore) {
+		Void(BasicBeanStore beanStore) {
 			super(beanStore);
 		}
 	}
@@ -206,7 +206,7 @@ public abstract class DebugEnablement {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(BeanStore beanStore) {
+	public static Builder create(BasicBeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 
@@ -217,11 +217,11 @@ public abstract class DebugEnablement {
 	/**
 	 * Constructor.
 	 * <p>
-	 * Subclasses typically override the {@link #init(BeanStore)} method when using this constructor.
+	 * Subclasses typically override the {@link #init(BasicBeanStore)} method when using this constructor.
 	 *
 	 * @param beanStore The bean store containing injectable beans for this enablement.
 	 */
-	public DebugEnablement(BeanStore beanStore) {
+	public DebugEnablement(BasicBeanStore beanStore) {
 		var builder = init(beanStore);
 		this.defaultEnablement = firstNonNull(builder.defaultEnablement, NEVER);
 		this.enablementMap = builder.mapBuilder.build();
@@ -296,7 +296,7 @@ public abstract class DebugEnablement {
 	 * @param beanStore The bean store containing injectable beans for this logger.
 	 * @return A new builder object.
 	 */
-	protected Builder init(BeanStore beanStore) {
+	protected Builder init(BasicBeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 

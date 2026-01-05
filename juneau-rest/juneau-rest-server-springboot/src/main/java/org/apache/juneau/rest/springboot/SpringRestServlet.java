@@ -51,10 +51,10 @@ public abstract class SpringRestServlet extends RestServlet {
 	 * Hook into Spring bean injection framework.
 	 *
 	 * @param parent Optional parent resource.
-	 * @return A BeanStore that retrieves beans from the Spring Boot app context.
+	 * @return A BasicBeanStore that retrieves beans from the Spring Boot app context.
 	 */
 	@RestInject
-	public BeanStore createBeanStore(Optional<BeanStore> parent) {
+	public BasicBeanStore createBeanStore(Optional<BasicBeanStore> parent) {
 		return new SpringBeanStore(appContext, parent, this);
 	}
 }

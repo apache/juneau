@@ -42,7 +42,7 @@ public interface SwaggerProvider {
 	 */
 	public class Builder {
 
-		final BeanStore beanStore;
+		final BasicBeanStore beanStore;
 		Class<?> resourceClass;
 		Supplier<VarResolver> varResolver;
 		Supplier<JsonSchemaGenerator> jsonSchemaGenerator;
@@ -55,7 +55,7 @@ public interface SwaggerProvider {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BeanStore beanStore) {
+		protected Builder(BasicBeanStore beanStore) {
 			this.beanStore = beanStore;
 			this.creator = BeanCreator.of(SwaggerProvider.class, beanStore).type(BasicSwaggerProvider.class).builder(Builder.class, this);
 		}
@@ -202,7 +202,7 @@ public interface SwaggerProvider {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	static Builder create(BeanStore beanStore) {
+	static Builder create(BasicBeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 

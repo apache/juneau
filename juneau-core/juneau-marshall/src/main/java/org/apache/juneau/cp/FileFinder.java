@@ -102,7 +102,7 @@ public interface FileFinder {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BeanStore beanStore) {
+		protected Builder(BasicBeanStore beanStore) {
 			super(BasicFileFinder.class, beanStore);
 			roots = set();
 			cachingLimit = -1;
@@ -214,7 +214,7 @@ public interface FileFinder {
 	 * @return A new builder for this object.
 	 */
 	static Builder create() {
-		return new Builder(BeanStore.INSTANCE);
+		return new Builder(BasicBeanStore.INSTANCE);
 	}
 
 	/**
@@ -223,7 +223,7 @@ public interface FileFinder {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	static Builder create(BeanStore beanStore) {
+	static Builder create(BasicBeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 

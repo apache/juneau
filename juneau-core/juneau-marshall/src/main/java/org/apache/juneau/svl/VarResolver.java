@@ -79,7 +79,7 @@ public class VarResolver {
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(VarResolver.class, BeanStore.create().build());
+			super(VarResolver.class, BasicBeanStore.create().build());
 			vars = VarList.create();
 		}
 
@@ -226,7 +226,7 @@ public class VarResolver {
 		return new Builder();
 	}
 
-	private static Var toVar(BeanStore bs, Object o) {
+	private static Var toVar(BasicBeanStore bs, Object o) {
 		if (o instanceof Class o2)
 			return BeanCreator.of(Var.class, bs).type(o2).run();
 		return (Var)o;
@@ -235,7 +235,7 @@ public class VarResolver {
 	final Var[] vars;
 	private final Map<String,Var> varMap;
 
-	final BeanStore beanStore;
+	final BasicBeanStore beanStore;
 
 	/**
 	 * Constructor.
@@ -250,7 +250,7 @@ public class VarResolver {
 			m.put(v.getName(), v);
 
 		this.varMap = u(m);
-		this.beanStore = BeanStore.of(builder.beanStore());
+		this.beanStore = BasicBeanStore.of(builder.beanStore());
 	}
 
 	/**
@@ -290,7 +290,7 @@ public class VarResolver {
 	 * @param beanStore The bean store to associate with this session.
 	 * @return A new resolver session.
 	 */
-	public VarResolverSession createSession(BeanStore beanStore) {
+	public VarResolverSession createSession(BasicBeanStore beanStore) {
 		return new VarResolverSession(this, beanStore);
 	}
 

@@ -126,7 +126,7 @@ import org.apache.juneau.svl.*;
  * <p class='bcode'>
  * 	<jc>// Fields that get set during initialization based on beans found in the bean store.</jc>
  * 	<ja>@RestInject</ja> CallLogger <jf>callLogger</jf>;
- * 	<ja>@RestInject</ja> BeanStore <jf>beanStore</jf>;  <jc>// Note that BeanStore itself can be accessed this way.</jc>
+ * 	<ja>@RestInject</ja> BasicBeanStore <jf>beanStore</jf>;  <jc>// Note that BasicBeanStore itself can be accessed this way.</jc>
  * </p>
  *
  * <h5 class='section'>Notes:</h5><ul>
@@ -142,7 +142,7 @@ import org.apache.juneau.svl.*;
  * <table class='w800 styled'>
  * 	<tr><th>Bean class</td><th>Bean qualifying names</th><th>Scope</th></tr>
  * 	<tr><td>{@link BeanContext}<br>{@link org.apache.juneau.BeanContext.Builder}</td><td></td><td>class<br>method</td></tr>
- * 	<tr><td>{@link BeanStore}<br>{@link org.apache.juneau.cp.BeanStore.Builder}</td><td></td><td>class</td></tr>
+ * 	<tr><td>{@link BasicBeanStore}<br>{@link org.apache.juneau.cp.BasicBeanStore.Builder}</td><td></td><td>class</td></tr>
  * 	<tr><td>{@link CallLogger}<br>{@link org.apache.juneau.rest.logger.CallLogger.Builder}</td><td></td><td>class</td></tr>
  * 	<tr><td>{@link Config}</td><td></td><td>class</td></tr>
  * 	<tr><td>{@link DebugEnablement}<br>{@link org.apache.juneau.rest.debug.DebugEnablement.Builder}</td><td></td><td>class</td></tr>

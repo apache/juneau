@@ -35,11 +35,11 @@ import org.apache.juneau.commons.reflect.*;
  * <p>
  * This class is instantiated through the following methods:
  * <ul class='javatree'>
- * 	<li class='jc'>{@link BeanStore}
+ * 	<li class='jc'>{@link BasicBeanStore}
  * 		<ul class='javatreec'>
- * 			<li class='jm'>{@link BeanStore#createMethodFinder(Class)}
- * 			<li class='jm'>{@link BeanStore#createMethodFinder(Class,Class)}
- * 			<li class='jm'>{@link BeanStore#createMethodFinder(Class,Object)}
+ * 			<li class='jm'>{@link BasicBeanStore#createMethodFinder(Class)}
+ * 			<li class='jm'>{@link BasicBeanStore#createMethodFinder(Class,Class)}
+ * 			<li class='jm'>{@link BasicBeanStore#createMethodFinder(Class,Object)}
  * 		</ul>
  * 	</li>
  * </ul>
@@ -63,7 +63,7 @@ import org.apache.juneau.commons.reflect.*;
  * 	B <mv>b</mv> = <jk>new</jk> B();
  *
  *  <jc>// Create a bean store with some mapped beans.</jc>
- * 	BeanStore <mv>beanStore</mv> = BeanStore.<jsm>create</jsm>().addBean(C.<jk>class</jk>, <jk>new</jk> C());
+ * 	BasicBeanStore <mv>beanStore</mv> = BasicBeanStore.<jsm>create</jsm>().addBean(C.<jk>class</jk>, <jk>new</jk> C());
  *
  * 	<jc>// Instantiate the bean using the creator method.</jc>
  * 	A <mv>a</mv> = <mv>beanStore</mv>
@@ -75,7 +75,7 @@ import org.apache.juneau.commons.reflect.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link BeanStore}
+ * 	<li class='jc'>{@link BasicBeanStore}
  * </ul>
  *
  * @param <T> The bean type being created.
@@ -85,23 +85,23 @@ public class BeanCreateMethodFinder<T> {
 	private Class<T> beanType;
 	private final Class<?> resourceClass;
 	private final Object resource;
-	private final BeanStore beanStore;
+	private final BasicBeanStore beanStore;
 
 	private MethodInfo method;
 	private Object[] args;
 
-	BeanCreateMethodFinder(Class<T> beanType, Class<?> resourceClass, BeanStore beanStore) {
+	BeanCreateMethodFinder(Class<T> beanType, Class<?> resourceClass, BasicBeanStore beanStore) {
 		this.beanType = assertArgNotNull("beanType", beanType);
 		this.resource = null;
 		this.resourceClass = assertArgNotNull("resourceClass", resourceClass);
-		this.beanStore = BeanStore.of(beanStore);
+		this.beanStore = BasicBeanStore.of(beanStore);
 	}
 
-	BeanCreateMethodFinder(Class<T> beanType, Object resource, BeanStore beanStore) {
+	BeanCreateMethodFinder(Class<T> beanType, Object resource, BasicBeanStore beanStore) {
 		this.beanType = assertArgNotNull("beanType", beanType);
 		this.resource = assertArgNotNull("resource", resource);
 		this.resourceClass = resource.getClass();
-		this.beanStore = BeanStore.of(beanStore, resource);
+		this.beanStore = BasicBeanStore.of(beanStore, resource);
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class BeanCreateMethodFinder<T> {
 	 * This method can be called multiple times with different method names or required parameters until a match is found.
 	 * <br>Once a method is found, subsequent calls to this method will be no-ops.
 	 *
-	 * See {@link BeanStore#createMethodFinder(Class, Object)} for usage.
+	 * See {@link BasicBeanStore#createMethodFinder(Class, Object)} for usage.
 	 *
 	 * @param filter The predicate to apply.
 	 * @return This object.

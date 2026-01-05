@@ -69,12 +69,12 @@ public class BasicTestCallLogger extends CallLogger {
 	 *
 	 * @param beanStore The bean store containing injectable beans for this logger.
 	 */
-	public BasicTestCallLogger(BeanStore beanStore) {
+	public BasicTestCallLogger(BasicBeanStore beanStore) {
 		super(beanStore);
 	}
 
 	@Override
-	protected Builder init(BeanStore beanStore) {
+	protected Builder init(BasicBeanStore beanStore) {
 		// @formatter:off
 		return super.init(beanStore)
 			.normalRules(  // Rules when debugging is not enabled.

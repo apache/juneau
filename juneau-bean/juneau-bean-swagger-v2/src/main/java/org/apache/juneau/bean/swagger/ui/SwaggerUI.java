@@ -54,7 +54,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 	// @formatter:off
 	static final FileFinder RESOURCES = FileFinder
-		.create(BeanStore.INSTANCE)
+		.create(BasicBeanStore.INSTANCE)
 		.cp(SwaggerUI.class, null, true)
 		.dir(",")
 		.caching(Boolean.getBoolean("RestContext.disableClasspathResourceCaching.b") ? -1 : 1_000_000)

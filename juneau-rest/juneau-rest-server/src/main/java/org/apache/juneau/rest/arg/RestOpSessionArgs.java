@@ -26,7 +26,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters on {@link RestOp}-annotated Java methods of types found on the {@link RestOpSession} object.
  *
  * <ul class='javatree'>
- * 	<li class='jc'>{@link BeanStore}
+ * 	<li class='jc'>{@link BasicBeanStore}
  * 	<li class='jc'>{@link RestOpSession}
  * </ul>
  *
@@ -43,7 +43,7 @@ public class RestOpSessionArgs extends SimpleRestOperationArg {
 	 * @return A new arg, or <jk>null</jk> if the parameter type is not one of the supported types.
 	 */
 	public static RestOpSessionArgs create(ParameterInfo paramInfo) {
-		if (paramInfo.isType(BeanStore.class))
+		if (paramInfo.isType(BasicBeanStore.class))
 			return new RestOpSessionArgs(RestOpSession::getBeanStore);
 		if (paramInfo.isType(RestOpSession.class))
 			return new RestOpSessionArgs(x -> x);

@@ -201,7 +201,7 @@ public class RestSession extends ContextSession {
 	}
 
 	private final long startTime = System.currentTimeMillis();
-	private final BeanStore beanStore;
+	private final BasicBeanStore beanStore;
 	private CallLogger logger;
 	private HttpServletRequest req;
 	private HttpServletResponse res;
@@ -223,7 +223,7 @@ public class RestSession extends ContextSession {
 		super(builder);
 		context = builder.ctx;
 		resource = builder.resource;
-		beanStore = BeanStore.of(context.getBeanStore(), resource).addBean(RestContext.class, context);
+		beanStore = BasicBeanStore.of(context.getBeanStore(), resource).addBean(RestContext.class, context);
 
 		logger = beanStore.add(CallLogger.class, builder.logger);
 		pathInfoUndecoded = builder.pathInfoUndecoded;
@@ -289,7 +289,7 @@ public class RestSession extends ContextSession {
 	 *
 	 * @return The bean store of this call.
 	 */
-	public BeanStore getBeanStore() { return beanStore; }
+	public BasicBeanStore getBeanStore() { return beanStore; }
 
 	/**
 	 * Returns the context that created this call.

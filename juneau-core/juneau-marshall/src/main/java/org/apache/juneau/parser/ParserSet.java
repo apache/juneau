@@ -99,7 +99,7 @@ public class ParserSet {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BeanStore beanStore) {
+		protected Builder(BasicBeanStore beanStore) {
 			super(ParserSet.class, beanStore);
 			this.entries = list();
 		}
@@ -125,7 +125,7 @@ public class ParserSet {
 		 * @param copyFrom The parser group that we're copying settings and parsers from.
 		 */
 		protected Builder(ParserSet copyFrom) {
-			super(copyFrom.getClass(), BeanStore.INSTANCE);
+			super(copyFrom.getClass(), BasicBeanStore.INSTANCE);
 			this.entries = list((Object[])copyFrom.entries);
 		}
 
@@ -444,7 +444,7 @@ public class ParserSet {
 	 * @return A new builder for this object.
 	 */
 	public static Builder create() {
-		return new Builder(BeanStore.INSTANCE);
+		return new Builder(BasicBeanStore.INSTANCE);
 	}
 
 	/**
@@ -453,7 +453,7 @@ public class ParserSet {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(BeanStore beanStore) {
+	public static Builder create(BasicBeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 

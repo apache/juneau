@@ -40,14 +40,14 @@ public class BasicSwaggerProvider implements SwaggerProvider {
 	private final JsonSchemaGenerator js;
 	private final Messages messages;
 	private final FileFinder fileFinder;
-	private final BeanStore beanStore;
+	private final BasicBeanStore beanStore;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param beanStore The bean store containing injectable beans for this logger.
 	 */
-	public BasicSwaggerProvider(BeanStore beanStore) {
+	public BasicSwaggerProvider(BasicBeanStore beanStore) {
 		// @formatter:off
 		this(
 			SwaggerProvider

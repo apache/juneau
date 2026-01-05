@@ -148,7 +148,7 @@ public class RestOpSession extends ContextSession {
 	 *
 	 * @return The bean store for this session.
 	 */
-	public BeanStore getBeanStore() { return session.getBeanStore(); }
+	public BasicBeanStore getBeanStore() { return session.getBeanStore(); }
 
 	@Override /* Overridden from ContextSession */
 	public RestOpContext getContext() { return ctx; }

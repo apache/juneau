@@ -55,7 +55,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 
 	// @formatter:off
 	static final FileFinder RESOURCES = FileFinder
-		.create(BeanStore.INSTANCE)
+		.create(BasicBeanStore.INSTANCE)
 		.cp(OpenApiUI.class, null, true)
 		.dir(",")
 		.caching(Boolean.getBoolean("RestContext.disableClasspathResourceCaching.b") ? -1 : 1_000_000)

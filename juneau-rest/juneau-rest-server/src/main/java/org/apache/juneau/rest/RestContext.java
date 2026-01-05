@@ -134,8 +134,8 @@ public class RestContext extends Context {
 		// @formatter:off
 		private static final Set<Class<?>> DELAYED_INJECTION = set(
 			BeanContext.Builder.class,
-			BeanStore.Builder.class,
-			BeanStore.class,
+			BasicBeanStore.Builder.class,
+			BasicBeanStore.class,
 			CallLogger.Builder.class,
 			CallLogger.class,
 			Config.class,
@@ -223,8 +223,8 @@ public class RestContext extends Context {
 		private BeanCreator<DebugEnablement> debugEnablement;
 		private BeanCreator<StaticFiles> staticFiles;
 		private BeanCreator<SwaggerProvider> swaggerProvider;
-		private BeanStore beanStore;
-		private BeanStore rootBeanStore;
+		private BasicBeanStore beanStore;
+		private BasicBeanStore rootBeanStore;
 		private boolean disableContentParam = env("RestContext.disableContentParam", false);
 		private boolean initialized;
 		private boolean renderResponseStackTraces = env("RestContext.renderResponseStackTraces", false);
@@ -542,14 +542,14 @@ public class RestContext extends Context {
 		 * 	<li>Class annotation:  {@link Rest#beanStore() @Rest(beanStore)}
 		 * 	<li>{@link RestInject @RestInject}-annotated methods:
 		 * 		<p class='bjava'>
-		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] BeanStore myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] BasicBeanStore myMethod(<i>&lt;args&gt;</i>) {...}
 		 * 		</p>
-		 * 		Args can be any injected bean including {@link org.apache.juneau.cp.BeanStore.Builder}, the default builder.
+		 * 		Args can be any injected bean including {@link org.apache.juneau.cp.BasicBeanStore.Builder}, the default builder.
 		 * </ul>
 		 *
 		 * @return The bean store in this builder.
 		 */
-		public BeanStore beanStore() {
+		public BasicBeanStore beanStore() {
 			return beanStore;
 		}
 
@@ -630,7 +630,7 @@ public class RestContext extends Context {
 		 * 	<jc>// Our customized logger.</jc>
 		 * 	<jk>public class</jk> MyLogger <jk>extends</jk> BasicCallLogger {
 		 *
-		 * 		<jk>public</jk> MyLogger(BeanStore <jv>beanStore</jv>) {
+		 * 		<jk>public</jk> MyLogger(BasicBeanStore <jv>beanStore</jv>) {
 		 *			<jk>super</jk>(<jv>beanStore</jv>);
 		 *		}
 		 *
@@ -673,7 +673,7 @@ public class RestContext extends Context {
 		 * 	<li class='note'>
 		 * 		When defined as a class, the implementation must have one of the following constructor:
 		 * 		<ul>
-		 * 			<li><code><jk>public</jk> T(BeanStore)</code>
+		 * 			<li><code><jk>public</jk> T(BasicBeanStore)</code>
 		 * 		</ul>
 		 * 	<li class='note'>
 		 * 		Inner classes of the REST resource class are allowed.
@@ -833,7 +833,7 @@ public class RestContext extends Context {
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		When defined as classes, instances are resolved using the registered bean store which
-		 * 		by default is {@link BeanStore} which requires the class have one of the following
+		 * 		by default is {@link BasicBeanStore} which requires the class have one of the following
 		 * 		constructors:
 		 * 		<ul>
 		 * 			<li><code><jk>public</jk> T(RestContext.Builder)</code>
@@ -1776,11 +1776,11 @@ public class RestContext extends Context {
 
 			if (rootBeanStore == null) {
 				rootBeanStore = beanStore;
-				beanStore = BeanStore.of(rootBeanStore, r.get());
+				beanStore = BasicBeanStore.of(rootBeanStore, r.get());
 			}
 			var bs = beanStore;
 
-			beanStore.add(BeanStore.class, bs);
+			beanStore.add(BasicBeanStore.class, bs);
 			varResolver = createVarResolver(bs, r, rc);
 			beanStore.add(VarResolver.class, varResolver.build());
 			config = beanStore.add(Config.class, createConfig(bs, r, rc));
@@ -3019,7 +3019,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Override the method used to create default request attributes.</jc>
 		 * 		<ja>@Override</ja>
-		 * 		<jk>protected</jk> NamedAttributeMap createDefaultRequestAttributes(Object <jv>resource</jv>, BeanStore <jv>beanStore</jv>, Method <jv>method</jv>, RestContext <jv>context</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>protected</jk> NamedAttributeMap createDefaultRequestAttributes(Object <jv>resource</jv>, BasicBeanStore <jv>beanStore</jv>, Method <jv>method</jv>, RestContext <jv>context</jv>) <jk>throws</jk> Exception {
 		 * 			<jk>return super</jk>
 		 * 				.createDefaultRequestAttributes(<jv>resource</jv>, <jv>beanStore</jv>, <jv>method</jv>, <jv>context</jv>)
 		 * 				.append(NamedAttribute.<jsm>of</jsm>(<js>"foo"</js>, ()-&gt;<jf>fooSupplier</jf>.get());
@@ -3077,7 +3077,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The root bean store.
 		 */
-		public BeanStore rootBeanStore() {
+		public BasicBeanStore rootBeanStore() {
 			return rootBeanStore;
 		}
 
@@ -3693,7 +3693,7 @@ public class RestContext extends Context {
 		 * 	These variables affect the variable resolver returned by {@link RestRequest#getVarResolverSession()}.
 		 *
 		 * <p>
-		 * The var resolver is created by the constructor using the {@link #createVarResolver(BeanStore,Supplier,Class)} method and is initialized with the following variables:
+		 * The var resolver is created by the constructor using the {@link #createVarResolver(BasicBeanStore,Supplier,Class)} method and is initialized with the following variables:
 		 * <ul class='javatreec'>
 		 * 	<li class='jc'>{@link ArgsVar}
 		 * 	<li class='jc'>{@link CoalesceVar}
@@ -3798,7 +3798,7 @@ public class RestContext extends Context {
 			return this;
 		}
 
-		private static void runInitHooks(BeanStore beanStore, Supplier<?> resource) throws ServletException {
+		private static void runInitHooks(BasicBeanStore beanStore, Supplier<?> resource) throws ServletException {
 
 			var r = resource.get();
 
@@ -3834,7 +3834,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new bean context sub-builder.
 		 */
-		protected BeanContext.Builder createBeanContext(BeanStore beanStore, Supplier<?> resource) {
+		protected BeanContext.Builder createBeanContext(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
 			Value<BeanContext.Builder> v = Value.of(BeanContext.create());
@@ -3860,12 +3860,12 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new bean store builder.
 		 */
-		protected BeanStore.Builder createBeanStore(Supplier<?> resource) {
+		protected BasicBeanStore.Builder createBeanStore(Supplier<?> resource) {
 
 			// Default value.
 			// @formatter:off
 			var v = Value.of(
-				BeanStore
+				BasicBeanStore
 					.create()
 					.parent(rootBeanStore())
 					.outer(resource.get())
@@ -3875,10 +3875,10 @@ public class RestContext extends Context {
 			// Apply @Rest(beanStore).
 			rstream(AP.find(Rest.class, info(resourceClass))).map(x -> x.inner().beanStore()).filter(ClassUtils::isNotVoid).forEach(x -> v.get().type(x));
 
-			// Replace with bean from:  @RestInject public [static] BeanStore xxx(<args>)
+			// Replace with bean from:  @RestInject public [static] BasicBeanStore xxx(<args>)
 			// @formatter:off
 			v.get().build()
-				.createMethodFinder(BeanStore.class)
+				.createMethodFinder(BasicBeanStore.class)
 				.find(Builder::isRestInjectMethod)
 				.run(x -> v.get().impl(x));
 			// @formatter:on
@@ -3899,7 +3899,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new call logger sub-builder.
 		 */
-		protected BeanCreator<CallLogger> createCallLogger(BeanStore beanStore, Supplier<?> resource) {
+		protected BeanCreator<CallLogger> createCallLogger(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			var creator = BeanCreator.of(CallLogger.class, beanStore).type(BasicCallLogger.class);
 
@@ -3930,7 +3930,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean type that this context is defined against.
 		 * @return A new config.
 		 */
-		protected Config createConfig(BeanStore beanStore, Supplier<?> resource, Class<?> resourceClass) {
+		protected Config createConfig(BasicBeanStore beanStore, Supplier<?> resource, Class<?> resourceClass) {
 
 			var v = Value.<Config>empty();
 
@@ -3970,7 +3970,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new debug enablement bean creator.
 		 */
-		protected BeanCreator<DebugEnablement> createDebugEnablement(BeanStore beanStore, Supplier<?> resource) {
+		protected BeanCreator<DebugEnablement> createDebugEnablement(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			var creator = BeanCreator.of(DebugEnablement.class, beanStore).type(BasicDebugEnablement.class);
 
@@ -3994,7 +3994,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new default request attributes sub-builder.
 		 */
-		protected NamedAttributeMap createDefaultRequestAttributes(BeanStore beanStore, Supplier<?> resource) {
+		protected NamedAttributeMap createDefaultRequestAttributes(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
 			var v = Value.of(NamedAttributeMap.create());
@@ -4016,7 +4016,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new default request headers sub-builder.
 		 */
-		protected HeaderList createDefaultRequestHeaders(BeanStore beanStore, Supplier<?> resource) {
+		protected HeaderList createDefaultRequestHeaders(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
 			var v = Value.of(HeaderList.create());
@@ -4039,7 +4039,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new default response headers sub-builder.
 		 */
-		protected HeaderList createDefaultResponseHeaders(BeanStore beanStore, Supplier<?> resource) {
+		protected HeaderList createDefaultResponseHeaders(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
 			var v = Value.of(HeaderList.create());
@@ -4062,7 +4062,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new destroy method list.
 		 */
-		protected MethodList createDestroyMethods(BeanStore beanStore, Supplier<?> resource) {
+		protected MethodList createDestroyMethods(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
 			var v = Value.of(MethodList.of(getAnnotatedMethods(resource, RestDestroy.class).collect(Collectors.toList())));
@@ -4088,7 +4088,7 @@ public class RestContext extends Context {
 		 * 	<br>Created by {@link RestContext.Builder#beanStore()}.
 		 * @return A new encoder group sub-builder.
 		 */
-		protected EncoderSet.Builder createEncoders(BeanStore beanStore, Supplier<?> resource) {
+		protected EncoderSet.Builder createEncoders(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
 			Value<EncoderSet.Builder> v = Value.of(EncoderSet.create(beanStore).add(IdentityEncoder.INSTANCE));
@@ -4114,7 +4114,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new end call method list.
 		 */
-		protected MethodList createEndCallMethods(BeanStore beanStore, Supplier<?> resource) {
+		protected MethodList createEndCallMethods(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
 			Value<MethodList> v = Value.of(MethodList.of(getAnnotatedMethods(resource, RestEndCall.class).collect(Collectors.toList())));
@@ -4138,7 +4138,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new JSON schema generator sub-builder.
 		 */
-		protected JsonSchemaGenerator.Builder createJsonSchemaGenerator(BeanStore beanStore, Supplier<?> resource) {
+		protected JsonSchemaGenerator.Builder createJsonSchemaGenerator(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
 			var v = Value.of(JsonSchemaGenerator.create());
@@ -4171,7 +4171,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean class that this context is defined against.
 		 * @return A new logger.
 		 */
-		protected Logger createLogger(BeanStore beanStore, Supplier<?> resource, Class<?> resourceClass) {
+		protected Logger createLogger(BasicBeanStore beanStore, Supplier<?> resource, Class<?> resourceClass) {
 
 			// Default value.
 			Value<Logger> v = Value.of(Logger.getLogger(cn(resourceClass)));
@@ -4198,7 +4198,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new messages sub-builder.
 		 */
-		protected Messages.Builder createMessages(BeanStore beanStore, Supplier<?> resource) {
+		protected Messages.Builder createMessages(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
 			Value<Messages.Builder> v = Value.of(Messages.create(resourceClass));
@@ -4225,7 +4225,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new method execution statistics store sub-builder.
 		 */
-		protected MethodExecStore.Builder createMethodExecStore(BeanStore beanStore, Supplier<?> resource) {
+		protected MethodExecStore.Builder createMethodExecStore(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
 			Value<MethodExecStore.Builder> v = Value.of(MethodExecStore.create(beanStore));
@@ -4256,7 +4256,7 @@ public class RestContext extends Context {
 		 * 	<br>Created by {@link RestContext.Builder#beanStore()}.
 		 * @return A new parser group sub-builder.
 		 */
-		protected ParserSet.Builder createParsers(BeanStore beanStore, Supplier<?> resource) {
+		protected ParserSet.Builder createParsers(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
 			Value<ParserSet.Builder> v = Value.of(ParserSet.create(beanStore));
@@ -4286,7 +4286,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new part parser sub-builder.
 		 */
-		protected HttpPartParser.Creator createPartParser(BeanStore beanStore, Supplier<?> resource) {
+		protected HttpPartParser.Creator createPartParser(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
 			Value<HttpPartParser.Creator> v = Value.of(HttpPartParser.creator().type(OpenApiParser.class));
@@ -4322,7 +4322,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new part serializer sub-builder.
 		 */
-		protected HttpPartSerializer.Creator createPartSerializer(BeanStore beanStore, Supplier<?> resource) {
+		protected HttpPartSerializer.Creator createPartSerializer(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
 			Value<HttpPartSerializer.Creator> v = Value.of(HttpPartSerializer.creator().type(OpenApiSerializer.class));
@@ -4354,7 +4354,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new post-call method list.
 		 */
-		protected MethodList createPostCallMethods(BeanStore beanStore, Supplier<?> resource) {
+		protected MethodList createPostCallMethods(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
 			Value<MethodList> v = Value.of(MethodList.of(getAnnotatedMethods(resource, RestPostCall.class).collect(Collectors.toList())));
@@ -4374,7 +4374,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new post-init-child-first method list.
 		 */
-		protected MethodList createPostInitChildFirstMethods(BeanStore beanStore, Supplier<?> resource) {
+		protected MethodList createPostInitChildFirstMethods(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
 			var ap = AP;
@@ -4402,7 +4402,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new post-init method list.
 		 */
-		protected MethodList createPostInitMethods(BeanStore beanStore, Supplier<?> resource) {
+		protected MethodList createPostInitMethods(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
 			var ap = AP;
@@ -4430,7 +4430,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new pre-call method list.
 		 */
-		protected MethodList createPreCallMethods(BeanStore beanStore, Supplier<?> resource) {
+		protected MethodList createPreCallMethods(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
 			Value<MethodList> v = Value.of(MethodList.of(getAnnotatedMethods(resource, RestPreCall.class).collect(Collectors.toList())));
@@ -4454,7 +4454,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new response processor list sub-builder.
 		 */
-		protected ResponseProcessorList.Builder createResponseProcessors(BeanStore beanStore, Supplier<?> resource) {
+		protected ResponseProcessorList.Builder createResponseProcessors(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
 			// @formatter:off
@@ -4495,7 +4495,7 @@ public class RestContext extends Context {
 		 * @return A new REST children list.
 		 * @throws Exception If a problem occurred instantiating one of the child rest contexts.
 		 */
-		protected RestChildren.Builder createRestChildren(BeanStore beanStore, Supplier<?> resource, RestContext restContext) throws Exception {
+		protected RestChildren.Builder createRestChildren(BasicBeanStore beanStore, Supplier<?> resource, RestContext restContext) throws Exception {
 
 			// Default value.
 			Value<RestChildren.Builder> v = Value.of(RestChildren.create(beanStore).type(childrenClass));
@@ -4569,7 +4569,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new REST operation args sub-builder.
 		 */
-		protected RestOpArgList.Builder createRestOpArgs(BeanStore beanStore, Supplier<?> resource) {
+		protected RestOpArgList.Builder createRestOpArgs(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
 			Value<RestOpArgList.Builder> v = Value.of(RestOpArgList.create(beanStore).add(AttributeArg.class, ContentArg.class, FormDataArg.class, HasFormDataArg.class, HasQueryArg.class,
@@ -4600,7 +4600,7 @@ public class RestContext extends Context {
 		 * @return A new REST operations list.
 		 * @throws ServletException If a problem occurred instantiating one of the child rest contexts.
 		 */
-		protected RestOperations.Builder createRestOperations(BeanStore beanStore, Supplier<?> resource, RestContext restContext) throws ServletException {
+		protected RestOperations.Builder createRestOperations(BasicBeanStore beanStore, Supplier<?> resource, RestContext restContext) throws ServletException {
 
 			// Default value.
 			Value<RestOperations.Builder> v = Value.of(RestOperations.create(beanStore));
@@ -4636,7 +4636,7 @@ public class RestContext extends Context {
 
 						RestOpContext.Builder rocb = RestOpContext.create(mi.inner(), restContext).beanStore(beanStore).type(opContextClass);
 
-						beanStore = BeanStore.of(beanStore, resource.get()).addBean(RestOpContext.Builder.class, rocb);
+						beanStore = BasicBeanStore.of(beanStore, resource.get()).addBean(RestOpContext.Builder.class, rocb);
 						for (var m : initMap.values()) {
 							if (! beanStore.hasAllParams(m)) {
 								throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", cns(m.getDeclaringClass()), m.getSignature(),
@@ -4699,7 +4699,7 @@ public class RestContext extends Context {
 		 * 	<br>Created by {@link RestContext.Builder#beanStore()}.
 		 * @return A new serializer group sub-builder.
 		 */
-		protected SerializerSet.Builder createSerializers(BeanStore beanStore, Supplier<?> resource) {
+		protected SerializerSet.Builder createSerializers(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
 			Value<SerializerSet.Builder> v = Value.of(SerializerSet.create(beanStore));
@@ -4725,7 +4725,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new start call method list.
 		 */
-		protected MethodList createStartCallMethods(BeanStore beanStore, Supplier<?> resource) {
+		protected MethodList createStartCallMethods(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
 			Value<MethodList> v = Value.of(MethodList.of(getAnnotatedMethods(resource, RestStartCall.class).collect(Collectors.toList())));
@@ -4749,7 +4749,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new static files sub-builder.
 		 */
-		protected BeanCreator<StaticFiles> createStaticFiles(BeanStore beanStore, Supplier<?> resource) {
+		protected BeanCreator<StaticFiles> createStaticFiles(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			var creator = BeanCreator.of(StaticFiles.class, beanStore).type(BasicStaticFiles.class);
 
@@ -4780,7 +4780,7 @@ public class RestContext extends Context {
 		 * 		resource class with any of the following arguments:
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
-		 * 			<li>{@link BeanStore}
+		 * 			<li>{@link BasicBeanStore}
 		 * 			<li>Any <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringbootBasics">juneau-rest-server-springboot Basics</a>.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
@@ -4798,7 +4798,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new swagger provider sub-builder.
 		 */
-		protected BeanCreator<SwaggerProvider> createSwaggerProvider(BeanStore beanStore, Supplier<?> resource) {
+		protected BeanCreator<SwaggerProvider> createSwaggerProvider(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			var creator = BeanCreator.of(SwaggerProvider.class, beanStore).type(BasicSwaggerProvider.class);
 
@@ -4830,7 +4830,7 @@ public class RestContext extends Context {
 		 * 	<br>Created by {@link RestContext.Builder#beanStore()}.
 		 * @return A new thrown-store sub-builder.
 		 */
-		protected ThrownStore.Builder createThrownStore(BeanStore beanStore, Supplier<?> resource, RestContext parent) {
+		protected ThrownStore.Builder createThrownStore(BasicBeanStore beanStore, Supplier<?> resource, RestContext parent) {
 
 			// Default value.
 			Value<ThrownStore.Builder> v = Value.of(ThrownStore.create(beanStore).impl(parent == null ? null : parent.getThrownStore()));
@@ -4862,7 +4862,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean type that this context is defined against.
 		 * @return A new variable resolver sub-builder.
 		 */
-		protected VarResolver.Builder createVarResolver(BeanStore beanStore, Supplier<?> resource, Class<?> resourceClass) {
+		protected VarResolver.Builder createVarResolver(BasicBeanStore beanStore, Supplier<?> resource, Class<?> resourceClass) {
 
 			// Default value.
 			// @formatter:off
@@ -4949,8 +4949,8 @@ public class RestContext extends Context {
 	protected final AtomicBoolean initialized = new AtomicBoolean(false);
 	protected final BasicHttpException initException;
 	protected final BeanContext beanContext;
-	protected final BeanStore beanStore;
-	protected final BeanStore rootBeanStore;
+	protected final BasicBeanStore beanStore;
+	protected final BasicBeanStore rootBeanStore;
 	protected final Builder builder;
 	protected final CallLogger callLogger;
 	protected final Charset defaultCharset;
@@ -5030,10 +5030,10 @@ public class RestContext extends Context {
 			resourceClass = builder.resourceClass;
 			rootBeanStore = builder.rootBeanStore();
 
-			BeanStore bs = beanStore = builder.beanStore();
+			BasicBeanStore bs = beanStore = builder.beanStore();
 			// @formatter:off
 			beanStore
-				.addBean(BeanStore.class, beanStore)
+				.addBean(BasicBeanStore.class, beanStore)
 				.addBean(RestContext.class, this)
 				.addBean(Object.class, resource.get())
 				.addBean(DefaultSettingsMap.class, defaultSettings)
@@ -5315,7 +5315,7 @@ public class RestContext extends Context {
 	 *
 	 * @return The resource resolver associated with this context.
 	 */
-	public BeanStore getBeanStore() { return beanStore; }
+	public BasicBeanStore getBeanStore() { return beanStore; }
 
 	/**
 	 * Returns the builder that created this context.
@@ -5604,7 +5604,7 @@ public class RestContext extends Context {
 	 *
 	 * @return The root bean store for this context.
 	 */
-	public BeanStore getRootBeanStore() { return rootBeanStore; }
+	public BasicBeanStore getRootBeanStore() { return rootBeanStore; }
 
 	/**
 	 * Returns the serializers associated with this context.
@@ -5965,13 +5965,13 @@ public class RestContext extends Context {
 	 * 	<br>Created by {@link RestContext.Builder#beanStore()}.
 	 * @return The array of resolvers.
 	 */
-	protected RestOpArg[] findRestOperationArgs(Method m, BeanStore beanStore) {
+	protected RestOpArg[] findRestOperationArgs(Method m, BasicBeanStore beanStore) {
 
 		var mi = MethodInfo.of(m);
 		var params = mi.getParameters();
 		var ra = new RestOpArg[params.size()];
 
-		beanStore = BeanStore.of(beanStore, getResource());
+		beanStore = BasicBeanStore.of(beanStore, getResource());
 
 		for (var i = 0; i < params.size(); i++) {
 			var pi = params.get(i);

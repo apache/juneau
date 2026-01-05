@@ -50,7 +50,7 @@ public class MethodExecStore {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BeanStore beanStore) {
+		protected Builder(BasicBeanStore beanStore) {
 			super(MethodExecStore.class, beanStore);
 		}
 
@@ -118,7 +118,7 @@ public class MethodExecStore {
 	 * @return A new builder for this object.
 	 */
 	public static Builder create() {
-		return new Builder(BeanStore.INSTANCE);
+		return new Builder(BasicBeanStore.INSTANCE);
 	}
 
 	/**
@@ -127,12 +127,12 @@ public class MethodExecStore {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(BeanStore beanStore) {
+	public static Builder create(BasicBeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 
 	private final ThrownStore thrownStore;
-	private final BeanStore beanStore;
+	private final BasicBeanStore beanStore;
 	private final Class<? extends MethodExecStats> statsImplClass;
 	private final ConcurrentHashMap<Method,MethodExecStats> db = new ConcurrentHashMap<>();
 

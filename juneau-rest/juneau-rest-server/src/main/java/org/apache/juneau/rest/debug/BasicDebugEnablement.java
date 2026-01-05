@@ -55,12 +55,12 @@ public class BasicDebugEnablement extends DebugEnablement {
 	 *
 	 * @param beanStore The bean store containing injectable beans for this enablement.
 	 */
-	public BasicDebugEnablement(BeanStore beanStore) {
+	public BasicDebugEnablement(BasicBeanStore beanStore) {
 		super(beanStore);
 	}
 
 	@Override
-	protected Builder init(BeanStore beanStore) {
+	protected Builder init(BasicBeanStore beanStore) {
 		var b = super.init(beanStore);
 
 		var defaultSettings = beanStore.getBean(DefaultSettingsMap.class).get();

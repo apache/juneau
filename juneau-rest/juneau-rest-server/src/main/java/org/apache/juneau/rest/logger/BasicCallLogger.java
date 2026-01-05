@@ -44,7 +44,7 @@ public class BasicCallLogger extends CallLogger {
 	 * Uses the same settings as {@link CallLogger}.
 	 */
 	public BasicCallLogger() {
-		super(BeanStore.INSTANCE);
+		super(BasicBeanStore.INSTANCE);
 	}
 
 	/**
@@ -52,12 +52,12 @@ public class BasicCallLogger extends CallLogger {
 	 *
 	 * @param beanStore The bean store containing injectable beans for this logger.
 	 */
-	public BasicCallLogger(BeanStore beanStore) {
+	public BasicCallLogger(BasicBeanStore beanStore) {
 		super(beanStore);
 	}
 
 	@Override
-	protected Builder init(BeanStore beanStore) {
+	protected Builder init(BasicBeanStore beanStore) {
 		// @formatter:off
 		return super.init(beanStore)
 			.normalRules(  // Rules when debugging is not enabled.

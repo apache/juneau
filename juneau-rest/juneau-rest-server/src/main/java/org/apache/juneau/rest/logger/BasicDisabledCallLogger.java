@@ -32,12 +32,12 @@ public class BasicDisabledCallLogger extends CallLogger {
 	 *
 	 * @param beanStore The bean store containing injectable beans for this logger.
 	 */
-	public BasicDisabledCallLogger(BeanStore beanStore) {
+	public BasicDisabledCallLogger(BasicBeanStore beanStore) {
 		super(beanStore);
 	}
 
 	@Override
-	protected Builder init(BeanStore beanStore) {
+	protected Builder init(BasicBeanStore beanStore) {
 		return super.init(beanStore).disabled();
 	}
 }

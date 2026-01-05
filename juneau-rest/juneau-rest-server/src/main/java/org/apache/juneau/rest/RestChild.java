@@ -52,7 +52,7 @@ public class RestChild {
 	 * @param path The child resource path relative to the parent resource URI.
 	 * @param resource
 	 * 	The child resource.
-	 * 	<br>Can either be a Class (which will be instantiated using the registered {@link BeanStore})
+	 * 	<br>Can either be a Class (which will be instantiated using the registered {@link BasicBeanStore})
 	 * 	or an already-instantiated object.
 	 */
 	public RestChild(/*UrlPathPattern path, */ String path, Object resource) {

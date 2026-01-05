@@ -1057,7 +1057,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	public static class Builder extends BeanContextable.Builder {
 
 		private BeanCreator<RestCallHandler> callHandler;
-		private BeanStore beanStore = BeanStore.create().build();
+		private BasicBeanStore beanStore = BasicBeanStore.create().build();
 		private BiPredicate<RestRequest,RestResponse> logRequestsPredicate;
 		private boolean detectLeaks;
 		private boolean executorServiceShutdownOnClose;
@@ -6178,7 +6178,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	protected final SerializerSet serializers;
 	protected final UrlEncodingSerializer urlEncodingSerializer;  // Used for form posts only.
 	Predicate<Integer> errorCodes;
-	private final BeanStore beanStore;
+	private final BasicBeanStore beanStore;
 	private final HttpClientConnectionManager connectionManager;
 	private final Logger logger;
 	private final Map<Class<?>,HttpPartParser> partParsers = new ConcurrentHashMap<>();

@@ -31,7 +31,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p class='bjava'>
  * 	<jv>opSession</jv>
  * 		.{@link RestOpSession#getBeanStore() getBeanStore}()
- * 		.{@link BeanStore#getBean(Class) getBean}(<jv>type</jv>);
+ * 		.{@link BasicBeanStore#getBean(Class) getBean}(<jv>type</jv>);
  * </p>
  *
  * <p>

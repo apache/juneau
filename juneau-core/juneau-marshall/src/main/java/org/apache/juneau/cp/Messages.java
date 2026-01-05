@@ -138,7 +138,7 @@ public class Messages extends ResourceBundle {
 		 * @param forClass The base class.
 		 */
 		protected Builder(Class<?> forClass) {
-			super(Messages.class, BeanStore.INSTANCE);
+			super(Messages.class, BasicBeanStore.INSTANCE);
 			this.forClass = forClass;
 			this.name = cns(forClass);
 			locations = list();

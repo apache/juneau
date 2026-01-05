@@ -53,7 +53,7 @@ public class BasicStaticFiles implements StaticFiles {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static StaticFiles.Builder create(BeanStore beanStore) {
+	public static StaticFiles.Builder create(BasicBeanStore beanStore) {
 		return new StaticFiles.Builder(beanStore);
 	}
 
@@ -68,7 +68,7 @@ public class BasicStaticFiles implements StaticFiles {
 	 *
 	 * @param beanStore The bean store containing injectable beans for this logger.
 	 */
-	public BasicStaticFiles(BeanStore beanStore) {
+	public BasicStaticFiles(BasicBeanStore beanStore) {
 		// @formatter:off
 		this(StaticFiles
 			.create(beanStore)

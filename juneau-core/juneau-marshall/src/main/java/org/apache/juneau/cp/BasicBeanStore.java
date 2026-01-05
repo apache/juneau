@@ -69,30 +69,30 @@ import org.apache.juneau.commons.reflect.*;
  * <p>
  * Beans are created through the following methods:
  * <ul class='javatreec'>
- * 	<li class='jm'>{@link BeanCreator#of(Class,BeanStore) BeanCreator.of(Class,BeanStore)}
+ * 	<li class='jm'>{@link BeanCreator#of(Class,BasicBeanStore) BeanCreator.of(Class,BasicBeanStore)}
  * 	<li class='jm'>{@link #createMethodFinder(Class) createMethodFinder(Class)}
  * 	<li class='jm'>{@link #createMethodFinder(Class,Class) createMethodFinder(Class,Class)}
  * 	<li class='jm'>{@link #createMethodFinder(Class,Object) createMethodFinder(Class,Object)}
  * </ul>
  *
  * <h5 class='section'>Notes:</h5><ul>
- * 	<li class='note'>Bean stores can be nested using {@link Builder#parent(BeanStore)}.
+ * 	<li class='note'>Bean stores can be nested using {@link Builder#parent(BasicBeanStore)}.
  * 	<li class='note'>Bean stores can be made read-only using {@link Builder#readOnly()}.
  * 	<li class='note'>Bean stores can be made thread-safe using {@link Builder#threadSafe()}.
  * </ul>
  *
  */
-public class BeanStore {
+public class BasicBeanStore {
 	/**
 	 * Builder class.
 	 */
 	public static class Builder {
 
-		BeanStore parent;
+		BasicBeanStore parent;
 		boolean readOnly, threadSafe;
 		Object outer;
-		Class<? extends BeanStore> type;
-		BeanStore impl;
+		Class<? extends BasicBeanStore> type;
+		BasicBeanStore impl;
 
 		/**
 		 * Constructor.
@@ -104,11 +104,11 @@ public class BeanStore {
 		 *
 		 * @return A new bean store.
 		 */
-		public BeanStore build() {
+		public BasicBeanStore build() {
 			if (nn(impl))
 				return impl;
-			if (type == null || type == BeanStore.class)
-				return new BeanStore(this);
+			if (type == null || type == BasicBeanStore.class)
+				return new BasicBeanStore(this);
 
 			var c = info(type);
 
@@ -118,16 +118,16 @@ public class BeanStore {
 				&& x.getParameterCount() == 0
 				&& x.isStatic()
 				&& x.hasName("getInstance")
-			).map(m -> m.<BeanStore>invoke(null));
+			).map(m -> m.<BasicBeanStore>invoke(null));
 			// @formatter:on
 			if (result.isPresent())
 				return result.get();
 
-			result = c.getPublicConstructor(x -> x.canAccept(this)).map(ci -> ci.<BeanStore>newInstance(this));
+			result = c.getPublicConstructor(x -> x.canAccept(this)).map(ci -> ci.<BasicBeanStore>newInstance(this));
 			if (result.isPresent())
 				return result.get();
 
-			result = c.getDeclaredConstructor(x -> x.isProtected() && x.canAccept(this)).map(ci -> ci.accessible().<BeanStore>newInstance(this));
+			result = c.getDeclaredConstructor(x -> x.isProtected() && x.canAccept(this)).map(ci -> ci.accessible().<BasicBeanStore>newInstance(this));
 			if (result.isPresent())
 				return result.get();
 
@@ -140,7 +140,7 @@ public class BeanStore {
 		 * @param value The bean to return from the {@link #build()} method.
 		 * @return This object.
 		 */
-		public Builder impl(BeanStore value) {
+		public Builder impl(BasicBeanStore value) {
 			impl = value;
 			return this;
 		}
@@ -168,7 +168,7 @@ public class BeanStore {
 		 * @param value The setting value.
 		 * @return  This object.
 		 */
-		public Builder parent(BeanStore value) {
+		public Builder parent(BasicBeanStore value) {
 			parent = value;
 			return this;
 		}
@@ -177,7 +177,7 @@ public class BeanStore {
 		 * Specifies that the bean store is read-only.
 		 *
 		 * <p>
-		 * This means methods such as {@link BeanStore#addBean(Class, Object)} cannot be used.
+		 * This means methods such as {@link BasicBeanStore#addBean(Class, Object)} cannot be used.
 		 *
 		 * @return  This object.
 		 */
@@ -210,7 +210,7 @@ public class BeanStore {
 		 * @param value The bean store type.
 		 * @return This object.
 		 */
-		public Builder type(Class<? extends BeanStore> value) {
+		public Builder type(Class<? extends BasicBeanStore> value) {
 			type = value;
 			return this;
 		}
@@ -219,12 +219,12 @@ public class BeanStore {
 	/**
 	 * Non-existent bean store.
 	 */
-	public static final class Void extends BeanStore {}
+	public static final class Void extends BasicBeanStore {}
 
 	/**
 	 * Static read-only reusable instance.
 	 */
-	public static final BeanStore INSTANCE = create().readOnly().build();
+	public static final BasicBeanStore INSTANCE = create().readOnly().build();
 
 	/**
 	 * Static creator.
@@ -239,9 +239,9 @@ public class BeanStore {
 	 * Static creator.
 	 *
 	 * @param parent Parent bean store.  Can be <jk>null</jk> if this is the root resource.
-	 * @return A new {@link BeanStore} object.
+	 * @return A new {@link BasicBeanStore} object.
 	 */
-	public static BeanStore of(BeanStore parent) {
+	public static BasicBeanStore of(BasicBeanStore parent) {
 		return create().parent(parent).build();
 	}
 
@@ -250,16 +250,16 @@ public class BeanStore {
 	 *
 	 * @param parent Parent bean store.  Can be <jk>null</jk> if this is the root resource.
 	 * @param outer The outer bean used when instantiating inner classes.  Can be <jk>null</jk>.
-	 * @return A new {@link BeanStore} object.
+	 * @return A new {@link BasicBeanStore} object.
 	 */
-	public static BeanStore of(BeanStore parent, Object outer) {
+	public static BasicBeanStore of(BasicBeanStore parent, Object outer) {
 		return create().parent(parent).outer(outer).build();
 	}
 
 	private final Deque<Entry<?>> entries;
 	private final Map<Class<?>,Entry<?>> unnamedEntries;
 
-	final Optional<BeanStore> parent;
+	final Optional<BasicBeanStore> parent;
 	final Optional<Object> outer;
 	final boolean readOnly, threadSafe;
 	final SimpleReadWriteLock lock;
@@ -269,7 +269,7 @@ public class BeanStore {
 	 *
 	 * @param builder The builder containing the settings for this bean.
 	 */
-	protected BeanStore(Builder builder) {
+	protected BasicBeanStore(Builder builder) {
 		parent = opt(builder.parent);
 		outer = opt(builder.outer);
 		readOnly = builder.readOnly;
@@ -279,7 +279,7 @@ public class BeanStore {
 		unnamedEntries = threadSafe ? new ConcurrentHashMap<>() : map();
 	}
 
-	BeanStore() {
+	BasicBeanStore() {
 		this(create());
 	}
 
@@ -318,7 +318,7 @@ public class BeanStore {
 	 * @param bean The bean.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public <T> BeanStore addBean(Class<T> beanType, T bean) {
+	public <T> BasicBeanStore addBean(Class<T> beanType, T bean) {
 		return addBean(beanType, bean, null);
 	}
 
@@ -331,7 +331,7 @@ public class BeanStore {
 	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public <T> BeanStore addBean(Class<T> beanType, T bean, String name) {
+	public <T> BasicBeanStore addBean(Class<T> beanType, T bean, String name) {
 		return addSupplier(beanType, () -> bean, name);
 	}
 
@@ -343,7 +343,7 @@ public class BeanStore {
 	 * @param bean The bean supplier.
 	 * @return This object.
 	 */
-	public <T> BeanStore addSupplier(Class<T> beanType, Supplier<T> bean) {
+	public <T> BasicBeanStore addSupplier(Class<T> beanType, Supplier<T> bean) {
 		return addSupplier(beanType, bean, null);
 	}
 
@@ -356,7 +356,7 @@ public class BeanStore {
 	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public <T> BeanStore addSupplier(Class<T> beanType, Supplier<T> bean, String name) {
+	public <T> BasicBeanStore addSupplier(Class<T> beanType, Supplier<T> bean, String name) {
 		assertCanWrite();
 		var e = createEntry(beanType, bean, name);
 		try (var x = lock.write()) {
@@ -375,7 +375,7 @@ public class BeanStore {
 	 *
 	 * @return This object.
 	 */
-	public BeanStore clear() {
+	public BasicBeanStore clear() {
 		assertCanWrite();
 		try (var x = lock.write()) {
 			unnamedEntries.clear();
@@ -499,7 +499,7 @@ public class BeanStore {
 			var pt = pi.getParameterType();
 			if (i == 0 && outer.isPresent() && pt.isInstance(outer.get()))
 				continue loop;
-			if (pt.is(Optional.class) || pt.is(BeanStore.class))
+			if (pt.is(Optional.class) || pt.is(BasicBeanStore.class))
 				continue loop;
 			var beanName = pi.getResolvedQualifier();  // Use @Named for bean injection
 			var ptc = pt.inner();
@@ -524,7 +524,7 @@ public class BeanStore {
 			var pt = pi.getParameterType();
 			if (i == 0 && outer.isPresent() && pt.isInstance(outer.get())) {
 				o[i] = outer.get();
-			} else if (pt.is(BeanStore.class)) {
+			} else if (pt.is(BasicBeanStore.class)) {
 				o[i] = this;
 			} else {
 				var beanQualifier = pi.getResolvedQualifier();
@@ -548,7 +548,7 @@ public class BeanStore {
 			var pt = pi.getParameterType();
 			if (i == 0 && outer.isPresent() && pt.isInstance(outer.get()))
 				continue loop;
-			if (pt.is(Optional.class) || pt.is(BeanStore.class))
+			if (pt.is(Optional.class) || pt.is(BasicBeanStore.class))
 				continue loop;
 			var beanQualifier = pi.getResolvedQualifier();
 			var ptc = pt.inner();
@@ -585,7 +585,7 @@ public class BeanStore {
 			.a("entries", entries.stream().map(Entry::properties).collect(toList()))
 			.a("identity", id(this))
 			.a("outer", id(outer.orElse(null)))
-			.a("parent", parent.map(BeanStore::properties).orElse(null))
+			.a("parent", parent.map(BasicBeanStore::properties).orElse(null))
 			.ai(readOnly, "readOnly", readOnly)
 			.ai(threadSafe, "threadSafe", threadSafe);
 		// @formatter:on
@@ -598,7 +598,7 @@ public class BeanStore {
 
 	private void assertCanWrite() {
 		if (readOnly)
-			throw new IllegalStateException("Method cannot be used because BeanStore is read-only.");
+			throw new IllegalStateException("Method cannot be used because BasicBeanStore is read-only.");
 	}
 
 	/**
@@ -618,7 +618,7 @@ public class BeanStore {
 	}
 
 	/**
-	 * Represents a bean in a {@link BeanStore}.
+	 * Represents a bean in a {@link BasicBeanStore}.
 	 *
 	 * <p>
 	 * A bean entry consists of the following:

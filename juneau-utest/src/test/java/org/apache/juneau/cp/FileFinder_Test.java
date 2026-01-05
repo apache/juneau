@@ -658,7 +658,7 @@ public class FileFinder_Test extends TestBase {  // NOSONAR - Needs to be public
 
 	public static class E03a extends FileFinder.Builder {
 		protected E03a() {
-			super(BeanStore.INSTANCE);
+			super(BasicBeanStore.INSTANCE);
 		}
 	}
 	public static class E03b extends BasicFileFinder {

@@ -52,7 +52,7 @@ class BeanStore_Test extends TestBase {
 
 	public static final String A1n = A1.class.getSimpleName();  // NOSONAR
 
-	public static class A3 extends BeanStore {
+	public static class A3 extends BasicBeanStore {
 		protected A3(Builder builder) {
 			super(builder);
 		}
@@ -62,30 +62,30 @@ class BeanStore_Test extends TestBase {
 	private static A2 a2a = new A2();
 
 	@Test void a00_dummy() {
-		assertDoesNotThrow(BeanStore.Void::new);
+		assertDoesNotThrow(BasicBeanStore.Void::new);
 	}
 
 	@Test void a01_builderCopyConstructor() {
-		var b1p = BeanStore.create().readOnly().threadSafe().build();
-		var b1c = BeanStore.create().parent(b1p).build();
+		var b1p = BasicBeanStore.create().readOnly().threadSafe().build();
+		var b1c = BasicBeanStore.create().parent(b1p).build();
 		assertContains("readOnly=true", b1c.toString());
 		assertContains("threadSafe=true", b1c.toString());
 	}
 
 	@Test void a02_readOnly() {
-		var b1p = BeanStore.create().readOnly().build();
-		var b1c = BeanStore.create().parent(b1p).build();
-		var b2p = BeanStore.create().readOnly().threadSafe().build();
-		var b2c = BeanStore.create().parent(b1p).threadSafe().build();
+		var b1p = BasicBeanStore.create().readOnly().build();
+		var b1c = BasicBeanStore.create().parent(b1p).build();
+		var b2p = BasicBeanStore.create().readOnly().threadSafe().build();
+		var b2c = BasicBeanStore.create().parent(b1p).threadSafe().build();
 
 		for (var b : array(b1p, b2p)) {
-			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", ()->b.add(A1.class, a1a));
-			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", ()->b.add(A1.class, a1a, "foo"));
-			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", ()->b.addBean(A1.class, a1a));
-			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", ()->b.addBean(A1.class, a1a, "foo"));
-			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", ()->b.addSupplier(A1.class, ()->a1a));
-			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", ()->b.addSupplier(A1.class, ()->a1a, "foo"));
-			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", b::clear);
+			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BasicBeanStore is read-only.", ()->b.add(A1.class, a1a));
+			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BasicBeanStore is read-only.", ()->b.add(A1.class, a1a, "foo"));
+			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BasicBeanStore is read-only.", ()->b.addBean(A1.class, a1a));
+			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BasicBeanStore is read-only.", ()->b.addBean(A1.class, a1a, "foo"));
+			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BasicBeanStore is read-only.", ()->b.addSupplier(A1.class, ()->a1a));
+			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BasicBeanStore is read-only.", ()->b.addSupplier(A1.class, ()->a1a, "foo"));
+			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BasicBeanStore is read-only.", b::clear);
 		}
 
 		for (var b : array(b1c, b2c)) {
@@ -100,10 +100,10 @@ class BeanStore_Test extends TestBase {
 	}
 
 	@Test void a04_addBean() {
-		var b1p = BeanStore.create().build();
-		var b1c = BeanStore.of(b1p);
-		var b2p = BeanStore.create().threadSafe().build();
-		var b2c = BeanStore.create().threadSafe().parent(b2p).build();
+		var b1p = BasicBeanStore.create().build();
+		var b1c = BasicBeanStore.of(b1p);
+		var b2p = BasicBeanStore.create().threadSafe().build();
+		var b2c = BasicBeanStore.create().threadSafe().parent(b2p).build();
 
 		for (var b : array(b1p, b1c, b2p, b2c)) {
 			assertFalse(b.hasBean(A1.class));
@@ -143,7 +143,7 @@ class BeanStore_Test extends TestBase {
 //		for (var b : array(b1p, b1c, b2p, b2c)) {
 //			assertTrue(b.hasBean(A1.class));
 //			assertEquals(a1b, b.getBean(A1.class).get());
-//			assertList(b.stream(A1.class).map(BeanStore.Entry::get), a1b, a1a);
+//			assertList(b.stream(A1.class).map(BasicBeanStore.Entry::get), a1b, a1a);
 //		}
 //
 //		b1c.add(A2.class, a2a);
@@ -156,7 +156,7 @@ class BeanStore_Test extends TestBase {
 //		for (var b : array(b1c, b2c)) {
 //			assertTrue(b.hasBean(A2.class));
 //			assertEquals(a2a, b.getBean(A2.class).get());
-//			assertList(b.stream(A2.class).map(BeanStore.Entry::get), a2a);
+//			assertList(b.stream(A2.class).map(BasicBeanStore.Entry::get), a2a);
 //		}
 //
 //		assertMatchesGlob("{entries=[{type=A1,bean="+Utils.id(a1b)+"},{type=A1,bean="+Utils.id(a1a)+"}],identity=*}", b1p);
@@ -177,7 +177,7 @@ class BeanStore_Test extends TestBase {
 //		for (var b : array(b1c, b2c)) {
 //			assertTrue(b.hasBean(A1.class));
 //			assertEquals(a1a, b.getBean(A1.class).get());
-//			assertList(b.stream(A1.class).map(BeanStore.Entry::get), a1a);
+//			assertList(b.stream(A1.class).map(BasicBeanStore.Entry::get), a1a);
 //		}
 //
 //		b1c.removeBean(A1.class);
@@ -190,10 +190,10 @@ class BeanStore_Test extends TestBase {
 	}
 
 	@Test void a05_addNamedBeans() {
-		var b1p = BeanStore.create().build();
-		var b1c = BeanStore.of(b1p);
-		var b2p = BeanStore.create().threadSafe().build();
-		var b2c = BeanStore.create().threadSafe().parent(b2p).build();
+		var b1p = BasicBeanStore.create().build();
+		var b1c = BasicBeanStore.of(b1p);
+		var b2p = BasicBeanStore.create().threadSafe().build();
+		var b2c = BasicBeanStore.create().threadSafe().parent(b2p).build();
 
 		for (var b : array(b1p, b2p)) {
 			b.addBean(A1.class, a1a).addBean(A1.class, a1b, "foo").addBean(A1.class, a1c, "bar").addBean(A1.class, a1d, "bar").addBean(A2.class, a2a, "foo");
@@ -203,10 +203,10 @@ class BeanStore_Test extends TestBase {
 		}
 
 //		for (var b : array(b1p, b2p)) {
-//			assertList(b.stream(A1.class).map(BeanStore.Entry::get), a1d,a1c,a1b,a1a);
+//			assertList(b.stream(A1.class).map(BasicBeanStore.Entry::get), a1d,a1c,a1b,a1a);
 //		}
 //		for (var b : array(b1c, b2c)) {
-//			assertList(b.stream(A1.class).map(BeanStore.Entry::get), a1e,a1d,a1c,a1b,a1a);
+//			assertList(b.stream(A1.class).map(BasicBeanStore.Entry::get), a1e,a1d,a1c,a1b,a1a);
 //		}
 //
 		for (var b : array(b1p, b1c, b2p, b2c)) {
@@ -229,9 +229,9 @@ class BeanStore_Test extends TestBase {
 	public static class B1 {
 		A1 a1;
 		Optional<A2> a2;
-		BeanStore a3;
+		BasicBeanStore a3;
 
-		public B1(A1 a1, Optional<A2> a2, BeanStore a3) {
+		public B1(A1 a1, Optional<A2> a2, BasicBeanStore a3) {
 			this.a1 = a1;
 			this.a2 = a2;
 			this.a3 = a3;
@@ -242,7 +242,7 @@ class BeanStore_Test extends TestBase {
 			this.a2 = a2;
 		}
 
-		public void m1(A1 a1, Optional<A2> a2, BeanStore a3) {
+		public void m1(A1 a1, Optional<A2> a2, BasicBeanStore a3) {
 			this.a1 = a1;
 			this.a2 = a2;
 			this.a3 = a3;
@@ -254,7 +254,7 @@ class BeanStore_Test extends TestBase {
 			this.a3 = null;
 		}
 
-		public static B1 m3(A1 a1, Optional<A2> a2, BeanStore a3) {
+		public static B1 m3(A1 a1, Optional<A2> a2, BasicBeanStore a3) {
 			return new B1(a1, a2, a3);
 		}
 	}
@@ -262,20 +262,20 @@ class BeanStore_Test extends TestBase {
 	@Test void b01_getParams() {
 
 		Predicate<Object> pEmptyOptional = x -> !((Optional<?>)x).isPresent();
-		Predicate<Object> pIsBeanStore = BeanStore.class::isInstance;
+		Predicate<Object> pIsBeanStore = BasicBeanStore.class::isInstance;
 		Predicate<Object> pNull = x -> x == null;
 		Predicate<Object> pA1a = x -> x==a1a;
 		Predicate<Object> pA2a = x -> ((Optional<?>)x).get()==a2a;
 
 		var outer = new B1(null, null, null);
 
-		var b1p = BeanStore.create().outer(outer).build();
-		var b1c = BeanStore.create().outer(outer).parent(b1p).build();
-		var b2p = BeanStore.create().outer(outer).threadSafe().build();
-		var b2c = BeanStore.create().outer(outer).parent(b1p).threadSafe().build();
+		var b1p = BasicBeanStore.create().outer(outer).build();
+		var b1c = BasicBeanStore.create().outer(outer).parent(b1p).build();
+		var b2p = BasicBeanStore.create().outer(outer).threadSafe().build();
+		var b2c = BasicBeanStore.create().outer(outer).parent(b1p).threadSafe().build();
 
 		var ci = ClassInfo.of(B1.class);
-		var c1 = ci.getPublicConstructor(x -> x.hasParameterTypes(A1.class, Optional.class, BeanStore.class)).get();
+		var c1 = ci.getPublicConstructor(x -> x.hasParameterTypes(A1.class, Optional.class, BasicBeanStore.class)).get();
 		var c2 = ci.getPublicConstructor(x -> x.hasParameterTypes(A1.class, Optional.class)).get();
 		var m1 = ci.getPublicMethod(x-> x.hasName("m1")).get();
 		var m2 = ci.getPublicMethod(x-> x.hasName("m2")).get();
@@ -380,9 +380,9 @@ class BeanStore_Test extends TestBase {
 	public class B2 {
 		A1 a1;
 		Optional<A2> a2;
-		BeanStore a3;
+		BasicBeanStore a3;
 
-		public B2(A1 a1, Optional<A2> a2, BeanStore a3) {
+		public B2(A1 a1, Optional<A2> a2, BasicBeanStore a3) {
 			this.a1 = a1;
 			this.a2 = a2;
 			this.a3 = a3;
@@ -397,19 +397,19 @@ class BeanStore_Test extends TestBase {
 	@Test void b02_getParams_innerClass() {
 
 		Predicate<Object> pEmptyOptional = x -> !((Optional<?>)x).isPresent();
-		Predicate<Object> pIsBeanStore = BeanStore.class::isInstance;
+		Predicate<Object> pIsBeanStore = BasicBeanStore.class::isInstance;
 		Predicate<Object> pNull = x -> x == null;
 		Predicate<Object> pThis = x -> x == this;
 		Predicate<Object> pA1a = x -> x==a1a;
 		Predicate<Object> pA2a = x -> ((Optional<?>)x).get()==a2a;
 
-		var b1p = BeanStore.create().outer(this).build();
-		var b1c = BeanStore.create().outer(this).parent(b1p).build();
-		var b2p = BeanStore.create().outer(this).threadSafe().build();
-		var b2c = BeanStore.create().outer(this).parent(b1p).threadSafe().build();
+		var b1p = BasicBeanStore.create().outer(this).build();
+		var b1c = BasicBeanStore.create().outer(this).parent(b1p).build();
+		var b2p = BasicBeanStore.create().outer(this).threadSafe().build();
+		var b2c = BasicBeanStore.create().outer(this).parent(b1p).threadSafe().build();
 
 		var ci = ClassInfo.of(B2.class);
-		var c1 = ci.getPublicConstructor(x -> x.hasParameterTypes(BeanStore_Test.class, A1.class, Optional.class, BeanStore.class)).get();
+		var c1 = ci.getPublicConstructor(x -> x.hasParameterTypes(BeanStore_Test.class, A1.class, Optional.class, BasicBeanStore.class)).get();
 		var c2 = ci.getPublicConstructor(x -> x.hasParameterTypes(BeanStore_Test.class, A1.class, Optional.class)).get();
 
 		for (var b : array(b1p, b1c, b2p, b2c)) {
@@ -489,7 +489,7 @@ class BeanStore_Test extends TestBase {
 	}
 
 	@Test void c00_createMethodFinder_invalidArgs() {
-		var b = BeanStore.create().build();
+		var b = BasicBeanStore.create().build();
 		assertThrowsWithMessage(IllegalArgumentException.class, "Method cannot be used without outer bean definition.", ()->b.createMethodFinder(null));
 		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'beanType' cannot be null.", ()->b.createMethodFinder((Class<?>)null,""));
 		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'resourceClass' cannot be null.", ()->b.createMethodFinder(String.class,null));
@@ -524,7 +524,7 @@ class BeanStore_Test extends TestBase {
 		public static C createC3(Optional<A1> a) { C e = new C(); e.a = a.orElse(null); return e; }
 		public static C createC4(@Named("Foo") A1 a) { return new C(); }
 		public static C createC5(@Named("Foo") Optional<A1> a) { C e = new C(); e.a = a.orElse(null); return e; }
-		public static C createC6(BeanStore bs) { assertNotNull(bs); return new C(); }
+		public static C createC6(BasicBeanStore bs) { assertNotNull(bs); return new C(); }
 	}
 
 
@@ -536,7 +536,7 @@ class BeanStore_Test extends TestBase {
 	public class D1b {}
 
 	@Test void d01_createBean_basic() {
-		var bs = BeanStore.create().outer(new BeanStore_Test()).build();
+		var bs = BasicBeanStore.create().outer(new BeanStore_Test()).build();
 		assertNotNull(BeanCreator.of(D1a.class, bs).run());
 		assertNotNull(BeanCreator.of(D1b.class, bs).run());
 		assertThrows(IllegalArgumentException.class, () -> BeanCreator.of(null, bs).run());
@@ -548,7 +548,7 @@ class BeanStore_Test extends TestBase {
 	public static D2 d2 = new D2();
 
 	@Test void d02_createBean_staticCreator_create() {
-		var bs = BeanStore.INSTANCE;
+		var bs = BasicBeanStore.INSTANCE;
 		assertEquals(d2, BeanCreator.of(D2.class, bs).run());
 	}
 
@@ -558,7 +558,7 @@ class BeanStore_Test extends TestBase {
 	public static D3 d3 = new D3() {};
 
 	@Test void d03_createBean_staticCreator_getInstance() {
-		var bs = BeanStore.INSTANCE;
+		var bs = BasicBeanStore.INSTANCE;
 		assertEquals(d3, BeanCreator.of(D3.class, bs).run());
 	}
 
@@ -584,7 +584,7 @@ class BeanStore_Test extends TestBase {
 	}
 
 	@Test void d04_createBean_staticCreator_invalidSignatures() {
-		var bs = BeanStore.INSTANCE;
+		var bs = BasicBeanStore.INSTANCE;
 		assertNotEqualsAny(BeanCreator.of(D4a.class, bs).run(), d4a1, d4a2, d4a3, d4a4);
 		assertNotEqualsAny(BeanCreator.of(D4b.class, bs).run(), d4b1, d4b2);
 		assertNotNull(BeanCreator.of(D4c.class, bs).run());
@@ -599,7 +599,7 @@ class BeanStore_Test extends TestBase {
 	public static D5 d5a = new D5(), d5b = new D5(), d5c = new D5();
 
 	@Test void d05_createBean_staticCreator_withBeans() {
-		var bs = BeanStore.create().build();
+		var bs = BasicBeanStore.create().build();
 		assertEquals(d5a, BeanCreator.of(D5.class, bs).run());
 		bs.add(Integer.class, 1);
 		assertEquals(d5c, BeanCreator.of(D5.class, bs).run());
@@ -616,7 +616,7 @@ class BeanStore_Test extends TestBase {
 	}
 
 	@Test void d06_createBean_staticCreator_ignoredWithBuilder() {
-		var bs = BeanStore.INSTANCE;
+		var bs = BasicBeanStore.INSTANCE;
 		assertString("1", BeanCreator.of(D6.class, bs).builder(String.class, "1").run().s);
 	}
 
@@ -627,7 +627,7 @@ class BeanStore_Test extends TestBase {
 	}
 
 	@Test void d07_createBean_staticCreator_withOptional() {
-		var bs = BeanStore.create().build();
+		var bs = BasicBeanStore.create().build();
 		assertString("X", BeanCreator.of(D7.class, bs).run().a);
 		bs.add(String.class, "bar");
 		assertString("bar", BeanCreator.of(D7.class, bs).run().a);
@@ -640,7 +640,7 @@ class BeanStore_Test extends TestBase {
 	}
 
 	@Test void d08_createBean_staticCreator_missingPrereqs() {
-		var bs = BeanStore.create().build();
+		var bs = BasicBeanStore.create().build();
 		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class org.apache.juneau.cp.BeanStore_Test$D8: Static creator found but could not find prerequisites: Integer.", ()->BeanCreator.of(D8.class, bs).run());
 		bs.add(Integer.class, 1);
 		assertString("null,1", BeanCreator.of(D8.class, bs).run().a);
@@ -655,7 +655,7 @@ class BeanStore_Test extends TestBase {
 	public interface D9b {}
 
 	@Test void d09_createBean_staticCreator_withBeans() {
-		var bs = BeanStore.INSTANCE;
+		var bs = BasicBeanStore.INSTANCE;
 		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D9a.class.getName()+": Class is abstract.", ()->BeanCreator.of(D9a.class, bs).run());
 		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D9b.class.getName()+": Class is an interface.", ()->BeanCreator.of(D9b.class, bs).run());
 	}
@@ -668,7 +668,7 @@ class BeanStore_Test extends TestBase {
 	}
 
 	@Test void d10_createBean_constructors_public() {
-		var bs = BeanStore.create().build();
+		var bs = BasicBeanStore.create().build();
 		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D10.class.getName()+": Public constructor found but could not find prerequisites: Integer or Integer,String or String.", ()->BeanCreator.of(D10.class, bs).run());
 		bs.add(String.class, "foo");
 		assertString("s=foo", BeanCreator.of(D10.class, bs).run().a);
@@ -684,7 +684,7 @@ class BeanStore_Test extends TestBase {
 	}
 
 	@Test void d11_createBean_constructors_protected() {
-		var bs = BeanStore.create().build();
+		var bs = BasicBeanStore.create().build();
 		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D11.class.getName()+": Protected constructor found but could not find prerequisites: Integer or Integer,String or String.", ()->BeanCreator.of(D11.class, bs).run());
 		bs.add(String.class, "foo");
 		assertString("s=foo", BeanCreator.of(D11.class, bs).run().a);
@@ -699,7 +699,7 @@ class BeanStore_Test extends TestBase {
 	}
 
 	@Test void d12_createBean_constructors_publicOverProtected() {
-		var bs = BeanStore.create().build();
+		var bs = BasicBeanStore.create().build();
 		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D12.class.getName()+": Public constructor found but could not find prerequisites: String.", ()->BeanCreator.of(D12.class, bs).run());
 		bs.add(String.class, "foo");
 		bs.add(Integer.class, 1);
@@ -711,7 +711,7 @@ class BeanStore_Test extends TestBase {
 	}
 
 	@Test void d13_createBean_constructors_private() {
-		var bs = BeanStore.INSTANCE;
+		var bs = BasicBeanStore.INSTANCE;
 		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D13.class.getName()+": No public/protected constructors found.", ()->BeanCreator.of(D13.class, bs).run());
 	}
 
@@ -722,7 +722,7 @@ class BeanStore_Test extends TestBase {
 	}
 
 	@Test void d14_createBean_constructors_namedBean() {
-		var bs = BeanStore.create().build();
+		var bs = BasicBeanStore.create().build();
 		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D14.class.getName()+": Public constructor found but could not find prerequisites: Integer,String@foo or String@foo.", ()->BeanCreator.of(D14.class, bs).run());
 		bs.add(String.class, "bar", "foo");
 		assertString("bar", BeanCreator.of(D14.class, bs).run().a);
@@ -735,7 +735,7 @@ class BeanStore_Test extends TestBase {
 	}
 
 	@Test void d15_createBean_constructors_namedBean_withOuter() {
-		var bs = BeanStore.create().outer(new BeanStore_Test()).build();
+		var bs = BasicBeanStore.create().outer(new BeanStore_Test()).build();
 		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D15.class.getName()+": Public constructor found but could not find prerequisites: Integer,String@foo or String@foo.", ()->BeanCreator.of(D15.class, bs).run());
 		bs.add(String.class, "bar", "foo");
 		assertString("bar", BeanCreator.of(D15.class, bs).run().a);
@@ -751,7 +751,7 @@ class BeanStore_Test extends TestBase {
 	}
 
 	@Test void d16_createBean_builders() {
-		var bs = BeanStore.create().build();
+		var bs = BasicBeanStore.create().build();
 		var b = D16.create();
 		b.b = "foo";
 		assertString("foo", BeanCreator.of(D16.class, bs).builder(D16.Builder.class, b).run().a);
@@ -770,7 +770,7 @@ class BeanStore_Test extends TestBase {
 	}
 
 	@Test void d17_createBean_builders_inherent() {
-		var bs = BeanStore.create().build();
+		var bs = BasicBeanStore.create().build();
 		assertNull(BeanCreator.<D17>of(D17.class, bs).run().a);
 		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D17.class.getName()+": Protected constructor found but could not find prerequisites: Builder or Builder,Integer or Integer.", ()->BeanCreator.<D17>of(D17.class, bs).builder(Boolean.class, true).run());
 	}

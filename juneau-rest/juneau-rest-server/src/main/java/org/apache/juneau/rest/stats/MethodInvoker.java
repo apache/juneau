@@ -81,7 +81,7 @@ public class MethodInvoker {
 	 * @throws IllegalArgumentException If wrong arguments were passed to method.
 	 * @throws InvocationTargetException If method threw an exception.
 	 */
-	public Object invoke(BeanStore beanStore, Object o) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public Object invoke(BasicBeanStore beanStore, Object o) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		if (beanStore.hasAllParams(m))
 			return invoke(o, beanStore.getParams(m));
 		throw illegalArg("Could not find prerequisites to invoke method ''{0}'': {1}", getFullName(), beanStore.getMissingParams(m));

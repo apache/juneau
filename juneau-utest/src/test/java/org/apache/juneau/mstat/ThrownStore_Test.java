@@ -223,7 +223,7 @@ class ThrownStore_Test extends TestBase {
 	}
 
 	@Test void b05_builder_beanFactory() {
-		var bs = BeanStore.create().build();
+		var bs = BasicBeanStore.create().build();
 
 		assertThrowsWithMessage(Exception.class, "Public constructor found but could not find prerequisites: B5a", ()->ThrownStore.create(bs).type(B5b.class).build());
 		assertInstanceOf(B5c.class, ThrownStore.create(bs).type(B5c.class).build());
@@ -252,7 +252,7 @@ class ThrownStore_Test extends TestBase {
 	}
 
 	@Test void b06_statsImplClass() {
-		var bs = BeanStore.create().build();
+		var bs = BasicBeanStore.create().build();
 
 		var t1 = new Throwable();
 		t1.fillInStackTrace();
