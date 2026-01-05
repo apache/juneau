@@ -95,34 +95,9 @@ loadScripts(document, 'script');</script>
 <div class="block">Create a method finder for finding bean creation methods.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../BeanCreateMethodFinder.html" title="class in org.apache.juneau.cp">BeanCreateMethodFinder</a>&lt;<a href="../BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BeanCreateMethodFinder.</span><code><a href="../BeanCreateMethodFinder.html#find(java.lang.String)" class="member-name-link">find</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;methodName)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BeanCreateMethodFinder.</span><code><a href="../BeanCreateMethodFinder.html#find(java.util.function.Predicate)" class="member-name-link">find</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="../../commons/reflect/MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>&gt;&nbsp;filter)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Shortcut for calling <c>find(<jv>x</jv> -&gt; <jv>x</jv>.hasName(<jv>methodName</jv>))</c>.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../BeanCreateMethodFinder.html" title="class in org.apache.juneau.cp">BeanCreateMethodFinder</a>&lt;<a href="../BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BeanCreateMethodFinder.</span><code><a href="../BeanCreateMethodFinder.html#find(java.util.function.Predicate)" class="member-name-link">find</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="../../commons/reflect/MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>&gt;&nbsp;filter)</code></div>
-<div class="col-last odd-row-color">
 <div class="block">Find the method matching the specified predicate.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../BeanCreateMethodFinder.html" title="class in org.apache.juneau.cp">BeanCreateMethodFinder</a>&lt;<a href="../BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BeanCreateMethodFinder.</span><code><a href="../BeanCreateMethodFinder.html#thenFind(java.lang.String)" class="member-name-link">thenFind</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;methodName)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Identical to <a href="../BeanCreateMethodFinder.html#find(java.util.function.Predicate)"><code>find(Predicate)</code></a> but named for fluent-style calls.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../BeanCreateMethodFinder.html" title="class in org.apache.juneau.cp">BeanCreateMethodFinder</a>&lt;<a href="../BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BeanCreateMethodFinder.</span><code><a href="../BeanCreateMethodFinder.html#thenFind(java.util.function.Predicate)" class="member-name-link">thenFind</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="../../commons/reflect/MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>&gt;&nbsp;filter)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Identical to <a href="../BeanCreateMethodFinder.html#find(java.util.function.Predicate)"><code>find(Predicate)</code></a> but named for fluent-style calls.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../BeanCreateMethodFinder.html" title="class in org.apache.juneau.cp">BeanCreateMethodFinder</a>&lt;<a href="../BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BeanCreateMethodFinder.</span><code><a href="../BeanCreateMethodFinder.html#withDefault(java.util.function.Supplier)" class="member-name-link">withDefault</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="../BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;&nbsp;def)</code></div>
-<div class="col-last even-row-color">
-<div class="block">A default value to return if no matching methods were found.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../BeanCreateMethodFinder.html" title="class in org.apache.juneau.cp">BeanCreateMethodFinder</a>&lt;<a href="../BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BeanCreateMethodFinder.</span><code><a href="../BeanCreateMethodFinder.html#withDefault(T)" class="member-name-link">withDefault</a><wbr>(<a href="../BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&nbsp;def)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">A default value to return if no matching methods were found.</div>
 </div>
 </div>
 </section>

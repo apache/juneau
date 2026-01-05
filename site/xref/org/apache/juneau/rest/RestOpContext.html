@@ -2065,7 +2065,7 @@
 <a class="jxr_linenumber" name="L2057" href="#L2057">2057</a> 					<strong class="jxr_keyword">if</strong> (a instanceof Header a2) {
 <a class="jxr_linenumber" name="L2058" href="#L2058">2058</a> 						<strong class="jxr_keyword">if</strong> (nn(def)) {
 <a class="jxr_linenumber" name="L2059" href="#L2059">2059</a> 							<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L2060" href="#L2060">2060</a> 								defaultRequestHeaders().set(basicHeader(firstNonEmpty(a2.name(), a2.value()), parseAnything(def)));
+<a class="jxr_linenumber" name="L2060" href="#L2060">2060</a> 								defaultRequestHeaders().set(basicHeader(firstNonEmpty(a2.name(), a2.value()), parseIfJson(def)));
 <a class="jxr_linenumber" name="L2061" href="#L2061">2061</a> 							} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
 <a class="jxr_linenumber" name="L2062" href="#L2062">2062</a> 								<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(e, <span class="jxr_string">"Malformed @Header annotation"</span>);
 <a class="jxr_linenumber" name="L2063" href="#L2063">2063</a> 							}
@@ -2074,7 +2074,7 @@
 <a class="jxr_linenumber" name="L2066" href="#L2066">2066</a> 					<strong class="jxr_keyword">if</strong> (a instanceof Query a2) {
 <a class="jxr_linenumber" name="L2067" href="#L2067">2067</a> 						<strong class="jxr_keyword">if</strong> (nn(def)) {
 <a class="jxr_linenumber" name="L2068" href="#L2068">2068</a> 							<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L2069" href="#L2069">2069</a> 								defaultRequestQueryData().setDefault(basicPart(firstNonEmpty(a2.name(), a2.value()), parseAnything(def)));
+<a class="jxr_linenumber" name="L2069" href="#L2069">2069</a> 								defaultRequestQueryData().setDefault(basicPart(firstNonEmpty(a2.name(), a2.value()), parseIfJson(def)));
 <a class="jxr_linenumber" name="L2070" href="#L2070">2070</a> 							} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
 <a class="jxr_linenumber" name="L2071" href="#L2071">2071</a> 								<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(e, <span class="jxr_string">"Malformed @Query annotation"</span>);
 <a class="jxr_linenumber" name="L2072" href="#L2072">2072</a> 							}
@@ -2083,7 +2083,7 @@
 <a class="jxr_linenumber" name="L2075" href="#L2075">2075</a> 					<strong class="jxr_keyword">if</strong> (a instanceof FormData a2) {
 <a class="jxr_linenumber" name="L2076" href="#L2076">2076</a> 						<strong class="jxr_keyword">if</strong> (nn(def)) {
 <a class="jxr_linenumber" name="L2077" href="#L2077">2077</a> 							<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L2078" href="#L2078">2078</a> 								defaultRequestFormData().setDefault(basicPart(firstNonEmpty(a2.name(), a2.value()), parseAnything(def)));
+<a class="jxr_linenumber" name="L2078" href="#L2078">2078</a> 								defaultRequestFormData().setDefault(basicPart(firstNonEmpty(a2.name(), a2.value()), parseIfJson(def)));
 <a class="jxr_linenumber" name="L2079" href="#L2079">2079</a> 							} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
 <a class="jxr_linenumber" name="L2080" href="#L2080">2080</a> 								<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(e, <span class="jxr_string">"Malformed @FormData annotation"</span>);
 <a class="jxr_linenumber" name="L2081" href="#L2081">2081</a> 							}
@@ -2642,6 +2642,6 @@
 <a class="jxr_linenumber" name="L2634" href="#L2634">2634</a> }
 </pre>
 <hr/>
-<div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
 </body>
 </html>

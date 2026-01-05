@@ -409,161 +409,168 @@
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 	<strong class="jxr_keyword">public</strong> Map&lt;String,String[]&gt; getQueryParams() {
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 		<strong class="jxr_keyword">if</strong> (queryParams == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 			<strong class="jxr_keyword">if</strong> (req.getMethod().equalsIgnoreCase(<span class="jxr_string">"POST"</span>))
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 				queryParams = RestUtils.parseQuery(req.getQueryString(), map());
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 				queryParams = req.getParameterMap();
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		}
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">return</strong> queryParams;
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	}
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> <em class="jxr_javadoccomment">	 * Returns the HTTP servlet request of this REST call.</em>
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> <em class="jxr_javadoccomment">	 * @return the HTTP servlet request of this REST call.</em>
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 	<strong class="jxr_keyword">public</strong> HttpServletRequest getRequest() { <strong class="jxr_keyword">return</strong> req; }
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 			<strong class="jxr_keyword">if</strong> (req.getMethod().equalsIgnoreCase(<span class="jxr_string">"POST"</span>)) {
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 				<strong class="jxr_keyword">var</strong> listMap = RestUtils.parseQuery(req.getQueryString());
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 				queryParams = map();
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : listMap.entrySet()) {
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 					<strong class="jxr_keyword">if</strong> (e.getValue() == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 						queryParams.put(e.getKey(), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 					<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 						queryParams.put(e.getKey(), array(e.getValue(), String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 				}
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 			} <strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 				queryParams = req.getParameterMap();
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		}
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">return</strong> queryParams;
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 	}
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 * Returns the REST object.</em>
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 * Returns the HTTP servlet request of this REST call.</em>
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> <em class="jxr_javadoccomment">	 * @return The rest object.</em>
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> <em class="jxr_javadoccomment">	 * @return the HTTP servlet request of this REST call.</em>
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 	<strong class="jxr_keyword">public</strong> Object getResource() { <strong class="jxr_keyword">return</strong> resource; }
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 	<strong class="jxr_keyword">public</strong> HttpServletRequest getRequest() { <strong class="jxr_keyword">return</strong> req; }
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">	 * Returns the HTTP servlet response of this REST call.</em>
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">	 * Returns the REST object.</em>
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">	 * @return the HTTP servlet response of this REST call.</em>
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">	 * @return The rest object.</em>
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	<strong class="jxr_keyword">public</strong> HttpServletResponse getResponse() { <strong class="jxr_keyword">return</strong> res; }
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	<strong class="jxr_keyword">public</strong> Object getResource() { <strong class="jxr_keyword">return</strong> resource; }
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> <em class="jxr_javadoccomment">	 * Shortcut for calling &lt;c&gt;getRequest().getServletPath()&lt;/c&gt;.</em>
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> <em class="jxr_javadoccomment">	 * Returns the HTTP servlet response of this REST call.</em>
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> <em class="jxr_javadoccomment">	 * @return The request servlet path.</em>
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> <em class="jxr_javadoccomment">	 * @return the HTTP servlet response of this REST call.</em>
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	<strong class="jxr_keyword">public</strong> String getServletPath() { <strong class="jxr_keyword">return</strong> req.getServletPath(); }
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	<strong class="jxr_keyword">public</strong> HttpServletResponse getResponse() { <strong class="jxr_keyword">return</strong> res; }
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 * Shortcut for calling &lt;c&gt;getRequest().getStatus()&lt;/c&gt;.</em>
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 * Shortcut for calling &lt;c&gt;getRequest().getServletPath()&lt;/c&gt;.</em>
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 * @return The response status code.</em>
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 * @return The request servlet path.</em>
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getStatus() { <strong class="jxr_keyword">return</strong> res.getStatus(); }
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 	<strong class="jxr_keyword">public</strong> String getServletPath() { <strong class="jxr_keyword">return</strong> req.getServletPath(); }
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">	 * Returns the request path info as a {@link UrlPath} bean.</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">	 * Shortcut for calling &lt;c&gt;getRequest().getStatus()&lt;/c&gt;.</em>
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 * @return The request path info as a {@link UrlPath} bean.</em>
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 * @return The response status code.</em>
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 	<strong class="jxr_keyword">public</strong> <a name="UrlPath" href="../../../../org/apache/juneau/rest/util/UrlPath.html#UrlPath">UrlPath</a> getUrlPath() {
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<strong class="jxr_keyword">if</strong> (urlPath == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 			urlPath = UrlPath.of(getPathInfoUndecoded());
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		<strong class="jxr_keyword">return</strong> urlPath;
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 	}
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">	 * Returns the URL path pattern match on this call.</em>
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">	 * @return The URL path pattern match on this call.</em>
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	<strong class="jxr_keyword">public</strong> <a name="UrlPathMatch" href="../../../../org/apache/juneau/rest/util/UrlPathMatch.html#UrlPathMatch">UrlPathMatch</a> getUrlPathMatch() { <strong class="jxr_keyword">return</strong> urlPathMatch; }
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getStatus() { <strong class="jxr_keyword">return</strong> res.getStatus(); }
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">	 * Returns the request path info as a {@link UrlPath} bean.</em>
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> <em class="jxr_javadoccomment">	 * @return The request path info as a {@link UrlPath} bean.</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 	<strong class="jxr_keyword">public</strong> <a name="UrlPath" href="../../../../org/apache/juneau/rest/util/UrlPath.html#UrlPath">UrlPath</a> getUrlPath() {
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		<strong class="jxr_keyword">if</strong> (urlPath == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 			urlPath = UrlPath.of(getPathInfoUndecoded());
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 		<strong class="jxr_keyword">return</strong> urlPath;
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	}
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> 
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> <em class="jxr_javadoccomment">	 * Sets the logger to use when logging this call.</em>
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> <em class="jxr_javadoccomment">	 * Returns the URL path pattern match on this call.</em>
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> <em class="jxr_javadoccomment">	 * @param value The new value for this setting.</em>
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (will use the default logger from the context if available).</em>
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 	<strong class="jxr_keyword">public</strong> <a name="RestSession" href="../../../../org/apache/juneau/rest/RestSession.html#RestSession">RestSession</a> logger(<a name="CallLogger" href="../../../../org/apache/juneau/rest/logger/CallLogger.html#CallLogger">CallLogger</a> value) {
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		logger = beanStore.add(CallLogger.<strong class="jxr_keyword">class</strong>, value);
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 	}
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> <em class="jxr_javadoccomment">	 * Runs this session.</em>
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> <em class="jxr_javadoccomment">	 * Does the following:</em>
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">	 * &lt;ol&gt;</em>
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Finds the Java method to invoke and creates a {@link RestOpSession} for it.</em>
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Invokes {@link RestPreCall} methods by calling {@link RestContext#preCall(RestOpSession)}.</em>
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Invokes Java method by calling {@link RestOpSession#run()}.</em>
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Invokes {@link RestPostCall} methods by calling {@link RestContext#postCall(RestOpSession)}.</em>
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;If the Java method produced output, finds the response processor for it and runs it by calling {@link RestContext#processResponse(RestOpSession)}.</em>
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;If no Java method matched, generates a 404/405/412 by calling {@link RestContext#handleNotFound(RestSession)}.</em>
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">	 * &lt;/ol&gt;</em>
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">	 * @throws Throwable Any throwable can be thrown.</em>
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> run() <strong class="jxr_keyword">throws</strong> Throwable {
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> 			opSession = context.getRestOperations().findOperation(<strong class="jxr_keyword">this</strong>).createSession(<strong class="jxr_keyword">this</strong>).build();
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> 			context.preCall(opSession);
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> 			opSession.run();
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> 			context.postCall(opSession);
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> 			<strong class="jxr_keyword">if</strong> (res.getStatus() == 0)
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> 				res.setStatus(200);
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> 			<strong class="jxr_keyword">if</strong> (opSession.getResponse().hasContent()) {
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> 				<em class="jxr_comment">// Now serialize the output if there was any.</em>
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> 				<em class="jxr_comment">// Some subclasses may write to the OutputStream or Writer directly.</em>
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> 				context.processResponse(opSession);
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 			}
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="NotFound" href="../../../../org/apache/juneau/http/response/NotFound.html#NotFound">NotFound</a> e) {
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> 			<strong class="jxr_keyword">if</strong> (getStatus() == 0)
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 				status(404);
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> 			exception(e);
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> 			context.handleNotFound(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		}
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> 	}
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> 
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> <em class="jxr_javadoccomment">	 * Sets the HTTP status on this call.</em>
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> <em class="jxr_javadoccomment">	 * @param value The status code.</em>
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> 	<strong class="jxr_keyword">public</strong> <a name="RestSession" href="../../../../org/apache/juneau/rest/RestSession.html#RestSession">RestSession</a> status(<strong class="jxr_keyword">int</strong> value) {
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> 		res.setStatus(value);
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> 	}
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> 
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> <em class="jxr_javadoccomment">	 * Sets the HTTP status on this call.</em>
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> <em class="jxr_javadoccomment">	 * @param value The status code.</em>
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (ignored).</em>
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 	<strong class="jxr_keyword">public</strong> <a name="RestSession" href="../../../../org/apache/juneau/rest/RestSession.html#RestSession">RestSession</a> status(StatusLine value) {
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> 		<strong class="jxr_keyword">if</strong> (nn(value))
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> 			res.setStatus(value.getStatusCode());
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> 	}
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> 
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">	 * Sets the URL path pattern match on this call.</em>
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> <em class="jxr_javadoccomment">	 * @param value The match pattern.</em>
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> 	<strong class="jxr_keyword">public</strong> <a name="RestSession" href="../../../../org/apache/juneau/rest/RestSession.html#RestSession">RestSession</a> urlPathMatch(<a name="UrlPathMatch" href="../../../../org/apache/juneau/rest/util/UrlPathMatch.html#UrlPathMatch">UrlPathMatch</a> value) {
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> 		urlPathMatch = beanStore.add(UrlPathMatch.<strong class="jxr_keyword">class</strong>, value);
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> 	}
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> 	@Override <em class="jxr_comment">/* Overridden from ContextSession */</em>
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> 	<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.properties()
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> 			.a(<span class="jxr_string">"context"</span>, context)
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 			.a(<span class="jxr_string">"resource"</span>, resource);
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> <em class="jxr_javadoccomment">	 * @return The URL path pattern match on this call.</em>
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 	<strong class="jxr_keyword">public</strong> <a name="UrlPathMatch" href="../../../../org/apache/juneau/rest/util/UrlPathMatch.html#UrlPathMatch">UrlPathMatch</a> getUrlPathMatch() { <strong class="jxr_keyword">return</strong> urlPathMatch; }
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">	 * Sets the logger to use when logging this call.</em>
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">	 * @param value The new value for this setting.</em>
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (will use the default logger from the context if available).</em>
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 	<strong class="jxr_keyword">public</strong> <a name="RestSession" href="../../../../org/apache/juneau/rest/RestSession.html#RestSession">RestSession</a> logger(<a name="CallLogger" href="../../../../org/apache/juneau/rest/logger/CallLogger.html#CallLogger">CallLogger</a> value) {
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 		logger = beanStore.add(CallLogger.<strong class="jxr_keyword">class</strong>, value);
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 	}
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">	 * Runs this session.</em>
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">	 * Does the following:</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">	 * &lt;ol&gt;</em>
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Finds the Java method to invoke and creates a {@link RestOpSession} for it.</em>
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Invokes {@link RestPreCall} methods by calling {@link RestContext#preCall(RestOpSession)}.</em>
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Invokes Java method by calling {@link RestOpSession#run()}.</em>
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Invokes {@link RestPostCall} methods by calling {@link RestContext#postCall(RestOpSession)}.</em>
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;If the Java method produced output, finds the response processor for it and runs it by calling {@link RestContext#processResponse(RestOpSession)}.</em>
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;If no Java method matched, generates a 404/405/412 by calling {@link RestContext#handleNotFound(RestSession)}.</em>
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> <em class="jxr_javadoccomment">	 * &lt;/ol&gt;</em>
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> <em class="jxr_javadoccomment">	 * @throws Throwable Any throwable can be thrown.</em>
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> run() <strong class="jxr_keyword">throws</strong> Throwable {
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 			opSession = context.getRestOperations().findOperation(<strong class="jxr_keyword">this</strong>).createSession(<strong class="jxr_keyword">this</strong>).build();
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 			context.preCall(opSession);
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 			opSession.run();
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 			context.postCall(opSession);
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 			<strong class="jxr_keyword">if</strong> (res.getStatus() == 0)
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 				res.setStatus(200);
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 			<strong class="jxr_keyword">if</strong> (opSession.getResponse().hasContent()) {
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 				<em class="jxr_comment">// Now serialize the output if there was any.</em>
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 				<em class="jxr_comment">// Some subclasses may write to the OutputStream or Writer directly.</em>
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 				context.processResponse(opSession);
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 			}
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="NotFound" href="../../../../org/apache/juneau/http/response/NotFound.html#NotFound">NotFound</a> e) {
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 			<strong class="jxr_keyword">if</strong> (getStatus() == 0)
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 				status(404);
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 			exception(e);
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 			context.handleNotFound(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 		}
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 	}
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> <em class="jxr_javadoccomment">	 * Sets the HTTP status on this call.</em>
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">	 * @param value The status code.</em>
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 	<strong class="jxr_keyword">public</strong> <a name="RestSession" href="../../../../org/apache/juneau/rest/RestSession.html#RestSession">RestSession</a> status(<strong class="jxr_keyword">int</strong> value) {
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		res.setStatus(value);
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 	}
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> <em class="jxr_javadoccomment">	 * Sets the HTTP status on this call.</em>
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> <em class="jxr_javadoccomment">	 * @param value The status code.</em>
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (ignored).</em>
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 	<strong class="jxr_keyword">public</strong> <a name="RestSession" href="../../../../org/apache/juneau/rest/RestSession.html#RestSession">RestSession</a> status(StatusLine value) {
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 		<strong class="jxr_keyword">if</strong> (nn(value))
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 			res.setStatus(value.getStatusCode());
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 	}
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> <em class="jxr_javadoccomment">	 * Sets the URL path pattern match on this call.</em>
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> <em class="jxr_javadoccomment">	 * @param value The match pattern.</em>
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 	<strong class="jxr_keyword">public</strong> <a name="RestSession" href="../../../../org/apache/juneau/rest/RestSession.html#RestSession">RestSession</a> urlPathMatch(<a name="UrlPathMatch" href="../../../../org/apache/juneau/rest/util/UrlPathMatch.html#UrlPathMatch">UrlPathMatch</a> value) {
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 		urlPathMatch = beanStore.add(UrlPathMatch.<strong class="jxr_keyword">class</strong>, value);
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> 	}
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> }
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 	@Override <em class="jxr_comment">/* Overridden from ContextSession */</em>
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 	<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.properties()
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 			.a(<span class="jxr_string">"context"</span>, context)
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 			.a(<span class="jxr_string">"resource"</span>, resource);
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 	}
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> }
 </pre>
 <hr/>
-<div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
 </body>
 </html>

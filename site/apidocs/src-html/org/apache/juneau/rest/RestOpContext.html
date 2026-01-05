@@ -2070,7 +2070,7 @@
 <span class="source-line-no">2057</span><span id="line-2057">               if (a instanceof Header a2) {</span>
 <span class="source-line-no">2058</span><span id="line-2058">                  if (nn(def)) {</span>
 <span class="source-line-no">2059</span><span id="line-2059">                     try {</span>
-<span class="source-line-no">2060</span><span id="line-2060">                        defaultRequestHeaders().set(basicHeader(firstNonEmpty(a2.name(), a2.value()), parseAnything(def)));</span>
+<span class="source-line-no">2060</span><span id="line-2060">                        defaultRequestHeaders().set(basicHeader(firstNonEmpty(a2.name(), a2.value()), parseIfJson(def)));</span>
 <span class="source-line-no">2061</span><span id="line-2061">                     } catch (ParseException e) {</span>
 <span class="source-line-no">2062</span><span id="line-2062">                        throw new ConfigException(e, "Malformed @Header annotation");</span>
 <span class="source-line-no">2063</span><span id="line-2063">                     }</span>
@@ -2079,7 +2079,7 @@
 <span class="source-line-no">2066</span><span id="line-2066">               if (a instanceof Query a2) {</span>
 <span class="source-line-no">2067</span><span id="line-2067">                  if (nn(def)) {</span>
 <span class="source-line-no">2068</span><span id="line-2068">                     try {</span>
-<span class="source-line-no">2069</span><span id="line-2069">                        defaultRequestQueryData().setDefault(basicPart(firstNonEmpty(a2.name(), a2.value()), parseAnything(def)));</span>
+<span class="source-line-no">2069</span><span id="line-2069">                        defaultRequestQueryData().setDefault(basicPart(firstNonEmpty(a2.name(), a2.value()), parseIfJson(def)));</span>
 <span class="source-line-no">2070</span><span id="line-2070">                     } catch (ParseException e) {</span>
 <span class="source-line-no">2071</span><span id="line-2071">                        throw new ConfigException(e, "Malformed @Query annotation");</span>
 <span class="source-line-no">2072</span><span id="line-2072">                     }</span>
@@ -2088,7 +2088,7 @@
 <span class="source-line-no">2075</span><span id="line-2075">               if (a instanceof FormData a2) {</span>
 <span class="source-line-no">2076</span><span id="line-2076">                  if (nn(def)) {</span>
 <span class="source-line-no">2077</span><span id="line-2077">                     try {</span>
-<span class="source-line-no">2078</span><span id="line-2078">                        defaultRequestFormData().setDefault(basicPart(firstNonEmpty(a2.name(), a2.value()), parseAnything(def)));</span>
+<span class="source-line-no">2078</span><span id="line-2078">                        defaultRequestFormData().setDefault(basicPart(firstNonEmpty(a2.name(), a2.value()), parseIfJson(def)));</span>
 <span class="source-line-no">2079</span><span id="line-2079">                     } catch (ParseException e) {</span>
 <span class="source-line-no">2080</span><span id="line-2080">                        throw new ConfigException(e, "Malformed @FormData annotation");</span>
 <span class="source-line-no">2081</span><span id="line-2081">                     }</span>

@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-41">RestUtils</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-39">RestUtils</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Various reusable utility methods.</div>
 </section>
@@ -109,60 +109,29 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#fixMethodPath(java.lang.String)" class="member-name-link">fixMethodPath</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getHttpResponseText(int)" class="member-name-link">getHttpResponseText</a><wbr>(int&nbsp;rc)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Normalizes the <a href="../annotation/RestOp.html#path()"><code>RestOp.path()</code></a> value.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getHttpResponseText(int)" class="member-name-link">getHttpResponseText</a><wbr>(int&nbsp;rc)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Returns readable text for an HTTP response code.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getPathInfoUndecoded(jakarta.servlet.http.HttpServletRequest)" class="member-name-link">getPathInfoUndecoded</a><wbr>(jakarta.servlet.http.HttpServletRequest&nbsp;req)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getPathInfoUndecoded(jakarta.servlet.http.HttpServletRequest)" class="member-name-link">getPathInfoUndecoded</a><wbr>(jakarta.servlet.http.HttpServletRequest&nbsp;req)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Identical to <code>HttpServletRequest.getPathInfo()</code> but doesn't decode encoded characters.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isValidContextPath(java.lang.String)" class="member-name-link">isValidContextPath</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Returns <jk>true</jk> if the specified value is a valid context path.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isValidPathInfo(java.lang.String)" class="member-name-link">isValidPathInfo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Returns <jk>true</jk> if the specified value is a valid path-info path.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isValidServletPath(java.lang.String)" class="member-name-link">isValidServletPath</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Returns <jk>true</jk> if the specified value is a valid servlet path.</div>
-</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parseAnything(java.lang.String)" class="member-name-link">parseAnything</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parseIfJson(java.lang.String)" class="member-name-link">parseIfJson</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Parses a string that can consist of a simple string or JSON object/array.</div>
+<div class="block">Parses a string as JSON if it appears to be JSON, otherwise returns the string as-is.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parseHeader(java.lang.String)" class="member-name-link">parseHeader</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parseQuery(java.io.Reader)" class="member-name-link">parseQuery</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;qs)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Parses HTTP header.</div>
+<div class="block">Parses a URL query string or form-data content from a reader.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parseKeyValuePair(java.lang.String)" class="member-name-link">parseKeyValuePair</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parseQuery(java.lang.String)" class="member-name-link">parseQuery</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;qs)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Parses key/value pairs separated by either : or =</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parseQuery(java.lang.Object)" class="member-name-link">parseQuery</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;qs)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Parses a URL query string or form-data content.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parseQuery(java.lang.Object,java.util.Map)" class="member-name-link">parseQuery</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;qs,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&gt;&nbsp;map)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Same as <a href="#parseQuery(java.lang.Object)"><code>parseQuery(Object)</code></a> but allows you to specify the map to insert values into.</div>
+<div class="block">Parses a URL query string or form-data content from a string.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#toValidContextPath(java.lang.String)" class="member-name-link">toValidContextPath</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</code></div>
@@ -170,32 +139,14 @@ loadScripts(document, 'script');</script>
 <div class="block">Converts the specified path segment to a valid context path.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#trimContextPath(java.lang.String,java.lang.String)" class="member-name-link">trimContextPath</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contextPath,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#validatePathInfo(java.lang.String)" class="member-name-link">validatePathInfo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">If the specified path-info starts with the specified context path, trims the context path from the path info.</div>
+<div class="block">Validates that the specified value is a valid path-info path and returns it.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuffer.html" title="class or interface in java.lang" class="external-link">StringBuffer</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#trimPathInfo(java.lang.StringBuffer,java.lang.String,java.lang.String)" class="member-name-link">trimPathInfo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuffer.html" title="class or interface in java.lang" class="external-link">StringBuffer</a>&nbsp;requestURI,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contextPath,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;servletPath)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#validateServletPath(java.lang.String)" class="member-name-link">validateServletPath</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Efficiently trims the path info part from a request URI.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#validateContextPath(java.lang.String)" class="member-name-link">validateContextPath</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Throws a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> if the method <a href="#isValidContextPath(java.lang.String)"><code>isValidContextPath(String)</code></a> returns <jk>false</jk> for the specified value.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#validatePathInfo(java.lang.String)" class="member-name-link">validatePathInfo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Throws a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> if the method <a href="#isValidPathInfo(java.lang.String)"><code>isValidPathInfo(String)</code></a> returns <jk>false</jk> for the specified value.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#validateServletPath(java.lang.String)" class="member-name-link">validateServletPath</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Throws a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> if the method <a href="#isValidServletPath(java.lang.String)"><code>isValidServletPath(String)</code></a> returns <jk>false</jk> for the specified value.</div>
+<div class="block">Validates that the specified value is a valid servlet path and returns it.</div>
 </div>
 </div>
 </div>
@@ -217,7 +168,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>RestUtils</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-42">RestUtils</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-40">RestUtils</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -229,22 +180,9 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="fixMethodPath(java.lang.String)">
-<h3>fixMethodPath</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-99">fixMethodPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
-<div class="block">Normalizes the <a href="../annotation/RestOp.html#path()"><code>RestOp.path()</code></a> value.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>path</code> - The path to normalize.</dd>
-<dt>Returns:</dt>
-<dd>The normalized path.</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="getHttpResponseText(int)">
 <h3>getHttpResponseText</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-113">getHttpResponseText</a></span><wbr><span class="parameters">(int&nbsp;rc)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-95">getHttpResponseText</a></span><wbr><span class="parameters">(int&nbsp;rc)</span></div>
 <div class="block">Returns readable text for an HTTP response code.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -257,7 +195,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPathInfoUndecoded(jakarta.servlet.http.HttpServletRequest)">
 <h3>getPathInfoUndecoded</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-123">getPathInfoUndecoded</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-105">getPathInfoUndecoded</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
 <div class="block">Identical to <code>HttpServletRequest.getPathInfo()</code> but doesn't decode encoded characters.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -268,128 +206,119 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="isValidContextPath(java.lang.String)">
-<h3>isValidContextPath</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-142">isValidContextPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
-<div class="block">Returns <jk>true</jk> if the specified value is a valid context path.
+<section class="detail" id="parseIfJson(java.lang.String)">
+<h3>parseIfJson</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-148">parseIfJson</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span>
+                          throws <span class="exceptions"><a href="../../parser/ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
+<div class="block">Parses a string as JSON if it appears to be JSON, otherwise returns the string as-is.
 
- The path must start with a "/" character but not end with a "/" character.
- For servlets in the default (root) context, the value should be "".</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>value</code> - The value to test.</dd>
-<dt>Returns:</dt>
-<dd><jk>true</jk> if the specified value is a valid context path.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="isValidPathInfo(java.lang.String)">
-<h3>isValidPathInfo</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-161">isValidPathInfo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
-<div class="block">Returns <jk>true</jk> if the specified value is a valid path-info path.
+ <p>
+ This method attempts to intelligently detect whether the input string is JSON or plain text.
+ If the string appears to be JSON (starts with <c>{</c>, <c>[</c>, or other JSON indicators),
+ it is parsed and returned as a Java object (<jk>Map</jk>, <jk>List</jk>, <jk>String</jk>, <jk>Number</jk>, etc.).
+ Otherwise, the original string is returned unchanged.
 
- The extra path information follows the servlet path but precedes the query string and will start with a "/" character.
- The value should be null if there was no extra path information.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>value</code> - The value to test.</dd>
-<dt>Returns:</dt>
-<dd><jk>true</jk> if the specified value is a valid path-info path.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="isValidServletPath(java.lang.String)">
-<h3>isValidServletPath</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-179">isValidServletPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
-<div class="block">Returns <jk>true</jk> if the specified value is a valid servlet path.
+ <p>
+ This is useful when processing input that could be either a JSON value or a plain string,
+ such as configuration values or user input that may or may not be JSON-encoded.
 
- This path must with a "/" character and includes either the servlet name or a path to the servlet,
- but does not include any extra path information or a query string.
- Should be an empty string ("") if the servlet used to process this request was matched using the "/*" pattern.</div>
+ <h5 class='section'>Example:</h5>
+ <p class='bjava'>
+   <jc>// JSON object is parsed</jc>
+   Object <jv>result1</jv> = parseIfJson(<js>"{\"name\":\"John\"}"</js>);
+   <jc>// Returns a Map with key "name" and value "John"</jc>
+
+   <jc>// JSON array is parsed</jc>
+   Object <jv>result2</jv> = parseIfJson(<js>"[1,2,3]"</js>);
+   <jc>// Returns a List containing [1, 2, 3]</jc>
+
+   <jc>// Plain string is returned as-is</jc>
+   Object <jv>result3</jv> = parseIfJson(<js>"hello world"</js>);
+   <jc>// Returns the string "hello world"</jc>
+ </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value to test.</dd>
+<dd><code>value</code> - The string to parse. Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
-<dd><jk>true</jk> if the specified value is a valid servlet path.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="parseAnything(java.lang.String)">
-<h3>parseAnything</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-196">parseAnything</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span>
-                            throws <span class="exceptions"><a href="../../parser/ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
-<div class="block">Parses a string that can consist of a simple string or JSON object/array.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>s</code> - The string to parse.</dd>
-<dt>Returns:</dt>
-<dd>The parsed value, or <jk>null</jk> if the input is null.</dd>
+<dd>The parsed JSON object (if the string was JSON), or the original string (if it was not JSON).
+   Returns <jk>null</jk> if the input is <jk>null</jk>.
+   <br>Return type can be: <jk>Map</jk>, <jk>List</jk>, <jk>String</jk>, <jk>Number</jk>, <jk>Boolean</jk>, or <jk>null</jk>.</dd>
 <dt>Throws:</dt>
-<dd><code><a href="../../parser/ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></code> - Invalid JSON in string.</dd>
+<dd><code><a href="../../parser/ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></code> - If the string appears to be JSON but contains invalid JSON syntax.</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="parseHeader(java.lang.String)">
-<h3>parseHeader</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-208">parseHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
-<div class="block">Parses HTTP header.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>s</code> - The string to parse.</dd>
-<dt>Returns:</dt>
-<dd>The parsed string.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="parseKeyValuePair(java.lang.String)">
-<h3>parseKeyValuePair</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-225">parseKeyValuePair</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
-<div class="block">Parses key/value pairs separated by either : or =</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>s</code> - The string to parse.</dd>
-<dt>Returns:</dt>
-<dd>The parsed string.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="parseQuery(java.lang.Object)">
+<section class="detail" id="parseQuery(java.lang.String)">
 <h3>parseQuery</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-245">parseQuery</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;qs)</span></div>
-<div class="block">Parses a URL query string or form-data content.</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-178">parseQuery</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;qs)</span></div>
+<div class="block">Parses a URL query string or form-data content from a string.
+
+ <p>
+ Parses key-value pairs from a query string format (e.g., <c>key1=value1&amp;key2=value2</c>).
+ Supports multiple values for the same key, which are collected into a <jk>List</jk>.
+
+ <p>
+ Special cases:
+ <ul>
+   <li>Empty or <jk>null</jk> strings return an empty map</li>
+   <li>Keys without values (e.g., <c>key1&amp;key2</c>) are stored with <jk>null</jk> values</li>
+   <li>Keys with empty values (e.g., <c>key=</c>) are stored with empty strings</li>
+   <li>Multiple occurrences of the same key append values to the list</li>
+ </ul>
+
+ <h5 class='section'>Example:</h5>
+ <p class='bjava'>
+   Map&lt;String,List&lt;String&gt;&gt; <jv>params</jv> = parseQuery(<js>"f1=v1&amp;f2=v2&amp;f1=v3"</js>);
+   <jv>params</jv>.get(<js>"f1"</js>);  <jc>// Returns [v1, v3]</jc>
+   <jv>params</jv>.get(<js>"f2"</js>);  <jc>// Returns [v2]</jc>
+ </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>qs</code> - A reader or string containing the query string to parse.</dd>
+<dd><code>qs</code> - The query string to parse. Can be <jk>null</jk> or empty.</dd>
 <dt>Returns:</dt>
-<dd>A new map containing the parsed query.</dd>
+<dd>A map of parameter names to lists of values. Returns an empty map if the input is <jk>null</jk> or empty.</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="parseQuery(java.lang.Object,java.util.Map)">
+<section class="detail" id="parseQuery(java.io.Reader)">
 <h3>parseQuery</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-256">parseQuery</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;qs,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&gt;&nbsp;map)</span></div>
-<div class="block">Same as <a href="#parseQuery(java.lang.Object)"><code>parseQuery(Object)</code></a> but allows you to specify the map to insert values into.</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-210">parseQuery</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;qs)</span></div>
+<div class="block">Parses a URL query string or form-data content from a reader.
+
+ <p>
+ Parses key-value pairs from a query string format (e.g., <c>key1=value1&amp;key2=value2</c>).
+ Supports multiple values for the same key, which are collected into a <jk>List</jk>.
+
+ <p>
+ Special cases:
+ <ul>
+   <li><jk>null</jk> readers return an empty map</li>
+   <li>Keys without values (e.g., <c>key1&amp;key2</c>) are stored with <jk>null</jk> values</li>
+   <li>Keys with empty values (e.g., <c>key=</c>) are stored with empty strings</li>
+   <li>Multiple occurrences of the same key append values to the list</li>
+ </ul>
+
+ <h5 class='section'>Example:</h5>
+ <p class='bjava'>
+   <jc>// Parse from a reader</jc>
+   Reader <jv>reader</jv> = <jk>new</jk> StringReader(<js>"f1=v1&amp;f2=v2"</js>);
+   Map&lt;String,List&lt;String&gt;&gt; <jv>params</jv> = parseQuery(<jv>reader</jv>);
+   <jv>params</jv>.get(<js>"f1"</js>);  <jc>// Returns [v1]</jc>
+ </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>qs</code> - A reader containing the query string to parse.</dd>
-<dd><code>map</code> - The map to pass the values into.</dd>
+<dd><code>qs</code> - The reader containing the query string to parse. Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
-<dd>The same map passed in, or a new map if it was <jk>null</jk>.</dd>
+<dd>A map of parameter names to lists of values. Returns an empty map if the input is <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="toValidContextPath(java.lang.String)">
 <h3>toValidContextPath</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-341">toValidContextPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-293">toValidContextPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
 <div class="block">Converts the specified path segment to a valid context path.
 
  <ul>
@@ -406,70 +335,52 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="trimContextPath(java.lang.String,java.lang.String)">
-<h3>trimContextPath</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-359">trimContextPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contextPath,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
-<div class="block">If the specified path-info starts with the specified context path, trims the context path from the path info.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>contextPath</code> - The context path.</dd>
-<dd><code>path</code> - The URL path.</dd>
-<dt>Returns:</dt>
-<dd>The path following the context path, or the original path.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="trimPathInfo(java.lang.StringBuffer,java.lang.String,java.lang.String)">
-<h3>trimPathInfo</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuffer.html" title="class or interface in java.lang" class="external-link">StringBuffer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-390">trimPathInfo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuffer.html" title="class or interface in java.lang" class="external-link">StringBuffer</a>&nbsp;requestURI,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contextPath,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;servletPath)</span></div>
-<div class="block">Efficiently trims the path info part from a request URI.
-
- <p>
- The result is the URI of the servlet itself.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>requestURI</code> - The value returned by <code>HttpServletRequest.getRequestURL()</code></dd>
-<dd><code>contextPath</code> - The value returned by <code>HttpServletRequest.getContextPath()</code></dd>
-<dd><code>servletPath</code> - The value returned by <code>HttpServletRequest.getServletPath()</code></dd>
-<dt>Returns:</dt>
-<dd>The same StringBuilder with remainder trimmed.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="validateContextPath(java.lang.String)">
-<h3>validateContextPath</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-452">validateContextPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
-<div class="block">Throws a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> if the method <a href="#isValidContextPath(java.lang.String)"><code>isValidContextPath(String)</code></a> returns <jk>false</jk> for the specified value.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>value</code> - The value to test.</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="validatePathInfo(java.lang.String)">
 <h3>validatePathInfo</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-462">validatePathInfo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
-<div class="block">Throws a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> if the method <a href="#isValidPathInfo(java.lang.String)"><code>isValidPathInfo(String)</code></a> returns <jk>false</jk> for the specified value.</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-321">validatePathInfo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="block">Validates that the specified value is a valid path-info path and returns it.
+
+ <p>
+ A valid path-info path must be:
+ <ul>
+   <li><jk>null</jk> (valid, indicates no extra path information)</li>
+   <li>Non-empty and starting with <c>/</c> (e.g., <c>/users/123</c>)</li>
+ </ul>
+
+ <p>
+ The path-info follows the servlet path but precedes the query string.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value to test.</dd>
+<dd><code>value</code> - The value to validate.</dd>
+<dt>Returns:</dt>
+<dd>The validated value (may be <jk>null</jk>).</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></code> - If the value is not a valid path-info path.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="validateServletPath(java.lang.String)">
 <h3>validateServletPath</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-472">validateServletPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
-<div class="block">Throws a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> if the method <a href="#isValidServletPath(java.lang.String)"><code>isValidServletPath(String)</code></a> returns <jk>false</jk> for the specified value.</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/RestUtils.html#line-344">validateServletPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="block">Validates that the specified value is a valid servlet path and returns it.
+
+ <p>
+ A valid servlet path must be:
+ <ul>
+   <li>An empty string <c>""</c> (valid, indicates servlet matched using <c>/*</c> pattern)</li>
+   <li>Non-empty, starting with <c>/</c>, not ending with <c>/</c>, and not exactly <c>/</c> (e.g., <c>/api</c>, <c>/api/users</c>)</li>
+ </ul>
+
+ <p>
+ The servlet path includes either the servlet name or a path to the servlet, but does not include any extra path information or a query string.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value to test.</dd>
+<dd><code>value</code> - The value to validate.</dd>
+<dt>Returns:</dt>
+<dd>The validated value (never <jk>null</jk>).</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></code> - If the value is <jk>null</jk> or not a valid servlet path.</dd>
 </dl>
 </section>
 </li>
