@@ -1776,7 +1776,7 @@ public class RestContext extends Context {
 
 			if (rootBeanStore == null) {
 				rootBeanStore = beanStore;
-				beanStore = BasicBeanStore.of(rootBeanStore, r.get());
+				beanStore = BasicBeanStore.of(rootBeanStore);
 			}
 			var bs = beanStore;
 
@@ -3867,7 +3867,6 @@ public class RestContext extends Context {
 				BasicBeanStore
 					.create()
 					.parent(rootBeanStore())
-					.outer(resource.get())
 				);
 			// @formatter:on
 
@@ -4635,7 +4634,7 @@ public class RestContext extends Context {
 
 						RestOpContext.Builder rocb = RestOpContext.create(mi.inner(), restContext).beanStore(beanStore).type(opContextClass);
 
-						beanStore = BasicBeanStore.of(beanStore, resource.get()).addBean(RestOpContext.Builder.class, rocb);
+						beanStore = BasicBeanStore.of(beanStore).addBean(RestOpContext.Builder.class, rocb);
 						for (var m : initMap.values()) {
 							if (! beanStore.hasAllParams(m, resource.get())) {
 								throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", cns(m.getDeclaringClass()), m.getSignature(),
@@ -5970,7 +5969,7 @@ public class RestContext extends Context {
 		var params = mi.getParameters();
 		var ra = new RestOpArg[params.size()];
 
-		beanStore = BasicBeanStore.of(beanStore, getResource());
+		beanStore = BasicBeanStore.of(beanStore);
 
 		for (var i = 0; i < params.size(); i++) {
 			var pi = params.get(i);

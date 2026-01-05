@@ -89,6 +89,13 @@ public class BeanCreateMethodFinder<T> {
 	private MethodInfo method;
 	private Object[] args;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param beanType The bean type to find creation methods for.
+	 * @param resourceClass The resource class to search for creation methods.
+	 * @param beanStore The bean store to use for parameter resolution.
+	 */
 	public BeanCreateMethodFinder(Class<T> beanType, Class<?> resourceClass, BasicBeanStore beanStore) {
 		this.beanType = assertArgNotNull("beanType", beanType);
 		this.resource = null;
@@ -96,11 +103,18 @@ public class BeanCreateMethodFinder<T> {
 		this.beanStore = BasicBeanStore.of(beanStore);
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param beanType The bean type to find creation methods for.
+	 * @param resource The resource object to search for creation methods.
+	 * @param beanStore The bean store to use for parameter resolution.
+	 */
 	public BeanCreateMethodFinder(Class<T> beanType, Object resource, BasicBeanStore beanStore) {
 		this.beanType = assertArgNotNull("beanType", beanType);
 		this.resource = assertArgNotNull("resource", resource);
 		this.resourceClass = resource.getClass();
-		this.beanStore = BasicBeanStore.of(beanStore, resource);
+		this.beanStore = BasicBeanStore.of(beanStore);
 	}
 
 	/**

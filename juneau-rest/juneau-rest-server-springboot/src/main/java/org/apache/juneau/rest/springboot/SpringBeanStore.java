@@ -19,8 +19,6 @@ package org.apache.juneau.rest.springboot;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
-import java.util.stream.*;
-
 import org.apache.juneau.cp.*;
 import org.springframework.context.*;
 
@@ -43,7 +41,7 @@ public class SpringBeanStore extends BasicBeanStore {
 	 * @param resource The REST object.  Can be <jk>null</jk>.
 	 */
 	public SpringBeanStore(Optional<ApplicationContext> appContext, Optional<BasicBeanStore> parent, Object resource) {
-		super(create().parent(parent.orElse(null)).outer(resource));
+		super(create().parent(parent.orElse(null)));
 		this.appContext = appContext;
 	}
 

@@ -89,7 +89,6 @@ public class BasicBeanStore {
 
 		BasicBeanStore parent;
 		boolean readOnly, threadSafe;
-		Object outer;
 		Class<? extends BasicBeanStore> type;
 		BasicBeanStore impl;
 
@@ -144,19 +143,6 @@ public class BasicBeanStore {
 			return this;
 		}
 
-		/**
-		 * Specifies the outer bean context.
-		 *
-		 * <p>
-		 * The outer context bean to use when calling constructors on inner classes.
-		 *
-		 * @param value The outer bean context.  Can be <jk>null</jk>.
-		 * @return  This object.
-		 */
-		public Builder outer(Object value) {
-			outer = value;
-			return this;
-		}
 
 		/**
 		 * Specifies the parent bean store.
@@ -244,22 +230,10 @@ public class BasicBeanStore {
 		return create().parent(parent).build();
 	}
 
-	/**
-	 * Static creator.
-	 *
-	 * @param parent Parent bean store.  Can be <jk>null</jk> if this is the root resource.
-	 * @param outer The outer bean used when instantiating inner classes.  Can be <jk>null</jk>.
-	 * @return A new {@link BasicBeanStore} object.
-	 */
-	public static BasicBeanStore of(BasicBeanStore parent, Object outer) {
-		return create().parent(parent).outer(outer).build();
-	}
-
 	private final Deque<Entry<?>> entries;
 	private final Map<Class<?>,Entry<?>> unnamedEntries;
 
 	final Optional<BasicBeanStore> parent;
-	final Optional<Object> outer;
 	final boolean readOnly, threadSafe;
 	final SimpleReadWriteLock lock;
 
@@ -270,7 +244,6 @@ public class BasicBeanStore {
 	 */
 	protected BasicBeanStore(Builder builder) {
 		parent = opt(builder.parent);
-		outer = opt(builder.outer);
 		readOnly = builder.readOnly;
 		threadSafe = builder.threadSafe;
 		lock = threadSafe ? new SimpleReadWriteLock() : SimpleReadWriteLock.NO_OP;
@@ -438,6 +411,7 @@ public class BasicBeanStore {
 	 * Given an executable, returns a list of types that are missing from this factory.
 	 *
 	 * @param executable The constructor or method to get the params for.
+	 * @param outer The outer object to use when instantiating inner classes.  Can be <jk>null</jk>.
 	 * @return A comma-delimited list of types that are missing from this factory, or <jk>null</jk> if none are missing.
 	 */
 	public String getMissingParams(ExecutableInfo executable, Object outer) {
@@ -464,6 +438,7 @@ public class BasicBeanStore {
 	 * Returns the corresponding beans in this factory for the specified param types.
 	 *
 	 * @param executable The constructor or method to get the params for.
+	 * @param outer The outer object to use when instantiating inner classes.  Can be <jk>null</jk>.
 	 * @return The corresponding beans in this factory for the specified param types.
 	 */
 	public Object[] getParams(ExecutableInfo executable, Object outer) {
@@ -487,6 +462,7 @@ public class BasicBeanStore {
 	 * Given the list of param types, returns <jk>true</jk> if this factory has all the parameters for the specified executable.
 	 *
 	 * @param executable The constructor or method to get the params for.
+	 * @param outer The outer object to use when instantiating inner classes.  Can be <jk>null</jk>.
 	 * @return A comma-delimited list of types that are missing from this factory.
 	 */
 	public boolean hasAllParams(ExecutableInfo executable, Object outer) {
@@ -531,7 +507,6 @@ public class BasicBeanStore {
 		return filteredBeanPropertyMap()
 			.a("entries", entries.stream().map(Entry::properties).collect(toList()))
 			.a("identity", id(this))
-			.a("outer", id(outer.orElse(null)))
 			.a("parent", parent.map(BasicBeanStore::properties).orElse(null))
 			.ai(readOnly, "readOnly", readOnly)
 			.ai(threadSafe, "threadSafe", threadSafe);

@@ -268,10 +268,10 @@ class BeanStore_Test extends TestBase {
 
 		var outer = new B1(null, null, null);
 
-		var b1p = BasicBeanStore.create().outer(outer).build().addBean(B1.class, outer);
-		var b1c = BasicBeanStore.create().outer(outer).parent(b1p).build();
-		var b2p = BasicBeanStore.create().outer(outer).threadSafe().build().addBean(B1.class, outer);
-		var b2c = BasicBeanStore.create().outer(outer).parent(b1p).threadSafe().build();
+		var b1p = BasicBeanStore.create().build().addBean(B1.class, outer);
+		var b1c = BasicBeanStore.create().parent(b1p).build();
+		var b2p = BasicBeanStore.create().threadSafe().build().addBean(B1.class, outer);
+		var b2c = BasicBeanStore.create().parent(b1p).threadSafe().build();
 
 		var ci = ClassInfo.of(B1.class);
 		var c1 = ci.getPublicConstructor(x -> x.hasParameterTypes(A1.class, Optional.class, BasicBeanStore.class)).get();
@@ -535,7 +535,7 @@ class BeanStore_Test extends TestBase {
 	public class D1b {}
 
 	@Test void d01_createBean_basic() {
-		var bs = BasicBeanStore.create().outer(new BeanStore_Test()).build();
+		var bs = BasicBeanStore.create().build();
 		assertNotNull(BeanCreator.of(D1a.class, bs).outer(this).run());
 		assertNotNull(BeanCreator.of(D1b.class, bs).outer(this).run());
 		assertThrows(IllegalArgumentException.class, () -> BeanCreator.of(null, bs).outer(this).run());

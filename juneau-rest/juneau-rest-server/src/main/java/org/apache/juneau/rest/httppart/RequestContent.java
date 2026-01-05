@@ -552,7 +552,6 @@ public class RequestContent {
 				.apply(ReaderParser.Builder.class, x -> x.streamCharset(req.getCharset()))
 				.schema(schema)
 				.debug(req.isDebug() ? true : null)
-				.outer(req.getContext().getResource())
 				.build();
 			// @formatter:on
 

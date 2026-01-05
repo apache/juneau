@@ -126,7 +126,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			this.parent = context.builder;
 			this.restMethod = method;
 
-			this.beanStore = BasicBeanStore.of(context.getBeanStore(), context.builder.resource().get()).addBean(java.lang.reflect.Method.class, method);
+			this.beanStore = BasicBeanStore.of(context.getBeanStore()).addBean(java.lang.reflect.Method.class, method);
 			var ap = context.getBeanContext().getAnnotationProvider();
 
 			var mi = MethodInfo.of(context.getResourceClass(), method);
@@ -1419,7 +1419,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			// Replace with bean from:  @RestInject(methodScope="foo") public [static] BeanContext xxx(<args>)
 			// @formatter:off
-			var bs = BasicBeanStore.of(beanStore, resource).addBean(BeanContext.Builder.class, v.get());
+			var bs = BasicBeanStore.of(beanStore).addBean(BeanContext.Builder.class, v.get());
 			new BeanCreateMethodFinder<>(BeanContext.class, resource, bs)
 				.find(this::matches)
 				.run(x -> v.get().impl(x));
@@ -1539,7 +1539,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			// Replace with bean from:  @RestInject(name="defaultRequestAttributes",methodScope="foo") public [static] NamedAttributeMap xxx(<args>)
 			// @formatter:off
-			var bs = BasicBeanStore.of(beanStore, resource).addBean(NamedAttributeMap.class, v.get());
+			var bs = BasicBeanStore.of(beanStore).addBean(NamedAttributeMap.class, v.get());
 			new BeanCreateMethodFinder<>(NamedAttributeMap.class, resource, bs)
 				.find(x -> matches(x, "defaultRequestAttributes"))
 				.run(x -> v.set(x));
@@ -1565,7 +1565,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			// Replace with bean from:  @RestInject(name="defaultRequestFormData",methodScope="foo") public [static] PartList xxx(<args>)
 			// @formatter:off
-			var bs = BasicBeanStore.of(beanStore, resource).addBean(PartList.class, v.get());
+			var bs = BasicBeanStore.of(beanStore).addBean(PartList.class, v.get());
 			new BeanCreateMethodFinder<>(PartList.class, resource, bs)
 				.find(x -> matches(x, "defaultRequestFormData"))
 				.run(x -> v.set(x));
@@ -1591,7 +1591,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			// Replace with bean from:  @RestInject(name="defaultRequestHeaders",methodScope="foo") public [static] HeaderList xxx(<args>)
 			// @formatter:off
-			var bs = BasicBeanStore.of(beanStore, resource).addBean(HeaderList.class, v.get());
+			var bs = BasicBeanStore.of(beanStore).addBean(HeaderList.class, v.get());
 			new BeanCreateMethodFinder<>(HeaderList.class, resource, bs)
 				.find(x -> matches(x, "defaultRequestHeaders"))
 				.run(x -> v.set(x));
@@ -1617,7 +1617,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			// Replace with bean from:  @RestInject(name="defaultRequestQueryData",methodScope="foo") public [static] PartList xxx(<args>)
 			// @formatter:off
-			var bs = BasicBeanStore.of(beanStore, resource).addBean(PartList.class, v.get());
+			var bs = BasicBeanStore.of(beanStore).addBean(PartList.class, v.get());
 			new BeanCreateMethodFinder<>(PartList.class, resource, bs)
 				.find(x -> matches(x, "defaultRequestQueryData"))
 				.run(x -> v.set(x));
@@ -1643,7 +1643,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			// Replace with bean from:  @RestInject(name="defaultResponseHeaders",methodScope="foo") public [static] HeaderList xxx(<args>)
 			// @formatter:off
-			var bs = BasicBeanStore.of(beanStore, resource).addBean(HeaderList.class, v.get());
+			var bs = BasicBeanStore.of(beanStore).addBean(HeaderList.class, v.get());
 			new BeanCreateMethodFinder<>(HeaderList.class, resource, bs)
 				.find(x -> matches(x, "defaultResponseHeaders"))
 				.run(x -> v.set(x));
@@ -1670,7 +1670,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			// Replace with bean from:  @RestInject(methodScope="foo") public [static] EncoderSet xxx(<args>)
 			// @formatter:off
-			var bs = BasicBeanStore.of(beanStore, resource).addBean(EncoderSet.Builder.class, v.get());
+			var bs = BasicBeanStore.of(beanStore).addBean(EncoderSet.Builder.class, v.get());
 			new BeanCreateMethodFinder<>(EncoderSet.class, resource, bs)
 				.find(this::matches)
 				.run(x -> v.get().impl(x));
@@ -1749,7 +1749,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			// Replace with bean from:  @RestInject(methodScope="foo") public [static] JsonSchemaGenerator xxx(<args>)
 			// @formatter:off
-			var bs = BasicBeanStore.of(beanStore, resource).addBean(JsonSchemaGenerator.Builder.class, v.get());
+			var bs = BasicBeanStore.of(beanStore).addBean(JsonSchemaGenerator.Builder.class, v.get());
 			new BeanCreateMethodFinder<>(JsonSchemaGenerator.class, resource, bs)
 				.find(this::matches)
 				.run(x -> v.get().impl(x));
@@ -1854,7 +1854,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			// Replace with bean from:  @RestInject(methodScope="foo") public [static] ParserSet xxx(<args>)
 			// @formatter:off
-			var bs = BasicBeanStore.of(beanStore, resource).addBean(ParserSet.Builder.class, v.get());
+			var bs = BasicBeanStore.of(beanStore).addBean(ParserSet.Builder.class, v.get());
 			new BeanCreateMethodFinder<>(ParserSet.class, resource, bs)
 				.find(this::matches)
 				.run(x -> v.get().impl(x));
@@ -1881,7 +1881,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			// Replace with bean from:  @RestInject(methodScope="foo") public [static] HttpPartParser xxx(<args>)
 			// @formatter:off
-			var bs = BasicBeanStore.of(beanStore, resource).addBean(HttpPartParser.Creator.class, v.get());
+			var bs = BasicBeanStore.of(beanStore).addBean(HttpPartParser.Creator.class, v.get());
 			new BeanCreateMethodFinder<>(HttpPartParser.class, resource, bs)
 				.find(this::matches)
 				.run(x -> v.get().impl(x));
@@ -1908,7 +1908,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			// Replace with bean from:  @RestInject(methodScope="foo") public [static] HttpPartSerializer xxx(<args>)
 			// @formatter:off
-			var bs = BasicBeanStore.of(beanStore, resource).addBean(HttpPartSerializer.Creator.class, v.get());
+			var bs = BasicBeanStore.of(beanStore).addBean(HttpPartSerializer.Creator.class, v.get());
 			new BeanCreateMethodFinder<>(HttpPartSerializer.class, resource, bs)
 				.find(this::matches)
 				.run(x -> v.get().impl(x));
@@ -1935,7 +1935,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			// Replace with bean from:  @RestInject(methodScope="foo") public [static] SerializerSet xxx(<args>)
 			// @formatter:off
-			var bs = BasicBeanStore.of(beanStore, resource).addBean(SerializerSet.Builder.class, v.get());
+			var bs = BasicBeanStore.of(beanStore).addBean(SerializerSet.Builder.class, v.get());
 			new BeanCreateMethodFinder<>(SerializerSet.class, resource, bs)
 				.find(this::matches)
 				.run(x -> v.get().impl(x));
@@ -2167,10 +2167,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				debug = DebugEnablement.create(context.getBeanStore()).enable(builder.debug, "*").build();
 
 			mi = MethodInfo.of(method).accessible();
-			var r = context.getResource();
 
-		// @formatter:off
-		var bs = BasicBeanStore.of(context.getRootBeanStore(), r)
+			// @formatter:off
+			var bs = BasicBeanStore.of(context.getRootBeanStore())
 				.addBean(RestOpContext.class, this)
 				.addBean(Method.class, method)
 				.addBean(AnnotationWorkList.class, builder.getApplied());

@@ -223,7 +223,7 @@ public class RestSession extends ContextSession {
 		super(builder);
 		context = builder.ctx;
 		resource = builder.resource;
-		beanStore = BasicBeanStore.of(context.getBeanStore(), resource).addBean(RestContext.class, context);
+		beanStore = BasicBeanStore.of(context.getBeanStore()).addBean(RestContext.class, context);
 
 		logger = beanStore.add(CallLogger.class, builder.logger);
 		pathInfoUndecoded = builder.pathInfoUndecoded;

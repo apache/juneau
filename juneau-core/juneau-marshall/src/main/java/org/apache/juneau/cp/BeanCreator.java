@@ -146,11 +146,19 @@ public class BeanCreator<T> {
 	 * @return A new creator.
 	 */
 	public static <T> BeanCreator<T> of(Class<T> beanType) {
-		return new BeanCreator(beanType, BasicBeanStore.INSTANCE);
+		return new BeanCreator<>(beanType, BasicBeanStore.INSTANCE);
 	}
 
+	/**
+	 * Creates a new bean creator.
+	 *
+	 * @param <T> The bean type to create.
+	 * @param beanType The bean type to create.
+	 * @param beanStore The bean store to use for parameter resolution.
+	 * @return A new creator.
+	 */
 	public static <T> BeanCreator<T> of(Class<T> beanType, BasicBeanStore beanStore) {
-		return new BeanCreator(beanType, beanStore);
+		return new BeanCreator<>(beanType, beanStore);
 	}
 
 	private final BasicBeanStore store;
@@ -169,9 +177,15 @@ public class BeanCreator<T> {
 	 */
 	protected BeanCreator(Class<T> type, BasicBeanStore store) {
 		this.type = info(type);
-		this.store = BasicBeanStore.of(store, store.outer.orElse(null));
+		this.store = BasicBeanStore.of(store);
 	}
 
+	/**
+	 * Specifies the outer object to use when instantiating inner classes.
+	 *
+	 * @param outer The outer object.  Can be <jk>null</jk>.
+	 * @return This object.
+	 */
 	public BeanCreator<T> outer(Object outer) {
 		this.outer = outer;
 		return this;

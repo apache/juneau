@@ -19,7 +19,6 @@ package org.apache.juneau.commons.reflect;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 
-import java.beans.beancontext.*;
 import java.lang.reflect.*;
 
 /**

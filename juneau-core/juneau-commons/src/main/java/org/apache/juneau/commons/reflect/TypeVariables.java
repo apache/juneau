@@ -19,8 +19,6 @@ package org.apache.juneau.commons.reflect;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.commons.utils.*;
-
 /**
  * Encapsulates type variable implementations for a class hierarchy.
  *
