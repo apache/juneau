@@ -53,7 +53,7 @@ public class ThrownStats implements Cloneable {
 		 */
 		protected Builder(BeanStore beanStore) {
 			this.beanStore = beanStore;
-			this.creator = beanStore.createBean(ThrownStats.class).builder(Builder.class, this);
+			this.creator = BeanCreator.of(ThrownStats.class, beanStore).builder(Builder.class, this);
 		}
 
 		/**

@@ -253,7 +253,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		@Override /* Overridden from BeanContext.Builder */
 		public RestOpContext build() {
 			try {
-				return beanStore.createBean(RestOpContext.class).type(getType().orElse(getDefaultImplClass())).builder(RestOpContext.Builder.class, this).run();
+				return BeanCreator.of(RestOpContext.class, beanStore).type(getType().orElse(getDefaultImplClass())).builder(RestOpContext.Builder.class, this).run();
 			} catch (Exception e) {
 				throw new InternalServerError(e);
 			}

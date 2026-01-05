@@ -606,7 +606,7 @@ public class RestContext extends Context {
 		@Override /* Overridden from BeanContext.Builder */
 		public RestContext build() {
 			try {
-				return beanStore().createBean(RestContext.class).type(getType().orElse(RestContext.class)).builder(RestContext.Builder.class, this).run();
+				return BeanCreator.of(RestContext.class, beanStore()).type(getType().orElse(RestContext.class)).builder(RestContext.Builder.class, this).run();
 			} catch (Exception e) {
 				e.printStackTrace();  // NOSONAR
 				throw new InternalServerError(e, "Could not instantiate RestContext.");
@@ -3901,7 +3901,7 @@ public class RestContext extends Context {
 		 */
 		protected BeanCreator<CallLogger> createCallLogger(BeanStore beanStore, Supplier<?> resource) {
 
-			var creator = beanStore.createBean(CallLogger.class).type(BasicCallLogger.class);
+			var creator = BeanCreator.of(CallLogger.class, beanStore).type(BasicCallLogger.class);
 
 			// Specify the bean type if its set as a default.
 			defaultClasses().get(CallLogger.class).ifPresent(x -> creator.type(x));
@@ -3972,7 +3972,7 @@ public class RestContext extends Context {
 		 */
 		protected BeanCreator<DebugEnablement> createDebugEnablement(BeanStore beanStore, Supplier<?> resource) {
 
-			var creator = beanStore.createBean(DebugEnablement.class).type(BasicDebugEnablement.class);
+			var creator = BeanCreator.of(DebugEnablement.class, beanStore).type(BasicDebugEnablement.class);
 
 			// Specify the bean type if its set as a default.
 			defaultClasses().get(DebugEnablement.class).ifPresent(x -> creator.type(x));
@@ -4521,7 +4521,7 @@ public class RestContext extends Context {
 					if (beanStore.getBean(oc).isPresent()) {
 						so = () -> beanStore.getBean(oc).get();  // If we resolved via injection, always get it this way.
 					} else {
-						Object o2 = beanStore.createBean(oc).builder(RestContext.Builder.class, cb).run();
+						Object o2 = BeanCreator.of(oc, beanStore).builder(RestContext.Builder.class, cb).run();
 						so = () -> o2;
 					}
 				} else {
@@ -4751,7 +4751,7 @@ public class RestContext extends Context {
 		 */
 		protected BeanCreator<StaticFiles> createStaticFiles(BeanStore beanStore, Supplier<?> resource) {
 
-			var creator = beanStore.createBean(StaticFiles.class).type(BasicStaticFiles.class);
+			var creator = BeanCreator.of(StaticFiles.class, beanStore).type(BasicStaticFiles.class);
 
 			// Specify the bean type if its set as a default.
 			defaultClasses().get(StaticFiles.class).ifPresent(x -> creator.type(x));
@@ -4800,7 +4800,7 @@ public class RestContext extends Context {
 		 */
 		protected BeanCreator<SwaggerProvider> createSwaggerProvider(BeanStore beanStore, Supplier<?> resource) {
 
-			var creator = beanStore.createBean(SwaggerProvider.class).type(BasicSwaggerProvider.class);
+			var creator = BeanCreator.of(SwaggerProvider.class, beanStore).type(BasicSwaggerProvider.class);
 
 			// Specify the bean type if its set as a default.
 			defaultClasses().get(SwaggerProvider.class).ifPresent(x -> creator.type(x));
@@ -5978,7 +5978,7 @@ public class RestContext extends Context {
 			beanStore.addBean(ParameterInfo.class, pi);
 			for (var c : restOpArgs) {
 				try {
-					ra[i] = beanStore.createBean(RestOpArg.class).type(c).run();
+					ra[i] = BeanCreator.of(RestOpArg.class, beanStore).type(c).run();
 					if (nn(ra[i]))
 						break;
 				} catch (ExecutableException e) {

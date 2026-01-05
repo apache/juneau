@@ -57,7 +57,7 @@ public class RestGuardList {
 		@SuppressWarnings("unchecked")
 		public Builder append(Class<? extends RestGuard>...values) {
 			for (var v : values)
-				entries.add(beanStore().createBean(RestGuard.class).type(v));
+				entries.add(BeanCreator.of(RestGuard.class, beanStore()).type(v));
 			return this;
 		}
 
@@ -69,7 +69,7 @@ public class RestGuardList {
 		 */
 		public Builder append(RestGuard...values) {
 			for (var v : values)
-				entries.add(beanStore().createBean(RestGuard.class).impl(v));
+				entries.add(BeanCreator.of(RestGuard.class, beanStore()).impl(v));
 			return this;
 		}
 

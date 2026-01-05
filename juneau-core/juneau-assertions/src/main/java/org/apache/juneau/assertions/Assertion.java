@@ -220,13 +220,11 @@ public class Assertion {
 		if (nn(throwable)) {
 			try {
 				// @formatter:off
-				throw BeanStore
-					.create()
-					.build()
-					.addBean(Throwable.class, cause)
-					.addBean(String.class, msg)
-					.addBean(Object[].class,new Object[0])
-					.createBean(throwable)
+				throw BeanCreator
+					.of(throwable)
+					.arg(Throwable.class, cause)
+					.arg(String.class, msg)
+					.arg(Object[].class,new Object[0])
 					.run();
 				// @formatter:on
 			} catch (@SuppressWarnings("unused") ExecutableException e) {

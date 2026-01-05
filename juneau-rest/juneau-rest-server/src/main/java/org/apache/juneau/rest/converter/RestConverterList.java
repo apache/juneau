@@ -57,7 +57,7 @@ public class RestConverterList {
 		@SuppressWarnings("unchecked")
 		public Builder append(Class<? extends RestConverter>...values) {
 			for (var v : values)
-				entries.add(beanStore().createBean(RestConverter.class).type(v));
+				entries.add(BeanCreator.of(RestConverter.class, beanStore()).type(v));
 			return this;
 		}
 
@@ -69,7 +69,7 @@ public class RestConverterList {
 		 */
 		public Builder append(RestConverter...values) {
 			for (var v : values)
-				entries.add(beanStore().createBean(RestConverter.class).impl(v));
+				entries.add(BeanCreator.of(RestConverter.class, beanStore()).impl(v));
 			return this;
 		}
 

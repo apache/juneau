@@ -59,7 +59,7 @@ public abstract class DebugEnablement {
 			mapBuilder = ReflectionMap.create(Enablement.class);
 			defaultEnablement = NEVER;
 			conditional = x -> eqic("true", x.getHeader("Debug"));
-			creator = beanStore.createBean(DebugEnablement.class).type(BasicDebugEnablement.class).builder(Builder.class, this);
+			creator = BeanCreator.of(DebugEnablement.class, beanStore).type(BasicDebugEnablement.class).builder(Builder.class, this);
 		}
 
 		/**

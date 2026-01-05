@@ -57,7 +57,7 @@ public interface SwaggerProvider {
 		 */
 		protected Builder(BeanStore beanStore) {
 			this.beanStore = beanStore;
-			this.creator = beanStore.createBean(SwaggerProvider.class).type(BasicSwaggerProvider.class).builder(Builder.class, this);
+			this.creator = BeanCreator.of(SwaggerProvider.class, beanStore).type(BasicSwaggerProvider.class).builder(Builder.class, this);
 		}
 
 		/**

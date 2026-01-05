@@ -18,7 +18,9 @@ package org.apache.juneau.cp;
 
 import static java.util.stream.Collectors.*;
 import static java.util.stream.Collectors.toList;
+import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -27,8 +29,8 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import java.util.function.*;
-import java.util.stream.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.concurrent.*;
 import org.apache.juneau.commons.reflect.*;
@@ -67,7 +69,7 @@ import org.apache.juneau.commons.reflect.*;
  * <p>
  * Beans are created through the following methods:
  * <ul class='javatreec'>
- * 	<li class='jm'>{@link #createBean(Class) createBean(Class)}
+ * 	<li class='jm'>{@link BeanCreator#of(Class,BeanStore) BeanCreator.of(Class,BeanStore)}
  * 	<li class='jm'>{@link #createMethodFinder(Class) createMethodFinder(Class)}
  * 	<li class='jm'>{@link #createMethodFinder(Class,Class) createMethodFinder(Class,Class)}
  * 	<li class='jm'>{@link #createMethodFinder(Class,Object) createMethodFinder(Class,Object)}
@@ -254,8 +256,8 @@ public class BeanStore {
 		return create().parent(parent).outer(outer).build();
 	}
 
-	private final Deque<BeanStoreEntry<?>> entries;
-	private final Map<Class<?>,BeanStoreEntry<?>> unnamedEntries;
+	private final Deque<Entry<?>> entries;
+	private final Map<Class<?>,Entry<?>> unnamedEntries;
 
 	final Optional<BeanStore> parent;
 	final Optional<Object> outer;
@@ -389,13 +391,6 @@ public class BeanStore {
 	 * 	<li class='jc'>{@link BeanCreator} for usage.
 	 * </ul>
 	 *
-	 * @param <T> The bean type to create.
-	 * @param beanType The bean type to create.
-	 * @return A new bean creator.
-	 */
-	public <T> BeanCreator<T> createBean(Class<T> beanType) {
-		return new BeanCreator<>(beanType, this);
-	}
 
 	/**
 	 * Create a method finder for finding bean creation methods.
@@ -461,7 +456,7 @@ public class BeanStore {
 	@SuppressWarnings("unchecked")
 	public <T> Optional<T> getBean(Class<T> beanType) {
 		try (var x = lock.read()) {
-			var e = (BeanStoreEntry<T>)unnamedEntries.get(beanType);
+			var e = (Entry<T>)unnamedEntries.get(beanType);
 			if (nn(e))
 				return opt(e.get());
 			if (parent.isPresent())
@@ -481,7 +476,7 @@ public class BeanStore {
 	@SuppressWarnings("unchecked")
 	public <T> Optional<T> getBean(Class<T> beanType, String name) {
 		try (var x = lock.read()) {
-			var e = (BeanStoreEntry<T>)entries.stream().filter(x2 -> x2.matches(beanType, name)).findFirst().orElse(null);
+			var e = (Entry<T>)entries.stream().filter(x2 -> x2.matches(beanType, name)).findFirst().orElse(null);
 			if (nn(e))
 				return opt(e.get());
 			if (parent.isPresent())
@@ -587,7 +582,7 @@ public class BeanStore {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("entries", entries.stream().map(BeanStoreEntry::properties).collect(toList()))
+			.a("entries", entries.stream().map(Entry::properties).collect(toList()))
 			.a("identity", id(this))
 			.a("outer", id(outer.orElse(null)))
 			.a("parent", parent.map(BeanStore::properties).orElse(null))
@@ -618,7 +613,111 @@ public class BeanStore {
 	 * @param name Optional name to associate with the bean.  Can be <jk>null</jk>.
 	 * @return A new bean store entry.
 	 */
-	protected <T> BeanStoreEntry<T> createEntry(Class<T> type, Supplier<T> bean, String name) {
-		return BeanStoreEntry.create(type, bean, name);
+	protected <T> Entry<T> createEntry(Class<T> type, Supplier<T> bean, String name) {
+		return Entry.create(type, bean, name);
+	}
+
+	/**
+	 * Represents a bean in a {@link BeanStore}.
+	 *
+	 * <p>
+	 * A bean entry consists of the following:
+	 * <ul>
+	 * 	<li>A class type.
+	 * 	<li>A bean or bean supplier that returns an instance of the class type.  This can be a subclass of the type.
+	 * 	<li>An optional name.
+	 * </ul>
+	 *
+	 * @param <T> The bean type.
+	 */
+	public static class Entry<T> {
+		/**
+		 * Static creator.
+		 *
+		 * @param <T> The class type to associate with the bean.
+		 * @param type The class type to associate with the bean.
+		 * @param bean The bean supplier.
+		 * @param name Optional name to associate with the bean.  Can be <jk>null</jk>.
+		 * @return A new bean store entry.
+		 */
+		public static <T> Entry<T> create(Class<T> type, Supplier<T> bean, String name) {
+			return new Entry<>(type, bean, name);
+		}
+
+		final Supplier<T> bean;
+		final Class<T> type;
+		final String name;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param type The class type to associate with the bean.
+		 * @param bean The bean supplier.
+		 * @param name Optional name to associate with the bean.  Can be <jk>null</jk>.
+		 */
+		protected Entry(Class<T> type, Supplier<T> bean, String name) {
+			this.bean = assertArgNotNull("bean", bean);
+			this.type = assertArgNotNull("type", type);
+			this.name = nullIfEmpty(name);
+		}
+
+		/**
+		 * Returns the bean associated with this entry.
+		 *
+		 * @return The bean associated with this entry.
+		 */
+		public T get() {
+			return bean.get();
+		}
+
+		/**
+		 * Returns the name associated with this entry.
+		 *
+		 * @return the name associated with this entry.  <jk>null</jk> if no name is associated.
+		 */
+		public String getName() { return name; }
+
+		/**
+		 * Returns the type this bean is associated with.
+		 *
+		 * @return The type this bean is associated with.
+		 */
+		public Class<T> getType() { return type; }
+
+		/**
+		 * Returns <jk>true</jk> if this bean is exactly of the specified type.
+		 *
+		 * @param type The class to check.  Returns <jk>false</jk> if <jk>null</jk>.
+		 * @return <jk>true</jk> if this bean is exactly of the specified type.
+		 */
+		public boolean matches(Class<?> type) {
+			return this.type.equals(type);
+		}
+
+		/**
+		 * Returns <jk>true</jk> if this bean is exactly of the specified type and has the specified name.
+		 *
+		 * @param type The class to check.  Returns <jk>false</jk> if <jk>null</jk>.
+		 * @param name The name to check.  Can be <jk>null</jk> to only match if name of entry is <jk>null</jk>.
+		 * @return <jk>true</jk> if this bean is exactly of the specified type and has the specified name.
+		 */
+		public boolean matches(Class<?> type, String name) {
+			name = nullIfEmpty(name);
+			return matches(type) && eq(this.name, name);
+		}
+
+		/**
+		 * Returns the properties in this object as a simple map for debugging purposes.
+		 *
+		 * @return The properties in this object as a simple map.
+		 */
+		protected JsonMap properties() {
+			// @formatter:off
+			return filteredMap()
+				.append("type", cns(getType()))
+				.append("bean", id(get()))
+				.append("name", getName());
+			// @formatter:on
+		}
 	}
 }

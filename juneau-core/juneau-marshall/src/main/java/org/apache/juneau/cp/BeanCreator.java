@@ -39,7 +39,7 @@ import org.apache.juneau.commons.reflect.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link BeanStore}
  * 		<ul class='javatreec'>
- * 			<li class='jm'>{@link BeanStore#createBean(Class)}
+ * 			<li class='jc'>{@link BeanCreator#of(Class,BeanStore)}
  * 		</ul>
  * 	</li>
  * </ul>
@@ -53,7 +53,8 @@ import org.apache.juneau.commons.reflect.*;
  * 		.addBean(Throwable.<jk>class</jk>, <jv>cause</jv>)
  * 		.addBean(String.<jk>class</jk>, <jv>msg</jv>)
  * 		.addBean(Object[].<jk>class</jk>, <jv>args</jv>)
- * 		.createBean(RuntimeException.<jk>class</jk>)
+ * 		<ja>// Use BeanCreator.of(RuntimeException.class, beanStore)</ja>
+ * 		BeanCreator.<jsm>of</jsm>(RuntimeException.<jk>class</jk>, <jv>beanStore</jv>)
  * 		.run();
  * </p>
  *
@@ -117,6 +118,7 @@ import org.apache.juneau.commons.reflect.*;
  * @param <T> The bean type being created.
  */
 public class BeanCreator<T> {
+
 	static class Match<T extends ExecutableInfo> {
 		T executable = null;
 		int numMatches = -1;
@@ -137,14 +139,18 @@ public class BeanCreator<T> {
 	}
 
 	/**
-	 * Shortcut for calling <c>BeanStore.INSTANCE.createBean(beanType)</c>.
+	 * Shortcut for calling <c>BeanCreator.of(beanType, BeanStore.INSTANCE)</c>.
 	 *
 	 * @param <T> The bean type to create.
 	 * @param beanType The bean type to create.
 	 * @return A new creator.
 	 */
 	public static <T> BeanCreator<T> of(Class<T> beanType) {
-		return BeanStore.INSTANCE.createBean(beanType);
+		return new BeanCreator(beanType, BeanStore.INSTANCE);
+	}
+
+	public static <T> BeanCreator<T> of(Class<T> beanType, BeanStore beanStore) {
+		return new BeanCreator(beanType, beanStore);
 	}
 
 	private final BeanStore store;

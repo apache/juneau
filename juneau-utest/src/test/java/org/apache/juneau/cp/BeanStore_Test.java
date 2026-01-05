@@ -143,7 +143,7 @@ class BeanStore_Test extends TestBase {
 //		for (var b : array(b1p, b1c, b2p, b2c)) {
 //			assertTrue(b.hasBean(A1.class));
 //			assertEquals(a1b, b.getBean(A1.class).get());
-//			assertList(b.stream(A1.class).map(BeanStoreEntry::get), a1b, a1a);
+//			assertList(b.stream(A1.class).map(BeanStore.Entry::get), a1b, a1a);
 //		}
 //
 //		b1c.add(A2.class, a2a);
@@ -156,7 +156,7 @@ class BeanStore_Test extends TestBase {
 //		for (var b : array(b1c, b2c)) {
 //			assertTrue(b.hasBean(A2.class));
 //			assertEquals(a2a, b.getBean(A2.class).get());
-//			assertList(b.stream(A2.class).map(BeanStoreEntry::get), a2a);
+//			assertList(b.stream(A2.class).map(BeanStore.Entry::get), a2a);
 //		}
 //
 //		assertMatchesGlob("{entries=[{type=A1,bean="+Utils.id(a1b)+"},{type=A1,bean="+Utils.id(a1a)+"}],identity=*}", b1p);
@@ -177,7 +177,7 @@ class BeanStore_Test extends TestBase {
 //		for (var b : array(b1c, b2c)) {
 //			assertTrue(b.hasBean(A1.class));
 //			assertEquals(a1a, b.getBean(A1.class).get());
-//			assertList(b.stream(A1.class).map(BeanStoreEntry::get), a1a);
+//			assertList(b.stream(A1.class).map(BeanStore.Entry::get), a1a);
 //		}
 //
 //		b1c.removeBean(A1.class);
@@ -203,10 +203,10 @@ class BeanStore_Test extends TestBase {
 		}
 
 //		for (var b : array(b1p, b2p)) {
-//			assertList(b.stream(A1.class).map(BeanStoreEntry::get), a1d,a1c,a1b,a1a);
+//			assertList(b.stream(A1.class).map(BeanStore.Entry::get), a1d,a1c,a1b,a1a);
 //		}
 //		for (var b : array(b1c, b2c)) {
-//			assertList(b.stream(A1.class).map(BeanStoreEntry::get), a1e,a1d,a1c,a1b,a1a);
+//			assertList(b.stream(A1.class).map(BeanStore.Entry::get), a1e,a1d,a1c,a1b,a1a);
 //		}
 //
 		for (var b : array(b1p, b1c, b2p, b2c)) {
@@ -537,9 +537,9 @@ class BeanStore_Test extends TestBase {
 
 	@Test void d01_createBean_basic() {
 		var bs = BeanStore.create().outer(new BeanStore_Test()).build();
-		assertNotNull(bs.createBean(D1a.class).run());
-		assertNotNull(bs.createBean(D1b.class).run());
-		assertThrows(IllegalArgumentException.class, () -> bs.createBean(null).run());
+		assertNotNull(BeanCreator.of(D1a.class, bs).run());
+		assertNotNull(BeanCreator.of(D1b.class, bs).run());
+		assertThrows(IllegalArgumentException.class, () -> BeanCreator.of(null, bs).run());
 	}
 
 	public static class D2 {
@@ -549,7 +549,7 @@ class BeanStore_Test extends TestBase {
 
 	@Test void d02_createBean_staticCreator_create() {
 		var bs = BeanStore.INSTANCE;
-		assertEquals(d2, bs.createBean(D2.class).run());
+		assertEquals(d2, BeanCreator.of(D2.class, bs).run());
 	}
 
 	public abstract static class D3 {
@@ -559,7 +559,7 @@ class BeanStore_Test extends TestBase {
 
 	@Test void d03_createBean_staticCreator_getInstance() {
 		var bs = BeanStore.INSTANCE;
-		assertEquals(d3, bs.createBean(D3.class).run());
+		assertEquals(d3, BeanCreator.of(D3.class, bs).run());
 	}
 
 	public static class D4a {
@@ -585,9 +585,9 @@ class BeanStore_Test extends TestBase {
 
 	@Test void d04_createBean_staticCreator_invalidSignatures() {
 		var bs = BeanStore.INSTANCE;
-		assertNotEqualsAny(bs.createBean(D4a.class).run(), d4a1, d4a2, d4a3, d4a4);
-		assertNotEqualsAny(bs.createBean(D4b.class).run(), d4b1, d4b2);
-		assertNotNull(bs.createBean(D4c.class).run());
+		assertNotEqualsAny(BeanCreator.of(D4a.class, bs).run(), d4a1, d4a2, d4a3, d4a4);
+		assertNotEqualsAny(BeanCreator.of(D4b.class, bs).run(), d4b1, d4b2);
+		assertNotNull(BeanCreator.of(D4c.class, bs).run());
 	}
 
 	public static class D5 {
@@ -600,11 +600,11 @@ class BeanStore_Test extends TestBase {
 
 	@Test void d05_createBean_staticCreator_withBeans() {
 		var bs = BeanStore.create().build();
-		assertEquals(d5a, bs.createBean(D5.class).run());
+		assertEquals(d5a, BeanCreator.of(D5.class, bs).run());
 		bs.add(Integer.class, 1);
-		assertEquals(d5c, bs.createBean(D5.class).run());
+		assertEquals(d5c, BeanCreator.of(D5.class, bs).run());
 		bs.add(String.class, "x");
-		assertEquals(d5b, bs.createBean(D5.class).run());
+		assertEquals(d5b, BeanCreator.of(D5.class, bs).run());
 	}
 
 	public static class D6 {
@@ -617,7 +617,7 @@ class BeanStore_Test extends TestBase {
 
 	@Test void d06_createBean_staticCreator_ignoredWithBuilder() {
 		var bs = BeanStore.INSTANCE;
-		assertString("1", bs.createBean(D6.class).builder(String.class, "1").run().s);
+		assertString("1", BeanCreator.of(D6.class, bs).builder(String.class, "1").run().s);
 	}
 
 	public static class D7 {
@@ -628,9 +628,9 @@ class BeanStore_Test extends TestBase {
 
 	@Test void d07_createBean_staticCreator_withOptional() {
 		var bs = BeanStore.create().build();
-		assertString("X", bs.createBean(D7.class).run().a);
+		assertString("X", BeanCreator.of(D7.class, bs).run().a);
 		bs.add(String.class, "bar");
-		assertString("bar", bs.createBean(D7.class).run().a);
+		assertString("bar", BeanCreator.of(D7.class, bs).run().a);
 	}
 
 	public static class D8 {
@@ -641,11 +641,11 @@ class BeanStore_Test extends TestBase {
 
 	@Test void d08_createBean_staticCreator_missingPrereqs() {
 		var bs = BeanStore.create().build();
-		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class org.apache.juneau.cp.BeanStore_Test$D8: Static creator found but could not find prerequisites: Integer.", ()->bs.createBean(D8.class).run());
+		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class org.apache.juneau.cp.BeanStore_Test$D8: Static creator found but could not find prerequisites: Integer.", ()->BeanCreator.of(D8.class, bs).run());
 		bs.add(Integer.class, 1);
-		assertString("null,1", bs.createBean(D8.class).run().a);
+		assertString("null,1", BeanCreator.of(D8.class, bs).run().a);
 		bs.add(String.class, "bar");
-		assertString("bar,1", bs.createBean(D8.class).run().a);
+		assertString("bar,1", BeanCreator.of(D8.class, bs).run().a);
 	}
 
 	public abstract static class D9a {
@@ -656,8 +656,8 @@ class BeanStore_Test extends TestBase {
 
 	@Test void d09_createBean_staticCreator_withBeans() {
 		var bs = BeanStore.INSTANCE;
-		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D9a.class.getName()+": Class is abstract.", ()->bs.createBean(D9a.class).run());
-		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D9b.class.getName()+": Class is an interface.", ()->bs.createBean(D9b.class).run());
+		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D9a.class.getName()+": Class is abstract.", ()->BeanCreator.of(D9a.class, bs).run());
+		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D9b.class.getName()+": Class is an interface.", ()->BeanCreator.of(D9b.class, bs).run());
 	}
 
 	public static class D10 {
@@ -669,11 +669,11 @@ class BeanStore_Test extends TestBase {
 
 	@Test void d10_createBean_constructors_public() {
 		var bs = BeanStore.create().build();
-		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D10.class.getName()+": Public constructor found but could not find prerequisites: Integer or Integer,String or String.", ()->bs.createBean(D10.class).run());
+		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D10.class.getName()+": Public constructor found but could not find prerequisites: Integer or Integer,String or String.", ()->BeanCreator.of(D10.class, bs).run());
 		bs.add(String.class, "foo");
-		assertString("s=foo", bs.createBean(D10.class).run().a);
+		assertString("s=foo", BeanCreator.of(D10.class, bs).run().a);
 		bs.add(Integer.class, 1);
-		assertString("s=foo,i=1", bs.createBean(D10.class).run().a);
+		assertString("s=foo,i=1", BeanCreator.of(D10.class, bs).run().a);
 	}
 
 	public static class D11 {
@@ -685,11 +685,11 @@ class BeanStore_Test extends TestBase {
 
 	@Test void d11_createBean_constructors_protected() {
 		var bs = BeanStore.create().build();
-		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D11.class.getName()+": Protected constructor found but could not find prerequisites: Integer or Integer,String or String.", ()->bs.createBean(D11.class).run());
+		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D11.class.getName()+": Protected constructor found but could not find prerequisites: Integer or Integer,String or String.", ()->BeanCreator.of(D11.class, bs).run());
 		bs.add(String.class, "foo");
-		assertString("s=foo", bs.createBean(D11.class).run().a);
+		assertString("s=foo", BeanCreator.of(D11.class, bs).run().a);
 		bs.add(Integer.class, 1);
-		assertString("s=foo,i=1", bs.createBean(D11.class).run().a);
+		assertString("s=foo,i=1", BeanCreator.of(D11.class, bs).run().a);
 	}
 
 	public static class D12 {
@@ -700,10 +700,10 @@ class BeanStore_Test extends TestBase {
 
 	@Test void d12_createBean_constructors_publicOverProtected() {
 		var bs = BeanStore.create().build();
-		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D12.class.getName()+": Public constructor found but could not find prerequisites: String.", ()->bs.createBean(D12.class).run());
+		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D12.class.getName()+": Public constructor found but could not find prerequisites: String.", ()->BeanCreator.of(D12.class, bs).run());
 		bs.add(String.class, "foo");
 		bs.add(Integer.class, 1);
-		assertString("s=foo", bs.createBean(D12.class).run().a);
+		assertString("s=foo", BeanCreator.of(D12.class, bs).run().a);
 	}
 
 	public static class D13 {
@@ -712,7 +712,7 @@ class BeanStore_Test extends TestBase {
 
 	@Test void d13_createBean_constructors_private() {
 		var bs = BeanStore.INSTANCE;
-		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D13.class.getName()+": No public/protected constructors found.", ()->bs.createBean(D13.class).run());
+		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D13.class.getName()+": No public/protected constructors found.", ()->BeanCreator.of(D13.class, bs).run());
 	}
 
 	public static class D14 {
@@ -723,9 +723,9 @@ class BeanStore_Test extends TestBase {
 
 	@Test void d14_createBean_constructors_namedBean() {
 		var bs = BeanStore.create().build();
-		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D14.class.getName()+": Public constructor found but could not find prerequisites: Integer,String@foo or String@foo.", ()->bs.createBean(D14.class).run());
+		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D14.class.getName()+": Public constructor found but could not find prerequisites: Integer,String@foo or String@foo.", ()->BeanCreator.of(D14.class, bs).run());
 		bs.add(String.class, "bar", "foo");
-		assertString("bar", bs.createBean(D14.class).run().a);
+		assertString("bar", BeanCreator.of(D14.class, bs).run().a);
 	}
 
 	public class D15 {
@@ -736,9 +736,9 @@ class BeanStore_Test extends TestBase {
 
 	@Test void d15_createBean_constructors_namedBean_withOuter() {
 		var bs = BeanStore.create().outer(new BeanStore_Test()).build();
-		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D15.class.getName()+": Public constructor found but could not find prerequisites: Integer,String@foo or String@foo.", ()->bs.createBean(D15.class).run());
+		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D15.class.getName()+": Public constructor found but could not find prerequisites: Integer,String@foo or String@foo.", ()->BeanCreator.of(D15.class, bs).run());
 		bs.add(String.class, "bar", "foo");
-		assertString("bar", bs.createBean(D15.class).run().a);
+		assertString("bar", BeanCreator.of(D15.class, bs).run().a);
 	}
 
 	public static class D16 {
@@ -754,7 +754,7 @@ class BeanStore_Test extends TestBase {
 		var bs = BeanStore.create().build();
 		var b = D16.create();
 		b.b = "foo";
-		assertString("foo", bs.createBean(D16.class).builder(D16.Builder.class, b).run().a);
+		assertString("foo", BeanCreator.of(D16.class, bs).builder(D16.Builder.class, b).run().a);
 	}
 
 	public static class D17 {
@@ -771,8 +771,8 @@ class BeanStore_Test extends TestBase {
 
 	@Test void d17_createBean_builders_inherent() {
 		var bs = BeanStore.create().build();
-		assertNull(bs.createBean(D17.class).run().a);
-		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D17.class.getName()+": Protected constructor found but could not find prerequisites: Builder or Builder,Integer or Integer.", ()->bs.createBean(D17.class).builder(Boolean.class, true).run());
+		assertNull(BeanCreator.<D17>of(D17.class, bs).run().a);
+		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D17.class.getName()+": Protected constructor found but could not find prerequisites: Builder or Builder,Integer or Integer.", ()->BeanCreator.<D17>of(D17.class, bs).builder(Boolean.class, true).run());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

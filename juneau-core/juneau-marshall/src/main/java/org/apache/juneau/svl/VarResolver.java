@@ -228,7 +228,7 @@ public class VarResolver {
 
 	private static Var toVar(BeanStore bs, Object o) {
 		if (o instanceof Class o2)
-			return bs.createBean(Var.class).type(o2).run();
+			return BeanCreator.of(Var.class, bs).type(o2).run();
 		return (Var)o;
 	}
 

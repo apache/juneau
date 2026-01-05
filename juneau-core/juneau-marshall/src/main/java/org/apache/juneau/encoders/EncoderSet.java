@@ -283,7 +283,7 @@ public class EncoderSet {
 		if (o instanceof Encoder o2)
 			return o2;
 		try {
-			return bs.createBean(Encoder.class).type((Class<?>)o).run();
+			return BeanCreator.of(Encoder.class, bs).type((Class<?>)o).run();
 		} catch (ExecutableException e) {
 			throw toRex(e);
 		}

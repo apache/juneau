@@ -105,7 +105,7 @@ public class ResponseProcessorList {
 		if (o instanceof ResponseProcessor o2)
 			return o2;
 		try {
-			return bs.createBean(ResponseProcessor.class).type((Class<?>)o).run();
+			return BeanCreator.of(ResponseProcessor.class, bs).type((Class<?>)o).run();
 		} catch (ExecutableException e) {
 			throw new ConfigException(e, "Could not instantiate class {0}", o);
 		}
