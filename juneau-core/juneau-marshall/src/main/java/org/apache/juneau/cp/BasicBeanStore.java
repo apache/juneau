@@ -70,9 +70,8 @@ import org.apache.juneau.commons.reflect.*;
  * Beans are created through the following methods:
  * <ul class='javatreec'>
  * 	<li class='jm'>{@link BeanCreator#of(Class,BasicBeanStore) BeanCreator.of(Class,BasicBeanStore)}
- * 	<li class='jm'>{@link #createMethodFinder(Class) createMethodFinder(Class)}
- * 	<li class='jm'>{@link #createMethodFinder(Class,Class) createMethodFinder(Class,Class)}
- * 	<li class='jm'>{@link #createMethodFinder(Class,Object) createMethodFinder(Class,Object)}
+ * 	<li class='jc'>{@link BeanCreateMethodFinder#BeanCreateMethodFinder(Class,Class,BasicBeanStore) BeanCreateMethodFinder(Class,Class,BasicBeanStore)}
+ * 	<li class='jc'>{@link BeanCreateMethodFinder#BeanCreateMethodFinder(Class,Object,BasicBeanStore) BeanCreateMethodFinder(Class,Object,BasicBeanStore)}
  * </ul>
  *
  * <h5 class='section'>Notes:</h5><ul>
@@ -392,41 +391,6 @@ public class BasicBeanStore {
 	 * </ul>
 	 *
 
-	/**
-	 * Create a method finder for finding bean creation methods.
-	 *
-	 * <p>
-	 * Same as {@link #createMethodFinder(Class,Class)} but looks for only static methods on the specified resource class
-	 * and not also instance methods within the context of a bean.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jc'>{@link BeanCreateMethodFinder} for usage.
-	 * </ul>
-	 *
-	 * @param <T> The bean type to create.
-	 * @param beanType The bean type to create.
-	 * @param resourceClass The class containing the bean creator method.
-	 * @return The method finder.  Never <jk>null</jk>.
-	 */
-	public <T> BeanCreateMethodFinder<T> createMethodFinder(Class<T> beanType, Class<?> resourceClass) {
-		return new BeanCreateMethodFinder<>(beanType, resourceClass, this);
-	}
-
-	/**
-	 * Create a method finder for finding bean creation methods.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jc'>{@link BeanCreateMethodFinder} for usage.
-	 * </ul>
-	 *
-	 * @param <T> The bean type to create.
-	 * @param beanType The bean type to create.
-	 * @param resource The class containing the bean creator method.
-	 * @return The method finder.  Never <jk>null</jk>.
-	 */
-	public <T> BeanCreateMethodFinder<T> createMethodFinder(Class<T> beanType, Object resource) {
-		return new BeanCreateMethodFinder<>(beanType, resource, this);
-	}
 
 	/**
 	 * Returns the unnamed bean of the specified type.

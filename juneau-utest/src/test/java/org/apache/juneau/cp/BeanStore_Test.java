@@ -490,9 +490,9 @@ class BeanStore_Test extends TestBase {
 
 	@Test void c00_createMethodFinder_invalidArgs() {
 		var b = BasicBeanStore.create().build();
-//		assertThrowsWithMessage(IllegalArgumentException.class, "Method cannot be used without outer bean definition.", ()->b.createMethodFinder(null));
-		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'beanType' cannot be null.", ()->b.createMethodFinder((Class<?>)null,""));
-		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'resourceClass' cannot be null.", ()->b.createMethodFinder(String.class,null));
+//		assertThrowsWithMessage(IllegalArgumentException.class, "Method cannot be used without outer bean definition.", ()->new BeanCreateMethodFinder<>(null, b));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'beanType' cannot be null.", ()->new BeanCreateMethodFinder<>((Class<?>)null, "", b));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'resourceClass' cannot be null.", ()->new BeanCreateMethodFinder<>(String.class, null, b));
 	}
 
 	// Instance methods.
