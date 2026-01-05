@@ -396,24 +396,6 @@ public class BasicBeanStore {
 	 * Create a method finder for finding bean creation methods.
 	 *
 	 * <p>
-	 * Same as {@link #createMethodFinder(Class,Object)} but uses {@link Builder#outer(Object)} as the resource bean.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jc'>{@link BeanCreateMethodFinder} for usage.
-	 * </ul>
-	 *
-	 * @param <T> The bean type to create.
-	 * @param beanType The bean type to create.
-	 * @return The method finder.  Never <jk>null</jk>.
-	 */
-	public <T> BeanCreateMethodFinder<T> createMethodFinder(Class<T> beanType) {
-		return new BeanCreateMethodFinder<>(beanType, outer.orElseThrow(() -> new IllegalArgumentException("Method cannot be used without outer bean definition.")), this);
-	}
-
-	/**
-	 * Create a method finder for finding bean creation methods.
-	 *
-	 * <p>
 	 * Same as {@link #createMethodFinder(Class,Class)} but looks for only static methods on the specified resource class
 	 * and not also instance methods within the context of a bean.
 	 *

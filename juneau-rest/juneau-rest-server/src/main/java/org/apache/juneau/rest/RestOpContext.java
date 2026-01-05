@@ -1519,7 +1519,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			beanStore.getBean(RestConverterList.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject(methodScope="foo") public [static] RestConverterList xxx(<args>)
-			beanStore.createMethodFinder(RestConverterList.class).addBean(RestConverterList.Builder.class, v.get()).find(this::matches).run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(RestConverterList.class, resource.get()).addBean(RestConverterList.Builder.class, v.get()).find(this::matches).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -1737,7 +1737,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			// Replace with bean from:  @RestInject(methodScope="foo") public [static] RestGuardList xxx(<args>)
 			// @formatter:off
 			beanStore
-				.createMethodFinder(RestGuardList.class)
+				.createMethodFinder(RestGuardList.class, resource.get())
 				.addBean(RestGuardList.Builder.class, v.get())
 				.find(m -> this.matches(m))
 				.run(x -> v.get().impl(x));
@@ -1845,7 +1845,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			// Replace with bean from:  @RestInject(methodScope="foo") public [static] RestMatcherList xxx(<args>)
 			// @formatter:off
 			beanStore
-				.createMethodFinder(RestMatcherList.class)
+				.createMethodFinder(RestMatcherList.class, resource.get())
 				.addBean(RestMatcherList.Builder.class, v.get())
 				.find(this::matches)
 				.run(x -> v.get().impl(x));
