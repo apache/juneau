@@ -2,11 +2,11 @@
 
 ## Current Release
 
-**9.1.0 (June 19, 2025)**
+**9.2.0 (Jan 5, 2026)**
 
-- [Release Notes](http://juneau.apache.org/site/apidocs-9.1.0/overview-summary.html#9.1.0)
-- [Binaries](https://www.apache.org/dyn/closer.cgi/juneau/binaries/juneau-9.1.0/apache-juneau-9.1.0-bin.zip) ([ASC](https://www.apache.org/dist/juneau/binaries/juneau-9.1.0/apache-juneau-9.1.0-bin.zip.asc), [SHA512](https://www.apache.org/dist/juneau/binaries/juneau-9.1.0/apache-juneau-9.1.0-bin.zip.sha512))
-- [Source](https://www.apache.org/dyn/closer.cgi/juneau/source/juneau-9.1.0/apache-juneau-9.1.0-src.zip) ([ASC](https://www.apache.org/dist/juneau/source/juneau-9.1.0/apache-juneau-9.1.0-src.zip.asc), [SHA512](https://www.apache.org/dist/juneau/source/juneau-9.1.0/apache-juneau-9.1.0-src.zip.sha512))
+- [Release Notes](/docs/release-notes/9.2.0)
+- [Binaries](https://www.apache.org/dyn/closer.cgi/juneau/binaries/juneau-9.2.0/apache-juneau-9.2.0-bin.zip) ([ASC](https://www.apache.org/dist/juneau/binaries/juneau-9.2.0/apache-juneau-9.2.0-bin.zip.asc), [SHA512](https://www.apache.org/dist/juneau/binaries/juneau-9.2.0/apache-juneau-9.2.0-bin.zip.sha512))
+- [Source](https://www.apache.org/dyn/closer.cgi/juneau/source/juneau-9.2.0/apache-juneau-9.2.0-src.zip) ([ASC](https://www.apache.org/dist/juneau/source/juneau-9.2.0/apache-juneau-9.2.0-src.zip.asc), [SHA512](https://www.apache.org/dist/juneau/source/juneau-9.2.0/apache-juneau-9.2.0-src.zip.sha512))
 
 ### What's Included
 
@@ -62,27 +62,42 @@
 <dependency>
 	<groupId>org.apache.juneau</groupId>
 	<artifactId>juneau-XXX</artifactId>
-	<version>9.1.0</version>
+	<version>9.2.0</version>
 </dependency>
 
 <!-- ...where the artifactId is typically... -->
 <artifactId>juneau-shaded-all</artifactId>
 
 <!-- ...but can also be any of the following... -->
+<!-- Core modules -->
+<artifactId>juneau-assertions</artifactId>
+<artifactId>juneau-bct</artifactId>
+<artifactId>juneau-commons</artifactId>
+<artifactId>juneau-config</artifactId>
 <artifactId>juneau-marshall</artifactId>
 <artifactId>juneau-marshall-rdf</artifactId>
+<artifactId>juneau-svl</artifactId>
+<!-- Bean DTOs -->
 <artifactId>juneau-bean-atom</artifactId>
 <artifactId>juneau-bean-common</artifactId>
 <artifactId>juneau-bean-html5</artifactId>
 <artifactId>juneau-bean-jsonschema</artifactId>
 <artifactId>juneau-bean-openapi-v3</artifactId>
 <artifactId>juneau-bean-swagger-v2</artifactId>
-<artifactId>juneau-svl</artifactId>
-<artifactId>juneau-config</artifactId>
-<artifactId>juneau-rest-server</artifactId>
-<artifactId>juneau-rest-server-jaxrs</artifactId>
+<!-- REST modules -->
 <artifactId>juneau-rest-client</artifactId>
-<artifactId>juneau-microservice-server</artifactId>
+<artifactId>juneau-rest-common</artifactId>
+<artifactId>juneau-rest-mock</artifactId>
+<artifactId>juneau-rest-server</artifactId>
+<artifactId>juneau-rest-server-springboot</artifactId>
+<!-- Microservice modules -->
+<artifactId>juneau-microservice-core</artifactId>
+<artifactId>juneau-microservice-jetty</artifactId>
+<!-- Shaded modules -->
+<artifactId>juneau-shaded-core</artifactId>
+<artifactId>juneau-shaded-rest-client</artifactId>
+<artifactId>juneau-shaded-rest-server</artifactId>
+<artifactId>juneau-shaded-rest-server-springboot</artifactId>
 ```
 
 ## Verifying File Integrity
@@ -92,19 +107,23 @@ How to [verify downloaded files](https://www.apache.org/info/verification.html).
 [Download KEYS](https://www.apache.org/dist/juneau/KEYS) file.
 
 ## Older Releases
+### 9.1.0 (June 19, 2025)
+- [Release Notes](/docs/release-notes/9.1.0)
+- [Binaries](https://archive.apache.org/dyn/closer.cgi/juneau/binaries/juneau-9.1.0/apache-juneau-9.1.0-bin.zip) ([ASC](https://archive.apache.org/dist/juneau/binaries/juneau-9.1.0/apache-juneau-9.1.0-bin.zip.asc), [SHA512](https://archive.apache.org/dist/juneau/binaries/juneau-9.1.0/apache-juneau-9.1.0-bin.zip.sha512))
+- [Source](https://archive.apache.org/dyn/closer.cgi/juneau/source/juneau-9.1.0/apache-juneau-9.1.0-src.zip) ([ASC](https://archive.apache.org/dist/juneau/source/juneau-9.1.0/apache-juneau-9.1.0-src.zip.asc), [SHA512](https://archive.apache.org/dist/juneau/source/juneau-9.1.0/apache-juneau-9.1.0-src.zip.sha512))
 
 ### 9.0.1 (Sept 6, 2023)
-- [Release Notes](http://juneau.apache.org/site/apidocs-9.1.0/overview-summary.html#9.0.1)
+- [Release Notes](/docs/release-notes/9.0.1)
 - [Binaries](https://archive.apache.org/dyn/closer.cgi/juneau/binaries/juneau-9.0.1/apache-juneau-9.0.1-bin.zip) ([ASC](https://archive.apache.org/dist/juneau/binaries/juneau-9.0.1/apache-juneau-9.0.1-bin.zip.asc), [SHA512](https://archive.apache.org/dist/juneau/binaries/juneau-9.0.1/apache-juneau-9.0.1-bin.zip.sha512))
 - [Source](https://archive.apache.org/dyn/closer.cgi/juneau/source/juneau-9.0.1/apache-juneau-9.0.1-src.zip) ([ASC](https://archive.apache.org/dist/juneau/source/juneau-9.0.1/apache-juneau-9.0.1-src.zip.asc), [SHA512](https://archive.apache.org/dist/juneau/source/juneau-9.0.1/apache-juneau-9.0.1-src.zip.sha512))
 
 ### 9.0.0 (Feb 27, 2023)
-- [Release Notes](http://juneau.apache.org/site/apidocs-9.1.0/overview-summary.html#9.0.0)
+- [Release Notes](/docs/release-notes/9.0.0)
 - [Binaries](https://archive.apache.org/dist/juneau/binaries/juneau-9.0.0/apache-juneau-9.0.0-bin.zip) ([ASC](https://archive.apache.org/dist/juneau/binaries/juneau-9.0.0/apache-juneau-9.0.0-bin.zip.asc), [SHA512](https://archive.apache.org/dist/juneau/binaries/juneau-9.0.0/apache-juneau-9.0.0-bin.zip.sha512))
 - [Source](https://archive.apache.org/dist/juneau/source/juneau-9.0.0/apache-juneau-9.0.0-src.zip) ([ASC](https://archive.apache.org/dist/juneau/source/juneau-9.0.0/apache-juneau-9.0.0-src.zip.asc), [SHA512](https://archive.apache.org/dist/juneau/source/juneau-9.0.0/apache-juneau-9.0.0-src.zip.sha512))
 
 ### 8.2.0 (Oct 14, 2020)
-- [Release Notes](http://juneau.apache.org/site/apidocs-9.1.0/overview-summary.html#8.2.0)
+- [Release Notes](/docs/release-notes/8.2.0)
 - [Binaries](https://archive.apache.org/dist/juneau/binaries/juneau-8.2.0/apache-juneau-8.2.0-bin.zip) ([ASC](https://archive.apache.org/dist/juneau/binaries/juneau-8.2.0/apache-juneau-8.2.0-bin.zip.asc), [SHA512](https://archive.apache.org/dist/juneau/binaries/juneau-8.2.0/apache-juneau-8.2.0-bin.zip.sha512))
 - [Source](https://archive.apache.org/dist/juneau/source/juneau-8.2.0/apache-juneau-8.2.0-src.zip) ([ASC](https://archive.apache.org/dist/juneau/source/juneau-8.2.0/apache-juneau-8.2.0-src.zip.asc), [SHA512](https://archive.apache.org/dist/juneau/source/juneau-8.2.0/apache-juneau-8.2.0-src.zip.sha512))
 

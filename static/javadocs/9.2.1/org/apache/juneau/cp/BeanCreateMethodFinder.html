@@ -155,44 +155,19 @@ loadScripts(document, 'script');</script>
 <div class="block">Adds a bean to the lookup for parameters.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BeanCreateMethodFinder.html" title="class in org.apache.juneau.cp">BeanCreateMethodFinder</a>&lt;<a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#find(java.lang.String)" class="member-name-link">find</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;methodName)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#find(java.util.function.Predicate)" class="member-name-link">find</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="../commons/reflect/MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>&gt;&nbsp;filter)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Shortcut for calling <c>find(<jv>x</jv> -&gt; <jv>x</jv>.hasName(<jv>methodName</jv>))</c>.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BeanCreateMethodFinder.html" title="class in org.apache.juneau.cp">BeanCreateMethodFinder</a>&lt;<a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#find(java.util.function.Predicate)" class="member-name-link">find</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="../commons/reflect/MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>&gt;&nbsp;filter)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Find the method matching the specified predicate.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#run()" class="member-name-link">run</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#run()" class="member-name-link">run</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Executes the matched method and returns the result.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#run(java.util.function.Consumer)" class="member-name-link">run</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;? super <a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;&nbsp;consumer)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#run(java.util.function.Consumer)" class="member-name-link">run</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;? super <a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;&nbsp;consumer)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Same as <a href="#run()"><code>run()</code></a> but also executes a consumer if the returned value was not <jk>null</jk>.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BeanCreateMethodFinder.html" title="class in org.apache.juneau.cp">BeanCreateMethodFinder</a>&lt;<a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#thenFind(java.lang.String)" class="member-name-link">thenFind</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;methodName)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Identical to <a href="#find(java.util.function.Predicate)"><code>find(Predicate)</code></a> but named for fluent-style calls.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BeanCreateMethodFinder.html" title="class in org.apache.juneau.cp">BeanCreateMethodFinder</a>&lt;<a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#thenFind(java.util.function.Predicate)" class="member-name-link">thenFind</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="../commons/reflect/MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>&gt;&nbsp;filter)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Identical to <a href="#find(java.util.function.Predicate)"><code>find(Predicate)</code></a> but named for fluent-style calls.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BeanCreateMethodFinder.html" title="class in org.apache.juneau.cp">BeanCreateMethodFinder</a>&lt;<a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withDefault(java.util.function.Supplier)" class="member-name-link">withDefault</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;&nbsp;def)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">A default value to return if no matching methods were found.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BeanCreateMethodFinder.html" title="class in org.apache.juneau.cp">BeanCreateMethodFinder</a>&lt;<a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withDefault(T)" class="member-name-link">withDefault</a><wbr>(<a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&nbsp;def)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">A default value to return if no matching methods were found.</div>
 </div>
 </div>
 </div>
@@ -214,7 +189,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addBean(java.lang.Class,T2)">
 <h3 id="addBean(java.lang.Class,java.lang.Object)">addBean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type"><a href="BeanCreateMethodFinder.html" title="class in org.apache.juneau.cp">BeanCreateMethodFinder</a>&lt;<a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreateMethodFinder.html#line-117">addBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T2&gt;&nbsp;c,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type"><a href="BeanCreateMethodFinder.html" title="class in org.apache.juneau.cp">BeanCreateMethodFinder</a>&lt;<a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreateMethodFinder.html#line-115">addBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T2&gt;&nbsp;c,
  T2&nbsp;t)</span></div>
 <div class="block">Adds a bean to the lookup for parameters.</div>
 <dl class="notes">
@@ -231,7 +206,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="find(java.util.function.Predicate)">
 <h3>find</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanCreateMethodFinder.html" title="class in org.apache.juneau.cp">BeanCreateMethodFinder</a>&lt;<a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreateMethodFinder.html#line-146">find</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="../commons/reflect/MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>&gt;&nbsp;filter)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanCreateMethodFinder.html" title="class in org.apache.juneau.cp">BeanCreateMethodFinder</a>&lt;<a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreateMethodFinder.html#line-144">find</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="../commons/reflect/MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>&gt;&nbsp;filter)</span></div>
 <div class="block">Find the method matching the specified predicate.
 
  <p>
@@ -260,22 +235,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="find(java.lang.String)">
-<h3>find</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanCreateMethodFinder.html" title="class in org.apache.juneau.cp">BeanCreateMethodFinder</a>&lt;<a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreateMethodFinder.html#line-171">find</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;methodName)</span></div>
-<div class="block">Shortcut for calling <c>find(<jv>x</jv> -&gt; <jv>x</jv>.hasName(<jv>methodName</jv>))</c>.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>methodName</code> - The method name to match.</dd>
-<dt>Returns:</dt>
-<dd>This object.</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="run()">
 <h3>run</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreateMethodFinder.html#line-181">run</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreateMethodFinder.html#line-169">run</a></span>()
       throws <span class="exceptions"><a href="../commons/reflect/ExecutableException.html" title="class in org.apache.juneau.commons.reflect">ExecutableException</a></span></div>
 <div class="block">Executes the matched method and returns the result.</div>
 <dl class="notes">
@@ -289,7 +251,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="run(java.util.function.Consumer)">
 <h3>run</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreateMethodFinder.html#line-195">run</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;? super <a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;&nbsp;consumer)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreateMethodFinder.html#line-183">run</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;? super <a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;&nbsp;consumer)</span>
       throws <span class="exceptions"><a href="../commons/reflect/ExecutableException.html" title="class in org.apache.juneau.commons.reflect">ExecutableException</a></span></div>
 <div class="block">Same as <a href="#run()"><code>run()</code></a> but also executes a consumer if the returned value was not <jk>null</jk>.</div>
 <dl class="notes">
@@ -299,58 +261,6 @@ loadScripts(document, 'script');</script>
 <dd>The object returned by the method invocation, or the default value if method was not found, or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#empty()" title="class or interface in java.util" class="external-link"><code>Optional.empty()</code></a>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="../commons/reflect/ExecutableException.html" title="class in org.apache.juneau.commons.reflect">ExecutableException</a></code> - If method invocation threw an exception.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="thenFind(java.util.function.Predicate)">
-<h3>thenFind</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanCreateMethodFinder.html" title="class in org.apache.juneau.cp">BeanCreateMethodFinder</a>&lt;<a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreateMethodFinder.html#line-208">thenFind</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="../commons/reflect/MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>&gt;&nbsp;filter)</span></div>
-<div class="block">Identical to <a href="#find(java.util.function.Predicate)"><code>find(Predicate)</code></a> but named for fluent-style calls.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>filter</code> - The predicate to apply.</dd>
-<dt>Returns:</dt>
-<dd>This object.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="thenFind(java.lang.String)">
-<h3>thenFind</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanCreateMethodFinder.html" title="class in org.apache.juneau.cp">BeanCreateMethodFinder</a>&lt;<a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreateMethodFinder.html#line-218">thenFind</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;methodName)</span></div>
-<div class="block">Identical to <a href="#find(java.util.function.Predicate)"><code>find(Predicate)</code></a> but named for fluent-style calls.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>methodName</code> - The method name to match.</dd>
-<dt>Returns:</dt>
-<dd>This object.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="withDefault(java.util.function.Supplier)">
-<h3>withDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanCreateMethodFinder.html" title="class in org.apache.juneau.cp">BeanCreateMethodFinder</a>&lt;<a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreateMethodFinder.html#line-228">withDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;&nbsp;def)</span></div>
-<div class="block">A default value to return if no matching methods were found.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>def</code> - The default value.</dd>
-<dt>Returns:</dt>
-<dd>This object.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="withDefault(T)">
-<h3 id="withDefault(java.lang.Object)">withDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanCreateMethodFinder.html" title="class in org.apache.juneau.cp">BeanCreateMethodFinder</a>&lt;<a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreateMethodFinder.html#line-240">withDefault</a></span><wbr><span class="parameters">(<a href="BeanCreateMethodFinder.html" title="type parameter in BeanCreateMethodFinder">T</a>&nbsp;def)</span></div>
-<div class="block">A default value to return if no matching methods were found.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>def</code> - The default value.  Can be <jk>null</jk>.</dd>
-<dt>Returns:</dt>
-<dd>This object.</dd>
 </dl>
 </section>
 </li>
