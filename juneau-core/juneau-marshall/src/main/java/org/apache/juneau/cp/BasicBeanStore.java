@@ -440,15 +440,15 @@ public class BasicBeanStore {
 	 * @param executable The constructor or method to get the params for.
 	 * @return A comma-delimited list of types that are missing from this factory, or <jk>null</jk> if none are missing.
 	 */
-	public String getMissingParams(ExecutableInfo executable) {
+	public String getMissingParams(ExecutableInfo executable, Object outer) {
 		var params = executable.getParameters();
 		List<String> l = list();
 		loop: for (int i = 0; i < params.size(); i++) {
 			var pi = params.get(i);
 			var pt = pi.getParameterType();
-			if (i == 0 && outer.isPresent() && pt.isInstance(outer.get()))
+			if (i == 0 && nn(outer) && pt.isInstance(outer))
 				continue loop;
-			if (pt.is(Optional.class) || pt.is(BasicBeanStore.class))
+			if (pt.is(Optional.class))
 				continue loop;
 			var beanName = pi.getResolvedQualifier();  // Use @Named for bean injection
 			var ptc = pt.inner();
@@ -466,15 +466,19 @@ public class BasicBeanStore {
 	 * @param executable The constructor or method to get the params for.
 	 * @return The corresponding beans in this factory for the specified param types.
 	 */
-	public Object[] getParams(ExecutableInfo executable) {
+	public Object[] getParams(ExecutableInfo executable, Object outer) {
 		var o = new Object[executable.getParameterCount()];
 		for (var i = 0; i < executable.getParameterCount(); i++) {
 			var pi = executable.getParameter(i);
 			var pt = pi.getParameterType();
-			var beanQualifier = pi.getResolvedQualifier();
-			var ptc = pt.unwrap(Optional.class).inner();
-			var o2 = beanQualifier == null ? getBean(ptc) : getBean(ptc, beanQualifier);
-			o[i] = pt.is(Optional.class) ? o2 : o2.orElse(null);
+			if (i == 0 && nn(outer) && pt.isInstance(outer)) {
+				o[i] = outer;
+			} else {
+				var beanQualifier = pi.getResolvedQualifier();
+				var ptc = pt.unwrap(Optional.class).inner();
+				var o2 = beanQualifier == null ? getBean(ptc) : getBean(ptc, beanQualifier);
+				o[i] = pt.is(Optional.class) ? o2 : o2.orElse(null);
+			}
 		}
 		return o;
 	}
@@ -485,13 +489,13 @@ public class BasicBeanStore {
 	 * @param executable The constructor or method to get the params for.
 	 * @return A comma-delimited list of types that are missing from this factory.
 	 */
-	public boolean hasAllParams(ExecutableInfo executable) {
+	public boolean hasAllParams(ExecutableInfo executable, Object outer) {
 		loop: for (int i = 0; i < executable.getParameterCount(); i++) {
 			var pi = executable.getParameter(i);
 			var pt = pi.getParameterType();
-			if (i == 0 && outer.isPresent() && pt.isInstance(outer.get()))
+			if (i == 0 && nn(outer) && pt.isInstance(outer))
 				continue loop;
-			if (pt.is(Optional.class) || pt.is(BasicBeanStore.class))
+			if (pt.is(Optional.class))
 				continue loop;
 			var beanQualifier = pi.getResolvedQualifier();
 			var ptc = pt.inner();

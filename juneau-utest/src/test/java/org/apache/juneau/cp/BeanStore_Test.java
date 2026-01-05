@@ -282,97 +282,97 @@ class BeanStore_Test extends TestBase {
 
 		for (var b : array(b1p, b1c, b2p, b2c)) {
 			for (var e : array(c1, m1, m3)) {
-				assertString(A1n, b.getMissingParams(e));
-				assertFalse(b.hasAllParams(e));
+				assertString(A1n, b.getMissingParams(e, outer));
+				assertFalse(b.hasAllParams(e, outer));
 			}
 			for (var e : array(c2, m2)) {
-				assertString(A1n+"@foo", b.getMissingParams(e));
-				assertFalse(b.hasAllParams(e));
+				assertString(A1n+"@foo", b.getMissingParams(e, outer));
+				assertFalse(b.hasAllParams(e, outer));
 			}
 		}
 
 		for (var b : array(b1p, b1c, b2p, b2c)) {
-			assertList(b.getParams(c1), pNull, pEmptyOptional, pIsBeanStore);
-			assertList(b.getParams(c2), pNull, pEmptyOptional);
-			assertList(b.getParams(m1), pNull, pEmptyOptional, pIsBeanStore);
-			assertList(b.getParams(m2), pNull, pEmptyOptional);
-			assertList(b.getParams(m3), pNull, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c1, outer), pNull, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c2, outer), pNull, pEmptyOptional);
+			assertList(b.getParams(m1, outer), pNull, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(m2, outer), pNull, pEmptyOptional);
+			assertList(b.getParams(m3, outer), pNull, pEmptyOptional, pIsBeanStore);
 		}
 
 		b1p.add(A1.class, a1a);
 		b2p.add(A1.class, a1a);
 		for (var b : array(b1p, b1c, b2p, b2c)) {
-			assertNull(b.getMissingParams(c1));
-			assertString(A1n+"@foo", b.getMissingParams(c2));
-			assertNull(b.getMissingParams(m1));
-			assertString(A1n+"@foo", b.getMissingParams(m2));
-			assertNull(b.getMissingParams(m3));
-			assertTrue(b.hasAllParams(c1));
-			assertFalse(b.hasAllParams(c2));
-			assertTrue(b.hasAllParams(m1));
-			assertFalse(b.hasAllParams(m2));
-			assertTrue(b.hasAllParams(m3));
-			assertList(b.getParams(c1), pA1a, pEmptyOptional, pIsBeanStore);
-			assertList(b.getParams(c2), pNull, pEmptyOptional);
-			assertList(b.getParams(m1), pA1a, pEmptyOptional, pIsBeanStore);
-			assertList(b.getParams(m2), pNull, pEmptyOptional);
-			assertList(b.getParams(m3), pA1a, pEmptyOptional, pIsBeanStore);
+			assertNull(b.getMissingParams(c1, outer));
+			assertString(A1n+"@foo", b.getMissingParams(c2, outer));
+			assertNull(b.getMissingParams(m1, outer));
+			assertString(A1n+"@foo", b.getMissingParams(m2, outer));
+			assertNull(b.getMissingParams(m3, outer));
+			assertTrue(b.hasAllParams(c1, outer));
+			assertFalse(b.hasAllParams(c2, outer));
+			assertTrue(b.hasAllParams(m1, outer));
+			assertFalse(b.hasAllParams(m2, outer));
+			assertTrue(b.hasAllParams(m3, outer));
+			assertList(b.getParams(c1, outer), pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c2, outer), pNull, pEmptyOptional);
+			assertList(b.getParams(m1, outer), pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(m2, outer), pNull, pEmptyOptional);
+			assertList(b.getParams(m3, outer), pA1a, pEmptyOptional, pIsBeanStore);
 		}
 
 		b1p.add(A1.class, a1a, "foo");
 		b2p.add(A1.class, a1a, "foo");
 		for (var b : array(b1p, b1c, b2p, b2c)) {
 			for (var e : array(c1, c2, m1, m2, m3)) {
-				assertNull(b.getMissingParams(e));
-				assertTrue(b.hasAllParams(e));
+				assertNull(b.getMissingParams(e, outer));
+				assertTrue(b.hasAllParams(e, outer));
 			}
-			assertList(b.getParams(c1), pA1a, pEmptyOptional, pIsBeanStore);
-			assertList(b.getParams(c2), pA1a, pEmptyOptional);
-			assertList(b.getParams(m1), pA1a, pEmptyOptional, pIsBeanStore);
-			assertList(b.getParams(m2), pA1a, pEmptyOptional);
-			assertList(b.getParams(m3), pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c1, outer), pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c2, outer), pA1a, pEmptyOptional);
+			assertList(b.getParams(m1, outer), pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(m2, outer), pA1a, pEmptyOptional);
+			assertList(b.getParams(m3, outer), pA1a, pEmptyOptional, pIsBeanStore);
 		}
 
 		b1p.add(A1.class, a1b, "bar");
 		b2p.add(A1.class, a1b, "bar");
 		for (var b : array(b1p, b1c, b2p, b2c)) {
 			for (var e : array(c1, c2, m1, m2, m3)) {
-				assertNull(b.getMissingParams(e));
-				assertTrue(b.hasAllParams(e));
+				assertNull(b.getMissingParams(e, outer));
+				assertTrue(b.hasAllParams(e, outer));
 			}
-			assertList(b.getParams(c1), pA1a, pEmptyOptional, pIsBeanStore);
-			assertList(b.getParams(c2), pA1a, pEmptyOptional);
-			assertList(b.getParams(m1), pA1a, pEmptyOptional, pIsBeanStore);
-			assertList(b.getParams(m2), pA1a, pEmptyOptional);
-			assertList(b.getParams(m3), pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c1, outer), pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c2, outer), pA1a, pEmptyOptional);
+			assertList(b.getParams(m1, outer), pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(m2, outer), pA1a, pEmptyOptional);
+			assertList(b.getParams(m3, outer), pA1a, pEmptyOptional, pIsBeanStore);
 		}
 
 		b1p.add(A2.class, a2a, "bar");
 		b2p.add(A2.class, a2a, "bar");
 		for (var b : array(b1p, b1c, b2p, b2c)) {
 			for (var e : array(c1, c2, m1, m2, m3)) {
-				assertNull(b.getMissingParams(e));
-				assertTrue(b.hasAllParams(e));
+				assertNull(b.getMissingParams(e, outer));
+				assertTrue(b.hasAllParams(e, outer));
 			}
-			assertList(b.getParams(c1), pA1a, pEmptyOptional, pIsBeanStore);
-			assertList(b.getParams(c2), pA1a, pA2a);
-			assertList(b.getParams(m1), pA1a, pEmptyOptional, pIsBeanStore);
-			assertList(b.getParams(m2), pA1a, pA2a);
-			assertList(b.getParams(m3), pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c1, outer), pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c2, outer), pA1a, pA2a);
+			assertList(b.getParams(m1, outer), pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(m2, outer), pA1a, pA2a);
+			assertList(b.getParams(m3, outer), pA1a, pEmptyOptional, pIsBeanStore);
 		}
 
 		b1p.add(A2.class, a2a, null);
 		b2p.add(A2.class, a2a, null);
 		for (var b : array(b1p, b1c, b2p, b2c)) {
 			for (var e : array(c1, c2, m1, m2, m3)) {
-				assertNull(b.getMissingParams(e));
-				assertTrue(b.hasAllParams(e));
+				assertNull(b.getMissingParams(e, outer));
+				assertTrue(b.hasAllParams(e, outer));
 			}
-			assertList(b.getParams(c1), pA1a, pA2a, pIsBeanStore);
-			assertList(b.getParams(c2), pA1a, pA2a);
-			assertList(b.getParams(m1), pA1a, pA2a, pIsBeanStore);
-			assertList(b.getParams(m2), pA1a, pA2a);
-			assertList(b.getParams(m3), pA1a, pA2a, pIsBeanStore);
+			assertList(b.getParams(c1, outer), pA1a, pA2a, pIsBeanStore);
+			assertList(b.getParams(c2, outer), pA1a, pA2a);
+			assertList(b.getParams(m1, outer), pA1a, pA2a, pIsBeanStore);
+			assertList(b.getParams(m2, outer), pA1a, pA2a);
+			assertList(b.getParams(m3, outer), pA1a, pA2a, pIsBeanStore);
 		}
 	}
 
@@ -412,70 +412,70 @@ class BeanStore_Test extends TestBase {
 		var c2 = ci.getPublicConstructor(x -> x.hasParameterTypes(BeanStore_Test.class, A1.class, Optional.class)).get();
 
 		for (var b : array(b1p, b1c, b2p, b2c)) {
-			assertString(A1n, b.getMissingParams(c1));
-			assertString(A1n+"@foo", b.getMissingParams(c2));
-			assertFalse(b.hasAllParams(c1));
-			assertFalse(b.hasAllParams(c2));
+			assertString(A1n, b.getMissingParams(c1, this));
+			assertString(A1n+"@foo", b.getMissingParams(c2, this));
+			assertFalse(b.hasAllParams(c1, this));
+			assertFalse(b.hasAllParams(c2, this));
 		}
 
 		for (var b : array(b1p, b1c, b2p, b2c)) {
-			assertList(b.getParams(c1), pThis, pNull, pEmptyOptional, pIsBeanStore);
-			assertList(b.getParams(c2), pThis, pNull, pEmptyOptional);
+			assertList(b.getParams(c1, this), pThis, pNull, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c2, this), pThis, pNull, pEmptyOptional);
 		}
 
 		b1p.add(A1.class, a1a);
 		b2p.add(A1.class, a1a);
 		for (var b : array(b1p, b1c, b2p, b2c)) {
-			assertNull(b.getMissingParams(c1));
-			assertString(A1n+"@foo", b.getMissingParams(c2));
-			assertTrue(b.hasAllParams(c1));
-			assertFalse(b.hasAllParams(c2));
-			assertList(b.getParams(c1), pThis, pA1a, pEmptyOptional, pIsBeanStore);
-			assertList(b.getParams(c2), pThis, pNull, pEmptyOptional);
+			assertNull(b.getMissingParams(c1, this));
+			assertString(A1n+"@foo", b.getMissingParams(c2, this));
+			assertTrue(b.hasAllParams(c1, this));
+			assertFalse(b.hasAllParams(c2, this));
+			assertList(b.getParams(c1, this), pThis, pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c2, this), pThis, pNull, pEmptyOptional);
 		}
 
 		b1p.add(A1.class, a1a, "foo");
 		b2p.add(A1.class, a1a, "foo");
 		for (var b : array(b1p, b1c, b2p, b2c)) {
 			for (var e : array(c1, c2)) {
-				assertNull(b.getMissingParams(e));
-				assertTrue(b.hasAllParams(e));
+				assertNull(b.getMissingParams(e, this));
+				assertTrue(b.hasAllParams(e, this));
 			}
-			assertList(b.getParams(c1), pThis, pA1a, pEmptyOptional, pIsBeanStore);
-			assertList(b.getParams(c2), pThis, pA1a, pEmptyOptional);
+			assertList(b.getParams(c1, this), pThis, pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c2, this), pThis, pA1a, pEmptyOptional);
 		}
 
 		b1p.add(A1.class, a1b, "bar");
 		b2p.add(A1.class, a1b, "bar");
 		for (var b : array(b1p, b1c, b2p, b2c)) {
 			for (var e : array(c1, c2)) {
-				assertNull(b.getMissingParams(e));
-				assertTrue(b.hasAllParams(e));
+				assertNull(b.getMissingParams(e, this));
+				assertTrue(b.hasAllParams(e, this));
 			}
-			assertList(b.getParams(c1), pThis, pA1a, pEmptyOptional, pIsBeanStore);
-			assertList(b.getParams(c2), pThis, pA1a, pEmptyOptional);
+			assertList(b.getParams(c1, this), pThis, pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c2, this), pThis, pA1a, pEmptyOptional);
 		}
 
 		b1p.add(A2.class, a2a, "bar");
 		b2p.add(A2.class, a2a, "bar");
 		for (var b : array(b1p, b1c, b2p, b2c)) {
 			for (var e : array(c1, c2)) {
-				assertNull(b.getMissingParams(e));
-				assertTrue(b.hasAllParams(e));
+				assertNull(b.getMissingParams(e, this));
+				assertTrue(b.hasAllParams(e, this));
 			}
-			assertList(b.getParams(c1), pThis, pA1a, pEmptyOptional, pIsBeanStore);
-			assertList(b.getParams(c2), pThis, pA1a, pA2a);
+			assertList(b.getParams(c1, this), pThis, pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c2, this), pThis, pA1a, pA2a);
 		}
 
 		b1p.add(A2.class, a2a, null);
 		b2p.add(A2.class, a2a, null);
 		for (var b : array(b1p, b1c, b2p, b2c)) {
 			for (var e : array(c1, c2)) {
-				assertNull(b.getMissingParams(e));
-				assertTrue(b.hasAllParams(e));
+				assertNull(b.getMissingParams(e, this));
+				assertTrue(b.hasAllParams(e, this));
 			}
-			assertList(b.getParams(c1), pThis, pA1a, pA2a, pIsBeanStore);
-			assertList(b.getParams(c2), pThis, pA1a, pA2a);
+			assertList(b.getParams(c1, this), pThis, pA1a, pA2a, pIsBeanStore);
+			assertList(b.getParams(c2, this), pThis, pA1a, pA2a);
 		}
 	}
 
@@ -536,9 +536,9 @@ class BeanStore_Test extends TestBase {
 
 	@Test void d01_createBean_basic() {
 		var bs = BasicBeanStore.create().outer(new BeanStore_Test()).build();
-		assertNotNull(BeanCreator.of(D1a.class, bs).run());
-		assertNotNull(BeanCreator.of(D1b.class, bs).run());
-		assertThrows(IllegalArgumentException.class, () -> BeanCreator.of(null, bs).run());
+		assertNotNull(BeanCreator.of(D1a.class, bs).outer(this).run());
+		assertNotNull(BeanCreator.of(D1b.class, bs).outer(this).run());
+		assertThrows(IllegalArgumentException.class, () -> BeanCreator.of(null, bs).outer(this).run());
 	}
 
 	public static class D2 {
@@ -734,7 +734,7 @@ class BeanStore_Test extends TestBase {
 	}
 
 	@Test void d15_createBean_constructors_namedBean_withOuter() {
-		var bs = BasicBeanStore.create().outer(new BeanStore_Test()).build();
+		var bs = BasicBeanStore.create().build().addBean(BeanStore_Test.class, new BeanStore_Test());
 		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D15.class.getName()+": Public constructor found but could not find prerequisites: Integer,String@foo or String@foo.", ()->BeanCreator.of(D15.class, bs).run());
 		bs.add(String.class, "bar", "foo");
 		assertString("bar", BeanCreator.of(D15.class, bs).run().a);

@@ -157,6 +157,7 @@ public class BeanCreator<T> {
 	private ClassInfo type;
 	private Object builder;
 	private T impl;
+	private Object outer;
 
 	private boolean silent;
 
@@ -169,6 +170,11 @@ public class BeanCreator<T> {
 	protected BeanCreator(Class<T> type, BasicBeanStore store) {
 		this.type = info(type);
 		this.store = BasicBeanStore.of(store, store.outer.orElse(null));
+	}
+
+	public BeanCreator<T> outer(Object outer) {
+		this.outer = outer;
+		return this;
 	}
 
 	/**
@@ -409,15 +415,15 @@ public class BeanCreator<T> {
 	}
 
 	private String getMissingParams(ExecutableInfo ei) {
-		return store.getMissingParams(ei);
+		return store.getMissingParams(ei, outer);
 	}
 
 	private Object[] getParams(ExecutableInfo ei) {
-		return store.getParams(ei);
+		return store.getParams(ei, outer);
 	}
 
 	private boolean hasAllParams(ExecutableInfo ei) {
-		return store.hasAllParams(ei);
+		return store.hasAllParams(ei, outer);
 	}
 
 	private boolean isStaticCreateMethod(MethodInfo m) {

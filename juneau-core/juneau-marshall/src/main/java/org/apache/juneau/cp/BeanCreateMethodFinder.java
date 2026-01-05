@@ -148,11 +148,11 @@ public class BeanCreateMethodFinder<T> {
 					&& x.hasReturnType(beanType)
 					&& ! x.hasAnnotation(BeanIgnore.class)
 					&& filter.test(x)
-					&& beanStore.hasAllParams(x)
+					&& beanStore.hasAllParams(x, resource)
 					&& (x.isStatic() || nn(resource))
 			).ifPresent(m -> {
 				method = m;
-				args = beanStore.getParams(m);
+				args = beanStore.getParams(m, resource);
 			});
 		}
 		return this;
