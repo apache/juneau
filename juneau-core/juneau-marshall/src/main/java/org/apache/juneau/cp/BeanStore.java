@@ -584,54 +584,6 @@ public class BeanStore {
 		return entries.stream().anyMatch(x -> x.matches(beanType, name)) || parent.map(x -> x.hasBean(beanType, name)).orElse(false);
 	}
 
-	/**
-	 * Removes an unnamed bean from this store.
-	 *
-	 * @param beanType The bean type being removed.
-	 * @return This object.
-	 */
-	public BeanStore removeBean(Class<?> beanType) {
-		return removeBean(beanType, null);
-	}
-
-	/**
-	 * Removes a named bean from this store.
-	 *
-	 * @param beanType The bean type being removed.
-	 * @param name The bean name to remove.
-	 * @return This object.
-	 */
-	public BeanStore removeBean(Class<?> beanType, String name) {
-		assertCanWrite();
-		try (var x = lock.write()) {
-			if (name == null)
-				unnamedEntries.remove(beanType);
-			entries.removeIf(y -> y.matches(beanType, name));
-		}
-		return this;
-	}
-
-	/**
-	 * Returns all the beans in this store of the specified type.
-	 *
-	 * <p>
-	 * Returns both named and unnamed beans.
-	 *
-	 * <p>
-	 * The results from the parent bean store are appended to the list of beans from this beans store.
-	 *
-	 * @param <T> The bean type to return.
-	 * @param beanType The bean type to return.
-	 * @return The bean entries.  Never <jk>null</jk>.
-	 */
-	public <T> Stream<BeanStoreEntry<T>> stream(Class<T> beanType) {
-		@SuppressWarnings("unchecked")
-		var s = entries.stream().filter(x -> x.matches(beanType)).map(x -> (BeanStoreEntry<T>)x);
-		if (parent.isPresent())
-			s = Stream.concat(s, parent.get().stream(beanType));
-		return s;
-	}
-
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()

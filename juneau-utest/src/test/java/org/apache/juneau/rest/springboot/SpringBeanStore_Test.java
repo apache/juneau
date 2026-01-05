@@ -33,37 +33,4 @@ class SpringBeanStore_Test extends TestBase {
 		assertSame(store, result);
 		assertInstanceOf(SpringBeanStore.class, result);
 	}
-
-	@Test
-	void a02_fluentChaining_removeBean_byClass() {
-		// Test that removeBean(Class) returns SpringBeanStore (not BeanStore)
-		var store = new SpringBeanStore(opte(), opte(), null);
-
-		SpringBeanStore result = store.removeBean(String.class);
-
-		assertSame(store, result);
-		assertInstanceOf(SpringBeanStore.class, result);
-	}
-
-	@Test
-	void a03_fluentChaining_removeBean_byClassAndName() {
-		// Test that removeBean(Class, String) returns SpringBeanStore (not BeanStore)
-		var store = new SpringBeanStore(opte(), opte(), null);
-
-		SpringBeanStore result = store.removeBean(String.class, "testBean");
-
-		assertSame(store, result);
-		assertInstanceOf(SpringBeanStore.class, result);
-	}
-
-	@Test
-	void a04_fluentChaining_complex() {
-		// Test chaining multiple fluent calls
-		var store = new SpringBeanStore(opte(), opte(), null);
-
-		SpringBeanStore result = store.removeBean(String.class).removeBean(Integer.class, "myInt").clear();
-
-		assertSame(store, result);
-		assertInstanceOf(SpringBeanStore.class, result);
-	}
 }

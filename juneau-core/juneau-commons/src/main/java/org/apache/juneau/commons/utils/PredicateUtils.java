@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.utils;
 
+import java.util.concurrent.*;
 import java.util.function.*;
 
 /**
@@ -96,6 +97,11 @@ public final class PredicateUtils {
 	 */
 	public static <T> boolean test(Predicate<T> predicate, T value) {
 		return (predicate == null || predicate.test(value));
+	}
+
+	public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+	    var seen = ConcurrentHashMap.newKeySet();
+	    return t -> seen.add(keyExtractor.apply(t));
 	}
 
 	private PredicateUtils() {}

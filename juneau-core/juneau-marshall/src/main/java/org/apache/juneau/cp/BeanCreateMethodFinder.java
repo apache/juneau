@@ -90,8 +90,6 @@ public class BeanCreateMethodFinder<T> {
 	private MethodInfo method;
 	private Object[] args;
 
-	private Supplier<T> def = () -> null;
-
 	BeanCreateMethodFinder(Class<T> beanType, Class<?> resourceClass, BeanStore beanStore) {
 		this.beanType = assertArgNotNull("beanType", beanType);
 		this.resource = null;
@@ -145,14 +143,14 @@ public class BeanCreateMethodFinder<T> {
 	 */
 	public BeanCreateMethodFinder<T> find(Predicate<MethodInfo> filter) {
 		// @formatter:off
-	if (method == null) {
-		info(resourceClass).getPublicMethod(
-			x -> x.isNotDeprecated()
-				&& x.hasReturnType(beanType)
-				&& ! x.hasAnnotation(BeanIgnore.class)
-				&& filter.test(x)
-				&& beanStore.hasAllParams(x)
-				&& (x.isStatic() || nn(resource))
+		if (method == null) {
+			info(resourceClass).getPublicMethod(
+				x -> x.isNotDeprecated()
+					&& x.hasReturnType(beanType)
+					&& ! x.hasAnnotation(BeanIgnore.class)
+					&& filter.test(x)
+					&& beanStore.hasAllParams(x)
+					&& (x.isStatic() || nn(resource))
 			).ifPresent(m -> {
 				method = m;
 				args = beanStore.getParams(m);
@@ -160,16 +158,6 @@ public class BeanCreateMethodFinder<T> {
 		}
 		return this;
 		// @formatter:on
-	}
-
-	/**
-	 * Shortcut for calling <c>find(<jv>x</jv> -&gt; <jv>x</jv>.hasName(<jv>methodName</jv>))</c>.
-	 *
-	 * @param methodName The method name to match.
-	 * @return This object.
-	 */
-	public BeanCreateMethodFinder<T> find(String methodName) {
-		return find(x -> x.hasName(methodName));
 	}
 
 	/**
@@ -182,7 +170,7 @@ public class BeanCreateMethodFinder<T> {
 	public T run() throws ExecutableException {
 		if (nn(method))
 			return (T)method.invoke(resource, args);
-		return def.get();
+		return null;
 	}
 
 	/**
@@ -197,47 +185,5 @@ public class BeanCreateMethodFinder<T> {
 		if (nn(t))
 			consumer.accept(t);
 		return t;
-	}
-
-	/**
-	 * Identical to {@link #find(Predicate)} but named for fluent-style calls.
-	 *
-	 * @param filter The predicate to apply.
-	 * @return This object.
-	 */
-	public BeanCreateMethodFinder<T> thenFind(Predicate<MethodInfo> filter) {
-		return find(filter);
-	}
-
-	/**
-	 * Identical to {@link #find(Predicate)} but named for fluent-style calls.
-	 *
-	 * @param methodName The method name to match.
-	 * @return This object.
-	 */
-	public BeanCreateMethodFinder<T> thenFind(String methodName) {
-		return find(methodName);
-	}
-
-	/**
-	 * A default value to return if no matching methods were found.
-	 *
-	 * @param def The default value.
-	 * @return This object.
-	 */
-	public BeanCreateMethodFinder<T> withDefault(Supplier<T> def) {
-		assertArgNotNull("def", def);
-		this.def = def;
-		return this;
-	}
-
-	/**
-	 * A default value to return if no matching methods were found.
-	 *
-	 * @param def The default value.  Can be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public BeanCreateMethodFinder<T> withDefault(T def) {
-		return withDefault(() -> def);
 	}
 }

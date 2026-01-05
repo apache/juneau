@@ -85,30 +85,4 @@ public class SpringBeanStore extends BeanStore {
 		}
 		return opte();
 	}
-
-	@Override /* Overridden from BeanStore */
-	public SpringBeanStore removeBean(Class<?> beanType) {
-		super.removeBean(beanType);
-		return this;
-	}
-
-	@Override /* Overridden from BeanStore */
-	public SpringBeanStore removeBean(Class<?> beanType, String name) {
-		super.removeBean(beanType, name);
-		return this;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> Stream<BeanStoreEntry<T>> stream(Class<T> c) {
-		try {
-			var o = super.stream(c);
-			if (appContext.isPresent())
-				o = Stream.concat(o, appContext.get().getBeansOfType(c).entrySet().stream().map(x -> BeanStoreEntry.create(c, () -> x.getValue(), x.getKey())));
-			return o;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return Collections.emptyList().stream().map(x -> (BeanStoreEntry<T>)x);
-	}
 }

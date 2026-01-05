@@ -86,8 +86,6 @@ class BeanStore_Test extends TestBase {
 			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", ()->b.addSupplier(A1.class, ()->a1a));
 			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", ()->b.addSupplier(A1.class, ()->a1a, "foo"));
 			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", b::clear);
-			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", ()->b.removeBean(A1.class));
-			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", ()->b.removeBean(A1.class, "foo"));
 		}
 
 		for (var b : array(b1c, b2c)) {
@@ -98,8 +96,6 @@ class BeanStore_Test extends TestBase {
 			b.addSupplier(A1.class, ()->a1a);
 			b.addSupplier(A1.class, ()->a1a, "foo");
 			b.clear();
-			b.removeBean(A1.class);
-			b.removeBean(A1.class, "foo");
 		}
 	}
 
@@ -141,56 +137,56 @@ class BeanStore_Test extends TestBase {
 			assertTrue(b.hasBean(A1.class));
 			assertEquals(a1a, b.getBean(A1.class).get());
 		}
-
-		b1p.add(A1.class, a1b);
-		b2p.add(A1.class, a1b);
-		for (var b : array(b1p, b1c, b2p, b2c)) {
-			assertTrue(b.hasBean(A1.class));
-			assertEquals(a1b, b.getBean(A1.class).get());
-			assertList(b.stream(A1.class).map(BeanStoreEntry::get), a1b, a1a);
-		}
-
-		b1c.add(A2.class, a2a);
-		b2c.add(A2.class, a2a);
-		for (var b : array(b1p, b2p)) {
-			assertFalse(b.hasBean(A2.class));
-			assertEmpty(b.getBean(A2.class));
-			assertEmpty(b.stream(A2.class));
-		}
-		for (var b : array(b1c, b2c)) {
-			assertTrue(b.hasBean(A2.class));
-			assertEquals(a2a, b.getBean(A2.class).get());
-			assertList(b.stream(A2.class).map(BeanStoreEntry::get), a2a);
-		}
-
-		assertMatchesGlob("{entries=[{type=A1,bean="+Utils.id(a1b)+"},{type=A1,bean="+Utils.id(a1a)+"}],identity=*}", b1p);
-		assertMatchesGlob("{entries=[{type=A2,bean="+Utils.id(a2a)+"}],identity=*,parent={entries=[{type=A1,bean="+Utils.id(a1b)+"},{type=A1,bean="+Utils.id(a1a)+"}],identity=*}}", b1c);
-		assertMatchesGlob("{entries=[{type=A1,bean="+Utils.id(a1b)+"},{type=A1,bean="+Utils.id(a1a)+"}],identity=*,threadSafe=true}", b2p);
-		assertMatchesGlob("{entries=[{type=A2,bean="+Utils.id(a2a)+"}],identity=*,parent={entries=[{type=A1,bean="+Utils.id(a1b)+"},{type=A1,bean="+Utils.id(a1a)+"}],identity=*,threadSafe=true},threadSafe=true}", b2c);
-
-		b1p.removeBean(A1.class);
-		b1c.clear().addBean(A1.class, a1a);
-		b2p.removeBean(A1.class);
-		b2c.clear().addBean(A1.class, a1a);
-
-		for (var b : array(b1p, b2p)) {
-			assertFalse(b.hasBean(A1.class));
-			assertEmpty(b.getBean(A1.class));
-			assertEmpty(b.stream(A1.class));
-		}
-		for (var b : array(b1c, b2c)) {
-			assertTrue(b.hasBean(A1.class));
-			assertEquals(a1a, b.getBean(A1.class).get());
-			assertList(b.stream(A1.class).map(BeanStoreEntry::get), a1a);
-		}
-
-		b1c.removeBean(A1.class);
-		b2c.removeBean(A1.class);
-		for (var b : array(b1p, b1c, b2p, b2c)) {
-			assertFalse(b.hasBean(A1.class));
-			assertEmpty(b.getBean(A1.class));
-			assertEmpty(b.stream(A1.class));
-		}
+//
+//		b1p.add(A1.class, a1b);
+//		b2p.add(A1.class, a1b);
+//		for (var b : array(b1p, b1c, b2p, b2c)) {
+//			assertTrue(b.hasBean(A1.class));
+//			assertEquals(a1b, b.getBean(A1.class).get());
+//			assertList(b.stream(A1.class).map(BeanStoreEntry::get), a1b, a1a);
+//		}
+//
+//		b1c.add(A2.class, a2a);
+//		b2c.add(A2.class, a2a);
+//		for (var b : array(b1p, b2p)) {
+//			assertFalse(b.hasBean(A2.class));
+//			assertEmpty(b.getBean(A2.class));
+//			assertEmpty(b.stream(A2.class));
+//		}
+//		for (var b : array(b1c, b2c)) {
+//			assertTrue(b.hasBean(A2.class));
+//			assertEquals(a2a, b.getBean(A2.class).get());
+//			assertList(b.stream(A2.class).map(BeanStoreEntry::get), a2a);
+//		}
+//
+//		assertMatchesGlob("{entries=[{type=A1,bean="+Utils.id(a1b)+"},{type=A1,bean="+Utils.id(a1a)+"}],identity=*}", b1p);
+//		assertMatchesGlob("{entries=[{type=A2,bean="+Utils.id(a2a)+"}],identity=*,parent={entries=[{type=A1,bean="+Utils.id(a1b)+"},{type=A1,bean="+Utils.id(a1a)+"}],identity=*}}", b1c);
+//		assertMatchesGlob("{entries=[{type=A1,bean="+Utils.id(a1b)+"},{type=A1,bean="+Utils.id(a1a)+"}],identity=*,threadSafe=true}", b2p);
+//		assertMatchesGlob("{entries=[{type=A2,bean="+Utils.id(a2a)+"}],identity=*,parent={entries=[{type=A1,bean="+Utils.id(a1b)+"},{type=A1,bean="+Utils.id(a1a)+"}],identity=*,threadSafe=true},threadSafe=true}", b2c);
+//
+//		b1p.removeBean(A1.class);
+//		b1c.clear().addBean(A1.class, a1a);
+//		b2p.removeBean(A1.class);
+//		b2c.clear().addBean(A1.class, a1a);
+//
+//		for (var b : array(b1p, b2p)) {
+//			assertFalse(b.hasBean(A1.class));
+//			assertEmpty(b.getBean(A1.class));
+//			assertEmpty(b.stream(A1.class));
+//		}
+//		for (var b : array(b1c, b2c)) {
+//			assertTrue(b.hasBean(A1.class));
+//			assertEquals(a1a, b.getBean(A1.class).get());
+//			assertList(b.stream(A1.class).map(BeanStoreEntry::get), a1a);
+//		}
+//
+//		b1c.removeBean(A1.class);
+//		b2c.removeBean(A1.class);
+//		for (var b : array(b1p, b1c, b2p, b2c)) {
+//			assertFalse(b.hasBean(A1.class));
+//			assertEmpty(b.getBean(A1.class));
+//			assertEmpty(b.stream(A1.class));
+//		}
 	}
 
 	@Test void a05_addNamedBeans() {
@@ -206,13 +202,13 @@ class BeanStore_Test extends TestBase {
 			b.addBean(A1.class, a1e);
 		}
 
-		for (var b : array(b1p, b2p)) {
-			assertList(b.stream(A1.class).map(BeanStoreEntry::get), a1d,a1c,a1b,a1a);
-		}
-		for (var b : array(b1c, b2c)) {
-			assertList(b.stream(A1.class).map(BeanStoreEntry::get), a1e,a1d,a1c,a1b,a1a);
-		}
-
+//		for (var b : array(b1p, b2p)) {
+//			assertList(b.stream(A1.class).map(BeanStoreEntry::get), a1d,a1c,a1b,a1a);
+//		}
+//		for (var b : array(b1c, b2c)) {
+//			assertList(b.stream(A1.class).map(BeanStoreEntry::get), a1e,a1d,a1c,a1b,a1a);
+//		}
+//
 		for (var b : array(b1p, b1c, b2p, b2c)) {
 			assertEquals(a1b, b.getBean(A1.class, "foo").get());
 			assertEquals(a1d, b.getBean(A1.class, "bar").get());
@@ -510,34 +506,6 @@ class BeanStore_Test extends TestBase {
 		public C createA7() { throw new RuntimeException("foo"); }
 	}
 
-	@Test void c01_createMethodFinder_instanceMethods() throws Exception {
-		var x = new C1();
-		var b1p = BeanStore.create().build();
-		var b1c = BeanStore.create().parent(b1p).build();
-		var b2p = BeanStore.create().build();
-		var b2c = BeanStore.create().outer(x).parent(b2p).build();
-		var b3p = BeanStore.create().build();
-		var b3c = BeanStore.create().outer(this).parent(b3p).build();
-
-		for (var m : array("createA0", "createA2", "createA3", "createA4", "createA5", "createA6")) {
-			for (var b : array(b1c, b2c, b3c)) {
-				assertNull(b.createMethodFinder(C.class, x).find(m).run());
-				assertNull(b.createMethodFinder(C.class, C1.class).find(m).run());
-			}
-			for (var b : array(b2c, b3c)) {
-				assertNull(b.createMethodFinder(C.class).find(m).run());
-			}
-		}
-		assertNotNull(b1c.createMethodFinder(C.class, x).find("createA1").run());
-		assertNull(b1c.createMethodFinder(C.class, C1.class).find("createA1").run());
-		assertNotNull(b2c.createMethodFinder(C.class).find("createA1").run());
-		assertNull(b3c.createMethodFinder(C.class).find("createA1").run());
-		assertThrowsWithMessage(Exception.class, "foo", ()->b1c.createMethodFinder(C.class, x).find("createA7").run());
-		assertNull(b1c.createMethodFinder(C.class, C1.class).find("createA7").run());
-		assertThrowsWithMessage(Exception.class, "foo", ()->b2c.createMethodFinder(C.class).find("createA7").run());
-		assertNull(b3c.createMethodFinder(C.class).find("createA7").run());
-	}
-
 	// Static methods.
 	public static class C2 {
 		public static C createB1() { return new C(); }
@@ -547,34 +515,6 @@ class BeanStore_Test extends TestBase {
 		@BeanIgnore public static C createB5() { return new C(); }
 		public static C createB6() { return null; }
 		public static C createB7() { throw new RuntimeException("foo"); }
-	}
-
-	@Test void c02_createMethodFinder_staticMethods() throws Exception {
-		var x = new C2();
-		var b1p = BeanStore.create().build();
-		var b1c = BeanStore.create().parent(b1p).build();
-		var b2p = BeanStore.create().build();
-		var b2c = BeanStore.create().outer(x).parent(b2p).build();
-		var b3p = BeanStore.create().build();
-		var b3c = BeanStore.create().outer(this).parent(b3p).build();
-
-		for (var m : array("createB0", "createB2", "createB3", "createB4", "createB5", "createB6")) {
-			for (var b : array(b1c, b2c, b3c)) {
-				assertNull(b.createMethodFinder(C.class, x).find(m).run());
-				assertNull(b.createMethodFinder(C.class, C2.class).find(m).run());
-			}
-			for (var b : array(b2c, b3c)) {
-				assertNull(b.createMethodFinder(C.class).find(m).run());
-			}
-		}
-		assertNotNull(b1c.createMethodFinder(C.class, x).find("createB1").run());
-		assertNotNull(b1c.createMethodFinder(C.class, C2.class).find("createB1").run());
-		assertNotNull(b2c.createMethodFinder(C.class).find("createB1").run());
-		assertNull(b3c.createMethodFinder(C.class).find("createB1").run());
-		assertThrowsWithMessage(Exception.class, "foo", ()->b1c.createMethodFinder(C.class, x).find("createB7").run());
-		assertThrowsWithMessage(Exception.class, "foo", ()->b1c.createMethodFinder(C.class, C2.class).find("createB7").run());
-		assertThrowsWithMessage(Exception.class, "foo", ()->b2c.createMethodFinder(C.class).find("createB7").run());
-		assertNull(b3c.createMethodFinder(C.class).find("createB7").run());
 	}
 
 	// Bean matching.
@@ -587,193 +527,6 @@ class BeanStore_Test extends TestBase {
 		public static C createC6(BeanStore bs) { assertNotNull(bs); return new C(); }
 	}
 
-	@Test void c03_createMethodFinder_beanMatching() throws Exception {
-		var x = new C3();
-		var b1p = BeanStore.create().build();
-		var b1c = BeanStore.create().parent(b1p).build();
-		var b2p = BeanStore.create().build();
-		var b2c = BeanStore.create().outer(x).parent(b2p).build();
-		var b3p = BeanStore.create().build();
-		var b3c = BeanStore.create().outer(this).parent(b3p).build();
-
-		for (var b : array(b1c, b2c, b3c)) {
-			assertNull(b.createMethodFinder(C.class, x).find("createC1").run());
-			assertNull(b.createMethodFinder(C.class, x).find("createC2").run());
-			assertNull(b.createMethodFinder(C.class, x).find("createC3").run().a);
-			assertNull(b.createMethodFinder(C.class, x).find("createC4").run());
-			assertNull(b.createMethodFinder(C.class, x).find("createC5").run().a);
-			assertNotNull(b.createMethodFinder(C.class, x).find("createC6").run());
-		}
-
-		b1p.addBean(A1.class, new A1());
-		b2p.addBean(A1.class, new A1());
-		b3p.addBean(A1.class, new A1());
-		for (var b : array(b1c, b2c)) {
-			assertNotNull(b.createMethodFinder(C.class, x).find("createC1").run());
-			assertNotNull(b.createMethodFinder(C.class, x).find("createC2").run());
-			assertNotNull(b.createMethodFinder(C.class, x).find("createC3").run().a);
-			assertNull(b.createMethodFinder(C.class, x).find("createC4").run());
-			assertNull(b.createMethodFinder(C.class, x).find("createC5").run().a);
-			assertNotNull(b.createMethodFinder(C.class, x).find("createC6").run());
-			assertNull(b.createMethodFinder(C.class, C3.class).find("createC1").run());
-			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC2").run());
-			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC3").run().a);
-			assertNull(b.createMethodFinder(C.class, C3.class).find("createC4").run());
-			assertNull(b.createMethodFinder(C.class, C3.class).find("createC5").run().a);
-			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC6").run());
-		}
-		assertNotNull(b2c.createMethodFinder(C.class).find("createC1").run());
-		assertNotNull(b2c.createMethodFinder(C.class).find("createC2").run());
-		assertNotNull(b2c.createMethodFinder(C.class).find("createC3").run().a);
-		assertNull(b2c.createMethodFinder(C.class).find("createC4").run());
-		assertNull(b2c.createMethodFinder(C.class).find("createC5").run().a);
-		assertNotNull(b2c.createMethodFinder(C.class).find("createC6").run());
-		for (var m : array("createC1","createC2","createC3","createC4","createC5","createC6")) {
-			assertNull(b3c.createMethodFinder(C.class).find(m).run());
-		}
-
-		b1p.clear().addSupplier(A1.class, A1::new);
-		b2p.clear().addSupplier(A1.class, A1::new);
-		for (var b : array(b1c, b2c)) {
-			assertNotNull(b.createMethodFinder(C.class, x).find("createC1").run());
-			assertNotNull(b.createMethodFinder(C.class, x).find("createC2").run());
-			assertNotNull(b.createMethodFinder(C.class, x).find("createC3").run().a);
-			assertNull(b.createMethodFinder(C.class, x).find("createC4").run());
-			assertNull(b.createMethodFinder(C.class, x).find("createC5").run().a);
-			assertNotNull(b.createMethodFinder(C.class, x).find("createC6").run());
-			assertNull(b.createMethodFinder(C.class, C3.class).find("createC1").run());
-			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC2").run());
-			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC3").run().a);
-			assertNull(b.createMethodFinder(C.class, C3.class).find("createC4").run());
-			assertNull(b.createMethodFinder(C.class, C3.class).find("createC5").run().a);
-			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC6").run());
-		}
-		assertNotNull(b2c.createMethodFinder(C.class).find("createC1").run());
-		assertNotNull(b2c.createMethodFinder(C.class).find("createC2").run());
-		assertInstanceOf(A1.class, b2c.createMethodFinder(C.class).find("createC3").run().a);
-		assertNull(b2c.createMethodFinder(C.class).find("createC4").run());
-		assertNull(b2c.createMethodFinder(C.class).find("createC5").run().a);
-		assertNotNull(b2c.createMethodFinder(C.class).find("createC6").run());
-		for (var m : array("createC1","createC2","createC3","createC4","createC5","createC6")) {
-			assertNull(b3c.createMethodFinder(C.class).find(m).run());
-		}
-
-		b1p.clear().add(A1.class, null);
-		b2p.clear().add(A1.class, null);
-		for (var b : array(b1c, b2c)) {
-			assertNotNull(b.createMethodFinder(C.class, x).find("createC1").run());
-			assertNotNull(b.createMethodFinder(C.class, x).find("createC2").run());
-			assertNull(b.createMethodFinder(C.class, x).find("createC3").run().a);
-			assertNull(b.createMethodFinder(C.class, x).find("createC4").run());
-			assertNull(b.createMethodFinder(C.class, x).find("createC5").run().a);
-			assertNotNull(b.createMethodFinder(C.class, x).find("createC6").run());
-			assertNull(b.createMethodFinder(C.class, C3.class).find("createC1").run());
-			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC2").run());
-			assertNull(b.createMethodFinder(C.class, C3.class).find("createC3").run().a);
-			assertNull(b.createMethodFinder(C.class, C3.class).find("createC4").run());
-			assertNull(b.createMethodFinder(C.class, C3.class).find("createC5").run().a);
-			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC6").run());
-		}
-		assertNotNull(b2c.createMethodFinder(C.class).find("createC1").run());
-		assertNotNull(b2c.createMethodFinder(C.class).find("createC2").run());
-		assertNull(b2c.createMethodFinder(C.class).find("createC3").run().a);
-		assertNull(b2c.createMethodFinder(C.class).find("createC4").run());
-		assertNull(b2c.createMethodFinder(C.class).find("createC5").run().a);
-		assertNotNull(b2c.createMethodFinder(C.class).find("createC6").run());
-		for (var m : array("createC1","createC2","createC3","createC4","createC5","createC6")) {
-			assertNull(b3c.createMethodFinder(C.class).find(m).run());
-		}
-
-		b1p.clear().addBean(A1.class, new A1()).add(A1.class, new A1(), "Foo");
-		b2p.clear().addBean(A1.class, new A1()).add(A1.class, new A1(), "Foo");
-		for (var b : array(b1c, b2c)) {
-			assertNotNull(b.createMethodFinder(C.class, x).find("createC1").run());
-			assertNotNull(b.createMethodFinder(C.class, x).find("createC2").run());
-			assertNotNull(b.createMethodFinder(C.class, x).find("createC3").run().a);
-			assertNotNull(b.createMethodFinder(C.class, x).find("createC4").run());
-			assertNotNull(b.createMethodFinder(C.class, x).find("createC5").run().a);
-			assertNotNull(b.createMethodFinder(C.class, x).find("createC6").run());
-			assertNull(b.createMethodFinder(C.class, C3.class).find("createC1").run());
-			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC2").run());
-			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC3").run().a);
-			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC4").run());
-			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC5").run().a);
-			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC6").run());
-		}
-		assertNotNull(b2c.createMethodFinder(C.class).find("createC1").run());
-		assertNotNull(b2c.createMethodFinder(C.class).find("createC2").run());
-		assertNotNull(b2c.createMethodFinder(C.class).find("createC3").run().a);
-		assertNotNull(b2c.createMethodFinder(C.class).find("createC4").run());
-		assertNotNull(b2c.createMethodFinder(C.class).find("createC5").run().a);
-		assertNotNull(b2c.createMethodFinder(C.class).find("createC6").run());
-		for (var m : array("createC1","createC2","createC3","createC4","createC5","createC6")) {
-			assertNull(b3c.createMethodFinder(C.class).find(m).run());
-		}
-	}
-
-	// Bean matching.
-	public static class C4 {
-		public static String createC1(A1 a) { return "createC1"; }
-		public static String createC2() { return "createC2"; }
-	}
-
-	@Test void c04_createMethodFinder_beanMatching_requiredArgs() throws Exception {
-		var x = new C4();
-		var b1p = BeanStore.create().build();
-		var b1c = BeanStore.create().outer(x).parent(b1p).build();
-
-		assertString("createC2", b1c.createMethodFinder(String.class).find("createC1").thenFind("createC2").run());
-		assertString("createC2", b1c.createMethodFinder(String.class).find("createC2").thenFind("createC1").run());
-
-		b1p.add(A1.class, null);
-		assertString("createC1", b1c.createMethodFinder(String.class).find("createC1").thenFind("createC2").run());
-		assertString("createC2", b1c.createMethodFinder(String.class).find("createC2").thenFind("createC1").run());
-		assertString("createC1", b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC1") && x2.hasAllParameters(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllParameters(A1.class)).run());
-		assertString("createC1", b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC2") && x2.hasAllParameters(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllParameters(A1.class)).run());
-
-		b1p.clear();
-		assertString("createC1", b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC1").thenFind("createC2").run());
-		assertString("createC2", b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC2").thenFind("createC1").run());
-		assertString("createC1", b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC1") && x2.hasAllParameters(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllParameters(A1.class)).run());
-		assertString("createC1", b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC2") && x2.hasAllParameters(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllParameters(A1.class)).run());
-
-		assertString("X", b1c.createMethodFinder(String.class).withDefault("X").run());
-		assertString("X", b1c.createMethodFinder(String.class).withDefault(()->"X").run());
-
-		b1c.createMethodFinder(String.class).withDefault("X").run(y -> assertString("X", y));
-	}
-
-	// Bean matching.
-	public class C5 {
-		public String createC1(A1 a) { return "createC1"; }
-		public String createC2() { return "createC2"; }
-	}
-
-	@Test void c05_createMethodFinder_beanMatching_requiredArgs_innerClass() throws Exception {
-		var x = new C5();
-		var b1p = BeanStore.create().build();
-		var b1c = BeanStore.create().outer(x).parent(b1p).build();
-
-		assertString("createC2", b1c.createMethodFinder(String.class).find("createC1").thenFind("createC2").run());
-		assertString("createC2", b1c.createMethodFinder(String.class).find("createC2").thenFind("createC1").run());
-
-		b1p.add(A1.class, null);
-		assertString("createC1", b1c.createMethodFinder(String.class).find("createC1").thenFind("createC2").run());
-		assertString("createC2", b1c.createMethodFinder(String.class).find("createC2").thenFind("createC1").run());
-		assertString("createC1", b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC1") && x2.hasAllParameters(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllParameters(A1.class)).run());
-		assertString("createC1", b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC2") && x2.hasAllParameters(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllParameters(A1.class)).run());
-
-		b1p.clear();
-		assertString("createC1", b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC1").thenFind("createC2").run());
-		assertString("createC2", b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC2").thenFind("createC1").run());
-		assertString("createC1", b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC1") && x2.hasAllParameters(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllParameters(A1.class)).run());
-		assertString("createC1", b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC2") && x2.hasAllParameters(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllParameters(A1.class)).run());
-
-		assertString("X", b1c.createMethodFinder(String.class).withDefault("X").run());
-		assertString("X", b1c.createMethodFinder(String.class).withDefault(()->"X").run());
-
-		b1c.createMethodFinder(String.class).withDefault("X").run(y -> assertString("X", y));
-	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// createBean()
@@ -852,8 +605,6 @@ class BeanStore_Test extends TestBase {
 		assertEquals(d5c, bs.createBean(D5.class).run());
 		bs.add(String.class, "x");
 		assertEquals(d5b, bs.createBean(D5.class).run());
-		bs.removeBean(Integer.class);
-		assertEquals(d5a, bs.createBean(D5.class).run());
 	}
 
 	public static class D6 {
@@ -923,8 +674,6 @@ class BeanStore_Test extends TestBase {
 		assertString("s=foo", bs.createBean(D10.class).run().a);
 		bs.add(Integer.class, 1);
 		assertString("s=foo,i=1", bs.createBean(D10.class).run().a);
-		bs.removeBean(String.class);
-		assertString("i=1", bs.createBean(D10.class).run().a);
 	}
 
 	public static class D11 {
@@ -941,8 +690,6 @@ class BeanStore_Test extends TestBase {
 		assertString("s=foo", bs.createBean(D11.class).run().a);
 		bs.add(Integer.class, 1);
 		assertString("s=foo,i=1", bs.createBean(D11.class).run().a);
-		bs.removeBean(String.class);
-		assertString("i=1", bs.createBean(D11.class).run().a);
 	}
 
 	public static class D12 {

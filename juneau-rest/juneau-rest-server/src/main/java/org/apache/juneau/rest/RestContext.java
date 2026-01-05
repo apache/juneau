@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.PredicateUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -199,23 +200,20 @@ public class RestContext extends Context {
 		//-----------------------------------------------------------------------------------------------------------------
 
 		private static <T extends Annotation> Stream<Method> getAnnotatedMethods(Supplier<?> resource, Class<T> annotation) {
-			var r = resource.get();
-			var seen = new LinkedHashSet<String>();
-
-			return ClassInfo.ofProxy(r).getAllMethodsTopDown().stream()
+			return ClassInfo.ofProxy(resource.get()).getAllMethodsTopDown().stream()
 				.filter(y -> y.hasAnnotation(annotation))
-				.filter(y -> seen.add(y.getSignature()))
+				.filter(distinctByKey(MethodInfo::getSignature))
 				.map(y -> y.accessible().inner());
 		}
 
-		private static boolean isRestBeanMethod(MethodInfo mi) {
-			return isRestBeanMethod(mi, null);
+		private static boolean isRestInjectMethod(MethodInfo mi) {
+			return isRestInjectMethod(mi, null);
 		}
 
-		private static boolean isRestBeanMethod(MethodInfo mi, String name) {
+		private static boolean isRestInjectMethod(MethodInfo mi, String name) {
 			return mi.getAnnotations(RestInject.class)
 				.map(AnnotationInfo::inner)
-				.filter(x -> nn(x) && x.methodScope().length == 0 && (name == null || x.name().equals(name)))
+				.filter(x -> nn(x) && x.methodScope().length == 0 && (n(name) || eq(x.name(), name)))
 				.findFirst()
 				.isPresent();
 		}
@@ -1810,7 +1808,7 @@ public class RestContext extends Context {
 					// @formatter:off
 					beanStore
 						.createMethodFinder(rt)
-						.find(Builder::isRestBeanMethod)
+						.find(Builder::isRestInjectMethod)
 						.run(y -> beanStore.add(rt, y, name));
 					// @formatter:on
 				}
@@ -3881,7 +3879,7 @@ public class RestContext extends Context {
 			// @formatter:off
 			v.get().build()
 				.createMethodFinder(BeanStore.class)
-				.find(Builder::isRestBeanMethod)
+				.find(Builder::isRestInjectMethod)
 				.run(x -> v.get().impl(x));
 			// @formatter:on
 
@@ -3911,7 +3909,7 @@ public class RestContext extends Context {
 			beanStore.getBean(CallLogger.class).ifPresent(x -> creator.impl(x));
 
 			// Replace with bean from:  @RestInject public [static] CallLogger xxx(<args>)
-			beanStore.createMethodFinder(CallLogger.class).find(Builder::isRestBeanMethod).run(x -> creator.impl(x));
+			beanStore.createMethodFinder(CallLogger.class).find(Builder::isRestInjectMethod).run(x -> creator.impl(x));
 
 			return creator;
 		}
@@ -3958,7 +3956,7 @@ public class RestContext extends Context {
 			beanStore.getBean(Config.class).ifPresent(x -> v.set(x));
 
 			// Replace with bean from:  @RestInject public [static] Config xxx(<args>)
-			beanStore.createMethodFinder(Config.class).addBean(Config.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.set(x));
+			beanStore.createMethodFinder(Config.class).addBean(Config.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -3982,7 +3980,7 @@ public class RestContext extends Context {
 			beanStore.getBean(DebugEnablement.class).ifPresent(x -> creator.impl(x));
 
 			// Replace with bean from:  @RestInject public [static] DebugEnablement xxx(<args>)
-			beanStore.createMethodFinder(DebugEnablement.class).find(Builder::isRestBeanMethod).run(x -> creator.impl(x));
+			beanStore.createMethodFinder(DebugEnablement.class).find(Builder::isRestInjectMethod).run(x -> creator.impl(x));
 
 			return creator;
 		}
@@ -4004,7 +4002,7 @@ public class RestContext extends Context {
 			beanStore.getBean(NamedAttributeMap.class, "defaultRequestAttributes").ifPresent(x -> v.set(x));
 
 			// Replace with bean from:  @RestInject(name="defaultRequestAttributes") public [static] NamedAttributeMap xxx(<args>)
-			beanStore.createMethodFinder(NamedAttributeMap.class).addBean(NamedAttributeMap.class, v.get()).find(x -> isRestBeanMethod(x, "defaultRequestAttributes")).run(x -> v.set(x));
+			beanStore.createMethodFinder(NamedAttributeMap.class).addBean(NamedAttributeMap.class, v.get()).find(x -> isRestInjectMethod(x, "defaultRequestAttributes")).run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -4027,7 +4025,7 @@ public class RestContext extends Context {
 			beanStore.getBean(HeaderList.class, "defaultRequestHeaders").ifPresent(x -> v.set(x));
 
 			// Replace with bean from:  @RestInject(name="defaultRequestHeaders") public [static] HeaderList xxx(<args>)
-			beanStore.createMethodFinder(HeaderList.class).addBean(HeaderList.class, v.get()).find(x -> isRestBeanMethod(x, "defaultRequestHeaders")).run(x -> v.set(x));
+			beanStore.createMethodFinder(HeaderList.class).addBean(HeaderList.class, v.get()).find(x -> isRestInjectMethod(x, "defaultRequestHeaders")).run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -4050,7 +4048,7 @@ public class RestContext extends Context {
 			beanStore.getBean(HeaderList.class, "defaultResponseHeaders").ifPresent(x -> v.set(x));
 
 			// Replace with bean from:  @RestInject(name="defaultResponseHeaders") public [static] HeaderList xxx(<args>)
-			beanStore.createMethodFinder(HeaderList.class).addBean(HeaderList.class, v.get()).find(x -> isRestBeanMethod(x, "defaultResponseHeaders")).run(x -> v.set(x));
+			beanStore.createMethodFinder(HeaderList.class).addBean(HeaderList.class, v.get()).find(x -> isRestInjectMethod(x, "defaultResponseHeaders")).run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -4070,7 +4068,7 @@ public class RestContext extends Context {
 			var v = Value.of(MethodList.of(getAnnotatedMethods(resource, RestDestroy.class).collect(Collectors.toList())));
 
 			// Replace with bean from:  @RestInject(name="destroyMethods") public [static] MethodList xxx(<args>)
-			beanStore.createMethodFinder(MethodList.class).addBean(MethodList.class, v.get()).find(x -> isRestBeanMethod(x, "destroyMethods")).run(x -> v.set(x));
+			beanStore.createMethodFinder(MethodList.class).addBean(MethodList.class, v.get()).find(x -> isRestInjectMethod(x, "destroyMethods")).run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -4102,7 +4100,7 @@ public class RestContext extends Context {
 			beanStore.getBean(EncoderSet.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject public [static] EncoderSet xxx(<args>)
-			beanStore.createMethodFinder(EncoderSet.class).addBean(EncoderSet.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(EncoderSet.class).addBean(EncoderSet.Builder.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4122,7 +4120,7 @@ public class RestContext extends Context {
 			Value<MethodList> v = Value.of(MethodList.of(getAnnotatedMethods(resource, RestEndCall.class).collect(Collectors.toList())));
 
 			// Replace with bean from:  @RestInject(name="endCallMethods") public [static] MethodList xxx(<args>)
-			beanStore.createMethodFinder(MethodList.class).addBean(MethodList.class, v.get()).find(x -> isRestBeanMethod(x, "endCallMethods")).run(x -> v.set(x));
+			beanStore.createMethodFinder(MethodList.class).addBean(MethodList.class, v.get()).find(x -> isRestInjectMethod(x, "endCallMethods")).run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -4152,7 +4150,7 @@ public class RestContext extends Context {
 			beanStore.getBean(JsonSchemaGenerator.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject public [static] JsonSchemaGenerator xxx(<args>)
-			beanStore.createMethodFinder(JsonSchemaGenerator.class).addBean(JsonSchemaGenerator.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(JsonSchemaGenerator.class).addBean(JsonSchemaGenerator.Builder.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4182,7 +4180,7 @@ public class RestContext extends Context {
 			beanStore.getBean(Logger.class).ifPresent(x -> v.set(x));
 
 			// Replace with bean from:  @RestInject public [static] Logger xxx(<args>)
-			beanStore.createMethodFinder(Logger.class).addBean(Logger.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.set(x));
+			beanStore.createMethodFinder(Logger.class).addBean(Logger.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -4209,7 +4207,7 @@ public class RestContext extends Context {
 			beanStore.getBean(Messages.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject public [static] Messages xxx(<args>)
-			beanStore.createMethodFinder(Messages.class).addBean(Messages.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(Messages.class).addBean(Messages.Builder.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4239,7 +4237,7 @@ public class RestContext extends Context {
 			beanStore.getBean(MethodExecStore.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject public [static] MethodExecStore xxx(<args>)
-			beanStore.createMethodFinder(MethodExecStore.class).addBean(MethodExecStore.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(MethodExecStore.class).addBean(MethodExecStore.Builder.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4270,7 +4268,7 @@ public class RestContext extends Context {
 			beanStore.getBean(ParserSet.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject public [static] ParserSet xxx(<args>)
-			beanStore.createMethodFinder(ParserSet.class).addBean(ParserSet.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(ParserSet.class).addBean(ParserSet.Builder.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4306,7 +4304,7 @@ public class RestContext extends Context {
 			defaultClasses().get(HttpPartParser.class).ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from:  @RestInject public [static] HttpPartParser xxx(<args>)
-			beanStore.createMethodFinder(HttpPartParser.class).addBean(HttpPartParser.Creator.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(HttpPartParser.class).addBean(HttpPartParser.Creator.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4342,7 +4340,7 @@ public class RestContext extends Context {
 			defaultClasses().get(HttpPartSerializer.class).ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from:  @RestInject public [static] HttpPartSerializer xxx(<args>)
-			beanStore.createMethodFinder(HttpPartSerializer.class).addBean(HttpPartSerializer.Creator.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(HttpPartSerializer.class).addBean(HttpPartSerializer.Creator.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4362,7 +4360,7 @@ public class RestContext extends Context {
 			Value<MethodList> v = Value.of(MethodList.of(getAnnotatedMethods(resource, RestPostCall.class).collect(Collectors.toList())));
 
 			// Replace with bean from:  @RestInject(name="postCallMethods") public [static] MethodList xxx(<args>)
-			beanStore.createMethodFinder(MethodList.class).addBean(MethodList.class, v.get()).find(x -> isRestBeanMethod(x, "postCallMethods")).run(x -> v.set(x));
+			beanStore.createMethodFinder(MethodList.class).addBean(MethodList.class, v.get()).find(x -> isRestInjectMethod(x, "postCallMethods")).run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -4390,7 +4388,7 @@ public class RestContext extends Context {
 				.collect(Collectors.toList())));
 
 			// Replace with bean from:  @RestInject(name="postInitChildFirstMethods") public [static] MethodList xxx(<args>)
-			beanStore.createMethodFinder(MethodList.class).addBean(MethodList.class, v.get()).find(x -> isRestBeanMethod(x, "postInitChildFirstMethods")).run(x -> v.set(x));
+			beanStore.createMethodFinder(MethodList.class).addBean(MethodList.class, v.get()).find(x -> isRestInjectMethod(x, "postInitChildFirstMethods")).run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -4407,9 +4405,7 @@ public class RestContext extends Context {
 		protected MethodList createPostInitMethods(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			var r = resource.get();
 			var ap = AP;
-			var ci = ClassInfo.ofProxy(r);
 			Value<MethodList> v = Value.of(MethodList.of(getAnnotatedMethods(resource, RestPostInit.class)
 				.filter(m -> {
 					var mi = MethodInfo.of(m);
@@ -4420,7 +4416,7 @@ public class RestContext extends Context {
 				.collect(Collectors.toList())));
 
 			// Replace with bean from:  @RestInject(name="postInitMethods") public [static] MethodList xxx(<args>)
-			beanStore.createMethodFinder(MethodList.class).addBean(MethodList.class, v.get()).find(x -> isRestBeanMethod(x, "postInitMethods")).run(x -> v.set(x));
+			beanStore.createMethodFinder(MethodList.class).addBean(MethodList.class, v.get()).find(x -> isRestInjectMethod(x, "postInitMethods")).run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -4440,7 +4436,7 @@ public class RestContext extends Context {
 			Value<MethodList> v = Value.of(MethodList.of(getAnnotatedMethods(resource, RestPreCall.class).collect(Collectors.toList())));
 
 			// Replace with bean from:  @RestInject(name="preCallMethods") public [static] MethodList xxx(<args>)
-			beanStore.createMethodFinder(MethodList.class).addBean(MethodList.class, v.get()).find(x -> isRestBeanMethod(x, "preCallMethods")).run(x -> v.set(x));
+			beanStore.createMethodFinder(MethodList.class).addBean(MethodList.class, v.get()).find(x -> isRestInjectMethod(x, "preCallMethods")).run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -4483,7 +4479,7 @@ public class RestContext extends Context {
 			beanStore.getBean(ResponseProcessorList.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject public [static] ResponseProcessorList xxx(<args>)
-			beanStore.createMethodFinder(ResponseProcessorList.class).addBean(ResponseProcessorList.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(ResponseProcessorList.class).addBean(ResponseProcessorList.Builder.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4546,7 +4542,7 @@ public class RestContext extends Context {
 			}
 
 			// Replace with bean from:  @RestInject public [static] RestChildren xxx(<args>)
-			beanStore.createMethodFinder(RestChildren.class).addBean(RestChildren.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(RestChildren.class).addBean(RestChildren.Builder.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4585,7 +4581,7 @@ public class RestContext extends Context {
 			beanStore.getBean(RestOpArgList.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject public [static] RestOpArgList xxx(<args>)
-			beanStore.createMethodFinder(RestOpArgList.class).addBean(RestOpArgList.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(RestOpArgList.class).addBean(RestOpArgList.Builder.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4684,7 +4680,7 @@ public class RestContext extends Context {
 			}
 
 			// Replace with bean from:  @RestInject public [static] RestOperations xxx(<args>)
-			beanStore.createMethodFinder(RestOperations.class).addBean(RestOperations.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(RestOperations.class).addBean(RestOperations.Builder.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4715,7 +4711,7 @@ public class RestContext extends Context {
 			beanStore.getBean(SerializerSet.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject public [static] SerializerSet xxx(<args>)
-			beanStore.createMethodFinder(SerializerSet.class).addBean(SerializerSet.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(SerializerSet.class).addBean(SerializerSet.Builder.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4735,7 +4731,7 @@ public class RestContext extends Context {
 			Value<MethodList> v = Value.of(MethodList.of(getAnnotatedMethods(resource, RestStartCall.class).collect(Collectors.toList())));
 
 			// Replace with bean from:  @RestInject(name="startCallMethods") public [static] MethodList xxx(<args>)
-			beanStore.createMethodFinder(MethodList.class).addBean(MethodList.class, v.get()).find(x -> isRestBeanMethod(x, "startCallMethods")).run(x -> v.set(x));
+			beanStore.createMethodFinder(MethodList.class).addBean(MethodList.class, v.get()).find(x -> isRestInjectMethod(x, "startCallMethods")).run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -4763,7 +4759,7 @@ public class RestContext extends Context {
 			beanStore.getBean(StaticFiles.class).ifPresent(x -> creator.impl(x));
 
 			// Replace with bean from:  @RestInject public [static] StaticFiles xxx(<args>)
-			beanStore.createMethodFinder(StaticFiles.class).find(Builder::isRestBeanMethod).run(x -> creator.impl(x));
+			beanStore.createMethodFinder(StaticFiles.class).find(Builder::isRestInjectMethod).run(x -> creator.impl(x));
 
 			return creator;
 		}
@@ -4812,7 +4808,7 @@ public class RestContext extends Context {
 			beanStore.getBean(SwaggerProvider.class).ifPresent(x -> creator.impl(x));
 
 			// Replace with bean from:  @RestInject public [static] SwaggerProvider xxx(<args>)
-			beanStore.createMethodFinder(SwaggerProvider.class).find(Builder::isRestBeanMethod).run(x -> creator.impl(x));
+			beanStore.createMethodFinder(SwaggerProvider.class).find(Builder::isRestInjectMethod).run(x -> creator.impl(x));
 
 			return creator;
 		}
@@ -4846,7 +4842,7 @@ public class RestContext extends Context {
 			beanStore.getBean(ThrownStore.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject public [static] ThrownStore xxx(<args>)
-			beanStore.createMethodFinder(ThrownStore.class).addBean(ThrownStore.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(ThrownStore.class).addBean(ThrownStore.Builder.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4903,7 +4899,7 @@ public class RestContext extends Context {
 			beanStore.getBean(VarResolver.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject public [static] VarResolver xxx(<args>)
-			beanStore.createMethodFinder(VarResolver.class).addBean(VarResolver.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(VarResolver.class).addBean(VarResolver.Builder.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
