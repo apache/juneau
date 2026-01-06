@@ -23,7 +23,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.cp.*;
 
 /**
  * A list of {@link RestOpArg} classes.

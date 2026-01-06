@@ -20,7 +20,6 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 

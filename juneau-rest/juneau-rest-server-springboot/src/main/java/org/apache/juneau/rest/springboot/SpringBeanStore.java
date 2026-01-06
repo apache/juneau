@@ -21,7 +21,6 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.cp.*;
 import org.springframework.context.*;
 
 /**

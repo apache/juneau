@@ -22,7 +22,6 @@ import java.lang.reflect.*;
 
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.cp.*;
 
 /**
  * A wrapper around a {@link Method#invoke(Object, Object...)} method that allows for basic instrumentation.

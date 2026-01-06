@@ -25,7 +25,6 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.cp.*;
 
 /**
  * Method execution statistics database.

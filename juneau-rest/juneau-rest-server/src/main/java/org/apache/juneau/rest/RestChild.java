@@ -17,7 +17,6 @@
 package org.apache.juneau.rest;
 
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.cp.*;
 
 /**
  * Represents a simple child REST resource / path mapping.

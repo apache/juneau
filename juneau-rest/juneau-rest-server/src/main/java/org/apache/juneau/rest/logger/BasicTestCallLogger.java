@@ -22,7 +22,6 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.rest.logger.CallLoggingDetail.*;
 
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.*;
 
 import jakarta.servlet.http.*;

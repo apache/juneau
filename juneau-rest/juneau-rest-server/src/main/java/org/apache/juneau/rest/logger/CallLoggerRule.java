@@ -25,8 +25,6 @@ import java.util.logging.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.cp.*;
-
 import jakarta.servlet.http.*;
 
 /**

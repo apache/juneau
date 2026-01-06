@@ -151,7 +151,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 
 	private final ResettableSupplier<String> resolvedName = memr(this::findNameInternal);  // Resolved name from @Name annotation or bytecode.
 
-	private final ResettableSupplier<String> resolvedQualifier = memr(this::findQualifierInternal);  // Resolved qualifier from @Named annotation.
+	private final ResettableSupplier<String> resolvedQualifier = memr(this::findQualifierInternal);  // Resolved qualifier from @Named or @Qualifier annotation.
 
 	/**
 	 * Constructor.
@@ -422,8 +422,8 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * Finds the bean injection qualifier for this parameter.
 	 *
 	 * <p>
-	 * Searches for the {@link org.apache.juneau.annotation.Named @Named} annotation value to determine
-	 * which named bean should be injected.
+	 * Searches for the {@link org.apache.juneau.annotation.Named @Named} or {@code javax.inject.Qualifier @Qualifier}
+	 * annotation value to determine which named bean should be injected.
 	 *
 	 * <p>
 	 * This method is used by the {@link org.apache.juneau.cp.BeanStore} for bean injection.
@@ -432,7 +432,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * <b>Note:</b> This is different from {@link #getResolvedName()} which looks for {@link org.apache.juneau.annotation.Name @Name}
 	 * annotations for bean property mapping.
 	 *
-	 * @return The bean qualifier name if {@code @Named} annotation is found, or <jk>null</jk> if not annotated.
+	 * @return The bean qualifier name if {@code @Named} or {@code @Qualifier} annotation is found, or <jk>null</jk> if not annotated.
 	 * @see #getResolvedName()
 	 */
 	public String getResolvedQualifier() { return resolvedQualifier.get(); }

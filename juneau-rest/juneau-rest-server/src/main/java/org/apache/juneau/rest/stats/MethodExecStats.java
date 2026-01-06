@@ -26,7 +26,6 @@ import java.util.concurrent.atomic.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.cp.*;
 
 /**
  * Method execution statistics.

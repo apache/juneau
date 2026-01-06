@@ -24,7 +24,6 @@ import java.util.logging.*;
 
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.cp.*;
 
 /**
  *

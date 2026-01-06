@@ -30,7 +30,6 @@ import java.util.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.lang.*;
-import org.apache.juneau.cp.*;
 
 /**
  * A var resolver session that combines a {@link VarResolver} with one or more session objects.

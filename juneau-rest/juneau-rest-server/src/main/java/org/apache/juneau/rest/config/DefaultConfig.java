@@ -18,7 +18,6 @@ package org.apache.juneau.rest.config;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.*;
