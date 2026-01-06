@@ -327,7 +327,7 @@ public class BeanUtils {
 		} else if (pt.innerType() instanceof ParameterizedType) {
 			// If pt is already a parameterized type (e.g., List<TestService> after unwrapping Optional),
 			// use pt.innerType() as the parameterizedType
-			parameterizedType = (ParameterizedType) pt.innerType();
+			parameterizedType = pt.innerType();
 		}
 
 		// Handle List<T> or Set<T>
@@ -413,7 +413,7 @@ public class BeanUtils {
 			} else if (pt.innerType() instanceof ParameterizedType) {
 				// If pt is already a parameterized type (e.g., Map<String,TestService> after unwrapping Optional),
 				// use pt.innerType() as the parameterizedType
-				parameterizedType = (ParameterizedType) pt.innerType();
+				parameterizedType = pt.innerType();
 			}
 			if (parameterizedType instanceof ParameterizedType pt2) {
 				var typeArgs = pt2.getActualTypeArguments();

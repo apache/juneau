@@ -119,24 +119,6 @@ class StringFormat_Test extends TestBase {
 		}
 	}
 
-	private static void assertMixedFormat(String expected, String pattern, Locale locale, Object... args) {
-		var actual = "";
-		var fmt = (StringFormat)null;
-		try {
-			var fmt2 = fs(pattern);
-			fmt = fmt2;
-			actual = stringify(()->fmt2.format(locale, args));
-		} catch (Throwable t) {
-			actual = t.getClass().getSimpleName() + ": " + t.getLocalizedMessage();
-		}
-		if (!expected.equals(actual)) {
-			System.out.println("Pattern: " + pattern);
-			var toPattern = opt(fmt).map(x -> x.toPattern()).orElse(null);
-			System.out.println("toPattern(): " + toPattern);
-			fail("Pattern: " + pattern + ", toPattern(): " + toPattern + ", expected: <" + expected + "> but was: <" + actual + ">");
-		}
-	}
-
 	private static void assertMixedFormat(String expected, String pattern, Object... args) {
 		var actual = "";
 		var fmt = (StringFormat)null;
@@ -324,7 +306,7 @@ class StringFormat_Test extends TestBase {
 		assertTrue(result.contains("19.99"), "Result should contain '19.99', but was: " + result);
 		assertTrue(result.contains("Price: "), "Result should contain 'Price: ', but was: " + result);
 		// Accept either old format ($19.99) or new format (USD 19.99) for Java 25 compatibility
-		assertTrue(result.contains("$") || result.contains("USD"), 
+		assertTrue(result.contains("$") || result.contains("USD"),
 			"Result should contain '$' or 'USD' for currency, but was: " + result);
 	}
 
@@ -358,18 +340,18 @@ class StringFormat_Test extends TestBase {
 		// Test equals - covers line 623
 		assertEquals(fmt1, fmt2);
 		assertNotEquals(fmt1, fmt3);
-		
+
 		// Test equals with null - covers line 623 (instanceof check fails)
 		assertNotEquals(fmt1, null);
-		
+
 		// Test equals with different type - covers line 623 (instanceof check fails)
 		assertNotEquals(fmt1, "Hello {0}");
 		assertNotEquals(fmt1, new Object());
-		
+
 		// Test equals with different pattern - covers line 623 (pattern comparison)
 		var fmt4 = StringFormat.of("Different pattern");
 		assertNotEquals(fmt1, fmt4);
-		
+
 		// Test hashCode
 		assertEquals(fmt1.hashCode(), fmt2.hashCode());
 	}
@@ -433,30 +415,30 @@ class StringFormat_Test extends TestBase {
 		var fmt1 = StringFormat.of("Hello {0}");
 		var result1 = fmt1.format((Object[])null);
 		assertEquals("Hello {0}", result1);
-		
+
 		// Test with complex format and null args
 		var fmt2 = StringFormat.of("Price: {0,number,currency}");
 		var result2 = fmt2.format((Object[])null);
 		assertEquals("Price: {0,number,currency}", result2);
-		
+
 		// Test locale == null branch - covers line 167 (locale == null ? Locale.getDefault() : locale)
 		// When locale is null, should use Locale.getDefault()
 		var fmt3 = StringFormat.of("Hello {0}");
 		var result3 = fmt3.format((Locale)null, "World");
 		// Should format using default locale
 		assertEquals("Hello World", result3);
-		
+
 		// Test locale != null branch - covers line 167 (else branch)
 		// When locale is provided, should use that locale
 		var fmt4 = StringFormat.of("Price: {0,number,currency}");
 		var result4 = fmt4.format(Locale.US, 19.99);
 		// Should format using US locale (dollar sign)
 		assertTrue(result4.contains("19.99") || result4.contains("$19.99"));
-		
+
 		var result5 = fmt4.format(Locale.FRANCE, 19.99);
 		// Should format using France locale (different currency symbol)
 		assertTrue(result5.contains("19.99") || result5.contains("19,99"));
-		
+
 		// Note on other branches:
 		// - index >= args.length: This branch exists but testing it is complex because MessageFormat
 		//   behavior with missing arguments may vary. The existing test a01_messageFormat() already
@@ -478,15 +460,15 @@ class StringFormat_Test extends TestBase {
 		// Test args == null branch - covers line 217 (args == null)
 		var fmt1 = StringFormat.of("Hello %s");
 		assertThrows(java.util.MissingFormatArgumentException.class, () -> fmt1.format((Object[])null));
-		
+
 		// Test with complex format and null args
 		var fmt2 = StringFormat.of("Price: %.2f");
 		assertThrows(java.util.MissingFormatArgumentException.class, () -> fmt2.format((Object[])null));
-		
+
 		// Test with explicit index format and null args
 		var fmt3 = StringFormat.of("First: %1$s, Second: %2$s");
 		assertThrows(java.util.MissingFormatArgumentException.class, () -> fmt3.format((Object[])null));
-		
+
 		// Note on other branches:
 		// - index >= args.length: This branch exists but testing it is complex because the index
 		//   calculation depends on how sequential vs explicit indices are handled. The existing
@@ -532,17 +514,17 @@ class StringFormat_Test extends TestBase {
 		// Test with empty args - covers lines 413-414 (args.length == 0, return pattern)
 		String result1 = StringFormat.format("Hello", Locale.US);
 		assertEquals("Hello", result1);
-		
+
 		String result2 = StringFormat.format("Test pattern", Locale.FRANCE);
 		assertEquals("Test pattern", result2);
-		
+
 		// Test with args - covers line 415 (calls of(pattern).format(locale, args))
 		String result3 = StringFormat.format("Hello %s", Locale.US, "World");
 		assertEquals("Hello World", result3);
-		
+
 		String result4 = StringFormat.format("Price: {0,number,currency}", Locale.US, 19.99);
 		assertTrue(result4.contains("19.99") || result4.contains("$19.99"));
-		
+
 		// Test with null locale and empty args - covers line 413-414
 		String result5 = StringFormat.format("Test", (Locale)null);
 		assertEquals("Test", result5);

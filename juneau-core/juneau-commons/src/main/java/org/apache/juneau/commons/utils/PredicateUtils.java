@@ -99,9 +99,28 @@ public final class PredicateUtils {
 		return (predicate == null || predicate.test(value));
 	}
 
+	/**
+	 * Returns a predicate that filters out duplicate elements based on a key extractor function.
+	 *
+	 * <p>
+	 * This is useful for filtering streams to keep only the first occurrence of each unique key.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Filter a stream to keep only methods with unique signatures</jc>
+	 * 	Stream&lt;Method&gt; <jv>methods</jv> = ...;
+	 * 	Stream&lt;Method&gt; <jv>unique</jv> = <jv>methods</jv>
+	 * 		.filter(PredicateUtils.<jsm>distinctByKey</jsm>(Method::<jsm>getName</jsm>));
+	 * </p>
+	 *
+	 * @param <T> The element type.
+	 * @param keyExtractor A function that extracts the key from each element.
+	 * @return A predicate that returns <jk>true</jk> for the first occurrence of each unique key,
+	 * 	and <jk>false</jk> for subsequent occurrences with the same key.
+	 */
 	public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
-	    var seen = ConcurrentHashMap.newKeySet();
-	    return t -> seen.add(keyExtractor.apply(t));
+		var seen = ConcurrentHashMap.newKeySet();
+		return t -> seen.add(keyExtractor.apply(t));
 	}
 
 	private PredicateUtils() {}

@@ -159,6 +159,7 @@ class HashKey_Test extends TestBase {
 		assertNotEquals(key, null);
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	@Test
 	void b11_equals_withNonHashKeyObject() {
 		HashKey key = HashKey.of("a", "b");
