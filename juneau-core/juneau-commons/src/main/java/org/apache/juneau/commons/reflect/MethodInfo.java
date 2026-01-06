@@ -581,9 +581,15 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	/**
 	 * Shortcut for calling the invoke method on the underlying method.
 	 *
+	 * <p>
+	 * If the underlying method is static, then the specified <c>obj</c> argument is ignored. It may be <jk>null</jk>.
+	 *
+	 * <p>
+	 * If the number of formal parameters required by the underlying method is 0, the supplied <c>args</c> array may be of length 0 or <jk>null</jk>.
+	 *
 	 * @param <T> The method return type.
-	 * @param obj the object the underlying method is invoked from.
-	 * @param args the arguments used for the method call
+	 * @param obj The object the underlying method is invoked from.  Can be <jk>null</jk> for static methods.
+	 * @param args The arguments used for the method call.  Can be <jk>null</jk> or empty for methods with no parameters.
 	 * @return The object returned from the method.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */

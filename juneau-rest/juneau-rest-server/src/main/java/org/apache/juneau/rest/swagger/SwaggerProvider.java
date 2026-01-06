@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.bean.swagger.Swagger;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.jsonschema.*;
@@ -42,7 +43,7 @@ public interface SwaggerProvider {
 	 */
 	public class Builder {
 
-		final BasicBeanStore beanStore;
+		final BasicBeanStore2 beanStore;
 		Class<?> resourceClass;
 		Supplier<VarResolver> varResolver;
 		Supplier<JsonSchemaGenerator> jsonSchemaGenerator;
@@ -55,7 +56,7 @@ public interface SwaggerProvider {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BasicBeanStore beanStore) {
+		protected Builder(BasicBeanStore2 beanStore) {
 			this.beanStore = beanStore;
 			this.creator = BeanCreator.of(SwaggerProvider.class, beanStore).type(BasicSwaggerProvider.class).builder(Builder.class, this);
 		}
@@ -202,7 +203,7 @@ public interface SwaggerProvider {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	static Builder create(BasicBeanStore beanStore) {
+	static Builder create(BasicBeanStore2 beanStore) {
 		return new Builder(beanStore);
 	}
 

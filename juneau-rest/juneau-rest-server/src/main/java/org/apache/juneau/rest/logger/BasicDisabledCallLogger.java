@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.logger;
 
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.cp.*;
 
 /**
@@ -32,12 +33,12 @@ public class BasicDisabledCallLogger extends CallLogger {
 	 *
 	 * @param beanStore The bean store containing injectable beans for this logger.
 	 */
-	public BasicDisabledCallLogger(BasicBeanStore beanStore) {
+	public BasicDisabledCallLogger(BasicBeanStore2 beanStore) {
 		super(beanStore);
 	}
 
 	@Override
-	protected Builder init(BasicBeanStore beanStore) {
+	protected Builder init(BasicBeanStore2 beanStore) {
 		return super.init(beanStore).disabled();
 	}
 }

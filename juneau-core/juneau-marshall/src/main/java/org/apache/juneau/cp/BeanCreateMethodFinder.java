@@ -24,6 +24,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 
 /**
@@ -35,10 +36,10 @@ import org.apache.juneau.commons.reflect.*;
  * <p>
  * This class is instantiated through the following methods:
  * <ul class='javatree'>
- * 	<li class='jc'>{@link BasicBeanStore}
+ * 	<li class='jc'>{@link BasicBeanStore2}
  * 		<ul class='javatreec'>
- * 			<li class='jc'>{@link BeanCreateMethodFinder#BeanCreateMethodFinder(Class,Class,BasicBeanStore) BeanCreateMethodFinder(Class,Class,BasicBeanStore)}
- * 			<li class='jc'>{@link BeanCreateMethodFinder#BeanCreateMethodFinder(Class,Object,BasicBeanStore) BeanCreateMethodFinder(Class,Object,BasicBeanStore)}
+ * 			<li class='jc'>{@link BeanCreateMethodFinder#BeanCreateMethodFinder(Class,Class,BasicBeanStore2) BeanCreateMethodFinder(Class,Class,BasicBeanStore2)}
+ * 			<li class='jc'>{@link BeanCreateMethodFinder#BeanCreateMethodFinder(Class,Object,BasicBeanStore2) BeanCreateMethodFinder(Class,Object,BasicBeanStore2)}
  * 		</ul>
  * 	</li>
  * </ul>
@@ -62,7 +63,7 @@ import org.apache.juneau.commons.reflect.*;
  * 	B <mv>b</mv> = <jk>new</jk> B();
  *
  *  <jc>// Create a bean store with some mapped beans.</jc>
- * 	BasicBeanStore <mv>beanStore</mv> = BasicBeanStore.<jsm>create</jsm>().addBean(C.<jk>class</jk>, <jk>new</jk> C());
+ * 	BasicBeanStore2 <mv>beanStore</mv> = BasicBeanStore2.<jsm>create</jsm>().addBean(C.<jk>class</jk>, <jk>new</jk> C());
  *
  * 	<jc>// Instantiate the bean using the creator method.</jc>
  * 	A <mv>a</mv> = <mv>beanStore</mv>
@@ -74,7 +75,7 @@ import org.apache.juneau.commons.reflect.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link BasicBeanStore}
+ * 	<li class='jc'>{@link BasicBeanStore2}
  * </ul>
  *
  * @param <T> The bean type being created.
@@ -84,7 +85,7 @@ public class BeanCreateMethodFinder<T> {
 	private Class<T> beanType;
 	private final Class<?> resourceClass;
 	private final Object resource;
-	private final BasicBeanStore beanStore;
+	private final BasicBeanStore2 beanStore;
 
 	private MethodInfo method;
 	private Object[] args;
@@ -96,11 +97,11 @@ public class BeanCreateMethodFinder<T> {
 	 * @param resourceClass The resource class to search for creation methods.
 	 * @param beanStore The bean store to use for parameter resolution.
 	 */
-	public BeanCreateMethodFinder(Class<T> beanType, Class<?> resourceClass, BasicBeanStore beanStore) {
+	public BeanCreateMethodFinder(Class<T> beanType, Class<?> resourceClass, BasicBeanStore2 beanStore) {
 		this.beanType = assertArgNotNull("beanType", beanType);
 		this.resource = null;
 		this.resourceClass = assertArgNotNull("resourceClass", resourceClass);
-		this.beanStore = BasicBeanStore.of(beanStore);
+		this.beanStore = BasicBeanStore2.of(beanStore);
 	}
 
 	/**
@@ -110,11 +111,11 @@ public class BeanCreateMethodFinder<T> {
 	 * @param resource The resource object to search for creation methods.
 	 * @param beanStore The bean store to use for parameter resolution.
 	 */
-	public BeanCreateMethodFinder(Class<T> beanType, Object resource, BasicBeanStore beanStore) {
+	public BeanCreateMethodFinder(Class<T> beanType, Object resource, BasicBeanStore2 beanStore) {
 		this.beanType = assertArgNotNull("beanType", beanType);
 		this.resource = assertArgNotNull("resource", resource);
 		this.resourceClass = resource.getClass();
-		this.beanStore = BasicBeanStore.of(beanStore);
+		this.beanStore = BasicBeanStore2.of(beanStore);
 	}
 
 	/**
@@ -149,7 +150,7 @@ public class BeanCreateMethodFinder<T> {
 	 * This method can be called multiple times with different method names or required parameters until a match is found.
 	 * <br>Once a method is found, subsequent calls to this method will be no-ops.
 	 *
-	 * See {@link BeanCreateMethodFinder#BeanCreateMethodFinder(Class,Object,BasicBeanStore)} for usage.
+	 * See {@link BeanCreateMethodFinder#BeanCreateMethodFinder(Class,Object,BasicBeanStore2)} for usage.
 	 *
 	 * @param filter The predicate to apply.
 	 * @return This object.

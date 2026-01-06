@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.lang.reflect.*;
 
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.cp.*;
 
@@ -81,7 +82,7 @@ public class MethodInvoker {
 	 * @throws IllegalArgumentException If wrong arguments were passed to method.
 	 * @throws InvocationTargetException If method threw an exception.
 	 */
-	public Object invoke(BasicBeanStore beanStore, Object o) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public Object invoke(BasicBeanStore2 beanStore, Object o) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		if (beanStore.hasAllParams(m, o))
 			return invoke(o, beanStore.getParams(m, o));
 		throw illegalArg("Could not find prerequisites to invoke method ''{0}'': {1}", getFullName(), beanStore.getMissingParams(m, o));

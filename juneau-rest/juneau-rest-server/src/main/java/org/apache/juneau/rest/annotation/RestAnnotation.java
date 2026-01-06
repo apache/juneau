@@ -28,6 +28,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.arg.*;
@@ -71,7 +72,7 @@ public class RestAnnotation {
 		private Class<? extends RestGuard>[] guards = new Class[0];
 		private Class<? extends SwaggerProvider> swaggerProvider = SwaggerProvider.Void.class;
 		private Class<? extends RestOpArg>[] restOpArgs = new Class[0];
-		private Class<? extends BasicBeanStore> beanStore = BasicBeanStore.Void.class;
+		private Class<? extends BasicBeanStore2> beanStore = BasicBeanStore2.Void.class;
 		private Class<? extends RestChildren> restChildrenClass = RestChildren.Void.class;
 		private Class<? extends DebugEnablement> debugEnablement = DebugEnablement.Void.class;
 		private Class<? extends Serializer>[] serializers = new Class[0];
@@ -132,7 +133,7 @@ public class RestAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder beanStore(Class<? extends BasicBeanStore> value) {
+		public Builder beanStore(Class<? extends BasicBeanStore2> value) {
 			beanStore = value;
 			return this;
 		}
@@ -740,7 +741,7 @@ public class RestAnnotation {
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends SwaggerProvider> swaggerProvider;
 		private final Class<? extends RestOpArg>[] restOpArgs;
-		private final Class<? extends BasicBeanStore> beanStore;
+		private final Class<? extends BasicBeanStore2> beanStore;
 		private final Class<? extends RestChildren> restChildrenClass;
 		private final Class<? extends DebugEnablement> debugEnablement;
 		private final Class<? extends Serializer>[] serializers;
@@ -824,7 +825,7 @@ public class RestAnnotation {
 		}
 
 		@Override /* Overridden from Rest */
-		public Class<? extends BasicBeanStore> beanStore() {
+		public Class<? extends BasicBeanStore2> beanStore() {
 			return beanStore;
 		}
 

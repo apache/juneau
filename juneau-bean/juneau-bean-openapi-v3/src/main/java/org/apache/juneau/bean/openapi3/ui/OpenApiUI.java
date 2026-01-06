@@ -30,6 +30,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.bean.openapi3.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.swap.*;
@@ -55,7 +56,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 
 	// @formatter:off
 	static final FileFinder RESOURCES = FileFinder
-		.create(BasicBeanStore.INSTANCE)
+		.create(BasicBeanStore2.INSTANCE)
 		.cp(OpenApiUI.class, null, true)
 		.dir(",")
 		.caching(Boolean.getBoolean("RestContext.disableClasspathResourceCaching.b") ? -1 : 1_000_000)

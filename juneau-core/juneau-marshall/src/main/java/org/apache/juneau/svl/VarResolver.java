@@ -23,6 +23,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.svl.vars.*;
 
@@ -79,7 +80,7 @@ public class VarResolver {
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(VarResolver.class, BasicBeanStore.create().build());
+			super(VarResolver.class, BasicBeanStore2.create().build());
 			vars = VarList.create();
 		}
 
@@ -226,7 +227,7 @@ public class VarResolver {
 		return new Builder();
 	}
 
-	private static Var toVar(BasicBeanStore bs, Object o) {
+	private static Var toVar(BasicBeanStore2 bs, Object o) {
 		if (o instanceof Class o2)
 			return BeanCreator.of(Var.class, bs).type(o2).run();
 		return (Var)o;
@@ -235,7 +236,7 @@ public class VarResolver {
 	final Var[] vars;
 	private final Map<String,Var> varMap;
 
-	final BasicBeanStore beanStore;
+	final BasicBeanStore2 beanStore;
 
 	/**
 	 * Constructor.
@@ -250,7 +251,7 @@ public class VarResolver {
 			m.put(v.getName(), v);
 
 		this.varMap = u(m);
-		this.beanStore = BasicBeanStore.of(builder.beanStore());
+		this.beanStore = BasicBeanStore2.of(builder.beanStore());
 	}
 
 	/**
@@ -290,7 +291,7 @@ public class VarResolver {
 	 * @param beanStore The bean store to associate with this session.
 	 * @return A new resolver session.
 	 */
-	public VarResolverSession createSession(BasicBeanStore beanStore) {
+	public VarResolverSession createSession(BasicBeanStore2 beanStore) {
 		return new VarResolverSession(this, beanStore);
 	}
 

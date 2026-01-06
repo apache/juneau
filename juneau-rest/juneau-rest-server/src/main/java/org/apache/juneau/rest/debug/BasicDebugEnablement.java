@@ -24,6 +24,7 @@ import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.rest.*;
@@ -55,12 +56,12 @@ public class BasicDebugEnablement extends DebugEnablement {
 	 *
 	 * @param beanStore The bean store containing injectable beans for this enablement.
 	 */
-	public BasicDebugEnablement(BasicBeanStore beanStore) {
+	public BasicDebugEnablement(BasicBeanStore2 beanStore) {
 		super(beanStore);
 	}
 
 	@Override
-	protected Builder init(BasicBeanStore beanStore) {
+	protected Builder init(BasicBeanStore2 beanStore) {
 		var b = super.init(beanStore);
 
 		var defaultSettings = beanStore.getBean(DefaultSettingsMap.class).get();

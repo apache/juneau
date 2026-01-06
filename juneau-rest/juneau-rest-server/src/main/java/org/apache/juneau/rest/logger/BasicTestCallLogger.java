@@ -21,6 +21,7 @@ import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.rest.logger.CallLoggingDetail.*;
 
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.*;
 
@@ -69,12 +70,12 @@ public class BasicTestCallLogger extends CallLogger {
 	 *
 	 * @param beanStore The bean store containing injectable beans for this logger.
 	 */
-	public BasicTestCallLogger(BasicBeanStore beanStore) {
+	public BasicTestCallLogger(BasicBeanStore2 beanStore) {
 		super(beanStore);
 	}
 
 	@Override
-	protected Builder init(BasicBeanStore beanStore) {
+	protected Builder init(BasicBeanStore2 beanStore) {
 		// @formatter:off
 		return super.init(beanStore)
 			.normalRules(  // Rules when debugging is not enabled.

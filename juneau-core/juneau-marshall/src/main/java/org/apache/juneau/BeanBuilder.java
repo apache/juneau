@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.cp.*;
 
 /**
@@ -32,7 +33,7 @@ public class BeanBuilder<T> {
 
 	private Class<? extends T> type, defaultType;
 	private T impl;
-	private final BasicBeanStore beanStore;
+	private final BasicBeanStore2 beanStore;
 
 	/**
 	 * Copy constructor.
@@ -51,7 +52,7 @@ public class BeanBuilder<T> {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @param defaultType The default bean type that this builder creates.
 	 */
-	protected BeanBuilder(Class<? extends T> defaultType, BasicBeanStore beanStore) {
+	protected BeanBuilder(Class<? extends T> defaultType, BasicBeanStore2 beanStore) {
 		this.defaultType = type = defaultType;
 		this.beanStore = beanStore;
 	}
@@ -61,7 +62,7 @@ public class BeanBuilder<T> {
 	 *
 	 * @return The bean store passed in through the constructor.
 	 */
-	public BasicBeanStore beanStore() {
+	public BasicBeanStore2 beanStore() {
 		return beanStore;
 	}
 

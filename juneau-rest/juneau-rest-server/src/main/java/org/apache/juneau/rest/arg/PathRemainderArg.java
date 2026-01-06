@@ -67,7 +67,7 @@ public class PathRemainderArg implements RestOpArg {
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
 	 * @param annotations The annotations to apply to any new part parsers.
-	 * @param pathMatcher Path matcher for the specified method (not used, but included for BasicBeanStore compatibility).
+	 * @param pathMatcher Path matcher for the specified method (not used, but included for BasicBeanStore2 compatibility).
 	 * @return A new {@link PathRemainderArg}, or <jk>null</jk> if the parameter is not annotated with {@link PathRemainder}.
 	 */
 	public static PathRemainderArg create(ParameterInfo paramInfo, AnnotationWorkList annotations, UrlPathMatcher pathMatcher) {

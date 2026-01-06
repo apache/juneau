@@ -215,8 +215,11 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	/**
 	 * Shortcut for calling the new-instance method on the underlying constructor.
 	 *
+	 * <p>
+	 * If the number of formal parameters required by the underlying constructor is 0, the supplied <c>args</c> array may be of length 0 or <jk>null</jk>.
+	 *
 	 * @param <T> The constructor class type.
-	 * @param args the arguments used for the method call.
+	 * @param args The arguments used for the constructor call.  Can be <jk>null</jk> or empty for constructors with no parameters.
 	 * @return The object returned from the constructor.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */

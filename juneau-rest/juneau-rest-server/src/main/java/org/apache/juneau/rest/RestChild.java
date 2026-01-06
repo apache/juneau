@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest;
 
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.cp.*;
 
 /**
@@ -52,7 +53,7 @@ public class RestChild {
 	 * @param path The child resource path relative to the parent resource URI.
 	 * @param resource
 	 * 	The child resource.
-	 * 	<br>Can either be a Class (which will be instantiated using the registered {@link BasicBeanStore})
+	 * 	<br>Can either be a Class (which will be instantiated using the registered {@link BasicBeanStore2})
 	 * 	or an already-instantiated object.
 	 */
 	public RestChild(/*UrlPathPattern path, */ String path, Object resource) {

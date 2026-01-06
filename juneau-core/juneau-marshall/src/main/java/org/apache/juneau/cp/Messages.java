@@ -30,6 +30,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.parser.ParseException;
@@ -138,7 +139,7 @@ public class Messages extends ResourceBundle {
 		 * @param forClass The base class.
 		 */
 		protected Builder(Class<?> forClass) {
-			super(Messages.class, BasicBeanStore.INSTANCE);
+			super(Messages.class, BasicBeanStore2.INSTANCE);
 			this.forClass = forClass;
 			this.name = cns(forClass);
 			locations = list();

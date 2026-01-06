@@ -14,11 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.cp;
+package org.apache.juneau.commons.inject;
 
 import static java.util.stream.Collectors.*;
 import static java.util.stream.Collectors.toList;
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
@@ -30,7 +29,6 @@ import java.util.concurrent.*;
 
 import java.util.function.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.concurrent.*;
 import org.apache.juneau.commons.reflect.*;
@@ -69,28 +67,29 @@ import org.apache.juneau.commons.reflect.*;
  * <p>
  * Beans are created through the following methods:
  * <ul class='javatreec'>
- * 	<li class='jm'>{@link BeanCreator#of(Class,BasicBeanStore) BeanCreator.of(Class,BasicBeanStore)}
- * 	<li class='jc'>{@link BeanCreateMethodFinder#BeanCreateMethodFinder(Class,Class,BasicBeanStore) BeanCreateMethodFinder(Class,Class,BasicBeanStore)}
- * 	<li class='jc'>{@link BeanCreateMethodFinder#BeanCreateMethodFinder(Class,Object,BasicBeanStore) BeanCreateMethodFinder(Class,Object,BasicBeanStore)}
+ * 	<li class='jm'>{@link BeanCreator#of(Class,BasicBeanStore2) BeanCreator.of(Class,BasicBeanStore2)}
+ * 	<li class='jc'>{@link BeanCreateMethodFinder#BeanCreateMethodFinder(Class,Class,BasicBeanStore2) BeanCreateMethodFinder(Class,Class,BasicBeanStore2)}
+ * 	<li class='jc'>{@link BeanCreateMethodFinder#BeanCreateMethodFinder(Class,Object,BasicBeanStore2) BeanCreateMethodFinder(Class,Object,BasicBeanStore2)}
  * </ul>
  *
  * <h5 class='section'>Notes:</h5><ul>
- * 	<li class='note'>Bean stores can be nested using {@link Builder#parent(BasicBeanStore)}.
+ * 	<li class='note'>Bean stores can be nested using {@link Builder#parent(BasicBeanStore2)}.
  * 	<li class='note'>Bean stores can be made read-only using {@link Builder#readOnly()}.
  * 	<li class='note'>Bean stores can be made thread-safe using {@link Builder#threadSafe()}.
  * </ul>
  *
  */
-public class BasicBeanStore {
+public class BasicBeanStore2 {
+
 	/**
 	 * Builder class.
 	 */
 	public static class Builder {
 
-		BasicBeanStore parent;
+		BasicBeanStore2 parent;
 		boolean readOnly, threadSafe;
-		Class<? extends BasicBeanStore> type;
-		BasicBeanStore impl;
+		Class<? extends BasicBeanStore2> type;
+		BasicBeanStore2 impl;
 
 		/**
 		 * Constructor.
@@ -102,11 +101,11 @@ public class BasicBeanStore {
 		 *
 		 * @return A new bean store.
 		 */
-		public BasicBeanStore build() {
+		public BasicBeanStore2 build() {
 			if (nn(impl))
 				return impl;
-			if (type == null || type == BasicBeanStore.class)
-				return new BasicBeanStore(this);
+			if (type == null || type == BasicBeanStore2.class)
+				return new BasicBeanStore2(this);
 
 			var c = info(type);
 
@@ -116,16 +115,16 @@ public class BasicBeanStore {
 				&& x.getParameterCount() == 0
 				&& x.isStatic()
 				&& x.hasName("getInstance")
-			).map(m -> m.<BasicBeanStore>invoke(null));
+			).map(m -> m.<BasicBeanStore2>invoke(null));
 			// @formatter:on
 			if (result.isPresent())
 				return result.get();
 
-			result = c.getPublicConstructor(x -> x.canAccept(this)).map(ci -> ci.<BasicBeanStore>newInstance(this));
+			result = c.getPublicConstructor(x -> x.canAccept(this)).map(ci -> ci.<BasicBeanStore2>newInstance(this));
 			if (result.isPresent())
 				return result.get();
 
-			result = c.getDeclaredConstructor(x -> x.isProtected() && x.canAccept(this)).map(ci -> ci.accessible().<BasicBeanStore>newInstance(this));
+			result = c.getDeclaredConstructor(x -> x.isProtected() && x.canAccept(this)).map(ci -> ci.accessible().<BasicBeanStore2>newInstance(this));
 			if (result.isPresent())
 				return result.get();
 
@@ -138,7 +137,7 @@ public class BasicBeanStore {
 		 * @param value The bean to return from the {@link #build()} method.
 		 * @return This object.
 		 */
-		public Builder impl(BasicBeanStore value) {
+		public Builder impl(BasicBeanStore2 value) {
 			impl = value;
 			return this;
 		}
@@ -153,7 +152,7 @@ public class BasicBeanStore {
 		 * @param value The setting value.
 		 * @return  This object.
 		 */
-		public Builder parent(BasicBeanStore value) {
+		public Builder parent(BasicBeanStore2 value) {
 			parent = value;
 			return this;
 		}
@@ -162,7 +161,7 @@ public class BasicBeanStore {
 		 * Specifies that the bean store is read-only.
 		 *
 		 * <p>
-		 * This means methods such as {@link BasicBeanStore#addBean(Class, Object)} cannot be used.
+		 * This means methods such as {@link BasicBeanStore2#addBean(Class, Object)} cannot be used.
 		 *
 		 * @return  This object.
 		 */
@@ -195,7 +194,7 @@ public class BasicBeanStore {
 		 * @param value The bean store type.
 		 * @return This object.
 		 */
-		public Builder type(Class<? extends BasicBeanStore> value) {
+		public Builder type(Class<? extends BasicBeanStore2> value) {
 			type = value;
 			return this;
 		}
@@ -204,12 +203,12 @@ public class BasicBeanStore {
 	/**
 	 * Non-existent bean store.
 	 */
-	public static final class Void extends BasicBeanStore {}
+	public static final class Void extends BasicBeanStore2 {}
 
 	/**
 	 * Static read-only reusable instance.
 	 */
-	public static final BasicBeanStore INSTANCE = create().readOnly().build();
+	public static final BasicBeanStore2 INSTANCE = create().readOnly().build();
 
 	/**
 	 * Static creator.
@@ -224,16 +223,16 @@ public class BasicBeanStore {
 	 * Static creator.
 	 *
 	 * @param parent Parent bean store.  Can be <jk>null</jk> if this is the root resource.
-	 * @return A new {@link BasicBeanStore} object.
+	 * @return A new {@link BasicBeanStore2} object.
 	 */
-	public static BasicBeanStore of(BasicBeanStore parent) {
+	public static BasicBeanStore2 of(BasicBeanStore2 parent) {
 		return create().parent(parent).build();
 	}
 
 	private final Deque<Entry<?>> entries;
 	private final Map<Class<?>,Entry<?>> unnamedEntries;
 
-	final Optional<BasicBeanStore> parent;
+	final Optional<BasicBeanStore2> parent;
 	final boolean readOnly, threadSafe;
 	final SimpleReadWriteLock lock;
 
@@ -242,19 +241,19 @@ public class BasicBeanStore {
 	 *
 	 * @param builder The builder containing the settings for this bean.
 	 */
-	protected BasicBeanStore(Builder builder) {
+	protected BasicBeanStore2(Builder builder) {
 		parent = opt(builder.parent);
 		readOnly = builder.readOnly;
 		threadSafe = builder.threadSafe;
 		lock = threadSafe ? new SimpleReadWriteLock() : SimpleReadWriteLock.NO_OP;
 		entries = threadSafe ? new ConcurrentLinkedDeque<>() : new LinkedList<>();
 		unnamedEntries = threadSafe ? new ConcurrentHashMap<>() : map();
-		var e = createEntry(BasicBeanStore.class, ()->this, null);
+		var e = createEntry(BasicBeanStore2.class, ()->this, null);
 		entries.addFirst(e);
-		unnamedEntries.put(BasicBeanStore.class, e);
+		unnamedEntries.put(BasicBeanStore2.class, e);
 	}
 
-	BasicBeanStore() {
+	BasicBeanStore2() {
 		this(create());
 	}
 
@@ -293,7 +292,7 @@ public class BasicBeanStore {
 	 * @param bean The bean.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public <T> BasicBeanStore addBean(Class<T> beanType, T bean) {
+	public <T> BasicBeanStore2 addBean(Class<T> beanType, T bean) {
 		return addBean(beanType, bean, null);
 	}
 
@@ -306,7 +305,7 @@ public class BasicBeanStore {
 	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public <T> BasicBeanStore addBean(Class<T> beanType, T bean, String name) {
+	public <T> BasicBeanStore2 addBean(Class<T> beanType, T bean, String name) {
 		return addSupplier(beanType, () -> bean, name);
 	}
 
@@ -318,7 +317,7 @@ public class BasicBeanStore {
 	 * @param bean The bean supplier.
 	 * @return This object.
 	 */
-	public <T> BasicBeanStore addSupplier(Class<T> beanType, Supplier<T> bean) {
+	public <T> BasicBeanStore2 addSupplier(Class<T> beanType, Supplier<T> bean) {
 		return addSupplier(beanType, bean, null);
 	}
 
@@ -331,7 +330,7 @@ public class BasicBeanStore {
 	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public <T> BasicBeanStore addSupplier(Class<T> beanType, Supplier<T> bean, String name) {
+	public <T> BasicBeanStore2 addSupplier(Class<T> beanType, Supplier<T> bean, String name) {
 		assertCanWrite();
 		var e = createEntry(beanType, bean, name);
 		try (var x = lock.write()) {
@@ -350,7 +349,7 @@ public class BasicBeanStore {
 	 *
 	 * @return This object.
 	 */
-	public BasicBeanStore clear() {
+	public BasicBeanStore2 clear() {
 		assertCanWrite();
 		try (var x = lock.write()) {
 			unnamedEntries.clear();
@@ -507,7 +506,7 @@ public class BasicBeanStore {
 		return filteredBeanPropertyMap()
 			.a("entries", entries.stream().map(Entry::properties).collect(toList()))
 			.a("identity", id(this))
-			.a("parent", parent.map(BasicBeanStore::properties).orElse(null))
+			.a("parent", parent.map(BasicBeanStore2::properties).orElse(null))
 			.ai(readOnly, "readOnly", readOnly)
 			.ai(threadSafe, "threadSafe", threadSafe);
 		// @formatter:on
@@ -520,7 +519,7 @@ public class BasicBeanStore {
 
 	private void assertCanWrite() {
 		if (readOnly)
-			throw new IllegalStateException("Method cannot be used because BasicBeanStore is read-only.");
+			throw new IllegalStateException("Method cannot be used because BasicBeanStore2 is read-only.");
 	}
 
 	/**
@@ -540,7 +539,7 @@ public class BasicBeanStore {
 	}
 
 	/**
-	 * Represents a bean in a {@link BasicBeanStore}.
+	 * Represents a bean in a {@link BasicBeanStore2}.
 	 *
 	 * <p>
 	 * A bean entry consists of the following:
@@ -633,12 +632,12 @@ public class BasicBeanStore {
 		 *
 		 * @return The properties in this object as a simple map.
 		 */
-		protected JsonMap properties() {
+		protected FluentMap<String,Object> properties() {
 			// @formatter:off
-			return filteredMap()
-				.append("type", cns(getType()))
-				.append("bean", id(get()))
-				.append("name", getName());
+			return filteredBeanPropertyMap()
+				.a("type", cns(getType()))
+				.a("bean", id(get()))
+				.a("name", getName());
 			// @formatter:on
 		}
 	}

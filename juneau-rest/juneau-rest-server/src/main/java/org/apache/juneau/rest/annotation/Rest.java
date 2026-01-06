@@ -26,6 +26,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
@@ -167,7 +168,7 @@ public @interface Rest {
 	 *
 	 * @return The annotation value.
 	 */
-	Class<? extends BasicBeanStore> beanStore() default BasicBeanStore.Void.class;
+	Class<? extends BasicBeanStore2> beanStore() default BasicBeanStore2.Void.class;
 
 	/**
 	 * Specifies the logger to use for logging of HTTP requests and responses.

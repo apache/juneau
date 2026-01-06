@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.cp.*;
 
 /**
@@ -43,7 +44,7 @@ public class RestConverterList {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BasicBeanStore beanStore) {
+		protected Builder(BasicBeanStore2 beanStore) {
 			super(RestConverterList.class, beanStore);
 			this.entries = list();
 		}
@@ -97,7 +98,7 @@ public class RestConverterList {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(BasicBeanStore beanStore) {
+	public static Builder create(BasicBeanStore2 beanStore) {
 		return new Builder(beanStore);
 	}
 

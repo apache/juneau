@@ -25,6 +25,8 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
+//import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 
@@ -32,14 +34,14 @@ import org.apache.juneau.commons.reflect.*;
  * Utility class for creating beans through constructors, creator methods, and builders.
  *
  * <p>
- * Uses a {@link BasicBeanStore} to find available ways to construct beans via injection of beans from the store.
+ * Uses a {@link BasicBeanStore2} to find available ways to construct beans via injection of beans from the store.
  *
  * <p>
  * This class is instantiated through the following method:
  * <ul class='javatree'>
- * 	<li class='jc'>{@link BasicBeanStore}
+ * 	<li class='jc'>{@link BasicBeanStore2}
  * 		<ul class='javatreec'>
- * 			<li class='jc'>{@link BeanCreator#of(Class,BasicBeanStore)}
+ * 			<li class='jc'>{@link BeanCreator#of(Class,BasicBeanStore2)}
  * 		</ul>
  * 	</li>
  * </ul>
@@ -47,7 +49,7 @@ import org.apache.juneau.commons.reflect.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Construct and throw a RuntimeException using a bean store.</jc>
- * 	<jk>throw</jk> BasicBeanStore
+ * 	<jk>throw</jk> BasicBeanStore2
  * 		.<jsm>create</jsm>()
  * 		.build()
  * 		.addBean(Throwable.<jk>class</jk>, <jv>cause</jv>)
@@ -112,7 +114,7 @@ import org.apache.juneau.commons.reflect.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link BasicBeanStore}
+ * 	<li class='jc'>{@link BasicBeanStore2}
  * </ul>
  *
  * @param <T> The bean type being created.
@@ -139,14 +141,14 @@ public class BeanCreator<T> {
 	}
 
 	/**
-	 * Shortcut for calling <c>BeanCreator.of(beanType, BasicBeanStore.INSTANCE)</c>.
+	 * Shortcut for calling <c>BeanCreator.of(beanType, BasicBeanStore2.INSTANCE)</c>.
 	 *
 	 * @param <T> The bean type to create.
 	 * @param beanType The bean type to create.
 	 * @return A new creator.
 	 */
 	public static <T> BeanCreator<T> of(Class<T> beanType) {
-		return new BeanCreator<>(beanType, BasicBeanStore.INSTANCE);
+		return new BeanCreator<>(beanType, BasicBeanStore2.INSTANCE);
 	}
 
 	/**
@@ -157,11 +159,11 @@ public class BeanCreator<T> {
 	 * @param beanStore The bean store to use for parameter resolution.
 	 * @return A new creator.
 	 */
-	public static <T> BeanCreator<T> of(Class<T> beanType, BasicBeanStore beanStore) {
+	public static <T> BeanCreator<T> of(Class<T> beanType, BasicBeanStore2 beanStore) {
 		return new BeanCreator<>(beanType, beanStore);
 	}
 
-	private final BasicBeanStore store;
+	private final BasicBeanStore2 store;
 	private ClassInfo type;
 	private Object builder;
 	private T impl;
@@ -175,9 +177,9 @@ public class BeanCreator<T> {
 	 * @param type The bean type being created.
 	 * @param store The bean store creating this creator.
 	 */
-	protected BeanCreator(Class<T> type, BasicBeanStore store) {
+	protected BeanCreator(Class<T> type, BasicBeanStore2 store) {
 		this.type = info(type);
-		this.store = BasicBeanStore.of(store);
+		this.store = BasicBeanStore2.of(store);
 	}
 
 	/**

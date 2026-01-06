@@ -170,8 +170,11 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	/**
 	 * Returns the field value on the specified object.
 	 *
-	 * @param o The object containing the field.
+	 * <p>
+	 * If the underlying field is static, then the specified <c>o</c> argument is ignored. It may be <jk>null</jk>.
+	 *
 	 * @param <T> The object type to retrieve.
+	 * @param o The object containing the field.  Can be <jk>null</jk> for static fields.
 	 * @return The field value.
 	 * @throws BeanRuntimeException Field was not accessible or field does not belong to object.
 	 */
@@ -420,7 +423,10 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	/**
 	 * Sets the field value on the specified object.
 	 *
-	 * @param o The object containing the field.
+	 * <p>
+	 * If the underlying field is static, then the specified <c>o</c> argument is ignored. It may be <jk>null</jk>.
+	 *
+	 * @param o The object containing the field.  Can be <jk>null</jk> for static fields.
 	 * @param value The new field value.
 	 * @throws BeanRuntimeException Field was not accessible or field does not belong to object.
 	 */
