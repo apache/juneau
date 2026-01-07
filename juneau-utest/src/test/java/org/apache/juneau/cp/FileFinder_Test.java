@@ -26,7 +26,6 @@ import java.nio.file.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.io.*;
 import org.apache.juneau.cp.sub.*;
 import org.junit.jupiter.api.*;
@@ -659,7 +658,7 @@ public class FileFinder_Test extends TestBase {  // NOSONAR - Needs to be public
 
 	public static class E03a extends FileFinder.Builder {
 		protected E03a() {
-			super(BasicBeanStore2.INSTANCE);
+			super(BasicBeanStore.INSTANCE);
 		}
 	}
 	public static class E03b extends BasicFileFinder {

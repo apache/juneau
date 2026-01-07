@@ -20,7 +20,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
-import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.cp.*;
 import org.springframework.context.*;
 
 /**
@@ -30,7 +30,7 @@ import org.springframework.context.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringbootBasics">juneau-rest-server-springboot Basics</a>
  * </ul>
  */
-public class SpringBeanStore extends BasicBeanStore2 {
+public class SpringBeanStore extends BasicBeanStore {
 
 	private final Optional<ApplicationContext> appContext;
 
@@ -41,12 +41,12 @@ public class SpringBeanStore extends BasicBeanStore2 {
 	 * @param parent The parent REST object bean store.  Can be <jk>null</jk>.
 	 * @param resource The REST object.  Can be <jk>null</jk>.
 	 */
-	public SpringBeanStore(Optional<ApplicationContext> appContext, Optional<BasicBeanStore2> parent, Object resource) {
+	public SpringBeanStore(Optional<ApplicationContext> appContext, Optional<BasicBeanStore> parent, Object resource) {
 		super(create().parent(parent.orElse(null)));
 		this.appContext = appContext;
 	}
 
-	@Override /* Overridden from BasicBeanStore2 */
+	@Override /* Overridden from BasicBeanStore */
 	public SpringBeanStore clear() {
 		super.clear();
 		return this;

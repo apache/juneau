@@ -18,18 +18,22 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * Identifies a bean injection qualifier for constructor/method parameters.
+ * Identifies a bean injection qualifier for constructor/method parameters and fields.
  *
  * <p>
- * This annotation is used to specify which named bean should be injected into a constructor
- * or method parameter. It serves the same purpose as the standard {@code javax.inject.Named} annotation but without
+ * This annotation is used to specify which named bean should be injected into a constructor,
+ * method parameter, or field. It serves the same purpose as the standard {@code javax.inject.Named} annotation but without
  * requiring a dependency on the javax.inject module.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jk>public</jk> MyClass(<ja>@Named</ja>(<js>"myBean"</js>) MyBean <jv>bean</jv>) {
- * 		<jc>// Constructor will receive the bean named "myBean" from the BasicBeanStore2</jc>
+ * 		<jc>// Constructor will receive the bean named "myBean" from the BasicBeanStore</jc>
  * 	}
+ *
+ * 	<ja>@Inject</ja>
+ * 	<ja>@Named</ja>(<js>"myBean"</js>)
+ * 	<jk>private</jk> MyBean <jv>field</jv>;  <jc>// Field will receive the bean named "myBean"</jc>
  * </p>
  *
  * <h5 class='section'>Comparison with @Name:</h5>
@@ -45,7 +49,7 @@ import java.lang.annotation.*;
  * <p class='bjava'>
  * 	<jc>// @Named - for bean injection</jc>
  * 	<jk>public</jk> MyService(<ja>@Named</ja>(<js>"primaryDb"</js>) Database <jv>db</jv>) {
- * 		<jc>// Injects the bean named "primaryDb" from BasicBeanStore2</jc>
+ * 		<jc>// Injects the bean named "primaryDb" from BasicBeanStore</jc>
  * 	}
  *
  * 	<jc>// @Name - for parameter naming (when bytecode names unavailable)</jc>
@@ -57,11 +61,11 @@ import java.lang.annotation.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='ja'>{@link Name}
- * 	<li class='jc'>{@link org.apache.juneau.commons.inject.BasicBeanStore2}
+ * 	<li class='jc'>{@link org.apache.juneau.cp.BasicBeanStore}
  * </ul>
  */
 @Documented
-@Target({ PARAMETER })
+@Target({ PARAMETER, FIELD })
 @Retention(RUNTIME)
 @Inherited
 public @interface Named {

@@ -28,7 +28,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.cp.*;
 
 /**
  * Represents a group of {@link Serializer Serializers} that can be looked up by media type.
@@ -98,7 +98,7 @@ public class SerializerSet {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BasicBeanStore2 beanStore) {
+		protected Builder(BasicBeanStore beanStore) {
 			super(SerializerSet.class, beanStore);
 			this.entries = list();
 		}
@@ -124,7 +124,7 @@ public class SerializerSet {
 		 * @param copyFrom The serializer group that we're copying settings and serializers from.
 		 */
 		protected Builder(SerializerSet copyFrom) {
-			super(copyFrom.getClass(), BasicBeanStore2.INSTANCE);
+			super(copyFrom.getClass(), BasicBeanStore.INSTANCE);
 			this.entries = list((Object[])copyFrom.entries);
 		}
 
@@ -442,7 +442,7 @@ public class SerializerSet {
 	 * @return A new builder for this object.
 	 */
 	public static Builder create() {
-		return new Builder(BasicBeanStore2.INSTANCE);
+		return new Builder(BasicBeanStore.INSTANCE);
 	}
 
 	/**
@@ -451,7 +451,7 @@ public class SerializerSet {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(BasicBeanStore2 beanStore) {
+	public static Builder create(BasicBeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 

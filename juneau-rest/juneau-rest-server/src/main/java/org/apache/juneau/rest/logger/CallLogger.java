@@ -31,8 +31,8 @@ import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.stats.*;
 import org.apache.juneau.rest.util.*;
@@ -113,7 +113,7 @@ public class CallLogger {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BasicBeanStore2 beanStore) {
+		protected Builder(BasicBeanStore beanStore) {
 			logger = Logger.getLogger(env(SP_logger, "global"));
 			enabled = env(SP_enabled, ALWAYS);
 			enabledTest = x -> false;
@@ -406,12 +406,12 @@ public class CallLogger {
 
 	/** Represents no logger */
 	public abstract class Void extends CallLogger {
-		Void(BasicBeanStore2 beanStore) {
+		Void(BasicBeanStore beanStore) {
 			super(beanStore);
 		}
 	}
 
-	private static final CallLoggerRule DEFAULT_RULE = CallLoggerRule.create(BasicBeanStore2.INSTANCE).build();
+	private static final CallLoggerRule DEFAULT_RULE = CallLoggerRule.create(BasicBeanStore.INSTANCE).build();
 
 	/**
 	 * System property name for the default logger name to use for {@link CallLogger} objects.
@@ -486,7 +486,7 @@ public class CallLogger {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(BasicBeanStore2 beanStore) {
+	public static Builder create(BasicBeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 
@@ -501,11 +501,11 @@ public class CallLogger {
 	/**
 	 * Constructor.
 	 * <p>
-	 * Subclasses typically override the {@link #init(BasicBeanStore2)} method when using this constructor.
+	 * Subclasses typically override the {@link #init(BasicBeanStore)} method when using this constructor.
 	 *
 	 * @param beanStore The bean store containing injectable beans for this logger.
 	 */
-	public CallLogger(BasicBeanStore2 beanStore) {
+	public CallLogger(BasicBeanStore beanStore) {
 		var builder = init(beanStore);
 		this.logger = builder.logger;
 		this.thrownStore = builder.thrownStore;
@@ -729,7 +729,7 @@ public class CallLogger {
 	 * @param beanStore The bean store containing injectable beans for this logger.
 	 * @return A new builder object.
 	 */
-	protected Builder init(BasicBeanStore2 beanStore) {
+	protected Builder init(BasicBeanStore beanStore) {
 		return new Builder(beanStore).logger(beanStore.getBean(Logger.class).orElse(null)).thrownStore(beanStore.getBean(ThrownStore.class).orElse(null));
 	}
 

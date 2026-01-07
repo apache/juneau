@@ -28,7 +28,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.cp.*;
 
 /**
  * Represents a group of {@link Parser Parsers} that can be looked up by media type.
@@ -99,7 +99,7 @@ public class ParserSet {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BasicBeanStore2 beanStore) {
+		protected Builder(BasicBeanStore beanStore) {
 			super(ParserSet.class, beanStore);
 			this.entries = list();
 		}
@@ -125,7 +125,7 @@ public class ParserSet {
 		 * @param copyFrom The parser group that we're copying settings and parsers from.
 		 */
 		protected Builder(ParserSet copyFrom) {
-			super(copyFrom.getClass(), BasicBeanStore2.INSTANCE);
+			super(copyFrom.getClass(), BasicBeanStore.INSTANCE);
 			this.entries = list((Object[])copyFrom.entries);
 		}
 
@@ -444,7 +444,7 @@ public class ParserSet {
 	 * @return A new builder for this object.
 	 */
 	public static Builder create() {
-		return new Builder(BasicBeanStore2.INSTANCE);
+		return new Builder(BasicBeanStore.INSTANCE);
 	}
 
 	/**
@@ -453,7 +453,7 @@ public class ParserSet {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(BasicBeanStore2 beanStore) {
+	public static Builder create(BasicBeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 

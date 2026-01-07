@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.stats.*;
 import org.junit.jupiter.api.*;
 
@@ -77,7 +77,7 @@ class MethodExecStore_Test extends TestBase {
 	}
 
 	@Test void a05_builder_beanFactory() {
-		var bs = BasicBeanStore2.create().build();
+		var bs = BasicBeanStore.create().build();
 
 		assertThrowsWithMessage(Exception.class, "Public constructor found but could not find prerequisites: A5a", ()->MethodExecStore.create(bs).type(A5b.class).build());
 		assertInstanceOf(A5c.class, MethodExecStore.create(bs).type(A5c.class).build());
@@ -106,7 +106,7 @@ class MethodExecStore_Test extends TestBase {
 	}
 
 	@Test public void a06_builder_statsImplClass() throws Exception {  // NOSONAR - Must be public.
-		var bs = BasicBeanStore2.create().build();
+		var bs = BasicBeanStore.create().build();
 		var m = MethodExecStore_Test.class.getMethod("a06_builder_statsImplClass");
 
 		assertThrowsWithMessage(Exception.class, "Public constructor found but could not find prerequisites: A6a", ()->MethodExecStore.create(bs).statsImplClass(A6b.class).build().getStats(m));
@@ -127,7 +127,7 @@ class MethodExecStore_Test extends TestBase {
 		assertSame(s, store.getThrownStore());
 
 		var s2 = ThrownStore.create().build();
-		var bs = BasicBeanStore2.create().build().addBean(ThrownStore.class, s2);
+		var bs = BasicBeanStore.create().build().addBean(ThrownStore.class, s2);
 		store = MethodExecStore.create(bs).build();
 		assertSame(s2, store.getThrownStore());
 	}

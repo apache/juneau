@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.Named;
-import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.config.*;
@@ -37,23 +37,23 @@ class RestContext_Builder_Test extends TestBase {
 
 	@Rest
 	public static class A1 {
-		@RestInject static BasicBeanStore2 beanStore;
+		@RestInject static BasicBeanStore beanStore;
 	}
 
 	@Test void a01_createBeanStore_default() {
 		MockRestClient.buildLax(A1.class);
-		assertEquals("BasicBeanStore2", A1.beanStore.getClass().getSimpleName());
+		assertEquals("BasicBeanStore", A1.beanStore.getClass().getSimpleName());
 	}
 
-	public static class MyBeanStore extends BasicBeanStore2 {
+	public static class MyBeanStore extends BasicBeanStore {
 		protected MyBeanStore(Builder builder) {
-			super(builder.parent(BasicBeanStore2.create().build().addBean(A.class, new A())));
+			super(builder.parent(BasicBeanStore.create().build().addBean(A.class, new A())));
 		}
 	}
 
 	@Rest(beanStore=MyBeanStore.class)
 	public static class A2 {
-		@RestInject static BasicBeanStore2 beanStore;
+		@RestInject static BasicBeanStore beanStore;
 	}
 
 	@Test void a02_createBeanStore_annotation() {
@@ -63,9 +63,9 @@ class RestContext_Builder_Test extends TestBase {
 
 	@Rest
 	public static class A3 {
-		@RestInject static BasicBeanStore2 beanStore;
+		@RestInject static BasicBeanStore beanStore;
 
-		@RestInject BasicBeanStore2.Builder beanStore(BasicBeanStore2.Builder b) {
+		@RestInject BasicBeanStore.Builder beanStore(BasicBeanStore.Builder b) {
 			return b.type(MyBeanStore.class);
 		}
 	}
@@ -77,10 +77,10 @@ class RestContext_Builder_Test extends TestBase {
 
 	@Rest
 	public static class A4 {
-		@RestInject static BasicBeanStore2 beanStore;
+		@RestInject static BasicBeanStore beanStore;
 
-		@RestInject BasicBeanStore2 beanStore() {
-			return BasicBeanStore2.create().type(MyBeanStore.class).build();
+		@RestInject BasicBeanStore beanStore() {
+			return BasicBeanStore.create().type(MyBeanStore.class).build();
 		}
 	}
 

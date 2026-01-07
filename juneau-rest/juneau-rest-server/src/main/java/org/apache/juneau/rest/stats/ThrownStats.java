@@ -23,7 +23,6 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.cp.*;
 
 /**
@@ -39,7 +38,7 @@ public class ThrownStats implements Cloneable {
 	 */
 	public static class Builder {
 
-		final BasicBeanStore2 beanStore;
+		final BasicBeanStore beanStore;
 		Throwable throwable;
 		long hash;
 		List<String> stackTrace;
@@ -52,7 +51,7 @@ public class ThrownStats implements Cloneable {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BasicBeanStore2 beanStore) {
+		protected Builder(BasicBeanStore beanStore) {
 			this.beanStore = beanStore;
 			this.creator = BeanCreator.of(ThrownStats.class, beanStore).builder(Builder.class, this);
 		}
@@ -128,7 +127,7 @@ public class ThrownStats implements Cloneable {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(BasicBeanStore2 beanStore) {
+	public static Builder create(BasicBeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.logger;
 
-import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.cp.*;
 
 /**
  * Default implementation of a {@link CallLogger} that never logs REST calls.
@@ -32,12 +32,12 @@ public class BasicDisabledCallLogger extends CallLogger {
 	 *
 	 * @param beanStore The bean store containing injectable beans for this logger.
 	 */
-	public BasicDisabledCallLogger(BasicBeanStore2 beanStore) {
+	public BasicDisabledCallLogger(BasicBeanStore beanStore) {
 		super(beanStore);
 	}
 
 	@Override
-	protected Builder init(BasicBeanStore2 beanStore) {
+	protected Builder init(BasicBeanStore beanStore) {
 		return super.init(beanStore).disabled();
 	}
 }

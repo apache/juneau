@@ -62,13 +62,13 @@ import java.lang.annotation.*;
  *
  * 	<jc>// @Named - for bean injection</jc>
  * 	<jk>public</jk> MyService(<ja>@Named</ja>(<js>"primaryDb"</js>) Database <jv>db</jv>) {
- * 		<jc>// Injects the bean named "primaryDb" from BasicBeanStore2</jc>
+ * 		<jc>// Injects the bean named "primaryDb" from BasicBeanStore</jc>
  * 	}
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='ja'>{@link Named}
- * 	<li class='jc'>{@link org.apache.juneau.commons.inject.BasicBeanStore2}
+ * 	<li class='jc'>{@link org.apache.juneau.cp.BasicBeanStore}
  * </ul>
  */
 @Documented

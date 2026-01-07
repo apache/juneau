@@ -22,7 +22,6 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.cp.*;
 
@@ -46,7 +45,7 @@ public class ResponseProcessorList {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BasicBeanStore2 beanStore) {
+		protected Builder(BasicBeanStore beanStore) {
 			super(ResponseProcessorList.class, beanStore);
 			this.entries = list();
 		}
@@ -98,11 +97,11 @@ public class ResponseProcessorList {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(BasicBeanStore2 beanStore) {
+	public static Builder create(BasicBeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 
-	private static ResponseProcessor instantiate(Object o, BasicBeanStore2 bs) {
+	private static ResponseProcessor instantiate(Object o, BasicBeanStore bs) {
 		if (o instanceof ResponseProcessor o2)
 			return o2;
 		try {
@@ -120,7 +119,7 @@ public class ResponseProcessorList {
 	 * @param builder The builder containing the contents for this list.
 	 */
 	protected ResponseProcessorList(Builder builder) {
-		BasicBeanStore2 bs = builder.beanStore();
+		BasicBeanStore bs = builder.beanStore();
 		// @formatter:off
 		entries =
 			builder

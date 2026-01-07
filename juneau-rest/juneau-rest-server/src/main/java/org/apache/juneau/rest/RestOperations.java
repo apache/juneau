@@ -22,7 +22,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
 
@@ -44,7 +44,7 @@ public class RestOperations {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BasicBeanStore2 beanStore) {
+		protected Builder(BasicBeanStore beanStore) {
 			super(RestOperations.class, beanStore);
 			map = new TreeMap<>();
 			set = set();
@@ -115,7 +115,7 @@ public class RestOperations {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(BasicBeanStore2 beanStore) {
+	public static Builder create(BasicBeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 

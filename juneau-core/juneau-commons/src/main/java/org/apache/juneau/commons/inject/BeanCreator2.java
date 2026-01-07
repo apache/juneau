@@ -14,19 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.cp;
+package org.apache.juneau.commons.inject;
 
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.reflect.Visibility.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * Utility class for creating beans through constructors, creator methods, and builders.
@@ -39,7 +40,7 @@ import org.apache.juneau.commons.reflect.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link BasicBeanStore}
  * 		<ul class='javatreec'>
- * 			<li class='jc'>{@link BeanCreator#of(Class,BasicBeanStore)}
+ * 			<li class='jc'>{@link BeanCreator2#of(Class,BasicBeanStore)}
  * 		</ul>
  * 	</li>
  * </ul>
@@ -117,7 +118,7 @@ import org.apache.juneau.commons.reflect.*;
  *
  * @param <T> The bean type being created.
  */
-public class BeanCreator<T> {
+public class BeanCreator2<T> {
 
 	static class Match<T extends ExecutableInfo> {
 		T executable = null;
@@ -145,8 +146,8 @@ public class BeanCreator<T> {
 	 * @param beanType The bean type to create.
 	 * @return A new creator.
 	 */
-	public static <T> BeanCreator<T> of(Class<T> beanType) {
-		return new BeanCreator<>(beanType, BasicBeanStore.INSTANCE);
+	public static <T> BeanCreator2<T> of(ClassInfoTyped<T> beanType) {
+		return new BeanCreator2<>(beanType, null);
 	}
 
 	/**
@@ -157,12 +158,13 @@ public class BeanCreator<T> {
 	 * @param beanStore The bean store to use for parameter resolution.
 	 * @return A new creator.
 	 */
-	public static <T> BeanCreator<T> of(Class<T> beanType, BasicBeanStore beanStore) {
-		return new BeanCreator<>(beanType, beanStore);
+	public static <T> BeanCreator2<T> of(ClassInfoTyped<T> beanType, BeanStore beanStore) {
+		assertArgNotNull("beanType", beanType);
+		return new BeanCreator2<>(beanType, beanStore);
 	}
 
-	private final BasicBeanStore store;
-	private ClassInfo type;
+	private final BasicBeanStore2 store;
+	private ClassInfoTyped<T> type;
 	private Object builder;
 	private T impl;
 	private Object outer;
@@ -175,9 +177,9 @@ public class BeanCreator<T> {
 	 * @param type The bean type being created.
 	 * @param store The bean store creating this creator.
 	 */
-	protected BeanCreator(Class<T> type, BasicBeanStore store) {
-		this.type = info(type);
-		this.store = BasicBeanStore.of(store);
+	protected BeanCreator2(ClassInfoTyped<T> type, BeanStore store) {
+		this.type = type;
+		this.store = new BasicBeanStore2(store);
 	}
 
 	/**
@@ -186,7 +188,7 @@ public class BeanCreator<T> {
 	 * @param outer The outer object.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BeanCreator<T> outer(Object outer) {
+	public BeanCreator2<T> outer(Object outer) {
 		this.outer = outer;
 		return this;
 	}
@@ -199,7 +201,7 @@ public class BeanCreator<T> {
 	 * @param bean The parameter value.
 	 * @return This object.
 	 */
-	public <T2> BeanCreator<T> arg(Class<T2> beanType, T2 bean) {
+	public <T2> BeanCreator2<T> addBean(Class<T2> beanType, T2 bean) {
 		store.add(beanType, bean);
 		return this;
 	}
@@ -217,13 +219,15 @@ public class BeanCreator<T> {
 	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
-	public <B> BeanCreator<T> builder(Class<B> type, B value) {
+	public BeanCreator2<T> builder(Object value) {
 		builder = value;
-		var t = value.getClass();
-		do {
-			store.add((Class<T>)t, (T)value);
-			t = t.getSuperclass();
-		} while (nn(t) && ! t.equals(type));
+		return this;
+	}
+
+	public <B> BeanCreator2<T> builder(ClassInfoTyped<B> type) {
+		// Find and invoke builder from the following in this order:
+		// public static Builder create(...) method on outer class with matching args in bean store.
+		// public Builder(...) constructor with matching args in bean store.
 		return this;
 	}
 
@@ -242,7 +246,7 @@ public class BeanCreator<T> {
 	 * @param value The value for this setting.
 	 * @return This object.
 	 */
-	public BeanCreator<T> impl(T value) {
+	public BeanCreator2<T> impl(T value) {
 		impl = value;
 		return this;
 	}
@@ -282,7 +286,6 @@ public class BeanCreator<T> {
 				&& x.hasNumParameters(1)
 				&& x.getParameter(0).canAccept(builder)
 				&& x.hasReturnType(type)
-				&& ! x.hasAnnotation(BeanIgnore.class)
 				&& x.hasName("getInstance")
 			).map(m -> m.<T>invoke(null, builder));
 			// @formatter:on
@@ -298,7 +301,6 @@ public class BeanCreator<T> {
 				&& x.isNotDeprecated()
 				&& x.getParameterCount() == 0
 				&& x.hasReturnType(type)
-				&& ! x.hasAnnotation(BeanIgnore.class)
 				&& x.hasName("getInstance")
 			).map(m -> m.<T>invoke(null));
 			// @formatter:on
@@ -314,12 +316,12 @@ public class BeanCreator<T> {
 			// Look for static creator method.
 			type.getPublicMethods().stream().filter(x -> isStaticCreateMethod(x)).forEach(x -> {
 				found.set("STATIC_CREATOR");
-				if (hasAllParams(x))
+				if (InjectUtils.hasAllParameters(x, store, outer))
 					match.add(x);
 			});
 
 			if (match.isPresent())
-				return match.get().invoke(null, getParams(match.get()));
+				return match.get().invoke(null, InjectUtils.getParameters(match.get(), store, outer));
 		}
 
 		if (type.isInterface()) {
@@ -338,7 +340,7 @@ public class BeanCreator<T> {
 		var constructorMatch = new Match<ConstructorInfo>();
 		type.getPublicConstructors().stream().forEach(x -> {
 			found.setIfEmpty("PUBLIC_CONSTRUCTOR");
-			if (hasAllParams(x))
+			if (InjectUtils.hasAllParameters(x, store, outer))
 				constructorMatch.add(x);
 		});
 
@@ -346,14 +348,14 @@ public class BeanCreator<T> {
 		if (! constructorMatch.isPresent()) {
 			type.getDeclaredConstructors().stream().filter(ConstructorInfo::isProtected).forEach(x -> {
 				found.setIfEmpty("PROTECTED_CONSTRUCTOR");
-				if (hasAllParams(x))
+				if (InjectUtils.hasAllParameters(x, store, outer))
 					constructorMatch.add(x);
 			});
 		}
 
 		// Execute.
 		if (constructorMatch.isPresent())
-			return constructorMatch.get().newInstance(getParams(constructorMatch.get()));
+			return constructorMatch.get().newInstance(InjectUtils.getParameters(constructorMatch.get(), store, outer));
 
 		if (builder == null) {
 			// Look for static-builder/protected-constructor pair.
@@ -377,12 +379,12 @@ public class BeanCreator<T> {
 			msg = "No public/protected constructors found";
 		} else if (found.get().equals("STATIC_CREATOR")) {
 			msg = "Static creator found but could not find prerequisites: "
-				+ type.getPublicMethods().stream().filter(x -> isStaticCreateMethod(x)).map(x -> getMissingParams(x)).sorted().collect(joining(" or "));
+				+ type.getPublicMethods().stream().filter(x -> isStaticCreateMethod(x)).map(x -> InjectUtils.getMissingParameters(x, store, outer)).sorted().collect(joining(" or "));
 		} else if (found.get().equals("PUBLIC_CONSTRUCTOR")) {
-			msg = "Public constructor found but could not find prerequisites: " + type.getPublicConstructors().stream().map(x -> getMissingParams(x)).sorted().collect(joining(" or "));
+			msg = "Public constructor found but could not find prerequisites: " + type.getPublicConstructors().stream().map(x -> InjectUtils.getMissingParameters(x, store, outer)).sorted().collect(joining(" or "));
 		} else {
 			msg = "Protected constructor found but could not find prerequisites: "
-				+ type.getDeclaredConstructors().stream().filter(ConstructorInfo::isProtected).map(x -> getMissingParams(x)).sorted().collect(joining(" or "));
+				+ type.getDeclaredConstructors().stream().filter(ConstructorInfo::isProtected).map(x -> InjectUtils.getMissingParameters(x, store, outer)).sorted().collect(joining(" or "));
 		}
 		throw new ExecutableException("Could not instantiate class {0}: {1}.", type.getName(), msg);
 	}
@@ -393,7 +395,7 @@ public class BeanCreator<T> {
 	 *
 	 * @return This object.
 	 */
-	public BeanCreator<T> silent() {
+	public BeanCreator2<T> silent() {
 		silent = true;
 		return this;
 	}
@@ -413,7 +415,7 @@ public class BeanCreator<T> {
 	 * @param value The value for this setting.
 	 * @return This object.
 	 */
-	public BeanCreator<T> type(Class<?> value) {
+	public BeanCreator2<T> type(Class<T> value) {
 		type = opt(value).map(x -> info(x)).orElse(null);
 		return this;
 	}
@@ -424,20 +426,8 @@ public class BeanCreator<T> {
 	 * @param value The value for this setting.
 	 * @return This object.
 	 */
-	public BeanCreator<T> type(ClassInfo value) {
+	public BeanCreator2<T> type(ClassInfo value) {
 		return type(value == null ? null : value.inner());
-	}
-
-	private String getMissingParams(ExecutableInfo ei) {
-		return store.getMissingParams(ei, outer);
-	}
-
-	private Object[] getParams(ExecutableInfo ei) {
-		return store.getParams(ei, outer);
-	}
-
-	private boolean hasAllParams(ExecutableInfo ei) {
-		return store.hasAllParams(ei, outer);
 	}
 
 	private boolean isStaticCreateMethod(MethodInfo m) {
@@ -449,7 +439,6 @@ public class BeanCreator<T> {
 		return m.isStatic()
 			&& m.isNotDeprecated()
 			&& m.hasReturnType(type)
-			&& ! m.hasAnnotation(BeanIgnore.class)
 			&& (m.hasName("create") || m.hasName("builder"));
 		// @formatter:on
 	}

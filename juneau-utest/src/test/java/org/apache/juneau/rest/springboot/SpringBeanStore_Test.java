@@ -25,7 +25,7 @@ class SpringBeanStore_Test extends TestBase {
 
 	@Test
 	void a01_fluentChaining_clear() {
-		// Test that clear() returns SpringBeanStore (not BasicBeanStore2)
+		// Test that clear() returns SpringBeanStore (not BasicBeanStore)
 		var store = new SpringBeanStore(opte(), opte(), null);
 
 		SpringBeanStore result = store.clear();

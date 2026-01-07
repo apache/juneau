@@ -71,7 +71,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.html.*;
@@ -1058,7 +1057,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	public static class Builder extends BeanContextable.Builder {
 
 		private BeanCreator<RestCallHandler> callHandler;
-		private BasicBeanStore2 beanStore = BasicBeanStore2.create().build();
+		private BasicBeanStore beanStore = BasicBeanStore.create().build();
 		private BiPredicate<RestRequest,RestResponse> logRequestsPredicate;
 		private boolean detectLeaks;
 		private boolean executorServiceShutdownOnClose;
@@ -6179,7 +6178,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	protected final SerializerSet serializers;
 	protected final UrlEncodingSerializer urlEncodingSerializer;  // Used for form posts only.
 	Predicate<Integer> errorCodes;
-	private final BasicBeanStore2 beanStore;
+	private final BasicBeanStore beanStore;
 	private final HttpClientConnectionManager connectionManager;
 	private final Logger logger;
 	private final Map<Class<?>,HttpPartParser> partParsers = new ConcurrentHashMap<>();

@@ -26,8 +26,8 @@ import java.util.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.FluentMap;
-import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.lang.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.logger.*;
@@ -201,7 +201,7 @@ public class RestSession extends ContextSession {
 	}
 
 	private final long startTime = System.currentTimeMillis();
-	private final BasicBeanStore2 beanStore;
+	private final BasicBeanStore beanStore;
 	private CallLogger logger;
 	private HttpServletRequest req;
 	private HttpServletResponse res;
@@ -223,7 +223,7 @@ public class RestSession extends ContextSession {
 		super(builder);
 		context = builder.ctx;
 		resource = builder.resource;
-		beanStore = BasicBeanStore2.of(context.getBeanStore()).addBean(RestContext.class, context);
+		beanStore = BasicBeanStore.of(context.getBeanStore()).addBean(RestContext.class, context);
 
 		logger = beanStore.add(CallLogger.class, builder.logger);
 		pathInfoUndecoded = builder.pathInfoUndecoded;
@@ -289,7 +289,7 @@ public class RestSession extends ContextSession {
 	 *
 	 * @return The bean store of this call.
 	 */
-	public BasicBeanStore2 getBeanStore() { return beanStore; }
+	public BasicBeanStore getBeanStore() { return beanStore; }
 
 	/**
 	 * Returns the context that created this call.

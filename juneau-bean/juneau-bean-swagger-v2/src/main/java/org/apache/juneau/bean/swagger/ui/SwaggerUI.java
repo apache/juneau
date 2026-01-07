@@ -29,7 +29,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.swap.*;
@@ -55,7 +54,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 	// @formatter:off
 	static final FileFinder RESOURCES = FileFinder
-		.create(BasicBeanStore2.INSTANCE)
+		.create(BasicBeanStore.INSTANCE)
 		.cp(SwaggerUI.class, null, true)
 		.dir(",")
 		.caching(Boolean.getBoolean("RestContext.disableClasspathResourceCaching.b") ? -1 : 1_000_000)

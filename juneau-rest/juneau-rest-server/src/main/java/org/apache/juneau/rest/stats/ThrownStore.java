@@ -26,7 +26,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.cp.*;
 
 /**
  * An in-memory cache of thrown exceptions.
@@ -53,7 +53,7 @@ public class ThrownStore {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BasicBeanStore2 beanStore) {
+		protected Builder(BasicBeanStore beanStore) {
 			super(ThrownStore.class, beanStore);
 		}
 
@@ -124,7 +124,7 @@ public class ThrownStore {
 	 * @return A new builder for this object.
 	 */
 	public static Builder create() {
-		return new Builder(BasicBeanStore2.INSTANCE);
+		return new Builder(BasicBeanStore.INSTANCE);
 	}
 
 	/**
@@ -133,13 +133,13 @@ public class ThrownStore {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(BasicBeanStore2 beanStore) {
+	public static Builder create(BasicBeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 
 	private final ConcurrentHashMap<Long,ThrownStats> db = new ConcurrentHashMap<>();
 	private final Optional<ThrownStore> parent;
-	private final BasicBeanStore2 beanStore;
+	private final BasicBeanStore beanStore;
 	private final Class<? extends ThrownStats> statsImplClass;
 	private final Set<String> ignoreClasses;
 
@@ -147,7 +147,7 @@ public class ThrownStore {
 	 * Constructor.
 	 */
 	public ThrownStore() {
-		this(create(BasicBeanStore2.INSTANCE));
+		this(create(BasicBeanStore.INSTANCE));
 	}
 
 	/**

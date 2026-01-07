@@ -16,25 +16,17 @@
  */
 package org.apache.juneau.commons.inject;
 
-import static java.util.stream.Collectors.*;
-import static java.util.stream.Collectors.toList;
-import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.concurrent.*;
-
 import java.util.function.*;
 
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.concurrent.*;
-import org.apache.juneau.commons.reflect.*;
 
 /**
- * Java bean store.
+ * Basic implementation of {@link WritableBeanStore}.
  *
  * <p>
  * A simple storage database for beans keyed by type and name.
@@ -46,215 +38,27 @@ import org.apache.juneau.commons.reflect.*;
  * the <ja>@Name</ja> or <ja>@Qualified</ja> annotations on constructor or method parameters.
  *
  * <p>
- * Beans are added through the following methods:
- * <ul class='javatreec'>
- * 	<li class='jm'>{@link #add(Class,Object) add(Class,Object)}
- * 	<li class='jm'>{@link #add(Class,Object,String) add(Class,Object,String)}
- * 	<li class='jm'>{@link #addBean(Class,Object) addBean(Class,Object)}
- * 	<li class='jm'>{@link #addBean(Class,Object,String) addBean(Class,Object,String)}
- * 	<li class='jm'>{@link #addSupplier(Class,Supplier) addSupplier(Class,Supplier)}
- * 	<li class='jm'>{@link #addSupplier(Class,Supplier,String) addSupplier(Class,Supplier,String)}
- * </ul>
+ * This implementation is thread-safe and supports parent bean stores for hierarchical bean resolution.
  *
- * <p>
- * Beans are retrieved through the following methods:
- * <ul class='javatreec'>
- * 	<li class='jm'>{@link #getBean(Class) getBean(Class)}
- * 	<li class='jm'>{@link #getBean(Class,String) getBean(Class,String)}
- * 	<li class='jm'>{@link #stream(Class) stream(Class)}
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='jc'>{@link BeanStore} - Read-only bean lookup interface
+ * 	<li class='jc'>{@link WritableBeanStore} - Writable bean store interface
  * </ul>
- *
- * <p>
- * Beans are created through the following methods:
- * <ul class='javatreec'>
- * 	<li class='jm'>{@link BeanCreator#of(Class,BasicBeanStore2) BeanCreator.of(Class,BasicBeanStore2)}
- * 	<li class='jc'>{@link BeanCreateMethodFinder#BeanCreateMethodFinder(Class,Class,BasicBeanStore2) BeanCreateMethodFinder(Class,Class,BasicBeanStore2)}
- * 	<li class='jc'>{@link BeanCreateMethodFinder#BeanCreateMethodFinder(Class,Object,BasicBeanStore2) BeanCreateMethodFinder(Class,Object,BasicBeanStore2)}
- * </ul>
- *
- * <h5 class='section'>Notes:</h5><ul>
- * 	<li class='note'>Bean stores can be nested using {@link Builder#parent(BasicBeanStore2)}.
- * 	<li class='note'>Bean stores can be made read-only using {@link Builder#readOnly()}.
- * 	<li class='note'>Bean stores can be made thread-safe using {@link Builder#threadSafe()}.
- * </ul>
- *
  */
-public class BasicBeanStore2 {
+public class BasicBeanStore2 implements WritableBeanStore {
 
-	/**
-	 * Builder class.
-	 */
-	public static class Builder {
-
-		BasicBeanStore2 parent;
-		boolean readOnly, threadSafe;
-		Class<? extends BasicBeanStore2> type;
-		BasicBeanStore2 impl;
-
-		/**
-		 * Constructor.
-		 */
-		protected Builder() {}
-
-		/**
-		 * Instantiates this bean store.
-		 *
-		 * @return A new bean store.
-		 */
-		public BasicBeanStore2 build() {
-			if (nn(impl))
-				return impl;
-			if (type == null || type == BasicBeanStore2.class)
-				return new BasicBeanStore2(this);
-
-			var c = info(type);
-
-			// @formatter:off
-			var result = c.getDeclaredMethod(
-				x -> x.isPublic()
-				&& x.getParameterCount() == 0
-				&& x.isStatic()
-				&& x.hasName("getInstance")
-			).map(m -> m.<BasicBeanStore2>invoke(null));
-			// @formatter:on
-			if (result.isPresent())
-				return result.get();
-
-			result = c.getPublicConstructor(x -> x.canAccept(this)).map(ci -> ci.<BasicBeanStore2>newInstance(this));
-			if (result.isPresent())
-				return result.get();
-
-			result = c.getDeclaredConstructor(x -> x.isProtected() && x.canAccept(this)).map(ci -> ci.accessible().<BasicBeanStore2>newInstance(this));
-			if (result.isPresent())
-				return result.get();
-
-			throw rex("Could not find a way to instantiate class {0}", cn(type));
-		}
-
-		/**
-		 * Overrides the bean to return from the {@link #build()} method.
-		 *
-		 * @param value The bean to return from the {@link #build()} method.
-		 * @return This object.
-		 */
-		public Builder impl(BasicBeanStore2 value) {
-			impl = value;
-			return this;
-		}
-
-
-		/**
-		 * Specifies the parent bean store.
-		 *
-		 * <p>
-		 * Bean searches are performed recursively up this parent chain.
-		 *
-		 * @param value The setting value.
-		 * @return  This object.
-		 */
-		public Builder parent(BasicBeanStore2 value) {
-			parent = value;
-			return this;
-		}
-
-		/**
-		 * Specifies that the bean store is read-only.
-		 *
-		 * <p>
-		 * This means methods such as {@link BasicBeanStore2#addBean(Class, Object)} cannot be used.
-		 *
-		 * @return  This object.
-		 */
-		public Builder readOnly() {
-			readOnly = true;
-			return this;
-		}
-
-		/**
-		 * Specifies that the bean store being created should be thread-safe.
-		 *
-		 * @return  This object.
-		 */
-		public Builder threadSafe() {
-			threadSafe = true;
-			return this;
-		}
-
-		/**
-		 * Overrides the bean store type.
-		 *
-		 * <p>
-		 * The specified type must have one of the following:
-		 * <ul>
-		 * 	<li>A static <c>getInstance()</c> method.
-		 * 	<li>A public constructor that takes in this builder.
-		 * 	<li>A protected constructor that takes in this builder.
-		 * </ul>
-		 *
-		 * @param value The bean store type.
-		 * @return This object.
-		 */
-		public Builder type(Class<? extends BasicBeanStore2> value) {
-			type = value;
-			return this;
-		}
-	}
-
-	/**
-	 * Non-existent bean store.
-	 */
-	public static final class Void extends BasicBeanStore2 {}
-
-	/**
-	 * Static read-only reusable instance.
-	 */
-	public static final BasicBeanStore2 INSTANCE = create().readOnly().build();
-
-	/**
-	 * Static creator.
-	 *
-	 * @return A new {@link Builder} object.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param parent Parent bean store.  Can be <jk>null</jk> if this is the root resource.
-	 * @return A new {@link BasicBeanStore2} object.
-	 */
-	public static BasicBeanStore2 of(BasicBeanStore2 parent) {
-		return create().parent(parent).build();
-	}
-
-	private final Deque<Entry<?>> entries;
-	private final Map<Class<?>,Entry<?>> unnamedEntries;
-
-	final Optional<BasicBeanStore2> parent;
-	final boolean readOnly, threadSafe;
-	final SimpleReadWriteLock lock;
+	private final ConcurrentHashMap<Class<?>, ConcurrentHashMap<String, Supplier<?>>> entries;
+	private final BeanStore parent;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder containing the settings for this bean.
+	 * @param parent The parent bean store.  Can be <jk>null</jk>.  Bean searches are performed recursively up this parent chain.
 	 */
-	protected BasicBeanStore2(Builder builder) {
-		parent = opt(builder.parent);
-		readOnly = builder.readOnly;
-		threadSafe = builder.threadSafe;
-		lock = threadSafe ? new SimpleReadWriteLock() : SimpleReadWriteLock.NO_OP;
-		entries = threadSafe ? new ConcurrentLinkedDeque<>() : new LinkedList<>();
-		unnamedEntries = threadSafe ? new ConcurrentHashMap<>() : map();
-		var e = createEntry(BasicBeanStore2.class, ()->this, null);
-		entries.addFirst(e);
-		unnamedEntries.put(BasicBeanStore2.class, e);
-	}
-
-	BasicBeanStore2() {
-		this(create());
+	public BasicBeanStore2(BeanStore parent) {
+		this.parent = parent;
+		entries = new ConcurrentHashMap<>();
+		addSupplier(BasicBeanStore2.class, ()->this, null);
 	}
 
 	/**
@@ -285,19 +89,20 @@ public class BasicBeanStore2 {
 	}
 
 	/**
-	 * Adds an unnamed bean of the specified type to this factory.
+	 * Adds an unnamed bean of the specified type to this store.
 	 *
 	 * @param <T> The class to associate this bean with.
 	 * @param beanType The class to associate this bean with.
 	 * @param bean The bean.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
+	@Override
 	public <T> BasicBeanStore2 addBean(Class<T> beanType, T bean) {
 		return addBean(beanType, bean, null);
 	}
 
 	/**
-	 * Adds a named bean of the specified type to this factory.
+	 * Adds a named bean of the specified type to this store.
 	 *
 	 * @param <T> The class to associate this bean with.
 	 * @param beanType The class to associate this bean with.
@@ -305,24 +110,32 @@ public class BasicBeanStore2 {
 	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
+	@Override
 	public <T> BasicBeanStore2 addBean(Class<T> beanType, T bean, String name) {
 		return addSupplier(beanType, () -> bean, name);
 	}
 
 	/**
-	 * Adds a supplier for an unnamed bean of the specified type to this factory.
+	 * Adds a supplier for an unnamed bean of the specified type to this store.
+	 *
+	 * <p>
+	 * The supplier will be invoked lazily when the bean is first requested.
 	 *
 	 * @param <T> The class to associate this bean with.
 	 * @param beanType The class to associate this bean with.
 	 * @param bean The bean supplier.
 	 * @return This object.
 	 */
+	@Override
 	public <T> BasicBeanStore2 addSupplier(Class<T> beanType, Supplier<T> bean) {
 		return addSupplier(beanType, bean, null);
 	}
 
 	/**
-	 * Adds a supplier for a named bean of the specified type to this factory.
+	 * Adds a supplier for a named bean of the specified type to this store.
+	 *
+	 * <p>
+	 * The supplier will be invoked lazily when the bean is first requested.
 	 *
 	 * @param <T> The class to associate this bean with.
 	 * @param beanType The class to associate this bean with.
@@ -330,186 +143,195 @@ public class BasicBeanStore2 {
 	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
+	@Override
 	public <T> BasicBeanStore2 addSupplier(Class<T> beanType, Supplier<T> bean, String name) {
-		assertCanWrite();
-		var e = createEntry(beanType, bean, name);
-		try (var x = lock.write()) {
-			entries.addFirst(e);
-			if (e(name))
-				unnamedEntries.put(beanType, e);
-		}
+		var typeMap = entries.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>());
+		var key = emptyIfNull(name);
+		typeMap.put(key, bean);
 		return this;
 	}
 
 	/**
-	 * Clears out all bean in this bean store.
+	 * Removes all beans from this store.
 	 *
 	 * <p>
-	 * Does not affect the parent bean store.
+	 * This operation only affects this store and does not affect the parent bean store.
 	 *
 	 * @return This object.
 	 */
+	@Override
 	public BasicBeanStore2 clear() {
-		assertCanWrite();
-		try (var x = lock.write()) {
-			unnamedEntries.clear();
-			entries.clear();
-		}
+		entries.clear();
 		return this;
 	}
-
-	/**
-	 * Instantiates a bean creator.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jc'>{@link BeanCreator} for usage.
-	 * </ul>
-	 *
-
 
 	/**
 	 * Returns the unnamed bean of the specified type.
 	 *
+	 * <p>
+	 * If no unnamed bean is found in this store, searches the parent store recursively.
+	 *
 	 * @param <T> The type of bean to return.
 	 * @param beanType The type of bean to return.
-	 * @return The bean.
+	 * @return The bean, or {@link Optional#empty()} if not found.
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T> Optional<T> getBean(Class<T> beanType) {
-		try (var x = lock.read()) {
-			var e = (Entry<T>)unnamedEntries.get(beanType);
-			if (nn(e))
-				return opt(e.get());
-			if (parent.isPresent())
-				return parent.get().getBean(beanType);
-			return opte();
+		var typeMap = entries.get(beanType);
+		if (nn(typeMap)) {
+			var supplier = typeMap.get("");
+			if (nn(supplier))
+				return opt((T)supplier.get());
 		}
+		if (nn(parent))
+			return parent.getBean(beanType);
+		return opte();
 	}
+
 
 	/**
 	 * Returns the named bean of the specified type.
 	 *
+	 * <p>
+	 * If no bean with the specified name is found in this store, searches the parent store recursively.
+	 *
 	 * @param <T> The type of bean to return.
 	 * @param beanType The type of bean to return.
 	 * @param name The bean name.  Can be <jk>null</jk>.
-	 * @return The bean.
+	 * @return The bean, or {@link Optional#empty()} if not found.
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T> Optional<T> getBean(Class<T> beanType, String name) {
-		try (var x = lock.read()) {
-			var e = (Entry<T>)entries.stream().filter(x2 -> x2.matches(beanType, name)).findFirst().orElse(null);
-			if (nn(e))
-				return opt(e.get());
-			if (parent.isPresent())
-				return parent.get().getBean(beanType, name);
-			return opte();
+		var typeMap = entries.get(beanType);
+		if (nn(typeMap)) {
+			var key = emptyIfNull(name);
+			var supplier = typeMap.get(key);
+			if (nn(supplier))
+				return opt((T)supplier.get());
 		}
+		if (nn(parent))
+			return parent.getBean(beanType, name);
+		return opte();
 	}
 
 	/**
-	 * Given an executable, returns a list of types that are missing from this factory.
+	 * Returns all beans of the specified type, keyed by bean name.
 	 *
-	 * @param executable The constructor or method to get the params for.
-	 * @param outer The outer object to use when instantiating inner classes.  Can be <jk>null</jk>.
-	 * @return A comma-delimited list of types that are missing from this factory, or <jk>null</jk> if none are missing.
-	 */
-	public String getMissingParams(ExecutableInfo executable, Object outer) {
-		var params = executable.getParameters();
-		List<String> l = list();
-		loop: for (int i = 0; i < params.size(); i++) {
-			var pi = params.get(i);
-			var pt = pi.getParameterType();
-			if (i == 0 && nn(outer) && pt.isInstance(outer))
-				continue loop;
-			if (pt.is(Optional.class))
-				continue loop;
-			var beanName = pi.getResolvedQualifier();  // Use @Named for bean injection
-			var ptc = pt.inner();
-			if (beanName == null && ! hasBean(ptc))
-				l.add(pt.getNameSimple());
-			if (nn(beanName) && ! hasBean(ptc, beanName))
-				l.add(pt.getNameSimple() + '@' + beanName);
-		}
-		return l.isEmpty() ? null : l.stream().sorted().collect(joining(","));
-	}
-
-	/**
-	 * Returns the corresponding beans in this factory for the specified param types.
+	 * <p>
+	 * The map keys are the bean names (empty string for unnamed beans), and the values are the bean instances.
+	 * Results from the parent store are included first, then beans from this store (which override parent beans with the same name).
 	 *
-	 * @param executable The constructor or method to get the params for.
-	 * @param outer The outer object to use when instantiating inner classes.  Can be <jk>null</jk>.
-	 * @return The corresponding beans in this factory for the specified param types.
+	 * @param <T> The bean type.
+	 * @param beanType The bean type.
+	 * @return A map of bean names to bean instances.  Never <jk>null</jk>.
 	 */
-	public Object[] getParams(ExecutableInfo executable, Object outer) {
-		var o = new Object[executable.getParameterCount()];
-		for (var i = 0; i < executable.getParameterCount(); i++) {
-			var pi = executable.getParameter(i);
-			var pt = pi.getParameterType();
-			if (i == 0 && nn(outer) && pt.isInstance(outer)) {
-				o[i] = outer;
-			} else {
-				var beanQualifier = pi.getResolvedQualifier();
-				var ptc = pt.unwrap(Optional.class).inner();
-				var o2 = beanQualifier == null ? getBean(ptc) : getBean(ptc, beanQualifier);
-				o[i] = pt.is(Optional.class) ? o2 : o2.orElse(null);
-			}
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T> Map<String,T> getBeansOfType(Class<T> beanType) {
+		Map<String,T> result = map();
+		if (nn(parent)) {
+			var parentBeans = parent.getBeansOfType(beanType);
+			parentBeans.forEach((name, bean) -> result.put(name, bean));
 		}
-		return o;
+		var typeMap = entries.get(beanType);
+		if (nn(typeMap)) {
+			typeMap.forEach((name, supplier) -> result.put(name, (T)supplier.get()));
+		}
+		return result;
 	}
 
 	/**
-	 * Given the list of param types, returns <jk>true</jk> if this factory has all the parameters for the specified executable.
+	 * Returns <jk>true</jk> if this store contains at least one unnamed bean of the specified type.
 	 *
-	 * @param executable The constructor or method to get the params for.
-	 * @param outer The outer object to use when instantiating inner classes.  Can be <jk>null</jk>.
-	 * @return A comma-delimited list of types that are missing from this factory.
-	 */
-	public boolean hasAllParams(ExecutableInfo executable, Object outer) {
-		loop: for (int i = 0; i < executable.getParameterCount(); i++) {
-			var pi = executable.getParameter(i);
-			var pt = pi.getParameterType();
-			if (i == 0 && nn(outer) && pt.isInstance(outer))
-				continue loop;
-			if (pt.is(Optional.class))
-				continue loop;
-			var beanQualifier = pi.getResolvedQualifier();
-			var ptc = pt.inner();
-			if ((beanQualifier == null && ! hasBean(ptc)) || (nn(beanQualifier) && ! hasBean(ptc, beanQualifier)))
-				return false;
-		}
-		return true;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this store contains the specified unnamed bean type.
+	 * <p>
+	 * If not found in this store, searches the parent store recursively.
 	 *
 	 * @param beanType The bean type to check.
-	 * @return <jk>true</jk> if this store contains the specified unnamed bean type.
+	 * @return <jk>true</jk> if this store contains at least one unnamed bean of the specified type.
 	 */
+	@Override
 	public boolean hasBean(Class<?> beanType) {
-		return unnamedEntries.containsKey(beanType) || parent.map(x -> x.hasBean(beanType)).orElse(false);
+		var typeMap = entries.get(beanType);
+		if (nn(typeMap) && typeMap.containsKey(""))
+			return true;
+		if (n(parent))
+			return false;
+		return parent.hasBean(beanType);
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this store contains the specified named bean type.
+	 * Returns <jk>true</jk> if this store contains a bean of the specified type and name.
+	 *
+	 * <p>
+	 * If not found in this store, searches the parent store recursively.
 	 *
 	 * @param beanType The bean type to check.
-	 * @param name The bean name.
-	 * @return <jk>true</jk> if this store contains the specified named bean type.
+	 * @param name The bean name.  Can be <jk>null</jk>.
+	 * @return <jk>true</jk> if this store contains a bean of the specified type and name.
 	 */
+	@Override
 	public boolean hasBean(Class<?> beanType, String name) {
-		return entries.stream().anyMatch(x -> x.matches(beanType, name)) || parent.map(x -> x.hasBean(beanType, name)).orElse(false);
+		var typeMap = entries.get(beanType);
+		if (nn(typeMap)) {
+			var key = emptyIfNull(name);
+			if (typeMap.containsKey(key))
+				return true;
+		}
+		if (n(parent))
+			return false;
+		return parent.hasBean(beanType, name);
 	}
 
-	protected FluentMap<String,Object> properties() {
-		// @formatter:off
-		return filteredBeanPropertyMap()
-			.a("entries", entries.stream().map(Entry::properties).collect(toList()))
-			.a("identity", id(this))
-			.a("parent", parent.map(BasicBeanStore2::properties).orElse(null))
-			.ai(readOnly, "readOnly", readOnly)
-			.ai(threadSafe, "threadSafe", threadSafe);
-		// @formatter:on
+	/**
+	 * Returns the supplier for an unnamed bean of the specified type.
+	 *
+	 * <p>
+	 * If no supplier is found in this store, searches the parent store recursively.
+	 *
+	 * @param <T> The bean type.
+	 * @param beanType The bean type.
+	 * @return The supplier, or {@link Optional#empty()} if no supplier of the specified type exists.
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T> Optional<Supplier<T>> getBeanSupplier(Class<T> beanType) {
+		var typeMap = entries.get(beanType);
+		if (nn(typeMap)) {
+			var supplier = typeMap.get("");
+			if (nn(supplier))
+				return opt((Supplier<T>)supplier);
+		}
+		if (nn(parent))
+			return parent.getBeanSupplier(beanType);
+		return opte();
+	}
+
+	/**
+	 * Returns the supplier for a named bean of the specified type.
+	 *
+	 * <p>
+	 * If no supplier with the specified name is found in this store, searches the parent store recursively.
+	 *
+	 * @param <T> The bean type.
+	 * @param beanType The bean type.
+	 * @param name The bean name.  Can be <jk>null</jk>.
+	 * @return The supplier, or {@link Optional#empty()} if no supplier of the specified type and name exists.
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T> Optional<Supplier<T>> getBeanSupplier(Class<T> beanType, String name) {
+		var typeMap = entries.get(beanType);
+		if (nn(typeMap)) {
+			var key = emptyIfNull(name);
+			var supplier = typeMap.get(key);
+			if (nn(supplier))
+				return opt((Supplier<T>)supplier);
+		}
+		if (nn(parent))
+			return parent.getBeanSupplier(beanType, name);
+		return opte();
 	}
 
 	@Override /* Overridden from Object */
@@ -517,128 +339,21 @@ public class BasicBeanStore2 {
 		return r(properties());
 	}
 
-	private void assertCanWrite() {
-		if (readOnly)
-			throw new IllegalStateException("Method cannot be used because BasicBeanStore2 is read-only.");
-	}
-
-	/**
-	 * Creates an entry in this store for the specified bean.
-	 *
-	 * <p>
-	 * Subclasses can override this method to create their own entry subtypes.
-	 *
-	 * @param <T> The class type to associate with the bean.
-	 * @param type The class type to associate with the bean.
-	 * @param bean The bean supplier.
-	 * @param name Optional name to associate with the bean.  Can be <jk>null</jk>.
-	 * @return A new bean store entry.
-	 */
-	protected <T> Entry<T> createEntry(Class<T> type, Supplier<T> bean, String name) {
-		return Entry.create(type, bean, name);
-	}
-
-	/**
-	 * Represents a bean in a {@link BasicBeanStore2}.
-	 *
-	 * <p>
-	 * A bean entry consists of the following:
-	 * <ul>
-	 * 	<li>A class type.
-	 * 	<li>A bean or bean supplier that returns an instance of the class type.  This can be a subclass of the type.
-	 * 	<li>An optional name.
-	 * </ul>
-	 *
-	 * @param <T> The bean type.
-	 */
-	public static class Entry<T> {
-		/**
-		 * Static creator.
-		 *
-		 * @param <T> The class type to associate with the bean.
-		 * @param type The class type to associate with the bean.
-		 * @param bean The bean supplier.
-		 * @param name Optional name to associate with the bean.  Can be <jk>null</jk>.
-		 * @return A new bean store entry.
-		 */
-		public static <T> Entry<T> create(Class<T> type, Supplier<T> bean, String name) {
-			return new Entry<>(type, bean, name);
-		}
-
-		final Supplier<T> bean;
-		final Class<T> type;
-		final String name;
-
-		/**
-		 * Constructor.
-		 *
-		 * @param type The class type to associate with the bean.
-		 * @param bean The bean supplier.
-		 * @param name Optional name to associate with the bean.  Can be <jk>null</jk>.
-		 */
-		protected Entry(Class<T> type, Supplier<T> bean, String name) {
-			this.bean = assertArgNotNull("bean", bean);
-			this.type = assertArgNotNull("type", type);
-			this.name = nullIfEmpty(name);
-		}
-
-		/**
-		 * Returns the bean associated with this entry.
-		 *
-		 * @return The bean associated with this entry.
-		 */
-		public T get() {
-			return bean.get();
-		}
-
-		/**
-		 * Returns the name associated with this entry.
-		 *
-		 * @return the name associated with this entry.  <jk>null</jk> if no name is associated.
-		 */
-		public String getName() { return name; }
-
-		/**
-		 * Returns the type this bean is associated with.
-		 *
-		 * @return The type this bean is associated with.
-		 */
-		public Class<T> getType() { return type; }
-
-		/**
-		 * Returns <jk>true</jk> if this bean is exactly of the specified type.
-		 *
-		 * @param type The class to check.  Returns <jk>false</jk> if <jk>null</jk>.
-		 * @return <jk>true</jk> if this bean is exactly of the specified type.
-		 */
-		public boolean matches(Class<?> type) {
-			return this.type.equals(type);
-		}
-
-		/**
-		 * Returns <jk>true</jk> if this bean is exactly of the specified type and has the specified name.
-		 *
-		 * @param type The class to check.  Returns <jk>false</jk> if <jk>null</jk>.
-		 * @param name The name to check.  Can be <jk>null</jk> to only match if name of entry is <jk>null</jk>.
-		 * @return <jk>true</jk> if this bean is exactly of the specified type and has the specified name.
-		 */
-		public boolean matches(Class<?> type, String name) {
-			name = nullIfEmpty(name);
-			return matches(type) && eq(this.name, name);
-		}
-
-		/**
-		 * Returns the properties in this object as a simple map for debugging purposes.
-		 *
-		 * @return The properties in this object as a simple map.
-		 */
-		protected FluentMap<String,Object> properties() {
-			// @formatter:off
-			return filteredBeanPropertyMap()
-				.a("type", cns(getType()))
-				.a("bean", id(get()))
-				.a("name", getName());
-			// @formatter:on
-		}
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		var entryList = list();
+		entries.forEach((type, typeMap) -> {
+			typeMap.forEach((name, supplier) -> {
+				entryList.add(filteredBeanPropertyMap()
+					.a("type", cns(type))
+					.a("bean", id(supplier.get()))
+					.a("name", name));
+			});
+		});
+		return filteredBeanPropertyMap()
+			.a("entries", entryList)
+			.a("identity", id(this))
+			.a("parent", parent instanceof BasicBeanStore2 parent2 ? parent2.properties() : s(parent));
+		// @formatter:on
 	}
 }

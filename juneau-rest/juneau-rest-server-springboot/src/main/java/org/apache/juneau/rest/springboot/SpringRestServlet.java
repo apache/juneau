@@ -18,7 +18,7 @@ package org.apache.juneau.rest.springboot;
 
 import java.util.*;
 
-import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.servlet.*;
 import org.springframework.beans.factory.annotation.*;
@@ -51,10 +51,10 @@ public abstract class SpringRestServlet extends RestServlet {
 	 * Hook into Spring bean injection framework.
 	 *
 	 * @param parent Optional parent resource.
-	 * @return A BasicBeanStore2 that retrieves beans from the Spring Boot app context.
+	 * @return A BasicBeanStore that retrieves beans from the Spring Boot app context.
 	 */
 	@RestInject
-	public BasicBeanStore2 createBeanStore(Optional<BasicBeanStore2> parent) {
+	public BasicBeanStore createBeanStore(Optional<BasicBeanStore> parent) {
 		return new SpringBeanStore(appContext, parent, this);
 	}
 }

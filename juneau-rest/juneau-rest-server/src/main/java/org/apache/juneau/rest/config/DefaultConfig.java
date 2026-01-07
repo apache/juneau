@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.config;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.*;
@@ -122,7 +122,7 @@ import org.apache.juneau.serializer.annotation.*;
 	title="$S{j.title,$E{J_TITLE,}}",
 
 	// Injectable/overridable beans.
-	beanStore=BasicBeanStore2.Void.class,  // Defaults to BasicBeanStore2.
+	beanStore=BasicBeanStore.Void.class,  // Defaults to BasicBeanStore.
 	callLogger=CallLogger.Void.class,  // Defaults to BasicCallLogger.
 	debugEnablement=DebugEnablement.Void.class,  // Defaults to BasicDefaultEnablement.
 	staticFiles=StaticFiles.Void.class,  // Defaults to BasicStaticFiles.
