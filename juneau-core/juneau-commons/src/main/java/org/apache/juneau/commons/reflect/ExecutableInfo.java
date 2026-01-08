@@ -272,6 +272,8 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 */
 	public final ClassInfo getDeclaringClass() { return declaringClass; }
 
+	public final boolean isDeclaringClass(ClassInfo value) { return eq(declaringClass, value); }
+
 	/**
 	 * Returns the exception types on this executable.
 	 *

@@ -25,6 +25,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.Named;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.reflect.ExecutableException;
 import org.junit.jupiter.api.*;
 
 class InjectUtils_Test extends TestBase {
@@ -249,9 +250,7 @@ class InjectUtils_Test extends TestBase {
 	@Test
 	void b02_getParams_singleBeanNotFound() throws Exception {
 		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
-		var params = getParameters(constructor, beanStore, null);
-		assertEquals(1, params.length);
-		assertNull(params[0]);
+		assertThrows(ExecutableException.class, () -> getParameters(constructor, beanStore, null));
 	}
 
 	@Test
@@ -571,7 +570,8 @@ class InjectUtils_Test extends TestBase {
 			.findFirst();
 		assertTrue(constructorOpt.isPresent(), "Constructor should be found. Available: " + constructors);
 		var constructor = constructorOpt.get();
-		var params = getParameters(constructor, beanStore, null);
+		// Pass 'this' as enclosingInstance for the inner class outer parameter
+		var params = getParameters(constructor, beanStore, this);
 		assertEquals(2, params.length); // Outer class + Optional parameter
 		assertTrue(params[1] instanceof Optional);
 		var opt = (Optional<List<TestService>>) params[1];
@@ -645,7 +645,8 @@ class InjectUtils_Test extends TestBase {
 			.findFirst();
 		assertTrue(constructorOpt.isPresent(), "Constructor should be found. Available: " + constructors);
 		var constructor = constructorOpt.get();
-		var params = getParameters(constructor, beanStore, null);
+		// Pass 'this' as enclosingInstance for the inner class outer parameter
+		var params = getParameters(constructor, beanStore, this);
 		assertEquals(2, params.length); // Outer class + Optional parameter
 		assertTrue(params[1] instanceof Optional);
 		var opt = (Optional<TestService[]>) params[1];
@@ -672,11 +673,10 @@ class InjectUtils_Test extends TestBase {
 			.findFirst();
 		assertTrue(constructorOpt.isPresent(), "Constructor should be found. Available: " + constructors);
 		var constructor = constructorOpt.get();
-		var params = getParameters(constructor, beanStore, null);
-		assertEquals(2, params.length); // Outer class + List parameter
 		// Since getElementType returns null for raw List, it won't be treated as a collection
-		// and will try to look up a bean of type List, which won't be found
-		assertNull(params[1]);
+		// and will try to look up a bean of type List, which won't be found - should throw exception
+		// Pass 'this' as enclosingInstance for the inner class outer parameter
+		assertThrows(ExecutableException.class, () -> getParameters(constructor, beanStore, this));
 	}
 
 	// Test line 322, 324, 327: getElementType - Map with wrong key type or non-Class value type
@@ -695,10 +695,8 @@ class InjectUtils_Test extends TestBase {
 			.findFirst();
 		assertTrue(constructorOpt.isPresent(), "Constructor should be found. Available: " + constructors);
 		var constructor = constructorOpt.get();
-		var params = getParameters(constructor, beanStore, null);
-		assertEquals(2, params.length); // Outer class + Map parameter
-		// Since key type is not String, getElementType returns null
-		assertNull(params[1]);
+		// Since key type is not String, getElementType returns null - should throw exception
+		assertThrows(ExecutableException.class, () -> getParameters(constructor, beanStore, null));
 	}
 
 	// Test line 322, 324, 327: getElementType - Map with non-Class value type
@@ -717,10 +715,8 @@ class InjectUtils_Test extends TestBase {
 			.findFirst();
 		assertTrue(constructorOpt.isPresent(), "Constructor should be found. Available: " + constructors);
 		var constructor = constructorOpt.get();
-		var params = getParameters(constructor, beanStore, null);
-		assertEquals(2, params.length); // Outer class + Map parameter
-		// Since value type is List<TestService> (ParameterizedType, not Class), getElementType returns null
-		assertNull(params[1]);
+		// Since value type is List<TestService> (ParameterizedType, not Class), getElementType returns null - should throw exception
+		assertThrows(ExecutableException.class, () -> getParameters(constructor, beanStore, null));
 	}
 
 	// Test line 324: getElementType - Map with raw type (no generic parameters)
@@ -739,11 +735,9 @@ class InjectUtils_Test extends TestBase {
 			.findFirst();
 		assertTrue(constructorOpt.isPresent(), "Constructor should be found. Available: " + constructors);
 		var constructor = constructorOpt.get();
-		var params = getParameters(constructor, beanStore, null);
-		assertEquals(2, params.length); // Outer class + Map parameter
 		// Since getElementType returns null for raw Map, it won't be treated as a collection
-		// and will try to look up a bean of type Map, which won't be found
-		assertNull(params[1]);
+		// and will try to look up a bean of type Map, which won't be found - should throw exception
+		assertThrows(ExecutableException.class, () -> getParameters(constructor, beanStore, null));
 	}
 
 	// Test line 333: getElementType - return null for unsupported types
@@ -763,11 +757,9 @@ class InjectUtils_Test extends TestBase {
 			.findFirst();
 		assertTrue(constructorOpt.isPresent(), "Constructor should be found. Available: " + constructors);
 		var constructor = constructorOpt.get();
-		var params = getParameters(constructor, beanStore, null);
-		assertEquals(2, params.length); // Outer class + Collection parameter
 		// Collection is not List/Set/Map, so isCollectionType returns false, so getCollectionValue returns null
-		// Then it tries to look up a bean of type Collection, which won't be found
-		assertNull(params[1]);
+		// Then it tries to look up a bean of type Collection, which won't be found - should throw exception
+		assertThrows(ExecutableException.class, () -> getParameters(constructor, beanStore, null));
 	}
 
 	// Test line 324: getElementType - Optional<SomeClass> where SomeClass is not a ParameterizedType
@@ -789,7 +781,8 @@ class InjectUtils_Test extends TestBase {
 			.findFirst();
 		assertTrue(constructorOpt.isPresent(), "Constructor should be found. Available: " + constructors);
 		var constructor = constructorOpt.get();
-		var params = getParameters(constructor, beanStore, null);
+		// Pass 'this' as enclosingInstance for the inner class outer parameter
+		var params = getParameters(constructor, beanStore, this);
 		assertEquals(2, params.length); // Outer class + Optional<List> parameter
 		// Optional<List> (raw) - after unwrapping Optional, we get List (raw)
 		// isCollectionType(List.class) returns true, so getCollectionValue is called
@@ -828,7 +821,8 @@ class InjectUtils_Test extends TestBase {
 			.findFirst();
 		assertTrue(constructorOpt.isPresent(), "Constructor should be found. Available: " + constructors);
 		var constructor = constructorOpt.get();
-		var params = getParameters(constructor, beanStore, null);
+		// Pass 'this' as enclosingInstance for the inner class outer parameter
+		var params = getParameters(constructor, beanStore, this);
 		assertEquals(2, params.length); // Outer class + Optional<Map> parameter
 		// This should work normally: Optional unwrapping happens, then Map is populated
 		assertTrue(params[1] instanceof Optional);
@@ -863,11 +857,9 @@ class InjectUtils_Test extends TestBase {
 			.findFirst();
 		assertTrue(constructorOpt.isPresent(), "Constructor should be found. Available: " + constructors);
 		var constructor = constructorOpt.get();
-		var params = getParameters(constructor, beanStore, null);
-		assertEquals(2, params.length); // Outer class + Map parameter
 		// Map<Integer, TestService> - getElementType returns null (key is not String)
-		// So getCollectionValue returns null early (line 383), never reaching line 416
-		assertNull(params[1]);
+		// So getCollectionValue returns null early, then tries to look up bean - should throw exception
+		assertThrows(ExecutableException.class, () -> getParameters(constructor, beanStore, null));
 	}
 
 	// Test line 437: getCollectionValue - fallback return null
@@ -898,11 +890,9 @@ class InjectUtils_Test extends TestBase {
 			.findFirst();
 		assertTrue(constructorOpt.isPresent(), "Constructor should be found. Available: " + constructors);
 		var constructor = constructorOpt.get();
-		var params = getParameters(constructor, beanStore, null);
-		assertEquals(2, params.length); // Outer class + Collection parameter
 		// Collection is not List/Set/Map, so isCollectionType returns false, so getCollectionValue returns null early
-		// Then it tries to look up a bean of type Collection, which won't be found
-		assertNull(params[1]);
+		// Then it tries to look up a bean of type Collection, which won't be found - should throw exception
+		assertThrows(ExecutableException.class, () -> getParameters(constructor, beanStore, null));
 	}
 
 	//====================================================================================================
@@ -1044,7 +1034,11 @@ class InjectUtils_Test extends TestBase {
 	@Test
 	void f01_injectBeans_fieldSingleBean() {
 		var service = new TestService("test1");
+		var service1 = new TestService("service1");
+		var another = new AnotherService(42);
 		beanStore.addBean(TestService.class, service);
+		beanStore.addBean(TestService.class, service1, "service1"); // Required for namedService
+		beanStore.addBean(AnotherService.class, another); // Required for anotherService
 		var bean = new TestFieldInjection();
 		injectBeans(bean, beanStore);
 		assertSame(service, bean.service);
@@ -1053,7 +1047,11 @@ class InjectUtils_Test extends TestBase {
 	@Test
 	void f02_injectBeans_fieldWithAutowired() {
 		var service = new TestService("test1");
+		var service1 = new TestService("service1");
+		var another = new AnotherService(42);
 		beanStore.addBean(TestService.class, service);
+		beanStore.addBean(TestService.class, service1, "service1"); // Required for namedService
+		beanStore.addBean(AnotherService.class, another); // Required for anotherService
 		var bean = new TestFieldInjection();
 		injectBeans(bean, beanStore);
 		assertSame(service, bean.service2);
@@ -1062,7 +1060,11 @@ class InjectUtils_Test extends TestBase {
 	@Test
 	void f03_injectBeans_fieldOptionalFound() {
 		var service = new TestService("test1");
+		var service1 = new TestService("service1");
+		var another = new AnotherService(42);
 		beanStore.addBean(TestService.class, service);
+		beanStore.addBean(TestService.class, service1, "service1"); // Required for namedService
+		beanStore.addBean(AnotherService.class, another); // Required for anotherService
 		var bean = new TestFieldInjection();
 		injectBeans(bean, beanStore);
 		assertTrue(bean.optionalService.isPresent());
@@ -1071,49 +1073,72 @@ class InjectUtils_Test extends TestBase {
 
 	@Test
 	void f04_injectBeans_fieldOptionalNotFound() {
+		var service1 = new TestService("service1");
+		var another = new AnotherService(42);
+		beanStore.addBean(TestService.class, service1, "service1"); // Required for namedService
+		beanStore.addBean(AnotherService.class, another); // Required for anotherService
+		// Note: No unnamed TestService, so service and service2 will fail, but optionalService will be empty
 		var bean = new TestFieldInjection();
-		injectBeans(bean, beanStore);
-		assertFalse(bean.optionalService.isPresent());
+		// This will throw because service and service2 are required
+		assertThrows(ExecutableException.class, () -> injectBeans(bean, beanStore));
 	}
 
 	@Test
 	void f05_injectBeans_fieldList() {
 		var service1 = new TestService("test1");
 		var service2 = new TestService("test2");
+		var service1Named = new TestService("service1");
+		var another = new AnotherService(42);
 		beanStore.addBean(TestService.class, service1);
 		beanStore.addBean(TestService.class, service2, "service2");
+		beanStore.addBean(TestService.class, service1Named, "service1"); // Required for namedService
+		beanStore.addBean(AnotherService.class, another); // Required for anotherService
 		var bean = new TestFieldInjection();
 		injectBeans(bean, beanStore);
 		assertNotNull(bean.serviceList);
-		assertEquals(2, bean.serviceList.size());
+		// getBeansOfType returns all TestService beans (named and unnamed), so we get 3: service1, service2, and service1Named
+		assertEquals(3, bean.serviceList.size());
 		assertTrue(bean.serviceList.contains(service1));
 		assertTrue(bean.serviceList.contains(service2));
+		assertTrue(bean.serviceList.contains(service1Named));
 	}
 
 	@Test
 	void f06_injectBeans_fieldSet() {
 		var service1 = new TestService("test1");
 		var service2 = new TestService("test2");
+		var service1Named = new TestService("service1");
+		var another = new AnotherService(42);
 		beanStore.addBean(TestService.class, service1);
 		beanStore.addBean(TestService.class, service2, "service2");
+		beanStore.addBean(TestService.class, service1Named, "service1"); // Required for namedService
+		beanStore.addBean(AnotherService.class, another); // Required for anotherService
 		var bean = new TestFieldInjection();
 		injectBeans(bean, beanStore);
 		assertNotNull(bean.serviceSet);
-		assertEquals(2, bean.serviceSet.size());
+		// getBeansOfType returns all TestService beans (named and unnamed), so we get 3: service1, service2, and service1Named
+		assertEquals(3, bean.serviceSet.size());
 		assertTrue(bean.serviceSet.contains(service1));
 		assertTrue(bean.serviceSet.contains(service2));
+		assertTrue(bean.serviceSet.contains(service1Named));
 	}
 
 	@Test
 	void f07_injectBeans_fieldMap() {
 		var service1 = new TestService("test1");
 		var service2 = new TestService("test2");
+		var unnamedService = new TestService("unnamed");
+		var another = new AnotherService(42);
+		beanStore.addBean(TestService.class, unnamedService); // Required for service and service2 fields
 		beanStore.addBean(TestService.class, service1, "service1");
 		beanStore.addBean(TestService.class, service2, "service2");
+		beanStore.addBean(AnotherService.class, another); // Required for anotherService
 		var bean = new TestFieldInjection();
 		injectBeans(bean, beanStore);
 		assertNotNull(bean.serviceMap);
-		assertEquals(2, bean.serviceMap.size());
+		// getBeansOfType returns all TestService beans (named and unnamed), so we get 3: unnamedService, service1, and service2
+		assertEquals(3, bean.serviceMap.size());
+		assertSame(unnamedService, bean.serviceMap.get("")); // Unnamed bean has empty string as key
 		assertSame(service1, bean.serviceMap.get("service1"));
 		assertSame(service2, bean.serviceMap.get("service2"));
 	}
@@ -1122,22 +1147,33 @@ class InjectUtils_Test extends TestBase {
 	void f08_injectBeans_fieldArray() {
 		var service1 = new TestService("test1");
 		var service2 = new TestService("test2");
+		var service1Named = new TestService("service1");
+		var another = new AnotherService(42);
 		beanStore.addBean(TestService.class, service1);
 		beanStore.addBean(TestService.class, service2, "service2");
+		beanStore.addBean(TestService.class, service1Named, "service1"); // Required for namedService
+		beanStore.addBean(AnotherService.class, another); // Required for anotherService
 		var bean = new TestFieldInjection();
 		injectBeans(bean, beanStore);
 		assertNotNull(bean.serviceArray);
-		assertEquals(2, bean.serviceArray.length);
-		assertTrue(bean.serviceArray[0].equals(service1) || bean.serviceArray[0].equals(service2));
-		assertTrue(bean.serviceArray[1].equals(service1) || bean.serviceArray[1].equals(service2));
+		// getBeansOfType returns all TestService beans (named and unnamed), so we get 3: service1, service2, and service1Named
+		assertEquals(3, bean.serviceArray.length);
+		assertTrue(bean.serviceArray[0].equals(service1) || bean.serviceArray[0].equals(service2) || bean.serviceArray[0].equals(service1Named));
+		assertTrue(bean.serviceArray[1].equals(service1) || bean.serviceArray[1].equals(service2) || bean.serviceArray[1].equals(service1Named));
+		assertTrue(bean.serviceArray[2].equals(service1) || bean.serviceArray[2].equals(service2) || bean.serviceArray[2].equals(service1Named));
 	}
 
 	@Test
 	void f09_injectBeans_fieldNamedBean() {
 		var service1 = new TestService("test1");
 		var service2 = new TestService("test2");
+		var another = new AnotherService(42);
 		beanStore.addBean(TestService.class, service1, "service1");
 		beanStore.addBean(TestService.class, service2, "service2");
+		beanStore.addBean(AnotherService.class, another); // Required for anotherService
+		// Also need unnamed TestService for service and service2 fields
+		var unnamedService = new TestService("unnamed");
+		beanStore.addBean(TestService.class, unnamedService);
 		var bean = new TestFieldInjection();
 		injectBeans(bean, beanStore);
 		assertSame(service1, bean.namedService);
@@ -1146,7 +1182,11 @@ class InjectUtils_Test extends TestBase {
 	@Test
 	void f10_injectBeans_fieldFinalSkipped() {
 		var service = new TestService("test1");
+		var service1 = new TestService("service1");
+		var another = new AnotherService(42);
 		beanStore.addBean(TestService.class, service);
+		beanStore.addBean(TestService.class, service1, "service1"); // Required for namedService
+		beanStore.addBean(AnotherService.class, another); // Required for anotherService
 		var bean = new TestFieldInjection();
 		injectBeans(bean, beanStore);
 		// Final field should not be injected (remains null)
@@ -1156,7 +1196,11 @@ class InjectUtils_Test extends TestBase {
 	@Test
 	void f11_injectBeans_fieldUnannotatedSkipped() {
 		var service = new TestService("test1");
+		var service1 = new TestService("service1");
+		var another = new AnotherService(42);
 		beanStore.addBean(TestService.class, service);
+		beanStore.addBean(TestService.class, service1, "service1"); // Required for namedService
+		beanStore.addBean(AnotherService.class, another); // Required for anotherService
 		var bean = new TestFieldInjection();
 		injectBeans(bean, beanStore);
 		// Unannotated field should not be injected
@@ -1166,16 +1210,17 @@ class InjectUtils_Test extends TestBase {
 	@Test
 	void f12_injectBeans_fieldNotFound() {
 		var bean = new TestFieldInjection();
-		injectBeans(bean, beanStore);
-		// Field should remain null if bean not found
-		assertNull(bean.service);
+		// injectBeans now throws exception if required bean is not found
+		assertThrows(ExecutableException.class, () -> injectBeans(bean, beanStore));
 	}
 
 	@Test
 	void f13_injectBeans_fieldMultipleTypes() {
 		var service = new TestService("test1");
+		var service1 = new TestService("service1");
 		var another = new AnotherService(42);
 		beanStore.addBean(TestService.class, service);
+		beanStore.addBean(TestService.class, service1, "service1"); // Required for namedService field
 		beanStore.addBean(AnotherService.class, another);
 		var bean = new TestFieldInjection();
 		injectBeans(bean, beanStore);
@@ -1186,7 +1231,9 @@ class InjectUtils_Test extends TestBase {
 	@Test
 	void f14_injectBeans_methodSingleBean() {
 		var service = new TestService("test1");
+		var service1 = new TestService("service1");
 		beanStore.addBean(TestService.class, service);
+		beanStore.addBean(TestService.class, service1, "service1"); // Required for method8
 		var bean = new TestMethodInjection();
 		injectBeans(bean, beanStore);
 		assertTrue(bean.method1Called);
@@ -1196,7 +1243,9 @@ class InjectUtils_Test extends TestBase {
 	@Test
 	void f15_injectBeans_methodWithAutowired() {
 		var service = new TestService("test1");
+		var service1 = new TestService("service1");
 		beanStore.addBean(TestService.class, service);
+		beanStore.addBean(TestService.class, service1, "service1"); // Required for method8
 		var bean = new TestMethodInjection();
 		injectBeans(bean, beanStore);
 		assertTrue(bean.method2Called);
@@ -1206,7 +1255,9 @@ class InjectUtils_Test extends TestBase {
 	@Test
 	void f16_injectBeans_methodOptional() {
 		var service = new TestService("test1");
+		var service1 = new TestService("service1");
 		beanStore.addBean(TestService.class, service);
+		beanStore.addBean(TestService.class, service1, "service1"); // Required for method8
 		var bean = new TestMethodInjection();
 		injectBeans(bean, beanStore);
 		assertTrue(bean.method3Called);
@@ -1216,8 +1267,10 @@ class InjectUtils_Test extends TestBase {
 	void f17_injectBeans_methodList() {
 		var service1 = new TestService("test1");
 		var service2 = new TestService("test2");
+		var service1Named = new TestService("service1");
 		beanStore.addBean(TestService.class, service1);
 		beanStore.addBean(TestService.class, service2, "service2");
+		beanStore.addBean(TestService.class, service1Named, "service1"); // Required for method8
 		var bean = new TestMethodInjection();
 		injectBeans(bean, beanStore);
 		assertTrue(bean.method4Called);
@@ -1227,8 +1280,10 @@ class InjectUtils_Test extends TestBase {
 	void f18_injectBeans_methodSet() {
 		var service1 = new TestService("test1");
 		var service2 = new TestService("test2");
+		var service1Named = new TestService("service1");
 		beanStore.addBean(TestService.class, service1);
 		beanStore.addBean(TestService.class, service2, "service2");
+		beanStore.addBean(TestService.class, service1Named, "service1"); // Required for method8
 		var bean = new TestMethodInjection();
 		injectBeans(bean, beanStore);
 		assertTrue(bean.method5Called);
@@ -1238,6 +1293,8 @@ class InjectUtils_Test extends TestBase {
 	void f19_injectBeans_methodMap() {
 		var service1 = new TestService("test1");
 		var service2 = new TestService("test2");
+		var unnamedService = new TestService("unnamed");
+		beanStore.addBean(TestService.class, unnamedService); // Required for method1
 		beanStore.addBean(TestService.class, service1, "service1");
 		beanStore.addBean(TestService.class, service2, "service2");
 		var bean = new TestMethodInjection();
@@ -1249,8 +1306,10 @@ class InjectUtils_Test extends TestBase {
 	void f20_injectBeans_methodArray() {
 		var service1 = new TestService("test1");
 		var service2 = new TestService("test2");
+		var service1Named = new TestService("service1");
 		beanStore.addBean(TestService.class, service1);
 		beanStore.addBean(TestService.class, service2, "service2");
+		beanStore.addBean(TestService.class, service1Named, "service1"); // Required for method8
 		var bean = new TestMethodInjection();
 		injectBeans(bean, beanStore);
 		assertTrue(bean.method7Called);
@@ -1260,6 +1319,8 @@ class InjectUtils_Test extends TestBase {
 	void f21_injectBeans_methodNamedBean() {
 		var service1 = new TestService("test1");
 		var service2 = new TestService("test2");
+		var unnamedService = new TestService("unnamed");
+		beanStore.addBean(TestService.class, unnamedService); // Required for method1
 		beanStore.addBean(TestService.class, service1, "service1");
 		beanStore.addBean(TestService.class, service2, "service2");
 		var bean = new TestMethodInjection();
@@ -1269,6 +1330,10 @@ class InjectUtils_Test extends TestBase {
 
 	@Test
 	void f22_injectBeans_methodZeroParameters() {
+		var unnamedService = new TestService("unnamed");
+		var service1Named = new TestService("service1");
+		beanStore.addBean(TestService.class, unnamedService); // Required for method1
+		beanStore.addBean(TestService.class, service1Named, "service1"); // Required for method8
 		var bean = new TestMethodInjection();
 		injectBeans(bean, beanStore);
 		assertTrue(bean.method9Called);
@@ -1277,7 +1342,9 @@ class InjectUtils_Test extends TestBase {
 	@Test
 	void f23_injectBeans_methodReturnValueIgnored() {
 		var service = new TestService("test1");
+		var service1 = new TestService("service1");
 		beanStore.addBean(TestService.class, service);
+		beanStore.addBean(TestService.class, service1, "service1"); // Required for method8
 		var bean = new TestMethodInjection();
 		injectBeans(bean, beanStore);
 		assertTrue(bean.method10Called);
@@ -1305,7 +1372,9 @@ class InjectUtils_Test extends TestBase {
 	@Test
 	void f25_injectBeans_methodWithTypeParamsSkipped() {
 		var service = new TestService("test1");
+		var service1 = new TestService("service1");
 		beanStore.addBean(TestService.class, service);
+		beanStore.addBean(TestService.class, service1, "service1"); // Required for method8
 		var bean = new TestMethodInjection();
 		injectBeans(bean, beanStore);
 		// Method with type parameters should be skipped
@@ -1315,7 +1384,9 @@ class InjectUtils_Test extends TestBase {
 	@Test
 	void f26_injectBeans_methodUnannotatedSkipped() {
 		var service = new TestService("test1");
+		var service1 = new TestService("service1");
 		beanStore.addBean(TestService.class, service);
+		beanStore.addBean(TestService.class, service1, "service1"); // Required for method8
 		var bean = new TestMethodInjection();
 		injectBeans(bean, beanStore);
 		// Unannotated method should be skipped
@@ -1325,7 +1396,9 @@ class InjectUtils_Test extends TestBase {
 	@Test
 	void f27_injectBeans_methodStatic() {
 		var service = new TestService("test1");
+		var service1 = new TestService("service1");
 		beanStore.addBean(TestService.class, service);
+		beanStore.addBean(TestService.class, service1, "service1"); // Required for method8
 		var bean = new TestMethodInjection();
 		// Static methods should be called (with null instance)
 		// Just verify no exception is thrown
@@ -1336,7 +1409,11 @@ class InjectUtils_Test extends TestBase {
 	@Test
 	void f28_injectBeans_returnsSameInstance() {
 		var service = new TestService("test1");
+		var service1 = new TestService("service1");
+		var another = new AnotherService(42);
 		beanStore.addBean(TestService.class, service);
+		beanStore.addBean(TestService.class, service1, "service1"); // Required for namedService field
+		beanStore.addBean(AnotherService.class, another); // Required for anotherService field
 		var bean = new TestFieldInjection();
 		var result = injectBeans(bean, beanStore);
 		// Should return the same instance for method chaining
@@ -1364,38 +1441,70 @@ class InjectUtils_Test extends TestBase {
 
 	@Test
 	void f30_injectBeans_fieldListEmpty() {
+		var service = new TestService("test1");
+		var service1 = new TestService("service1");
+		var another = new AnotherService(42);
+		beanStore.addBean(TestService.class, service); // Required for service and service2 fields
+		beanStore.addBean(TestService.class, service1, "service1"); // Required for namedService field
+		beanStore.addBean(AnotherService.class, another); // Required for anotherService field
 		var bean = new TestFieldInjection();
 		injectBeans(bean, beanStore);
-		// Empty list should be created
+		// List will be populated with all TestService beans (service and service1)
 		assertNotNull(bean.serviceList);
-		assertTrue(bean.serviceList.isEmpty());
+		assertEquals(2, bean.serviceList.size());
+		assertTrue(bean.serviceList.contains(service));
+		assertTrue(bean.serviceList.contains(service1));
 	}
 
 	@Test
 	void f31_injectBeans_fieldSetEmpty() {
+		var service = new TestService("test1");
+		var service1 = new TestService("service1");
+		var another = new AnotherService(42);
+		beanStore.addBean(TestService.class, service); // Required for service and service2 fields
+		beanStore.addBean(TestService.class, service1, "service1"); // Required for namedService field
+		beanStore.addBean(AnotherService.class, another); // Required for anotherService field
 		var bean = new TestFieldInjection();
 		injectBeans(bean, beanStore);
-		// Empty set should be created
+		// Set will be populated with all TestService beans (service and service1)
 		assertNotNull(bean.serviceSet);
-		assertTrue(bean.serviceSet.isEmpty());
+		assertEquals(2, bean.serviceSet.size());
+		assertTrue(bean.serviceSet.contains(service));
+		assertTrue(bean.serviceSet.contains(service1));
 	}
 
 	@Test
 	void f32_injectBeans_fieldMapEmpty() {
+		var service = new TestService("test1");
+		var service1 = new TestService("service1");
+		var another = new AnotherService(42);
+		beanStore.addBean(TestService.class, service); // Required for service and service2 fields
+		beanStore.addBean(TestService.class, service1, "service1"); // Required for namedService field
+		beanStore.addBean(AnotherService.class, another); // Required for anotherService field
 		var bean = new TestFieldInjection();
 		injectBeans(bean, beanStore);
-		// Empty map should be created
+		// Map will be populated with all TestService beans (service with empty string key, service1 with "service1" key)
 		assertNotNull(bean.serviceMap);
-		assertTrue(bean.serviceMap.isEmpty());
+		assertEquals(2, bean.serviceMap.size());
+		assertSame(service, bean.serviceMap.get("")); // Unnamed bean has empty string as key
+		assertSame(service1, bean.serviceMap.get("service1"));
 	}
 
 	@Test
 	void f33_injectBeans_fieldArrayEmpty() {
+		var service = new TestService("test1");
+		var service1 = new TestService("service1");
+		var another = new AnotherService(42);
+		beanStore.addBean(TestService.class, service); // Required for service and service2 fields
+		beanStore.addBean(TestService.class, service1, "service1"); // Required for namedService field
+		beanStore.addBean(AnotherService.class, another); // Required for anotherService field
 		var bean = new TestFieldInjection();
 		injectBeans(bean, beanStore);
-		// Empty array should be created
+		// Array will be populated with all TestService beans (service and service1)
 		assertNotNull(bean.serviceArray);
-		assertEquals(0, bean.serviceArray.length);
+		assertEquals(2, bean.serviceArray.length);
+		assertTrue(bean.serviceArray[0].equals(service) || bean.serviceArray[0].equals(service1));
+		assertTrue(bean.serviceArray[1].equals(service) || bean.serviceArray[1].equals(service1));
 	}
 
 	// Test lines 436-442: getCollectionValue - when pi.getParameterizedType() is not ParameterizedType
@@ -1421,7 +1530,8 @@ class InjectUtils_Test extends TestBase {
 			.findFirst();
 		assertTrue(constructorOpt.isPresent(), "Constructor should be found. Available: " + constructors);
 		var constructor = constructorOpt.get();
-		var params = getParameters(constructor, beanStore, null);
+		// Pass 'this' as enclosingInstance for the inner class outer parameter
+		var params = getParameters(constructor, beanStore, this);
 		assertEquals(2, params.length); // Outer class + Map parameter
 		// This should work: pt.innerType() provides the ParameterizedType even if pi.getParameterizedType() doesn't
 		assertTrue(params[1] instanceof Map);
@@ -1429,6 +1539,120 @@ class InjectUtils_Test extends TestBase {
 		assertEquals(2, map.size());
 		assertSame(service1, map.get("service1"));
 		assertSame(service2, map.get("service2"));
+	}
+
+	//====================================================================================================
+	// otherBeans parameter tests
+	//====================================================================================================
+
+	@Test
+	void g01_getMissingParams_otherBeans() throws Exception {
+		var service = new TestService("test1");
+		// Service not in bean store, but provided as otherBeans
+		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
+		var result = getMissingParameters(constructor, beanStore, null, service);
+		assertNull(result); // Should find service in otherBeans
+	}
+
+	@Test
+	void g02_getMissingParams_otherBeansNotMatching() throws Exception {
+		var wrongService = new AnotherService(42);
+		// Wrong type in otherBeans - should still be missing
+		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
+		var result = getMissingParameters(constructor, beanStore, null, wrongService);
+		assertEquals("TestService", result); // Should still be missing
+	}
+
+	@Test
+	void g03_getParameters_otherBeans() throws Exception {
+		var service = new TestService("test1");
+		// Service not in bean store, but provided as otherBeans
+		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
+		var params = getParameters(constructor, beanStore, null, service);
+		assertEquals(1, params.length);
+		assertSame(service, params[0]); // Should use service from otherBeans
+	}
+
+	@Test
+	void g04_getParameters_otherBeansPreferStore() throws Exception {
+		var storeService = new TestService("store");
+		var otherService = new TestService("other");
+		beanStore.addBean(TestService.class, storeService);
+		// Store has service, otherBeans also has service - should prefer store
+		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
+		var params = getParameters(constructor, beanStore, null, otherService);
+		assertEquals(1, params.length);
+		assertSame(storeService, params[0]); // Should prefer store over otherBeans
+	}
+
+	@Test
+	void g05_hasAllParameters_otherBeans() throws Exception {
+		var service = new TestService("test1");
+		// Service not in bean store, but provided as otherBeans
+		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
+		assertTrue(hasAllParameters(constructor, beanStore, null, service)); // Should find service in otherBeans
+	}
+
+	@Test
+	void g06_invoke_constructorWithOtherBeans() throws Exception {
+		var service = new TestService("test1");
+		// Service not in bean store, but provided as otherBeans
+		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
+		var result = invoke(constructor, beanStore, null, service);
+		assertNotNull(result);
+		assertTrue(result instanceof TestClass1);
+	}
+
+	@Test
+	void g07_invoke_methodWithOtherBeans() throws Exception {
+		var service = new TestService("test1");
+		// Service not in bean store, but provided as otherBeans
+		var instance = new TestMethodClass();
+		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("method1") && x.hasParameterTypes(TestService.class)).get();
+		invoke(method, beanStore, instance, service);
+		// Method should execute without exception
+	}
+
+	@Test
+	void g08_getMissingParams_methodWithOtherBeans() throws Exception {
+		var service = new TestService("test1");
+		// Service not in bean store, but provided as otherBeans
+		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("method1") && x.hasParameterTypes(TestService.class)).get();
+		var result = getMissingParameters(method, beanStore, service);
+		assertNull(result); // Should find service in otherBeans
+	}
+
+	@Test
+	void g09_getParameters_methodWithOtherBeans() throws Exception {
+		var service = new TestService("test1");
+		// Service not in bean store, but provided as otherBeans
+		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("method1") && x.hasParameterTypes(TestService.class)).get();
+		var params = getParameters(method, beanStore, service);
+		assertEquals(1, params.length);
+		assertSame(service, params[0]); // Should use service from otherBeans
+	}
+
+	@Test
+	void g10_hasAllParameters_methodWithOtherBeans() throws Exception {
+		var service = new TestService("test1");
+		// Service not in bean store, but provided as otherBeans
+		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("method1") && x.hasParameterTypes(TestService.class)).get();
+		assertTrue(hasAllParameters(method, beanStore, service)); // Should find service in otherBeans
+	}
+
+	@Test
+	void g11_getParameters_methodNotFound() throws Exception {
+		// Method parameter not in bean store and not in otherBeans - should throw exception
+		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("method1") && x.hasParameterTypes(TestService.class)).get();
+		assertThrows(ExecutableException.class, () -> getParameters(method, beanStore));
+	}
+
+	@Test
+	void g12_invoke_methodNotFound() throws Exception {
+		// Method parameter not in bean store and not in otherBeans - should throw exception
+		var instance = new TestMethodClass();
+		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("method1") && x.hasParameterTypes(TestService.class)).get();
+		assertThrows(ExecutableException.class, () -> invoke(method, beanStore, instance));
 	}
 }
 

@@ -492,6 +492,10 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		return hasAllParameters(requiredParam);
 	}
 
+	public boolean hasParameter(Object parameter) {
+		return getParameters().stream().anyMatch(x -> x.canAccept(parameter));
+	}
+
 	/**
 	 * Returns <jk>true</jk> if this method has this return type.
 	 *
