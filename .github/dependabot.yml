@@ -30,4 +30,6 @@ updates:
     directory: "/docs"
     open-pull-requests-limit: 0
     schedule:
-      interval: "never"
+      interval: "yearly"
+    exclude-paths:
+      - "**"
