@@ -50,7 +50,7 @@
 		<dependency>
 			<groupId>org.junit.vintage</groupId>
 			<artifactId>junit-vintage-engine</artifactId>
-			<version>6.0.1</version>
+			<version>${junit.version}</version>
 		</dependency>
 	</dependencies>
 

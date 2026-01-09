@@ -15,6 +15,7 @@ Release Notes - Juneau - Version 9.2.1
 
 ** Changes
 
+    * Bump junit.version from a mix of 5.13.4 and 6.0.1 to 6.0.2.
 
 Release Notes - Juneau - Version 9.2.0
 
