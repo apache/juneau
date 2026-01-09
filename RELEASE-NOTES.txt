@@ -16,6 +16,10 @@ Release Notes - Juneau - Version 9.2.1
 ** Changes
 
     * Bump junit.version from a mix of 5.13.4 and 6.0.1 to 6.0.2.
+    * Bump maven.compiler.source in examples from a mix for 1.8 and 17 to 17 (inherited from parent POM when possible).
+    * Bump maven.compiler.target in examples from a mix for 1.8 and 17 to 17 (inherited from parent POM when possible).
+    * Bump maven.compiler.source in juneau-rest-server-springboot from a mix for 1.8 and 17 to 17 (inherited from parent POM).
+    * Bump maven.compiler.target in juneau-rest-server-springboot from a mix for 1.8 and 17 to 17 (inherited from parent POM).
 
 Release Notes - Juneau - Version 9.2.0
 
