@@ -38,12 +38,16 @@ import org.apache.juneau.commons.reflect.*;
  * <ul class='spaced-list'>
  * 	<li><b>Single beans</b> - Parameters of type <c>T</c> are resolved by looking up a bean of that type in the bean store.
  * 	<li><b>Optional beans</b> - Parameters of type <c>Optional&lt;T&gt;</c> are resolved to <c>Optional.empty()</c> if no bean is found.
- * 	<li><b>Arrays</b> - Parameters of type <c>T[]</c> are populated with all beans of type <c>T</c> from the bean store.
- * 	<li><b>Lists</b> - Parameters of type <c>List&lt;T&gt;</c> are populated with all beans of type <c>T</c> from the bean store.
+ * 	<li><b>Arrays</b> - Parameters of type <c>T[]</c> are populated with all beans of type <c>T</c> from the bean store
+ * 		(both named and unnamed beans are included).
+ * 	<li><b>Lists</b> - Parameters of type <c>List&lt;T&gt;</c> are populated with all beans of type <c>T</c> from the bean store
+ * 		(both named and unnamed beans are included).
  * 		<br><b>Note:</b> Only the <c>List</c> interface is supported, not concrete implementations like <c>ArrayList</c> or <c>LinkedList</c>.
- * 	<li><b>Sets</b> - Parameters of type <c>Set&lt;T&gt;</c> are populated with all beans of type <c>T</c> from the bean store.
+ * 	<li><b>Sets</b> - Parameters of type <c>Set&lt;T&gt;</c> are populated with all beans of type <c>T</c> from the bean store
+ * 		(both named and unnamed beans are included).
  * 		<br><b>Note:</b> Only the <c>Set</c> interface is supported, not concrete implementations like <c>HashSet</c> or <c>LinkedHashSet</c>.
- * 	<li><b>Maps</b> - Parameters of type <c>Map&lt;String,T&gt;</c> are populated with all beans of type <c>T</c> keyed by bean name.
+ * 	<li><b>Maps</b> - Parameters of type <c>Map&lt;String,T&gt;</c> are populated with all beans of type <c>T</c> keyed by bean name
+ * 		(both named and unnamed beans are included; unnamed beans use an empty string as the key).
  * 		<br><b>Note:</b> Only the <c>Map</c> interface is supported, not concrete implementations like <c>HashMap</c> or <c>LinkedHashMap</c>.
  * </ul>
  *
@@ -51,7 +55,13 @@ import org.apache.juneau.commons.reflect.*;
  * <p>
  * Parameters and fields can be annotated with {@link org.apache.juneau.annotation.Named @Named} or {@code javax.inject.Qualifier @Qualifier}
  * to specify which named bean should be injected.  For collections, arrays, and maps, qualifiers are ignored and all beans
- * of the element type are included.
+ * of the element type are included (both named and unnamed).
+ *
+ * <h5 class='section'>Exception Handling:</h5>
+ * <p>
+ * Methods that resolve parameters or inject beans will throw {@link ExecutableException} if a required bean (non-Optional,
+ * non-collection) cannot be found in the bean store or <c>otherBeans</c>.  Optional parameters and collection types
+ * (arrays, List, Set, Map) never throw exceptions and will be empty if no beans are found.
  *
  * <h5 class='section'>Field and Method Injection:</h5>
  * <p>
@@ -215,7 +225,7 @@ public class InjectUtils {
 	 * 	<li><b>Sets</b> - All beans of the element type are collected into a <c>LinkedHashSet</c> (may be empty).
 	 * 		Never throws an exception.
 	 * 	<li><b>Maps</b> - All beans of the value type are collected into a <c>LinkedHashMap</c> keyed by bean name (may be empty).
-	 * 		Never throws an exception.
+	 * 		Unnamed beans use an empty string as the key.  Never throws an exception.
 	 * </ul>
 	 *
 	 * @param ci The constructor to get parameters for.
@@ -248,7 +258,7 @@ public class InjectUtils {
 	 * <ul class='spaced-list'>
 	 * 	<li><b>Single beans</b> - Resolved using {@link BeanStore#getBean(Class)} or {@link BeanStore#getBean(Class, String)}.
 	 * 		If not found, checks <c>otherBeans</c> for a compatible instance.
-	 * 		Never throws an exception.
+	 * 		Throws {@link ExecutableException} if not found in either location.
 	 * 	<li><b>Optional beans</b> - Wrapped in <c>Optional</c>, or <c>Optional.empty()</c> if not found.
 	 * 		Never throws an exception.
 	 * 	<li><b>Arrays</b> - All beans of the element type are collected into an array (may be empty).
@@ -258,7 +268,7 @@ public class InjectUtils {
 	 * 	<li><b>Sets</b> - All beans of the element type are collected into a <c>LinkedHashSet</c> (may be empty).
 	 * 		Never throws an exception.
 	 * 	<li><b>Maps</b> - All beans of the value type are collected into a <c>LinkedHashMap</c> keyed by bean name (may be empty).
-	 * 		Never throws an exception.
+	 * 		Unnamed beans use an empty string as the key.  Never throws an exception.
 	 * </ul>
 	 *
 	 * @param mi The method to get parameters for.
@@ -443,6 +453,7 @@ public class InjectUtils {
 	 * @param beanStore The bean store to resolve the field value from.
 	 * @param bean The object instance containing the field.
 	 * @return The same bean instance (for method chaining).
+	 * @throws ExecutableException If a required field (non-Optional, non-collection) cannot be resolved from the bean store.
 	 */
 	public static <T> T invoke(FieldInfo field, BeanStore beanStore, T bean) {
 		field.accessible();
@@ -671,12 +682,12 @@ public class InjectUtils {
 		// Handle single bean
 		var ptc = ptUnwrapped.inner();
 		var o2 = beanQualifier == null ? beanStore.getBean(ptc) : beanStore.getBean(ptc, beanQualifier);
-		
+
 		if (fieldType.is(Optional.class))
 			return o2;
 		if (o2.isPresent())
 			return o2.get();
-		
+
 		throw exex("Could not resolve value for field {0}", field);
 	}
 

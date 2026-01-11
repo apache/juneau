@@ -272,6 +272,12 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 */
 	public final ClassInfo getDeclaringClass() { return declaringClass; }
 
+	/**
+	 * Returns <jk>true</jk> if the declaring class of this executable matches the specified class.
+	 *
+	 * @param value The class to compare against.
+	 * @return <jk>true</jk> if the declaring class matches the specified class.
+	 */
 	public final boolean isDeclaringClass(ClassInfo value) { return eq(declaringClass, value); }
 
 	/**
@@ -506,6 +512,29 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	public final boolean hasParameterTypes(ClassInfo...args) {
 		var params = getParameters();
 		return params.size() == args.length && IntStream.range(0, args.length).allMatch(i -> params.get(i).getParameterType().is(args[i]));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this executable has a parameter of the specified type in any position.
+	 *
+	 * @param type The type to test for.
+	 * @return <jk>true</jk> if this executable has a parameter of the specified type.
+	 */
+	public final boolean hasParameterType(ClassInfo type) {
+		return getParameters().stream().anyMatch(p -> p.getParameterType().is(type));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this executable has a parameter that is a parent of the specified type in any position.
+	 *
+	 * <p>
+	 * This means the parameter type can accept an instance of the specified type.
+	 *
+	 * @param type The type to test for.
+	 * @return <jk>true</jk> if this executable has a parameter that can accept the specified type.
+	 */
+	public final boolean hasParameterTypeParent(ClassInfo type) {
+		return getParameters().stream().anyMatch(p -> p.getParameterType().isParentOfLenient(type));
 	}
 
 	/**

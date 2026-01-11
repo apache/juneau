@@ -344,6 +344,35 @@ A reusable Python script is available at `scripts/build-and-test.py` for common 
 - When you need to verify both build and tests pass
 - During iterative development to quickly test changes
 
+### 5.1. Command Execution Best Practices
+
+**Adding Timeouts to Commands:**
+
+When running terminal commands that use `head`, `tail`, or pipe operations that might hang waiting for input, always wrap them with the `timeout` command to prevent indefinite hangs:
+
+1. **Use `timeout` for commands with `head`/`tail`**:
+   - Instead of: `command | grep pattern | head -5`
+   - Use: `timeout 30s sh -c 'command | grep pattern | head -5'`
+
+2. **Timeout durations**:
+   - Quick commands (grep, find, etc.): 10-30 seconds
+   - Maven commands: 60-120 seconds (or longer for full builds)
+   - Adjust based on expected command duration
+
+3. **Why this matters**:
+   - Commands with `head`/`tail` can hang indefinitely if the input stream doesn't close
+   - Pipe operations may wait for input that never arrives
+   - Timeouts prevent the assistant from getting stuck waiting for commands that will never complete
+
+**Examples:**
+```bash
+# Quick command with timeout
+timeout 10s sh -c 'mvn test-compile 2>&1 | grep "ERROR" | head -5'
+
+# Maven command with longer timeout
+timeout 120s sh -c 'mvn clean install 2>&1 | tail -20'
+```
+
 ### 6. Error Handling and Validation
 - Use `assertThrowsWithMessage` for exception testing
 - Test both valid and invalid scenarios
