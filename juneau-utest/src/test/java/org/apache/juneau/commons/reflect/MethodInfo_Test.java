@@ -28,7 +28,10 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.inject.*;
 import org.junit.jupiter.api.*;
+
+import static org.apache.juneau.commons.utils.Utils.*;
 
 class MethodInfo_Test extends TestBase {
 
@@ -796,6 +799,118 @@ class MethodInfo_Test extends TestBase {
 		assertTrue(set.contains(mi1b));
 		assertTrue(set.contains(mi1c));
 		assertFalse(set.contains(mi2));
+	}
+
+	//====================================================================================================
+	// Dependency Injection Tests (moved from InjectUtils_Test)
+	//====================================================================================================
+
+	// Test bean classes (shared with ConstructorInfo_Test)
+	static class TestService {
+		private final String name;
+		TestService(String name) { this.name = name; }
+		String getName() { return name; }
+		@Override public String toString() { return "TestService[" + name + "]"; }
+		@Override public boolean equals(Object o) { return o instanceof TestService o2 && eq(this, o2, (x,y) -> eq(x.name, y.name)); }
+		@Override public int hashCode() { return h(name); }
+	}
+
+	// Test method classes
+	public static class TestMethodClass {
+		public void method1(TestService service) {}
+		public void method2(@org.apache.juneau.annotation.Named("service1") TestService service) {}
+		public void method3(Optional<TestService> service) {}
+		public void method4(TestService[] services) {}
+		public void method5(List<TestService> services) {}
+		public void method6(Set<TestService> services) {}
+		public void method7(Map<String, TestService> services) {}
+		public static void staticMethod(TestService service) {}
+	}
+
+	private BasicBeanStore2 beanStore;
+
+	@BeforeEach
+	void setUpBeanStore() {
+		beanStore = new BasicBeanStore2(null);
+	}
+
+	//====================================================================================================
+	// inject
+	//====================================================================================================
+
+	@Test
+	void b001_inject_method() throws Exception {
+		var service = new TestService("test1");
+		beanStore.addBean(TestService.class, service);
+		var instance = new TestMethodClass();
+		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("method1") && x.hasParameterTypes(TestService.class)).get();
+		method.inject(beanStore, instance);
+		// Method should execute without exception
+	}
+
+	@Test
+	void b002_inject_staticMethod() throws Exception {
+		var service = new TestService("test1");
+		beanStore.addBean(TestService.class, service);
+		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("staticMethod") && x.hasParameterTypes(TestService.class)).get();
+		method.inject(beanStore, null); // null for static methods
+		// Method should execute without exception
+	}
+
+	//====================================================================================================
+	// otherBeans parameter tests
+	//====================================================================================================
+
+	@Test
+	void b003_inject_methodWithOtherBeans() throws Exception {
+		var service = new TestService("test1");
+		// Service not in bean store, but provided as otherBeans
+		var instance = new TestMethodClass();
+		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("method1") && x.hasParameterTypes(TestService.class)).get();
+		method.inject(beanStore, instance, service);
+		// Method should execute without exception
+	}
+
+	@Test
+	void b004_getMissingParameterTypes_methodWithOtherBeans() throws Exception {
+		var service = new TestService("test1");
+		// Service not in bean store, but provided as otherBeans
+		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("method1") && x.hasParameterTypes(TestService.class)).get();
+		var result = method.getMissingParameterTypes(beanStore, service);
+		assertNull(result); // Should find service in otherBeans
+	}
+
+	@Test
+	void b005_resolveParameters_methodWithOtherBeans() throws Exception {
+		var service = new TestService("test1");
+		// Service not in bean store, but provided as otherBeans
+		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("method1") && x.hasParameterTypes(TestService.class)).get();
+		var params = method.resolveParameters(beanStore, service);
+		assertEquals(1, params.length);
+		assertSame(service, params[0]); // Should use service from otherBeans
+	}
+
+	@Test
+	void b006_canResolveAll_methodWithOtherBeans() throws Exception {
+		var service = new TestService("test1");
+		// Service not in bean store, but provided as otherBeans
+		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("method1") && x.hasParameterTypes(TestService.class)).get();
+		assertTrue(method.canResolveAllParameters(beanStore, service)); // Should find service in otherBeans
+	}
+
+	@Test
+	void b007_resolveParameters_methodNotFound() throws Exception {
+		// Method parameter not in bean store and not in otherBeans - should throw exception
+		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("method1") && x.hasParameterTypes(TestService.class)).get();
+		assertThrows(ExecutableException.class, () -> method.resolveParameters(beanStore));
+	}
+
+	@Test
+	void b008_inject_methodNotFound() throws Exception {
+		// Method parameter not in bean store and not in otherBeans - should throw exception
+		var instance = new TestMethodClass();
+		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("method1") && x.hasParameterTypes(TestService.class)).get();
+		assertThrows(ExecutableException.class, () -> method.inject(beanStore, instance));
 	}
 }
 

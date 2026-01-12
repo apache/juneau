@@ -30,6 +30,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.utils.*;
 
 /**
@@ -495,5 +496,102 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		dc.appendNameFormatted(sb, SHORT, true, '$', BRACKETS);
 		sb.append('.').append(getName());
 		return sb.toString();
+	}
+
+	/**
+	 * Resolves field value from the bean store and sets it on the specified bean instance.
+	 *
+	 * <p>
+	 * This method resolves the field value using the same logic as parameter resolution,
+	 * supporting single beans, {@code Optional}, arrays, {@code List}, {@code Set}, and {@code Map}.
+	 * The field is made accessible before setting its value.
+	 *
+	 * <h5 class='section'>Field Resolution:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>Single beans</b> - Resolved using {@link BeanStore#getBean(Class)} or {@link BeanStore#getBean(Class, String)}.
+	 * 		Throws {@link ExecutableException} if not found.
+	 * 	<li><b>Optional beans</b> - Wrapped in <c>Optional</c>, or <c>Optional.empty()</c> if not found.
+	 * 		Never throws an exception.
+	 * 	<li><b>Arrays</b> - All beans of the element type are collected into an array (may be empty).
+	 * 		Never throws an exception.
+	 * 	<li><b>Lists</b> - All beans of the element type are collected into a <c>List</c> (may be empty).
+	 * 		Never throws an exception.
+	 * 	<li><b>Sets</b> - All beans of the element type are collected into a <c>LinkedHashSet</c> (may be empty).
+	 * 		Never throws an exception.
+	 * 	<li><b>Maps</b> - All beans of the value type are collected into a <c>LinkedHashMap</c> keyed by bean name (may be empty).
+	 * 		Unnamed beans use an empty string as the key.  Never throws an exception.
+	 * </ul>
+	 *
+	 * @param <T> The bean type.
+	 * @param beanStore The bean store to resolve the field value from.
+	 * @param bean The object instance containing the field.
+	 * @return The same bean instance (for method chaining).
+	 * @throws ExecutableException If a required field (non-Optional, non-collection) cannot be resolved from the bean store.
+	 */
+	public <T> T inject(BeanStore beanStore, T bean) {
+		accessible();
+		var fieldType = getFieldType();
+
+		// Find qualifier from @Named or @Qualifier annotation (same logic as ParameterInfo.getResolvedQualifier)
+		var beanQualifier = getAnnotations().stream()
+			.filter(ai -> ai.hasSimpleName("Named") || ai.hasSimpleName("Qualifier"))
+			.map(ai -> ai.getValue().orElse(null))
+			.filter(Objects::nonNull)
+			.findFirst()
+			.orElse(null);
+
+		var ptUnwrapped = fieldType.unwrap(Optional.class);
+
+		// Handle collections and arrays
+		Object collectionValue = null;
+		if (ptUnwrapped.isInjectCollectionType()) {
+			// Extract element type from field type
+			Class<?> elementType = null;
+
+			if (ptUnwrapped.isArray()) {
+				elementType = ptUnwrapped.getComponentType().inner();
+			} else {
+				Type parameterizedType = fieldType.innerType();
+				var inner = opt(ptUnwrapped.inner()).orElse(Object.class);
+
+				if (eq(inner, List.class) || eq(inner, Set.class)) {
+					if (parameterizedType instanceof ParameterizedType pt2) {
+						var typeArgs = pt2.getActualTypeArguments();
+						if (typeArgs.length > 0 && typeArgs[0] instanceof Class<?> elementClass) {
+							elementType = elementClass;
+						}
+					}
+				} else if (eq(inner, Map.class)) {
+					if (parameterizedType instanceof ParameterizedType pt2) {
+						var typeArgs = pt2.getActualTypeArguments();
+						if (typeArgs.length >= 2 && typeArgs[0] == String.class && typeArgs[1] instanceof Class<?> valueClass) {
+							elementType = valueClass;
+						}
+					}
+				}
+			}
+
+			collectionValue = ReflectionUtils.resolveCollectionValue(elementType, beanStore, ptUnwrapped);
+		}
+
+		Object value;
+		if (nn(collectionValue)) {
+			value = fieldType.is(Optional.class) ? Optional.of(collectionValue) : collectionValue;
+		} else {
+			// Handle single bean
+			var ptc = ptUnwrapped.inner();
+			var o2 = beanQualifier == null ? beanStore.getBean(ptc) : beanStore.getBean(ptc, beanQualifier);
+
+			if (fieldType.is(Optional.class)) {
+				value = o2;
+			} else if (o2.isPresent()) {
+				value = o2.get();
+			} else {
+				throw exex("Could not resolve value for field {0}", this);
+			}
+		}
+
+		set(bean, value);
+		return bean;
 	}
 }

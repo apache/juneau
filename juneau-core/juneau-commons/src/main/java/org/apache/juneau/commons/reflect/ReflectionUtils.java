@@ -16,7 +16,12 @@
  */
 package org.apache.juneau.commons.reflect;
 
+import static org.apache.juneau.commons.utils.Utils.*;
+
 import java.lang.reflect.*;
+import java.util.*;
+
+import org.apache.juneau.commons.inject.*;
 
 /**
  * Utility class providing convenient static methods for creating reflection info objects.
@@ -150,5 +155,57 @@ public class ReflectionUtils {
 	 */
 	public static final ClassInfo info(Object o) {
 		return ClassInfo.of(o);
+	}
+
+	/**
+	 * Resolves and creates a collection, array, or map containing all beans of the element type from the bean store.
+	 *
+	 * <p>
+	 * This is a helper method used internally by {@link ParameterInfo} and {@link FieldInfo} for resolving collection values.
+	 *
+	 * @param elementType The element type (for arrays/collections) or value type (for maps).
+	 * @param beanStore The bean store to retrieve beans from.
+	 * @param targetType The target collection type (must be a collection type).
+	 * @return The collection, array, or map containing all beans of the element type, or <jk>null</jk> if not a supported collection type.
+	 */
+	static Object resolveCollectionValue(Class<?> elementType, BeanStore beanStore, ClassInfo targetType) {
+		if (elementType == null || ! targetType.isInjectCollectionType())
+			return null;
+
+		// Get all beans of the element type
+		var beans = beanStore.getBeansOfType(elementType);
+
+		// Handle Map<String,T> - getBeansOfType already returns Map<String,T>
+		var inner = opt(targetType.inner()).orElse(Object.class);
+		if (Map.class.isAssignableFrom(inner)) {
+			// Verify it's Map<String,T> by checking the parameterized type
+			Type parameterizedType = targetType.innerType();
+			if (parameterizedType instanceof ParameterizedType pt2) {
+				var typeArgs = pt2.getActualTypeArguments();
+				if (typeArgs.length >= 2 && typeArgs[0] == String.class) {
+					return new LinkedHashMap<>(beans);
+				}
+			}
+			return null;
+		}
+
+		var values = new ArrayList<>(beans.values());
+
+		// Convert to appropriate collection/array type
+		if (targetType.isArray()) {
+			var array = Array.newInstance(elementType, values.size());
+			for (var i = 0; i < values.size(); i++)
+				Array.set(array, i, values.get(i));
+			return array;
+		}
+
+		if (eq(inner, Set.class)) {
+			return new LinkedHashSet<>(values);
+		} else if (eq(inner, List.class)) {
+			return values;
+		}
+
+		// Defensive check: return null if inner is null or not a supported collection type.
+		return null;
 	}
 }

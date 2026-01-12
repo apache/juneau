@@ -21,7 +21,6 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.commons.inject.InjectUtils.*;
 import static java.util.Comparator.*;
 import static org.apache.juneau.commons.reflect.ElementFlag.*;
 
@@ -116,7 +115,7 @@ import org.apache.juneau.commons.reflect.*;
  * <h5 class='section'>Dependency Injection:</h5>
  * <p>
  * Both builder instances and the final bean have automatic dependency injection performed via
- * {@link InjectUtils#injectBeans(Object, BeanStore)}, which processes {@code @Inject} and {@code @Autowired} annotations
+ * {@link ClassInfo#inject(Object, BeanStore)}, which processes {@code @Inject} and {@code @Autowired} annotations
  * on fields and methods.
  *
  * <p>
@@ -219,7 +218,7 @@ public class BeanCreator2<T> {
 	 * directly from {@link #create()}, after performing dependency injection on it.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>The bean implementation will still have its fields and methods injected via {@link InjectUtils#injectBeans(Object, BeanStore)}.
+	 * 	<li class='note'>The bean implementation will still have its fields and methods injected via {@link ClassInfo#inject(Object, BeanStore)}.
 	 * 	<li class='note'>This is useful when you want to provide a pre-configured instance but still benefit from dependency injection.
 	 * </ul>
 	 *
@@ -241,7 +240,7 @@ public class BeanCreator2<T> {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>The cached instance is stored in this creator and will be returned on all subsequent calls.
-	 * 	<li class='note'>Dependency injection via {@link InjectUtils#injectBeans(Object, BeanStore)} is only performed once
+	 * 	<li class='note'>Dependency injection via {@link ClassInfo#inject(Object, BeanStore)} is only performed once
 	 * 		during the initial creation.
 	 * 	<li class='note'>If {@link #impl(Object)} is used to provide an existing instance, that instance becomes the cached singleton.
 	 * 	<li class='note'>This is useful for expensive-to-construct beans that should be shared across multiple uses.
@@ -274,7 +273,7 @@ public class BeanCreator2<T> {
 	 *
 	 * <p>
 	 * Post-creation hooks are executed after the bean is instantiated and after dependency injection
-	 * has been performed via {@link InjectUtils#injectBeans(Object, BeanStore)}.
+	 * has been performed via {@link ClassInfo#inject(Object, BeanStore)}.
 	 *
 	 * <p>
 	 * Multiple hooks can be registered and they will be executed in the order they were added.
@@ -419,7 +418,7 @@ public class BeanCreator2<T> {
 	 *
 	 * <p>
 	 * Builder customizers are executed after the builder is instantiated (via factory method or constructor)
-	 * and after dependency injection has been performed on the builder via {@link InjectUtils#injectBeans(Object, BeanStore)},
+	 * and after dependency injection has been performed on the builder via {@link ClassInfo#inject(Object, BeanStore)},
 	 * but before the builder's {@code build()}/{@code create()}/{@code get()} method is called to create the final bean.
 	 *
 	 * <p>
@@ -850,10 +849,10 @@ public class BeanCreator2<T> {
 		// Step 2: Look for a public constructor on the builder type
 		r = builderType.getPublicConstructors().stream()
 			.filter(x -> x.is(NOT_DEPRECATED))
-			.filter(x -> hasAllParameters(x, bs, enclosingInstance))
+			.filter(x -> x.canResolveAllParameters(bs, enclosingInstance))
 			.sorted(comparing(ConstructorInfo::getParameterCount).reversed())
 			.findFirst()
-			.map(x -> injectBeans(invoke(x, bs, enclosingInstance), bs));
+			.map(x -> inject(x.inject(bs, enclosingInstance)));
 
 		if (r.isPresent())
 			return r.get();
@@ -861,10 +860,10 @@ public class BeanCreator2<T> {
 		// Step 3: Look for a protected constructor on the builder type
 		r = builderType.getDeclaredConstructors().stream()
 			.filter(x -> x.isAll(ElementFlag.PROTECTED, NOT_DEPRECATED))
-			.filter(x -> hasAllParameters(x, bs, enclosingInstance))
+			.filter(x -> x.canResolveAllParameters(bs, enclosingInstance))
 			.sorted(comparing(ConstructorInfo::getParameterCount).reversed())
 			.findFirst()
-			.map(x -> injectBeans(invoke(x, bs, enclosingInstance), bs));
+			.map(x -> inject(x.inject(bs, enclosingInstance)));
 
 		return r.orElse(null);
 	}
@@ -931,10 +930,10 @@ public class BeanCreator2<T> {
 			.filter(x -> x.isAll(STATIC, NOT_DEPRECATED))
 			.filter(x -> hasName(x, builderMethodNames.toArray(new String[0])))
 			.filter(x -> x.hasReturnType(builderType))
-			.filter(x -> hasAllParameters(x, bs, enclosingInstance))
+			.filter(x -> x.canResolveAllParameters(bs, enclosingInstance))
 			.sorted(comparing(MethodInfo::getParameterCount).reversed())
 			.findFirst()
-			.map(x -> injectBeans(invoke(x, bs, enclosingInstance), bs));
+			.map(x -> inject(x.inject(bs, enclosingInstance)));
 	}
 
 	/**
@@ -1000,11 +999,22 @@ public class BeanCreator2<T> {
 	}
 
 	/**
+	 * Helper method to inject beans into an object instance.
+	 *
+	 * @param <T> The bean type.
+	 * @param bean The object to inject beans into.
+	 * @return The same bean instance (for method chaining).
+	 */
+	private <T2> T2 inject(T2 bean) {
+		return ClassInfo.of(bean).inject(bean, store.get());
+	}
+
+	/**
 	 * Creates the bean.
 	 *
 	 * <p>
 	 * After creating the bean, this method automatically injects dependencies into fields and methods
-	 * annotated with {@code @Inject} or {@code @Autowired} using {@link InjectUtils#injectBeans(Object, BeanStore)}.
+	 * annotated with {@code @Inject} or {@code @Autowired} using {@link ClassInfo#inject(Object, BeanStore)}.
 	 *
 	 * @return A new bean with all dependencies injected.
 	 * @throws ExecutableException if bean could not be created.
@@ -1058,12 +1068,12 @@ public class BeanCreator2<T> {
 				.filter(x -> x.isAll(NOT_STATIC, NOT_DEPRECATED))
 				.filter(x -> hasName(x, "build", "create", "get"))
 				.filter(x -> x.hasReturnType(beanSubType))
-				.filter(x -> hasAllParameters(x, store))
+				.filter(x -> x.canResolveAllParameters(store))
 				.sorted(methodComparator)
 				.findFirst()
 				.map(x -> {
 					log("Found builder method: %s", x.getFullName());
-					return (T)beanType.cast(invoke(x, store, builder));
+					return (T)beanType.cast(x.inject(store, builder));
 				})
 				.orElse((T)null);
 
@@ -1074,13 +1084,13 @@ public class BeanCreator2<T> {
 					.filter(x -> x.isAll(STATIC, NOT_DEPRECATED))
 					.filter(x -> isFactoryMethod(x))
 					.filter(x -> x.hasReturnType(beanSubType))
-					.filter(x -> hasAllParameters(x, store, builder))
+					.filter(x -> x.canResolveAllParameters(store, builder))
 					.filter(x -> x.hasParameter(builder))
 					.sorted(methodComparator)
 					.findFirst()
 					.map(x -> {
 						log("Found factory method accepting builder: %s", x.getFullName());
-						return (T)beanType.cast(invoke(x, store, null, builder));
+						return (T)beanType.cast(x.inject(store, null, builder));
 					})
 					.orElse(null);
 			}
@@ -1091,12 +1101,12 @@ public class BeanCreator2<T> {
 				bean = beanSubType.getPublicConstructors().stream()
 					.filter(x -> x.is(NOT_DEPRECATED))
 					.filter(x -> x.isDeclaringClass(beanSubType))
-					.filter(x -> hasAllParameters(x, store, enclosingInstance, builder))
+					.filter(x -> x.canResolveAllParameters(store, enclosingInstance, builder))
 					.sorted(constructorComparator)
 					.findFirst()
 					.map(x -> {
 						log("Found constructor accepting builder: %s", x.getFullName());
-						return (T)beanType.cast(invoke(x, store, enclosingInstance, builder));
+						return (T)beanType.cast(x.inject(store, enclosingInstance, builder));
 					})
 					.orElse(null);
 			}
@@ -1107,19 +1117,19 @@ public class BeanCreator2<T> {
 				bean = info(builder.getClass()).getPublicMethods().stream()
 					.filter(x -> x.isAll(NOT_STATIC, NOT_DEPRECATED))
 					.filter(x -> x.hasReturnType(beanSubType))
-					.filter(x -> hasAllParameters(x, store))
+					.filter(x -> x.canResolveAllParameters(store))
 					.sorted(methodComparator)
 					.findFirst()
 					.map(x -> {
 						log("Found builder method: %s", x.getFullName());
-						return (T)beanType.cast(invoke(x, store, builder));
+						return (T)beanType.cast(x.inject(store, builder));
 					})
 					.orElse(null);
 			}
 
 			if (bean != null) {
 				log("Bean created successfully via builder");
-				bean = injectBeans(bean, store);
+				bean = inject(bean);
 				runPostCreateHooks(bean);
 				addBeanToStore(bean, store);
 				if (singleton)
@@ -1151,7 +1161,7 @@ public class BeanCreator2<T> {
 			.findFirst()
 			.map(x -> {
 				log("Found factory method: %s", x.getFullName());
-				return (T)beanType.cast(invoke(x, store, null));
+				return (T)beanType.cast(x.inject(store, null));
 			})
 			.orElse(null);
 
@@ -1161,19 +1171,19 @@ public class BeanCreator2<T> {
 			bean = beanSubType.getPublicConstructors().stream()
 				.filter(x -> x.isAll(NOT_DEPRECATED))
 				.filter(x -> x.isDeclaringClass(beanSubType))
-				.filter(x -> hasAllParameters(x, store, enclosingInstance))
+				.filter(x -> x.canResolveAllParameters(store, enclosingInstance))
 				.sorted(constructorComparator)
 				.findFirst()
 				.map(x -> {
 					log("Found constructor: %s", x.getFullName());
-					return (T)beanType.cast(invoke(x, store, enclosingInstance));
+					return (T)beanType.cast(x.inject(store, enclosingInstance));
 				})
 				.orElse(null);
 		}
 
 		if (bean != null) {
 			log("Bean created successfully");
-			bean = injectBeans(bean, store);
+			bean = inject(bean);
 			runPostCreateHooks(bean);
 			validateBean(bean);
 			addBeanToStore(bean, store);

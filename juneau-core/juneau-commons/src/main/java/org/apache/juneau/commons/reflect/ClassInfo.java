@@ -36,6 +36,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.lang.*;
 
 /**
@@ -2605,4 +2606,97 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	MethodInfo getMethod(Method x) {
 		return methodCache.get(x, () -> new MethodInfo(this, x));
 	}
+
+	/**
+	 * Returns <jk>true</jk> if this type is a collection type that should be populated with multiple beans.
+	 *
+	 * <p>
+	 * Supported collection types:
+	 * <ul>
+	 * 	<li>Arrays (<c>T[]</c>)
+	 * 	<li><c>List&lt;T&gt;</c> (interface only, not concrete implementations like <c>ArrayList</c> or <c>LinkedList</c>)
+	 * 	<li><c>Set&lt;T&gt;</c> (interface only, not concrete implementations like <c>HashSet</c> or <c>LinkedHashSet</c>)
+	 * 	<li><c>Map&lt;String,T&gt;</c> (interface only, not concrete implementations like <c>HashMap</c> or <c>LinkedHashMap</c>)
+	 * </ul>
+	 *
+	 * <p>
+	 * <b>Note:</b> This matches Spring's behavior where only the base interfaces trigger automatic collection injection.
+	 * Concrete implementations like <c>ArrayList&lt;T&gt;</c> are treated as regular bean types, not collection types.
+	 *
+	 * @return <jk>true</jk> if this type is a supported collection, array, or map type.
+	 */
+	public boolean isInjectCollectionType() {
+		if (isArray())
+			return true;
+		var inner = opt(this.inner()).orElse(Object.class);
+		// Only match the exact interfaces, not their implementations (matches Spring's behavior)
+		return eq(inner, List.class) || eq(inner, Set.class) || eq(inner, Map.class);
+	}
+
+	/**
+	 * Injects beans from the bean store into the specified object's fields and methods.
+	 *
+	 * <p>
+	 * This method performs field and method injection based on {@code @Inject} or {@code @Autowired} annotations.
+	 *
+	 * <h5 class='section'>Injectable Fields:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Must be annotated with {@code @Inject} or {@code @Autowired} (matched by simple class name)
+	 * 	<li>Must not be final
+	 * 	<li>May have any valid name
+	 * 	<li>Supports the same parameter types as parameter resolution: single beans, {@code Optional}, arrays, {@code List}, {@code Set}, {@code Map}
+	 * </ul>
+	 *
+	 * <h5 class='section'>Injectable Methods:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Must be annotated with {@code @Inject} or {@code @Autowired} (matched by simple class name)
+	 * 	<li>Must not be abstract
+	 * 	<li>Must not declare type parameters
+	 * 	<li>May return any type (return value is ignored)
+	 * 	<li>May have any valid name
+	 * 	<li>May accept zero or more dependencies as arguments
+	 * 	<li>Supports the same parameter types as parameter resolution: single beans, {@code Optional}, arrays, {@code List}, {@code Set}, {@code Map}
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Class with injectable fields and methods</jc>
+	 * 	<jk>public</jk> <jk>class</jk> MyService {
+	 * 		<ja>@Inject</ja>
+	 * 		<jk>private</jk> MyDependency <jv>dependency</jv>;
+	 *
+	 * 		<ja>@Autowired</ja>
+	 * 		<jk>private</jk> List&lt;MyService&gt; <jv>allServices</jv>;
+	 *
+	 * 		<ja>@Inject</ja>
+	 * 		<jk>public</jk> <jk>void</jk> init(MyConfig <jv>config</jv>) {
+	 * 			<jc>// Initialization logic</jc>
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Inject beans</jc>
+	 * 	MyService <jv>service</jv> = <jk>new</jk> MyService();
+	 * 	ClassInfo.<jsm>of</jsm>(<jv>service</jv>).<jsm>inject</jsm>(<jv>beanStore</jv>);
+	 * </p>
+	 *
+	 * @param <T> The bean type.
+	 * @param bean The object to inject beans into.
+	 * @param beanStore The bean store to resolve beans from.
+	 * @return The same bean instance (for method chaining).
+	 * @throws ExecutableException If any field or method cannot be injected (e.g., required bean not found in the bean store).
+	 */
+	public <T> T inject(T bean, BeanStore beanStore) {
+		// Inject into fields
+		getAllFields().stream()
+			.filter(x -> x.isNotFinal() && x.getAnnotations().stream().map(AnnotationInfo::getName).anyMatch(n -> eq(n, "Inject") || eq(n, "Autowired")))
+			.forEach(x -> x.inject(beanStore, bean));
+
+		// Inject into methods
+		getAllMethods().stream()
+			.filter(x -> x.isNotAbstract() && eq(x.getTypeParameters().length, 0) && x.getAnnotations().stream().map(AnnotationInfo::getName).anyMatch(n -> eq(n, "Inject") || eq(n, "Autowired")))
+			.forEach(x -> x.inject(beanStore, bean));
+
+		return bean;
+	}
+
 }

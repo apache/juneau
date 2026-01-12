@@ -16,12 +16,15 @@
  */
 package org.apache.juneau.commons.reflect;
 
+import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
+import java.util.*;
 
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.utils.*;
 
 /**
@@ -251,7 +254,151 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	public <T> T newInstanceLenient(Object...args) throws ExecutableException {
 		return newInstance(ClassUtils.getMatchingArgs(inner.getParameterTypes(), args));
 	}
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotatable interface methods
-	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns comma-delimited list of missing parameter types.
+	 *
+	 * <p>
+	 * Analyzes the parameters of this constructor and checks if all required beans are available
+	 * in the bean store or in the <c>otherBeans</c> parameter.
+	 *
+	 * <p>
+	 * The following parameter types are considered optional and are not checked:
+	 * <ul>
+	 * 	<li>Parameters of type <c>Optional&lt;T&gt;</c>
+	 * 	<li>Parameters of type <c>T[]</c>, <c>List&lt;T&gt;</c>, <c>Set&lt;T&gt;</c>, or <c>Map&lt;String,T&gt;</c>
+	 * 	<li>The first parameter if it matches the <c>enclosingInstance</c> object type (for non-static inner classes)
+	 * </ul>
+	 *
+	 * <p>
+	 * If a parameter has a {@link org.apache.juneau.annotation.Named @Named} or {@code @Qualifier} annotation,
+	 * the method checks for a bean with that specific name in the bean store.  Otherwise, it checks for an unnamed bean
+	 * of the parameter type in the bean store, and if not found, checks the <c>otherBeans</c> parameter.
+	 *
+	 * @param beanStore The bean store to check for beans.
+	 * @param enclosingInstance The outer class instance for non-static inner class constructors.
+	 * 	If the first parameter type matches this object's type, it is used as the first parameter and not checked in the bean store.
+	 * 	Can be <jk>null</jk> for regular classes or static inner classes.
+	 * @param otherBeans Optional additional bean instances to check if not found in the bean store.
+	 * 	These are checked after the bean store but before marking the parameter as missing.
+	 * @return A comma-delimited, sorted list of missing parameter types (e.g., <js>"String,Integer"</js>),
+	 * 	or <jk>null</jk> if all required parameters are available.
+	 */
+	public String getMissingParameterTypes(BeanStore beanStore, Object enclosingInstance, Object... otherBeans) {
+		// @formatter:off
+		return nullIfEmpty(
+			getParameters()
+				.stream()
+				.map(x -> {
+					var pt = x.getParameterType();
+					if (x.getIndex() == 0 && nn(enclosingInstance) && pt.isInstance(enclosingInstance))
+						return null;
+					return x.getMissingType(beanStore, otherBeans);
+				})
+				.filter(Objects::nonNull)
+				.sorted()
+				.collect(joining(","))
+		);
+		// @formatter:on
+	}
+
+	/**
+	 * Checks if all constructor parameters can be resolved.
+	 *
+	 * <p>
+	 * This method performs the same checks as {@link #getMissingParameterTypes(BeanStore, Object, Object...)} but
+	 * returns a boolean instead of a list of missing types.
+	 *
+	 * <p>
+	 * The following parameter types are considered optional and are not checked:
+	 * <ul>
+	 * 	<li>Parameters of type <c>Optional&lt;T&gt;</c>
+	 * 	<li>Parameters of type <c>T[]</c>, <c>List&lt;T&gt;</c>, <c>Set&lt;T&gt;</c>, or <c>Map&lt;String,T&gt;</c>
+	 * 	<li>The first parameter if it matches the <c>enclosingInstance</c> object type (for non-static inner classes)
+	 * </ul>
+	 *
+	 * <p>
+	 * If a parameter has a {@link org.apache.juneau.annotation.Named @Named} or {@code @Qualifier} annotation,
+	 * the method checks for a bean with that specific name in the bean store.  Otherwise, it checks for an unnamed bean
+	 * of the parameter type in the bean store, and if not found, checks the <c>otherBeans</c> parameter.
+	 *
+	 * @param beanStore The bean store to check for beans.
+	 * @param enclosingInstance The outer class instance for non-static inner class constructors.
+	 * 	If the first parameter type matches this object's type, it is used as the first parameter and not checked in the bean store.
+	 * 	Can be <jk>null</jk> for regular classes or static inner classes.
+	 * @param otherBeans Optional additional bean instances to check if not found in the bean store.
+	 * 	These are checked after the bean store but before marking the parameter as missing.
+	 * @return <jk>true</jk> if all required parameters are available in the bean store or <c>otherBeans</c>, <jk>false</jk> otherwise.
+	 */
+	public boolean canResolveAllParameters(BeanStore beanStore, Object enclosingInstance, Object... otherBeans) {
+		return getParameters().stream().map(x -> {
+			var pt = x.getParameterType();
+			if (x.getIndex() == 0 && nn(enclosingInstance) && pt.isInstance(enclosingInstance))
+				return true;
+			return x.canResolve(beanStore, otherBeans);
+		}).allMatch(x -> x);
+	}
+
+	/**
+	 * Resolves parameters from the bean store and invokes the constructor.
+	 *
+	 * <p>
+	 * For each parameter in the constructor, this method:
+	 * <ul>
+	 * 	<li>If the first parameter type matches the <c>enclosingInstance</c> object type, uses the <c>enclosingInstance</c> object
+	 * 		(for non-static inner class constructors).
+	 * 	<li>If the parameter is a collection/array/map type, collects all beans of the element type.
+	 * 	<li>Otherwise, looks up a single bean by type and optional qualifier name in the bean store.
+	 * 	<li>If not found in the bean store, checks the <c>otherBeans</c> parameter.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Parameter Resolution:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>Single beans</b> - Resolved using {@link BeanStore#getBean(Class)} or {@link BeanStore#getBean(Class, String)}.
+	 * 		If not found, checks <c>otherBeans</c> for a compatible instance.
+	 * 		Throws {@link ExecutableException} if not found in either location.
+	 * 	<li><b>Optional beans</b> - Wrapped in <c>Optional</c>, or <c>Optional.empty()</c> if not found.
+	 * 		Never throws an exception.
+	 * 	<li><b>Arrays</b> - All beans of the element type are collected into an array (may be empty).
+	 * 		Never throws an exception.
+	 * 	<li><b>Lists</b> - All beans of the element type are collected into a <c>List</c> (may be empty).
+	 * 		Never throws an exception.
+	 * 	<li><b>Sets</b> - All beans of the element type are collected into a <c>LinkedHashSet</c> (may be empty).
+	 * 		Never throws an exception.
+	 * 	<li><b>Maps</b> - All beans of the value type are collected into a <c>LinkedHashMap</c> keyed by bean name (may be empty).
+	 * 		Unnamed beans use an empty string as the key.  Never throws an exception.
+	 * </ul>
+	 *
+	 * <p>
+	 * The <c>enclosingInstance</c> parameter is used for non-static inner class constructors.  If the first parameter type
+	 * matches this object's type, it is used as the first parameter value.  For regular constructors, this parameter
+	 * is ignored if it doesn't match the first parameter type.
+	 *
+	 * @param <T> The return type of the constructor.
+	 * @param beanStore The bean store to resolve parameters from.
+	 * @param enclosingInstance The outer class instance for non-static inner classes (can be <jk>null</jk>).
+	 * @param otherBeans Optional additional bean instances to use if not found in the bean store.
+	 * @return The result of invoking the constructor.
+	 * @throws ExecutableException If the constructor cannot be invoked or parameter resolution fails.
+	 */
+	public <T> T inject(BeanStore beanStore, Object enclosingInstance, Object... otherBeans) {
+		var params = getParameters().stream().map(x -> x.resolveValue(beanStore, enclosingInstance, otherBeans)).toArray();
+		return accessible().newInstance(params);
+	}
+
+	/**
+	 * Resolves all constructor parameters from the bean store.
+	 *
+	 * <p>
+	 * This is a package-private helper method used by tests.  For normal usage, use {@link #inject(BeanStore, Object, Object...)}.
+	 *
+	 * @param beanStore The bean store to resolve beans from.
+	 * @param enclosingInstance The outer class instance for non-static inner class constructors.
+	 * @param otherBeans Optional additional bean instances to use if not found in the bean store.
+	 * @return An array of parameter values in the same order as the constructor parameters.
+	 * @throws ExecutableException If a required parameter cannot be resolved.
+	 */
+	Object[] resolveParameters(BeanStore beanStore, Object enclosingInstance, Object... otherBeans) {
+		return getParameters().stream().map(x -> x.resolveValue(beanStore, enclosingInstance, otherBeans)).toArray();
+	}
 }

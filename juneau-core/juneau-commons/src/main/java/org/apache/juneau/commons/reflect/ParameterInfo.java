@@ -18,6 +18,7 @@ package org.apache.juneau.commons.reflect;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -27,6 +28,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.utils.*;
 
 /**
@@ -677,5 +679,233 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 			.findFirst()
 			.orElse(null);
 		// @formatter:on
+	}
+
+	/**
+	 * Checks if this parameter can be resolved from the bean store.
+	 *
+	 * <p>
+	 * The following parameter types are considered optional and always return <jk>true</jk>:
+	 * <ul>
+	 * 	<li>Parameters of type <c>Optional&lt;T&gt;</c>
+	 * 	<li>Parameters of type <c>T[]</c>, <c>List&lt;T&gt;</c>, <c>Set&lt;T&gt;</c>, or <c>Map&lt;String,T&gt;</c>
+	 * </ul>
+	 *
+	 * <p>
+	 * If a parameter has a {@link org.apache.juneau.annotation.Named @Named} or {@code @Qualifier} annotation,
+	 * the method checks for a bean with that specific name in the bean store.  Otherwise, it checks for an unnamed bean
+	 * of the parameter type in the bean store, and if not found, checks the <c>otherBeans</c> parameter.
+	 *
+	 * @param beanStore The bean store to check for beans.
+	 * @param otherBeans Optional additional bean instances to check if not found in the bean store.
+	 * 	These are checked after the bean store but before returning <jk>false</jk>.
+	 * @return <jk>true</jk> if this parameter can be resolved, <jk>false</jk> otherwise.
+	 */
+	public boolean canResolve(BeanStore beanStore, Object... otherBeans) {
+		var pt = getParameterType();
+
+		if (pt.is(Optional.class) || pt.isInjectCollectionType()) // Optional/Collection/array types are always satisfied (even if empty).
+			return true;
+
+		var bq = getResolvedQualifier();
+
+		if (nn(bq))
+			return beanStore.hasBean(pt.inner(), bq);
+
+		if (beanStore.hasBean(pt.inner()))
+			return true;
+
+		for (var o : otherBeans)
+			if (canAccept(o))
+				return true;
+		return false;
+	}
+
+	/**
+	 * Returns the missing type name if this parameter cannot be resolved, <jk>null</jk> otherwise.
+	 *
+	 * <p>
+	 * The following parameter types are considered optional and always return <jk>null</jk>:
+	 * <ul>
+	 * 	<li>Parameters of type <c>Optional&lt;T&gt;</c>
+	 * 	<li>Parameters of type <c>T[]</c>, <c>List&lt;T&gt;</c>, <c>Set&lt;T&gt;</c>, or <c>Map&lt;String,T&gt;</c>
+	 * </ul>
+	 *
+	 * <p>
+	 * If a parameter has a {@link org.apache.juneau.annotation.Named @Named} or {@code @Qualifier} annotation,
+	 * the method checks for a bean with that specific name in the bean store.  Otherwise, it checks for an unnamed bean
+	 * of the parameter type in the bean store, and if not found, checks the <c>otherBeans</c> parameter.
+	 *
+	 * @param beanStore The bean store to check for beans.
+	 * @param otherBeans Optional additional bean instances to check if not found in the bean store.
+	 * 	These are checked after the bean store but before marking the parameter as missing.
+	 * @return Missing type name (e.g., <js>"String"</js> or <js>"String@name"</js> for qualified beans) or <jk>null</jk> if resolvable.
+	 */
+	public String getMissingType(BeanStore beanStore, Object... otherBeans) {
+		var pt = getParameterType();
+		if (pt.is(Optional.class) || pt.isInjectCollectionType()) // Optional/Collection/array types are always satisfied (even if empty).
+			return null;
+		var bq = getResolvedQualifier();  // Use @Named/@Qualified for bean injection
+		if (nn(bq)) {
+			if (! beanStore.hasBean(pt.inner(), bq))
+				return pt.getNameSimple() + '@' + bq;
+			return null;
+		}
+		if (beanStore.hasBean(pt.inner()))
+			return null;
+		for (var o : otherBeans)
+			if (canAccept(o))
+				return null;
+		return pt.getNameSimple();
+	}
+
+	/**
+	 * Resolves the parameter value from the bean store.
+	 *
+	 * <p>
+	 * For each parameter, this method:
+	 * <ul>
+	 * 	<li>If the parameter is a collection/array/map type, collects all beans of the element type.
+	 * 	<li>Otherwise, looks up a single bean by type and optional qualifier name in the bean store.
+	 * 	<li>If not found in the bean store, checks the <c>otherBeans</c> parameter.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Parameter Resolution:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>Single beans</b> - Resolved using {@link BeanStore#getBean(Class)} or {@link BeanStore#getBean(Class, String)}.
+	 * 		If not found, checks <c>otherBeans</c> for a compatible instance.
+	 * 		Throws {@link ExecutableException} if not found in either location.
+	 * 	<li><b>Optional beans</b> - Wrapped in <c>Optional</c>, or <c>Optional.empty()</c> if not found.
+	 * 		Never throws an exception.
+	 * 	<li><b>Arrays</b> - All beans of the element type are collected into an array (may be empty).
+	 * 		Never throws an exception.
+	 * 	<li><b>Lists</b> - All beans of the element type are collected into a <c>List</c> (may be empty).
+	 * 		Never throws an exception.
+	 * 	<li><b>Sets</b> - All beans of the element type are collected into a <c>LinkedHashSet</c> (may be empty).
+	 * 		Never throws an exception.
+	 * 	<li><b>Maps</b> - All beans of the value type are collected into a <c>LinkedHashMap</c> keyed by bean name (may be empty).
+	 * 		Unnamed beans use an empty string as the key.  Never throws an exception.
+	 * </ul>
+	 *
+	 * @param beanStore The bean store to resolve beans from.
+	 * @param otherBeans Optional additional bean instances to use if not found in the bean store.
+	 * 	These are checked after the bean store but before throwing an exception.
+	 * @return The resolved parameter value.
+	 * @throws ExecutableException If a required parameter (non-Optional, non-collection) cannot be resolved
+	 * 	from the bean store or <c>otherBeans</c>.
+	 */
+	public Object resolveValue(BeanStore beanStore, Object... otherBeans) {
+		var pt = getParameterType();
+		var bq = getResolvedQualifier();
+		var ptu = pt.unwrap(Optional.class);
+
+		// Handle collections and arrays
+		Object collectionValue = null;
+		if (ptu.isInjectCollectionType()) {
+			// Extract element type from collection/array/map parameter type
+			Class<?> elementType = null;
+
+			// Handle arrays
+			if (ptu.isArray()) {
+				elementType = ptu.getComponentType().inner();
+			} else {
+				// Get the parameterized type
+				Type parameterizedType = getParameterizedType();
+				if (parameterizedType instanceof ParameterizedType pt2) {
+					var rawType = pt2.getRawType();
+					// If wrapped in Optional, unwrap it to get the nested type
+					if (rawType instanceof Class<?> rawClass && rawClass == Optional.class) {
+						var typeArgs = pt2.getActualTypeArguments();
+						if (typeArgs.length > 0 && typeArgs[0] instanceof ParameterizedType nestedPt) {
+							// Optional<List<T>> -> List<T>
+							parameterizedType = nestedPt;
+						} else {
+							// Optional<SomeClass> - not a collection, elementType remains null
+							parameterizedType = null;
+						}
+					}
+				} else if (pt.innerType() instanceof ParameterizedType) {
+					// If pt is already a parameterized type (e.g., List<TestService> after unwrapping Optional),
+					// use pt.innerType() as the parameterizedType
+					parameterizedType = pt.innerType();
+				} else {
+					parameterizedType = null;
+				}
+
+				// Handle List<T> or Set<T>
+				var inner = opt(ptu.inner()).orElse(Object.class);
+				if (eq(inner, List.class) || eq(inner, Set.class)) {
+					if (parameterizedType instanceof ParameterizedType pt2) {
+						var typeArgs = pt2.getActualTypeArguments();
+						if (typeArgs.length > 0 && typeArgs[0] instanceof Class<?> elementClass) {
+							elementType = elementClass;
+						}
+					}
+				} else if (eq(inner, Map.class)) {
+					// Handle Map<String,T> - extract value type (second type argument)
+					if (parameterizedType instanceof ParameterizedType pt2) {
+						var typeArgs = pt2.getActualTypeArguments();
+						// Verify key type is String and get value type
+						if (typeArgs.length >= 2 && typeArgs[0] == String.class && typeArgs[1] instanceof Class<?> valueClass) {
+							elementType = valueClass;
+						}
+					}
+				}
+			}
+
+			collectionValue = ReflectionUtils.resolveCollectionValue(elementType, beanStore, ptu);
+		}
+		if (nn(collectionValue))
+			return pt.is(Optional.class) ? Optional.of(collectionValue) : collectionValue;
+
+		// Handle single bean
+		var ptc = ptu.inner();
+
+		Optional<Object> r;
+
+		if (nn(bq)) {
+			r = beanStore.getBean(ptc, bq);
+		} else {
+			r = beanStore.getBean(ptc);
+			if (r.isEmpty()) {
+				for (var r2 : otherBeans)
+					if (canAccept(r2)) {
+						r = opt(r2);
+						break;
+					}
+			}
+		}
+
+		if (pt.is(Optional.class))
+			return r;
+		if (r.isPresent())
+			return r.get();
+
+		throw exex("Could not resolve value for parameter {0}", this);
+	}
+
+	/**
+	 * Resolves the parameter value from the bean store (constructor version with enclosingInstance).
+	 *
+	 * <p>
+	 * This method is used for constructor parameters.  If the first parameter type matches the <c>enclosingInstance</c>
+	 * object type, it uses the <c>enclosingInstance</c> object (for non-static inner class constructors).
+	 * Otherwise, it delegates to {@link #resolveValue(BeanStore, Object...)}.
+	 *
+	 * @param beanStore The bean store to resolve beans from.
+	 * @param enclosingInstance The outer class instance for non-static inner class constructors.
+	 * 	If the first parameter type matches this object's type, it is used as the first parameter value.
+	 * 	Can be <jk>null</jk> for regular classes or static inner classes.
+	 * @param otherBeans Optional additional bean instances to use if not found in the bean store.
+	 * 	These are checked after the bean store but before throwing an exception.
+	 * @return The resolved parameter value.
+	 * @throws ExecutableException If a required parameter (non-Optional, non-collection) cannot be resolved
+	 * 	from the bean store or <c>otherBeans</c>.
+	 */
+	public Object resolveValue(BeanStore beanStore, Object enclosingInstance, Object... otherBeans) {
+		var pt = getParameterType();
+		if (getIndex() == 0 && nn(enclosingInstance) && pt.isInstance(enclosingInstance))
+			return enclosingInstance;
+		return resolveValue(beanStore, otherBeans);
 	}
 }
