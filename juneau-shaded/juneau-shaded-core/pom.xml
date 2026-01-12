@@ -29,7 +29,7 @@
 	<name>Apache Juneau Core (Shaded)</name>
 	<description>
 		Shaded JAR containing all juneau-core submodules for general marshalling work.
-		Includes: juneau-commons, juneau-assertions, juneau-bct, juneau-config, and juneau-marshall.
+		Includes: juneau-commons, juneau-assertions, juneau-config, and juneau-marshall.
 		This artifact is useful for projects that need core Juneau functionality without managing multiple dependencies.
 	</description>
 
@@ -43,11 +43,6 @@
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-assertions</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-bct</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

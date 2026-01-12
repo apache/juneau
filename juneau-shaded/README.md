@@ -15,7 +15,6 @@ This module contains shaded (uber) JAR artifacts that bundle multiple Juneau mod
 **Includes**:
 - juneau-commons
 - juneau-assertions
-- juneau-bct (Bean-Centric Testing)
 - juneau-config
 - juneau-marshall
 
@@ -46,7 +45,6 @@ maven_jar(
 - All modules from juneau-shaded-core
 - juneau-rest-common
 - juneau-rest-client
-- juneau-rest-mock
 
 **Maven Usage**:
 ```xml
@@ -76,7 +74,6 @@ maven_jar(
 - juneau-rest-common
 - juneau-rest-server
 - juneau-rest-server-rdf
-- juneau-rest-mock
 
 **Maven Usage**:
 ```xml

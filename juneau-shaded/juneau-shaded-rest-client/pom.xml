@@ -28,7 +28,7 @@
 	<artifactId>juneau-shaded-rest-client</artifactId>
 	<name>Apache Juneau REST Client (Shaded)</name>
 	<description>
-		Shaded JAR containing juneau-core modules plus juneau-rest-common, juneau-rest-client, and juneau-rest-mock.
+		Shaded JAR containing juneau-core modules plus juneau-rest-common and juneau-rest-client.
 		This artifact provides everything needed for REST client development with Juneau.
 	</description>
 
@@ -49,11 +49,6 @@
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-client</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-mock</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
