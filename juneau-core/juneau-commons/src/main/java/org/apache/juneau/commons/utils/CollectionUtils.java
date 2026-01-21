@@ -853,6 +853,36 @@ public class CollectionUtils {
 	}
 
 	/**
+	 * Returns the element at the specified index.
+	 *
+	 * <p>
+	 * This is a null-safe convenience method that safely accesses list elements.
+	 * If the list is <jk>null</jk>, the index is negative, or the index is greater than or equal to the list size,
+	 * this method returns <jk>null</jk> instead of throwing an exception.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	List&lt;String&gt; <jv>list</jv> = <jsm>l</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
+	 *
+	 * 	String <jv>first</jv> = <jsm>at</jsm>(<jv>list</jv>, 0);   <jc>// Returns "a"</jc>
+	 * 	String <jv>second</jv> = <jsm>at</jsm>(<jv>list</jv>, 1);  <jc>// Returns "b"</jc>
+	 * 	String <jv>outOfBounds</jv> = <jsm>at</jsm>(<jv>list</jv>, 10);  <jc>// Returns null</jc>
+	 * 	String <jv>negative</jv> = <jsm>at</jsm>(<jv>list</jv>, -1);  <jc>// Returns null</jc>
+	 * 	String <jv>nullList</jv> = <jsm>at</jsm>(<jk>null</jk>, 0);  <jc>// Returns null</jc>
+	 * </p>
+	 *
+	 * @param <E> The element type.
+	 * @param l The list. Can be <jk>null</jk>.
+	 * @param index The index to access.
+	 * @return The element at the specified index, or <jk>null</jk> if the list is <jk>null</jk>, the index is out of bounds, or negative.
+	 */
+	public static <E> E at(List<E> l, int index) {
+		if (l == null || index < 0 || index >= l.size())
+			return null;
+		return l.get(index);
+	}
+
+	/**
 	 * Returns the length of the specified array.
 	 *
 	 * <p>

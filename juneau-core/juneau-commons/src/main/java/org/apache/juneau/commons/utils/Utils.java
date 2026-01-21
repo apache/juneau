@@ -501,14 +501,14 @@ public class Utils {
 	 * Tests two objects for equality, gracefully handling nulls and arrays.
 	 *
 	 * <p>
- * This method handles annotations specially by delegating to {@link org.apache.juneau.commons.utils.AnnotationUtils#equals(java.lang.annotation.Annotation, java.lang.annotation.Annotation)}
- * to ensure proper annotation comparison according to the annotation equality contract.
- *
- * @param <T> The value types.
- * @param o1 Object 1.
- * @param o2 Object 2.
- * @return <jk>true</jk> if both objects are equal based on the {@link Object#equals(Object)} method.
- * @see org.apache.juneau.commons.utils.AnnotationUtils#equals(java.lang.annotation.Annotation, java.lang.annotation.Annotation)
+	 * This method handles annotations specially by delegating to {@link org.apache.juneau.commons.utils.AnnotationUtils#equals(java.lang.annotation.Annotation, java.lang.annotation.Annotation)}
+	 * to ensure proper annotation comparison according to the annotation equality contract.
+	 *
+	 * @param <T> The value types.
+	 * @param o1 Object 1.
+	 * @param o2 Object 2.
+	 * @return <jk>true</jk> if both objects are equal based on the {@link Object#equals(Object)} method.
+	 * @see org.apache.juneau.commons.utils.AnnotationUtils#equals(java.lang.annotation.Annotation, java.lang.annotation.Annotation)
 	 */
 	public static <T> boolean eq(T o1, T o2) {
 		// Handle annotations specially
@@ -525,6 +525,37 @@ public class Utils {
 			return true;
 		}
 		return Objects.equals(o1, o2);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the first argument equals any of the varargs arguments.
+	 *
+	 * <p>
+	 * Uses {@link #eq(Object, Object)} for equality comparison, which handles nulls, arrays, and annotations gracefully.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>assertTrue</jk>(eqAny(<js>"apple"</js>, <js>"apple"</js>, <js>"banana"</js>, <js>"cherry"</js>));
+	 * 	<jk>assertFalse</jk>(eqAny(<js>"apple"</js>, <js>"banana"</js>, <js>"cherry"</js>));
+	 * 	<jk>assertTrue</jk>(eqAny(<jk>null</jk>, <js>"apple"</js>, <jk>null</jk>, <js>"banana"</js>));
+	 * 	<jk>assertFalse</jk>(eqAny(<js>"apple"</js>));  <jc>// Empty varargs</jc>
+	 * </p>
+	 *
+	 * @param <T> The value types.
+	 * @param o1 The first object to compare.
+	 * @param o2 The varargs array of objects to compare against.
+	 * @return <jk>true</jk> if <c>o1</c> equals any of the values in <c>o2</c>, <jk>false</jk> otherwise.
+	 * 	Returns <jk>false</jk> if <c>o2</c> is <jk>null</jk> or empty.
+	 * @see #eq(Object, Object)
+	 */
+	@SafeVarargs
+	public static <T> boolean eqAny(T o1, T...o2) {
+		if (o2 == null || o2.length == 0)
+			return false;
+		for (var o : o2)
+			if (eq(o1, o))
+				return true;
+		return false;
 	}
 
 	/**
@@ -1555,6 +1586,31 @@ public class Utils {
 	 */
 	public static final <T> Optional<T> opt(T t) {
 		return Optional.ofNullable(t);
+	}
+
+	/**
+	 * Returns an Optional containing the element at the specified index in the list, or empty if the index is out of bounds or the element is <jk>null</jk>.
+	 *
+	 * <p>
+	 * This is a convenience method that combines {@link CollectionUtils#at(List, int)} with {@link #opt(Object)}.
+	 * </p>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	List&lt;String&gt; <jv>list</jv> = <jsm>list</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
+	 * 	Optional&lt;String&gt; <jv>result</jv> = <jsm>opt</jsm>(<jv>list</jv>, 1);  <jc>// Optional.of("b")</jc>
+	 * 	Optional&lt;String&gt; <jv>result2</jv> = <jsm>opt</jsm>(<jv>list</jv>, 10);  <jc>// Optional.empty()</jc>
+	 * </p>
+	 *
+	 * @param <T> The element type.
+	 * @param l The list to get the element from.
+	 * @param index The index of the element to retrieve.
+	 * @return An Optional containing the element at the specified index, or empty if the index is out of bounds or the element is <jk>null</jk>.
+	 * @see CollectionUtils#at(List, int)
+	 * @see #opt(Object)
+	 */
+	public static final <T> Optional<T> opt(List<T> l, int index) {
+		return opt(CollectionUtils.at(l, index));
 	}
 
 	/**

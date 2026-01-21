@@ -1999,6 +1999,28 @@ public class ClassInfo_Test extends TestBase {
 		assertFalse(method2.isPresent());
 	}
 
+	// Test classes for bridge method testing
+	public interface GenericInterfaceForBridge<T> {
+		T getValue();
+	}
+	public static class BridgeMethodTestClass implements GenericInterfaceForBridge<String> {
+		@Override
+		public String getValue() { return "value"; }  // This creates a bridge method
+	}
+
+	// Test classes for covariant return type (creates bridge method)
+	public static class ParentWithMethod {
+		public ParentWithMethod getInstance() {
+			return new ParentWithMethod();
+		}
+	}
+	public static class ChildWithCovariantReturn extends ParentWithMethod {
+		@Override
+		public ChildWithCovariantReturn getInstance() {
+			return new ChildWithCovariantReturn();
+		}
+	}
+
 	//====================================================================================================
 	// getPublicMethods()
 	//====================================================================================================
@@ -2012,6 +2034,35 @@ public class ClassInfo_Test extends TestBase {
 		// Test on types
 		check("", aTypeInfo.getPublicMethods());
 		check("", pTypeGenericArgInfo.getPublicMethods());
+	}
+
+	/**
+	 * Tests that getPublicMethods() excludes both bridge and synthetic methods.
+	 * Some methods can be both bridge and synthetic, and they should be excluded.
+	 */
+	@Test
+	void a059d_getPublicMethods_excludesBridgeAndSyntheticMethods() {
+		// Test with ArrayList which implements List and has bridge methods
+		var arrayListInfo = ClassInfo.of(java.util.ArrayList.class);
+		var publicMethods = arrayListInfo.getPublicMethods();
+
+		// Verify no bridge methods are included
+		var bridgeMethods = publicMethods.stream()
+			.filter(MethodInfo::isBridge)
+			.toList();
+		assertTrue(bridgeMethods.isEmpty(), "getPublicMethods() should not include bridge methods. Found: " + bridgeMethods);
+
+		// Verify no synthetic methods are included
+		var syntheticMethods = publicMethods.stream()
+			.filter(MethodInfo::isSynthetic)
+			.toList();
+		assertTrue(syntheticMethods.isEmpty(), "getPublicMethods() should not include synthetic methods. Found: " + syntheticMethods);
+
+		// Verify that methods that are both bridge and synthetic are excluded
+		var bridgeOrSynthetic = publicMethods.stream()
+			.filter(m -> m.isBridge() || m.isSynthetic())
+			.toList();
+		assertTrue(bridgeOrSynthetic.isEmpty(), "getPublicMethods() should not include methods that are bridge or synthetic. Found: " + bridgeOrSynthetic);
 	}
 
 	//====================================================================================================
@@ -3548,6 +3599,10 @@ public class ClassInfo_Test extends TestBase {
 	@java.lang.annotation.Target({java.lang.annotation.ElementType.FIELD, java.lang.annotation.ElementType.METHOD})
 	@interface Autowired {}
 
+	@java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
+	@java.lang.annotation.Target({java.lang.annotation.ElementType.METHOD})
+	@interface PostConstruct {}
+
 	// Test classes for field injection
 	static class TestFieldInjection {
 		@Inject
@@ -3662,6 +3717,84 @@ public class ClassInfo_Test extends TestBase {
 		@Inject
 		static void staticMethod(TestService service) {
 			// Static method - can't access instance fields, so we just verify it executes without error
+		}
+	}
+
+	// Test class for PostConstruct injection
+	static class TestPostConstruct {
+		boolean postConstructCalled = false;
+		TestService injectedService;
+		boolean postConstruct2Called = false;
+
+		@Inject
+		TestService service;
+
+		@PostConstruct
+		void postConstruct() {
+			postConstructCalled = true;
+			// Verify injection happened before PostConstruct
+			injectedService = service;
+		}
+
+		@PostConstruct
+		void postConstruct2() {
+			postConstruct2Called = true;
+		}
+	}
+
+	// Parent class with PostConstruct for testing parent-to-child order
+	static class ParentWithPostConstruct {
+		final List<String> callOrder = new ArrayList<>();
+
+		@PostConstruct
+		void parentPostConstruct() {
+			callOrder.add("parent");
+		}
+	}
+
+	// Child class with PostConstruct for testing parent-to-child order
+	static class ChildWithPostConstruct extends ParentWithPostConstruct {
+		@PostConstruct
+		void childPostConstruct() {
+			callOrder.add("child");
+		}
+	}
+
+	// Test class with PostConstruct that has parameters (should be skipped)
+	static class TestPostConstructWithParams {
+		boolean called = false;
+
+		@PostConstruct
+		void postConstruct(TestService service) {
+			called = true; // Should not be called - has parameters
+		}
+	}
+
+	// Test class with PostConstruct that returns value (should still be called)
+	static class TestPostConstructWithReturn {
+		boolean called = false;
+
+		@PostConstruct
+		public String postConstruct() {
+			called = true;
+			return "result"; // Return value should be ignored
+		}
+	}
+
+	// Test class with abstract PostConstruct method (should be skipped)
+	static abstract class TestAbstractPostConstruct {
+		@PostConstruct
+		abstract void postConstruct();
+	}
+
+	// Test class with PostConstruct and type parameters (should be skipped)
+	static class TestPostConstructWithTypeParams {
+		boolean called = false;
+
+		@PostConstruct
+		@SuppressWarnings("unused")
+		<T> void postConstruct() {
+			called = true; // Should not be called - has type parameters
 		}
 	}
 
@@ -4092,6 +4225,87 @@ public class ClassInfo_Test extends TestBase {
 		ClassInfo.of(combined).inject(combined, beanStore);
 		assertSame(service, combined.field);
 		// Method should have been called (no exception means it worked)
+	}
+
+	//====================================================================================================
+	// injectBeans - PostConstruct tests
+	//====================================================================================================
+
+	@Test
+	void b030_injectBeans_postConstructCalled() {
+		var service = new TestService("test1");
+		beanStore.addBean(TestService.class, service);
+		var bean = new TestPostConstruct();
+		ClassInfo.of(bean).inject(bean, beanStore);
+		assertTrue(bean.postConstructCalled, "@PostConstruct method should be called");
+		assertSame(service, bean.injectedService, "Injection should happen before PostConstruct");
+	}
+
+	@Test
+	void b031_injectBeans_postConstructCalledAfterInjection() {
+		var service = new TestService("test1");
+		beanStore.addBean(TestService.class, service);
+		var bean = new TestPostConstruct();
+		ClassInfo.of(bean).inject(bean, beanStore);
+		// Verify that injection happened before PostConstruct
+		assertNotNull(bean.injectedService, "Service should be injected before PostConstruct runs");
+		assertSame(service, bean.injectedService);
+		assertTrue(bean.postConstructCalled);
+	}
+
+	@Test
+	void b032_injectBeans_postConstructMultipleMethods() {
+		var service = new TestService("test1");
+		beanStore.addBean(TestService.class, service);
+		var bean = new TestPostConstruct();
+		ClassInfo.of(bean).inject(bean, beanStore);
+		assertTrue(bean.postConstructCalled, "First @PostConstruct method should be called");
+		assertTrue(bean.postConstruct2Called, "Second @PostConstruct method should be called");
+	}
+
+	@Test
+	void b033_injectBeans_postConstructParentToChildOrder() {
+		var bean = new ChildWithPostConstruct();
+		ClassInfo.of(bean).inject(bean, beanStore);
+		// Parent PostConstruct should be called before child PostConstruct
+		assertEquals(2, bean.callOrder.size());
+		assertEquals("parent", bean.callOrder.get(0), "Parent PostConstruct should be called first");
+		assertEquals("child", bean.callOrder.get(1), "Child PostConstruct should be called second");
+	}
+
+	@Test
+	void b034_injectBeans_postConstructWithParametersSkipped() {
+		var service = new TestService("test1");
+		beanStore.addBean(TestService.class, service);
+		var bean = new TestPostConstructWithParams();
+		ClassInfo.of(bean).inject(bean, beanStore);
+		assertFalse(bean.called, "@PostConstruct method with parameters should be skipped");
+	}
+
+	@Test
+	void b035_injectBeans_postConstructWithReturnValue() {
+		var bean = new TestPostConstructWithReturn();
+		ClassInfo.of(bean).inject(bean, beanStore);
+		assertFalse(bean.called, "@PostConstruct method with return value should be skipped");
+	}
+
+	@Test
+	void b036_injectBeans_postConstructWithTypeParamsSkipped() {
+		var bean = new TestPostConstructWithTypeParams();
+		ClassInfo.of(bean).inject(bean, beanStore);
+		assertFalse(bean.called, "@PostConstruct method with type parameters should be skipped");
+	}
+
+	@Test
+	void b037_injectBeans_postConstructWithFieldAndMethodInjection() {
+		var service = new TestService("test1");
+		beanStore.addBean(TestService.class, service);
+		var bean = new TestPostConstruct();
+		ClassInfo.of(bean).inject(bean, beanStore);
+		// Verify all injection happened before PostConstruct
+		assertSame(service, bean.service, "Field injection should happen first");
+		assertSame(service, bean.injectedService, "PostConstruct should see injected field");
+		assertTrue(bean.postConstructCalled, "PostConstruct should be called after all injection");
 	}
 }
 

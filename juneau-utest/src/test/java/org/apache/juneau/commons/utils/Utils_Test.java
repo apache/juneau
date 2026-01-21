@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
 import java.lang.annotation.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -269,6 +270,54 @@ class Utils_Test extends TestBase {
 		// Test line 453 branch: one is annotation, other is not
 		assertFalse(eq(a1, "not an annotation"));  // o1 is Annotation, o2 is not
 		assertFalse(eq("not an annotation", a1));  // o1 is not, o2 is Annotation
+	}
+
+	//====================================================================================================
+	// eqAny(T, T...)
+	//====================================================================================================
+	@Test
+	void a014_eqAny() {
+		// Basic equality tests
+		assertTrue(eqAny("apple", "apple", "banana", "cherry"));
+		assertFalse(eqAny("apple", "banana", "cherry"));
+		assertTrue(eqAny(123, 123, 456, 789));
+		assertFalse(eqAny(123, 456, 789));
+
+		// Null handling
+		assertTrue(eqAny(null, "apple", null, "banana"));
+		assertFalse(eqAny(null, "apple", "banana"));
+		assertTrue(eqAny("apple", null, "apple", "banana"));
+		assertFalse(eqAny("apple", "banana", "cherry"));
+
+		// Empty varargs
+		assertFalse(eqAny("apple"));
+		assertFalse(eqAny(null));
+		assertFalse(eqAny(123));
+
+		// Null varargs array
+		String[] nullArray = null;
+		assertFalse(eqAny("apple", nullArray));
+
+		// Test arrays
+		var arr1 = a(1, 2, 3);
+		var arr2 = a(1, 2, 3);
+		var arr3 = a(1, 2, 4);
+		assertTrue(eqAny(arr1, arr2, arr3));
+		assertFalse(eqAny(arr1, (Serializable[])arr3));
+
+		// Test annotations
+		@TestAnnotation("test")
+		class T1 {}
+		@TestAnnotation("test")
+		class T2 {}
+		@TestAnnotation("different")
+		class T3 {}
+
+		var a1 = T1.class.getAnnotation(TestAnnotation.class);
+		var a2 = T2.class.getAnnotation(TestAnnotation.class);
+		var a3 = T3.class.getAnnotation(TestAnnotation.class);
+		assertTrue(eqAny(a1, a2, a3));
+		assertFalse(eqAny(a1, a3));
 	}
 
 	//====================================================================================================

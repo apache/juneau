@@ -188,9 +188,9 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		if (i == 0) {
 			var declaringClass = getDeclaringClass();
 			var oDeclaringClass = o.getDeclaringClass();
-			if (declaringClass.isParentOf(oDeclaringClass)) {
+			if (declaringClass.isChildOf(oDeclaringClass)) {
 				i = -1; // This method is from a child class, so it comes first
-			} else if (oDeclaringClass.isParentOf(declaringClass)) {
+			} else if (oDeclaringClass.isChildOf(declaringClass)) {
 				i = 1; // Other method is from a child class, so it comes first
 			} else {
 				i = cmp(declaringClass.getName(), oDeclaringClass.getName()); // Neither is a child of the other, compare by class name for deterministic ordering

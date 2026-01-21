@@ -267,6 +267,23 @@ class MethodInfo_Test extends TestBase {
 		assertSame(a_m, result);
 	}
 
+	// Test classes for compareTo tie-breaker testing
+	public static class CompareToParent {
+		public CompareToParent getInstance() {
+			return new CompareToParent();
+		}
+		public void method(String param) {}
+	}
+
+	public static class CompareToChild extends CompareToParent {
+		@Override
+		public CompareToChild getInstance() {
+			return new CompareToChild();
+		}
+		@Override
+		public void method(String param) {}
+	}
+
 	//====================================================================================================
 	// compareTo(MethodInfo)
 	//====================================================================================================
@@ -274,6 +291,42 @@ class MethodInfo_Test extends TestBase {
 	void a002_compareTo() {
 		var s = new TreeSet<>(l(g_a1a, g_a1b, g_a1c, g_a1d, g_a2, g_a3));
 		check("[G.a1(), G.a1(int), G.a1(String), G.a1(int,int), G.a2(), G.a3()]", s);
+	}
+
+	/**
+	 * Tests that compareTo() correctly handles tie-breaking for overridden methods.
+	 * When methods have the same name and parameters, child class methods should
+	 * come before parent class methods in sorted order. This ensures consistent ordering
+	 * and that methods with covariant return types are selected correctly.
+	 */
+	@Test
+	void a002b_compareTo_tieBreakerForOverriddenMethods() throws Exception {
+		// Get methods from parent and child classes with same signature
+		var parentMethod = MethodInfo.of(CompareToParent.class.getMethod("getInstance"));
+		var childMethod = MethodInfo.of(CompareToChild.class.getMethod("getInstance"));
+
+		// Child method should come before parent method (negative comparison)
+		assertTrue(childMethod.compareTo(parentMethod) < 0, "Child method should come before parent method");
+		assertTrue(parentMethod.compareTo(childMethod) > 0, "Parent method should come after child method");
+
+		// When sorted, child should come first
+		var sorted = new TreeSet<>(l(parentMethod, childMethod));
+		var list = new ArrayList<>(sorted);
+		assertEquals(childMethod, list.get(0), "Child method should be first in sorted set");
+		assertEquals(parentMethod, list.get(1), "Parent method should be second in sorted set");
+
+		// Test with methods that have parameters
+		var parentMethodWithParam = MethodInfo.of(CompareToParent.class.getMethod("method", String.class));
+		var childMethodWithParam = MethodInfo.of(CompareToChild.class.getMethod("method", String.class));
+
+		assertTrue(childMethodWithParam.compareTo(parentMethodWithParam) < 0, "Child method with params should come before parent");
+		assertTrue(parentMethodWithParam.compareTo(childMethodWithParam) > 0, "Parent method with params should come after child");
+
+		// Test with unrelated classes (should fall back to class name comparison)
+		var unrelatedMethod = MethodInfo.of(A1.class.getMethod("m"));
+		var unrelatedMethod2 = MethodInfo.of(EqualsTestClass.class.getMethod("method1"));
+		// These should have different names, so comparison should be based on name, not tie-breaker
+		assertNotEquals(0, unrelatedMethod.compareTo(unrelatedMethod2));
 	}
 
 	//====================================================================================================
@@ -422,6 +475,49 @@ class MethodInfo_Test extends TestBase {
 	void a013_getReturnType() {
 		check("void", d_a1.getReturnType());
 		check("Integer", d_a2.getReturnType());
+	}
+
+	// Test classes for covariant return type testing
+	public static class ParentWithMethod {
+		public ParentWithMethod getInstance() {
+			return new ParentWithMethod();
+		}
+	}
+
+	public static class ChildWithCovariantReturn extends ParentWithMethod {
+		@Override
+		public ChildWithCovariantReturn getInstance() {
+			return new ChildWithCovariantReturn();
+		}
+	}
+
+	/**
+	 * Tests that getReturnType() correctly handles covariant return types.
+	 * When a child class overrides a parent method with a more specific return type,
+	 * getReturnType() should return the child's return type, not the parent's.
+	 */
+	@Test
+	void a013b_getReturnType_covariantReturnType() throws Exception {
+		// Get the method from the child class
+		var childMethod = MethodInfo.of(ChildWithCovariantReturn.class.getMethod("getInstance"));
+		var childReturnType = childMethod.getReturnType();
+
+		// Should return the child type, not the parent type
+		assertEquals(ChildWithCovariantReturn.class, childReturnType.inner());
+		assertNotEquals(ParentWithMethod.class, childReturnType.inner());
+
+		// Verify it's actually a child of the parent
+		assertTrue(childReturnType.isChildOf(ClassInfo.of(ParentWithMethod.class)));
+
+		// Get the method from the parent class for comparison
+		var parentMethod = MethodInfo.of(ParentWithMethod.class.getMethod("getInstance"));
+		var parentReturnType = parentMethod.getReturnType();
+
+		// Parent method should return parent type
+		assertEquals(ParentWithMethod.class, parentReturnType.inner());
+
+		// Child and parent return types should be different
+		assertNotEquals(childReturnType.inner(), parentReturnType.inner());
 	}
 
 	//====================================================================================================
