@@ -90,8 +90,8 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	private final Supplier<List<ClassInfo>> parameterTypes;  // All parameter types of this executable.
 	private final Supplier<List<ClassInfo>> exceptions;  // All exceptions declared by this executable.
 	private final Supplier<List<AnnotationInfo<Annotation>>> declaredAnnotations;  // All annotations declared directly on this executable.
-	private final Supplier<String> shortName;  // Short name (method/constructor name with parameters).
-	private final Supplier<String> fullName;  // Fully qualified name (declaring-class.method-name with parameters).
+	private final Supplier<String> nameShort;  // Short name (method/constructor name with parameters).
+	private final Supplier<String> nameFull;  // Fully qualified name (declaring-class.method-name with parameters).
 	private final Supplier<String> toString;  // String representation with modifiers, return type, name, and throws declarations.
 
 	/**
@@ -114,8 +114,8 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		this.parameterTypes = mem(() -> getParameters().stream().map(ParameterInfo::getParameterType).toList());
 		this.exceptions = mem(() -> stream(inner.getExceptionTypes()).map(ClassInfo::of).map(ClassInfo.class::cast).toList());
 		this.declaredAnnotations = mem(() -> stream(inner.getDeclaredAnnotations()).flatMap(a -> AnnotationUtils.streamRepeated(a)).map(a -> ai((Annotatable)this, a)).toList());
-		this.shortName = mem(() -> f("{0}({1})", getNameSimple(), getParameters().stream().map(p -> p.getParameterType().getNameSimple()).collect(joining(","))));
-		this.fullName = mem(this::findFullName);
+		this.nameShort = mem(() -> f("{0}({1})", getNameSimple(), getParameters().stream().map(p -> p.getParameterType().getNameSimple()).collect(joining(","))));
+		this.nameFull = mem(this::findNameFull);
 		this.toString = mem(this::findToString);
 	}
 
@@ -300,7 +300,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 *
 	 * @return The underlying executable name.
 	 */
-	public final String getNameFull() { return fullName.get(); }
+	public final String getNameFull() { return nameFull.get(); }
 
 	/**
 	 * Returns parameter information at the specified index.
@@ -364,7 +364,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 *
 	 * @return The underlying executable name.
 	 */
-	public final String getNameShort() { return shortName.get(); }
+	public final String getNameShort() { return nameShort.get(); }
 
 	/**
 	 * Returns the simple name of the underlying method.
@@ -945,7 +945,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 			throw new IndexOutOfBoundsException(f("Invalid index ''{0}''.  Parameter count: {1}", index, pc));
 	}
 
-	private String findFullName() {
+	private String findNameFull() {
 		var sb = new StringBuilder(128);
 		var dc = declaringClass;
 		var pi = dc.getPackage();

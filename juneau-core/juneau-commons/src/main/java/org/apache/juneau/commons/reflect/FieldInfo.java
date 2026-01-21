@@ -130,7 +130,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	private final ClassInfo declaringClass;
 	private final Supplier<ClassInfo> type;
 	private final Supplier<List<AnnotationInfo<Annotation>>> annotations;  // All annotations declared directly on this field.
-	private final Supplier<String> fullName;  // Fully qualified field name (declaring-class.field-name).
+	private final Supplier<String> nameFull;  // Fully qualified field name (declaring-class.field-name).
 	private final Supplier<String> toString;  // String representation with modifiers, type, and full name.
 
 	/**
@@ -151,7 +151,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		this.inner = inner;
 		this.type = mem(() -> ClassInfo.of(inner.getType(), inner.getGenericType()));
 		this.annotations = mem(() -> stream(inner.getAnnotations()).flatMap(a -> AnnotationUtils.streamRepeated(a)).map(a -> ai(this, a)).toList());
-		this.fullName = mem(this::findFullName);
+		this.nameFull = mem(this::findNameFull);
 		this.toString = mem(this::findToString);
 	}
 
@@ -262,7 +262,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 *
 	 * @return The underlying executable name.
 	 */
-	public String getNameFull() { return fullName.get(); }
+	public String getNameFull() { return nameFull.get(); }
 
 	@Override /* Annotatable */
 	public String getLabel() { return getDeclaringClass().getNameSimple() + "." + getName(); }
@@ -536,7 +536,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		return sb.toString();
 	}
 
-	private String findFullName() {
+	private String findNameFull() {
 		var sb = new StringBuilder(128);
 		var dc = declaringClass;
 		var pi = dc.getPackage();

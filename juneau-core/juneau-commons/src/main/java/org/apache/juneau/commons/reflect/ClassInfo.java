@@ -186,9 +186,9 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	private final Supplier<PackageInfo> packageInfo;  // The package this class belongs to (null for primitive types and arrays).
 	private final Supplier<List<ClassInfo>> parents;  // All superclasses of this class in child-to-parent order, starting with this class.
 	private final Supplier<List<AnnotationInfo>> declaredAnnotations;  // All annotations declared directly on this class, wrapped in AnnotationInfo.
-	private final Supplier<String> fullName;  // Fully qualified class name with generics (e.g., "java.util.List<java.lang.String>").
-	private final Supplier<String> shortName;  // Simple class name with generics (e.g., "List<String>").
-	private final Supplier<String> readableName;  // Human-readable class name without generics (e.g., "List").
+	private final Supplier<String> nameFull;  // Fully qualified class name with generics (e.g., "java.util.List<java.lang.String>").
+	private final Supplier<String> nameShort;  // Simple class name with generics (e.g., "List<String>").
+	private final Supplier<String> nameReadable;  // Human-readable class name without generics (e.g., "List").
 	private final Supplier<String> toString;  // String representation with modifiers, class type, name, and type parameters.
 	private final Supplier<List<ClassInfo>> declaredInterfaces;  // All interfaces declared directly by this class.
 	private final Supplier<List<ClassInfo>> interfaces;  // All interfaces implemented by this class and its parents, in child-to-parent order.
@@ -232,9 +232,9 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 		this.packageInfo = mem(() -> opt(inner).map(x -> x.getPackage()).filter(p -> p != null).map(PackageInfo::of).orElse(null));  // PackageInfo may be null for primitive types and arrays.
 		this.parents = mem(this::findParents);
 		this.declaredAnnotations = mem(() -> (List)opt(inner).map(x -> u(l(x.getDeclaredAnnotations()))).orElse(liste()).stream().flatMap(a -> streamRepeated(a)).map(a -> ai(this, a)).toList());
-		this.fullName = mem(() -> getNameFormatted(FULL, true, '$', BRACKETS));
-		this.shortName = mem(() -> getNameFormatted(SHORT, true, '$', BRACKETS));
-		this.readableName = mem(() -> getNameFormatted(SIMPLE, false, '$', WORD));
+		this.nameFull = mem(() -> getNameFormatted(FULL, true, '$', BRACKETS));
+		this.nameShort = mem(() -> getNameFormatted(SHORT, true, '$', BRACKETS));
+		this.nameReadable = mem(() -> getNameFormatted(SIMPLE, false, '$', WORD));
 		this.toString = mem(this::findToString);
 		this.declaredInterfaces = mem(() -> opt(inner).map(x -> stream(x.getGenericInterfaces()).map(ClassInfo::of).map(ClassInfo.class::cast).toList()).orElse(liste()));
 		this.interfaces = mem(() -> getParents().stream().flatMap(x -> x.getDeclaredInterfaces().stream()).flatMap(ci2 -> concat(Stream.of(ci2), ci2.getInterfaces().stream())).distinct().toList());
@@ -1233,14 +1233,14 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 *
 	 * @return The underlying class name.
 	 */
-	public String getNameFull() { return fullName.get(); }
+	public String getNameFull() { return nameFull.get(); }
 
 	/**
 	 * Same as {@link #getNameSimple()} but uses <js>"Array"</js> instead of <js>"[]"</js>.
 	 *
 	 * @return The readable name for this class.
 	 */
-	public String getNameReadable() { return readableName.get(); }
+	public String getNameReadable() { return nameReadable.get(); }
 
 	/**
 	 * Returns all possible names for this class.
@@ -1264,7 +1264,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 *
 	 * @return The short name of the underlying class.
 	 */
-	public String getNameShort() { return shortName.get(); }
+	public String getNameShort() { return nameShort.get(); }
 
 	/**
 	 * Returns the simple name of the underlying class.
@@ -2794,6 +2794,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 *
 	 * <p>
 	 * This method performs field and method injection based on {@code @Inject} or {@code @Autowired} annotations.
+	 * After all injection is complete, it calls any methods annotated with {@code @PostConstruct}.
 	 *
 	 * <h5 class='section'>Injectable Fields:</h5>
 	 * <ul class='spaced-list'>
