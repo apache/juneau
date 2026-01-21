@@ -131,6 +131,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	private final Supplier<ClassInfo> type;
 	private final Supplier<List<AnnotationInfo<Annotation>>> annotations;  // All annotations declared directly on this field.
 	private final Supplier<String> fullName;  // Fully qualified field name (declaring-class.field-name).
+	private final Supplier<String> toString;  // String representation with modifiers, type, and full name.
 
 	/**
 	 * Constructor.
@@ -151,6 +152,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		this.type = mem(() -> ClassInfo.of(inner.getType(), inner.getGenericType()));
 		this.annotations = mem(() -> stream(inner.getAnnotations()).flatMap(a -> AnnotationUtils.streamRepeated(a)).map(a -> ai(this, a)).toList());
 		this.fullName = mem(this::findFullName);
+		this.toString = mem(this::findToString);
 	}
 
 	/**
@@ -480,9 +482,58 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	// Annotatable interface methods
 	//-----------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Returns a detailed string representation of this field.
+	 *
+	 * <p>
+	 * The returned string includes:
+	 * <ul>
+	 * 	<li>Modifiers (public, private, protected, static, final, volatile, transient)
+	 * 	<li>Field type with generics (e.g., "List&lt;String&gt;")
+	 * 	<li>Fully qualified field name (declaring-class.field-name)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Simple field</jc>
+	 * 	FieldInfo <jv>fi</jv> = ...;
+	 * 	<jv>fi</jv>.toString();
+	 * 	<jc>// Returns: "public java.lang.String org.example.MyClass.name"</jc>
+	 *
+	 * 	<jc>// Static final field</jc>
+	 * 	<jc>// Returns: "public static final int org.example.MyClass.MAX_VALUE"</jc>
+	 *
+	 * 	<jc>// Generic field</jc>
+	 * 	<jc>// Returns: "private java.util.List&lt;java.lang.String&gt; org.example.MyClass.items"</jc>
+	 *
+	 * 	<jc>// Volatile field</jc>
+	 * 	<jc>// Returns: "volatile boolean org.example.MyClass.flag"</jc>
+	 * </p>
+	 *
+	 * @return A detailed string representation including modifiers, type, and full name.
+	 */
 	@Override
 	public String toString() {
-		return cn(inner.getDeclaringClass()) + "." + inner.getName();
+		return toString.get();
+	}
+
+	private String findToString() {
+		var sb = new StringBuilder(256);
+
+		// Modifiers
+		var mods = Modifier.toString(getModifiers());
+		if (nn(mods) && ! mods.isEmpty()) {
+			sb.append(mods).append(" ");
+		}
+
+		// Field type (use generic type to show generics)
+		var genericType = inner.getGenericType();
+		ClassInfo.of(genericType).appendNameFormatted(sb, FULL, true, '$', BRACKETS);
+
+		// Fully qualified field name
+		sb.append(" ").append(getNameFull());
+
+		return sb.toString();
 	}
 
 	private String findFullName() {

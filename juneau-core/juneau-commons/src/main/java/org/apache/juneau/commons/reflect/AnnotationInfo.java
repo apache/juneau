@@ -697,7 +697,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 *
 	 * @return A new map showing the attributes of this annotation info.
 	 */
-	protected FluentMap<String,Object> properties() {
+	public FluentMap<String,Object> properties() {
 		// @formatter:off
 		var ca = info(a.annotationType());
 		var ja = mapb().sorted().buildFluent();  // NOAI

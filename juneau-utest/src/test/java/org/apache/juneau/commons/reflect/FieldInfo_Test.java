@@ -670,7 +670,100 @@ class FieldInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a031_toString() {
-		assertEquals("org.apache.juneau.commons.reflect.FieldInfo_Test$E.a1", e_a1.toString());
+		// e_a1 is a public int field, new toString() includes modifiers and type
+		assertEquals("public int org.apache.juneau.commons.reflect.FieldInfo_Test$E.a1", e_a1.toString());
+	}
+
+	@Test
+	void a032_toString_comprehensive() {
+		var ci = ClassInfo.of(ToStringTestClass.class);
+
+		// Public field
+		var publicField = ci.getPublicField(x -> x.hasName("publicField")).get();
+		assertEquals("public int org.apache.juneau.commons.reflect.FieldInfo_Test$ToStringTestClass.publicField", publicField.toString());
+
+		// Private field
+		var privateField = ci.getDeclaredField(x -> x.hasName("privateField")).get();
+		assertEquals("private java.lang.String org.apache.juneau.commons.reflect.FieldInfo_Test$ToStringTestClass.privateField", privateField.toString());
+
+		// Protected field
+		var protectedField = ci.getDeclaredField(x -> x.hasName("protectedField")).get();
+		assertEquals("protected boolean org.apache.juneau.commons.reflect.FieldInfo_Test$ToStringTestClass.protectedField", protectedField.toString());
+
+		// Package-private field
+		var packageField = ci.getDeclaredField(x -> x.hasName("packageField")).get();
+		assertEquals("double org.apache.juneau.commons.reflect.FieldInfo_Test$ToStringTestClass.packageField", packageField.toString());
+
+		// Static field
+		var staticField = ci.getPublicField(x -> x.hasName("staticField")).get();
+		assertEquals("public static long org.apache.juneau.commons.reflect.FieldInfo_Test$ToStringTestClass.staticField", staticField.toString());
+
+		// Final field
+		var finalField = ci.getPublicField(x -> x.hasName("finalField")).get();
+		assertEquals("public static final int org.apache.juneau.commons.reflect.FieldInfo_Test$ToStringTestClass.finalField", finalField.toString());
+
+		// Volatile field
+		var volatileField = ci.getPublicField(x -> x.hasName("volatileField")).get();
+		assertEquals("public volatile boolean org.apache.juneau.commons.reflect.FieldInfo_Test$ToStringTestClass.volatileField", volatileField.toString());
+
+		// Transient field
+		var transientField = ci.getPublicField(x -> x.hasName("transientField")).get();
+		assertEquals("public transient java.lang.Object org.apache.juneau.commons.reflect.FieldInfo_Test$ToStringTestClass.transientField", transientField.toString());
+
+		// Generic field (private, so use getDeclaredField)
+		var genericField = ci.getDeclaredField(x -> x.hasName("genericField")).get();
+		assertEquals("private java.util.List<java.lang.String> org.apache.juneau.commons.reflect.FieldInfo_Test$ToStringTestClass.genericField", genericField.toString());
+
+		// Generic field with multiple type parameters (private, so use getDeclaredField)
+		var mapField = ci.getDeclaredField(x -> x.hasName("mapField")).get();
+		assertEquals("private java.util.Map<java.lang.String,java.lang.Integer> org.apache.juneau.commons.reflect.FieldInfo_Test$ToStringTestClass.mapField", mapField.toString());
+
+		// Array field
+		var arrayField = ci.getPublicField(x -> x.hasName("arrayField")).get();
+		assertEquals("public int[] org.apache.juneau.commons.reflect.FieldInfo_Test$ToStringTestClass.arrayField", arrayField.toString());
+
+		// Multi-dimensional array field
+		var matrixField = ci.getPublicField(x -> x.hasName("matrixField")).get();
+		assertEquals("public java.lang.String[][] org.apache.juneau.commons.reflect.FieldInfo_Test$ToStringTestClass.matrixField", matrixField.toString());
+
+		// Generic array field
+		var genericArrayField = ci.getPublicField(x -> x.hasName("genericArrayField")).get();
+		assertEquals("public java.util.List<java.lang.String>[] org.apache.juneau.commons.reflect.FieldInfo_Test$ToStringTestClass.genericArrayField", genericArrayField.toString());
+
+		// Primitive types
+		var byteField = ci.getPublicField(x -> x.hasName("byteField")).get();
+		assertEquals("public byte org.apache.juneau.commons.reflect.FieldInfo_Test$ToStringTestClass.byteField", byteField.toString());
+
+		var charField = ci.getPublicField(x -> x.hasName("charField")).get();
+		assertEquals("public char org.apache.juneau.commons.reflect.FieldInfo_Test$ToStringTestClass.charField", charField.toString());
+
+		var floatField = ci.getPublicField(x -> x.hasName("floatField")).get();
+		assertEquals("public float org.apache.juneau.commons.reflect.FieldInfo_Test$ToStringTestClass.floatField", floatField.toString());
+
+		// Multiple modifiers
+		var staticFinalField = ci.getPublicField(x -> x.hasName("staticFinalField")).get();
+		assertEquals("public static final java.lang.String org.apache.juneau.commons.reflect.FieldInfo_Test$ToStringTestClass.staticFinalField", staticFinalField.toString());
+	}
+
+	// Test class for toString() comprehensive tests
+	public static class ToStringTestClass {
+		public int publicField;
+		private String privateField;
+		protected boolean protectedField;
+		double packageField;
+		public static long staticField;
+		public static final int finalField = 42;
+		public volatile boolean volatileField;
+		public transient Object transientField;
+		private java.util.List<String> genericField;
+		private java.util.Map<String, Integer> mapField;
+		public int[] arrayField;
+		public String[][] matrixField;
+		public java.util.List<String>[] genericArrayField;
+		public byte byteField;
+		public char charField;
+		public float floatField;
+		public static final String staticFinalField = "constant";
 	}
 
 	//====================================================================================================
