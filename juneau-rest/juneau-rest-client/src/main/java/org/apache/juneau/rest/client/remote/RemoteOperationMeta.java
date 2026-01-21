@@ -69,7 +69,7 @@ public class RemoteOperationMeta {
 
 			var _httpMethod = Value.<String>empty();
 			var _path = Value.<String>empty();
-			al.stream().map(x -> x.getName().substring(6).toUpperCase()).filter(x -> ! x.equals("OP")).forEach(x -> _httpMethod.set(x));
+			al.stream().map(x -> x.getNameSimple().substring(6).toUpperCase()).filter(x -> ! x.equals("OP")).forEach(x -> _httpMethod.set(x));
 			al.forEach(ai -> ai.getValue(String.class, "method").filter(NOT_EMPTY).ifPresent(x -> _httpMethod.set(x.trim().toUpperCase())));
 			al.forEach(ai -> ai.getValue(String.class, "path").filter(NOT_EMPTY).ifPresent(x -> _path.set(x.trim())));
 			httpMethod = _httpMethod.orElse("").trim();

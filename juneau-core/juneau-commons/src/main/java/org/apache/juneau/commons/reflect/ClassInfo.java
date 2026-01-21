@@ -2819,12 +2819,12 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	public <T> T inject(T bean, BeanStore beanStore) {
 		// Inject into fields
 		getAllFields().stream()
-			.filter(x -> x.isNotFinal() && x.getAnnotations().stream().map(AnnotationInfo::getName).anyMatch(n -> eq(n, "Inject") || eq(n, "Autowired")))
+			.filter(x -> x.isNotFinal() && x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eq(n, "Inject") || eq(n, "Autowired")))
 			.forEach(x -> x.inject(beanStore, bean));
 
 		// Inject into methods
 		getAllMethods().stream()
-			.filter(x -> x.isNotAbstract() && eq(x.getTypeParameters().length, 0) && x.getAnnotations().stream().map(AnnotationInfo::getName).anyMatch(n -> eq(n, "Inject") || eq(n, "Autowired")))
+			.filter(x -> x.isNotAbstract() && eq(x.getTypeParameters().length, 0) && x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eq(n, "Inject") || eq(n, "Autowired")))
 			.forEach(x -> x.inject(beanStore, bean));
 
 		return bean;

@@ -209,7 +209,7 @@ class FieldInfo_Test extends TestBase {
 		assertDoesNotThrow(()->d_isProtected.accessible());
 		assertDoesNotThrow(()->d_isPrivate.accessible());
 		assertDoesNotThrow(()->d_isDefault.accessible());
-		
+
 		// Verify it returns this for chaining
 		var result = d_isPublic.accessible();
 		assertSame(d_isPublic, result);
@@ -223,12 +223,12 @@ class FieldInfo_Test extends TestBase {
 		// Fields should be sorted by field name only
 		// "a2" comes before "f1" alphabetically, so b_a2 should come before a1_f1
 		var b_a2 = off(B.class, "a2");
-		
+
 		// "a2" < "f1" alphabetically, so b_a2 should come before a1_f1
 		assertTrue(b_a2.compareTo(a1_f1) < 0);
 		assertTrue(a1_f1.compareTo(b_a2) > 0);
 		assertEquals(0, a1_f1.compareTo(a1_f1));
-		
+
 		// Test fields from same class - should be sorted by field name
 		assertTrue(b_a1.compareTo(b_a2) < 0);
 		assertTrue(b_a2.compareTo(b_a1) > 0);
@@ -242,10 +242,10 @@ class FieldInfo_Test extends TestBase {
 		var obj = new GetSetTest();
 		obj.value = "test";
 		obj.number = 42;
-		
+
 		assertEquals("test", getSetTest_value.get(obj));
 		assertEquals(Integer.valueOf(42), getSetTest_number.get(obj));
-		
+
 		// Null value
 		obj.value = null;
 		assertNull(getSetTest_value.get(obj));
@@ -276,16 +276,16 @@ class FieldInfo_Test extends TestBase {
 	void a006_getAnnotations() {
 		var annotations1 = f_field1.getAnnotations();
 		assertEquals(2, annotations1.size());
-		assertTrue(annotations1.stream().anyMatch(a -> a.hasSimpleName("TestAnnotation1")));
-		assertTrue(annotations1.stream().anyMatch(a -> a.hasSimpleName("TestAnnotation2")));
+		assertTrue(annotations1.stream().anyMatch(a -> a.hasNameSimple("TestAnnotation1")));
+		assertTrue(annotations1.stream().anyMatch(a -> a.hasNameSimple("TestAnnotation2")));
 
 		var annotations2 = f_field2.getAnnotations();
 		assertEquals(1, annotations2.size());
-		assertTrue(annotations2.stream().anyMatch(a -> a.hasSimpleName("TestAnnotation1")));
+		assertTrue(annotations2.stream().anyMatch(a -> a.hasNameSimple("TestAnnotation1")));
 
 		var annotations3 = f_field3.getAnnotations();
 		assertEquals(0, annotations3.size());
-		
+
 		// Test memoization - should return same instance
 		var annotations1_2 = f_field1.getAnnotations();
 		assertSame(annotations1, annotations1_2);
@@ -331,7 +331,7 @@ class FieldInfo_Test extends TestBase {
 	void a009_getFieldType() {
 		check("int", e_a1.getFieldType());
 		check("int", e_a2.getFieldType());
-		
+
 		// Test memoization - should return same instance
 		var type1 = e_a1.getFieldType();
 		var type2 = e_a1.getFieldType();
@@ -345,7 +345,7 @@ class FieldInfo_Test extends TestBase {
 	void a010_getFullName() throws Exception {
 		String fullName1 = g_field1.getNameFull();
 		String fullName2 = g_field2.getNameFull();
-		
+
 		// Test line 449: getPackage() returns null (default package class)
 		// A field can have a null package if its declaring class is in the default package
 		// According to Java API, Class.getPackage() returns null for classes in the default package
@@ -369,15 +369,15 @@ class FieldInfo_Test extends TestBase {
 
 		assertTrue(fullName1.endsWith("FieldInfo_Test$G.field1"));
 		assertTrue(fullName2.endsWith("FieldInfo_Test$G.field2"));
-		
+
 		assertTrue(fullName1.startsWith("org.apache.juneau.commons.reflect."));
 		assertTrue(fullName2.startsWith("org.apache.juneau.commons.reflect."));
-		
+
 		// Test memoization - should return same instance
 		String name1 = g_field1.getNameFull();
 		String name2 = g_field1.getNameFull();
 		assertSame(name1, name2);
-		
+
 		// Test with inner class
 		String innerFullName = inner_field.getNameFull();
 		assertTrue(innerFullName.contains("FieldInfo_Test$InnerClass"));
@@ -457,19 +457,19 @@ class FieldInfo_Test extends TestBase {
 		assertFalse(c_isNotStatic.is(STATIC));
 		assertFalse(c_isTransient.is(NOT_TRANSIENT));
 		assertFalse(c_isNotTransient.is(TRANSIENT));
-		
+
 		// Enum constant
 		assertTrue(testEnum_value1.is(ENUM_CONSTANT));
 		assertFalse(a1_f1.is(ENUM_CONSTANT));
 		assertTrue(a1_f1.is(NOT_ENUM_CONSTANT));  // Line 313: true branch - field is NOT an enum constant
 		assertFalse(testEnum_value1.is(NOT_ENUM_CONSTANT));  // Line 313: false branch - field IS an enum constant
-		
+
 		// Synthetic (lines 314-315)
 		assertFalse(a1_f1.is(SYNTHETIC));
 		assertTrue(a1_f1.is(NOT_SYNTHETIC));
 		assertFalse(b_a1.is(SYNTHETIC));
 		assertTrue(b_a1.is(NOT_SYNTHETIC));
-		
+
 		// HAS_PARAMS doesn't apply to fields, should throw exception
 		assertThrowsWithMessage(RuntimeException.class, "Invalid flag for element: HAS_PARAMS", () -> c_deprecated.is(HAS_PARAMS));
 	}
@@ -483,22 +483,22 @@ class FieldInfo_Test extends TestBase {
 		var privateBefore = d_isPrivate.isAccessible();
 		var protectedBefore = d_isProtected.isAccessible();
 		var defaultBefore = d_isDefault.isAccessible();
-		
+
 		// Make them accessible
 		d_isPrivate.setAccessible();
 		d_isProtected.setAccessible();
 		d_isDefault.setAccessible();
-		
+
 		// After setAccessible(), they should be accessible (if Java 9+)
 		var privateAfter = d_isPrivate.isAccessible();
 		var protectedAfter = d_isProtected.isAccessible();
 		var defaultAfter = d_isDefault.isAccessible();
-		
+
 		// Verify the method doesn't throw and returns a boolean
 		assertTrue(privateAfter || !privateBefore, "After setAccessible(), isAccessible() should return true (Java 9+) or false (Java 8)");
 		assertTrue(protectedAfter || !protectedBefore, "After setAccessible(), isAccessible() should return true (Java 9+) or false (Java 8)");
 		assertTrue(defaultAfter || !defaultBefore, "After setAccessible(), isAccessible() should return true (Java 9+) or false (Java 8)");
-		
+
 		// Public fields might already be accessible
 		var publicAccessible = d_isPublic.isAccessible();
 		assertNotNull(publicAccessible);
@@ -601,7 +601,7 @@ class FieldInfo_Test extends TestBase {
 	@Test
 	void a026_of_withoutClass() {
 		check("f1", FieldInfo.of(a1_f1.inner()));
-		
+
 		// Null should throw
 		assertThrows(IllegalArgumentException.class, () -> FieldInfo.of((Field)null));
 		assertThrows(IllegalArgumentException.class, () -> FieldInfo.of((ClassInfo)null, null));
@@ -613,13 +613,13 @@ class FieldInfo_Test extends TestBase {
 	@Test
 	void a027_set() {
 		var obj = new GetSetTest();
-		
+
 		getSetTest_value.set(obj, "newValue");
 		assertEquals("newValue", obj.value);
-		
+
 		getSetTest_number.set(obj, 100);
 		assertEquals(100, obj.number);
-		
+
 		// Set to null
 		getSetTest_value.set(obj, null);
 		assertNull(obj.value);
@@ -642,12 +642,12 @@ class FieldInfo_Test extends TestBase {
 	@Test
 	void a029_setIfNull() {
 		var obj = new GetSetTest();
-		
+
 		// Set when null
 		obj.value = null;
 		getSetTest_value.setIfNull(obj, "defaultValue");
 		assertEquals("defaultValue", obj.value);
-		
+
 		// Don't set when not null
 		obj.value = "existing";
 		getSetTest_value.setIfNull(obj, "shouldNotSet");
@@ -775,43 +775,43 @@ class FieldInfo_Test extends TestBase {
 		Field f1 = EqualsTestClass.class.getField("field1");
 		FieldInfo fi1a = FieldInfo.of(f1);
 		FieldInfo fi1b = FieldInfo.of(f1);
-		
+
 		Field f2 = EqualsTestClass.class.getField("field2");
 		FieldInfo fi2 = FieldInfo.of(f2);
 
 		// Same field should be equal
 		assertEquals(fi1a, fi1b);
 		assertEquals(fi1a.hashCode(), fi1b.hashCode());
-		
+
 		// Different fields should not be equal
 		assertNotEquals(fi1a, fi2);
 		assertNotEquals(fi1a, null);
 		assertNotEquals(fi1a, "not a FieldInfo");
-		
+
 		// Reflexive
 		assertEquals(fi1a, fi1a);
-		
+
 		// Symmetric
 		assertEquals(fi1a, fi1b);
 		assertEquals(fi1b, fi1a);
-		
+
 		// Transitive
 		FieldInfo fi1c = FieldInfo.of(f1);
 		assertEquals(fi1a, fi1b);
 		assertEquals(fi1b, fi1c);
 		assertEquals(fi1a, fi1c);
-		
+
 		// HashMap usage - same field should map to same value
 		Map<FieldInfo, String> map = new HashMap<>();
 		map.put(fi1a, "value1");
 		assertEquals("value1", map.get(fi1b));
 		assertEquals("value1", map.get(fi1c));
-		
+
 		// HashMap usage - different fields should map to different values
 		map.put(fi2, "value2");
 		assertEquals("value2", map.get(fi2));
 		assertNotEquals("value2", map.get(fi1a));
-		
+
 		// HashSet usage
 		Set<FieldInfo> set = new HashSet<>();
 		set.add(fi1a);

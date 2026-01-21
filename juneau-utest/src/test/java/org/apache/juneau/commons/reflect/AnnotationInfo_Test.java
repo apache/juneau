@@ -387,7 +387,29 @@ class AnnotationInfo_Test extends TestBase {
 		var ci = ClassInfo.of(TestClass.class);
 		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
 		assertNotNull(ai);
-		assertEquals("TestAnnotation", ai.getName());
+		// getName() now returns fully qualified name
+		assertEquals("org.apache.juneau.commons.reflect.AnnotationInfo_Test$TestAnnotation", ai.getName());
+	}
+
+	@Test
+	void a015_getNameSimple() {
+		var ci = ClassInfo.of(TestClass.class);
+		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
+		assertNotNull(ai);
+		// getNameSimple() returns simple name
+		assertEquals("TestAnnotation", ai.getNameSimple());
+
+		// Test with standard library annotation
+		var ci2 = ClassInfo.of(DocumentedClass.class);
+		var ai2 = ci2.getAnnotations(DocumentedAnnotation.class).findFirst().orElse(null);
+		assertNotNull(ai2);
+		assertEquals("DocumentedAnnotation", ai2.getNameSimple());
+
+		// Test with nested annotation
+		var ci3 = ClassInfo.of(GroupTestClass.class);
+		var ai3 = ci3.getAnnotations(GroupMember1.class).findFirst().orElse(null);
+		assertNotNull(ai3);
+		assertEquals("GroupMember1", ai3.getNameSimple());
 	}
 
 	//====================================================================================================
@@ -551,8 +573,8 @@ class AnnotationInfo_Test extends TestBase {
 		var ai = ci.getAnnotations(TestAnnotation.class).findFirst().orElse(null);
 		assertNotNull(ai);
 
-		assertTrue(ai.hasSimpleName("TestAnnotation"));
-		assertFalse(ai.hasSimpleName(TestAnnotation.class.getName()));
+		assertTrue(ai.hasNameSimple("TestAnnotation"));
+		assertFalse(ai.hasNameSimple(TestAnnotation.class.getName()));
 	}
 
 	//====================================================================================================
@@ -660,16 +682,16 @@ class AnnotationInfo_Test extends TestBase {
 		assertNotNull(map2);
 		var annotationMap2 = (java.util.Map<String,Object>)map2.get("@ToMapTestAnnotation");
 		assertNotNull(annotationMap2);
-		
+
 		// value differs from default (non-array), should be included
 		assertEquals("custom", annotationMap2.get("value"));
-		
+
 		// nonEmptyArray differs from default (non-empty array), should be included
 		assertTrue(annotationMap2.containsKey("nonEmptyArray"));
-		
+
 		// emptyArrayWithNonEmptyDefault is empty array but default is non-empty, should be included
 		assertTrue(annotationMap2.containsKey("emptyArrayWithNonEmptyDefault"));
-		
+
 		// arrayValue is empty array matching default empty array, should NOT be included
 		assertFalse(annotationMap2.containsKey("arrayValue"));
 
@@ -696,21 +718,21 @@ class AnnotationInfo_Test extends TestBase {
 				return method.getDefaultValue();
 			}
 		};
-		
+
 		var proxyAnnotation = (ToMapTestAnnotation)java.lang.reflect.Proxy.newProxyInstance(
 			annotationType.getClassLoader(),
 			new Class[]{annotationType},
 			handler
 		);
-		
+
 		var ci3 = ClassInfo.of(ToMapTestClass.class);
 		var ai3 = AnnotationInfo.of(ci3, proxyAnnotation);
-		
+
 		var map3 = ai3.properties();
 		assertNotNull(map3);
 		var annotationMap3 = (java.util.Map<String,Object>)map3.get("@ToMapTestAnnotation");
 		assertNotNull(annotationMap3);
-		
+
 		// The exception should be caught and stored as a localized message
 		assertTrue(annotationMap3.containsKey("value"));
 		var value = annotationMap3.get("value");

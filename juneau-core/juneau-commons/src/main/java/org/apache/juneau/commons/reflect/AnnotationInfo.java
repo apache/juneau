@@ -403,17 +403,31 @@ public class AnnotationInfo<T extends Annotation> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Returns the class name of this annotation.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
+	 * 	String <jv>name</jv> = <jv>ai</jv>.getName();  <jc>// Returns "mypackage.MyAnnotation"</jc>
+	 * </p>
+	 *
+	 * @return The simple class name of the annotation (e.g., {@code "Override"} for {@code @Override}).
+	 */
+	public String getName() { return cn(a.annotationType()); }
+
+	/**
 	 * Returns the simple class name of this annotation.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
-	 * 	String <jv>name</jv> = <jv>ai</jv>.getName();  <jc>// Returns "MyAnnotation"</jc>
+	 * 	String <jv>name</jv> = <jv>ai</jv>.getNameSimple();  <jc>// Returns "MyAnnotation"</jc>
 	 * </p>
 	 *
 	 * @return The simple class name of the annotation (e.g., {@code "Override"} for {@code @Override}).
+	 * @see #getName()
 	 */
-	public String getName() { return cns(a.annotationType()); }
+	public String getNameSimple() { return cns(a.annotationType()); }
 
 	/**
 	 * Returns the rank of this annotation for sorting by precedence.
@@ -591,7 +605,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return <jk>true</jk> if this annotation has the specified fully-qualified name.
 	 */
 	public boolean hasName(String value) {
-		return eq(value, a.annotationType().getName());
+		return eq(value, getName());
 	}
 
 	/**
@@ -605,8 +619,8 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @param value The simple name to check.
 	 * @return <jk>true</jk> if this annotation has the specified simple name.
 	 */
-	public boolean hasSimpleName(String value) {
-		return eq(value, a.annotationType().getSimpleName());
+	public boolean hasNameSimple(String value) {
+		return eq(value, getNameSimple());
 	}
 
 	/**

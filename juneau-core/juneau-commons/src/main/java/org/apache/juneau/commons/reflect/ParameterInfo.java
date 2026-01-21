@@ -667,7 +667,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 
 		// Parameter type (use generic type if available to show generics)
 		var paramType = getParameterizedType();
-		
+
 		// For varargs, we need to get the component type and display it with "..." instead of "[]"
 		if (isVarArgs()) {
 			// Get the component type of the array
@@ -732,7 +732,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		// because bytecode names are unreliable - users may or may not compile with -parameters flag.
 		for (var mp : getMatchingParameters()) {
 			for (var ai : mp.getAnnotations()) {
-				if (ai.hasSimpleName("Name")) {
+				if (ai.hasNameSimple("Name")) {
 					var value = ai.getValue().orElse(null);
 					if (value != null)  // HTT
 						return value;
@@ -748,7 +748,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		// @formatter:off
 		return getMatchingParameters().stream()
 			.flatMap(mp -> mp.getAnnotations().stream())
-			.filter(ai -> ai.hasSimpleName("Named") || ai.hasSimpleName("Qualifier"))
+			.filter(ai -> ai.hasNameSimple("Named") || ai.hasNameSimple("Qualifier"))
 			.map(ai -> ai.getValue().orElse(null))
 			.filter(Objects::nonNull)
 			.findFirst()
