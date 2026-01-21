@@ -130,12 +130,26 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			var ap = context.getBeanContext().getAnnotationProvider();
 
 			var mi = MethodInfo.of(context.getResourceClass(), method);
+			var resourceClass = ClassInfo.of(context.getResourceClass());
 
 			try {
 				var vr = context.getVarResolver();
 				var vrs = vr.createSession();
 
-				var work = AnnotationWorkList.of(vrs, rstream(ap.find(mi, SELF, MATCHING_METHODS, DECLARING_CLASS, RETURN_TYPE, PACKAGE)).filter(CONTEXT_APPLY_FILTER));
+				// For DECLARING_CLASS traversal, we need to search from the resource class hierarchy,
+				// not the method's declaring class hierarchy, to ensure we find annotations on the
+				// resource class even when the method is declared in a parent class.
+				// We search class annotations first (parent-to-child), then method annotations (parent-to-child),
+				// so that method-level annotations override class-level ones.
+				// Use LinkedHashSet to deduplicate while preserving order (parent-to-child).
+				var declaringClassAnnotations = rstream(ap.find(resourceClass, SELF, PARENTS));
+				var methodAnnotations = rstream(ap.find(mi, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE));
+				var allAnnotationsSet = new java.util.LinkedHashSet<AnnotationInfo<?>>();
+				declaringClassAnnotations.forEach(allAnnotationsSet::add);
+				methodAnnotations.forEach(allAnnotationsSet::add);
+				var allAnnotations = allAnnotationsSet.stream();
+
+				var work = AnnotationWorkList.of(vrs, allAnnotations.filter(CONTEXT_APPLY_FILTER));
 
 				apply(work);
 

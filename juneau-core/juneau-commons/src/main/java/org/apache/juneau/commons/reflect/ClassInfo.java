@@ -2735,7 +2735,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * @return The cached {@link MethodInfo} wrapper for this method.
 	 */
 	MethodInfo getMethod(Method x) {
-		return methodCache.get(x, () -> new MethodInfo(this, x));
+		return methodCache.get(x, () -> new MethodInfo(eq(this.inner, x.getDeclaringClass()) ? this : of(x.getDeclaringClass()), x));
 	}
 
 	/**
