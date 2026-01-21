@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.reflect;
 
+import static org.apache.juneau.commons.reflect.ClassArrayFormat.*;
+import static org.apache.juneau.commons.reflect.ClassNameFormat.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
@@ -104,6 +106,7 @@ public class AnnotationInfo<T extends Annotation> {
 	private T a;  // Effectively final
 
 	private final Supplier<List<MethodInfo>> methods = mem(() -> stream(a.annotationType().getMethods()).map(m -> MethodInfo.of(info(a.annotationType()), m)).toList());
+	private final Supplier<String> toString;  // String representation with annotation type, location, and values.
 
 	/**
 	 * Constructor.
@@ -115,6 +118,7 @@ public class AnnotationInfo<T extends Annotation> {
 		this.annotatable = on;  // TODO - Shouldn't allow null.
 		this.a = assertArgNotNull("a", a);
 		this.rank = findRank(a);
+		this.toString = mem(this::findToString);
 	}
 
 	/**
@@ -740,15 +744,112 @@ public class AnnotationInfo<T extends Annotation> {
 	}
 
 	/**
-	 * Returns a string representation of this annotation.
+	 * Returns a detailed string representation of this annotation.
 	 *
 	 * <p>
-	 * Returns the map representation created by {@link #properties()}.
+	 * The returned string includes:
+	 * <ul>
+	 * 	<li>Annotation type (fully qualified name with @ prefix)
+	 * 	<li>Location where the annotation is declared (on=...)
+	 * 	<li>Annotation values (non-default values only, in key=value format)
+	 * </ul>
 	 *
-	 * @return A string representation of this annotation.
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Simple annotation on a class</jc>
+	 * 	AnnotationInfo <jv>ai</jv> = ...;
+	 * 	<jv>ai</jv>.toString();
+	 * 	<jc>// Returns: "@java.lang.Deprecated(on=org.example.MyClass)"</jc>
+	 *
+	 * 	<jc>// Annotation with value</jc>
+	 * 	<jc>// Returns: "@org.example.MyAnnotation(value=foo, on=org.example.MyClass)"</jc>
+	 *
+	 * 	<jc>// Annotation on a method</jc>
+	 * 	<jc>// Returns: "@org.example.RestGet(path=/api, on=org.example.MyClass.myMethod)"</jc>
+	 *
+	 * 	<jc>// Annotation on a field</jc>
+	 * 	<jc>// Returns: "@org.example.Inject(name=myBean, on=org.example.MyClass.myField)"</jc>
+	 * </p>
+	 *
+	 * <h5 class='section'>Comparison with Other Methods:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>{@link #toSimpleString()} - Returns simple format: "@AnnotationName(on=location)"
+	 * 	<li>{@link #properties()} - Returns map representation for debugging
+	 * </ul>
+	 *
+	 * @return A detailed string representation including annotation type, location, and values.
 	 */
 	@Override /* Overridden from Object */
 	public String toString() {
-		return r(properties());
+		return toString.get();
+	}
+
+	private String findToString() {
+		var sb = new StringBuilder(256);
+
+		// Annotation type (with @ prefix and full package name)
+		sb.append("@");
+		var annotationType = a.annotationType();
+		ClassInfo.of(annotationType).appendNameFormatted(sb, FULL, true, '$', BRACKETS);
+
+		// Get annotation values (non-default only)
+		var ca = info(annotationType);
+		var values = new ArrayList<String>();
+		ca.getDeclaredMethods().stream().forEach(m -> {
+			safeOptCatch(() -> {
+				var val = m.invoke(a);
+				var d = m.inner().getDefaultValue();
+				// Add values only if they're different from the default
+				if (neq(val, d)) {
+					if (! (isArray(val) && length(val) == 0 && isArray(d) && length(d) == 0)) {
+						var valueStr = formatAnnotationValue(val);
+						values.add(m.getName() + "=" + valueStr);
+					}
+				}
+				return null;
+			}, e -> null);
+		});
+
+		// Build the string: @AnnotationType(key1=value1, key2=value2, on=location)
+		if (! values.isEmpty()) {
+			sb.append("(");
+			sb.append(String.join(", ", values));
+			sb.append(", on=");
+		} else {
+			sb.append("(on=");
+		}
+		sb.append(annotatable.getLabel());
+		sb.append(")");
+
+		return sb.toString();
+	}
+
+	private String formatAnnotationValue(Object value) {
+		if (value == null)
+			return "null";
+		if (value instanceof String)
+			return "\"" + value + "\"";
+		if (isArray(value)) {
+			var array = toList(value, Object.class);
+			if (array.isEmpty())
+				return "{}";
+			var elements = array.stream()
+				.map(this::formatAnnotationValue)
+				.collect(java.util.stream.Collectors.joining(", "));
+			return "{" + elements + "}";
+		}
+		if (value instanceof Class<?> c) {
+			var sb = new StringBuilder();
+			ClassInfo.of(c).appendNameFormatted(sb, FULL, true, '$', BRACKETS);
+			return sb.toString() + ".class";
+		}
+		if (value instanceof Enum<?> e) {
+			return e.getDeclaringClass().getSimpleName() + "." + e.name();
+		}
+		if (value instanceof Annotation ann) {
+			// For nested annotations, use simple format
+			return "@" + ClassInfo.of(ann.annotationType()).getNameSimple() + "(...)";
+		}
+		return String.valueOf(value);
 	}
 }

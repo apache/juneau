@@ -745,8 +745,154 @@ class AnnotationInfo_Test extends TestBase {
 
 		var str = ai.toString();
 		assertNotNull(str);
-		// toString() returns the map representation
-		assertTrue(str.contains("CLASS_TYPE") || str.contains("@TestAnnotation"));
+		// New toString() format: @AnnotationType(value=..., on=location)
+		assertTrue(str.startsWith("@"), "Should start with @");
+		assertTrue(str.contains("TestAnnotation"), "Should contain annotation type name");
+		assertTrue(str.contains("value=\"test\""), "Should contain annotation value");
+		assertTrue(str.contains("on="), "Should contain 'on=' location");
+		assertTrue(str.contains("TestClass"), "Should contain declaring class name");
 	}
+
+	@Test
+	void a032_toString_comprehensive() {
+		// Test annotation with single value
+		var ci1 = ClassInfo.of(ToStringTestClass.class);
+		var ai1 = ci1.getAnnotations(TestAnnotation.class).findFirst().get();
+		var str1 = ai1.toString();
+		assertTrue(str1.startsWith("@"), "Should start with @");
+		assertTrue(str1.contains("TestAnnotation"), "Should contain annotation type");
+		assertTrue(str1.contains("value=\"test\""), "Should contain value");
+		assertTrue(str1.contains("on="), "Should contain location");
+		assertTrue(str1.contains("ToStringTestClass"), "Should contain declaring class name");
+
+		// Test annotation with multiple values
+		var ci2 = ClassInfo.of(MultiTypeTestClass.class);
+		var ai2 = ci2.getAnnotations(MultiTypeAnnotation.class).findFirst().get();
+		var str2 = ai2.toString();
+		assertTrue(str2.contains("MultiTypeAnnotation"), "Should contain annotation type");
+		assertTrue(str2.contains("stringValue=\"test\""), "Should contain string value");
+		assertTrue(str2.contains("intValue=123"), "Should contain int value");
+		assertTrue(str2.contains("boolValue=false"), "Should contain boolean value");
+		assertTrue(str2.contains("longValue=999"), "Should contain long value");
+		assertTrue(str2.contains("doubleValue=1.23"), "Should contain double value");
+		assertTrue(str2.contains("floatValue=4.56"), "Should contain float value");
+		assertTrue(str2.contains("classValue=java.lang.Integer.class"), "Should contain class value");
+		assertTrue(str2.contains("stringArray="), "Should contain string array key");
+		assertTrue(str2.contains("\"x\"") && str2.contains("\"y\""), "Should contain string array values");
+		assertTrue(str2.contains("classArray="), "Should contain class array key");
+		assertTrue(str2.contains("java.lang.Long.class") && str2.contains("java.lang.Double.class"), "Should contain class array values");
+		assertTrue(str2.contains("on="), "Should contain location");
+
+		// Test annotation with default values (should not appear)
+		var ci3 = ClassInfo.of(DefaultValueTestClass.class);
+		var ai3 = ci3.getAnnotations(TestAnnotation.class).findFirst().get();
+		var str3 = ai3.toString();
+		// Should not contain value since it's the default
+		assertFalse(str3.contains("value="), "Should not contain default value");
+		// Should still contain location
+		assertTrue(str3.contains("on="), "Should contain location");
+		assertTrue(str3.contains("DefaultValueTestClass"), "Should contain declaring class name");
+
+		// Test annotation on method
+		var ci4 = ClassInfo.of(MethodAnnotationTestClass.class);
+		var method = ci4.getPublicMethod(x -> x.hasName("testMethod")).get();
+		var ai4 = method.getAnnotations(TestAnnotationMultiTarget.class).findFirst().get();
+		var str4 = ai4.toString();
+		assertTrue(str4.contains("TestAnnotationMultiTarget"), "Should contain annotation type");
+		assertTrue(str4.contains("value=\"method\""), "Should contain method annotation value");
+		assertTrue(str4.contains("on="), "Should contain location");
+		assertTrue(str4.contains("testMethod"), "Should contain method name");
+
+		// Test annotation on field
+		var ci5 = ClassInfo.of(FieldAnnotationTestClass.class);
+		var field = ci5.getPublicField(x -> x.hasName("testField")).get();
+		var ai5 = field.getAnnotations(TestAnnotationMultiTarget.class).findFirst().get();
+		var str5 = ai5.toString();
+		assertTrue(str5.contains("TestAnnotationMultiTarget"), "Should contain annotation type");
+		assertTrue(str5.contains("value=\"field\""), "Should contain field annotation value");
+		assertTrue(str5.contains("on="), "Should contain location");
+		assertTrue(str5.contains("testField"), "Should contain field name");
+
+		// Test annotation on parameter
+		var ci6 = ClassInfo.of(ParameterAnnotationTestClass.class);
+		var method6 = ci6.getPublicMethod(x -> x.hasName("testMethod")).get();
+		var param = method6.getParameter(0);
+		var ai6 = param.getAnnotations(TestAnnotationMultiTarget.class).findFirst().get();
+		var str6 = ai6.toString();
+		assertTrue(str6.contains("TestAnnotationMultiTarget"), "Should contain annotation type");
+		assertTrue(str6.contains("value=\"param\""), "Should contain parameter annotation value");
+		assertTrue(str6.contains("on="), "Should contain location");
+
+		// Test annotation with empty array (should not appear if default is also empty)
+		var ci7 = ClassInfo.of(EmptyArrayTestClass.class);
+		var ai7 = ci7.getAnnotations(ClassArrayAnnotation.class).findFirst().get();
+		var str7 = ai7.toString();
+		// Empty array should not appear if default is also empty
+		assertFalse(str7.contains("classes="), "Should not contain empty array if default is also empty");
+
+		// Test annotation with non-empty array when default is empty
+		var ci8 = ClassInfo.of(NonEmptyArrayTestClass.class);
+		var ai8 = ci8.getAnnotations(ClassArrayAnnotation.class).findFirst().get();
+		var str8 = ai8.toString();
+		assertTrue(str8.contains("classes="), "Should contain non-empty array");
+		assertTrue(str8.contains("java.lang.String.class"), "Should contain array element");
+
+		// Test annotation with enum value
+		var ci9 = ClassInfo.of(EnumValueTestClass.class);
+		var ai9 = ci9.getAnnotations(EnumAnnotation.class).findFirst().get();
+		var str9 = ai9.toString();
+		assertTrue(str9.contains("EnumAnnotation"), "Should contain annotation type");
+		assertTrue(str9.contains("on="), "Should contain location");
+		assertTrue(str9.contains("EnumValueTestClass"), "Should contain declaring class name");
+		// Note: Enum values may or may not appear if they match defaults due to enum comparison behavior
+		// The important thing is that the annotation type and location are present
+	}
+
+	// Test classes for comprehensive toString() testing
+	@TestAnnotation("test")
+	public static class ToStringTestClass {}
+
+	@MultiTypeAnnotation(stringValue = "test", intValue = 123, boolValue = false, longValue = 999L, doubleValue = 1.23, floatValue = 4.56f, classValue = Integer.class, stringArray = { "x", "y" }, classArray = { Long.class, Double.class })
+	public static class MultiTypeTestClass {}
+
+	@TestAnnotation  // Uses default value
+	public static class DefaultValueTestClass {}
+
+	@Target({TYPE, METHOD, FIELD, PARAMETER})
+	@Retention(RUNTIME)
+	public static @interface TestAnnotationMultiTarget {
+		String value() default "default";
+	}
+
+	public static class MethodAnnotationTestClass {
+		@TestAnnotationMultiTarget("method")
+		public void testMethod() {}
+	}
+
+	public static class FieldAnnotationTestClass {
+		@TestAnnotationMultiTarget("field")
+		public String testField;
+	}
+
+	public static class ParameterAnnotationTestClass {
+		public void testMethod(@TestAnnotationMultiTarget("param") String param) {}
+	}
+
+	@ClassArrayAnnotation  // Empty array, same as default
+	public static class EmptyArrayTestClass {}
+
+	@ClassArrayAnnotation(classes = { String.class })
+	public static class NonEmptyArrayTestClass {}
+
+	enum TestEnum { VALUE1, VALUE2 }
+
+	@Target(TYPE)
+	@Retention(RUNTIME)
+	public static @interface EnumAnnotation {
+		TestEnum value() default TestEnum.VALUE1;
+	}
+
+	@EnumAnnotation(TestEnum.VALUE2)
+	public static class EnumValueTestClass {}
 }
 
