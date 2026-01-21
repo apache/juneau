@@ -391,7 +391,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return An {@link Optional} containing the method info, or empty if method not found.
 	 */
 	public Optional<MethodInfo> getMethod(String methodName) {
-		return methods.get().stream().filter(x -> eq(methodName, x.getSimpleName())).findFirst();
+		return methods.get().stream().filter(x -> eq(methodName, x.getNameSimple())).findFirst();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -1072,7 +1072,7 @@ public class BeanCreator2<T> {
 				.sorted(methodComparator)
 				.findFirst()
 				.map(x -> {
-					log("Found builder method: %s", x.getFullName());
+					log("Found builder method: %s", x.getNameFull());
 					return (T)beanType.cast(x.inject(store, builder));
 				})
 				.orElse((T)null);
@@ -1089,7 +1089,7 @@ public class BeanCreator2<T> {
 					.sorted(methodComparator)
 					.findFirst()
 					.map(x -> {
-						log("Found factory method accepting builder: %s", x.getFullName());
+						log("Found factory method accepting builder: %s", x.getNameFull());
 						return (T)beanType.cast(x.inject(store, null, builder));
 					})
 					.orElse(null);
@@ -1105,7 +1105,7 @@ public class BeanCreator2<T> {
 					.sorted(constructorComparator)
 					.findFirst()
 					.map(x -> {
-						log("Found constructor accepting builder: %s", x.getFullName());
+						log("Found constructor accepting builder: %s", x.getNameFull());
 						return (T)beanType.cast(x.inject(store, enclosingInstance, builder));
 					})
 					.orElse(null);
@@ -1121,7 +1121,7 @@ public class BeanCreator2<T> {
 					.sorted(methodComparator)
 					.findFirst()
 					.map(x -> {
-						log("Found builder method: %s", x.getFullName());
+						log("Found builder method: %s", x.getNameFull());
 						return (T)beanType.cast(x.inject(store, builder));
 					})
 					.orElse(null);
@@ -1160,7 +1160,7 @@ public class BeanCreator2<T> {
 			.sorted(methodComparator)
 			.findFirst()
 			.map(x -> {
-				log("Found factory method: %s", x.getFullName());
+				log("Found factory method: %s", x.getNameFull());
 				return (T)beanType.cast(x.inject(store, null));
 			})
 			.orElse(null);
@@ -1175,7 +1175,7 @@ public class BeanCreator2<T> {
 				.sorted(constructorComparator)
 				.findFirst()
 				.map(x -> {
-					log("Found constructor: %s", x.getFullName());
+					log("Found constructor: %s", x.getNameFull());
 					return (T)beanType.cast(x.inject(store, enclosingInstance));
 				})
 				.orElse(null);

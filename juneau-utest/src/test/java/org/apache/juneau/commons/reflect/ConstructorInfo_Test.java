@@ -50,9 +50,9 @@ class ConstructorInfo_Test extends TestBase {
 			if (t instanceof ClassInfo)
 				return ((ClassInfo)t).getNameSimple();
 			if (t instanceof ConstructorInfo)
-				return ((ConstructorInfo)t).getShortName();
+				return ((ConstructorInfo)t).getNameShort();
 			if (t instanceof Constructor)
-				return ConstructorInfo.of((Constructor<?>)t).getShortName();
+				return ConstructorInfo.of((Constructor<?>)t).getNameShort();
 			return t.toString();
 		}
 	};
@@ -257,7 +257,7 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a012_getFullName() {
-		var fullName = b_c2.getFullName();
+		var fullName = b_c2.getNameFull();
 		assertNotNull(fullName);
 		assertTrue(fullName.contains("B"));
 		assertTrue(fullName.contains("String"));
@@ -330,8 +330,8 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a018_getSimpleName() {
-		assertEquals("A", a.getSimpleName());
-		assertEquals("B", b_c1.getSimpleName());
+		assertEquals("A", a.getNameSimple());
+		assertEquals("B", b_c1.getNameSimple());
 	}
 
 	//====================================================================================================

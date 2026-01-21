@@ -113,7 +113,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		this.parameterTypes = mem(() -> getParameters().stream().map(ParameterInfo::getParameterType).toList());
 		this.exceptions = mem(() -> stream(inner.getExceptionTypes()).map(ClassInfo::of).map(ClassInfo.class::cast).toList());
 		this.declaredAnnotations = mem(() -> stream(inner.getDeclaredAnnotations()).flatMap(a -> AnnotationUtils.streamRepeated(a)).map(a -> ai((Annotatable)this, a)).toList());
-		this.shortName = mem(() -> f("{0}({1})", getSimpleName(), getParameters().stream().map(p -> p.getParameterType().getNameSimple()).collect(joining(","))));
+		this.shortName = mem(() -> f("{0}({1})", getNameSimple(), getParameters().stream().map(p -> p.getParameterType().getNameSimple()).collect(joining(","))));
 		this.fullName = mem(this::findFullName);
 	}
 
@@ -298,7 +298,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 *
 	 * @return The underlying executable name.
 	 */
-	public final String getFullName() { return fullName.get(); }
+	public final String getNameFull() { return fullName.get(); }
 
 	/**
 	 * Returns parameter information at the specified index.
@@ -362,14 +362,14 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 *
 	 * @return The underlying executable name.
 	 */
-	public final String getShortName() { return shortName.get(); }
+	public final String getNameShort() { return shortName.get(); }
 
 	/**
 	 * Returns the simple name of the underlying method.
 	 *
 	 * @return The simple name of the underlying method;
 	 */
-	public final String getSimpleName() { return isConstructor ? cns(inner.getDeclaringClass()) : inner.getName(); }
+	public final String getNameSimple() { return isConstructor ? cns(inner.getDeclaringClass()) : inner.getName(); }
 
 	/**
 	 * Returns an array of {@link TypeVariable} objects that represent the type variables declared by the generic declaration.
@@ -411,7 +411,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return <jk>true</jk> if this method has one of the names.
 	 */
 	public final boolean hasAnyName(Collection<String> names) {
-		return names.contains(getSimpleName());
+		return names.contains(getNameSimple());
 	}
 
 	/**
@@ -421,7 +421,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return <jk>true</jk> if this method has one of the names.
 	 */
 	public final boolean hasAnyName(String...names) {
-		return stream(names).anyMatch(n -> eq(n, getSimpleName()));
+		return stream(names).anyMatch(n -> eq(n, getNameSimple()));
 	}
 
 	/**
@@ -442,7 +442,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return <jk>true</jk> if this method has this name.
 	 */
 	public final boolean hasName(String name) {
-		return getSimpleName().equals(name);
+		return getNameSimple().equals(name);
 	}
 
 	/**
@@ -787,7 +787,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 
 	@Override
 	public String toString() {
-		return getShortName();
+		return getNameShort();
 	}
 
 	private void checkIndex(int index) {
@@ -806,7 +806,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 			sb.append(pi.getName()).append('.');
 		dc.appendNameFormatted(sb, SHORT, true, '$', BRACKETS);
 		if (! isConstructor)
-			sb.append('.').append(getSimpleName());
+			sb.append('.').append(getNameSimple());
 		sb.append('(');
 		sb.append(getParameters().stream().map(p -> p.getParameterType().getNameFormatted(FULL, true, '$', BRACKETS)).collect(joining(",")));
 		sb.append(')');

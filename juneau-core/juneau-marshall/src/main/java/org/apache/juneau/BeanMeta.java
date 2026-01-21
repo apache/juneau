@@ -470,7 +470,7 @@ public class BeanMeta<T> {
 						if (nn(bpm.getter)) {
 							if (! ap.has(Beanp.class, mi) && ap.has(Beanp.class, bpm.getter)) {
 								m = bpm.getter.inner();  // @Beanp annotated method takes precedence.
-							} else if (m.getName().startsWith("is") && bpm.getter.getSimpleName().startsWith("get")) {
+							} else if (m.getName().startsWith("is") && bpm.getter.getNameSimple().startsWith("get")) {
 								m = bpm.getter.inner();  // getX() overrides isX().
 							}
 						}
@@ -964,7 +964,7 @@ public class BeanMeta<T> {
 				args = con.getParameters().stream().map(x -> x.getName()).toList();
 				for (int i = 0; i < args.size(); i++) {
 					if (isBlank(args.get(i)))
-						throw bex(ci, "Could not find name for parameter #{0} of constructor ''{1}''", i, con.getFullName());
+						throw bex(ci, "Could not find name for parameter #{0} of constructor ''{1}''", i, con.getNameFull());
 				}
 			}
 			return new BeanConstructor(opt(con), args);
@@ -1084,7 +1084,7 @@ public class BeanMeta<T> {
 				if (! (m.isVisible(v) || ne(beanps) || ne(names)))
 					continue;
 
-				var n = m.getSimpleName();
+				var n = m.getNameSimple();
 
 				var params = m.getParameters();
 				var rt = m.getReturnType();
@@ -1157,7 +1157,7 @@ public class BeanMeta<T> {
 				n = pn.getPropertyName(n);
 
 				if ("*".equals(bpName) && methodType == UNKNOWN)
-					throw bex(ci, "Found @Beanp(\"*\") but could not determine method type on method ''{0}''.", m.getSimpleName());
+					throw bex(ci, "Found @Beanp(\"*\") but could not determine method type on method ''{0}''.", m.getNameSimple());
 
 				if (methodType != UNKNOWN) {
 					if (nn(bpName) && ! bpName.isEmpty())

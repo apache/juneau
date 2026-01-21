@@ -1051,9 +1051,10 @@ public class BeanName_Test extends TestBase {
 
 **Key Points:**
 - Use `@Nested` inner classes for major test categories
-- Each nested class name follows the pattern: `L_categoryName`
-- Tests within nested classes still use `LNN_testName` pattern
-- The letter in the nested class name matches the letter in the test method names
+- Each nested class name follows the pattern: `L_categoryName` where L is an uppercase letter (A, B, C, etc.)
+- Tests within nested classes use `l##_testName` pattern where l is the lowercase letter matching the nested class (a, b, c, etc.) and ## is an incrementing number (01, 02, 03, etc.)
+- The letter in the nested class name matches the letter in the test method names (uppercase for class, lowercase for methods)
+- Each nested class extends `TestBase` to inherit test utilities and setup
 
 ### Common Test Categories
 
@@ -1245,6 +1246,112 @@ In all cases, `assertBean` should be used to validate results.
 - Group related tests in logical test methods
 - Use descriptive test method names
 - Follow consistent test structure across all test classes
+
+### Test Helper Class Naming Convention
+
+**Rule**: For test helper classes that are only used by one test, prefix the class name with the test method prefix and move it immediately above the test that uses it.
+
+**Naming Pattern**: `LNN_ClassName` where:
+- **L** is the uppercase letter matching the test method prefix (A, B, C, etc.)
+- **NN** is the two-digit number matching the test method number (01, 02, 03, etc.)
+- **ClassName** is the descriptive class name
+
+**Placement**: Move the helper class definition to immediately above the test method that uses it.
+
+**Examples**:
+```java
+// WRONG - Generic name, defined far from usage
+public static class BeanWithDeprecatedGetInstance {
+    // ...
+}
+
+@Test
+void c03_createBeanIgnoresDeprecatedGetInstance() {
+    var bean = bc(BeanWithDeprecatedGetInstance.class).run();
+    // ...
+}
+
+// CORRECT - Prefixed with test name, placed above test
+@Test
+void c03_createBeanIgnoresDeprecatedGetInstance() {
+    // Bean with both deprecated and valid getInstance methods
+    public static class C03_BeanWithDeprecatedGetInstance {
+        private static final C03_BeanWithDeprecatedGetInstance INSTANCE = new C03_BeanWithDeprecatedGetInstance();
+        // ...
+    }
+
+    var bean = bc(C03_BeanWithDeprecatedGetInstance.class).run();
+    // ...
+}
+```
+
+**Rationale**:
+- Makes it immediately clear which test uses the helper class
+- Reduces namespace pollution by scoping helper classes to their tests
+- Improves code locality by keeping related code together
+- Makes it easier to identify unused helper classes
+
+**When to Apply**:
+- Only apply this convention to helper classes used by a single test
+- Classes used by multiple tests should keep their generic names
+- Classes used across nested test classes should remain at the nested class level
+
+### Test State Capture Utilities
+
+**Purpose**: Use proper utility classes instead of arrays for capturing mutable state in lambdas and test scenarios.
+
+**Rules**:
+1. **Use `Flag` for boolean state**: Instead of `new boolean[]{false}`, use `Flag.create()` for capturing boolean flags in lambdas and test hooks.
+2. **Use `IntegerValue` for integer counters**: Instead of `new int[]{0}`, use `IntegerValue.create()` for capturing integer counts in lambdas and test hooks.
+
+**Examples**:
+```java
+// WRONG - Using arrays for state capture
+var hookCalled = new boolean[]{false};
+bc(SimpleBean.class)
+    .postCreateHook(b -> hookCalled[0] = true)
+    .run();
+assertTrue(hookCalled[0]);
+
+var callCount = new int[]{0};
+bc(SimpleBean.class)
+    .postCreateHook(b -> callCount[0]++)
+    .run();
+assertEquals(1, callCount[0]);
+
+// CORRECT - Using Flag and IntegerValue
+var hookCalled = Flag.create();
+bc(SimpleBean.class)
+    .postCreateHook(b -> hookCalled.set())
+    .run();
+assertTrue(hookCalled.isSet());
+
+var callCount = IntegerValue.create();
+bc(SimpleBean.class)
+    .postCreateHook(b -> callCount.increment())
+    .run();
+assertEquals(1, callCount.get());
+```
+
+**Flag Methods**:
+- `Flag.create()` - Creates a flag initialized to `false`
+- `flag.set()` - Sets the flag to `true`
+- `flag.isSet()` - Returns `true` if flag is set
+- `flag.isUnset()` - Returns `true` if flag is not set
+- `flag.setIf(condition)` - Sets flag if condition is `true`
+
+**IntegerValue Methods**:
+- `IntegerValue.create()` - Creates an integer initialized to `0`
+- `counter.increment()` - Increments by 1
+- `counter.get()` - Returns the current value
+- `counter.getAndIncrement()` - Returns current value then increments
+- `counter.incrementAndGet()` - Increments then returns new value
+
+**Rationale**:
+- Provides cleaner, more readable code than array access patterns
+- Better type safety and API design
+- Consistent with Apache Juneau utility class patterns
+- Makes test code more maintainable and easier to understand
 
 ### Documentation
 - Include javadoc for test methods explaining their purpose

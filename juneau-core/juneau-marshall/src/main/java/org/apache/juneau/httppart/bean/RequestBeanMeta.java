@@ -58,7 +58,7 @@ public class RequestBeanMeta {
 			var ap = cm.getBeanContext().getAnnotationProvider();
 			apply(ap.find(Request.class, cm).stream().findFirst().map(x -> x.inner()).orElse(null));
 			cm.getPublicMethods().stream().forEach(x -> {
-				var n = x.getSimpleName();
+				var n = x.getNameSimple();
 				if (x.hasAnnotation(Header.class)) {
 					assertNoArgs(x, Header.class);
 					assertReturnNotVoid(x, Header.class);

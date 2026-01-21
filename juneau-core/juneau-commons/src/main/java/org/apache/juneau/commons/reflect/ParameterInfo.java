@@ -279,7 +279,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	@Override /* Annotatable */
 	public String getLabel() {
 		var exec = getDeclaringExecutable();
-		var label = exec.getDeclaringClass().getNameSimple() + "." + exec.getShortName();
+		var label = exec.getDeclaringClass().getNameSimple() + "." + exec.getNameShort();
 		return label + "[" + index + "]";
 	}
 
@@ -614,7 +614,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 
 	@Override
 	public String toString() {
-		return (executable.getSimpleName()) + "[" + index + "]";
+		return (executable.getNameSimple()) + "[" + index + "]";
 	}
 
 	private List<ParameterInfo> findMatchingParameters() {

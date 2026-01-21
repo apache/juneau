@@ -8038,8 +8038,8 @@ public class StringUtils {
 		list.add(readifier(byte[].class, x -> toHex(x)));
 		list.add(readifier(Enum.class, x -> ((Enum<?>)x).name()));
 		list.add(readifier(Class.class, x -> cns(x)));
-		list.add(readifier(Constructor.class, x -> ConstructorInfo.of(x).getFullName()));
-		list.add(readifier(Method.class, x -> MethodInfo.of(x).getFullName()));
+		list.add(readifier(Constructor.class, x -> ConstructorInfo.of(x).getNameFull()));
+		list.add(readifier(Method.class, x -> MethodInfo.of(x).getNameFull()));
 		list.add(readifier(Field.class, x -> FieldInfo.of(x).toString()));
 		list.add(readifier(Parameter.class, x -> ParameterInfo.of(x).toString()));
 		list.add(readifier(ClassInfo.class, ClassInfo::toString));

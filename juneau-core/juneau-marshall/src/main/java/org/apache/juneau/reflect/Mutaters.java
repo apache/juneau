@@ -308,14 +308,14 @@ public class Mutaters {
 		return ic.getPublicMethod(
 			x -> x.isNotStatic()
 			&& x.getParameterCount() == 0
-			&& x.getSimpleName().startsWith("to")
-			&& x.getSimpleName().substring(2).equalsIgnoreCase(tn)
+			&& x.getNameSimple().startsWith("to")
+			&& x.getNameSimple().substring(2).equalsIgnoreCase(tn)
 		).orElse(null);
 		// @formatter:on
 	}
 
 	private static boolean isStaticCreateMethodName(MethodInfo mi, Class<?> ic) {
-		var n = mi.getSimpleName();
+		var n = mi.getNameSimple();
 		var cn = ic.getSimpleName();
 		// @formatter:off
 		return isOneOf(n, "create","from","fromValue","parse","valueOf","builder")

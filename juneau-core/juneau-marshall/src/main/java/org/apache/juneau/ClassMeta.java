@@ -1536,7 +1536,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 			// Try to find a corresponding getter method (even if not annotated)
 			// If setter is "setName", look for "getName" or "isName"
-			var setterName = setterMethod.get().getSimpleName();
+			var setterName = setterMethod.get().getNameSimple();
 			if (setterName.startsWith("set") && setterName.length() > 3) {
 				var propertyName = setterName.substring(3);
 				var getterName1 = "get" + propertyName;
@@ -1628,7 +1628,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 			// Try to find a corresponding getter method (even if not annotated)
 			// If setter is "setParent", look for "getParent" or "isParent"
-			var setterName = setterMethod.get().getSimpleName();
+			var setterName = setterMethod.get().getNameSimple();
 			if (setterName.startsWith("set") && setterName.length() > 3) {
 				var propertyName = setterName.substring(3);
 				var getterName1 = "get" + propertyName;

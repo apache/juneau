@@ -171,7 +171,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 
 	@Override
 	public int compareTo(MethodInfo o) {
-		int i = cmp(getSimpleName(), o.getSimpleName());
+		int i = cmp(getNameSimple(), o.getNameSimple());
 		if (i == 0) {
 			var params = getParameters();
 			var oParams = o.getParameters();
@@ -317,7 +317,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	public Type getGenericReturnType() { return inner.getGenericReturnType(); }
 
 	@Override /* Annotatable */
-	public String getLabel() { return getDeclaringClass().getNameSimple() + "." + getShortName(); }
+	public String getLabel() { return getDeclaringClass().getNameSimple() + "." + getNameShort(); }
 
 	/**
 	 * Returns this method and all matching methods up the hierarchy chain.

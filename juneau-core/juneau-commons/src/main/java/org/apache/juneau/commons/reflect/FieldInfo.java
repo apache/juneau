@@ -260,7 +260,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 *
 	 * @return The underlying executable name.
 	 */
-	public String getFullName() { return fullName.get(); }
+	public String getNameFull() { return fullName.get(); }
 
 	@Override /* Annotatable */
 	public String getLabel() { return getDeclaringClass().getNameSimple() + "." + getName(); }

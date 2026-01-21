@@ -95,7 +95,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 					.map(varResolver::resolve)
 					.map(Enablement::fromString)
 					.filter(Objects::nonNull)
-					.forEach(e -> b.enable(e, x.getFullName()))
+					.forEach(e -> b.enable(e, x.getNameFull()))
 			);
 		// @formatter:on
 

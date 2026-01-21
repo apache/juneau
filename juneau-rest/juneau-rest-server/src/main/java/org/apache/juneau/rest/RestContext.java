@@ -4630,7 +4630,7 @@ public class RestContext extends Context {
 				if (al.size() > 0) {
 					try {
 						if (mi.isNotPublic())
-							throw servletException("@RestOp method {0}.{1} must be defined as public.", rci.inner().getName(), mi.getSimpleName());
+							throw servletException("@RestOp method {0}.{1} must be defined as public.", rci.inner().getName(), mi.getNameSimple());
 
 						RestOpContext.Builder rocb = RestOpContext.create(mi.inner(), restContext).beanStore(beanStore).type(opContextClass);
 
@@ -5980,11 +5980,11 @@ public class RestContext extends Context {
 					if (nn(ra[i]))
 						break;
 				} catch (ExecutableException e) {
-					throw new InternalServerError(e.unwrap(), "Could not resolve parameter {0} on method {1}.", i, mi.getFullName());
+					throw new InternalServerError(e.unwrap(), "Could not resolve parameter {0} on method {1}.", i, mi.getNameFull());
 				}
 			}
 			if (ra[i] == null)
-				throw new InternalServerError("Could not resolve parameter {0} on method {1}.", i, mi.getFullName());
+				throw new InternalServerError("Could not resolve parameter {0} on method {1}.", i, mi.getNameFull());
 		}
 
 		return ra;

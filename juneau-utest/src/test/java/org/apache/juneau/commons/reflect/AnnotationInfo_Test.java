@@ -372,7 +372,7 @@ class AnnotationInfo_Test extends TestBase {
 		// Existing method
 		var method = ai.getMethod("value");
 		assertTrue(method.isPresent());
-		assertEquals("value", method.get().getSimpleName());
+		assertEquals("value", method.get().getNameSimple());
 
 		// Non-existent method
 		var method2 = ai.getMethod("nonexistent");

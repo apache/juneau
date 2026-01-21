@@ -113,7 +113,7 @@ class ParameterInfo_Test extends TestBase {
 			if (isArray(t))
 				return StreamSupport.stream(toList(t, Object.class).spliterator(), false).map(this).collect(Collectors.joining(","));
 			if (t instanceof MethodInfo)
-				return ((MethodInfo)t).getDeclaringClass().getNameSimple() + '.' + ((MethodInfo)t).getShortName();
+				return ((MethodInfo)t).getDeclaringClass().getNameSimple() + '.' + ((MethodInfo)t).getNameShort();
 			if (t instanceof CA)
 				return "@CA(" + ((CA)t).value() + ")";
 			if (t instanceof DA)

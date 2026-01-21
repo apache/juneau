@@ -142,7 +142,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 
 	@Override
 	public int compareTo(ConstructorInfo o) {
-		int i = cmp(getSimpleName(), o.getSimpleName());
+		int i = cmp(getNameSimple(), o.getNameSimple());
 		if (i == 0) {
 			i = getParameterCount() - o.getParameterCount();
 			if (i == 0) {
@@ -160,7 +160,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	public AnnotatableType getAnnotatableType() { return AnnotatableType.CONSTRUCTOR_TYPE; }
 
 	@Override /* Annotatable */
-	public String getLabel() { return getDeclaringClass().getNameSimple() + "." + getShortName(); }
+	public String getLabel() { return getDeclaringClass().getNameSimple() + "." + getNameShort(); }
 
 	/**
 	 * Returns the wrapped constructor.

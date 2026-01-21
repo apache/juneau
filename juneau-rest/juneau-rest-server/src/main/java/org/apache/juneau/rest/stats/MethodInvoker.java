@@ -53,7 +53,7 @@ public class MethodInvoker {
 	 *
 	 * @return The name of the method.
 	 */
-	public String getFullName() { return m.getFullName(); }
+	public String getFullName() { return m.getNameFull(); }
 
 	/**
 	 * Returns the stats of this method invoker.

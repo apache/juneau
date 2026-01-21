@@ -343,8 +343,8 @@ class FieldInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a010_getFullName() throws Exception {
-		String fullName1 = g_field1.getFullName();
-		String fullName2 = g_field2.getFullName();
+		String fullName1 = g_field1.getNameFull();
+		String fullName2 = g_field2.getNameFull();
 		
 		// Test line 449: getPackage() returns null (default package class)
 		// A field can have a null package if its declaring class is in the default package
@@ -356,7 +356,7 @@ class FieldInfo_Test extends TestBase {
 			if (pkg == null) {
 				// Test the false branch of line 449: when package is null, don't append package name
 				FieldInfo defaultPkgField = defaultPkgClass.getPublicField(x -> x.hasName("testField")).get();
-				String fullName = defaultPkgField.getFullName();
+				String fullName = defaultPkgField.getNameFull();
 				// When package is null, getFullName() should not include package prefix
 				assertTrue(fullName.startsWith("DefaultPackageTestClass"), "Full name should start with class name when package is null: " + fullName);
 				assertTrue(fullName.endsWith(".testField"), "Full name should end with field name: " + fullName);
@@ -374,12 +374,12 @@ class FieldInfo_Test extends TestBase {
 		assertTrue(fullName2.startsWith("org.apache.juneau.commons.reflect."));
 		
 		// Test memoization - should return same instance
-		String name1 = g_field1.getFullName();
-		String name2 = g_field1.getFullName();
+		String name1 = g_field1.getNameFull();
+		String name2 = g_field1.getNameFull();
 		assertSame(name1, name2);
 		
 		// Test with inner class
-		String innerFullName = inner_field.getFullName();
+		String innerFullName = inner_field.getNameFull();
 		assertTrue(innerFullName.contains("FieldInfo_Test$InnerClass"));
 		assertTrue(innerFullName.endsWith(".innerField"));
 	}

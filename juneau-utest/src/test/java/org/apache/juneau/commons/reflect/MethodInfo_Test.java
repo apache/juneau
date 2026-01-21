@@ -67,9 +67,9 @@ class MethodInfo_Test extends TestBase {
 			if (t == null)
 				return null;
 			if (t instanceof MethodInfo t2)
-				return t2.getDeclaringClass().getNameSimple() + '.' + ((MethodInfo)t).getShortName();
+				return t2.getDeclaringClass().getNameSimple() + '.' + ((MethodInfo)t).getNameShort();
 			if (t instanceof Method t2)
-				return t2.getDeclaringClass().getSimpleName() + '.' + MethodInfo.of((Method)t).getShortName();
+				return t2.getDeclaringClass().getSimpleName() + '.' + MethodInfo.of((Method)t).getNameShort();
 			if (t instanceof List<?> t2)
 				return (t2.stream().map(this).collect(Collectors.joining(",")));
 			if (t instanceof AnnotationInfo t2)
@@ -697,7 +697,7 @@ class MethodInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a036_getFullName() {
-		var fullName = e_a1.getFullName();
+		var fullName = e_a1.getNameFull();
 		assertNotNull(fullName);
 		assertTrue(fullName.contains("MethodInfo_Test$E"));
 		assertTrue(fullName.contains("a1"));
@@ -724,9 +724,9 @@ class MethodInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a038_getShortName() {
-		assertEquals("m()", a_m.getShortName());
-		assertEquals("a1(CharSequence)", e_a1.getShortName());
-		assertEquals("a2(int,int)", e_a2.getShortName());
+		assertEquals("m()", a_m.getNameShort());
+		assertEquals("a1(CharSequence)", e_a1.getNameShort());
+		assertEquals("a2(int,int)", e_a2.getNameShort());
 	}
 
 	//====================================================================================================
@@ -734,8 +734,8 @@ class MethodInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a039_getSimpleName() {
-		assertEquals("m", a_m.getSimpleName());
-		assertEquals("a1", e_a1.getSimpleName());
+		assertEquals("m", a_m.getNameSimple());
+		assertEquals("a1", e_a1.getNameSimple());
 	}
 
 	//====================================================================================================

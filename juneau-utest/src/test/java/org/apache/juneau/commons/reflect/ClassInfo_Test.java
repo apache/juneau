@@ -144,9 +144,9 @@ public class ClassInfo_Test extends TestBase {
 		if (t instanceof ClassInfo t5)
 			return t5.getNameSimple();
 		if (t instanceof MethodInfo t6)
-			return t6.getDeclaringClass().getNameSimple() + '.' + t6.getShortName();
+			return t6.getDeclaringClass().getNameSimple() + '.' + t6.getNameShort();
 		if (t instanceof ConstructorInfo t7)
-			return t7.getShortName();
+			return t7.getNameShort();
 		if (t instanceof FieldInfo t8)
 			return t8.getDeclaringClass().getNameSimple() + '.' + t8.getName();
 		if (t instanceof A t9)
