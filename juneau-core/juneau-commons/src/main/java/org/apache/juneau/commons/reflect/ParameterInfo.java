@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.reflect;
 
+import static org.apache.juneau.commons.reflect.ClassArrayFormat.*;
+import static org.apache.juneau.commons.reflect.ClassNameFormat.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -155,6 +157,8 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 
 	private final ResettableSupplier<String> resolvedQualifier = memr(this::findQualifierInternal);  // Resolved qualifier from @Named or @Qualifier annotation.
 
+	private final Supplier<String> toString;  // String representation with modifiers, type, name, and varargs flag.
+
 	/**
 	 * Constructor.
 	 *
@@ -177,6 +181,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		this.type = type;
 		this.annotations = mem(() -> stream(inner.getAnnotations()).flatMap(a -> AnnotationUtils.streamRepeated(a)).map(a -> ai(this, a)).toList());
 		this.matchingParameters = mem(this::findMatchingParameters);
+		this.toString = mem(this::findToString);
 	}
 
 	/**
@@ -612,9 +617,79 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 */
 	public boolean isVarArgs() { return inner.isVarArgs(); }
 
+	/**
+	 * Returns a detailed string representation of this parameter.
+	 *
+	 * <p>
+	 * The returned string includes:
+	 * <ul>
+	 * 	<li>Modifiers (final)
+	 * 	<li>Parameter type with generics (e.g., "List&lt;String&gt;")
+	 * 	<li>Parameter name (if available)
+	 * 	<li>Varargs indicator (if applicable)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Simple parameter</jc>
+	 * 	ParameterInfo <jv>pi</jv> = ...;
+	 * 	<jv>pi</jv>.toString();
+	 * 	<jc>// Returns: "java.lang.String name"</jc>
+	 *
+	 * 	<jc>// Final parameter</jc>
+	 * 	<jc>// Returns: "final java.lang.String name"</jc>
+	 *
+	 * 	<jc>// Generic parameter</jc>
+	 * 	<jc>// Returns: "java.util.List&lt;java.lang.String&gt; items"</jc>
+	 *
+	 * 	<jc>// Varargs parameter</jc>
+	 * 	<jc>// Returns: "java.lang.String... values"</jc>
+	 *
+	 * 	<jc>// Parameter without name (fallback)</jc>
+	 * 	<jc>// Returns: "int arg0"</jc>
+	 * </p>
+	 *
+	 * @return A detailed string representation including modifiers, type, name, and varargs flag.
+	 */
 	@Override
 	public String toString() {
-		return (executable.getNameSimple()) + "[" + index + "]";
+		return toString.get();
+	}
+
+	private String findToString() {
+		var sb = new StringBuilder(128);
+
+		// Modifiers (final is common for parameters)
+		var mods = Modifier.toString(getModifiers());
+		if (nn(mods) && ! mods.isEmpty()) {
+			sb.append(mods).append(" ");
+		}
+
+		// Parameter type (use generic type if available to show generics)
+		var paramType = getParameterizedType();
+		
+		// For varargs, we need to get the component type and display it with "..." instead of "[]"
+		if (isVarArgs()) {
+			// Get the component type of the array
+			var typeInfo = ClassInfo.of(paramType);
+			var componentType = typeInfo.getComponentType();
+			// Display the component type without array brackets, then add "..."
+			componentType.appendNameFormatted(sb, FULL, true, '$', BRACKETS);
+			sb.append("...");
+		} else {
+			ClassInfo.of(paramType).appendNameFormatted(sb, FULL, true, '$', BRACKETS);
+		}
+
+		// Parameter name (if available)
+		var name = getResolvedName();
+		if (nn(name)) {
+			sb.append(" ").append(name);
+		} else {
+			// Fallback to index-based name if no name available
+			sb.append(" arg").append(index);
+		}
+
+		return sb.toString();
 	}
 
 	private List<ParameterInfo> findMatchingParameters() {

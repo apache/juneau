@@ -343,8 +343,13 @@ class ExecutableInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a011_getParameter() {
-		check("B[0]", b_c2.getParameter(0));
-		check("m[0]", b_m2.getParameter(0));
+		// b_c2 is B(String s) constructor, parameter name may or may not be available in bytecode
+		var param1 = b_c2.getParameter(0).toString();
+		assertTrue(param1.equals("java.lang.String s") || param1.equals("java.lang.String arg0"), "Expected 'java.lang.String s' or 'java.lang.String arg0', got: " + param1);
+		
+		// b_m2 is m(String s) method, parameter name may or may not be available in bytecode
+		var param2 = b_m2.getParameter(0).toString();
+		assertTrue(param2.equals("java.lang.String s") || param2.equals("java.lang.String arg0"), "Expected 'java.lang.String s' or 'java.lang.String arg0', got: " + param2);
 		
 		// Index out of bounds
 		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '0'.  No parameters.", ()->b_c1.getParameter(0));
@@ -369,9 +374,13 @@ class ExecutableInfo_Test extends TestBase {
 	@Test
 	void a013_getParameters() {
 		check("", b_c1.getParameters());
-		check("B[0]", b_c2.getParameters());
+		// b_c2 is B(String s) constructor, parameter name may or may not be available in bytecode
+		var params1 = b_c2.getParameters().stream().map(ParameterInfo::toString).collect(Collectors.joining(","));
+		assertTrue(params1.equals("java.lang.String s") || params1.equals("java.lang.String arg0"), "Expected 'java.lang.String s' or 'java.lang.String arg0', got: " + params1);
 		check("", b_m1.getParameters());
-		check("m[0]", b_m2.getParameters());
+		// b_m2 is m(String s) method, parameter name may or may not be available in bytecode
+		var params2 = b_m2.getParameters().stream().map(ParameterInfo::toString).collect(Collectors.joining(","));
+		assertTrue(params2.equals("java.lang.String s") || params2.equals("java.lang.String arg0"), "Expected 'java.lang.String s' or 'java.lang.String arg0', got: " + params2);
 		
 		// Test caching - should return same result
 		check("", b_c1.getParameters());

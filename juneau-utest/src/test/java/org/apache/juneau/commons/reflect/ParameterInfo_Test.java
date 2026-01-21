@@ -267,7 +267,22 @@ class ParameterInfo_Test extends TestBase {
 		public PC4(String foo, int bar) {}  // NOSONAR
 	}
 	public static class PC5 extends PC4 {
-		public PC5(String foo) { super(foo, 0); }  // NOSONAR
+		public PC5(String foo) { super(foo, 0); }
+	}
+
+	// Test class for toString() comprehensive tests
+	public static class ToStringTestClass {
+		public void basicMethod(int a, String b) {}  // NOSONAR
+		public void namedMethod(@org.apache.juneau.annotation.Name("x") int x, @org.apache.juneau.annotation.Name("y") String y) {}  // NOSONAR
+		public void finalMethod(final int value) {}  // NOSONAR
+		public void genericMethod(@org.apache.juneau.annotation.Name("list") java.util.List<String> list, @org.apache.juneau.annotation.Name("map") java.util.Map<String, Integer> map) {}  // NOSONAR
+		public void varargsMethod(@org.apache.juneau.annotation.Name("values") String... values) {}  // NOSONAR
+		public void finalVarargsMethod(final @org.apache.juneau.annotation.Name("args") String... args) {}  // NOSONAR
+		public void arrayMethod(@org.apache.juneau.annotation.Name("numbers") int[] numbers, @org.apache.juneau.annotation.Name("matrix") String[][] matrix) {}  // NOSONAR
+		public void genericArrayMethod(@org.apache.juneau.annotation.Name("lists") java.util.List<String>[] lists) {}  // NOSONAR
+		public void primitiveMethod(@org.apache.juneau.annotation.Name("flag") boolean flag, @org.apache.juneau.annotation.Name("value") double value, @org.apache.juneau.annotation.Name("count") long count) {}  // NOSONAR
+		public ToStringTestClass(@org.apache.juneau.annotation.Name("id") int id, @org.apache.juneau.annotation.Name("name") String name) {}  // NOSONAR
+		public void unnamedMethod(int param1, String param2) {}  // NOSONAR - no @Name annotations, will fallback to arg0, arg1
 	}
 
 	public static class PC6 {
@@ -864,7 +879,78 @@ class ParameterInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a029_toString() {
-		assertEquals("a1[1]", e_a1_b.toString());
+		// e_a1_b is the second parameter of method a1(int a, @Name("b") int b)
+		// It has @Name("b") annotation, so resolved name is "b"
+		assertEquals("int b", e_a1_b.toString());
+	}
+
+	@Test
+	void a030_toString_comprehensive() {
+		var ci = ClassInfo.of(ToStringTestClass.class);
+
+		// Basic parameters (names may or may not be available in bytecode)
+		var method1 = ci.getPublicMethod(x -> x.hasName("basicMethod")).get();
+		var param1_0 = method1.getParameter(0).toString();
+		assertTrue(param1_0.equals("int a") || param1_0.equals("int arg0"), "Expected 'int a' or 'int arg0', got: " + param1_0);
+		var param1_1 = method1.getParameter(1).toString();
+		assertTrue(param1_1.equals("java.lang.String b") || param1_1.equals("java.lang.String arg1"), "Expected 'java.lang.String b' or 'java.lang.String arg1', got: " + param1_1);
+
+		// Parameters with @Name annotation (always have names)
+		var method2 = ci.getPublicMethod(x -> x.hasName("namedMethod")).get();
+		assertEquals("int x", method2.getParameter(0).toString());
+		assertEquals("java.lang.String y", method2.getParameter(1).toString());
+
+		// Final parameters (final modifier may or may not appear depending on JVM/environment)
+		// Accept both with and without final modifier
+		var method3 = ci.getPublicMethod(x -> x.hasName("finalMethod")).get();
+		var param3_0 = method3.getParameter(0).toString();
+		assertTrue(
+			param3_0.equals("int value") || param3_0.equals("int arg0") ||
+			param3_0.equals("final int value") || param3_0.equals("final int arg0"),
+			"Expected 'int value', 'int arg0', 'final int value', or 'final int arg0', got: " + param3_0);
+
+		// Generic parameters
+		var method4 = ci.getPublicMethod(x -> x.hasName("genericMethod")).get();
+		assertEquals("java.util.List<java.lang.String> list", method4.getParameter(0).toString());
+		assertEquals("java.util.Map<java.lang.String,java.lang.Integer> map", method4.getParameter(1).toString());
+
+		// Varargs parameter
+		var method5 = ci.getPublicMethod(x -> x.hasName("varargsMethod")).get();
+		assertEquals("java.lang.String... values", method5.getParameter(0).toString());
+
+		// Final varargs parameter (final modifier may or may not appear depending on JVM/environment)
+		var method6 = ci.getPublicMethod(x -> x.hasName("finalVarargsMethod")).get();
+		var param6_0 = method6.getParameter(0).toString();
+		assertTrue(
+			param6_0.equals("java.lang.String... args") || param6_0.equals("final java.lang.String... args"),
+			"Expected 'java.lang.String... args' or 'final java.lang.String... args', got: " + param6_0);
+
+		// Array parameters
+		var method7 = ci.getPublicMethod(x -> x.hasName("arrayMethod")).get();
+		assertEquals("int[] numbers", method7.getParameter(0).toString());
+		assertEquals("java.lang.String[][] matrix", method7.getParameter(1).toString());
+
+		// Generic array parameters
+		var method8 = ci.getPublicMethod(x -> x.hasName("genericArrayMethod")).get();
+		assertEquals("java.util.List<java.lang.String>[] lists", method8.getParameter(0).toString());
+
+		// Primitive types
+		var method9 = ci.getPublicMethod(x -> x.hasName("primitiveMethod")).get();
+		assertEquals("boolean flag", method9.getParameter(0).toString());
+		assertEquals("double value", method9.getParameter(1).toString());
+		assertEquals("long count", method9.getParameter(2).toString());
+
+		// Constructor parameters (with @Name annotations, always have names)
+		var ctor1 = ci.getPublicConstructor(x -> x.getParameterCount() == 2).get();
+		assertEquals("int id", ctor1.getParameter(0).toString());
+		assertEquals("java.lang.String name", ctor1.getParameter(1).toString());
+
+		// Parameters without @Name annotations (names may or may not be available in bytecode)
+		var method10 = ci.getPublicMethod(x -> x.hasName("unnamedMethod")).get();
+		var param10_0 = method10.getParameter(0).toString();
+		assertTrue(param10_0.equals("int param1") || param10_0.equals("int arg0"), "Expected 'int param1' or 'int arg0', got: " + param10_0);
+		var param10_1 = method10.getParameter(1).toString();
+		assertTrue(param10_1.equals("java.lang.String param2") || param10_1.equals("java.lang.String arg1"), "Expected 'java.lang.String param2' or 'java.lang.String arg1', got: " + param10_1);
 	}
 
 	//====================================================================================================
