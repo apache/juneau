@@ -2621,34 +2621,76 @@ public class ClassInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a077_isChildOf() {
-		assertTrue(ka.isChildOf(KA.class));
-		assertFalse(ka.isChildOf(KB.class));
-		assertFalse(ka.isChildOf(KC.class));
-		assertTrue(kb.isChildOf(KA.class));
-		assertTrue(kb.isChildOf(KB.class));
-		assertFalse(kb.isChildOf(KC.class));
-		assertTrue(kc.isChildOf(KA.class));
-		assertTrue(kc.isChildOf(KB.class));
-		assertTrue(kc.isChildOf(KC.class));
+		assertTrue(ka.isAssignableTo(KA.class));
+		assertFalse(ka.isAssignableTo(KB.class));
+		assertFalse(ka.isAssignableTo(KC.class));
+		assertTrue(kb.isAssignableTo(KA.class));
+		assertTrue(kb.isAssignableTo(KB.class));
+		assertFalse(kb.isAssignableTo(KC.class));
+		assertTrue(kc.isAssignableTo(KA.class));
+		assertTrue(kc.isAssignableTo(KB.class));
+		assertTrue(kc.isAssignableTo(KC.class));
+		// Test with null
+		assertFalse(ka.isAssignableTo((Class<?>)null));
+		// Test on types
+		assertFalse(ka.isAssignableTo(aType));
+		assertFalse(ka.isAssignableTo(pType));
+		assertFalse(ka.isAssignableTo(pTypeDimensional));
+		assertFalse(ka.isAssignableTo(pTypeGeneric));
+		assertFalse(ka.isAssignableTo(pTypeGenericArg));
+		assertFalse(aTypeInfo.isAssignableTo(KA.class));
+		assertFalse(pTypeInfo.isAssignableTo(KA.class));
+		assertFalse(pTypeDimensionalInfo.isAssignableTo(KA.class));
+		assertFalse(pTypeGenericInfo.isAssignableTo(KA.class));
+		assertFalse(pTypeGenericArgInfo.isAssignableTo(KA.class));
+
+		// Test isChildOf(ClassInfo)
+		assertTrue(kb.isAssignableTo(ka));
+		assertTrue(kc.isAssignableTo(ka));
+		assertTrue(kc.isAssignableTo(kb));
+		assertFalse(ka.isAssignableTo(kb));
+	}
+
+	//====================================================================================================
+	// isChildOf(Class<?>) - strict version
+	//====================================================================================================
+	@Test
+	void a077a_isChildOf_strict() {
+		// Strict version excludes same class
+		assertFalse(ka.isChildOf(KA.class));  // Same class, should be false
+		assertTrue(kb.isChildOf(KA.class));   // KB extends KA, should be true
+		assertTrue(kc.isChildOf(KA.class));   // KC extends KB extends KA, should be true
+		assertFalse(kb.isChildOf(KB.class));   // Same class, should be false
+		assertTrue(kc.isChildOf(KB.class));   // KC extends KB, should be true
+		assertFalse(kc.isChildOf(KC.class));  // Same class, should be false
+		assertFalse(ka.isChildOf(KB.class));  // KA is not a child of KB, should be false
+		assertFalse(ka.isChildOf(KC.class));  // KA is not a child of KC, should be false
 		// Test with null
 		assertFalse(ka.isChildOf((Class<?>)null));
 		// Test on types
 		assertFalse(ka.isChildOf(aType));
-		assertFalse(ka.isChildOf(pType));
-		assertFalse(ka.isChildOf(pTypeDimensional));
-		assertFalse(ka.isChildOf(pTypeGeneric));
-		assertFalse(ka.isChildOf(pTypeGenericArg));
 		assertFalse(aTypeInfo.isChildOf(KA.class));
-		assertFalse(pTypeInfo.isChildOf(KA.class));
-		assertFalse(pTypeDimensionalInfo.isChildOf(KA.class));
-		assertFalse(pTypeGenericInfo.isChildOf(KA.class));
-		assertFalse(pTypeGenericArgInfo.isChildOf(KA.class));
+	}
 
-		// Test isChildOf(ClassInfo)
-		assertTrue(kb.isChildOf(ka));
-		assertTrue(kc.isChildOf(ka));
-		assertTrue(kc.isChildOf(kb));
-		assertFalse(ka.isChildOf(kb));
+	//====================================================================================================
+	// isParentOf(Class<?>) - strict version
+	//====================================================================================================
+	@Test
+	void a077b_isParentOf_strict() {
+		// Strict version excludes same class
+		assertFalse(ka.isParentOf(KA.class));  // Same class, should be false
+		assertTrue(ka.isParentOf(KB.class));   // KA is parent of KB, should be true
+		assertTrue(ka.isParentOf(KC.class));   // KA is parent of KC, should be true
+		assertFalse(kb.isParentOf(KB.class));  // Same class, should be false
+		assertTrue(kb.isParentOf(KC.class));   // KB is parent of KC, should be true
+		assertFalse(kc.isParentOf(KC.class)); // Same class, should be false
+		assertFalse(kb.isParentOf(KA.class));  // KB is not a parent of KA, should be false
+		assertFalse(kc.isParentOf(KA.class));  // KC is not a parent of KA, should be false
+		// Test with null
+		assertFalse(ka.isParentOf((Class<?>)null));
+		// Test on types
+		assertFalse(ka.isParentOf(aType));
+		assertFalse(aTypeInfo.isParentOf(KA.class));
 	}
 
 	//====================================================================================================
@@ -2656,21 +2698,21 @@ public class ClassInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a078_isChildOfAny() {
-		assertTrue(ka.isChildOfAny(KA.class));
-		assertFalse(ka.isChildOfAny(KB.class));
-		assertFalse(ka.isChildOfAny(KC.class));
-		assertTrue(kb.isChildOfAny(KA.class));
-		assertTrue(kb.isChildOfAny(KB.class));
-		assertFalse(kb.isChildOfAny(KC.class));
-		assertTrue(kc.isChildOfAny(KA.class));
-		assertTrue(kc.isChildOfAny(KB.class));
-		assertTrue(kc.isChildOfAny(KC.class));
+		assertTrue(ka.isAssignableToAny(KA.class));
+		assertFalse(ka.isAssignableToAny(KB.class));
+		assertFalse(ka.isAssignableToAny(KC.class));
+		assertTrue(kb.isAssignableToAny(KA.class));
+		assertTrue(kb.isAssignableToAny(KB.class));
+		assertFalse(kb.isAssignableToAny(KC.class));
+		assertTrue(kc.isAssignableToAny(KA.class));
+		assertTrue(kc.isAssignableToAny(KB.class));
+		assertTrue(kc.isAssignableToAny(KC.class));
 		// Test on types
-		assertFalse(aTypeInfo.isChildOfAny(KA.class));
-		assertFalse(pTypeInfo.isChildOfAny(KA.class));
-		assertFalse(pTypeDimensionalInfo.isChildOfAny(KA.class));
-		assertFalse(pTypeGenericInfo.isChildOfAny(KA.class));
-		assertFalse(pTypeGenericArgInfo.isChildOfAny(KA.class));
+		assertFalse(aTypeInfo.isAssignableToAny(KA.class));
+		assertFalse(pTypeInfo.isAssignableToAny(KA.class));
+		assertFalse(pTypeDimensionalInfo.isAssignableToAny(KA.class));
+		assertFalse(pTypeGenericInfo.isAssignableToAny(KA.class));
+		assertFalse(pTypeGenericArgInfo.isAssignableToAny(KA.class));
 	}
 
 	//====================================================================================================
@@ -2947,28 +2989,28 @@ public class ClassInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a093_isParentOf() {
-		assertTrue(ka.isParentOf(KA.class));
-		assertTrue(ka.isParentOf(KB.class));
-		assertTrue(ka.isParentOf(KC.class));
-		assertFalse(kb.isParentOf(KA.class));
-		assertTrue(kb.isParentOf(KB.class));
-		assertTrue(kb.isParentOf(KC.class));
-		assertFalse(kc.isParentOf(KA.class));
-		assertFalse(kc.isParentOf(KB.class));
-		assertTrue(kc.isParentOf(KC.class));
+		assertTrue(ka.isAssignableFrom(KA.class));
+		assertTrue(ka.isAssignableFrom(KB.class));
+		assertTrue(ka.isAssignableFrom(KC.class));
+		assertFalse(kb.isAssignableFrom(KA.class));
+		assertTrue(kb.isAssignableFrom(KB.class));
+		assertTrue(kb.isAssignableFrom(KC.class));
+		assertFalse(kc.isAssignableFrom(KA.class));
+		assertFalse(kc.isAssignableFrom(KB.class));
+		assertTrue(kc.isAssignableFrom(KC.class));
 		// Test with null
-		assertFalse(ka.isParentOf((Class<?>)null));
+		assertFalse(ka.isAssignableFrom((Class<?>)null));
 		// Test on types
-		assertFalse(ka.isParentOf(aType));
-		assertFalse(ka.isParentOf(pType));
-		assertFalse(ka.isParentOf(pTypeDimensional));
-		assertFalse(ka.isParentOf(pTypeGeneric));
-		assertFalse(ka.isParentOf(pTypeGenericArg));
-		assertFalse(aTypeInfo.isParentOf(KA.class));
-		assertFalse(pTypeInfo.isParentOf(KA.class));
-		assertFalse(pTypeDimensionalInfo.isParentOf(KA.class));
-		assertFalse(pTypeGenericInfo.isParentOf(KA.class));
-		assertFalse(pTypeGenericArgInfo.isParentOf(KA.class));
+		assertFalse(ka.isAssignableFrom(aType));
+		assertFalse(ka.isAssignableFrom(pType));
+		assertFalse(ka.isAssignableFrom(pTypeDimensional));
+		assertFalse(ka.isAssignableFrom(pTypeGeneric));
+		assertFalse(ka.isAssignableFrom(pTypeGenericArg));
+		assertFalse(aTypeInfo.isAssignableFrom(KA.class));
+		assertFalse(pTypeInfo.isAssignableFrom(KA.class));
+		assertFalse(pTypeDimensionalInfo.isAssignableFrom(KA.class));
+		assertFalse(pTypeGenericInfo.isAssignableFrom(KA.class));
+		assertFalse(pTypeGenericArgInfo.isAssignableFrom(KA.class));
 	}
 
 	//====================================================================================================
@@ -2977,23 +3019,23 @@ public class ClassInfo_Test extends TestBase {
 	@Test
 	void a093b_isParentOf_ClassInfo() {
 		// Test isParentOf(ClassInfo) with valid classes
-		assertTrue(ka.isParentOf(ka));
-		assertTrue(ka.isParentOf(kb));
-		assertTrue(ka.isParentOf(kc));
-		assertFalse(kb.isParentOf(ka));
-		assertTrue(kb.isParentOf(kb));
-		assertTrue(kb.isParentOf(kc));
-		assertFalse(kc.isParentOf(ka));
-		assertFalse(kc.isParentOf(kb));
-		assertTrue(kc.isParentOf(kc));
+		assertTrue(ka.isAssignableFrom(ka));
+		assertTrue(ka.isAssignableFrom(kb));
+		assertTrue(ka.isAssignableFrom(kc));
+		assertFalse(kb.isAssignableFrom(ka));
+		assertTrue(kb.isAssignableFrom(kb));
+		assertTrue(kb.isAssignableFrom(kc));
+		assertFalse(kc.isAssignableFrom(ka));
+		assertFalse(kc.isAssignableFrom(kb));
+		assertTrue(kc.isAssignableFrom(kc));
 
 		// Test with null child (line 2029)
-		assertFalse(ka.isParentOf((ClassInfo)null));
+		assertFalse(ka.isAssignableFrom((ClassInfo)null));
 
 		// Test with null inner
 		var nullInnerCi = ClassInfo.of((Class<?>)null, pType);
-		assertFalse(nullInnerCi.isParentOf(ka));
-		assertFalse(nullInnerCi.isParentOf((ClassInfo)null));
+		assertFalse(nullInnerCi.isAssignableFrom(ka));
+		assertFalse(nullInnerCi.isAssignableFrom((ClassInfo)null));
 	}
 
 	//====================================================================================================

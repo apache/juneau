@@ -573,7 +573,7 @@ public class JettyMicroservice extends Microservice {
 		for (var s : cf.get("Jetty/servlets").asStringArray().orElse(new String[0])) {
 			try {
 				var c = info(Class.forName(s));
-				if (c.isChildOf(RestServlet.class)) {
+				if (c.isAssignableTo(RestServlet.class)) {
 					var rs = (RestServlet)c.newInstance();
 					addServlet(rs, rs.getPath());
 				} else {
@@ -587,7 +587,7 @@ public class JettyMicroservice extends Microservice {
 		cf.get("Jetty/servletMap").asMap().orElse(EMPTY_MAP).forEach((k, v) -> {
 			try {
 				var c = info(Class.forName(v.toString()));
-				if (c.isChildOf(Servlet.class)) {
+				if (c.isAssignableTo(Servlet.class)) {
 					var rs = (Servlet)c.newInstance();
 					addServlet(rs, k);
 				} else {

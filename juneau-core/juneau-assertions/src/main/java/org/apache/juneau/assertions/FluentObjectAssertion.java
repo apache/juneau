@@ -504,7 +504,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 */
 	public R isType(Class<?> parent) throws AssertionError {
 		assertArgNotNull("parent", parent);
-		if (! info(value()).isChildOf(parent))
+		if (! info(value()).isAssignableTo(parent))
 			throw error(MSG_unexpectedType, cn(parent), cn(value));
 		return returns();
 	}

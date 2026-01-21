@@ -5922,7 +5922,7 @@ public class RestContext extends Context {
 		if (ci.hasAnnotation(Response.class))
 			return t;
 
-		if (ci.isChildOf(ParseException.class) || ci.is(InvalidDataConversionException.class))
+		if (ci.isAssignableTo(ParseException.class) || ci.is(InvalidDataConversionException.class))
 			return new BadRequest(t);
 
 		String n = cn(t);

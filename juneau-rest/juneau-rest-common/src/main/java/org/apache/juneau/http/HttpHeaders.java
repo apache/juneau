@@ -505,7 +505,7 @@ public class HttpHeaders {
 		if (o == null)
 			return false;
 		var ci = ClassInfo.of(o);
-		return nn(ci) && ci.isChildOfAny(Header.class, Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
+		return nn(ci) && ci.isAssignableToAny(Header.class, Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
 	}
 
 	/**

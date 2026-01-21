@@ -60,7 +60,7 @@ public class BasicPart implements NameValuePair, Headerable {
 		if (o == null)
 			return false;
 		var ci = ClassInfo.of(o);
-		return nn(ci) && ci.isChildOfAny(Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
+		return nn(ci) && ci.isAssignableToAny(Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
 	}
 
 	/**

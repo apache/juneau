@@ -779,7 +779,7 @@ public abstract class Context {
 			var ct = info(cacheType);
 			var bt = info(builderType);
 			return ct
-				.getPublicConstructor(x -> x.hasNumParameters(1) && x.getParameter(0).getParameterType().isParentOf(builderType))
+				.getPublicConstructor(x -> x.hasNumParameters(1) && x.getParameter(0).getParameterType().isAssignableFrom(builderType))
 				.orElseThrow(() -> rex("Public constructor not found: {0}({1})", ct.getName(), bt.getName()));
 		})
 		.build();

@@ -2941,7 +2941,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					continue;
 				var ci = ClassInfo.of(c);
 				if (nn(ci)) {
-					if (ci.isChildOfAny(RestCallInterceptor.class, HttpRequestInterceptor.class, HttpResponseInterceptor.class))
+					if (ci.isAssignableToAny(RestCallInterceptor.class, HttpRequestInterceptor.class, HttpResponseInterceptor.class))
 						interceptors(ci.newInstance());
 					else
 						throw new ConfigException("Invalid class of type ''{0}'' passed to interceptors().", ci.getName());
@@ -3007,7 +3007,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					continue;
 				ClassInfo ci = ClassInfo.of(o);
 				if (nn(ci)) {
-					if (! ci.isChildOfAny(HttpRequestInterceptor.class, HttpResponseInterceptor.class, RestCallInterceptor.class))
+					if (! ci.isAssignableToAny(HttpRequestInterceptor.class, HttpResponseInterceptor.class, RestCallInterceptor.class))
 						throw new ConfigException("Invalid object of type ''{0}'' passed to interceptors().", ci.getName());
 					if (o instanceof HttpRequestInterceptor o2)
 						addInterceptorLast(o2);

@@ -132,7 +132,7 @@ public class BeanRegistry {
 	private void addClass(ClassInfo ci) {
 		try {
 			if (nn(ci) && nn(ci.inner())) {
-				if (ci.isChildOf(Collection.class)) {
+				if (ci.isAssignableTo(Collection.class)) {
 					Collection<?> cc = BeanCreator.of(Collection.class).type(ci).run();
 					cc.forEach(x -> {
 						if (x instanceof Class<?> x2)
@@ -140,7 +140,7 @@ public class BeanRegistry {
 						else
 							throw bex("Collection class ''{0}'' passed to BeanRegistry does not contain Class objects.", ci.getName());
 					});
-				} else if (ci.isChildOf(Map.class)) {
+				} else if (ci.isAssignableTo(Map.class)) {
 					Map<?,?> m = BeanCreator.of(Map.class).type(ci).run();
 					m.forEach((k, v) -> {
 						var typeName = s(k);

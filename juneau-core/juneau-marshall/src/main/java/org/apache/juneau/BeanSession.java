@@ -1173,7 +1173,7 @@ public class BeanSession extends ContextSession {
 			if (nn(swap)) {
 				var nc = swap.getNormalClass();
 				var fc = swap.getSwapClass();
-				if (nc.isParentOf(tc) && fc.isParentOf(value.getClass()))
+				if (nc.isAssignableFrom(tc) && fc.isAssignableFrom(value.getClass()))
 					return (T)swap.unswap(this, value, to);
 				var fcm = getClassMeta(fc);
 				if (fcm.isNumber() && value instanceof Number value2) {
@@ -1187,7 +1187,7 @@ public class BeanSession extends ContextSession {
 			if (nn(swap)) {
 				var nc = swap.getNormalClass();
 				var fc = swap.getSwapClass();
-				if (nc.isParentOf(from.inner()) && fc.isParentOf(tc))
+				if (nc.isAssignableFrom(from.inner()) && fc.isAssignableFrom(tc))
 					return (T)swap.swap(this, value);
 			}
 
@@ -1494,7 +1494,7 @@ public class BeanSession extends ContextSession {
 					var typeName = m2.getString(getBeanTypePropertyName(to));
 					if (nn(typeName)) {
 						var cm = to.getBeanRegistry().getClassMeta(typeName);
-						if (nn(cm) && to.isParentOf(cm.inner()))
+						if (nn(cm) && to.isAssignableFrom(cm.inner()))
 							return (T)m2.cast(cm);
 					}
 				}

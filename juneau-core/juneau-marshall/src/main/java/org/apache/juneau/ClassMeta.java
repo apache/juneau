@@ -190,48 +190,48 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 		var ap = beanContext.getAnnotationProvider();
 
-		if (isChildOf(Delegate.class)) {
+		if (isAssignableTo(Delegate.class)) {
 			cat.set(DELEGATE);
 		}
 		if (isEnum()) {
 			cat.set(ENUM);
-		} else if (isChildOf(CharSequence.class)) {
+		} else if (isAssignableTo(CharSequence.class)) {
 			cat.set(CHARSEQ);
 			if (is(String.class)) {
 				cat.set(STR);
 			}
-		} else if (isChildOf(Number.class) || isAny(byte.class, short.class, int.class, long.class, float.class, double.class)) {
+		} else if (isAssignableTo(Number.class) || isAny(byte.class, short.class, int.class, long.class, float.class, double.class)) {
 			cat.set(NUMBER);
-			if (isChildOfAny(Float.class, Double.class) || isAny(float.class, double.class)) {
+			if (isAssignableToAny(Float.class, Double.class) || isAny(float.class, double.class)) {
 				cat.set(DECIMAL);
 			}
-		} else if (isChildOf(Collection.class)) {
+		} else if (isAssignableTo(Collection.class)) {
 			cat.set(COLLECTION);
-			if (isChildOf(Set.class)) {
+			if (isAssignableTo(Set.class)) {
 				cat.set(SET);
-			} else if (isChildOf(List.class)) {
+			} else if (isAssignableTo(List.class)) {
 				cat.set(LIST);
 			}
-		} else if (isChildOf(Map.class)) {
+		} else if (isAssignableTo(Map.class)) {
 			cat.set(MAP);
-			if (isChildOf(BeanMap.class)) {
+			if (isAssignableTo(BeanMap.class)) {
 				cat.set(BEANMAP);
 			}
-		} else if (isChildOfAny(Date.class, Calendar.class)) {
-			if (isChildOf(Date.class)) {
+		} else if (isAssignableToAny(Date.class, Calendar.class)) {
+			if (isAssignableTo(Date.class)) {
 				cat.set(DATE);
-			} else if (isChildOf(Calendar.class)) {
+			} else if (isAssignableTo(Calendar.class)) {
 				cat.set(CALENDAR);
 			}
-		} else if (isChildOf(Temporal.class)) {
+		} else if (isAssignableTo(Temporal.class)) {
 			cat.set(TEMPORAL);
 		} else if (inner().isArray()) {
 			cat.set(ARRAY);
-		} else if (isChildOfAny(URL.class, URI.class) || ap.has(Uri.class, this)) {
+		} else if (isAssignableToAny(URL.class, URI.class) || ap.has(Uri.class, this)) {
 			cat.set(URI);
-		} else if (isChildOf(Reader.class)) {
+		} else if (isAssignableTo(Reader.class)) {
 			cat.set(READER);
-		} else if (isChildOf(InputStream.class)) {
+		} else if (isAssignableTo(InputStream.class)) {
 			cat.set(INPUTSTREAM);
 		}
 
@@ -262,11 +262,11 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	}
 
 	protected ObjectSwap<?,?> findSwap(Class<?> c) {
-		return childSwaps.get().stream().filter(x -> x.getNormalClass().isParentOf(c)).findFirst().orElse(null);
+		return childSwaps.get().stream().filter(x -> x.getNormalClass().isAssignableFrom(c)).findFirst().orElse(null);
 	}
 
 	protected ObjectSwap<?,?> findUnswap(Class<?> c) {
-		return childSwaps.get().stream().filter(x -> x.getSwapClass().isParentOf(c)).findFirst().orElse(null);
+		return childSwaps.get().stream().filter(x -> x.getSwapClass().isAssignableFrom(c)).findFirst().orElse(null);
 	}
 
 
@@ -1273,7 +1273,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			c = s.impl();
 		var ci = info(c);
 
-		if (ci.isChildOf(ObjectSwap.class)) {
+		if (ci.isAssignableTo(ObjectSwap.class)) {
 			var ps = BeanCreator.of(ObjectSwap.class).type(ci).run();
 			if (s.mediaTypes().length > 0)
 				ps.forMediaTypes(MediaType.ofAll(s.mediaTypes()));
@@ -1282,7 +1282,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			return ps;
 		}
 
-		if (ci.isChildOf(Surrogate.class)) {
+		if (ci.isAssignableTo(Surrogate.class)) {
 			List<SurrogateSwap<?,?>> l = SurrogateSwap.findObjectSwaps(c, beanContext);
 			if (! l.isEmpty())
 				return (ObjectSwap<T,?>)l.iterator().next();
@@ -1362,7 +1362,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (! swapArray.isEmpty()) {
 			var innerClass = inner();
 			for (var f : swapArray)
-				if (f.getNormalClass().isParentOf(innerClass))
+				if (f.getNormalClass().isAssignableFrom(innerClass))
 					list.add((ObjectSwap<T,?>)f);
 		}
 
@@ -1393,7 +1393,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		var list = new ArrayList<ObjectSwap<?,?>>();
 		var innerClass = inner();
 		for (var f : swapArray)
-			if (f.getNormalClass().isChildOf(innerClass))
+			if (f.getNormalClass().isAssignableTo(innerClass))
 				list.add(f);
 		return u(list);
 	}
@@ -1447,7 +1447,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 		return getDeclaredFields()
 			.stream()
-			.filter(x -> x.isStatic() && isParentOf(x.getFieldType()) && ap.has(Example.class, x))
+			.filter(x -> x.isStatic() && isAssignableFrom(x.getFieldType()) && ap.has(Example.class, x))
 			.map(x -> x.accessible())
 			.findFirst()
 			.orElse(null);

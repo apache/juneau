@@ -461,7 +461,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 		if (inner.isInstance(child))
 			return true;
 		if (this.isPrimitive())
-			return this.getWrapperIfPrimitive().isParentOf(of(child).getWrapperIfPrimitive());
+			return this.getWrapperIfPrimitive().isAssignableFrom(of(child).getWrapperIfPrimitive());
 		return false;
 	}
 
@@ -2010,18 +2010,55 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * @param parent The parent class.
 	 * @return <jk>true</jk> if this class is a child or the same as <c>parent</c>.
 	 */
-	public boolean isChildOf(Class<?> parent) {
+	public boolean isAssignableTo(Class<?> parent) {
 		return and(nn(inner), nn(parent)) && parent.isAssignableFrom(inner);
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this class is a child or the same as <c>parent</c>.
+	 * Returns <jk>true</jk> if this class is strictly a child of <c>parent</c> (not the same class).
+	 *
+	 * <p>
+	 * This method returns <jk>true</jk> only if this class is a child of the parent class,
+	 * excluding the case where they are the same class.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ClassInfo <jv>child</jv> = ClassInfo.<jsm>of</jsm>(ArrayList.<jk>class</jk>);
+	 * 	ClassInfo <jv>parent</jv> = ClassInfo.<jsm>of</jsm>(List.<jk>class</jk>);
+	 * 	<jk>boolean</jk> <jv>b1</jv> = <jv>child</jv>.isChildOf(List.<jk>class</jk>);  <jc>// true</jc>
+	 * 	<jk>boolean</jk> <jv>b2</jv> = <jv>child</jv>.isChildOf(ArrayList.<jk>class</jk>);  <jc>// false (same class)</jc>
+	 * </p>
 	 *
 	 * @param parent The parent class.
-	 * @return <jk>true</jk> if this class is a parent or the same as <c>parent</c>.
+	 * @return <jk>true</jk> if this class is strictly a child of <c>parent</c>.
+	 */
+	public boolean isChildOf(Class<?> parent) {
+		return and(nn(inner), nn(parent)) && neq(inner, parent) && parent.isAssignableFrom(inner);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is strictly a child of <c>parent</c> (not the same class).
+	 *
+	 * <p>
+	 * Same as {@link #isChildOf(Class)} but takes in a {@link ClassInfo}.
+	 *
+	 * @param parent The parent class.
+	 * @return <jk>true</jk> if this class is strictly a child of <c>parent</c>.
 	 */
 	public boolean isChildOf(ClassInfo parent) {
-		return isChildOf(parent.inner());
+		return and(nn(inner), nn(parent)) && neq(inner, parent.inner()) && parent.inner().isAssignableFrom(inner);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is strictly a child of <c>parent</c> (not the same class).
+	 *
+	 * @param parent The parent class.
+	 * @return <jk>true</jk> if this class is strictly a child of <c>parent</c>.
+	 */
+	public boolean isChildOf(Type parent) {
+		if (parent instanceof Class<?> c)
+			return isChildOf(c);
+		return false;
 	}
 
 	/**
@@ -2030,9 +2067,19 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * @param parent The parent class.
 	 * @return <jk>true</jk> if this class is a parent or the same as <c>parent</c>.
 	 */
-	public boolean isChildOf(Type parent) {
+	public boolean isAssignableTo(ClassInfo parent) {
+		return isAssignableTo(parent.inner());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a child or the same as <c>parent</c>.
+	 *
+	 * @param parent The parent class.
+	 * @return <jk>true</jk> if this class is a parent or the same as <c>parent</c>.
+	 */
+	public boolean isAssignableTo(Type parent) {
 		if (parent instanceof Class<?> c)
-			return isChildOf(c);
+			return isAssignableTo(c);
 		return false;
 	}
 
@@ -2042,9 +2089,9 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * @param parents The parents class.
 	 * @return <jk>true</jk> if this class is a child or the same as any of the <c>parents</c>.
 	 */
-	public boolean isChildOfAny(Class<?>...parents) {
+	public boolean isAssignableToAny(Class<?>...parents) {
 		for (var p : parents)
-			if (isChildOf(p))
+			if (isAssignableTo(p))
 				return true;
 		return false;
 	}
@@ -2180,15 +2227,62 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * @param child The child class.
 	 * @return <jk>true</jk> if this class is a parent or the same as <c>child</c>.
 	 */
-	public boolean isParentOf(Class<?> child) {
+	public boolean isAssignableFrom(Class<?> child) {
 		return nn(inner) && nn(child) && inner.isAssignableFrom(child);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is strictly a parent of <c>child</c> (not the same class).
+	 *
+	 * <p>
+	 * This method returns <jk>true</jk> only if this class is a parent of the child class,
+	 * excluding the case where they are the same class.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ClassInfo <jv>parent</jv> = ClassInfo.<jsm>of</jsm>(List.<jk>class</jk>);
+	 * 	ClassInfo <jv>child</jv> = ClassInfo.<jsm>of</jsm>(ArrayList.<jk>class</jk>);
+	 * 	<jk>boolean</jk> <jv>b1</jv> = <jv>parent</jv>.isParentOf(ArrayList.<jk>class</jk>);  <jc>// true</jc>
+	 * 	<jk>boolean</jk> <jv>b2</jv> = <jv>parent</jv>.isParentOf(List.<jk>class</jk>);  <jc>// false (same class)</jc>
+	 * </p>
+	 *
+	 * @param child The child class.
+	 * @return <jk>true</jk> if this class is strictly a parent of <c>child</c>.
+	 */
+	public boolean isParentOf(Class<?> child) {
+		return nn(inner) && nn(child) && neq(inner, child) && inner.isAssignableFrom(child);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is strictly a parent of <c>child</c> (not the same class).
+	 *
+	 * <p>
+	 * Same as {@link #isParentOf(Class)} but takes in a {@link ClassInfo}.
+	 *
+	 * @param child The child class.
+	 * @return <jk>true</jk> if this class is strictly a parent of <c>child</c>.
+	 */
+	public boolean isParentOf(ClassInfo child) {
+		return nn(inner) && nn(child) && neq(inner, child.inner()) && inner.isAssignableFrom(child.inner());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is strictly a parent of <c>child</c> (not the same class).
+	 *
+	 * @param child The child class.
+	 * @return <jk>true</jk> if this class is strictly a parent of <c>child</c>.
+	 */
+	public boolean isParentOf(Type child) {
+		if (child instanceof Class<?> c)
+			return isParentOf(c);
+		return false;
 	}
 
 	/**
 	 * Returns <jk>true</jk> if this class is a parent or the same as <c>child</c>.
 	 *
 	 * <p>
-	 * Same as {@link #isParentOf(Class)} but takes in a {@link ClassInfo}.
+	 * Same as {@link #isAssignableFrom(Class)} but takes in a {@link ClassInfo}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -2200,7 +2294,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * @param child The child class.
 	 * @return <jk>true</jk> if this class is a parent or the same as <c>child</c>.
 	 */
-	public boolean isParentOf(ClassInfo child) {
+	public boolean isAssignableFrom(ClassInfo child) {
 		return nn(inner) && nn(child) && inner.isAssignableFrom(child.inner());
 	}
 
@@ -2210,9 +2304,9 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * @param child The child class.
 	 * @return <jk>true</jk> if this class is a parent or the same as <c>child</c>.
 	 */
-	public boolean isParentOf(Type child) {
+	public boolean isAssignableFrom(Type child) {
 		if (child instanceof Class<?> c)
-			return isParentOf(c);
+			return isAssignableFrom(c);
 		return false;
 	}
 
@@ -2243,7 +2337,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 		if (inner.isAssignableFrom(child))
 			return true;
 		if (this.isPrimitive() || child.isPrimitive()) {
-			return this.getWrapperIfPrimitive().isParentOf(of(child).getWrapperIfPrimitive());
+			return this.getWrapperIfPrimitive().isAssignableFrom(of(child).getWrapperIfPrimitive());
 		}
 		return false;
 	}
@@ -2263,7 +2357,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 		// Note: If both are primitives and the same type, we would have returned true above
 		// So this branch is only reached when at least one is a primitive and they're not directly assignable
 		if (this.isPrimitive() || child.isPrimitive()) {
-			return this.getWrapperIfPrimitive().isParentOf(child.getWrapperIfPrimitive());
+			return this.getWrapperIfPrimitive().isAssignableFrom(child.getWrapperIfPrimitive());
 		}
 		return false;
 	}
@@ -2314,7 +2408,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 *
 	 * @return <jk>true</jk> if this class is a {@link RuntimeException}.
 	 */
-	public boolean isRuntimeException() { return isChildOf(RuntimeException.class); }
+	public boolean isRuntimeException() { return isAssignableTo(RuntimeException.class); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a sealed class.

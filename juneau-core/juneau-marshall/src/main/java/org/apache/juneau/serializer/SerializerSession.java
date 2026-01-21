@@ -367,14 +367,14 @@ public class SerializerSession extends BeanTraverseSession {
 				if (((Object[])value).length == 0)
 					return true;
 			}
-			if (cm.isCollection() || (cm.isObject() && info(value).isChildOf(Collection.class))) {
+			if (cm.isCollection() || (cm.isObject() && info(value).isAssignableTo(Collection.class))) {
 				if (((Collection<?>)value).isEmpty())
 					return true;
 			}
 		}
 
 		if (isTrimEmptyMaps()) {
-			if (cm.isMap() || (cm.isObject() && info(value).isChildOf(Map.class))) {
+			if (cm.isMap() || (cm.isObject() && info(value).isAssignableTo(Map.class))) {
 				if (((Map<?,?>)value).isEmpty())
 					return true;
 			}

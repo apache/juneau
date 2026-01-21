@@ -157,7 +157,7 @@ public class HttpParts {
 		if (o == null)
 			return false;
 		var ci = ClassInfo.of(o);
-		return nn(ci) && ci.isChildOfAny(Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
+		return nn(ci) && ci.isAssignableToAny(Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
 	}
 
 	/**
@@ -360,8 +360,8 @@ public class HttpParts {
 	 */
 	public static boolean isHttpPart(HttpPartType partType, ClassMeta<?> type) {
 		return switch (partType) {
-			case PATH, QUERY, FORMDATA -> type.getProperty("HttpPart.isNameValuePair", x -> x.isChildOf(NameValuePair.class)).orElse(false);
-			case HEADER -> type.getProperty("HttpPart.isHeader", x -> x.isChildOf(org.apache.http.Header.class)).orElse(false);
+			case PATH, QUERY, FORMDATA -> type.getProperty("HttpPart.isNameValuePair", x -> x.isAssignableTo(NameValuePair.class)).orElse(false);
+			case HEADER -> type.getProperty("HttpPart.isHeader", x -> x.isAssignableTo(org.apache.http.Header.class)).orElse(false);
 			default -> false;
 		};
 	}

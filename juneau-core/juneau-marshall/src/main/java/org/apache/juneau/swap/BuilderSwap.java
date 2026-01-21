@@ -111,7 +111,7 @@ public class BuilderSwap<T,B> {
 			var cc = pci.getPublicConstructor(
 				x -> x.isVisible(cVis)
 				&& x.hasNumParameters(1)
-				&& x.getParameter(0).getParameterType().isChildOf(Builder.class)
+				&& x.getParameter(0).getParameterType().isAssignableTo(Builder.class)
 			).orElse(null);
 			// @formatter:on
 			if (nn(cc)) {

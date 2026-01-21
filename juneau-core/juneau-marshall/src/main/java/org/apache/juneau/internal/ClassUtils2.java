@@ -51,7 +51,7 @@ public class ClassUtils2 {
 		for (var i = 0; i < paramTypes.length; i++) {
 			var pt = info(paramTypes[i]).getWrapperIfPrimitive();
 			for (var arg : args) {
-				if (nn(arg) && pt.isParentOf(arg.getClass())) {
+				if (nn(arg) && pt.isAssignableFrom(arg.getClass())) {
 					params[i] = arg;
 					break;
 				}

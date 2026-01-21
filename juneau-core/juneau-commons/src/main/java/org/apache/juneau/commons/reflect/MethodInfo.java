@@ -182,6 +182,20 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 				}
 			}
 		}
+		// Tie-breaker: if methods have same name and parameters (e.g., overridden methods),
+		// prefer methods from child classes over parent classes
+		// This ensures consistent ordering and that child methods (with covariant return types) come first
+		if (i == 0) {
+			var declaringClass = getDeclaringClass();
+			var oDeclaringClass = o.getDeclaringClass();
+			if (declaringClass.isParentOf(oDeclaringClass)) {
+				i = -1; // This method is from a child class, so it comes first
+			} else if (oDeclaringClass.isParentOf(declaringClass)) {
+				i = 1; // Other method is from a child class, so it comes first
+			} else {
+				i = cmp(declaringClass.getName(), oDeclaringClass.getName()); // Neither is a child of the other, compare by class name for deterministic ordering
+			}
+		}
 		return i;
 	}
 
@@ -531,7 +545,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return <jk>true</jk> if this method has this parent return type.
 	 */
 	public boolean hasReturnTypeParent(Class<?> c) {
-		return ClassInfo.of(c).isParentOf(inner.getReturnType());
+		return ClassInfo.of(c).isAssignableFrom(inner.getReturnType());
 	}
 
 	/**

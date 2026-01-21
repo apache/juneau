@@ -226,7 +226,7 @@ public abstract class ObjectSwap<T,S> {
 	public boolean isNormalObject(Object o) {
 		if (o == null)
 			return false;
-		return normalClassInfo.isParentOf(o.getClass());
+		return normalClassInfo.isAssignableFrom(o.getClass());
 	}
 
 	/**
@@ -240,7 +240,7 @@ public abstract class ObjectSwap<T,S> {
 	public boolean isSwappedObject(Object o) {
 		if (o == null)
 			return false;
-		return swapClassInfo.isParentOf(o.getClass());
+		return swapClassInfo.isAssignableFrom(o.getClass());
 	}
 
 	/**

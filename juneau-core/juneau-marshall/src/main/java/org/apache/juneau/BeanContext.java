@@ -3676,9 +3676,9 @@ public class BeanContext extends Context {
 				_objectSwaps.add(os);
 			} else {
 				var ci = info((Class<?>)x);
-				if (ci.isChildOf(ObjectSwap.class))
+				if (ci.isAssignableTo(ObjectSwap.class))
 					_objectSwaps.add(BeanCreator.of(ObjectSwap.class).type(ci).run());
-				else if (ci.isChildOf(Surrogate.class))
+				else if (ci.isAssignableTo(Surrogate.class))
 					_objectSwaps.addAll(SurrogateSwap.findObjectSwaps(ci.inner(), this));
 				else
 					throw rex("Invalid class {0} specified in BeanContext.swaps property.  Must be a subclass of ObjectSwap or Surrogate.", cn(ci.inner()));
@@ -4258,7 +4258,7 @@ public class BeanContext extends Context {
 					return true;
 		}
 		for (var exclude : notBeanClasses)
-			if (ci.isChildOf(exclude))
+			if (ci.isAssignableTo(exclude))
 				return true;
 		return false;
 	}

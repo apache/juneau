@@ -154,7 +154,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (isVoid(c))
 				return null;
 			var ci = info(c);
-			if (ci.isChildOf(ObjectSwap.class)) {
+			if (ci.isAssignableTo(ObjectSwap.class)) {
 				var ps = BeanCreator.of(ObjectSwap.class).type(ci).run();
 				if (nn(ps.forMediaTypes()))
 					throw unsupportedOp("TODO - Media types on swaps not yet supported on bean properties.");
@@ -162,7 +162,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					throw unsupportedOp("TODO - Templates on swaps not yet supported on bean properties.");
 				return ps;
 			}
-			if (ci.isChildOf(Surrogate.class))
+			if (ci.isAssignableTo(Surrogate.class))
 				throw unsupportedOp("TODO - Surrogate swaps not yet supported on bean properties.");
 			throw rex("Invalid class used in @Swap annotation.  Must be a subclass of ObjectSwap or Surrogate. {0}", cn(c));
 		}
@@ -362,7 +362,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (nn(getter)) {
 				var pt = getter.getParameterTypes();
 				if (isDyna) {
-					if (ci.isChildOf(Map.class) && e(pt)) {
+					if (ci.isAssignableTo(Map.class) && e(pt)) {
 						isDynaGetterMap = true;
 					} else if (pt.size() == 1 && pt.get(0).is(String.class)) {
 						// OK.
@@ -370,7 +370,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 						return false;
 					}
 				} else {
-					if (! ci.isChildOf(getter.getReturnType()))
+					if (! ci.isAssignableTo(getter.getReturnType()))
 						return false;
 				}
 			}
@@ -383,16 +383,16 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 						return false;
 					}
 				} else {
-					if (pt.size() != 1 || ! ci.isChildOf(pt.get(0).inner()))
+					if (pt.size() != 1 || ! ci.isAssignableTo(pt.get(0).inner()))
 						return false;
 				}
 			}
 			if (nn(field)) {
 				if (isDyna) {
-					if (! field.getFieldType().isChildOf(Map.class))
+					if (! field.getFieldType().isAssignableTo(Map.class))
 						return false;
 				} else {
-					if (! ci.isChildOf(field.getFieldType()))
+					if (! ci.isAssignableTo(field.getFieldType()))
 						return false;
 				}
 			}
@@ -999,7 +999,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 				var vc = value1 == null ? null : value1.getClass();
 
-				if (isMap && (setter == null || ! pcInfo.isParentOf(vc))) {
+				if (isMap && (setter == null || ! pcInfo.isAssignableFrom(vc))) {
 
 					if (! (value1 instanceof Map)) {
 						if (value1 instanceof CharSequence value21)
@@ -1057,7 +1057,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					if (nn(setter) || nn(field))
 						invokeSetter(bean, pName, propMap);
 
-				} else if (isCollection && (setter == null || ! pcInfo.isParentOf(vc))) {
+				} else if (isCollection && (setter == null || ! pcInfo.isAssignableFrom(vc))) {
 
 					if (! (value1 instanceof Collection)) {
 						if (value1 instanceof CharSequence value2)
@@ -1116,7 +1116,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					});
 
 				} else {
-					if (nn(swap) && value1 != null && swap.getSwapClass().isParentOf(value1.getClass())) {
+					if (nn(swap) && value1 != null && swap.getSwapClass().isAssignableFrom(value1.getClass())) {
 						value1 = swap.unswap(session, value1, rawTypeMeta);
 					} else {
 						value1 = session.convertToType(value1, rawTypeMeta);

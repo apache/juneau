@@ -132,7 +132,7 @@ public class BeanMeta<T> {
 				return true;
 
 			// Doesn't match if not same type or super type as getter/field.
-			if (! type.isParentOf(pt))
+			if (! type.isAssignableFrom(pt))
 				return false;
 
 			// If a setter was previously set, only use this setter if it's a closer
@@ -212,7 +212,7 @@ public class BeanMeta<T> {
 			if (bc.isNotABean(cm))
 				return notABean("Class matches exclude-class list");
 
-			if (bc.isBeansRequireSerializable() && ! cm.isChildOf(Serializable.class) && ! ap.has(Bean.class, cm))
+			if (bc.isBeansRequireSerializable() && ! cm.isAssignableTo(Serializable.class) && ! ap.has(Bean.class, cm))
 				return notABean("Class is not serializable");
 
 			if (ap.has(BeanIgnore.class, cm))
@@ -1093,9 +1093,9 @@ public class BeanMeta<T> {
 
 				if (params.isEmpty()) {
 					if ("*".equals(bpName)) {
-						if (rt.isChildOf(Collection.class)) {
+						if (rt.isAssignableTo(Collection.class)) {
 							methodType = EXTRAKEYS;
-						} else if (rt.isChildOf(Map.class)) {
+						} else if (rt.isAssignableTo(Map.class)) {
 							methodType = GETTER;
 						}
 						n = bpName;
@@ -1119,17 +1119,17 @@ public class BeanMeta<T> {
 					}
 				} else if (params.size() == 1) {
 					if ("*".equals(bpName)) {
-						if (params.get(0).getParameterType().isChildOf(Map.class)) {
+						if (params.get(0).getParameterType().isAssignableTo(Map.class)) {
 							methodType = SETTER;
 							n = bpName;
 						} else if (params.get(0).getParameterType().is(String.class)) {
 							methodType = GETTER;
 							n = bpName;
 						}
-					} else if (n.startsWith("set") && (rt.isParentOf(ci) || rt.is(Void.TYPE))) {
+					} else if (n.startsWith("set") && (rt.isAssignableFrom(ci) || rt.is(Void.TYPE))) {
 						methodType = SETTER;
 						n = n.substring(3);
-					} else if (n.startsWith("with") && (rt.isParentOf(ci))) {
+					} else if (n.startsWith("with") && (rt.isAssignableFrom(ci))) {
 						methodType = SETTER;
 						n = n.substring(4);
 					} else if (nn(bpName)) {
@@ -1141,12 +1141,12 @@ public class BeanMeta<T> {
 						} else {
 							n = bpName;
 						}
-					} else if (fluentSetters && rt.isParentOf(ci)) {
+					} else if (fluentSetters && rt.isAssignableFrom(ci)) {
 						methodType = SETTER;
 					}
 				} else if (params.size() == 2) {
 					if ("*".equals(bpName) && params.get(0).getParameterType().is(String.class)) {
-						if (n.startsWith("set") && (rt.isParentOf(ci) || rt.is(Void.TYPE))) {
+						if (n.startsWith("set") && (rt.isAssignableFrom(ci) || rt.is(Void.TYPE))) {
 							methodType = SETTER;
 						} else {
 							methodType = GETTER;
