@@ -3335,13 +3335,69 @@ public class ClassInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a105_toString() {
-		assertEquals("class org.apache.juneau.commons.reflect.AClass", aClass.toString());
-		assertEquals("interface org.apache.juneau.commons.reflect.AInterface", aInterface.toString());
+		assertEquals("public class org.apache.juneau.commons.reflect.AClass", aClass.toString());
+		assertEquals("public interface org.apache.juneau.commons.reflect.AInterface", aInterface.toString());
 		assertEquals("class org.apache.juneau.commons.reflect.ClassInfo_Test$A1", aType.toString());
 		assertEquals("java.util.Map<java.lang.String, java.util.List<java.lang.String>>", pType.toString());
 		assertEquals("java.util.Map<java.lang.String, java.lang.String[][]>", pTypeDimensional.toString());
 		assertEquals("java.util.AbstractMap<K, V>", pTypeGeneric.toString());
 		assertEquals("V", pTypeGenericArg.toString());
+	}
+
+	// Test classes for comprehensive toString() testing
+	public static class ToStringTestPublic {}
+	static class ToStringTestPackage {}
+	protected static class ToStringTestProtected {}
+	private static class ToStringTestPrivate {}
+	public static final class ToStringTestFinal {}
+	public abstract static class ToStringTestAbstract {}
+	public static class ToStringTestGeneric<T> {}
+	public static class ToStringTestGenericWithBounds<T extends Comparable<T> & java.io.Serializable> {}
+	public enum ToStringTestEnum { VALUE1, VALUE2 }
+	public @interface ToStringTestAnnotation {}
+	public static record ToStringTestRecord(String name, int value) {}
+
+	@Test
+	void a106_toString_comprehensive() {
+		// Different visibility modifiers (note: inner classes are static)
+		assertEquals("public static class org.apache.juneau.commons.reflect.ClassInfo_Test$ToStringTestPublic", ClassInfo.of(ToStringTestPublic.class).toString());
+		assertEquals("static class org.apache.juneau.commons.reflect.ClassInfo_Test$ToStringTestPackage", ClassInfo.of(ToStringTestPackage.class).toString());
+		assertEquals("protected static class org.apache.juneau.commons.reflect.ClassInfo_Test$ToStringTestProtected", ClassInfo.of(ToStringTestProtected.class).toString());
+		assertEquals("private static class org.apache.juneau.commons.reflect.ClassInfo_Test$ToStringTestPrivate", ClassInfo.of(ToStringTestPrivate.class).toString());
+		
+		// Final class
+		assertEquals("public static final class org.apache.juneau.commons.reflect.ClassInfo_Test$ToStringTestFinal", ClassInfo.of(ToStringTestFinal.class).toString());
+		
+		// Abstract class (Modifier.toString() returns "public abstract static" in standard Java modifier order)
+		assertEquals("public abstract static class org.apache.juneau.commons.reflect.ClassInfo_Test$ToStringTestAbstract", ClassInfo.of(ToStringTestAbstract.class).toString());
+		
+		// Generic class
+		assertEquals("public static class org.apache.juneau.commons.reflect.ClassInfo_Test$ToStringTestGeneric<T>", ClassInfo.of(ToStringTestGeneric.class).toString());
+		
+		// Generic class with bounds
+		assertEquals("public static class org.apache.juneau.commons.reflect.ClassInfo_Test$ToStringTestGenericWithBounds<T extends java.lang.Comparable<T> & java.io.Serializable>", ClassInfo.of(ToStringTestGenericWithBounds.class).toString());
+		
+		// Enum
+		assertEquals("public static enum org.apache.juneau.commons.reflect.ClassInfo_Test$ToStringTestEnum", ClassInfo.of(ToStringTestEnum.class).toString());
+		
+		// Annotation
+		assertEquals("public static @interface org.apache.juneau.commons.reflect.ClassInfo_Test$ToStringTestAnnotation", ClassInfo.of(ToStringTestAnnotation.class).toString());
+		
+		// Record
+		assertEquals("public static record org.apache.juneau.commons.reflect.ClassInfo_Test$ToStringTestRecord", ClassInfo.of(ToStringTestRecord.class).toString());
+		
+		// Test existing classes with different modifiers
+		assertEquals("public static class org.apache.juneau.commons.reflect.ClassInfo_Test$H_Public", hPublic.toString());
+		assertEquals("static class org.apache.juneau.commons.reflect.ClassInfo_Test$H_Package", hPackage.toString());
+		assertEquals("protected static class org.apache.juneau.commons.reflect.ClassInfo_Test$H_Protected", hProtected.toString());
+		assertEquals("private static class org.apache.juneau.commons.reflect.ClassInfo_Test$H_Private", hPrivate.toString());
+		assertEquals("public abstract class org.apache.juneau.commons.reflect.ClassInfo_Test$H_AbstractPublic", hAbstractPublic.toString());
+		
+		// Test standard library classes
+		assertEquals("public final class java.lang.String", ClassInfo.of(String.class).toString());
+		assertEquals("public interface java.util.List<E>", ClassInfo.of(java.util.List.class).toString());
+		assertEquals("public class java.util.ArrayList<E>", ClassInfo.of(java.util.ArrayList.class).toString());
+		assertEquals("public enum java.time.Month", ClassInfo.of(java.time.Month.class).toString());
 	}
 
 	//====================================================================================================

@@ -787,6 +787,57 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		return inner.toGenericString();
 	}
 
+	/**
+	 * Returns a detailed string representation of this executable (method or constructor).
+	 *
+	 * <p>
+	 * The returned string includes:
+	 * <ul>
+	 * 	<li>Modifiers (public, private, protected, static, final, abstract, synchronized, etc.)
+	 * 	<li>Synthetic and bridge flags (if applicable)
+	 * 	<li>Generic type parameters with bounds (if any, e.g., "&lt;T extends Comparable&lt;T&gt;&gt;")
+	 * 	<li>Return type (for methods only, not constructors)
+	 * 	<li>Fully qualified name with parameters
+	 * 	<li>Throws declarations (if any)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Constructor</jc>
+	 * 	ConstructorInfo <jv>ci</jv> = ConstructorInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>.getConstructor(String.<jk>class</jk>));
+	 * 	<jv>ci</jv>.toString();
+	 * 	<jc>// Returns: "public org.example.MyClass(java.lang.String)"</jc>
+	 *
+	 * 	<jc>// Method</jc>
+	 * 	MethodInfo <jv>mi</jv> = MethodInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>, <js>"myMethod"</js>, String.<jk>class</jk>);
+	 * 	<jv>mi</jv>.toString();
+	 * 	<jc>// Returns: "public java.lang.String org.example.MyClass.myMethod(java.lang.String)"</jc>
+	 *
+	 * 	<jc>// Method with throws</jc>
+	 * 	MethodInfo <jv>mi2</jv> = MethodInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>, <js>"riskyMethod"</js>);
+	 * 	<jv>mi2</jv>.toString();
+	 * 	<jc>// Returns: "public void org.example.MyClass.riskyMethod() throws java.io.IOException, java.lang.Exception"</jc>
+	 *
+	 * 	<jc>// Generic method</jc>
+	 * 	MethodInfo <jv>mi3</jv> = MethodInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>, <js>"genericMethod"</js>);
+	 * 	<jv>mi3</jv>.toString();
+	 * 	<jc>// Returns: "public &lt;T&gt; void org.example.MyClass.genericMethod(T)"</jc>
+	 *
+	 * 	<jc>// Generic method with bounds</jc>
+	 * 	MethodInfo <jv>mi4</jv> = MethodInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>, <js>"boundedMethod"</js>);
+	 * 	<jv>mi4</jv>.toString();
+	 * 	<jc>// Returns: "public &lt;T extends java.lang.Comparable&lt;T&gt;&gt; void org.example.MyClass.boundedMethod(T)"</jc>
+	 * </p>
+	 *
+	 * <h5 class='section'>Comparison with Other Methods:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>{@link #getNameShort()} - Returns short name with parameters (e.g., "myMethod(int, String)")
+	 * 	<li>{@link #getNameFull()} - Returns fully qualified name with parameters (e.g., "org.example.MyClass.myMethod(int, java.lang.String)")
+	 * 	<li>{@link #toGenericString()} - Returns generic string from underlying Executable
+	 * </ul>
+	 *
+	 * @return A detailed string representation including modifiers, return type, name, and throws declarations.
+	 */
 	@Override
 	public String toString() {
 		return toString.get();
@@ -801,18 +852,76 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 			sb.append(mods).append(" ");
 		}
 
-		// Add synthetic and bridge flags (not actual modifiers but useful to show)
+		// Add synthetic, bridge, varargs, and default flags (not actual modifiers but useful to show)
 		if (isSynthetic())
 			sb.append("synthetic ");
-		if (this instanceof MethodInfo mi && mi.isBridge())
-			sb.append("bridge ");
+		if (this instanceof MethodInfo mi) {
+			if (mi.isBridge())
+				sb.append("bridge ");
+			if (mi.isDefault())
+				sb.append("default ");
+		}
+		if (isVarArgs())
+			sb.append("varargs ");
+
+		// Type parameters (if any)
+		var typeParams = getTypeParameters();
+		var hasTypeParams = typeParams.length > 0;
+		if (hasTypeParams) {
+			sb.append('<');
+			var first = true;
+			for (var tv : typeParams) {
+				if (! first)
+					sb.append(", ");
+				first = false;
+				sb.append(tv.getName());
+				var bounds = tv.getBounds();
+				if (bounds.length > 0 && (bounds.length > 1 || ! bounds[0].equals(Object.class))) {
+					sb.append(" extends ");
+					var firstBound = true;
+					for (var bound : bounds) {
+						if (! firstBound)
+							sb.append(" & ");
+						firstBound = false;
+						if (bound instanceof Class<?> boundClass) {
+							ClassInfo.of(boundClass).appendNameFormatted(sb, FULL, true, '$', BRACKETS);
+						} else {
+							sb.append(bound.getTypeName());
+						}
+					}
+				}
+			}
+			sb.append("> ");
+		}
 
 		// Return type (skip for constructors)
 		if (this instanceof MethodInfo mi)
 			mi.getReturnType().appendNameFormatted(sb, FULL, true, '$', BRACKETS).append(" ");
 
-		// Full name
-		sb.append(getNameFull());
+		// Full name - use generic parameter types if we have type parameters
+		if (hasTypeParams) {
+			// Build signature with generic parameter types to show type variables instead of erased types
+			var dc = getDeclaringClass();
+			var pi = dc.getPackage();
+			if (nn(pi))
+				sb.append(pi.getName()).append('.');
+			dc.appendNameFormatted(sb, SHORT, true, '$', BRACKETS);
+			if (! isConstructor)
+				sb.append('.').append(getNameSimple());
+			sb.append('(');
+			var genericParamTypes = inner.getGenericParameterTypes();
+			var first = true;
+			for (var gpt : genericParamTypes) {
+				if (! first)
+					sb.append(',');
+				first = false;
+				ClassInfo.of(gpt).appendNameFormatted(sb, FULL, true, '$', BRACKETS);
+			}
+			sb.append(')');
+		} else {
+			// Use regular getNameFull() for non-generic methods
+			sb.append(getNameFull());
+		}
 
 		// Throws declarations
 		var exTypes = getExceptionTypes();

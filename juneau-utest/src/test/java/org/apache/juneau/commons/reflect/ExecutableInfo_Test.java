@@ -874,5 +874,72 @@ class ExecutableInfo_Test extends TestBase {
 		check("public void org.apache.juneau.commons.reflect.ExecutableInfo_Test$B.m()", b_m1.toString());
 		check("public int org.apache.juneau.commons.reflect.ExecutableInfo_Test$B.m(java.lang.String)", b_m2.toString());
 	}
+
+	// Test classes for comprehensive toString() testing
+	static class ToStringTestClass {
+		public ToStringTestClass() {}
+		private ToStringTestClass(int i) {}  // NOSONAR
+		protected ToStringTestClass(String s) {}  // NOSONAR
+		static ToStringTestClass create() { return null; }  // NOSONAR
+		public void publicMethod() {}
+		private void privateMethod() {}  // NOSONAR
+		protected void protectedMethod() {}  // NOSONAR
+		static void staticMethod() {}  // NOSONAR
+		final void finalMethod() {}  // NOSONAR
+		public void methodWithThrows() throws java.io.IOException, java.lang.Exception {}  // NOSONAR
+		public <T> void genericMethod(T t) {}  // NOSONAR
+		public <T extends Comparable<T>> void genericMethodWithBounds(T t) {}  // NOSONAR
+	}
+	static abstract class ToStringTestAbstractClass {
+		abstract void abstractMethod();  // NOSONAR
+	}
+
+	@Test
+	void a046_toString_comprehensive() {
+		var ci = ClassInfo.of(ToStringTestClass.class);
+		
+		// Constructors with different modifiers
+		var publicCtor = ci.getPublicConstructor(cons -> cons.getParameterCount() == 0).get();
+		assertEquals("public org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass()", publicCtor.toString());
+		
+		var privateCtor = ci.getDeclaredConstructor(x -> x.hasParameterTypes(int.class)).get();
+		assertEquals("private org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass(int)", privateCtor.toString());
+		
+		var protectedCtor = ci.getDeclaredConstructor(x -> x.hasParameterTypes(String.class)).get();
+		assertEquals("protected org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass(java.lang.String)", protectedCtor.toString());
+		
+		// Methods with different modifiers
+		var publicMethod = ci.getPublicMethod(x -> x.hasName("publicMethod")).get();
+		assertEquals("public void org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass.publicMethod()", publicMethod.toString());
+		
+		var privateMethod = ci.getDeclaredMethod(x -> x.hasName("privateMethod")).get();
+		assertEquals("private void org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass.privateMethod()", privateMethod.toString());
+		
+		var protectedMethod = ci.getDeclaredMethod(x -> x.hasName("protectedMethod")).get();
+		assertEquals("protected void org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass.protectedMethod()", protectedMethod.toString());
+		
+		var staticMethod = ci.getDeclaredMethod(x -> x.hasName("staticMethod")).get();
+		assertEquals("static void org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass.staticMethod()", staticMethod.toString());
+		
+		var finalMethod = ci.getDeclaredMethod(x -> x.hasName("finalMethod")).get();
+		assertEquals("final void org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass.finalMethod()", finalMethod.toString());
+		
+		// Method with throws
+		var methodWithThrows = ci.getPublicMethod(x -> x.hasName("methodWithThrows")).get();
+		assertEquals("public void org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass.methodWithThrows() throws java.io.IOException, java.lang.Exception", methodWithThrows.toString());
+		
+		// Generic method
+		var genericMethod = ci.getPublicMethod(x -> x.hasName("genericMethod")).get();
+		assertEquals("public <T> void org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass.genericMethod(T)", genericMethod.toString());
+		
+		// Generic method with bounds
+		var genericMethodWithBounds = ci.getPublicMethod(x -> x.hasName("genericMethodWithBounds")).get();
+		assertEquals("public <T extends java.lang.Comparable<T>> void org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass.genericMethodWithBounds(T)", genericMethodWithBounds.toString());
+		
+		// Abstract method
+		var abstractCi = ClassInfo.of(ToStringTestAbstractClass.class);
+		var abstractMethod = abstractCi.getDeclaredMethod(x -> x.hasName("abstractMethod")).get();
+		assertEquals("abstract void org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestAbstractClass.abstractMethod()", abstractMethod.toString());
+	}
 }
 

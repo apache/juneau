@@ -189,6 +189,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	private final Supplier<String> fullName;  // Fully qualified class name with generics (e.g., "java.util.List<java.lang.String>").
 	private final Supplier<String> shortName;  // Simple class name with generics (e.g., "List<String>").
 	private final Supplier<String> readableName;  // Human-readable class name without generics (e.g., "List").
+	private final Supplier<String> toString;  // String representation with modifiers, class type, name, and type parameters.
 	private final Supplier<List<ClassInfo>> declaredInterfaces;  // All interfaces declared directly by this class.
 	private final Supplier<List<ClassInfo>> interfaces;  // All interfaces implemented by this class and its parents, in child-to-parent order.
 	private final Supplier<List<ClassInfo>> allParents;  // All parent classes and interfaces, classes first, then in child-to-parent order.
@@ -234,6 +235,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 		this.fullName = mem(() -> getNameFormatted(FULL, true, '$', BRACKETS));
 		this.shortName = mem(() -> getNameFormatted(SHORT, true, '$', BRACKETS));
 		this.readableName = mem(() -> getNameFormatted(SIMPLE, false, '$', WORD));
+		this.toString = mem(this::findToString);
 		this.declaredInterfaces = mem(() -> opt(inner).map(x -> stream(x.getGenericInterfaces()).map(ClassInfo::of).map(ClassInfo.class::cast).toList()).orElse(liste()));
 		this.interfaces = mem(() -> getParents().stream().flatMap(x -> x.getDeclaredInterfaces().stream()).flatMap(ci2 -> concat(Stream.of(ci2), ci2.getInterfaces().stream())).distinct().toList());
 		this.allParents = mem(() -> concat(getParents().stream(), getInterfaces().stream()).toList());
@@ -2345,9 +2347,138 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 		}
 	}
 
+	/**
+	 * Returns a detailed string representation of this class.
+	 *
+	 * <p>
+	 * The returned string includes:
+	 * <ul>
+	 * 	<li>Modifiers (public, private, protected, static, final, abstract, etc.)
+	 * 	<li>Class type (class, interface, enum, annotation, or record)
+	 * 	<li>Fully qualified class name
+	 * 	<li>Generic type parameters with bounds (if any)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Regular class</jc>
+	 * 	ClassInfo.<jsm>of</jsm>(String.<jk>class</jk>).toString();
+	 * 	<jc>// Returns: "public final class java.lang.String"</jc>
+	 *
+	 * 	<jc>// Interface</jc>
+	 * 	ClassInfo.<jsm>of</jsm>(List.<jk>class</jk>).toString();
+	 * 	<jc>// Returns: "public interface java.util.List"</jc>
+	 *
+	 * 	<jc>// Generic class</jc>
+	 * 	ClassInfo.<jsm>of</jsm>(ArrayList.<jk>class</jk>).toString();
+	 * 	<jc>// Returns: "public class java.util.ArrayList&lt;E&gt;"</jc>
+	 *
+	 * 	<jc>// Generic class with bounds</jc>
+	 * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(Comparable.<jk>class</jk>);
+	 * 	<jv>ci</jv>.toString();
+	 * 	<jc>// Returns: "public interface java.lang.Comparable&lt;T&gt;"</jc>
+	 *
+	 * 	<jc>// Enum</jc>
+	 * 	ClassInfo.<jsm>of</jsm>(Month.<jk>class</jk>).toString();
+	 * 	<jc>// Returns: "public enum java.time.Month"</jc>
+	 *
+	 * 	<jc>// Record</jc>
+	 * 	ClassInfo <jv>record</jv> = ClassInfo.<jsm>of</jsm>(MyRecord.<jk>class</jk>);
+	 * 	<jv>record</jv>.toString();
+	 * 	<jc>// Returns: "public record org.example.MyRecord"</jc>
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>For interfaces, the "abstract" modifier is omitted since it's implicit.
+	 * 	<li>For non-class types (e.g., TypeVariable, ParameterizedType), returns the result of {@link Type#toString()}.
+	 * 	<li>Type parameters include bounds when present (e.g., "&lt;T extends Comparable&lt;T&gt;&gt;").
+	 * </ul>
+	 *
+	 * <h5 class='section'>Comparison with Other Methods:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>{@link #getNameSimple()} - Returns simple class name without package (e.g., "String")
+	 * 	<li>{@link #getNameShort()} - Returns short name with outer classes (e.g., "MyClass$Inner")
+	 * 	<li>{@link #getNameFull()} - Returns fully qualified name with type parameters (e.g., "java.util.List&lt;String&gt;")
+	 * </ul>
+	 *
+	 * @return A detailed string representation including modifiers, class type, name, and type parameters.
+	 */
 	@Override
 	public String toString() {
-		return innerType.toString();
+		return toString.get();
+	}
+
+	private String findToString() {
+		var sb = new StringBuilder(256);
+
+		// Class type (class, interface, enum, annotation, record)
+		if (inner == null) {
+			// For non-class types (e.g., TypeVariable, ParameterizedType), use innerType.toString()
+			return innerType.toString();
+		}
+
+		// Modifiers (filter out implicit modifiers)
+		var mods = Modifier.toString(getModifiers());
+		if (nn(mods) && ! mods.isEmpty()) {
+			// Remove "abstract" for interfaces since it's implicit and redundant
+			// Remove "final" for enums and records since it's implicit and redundant
+			// Also remove "interface" if it somehow got included (shouldn't happen, but be safe)
+			if (isInterface()) {
+				mods = mods.replace("abstract", "").replace("interface", "").trim().replaceAll("\\s+", " ");
+			} else if (isEnum() || isRecord()) {
+				mods = mods.replace("final", "").trim().replaceAll("\\s+", " ");
+			}
+			if (! mods.isEmpty()) {
+				sb.append(mods).append(" ");
+			}
+		}
+
+		if (isRecord()) {
+			sb.append("record ");
+		} else if (isAnnotation()) {
+			sb.append("@interface ");
+		} else if (isEnum()) {
+			sb.append("enum ");
+		} else if (isInterface()) {
+			sb.append("interface ");
+		} else {
+			sb.append("class ");
+		}
+
+		// Full name
+		appendNameFormatted(sb, FULL, false, '$', BRACKETS);
+
+		// Type parameters (if declared on the class itself, not as a parameterized type)
+		var typeParams = getTypeParameters();
+		if (! typeParams.isEmpty()) {
+			sb.append('<');
+			var first = true;
+			for (var tv : typeParams) {
+				if (! first)
+					sb.append(", ");
+				first = false;
+				sb.append(tv.getName());
+				var bounds = tv.getBounds();
+				if (bounds.length > 0 && (bounds.length > 1 || ! bounds[0].equals(Object.class))) {
+					sb.append(" extends ");
+					var firstBound = true;
+					for (var bound : bounds) {
+						if (! firstBound)
+							sb.append(" & ");
+						firstBound = false;
+						if (bound instanceof Class<?> boundClass) {
+							of(boundClass).appendNameFormatted(sb, FULL, true, '$', BRACKETS);
+						} else {
+							sb.append(bound.getTypeName());
+						}
+					}
+				}
+			}
+			sb.append('>');
+		}
+
+		return sb.toString();
 	}
 
 	/**
