@@ -72,6 +72,8 @@ class MethodInfo_Test extends TestBase {
 				return t2.getDeclaringClass().getSimpleName() + '.' + MethodInfo.of((Method)t).getNameShort();
 			if (t instanceof List<?> t2)
 				return (t2.stream().map(this).collect(Collectors.joining(",")));
+			if (t instanceof java.util.Set<?> t2)
+				return "[" + t2.stream().map(this).collect(Collectors.joining(", ")) + "]";
 			if (t instanceof AnnotationInfo t2)
 				return apply(t2.inner());
 			if (t instanceof A t2)
@@ -271,7 +273,7 @@ class MethodInfo_Test extends TestBase {
 	@Test
 	void a002_compareTo() {
 		var s = new TreeSet<>(l(g_a1a, g_a1b, g_a1c, g_a1d, g_a2, g_a3));
-		check("[a1(), a1(int), a1(String), a1(int,int), a2(), a3()]", s);
+		check("[G.a1(), G.a1(int), G.a1(String), G.a1(int,int), G.a2(), G.a3()]", s);
 	}
 
 	//====================================================================================================

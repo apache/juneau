@@ -869,10 +869,10 @@ class ExecutableInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a045_toString() {
-		check("B()", b_c1.toString());
-		check("B(String)", b_c2.toString());
-		check("m()", b_m1.toString());
-		check("m(String)", b_m2.toString());
+		check("public org.apache.juneau.commons.reflect.ExecutableInfo_Test$B()", b_c1.toString());
+		check("public org.apache.juneau.commons.reflect.ExecutableInfo_Test$B(java.lang.String)", b_c2.toString());
+		check("public void org.apache.juneau.commons.reflect.ExecutableInfo_Test$B.m()", b_m1.toString());
+		check("public int org.apache.juneau.commons.reflect.ExecutableInfo_Test$B.m(java.lang.String)", b_m2.toString());
 	}
 }
 

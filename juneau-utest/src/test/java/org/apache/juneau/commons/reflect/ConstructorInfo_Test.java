@@ -719,9 +719,9 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a053_toString() {
-		check("A()", a.toString());
-		check("B()", b_c1.toString());
-		check("B(String)", b_c2.toString());
+		check("public org.apache.juneau.commons.reflect.ConstructorInfo_Test$A()", a.toString());
+		check("public org.apache.juneau.commons.reflect.ConstructorInfo_Test$B()", b_c1.toString());
+		check("public org.apache.juneau.commons.reflect.ConstructorInfo_Test$B(java.lang.String)", b_c2.toString());
 	}
 
 	//====================================================================================================

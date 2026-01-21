@@ -92,6 +92,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	private final Supplier<List<AnnotationInfo<Annotation>>> declaredAnnotations;  // All annotations declared directly on this executable.
 	private final Supplier<String> shortName;  // Short name (method/constructor name with parameters).
 	private final Supplier<String> fullName;  // Fully qualified name (declaring-class.method-name with parameters).
+	private final Supplier<String> toString;  // String representation with modifiers, return type, name, and throws declarations.
 
 	/**
 	 * Constructor.
@@ -115,6 +116,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		this.declaredAnnotations = mem(() -> stream(inner.getDeclaredAnnotations()).flatMap(a -> AnnotationUtils.streamRepeated(a)).map(a -> ai((Annotatable)this, a)).toList());
 		this.shortName = mem(() -> f("{0}({1})", getNameSimple(), getParameters().stream().map(p -> p.getParameterType().getNameSimple()).collect(joining(","))));
 		this.fullName = mem(this::findFullName);
+		this.toString = mem(this::findToString);
 	}
 
 	/**
@@ -787,8 +789,44 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 
 	@Override
 	public String toString() {
-		return getNameShort();
+		return toString.get();
 	}
+
+	private String findToString() {
+		var sb = new StringBuilder(256);
+
+		// Modifiers
+		var mods = Modifier.toString(getModifiers());
+		if (nn(mods) && ! mods.isEmpty()) {
+			sb.append(mods).append(" ");
+		}
+
+		// Add synthetic and bridge flags (not actual modifiers but useful to show)
+		if (isSynthetic())
+			sb.append("synthetic ");
+		if (this instanceof MethodInfo mi && mi.isBridge())
+			sb.append("bridge ");
+
+		// Return type (skip for constructors)
+		if (this instanceof MethodInfo mi)
+			mi.getReturnType().appendNameFormatted(sb, FULL, true, '$', BRACKETS).append(" ");
+
+		// Full name
+		sb.append(getNameFull());
+
+		// Throws declarations
+		var exTypes = getExceptionTypes();
+		if (! exTypes.isEmpty()) {
+			sb.append(" throws ");
+			sb.append(exTypes.stream()
+				.map(e -> e.getNameFormatted(FULL, true, '$', BRACKETS))
+				.collect(joining(", ")));
+		}
+
+		return sb.toString();
+	}
+
+
 
 	private void checkIndex(int index) {
 		int pc = getParameterCount();
