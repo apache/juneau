@@ -3444,6 +3444,7 @@ public class ClassInfo_Test extends TestBase {
 	private static class ToStringTestPrivate {}
 	public static final class ToStringTestFinal {}
 	public abstract static class ToStringTestAbstract {}
+	@SuppressWarnings("unused")
 	public static class ToStringTestGeneric<T> {}
 	public static class ToStringTestGenericWithBounds<T extends Comparable<T> & java.io.Serializable> {}
 	public enum ToStringTestEnum { VALUE1, VALUE2 }

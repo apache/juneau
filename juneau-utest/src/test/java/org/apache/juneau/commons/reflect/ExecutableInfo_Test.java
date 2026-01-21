@@ -885,6 +885,7 @@ class ExecutableInfo_Test extends TestBase {
 	}
 
 	// Test classes for comprehensive toString() testing
+	@SuppressWarnings("unused")
 	static class ToStringTestClass {
 		public ToStringTestClass() {}
 		private ToStringTestClass(int i) {}  // NOSONAR
@@ -895,7 +896,7 @@ class ExecutableInfo_Test extends TestBase {
 		protected void protectedMethod() {}  // NOSONAR
 		static void staticMethod() {}  // NOSONAR
 		final void finalMethod() {}  // NOSONAR
-		public void methodWithThrows() throws java.io.IOException, java.lang.Exception {}  // NOSONAR
+		public void methodWithThrows() throws java.io.IOException, java.lang.Exception {}  // NOSONAR - IOException declared for reflection testing
 		public <T> void genericMethod(T t) {}  // NOSONAR
 		public <T extends Comparable<T>> void genericMethodWithBounds(T t) {}  // NOSONAR
 	}

@@ -23,12 +23,13 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static java.util.Comparator.*;
 import static org.apache.juneau.commons.reflect.ElementFlag.*;
-
+import static java.util.Collections.*;
 
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.concurrent.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 
@@ -50,8 +51,8 @@ import org.apache.juneau.commons.reflect.*;
  * 	<jk>public class</jk> MyBean {
  * 		<jk>private final</jk> String <jf>value</jf>;
  *
- * 		<jk>private</jk> MyBean(Builder <jv>builder</jv>) {
- * 			<jk>this</jk>.<jf>value</jf> = <jv>builder</jv>.<jf>value</jf>;
+ * 		<jk>private</jk> MyBean(String <jv>value</jv>) {
+ * 			<jk>this</jk>.<jf>value</jf> = <jv>value</jv>;
  * 		}
  *
  * 		<jk>public static</jk> Builder <jsm>create</jsm>() {
@@ -67,16 +68,40 @@ import org.apache.juneau.commons.reflect.*;
  * 			}
  *
  * 			<jk>public</jk> MyBean build() {
- * 				<jk>return new</jk> MyBean(<jk>this</jk>);
+ * 				<jk>return new</jk> MyBean(<jf>value</jf>);
  * 			}
  * 		}
+ *
+ * 	<jc>// Builder with @Inject on build() method</jc>
+ * 	<jk>public class</jk> MyBean2 {
+ * 		<jk>private final</jk> String <jf>value</jf>;
+ * 		<jk>private final</jk> MyDependency <jf>dependency</jf>;
+ *
+ * 		<jk>private</jk> MyBean2(String <jv>value</jv>, MyDependency <jv>dependency</jv>) {
+ * 			<jk>this</jk>.<jf>value</jf> = <jv>value</jv>;
+ * 			<jk>this</jk>.<jf>dependency</jf> = <jv>dependency</jv>;
+ * 		}
+ *
+ * 		<jk>public static class</jk> Builder {
+ * 			<jk>private</jk> String <jf>value</jf>;
+ *
+ * 			<jk>public</jk> Builder value(String <jv>value</jv>) {
+ * 				<jk>this</jk>.<jf>value</jf> = <jv>value</jv>;
+ * 				<jk>return this</jk>;
+ * 			}
+ *
+ * 			<ja>@Inject</ja>
+ * 			<jk>public</jk> MyBean2 build(MyDependency <jv>dependency</jv>) {
+ * 				<jk>return new</jk> MyBean2(<jv>value</jv>, <jv>dependency</jv>);
+ * 			}
+ * 		}
+ * 	}
  * 	}
  *
  * 	<jc>// Create bean using BeanCreator2</jc>
  * 	MyBean <jv>bean</jv> = BeanCreator2
- * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>)
- * 		.beanStore(<jv>myBeanStore</jv>)
- * 		.create();
+ * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>, <jv>myBeanStore</jv>)
+ * 		.run();
  * </p>
  *
  * <h5 class='section'>Bean Creation Order:</h5>
@@ -86,9 +111,11 @@ import org.apache.juneau.commons.reflect.*;
  * 	<li><b>Using a Builder</b> (if a builder is found or specified):
  * 		<ol>
  * 			<li>Calls a <c>build()</c>/<c>create()</c>/<c>get()</c> method on the builder that returns the bean type.
- * 			<li>Calls a static <c>getInstance(Builder)</c> method on the bean class.
- * 			<li>Calls a constructor on the bean class that accepts the builder.
- * 			<li>Calls any method on the builder that returns the bean type.
+ * 				<ul>
+ * 					<li>The method is <b>required</b> - if no such method exists, bean creation fails.
+ * 					<li>If the method has <c>@Inject</c> or <c>@Autowired</c> annotation, its parameters are resolved from the bean store.
+ * 					<li>If the method does not have <c>@Inject</c> annotation, it must have no parameters.
+ * 				</ul>
  * 		</ol>
  * 	<li><b>Without a Builder</b>:
  * 		<ol>
@@ -107,7 +134,7 @@ import org.apache.juneau.commons.reflect.*;
  * 	<li>Auto-detection:
  * 		<ul>
  * 			<li>Static <c>create()</c> or <c>builder()</c> method that returns a builder type
- * 				(method names can be customized via {@link #builderMethod(String...)}).
+ * 				(method names can be customized via {@link #builderMethodNames(String...)}).
  * 			<li>Inner class named <c>Builder</c>.
  * 		</ul>
  * </ol>
@@ -122,7 +149,27 @@ import org.apache.juneau.commons.reflect.*;
  * This means that after a bean is created, all of its fields and methods annotated with {@code @Inject} or {@code @Autowired}
  * will automatically be populated with beans from the bean store.
  *
+ * <h5 class='section'>Caching:</h5>
+ * <p>
+ * By default, each call to {@link #run()} creates a new bean instance. To enable caching, call {@link #cached()}.
+ * When caching is enabled, bean instances are cached using {@link ResettableSupplier}, so multiple calls to {@link #run()}
+ * will return the same instance unless {@link #reset()} is called or configuration changes. Explicit implementations set via
+ * {@link #implementation(Object)} and explicit builder instances set via {@link #builder(Object)} are preserved
+ * across resets.
+ *
+ * <h5 class='section'>Thread Safety:</h5>
+ * <p>
+ * This class is thread-safe. All configuration methods and bean creation use {@link SimpleReadWriteLock} to ensure
+ * safe concurrent access. Multiple threads can safely call {@link #run()} simultaneously, and configuration changes
+ * are properly synchronized.
+ *
  * <h5 class='section'>Notes:</h5><ul>
+ * 	<li class='note'>Builders must have a <c>build()</c>, <c>create()</c>, or <c>get()</c> method that returns the bean type.
+ * 		This method is required - constructors accepting builders are no longer supported.
+ * 	<li class='note'>The builder's <c>build()</c>/<c>create()</c>/<c>get()</c> method may have <c>@Inject</c> or <c>@Autowired</c>
+ * 		annotation to allow dependency injection of parameters from the bean store.
+ * 	<li class='note'>If the builder's <c>build()</c>/<c>create()</c>/<c>get()</c> method does not have <c>@Inject</c> annotation,
+ * 		it must have no parameters.
  * 	<li class='note'>All constructors and methods except {@link Optional} and {@link List} parameters
  * 		must have beans available in the store.
  * 	<li class='note'>If multiple constructors/methods are found, the one with the most matching parameters is used.
@@ -138,13 +185,16 @@ import org.apache.juneau.commons.reflect.*;
 public class BeanCreator2<T> {
 
 	/** Default factory method names used for bean instantiation. */
-	public static final Set<String> DEFAULT_FACTORY_METHOD_NAMES = u(set("getInstance"));
+	protected static final Set<String> DEFAULT_FACTORY_METHOD_NAMES = u(set("getInstance"));
 
-	/** Default builder method names used for builder instantiation. */
-	public static final Set<String> DEFAULT_BUILDER_METHOD_NAMES = u(set("create", "builder"));
+	/** Default builder method names used for builder factory methods (static methods that create/return a builder). */
+	protected static final Set<String> DEFAULT_BUILDER_METHOD_NAMES = u(set("create", "builder"));
+
+	/** Default build method names used for builder build methods (instance methods on builder that build/return the bean). */
+	protected static final Set<String> DEFAULT_BUILD_METHOD_NAMES = u(set("build", "create", "get"));
 
 	/** Default builder class names for auto-detection. */
-	public static final Set<String> DEFAULT_BUILDER_CLASS_NAMES = u(set("Builder"));
+	protected static final Set<String> DEFAULT_BUILDER_CLASS_NAMES = u(set("Builder"));
 
 	/**
 	 * Creates a new bean creator.
@@ -154,194 +204,355 @@ public class BeanCreator2<T> {
 	 * @return A new bean creator.
 	 */
 	public static <T> BeanCreator2<T> of(Class<T> beanType) {
-		return new BeanCreator2<>(beanType);
+		return new BeanCreator2<>(beanType, null);
 	}
 
-	private BeanStore parentStore;
-	private Supplier<BasicBeanStore2> store = mem(()-> new BasicBeanStore2(parentStore));
-	private ClassInfoTyped<T> beanType;
-	private ClassInfo beanSubType;
-	private ClassInfo builderType;
-	private ResettableSupplier<Object> builder = memr(() -> findBuilder());
-	private T beanImpl;
+	/**
+	 * Creates a new bean creator with a parent bean store.
+	 *
+	 * @param <T> The bean type to create.
+	 * @param beanType The bean type to create.
+	 * @param parentStore The parent bean store to use for resolving dependencies. Can be <jk>null</jk>.
+	 * @return A new bean creator.
+	 */
+	public static <T> BeanCreator2<T> of(Class<T> beanType, BeanStore parentStore) {
+		return new BeanCreator2<>(beanType, parentStore);
+	}
+
+	private final BeanStore parentStore;
+	private final BasicBeanStore2 store;
+	private final ClassInfoTyped<T> beanType;
+	private final SimpleReadWriteLock lock = new SimpleReadWriteLock();
+	private final OptionalReference<List<String>> debug = OptionalReference.empty();
+
+	private ClassInfoTyped<? extends T> beanSubType;
+	private ClassInfo explicitBuilderType = null;
+	private Object explicitBuilder = null;
 	private Object enclosingInstance;
-	private boolean singleton = false;
-	private T cachedInstance = null;
+	private T explicitImplementation = null;
 	private List<Consumer<T>> postCreateHooks = new ArrayList<>();
 	private Set<String> factoryMethodNames = DEFAULT_FACTORY_METHOD_NAMES;
 	private Set<String> builderMethodNames = DEFAULT_BUILDER_METHOD_NAMES;
+	private Set<String> buildMethodNames = DEFAULT_BUILD_METHOD_NAMES;
 	private Set<String> builderClassNames = DEFAULT_BUILDER_CLASS_NAMES;
-	private Consumer<Object> builderCustomizer = null;
-	private Supplier<T> fallbackSupplier = null;
-	private Predicate<T> validator = null;
-	private boolean debug = false;
-	private List<String> debugLog = new ArrayList<>();
-	private boolean addToStore = false;
-	private String addToStoreName = null;
+	private Supplier<? extends T> fallbackSupplier = null;
+	private String name = null;
+	private boolean cached = false;
+
+	private ResettableSupplier<ClassInfo> builderType = memr(() -> findBuilderType());
+	private ResettableSupplier<List<ClassInfo>> builderTypes = memr(() -> findBuilderTypes());
+	private ResettableSupplier<List<ClassInfo>> beanSubTypes = memr(() -> findBeanSubTypes());
+	private ResettableSupplier<Object> builder = memr(() -> findBuilder());
+	private ResettableSupplier<T> beanImpl = memr(() -> findBeanImpl());
 
 	/**
 	 * Constructor.
 	 *
 	 * @param beanType The bean type being created.
+	 * @param parentStore The parent bean store to use for resolving dependencies. Can be <jk>null</jk>.
 	 */
-	protected BeanCreator2(Class<T> beanType) {
+	protected BeanCreator2(Class<T> beanType, BeanStore parentStore) {
 		this.beanType = info(assertArgNotNull("beanType", beanType));
 		this.beanSubType = this.beanType;
+		this.parentStore = parentStore;
+		this.store = new BasicBeanStore2(this.parentStore);
 	}
 
 	/**
-	 * Specifies the bean store to use for resolving constructor/method parameters.
+	 * Adds a bean to the internal bean store and returns it.
 	 *
-	 * @param value The bean store to use.  Can be <jk>null</jk>.
-	 * @return This object.
+	 * @param <T2> The bean type.
+	 * @param type The bean type.
+	 * @param bean The bean instance.
+	 * @return The bean that was added.
 	 */
-	public BeanCreator2<T> beanStore(BeanStore value) {
-		parentStore = value;
-		return this;
+	public <T2> T2 add(Class<T2> type, T2 bean) {
+		try (var writeLock = lock.write()) {
+			store.add(type, bean);
+			reset();
+		}
+		return bean;
 	}
+
 	/**
-	 * Specifies the enclosing instance object to use when instantiating inner classes.
+	 * Adds a bean to the internal bean store.
 	 *
-	 * @param outer The enclosing instance object.  Can be <jk>null</jk>.
+	 * @param <T2> The bean type.
+	 * @param type The bean type.
+	 * @param bean The bean instance.
 	 * @return This object.
 	 */
-	public BeanCreator2<T> enclosingInstance(Object outer) {
-		this.enclosingInstance = outer;
+	public <T2> BeanCreator2<T> addBean(Class<T2> type, T2 bean) {
+		try (var writeLock = lock.write()) {
+			store.add(type, bean);
+			reset();
+		}
 		return this;
 	}
 
 	/**
-	 * Specifies an existing bean implementation to use instead of creating a new instance.
+	 * Adds a named bean to the internal bean store.
+	 *
+	 * @param <T2> The bean type.
+	 * @param type The bean type.
+	 * @param bean The bean instance.
+	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
+	 * @return This object.
+	 */
+	public <T2> BeanCreator2<T> addBean(Class<T2> type, T2 bean, String name) {
+		try (var writeLock = lock.write()) {
+			store.add(type, bean, name);
+			reset();
+		}
+		return this;
+	}
+
+	/**
+	 * Attempts to create the bean, returning an {@link Optional} instead of throwing an exception on failure.
 	 *
 	 * <p>
-	 * When specified, the bean creation logic is bypassed and this implementation is returned
-	 * directly from {@link #create()}, after performing dependency injection on it.
+	 * This is a non-throwing variant of {@link #run()} that wraps the result in an {@link Optional}.
+	 * If bean creation fails for any reason (missing dependencies, abstract class, interface, no matching constructor, etc.),
+	 * this method returns {@link Optional#empty()} instead of throwing {@link ExecutableException}.
+	 *
+	 * <p>
+	 * This method is useful when bean creation failure is expected and should not be treated as exceptional,
+	 * such as when implementing optional features or trying multiple creation strategies.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>The bean implementation will still have its fields and methods injected via {@link ClassInfo#inject(Object, BeanStore)}.
-	 * 	<li class='note'>This is useful when you want to provide a pre-configured instance but still benefit from dependency injection.
-	 * </ul>
-	 *
-	 * @param value The bean implementation instance.
-	 * @return This object.
-	 */
-	public BeanCreator2<T> implementation(T value) {
-		this.beanImpl = value;
-		return this;
-	}
-
-	/**
-	 * Enables singleton mode for this bean creator.
-	 *
-	 * <p>
-	 * When enabled, the first call to {@link #create()} will create and cache the bean instance.
-	 * Subsequent calls to {@link #create()} will return the same cached instance instead of creating
-	 * a new one.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>The cached instance is stored in this creator and will be returned on all subsequent calls.
-	 * 	<li class='note'>Dependency injection via {@link ClassInfo#inject(Object, BeanStore)} is only performed once
-	 * 		during the initial creation.
-	 * 	<li class='note'>If {@link #impl(Object)} is used to provide an existing instance, that instance becomes the cached singleton.
-	 * 	<li class='note'>This is useful for expensive-to-construct beans that should be shared across multiple uses.
-	 * 	<li class='note'>Thread safety: The cached instance is stored in a non-volatile field. If thread safety is required,
-	 * 		external synchronization should be used or the bean should be created once and stored externally.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Create a singleton bean</jc>
-	 * 	BeanCreator2&lt;MyService&gt; <jv>creator</jv> = BeanCreator2
-	 * 		.<jsm>of</jsm>(MyService.<jk>class</jk>)
-	 * 		.beanStore(<jv>myBeanStore</jv>)
-	 * 		.singleton();
-	 *
-	 * 	MyService <jv>service1</jv> = <jv>creator</jv>.create();  <jc>// Creates new instance</jc>
-	 * 	MyService <jv>service2</jv> = <jv>creator</jv>.create();  <jc>// Returns cached instance</jc>
-	 * 	<jsm>assertSame</jsm>(<jv>service1</jv>, <jv>service2</jv>);  <jc>// true</jc>
-	 * </p>
-	 *
-	 * @return This object.
-	 */
-	public BeanCreator2<T> singleton() {
-		this.singleton = true;
-		return this;
-	}
-
-	/**
-	 * Registers a post-creation hook to run after the bean is created.
-	 *
-	 * <p>
-	 * Post-creation hooks are executed after the bean is instantiated and after dependency injection
-	 * has been performed via {@link ClassInfo#inject(Object, BeanStore)}.
-	 *
-	 * <p>
-	 * Multiple hooks can be registered and they will be executed in the order they were added.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>Hooks are executed every time {@link #create()} is called, unless {@link #singleton()} mode is enabled,
-	 * 		in which case hooks are only executed once when the bean is first created.
-	 * 	<li class='note'>Hooks are executed after dependency injection, so all {@code @Inject} fields and methods
-	 * 		will have been populated before the hook runs.
-	 * 	<li class='note'>Hooks can be used for custom initialization logic, logging, wrapping beans with proxies,
-	 * 		or any other post-creation processing.
-	 * 	<li class='note'>If a hook throws an exception, bean creation will fail and the exception will propagate to the caller.
-	 * 	<li class='note'>The hook receives the fully initialized bean instance as its parameter.
+	 * 	<li class='note'>Unlike {@link #run()}, this method catches {@link ExecutableException} and returns empty.
+	 * 	<li class='note'>If a fallback is registered via {@link #fallback(Supplier)},
+	 * 		it will be used before returning empty, so this method will only return empty if both
+	 * 		normal creation AND fallback fail.
+	 * 	<li class='note'>The created bean is cached via {@link ResettableSupplier}, so subsequent calls return the same instance
+	 * 		unless {@link #reset()} is called or configuration changes.
+	 * 	<li class='note'>Post-creation hooks are still executed if creation succeeds.
+	 * 	<li class='note'>Other exceptions (e.g., from post-creation hooks or fallback suppliers) are NOT caught
+	 * 		and will propagate to the caller.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Register multiple initialization hooks</jc>
-	 * 	MyService <jv>service</jv> = BeanCreator2
-	 * 		.<jsm>of</jsm>(MyService.<jk>class</jk>)
-	 * 		.beanStore(<jv>myBeanStore</jv>)
-	 * 		.run(<jv>s</jv> -&gt; <jv>s</jv>.initialize())
-	 * 		.run(<jv>s</jv> -&gt; <jv>s</jv>.loadConfiguration())
-	 * 		.run(<jv>s</jv> -&gt; <jv>logger</jv>.info(<js>"Created service: "</js> + <jv>s</jv>))
-	 * 		.create();
-	 * </p>
-	 *
-	 * @param initializer The initialization hook to run after bean creation. Cannot be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public BeanCreator2<T> run(Consumer<T> initializer) {
-		assertArgNotNull("initializer", initializer);
-		postCreateHooks.add(initializer);
-		return this;
-	}
-
-	/**
-	 * Specifies custom static factory method names to look for when creating the bean.
-	 *
-	 * <p>
-	 * By default, {@link BeanCreator2} looks for a static {@code getInstance()} method when attempting
-	 * to create beans without a builder. This method allows you to specify alternative
-	 * factory method names to support non-standard naming conventions.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>Factory methods must be public, static, non-deprecated, and return the bean type.
-	 * 	<li class='note'>If multiple factory methods match, the one with the most parameters that can be
-	 * 		resolved from the bean store will be used.
-	 * 	<li class='note'>Factory methods are attempted before constructors in the bean creation order.
-	 * 	<li class='note'>This setting only affects factory method detection; it does not affect builder detection.
-	 * 	<li class='note'>Calling this method replaces the default factory method names.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Support multiple factory method naming conventions</jc>
+	 * 	<jc>// Try to create, use default if it fails</jc>
 	 * 	MyBean <jv>bean</jv> = BeanCreator2
-	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>)
-	 * 		.beanStore(<jv>myBeanStore</jv>)
-	 * 		.factoryMethod(<js>"of"</js>, <js>"from"</js>, <js>"create"</js>, <js>"newInstance"</js>)
-	 * 		.create();
+	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>, <jv>myBeanStore</jv>)
+	 * 		.asOptional()
+	 * 		.orElse(<jk>new</jk> DefaultMyBean());
+	 *
+	 * 	<jc>// Chain multiple creation attempts</jc>
+	 * 	MyService <jv>service</jv> = BeanCreator2.<jsm>of</jsm>(AdvancedService.<jk>class</jk>, <jv>store</jv>)
+	 * 		.asOptional()
+	 * 		.or(() -&gt; BeanCreator2.<jsm>of</jsm>(BasicService.<jk>class</jk>, <jv>store</jv>)
+	 * 			.asOptional())
+	 * 		.orElseGet(() -&gt; <jk>new</jk> FallbackService());
+	 *
+	 * 	<jc>// Check if optional feature is available</jc>
+	 * 	Optional&lt;OptionalFeature&gt; <jv>feature</jv> = BeanCreator2
+	 * 		.<jsm>of</jsm>(OptionalFeature.<jk>class</jk>, <jv>store</jv>)
+	 * 		.asOptional();
+	 * 	<jk>if</jk> (<jv>feature</jv>.isPresent()) {
+	 * 		<jv>feature</jv>.get().enable();
+	 * 	}
 	 * </p>
 	 *
-	 * @param names The factory method names to look for. Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
+	 * @return An {@link Optional} containing the created bean, or {@link Optional#empty()} if creation failed.
+	 */
+	public Optional<T> asOptional() {
+		try {
+			return Optional.of(run());
+		} catch (@SuppressWarnings("unused") ExecutableException e) {
+			return Optional.empty();
+		}
+	}
+
+	/**
+	 * Converts this creator into a resettable supplier.
+	 *
+	 * <p>
+	 * A {@link ResettableSupplier} caches the result of the first {@link ResettableSupplier#get()} call
+	 * and returns that cached value for subsequent calls. The {@link ResettableSupplier#reset()} method
+	 * can be used to clear the cache, forcing the bean to be recreated on the next get() call.
+	 *
+	 * <p>
+	 * This is particularly useful when the bean store contents change and you want to recreate the bean
+	 * with updated dependencies.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>The returned {@link ResettableSupplier} is thread-safe.
+	 * 	<li class='note'>Each call to {@link ResettableSupplier#get()} after a reset() will invoke
+	 * 		{@link #run()}, which may trigger dependency injection and post-creation hooks.
+	 * 	<li class='note'>The supplier inherits all Optional-like methods from {@link OptionalSupplier}.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Create a resettable supplier for a bean with dependencies</jc>
+	 * 	BeanStore <jv>store</jv> = <jk>new</jk> BasicBeanStore2(<jk>null</jk>);
+	 * 	<jv>store</jv>.addBean(String.<jk>class</jk>, <js>"initial"</js>);
+	 *
+	 * 	ResettableSupplier&lt;MyBean&gt; <jv>supplier</jv> = BeanCreator2
+	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>, <jv>store</jv>)
+	 * 		.asResettableSupplier();
+	 *
+	 * 	<jc>// First call creates and caches the bean</jc>
+	 * 	MyBean <jv>bean1</jv> = <jv>supplier</jv>.get();
+	 *
+	 * 	<jc>// Subsequent calls return the cached bean</jc>
+	 * 	MyBean <jv>bean2</jv> = <jv>supplier</jv>.get();
+	 * 	<jsm>assertSame</jsm>(<jv>bean1</jv>, <jv>bean2</jv>);
+	 *
+	 * 	<jc>// Update the bean store</jc>
+	 * 	<jv>store</jv>.addBean(String.<jk>class</jk>, <js>"updated"</js>);
+	 *
+	 * 	<jc>// Reset forces recreation with updated dependencies</jc>
+	 * 	<jv>supplier</jv>.reset();
+	 * 	MyBean <jv>bean3</jv> = <jv>supplier</jv>.get();
+	 * 	<jsm>assertNotSame</jsm>(<jv>bean1</jv>, <jv>bean3</jv>);  <jc>// New instance with updated deps</jc>
+	 * </p>
+	 *
+	 * @return A resettable supplier that caches the created bean until reset.
+	 */
+	public ResettableSupplier<T> asResettableSupplier() {
+		return new ResettableSupplier<>(() -> run());
+	}
+
+	/**
+	 * Converts this creator into a supplier.
+	 *
+	 * @return A supplier that returns the results of the {@link #run()} method.
+	 */
+	public Supplier<T> asSupplier() {
+		return () -> run();
+	}
+
+	/**
+	 * Specifies a subclass of the bean type to create.
+	 *
+	 * <p>
+	 * This allows you to create a specific implementation when the bean type is an interface, abstract class,
+	 * or when you want to instantiate a customized subclass of a concrete class.
+	 *
+	 * @param value The subclass type to create. Cannot be <jk>null</jk>. Must be a subclass of {@code beanType}.
+	 * @return This object.
+	 * @throws IllegalArgumentException If value is not a subclass of {@code beanType}.
+	 */
+	public BeanCreator2<T> beanSubType(Class<? extends T> value) {
+		assertArgNotNull("value", value);
+		try (var writeLock = lock.write()) {
+			beanSubType = info(value);
+			assertArg(beanType.isParentOf(beanSubType), "beanSubType must be a subclass of beanType. beanType={0}, beanSubType={1}", cn(beanType), cn(beanSubType));
+			reset();
+		}
+		return this;
+	}
+
+	/**
+	 * Specifies the builder type to use for creating the bean.
+	 *
+	 * <p>
+	 * This method triggers builder type detection and instantiation for the specified type.
+	 *
+	 * <p>
+	 * The builder type must be valid, meaning it must have a <c>build()</c>, <c>create()</c>, or <c>get()</c> method
+	 * that returns the bean type (or a parent of the bean type). The method may have <c>@Inject</c> or <c>@Autowired</c>
+	 * annotation to allow injected parameters; otherwise, it must have no parameters.
+	 *
+	 * <p>
+	 * If the builder type is invalid (does not have a valid build method), this method throws an
+	 * {@link IllegalArgumentException}.
+	 *
+	 * <p>
+	 * The builder will be instantiated by looking for:
+	 * <ol>
+	 * 	<li>A static <c>create()</c> or <c>builder()</c> method that returns the builder type.
+	 * 	<li>A public constructor on the builder type with parameters that can be resolved from the bean store.
+	 * 	<li>A protected constructor on the builder type with parameters that can be resolved from the bean store.
+	 * </ol>
+	 *
+	 * @param value The builder type. Cannot be <jk>null</jk>.
+	 * @return This object.
+	 * @throws IllegalArgumentException If the builder type is invalid (does not have a valid build/create/get method).
+	 */
+	public BeanCreator2<T> builder(Class<?> value) {
+		try (var writeLock = lock.write()) {
+			explicitBuilderType = info(assertArgNotNull("value", value));
+			builderType.set(explicitBuilderType);
+			assertArg(isValidBuilderType(explicitBuilderType), "Invalid builder type {0} for bean type {1}. Builder must have a build(), create(), or get() method that returns {1} (or a parent of {1}). The method may have @Inject annotation to allow injected parameters; otherwise, it must have no parameters.", cn(explicitBuilderType), cn(beanType));
+			builderTypes.get();  // Triggers validation on type hierarchy.
+			reset();
+		}
+		return this;
+	}
+
+	/**
+	 * Specifies an existing builder instance to use for creating the bean.
+	 *
+	 * <p>
+	 * The builder instance's class must be a valid builder type, meaning it must have a <c>build()</c>, <c>create()</c>,
+	 * or <c>get()</c> method that returns the bean type (or a parent of the bean type). The method may have
+	 * <c>@Inject</c> or <c>@Autowired</c> annotation to allow injected parameters; otherwise, it must have no parameters.
+	 *
+	 * <p>
+	 * If the builder instance's class is invalid (does not have a valid build method), this method throws an
+	 * {@link IllegalArgumentException}.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>When specified, the builder type detection is bypassed.
+	 * 	<li class='note'>The builder will be used to create the bean via:
+	 * 		<ul>
+	 * 			<li>A <c>build()</c>/<c>create()</c>/<c>get()</c> method on the builder (required).
+	 * 				The method may have <c>@Inject</c> annotation to allow injected parameters.
+	 * 		</ul>
+	 * 	<li class='note'>The explicit builder instance is preserved even when {@link #reset()} is called,
+	 * 		unlike cached results from suppliers.
+	 * </ul>
+	 *
+	 * @param value The builder instance. Cannot be <jk>null</jk>.
+	 * @return This object.
+	 * @throws IllegalArgumentException If the builder instance's class is invalid (does not have a valid build/create/get method).
+	 */
+	public BeanCreator2<T> builder(Object value) {
+		try (var writeLock = lock.write()) {
+			builder(value.getClass());
+			explicitBuilder = assertArgNotNull("value", value);
+			reset();
+		}
+		return this;
+	}
+
+	/**
+	 * Specifies custom class names to look for when auto-detecting builder inner classes.
+	 *
+	 * <p>
+	 * By default, {@code BeanCreator2} looks for inner classes named {@code "Builder"}.
+	 * This method allows you to specify alternative class names.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>Inner builder classes must be public, static, and pass builder validation
+	 * 		(have a build/create/get method or be accepted by a bean constructor).
+	 * 	<li class='note'>If multiple inner classes match, the first valid one found will be used.
+	 * 	<li class='note'>This only affects inner class detection. It does not affect builders specified via
+	 * 		{@link #builder(Class)}, {@link #builder(Object)}, or the {@link Builder @Builder} annotation.
+	 * 	<li class='note'>Calling this method replaces the default builder class names.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Support alternative builder class naming conventions</jc>
+	 * 	MyBean <jv>bean</jv> = BeanCreator2
+	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>, <jv>myBeanStore</jv>)
+	 * 		.builderClassNames(<js>"BuilderImpl"</js>, <js>"Factory"</js>)
+	 * 		.run();
+	 * </p>
+	 *
+	 * @param names The builder class names to look for. Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 	 * @return This object.
 	 */
-	public BeanCreator2<T> factoryMethod(String... names) {
-		factoryMethodNames = set(assertArgNoNulls("names", names));
+	public BeanCreator2<T> builderClassNames(String... names) {
+		try (var writeLock = lock.write()) {
+			builderClassNames = set(assertArgNoNulls("names", names));
+			reset();
+		}
 		return this;
 	}
 
@@ -366,98 +577,210 @@ public class BeanCreator2<T> {
 	 * 	<jc>// Support alternative builder factory method naming conventions</jc>
 	 * 	MyBean <jv>bean</jv> = BeanCreator2
 	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>)
-	 * 		.beanStore(<jv>myBeanStore</jv>)
-	 * 		.builderMethod(<js>"newBuilder"</js>, <js>"instance"</js>)
-	 * 		.create();
+	 * 		.builderMethodNames(<js>"newBuilder"</js>, <js>"instance"</js>)
+		.run();
 	 * </p>
 	 *
 	 * @param names The builder factory method names to look for. Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 	 * @return This object.
 	 */
-	public BeanCreator2<T> builderMethod(String... names) {
-		builderMethodNames = set(assertArgNoNulls("names", names));
+	public BeanCreator2<T> builderMethodNames(String... names) {
+		try (var writeLock = lock.write()) {
+			builderMethodNames = set(assertArgNoNulls("names", names));
+			reset();
+		}
 		return this;
 	}
 
 	/**
-	 * Specifies custom class names to look for when auto-detecting builder inner classes.
+	 * Specifies custom method names to look for when calling build methods on builder instances.
 	 *
 	 * <p>
-	 * By default, {@code BeanCreator2} looks for inner classes named {@code "Builder"}.
-	 * This method allows you to specify alternative class names.
+	 * By default, {@code BeanCreator2} looks for instance methods named {@code "build"}, {@code "create"}, or {@code "get"}
+	 * on the builder that return the bean type. This method allows you to specify alternative method names.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>Inner builder classes must be public, static, and pass builder validation
-	 * 		(have a build/create/get method or be accepted by a bean constructor).
-	 * 	<li class='note'>If multiple inner classes match, the first valid one found will be used.
-	 * 	<li class='note'>This only affects inner class detection. It does not affect builders specified via
-	 * 		{@link #builder(Class)}, {@link #builder(Object)}, or the {@link Builder @Builder} annotation.
-	 * 	<li class='note'>Calling this method replaces the default builder class names.
+	 * 	<li class='note'>Build methods must be public, non-static, non-deprecated, and return the bean type
+	 * 		(or a parent type of the bean type).
+	 * 	<li class='note'>If the method has {@code @Inject} or {@code @Autowired} annotation, its parameters are resolved from the bean store.
+	 * 	<li class='note'>If the method does not have {@code @Inject} annotation, it must have no parameters.
+	 * 	<li class='note'>Calling this method replaces the default build method names.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Support alternative builder class naming conventions</jc>
+	 * 	<jc>// Support alternative build method naming conventions</jc>
 	 * 	MyBean <jv>bean</jv> = BeanCreator2
 	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>)
-	 * 		.beanStore(<jv>myBeanStore</jv>)
-	 * 		.builderClass(<js>"BuilderImpl"</js>, <js>"Factory"</js>)
-	 * 		.create();
+	 * 		.buildMethodNames(<js>"execute"</js>, <js>"make"</js>)
+		.run();
 	 * </p>
 	 *
-	 * @param names The builder class names to look for. Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
+	 * @param names The build method names to look for. Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 	 * @return This object.
 	 */
-	public BeanCreator2<T> builderClass(String... names) {
-		builderClassNames = set(assertArgNoNulls("names", names));
+	public BeanCreator2<T> buildMethodNames(String... names) {
+		try (var writeLock = lock.write()) {
+			buildMethodNames = set(assertArgNoNulls("names", names));
+			reset();
+		}
 		return this;
 	}
 
 	/**
-	 * Registers a customizer to configure the builder before it is used to create the bean.
+	 * Enables caching mode.
 	 *
 	 * <p>
-	 * Builder customizers are executed after the builder is instantiated (via factory method or constructor)
-	 * and after dependency injection has been performed on the builder via {@link ClassInfo#inject(Object, BeanStore)},
-	 * but before the builder's {@code build()}/{@code create()}/{@code get()} method is called to create the final bean.
+	 * When caching mode is enabled, bean instances are cached using {@link ResettableSupplier},
+	 * so multiple calls to {@link #run()} will return the same instance unless {@link #reset()} is called
+	 * or configuration changes.
 	 *
 	 * <p>
-	 * This allows you to configure builder properties that aren't available in the bean store or to apply
-	 * default configurations, conditional logic, or custom setup to the builder.
+	 * When caching mode is disabled (the default), each call to {@link #run()} will create a new bean instance
+	 * by calling {@link #findBeanImpl()} directly.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Enable caching mode - same instance returned on each run()</jc>
+	 * 	<jk>var</jk> <jv>creator</jv> = BeanCreator2
+	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>)
+	 * 		.<jsm>cached</jsm>();
+	 * 	MyBean <jv>bean1</jv> = <jv>creator</jv>.<jsm>run</jsm>();
+	 * 	MyBean <jv>bean2</jv> = <jv>creator</jv>.<jsm>run</jsm>();
+	 * 	<jc>// bean1 and bean2 are the same instance</jc>
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public BeanCreator2<T> cached() {
+		try (var writeLock = lock.write()) {
+			cached = true;
+		}
+		return this;
+	}
+
+	/**
+	 * Creates the bean.
+	 *
+	 * <p>
+	 * After creating the bean, this method automatically injects dependencies into fields and methods
+	 * annotated with {@code @Inject} or {@code @Autowired} using {@link ClassInfo#inject(Object, BeanStore)}.
+	 *
+	 * @return A new bean with all dependencies injected.
+	 * @throws ExecutableException if bean could not be created.
+	 */
+	public T run() {
+		debug.ifPresent(x -> x.clear());
+
+		try (var readLock = lock.read()) {
+
+			if (neq(beanSubType, beanType))
+				log("Subtype specified: %s", beanSubType.getName());
+
+			if (explicitImplementation != null) {
+				log("Using pre-configured impl() instance");
+				return runPostCreateHooks(inject(explicitImplementation));
+			}
+
+			if (cached) {
+				log("Using cached instance");
+				return beanImpl.get();
+			}
+
+			log("Using new instance");
+			return findBeanImpl();
+		}
+	}
+
+	/**
+	 * Enables debug mode to track the bean creation process.
+	 *
+	 * <p>
+	 * When debug mode is enabled, the creator logs each step of the bean creation process
+	 * to an internal list. This log can be retrieved via {@link #getDebugLog()} to understand
+	 * which creation path was taken, why creation might have failed, or to troubleshoot
+	 * unexpected behavior.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>The customizer is only called if a builder is used to create the bean.
-	 * 		It will not be called if the bean is created via constructor, factory method, or {@link #impl(Object)}.
-	 * 	<li class='note'>The customizer receives the builder instance after dependency injection, so any
-	 * 		{@code @Inject} fields and methods on the builder will have been populated.
-	 * 	<li class='note'>Only one customizer can be registered. Subsequent calls to this method will replace
-	 * 		the previous customizer.
-	 * 	<li class='note'>If the customizer throws an exception, bean creation will fail and the exception will propagate to the caller.
-	 * 	<li class='note'>The customizer receives the builder as {@code Object}, so you'll need to cast it to the
-	 * 		appropriate builder type inside your customizer lambda.
+	 * 	<li class='note'>Debug logs include: builder detection, factory method attempts, constructor attempts,
+	 * 		dependency resolution, injection, hooks execution, validation, and fallback usage.
+	 * 	<li class='note'>The debug log is reset each time {@link #run()} or {@link #asOptional()} is called.
+	 * 	<li class='note'>Debug mode has minimal performance impact but should generally be disabled in production.
+	 * 	<li class='note'>The debug log is stored in memory and can be retrieved after bean creation.
+	 * 	<li class='note'>When caching is enabled via {@link #cached()}, the log reflects the first creation only
+	 * 		(subsequent calls return the cached instance unless {@link #reset()} is called).
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Customize builder before creating bean</jc>
-	 * 	MyBean <jv>bean</jv> = BeanCreator2
-	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>)
-	 * 		.beanStore(<jv>myBeanStore</jv>)
-	 * 		.customizeBuilder(<jv>b</jv> -&gt; {
-	 * 			MyBean.Builder <jv>builder</jv> = (MyBean.Builder)<jv>b</jv>;
-	 * 			<jv>builder</jv>.timeout(5000);
-	 * 			<jv>builder</jv>.retries(3);
-	 * 			<jv>builder</jv>.enabled(<jk>true</jk>);
-	 * 		})
-	 * 		.create();
+	 * 	<jc>// Enable debug mode</jc>
+	 * 	<jk>var</jk> <jv>creator</jv> = BeanCreator2
+	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>, <jv>store</jv>)
+	 * 		.debug();
+	 *
+	 * 	MyBean <jv>bean</jv> = <jv>creator</jv>.run();
+	 *
+	 * 	<jc>// Print debug log</jc>
+	 * 	<jv>creator</jv>.getDebugLog().forEach(System.<jf>out</jf>::println);
 	 * </p>
 	 *
-	 * @param customizer The builder customizer. Cannot be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BeanCreator2<T> customizeBuilder(Consumer<Object> customizer) {
-		assertArgNotNull("customizer", customizer);
-		this.builderCustomizer = customizer;
+	public BeanCreator2<T> debug() {
+		try (var writeLock = lock.write()) {
+			debug.set(synchronizedList(new ArrayList<>()));
+		}
+		return this;
+	}
+
+	/**
+	 * Specifies the enclosing instance object to use when instantiating inner classes.
+	 *
+	 * @param outer The enclosing instance object.  Can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public BeanCreator2<T> enclosingInstance(Object outer) {
+		try (var writeLock = lock.write()) {
+			this.enclosingInstance = outer;
+			reset();
+		}
+		return this;
+	}
+
+	/**
+	 * Specifies custom static factory method names to look for when creating the bean.
+	 *
+	 * <p>
+	 * By default, {@link BeanCreator2} looks for a static {@code getInstance()} method when attempting
+	 * to create beans without a builder. This method allows you to specify alternative
+	 * factory method names to support non-standard naming conventions.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>Factory methods must be public, static, non-deprecated, and return the bean type.
+	 * 	<li class='note'>If multiple factory methods match, the one with the most parameters that can be
+	 * 		resolved from the bean store will be used.
+	 * 	<li class='note'>Factory methods are attempted before constructors in the bean creation order.
+	 * 	<li class='note'>This setting only affects factory method detection; it does not affect builder detection.
+	 * 	<li class='note'>Calling this method replaces the default factory method names.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Support multiple factory method naming conventions</jc>
+	 * 	MyBean <jv>bean</jv> = BeanCreator2
+	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>, <jv>myBeanStore</jv>)
+	 * 		.factoryMethodNames(<js>"of"</js>, <js>"from"</js>, <js>"create"</js>, <js>"newInstance"</js>)
+	 * 		.run();
+	 * </p>
+	 *
+	 * @param names The factory method names to look for. Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
+	 * @return This object.
+	 */
+	public BeanCreator2<T> factoryMethodNames(String... names) {
+		try (var writeLock = lock.write()) {
+			factoryMethodNames = set(assertArgNoNulls("names", names));
+			reset();
+		}
 		return this;
 	}
 
@@ -477,324 +800,90 @@ public class BeanCreator2<T> {
 	 * 		If bean creation succeeds normally, the fallback is never called.
 	 * 	<li class='note'>Fallbacks are checked after all normal creation attempts (builders, factory methods, constructors).
 	 * 	<li class='note'>The fallback-provided instance will have post-creation hooks executed on it.
-	 * 	<li class='note'>In singleton mode, if the fallback is used, that instance becomes the cached singleton.
-	 * 	<li class='note'>Only one fallback can be registered. Subsequent calls to {@code orElse()} will replace
+	 * 	<li class='note'>If the fallback is used, that instance is cached via {@link ResettableSupplier} and returned on subsequent calls
+	 * 		unless {@link #reset()} is called or configuration changes.
+	 * 	<li class='note'>Only one fallback can be registered. Subsequent calls to this method will replace
 	 * 		the previous fallback.
 	 * 	<li class='note'>If the fallback supplier itself throws an exception, that exception will propagate to the caller.
+	 * 	<li class='note'>To use a pre-created instance as a fallback, wrap it in a supplier: <c>fallback(() -&gt; myInstance)</c>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Provide a default instance if creation fails</jc>
 	 * 	MyService <jv>service</jv> = BeanCreator2
-	 * 		.<jsm>of</jsm>(MyService.<jk>class</jk>)
-	 * 		.beanStore(<jv>myBeanStore</jv>)
-	 * 		.orElse(() -&gt; <jk>new</jk> DefaultMyService())
-	 * 		.create();
+	 * 		.<jsm>of</jsm>(MyService.<jk>class</jk>, <jv>myBeanStore</jv>)
+	 * 		.fallback(() -&gt; <jk>new</jk> DefaultMyService())
+	 * 		.run();
+	 *
+	 * 	<jc>// Use a pre-created instance as fallback</jc>
+	 * 	MyService <jv>defaultService</jv> = <jk>new</jk> DefaultMyService();
+	 * 	MyService <jv>service2</jv> = BeanCreator2
+	 * 		.<jsm>of</jsm>(MyService.<jk>class</jk>, <jv>myBeanStore</jv>)
+	 * 		.fallback(() -&gt; <jv>defaultService</jv>)
+	 * 		.run();
 	 * </p>
 	 *
 	 * @param fallback The fallback supplier. Cannot be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BeanCreator2<T> orElse(Supplier<T> fallback) {
+	public BeanCreator2<T> fallback(Supplier<? extends T> fallback) {
 		assertArgNotNull("fallback", fallback);
-		this.fallbackSupplier = fallback;
+		try (var writeLock = lock.write()) {
+			this.fallbackSupplier = fallback;
+		}
 		return this;
 	}
 
 	/**
-	 * Specifies a fallback instance to use if bean creation fails.
+	 * Returns the bean subtype class info if specified, or the normal bean type if not.
 	 *
 	 * <p>
-	 * This is a convenience method that wraps the provided instance in a supplier.
-	 * See {@link #orElse(Supplier)} for full details.
+	 * If {@link #beanSubType(Class)} was called to specify a subtype, returns that subtype.
+	 * Otherwise, returns the original bean type passed to {@link #of(Class)}.
+	 *
+	 * @return The bean subtype class info, or the bean type class info if no subtype was specified.
+	 */
+	protected ClassInfo getBeanSubType() {
+		try (var readLock = lock.read()) {
+			return beanSubType;
+		}
+	}
+
+	/**
+	 * Returns the name of the bean being created.
+	 *
+	 * <p>
+	 * Returns the name that was set via {@link #name(String)}, or <jk>null</jk> if no name was specified.
+	 *
+	 * @return The bean name, or <jk>null</jk> if not set.
+	 */
+	public String getName() {
+		try (var readLock = lock.read()) {
+			return name;
+		}
+	}
+
+	/**
+	 * Returns the list of bean subtype classes, including the bean subtype, bean type, and all classes in between.
+	 *
+	 * <p>
+	 * This method returns a list that starts with the bean subtype (if different from bean type) and includes
+	 * all parent classes up to and including the bean type. If no subtype was specified, the list will contain
+	 * only the bean type.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Use a pre-created default instance if creation fails</jc>
-	 * 	MyService <jv>defaultService</jv> = <jk>new</jk> DefaultMyService();
-	 * 	MyService <jv>service</jv> = BeanCreator2
-	 * 		.<jsm>of</jsm>(MyService.<jk>class</jk>)
-	 * 		.beanStore(<jv>myBeanStore</jv>)
-	 * 		.orElse(<jv>defaultService</jv>)
-	 * 		.create();
+	 * 	<jc>// If beanType is A and beanSubType is C (extends B extends A)</jc>
+	 * 	<jc>// getBeanSubTypes() returns: [C, B, A]</jc>
 	 * </p>
 	 *
-	 * @param defaultInstance The default instance to use if creation fails. Cannot be <jk>null</jk>.
-	 * @return This object.
+	 * @return A list of bean subtype class info objects, never <jk>null</jk>.
 	 */
-	public BeanCreator2<T> orElse(T defaultInstance) {
-		assertArgNotNull("defaultInstance", defaultInstance);
-		this.fallbackSupplier = () -> defaultInstance;
-		return this;
-	}
-
-	/**
-	 * Registers a validator to check the created bean before returning it.
-	 *
-	 * <p>
-	 * The validator is executed after bean creation, dependency injection, and post-creation hooks,
-	 * but before the bean is returned to the caller. If the validator returns {@code false},
-	 * bean creation fails with an {@link ExecutableException}.
-	 *
-	 * <p>
-	 * This allows enforcing runtime constraints, business rules, or state validation on created beans.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>The validator is called after all dependencies are injected and all post-creation hooks have run.
-	 * 	<li class='note'>If validation fails, an {@link ExecutableException} is thrown with a descriptive message.
-	 * 	<li class='note'>In singleton mode, validation is performed on the first creation and the validated instance is cached.
-	 * 		Subsequent calls return the cached instance without re-validation.
-	 * 	<li class='note'>Only one validator can be registered. Subsequent calls to this method will replace the previous validator.
-	 * 	<li class='note'>If the validator throws an exception, that exception propagates to the caller.
-	 * 	<li class='note'>The validator is NOT called on fallback instances provided via {@link #orElse(Supplier)} or {@link #orElse(Object)}.
-	 * 	<li class='note'>The validator is NOT called on instances provided via {@link #impl(Object)}.
-	 * 	<li class='note'>Validation failures are caught by {@link #tryCreate()}, which returns {@link Optional#empty()} on failure.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Validate bean state</jc>
-	 * 	MyBean <jv>bean</jv> = BeanCreator2
-	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>)
-	 * 		.beanStore(<jv>myBeanStore</jv>)
-	 * 		.validate(<jv>b</jv> -&gt; <jv>b</jv>.isValid())
-	 * 		.create();
-	 *
-	 * 	<jc>// Enforce business rules</jc>
-	 * 	Service <jv>service</jv> = BeanCreator2
-	 * 		.<jsm>of</jsm>(Service.<jk>class</jk>)
-	 * 		.beanStore(<jv>store</jv>)
-	 * 		.validate(<jv>s</jv> -&gt; <jv>s</jv>.getConnectionCount() &gt; 0)
-	 * 		.create();
-	 *
-	 * 	<jc>// Validate multiple conditions</jc>
-	 * 	Config <jv>config</jv> = BeanCreator2
-	 * 		.<jsm>of</jsm>(Config.<jk>class</jk>)
-	 * 		.beanStore(<jv>store</jv>)
-	 * 		.validate(<jv>c</jv> -&gt;
-	 * 			<jv>c</jv>.getHost() != <jk>null</jk> &amp;&amp;
-	 * 			<jv>c</jv>.getPort() &gt; 0 &amp;&amp;
-	 * 			<jv>c</jv>.getTimeout() &gt; 0
-	 * 		)
-	 * 		.create();
-	 * </p>
-	 *
-	 * @param validator The validator predicate. Must return {@code true} if the bean is valid, {@code false} otherwise. Cannot be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public BeanCreator2<T> validate(Predicate<T> validator) {
-		assertArgNotNull("validator", validator);
-		this.validator = validator;
-		return this;
-	}
-
-	/**
-	 * Enables debug mode to track the bean creation process.
-	 *
-	 * <p>
-	 * When debug mode is enabled, the creator logs each step of the bean creation process
-	 * to an internal list. This log can be retrieved via {@link #getDebugLog()} to understand
-	 * which creation path was taken, why creation might have failed, or to troubleshoot
-	 * unexpected behavior.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>Debug logs include: builder detection, factory method attempts, constructor attempts,
-	 * 		dependency resolution, injection, hooks execution, validation, and fallback usage.
-	 * 	<li class='note'>The debug log is reset each time {@link #create()} or {@link #tryCreate()} is called.
-	 * 	<li class='note'>Debug mode has minimal performance impact but should generally be disabled in production.
-	 * 	<li class='note'>The debug log is stored in memory and can be retrieved after bean creation.
-	 * 	<li class='note'>In singleton mode, the log reflects the first creation only (subsequent calls return cached instance).
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Enable debug mode</jc>
-	 * 	<jk>var</jk> <jv>creator</jv> = BeanCreator2
-	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>)
-	 * 		.beanStore(<jv>store</jv>)
-	 * 		.debug();
-	 *
-	 * 	MyBean <jv>bean</jv> = <jv>creator</jv>.create();
-	 *
-	 * 	<jc>// Print debug log</jc>
-	 * 	<jv>creator</jv>.getDebugLog().forEach(System.<jf>out</jf>::println);
-	 * </p>
-	 *
-	 * @return This object.
-	 */
-	public BeanCreator2<T> debug() {
-		this.debug = true;
-		return this;
-	}
-
-	/**
-	 * Returns an unmodifiable list of debug log entries from the last bean creation attempt.
-	 *
-	 * <p>
-	 * This method returns the detailed log of steps taken during the most recent call to
-	 * {@link #create()} or {@link #tryCreate()}. The log is only populated when {@link #debug()}
-	 * mode is enabled.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>Returns an empty list if {@link #debug()} was not called or if no creation has been attempted.
-	 * 	<li class='note'>The log is reset at the beginning of each {@link #create()} call.
-	 * 	<li class='note'>In singleton mode, the log reflects only the first creation (cached instances don't regenerate logs).
-	 * 	<li class='note'>The returned list is unmodifiable.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>var</jk> <jv>creator</jv> = BeanCreator2.<jsm>of</jsm>(MyBean.<jk>class</jk>)
-	 * 		.beanStore(<jv>store</jv>)
-	 * 		.debug();
-	 *
-	 * 	<jk>try</jk> {
-	 * 		<jv>creator</jv>.create();
-	 * 	} <jk>catch</jk> (ExecutableException <jv>e</jv>) {
-	 * 		<jc>// Print debug log to understand why creation failed</jc>
-	 * 		<jv>creator</jv>.getDebugLog().forEach(System.<jf>err</jf>::println);
-	 * 	}
-	 * </p>
-	 *
-	 * @return An unmodifiable list of debug log entries.
-	 */
-	public List<String> getDebugLog() {
-		return Collections.unmodifiableList(debugLog);
-	}
-
-	/**
-	 * Automatically adds the created bean to the bean store after creation.
-	 *
-	 * <p>
-	 * When this option is enabled, the successfully created bean will be automatically added to the
-	 * bean store (if it's a {@link WritableBeanStore}) using the bean's type as the key.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>Only works if the bean store is an instance of {@link WritableBeanStore}.
-	 * 	<li class='note'>The bean is added after successful creation, injection, hooks, and validation.
-	 * 	<li class='note'>In singleton mode, the bean is added only on the first creation (not on cached returns).
-	 * 	<li class='note'>If creation fails, nothing is added to the store.
-	 * 	<li class='note'>If the bean store already contains a bean with the same type, it will be replaced.
-	 * 	<li class='note'>Fallback instances and {@link #impl(Object)} instances are also added to the store.
-	 * 	<li class='note'>The bean type used as the key is the type passed to {@link #of(Class)}, not the subtype.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Create bean and add it to the store</jc>
-	 * 	MyBean <jv>bean</jv> = BeanCreator2
-	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>)
-	 * 		.beanStore(<jv>writableStore</jv>)
-	 * 		.addToStore()
-	 * 		.create();
-	 *
-	 * 	<jc>// Bean is now available in the store</jc>
-	 * 	MyBean <jv>sameBeanFromStore</jv> = <jv>writableStore</jv>.getBean(MyBean.<jk>class</jk>).get();
-	 * 	<jsm>assertSame</jsm>(<jv>bean</jv>, <jv>sameBeanFromStore</jv>);
-	 * </p>
-	 *
-	 * @return This object.
-	 */
-	public BeanCreator2<T> addToStore() {
-		this.addToStore = true;
-		return this;
-	}
-
-	/**
-	 * Automatically adds the created bean to the bean store with a specific name.
-	 *
-	 * <p>
-	 * When this option is enabled, the successfully created bean will be automatically added to the
-	 * bean store (if it's a {@link WritableBeanStore}) using the bean's type and the specified name as the key.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>Only works if the bean store is an instance of {@link WritableBeanStore}.
-	 * 	<li class='note'>The bean is added after successful creation, injection, hooks, and validation.
-	 * 	<li class='note'>In singleton mode, the bean is added only on the first creation (not on cached returns).
-	 * 	<li class='note'>If creation fails, nothing is added to the store.
-	 * 	<li class='note'>If the bean store already contains a bean with the same type and name, it will be replaced.
-	 * 	<li class='note'>Fallback instances and {@link #impl(Object)} instances are also added to the store.
-	 * 	<li class='note'>The bean type used as the key is the type passed to {@link #of(Class)}, not the subtype.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Create multiple beans of the same type with different names</jc>
-	 * 	UserService <jv>adminService</jv> = BeanCreator2
-	 * 		.<jsm>of</jsm>(UserService.<jk>class</jk>)
-	 * 		.beanStore(<jv>writableStore</jv>)
-	 * 		.run(<jv>s</jv> -&gt; <jv>s</jv>.setRole(<js>"admin"</js>))
-	 * 		.addToStore(<js>"adminUserService"</js>)
-	 * 		.create();
-	 *
-	 * 	UserService <jv>guestService</jv> = BeanCreator2
-	 * 		.<jsm>of</jsm>(UserService.<jk>class</jk>)
-	 * 		.beanStore(<jv>writableStore</jv>)
-	 * 		.run(<jv>s</jv> -&gt; <jv>s</jv>.setRole(<js>"guest"</js>))
-	 * 		.addToStore(<js>"guestUserService"</js>)
-	 * 		.create();
-	 *
-	 * 	<jc>// Retrieve by name</jc>
-	 * 	UserService <jv>admin</jv> = <jv>writableStore</jv>.getBean(UserService.<jk>class</jk>, <js>"adminUserService"</js>).get();
-	 * 	UserService <jv>guest</jv> = <jv>writableStore</jv>.getBean(UserService.<jk>class</jk>, <js>"guestUserService"</js>).get();
-	 * </p>
-	 *
-	 * @param name The name to associate with the bean in the store. Cannot be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public BeanCreator2<T> addToStore(String name) {
-		assertArgNotNull("name", name);
-		this.addToStore = true;
-		this.addToStoreName = name;
-		return this;
-	}
-
-	/**
-	 * Adds a bean to the internal bean store.
-	 *
-	 * @param <T2> The bean type.
-	 * @param type The bean type.
-	 * @param bean The bean instance.
-	 * @return This object.
-	 */
-	public <T2> BeanCreator2<T> addBean(Class<T2> type, T2 bean) {
-		store.get().add(type, bean);
-		return this;
-	}
-
-	/**
-	 * Adds a bean to the internal bean store and returns it.
-	 *
-	 * @param <T2> The bean type.
-	 * @param type The bean type.
-	 * @param bean The bean instance.
-	 * @return The bean that was added.
-	 */
-	public <T2> T2 add(Class<T2> type, T2 bean) {
-		store.get().add(type, bean);
-		return bean;
-	}
-
-	/**
-	 * Specifies an existing builder instance to use for creating the bean.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>When specified, the builder type detection is bypassed.
-	 * 	<li class='note'>The builder will be used to create the bean via one of:
-	 * 		<ul>
-	 * 			<li>A <c>build()</c>/<c>create()</c>/<c>get()</c> method on the builder.
-	 * 			<li>A static <c>getInstance(Builder)</c> method on the bean class.
-	 * 			<li>A constructor on the bean class that accepts the builder.
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * @param value The builder instance.
-	 * @return This object.
-	 */
-	public BeanCreator2<T> builder(Object value) {
-		builder.set(assertArgNotNull("value", value));
-		return this;
+	protected List<ClassInfo> getBeanSubTypes() {
+		try (var readLock = lock.read()) {
+			return beanSubTypes.get();
+		}
 	}
 
 	/**
@@ -805,35 +894,470 @@ public class BeanCreator2<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public <B> Optional<B> getBuilder() {
-		return (Optional<B>)builder.toOptional();
+		try (var writeLock = lock.write()) {
+			beanImpl.reset();
+			return (Optional<B>)builder.toOptional();
+		}
 	}
 
 	/**
-	 * Specifies the builder type to use for creating the bean.
+	 * Returns the builder type class info determined by {@link #findBuilderType()}.
+	 *
+	 * @return The builder type class info, or <jk>null</jk> if no builder type was determined.
+	 */
+	protected ClassInfo getBuilderType() {
+		try (var readLock = lock.read()) {
+			return builderType.get();
+		}
+	}
+
+	/**
+	 * Returns the list of builder types, including the primary builder type and any builder types found in the builder's parent hierarchy.
 	 *
 	 * <p>
-	 * This method triggers builder type detection and instantiation for the specified type.
+	 * This method returns a list that includes the primary builder type and all builder types found by traversing
+	 * the builder's parent hierarchy. This allows parent builders to be resolved as injectable types.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Class A with builder</jc>
+	 * 	<jk>class</jk> A {
+	 * 		<jk>static class</jk> Builder {
+	 * 			A create() { <jk>return new</jk> A(); }
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Class B extends A with builder</jc>
+	 * 	<jk>class</jk> B <jk>extends</jk> A {
+	 * 		<jk>static class</jk> Builder <jk>extends</jk> A.Builder {
+	 * 			B create() { <jk>return new</jk> B(); }
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// When creating B, getBuilderTypes() returns: [B.Builder, A.Builder]</jc>
+	 * </p>
+	 *
+	 * @return A list of builder type class info objects, never <jk>null</jk>.
+	 */
+	protected List<ClassInfo> getBuilderTypes() {
+		try (var readLock = lock.read()) {
+			return builderTypes.get();
+		}
+	}
+
+	/**
+	 * Returns an unmodifiable list of debug log entries from the last bean creation attempt.
 	 *
 	 * <p>
-	 * The builder will be instantiated by looking for:
-	 * <ol>
-	 * 	<li>A static <c>create()</c> or <c>builder()</c> method that returns the builder type.
-	 * 	<li>A public constructor on the builder type with parameters that can be resolved from the bean store.
-	 * 	<li>A protected constructor on the builder type with parameters that can be resolved from the bean store.
-	 * </ol>
+	 * This method returns the detailed log of steps taken during the most recent call to
+	 * {@link #run()} or {@link #asOptional()}. The log is only populated when {@link #debug()}
+	 * mode is enabled.
 	 *
-	 * @param value The builder type.
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>Returns an empty list if {@link #debug()} was not called or if no creation has been attempted.
+	 * 	<li class='note'>The log is reset at the beginning of each {@link #run()} call.
+	 * 	<li class='note'>Since {@link #run()} uses a cached {@link ResettableSupplier}, the log reflects only the first creation
+	 * 		(subsequent calls return the cached instance unless {@link #reset()} is called).
+	 * 	<li class='note'>The returned list is unmodifiable.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>var</jk> <jv>creator</jv> = BeanCreator2.<jsm>of</jsm>(MyBean.<jk>class</jk>, <jv>store</jv>)
+	 * 		.debug();
+	 *
+	 * 	<jk>try</jk> {
+		<jv>creator</jv>.run();
+	 * 	} <jk>catch</jk> (ExecutableException <jv>e</jv>) {
+	 * 		<jc>// Print debug log to understand why creation failed</jc>
+	 * 		<jv>creator</jv>.getDebugLog().forEach(System.<jf>err</jf>::println);
+	 * 	}
+	 * </p>
+	 *
+	 * @return An unmodifiable list of debug log entries.
+	 */
+	public List<String> getDebugLog() {
+		return debug.map(x -> u(copyOf(debug.get()))).orElse(emptyList());
+	}
+
+	/**
+	 * Specifies an existing bean implementation to use instead of creating a new instance.
+	 *
+	 * <p>
+	 * When specified, the bean creation logic is bypassed and this implementation is returned
+	 * directly from {@link #run()}, after performing dependency injection on it.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>The bean implementation will still have its fields and methods injected via {@link ClassInfo#inject(Object, BeanStore)}.
+	 * 	<li class='note'>This is useful when you want to provide a pre-configured instance but still benefit from dependency injection.
+	 * 	<li class='note'>The explicit implementation is preserved even when {@link #reset()} is called, unlike cached results from suppliers.
+	 * </ul>
+	 *
+	 * @param value The bean implementation instance.
 	 * @return This object.
 	 */
-	public BeanCreator2<T> builder(Class<?> value) {
-		builderType = info(assertArgNotNull("value", value));
+	public BeanCreator2<T> implementation(T value) {
+		try (var writeLock = lock.write()) {
+			this.explicitImplementation = value;
+		}
 		return this;
+	}
+
+	/**
+	 * Registers a post-creation hook to run after the bean is created.
+	 *
+	 * <p>
+	 * Post-creation hooks are executed after the bean is instantiated and after dependency injection
+	 * has been performed via {@link ClassInfo#inject(Object, BeanStore)}.
+	 *
+	 * <p>
+	 * Multiple hooks can be registered and they will be executed in the order they were added.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>Hooks are executed every time {@link #run()} is called. Since {@link #run()} uses a cached
+	 * 		{@link ResettableSupplier}, hooks are only executed once unless {@link #reset()} is called.
+	 * 	<li class='note'>Hooks are executed after dependency injection, so all {@code @Inject} fields and methods
+	 * 		will have been populated before the hook runs.
+	 * 	<li class='note'>Hooks can be used for custom initialization logic, logging, wrapping beans with proxies,
+	 * 		or any other post-creation processing.
+	 * 	<li class='note'>If a hook throws an exception, bean creation will fail and the exception will propagate to the caller.
+	 * 	<li class='note'>The hook receives the fully initialized bean instance as its parameter.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Register multiple post-creation hooks</jc>
+	 * 	MyService <jv>service</jv> = BeanCreator2
+	 * 		.<jsm>of</jsm>(MyService.<jk>class</jk>, <jv>myBeanStore</jv>)
+	 * 		.postCreateHook(<jv>s</jv> -&gt; <jv>s</jv>.initialize())
+	 * 		.postCreateHook(<jv>s</jv> -&gt; <jv>s</jv>.loadConfiguration())
+	 * 		.postCreateHook(<jv>s</jv> -&gt; <jv>logger</jv>.info(<js>"Created service: "</js> + <jv>s</jv>))
+		.run();
+	 * </p>
+	 *
+	 * @param hook The post-creation hook to run after bean creation. Cannot be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public BeanCreator2<T> postCreateHook(Consumer<T> hook) {
+		assertArgNotNull("hook", hook);
+		try (var writeLock = lock.write()) {
+			postCreateHooks.add(hook);
+		}
+		return this;
+	}
+
+	/**
+	 * Specifies the name of the bean being created.
+	 *
+	 * @param value The bean name.  Can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public BeanCreator2<T> name(String value) {
+		try (var writeLock = lock.write()) {
+			this.name = value;
+		}
+		return this;
+	}
+
+	/**
+	 * Resets the builder, builderType, and beanImpl suppliers.
+	 *
+	 * <p>
+	 * This causes them to be re-evaluated on the next call to {@link #run()}.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>If an explicit builder instance was set via {@link #builder(Object)},
+	 * 		it is preserved and not cleared by this method.
+	 * 	<li class='note'>If an explicit implementation was set via {@link #implementation(Object)},
+	 * 		it is preserved and not cleared by this method.
+	 * 	<li class='note'>Only the cached results from suppliers are reset, not the configuration itself.
+	 * </ul>
+	 *
+	 * @return This object.
+	 */
+	public BeanCreator2<T> reset() {
+		try (var writeLock = lock.write()) {
+			// Only reset builder if no explicit builder instance was set
+			// Explicit builder instances should be preserved across resets
+			if (explicitBuilder == null) {
+				builder.reset();
+			}
+			builderType.reset();
+			// Only reset beanImpl if no explicit implementation was set
+			// Explicit implementations should be preserved across resets
+			if (explicitImplementation == null) {
+				beanImpl.reset();
+			}
+		}
+		return this;
+	}
+
+	/**
+	 * Finds and creates the bean implementation.
+	 *
+	 * <p>
+	 * This method contains all the logic for creating beans via builders, factory methods, constructors, or fallbacks.
+	 *
+	 * @return The created bean.
+	 * @throws ExecutableException if bean could not be created.
+	 */
+	@SuppressWarnings("unchecked")
+	private T findBeanImpl() {
+		var store = this.store;
+		var builder = explicitBuilder != null ? explicitBuilder : this.builder.get();  // Use explicit builder if set, otherwise get from supplier
+		T bean = null;
+		var methodComparator = comparing(MethodInfo::getParameterCount).reversed();
+		var constructorComparator = comparing(ConstructorInfo::getParameterCount).reversed();
+
+		if (builder != null) {
+			log("Builder detected: %s", builder.getClass().getName());
+
+			// Look for Builder.build()/create()/get() - REQUIRED
+			// Uses buildMethodNames configuration (defaults to "build", "create", "get")
+			// Check declared methods first to get the most specific override, then fall back to public methods
+			var buildMethod = info(builder.getClass()).getPublicMethods().stream()
+				.filter(x -> x.isAll(NOT_STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
+				.filter(x -> buildMethodNames.contains(x.getNameSimple()))
+				.filter(x -> opt(x).map(x2 -> x2.getReturnType()).filter(x2 -> x2.is(beanSubType.inner()) || x2.isParentOf(beanSubType)).isPresent()) // Accept methods that return beanSubType or a parent type of beanSubType
+				.filter(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, "Inject", "Autowired")) ? x.canResolveAllParameters(store) : x.getParameterCount() == 0)
+				.sorted(methodComparator)
+				.findFirst();
+
+			if (buildMethod.isPresent()) {
+				var method = buildMethod.get();
+				log("Found build method: %s", method.getNameFull());
+				log("Method declaring class: %s", method.getDeclaringClass().getName());
+				log("Builder class: %s", builder.getClass().getName());
+				var returnType = method.getReturnType();
+				log("Method return type: %s", returnType.getName());
+				log("Expected beanSubType: %s", beanSubType.getName());
+
+				// Check if method has @Inject annotation
+				boolean hasInject = method.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, "Inject", "Autowired"));
+				if (hasInject) {
+					log("Method has @Inject annotation, resolving parameters from bean store");
+				} else {
+					log("Method has no parameters, calling without injection");
+				}
+
+				// Call the builder method
+				Object builtBean = method.inject(store, builder);
+
+				// Builder build method must return the exact beanSubType
+				if (!returnType.is(beanSubType.inner())) {
+					log("Builder method %s returns %s, but must return %s", method.getNameFull(), returnType.getName(), beanSubType.getName());
+					throw exex("Builder method {0} returns {1}, but must return {2}. Builder build methods must always return the exact bean subtype being created.", method.getNameFull(), returnType.getName(), beanSubType.getName());
+				}
+				bean = (T)beanType.cast(builtBean);
+			}
+
+			if (bean != null) {
+				log("Bean created successfully via builder");
+				bean = inject(bean);
+				runPostCreateHooks(bean);
+				return bean;
+			}
+
+			// Builder was found but no appropriate build method was found
+			// Try fallback: look for ANY method on builder that returns the exact bean type
+			log("Attempting Builder.anything()");
+			var anyMethod = info(builder.getClass()).getPublicMethods().stream()
+				.filter(x -> x.isAll(NOT_STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
+				.filter(x -> !buildMethodNames.contains(x.getNameSimple())) // Skip standard build methods we already checked
+				.filter(x -> x.getReturnType().is(beanSubType.inner())) // Must return exact beanSubType, not parent
+				.filter(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, "Inject", "Autowired")) ? x.canResolveAllParameters(store) : x.getParameterCount() == 0)
+				.sorted(methodComparator)
+				.findFirst();
+
+			if (anyMethod.isPresent()) {
+				var method = anyMethod.get();
+				log("Found builder method returning bean type: %s", method.getNameFull());
+				var returnType = method.getReturnType();
+
+				// Call the builder method
+				Object builtBean = method.inject(store, builder);
+
+				// Builder method must return the exact beanSubType
+				if (!returnType.is(beanSubType.inner())) {
+					log("Builder method %s returns %s, but must return %s", method.getNameFull(), returnType.getName(), beanSubType.getName());
+					throw exex("Builder method {0} returns {1}, but must return {2}. Builder build methods must always return the exact bean subtype being created.", method.getNameFull(), returnType.getName(), beanSubType.getName());
+				}
+				bean = (T)beanType.cast(builtBean);
+
+				if (bean != null) {
+					log("Bean created successfully via builder fallback method");
+					bean = inject(bean);
+					runPostCreateHooks(bean);
+					return bean;
+				}
+			}
+
+			// Check if builder type has ANY method that returns the right type (even if not named build/create/get)
+			// If so, log that builder was detected but no appropriate build method was found
+			// Otherwise, log that builder type is invalid
+			var builderTypeInfo = builderType.get();
+			boolean hasAnyMethodWithRightReturnType = builderTypeInfo != null && builderTypeInfo.getPublicMethods().stream()
+				.filter(x -> x.isAll(NOT_STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
+				.map(x -> x.getReturnType())
+				.anyMatch(x -> x.isAssignableFrom(beanSubType));
+			boolean hasBuildMethodWithRightReturnType = builderTypeInfo != null && builderTypeInfo.getPublicMethods().stream()
+				.filter(x -> x.isAll(NOT_STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
+				.filter(x -> buildMethodNames.contains(x.getNameSimple()))
+				.map(x -> x.getReturnType())
+				.anyMatch(x -> x.isAssignableFrom(beanSubType));
+			boolean isExplicitBuilder = explicitBuilderType != null || explicitBuilder != null;
+			boolean isValidBuilder = builderTypeInfo != null && isValidBuilderType(builderTypeInfo);
+
+			if (hasAnyMethodWithRightReturnType && !hasBuildMethodWithRightReturnType) {
+				// Builder has a method returning the right type but not with the expected name
+				log("Builder detected but no appropriate build method found. Builder type: %s. Expected method names: %s", builder.getClass().getName(), buildMethodNames);
+				// Fall through to factory methods/constructors
+			} else if (hasBuildMethodWithRightReturnType || isExplicitBuilder || isValidBuilder) {
+				// Builder has a build method with right return type (even if can't be called) or was explicitly set
+				// Throw exception unless fallback exists
+				log("Builder detected but no appropriate build method found. Builder type: %s. Expected method names: %s", builder.getClass().getName(), buildMethodNames);
+
+				if (fallbackSupplier != null) {
+					log("Using fallback supplier");
+					T fallbackBean = fallbackSupplier.get();
+					runPostCreateHooks(fallbackBean);
+					return fallbackBean;
+				}
+
+				log("Failed to create bean using builder");
+				throw exex("Could not instantiate class {0} using builder type {1}. Builder must have a build(), create(), or get() method that returns {0}. The method may have @Inject annotation to allow injected parameters.", beanSubType.getName(), builderTypeInfo != null ? builderTypeInfo.getName() : builder.getClass().getName());
+			} else {
+				// Builder type is invalid and was auto-detected - fall through to factory methods/constructors
+				log("Builder detected but builder type is invalid. Builder type: %s. Falling back to factory methods/constructors.", builder.getClass().getName());
+			}
+		}
+
+		// Look for Bean.factoryMethod().
+		log("Attempting Bean.factoryMethod()");
+		// If builder was detected but has no build method, pass it as extra bean for factory methods
+		Object[] factoryMethodExtraBeans = builder != null ? new Object[]{builder} : new Object[0];
+		bean = beanSubType.getPublicMethods().stream()
+			.filter(x -> x.isAll(STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
+			.filter(x -> factoryMethodNames.contains(x.getNameSimple()))
+			.filter(x -> x.hasReturnType(beanSubType))
+			.filter(x -> x.canResolveAllParameters(store, factoryMethodExtraBeans))
+			.sorted(methodComparator)
+			.findFirst()
+			.map(x -> {
+				log("Found factory method: %s", x.getNameFull());
+				return (T)beanType.cast(x.inject(store, null, factoryMethodExtraBeans));
+			})
+			.orElse(null);
+
+		// Look for Bean().
+		if (bean == null) {
+			log("Attempting Bean() constructor");
+			// If builder was detected but has no build method, pass it as extra bean for constructors
+			Object[] constructorExtraBeans = builder != null ? new Object[]{builder} : new Object[0];
+			bean = beanSubType.getPublicConstructors().stream()
+				.filter(x -> x.isAll(NOT_DEPRECATED))
+				.filter(x -> x.isDeclaringClass(beanSubType))
+				.filter(x -> x.canResolveAllParameters(store, enclosingInstance, constructorExtraBeans))
+				.sorted(constructorComparator)
+				.findFirst()
+				.map(x -> {
+					log("Found constructor: %s", x.getNameFull());
+					return (T)beanType.cast(x.inject(store, enclosingInstance, constructorExtraBeans));
+				})
+				.orElse(null);
+		}
+
+		if (bean != null) {
+			log("Bean created successfully");
+			bean = inject(bean);
+			runPostCreateHooks(bean);
+			return bean;
+		}
+
+		if (beanSubType.isInterface()) {
+			log("Bean type is an interface");
+			if (fallbackSupplier != null) {
+				log("Using fallback supplier");
+				T fallbackBean = fallbackSupplier.get();
+				runPostCreateHooks(fallbackBean);
+				return fallbackBean;
+			}
+			throw exex("Could not instantiate class {0}: {1}.", beanSubType.getName(), "Class is an interface");
+		}
+
+		if (beanSubType.isAbstract()) {
+			log("Bean type is abstract");
+			if (fallbackSupplier != null) {
+				log("Using fallback supplier");
+				T fallbackBean = fallbackSupplier.get();
+				runPostCreateHooks(fallbackBean);
+				return fallbackBean;
+			}
+			throw exex("Could not instantiate class {0}: {1}.", beanSubType.getName(), "Class is abstract");
+		}
+
+		if (fallbackSupplier != null) {
+			log("Using fallback supplier");
+			T fallbackBean = fallbackSupplier.get();
+			runPostCreateHooks(fallbackBean);
+			return fallbackBean;
+		}
+
+		log("Failed to create bean: no methods/constructors found with matching parameters");
+		throw exex("Could not instantiate class {0}:  No methods/constructors found with matching parameters", beanSubType.getName());
+	}
+
+	/**
+	 * Finds all bean subtypes, including beanSubType, beanType, and all classes in between.
+	 *
+	 * <p>
+	 * This method traverses the hierarchy from {@code beanSubType} up to {@code beanType}, collecting all classes
+	 * in the inheritance chain. This allows parent bean types to be resolved as injectable types.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Class hierarchy</jc>
+	 * 	<jk>class</jk> A { }
+	 * 	<jk>class</jk> B <jk>extends</jk> A { }
+	 * 	<jk>class</jk> C <jk>extends</jk> B { }
+	 *
+	 * 	<jc>// When creating C with beanType=A, beanSubType=C</jc>
+	 * 	<jc>// This method returns: [C, B, A]</jc>
+	 * </p>
+	 *
+	 * @return A list of bean subtypes from beanSubType to beanType, never <jk>null</jk>.
+	 */
+	private List<ClassInfo> findBeanSubTypes() {
+		var result = new ArrayList<ClassInfo>();
+
+		// If beanSubType is the same as beanType, just return a single-element list
+		if (beanSubType.is(beanType.inner())) {
+			result.add(beanSubType);
+			return result;
+		}
+
+		// Traverse from beanSubType up to beanType
+		var parents = beanSubType.getParents();
+		for (var parent : parents) {
+			result.add(parent);
+			// Stop when we reach beanType
+			if (parent.is(beanType.inner())) {
+				break;
+			}
+		}
+
+		// This should never happen if beanSubType validation is correct, but check anyway
+		if (result.isEmpty() || !result.get(result.size() - 1).is(beanType.inner())) {
+			throw illegalArg("beanType {0} was not found in the parent hierarchy of beanSubType {1}. This indicates a validation error.", beanType.getName(), beanSubType.getName());
+		}
+
+		return result;
 	}
 
 	private Object findBuilder() {
 
-		var bs = store.get();
-		ClassInfo builderType = determineBuilderType();
+		var bs = store;
+		var builderType = this.builderType.get();
 
 		// If no builder type was determined, return null (builder not needed)
 		if (builderType == null)
@@ -842,13 +1366,20 @@ public class BeanCreator2<T> {
 		Optional<Object> r;
 
 		// Step 1: Look for a static create/builder method that returns the builder type
-		r = findBuilderFromStaticMethod(beanSubType, builderType, bs);
+		r = beanSubType.getPublicMethods().stream()
+			.filter(x -> x.isAll(STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
+			.filter(x -> builderMethodNames.contains(x.getNameSimple()))
+			.filter(x -> x.hasReturnType(builderType))
+			.filter(x -> x.canResolveAllParameters(bs, enclosingInstance))
+			.sorted(comparing(MethodInfo::getParameterCount).reversed())
+			.findFirst()
+			.map(x -> inject(x.inject(bs, enclosingInstance)));
 		if (r.isPresent())
 			return r.get();
 
 		// Step 2: Look for a public constructor on the builder type
 		r = builderType.getPublicConstructors().stream()
-			.filter(x -> x.is(NOT_DEPRECATED))
+			.filter(x -> x.isAll(NOT_DEPRECATED))
 			.filter(x -> x.canResolveAllParameters(bs, enclosingInstance))
 			.sorted(comparing(ConstructorInfo::getParameterCount).reversed())
 			.findFirst()
@@ -869,33 +1400,50 @@ public class BeanCreator2<T> {
 	}
 
 	/**
-	 * Determines the builder type based on priority:
+	 * Finds the builder type based on priority:
 	 * 1. Explicitly set builderType
 	 * 2. @Builder annotation on beanSubType (includes inherited annotations)
 	 * 3. Autodetect from static methods or inner classes
 	 */
-	private ClassInfo determineBuilderType() {
-		log("Determining builder type...");
+	@SuppressWarnings("unchecked")
+	private ClassInfo findBuilderType() {
+		log("Finding builder type...");
 
 		// Priority 1: Explicitly set builderType
-		if (builderType != null) {
-			log("Using explicitly set builder type: %s", builderType.getName());
-			return builderType;
+		if (explicitBuilderType != null) {
+			log("Using explicitly set builder type: %s", explicitBuilderType.getName());
+			return explicitBuilderType;
 		}
 
 		// Priority 2: @Builder annotation on beanSubType
-		Optional<ClassInfo> r = beanSubType.getAnnotations(Builder.class)
+		// Check declared annotations first to ensure child's annotation overrides parent's
+		var r = beanSubType.getDeclaredAnnotations().stream()
+			.filter(a -> a.isType(Builder.class))
+			.map(a -> (AnnotationInfo<Builder>)a)
 			.map(x -> ClassInfo.class.cast(info(x.inner().value())))
 			.findFirst();
 		if (r.isPresent()) {
-			log("Found builder via @Builder annotation: %s", r.get().getName());
+			log("Found builder via @Builder annotation on beanSubType: %s", r.get().getName());
+			return r.get();
+		}
+		// Fall back to inherited annotations if no declared annotation found
+		r = beanSubType.getAnnotations(Builder.class)
+			.map(x -> ClassInfo.class.cast(info(x.inner().value())))
+			.findFirst();
+		if (r.isPresent()) {
+			log("Found builder via @Builder annotation (inherited): %s", r.get().getName());
 			return r.get();
 		}
 
 		// Priority 3: Autodetect
 		// 3a: Look for static create/builder method that returns a potential builder type
-		log("Looking for builder via static method...");
-		r = findBuilderTypeFromStaticMethod(beanSubType);
+		r = beanSubType.getPublicMethods().stream()
+			.filter(x -> x.isAll(STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
+			.filter(x -> builderMethodNames.contains(x.getNameSimple()))
+			.filter(x -> ! x.hasReturnType(beanSubType)) // Must not return the bean type itself
+			.filter(x -> isValidBuilderType(x.getReturnType()))
+			.findFirst()
+			.map(MethodInfo::getReturnType);
 		if (r.isPresent()) {
 			log("Found builder via static method: %s", r.get().getName());
 			return r.get();
@@ -903,17 +1451,36 @@ public class BeanCreator2<T> {
 
 		// 3b: Look for inner Builder class
 		log("Looking for inner builder class (names: %s)...", builderClassNames);
-		r = findInnerBuilderClass(beanSubType);
+		r = beanSubType.getDeclaredMemberClasses().stream()
+			.filter(x -> builderClassNames.contains(x.getNameSimple()))
+			.findFirst();
 		if (r.isPresent()) {
-			log("Found builder via inner class: %s", r.get().getName());
-			return r.get();
+			var builderClass = r.get();
+			if (isValidBuilderType(builderClass)) {
+				log("Found builder via inner class: %s", builderClass.getName());
+				return builderClass;
+			}
+			// Still return it so we can provide a better error message when trying to use it
+			log("Found builder class via inner class but it is not valid: %s", builderClass.getName());
+			return builderClass;
 		}
 
-		if (beanSubType != beanType) {
-			r = findInnerBuilderClass(beanType);
+		// 3c: Look for builder in parent classes (skip the first element which is beanSubType itself)
+		var parentClasses = beanSubType.getParents();
+		for (int i = 1; i < parentClasses.size(); i++) {
+			var parentClass = parentClasses.get(i);
+			r = parentClass.getDeclaredMemberClasses().stream()
+				.filter(x -> builderClassNames.contains(x.getNameSimple()))
+				.findFirst();
 			if (r.isPresent()) {
-				log("Found builder via parent inner class: %s", r.get().getName());
-				return r.get();
+				var builderClass = r.get();
+				if (isValidBuilderType(builderClass)) {
+					log("Found builder via parent inner class: %s", builderClass.getName());
+					return builderClass;
+				}
+				// Still return it so we can provide a better error message when trying to use it
+				log("Found builder class via parent inner class but it is not valid: %s", builderClass.getName());
+				return builderClass;
 			}
 		}
 
@@ -923,79 +1490,61 @@ public class BeanCreator2<T> {
 	}
 
 	/**
-	 * Looks for a static create/builder method that returns a builder instance.
+	 * Finds all builder types, including the primary builder type and any builder types found in the builder's parent hierarchy.
+	 *
+	 * <p>
+	 * This method traverses the parent hierarchy of the primary builder type, looking for builder classes whose build methods
+	 * return types that are the same as or parents of {@code beanType}. This allows parent builders to be resolved as injectable types.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Class A with builder</jc>
+	 * 	<jk>class</jk> A {
+	 * 		<jk>static class</jk> Builder {
+	 * 			A create() { <jk>return new</jk> A(); }
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Class B extends A with builder</jc>
+	 * 	<jk>class</jk> B <jk>extends</jk> A {
+	 * 		<jk>static class</jk> Builder <jk>extends</jk> A.Builder {
+	 * 			B create() { <jk>return new</jk> B(); }
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// When creating B, this method returns: [B.Builder, A.Builder]</jc>
+	 * 	<jc>// Traverses B.Builder → A.Builder hierarchy</jc>
+	 * 	<jc>// B.Builder.create() returns B (matches beanType)</jc>
+	 * 	<jc>// A.Builder.create() returns A (A is parent of B)</jc>
+	 * </p>
+	 *
+	 * @return A list of builder types, never <jk>null</jk>.
 	 */
-	private Optional<Object> findBuilderFromStaticMethod(ClassInfo type, ClassInfo builderType, BasicBeanStore2 bs) {
-		return type.getPublicMethods().stream()
-			.filter(x -> x.isAll(STATIC, NOT_DEPRECATED))
-			.filter(x -> hasName(x, builderMethodNames.toArray(new String[0])))
-			.filter(x -> x.hasReturnType(builderType))
-			.filter(x -> x.canResolveAllParameters(bs, enclosingInstance))
-			.sorted(comparing(MethodInfo::getParameterCount).reversed())
-			.findFirst()
-			.map(x -> inject(x.inject(bs, enclosingInstance)));
-	}
+	private List<ClassInfo> findBuilderTypes() {
+		var result = new ArrayList<ClassInfo>();
 
-	/**
-	 * Autodetects builder type from static create/builder methods.
-	 * Returns the return type of a static create/builder method if it can be used as a builder.
-	 */
-	private Optional<ClassInfo> findBuilderTypeFromStaticMethod(ClassInfo type) {
-		return type.getPublicMethods().stream()
-			.filter(x -> x.isAll(STATIC, NOT_DEPRECATED))
-			.filter(x -> hasName(x, builderMethodNames.toArray(new String[0])))
-			.filter(x -> !x.hasReturnType(type)) // Must not return the bean type itself
-			.filter(x -> isValidBuilderType(x.getReturnType()))
-			.findFirst()
-			.map(MethodInfo::getReturnType);
-	}
-
-	/**
-	 * Looks for an inner class with a name matching builderClassNames.
-	 */
-	private Optional<ClassInfo> findInnerBuilderClass(ClassInfo type) {
-		return type.getDeclaredMemberClasses().stream()
-			.filter(x -> builderClassNames.contains(x.getNameSimple()))
-			.filter(x -> isValidBuilderType(x))
-			.findFirst();
-	}
-
-	/**
-	 * Checks if a type can be used as a builder.
-	 * A valid builder type must have either:
-	 * - A build/create/get method that returns the bean type
-	 * - Can be passed to a bean constructor
-	 */
-	private boolean isValidBuilderType(ClassInfo builderCandidate) {
-		log("Validating builder candidate: %s", builderCandidate.getName());
-
-		// Check if it has a build/create/get method that returns beanSubType or beanType
-		boolean hasBuildMethod = builderCandidate.getPublicMethods().stream()
-			.filter(x -> x.isAll(NOT_STATIC, NOT_DEPRECATED))
-			.filter(x -> hasName(x, "build", "create", "get"))
-			.filter(x -> hasReturnType(x, beanSubType, beanType))
-			.findFirst()
-			.isPresent();
-
-		if (hasBuildMethod) {
-			log("Builder is valid: has build/create/get method returning bean type");
-			return true;
+		// Start with the primary builder type
+		var primaryBuilderType = findBuilderType();
+		if (primaryBuilderType == null) {
+			return result;
 		}
 
-		// Check if beanSubType has a constructor that accepts this builder type
-		boolean hasConstructor = beanSubType.getPublicConstructors().stream()
-			.filter(x -> x.is(NOT_DEPRECATED))
-			.filter(x -> x.hasParameterTypeParent(builderCandidate))
-			.findFirst()
-			.isPresent();
+		// Add the primary builder type first
+		result.add(primaryBuilderType);
 
-		if (hasConstructor) {
-			log("Builder is valid: bean has constructor accepting this builder");
-			return true;
+		// Traverse the parent hierarchy of the builder type itself (skip the first element which is the primary builder type itself)
+		var builderParents = primaryBuilderType.getParents();
+		for (int i = 0; i < builderParents.size(); i++) {
+			var builderParent = builderParents.get(i);
+			builderParent.getPublicMethods().stream()
+				.filter(m -> m.isAll(NOT_STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
+				.filter(m -> buildMethodNames.contains(m.getNameSimple()))
+				.filter(m -> m.getReturnType().isParentOf(beanType))
+				.findFirst()
+				.ifPresent(x -> result.add(builderParent));
 		}
 
-		log("Builder is NOT valid: no build method returning bean type and no constructor accepting builder");
-		return false;
+		return result;
 	}
 
 	/**
@@ -1006,435 +1555,46 @@ public class BeanCreator2<T> {
 	 * @return The same bean instance (for method chaining).
 	 */
 	private <T2> T2 inject(T2 bean) {
-		return ClassInfo.of(bean).inject(bean, store.get());
+		return ClassInfo.of(bean).inject(bean, store);
 	}
 
 	/**
-	 * Creates the bean.
-	 *
-	 * <p>
-	 * After creating the bean, this method automatically injects dependencies into fields and methods
-	 * annotated with {@code @Inject} or {@code @Autowired} using {@link ClassInfo#inject(Object, BeanStore)}.
-	 *
-	 * @return A new bean with all dependencies injected.
-	 * @throws ExecutableException if bean could not be created.
+	 * Checks if a type can be used as a builder.
+	 * A valid builder type must have:
+	 * - A build/create/get method that returns the bean type or a parent of the bean type
+	 *   - The method may have @Inject annotation to allow injected parameters
+	 *   - If no @Inject annotation, the method must have no parameters
 	 */
-	@SuppressWarnings("unchecked")
-	public T create() {
-		// @formatter:off
+	private boolean isValidBuilderType(ClassInfo builderCandidate) {
+		log("Validating builder candidate: %s", builderCandidate.getName());
 
-		// Reset debug log if debug is enabled
-		if (debug) {
-			debugLog.clear();
-			log("Starting bean creation for type: %s", beanType.getName());
-			if (neq(beanSubType, beanType))
-				log("Subtype specified: %s", beanSubType.getName());
-		}
-
-		// Return cached singleton if available
-		if (singleton && cachedInstance != null) {
-			log("Returning cached singleton instance");
-			return cachedInstance;
-		}
-
-		var store = this.store.get();
-
-		if (nn(beanImpl)) {
-			log("Using pre-configured impl() instance");
-			runPostCreateHooks(beanImpl);
-			addBeanToStore(beanImpl, store);
-			if (singleton)
-				cachedInstance = beanImpl;
-			return beanImpl;
-		}
-
-		var builder = this.builder.get();
-		T bean = null;
-		var methodComparator = comparing(MethodInfo::getParameterCount).reversed();
-		var constructorComparator = comparing(ConstructorInfo::getParameterCount).reversed();
-
-		if (builder != null) {
-			log("Builder detected: %s", builder.getClass().getName());
-
-			// Customize builder if customizer is registered
-			if (builderCustomizer != null) {
-				log("Applying builder customizer");
-				builderCustomizer.accept(builder);
-			}
-
-			// Look for Builder.build().
-			log("Attempting Builder.build/create/get()");
-			bean = info(builder.getClass()).getPublicMethods().stream()
-				.filter(x -> x.isAll(NOT_STATIC, NOT_DEPRECATED))
-				.filter(x -> hasName(x, "build", "create", "get"))
-				.filter(x -> x.hasReturnType(beanSubType))
-				.filter(x -> x.canResolveAllParameters(store))
-				.sorted(methodComparator)
-				.findFirst()
-				.map(x -> {
-					log("Found builder method: %s", x.getNameFull());
-					return (T)beanType.cast(x.inject(store, builder));
-				})
-				.orElse((T)null);
-
-			// Look for Bean.factoryMethod(Builder).
-			if (bean == null) {
-				log("Attempting Bean.factoryMethod(Builder)");
-				bean = beanType.getPublicMethods().stream()
-					.filter(x -> x.isAll(STATIC, NOT_DEPRECATED))
-					.filter(x -> isFactoryMethod(x))
-					.filter(x -> x.hasReturnType(beanSubType))
-					.filter(x -> x.canResolveAllParameters(store, builder))
-					.filter(x -> x.hasParameter(builder))
-					.sorted(methodComparator)
-					.findFirst()
-					.map(x -> {
-						log("Found factory method accepting builder: %s", x.getNameFull());
-						return (T)beanType.cast(x.inject(store, null, builder));
-					})
-					.orElse(null);
-			}
-
-			// Look for Bean(Builder).
-			if (bean == null) {
-				log("Attempting Bean(Builder) constructor");
-				bean = beanSubType.getPublicConstructors().stream()
-					.filter(x -> x.is(NOT_DEPRECATED))
-					.filter(x -> x.isDeclaringClass(beanSubType))
-					.filter(x -> x.canResolveAllParameters(store, enclosingInstance, builder))
-					.sorted(constructorComparator)
-					.findFirst()
-					.map(x -> {
-						log("Found constructor accepting builder: %s", x.getNameFull());
-						return (T)beanType.cast(x.inject(store, enclosingInstance, builder));
-					})
-					.orElse(null);
-			}
-
-			// Look for Builder.anything().
-			if (bean == null) {
-				log("Attempting Builder.anything() - any method returning bean type");
-				bean = info(builder.getClass()).getPublicMethods().stream()
-					.filter(x -> x.isAll(NOT_STATIC, NOT_DEPRECATED))
-					.filter(x -> x.hasReturnType(beanSubType))
-					.filter(x -> x.canResolveAllParameters(store))
-					.sorted(methodComparator)
-					.findFirst()
-					.map(x -> {
-						log("Found builder method: %s", x.getNameFull());
-						return (T)beanType.cast(x.inject(store, builder));
-					})
-					.orElse(null);
-			}
-
-			if (bean != null) {
-				log("Bean created successfully via builder");
-				bean = inject(bean);
-				runPostCreateHooks(bean);
-				addBeanToStore(bean, store);
-				if (singleton)
-					cachedInstance = bean;
-				return bean;
-			}
-
-			if (fallbackSupplier != null) {
-				log("Using fallback supplier");
-				T fallbackBean = fallbackSupplier.get();
-				runPostCreateHooks(fallbackBean);
-				addBeanToStore(fallbackBean, store);
-				if (singleton)
-					cachedInstance = fallbackBean;
-				return fallbackBean;
-			}
-
-			log("Failed to create bean using builder");
-			throw exex("Could not instantiate class {0} using builder type {1}.", beanSubType.getName(), builderType);
-		}
-
-		// Look for Bean.factoryMethod().
-		log("Attempting Bean.factoryMethod()");
-		bean = beanSubType.getPublicMethods().stream()
-			.filter(x -> x.isAll(STATIC, NOT_DEPRECATED))
-			.filter(x -> isFactoryMethod(x))
-			.filter(x -> x.hasReturnType(beanSubType))
-			.sorted(methodComparator)
-			.findFirst()
-			.map(x -> {
-				log("Found factory method: %s", x.getNameFull());
-				return (T)beanType.cast(x.inject(store, null));
+		// Check if it has a build/create/get method that returns beanSubType, beanType, or a parent of beanSubType
+		var hasBuildMethod = builderCandidate.getPublicMethods().stream()
+			.filter(x -> x.isAll(NOT_STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
+			.filter(x -> buildMethodNames.contains(x.getNameSimple()))
+			.filter(x -> {
+				var returnType = x.getReturnType();
+				return returnType.is(beanSubType.inner()) || returnType.is(beanType.inner()) || returnType.isParentOf(beanSubType);
 			})
-			.orElse(null);
+			.filter(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, "Inject", "Autowired")) || x.getParameterCount() == 0)
+			.findFirst()
+			.isPresent();
 
-		// Look for Bean().
-		if (bean == null) {
-			log("Attempting Bean() constructor");
-			bean = beanSubType.getPublicConstructors().stream()
-				.filter(x -> x.isAll(NOT_DEPRECATED))
-				.filter(x -> x.isDeclaringClass(beanSubType))
-				.filter(x -> x.canResolveAllParameters(store, enclosingInstance))
-				.sorted(constructorComparator)
-				.findFirst()
-				.map(x -> {
-					log("Found constructor: %s", x.getNameFull());
-					return (T)beanType.cast(x.inject(store, enclosingInstance));
-				})
-				.orElse(null);
+		if (hasBuildMethod) {
+			log("Builder is valid: has build/create/get method returning bean type");
+			return true;
 		}
 
-		if (bean != null) {
-			log("Bean created successfully");
-			bean = inject(bean);
-			runPostCreateHooks(bean);
-			validateBean(bean);
-			addBeanToStore(bean, store);
-			if (singleton)
-				cachedInstance = bean;
-			return bean;
-		}
-
-		if (beanSubType.isInterface()) {
-			log("Bean type is an interface");
-			if (fallbackSupplier != null) {
-				log("Using fallback supplier");
-				T fallbackBean = fallbackSupplier.get();
-				runPostCreateHooks(fallbackBean);
-				addBeanToStore(fallbackBean, store);
-				if (singleton)
-					cachedInstance = fallbackBean;
-				return fallbackBean;
-			}
-			throw exex("Could not instantiate class {0}: {1}.", beanSubType.getName(), "Class is an interface");
-		}
-
-		if (beanSubType.isAbstract()) {
-			log("Bean type is abstract");
-			if (fallbackSupplier != null) {
-				log("Using fallback supplier");
-				T fallbackBean = fallbackSupplier.get();
-				runPostCreateHooks(fallbackBean);
-				addBeanToStore(fallbackBean, store);
-				if (singleton)
-					cachedInstance = fallbackBean;
-				return fallbackBean;
-			}
-			throw exex("Could not instantiate class {0}: {1}.", beanSubType.getName(), "Class is abstract");
-		}
-
-		if (fallbackSupplier != null) {
-			log("Using fallback supplier");
-			T fallbackBean = fallbackSupplier.get();
-			runPostCreateHooks(fallbackBean);
-			addBeanToStore(fallbackBean, store);
-			if (singleton)
-				cachedInstance = fallbackBean;
-			return fallbackBean;
-		}
-
-		log("Failed to create bean: no methods/constructors found with matching parameters");
-		throw exex("Could not instantiate class {0}:  No methods/constructors found with matching parameters", beanSubType.getName());
-	}
-
-	/**
-	 * Attempts to create the bean, returning an {@link Optional} instead of throwing an exception on failure.
-	 *
-	 * <p>
-	 * This is a non-throwing variant of {@link #create()} that wraps the result in an {@link Optional}.
-	 * If bean creation fails for any reason (missing dependencies, abstract class, interface, no matching constructor, etc.),
-	 * this method returns {@link Optional#empty()} instead of throwing {@link ExecutableException}.
-	 *
-	 * <p>
-	 * This method is useful when bean creation failure is expected and should not be treated as exceptional,
-	 * such as when implementing optional features or trying multiple creation strategies.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>Unlike {@link #create()}, this method catches {@link ExecutableException} and returns empty.
-	 * 	<li class='note'>If a fallback is registered via {@link #orElse(Supplier)} or {@link #orElse(Object)},
-	 * 		it will be used before returning empty, so this method will only return empty if both
-	 * 		normal creation AND fallback fail.
-	 * 	<li class='note'>In singleton mode, if creation succeeds, the instance is cached for subsequent calls.
-	 * 	<li class='note'>Post-creation hooks are still executed if creation succeeds.
-	 * 	<li class='note'>Other exceptions (e.g., from post-creation hooks or fallback suppliers) are NOT caught
-	 * 		and will propagate to the caller.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Try to create, use default if it fails</jc>
-	 * 	MyBean <jv>bean</jv> = BeanCreator2
-	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>)
-	 * 		.beanStore(<jv>myBeanStore</jv>)
-	 * 		.asOptional()
-	 * 		.orElse(<jk>new</jk> DefaultMyBean());
-	 *
-	 * 	<jc>// Chain multiple creation attempts</jc>
-	 * 	MyService <jv>service</jv> = BeanCreator2.<jsm>of</jsm>(AdvancedService.<jk>class</jk>)
-	 * 		.beanStore(<jv>store</jv>)
-	 * 		.asOptional()
-	 * 		.or(() -&gt; BeanCreator2.<jsm>of</jsm>(BasicService.<jk>class</jk>)
-	 * 			.beanStore(<jv>store</jv>)
-	 * 			.asOptional())
-	 * 		.orElseGet(() -&gt; <jk>new</jk> FallbackService());
-	 *
-	 * 	<jc>// Check if optional feature is available</jc>
-	 * 	Optional&lt;OptionalFeature&gt; <jv>feature</jv> = BeanCreator2
-	 * 		.<jsm>of</jsm>(OptionalFeature.<jk>class</jk>)
-	 * 		.beanStore(<jv>store</jv>)
-	 * 		.asOptional();
-	 * 	<jk>if</jk> (<jv>feature</jv>.isPresent()) {
-	 * 		<jv>feature</jv>.get().enable();
-	 * 	}
-	 * </p>
-	 *
-	 * @return An {@link Optional} containing the created bean, or {@link Optional#empty()} if creation failed.
-	 */
-	public Optional<T> asOptional() {
-		try {
-			return Optional.of(create());
-		} catch (ExecutableException e) {
-			return Optional.empty();
-		}
-	}
-
-	/**
-	 * Converts this creator into a supplier.
-	 *
-	 * @return A supplier that returns the results of the {@link #create()} method.
-	 */
-	public Supplier<T> asSupplier() {
-		return () -> create();
-	}
-
-	/**
-	 * Converts this creator into a resettable supplier.
-	 *
-	 * <p>
-	 * A {@link ResettableSupplier} caches the result of the first {@link ResettableSupplier#get()} call
-	 * and returns that cached value for subsequent calls. The {@link ResettableSupplier#reset()} method
-	 * can be used to clear the cache, forcing the bean to be recreated on the next get() call.
-	 *
-	 * <p>
-	 * This is particularly useful when the bean store contents change and you want to recreate the bean
-	 * with updated dependencies.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>The returned {@link ResettableSupplier} is thread-safe.
-	 * 	<li class='note'>If {@link #singleton()} mode is enabled on this creator, the singleton cache
-	 * 		is separate from the ResettableSupplier's cache. Calling reset() on the supplier will NOT
-	 * 		clear the creator's singleton cache.
-	 * 	<li class='note'>Each call to {@link ResettableSupplier#get()} after a reset() will invoke
-	 * 		{@link #create()}, which may trigger dependency injection and post-creation hooks.
-	 * 	<li class='note'>The supplier inherits all Optional-like methods from {@link OptionalSupplier}.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Create a resettable supplier for a bean with dependencies</jc>
-	 * 	BeanStore <jv>store</jv> = <jk>new</jk> BasicBeanStore2(<jk>null</jk>);
-	 * 	<jv>store</jv>.addBean(String.<jk>class</jk>, <js>"initial"</js>);
-	 *
-	 * 	ResettableSupplier&lt;MyBean&gt; <jv>supplier</jv> = BeanCreator2
-	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>)
-	 * 		.beanStore(<jv>store</jv>)
-	 * 		.asResettableSupplier();
-	 *
-	 * 	<jc>// First call creates and caches the bean</jc>
-	 * 	MyBean <jv>bean1</jv> = <jv>supplier</jv>.get();
-	 *
-	 * 	<jc>// Subsequent calls return the cached bean</jc>
-	 * 	MyBean <jv>bean2</jv> = <jv>supplier</jv>.get();
-	 * 	<jsm>assertSame</jsm>(<jv>bean1</jv>, <jv>bean2</jv>);
-	 *
-	 * 	<jc>// Update the bean store</jc>
-	 * 	<jv>store</jv>.addBean(String.<jk>class</jk>, <js>"updated"</js>);
-	 *
-	 * 	<jc>// Reset forces recreation with updated dependencies</jc>
-	 * 	<jv>supplier</jv>.reset();
-	 * 	MyBean <jv>bean3</jv> = <jv>supplier</jv>.get();
-	 * 	<jsm>assertNotSame</jsm>(<jv>bean1</jv>, <jv>bean3</jv>);  <jc>// New instance with updated deps</jc>
-	 * </p>
-	 *
-	 * @return A resettable supplier that caches the created bean until reset.
-	 */
-	public ResettableSupplier<T> asResettableSupplier() {
-		return new ResettableSupplier<>(() -> create());
-	}
-
-	/**
-	 * Specifies a subclass of the bean type to create.
-	 *
-	 * <p>
-	 * This allows you to create a specific implementation when the bean type is an interface, abstract class,
-	 * or when you want to instantiate a customized subclass of a concrete class.
-	 *
-	 * @param value The subclass type to create. Cannot be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public BeanCreator2<T> beanSubType(Class<T> value) {
-		beanSubType = info(assertArgNotNull("value", value));
-		return this;
-	}
-
-	private void runPostCreateHooks(T bean) {
-		for (Consumer<T> hook : postCreateHooks) {
-			hook.accept(bean);
-		}
-	}
-
-	private void validateBean(T bean) {
-		if (validator != null && !validator.test(bean)) {
-			throw exex("Bean validation failed for {0}", beanType.getName());
-		}
+		log("Builder is NOT valid: no build/create/get method returning bean type");
+		return false;
 	}
 
 	private void log(String message, Object... args) {
-		if (debug) {
-			debugLog.add(args.length == 0 ? message : String.format(message, args));
-		}
+		debug.ifPresent(x -> x.add(args.length == 0 ? message : String.format(message, args)));
 	}
 
-	private void addBeanToStore(T bean, BeanStore store) {
-		if (addToStore && parentStore instanceof WritableBeanStore) {
-			WritableBeanStore writableStore = (WritableBeanStore) parentStore;
-			if (addToStoreName != null) {
-				log("Adding bean to store with name: %s", addToStoreName);
-				log("  beanType.inner() = %s", beanType.inner());
-				log("  bean = %s", bean);
-				log("  parentStore = %s", parentStore);
-				writableStore.addBean(beanType.inner(), bean, addToStoreName);
-				log("Bean added successfully with name");
-			} else {
-				log("Adding bean to store with type: %s", beanType.getName());
-				log("  beanType.inner() = %s", beanType.inner());
-				log("  bean = %s @ %s", bean, System.identityHashCode(bean));
-				log("  parentStore = %s @ %s", parentStore, System.identityHashCode(parentStore));
-				WritableBeanStore result = writableStore.addBean(beanType.inner(), bean);
-				log("  addBean returned: %s @ %s", result, System.identityHashCode(result));
-				log("Bean added successfully without name");
-			}
-		} else if (addToStore) {
-			log("Parent store is not WritableBeanStore, cannot add bean");
-		}
-	}
-
-	private boolean isFactoryMethod(MethodInfo mi) {
-		for (String name : factoryMethodNames) {
-			if (mi.hasName(name))
-				return true;
-		}
-		return false;
-	}
-
-	private static boolean hasName(MethodInfo ei, String...names) {
-		for (var s : names)
-			if (ei.hasName(s))
-				return true;
-		return false;
-	}
-
-	private static boolean hasReturnType(MethodInfo mi, ClassInfo...types) {
-		for (var type : types)
-			if (mi.hasReturnType(type))
-				return true;
-		return false;
+	private T runPostCreateHooks(T bean) {
+		postCreateHooks.forEach(x -> x.accept(bean));
+		return bean;
 	}
 }

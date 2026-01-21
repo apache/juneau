@@ -746,6 +746,7 @@ class FieldInfo_Test extends TestBase {
 	}
 
 	// Test class for toString() comprehensive tests
+	@SuppressWarnings("unused")
 	public static class ToStringTestClass {
 		public int publicField;
 		private String privateField;
