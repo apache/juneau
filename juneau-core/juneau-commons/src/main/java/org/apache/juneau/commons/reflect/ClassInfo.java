@@ -342,11 +342,11 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 				// Outer classes but no package
 				if (nn(ct)) {
 					if (ct.isLocalClass()) {
-						// Local class: include enclosing class simple name
-						sb.append(of(ct.getEnclosingClass()).getNameSimple()).append(separator).append(ct.getSimpleName());
+						// Local class: recursively include all enclosing classes
+						appendShortNameWithOuters(sb, of(ct.getEnclosingClass()), separator).append(separator).append(ct.getSimpleName());
 					} else if (ct.isMemberClass()) {
-						// Member class: include declaring class simple name
-						sb.append(of(ct.getDeclaringClass()).getNameSimple()).append(separator).append(ct.getSimpleName());
+						// Member class: recursively include all declaring classes
+						appendShortNameWithOuters(sb, of(ct.getDeclaringClass()), separator).append(separator).append(ct.getSimpleName());
 					} else {
 						// Regular class: just simple name
 						sb.append(ct.getSimpleName());
@@ -380,6 +380,31 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 			sb.append('>');
 		}
 
+		return sb;
+	}
+
+	/**
+	 * Helper method to recursively append short name with all outer classes for SHORT format.
+	 * This ensures multiply-nested classes include all outer class names.
+	 *
+	 * @param sb The StringBuilder to append to.
+	 * @param classInfo The ClassInfo to append.
+	 * @param separator The separator character between outer and inner classes.
+	 */
+	private StringBuilder appendShortNameWithOuters(StringBuilder sb, ClassInfo classInfo, char separator) {
+		var ct = classInfo.inner();
+		if (ct == null) {
+			sb.append(classInfo.getNameSimple());
+			return sb;
+		}
+
+		if (ct.isLocalClass()) {
+			appendShortNameWithOuters(sb, of(ct.getEnclosingClass()), separator).append(separator).append(ct.getSimpleName());
+		} else if (ct.isMemberClass()) {
+			appendShortNameWithOuters(sb, of(ct.getDeclaringClass()), separator).append(separator).append(ct.getSimpleName());
+		} else {
+			sb.append(ct.getSimpleName());
+		}
 		return sb;
 	}
 
@@ -2789,6 +2814,18 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * 	<li>Supports the same parameter types as parameter resolution: single beans, {@code Optional}, arrays, {@code List}, {@code Set}, {@code Map}
 	 * </ul>
 	 *
+	 * <h5 class='section'>PostConstruct Methods:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Must be annotated with {@code @PostConstruct} (matched by simple class name)
+	 * 	<li>Must return {@code void}
+	 * 	<li>Must have no parameters
+	 * 	<li>Must not be abstract
+	 * 	<li>Must not declare type parameters
+	 * 	<li>Called after all field and method injection is complete
+	 * 	<li>Called in parent-to-child order (parent methods execute before child methods)
+	 * 	<li>Multiple methods can be annotated, and all will be called in order
+	 * </ul>
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Class with injectable fields and methods</jc>
@@ -2802,6 +2839,11 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * 		<ja>@Inject</ja>
 	 * 		<jk>public</jk> <jk>void</jk> init(MyConfig <jv>config</jv>) {
 	 * 			<jc>// Initialization logic</jc>
+	 * 		}
+	 *
+	 * 		<ja>@PostConstruct</ja>
+	 * 		<jk>public</jk> <jk>void</jk> postConstruct() {
+	 * 			<jc>// Called after all injection is complete</jc>
 	 * 		}
 	 * 	}
 	 *
@@ -2825,6 +2867,15 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 		// Inject into methods
 		getAllMethods().stream()
 			.filter(x -> x.isNotAbstract() && eq(x.getTypeParameters().length, 0) && x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eq(n, "Inject") || eq(n, "Autowired")))
+			.filter(x -> x.isNotAbstract() && eq(x.getTypeParameters().length, 0) && x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eq(n, "Inject") || eq(n, "Autowired")))
+			.forEach(x -> x.inject(beanStore, bean));
+
+		// Call @PostConstruct methods after all injection is complete
+		// Use getAllMethodsTopDown() to ensure parent methods are called before child methods
+		getAllMethodsTopDown().stream()
+			.filter(x -> x.isNotAbstract() && eq(x.getTypeParameters().length, 0))
+			.filter(x -> x.getReturnType().is(void.class) && eq(x.getParameterCount(), 0))
+			.filter(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eq(n, "PostConstruct")))
 			.forEach(x -> x.inject(beanStore, bean));
 
 		return bean;
