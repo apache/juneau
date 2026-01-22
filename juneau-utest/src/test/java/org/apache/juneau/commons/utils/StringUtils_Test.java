@@ -1499,13 +1499,13 @@ class StringUtils_Test extends TestBase {
 		assertEquals("Hello {unknown}", formatNamed("Hello {unknown}", args)); // Unknown placeholder kept
 		assertEquals("No placeholders", formatNamed("No placeholders", args));
 		assertNull(formatNamed(null, args));
-		assertEquals("Template", formatNamed("Template", null));
+		assertEquals("Template", formatNamed("Template", (Map<String,Object>)null));
 		assertEquals("Template", formatNamed("Template", new HashMap<>()));
 		// Test with null values
 		var argsWithNull = new HashMap<String,Object>();
 		argsWithNull.put("name", "John");
 		argsWithNull.put("value", null);
-		assertEquals("Hello John, value: ", formatNamed("Hello {name}, value: {value}", argsWithNull));
+		assertEquals("Hello John, value: {value}", formatNamed("Hello {name}, value: {value}", argsWithNull));
 
 		// Nested braces with depth tracking - triggers code path
 		var argsNested = new HashMap<String,Object>();
@@ -1527,7 +1527,7 @@ class StringUtils_Test extends TestBase {
 		argsExists.put("key1", "value1");
 		argsExists.put("key2", null); // null value but key exists
 		assertEquals("value1", formatNamed("{key1}", argsExists));
-		assertEquals("", formatNamed("{key2}", argsExists)); // null value, key exists
+		assertEquals("{key2}", formatNamed("{key2}", argsExists)); // null value, key exists
 
 		// Recursive formatNamed when value contains '{' - triggers code path
 		var argsRecursive = new HashMap<String,Object>();

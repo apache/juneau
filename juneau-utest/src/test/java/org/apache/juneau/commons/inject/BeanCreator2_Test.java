@@ -28,9 +28,11 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.Flag;
 import org.apache.juneau.commons.lang.IntegerValue;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
 import org.apache.juneau.commons.annotation.*;
+import java.util.logging.Level;
 
 class BeanCreator2_Test extends TestBase {
 
@@ -470,40 +472,40 @@ class BeanCreator2_Test extends TestBase {
 			public Map<String, TestService> getServices() { return services; }
 		}
 
-	/**
-	 * Tests creating a bean using addBean() to add dependencies directly to the creator.
-	 */
-	@Test
-	void a08_createBeanWithAddBean() {
-		var testService = new TestService("test");
-		var anotherService = new AnotherService(42);
+		/**
+		 * Tests creating a bean using addBean() to add dependencies directly to the creator.
+		 */
+		@Test
+		void a08_createBeanWithAddBean() {
+			var testService = new TestService("test");
+			var anotherService = new AnotherService(42);
 
-		var bean = bc(BeanWithDependencies.class)
-			.addBean(TestService.class, testService)
-			.addBean(AnotherService.class, anotherService)
-			.run();
+			var bean = bc(BeanWithDependencies.class)
+				.addBean(TestService.class, testService)
+				.addBean(AnotherService.class, anotherService)
+				.run();
 
-		assertSame(testService, bean.getService());
-		assertSame(anotherService, bean.getAnother());
-	}
+			assertSame(testService, bean.getService());
+			assertSame(anotherService, bean.getAnother());
+		}
 
-	/**
-	 * Tests creating a bean using addBean() with a name parameter to add named dependencies.
-	 */
-	@Test
-	void a09_createBeanWithAddBeanWithName() {
-		var service1 = new TestService("test1");
-		var service2 = new TestService("test2");
+		/**
+		 * Tests creating a bean using addBean() with a name parameter to add named dependencies.
+		 */
+		@Test
+		void a09_createBeanWithAddBeanWithName() {
+			var service1 = new TestService("test1");
+			var service2 = new TestService("test2");
 
-		var bean = bc(A07_BeanWithMap.class)
-			.addBean(TestService.class, service1)
-			.addBean(TestService.class, service2, "service2")
-			.run();
+			var bean = bc(A07_BeanWithMap.class)
+				.addBean(TestService.class, service1)
+				.addBean(TestService.class, service2, "service2")
+				.run();
 
-		assertEquals(2, bean.getServices().size());
-		assertSame(service1, bean.getServices().get("")); // Unnamed bean uses empty string as key
-		assertSame(service2, bean.getServices().get("service2"));
-	}
+			assertEquals(2, bean.getServices().size());
+			assertSame(service1, bean.getServices().get("")); // Unnamed bean uses empty string as key
+			assertSame(service2, bean.getServices().get("service2"));
+		}
 	}
 
 	/**
@@ -3125,8 +3127,8 @@ class BeanCreator2_Test extends TestBase {
 		void m12_asOptionalIsPresent() {
 			// @formatter:off
 			bc(SimpleBean.class)
-				.asOptional()
-				.ifPresent(bean -> assertInstanceOf(SimpleBean.class, bean));
+			.asOptional()
+			.ifPresent(bean -> assertInstanceOf(SimpleBean.class, bean));
 			// @formatter:on
 		}
 
@@ -3200,16 +3202,16 @@ class BeanCreator2_Test extends TestBase {
 		/**
 		 * Tests that debug() mode creates a debug log when bean is created.
 		 */
-	@Test
-	void n01_debugModeCreatesLog() {
-		var creator = bc(SimpleBean.class).debug();
+		@Test
+		void n01_debugModeCreatesLog() {
+			var creator = bc(SimpleBean.class).debug();
 
-		creator.run();
+			creator.run();
 
-		var log = creator.getDebugLog();
-		assertTrue(log.size() > 0, "Log should contain entries");
-		assertTrue(log.get(0).contains("Using new instance"), "First log entry should indicate creation method");
-	}
+			var log = creator.getDebugLog();
+			assertTrue(log.size() > 0, "Log should contain entries");
+			assertTrue(log.get(0).contains("Using new instance"), "First log entry should indicate creation method");
+		}
 
 		/**
 		 * Tests that without debug() mode, no debug log is created.
@@ -3250,10 +3252,10 @@ class BeanCreator2_Test extends TestBase {
 			var secondLog = creator.getDebugLog();
 			var secondLogSize = secondLog.size();
 
-		// Note: The first create may have more entries due to builder type determination logging
-		// which is cached for subsequent creates. We just verify the log was reset (has entries).
-		assertTrue(secondLogSize > 0, "Log should contain entries after second create");
-		assertTrue(secondLog.get(0).contains("Using new instance"), "Log should start fresh on each create");
+			// Note: The first create may have more entries due to builder type determination logging
+			// which is cached for subsequent creates. We just verify the log was reset (has entries).
+			assertTrue(secondLogSize > 0, "Log should contain entries after second create");
+			assertTrue(secondLog.get(0).contains("Using new instance"), "Log should start fresh on each create");
 		}
 
 		/**
@@ -3320,11 +3322,11 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void n09_debugWithFailure() {
-		var creator = bc(BeanInterface.class).debug();
+			var creator = bc(BeanInterface.class).debug();
 
-		assertThrows(ExecutableException.class, () -> creator.run());
+			assertThrows(ExecutableException.class, () -> creator.run());
 
-		var log = creator.getDebugLog();
+			var log = creator.getDebugLog();
 			assertFalse(log.isEmpty(), "Log should be populated even on failure");
 		}
 
@@ -3598,23 +3600,23 @@ class BeanCreator2_Test extends TestBase {
 			assertEquals(BeanWithBuilder.Builder.class.getName(), builderTypes.get(0).getName());
 		}
 
-	/**
-	 * Tests that getBuilderTypes() returns full builder class hierarchy when builder extends parent builder (protected method test).
-	 */
-	@Test
-	void p15_getBuilderTypesReturnsHierarchyWhenBuilderExtendsParent() {
-		var creator = bc(ChildBeanWithBuilder.class).debug();
-		creator.getBuilder(); // Trigger builder detection
-		var builderTypes = creator.getBuilderTypes();
+		/**
+		 * Tests that getBuilderTypes() returns full builder class hierarchy when builder extends parent builder (protected method test).
+		 */
+		@Test
+		void p15_getBuilderTypesReturnsHierarchyWhenBuilderExtendsParent() {
+			var creator = bc(ChildBeanWithBuilder.class).debug();
+			creator.getBuilder(); // Trigger builder detection
+			var builderTypes = creator.getBuilderTypes();
 
-		assertTrue(builderTypes.size() >= 2, "Should have at least the child builder and parent builder");
+			assertTrue(builderTypes.size() >= 2, "Should have at least the child builder and parent builder");
 
 
-		// Primary builder type should be the child's builder
-		assertEquals(ChildBeanWithBuilder.BuilderForChild.class.getName(), builderTypes.get(0).getName());
-		// Parent builder should also be included in the hierarchy
-		assertEquals(ParentBeanWithBuilder.BuilderForParent.class.getName(), builderTypes.get(1).getName());
-	}
+			// Primary builder type should be the child's builder
+			assertEquals(ChildBeanWithBuilder.BuilderForChild.class.getName(), builderTypes.get(0).getName());
+			// Parent builder should also be included in the hierarchy
+			assertEquals(ParentBeanWithBuilder.BuilderForParent.class.getName(), builderTypes.get(1).getName());
+		}
 
 		/**
 		 * Tests that getBuilderTypes() caches results using ResettableSupplier (protected method test).
@@ -3668,27 +3670,27 @@ class BeanCreator2_Test extends TestBase {
 			assertEquals("final", creator.getName());
 		}
 
-	/**
-	 * Tests debug logging when builder returns parent type instead of child type.
-	 * Verifies that builder build methods must return the exact bean subtype being created.
-	 */
-	@Test
-	void p20_builderReturnsParentTypeNoConstructorAcceptsBuilder() {
-	var creator = bc(P20_ParentBeanForBuilderTest.class)
-		.beanSubType(P20_ChildBeanForBuilderTest.class)
-		.builder(P20_BuilderForParentBean.class)
-		.debug();
+		/**
+		 * Tests debug logging when builder returns parent type instead of child type.
+		 * Verifies that builder build methods must return the exact bean subtype being created.
+		 */
+		@Test
+		void p20_builderReturnsParentTypeNoConstructorAcceptsBuilder() {
+			var creator = bc(P20_ParentBeanForBuilderTest.class)
+				.beanSubType(P20_ChildBeanForBuilderTest.class)
+				.builder(P20_BuilderForParentBean.class)
+				.debug();
 
-	assertThrows(ExecutableException.class, () -> creator.run());
+			assertThrows(ExecutableException.class, () -> creator.run());
 
-	var log = creator.getDebugLog();
-		var logString = log.toString();
-		assertContains("Builder method", logString);
-		assertContains("returns", logString);
-		assertContains("but must return", logString);
-		assertContains(P20_ChildBeanForBuilderTest.class.getSimpleName(), logString);
-		assertContains(P20_BuilderForParentBean.class.getSimpleName(), logString);
-	}
+			var log = creator.getDebugLog();
+			var logString = log.toString();
+			assertContains("Builder method", logString);
+			assertContains("returns", logString);
+			assertContains("but must return", logString);
+			assertContains(P20_ChildBeanForBuilderTest.class.getSimpleName(), logString);
+			assertContains(P20_BuilderForParentBean.class.getSimpleName(), logString);
+		}
 
 		public static class P20_ParentBeanForBuilderTest {
 			protected final String value;
@@ -3718,6 +3720,148 @@ class BeanCreator2_Test extends TestBase {
 			}
 			public static P20_BuilderForParentBean create() {
 				return new P20_BuilderForParentBean();
+			}
+		}
+	}
+
+	/**
+	 * Tests logging functionality:
+	 * - Log messages are captured at FINE level
+	 * - Log format includes bean type name
+	 * - Log messages are properly formatted
+	 */
+	@Nested class Q_logging extends TestBase {
+
+		/**
+		 * Tests that logging occurs when creating a simple bean.
+		 */
+		@Test
+		void q01_loggingOnSimpleBeanCreation() {
+			// Get the logger instance using the same method as BeanCreator2 static field
+			// This ensures we get the same cached instance
+			var logger = Logger.getLogger(BeanCreator2.class);
+			logger.setLevel(Level.FINE); // Enable FINE level logging
+
+			try (var capture = logger.captureEvents()) {
+				var bean = bc(SimpleBean.class).run();
+
+				assertNotNull(bean);
+				var allRecords = capture.getRecords();
+				assertTrue(allRecords.size() > 0, "Should have captured log records. Got: " + allRecords.size());
+
+				// Check that at least one log record is at FINE level
+				var fineRecords = allRecords.stream()
+					.filter(r -> r.getLevel() == Level.FINE)
+					.toList();
+				assertTrue(fineRecords.size() > 0, "Should have FINE level log records. Got: " + fineRecords.size());
+
+				// Check that log messages contain bean type name
+				boolean foundBeanType = fineRecords.stream()
+					.anyMatch(r -> r.getMessage().contains(SimpleBean.class.getName()));
+				assertTrue(foundBeanType, "Log messages should contain bean type name. Messages: " +
+					fineRecords.stream().map(r -> r.getMessage()).toList());
+			}
+		}
+
+		/**
+		 * Tests that logging occurs when creating a bean with builder.
+		 */
+		@Test
+		void q02_loggingOnBuilderBeanCreation() {
+			var logger = Logger.getLogger(BeanCreator2.class);
+			logger.setLevel(Level.FINE); // Enable FINE level logging
+			try (var capture = logger.captureEvents()) {
+				var bean = bc(Q02_BeanWithBuilder.class).run();
+
+				assertNotNull(bean);
+				var records = capture.getRecords("{level} {msg}");
+				assertTrue(records.size() > 0, "Should have captured log records");
+
+				// Check for builder-related log messages
+				var formattedRecords = capture.getRecords("{level} {msg}");
+				boolean foundBuilderLog = formattedRecords.stream()
+					.anyMatch(msg -> msg.contains("Builder detected") || msg.contains("build method"));
+				assertTrue(foundBuilderLog, "Should have builder-related log messages");
+			}
+		}
+
+		/**
+		 * Tests that log messages include bean type prefix.
+		 */
+		@Test
+		void q03_logMessagesIncludeBeanTypePrefix() {
+			var logger = Logger.getLogger(BeanCreator2.class);
+			logger.setLevel(Level.FINE); // Enable FINE level logging
+			try (var capture = logger.captureEvents()) {
+				var bean = bc(SimpleBean.class).run();
+
+				assertNotNull(bean);
+				var fineRecords = capture.getRecords().stream()
+					.filter(r -> r.getLevel() == Level.FINE)
+					.toList();
+
+				// Check that log messages start with bean type name
+				boolean hasCorrectPrefix = fineRecords.stream()
+					.anyMatch(r -> {
+						String msg = r.getMessage();
+						return msg.startsWith(SimpleBean.class.getName() + ":");
+					});
+				assertTrue(hasCorrectPrefix, "Log messages should start with bean type name prefix");
+			}
+		}
+
+		/**
+		 * Tests that log messages with format arguments are properly formatted.
+		 */
+		@Test
+		void q04_logMessagesWithFormatArguments() {
+			var logger = Logger.getLogger(BeanCreator2.class);
+			try (var capture = logger.captureEvents()) {
+				// Create a bean that will trigger logging with format arguments
+				var bean = bc(Q02_BeanWithBuilder.class).run();
+
+				assertNotNull(bean);
+				var fineRecords = capture.getRecords().stream()
+					.filter(r -> r.getLevel() == Level.FINE)
+					.toList();
+
+				// Check for formatted messages (e.g., "Builder detected: %s")
+				boolean hasFormattedMessage = fineRecords.stream()
+					.anyMatch(r -> {
+						String msg = r.getMessage();
+						return msg.contains("Builder detected") && msg.contains(Q02_BeanWithBuilder.Builder.class.getName());
+					});
+				assertTrue(hasFormattedMessage, "Should have formatted log messages with arguments");
+			}
+		}
+
+		// Test bean with builder for logging tests
+		public static class Q02_BeanWithBuilder {
+			private String value;
+
+			public Q02_BeanWithBuilder(String value) {
+				this.value = value;
+			}
+
+			public String getValue() {
+				return value;
+			}
+
+			public static class Builder {
+				private String value = "default";
+
+				public Builder value(String value) {
+					this.value = value;
+					return this;
+				}
+
+				public Q02_BeanWithBuilder build() {
+					return new Q02_BeanWithBuilder(value);
+				}
+
+				public static Builder create() {
+					return new Builder();
+				}
 			}
 		}
 	}

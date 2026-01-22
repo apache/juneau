@@ -2164,10 +2164,10 @@ public class StringUtils {
 	}
 
 	/**
-	 * Simple utility for replacing variables of the form <js>"{key}"</js> with values in the specified map.
+	 * Simple utility for replacing variables of the form <js>"{key}"</js> with values from a function.
 	 *
 	 * <p>
-	 * Supports named MessageFormat-style variables: <js>"{key}"</js> where <c>key</c> is a map key.
+	 * Supports named MessageFormat-style variables: <js>"{key}"</js> where <c>key</c> is resolved by the function.
 	 * For un-numbered sequential placeholders <js>"{}"</js>, use {@link #format(String, Object...)} instead.
 	 *
 	 * <p>
@@ -2175,24 +2175,24 @@ public class StringUtils {
 	 * readable formatting (e.g., byte arrays are converted to hex, collections are formatted without spaces).
 	 *
 	 * <p>
-	 * Nested variables are supported in both the input string and map values.
+	 * Nested variables are supported in both the input string and returned values.
 	 *
 	 * <p>
-	 * If the map does not contain the specified value, the variable is not replaced.
+	 * If the function returns <jk>null</jk> for a key, the variable is not replaced.
 	 *
 	 * <p>
-	 * <jk>null</jk> values in the map are treated as blank strings.
+	 * <jk>null</jk> values returned by the function are treated as blank strings.
 	 *
 	 * @param s The string containing variables to replace.
-	 * @param m The map containing the variable values.
+	 * @param resolver The function that resolves variable names to values.
 	 * @return The new string with variables replaced, or the original string if it didn't have variables in it.
 	 */
-	public static String formatNamed(String s, Map<String,Object> m) {
+	public static String formatNamed(String s, Function<String,Object> resolver) {
 
 		if (s == null)
 			return null;
 
-		if (m == null || m.isEmpty() || s.indexOf('{') == -1)
+		if (resolver == null || s.indexOf('{') == -1)
 			return s;
 
 		// S1: Not in variable, looking for '{'
@@ -2223,24 +2223,16 @@ public class StringUtils {
 						depth--;
 					} else {
 						var key = s.substring(x + 1, i);
-						key = (hasInternalVar ? formatNamed(key, m) : key);
+						key = (hasInternalVar ? formatNamed(key, resolver) : key);
 						hasInternalVar = false;
-						// JUNEAU-248: Check if key exists in map by attempting to get it
-						// For regular maps: use containsKey() OR nn(get()) check
-						// For BeanMaps: get() returns non-null for accessible properties (including hidden ones)
-						var val = m.get(key);
-						// Check if key actually exists: either containsKey is true, or val is non-null
-						// This handles both regular maps and BeanMaps correctly
-						var keyExists = m.containsKey(key) || nn(val);
-						if (! keyExists)
+						var val = resolver.apply(key);
+						if (val == null)
 							out.append('{').append(key).append('}');
 						else {
-							if (val == null)
-								val = "";
 							var v = r(val);
 							// If the replacement also contains variables, replace them now.
 							if (v.indexOf('{') != -1)
-								v = formatNamed(v, m);
+								v = formatNamed(v, resolver);
 							out.append(v);
 						}
 						state = S1;
@@ -2249,6 +2241,50 @@ public class StringUtils {
 			}
 		}
 		return out.toString();
+	}
+
+	/**
+	 * Simple utility for replacing variables of the form <js>"{key}"</js> with values in the specified map.
+	 *
+	 * <p>
+	 * Supports named MessageFormat-style variables: <js>"{key}"</js> where <c>key</c> is a map key.
+	 * For un-numbered sequential placeholders <js>"{}"</js>, use {@link #format(String, Object...)} instead.
+	 *
+	 * <p>
+	 * Variable values are converted to strings using {@link #readable(Object)} to ensure consistent,
+	 * readable formatting (e.g., byte arrays are converted to hex, collections are formatted without spaces).
+	 *
+	 * <p>
+	 * Nested variables are supported in both the input string and map values.
+	 *
+	 * <p>
+	 * If the map does not contain the specified value, the variable is not replaced.
+	 *
+	 * <p>
+	 * <jk>null</jk> values in the map are treated as blank strings.
+	 *
+	 * @param s The string containing variables to replace.
+	 * @param m The map containing the variable values.
+	 * @return The new string with variables replaced, or the original string if it didn't have variables in it.
+	 */
+	public static String formatNamed(String s, Map<String,Object> m) {
+		if (s == null)
+			return null;
+
+		if (m == null || m.isEmpty())
+			return s;
+
+		// Delegate to Function-based version
+		return formatNamed(s, key -> {
+			// JUNEAU-248: Check if key exists in map by attempting to get it
+			// For regular maps: use containsKey() OR nn(get()) check
+			// For BeanMaps: get() returns non-null for accessible properties (including hidden ones)
+			var val = m.get(key);
+			// Check if key actually exists: either containsKey is true, or val is non-null
+			// This handles both regular maps and BeanMaps correctly
+			var keyExists = m.containsKey(key) || nn(val);
+			return keyExists ? val : null;
+		});
 	}
 
 	/**

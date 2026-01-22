@@ -31,6 +31,7 @@ import java.util.function.*;
 import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.commons.concurrent.*;
 import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.commons.reflect.*;
 
 /**
@@ -224,6 +225,7 @@ public class BeanCreator2<T> {
 	private final ClassInfoTyped<T> beanType;
 	private final SimpleReadWriteLock lock = new SimpleReadWriteLock();
 	private final OptionalReference<List<String>> debug = OptionalReference.empty();
+	private static final Logger logger = Logger.getLogger(BeanCreator2.class);
 
 	private ClassInfoTyped<? extends T> beanSubType;
 	private ClassInfo explicitBuilderType = null;
@@ -1590,6 +1592,9 @@ public class BeanCreator2<T> {
 	}
 
 	private void log(String message, Object... args) {
+		// Log to Logger at FINE level
+		logger.fine(beanType.getName() + ": " + message, args);
+		// Also add to debug log if enabled
 		debug.ifPresent(x -> x.add(args.length == 0 ? message : String.format(message, args)));
 	}
 
