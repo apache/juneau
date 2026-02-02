@@ -61,7 +61,7 @@ class RestClient_Response_Headers_Test extends TestBase {
 	public static class A2 extends BasicHeader {
 		private static final long serialVersionUID = 1L;
 
-		private A2(String name, Object value) {  // NOSONAR
+		private A2(String name, Object value) {  // NOSONAR(java:S1186): Unused test method/constructor
 			super(name, value);  // Never called.
 		}
 	}

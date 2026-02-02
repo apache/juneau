@@ -26,7 +26,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
-@Deprecated
 class PrimitiveArrayAssertion_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -46,8 +45,10 @@ class PrimitiveArrayAssertion_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_msg() {
-		assertThrows(BasicAssertionError.class, ()->byteArray(null).setMsg("Foo {0}", 1).isExists(), "Foo 1");
-		assertThrows(RuntimeException.class, ()->byteArray(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists(), "Foo 1");
+		var assertion1 = byteArray(null).setMsg("Foo {0}", 1);
+		assertThrows(BasicAssertionError.class, assertion1::isExists, "Foo 1");
+		var assertion2 = byteArray(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class);
+		assertThrows(RuntimeException.class, assertion2::isExists, "Foo 1");
 	}
 
 	@Test void a02_stdout() {
@@ -119,19 +120,22 @@ class PrimitiveArrayAssertion_Test extends TestBase {
 	@Test void ca01_exists() {
 		int[] x = {}, nil = null;
 		intArray(x).isExists().isExists();
-		assertThrows(BasicAssertionError.class, ()->intArray(nil).isExists(), "Value was null.");
+		var assertion1 = intArray(nil);
+		assertThrows(BasicAssertionError.class, assertion1::isExists, "Value was null.");
 	}
 
 	@Test void ca02_isNull() {
 		int[] x = {}, nil = null;
 		intArray(nil).isNull();
-		assertThrows(BasicAssertionError.class, ()->intArray(x).isNull(), "Value was not null.");
+		var assertion2 = intArray(x);
+		assertThrows(BasicAssertionError.class, assertion2::isNull, "Value was not null.");
 	}
 
 	@Test void ca03_isNotNull() {
 		int[] x = {}, nil = null;
 		intArray(x).isNotNull();
-		assertThrows(BasicAssertionError.class, ()->intArray(nil).isNotNull(), "Value was null.");
+		var assertion3 = intArray(nil);
+		assertThrows(BasicAssertionError.class, assertion3::isNotNull, "Value was null.");
 	}
 
 	@Test void ca04a_is_T() {
@@ -255,7 +259,10 @@ class PrimitiveArrayAssertion_Test extends TestBase {
 		intArray(x1).is(eq("1"),eq("2"));
 		intArray(x1).is(eq(1),eq(2));
 		assertThrown(()->intArray(x1).is(eq("1"),eq("3"))).asMessage().asOneLine().is("Array did not contain expected value at index 1.  Value did not match expected.  Expect='3'.  Actual='2'.");
-		assertThrows(BasicAssertionError.class, ()->intArray(nil).is(eq("1"),eq("3")), "Value was null.");
+		var assertion4 = intArray(nil);
+		Predicate<Integer> predicate1 = eq("1");
+		Predicate<Integer> predicate2 = eq("3");
+		assertThrows(BasicAssertionError.class, ()->assertion4.is(predicate1, predicate2), "Value was null.");
 		intArray(x1).is((Predicate<Integer>)null,null);
 	}
 
@@ -264,8 +271,10 @@ class PrimitiveArrayAssertion_Test extends TestBase {
 		intArray(x1).isAny(x -> x .equals(3));
 		intArray(x1).isAny(eq(3));
 		assertThrown(()->intArray(x1).isAny(x -> x.equals(4))).asMessage().asOneLine().is("Array did not contain any matching value.  Value='[2,3,1]'.");
-		assertThrows(IllegalArgumentException.class, ()->intArray(x1).isAny((Predicate<Integer>)null), "Argument 'test' cannot be null.");
-		assertThrows(BasicAssertionError.class, ()->intArray(nil).isAny(x->true), "Value was null.");
+		var assertion5 = intArray(x1);
+		assertThrows(IllegalArgumentException.class, ()->assertion5.isAny((Predicate<Integer>)null), "Argument 'test' cannot be null.");
+		var assertion6 = intArray(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion6.isAny(x->true), "Value was null.");
 	}
 
 	@Test void cb03_all() {
@@ -273,37 +282,46 @@ class PrimitiveArrayAssertion_Test extends TestBase {
 		intArray(x1).isAll(x -> x < 4);
 		assertThrown(()->intArray(x1).isAll(x -> x < 3)).asMessage().asOneLine().is("Array contained non-matching value at index 1.  Unexpected value: '3'.");
 		assertThrown(()->intArray(x1).isAll(ne(3))).asMessage().asOneLine().is("Array contained non-matching value at index 1.  Value unexpectedly matched.  Value='3'.");
-		assertThrows(IllegalArgumentException.class, ()->intArray(x1).isAll(null), "Argument 'test' cannot be null.");
-		assertThrows(BasicAssertionError.class, ()->intArray(nil).isAll(x->true), "Value was null.");
+		var assertion7 = intArray(x1);
+		assertThrows(IllegalArgumentException.class, ()->assertion7.isAll(null), "Argument 'test' cannot be null.");
+		var assertion8 = intArray(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion8.isAll(x->true), "Value was null.");
 	}
 
 	@Test void cb04_isEmpty() {
 		int[] x1={}, x2={1,2}, nil = null;
 		intArray(x1).isEmpty();
-		assertThrows(BasicAssertionError.class, ()->intArray(x2).isEmpty(), "Array was not empty.");
-		assertThrows(BasicAssertionError.class, ()->intArray(nil).isEmpty(), "Value was null.");
+		var assertion9 = intArray(x2);
+		assertThrows(BasicAssertionError.class, assertion9::isEmpty, "Array was not empty.");
+		var assertion10 = intArray(nil);
+		assertThrows(BasicAssertionError.class, assertion10::isEmpty, "Value was null.");
 	}
 
 	@Test void cb05_isNotEmpty() {
 		int[] x1={}, x2={1,2}, nil = null;
 		intArray(x2).isNotEmpty();
-		assertThrows(BasicAssertionError.class, ()->intArray(x1).isNotEmpty(), "Array was empty.");
-		assertThrows(BasicAssertionError.class, ()->intArray(nil).isNotEmpty(), "Value was null.");
+		var assertion11 = intArray(x1);
+		assertThrows(BasicAssertionError.class, assertion11::isNotEmpty, "Array was empty.");
+		var assertion12 = intArray(nil);
+		assertThrows(BasicAssertionError.class, assertion12::isNotEmpty, "Value was null.");
 	}
 
 	@Test void cb06_contains() {
 		int[] x1 = {1,2}, nil = null;
 		intArray(x1).isContains(1);
 		assertThrown(()->intArray(x1).isContains(3)).asMessage().asOneLine().is("Array did not contain expected value.  Expect='3'.  Actual='[1,2]'.");
-		assertThrows(BasicAssertionError.class, ()->intArray(nil).isContains(3), "Value was null.");
-		assertThrows(BasicAssertionError.class, ()->intArray(nil).isContains(null), "Value was null.");
+		var assertion13 = intArray(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion13.isContains(3), "Value was null.");
+		var assertion14 = intArray(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion14.isContains(null), "Value was null.");
 	}
 
 	@Test void cb07_doesNotContain() {
 		int[] x1 = {1,2}, nil = null;
 		intArray(x1).isNotContains(3);
 		assertThrown(()->intArray(x1).isNotContains(1)).asMessage().asOneLine().is("Array contained unexpected value.  Unexpected='1'.  Actual='[1,2]'.");
-		assertThrows(BasicAssertionError.class, ()->intArray(nil).isNotContains(3), "Value was null.");
+		var assertion15 = intArray(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion15.isNotContains(3), "Value was null.");
 	}
 
 	@Test void cb08_isSize() {
@@ -312,7 +330,8 @@ class PrimitiveArrayAssertion_Test extends TestBase {
 		intArray(x2).isSize(2);
 		assertThrown(()->intArray(x1).isSize(2)).asMessage().asOneLine().is("Array did not have the expected size.  Expect=2.  Actual=0.");
 		assertThrown(()->intArray(x2).isSize(0)).asMessage().asOneLine().is("Array did not have the expected size.  Expect=0.  Actual=2.");
-		assertThrows(BasicAssertionError.class, ()->intArray(nil).isSize(0), "Value was null.");
+		var assertion16 = intArray(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion16.isSize(0), "Value was null.");
 	}
 
 	@Test void cb09_has() {

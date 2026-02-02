@@ -27,7 +27,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
-@Deprecated
 class ThrowableAssertion_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -54,8 +53,10 @@ class ThrowableAssertion_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_msg() {
-		assertThrows(BasicAssertionError.class, ()->test(null).setMsg("Foo {0}", 1).isExists(), "Foo 1");
-		assertThrows(RuntimeException.class, ()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists(), "Foo 1");
+		var assertion1 = test(null).setMsg("Foo {0}", 1);
+		assertThrows(BasicAssertionError.class, assertion1::isExists, "Foo 1");
+		var assertion2 = test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class);
+		assertThrows(RuntimeException.class, assertion2::isExists, "Foo 1");
 	}
 
 	@Test void a02_stdout() {
@@ -189,21 +190,24 @@ class ThrowableAssertion_Test extends TestBase {
 		var x = throwable();
 		var nil = no(Throwable.class);
 		test(x).isExists().isExists();
-		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Exception was not thrown.");
+		var assertion1 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion1::isExists, "Exception was not thrown.");
 	}
 
 	@Test void ca02_isNull() {
 		var x = throwable();
 		var nil = no(Throwable.class);
 		test(nil).isNull();
-		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
+		var assertion2 = test(x);
+		assertThrows(BasicAssertionError.class, assertion2::isNull, "Value was not null.");
 	}
 
 	@Test void ca03_isNotNull() {
 		var x = throwable();
 		var nil = no(Throwable.class);
 		test(x).isNotNull();
-		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
+		var assertion3 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion3::isNotNull, "Value was null.");
 	}
 
 	@Test void ca04a_is_T() {

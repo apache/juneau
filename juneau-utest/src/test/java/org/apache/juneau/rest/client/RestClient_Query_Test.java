@@ -111,7 +111,7 @@ class RestClient_Query_Test extends TestBase {
 			throw new IOException("foo");
 		}
 		@Override
-		public void close() throws IOException {}  // NOSONAR
+		public void close() throws IOException {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 
 	@Test void a12_queryCustom_Object() throws Exception {

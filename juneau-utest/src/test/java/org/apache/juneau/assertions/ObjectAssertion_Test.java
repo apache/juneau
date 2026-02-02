@@ -29,7 +29,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
-@Deprecated
 class ObjectAssertion_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -55,8 +54,10 @@ class ObjectAssertion_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_msg() {
-		assertThrows(BasicAssertionError.class, ()->test(null).setMsg("Foo {0}", 1).isExists(), "Foo 1");
-		assertThrows(RuntimeException.class, ()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists(), "Foo 1");
+		var assertion1 = test(null).setMsg("Foo {0}", 1);
+		assertThrows(BasicAssertionError.class, assertion1::isExists, "Foo 1");
+		var assertion2 = test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class);
+		assertThrows(RuntimeException.class, assertion2::isExists, "Foo 1");
 	}
 
 	@Test void a02_stdout() {
@@ -124,21 +125,24 @@ class ObjectAssertion_Test extends TestBase {
 		var x = 1;
 		var nil = no(Integer.class);
 		test(x).isExists().isExists();
-		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
+		var assertion3 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion3::isExists, "Value was null.");
 	}
 
 	@Test void ca02_isNull() {
 		var x = 1;
 		var nil = no(Integer.class);
 		test(nil).isNull();
-		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
+		var assertion4 = test(x);
+		assertThrows(BasicAssertionError.class, assertion4::isNull, "Value was not null.");
 	}
 
 	@Test void ca03_isNotNull() {
 		var x = 1;
 		var nil = no(Integer.class);
 		test(x).isNotNull();
-		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
+		var assertion5 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion5::isNotNull, "Value was null.");
 	}
 
 	@Test void ca04a_is_T() {

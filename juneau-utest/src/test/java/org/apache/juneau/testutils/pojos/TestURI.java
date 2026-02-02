@@ -45,12 +45,12 @@ public class TestURI {
 
 	public TestURI() throws Exception {
 		f1 = new URI("f1/x1");
-		f2 = new URI("/f2/x2");  // NOSONAR
-		f3 = new URI("http://www.apache.org/f3/x3");  // NOSONAR
+		f2 = new URI("/f2/x2");  // NOSONAR(java:UNKNOWN): Field initialization
+		f3 = new URI("http://www.apache.org/f3/x3");  // NOSONAR(java:UNKNOWN): Field initialization
 		f4 = "f4/x4";
 		f5 = "/f5/x5";
 		f6 = "http://www.apache.org/f6/x6";
-		f7 = new URL("http://www.apache.org/f7/x7");  // NOSONAR
+		f7 = new URL("http://www.apache.org/f7/x7");  // NOSONAR(java:UNKNOWN): Field initialization
 		f8 = new TestURIb();
 		fa = "http://www.apache.org/fa/xa#MY_LABEL";
 		fb = "http://www.apache.org/fb/xb?label=MY_LABEL&foo=bar";

@@ -117,7 +117,7 @@ public class ClassInfo_Test extends TestBase {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<AConfig> a, Context.Builder b) {}  // NOSONAR
+		public void apply(AnnotationInfo<AConfig> a, Context.Builder b) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 
 	private static void check(String expected, Object o) {
@@ -236,27 +236,27 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	static class CC2 extends CC1 implements CI3 {
-		public void c2b() {}  // NOSONAR
+		public void c2b() {}  // NOSONAR(java:S1186): Unused test method/constructor
 
 		@Override
-		public void i1b() {}  // NOSONAR
+		public void i1b() {}  // NOSONAR(java:S1186): Unused test method/constructor
 
 		@Override
-		public void i2b() {}  // NOSONAR
+		public void i2b() {}  // NOSONAR(java:S1186): Unused test method/constructor
 
 		@Override
-		public void i2a() {}  // NOSONAR
+		public void i2a() {}  // NOSONAR(java:S1186): Unused test method/constructor
 
-		protected void c2a() {}  // NOSONAR
+		protected void c2a() {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 
 	static class CC3 extends CC2 {
 		@Override
-		public void i2b() {}  // NOSONAR
+		public void i2b() {}  // NOSONAR(java:S1186): Unused test method/constructor
 
-		public void c3a() {}  // NOSONAR
+		public void c3a() {}  // NOSONAR(java:S1186): Unused test method/constructor
 
-		protected void c3b() {}  // NOSONAR
+		protected void c3b() {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 
 	static ClassInfo cc3 = of(CC3.class), ci2 = of(CI2.class);
@@ -264,15 +264,15 @@ public class ClassInfo_Test extends TestBase {
 	static class E1 {
 		public E1() {}
 
-		public E1(String a) {}  // NOSONAR
+		public E1(String a) {}  // NOSONAR(java:S1186): Unused test method/constructor
 
-		public E1(Writer a) {}  // NOSONAR
+		public E1(Writer a) {}  // NOSONAR(java:S1186): Unused test method/constructor
 
-		public E1(String a, Writer b) {}  // NOSONAR
+		public E1(String a, Writer b) {}  // NOSONAR(java:S1186): Unused test method/constructor
 
-		protected E1(int a) {}  // NOSONAR
+		protected E1(int a) {}  // NOSONAR(java:S1186): Unused test method/constructor
 
-		E1(float a) {}  // NOSONAR
+		E1(float a) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 
 	static class E2 {
@@ -284,12 +284,12 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	class E4 {
-		public E4() {}  // NOSONAR
+		public E4() {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 
 	static class E5 {
 		@Deprecated
-		public E5() {}  // NOSONAR
+		public E5() {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 
 	class E6 {
@@ -397,7 +397,7 @@ public class ClassInfo_Test extends TestBase {
 	public class H_PublicDeprecated {}
 
 	static ClassInfo hPublic = of(H_Public.class), hPackage = of(H_Package.class), hProtected = of(H_Protected.class), hPrivate = of(H_Private.class), hPublicMember = of(H_PublicMember.class),
-		hAbstractPublic = of(H_AbstractPublic.class), hPublicDeprecated = of(H_PublicDeprecated.class);  // NOSONAR
+		hAbstractPublic = of(H_AbstractPublic.class), hPublicDeprecated = of(H_PublicDeprecated.class);  // NOSONAR(java:UNKNOWN): Field initialization
 
 	@Deprecated
 	public abstract static class H2a {}
@@ -427,7 +427,7 @@ public class ClassInfo_Test extends TestBase {
 
 	static ClassInfo h2a = of(H2a.class), h2b = of(H2b.class), h2Deprecated = of(H2_Deprecated.class), h2NotDeprecated = of(H2_NotDeprecated.class), h2Public = of(H2_Public.class),
 		h2NotPublic = of(H2_NotPublic.class), h2Static = of(H2_Static.class), h2NotStatic = of(H2_NotStatic.class), h2Member = of(H2_Member.class), h2StaticMember = of(H2_StaticMember.class),
-		h2Abstract = of(H2_Abstract.class), h2NotAbstract = of(H2_NotAbstract.class);  // NOSONAR
+		h2Abstract = of(H2_Abstract.class), h2NotAbstract = of(H2_NotAbstract.class);  // NOSONAR(java:UNKNOWN): Field initialization
 
 	static List<Class<?>> primitives = l(boolean.class, byte.class, short.class, char.class, int.class, long.class, float.class, double.class);
 	static List<Class<?>> primitiveWrappers = l(Boolean.class, Byte.class, Short.class, Character.class, Integer.class, Long.class, Float.class, Double.class);

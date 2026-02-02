@@ -27,7 +27,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
-@Deprecated
 class ListAssertion_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -43,8 +42,10 @@ class ListAssertion_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_msg() {
-		assertThrows(BasicAssertionError.class, ()->test(null).setMsg("Foo {0}", 1).isExists(), "Foo 1");
-		assertThrows(RuntimeException.class, ()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists(), "Foo 1");
+		var assertion1 = test(null).setMsg("Foo {0}", 1);
+		assertThrows(BasicAssertionError.class, assertion1::isExists, "Foo 1");
+		var assertion2 = test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class);
+		assertThrows(RuntimeException.class, assertion2::isExists, "Foo 1");
 	}
 
 	@Test void a02_stdout() {
@@ -146,21 +147,24 @@ class ListAssertion_Test extends TestBase {
 		var x = liste(Integer.class);
 		var nil = listn(Integer.class);
 		test(x).isExists().isExists();
-		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
+		var assertion3 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion3::isExists, "Value was null.");
 	}
 
 	@Test void ca02_isNull() {
 		var x = liste(Integer.class);
 		var nil = listn(Integer.class);
 		test(nil).isNull();
-		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
+		var assertion4 = test(x);
+		assertThrows(BasicAssertionError.class, assertion4::isNull, "Value was not null.");
 	}
 
 	@Test void ca03_isNotNull() {
 		var x = liste(Integer.class);
 		var nil = listn(Integer.class);
 		test(x).isNotNull();
-		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
+		var assertion5 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion5::isNotNull, "Value was null.");
 	}
 
 	@Test void ca04a_is_T() {
@@ -310,8 +314,10 @@ class ListAssertion_Test extends TestBase {
 		var x2 = l("a","b");
 		var nil = listn(String.class);
 		test(x1).isEmpty();
-		assertThrows(BasicAssertionError.class, ()->test(x2).isEmpty(), "Collection was not empty.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isEmpty(), "Value was null.");
+		var assertion6 = test(x2);
+		assertThrows(BasicAssertionError.class, assertion6::isEmpty, "Collection was not empty.");
+		var assertion7 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion7::isEmpty, "Value was null.");
 	}
 
 	@Test void cb02_isNotEmpty() {
@@ -319,8 +325,10 @@ class ListAssertion_Test extends TestBase {
 		var x2 = l("a","b");
 		var nil = listn(String.class);
 		test(x2).isNotEmpty();
-		assertThrows(BasicAssertionError.class, ()->test(x1).isNotEmpty(), "Collection was empty.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isNotEmpty(), "Value was null.");
+		var assertion8 = test(x1);
+		assertThrows(BasicAssertionError.class, assertion8::isNotEmpty, "Collection was empty.");
+		var assertion9 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion9::isNotEmpty, "Value was null.");
 	}
 
 	@Test void cb03_contains() {
@@ -328,7 +336,8 @@ class ListAssertion_Test extends TestBase {
 		var nil = listn(String.class);
 		test(x).isContains("a");
 		assertThrown(()->test(x).isContains("z")).asMessage().asOneLine().is("Collection did not contain expected value.  Expect='z'.  Value='[a,b]'.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isContains("z"), "Value was null.");
+		var assertion10 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion10.isContains("z"), "Value was null.");
 	}
 
 	@Test void cb04_doesNotContain() {
@@ -336,7 +345,8 @@ class ListAssertion_Test extends TestBase {
 		var nil = listn(String.class);
 		test(x).isNotContains("z");
 		assertThrown(()->test(x).isNotContains("a")).asMessage().asOneLine().is("Collection contained unexpected value.  Unexpected='a'.  Value='[a,b]'.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isNotContains("z"), "Value was null.");
+		var assertion11 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion11.isNotContains("z"), "Value was null.");
 	}
 
 	@Test void cb05_any() {
@@ -344,7 +354,8 @@ class ListAssertion_Test extends TestBase {
 		var nil = listn(String.class);
 		test(x1).isAny(x->x.equals("a"));
 		assertThrown(()->test(x1).isAny(x->x.equals("z"))).asMessage().asOneLine().is("Collection did not contain tested value.  Value='[a,b]'.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isAny(x->x.equals("z")), "Value was null.");
+		var assertion12 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion12.isAny(x->x.equals("z")), "Value was null.");
 	}
 
 	@Test void cb06_all() {
@@ -352,7 +363,8 @@ class ListAssertion_Test extends TestBase {
 		var nil = listn(String.class);
 		test(x1).isAll(x->x!=null);
 		assertThrown(()->test(x1).isAll(x->x.equals("z"))).asMessage().asOneLine().is("Collection did not contain tested value.  Value='[a,b]'.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isAll(x->x.equals("z")), "Value was null.");
+		var assertion13 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion13.isAll(x->x.equals("z")), "Value was null.");
 	}
 
 	@Test void cb07_isSize() {
@@ -360,7 +372,8 @@ class ListAssertion_Test extends TestBase {
 		var nil = listn(String.class);
 		test(x).isSize(2);
 		assertThrown(()->test(x).isSize(0)).asMessage().asOneLine().is("Collection did not have the expected size.  Expect=0.  Actual=2.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isSize(0), "Value was null.");
+		var assertion14 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion14.isSize(0), "Value was null.");
 	}
 
 	@Test void cc01_has() {
@@ -369,7 +382,8 @@ class ListAssertion_Test extends TestBase {
 		test(x).isHas("a","b");
 		assertThrown(()->test(x).isHas("a")).asMessage().asOneLine().is("Collection did not have the expected size.  Expect=1.  Actual=2.");
 		assertThrown(()->test(x).isHas("a","c")).asMessage().asOneLine().is("List did not contain expected value at index 1.  Value did not match expected.  Expect='c'.  Actual='b'.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isHas("a","c"), "Value was null.");
+		var assertion15 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion15.isHas("a","c"), "Value was null.");
 	}
 
 	@Test void cc02_each() {
@@ -378,6 +392,7 @@ class ListAssertion_Test extends TestBase {
 		test(x1).isEach(x->x!=null,x->x!=null);
 		assertThrown(()->test(x1).isEach(x->x==null)).asMessage().asOneLine().is("Collection did not have the expected size.  Expect=1.  Actual=2.");
 		assertThrown(()->test(x1).isEach(x->x==null,x->x==null)).asMessage().asOneLine().is("List did not contain expected value at index 0.  Unexpected value: 'a'.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isEach(x->x==null), "Value was null.");
+		var assertion16 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion16.isEach(x->x==null), "Value was null.");
 	}
 }

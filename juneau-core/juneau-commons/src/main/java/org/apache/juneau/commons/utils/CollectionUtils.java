@@ -873,7 +873,7 @@ public class CollectionUtils {
 	 * @return An unmodifiable list containing the specified values, or <jk>null</jk> if the input is <jk>null</jk>.
 	 */
 	@SafeVarargs
-	public static <T> List<T> l(T...values) {  // NOSONAR
+	public static <T> List<T> l(T...values) {  // NOSONAR(java:UNKNOWN): Varargs convenience method
 		return values == null ? null : Arrays.asList(values);
 	}
 
@@ -964,7 +964,7 @@ public class CollectionUtils {
 	 * @return A modifiable list containing the specified values.
 	 */
 	@SafeVarargs
-	public static <T> List<T> list(T...values) {  // NOSONAR
+	public static <T> List<T> list(T...values) {  // NOSONAR(java:UNKNOWN): Varargs convenience method
 		return new ArrayList<>(l(values));
 	}
 
@@ -985,7 +985,7 @@ public class CollectionUtils {
 	 * @see #list(Object...)
 	 */
 	@SafeVarargs
-	public static <T> ArrayList<T> al(T...values) {  // NOSONAR
+	public static <T> ArrayList<T> al(T...values) {  // NOSONAR(java:UNKNOWN): Varargs convenience method
 		return new ArrayList<>(l(values));
 	}
 
@@ -1005,7 +1005,7 @@ public class CollectionUtils {
 	 * @return A new modifiable LinkedList containing the specified values.
 	 */
 	@SafeVarargs
-	public static <T> LinkedList<T> ll(T...values) {  // NOSONAR
+	public static <T> LinkedList<T> ll(T...values) {  // NOSONAR(java:UNKNOWN): Varargs convenience method
 		return new LinkedList<>(l(values));
 	}
 
@@ -1025,7 +1025,7 @@ public class CollectionUtils {
 	 * @return A new modifiable HashSet containing the specified values.
 	 */
 	@SafeVarargs
-	public static <T> HashSet<T> hs(T...values) {  // NOSONAR
+	public static <T> HashSet<T> hs(T...values) {  // NOSONAR(java:UNKNOWN): Varargs convenience method
 		return new HashSet<>(Arrays.asList(values));
 	}
 
@@ -1046,7 +1046,7 @@ public class CollectionUtils {
 	 * @return A new modifiable TreeSet containing the specified values.
 	 */
 	@SafeVarargs
-	public static <T extends Comparable<T>> TreeSet<T> ts(T...values) {  // NOSONAR
+	public static <T extends Comparable<T>> TreeSet<T> ts(T...values) {  // NOSONAR(java:UNKNOWN): Varargs convenience method
 		return new TreeSet<>(Arrays.asList(values));
 	}
 
@@ -1926,7 +1926,7 @@ public class CollectionUtils {
 	 * @return A modifiable LinkedHashSet containing the specified values.
 	 */
 	@SafeVarargs
-	public static <T> LinkedHashSet<T> set(T...values) {  // NOSONAR
+	public static <T> LinkedHashSet<T> set(T...values) {  // NOSONAR(java:UNKNOWN): Varargs convenience method
 		assertArgNotNull("values", values);
 		return new LinkedHashSet<>(Arrays.asList(values));
 	}
@@ -2232,7 +2232,7 @@ public class CollectionUtils {
 	 * @throws IllegalArgumentException if the input object cannot be converted to a List.
 	 * @see arrayToList
 	 */
-	public static final List<?> toList(Object o) {  // NOSONAR
+	public static final List<?> toList(Object o) {  // NOSONAR(java:UNKNOWN): Raw type return
 		assertArgNotNull("o", o);
 		if (o instanceof List<?> o2)
 			return o2;

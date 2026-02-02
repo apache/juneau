@@ -1234,8 +1234,8 @@ class Swagger_Test extends TestBase {
 	}
 
 	@Test void j02_operation_deprecated_Deprecated() throws Exception {
-		assertTrue(getSwagger(new J2()).getPaths().get("/path2/{foo}").get("get").getDeprecated());  // NOSONAR
-		assertTrue(getSwaggerWithFile(new J2()).getPaths().get("/path2/{foo}").get("get").getDeprecated());  // NOSONAR
+		assertTrue(getSwagger(new J2()).getPaths().get("/path2/{foo}").get("get").getDeprecated());  // NOSONAR(java:UNKNOWN): Field initialization
+		assertTrue(getSwaggerWithFile(new J2()).getPaths().get("/path2/{foo}").get("get").getDeprecated());  // NOSONAR(java:UNKNOWN): Field initialization
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

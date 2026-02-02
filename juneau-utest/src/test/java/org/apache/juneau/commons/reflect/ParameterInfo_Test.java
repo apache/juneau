@@ -132,18 +132,18 @@ class ParameterInfo_Test extends TestBase {
 
 	static class B {
 		public B(int a, String b) {}
-		public void a1(int a, String b) {}  // NOSONAR
-		void a2(int a, String b) {}  // NOSONAR
+		public void a1(int a, String b) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		void a2(int a, String b) {}  // NOSONAR(java:S1186): Unused test method/constructor
 		public void varargsMethod(String... args) {}  // NOSONAR - for testing VARARGS flag
 	}
 	static ClassInfo b = ClassInfo.of(B.class);
 	static ParameterInfo
-		b_b_a = b.getPublicConstructor(x -> x.hasParameterTypes(int.class, String.class)).get().getParameter(0),  // NOSONAR
-		b_b_b = b.getPublicConstructor(x -> x.hasParameterTypes(int.class, String.class)).get().getParameter(1),  // NOSONAR
-		b_a1_a = b.getMethod(x -> x.hasName("a1")).get().getParameter(0),  // NOSONAR
-		b_a1_b = b.getMethod(x -> x.hasName("a1")).get().getParameter(1),  // NOSONAR
-		b_a2_a = b.getMethod(x -> x.hasName("a2")).get().getParameter(0),  // NOSONAR
-		b_a2_b = b.getMethod(x -> x.hasName("a2")).get().getParameter(1),  // NOSONAR
+		b_b_a = b.getPublicConstructor(x -> x.hasParameterTypes(int.class, String.class)).get().getParameter(0),  // NOSONAR(java:UNKNOWN): Unused test code
+		b_b_b = b.getPublicConstructor(x -> x.hasParameterTypes(int.class, String.class)).get().getParameter(1),  // NOSONAR(java:UNKNOWN): Unused test code
+		b_a1_a = b.getMethod(x -> x.hasName("a1")).get().getParameter(0),  // NOSONAR(java:UNKNOWN): Unused test code
+		b_a1_b = b.getMethod(x -> x.hasName("a1")).get().getParameter(1),  // NOSONAR(java:UNKNOWN): Unused test code
+		b_a2_a = b.getMethod(x -> x.hasName("a2")).get().getParameter(0),  // NOSONAR(java:UNKNOWN): Unused test code
+		b_a2_b = b.getMethod(x -> x.hasName("a2")).get().getParameter(1),  // NOSONAR(java:UNKNOWN): Unused test code
 		b_varargs = b.getMethod(x -> x.hasName("varargsMethod")).get().getParameter(0);  // NOSONAR - varargs parameter
 
 	@CA("1") public static class C1 extends C2 {}
@@ -158,19 +158,19 @@ class ParameterInfo_Test extends TestBase {
 	public static class CC implements CB {
 		public CC(@CA("9") C1 x) {}
 		@Override
-		public void a1(C1 x) {}  // NOSONAR
+		public void a1(C1 x) {}  // NOSONAR(java:S1186): Unused test method/constructor
 		@Override
-		public void a2(@CA("6") C1 x) {}  // NOSONAR
+		public void a2(@CA("6") C1 x) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 	static ClassInfo
 		cb = ClassInfo.of(CB.class),
 		cc = ClassInfo.of(CC.class);
 	static ParameterInfo
-		cc_cc = cc.getPublicConstructor(x -> x.hasParameterTypes(C1.class)).get().getParameter(0),  // NOSONAR
-		cb_a1 = cb.getMethod(x -> x.hasName("a1")).get().getParameter(0),  // NOSONAR
-		cb_a2 = cb.getMethod(x -> x.hasName("a2")).get().getParameter(0),  // NOSONAR
-		cc_a1 = cc.getMethod(x -> x.hasName("a1")).get().getParameter(0),  // NOSONAR
-		cc_a2 = cc.getMethod(x -> x.hasName("a2")).get().getParameter(0);  // NOSONAR
+		cc_cc = cc.getPublicConstructor(x -> x.hasParameterTypes(C1.class)).get().getParameter(0),  // NOSONAR(java:UNKNOWN): Unused test code
+		cb_a1 = cb.getMethod(x -> x.hasName("a1")).get().getParameter(0),  // NOSONAR(java:UNKNOWN): Unused test code
+		cb_a2 = cb.getMethod(x -> x.hasName("a2")).get().getParameter(0),  // NOSONAR(java:UNKNOWN): Unused test code
+		cc_a1 = cc.getMethod(x -> x.hasName("a1")).get().getParameter(0),  // NOSONAR(java:UNKNOWN): Unused test code
+		cc_a2 = cc.getMethod(x -> x.hasName("a2")).get().getParameter(0);  // NOSONAR(java:UNKNOWN): Field initialization
 
 	@DA("1") public static class D1 extends D2 {}
 	@DA("2") public static class D2 implements D3, D4 {}
@@ -182,35 +182,35 @@ class ParameterInfo_Test extends TestBase {
 	}
 	public static class DC implements DB {
 		@Override
-		public void a1(@DA("5") D1 x) {}  // NOSONAR
+		public void a1(@DA("5") D1 x) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 
 	static ClassInfo
 		db = ClassInfo.of(DB.class),
 		dc = ClassInfo.of(DC.class);
 	static ParameterInfo
-		db_a1 = db.getMethod(x -> x.hasName("a1")).get().getParameter(0),  // NOSONAR
-		dc_a1 = dc.getMethod(x -> x.hasName("a1")).get().getParameter(0);  // NOSONAR
+		db_a1 = db.getMethod(x -> x.hasName("a1")).get().getParameter(0),  // NOSONAR(java:UNKNOWN): Unused test code
+		dc_a1 = dc.getMethod(x -> x.hasName("a1")).get().getParameter(0);  // NOSONAR(java:UNKNOWN): Field initialization
 
 	static class E {
 		public void a1(int a, @org.apache.juneau.annotation.Name("b") int b) {}  // NOSONAR - use full qualified name to avoid conflict
 		// Parameter with both @Name and another annotation to test line 622 both branches
-		public void test(@CA("test") @org.apache.juneau.annotation.Name("paramName") String param) {}  // NOSONAR
+		public void test(@CA("test") @org.apache.juneau.annotation.Name("paramName") String param) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 
 	// Test classes for getResolvedQualifier() - line 643
 	static class G {
 		// Test line 643: hasSimpleName("Named") = true, hasSimpleName("Qualifier") = false
-		public void test1(@Named("bean1") String param) {}  // NOSONAR
+		public void test1(@Named("bean1") String param) {}  // NOSONAR(java:S1186): Unused test method/constructor
 		// Test line 643: hasSimpleName("Named") = false, hasSimpleName("Qualifier") = true
-		public void test2(@Qualifier("bean2") String param) {}  // NOSONAR
+		public void test2(@Qualifier("bean2") String param) {}  // NOSONAR(java:S1186): Unused test method/constructor
 		// Test line 643: hasSimpleName("Named") = true, hasSimpleName("Qualifier") = true (both true, @Named first)
-		public void test3(@Named("bean3") @Qualifier("bean3") String param) {}  // NOSONAR
+		public void test3(@Named("bean3") @Qualifier("bean3") String param) {}  // NOSONAR(java:S1186): Unused test method/constructor
 		// Test line 643: hasSimpleName("Named") = true, hasSimpleName("Qualifier") = true (both true, @Qualifier first)
 		// This ensures both sides of the OR are evaluated when @Qualifier comes first
-		public void test3b(@Qualifier("bean3b") @Named("bean3b") String param) {}  // NOSONAR
+		public void test3b(@Qualifier("bean3b") @Named("bean3b") String param) {}  // NOSONAR(java:S1186): Unused test method/constructor
 		// Test line 643: hasSimpleName("Named") = false, hasSimpleName("Qualifier") = false (both false)
-		public void test4(@CA("test") String param) {}  // NOSONAR
+		public void test4(@CA("test") String param) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 	static ClassInfo g = ClassInfo.of(G.class);
 	static ParameterInfo
@@ -222,8 +222,8 @@ class ParameterInfo_Test extends TestBase {
 
 	static ClassInfo e = ClassInfo.of(E.class);
 	static ParameterInfo
-		e_a1_a = e.getMethod(x -> x.hasName("a1")).get().getParameter(0),  // NOSONAR
-		e_a1_b = e.getMethod(x -> x.hasName("a1")).get().getParameter(1),  // NOSONAR
+		e_a1_a = e.getMethod(x -> x.hasName("a1")).get().getParameter(0),  // NOSONAR(java:UNKNOWN): Unused test code
+		e_a1_b = e.getMethod(x -> x.hasName("a1")).get().getParameter(1),  // NOSONAR(java:UNKNOWN): Unused test code
 		e_test = e.getMethod(x -> x.hasName("test")).get().getParameter(0);  // NOSONAR - has both @CA and @Name annotations
 
 	// Method hierarchy tests
@@ -231,10 +231,10 @@ class ParameterInfo_Test extends TestBase {
 		void foo(String s);
 	}
 	public static class PM2 implements PM1 {
-		@Override public void foo(String s) {}  // NOSONAR
+		@Override public void foo(String s) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 	public static class PM3 extends PM2 {
-		@Override public void foo(String s) {}  // NOSONAR
+		@Override public void foo(String s) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 
 	// Method with multiple interfaces
@@ -245,7 +245,7 @@ class ParameterInfo_Test extends TestBase {
 		void bar(int x, String s);
 	}
 	public static class PM6 implements PM4, PM5 {
-		@Override public void bar(int x, String s) {}  // NOSONAR
+		@Override public void bar(int x, String s) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 
 	// Constructor hierarchy tests
@@ -254,17 +254,17 @@ class ParameterInfo_Test extends TestBase {
 	}
 
 	public static class PC1 {
-		public PC1(String foo) {}  // NOSONAR
+		public PC1(String foo) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 	public static class PC2 extends PC1 {
-		public PC2(String foo) { super(foo); }  // NOSONAR
+		public PC2(String foo) { super(foo); }  // NOSONAR(java:UNKNOWN): Unused test code
 	}
 	public static class PC3 extends PC2 {
-		public PC3(String foo) { super(foo); }  // NOSONAR
+		public PC3(String foo) { super(foo); }  // NOSONAR(java:UNKNOWN): Unused test code
 	}
 
 	public static class PC4 {
-		public PC4(String foo, int bar) {}  // NOSONAR
+		public PC4(String foo, int bar) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 	public static class PC5 extends PC4 {
 		public PC5(String foo) { super(foo, 0); }
@@ -272,79 +272,79 @@ class ParameterInfo_Test extends TestBase {
 
 	// Test class for toString() comprehensive tests
 	public static class ToStringTestClass {
-		public void basicMethod(int a, String b) {}  // NOSONAR
-		public void namedMethod(@org.apache.juneau.annotation.Name("x") int x, @org.apache.juneau.annotation.Name("y") String y) {}  // NOSONAR
-		public void finalMethod(final int value) {}  // NOSONAR
-		public void genericMethod(@org.apache.juneau.annotation.Name("list") java.util.List<String> list, @org.apache.juneau.annotation.Name("map") java.util.Map<String, Integer> map) {}  // NOSONAR
-		public void varargsMethod(@org.apache.juneau.annotation.Name("values") String... values) {}  // NOSONAR
-		public void finalVarargsMethod(final @org.apache.juneau.annotation.Name("args") String... args) {}  // NOSONAR
-		public void arrayMethod(@org.apache.juneau.annotation.Name("numbers") int[] numbers, @org.apache.juneau.annotation.Name("matrix") String[][] matrix) {}  // NOSONAR
-		public void genericArrayMethod(@org.apache.juneau.annotation.Name("lists") java.util.List<String>[] lists) {}  // NOSONAR
-		public void primitiveMethod(@org.apache.juneau.annotation.Name("flag") boolean flag, @org.apache.juneau.annotation.Name("value") double value, @org.apache.juneau.annotation.Name("count") long count) {}  // NOSONAR
-		public ToStringTestClass(@org.apache.juneau.annotation.Name("id") int id, @org.apache.juneau.annotation.Name("name") String name) {}  // NOSONAR
+		public void basicMethod(int a, String b) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void namedMethod(@org.apache.juneau.annotation.Name("x") int x, @org.apache.juneau.annotation.Name("y") String y) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void finalMethod(final int value) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void genericMethod(@org.apache.juneau.annotation.Name("list") java.util.List<String> list, @org.apache.juneau.annotation.Name("map") java.util.Map<String, Integer> map) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void varargsMethod(@org.apache.juneau.annotation.Name("values") String... values) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void finalVarargsMethod(final @org.apache.juneau.annotation.Name("args") String... args) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void arrayMethod(@org.apache.juneau.annotation.Name("numbers") int[] numbers, @org.apache.juneau.annotation.Name("matrix") String[][] matrix) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void genericArrayMethod(@org.apache.juneau.annotation.Name("lists") java.util.List<String>[] lists) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void primitiveMethod(@org.apache.juneau.annotation.Name("flag") boolean flag, @org.apache.juneau.annotation.Name("value") double value, @org.apache.juneau.annotation.Name("count") long count) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public ToStringTestClass(@org.apache.juneau.annotation.Name("id") int id, @org.apache.juneau.annotation.Name("name") String name) {}  // NOSONAR(java:S1186): Unused test method/constructor
 		public void unnamedMethod(int param1, String param2) {}  // NOSONAR - no @Name annotations, will fallback to arg0, arg1
 	}
 
 	public static class PC6 {
-		public PC6(String foo) {}  // NOSONAR
-		public PC6(String foo, int bar) {}  // NOSONAR
+		public PC6(String foo) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public PC6(String foo, int bar) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 	public static class PC7 extends PC6 {
-		public PC7(String foo) { super(foo); }  // NOSONAR
+		public PC7(String foo) { super(foo); }  // NOSONAR(java:UNKNOWN): Unused test code
 	}
 
 	public interface PM7 {
 		void baz(String differentName);
 	}
 	public static class PM8 implements PM7 {
-		@Override public void baz(String differentName) {}  // NOSONAR
-		public void foo(String s) {}  // NOSONAR
+		@Override public void baz(String differentName) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void foo(String s) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 
 	public interface PM9 {
 		void qux(int x);
 	}
 	public static class PM10 implements PM9 {
-		@Override public void qux(int x) {}  // NOSONAR
+		@Override public void qux(int x) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 	public static class PM11 extends PM10 {
 		public void qux(String x) {}  // NOSONAR - different overload
 	}
 
 	public static class PC8 {
-		public PC8(int foo) {}  // NOSONAR
+		public PC8(int foo) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 	public static class PC9 extends PC8 {
-		public PC9(String foo) { super(0); }  // NOSONAR
+		public PC9(String foo) { super(0); }  // NOSONAR(java:UNKNOWN): Unused test code
 	}
 
 	public static class PC10 {
-		public PC10(String bar) {}  // NOSONAR
+		public PC10(String bar) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 	public static class PC11 extends PC10 {
-		public PC11(String foo) { super(foo); }  // NOSONAR
+		public PC11(String foo) { super(foo); }  // NOSONAR(java:UNKNOWN): Unused test code
 	}
 
 	public static class PC12 {
-		public PC12(@Name("foo") String x) {}  // NOSONAR
-		public PC12(@Name("bar") String x, int y) {}  // NOSONAR
+		public PC12(@Name("foo") String x) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public PC12(@Name("bar") String x, int y) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 	public static class PC13 extends PC12 {
-		public PC13(@Name("foo") String x) { super(x); }  // NOSONAR
+		public PC13(@Name("foo") String x) { super(x); }  // NOSONAR(java:UNKNOWN): Unused test code
 	}
 
 	public static class PC14 {
-		public PC14(@Name("bar") String x) {}  // NOSONAR
+		public PC14(@Name("bar") String x) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 	public static class PC15 extends PC14 {
-		public PC15(@Name("foo") String x) { super(x); }  // NOSONAR
+		public PC15(@Name("foo") String x) { super(x); }  // NOSONAR(java:UNKNOWN): Unused test code
 	}
 
 	public interface PM12 {
 		void test(@Name("param1") String x);
 	}
 	public static class PM13 implements PM12 {
-		@Override public void test(@Name("param1") String x) {}  // NOSONAR
+		@Override public void test(@Name("param1") String x) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 
 	//====================================================================================================

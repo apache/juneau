@@ -55,7 +55,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 	}
 
 	public static class A03 {
-		public void a(  // NOSONAR
+		public void a(  // NOSONAR(java:UNKNOWN): Method parameter spans multiple lines
 				@Content
 				@Schema(
 					d={"b1","b2"},
@@ -75,7 +75,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 	}
 
 	public static class A04 {
-		public void a(  // NOSONAR
+		public void a(  // NOSONAR(java:UNKNOWN): Method parameter spans multiple lines
 				@Content
 				@Schema(
 					d={"b3","b3"},
@@ -823,7 +823,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 		s.validateInput(null);  // null is allowed when not required
 	}
 
-	@Test void d01a_const_invalid() throws Exception {
+	@Test void d01a_const_invalid() {
 		var s = HttpPartSchema.create().applyAll(Content.class, D01a.class).build();
 		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match constant.  Must be: CONSTANT_VALUE", ()->s.validateInput("OTHER_VALUE"));
 	}
@@ -874,6 +874,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 	// Backward compatibility: Old boolean exclusiveMaximum/exclusiveMinimum
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings("deprecation")
 	@Content
 	@Schema(t="integer", exclusiveMaximum=true, exclusiveMinimum=true, maximum="100", minimum="0")
 	public static class D03a {}
@@ -891,6 +892,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(101, BeanContext.DEFAULT));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Content
 	@Schema(t="integer", exclusiveMaximum=false, exclusiveMinimum=false, maximum="100", minimum="0")
 	public static class D03b {}
@@ -908,6 +910,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(101, BeanContext.DEFAULT));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Content
 	@Schema(t="integer", exclusiveMaximumValue="100", exclusiveMinimumValue="0", exclusiveMaximum=false, exclusiveMinimum=false)
 	public static class D03c {}
@@ -931,7 +934,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 	@Schema(deprecatedProperty=true)
 	public static class D04a {}
 
-	@Test void d04a_deprecated() throws Exception {
+	@Test void d04a_deprecated() {
 		var s = HttpPartSchema.create().applyAll(Content.class, D04a.class).build();
 		// deprecated is just a flag, doesn't affect validation
 		assertBean(s, "deprecated", "true");
@@ -945,7 +948,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 	@Schema(examples={"example1", "example2", "example3"})
 	public static class D05a {}
 
-	@Test void d05a_examples() throws Exception {
+	@Test void d05a_examples() {
 		var s = HttpPartSchema.create().applyAll(Content.class, D05a.class).build();
 		// examples are documentation only, doesn't affect validation
 		assertBean(s, "examples", "[example1,example2,example3]");

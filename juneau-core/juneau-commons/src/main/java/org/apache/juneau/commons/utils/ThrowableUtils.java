@@ -29,7 +29,7 @@ import org.apache.juneau.commons.settings.*;
  */
 public class ThrowableUtils {
 
-	static Setting<Boolean> VERBOSE = Settings.get().get("juneau.enableVerboseExceptions").asBoolean();
+	static final Setting<Boolean> VERBOSE = Settings.get().get("juneau.enableVerboseExceptions").asBoolean();
 
 	/**
 	 * Interface used with {@link Utils#safeSupplier(SupplierWithThrowable)}.
@@ -45,7 +45,7 @@ public class ThrowableUtils {
 		 * @return a result
 		 * @throws Throwable if supplier threw an exception.
 		 */
-		T get() throws Throwable;
+		T get() throws Throwable;  // NOSONAR(java:S112)
 	}
 
 	/**
@@ -179,9 +179,7 @@ public class ThrowableUtils {
 	 * @return Either the same exception if it's already the specified type, or a wrapped exception.
 	 */
 	public static <T> T castException(Class<T> type, Throwable t) {
-		return safeSupplier(() -> {
-			return type.isInstance(t) ? type.cast(t) : type.getConstructor(Throwable.class).newInstance(t);
-		});
+		return safeSupplier(() -> type.isInstance(t) ? type.cast(t) : type.getConstructor(Throwable.class).newInstance(t));
 	}
 
 	/**
@@ -283,7 +281,7 @@ public class ThrowableUtils {
 	 * @param maxDepth The maximum number of stack trace elements to print. If <jk>null</jk> or negative, prints all elements.
 	 */
 	public static void printStackTrace(Throwable t, Integer maxDepth) {
-		printStackTrace(t, new PrintWriter(System.err, true), maxDepth);
+		printStackTrace(t, new PrintWriter(System.err, true), maxDepth);  // NOSONAR(java:S106)
 	}
 
 	/**
@@ -336,7 +334,7 @@ public class ThrowableUtils {
 	}
 
 	private static <T extends Throwable> T log(T exception) {
-		if (VERBOSE.orElse(false)) exception.printStackTrace();
+		if (Boolean.TRUE.equals(VERBOSE.orElse(false))) exception.printStackTrace();
 		return exception;
 	}
 

@@ -29,7 +29,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
-@Deprecated
 class AnyAssertion_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

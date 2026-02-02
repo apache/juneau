@@ -28,7 +28,6 @@ import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
-@Deprecated
 class MapAssertion_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -44,8 +43,10 @@ class MapAssertion_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_msg() {
-		assertThrows(BasicAssertionError.class, ()->test(null).setMsg("Foo {0}", 1).isExists(), "Foo 1");
-		assertThrows(RuntimeException.class, ()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists(), "Foo 1");
+		var assertion1 = test(null).setMsg("Foo {0}", 1);
+		assertThrows(BasicAssertionError.class, assertion1::isExists, "Foo 1");
+		var assertion2 = test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class);
+		assertThrows(RuntimeException.class, assertion2::isExists, "Foo 1");
 	}
 
 	@Test void a02_stdout() {
@@ -135,21 +136,24 @@ class MapAssertion_Test extends TestBase {
 		var x = m();
 		var nil = mapn(Object.class, Object.class);
 		test(x).isExists().isExists();
-		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
+		var assertion3 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion3::isExists, "Value was null.");
 	}
 
 	@Test void ca02_isNull() {
 		var x = m();
 		var nil = mapn(Object.class, Object.class);
 		assertMap(nil).isNull();
-		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
+		var assertion4 = test(x);
+		assertThrows(BasicAssertionError.class, assertion4::isNull, "Value was not null.");
 	}
 
 	@Test void ca03_isNotNull() {
 		var x = m();
 		var nil = mapn(Object.class, Object.class);
 		test(x).isNotNull();
-		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
+		var assertion5 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion5::isNotNull, "Value was null.");
 	}
 
 	@Test void ca04a_is_T() {
@@ -300,8 +304,10 @@ class MapAssertion_Test extends TestBase {
 		var x2 = m("a",1,"b",2);
 		var nil = mapn(Object.class, Object.class);
 		test(x1).isEmpty();
-		assertThrows(BasicAssertionError.class, ()->test(x2).isEmpty(), "Map was not empty.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isEmpty(), "Value was null.");
+		var assertion6 = test(x2);
+		assertThrows(BasicAssertionError.class, assertion6::isEmpty, "Map was not empty.");
+		var assertion7 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion7::isEmpty, "Value was null.");
 	}
 
 	@Test void cb02_isNotEmpty() {
@@ -309,8 +315,10 @@ class MapAssertion_Test extends TestBase {
 		var x2 = m("a",1,"b",2);
 		var nil = mapn(Object.class, Object.class);
 		test(x2).isNotEmpty();
-		assertThrows(BasicAssertionError.class, ()->test(x1).isNotEmpty(), "Map was empty.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isNotEmpty(), "Value was null.");
+		var assertion8 = test(x1);
+		assertThrows(BasicAssertionError.class, assertion8::isNotEmpty, "Map was empty.");
+		var assertion9 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion9::isNotEmpty, "Value was null.");
 	}
 
 	@Test void cb03_containsKey() {
@@ -318,7 +326,8 @@ class MapAssertion_Test extends TestBase {
 		var nil = mapn(Object.class, Object.class);
 		test(x).isContainsKey("a");
 		assertThrown(()->test(x).isContainsKey("x")).asMessage().asOneLine().is("Map did not contain expected key.  Expected key='x'.  Value='{a=1, b=2}'.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isContainsKey("x"), "Value was null.");
+		var assertion10 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion10.isContainsKey("x"), "Value was null.");
 	}
 
 	@Test void cb04_doesNotContainKey() {
@@ -326,7 +335,8 @@ class MapAssertion_Test extends TestBase {
 		var nil = mapn(Object.class, Object.class);
 		test(x).isNotContainsKey("x");
 		assertThrown(()->test(x).isNotContainsKey("a")).asMessage().asOneLine().is("Map contained unexpected key.  Unexpected key='a'.  Value='{a=1, b=2}'.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isContainsKey("x"), "Value was null.");
+		var assertion11 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion11.isContainsKey("x"), "Value was null.");
 	}
 
 	@Test void cb05_isSize() {
@@ -334,6 +344,7 @@ class MapAssertion_Test extends TestBase {
 		var nil = mapn(Object.class, Object.class);
 		test(x).isSize(2);
 		assertThrown(()->test(x).isSize(1)).asMessage().asOneLine().is("Map did not have the expected size.  Expect=1.  Actual=2.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isSize(0), "Value was null.");
+		var assertion12 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion12.isSize(0), "Value was null.");
 	}
 }

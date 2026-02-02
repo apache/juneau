@@ -65,7 +65,7 @@ import org.apache.juneau.swap.*;
  * @param <T> The class type of the wrapped class.
  */
 @Bean(properties = "innerClass,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
-public class ClassMeta<T> extends ClassInfoTyped<T> {
+public class ClassMeta<T> extends ClassInfoTyped<T> {  // NOSONAR(java:S1200): ClassMeta is intentionally a large class that aggregates metadata from multiple sources
 
 	private static class Categories {
 		int bits;
@@ -130,11 +130,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private static boolean isCacheable(Class<?> c) {
 		var n = cn(c);
 		var x = n.charAt(n.length() - 1);  // All generated classes appear to end with digits.
-		if (x >= '0' && x <= '9') {
-			if (n.indexOf("$$") != -1 || n.startsWith("sun") || n.startsWith("com.sun") || n.indexOf("$Proxy") != -1)
-				return false;
-		}
-		return true;
+		return !(x >= '0' && x <= '9' && (n.indexOf("$$") != -1 || n.startsWith("sun") || n.startsWith("com.sun") || n.indexOf("$Proxy") != -1));
 	}
 
 	private final List<ClassMeta<?>> args;                                     // Arg types if this is an array of args.
@@ -235,27 +231,27 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			cat.set(INPUTSTREAM);
 		}
 
-		beanMeta = mem(()->findBeanMeta());
-		builderSwap = mem(()->findBuilderSwap());
-		childSwapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findSwap(x)).build();
-		childSwaps = mem(()->findChildSwaps());
-		childUnswapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(x -> findUnswap(x)).build();
-		beanDictionaryName = mem(()->findBeanDictionaryName());
-		elementType = mem(()->findElementType());
-		enumValues = mem(()->findEnumValues());
-		example = mem(()->findExample());
-		exampleField = mem(()->findExampleField());
-		exampleMethod = mem(()->findExampleMethod());
-		fromStringMethod = mem(()->findFromStringMethod());
-		implClass = mem(()->findImplClass());
-		keyValueTypes = mem(()->findKeyValueTypes());
-		marshalledFilter = mem(()->findMarshalledFilter());
-		nameProperty = mem(()->findNameProperty());
-		noArgConstructor = mem(()->findNoArgConstructor());
-		parentProperty = mem(()->findParentProperty());
+		beanMeta = mem(this::findBeanMeta);
+		builderSwap = mem(this::findBuilderSwap);
+		childSwapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(this::findSwap).build();
+		childSwaps = mem(this::findChildSwaps);
+		childUnswapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(this::findUnswap).build();
+		beanDictionaryName = mem(this::findBeanDictionaryName);
+		elementType = mem(this::findElementType);
+		enumValues = mem(this::findEnumValues);
+		example = mem(this::findExample);
+		exampleField = mem(this::findExampleField);
+		exampleMethod = mem(this::findExampleMethod);
+		fromStringMethod = mem(this::findFromStringMethod);
+		implClass = mem(this::findImplClass);
+		keyValueTypes = mem(this::findKeyValueTypes);
+		marshalledFilter = mem(this::findMarshalledFilter);
+		nameProperty = mem(this::findNameProperty);
+		noArgConstructor = mem(this::findNoArgConstructor);
+		parentProperty = mem(this::findParentProperty);
 		properties = Cache.<String,Optional<?>>create().build();
-		stringConstructor = mem(()->findStringConstructor());
-		swaps = mem(()->findSwaps());
+		stringConstructor = mem(this::findStringConstructor);
+		swaps = mem(this::findSwaps);
 
 		this.args = null;
 		this.stringMutater = Mutaters.get(String.class, inner());
@@ -277,30 +273,30 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	ClassMeta(List<ClassMeta<?>> args) {
 		super((Class<T>)Object[].class);
 		this.args = args;
-		this.childSwaps = mem(()->findChildSwaps());
+		this.childSwaps = mem(this::findChildSwaps);
 		this.childSwapMap = null;
 		this.childUnswapMap = null;
 		this.cat = new Categories().set(ARGS);
 		this.beanContext = null;
-		this.elementType = mem(()->findElementType());
-		this.keyValueTypes = mem(()->findKeyValueTypes());
-		this.beanMeta = mem(()->findBeanMeta());
-		this.swaps = mem(()->findSwaps());
+		this.elementType = mem(this::findElementType);
+		this.keyValueTypes = mem(this::findKeyValueTypes);
+		this.beanMeta = mem(this::findBeanMeta);
+		this.swaps = mem(this::findSwaps);
 		this.stringMutater = null;
-		this.fromStringMethod = mem(()->findFromStringMethod());
-		this.exampleMethod = mem(()->findExampleMethod());
-		this.parentProperty = mem(()->findParentProperty());
-		this.nameProperty = mem(()->findNameProperty());
-		this.exampleField = mem(()->findExampleField());
-		this.noArgConstructor = mem(()->findNoArgConstructor());
+		this.fromStringMethod = mem(this::findFromStringMethod);
+		this.exampleMethod = mem(this::findExampleMethod);
+		this.parentProperty = mem(this::findParentProperty);
+		this.nameProperty = mem(this::findNameProperty);
+		this.exampleField = mem(this::findExampleField);
+		this.noArgConstructor = mem(this::findNoArgConstructor);
 		this.properties = Cache.<String,Optional<?>>create().build();
-		this.stringConstructor = mem(()->findStringConstructor());
-		this.marshalledFilter = mem(()->findMarshalledFilter());
-		this.builderSwap = mem(()->findBuilderSwap());
-		this.example = mem(()->findExample());
-		this.implClass = mem(()->findImplClass());
-		this.enumValues = mem(()->findEnumValues());
-		this.beanDictionaryName = mem(()->findBeanDictionaryName());
+		this.stringConstructor = mem(this::findStringConstructor);
+		this.marshalledFilter = mem(this::findMarshalledFilter);
+		this.builderSwap = mem(this::findBuilderSwap);
+		this.example = mem(this::findExample);
+		this.implClass = mem(this::findImplClass);
+		this.enumValues = mem(this::findEnumValues);
+		this.beanDictionaryName = mem(this::findBeanDictionaryName);
 	}
 
 	/**
@@ -366,9 +362,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (isMemberClass() && isNotStatic())
 			return false;
 		var bm = getBeanMeta();
-		if (noArgConstructor.isPresent() || (bm != null && bm.getBeanProxyInvocationHandler() != null) || (isArray() && elementType.get().canCreateNewInstance()))
-			return true;
-		return false;
+		return noArgConstructor.isPresent() || (bm != null && bm.getBeanProxyInvocationHandler() != null) || (isArray() && elementType.get().canCreateNewInstance());
 	}
 
 	/**
@@ -411,6 +405,11 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		return (o instanceof ClassMeta<?>) && super.equals(o);
 	}
 
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return super.hashCode();
+	}
+
 	/**
 	 * Performs an action on all matching annotations of the specified type defined on this class or parent classes/interfaces in parent-to-child order.
 	 *
@@ -422,7 +421,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 */
 	public <A extends Annotation> ClassMeta<T> forEachAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
 		if (beanContext != null) {
-			beanContext.getAnnotationProvider().find(type, this).stream().map(AnnotationInfo::inner).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
+			beanContext.getAnnotationProvider().find(type, this).stream().map(AnnotationInfo::inner).filter(x -> filter == null || filter.test(x)).forEach(action::accept);
 		}
 		return this;
 	}
@@ -645,7 +644,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	public Optional<?> getOptionalDefault() {
 		if (isOptional())
 			return opt(getElementType().getOptionalDefault());
-		return null;
+		return null;  // NOSONAR(java:UNKNOWN): Intentional null return
 	}
 
 	/**
@@ -1304,7 +1303,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			.stream()
 			.map(AnnotationInfo::inner)
 			.filter(x -> ! x.typeName().isEmpty())
-			.map(x -> x.typeName())
+			.map(Bean::typeName)
 			.findFirst()
 			.orElse(null);
 	}
@@ -1399,7 +1398,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 	private BidiMap<Object,String> findEnumValues() {
 		if (! isEnum())
-			return null;
+			return BidiMap.<Object,String>create().unmodifiable().build();
 
 		var bc = beanContext;
 		var useEnumNames = nn(bc) && bc.isUseEnumNames();
@@ -1411,32 +1410,32 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 	private String findExample() {
 
-		var example = beanMeta.get().optBeanMeta().map(x -> x.getBeanFilter()).map(x -> x.getExample()).orElse(null);
+		var ex = beanMeta.get().optBeanMeta().map(x -> x.getBeanFilter()).map(x -> x.getExample()).orElse(null);
 
-		if (example == null)
-			example = marshalledFilter.map(x -> x.getExample()).orElse(null);
+		if (ex == null)
+			ex = marshalledFilter.map(x -> x.getExample()).orElse(null);
 
-		if (example == null && nn(beanContext))
-			example = beanContext.getAnnotationProvider().find(Example.class, this).stream().map(x -> x.inner().value()).filter(Utils::ne).findFirst().orElse(null);
+		if (ex == null && nn(beanContext))
+			ex = beanContext.getAnnotationProvider().find(Example.class, this).stream().map(x -> x.inner().value()).filter(Utils::ne).findFirst().orElse(null);
 
-		if (example == null) {
+		if (ex == null) {
 			if (isAny(boolean.class, Boolean.class)) {
-				example = "true";
+				ex = "true";
 			} else if (isAny(char.class, Character.class)) {
-				example = "a";
+				ex = "a";
 			} else if (cat.is(CHARSEQ)) {
-				example = "foo";
+				ex = "foo";
 			} else if (cat.is(ENUM)) {
 				Optional<Enum<?>> e = first(EnumSet.allOf(asEnumClass(inner())));
-				example = e.map(x -> beanContext.isUseEnumNames() ? x.name() : x.toString()).orElse(null);
+				ex = e.map(x -> beanContext.isUseEnumNames() ? x.name() : x.toString()).orElse(null);
 			} else if (isAny(float.class, Float.class, double.class, Double.class)) {
-				example = "1.0";
+				ex = "1.0";
 			} else if (isAny(short.class, Short.class, int.class, Integer.class, long.class, Long.class)) {
-				example = "1";
+				ex = "1";
 			}
 		}
 
-		return example;
+		return ex;
 	}
 
 	private FieldInfo findExampleField() {
@@ -1492,7 +1491,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (is(Object.class))
 			return null;
 
-		var v = beanContext.getAnnotationProvider().find(Bean.class, this).stream().map(x -> x.inner()).filter(x -> neq(x.implClass(), void.class)).map(x -> ClassInfo.of(x)).findFirst().orElse(null);
+		var v = beanContext.getAnnotationProvider().find(Bean.class, this).stream().map(x -> x.inner()).filter(x -> neq(x.implClass(), void.class)).map(ClassInfo::of).findFirst().orElse(null);
 
 		if (v == null)
 			v = marshalledFilter.map(x -> x.getImplClass()).map(ReflectionUtils::info).orElse(null);
@@ -1558,7 +1557,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 					if (field.isPresent()) {
 						var f = field.get().accessible();
-						builder.getter(obj -> f.get(obj));
+						builder.getter(f::get);
 					}
 				}
 			}
@@ -1650,7 +1649,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 					if (field.isPresent()) {
 						var f = field.get().accessible();
-						builder.getter(obj -> f.get(obj));
+						builder.getter(f::get);
 					}
 				}
 			}
@@ -1751,7 +1750,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		}
 		if (cat.is(COLLECTION) || is(Optional.class)) {
 			var et = elementType.get();
-			return sb.append(n).append(et != null && et.isObject() ? "" : "<" + (et == null ? "?" : et.toString(simple)) + ">");
+			String typeString = et != null ? et.toString(simple) : "?";
+			return sb.append(n).append(et != null && et.isObject() ? "" : "<" + typeString + ">");
 		}
 		return sb.append(n);
 	}

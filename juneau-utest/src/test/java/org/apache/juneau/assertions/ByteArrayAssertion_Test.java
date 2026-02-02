@@ -25,7 +25,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
-@Deprecated
 class ByteArrayAssertion_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -41,8 +40,10 @@ class ByteArrayAssertion_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_msg() {
-		assertThrows(BasicAssertionError.class, ()->test(null).setMsg("A {0}", 1).isExists(), "A 1");
-		assertThrows(RuntimeException.class, ()->test(null).setMsg("A {0}", 1).setThrowable(RuntimeException.class).isExists(), "A 1");
+		var assertion1 = test(null).setMsg("A {0}", 1);
+		assertThrows(BasicAssertionError.class, assertion1::isExists, "A 1");
+		var assertion2 = test(null).setMsg("A {0}", 1).setThrowable(RuntimeException.class);
+		assertThrows(RuntimeException.class, assertion2::isExists, "A 1");
 	}
 
 	@Test void a02_stdout() {
@@ -137,19 +138,22 @@ class ByteArrayAssertion_Test extends TestBase {
 	@Test void ca01_exists() {
 		byte[] x = {}, nil = null;
 		test(x).isExists().isExists();
-		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
+		var assertion3 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion3::isExists, "Value was null.");
 	}
 
 	@Test void ca02_isNull() {
 		byte[] x = {}, nil = null;
 		test(nil).isNull();
-		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
+		var assertion4 = test(x);
+		assertThrows(BasicAssertionError.class, assertion4::isNull, "Value was not null.");
 	}
 
 	@Test void ca03_isNotNull() {
 		byte[] x = {}, nil = null;
 		test(x).isNotNull();
-		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
+		var assertion12 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion12::isNotNull, "Value was null.");
 	}
 
 	@Test void ca04a_is_T() {
@@ -271,15 +275,19 @@ class ByteArrayAssertion_Test extends TestBase {
 	@Test void cb01_isEmpty() {
 		byte[] x1 = {}, x2 = {1,2}, nil = null;
 		test(x1).isEmpty();
-		assertThrows(BasicAssertionError.class, ()->test(x2).isEmpty(), "Array was not empty.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isEmpty(), "Value was null.");
+		var assertion5 = test(x2);
+		assertThrows(BasicAssertionError.class, assertion5::isEmpty, "Array was not empty.");
+		var assertion6 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion6::isEmpty, "Value was null.");
 	}
 
 	@Test void cb02_isNotEmpty() {
 		byte[] x1={}, x2={1,2}, nil = null;
 		test(x2).isNotEmpty();
-		assertThrows(BasicAssertionError.class, ()->test(x1).isNotEmpty(), "Array was empty.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isNotEmpty(), "Value was null.");
+		var assertion7 = test(x1);
+		assertThrows(BasicAssertionError.class, assertion7::isNotEmpty, "Array was empty.");
+		var assertion8 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion8::isNotEmpty, "Value was null.");
 	}
 
 	@Test void cb03_contains() {
@@ -287,7 +295,8 @@ class ByteArrayAssertion_Test extends TestBase {
 		test(x1).isContains((byte)1);
 		assertThrown(()->test(x1).isContains((byte)3)).asMessage().asOneLine().is("Array did not contain expected value.  Expect='3'.  Actual='0102'.");
 		assertThrown(()->test(x1).isContains(null)).asMessage().asOneLine().is("Array did not contain expected value.  Expect='null'.  Actual='0102'.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isContains((byte)3), "Value was null.");
+		var assertion9 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion9.isContains((byte)3), "Value was null.");
 	}
 
 	@Test void cb04_doesNotContain() {
@@ -295,7 +304,8 @@ class ByteArrayAssertion_Test extends TestBase {
 		test(x1).isNotContains((byte)3);
 		test(x1).isNotContains(null);
 		assertThrown(()->test(x1).isNotContains((byte)1)).asMessage().asOneLine().is("Array contained unexpected value.  Unexpected='1'.  Actual='0102'.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isNotContains((byte)3), "Value was null.");
+		var assertion10 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion10.isNotContains((byte)3), "Value was null.");
 	}
 
 	@Test void cb05_isSize() {
@@ -304,6 +314,7 @@ class ByteArrayAssertion_Test extends TestBase {
 		test(x2).isSize(2);
 		assertThrown(()->test(x1).isSize(2)).asMessage().asOneLine().is("Array did not have the expected size.  Expect=2.  Actual=0.");
 		assertThrown(()->test(x2).isSize(0)).asMessage().asOneLine().is("Array did not have the expected size.  Expect=0.  Actual=2.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isSize(0), "Value was null.");
+		var assertion11 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion11.isSize(0), "Value was null.");
 	}
 }

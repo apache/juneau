@@ -49,7 +49,7 @@ class BeanStore_Test extends TestBase {
 	public static class A1 {}
 	public static class A2 {}
 
-	public static final String A1n = A1.class.getSimpleName();  // NOSONAR
+	public static final String A1n = A1.class.getSimpleName();  // NOSONAR(java:UNKNOWN): Field initialization
 
 	public static class A3 extends BasicBeanStore {
 		protected A3(Builder builder) {
@@ -763,8 +763,8 @@ class BeanStore_Test extends TestBase {
 			public String b;
 		}
 		protected D17(Builder b, Integer i) { a = b.b; }
-		protected D17(Integer i) {}  // NOSONAR
-		D17(String s) {}  // NOSONAR
+		protected D17(Integer i) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		D17(String s) {}  // NOSONAR(java:S1186): Unused test method/constructor
 		protected D17(Builder b) { a = b.b; }
 	}
 

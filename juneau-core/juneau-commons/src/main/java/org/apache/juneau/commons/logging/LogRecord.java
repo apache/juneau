@@ -48,10 +48,10 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='jc'>{@link java.util.logging.LogRecord}
  * </ul>
  */
-public class LogRecord extends java.util.logging.LogRecord {
+public class LogRecord extends java.util.logging.LogRecord {  // NOSONAR(java:S2176): Intentional name shadowing for convenience
 
 	private static final long serialVersionUID = 1L;
-	private Supplier<Optional<StackTraceElement>> source = mem(()->findSource());
+	private transient Supplier<Optional<StackTraceElement>> source = mem(()->findSource());
 
 	/**
 	 * Constructor.
@@ -92,6 +92,8 @@ public class LogRecord extends java.util.logging.LogRecord {
 	 */
 	@Override
 	public String getSourceClassName() {
+		if (source == null)
+			source = mem(()->findSource());
 		return source.get().map(x -> x.getClassName()).orElse(null);
 	}
 
@@ -102,11 +104,13 @@ public class LogRecord extends java.util.logging.LogRecord {
 	 */
 	@Override
 	public String getSourceMethodName() {
+		if (source == null)
+			source = mem(()->findSource());
 		return source.get().map(x -> x.getMethodName()).orElse(null);
 	}
 
-	private Optional<StackTraceElement> findSource() {
-		for (var e : new Throwable().getStackTrace()) {
+	private static Optional<StackTraceElement> findSource() {
+		for (var e : new Throwable().getStackTrace()) {  // NOSONAR(java:S1147): Creating Throwable to get stack trace
 			var c = e.getClassName();
 			var m = e.getMethodName();
 			// Skip LogRecord and Logger classes
@@ -226,11 +230,11 @@ public class LogRecord extends java.util.logging.LogRecord {
 	@SuppressWarnings("deprecation")
 	public String formatted(String format) {
 		var date = new Date(getMillis());
-		Supplier<String> source = () -> getSourceClassName() + ' ' + getSourceMethodName();
+		Supplier<String> sourceName = () -> getSourceClassName() + ' ' + getSourceMethodName();
 
 		Function<String, Object> resolver = key -> switch (key) {
 			case "date" -> "%1$s";
-			case "source" -> source.get();  // Override default behavior since logging class doesn't handle classes outside of java.util.logging.
+			case "source" -> sourceName.get();  // Override default behavior since logging class doesn't handle classes outside of java.util.logging.
 			case "logger" -> "%3$s";
 			case "level" -> "%4$s";
 			case "msg" -> "%5$s";
@@ -243,6 +247,6 @@ public class LogRecord extends java.util.logging.LogRecord {
 			default -> "";
 		};
 
-		return safeOptCatch(()->f(formatNamed(format, resolver), date, source, getLoggerName(), getLevel(), getMessage(), getThrown()), x -> x.getLocalizedMessage()).orElse(null);
+		return safeOptCatch(()->f(formatNamed(format, resolver), date, sourceName, getLoggerName(), getLevel(), getMessage(), getThrown()), x -> x.getLocalizedMessage()).orElse(null);
 	}
 }

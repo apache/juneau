@@ -1596,7 +1596,7 @@ class BeanMap_Test extends TestBase {
 		@BeanIgnore public String c;
 
 		@BeanIgnore public String getD() { return null; }
-		@BeanIgnore public void setD(String v) {}  // NOSONAR
+		@BeanIgnore public void setD(String v) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 
 	@Test void a34_hiddenProperties_usingConfig() {
@@ -1635,7 +1635,7 @@ class BeanMap_Test extends TestBase {
 		@BeanIgnore public String c;
 
 		@BeanIgnore public String getD() { return null; }
-		@BeanIgnore public void setD(String v) {}  // NOSONAR
+		@BeanIgnore public void setD(String v) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 
 	//====================================================================================================

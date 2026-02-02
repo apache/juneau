@@ -562,7 +562,7 @@ class ConfigMapListener_Test extends TestBase {
 				latch.countDown();
 		}
 
-		public void check(ConfigEvents events) throws Exception {}  // NOSONAR
+		public void check(ConfigEvents events) throws Exception {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 
 	private static void wait(CountDownLatch latch) throws InterruptedException {

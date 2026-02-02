@@ -176,11 +176,11 @@ class SchemaAnnotation_Test extends TestBase {
 
 	public static class C1 {
 		public int f1;
-		public void m1() {}  // NOSONAR
+		public void m1() {}  // NOSONAR(java:S1186): Unused test method
 	}
 	public static class C2 {
 		public int f2;
-		public void m2() {}  // NOSONAR
+		public void m2() {}  // NOSONAR(java:S1186): Unused test method
 	}
 
 	@Test void c01_otherMethods() throws Exception {
@@ -199,6 +199,7 @@ class SchemaAnnotation_Test extends TestBase {
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings("deprecation")
 	@Schema(
 		default_="a",
 		enum_="b",
@@ -258,6 +259,7 @@ class SchemaAnnotation_Test extends TestBase {
 	public static class D1 {}
 	Schema d1 = D1.class.getAnnotationsByType(Schema.class)[0];
 
+	@SuppressWarnings("deprecation")
 	@Schema(
 		default_="a",
 		enum_="b",
@@ -327,7 +329,7 @@ class SchemaAnnotation_Test extends TestBase {
 	// JSON Schema Draft 2020-12 properties
 	//------------------------------------------------------------------------------------------------------------------
 
-	Schema draft2020_1 = SchemaAnnotation.create()
+	Schema draft20201 = SchemaAnnotation.create()
 		.const_("constantValue")
 		.examples("example1", "example2")
 		.$comment("This is a schema comment")
@@ -348,7 +350,7 @@ class SchemaAnnotation_Test extends TestBase {
 		.$id("https://example.com/schemas/my-schema")
 		.build();
 
-	Schema draft2020_2 = SchemaAnnotation.create()
+	Schema draft20202 = SchemaAnnotation.create()
 		.const_("constantValue")
 		.examples("example1", "example2")
 		.$comment("This is a schema comment")
@@ -370,20 +372,20 @@ class SchemaAnnotation_Test extends TestBase {
 		.build();
 
 	@Test void e01_draft2020_basic() {
-		assertBean(draft2020_1,
+		assertBean(draft20201,
 			"$comment,$defs,$id,const_,else_,if_,then_,contentEncoding,contentMediaType,dependentRequired,dependentSchemas,deprecatedProperty,examples,exclusiveMaximumValue,exclusiveMinimumValue,prefixItems,unevaluatedItems,unevaluatedProperties",
 			"[This is a schema comment],[MyDef:{type:'string'}],https://example.com/schemas/my-schema,[constantValue],[required:['qux']],[properties:{foo:{const:'bar'}}],[required:['baz']],base64,application/json,[prop1:prop2,prop3],[prop1:{type:'string'}],true,[example1,example2],100,0,[string,number],[false],[false]");
 	}
 
 	@Test void e02_draft2020_testEquivalency() {
-		assertEquals(draft2020_2, draft2020_1);
-		assertNotEqualsAny(draft2020_1.hashCode(), 0, -1);
-		assertEquals(draft2020_1.hashCode(), draft2020_2.hashCode());
+		assertEquals(draft20202, draft20201);
+		assertNotEqualsAny(draft20201.hashCode(), 0, -1);
+		assertEquals(draft20201.hashCode(), draft20202.hashCode());
 	}
 
 	@Test void e03_draft2020_testEquivalencyInPropertyStores() {
-		var bc1 = BeanContext.create().annotations(draft2020_1).build();
-		var bc2 = BeanContext.create().annotations(draft2020_2).build();
+		var bc1 = BeanContext.create().annotations(draft20201).build();
+		var bc2 = BeanContext.create().annotations(draft20202).build();
 		assertSame(bc1, bc2);
 	}
 
@@ -434,9 +436,9 @@ class SchemaAnnotation_Test extends TestBase {
 	Schema e2 = E2.class.getAnnotationsByType(Schema.class)[0];
 
 	@Test void e04_draft2020_comparisonWithDeclarativeAnnotations() {
-		assertEqualsAll(draft2020_1, e1, e2);
-		assertNotEqualsAny(draft2020_1.hashCode(), 0, -1);
-		assertEqualsAll(draft2020_1.hashCode(), e1.hashCode(), e2.hashCode());
+		assertEqualsAll(draft20201, e1, e2);
+		assertNotEqualsAny(draft20201.hashCode(), 0, -1);
+		assertEqualsAll(draft20201.hashCode(), e1.hashCode(), e2.hashCode());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

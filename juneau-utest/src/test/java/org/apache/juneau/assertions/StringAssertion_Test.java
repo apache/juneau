@@ -27,7 +27,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
-@Deprecated
 class StringAssertion_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -43,8 +42,10 @@ class StringAssertion_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_msg() {
-		assertThrows(BasicAssertionError.class, ()->test(null).setMsg("Foo {0}", 1).isExists(), "Foo 1");
-		assertThrows(RuntimeException.class, ()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists(), "Foo 1");
+		var assertion1 = test(null).setMsg("Foo {0}", 1);
+		assertThrows(BasicAssertionError.class, assertion1::isExists, "Foo 1");
+		var assertion2 = test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class);
+		assertThrows(RuntimeException.class, assertion2::isExists, "Foo 1");
 	}
 
 	@Test void a02_stdout() {
@@ -104,8 +105,10 @@ class StringAssertion_Test extends TestBase {
 		var nil = no(String.class);
 		test(x).asReplaceAll("fo+","bar").is("barbar").is("foobar");
 		test(nil).asReplaceAll("fo+","bar").isNull();
-		assertThrows(IllegalArgumentException.class, ()->test(x).asReplaceAll(null,""), "Argument 'regex' cannot be null.");
-		assertThrows(IllegalArgumentException.class, ()->test(x).asReplaceAll("",null), "Argument 'replacement' cannot be null.");
+		var assertion3 = test(x);
+		assertThrows(IllegalArgumentException.class, ()->assertion3.asReplaceAll(null,""), "Argument 'regex' cannot be null.");
+		var assertion4 = test(x);
+		assertThrows(IllegalArgumentException.class, ()->assertion4.asReplaceAll("",null), "Argument 'replacement' cannot be null.");
 	}
 
 	@Test void bb02_replace() {
@@ -113,8 +116,10 @@ class StringAssertion_Test extends TestBase {
 		var nil = no(String.class);
 		test(x).asReplace("foo","bar").is("barbar").is("foobar");
 		test(nil).asReplace("foo","bar").isNull();
-		assertThrows(IllegalArgumentException.class, ()->test(x).asReplace(null,"bar").isNull(), "Argument 'target' cannot be null.");
-		assertThrows(IllegalArgumentException.class, ()->test(x).asReplace("foo",null).isNull(), "Argument 'replacement' cannot be null.");
+		var assertion5 = test(x);
+		assertThrows(IllegalArgumentException.class, () -> assertion5.asReplace(null,"bar"), "Argument 'target' cannot be null.");
+		var assertion6 = test(x);
+		assertThrows(IllegalArgumentException.class, () -> assertion6.asReplace("foo",null), "Argument 'replacement' cannot be null.");
 	}
 
 	@Test void bb03_urlDecode() {
@@ -160,21 +165,24 @@ class StringAssertion_Test extends TestBase {
 		var x = "1";
 		var nil = no(String.class);
 		test(x).isExists().isExists();
-		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
+		var assertion7 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion7::isExists, "Value was null.");
 	}
 
 	@Test void ca02_isNull() {
 		var x = "1";
 		var nil = no(String.class);
 		test(nil).isNull();
-		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
+		var assertion8 = test(x);
+		assertThrows(BasicAssertionError.class, assertion8::isNull, "Value was not null.");
 	}
 
 	@Test void ca03_isNotNull() {
 		var x = "1";
 		var nil = no(String.class);
 		test(x).isNotNull();
-		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
+		var assertion9 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion9::isNotNull, "Value was null.");
 	}
 
 	@Test void ca04a_is_T() {
@@ -348,8 +356,10 @@ class StringAssertion_Test extends TestBase {
 		var nil = no(String.class);
 
 		test(x).isLines("foo","bar","baz");
-		assertThrows(IllegalArgumentException.class, ()->test(nil).isLines((String[])null), "Argument 'lines' cannot be null.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isLines((String)null), "Value was null.");
+		var assertion10 = test(nil);
+		assertThrows(IllegalArgumentException.class, ()->assertion10.isLines((String[])null), "Argument 'lines' cannot be null.");
+		var assertion11 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion11.isLines((String)null), "Value was null.");
 		assertThrown(()->test(x).asJavaStrings().isLines("foo","bar","bar")).asMessage().asOneLine().is("String differed at position 10.  Expect='foo\\nbar\\nbar'.  Actual='foo\\nbar\\nbaz'.");
 	}
 
@@ -360,12 +370,15 @@ class StringAssertion_Test extends TestBase {
 		var nil = no(String.class);
 
 		test(x1).isSortedLines("bar","foo","baz");
-		assertThrows(IllegalArgumentException.class, ()->test(nil).isSortedLines((String[])null), "Argument 'lines' cannot be null.");
+		var assertion12 = test(nil);
+		assertThrows(IllegalArgumentException.class, ()->assertion12.isSortedLines((String[])null), "Argument 'lines' cannot be null.");
 		test(empty).isSortedLines((String)null);
-		assertThrows(BasicAssertionError.class, ()->test(nil).isSortedLines(), "Value was null.");
+		var assertion13 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion13::isSortedLines, "Value was null.");
 		assertThrown(()->test(x1).isSortedLines("bar","foo","bar")).asMessage().asOneLine().is("Expected string had different values at line 2.  Expect='bar'.  Actual='baz'.");
 		assertThrown(()->test(x1).isSortedLines("bar","foo")).asMessage().asOneLine().is("Expected string had different numbers of lines.  Expect='2'.  Actual='3'.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isSortedLines("foo"), "Value was null.");
+		var assertion14 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion14.isSortedLines("foo"), "Value was null.");
 		assertThrown(()->test(x2).isSortedLines((String)null)).asMessage().asOneLine().is("Expected string had different values at line 1.  Expect=''.  Actual='foo'.");
 	}
 
@@ -375,7 +388,8 @@ class StringAssertion_Test extends TestBase {
 		test(x).isContains("foo","bar");
 		assertThrown(()->test(x).isContains("foo","baz")).asMessage().asOneLine().is("String did not contain expected substring.  Substring='baz'.  Value='foobar'.");
 		test(nil).isContains();
-		assertThrows(IllegalArgumentException.class, ()->test(x).isContains((String[])null), "Argument 'values' cannot be null.");
+		var assertion15 = test(x);
+		assertThrows(IllegalArgumentException.class, ()->assertion15.isContains((String[])null), "Argument 'values' cannot be null.");
 		test(x).isContains((String)null);
 		assertThrown(()->test(nil).isContains("foobar")).asMessage().asOneLine().is("String did not contain expected substring.  Substring='foobar'.  Value='null'.");
 	}
@@ -386,7 +400,8 @@ class StringAssertion_Test extends TestBase {
 		test(x).isNotContains("baz","qux");
 		assertThrown(()->test(x).isNotContains("foo","baz")).asMessage().asOneLine().is("String contained unexpected substring.  Substring='foo'.  Value='foobar'.");
 		test(nil).isNotContains();
-		assertThrows(IllegalArgumentException.class, ()->test(x).isNotContains((String[])null), "Argument 'values' cannot be null.");
+		var assertion16 = test(x);
+		assertThrows(IllegalArgumentException.class, ()->assertion16.isNotContains((String[])null), "Argument 'values' cannot be null.");
 		test(x).isNotContains((String)null);
 		test(nil).isNotContains("foobar");
 	}
@@ -405,8 +420,10 @@ class StringAssertion_Test extends TestBase {
 		var empty = "";
 		var nil = no(String.class);
 		test(x).isNotEmpty();
-		assertThrows(BasicAssertionError.class, ()->test(empty).isNotEmpty(), "String was empty.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isNotEmpty(), "String was null.");
+		var assertion17 = test(empty);
+		assertThrows(BasicAssertionError.class, assertion17::isNotEmpty, "String was empty.");
+		var assertion18 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion18::isNotEmpty, "String was null.");
 	}
 
 	@Test void cb09_matches() {
@@ -415,8 +432,10 @@ class StringAssertion_Test extends TestBase {
 		var nil = no(String.class);
 		test(x).isMatches("fo*");
 		assertThrown(()->test(x).isMatches("b*")).asMessage().asOneLine().is("String did not match expected pattern.  Pattern='\\Qb\\E.*\\Q\\E'.  Value='foo'.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isMatches("b*"), "Value was null.");
-		assertThrows(IllegalArgumentException.class, ()->test(empty).isMatches(null), "Argument 'searchPattern' cannot be null.");
+		var assertion19 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion19.isMatches("b*"), "Value was null.");
+		var assertion20 = test(empty);
+		assertThrows(IllegalArgumentException.class, ()->assertion20.isMatches(null), "Argument 'searchPattern' cannot be null.");
 	}
 
 	@Test void cb10_regex() {
@@ -425,8 +444,10 @@ class StringAssertion_Test extends TestBase {
 		var nil = no(String.class);
 		test(x).isPattern("fo+");
 		assertThrown(()->test(x).isPattern("bar")).asMessage().asOneLine().is("String did not match expected pattern.  Pattern='bar'.  Value='foo'.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isPattern("fo+"), "Value was null.");
-		assertThrows(IllegalArgumentException.class, ()->test(empty).isPattern((String)null), "Argument 'regex' cannot be null.");
+		var assertion23 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion23.isPattern("fo+"), "Value was null.");
+		var assertion24 = test(empty);
+		assertThrows(IllegalArgumentException.class, ()->assertion24.isPattern((String)null), "Argument 'regex' cannot be null.");
 	}
 
 	@Test void cb10b_regex_wFlags() {
@@ -435,8 +456,10 @@ class StringAssertion_Test extends TestBase {
 		var nil = no(String.class);
 		test(x).isPattern("FO+", Pattern.CASE_INSENSITIVE);
 		assertThrown(()->test(x).isPattern("bar")).asMessage().asOneLine().is("String did not match expected pattern.  Pattern='bar'.  Value='foo'.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isPattern("fo+"), "Value was null.");
-		assertThrows(IllegalArgumentException.class, ()->test(empty).isPattern((String)null), "Argument 'regex' cannot be null.");
+		var assertion27 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion27.isPattern("fo+"), "Value was null.");
+		var assertion28 = test(empty);
+		assertThrows(IllegalArgumentException.class, ()->assertion28.isPattern((String)null), "Argument 'regex' cannot be null.");
 	}
 
 	@Test void cb10c_regex_wPattern() {
@@ -445,8 +468,10 @@ class StringAssertion_Test extends TestBase {
 		var nil = no(String.class);
 		test(x).isPattern(Pattern.compile("FO+", Pattern.CASE_INSENSITIVE));
 		assertThrown(()->test(x).isPattern("bar")).asMessage().asOneLine().is("String did not match expected pattern.  Pattern='bar'.  Value='foo'.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isPattern("fo+"), "Value was null.");
-		assertThrows(IllegalArgumentException.class, ()->test(empty).isPattern((String)null), "Argument 'regex' cannot be null.");
+		var assertion29 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion29.isPattern("fo+"), "Value was null.");
+		var assertion30 = test(empty);
+		assertThrows(IllegalArgumentException.class, ()->assertion30.isPattern((String)null), "Argument 'regex' cannot be null.");
 	}
 
 	@Test void cb12_startsWith() {
@@ -454,7 +479,8 @@ class StringAssertion_Test extends TestBase {
 		var nil = no(String.class);
 		test(x).isStartsWith("fo");
 		assertThrown(()->test(x).isStartsWith("x")).asMessage().asOneLine().is("String did not start with expected substring.  Substring='x'.  Value='foo'.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isStartsWith("x"), "Value was null.");
+		var assertion25 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion25.isStartsWith("x"), "Value was null.");
 	}
 
 	@Test void cb13_endsWith() {
@@ -462,6 +488,7 @@ class StringAssertion_Test extends TestBase {
 		var nil = no(String.class);
 		test(x).isEndsWith("oo");
 		assertThrown(()->test(x).isEndsWith("x")).asMessage().asOneLine().is("String did not end with expected substring.  Substring='x'.  Value='foo'.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isEndsWith("x"), "Value was null.");
+		var assertion26 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion26.isEndsWith("x"), "Value was null.");
 	}
 }

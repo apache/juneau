@@ -48,6 +48,7 @@
 		<jetty.version>12.1.5</jetty.version>
 		<jetty.ee.version>11</jetty.ee.version>
 		<spring.version>4.0.1</spring.version>
+		<sonar.organization>apache</sonar.organization>
 	</properties>
 
 	<modules>

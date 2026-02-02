@@ -24,7 +24,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-@Deprecated
 class Verify_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

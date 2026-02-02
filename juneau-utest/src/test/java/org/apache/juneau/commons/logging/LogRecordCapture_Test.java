@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
  */
 class LogRecordCapture_Test extends TestBase {
 
-	private Logger getLogger(String name) {
+	private static Logger getLogger(String name) {
 		var l = Logger.getLogger(name);
 		l.setLevel(Level.OFF);
 		return l;

@@ -395,7 +395,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 	public static class B3 extends SimpleBean {
 
 		@Example
-		public static B3 EXAMPLE = getExample();
+		public static final B3 EXAMPLE = getExample();
 
 		private static B3 getExample() {
 			var ex = new B3();
@@ -419,7 +419,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 
 	public static class B3c extends SimpleBean {
 
-		public static B3c EXAMPLE = getExample();
+		public static final B3c EXAMPLE = getExample();
 
 		private static B3c getExample() {
 			var ex = new B3c();
@@ -541,7 +541,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 	public static class C2 extends BeanMap {
 
 		@Example
-		public static C2 EXAMPLE = getExample();
+		public static final C2 EXAMPLE = getExample();
 
 		private static C2 getExample() {
 			var ex = new C2();
@@ -566,7 +566,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 	@SuppressWarnings("serial")
 	public static class C2c extends BeanMap {
 
-		public static C2c EXAMPLE = getExample();
+		public static final C2c EXAMPLE = getExample();
 
 		private static C2c getExample() {
 			var ex = new C2c();
@@ -690,7 +690,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 	public static class D2 extends BeanList {
 
 		@Example
-		public static D2 EXAMPLE = getExample();
+		public static final D2 EXAMPLE = getExample();
 
 		private static D2 getExample() {
 			var ex = new D2();
@@ -715,7 +715,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 	@SuppressWarnings("serial")
 	public static class D2c extends BeanList {
 
-		public static D2c EXAMPLE = getExample();
+		public static final D2c EXAMPLE = getExample();
 
 		private static D2c getExample() {
 			var ex = new D2c();
@@ -1514,6 +1514,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertBean(schema, "exclusiveMaximum,exclusiveMinimum,maximum,minimum", "true,true,100,0");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Schema(type="integer", exclusiveMaximum=true, exclusiveMinimum=true, maximum="100", minimum="0")
 	public static class OldStyleExclusiveBean {
 		public int value;
@@ -1526,6 +1527,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertBean(schema, "exclusiveMaximum,exclusiveMinimum", "100,0");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Schema(type="integer",
 		exclusiveMaximumValue="100",
 		exclusiveMinimumValue="0",

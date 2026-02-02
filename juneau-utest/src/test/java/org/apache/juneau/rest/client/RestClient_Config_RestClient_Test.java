@@ -167,20 +167,20 @@ class RestClient_Config_RestClient_Test extends TestBase {
 
 	public static class A5b extends BasicRestCallInterceptor {
 		@Override
-		public void onInit(RestRequest req) throws Exception {}  // NOSONAR
+		public void onInit(RestRequest req) throws Exception {}  // NOSONAR(java:S1186): Unused test method/constructor
 		@Override
 		public void onConnect(RestRequest req, RestResponse res) throws Exception {
 			throw new RuntimeException("foo");
 		}
 		@Override
-		public void onClose(RestRequest req, RestResponse res) throws Exception {}  // NOSONAR
+		public void onClose(RestRequest req, RestResponse res) throws Exception {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 
 	public static class A5c extends BasicRestCallInterceptor {
 		@Override
-		public void onInit(RestRequest req) throws Exception {}  // NOSONAR
+		public void onInit(RestRequest req) throws Exception {}  // NOSONAR(java:S1186): Unused test method/constructor
 		@Override
-		public void onConnect(RestRequest req, RestResponse res) throws Exception {}  // NOSONAR
+		public void onConnect(RestRequest req, RestResponse res) throws Exception {}  // NOSONAR(java:S1186): Unused test method/constructor
 		@Override
 		public void onClose(RestRequest req, RestResponse res) throws Exception {
 			throw new RuntimeException("foo");
@@ -196,20 +196,20 @@ class RestClient_Config_RestClient_Test extends TestBase {
 
 	public static class A5e extends BasicRestCallInterceptor {
 		@Override
-		public void onInit(RestRequest req) throws Exception {}  // NOSONAR
+		public void onInit(RestRequest req) throws Exception {}  // NOSONAR(java:S1186): Unused test method/constructor
 		@Override
 		public void onConnect(RestRequest req, RestResponse res) throws Exception {
 			throw new RestCallException(null,null,"foo");
 		}
 		@Override
-		public void onClose(RestRequest req, RestResponse res) throws Exception {}  // NOSONAR
+		public void onClose(RestRequest req, RestResponse res) throws Exception {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 
 	public static class A5f extends BasicRestCallInterceptor {
 		@Override
-		public void onInit(RestRequest req) throws Exception {}  // NOSONAR
+		public void onInit(RestRequest req) throws Exception {}  // NOSONAR(java:S1186): Unused test method/constructor
 		@Override
-		public void onConnect(RestRequest req, RestResponse res) throws Exception {}  // NOSONAR
+		public void onConnect(RestRequest req, RestResponse res) throws Exception {}  // NOSONAR(java:S1186): Unused test method/constructor
 		@Override
 		public void onClose(RestRequest req, RestResponse res) throws Exception {
 			throw new RuntimeException("foo");
@@ -225,20 +225,20 @@ class RestClient_Config_RestClient_Test extends TestBase {
 
 	public static class A5h extends BasicRestCallInterceptor {
 		@Override
-		public void onInit(RestRequest req) throws Exception {}  // NOSONAR
+		public void onInit(RestRequest req) throws Exception {}  // NOSONAR(java:S1186): Unused test method/constructor
 		@Override
 		public void onConnect(RestRequest req, RestResponse res) throws Exception {
 			throw new IOException("foo");
 		}
 		@Override
-		public void onClose(RestRequest req, RestResponse res) throws Exception {}  // NOSONAR
+		public void onClose(RestRequest req, RestResponse res) throws Exception {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 
 	public static class A5i extends BasicRestCallInterceptor {
 		@Override
-		public void onInit(RestRequest req) throws Exception {}  // NOSONAR
+		public void onInit(RestRequest req) throws Exception {}  // NOSONAR(java:S1186): Unused test method/constructor
 		@Override
-		public void onConnect(RestRequest req, RestResponse res) throws Exception {}  // NOSONAR
+		public void onConnect(RestRequest req, RestResponse res) throws Exception {}  // NOSONAR(java:S1186): Unused test method/constructor
 		@Override
 		public void onClose(RestRequest req, RestResponse res) throws Exception {
 			throw new RuntimeException("foo");

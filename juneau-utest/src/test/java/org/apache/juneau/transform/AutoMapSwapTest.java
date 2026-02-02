@@ -236,7 +236,7 @@ class AutoMapSwapTest extends TestBase {
 		}
 	}
 	public static class E04 {
-		public Map<String,String> toMap(Map<String,String> foo) {  // NOSONAR
+		public Map<String,String> toMap(Map<String,String> foo) {  // NOSONAR(java:S1186): Unused test method/constructor
 			return STRINGMAP;
 		}
 	}
@@ -290,7 +290,7 @@ class AutoMapSwapTest extends TestBase {
 		public Map<String,String> toMap() {
 			return STRINGMAP;
 		}
-		public static F01c create(Map<String,String> o) {  // NOSONAR
+		public static F01c create(Map<String,String> o) {  // NOSONAR(java:S1186): Unused test method/constructor
 			return null;
 		}
 	}
@@ -307,7 +307,7 @@ class AutoMapSwapTest extends TestBase {
 		public Map<String,String> toMap() {
 			return STRINGMAP;
 		}
-		public static Object create(Map<String,String> o) {  // NOSONAR
+		public static Object create(Map<String,String> o) {  // NOSONAR(java:S1186): Unused test method/constructor
 			return null;
 		}
 	}
@@ -323,7 +323,7 @@ class AutoMapSwapTest extends TestBase {
 		public Map<String,String> toMap() {
 			return STRINGMAP;
 		}
-		public F05 create(Map<String,String> o) {  // NOSONAR
+		public F05 create(Map<String,String> o) {  // NOSONAR(java:S1186): Unused test method/constructor
 			return null;
 		}
 	}
@@ -331,7 +331,7 @@ class AutoMapSwapTest extends TestBase {
 		public Map<String,String> toMap() {
 			return STRINGMAP;
 		}
-		public static F06 createx(Map<String,String> o) {  // NOSONAR
+		public static F06 createx(Map<String,String> o) {  // NOSONAR(java:S1186): Unused test method/constructor
 			return null;
 		}
 	}

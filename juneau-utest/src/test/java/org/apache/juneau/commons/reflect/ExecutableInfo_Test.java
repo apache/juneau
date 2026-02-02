@@ -68,16 +68,16 @@ class ExecutableInfo_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	static class A {
-		public A() {}  // NOSONAR
-		public void foo() {}  // NOSONAR
+		public A() {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void foo() {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	static class B {
 		public B() {}
-		public B(String s) {}  // NOSONAR
-		public void m() {}  // NOSONAR
-		public int m(String s) { return 0; }  // NOSONAR
+		public B(String s) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void m() {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public int m(String s) { return 0; }  // NOSONAR(java:UNKNOWN): Unused test code
 	}
 	static ClassInfo b = ClassInfo.of(B.class);
 	static ExecutableInfo
@@ -99,11 +99,11 @@ class ExecutableInfo_Test extends TestBase {
 
 	static class C {
 		public C() {}
-		public C(@CA String foo) {}  // NOSONAR
-		public @CA C(int bar) {}  // NOSONAR
-		public void m() {}  // NOSONAR
-		public void m(@CA String foo) {}  // NOSONAR
-		public @CA void m(int bar) {}  // NOSONAR
+		public C(@CA String foo) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public @CA C(int bar) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void m() {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void m(@CA String foo) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public @CA void m(int bar) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 	static ClassInfo c = ClassInfo.of(C.class);
 	static ConstructorInfo
@@ -119,8 +119,8 @@ class ExecutableInfo_Test extends TestBase {
 
 	@SuppressWarnings("unused")
 	static class D {
-		public D() throws IOException {}  // NOSONAR
-		public void m() throws IOException {}  // NOSONAR
+		public D() throws IOException {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void m() throws IOException {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 	static ClassInfo d = ClassInfo.of(D.class);
 	static ExecutableInfo
@@ -172,11 +172,11 @@ class ExecutableInfo_Test extends TestBase {
 
 	static class X {
 		public X() {}
-		public X(String foo) {}  // NOSONAR
-		public X(Map<String,Object> foo) {}  // NOSONAR
-		public void foo(){}  // NOSONAR
-		public void foo(String foo){}  // NOSONAR
-		public void foo(Map<String,Object> foo){}  // NOSONAR
+		public X(String foo) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public X(Map<String,Object> foo) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void foo(){}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void foo(String foo){}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void foo(Map<String,Object> foo){}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 	static ClassInfo x2 = ClassInfo.of(X.class);
 
@@ -888,20 +888,20 @@ class ExecutableInfo_Test extends TestBase {
 	@SuppressWarnings("unused")
 	static class ToStringTestClass {
 		public ToStringTestClass() {}
-		private ToStringTestClass(int i) {}  // NOSONAR
-		protected ToStringTestClass(String s) {}  // NOSONAR
-		static ToStringTestClass create() { return null; }  // NOSONAR
+		private ToStringTestClass(int i) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		protected ToStringTestClass(String s) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		static ToStringTestClass create() { return null; }  // NOSONAR(java:UNKNOWN): Unused test code
 		public void publicMethod() {}
-		private void privateMethod() {}  // NOSONAR
-		protected void protectedMethod() {}  // NOSONAR
-		static void staticMethod() {}  // NOSONAR
-		final void finalMethod() {}  // NOSONAR
-		public void methodWithThrows() throws java.io.IOException, java.lang.Exception {}  // NOSONAR - IOException declared for reflection testing
-		public <T> void genericMethod(T t) {}  // NOSONAR
-		public <T extends Comparable<T>> void genericMethodWithBounds(T t) {}  // NOSONAR
+		private void privateMethod() {}  // NOSONAR(java:S1186): Unused test method/constructor
+		protected void protectedMethod() {}  // NOSONAR(java:S1186): Unused test method/constructor
+		static void staticMethod() {}  // NOSONAR(java:S1186): Unused test method/constructor
+		final void finalMethod() {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void methodWithThrows() throws java.io.IOException, java.lang.Exception {}  // NOSONAR(java:S1186): IOException declared for reflection testing
+		public <T> void genericMethod(T t) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public <T extends Comparable<T>> void genericMethodWithBounds(T t) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 	static abstract class ToStringTestAbstractClass {
-		abstract void abstractMethod();  // NOSONAR
+		abstract void abstractMethod();  // NOSONAR(java:UNKNOWN): Field initialization
 	}
 
 	@Test

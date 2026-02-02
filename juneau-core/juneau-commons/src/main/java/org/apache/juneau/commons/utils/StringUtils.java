@@ -148,7 +148,7 @@ public class StringUtils {
 	 * with optional sign, exponent, and type suffixes. Copied from the JDK source to keep parsing logic consistent.
 	 */
 	public static final Pattern FP_REGEX = Pattern.compile(
-		"[+-]?(NaN|Infinity|((((\\p{Digit}+)(\\.)?((\\p{Digit}+)?)([eE][+-]?(\\p{Digit}+))?)|(\\.((\\p{Digit}+))([eE][+-]?(\\p{Digit}+))?)|(((0[xX](\\p{XDigit}+)(\\.)?)|(0[xX](\\p{XDigit}+)?(\\.)(\\p{XDigit}+)))[pP][+-]?(\\p{Digit}+)))[fFdD]?))[\\x00-\\x20]*"  // NOSONAR
+		"[+-]?(NaN|Infinity|((((\\p{Digit}+)(\\.)?((\\p{Digit}+)?)([eE][+-]?(\\p{Digit}+))?)|(\\.((\\p{Digit}+))([eE][+-]?(\\p{Digit}+))?)|(((0[xX](\\p{XDigit}+)(\\.)?)|(0[xX](\\p{XDigit}+)?(\\.)(\\p{XDigit}+)))[pP][+-]?(\\p{Digit}+)))[fFdD]?))[\\x00-\\x20]*"  // NOSONAR(java:S5998): Complex regex pattern for floating point numbers
 	);
 
 	static final Map<Character,AsciiSet> ESCAPE_SETS = new ConcurrentHashMap<>();
@@ -329,7 +329,7 @@ public class StringUtils {
 	 */
 	public static byte[] base64Decode(String in) {
 		if (in == null)
-			return null;  // NOSONAR - Intentional.
+			return null;  // NOSONAR(java:S1168): Intentional null return
 
 		var bIn = in.getBytes(UTF8);
 
@@ -1213,7 +1213,7 @@ public class StringUtils {
 	 */
 	public static String[] distinct(String[] array) {
 		if (array == null)
-			return null;  // NOSONAR - Intentional.
+			return null;  // NOSONAR(java:S1168): Intentional null return
 		return Arrays.stream(array).collect(Collectors.toCollection(LinkedHashSet::new)).toArray(new String[0]);
 	}
 
@@ -1896,7 +1896,7 @@ public class StringUtils {
 	 */
 	public static String[] filter(String[] array, Predicate<String> predicate) {
 		if (array == null)
-			return null;  // NOSONAR - Intentional.
+			return null;  // NOSONAR(java:S1168): Intentional null return
 		if (predicate == null)
 			return new String[0];
 		return Arrays.stream(array).filter(predicate).toArray(String[]::new);
@@ -2366,7 +2366,7 @@ public class StringUtils {
 	 * @param s The URI string.
 	 * @return Just the authority portion of the URI.
 	 */
-	public static String getAuthorityUri(String s) {  // NOSONAR - False positive.
+	public static String getAuthorityUri(String s) {  // NOSONAR(java:UNKNOWN): False positive
 
 		// Use a state machine for maximum performance.
 
@@ -2391,7 +2391,7 @@ public class StringUtils {
 					state = S3;
 				else if (! isLowerCaseLetter(c))
 					return s;
-			} else if (state == S3) {  // NOSONAR - False positive.
+			} else if (state == S3) {  // NOSONAR(java:UNKNOWN): False positive
 				if (c == '/')
 					state = S4;
 				else
@@ -2407,7 +2407,7 @@ public class StringUtils {
 				else
 					return s;
 			} else /* state == S6 */ {
-				if (c == '/')  // NOSONAR - Intentional.
+				if (c == '/')  // NOSONAR(java:UNKNOWN): Intentional
 					return s.substring(0, i);
 			}
 		}
@@ -2645,7 +2645,7 @@ public class StringUtils {
 			end = lines.length;
 		var sb = new StringBuilder();
 		for (var l : l(lines).subList(start - 1, end))
-			sb.append(String.format("%0" + digits + "d", start++)).append(": ").append(l).append("\n");  // NOSONAR - Intentional.
+			sb.append(String.format("%0" + digits + "d", start++)).append(": ").append(l).append("\n");  // NOSONAR(java:UNKNOWN): Intentional
 		return sb.toString();
 	}
 
@@ -2863,7 +2863,7 @@ public class StringUtils {
 	 * @param s The string to test.
 	 * @return <jk>true</jk> if it's an absolute path.
 	 */
-	public static boolean isAbsoluteUri(String s) {  // NOSONAR - False positive.
+	public static boolean isAbsoluteUri(String s) {  // NOSONAR(java:UNKNOWN): False positive
 
 		if (isEmpty(s))
 			return false;
@@ -2890,7 +2890,7 @@ public class StringUtils {
 					state = S3;
 				else if (! isLowerCaseLetter(c))
 					return false;
-			} else if (state == S3) {  // NOSONAR - False positive.
+			} else if (state == S3) {  // NOSONAR(java:UNKNOWN): False positive
 				if (c == '/')
 					state = S4;
 				else
@@ -3527,7 +3527,7 @@ public class StringUtils {
 	 * @param s The string to test.
 	 * @return <jk>true</jk> if it's an absolute path.
 	 */
-	public static boolean isUri(String s) {  // NOSONAR - False positive.
+	public static boolean isUri(String s) {  // NOSONAR(java:UNKNOWN): False positive
 
 		if (isEmpty(s))
 			return false;
@@ -3553,7 +3553,7 @@ public class StringUtils {
 					state = S3;
 				else
 					return false;
-			} else if (state == S3) {  // NOSONAR - False positive.
+			} else if (state == S3) {  // NOSONAR(java:UNKNOWN): False positive
 				if (c == ':')
 					state = S4;
 				else if (! isLowerCaseLetter(c))
@@ -4290,7 +4290,7 @@ public class StringUtils {
 	 */
 	public static String[] mapped(String[] array, Function<String,String> mapper) {
 		if (array == null)
-			return null;  // NOSONAR - Intentional.
+			return null;  // NOSONAR(java:S1168): Intentional null return
 		if (mapper == null)
 			return Arrays.copyOf(array, array.length);
 		return Arrays.stream(array).map(mapper).toArray(String[]::new);
@@ -4914,7 +4914,7 @@ public class StringUtils {
 	public static String obfuscate(String s) {
 		if (s == null || s.length() < 2)
 			return "*";
-		return s.substring(0, 1) + s.substring(1).replaceAll(".", "*");  // NOSONAR
+		return s.substring(0, 1) + s.substring(1).replaceAll(".", "*");  // NOSONAR(java:S5998): Regex pattern for masking string
 	}
 
 	/**
@@ -5099,7 +5099,7 @@ public class StringUtils {
 		var m = multiplierInt(s);
 		if (m == 1)
 			return Integer.decode(s);
-		return Integer.decode(s.substring(0, s.length() - 1).trim()) * m;  // NOSONAR - NPE not possible here.
+		return Integer.decode(s.substring(0, s.length() - 1).trim()) * m;  // NOSONAR(java:S2259): NPE not possible here
 	}
 
 	/**
@@ -5146,7 +5146,7 @@ public class StringUtils {
 			return Long.decode(s);
 		}
 		var baseStr = s.substring(0, s.length() - 1).trim();
-		var base = Long.decode(baseStr);  // NOSONAR - NPE not possible here.
+		var base = Long.decode(baseStr);  // NOSONAR(java:S2259): NPE not possible here
 		try {
 			return Math.multiplyExact(base, m);
 		} catch (@SuppressWarnings("unused") ArithmeticException e) {
@@ -6134,7 +6134,7 @@ public class StringUtils {
 	 */
 	public static String[] sort(String[] array) {
 		if (array == null)
-			return null;  // NOSONAR - Intentional.
+			return null;  // NOSONAR(java:S1168): Intentional null return
 		var result = Arrays.copyOf(array, array.length);
 		Arrays.sort(result);
 		return result;
@@ -6160,7 +6160,7 @@ public class StringUtils {
 	 */
 	public static String[] sortIgnoreCase(String[] array) {
 		if (array == null)
-			return null;  // NOSONAR - Intentional.
+			return null;  // NOSONAR(java:S1168): Intentional null return
 		var result = Arrays.copyOf(array, array.length);
 		Arrays.sort(result, String.CASE_INSENSITIVE_ORDER);
 		return result;
@@ -6282,7 +6282,7 @@ public class StringUtils {
 			else if (s.charAt(i) == c && escapeCount % 2 == 0) {
 				var s2 = s.substring(x1, i);
 				var s3 = unescapeChars(s2, escapeChars);
-				consumer.accept(s3.trim());  // NOSONAR - NPE not possible.
+				consumer.accept(s3.trim());  // NOSONAR(java:S2259): NPE not possible
 				x1 = i + 1;
 			}
 			if (s.charAt(i) != '\\')
@@ -6290,7 +6290,7 @@ public class StringUtils {
 		}
 		var s2 = s.substring(x1);
 		var s3 = unescapeChars(s2, escapeChars);
-		consumer.accept(s3.trim());  // NOSONAR - NPE not possible.
+		consumer.accept(s3.trim());  // NOSONAR(java:S2259): NPE not possible
 	}
 
 	/**
@@ -6306,7 +6306,7 @@ public class StringUtils {
 		var escapeChars = getEscapeSet(c);
 
 		if (s == null)
-			return null;  // NOSONAR - Intentional.
+			return null;  // NOSONAR(java:S1168): Intentional null return
 		if (isEmpty(s))
 			return Collections.emptyList();
 		if (s.indexOf(c) == -1)
@@ -6406,7 +6406,7 @@ public class StringUtils {
 	 */
 	public static String[] splita(String[] s, char c) {
 		if (s == null)
-			return null;  // NOSONAR - Intentional.
+			return null;  // NOSONAR(java:S1168): Intentional null return
 		var l = new LinkedList<String>();
 		for (var ss : s) {
 			if (ss == null || ss.indexOf(c) == -1)
@@ -6434,7 +6434,7 @@ public class StringUtils {
 	public static Map<String,String> splitMap(String s, boolean trim) {
 
 		if (s == null)
-			return null;  // NOSONAR - Intentional.
+			return null;  // NOSONAR(java:S1168): Intentional null return
 		if (isEmpty(s))
 			return mape();
 
@@ -6472,7 +6472,7 @@ public class StringUtils {
 						x1 = i + 1;
 					}
 				} else /* state == S2 */ {
-					if (c == ',') {  // NOSONAR - Intentional.
+					if (c == ',') {  // NOSONAR(java:UNKNOWN): Intentional
 						var val = s.substring(x1, i);
 						if (trim)
 							val = trim(val);
@@ -6500,7 +6500,7 @@ public class StringUtils {
 	public static String[] splitMethodArgs(String s) {
 
 		if (s == null)
-			return null;  // NOSONAR - Intentional.
+			return null;  // NOSONAR(java:S1168): Intentional null return
 		if (isEmpty(s))
 			return new String[0];
 		if (s.indexOf(',') == -1)
@@ -6549,7 +6549,7 @@ public class StringUtils {
 		var escapeChars = getEscapeSet(',');
 
 		if (s == null)
-			return null;  // NOSONAR - Intentional.
+			return null;  // NOSONAR(java:S1168): Intentional null return
 		if (isEmpty(s))
 			return Collections.emptyList();
 		if (s.indexOf(',') == -1)
@@ -6683,7 +6683,7 @@ public class StringUtils {
 	public static String[] splitQuoted(String s, boolean keepQuotes) {
 
 		if (s == null)
-			return null;  // NOSONAR - Intentional.
+			return null;  // NOSONAR(java:S1168): Intentional null return
 
 		s = s.trim();
 
@@ -6726,7 +6726,7 @@ public class StringUtils {
 				} else if (! isInEscape) {
 					if (c == (state == S2 ? '\'' : '"')) {
 						var s2 = s.substring(mark, keepQuotes ? i + 1 : i);
-						if (needsUnescape)  // NOSONAR - False positive check.
+						if (needsUnescape)  // NOSONAR(java:UNKNOWN): False positive check
 							s2 = unescapeChars(s2, QUOTE_ESCAPE_SET);
 						l.add(s2);
 						state = S1;
@@ -7207,7 +7207,7 @@ public class StringUtils {
 	 */
 	public static String[] toStringArray(Collection<String> collection) {
 		if (collection == null)
-			return null;  // NOSONAR - Intentional.
+			return null;  // NOSONAR(java:S1168): Intentional null return
 		return collection.toArray(new String[collection.size()]);
 	}
 
@@ -7341,7 +7341,7 @@ public class StringUtils {
 			return s;
 		while (endsWith(s, '/'))
 			s = s.substring(0, s.length() - 1);
-		while (ne(s) && s.charAt(0) == '/')  // NOSONAR - NPE not possible here.
+		while (ne(s) && s.charAt(0) == '/')  // NOSONAR(java:S2259): NPE not possible here
 			s = s.substring(1);
 		return s;
 	}
@@ -7431,10 +7431,10 @@ public class StringUtils {
 			var c = s.charAt(i);
 
 			if (c == '\\') {
-				if (i + 1 != s.length()) {  // NOSONAR - Intentional.
+				if (i + 1 != s.length()) {  // NOSONAR(java:UNKNOWN): Intentional
 					var c2 = s.charAt(i + 1);
 					if (escaped.contains(c2)) {
-						i++;  // NOSONAR - Intentional.
+						i++;  // NOSONAR(java:UNKNOWN): Intentional
 					}
 				}
 			}
@@ -7636,21 +7636,21 @@ public class StringUtils {
 			} else {
 				if (c == ' ') {
 					sb.append('+');
-					i++;  // NOSONAR - Intentional.
+					i++;  // NOSONAR(java:UNKNOWN): Intentional
 				} else {
 					do {
 						caw.write(c);
 						if (c >= 0xD800 && c <= 0xDBFF) {
-							if ((i + 1) < s.length()) {  // NOSONAR - Intentional.
+							if ((i + 1) < s.length()) {  // NOSONAR(java:UNKNOWN): Intentional
 								int d = s.charAt(i + 1);
 								if (d >= 0xDC00 && d <= 0xDFFF) {
 									caw.write(d);
-									i++;  // NOSONAR - Intentional.
+									i++;  // NOSONAR(java:UNKNOWN): Intentional
 								}
 							}
 						}
-						i++;  // NOSONAR - Intentional.
-					} while (i < s.length() && ! URL_ENCODE_PATHINFO_VALIDCHARS.contains((c = s.charAt(i))));   // NOSONAR - Intentional.
+						i++;  // NOSONAR(java:UNKNOWN): Intentional
+					} while (i < s.length() && ! URL_ENCODE_PATHINFO_VALIDCHARS.contains((c = s.charAt(i))));   // NOSONAR(java:UNKNOWN): Intentional
 
 					caw.flush();
 					var s2 = new String(caw.toCharArray());

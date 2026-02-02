@@ -26,7 +26,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
-@Deprecated
 class BeanAssertion_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -37,7 +36,7 @@ class BeanAssertion_Test extends TestBase {
 		return assertBean(value).setSilent();
 	}
 
-	public static A A1 = new A(), A1a = new A(), A2 = new A(2,3);
+	public static A a1 = new A(), a1a = new A(), a2 = new A(2,3);
 
 	public static class A implements Comparable<A> {
 		public int a = 1, b = 2;
@@ -53,8 +52,10 @@ class BeanAssertion_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_msg() {
-		assertThrows(BasicAssertionError.class, ()->test(null).setMsg("Foo {0}", 1).isExists(), "Foo 1");
-		assertThrows(RuntimeException.class, ()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists(), "Foo 1");
+		var assertion1 = test(null).setMsg("Foo {0}", 1);
+		assertThrows(BasicAssertionError.class, assertion1::isExists, "Foo 1");
+		var assertion2 = test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class);
+		assertThrows(RuntimeException.class, assertion2::isExists, "Foo 1");
 	}
 
 	@Test void a02_stdout() {
@@ -66,14 +67,14 @@ class BeanAssertion_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void ba01a_asString() {
-		var x = A1;
+		var x = a1;
 		var nil = (A)null;
 		test(x).asString().is("a=1,b=2");
 		test(nil).asString().isNull();
 	}
 
 	@Test void ba01b_asString_wSerializer() {
-		var x = A1;
+		var x = a1;
 		var nil = (A)null;
 		var s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("{a:1,b:2}");
@@ -81,52 +82,55 @@ class BeanAssertion_Test extends TestBase {
 	}
 
 	@Test void ba01c_asString_wPredicate() {
-		var x1 = A1;
+		var x1 = a1;
 		test(x1).asString(x -> "foo").is("foo");
 	}
 
 	@Test void ba02_asJson() {
-		var x = A1;
+		var x = a1;
 		var nil = (A)null;
 		test(x).asJson().is("{a:1,b:2}");
 		test(nil).asJson().is("null");
 	}
 
 	@Test void ba03_asJsonSorted() {
-		var x1 = a(A2,A1);
+		var x1 = a(a2,a1);
 		var nil = (A)null;
 		test(x1).asJsonSorted().is("[{a:1,b:2},{a:2,b:3}]");
 		test(nil).asJsonSorted().is("null");
 	}
 
 	@Test void ba04_apply() {
-		var x1 = A1;
-		var x2 = A2;
+		var x1 = a1;
+		var x2 = a2;
 		test(x1).asTransformed(x -> x2).is(x2);
 	}
 
 	@Test void bb01_extract() {
-		var x = A1;
+		var x = a1;
 		var nil = (A)null;
 		test(x).asPropertyMap("b,a").asJson().is("{b:2,a:1}");
 		test(x).asPropertyMap("x").asJson().is("{}");
-		assertThrows(BasicAssertionError.class, ()->test(nil).asPropertyMap("x"), "Value was null.");
+		var assertion3 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion3.asPropertyMap("x"), "Value was null.");
 	}
 
 	@Test void bb02_property() {
-		var x = A1;
+		var x = a1;
 		var nil = (A)null;
 		test(x).asProperty("a").asInteger().is(1);
 		test(x).asProperty("x").asInteger().isNull();
-		assertThrows(BasicAssertionError.class, ()->test(nil).asProperty("x"), "Value was null.");
+		var assertion4 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion4.asProperty("x"), "Value was null.");
 	}
 
 	@Test void bb03_properties() {
-		var x = A1;
+		var x = a1;
 		var nil = (A)null;
 		test(x).asProperties("a").asJson().is("[1]");
 		test(x).asProperties("x").asJson().is("[null]");
-		assertThrows(BasicAssertionError.class, ()->test(nil).asProperties("x"), "Value was null.");
+		var assertion5 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion5.asProperties("x"), "Value was null.");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -134,30 +138,33 @@ class BeanAssertion_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void ca01_exists() {
-		var x = A1;
+		var x = a1;
 		var nil = (A)null;
 		test(x).isExists().isExists();
-		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
+		var assertion6 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion6::isExists, "Value was null.");
 	}
 
 	@Test void ca02_isNull() {
-		var x = A1;
+		var x = a1;
 		var nil = (A)null;
 		test(nil).isNull();
-		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
+		var assertion7 = test(x);
+		assertThrows(BasicAssertionError.class, assertion7::isNull, "Value was not null.");
 	}
 
 	@Test void ca03_isNotNull() {
-		var x = A1;
+		var x = a1;
 		var nil = (A)null;
 		test(x).isNotNull();
-		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
+		var assertion8 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion8::isNotNull, "Value was null.");
 	}
 
 	@Test void ca04a_is_T() {
-		var x1 = A1;
-		var x1a = A1a;
-		var x2 = A2;
+		var x1 = a1;
+		var x1a = a1a;
+		var x2 = a2;
 		var nil = (A)null;
 		test(x1).is(x1);
 		test(x1).is(x1a);
@@ -168,16 +175,16 @@ class BeanAssertion_Test extends TestBase {
 	}
 
 	@Test void ca04b_is_predicate() {
-		var x1 = A1;
+		var x1 = a1;
 		test(x1).is(x->x.a==1);
 		assertThrown(()->test(x1).is(x->x.a==2)).asMessage().asOneLine().is("Unexpected value: 'a=1,b=2'.");
 		assertThrown(()->test(x1).is(ne(x1))).asMessage().asOneLine().is("Value unexpectedly matched.  Value='a=1,b=2'.");
 	}
 
 	@Test void ca05_isNot() {
-		var x1 = A1;
-		var x1a = A1a;
-		var x2 = A2;
+		var x1 = a1;
+		var x1a = a1a;
+		var x2 = a2;
 		var nil = (A)null;
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
@@ -187,9 +194,9 @@ class BeanAssertion_Test extends TestBase {
 	}
 
 	@Test void ca06_isAny() {
-		var x1 = A1;
-		var x1a = A1a;
-		var x2 = A2;
+		var x1 = a1;
+		var x1a = a1a;
+		var x2 = a2;
 		var nil = (A)null;
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[a=2,b=3]'.  Actual='a=1,b=2'.");
@@ -198,9 +205,9 @@ class BeanAssertion_Test extends TestBase {
 	}
 
 	@Test void ca07_isNotAny() {
-		var x1 = A1;
-		var x1a = A1a;
-		var x2 = A2;
+		var x1 = a1;
+		var x1a = a1a;
+		var x2 = a2;
 		var nil = (A)null;
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
@@ -210,8 +217,8 @@ class BeanAssertion_Test extends TestBase {
 	}
 
 	@Test void ca08_isSame() {
-		var x1 = A1;
-		var x1a = A1a;
+		var x1 = a1;
+		var x1a = a1a;
 		var nil = (A)null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
@@ -221,9 +228,9 @@ class BeanAssertion_Test extends TestBase {
 	}
 
 	@Test void ca09_isSameJsonAs() {
-		var x1 = A1;
-		var x1a = A1a;
-		var x2 = A2;
+		var x1 = a1;
+		var x1a = a1a;
+		var x2 = a2;
 		var nil = (A)null;
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
@@ -233,9 +240,9 @@ class BeanAssertion_Test extends TestBase {
 	}
 
 	@Test void ca10_isSameSortedJsonAs() {
-		var x1 = A1;
-		var x1a = A1a;
-		var x2 = A2;
+		var x1 = a1;
+		var x1a = a1a;
+		var x2 = a2;
 		var nil = (A)null;
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
@@ -245,9 +252,9 @@ class BeanAssertion_Test extends TestBase {
 	}
 
 	@Test void ca11_isSameSerializedAs() {
-		var x1 = A1;
-		var x1a = A1a;
-		var x2 = A2;
+		var x1 = a1;
+		var x1a = a1a;
+		var x2 = a2;
 		var nil = (A)null;
 		var s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
@@ -258,7 +265,7 @@ class BeanAssertion_Test extends TestBase {
 	}
 
 	@Test void ca12_isType() {
-		var x = A1;
+		var x = a1;
 		var nil = (A)null;
 		test(x).isType(A.class);
 		test(x).isType(Object.class);
@@ -268,7 +275,7 @@ class BeanAssertion_Test extends TestBase {
 	}
 
 	@Test void ca13_isExactType() {
-		var x = A1;
+		var x = a1;
 		var nil = (A)null;
 		test(x).isExactType(A.class);
 		assertThrown(()->test(x).isExactType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='org.apache.juneau.assertions.BeanAssertion_Test$A'.");
@@ -277,7 +284,7 @@ class BeanAssertion_Test extends TestBase {
 	}
 
 	@Test void ca14_isString() {
-		var x = A1;
+		var x = a1;
 		var nil = (A)null;
 		test(x).isString("a=1,b=2");
 		test(nil).isString(null);
@@ -287,7 +294,7 @@ class BeanAssertion_Test extends TestBase {
 	}
 
 	@Test void ca15_isJson() {
-		var x = A1;
+		var x = a1;
 		var nil = (A)null;
 		test(x).isJson("{a:1,b:2}");
 		test(nil).isJson("null");

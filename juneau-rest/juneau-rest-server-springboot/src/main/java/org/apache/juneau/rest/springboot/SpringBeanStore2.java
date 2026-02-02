@@ -83,11 +83,8 @@ public class SpringBeanStore2 extends BasicBeanStore2 {
 
 		// Fall back to Spring context
 		if (nn(appContext)) {
-			try {
-				return opt(appContext.getBeanProvider(beanType).getIfAvailable());
-			} catch (Exception e) {
-				// Bean not found in Spring context
-			}
+			var bean = safeOpt(() -> appContext.getBeanProvider(beanType).getIfAvailable()).orElse(null);
+			return bean != null ? opt(bean) : opte();
 		}
 
 		return opte();
@@ -101,14 +98,9 @@ public class SpringBeanStore2 extends BasicBeanStore2 {
 			return o;
 
 		// Fall back to Spring context
-		if (nn(appContext) && nn(name)) {
-			try {
-				if (appContext.containsBean(name)) {
-					return opt(appContext.getBean(name, beanType));
-				}
-			} catch (Exception e) {
-				// Bean not found in Spring context
-			}
+		if (nn(appContext) && nn(name) && safeOpt(() -> appContext.containsBean(name)).orElse(false)) {
+			var bean = safeOpt(() -> appContext.getBean(name, beanType)).orElse(null);
+			return bean != null ? opt(bean) : opte();
 		}
 
 		return opte();
@@ -121,15 +113,7 @@ public class SpringBeanStore2 extends BasicBeanStore2 {
 
 		// Add beans from Spring context (if they don't already exist in the result)
 		if (nn(appContext)) {
-			try {
-				Map<String, T> springBeans = appContext.getBeansOfType(beanType);
-				springBeans.forEach((name, bean) -> {
-					// Only add if not already present (local beans take precedence)
-					result.putIfAbsent(name, bean);
-				});
-			} catch (Exception e) {
-				// Bean type not found in Spring context
-			}
+			safeOpt(() -> appContext.getBeansOfType(beanType)).ifPresent(springBeans -> springBeans.forEach(result::putIfAbsent));
 		}
 
 		return result;
@@ -143,12 +127,9 @@ public class SpringBeanStore2 extends BasicBeanStore2 {
 
 		// Check Spring context
 		if (nn(appContext)) {
-			try {
-				String[] beanNames = appContext.getBeanNamesForType(beanType);
-				return beanNames.length > 0;
-			} catch (Exception e) {
-				// Bean type not found in Spring context
-			}
+			return safeOpt(() -> appContext.getBeanNamesForType(beanType))
+				.map(beanNames -> beanNames.length > 0)
+				.orElse(false);
 		}
 
 		return false;
@@ -162,11 +143,8 @@ public class SpringBeanStore2 extends BasicBeanStore2 {
 
 		// Check Spring context
 		if (nn(appContext) && nn(name)) {
-			try {
-				return appContext.containsBean(name) && appContext.isTypeMatch(name, beanType);
-			} catch (Exception e) {
-				// Bean not found in Spring context
-			}
+			return safeOpt(() -> appContext.containsBean(name) && appContext.isTypeMatch(name, beanType))
+				.orElse(false);
 		}
 
 		return false;
@@ -181,14 +159,13 @@ public class SpringBeanStore2 extends BasicBeanStore2 {
 
 		// Return a supplier that delegates to Spring context
 		if (nn(appContext)) {
-			try {
-				var provider = appContext.getBeanProvider(beanType);
+			var providerOpt = safeOpt(() -> appContext.getBeanProvider(beanType));
+			if (providerOpt.isPresent()) {
+				var provider = providerOpt.get();
 				// Only return a supplier if the bean actually exists in Spring
 				if (provider.getIfAvailable() != null) {
-					return opt(() -> provider.getIfAvailable());
+					return opt(provider::getIfAvailable);
 				}
-			} catch (Exception e) {
-				// Bean not found in Spring context
 			}
 		}
 
@@ -203,14 +180,8 @@ public class SpringBeanStore2 extends BasicBeanStore2 {
 			return supplier;
 
 		// Return a supplier that delegates to Spring context
-		if (nn(appContext) && nn(name)) {
-			try {
-				if (appContext.containsBean(name) && appContext.isTypeMatch(name, beanType)) {
-					return opt(() -> appContext.getBean(name, beanType));
-				}
-			} catch (Exception e) {
-				// Bean not found in Spring context
-			}
+		if (nn(appContext) && nn(name) && safeOpt(() -> appContext.containsBean(name) && appContext.isTypeMatch(name, beanType)).orElse(false)) {
+			return opt(() -> safeOpt(() -> appContext.getBean(name, beanType)).orElse(null));
 		}
 
 		return opte();

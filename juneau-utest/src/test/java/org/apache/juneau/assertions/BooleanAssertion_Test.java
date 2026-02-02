@@ -25,7 +25,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
-@Deprecated
 class BooleanAssertion_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -41,8 +40,10 @@ class BooleanAssertion_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_msg() {
-		assertThrows(BasicAssertionError.class, ()->test(null).setMsg("A {0}", 1).isExists(), "A 1");
-		assertThrows(RuntimeException.class, ()->test(null).setMsg("A {0}", 1).setThrowable(RuntimeException.class).isExists(), "A 1");
+		var assertion1 = test(null).setMsg("A {0}", 1);
+		assertThrows(BasicAssertionError.class, assertion1::isExists, "A 1");
+		var assertion2 = test(null).setMsg("A {0}", 1).setThrowable(RuntimeException.class);
+		assertThrows(RuntimeException.class, assertion2::isExists, "A 1");
 	}
 
 	@Test void a02_stdout() {
@@ -100,21 +101,24 @@ class BooleanAssertion_Test extends TestBase {
 		var x = true;
 		var nil = no(Boolean.class);
 		test(x).isExists().isExists();
-		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
+		var assertion3 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion3::isExists, "Value was null.");
 	}
 
 	@Test void ca02_isNull() {
 		var x = true;
 		var nil = no(Boolean.class);
 		test(nil).isNull();
-		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
+		var assertion4 = test(x);
+		assertThrows(BasicAssertionError.class, assertion4::isNull, "Value was not null.");
 	}
 
 	@Test void ca03_isNotNull() {
 		var x = true;
 		var nil = no(Boolean.class);
 		test(x).isNotNull();
-		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
+		var assertion9 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion9::isNotNull, "Value was null.");
 	}
 
 	@Test void ca04a_is_T() {
@@ -262,14 +266,18 @@ class BooleanAssertion_Test extends TestBase {
 	@Test void cc01_isTrue() {
 		var nil = no(Boolean.class);
 		test(true).isTrue();
-		assertThrows(BasicAssertionError.class, ()->test(false).isTrue(), "Value was false.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isTrue(), "Value was null.");
+		var assertion5 = test(false);
+		assertThrows(BasicAssertionError.class, assertion5::isTrue, "Value was false.");
+		var assertion6 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion6::isTrue, "Value was null.");
 	}
 
 	@Test void cc02_isFalse() {
 		var nil = no(Boolean.class);
 		test(false).isFalse();
-		assertThrows(BasicAssertionError.class, ()->test(true).isFalse(), "Value was true.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isFalse(), "Value was null.");
+		var assertion7 = test(true);
+		assertThrows(BasicAssertionError.class, assertion7::isFalse, "Value was true.");
+		var assertion8 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion8::isFalse, "Value was null.");
 	}
 }

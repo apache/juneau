@@ -768,7 +768,7 @@ public class BctAssertions {
 					if (neq(e2, converter.stringify(x))) {
 						errors.add(assertEqualsFailed(e2, converter.stringify(x), composeMessage(message, "Element at index {0} did not match.", i)));
 					}
-				} else if (e instanceof Predicate e2) { // NOSONAR
+				} else if (e instanceof Predicate e2) {
 					if (! e2.test(x)) {
 						errors.add(new AssertionFailedError(composeMessage(message, "Element at index {0} did not pass predicate.  ==> actual: <{1}>", i, converter.stringify(x)).get()));
 					}

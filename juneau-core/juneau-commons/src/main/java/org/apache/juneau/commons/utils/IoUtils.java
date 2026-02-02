@@ -47,8 +47,8 @@ public class IoUtils {
 
 	private static final int BUFF_SIZE = 1024;
 
-	private static final ThreadLocal<byte[]> BYTE_BUFFER_CACHE = (Boolean.getBoolean("juneau.disableIoBufferReuse") ? null : new ThreadLocal<>());  // NOSONAR
-	private static final ThreadLocal<char[]> CHAR_BUFFER_CACHE = (Boolean.getBoolean("juneau.disableIoBufferReuse") ? null : new ThreadLocal<>());  // NOSONAR
+	private static final ThreadLocal<byte[]> BYTE_BUFFER_CACHE = (Boolean.getBoolean("juneau.disableIoBufferReuse") ? null : new ThreadLocal<>());  // NOSONAR(java:S1168): Intentional null for conditional initialization
+	private static final ThreadLocal<char[]> CHAR_BUFFER_CACHE = (Boolean.getBoolean("juneau.disableIoBufferReuse") ? null : new ThreadLocal<>());  // NOSONAR(java:S1168): Intentional null for conditional initialization
 	static final AtomicInteger BYTE_BUFFER_CACHE_HITS = new AtomicInteger();
 
 	static final AtomicInteger BYTE_BUFFER_CACHE_MISSES = new AtomicInteger();

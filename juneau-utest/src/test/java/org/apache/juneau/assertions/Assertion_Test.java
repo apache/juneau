@@ -23,7 +23,6 @@ import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings("serial")
-@Deprecated
 class Assertion_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

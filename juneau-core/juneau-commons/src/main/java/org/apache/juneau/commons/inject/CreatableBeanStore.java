@@ -74,7 +74,7 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 * @return The creator that was created and stored.
 	 */
 	public <T> BeanCreator2<T> add(Class<T> beanType) {
-		assertArgNotNull("beanType", beanType);
+		assertArgNotNull("beanType", beanType);  // NOSONAR(java:UNKNOWN): Assertion method, return value not used
 		var creator = BeanCreator2.of(beanType, this, null, enclosingInstance);
 		creators.put(beanType, creator);
 		return creator;
@@ -237,18 +237,13 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 			}
 
 			// Check builder types - if requested type matches a builder type, return the creator
-			try {
-				var builderTypes = c.getBuilderTypes();
-				if (nn(builderTypes)) {
-					for (var builderType : builderTypes) {
-						if (nn(builderType) && builderType.is(beanType)) {
-							return opt(() -> (T)c.getBuilder());
-						}
+			var builderTypes = safeOpt(c::getBuilderTypes);
+			if (builderTypes.isPresent()) {
+				for (var builderType : builderTypes.get()) {
+					if (nn(builderType) && builderType.is(beanType)) {
+						return opt(() -> (T)c.getBuilder());
 					}
 				}
-			} catch (Exception e) {
-				// Skip creators that fail to get builder types
-				continue;
 			}
 		}
 

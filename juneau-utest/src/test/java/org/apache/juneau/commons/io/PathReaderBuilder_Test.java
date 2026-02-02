@@ -48,7 +48,7 @@ class PathReaderBuilder_Test extends TestBase {
 	}
 
 	@Test void a02_allowNoFileException() {
-		assertThrows(IllegalStateException.class, () -> PathReaderBuilder.create().build());  // NOSONAR
+		assertThrows(IllegalStateException.class, () -> PathReaderBuilder.create().build());  // NOSONAR(java:UNKNOWN): Field initialization
 		assertThrows(NoSuchFileException.class, () -> PathReaderBuilder.create().path("this file does not exist, at all.").build());
 	}
 

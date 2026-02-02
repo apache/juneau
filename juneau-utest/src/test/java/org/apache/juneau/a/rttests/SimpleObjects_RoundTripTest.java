@@ -247,7 +247,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a29_integer(RoundTrip_Tester t) throws Exception {
-		assertEquals(Integer.valueOf(123), t.roundTrip((Integer)123, Integer.class));
+		assertEquals(Integer.valueOf(123), t.roundTrip(123, Integer.class));
 	}
 
 	@ParameterizedTest
@@ -311,7 +311,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a36_character(RoundTrip_Tester t) throws Exception {
-		assertEquals(Character.valueOf('a'), t.roundTrip((Character)'a', Character.class));
+		assertEquals(Character.valueOf('a'), t.roundTrip('a', Character.class));
 	}
 
 	@ParameterizedTest
@@ -336,7 +336,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a39_floatObject(RoundTrip_Tester t) throws Exception {
-		assertEquals(Float.valueOf(1f), t.roundTrip((Float)1f, Float.class));
+		assertEquals(Float.valueOf(1f), t.roundTrip(1f, Float.class));
 	}
 
 	@ParameterizedTest
@@ -361,7 +361,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a42_doubleObject(RoundTrip_Tester t) throws Exception {
-		assertEquals(Double.valueOf(1d), t.roundTrip((Double)1d, Double.class));
+		assertEquals(Double.valueOf(1d), t.roundTrip(1d, Double.class));
 	}
 
 	@ParameterizedTest
@@ -386,7 +386,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a45_longObject(RoundTrip_Tester t) throws Exception {
-		assertEquals(Long.valueOf(1L), t.roundTrip((Long)1L, Long.class));
+		assertEquals(Long.valueOf(1L), t.roundTrip(1L, Long.class));
 	}
 
 	@ParameterizedTest
@@ -411,7 +411,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a48_shortObject(RoundTrip_Tester t) throws Exception {
-		assertEquals(Short.valueOf((short)1), t.roundTrip((Short)(short)1, Short.class));
+		assertEquals(Short.valueOf((short)1), t.roundTrip((short)1, Short.class));
 	}
 
 	@ParameterizedTest

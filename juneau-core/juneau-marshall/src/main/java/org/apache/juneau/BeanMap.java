@@ -174,7 +174,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		}
 
 		// Construct our own anonymous set to implement this function.
-		var s = new AbstractSet<Entry<String,Object>>() {
+		return new AbstractSet<>() {
 
 			// Get the list of properties from the meta object.
 			// Note that the HashMap.values() method caches results, so this collection
@@ -214,8 +214,6 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				return pSet.size();
 			}
 		};
-
-		return s;
 	}
 
 	/**
@@ -227,9 +225,6 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 */
 	public BeanMap<T> forEachProperty(Predicate<BeanPropertyMeta> filter, Consumer<BeanPropertyMeta> action) {
 		meta.getProperties().values().stream().filter(filter).forEach(action);
-//		for (var bpm : meta.propertyArray)
-//			if (filter.test(bpm))
-//				action.accept(bpm);
 		return this;
 	}
 
@@ -249,10 +244,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 					var val = bpm.get(this, null);
 					if (valueFilter.test(val))
 						action.apply(bpm, bpm.getName(), val, null);
-				} catch (Error e) {
+				} catch (Error e) {  // NOSONAR(java:S1181): Errors should always be rethrown
 					// Errors should always be uncaught.
 					throw e;
-				} catch (Throwable t) {
+				} catch (Throwable t) {  // NOSONAR(java:S1181): Exception used in action.apply
 					action.apply(bpm, bpm.getName(), null, t);
 				}
 			});
@@ -264,10 +259,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			forEachProperty(x -> ! x.isDyna(), bpm -> {
 				try {
 					actions.put(bpm.getName(), new BeanPropertyValue(bpm, bpm.getName(), bpm.get(this, null), null));
-				} catch (Error e) {
+				} catch (Error e) {  // NOSONAR(java:S1181): Errors should always be rethrown
 					// Errors should always be uncaught.
 					throw e;
-				} catch (Throwable t) {
+				} catch (Throwable t) {  // NOSONAR(java:S1181): Exception used in BeanPropertyValue
 					actions.put(bpm.getName(), new BeanPropertyValue(bpm, bpm.getName(), null, t));
 				}
 			});
@@ -430,7 +425,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				args[i] = propertyCache.remove(props.get(i));
 			try {
 				bean = c.<T>newInstance(args);
-				propertyCache.forEach((k, v) -> put(k, v));
+				propertyCache.forEach(this::put);
 				propertyCache = null;
 			} catch (IllegalArgumentException e) {
 				throw bex(e, meta.getClassMeta().inner(), "IllegalArgumentException occurred on call to class constructor ''{0}'' with argument types ''{1}''", c.getNameSimple(),
@@ -664,4 +659,44 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 	@SuppressWarnings("unchecked")
 	void setBean(Object bean) { this.bean = (T)bean; }
+
+	/**
+	 * Compares the specified object with this map for equality.
+	 *
+	 * <p>
+	 * Returns <jk>true</jk> if the given object is also a map and the two maps represent the same
+	 * mappings. More formally, two maps <c>m1</c> and <c>m2</c> represent the same mappings if
+	 * <c>m1.entrySet().equals(m2.entrySet())</c>.
+	 *
+	 * <p>
+	 * This implementation compares the entry sets of the two maps.
+	 *
+	 * @param o Object to be compared for equality with this map.
+	 * @return <jk>true</jk> if the specified object is equal to this map.
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Map<?,?>))
+			return false;
+		return super.equals(o);
+	}
+
+	/**
+	 * Returns the hash code value for this map.
+	 *
+	 * <p>
+	 * The hash code of a map is defined to be the sum of the hash codes of each entry in the map's
+	 * <c>entrySet()</c> view. This ensures that <c>m1.equals(m2)</c> implies that
+	 * <c>m1.hashCode()==m2.hashCode()</c> for any two maps <c>m1</c> and <c>m2</c>, as required
+	 * by the general contract of {@link Object#hashCode()}.
+	 *
+	 * <p>
+	 * This implementation computes the hash code from the entry set.
+	 *
+	 * @return The hash code value for this map.
+	 */
+	@Override
+	public int hashCode() {
+		return entrySet().hashCode();
+	}
 }

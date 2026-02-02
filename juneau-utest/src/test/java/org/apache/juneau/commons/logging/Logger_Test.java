@@ -29,13 +29,13 @@ import org.junit.jupiter.api.*;
  */
 class Logger_Test extends TestBase {
 
-	private Logger getLogger(String name) {
+	private static Logger getLogger(String name) {
 		var l = Logger.getLogger(name);
 		l.setLevel(Level.OFF);
 		return l;
 	}
 
-	private Logger getLogger(Class<?> class_) {
+	private static Logger getLogger(Class<?> class_) {
 		var l = Logger.getLogger(class_);
 		l.setLevel(Level.OFF);
 		return l;

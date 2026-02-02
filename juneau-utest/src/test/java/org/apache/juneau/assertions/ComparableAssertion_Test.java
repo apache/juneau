@@ -25,7 +25,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
-@Deprecated
 class ComparableAssertion_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -41,8 +40,10 @@ class ComparableAssertion_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_msg() {
-		assertThrows(BasicAssertionError.class, ()->test(null).setMsg("A {0}", 1).isExists(), "A 1");
-		assertThrows(RuntimeException.class, ()->test(null).setMsg("A {0}", 1).setThrowable(RuntimeException.class).isExists(), "A 1");
+		var assertion1 = test(null).setMsg("A {0}", 1);
+		assertThrows(BasicAssertionError.class, assertion1::isExists, "A 1");
+		var assertion2 = test(null).setMsg("A {0}", 1).setThrowable(RuntimeException.class);
+		assertThrows(RuntimeException.class, assertion2::isExists, "A 1");
 	}
 
 	@Test void a02_stdout() {
@@ -101,21 +102,24 @@ class ComparableAssertion_Test extends TestBase {
 		var x = 1;
 		var nil = no(Integer.class);
 		test(x).isExists().isExists();
-		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
+		var assertion3 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion3::isExists, "Value was null.");
 	}
 
 	@Test void ca02_isNull() {
 		var x = 1;
 		var nil = no(Integer.class);
 		test(nil).isNull();
-		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
+		var assertion4 = test(x);
+		assertThrows(BasicAssertionError.class, assertion4::isNull, "Value was not null.");
 	}
 
 	@Test void ca03_isNotNull() {
 		var x = 1;
 		var nil = no(Integer.class);
 		test(x).isNotNull();
-		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
+		var assertion5 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion5::isNotNull, "Value was null.");
 	}
 
 	@Test void ca04a_is_T() {
@@ -268,8 +272,10 @@ class ComparableAssertion_Test extends TestBase {
 		test(x2).isGt(x1);
 		assertThrown(()->test(x1).isGt(x1)).asMessage().asOneLine().is("Value was not greater than expected.  Expect='1'.  Actual='1'.");
 		assertThrown(()->test(x1).isGt(x2)).asMessage().asOneLine().is("Value was not greater than expected.  Expect='2'.  Actual='1'.");
-		assertThrows(IllegalArgumentException.class, ()->test(x1).isGt(nil), "Argument 'value' cannot be null.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isGt(x2), "Value was null.");
+		var assertion6 = test(x1);
+		assertThrows(IllegalArgumentException.class, ()->assertion6.isGt(nil), "Argument 'value' cannot be null.");
+		var assertion7 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion7.isGt(x2), "Value was null.");
 	}
 
 	@Test void cb02_isGte() {
@@ -281,8 +287,10 @@ class ComparableAssertion_Test extends TestBase {
 		test(x1).isGte(x1);
 		test(x1).isGte(x1a);
 		assertThrown(()->test(x1).isGte(x2)).asMessage().asOneLine().is("Value was not greater than or equals to expected.  Expect='2'.  Actual='1'.");
-		assertThrows(IllegalArgumentException.class, ()->test(x1).isGte(nil), "Argument 'value' cannot be null.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isGte(x2), "Value was null.");
+		var assertion8 = test(x1);
+		assertThrows(IllegalArgumentException.class, ()->assertion8.isGte(nil), "Argument 'value' cannot be null.");
+		var assertion9 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion9.isGte(x2), "Value was null.");
 	}
 
 	@Test void cb03_isLt() {
@@ -292,8 +300,10 @@ class ComparableAssertion_Test extends TestBase {
 		test(x1).isLt(x2);
 		assertThrown(()->test(x1).isLt(x1)).asMessage().asOneLine().is("Value was not less than expected.  Expect='1'.  Actual='1'.");
 		assertThrown(()->test(x2).isLt(x1)).asMessage().asOneLine().is("Value was not less than expected.  Expect='1'.  Actual='2'.");
-		assertThrows(IllegalArgumentException.class, ()->test(x2).isLt(nil), "Argument 'value' cannot be null.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isLt(x1), "Value was null.");
+		var assertion10 = test(x2);
+		assertThrows(IllegalArgumentException.class, ()->assertion10.isLt(nil), "Argument 'value' cannot be null.");
+		var assertion11 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion11.isLt(x1), "Value was null.");
 	}
 
 	@Test void cb04_isLte() {
@@ -305,8 +315,10 @@ class ComparableAssertion_Test extends TestBase {
 		test(x1).isLte(x1);
 		test(x1).isLte(x1a);
 		assertThrown(()->test(x2).isLte(x1)).asMessage().asOneLine().is("Value was not less than or equals to expected.  Expect='1'.  Actual='2'.");
-		assertThrows(IllegalArgumentException.class, ()->test(x2).isLte(nil), "Argument 'value' cannot be null.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isLte(x1), "Value was null.");
+		var assertion12 = test(x2);
+		assertThrows(IllegalArgumentException.class, ()->assertion12.isLte(nil), "Argument 'value' cannot be null.");
+		var assertion13 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion13.isLte(x1), "Value was null.");
 	}
 
 	@Test void cb05_isBetween() {
@@ -319,8 +331,10 @@ class ComparableAssertion_Test extends TestBase {
 		test(x2).isBetween(x1, x3);
 		test(x3).isBetween(x1, x3);
 		assertThrown(()->test(x4).isBetween(x1, x3)).asMessage().asOneLine().is("Value was not less than or equals to expected.  Expect='3'.  Actual='4'.");
-		assertThrows(BasicAssertionError.class, ()->test(nil).isBetween(x1, x3), "Value was null.");
-		assertThrows(IllegalArgumentException.class, ()->test(x1).isBetween(nil, x3), "Argument 'lower' cannot be null.");
+		var assertion14 = test(nil);
+		assertThrows(BasicAssertionError.class, ()->assertion14.isBetween(x1, x3), "Value was null.");
+		var assertion15 = test(x1);
+		assertThrows(IllegalArgumentException.class, ()->assertion15.isBetween(nil, x3), "Argument 'lower' cannot be null.");
 		assertThrown(()->test(x1).isBetween(x1, nil)).asMessage().asOneLine().is("Argument 'upper' cannot be null.");
 	}
 }

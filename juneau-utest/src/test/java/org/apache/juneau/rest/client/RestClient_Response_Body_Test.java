@@ -67,7 +67,7 @@ class RestClient_Response_Body_Test extends TestBase {
 			return bean;
 		}
 		@RestOp
-		public void head() {}  // NOSONAR
+		public void head() {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
 
 	public static class TestClient extends MockRestClient {
@@ -138,7 +138,7 @@ class RestClient_Response_Body_Test extends TestBase {
 		var x2 = client().interceptors(rci).build(TestClient.class).entity(new StringEntity("{f:2}"));
 		assertThrowsWithMessage(NullPointerException.class, "foo", ()->x2.get("/bean").run().getContent().cache().asInputStream());
 		assertThrowsWithMessage(NullPointerException.class, "foo", ()->x2.get("/bean").run().getContent().asInputStream().close());
-		assertThrowsWithMessage(NullPointerException.class, "foo", ()->((EofSensorInputStream)x2.get("/bean").run().getContent().asInputStream()).abortConnection());  // NOSONAR
+		assertThrowsWithMessage(NullPointerException.class, "foo", ()->((EofSensorInputStream)x2.get("/bean").run().getContent().asInputStream()).abortConnection());  // NOSONAR(java:UNKNOWN): Field initialization
 	}
 
 	@Test void a04_asReader() throws Exception {

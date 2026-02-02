@@ -335,7 +335,7 @@ public class SchemaInfo extends OpenApiElement {
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
-		return switch (property) {  // NOSONAR
+		return switch (property) {
 			case "format" -> toType(getFormat(), type);
 			case "title" -> toType(getTitle(), type);
 			case "description" -> toType(getDescription(), type);
@@ -723,7 +723,7 @@ public class SchemaInfo extends OpenApiElement {
 	@Override /* Overridden from SwaggerElement */
 	public SchemaInfo set(String property, Object value) {
 		assertArgNotNull("property", property);
-		return switch (property) {  // NOSONAR
+		return switch (property) {  // NOSONAR(java:UNKNOWN): Switch expression
 			case "$ref" -> setRef(value);
 			case "additionalProperties" -> setAdditionalProperties(toType(value, SchemaInfo.class));
 			case "allOf" -> setAllOf(listb(Object.class).addAny(value).sparse().build());
