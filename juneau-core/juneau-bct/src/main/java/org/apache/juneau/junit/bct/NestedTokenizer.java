@@ -155,6 +155,7 @@ class NestedTokenizer {
 		IN_ESCAPE
 	}
 
+	@SuppressWarnings({"java:S3776","java:S6541"})  // Intentional Brain Method.
 	public static List<Token> tokenize(String in) {
 		if (in == null)
 			throw illegalArg("Input was null.");

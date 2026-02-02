@@ -190,9 +190,7 @@ public class Stringifiers {
 	 * @return A {@link Stringifier} for char arrays
 	 */
 	public static Stringifier<char[]> charArrayStringifier() {
-		return (bc, chars) -> {
-			return new String(chars);
-		};
+		return (bc, chars) -> new String(chars);
 	}
 
 	/**

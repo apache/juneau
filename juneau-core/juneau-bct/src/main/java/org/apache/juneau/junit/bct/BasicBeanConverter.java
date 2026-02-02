@@ -217,7 +217,7 @@ import java.util.stream.*;
  *
  * @see BeanConverter
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes","java:S115","javabugs:S2259"})
 public class BasicBeanConverter implements BeanConverter {
 
 	/**
@@ -882,7 +882,7 @@ public class BasicBeanConverter implements BeanConverter {
 			.findFirst();
 		// @formatter:on
 		if (isEmpty.isPresent())
-			return isEmpty.get() ? 0 : 1;
+			return isTrue(isEmpty.get()) ? 0 : 1;
 
 		throw illegalArg("Object of type {0} does not have a determinable size.", cns(o));
 	}

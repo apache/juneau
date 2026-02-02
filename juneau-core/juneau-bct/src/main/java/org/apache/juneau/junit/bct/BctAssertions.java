@@ -180,6 +180,7 @@ import org.opentest4j.*;
  * @see BctConfiguration#set(BeanConverter)
  * @see BctConfiguration#clear()
  */
+@SuppressWarnings("java:S1192")
 public class BctAssertions {
 
 	/**
@@ -749,7 +750,7 @@ public class BctAssertions {
 	 *                 Can be Strings (readable format comparison), Predicates (functional testing), or Objects (direct equality).
 	 * @throws AssertionError if the List size or contents don't match expected values
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked","java:S3776"})
 	public static void assertList(Supplier<String> message, Object actual, Object...expected) {
 		assertArgNotNull("expected", expected);
 		assertArgNotNull("actual", actual);
@@ -768,7 +769,8 @@ public class BctAssertions {
 					if (neq(e2, converter.stringify(x))) {
 						errors.add(assertEqualsFailed(e2, converter.stringify(x), composeMessage(message, "Element at index {0} did not match.", i)));
 					}
-				} else if (e instanceof Predicate e2) {
+				} else if (e instanceof Predicate<?> p) {
+					Predicate<Object> e2 = (Predicate<Object>) p;
 					if (! e2.test(x)) {
 						errors.add(new AssertionFailedError(composeMessage(message, "Element at index {0} did not pass predicate.  ==> actual: <{1}>", i, converter.stringify(x)).get()));
 					}

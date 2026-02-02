@@ -1320,8 +1320,8 @@ public class Utils {
 	 * @param value The value being checked.
 	 * @return <jk>true</jk> if the specified boolean is not <jk>null</jk> and is <jk>true</jk>.
 	 */
-	public static boolean isTrue(Boolean value) {
-		return nn(value) && value;
+	public static boolean isTrue(Object value) {
+		return Boolean.TRUE.equals(value);
 	}
 
 	/**

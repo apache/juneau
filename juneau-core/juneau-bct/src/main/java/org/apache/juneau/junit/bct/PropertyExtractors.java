@@ -221,13 +221,13 @@ public class PropertyExtractors {
 			return true;
 		}
 
-		@SuppressWarnings("null")
+		@SuppressWarnings({"null","java:S3011","java:S3776"})  // Intentional brain method.
 		@Override
 		public Object extract(BeanConverter converter, Object o, String name) {
 			return safe(() -> {
 				if (o == null)
 					return null;
-				var f = (Field)null;
+				var f = no(Field.class);
 				var c = o.getClass();
 				var n = Character.toUpperCase(name.charAt(0)) + name.substring(1);
 				var m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("is" + n) && x.getParameterCount() == 0).findFirst().orElse(null);

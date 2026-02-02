@@ -80,6 +80,13 @@ import org.apache.juneau.commons.settings.*;
  */
 public class BctConfiguration {
 
+	/**
+	 * Private constructor to prevent instantiation.
+	 */
+	private BctConfiguration() {
+		// Utility class - prevent instantiation
+	}
+
 	// Thread-local memoized supplier for default converter (defaults to BasicBeanConverter.DEFAULT)
 	private static final ThreadLocal<ResettableSupplier<BeanConverter>> CONVERTER_SUPPLIER = ThreadLocal.withInitial(() -> memr(() -> BasicBeanConverter.DEFAULT));
 
@@ -198,6 +205,28 @@ public class BctConfiguration {
 	}
 
 	/**
+	 * Gets a boolean configuration value by name with a default value.
+	 *
+	 * <p>
+	 * Returns the configured boolean value if set, otherwise returns the provided default value.
+	 * Thread-local values take precedence over global values.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>boolean</jk> <jv>sortMaps</jv> = BctConfiguration.<jsm>get</jsm>(BctConfiguration.<jsf>BCT_SORT_MAPS</jsf>, <jk>false</jk>);
+	 * </p>
+	 *
+	 * @param name The configuration property name (e.g., {@link #BCT_SORT_MAPS}).
+	 * @param def The default boolean value to return if not set.
+	 * @return The configured boolean value, or the default if not set.
+	 * @see #get(String)
+	 * @see #set(String, Object)
+	 */
+	public static boolean get(String name, boolean def) {
+		return SETTINGS.get(name, def);
+	}
+
+	/**
 	 * Clears all thread-local configuration settings.
 	 *
 	 * <p>
@@ -226,6 +255,7 @@ public class BctConfiguration {
 	public static void clear() {
 		SETTINGS.clearLocal();
 		CONVERTER_OVERRIDE.remove();
+		CONVERTER_SUPPLIER.remove();
 	}
 
 	/**

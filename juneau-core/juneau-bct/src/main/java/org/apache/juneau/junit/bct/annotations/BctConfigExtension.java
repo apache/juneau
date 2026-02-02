@@ -49,6 +49,7 @@ public class BctConfigExtension implements BeforeEachCallback, AfterEachCallback
 		al.stream().map(x -> x.beanConverter()).filter(x -> neq(x, BeanConverter.class)).findFirst().map(x -> eq(x, BasicBeanConverter.class) ? null : x).ifPresent(x -> setConverter(x));
 	}
 
+	@SuppressWarnings("java:S3011")
 	private static void setConverter(Class<? extends BeanConverter> x) {
 		safe(()->{
 			var c = x.getDeclaredConstructor();
@@ -69,8 +70,8 @@ public class BctConfigExtension implements BeforeEachCallback, AfterEachCallback
 
 	private static List<BctConfig> getAnnotations(ExtensionContext context) {
 		var l = new ArrayList<BctConfig>();
-		context.getTestMethod().map(x -> x.getAnnotation(BctConfig.class)).ifPresent(x -> l.add(x));
-		context.getTestClass().map(x -> x.getAnnotation(BctConfig.class)).ifPresent(x -> l.add(x));
+		context.getTestMethod().map(x -> x.getAnnotation(BctConfig.class)).ifPresent(l::add);
+		context.getTestClass().map(x -> x.getAnnotation(BctConfig.class)).ifPresent(l::add);
 		return l;
 	}
 }
