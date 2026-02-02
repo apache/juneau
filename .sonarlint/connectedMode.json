@@ -1,0 +1,5 @@
+{
+    "sonarCloudOrganization": "apache",
+    "projectKey": "apache_juneau",
+    "region": "EU"
+}
