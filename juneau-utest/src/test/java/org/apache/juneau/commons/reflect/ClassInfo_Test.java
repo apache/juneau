@@ -2037,32 +2037,42 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	/**
-	 * Tests that getPublicMethods() excludes both bridge and synthetic methods.
-	 * Some methods can be both bridge and synthetic, and they should be excluded.
+	 * Tests that getPublicMethods() includes bridge and synthetic methods, matching Class.getMethods() behavior.
+	 * Bridge methods are compiler-generated methods for type erasure in generics.
+	 * Synthetic methods are compiler-generated methods (e.g., for lambda expressions, enum values, etc.).
 	 */
 	@Test
-	void a059d_getPublicMethods_excludesBridgeAndSyntheticMethods() {
+	void a059d_getPublicMethods_includesBridgeAndSyntheticMethods() {
 		// Test with ArrayList which implements List and has bridge methods
 		var arrayListInfo = ClassInfo.of(java.util.ArrayList.class);
 		var publicMethods = arrayListInfo.getPublicMethods();
 
-		// Verify no bridge methods are included
+		// Get the corresponding methods from Class.getMethods() for comparison
+		var classMethods = java.util.ArrayList.class.getMethods();
+		var classBridgeMethods = java.util.stream.Stream.of(classMethods)
+			.filter(java.lang.reflect.Method::isBridge)
+			.toList();
+		var classSyntheticMethods = java.util.stream.Stream.of(classMethods)
+			.filter(java.lang.reflect.Method::isSynthetic)
+			.toList();
+
+		// Verify that getPublicMethods() includes bridge methods (matching Class.getMethods())
 		var bridgeMethods = publicMethods.stream()
 			.filter(MethodInfo::isBridge)
 			.toList();
-		assertTrue(bridgeMethods.isEmpty(), "getPublicMethods() should not include bridge methods. Found: " + bridgeMethods);
+		assertEquals(classBridgeMethods.size(), bridgeMethods.size(), 
+			"getPublicMethods() should include bridge methods matching Class.getMethods(). " +
+			"Class.getMethods() has " + classBridgeMethods.size() + " bridge methods, " +
+			"getPublicMethods() has " + bridgeMethods.size() + " bridge methods.");
 
-		// Verify no synthetic methods are included
+		// Verify that getPublicMethods() includes synthetic methods (matching Class.getMethods())
 		var syntheticMethods = publicMethods.stream()
 			.filter(MethodInfo::isSynthetic)
 			.toList();
-		assertTrue(syntheticMethods.isEmpty(), "getPublicMethods() should not include synthetic methods. Found: " + syntheticMethods);
-
-		// Verify that methods that are both bridge and synthetic are excluded
-		var bridgeOrSynthetic = publicMethods.stream()
-			.filter(m -> m.isBridge() || m.isSynthetic())
-			.toList();
-		assertTrue(bridgeOrSynthetic.isEmpty(), "getPublicMethods() should not include methods that are bridge or synthetic. Found: " + bridgeOrSynthetic);
+		assertEquals(classSyntheticMethods.size(), syntheticMethods.size(),
+			"getPublicMethods() should include synthetic methods matching Class.getMethods(). " +
+			"Class.getMethods() has " + classSyntheticMethods.size() + " synthetic methods, " +
+			"getPublicMethods() has " + syntheticMethods.size() + " synthetic methods.");
 	}
 
 	//====================================================================================================

@@ -1406,8 +1406,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		var useEnumNames = nn(bc) && bc.isUseEnumNames();
 
 		var m = BidiMap.<Object,String>create().unmodifiable();
-		var c = inner().asSubclass(Enum.class);
-		stream(c.getEnumConstants()).forEach(x -> m.add(x, useEnumNames ? x.name() : x.toString()));
+		stream(asEnumClass(inner()).getEnumConstants()).forEach(x -> m.add(x, useEnumNames ? x.name() : x.toString()));
 		return m.build();
 	}
 
@@ -1430,7 +1429,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			} else if (cat.is(CHARSEQ)) {
 				example = "foo";
 			} else if (cat.is(ENUM)) {
-				Iterator<? extends Enum<?>> i = EnumSet.allOf(inner().asSubclass(Enum.class)).iterator();
+				Iterator<? extends Enum<?>> i = EnumSet.allOf(asEnumClass(inner())).iterator();
 				example = i.hasNext() ? (beanContext.isUseEnumNames() ? i.next().name() : i.next().toString()) : null;
 			} else if (isAny(float.class, Float.class, double.class, Double.class)) {
 				example = "1.0";

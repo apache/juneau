@@ -1666,7 +1666,8 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>This method behaves similarly to Java's {@link Class#getMethods()}, returning only public methods.
+	 * 	<li>This method behaves similarly to Java's {@link Class#getMethods()}, returning only public methods from this class and parent classes/interfaces.
+	 * 	<li>Bridge and synthetic methods are included (matching {@link Class#getMethods()} behavior).
 	 * 	<li>Methods defined on the {@link Object} class are excluded from the results.
 	 * </ul>
 	 *

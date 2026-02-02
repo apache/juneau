@@ -158,6 +158,33 @@ public class ReflectionUtils {
 	}
 
 	/**
+	 * Converts a class to an enum class, suppressing rawtypes warnings.
+	 *
+	 * <p>
+	 * This utility method wraps {@link Class#asSubclass(Class)} for enum classes and suppresses
+	 * the rawtypes warning that occurs when converting to {@code Class<? extends Enum>} for use
+	 * with methods like {@link EnumSet#allOf(Class)}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Instead of:</jc>
+	 * 	<ja>@SuppressWarnings</ja>(<js>"rawtypes"</js>)
+	 * 	Class&lt;? <jk>extends</jk> Enum&gt; <jv>enumClass</jv> = <jv>clazz</jv>.asSubclass(Enum.<jk>class</jk>);
+	 *
+	 * 	<jc>// Use:</jc>
+	 * 	Class&lt;? <jk>extends</jk> Enum&gt; <jv>enumClass</jv> = ReflectionUtils.<jsm>asEnumClass</jsm>(<jv>clazz</jv>);
+	 * </p>
+	 *
+	 * @param clazz The class to convert. Must be an enum class.
+	 * @return The enum class as a raw type suitable for use with {@link EnumSet#allOf(Class)}.
+	 * @throws ClassCastException if the class is not an enum class.
+	 */
+	@SuppressWarnings("rawtypes")
+	public static Class<? extends Enum> asEnumClass(Class<?> clazz) {
+		return clazz.asSubclass(Enum.class);
+	}
+
+	/**
 	 * Resolves and creates a collection, array, or map containing all beans of the element type from the bean store.
 	 *
 	 * <p>
