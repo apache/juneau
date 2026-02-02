@@ -555,15 +555,20 @@ class CollectionUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// first(List<E>)
+	// first(Iterable<E>)
 	//====================================================================================================
 	@Test
 	void a031_first() {
-		List<String> list = list("a", "b", "c");
-		assertEquals("a", first(list));
+		var list = list("a", "b", "c");
+		assertEquals(Optional.of("a"), first(list));
 
-		assertNull(first(null));
-		assertNull(first(list()));
+		assertEquals(Optional.empty(), first(null));
+		assertEquals(Optional.empty(), first(list()));
+
+		// Test with Set
+		var set = set(1, 2, 3);
+		assertTrue(first(set).isPresent());
+		assertTrue(set.contains(first(set).get()));
 	}
 
 	//====================================================================================================
@@ -1297,7 +1302,6 @@ class CollectionUtils_Test extends TestBase {
 		ArrayList<String> arrayList = new ArrayList<>();
 		arrayList.add("a");
 		arrayList.add("b");
-		@SuppressWarnings("cast")
 		List<?> result1 = toList((Object)arrayList);
 		assertSame(arrayList, result1);
 

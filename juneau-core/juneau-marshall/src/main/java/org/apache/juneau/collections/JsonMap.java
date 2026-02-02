@@ -1104,7 +1104,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @return The first key in the map, or <jk>null</jk> if the map is empty.
 	 */
-	public String getFirstKey() { return isEmpty() ? null : keySet().iterator().next(); }
+	public String getFirstKey() { return first(keySet()).orElse(null); }
 
 	/**
 	 * Returns the specified entry value converted to an {@link Integer}.

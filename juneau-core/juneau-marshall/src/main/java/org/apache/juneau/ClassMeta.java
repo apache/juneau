@@ -1284,8 +1284,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 		if (ci.isAssignableTo(Surrogate.class)) {
 			List<SurrogateSwap<?,?>> l = SurrogateSwap.findObjectSwaps(c, beanContext);
-			if (! l.isEmpty())
-				return (ObjectSwap<T,?>)l.iterator().next();
+			return first(l).map(x -> (ObjectSwap<T,?>)x).orElse(null);
 		}
 
 		throw new ClassMetaRuntimeException(c, "Invalid swap class ''{0}'' specified.  Must extend from ObjectSwap or Surrogate.", c);
@@ -1410,7 +1409,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		return m.build();
 	}
 
-	@SuppressWarnings("unchecked")
 	private String findExample() {
 
 		var example = beanMeta.get().optBeanMeta().map(x -> x.getBeanFilter()).map(x -> x.getExample()).orElse(null);
@@ -1429,8 +1427,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			} else if (cat.is(CHARSEQ)) {
 				example = "foo";
 			} else if (cat.is(ENUM)) {
-				Iterator<? extends Enum<?>> i = EnumSet.allOf(asEnumClass(inner())).iterator();
-				example = i.hasNext() ? (beanContext.isUseEnumNames() ? i.next().name() : i.next().toString()) : null;
+				Optional<Enum<?>> e = first(EnumSet.allOf(asEnumClass(inner())));
+				example = e.map(x -> beanContext.isUseEnumNames() ? x.name() : x.toString()).orElse(null);
 			} else if (isAny(float.class, Float.class, double.class, Double.class)) {
 				example = "1.0";
 			} else if (isAny(short.class, Short.class, int.class, Integer.class, long.class, Long.class)) {

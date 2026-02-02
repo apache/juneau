@@ -710,14 +710,61 @@ public class CollectionUtils {
 	}
 
 	/**
-	 * Returns the first element in a list.
+	 * Returns the next value from an iterator, or an empty Optional if there are no more elements.
+	 *
+	 * <p>
+	 * This is a null-safe operation. Returns an empty Optional if the iterator is <jk>null</jk> or
+	 * has no more elements.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Iterator&lt;String&gt; <jv>it</jv> = list.iterator();
+	 * 	Optional&lt;String&gt; <jv>first</jv> = <jsm>next</jsm>(<jv>it</jv>);  <jc>// Optional.of("first")</jc>
+	 * 	Optional&lt;String&gt; <jv>second</jv> = <jsm>next</jsm>(<jv>it</jv>);  <jc>// Optional.of("second")</jc>
+	 * 	Optional&lt;String&gt; <jv>empty</jv> = <jsm>next</jsm>(<jv>it</jv>);   <jc>// Optional.empty()</jc>
+	 * 	Optional&lt;String&gt; <jv>nullResult</jv> = <jsm>next</jsm>(<jk>null</jk>);  <jc>// Optional.empty()</jc>
+	 * </p>
 	 *
 	 * @param <E> The element type.
-	 * @param l The list. Can be <jk>null</jk>.
-	 * @return The first element in the list, or <jk>null</jk> if the list is <jk>null</jk> or empty.
+	 * @param iterator The iterator. Can be <jk>null</jk>.
+	 * @return An Optional containing the next element, or empty if the iterator is <jk>null</jk> or has no more elements.
 	 */
-	public static <E> E first(List<E> l) {
-		return e(l) ? null : l.get(0);
+	public static <E> Optional<E> next(Iterator<? extends E> iterator) {
+		if (iterator == null || !iterator.hasNext())
+			return Optional.empty();
+		return Optional.of(iterator.next());
+	}
+
+	/**
+	 * Returns the first element in an iterable.
+	 *
+	 * <p>
+	 * This is a null-safe operation. Returns an empty Optional if the iterable is <jk>null</jk> or empty.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	List&lt;String&gt; <jv>list</jv> = <jsm>l</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
+	 * 	Optional&lt;String&gt; <jv>first</jv> = <jsm>first</jsm>(<jv>list</jv>);  <jc>// Optional.of("a")</jc>
+	 *
+	 * 	Set&lt;Integer&gt; <jv>set</jv> = <jsm>s</jsm>(1, 2, 3);
+	 * 	Optional&lt;Integer&gt; <jv>firstInt</jv> = <jsm>first</jsm>(<jv>set</jv>);  <jc>// Optional.of(1) or another element</jc>
+	 *
+	 * 	EnumSet&lt;MyEnum&gt; <jv>enumSet</jv> = EnumSet.allOf(MyEnum.<jk>class</jk>);
+	 * 	Optional&lt;MyEnum&gt; <jv>firstEnum</jv> = <jsm>first</jsm>(<jv>enumSet</jv>);  <jc>// Optional.of(first enum value)</jc>
+	 *
+	 * 	Optional&lt;String&gt; <jv>empty</jv> = <jsm>first</jsm>(Collections.emptyList());  <jc>// Optional.empty()</jc>
+	 * 	Optional&lt;String&gt; <jv>nullResult</jv> = <jsm>first</jsm>(<jk>null</jk>);  <jc>// Optional.empty()</jc>
+	 * </p>
+	 *
+	 * @param <E> The element type.
+	 * @param iterable The iterable. Can be <jk>null</jk>.
+	 * @return An Optional containing the first element, or empty if the iterable is <jk>null</jk> or empty.
+	 */
+	public static <E> Optional<E> first(Iterable<? extends E> iterable) {
+		if (iterable == null)
+			return Optional.empty();
+		Iterator<? extends E> iterator = iterable.iterator();
+		return next(iterator);
 	}
 
 	/**

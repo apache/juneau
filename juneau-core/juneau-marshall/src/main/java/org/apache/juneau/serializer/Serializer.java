@@ -1364,7 +1364,7 @@ public class Serializer extends BeanTraverseContext {
 	 *
 	 * @return The media type.  Never <jk>null</jk>.
 	 */
-	public final MediaType getPrimaryMediaType() { return acceptMediaTypes.get(0); }
+	public final MediaType getPrimaryMediaType() { return first(acceptMediaTypes).get(); }
 
 	/**
 	 * Optional method that returns the response <c>Content-Type</c> for this serializer if it is different from

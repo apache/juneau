@@ -1080,7 +1080,7 @@ public class Parser extends BeanContextable {
 	 *
 	 * @return The media type.
 	 */
-	public final MediaType getPrimaryMediaType() { return consumesArray.isEmpty() ? null : consumesArray.get(0); }
+	public final MediaType getPrimaryMediaType() { return first(consumesArray).orElse(null); }
 
 	@Override /* Overridden from Context */
 	public ParserSession getSession() { return createSession().build(); }
