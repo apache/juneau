@@ -205,7 +205,7 @@ public class BeanCreator2<T> {
 	 * @return A new bean creator.
 	 */
 	public static <T> BeanCreator2<T> of(Class<T> beanType) {
-		return new BeanCreator2<>(beanType, null);
+		return new BeanCreator2<>(beanType, null, null, null);
 	}
 
 	/**
@@ -217,7 +217,21 @@ public class BeanCreator2<T> {
 	 * @return A new bean creator.
 	 */
 	public static <T> BeanCreator2<T> of(Class<T> beanType, BeanStore parentStore) {
-		return new BeanCreator2<>(beanType, parentStore);
+		return new BeanCreator2<>(beanType, parentStore, null, null);
+	}
+
+	/**
+	 * Creates a new bean creator with a parent bean store, name, and enclosing instance.
+	 *
+	 * @param <T> The bean type to create.
+	 * @param beanType The bean type to create.
+	 * @param parentStore The parent bean store to use for resolving dependencies. Can be <jk>null</jk>.
+	 * @param name The bean name. Can be <jk>null</jk>.
+	 * @param enclosingInstance The enclosing instance object. Can be <jk>null</jk>.
+	 * @return A new bean creator.
+	 */
+	public static <T> BeanCreator2<T> of(Class<T> beanType, BeanStore parentStore, String name, Object enclosingInstance) {
+		return new BeanCreator2<>(beanType, parentStore, name, enclosingInstance);
 	}
 
 	private final BeanStore parentStore;
@@ -230,7 +244,7 @@ public class BeanCreator2<T> {
 	private ClassInfoTyped<? extends T> beanSubType;
 	private ClassInfo explicitBuilderType = null;
 	private Object explicitBuilder = null;
-	private Object enclosingInstance;
+	private final Object enclosingInstance;
 	private T explicitImplementation = null;
 	private List<Consumer<T>> postCreateHooks = new ArrayList<>();
 	private Set<String> factoryMethodNames = DEFAULT_FACTORY_METHOD_NAMES;
@@ -238,7 +252,7 @@ public class BeanCreator2<T> {
 	private Set<String> buildMethodNames = DEFAULT_BUILD_METHOD_NAMES;
 	private Set<String> builderClassNames = DEFAULT_BUILDER_CLASS_NAMES;
 	private Supplier<? extends T> fallbackSupplier = null;
-	private String name = null;
+	private final String name;
 	private boolean cached = false;
 
 	private ResettableSupplier<ClassInfo> builderType = memr(() -> findBuilderType());
@@ -252,12 +266,16 @@ public class BeanCreator2<T> {
 	 *
 	 * @param beanType The bean type being created.
 	 * @param parentStore The parent bean store to use for resolving dependencies. Can be <jk>null</jk>.
+	 * @param name The bean name. Can be <jk>null</jk>.
+	 * @param enclosingInstance The enclosing instance object. Can be <jk>null</jk>.
 	 */
-	protected BeanCreator2(Class<T> beanType, BeanStore parentStore) {
+	protected BeanCreator2(Class<T> beanType, BeanStore parentStore, String name, Object enclosingInstance) {
 		this.beanType = info(assertArgNotNull("beanType", beanType));
 		this.beanSubType = this.beanType;
 		this.parentStore = parentStore;
 		this.store = new BasicBeanStore2(this.parentStore);
+		this.name = name;
+		this.enclosingInstance = enclosingInstance;
 	}
 
 	/**
@@ -735,19 +753,6 @@ public class BeanCreator2<T> {
 		return this;
 	}
 
-	/**
-	 * Specifies the enclosing instance object to use when instantiating inner classes.
-	 *
-	 * @param outer The enclosing instance object.  Can be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public BeanCreator2<T> enclosingInstance(Object outer) {
-		try (var writeLock = lock.write()) {
-			this.enclosingInstance = outer;
-			reset();
-		}
-		return this;
-	}
 
 	/**
 	 * Specifies custom static factory method names to look for when creating the bean.
@@ -1048,18 +1053,6 @@ public class BeanCreator2<T> {
 		return this;
 	}
 
-	/**
-	 * Specifies the name of the bean being created.
-	 *
-	 * @param value The bean name.  Can be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public BeanCreator2<T> name(String value) {
-		try (var writeLock = lock.write()) {
-			this.name = value;
-		}
-		return this;
-	}
 
 	/**
 	 * Resets the builder, builderType, and beanImpl suppliers.

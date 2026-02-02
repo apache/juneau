@@ -1997,8 +1997,7 @@ class BeanCreator2_Test extends TestBase {
 			var value = "test";
 			beanStore.add(String.class, value);
 
-			var bean = bc(InnerBean.class)
-				.enclosingInstance(outerInstance)
+			var bean = BeanCreator2.of(InnerBean.class, beanStore, null, outerInstance)
 				.run();
 
 			assertEquals(value, bean.getValue());
@@ -2345,13 +2344,14 @@ class BeanCreator2_Test extends TestBase {
 		}
 
 		/**
-		 * Tests that enclosingInstance() returns this for method chaining.
+		 * Tests that enclosingInstance can be set via constructor.
 		 */
 		@Test
-		void i06_enclosingInstanceReturnsThis() {
-			var creator = BeanCreator2.of(InnerBean.class);
-			var result = creator.enclosingInstance(new BeanCreator2_Test());
-			assertSame(creator, result);
+		void i06_enclosingInstanceCanBeSetViaConstructor() {
+			var outerInstance = new BeanCreator2_Test();
+			var creator = BeanCreator2.of(InnerBean.class, null, null, outerInstance);
+			// Verify creator was created successfully
+			assertNotNull(creator);
 		}
 
 		/**
@@ -3464,22 +3464,22 @@ class BeanCreator2_Test extends TestBase {
 		}
 
 		/**
-		 * Tests that getName() returns the name set via name() method.
+		 * Tests that getName() returns the name set via constructor.
 		 */
 		@Test
 		void p04_getNameReturnsSetName() {
-			var creator = bc(SimpleBean.class).name("myBean");
+			var creator = BeanCreator2.of(SimpleBean.class, beanStore, "myBean", null);
 			var name = creator.getName();
 
 			assertEquals("myBean", name);
 		}
 
 		/**
-		 * Tests that getName() returns null when name is explicitly set to null via name(null).
+		 * Tests that getName() returns null when name is set to null via constructor.
 		 */
 		@Test
 		void p05_getNameReturnsNullWhenSetToNull() {
-			var creator = bc(SimpleBean.class).name("initial").name(null);
+			var creator = BeanCreator2.of(SimpleBean.class, beanStore, null, null);
 			var name = creator.getName();
 
 			assertNull(name, "getName() should return null when name is set to null");
@@ -3633,39 +3633,30 @@ class BeanCreator2_Test extends TestBase {
 		}
 
 		/**
-		 * Tests that name() sets the name and returns this for method chaining.
+		 * Tests that name can be set via constructor.
 		 */
 		@Test
-		void p17_nameSetsNameAndReturnsThis() {
-			var creator = BeanCreator2.of(SimpleBean.class);
-			var result = creator.name("testBean");
+		void p17_nameCanBeSetViaConstructor() {
+			var creator = BeanCreator2.of(SimpleBean.class, null, "testBean", null);
 
-			// Should return this for method chaining
-			assertSame(creator, result);
 			assertEquals("testBean", creator.getName());
 		}
 
 		/**
-		 * Tests that name() can accept null value to clear the name.
+		 * Tests that name can be set to null via constructor.
 		 */
 		@Test
 		void p18_nameCanBeSetToNull() {
-			var creator = bc(SimpleBean.class).name("initial");
-			assertEquals("initial", creator.getName());
-
-			creator.name(null);
-			assertNull(creator.getName(), "name() should allow null value");
+			var creator = BeanCreator2.of(SimpleBean.class, beanStore, null, null);
+			assertNull(creator.getName(), "name should allow null value");
 		}
 
 		/**
-		 * Tests that name() can be chained multiple times, with later calls overriding earlier ones.
+		 * Tests that name can be set via constructor.
 		 */
 		@Test
-		void p19_nameCanBeChained() {
-			var creator = bc(SimpleBean.class)
-				.name("first")
-				.name("second")
-				.name("final");
+		void p19_nameCanBeSetViaConstructor() {
+			var creator = BeanCreator2.of(SimpleBean.class, beanStore, "final", null);
 
 			assertEquals("final", creator.getName());
 		}

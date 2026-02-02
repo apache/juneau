@@ -176,17 +176,8 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	 * @return The bean, or {@link Optional#empty()} if not found.
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public <T> Optional<T> getBean(Class<T> beanType) {
-		var typeMap = entries.get(beanType);
-		if (nn(typeMap)) {
-			var supplier = typeMap.get("");
-			if (nn(supplier))
-				return opt((T)supplier.get());
-		}
-		if (nn(parent))
-			return parent.getBean(beanType);
-		return opte();
+		return getBean(beanType, null);
 	}
 
 
@@ -202,18 +193,8 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	 * @return The bean, or {@link Optional#empty()} if not found.
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public <T> Optional<T> getBean(Class<T> beanType, String name) {
-		var typeMap = entries.get(beanType);
-		if (nn(typeMap)) {
-			var key = emptyIfNull(name);
-			var supplier = typeMap.get(key);
-			if (nn(supplier))
-				return opt((T)supplier.get());
-		}
-		if (nn(parent))
-			return parent.getBean(beanType, name);
-		return opte();
+		return resolve(beanType, name).map(Supplier::get);
 	}
 
 	/**
@@ -253,12 +234,7 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	 */
 	@Override
 	public boolean hasBean(Class<?> beanType) {
-		var typeMap = entries.get(beanType);
-		if (nn(typeMap) && typeMap.containsKey(""))
-			return true;
-		if (n(parent))
-			return false;
-		return parent.hasBean(beanType);
+		return hasBean(beanType, null);
 	}
 
 	/**
@@ -273,15 +249,7 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	 */
 	@Override
 	public boolean hasBean(Class<?> beanType, String name) {
-		var typeMap = entries.get(beanType);
-		if (nn(typeMap)) {
-			var key = emptyIfNull(name);
-			if (typeMap.containsKey(key))
-				return true;
-		}
-		if (n(parent))
-			return false;
-		return parent.hasBean(beanType, name);
+		return resolve(beanType, name).isPresent();
 	}
 
 	/**
@@ -295,16 +263,32 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	 * @return The supplier, or {@link Optional#empty()} if no supplier of the specified type exists.
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public <T> Optional<Supplier<T>> getBeanSupplier(Class<T> beanType) {
+		return getBeanSupplier(beanType, null);
+	}
+
+	/**
+	 * Resolves a supplier for a bean of the specified type and name.
+	 *
+	 * <p>
+	 * If no supplier with the specified name is found in this store, searches the parent store recursively.
+	 *
+	 * @param <T> The bean type.
+	 * @param beanType The bean type.
+	 * @param name The bean name.  Can be <jk>null</jk>.
+	 * @return The supplier, or {@link Optional#empty()} if no supplier of the specified type and name exists.
+	 */
+	@SuppressWarnings("unchecked")
+	protected <T> Optional<Supplier<T>> resolve(Class<T> beanType, String name) {
 		var typeMap = entries.get(beanType);
 		if (nn(typeMap)) {
-			var supplier = typeMap.get("");
+			var key = emptyIfNull(name);
+			var supplier = typeMap.get(key);
 			if (nn(supplier))
 				return opt((Supplier<T>)supplier);
 		}
 		if (nn(parent))
-			return parent.getBeanSupplier(beanType);
+			return parent.getBeanSupplier(beanType, name);
 		return opte();
 	}
 
@@ -320,18 +304,8 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	 * @return The supplier, or {@link Optional#empty()} if no supplier of the specified type and name exists.
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public <T> Optional<Supplier<T>> getBeanSupplier(Class<T> beanType, String name) {
-		var typeMap = entries.get(beanType);
-		if (nn(typeMap)) {
-			var key = emptyIfNull(name);
-			var supplier = typeMap.get(key);
-			if (nn(supplier))
-				return opt((Supplier<T>)supplier);
-		}
-		if (nn(parent))
-			return parent.getBeanSupplier(beanType, name);
-		return opte();
+		return resolve(beanType, name);
 	}
 
 	@Override /* Overridden from Object */
