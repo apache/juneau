@@ -177,7 +177,7 @@ public class RestUtils {
 	 */
 	public static Map<String,List<String>> parseQuery(String qs) {
 		if (isEmpty(qs)) return Collections.emptyMap();
-		return parseQuery((Object)qs);
+		return safe(()->parseQuery(new ParserPipe(qs)));
 	}
 
 	/**
@@ -209,73 +209,68 @@ public class RestUtils {
 	 */
 	public static Map<String,List<String>> parseQuery(Reader qs) {
 		if (n(qs)) return Collections.emptyMap();
-		return parseQuery((Object)qs);
+		return safe(()-> parseQuery(new ParserPipe(qs)));
 	}
 
-	private static Map<String,List<String>> parseQuery(Object qs) {
+	private static Map<String,List<String>> parseQuery(ParserPipe p) throws IOException {
 
 		var m = CollectionUtils.<String,List<String>>map();
 
-		try (var p = new ParserPipe(qs)) {
+		// S1: Looking for attrName start.
+		// S2: Found attrName start, looking for = or & or end.
+		// S3: Found =, looking for valStart or &.
+		// S4: Found valStart, looking for & or end.
 
-			// S1: Looking for attrName start.
-			// S2: Found attrName start, looking for = or & or end.
-			// S3: Found =, looking for valStart or &.
-			// S4: Found valStart, looking for & or end.
+		try (var r = new UonReader(p, true)) {
+			var c = r.peekSkipWs();
+			if (c == '?')
+				r.read();
 
-			try (var r = new UonReader(p, true)) {
-				var c = r.peekSkipWs();
-				if (c == '?')
-					r.read();
-
-				var state = S1;
-				var currAttr = (String)null;
-				while (c != -1) {
-					c = r.read();
-					if (state == S1) {
-						if (c != -1) {
-							r.unread();
-							r.mark();
-							state = S2;
-						}
-					} else if (state == S2) {
-						if (c == -1) {
-							add(m, r.getMarked(), null);
-						} else if (c == '\u0001') {
-							add(m, r.getMarked(0, -1), null);
-							state = S1;
-						} else if (c == '\u0002') {
-							currAttr = r.getMarked(0, -1);
-							state = S3;
-						}
-					} else if (state == S3) {
-						if (c == -1 || c == '\u0001') {
-							add(m, currAttr, "");
-							state = S1;
-						} else {
-							if (c == '\u0002')
-								r.replace('=');
-							r.unread();
-							r.mark();
-							state = S4;
-						}
-					} else if (state == S4) {
-						if (c == -1) {
-							add(m, currAttr, r.getMarked());
-						} else if (c == '\u0001') {
-							add(m, currAttr, r.getMarked(0, -1));
-							state = S1;
-						} else if (c == '\u0002') {
+			var state = S1;
+			var currAttr = (String)null;
+			while (c != -1) {
+				c = r.read();
+				if (state == S1) {
+					if (c != -1) {
+						r.unread();
+						r.mark();
+						state = S2;
+					}
+				} else if (state == S2) {
+					if (c == -1) {
+						add(m, r.getMarked(), null);
+					} else if (c == '\u0001') {
+						add(m, r.getMarked(0, -1), null);
+						state = S1;
+					} else if (c == '\u0002') {
+						currAttr = r.getMarked(0, -1);
+						state = S3;
+					}
+				} else if (state == S3) {
+					if (c == -1 || c == '\u0001') {
+						add(m, currAttr, "");
+						state = S1;
+					} else {
+						if (c == '\u0002')
 							r.replace('=');
-						}
+						r.unread();
+						r.mark();
+						state = S4;
+					}
+				} else if (state == S4) {
+					if (c == -1) {
+						add(m, currAttr, r.getMarked());
+					} else if (c == '\u0001') {
+						add(m, currAttr, r.getMarked(0, -1));
+						state = S1;
+					} else if (c == '\u0002') {
+						r.replace('=');
 					}
 				}
 			}
-
-			return m;
-		} catch (IOException e) {
-			throw toRex(e); // Should never happen.
 		}
+
+		return m;
 	}
 
 	/**
