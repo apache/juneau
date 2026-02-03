@@ -538,6 +538,7 @@ public class ClassInfo_Test extends TestBase {
 	// arrayType()
 	//====================================================================================================
 	@Test
+	@SuppressWarnings("java:S125")
 	void a002_arrayType() {
 		var ci = ClassInfo.of(String.class);
 		var arrayType = ci.arrayType();
@@ -778,16 +779,6 @@ public class ClassInfo_Test extends TestBase {
 		assertTrue(ClassInfo.of(Number.class).canAcceptArg(42));
 		assertTrue(ClassInfo.of(Number.class).canAcceptArg(Integer.valueOf(42)));
 
-		// Test line 434: all 4 branches of if (this.isPrimitive() || child.getClass().isPrimitive())
-		// Branch 1: this.isPrimitive() == true && child.getClass().isPrimitive() == true
-		// Note: When you pass a primitive value like 42, it gets autoboxed to Integer, so child.getClass() returns Integer.class (not primitive)
-		// This branch is likely unreachable in practice since primitive values are always autoboxed
-
-		// Branch 2: this.isPrimitive() == true && child.getClass().isPrimitive() == false (already covered above at line 707)
-		// Branch 3: this.isPrimitive() == false && child.getClass().isPrimitive() == true (already covered above at line 710)
-		// Branch 4: this.isPrimitive() == false && child.getClass().isPrimitive() == false
-		// This happens when both are non-primitive, isInstance returns false, and we fall through to return false
-		// This is the missing branch - need to test when condition is false (both false), so we skip the if and return false
 		assertFalse(ClassInfo.of(String.class).canAcceptArg(new Object())); // Both non-primitive, isInstance false, condition false, returns false
 		assertFalse(ClassInfo.of(String.class).canAcceptArg(42)); // String is not primitive, Integer is not primitive, isInstance false, condition false, returns false
 
@@ -1424,28 +1415,20 @@ public class ClassInfo_Test extends TestBase {
 		// When inner is null but isParameterizedType is true, code extracts raw type and uses its simple name
 		assertEquals("Map", formatted2);
 
-		// Test line 326: FULL format separator replacement (4 branches)
-		// Branch 1: separator != '$' && sb.indexOf("$") != -1 (true, true) - should replace '$' with separator
 		var ci12 = ClassInfo.of(Map.Entry.class);
 		assertEquals("java.util.Map.Entry", ci12.getNameFormatted(FULL, false, '.', BRACKETS));
 
-		// Branch 2: separator != '$' && sb.indexOf("$") == -1 (true, false) - no '$' in name, no replacement needed
 		var ci13 = ClassInfo.of(String.class);
 		assertEquals("java.lang.String", ci13.getNameFormatted(FULL, false, '.', BRACKETS));
 
-		// Branch 3: separator == '$' && sb.indexOf("$") != -1 (false, true) - separator is '$', no replacement
 		assertEquals("java.util.Map$Entry", ci12.getNameFormatted(FULL, false, '$', BRACKETS));
 
-		// Branch 4: separator == '$' && sb.indexOf("$") == -1 (false, false) - separator is '$', no '$' in name
 		assertEquals("java.lang.String", ci13.getNameFormatted(FULL, false, '$', BRACKETS));
 
-		// Test line 360: SIMPLE format with null class (not ParameterizedType) - should use innerType.getTypeName()
-		// Use an existing TypeVariable from MC class which has type parameters
 		var typeVar = MC.class.getTypeParameters()[0]; // MC<K,E> has K as first type parameter
 		var ci14 = ClassInfo.of((Class<?>)null, typeVar);
 		var formatted3 = ci14.getNameFormatted(SIMPLE, false, '$', BRACKETS);
 		assertNotNull(formatted3);
-		// Should use innerType.getTypeName() which returns the type variable name
 		assertEquals(typeVar.getName(), formatted3);
 	}
 
@@ -2112,8 +2095,6 @@ public class ClassInfo_Test extends TestBase {
 		// @Repeatable itself is not repeatable, so should return null
 		assertNull(method);
 
-		// Test isRepeatedAnnotation() (line 2135)
-		// When getRepeatedAnnotationMethod() returns null, isRepeatedAnnotation() should return false
 		assertFalse(repeatable.isRepeatedAnnotation());
 
 		// Test with a class that has a repeatable annotation method
@@ -2124,19 +2105,9 @@ public class ClassInfo_Test extends TestBase {
 		assertNotNull(containerMethod);  // Should find the value() method
 		assertTrue(container.isRepeatedAnnotation());  // Line 2135: getRepeatedAnnotationMethod() != null returns true
 
-		// Test line 2364 branches: return r != null && r.value().equals(inner);
-		// Branch 1: r != null is false (r is null) - when component type doesn't have @Repeatable
-		// This is covered by NonRepeatableArrayContainer which has value() returning String[], but String is not a repeatable annotation
 		var nonRepeatableContainer = ClassInfo.of(NonRepeatableArrayContainer.class);
 		assertNull(nonRepeatableContainer.getRepeatedAnnotationMethod());  // Should return null because String is not repeatable
 
-		// Branch 2: r != null is true, r.value().equals(inner) is true - covered by TestRepeatableContainer above
-		// TestRepeatableContainer has value() returning TestRepeatable[], and TestRepeatable is marked with @Repeatable(TestRepeatableContainer.class)
-		// So when checking TestRepeatableContainer, r.value() equals TestRepeatableContainer.class (inner)
-
-		// Branch 3: r != null is true, r.value().equals(inner) is false - when @Repeatable points to a different container
-		// WrongContainer has value() returning TestRepeatable[], but TestRepeatable's @Repeatable points to TestRepeatableContainer, not WrongContainer
-		// So when checking WrongContainer, r.value() would be TestRepeatableContainer.class, not WrongContainer.class, so equals(inner) is false
 		var wrongContainer = ClassInfo.of(WrongContainer.class);
 		assertNull(wrongContainer.getRepeatedAnnotationMethod());  // Should return null because the @Repeatable points to a different container
 
@@ -3130,17 +3101,9 @@ public class ClassInfo_Test extends TestBase {
 		var nullInnerCi = ClassInfo.of((Class<?>)null, pType);
 		assertFalse(nullInnerCi.isParentOfLenient(ClassInfo.of(String.class)));
 
-		// Test all branches of line 2087: if (this.isPrimitive() || child.isPrimitive())
-		// Branch 1: this.isPrimitive() == true, child.isPrimitive() == false (already covered above)
-		// Branch 2: this.isPrimitive() == false, child.isPrimitive() == true (already covered above)
-		// Branch 3: this.isPrimitive() == true, child.isPrimitive() == true
-		// Note: If both are the same primitive, isAssignableFrom returns true, so we return early at line 2086
-		// To reach line 2087 with both primitives, we need different primitive types
 		assertFalse(ClassInfo.of(int.class).isParentOfLenient(ClassInfo.of(long.class)));
-		// Same primitive type (returns true at line 2086, doesn't reach line 2087)
 		assertTrue(ClassInfo.of(int.class).isParentOfLenient(int.class));
 		assertTrue(ClassInfo.of(int.class).isParentOfLenient(ClassInfo.of(int.class)));
-		// Branch 4: this.isPrimitive() == false, child.isPrimitive() == false (already covered by String tests)
 	}
 
 	//====================================================================================================

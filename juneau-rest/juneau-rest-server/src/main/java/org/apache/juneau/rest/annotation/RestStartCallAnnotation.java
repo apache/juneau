@@ -98,7 +98,7 @@ public class RestStartCallAnnotation {
 			return this;
 		}
 
-	
+
 		@Override /* Overridden from AppliedAnnotationObject.BuilderM */
 		public Builder on(org.apache.juneau.commons.reflect.MethodInfo...value) {
 			super.on(value);

@@ -38,7 +38,7 @@ class AnnotationTraversal_Test extends TestBase {
 		assertEquals(35, AnnotationTraversal.DECLARING_CLASS.getOrder());
 		assertEquals(40, AnnotationTraversal.PACKAGE.getOrder());
 		assertEquals(999, AnnotationTraversal.REVERSE.getOrder());
-		
+
 		// Verify order values are as expected (lower values = higher precedence)
 		assertTrue(AnnotationTraversal.SELF.getOrder() < AnnotationTraversal.PARENTS.getOrder());
 		assertTrue(AnnotationTraversal.PARENTS.getOrder() < AnnotationTraversal.RETURN_TYPE.getOrder());

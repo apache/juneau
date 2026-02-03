@@ -51,7 +51,7 @@ class ReflectionUtils_Test extends TestBase {
 		ClassInfo ci = ReflectionUtils.info(TestClass.class);
 		assertNotNull(ci);
 		assertEquals(TestClass.class, ci.inner());
-		
+
 		// Null class - ClassInfo.of(null) throws IllegalArgumentException
 		assertThrows(IllegalArgumentException.class, () -> ReflectionUtils.info((Class<?>)null));
 	}
@@ -66,7 +66,7 @@ class ReflectionUtils_Test extends TestBase {
 		ConstructorInfo ci = ReflectionUtils.info(ctor);
 		assertNotNull(ci);
 		assertEquals(ctor, ci.inner());
-		
+
 		// Null constructor - ConstructorInfo.of(null) throws IllegalArgumentException
 		assertThrows(IllegalArgumentException.class, () -> ReflectionUtils.info((Constructor<?>)null));
 	}
@@ -81,7 +81,7 @@ class ReflectionUtils_Test extends TestBase {
 		FieldInfo fi = ReflectionUtils.info(field);
 		assertNotNull(fi);
 		assertEquals(field, fi.inner());
-		
+
 		// Null field - FieldInfo.of(null) throws IllegalArgumentException
 		assertThrows(IllegalArgumentException.class, () -> ReflectionUtils.info((Field)null));
 	}
@@ -96,7 +96,7 @@ class ReflectionUtils_Test extends TestBase {
 		MethodInfo mi = ReflectionUtils.info(method);
 		assertNotNull(mi);
 		assertEquals(method, mi.inner());
-		
+
 		// Null method - MethodInfo.of(null) throws IllegalArgumentException
 		assertThrows(IllegalArgumentException.class, () -> ReflectionUtils.info((Method)null));
 	}
@@ -111,10 +111,10 @@ class ReflectionUtils_Test extends TestBase {
 		ClassInfo ci = ReflectionUtils.info(obj);
 		assertNotNull(ci);
 		assertEquals(TestClass.class, ci.inner());
-		
+
 		// Null object - ClassInfo.of(null) calls object.getClass() which throws NPE
 		assertThrows(NullPointerException.class, () -> ReflectionUtils.info((Object)null));
-		
+
 		// Class object
 		ClassInfo ciClass = ReflectionUtils.info(TestClass.class);
 		assertNotNull(ciClass);

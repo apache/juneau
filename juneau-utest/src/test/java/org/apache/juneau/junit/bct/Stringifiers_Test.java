@@ -83,10 +83,10 @@ class Stringifiers_Test extends TestBase {
 
 		@Test
 		void a05_stringifyWithComplexValues() {
-		var converter = BasicBeanConverter.builder().defaultSettings().build();
-		var stringifier = Stringifiers.mapEntryStringifier();
-		var entry = Map.entry("list", l("a", "b"));
-		var result = stringifier.apply(converter, entry);
+			var converter = BasicBeanConverter.builder().defaultSettings().build();
+			var stringifier = Stringifiers.mapEntryStringifier();
+			var entry = Map.entry("list", l("a", "b"));
+			var result = stringifier.apply(converter, entry);
 
 			assertEquals("list=[a,b]", result);
 		}
@@ -455,20 +455,20 @@ class Stringifiers_Test extends TestBase {
 
 		@Test
 		void l01_stringifyList() {
-		var converter = BasicBeanConverter.builder().defaultSettings().build();
-		var stringifier = Stringifiers.listStringifier();
-		var input = l("a", "b", "c");
-		var result = stringifier.apply(converter, input);
+			var converter = BasicBeanConverter.builder().defaultSettings().build();
+			var stringifier = Stringifiers.listStringifier();
+			var input = l("a", "b", "c");
+			var result = stringifier.apply(converter, input);
 
 			assertEquals("[a,b,c]", result);
 		}
 
 		@Test
 		void l02_stringifyEmptyList() {
-		var converter = BasicBeanConverter.builder().defaultSettings().build();
-		var stringifier = Stringifiers.listStringifier();
-		var input = l();
-		var result = stringifier.apply(converter, input);
+			var converter = BasicBeanConverter.builder().defaultSettings().build();
+			var stringifier = Stringifiers.listStringifier();
+			var input = l();
+			var result = stringifier.apply(converter, input);
 
 			assertEquals("[]", result);
 		}
@@ -480,10 +480,10 @@ class Stringifiers_Test extends TestBase {
 				.addSetting("fieldSeparator", "; ")
 				.addSetting("collectionPrefix", "(")
 				.addSetting("collectionSuffix", ")")
-			.build();
-		var stringifier = Stringifiers.listStringifier();
-		var input = l("x", "y", "z");
-		var result = stringifier.apply(converter, input);
+				.build();
+			var stringifier = Stringifiers.listStringifier();
+			var input = l("x", "y", "z");
+			var result = stringifier.apply(converter, input);
 
 			assertEquals("(x; y; z)", result);
 		}
@@ -508,7 +508,7 @@ class Stringifiers_Test extends TestBase {
 			var stringifier = Stringifiers.mapStringifier();
 			var input = m("key1", "value1", "key2", "value2");
 			var result = stringifier.apply(converter, input);
-	
+
 			// Order may vary, so check both possibilities
 			assertTrue(result.equals("{key1=value1,key2=value2}") ||
 				result.equals("{key2=value2,key1=value1}"));
@@ -520,7 +520,7 @@ class Stringifiers_Test extends TestBase {
 			var stringifier = Stringifiers.mapStringifier();
 			var input = m();
 			var result = stringifier.apply(converter, input);
-	
+
 			assertEquals("{}", result);
 		}
 
@@ -558,26 +558,26 @@ class Stringifiers_Test extends TestBase {
 
 		@Test
 		void n01_useInBasicBeanConverter() {
-		// Test various stringifiable objects
-		assertBean(Map.entry("k", "v"), "<self>", "k=v");
-		assertBean(l("a", "b"), "<self>", "[a,b]");
-		assertBean(m("x", "y"), "<self>", "{x=y}");
-		assertBean(TestEnum.VALUE1, "<self>", "VALUE1");
-		assertBean(String.class, "<self>", "String");
-	}
+			// Test various stringifiable objects
+			assertBean(Map.entry("k", "v"), "<self>", "k=v");
+			assertBean(l("a", "b"), "<self>", "[a,b]");
+			assertBean(m("x", "y"), "<self>", "{x=y}");
+			assertBean(TestEnum.VALUE1, "<self>", "VALUE1");
+			assertBean(String.class, "<self>", "String");
+		}
 
-	@Test
-	void n02_customStringifierRegistration() {
-		// Test that custom registration works
-		assertBean(l("custom"), "<self>", "[custom]");
-	}
+		@Test
+		void n02_customStringifierRegistration() {
+			// Test that custom registration works
+			assertBean(l("custom"), "<self>", "[custom]");
+		}
 
-	@Test
-	void n03_stringifierChaining() {
-		// Map with list values
-		var complexMap = m("items", l("a", "b"));
-		assertMatchesGlob("*items=[a,b]*", BasicBeanConverter.DEFAULT.stringify(complexMap));
-	}
+		@Test
+		void n03_stringifierChaining() {
+			// Map with list values
+			var complexMap = m("items", l("a", "b"));
+			assertMatchesGlob("*items=[a,b]*", BasicBeanConverter.DEFAULT.stringify(complexMap));
+		}
 
 		private enum TestEnum { VALUE1, VALUE2 }
 	}

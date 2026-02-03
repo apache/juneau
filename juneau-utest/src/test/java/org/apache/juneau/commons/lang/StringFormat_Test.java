@@ -409,7 +409,6 @@ class StringFormat_Test extends TestBase {
 
 	//====================================================================================================
 	// Test coverage for line 162 branches in MessageFormatToken.append()
-	// Line 162: if (args == null || index >= args.length || index < 0)
 	//====================================================================================================
 	@Test void a14_messageFormatTokenBranches() {
 		// Test args == null branch - covers line 162 (args == null)
@@ -455,7 +454,6 @@ class StringFormat_Test extends TestBase {
 
 	//====================================================================================================
 	// Test coverage for line 217 branches in StringFormatToken.append()
-	// Line 217: if (args == null || index >= args.length || index < 0)
 	//====================================================================================================
 	@Test void a15_stringFormatTokenBranches() {
 		// Test args == null branch - covers line 217 (args == null)
@@ -488,10 +486,6 @@ class StringFormat_Test extends TestBase {
 	}
 
 	@Test void a12_localeHandling() {
-		// Lines 259-260: Test locale null checks and default locale detection in StringFormatToken
-		// Line 259: var l = locale == null ? Locale.getDefault() : locale;
-		// Line 260: var dl = locale == null || locale.equals(Locale.getDefault());
-
 		// Test with null locale (covers locale == null on both lines)
 		assertStringFormat("Hello %s", (Locale)null, "John");
 		assertStringFormat("Number: %d", (Locale)null, 42);

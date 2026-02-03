@@ -137,56 +137,6 @@ class BeanStore_Test extends TestBase {
 			assertTrue(b.hasBean(A1.class));
 			assertEquals(a1a, b.getBean(A1.class).get());
 		}
-//
-//		b1p.add(A1.class, a1b);
-//		b2p.add(A1.class, a1b);
-//		for (var b : array(b1p, b1c, b2p, b2c)) {
-//			assertTrue(b.hasBean(A1.class));
-//			assertEquals(a1b, b.getBean(A1.class).get());
-//			assertList(b.stream(A1.class).map(BasicBeanStore.Entry::get), a1b, a1a);
-//		}
-//
-//		b1c.add(A2.class, a2a);
-//		b2c.add(A2.class, a2a);
-//		for (var b : array(b1p, b2p)) {
-//			assertFalse(b.hasBean(A2.class));
-//			assertEmpty(b.getBean(A2.class));
-//			assertEmpty(b.stream(A2.class));
-//		}
-//		for (var b : array(b1c, b2c)) {
-//			assertTrue(b.hasBean(A2.class));
-//			assertEquals(a2a, b.getBean(A2.class).get());
-//			assertList(b.stream(A2.class).map(BasicBeanStore.Entry::get), a2a);
-//		}
-//
-//		assertMatchesGlob("{entries=[{type=A1,bean="+Utils.id(a1b)+"},{type=A1,bean="+Utils.id(a1a)+"}],identity=*}", b1p);
-//		assertMatchesGlob("{entries=[{type=A2,bean="+Utils.id(a2a)+"}],identity=*,parent={entries=[{type=A1,bean="+Utils.id(a1b)+"},{type=A1,bean="+Utils.id(a1a)+"}],identity=*}}", b1c);
-//		assertMatchesGlob("{entries=[{type=A1,bean="+Utils.id(a1b)+"},{type=A1,bean="+Utils.id(a1a)+"}],identity=*,threadSafe=true}", b2p);
-//		assertMatchesGlob("{entries=[{type=A2,bean="+Utils.id(a2a)+"}],identity=*,parent={entries=[{type=A1,bean="+Utils.id(a1b)+"},{type=A1,bean="+Utils.id(a1a)+"}],identity=*,threadSafe=true},threadSafe=true}", b2c);
-//
-//		b1p.removeBean(A1.class);
-//		b1c.clear().addBean(A1.class, a1a);
-//		b2p.removeBean(A1.class);
-//		b2c.clear().addBean(A1.class, a1a);
-//
-//		for (var b : array(b1p, b2p)) {
-//			assertFalse(b.hasBean(A1.class));
-//			assertEmpty(b.getBean(A1.class));
-//			assertEmpty(b.stream(A1.class));
-//		}
-//		for (var b : array(b1c, b2c)) {
-//			assertTrue(b.hasBean(A1.class));
-//			assertEquals(a1a, b.getBean(A1.class).get());
-//			assertList(b.stream(A1.class).map(BasicBeanStore.Entry::get), a1a);
-//		}
-//
-//		b1c.removeBean(A1.class);
-//		b2c.removeBean(A1.class);
-//		for (var b : array(b1p, b1c, b2p, b2c)) {
-//			assertFalse(b.hasBean(A1.class));
-//			assertEmpty(b.getBean(A1.class));
-//			assertEmpty(b.stream(A1.class));
-//		}
 	}
 
 	@Test void a05_addNamedBeans() {
@@ -202,13 +152,6 @@ class BeanStore_Test extends TestBase {
 			b.addBean(A1.class, a1e);
 		}
 
-//		for (var b : array(b1p, b2p)) {
-//			assertList(b.stream(A1.class).map(BasicBeanStore.Entry::get), a1d,a1c,a1b,a1a);
-//		}
-//		for (var b : array(b1c, b2c)) {
-//			assertList(b.stream(A1.class).map(BasicBeanStore.Entry::get), a1e,a1d,a1c,a1b,a1a);
-//		}
-//
 		for (var b : array(b1p, b1c, b2p, b2c)) {
 			assertEquals(a1b, b.getBean(A1.class, "foo").get());
 			assertEquals(a1d, b.getBean(A1.class, "bar").get());
@@ -490,7 +433,6 @@ class BeanStore_Test extends TestBase {
 
 	@Test void c00_createMethodFinder_invalidArgs() {
 		var b = BasicBeanStore.create().build();
-//		assertThrowsWithMessage(IllegalArgumentException.class, "Method cannot be used without outer bean definition.", ()->new BeanCreateMethodFinder<>(null, b));
 		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'beanType' cannot be null.", ()->new BeanCreateMethodFinder<>((Class<?>)null, "", b));
 		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'resourceClass' cannot be null.", ()->new BeanCreateMethodFinder<>(String.class, null, b));
 	}

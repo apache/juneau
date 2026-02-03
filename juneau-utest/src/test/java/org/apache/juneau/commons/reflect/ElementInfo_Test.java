@@ -262,17 +262,17 @@ class ElementInfo_Test extends TestBase {
 		// Empty flags array - allMatch on empty stream returns true (vacuous truth) (line 143)
 		assertTrue(publicClass.isAll());
 		assertTrue(staticMethod.isAll());
-		
+
 		// Single flag - ensures stream(flags).allMatch(this::is) is executed (line 143)
 		assertTrue(publicClass.isAll(PUBLIC));
 		assertFalse(publicClass.isAll(PRIVATE));
 		assertTrue(staticMethod.isAll(STATIC));
 		assertFalse(staticMethod.isAll(FINAL));
-		
+
 		// Multiple flags where first doesn't match (short-circuit) - line 143
 		// allMatch short-circuits on first false, so this tests the short-circuit branch
 		assertFalse(publicClass.isAll(PRIVATE, PUBLIC, NOT_PRIVATE));
-		
+
 		// Multiple flags where all match (full iteration) - line 143
 		// allMatch iterates through all elements when all are true
 		assertTrue(publicClass.isAll(PUBLIC, NOT_PRIVATE, NOT_PROTECTED, NOT_FINAL));
@@ -299,17 +299,17 @@ class ElementInfo_Test extends TestBase {
 		// Empty flags array - anyMatch on empty stream returns false (line 157)
 		assertFalse(publicClass.isAny(new ElementFlag[0]));
 		assertFalse(staticMethod.isAny(new ElementFlag[0]));
-		
+
 		// Single flag - ensures stream(flags).anyMatch(this::is) is executed (line 157)
 		assertTrue(publicClass.isAny(PUBLIC));
 		assertFalse(publicClass.isAny(PRIVATE));
 		assertTrue(staticMethod.isAny(STATIC));
 		assertFalse(staticMethod.isAny(FINAL));
-		
+
 		// Multiple flags where first matches (short-circuit) - line 157
 		// anyMatch short-circuits on first true, so this tests the short-circuit branch
 		assertTrue(publicClass.isAny(PUBLIC, PRIVATE, PROTECTED));
-		
+
 		// Multiple flags where none match (full iteration) - line 157
 		// anyMatch iterates through all elements when all are false
 		assertFalse(publicClass.isAny(PRIVATE, PROTECTED, FINAL, ABSTRACT));

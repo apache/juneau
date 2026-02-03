@@ -321,7 +321,7 @@ class BooleanValue_Test extends TestBase {
 		assertFalse(v.isAny(true));
 		assertFalse(v.isAny(false));
 		assertFalse(v.isAny());
-		
+
 		// Test that null array throws IllegalArgumentException
 		assertThrows(IllegalArgumentException.class, () -> v.isAny((Boolean[])null));
 	}

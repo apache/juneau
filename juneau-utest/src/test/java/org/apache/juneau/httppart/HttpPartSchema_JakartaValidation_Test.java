@@ -126,14 +126,6 @@ class HttpPartSchema_JakartaValidation_Test extends TestBase {
 		public String value;
 	}
 
-	// Disabled: HttpPartFormat enum does not support "email" format
-	// @Test
-	// void f01_jakarta_Email() throws Exception {
-	// 	Email anno = F01.class.getDeclaredField("value").getAnnotation(Email.class);
-	// 	var s = HttpPartSchema.create().apply(anno).build();
-	// 	assertEquals("email", s.getFormat().toString());
-	// }
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Positive
 	//-----------------------------------------------------------------------------------------------------------------

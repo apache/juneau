@@ -325,7 +325,7 @@ public class RestGetAnnotation {
 			super.on(value);
 			return this;
 		}
-	
+
 		@Override /* Overridden from AppliedAnnotationObject.BuilderM */
 		public Builder on(MethodInfo...value) {
 			super.on(value);

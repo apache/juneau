@@ -598,26 +598,18 @@ class ReversedList_Test extends TestBase {
 
 	@Test
 	void l01_equals_differentLengths() {
-		// Line 320: while (e1.hasNext() && e2.hasNext())
-		// Line 326: return !(e1.hasNext() || e2.hasNext());
-		// Test when lists have different lengths - one iterator exhausted before the other
 		var original1 = new ArrayList<>(List.of("a", "b", "c"));
 		var reversed1 = new ReversedList<>(original1);
 
 		var original2 = new ArrayList<>(List.of("a", "b", "c", "d"));
 		var reversed2 = new ReversedList<>(original2);
 
-		// reversed1: ["c", "b", "a"]
-		// reversed2: ["d", "c", "b", "a"]
-		// After comparing first 3 elements, e1 is exhausted but e2 has more
-		// Line 326: return !(e1.hasNext() || e2.hasNext()) should return false
 		assertNotEquals(reversed1, reversed2);
 		assertNotEquals(reversed2, reversed1);
 	}
 
 	@Test
 	void l02_equals_oneExhausted() {
-		// Line 326: return !(e1.hasNext() || e2.hasNext());
 		// Test when one iterator is exhausted before the other
 		var original1 = new ArrayList<>(List.of("a", "b"));
 		var reversed1 = new ReversedList<>(original1);
@@ -633,7 +625,6 @@ class ReversedList_Test extends TestBase {
 
 	@Test
 	void l03_hashCode_withNullElements() {
-		// Line 356: hashCode = 31 * hashCode + (e == null ? 0 : e.hashCode());
 		// Test hashCode with null elements
 		var original = new ArrayList<>(Arrays.asList("a", null, "c"));
 		var reversed = new ReversedList<>(original);

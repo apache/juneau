@@ -83,12 +83,12 @@ class ExecutableException_Test extends TestBase {
 		InvocationTargetException ite = new InvocationTargetException(targetException);
 		ExecutableException e = new ExecutableException(ite);
 		assertSame(targetException, e.getTargetException());
-		
+
 		// With other exception
 		IllegalArgumentException iae = new IllegalArgumentException("test");
 		ExecutableException e2 = new ExecutableException(iae);
 		assertSame(iae, e2.getTargetException());
-		
+
 		// With no cause
 		ExecutableException e3 = new ExecutableException("message");
 		assertNull(e3.getTargetException());
@@ -103,7 +103,7 @@ class ExecutableException_Test extends TestBase {
 		Throwable cause = new RuntimeException("cause");
 		ExecutableException e = new ExecutableException(cause);
 		assertSame(cause, e.unwrap());
-		
+
 		// Without cause
 		ExecutableException e2 = new ExecutableException("message");
 		assertSame(e2, e2.unwrap());

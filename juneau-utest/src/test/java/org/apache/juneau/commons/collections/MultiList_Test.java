@@ -697,7 +697,6 @@ class MultiList_Test extends TestBase {
 
 	@Test
 	void h07_listIterator_hasPrevious_findsPreviousList() {
-		// Line 387: return true when previous list has elements
 		var l1 = l(a("1", "2"));
 		List<String> l2 = l(a()); // Empty list
 		var l3 = l(a("3", "4"));
@@ -714,7 +713,6 @@ class MultiList_Test extends TestBase {
 
 	@Test
 	void h08_listIterator_remove_throwsWhenCurrentIteratorIsNull() {
-		// Line 418: throw IllegalStateException when currentIterator == null
 		var l1 = l(a("1"));
 		var ml = new MultiList<>(l1);
 		var li = ml.listIterator();
@@ -724,7 +722,6 @@ class MultiList_Test extends TestBase {
 
 	@Test
 	void h09_listIterator_set_throwsWhenCurrentIteratorIsNull() {
-		// Line 426: throw IllegalStateException when currentIterator == null
 		var l1 = l(a("1"));
 		var ml = new MultiList<>(l1);
 		var li = ml.listIterator();
@@ -734,8 +731,6 @@ class MultiList_Test extends TestBase {
 
 	@Test
 	void h10_listIterator_constructor_atEndWithNonEmptyLists() {
-		// Line 346: if (currentIterator == null && l.length > 0)
-		// This happens when index is at the end
 		var l1 = l(a("1", "2"));
 		var l2 = l(a("3", "4"));
 		var ml = new MultiList<>(l1, l2);
@@ -748,8 +743,6 @@ class MultiList_Test extends TestBase {
 
 	@Test
 	void h11_equals_differentLengths() {
-		// Line 509: while (e1.hasNext() && e2.hasNext())
-		// Line 515: return !(e1.hasNext() || e2.hasNext());
 		// Test when lists have different lengths
 		var l1 = l(a("1", "2"));
 		var ml1 = new MultiList<>(l1);
@@ -777,7 +770,6 @@ class MultiList_Test extends TestBase {
 
 	@Test
 	void h13_hashCode_iteratesThroughAllElements() {
-		// Line 541: for (E e : this)
 		// Test that hashCode iterates through all elements
 		var l1 = l(a("1", "2"));
 		var l2 = l(a("3", "4"));

@@ -128,10 +128,10 @@ class ResourceBundleUtils_Test extends TestBase {
 	void a10_findBundle_differentClassLoaders() {
 		var loader1 = getClass().getClassLoader();
 		var loader2 = Thread.currentThread().getContextClassLoader();
-		
+
 		var bundle1 = ResourceBundleUtils.findBundle("org.apache.juneau.rest.NlsTest", Locale.getDefault(), loader1);
 		var bundle2 = ResourceBundleUtils.findBundle("org.apache.juneau.rest.NlsTest", Locale.getDefault(), loader2);
-		
+
 		// Both should find the bundle (assuming same classpath)
 		assertNotNull(bundle1);
 		assertNotNull(bundle2);
@@ -242,7 +242,7 @@ class ResourceBundleUtils_Test extends TestBase {
 		assertThrows(MissingResourceException.class, () -> {
 			ResourceBundle.getBundle("definitely.does.not.exist.Bundle", Locale.getDefault(), loader);
 		});
-		
+
 		// But utils call should return null
 		var bundle = ResourceBundleUtils.findBundle("definitely.does.not.exist.Bundle", Locale.getDefault(), loader);
 		assertNull(bundle);

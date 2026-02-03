@@ -176,7 +176,7 @@ public class RequestContent {
 	 *
 	 * 	<jc>// Parse into an int array.</jc>
 	 * 	<jk>int</jk>[] <jv>content2</jv> = <jv>req</jv>.getContent().as(<jk>int</jk>[].<jk>class</jk>);
-	
+	 * 
 	 * 	<jc>// Parse into a bean.</jc>
 	 * 	MyBean <jv>content3</jv> = <jv>req</jv>.getContent().as(MyBean.<jk>class</jk>);
 	 *

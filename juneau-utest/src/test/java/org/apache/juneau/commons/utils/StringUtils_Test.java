@@ -1490,6 +1490,7 @@ class StringUtils_Test extends TestBase {
 	// formatNamed(String,Map<String,Object>)
 	//====================================================================================================
 	@Test
+	@SuppressWarnings("java:S125")
 	void a059_formatNamed() {
 		var args = new HashMap<String,Object>();
 		args.put("name", "John");
@@ -1687,6 +1688,7 @@ class StringUtils_Test extends TestBase {
 	// getDuration(String)
 	//====================================================================================================
 	@Test
+	@SuppressWarnings("java:S125")
 	void a066_getDuration() {
 		// Basic tests
 		assertEquals(-1, getDuration(null));
@@ -6464,6 +6466,7 @@ class StringUtils_Test extends TestBase {
 	// unescapeChars(String,AsciiSet)
 	//====================================================================================================
 	@Test
+	@SuppressWarnings("java:S125")
 	void a222_unescapeChars() {
 		var escape = AsciiSet.of("\\,|");
 

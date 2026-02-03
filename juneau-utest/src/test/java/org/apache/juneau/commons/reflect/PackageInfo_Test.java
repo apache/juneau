@@ -228,7 +228,7 @@ class PackageInfo_Test extends TestBase {
 		// Package versions come from JAR manifest (Specification-Version header)
 		// Most test packages don't have versions, so isCompatibleWith throws NumberFormatException
 		// However, line 309 is still executed - the exception is thrown FROM that line
-		
+
 		// Try to find a package with a version (e.g., from standard library or a dependency)
 		// If found, test the normal return path
 		var specVersion = pi.getSpecificationVersion();
@@ -236,7 +236,7 @@ class PackageInfo_Test extends TestBase {
 			// Line 309: normal return path when package has a version
 			var compatible = pi.isCompatibleWith("1.0");
 			assertNotNull(compatible);
-			
+
 			// Test with another version
 			var compatible2 = pi.isCompatibleWith("2.0");
 			assertNotNull(compatible2);

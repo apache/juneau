@@ -582,14 +582,12 @@ class BasicBeanStore_Test extends TestBase {
 
 		var store = new BasicBeanStore2(parent);
 		// Store has no beans, but parent does
-		// This should hit line 259: return nn(parent) && parent.hasBean(beanType);
 		assertTrue(store.hasBean(TestBean.class));
 	}
 
 	@Test
 	void j07_hasBean_unnamed_noParentAndNotFound() {
 		var store = new BasicBeanStore2(null);
-		// No beans, no parent - should hit line 259 with parent=null
 		assertFalse(store.hasBean(TestBean.class));
 	}
 
@@ -650,7 +648,6 @@ class BasicBeanStore_Test extends TestBase {
 
 		var store = new BasicBeanStore2(parent);
 		// Store has no beans, but parent does
-		// This should hit line 280: return nn(parent) && parent.hasBean(beanType, name);
 		assertTrue(store.hasBean(TestBean.class, "name1"));
 	}
 
@@ -661,14 +658,12 @@ class BasicBeanStore_Test extends TestBase {
 		store.addBean(TestBean.class, new TestBean("test1"), "name1");
 
 		// hasBean should return false since "name2" doesn't exist
-		// This should hit line 277: if (typeMap.containsKey(key)) - false branch
 		assertFalse(store.hasBean(TestBean.class, "name2"));
 	}
 
 	@Test
 	void k09_hasBean_named_noParentAndNotFound() {
 		var store = new BasicBeanStore2(null);
-		// No beans, no parent - should hit line 280 with parent=null
 		assertFalse(store.hasBean(TestBean.class, "name1"));
 	}
 

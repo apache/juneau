@@ -46,25 +46,25 @@ class PredicateUtils_Test {
 	void a001_consumeIf() {
 		List<String> consumed = new ArrayList<>();
 		Consumer<String> consumer = consumed::add;
-		
+
 		// When predicate is null, should consume
 		consumeIf(null, consumer, "test");
 		assertEquals(1, consumed.size());
 		assertEquals("test", consumed.get(0));
-		
+
 		// When predicate matches, should consume
 		consumed.clear();
 		Predicate<String> matches = s -> s.equals("match");
 		consumeIf(matches, consumer, "match");
 		assertEquals(1, consumed.size());
 		assertEquals("match", consumed.get(0));
-		
+
 		// When predicate doesn't match, should not consume
 		consumed.clear();
 		Predicate<String> noMatch = s -> s.equals("match");
 		consumeIf(noMatch, consumer, "nomatch");
 		assertTrue(consumed.isEmpty());
-		
+
 		// Test with different types
 		List<Integer> intConsumed = new ArrayList<>();
 		Consumer<Integer> intConsumer = intConsumed::add;
@@ -72,7 +72,7 @@ class PredicateUtils_Test {
 		consumeIf(even, intConsumer, 2);
 		assertEquals(1, intConsumed.size());
 		assertEquals(2, intConsumed.get(0));
-		
+
 		consumeIf(even, intConsumer, 3);
 		assertEquals(1, intConsumed.size()); // Should not add 3
 	}
@@ -86,19 +86,19 @@ class PredicateUtils_Test {
 		PrintStream originalErr = System.err;
 		ByteArrayOutputStream errCapture = new ByteArrayOutputStream();
 		System.setErr(new PrintStream(errCapture));
-		
+
 		try {
 			// Test peek() function
 			Function<String, String> peekFunc = peek();
 			String result = peekFunc.apply("test value");
-			
+
 			// Should return the value unchanged
 			assertEquals("test value", result);
-			
+
 			// Should have printed to stderr
 			String output = errCapture.toString();
 			assertTrue(output.contains("test value"), "Output should contain 'test value', but was: " + output);
-			
+
 			// Test with null
 			errCapture.reset();
 			Function<Object, Object> peekFunc2 = peek();
@@ -106,7 +106,7 @@ class PredicateUtils_Test {
 			assertNull(result2);
 			String output2 = errCapture.toString();
 			assertTrue(output2.contains("null"), "Output should contain 'null', but was: " + output2);
-			
+
 			// Test with different types
 			errCapture.reset();
 			Function<Integer, Integer> peekInt = peek();
@@ -128,19 +128,19 @@ class PredicateUtils_Test {
 		PrintStream originalErr = System.err;
 		ByteArrayOutputStream errCapture = new ByteArrayOutputStream();
 		System.setErr(new PrintStream(errCapture));
-		
+
 		try {
 			// Test peek() with message and formatter
 			Function<String, String> peekFunc = peek("Processing: {0}", String::toUpperCase);
 			String result = peekFunc.apply("test");
-			
+
 			// Should return the value unchanged
 			assertEquals("test", result);
-			
+
 			// Should have printed formatted message to stderr
 			String output = errCapture.toString();
 			assertTrue(output.contains("Processing: TEST"), "Output should contain 'Processing: TEST', but was: " + output);
-			
+
 			// Test with different formatter
 			errCapture.reset();
 			Function<Integer, Integer> peekInt = peek("Value: {0}", i -> i * 2);
@@ -148,7 +148,7 @@ class PredicateUtils_Test {
 			assertEquals(5, result2);
 			String output2 = errCapture.toString();
 			assertTrue(output2.contains("Value: 10"), "Output should contain 'Value: 10', but was: " + output2);
-			
+
 			// Test with null value
 			errCapture.reset();
 			Function<String, String> peekNull = peek("Null value: {0}", s -> s == null ? "null" : s);
@@ -156,7 +156,7 @@ class PredicateUtils_Test {
 			assertNull(result3);
 			String output3 = errCapture.toString();
 			assertTrue(output3.contains("Null value: null"), "Output should contain 'Null value: null', but was: " + output3);
-			
+
 			// Test with complex formatter
 			errCapture.reset();
 			class Person {
@@ -183,32 +183,32 @@ class PredicateUtils_Test {
 		assertTrue(test(null, "any value"));
 		assertTrue(test(null, null));
 		assertTrue(test(null, 123));
-		
+
 		// When predicate matches, should return true
 		Predicate<String> matches = s -> s.equals("match");
 		assertTrue(test(matches, "match"));
-		
+
 		// When predicate doesn't match, should return false
 		assertFalse(test(matches, "nomatch"));
-		
+
 		// Test with different types
 		Predicate<Integer> even = i -> i % 2 == 0;
 		assertTrue(test(even, 2));
 		assertTrue(test(even, 4));
 		assertFalse(test(even, 3));
 		assertFalse(test(even, 5));
-		
+
 		// Test with null value
 		Predicate<String> notNull = s -> s != null;
 		assertTrue(test(notNull, "test"));
 		assertFalse(test(notNull, null));
-		
+
 		// Test with always true predicate
 		Predicate<Object> alwaysTrue = o -> true;
 		assertTrue(test(alwaysTrue, "anything"));
 		assertTrue(test(alwaysTrue, null));
 		assertTrue(test(alwaysTrue, 123));
-		
+
 		// Test with always false predicate
 		Predicate<Object> alwaysFalse = o -> false;
 		assertFalse(test(alwaysFalse, "anything"));

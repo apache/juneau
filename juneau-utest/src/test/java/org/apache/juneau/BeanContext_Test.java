@@ -160,14 +160,13 @@ class BeanContext_Test extends TestBase {
 	// BeanContext.Builder.impl() - Line 2372 coverage
 	//====================================================================================================
 
-	@Test void e01_impl() {
-		// Create a BeanContext to use as the implementation
+	@Test
+	void e01_impl() {
 		var impl = BeanContext.create()
 			.sortProperties()
 			.locale(Locale.CANADA)
 			.build();
 
-		// Call impl() which exercises line 2372: super.impl(value);
 		var builder = BeanContext.create()
 			.impl(impl);
 
