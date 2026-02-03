@@ -56,8 +56,8 @@ public class ConfigMap implements ConfigStoreListener {
 		 */
 		ConfigSection(List<String> lines) {
 
-			var name2 = (String)null;
-			var rawLine2 = (String)null;
+			String name2 = null;
+			String rawLine2 = null;
 
 			// S1: Looking for section.
 			// S2: Found section, looking for end.
@@ -476,7 +476,7 @@ public class ConfigMap implements ConfigStoreListener {
 	@SuppressWarnings("null")
 	@Override /* Overridden from ConfigStoreListener */
 	public void onChange(String newContents) {
-		var changes2 = (ConfigEvents)null;
+		ConfigEvents changes2 = null;
 		try (var x = lock.write()) {
 			if (neq(contents, newContents)) {
 				changes2 = findDiffs(newContents);
@@ -860,7 +860,7 @@ public class ConfigMap implements ConfigStoreListener {
 
 		// Collapse any multi-lines.
 		var li = lines.listIterator(lines.size());
-		var accumulator = (String)null;
+		String accumulator = null;
 		while (li.hasPrevious()) {
 			var l = li.previous();
 			var c = firstChar(l);

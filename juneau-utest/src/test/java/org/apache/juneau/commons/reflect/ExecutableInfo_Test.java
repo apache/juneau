@@ -344,7 +344,7 @@ class ExecutableInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a011_getParameter() {
-		// b_c2 is B(String s) constructor, parameter name may or may not be available in bytecode
+		// bc2 is B(String s) constructor, parameter name may or may not be available in bytecode
 		var param1 = b_c2.getParameter(0).toString();
 		assertTrue(param1.equals("java.lang.String s") || param1.equals("java.lang.String arg0"), "Expected 'java.lang.String s' or 'java.lang.String arg0', got: " + param1);
 
@@ -375,7 +375,7 @@ class ExecutableInfo_Test extends TestBase {
 	@Test
 	void a013_getParameters() {
 		check("", b_c1.getParameters());
-		// b_c2 is B(String s) constructor, parameter name may or may not be available in bytecode
+		// bc2 is B(String s) constructor, parameter name may or may not be available in bytecode
 		var params1 = b_c2.getParameters().stream().map(ParameterInfo::toString).collect(Collectors.joining(","));
 		assertTrue(params1.equals("java.lang.String s") || params1.equals("java.lang.String arg0"), "Expected 'java.lang.String s' or 'java.lang.String arg0', got: " + params1);
 		check("", b_m1.getParameters());
@@ -503,10 +503,10 @@ class ExecutableInfo_Test extends TestBase {
 		assertTrue(b_c2.hasMatchingParameters(params1));
 
 		// Test with parameters from a different executable that has different parameter types
-		var params2 = b_c1.getParameters();  // b_c1 has no parameters, b_c2 has one String parameter
+		var params2 = b_c1.getParameters();  // bc1 has no parameters, bc2 has one String parameter
 		assertFalse(b_c2.hasMatchingParameters(params2));
 
-		// Test that b_c2 and b_m2 DO match (both have String parameter)
+		// Test that bc2 and b_m2 DO match (both have String parameter)
 		var params3 = b_m2.getParameters();
 		assertTrue(b_c2.hasMatchingParameters(params3));
 	}

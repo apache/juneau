@@ -229,9 +229,8 @@ class SerializerConfigAnnotation_Test extends TestBase {
 
 	@Test void d01_invalidQuoteChar_throwsException() {
 		var al = AnnotationWorkList.of(sr, rstream(d.getAnnotations()));
-		assertThrows(ConfigException.class, () -> {
-			JsonSerializer.create().apply(al).build();
-		});
+		var serializer = JsonSerializer.create();
+		assertThrows(ConfigException.class, () -> serializer.apply(al));
 	}
 
 	@SerializerConfig(
@@ -272,8 +271,7 @@ class SerializerConfigAnnotation_Test extends TestBase {
 
 	@Test void d03_invalidInteger_throwsException() {
 		var al = AnnotationWorkList.of(sr, rstream(f.getAnnotations()));
-		assertThrows(ConfigException.class, () -> {
-			JsonSerializer.create().apply(al).build();
-		});
+		var serializer = JsonSerializer.create();
+		assertThrows(ConfigException.class, () -> serializer.apply(al));
 	}
 }

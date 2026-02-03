@@ -97,7 +97,8 @@ class OAuthFlows_Test extends TestBase {
 		}
 
 		@Test void a11_strictMode() {
-			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			var strictBean = bean().strict();
+			assertThrows(RuntimeException.class, () -> strictBean.set("foo", "bar"));
 			assertDoesNotThrow(() -> bean().set("foo", "bar"));
 
 			assertFalse(bean().isStrict());
@@ -207,9 +208,10 @@ class OAuthFlows_Test extends TestBase {
 		}
 
 		@Test void c10_nullPropertyValue() {
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
-			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
+			var oauthFlows = bean();
+			assertThrows(IllegalArgumentException.class, ()->oauthFlows.get(null));
+			assertThrows(IllegalArgumentException.class, ()->oauthFlows.get(null, String.class));
+			assertThrows(IllegalArgumentException.class, ()->oauthFlows.set(null, "a"));
 		}
 	}
 

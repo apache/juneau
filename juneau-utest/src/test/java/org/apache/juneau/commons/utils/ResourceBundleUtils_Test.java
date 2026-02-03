@@ -181,8 +181,9 @@ class ResourceBundleUtils_Test extends TestBase {
 		var loader = getClass().getClassLoader();
 		// null baseName causes NullPointerException in ResourceBundle.getBundle
 		// which is not caught (only MissingResourceException is caught)
+		var locale = Locale.getDefault();
 		assertThrows(NullPointerException.class, () -> {
-			ResourceBundleUtils.findBundle(null, Locale.getDefault(), loader);
+			ResourceBundleUtils.findBundle(null, locale, loader);
 		});
 	}
 
@@ -239,8 +240,9 @@ class ResourceBundleUtils_Test extends TestBase {
 	void a20_findBundle_directCallThrowsButUtilsDoesNot() {
 		var loader = getClass().getClassLoader();
 		// Verify that direct call throws but utils call doesn't
+		var locale = Locale.getDefault();
 		assertThrows(MissingResourceException.class, () -> {
-			ResourceBundle.getBundle("definitely.does.not.exist.Bundle", Locale.getDefault(), loader);
+			ResourceBundle.getBundle("definitely.does.not.exist.Bundle", locale, loader);
 		});
 
 		// But utils call should return null

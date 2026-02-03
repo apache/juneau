@@ -24,7 +24,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("deprecation")
 public class JsonSchema_Test extends TestBase {
 
 	@Test void a01_schema1() throws Exception {
@@ -243,6 +242,7 @@ public class JsonSchema_Test extends TestBase {
 	}
 
 	/** Bean with simple values for each property */
+	@SuppressWarnings("removal")
 	public static JsonSchema getTest1() {
 		return new JsonSchema()
 			.setId("http://id")
@@ -280,6 +280,7 @@ public class JsonSchema_Test extends TestBase {
 	}
 
 	/** Bean with other possible property value types not covered in test1 */
+	@SuppressWarnings("removal")
 	public static JsonSchema getTest2() {
 		return new JsonSchema()
 			.setId(URI.create("http://id"))

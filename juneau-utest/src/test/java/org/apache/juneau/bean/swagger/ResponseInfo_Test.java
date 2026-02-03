@@ -96,7 +96,8 @@ class ResponseInfo_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, ()->x.getHeader(null));
 			assertThrows(IllegalArgumentException.class, ()->x.addExample(null, "a"));
 			assertThrows(IllegalArgumentException.class, ()->x.addExample("a", null));
-			assertThrows(IllegalArgumentException.class, ()->x.addHeader(null, headerInfo()));
+			var headerInfo = headerInfo();
+			assertThrows(IllegalArgumentException.class, ()->x.addHeader(null, headerInfo));
 			assertThrows(IllegalArgumentException.class, ()->x.addHeader("a", null));
 		}
 
@@ -125,7 +126,8 @@ class ResponseInfo_Test extends TestBase {
 		}
 
 		@Test void a13_strictMode() {
-			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			var strictBean = bean().strict();
+			assertThrows(RuntimeException.class, () -> strictBean.set("foo", "bar"));
 			assertDoesNotThrow(() -> bean().set("foo", "bar"));
 
 			assertFalse(bean().isStrict());
@@ -273,9 +275,10 @@ class ResponseInfo_Test extends TestBase {
 		}
 
 		@Test void c10_nullPropertyValue() {
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
-			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
+			var responseInfo = bean();
+			assertThrows(IllegalArgumentException.class, ()->responseInfo.get(null));
+			assertThrows(IllegalArgumentException.class, ()->responseInfo.get(null, String.class));
+			assertThrows(IllegalArgumentException.class, ()->responseInfo.set(null, "a"));
 		}
 	}
 

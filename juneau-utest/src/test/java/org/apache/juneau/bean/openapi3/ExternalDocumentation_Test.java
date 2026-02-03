@@ -179,9 +179,10 @@ class ExternalDocumentation_Test extends TestBase {
 		}
 
 		@Test void c10_nullPropertyValue() {
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
-			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
+			var externalDoc = bean();
+			assertThrows(IllegalArgumentException.class, ()->externalDoc.get(null));
+			assertThrows(IllegalArgumentException.class, ()->externalDoc.get(null, String.class));
+			assertThrows(IllegalArgumentException.class, ()->externalDoc.set(null, "a"));
 		}
 	}
 

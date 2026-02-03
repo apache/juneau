@@ -119,18 +119,18 @@ class RestClient_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class B4 extends RestClient {
-		private static boolean CREATE_REQUEST_CALLED, CREATE_RESPONSE_CALLED;
+		private static boolean createRequestCalled, createResponseCalled;
 		public B4(RestClient.Builder b) {
 			super(b);
 		}
 		@Override
 		protected RestRequest createRequest(java.net.URI uri, String method, boolean hasBody) throws RestCallException {
-			CREATE_REQUEST_CALLED = true;
+			createRequestCalled = true;
 			return super.createRequest(uri, method, hasBody);
 		}
 		@Override
 		protected RestResponse createResponse(RestRequest req, HttpResponse httpResponse, Parser parser) throws RestCallException {
-			CREATE_RESPONSE_CALLED = true;
+			createResponseCalled = true;
 			return super.createResponse(req, httpResponse, parser);
 		}
 		@Override /* HttpClient */
@@ -141,8 +141,8 @@ class RestClient_Test extends TestBase {
 
 	@Test void b04_restClient_overrideCreateRequest() throws Exception {
 		RestClient.create().json5().build(B4.class).get("foo").run();
-		assertTrue(B4.CREATE_REQUEST_CALLED);
-		assertTrue(B4.CREATE_RESPONSE_CALLED);
+		assertTrue(B4.createRequestCalled);
+		assertTrue(B4.createResponseCalled);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -207,7 +207,7 @@ class RestClient_Test extends TestBase {
 		assertDoesNotThrow(()->RestClient.create().disableRedirectHandling().redirectStrategy(DefaultRedirectStrategy.INSTANCE).defaultCookieSpecRegistry(null).sslHostnameVerifier(null).publicSuffixMatcher(null).sslContext(null).sslSocketFactory(null).maxConnTotal(10).maxConnPerRoute(10).defaultSocketConfig(null).defaultConnectionConfig(null).connectionTimeToLive(100,TimeUnit.DAYS).connectionManager(null).connectionManagerShared(true).connectionReuseStrategy(null).keepAliveStrategy(null).targetAuthenticationStrategy(null).proxyAuthenticationStrategy(null).userTokenHandler(null).disableConnectionState().schemePortResolver(null).disableCookieManagement().disableContentCompression().disableAuthCaching().retryHandler(null).disableAutomaticRetries().proxy(null).routePlanner(null).connectionBackoffStrategy(null).backoffManager(null).serviceUnavailableRetryStrategy(null).defaultCookieStore(null).defaultCredentialsProvider(null).defaultAuthSchemeRegistry(null).contentDecoderRegistry(null).defaultRequestConfig(null).useSystemProperties().evictExpiredConnections().evictIdleConnections(1,TimeUnit.DAYS));
 	}
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings("removal")
 	@Test void c06_httpClient_unusedHttpClientMethods() {
 		var x = RestClient.create().build();
 		assertThrows(UnsupportedOperationException.class, x::getParams);
@@ -326,7 +326,7 @@ class RestClient_Test extends TestBase {
 		assertEquals(2,x.getMajor());
 	}
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings("removal")
 	@Test void e04_httpRequestBase_completed() throws Exception {
 		client().build().get("/bean").completed().run().assertStatus(200);
 	}
@@ -399,7 +399,7 @@ class RestClient_Test extends TestBase {
 		assertEquals("Foo: bar", x.headerIterator("Foo").next().toString());
 	}
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({"deprecation","removal"})
 	@Test void e15_httpMessage_getParams() throws Exception {
 		var p = new BasicHttpParams();
 		var x = client().build().get("/bean");

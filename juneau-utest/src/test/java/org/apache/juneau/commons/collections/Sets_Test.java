@@ -507,23 +507,17 @@ class Sets_Test extends TestBase {
 		// Test line 698: convertElement returns null when elementFunction is null and element can't be converted
 		// This causes line 242 to throw an exception
 		// When elementFunction is null and we try to add a non-matching type, it should throw
-		assertThrows(RuntimeException.class, () -> {
-			Sets.create(Integer.class)
-				.addAny("not-an-integer")
-				.build();
-		});
+		var builder = Sets.create(Integer.class);
+		assertThrows(RuntimeException.class, () -> builder.addAny("not-an-integer"));
 	}
 
 	@Test
 	void m11_addAny_elementFunctionReturnsNull() {
 		// ElementFunction exists but returns null (can't convert)
 		// Should throw RuntimeException when elementFunction can't convert
-		assertThrows(RuntimeException.class, () -> {
-			Sets.create(Integer.class)
-				.elementFunction(o -> null)  // Can't convert
-				.addAny("not-an-integer")
-				.build();
-		});
+		var builder = Sets.create(Integer.class)
+			.elementFunction(o -> null);  // Can't convert
+		assertThrows(RuntimeException.class, () -> builder.addAny("not-an-integer"));
 	}
 
 	@Test

@@ -3839,7 +3839,8 @@ public class ClassInfo_Test extends TestBase {
 		// Note: No unnamed TestService, so service and service2 will fail, but optionalService will be empty
 		var bean = new TestFieldInjection();
 		// This will throw because service and service2 are required
-		assertThrows(ExecutableException.class, () -> ClassInfo.of(bean).inject(bean, beanStore));
+		var classInfo = ClassInfo.of(bean);
+		assertThrows(ExecutableException.class, () -> classInfo.inject(bean, beanStore));
 	}
 
 	@Test
@@ -3970,7 +3971,8 @@ public class ClassInfo_Test extends TestBase {
 	void b012_injectBeans_fieldNotFound() {
 		var bean = new TestFieldInjection();
 		// injectBeans now throws exception if required bean is not found
-		assertThrows(ExecutableException.class, () -> ClassInfo.of(bean).inject(bean, beanStore));
+		var classInfo = ClassInfo.of(bean);
+		assertThrows(ExecutableException.class, () -> classInfo.inject(bean, beanStore));
 	}
 
 	@Test

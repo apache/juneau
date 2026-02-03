@@ -51,9 +51,9 @@ class ContextSession_Test extends TestBase {
 
 	@Test void a03_property_nullKey() {
 		// Test line 142: assertArgNotNull on key
+		var session = BeanContext.DEFAULT.createSession();
 		assertThrows(IllegalArgumentException.class, () -> {
-			BeanContext.DEFAULT.createSession()
-				.property(null, "value");
+			session.property(null, "value");
 		});
 	}
 

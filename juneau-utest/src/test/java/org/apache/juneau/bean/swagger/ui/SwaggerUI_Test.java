@@ -303,9 +303,8 @@ class SwaggerUI_Test extends TestBase {
 	 * Test method for null input.
 	 */
 	@Test void a11_nullInput() {
-		assertThrows(NullPointerException.class, () -> {
-			new SwaggerUI().swap(bs, null);
-		});
+		var swaggerUI = new SwaggerUI();
+		assertThrows(NullPointerException.class, () -> swaggerUI.swap(bs, null));
 	}
 
 	/**

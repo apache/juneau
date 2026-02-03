@@ -138,7 +138,8 @@ class Items_Test extends TestBase {
 		}
 
 		@Test void a13_strictMode() {
-			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			var strictBean = bean().strict();
+			assertThrows(RuntimeException.class, () -> strictBean.set("foo", "bar"));
 			assertDoesNotThrow(() -> bean().set("foo", "bar"));
 
 			assertFalse(bean().isStrict());
@@ -291,9 +292,10 @@ class Items_Test extends TestBase {
 		}
 
 		@Test void c10_nullPropertyValue() {
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
-			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
+			var items = bean();
+			assertThrows(IllegalArgumentException.class, ()->items.get(null));
+			assertThrows(IllegalArgumentException.class, ()->items.get(null, String.class));
+			assertThrows(IllegalArgumentException.class, ()->items.set(null, "a"));
 		}
 	}
 

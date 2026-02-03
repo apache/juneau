@@ -137,7 +137,8 @@ class OpenApi_Test extends TestBase {
 		}
 
 		@Test void a12_strictMode() {
-			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			var strictBean = bean().strict();
+			assertThrows(RuntimeException.class, () -> strictBean.set("foo", "bar"));
 			assertDoesNotThrow(() -> bean().set("foo", "bar"));
 
 			assertFalse(bean().isStrict());
@@ -169,7 +170,8 @@ class OpenApi_Test extends TestBase {
 			);
 
 			// Test addPath with null path (covers the null check branch)
-			assertThrows(IllegalArgumentException.class, () -> x.addPath(null, pathItem()));
+			var pathItem = pathItem();
+			assertThrows(IllegalArgumentException.class, () -> x.addPath(null, pathItem));
 			assertThrows(IllegalArgumentException.class, () -> x.addPath("/test", null));
 		}
 	}
@@ -286,9 +288,10 @@ class OpenApi_Test extends TestBase {
 		}
 
 		@Test void c10_nullPropertyValue() {
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
-			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
+			var openApi = bean();
+			assertThrows(IllegalArgumentException.class, ()->openApi.get(null));
+			assertThrows(IllegalArgumentException.class, ()->openApi.get(null, String.class));
+			assertThrows(IllegalArgumentException.class, ()->openApi.set(null, "a"));
 		}
 	}
 

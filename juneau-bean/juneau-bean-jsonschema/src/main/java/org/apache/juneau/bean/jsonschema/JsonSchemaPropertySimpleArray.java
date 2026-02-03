@@ -47,356 +47,356 @@ public class JsonSchemaPropertySimpleArray extends JsonSchemaProperty {
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray addAdditionalItems(JsonSchema...additionalItems) {
-		super.addAdditionalItems(additionalItems);
+	public JsonSchemaPropertySimpleArray addAdditionalItems(JsonSchema...value) {
+		super.addAdditionalItems(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray addAllOf(JsonSchema...allOf) {
-		super.addAllOf(allOf);
+	public JsonSchemaPropertySimpleArray addAllOf(JsonSchema...value) {
+		super.addAllOf(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray addAnyOf(JsonSchema...anyOf) {
-		super.addAnyOf(anyOf);
+	public JsonSchemaPropertySimpleArray addAnyOf(JsonSchema...value) {
+		super.addAnyOf(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray addDef(String name, JsonSchema def) {
-		super.addDef(name, def);
+	public JsonSchemaPropertySimpleArray addDef(String name, JsonSchema value) {
+		super.addDef(name, value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray addDefinition(String name, JsonSchema definition) {
-		super.addDefinition(name, definition);
+	public JsonSchemaPropertySimpleArray addDefinition(String name, JsonSchema value) {
+		super.addDefinition(name, value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray addDependency(String name, JsonSchema dependency) {
-		super.addDependency(name, dependency);
+	public JsonSchemaPropertySimpleArray addDependency(String name, JsonSchema value) {
+		super.addDependency(name, value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray addDependentRequired(String name, List<String> required) {
-		super.addDependentRequired(name, required);
+	public JsonSchemaPropertySimpleArray addDependentRequired(String name, List<String> value) {
+		super.addDependentRequired(name, value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray addDependentSchema(String name, JsonSchema schema) {
-		super.addDependentSchema(name, schema);
+	public JsonSchemaPropertySimpleArray addDependentSchema(String name, JsonSchema value) {
+		super.addDependentSchema(name, value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray addEnum(Object...enum_) {
-		super.addEnum(enum_);
+	public JsonSchemaPropertySimpleArray addEnum(Object...value) {
+		super.addEnum(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray addExamples(Object...examples) {
-		super.addExamples(examples);
+	public JsonSchemaPropertySimpleArray addExamples(Object...value) {
+		super.addExamples(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray addItems(JsonSchema...items) {
-		super.addItems(items);
+	public JsonSchemaPropertySimpleArray addItems(JsonSchema...value) {
+		super.addItems(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray addOneOf(JsonSchema...oneOf) {
-		super.addOneOf(oneOf);
+	public JsonSchemaPropertySimpleArray addOneOf(JsonSchema...value) {
+		super.addOneOf(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray addPatternProperties(JsonSchemaProperty...properties) {
-		super.addPatternProperties(properties);
+	public JsonSchemaPropertySimpleArray addPatternProperties(JsonSchemaProperty...value) {
+		super.addPatternProperties(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray addPrefixItems(JsonSchema...prefixItems) {
-		super.addPrefixItems(prefixItems);
+	public JsonSchemaPropertySimpleArray addPrefixItems(JsonSchema...value) {
+		super.addPrefixItems(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray addProperties(JsonSchema...properties) {
-		super.addProperties(properties);
+	public JsonSchemaPropertySimpleArray addProperties(JsonSchema...value) {
+		super.addProperties(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray addRequired(JsonSchemaProperty...properties) {
-		super.addRequired(properties);
+	public JsonSchemaPropertySimpleArray addRequired(JsonSchemaProperty...value) {
+		super.addRequired(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray addRequired(List<String> required) {
-		super.addRequired(required);
+	public JsonSchemaPropertySimpleArray addRequired(List<String> value) {
+		super.addRequired(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray addRequired(String...required) {
-		super.addRequired(required);
+	public JsonSchemaPropertySimpleArray addRequired(String...value) {
+		super.addRequired(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray addTypes(JsonType...types) {
-		super.addTypes(types);
+	public JsonSchemaPropertySimpleArray addTypes(JsonType...value) {
+		super.addTypes(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setAllOf(List<JsonSchema> allOf) {
-		super.setAllOf(allOf);
+	public JsonSchemaPropertySimpleArray setAllOf(List<JsonSchema> value) {
+		super.setAllOf(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setAnyOf(List<JsonSchema> anyOf) {
-		super.setAnyOf(anyOf);
+	public JsonSchemaPropertySimpleArray setAnyOf(List<JsonSchema> value) {
+		super.setAnyOf(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setConst(Object const_) {
-		super.setConst(const_);
+	public JsonSchemaPropertySimpleArray setConst(Object value) {
+		super.setConst(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setContentEncoding(String contentEncoding) {
-		super.setContentEncoding(contentEncoding);
+	public JsonSchemaPropertySimpleArray setContentEncoding(String value) {
+		super.setContentEncoding(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setContentMediaType(String contentMediaType) {
-		super.setContentMediaType(contentMediaType);
+	public JsonSchemaPropertySimpleArray setContentMediaType(String value) {
+		super.setContentMediaType(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setDefinitions(Map<String,JsonSchema> definitions) {
-		super.setDefinitions(definitions);
+	public JsonSchemaPropertySimpleArray setDefinitions(Map<String,JsonSchema> value) {
+		super.setDefinitions(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setDependencies(Map<String,JsonSchema> dependencies) {
-		super.setDependencies(dependencies);
+	public JsonSchemaPropertySimpleArray setDependencies(Map<String,JsonSchema> value) {
+		super.setDependencies(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setDependentRequired(Map<String,List<String>> dependentRequired) {
-		super.setDependentRequired(dependentRequired);
+	public JsonSchemaPropertySimpleArray setDependentRequired(Map<String,List<String>> value) {
+		super.setDependentRequired(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setDependentSchemas(Map<String,JsonSchema> dependentSchemas) {
-		super.setDependentSchemas(dependentSchemas);
+	public JsonSchemaPropertySimpleArray setDependentSchemas(Map<String,JsonSchema> value) {
+		super.setDependentSchemas(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setDescription(String description) {
-		super.setDescription(description);
+	public JsonSchemaPropertySimpleArray setDescription(String value) {
+		super.setDescription(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setEnum(List<Object> enum_) {
-		super.setEnum(enum_);
+	public JsonSchemaPropertySimpleArray setEnum(List<Object> value) {
+		super.setEnum(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setExamples(List<Object> examples) {
-		super.setExamples(examples);
+	public JsonSchemaPropertySimpleArray setExamples(List<Object> value) {
+		super.setExamples(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setExclusiveMaximum(Number exclusiveMaximum) {
-		super.setExclusiveMaximum(exclusiveMaximum);
+	public JsonSchemaPropertySimpleArray setExclusiveMaximum(Number value) {
+		super.setExclusiveMaximum(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setExclusiveMinimum(Number exclusiveMinimum) {
-		super.setExclusiveMinimum(exclusiveMinimum);
+	public JsonSchemaPropertySimpleArray setExclusiveMinimum(Number value) {
+		super.setExclusiveMinimum(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setId(Object id) {
-		super.setId(id);
+	public JsonSchemaPropertySimpleArray setId(Object value) {
+		super.setId(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setMaximum(Number maximum) {
-		super.setMaximum(maximum);
+	public JsonSchemaPropertySimpleArray setMaximum(Number value) {
+		super.setMaximum(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setMaxItems(Integer maxItems) {
-		super.setMaxItems(maxItems);
+	public JsonSchemaPropertySimpleArray setMaxItems(Integer value) {
+		super.setMaxItems(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setMaxLength(Integer maxLength) {
-		super.setMaxLength(maxLength);
+	public JsonSchemaPropertySimpleArray setMaxLength(Integer value) {
+		super.setMaxLength(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setMaxProperties(Integer maxProperties) {
-		super.setMaxProperties(maxProperties);
+	public JsonSchemaPropertySimpleArray setMaxProperties(Integer value) {
+		super.setMaxProperties(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setMinimum(Number minimum) {
-		super.setMinimum(minimum);
+	public JsonSchemaPropertySimpleArray setMinimum(Number value) {
+		super.setMinimum(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setMinItems(Integer minItems) {
-		super.setMinItems(minItems);
+	public JsonSchemaPropertySimpleArray setMinItems(Integer value) {
+		super.setMinItems(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setMinLength(Integer minLength) {
-		super.setMinLength(minLength);
+	public JsonSchemaPropertySimpleArray setMinLength(Integer value) {
+		super.setMinLength(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setMinProperties(Integer minProperties) {
-		super.setMinProperties(minProperties);
+	public JsonSchemaPropertySimpleArray setMinProperties(Integer value) {
+		super.setMinProperties(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setMultipleOf(Number multipleOf) {
-		super.setMultipleOf(multipleOf);
+	public JsonSchemaPropertySimpleArray setMultipleOf(Number value) {
+		super.setMultipleOf(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setName(String name) {
-		super.setName(name);
+	public JsonSchemaPropertySimpleArray setName(String value) {
+		super.setName(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setNot(JsonSchema not) {
-		super.setNot(not);
+	public JsonSchemaPropertySimpleArray setNot(JsonSchema value) {
+		super.setNot(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setOneOf(List<JsonSchema> oneOf) {
-		super.setOneOf(oneOf);
+	public JsonSchemaPropertySimpleArray setOneOf(List<JsonSchema> value) {
+		super.setOneOf(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setPattern(String pattern) {
-		super.setPattern(pattern);
+	public JsonSchemaPropertySimpleArray setPattern(String value) {
+		super.setPattern(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setPatternProperties(Map<String,JsonSchema> patternProperties) {
-		super.setPatternProperties(patternProperties);
+	public JsonSchemaPropertySimpleArray setPatternProperties(Map<String,JsonSchema> value) {
+		super.setPatternProperties(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setPrefixItems(JsonSchemaArray prefixItems) {
-		super.setPrefixItems(prefixItems);
+	public JsonSchemaPropertySimpleArray setPrefixItems(JsonSchemaArray value) {
+		super.setPrefixItems(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setProperties(Map<String,JsonSchema> properties) {
-		super.setProperties(properties);
+	public JsonSchemaPropertySimpleArray setProperties(Map<String,JsonSchema> value) {
+		super.setProperties(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setReadOnly(Boolean readOnly) {
-		super.setReadOnly(readOnly);
+	public JsonSchemaPropertySimpleArray setReadOnly(Boolean value) {
+		super.setReadOnly(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setRequired(List<String> required) {
-		super.setRequired(required);
+	public JsonSchemaPropertySimpleArray setRequired(List<String> value) {
+		super.setRequired(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setSchemaMap(JsonSchemaMap schemaMap) {
-		super.setSchemaMap(schemaMap);
+	public JsonSchemaPropertySimpleArray setSchemaMap(JsonSchemaMap value) {
+		super.setSchemaMap(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setTitle(String title) {
-		super.setTitle(title);
+	public JsonSchemaPropertySimpleArray setTitle(String value) {
+		super.setTitle(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setType(Object type) {
-		super.setType(type);
+	public JsonSchemaPropertySimpleArray setType(Object value) {
+		super.setType(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setUnevaluatedItems(JsonSchema unevaluatedItems) {
-		super.setUnevaluatedItems(unevaluatedItems);
+	public JsonSchemaPropertySimpleArray setUnevaluatedItems(JsonSchema value) {
+		super.setUnevaluatedItems(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setUnevaluatedProperties(JsonSchema unevaluatedProperties) {
-		super.setUnevaluatedProperties(unevaluatedProperties);
+	public JsonSchemaPropertySimpleArray setUnevaluatedProperties(JsonSchema value) {
+		super.setUnevaluatedProperties(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setUniqueItems(Boolean uniqueItems) {
-		super.setUniqueItems(uniqueItems);
+	public JsonSchemaPropertySimpleArray setUniqueItems(Boolean value) {
+		super.setUniqueItems(value);
 		return this;
 	}
 
 	@Override /* Overridden from JsonSchemaProperty */
-	public JsonSchemaPropertySimpleArray setWriteOnly(Boolean writeOnly) {
-		super.setWriteOnly(writeOnly);
+	public JsonSchemaPropertySimpleArray setWriteOnly(Boolean value) {
+		super.setWriteOnly(value);
 		return this;
 	}
 }

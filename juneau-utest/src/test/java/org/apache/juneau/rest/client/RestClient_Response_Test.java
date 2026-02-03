@@ -214,7 +214,7 @@ class RestClient_Response_Test extends TestBase {
 	// Other.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({"deprecation","removal"})
 	@Test void e01_response_getParams_setParams() throws Exception {
 		var x = client(D.class).build().post("/bean",bean).run();
 		var p = new BasicHttpParams();

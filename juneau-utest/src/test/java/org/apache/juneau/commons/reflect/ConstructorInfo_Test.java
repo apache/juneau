@@ -92,10 +92,10 @@ class ConstructorInfo_Test extends TestBase {
 	}
 	static ClassInfo b = ClassInfo.of(B.class);
 	static ConstructorInfo
-		b_c1 = b.getPublicConstructor(cons -> cons.getParameterCount() == 0).get(),
-		b_c2 = b.getPublicConstructor(x -> x.hasParameterTypes(String.class)).get(),
-		b_c3 = b.getDeclaredConstructor(x -> x.hasParameterTypes(int.class)).get(),
-		b_c4 = b.getPublicConstructor(x -> x.hasParameterTypes(String.class, String.class)).get();
+		bc1 = b.getPublicConstructor(cons -> cons.getParameterCount() == 0).get(),
+		bc2 = b.getPublicConstructor(x -> x.hasParameterTypes(String.class)).get(),
+		bc3 = b.getDeclaredConstructor(x -> x.hasParameterTypes(int.class)).get(),
+		bc4 = b.getPublicConstructor(x -> x.hasParameterTypes(String.class, String.class)).get();
 
 	@Target({CONSTRUCTOR})
 	@Retention(RUNTIME)
@@ -131,12 +131,12 @@ class ConstructorInfo_Test extends TestBase {
 	@Test
 	void a001_accessible() {
 		// Make protected constructor accessible
-		b_c3.accessible();
-		assertEquals(null, b_c3.newInstanceLenient(123).toString());
+		bc3.accessible();
+		assertEquals(null, bc3.newInstanceLenient(123).toString());
 
 		// Verify it returns this for chaining
-		var result = b_c3.accessible();
-		assertSame(b_c3, result);
+		var result = bc3.accessible();
+		assertSame(bc3, result);
 	}
 
 	//====================================================================================================
@@ -145,17 +145,17 @@ class ConstructorInfo_Test extends TestBase {
 	@Test
 	void a002_canAccept() {
 		// Exact match
-		assertTrue(b_c2.canAccept("test"));
-		assertFalse(b_c2.canAccept(123));
-		assertFalse(b_c2.canAccept("test", "extra"));
+		assertTrue(bc2.canAccept("test"));
+		assertFalse(bc2.canAccept(123));
+		assertFalse(bc2.canAccept("test", "extra"));
 
 		// No parameters
-		assertTrue(b_c1.canAccept());
-		assertFalse(b_c1.canAccept("test"));
+		assertTrue(bc1.canAccept());
+		assertFalse(bc1.canAccept("test"));
 
 		// Multiple parameters
-		assertTrue(b_c4.canAccept("test1", "test2"));
-		assertFalse(b_c4.canAccept("test1"));
+		assertTrue(bc4.canAccept("test1", "test2"));
+		assertFalse(bc4.canAccept("test1"));
 	}
 
 	//====================================================================================================
@@ -163,7 +163,7 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a003_compareTo() {
-		var s = new TreeSet<>(l(b_c1, b_c2, b_c3, b_c4, a));
+		var s = new TreeSet<>(l(bc1, bc2, bc3, bc4, a));
 		check("A(),B(),B(int),B(String),B(String,String)", s);
 	}
 
@@ -185,7 +185,7 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a005_getAnnotatedParameterTypes() {
-		var types = b_c2.getAnnotatedParameterTypes();
+		var types = bc2.getAnnotatedParameterTypes();
 		assertNotNull(types);
 		assertEquals(1, types.length);
 		assertEquals(String.class, types[0].getType());
@@ -197,7 +197,7 @@ class ConstructorInfo_Test extends TestBase {
 	@Test
 	void a006_getAnnotatedReceiverType() {
 		// Top-level class constructor should return null
-		var receiverType = b_c1.getAnnotatedReceiverType();
+		var receiverType = bc1.getAnnotatedReceiverType();
 		assertNull(receiverType);
 	}
 
@@ -206,7 +206,7 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a007_getAnnotatableType() {
-		assertEquals(AnnotatableType.CONSTRUCTOR_TYPE, b_c1.getAnnotatableType());
+		assertEquals(AnnotatableType.CONSTRUCTOR_TYPE, bc1.getAnnotatableType());
 	}
 
 	//====================================================================================================
@@ -214,7 +214,7 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a008_getDeclaredAnnotations() {
-		var annotations = b_c1.getDeclaredAnnotations();
+		var annotations = bc1.getDeclaredAnnotations();
 		assertNotNull(annotations);
 		// Should be empty for unannotated constructor
 		assertTrue(annotations.isEmpty());
@@ -225,7 +225,7 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a009_getDeclaredAnnotations_typed() {
-		var annotations = b_c1.getDeclaredAnnotations(TestAnnotation.class);
+		var annotations = bc1.getDeclaredAnnotations(TestAnnotation.class);
 		assertNotNull(annotations);
 		assertEquals(0, annotations.count());
 	}
@@ -236,7 +236,7 @@ class ConstructorInfo_Test extends TestBase {
 	@Test
 	void a010_getDeclaringClass() {
 		check("A", a.getDeclaringClass());
-		check("B", b_c1.getDeclaringClass());
+		check("B", bc1.getDeclaringClass());
 	}
 
 	//====================================================================================================
@@ -257,7 +257,7 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a012_getFullName() {
-		var fullName = b_c2.getNameFull();
+		var fullName = bc2.getNameFull();
 		assertNotNull(fullName);
 		assertTrue(fullName.contains("B"));
 		assertTrue(fullName.contains("String"));
@@ -268,7 +268,7 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a013_getLabel() {
-		var label = b_c1.getLabel();
+		var label = bc1.getLabel();
 		assertNotNull(label);
 		assertTrue(label.contains("B"));
 		assertTrue(label.contains("()"));
@@ -279,13 +279,13 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a014_getParameter() {
-		var param = b_c2.getParameter(0);
+		var param = bc2.getParameter(0);
 		assertNotNull(param);
 		assertEquals(String.class, param.getParameterType().inner());
 
 		// Index out of bounds
-		assertThrows(IndexOutOfBoundsException.class, () -> b_c2.getParameter(1));
-		assertThrows(IndexOutOfBoundsException.class, () -> b_c1.getParameter(0));
+		assertThrows(IndexOutOfBoundsException.class, () -> bc2.getParameter(1));
+		assertThrows(IndexOutOfBoundsException.class, () -> bc1.getParameter(0));
 	}
 
 	//====================================================================================================
@@ -293,9 +293,9 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a015_getParameterCount() {
-		assertEquals(0, b_c1.getParameterCount());
-		assertEquals(1, b_c2.getParameterCount());
-		assertEquals(2, b_c4.getParameterCount());
+		assertEquals(0, bc1.getParameterCount());
+		assertEquals(1, bc2.getParameterCount());
+		assertEquals(2, bc4.getParameterCount());
 	}
 
 	//====================================================================================================
@@ -303,14 +303,14 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a016_getParameters() {
-		var params = b_c2.getParameters();
+		var params = bc2.getParameters();
 		assertNotNull(params);
 		assertEquals(1, params.size());
 		assertEquals(String.class, params.get(0).getParameterType().inner());
 
 		// Test stream operations
 		int[] count = {0};
-		b_c4.getParameters().stream().filter(x -> true).forEach(x -> count[0]++);
+		bc4.getParameters().stream().filter(x -> true).forEach(x -> count[0]++);
 		assertEquals(2, count[0]);
 	}
 
@@ -320,9 +320,9 @@ class ConstructorInfo_Test extends TestBase {
 	@Test
 	void a017_getShortName() {
 		check("A()", a);
-		check("B()", b_c1);
-		check("B(String)", b_c2);
-		check("B(String,String)", b_c4);
+		check("B()", bc1);
+		check("B(String)", bc2);
+		check("B(String,String)", bc4);
 	}
 
 	//====================================================================================================
@@ -331,7 +331,7 @@ class ConstructorInfo_Test extends TestBase {
 	@Test
 	void a018_getSimpleName() {
 		assertEquals("A", a.getNameSimple());
-		assertEquals("B", b_c1.getNameSimple());
+		assertEquals("B", bc1.getNameSimple());
 	}
 
 	//====================================================================================================
@@ -339,7 +339,7 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a019_getTypeParameters() {
-		var typeParams = b_c1.getTypeParameters();
+		var typeParams = bc1.getTypeParameters();
 		assertNotNull(typeParams);
 		assertEquals(0, typeParams.length);
 	}
@@ -349,7 +349,7 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a020_hasAnnotation() {
-		assertFalse(b_c1.hasAnnotation(TestAnnotation.class));
+		assertFalse(bc1.hasAnnotation(TestAnnotation.class));
 	}
 
 	//====================================================================================================
@@ -357,8 +357,8 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a021_hasAnyName_collection() {
-		assertTrue(b_c1.hasAnyName(Arrays.asList("B", "C")));
-		assertFalse(b_c1.hasAnyName(Arrays.asList("C", "D")));
+		assertTrue(bc1.hasAnyName(Arrays.asList("B", "C")));
+		assertFalse(bc1.hasAnyName(Arrays.asList("C", "D")));
 	}
 
 	//====================================================================================================
@@ -366,8 +366,8 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a022_hasAnyName_varargs() {
-		assertTrue(b_c1.hasAnyName("B", "C"));
-		assertFalse(b_c1.hasAnyName("C", "D"));
+		assertTrue(bc1.hasAnyName("B", "C"));
+		assertFalse(bc1.hasAnyName("C", "D"));
 	}
 
 	//====================================================================================================
@@ -375,11 +375,11 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a023_hasMatchingParameters() {
-		var params1 = b_c2.getParameters();
-		assertTrue(b_c2.hasMatchingParameters(params1));
+		var params1 = bc2.getParameters();
+		assertTrue(bc2.hasMatchingParameters(params1));
 
-		var params2 = b_c4.getParameters();
-		assertFalse(b_c2.hasMatchingParameters(params2));
+		var params2 = bc4.getParameters();
+		assertFalse(bc2.hasMatchingParameters(params2));
 	}
 
 	//====================================================================================================
@@ -387,8 +387,8 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a024_hasName() {
-		assertTrue(b_c1.hasName("B"));
-		assertFalse(b_c1.hasName("A"));
+		assertTrue(bc1.hasName("B"));
+		assertFalse(bc1.hasName("A"));
 	}
 
 	//====================================================================================================
@@ -396,9 +396,9 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a025_hasNumParameters() {
-		assertTrue(b_c1.hasNumParameters(0));
-		assertTrue(b_c2.hasNumParameters(1));
-		assertFalse(b_c1.hasNumParameters(1));
+		assertTrue(bc1.hasNumParameters(0));
+		assertTrue(bc2.hasNumParameters(1));
+		assertFalse(bc1.hasNumParameters(1));
 	}
 
 	//====================================================================================================
@@ -406,8 +406,8 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a026_hasParameters() {
-		assertFalse(b_c1.hasParameters());
-		assertTrue(b_c2.hasParameters());
+		assertFalse(bc1.hasParameters());
+		assertTrue(bc2.hasParameters());
 	}
 
 	//====================================================================================================
@@ -416,10 +416,10 @@ class ConstructorInfo_Test extends TestBase {
 	@Test
 	void a027_hasParameterTypeParents_class() {
 		// String parameter type is a parent of String (exact match)
-		assertTrue(b_c2.hasParameterTypeParents(String.class));
+		assertTrue(bc2.hasParameterTypeParents(String.class));
 		// String is NOT a parent of Object (Object is the parent of String)
-		assertFalse(b_c2.hasParameterTypeParents(Object.class));
-		assertFalse(b_c2.hasParameterTypeParents(Integer.class));
+		assertFalse(bc2.hasParameterTypeParents(Object.class));
+		assertFalse(bc2.hasParameterTypeParents(Integer.class));
 	}
 
 	//====================================================================================================
@@ -430,9 +430,9 @@ class ConstructorInfo_Test extends TestBase {
 		var stringClass = ClassInfo.of(String.class);
 		var objectClass = ClassInfo.of(Object.class);
 		var integerClass = ClassInfo.of(Integer.class);
-		assertTrue(b_c2.hasParameterTypeParents(stringClass));
-		assertFalse(b_c2.hasParameterTypeParents(objectClass));
-		assertFalse(b_c2.hasParameterTypeParents(integerClass));
+		assertTrue(bc2.hasParameterTypeParents(stringClass));
+		assertFalse(bc2.hasParameterTypeParents(objectClass));
+		assertFalse(bc2.hasParameterTypeParents(integerClass));
 	}
 
 	//====================================================================================================
@@ -440,9 +440,9 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a029_hasParameterTypes_class() {
-		assertTrue(b_c2.hasParameterTypes(String.class));
-		assertFalse(b_c2.hasParameterTypes(Integer.class));
-		assertFalse(b_c2.hasParameterTypes(String.class, String.class));
+		assertTrue(bc2.hasParameterTypes(String.class));
+		assertFalse(bc2.hasParameterTypes(Integer.class));
+		assertFalse(bc2.hasParameterTypes(String.class, String.class));
 	}
 
 	//====================================================================================================
@@ -452,8 +452,8 @@ class ConstructorInfo_Test extends TestBase {
 	void a030_hasParameterTypes_classInfo() {
 		var stringClass = ClassInfo.of(String.class);
 		var integerClass = ClassInfo.of(Integer.class);
-		assertTrue(b_c2.hasParameterTypes(stringClass));
-		assertFalse(b_c2.hasParameterTypes(integerClass));
+		assertTrue(bc2.hasParameterTypes(stringClass));
+		assertFalse(bc2.hasParameterTypes(integerClass));
 	}
 
 	//====================================================================================================
@@ -462,10 +462,10 @@ class ConstructorInfo_Test extends TestBase {
 	@Test
 	void a031_hasParameterTypesLenient_class() {
 		// Exact match
-		assertTrue(b_c2.hasParameterTypesLenient(String.class));
+		assertTrue(bc2.hasParameterTypesLenient(String.class));
 		// String parameter type is NOT a parent of Object
-		assertFalse(b_c2.hasParameterTypesLenient(Object.class));
-		assertFalse(b_c2.hasParameterTypesLenient(Integer.class));
+		assertFalse(bc2.hasParameterTypesLenient(Object.class));
+		assertFalse(bc2.hasParameterTypesLenient(Integer.class));
 	}
 
 	//====================================================================================================
@@ -476,9 +476,9 @@ class ConstructorInfo_Test extends TestBase {
 		var stringClass = ClassInfo.of(String.class);
 		var objectClass = ClassInfo.of(Object.class);
 		var integerClass = ClassInfo.of(Integer.class);
-		assertTrue(b_c2.hasParameterTypesLenient(stringClass));
-		assertFalse(b_c2.hasParameterTypesLenient(objectClass));
-		assertFalse(b_c2.hasParameterTypesLenient(integerClass));
+		assertTrue(bc2.hasParameterTypesLenient(stringClass));
+		assertFalse(bc2.hasParameterTypesLenient(objectClass));
+		assertFalse(bc2.hasParameterTypesLenient(integerClass));
 	}
 
 	//====================================================================================================
@@ -486,7 +486,7 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a033_inner() {
-		var ctor = b_c1.inner();
+		var ctor = bc1.inner();
 		assertNotNull(ctor);
 		assertEquals(B.class, ctor.getDeclaringClass());
 	}
@@ -496,12 +496,12 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a034_is() {
-		assertTrue(b_c1.is(ElementFlag.CONSTRUCTOR));
-		assertFalse(b_c1.is(ElementFlag.NOT_CONSTRUCTOR));
-		assertTrue(b_c1.is(ElementFlag.HAS_NO_PARAMS));
-		assertFalse(b_c1.is(ElementFlag.HAS_PARAMS));
-		assertTrue(b_c2.is(ElementFlag.HAS_PARAMS));
-		assertFalse(b_c2.is(ElementFlag.HAS_NO_PARAMS));
+		assertTrue(bc1.is(ElementFlag.CONSTRUCTOR));
+		assertFalse(bc1.is(ElementFlag.NOT_CONSTRUCTOR));
+		assertTrue(bc1.is(ElementFlag.HAS_NO_PARAMS));
+		assertFalse(bc1.is(ElementFlag.HAS_PARAMS));
+		assertTrue(bc2.is(ElementFlag.HAS_PARAMS));
+		assertFalse(bc2.is(ElementFlag.HAS_NO_PARAMS));
 	}
 
 	//====================================================================================================
@@ -510,19 +510,19 @@ class ConstructorInfo_Test extends TestBase {
 	@Test
 	void a035_isAccessible() {
 		// Test isAccessible() before and after setAccessible()
-		var privateBefore = b_c3.isAccessible();
+		var privateBefore = bc3.isAccessible();
 
 		// Make it accessible
-		b_c3.setAccessible();
+		bc3.setAccessible();
 
 		// After setAccessible(), it should be accessible (if Java 9+)
-		var privateAfter = b_c3.isAccessible();
+		var privateAfter = bc3.isAccessible();
 
 		// Verify the method doesn't throw and returns a boolean
 		assertTrue(privateAfter || !privateBefore, "After setAccessible(), isAccessible() should return true (Java 9+) or false (Java 8)");
 
 		// Public constructors might already be accessible
-		var publicAccessible = b_c1.isAccessible();
+		var publicAccessible = bc1.isAccessible();
 		assertNotNull(publicAccessible);
 	}
 
@@ -531,8 +531,8 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a036_isAll() {
-		assertTrue(b_c1.isAll(ElementFlag.CONSTRUCTOR, ElementFlag.HAS_NO_PARAMS));
-		assertFalse(b_c1.isAll(ElementFlag.CONSTRUCTOR, ElementFlag.HAS_PARAMS));
+		assertTrue(bc1.isAll(ElementFlag.CONSTRUCTOR, ElementFlag.HAS_NO_PARAMS));
+		assertFalse(bc1.isAll(ElementFlag.CONSTRUCTOR, ElementFlag.HAS_PARAMS));
 	}
 
 	//====================================================================================================
@@ -540,8 +540,8 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a037_isAny() {
-		assertTrue(b_c1.isAny(ElementFlag.CONSTRUCTOR, ElementFlag.HAS_PARAMS));
-		assertFalse(b_c1.isAny(ElementFlag.HAS_PARAMS, ElementFlag.SYNTHETIC));
+		assertTrue(bc1.isAny(ElementFlag.CONSTRUCTOR, ElementFlag.HAS_PARAMS));
+		assertFalse(bc1.isAny(ElementFlag.HAS_PARAMS, ElementFlag.SYNTHETIC));
 	}
 
 	//====================================================================================================
@@ -549,7 +549,7 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a038_isConstructor() {
-		assertTrue(b_c1.isConstructor());
+		assertTrue(bc1.isConstructor());
 	}
 
 	//====================================================================================================
@@ -560,7 +560,7 @@ class ConstructorInfo_Test extends TestBase {
 		var ci = ClassInfo.of(DeprecatedClass.class);
 		var ctor = ci.getPublicConstructor(x -> x.getParameterCount() == 0).get();
 		assertTrue(ctor.isDeprecated());
-		assertFalse(b_c1.isDeprecated());
+		assertFalse(bc1.isDeprecated());
 	}
 
 	//====================================================================================================
@@ -571,7 +571,7 @@ class ConstructorInfo_Test extends TestBase {
 		var ci = ClassInfo.of(DeprecatedClass.class);
 		var ctor = ci.getPublicConstructor(x -> x.getParameterCount() == 0).get();
 		assertFalse(ctor.isNotDeprecated());
-		assertTrue(b_c1.isNotDeprecated());
+		assertTrue(bc1.isNotDeprecated());
 	}
 
 	//====================================================================================================
@@ -580,7 +580,7 @@ class ConstructorInfo_Test extends TestBase {
 	@Test
 	void a041_isSynthetic() {
 		// Regular constructors are not synthetic
-		assertFalse(b_c1.isSynthetic());
+		assertFalse(bc1.isSynthetic());
 	}
 
 	//====================================================================================================
@@ -591,7 +591,7 @@ class ConstructorInfo_Test extends TestBase {
 		var ci = ClassInfo.of(VarArgsClass.class);
 		var ctor = ci.getPublicConstructor(x -> x.hasParameterTypes(String[].class)).get();
 		assertTrue(ctor.isVarArgs());
-		assertFalse(b_c1.isVarArgs());
+		assertFalse(bc1.isVarArgs());
 	}
 
 	//====================================================================================================
@@ -600,16 +600,16 @@ class ConstructorInfo_Test extends TestBase {
 	@Test
 	void a043_isVisible() {
 		// Public constructor
-		assertTrue(b_c1.isVisible(Visibility.PUBLIC));
-		assertTrue(b_c1.isVisible(Visibility.PROTECTED));
-		assertTrue(b_c1.isVisible(Visibility.PRIVATE)); // PRIVATE includes all
-		assertTrue(b_c1.isVisible(Visibility.DEFAULT));
+		assertTrue(bc1.isVisible(Visibility.PUBLIC));
+		assertTrue(bc1.isVisible(Visibility.PROTECTED));
+		assertTrue(bc1.isVisible(Visibility.PRIVATE)); // PRIVATE includes all
+		assertTrue(bc1.isVisible(Visibility.DEFAULT));
 
 		// Protected constructor
-		assertFalse(b_c3.isVisible(Visibility.PUBLIC));
-		assertTrue(b_c3.isVisible(Visibility.PROTECTED));
-		assertTrue(b_c3.isVisible(Visibility.PRIVATE)); // PRIVATE includes all
-		assertTrue(b_c3.isVisible(Visibility.DEFAULT));
+		assertFalse(bc3.isVisible(Visibility.PUBLIC));
+		assertTrue(bc3.isVisible(Visibility.PROTECTED));
+		assertTrue(bc3.isVisible(Visibility.PRIVATE)); // PRIVATE includes all
+		assertTrue(bc3.isVisible(Visibility.DEFAULT));
 	}
 
 	//====================================================================================================
@@ -617,8 +617,8 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a044_newInstance() {
-		assertEquals(null, b_c1.newInstance().toString());
-		assertEquals("foo", b_c2.newInstance("foo").toString());
+		assertEquals(null, bc1.newInstance().toString());
+		assertEquals("foo", bc2.newInstance("foo").toString());
 	}
 
 	//====================================================================================================
@@ -626,8 +626,8 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a045_newInstanceLenient() {
-		assertEquals(null, b_c1.newInstanceLenient().toString());
-		assertEquals("foo", b_c2.newInstanceLenient("foo").toString());
+		assertEquals(null, bc1.newInstanceLenient().toString());
+		assertEquals("foo", bc2.newInstanceLenient("foo").toString());
 	}
 
 	//====================================================================================================
@@ -656,11 +656,11 @@ class ConstructorInfo_Test extends TestBase {
 	@Test
 	void a048_parameterMatchesLenientCount_class() {
 		// Exact match - String parameter type is a parent of String
-		assertEquals(1, b_c2.parameterMatchesLenientCount(String.class));
+		assertEquals(1, bc2.parameterMatchesLenientCount(String.class));
 		// String is NOT a parent of Object, so this should return -1
-		assertEquals(-1, b_c2.parameterMatchesLenientCount(Object.class));
+		assertEquals(-1, bc2.parameterMatchesLenientCount(Object.class));
 		// No match
-		assertEquals(-1, b_c2.parameterMatchesLenientCount(Integer.class));
+		assertEquals(-1, bc2.parameterMatchesLenientCount(Integer.class));
 	}
 
 	//====================================================================================================
@@ -672,10 +672,10 @@ class ConstructorInfo_Test extends TestBase {
 		var objectClass = ClassInfo.of(Object.class);
 		var integerClass = ClassInfo.of(Integer.class);
 
-		assertEquals(1, b_c2.parameterMatchesLenientCount(stringClass));
+		assertEquals(1, bc2.parameterMatchesLenientCount(stringClass));
 		// String is NOT a parent of Object, so this should return -1
-		assertEquals(-1, b_c2.parameterMatchesLenientCount(objectClass));
-		assertEquals(-1, b_c2.parameterMatchesLenientCount(integerClass));
+		assertEquals(-1, bc2.parameterMatchesLenientCount(objectClass));
+		assertEquals(-1, bc2.parameterMatchesLenientCount(integerClass));
 	}
 
 	//====================================================================================================
@@ -684,12 +684,12 @@ class ConstructorInfo_Test extends TestBase {
 	@Test
 	void a050_parameterMatchesLenientCount_object() {
 		// String parameter can accept String object
-		assertEquals(1, b_c2.parameterMatchesLenientCount("test"));
+		assertEquals(1, bc2.parameterMatchesLenientCount("test"));
 		// String parameter can accept Object (String.isAssignableFrom(Object) is false, but canAcceptArg checks if Object can be assigned to String)
 		// Actually, wait - canAcceptArg checks if the parameter type can accept the argument value
 		// String parameter cannot accept an Object instance (without casting), so this should return -1
-		assertEquals(-1, b_c2.parameterMatchesLenientCount(new Object()));
-		assertEquals(-1, b_c2.parameterMatchesLenientCount(123));
+		assertEquals(-1, bc2.parameterMatchesLenientCount(new Object()));
+		assertEquals(-1, bc2.parameterMatchesLenientCount(123));
 	}
 
 	//====================================================================================================
@@ -698,9 +698,9 @@ class ConstructorInfo_Test extends TestBase {
 	@Test
 	void a051_setAccessible() {
 		// Make protected constructor accessible
-		var result = b_c3.setAccessible();
+		var result = bc3.setAccessible();
 		assertTrue(result);
-		assertEquals(null, b_c3.newInstanceLenient(123).toString());
+		assertEquals(null, bc3.newInstanceLenient(123).toString());
 	}
 
 	//====================================================================================================
@@ -708,7 +708,7 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a052_toGenericString() {
-		var str = b_c2.toGenericString();
+		var str = bc2.toGenericString();
 		assertNotNull(str);
 		assertTrue(str.contains("B"));
 		assertTrue(str.contains("String"));
@@ -720,8 +720,8 @@ class ConstructorInfo_Test extends TestBase {
 	@Test
 	void a053_toString() {
 		check("public org.apache.juneau.commons.reflect.ConstructorInfo_Test$A()", a.toString());
-		check("public org.apache.juneau.commons.reflect.ConstructorInfo_Test$B()", b_c1.toString());
-		check("public org.apache.juneau.commons.reflect.ConstructorInfo_Test$B(java.lang.String)", b_c2.toString());
+		check("public org.apache.juneau.commons.reflect.ConstructorInfo_Test$B()", bc1.toString());
+		check("public org.apache.juneau.commons.reflect.ConstructorInfo_Test$B(java.lang.String)", bc2.toString());
 	}
 
 	//====================================================================================================

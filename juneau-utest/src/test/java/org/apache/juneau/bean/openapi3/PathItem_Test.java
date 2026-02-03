@@ -104,7 +104,8 @@ class PathItem_Test extends TestBase {
 		}
 
 		@Test void a11_strictMode() {
-			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			var strictBean = bean().strict();
+			assertThrows(RuntimeException.class, () -> strictBean.set("foo", "bar"));
 			assertDoesNotThrow(() -> bean().set("foo", "bar"));
 
 			assertFalse(bean().isStrict());
@@ -222,9 +223,10 @@ class PathItem_Test extends TestBase {
 		}
 
 		@Test void c10_nullPropertyValue() {
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
-			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
+			var pathItem = bean();
+			assertThrows(IllegalArgumentException.class, ()->pathItem.get(null));
+			assertThrows(IllegalArgumentException.class, ()->pathItem.get(null, String.class));
+			assertThrows(IllegalArgumentException.class, ()->pathItem.set(null, "a"));
 		}
 	}
 

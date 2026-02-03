@@ -35,20 +35,20 @@ public class JsonSchemaArray extends LinkedList<JsonSchema> {
 	/**
 	 * Constructor with predefined types to add to this list.
 	 *
-	 * @param schemas The list of schemas in this array.
+	 * @param value The list of schemas in this array.
 	 */
-	public JsonSchemaArray(JsonSchema...schemas) {
-		addAll(schemas);
+	public JsonSchemaArray(JsonSchema...value) {
+		addAll(value);
 	}
 
 	/**
 	 * Convenience method for adding one or more {@link JsonSchema} objects to this array.
 	 *
-	 * @param schemas The {@link JsonSchema} objects to add to this array.
+	 * @param value The {@link JsonSchema} objects to add to this array.
 	 * @return This object.
 	 */
-	public JsonSchemaArray addAll(JsonSchema...schemas) {
-		Collections.addAll(this, schemas);
+	public JsonSchemaArray addAll(JsonSchema...value) {
+		Collections.addAll(this, value);
 		return this;
 	}
 }

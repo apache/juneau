@@ -93,15 +93,15 @@ class FieldInfo_Test extends TestBase {
 	static class A1 {
 		public int f1;
 	}
-	FieldInfo a1_f1 = off(A1.class, "f1");
+	FieldInfo a1f1 = off(A1.class, "f1");
 
 	public static class B {
 		@A("a1") public int a1;
 		public int a2;
 	}
 	FieldInfo
-		b_a1 = off(B.class, "a1"),
-		b_a2 = off(B.class, "a2");
+		ba1 = off(B.class, "a1"),
+		ba2 = off(B.class, "a2");
 
 	abstract static class C {
 		@Deprecated public int deprecated;
@@ -222,17 +222,17 @@ class FieldInfo_Test extends TestBase {
 	@Test
 	void a002_compareTo() {
 		// Fields should be sorted by field name only
-		// "a2" comes before "f1" alphabetically, so b_a2 should come before a1_f1
+		// "a2" comes before "f1" alphabetically, so ba2 should come before a1f1
 		var b_a2 = off(B.class, "a2");
 
-		// "a2" < "f1" alphabetically, so b_a2 should come before a1_f1
-		assertTrue(b_a2.compareTo(a1_f1) < 0);
-		assertTrue(a1_f1.compareTo(b_a2) > 0);
-		assertEquals(0, a1_f1.compareTo(a1_f1));
+		// "a2" < "f1" alphabetically, so ba2 should come before a1f1
+		assertTrue(b_a2.compareTo(a1f1) < 0);
+		assertTrue(a1f1.compareTo(b_a2) > 0);
+		assertEquals(0, a1f1.compareTo(a1f1));
 
 		// Test fields from same class - should be sorted by field name
-		assertTrue(b_a1.compareTo(b_a2) < 0);
-		assertTrue(b_a2.compareTo(b_a1) > 0);
+		assertTrue(ba1.compareTo(b_a2) < 0);
+		assertTrue(b_a2.compareTo(ba1) > 0);
 	}
 
 	//====================================================================================================
@@ -257,7 +257,7 @@ class FieldInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a004_getAnnotatableType() {
-		assertEquals(AnnotatableType.FIELD_TYPE, a1_f1.getAnnotatableType());
+		assertEquals(AnnotatableType.FIELD_TYPE, a1f1.getAnnotatableType());
 	}
 
 	//====================================================================================================
@@ -321,8 +321,8 @@ class FieldInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a008_getDeclaringClass() {
-		check("A1", a1_f1.getDeclaringClass());
-		check("B", b_a1.getDeclaringClass());
+		check("A1", a1f1.getDeclaringClass());
+		check("B", ba1.getDeclaringClass());
 	}
 
 	//====================================================================================================
@@ -390,7 +390,7 @@ class FieldInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a011_getLabel() {
-		var label = a1_f1.getLabel();
+		var label = a1f1.getLabel();
 		assertNotNull(label);
 		assertTrue(label.contains("A1"));
 		assertTrue(label.contains("f1"));
@@ -401,9 +401,9 @@ class FieldInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a012_getName() {
-		assertEquals("f1", a1_f1.getName());
-		assertEquals("a1", b_a1.getName());
-		assertEquals("a2", b_a2.getName());
+		assertEquals("f1", a1f1.getName());
+		assertEquals("a1", ba1.getName());
+		assertEquals("a2", ba2.getName());
 	}
 
 	//====================================================================================================
@@ -411,8 +411,8 @@ class FieldInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a013_hasAnnotation() {
-		assertTrue(b_a1.hasAnnotation(A.class));
-		assertFalse(b_a2.hasAnnotation(A.class));
+		assertTrue(ba1.hasAnnotation(A.class));
+		assertFalse(ba2.hasAnnotation(A.class));
 	}
 
 	//====================================================================================================
@@ -420,9 +420,9 @@ class FieldInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a014_hasName() {
-		assertTrue(b_a1.hasName("a1"));
-		assertFalse(b_a1.hasName("a2"));
-		assertFalse(b_a1.hasName(null));
+		assertTrue(ba1.hasName("a1"));
+		assertFalse(ba1.hasName("a2"));
+		assertFalse(ba1.hasName(null));
 	}
 
 	//====================================================================================================
@@ -430,8 +430,8 @@ class FieldInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a015_inner() {
-		check("f1", a1_f1.inner());
-		var field = a1_f1.inner();
+		check("f1", a1f1.inner());
+		var field = a1f1.inner();
 		assertNotNull(field);
 		assertEquals("f1", field.getName());
 	}
@@ -461,15 +461,15 @@ class FieldInfo_Test extends TestBase {
 
 		// Enum constant
 		assertTrue(testEnum_value1.is(ENUM_CONSTANT));
-		assertFalse(a1_f1.is(ENUM_CONSTANT));
-		assertTrue(a1_f1.is(NOT_ENUM_CONSTANT));  // Line 313: true branch - field is NOT an enum constant
+		assertFalse(a1f1.is(ENUM_CONSTANT));
+		assertTrue(a1f1.is(NOT_ENUM_CONSTANT));  // Line 313: true branch - field is NOT an enum constant
 		assertFalse(testEnum_value1.is(NOT_ENUM_CONSTANT));  // Line 313: false branch - field IS an enum constant
 
 		// Synthetic (lines 314-315)
-		assertFalse(a1_f1.is(SYNTHETIC));
-		assertTrue(a1_f1.is(NOT_SYNTHETIC));
-		assertFalse(b_a1.is(SYNTHETIC));
-		assertTrue(b_a1.is(NOT_SYNTHETIC));
+		assertFalse(a1f1.is(SYNTHETIC));
+		assertTrue(a1f1.is(NOT_SYNTHETIC));
+		assertFalse(ba1.is(SYNTHETIC));
+		assertTrue(ba1.is(NOT_SYNTHETIC));
 
 		// HAS_PARAMS doesn't apply to fields, should throw exception
 		assertThrowsWithMessage(RuntimeException.class, "Invalid flag for element: HAS_PARAMS", () -> c_deprecated.is(HAS_PARAMS));
@@ -541,7 +541,7 @@ class FieldInfo_Test extends TestBase {
 	void a021_isEnumConstant() {
 		assertTrue(testEnum_value1.isEnumConstant());
 		assertTrue(testEnum_value2.isEnumConstant());
-		assertFalse(a1_f1.isEnumConstant());
+		assertFalse(a1f1.isEnumConstant());
 	}
 
 	//====================================================================================================
@@ -559,7 +559,7 @@ class FieldInfo_Test extends TestBase {
 	@Test
 	void a023_isSynthetic() {
 		// Regular fields are not synthetic
-		assertFalse(a1_f1.isSynthetic());
+		assertFalse(a1f1.isSynthetic());
 	}
 
 	//====================================================================================================
@@ -593,7 +593,7 @@ class FieldInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a025_of_withClass() {
-		check("f1", FieldInfo.of(ClassInfo.of(A1.class), a1_f1.inner()));
+		check("f1", FieldInfo.of(ClassInfo.of(A1.class), a1f1.inner()));
 	}
 
 	//====================================================================================================
@@ -601,7 +601,7 @@ class FieldInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a026_of_withoutClass() {
-		check("f1", FieldInfo.of(a1_f1.inner()));
+		check("f1", FieldInfo.of(a1f1.inner()));
 
 		// Null should throw
 		assertThrows(IllegalArgumentException.class, () -> FieldInfo.of((Field)null));

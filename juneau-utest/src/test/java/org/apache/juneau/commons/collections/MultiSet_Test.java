@@ -119,8 +119,12 @@ class MultiSet_Test extends TestBase {
 		assertEmpty(ms);
 
 		assertThrows(IllegalArgumentException.class, ()->new MultiSet<>((Collection<String>)null));
-		assertThrows(NoSuchElementException.class, ()->new MultiSet<String>().iterator().next());
-		assertThrows(NoSuchElementException.class, ()->new MultiSet<String>().iterator().remove());
+		var emptyMultiSet = new MultiSet<String>();
+		var iterator = emptyMultiSet.iterator();
+		assertThrows(NoSuchElementException.class, ()->iterator.next());
+		var emptyMultiSet2 = new MultiSet<String>();
+		var iterator2 = emptyMultiSet2.iterator();
+		assertThrows(NoSuchElementException.class, ()->iterator2.remove());
 	}
 
 	@Test

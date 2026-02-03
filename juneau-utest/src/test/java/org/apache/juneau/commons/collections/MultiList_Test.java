@@ -141,8 +141,12 @@ class MultiList_Test extends TestBase {
 	void a08_emptyMultiList() {
 		MultiList<String> ml = new MultiList<>();
 		assertEmpty(ml);
-		assertThrows(NoSuchElementException.class, () -> new MultiList<String>().iterator().next());
-		assertThrows(IllegalStateException.class, () -> new MultiList<String>().iterator().remove());
+		var emptyMultiList = new MultiList<String>();
+		var iterator = emptyMultiList.iterator();
+		assertThrows(NoSuchElementException.class, () -> iterator.next());
+		var emptyMultiList2 = new MultiList<String>();
+		var iterator2 = emptyMultiList2.iterator();
+		assertThrows(IllegalStateException.class, () -> iterator2.remove());
 	}
 
 	@Test

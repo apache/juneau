@@ -124,7 +124,8 @@ class BeanConverter_Test extends TestBase {
 			assertNotNull(converter.getNested(null, tokenize("anyProperty").get(0)));
 
 			// Null token should throw IllegalArgumentException
-			assertThrows(IllegalArgumentException.class, () -> converter.getNested(new Object(), null));
+			var obj = new Object();
+			assertThrows(IllegalArgumentException.class, () -> converter.getNested(obj, null));
 		}
 
 		@Test
@@ -268,8 +269,9 @@ class BeanConverter_Test extends TestBase {
 			var bean = new TestBean("test", 42);
 
 			// Non-existent property should throw PropertyNotFoundException with descriptive message
+			var token = tokenize("nonExistentProperty").get(0);
 			var ex = assertThrows(PropertyNotFoundException.class, () ->
-				converter.getNested(bean, tokenize("nonExistentProperty").get(0)));
+				converter.getNested(bean, token));
 
 			// Verify the exception message contains useful information
 			assertTrue(ex.getMessage().contains("nonExistentProperty"));
@@ -282,8 +284,9 @@ class BeanConverter_Test extends TestBase {
 			var bean = new ExceptionThrowingBean();
 
 			// Exception in getter should propagate as RuntimeException (wrapped InvocationTargetException)
+			var token = tokenize("throwingProperty").get(0);
 			assertThrows(RuntimeException.class, () ->
-				converter.getNested(bean, tokenize("throwingProperty").get(0)));
+				converter.getNested(bean, token));
 		}
 
 		@Test
@@ -292,7 +295,8 @@ class BeanConverter_Test extends TestBase {
 			var bean = new TestBean("test", 42);
 
 			// Invalid property should throw PropertyNotFoundException
-			assertThrows(PropertyNotFoundException.class, () -> converter.getNested(bean, tokenize("invalidProperty").get(0)));
+			var token = tokenize("invalidProperty").get(0);
+			assertThrows(PropertyNotFoundException.class, () -> converter.getNested(bean, token));
 			// Test null token handling
 			assertThrows(IllegalArgumentException.class, () -> converter.getNested(bean, null));
 		}

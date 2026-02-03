@@ -100,9 +100,11 @@ class Operation_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, ()->x.getResponse(null));
 			assertThrows(IllegalArgumentException.class, () -> x.get(null, String.class));
 			assertThrows(IllegalArgumentException.class, () -> x.set(null, "value"));
-			assertThrows(IllegalArgumentException.class, () -> x.addResponse(null, response()));
+			var response = response();
+			assertThrows(IllegalArgumentException.class, () -> x.addResponse(null, response));
 			assertThrows(IllegalArgumentException.class, () -> x.addResponse("200", null));
-			assertThrows(IllegalArgumentException.class, () -> x.addCallback(null, callback()));
+			var callback = callback();
+			assertThrows(IllegalArgumentException.class, () -> x.addCallback(null, callback));
 			assertThrows(IllegalArgumentException.class, () -> x.addCallback("test", null));
 		}
 
@@ -143,7 +145,8 @@ class Operation_Test extends TestBase {
 		}
 
 		@Test void a13_strictMode() {
-			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			var strictBean = bean().strict();
+			assertThrows(RuntimeException.class, () -> strictBean.set("foo", "bar"));
 			assertDoesNotThrow(() -> bean().set("foo", "bar"));
 
 			assertFalse(bean().isStrict());
@@ -341,9 +344,10 @@ class Operation_Test extends TestBase {
 		}
 
 		@Test void c10_nullPropertyValue() {
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
-			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
+			var operation = bean();
+			assertThrows(IllegalArgumentException.class, ()->operation.get(null));
+			assertThrows(IllegalArgumentException.class, ()->operation.get(null, String.class));
+			assertThrows(IllegalArgumentException.class, ()->operation.set(null, "a"));
 		}
 	}
 

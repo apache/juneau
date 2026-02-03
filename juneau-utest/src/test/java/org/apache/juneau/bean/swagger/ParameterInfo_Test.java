@@ -238,7 +238,8 @@ class ParameterInfo_Test extends TestBase {
 		}
 
 		@Test void a22_strictMode() {
-			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			var strictBean = bean().strict();
+			assertThrows(RuntimeException.class, () -> strictBean.set("foo", "bar"));
 			assertDoesNotThrow(() -> bean().set("foo", "bar"));
 
 			assertFalse(bean().isStrict());
@@ -403,9 +404,10 @@ class ParameterInfo_Test extends TestBase {
 		}
 
 		@Test void c10_nullPropertyValue() {
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
-			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
+			var parameterInfo = bean();
+			assertThrows(IllegalArgumentException.class, ()->parameterInfo.get(null));
+			assertThrows(IllegalArgumentException.class, ()->parameterInfo.get(null, String.class));
+			assertThrows(IllegalArgumentException.class, ()->parameterInfo.set(null, "a"));
 		}
 	}
 

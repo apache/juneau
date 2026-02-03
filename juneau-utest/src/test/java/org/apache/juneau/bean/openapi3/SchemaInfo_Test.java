@@ -145,7 +145,8 @@ class SchemaInfo_Test extends TestBase {
 		}
 
 		@Test void a12_strictMode() {
-			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			var strictBean = bean().strict();
+			assertThrows(RuntimeException.class, () -> strictBean.set("foo", "bar"));
 			assertDoesNotThrow(() -> bean().set("foo", "bar"));
 
 			assertFalse(bean().isStrict());
@@ -297,9 +298,10 @@ class SchemaInfo_Test extends TestBase {
 		}
 
 		@Test void c10_nullPropertyValue() {
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
-			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
+			var schemaInfo = bean();
+			assertThrows(IllegalArgumentException.class, ()->schemaInfo.get(null));
+			assertThrows(IllegalArgumentException.class, ()->schemaInfo.get(null, String.class));
+			assertThrows(IllegalArgumentException.class, ()->schemaInfo.set(null, "a"));
 		}
 	}
 

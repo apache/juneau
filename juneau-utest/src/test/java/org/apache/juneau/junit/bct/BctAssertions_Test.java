@@ -324,7 +324,8 @@ class BctAssertions_Test extends TestBase {
 
 		@Test
 		void h04_elementMismatch() {
-			var e = assertThrows(AssertionFailedError.class, () -> assertList(l("a", "b"), "a", "wrong"));
+			var list = l("a", "b");
+			var e = assertThrows(AssertionFailedError.class, () -> assertList(list, "a", "wrong"));
 			assertContains("Element at index 1 did not match", e.getMessage());
 		}
 

@@ -93,7 +93,8 @@ class Xml_Test extends TestBase {
 		}
 
 		@Test void a10_strictMode() {
-			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			var strictBean = bean().strict();
+			assertThrows(RuntimeException.class, () -> strictBean.set("foo", "bar"));
 			assertDoesNotThrow(() -> bean().set("foo", "bar"));
 
 			assertFalse(bean().isStrict());
@@ -211,9 +212,10 @@ class Xml_Test extends TestBase {
 		}
 
 		@Test void c10_nullPropertyValue() {
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
-			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
+			var xml = bean();
+			assertThrows(IllegalArgumentException.class, ()->xml.get(null));
+			assertThrows(IllegalArgumentException.class, ()->xml.get(null, String.class));
+			assertThrows(IllegalArgumentException.class, ()->xml.set(null, "a"));
 		}
 	}
 

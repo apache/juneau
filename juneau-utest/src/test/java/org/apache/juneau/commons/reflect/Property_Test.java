@@ -205,11 +205,8 @@ class Property_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a011_field_withNullField() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			Property.<TestClass, String>create()
-				.field(null)
-				.build();
-		});
+		var builder = Property.<TestClass, String>create();
+		assertThrows(IllegalArgumentException.class, () -> builder.field(null));
 	}
 
 	//====================================================================================================
@@ -255,11 +252,8 @@ class Property_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a014_getter_withNullMethod() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			Property.<TestClass, String>create()
-				.getter((MethodInfo)null)
-				.build();
-		});
+		var builder = Property.<TestClass, String>create();
+		assertThrows(IllegalArgumentException.class, () -> builder.getter((MethodInfo)null));
 	}
 
 	//====================================================================================================
@@ -267,11 +261,8 @@ class Property_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a015_setter_withNullMethod() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			Property.<TestClass, String>create()
-				.setter((MethodInfo)null)
-				.build();
-		});
+		var builder = Property.<TestClass, String>create();
+		assertThrows(IllegalArgumentException.class, () -> builder.setter((MethodInfo)null));
 	}
 
 	//====================================================================================================

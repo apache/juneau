@@ -261,7 +261,7 @@ class RestClient_Response_Body_Test extends TestBase {
 	// HttpEntity passthrough methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings("removal")
 	@Test void b01_httpEntityMethods() throws Exception {
 		var x1 = testClient().entity(stringEntity("foo")).get().run().getContent();
 		assertTrue(x1.isRepeatable());
@@ -298,7 +298,7 @@ class RestClient_Response_Body_Test extends TestBase {
 		testClient().entity(inputStreamEntity("foo")).get().run().getContent().consumeContent();
 	}
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings("removal")
 	@Test void b02_head() throws Exception {
 		assertFalse(client().build().head("").run().getContent().isRepeatable());
 		assertFalse(client().build().head("").run().getContent().isChunked());

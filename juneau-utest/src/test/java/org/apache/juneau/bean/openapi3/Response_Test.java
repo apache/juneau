@@ -103,13 +103,17 @@ class Response_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, ()->x.getHeader(null));
 			assertThrows(IllegalArgumentException.class, ()->x.getContent(null));
 			assertThrows(IllegalArgumentException.class, ()->x.getLink(null));
-			assertThrows(IllegalArgumentException.class, ()->x.get(null, String.class));
+			var stringClass = String.class;
+			assertThrows(IllegalArgumentException.class, ()->x.get(null, stringClass));
 			assertThrows(IllegalArgumentException.class, ()->x.set(null, "value"));
-			assertThrows(IllegalArgumentException.class, ()->x.addHeader(null, headerInfo()));
+			var headerInfo = headerInfo();
+			assertThrows(IllegalArgumentException.class, ()->x.addHeader(null, headerInfo));
 			assertThrows(IllegalArgumentException.class, ()->x.addHeader("a", null));
-			assertThrows(IllegalArgumentException.class, ()->x.addContent(null, mediaType()));
+			var mediaType = mediaType();
+			assertThrows(IllegalArgumentException.class, ()->x.addContent(null, mediaType));
 			assertThrows(IllegalArgumentException.class, ()->x.addContent("a", null));
-			assertThrows(IllegalArgumentException.class, ()->x.addLink(null, link()));
+			var link = link();
+			assertThrows(IllegalArgumentException.class, ()->x.addLink(null, link));
 			assertThrows(IllegalArgumentException.class, ()->x.addLink("a", null));
 		}
 
@@ -142,7 +146,8 @@ class Response_Test extends TestBase {
 		}
 
 		@Test void a13_strictMode() {
-			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			var strictBean = bean().strict();
+			assertThrows(RuntimeException.class, () -> strictBean.set("foo", "bar"));
 			assertDoesNotThrow(() -> bean().set("foo", "bar"));
 
 			assertFalse(bean().isStrict());
@@ -303,9 +308,10 @@ class Response_Test extends TestBase {
 		}
 
 		@Test void c10_nullPropertyValue() {
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
-			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
+			var response = bean();
+			assertThrows(IllegalArgumentException.class, ()->response.get(null));
+			assertThrows(IllegalArgumentException.class, ()->response.get(null, String.class));
+			assertThrows(IllegalArgumentException.class, ()->response.set(null, "a"));
 		}
 	}
 

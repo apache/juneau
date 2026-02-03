@@ -70,7 +70,7 @@ class DefaultSwaps_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	//	POJO_SWAPS.put(Enumeration.class, new EnumerationSwap())
 	//------------------------------------------------------------------------------------------------------------------
-	private static Vector<String> A = new Vector<>();
+	private static final Vector<String> A = new Vector<>();
 	static {
 		A.add("foo");
 		A.add("bar");
@@ -101,10 +101,10 @@ class DefaultSwaps_Test extends TestBase {
 		test1("{f1:['foo','bar'],f2:'FOO'}", new ABean());
 	}
 
-	private static Vector<String> Ac = new Vector<>();
+	private static final Vector<String> A_C = new Vector<>();
 	static {
-		Ac.add("foo");
-		Ac.add("bar");
+		A_C.add("foo");
+		A_C.add("bar");
 	}
 
 	public static class AcSwap extends StringSwap<Enumeration<?>> {
@@ -126,11 +126,11 @@ class DefaultSwaps_Test extends TestBase {
 	}
 
 	@Test void a01c_Enumeration_usingConfig() throws Exception {
-		test2("['foo','bar']", Ac.elements(), AcBeanConfig.class);
+		test2("['foo','bar']", A_C.elements(), AcBeanConfig.class);
 	}
 
 	@Test void a02c_Enumeration_overrideSwap_usingConfig() throws Exception {
-		test4("'FOO'", Ac.elements(), AcSwap.class, AcBeanConfig.class);
+		test4("'FOO'", A_C.elements(), AcSwap.class, AcBeanConfig.class);
 	}
 
 	@Test void a03c_Enumeration_overrideAnnotation_usingConfig() throws Exception {
@@ -140,7 +140,7 @@ class DefaultSwaps_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	//	POJO_SWAPS.put(Iterator.class, new IteratorSwap())
 	//------------------------------------------------------------------------------------------------------------------
-	private static List<String> B = l("foo","bar");
+	private static final List<String> B = l("foo","bar");
 
 	public static class BSwap extends StringSwap<Iterator<?>> {
 		@Override /* ObjectSwap */
@@ -167,7 +167,7 @@ class DefaultSwaps_Test extends TestBase {
 		test1("{f1:['foo','bar'],f2:'FOO'}", new BBean());
 	}
 
-	private static List<String> Bc = l("foo","bar");
+	private static final List<String> B_C = l("foo","bar");
 
 	public static class BcSwap extends StringSwap<Iterator<?>> {
 		@Override /* ObjectSwap */
@@ -187,11 +187,11 @@ class DefaultSwaps_Test extends TestBase {
 	}
 
 	@Test void b01c_Iterator_usingConfig() throws Exception {
-		test2("['foo','bar']", Bc.iterator(), BcBeanConfig.class);
+		test2("['foo','bar']", B_C.iterator(), BcBeanConfig.class);
 	}
 
 	@Test void b02c_Iterator_overrideSwap_usingConfig() throws Exception {
-		test4("'FOO'", Bc.iterator(), BcSwap.class, BcBeanConfig.class);
+		test4("'FOO'", B_C.iterator(), BcSwap.class, BcBeanConfig.class);
 	}
 
 	@Test void b03c_Iterator_overrideAnnotation_usingConfig() throws Exception {
@@ -201,7 +201,7 @@ class DefaultSwaps_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	//	POJO_SWAPS.put(Locale.class, new LocaleSwap())
 	//------------------------------------------------------------------------------------------------------------------
-	private static Locale C = Locale.JAPAN;
+	private static final Locale C = Locale.JAPAN;
 
 	public static class CSwap extends StringSwap<Locale> {
 		@Override /* ObjectSwap */
@@ -231,7 +231,7 @@ class DefaultSwaps_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	//	POJO_SWAPS.put(Calendar.class, new TemporalCalendarSwap.IsoOffsetDateTime())
 	//------------------------------------------------------------------------------------------------------------------
-	private static GregorianCalendar D = GregorianCalendar.from(ZonedDateTime.from(DateTimeFormatter.ISO_ZONED_DATE_TIME.parse("2012-12-21T12:34:56Z")));
+	private static final GregorianCalendar D = GregorianCalendar.from(ZonedDateTime.from(DateTimeFormatter.ISO_ZONED_DATE_TIME.parse("2012-12-21T12:34:56Z")));
 
 	public static class DSwap extends StringSwap<Calendar> {
 		@Override /* ObjectSwap */
@@ -621,14 +621,7 @@ class DefaultSwaps_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	//	POJO_SWAPS.put(XMLGregorianCalendar.class, new XMLGregorianCalendarSwap())
 	//------------------------------------------------------------------------------------------------------------------
-	private static XMLGregorianCalendar H;
-	static {
-		try {
-			H = DatatypeFactory.newInstance().newXMLGregorianCalendar("2012-12-21T12:34:56.789Z");
-		} catch (DatatypeConfigurationException e) {
-			e.printStackTrace();
-		}
-	}
+	private static final XMLGregorianCalendar H = safe(()->DatatypeFactory.newInstance().newXMLGregorianCalendar("2012-12-21T12:34:56.789Z"));
 
 	public static class HSwap extends StringSwap<XMLGregorianCalendar> {
 		@Override /* ObjectSwap */

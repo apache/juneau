@@ -418,25 +418,25 @@ class ReflectionMap_Test extends TestBase {
 		}
 
 		// @formatter:off
-		static ReflectionMap<Number>
-			C1f1_SIMPLE = create().append("C1.f1", 1).build(),
-			C1f1_FULL = create().append("org.apache.juneau.commons.reflect.ReflectionMap_Test$C_Field$C1.f1", 1).build();
+		static final ReflectionMap<Number>
+			C1F1_SIMPLE = create().append("C1.f1", 1).build(),
+			C1F1_FULL = create().append("org.apache.juneau.commons.reflect.ReflectionMap_Test$C_Field$C1.f1", 1).build();
 		// @formatter:on
 
 		@Test void a01_checkEntries() {
-			checkEntries(C1f1_SIMPLE, false, true, true, false);
-			checkEntries(C1f1_FULL, false, true, true, false);
+			checkEntries(C1F1_SIMPLE, false, true, true, false);
+			checkEntries(C1F1_FULL, false, true, true, false);
 		}
 
 		private static void test(Field f, boolean match_C1f1_SIMPLE, boolean match_C1f1_FULL) {
-			assertEquals(match_C1f1_SIMPLE, C1f1_SIMPLE.find(f).findAny().isPresent());
-			assertEquals(match_C1f1_FULL, C1f1_FULL.find(f).findAny().isPresent());
+			assertEquals(match_C1f1_SIMPLE, C1F1_SIMPLE.find(f).findAny().isPresent());
+			assertEquals(match_C1f1_FULL, C1F1_FULL.find(f).findAny().isPresent());
 
-			assertEquals(match_C1f1_SIMPLE, C1f1_SIMPLE.find(f).filter(Integer.class::isInstance).findAny().isPresent());
-			assertEquals(match_C1f1_FULL, C1f1_FULL.find(f).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_C1f1_SIMPLE, C1F1_SIMPLE.find(f).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_C1f1_FULL, C1F1_FULL.find(f).filter(Integer.class::isInstance).findAny().isPresent());
 
-			assertFalse(C1f1_SIMPLE.find(f).filter(Long.class::isInstance).findAny().isPresent());
-			assertFalse(C1f1_FULL.find(f).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(C1F1_SIMPLE.find(f).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(C1F1_FULL.find(f).filter(Long.class::isInstance).findAny().isPresent());
 		}
 
 		@Test void a02_find() throws NoSuchFieldException, SecurityException {

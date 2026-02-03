@@ -35,20 +35,20 @@ public class JsonTypeArray extends LinkedList<JsonType> {
 	/**
 	 * Constructor with predefined types to add to this list.
 	 *
-	 * @param types The list of types to add to the list.
+	 * @param value The list of types to add to the list.
 	 */
-	public JsonTypeArray(JsonType...types) {
-		addAll(types);
+	public JsonTypeArray(JsonType...value) {
+		addAll(value);
 	}
 
 	/**
 	 * Convenience method for adding one or more {@link JsonType} objects to this array.
 	 *
-	 * @param types The {@link JsonType} objects to add to this array.
+	 * @param value The {@link JsonType} objects to add to this array.
 	 * @return This object.
 	 */
-	public JsonTypeArray addAll(JsonType...types) {
-		Collections.addAll(this, types);
+	public JsonTypeArray addAll(JsonType...value) {
+		Collections.addAll(this, value);
 		return this;
 	}
 }

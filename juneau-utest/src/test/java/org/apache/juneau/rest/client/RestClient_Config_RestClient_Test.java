@@ -112,9 +112,9 @@ class RestClient_Config_RestClient_Test extends TestBase {
 		var x1 = client().errorCodes(x -> x == 200).build();
 		var x2 = client().build();
 		var request1 = x1.get("/echo");
-		assertEquals(200, ((RestCallException)assertThrows(Throwable.class, ()->request1.run())).getResponseCode());
+		assertEquals(200, ((RestCallException)assertThrows(Throwable.class, request1::run)).getResponseCode());
 		var request2 = x2.get("/echo").errorCodes(x -> x == 200);
-		assertEquals(200, ((RestCallException)assertThrows(Throwable.class, ()->request2.run())).getResponseCode());
+		assertEquals(200, ((RestCallException)assertThrows(Throwable.class, request2::run)).getResponseCode());
 	}
 
 	@Test void a03_executorService() throws Exception {

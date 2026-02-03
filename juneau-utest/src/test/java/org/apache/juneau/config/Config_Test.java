@@ -396,10 +396,14 @@ class Config_Test extends TestBase {
 	@Test void getLong2BadValues() {
 		var c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
 
-		assertThrows(NumberFormatException.class, ()->c.get("a1").asLong().orElse(-1L));
-		assertThrows(NumberFormatException.class, ()->c.get("a2").asLong().orElse(-1L));
-		assertThrows(NumberFormatException.class, ()->c.get("a3").asLong().orElse(-1L));
-		assertThrows(NumberFormatException.class, ()->c.get("a4").asLong().orElse(-1L));
+		var a1Entry = c.get("a1");
+		assertThrows(NumberFormatException.class, ()->a1Entry.asLong());
+		var a2Entry = c.get("a2");
+		assertThrows(NumberFormatException.class, ()->a2Entry.asLong());
+		var a3Entry = c.get("a3");
+		assertThrows(NumberFormatException.class, ()->a3Entry.asLong());
+		var a4Entry = c.get("a4");
+		assertThrows(NumberFormatException.class, ()->a4Entry.asLong());
 	}
 
 	//====================================================================================================

@@ -2019,7 +2019,8 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void g01_missingDependencyThrowsException() {
-			assertThrows(ExecutableException.class, () -> bc(BeanWithDependencies.class).run());
+			var creator = bc(BeanWithDependencies.class);
+			assertThrows(ExecutableException.class, creator::run);
 		}
 
 		/**
@@ -2027,7 +2028,8 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void g02_abstractClassThrowsException() {
-			assertThrows(ExecutableException.class, () -> bc(AbstractBean.class).run());
+			var creator = bc(AbstractBean.class);
+			assertThrows(ExecutableException.class, creator::run);
 		}
 
 		// Abstract class with unresolvable constructor (so constructor attempt is skipped)
@@ -2067,7 +2069,8 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void g03_interfaceThrowsException() {
-			assertThrows(ExecutableException.class, () -> bc(BeanInterface.class).run());
+			var creator = bc(BeanInterface.class);
+			assertThrows(ExecutableException.class, creator::run);
 		}
 
 		/**
@@ -2086,7 +2089,8 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void g05_fallbackNullThrowsException() {
-			assertThrows(IllegalArgumentException.class, () -> bc(SimpleBean.class).fallback(null));
+			var creator = bc(SimpleBean.class);
+			assertThrows(IllegalArgumentException.class, () -> creator.fallback(null));
 		}
 
 		/**
@@ -3147,7 +3151,8 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void m14_asOptionalOrElseThrow() {
-			assertThrows(NoSuchElementException.class, () -> bc(BeanInterface.class).asOptional().orElseThrow());
+			var optional = bc(BeanInterface.class).asOptional();
+			assertThrows(NoSuchElementException.class, optional::orElseThrow);
 		}
 
 		/**
@@ -3180,12 +3185,12 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void m17_asOptionalPostHookExceptionPropagates() {
-			assertThrows(RuntimeException.class, () -> {
-				bc(SimpleBean.class)
+			var builder = bc(SimpleBean.class)
 				.postCreateHook(b -> {
 					throw rex("Hook error");
-				})
-				.asOptional();
+				});
+			assertThrows(RuntimeException.class, () -> {
+				builder.asOptional();
 			}, "Post-create hook exceptions should propagate even in tryCreate");
 		}
 	}
@@ -3349,7 +3354,8 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void n12_beanSubTypeNullThrows() {
-			assertThrows(IllegalArgumentException.class, () -> BeanCreator2.of(SimpleBean.class).beanSubType(null));
+			var creator = BeanCreator2.of(SimpleBean.class);
+			assertThrows(IllegalArgumentException.class, () -> creator.beanSubType(null));
 		}
 	}
 

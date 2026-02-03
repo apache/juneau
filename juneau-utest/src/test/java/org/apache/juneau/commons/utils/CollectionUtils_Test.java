@@ -1341,8 +1341,9 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals("test", result7.get(0));
 
 		// Test line 2009: unsupported type throws exception
+		var unsupportedObject = new Object() {}; // Unsupported type
 		assertThrows(RuntimeException.class, () -> {
-			toList(new Object() {}); // Unsupported type
+			toList(unsupportedObject);
 		});
 	}
 

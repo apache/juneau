@@ -87,9 +87,8 @@ class LogRecordCapture_Test extends TestBase {
 			assertSize(1, records);
 
 			// Should be unmodifiable
-			assertThrows(UnsupportedOperationException.class, () -> {
-				records.add(new LogRecord("test", Level.INFO, "test", null, null));
-			});
+			var logRecord = new LogRecord("test", Level.INFO, "test", null, null);
+			assertThrows(UnsupportedOperationException.class, () -> records.add(logRecord));
 		}
 	}
 

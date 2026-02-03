@@ -59,9 +59,8 @@ class FileReaderBuilder_Test extends TestBase {
 	}
 
 	@Test void b02_build_noFile() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			FileReaderBuilder.create().build();
-		});
+		var builder = FileReaderBuilder.create();
+		assertThrows(IllegalArgumentException.class, builder::build);
 	}
 
 	@Test void b03_build_fileNotFound() {
@@ -159,19 +158,13 @@ class FileReaderBuilder_Test extends TestBase {
 	}
 
 	@Test void e02_charsetString_null() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			FileReaderBuilder.create(PATH.toFile())
-				.charset((String)null)
-				.build();
-		});
+		var builder = FileReaderBuilder.create(PATH.toFile());
+		assertThrows(IllegalArgumentException.class, () -> builder.charset((String)null));
 	}
 
 	@Test void e03_charsetString_invalid() {
-		assertThrows(UnsupportedCharsetException.class, () -> {
-			FileReaderBuilder.create(PATH.toFile())
-				.charset("INVALID-CHARSET-NAME")
-				.build();
-		});
+		var builder = FileReaderBuilder.create(PATH.toFile());
+		assertThrows(UnsupportedCharsetException.class, () -> builder.charset("INVALID-CHARSET-NAME"));
 	}
 
 	//====================================================================================================

@@ -597,11 +597,8 @@ class Maps_Test extends TestBase {
 		inputMap.put("a", 1);
 		inputMap.put("b", null);
 
-		assertThrows(RuntimeException.class, () -> {
-			Maps.create(String.class, Integer.class)
-				.addAny(inputMap)
-				.build();
-		});
+		var builder = Maps.create(String.class, Integer.class);
+		assertThrows(RuntimeException.class, () -> builder.addAny(inputMap));
 	}
 
 	@Test
@@ -662,11 +659,8 @@ class Maps_Test extends TestBase {
 	@Test
 	void k08_addAny_nonMapObject() {
 		// addAny only accepts Map instances, non-Map objects throw exception
-		assertThrows(RuntimeException.class, () -> {
-			Maps.create(String.class, Integer.class)
-				.addAny("not-a-map")
-				.build();
-		});
+		var builder = Maps.create(String.class, Integer.class);
+		assertThrows(RuntimeException.class, () -> builder.addAny("not-a-map"));
 	}
 
 	@Test
@@ -675,21 +669,18 @@ class Maps_Test extends TestBase {
 		var inputMap = new LinkedHashMap<String,String>();
 		inputMap.put("a", "not-an-integer");
 
-		assertThrows(RuntimeException.class, () -> {
-			Maps.create(String.class, Integer.class)
-				.valueFunction(o -> {
-					if (o instanceof String) {
-						try {
-							return Integer.parseInt((String)o);
-						} catch (NumberFormatException e) {
-							throw new RuntimeException("Cannot convert", e);
-						}
+		var builder = Maps.create(String.class, Integer.class)
+			.valueFunction(o -> {
+				if (o instanceof String) {
+					try {
+						return Integer.parseInt((String)o);
+					} catch (NumberFormatException e) {
+						throw new RuntimeException("Cannot convert", e);
 					}
-					return (Integer)o;
-				})
-				.addAny(inputMap)
-				.build();
-		});
+				}
+				return (Integer)o;
+			});
+		assertThrows(RuntimeException.class, () -> builder.addAny(inputMap));
 	}
 
 	@Test
@@ -697,16 +688,13 @@ class Maps_Test extends TestBase {
 		var inputMap = new LinkedHashMap<Object,String>();
 		inputMap.put(new Object(), "value");  // Object can't be converted to String
 
-		assertThrows(RuntimeException.class, () -> {
-			Maps.create(String.class, String.class)
-				.keyFunction(o -> {
-					if (o instanceof String)
-						return (String)o;
-					throw new RuntimeException("Cannot convert key");
-				})
-				.addAny(inputMap)
-				.build();
-		});
+		var builder = Maps.create(String.class, String.class)
+			.keyFunction(o -> {
+				if (o instanceof String)
+					return (String)o;
+				throw new RuntimeException("Cannot convert key");
+			});
+		assertThrows(RuntimeException.class, () -> builder.addAny(inputMap));
 	}
 
 	@Test
@@ -715,12 +703,9 @@ class Maps_Test extends TestBase {
 		var inputMap = new LinkedHashMap<Object,String>();
 		inputMap.put(new Object(), "value");  // Object can't be converted to String, and no keyFunction
 
-		assertThrows(RuntimeException.class, () -> {
-			Maps.create(String.class, String.class)
-				// No keyFunction set
-				.addAny(inputMap)
-				.build();
-		});
+		var builder = Maps.create(String.class, String.class);
+		// No keyFunction set
+		assertThrows(RuntimeException.class, () -> builder.addAny(inputMap));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

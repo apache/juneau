@@ -191,14 +191,14 @@ public class MimeTypeDetector_Test {
 
 	@Test
 	void testAddTypesFileContents() {
-		String mimeTypesFile =
-			"# Custom MIME types file\n" +
-				"text/html        html htm\n" +
-				"image/png        png\n" +
-				"application/json json\n" +
-				"text/plain       txt log\n" +
-				"# Another comment\n" +
-				"application/x-custom custom cst";
+		String mimeTypesFile = """
+			# Custom MIME types file
+			text/html        html htm
+			image/png        png
+			application/json json
+			text/plain       txt log
+			# Another comment
+			application/x-custom custom cst""";
 
 		var detector = MimeTypeDetector.builder()
 			.addTypes(mimeTypesFile)

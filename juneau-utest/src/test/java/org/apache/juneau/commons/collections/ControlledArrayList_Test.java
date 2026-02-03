@@ -111,9 +111,10 @@ class ControlledArrayList_Test extends TestBase {
 			var x1 = new ControlledArrayList<>(false, l(1));
 			var x2 = new ControlledArrayList<>(true, l(1));
 
-			assertTrue(x1.addAll(l(2, 3)));
-			assertThrows(UnsupportedOperationException.class, () -> x2.addAll(l(2, 3)));
-			x2.overrideAddAll(l(2, 3));
+			var list1 = l(2, 3);
+			assertTrue(x1.addAll(list1));
+			assertThrows(UnsupportedOperationException.class, () -> x2.addAll(list1));
+			x2.overrideAddAll(list1);
 			assertList(x1, 1, 2, 3);
 			assertList(x2, 1, 2, 3);
 		}
@@ -123,9 +124,10 @@ class ControlledArrayList_Test extends TestBase {
 			var x1 = new ControlledArrayList<>(false, l(1, 4));
 			var x2 = new ControlledArrayList<>(true, l(1, 4));
 
-			assertTrue(x1.addAll(1, l(2, 3)));
-			assertThrows(UnsupportedOperationException.class, () -> x2.addAll(1, l(2, 3)));
-			x2.overrideAddAll(1, l(2, 3));
+			var list1 = l(2, 3);
+			assertTrue(x1.addAll(1, list1));
+			assertThrows(UnsupportedOperationException.class, () -> x2.addAll(1, list1));
+			x2.overrideAddAll(1, list1);
 			assertList(x1, 1, 2, 3, 4);
 			assertList(x2, 1, 2, 3, 4);
 		}
@@ -159,9 +161,10 @@ class ControlledArrayList_Test extends TestBase {
 			var x1 = new ControlledArrayList<>(false, l(1, 2, 3, 4));
 			var x2 = new ControlledArrayList<>(true, l(1, 2, 3, 4));
 
-			assertTrue(x1.removeAll(l(2, 4)));
-			assertThrows(UnsupportedOperationException.class, () -> x2.removeAll(l(2, 4)));
-			x2.overrideRemoveAll(l(2, 4));
+			var list1 = l(2, 4);
+			assertTrue(x1.removeAll(list1));
+			assertThrows(UnsupportedOperationException.class, () -> x2.removeAll(list1));
+			x2.overrideRemoveAll(list1);
 			assertList(x1, 1, 3);
 			assertList(x2, 1, 3);
 		}
@@ -171,9 +174,10 @@ class ControlledArrayList_Test extends TestBase {
 			var x1 = new ControlledArrayList<>(false, l(1, 2, 3, 4));
 			var x2 = new ControlledArrayList<>(true, l(1, 2, 3, 4));
 
-			assertTrue(x1.retainAll(l(2, 4)));
-			assertThrows(UnsupportedOperationException.class, () -> x2.retainAll(l(2, 4)));
-			x2.overrideRetainAll(l(2, 4));
+			var list1 = l(2, 4);
+			assertTrue(x1.retainAll(list1));
+			assertThrows(UnsupportedOperationException.class, () -> x2.retainAll(list1));
+			x2.overrideRetainAll(list1);
 			assertList(x1, 2, 4);
 			assertList(x2, 2, 4);
 		}
@@ -605,14 +609,15 @@ class ControlledArrayList_Test extends TestBase {
 			var x1 = new ControlledArrayList<>(false);
 			var x2 = new ControlledArrayList<>(true);
 
-			assertFalse(x1.addAll(l()));
-			assertThrows(UnsupportedOperationException.class, () -> x2.addAll(l()));
+			var emptyList = l();
+			assertFalse(x1.addAll(emptyList));
+			assertThrows(UnsupportedOperationException.class, () -> x2.addAll(emptyList));
 
-			assertFalse(x1.removeAll(l()));
-			assertThrows(UnsupportedOperationException.class, () -> x2.removeAll(l()));
+			assertFalse(x1.removeAll(emptyList));
+			assertThrows(UnsupportedOperationException.class, () -> x2.removeAll(emptyList));
 
-			assertFalse(x1.retainAll(l()));
-			assertThrows(UnsupportedOperationException.class, () -> x2.retainAll(l()));
+			assertFalse(x1.retainAll(emptyList));
+			assertThrows(UnsupportedOperationException.class, () -> x2.retainAll(emptyList));
 
 			assertFalse(x1.remove((Integer)1));
 			assertThrows(UnsupportedOperationException.class, () -> x2.remove((Integer)1));

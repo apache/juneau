@@ -79,10 +79,12 @@ class PropertyNotFoundException_Test extends TestBase {
 			BeanConverter converter = BasicBeanConverter.DEFAULT;
 			var bean = new TestBean("test", 42);
 
-			// This should throw PropertyNotFoundException
-			PropertyNotFoundException ex = assertThrows(PropertyNotFoundException.class, () -> {
-				converter.getNested(bean, tokenize("nonExistentProperty").get(0));
-			});
+		// This should throw PropertyNotFoundException
+		var tokens = tokenize("nonExistentProperty");
+		var token = tokens.get(0);
+		PropertyNotFoundException ex = assertThrows(PropertyNotFoundException.class, () -> {
+			converter.getNested(bean, token);
+		});
 
 			assertTrue(ex.getMessage().contains("nonExistentProperty"));
 			assertTrue(ex.getMessage().contains("TestBean"));

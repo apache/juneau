@@ -28,7 +28,8 @@ import org.eclipse.jgit.transport.*;
 @SuppressWarnings({ "javadoc", "unused" })
 public class GitControl {
 
-	private String localPath, remotePath;
+	private String localPath;
+	private String remotePath;
 	private Repository localRepo;
 	private Git git;
 	private CredentialsProvider cp;
@@ -43,31 +44,30 @@ public class GitControl {
 		git = new Git(localRepo);
 	}
 
-	public void addToRepo() throws IOException, NoFilepatternException, GitAPIException {
+	public void addToRepo() throws GitAPIException {
 		var add = git.add();
 		add.addFilepattern(".").call();
 	}
 
-	public void branch(String name) throws RefAlreadyExistsException, RefNotFoundException, InvalidRefNameException, CheckoutConflictException, GitAPIException {
+	public void branch(String name) throws GitAPIException {
 		git.checkout().setName(name).setStartPoint("origin/".concat(name)).call();
 	}
 
 	@SuppressWarnings("resource")
-	public void cloneRepo() throws IOException, NoFilepatternException, GitAPIException {
+	public void cloneRepo() throws GitAPIException {
 		Git.cloneRepository().setURI(remotePath).setDirectory(new File(localPath)).call();
 	}
 
 	public void commitToRepo(String message)
-		throws IOException, NoHeadException, NoMessageException, ConcurrentRefUpdateException, JGitInternalException, WrongRepositoryStateException, GitAPIException {
+		throws JGitInternalException, GitAPIException {
 		git.commit().setMessage(message).call();
 	}
 
-	public void pullFromRepo() throws IOException, WrongRepositoryStateException, InvalidConfigurationException, DetachedHeadException, InvalidRemoteException, CanceledException, RefNotFoundException,
-		NoHeadException, GitAPIException {
+	public void pullFromRepo() throws GitAPIException {
 		git.pull().call();
 	}
 
-	public void pushToRepo() throws IOException, JGitInternalException, InvalidRemoteException, GitAPIException {
+	public void pushToRepo() throws JGitInternalException, GitAPIException {
 		var pc = git.push();
 		pc.setCredentialsProvider(cp).setForce(true).setPushAll();
 		try {

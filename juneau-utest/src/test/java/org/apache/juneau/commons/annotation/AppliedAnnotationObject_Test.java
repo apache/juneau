@@ -1028,7 +1028,8 @@ class AppliedAnnotationObject_Test extends TestBase {
 
 		@Test
 		void m08_nullConstructorInfo_throwsException() {
-			assertThrows(IllegalArgumentException.class, () -> E_BuilderCTests.E.create().on((ConstructorInfo)null).build());
+			var builder = E_BuilderCTests.E.create();
+			assertThrows(IllegalArgumentException.class, () -> builder.on((ConstructorInfo)null));
 		}
 	}
 }

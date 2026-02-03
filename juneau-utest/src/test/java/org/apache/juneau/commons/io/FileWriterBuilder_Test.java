@@ -76,9 +76,8 @@ class FileWriterBuilder_Test extends TestBase {
 	}
 
 	@Test void b02_build_noFile() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			FileWriterBuilder.create().build();
-		});
+		var builder = FileWriterBuilder.create();
+		assertThrows(IllegalArgumentException.class, builder::build);
 	}
 
 	//====================================================================================================
@@ -182,19 +181,13 @@ class FileWriterBuilder_Test extends TestBase {
 	}
 
 	@Test void f02_charsetString_null() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			FileWriterBuilder.create(TEST_FILE.toFile())
-				.charset((String)null)
-				.build();
-		});
+		var builder = FileWriterBuilder.create(TEST_FILE.toFile());
+		assertThrows(IllegalArgumentException.class, () -> builder.charset((String)null));
 	}
 
 	@Test void f03_charsetString_invalid() {
-		assertThrows(UnsupportedCharsetException.class, () -> {
-			FileWriterBuilder.create(TEST_FILE.toFile())
-				.charset("INVALID-CHARSET-NAME")
-				.build();
-		});
+		var builder = FileWriterBuilder.create(TEST_FILE.toFile());
+		assertThrows(UnsupportedCharsetException.class, () -> builder.charset("INVALID-CHARSET-NAME"));
 	}
 
 	//====================================================================================================

@@ -479,23 +479,17 @@ class Lists_Test extends TestBase {
 	@Test
 	void l10_addAny_noElementFunction_throwsException() {
 		// When elementFunction is null and we try to add a non-matching type, it should throw
-		assertThrows(RuntimeException.class, () -> {
-			Lists.create(Integer.class)
-				.addAny("not-an-integer")
-				.build();
-		});
+		var builder = Lists.create(Integer.class);
+		assertThrows(RuntimeException.class, () -> builder.addAny("not-an-integer"));
 	}
 
 	@Test
 	void l11_addAny_elementFunctionReturnsNull() {
 		// ElementFunction exists but returns null (can't convert)
 		// Should throw RuntimeException when elementFunction can't convert
-		assertThrows(RuntimeException.class, () -> {
-			Lists.create(Integer.class)
-				.elementFunction(o -> null)  // Can't convert
-				.addAny("not-an-integer")
-				.build();
-		});
+		var builder = Lists.create(Integer.class)
+			.elementFunction(o -> null);  // Can't convert
+		assertThrows(RuntimeException.class, () -> builder.addAny("not-an-integer"));
 	}
 
 	@Test

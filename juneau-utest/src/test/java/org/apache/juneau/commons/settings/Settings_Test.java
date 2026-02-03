@@ -630,17 +630,15 @@ class Settings_Test extends TestBase {
 
 	@Test
 	void o09_addSource_nullSource() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			Settings.create().addSource(null);
-		});
+		var builder = Settings.create();
+		assertThrows(IllegalArgumentException.class, () -> builder.addSource(null));
 	}
 
 	@Test
 	void o10_setSources_nullSource() {
 		var source1 = new MapStore();
-		assertThrows(IllegalArgumentException.class, () -> {
-			Settings.create().setSources(source1, null);
-		});
+		var builder = Settings.create();
+		assertThrows(IllegalArgumentException.class, () -> builder.setSources(source1, null));
 	}
 
 	@Test
@@ -934,9 +932,8 @@ class Settings_Test extends TestBase {
 	void u10_get_withDefaultString_nullDefault() {
 		// Null defaults are not allowed
 		System.setProperty(TEST_PROP, "found-value");
-		assertThrows(IllegalArgumentException.class, () -> {
-			Settings.get().get(TEST_PROP, (String)null);
-		});
+		var settings = Settings.get();
+		assertThrows(IllegalArgumentException.class, () -> settings.get(TEST_PROP, (String)null));
 	}
 
 	@Test
@@ -1029,16 +1026,15 @@ class Settings_Test extends TestBase {
 
 	@Test
 	void v06_addTypeFunction_nullType() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			Settings.create().addTypeFunction(null, Integer::valueOf);
-		});
+		var builder = Settings.create();
+		assertThrows(IllegalArgumentException.class, () -> builder.addTypeFunction(null, Integer::valueOf));
 	}
 
 	@Test
 	void v07_addTypeFunction_nullFunction() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			Settings.create().addTypeFunction(Integer.class, null);
-		});
+		var builder = Settings.create();
+		var integerClass = Integer.class;
+		assertThrows(IllegalArgumentException.class, () -> builder.addTypeFunction(integerClass, null));
 	}
 
 	@Test
@@ -1057,9 +1053,8 @@ class Settings_Test extends TestBase {
 			.build();
 
 		System.setProperty(TEST_PROP, "123");
-		assertThrows(RuntimeException.class, () -> {
-			settings.get(TEST_PROP, new UnsupportedType(0)); // No static method or String constructor
-		});
+		var unsupportedType = new UnsupportedType(0);
+		assertThrows(RuntimeException.class, () -> settings.get(TEST_PROP, unsupportedType)); // No static method or String constructor
 	}
 
 	@Test

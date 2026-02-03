@@ -1872,7 +1872,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return The response object.
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 */
-	@SuppressWarnings({"null","java:S6541"})
+	@SuppressWarnings({"null","java:S3776","java:S6541"})
 	public RestResponse run() throws RestCallException {
 		if (nn(response))
 			throw new RestCallException(response, null, "run() already called.");

@@ -731,7 +731,8 @@ class IoUtils_Test extends TestBase {
 		assertNull(read((Object)null));
 
 		// Test with invalid type
-		assertThrows(IllegalArgumentException.class, () -> read(new Object()));
+		var invalidObject = new Object();
+		assertThrows(IllegalArgumentException.class, () -> read(invalidObject));
 	}
 
 	//====================================================================================================

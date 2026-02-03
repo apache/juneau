@@ -376,41 +376,41 @@ public class JsonSchema {
 	/**
 	 * Bean property appender:  <property>additionalItems</property>.
 	 *
-	 * @param additionalItems
+	 * @param value
 	 * 	The list of items to append to the <property>additionalItems</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema addAdditionalItems(JsonSchema...additionalItems) {
+	public JsonSchema addAdditionalItems(JsonSchema...value) {
 		if (this.additionalItemsSchemaArray == null)
 			this.additionalItemsSchemaArray = new JsonSchemaArray();
-		this.additionalItemsSchemaArray.addAll(additionalItems);
-		setMasterOn(additionalItems);
+		this.additionalItemsSchemaArray.addAll(value);
+		setMasterOn(value);
 		return this;
 	}
 
 	/**
 	 * Bean property appender:  <property>allOf</property>.
 	 *
-	 * @param allOf The list of items to append to the <property>allOf</property> property on this bean.
+	 * @param value The list of items to append to the <property>allOf</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema addAllOf(JsonSchema...allOf) {
-		setMasterOn(allOf);
-		this.allOf = addAll(this.allOf, allOf);
+	public JsonSchema addAllOf(JsonSchema...value) {
+		setMasterOn(value);
+		this.allOf = addAll(this.allOf, value);
 		return this;
 	}
 
 	/**
 	 * Bean property appender:  <property>anyOf</property>.
 	 *
-	 * @param anyOf The list of items to append to the <property>anyOf</property> property on this bean.
+	 * @param value The list of items to append to the <property>anyOf</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema addAnyOf(JsonSchema...anyOf) {
+	public JsonSchema addAnyOf(JsonSchema...value) {
 		if (this.anyOf == null)
 			this.anyOf = new LinkedList<>();
-		setMasterOn(anyOf);
-		for (var s : anyOf)
+		setMasterOn(value);
+		for (var s : value)
 			this.anyOf.add(s);
 		return this;
 	}
@@ -419,14 +419,14 @@ public class JsonSchema {
 	 * Bean property appender:  <property>$defs</property>.
 	 *
 	 * @param name The key in the defs map entry.
-	 * @param def The value in the defs map entry.
+	 * @param value The value in the defs map entry.
 	 * @return This object.
 	 */
-	public JsonSchema addDef(String name, JsonSchema def) {
+	public JsonSchema addDef(String name, JsonSchema value) {
 		if (this.defs == null)
 			this.defs = map();
-		this.defs.put(name, def);
-		setMasterOn(def);
+		this.defs.put(name, value);
+		setMasterOn(value);
 		return this;
 	}
 
@@ -434,14 +434,14 @@ public class JsonSchema {
 	 * Bean property appender:  <property>definitions</property>.
 	 *
 	 * @param name The key in the definitions map entry.
-	 * @param definition The value in the definitions map entry.
+	 * @param value The value in the definitions map entry.
 	 * @return This object.
 	 */
-	public JsonSchema addDefinition(String name, JsonSchema definition) {
+	public JsonSchema addDefinition(String name, JsonSchema value) {
 		if (this.definitions == null)
 			this.definitions = map();
-		this.definitions.put(name, definition);
-		setMasterOn(definition);
+		this.definitions.put(name, value);
+		setMasterOn(value);
 		return this;
 	}
 
@@ -449,14 +449,14 @@ public class JsonSchema {
 	 * Bean property appender:  <property>dependencies</property>.
 	 *
 	 * @param name The key of the entry in the dependencies map.
-	 * @param dependency The value of the entry in the dependencies map.
+	 * @param value The value of the entry in the dependencies map.
 	 * @return This object.
 	 */
-	public JsonSchema addDependency(String name, JsonSchema dependency) {
+	public JsonSchema addDependency(String name, JsonSchema value) {
 		if (this.dependencies == null)
 			this.dependencies = map();
-		this.dependencies.put(name, dependency);
-		setMasterOn(dependency);
+		this.dependencies.put(name, value);
+		setMasterOn(value);
 		return this;
 	}
 
@@ -464,13 +464,13 @@ public class JsonSchema {
 	 * Bean property appender:  <property>dependentRequired</property>.
 	 *
 	 * @param name The key of the entry in the dependentRequired map.
-	 * @param required The value of the entry in the dependentRequired map.
+	 * @param value The value of the entry in the dependentRequired map.
 	 * @return This object.
 	 */
-	public JsonSchema addDependentRequired(String name, List<String> required) {
+	public JsonSchema addDependentRequired(String name, List<String> value) {
 		if (this.dependentRequired == null)
 			this.dependentRequired = map();
-		this.dependentRequired.put(name, required);
+		this.dependentRequired.put(name, value);
 		return this;
 	}
 
@@ -478,27 +478,27 @@ public class JsonSchema {
 	 * Bean property appender:  <property>dependentSchemas</property>.
 	 *
 	 * @param name The key of the entry in the dependentSchemas map.
-	 * @param schema The value of the entry in the dependentSchemas map.
+	 * @param value The value of the entry in the dependentSchemas map.
 	 * @return This object.
 	 */
-	public JsonSchema addDependentSchema(String name, JsonSchema schema) {
+	public JsonSchema addDependentSchema(String name, JsonSchema value) {
 		if (this.dependentSchemas == null)
 			this.dependentSchemas = map();
-		this.dependentSchemas.put(name, schema);
-		setMasterOn(schema);
+		this.dependentSchemas.put(name, value);
+		setMasterOn(value);
 		return this;
 	}
 
 	/**
 	 * Bean property appender:  <property>enum</property>.
 	 *
-	 * @param enum_ The list of items to append to the <property>enum</property> property on this bean.
+	 * @param value The list of items to append to the <property>enum</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema addEnum(Object...enum_) {
+	public JsonSchema addEnum(Object...value) {
 		if (this.enum_ == null)
 			this.enum_ = new LinkedList<>();
-		for (var e : enum_)
+		for (var e : value)
 			this.enum_.add(e);
 		return this;
 	}
@@ -506,13 +506,13 @@ public class JsonSchema {
 	/**
 	 * Bean property appender:  <property>examples</property>.
 	 *
-	 * @param examples The list of items to append to the <property>examples</property> property on this bean.
+	 * @param value The list of items to append to the <property>examples</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema addExamples(Object...examples) {
+	public JsonSchema addExamples(Object...value) {
 		if (this.examples == null)
 			this.examples = new LinkedList<>();
-		for (var e : examples)
+		for (var e : value)
 			this.examples.add(e);
 		return this;
 	}
@@ -520,28 +520,28 @@ public class JsonSchema {
 	/**
 	 * Bean property appender:  <property>items</property>.
 	 *
-	 * @param items The list of items to append to the <property>items</property> property on this bean.
+	 * @param value The list of items to append to the <property>items</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema addItems(JsonSchema...items) {
+	public JsonSchema addItems(JsonSchema...value) {
 		if (this.itemsSchemaArray == null)
 			this.itemsSchemaArray = new JsonSchemaArray();
-		this.itemsSchemaArray.addAll(items);
-		setMasterOn(items);
+		this.itemsSchemaArray.addAll(value);
+		setMasterOn(value);
 		return this;
 	}
 
 	/**
 	 * Bean property appender:  <property>oneOf</property>.
 	 *
-	 * @param oneOf The list of items to append to the <property>oneOf</property> property on this bean.
+	 * @param value The list of items to append to the <property>oneOf</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema addOneOf(JsonSchema...oneOf) {
+	public JsonSchema addOneOf(JsonSchema...value) {
 		if (this.oneOf == null)
 			this.oneOf = new LinkedList<>();
-		setMasterOn(oneOf);
-		for (var s : oneOf)
+		setMasterOn(value);
+		for (var s : value)
 			this.oneOf.add(s);
 		return this;
 	}
@@ -552,14 +552,14 @@ public class JsonSchema {
 	 * <p>
 	 * Properties must have their <property>name</property> property set to the pattern string when using this method.
 	 *
-	 * @param properties The list of items to append to the <property>patternProperties</property> property on this bean.
+	 * @param value The list of items to append to the <property>patternProperties</property> property on this bean.
 	 * @return This object.
 	 * @throws BeanRuntimeException If property is found without a set <property>name</property> property.
 	 */
-	public JsonSchema addPatternProperties(JsonSchemaProperty...properties) {
+	public JsonSchema addPatternProperties(JsonSchemaProperty...value) {
 		if (this.patternProperties == null)
 			this.patternProperties = map();
-		for (var p : properties) {
+		for (var p : value) {
 			if (p.getName() == null)
 				throw bex(JsonSchema.class, "Invalid property passed to JsonSchema.addProperties().  Property name was null.");
 			setMasterOn(p);
@@ -571,14 +571,14 @@ public class JsonSchema {
 	/**
 	 * Bean property appender:  <property>prefixItems</property>.
 	 *
-	 * @param prefixItems The list of items to append to the <property>prefixItems</property> property on this bean.
+	 * @param value The list of items to append to the <property>prefixItems</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema addPrefixItems(JsonSchema...prefixItems) {
+	public JsonSchema addPrefixItems(JsonSchema...value) {
 		if (this.prefixItems == null)
 			this.prefixItems = new JsonSchemaArray();
-		this.prefixItems.addAll(prefixItems);
-		setMasterOn(prefixItems);
+		this.prefixItems.addAll(value);
+		setMasterOn(value);
 		return this;
 	}
 
@@ -588,14 +588,14 @@ public class JsonSchema {
 	 * <p>
 	 * Properties must have their <property>name</property> property set on them when using this method.
 	 *
-	 * @param properties The list of items to append to the <property>properties</property> property on this bean.
+	 * @param value The list of items to append to the <property>properties</property> property on this bean.
 	 * @return This object.
 	 * @throws BeanRuntimeException If property is found without a set <property>name</property> property.
 	 */
-	public JsonSchema addProperties(JsonSchema...properties) {
+	public JsonSchema addProperties(JsonSchema...value) {
 		if (this.properties == null)
 			this.properties = map();
-		for (var p : properties) {
+		for (var p : value) {
 			if (p.getName() == null)
 				throw bex(JsonSchema.class, "Invalid property passed to JsonSchema.addProperties().  Property name was null.");
 			setMasterOn(p);
@@ -607,13 +607,13 @@ public class JsonSchema {
 	/**
 	 * Bean property appender:  <property>required</property>.
 	 *
-	 * @param properties The list of items to append to the <property>required</property> property on this bean.
+	 * @param value The list of items to append to the <property>required</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema addRequired(JsonSchemaProperty...properties) {
+	public JsonSchema addRequired(JsonSchemaProperty...value) {
 		if (this.required == null)
 			this.required = new LinkedList<>();
-		for (var p : properties)
+		for (var p : value)
 			this.required.add(p.getName());
 		return this;
 	}
@@ -621,26 +621,26 @@ public class JsonSchema {
 	/**
 	 * Bean property appender:  <property>required</property>.
 	 *
-	 * @param required The list of items to append to the <property>required</property> property on this bean.
+	 * @param value The list of items to append to the <property>required</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema addRequired(List<String> required) {
+	public JsonSchema addRequired(List<String> value) {
 		if (this.required == null)
 			this.required = new LinkedList<>();
-		required.forEach(x -> this.required.add(x));
+		value.forEach(x -> this.required.add(x));
 		return this;
 	}
 
 	/**
 	 * Bean property appender:  <property>required</property>.
 	 *
-	 * @param required The list of items to append to the <property>required</property> property on this bean.
+	 * @param value The list of items to append to the <property>required</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema addRequired(String...required) {
+	public JsonSchema addRequired(String...value) {
 		if (this.required == null)
 			this.required = new LinkedList<>();
-		for (var r : required)
+		for (var r : value)
 			this.required.add(r);
 		return this;
 	}
@@ -648,13 +648,13 @@ public class JsonSchema {
 	/**
 	 * Bean property appender:  <property>type</property>.
 	 *
-	 * @param types The list of items to append to the <property>type</property> property on this bean.
+	 * @param value The list of items to append to the <property>type</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema addTypes(JsonType...types) {
+	public JsonSchema addTypes(JsonType...value) {
 		if (this.typeJsonTypeArray == null)
 			this.typeJsonTypeArray = new JsonTypeArray();
-		this.typeJsonTypeArray.addAll(types);
+		this.typeJsonTypeArray.addAll(value);
 		return this;
 	}
 
@@ -1281,23 +1281,23 @@ public class JsonSchema {
 	/**
 	 * Bean property setter:  <property>additionalItems</property>.
 	 *
-	 * @param additionalItems
+	 * @param value
 	 * 	The new value for the <property>additionalItems</property> property on this bean.
 	 * 	This object must be of type {@link Boolean} or {@link JsonSchemaArray}.
 	 * @return This object.
 	 * @throws BeanRuntimeException If invalid object type passed in.
 	 */
-	public JsonSchema setAdditionalItems(Object additionalItems) {
+	public JsonSchema setAdditionalItems(Object value) {
 		this.additionalItemsBoolean = null;
 		this.additionalItemsSchemaArray = null;
-		if (nn(additionalItems)) {
-			if (additionalItems instanceof Boolean additionalItems2)
-				this.additionalItemsBoolean = additionalItems2;
-			else if (additionalItems instanceof JsonSchemaArray additionalItems2) {
-				this.additionalItemsSchemaArray = additionalItems2;
+		if (nn(value)) {
+			if (value instanceof Boolean value2)
+				this.additionalItemsBoolean = value2;
+			else if (value instanceof JsonSchemaArray value2) {
+				this.additionalItemsSchemaArray = value2;
 				setMasterOn(this.additionalItemsSchemaArray);
 			} else {
-				throw bex(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchemaArray", cn(additionalItems));
+				throw bex(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchemaArray", cn(value));
 			}
 		}
 		return this;
@@ -1306,24 +1306,24 @@ public class JsonSchema {
 	/**
 	 * Bean property setter:  <property>additionalProperties</property>.
 	 *
-	 * @param additionalProperties
+	 * @param value
 	 * 	The new value for the <property>additionalProperties</property> property on this bean.
 	 * 	This object must be of type {@link Boolean} or {@link JsonSchema}.
 	 * @return This object.
 	 * @throws BeanRuntimeException If invalid object type passed in.
 	 */
 	@Beanp(dictionary = { JsonSchema.class })
-	public JsonSchema setAdditionalProperties(Object additionalProperties) {
+	public JsonSchema setAdditionalProperties(Object value) {
 		this.additionalPropertiesBoolean = null;
 		this.additionalPropertiesSchema = null;
-		if (nn(additionalProperties)) {
-			if (additionalProperties instanceof Boolean additionalProperties2)
-				this.additionalPropertiesBoolean = additionalProperties2;
-			else if (additionalProperties instanceof JsonSchema additionalProperties2) {
-				this.additionalPropertiesSchema = additionalProperties2;
+		if (nn(value)) {
+			if (value instanceof Boolean value2)
+				this.additionalPropertiesBoolean = value2;
+			else if (value instanceof JsonSchema value2) {
+				this.additionalPropertiesSchema = value2;
 				setMasterOn(this.additionalPropertiesSchema);
 			} else
-				throw bex(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchema", cn(additionalProperties));
+				throw bex(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchema", cn(value));
 		}
 		return this;
 	}
@@ -1331,24 +1331,24 @@ public class JsonSchema {
 	/**
 	 * Bean property setter:  <property>allOf</property>.
 	 *
-	 * @param allOf The new value for the <property>allOf</property> property on this bean.
+	 * @param value The new value for the <property>allOf</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setAllOf(List<JsonSchema> allOf) {
-		this.allOf = allOf;
-		setMasterOn(allOf);
+	public JsonSchema setAllOf(List<JsonSchema> value) {
+		this.allOf = value;
+		setMasterOn(value);
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>anyOf</property>.
 	 *
-	 * @param anyOf The new value of the <property>anyOf</property> property on this bean.
+	 * @param value The new value of the <property>anyOf</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setAnyOf(List<JsonSchema> anyOf) {
-		this.anyOf = anyOf;
-		setMasterOn(anyOf);
+	public JsonSchema setAnyOf(List<JsonSchema> value) {
+		this.anyOf = value;
+		setMasterOn(value);
 		return this;
 	}
 
@@ -1358,11 +1358,11 @@ public class JsonSchema {
 	 * <p>
 	 * This property was added in Draft 06.
 	 *
-	 * @param const_ The new value for the <property>const</property> property on this bean.
+	 * @param value The new value for the <property>const</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setConst(Object const_) {
-		this.const_ = const_;
+	public JsonSchema setConst(Object value) {
+		this.const_ = value;
 		return this;
 	}
 
@@ -1372,11 +1372,11 @@ public class JsonSchema {
 	 * <p>
 	 * This property was added in Draft 07.
 	 *
-	 * @param contentEncoding The new value for the <property>contentEncoding</property> property on this bean.
+	 * @param value The new value for the <property>contentEncoding</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setContentEncoding(String contentEncoding) {
-		this.contentEncoding = contentEncoding;
+	public JsonSchema setContentEncoding(String value) {
+		this.contentEncoding = value;
 		return this;
 	}
 
@@ -1386,24 +1386,24 @@ public class JsonSchema {
 	 * <p>
 	 * This property was added in Draft 07.
 	 *
-	 * @param contentMediaType The new value for the <property>contentMediaType</property> property on this bean.
+	 * @param value The new value for the <property>contentMediaType</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setContentMediaType(String contentMediaType) {
-		this.contentMediaType = contentMediaType;
+	public JsonSchema setContentMediaType(String value) {
+		this.contentMediaType = value;
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>definitions</property>.
 	 *
-	 * @param definitions The new value for the <property>definitions</property> property on this bean.
+	 * @param value The new value for the <property>definitions</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setDefinitions(Map<String,JsonSchema> definitions) {
-		this.definitions = definitions;
-		if (nn(definitions))
-			setMasterOn(definitions.values());
+	public JsonSchema setDefinitions(Map<String,JsonSchema> value) {
+		this.definitions = value;
+		if (nn(value))
+			setMasterOn(value.values());
 		return this;
 	}
 
@@ -1414,27 +1414,27 @@ public class JsonSchema {
 	 * This is the Draft 2020-12 replacement for <property>definitions</property>.
 	 * Both properties are supported for backward compatibility.
 	 *
-	 * @param defs The new value for the <property>$defs</property> property on this bean.
+	 * @param value The new value for the <property>$defs</property> property on this bean.
 	 * @return This object.
 	 */
 	@Beanp("$defs")
-	public JsonSchema setDefs(Map<String,JsonSchema> defs) {
-		this.defs = defs;
-		if (nn(defs))
-			setMasterOn(defs.values());
+	public JsonSchema setDefs(Map<String,JsonSchema> value) {
+		this.defs = value;
+		if (nn(value))
+			setMasterOn(value.values());
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>dependencies</property>.
 	 *
-	 * @param dependencies The new value for the <property>dependencies</property> property on this bean.
+	 * @param value The new value for the <property>dependencies</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setDependencies(Map<String,JsonSchema> dependencies) {
-		this.dependencies = dependencies;
-		if (nn(dependencies))
-			setMasterOn(dependencies.values());
+	public JsonSchema setDependencies(Map<String,JsonSchema> value) {
+		this.dependencies = value;
+		if (nn(value))
+			setMasterOn(value.values());
 		return this;
 	}
 
@@ -1444,11 +1444,11 @@ public class JsonSchema {
 	 * <p>
 	 * This property was added in Draft 2019-09 as a replacement for the array form of <property>dependencies</property>.
 	 *
-	 * @param dependentRequired The new value for the <property>dependentRequired</property> property on this bean.
+	 * @param value The new value for the <property>dependentRequired</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setDependentRequired(Map<String,List<String>> dependentRequired) {
-		this.dependentRequired = dependentRequired;
+	public JsonSchema setDependentRequired(Map<String,List<String>> value) {
+		this.dependentRequired = value;
 		return this;
 	}
 
@@ -1458,24 +1458,24 @@ public class JsonSchema {
 	 * <p>
 	 * This property was added in Draft 2019-09 as a replacement for the schema form of <property>dependencies</property>.
 	 *
-	 * @param dependentSchemas The new value for the <property>dependentSchemas</property> property on this bean.
+	 * @param value The new value for the <property>dependentSchemas</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setDependentSchemas(Map<String,JsonSchema> dependentSchemas) {
-		this.dependentSchemas = dependentSchemas;
-		if (nn(dependentSchemas))
-			setMasterOn(dependentSchemas.values());
+	public JsonSchema setDependentSchemas(Map<String,JsonSchema> value) {
+		this.dependentSchemas = value;
+		if (nn(value))
+			setMasterOn(value.values());
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>description</property>.
 	 *
-	 * @param description The new value for the <property>description</property> property on this bean.
+	 * @param value The new value for the <property>description</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setDescription(String description) {
-		this.description = description;
+	public JsonSchema setDescription(String value) {
+		this.description = value;
 		return this;
 	}
 
@@ -1485,24 +1485,24 @@ public class JsonSchema {
 	 * <p>
 	 * This property was added in Draft 07 for conditional schema application.
 	 *
-	 * @param else_ The new value for the <property>else</property> property on this bean.
+	 * @param value The new value for the <property>else</property> property on this bean.
 	 * @return This object.
 	 */
 	@Beanp("else")
-	public JsonSchema setElse(JsonSchema else_) {
-		this.else_ = else_;
-		setMasterOn(else_);
+	public JsonSchema setElse(JsonSchema value) {
+		this.else_ = value;
+		setMasterOn(value);
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>enum</property>.
 	 *
-	 * @param enum_ The new value for the <property>enum</property> property on this bean.
+	 * @param value The new value for the <property>enum</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setEnum(List<Object> enum_) {
-		this.enum_ = enum_;
+	public JsonSchema setEnum(List<Object> value) {
+		this.enum_ = value;
 		return this;
 	}
 
@@ -1512,11 +1512,11 @@ public class JsonSchema {
 	 * <p>
 	 * This property was added in Draft 06.
 	 *
-	 * @param examples The new value for the <property>examples</property> property on this bean.
+	 * @param value The new value for the <property>examples</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setExamples(List<Object> examples) {
-		this.examples = examples;
+	public JsonSchema setExamples(List<Object> value) {
+		this.examples = value;
 		return this;
 	}
 
@@ -1527,11 +1527,11 @@ public class JsonSchema {
 	 * In Draft 06+, this is a numeric value representing the exclusive upper bound.
 	 * In Draft 04, this was a boolean flag. This implementation uses the Draft 06+ semantics.
 	 *
-	 * @param exclusiveMaximum The new value for the <property>exclusiveMaximum</property> property on this bean.
+	 * @param value The new value for the <property>exclusiveMaximum</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setExclusiveMaximum(Number exclusiveMaximum) {
-		this.exclusiveMaximum = exclusiveMaximum;
+	public JsonSchema setExclusiveMaximum(Number value) {
+		this.exclusiveMaximum = value;
 		return this;
 	}
 
@@ -1542,11 +1542,11 @@ public class JsonSchema {
 	 * In Draft 06+, this is a numeric value representing the exclusive lower bound.
 	 * In Draft 04, this was a boolean flag. This implementation uses the Draft 06+ semantics.
 	 *
-	 * @param exclusiveMinimum The new value for the <property>exclusiveMinimum</property> property on this bean.
+	 * @param value The new value for the <property>exclusiveMinimum</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setExclusiveMinimum(Number exclusiveMinimum) {
-		this.exclusiveMinimum = exclusiveMinimum;
+	public JsonSchema setExclusiveMinimum(Number value) {
+		this.exclusiveMinimum = value;
 		return this;
 	}
 
@@ -1564,13 +1564,13 @@ public class JsonSchema {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param id The new value for the <property>id</property> property on this bean.
+	 * @param value The new value for the <property>id</property> property on this bean.
 	 * @return This object.
 	 * @deprecated Use {@link #setIdUri(Object)} instead.
 	 */
 	@Deprecated(since = "10.0", forRemoval = true)
-	public JsonSchema setId(Object id) {
-		this.id = toUri(id);
+	public JsonSchema setId(Object value) {
+		this.id = toUri(value);
 		return this;
 	}
 
@@ -1587,12 +1587,12 @@ public class JsonSchema {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param idUri The new value for the <property>$id</property> property on this bean.
+	 * @param value The new value for the <property>$id</property> property on this bean.
 	 * @return This object.
 	 */
 	@Beanp("$id")
-	public JsonSchema setIdUri(Object idUri) {
-		this.idUri = toUri(idUri);
+	public JsonSchema setIdUri(Object value) {
+		this.idUri = toUri(value);
 		return this;
 	}
 
@@ -1602,37 +1602,37 @@ public class JsonSchema {
 	 * <p>
 	 * This property was added in Draft 07 for conditional schema application.
 	 *
-	 * @param if_ The new value for the <property>if</property> property on this bean.
+	 * @param value The new value for the <property>if</property> property on this bean.
 	 * @return This object.
 	 */
 	@Beanp("if")
-	public JsonSchema setIf(JsonSchema if_) {
-		this.if_ = if_;
-		setMasterOn(if_);
+	public JsonSchema setIf(JsonSchema value) {
+		this.if_ = value;
+		setMasterOn(value);
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>items</property>.
 	 *
-	 * @param
-	 * 	items The new value for the <property>items</property> property on this bean.
+	 * @param value
+	 * 	The new value for the <property>items</property> property on this bean.
 	 * 	This object must be of type {@link JsonSchema} or {@link JsonSchemaArray}.
 	 * @return This object.
 	 * @throws BeanRuntimeException If invalid object type passed in.
 	 */
-	public JsonSchema setItems(Object items) {
+	public JsonSchema setItems(Object value) {
 		this.itemsSchema = null;
 		this.itemsSchemaArray = null;
-		if (nn(items)) {
-			if (items instanceof JsonSchema items2) {
-				this.itemsSchema = items2;
+		if (nn(value)) {
+			if (value instanceof JsonSchema value2) {
+				this.itemsSchema = value2;
 				setMasterOn(this.itemsSchema);
-			} else if (items instanceof JsonSchemaArray items2) {
-				this.itemsSchemaArray = items2;
+			} else if (value instanceof JsonSchemaArray value2) {
+				this.itemsSchemaArray = value2;
 				setMasterOn(this.itemsSchemaArray);
 			} else {
-				throw bex(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  JsonSchema, JsonSchemaArray", cn(items));
+				throw bex(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  JsonSchema, JsonSchemaArray", cn(value));
 			}
 		}
 		return this;
@@ -1641,99 +1641,99 @@ public class JsonSchema {
 	/**
 	 * Bean property setter:  <property>maximum</property>.
 	 *
-	 * @param maximum The new value for the <property>maximum</property> property on this bean.
+	 * @param value The new value for the <property>maximum</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setMaximum(Number maximum) {
-		this.maximum = maximum;
+	public JsonSchema setMaximum(Number value) {
+		this.maximum = value;
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>maxItems</property>.
 	 *
-	 * @param maxItems The new value for the <property>maxItems</property> property on this bean.
+	 * @param value The new value for the <property>maxItems</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setMaxItems(Integer maxItems) {
-		this.maxItems = maxItems;
+	public JsonSchema setMaxItems(Integer value) {
+		this.maxItems = value;
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>maxLength</property>.
 	 *
-	 * @param maxLength The new value for the <property>maxLength</property> property on this bean.
+	 * @param value The new value for the <property>maxLength</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setMaxLength(Integer maxLength) {
-		this.maxLength = maxLength;
+	public JsonSchema setMaxLength(Integer value) {
+		this.maxLength = value;
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>maxProperties</property>.
 	 *
-	 * @param maxProperties The new value for the <property>maxProperties</property> property on this bean.
+	 * @param value The new value for the <property>maxProperties</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setMaxProperties(Integer maxProperties) {
-		this.maxProperties = maxProperties;
+	public JsonSchema setMaxProperties(Integer value) {
+		this.maxProperties = value;
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>minimum</property>.
 	 *
-	 * @param minimum The new value for the <property>minimum</property> property on this bean.
+	 * @param value The new value for the <property>minimum</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setMinimum(Number minimum) {
-		this.minimum = minimum;
+	public JsonSchema setMinimum(Number value) {
+		this.minimum = value;
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>minItems</property>.
 	 *
-	 * @param minItems The new value for the <property>minItems</property> property on this bean.
+	 * @param value The new value for the <property>minItems</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setMinItems(Integer minItems) {
-		this.minItems = minItems;
+	public JsonSchema setMinItems(Integer value) {
+		this.minItems = value;
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>minLength</property>.
 	 *
-	 * @param minLength The new value for the <property>minLength</property> property on this bean.
+	 * @param value The new value for the <property>minLength</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setMinLength(Integer minLength) {
-		this.minLength = minLength;
+	public JsonSchema setMinLength(Integer value) {
+		this.minLength = value;
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>minProperties</property>.
 	 *
-	 * @param minProperties The new value for the <property>minProperties</property> property on this bean.
+	 * @param value The new value for the <property>minProperties</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setMinProperties(Integer minProperties) {
-		this.minProperties = minProperties;
+	public JsonSchema setMinProperties(Integer value) {
+		this.minProperties = value;
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>multipleOf</property>.
 	 *
-	 * @param multipleOf The new value for the <property>multipleOf</property> property on this bean.
+	 * @param value The new value for the <property>multipleOf</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setMultipleOf(Number multipleOf) {
-		this.multipleOf = multipleOf;
+	public JsonSchema setMultipleOf(Number value) {
+		this.multipleOf = value;
 		return this;
 	}
 
@@ -1743,60 +1743,60 @@ public class JsonSchema {
 	 * <p>
 	 * This is an internal property used for tracking property names and is not part of the JSON Schema specification.
 	 *
-	 * @param name The new value for the <property>name</property> property on this bean.
+	 * @param value The new value for the <property>name</property> property on this bean.
 	 * @return This object.
 	 */
 	@BeanIgnore
-	public JsonSchema setName(String name) {
-		this.name = name;
+	public JsonSchema setName(String value) {
+		this.name = value;
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>not</property>.
 	 *
-	 * @param not The new value for the <property>not</property> property on this bean.
+	 * @param value The new value for the <property>not</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setNot(JsonSchema not) {
-		this.not = not;
-		setMasterOn(not);
+	public JsonSchema setNot(JsonSchema value) {
+		this.not = value;
+		setMasterOn(value);
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>oneOf</property>.
 	 *
-	 * @param oneOf The new value for the <property>oneOf</property> property on this bean.
+	 * @param value The new value for the <property>oneOf</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setOneOf(List<JsonSchema> oneOf) {
-		this.oneOf = oneOf;
-		setMasterOn(oneOf);
+	public JsonSchema setOneOf(List<JsonSchema> value) {
+		this.oneOf = value;
+		setMasterOn(value);
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>pattern</property>.
 	 *
-	 * @param pattern The new value for the <property>pattern</property> property on this bean.
+	 * @param value The new value for the <property>pattern</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setPattern(String pattern) {
-		this.pattern = pattern;
+	public JsonSchema setPattern(String value) {
+		this.pattern = value;
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>patternProperties</property>.
 	 *
-	 * @param patternProperties The new value for the <property>patternProperties</property> property on this bean.
+	 * @param value The new value for the <property>patternProperties</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setPatternProperties(Map<String,JsonSchema> patternProperties) {
-		this.patternProperties = patternProperties;
-		if (nn(patternProperties)) {
-			patternProperties.entrySet().forEach(x -> {
+	public JsonSchema setPatternProperties(Map<String,JsonSchema> value) {
+		this.patternProperties = value;
+		if (nn(value)) {
+			value.entrySet().forEach(x -> {
 				var s = x.getValue();
 				setMasterOn(s);
 				s.setName(x.getKey());
@@ -1811,28 +1811,28 @@ public class JsonSchema {
 	 * <p>
 	 * This property was added in Draft 2020-12 for tuple validation.
 	 *
-	 * @param prefixItems The new value for the <property>prefixItems</property> property on this bean.
+	 * @param value The new value for the <property>prefixItems</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setPrefixItems(JsonSchemaArray prefixItems) {
-		this.prefixItems = prefixItems;
-		setMasterOn(prefixItems);
+	public JsonSchema setPrefixItems(JsonSchemaArray value) {
+		this.prefixItems = value;
+		setMasterOn(value);
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>properties</property>.
 	 *
-	 * @param properties The new value for the <property>properties</property> property on this bean.
+	 * @param value The new value for the <property>properties</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setProperties(Map<String,JsonSchema> properties) {
-		this.properties = properties;
-		if (nn(properties)) {
-			properties.entrySet().forEach(x -> {
-				var value = x.getValue();
-				setMasterOn(value);
-				value.setName(x.getKey());
+	public JsonSchema setProperties(Map<String,JsonSchema> value) {
+		this.properties = value;
+		if (nn(value)) {
+			value.entrySet().forEach(x -> {
+				var v = x.getValue();
+				setMasterOn(v);
+				v.setName(x.getKey());
 			});
 		}
 		return this;
@@ -1844,11 +1844,11 @@ public class JsonSchema {
 	 * <p>
 	 * This property was added in Draft 07.
 	 *
-	 * @param readOnly The new value for the <property>readOnly</property> property on this bean.
+	 * @param value The new value for the <property>readOnly</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setReadOnly(Boolean readOnly) {
-		this.readOnly = readOnly;
+	public JsonSchema setReadOnly(Boolean value) {
+		this.readOnly = value;
 		return this;
 	}
 
@@ -1862,23 +1862,23 @@ public class JsonSchema {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param ref The new value for the <property>$ref</property> property on this bean.
+	 * @param value The new value for the <property>$ref</property> property on this bean.
 	 * @return This object.
 	 */
 	@Beanp("$ref")
-	public JsonSchema setRef(Object ref) {
-		this.ref = toUri(ref);
+	public JsonSchema setRef(Object value) {
+		this.ref = toUri(value);
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>required</property>.
 	 *
-	 * @param required The new value for the <property>required</property> property on this bean.
+	 * @param value The new value for the <property>required</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setRequired(List<String> required) {
-		this.required = required;
+	public JsonSchema setRequired(List<String> value) {
+		this.required = value;
 		return this;
 	}
 
@@ -1886,12 +1886,12 @@ public class JsonSchema {
 	 * Associates a schema map with this schema for resolving other schemas identified through <property>$ref</property>
 	 * properties.
 	 *
-	 * @param schemaMap The schema map to associate with this schema.  Can be <jk>null</jk>.
+	 * @param value The schema map to associate with this schema.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	@BeanIgnore
-	public JsonSchema setSchemaMap(JsonSchemaMap schemaMap) {
-		this.schemaMap = schemaMap;
+	public JsonSchema setSchemaMap(JsonSchemaMap value) {
+		this.schemaMap = value;
 		return this;
 	}
 
@@ -1905,12 +1905,12 @@ public class JsonSchema {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param schemaVersion The new value for the <property>schemaVersion</property> property on this bean.
+	 * @param value The new value for the <property>schemaVersion</property> property on this bean.
 	 * @return This object.
 	 */
 	@Beanp("$schema")
-	public JsonSchema setSchemaVersionUri(Object schemaVersion) {
-		this.schemaVersion = toUri(schemaVersion);
+	public JsonSchema setSchemaVersionUri(Object value) {
+		this.schemaVersion = toUri(value);
 		return this;
 	}
 
@@ -1920,46 +1920,46 @@ public class JsonSchema {
 	 * <p>
 	 * This property was added in Draft 07 for conditional schema application.
 	 *
-	 * @param then_ The new value for the <property>then</property> property on this bean.
+	 * @param value The new value for the <property>then</property> property on this bean.
 	 * @return This object.
 	 */
 	@Beanp("then")
-	public JsonSchema setThen(JsonSchema then_) {
-		this.then_ = then_;
-		setMasterOn(then_);
+	public JsonSchema setThen(JsonSchema value) {
+		this.then_ = value;
+		setMasterOn(value);
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>title</property>.
 	 *
-	 * @param title The new value for the <property>title</property> property on this bean.
+	 * @param value The new value for the <property>title</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setTitle(String title) {
-		this.title = title;
+	public JsonSchema setTitle(String value) {
+		this.title = value;
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>type</property>.
 	 *
-	 * @param type
+	 * @param value
 	 * 	The new value for the <property>type</property> property on this bean.
 	 * 	This object must be of type {@link JsonType} or {@link JsonTypeArray}.
 	 * @return This object.
 	 * @throws BeanRuntimeException If invalid object type passed in.
 	 */
-	public JsonSchema setType(Object type) {
+	public JsonSchema setType(Object value) {
 		this.typeJsonType = null;
 		this.typeJsonTypeArray = null;
-		if (nn(type)) {
-			if (type instanceof JsonType type2)
-				this.typeJsonType = type2;
-			else if (type instanceof JsonTypeArray type2)
-				this.typeJsonTypeArray = type2;
+		if (nn(value)) {
+			if (value instanceof JsonType value2)
+				this.typeJsonType = value2;
+			else if (value instanceof JsonTypeArray value2)
+				this.typeJsonTypeArray = value2;
 			else
-				throw bex(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  SimpleType, SimpleTypeArray", cn(type));
+				throw bex(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  SimpleType, SimpleTypeArray", cn(value));
 		}
 		return this;
 	}
@@ -1970,12 +1970,12 @@ public class JsonSchema {
 	 * <p>
 	 * This property was added in Draft 2019-09.
 	 *
-	 * @param unevaluatedItems The new value for the <property>unevaluatedItems</property> property on this bean.
+	 * @param value The new value for the <property>unevaluatedItems</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setUnevaluatedItems(JsonSchema unevaluatedItems) {
-		this.unevaluatedItems = unevaluatedItems;
-		setMasterOn(unevaluatedItems);
+	public JsonSchema setUnevaluatedItems(JsonSchema value) {
+		this.unevaluatedItems = value;
+		setMasterOn(value);
 		return this;
 	}
 
@@ -1985,23 +1985,23 @@ public class JsonSchema {
 	 * <p>
 	 * This property was added in Draft 2019-09.
 	 *
-	 * @param unevaluatedProperties The new value for the <property>unevaluatedProperties</property> property on this bean.
+	 * @param value The new value for the <property>unevaluatedProperties</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setUnevaluatedProperties(JsonSchema unevaluatedProperties) {
-		this.unevaluatedProperties = unevaluatedProperties;
-		setMasterOn(unevaluatedProperties);
+	public JsonSchema setUnevaluatedProperties(JsonSchema value) {
+		this.unevaluatedProperties = value;
+		setMasterOn(value);
 		return this;
 	}
 
 	/**
 	 * Bean property setter:  <property>uniqueItems</property>.
 	 *
-	 * @param uniqueItems The new value for the <property>uniqueItems</property> property on this bean.
+	 * @param value The new value for the <property>uniqueItems</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setUniqueItems(Boolean uniqueItems) {
-		this.uniqueItems = uniqueItems;
+	public JsonSchema setUniqueItems(Boolean value) {
+		this.uniqueItems = value;
 		return this;
 	}
 
@@ -2011,11 +2011,11 @@ public class JsonSchema {
 	 * <p>
 	 * This property was added in Draft 07.
 	 *
-	 * @param writeOnly The new value for the <property>writeOnly</property> property on this bean.
+	 * @param value The new value for the <property>writeOnly</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setWriteOnly(Boolean writeOnly) {
-		this.writeOnly = writeOnly;
+	public JsonSchema setWriteOnly(Boolean value) {
+		this.writeOnly = value;
 		return this;
 	}
 

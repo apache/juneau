@@ -364,12 +364,9 @@ class BidiMap_Test extends TestBase {
 
 	@Test void a23_duplicateValuesInBuilder() {
 		// Duplicate values are not allowed
-		assertThrows(IllegalArgumentException.class, () ->
-			BidiMap.<String,Integer>create()
-				.add("one", 1)
-				.add("uno", 1)
-				.build()
-		);
+		var builder = BidiMap.<String,Integer>create()
+			.add("one", 1);
+		assertThrows(IllegalArgumentException.class, () -> builder.add("uno", 1));
 	}
 
 	@Test void a23b_duplicateValuesInBuilder_overwritingKey() {
@@ -377,13 +374,10 @@ class BidiMap_Test extends TestBase {
 		// This should throw IllegalArgumentException
 		// The condition is: values.contains(value) && ! value.equals(existingValue)
 		// where existingValue is the value currently mapped to the key being added
-		assertThrows(IllegalArgumentException.class, () ->
-			BidiMap.<String,Integer>create()
-				.add("key1", 100)
-				.add("key2", 200)
-				.add("key1", 200)  // Try to map key1 to 200, but 200 is already mapped to key2
-				.build()
-		);
+		var builder = BidiMap.<String,Integer>create()
+			.add("key1", 100)
+			.add("key2", 200);
+		assertThrows(IllegalArgumentException.class, () -> builder.add("key1", 200));  // Try to map key1 to 200, but 200 is already mapped to key2
 	}
 
 	@Test void a23c_overwriteKeyWithSameValue() {

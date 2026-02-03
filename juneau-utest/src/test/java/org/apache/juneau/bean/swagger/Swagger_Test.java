@@ -121,19 +121,25 @@ class Swagger_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, ()->x.getParameterInfo(null, "a", "a", "a"));
 			assertThrows(IllegalArgumentException.class, ()->x.getParameterInfo("a", null, "a", "a"));
 			assertThrows(IllegalArgumentException.class, ()->x.getParameterInfo("a", "a", null, "a"));
-			assertThrows(IllegalArgumentException.class, ()->x.get(null, String.class));
+			var stringClass = String.class;
+			assertThrows(IllegalArgumentException.class, ()->x.get(null, stringClass));
 			assertThrows(IllegalArgumentException.class, ()->x.set(null, "value"));
-			assertThrows(IllegalArgumentException.class, ()->x.addDefinition(null, JsonMap.of("a", "b")));
+			var jsonMap = JsonMap.of("a", "b");
+			assertThrows(IllegalArgumentException.class, ()->x.addDefinition(null, jsonMap));
 			assertThrows(IllegalArgumentException.class, ()->x.addDefinition("a", null));
-			assertThrows(IllegalArgumentException.class, ()->x.addParameter(null, parameterInfo("a", "b")));
+			var parameterInfo = parameterInfo("a", "b");
+			assertThrows(IllegalArgumentException.class, ()->x.addParameter(null, parameterInfo));
 			assertThrows(IllegalArgumentException.class, ()->x.addParameter("a", null));
-			assertThrows(IllegalArgumentException.class, ()->x.addPath(null, "get", operation()));
-			assertThrows(IllegalArgumentException.class, ()->x.addPath("a", null, operation()));
+			var operation = operation();
+			assertThrows(IllegalArgumentException.class, ()->x.addPath(null, "get", operation));
+			assertThrows(IllegalArgumentException.class, ()->x.addPath("a", null, operation));
 			assertThrows(IllegalArgumentException.class, ()->x.addPath("a", "get", null));
-			assertThrows(IllegalArgumentException.class, ()->x.addResponse(null, responseInfo()));
+			var responseInfo = responseInfo();
+			assertThrows(IllegalArgumentException.class, ()->x.addResponse(null, responseInfo));
 			assertThrows(IllegalArgumentException.class, ()->x.addResponse("a", null));
 			assertThrows(IllegalArgumentException.class, ()->x.addSecurity(null, "a"));
-			assertThrows(IllegalArgumentException.class, ()->x.addSecurityDefinition(null, securityScheme()));
+			var securityScheme = securityScheme();
+			assertThrows(IllegalArgumentException.class, ()->x.addSecurityDefinition(null, securityScheme));
 			assertThrows(IllegalArgumentException.class, ()->x.addSecurityDefinition("a", null));
 		}
 
@@ -281,7 +287,8 @@ class Swagger_Test extends TestBase {
 		}
 
 		@Test void a20_strictMode() {
-			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			var strictBean = bean().strict();
+			assertThrows(RuntimeException.class, () -> strictBean.set("foo", "bar"));
 			assertDoesNotThrow(() -> bean().set("foo", "bar"));
 
 			assertFalse(bean().isStrict());
@@ -402,17 +409,19 @@ class Swagger_Test extends TestBase {
 		}
 
 		@Test void c09_getTypes() {
+			var objectClass = Object.class;
 			assertMapped(
-				TESTER.bean(), (obj,prop) -> cns(obj.get(prop, Object.class)),
+				TESTER.bean(), (obj,prop) -> cns(obj.get(prop, objectClass)),
 				"basePath,consumes,definitions,externalDocs,host,info,parameters,paths,produces,responses,schemes,security,securityDefinitions,swagger,tags,x1,x2",
 				"String,LinkedHashSet,LinkedHashMap,ExternalDocumentation,String,Info,LinkedHashMap,TreeMap,LinkedHashSet,LinkedHashMap,LinkedHashSet,ArrayList,LinkedHashMap,String,LinkedHashSet,String,<null>"
 			);
 		}
 
 		@Test void c10_nullPropertyValue() {
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
-			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
+			var swagger = bean();
+			assertThrows(IllegalArgumentException.class, ()->swagger.get(null));
+			assertThrows(IllegalArgumentException.class, ()->swagger.get(null, String.class));
+			assertThrows(IllegalArgumentException.class, ()->swagger.set(null, "a"));
 		}
 	}
 

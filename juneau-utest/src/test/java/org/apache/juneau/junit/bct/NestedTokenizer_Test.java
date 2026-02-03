@@ -392,7 +392,8 @@ class NestedTokenizer_Test extends TestBase {
 
 		// Verify unmodifiable
 		var nested = parent.getNested();
-		assertThrows(UnsupportedOperationException.class, () -> nested.add(new Token("child3")));
+		var token = new Token("child3");
+		assertThrows(UnsupportedOperationException.class, () -> nested.add(token));
 	}
 
 	@Test void d05_hasNestedEdgeCases() {
