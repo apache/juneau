@@ -65,7 +65,7 @@ public class RemoteOperationReturn {
 			rv = RemoteReturn.NONE;
 		} else {
 			Value<RemoteReturn> v = Value.of(RemoteReturn.BODY);
-			al.forEach(ai -> ai.getValue(RemoteReturn.class, "returns").ifPresent(x -> v.set(x)));
+			al.forEach(ai -> ai.getValue(RemoteReturn.class, "returns").ifPresent(v::set));
 			rv = v.get();
 		}
 

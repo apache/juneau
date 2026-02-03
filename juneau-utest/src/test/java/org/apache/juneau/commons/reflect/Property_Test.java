@@ -68,7 +68,7 @@ class Property_Test extends TestBase {
 	@Test
 	void a002_functionGetterAndSetter() {
 		var prop = Property.<TestClass, String>create()
-			.getter(obj -> obj.getPublicField())
+			.getter(TestClass::getPublicField)
 			.setter(TestClass::setPublicField)
 			.build();
 
@@ -84,7 +84,7 @@ class Property_Test extends TestBase {
 	@Test
 	void a003_getterOnly() {
 		var prop = Property.<TestClass, String>create()
-			.getter(obj -> obj.getPublicField())
+			.getter(TestClass::getPublicField)
 			.build();
 
 		var obj = new TestClass();
@@ -130,7 +130,7 @@ class Property_Test extends TestBase {
 	@Test
 	void a006_set_withNullConsumer() {
 		var prop = Property.<TestClass, String>create()
-			.getter(obj -> obj.getPublicField())
+			.getter(TestClass::getPublicField)
 			.build();
 
 		var obj = new TestClass();
@@ -144,7 +144,7 @@ class Property_Test extends TestBase {
 	@Test
 	void a007_get_withNullObject() {
 		var prop = Property.<TestClass, String>create()
-			.getter(obj -> obj.getPublicField())
+			.getter(TestClass::getPublicField)
 			.build();
 
 		assertThrows(IllegalArgumentException.class, () -> prop.get(null));
@@ -241,7 +241,7 @@ class Property_Test extends TestBase {
 			.findFirst()
 			.orElseThrow();
 		var prop = Property.<TestClass, String>create()
-			.getter(obj -> obj.getPublicField())
+			.getter(TestClass::getPublicField)
 			.setter(setter)
 			.build();
 
@@ -299,7 +299,7 @@ class Property_Test extends TestBase {
 	@Test
 	void a017_set_withNullValue() {
 		var prop = Property.<TestClass, String>create()
-			.getter(obj -> obj.getPublicField())
+			.getter(TestClass::getPublicField)
 			.setter(TestClass::setPublicField)
 			.build();
 
@@ -418,7 +418,7 @@ class Property_Test extends TestBase {
 	@Test
 	void a024_builder_chaining() {
 		var prop = Property.<TestClass, String>create()
-			.getter(obj -> obj.getPublicField())
+			.getter(TestClass::getPublicField)
 			.setter(TestClass::setPublicField)
 			.build();
 

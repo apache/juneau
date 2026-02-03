@@ -77,11 +77,7 @@ public class HeaderBeanMeta<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> HeaderBeanMeta<T> of(Class<T> type) {
-		HeaderBeanMeta<?> m = CACHE.get(type);
-		if (m == null) {
-			m = new HeaderBeanMeta<>(type);
-			CACHE.put(type, m);
-		}
+		HeaderBeanMeta<?> m = CACHE.computeIfAbsent(type, HeaderBeanMeta::new);
 		return (HeaderBeanMeta<T>)m;
 	}
 

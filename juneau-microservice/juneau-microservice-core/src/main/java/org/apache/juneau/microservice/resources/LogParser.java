@@ -106,25 +106,18 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 		}
 
 		boolean matches() {
-			if (! isRecord)
-				return false;
-			if (nn(start) && date.before(start))
-				return false;
-			if (nn(end) && date.after(end))
-				return false;
-			if (nn(threadFilter) && ! threadFilter.equals(thread))
-				return false;
-			if (nn(loggerFilter) && ! loggerFilter.contains(logger))
-				return false;
-			if (nn(severityFilter) && ! severityFilter.contains(severity))
-				return false;
-			return true;
+			return isRecord
+				&& !(nn(start) && date.before(start))
+				&& !(nn(end) && date.after(end))
+				&& !(nn(threadFilter) && ! threadFilter.equals(thread))
+				&& !(nn(loggerFilter) && ! loggerFilter.contains(logger))
+				&& !(nn(severityFilter) && ! severityFilter.contains(severity));
 		}
 	}
 
 	static String toHtml(String s) {
 		if (s.indexOf('<') != -1)
-			return s.replaceAll("<", "&lt;");//$NON-NLS-2$
+			return s.replace("<", "&lt;");//$NON-NLS-2$
 		return s;
 	}
 

@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
+import java.nio.file.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -29,6 +30,7 @@ import org.apache.juneau.bean.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -308,8 +310,11 @@ public class DirectoryResource extends BasicRestServlet {
 					deleteFile(fc);
 			}
 		}
-		if (! f.delete())
+		try {
+			Files.delete(f.toPath());
+		} catch (IOException e) {
 			throw new Forbidden("Could not delete file {0}", f.getAbsolutePath());
+		}
 	}
 
 	private File getFile(String path) throws NotFound {

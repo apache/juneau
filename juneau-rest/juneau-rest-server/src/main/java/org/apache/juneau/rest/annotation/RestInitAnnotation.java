@@ -34,6 +34,13 @@ import org.apache.juneau.commons.annotation.*;
 public class RestInitAnnotation {
 
 	/**
+	 * Private constructor to prevent instantiation.
+	 */
+	private RestInitAnnotation() {
+		// Utility class - prevent instantiation
+	}
+
+	/**
 	 * A collection of {@link RestInit @RestInit annotations}.
 	 */
 	@Documented

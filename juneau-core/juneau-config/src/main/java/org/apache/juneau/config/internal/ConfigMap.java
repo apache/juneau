@@ -361,7 +361,7 @@ public class ConfigMap implements ConfigStoreListener {
 			var ce = cs == null ? null : cs.entries.get(key);
 
 			if (ce == null)
-				ce = imports.stream().map(y -> y.getConfigMap().getEntry(section, key)).filter(y -> nn(y)).findFirst().orElse(null);
+				ce = imports.stream().map(y -> y.getConfigMap().getEntry(section, key)).filter(Utils::nn).findFirst().orElse(null);
 
 			return ce;
 		}
@@ -790,6 +790,7 @@ public class ConfigMap implements ConfigStoreListener {
 		return changes2;
 	}
 
+	@SuppressWarnings("java:S3776")
 	private ConfigMap load(String contents) throws IOException {
 		if (contents == null)
 			contents = "";

@@ -108,11 +108,13 @@ class RestClient_Config_RestClient_Test extends TestBase {
 		client().callHandler(A1.class).header("Foo","f1").build().get("/checkHeader").header("Foo","f2").run().assertContent("['f1','f2','baz']");
 	}
 
-	@Test void a02_errorCodes() {
+	@Test void a02_errorCodes() throws RestCallException {
 		var x1 = client().errorCodes(x -> x == 200).build();
 		var x2 = client().build();
-		assertEquals(200, ((RestCallException)assertThrows(Throwable.class, ()->x1.get("/echo").run())).getResponseCode());
-		assertEquals(200, ((RestCallException)assertThrows(Throwable.class, ()->x2.get("/echo").errorCodes(x -> x == 200).run())).getResponseCode());
+		var request1 = x1.get("/echo");
+		assertEquals(200, ((RestCallException)assertThrows(Throwable.class, ()->request1.run())).getResponseCode());
+		var request2 = x2.get("/echo").errorCodes(x -> x == 200);
+		assertEquals(200, ((RestCallException)assertThrows(Throwable.class, ()->request2.run())).getResponseCode());
 	}
 
 	@Test void a03_executorService() throws Exception {

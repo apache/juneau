@@ -97,14 +97,14 @@ public class LogEntryFormatter extends Formatter {
 
 		// @formatter:off
 		format = format
-			.replaceAll("\\{date\\}", "%1\\$s")
-			.replaceAll("\\{class\\}", "%2\\$s")
-			.replaceAll("\\{method\\}", "%3\\$s")
-			.replaceAll("\\{logger\\}", "%4\\$s")
-			.replaceAll("\\{level\\}", "%5\\$s")
-			.replaceAll("\\{msg\\}", "%6\\$s")
-			.replaceAll("\\{threadid\\}", "%7\\$s")
-			.replaceAll("\\{exception\\}", "%8\\$s");
+			.replace("\\{date\\}", "%1\\$s")
+			.replace("\\{class\\}", "%2\\$s")
+			.replace("\\{method\\}", "%3\\$s")
+			.replace("\\{logger\\}", "%4\\$s")
+			.replace("\\{level\\}", "%5\\$s")
+			.replace("\\{msg\\}", "%6\\$s")
+			.replace("\\{threadid\\}", "%7\\$s")
+			.replace("\\{exception\\}", "%8\\$s");
 		// @formatter:on
 
 		this.format = format;
@@ -150,7 +150,7 @@ public class LogEntryFormatter extends Formatter {
 					switch (group) {
 						case 1:
 							fieldIndexes.put("date", index++);
-							re.append("(" + dateFormat.replaceAll("[mHhsSdMy]", "\\\\d").replaceAll("\\.", "\\\\.") + ")");
+							re.append("(").append(dateFormat.replaceAll("[mHhsSdMy]", "\\\\d").replace(".", "\\.")).append(")");
 							break;
 						case 2:
 							fieldIndexes.put("class", index++);
@@ -195,7 +195,7 @@ public class LogEntryFormatter extends Formatter {
 			sre = sre.substring(0, sre.length() - 3);
 
 		// Replace instances of %n.
-		sre = sre.replaceAll("\\\\%n", "\\\\n");
+		sre = sre.replace("\\\\%n", "\\\\n");
 
 		rePattern = Pattern.compile(sre);
 		fieldIndexes = copyOf(fieldIndexes);

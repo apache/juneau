@@ -78,11 +78,7 @@ public class PartBeanMeta<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> PartBeanMeta<T> of(Class<T> type) {
-		PartBeanMeta<?> m = CACHE.get(type);
-		if (m == null) {
-			m = new PartBeanMeta<>(type);
-			CACHE.put(type, m);
-		}
+		PartBeanMeta<?> m = CACHE.computeIfAbsent(type, PartBeanMeta::new);
 		return (PartBeanMeta<T>)m;
 	}
 

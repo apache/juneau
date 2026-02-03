@@ -141,9 +141,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		public String getValue() { return value; }
 
 		boolean isValid() {
-			if (e(name) || value == null)
-				return false;
-			return true;
+			return !(e(name) || value == null);
 		}
 	}
 
@@ -164,17 +162,13 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	private static boolean isHeaderArray(Object o) {
 		if (! isArray(o))
 			return false;
-		if (Header.class.isAssignableFrom(o.getClass().getComponentType()))
-			return true;
-		return false;
+		return Header.class.isAssignableFrom(o.getClass().getComponentType());
 	}
 
 	private static boolean isNameValuePairArray(Object o) {
 		if (! isArray(o))
 			return false;
-		if (NameValuePair.class.isAssignableFrom(o.getClass().getComponentType()))
-			return true;
-		return false;
+		return NameValuePair.class.isAssignableFrom(o.getClass().getComponentType());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -380,7 +374,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return This object.
 	 */
-	@Deprecated
+	@Deprecated(since = "10.0", forRemoval = true)
 	public RestRequest completed() {
 		request.completed();
 		return this;
@@ -856,7 +850,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @deprecated Use constructor parameters of configuration API provided by HttpClient.
 	 */
 	@Override /* Overridden from HttpMessage */
-	@Deprecated
+	@Deprecated(since = "10.0", forRemoval = true)
 	public HttpParams getParams() { return request.getParams(); }
 
 	/**
@@ -1878,7 +1872,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return The response object.
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 */
-	@SuppressWarnings("null")
+	@SuppressWarnings({"null","java:S6541"})
 	public RestResponse run() throws RestCallException {
 		if (nn(response))
 			throw new RestCallException(response, null, "run() already called.");
@@ -1891,13 +1885,13 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				var path = uriBuilder.getPath();
 				var name = x.name;
 				var value = x.value;
-				var var = "{" + name + "}";
-				if (path.indexOf(var) == -1 && ! name.equals("/*"))
+				var pathVar = "{" + name + "}";
+				if (path.indexOf(pathVar) == -1 && ! name.equals("/*"))
 					throw new IllegalStateException("Path variable {" + name + "} was not found in path.");
 				if (name.equals("/*"))
 					path = path.replaceAll("\\/\\*$", "/" + value);
 				else
-					path = path.replace(var, String.valueOf(value));
+					path = path.replace(pathVar, String.valueOf(value));
 				uriBuilder.setPath(path);
 			});
 
@@ -1923,7 +1917,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			if (accept == null && nn(parser))
 				hl.set(Accept.of(parser.getPrimaryMediaType()));
 
-			headerData.stream().map(SimpleHeader::new).filter(SimplePart::isValid).forEach(x -> request.addHeader(x));
+			headerData.stream().map(SimpleHeader::new).filter(SimplePart::isValid).forEach(request::addHeader);
 
 			if (request2 == null && content != NO_BODY)
 				throw new RestCallException(null, null, "Method does not support content entity.  Method={0}, URI={1}", getMethod(), getURI());
@@ -1944,7 +1938,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				if (input2 instanceof PartList input22)
 					entity = new UrlEncodedFormEntity(input22.stream().map(SimpleFormData::new).filter(SimplePart::isValid).collect(toList()));
 				else if (input2 instanceof HttpResource input23) {
-					input23.getHeaders().forEach(x -> request.addHeader(x));
+					input23.getHeaders().forEach(request::addHeader);
 					entity = (HttpEntity)input2;
 				} else if (input2 instanceof HttpEntity input3) {
 					if (input3 instanceof SerializedEntity input32) {
@@ -2151,7 +2145,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @deprecated Use constructor parameters of configuration API provided by HttpClient.
 	 */
 	@Override /* Overridden from HttpMessage */
-	@Deprecated
+	@Deprecated(since = "10.0", forRemoval = true)
 	public void setParams(HttpParams params) {
 		request.setParams(params);
 	}
@@ -2410,12 +2404,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	private HttpPartSerializerSession getPartSerializerSession(HttpPartSerializer serializer) {
 		if (serializer == null)
 			serializer = client.getPartSerializer();
-		var s = partSerializerSessions.get(serializer);
-		if (s == null) {
-			s = serializer.getPartSession();
-			partSerializerSessions.put(serializer, s);
-		}
-		return s;
+		return partSerializerSessions.computeIfAbsent(serializer, HttpPartSerializer::getPartSession);
 	}
 
 	private ContentType getRequestContentType(ContentType def) {
@@ -2517,7 +2506,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (HttpParts.canCast(value)) {
 			l.add(HttpParts.cast(value));
 		} else if (value instanceof PartList value2) {
-			value2.forEach(x -> l.add(x));
+			value2.forEach(l::add);
 		} else if (value instanceof Collection<?> value3) {
 			value3.forEach(x -> l.add(HttpParts.cast(x)));
 		} else if (isArray(value)) {
@@ -2595,7 +2584,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (HttpParts.canCast(value)) {
 			l.add(HttpParts.cast(value));
 		} else if (value instanceof PartList value2) {
-			value2.forEach(x -> l.add(x));
+			value2.forEach(l::add);
 		} else if (value instanceof Collection<?> value3) {
 			value3.forEach(x -> l.add(HttpParts.cast(x)));
 		} else if (isArray(value)) {
@@ -2628,7 +2617,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (HttpParts.canCast(value)) {
 			l.add(HttpParts.cast(value));
 		} else if (value instanceof PartList value2) {
-			value2.forEach(x -> l.add(x));
+			value2.forEach(l::add);
 		} else if (value instanceof Collection<?> value3) {
 			value3.forEach(x -> l.add(HttpParts.cast(x)));
 		} else if (isArray(value)) {

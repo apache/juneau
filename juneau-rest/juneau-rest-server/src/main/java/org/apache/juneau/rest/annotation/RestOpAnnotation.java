@@ -47,6 +47,13 @@ import org.apache.juneau.svl.*;
 public class RestOpAnnotation {
 
 	/**
+	 * Private constructor to prevent instantiation.
+	 */
+	private RestOpAnnotation() {
+		// Utility class - prevent instantiation
+	}
+
+	/**
 	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
@@ -64,10 +71,25 @@ public class RestOpAnnotation {
 		private Class<? extends Serializer>[] serializers = new Class[0];
 		private Class<?>[] parsers = {};
 		private OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
-		private String clientVersion = "", debug = "", defaultAccept = "", defaultCharset = "", defaultContentType = "", maxInput = "", method = "", rolesDeclared = "", roleGuard = "", summary = "",
-			value = "";
-		private String[] consumes = {}, defaultRequestFormData = {}, defaultRequestQueryData = {}, defaultRequestAttributes = {}, defaultRequestHeaders = {}, defaultResponseHeaders = {}, path = {},
-			produces = {};
+		private String clientVersion = "";
+		private String debug = "";
+		private String defaultAccept = "";
+		private String defaultCharset = "";
+		private String defaultContentType = "";
+		private String maxInput = "";
+		private String method = "";
+		private String rolesDeclared = "";
+		private String roleGuard = "";
+		private String summary = "";
+		private String value = "";
+		private String[] consumes = {};
+		private String[] defaultRequestFormData = {};
+		private String[] defaultRequestQueryData = {};
+		private String[] defaultRequestAttributes = {};
+		private String[] defaultRequestHeaders = {};
+		private String[] defaultResponseHeaders = {};
+		private String[] path = {};
+		private String[] produces = {};
 
 		/**
 		 * Constructor.
@@ -428,8 +450,8 @@ public class RestOpAnnotation {
 			classes(a.serializers()).ifPresent(x -> b.serializers().set(x));
 			classes(a.parsers()).ifPresent(x -> b.parsers().set(x));
 			classes(a.encoders()).ifPresent(x -> b.encoders().set(x));
-			stream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
-			stream(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
+		stream(a.produces()).map(MediaType::of).forEach(b::produces);
+		stream(a.consumes()).map(MediaType::of).forEach(b::consumes);
 			stream(a.defaultRequestHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultRequestHeaders().setDefault(x));
 			stream(a.defaultResponseHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultResponseHeaders().setDefault(x));
 			stream(a.defaultRequestAttributes()).map(BasicNamedAttribute::ofPair).forEach(x -> b.defaultRequestAttributes().add(x));
@@ -440,15 +462,15 @@ public class RestOpAnnotation {
 			b.converters().append(a.converters());
 			b.guards().append(a.guards());
 			b.matchers().append(a.matchers());
-			string(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
-			string(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
-			string(a.maxInput()).ifPresent(x -> b.maxInput(x));
-			stream(a.path()).forEach(x -> b.path(x));
-			cdl(a.rolesDeclared()).forEach(x -> b.rolesDeclared(x));
-			string(a.roleGuard()).ifPresent(x -> b.roleGuard(x));
+			string(a.clientVersion()).ifPresent(b::clientVersion);
+			string(a.defaultCharset()).map(Charset::forName).ifPresent(b::defaultCharset);
+			string(a.maxInput()).ifPresent(b::maxInput);
+			stream(a.path()).forEach(b::path);
+			cdl(a.rolesDeclared()).forEach(b::rolesDeclared);
+			string(a.roleGuard()).ifPresent(b::roleGuard);
 
-			string(a.method()).ifPresent(x -> b.httpMethod(x));
-			string(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
+			string(a.method()).ifPresent(b::httpMethod);
+			string(a.debug()).map(Enablement::fromString).ifPresent(b::debug);
 
 			var v = trim(string(a.value()).orElse(null));
 			if (nn(v)) {
@@ -474,8 +496,25 @@ public class RestOpAnnotation {
 		private final Class<? extends Serializer>[] serializers;
 		private final Class<?>[] parsers;
 		private final OpSwagger swagger;
-		private final String clientVersion, debug, defaultAccept, defaultCharset, defaultContentType, maxInput, method, rolesDeclared, roleGuard, summary, value;
-		private final String[] consumes, defaultRequestFormData, defaultRequestQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, path, produces;
+		private final String clientVersion;
+		private final String debug;
+		private final String defaultAccept;
+		private final String defaultCharset;
+		private final String defaultContentType;
+		private final String maxInput;
+		private final String method;
+		private final String rolesDeclared;
+		private final String roleGuard;
+		private final String summary;
+		private final String value;
+		private final String[] consumes;
+		private final String[] defaultRequestFormData;
+		private final String[] defaultRequestQueryData;
+		private final String[] defaultRequestAttributes;
+		private final String[] defaultRequestHeaders;
+		private final String[] defaultResponseHeaders;
+		private final String[] path;
+		private final String[] produces;
 
 		Object(RestOpAnnotation.Builder b) {
 			super(b);

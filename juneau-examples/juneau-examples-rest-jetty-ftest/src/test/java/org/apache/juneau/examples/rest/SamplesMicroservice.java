@@ -40,7 +40,7 @@ public class SamplesMicroservice {
 	 * @return <jk>true</jk> if the service started, <jk>false</jk> if it's already started.
 	 * If this returns <jk>false</jk> then don't call stopMicroservice()!.
 	 */
-	public synchronized static boolean startMicroservice() {
+	public static synchronized boolean startMicroservice() {
 		if (microservice != null)
 			return false;
 		try {
@@ -71,7 +71,7 @@ public class SamplesMicroservice {
 	/**
 	 * Stops the microservice.
 	 */
-	public synchronized static void stopMicroservice() {
+	public static synchronized void stopMicroservice() {
 		try {
 			microservice.stop();
 			microservice = null;

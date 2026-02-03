@@ -353,22 +353,18 @@ class AsciiSet_Test extends TestBase {
 
 	@Test
 	void e06_builderRanges_invalidLength() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			AsciiSet.create().ranges("ab"); // Too short
-		});
-		assertThrows(IllegalArgumentException.class, () -> {
-			AsciiSet.create().ranges("abcd"); // Too long
-		});
+		var builder1 = AsciiSet.create();
+		assertThrows(IllegalArgumentException.class, () -> builder1.ranges("ab")); // Too short
+		var builder2 = AsciiSet.create();
+		assertThrows(IllegalArgumentException.class, () -> builder2.ranges("abcd")); // Too long
 	}
 
 	@Test
 	void e07_builderRanges_invalidFormat() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			AsciiSet.create().ranges("a_b"); // Wrong separator
-		});
-		assertThrows(IllegalArgumentException.class, () -> {
-			AsciiSet.create().ranges("a b"); // Space instead of dash
-		});
+		var builder1 = AsciiSet.create();
+		assertThrows(IllegalArgumentException.class, () -> builder1.ranges("a_b")); // Wrong separator
+		var builder2 = AsciiSet.create();
+		assertThrows(IllegalArgumentException.class, () -> builder2.ranges("a b")); // Space instead of dash
 	}
 
 	@Test

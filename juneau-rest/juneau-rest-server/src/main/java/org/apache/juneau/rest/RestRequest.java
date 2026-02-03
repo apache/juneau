@@ -169,7 +169,7 @@ import jakarta.servlet.http.*;
  * </ul>
  *
  */
-@SuppressWarnings({ "unchecked", "unused" })
+@SuppressWarnings({"unchecked","unused","java:S6539"})
 public class RestRequest extends HttpServletRequestWrapper {
 
 	/*
@@ -493,7 +493,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 			if (charset == null)
 				charset = opContext.getDefaultCharset();
 			if (charset == null)
-				charset = Charset.forName("UTF-8");
+				charset = StandardCharsets.UTF_8;
 		}
 		return charset;
 	}
@@ -1445,7 +1445,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public RestRequest setDebug(Boolean b) throws IOException {
 		setAttribute("Debug", b);
-		if (b)
+		if (isTrue(b))
 			inner = CachingHttpServletRequest.wrap(inner);
 		return this;
 	}

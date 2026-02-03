@@ -1117,22 +1117,12 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	public UonBeanPropertyMeta getUonBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
 			return UonBeanPropertyMeta.DEFAULT;
-		UonBeanPropertyMeta m = uonBeanPropertyMetas.get(bpm);
-		if (m == null) {
-			m = new UonBeanPropertyMeta(bpm.getDelegateFor(), this);
-			uonBeanPropertyMetas.put(bpm, m);
-		}
-		return m;
+		return uonBeanPropertyMetas.computeIfAbsent(bpm, k -> new UonBeanPropertyMeta(k.getDelegateFor(), this));
 	}
 
 	@Override /* Overridden from UonMetaProvider */
 	public UonClassMeta getUonClassMeta(ClassMeta<?> cm) {
-		UonClassMeta m = uonClassMetas.get(cm);
-		if (m == null) {
-			m = new UonClassMeta(cm, this);
-			uonClassMetas.put(cm, m);
-		}
-		return m;
+		return uonClassMetas.computeIfAbsent(cm, k -> new UonClassMeta(k, this));
 	}
 
 	/**

@@ -25,6 +25,7 @@ import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.serializer.*;
 
@@ -247,7 +248,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @return A new fluent string assertion.
 	 */
 	public FluentStringListAssertion<R> asStrings() {
-		return new FluentStringListAssertion<>(this, valueIsNull() ? null : stream(value()).map((o) -> s(o)).toList(), returns());
+		return new FluentStringListAssertion<>(this, valueIsNull() ? null : stream(value()).map(Utils::s).toList(), returns());
 	}
 
 	/**

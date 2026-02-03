@@ -418,7 +418,7 @@ class CollectionUtils_Test extends TestBase {
 	@Test
 	void a021_copyOf_listFunction() {
 		List<String> list = list("a", "b", "c");
-		List<String> result = copyOf(list, s -> s.toUpperCase());
+		List<String> result = copyOf(list, String::toUpperCase);
 		assertNotNull(result);
 		assertEquals(3, result.size());
 		assertEquals("A", result.get(0));

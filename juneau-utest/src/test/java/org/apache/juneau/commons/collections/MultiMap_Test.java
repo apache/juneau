@@ -488,7 +488,7 @@ class MultiMap_Test extends TestBase {
 		var map1 = map("key1", "value1");
 		var multiMap = new MultiMap<>(map1);
 
-		assertNotEquals(multiMap, null);
+		assertNotNull(multiMap);
 	}
 
 	@Test

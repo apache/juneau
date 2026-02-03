@@ -284,7 +284,7 @@ class MultiSet_Test extends TestBase {
 		var l1 = l(a("1", "2"));
 		var multiSet = new MultiSet<>(l1);
 
-		assertNotEquals(multiSet, null);
+		assertNotNull(multiSet);
 	}
 
 	@Test
@@ -329,9 +329,9 @@ class MultiSet_Test extends TestBase {
 		var multiSet = new MultiSet<>(l1);
 
 		// Not a Set - should return false immediately due to instanceof check
-		assertNotEquals(multiSet, "not a set");
-		assertNotEquals(multiSet, 123);
-		assertNotEquals(multiSet, List.of("1", "2")); // List is not a Set
+		assertNotEquals("not a set", multiSet);
+		assertNotEquals(123, multiSet);
+		assertNotEquals(List.of("1", "2"), multiSet); // List is not a Set
 	}
 
 	@Test

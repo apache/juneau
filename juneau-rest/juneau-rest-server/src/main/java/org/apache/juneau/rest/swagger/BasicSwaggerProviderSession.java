@@ -59,7 +59,7 @@ import jakarta.servlet.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({"resource","java:S1168"})
 public class BasicSwaggerProviderSession {
 
 	private static Set<Integer> getCodes(List<StatusCode> la, Integer def) {
@@ -136,6 +136,7 @@ public class BasicSwaggerProviderSession {
 	 * @return A new {@link Swagger} object.
 	 * @throws Exception If an error occurred producing the Swagger.
 	 */
+	@SuppressWarnings("java:S3776")
 	public Swagger getSwagger() throws Exception {
 		// @formatter:off
 
@@ -280,7 +281,7 @@ public class BasicSwaggerProviderSession {
 
 			// Add @RestOp(swagger)
 			var _ms = Value.<OpSwagger>empty();
-			al.forEach(ai -> ai.getValue(OpSwagger.class, "swagger").filter(OpSwaggerAnnotation::notEmpty).ifPresent(x -> _ms.set(x)));
+			al.forEach(ai -> ai.getValue(OpSwagger.class, "swagger").filter(OpSwaggerAnnotation::notEmpty).ifPresent(_ms::set));
 			var ms = _ms.orElseGet(() -> OpSwaggerAnnotation.create().build());
 
 			op.append(parseMap(ms.value(), "@OpSwagger(value) on class {0} method {1}", c, m));
@@ -293,7 +294,7 @@ public class BasicSwaggerProviderSession {
 			);
 
 			var _summary = Value.<String>empty();
-			al.forEach(ai -> ai.getValue(String.class, "summary").filter(NOT_EMPTY).ifPresent(x -> _summary.set(x)));
+			al.forEach(ai -> ai.getValue(String.class, "summary").filter(NOT_EMPTY).ifPresent(_summary::set));
 			op.appendIf(ne, "summary",
 				firstNonEmpty(
 					resolve(ms.summary()),
@@ -304,7 +305,7 @@ public class BasicSwaggerProviderSession {
 			);
 
 			var _description = Value.<String[]>empty();
-			al.forEach(ai -> ai.getValue(String[].class, "description").filter(x -> x.length > 0).ifPresent(x -> _description.set(x)));
+			al.forEach(ai -> ai.getValue(String[].class, "description").filter(x -> x.length > 0).ifPresent(_description::set));
 			op.appendIf(ne, "description",
 				firstNonEmpty(
 					resolve(ms.description()),
@@ -473,7 +474,6 @@ public class BasicSwaggerProviderSession {
 						merge(om, a);
 						var schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
 						rstream(ap.find(Schema.class, mi)).forEach(x -> merge(schema, x.inner()));
-						//context.getAnnotationProvider().xforEachMethodAnnotation(Schema.class, mi, x -> true, x -> merge(schema, x));
 						pushupSchemaFields(RESPONSE, om, schema);
 						om.appendIf(nem, "schema", schema);
 						addBodyExamples(sm, om, true, m.getGenericReturnType(), locale);
@@ -685,7 +685,7 @@ public class BasicSwaggerProviderSession {
 	}
 
 	@SafeVarargs
-	private final static <T> T firstNonEmpty(T...t) {
+	private static final <T> T firstNonEmpty(T...t) {
 		for (var oo : t)
 			if (ne(oo))
 				return oo;
@@ -709,15 +709,10 @@ public class BasicSwaggerProviderSession {
 	}
 
 	private static JsonMap getOperation(JsonMap om, String path, String httpMethod) {
-		if (! om.containsKey("paths"))
-			om.put("paths", new JsonMap());
-		om = om.getMap("paths");
-		if (! om.containsKey(path))
-			om.put(path, new JsonMap());
-		om = om.getMap(path);
-		if (! om.containsKey(httpMethod))
-			om.put(httpMethod, new JsonMap());
-		return om.getMap(httpMethod);
+		om = (JsonMap) om.computeIfAbsent("paths", k -> new JsonMap());
+		om = (JsonMap) om.computeIfAbsent(path, k -> new JsonMap());
+		om.computeIfAbsent(httpMethod, k -> new JsonMap());
+		return (JsonMap) om.get(httpMethod);
 	}
 
 	private JsonMap getSchema(JsonMap schema, Type type, BeanSession bs) throws Exception {
@@ -729,7 +724,7 @@ public class BasicSwaggerProviderSession {
 
 		var cm = bs.getClassMeta(type);
 
-		if (schema.getBoolean("ignore", false))
+		if (schema.is("ignore", false))
 			return null;
 
 		if (schema.containsKey("type") || schema.containsKey("$ref"))
@@ -741,9 +736,7 @@ public class BasicSwaggerProviderSession {
 	}
 
 	private static boolean isMulti(Header h) {
-		if ("*".equals(h.name()) || "*".equals(h.value()))
-			return true;
-		return false;
+		return "*".equals(h.name()) || "*".equals(h.value());
 	}
 
 	private static JsonList merge(JsonList...lists) {
@@ -933,7 +926,7 @@ public class BasicSwaggerProviderSession {
 		try {
 			if (o == null)
 				return null;
-			var s = (o instanceof String[] ? joinnl((String[])o) : o.toString());
+			var s = (o instanceof String[] stringArray ? joinnl(stringArray) : o.toString());
 			if (s.isEmpty())
 				return null;
 			s = resolve(s);
@@ -949,7 +942,7 @@ public class BasicSwaggerProviderSession {
 		try {
 			if (o == null)
 				return null;
-			var s = (o instanceof String[] ? joinnl((String[])o) : o.toString());
+			var s = (o instanceof String[] stringArray ? joinnl(stringArray) : o.toString());
 			if (s.isEmpty())
 				return null;
 			s = resolve(s);
@@ -962,8 +955,8 @@ public class BasicSwaggerProviderSession {
 	private JsonMap parseMap(Object o) throws ParseException {
 		if (o == null)
 			return null;
-		if (o instanceof String[])
-			o = joinnl((String[])o);
+		if (o instanceof String[] stringArray)
+			o = joinnl(stringArray);
 		if (o instanceof String o2) {
 			if (o2.isEmpty())
 				return null;
@@ -1174,7 +1167,7 @@ public class BasicSwaggerProviderSession {
 			return null;
 		Set<String> set = set();
 		for (var s : ss)
-			split(s, x -> set.add(x));
+			split(s, set::add);
 		return set.isEmpty() ? null : set;
 	}
 }

@@ -159,7 +159,7 @@ public class Swagger extends SwaggerElement {
 			});
 
 		if (nn(copyFrom.tags))
-			this.tags.addAll(copyOf(copyFrom.tags, x -> x.copy()));
+			this.tags.addAll(copyOf(copyFrom.tags, Tag::copy));
 	}
 
 	/**

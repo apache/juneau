@@ -3324,7 +3324,7 @@ class BeanCreator2_Test extends TestBase {
 		void n09_debugWithFailure() {
 			var creator = bc(BeanInterface.class).debug();
 
-			assertThrows(ExecutableException.class, () -> creator.run());
+			assertThrows(ExecutableException.class, creator::run);
 
 			var log = creator.getDebugLog();
 			assertFalse(log.isEmpty(), "Log should be populated even on failure");
@@ -3672,7 +3672,7 @@ class BeanCreator2_Test extends TestBase {
 				.builder(P20_BuilderForParentBean.class)
 				.debug();
 
-			assertThrows(ExecutableException.class, () -> creator.run());
+			assertThrows(ExecutableException.class, creator::run);
 
 			var log = creator.getDebugLog();
 			var logString = log.toString();

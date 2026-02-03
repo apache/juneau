@@ -160,7 +160,7 @@ import org.apache.juneau.swap.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanContextBasics">Bean Context Basics</a>
  * </ul>
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({"unchecked","rawtypes","java:S6539"})
 public class BeanContext extends Context {
 
 	/**
@@ -233,14 +233,14 @@ public class BeanContext extends Context {
 			ignoreInvocationExceptionsOnSetters = env("BeanContext.ignoreInvocationExceptionsOnSetters", false);
 			ignoreUnknownBeanProperties = env("BeanContext.ignoreUnknownBeanProperties", false);
 			ignoreUnknownEnumValues = env("BeanContext.ignoreUnknownEnumValues", false);
-			locale = env("BeanContext.locale").map(x -> Locale.forLanguageTag(x)).orElse(Locale.getDefault());
-			mediaType = env("BeanContext.mediaType").map(x -> MediaType.of(x)).orElse(null);
-			notBeanClasses = new TreeSet<>();
-			notBeanPackages = new TreeSet<>();
-			propertyNamer = null;
-			sortProperties = env("BeanContext.sortProperties", false);
-			swaps = list();
-			timeZone = env("BeanContext.timeZone").map(x -> TimeZone.getTimeZone(x)).orElse(null);
+		locale = env("BeanContext.locale").map(Locale::forLanguageTag).orElse(Locale.getDefault());
+		mediaType = env("BeanContext.mediaType").map(MediaType::of).orElse(null);
+		notBeanClasses = new TreeSet<>();
+		notBeanPackages = new TreeSet<>();
+		propertyNamer = null;
+		sortProperties = env("BeanContext.sortProperties", false);
+		swaps = list();
+		timeZone = env("BeanContext.timeZone").map(TimeZone::getTimeZone).orElse(null);
 			typePropertyName = env("BeanContext.typePropertyName", "_type");
 			useEnumNames = env("BeanContext.useEnumNames", false);
 			useJavaBeanIntrospector = env("BeanContext.useJavaBeanIntrospector", false);
@@ -3663,28 +3663,28 @@ public class BeanContext extends Context {
 		var builderNotBeanClasses = new ArrayList<>(builder.notBeanClasses);
 		notBeanClasses = builderNotBeanClasses.isEmpty() ? DEFAULT_NOTBEAN_CLASSES : Stream.concat(builderNotBeanClasses.stream(), DEFAULT_NOTBEAN_CLASSES.stream()).distinct().toList();
 
-		List<String> _notBeanPackages = notBeanPackages.isEmpty() ? DEFAULT_NOTBEAN_PACKAGES : Stream.concat(notBeanPackages.stream(), DEFAULT_NOTBEAN_PACKAGES.stream()).toList();
-		LinkedHashSet<String> _notBeanPackageNames = _notBeanPackages.stream().filter(x -> ! x.endsWith(".*")).collect(Collectors.toCollection(LinkedHashSet::new));
-		notBeanPackageNames = u(_notBeanPackageNames);
-		notBeanPackagePrefixes = _notBeanPackages.stream().filter(x -> x.endsWith(".*")).map(x -> x.substring(0, x.length() - 2)).toList();
+		List<String> notBeanPackages_ = notBeanPackages.isEmpty() ? DEFAULT_NOTBEAN_PACKAGES : Stream.concat(notBeanPackages.stream(), DEFAULT_NOTBEAN_PACKAGES.stream()).toList();
+		LinkedHashSet<String> notBeanPackageNames_ = notBeanPackages_.stream().filter(x -> ! x.endsWith(".*")).collect(Collectors.toCollection(LinkedHashSet::new));
+		notBeanPackageNames = u(notBeanPackageNames_);
+		notBeanPackagePrefixes = notBeanPackages_.stream().filter(x -> x.endsWith(".*")).map(x -> x.substring(0, x.length() - 2)).toList();
 
 		propertyNamerBean = safe(()->propertyNamer.getDeclaredConstructor().newInstance());
 
-		var _objectSwaps = new LinkedList<ObjectSwap<?,?>>();
+		var objectSwaps_ = new LinkedList<ObjectSwap<?,?>>();
 		swaps.forEach(x -> {
 			if (x instanceof ObjectSwap<?,?> os) {
-				_objectSwaps.add(os);
+				objectSwaps_.add(os);
 			} else {
 				var ci = info((Class<?>)x);
 				if (ci.isAssignableTo(ObjectSwap.class))
-					_objectSwaps.add(BeanCreator.of(ObjectSwap.class).type(ci).run());
+					objectSwaps_.add(BeanCreator.of(ObjectSwap.class).type(ci).run());
 				else if (ci.isAssignableTo(Surrogate.class))
-					_objectSwaps.addAll(SurrogateSwap.findObjectSwaps(ci.inner(), this));
+					objectSwaps_.addAll(SurrogateSwap.findObjectSwaps(ci.inner(), this));
 				else
 					throw rex("Invalid class {0} specified in BeanContext.swaps property.  Must be a subclass of ObjectSwap or Surrogate.", cn(ci.inner()));
 			}
 		});
-		objectSwaps = u(_objectSwaps);
+		objectSwaps = u(objectSwaps_);
 
 		cmCache = Cache.<Class,ClassMeta>create().supplier(type -> new ClassMeta<>(type, this)).build();
 		cmString = cmCache.get(String.class);
@@ -3854,7 +3854,7 @@ public class BeanContext extends Context {
 	public final <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
 		if (type == null)
 			return null;
-		var cm = (ClassMeta<T>)null;
+		ClassMeta<T> cm = null;
 		if (type instanceof Class type2)
 			cm = getClassMeta(type2);
 		else

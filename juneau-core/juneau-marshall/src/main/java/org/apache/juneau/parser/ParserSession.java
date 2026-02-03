@@ -377,8 +377,8 @@ public class ParserSession extends BeanSession {
 	 * @throws IOException Thrown by the underlying stream.
 	 */
 	public final <T> T parse(Object input, Class<T> type) throws ParseException, IOException {
-		try (var pipe = createPipe(input)) {
-			return parseInner(pipe, getClassMeta(type));
+		try (var p = createPipe(input)) {
+			return parseInner(p, getClassMeta(type));
 		}
 	}
 
@@ -399,8 +399,8 @@ public class ParserSession extends BeanSession {
 	 * @throws IOException Thrown by the underlying stream.
 	 */
 	public final <T> T parse(Object input, ClassMeta<T> type) throws ParseException, IOException {
-		try (var pipe = createPipe(input)) {
-			return parseInner(pipe, type);
+		try (var p = createPipe(input)) {
+			return parseInner(p, type);
 		}
 	}
 
@@ -480,8 +480,8 @@ public class ParserSession extends BeanSession {
 	 */
 	@SuppressWarnings("unchecked")
 	public final <T> T parse(Object input, Type type, Type...args) throws ParseException, IOException {
-		try (var pipe = createPipe(input)) {
-			return (T)parseInner(pipe, getClassMeta(type, args));
+		try (var p = createPipe(input)) {
+			return (T)parseInner(p, getClassMeta(type, args));
 		}
 	}
 
@@ -520,8 +520,8 @@ public class ParserSession extends BeanSession {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public final <T> T parse(String input, Class<T> type) throws ParseException {
-		try (var pipe = createPipe(input)) {
-			return parseInner(pipe, getClassMeta(type));
+		try (var p = createPipe(input)) {
+			return parseInner(p, getClassMeta(type));
 		} catch (IOException e) {
 			throw new ParseException(e); // Shouldn't happen.
 		}
@@ -542,8 +542,8 @@ public class ParserSession extends BeanSession {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public final <T> T parse(String input, ClassMeta<T> type) throws ParseException {
-		try (var pipe = createPipe(input)) {
-			return parseInner(pipe, type);
+		try (var p = createPipe(input)) {
+			return parseInner(p, type);
 		} catch (IOException e) {
 			throw new ParseException(e); // Shouldn't happen.
 		}
@@ -587,8 +587,8 @@ public class ParserSession extends BeanSession {
 	 */
 	@SuppressWarnings("unchecked")
 	public final <T> T parse(String input, Type type, Type...args) throws ParseException {
-		try (var pipe = createPipe(input)) {
-			return (T)parseInner(pipe, getClassMeta(type, args));
+		try (var p = createPipe(input)) {
+			return (T)parseInner(p, getClassMeta(type, args));
 		} catch (IOException e) {
 			throw new ParseException(e); // Shouldn't happen.
 		}
@@ -615,8 +615,8 @@ public class ParserSession extends BeanSession {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public final Object[] parseArgs(Object input, Type[] argTypes) throws ParseException {
-		try (var pipe = createPipe(input)) {
-			return doParse(pipe, getArgsClassMeta(argTypes));
+		try (var p = createPipe(input)) {
+			return doParse(p, getArgsClassMeta(argTypes));
 		} catch (ParseException e) {
 			throw e;
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
@@ -650,8 +650,8 @@ public class ParserSession extends BeanSession {
 	 * @throws UnsupportedOperationException If not implemented.
 	 */
 	public final <E> Collection<E> parseIntoCollection(Object input, Collection<E> c, Type elementType) throws ParseException {
-		try (var pipe = createPipe(input)) {
-			return doParseIntoCollection(pipe, c, elementType);
+		try (var p = createPipe(input)) {
+			return doParseIntoCollection(p, c, elementType);
 		} catch (ParseException e) {
 			throw e;
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
@@ -690,8 +690,8 @@ public class ParserSession extends BeanSession {
 	 * @throws UnsupportedOperationException If not implemented.
 	 */
 	public final <K,V> Map<K,V> parseIntoMap(Object input, Map<K,V> m, Type keyType, Type valueType) throws ParseException {
-		try (var pipe = createPipe(input)) {
-			return doParseIntoMap(pipe, m, keyType, valueType);
+		try (var p = createPipe(input)) {
+			return doParseIntoMap(p, m, keyType, valueType);
 		} catch (ParseException e) {
 			throw e;
 		} catch (Exception e) {

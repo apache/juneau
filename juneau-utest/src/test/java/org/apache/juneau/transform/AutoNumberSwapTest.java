@@ -177,11 +177,13 @@ class AutoNumberSwapTest extends TestBase {
 	}
 
 	@Test void a14_swap_serializeException() {
-		assertThrows(SerializeException.class, ()->find(A14.class).swap(null, null));
+		var beanMeta = find(A14.class);
+		assertThrows(SerializeException.class, ()->beanMeta.swap(null, null));
 	}
 
 	@Test void a15_swap_runtimeException() {
-		assertThrows(SerializeException.class, ()->find(A15.class).swap(null, null));
+		var beanMeta = find(A15.class);
+		assertThrows(SerializeException.class, ()->beanMeta.swap(null, null));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -377,7 +379,8 @@ class AutoNumberSwapTest extends TestBase {
 	}
 
 	@Test void b15_unswap_noMethod() {
-		assertThrows(ParseException.class, ()->find(B15.class).unswap(null, 1, null));
+		var beanMeta = find(B15.class);
+		assertThrows(ParseException.class, ()->beanMeta.unswap(null, 1, null));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -548,7 +551,8 @@ class AutoNumberSwapTest extends TestBase {
 	}
 
 	@Test void c13_unswapConstructor_noConstructor() {
-		assertThrows(ParseException.class, ()->find(C13.class).unswap(null, 1, null));
+		var beanMeta = find(C13.class);
+		assertThrows(ParseException.class, ()->beanMeta.unswap(null, 1, null));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -730,31 +734,38 @@ class AutoNumberSwapTest extends TestBase {
 	}
 
 	@Test void f01_ignoreUnswapMethod_beanIgnore() {
-		assertThrows(ParseException.class, ()->find(F01.class).unswap(null, null, null));
+		var beanMeta = find(F01.class);
+		assertThrows(ParseException.class, ()->beanMeta.unswap(null, null, null));
 	}
 
 	@Test void f01c_ignoreUnswapMethod_beanIgnore_usingConfig() {
-		assertThrows(ParseException.class, ()->find(bc(F01Config.class), F01c.class).unswap(null, null, null));
+		var beanMeta = find(bc(F01Config.class), F01c.class);
+		assertThrows(ParseException.class, ()->beanMeta.unswap(null, null, null));
 	}
 
 	@Test void f02_ignoreUnswapMethod_deprecated() {
-		assertThrows(ParseException.class, ()->find(F02.class).unswap(null, null, null));
+		var beanMeta = find(F02.class);
+		assertThrows(ParseException.class, ()->beanMeta.unswap(null, null, null));
 	}
 
 	@Test void f03_ignoreUnswapMethod_wrongReturnType() {
-		assertThrows(ParseException.class, ()->find(F03.class).unswap(null, null, null));
+		var beanMeta = find(F03.class);
+		assertThrows(ParseException.class, ()->beanMeta.unswap(null, null, null));
 	}
 
 	@Test void f04_ignoreUnswapMethod_wrongParameters() {
-		assertThrows(ParseException.class, ()->find(F04.class).unswap(null, null, null));
+		var beanMeta = find(F04.class);
+		assertThrows(ParseException.class, ()->beanMeta.unswap(null, null, null));
 	}
 
 	@Test void f05_ignoreUnswapMethod_notStatic() {
-		assertThrows(ParseException.class, ()->find(F05.class).unswap(null, null, null));
+		var beanMeta = find(F05.class);
+		assertThrows(ParseException.class, ()->beanMeta.unswap(null, null, null));
 	}
 
 	@Test void f06_ignoreUnswapMethod_wrongName() {
-		assertThrows(ParseException.class, ()->find(F06.class).unswap(null, null, null));
+		var beanMeta = find(F06.class);
+		assertThrows(ParseException.class, ()->beanMeta.unswap(null, null, null));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -788,14 +799,17 @@ class AutoNumberSwapTest extends TestBase {
 	}
 
 	@Test void g01_ignoreUnswapConstructor_beanIgnore() {
-		assertThrows(ParseException.class, ()->find(G01.class).unswap(null, null, null));
+		var beanMeta = find(G01.class);
+		assertThrows(ParseException.class, ()->beanMeta.unswap(null, null, null));
 	}
 
 	@Test void g01c_ignoreUnswapConstructor_beanIgnore_usingConfig() {
-		assertThrows(ParseException.class, ()->find(bc(G01Config.class), G01c.class).unswap(null, null, null));
+		var beanMeta = find(bc(G01Config.class), G01c.class);
+		assertThrows(ParseException.class, ()->beanMeta.unswap(null, null, null));
 	}
 
 	@Test void g02_ignoreUnswapConstructor_deprecated() {
-		assertThrows(ParseException.class, ()->find(G02.class).unswap(null, null, null));
+		var beanMeta = find(G02.class);
+		assertThrows(ParseException.class, ()->beanMeta.unswap(null, null, null));
 	}
 }

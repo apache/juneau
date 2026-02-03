@@ -182,7 +182,7 @@ public class TestUtils {
 		}
 	}
 
-	final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
+	protected static final char[] hexArray = "0123456789ABCDEF".toCharArray();
 
 	public static String toHex(byte b) {
 		var c = new char[2];

@@ -225,7 +225,7 @@ class StateEnum_Test extends TestBase {
 	void d07_compareTo_ordering() {
 		assertTrue(S1.compareTo(S2) < 0);
 		assertTrue(S2.compareTo(S1) > 0);
-		assertTrue(S1.compareTo(S1) == 0);
+		assertEquals(0, S1.compareTo(S1));
 		assertTrue(S10.compareTo(S20) < 0);
 		assertTrue(S50.compareTo(S1) > 0);
 	}

@@ -114,7 +114,7 @@ public abstract class ConsoleCommand {
 	 * @throws Exception
 	 * 	Any thrown exception will simply be sent to STDERR.
 	 */
-	abstract public boolean execute(Scanner in, PrintWriter out, Args args) throws Exception;
+	public abstract boolean execute(Scanner in, PrintWriter out, Args args) throws Exception;
 
 	/**
 	 * Returns localized details of the command.
@@ -162,7 +162,7 @@ public abstract class ConsoleCommand {
 	 * 	The name of the command.
 	 * 	<br>Must not be <jk>null</jk> or contain spaces.
 	 */
-	abstract public String getName();
+	public abstract String getName();
 
 	/**
 	 * Returns the usage synopsis of the command.

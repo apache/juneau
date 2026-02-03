@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.httppart;
 
-import static java.util.stream.Collectors.toList;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -315,7 +314,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	public String asQueryString() {
 		var sb = new StringBuilder();
 		for (var e : this) {
-			if (sb.length() > 0)
+			if (!sb.isEmpty())
 				sb.append("&");
 			sb.append(urlEncode(e.getName())).append('=').append(urlEncode(e.getValue()));
 		}
@@ -414,7 +413,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @return The list of all parameters with the specified name, or an empty list if none are found.
 	 */
 	public List<RequestFormParam> getAll(String name) {
-		return stream(name).collect(toList());
+		return stream(name).toList();
 	}
 
 	/**
@@ -445,7 +444,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	public RequestFormParam getLast(String name) {
 		assertArgNotNull("name", name);
 		var v = Value.<RequestFormParam>empty();
-		stream(name).forEach(x -> v.set(x));
+		stream(name).forEach(v::set);
 		return v.orElseGet(() -> new RequestFormParam(req, name, null).parser(parser));
 	}
 
@@ -453,7 +452,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * Returns all the unique header names in this list.
 	 * @return The list of all unique header names in this list.
 	 */
-	public List<String> getNames() { return stream().map(RequestFormParam::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList()); }
+	public List<String> getNames() { return stream().map(RequestFormParam::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().toList(); }
 
 	/**
 	 * Returns all headers in sorted order.

@@ -66,7 +66,7 @@ public class FileStore extends ConfigStore {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			charset = env("ConfigFileStore.charset").map(x -> Charset.forName(x)).orElse(Charset.defaultCharset());
+			charset = env("ConfigFileStore.charset").map(Charset::forName).orElse(Charset.defaultCharset());
 			directory = env("ConfigFileStore.directory", ".");
 			enableWatcher = env("ConfigFileStore.enableWatcher", false);
 			extensions = env("ConfigFileStore.extensions", "cfg");

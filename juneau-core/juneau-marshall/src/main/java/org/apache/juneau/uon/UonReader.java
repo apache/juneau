@@ -79,6 +79,7 @@ public class UonReader extends ParserReader {
 	}
 
 	@Override /* Overridden from Reader */
+	@SuppressWarnings("java:S3776")
 	public int read(char[] cbuf, int off, int len) throws IOException {
 
 		if (! decodeChars)

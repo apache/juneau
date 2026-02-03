@@ -86,6 +86,6 @@ public class HelpCommand extends ConsoleCommand {
 	private static String indent(String in) {
 		if (in == null)
 			return "";
-		return in.replaceAll("\n", "\n\t");
+		return in.replace("\n", "\n\t");
 	}
 }

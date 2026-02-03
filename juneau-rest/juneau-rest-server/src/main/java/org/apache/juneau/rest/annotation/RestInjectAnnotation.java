@@ -31,6 +31,13 @@ import org.apache.juneau.commons.annotation.*;
 public class RestInjectAnnotation {
 
 	/**
+	 * Private constructor to prevent instantiation.
+	 */
+	private RestInjectAnnotation() {
+		// Utility class - prevent instantiation
+	}
+
+	/**
 	 * A collection of {@link RestInject @RestInject annotations}.
 	 */
 	@Documented
@@ -57,7 +64,8 @@ public class RestInjectAnnotation {
 	public static class Builder extends AppliedAnnotationObject.BuilderM {
 
 		private String[] description = {};
-		private String name, value;
+		private String name;
+		private String value;
 		private String[] methodScope;
 
 		/**
@@ -143,7 +151,8 @@ public class RestInjectAnnotation {
 	private static class Object extends AppliedAnnotationObject implements RestInject {
 
 		private final String[] description;
-		private final String name, value;
+		private final String name;
+		private final String value;
 		private final String[] methodScope;
 
 		Object(RestInjectAnnotation.Builder b) {

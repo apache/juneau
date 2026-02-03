@@ -22,6 +22,7 @@ import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.serializer.*;
 
@@ -170,7 +171,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 * @return A new fluent string assertion.
 	 */
 	public FluentStringListAssertion<R> asStrings() {
-		return new FluentStringListAssertion<>(this, valueIsNull() ? null : value().stream().map(o -> s(o)).toList(), returns());
+		return new FluentStringListAssertion<>(this, valueIsNull() ? null : value().stream().map(Utils::s).toList(), returns());
 	}
 
 	@Override /* Overridden from FluentObjectAssertion */

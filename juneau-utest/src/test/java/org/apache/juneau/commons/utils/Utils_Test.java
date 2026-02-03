@@ -874,9 +874,7 @@ class Utils_Test extends TestBase {
 	void a049_safe_Snippet_withExceptionMapper() {
 		// Test normal execution
 		AtomicInteger count = new AtomicInteger(0);
-		safe((Snippet)() -> {
-			count.incrementAndGet();
-		}, e -> new RuntimeException("mapped: " + e.getMessage()));
+		safe((Snippet)count::incrementAndGet, e -> new RuntimeException("mapped: " + e.getMessage()));
 		assertEquals(1, count.get());
 
 		// Test RuntimeException is rethrown (not mapped)

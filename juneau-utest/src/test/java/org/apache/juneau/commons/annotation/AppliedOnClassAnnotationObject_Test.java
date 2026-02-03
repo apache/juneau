@@ -402,12 +402,14 @@ class AppliedOnClassAnnotationObject_Test extends TestBase {
 
 	@Test
 	void i01_null_classInArray() {
-		assertThrows(IllegalArgumentException.class, () -> T.create().onClass((Class<?>)null).build());
+		var builder = T.create();
+		assertThrows(IllegalArgumentException.class, () -> builder.onClass((Class<?>)null));
 	}
 
 	@Test
 	void i02_null_classInfoInArray() {
-		assertThrows(IllegalArgumentException.class, () -> T.create().onClass((ClassInfo)null).build());
+		var builder = T.create();
+		assertThrows(IllegalArgumentException.class, () -> builder.onClass((ClassInfo)null));
 	}
 
 	@Test

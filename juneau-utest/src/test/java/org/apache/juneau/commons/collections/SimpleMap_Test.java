@@ -386,7 +386,7 @@ class SimpleMap_Test extends TestBase {
 		Object[] values = { "value1" };
 		SimpleMap<String,Object> map = new SimpleMap<>(keys, values);
 
-		assertNotEquals(map, null);
+		assertNotNull(map);
 	}
 
 	@Test

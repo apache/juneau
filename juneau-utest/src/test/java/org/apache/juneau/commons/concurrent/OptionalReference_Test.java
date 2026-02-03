@@ -595,7 +595,7 @@ class OptionalReference_Test extends TestBase {
 			thread.join();
 		}
 
-		assertTrue(ref.get() == 500);
+		assertEquals(500, ref.get());
 	}
 
 	//====================================================================================================

@@ -907,7 +907,7 @@ public class JsonSchema {
 	 * @return The value of the <property>id</property> property on this bean, or <jk>null</jk> if it is not set.
 	 * @deprecated Use {@link #getIdUri()} instead.
 	 */
-	@Deprecated
+	@Deprecated(since = "10.0", forRemoval = true)
 	public URI getId() {
 		return nn(id) ? id : idUri; // Fall back to new '$id' for compatibility when reading
 	}
@@ -1568,7 +1568,7 @@ public class JsonSchema {
 	 * @return This object.
 	 * @deprecated Use {@link #setIdUri(Object)} instead.
 	 */
-	@Deprecated
+	@Deprecated(since = "10.0", forRemoval = true)
 	public JsonSchema setId(Object id) {
 		this.id = toUri(id);
 		return this;

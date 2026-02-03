@@ -1073,11 +1073,8 @@ class AnnotationProvider_Test extends TestBase {
 		// This test covers line 334 - onClass() method with wrong return type
 		var invalidAnnotation = new InvalidOnClassAnnotation();
 
-		assertThrows(BeanRuntimeException.class, () -> {
-			AnnotationProvider.create()
-				.addRuntimeAnnotations(invalidAnnotation)
-				.build();
-		});
+		var builder = AnnotationProvider.create();
+		assertThrows(BeanRuntimeException.class, () -> builder.addRuntimeAnnotations(invalidAnnotation));
 	}
 
 	@Test
@@ -1085,11 +1082,8 @@ class AnnotationProvider_Test extends TestBase {
 		// This test covers line 341 - on() method with wrong return type
 		var invalidAnnotation = new InvalidOnAnnotation();
 
-		assertThrows(BeanRuntimeException.class, () -> {
-			AnnotationProvider.create()
-				.addRuntimeAnnotations(invalidAnnotation)
-				.build();
-		});
+		var builder = AnnotationProvider.create();
+		assertThrows(BeanRuntimeException.class, () -> builder.addRuntimeAnnotations(invalidAnnotation));
 	}
 
 	// Runtime annotation that throws an exception when onClass() is invoked
@@ -1131,11 +1125,8 @@ class AnnotationProvider_Test extends TestBase {
 		var throwingAnnotation = new ThrowingOnClassAnnotation();
 
 		// The exception from onClass() will be caught and wrapped in BeanRuntimeException
-		assertThrows(BeanRuntimeException.class, () -> {
-			AnnotationProvider.create()
-				.addRuntimeAnnotations(throwingAnnotation)
-				.build();
-		});
+		var builder = AnnotationProvider.create();
+		assertThrows(BeanRuntimeException.class, () -> builder.addRuntimeAnnotations(throwingAnnotation));
 	}
 }
 

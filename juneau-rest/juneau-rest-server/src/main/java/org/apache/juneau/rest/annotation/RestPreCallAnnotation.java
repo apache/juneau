@@ -34,6 +34,13 @@ import org.apache.juneau.commons.annotation.*;
 public class RestPreCallAnnotation {
 
 	/**
+	 * Private constructor to prevent instantiation.
+	 */
+	private RestPreCallAnnotation() {
+		// Utility class - prevent instantiation
+	}
+
+	/**
 	 * A collection of {@link RestPreCall @RestPreCall annotations}.
 	 */
 	@Documented

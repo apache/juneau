@@ -248,14 +248,14 @@ public class MockServletRequest implements HttpServletRequest {
 	 */
 	public MockServletRequest content(Object value) {
 		try {
-			if (value instanceof byte[])
-				this.content = (byte[])value;
-			else if (value instanceof Reader)
-				this.content = readBytes((Reader)value);
-			else if (value instanceof InputStream)
-				this.content = readBytes((InputStream)value);
-			else if (value instanceof CharSequence)
-				this.content = ((CharSequence)value).toString().getBytes();
+			if (value instanceof byte[] byteArray)
+				this.content = byteArray;
+			else if (value instanceof Reader reader)
+				this.content = readBytes(reader);
+			else if (value instanceof InputStream inputstream)
+				this.content = readBytes(inputstream);
+			else if (value instanceof CharSequence charsequence)
+				this.content = charsequence.toString().getBytes();
 			else if (nn(value))
 				this.content = value.toString().getBytes();
 		} catch (IOException e) {
@@ -547,7 +547,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 */
 	public MockServletRequest header(String name, Object value) {
 		if (nn(value)) {
-			var v1 = (value instanceof String[]) ? (String[])value : a(value.toString());
+			var v1 = (value instanceof String[] stringArray) ? stringArray : a(value.toString());
 			var v2 = headerMap.get(name);
 			var v3 = combine(v2, v1);
 			headerMap.put(name, v3);

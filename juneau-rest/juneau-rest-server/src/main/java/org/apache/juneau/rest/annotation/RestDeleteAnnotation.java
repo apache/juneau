@@ -42,6 +42,13 @@ import org.apache.juneau.svl.*;
 public class RestDeleteAnnotation {
 
 	/**
+	 * Private constructor to prevent instantiation.
+	 */
+	private RestDeleteAnnotation() {
+		// Utility class - prevent instantiation
+	}
+
+	/**
 	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
@@ -56,8 +63,19 @@ public class RestDeleteAnnotation {
 		private Class<? extends RestMatcher>[] matchers = new Class[0];
 		private Class<? extends Encoder>[] encoders = new Class[0];
 		private OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
-		private String clientVersion = "", debug = "", defaultAccept = "", defaultCharset = "", rolesDeclared = "", roleGuard = "", summary = "", value = "";
-		private String[] defaultRequestQueryData = {}, defaultRequestAttributes = {}, defaultRequestHeaders = {}, defaultResponseHeaders = {}, path = {};
+		private String clientVersion = "";
+		private String debug = "";
+		private String defaultAccept = "";
+		private String defaultCharset = "";
+		private String rolesDeclared = "";
+		private String roleGuard = "";
+		private String summary = "";
+		private String value = "";
+		private String[] defaultRequestQueryData = {};
+		private String[] defaultRequestAttributes = {};
+		private String[] defaultRequestHeaders = {};
+		private String[] defaultResponseHeaders = {};
+		private String[] path = {};
 
 		/**
 		 * Constructor.
@@ -324,13 +342,13 @@ public class RestDeleteAnnotation {
 			string(a.defaultAccept()).map(HttpHeaders::accept).ifPresent(x -> b.defaultRequestHeaders().setDefault(x));
 			b.guards().append(a.guards());
 			b.matchers().append(a.matchers());
-			string(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
-			string(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
-			stream(a.path()).forEach(x -> b.path(x));
-			string(a.value()).ifPresent(x -> b.path(x));
-			cdl(a.rolesDeclared()).forEach(x -> b.rolesDeclared(x));
-			string(a.roleGuard()).ifPresent(x -> b.roleGuard(x));
-			string(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
+			string(a.clientVersion()).ifPresent(b::clientVersion);
+			string(a.defaultCharset()).map(Charset::forName).ifPresent(b::defaultCharset);
+			stream(a.path()).forEach(b::path);
+			string(a.value()).ifPresent(b::path);
+			cdl(a.rolesDeclared()).forEach(b::rolesDeclared);
+			string(a.roleGuard()).ifPresent(b::roleGuard);
+			string(a.debug()).map(Enablement::fromString).ifPresent(b::debug);
 		}
 
 	}
@@ -342,8 +360,19 @@ public class RestDeleteAnnotation {
 		private final Class<? extends RestMatcher>[] matchers;
 		private final Class<? extends Encoder>[] encoders;
 		private final OpSwagger swagger;
-		private final String clientVersion, debug, defaultAccept, defaultCharset, rolesDeclared, roleGuard, summary, value;
-		private final String[] defaultRequestQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, path;
+		private final String clientVersion;
+		private final String debug;
+		private final String defaultAccept;
+		private final String defaultCharset;
+		private final String rolesDeclared;
+		private final String roleGuard;
+		private final String summary;
+		private final String value;
+		private final String[] defaultRequestQueryData;
+		private final String[] defaultRequestAttributes;
+		private final String[] defaultRequestHeaders;
+		private final String[] defaultResponseHeaders;
+		private final String[] path;
 
 		Object(RestDeleteAnnotation.Builder b) {
 			super(b);

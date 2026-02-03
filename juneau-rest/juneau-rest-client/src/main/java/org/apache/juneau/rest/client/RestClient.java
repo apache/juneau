@@ -6709,12 +6709,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				body = body2.get();
 			if (body instanceof NameValuePair body2)
 				return req.content(new UrlEncodedFormEntity(l(body2)));
-			if (body instanceof NameValuePair[])
-				return req.content(new UrlEncodedFormEntity(l((NameValuePair[])body)));
+			if (body instanceof NameValuePair[] namevaluepairArray)
+				return req.content(new UrlEncodedFormEntity(l(namevaluepairArray)));
 			if (body instanceof PartList body2)
 				return req.content(new UrlEncodedFormEntity(body2));
 			if (body instanceof HttpResource body2)
-				body2.getHeaders().forEach(x -> req.header(x));
+				body2.getHeaders().forEach(req::header);
 			if (body instanceof HttpEntity body3) {
 				if (body3.getContentType() == null)
 					req.header(ContentType.APPLICATION_FORM_URLENCODED);
@@ -6795,7 +6795,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @return The connection manager.
 	 * @deprecated Use {@link HttpClientBuilder}.
 	 */
-	@Deprecated
+	@Deprecated(since = "10.0", forRemoval = true)
 	@Override /* Overridden from HttpClient */
 	public ClientConnectionManager getConnectionManager() { return httpClient.getConnectionManager(); }
 
@@ -6814,7 +6814,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @return The default parameters.
 	 * @deprecated Use {@link RequestConfig}.
 	 */
-	@Deprecated
+	@Deprecated(since = "10.0", forRemoval = true)
 	@Override /* Overridden from HttpClient */
 	public HttpParams getParams() { return httpClient.getParams(); }
 
@@ -6957,7 +6957,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				if (serializer != null) rc.serializer(serializer);
 				if (parser != null) rc.parser(parser);
 
-				rm.getHeaders().forEach(x -> rc.header(x));
+				rm.getHeaders().forEach(rc::header);
 
 				// Apply method-level defaults if parameter values are not provided (9.2.0)
 				rom.forEachPathArg(a -> {
@@ -7981,7 +7981,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			var ret = (Object)null;
 			var res = (RestResponse)null;
 			rc.rethrow(RuntimeException.class);
-			rom.forEachException(x -> rc.rethrow(x));
+			rom.forEachException(rc::rethrow);
 			if (ror.getReturnValue() == RemoteReturn.NONE) {
 				res = rc.complete();
 			} else if (ror.getReturnValue() == RemoteReturn.STATUS) {
@@ -8036,15 +8036,14 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 	@SuppressWarnings("unchecked")
 	<T extends Context> T getInstance(Class<T> c) {
-		var o = requestContexts.get(c);
-		if (o == null) {
-			if (Serializer.class.isAssignableFrom(c)) {
-				o = Serializer.createSerializerBuilder((Class<? extends Serializer>)c).beanContext(getBeanContext()).build();
-			} else if (Parser.class.isAssignableFrom(c)) {
-				o = Parser.createParserBuilder((Class<? extends Parser>)c).beanContext(getBeanContext()).build();
+		var o = requestContexts.computeIfAbsent(c, k -> {
+			if (Serializer.class.isAssignableFrom(k)) {
+				return Serializer.createSerializerBuilder((Class<? extends Serializer>)k).beanContext(getBeanContext()).build();
+			} else if (Parser.class.isAssignableFrom(k)) {
+				return Parser.createParserBuilder((Class<? extends Parser>)k).beanContext(getBeanContext()).build();
 			}
-			requestContexts.put(c, o);
-		}
+			return null;
+		});
 		return (T)o;
 	}
 

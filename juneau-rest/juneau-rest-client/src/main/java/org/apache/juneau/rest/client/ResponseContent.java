@@ -989,7 +989,7 @@ public class ResponseContent implements HttpEntity {
 	 * the input stream returned by {@link #getContent()}
 	 */
 	@Override /* Overridden from HttpEntity */
-	@Deprecated
+	@Deprecated(since = "10.0", forRemoval = true)
 	public void consumeContent() throws IOException {
 		entity.consumeContent();
 	}

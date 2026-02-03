@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.nio.charset.*;
+import java.nio.file.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -29,6 +30,7 @@ import org.apache.juneau.commons.time.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -227,8 +229,8 @@ public class LogsResource extends BasicRestServlet {
 
 		var f = getFile(path);
 
-		var startDate = opt(start).filter(x1 -> ! isBlank(x1)).map(x2 -> GranularZonedDateTime.of(start).getZonedDateTime()).map(GregorianCalendar::from).map(x -> x.getTime()).orElse(null);
-		var endDate = opt(end).filter(x11 -> ! isBlank(x11)).map(x4 -> GranularZonedDateTime.of(end).getZonedDateTime()).map(GregorianCalendar::from).map(x3 -> x3.getTime()).orElse(null);
+		var startDate = opt(start).filter(x1 -> ! isBlank(x1)).map(x2 -> GranularZonedDateTime.of(start).getZonedDateTime()).map(GregorianCalendar::from).map(Calendar::getTime).orElse(null);
+		var endDate = opt(end).filter(x11 -> ! isBlank(x11)).map(x4 -> GranularZonedDateTime.of(end).getZonedDateTime()).map(GregorianCalendar::from).map(Calendar::getTime).orElse(null);
 
 		if (! highlight) {
 			var o = getReader(f, startDate, endDate, thread, loggers, severity);
@@ -297,8 +299,8 @@ public class LogsResource extends BasicRestServlet {
 		var f = getFile(path);
 		req.setAttribute("fullPath", f.getAbsolutePath());
 
-		var startDate = opt(start).filter(x1 -> ! isBlank(x1)).map(x2 -> GranularZonedDateTime.of(start).getZonedDateTime()).map(GregorianCalendar::from).map(x -> x.getTime()).orElse(null);
-		var endDate = opt(end).filter(x11 -> ! isBlank(x11)).map(x4 -> GranularZonedDateTime.of(end).getZonedDateTime()).map(GregorianCalendar::from).map(x3 -> x3.getTime()).orElse(null);
+		var startDate = opt(start).filter(x1 -> ! isBlank(x1)).map(x2 -> GranularZonedDateTime.of(start).getZonedDateTime()).map(GregorianCalendar::from).map(Calendar::getTime).orElse(null);
+		var endDate = opt(end).filter(x11 -> ! isBlank(x11)).map(x4 -> GranularZonedDateTime.of(end).getZonedDateTime()).map(GregorianCalendar::from).map(Calendar::getTime).orElse(null);
 
 		return getLogParser(f, startDate, endDate, thread, loggers, severity);
 	}
@@ -313,8 +315,11 @@ public class LogsResource extends BasicRestServlet {
 					deleteFile(fc);
 			}
 		}
-		if (! f.delete())
+		try {
+			Files.delete(f.toPath());
+		} catch (IOException e) {
 			throw new Forbidden("Could not delete file {0}", f.getAbsolutePath());
+		}
 	}
 
 	private File getFile(String path) throws NotFound {

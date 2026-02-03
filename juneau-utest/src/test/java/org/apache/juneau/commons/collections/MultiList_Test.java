@@ -593,7 +593,7 @@ class MultiList_Test extends TestBase {
 	void g05_equals_notAList() {
 		var l1 = l(a("1", "2"));
 		var multiList = new MultiList<>(l1);
-		assertNotEquals(multiList, null);
+		assertNotNull(multiList);
 	}
 
 	@Test

@@ -945,7 +945,7 @@ class FilteredMap_Test extends TestBase {
 			.create(String.class, Integer.class)
 			.filter((k, v) -> v != null && v > 0)
 			.functions(
-				o -> o.toString(),                    // Key function
+				Object::toString,                    // Key function
 				o -> Integer.parseInt(o.toString())   // Value function
 			)
 			.build();

@@ -986,37 +986,44 @@ class AppliedAnnotationObject_Test extends TestBase {
 
 		@Test
 		void m01_nullClass_throwsException() {
-			assertThrows(IllegalArgumentException.class, () -> C_BuilderTTests.C.create().on((Class<?>)null).build());
+			var builder = C_BuilderTTests.C.create();
+			assertThrows(IllegalArgumentException.class, () -> builder.on((Class<?>)null));
 		}
 
 		@Test
 		void m02_nullClassInfo_throwsException() {
-			assertThrows(IllegalArgumentException.class, () -> C_BuilderTTests.C.create().on((ClassInfo)null).build());
+			var builder = C_BuilderTTests.C.create();
+			assertThrows(IllegalArgumentException.class, () -> builder.on((ClassInfo)null));
 		}
 
 		@Test
 		void m03_nullMethod_throwsException() {
-			assertThrows(IllegalArgumentException.class, () -> D_BuilderMTests.D.create().on((java.lang.reflect.Method)null).build());
+			var builder = D_BuilderMTests.D.create();
+			assertThrows(IllegalArgumentException.class, () -> builder.on((java.lang.reflect.Method)null));
 		}
 
 		@Test
 		void m04_nullMethodInfo_throwsException() {
-			assertThrows(IllegalArgumentException.class, () -> D_BuilderMTests.D.create().on((MethodInfo)null).build());
+			var builder = D_BuilderMTests.D.create();
+			assertThrows(IllegalArgumentException.class, () -> builder.on((MethodInfo)null));
 		}
 
 		@Test
 		void m05_nullField_throwsException() {
-			assertThrows(IllegalArgumentException.class, () -> F_BuilderMFTests.F.create().on((java.lang.reflect.Field)null).build());
+			var builder = F_BuilderMFTests.F.create();
+			assertThrows(IllegalArgumentException.class, () -> builder.on((java.lang.reflect.Field)null));
 		}
 
 		@Test
 		void m06_nullFieldInfo_throwsException() {
-			assertThrows(IllegalArgumentException.class, () -> F_BuilderMFTests.F.create().on((FieldInfo)null).build());
+			var builder = F_BuilderMFTests.F.create();
+			assertThrows(IllegalArgumentException.class, () -> builder.on((FieldInfo)null));
 		}
 
 		@Test
 		void m07_nullConstructor_throwsException() {
-			assertThrows(IllegalArgumentException.class, () -> E_BuilderCTests.E.create().on((java.lang.reflect.Constructor<?>)null).build());
+			var builder = E_BuilderCTests.E.create();
+			assertThrows(IllegalArgumentException.class, () -> builder.on((java.lang.reflect.Constructor<?>)null));
 		}
 
 		@Test

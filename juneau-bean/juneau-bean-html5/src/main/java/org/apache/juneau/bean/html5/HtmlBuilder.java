@@ -2158,6 +2158,7 @@ public class HtmlBuilder {
 	 *
 	 * @return The new element.
 	 */
+	@SuppressWarnings("java:S6213")
 	public static final Var var() {
 		return new Var();
 	}
@@ -2168,6 +2169,7 @@ public class HtmlBuilder {
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
+	@SuppressWarnings("java:S6213")
 	public static final Var var(Object...children) {
 		return new Var(children);
 	}

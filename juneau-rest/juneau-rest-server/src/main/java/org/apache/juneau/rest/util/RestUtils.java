@@ -39,6 +39,13 @@ import jakarta.servlet.http.*;
 @SuppressWarnings("resource")
 public class RestUtils {
 
+	/**
+	 * Private constructor to prevent instantiation.
+	 */
+	private RestUtils() {
+		// Utility class - prevent instantiation
+	}
+
 	// @formatter:off
 	private static Map<Integer,String> httpMsgs = mapb(Integer.class, String.class)
 		.unmodifiable()
@@ -212,6 +219,7 @@ public class RestUtils {
 		return safe(()-> parseQuery(new ParserPipe(qs)));
 	}
 
+	@SuppressWarnings("java:S2677")
 	private static Map<String,List<String>> parseQuery(ParserPipe p) throws IOException {
 
 		var m = CollectionUtils.<String,List<String>>map();

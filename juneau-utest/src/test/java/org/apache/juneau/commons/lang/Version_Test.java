@@ -152,9 +152,9 @@ class Version_Test extends TestBase {
 	@Test
 	void b05_equalsObject_differentType() {
 		var v1 = of("1.2.3");
-		assertNotEquals(v1, "1.2.3");
-		assertNotEquals(v1, 123);
-		assertNotEquals(v1, new Object());
+		assertNotEquals("1.2.3", v1);
+		assertNotEquals(123, v1);
+		assertNotEquals(new Object(), v1);
 	}
 
 	@Test

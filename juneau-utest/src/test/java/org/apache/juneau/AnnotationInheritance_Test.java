@@ -110,7 +110,7 @@ class AnnotationInheritance_Test extends TestBase {
 	}
 
 	@Test
-	void b01_xml_format_inheritance() throws Exception {
+	void b01_xml_format_inheritance() {
 		var bc = BeanContext.DEFAULT;
 		var bm = bc.getBeanMeta(B1_Child.class);
 		var prop = bm.getPropertyMeta("i");

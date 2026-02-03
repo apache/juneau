@@ -34,6 +34,13 @@ import org.apache.juneau.commons.annotation.*;
 public class RestEndCallAnnotation {
 
 	/**
+	 * Private constructor to prevent instantiation.
+	 */
+	private RestEndCallAnnotation() {
+		// Utility class - prevent instantiation
+	}
+
+	/**
 	 * A collection of {@link RestEndCall @RestEndCall annotations}.
 	 */
 	@Documented

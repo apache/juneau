@@ -1089,6 +1089,18 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
+	 * Shortcut for <code>getWithDefault(key, defVal, Boolean.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @param defVal The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public boolean is(String key, boolean defVal) {
+		return getWithDefault(key, defVal, Boolean.class);
+	}
+
+	/**
 	 * Returns the class type of the object at the specified index.
 	 *
 	 * @param key The key into this map.

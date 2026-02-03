@@ -625,7 +625,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @deprecated Use configuration classes provided <jk>org.apache.http.config</jk> and <jk>org.apache.http.client.config</jk>.
 	 */
 	@Override /* Overridden from HttpMessage */
-	@Deprecated
+	@Deprecated(since = "10.0", forRemoval = true)
 	public HttpParams getParams() { return response.getParams(); }
 
 	/**
@@ -816,7 +816,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @deprecated Use configuration classes provided <jk>org.apache.http.config</jk> and <jk>org.apache.http.client.config</jk>.
 	 */
 	@Override /* Overridden from HttpMessage */
-	@Deprecated
+	@Deprecated(since = "10.0", forRemoval = true)
 	public void setParams(HttpParams params) {
 		response.setParams(params);
 	}
@@ -897,12 +897,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @return A session of the specified parser.
 	 */
 	protected HttpPartParserSession getPartParserSession(HttpPartParser parser) {
-		var s = partParserSessions.get(parser);
-		if (s == null) {
-			s = parser.getPartSession();
-			partParserSessions.put(parser, s);
-		}
-		return s;
+		return partParserSessions.computeIfAbsent(parser, HttpPartParser::getPartSession);
 	}
 
 	@SuppressWarnings("unchecked")

@@ -207,7 +207,7 @@ public class JettyMicroservice extends Microservice {
 		 */
 		public Builder jettyXml(Object jettyXml, boolean resolveVars) throws IOException {
 			if (jettyXml instanceof String jettyXml2)
-				this.jettyXml = read(resolveFile(jettyXml2.toString()));
+				this.jettyXml = read(resolveFile(jettyXml2));
 			else if (jettyXml instanceof File jettyXml3)
 				this.jettyXml = read(jettyXml3);
 			else if (jettyXml instanceof Path jettyXml4)

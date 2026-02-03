@@ -286,7 +286,8 @@ class BctAssertions_Test extends TestBase {
 
 		@Test
 		void g03_notEmpty() {
-			var e = assertThrows(AssertionFailedError.class, () -> assertEmpty(l("item")));
+			var list = l("item");
+			var e = assertThrows(AssertionFailedError.class, () -> assertEmpty(list));
 			assertContains("Value was not empty", e.getMessage());
 		}
 
@@ -316,7 +317,8 @@ class BctAssertions_Test extends TestBase {
 
 		@Test
 		void h03_sizeMismatch() {
-			var e = assertThrows(AssertionFailedError.class, () -> assertList(l("a", "b"), "a", "b", "c"));
+			var list = l("a", "b");
+			var e = assertThrows(AssertionFailedError.class, () -> assertList(list, "a", "b", "c"));
 			assertContains("Wrong list length", e.getMessage());
 		}
 
@@ -409,13 +411,15 @@ class BctAssertions_Test extends TestBase {
 
 		@Test
 		void h03_sizeMismatch() {
-			var e = assertThrows(AssertionFailedError.class, () -> assertMap(m("a", "1"), "a=1", "b=2"));
+			var map = m("a", "1");
+			var e = assertThrows(AssertionFailedError.class, () -> assertMap(map, "a=1", "b=2"));
 			assertContains("Wrong list length", e.getMessage());
 		}
 
 		@Test
 		void h04_elementMismatch() {
-			var e = assertThrows(AssertionFailedError.class, () -> assertMap(m("a", "1", "b", "2"), "a=1", "b=wrong"));
+			var map = m("a", "1", "b", "2");
+			var e = assertThrows(AssertionFailedError.class, () -> assertMap(map, "a=1", "b=wrong"));
 			assertContains("Element at index 1 did not match", e.getMessage());
 		}
 
@@ -546,7 +550,8 @@ class BctAssertions_Test extends TestBase {
 
 		@Test
 		void i03_actuallyEmpty() {
-			var e = assertThrows(AssertionFailedError.class, () -> assertNotEmpty(l()));
+			var list = l();
+			var e = assertThrows(AssertionFailedError.class, () -> assertNotEmpty(list));
 			assertContains("Value was empty", e.getMessage());
 		}
 
@@ -577,7 +582,8 @@ class BctAssertions_Test extends TestBase {
 
 		@Test
 		void j03_wrongSize() {
-			var e = assertThrows(AssertionFailedError.class, () -> assertSize(5, l("a", "b", "c")));
+			var list = l("a", "b", "c");
+			var e = assertThrows(AssertionFailedError.class, () -> assertSize(5, list));
 			assertContains("Value not expected size", e.getMessage());
 		}
 

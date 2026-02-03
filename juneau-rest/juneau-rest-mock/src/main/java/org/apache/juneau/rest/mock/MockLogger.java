@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.logging.*;
 import java.util.logging.Formatter;
@@ -189,10 +190,10 @@ public class MockLogger extends Logger {
 	}
 
 	@Override /* Overridden from Logger */
-	public synchronized void log(LogRecord record) {
-		logRecords.add(record);
+	public synchronized void log(LogRecord logRecord) {
+		logRecords.add(logRecord);
 		try {
-			baos.write(getFormatter().format(record).getBytes("UTF-8"));
+			baos.write(getFormatter().format(logRecord).getBytes(StandardCharsets.UTF_8));
 		} catch (Exception e) {
 			throw toRex(e);
 		}

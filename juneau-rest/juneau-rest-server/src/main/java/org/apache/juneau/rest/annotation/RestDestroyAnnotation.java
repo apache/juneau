@@ -34,6 +34,13 @@ import org.apache.juneau.commons.annotation.*;
 public class RestDestroyAnnotation {
 
 	/**
+	 * Private constructor to prevent instantiation.
+	 */
+	private RestDestroyAnnotation() {
+		// Utility class - prevent instantiation
+	}
+
+	/**
 	 * A collection of {@link RestDestroy @RestDestroy annotations}.
 	 */
 	@Documented
