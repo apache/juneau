@@ -83,6 +83,7 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
+
 	/**
 	 * Builder class.
 	 */

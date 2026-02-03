@@ -71,6 +71,7 @@ import org.apache.juneau.soap.*;
  * </ul>
  */
 public class Serializer extends BeanTraverseContext {
+
 	/**
 	 * Builder class.
 	 */

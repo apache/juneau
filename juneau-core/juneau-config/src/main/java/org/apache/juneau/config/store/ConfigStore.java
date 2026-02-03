@@ -46,6 +46,7 @@ import org.apache.juneau.config.internal.*;
 */
 @SuppressWarnings("resource")
 public abstract class ConfigStore extends Context implements Closeable {
+
 	/**
 	 * Builder class.
 	 */

@@ -24,16 +24,22 @@ package org.apache.juneau.commons.reflect;
  * for runtime dispatch and polymorphic handling.
  */
 public enum AnnotatableType {
+
 	/** Represents a {@link Class} wrapped in {@link ClassInfo}. */
 	CLASS_TYPE,
+
 	/** Represents a {@link java.lang.reflect.Method} wrapped in {@link MethodInfo}. */
 	METHOD_TYPE,
+
 	/** Represents a {@link java.lang.reflect.Field} wrapped in {@link FieldInfo}. */
 	FIELD_TYPE,
+
 	/** Represents a {@link java.lang.Package} wrapped in {@link PackageInfo}. */
 	PACKAGE_TYPE,
+
 	/** Represents a {@link java.lang.reflect.Constructor} wrapped in {@link ConstructorInfo}. */
 	CONSTRUCTOR_TYPE,
+
 	/** Represents a {@link java.lang.reflect.Parameter} wrapped in {@link ParameterInfo}. */
 	PARAMETER_TYPE
 }

@@ -138,6 +138,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 public class UonSerializer extends WriterSerializer implements HttpPartSerializer, UonMetaProvider {
+
 	/**
 	 * Builder class.
 	 */

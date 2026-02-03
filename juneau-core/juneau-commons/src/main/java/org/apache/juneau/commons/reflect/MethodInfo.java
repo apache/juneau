@@ -83,6 +83,7 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  */
 public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>, Annotatable {
+
 	/**
 	 * Creates a MethodInfo wrapper for the specified method.
 	 *

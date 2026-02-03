@@ -55,6 +55,7 @@ import org.apache.juneau.uon.*;
  * </ul>
  */
 public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvider {
+
 	/**
 	 * Builder class.
 	 */

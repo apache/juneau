@@ -552,6 +552,7 @@ public class BasicBeanStore {
 	 * @param <T> The bean type.
 	 */
 	public static class Entry<T> {
+
 		/**
 		 * Static creator.
 		 *

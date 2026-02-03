@@ -139,6 +139,7 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 public class Parser extends BeanContextable {
+
 	/**
 	 * Builder class.
 	 */

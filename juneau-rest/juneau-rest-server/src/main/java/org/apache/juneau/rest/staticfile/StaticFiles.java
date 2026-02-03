@@ -35,6 +35,7 @@ import org.apache.juneau.http.resource.*;
  * </ul>
  */
 public interface StaticFiles extends FileFinder {
+
 	/**
 	 * Builder class.
 	 */

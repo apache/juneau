@@ -247,6 +247,7 @@ import jakarta.servlet.http.*;
  * </ul>
  */
 public class MockRestClient extends RestClient implements HttpClientConnection {
+
 	/**
 	 * Builder class.
 	 */

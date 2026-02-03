@@ -55,6 +55,7 @@ import org.apache.juneau.xml.annotation.*;
  */
 @SuppressWarnings("resource")
 public class HtmlSerializerSession extends XmlSerializerSession {
+
 	/**
 	 * Builder class.
 	 */

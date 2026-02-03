@@ -32,6 +32,7 @@ import org.apache.juneau.commons.annotation.*;
  * </ul>
  */
 public class RestPostCallAnnotation {
+
 	/**
 	 * A collection of {@link RestPostCall @RestPostCall annotations}.
 	 */

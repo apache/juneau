@@ -50,6 +50,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class RestAnnotation {
+
 	/**
 	 * Builder class.
 	 *

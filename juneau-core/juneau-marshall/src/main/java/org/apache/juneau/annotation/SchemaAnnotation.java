@@ -39,6 +39,7 @@ import org.apache.juneau.svl.*;
  *
  */
 public class SchemaAnnotation {
+
 	/**
 	 * Applies targeted {@link Schema} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */

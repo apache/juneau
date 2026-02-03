@@ -27,6 +27,7 @@ import org.apache.juneau.commons.annotation.*;
  *
  */
 public class HasQueryAnnotation {
+
 	/**
 	 * Builder class.
 	 *

@@ -40,6 +40,7 @@ import org.apache.juneau.commons.reflect.*;
  * </ul>
  */
 public class OutputStreamSerializer extends Serializer {
+
 	/**
 	 * Builder class.
 	 */

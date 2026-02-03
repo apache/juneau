@@ -51,6 +51,7 @@ import org.apache.juneau.http.header.*;
 @BeanIgnore
 @SuppressWarnings("resource")
 public class BasicHttpEntity implements HttpEntity {
+
 	/**
 	 * An empty HttpEntity.
 	 */

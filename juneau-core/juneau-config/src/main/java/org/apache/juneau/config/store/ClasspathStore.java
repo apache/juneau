@@ -42,6 +42,7 @@ import org.apache.juneau.commons.utils.*;
  */
 @SuppressWarnings("resource")
 public class ClasspathStore extends ConfigStore {
+
 	/**
 	 * Builder class.
 	 */

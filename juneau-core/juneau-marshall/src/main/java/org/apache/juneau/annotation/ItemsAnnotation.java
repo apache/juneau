@@ -27,6 +27,7 @@ import org.apache.juneau.commons.annotation.*;
  *
  */
 public class ItemsAnnotation {
+
 	/**
 	 * Builder class.
 	 *

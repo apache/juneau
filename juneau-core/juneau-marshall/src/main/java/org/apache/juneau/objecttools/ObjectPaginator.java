@@ -52,6 +52,7 @@ import org.apache.juneau.*;
  * </ul>
  */
 public class ObjectPaginator implements ObjectTool<PageArgs> {
+
 	/**
 	 * Static creator.
 	 * @return A new {@link ObjectPaginator} object.

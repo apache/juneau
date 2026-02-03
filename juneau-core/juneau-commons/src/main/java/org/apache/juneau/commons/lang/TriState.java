@@ -41,6 +41,7 @@ package org.apache.juneau.commons.lang;
  * </p>
  */
 public enum TriState {
+
 	/** Explicitly set to <jk>true</jk>. */
 	TRUE,
 

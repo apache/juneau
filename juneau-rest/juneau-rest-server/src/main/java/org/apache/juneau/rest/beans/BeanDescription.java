@@ -39,6 +39,7 @@ import org.apache.juneau.annotation.*;
  */
 @Bean(properties = "type,properties")
 public class BeanDescription {
+
 	/**
 	 * Information about a bean property.
 	 */

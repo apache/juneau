@@ -50,6 +50,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 public class OpenApi extends CharMarshaller {
+
 	/**
 	 * Default reusable instance.
 	 */

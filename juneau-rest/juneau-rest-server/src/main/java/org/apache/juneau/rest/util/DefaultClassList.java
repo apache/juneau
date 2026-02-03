@@ -31,6 +31,7 @@ import java.util.*;
  *
  */
 public class DefaultClassList {
+
 	/**
 	 * Static creator.
 	 *

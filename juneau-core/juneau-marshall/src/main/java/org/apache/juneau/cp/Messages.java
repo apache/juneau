@@ -112,6 +112,7 @@ import org.apache.juneau.parser.ParseException;
  *
  */
 public class Messages extends ResourceBundle {
+
 	/**
 	 * Builder class.
 	 */

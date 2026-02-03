@@ -132,6 +132,7 @@ import org.apache.juneau.uon.*;
  * </ul>
  */
 public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingMetaProvider {
+
 	/**
 	 * Builder class.
 	 */

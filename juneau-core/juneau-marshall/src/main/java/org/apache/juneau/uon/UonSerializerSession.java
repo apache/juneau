@@ -48,6 +48,7 @@ import org.apache.juneau.svl.*;
  */
 @SuppressWarnings("resource")
 public class UonSerializerSession extends WriterSerializerSession implements HttpPartSerializerSession {
+
 	/**
 	 * Builder class.
 	 */

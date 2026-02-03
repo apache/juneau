@@ -28,6 +28,7 @@ import org.apache.juneau.commons.annotation.*;
  *
  */
 public class TagAnnotation {
+
 	/**
 	 * Builder class.
 	 *

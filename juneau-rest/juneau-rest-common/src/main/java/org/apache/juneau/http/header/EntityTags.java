@@ -28,6 +28,7 @@ import org.apache.juneau.commons.collections.*;
  */
 @BeanIgnore
 public class EntityTags {
+
 	/** Represents an empty entity tags object. */
 	public static final EntityTags EMPTY = new EntityTags("");
 

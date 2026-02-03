@@ -36,6 +36,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class JsonAnnotation {
+
 	/**
 	 * Applies targeted {@link Json} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */

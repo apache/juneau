@@ -48,6 +48,7 @@ import org.apache.juneau.xml.*;
  *
  */
 public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvider {
+
 	/**
 	 * Builder class.
 	 */

@@ -46,6 +46,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 public class JsonSchemaGeneratorSession extends BeanTraverseSession {
+
 	/**
 	 * Builder class.
 	 */

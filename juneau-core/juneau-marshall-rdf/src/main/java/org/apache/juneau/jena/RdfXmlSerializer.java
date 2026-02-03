@@ -28,6 +28,7 @@ package org.apache.juneau.jena;
  * </ul>
  */
 public class RdfXmlSerializer extends RdfSerializer {
+
 	/** Default RDF/XML serializer, all default settings.*/
 	public static final RdfXmlSerializer DEFAULT = new RdfXmlSerializer(create());
 

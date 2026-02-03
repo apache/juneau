@@ -53,6 +53,7 @@ import org.apache.juneau.uon.*;
  */
 @SuppressWarnings("resource")
 public class OpenApiSerializerSession extends UonSerializerSession {
+
 	/**
 	 * Builder class.
 	 */

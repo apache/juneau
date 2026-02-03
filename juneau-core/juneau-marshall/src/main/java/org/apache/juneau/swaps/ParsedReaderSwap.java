@@ -62,6 +62,7 @@ public class ParsedReaderSwap extends ObjectSwap<Reader,Object> {
 
 	/** Reader transform for reading HTML text. */
 	public static class Html extends ParsedReaderSwap {
+
 		/** Constructor */
 		public Html() {
 			super(HtmlParser.DEFAULT);
@@ -70,6 +71,7 @@ public class ParsedReaderSwap extends ObjectSwap<Reader,Object> {
 
 	/** Reader transform for reading JSON text. */
 	public static class Json extends ParsedReaderSwap {
+
 		/** Constructor */
 		public Json() {
 			super(JsonParser.DEFAULT);
@@ -78,6 +80,7 @@ public class ParsedReaderSwap extends ObjectSwap<Reader,Object> {
 
 	/** Reader transform for reading plain text. */
 	public static class PlainText extends ParsedReaderSwap {
+
 		/** Constructor */
 		public PlainText() {
 			super(null);
@@ -86,6 +89,7 @@ public class ParsedReaderSwap extends ObjectSwap<Reader,Object> {
 
 	/** Reader transform for reading plain text. */
 	public static class Uon extends ParsedReaderSwap {
+
 		/** Constructor */
 		public Uon() {
 			super(UonParser.DEFAULT);
@@ -94,6 +98,7 @@ public class ParsedReaderSwap extends ObjectSwap<Reader,Object> {
 
 	/** Reader transform for reading plain text. */
 	public static class UrlEncoding extends ParsedReaderSwap {
+
 		/** Constructor */
 		public UrlEncoding() {
 			super(UrlEncodingParser.DEFAULT);
@@ -102,6 +107,7 @@ public class ParsedReaderSwap extends ObjectSwap<Reader,Object> {
 
 	/** Reader transform for reading XML text. */
 	public static class Xml extends ParsedReaderSwap {
+
 		/** Constructor */
 		public Xml() {
 			super(XmlParser.DEFAULT);

@@ -124,6 +124,7 @@ import org.apache.juneau.parser.*;
  * </ul>
  */
 public class JsonParser extends ReaderParser implements JsonMetaProvider {
+
 	/**
 	 * Builder class.
 	 */

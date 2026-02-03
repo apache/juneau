@@ -33,6 +33,7 @@ import org.apache.juneau.svl.*;
  *
  */
 public class SwapAnnotation {
+
 	/**
 	 * Applies targeted {@link Swap} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */

@@ -41,6 +41,7 @@ import org.apache.juneau.svl.*;
  */
 @SuppressWarnings("resource")
 public class XmlDocSerializerSession extends XmlSerializerSession {
+
 	/**
 	 * Builder class.
 	 */

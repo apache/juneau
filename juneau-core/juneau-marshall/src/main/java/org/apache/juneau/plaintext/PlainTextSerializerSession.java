@@ -39,6 +39,7 @@ import org.apache.juneau.svl.*;
  */
 @SuppressWarnings("resource")
 public class PlainTextSerializerSession extends WriterSerializerSession {
+
 	/**
 	 * Builder class.
 	 */

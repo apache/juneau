@@ -36,6 +36,7 @@ package org.apache.juneau.json;
  * </ul>
  */
 public class Json5Parser extends JsonParser {
+
 	/** Default parser, Accept=application/json5. */
 	public static final Json5Parser DEFAULT = new Json5Parser(create());
 

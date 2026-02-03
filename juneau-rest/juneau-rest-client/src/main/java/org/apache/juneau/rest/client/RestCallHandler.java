@@ -65,6 +65,7 @@ import org.apache.http.protocol.*;
  * </ul>
  */
 public interface RestCallHandler {
+
 	/**
 	 * Execute the specified request.
 	 *

@@ -53,6 +53,7 @@ import org.apache.juneau.parser.*;
  * </ul>
  */
 public class UonParser extends ReaderParser implements HttpPartParser, UonMetaProvider {
+
 	/**
 	 * Builder class.
 	 */

@@ -34,6 +34,7 @@ import java.util.regex.*;
  * names.
  */
 public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.Entry>, Closeable {
+
 	/**
 	 * Represents a single line from the log file.
 	 */

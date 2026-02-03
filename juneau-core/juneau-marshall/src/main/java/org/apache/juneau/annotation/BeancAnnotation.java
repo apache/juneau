@@ -33,6 +33,7 @@ import org.apache.juneau.svl.*;
  *
  */
 public class BeancAnnotation {
+
 	/**
 	 * Applies targeted {@link Beanc} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */

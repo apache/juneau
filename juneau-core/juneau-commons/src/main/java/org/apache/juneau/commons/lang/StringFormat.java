@@ -370,6 +370,7 @@ public final class StringFormat {
 	 * Base class for format tokens.
 	 */
 	private abstract static class Token {
+
 		/**
 		 * Appends the formatted content to the StringBuilder.
 		 *

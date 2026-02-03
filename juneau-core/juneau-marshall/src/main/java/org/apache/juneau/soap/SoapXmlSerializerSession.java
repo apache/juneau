@@ -41,6 +41,7 @@ import org.apache.juneau.xml.*;
  */
 @SuppressWarnings("resource")
 public class SoapXmlSerializerSession extends XmlSerializerSession {
+
 	/**
 	 * Builder class.
 	 */

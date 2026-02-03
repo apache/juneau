@@ -45,6 +45,7 @@ import org.apache.juneau.svl.*;
  */
 @SuppressWarnings("resource")
 public class JsonSerializerSession extends WriterSerializerSession {
+
 	/**
 	 * Builder class.
 	 */

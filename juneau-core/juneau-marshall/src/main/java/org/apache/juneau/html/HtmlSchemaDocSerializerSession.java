@@ -40,6 +40,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class HtmlSchemaDocSerializerSession extends HtmlDocSerializerSession {
+
 	/**
 	 * Builder class.
 	 */

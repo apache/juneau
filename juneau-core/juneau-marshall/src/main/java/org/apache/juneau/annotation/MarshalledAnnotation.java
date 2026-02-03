@@ -32,6 +32,7 @@ import org.apache.juneau.svl.*;
  *
  */
 public class MarshalledAnnotation {
+
 	/**
 	 * Applies targeted {@link Marshalled} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */

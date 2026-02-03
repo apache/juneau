@@ -28,6 +28,7 @@ package org.apache.juneau.jena;
  * </ul>
  */
 public class NTripleParser extends RdfParser {
+
 	/** Default N-Triple parser, all default settings.*/
 	public static final NTripleParser DEFAULT = new NTripleParser(create());
 

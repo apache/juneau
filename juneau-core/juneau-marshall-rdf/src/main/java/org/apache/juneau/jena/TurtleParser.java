@@ -28,6 +28,7 @@ package org.apache.juneau.jena;
  * </ul>
  */
 public class TurtleParser extends RdfParser {
+
 	/** Default Turtle parser, all default settings.*/
 	public static final TurtleParser DEFAULT = new TurtleParser(create());
 

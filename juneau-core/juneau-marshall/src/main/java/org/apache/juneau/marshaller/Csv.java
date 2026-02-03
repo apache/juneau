@@ -33,6 +33,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 public class Csv extends CharMarshaller {
+
 	/**
 	 * Default reusable instance.
 	 */

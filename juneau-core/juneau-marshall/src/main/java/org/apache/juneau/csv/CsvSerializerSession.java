@@ -43,6 +43,7 @@ import org.apache.juneau.svl.*;
  */
 @SuppressWarnings("resource")
 public class CsvSerializerSession extends WriterSerializerSession {
+
 	/**
 	 * Builder class.
 	 */

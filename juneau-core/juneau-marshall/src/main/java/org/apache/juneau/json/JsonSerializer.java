@@ -110,6 +110,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 public class JsonSerializer extends WriterSerializer implements JsonMetaProvider {
+
 	/**
 	 * Builder class.
 	 */

@@ -32,6 +32,7 @@ import org.apache.juneau.commons.annotation.*;
  * </ul>
  */
 public class RestDestroyAnnotation {
+
 	/**
 	 * A collection of {@link RestDestroy @RestDestroy annotations}.
 	 */

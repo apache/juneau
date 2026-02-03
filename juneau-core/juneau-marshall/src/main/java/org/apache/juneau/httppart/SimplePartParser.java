@@ -55,6 +55,7 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 public class SimplePartParser extends BaseHttpPartParser {
+
 	/**
 	 * Builder class.
 	 */

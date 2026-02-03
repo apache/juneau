@@ -33,6 +33,7 @@ import org.apache.juneau.svl.*;
  *
  */
 public class PlainTextAnnotation {
+
 	/**
 	 * Applies targeted {@link PlainText} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */

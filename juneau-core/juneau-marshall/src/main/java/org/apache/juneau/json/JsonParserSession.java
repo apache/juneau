@@ -50,6 +50,7 @@ import org.apache.juneau.swap.*;
  */
 @SuppressWarnings({ "unchecked", "rawtypes", "resource" })
 public class JsonParserSession extends ReaderParserSession {
+
 	/**
 	 * Builder class.
 	 */

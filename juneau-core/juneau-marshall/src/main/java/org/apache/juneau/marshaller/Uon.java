@@ -49,6 +49,7 @@ import org.apache.juneau.uon.*;
  * </ul>
  */
 public class Uon extends CharMarshaller {
+
 	/**
 	 * Default reusable instance.
 	 */

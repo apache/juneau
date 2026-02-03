@@ -47,6 +47,7 @@ import org.apache.juneau.uon.*;
  */
 @SuppressWarnings({ "unchecked", "rawtypes", "resource" })
 public class UrlEncodingParserSession extends UonParserSession {
+
 	/**
 	 * Builder class.
 	 */

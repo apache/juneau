@@ -197,6 +197,7 @@ import org.apache.juneau.swap.*;
  */
 @Bean(typeName = "schema")
 public class JsonSchema {
+
 	/**
 	 * Used during parsing to convert the <property>additionalItems</property> property to the correct class type.
 	 *

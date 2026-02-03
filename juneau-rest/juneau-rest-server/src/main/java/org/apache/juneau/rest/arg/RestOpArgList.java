@@ -32,6 +32,7 @@ import org.apache.juneau.cp.*;
  * </ul>
  */
 public class RestOpArgList {
+
 	/**
 	 * Builder class.
 	 */

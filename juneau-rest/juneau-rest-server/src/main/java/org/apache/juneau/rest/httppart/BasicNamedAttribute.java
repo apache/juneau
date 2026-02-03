@@ -36,6 +36,7 @@ import org.apache.juneau.http.part.*;
  */
 @BeanIgnore
 public class BasicNamedAttribute implements NamedAttribute {
+
 	/**
 	 * Static creator.
 	 *

@@ -42,6 +42,7 @@ import org.apache.juneau.svl.*;
  */
 @SuppressWarnings("resource")
 public class HtmlStrippedDocSerializerSession extends HtmlSerializerSession {
+
 	/**
 	 * Builder class.
 	 */

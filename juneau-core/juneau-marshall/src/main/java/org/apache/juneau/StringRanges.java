@@ -63,6 +63,7 @@ import org.apache.juneau.commons.collections.*;
  */
 @BeanIgnore
 public class StringRanges {
+
 	/** Represents an empty string ranges object. */
 	public static final StringRanges EMPTY = new StringRanges("");
 

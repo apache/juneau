@@ -31,6 +31,7 @@ import org.apache.juneau.rest.annotation.*;
  *
  */
 public class RestOperations {
+
 	/**
 	 * Builder class.
 	 */

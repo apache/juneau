@@ -48,6 +48,7 @@ import org.apache.juneau.commons.utils.*;
  *
  */
 public class BeanTraverseSession extends BeanSession {
+
 	/**
 	 * Builder class.
 	 */

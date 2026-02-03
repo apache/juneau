@@ -33,6 +33,7 @@ import org.apache.juneau.svl.*;
  *
  */
 public class SoapXmlAnnotation {
+
 	/**
 	 * Applies targeted {@link SoapXml} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */

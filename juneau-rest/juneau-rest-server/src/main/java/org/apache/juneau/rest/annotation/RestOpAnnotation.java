@@ -45,6 +45,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class RestOpAnnotation {
+
 	/**
 	 * Builder class.
 	 *

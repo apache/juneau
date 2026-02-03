@@ -53,6 +53,7 @@ import org.apache.juneau.swap.*;
  *
  */
 public class PlainTextSerializer extends WriterSerializer implements PlainTextMetaProvider {
+
 	/**
 	 * Builder class.
 	 */

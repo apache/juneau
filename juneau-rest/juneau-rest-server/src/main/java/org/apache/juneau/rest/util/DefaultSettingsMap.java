@@ -33,6 +33,7 @@ import java.util.*;
  *
  */
 public class DefaultSettingsMap {
+
 	/**
 	 * Static creator.
 	 *

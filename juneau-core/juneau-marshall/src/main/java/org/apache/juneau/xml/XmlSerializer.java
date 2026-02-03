@@ -135,6 +135,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
+
 	/**
 	 * Builder class.
 	 */

@@ -35,6 +35,7 @@ import org.apache.juneau.annotation.*;
  *
  */
 public class MarshalledFilter {
+
 	/**
 	 * Builder class.
 	 */

@@ -25,6 +25,7 @@ package org.apache.juneau.jena;
  * </ul>
  */
 public class Constants {
+
 	/** Jena language support: <js>"RDF/XML"</js>.*/
 	public static final String LANG_RDF_XML = "RDF/XML";
 

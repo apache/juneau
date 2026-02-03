@@ -87,6 +87,7 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  */
 public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, Annotatable {
+
 	/**
 	 * Creates a FieldInfo wrapper for the specified field.
 	 *

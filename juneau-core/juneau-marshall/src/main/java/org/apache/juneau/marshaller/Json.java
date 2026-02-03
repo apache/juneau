@@ -49,6 +49,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 public class Json extends CharMarshaller {
+
 	/**
 	 * Default reusable instance.
 	 */

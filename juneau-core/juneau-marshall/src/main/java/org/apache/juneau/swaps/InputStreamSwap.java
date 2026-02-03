@@ -38,6 +38,7 @@ public abstract class InputStreamSwap extends StringSwap<InputStream> {
 	 * Converts {@link InputStream InputStreams} to BASE-64 encoding.
 	 */
 	public static class Base64 extends InputStreamSwap {
+
 		/**
 		 * Converts the specified {@link InputStream} to a {@link String}.
 		 */
@@ -59,6 +60,7 @@ public abstract class InputStreamSwap extends StringSwap<InputStream> {
 	 * Converts {@link InputStream InputStreams} to hex encoding.
 	 */
 	public static class Hex extends InputStreamSwap {
+
 		/**
 		 * Converts the specified {@link InputStream} to a {@link String}.
 		 */
@@ -80,6 +82,7 @@ public abstract class InputStreamSwap extends StringSwap<InputStream> {
 	 * Converts {@link InputStream InputStreams} to spaced-hex encoding.
 	 */
 	public static class SpacedHex extends InputStreamSwap {
+
 		/**
 		 * Converts the specified {@link InputStream} to a {@link String}.
 		 */

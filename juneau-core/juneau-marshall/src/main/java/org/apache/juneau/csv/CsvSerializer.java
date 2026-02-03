@@ -45,6 +45,7 @@ import org.apache.juneau.serializer.*;
  *
  */
 public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
+
 	/**
 	 * Builder class.
 	 */

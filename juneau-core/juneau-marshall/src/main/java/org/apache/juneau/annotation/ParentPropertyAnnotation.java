@@ -33,6 +33,7 @@ import org.apache.juneau.svl.*;
  *
  */
 public class ParentPropertyAnnotation {
+
 	/**
 	 * Applies targeted {@link ParentProperty} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */

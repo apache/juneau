@@ -45,6 +45,7 @@ import org.apache.juneau.uon.*;
  */
 @SuppressWarnings({ "rawtypes", "unchecked", "resource" })
 public class UrlEncodingSerializerSession extends UonSerializerSession {
+
 	/**
 	 * Builder class.
 	 */

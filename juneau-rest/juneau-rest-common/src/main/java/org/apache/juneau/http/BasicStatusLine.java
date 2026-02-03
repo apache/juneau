@@ -33,6 +33,7 @@ import org.apache.http.message.*;
  * </ul>
  */
 public class BasicStatusLine implements StatusLine {
+
 	/**
 	 * Instantiates a new instance of this bean.
 	 *

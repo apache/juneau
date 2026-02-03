@@ -35,6 +35,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class HtmlLinkAnnotation {
+
 	/**
 	 * Applies targeted {@link HtmlLink} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */

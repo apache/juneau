@@ -39,6 +39,7 @@ import org.apache.juneau.cp.*;
  * </ul>
  */
 public class ThrownStore {
+
 	/**
 	 * Builder class.
 	 */

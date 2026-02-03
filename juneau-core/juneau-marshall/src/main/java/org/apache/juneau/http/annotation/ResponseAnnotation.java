@@ -35,6 +35,7 @@ import org.apache.juneau.svl.*;
  *
  */
 public class ResponseAnnotation {
+
 	/**
 	 * Applies targeted {@link Response} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */

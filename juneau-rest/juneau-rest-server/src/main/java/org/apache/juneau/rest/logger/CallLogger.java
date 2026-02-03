@@ -95,6 +95,7 @@ import jakarta.servlet.http.*;
  * </ul>
  */
 public class CallLogger {
+
 	/**
 	 * Builder class.
 	 */

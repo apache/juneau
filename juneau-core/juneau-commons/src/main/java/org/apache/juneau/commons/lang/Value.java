@@ -106,6 +106,7 @@ import org.apache.juneau.commons.reflect.ClassInfo;
  * @param <T> The value type.
  */
 public class Value<T> {
+
 	/**
 	 * Creates a new empty value (with <c>null</c> as the initial value).
 	 *

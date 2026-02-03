@@ -105,6 +105,7 @@ import org.apache.juneau.serializer.*;
  * @param <R> The return type.
  */
 public class FluentResponseStatusLineAssertion<R> extends FluentObjectAssertion<StatusLine,R> {
+
 	/**
 	 * Chained constructor.
 	 *

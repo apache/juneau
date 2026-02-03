@@ -48,6 +48,7 @@ import org.apache.juneau.json.*;
  * </ul>
  */
 public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSchemaMetaProvider {
+
 	/**
 	 * Builder class.
 	 */

@@ -33,6 +33,7 @@ import org.apache.juneau.svl.*;
  *
  */
 public class BeanIgnoreAnnotation {
+
 	/**
 	 * Applies targeted {@link BeanIgnore} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */

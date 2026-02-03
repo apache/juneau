@@ -59,6 +59,7 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 public class RdfParser extends ReaderParser implements RdfMetaProvider {
+
 	/**
 	 * Builder class.
 	 */

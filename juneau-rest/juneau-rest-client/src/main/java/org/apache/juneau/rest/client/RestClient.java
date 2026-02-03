@@ -1051,6 +1051,7 @@ import org.apache.juneau.xml.*;
  */
 @SuppressWarnings("resource")
 public class RestClient extends BeanContextable implements HttpClient, Closeable {
+
 	/**
 	 * Builder class.
 	 */

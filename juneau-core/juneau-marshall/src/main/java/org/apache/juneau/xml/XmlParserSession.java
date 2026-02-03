@@ -53,6 +53,7 @@ import org.apache.juneau.swap.*;
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class XmlParserSession extends ReaderParserSession {
+
 	/**
 	 * Builder class.
 	 */

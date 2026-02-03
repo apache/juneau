@@ -147,6 +147,7 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
+
 	/**
 	 * Builder class.
 	 */

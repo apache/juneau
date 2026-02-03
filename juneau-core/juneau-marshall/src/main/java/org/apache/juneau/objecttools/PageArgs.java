@@ -26,6 +26,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
  * </ul>
  */
 public class PageArgs {
+
 	/**
 	 * Static creator.
 	 *

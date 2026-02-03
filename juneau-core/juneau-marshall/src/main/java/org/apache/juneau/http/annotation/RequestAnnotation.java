@@ -33,6 +33,7 @@ import org.apache.juneau.svl.*;
  *
  */
 public class RequestAnnotation {
+
 	/**
 	 * Applies targeted {@link Request} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */

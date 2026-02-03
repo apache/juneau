@@ -37,6 +37,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
  * </ul>
  */
 public class EntityTag {
+
 	/**
 	 * Static creator.
 	 *

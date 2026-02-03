@@ -48,6 +48,7 @@ import org.apache.juneau.commons.reflect.*;
  * </ul>
  */
 public class InputStreamParser extends Parser {
+
 	/**
 	 * Builder class.
 	 */

@@ -28,6 +28,7 @@ package org.apache.juneau.jena;
  * </ul>
  */
 public class TurtleSerializer extends RdfSerializer {
+
 	/** Default Turtle serializer, all default settings.*/
 	public static final TurtleSerializer DEFAULT = new TurtleSerializer(create());
 

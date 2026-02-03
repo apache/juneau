@@ -37,6 +37,7 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 public class SimplePartSerializer extends BaseHttpPartSerializer {
+
 	/**
 	 * Builder class.
 	 */

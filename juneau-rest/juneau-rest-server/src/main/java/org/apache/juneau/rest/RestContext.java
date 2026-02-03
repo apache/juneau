@@ -124,6 +124,7 @@ import jakarta.servlet.http.*;
  * </ul>
  */
 public class RestContext extends Context {
+
 	/**
 	 * Builder class.
 	 */

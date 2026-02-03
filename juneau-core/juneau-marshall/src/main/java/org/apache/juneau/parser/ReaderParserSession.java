@@ -40,6 +40,7 @@ import org.apache.juneau.httppart.*;
  * </ul>
  */
 public class ReaderParserSession extends ParserSession {
+
 	/**
 	 * Builder class.
 	 */

@@ -57,6 +57,7 @@ import org.apache.juneau.swap.*;
  *
  */
 public class PlainTextParser extends ReaderParser implements PlainTextMetaProvider {
+
 	/**
 	 * Builder class.
 	 */

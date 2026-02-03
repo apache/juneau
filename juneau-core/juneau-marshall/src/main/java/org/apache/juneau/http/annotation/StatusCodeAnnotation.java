@@ -34,6 +34,7 @@ import org.apache.juneau.svl.*;
  *
  */
 public class StatusCodeAnnotation {
+
 	/**
 	 * Applies targeted {@link StatusCode} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */

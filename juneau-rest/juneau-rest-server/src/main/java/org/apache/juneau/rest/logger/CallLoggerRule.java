@@ -36,6 +36,7 @@ import jakarta.servlet.http.*;
  * </ul>
  */
 public class CallLoggerRule {
+
 	/**
 	 * Builder class.
 	 */

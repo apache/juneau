@@ -40,6 +40,7 @@ import jakarta.servlet.http.*;
  * </ul>
  */
 public abstract class DebugEnablement {
+
 	/**
 	 * Builder class.
 	 */

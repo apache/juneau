@@ -51,6 +51,7 @@ import org.apache.juneau.jsonschema.*;
  * </ul>
  */
 public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMetaProvider {
+
 	/**
 	 * Builder class.
 	 */

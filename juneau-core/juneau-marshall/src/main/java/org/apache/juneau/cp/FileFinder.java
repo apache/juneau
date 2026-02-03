@@ -88,6 +88,7 @@ import org.apache.juneau.commons.io.*;
  *
  */
 public interface FileFinder {
+
 	/**
 	 * Builder class.
 	 */

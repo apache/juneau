@@ -35,6 +35,7 @@ public abstract class ByteArraySwap extends StringSwap<byte[]> {
 	 * Converts byte arrays to BASE-64 encoding.
 	 */
 	public static class Base64 extends ByteArraySwap {
+
 		/**
 		 * Converts the specified <code><jk>byte</jk>[]</code> to a {@link String}.
 		 */
@@ -56,6 +57,7 @@ public abstract class ByteArraySwap extends StringSwap<byte[]> {
 	 * Converts byte arrays to hex encoding.
 	 */
 	public static class Hex extends ByteArraySwap {
+
 		/**
 		 * Converts the specified <code><jk>byte</jk>[]</code> to a {@link String}.
 		 */
@@ -77,6 +79,7 @@ public abstract class ByteArraySwap extends StringSwap<byte[]> {
 	 * Converts byte arrays to spaced-hex encoding.
 	 */
 	public static class SpacedHex extends ByteArraySwap {
+
 		/**
 		 * Converts the specified <code><jk>byte</jk>[]</code> to a {@link String}.
 		 */

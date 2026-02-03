@@ -51,6 +51,7 @@ import org.apache.juneau.bean.html5.*;
  * </ul>
  */
 public class Hyperlink extends A {
+
 	/**
 	 * Static creator.
 	 *

@@ -45,6 +45,7 @@ import org.apache.juneau.urlencoding.*;
  * </ul>
  */
 public class SerializedPart extends BasicPart {
+
 	/**
 	 * Instantiates a new instance of this object.
 	 *

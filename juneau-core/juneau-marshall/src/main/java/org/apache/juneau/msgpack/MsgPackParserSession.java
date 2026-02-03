@@ -46,6 +46,7 @@ import org.apache.juneau.swap.*;
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class MsgPackParserSession extends InputStreamParserSession {
+
 	/**
 	 * Builder class.
 	 */

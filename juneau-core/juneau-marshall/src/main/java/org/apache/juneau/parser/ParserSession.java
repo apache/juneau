@@ -50,6 +50,7 @@ import org.apache.juneau.swap.*;
  * </ul>
  */
 public class ParserSession extends BeanSession {
+
 	/**
 	 * Builder class.
 	 */

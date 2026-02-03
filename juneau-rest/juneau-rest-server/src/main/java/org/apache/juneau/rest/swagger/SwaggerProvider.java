@@ -37,6 +37,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public interface SwaggerProvider {
+
 	/**
 	 * Builder class.
 	 */

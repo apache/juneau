@@ -49,6 +49,7 @@ import org.apache.juneau.urlencoding.*;
  * </ul>
  */
 public class UrlEncoding extends CharMarshaller {
+
 	/**
 	 * Default reusable instance.
 	 */

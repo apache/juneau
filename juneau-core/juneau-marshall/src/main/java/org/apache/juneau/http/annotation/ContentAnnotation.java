@@ -34,6 +34,7 @@ import org.apache.juneau.svl.*;
  *
  */
 public class ContentAnnotation {
+
 	/**
 	 * Applies targeted {@link Content} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */

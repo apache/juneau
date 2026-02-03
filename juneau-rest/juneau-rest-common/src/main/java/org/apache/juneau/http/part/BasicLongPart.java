@@ -32,6 +32,7 @@ import org.apache.juneau.assertions.*;
  * </ul>
  */
 public class BasicLongPart extends BasicPart {
+
 	/**
 	 * Static creator.
 	 *

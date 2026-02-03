@@ -39,6 +39,7 @@ import org.apache.juneau.rest.logger.*;
  *
  */
 public class RestOpSession extends ContextSession {
+
 	/**
 	 * Builder class.
 	 */

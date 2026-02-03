@@ -68,6 +68,7 @@ import org.apache.juneau.svl.vars.*;
  */
 @SuppressWarnings("resource")
 public class VarResolver {
+
 	/**
 	 * Builder class.
 	 */

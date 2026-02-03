@@ -59,6 +59,7 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
+
 	/**
 	 * Builder class.
 	 */

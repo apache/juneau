@@ -32,6 +32,7 @@ import org.apache.juneau.assertions.*;
  * </ul>
  */
 public class BasicBooleanPart extends BasicPart {
+
 	/**
 	 * Static creator.
 	 *

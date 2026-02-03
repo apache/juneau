@@ -38,6 +38,7 @@ import org.apache.juneau.parser.*;
  *
  */
 public class CsvParser extends ReaderParser implements CsvMetaProvider {
+
 	/**
 	 * Builder class.
 	 */

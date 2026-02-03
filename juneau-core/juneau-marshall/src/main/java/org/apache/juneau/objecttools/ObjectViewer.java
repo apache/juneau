@@ -54,6 +54,7 @@ import org.apache.juneau.internal.*;
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class ObjectViewer implements ObjectTool<ViewArgs> {
+
 	/**
 	 * Default reusable searcher.
 	 */

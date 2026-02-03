@@ -54,6 +54,7 @@ import com.hp.hpl.jena.util.iterator.*;
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class RdfParserSession extends ReaderParserSession {
+
 	/**
 	 * Builder class.
 	 */

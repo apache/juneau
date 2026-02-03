@@ -28,6 +28,7 @@ package org.apache.juneau.jena;
  * </ul>
  */
 public class RdfXmlParser extends RdfParser {
+
 	/** Default XML parser, all default settings.*/
 	public static final RdfXmlParser DEFAULT = new RdfXmlParser(create());
 

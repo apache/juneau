@@ -49,6 +49,7 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 public class Xml extends CharMarshaller {
+
 	/**
 	 * Default reusable instance.
 	 */

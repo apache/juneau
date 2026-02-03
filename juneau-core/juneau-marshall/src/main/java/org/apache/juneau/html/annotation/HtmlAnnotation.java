@@ -38,6 +38,7 @@ import org.apache.juneau.svl.*;
  */
 @SuppressWarnings("rawtypes")
 public class HtmlAnnotation {
+
 	/**
 	 * Applies targeted {@link Html} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */

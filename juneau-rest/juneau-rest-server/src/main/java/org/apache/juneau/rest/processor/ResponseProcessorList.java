@@ -33,6 +33,7 @@ import org.apache.juneau.cp.*;
  * </ul>
  */
 public class ResponseProcessorList {
+
 	/**
 	 * Builder class.
 	 */

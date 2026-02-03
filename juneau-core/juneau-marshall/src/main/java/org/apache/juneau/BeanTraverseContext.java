@@ -38,6 +38,7 @@ import org.apache.juneau.commons.reflect.*;
  *
  */
 public abstract class BeanTraverseContext extends BeanContextable {
+
 	/**
 	 * Builder class.
 	 */

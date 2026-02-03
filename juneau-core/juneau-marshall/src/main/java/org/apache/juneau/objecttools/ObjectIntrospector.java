@@ -49,6 +49,7 @@ import org.apache.juneau.parser.*;
  *
  */
 public class ObjectIntrospector {
+
 	/**
 	 * Static creator.
 	 * @param o The object on which Java methods will be invoked.

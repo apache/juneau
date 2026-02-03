@@ -44,6 +44,7 @@ import jakarta.servlet.http.*;
  *
  */
 public class RestSession extends ContextSession {
+
 	/**
 	 * Builder class.
 	 */

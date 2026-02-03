@@ -91,6 +91,7 @@ import org.apache.juneau.serializer.*;
  * @param <R> The return type.
  */
 public class FluentProtocolVersionAssertion<R> extends FluentObjectAssertion<ProtocolVersion,R> {
+
 	/**
 	 * Chained constructor.
 	 *

@@ -22,6 +22,7 @@ import java.util.function.*;
  * Specifies an entry modifier that is used to encode during write and decode during read of config entries.
  */
 public class Mod {
+
 	/** A no-op modifier. */
 	public static final Mod NO_OP = new Mod(' ', x -> x, x -> x, x -> true);
 	private final char id;

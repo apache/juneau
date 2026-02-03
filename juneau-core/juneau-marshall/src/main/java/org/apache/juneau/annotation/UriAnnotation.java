@@ -33,6 +33,7 @@ import org.apache.juneau.svl.*;
  *
  */
 public class UriAnnotation {
+
 	/**
 	 * Applies targeted {@link Uri} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */

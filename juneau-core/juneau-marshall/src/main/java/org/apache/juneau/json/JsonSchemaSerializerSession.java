@@ -40,6 +40,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class JsonSchemaSerializerSession extends JsonSerializerSession {
+
 	/**
 	 * Builder class.
 	 */

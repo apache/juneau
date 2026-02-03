@@ -33,6 +33,7 @@ import org.apache.juneau.parser.*;
  *
  */
 public class SubItemsAnnotation {
+
 	/**
 	 * Builder class.
 	 *

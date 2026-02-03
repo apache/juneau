@@ -32,6 +32,7 @@ import org.apache.http.*;
  * </ul>
  */
 public class BasicUriPart extends BasicPart {
+
 	/**
 	 * Static creator with delayed value.
 	 *

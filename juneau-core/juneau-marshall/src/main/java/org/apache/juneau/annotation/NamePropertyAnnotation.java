@@ -33,6 +33,7 @@ import org.apache.juneau.svl.*;
  *
  */
 public class NamePropertyAnnotation {
+
 	/**
 	 * Applies targeted {@link NameProperty} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */

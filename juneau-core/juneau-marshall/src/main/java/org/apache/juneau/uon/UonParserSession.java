@@ -51,6 +51,7 @@ import org.apache.juneau.swap.*;
  */
 @SuppressWarnings({ "unchecked", "rawtypes", "resource" })
 public class UonParserSession extends ReaderParserSession implements HttpPartParserSession {
+
 	/**
 	 * Builder class.
 	 */

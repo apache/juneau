@@ -62,6 +62,7 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Thrown")
 public class Thrown extends BasicCsvHeader {
+
 	/**
 	 * Represents a single entry in this header.
 	 */

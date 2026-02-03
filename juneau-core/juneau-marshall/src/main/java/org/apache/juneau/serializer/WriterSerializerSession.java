@@ -51,6 +51,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class WriterSerializerSession extends SerializerSession {
+
 	/**
 	 * Builder class.
 	 */

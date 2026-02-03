@@ -48,6 +48,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class OutputStreamSerializerSession extends SerializerSession {
+
 	/**
 	 * Builder class.
 	 */

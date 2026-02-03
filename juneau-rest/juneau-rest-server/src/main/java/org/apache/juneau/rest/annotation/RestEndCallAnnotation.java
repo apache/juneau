@@ -32,6 +32,7 @@ import org.apache.juneau.commons.annotation.*;
  * </ul>
  */
 public class RestEndCallAnnotation {
+
 	/**
 	 * A collection of {@link RestEndCall @RestEndCall annotations}.
 	 */

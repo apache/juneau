@@ -48,6 +48,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 public class MsgPack extends StreamMarshaller {
+
 	/**
 	 * Default reusable instance.
 	 */

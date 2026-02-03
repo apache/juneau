@@ -32,6 +32,7 @@ import org.apache.juneau.parser.*;
  *
  */
 public class ExternalDocsAnnotation {
+
 	/**
 	 * Builder class.
 	 *

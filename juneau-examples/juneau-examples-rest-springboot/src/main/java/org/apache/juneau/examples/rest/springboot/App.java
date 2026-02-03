@@ -34,6 +34,7 @@ import org.springframework.stereotype.*;
 @SpringBootApplication
 @Controller
 public class App {
+
 	/**
 	 * Entry point method.
 	 * @param args Command-line arguments.

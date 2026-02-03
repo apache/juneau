@@ -29,6 +29,7 @@ import java.util.*;
  * </ul>
  */
 public class SearchArgs {
+
 	/**
 	 * Static creator.
 	 *

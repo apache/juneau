@@ -36,6 +36,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class UrlEncodingAnnotation {
+
 	/**
 	 * Applies targeted {@link UrlEncoding} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */

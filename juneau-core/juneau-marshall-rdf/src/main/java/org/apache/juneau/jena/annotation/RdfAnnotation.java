@@ -37,6 +37,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class RdfAnnotation {
+
 	/**
 	 * A collection of {@link Rdf @Rdf annotations}.
 	 */

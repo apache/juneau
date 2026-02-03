@@ -65,6 +65,7 @@ import org.apache.juneau.swap.*;
  * </ul>
  */
 public class SerializerSession extends BeanTraverseSession {
+
 	/**
 	 * Builder class.
 	 */

@@ -55,6 +55,7 @@ import org.apache.juneau.xml.*;
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class HtmlParserSession extends XmlParserSession {
+
 	/**
 	 * Builder class.
 	 */

@@ -37,6 +37,7 @@ import org.apache.juneau.config.store.*;
  */
 @SuppressWarnings({ "resource", "unused" })
 public class SqlStore extends ConfigStore {
+
 	/**
 	 * Builder class.
 	 */

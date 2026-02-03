@@ -42,6 +42,7 @@ package org.apache.juneau.json;
  * </ul>
  */
 public class Json5Serializer extends JsonSerializer {
+
 	/** Default serializer, single quotes, simple mode, with whitespace. */
 	public static class Readable extends Json5Serializer {
 

@@ -32,6 +32,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 public class SwaggerAnnotation {
+
 	/**
 	 * Builder class.
 	 *

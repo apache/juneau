@@ -63,6 +63,7 @@ import org.apache.juneau.commons.collections.*;
  * </ul>
  */
 public class MimeTypeDetector {
+
 	/**
 	 * Builder class for creating MimeTypeDetector instances.
 	 */

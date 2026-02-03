@@ -52,6 +52,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 public interface HttpPartSerializer {
+
 	/**
 	 * A creator for a part serializer.
 	 */

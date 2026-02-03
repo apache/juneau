@@ -27,6 +27,7 @@ import org.apache.juneau.commons.reflect.*;
  * </ul>
  */
 public class DebugEnablementMap extends ReflectionMap<Enablement> {
+
 	/**
 	 * Builder class.
 	 */

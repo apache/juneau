@@ -102,6 +102,7 @@ import org.apache.juneau.serializer.*;
  * @param <R> The return type.
  */
 public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<RequestContent,R> {
+
 	/**
 	 * Chained constructor.
 	 *

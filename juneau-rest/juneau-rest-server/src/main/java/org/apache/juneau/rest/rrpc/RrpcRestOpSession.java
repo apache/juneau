@@ -42,6 +42,7 @@ import org.apache.juneau.rest.*;
  */
 @SuppressWarnings("resource")
 public class RrpcRestOpSession extends RestOpSession {
+
 	/**
 	 * Builder class.
 	 */

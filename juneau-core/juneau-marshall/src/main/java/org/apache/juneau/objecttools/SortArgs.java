@@ -31,6 +31,7 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  */
 public class SortArgs {
+
 	/**
 	 * Static creator.
 	 *

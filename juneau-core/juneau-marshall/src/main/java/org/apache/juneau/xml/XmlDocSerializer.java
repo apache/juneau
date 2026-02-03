@@ -41,6 +41,7 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
  * </ul>
  */
 public class XmlDocSerializer extends XmlSerializer {
+
 	/** Default serializer without namespaces. */
 	public static class Ns extends XmlDocSerializer {
 

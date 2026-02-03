@@ -42,6 +42,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class RestPatchAnnotation {
+
 	/**
 	 * Builder class.
 	 *

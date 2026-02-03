@@ -33,6 +33,7 @@ import org.apache.juneau.svl.*;
  *
  */
 public class ExampleAnnotation {
+
 	/**
 	 * Applies targeted {@link Example} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */

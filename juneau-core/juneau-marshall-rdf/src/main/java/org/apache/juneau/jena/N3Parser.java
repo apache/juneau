@@ -28,6 +28,7 @@ package org.apache.juneau.jena;
  * </ul>
  */
 public class N3Parser extends RdfParser {
+
 	/** Default N3 parser, all default settings.*/
 	public static final N3Parser DEFAULT = new N3Parser(create());
 

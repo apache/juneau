@@ -36,6 +36,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class OpenApiAnnotation {
+
 	/**
 	 * Applies targeted {@link OpenApi} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */

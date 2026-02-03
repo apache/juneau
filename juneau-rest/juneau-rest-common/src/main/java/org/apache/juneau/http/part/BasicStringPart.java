@@ -32,6 +32,7 @@ import org.apache.juneau.assertions.*;
  * </ul>
  */
 public class BasicStringPart extends BasicPart {
+
 	/**
 	 * Static creator.
 	 *

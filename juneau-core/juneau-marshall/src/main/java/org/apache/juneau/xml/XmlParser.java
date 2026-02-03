@@ -56,6 +56,7 @@ import org.apache.juneau.parser.*;
  * </ul>
  */
 public class XmlParser extends ReaderParser implements XmlMetaProvider {
+
 	/**
 	 * Builder class.
 	 */

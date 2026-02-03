@@ -48,6 +48,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 public class MsgPackSerializer extends OutputStreamSerializer implements MsgPackMetaProvider {
+
 	/** Default serializer, BASE64 string output. */
 	public static class Base64 extends MsgPackSerializer {
 

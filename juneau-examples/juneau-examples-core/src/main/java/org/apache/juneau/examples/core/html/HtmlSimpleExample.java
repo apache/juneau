@@ -24,6 +24,7 @@ import org.apache.juneau.html.*;
  *
  */
 public class HtmlSimpleExample {
+
 	/**
 	 * Serializing Pojo bean into Html format and Deserialize back to Pojo instance type.
 	 *

@@ -36,6 +36,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class MsgPackAnnotation {
+
 	/**
 	 * Applies targeted {@link MsgPack} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */

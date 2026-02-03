@@ -31,6 +31,7 @@ import org.apache.juneau.cp.*;
  * </ul>
  */
 public class RestGuardList {
+
 	/**
 	 * Builder class.
 	 */

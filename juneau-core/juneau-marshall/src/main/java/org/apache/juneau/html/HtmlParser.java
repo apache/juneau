@@ -52,6 +52,7 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 public class HtmlParser extends XmlParser implements HtmlMetaProvider {
+
 	/**
 	 * Builder class.
 	 */

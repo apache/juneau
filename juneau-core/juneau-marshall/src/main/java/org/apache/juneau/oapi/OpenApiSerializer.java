@@ -42,6 +42,7 @@ import org.apache.juneau.uon.*;
  * </ul>
  */
 public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvider {
+
 	/**
 	 * Builder class.
 	 */

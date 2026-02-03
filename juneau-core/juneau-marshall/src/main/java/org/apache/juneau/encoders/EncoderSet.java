@@ -76,6 +76,7 @@ import org.apache.juneau.cp.*;
  * </ul>
  */
 public class EncoderSet {
+
 	/**
 	 * Builder class.
 	 */

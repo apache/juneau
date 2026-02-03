@@ -32,6 +32,7 @@ import org.apache.juneau.commons.annotation.*;
  * </ul>
  */
 public class RestInitAnnotation {
+
 	/**
 	 * A collection of {@link RestInit @RestInit annotations}.
 	 */

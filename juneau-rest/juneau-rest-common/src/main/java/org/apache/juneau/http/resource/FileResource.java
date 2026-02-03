@@ -31,6 +31,7 @@ import org.apache.juneau.http.header.*;
  * </ul>
  */
 public class FileResource extends BasicResource {
+
 	/**
 	 * Constructor.
 	 */

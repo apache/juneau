@@ -24,6 +24,7 @@ package org.apache.juneau.httppart;
  * </ul>
  */
 public class Constants {
+
 	/**
 	 * Comma-separated values (e.g. <js>"foo,bar"</js>).
 	 */

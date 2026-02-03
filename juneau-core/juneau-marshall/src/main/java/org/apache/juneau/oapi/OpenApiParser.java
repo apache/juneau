@@ -42,6 +42,7 @@ import org.apache.juneau.uon.*;
  * </ul>
  */
 public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
+
 	/**
 	 * Builder class.
 	 */

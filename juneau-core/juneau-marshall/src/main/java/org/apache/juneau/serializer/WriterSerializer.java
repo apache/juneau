@@ -43,6 +43,7 @@ import org.apache.juneau.json.*;
  * </ul>
  */
 public class WriterSerializer extends Serializer {
+
 	/**
 	 * Builder class.
 	 */

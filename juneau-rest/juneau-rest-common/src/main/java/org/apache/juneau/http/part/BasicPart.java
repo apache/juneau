@@ -50,6 +50,7 @@ import org.apache.juneau.http.header.*;
  */
 @BeanIgnore
 public class BasicPart implements NameValuePair, Headerable {
+
 	/**
 	 * Returns <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
 	 *

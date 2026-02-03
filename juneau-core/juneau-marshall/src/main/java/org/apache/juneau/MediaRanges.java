@@ -57,6 +57,7 @@ import org.apache.juneau.commons.collections.*;
  */
 @BeanIgnore
 public class MediaRanges {
+
 	/** Represents an empty media ranges object. */
 	public static final MediaRanges EMPTY = new MediaRanges("");
 

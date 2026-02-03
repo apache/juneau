@@ -49,6 +49,7 @@ import org.apache.juneau.commons.collections.FluentMap;
  */
 @SuppressWarnings("resource")
 public class FileStore extends ConfigStore {
+
 	/**
 	 * Builder class.
 	 */

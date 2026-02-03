@@ -35,6 +35,7 @@ import org.apache.juneau.parser.*;
  *
  */
 public class CsvParserSession extends ReaderParserSession {
+
 	/**
 	 * Builder class.
 	 */

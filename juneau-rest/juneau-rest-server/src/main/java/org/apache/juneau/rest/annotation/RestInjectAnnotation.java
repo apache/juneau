@@ -29,6 +29,7 @@ import org.apache.juneau.commons.annotation.*;
  *
  */
 public class RestInjectAnnotation {
+
 	/**
 	 * A collection of {@link RestInject @RestInject annotations}.
 	 */
