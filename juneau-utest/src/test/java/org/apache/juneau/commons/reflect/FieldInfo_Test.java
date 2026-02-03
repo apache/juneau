@@ -30,6 +30,7 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({"java:S115","java:S117","java:S3008"})
 class FieldInfo_Test extends TestBase {
 
 	@Documented
@@ -786,8 +787,8 @@ class FieldInfo_Test extends TestBase {
 
 		// Different fields should not be equal
 		assertNotEquals(fi1a, fi2);
-		assertNotEquals(fi1a, null);
-		assertNotEquals(fi1a, "not a FieldInfo");
+		assertNotEquals(null, fi1a);
+		assertNotEquals("not a FieldInfo", fi1a);
 
 		// Reflexive
 		assertEquals(fi1a, fi1a);

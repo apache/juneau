@@ -43,7 +43,7 @@ import jakarta.servlet.http.*;
 	callLogger=BasicDisabledCallLogger.class
 )
 @SerializerConfig(addRootType="true",addBeanTypes="true")
-@SuppressWarnings({"serial"})
+@SuppressWarnings({"serial","java:S4144"})
 public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	public static FileWriter logFile;

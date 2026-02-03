@@ -775,8 +775,8 @@ class FilteredSet_Test extends TestBase {
 		set2.add("value1");
 		set2.add("value2");
 
-		assertTrue(set1.equals(set2));
-		assertTrue(set2.equals(set1));
+		assertEquals(set1, set2);
+		assertEquals(set2, set1);
 	}
 
 	@Test
@@ -790,8 +790,8 @@ class FilteredSet_Test extends TestBase {
 		var set2 = new LinkedHashSet<String>();
 		set2.add("value2");
 
-		assertFalse(set1.equals(set2));
-		assertFalse(set2.equals(set1));
+		assertNotEquals(set1, set2);
+		assertNotEquals(set2, set1);
 	}
 
 	@Test

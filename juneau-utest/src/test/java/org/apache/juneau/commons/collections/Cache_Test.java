@@ -438,7 +438,7 @@ class Cache_Test extends TestBase {
 	// Thread safety and concurrency
 	//====================================================================================================
 
-	@Test void a21_concurrentAccess() throws Exception {
+	@Test void a21_concurrentAccess() throws InterruptedException, ExecutionException, TimeoutException {
 		var cache = Cache.of(Integer.class, String.class).build();
 		var executor = Executors.newFixedThreadPool(10);
 		var callCount = new AtomicInteger();
@@ -465,7 +465,7 @@ class Cache_Test extends TestBase {
 		executor.shutdown();
 	}
 
-	@Test void a22_concurrentDifferentKeys() throws Exception {
+	@Test void a22_concurrentDifferentKeys() throws InterruptedException, ExecutionException, TimeoutException {
 		var cache = Cache.of(Integer.class, String.class).build();
 		var executor = Executors.newFixedThreadPool(10);
 
@@ -971,7 +971,7 @@ class Cache_Test extends TestBase {
 	// Thread-local cache mode
 	//====================================================================================================
 
-	@Test void a54_threadLocal_basicCaching() throws Exception {
+	@Test void a54_threadLocal_basicCaching() {
 		var cache = Cache.of(String.class, String.class)
 			.threadLocal()
 			.build();
@@ -997,7 +997,7 @@ class Cache_Test extends TestBase {
 		assertEquals(1, cache.getCacheHits());
 	}
 
-	@Test void a55_threadLocal_eachThreadHasOwnCache() throws Exception {
+	@Test void a55_threadLocal_eachThreadHasOwnCache() throws InterruptedException, ExecutionException, TimeoutException {
 		var cache = Cache.of(String.class, String.class)
 			.threadLocal()
 			.build();
@@ -1153,7 +1153,7 @@ class Cache_Test extends TestBase {
 		assertEquals(1, cache.getCacheHits());
 	}
 
-	@Test void a61_threadLocal_weakMode_eachThreadHasOwnCache() throws Exception {
+	@Test void a61_threadLocal_weakMode_eachThreadHasOwnCache() throws InterruptedException, ExecutionException, TimeoutException {
 		var cache = Cache.of(String.class, String.class)
 			.threadLocal()
 			.cacheMode(WEAK)

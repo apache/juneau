@@ -28,7 +28,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes","java:S5961"})
 class UonParser_Test extends TestBase {
 
 	static UonParser p = UonParser.DEFAULT;

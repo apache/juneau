@@ -42,7 +42,7 @@ class RoundTripLargeObjects_Test extends TestBase {
 	private static final int NUM_RUNS = 10;
 	private static final int SIZE_PARAM = 20000;
 
-	private static RoundTrip_Tester[] TESTERS = {
+	private static final RoundTrip_Tester[] TESTERS = {
 		tester(1, "Json DEFAULT")
 			.serializer(JsonSerializer.create().keepNullProperties())
 			.parser(JsonParser.create())

@@ -290,7 +290,7 @@ class OptionalSupplier_Test extends TestBase {
 		OptionalSupplier<String> supplier = OptionalSupplier.ofNullable("value");
 		supplier.ifPresentOrElse(
 			s -> presentCount.incrementAndGet(),
-			() -> emptyCount.incrementAndGet()
+			emptyCount::incrementAndGet
 		);
 		assertEquals(1, presentCount.get());
 		assertEquals(0, emptyCount.get());
@@ -303,7 +303,7 @@ class OptionalSupplier_Test extends TestBase {
 		OptionalSupplier<String> supplier = OptionalSupplier.ofNullable(null);
 		supplier.ifPresentOrElse(
 			s -> presentCount.incrementAndGet(),
-			() -> emptyCount.incrementAndGet()
+			emptyCount::incrementAndGet
 		);
 		assertEquals(0, presentCount.get());
 		assertEquals(1, emptyCount.get());

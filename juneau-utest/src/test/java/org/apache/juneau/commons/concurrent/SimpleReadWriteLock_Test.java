@@ -48,10 +48,10 @@ class SimpleReadWriteLock_Test extends TestBase {
 	}
 
 	@Test
-	void a04_noOp_closeDoesNotThrow() throws Exception {
+	void a04_noOp_closeDoesNotThrow() {
 		var lock = SimpleReadWriteLock.NO_OP.read();
 		// Should not throw when closing NO_OP lock
-		assertDoesNotThrow(() -> lock.close());
+		assertDoesNotThrow(lock::close);
 	}
 
 	//====================================================================================================
@@ -100,11 +100,11 @@ class SimpleReadWriteLock_Test extends TestBase {
 	}
 
 	@Test
-	void c03_read_canClose() throws Exception {
+	void c03_read_canClose() {
 		var rwLock = new SimpleReadWriteLock();
 		var lock = rwLock.read();
 		// Should not throw when closing
-		assertDoesNotThrow(() -> lock.close());
+		assertDoesNotThrow(lock::close);
 	}
 
 	@Test
@@ -139,11 +139,11 @@ class SimpleReadWriteLock_Test extends TestBase {
 	}
 
 	@Test
-	void d03_write_canClose() throws Exception {
+	void d03_write_canClose() {
 		var rwLock = new SimpleReadWriteLock();
 		var lock = rwLock.write();
 		// Should not throw when closing
-		assertDoesNotThrow(() -> lock.close());
+		assertDoesNotThrow(lock::close);
 	}
 
 	@Test
@@ -162,7 +162,7 @@ class SimpleReadWriteLock_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	void e01_readAndWrite_differentInstances() throws Exception {
+	void e01_readAndWrite_differentInstances() {
 		var rwLock = new SimpleReadWriteLock();
 		var readLock = rwLock.read();
 		readLock.close();  // Release read lock before acquiring write lock
@@ -172,7 +172,7 @@ class SimpleReadWriteLock_Test extends TestBase {
 	}
 
 	@Test
-	void e02_readAndWrite_bothCanBeCreated() throws Exception {
+	void e02_readAndWrite_bothCanBeCreated() {
 		var rwLock = new SimpleReadWriteLock();
 		var readLock = rwLock.read();
 		readLock.close();  // Release read lock before acquiring write lock
@@ -183,12 +183,12 @@ class SimpleReadWriteLock_Test extends TestBase {
 	}
 
 	@Test
-	void e03_readAndWrite_bothCanBeClosed() throws Exception {
+	void e03_readAndWrite_bothCanBeClosed() {
 		var rwLock = new SimpleReadWriteLock();
 		var readLock = rwLock.read();
 		readLock.close();  // Release read lock before acquiring write lock
 		var writeLock = rwLock.write();
-		assertDoesNotThrow(() -> writeLock.close());
+		assertDoesNotThrow(writeLock::close);
 		// Both locks have been closed successfully
 	}
 
@@ -259,7 +259,7 @@ class SimpleReadWriteLock_Test extends TestBase {
 	}
 
 	@Test
-	void f11_getReadLockCount_afterRead() throws Exception {
+	void f11_getReadLockCount_afterRead() {
 		var lock = new SimpleReadWriteLock();
 		var readLock = lock.read();
 		// After acquiring read lock, count should be > 0
@@ -268,7 +268,7 @@ class SimpleReadWriteLock_Test extends TestBase {
 	}
 
 	@Test
-	void f12_isWriteLocked_afterWrite() throws Exception {
+	void f12_isWriteLocked_afterWrite() {
 		var lock = new SimpleReadWriteLock();
 		var writeLock = lock.write();
 		// After acquiring write lock, should be write locked
@@ -277,7 +277,7 @@ class SimpleReadWriteLock_Test extends TestBase {
 	}
 
 	@Test
-	void f13_isWriteLockedByCurrentThread_afterWrite() throws Exception {
+	void f13_isWriteLockedByCurrentThread_afterWrite() {
 		var lock = new SimpleReadWriteLock();
 		var writeLock = lock.write();
 		// After acquiring write lock, current thread should hold it
@@ -286,7 +286,7 @@ class SimpleReadWriteLock_Test extends TestBase {
 	}
 
 	@Test
-	void f14_getReadHoldCount_afterRead() throws Exception {
+	void f14_getReadHoldCount_afterRead() {
 		var lock = new SimpleReadWriteLock();
 		var readLock = lock.read();
 		// After acquiring read lock, hold count should be > 0
@@ -295,7 +295,7 @@ class SimpleReadWriteLock_Test extends TestBase {
 	}
 
 	@Test
-	void f15_getWriteHoldCount_afterWrite() throws Exception {
+	void f15_getWriteHoldCount_afterWrite() {
 		var lock = new SimpleReadWriteLock();
 		var writeLock = lock.write();
 		// After acquiring write lock, hold count should be > 0
@@ -308,7 +308,7 @@ class SimpleReadWriteLock_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	void g01_tryWithResources_read() throws Exception {
+	void g01_tryWithResources_read() {
 		var lock = new SimpleReadWriteLock();
 		try (var readLock = lock.read()) {
 			assertNotNull(readLock);
@@ -319,7 +319,7 @@ class SimpleReadWriteLock_Test extends TestBase {
 	}
 
 	@Test
-	void g02_tryWithResources_write() throws Exception {
+	void g02_tryWithResources_write() {
 		var lock = new SimpleReadWriteLock();
 		try (var writeLock = lock.write()) {
 			assertNotNull(writeLock);
@@ -330,7 +330,7 @@ class SimpleReadWriteLock_Test extends TestBase {
 	}
 
 	@Test
-	void g03_tryWithResources_readAndWrite() throws Exception {
+	void g03_tryWithResources_readAndWrite() {
 		var lock = new SimpleReadWriteLock();
 		try (var readLock = lock.read()) {
 			assertNotNull(readLock);
@@ -349,7 +349,7 @@ class SimpleReadWriteLock_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	void h01_edgeCase_multipleReadLocks() throws Exception {
+	void h01_edgeCase_multipleReadLocks() {
 		var lock = new SimpleReadWriteLock();
 		var readLock1 = lock.read();
 		var readLock2 = lock.read();
@@ -363,7 +363,7 @@ class SimpleReadWriteLock_Test extends TestBase {
 	}
 
 	@Test
-	void h02_edgeCase_multipleWriteLocks() throws Exception {
+	void h02_edgeCase_multipleWriteLocks() {
 		var lock = new SimpleReadWriteLock();
 		var writeLock1 = lock.write();
 		writeLock1.close();
@@ -376,7 +376,7 @@ class SimpleReadWriteLock_Test extends TestBase {
 	}
 
 	@Test
-	void h03_edgeCase_fairLock() throws Exception {
+	void h03_edgeCase_fairLock() {
 		var lock = new SimpleReadWriteLock(true);
 		assertTrue(lock.isFair());
 		var readLock = lock.read();
@@ -388,7 +388,7 @@ class SimpleReadWriteLock_Test extends TestBase {
 	}
 
 	@Test
-	void h04_edgeCase_unfairLock() throws Exception {
+	void h04_edgeCase_unfairLock() {
 		var lock = new SimpleReadWriteLock(false);
 		assertFalse(lock.isFair());
 		var readLock = lock.read();

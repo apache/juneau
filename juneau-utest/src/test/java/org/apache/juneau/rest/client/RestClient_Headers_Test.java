@@ -39,6 +39,7 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 public class RestClient_Headers_Test extends TestBase {
 
 	public static final CaptureLogger LOGGER = new CaptureLogger();

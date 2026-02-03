@@ -79,8 +79,8 @@ class Tuple1_Test extends TestBase {
 
 	@Test void a08_equality_notTuple1() {
 		var x1 = Tuple1.of("foo");
-		assertNotEquals(x1, "foo");
-		assertNotEquals(x1, null);
+		assertNotEquals("foo", x1);
+		assertNotEquals(null, x1);
 		assertNotEquals(x1, new Object());
 	}
 

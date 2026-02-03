@@ -30,6 +30,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 class BasicHttpResource_Test extends TestBase {
 
 	@Test void a01_basic() throws Exception {

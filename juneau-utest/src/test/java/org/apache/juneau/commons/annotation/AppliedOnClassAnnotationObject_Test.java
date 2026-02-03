@@ -393,7 +393,7 @@ class AppliedOnClassAnnotationObject_Test extends TestBase {
 	@Test
 	void h04_edgeCase_equality_null() {
 		var a = T.create().build();
-		assertNotEquals(a, null);
+		assertNotEquals(null, a);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

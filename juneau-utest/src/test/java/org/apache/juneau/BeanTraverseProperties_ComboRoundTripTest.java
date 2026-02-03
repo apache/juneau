@@ -29,7 +29,7 @@ class BeanTraverseProperties_ComboRoundTripTest extends ComboRoundTripTest_Base 
 		return ComboRoundTrip_Tester.create(index, label, type, ()->bean);
 	}
 
-	private static ComboRoundTrip_Tester<?>[] TESTERS = {
+	private static final ComboRoundTrip_Tester<?>[] TESTERS = {
 		tester(1, "BEANTRAVERSE_initialDepth", A.class, new A().init())
 			.json("{f:1}")
 			.jsonT("{f:1}")

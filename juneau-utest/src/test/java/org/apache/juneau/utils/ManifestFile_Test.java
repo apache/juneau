@@ -29,7 +29,7 @@ class ManifestFile_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// test - Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void a01_basic() throws Exception {
+	@Test void a01_basic() {
 		var manifest = new Manifest();
 		manifest.getMainAttributes().put(java.util.jar.Attributes.Name.MANIFEST_VERSION, "1.0");
 		manifest.getMainAttributes().put(new java.util.jar.Attributes.Name("Bundle-Name"), "Test Bundle");
@@ -45,7 +45,7 @@ class ManifestFile_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// test - Fluent setters
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void a02_fluentSetters() throws Exception {
+	@Test void a02_fluentSetters() {
 		var manifest = new Manifest();
 		manifest.getMainAttributes().put(java.util.jar.Attributes.Name.MANIFEST_VERSION, "1.0");
 
@@ -92,7 +92,7 @@ class ManifestFile_Test extends TestBase {
 		assertSame(mf, mf.unmodifiable());
 	}
 
-	@Test void a03_fluentChaining() throws Exception {
+	@Test void a03_fluentChaining() {
 		var manifest = new Manifest();
 		manifest.getMainAttributes().put(java.util.jar.Attributes.Name.MANIFEST_VERSION, "1.0");
 

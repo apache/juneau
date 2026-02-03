@@ -434,7 +434,7 @@ class CollectionUtils_Test extends TestBase {
 	@Test
 	void a022_copyOf_listFunctionSupplier() {
 		List<String> list = list("a", "b");
-		List<String> result = copyOf(list, s -> s.toUpperCase(), LinkedList::new);
+		List<String> result = copyOf(list, String::toUpperCase, LinkedList::new);
 		assertNotNull(result);
 		assertTrue(result instanceof LinkedList);
 		assertEquals(2, result.size());
@@ -507,7 +507,7 @@ class CollectionUtils_Test extends TestBase {
 	@Test
 	void a027_copyOf_setFunction() {
 		Set<String> set = set("a", "b");
-		Set<String> result = copyOf(set, s -> s.toUpperCase());
+		Set<String> result = copyOf(set, String::toUpperCase);
 		assertNotNull(result);
 		assertEquals(2, result.size());
 		assertTrue(result.contains("A"));
@@ -877,7 +877,7 @@ class CollectionUtils_Test extends TestBase {
 		// Immutability
 		assertThrows(UnsupportedOperationException.class, () -> m1.put("x", 2));
 		assertThrows(UnsupportedOperationException.class, () -> m1.remove("a"));
-		assertThrows(UnsupportedOperationException.class, () -> m1.clear());
+		assertThrows(UnsupportedOperationException.class, m1::clear);
 	}
 
 	//====================================================================================================
@@ -1369,16 +1369,12 @@ class CollectionUtils_Test extends TestBase {
 		assertFalse(it.hasNext());
 
 		// Test line 2085: NoSuchElementException when calling next() after exhausted
-		assertThrows(java.util.NoSuchElementException.class, () -> {
-			it.next();
-		});
+		assertThrows(java.util.NoSuchElementException.class, it::next);
 
 		// Test line 2093: UnsupportedOperationException when calling remove()
 		Iterator<String> it2 = result.iterator();
 		it2.next(); // Move to first element
-		assertThrows(UnsupportedOperationException.class, () -> {
-			it2.remove();
-		});
+		assertThrows(UnsupportedOperationException.class, it2::remove);
 	}
 
 	//====================================================================================================

@@ -38,7 +38,7 @@ public class ReaderObjectSwap_ComboSerializeTest extends ComboSerializeTest_Base
 		return ComboSerialize_Tester.create(index, label, bean);
 	}
 
-	private static ComboSerialize_Tester<?>[] TESTERS = {
+	private static final ComboSerialize_Tester<?>[] TESTERS = {
 		tester(1, "PojoToSimpleReader", PojoToSimpleReader::new)
 			.json("foo")
 			.jsonT("foo")

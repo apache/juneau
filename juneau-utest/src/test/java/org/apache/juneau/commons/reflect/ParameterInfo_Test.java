@@ -32,12 +32,13 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.Name;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({"java:S117", "java:S5961"})
 class ParameterInfo_Test extends TestBase {
 
 	private static String originalDisableParamNameDetection;
 
 	@BeforeAll
-	public static void beforeAll() {
+	static void beforeAll() {
 		// Save original system property value
 		originalDisableParamNameDetection = System.getProperty("juneau.disableParamNameDetection");
 
@@ -47,7 +48,7 @@ class ParameterInfo_Test extends TestBase {
 	}
 
 	@AfterAll
-	public static void afterAll() {
+	static void afterAll() {
 		// Restore original system property value
 		if (originalDisableParamNameDetection == null)
 			System.clearProperty("juneau.disableParamNameDetection");
@@ -420,7 +421,7 @@ class ParameterInfo_Test extends TestBase {
 	void a007_getDeclaringExecutable() {
 		var exec1 = b_b_a.getDeclaringExecutable();
 		assertTrue(exec1.isConstructor());
-		
+
 		var exec2 = b_a1_a.getDeclaringExecutable();
 		assertFalse(exec2.isConstructor());
 		assertTrue(exec2 instanceof MethodInfo);
@@ -464,7 +465,7 @@ class ParameterInfo_Test extends TestBase {
 		check("PM3", matching.get(0).getDeclaringExecutable().getDeclaringClass());
 		check("PM2", matching.get(1).getDeclaringExecutable().getDeclaringClass());
 		check("PM1", matching.get(2).getDeclaringExecutable().getDeclaringClass());
-		
+
 		// Method multiple interfaces
 		var mi2 = MethodInfo.of(PM6.class.getMethod("bar", int.class, String.class));
 		var pi0 = mi2.getParameter(0);
@@ -473,7 +474,7 @@ class ParameterInfo_Test extends TestBase {
 		check("PM6", matching0.get(0).getDeclaringExecutable().getDeclaringClass());
 		check("PM4", matching0.get(1).getDeclaringExecutable().getDeclaringClass());
 		check("PM5", matching0.get(2).getDeclaringExecutable().getDeclaringClass());
-		
+
 		// Constructor simple hierarchy
 		var ci = ConstructorInfo.of(PC3.class.getConstructor(String.class));
 		var pi2 = ci.getParameter(0);
@@ -482,7 +483,7 @@ class ParameterInfo_Test extends TestBase {
 		check("PC3", matching2.get(0).getDeclaringExecutable().getDeclaringClass());
 		check("PC2", matching2.get(1).getDeclaringExecutable().getDeclaringClass());
 		check("PC1", matching2.get(2).getDeclaringExecutable().getDeclaringClass());
-		
+
 		// Constructor different parameter counts
 		var ci2 = ConstructorInfo.of(PC5.class.getConstructor(String.class));
 		var pi3 = ci2.getParameter(0);
@@ -490,7 +491,7 @@ class ParameterInfo_Test extends TestBase {
 		assertEquals(2, matching3.size());
 		check("PC5", matching3.get(0).getDeclaringExecutable().getDeclaringClass());
 		check("PC4", matching3.get(1).getDeclaringExecutable().getDeclaringClass());
-		
+
 		// Constructor multiple parent constructors
 		var ci3 = ConstructorInfo.of(PC7.class.getConstructor(String.class));
 		var pi4 = ci3.getParameter(0);
@@ -499,28 +500,28 @@ class ParameterInfo_Test extends TestBase {
 		check("PC7", matching4.get(0).getDeclaringExecutable().getDeclaringClass());
 		check("PC6", matching4.get(1).getDeclaringExecutable().getDeclaringClass());
 		check("PC6", matching4.get(2).getDeclaringExecutable().getDeclaringClass());
-		
+
 		// Method different parameter name
 		var mi3 = MethodInfo.of(PM8.class.getMethod("foo", String.class));
 		var pi5 = mi3.getParameter(0);
 		var matching5 = pi5.getMatchingParameters();
 		assertEquals(1, matching5.size());
 		check("PM8", matching5.get(0).getDeclaringExecutable().getDeclaringClass());
-		
+
 		// Method different parameter type
 		var mi4 = MethodInfo.of(PM11.class.getMethod("qux", String.class));
 		var pi6 = mi4.getParameter(0);
 		var matching6 = pi6.getMatchingParameters();
 		assertEquals(1, matching6.size());
 		check("PM11", matching6.get(0).getDeclaringExecutable().getDeclaringClass());
-		
+
 		// Constructor different parameter type
 		var ci4 = ConstructorInfo.of(PC9.class.getConstructor(String.class));
 		var pi7 = ci4.getParameter(0);
 		var matching7 = pi7.getMatchingParameters();
 		assertEquals(1, matching7.size());
 		check("PC9", matching7.get(0).getDeclaringExecutable().getDeclaringClass());
-		
+
 		// Constructor different parameter name
 		var ci5 = ConstructorInfo.of(PC11.class.getConstructor(String.class));
 		var pi8 = ci5.getParameter(0);
@@ -528,7 +529,7 @@ class ParameterInfo_Test extends TestBase {
 		assertEquals(2, matching8.size());
 		check("PC11", matching8.get(0).getDeclaringExecutable().getDeclaringClass());
 		check("PC10", matching8.get(1).getDeclaringExecutable().getDeclaringClass());
-		
+
 		// Constructor with @Name annotation matching
 		var ci6 = ConstructorInfo.of(PC13.class.getConstructor(String.class));
 		var pi9 = ci6.getParameter(0);
@@ -539,7 +540,7 @@ class ParameterInfo_Test extends TestBase {
 		check("PC12", matching9.get(2).getDeclaringExecutable().getDeclaringClass());
 		assertEquals("foo", matching9.get(1).getName());
 		assertEquals("bar", matching9.get(2).getName());
-		
+
 		// Constructor with @Name annotation different names
 		var ci7 = ConstructorInfo.of(PC15.class.getConstructor(String.class));
 		var pi10 = ci7.getParameter(0);
@@ -549,7 +550,7 @@ class ParameterInfo_Test extends TestBase {
 		check("PC14", matching10.get(1).getDeclaringExecutable().getDeclaringClass());
 		assertEquals("foo", matching10.get(0).getName());
 		assertEquals("bar", matching10.get(1).getName());
-		
+
 		// Method with @Name annotation matching
 		var mi5 = MethodInfo.of(PM13.class.getMethod("test", String.class));
 		var pi11 = mi5.getParameter(0);
@@ -627,32 +628,32 @@ class ParameterInfo_Test extends TestBase {
 		// With DISABLE_PARAM_NAME_DETECTION=true, only parameters with @Name annotation have resolved names
 		// Test line 622: hasSimpleName("Name") returns false (no @Name annotation)
 		assertNull(e_a1_a.getResolvedName());  // No @Name annotation
-		
+
 		// Test line 622: hasSimpleName("Name") returns true
 		// Test line 624: value != null branch
 		assertEquals("b", e_a1_b.getResolvedName());   // Has @Name("b") with non-null value
-		
+
 		// Test line 622: both branches in a single call
 		// e_test has both @CA("test") and @Name("paramName") annotations
 		// When iterating through annotations, we'll hit:
 		// - @CA annotation: hasSimpleName("Name") returns false (line 622 false branch)
 		// - @Name annotation: hasSimpleName("Name") returns true (line 622 true branch)
 		assertEquals("paramName", e_test.getResolvedName());  // Should return @Name value
-		
+
 		// Test line 632: bytecode parameter name fallback
 		// Temporarily disable the flag to test the bytecode name fallback
 		String originalValue = System.getProperty("juneau.disableParamNameDetection");
 		try {
 			System.setProperty("juneau.disableParamNameDetection", "false");
 			ParameterInfo.reset();
-			
+
 			// Get a fresh ParameterInfo instance after resetting (don't use cached static field)
 			// Note: Line 632 is only executed if BOTH conditions are true:
 			// 1. DISABLE_PARAM_NAME_DETECTION.get() returns false (flag is disabled)
 			// 2. inner.isNamePresent() returns true (bytecode names are available)
 			var freshClassInfo = ClassInfo.of(E.class);
 			var paramWithoutName = freshClassInfo.getMethod(x -> x.hasName("a1")).get().getParameter(0);
-			
+
 			// Check if bytecode names are available
 			// Line 632 is only executed when both conditions on line 631 are true:
 			// 1. !DISABLE_PARAM_NAME_DETECTION.get() is true (flag is false)
@@ -677,7 +678,7 @@ class ParameterInfo_Test extends TestBase {
 				System.setProperty("juneau.disableParamNameDetection", originalValue);
 			ParameterInfo.reset();
 		}
-		
+
 		// Note: Line 624 (value == null branch) is hard to test because it would require an annotation
 		// with simple name "Name" that doesn't have a String value() method. In practice, all @Name
 		// annotations have a String value() method, so this branch is unlikely to be reached.
@@ -692,15 +693,15 @@ class ParameterInfo_Test extends TestBase {
 		// This covers the false branch of the OR condition
 		assertNull(b_a1_a.getResolvedQualifier());  // No @Named or @Qualifier annotation
 		assertNull(g_test4.getResolvedQualifier());  // Has @CA but not @Named or @Qualifier
-		
+
 		// Test line 643: hasSimpleName("Named") = true, hasSimpleName("Qualifier") = false
 		// This covers branch 1: true || false = true
 		assertEquals("bean1", g_test1.getResolvedQualifier());
-		
+
 		// Test line 643: hasSimpleName("Named") = false, hasSimpleName("Qualifier") = true
 		// This covers branch 2: false || true = true
 		assertEquals("bean2", g_test2.getResolvedQualifier());
-		
+
 		// Test line 643: hasSimpleName("Named") = true, hasSimpleName("Qualifier") = true
 		// This covers branch 3: true || true = true
 		// When @Named comes first, the OR short-circuits on the first annotation
@@ -737,20 +738,20 @@ class ParameterInfo_Test extends TestBase {
 	void a020_is() {
 		// Test line 465: SYNTHETIC
 		assertFalse(b_a1_a.is(ElementFlag.SYNTHETIC));
-		
+
 		// Test line 466: NOT_SYNTHETIC
 		assertTrue(b_a1_a.is(ElementFlag.NOT_SYNTHETIC));
-		
+
 		// Test line 467: VARARGS - regular parameters are not varargs
 		assertFalse(b_a1_a.is(ElementFlag.VARARGS));
 		// Test line 467: VARARGS - true branch (varargs parameter)
 		assertTrue(b_varargs.is(ElementFlag.VARARGS));
-		
+
 		// Test line 468: NOT_VARARGS - regular parameters
 		assertTrue(b_a1_a.is(ElementFlag.NOT_VARARGS));
 		// Test line 468: NOT_VARARGS - false branch (varargs parameter)
 		assertFalse(b_varargs.is(ElementFlag.NOT_VARARGS));
-		
+
 		// Test line 469: default case - flags that fall through to super.is(flag)
 		// Test with a modifier flag that's handled by ElementInfo (e.g., PUBLIC, FINAL, etc.)
 		// Parameters don't have modifiers like PUBLIC/PRIVATE, but we can test the default path
@@ -839,7 +840,7 @@ class ParameterInfo_Test extends TestBase {
 		assertNotNull(pi);
 		assertEquals(b_a1_a.getIndex(), pi.getIndex());
 		assertEquals(b_a1_a.getParameterType(), pi.getParameterType());
-		
+
 		// Test line 131: Constructor case
 		// Line 135: for loop entry
 		// Line 137: wrapped == inner branch (identity check)
@@ -848,7 +849,7 @@ class ParameterInfo_Test extends TestBase {
 		assertNotNull(ctorPi);
 		assertEquals(b_b_a.getIndex(), ctorPi.getIndex());
 		assertEquals(b_b_a.getParameterType(), ctorPi.getParameterType());
-		
+
 		// Test line 137: wrapped.equals(inner) branch
 		// Get Parameter directly from Method.getParameters() instead of from ParameterInfo
 		// This ensures we're testing the equals() branch, not just the == branch
@@ -858,17 +859,17 @@ class ParameterInfo_Test extends TestBase {
 		var pi2 = ParameterInfo.of(directParam);
 		assertNotNull(pi2);
 		assertEquals(0, pi2.getIndex());
-		
+
 		// Test with constructor parameter from direct source
 		var ctor = B.class.getConstructor(int.class, String.class);
 		var directCtorParam = ctor.getParameters()[0];
 		var ctorPi2 = ParameterInfo.of(directCtorParam);
 		assertNotNull(ctorPi2);
 		assertEquals(0, ctorPi2.getIndex());
-		
+
 		// Null should throw
 		assertThrows(IllegalArgumentException.class, () -> ParameterInfo.of(null));
-		
+
 		// Note: Line 140 is defensive code that should be unreachable in practice:
 		// - A Parameter always belongs to its declaring executable's parameters
 		// This branch is hard to test without mocking or reflection hacks
@@ -963,43 +964,43 @@ class ParameterInfo_Test extends TestBase {
 		Parameter p1 = method.getParameters()[0];
 		ParameterInfo pi1a = ParameterInfo.of(p1);
 		ParameterInfo pi1b = ParameterInfo.of(p1);
-		
+
 		Parameter p2 = method.getParameters()[1];
 		ParameterInfo pi2 = ParameterInfo.of(p2);
 
 		// Same parameter should be equal
 		assertEquals(pi1a, pi1b);
 		assertEquals(pi1a.hashCode(), pi1b.hashCode());
-		
+
 		// Different parameters should not be equal
 		assertNotEquals(pi1a, pi2);
-		assertNotEquals(pi1a, null);
-		assertNotEquals(pi1a, "not a ParameterInfo");
-		
+		assertNotEquals(null, pi1a);
+		assertNotEquals("not a ParameterInfo", pi1a);
+
 		// Reflexive
 		assertEquals(pi1a, pi1a);
-		
+
 		// Symmetric
 		assertEquals(pi1a, pi1b);
 		assertEquals(pi1b, pi1a);
-		
+
 		// Transitive
 		ParameterInfo pi1c = ParameterInfo.of(p1);
 		assertEquals(pi1a, pi1b);
 		assertEquals(pi1b, pi1c);
 		assertEquals(pi1a, pi1c);
-		
+
 		// HashMap usage - same parameter should map to same value
 		Map<ParameterInfo, String> map = new HashMap<>();
 		map.put(pi1a, "value1");
 		assertEquals("value1", map.get(pi1b));
 		assertEquals("value1", map.get(pi1c));
-		
+
 		// HashMap usage - different parameters should map to different values
 		map.put(pi2, "value2");
 		assertEquals("value2", map.get(pi2));
 		assertNotEquals("value2", map.get(pi1a));
-		
+
 		// HashSet usage
 		Set<ParameterInfo> set = new HashSet<>();
 		set.add(pi1a);

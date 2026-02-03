@@ -140,9 +140,7 @@ class LocalFile_Test extends TestBase {
 
 	@Test void d04_read_classpath_nonexistent() {
 		var file = new LocalFile(LocalFile_Test.class, "/nonexistent.properties");
-		assertThrows(IOException.class, () -> {
-			file.read();
-		});
+		assertThrows(IOException.class, file::read);
 	}
 
 	//====================================================================================================

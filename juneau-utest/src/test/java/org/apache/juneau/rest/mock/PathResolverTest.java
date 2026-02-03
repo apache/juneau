@@ -24,6 +24,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 class PathResolverTest extends TestBase {
 
 	public static class PathResolver2 extends MockPathResolver {

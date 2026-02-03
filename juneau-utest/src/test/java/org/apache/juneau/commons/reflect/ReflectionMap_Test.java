@@ -26,6 +26,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({"java:S117"})
 class ReflectionMap_Test extends TestBase {
 
 	private static ReflectionMap.Builder<Number> create() {
@@ -50,7 +51,7 @@ class ReflectionMap_Test extends TestBase {
 		static class A2 {}
 
 		// @formatter:off
-		static ReflectionMap<Number>
+		static final ReflectionMap<Number>
 			A1_SIMPLE = create().append("A1", 1).build(),
 			A1b_SIMPLE = create().append("ReflectionMap_Test$A_Class$A1", 1).build(),
 			A1_FULL = create().append("org.apache.juneau.commons.reflect.ReflectionMap_Test$A_Class$A1", 1).build();  // Note this could be a static field.
@@ -66,25 +67,25 @@ class ReflectionMap_Test extends TestBase {
 			assertEquals(match_A1b_SIMPLE, A1b_SIMPLE.find(c).findAny().isPresent());
 			assertEquals(match_A1_FULL, A1_FULL.find(c).findAny().isPresent());
 
-			assertEquals(match_A1_SIMPLE, A1_SIMPLE.find(c).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_A1b_SIMPLE, A1b_SIMPLE.find(c).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_A1_FULL, A1_FULL.find(c).filter(v -> v instanceof Integer).findAny().isPresent());
+			assertEquals(match_A1_SIMPLE, A1_SIMPLE.find(c).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_A1b_SIMPLE, A1b_SIMPLE.find(c).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_A1_FULL, A1_FULL.find(c).filter(Integer.class::isInstance).findAny().isPresent());
 
-			assertFalse(A1_SIMPLE.find(c).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(A1b_SIMPLE.find(c).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(A1_FULL.find(c).filter(v -> v instanceof Long).findAny().isPresent());
+			assertFalse(A1_SIMPLE.find(c).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(A1b_SIMPLE.find(c).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(A1_FULL.find(c).filter(Long.class::isInstance).findAny().isPresent());
 
 			assertEquals(match_A1_SIMPLE, A1_SIMPLE.find(c).count() > 0);
 			assertEquals(match_A1b_SIMPLE, A1b_SIMPLE.find(c).count() > 0);
 			assertEquals(match_A1_FULL, A1_FULL.find(c).count() > 0);
 
-			assertEquals(match_A1_SIMPLE, A1_SIMPLE.find(c).filter(v -> v instanceof Integer).count() > 0);
-			assertEquals(match_A1b_SIMPLE, A1b_SIMPLE.find(c).filter(v -> v instanceof Integer).count() > 0);
-			assertEquals(match_A1_FULL, A1_FULL.find(c).filter(v -> v instanceof Integer).count() > 0);
+			assertEquals(match_A1_SIMPLE, A1_SIMPLE.find(c).filter(Integer.class::isInstance).count() > 0);
+			assertEquals(match_A1b_SIMPLE, A1b_SIMPLE.find(c).filter(Integer.class::isInstance).count() > 0);
+			assertEquals(match_A1_FULL, A1_FULL.find(c).filter(Integer.class::isInstance).count() > 0);
 
-			assertFalse(A1_SIMPLE.find(c).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(A1b_SIMPLE.find(c).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(A1_FULL.find(c).filter(v -> v instanceof Long).findAny().isPresent());
+			assertFalse(A1_SIMPLE.find(c).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(A1b_SIMPLE.find(c).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(A1_FULL.find(c).filter(Long.class::isInstance).findAny().isPresent());
 		}
 
 		@Test void a02_find() {
@@ -108,7 +109,7 @@ class ReflectionMap_Test extends TestBase {
 			}
 		}
 
-		@Test void a04_innerClassMatching() throws Exception {
+		@Test void a04_innerClassMatching() {
 			var inner1 = OuterClass.InnerClass1.class;
 			var inner2 = OuterClass.InnerClass1.InnerClass2.class;
 
@@ -130,7 +131,7 @@ class ReflectionMap_Test extends TestBase {
 		}
 
 		// Test for class without package (line 586 false branch, line 588 false branch)
-		@Test void a05_classWithoutPackage() throws Exception {
+		@Test void a05_classWithoutPackage() {
 			// Primitive array class has no package and no '$' in name
 			var intArrayClass = int[].class;
 			var rm1 = create().append("int[]", 1).build();
@@ -142,7 +143,7 @@ class ReflectionMap_Test extends TestBase {
 		}
 
 		// Test for inner class with and without package (line 588 branches)
-		@Test void a06_innerClassPackageHandling() throws Exception {
+		@Test void a06_innerClassPackageHandling() throws ClassNotFoundException {
 			var inner1 = OuterClass.InnerClass1.class;
 
 			// Pattern with full path including package - tests line 588 true branch (package not null)
@@ -172,7 +173,7 @@ class ReflectionMap_Test extends TestBase {
 		}
 
 		// Additional test to ensure both branches of line 586 are covered
-		@Test void a07_nonInnerClassMatching() throws Exception {
+		@Test void a07_nonInnerClassMatching() {
 			// Test classes without $ (line 586 false branch)
 			var rm1 = create().append("String", 1).build();
 			assertTrue(rm1.find(String.class).findAny().isPresent()); // No $ in name
@@ -201,7 +202,7 @@ class ReflectionMap_Test extends TestBase {
 		}
 
 		// @formatter:off
-		static ReflectionMap<Number>
+		static final ReflectionMap<Number>
 			B1m1_SIMPLE = create().append("B1.m1", 1).build(),
 			B1m1i_SIMPLE = create().append("B1.m1(int)", 1).build(),
 			B1m1s_SIMPLE = create().append("B1.m1(String)", 1).build(),
@@ -248,34 +249,34 @@ class ReflectionMap_Test extends TestBase {
 			assertEquals(match_B1m1si_FULL, B1m1si_FULL.find(m).findAny().isPresent());
 			assertEquals(match_B1m1ssi_FULL, B1m1ssi_FULL.find(m).findAny().isPresent());
 
-			assertEquals(match_B1m1_SIMPLE, B1m1_SIMPLE.find(m).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_B1m1i_SIMPLE, B1m1i_SIMPLE.find(m).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_B1m1s_SIMPLE, B1m1s_SIMPLE.find(m).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_B1m1ss_SIMPLE, B1m1ss_SIMPLE.find(m).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_B1m1si_SIMPLE, B1m1si_SIMPLE.find(m).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_B1m1ssi_SIMPLE, B1m1ssi_SIMPLE.find(m).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_B1m1_FULL, B1m1_FULL.find(m).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_B1m1i_FULL, B1m1i_FULL.find(m).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_B1m1s_FULL, B1m1s_FULL.find(m).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_B1m1ss_FULL, B1m1ss_FULL.find(m).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_B1m1si_FULL, B1m1si_FULL.find(m).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_B1m1ssi_FULL, B1m1ssi_FULL.find(m).filter(v -> v instanceof Integer).findAny().isPresent());
+			assertEquals(match_B1m1_SIMPLE, B1m1_SIMPLE.find(m).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_B1m1i_SIMPLE, B1m1i_SIMPLE.find(m).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_B1m1s_SIMPLE, B1m1s_SIMPLE.find(m).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_B1m1ss_SIMPLE, B1m1ss_SIMPLE.find(m).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_B1m1si_SIMPLE, B1m1si_SIMPLE.find(m).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_B1m1ssi_SIMPLE, B1m1ssi_SIMPLE.find(m).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_B1m1_FULL, B1m1_FULL.find(m).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_B1m1i_FULL, B1m1i_FULL.find(m).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_B1m1s_FULL, B1m1s_FULL.find(m).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_B1m1ss_FULL, B1m1ss_FULL.find(m).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_B1m1si_FULL, B1m1si_FULL.find(m).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_B1m1ssi_FULL, B1m1ssi_FULL.find(m).filter(Integer.class::isInstance).findAny().isPresent());
 
-			assertFalse(B1m1_SIMPLE.find(m).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(B1m1i_SIMPLE.find(m).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(B1m1s_SIMPLE.find(m).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(B1m1ss_SIMPLE.find(m).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(B1m1si_SIMPLE.find(m).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(B1m1ssi_SIMPLE.find(m).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(B1m1_FULL.find(m).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(B1m1i_FULL.find(m).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(B1m1s_FULL.find(m).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(B1m1ss_FULL.find(m).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(B1m1si_FULL.find(m).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(B1m1ssi_FULL.find(m).filter(v -> v instanceof Long).findAny().isPresent());
+			assertFalse(B1m1_SIMPLE.find(m).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(B1m1i_SIMPLE.find(m).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(B1m1s_SIMPLE.find(m).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(B1m1ss_SIMPLE.find(m).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(B1m1si_SIMPLE.find(m).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(B1m1ssi_SIMPLE.find(m).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(B1m1_FULL.find(m).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(B1m1i_FULL.find(m).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(B1m1s_FULL.find(m).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(B1m1ss_FULL.find(m).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(B1m1si_FULL.find(m).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(B1m1ssi_FULL.find(m).filter(Long.class::isInstance).findAny().isPresent());
 		}
 
-		@Test void a02_find() throws Exception {
+		@Test void a02_find() throws NoSuchMethodException, SecurityException {
 			test(B1.class.getMethod("m1"), true, false, false, false, false, false, true, false, false, false, false, false);
 			test(B1.class.getMethod("m1", int.class), true, true, false, false, false, false, true, true, false, false, false, false);
 			test(B1.class.getMethod("m1", String.class), true, false, true, true, false, false, true, false, true, true, false, false);
@@ -295,7 +296,7 @@ class ReflectionMap_Test extends TestBase {
 			public void m5(Map x, List y) { /* no-op */ }
 		}
 
-		@Test void a03_generics() throws Exception {
+		@Test void a03_generics() throws NoSuchMethodException, SecurityException {
 			// Generic parameters should be stripped, so List<String> matches List
 			var rm1 = create().append("B2a.m1(List<String>)", 1).build();
 			assertTrue(rm1.find(B2a.class.getMethod("m1", List.class)).findAny().isPresent());
@@ -328,7 +329,7 @@ class ReflectionMap_Test extends TestBase {
 			public void m3(int[] x) { /* no-op */ }
 		}
 
-		@Test void a04_arrayParams() throws Exception {
+		@Test void a04_arrayParams() throws NoSuchMethodException, SecurityException {
 			// Single-dimensional array with simple name
 			var rm1 = create().append("B3.m1(String[])", 1).build();
 			assertTrue(rm1.find(B3.class.getMethod("m1", String[].class)).findAny().isPresent());
@@ -352,7 +353,7 @@ class ReflectionMap_Test extends TestBase {
 			public void m2(Map<String, Integer>[][] x) { /* no-op */ }
 		}
 
-		@Test void a05_genericArrays() throws Exception {
+		@Test void a05_genericArrays() throws NoSuchMethodException, SecurityException {
 			// Array of generic types - generics should be stripped, array dimensions preserved
 			var rm1 = create().append("B4.m1(List<String>[])", 1).build();
 			assertTrue(rm1.find(B4.class.getMethod("m1", List[].class)).findAny().isPresent());
@@ -378,7 +379,7 @@ class ReflectionMap_Test extends TestBase {
 			public void testMethod(int[] x) { /* no-op */ }
 		}
 
-		@Test void a06_arrayNegativeMatching() throws Exception {
+		@Test void a06_arrayNegativeMatching() throws NoSuchMethodException, SecurityException {
 			// Array dimension mismatch - pattern has 1 dimension, actual has 2
 			var rm1 = create().append("B5.testMethod(String[])", 1).build();
 			assertFalse(rm1.find(B5.class.getMethod("testMethod", String[][].class)).findAny().isPresent());
@@ -431,14 +432,14 @@ class ReflectionMap_Test extends TestBase {
 			assertEquals(match_C1f1_SIMPLE, C1f1_SIMPLE.find(f).findAny().isPresent());
 			assertEquals(match_C1f1_FULL, C1f1_FULL.find(f).findAny().isPresent());
 
-			assertEquals(match_C1f1_SIMPLE, C1f1_SIMPLE.find(f).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_C1f1_FULL, C1f1_FULL.find(f).filter(v -> v instanceof Integer).findAny().isPresent());
+			assertEquals(match_C1f1_SIMPLE, C1f1_SIMPLE.find(f).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_C1f1_FULL, C1f1_FULL.find(f).filter(Integer.class::isInstance).findAny().isPresent());
 
-			assertFalse(C1f1_SIMPLE.find(f).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(C1f1_FULL.find(f).filter(v -> v instanceof Long).findAny().isPresent());
+			assertFalse(C1f1_SIMPLE.find(f).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(C1f1_FULL.find(f).filter(Long.class::isInstance).findAny().isPresent());
 		}
 
-		@Test void a02_find() throws Exception {
+		@Test void a02_find() throws NoSuchFieldException, SecurityException {
 			test(C1.class.getField("f1"), true, true);
 			test(C1.class.getField("f2"), false, false);
 			test(C2.class.getField("f1"), false, false);
@@ -464,7 +465,7 @@ class ReflectionMap_Test extends TestBase {
 		}
 
 		// @formatter:off
-		static ReflectionMap<Number>
+		static final ReflectionMap<Number>
 			D_SIMPLE = create().append("D1()", 1).build(),
 			Di_SIMPLE = create().append("D1(int)", 1).build(),
 			Ds_SIMPLE = create().append("D1(String)", 1).build(),
@@ -511,34 +512,34 @@ class ReflectionMap_Test extends TestBase {
 			assertEquals(match_Dsi_FULL, Dsi_FULL.find(c).findAny().isPresent());
 			assertEquals(match_Dssi_FULL, Dssi_FULL.find(c).findAny().isPresent());
 
-			assertEquals(match_D_SIMPLE, D_SIMPLE.find(c).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_Di_SIMPLE, Di_SIMPLE.find(c).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_Ds_SIMPLE, Ds_SIMPLE.find(c).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_Dss_SIMPLE, Dss_SIMPLE.find(c).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_Dsi_SIMPLE, Dsi_SIMPLE.find(c).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_Dssi_SIMPLE, Dssi_SIMPLE.find(c).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_D_FULL, D_FULL.find(c).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_Di_FULL, Di_FULL.find(c).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_Ds_FULL, Ds_FULL.find(c).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_Dss_FULL, Dss_FULL.find(c).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_Dsi_FULL, Dsi_FULL.find(c).filter(v -> v instanceof Integer).findAny().isPresent());
-			assertEquals(match_Dssi_FULL, Dssi_FULL.find(c).filter(v -> v instanceof Integer).findAny().isPresent());
+			assertEquals(match_D_SIMPLE, D_SIMPLE.find(c).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_Di_SIMPLE, Di_SIMPLE.find(c).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_Ds_SIMPLE, Ds_SIMPLE.find(c).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_Dss_SIMPLE, Dss_SIMPLE.find(c).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_Dsi_SIMPLE, Dsi_SIMPLE.find(c).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_Dssi_SIMPLE, Dssi_SIMPLE.find(c).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_D_FULL, D_FULL.find(c).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_Di_FULL, Di_FULL.find(c).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_Ds_FULL, Ds_FULL.find(c).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_Dss_FULL, Dss_FULL.find(c).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_Dsi_FULL, Dsi_FULL.find(c).filter(Integer.class::isInstance).findAny().isPresent());
+			assertEquals(match_Dssi_FULL, Dssi_FULL.find(c).filter(Integer.class::isInstance).findAny().isPresent());
 
-			assertFalse(D_SIMPLE.find(c).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(Di_SIMPLE.find(c).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(Ds_SIMPLE.find(c).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(Dss_SIMPLE.find(c).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(Dsi_SIMPLE.find(c).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(Dssi_SIMPLE.find(c).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(D_FULL.find(c).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(Di_FULL.find(c).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(Ds_FULL.find(c).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(Dss_FULL.find(c).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(Dsi_FULL.find(c).filter(v -> v instanceof Long).findAny().isPresent());
-			assertFalse(Dssi_FULL.find(c).filter(v -> v instanceof Long).findAny().isPresent());
+			assertFalse(D_SIMPLE.find(c).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(Di_SIMPLE.find(c).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(Ds_SIMPLE.find(c).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(Dss_SIMPLE.find(c).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(Dsi_SIMPLE.find(c).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(Dssi_SIMPLE.find(c).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(D_FULL.find(c).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(Di_FULL.find(c).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(Ds_FULL.find(c).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(Dss_FULL.find(c).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(Dsi_FULL.find(c).filter(Long.class::isInstance).findAny().isPresent());
+			assertFalse(Dssi_FULL.find(c).filter(Long.class::isInstance).findAny().isPresent());
 		}
 
-		@Test void a02_find() throws Exception {
+		@Test void a02_find() throws NoSuchMethodException, SecurityException {
 			test(D1.class.getConstructor(), true, false, false, false, false, false, true, false, false, false, false, false);
 			test(D1.class.getConstructor(int.class), false, true, false, false, false, false, false, true, false, false, false, false);
 			test(D1.class.getConstructor(String.class), false, false, true, true, false, false, false, false, true, true, false, false);
@@ -554,7 +555,7 @@ class ReflectionMap_Test extends TestBase {
 			public D3(Map<String, Integer>[] x) { /* no-op */ }
 		}
 
-		@Test void a03_generics() throws Exception {
+		@Test void a03_generics() throws NoSuchMethodException, SecurityException {
 			// Generic parameters with commas should be handled correctly
 			var rm1 = create().append("D3(Map<String,Integer>)", 1).build();
 			assertTrue(rm1.find(D3.class.getConstructor(Map.class)).findAny().isPresent());
@@ -606,15 +607,15 @@ class ReflectionMap_Test extends TestBase {
 
 		static class F1 {}
 
-		static ReflectionMap<Number> RM_F = create().append("F2, F1", 1).build();
+		static final ReflectionMap<Number> RM_F = create().append("F2, F1", 1).build();
 
 		@Test void a01_cdl() {
 			assertString("1", RM_F.find(F1.class).findFirst().get());
 		}
 
-		static ReflectionMap<Number> RM_G = create().build();
+		static final ReflectionMap<Number> RM_G = create().build();
 
-		@Test void a02_emptyReflectionMap() throws Exception {
+		@Test void a02_emptyReflectionMap() throws NoSuchMethodException, SecurityException, NoSuchFieldException {
 			assertFalse(RM_G.find(A_Class.A1.class).findAny().isPresent());
 			assertFalse(RM_G.find(B_Method.B1.class.getMethod("m1")).findAny().isPresent());
 			assertFalse(RM_G.find(C_Field.C1.class.getField("f1")).findAny().isPresent());

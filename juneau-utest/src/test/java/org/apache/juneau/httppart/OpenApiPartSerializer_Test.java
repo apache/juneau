@@ -32,6 +32,7 @@ import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 class OpenApiPartSerializer_Test extends TestBase {
 
 	static OpenApiSerializerSession s = OpenApiSerializer.DEFAULT.getSession();

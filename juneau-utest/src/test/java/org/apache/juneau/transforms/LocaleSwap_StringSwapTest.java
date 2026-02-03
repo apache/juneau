@@ -24,7 +24,7 @@ import org.apache.juneau.swaps.*;
 
 class LocaleSwap_StringSwapTest extends StringSwapTest_Base {
 
-	private static LocaleSwap SWAP = new LocaleSwap();
+	private static final LocaleSwap SWAP = new LocaleSwap();
 
 	private static <T> StringSwap_Tester<T> tester(int index, String label, T object, StringSwap<T> swap, String expected) {
 		return StringSwap_Tester.create(index, label, object, swap, expected, BeanContext.DEFAULT_SESSION).build();

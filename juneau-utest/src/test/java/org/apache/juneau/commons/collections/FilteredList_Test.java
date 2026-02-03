@@ -776,8 +776,8 @@ class FilteredList_Test extends TestBase {
 		list2.add("value1");
 		list2.add("value2");
 
-		assertTrue(list1.equals(list2));
-		assertTrue(list2.equals(list1));
+		assertEquals(list1, list2);
+		assertEquals(list2, list1);
 	}
 
 	@Test
@@ -791,8 +791,8 @@ class FilteredList_Test extends TestBase {
 		var list2 = new ArrayList<String>();
 		list2.add("value2");
 
-		assertFalse(list1.equals(list2));
-		assertFalse(list2.equals(list1));
+		assertNotEquals(list1, list2);
+		assertNotEquals(list2, list1);
 	}
 
 	@Test

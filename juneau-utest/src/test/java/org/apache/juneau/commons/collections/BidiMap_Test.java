@@ -296,7 +296,7 @@ class BidiMap_Test extends TestBase {
 			.unmodifiable()
 			.build();
 
-		assertThrows(UnsupportedOperationException.class, () -> map.clear());
+		assertThrows(UnsupportedOperationException.class, map::clear);
 	}
 
 	@Test void a20_unmodifiable_readOperationsWork() {
@@ -611,8 +611,8 @@ class BidiMap_Test extends TestBase {
 			.add("two", 2)
 			.build();
 
-		assertTrue(map1.equals(map2));
-		assertTrue(map2.equals(map1));
+		assertEquals(map1, map2);
+		assertEquals(map2, map1);
 	}
 
 	@Test
@@ -625,8 +625,8 @@ class BidiMap_Test extends TestBase {
 			.add("one", 2)
 			.build();
 
-		assertFalse(map1.equals(map2));
-		assertFalse(map2.equals(map1));
+		assertNotEquals(map1, map2);
+		assertNotEquals(map2, map1);
 	}
 
 	@Test
@@ -640,8 +640,8 @@ class BidiMap_Test extends TestBase {
 		regularMap.put("one", 1);
 		regularMap.put("two", 2);
 
-		assertTrue(map.equals(regularMap));
-		assertTrue(regularMap.equals(map));
+		assertEquals(map, regularMap);
+		assertEquals(regularMap, map);
 	}
 
 	@Test
@@ -650,7 +650,7 @@ class BidiMap_Test extends TestBase {
 			.add("one", 1)
 			.build();
 
-		assertFalse(map.equals(null));
+		assertNotEquals(null, map);
 	}
 
 	@Test

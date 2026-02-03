@@ -18,9 +18,10 @@
 // This class is intentionally in the default package to test line 588 false branch
 // where a class has $ (is an inner class) but has no package
 
+@SuppressWarnings("java:S1220")
 public class DefaultPackageTestClass {
 	public int testField;  // Field for testing FieldInfo.getFullName() with null package
-	
+
 	public static class InnerClass {
 		public static class NestedInner {}
 	}

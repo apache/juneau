@@ -120,7 +120,7 @@ class Flag_Test extends TestBase {
 		var a = Flag.of(true);
 		var b = Flag.create();
 
-		a.ifSet(() -> b.set());
+		a.ifSet(b::set);
 
 		assertTrue(b.isSet());
 	}
@@ -130,7 +130,7 @@ class Flag_Test extends TestBase {
 		var a = Flag.create();
 		var b = Flag.create();
 
-		a.ifSet(() -> b.set());
+		a.ifSet(b::set);
 
 		assertFalse(b.isSet());
 	}
@@ -140,7 +140,7 @@ class Flag_Test extends TestBase {
 		var a = Flag.of(true);
 		var b = Flag.create();
 
-		a.ifNotSet(() -> b.set());
+		a.ifNotSet(b::set);
 
 		assertFalse(b.isSet());
 	}
@@ -150,7 +150,7 @@ class Flag_Test extends TestBase {
 		var a = Flag.create();
 		var b = Flag.create();
 
-		a.ifNotSet(() -> b.set());
+		a.ifNotSet(b::set);
 
 		assertTrue(b.isSet());
 	}
@@ -179,7 +179,7 @@ class Flag_Test extends TestBase {
 
 		// Simulate initializing only once
 		for (var i = 0; i < 5; i++) {
-			a.ifNotSet(() -> a.set());
+			a.ifNotSet(a::set);
 		}
 
 		assertTrue(a.isSet());
@@ -260,28 +260,28 @@ class Flag_Test extends TestBase {
 	void d03_equals_sameValue() {
 		var flag1 = Flag.of(true);
 		var flag2 = Flag.of(true);
-		assertTrue(flag1.equals(flag2));
-		assertTrue(flag2.equals(flag1));
+		assertEquals(flag1, flag2);
+		assertEquals(flag2, flag1);
 	}
 
 	@Test
 	void d04_equals_differentValue() {
 		var flag1 = Flag.of(true);
 		var flag2 = Flag.of(false);
-		assertFalse(flag1.equals(flag2));
-		assertFalse(flag2.equals(flag1));
+		assertNotEquals(flag1, flag2);
+		assertNotEquals(flag2, flag1);
 	}
 
 	@Test
 	void d05_equals_sameInstance() {
 		var flag = Flag.of(true);
-		assertTrue(flag.equals(flag));
+		assertEquals(flag, flag);
 	}
 
 	@Test
 	void d06_equals_notAFlag() {
 		var flag = Flag.of(true);
-		assertFalse(flag.equals(null));
+		assertNotEquals(flag, null);
 	}
 
 	@Test

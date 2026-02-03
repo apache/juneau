@@ -24,7 +24,7 @@ import org.junit.jupiter.api.*;
 class RequestHttpPart_FluentSetters_Test extends TestBase {
 
 	@Test
-	public void a01_RequestFormParam_def() throws Exception {
+	void a01_RequestFormParam_def() {
 		// Test that def() returns correct type for fluent chaining
 		var x = new RequestFormParam(null, "test", null);
 		assertSame(x, x.def("default"));
@@ -39,7 +39,7 @@ class RequestHttpPart_FluentSetters_Test extends TestBase {
 	}
 
 	@Test
-	public void a02_RequestHeader_def() throws Exception {
+	void a02_RequestHeader_def() {
 		// Test that def() returns correct type for fluent chaining
 		var x = new RequestHeader(null, "X-Missing", null);
 		assertSame(x, x.def("default"));
@@ -54,7 +54,7 @@ class RequestHttpPart_FluentSetters_Test extends TestBase {
 	}
 
 	@Test
-	public void a03_RequestPathParam_def() throws Exception {
+	void a03_RequestPathParam_def() {
 		// Test that def() returns correct type for fluent chaining
 		var x = new RequestPathParam(null, "param", null);
 		assertSame(x, x.def("default"));
@@ -69,7 +69,7 @@ class RequestHttpPart_FluentSetters_Test extends TestBase {
 	}
 
 	@Test
-	public void a04_RequestQueryParam_def() throws Exception {
+	void a04_RequestQueryParam_def() {
 		// Test that def() returns correct type for fluent chaining
 		var x = new RequestQueryParam(null, "missing", null);
 		assertSame(x, x.def("default"));
@@ -84,7 +84,7 @@ class RequestHttpPart_FluentSetters_Test extends TestBase {
 	}
 
 	@Test
-	public void a05_def_withExistingValue() throws Exception {
+	void a05_def_withExistingValue() {
 		// Test that def() does not override existing values
 		var x = new RequestHeader(null, "X-Test", "existing");
 		x.def("default");

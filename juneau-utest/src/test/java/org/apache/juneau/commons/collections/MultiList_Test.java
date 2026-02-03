@@ -549,8 +549,8 @@ class MultiList_Test extends TestBase {
 		var l4 = l(a("3", "4"));
 		var multiList2 = new MultiList<>(l3, l4);
 
-		assertTrue(multiList1.equals(multiList2));
-		assertTrue(multiList2.equals(multiList1));
+		assertEquals(multiList1, multiList2);
+		assertEquals(multiList2, multiList1);
 	}
 
 	@Test
@@ -561,8 +561,8 @@ class MultiList_Test extends TestBase {
 		var l2 = l(a("1", "3"));
 		var multiList2 = new MultiList<>(l2);
 
-		assertFalse(multiList1.equals(multiList2));
-		assertFalse(multiList2.equals(multiList1));
+		assertNotEquals(multiList1, multiList2);
+		assertNotEquals(multiList2, multiList1);
 	}
 
 	@Test
@@ -575,7 +575,7 @@ class MultiList_Test extends TestBase {
 		var l4 = l(a("1", "2"));
 		var multiList2 = new MultiList<>(l3, l4);
 
-		assertFalse(multiList1.equals(multiList2)); // Order matters for lists
+		assertNotEquals(multiList1, multiList2); // Order matters for lists
 	}
 
 	@Test
@@ -585,15 +585,15 @@ class MultiList_Test extends TestBase {
 
 		var regularList = new ArrayList<>(l(a("1", "2", "3")));
 
-		assertTrue(multiList.equals(regularList));
-		assertTrue(regularList.equals(multiList));
+		assertEquals(multiList, regularList);
+		assertEquals(regularList, multiList);
 	}
 
 	@Test
 	void g05_equals_notAList() {
 		var l1 = l(a("1", "2"));
 		var multiList = new MultiList<>(l1);
-		assertFalse(multiList.equals(null));
+		assertNotEquals(multiList, null);
 	}
 
 	@Test
@@ -757,8 +757,8 @@ class MultiList_Test extends TestBase {
 		var l2 = l(a("1", "2", "3"));
 		var ml2 = new MultiList<>(l2);
 
-		assertFalse(ml1.equals(ml2)); // Different lengths
-		assertFalse(ml2.equals(ml1));
+		assertNotEquals(ml1, ml2); // Different lengths
+		assertNotEquals(ml2, ml1);
 	}
 
 	@Test
@@ -772,7 +772,7 @@ class MultiList_Test extends TestBase {
 
 		// ml1 is shorter, so e1.hasNext() becomes false first
 		// Then we check e2.hasNext() which is true, so return false
-		assertFalse(ml1.equals(ml2));
+		assertNotEquals(ml1, ml2);
 	}
 
 	@Test

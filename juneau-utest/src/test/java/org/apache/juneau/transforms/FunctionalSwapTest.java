@@ -28,9 +28,9 @@ class FunctionalSwapTest extends RoundTripObjectSwapTest_Base {
 	// Setup
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static BeanSession BS = BeanContext.DEFAULT_SESSION;
+	private static final BeanSession BS = BeanContext.DEFAULT_SESSION;
 	private static final LocaleSwap localeSwap = new LocaleSwap();
-	private static FunctionalSwap<Locale,String> SWAP = new FunctionalSwap<>(Locale.class, String.class, x->localeSwap.swap(BS, x), x->localeSwap.unswap(BS, x, null));
+	private static final FunctionalSwap<Locale,String> SWAP = new FunctionalSwap<>(Locale.class, String.class, x->localeSwap.swap(BS, x), x->localeSwap.unswap(BS, x, null));
 
 	private static <T,S> RoundTripObjectSwap_Tester<T,S> tester(int index, String label, T object, ObjectSwap<T,S> swap, S expected, BeanSession bs) {
 		return RoundTripObjectSwap_Tester.create(index, label, object, swap, expected, bs).build();

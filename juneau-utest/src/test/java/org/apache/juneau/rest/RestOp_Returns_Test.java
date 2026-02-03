@@ -30,6 +30,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 class RestOp_Returns_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

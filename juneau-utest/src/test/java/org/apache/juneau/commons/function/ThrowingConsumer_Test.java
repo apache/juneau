@@ -32,7 +32,7 @@ class ThrowingConsumer_Test extends TestBase {
 		var callCount = new AtomicInteger();
 		var receivedValue = new Object[1];
 
-		ThrowingConsumer<String> consumer = (t) -> {
+		ThrowingConsumer<String> consumer = t -> {
 			callCount.incrementAndGet();
 			receivedValue[0] = t;
 		};
@@ -46,7 +46,7 @@ class ThrowingConsumer_Test extends TestBase {
 		var callCount = new AtomicInteger();
 		var receivedValue = new Object[1];
 
-		ThrowingConsumer<String> consumer = (t) -> {
+		ThrowingConsumer<String> consumer = t -> {
 			callCount.incrementAndGet();
 			receivedValue[0] = t;
 		};
@@ -60,7 +60,7 @@ class ThrowingConsumer_Test extends TestBase {
 	// Exception handling tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void b01_throwsCheckedException() {
-		ThrowingConsumer<String> consumer = (t) -> {
+		ThrowingConsumer<String> consumer = t -> {
 			throw new Exception("Test exception");
 		};
 
@@ -73,7 +73,7 @@ class ThrowingConsumer_Test extends TestBase {
 	}
 
 	@Test void b02_throwsRuntimeException() {
-		ThrowingConsumer<String> consumer = (t) -> {
+		ThrowingConsumer<String> consumer = t -> {
 			throw new RuntimeException("Test runtime exception");
 		};
 
@@ -87,7 +87,7 @@ class ThrowingConsumer_Test extends TestBase {
 	}
 
 	@Test void b03_throwsError() {
-		ThrowingConsumer<String> consumer = (t) -> {
+		ThrowingConsumer<String> consumer = t -> {
 			throw new Error("Test error");
 		};
 
@@ -100,7 +100,7 @@ class ThrowingConsumer_Test extends TestBase {
 	}
 
 	@Test void b04_throwsNullPointerException() {
-		ThrowingConsumer<String> consumer = (t) -> {
+		ThrowingConsumer<String> consumer = t -> {
 			throw new NullPointerException("NPE");
 		};
 
@@ -114,7 +114,7 @@ class ThrowingConsumer_Test extends TestBase {
 	}
 
 	@Test void b05_throwsIllegalArgumentException() {
-		ThrowingConsumer<String> consumer = (t) -> {
+		ThrowingConsumer<String> consumer = t -> {
 			throw new IllegalArgumentException("IAE");
 		};
 
@@ -135,7 +135,7 @@ class ThrowingConsumer_Test extends TestBase {
 		var receivedValue = new Object[1];
 
 		// ThrowingConsumer extends Consumer, so it can be used where Consumer is expected
-		java.util.function.Consumer<String> consumer = (t) -> {
+		java.util.function.Consumer<String> consumer = t -> {
 			callCount.incrementAndGet();
 			receivedValue[0] = t;
 		};
@@ -148,9 +148,7 @@ class ThrowingConsumer_Test extends TestBase {
 	@Test void c02_lambdaExpression() {
 		var callCount = new AtomicInteger();
 
-		ThrowingConsumer<Integer> consumer = (x) -> {
-			callCount.addAndGet(x);
-		};
+		ThrowingConsumer<Integer> consumer = callCount::addAndGet;
 
 		consumer.accept(5);
 		consumer.accept(10);

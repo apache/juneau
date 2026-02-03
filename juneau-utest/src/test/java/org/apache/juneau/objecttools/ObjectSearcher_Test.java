@@ -238,7 +238,7 @@ public class ObjectSearcher_Test extends TestBase {
 		}
 	}
 
-	C[] INT_BEAN_ARRAY = {C.create(-2), C.create(-1), C.create(0), C.create(1), C.create(2), C.create(3)};
+	static final C[] INT_BEAN_ARRAY = {C.create(-2), C.create(-1), C.create(0), C.create(1), C.create(2), C.create(3)};
 
 	@Test void b01_intSearch_oneNumber() {
 		for (var s : a("f=1", "f = 1"))

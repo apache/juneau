@@ -88,10 +88,10 @@ class Version_Test extends TestBase {
 	@Test void a04_isEqualsTo() {
 		var x = of("1.2.3");
 
-		assertTrue(x.equals(of("1.2.3")));
-		assertTrue(x.equals(of("1.2")));
-		assertTrue(x.equals(of("1.2.3.4")));
-		assertFalse(x.equals(of("1.2.4")));
+		assertEquals(x, of("1.2.3"));
+		assertEquals(x, of("1.2"));
+		assertEquals(x, of("1.2.3.4"));
+		assertNotEquals(x, of("1.2.4"));
 	}
 
 	@Test void a05_compareTo() {
@@ -116,23 +116,23 @@ class Version_Test extends TestBase {
 	@Test
 	void b01_equalsObject_sameInstance() {
 		var v1 = of("1.2.3");
-		assertTrue(v1.equals(v1));
+		assertEquals(v1, v1);
 	}
 
 	@Test
 	void b02_equalsObject_sameVersion() {
 		var v1 = of("1.2.3");
 		var v2 = of("1.2.3");
-		assertTrue(v1.equals(v2));
-		assertTrue(v2.equals(v1));
+		assertEquals(v1, v2);
+		assertEquals(v2, v1);
 	}
 
 	@Test
 	void b03_equalsObject_differentVersions() {
 		var v1 = of("1.2.3");
 		var v2 = of("1.2.4");
-		assertFalse(v1.equals(v2));
-		assertFalse(v2.equals(v1));
+		assertNotEquals(v1, v2);
+		assertNotEquals(v2, v1);
 	}
 
 	@Test
@@ -141,7 +141,7 @@ class Version_Test extends TestBase {
 		// equals(Object) should return false for null
 		// The instanceof check should prevent any null access
 		try {
-			assertFalse(v1.equals((Object)null));
+			assertNotEquals(v1, (Object)null);
 		} catch (NullPointerException e) {
 			// If there's a bug in the implementation, we'll catch it here
 			// But ideally this should not throw
@@ -149,13 +149,12 @@ class Version_Test extends TestBase {
 		}
 	}
 
-	@SuppressWarnings("unlikely-arg-type")
 	@Test
 	void b05_equalsObject_differentType() {
 		var v1 = of("1.2.3");
-		assertFalse(v1.equals("1.2.3"));
-		assertFalse(v1.equals(123));
-		assertFalse(v1.equals(new Object()));
+		assertNotEquals(v1, "1.2.3");
+		assertNotEquals(v1, 123);
+		assertNotEquals(v1, new Object());
 	}
 
 	@Test
@@ -163,8 +162,8 @@ class Version_Test extends TestBase {
 		var v1 = of("1.2");
 		var v2 = of("1.2.0");
 		// equals(Version) compares only common parts, so these should be equal
-		assertTrue(v1.equals(v2));
-		assertTrue(v2.equals(v1));
+		assertEquals(v1, v2);
+		assertEquals(v2, v1);
 	}
 
 	@Test
@@ -172,22 +171,22 @@ class Version_Test extends TestBase {
 		var v1 = of("1.2.3");
 		var v2 = of("1.2.3.0");
 		// equals(Version) compares only common parts, so these should be equal
-		assertTrue(v1.equals(v2));
-		assertTrue(v2.equals(v1));
+		assertEquals(v1, v2);
+		assertEquals(v2, v1);
 	}
 
 	@Test
 	void b08_equalsObject_singlePartVersions() {
 		var v1 = of("1");
 		var v2 = of("1");
-		assertTrue(v1.equals(v2));
+		assertEquals(v1, v2);
 	}
 
 	@Test
 	void b09_equalsObject_emptyVersions() {
 		var v1 = of("");
 		var v2 = of("");
-		assertTrue(v1.equals(v2));
+		assertEquals(v1, v2);
 	}
 
 	@Test
@@ -202,15 +201,15 @@ class Version_Test extends TestBase {
 		var v1 = of("1.2.3");
 		var v2 = of("1.2.3");
 		var v3 = of("1.2.3");
-		assertTrue(v1.equals(v2));
-		assertTrue(v2.equals(v3));
-		assertTrue(v1.equals(v3));
+		assertEquals(v1, v2);
+		assertEquals(v2, v3);
+		assertEquals(v1, v3);
 	}
 
 	@Test
 	void b12_equalsObject_reflexivity() {
 		var v1 = of("1.2.3");
-		assertTrue(v1.equals(v1));
+		assertEquals(v1, v1);
 	}
 
 	//====================================================================================================

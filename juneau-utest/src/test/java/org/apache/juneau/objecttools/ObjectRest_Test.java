@@ -30,7 +30,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"rawtypes","serial"})
+@SuppressWarnings({"rawtypes","serial","java:S5961"})
 class ObjectRest_Test extends TestBase {
 
 	//====================================================================================================

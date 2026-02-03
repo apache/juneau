@@ -31,6 +31,7 @@ import org.junit.jupiter.api.*;
 /**
  * Testcase for {@link ParameterInfo}.
  */
+@SuppressWarnings("java:S5961")
 class ParameterInfo_Test extends TestBase {
 
 	@Nested class A_basicTests extends TestBase {

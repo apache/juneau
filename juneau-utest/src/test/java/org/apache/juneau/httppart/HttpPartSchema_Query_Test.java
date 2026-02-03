@@ -30,6 +30,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.annotation.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 class HttpPartSchema_Query_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

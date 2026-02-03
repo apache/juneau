@@ -169,18 +169,18 @@ class RestUtils_Test extends TestBase {
 	// parseIfJson(String)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void k01_testParseIfJson_null() throws Exception {
+	@Test void k01_testParseIfJson_null() {
 		assertNull(parseIfJson(null));
 	}
 
-	@Test void k02_testParseIfJson_plainString() throws Exception {
+	@Test void k02_testParseIfJson_plainString() {
 		assertEquals("hello world", parseIfJson("hello world"));
 		assertEquals("foo", parseIfJson("foo"));
 		assertEquals("", parseIfJson(""));
 		assertEquals("123abc", parseIfJson("123abc"));
 	}
 
-	@Test void k03_testParseIfJson_jsonObject() throws Exception {
+	@Test void k03_testParseIfJson_jsonObject() {
 		var result = parseIfJson("{\"name\":\"John\",\"age\":30}");
 		assertTrue(result instanceof Map);
 		var map = (Map<String, Object>) result;
@@ -188,14 +188,14 @@ class RestUtils_Test extends TestBase {
 		assertEquals(30, map.get("age"));
 	}
 
-	@Test void k04_testParseIfJson_jsonObjectEmpty() throws Exception {
+	@Test void k04_testParseIfJson_jsonObjectEmpty() {
 		var result = parseIfJson("{}");
 		assertTrue(result instanceof Map);
 		var map = (Map<String, Object>) result;
 		assertTrue(map.isEmpty());
 	}
 
-	@Test void k05_testParseIfJson_jsonArray() throws Exception {
+	@Test void k05_testParseIfJson_jsonArray() {
 		var result = parseIfJson("[1,2,3]");
 		assertTrue(result instanceof List);
 		var list = (List<Object>) result;
@@ -205,23 +205,23 @@ class RestUtils_Test extends TestBase {
 		assertEquals(3, list.get(2));
 	}
 
-	@Test void k06_testParseIfJson_jsonArrayEmpty() throws Exception {
+	@Test void k06_testParseIfJson_jsonArrayEmpty() {
 		var result = parseIfJson("[]");
 		assertTrue(result instanceof List);
 		var list = (List<Object>) result;
 		assertTrue(list.isEmpty());
 	}
 
-	@Test void k07_testParseIfJson_jsonBoolean() throws Exception {
+	@Test void k07_testParseIfJson_jsonBoolean() {
 		assertEquals(true, parseIfJson("true"));
 		assertEquals(false, parseIfJson("false"));
 	}
 
-	@Test void k08_testParseIfJson_jsonNull() throws Exception {
+	@Test void k08_testParseIfJson_jsonNull() {
 		assertNull(parseIfJson("null"));
 	}
 
-	@Test void k09_testParseIfJson_jsonNumber() throws Exception {
+	@Test void k09_testParseIfJson_jsonNumber() {
 		assertEquals(123, parseIfJson("123"));
 		var result = parseIfJson("123.45");
 		assertTrue(result instanceof Number);
@@ -229,7 +229,7 @@ class RestUtils_Test extends TestBase {
 		assertEquals(-42, parseIfJson("-42"));
 	}
 
-	@Test void k10_testParseIfJson_jsonWithWhitespace() throws Exception {
+	@Test void k10_testParseIfJson_jsonWithWhitespace() {
 		var result = parseIfJson("  {\"key\":\"value\"}  ");
 		assertTrue(result instanceof Map);
 		var map = (Map<String, Object>) result;
@@ -242,7 +242,7 @@ class RestUtils_Test extends TestBase {
 		assertThrows(ParseException.class, () -> parseIfJson("{key:invalid value}"));
 	}
 
-	@Test void k12_testParseIfJson_nestedStructures() throws Exception {
+	@Test void k12_testParseIfJson_nestedStructures() {
 		var result = parseIfJson("{\"items\":[1,2,3],\"nested\":{\"a\":1,\"b\":2}}");
 		assertTrue(result instanceof Map);
 		var map = (Map<String, Object>) result;
@@ -250,7 +250,7 @@ class RestUtils_Test extends TestBase {
 		assertTrue(map.get("nested") instanceof Map);
 	}
 
-	@Test void k13_testParseIfJson_singleQuotedString() throws Exception {
+	@Test void k13_testParseIfJson_singleQuotedString() {
 		var result = parseIfJson("'test string'");
 		assertEquals("test string", result);
 	}
@@ -283,17 +283,17 @@ class RestUtils_Test extends TestBase {
 		assertTrue(m.isEmpty());
 	}
 
-	@Test void g05_testParseQuery_readerEmpty() throws Exception {
+	@Test void g05_testParseQuery_readerEmpty() {
 		var m = parseQuery(new StringReader(""));
 		assertTrue(m.isEmpty());
 	}
 
-	@Test void g06_testParseQuery_readerWhitespaceOnly() throws Exception {
+	@Test void g06_testParseQuery_readerWhitespaceOnly() {
 		var m = parseQuery(new StringReader("   "));
 		assertTrue(m.isEmpty());
 	}
 
-	@Test void g07_testParseQuery_readerValid() throws Exception {
+	@Test void g07_testParseQuery_readerValid() {
 		var m = parseQuery(new StringReader("f1=v1&f2=v2"));
 		assertEquals("v1", m.get("f1").get(0));
 		assertEquals("v2", m.get("f2").get(0));
@@ -337,7 +337,7 @@ class RestUtils_Test extends TestBase {
 		assertBean(m, "f1,f2", "<null>,[abc,def]");
 	}
 
-	@Test void h02_testEmptyString() throws Exception {
+	@Test void h02_testEmptyString() {
 		var p = UrlEncodingParser.DEFAULT;
 
 		var s = "";

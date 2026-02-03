@@ -28,6 +28,7 @@ import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 class RestOp_Throws_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic sanity tests

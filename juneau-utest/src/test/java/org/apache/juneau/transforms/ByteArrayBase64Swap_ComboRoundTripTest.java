@@ -33,7 +33,7 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.parserApply(p -> p.swaps(ByteArraySwap.Base64.class));
 	}
 
-	private static ComboRoundTrip_Tester<?>[] TESTERS = {
+	private static final ComboRoundTrip_Tester<?>[] TESTERS = {
 		tester(1, "ByteArray1d", byte[].class, bytes(1,2,3))
 			.json("'AQID'")
 			.jsonT("'AQID'")

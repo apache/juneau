@@ -456,8 +456,8 @@ class MultiMap_Test extends TestBase {
 		var map4 = map("key3", "value3");
 		var multiMap2 = new MultiMap<>(map3, map4);
 
-		assertTrue(multiMap1.equals(multiMap2));
-		assertTrue(multiMap2.equals(multiMap1));
+		assertEquals(multiMap1, multiMap2);
+		assertEquals(multiMap2, multiMap1);
 	}
 
 	@Test
@@ -468,8 +468,8 @@ class MultiMap_Test extends TestBase {
 		var map2 = map("key1", "value2");
 		var multiMap2 = new MultiMap<>(map2);
 
-		assertFalse(multiMap1.equals(multiMap2));
-		assertFalse(multiMap2.equals(multiMap1));
+		assertNotEquals(multiMap1, multiMap2);
+		assertNotEquals(multiMap2, multiMap1);
 	}
 
 	@Test
@@ -479,8 +479,8 @@ class MultiMap_Test extends TestBase {
 
 		var regularMap = new LinkedHashMap<>(map("key1", "value1", "key2", "value2"));
 
-		assertTrue(multiMap.equals(regularMap));
-		assertTrue(regularMap.equals(multiMap));
+		assertEquals(multiMap, regularMap);
+		assertEquals(regularMap, multiMap);
 	}
 
 	@Test
@@ -488,7 +488,7 @@ class MultiMap_Test extends TestBase {
 		var map1 = map("key1", "value1");
 		var multiMap = new MultiMap<>(map1);
 
-		assertFalse(multiMap.equals(null));
+		assertNotEquals(multiMap, null);
 	}
 
 	@Test

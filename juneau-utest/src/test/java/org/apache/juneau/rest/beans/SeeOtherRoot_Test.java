@@ -40,7 +40,7 @@ class SeeOtherRoot_Test extends TestBase {
 		assertNotNull(x);
 	}
 
-	@Test void a03_fluentSetters() throws Exception {
+	@Test void a03_fluentSetters() throws URISyntaxException {
 		var x = new SeeOtherRoot();
 
 		// Test setContent(String) returns same instance
@@ -96,7 +96,7 @@ class SeeOtherRoot_Test extends TestBase {
 		assertSame(x, x.setUnmodifiable());
 	}
 
-	@Test void a04_fluentChaining() throws Exception {
+	@Test void a04_fluentChaining() {
 		// Test multiple fluent calls can be chained
 		var x = new SeeOtherRoot()
 			.setHeaders(l(BasicHeader.of("X-Chain", "chained")))
@@ -110,7 +110,7 @@ class SeeOtherRoot_Test extends TestBase {
 		assertNotNull(SeeOtherRoot.INSTANCE);
 	}
 
-	@Test void a06_copy() throws Exception {
+	@Test void a06_copy() {
 		// Test that copy() returns correct type
 		var x = new SeeOtherRoot();
 

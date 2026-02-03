@@ -440,8 +440,8 @@ class FluentSet_Test extends TestBase {
 		set2.add("item2");
 		set2.add("item3");
 
-		assertTrue(set1.equals(set2));
-		assertTrue(set2.equals(set1));
+		assertEquals(set1, set2);
+		assertEquals(set2, set1);
 	}
 
 	@Test
@@ -453,8 +453,8 @@ class FluentSet_Test extends TestBase {
 		set2.add("item1");
 		set2.add("item3");
 
-		assertFalse(set1.equals(set2));
-		assertFalse(set2.equals(set1));
+		assertNotEquals(set1, set2);
+		assertNotEquals(set2, set1);
 	}
 
 	@Test

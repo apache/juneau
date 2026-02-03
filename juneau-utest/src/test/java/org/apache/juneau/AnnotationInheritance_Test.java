@@ -64,7 +64,7 @@ class AnnotationInheritance_Test extends TestBase {
 	}
 
 	@Test
-	void a01_beanp_propertyName_inheritance() throws Exception {
+	void a01_beanp_propertyName_inheritance() {
 		var bc = BeanContext.DEFAULT;
 
 		// Property should be named "v" (from parent's @Beanp), inherited via BeanMeta.inheritParentAnnotations
@@ -75,7 +75,7 @@ class AnnotationInheritance_Test extends TestBase {
 	}
 
 	@Test
-	void a02_beanp_propertyName_roundTrip() throws Exception {
+	void a02_beanp_propertyName_roundTrip() {
 		// Verify parsing also works with inherited property name
 		var bean = JsonParser.DEFAULT.parse("{v:'hello'}", A1_Child.class);
 		assertBean(bean, "value", "hello");
@@ -118,18 +118,6 @@ class AnnotationInheritance_Test extends TestBase {
 		assertNotNull(prop, "Property 'i' should exist (inherited from @Beanp)");
 	}
 
-	/* Commented out - complex serialization test
-	@Test
-	void b02_xml_serialization_withInheritance() throws Exception {
-		var bean = new B1_Child().setItems(l("one", "two", "three"));
-		var xml = XmlSerializer.DEFAULT.serialize(bean);
-
-		// The @Xml annotation is on the getter in the parent, which is not overridden
-		// So the getter's annotations are used directly (not via inheritance on the setter)
-		assertTrue(xml.contains("<i>"), "XML should use property name 'i' from inherited @Beanp");
-	}
-	*/
-
 	//====================================================================================================
 	// Multiple annotation inheritance
 	//====================================================================================================
@@ -157,7 +145,7 @@ class AnnotationInheritance_Test extends TestBase {
 	}
 
 	@Test
-	void c01_multiple_beanp_attributes_inheritance() throws Exception {
+	void c01_multiple_beanp_attributes_inheritance() {
 		var bc = BeanContext.DEFAULT;
 		var bm = bc.getBeanMeta(C1_Child.class);
 		var prop = bm.getPropertyMeta("n");
@@ -199,28 +187,6 @@ class AnnotationInheritance_Test extends TestBase {
 		}
 	}
 
-	/* Commented out - complex property resolution test
-	@Test
-	void d01_multiLevel_inheritance() throws Exception {
-		var bc = BeanContext.DEFAULT;
-		var bm = bc.getBeanMeta(D1_Child.class);
-		var prop = bm.getPropertyMeta("c");
-
-		assertNotNull(prop, "Property 'c' should exist through multi-level inheritance");
-
-		// Verify annotation is inherited through multiple levels
-		var ap = prop.getClassMeta().getBeanContext().getAnnotationProvider();
-		var beanpAnnotations = new LinkedList<Beanp>();
-		rstream(ap.find(Beanp.class, prop.getBeanMeta().getClassMeta())).forEach(x -> beanpAnnotations.add(x.inner()));
-		beanpAnnotations.addAll(prop.getAllAnnotationsParentFirst(Beanp.class));
-		assertNotEmpty(beanpAnnotations);
-
-		// Note: Both "c" and "count" properties exist due to getter/setter property resolution
-		var bean = new D1_Child().setCount(42);
-		assertJson("{c:42,count:42}", bean);
-	}
-	*/
-
 	//====================================================================================================
 	// Getter override (rare case)
 	//====================================================================================================
@@ -247,7 +213,7 @@ class AnnotationInheritance_Test extends TestBase {
 	}
 
 	@Test
-	void e01_getter_annotation_inheritance() throws Exception {
+	void e01_getter_annotation_inheritance() {
 		var bc = BeanContext.DEFAULT;
 		var bm = bc.getBeanMeta(E1_Child.class);
 		var prop = bm.getPropertyMeta("d");

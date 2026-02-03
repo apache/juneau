@@ -29,7 +29,7 @@ class Builder_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		return ComboRoundTrip_Tester.create(index, label, type, ()->bean);
 	}
 
-	private static ComboRoundTrip_Tester<?>[] TESTERS = {
+	private static final ComboRoundTrip_Tester<?>[] TESTERS = {
 		tester(1, "A", A.class, new A(null).init())
 			.json("{a:1}")
 			.jsonT("{a:1}")

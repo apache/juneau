@@ -76,8 +76,8 @@ class KeywordSet_Test extends TestBase {
 		var ks1 = new KeywordSet("apple", "banana", "cherry");
 		var ks2 = new KeywordSet("apple", "banana", "cherry");
 
-		assertTrue(ks1.equals(ks2));
-		assertTrue(ks2.equals(ks1));
+		assertEquals(ks1, ks2);
+		assertEquals(ks2, ks1);
 	}
 
 	@Test
@@ -86,8 +86,8 @@ class KeywordSet_Test extends TestBase {
 		var ks2 = new KeywordSet("cherry", "apple", "banana");
 
 		// Should be equal because both are sorted internally
-		assertTrue(ks1.equals(ks2));
-		assertTrue(ks2.equals(ks1));
+		assertEquals(ks1, ks2);
+		assertEquals(ks2, ks1);
 	}
 
 	@Test
@@ -95,8 +95,8 @@ class KeywordSet_Test extends TestBase {
 		var ks1 = new KeywordSet("apple", "banana");
 		var ks2 = new KeywordSet("apple", "cherry");
 
-		assertFalse(ks1.equals(ks2));
-		assertFalse(ks2.equals(ks1));
+		assertNotEquals(ks1, ks2);
+		assertNotEquals(ks2, ks1);
 	}
 
 	@Test
@@ -104,15 +104,15 @@ class KeywordSet_Test extends TestBase {
 		var ks1 = new KeywordSet("apple", "banana");
 		var ks2 = new KeywordSet("apple", "banana", "cherry");
 
-		assertFalse(ks1.equals(ks2));
-		assertFalse(ks2.equals(ks1));
+		assertNotEquals(ks1, ks2);
+		assertNotEquals(ks2, ks1);
 	}
 
 	@Test
 	void w08_equals_notAKeywordSet() {
 		var ks = new KeywordSet("apple", "banana");
 
-		assertFalse(ks.equals(null));
+		assertNotEquals(ks, null);
 	}
 
 	@Test
@@ -120,8 +120,8 @@ class KeywordSet_Test extends TestBase {
 		var ks1 = new KeywordSet();
 		var ks2 = new KeywordSet();
 
-		assertTrue(ks1.equals(ks2));
-		assertTrue(ks2.equals(ks1));
+		assertEquals(ks1, ks2);
+		assertEquals(ks2, ks1);
 	}
 
 	@Test

@@ -518,7 +518,7 @@ class Maps_Test extends TestBase {
 		inputMap.put(2, "20");
 
 		var map = Maps.create(String.class, Integer.class)
-			.keyFunction(o -> String.valueOf(o))
+			.keyFunction(String::valueOf)
 			.valueFunction(o -> o instanceof String ? Integer.parseInt((String)o) : (Integer)o)
 			.addAny(inputMap)
 			.build();
@@ -534,7 +534,7 @@ class Maps_Test extends TestBase {
 
 		var map = Maps.create(String.class, Integer.class)
 			.functions(
-				o -> String.valueOf(o),  // key function
+				String::valueOf,  // key function
 				o -> o instanceof String ? Integer.parseInt((String)o) : (Integer)o  // value function
 			)
 			.addAny(inputMap)
@@ -611,7 +611,7 @@ class Maps_Test extends TestBase {
 		inputMap.put(2, "20");
 
 		var map = Maps.create(String.class, Integer.class)
-			.keyFunction(o -> String.valueOf(o))
+			.keyFunction(String::valueOf)
 			.valueFunction(o -> o instanceof String ? Integer.parseInt((String)o) : (Integer)o)
 			.addAny(inputMap)
 			.build();

@@ -136,7 +136,7 @@ class LongValue_Test extends TestBase {
 	void c05_ifPresent() {
 		var v = LongValue.of(7L);
 		var sb = new StringBuilder();
-		v.ifPresent(x -> sb.append(x));
+		v.ifPresent(sb::append);
 		assertEquals("7", sb.toString());
 	}
 

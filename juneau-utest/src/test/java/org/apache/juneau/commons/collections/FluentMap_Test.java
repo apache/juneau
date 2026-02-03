@@ -463,8 +463,8 @@ class FluentMap_Test extends TestBase {
 		map2.put("key1", "value1");
 		map2.put("key2", "value2");
 
-		assertTrue(map1.equals(map2));
-		assertTrue(map2.equals(map1));
+		assertEquals(map1, map2);
+		assertEquals(map2, map1);
 	}
 
 	@Test
@@ -475,8 +475,8 @@ class FluentMap_Test extends TestBase {
 		var map2 = new LinkedHashMap<String, String>();
 		map2.put("key1", "value2");
 
-		assertFalse(map1.equals(map2));
-		assertFalse(map2.equals(map1));
+		assertNotEquals(map1, map2);
+		assertNotEquals(map2, map1);
 	}
 
 	@Test

@@ -41,7 +41,7 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		return ComboRoundTrip_Tester.create(index, label, type, ()->bean).serializerApply(Serializer.Builder::keepNullProperties);
 	}
 
-	private static ComboRoundTrip_Tester<?>[] TESTERS = {
+	private static final ComboRoundTrip_Tester<?>[] TESTERS = {
 		tester(1, "BeanWithDynaField", BeanWithDynaField.class, new BeanWithDynaField().init())
 			.json("{f1:1,f2a:'a',f2b:'b',f3:3}")
 			.jsonT("{f1:1,f2a:'a',f2b:'b',f3:3}")

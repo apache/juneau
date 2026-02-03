@@ -129,7 +129,7 @@ class ConstructorInfo_Test extends TestBase {
 	// accessible()
 	//====================================================================================================
 	@Test
-	void a001_accessible() throws Exception {
+	void a001_accessible() {
 		// Make protected constructor accessible
 		b_c3.accessible();
 		assertEquals(null, b_c3.newInstanceLenient(123).toString());
@@ -616,7 +616,7 @@ class ConstructorInfo_Test extends TestBase {
 	// newInstance(Object...)
 	//====================================================================================================
 	@Test
-	void a044_newInstance() throws Exception {
+	void a044_newInstance() {
 		assertEquals(null, b_c1.newInstance().toString());
 		assertEquals("foo", b_c2.newInstance("foo").toString());
 	}
@@ -625,7 +625,7 @@ class ConstructorInfo_Test extends TestBase {
 	// newInstanceLenient(Object...)
 	//====================================================================================================
 	@Test
-	void a045_newInstanceLenient() throws Exception {
+	void a045_newInstanceLenient() {
 		assertEquals(null, b_c1.newInstanceLenient().toString());
 		assertEquals("foo", b_c2.newInstanceLenient("foo").toString());
 	}
@@ -696,7 +696,7 @@ class ConstructorInfo_Test extends TestBase {
 	// setAccessible()
 	//====================================================================================================
 	@Test
-	void a051_setAccessible() throws Exception {
+	void a051_setAccessible() {
 		// Make protected constructor accessible
 		var result = b_c3.setAccessible();
 		assertTrue(result);
@@ -728,7 +728,7 @@ class ConstructorInfo_Test extends TestBase {
 	// equals(Object) and hashCode()
 	//====================================================================================================
 	@Test
-	void a054_equals_hashCode() throws Exception {
+	void a054_equals_hashCode() throws NoSuchMethodException, SecurityException {
 		// Get ConstructorInfo instances from the same Constructor
 		Constructor<?> c1 = EqualsTestClass.class.getConstructor();
 		ConstructorInfo ci1a = ConstructorInfo.of(c1);
@@ -743,8 +743,8 @@ class ConstructorInfo_Test extends TestBase {
 
 		// Different constructors should not be equal
 		assertNotEquals(ci1a, ci2);
-		assertNotEquals(ci1a, null);
-		assertNotEquals(ci1a, "not a ConstructorInfo");
+		assertNotEquals(null, ci1a);
+		assertNotEquals("not a ConstructorInfo", ci1a);
 
 		// Reflexive
 		assertEquals(ci1a, ci1a);
@@ -880,7 +880,7 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	void b001_getMissingParameterTypes_allAvailable() throws Exception {
+	void b001_getMissingParameterTypes_allAvailable() {
 		beanStore.addBean(TestService.class, new TestService("test1"));
 		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
 		var result = constructor.getMissingParameterTypes(beanStore, null);
@@ -888,14 +888,14 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b002_getMissingParameterTypes_singleMissing() throws Exception {
+	void b002_getMissingParameterTypes_singleMissing() {
 		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
 		var result = constructor.getMissingParameterTypes(beanStore, null);
 		assertEquals("TestService", result);
 	}
 
 	@Test
-	void b003_getMissingParameterTypes_namedBeanFound() throws Exception {
+	void b003_getMissingParameterTypes_namedBeanFound() {
 		beanStore.addBean(TestService.class, new TestService("test1"), "service1");
 		var constructor = ClassInfo.of(TestClass2.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
 		var result = constructor.getMissingParameterTypes(beanStore, null);
@@ -903,49 +903,49 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b004_getMissingParameterTypes_namedBeanMissing() throws Exception {
+	void b004_getMissingParameterTypes_namedBeanMissing() {
 		var constructor = ClassInfo.of(TestClass2.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
 		var result = constructor.getMissingParameterTypes(beanStore, null);
 		assertEquals("TestService@service1", result);
 	}
 
 	@Test
-	void b005_getMissingParameterTypes_optionalSkipped() throws Exception {
+	void b005_getMissingParameterTypes_optionalSkipped() {
 		var constructor = ClassInfo.of(TestClass3.class).getPublicConstructor(x -> x.hasParameterTypes(Optional.class)).get();
 		var result = constructor.getMissingParameterTypes(beanStore, null);
 		assertNull(result); // Optional parameters are skipped
 	}
 
 	@Test
-	void b006_getMissingParameterTypes_arraySkipped() throws Exception {
+	void b006_getMissingParameterTypes_arraySkipped() {
 		var constructor = ClassInfo.of(TestClass4.class).getPublicConstructor(x -> x.hasParameterTypes(TestService[].class)).get();
 		var result = constructor.getMissingParameterTypes(beanStore, null);
 		assertNull(result); // Arrays are skipped
 	}
 
 	@Test
-	void b007_getMissingParameterTypes_listSkipped() throws Exception {
+	void b007_getMissingParameterTypes_listSkipped() {
 		var constructor = ClassInfo.of(TestClass5.class).getPublicConstructor(x -> x.hasParameterTypes(List.class)).get();
 		var result = constructor.getMissingParameterTypes(beanStore, null);
 		assertNull(result); // Lists are skipped
 	}
 
 	@Test
-	void b008_getMissingParameterTypes_setSkipped() throws Exception {
+	void b008_getMissingParameterTypes_setSkipped() {
 		var constructor = ClassInfo.of(TestClass6.class).getPublicConstructor(x -> x.hasParameterTypes(Set.class)).get();
 		var result = constructor.getMissingParameterTypes(beanStore, null);
 		assertNull(result); // Sets are skipped
 	}
 
 	@Test
-	void b009_getMissingParameterTypes_mapSkipped() throws Exception {
+	void b009_getMissingParameterTypes_mapSkipped() {
 		var constructor = ClassInfo.of(TestClass7.class).getPublicConstructor(x -> x.hasParameterTypes(Map.class)).get();
 		var result = constructor.getMissingParameterTypes(beanStore, null);
 		assertNull(result); // Maps are skipped
 	}
 
 	@Test
-	void b010_getMissingParameterTypes_multipleMissing() throws Exception {
+	void b010_getMissingParameterTypes_multipleMissing() {
 		var constructor = ClassInfo.of(TestClass8.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class, AnotherService.class)).get();
 		var result = constructor.getMissingParameterTypes(beanStore, null);
 		assertTrue(result.contains("AnotherService"));
@@ -955,7 +955,7 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b011_getMissingParameterTypes_innerClassOuterSkipped() throws Exception {
+	void b011_getMissingParameterTypes_innerClassOuterSkipped() {
 		beanStore.addBean(TestService.class, new TestService("test1"));
 		beanStore.addBean(OuterClass.class, new OuterClass()); // Add outer class bean so explicit parameter is available
 		var outer = new OuterClass();
@@ -978,7 +978,7 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	void b012_resolveParameters_singleBean() throws Exception {
+	void b012_resolveParameters_singleBean() {
 		var service = new TestService("test1");
 		beanStore.addBean(TestService.class, service);
 		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
@@ -988,13 +988,13 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b013_resolveParameters_singleBeanNotFound() throws Exception {
+	void b013_resolveParameters_singleBeanNotFound() {
 		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
 		assertThrows(ExecutableException.class, () -> constructor.resolveParameters(beanStore, null));
 	}
 
 	@Test
-	void b014_resolveParameters_namedBean() throws Exception {
+	void b014_resolveParameters_namedBean() {
 		var service1 = new TestService("test1");
 		var service2 = new TestService("test2");
 		beanStore.addBean(TestService.class, service1, "service1");
@@ -1006,7 +1006,7 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b015_resolveParameters_optionalBeanFound() throws Exception {
+	void b015_resolveParameters_optionalBeanFound() {
 		var service = new TestService("test1");
 		beanStore.addBean(TestService.class, service);
 		var constructor = ClassInfo.of(TestClass3.class).getPublicConstructor(x -> x.hasParameterTypes(Optional.class)).get();
@@ -1019,7 +1019,7 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b016_resolveParameters_optionalBeanNotFound() throws Exception {
+	void b016_resolveParameters_optionalBeanNotFound() {
 		var constructor = ClassInfo.of(TestClass3.class).getPublicConstructor(x -> x.hasParameterTypes(Optional.class)).get();
 		var params = constructor.resolveParameters(beanStore, null);
 		assertEquals(1, params.length);
@@ -1029,7 +1029,7 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b017_resolveParameters_array() throws Exception {
+	void b017_resolveParameters_array() {
 		var service1 = new TestService("test1");
 		var service2 = new TestService("test2");
 		beanStore.addBean(TestService.class, service1);
@@ -1045,7 +1045,7 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b018_resolveParameters_arrayEmpty() throws Exception {
+	void b018_resolveParameters_arrayEmpty() {
 		var constructor = ClassInfo.of(TestClass4.class).getPublicConstructor(x -> x.hasParameterTypes(TestService[].class)).get();
 		var params = constructor.resolveParameters(beanStore, null);
 		assertEquals(1, params.length);
@@ -1055,7 +1055,7 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b019_resolveParameters_list() throws Exception {
+	void b019_resolveParameters_list() {
 		var service1 = new TestService("test1");
 		var service2 = new TestService("test2");
 		beanStore.addBean(TestService.class, service1);
@@ -1071,7 +1071,7 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b020_resolveParameters_set() throws Exception {
+	void b020_resolveParameters_set() {
 		var service1 = new TestService("test1");
 		var service2 = new TestService("test2");
 		beanStore.addBean(TestService.class, service1);
@@ -1087,7 +1087,7 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b021_resolveParameters_map() throws Exception {
+	void b021_resolveParameters_map() {
 		var service1 = new TestService("test1");
 		var service2 = new TestService("test2");
 		beanStore.addBean(TestService.class, service1, "service1");
@@ -1103,7 +1103,7 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b022_resolveParameters_mapWithUnnamedBean() throws Exception {
+	void b022_resolveParameters_mapWithUnnamedBean() {
 		var service1 = new TestService("test1");
 		var service2 = new TestService("test2");
 		beanStore.addBean(TestService.class, service1); // Unnamed
@@ -1119,7 +1119,7 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b023_resolveParameters_mixedTypes() throws Exception {
+	void b023_resolveParameters_mixedTypes() {
 		var service1 = new TestService("test1");
 		var service2 = new TestService("test2");
 		var another = new AnotherService(42);
@@ -1140,7 +1140,7 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b024_resolveParameters_innerClassOuter() throws Exception {
+	void b024_resolveParameters_innerClassOuter() {
 		beanStore.addBean(TestService.class, new TestService("test1"));
 		beanStore.addBean(OuterClass.class, new OuterClass()); // Add outer class bean for explicit parameter
 		var outer = new OuterClass();
@@ -1166,39 +1166,39 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	void b025_canResolveAll_allAvailable() throws Exception {
+	void b025_canResolveAll_allAvailable() {
 		beanStore.addBean(TestService.class, new TestService("test1"));
 		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
 		assertTrue(constructor.canResolveAllParameters(beanStore, null));
 	}
 
 	@Test
-	void b026_canResolveAll_missing() throws Exception {
+	void b026_canResolveAll_missing() {
 		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
 		assertFalse(constructor.canResolveAllParameters(beanStore, null));
 	}
 
 	@Test
-	void b027_canResolveAll_optionalSkipped() throws Exception {
+	void b027_canResolveAll_optionalSkipped() {
 		var constructor = ClassInfo.of(TestClass3.class).getPublicConstructor(x -> x.hasParameterTypes(Optional.class)).get();
 		assertTrue(constructor.canResolveAllParameters(beanStore, null)); // Optional is skipped
 	}
 
 	@Test
-	void b028_canResolveAll_collectionsSkipped() throws Exception {
+	void b028_canResolveAll_collectionsSkipped() {
 		var constructor = ClassInfo.of(TestClass5.class).getPublicConstructor(x -> x.hasParameterTypes(List.class)).get();
 		assertTrue(constructor.canResolveAllParameters(beanStore, null)); // Collections are skipped
 	}
 
 	@Test
-	void b029_canResolveAll_namedBeanFound() throws Exception {
+	void b029_canResolveAll_namedBeanFound() {
 		beanStore.addBean(TestService.class, new TestService("test1"), "service1");
 		var constructor = ClassInfo.of(TestClass2.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
 		assertTrue(constructor.canResolveAllParameters(beanStore, null));
 	}
 
 	@Test
-	void b030_canResolveAll_namedBeanMissing() throws Exception {
+	void b030_canResolveAll_namedBeanMissing() {
 		var constructor = ClassInfo.of(TestClass2.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
 		assertFalse(constructor.canResolveAllParameters(beanStore, null));
 	}
@@ -1208,7 +1208,7 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	void b031_inject_constructor() throws Exception {
+	void b031_inject_constructor() {
 		var service = new TestService("test1");
 		beanStore.addBean(TestService.class, service);
 		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
@@ -1218,7 +1218,7 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b032_inject_constructorWithCollections() throws Exception {
+	void b032_inject_constructorWithCollections() {
 		var service1 = new TestService("test1");
 		var service2 = new TestService("test2");
 		beanStore.addBean(TestService.class, service1);
@@ -1230,7 +1230,7 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b033_inject_innerClassConstructor() throws Exception {
+	void b033_inject_innerClassConstructor() {
 		beanStore.addBean(TestService.class, new TestService("test1"));
 		beanStore.addBean(OuterClass.class, new OuterClass()); // Add outer class bean for explicit parameter
 		var outer = new OuterClass();
@@ -1254,14 +1254,14 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	void b034_getMissingParameterTypes_beanNull() throws Exception {
+	void b034_getMissingParameterTypes_beanNull() {
 		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
 		var result = constructor.getMissingParameterTypes(beanStore, null);
 		assertEquals("TestService", result); // Should check bean store since bean is null
 	}
 
 	@Test
-	void b035_getMissingParameterTypes_firstParamDoesNotMatchBean() throws Exception {
+	void b035_getMissingParameterTypes_firstParamDoesNotMatchBean() {
 		var wrongBean = new AnotherService(42);
 		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
 		var result = constructor.getMissingParameterTypes(beanStore, wrongBean);
@@ -1269,20 +1269,20 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b036_canResolveAll_beanNull() throws Exception {
+	void b036_canResolveAll_beanNull() {
 		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
 		assertFalse(constructor.canResolveAllParameters(beanStore, null)); // Should check bean store
 	}
 
 	@Test
-	void b037_canResolveAll_firstParamDoesNotMatchBean() throws Exception {
+	void b037_canResolveAll_firstParamDoesNotMatchBean() {
 		var wrongBean = new AnotherService(42);
 		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
 		assertFalse(constructor.canResolveAllParameters(beanStore, wrongBean)); // Should check bean store
 	}
 
 	@Test
-	void b038_canResolveAll_firstParamMatchesBean() throws Exception {
+	void b038_canResolveAll_firstParamMatchesBean() {
 		var bean = new TestService("test1");
 		// Constructor with TestService as first parameter - should use bean, not check store
 		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
@@ -1290,7 +1290,7 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b039_canResolveAll_firstParamMatchesBeanButSecondMissing() throws Exception {
+	void b039_canResolveAll_firstParamMatchesBeanButSecondMissing() {
 		var bean = new TestService("test1");
 		// Constructor with TestService (first) and AnotherService (second) - first satisfied by bean, second missing
 		var constructor = ClassInfo.of(TestClass8.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class, AnotherService.class)).get();
@@ -1302,7 +1302,7 @@ class ConstructorInfo_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	void b040_getMissingParameterTypes_otherBeans() throws Exception {
+	void b040_getMissingParameterTypes_otherBeans() {
 		var service = new TestService("test1");
 		// Service not in bean store, but provided as otherBeans
 		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
@@ -1311,7 +1311,7 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b041_getMissingParameterTypes_otherBeansNotMatching() throws Exception {
+	void b041_getMissingParameterTypes_otherBeansNotMatching() {
 		var wrongService = new AnotherService(42);
 		// Wrong type in otherBeans - should still be missing
 		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
@@ -1320,7 +1320,7 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b042_resolveParameters_otherBeans() throws Exception {
+	void b042_resolveParameters_otherBeans() {
 		var service = new TestService("test1");
 		// Service not in bean store, but provided as otherBeans
 		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
@@ -1330,7 +1330,7 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b043_resolveParameters_otherBeansPreferStore() throws Exception {
+	void b043_resolveParameters_otherBeansPreferStore() {
 		var storeService = new TestService("store");
 		var otherService = new TestService("other");
 		beanStore.addBean(TestService.class, storeService);
@@ -1342,7 +1342,7 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b044_canResolveAll_otherBeans() throws Exception {
+	void b044_canResolveAll_otherBeans() {
 		var service = new TestService("test1");
 		// Service not in bean store, but provided as otherBeans
 		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();
@@ -1350,7 +1350,7 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b045_inject_constructorWithOtherBeans() throws Exception {
+	void b045_inject_constructorWithOtherBeans() {
 		var service = new TestService("test1");
 		// Service not in bean store, but provided as otherBeans
 		var constructor = ClassInfo.of(TestClass1.class).getPublicConstructor(x -> x.hasParameterTypes(TestService.class)).get();

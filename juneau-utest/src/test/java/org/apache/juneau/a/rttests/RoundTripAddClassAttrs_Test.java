@@ -39,7 +39,7 @@ import org.junit.jupiter.params.provider.*;
  */
 class RoundTripAddClassAttrs_Test extends TestBase {
 
-	private static RoundTrip_Tester[] TESTERS = {
+	private static final RoundTrip_Tester[] TESTERS = {
 		tester(1, "JsonSerializer.DEFAULT/JsonParser.DEFAULT")
 			.serializer(JsonSerializer.create().addBeanTypes().addRootType())
 			.parser(JsonParser.create().disableInterfaceProxies())

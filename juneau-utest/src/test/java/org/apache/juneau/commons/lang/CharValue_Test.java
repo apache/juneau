@@ -137,9 +137,7 @@ class CharValue_Test extends TestBase {
 	void c01_trackingLastCharacter() {
 		var lastChar = CharValue.create();
 
-		"Hello World".chars().mapToObj(c -> (char)c).forEach(ch -> {
-			lastChar.set(ch);
-		});
+		"Hello World".chars().mapToObj(c -> (char)c).forEach(lastChar::set);
 
 		assertEquals('d', lastChar.get());
 	}

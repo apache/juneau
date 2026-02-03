@@ -483,7 +483,7 @@ class ResettableSupplier_Test extends TestBase {
 		var supplier = new ResettableSupplier<>(() -> "value");
 		supplier.ifPresentOrElse(
 			s -> presentCount.incrementAndGet(),
-			() -> emptyCount.incrementAndGet()
+			emptyCount::incrementAndGet
 		);
 		assertEquals(1, presentCount.get());
 		assertEquals(0, emptyCount.get());
@@ -495,7 +495,7 @@ class ResettableSupplier_Test extends TestBase {
 		var supplier = new ResettableSupplier<>(() -> null);
 		supplier.ifPresentOrElse(
 			s -> presentCount.incrementAndGet(),
-			() -> emptyCount.incrementAndGet()
+			emptyCount::incrementAndGet
 		);
 		assertEquals(0, presentCount.get());
 		assertEquals(1, emptyCount.get());

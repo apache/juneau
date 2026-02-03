@@ -27,6 +27,7 @@ import org.apache.juneau.swap.*;
 import org.apache.juneau.swaps.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S3008")
 class TemporalDateSwap_StringSwapTest extends StringSwapTest_Base {
 
 	@BeforeAll

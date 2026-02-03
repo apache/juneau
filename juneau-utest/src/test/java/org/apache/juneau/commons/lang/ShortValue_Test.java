@@ -128,7 +128,7 @@ class ShortValue_Test extends TestBase {
 	void c05_ifPresent() {
 		var v = ShortValue.of((short)7);
 		var sb = new StringBuilder();
-		v.ifPresent(x -> sb.append(x));
+		v.ifPresent(sb::append);
 		assertEquals("7", sb.toString());
 	}
 

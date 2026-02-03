@@ -36,6 +36,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 class RestClient_Response_Headers_Test extends TestBase {
 
 	@Rest

@@ -42,7 +42,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 			));
 	}
 
-	private static ComboSerialize_Tester<?>[] TESTERS = {
+	private static final ComboSerialize_Tester<?>[] TESTERS = {
 		tester(1, "TestMediaTypeLiterals", TestMediaTypeLiterals::new)
 			.json("'JSON'")
 			.jsonT("'JSON'")

@@ -102,7 +102,7 @@ class BasicHeader_Test extends TestBase {
 		assertEquals(h1, h2);
 		assertNotEquals(h1, h3);
 		assertNotEquals(h1, h4);
-		assertNotEquals(h1, "foo");
+		assertNotEquals("foo", h1);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

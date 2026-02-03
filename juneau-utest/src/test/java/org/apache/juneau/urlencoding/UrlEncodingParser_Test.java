@@ -27,7 +27,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes","java:S5961"})
 class UrlEncodingParser_Test extends TestBase {
 
 	static UrlEncodingParser p = UrlEncodingParser.DEFAULT;

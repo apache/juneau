@@ -27,21 +27,21 @@ class ThrowingFunction_Test extends TestBase {
 	// Basic tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void a01_basic() {
-		ThrowingFunction<String,Integer> function = (t) -> t.length();
+		ThrowingFunction<String,Integer> function = t -> t.length();
 
 		assertEquals(5, function.apply("hello"));
 		assertEquals(0, function.apply(""));
 	}
 
 	@Test void a02_withNullValue() {
-		ThrowingFunction<String,Integer> function = (t) -> t == null ? 0 : t.length();
+		ThrowingFunction<String,Integer> function = t -> t == null ? 0 : t.length();
 
 		assertEquals(0, function.apply(null));
 		assertEquals(5, function.apply("hello"));
 	}
 
 	@Test void a03_returnsNull() {
-		ThrowingFunction<String,String> function = (t) -> null;
+		ThrowingFunction<String,String> function = t -> null;
 
 		assertNull(function.apply("test"));
 	}
@@ -50,7 +50,7 @@ class ThrowingFunction_Test extends TestBase {
 	// Exception handling tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void b01_throwsCheckedException() {
-		ThrowingFunction<String,String> function = (t) -> {
+		ThrowingFunction<String,String> function = t -> {
 			throw new Exception("Test exception");
 		};
 
@@ -63,7 +63,7 @@ class ThrowingFunction_Test extends TestBase {
 	}
 
 	@Test void b02_throwsRuntimeException() {
-		ThrowingFunction<String,String> function = (t) -> {
+		ThrowingFunction<String,String> function = t -> {
 			throw new RuntimeException("Test runtime exception");
 		};
 
@@ -77,7 +77,7 @@ class ThrowingFunction_Test extends TestBase {
 	}
 
 	@Test void b03_throwsError() {
-		ThrowingFunction<String,String> function = (t) -> {
+		ThrowingFunction<String,String> function = t -> {
 			throw new Error("Test error");
 		};
 
@@ -90,7 +90,7 @@ class ThrowingFunction_Test extends TestBase {
 	}
 
 	@Test void b04_throwsNullPointerException() {
-		ThrowingFunction<String,String> function = (t) -> {
+		ThrowingFunction<String,String> function = t -> {
 			throw new NullPointerException("NPE");
 		};
 
@@ -104,7 +104,7 @@ class ThrowingFunction_Test extends TestBase {
 	}
 
 	@Test void b05_throwsIllegalArgumentException() {
-		ThrowingFunction<String,String> function = (t) -> {
+		ThrowingFunction<String,String> function = t -> {
 			throw new IllegalArgumentException("IAE");
 		};
 
@@ -122,13 +122,13 @@ class ThrowingFunction_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void c01_usedAsFunction() {
 		// ThrowingFunction extends Function, so it can be used where Function is expected
-		java.util.function.Function<String,Integer> function = (t) -> t.length();
+		java.util.function.Function<String,Integer> function = t -> t.length();
 
 		assertEquals(5, function.apply("hello"));
 	}
 
 	@Test void c02_lambdaExpression() {
-		ThrowingFunction<Integer,Integer> function = (x) -> x * 2;
+		ThrowingFunction<Integer,Integer> function = x -> x * 2;
 
 		assertEquals(10, function.apply(5));
 		assertEquals(0, function.apply(0));
@@ -143,8 +143,8 @@ class ThrowingFunction_Test extends TestBase {
 	}
 
 	@Test void c04_compose() {
-		ThrowingFunction<Integer,Integer> multiply = (x) -> x * 2;
-		java.util.function.Function<Integer,Integer> add = (x) -> x + 1;
+		ThrowingFunction<Integer,Integer> multiply = x -> x * 2;
+		java.util.function.Function<Integer,Integer> add = x -> x + 1;
 
 		// Compose: multiply.apply(add.apply(5)) = multiply.apply(6) = 12
 		// compose applies the argument function first, then this function
@@ -153,8 +153,8 @@ class ThrowingFunction_Test extends TestBase {
 	}
 
 	@Test void c05_andThen() {
-		ThrowingFunction<Integer,Integer> multiply = (x) -> x * 2;
-		java.util.function.Function<Integer,Integer> add = (x) -> x + 1;
+		ThrowingFunction<Integer,Integer> multiply = x -> x * 2;
+		java.util.function.Function<Integer,Integer> add = x -> x + 1;
 
 		// AndThen: add.apply(multiply.apply(5)) = add.apply(10) = 11
 		var composed = multiply.andThen(add);
@@ -162,7 +162,7 @@ class ThrowingFunction_Test extends TestBase {
 	}
 
 	@Test void c06_identity() {
-		ThrowingFunction<String,String> identity = (t) -> t;
+		ThrowingFunction<String,String> identity = t -> t;
 
 		assertEquals("test", identity.apply("test"));
 		assertNull(identity.apply(null));

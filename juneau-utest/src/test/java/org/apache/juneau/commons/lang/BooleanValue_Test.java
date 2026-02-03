@@ -141,7 +141,7 @@ class BooleanValue_Test extends TestBase {
 	void c05_ifPresent() {
 		var v = BooleanValue.of(true);
 		var sb = new StringBuilder();
-		v.ifPresent(x -> sb.append(x));
+		v.ifPresent(sb::append);
 		assertEquals("true", sb.toString());
 	}
 

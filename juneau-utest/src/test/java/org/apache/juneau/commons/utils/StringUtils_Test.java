@@ -32,6 +32,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 class StringUtils_Test extends TestBase {
 
 	@SuppressWarnings("serial")
@@ -2048,11 +2049,11 @@ class StringUtils_Test extends TestBase {
 		// Test that intern returns the same reference for equal strings
 		var s1 = new String("test");
 		var s2 = new String("test");
-		assertTrue(s1 != s2); // Different objects
+		assertNotSame(s1, s2); // Different objects
 
 		var i1 = intern(s1);
 		var i2 = intern(s2);
-		assertTrue(i1 == i2); // Same interned object
+		assertSame(i1, i2); // Same interned object
 
 		// Test null handling
 		assertNull(intern(null));
@@ -5011,7 +5012,7 @@ class StringUtils_Test extends TestBase {
 				assertNotNull(paramStr);
 				// Parameter format is: methodName[index] or className[index] for constructors
 				// Just verify it's not empty and contains a bracket
-				assertTrue(paramStr.length() > 0);
+				assertFalse(paramStr.isEmpty());
 			}
 		} catch (NoSuchMethodException e) {
 			fail("Method not found");
@@ -6132,7 +6133,7 @@ class StringUtils_Test extends TestBase {
 	// toHex(InputStream)
 	//====================================================================================================
 	@Test
-	void a206_toHexInputStream() throws Exception {
+	void a206_toHexInputStream() {
 		// Null input
 		assertNull(toHex((java.io.InputStream)null));
 
@@ -6206,7 +6207,7 @@ class StringUtils_Test extends TestBase {
 		var bytes1 = "Hello".getBytes();
 		var result1 = toReadableBytes(bytes1);
 		// Result should contain printable chars and hex representation
-		assertTrue(result1.length() > 0);
+		assertFalse(result1.isEmpty());
 		assertTrue(result1.contains("[48]")); // Hex for 'H'
 
 		// Test with non-printable characters
@@ -6680,11 +6681,11 @@ class StringUtils_Test extends TestBase {
 		assertNotNull(result5);
 		// The surrogate pair code  is executed during encoding
 		// Check that the result is different from input (encoding occurred) or contains encoded characters
-		assertTrue(result5.length() > 0);
+		assertFalse(result5.isEmpty());
 		// Also test with a string that combines regular characters with surrogate pairs
 		var result5b = urlEncodePath("test🎉file");
 		assertNotNull(result5b);
-		assertTrue(result5b.length() > 0);
+		assertFalse(result5b.isEmpty());
 
 		// Test - uppercase hex digits (caseDiff applied)
 		// forDigit returns lowercase 'a'-'f' for hex digits 10-15, which need to be converted to uppercase

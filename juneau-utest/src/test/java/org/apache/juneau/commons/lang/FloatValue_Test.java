@@ -94,7 +94,7 @@ class FloatValue_Test extends TestBase {
 	void b05_ifPresent() {
 		var v = FloatValue.of(7.5f);
 		var sb = new StringBuilder();
-		v.ifPresent(x -> sb.append(x));
+		v.ifPresent(sb::append);
 		assertEquals("7.5", sb.toString());
 	}
 

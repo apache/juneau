@@ -57,7 +57,7 @@ class RestPostInit_Test extends TestBase {
 
 	@Rest(path="/sub",children={A_Child.class})
 	public static class A_Sub extends A_Super {
-		protected static String LAST_CALLED;
+		protected static String lastCalled;
 		@Override
 		@RestPostInit
 		public void postInit1c(RestContext context) {
@@ -79,11 +79,11 @@ class RestPostInit_Test extends TestBase {
 		}
 		@RestPostInit
 		public void postInitOrderTestSub() {
-			LAST_CALLED = "PARENT";
+			lastCalled = "PARENT";
 		}
 		@RestGet
 		public String getLastCalled() {
-			return LAST_CALLED;
+			return lastCalled;
 		}
 	}
 
@@ -100,7 +100,7 @@ class RestPostInit_Test extends TestBase {
 		}
 		@RestPostInit
 		public void postInitOrderTestSub() {
-			A_Sub.LAST_CALLED = "CHILD";
+			A_Sub.lastCalled = "CHILD";
 		}
 	}
 
@@ -151,7 +151,7 @@ class RestPostInit_Test extends TestBase {
 
 	@Rest(path="/sub", children={B_Child.class})
 	public static class B_Sub extends B_Super {
-		protected static String LAST_CALLED;
+		protected static String lastCalled;
 		@Override
 		@RestPostInit(childFirst=true)
 		public void postInitChildFirst1c(RestContext context) {
@@ -173,11 +173,11 @@ class RestPostInit_Test extends TestBase {
 		}
 		@RestPostInit(childFirst=true)
 		public void postInitChildFirstOrderTestSub() {
-			LAST_CALLED = "PARENT";
+			lastCalled = "PARENT";
 		}
 		@RestGet
 		public String getLastCalled() {
-			return LAST_CALLED;
+			return lastCalled;
 		}
 	}
 
@@ -194,7 +194,7 @@ class RestPostInit_Test extends TestBase {
 		}
 		@RestPostInit(childFirst=true)
 		public void postInitChildFirstOrderTestSub() {
-			B_Sub.LAST_CALLED = "CHILD";
+			B_Sub.lastCalled = "CHILD";
 		}
 	}
 

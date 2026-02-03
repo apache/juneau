@@ -38,6 +38,7 @@ import org.apache.juneau.urlencoding.annotation.*;
 import org.apache.juneau.urlencoding.annotation.UrlEncoding;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 class Content_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

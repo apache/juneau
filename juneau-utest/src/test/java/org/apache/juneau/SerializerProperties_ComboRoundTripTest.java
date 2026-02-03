@@ -37,7 +37,7 @@ class SerializerProperties_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		return ComboRoundTrip_Tester.create(index, label, type, ()->bean);
 	}
 
-	private static ComboRoundTrip_Tester<?>[] TESTERS = {
+	private static final ComboRoundTrip_Tester<?>[] TESTERS = {
 		tester(1, "SERIALIZER_addBeanTypes", JsonMap.class, JsonMap.of("a", T0.create()))
 			.json("{a:{_type:'BwT',f:1}}")
 			.jsonT("{a:{t:'BwT',f:1}}")

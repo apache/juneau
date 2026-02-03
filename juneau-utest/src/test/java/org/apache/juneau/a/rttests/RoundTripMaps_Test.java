@@ -41,7 +41,7 @@ import org.junit.jupiter.params.provider.*;
 @SuppressWarnings({"deprecation"})
 class RoundTripMaps_Test extends TestBase {
 
-	private static RoundTrip_Tester[] TESTERS = {
+	private static final RoundTrip_Tester[] TESTERS = {
 		tester(1, "Json - default")
 			.serializer(JsonSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonParser.create())

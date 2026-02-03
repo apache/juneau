@@ -683,8 +683,8 @@ class SortedLinkedList_Test extends TestBase {
 	void o10_equals_notAList() {
 		var list = new SortedLinkedList<String>();
 		list.add("a");
-		assertNotEquals(list, "a");
-		assertNotEquals(list, null);
+		assertNotEquals("a", list);
+		assertNotEquals(null, list);
 	}
 
 	@Test

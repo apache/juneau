@@ -24,6 +24,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 class UrlEncodingSerializer_Test extends TestBase {
 
 	static UrlEncodingSerializer s = UrlEncodingSerializer.DEFAULT.copy().addRootType().build();

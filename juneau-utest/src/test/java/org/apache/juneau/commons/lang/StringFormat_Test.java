@@ -29,6 +29,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.function.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 class StringFormat_Test extends TestBase {
 
 	private static StringFormat fs(String pattern) {
@@ -342,10 +343,10 @@ class StringFormat_Test extends TestBase {
 		assertNotEquals(fmt1, fmt3);
 
 		// Test equals with null - covers line 623 (instanceof check fails)
-		assertNotEquals(fmt1, null);
+		assertNotEquals(null, fmt1);
 
 		// Test equals with different type - covers line 623 (instanceof check fails)
-		assertNotEquals(fmt1, "Hello {0}");
+		assertNotEquals("Hello {0}", fmt1);
 		assertNotEquals(fmt1, new Object());
 
 		// Test equals with different pattern - covers line 623 (pattern comparison)

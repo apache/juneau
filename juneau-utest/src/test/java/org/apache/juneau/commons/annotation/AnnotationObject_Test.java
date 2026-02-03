@@ -25,6 +25,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({"java:S117"})
 class AnnotationObject_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -63,8 +64,8 @@ class AnnotationObject_Test extends TestBase {
 				super(TA.class);
 			}
 
-			public Builder value(String _value) {
-				value = _value;
+			public Builder value(String value_) {
+				value = value_;
 				return this;
 			}
 
@@ -321,7 +322,7 @@ class AnnotationObject_Test extends TestBase {
 	@Test
 	void g05_equality_null() {
 		var a = T.create().build();
-		assertNotEquals(a, null);
+		assertNotEquals(null, a);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

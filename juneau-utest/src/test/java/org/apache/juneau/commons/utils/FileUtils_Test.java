@@ -130,7 +130,7 @@ class FileUtils_Test extends TestBase {
 			var sb = new StringBuilder();
 			String line;
 			while ((line = reader.readLine()) != null) {
-				if (sb.length() > 0)
+				if (!sb.isEmpty())
 					sb.append('\n');
 				sb.append(line);
 			}

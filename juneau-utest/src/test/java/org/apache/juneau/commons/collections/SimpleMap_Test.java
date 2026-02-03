@@ -348,8 +348,8 @@ class SimpleMap_Test extends TestBase {
 		Object[] values2 = { "value1", "value2" };
 		SimpleMap<String,Object> map2 = new SimpleMap<>(keys2, values2);
 
-		assertTrue(map1.equals(map2));
-		assertTrue(map2.equals(map1));
+		assertEquals(map1, map2);
+		assertEquals(map2, map1);
 	}
 
 	@Test
@@ -362,8 +362,8 @@ class SimpleMap_Test extends TestBase {
 		Object[] values2 = { "value1", "value3" };
 		SimpleMap<String,Object> map2 = new SimpleMap<>(keys2, values2);
 
-		assertFalse(map1.equals(map2));
-		assertFalse(map2.equals(map1));
+		assertNotEquals(map1, map2);
+		assertNotEquals(map2, map1);
 	}
 
 	@Test
@@ -376,8 +376,8 @@ class SimpleMap_Test extends TestBase {
 		regularMap.put("key1", "value1");
 		regularMap.put("key2", "value2");
 
-		assertTrue(map.equals(regularMap));
-		assertTrue(regularMap.equals(map));
+		assertEquals(map, regularMap);
+		assertEquals(regularMap, map);
 	}
 
 	@Test
@@ -386,7 +386,7 @@ class SimpleMap_Test extends TestBase {
 		Object[] values = { "value1" };
 		SimpleMap<String,Object> map = new SimpleMap<>(keys, values);
 
-		assertFalse(map.equals(null));
+		assertNotEquals(map, null);
 	}
 
 	@Test

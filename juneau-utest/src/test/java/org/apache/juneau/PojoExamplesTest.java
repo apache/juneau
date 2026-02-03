@@ -57,7 +57,7 @@ class PojoExamplesTest extends TestBase {
 		public String f1;
 
 		@Example
-		public static B1 EXAMPLE = new B1().init();
+		public static final B1 EXAMPLE = new B1().init();
 
 		public B1 init() {
 			this.f1 = "f1b";
@@ -78,7 +78,7 @@ class PojoExamplesTest extends TestBase {
 	public static class B1c {
 		public String f1;
 
-		public static B1c EXAMPLE = new B1c().init();
+		public static final B1c EXAMPLE = new B1c().init();
 
 		public B1c init() {
 			this.f1 = "f1b";
@@ -98,7 +98,7 @@ class PojoExamplesTest extends TestBase {
 		public String f1;
 
 		@Example
-		private static B2 EXAMPLE = new B2().init();
+		private static final B2 EXAMPLE = new B2().init();
 
 		public B2 init() {
 			this.f1 = "f1b";
@@ -120,7 +120,7 @@ class PojoExamplesTest extends TestBase {
 		public String f1;
 
 		@SuppressWarnings("unused")
-		private static B2c EXAMPLE = new B2c().init();
+		private static final B2c EXAMPLE = new B2c().init();
 
 		public B2c init() {
 			this.f1 = "f1b";

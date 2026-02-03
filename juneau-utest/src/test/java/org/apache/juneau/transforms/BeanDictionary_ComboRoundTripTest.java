@@ -35,7 +35,7 @@ class BeanDictionary_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		return ComboRoundTrip_Tester.create(index, label, type, ()->bean).serializerApply(Serializer.Builder::keepNullProperties);
 	}
 
-	private static ComboRoundTrip_Tester<?>[] TESTERS = {
+	private static final ComboRoundTrip_Tester<?>[] TESTERS = {
 		tester(1, "A", A.class, new A().init())
 			.json("{_type:'A',a:1}")
 			.jsonT("{t:'A',a:1}")

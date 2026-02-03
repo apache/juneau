@@ -206,7 +206,7 @@ class BeanCreator2_Test extends TestBase {
 	}
 
 	// Abstract class for error testing
-	public static abstract class AbstractBean {
+	public abstract static class AbstractBean {
 		public AbstractBean() {}
 	}
 
@@ -1859,7 +1859,7 @@ class BeanCreator2_Test extends TestBase {
 		void d27_builderFailsWithoutFallback() {
 			var creator = bc(D27_BeanWithFailingBuilder.class).debug();
 
-			var exception = assertThrows(ExecutableException.class, () -> creator.run());
+			var exception = assertThrows(ExecutableException.class, creator::run);
 
 			assertContains("Could not instantiate class", exception.getMessage());
 			assertContains("using builder type", exception.getMessage());
@@ -1909,7 +1909,7 @@ class BeanCreator2_Test extends TestBase {
 				.beanSubType(D28_ChildBeanForBuilderMethod.class)
 				.builder(D28_BuilderForParentMethod.class);
 
-			var ex = assertThrows(ExecutableException.class, () -> creator.run());
+			var ex = assertThrows(ExecutableException.class, creator::run);
 			assertContains("Builder method", ex.getMessage());
 			assertContains("returns", ex.getMessage());
 			assertContains("but must return", ex.getMessage());
@@ -2031,7 +2031,7 @@ class BeanCreator2_Test extends TestBase {
 		}
 
 		// Abstract class with unresolvable constructor (so constructor attempt is skipped)
-		public static abstract class AbstractBeanWithUnresolvableConstructor {
+		public abstract static class AbstractBeanWithUnresolvableConstructor {
 			public AbstractBeanWithUnresolvableConstructor(UnresolvableType unresolvable) {
 				// Constructor with unresolvable parameter - won't be matched
 			}
@@ -2052,7 +2052,7 @@ class BeanCreator2_Test extends TestBase {
 			var creator = bc(AbstractBeanWithUnresolvableConstructor.class).debug();
 
 			// Should throw exception because abstract class and no fallback
-			var exception = assertThrows(ExecutableException.class, () -> creator.run());
+			var exception = assertThrows(ExecutableException.class, creator::run);
 
 			assertContains("Could not instantiate class", exception.getMessage());
 			assertContains("Class is abstract", exception.getMessage());
@@ -2809,7 +2809,7 @@ class BeanCreator2_Test extends TestBase {
 					throw rex("Hook error");
 				});
 
-			assertThrows(RuntimeException.class, () -> creator.run(), "Hook exception should propagate");
+			assertThrows(RuntimeException.class, creator::run, "Hook exception should propagate");
 		}
 
 		/**
@@ -2825,7 +2825,7 @@ class BeanCreator2_Test extends TestBase {
 				})
 				.postCreateHook(b -> secondHookRan.set());
 
-			assertThrows(RuntimeException.class, () -> creator.run());
+			assertThrows(RuntimeException.class, creator::run);
 			assertFalse(secondHookRan.isSet(), "Second hook should not run if first hook fails");
 		}
 
@@ -3169,7 +3169,7 @@ class BeanCreator2_Test extends TestBase {
 		void m16_asOptionalFilter() {
 			var result = bc(SimpleBean.class)
 				.asOptional()
-				.filter(bean -> bean != null);
+				.filter(Objects::nonNull);
 
 			assertTrue(result.isPresent());
 		}

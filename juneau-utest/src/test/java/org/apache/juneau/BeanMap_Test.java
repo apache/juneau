@@ -34,7 +34,7 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"rawtypes","serial"})
+@SuppressWarnings({"rawtypes","serial", "java:S5961"})
 class BeanMap_Test extends TestBase {
 
 	JsonSerializer serializer = Json5Serializer.DEFAULT.copy().addBeanTypes().addRootType().build();

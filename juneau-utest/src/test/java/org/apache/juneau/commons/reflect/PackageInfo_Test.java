@@ -101,7 +101,7 @@ class PackageInfo_Test extends TestBase {
 		var pi = PackageInfo.of(String.class);
 		// May be null if not specified in manifest
 		// Just verify the method doesn't throw
-		assertDoesNotThrow(() -> pi.getImplementationTitle());
+		assertDoesNotThrow(pi::getImplementationTitle);
 	}
 
 	//====================================================================================================
@@ -112,7 +112,7 @@ class PackageInfo_Test extends TestBase {
 		var pi = PackageInfo.of(String.class);
 		// May be null if not specified in manifest
 		// Just verify the method doesn't throw
-		assertDoesNotThrow(() -> pi.getImplementationVendor());
+		assertDoesNotThrow(pi::getImplementationVendor);
 	}
 
 	//====================================================================================================
@@ -123,7 +123,7 @@ class PackageInfo_Test extends TestBase {
 		var pi = PackageInfo.of(String.class);
 		// May be null if not specified in manifest
 		// Just verify the method doesn't throw
-		assertDoesNotThrow(() -> pi.getImplementationVersion());
+		assertDoesNotThrow(pi::getImplementationVersion);
 	}
 
 	//====================================================================================================
@@ -160,7 +160,7 @@ class PackageInfo_Test extends TestBase {
 		var pi = PackageInfo.of(String.class);
 		// May be null if not specified in manifest
 		// Just verify the method doesn't throw
-		assertDoesNotThrow(() -> pi.getSpecificationTitle());
+		assertDoesNotThrow(pi::getSpecificationTitle);
 	}
 
 	//====================================================================================================
@@ -171,7 +171,7 @@ class PackageInfo_Test extends TestBase {
 		var pi = PackageInfo.of(String.class);
 		// May be null if not specified in manifest
 		// Just verify the method doesn't throw
-		assertDoesNotThrow(() -> pi.getSpecificationVendor());
+		assertDoesNotThrow(pi::getSpecificationVendor);
 	}
 
 	//====================================================================================================
@@ -182,7 +182,7 @@ class PackageInfo_Test extends TestBase {
 		var pi = PackageInfo.of(String.class);
 		// May be null if not specified in manifest
 		// Just verify the method doesn't throw
-		assertDoesNotThrow(() -> pi.getSpecificationVersion());
+		assertDoesNotThrow(pi::getSpecificationVersion);
 	}
 
 	//====================================================================================================

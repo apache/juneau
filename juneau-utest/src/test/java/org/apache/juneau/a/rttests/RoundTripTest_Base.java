@@ -30,7 +30,7 @@ import org.apache.juneau.xml.*;
  */
 public abstract class RoundTripTest_Base extends TestBase {
 
-	private static RoundTrip_Tester[] TESTERS = {
+	private static final RoundTrip_Tester[] TESTERS = {
 		tester(1, "Json - default")
 			.serializer(JsonSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonParser.create())

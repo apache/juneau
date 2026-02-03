@@ -576,7 +576,7 @@ class FilteredMap_Test extends TestBase {
 		var map = FilteredMap
 			.create(String.class, Integer.class)
 			.filter((k, v) -> v != null && v > 0)
-			.keyFunction(o -> o.toString())
+			.keyFunction(Object::toString)
 			.build();
 
 		map.add(123, 5);   // Key converted from Integer to String
@@ -594,7 +594,7 @@ class FilteredMap_Test extends TestBase {
 		var map = FilteredMap
 			.<String,String>create()
 			.filter((k, v) -> v != null)
-			.keyFunction(o -> o.toString())
+			.keyFunction(Object::toString)
 			.build();
 
 		map.add(123, "value1");  // Key converted using function
@@ -648,7 +648,7 @@ class FilteredMap_Test extends TestBase {
 		var map = FilteredMap
 			.create(String.class, Integer.class)
 			.filter((k, v) -> v != null && v > 0)
-			.keyFunction(o -> o.toString())
+			.keyFunction(Object::toString)
 			.valueFunction(o -> Integer.parseInt(o.toString()))
 			.build();
 
@@ -714,7 +714,7 @@ class FilteredMap_Test extends TestBase {
 		var map = FilteredMap
 			.create(String.class, Integer.class)
 			.filter((k, v) -> v != null && v > 0)
-			.keyFunction(o -> o.toString())
+			.keyFunction(Object::toString)
 			.build();
 
 		var source = Map.of(
@@ -1048,8 +1048,8 @@ class FilteredMap_Test extends TestBase {
 		map2.put("key1", "value1");
 		map2.put("key2", "value2");
 
-		assertTrue(map1.equals(map2));
-		assertTrue(map2.equals(map1));
+		assertEquals(map1, map2);
+		assertEquals(map2, map1);
 	}
 
 	@Test
@@ -1063,8 +1063,8 @@ class FilteredMap_Test extends TestBase {
 		var map2 = new LinkedHashMap<String, String>();
 		map2.put("key1", "value2");
 
-		assertFalse(map1.equals(map2));
-		assertFalse(map2.equals(map1));
+		assertNotEquals(map1, map2);
+		assertNotEquals(map2, map1);
 	}
 
 	@Test
@@ -1192,7 +1192,7 @@ class FilteredMap_Test extends TestBase {
 		var map = FilteredMap
 			.create(String.class, Integer.class)
 			.filter((k, v) -> v != null && v > 0)
-			.keyFunction(o -> o.toString())
+			.keyFunction(Object::toString)
 			.valueFunction(o -> Integer.parseInt(o.toString()))
 			.build();
 

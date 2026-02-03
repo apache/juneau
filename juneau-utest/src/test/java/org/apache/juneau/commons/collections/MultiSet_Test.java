@@ -25,6 +25,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 class MultiSet_Test extends TestBase {
 
 	@Test void doTest() {
@@ -238,8 +239,8 @@ class MultiSet_Test extends TestBase {
 		var l4 = l(a("3", "4"));
 		var multiSet2 = new MultiSet<>(l3, l4);
 
-		assertTrue(multiSet1.equals(multiSet2));
-		assertTrue(multiSet2.equals(multiSet1));
+		assertEquals(multiSet1, multiSet2);
+		assertEquals(multiSet2, multiSet1);
 	}
 
 	@Test
@@ -250,8 +251,8 @@ class MultiSet_Test extends TestBase {
 		var l2 = l(a("1", "3"));
 		var multiSet2 = new MultiSet<>(l2);
 
-		assertFalse(multiSet1.equals(multiSet2));
-		assertFalse(multiSet2.equals(multiSet1));
+		assertNotEquals(multiSet1, multiSet2);
+		assertNotEquals(multiSet2, multiSet1);
 	}
 
 	@Test
@@ -264,7 +265,7 @@ class MultiSet_Test extends TestBase {
 		var l4 = l(a("1", "2"));
 		var multiSet2 = new MultiSet<>(l3, l4);
 
-		assertTrue(multiSet1.equals(multiSet2)); // Order doesn't matter for sets
+		assertEquals(multiSet1, multiSet2); // Order doesn't matter for sets
 	}
 
 	@Test
@@ -274,8 +275,8 @@ class MultiSet_Test extends TestBase {
 
 		var regularSet = new LinkedHashSet<>(l(a("1", "2", "3")));
 
-		assertTrue(multiSet.equals(regularSet));
-		assertTrue(regularSet.equals(multiSet));
+		assertEquals(multiSet, regularSet);
+		assertEquals(regularSet, multiSet);
 	}
 
 	@Test
@@ -283,7 +284,7 @@ class MultiSet_Test extends TestBase {
 		var l1 = l(a("1", "2"));
 		var multiSet = new MultiSet<>(l1);
 
-		assertFalse(multiSet.equals(null));
+		assertNotEquals(multiSet, null);
 	}
 
 	@Test
@@ -320,7 +321,6 @@ class MultiSet_Test extends TestBase {
 		assertFalse(it.hasNext()); // i2 is null, should return false
 	}
 
-	@SuppressWarnings("unlikely-arg-type")
 	@Test
 	void equals_notASet_otherTypes() {
 		// Line 308: return (o instanceof Set o2) && ...
@@ -329,9 +329,9 @@ class MultiSet_Test extends TestBase {
 		var multiSet = new MultiSet<>(l1);
 
 		// Not a Set - should return false immediately due to instanceof check
-		assertFalse(multiSet.equals("not a set"));
-		assertFalse(multiSet.equals(123));
-		assertFalse(multiSet.equals(List.of("1", "2"))); // List is not a Set
+		assertNotEquals(multiSet, "not a set");
+		assertNotEquals(multiSet, 123);
+		assertNotEquals(multiSet, List.of("1", "2")); // List is not a Set
 	}
 
 	@Test

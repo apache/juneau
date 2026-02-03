@@ -22,6 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({"java:S3577","java:S5961"})
 class Swagger_RestOp_Parameters extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -40,6 +40,7 @@ import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({"java:S3008", "java:S5961"})
 public class ClassInfo_Test extends TestBase {
 
 	@Documented
@@ -723,9 +724,9 @@ public class ClassInfo_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> g3.getAnnotations(null));
 
 		// Test annotation order - parent first
-		check("@PA(10),@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g3.getAnnotations()).collect(Collectors.toList()));
-		check("@PA(10),@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g4.getAnnotations()).collect(Collectors.toList()));
-		check("@PA(10),@A(3)", rstream(g5.getAnnotations()).collect(Collectors.toList()));
+		check("@PA(10),@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g3.getAnnotations()).toList());
+		check("@PA(10),@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g4.getAnnotations()).toList());
+		check("@PA(10),@A(3)", rstream(g5.getAnnotations()).toList());
 	}
 
 	//====================================================================================================
@@ -891,8 +892,8 @@ public class ClassInfo_Test extends TestBase {
 		assertNotEquals(pTypeInfo, pTypeDimensionalInfo);
 
 		// Not a ClassInfo
-		assertNotEquals(ci1, "not a ClassInfo");
-		assertNotEquals(ci1, null);
+		assertNotEquals("not a ClassInfo", ci1);
+		assertNotEquals(null, ci1);
 	}
 
 	//====================================================================================================
@@ -1779,7 +1780,7 @@ public class ClassInfo_Test extends TestBase {
 		// 7. IGrandParent (direct interface on GrandParent)
 		// 8. ISuperGrandParent (parent interface of IGrandParent)
 
-		var names = parentsAndInterfaces.stream().map(ClassInfo::getNameSimple).collect(Collectors.toList());
+		var names = parentsAndInterfaces.stream().map(ClassInfo::getNameSimple).toList();
 
 		// Verify all expected classes/interfaces are present
 		assertTrue(names.contains("Child"), "Should include Child itself");
@@ -1977,7 +1978,7 @@ public class ClassInfo_Test extends TestBase {
 		var stream = aClass.getResourceAsStream("/");
 		// May be null depending on classpath, but should not throw
 		if (stream != null) {
-			assertDoesNotThrow(() -> stream.close());
+			assertDoesNotThrow(stream::close);
 		}
 
 		// For types with null inner, should return null
@@ -2060,7 +2061,7 @@ public class ClassInfo_Test extends TestBase {
 		var bridgeMethods = publicMethods.stream()
 			.filter(MethodInfo::isBridge)
 			.toList();
-		assertEquals(classBridgeMethods.size(), bridgeMethods.size(), 
+		assertEquals(classBridgeMethods.size(), bridgeMethods.size(),
 			"getPublicMethods() should include bridge methods matching Class.getMethods(). " +
 			"Class.getMethods() has " + classBridgeMethods.size() + " bridge methods, " +
 			"getPublicMethods() has " + bridgeMethods.size() + " bridge methods.");
@@ -3793,7 +3794,7 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	// Test class with abstract PostConstruct method (should be skipped)
-	static abstract class TestAbstractPostConstruct {
+	abstract static class TestAbstractPostConstruct {
 		@PostConstruct
 		abstract void postConstruct();
 	}
@@ -3810,7 +3811,7 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	// Abstract test class for testing abstract method skipping
-	static abstract class TestAbstractMethodInjection {
+	abstract static class TestAbstractMethodInjection {
 		@Inject
 		abstract void abstractMethod(TestService service);
 	}

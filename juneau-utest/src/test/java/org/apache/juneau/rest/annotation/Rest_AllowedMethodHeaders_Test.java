@@ -20,6 +20,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 class Rest_AllowedMethodHeaders_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	// @Rest(allowedMethodHeaders)

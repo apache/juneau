@@ -22,6 +22,7 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 class HtmlBuilder_Test extends TestBase {
 
 	@Test void a01_allStaticMethods() {

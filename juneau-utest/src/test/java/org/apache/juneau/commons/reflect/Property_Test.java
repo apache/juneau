@@ -66,10 +66,10 @@ class Property_Test extends TestBase {
 	// Property.Builder.getter(Function) and setter(BiConsumer) - basic usage
 	//====================================================================================================
 	@Test
-	void a002_functionGetterAndSetter() throws Exception {
+	void a002_functionGetterAndSetter() {
 		var prop = Property.<TestClass, String>create()
 			.getter(obj -> obj.getPublicField())
-			.setter((obj, val) -> obj.setPublicField(val))
+			.setter(TestClass::setPublicField)
 			.build();
 
 		var obj = new TestClass();
@@ -82,7 +82,7 @@ class Property_Test extends TestBase {
 	// Property.Builder.getter(Function) - getter only
 	//====================================================================================================
 	@Test
-	void a003_getterOnly() throws Exception {
+	void a003_getterOnly() {
 		var prop = Property.<TestClass, String>create()
 			.getter(obj -> obj.getPublicField())
 			.build();
@@ -98,9 +98,9 @@ class Property_Test extends TestBase {
 	// Property.Builder.setter(BiConsumer) - setter only
 	//====================================================================================================
 	@Test
-	void a004_setterOnly() throws Exception {
+	void a004_setterOnly() {
 		var prop = Property.<TestClass, String>create()
-			.setter((obj, val) -> obj.setPublicField(val))
+			.setter(TestClass::setPublicField)
 			.build();
 
 		var obj = new TestClass();
@@ -114,9 +114,9 @@ class Property_Test extends TestBase {
 	// Property.get() - with null producer
 	//====================================================================================================
 	@Test
-	void a005_get_withNullProducer() throws Exception {
+	void a005_get_withNullProducer() {
 		var prop = Property.<TestClass, String>create()
-			.setter((obj, val) -> obj.setPublicField(val))
+			.setter(TestClass::setPublicField)
 			.build();
 
 		var obj = new TestClass();
@@ -128,7 +128,7 @@ class Property_Test extends TestBase {
 	// Property.set() - with null consumer
 	//====================================================================================================
 	@Test
-	void a006_set_withNullConsumer() throws Exception {
+	void a006_set_withNullConsumer() {
 		var prop = Property.<TestClass, String>create()
 			.getter(obj -> obj.getPublicField())
 			.build();
@@ -156,7 +156,7 @@ class Property_Test extends TestBase {
 	@Test
 	void a008_set_withNullObject() {
 		var prop = Property.<TestClass, String>create()
-			.setter((obj, val) -> obj.setPublicField(val))
+			.setter(TestClass::setPublicField)
 			.build();
 
 		assertThrows(IllegalArgumentException.class, () -> prop.set(null, "test"));
@@ -166,7 +166,7 @@ class Property_Test extends TestBase {
 	// Property.Builder.field(FieldInfo) - public field
 	//====================================================================================================
 	@Test
-	void a009_field_publicField() throws Exception {
+	void a009_field_publicField() {
 		var field = ClassInfo.of(TestClass.class).getPublicFields().stream()
 			.filter(f -> f.getName().equals("publicField"))
 			.findFirst()
@@ -185,7 +185,7 @@ class Property_Test extends TestBase {
 	// Property.Builder.field(FieldInfo) - private field
 	//====================================================================================================
 	@Test
-	void a010_field_privateField() throws Exception {
+	void a010_field_privateField() {
 		var field = ClassInfo.of(TestClass.class).getDeclaredFields().stream()
 			.filter(f -> f.getName().equals("privateField"))
 			.findFirst()
@@ -216,14 +216,14 @@ class Property_Test extends TestBase {
 	// Property.Builder.getter(MethodInfo) - method getter
 	//====================================================================================================
 	@Test
-	void a012_getter_methodInfo() throws Exception {
+	void a012_getter_methodInfo() {
 		var getter = ClassInfo.of(TestClass.class).getPublicMethods().stream()
 			.filter(m -> m.hasName("getPublicField"))
 			.findFirst()
 			.orElseThrow();
 		var prop = Property.<TestClass, String>create()
 			.getter(getter)
-			.setter((obj, val) -> obj.setPublicField(val))
+			.setter(TestClass::setPublicField)
 			.build();
 
 		var obj = new TestClass();
@@ -235,7 +235,7 @@ class Property_Test extends TestBase {
 	// Property.Builder.setter(MethodInfo) - method setter
 	//====================================================================================================
 	@Test
-	void a013_setter_methodInfo() throws Exception {
+	void a013_setter_methodInfo() {
 		var setter = ClassInfo.of(TestClass.class).getPublicMethods().stream()
 			.filter(m -> m.hasName("setPublicField") && m.hasParameterTypes(String.class))
 			.findFirst()
@@ -278,7 +278,7 @@ class Property_Test extends TestBase {
 	// Property.Builder.field() - with primitive type
 	//====================================================================================================
 	@Test
-	void a016_field_primitiveType() throws Exception {
+	void a016_field_primitiveType() {
 		var field = ClassInfo.of(TestClass.class).getDeclaredFields().stream()
 			.filter(f -> f.getName().equals("intField"))
 			.findFirst()
@@ -297,10 +297,10 @@ class Property_Test extends TestBase {
 	// Property.set() - with null value
 	//====================================================================================================
 	@Test
-	void a017_set_withNullValue() throws Exception {
+	void a017_set_withNullValue() {
 		var prop = Property.<TestClass, String>create()
 			.getter(obj -> obj.getPublicField())
-			.setter((obj, val) -> obj.setPublicField(val))
+			.setter(TestClass::setPublicField)
 			.build();
 
 		var obj = new TestClass();
@@ -416,10 +416,10 @@ class Property_Test extends TestBase {
 	// Property.Builder - chaining methods
 	//====================================================================================================
 	@Test
-	void a024_builder_chaining() throws Exception {
+	void a024_builder_chaining() {
 		var prop = Property.<TestClass, String>create()
 			.getter(obj -> obj.getPublicField())
-			.setter((obj, val) -> obj.setPublicField(val))
+			.setter(TestClass::setPublicField)
 			.build();
 
 		assertNotNull(prop);
@@ -431,7 +431,7 @@ class Property_Test extends TestBase {
 	// Property.Builder.field() - complete round trip
 	//====================================================================================================
 	@Test
-	void a025_field_roundTrip() throws Exception {
+	void a025_field_roundTrip() {
 		var field = ClassInfo.of(TestClass.class).getPublicFields().stream()
 			.filter(f -> f.getName().equals("publicField"))
 			.findFirst()
@@ -453,7 +453,7 @@ class Property_Test extends TestBase {
 	// Property.Builder.getter/setter(MethodInfo) - complete round trip
 	//====================================================================================================
 	@Test
-	void a026_methodInfo_roundTrip() throws Exception {
+	void a026_methodInfo_roundTrip() {
 		var getter = ClassInfo.of(TestClass.class).getPublicMethods().stream()
 			.filter(m -> m.hasName("getPublicField"))
 			.findFirst()

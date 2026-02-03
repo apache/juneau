@@ -40,6 +40,7 @@ import org.junit.jupiter.api.*;
 
 import jakarta.servlet.*;
 
+@SuppressWarnings("java:S5961")
 class RestOp_Params_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -26,7 +26,7 @@ import org.apache.juneau.commons.reflect.ClassInfo_Test.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"rawtypes","serial"})
+@SuppressWarnings({"rawtypes","serial","java:S5961"})
 class ClassMeta_Test extends TestBase {
 
 	BeanContext bc = BeanContext.DEFAULT;

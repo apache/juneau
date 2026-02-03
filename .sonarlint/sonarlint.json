@@ -1,0 +1,6 @@
+{
+  "serverId": "sonarcloud",
+  "projectKey": "apache_juneau",
+  "ideFilePathStyle": "windows",
+  "excludedRules": []
+}

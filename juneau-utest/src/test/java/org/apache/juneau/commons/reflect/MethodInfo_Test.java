@@ -298,9 +298,11 @@ class MethodInfo_Test extends TestBase {
 	 * When methods have the same name and parameters, child class methods should
 	 * come before parent class methods in sorted order. This ensures consistent ordering
 	 * and that methods with covariant return types are selected correctly.
+	 * @throws SecurityException
+	 * @throws NoSuchMethodException
 	 */
 	@Test
-	void a002b_compareTo_tieBreakerForOverriddenMethods() throws Exception {
+	void a002b_compareTo_tieBreakerForOverriddenMethods() throws NoSuchMethodException, SecurityException {
 		// Get methods from parent and child classes with same signature
 		var parentMethod = MethodInfo.of(CompareToParent.class.getMethod("getInstance"));
 		var childMethod = MethodInfo.of(CompareToChild.class.getMethod("getInstance"));
@@ -356,7 +358,7 @@ class MethodInfo_Test extends TestBase {
 		var annotations = c_a1.getAnnotations();
 		assertNotNull(annotations);
 		assertTrue(annotations.size() > 0);
-		
+
 		// Should include annotations from C1, C2, C3, and the method itself
 		var aAnnotations = annotations.stream().filter(a -> a.isType(A.class)).toList();
 		assertTrue(aAnnotations.size() >= 1);
@@ -370,7 +372,7 @@ class MethodInfo_Test extends TestBase {
 		// Should find annotations from hierarchy
 		var aAnnotations = c_a1.getAnnotations(A.class).toList();
 		assertTrue(aAnnotations.size() >= 1);
-		
+
 		// Should not find non-existent annotations
 		var axAnnotations = c_a1.getAnnotations(AX.class).toList();
 		assertEquals(0, axAnnotations.size());
@@ -383,11 +385,11 @@ class MethodInfo_Test extends TestBase {
 	void a007_getDefaultValue() {
 		// Regular methods don't have default values
 		assertNull(a_m.getDefaultValue());
-		
+
 		// Annotation methods can have default values - A doesn't have a default, so it returns null
 		var annotationMethod = ClassInfo.of(A.class).getPublicMethod(m -> m.hasName("value")).get();
 		assertNull(annotationMethod.getDefaultValue());  // A.value() has no default value
-		
+
 		// Test with an annotation that has a default value
 		var annotationWithDefault = ClassInfo.of(TestAnnotationWithDefault.class).getPublicMethod(m -> m.hasName("value")).get();
 		assertNotNull(annotationWithDefault.getDefaultValue());
@@ -419,27 +421,27 @@ class MethodInfo_Test extends TestBase {
 	// getMatchingMethods()
 	//====================================================================================================
 	@Test
-	void a010_getMatchingMethods() throws Exception {
+	void a010_getMatchingMethods() throws NoSuchMethodException, SecurityException {
 		// Simple hierarchy
 		var mi = MethodInfo.of(B3.class.getMethod("foo", int.class));
 		check("B3.foo(int),B1.foo(int),B2.foo(int)", mi.getMatchingMethods());
-		
+
 		// Multiple interfaces
 		var mi2 = MethodInfo.of(BM5.class.getMethod("foo", String.class));
 		check("BM5.foo(String),BM2.foo(String),BM3.foo(String)", mi2.getMatchingMethods());
-		
+
 		// Nested interfaces
 		var mi3 = MethodInfo.of(BM6.class.getMethod("foo", String.class));
 		check("BM6.foo(String),BM4.foo(String),BM1.foo(String),BM5.foo(String),BM2.foo(String),BM3.foo(String)", mi3.getMatchingMethods());
-		
+
 		// Only this method
 		var mi4 = MethodInfo.of(Object.class.getMethod("toString"));
 		check("Object.toString()", mi4.getMatchingMethods());
-		
+
 		// With interface
 		var mi5 = MethodInfo.of(BM8.class.getMethod("bar"));
 		check("BM8.bar(),BM7.bar()", mi5.getMatchingMethods());
-		
+
 		// No match in parent
 		var mi6 = MethodInfo.of(BM8.class.getMethod("baz"));
 		check("BM8.baz()", mi6.getMatchingMethods());
@@ -495,9 +497,11 @@ class MethodInfo_Test extends TestBase {
 	 * Tests that getReturnType() correctly handles covariant return types.
 	 * When a child class overrides a parent method with a more specific return type,
 	 * getReturnType() should return the child's return type, not the parent's.
+	 * @throws SecurityException
+	 * @throws NoSuchMethodException
 	 */
 	@Test
-	void a013b_getReturnType_covariantReturnType() throws Exception {
+	void a013b_getReturnType_covariantReturnType() throws NoSuchMethodException, SecurityException {
 		// Get the method from the child class
 		var childMethod = MethodInfo.of(ChildWithCovariantReturn.class.getMethod("getInstance"));
 		var childReturnType = childMethod.getReturnType();
@@ -636,7 +640,7 @@ class MethodInfo_Test extends TestBase {
 	// invoke(Object, Object...)
 	//====================================================================================================
 	@Test
-	void a024_invoke() throws Exception {
+	void a024_invoke() {
 		var e = new E();
 		e_a1.invoke(e, "foo");
 		assertEquals("foo", e.f);
@@ -648,7 +652,7 @@ class MethodInfo_Test extends TestBase {
 	// invokeLenient(Object, Object...)
 	//====================================================================================================
 	@Test
-	void a025_invokeLenient() throws Exception {
+	void a025_invokeLenient() {
 		var e = new E();
 		e_a1.invokeLenient(e, "foo", 123);
 		assertEquals("foo", e.f);
@@ -664,7 +668,7 @@ class MethodInfo_Test extends TestBase {
 		// Bridge method
 		assertFalse(f_foo.is(ElementFlag.BRIDGE));
 		assertTrue(f_foo.is(ElementFlag.NOT_BRIDGE));  // Line 599: true branch - method is NOT a bridge
-		
+
 		// Test line 599: false branch - method IS a bridge (NOT_BRIDGE returns false)
 		// Bridge methods are created by the compiler for generic type erasure
 		// Bridge methods occur when a class implements a generic interface/class
@@ -690,12 +694,12 @@ class MethodInfo_Test extends TestBase {
 				assertFalse(arrayListBridge.get().is(ElementFlag.NOT_BRIDGE));  // Line 599: false branch
 			}
 		}
-		
+
 		// Default method
 		var defaultMethod = ClassInfo.of(DefaultInterface.class).getPublicMethod(m -> m.hasName("defaultMethod")).get();
 		assertTrue(defaultMethod.is(ElementFlag.DEFAULT));
 		assertFalse(defaultMethod.is(ElementFlag.NOT_DEFAULT));
-		
+
 		// Regular method
 		assertFalse(a_m.is(ElementFlag.DEFAULT));
 		assertTrue(a_m.is(ElementFlag.NOT_DEFAULT));
@@ -741,11 +745,11 @@ class MethodInfo_Test extends TestBase {
 	// matches(MethodInfo)
 	//====================================================================================================
 	@Test
-	void a031_matches() throws Exception {
+	void a031_matches() throws NoSuchMethodException, SecurityException {
 		var mi1 = MethodInfo.of(B3.class.getMethod("foo", int.class));
 		var mi2 = MethodInfo.of(B2.class.getMethod("foo", int.class));
 		var mi3 = MethodInfo.of(B3.class.getMethod("foo", String.class));
-		
+
 		assertTrue(mi1.matches(mi2));
 		assertFalse(mi1.matches(mi3));
 	}
@@ -754,7 +758,7 @@ class MethodInfo_Test extends TestBase {
 	// of(Class<?>, Method)
 	//====================================================================================================
 	@Test
-	void a032_of_withClass() throws Exception {
+	void a032_of_withClass() throws NoSuchMethodException, SecurityException {
 		var method = A1.class.getMethod("m");
 		var mi = MethodInfo.of(A1.class, method);
 		check("A1.m()", mi);
@@ -775,7 +779,7 @@ class MethodInfo_Test extends TestBase {
 	void a034_of_withoutClass() {
 		var mi = MethodInfo.of(a_m.inner());
 		check("A1.m()", mi);
-		
+
 		// Null should throw
 		assertThrows(IllegalArgumentException.class, () -> MethodInfo.of((Method)null));
 		assertThrows(IllegalArgumentException.class, () -> MethodInfo.of((ClassInfo)null, null));
@@ -785,7 +789,7 @@ class MethodInfo_Test extends TestBase {
 	// getDeclaringClass() - inherited from ExecutableInfo
 	//====================================================================================================
 	@Test
-	void a035_getDeclaringClass() throws Exception {
+	void a035_getDeclaringClass() throws NoSuchMethodException, SecurityException {
 		check("A1", a_m.getDeclaringClass());
 		check("B3", MethodInfo.of(B3.class.getMethod("foo", int.class)).getDeclaringClass());
 	}
@@ -810,7 +814,7 @@ class MethodInfo_Test extends TestBase {
 		assertEquals(0, e_a3.getParameters().size());
 		assertEquals(1, e_a1.getParameters().size());
 		assertEquals(2, e_a2.getParameters().size());
-		
+
 		// Test stream operations
 		int[] count = {0};
 		e_a2.getParameters().stream().filter(x -> true).forEach(x -> count[0]++);
@@ -849,48 +853,48 @@ class MethodInfo_Test extends TestBase {
 	// equals(Object) and hashCode()
 	//====================================================================================================
 	@Test
-	void a041_equals_hashCode() throws Exception {
+	void a041_equals_hashCode() throws NoSuchMethodException, SecurityException {
 		// Get MethodInfo instances from the same Method
 		Method m1 = EqualsTestClass.class.getMethod("method1");
 		MethodInfo mi1a = MethodInfo.of(m1);
 		MethodInfo mi1b = MethodInfo.of(m1);
-		
+
 		Method m2 = EqualsTestClass.class.getMethod("method2", String.class);
 		MethodInfo mi2 = MethodInfo.of(m2);
 
 		// Same method should be equal
 		assertEquals(mi1a, mi1b);
 		assertEquals(mi1a.hashCode(), mi1b.hashCode());
-		
+
 		// Different methods should not be equal
 		assertNotEquals(mi1a, mi2);
-		assertNotEquals(mi1a, null);
-		assertNotEquals(mi1a, "not a MethodInfo");
-		
+		assertNotEquals(null, mi1a);
+		assertNotEquals("not a MethodInfo", mi1a);
+
 		// Reflexive
 		assertEquals(mi1a, mi1a);
-		
+
 		// Symmetric
 		assertEquals(mi1a, mi1b);
 		assertEquals(mi1b, mi1a);
-		
+
 		// Transitive
 		MethodInfo mi1c = MethodInfo.of(m1);
 		assertEquals(mi1a, mi1b);
 		assertEquals(mi1b, mi1c);
 		assertEquals(mi1a, mi1c);
-		
+
 		// HashMap usage - same method should map to same value
 		Map<MethodInfo, String> map = new HashMap<>();
 		map.put(mi1a, "value1");
 		assertEquals("value1", map.get(mi1b));
 		assertEquals("value1", map.get(mi1c));
-		
+
 		// HashMap usage - different methods should map to different values
 		map.put(mi2, "value2");
 		assertEquals("value2", map.get(mi2));
 		assertNotEquals("value2", map.get(mi1a));
-		
+
 		// HashSet usage
 		Set<MethodInfo> set = new HashSet<>();
 		set.add(mi1a);
@@ -937,7 +941,7 @@ class MethodInfo_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	void b001_inject_method() throws Exception {
+	void b001_inject_method() {
 		var service = new TestService("test1");
 		beanStore.addBean(TestService.class, service);
 		var instance = new TestMethodClass();
@@ -947,7 +951,7 @@ class MethodInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b002_inject_staticMethod() throws Exception {
+	void b002_inject_staticMethod() {
 		var service = new TestService("test1");
 		beanStore.addBean(TestService.class, service);
 		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("staticMethod") && x.hasParameterTypes(TestService.class)).get();
@@ -960,7 +964,7 @@ class MethodInfo_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	void b003_inject_methodWithOtherBeans() throws Exception {
+	void b003_inject_methodWithOtherBeans() {
 		var service = new TestService("test1");
 		// Service not in bean store, but provided as otherBeans
 		var instance = new TestMethodClass();
@@ -970,7 +974,7 @@ class MethodInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b004_getMissingParameterTypes_methodWithOtherBeans() throws Exception {
+	void b004_getMissingParameterTypes_methodWithOtherBeans() {
 		var service = new TestService("test1");
 		// Service not in bean store, but provided as otherBeans
 		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("method1") && x.hasParameterTypes(TestService.class)).get();
@@ -979,7 +983,7 @@ class MethodInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b005_resolveParameters_methodWithOtherBeans() throws Exception {
+	void b005_resolveParameters_methodWithOtherBeans() {
 		var service = new TestService("test1");
 		// Service not in bean store, but provided as otherBeans
 		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("method1") && x.hasParameterTypes(TestService.class)).get();
@@ -989,7 +993,7 @@ class MethodInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b006_canResolveAll_methodWithOtherBeans() throws Exception {
+	void b006_canResolveAll_methodWithOtherBeans() {
 		var service = new TestService("test1");
 		// Service not in bean store, but provided as otherBeans
 		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("method1") && x.hasParameterTypes(TestService.class)).get();
@@ -997,14 +1001,14 @@ class MethodInfo_Test extends TestBase {
 	}
 
 	@Test
-	void b007_resolveParameters_methodNotFound() throws Exception {
+	void b007_resolveParameters_methodNotFound() {
 		// Method parameter not in bean store and not in otherBeans - should throw exception
 		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("method1") && x.hasParameterTypes(TestService.class)).get();
 		assertThrows(ExecutableException.class, () -> method.resolveParameters(beanStore));
 	}
 
 	@Test
-	void b008_inject_methodNotFound() throws Exception {
+	void b008_inject_methodNotFound() {
 		// Method parameter not in bean store and not in otherBeans - should throw exception
 		var instance = new TestMethodClass();
 		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("method1") && x.hasParameterTypes(TestService.class)).get();

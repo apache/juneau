@@ -24,6 +24,7 @@ import java.lang.reflect.Modifier;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 class ElementInfo_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

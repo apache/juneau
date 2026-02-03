@@ -27,6 +27,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for {@link Logger}.
  */
+@SuppressWarnings({"java:S117"})
 class Logger_Test extends TestBase {
 
 	private static Logger getLogger(String name) {

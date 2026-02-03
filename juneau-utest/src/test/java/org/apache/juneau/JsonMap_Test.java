@@ -26,6 +26,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.objecttools.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 class JsonMap_Test extends TestBase {
 
 	//====================================================================================================

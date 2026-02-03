@@ -46,6 +46,7 @@ import org.apache.juneau.utest.utils.*;
 import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 class RestClient_Config_RestClient_Test extends TestBase {
 
 	public static class ABean {

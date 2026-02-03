@@ -231,9 +231,7 @@ class ReaderInputStream_Test extends TestBase {
 		var is = new ReaderInputStream(reader, StandardCharsets.UTF_8);
 		is.close(); // Should close the underlying reader
 		// Reader should be closed
-		assertThrows(IOException.class, () -> {
-			reader.read();
-		});
+		assertThrows(IOException.class, reader::read);
 	}
 
 	//====================================================================================================

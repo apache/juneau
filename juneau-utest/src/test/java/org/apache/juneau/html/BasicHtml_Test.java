@@ -43,7 +43,7 @@ class BasicHtml_Test extends TestBase {
 		s3 = HtmlSerializer.DEFAULT_SQ.copy().applyAnnotations(ANNOTATED_CLASSES).build();
 	private static final HtmlParser parser = HtmlParser.DEFAULT.copy().applyAnnotations(ANNOTATED_CLASSES).build();
 
-	private static Input[] INPUT = {
+	private static final Input[] INPUT = {
 		input(
 			"SimpleTypes-1",
 			String.class,

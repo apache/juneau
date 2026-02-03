@@ -35,7 +35,7 @@ public class ReaderObject_ComboSerializeTest extends ComboSerializeTest_Base {
 		return ComboSerialize_Tester.create(index, label, bean).serializerApply(Serializer.Builder::keepNullProperties);
 	}
 
-	private static ComboSerialize_Tester<?>[] TESTERS = {
+	private static final ComboSerialize_Tester<?>[] TESTERS = {
 		tester(1, "SimpleReader", ()->reader("foobar"))
 			.json("foobar")
 			.jsonT("foobar")

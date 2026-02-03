@@ -77,7 +77,7 @@ class ExecutableException_Test extends TestBase {
 	// getTargetException()
 	//====================================================================================================
 	@Test
-	void a005_getTargetException() throws Exception {
+	void a005_getTargetException() {
 		// With InvocationTargetException
 		RuntimeException targetException = new RuntimeException("target");
 		InvocationTargetException ite = new InvocationTargetException(targetException);

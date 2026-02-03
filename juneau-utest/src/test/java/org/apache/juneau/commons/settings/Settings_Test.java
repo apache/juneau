@@ -29,6 +29,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.function.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({"java:S4144"})
 class Settings_Test extends TestBase {
 
 	private static final String TEST_PROP = "juneau.test.property";
@@ -703,8 +704,8 @@ class Settings_Test extends TestBase {
 		// Create a writable functional source using system properties
 		var source = FunctionalStore.of(
 			System::getProperty,
-			(k, v) -> System.setProperty(k, v),
-			k -> System.clearProperty(k),
+			System::setProperty,
+			System::clearProperty,
 			() -> { /* No-op clear for system properties */ }
 		);
 
@@ -729,8 +730,8 @@ class Settings_Test extends TestBase {
 		// Create a writable functional source and add it to Settings
 		var source = FunctionalStore.of(
 			System::getProperty,
-			(k, v) -> System.setProperty(k, v),
-			k -> System.clearProperty(k),
+			System::setProperty,
+			System::clearProperty,
 			() -> { /* No-op clear for system properties */ }
 		);
 
@@ -796,7 +797,7 @@ class Settings_Test extends TestBase {
 	void r01_localStore() {
 		// Test that localStore() method can be called on the builder
 		var settings = Settings.create()
-			.localStore(OptionalSupplier.of(() -> new MapStore()))
+			.localStore(OptionalSupplier.of(MapStore::new))
 			.build();
 		// Verify it works by setting a local value
 		settings.setLocal(TEST_PROP, "test-value");
@@ -848,9 +849,7 @@ class Settings_Test extends TestBase {
 			.build();
 
 		// clearGlobal() should throw IllegalStateException
-		assertThrows(IllegalStateException.class, () -> {
-			settings.clearGlobal();
-		});
+		assertThrows(IllegalStateException.class, settings::clearGlobal);
 	}
 
 	//====================================================================================================

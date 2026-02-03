@@ -923,7 +923,7 @@ class BasicBeanStore_Test extends TestBase {
 		assertNotNull(result);
 		assertFalse(result.isEmpty());
 		// Should contain some representation of the store
-		assertTrue(result.contains("BasicBeanStore2") || result.contains("entries") || result.length() > 0);
+		assertTrue(result.contains("BasicBeanStore2") || result.contains("entries") || !result.isEmpty());
 	}
 
 	@Test

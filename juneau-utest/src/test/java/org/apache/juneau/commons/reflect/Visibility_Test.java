@@ -87,14 +87,14 @@ class Visibility_Test extends TestBase {
 	// transform(Constructor<T>)
 	//====================================================================================================
 	@Test
-	void a001_transform_constructor_null() throws Exception {
+	void a001_transform_constructor_null() {
 		assertThrows(IllegalArgumentException.class, () -> Visibility.PUBLIC.transform((Constructor<?>)null));
 		assertThrows(IllegalArgumentException.class, () -> Visibility.PRIVATE.transform((Constructor<?>)null));
 		assertThrows(IllegalArgumentException.class, () -> Visibility.NONE.transform((Constructor<?>)null));
 	}
 
 	@Test
-	void a002_transform_constructor_public() throws Exception {
+	void a002_transform_constructor_public() {
 		Constructor<?> publicCtor = getConstructor(PublicClass.class);
 		Constructor<?> privateCtor = getConstructor(PrivateClass.class);
 		Constructor<?> protectedCtor = getConstructor(ProtectedClass.class);
@@ -132,7 +132,7 @@ class Visibility_Test extends TestBase {
 	}
 
 	@Test
-	void a003_transform_constructor_returnsSameInstance() throws Exception {
+	void a003_transform_constructor_returnsSameInstance() {
 		Constructor<?> publicCtor = getConstructor(PublicClass.class);
 		Constructor<?> result = Visibility.PUBLIC.transform(publicCtor);
 		assertSame(publicCtor, result);
@@ -142,14 +142,14 @@ class Visibility_Test extends TestBase {
 	// transform(Field)
 	//====================================================================================================
 	@Test
-	void a004_transform_field_null() throws Exception {
+	void a004_transform_field_null() {
 		assertThrows(IllegalArgumentException.class, () -> Visibility.PUBLIC.transform((Field)null));
 		assertThrows(IllegalArgumentException.class, () -> Visibility.PRIVATE.transform((Field)null));
 		assertThrows(IllegalArgumentException.class, () -> Visibility.NONE.transform((Field)null));
 	}
 
 	@Test
-	void a005_transform_field_public() throws Exception {
+	void a005_transform_field_public() {
 		Field publicField = getField(PublicClass.class, "publicField");
 		Field privateField = getField(PrivateClass.class, "privateField");
 		Field protectedField = getField(ProtectedClass.class, "protectedField");
@@ -187,7 +187,7 @@ class Visibility_Test extends TestBase {
 	}
 
 	@Test
-	void a006_transform_field_returnsSameInstance() throws Exception {
+	void a006_transform_field_returnsSameInstance() {
 		Field publicField = getField(PublicClass.class, "publicField");
 		Field result = Visibility.PUBLIC.transform(publicField);
 		assertSame(publicField, result);
@@ -197,14 +197,14 @@ class Visibility_Test extends TestBase {
 	// transform(Method)
 	//====================================================================================================
 	@Test
-	void a007_transform_method_null() throws Exception {
+	void a007_transform_method_null() {
 		assertThrows(IllegalArgumentException.class, () -> Visibility.PUBLIC.transform((Method)null));
 		assertThrows(IllegalArgumentException.class, () -> Visibility.PRIVATE.transform((Method)null));
 		assertThrows(IllegalArgumentException.class, () -> Visibility.NONE.transform((Method)null));
 	}
 
 	@Test
-	void a008_transform_method_public() throws Exception {
+	void a008_transform_method_public() {
 		Method publicMethod = getMethod(PublicClass.class, "publicMethod");
 		Method privateMethod = getMethod(PrivateClass.class, "privateMethod");
 		Method protectedMethod = getMethod(ProtectedClass.class, "protectedMethod");
@@ -242,7 +242,7 @@ class Visibility_Test extends TestBase {
 	}
 
 	@Test
-	void a009_transform_method_returnsSameInstance() throws Exception {
+	void a009_transform_method_returnsSameInstance() {
 		Method publicMethod = getMethod(PublicClass.class, "publicMethod");
 		Method result = Visibility.PUBLIC.transform(publicMethod);
 		assertSame(publicMethod, result);

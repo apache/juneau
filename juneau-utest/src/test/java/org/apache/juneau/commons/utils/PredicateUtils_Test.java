@@ -26,6 +26,7 @@ import java.util.function.*;
 
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 class PredicateUtils_Test {
 
 	//====================================================================================================
@@ -130,7 +131,7 @@ class PredicateUtils_Test {
 		
 		try {
 			// Test peek() with message and formatter
-			Function<String, String> peekFunc = peek("Processing: {0}", s -> s.toUpperCase());
+			Function<String, String> peekFunc = peek("Processing: {0}", String::toUpperCase);
 			String result = peekFunc.apply("test");
 			
 			// Should return the value unchanged

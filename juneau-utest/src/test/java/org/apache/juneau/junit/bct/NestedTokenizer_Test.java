@@ -328,10 +328,10 @@ class NestedTokenizer_Test extends TestBase {
 		assertEquals(token, token);
 
 		// Case 2: Null comparison
-		assertNotEquals(token, null);
+		assertNotEquals(null, token);
 
 		// Case 3: Different object type
-		assertNotEquals(token, "not a token");
+		assertNotEquals("not a token", token);
 		assertNotEquals(token, Integer.valueOf(42));
 
 		// Case 4: Different value, same nested (null)

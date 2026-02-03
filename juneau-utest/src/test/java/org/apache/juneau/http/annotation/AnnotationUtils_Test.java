@@ -29,6 +29,7 @@ import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.oapi.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 class AnnotationUtils_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

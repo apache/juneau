@@ -24,6 +24,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 class Visibility_Test extends TestBase {
 
 	//====================================================================================================

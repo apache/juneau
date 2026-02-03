@@ -178,8 +178,8 @@ class LocalDir_Test extends TestBase {
 
 	@Test void e06_equals_notLocalDir() {
 		var dir = new LocalDir(TEST_DIR);
-		assertNotEquals(dir, "not a LocalDir");
-		assertNotEquals(dir, null);
+		assertNotEquals("not a LocalDir", dir);
+		assertNotEquals(null, dir);
 		assertNotEquals(dir, new Object());
 	}
 

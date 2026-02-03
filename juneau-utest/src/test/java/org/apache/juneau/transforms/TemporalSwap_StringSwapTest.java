@@ -28,6 +28,7 @@ import org.apache.juneau.swap.*;
 import org.apache.juneau.swaps.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S3008")
 class TemporalSwap_StringSwapTest extends StringSwapTest_Base {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -44,11 +45,11 @@ class TemporalSwap_StringSwapTest extends StringSwapTest_Base {
 		unsetTimeZone();
 	}
 
-	private static BeanSession
+	private static final BeanSession
 		BS_DEFAULT = BeanContext.DEFAULT_SESSION,
 		BS_PST = BeanContext.DEFAULT.createSession().timeZone(TimeZone.getTimeZone("PST")).build();
 
-	private static Temporal
+	private static final Temporal
 		DT_ZonedDateTime = ZonedDateTime.parse("2012-12-21T12:34:56Z"),
 		DT_Instant = Instant.parse("2012-12-21T12:34:56Z"),
 		DT_LocalDate = LocalDate.parse("2012-12-21"),
@@ -59,7 +60,7 @@ class TemporalSwap_StringSwapTest extends StringSwapTest_Base {
 		DT_Year = Year.parse("2012"),
 		DT_YearMonth = YearMonth.parse("2012-12");
 
-	private static Temporal
+	private static final Temporal
 		DT_HijrahDate = HijrahDate.from(DT_ZonedDateTime),
 		DT_JapaneseDate = JapaneseDate.from(DT_ZonedDateTime),
 		DT_MinguoDate = MinguoDate.from(DT_ZonedDateTime),

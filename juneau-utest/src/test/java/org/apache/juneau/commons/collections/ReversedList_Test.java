@@ -182,7 +182,7 @@ class ReversedList_Test extends TestBase {
 		var original = List.of("A", "B", "C");
 		var reversed = new ReversedList<>(original);
 
-		assertThrows(UnsupportedOperationException.class, () -> reversed.clear());
+		assertThrows(UnsupportedOperationException.class, reversed::clear);
 	}
 
 	@Test
@@ -192,7 +192,7 @@ class ReversedList_Test extends TestBase {
 
 		var it = reversed.iterator();
 		it.next();
-		assertThrows(UnsupportedOperationException.class, () -> it.remove());
+		assertThrows(UnsupportedOperationException.class, it::remove);
 	}
 
 	//====================================================================================================
@@ -282,7 +282,7 @@ class ReversedList_Test extends TestBase {
 		var it = reversed.listIterator();
 		it.next();
 
-		assertThrows(UnsupportedOperationException.class, () -> it.remove());
+		assertThrows(UnsupportedOperationException.class, it::remove);
 		assertThrows(UnsupportedOperationException.class, () -> it.set("X"));
 		assertThrows(UnsupportedOperationException.class, () -> it.add("X"));
 	}
@@ -534,8 +534,8 @@ class ReversedList_Test extends TestBase {
 		var reversed2 = new ReversedList<>(original2);
 
 		// ReversedList.equals() compares in reversed order
-		assertTrue(reversed1.equals(reversed2));
-		assertTrue(reversed2.equals(reversed1));
+		assertEquals(reversed1, reversed2);
+		assertEquals(reversed2, reversed1);
 	}
 
 	@Test
@@ -546,8 +546,8 @@ class ReversedList_Test extends TestBase {
 		var original2 = new ArrayList<>(List.of("a", "b", "d"));
 		var reversed2 = new ReversedList<>(original2);
 
-		assertFalse(reversed1.equals(reversed2));
-		assertFalse(reversed2.equals(reversed1));
+		assertNotEquals(reversed1, reversed2);
+		assertNotEquals(reversed2, reversed1);
 	}
 
 	@Test
@@ -558,8 +558,8 @@ class ReversedList_Test extends TestBase {
 		// A reversed list ["c", "b", "a"] should equal a regular list ["c", "b", "a"]
 		var regularList = new ArrayList<>(List.of("c", "b", "a"));
 
-		assertTrue(reversed.equals(regularList));
-		assertTrue(regularList.equals(reversed));
+		assertEquals(reversed, regularList);
+		assertEquals(regularList, reversed);
 	}
 
 	@Test
@@ -567,7 +567,7 @@ class ReversedList_Test extends TestBase {
 		var original = new ArrayList<>(List.of("a", "b", "c"));
 		var reversed = new ReversedList<>(original);
 
-		assertFalse(reversed.equals(null));
+		assertNotEquals(reversed, null);
 	}
 
 	@Test
@@ -611,8 +611,8 @@ class ReversedList_Test extends TestBase {
 		// reversed2: ["d", "c", "b", "a"]
 		// After comparing first 3 elements, e1 is exhausted but e2 has more
 		// Line 326: return !(e1.hasNext() || e2.hasNext()) should return false
-		assertFalse(reversed1.equals(reversed2));
-		assertFalse(reversed2.equals(reversed1));
+		assertNotEquals(reversed1, reversed2);
+		assertNotEquals(reversed2, reversed1);
 	}
 
 	@Test
@@ -628,7 +628,7 @@ class ReversedList_Test extends TestBase {
 		// reversed1: ["b", "a"]
 		// reversed2: ["c", "b", "a"]
 		// After comparing first 2 elements, e1 is exhausted but e2 has more
-		assertFalse(reversed1.equals(reversed2));
+		assertNotEquals(reversed1, reversed2);
 	}
 
 	@Test

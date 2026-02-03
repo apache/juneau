@@ -78,7 +78,7 @@ class BctUtils_Test extends TestBase {
 	@DisplayName("tokenize() - Basic tokenization")
 	void d01_tokenizeBasic() {
 		var tokens = tokenize("name,age,city");
-		assertList(tokens.stream().map(t -> t.getValue()).toList(), "name", "age", "city");
+		assertList(tokens.stream().map(NestedTokenizer.Token::getValue).toList(), "name", "age", "city");
 
 		// Each should have no nested fields
 		tokens.forEach(t -> assertEmpty(t.getNested()));
@@ -95,7 +95,7 @@ class BctUtils_Test extends TestBase {
 
 		assertEquals("address", tokens.get(1).getValue());
 		var nested = tokens.get(1).getNested();
-		assertList(nested.stream().map(t -> t.getValue()).toList(), "street", "city", "zip");
+		assertList(nested.stream().map(NestedTokenizer.Token::getValue).toList(), "street", "city", "zip");
 
 		assertEquals("age", tokens.get(2).getValue());
 		assertEmpty(tokens.get(2).getNested());

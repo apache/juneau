@@ -31,6 +31,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({"java:S4144"})
 class Query_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

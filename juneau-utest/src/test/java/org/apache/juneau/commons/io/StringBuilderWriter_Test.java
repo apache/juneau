@@ -18,6 +18,8 @@ package org.apache.juneau.commons.io;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
+
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
@@ -302,7 +304,7 @@ class StringBuilderWriter_Test extends TestBase {
 	//====================================================================================================
 	// flush() and close() tests
 	//====================================================================================================
-	@Test void h01_flush() throws Exception {
+	@Test void h01_flush() {
 		var sbw = new StringBuilderWriter();
 		sbw.write("test");
 		sbw.flush(); // Should not throw
@@ -312,7 +314,7 @@ class StringBuilderWriter_Test extends TestBase {
 		assertEquals("testmore", sbw.toString());
 	}
 
-	@Test void h02_close() throws Exception {
+	@Test void h02_close() throws IOException {
 		var sbw = new StringBuilderWriter();
 		sbw.write("test");
 		sbw.close(); // Should not throw
@@ -322,7 +324,7 @@ class StringBuilderWriter_Test extends TestBase {
 		assertEquals("testmore", sbw.toString());
 	}
 
-	@Test void h03_flushAndClose() throws Exception {
+	@Test void h03_flushAndClose() throws IOException {
 		var sbw = new StringBuilderWriter();
 		sbw.write("test");
 		sbw.flush();

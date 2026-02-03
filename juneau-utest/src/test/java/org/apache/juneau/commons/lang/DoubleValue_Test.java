@@ -94,7 +94,7 @@ class DoubleValue_Test extends TestBase {
 	void b05_ifPresent() {
 		var v = DoubleValue.of(7.5);
 		var sb = new StringBuilder();
-		v.ifPresent(x -> sb.append(x));
+		v.ifPresent(sb::append);
 		assertEquals("7.5", sb.toString());
 	}
 

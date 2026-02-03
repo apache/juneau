@@ -25,7 +25,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({})
+@SuppressWarnings("java:S5961")
 class UonParserReader_Test extends TestBase {
 
 	//====================================================================================================

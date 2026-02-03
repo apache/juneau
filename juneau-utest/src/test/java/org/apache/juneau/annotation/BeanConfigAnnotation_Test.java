@@ -36,6 +36,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the @BeanConfig annotation.
  */
+@SuppressWarnings("java:S5961")
 class BeanConfigAnnotation_Test extends TestBase {
 
 	private static void check(String expected, Object o) {

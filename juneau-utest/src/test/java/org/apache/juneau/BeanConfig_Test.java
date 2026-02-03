@@ -35,7 +35,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes", "java:S5961"})
 class BeanConfig_Test extends TestBase {
 
 	//====================================================================================================

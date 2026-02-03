@@ -32,6 +32,7 @@ import org.apache.juneau.annotation.Named;
 import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({"java:S4144","java:S5961"})
 class BeanStore_Test extends TestBase {
 
 	@Documented

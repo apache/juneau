@@ -48,10 +48,10 @@ import org.junit.jupiter.params.provider.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-@SuppressWarnings({"rawtypes","serial"})
+@SuppressWarnings({"rawtypes","serial","java:S5961"})
 class RoundTripTransformBeans_Test extends TestBase {
 
-	private static RoundTrip_Tester[] TESTERS = {
+	private static final RoundTrip_Tester[] TESTERS = {
 		tester(1, "Json - default")
 			.serializer(JsonSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonParser.create())

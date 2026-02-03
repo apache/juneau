@@ -261,7 +261,7 @@ class DefaultSwaps_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	//	POJO_SWAPS.put(Date.class, new TemporalDateSwap.IsoLocalDateTime())
 	//------------------------------------------------------------------------------------------------------------------
-	private static Date E = Date.from(Instant.from(DateTimeFormatter.ISO_INSTANT.parse("2012-12-21T12:34:56Z")));
+	private static final Date E = Date.from(Instant.from(DateTimeFormatter.ISO_INSTANT.parse("2012-12-21T12:34:56Z")));
 
 	public static class ESwap extends StringSwap<Date> {
 		@Override /* ObjectSwap */
@@ -291,7 +291,7 @@ class DefaultSwaps_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	//	POJO_SWAPS.put(Instant.class, new TemporalSwap.IsoInstant())
 	//------------------------------------------------------------------------------------------------------------------
-	private static Instant FA = Instant.parse("2012-12-21T12:34:56Z");
+	private static final Instant FA = Instant.parse("2012-12-21T12:34:56Z");
 
 	public static class FASwap extends StringSwap<Instant> {
 		@Override /* ObjectSwap */
@@ -321,7 +321,7 @@ class DefaultSwaps_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	//	POJO_SWAPS.put(ZonedDateTime.class, new TemporalSwap.IsoOffsetDateTime())
 	//------------------------------------------------------------------------------------------------------------------
-	private static ZonedDateTime FB = ZonedDateTime.parse("2012-12-21T12:34:56Z");
+	private static final ZonedDateTime FB = ZonedDateTime.parse("2012-12-21T12:34:56Z");
 
 	public static class FBSwap extends StringSwap<ZonedDateTime> {
 		@Override /* ObjectSwap */
@@ -351,7 +351,7 @@ class DefaultSwaps_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	//	POJO_SWAPS.put(LocalDate.class, new TemporalSwap.IsoLocalDate())
 	//------------------------------------------------------------------------------------------------------------------
-	private static LocalDate FC = LocalDate.parse("2012-12-21");
+	private static final LocalDate FC = LocalDate.parse("2012-12-21");
 
 	public static class FCSwap extends StringSwap<LocalDate> {
 		@Override /* ObjectSwap */
@@ -381,7 +381,7 @@ class DefaultSwaps_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	//	POJO_SWAPS.put(LocalDateTime.class, new TemporalSwap.IsoLocalDateTime())
 	//------------------------------------------------------------------------------------------------------------------
-	private static LocalDateTime FD = LocalDateTime.parse("2012-12-21T12:34:56");
+	private static final LocalDateTime FD = LocalDateTime.parse("2012-12-21T12:34:56");
 
 	public static class FDSwap extends StringSwap<LocalDateTime> {
 		@Override /* ObjectSwap */
@@ -411,7 +411,7 @@ class DefaultSwaps_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	//	POJO_SWAPS.put(LocalTime.class, new TemporalSwap.IsoLocalTime())
 	//------------------------------------------------------------------------------------------------------------------
-	private static LocalTime FE = LocalTime.parse("12:34:56");
+	private static final LocalTime FE = LocalTime.parse("12:34:56");
 
 	public static class FESwap extends StringSwap<LocalTime> {
 		@Override /* ObjectSwap */
@@ -441,7 +441,7 @@ class DefaultSwaps_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	//	POJO_SWAPS.put(OffsetDateTime.class, new TemporalSwap.IsoOffsetDateTime())
 	//------------------------------------------------------------------------------------------------------------------
-	private static OffsetDateTime FF = OffsetDateTime.parse("2012-12-21T12:34:56-05:00");
+	private static final OffsetDateTime FF = OffsetDateTime.parse("2012-12-21T12:34:56-05:00");
 
 	public static class FFSwap extends StringSwap<OffsetDateTime> {
 		@Override /* ObjectSwap */
@@ -471,7 +471,7 @@ class DefaultSwaps_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	//	POJO_SWAPS.put(OffsetTime.class, new TemporalSwap.IsoOffsetTime())
 	//------------------------------------------------------------------------------------------------------------------
-	private static OffsetTime FG = OffsetTime.parse("12:34:56-05:00");
+	private static final OffsetTime FG = OffsetTime.parse("12:34:56-05:00");
 
 	public static class FGSwap extends StringSwap<OffsetTime> {
 		@Override /* ObjectSwap */
@@ -501,7 +501,7 @@ class DefaultSwaps_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	//	POJO_SWAPS.put(Year.class, new TemporalSwap.IsoYear())
 	//------------------------------------------------------------------------------------------------------------------
-	private static Year FH = Year.parse("2012");
+	private static final Year FH = Year.parse("2012");
 
 	public static class FHSwap extends StringSwap<Year> {
 		@Override /* ObjectSwap */
@@ -531,7 +531,7 @@ class DefaultSwaps_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	//	POJO_SWAPS.put(YearMonth.class, new TemporalSwap.IsoYearMonth())
 	//------------------------------------------------------------------------------------------------------------------
-	private static YearMonth FI = YearMonth.parse("2012-12");
+	private static final YearMonth FI = YearMonth.parse("2012-12");
 
 	public static class FISwap extends StringSwap<YearMonth> {
 		@Override /* ObjectSwap */
@@ -561,7 +561,7 @@ class DefaultSwaps_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	//	POJO_SWAPS.put(Temporal.class, new TemporalSwap.IsoInstant())
 	//------------------------------------------------------------------------------------------------------------------
-	private static Temporal FJ = HijrahDate.from(FB);
+	private static final Temporal FJ = HijrahDate.from(FB);
 
 	public static class FJSwap extends StringSwap<Temporal> {
 		@Override /* ObjectSwap */
@@ -591,7 +591,7 @@ class DefaultSwaps_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	//	POJO_SWAPS.put(TimeZone.class, new TimeZoneSwap())
 	//------------------------------------------------------------------------------------------------------------------
-	private static TimeZone G = TimeZone.getTimeZone("Z");
+	private static final TimeZone G = TimeZone.getTimeZone("Z");
 
 	public static class GSwap extends StringSwap<TimeZone> {
 		@Override /* ObjectSwap */
@@ -658,7 +658,7 @@ class DefaultSwaps_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	//	POJO_SWAPS.put(ZoneId.class, new ZoneIdSwap())
 	//------------------------------------------------------------------------------------------------------------------
-	private static ZoneId I = ZoneId.of("Z");
+	private static final ZoneId I = ZoneId.of("Z");
 
 	public static class ISwap extends StringSwap<ZoneId> {
 		@Override /* ObjectSwap */

@@ -435,7 +435,7 @@ class Utils_Test extends TestBase {
 
 		// Null handling
 		var nullSupplier = fs(null, "test");
-		assertThrows(IllegalArgumentException.class, ()->nullSupplier.get());
+		assertThrows(IllegalArgumentException.class, nullSupplier::get);
 
 		// Empty pattern
 		var emptySupplier = fs("");
@@ -841,9 +841,7 @@ class Utils_Test extends TestBase {
 	void a048_safe_Snippet() {
 		// Test normal execution - covers line 1371
 		AtomicInteger count = new AtomicInteger(0);
-		safe((Snippet)() -> {
-			count.incrementAndGet();
-		});
+		safe((Snippet)count::incrementAndGet);
 		assertEquals(1, count.get());
 
 		// Test RuntimeException is rethrown - covers lines 1372-1373

@@ -26,6 +26,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.MediaType;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 class MediaRanges_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

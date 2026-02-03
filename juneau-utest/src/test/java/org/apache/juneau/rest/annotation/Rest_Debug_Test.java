@@ -24,6 +24,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({"java:S4144","java:S5961"})
 public class Rest_Debug_Test extends TestBase {
 
 	public static final CaptureLogger LOGGER = new CaptureLogger();

@@ -94,7 +94,7 @@ public class BenchmarkRunner {
 			}
 		};
 
-		listStreamForEach = lst -> lst.forEach(value -> Math.abs(value));
+		listStreamForEach = lst -> lst.forEach(Math::abs);
 
 		mapValuesIterator = m -> {
 			for (var value : m.values()) {
@@ -108,7 +108,7 @@ public class BenchmarkRunner {
 			}
 		};
 
-		mapValuesForEach = m -> m.values().forEach(value -> Math.abs(value));
+		mapValuesForEach = m -> m.values().forEach(Math::abs);
 		mapForEach = m -> m.forEach((k, v) -> Math.abs(v));
 
 		// ThrowingConsumer variants
@@ -124,7 +124,7 @@ public class BenchmarkRunner {
 			}
 		};
 
-		throwingListStreamForEach = lst -> lst.forEach(value -> Math.abs(value));
+		throwingListStreamForEach = lst -> lst.forEach(Math::abs);
 
 		throwingMapValuesIterator = m -> {
 			for (var value : m.values()) {
@@ -138,7 +138,7 @@ public class BenchmarkRunner {
 			}
 		};
 
-		throwingMapValuesForEach = m -> m.values().forEach(value -> Math.abs(value));
+		throwingMapValuesForEach = m -> m.values().forEach(Math::abs);
 		throwingMapForEach = m -> m.forEach((k, v) -> Math.abs(v));
 	}
 
@@ -197,43 +197,43 @@ public class BenchmarkRunner {
 	// =============================================================================
 
 	@Benchmark
-	public void throwingListIterator(Blackhole bh) throws Exception {
+	public void throwingListIterator(Blackhole bh) {
 		throwingListIterator.accept(list);
 		bh.consume(list);
 	}
 
 	@Benchmark
-	public void throwingListForEach(Blackhole bh) throws Exception {
+	public void throwingListForEach(Blackhole bh) {
 		throwingListForEach.accept(list);
 		bh.consume(list);
 	}
 
 	@Benchmark
-	public void throwingListStreamForEach(Blackhole bh) throws Exception {
+	public void throwingListStreamForEach(Blackhole bh) {
 		throwingListStreamForEach.accept(list);
 		bh.consume(list);
 	}
 
 	@Benchmark
-	public void throwingMapValuesIterator(Blackhole bh) throws Exception {
+	public void throwingMapValuesIterator(Blackhole bh) {
 		throwingMapValuesIterator.accept(map);
 		bh.consume(map);
 	}
 
 	@Benchmark
-	public void throwingMapEntrySetIterator(Blackhole bh) throws Exception {
+	public void throwingMapEntrySetIterator(Blackhole bh) {
 		throwingMapEntrySetIterator.accept(map);
 		bh.consume(map);
 	}
 
 	@Benchmark
-	public void throwingMapValuesForEach(Blackhole bh) throws Exception {
+	public void throwingMapValuesForEach(Blackhole bh) {
 		throwingMapValuesForEach.accept(map);
 		bh.consume(map);
 	}
 
 	@Benchmark
-	public void throwingMapForEach(Blackhole bh) throws Exception {
+	public void throwingMapForEach(Blackhole bh) {
 		throwingMapForEach.accept(map);
 		bh.consume(map);
 	}

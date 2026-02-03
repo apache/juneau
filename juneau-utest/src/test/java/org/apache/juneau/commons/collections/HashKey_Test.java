@@ -88,8 +88,7 @@ class HashKey_Test extends TestBase {
 		HashKey key1 = HashKey.of("a", "b", 42);
 		HashKey key2 = HashKey.of("a", "b", 42);
 		assertEquals(key1, key2);
-		assertTrue(key1.equals(key2));
-		assertTrue(key2.equals(key1));
+		assertEquals(key2, key1);
 	}
 
 	@Test
@@ -97,7 +96,6 @@ class HashKey_Test extends TestBase {
 		HashKey key1 = HashKey.of("a", "b", 42);
 		HashKey key2 = HashKey.of("a", "b", 43);
 		assertNotEquals(key1, key2);
-		assertFalse(key1.equals(key2));
 	}
 
 	@Test
@@ -105,7 +103,6 @@ class HashKey_Test extends TestBase {
 		HashKey key1 = HashKey.of("a", "b", 42);
 		HashKey key2 = HashKey.of("b", "a", 42);
 		assertNotEquals(key1, key2);
-		assertFalse(key1.equals(key2));
 	}
 
 	@Test
@@ -113,7 +110,6 @@ class HashKey_Test extends TestBase {
 		HashKey key1 = HashKey.of("a", "b");
 		HashKey key2 = HashKey.of("a", "b", "c");
 		assertNotEquals(key1, key2);
-		assertFalse(key1.equals(key2));
 	}
 
 	@Test
@@ -155,24 +151,20 @@ class HashKey_Test extends TestBase {
 	void b10_equals_withNullObject() {
 		HashKey key = HashKey.of("a", "b");
 		// equals() now checks for null and returns false
-		assertFalse(key.equals(null));
-		assertNotEquals(key, null);
+		assertNotEquals(null, key);
 	}
 
-	@SuppressWarnings("unlikely-arg-type")
 	@Test
 	void b11_equals_withNonHashKeyObject() {
 		HashKey key = HashKey.of("a", "b");
 		// equals() now checks type and returns false for non-HashKey objects
-		assertFalse(key.equals("not a HashKey"));
-		assertNotEquals(key, "not a HashKey");
+		assertNotEquals("not a HashKey", key);
 	}
 
 	@Test
 	void b12_equals_reflexive() {
 		HashKey key = HashKey.of("a", "b", 42);
 		assertEquals(key, key);
-		assertTrue(key.equals(key));
 	}
 
 	@Test
@@ -207,7 +199,7 @@ class HashKey_Test extends TestBase {
 		HashKey key1 = HashKey.of((Object)arr1);
 		HashKey key2 = HashKey.of((Object)arr2);
 		// Arrays with same contents should be equal (ne() uses deep equality)
-		assertTrue(key1.equals(key2), "Arrays with same contents should be equal");
+		assertEquals(key1, key2, "Arrays with same contents should be equal");
 		// And should have same hash code (using Arrays.deepHashCode())
 		assertEquals(key1.hashCode(), key2.hashCode(),
 			"Equal HashKeys must have equal hash codes");

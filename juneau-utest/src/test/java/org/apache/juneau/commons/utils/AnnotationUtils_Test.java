@@ -22,10 +22,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 class AnnotationUtils_Test {
 
 	//====================================================================================================
@@ -495,19 +495,19 @@ class AnnotationUtils_Test {
 	void a003_streamRepeated() {
 		// Non-repeatable annotation - should return singleton stream
 		var a1 = TestClass1.class.getAnnotation(SimpleAnnotation.class);
-		List<Annotation> result1 = streamRepeated(a1).collect(Collectors.toList());
+		List<Annotation> result1 = streamRepeated(a1).toList();
 		assertEquals(1, result1.size());
 		assertSame(a1, result1.get(0));
 
 		// Test with empty annotation
 		var a26 = TestClass26.class.getAnnotation(EmptyAnnotation.class);
-		List<Annotation> result2 = streamRepeated(a26).collect(Collectors.toList());
+		List<Annotation> result2 = streamRepeated(a26).toList();
 		assertEquals(1, result2.size());
 		assertSame(a26, result2.get(0));
 
 		// Test with multi-member annotation
 		var a5 = TestClass5.class.getAnnotation(MultiMemberAnnotation.class);
-		List<Annotation> result3 = streamRepeated(a5).collect(Collectors.toList());
+		List<Annotation> result3 = streamRepeated(a5).toList();
 		assertEquals(1, result3.size());
 		assertSame(a5, result3.get(0));
 	}

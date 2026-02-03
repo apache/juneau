@@ -93,7 +93,7 @@ class Value_Test extends TestBase {
 	void b07_getAndSet_withListener() {
 		var v = Value.of("old");
 		var sb = new StringBuilder();
-		v.listener((val) -> sb.append(val));
+		v.listener(sb::append);
 
 		var old = v.getAndSet("new");
 
@@ -455,7 +455,7 @@ class Value_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void i01_unwrap_parameterizedValueType() throws Exception {
+	void i01_unwrap_parameterizedValueType() {
 		java.lang.reflect.Type valueType = new java.lang.reflect.ParameterizedType() {
 			@Override
 			public Type[] getActualTypeArguments() {

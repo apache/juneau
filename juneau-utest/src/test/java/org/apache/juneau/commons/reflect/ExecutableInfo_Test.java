@@ -32,6 +32,7 @@ import java.util.stream.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({"java:S3008", "java:S5961"})
 class ExecutableInfo_Test extends TestBase {
 
 	private static void check(String expected, Object o) {
@@ -193,7 +194,7 @@ class ExecutableInfo_Test extends TestBase {
 		assertDoesNotThrow(()->f_isProtected.accessible());
 		assertDoesNotThrow(()->f_isPrivate.accessible());
 		assertDoesNotThrow(()->f_isDefault.accessible());
-		
+
 		// Verify it returns this for chaining
 		var result = f_isPublic.accessible();
 		assertSame(f_isPublic, result);
@@ -208,11 +209,11 @@ class ExecutableInfo_Test extends TestBase {
 		assertTrue(b_c2.canAccept("test"));
 		assertFalse(b_c2.canAccept(123));
 		assertFalse(b_c2.canAccept("test", "extra"));
-		
+
 		// No parameters
 		assertTrue(b_c1.canAccept());
 		assertFalse(b_c1.canAccept("test"));
-		
+
 		// Multiple parameters
 		assertTrue(b_m2.canAccept("test"));
 		assertFalse(b_m2.canAccept());
@@ -258,7 +259,7 @@ class ExecutableInfo_Test extends TestBase {
 		var annotations = c_c1.getDeclaredAnnotations();
 		assertNotNull(annotations);
 		assertTrue(annotations.isEmpty());
-		
+
 		// Constructor with annotation
 		var annotations2 = c_c3.getDeclaredAnnotations();
 		assertNotNull(annotations2);
@@ -273,7 +274,7 @@ class ExecutableInfo_Test extends TestBase {
 	void a007_getDeclaredAnnotations_typed() {
 		var annotations = c_c3.getDeclaredAnnotations(CA.class);
 		assertEquals(1, annotations.count());
-		
+
 		var annotations2 = c_c1.getDeclaredAnnotations(CA.class);
 		assertEquals(0, annotations2.count());
 	}
@@ -296,7 +297,7 @@ class ExecutableInfo_Test extends TestBase {
 	void a009_getExceptionTypes() {
 		check("IOException", d_c.getExceptionTypes());
 		check("IOException", d_m.getExceptionTypes());
-		
+
 		// Test caching - should return same result
 		check("IOException", d_c.getExceptionTypes());
 	}
@@ -310,12 +311,12 @@ class ExecutableInfo_Test extends TestBase {
 		assertEquals("org.apache.juneau.commons.reflect.ExecutableInfo_Test$X.foo()", x2.getPublicMethod(x -> x.hasName("foo") && x.getParameterCount() == 0).get().getNameFull());
 		assertEquals("org.apache.juneau.commons.reflect.ExecutableInfo_Test$X.foo(java.lang.String)", x2.getPublicMethod(x -> x.hasName("foo") && x.hasParameterTypes(String.class)).get().getNameFull());
 		assertEquals("org.apache.juneau.commons.reflect.ExecutableInfo_Test$X.foo(java.util.Map<java.lang.String,java.lang.Object>)", x2.getPublicMethod(x -> x.hasName("foo") && x.hasParameterTypes(Map.class)).get().getNameFull());
-		
+
 		// Constructor
 		assertEquals("org.apache.juneau.commons.reflect.ExecutableInfo_Test$X()", x2.getPublicConstructor(cons -> cons.getParameterCount() == 0).get().getNameFull());
 		assertEquals("org.apache.juneau.commons.reflect.ExecutableInfo_Test$X(java.lang.String)", x2.getPublicConstructor(x -> x.hasParameterTypes(String.class)).get().getNameFull());
 		assertEquals("org.apache.juneau.commons.reflect.ExecutableInfo_Test$X(java.util.Map<java.lang.String,java.lang.Object>)", x2.getPublicConstructor(x -> x.hasParameterTypes(Map.class)).get().getNameFull());
-		
+
 		// Test line 752: getPackage() returns null branch
 		// Primitive types don't have packages, but we can't get methods/constructors from primitives.
 		// However, we can test with a class in the default package (no package declaration).
@@ -346,11 +347,11 @@ class ExecutableInfo_Test extends TestBase {
 		// b_c2 is B(String s) constructor, parameter name may or may not be available in bytecode
 		var param1 = b_c2.getParameter(0).toString();
 		assertTrue(param1.equals("java.lang.String s") || param1.equals("java.lang.String arg0"), "Expected 'java.lang.String s' or 'java.lang.String arg0', got: " + param1);
-		
+
 		// b_m2 is m(String s) method, parameter name may or may not be available in bytecode
 		var param2 = b_m2.getParameter(0).toString();
 		assertTrue(param2.equals("java.lang.String s") || param2.equals("java.lang.String arg0"), "Expected 'java.lang.String s' or 'java.lang.String arg0', got: " + param2);
-		
+
 		// Index out of bounds
 		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '0'.  No parameters.", ()->b_c1.getParameter(0));
 		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '-1'.  Parameter count: 1", ()->b_c2.getParameter(-1));
@@ -381,10 +382,10 @@ class ExecutableInfo_Test extends TestBase {
 		// b_m2 is m(String s) method, parameter name may or may not be available in bytecode
 		var params2 = b_m2.getParameters().stream().map(ParameterInfo::toString).collect(Collectors.joining(","));
 		assertTrue(params2.equals("java.lang.String s") || params2.equals("java.lang.String arg0"), "Expected 'java.lang.String s' or 'java.lang.String arg0', got: " + params2);
-		
+
 		// Test caching - should return same result
 		check("", b_c1.getParameters());
-		
+
 		// Test enum constructor parameters
 		var b1 = ClassInfo.of(B1.class);
 		check("String,int", b1.getDeclaredConstructors().get(0).getParameters().stream().map(ParameterInfo::getParameterType).toList());
@@ -398,24 +399,24 @@ class ExecutableInfo_Test extends TestBase {
 		// Test with no parameters
 		check("", b_c1.getParameterTypes());
 		check("", b_m1.getParameterTypes());
-		
+
 		// Test with single parameter
 		check("String", b_c2.getParameterTypes());
 		check("String", b_m2.getParameterTypes());
-		
+
 		// Test with multiple parameters
 		var b1 = ClassInfo.of(B1.class);
 		check("String,int", b1.getDeclaredConstructors().get(0).getParameterTypes());
-		
+
 		// Test with different parameter types
 		check("int", c_c3.getParameterTypes());
 		check("int", c_m3.getParameterTypes());
-		
+
 		// Test caching - should return same result
 		var types1 = b_c2.getParameterTypes();
 		var types2 = b_c2.getParameterTypes();
 		assertSame(types1, types2, "getParameterTypes() should return cached result");
-		
+
 		// Verify that getParameterTypes() returns the same types as getParameters().stream().map(ParameterInfo::getParameterType)
 		var typesFromMethod = b_c2.getParameterTypes();
 		var typesFromParams = b_c2.getParameters().stream().map(ParameterInfo::getParameterType).toList();
@@ -431,7 +432,7 @@ class ExecutableInfo_Test extends TestBase {
 		assertEquals("foo()", x2.getPublicMethod(x -> x.hasName("foo") && x.getParameterCount() == 0).get().getNameShort());
 		assertEquals("foo(String)", x2.getPublicMethod(x -> x.hasName("foo") && x.hasParameterTypes(String.class)).get().getNameShort());
 		assertEquals("foo(Map)", x2.getPublicMethod(x -> x.hasName("foo") && x.hasParameterTypes(Map.class)).get().getNameShort());
-		
+
 		// Constructor
 		assertEquals("X()", x2.getPublicConstructor(cons -> cons.getParameterCount() == 0).get().getNameShort());
 		assertEquals("X(String)", x2.getPublicConstructor(x -> x.hasParameterTypes(String.class)).get().getNameShort());
@@ -446,7 +447,7 @@ class ExecutableInfo_Test extends TestBase {
 		// Method
 		assertEquals("foo", x2.getPublicMethod(x -> x.hasName("foo") && x.getParameterCount() == 0).get().getNameSimple());
 		assertEquals("foo", x2.getPublicMethod(x -> x.hasName("foo") && x.hasParameterTypes(String.class)).get().getNameSimple());
-		
+
 		// Constructor
 		assertEquals("X", x2.getPublicConstructor(cons -> cons.getParameterCount() == 0).get().getNameSimple());
 		assertEquals("X", x2.getPublicConstructor(x -> x.hasParameterTypes(String.class)).get().getNameSimple());
@@ -500,11 +501,11 @@ class ExecutableInfo_Test extends TestBase {
 	void a020_hasMatchingParameters() {
 		var params1 = b_c2.getParameters();
 		assertTrue(b_c2.hasMatchingParameters(params1));
-		
+
 		// Test with parameters from a different executable that has different parameter types
 		var params2 = b_c1.getParameters();  // b_c1 has no parameters, b_c2 has one String parameter
 		assertFalse(b_c2.hasMatchingParameters(params2));
-		
+
 		// Test that b_c2 and b_m2 DO match (both have String parameter)
 		var params3 = b_m2.getParameters();
 		assertTrue(b_c2.hasMatchingParameters(params3));
@@ -586,18 +587,18 @@ class ExecutableInfo_Test extends TestBase {
 		var longClass = ClassInfo.of(long.class);
 		assertTrue(e_hasParams.hasParameterTypes(intClass));
 		assertFalse(e_hasParams.hasParameterTypes(longClass));
-		
+
 		// Test line 484 branches:
 		// Branch 1: params.size() == args.length is false (short-circuit) - when sizes don't match
 		// e_hasParams has 1 parameter, so passing 0 or 2 args should return false
 		assertFalse(e_hasParams.hasParameterTypes(new ClassInfo[0]));  // Empty args array, but method has 1 parameter
 		var intClass2 = ClassInfo.of(int.class);
 		assertFalse(e_hasParams.hasParameterTypes(intClass, intClass2));  // 2 args, but method has 1 parameter
-		
+
 		// Branch 2: params.size() == args.length is true, args.length == 0 (empty stream, allMatch returns true)
 		// e_hasNoParams has 0 parameters, so passing empty args should return true
 		assertTrue(e_hasNoParams.hasParameterTypes(new ClassInfo[0]));  // Empty args array, method has 0 parameters
-		
+
 		// Branch 3: params.size() == args.length is true, args.length > 0, allMatch returns true - already covered above
 		// Branch 4: params.size() == args.length is true, args.length > 0, allMatch returns false - already covered above
 	}
@@ -652,14 +653,14 @@ class ExecutableInfo_Test extends TestBase {
 		assertFalse(e_isNotStatic.is(STATIC));
 		assertFalse(e_isAbstract.is(NOT_ABSTRACT));
 		assertFalse(e_isNotAbstract.is(ABSTRACT));
-		
+
 		// Constructor vs method
 		assertTrue(a.getPublicConstructor(cons -> cons.getParameterCount() == 0).get().isConstructor());
 		assertTrue(a.getPublicConstructor(cons -> cons.getParameterCount() == 0).get().is(ElementFlag.CONSTRUCTOR));
 		assertFalse(a.getPublicMethod(x -> x.hasName("foo")).get().isConstructor());
 		assertFalse(a.getPublicMethod(x -> x.hasName("foo")).get().is(ElementFlag.CONSTRUCTOR));
 		assertTrue(a.getPublicMethod(x -> x.hasName("foo")).get().is(NOT_CONSTRUCTOR));
-		
+
 		// SYNTHETIC and NOT_SYNTHETIC (lines 531, 532)
 		// Regular executables are not synthetic
 		assertFalse(b_c1.isSynthetic());
@@ -668,14 +669,14 @@ class ExecutableInfo_Test extends TestBase {
 		assertFalse(b_m1.isSynthetic());
 		assertFalse(b_m1.is(SYNTHETIC));
 		assertTrue(b_m1.is(NOT_SYNTHETIC));
-		
+
 		// VARARGS and NOT_VARARGS (lines 532, 533)
 		var varArgsCi = ClassInfo.of(VarArgsClass.class);
 		var varArgsCtor = varArgsCi.getPublicConstructor(cons -> cons.isVarArgs()).get();
 		assertTrue(varArgsCtor.isVarArgs());
 		assertTrue(varArgsCtor.is(VARARGS));
 		assertFalse(varArgsCtor.is(NOT_VARARGS));
-		
+
 		// Non-varargs executables
 		assertFalse(b_c1.isVarArgs());
 		assertFalse(b_c1.is(VARARGS));
@@ -683,10 +684,10 @@ class ExecutableInfo_Test extends TestBase {
 		assertFalse(b_m1.isVarArgs());
 		assertFalse(b_m1.is(VARARGS));
 		assertTrue(b_m1.is(NOT_VARARGS));
-		
+
 		// TRANSIENT is a valid modifier flag but doesn't apply to executables
 		assertFalse(e_deprecated.is(TRANSIENT));
-		
+
 		// CLASS is not a modifier flag and doesn't apply to executables, should throw exception
 		assertThrowsWithMessage(RuntimeException.class, "Invalid flag for element: CLASS", () -> e_deprecated.is(ElementFlag.CLASS));
 	}
@@ -700,22 +701,22 @@ class ExecutableInfo_Test extends TestBase {
 		var privateBefore = f_isPrivate.isAccessible();
 		var protectedBefore = f_isProtected.isAccessible();
 		var defaultBefore = f_isDefault.isAccessible();
-		
+
 		// Make them accessible
 		f_isPrivate.setAccessible();
 		f_isProtected.setAccessible();
 		f_isDefault.setAccessible();
-		
+
 		// After setAccessible(), they should be accessible (if Java 9+)
 		var privateAfter = f_isPrivate.isAccessible();
 		var protectedAfter = f_isProtected.isAccessible();
 		var defaultAfter = f_isDefault.isAccessible();
-		
+
 		// Verify the method doesn't throw and returns a boolean
 		assertTrue(privateAfter || !privateBefore, "After setAccessible(), isAccessible() should return true (Java 9+) or false (Java 8)");
 		assertTrue(protectedAfter || !protectedBefore, "After setAccessible(), isAccessible() should return true (Java 9+) or false (Java 8)");
 		assertTrue(defaultAfter || !defaultBefore, "After setAccessible(), isAccessible() should return true (Java 9+) or false (Java 8)");
-		
+
 		// Public methods might already be accessible
 		var publicAccessible = f_isPublic.isAccessible();
 		assertNotNull(publicAccessible);
@@ -900,52 +901,52 @@ class ExecutableInfo_Test extends TestBase {
 		public <T> void genericMethod(T t) {}  // NOSONAR(java:S1186): Unused test method/constructor
 		public <T extends Comparable<T>> void genericMethodWithBounds(T t) {}  // NOSONAR(java:S1186): Unused test method/constructor
 	}
-	static abstract class ToStringTestAbstractClass {
+	abstract static class ToStringTestAbstractClass {
 		abstract void abstractMethod();  // NOSONAR(java:UNKNOWN): Field initialization
 	}
 
 	@Test
 	void a046_toString_comprehensive() {
 		var ci = ClassInfo.of(ToStringTestClass.class);
-		
+
 		// Constructors with different modifiers
 		var publicCtor = ci.getPublicConstructor(cons -> cons.getParameterCount() == 0).get();
 		assertEquals("public org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass()", publicCtor.toString());
-		
+
 		var privateCtor = ci.getDeclaredConstructor(x -> x.hasParameterTypes(int.class)).get();
 		assertEquals("private org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass(int)", privateCtor.toString());
-		
+
 		var protectedCtor = ci.getDeclaredConstructor(x -> x.hasParameterTypes(String.class)).get();
 		assertEquals("protected org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass(java.lang.String)", protectedCtor.toString());
-		
+
 		// Methods with different modifiers
 		var publicMethod = ci.getPublicMethod(x -> x.hasName("publicMethod")).get();
 		assertEquals("public void org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass.publicMethod()", publicMethod.toString());
-		
+
 		var privateMethod = ci.getDeclaredMethod(x -> x.hasName("privateMethod")).get();
 		assertEquals("private void org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass.privateMethod()", privateMethod.toString());
-		
+
 		var protectedMethod = ci.getDeclaredMethod(x -> x.hasName("protectedMethod")).get();
 		assertEquals("protected void org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass.protectedMethod()", protectedMethod.toString());
-		
+
 		var staticMethod = ci.getDeclaredMethod(x -> x.hasName("staticMethod")).get();
 		assertEquals("static void org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass.staticMethod()", staticMethod.toString());
-		
+
 		var finalMethod = ci.getDeclaredMethod(x -> x.hasName("finalMethod")).get();
 		assertEquals("final void org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass.finalMethod()", finalMethod.toString());
-		
+
 		// Method with throws
 		var methodWithThrows = ci.getPublicMethod(x -> x.hasName("methodWithThrows")).get();
 		assertEquals("public void org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass.methodWithThrows() throws java.io.IOException, java.lang.Exception", methodWithThrows.toString());
-		
+
 		// Generic method
 		var genericMethod = ci.getPublicMethod(x -> x.hasName("genericMethod")).get();
 		assertEquals("public <T> void org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass.genericMethod(T)", genericMethod.toString());
-		
+
 		// Generic method with bounds
 		var genericMethodWithBounds = ci.getPublicMethod(x -> x.hasName("genericMethodWithBounds")).get();
 		assertEquals("public <T extends java.lang.Comparable<T>> void org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass.genericMethodWithBounds(T)", genericMethodWithBounds.toString());
-		
+
 		// Abstract method
 		var abstractCi = ClassInfo.of(ToStringTestAbstractClass.class);
 		var abstractMethod = abstractCi.getDeclaredMethod(x -> x.hasName("abstractMethod")).get();

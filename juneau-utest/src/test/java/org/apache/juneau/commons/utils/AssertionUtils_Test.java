@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S5961")
 class AssertionUtils_Test extends TestBase {
 
 	//====================================================================================================
