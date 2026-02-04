@@ -262,6 +262,7 @@ public class GranularZonedDateTime {
 	 * @throws IllegalArgumentException if value is null.
 	 * @throws DateTimeParseException if the timestamp format is invalid.
 	 */
+	@SuppressWarnings("java:S6541")
 	public static GranularZonedDateTime of(String value, ZoneId defaultZoneId, TimeProvider timeProvider) {
 		assertArgNotNull(ARG_value, value);
 		var digit = StringUtils.DIGIT;

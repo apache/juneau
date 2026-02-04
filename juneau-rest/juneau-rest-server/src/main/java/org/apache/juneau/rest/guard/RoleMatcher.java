@@ -239,6 +239,7 @@ public class RoleMatcher {
 		return exp.toString();
 	}
 
+	@SuppressWarnings("java:S6541")
 	private Exp parse(String expression) throws ParseException {
 		if (StringUtils.isBlank(expression))
 			return new Never();

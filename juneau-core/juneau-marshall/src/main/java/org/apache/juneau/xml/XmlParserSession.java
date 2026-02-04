@@ -369,7 +369,7 @@ public class XmlParserSession extends ReaderParserSession {
 		return key.equals(getBeanTypePropertyName(null)) || key.equals(getNamePropertyName());
 	}
 
-	@SuppressWarnings({ "null", "java:S3776" })
+	@SuppressWarnings({ "null", "java:S3776", "java:S6541" })
 	private <T> BeanMap<T> parseIntoBean(XmlReader r, BeanMap<T> m, boolean isNil) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		var bMeta = m.getMeta();
 		var xmlMeta = getXmlBeanMeta(bMeta);

@@ -208,7 +208,7 @@ public class BasicSwaggerProviderSession {
 	 * @return A new {@link Swagger} object.
 	 * @throws Exception If an error occurred producing the Swagger.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({ "java:S3776", "java:S6541" })
 	public Swagger getSwagger() throws Exception {
 		// @formatter:off
 

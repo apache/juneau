@@ -985,6 +985,7 @@ public class AnnotationProvider {
 	 * Computes and caches the complete list of annotations for a given type, class, and traversal combination.
 	 * This is the supplier function for the findCache.
 	 */
+	@SuppressWarnings("java:S6541")
 	private List load(Class<?> type, ElementInfo element, AnnotationTraversal[] traversals) {
 
 		if (type != null) {

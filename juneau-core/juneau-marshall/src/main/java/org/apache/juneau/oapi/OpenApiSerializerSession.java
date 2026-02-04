@@ -281,7 +281,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	}
 
 	@Override /* Overridden from PartSerializer */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({ "java:S3776", "java:S6541" })
 	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 
 		ClassMeta<?> type = getClassMetaForObject(value);

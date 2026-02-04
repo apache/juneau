@@ -135,7 +135,7 @@ class MockPathResolver {
 		return r(properties());
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({ "java:S3776", "java:S6541" })
 	private void init(String target, String contextPath, String servletPath, String pathToResolve, Map<String,Object> pathVars) {
 
 		target = trimTrailingSlashes(emptyIfNull(target));

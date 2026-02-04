@@ -1103,7 +1103,7 @@ public class BeanCreator2<T> {
 	 * @return The created bean.
 	 * @throws ExecutableException if bean could not be created.
 	 */
-	@SuppressWarnings({ "unchecked", "java:S3776" })
+	@SuppressWarnings({ "unchecked", "java:S3776", "java:S6541" })
 	private T findBeanImpl() {
 		var store = this.store;
 		var builder = explicitBuilder != null ? explicitBuilder : this.builder.get();  // Use explicit builder if set, otherwise get from supplier

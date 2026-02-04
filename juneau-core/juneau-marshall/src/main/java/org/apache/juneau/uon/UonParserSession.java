@@ -295,7 +295,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * @throws ParseException Malformed input encountered.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({ "java:S3776", "java:S6541" })
 	public <T> T parseAnything(ClassMeta<?> eType, UonReader r, Object outer, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
@@ -451,7 +451,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		throw new ParseException(this, "Unrecognized syntax for boolean.  ''{0}''.", s);
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({ "java:S3776", "java:S6541" })
 	private <T> BeanMap<T> parseIntoBeanMap(UonReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 
 		int c = r.readSkipWs();

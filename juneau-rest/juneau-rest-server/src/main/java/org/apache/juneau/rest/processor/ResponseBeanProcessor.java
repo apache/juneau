@@ -40,6 +40,7 @@ import org.apache.juneau.rest.*;
 public class ResponseBeanProcessor implements ResponseProcessor {
 
 	@Override /* Overridden from ResponseProcessor */
+	@SuppressWarnings("java:S6541")
 	public int process(RestOpSession opSession) throws IOException {
 
 		var req = opSession.getRequest();

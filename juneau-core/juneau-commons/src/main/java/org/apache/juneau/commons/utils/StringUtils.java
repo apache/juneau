@@ -4343,7 +4343,7 @@ public class StringUtils {
 	 * @param str The string to generate a Metaphone code for. Can be <jk>null</jk>.
 	 * @return The Metaphone code, or <jk>null</jk> if input is <jk>null</jk> or empty.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({ "java:S3776", "java:S6541" })
 	public static String metaphone(String str) {
 		if (isEmpty(str))
 			return null;
@@ -7772,7 +7772,7 @@ public class StringUtils {
 	 * @return The wrapped string, or <jk>null</jk> if input is <jk>null</jk>.
 	 * @throws IllegalArgumentException if wrapLength is &lt;= 0 or newline is <jk>null</jk>.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({ "java:S3776", "java:S6541" })
 	public static String wrap(String str, int wrapLength, String newline) {
 		if (str == null)
 			return null;
@@ -7956,7 +7956,7 @@ public class StringUtils {
 	 * @param ip The IPv6 address string to validate.
 	 * @return <jk>true</jk> if the string is a valid IPv6 address format, <jk>false</jk> otherwise.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({ "java:S3776", "java:S6541" })
 	public static boolean isValidIPv6Address(String ip) {
 		if (ip == null || ip.isEmpty())
 			return false;

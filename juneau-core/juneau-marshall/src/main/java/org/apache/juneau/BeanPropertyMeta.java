@@ -962,7 +962,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @return The previous property value.
 	 * @throws BeanRuntimeException If property could not be set.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({ "java:S3776", "java:S6541" })
 	public Object set(BeanMap<?> m, String pName, Object value) throws BeanRuntimeException {
 		Object value1 = m.meta.onWriteProperty(m.bean, pName, value);
 		try {

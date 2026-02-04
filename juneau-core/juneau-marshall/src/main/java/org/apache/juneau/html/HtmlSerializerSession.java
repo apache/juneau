@@ -468,7 +468,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		out.ie(i).eTag("table").nl(i);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked", "java:S3776" })
+	@SuppressWarnings({ "rawtypes", "unchecked", "java:S3776", "java:S6541" })
 	private void serializeCollection(XmlWriter out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, String name, BeanPropertyMeta ppMeta) throws SerializeException {
 
 		HtmlClassMeta cHtml = getHtmlClassMeta(sType);

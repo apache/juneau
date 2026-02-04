@@ -243,7 +243,7 @@ public class OpenApiParserSession extends UonParserSession {
 		return t;
 	}
 
-	@SuppressWarnings({ "unchecked", "java:S3776" })
+	@SuppressWarnings({ "unchecked", "java:S3776", "java:S6541" })
 	private <T> T parseInner(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws SchemaValidationException, ParseException {
 		schema.validateInput(in);
 		if (in == null || "null".equals(in)) {

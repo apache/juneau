@@ -319,6 +319,7 @@ public class VarResolverSession {
 	 * @return The same writer.
 	 * @throws IOException Thrown by underlying stream.
 	 */
+	@SuppressWarnings("java:S6541")
 	public Writer resolveTo(String s, Writer out) throws IOException {
 
 		// S1: Not in variable, looking for $

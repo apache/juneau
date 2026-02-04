@@ -792,7 +792,7 @@ public class ConfigMap implements ConfigStoreListener {
 		return changes2;
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({ "java:S3776", "java:S6541" })
 	private ConfigMap load(String contents) throws IOException {
 		if (contents == null)
 			contents = "";

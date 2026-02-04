@@ -22,3 +22,4 @@ cursor-*
 
 # Release script generated history files
 scripts/release-history-*.json
+/SONARQUBE_ISSUES.txt

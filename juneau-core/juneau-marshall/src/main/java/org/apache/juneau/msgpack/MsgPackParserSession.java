@@ -178,7 +178,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 	/*
 	 * Workhorse method.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({ "java:S3776", "java:S6541" })
 	private <T> T parseAnything(ClassMeta<?> eType, MsgPackInputStream is, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)

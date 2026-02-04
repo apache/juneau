@@ -216,7 +216,7 @@ public final class StringFormat {
 		}
 
 		@Override
-		@SuppressWarnings("java:S3776")
+		@SuppressWarnings({ "java:S3776", "java:S6541" })
 		void append(StringBuilder sb, Object[] args, Locale locale) {
 			// String.format() throws MissingFormatArgumentException when argument is missing
 			if (args == null || index >= args.length || index < 0) {
@@ -483,7 +483,7 @@ public final class StringFormat {
 	/**
 	 * Parses the pattern into a list of tokens.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({ "java:S3776", "java:S6541" })
 	private static List<Token> parseTokens(String pattern) {
 		var tokens = new ArrayList<Token>();
 		var length = pattern.length();

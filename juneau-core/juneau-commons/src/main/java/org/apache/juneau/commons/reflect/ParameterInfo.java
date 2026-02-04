@@ -873,7 +873,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @throws ExecutableException If a required parameter (non-Optional, non-collection) cannot be resolved
 	 * 	from the bean store or <c>otherBeans</c>.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({ "java:S3776", "java:S6541" })
 	public Object resolveValue(BeanStore beanStore, Object... otherBeans) {
 		var pt = getParameterType();
 		var bq = getResolvedQualifier();
