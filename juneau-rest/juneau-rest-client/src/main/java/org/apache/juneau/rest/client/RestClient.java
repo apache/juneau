@@ -7989,7 +7989,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 		try {
 			Object ret = null;
-			RestResponse res = null;
+			RestResponse res;
 			rc.rethrow(RuntimeException.class);
 			rom.forEachException(rc::rethrow);
 			if (ror.getReturnValue() == RemoteReturn.NONE) {

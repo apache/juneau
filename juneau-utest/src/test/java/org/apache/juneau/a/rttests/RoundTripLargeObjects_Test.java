@@ -108,10 +108,9 @@ class RoundTripLargeObjects_Test extends TestBase {
 		var s = t.getSerializer();
 		var p = t.getParser();
 		System.err.println("\n---Speed test on " + t.label + "---"); // NOT DEBUG
-		var r = (Object)"";
 
 		// Initialization run.
-		r = s.serialize(a);
+		Object r = s.serialize(a);
 		System.err.println(f("Serialized size: {0,number} ", (r instanceof String ? r.toString().length() : ((byte[])r).length))); // NOT DEBUG
 		p.parse(r, A.class);
 

@@ -308,7 +308,7 @@ public class Maps<K,V> {
 		if (sparse && e(map))
 			return null;
 
-		Map<K,V> map2 = null;
+		Map<K,V> map2;
 
 		if (ordered) {
 			map2 = new LinkedHashMap<>();

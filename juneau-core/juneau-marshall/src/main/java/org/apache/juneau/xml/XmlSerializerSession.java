@@ -597,8 +597,6 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			if (nn(ns)) {
 				if (nn(ns.uri))
 					addNamespace(ns);
-				else
-					ns = null;
 			}
 		}
 
@@ -763,7 +761,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		int i = isMixedOrText ? 0 : indent;       // Current indentation
 		ClassMeta<?> aType = null;     // The actual type
 		ClassMeta<?> wType = null;     // The wrapped type (delegate)
-		ClassMeta<?> sType = object(); // The serialized type
+		ClassMeta<?> sType; // The serialized type
 
 		aType = push2(keyName, o, eType);
 

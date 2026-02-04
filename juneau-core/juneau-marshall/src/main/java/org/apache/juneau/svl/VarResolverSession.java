@@ -332,7 +332,7 @@ public class VarResolverSession {
 		var hasInternalVar = false;
 		var hasInnerEscapes = false;
 		String varType = null;
-		String varVal = null;
+		String varVal;
 		var x = 0;
 		var x2 = 0;
 		var depth = 0;

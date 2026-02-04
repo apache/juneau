@@ -4511,29 +4511,29 @@ public class RestContext extends Context {
 			for (var o : children) {
 				String path = null;
 				Supplier<?> so;
+				RestContext.Builder cb = null;
 
 				if (o instanceof RestChild o2) {
 					path = o2.path;
 					var o3 = o2.resource;
 					so = () -> o3;
-				}
-
-				RestContext.Builder cb = null;
-
-				if (o instanceof Class<?> oc) {
-					// Don't allow specifying yourself as a child.  Causes an infinite loop.
-					if (oc == resourceClass)
-						continue;
-					cb = RestContext.create(oc, restContext, inner);
-					if (beanStore.getBean(oc).isPresent()) {
-						so = () -> beanStore.getBean(oc).get();  // If we resolved via injection, always get it this way.
-					} else {
-						Object o2 = BeanCreator.of(oc, beanStore).builder(RestContext.Builder.class, cb).run();
-						so = () -> o2;
-					}
+					cb = RestContext.create(o3.getClass(), restContext, inner);
 				} else {
-					cb = RestContext.create(o.getClass(), restContext, inner);
-					so = () -> o;
+					if (o instanceof Class<?> oc) {
+						// Don't allow specifying yourself as a child.  Causes an infinite loop.
+						if (oc == resourceClass)
+							continue;
+						cb = RestContext.create(oc, restContext, inner);
+						if (beanStore.getBean(oc).isPresent()) {
+							so = () -> beanStore.getBean(oc).get();  // If we resolved via injection, always get it this way.
+						} else {
+							Object o2 = BeanCreator.of(oc, beanStore).builder(RestContext.Builder.class, cb).run();
+							so = () -> o2;
+						}
+					} else {
+						cb = RestContext.create(o.getClass(), restContext, inner);
+						so = () -> o;
+					}
 				}
 
 				if (nn(path))

@@ -571,8 +571,9 @@ public class HtmlParserSession extends XmlParserSession {
 	private <E> Collection<E> parseTableIntoCollection(XmlReader r, Collection<E> l, ClassMeta<E> type, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException, XMLStreamException {
 
-		HtmlTag tag = nextTag(r, TR);
+		nextTag(r, TR);
 		List<String> keys = list();
+		HtmlTag tag;
 		while (true) {
 			tag = nextTag(r, TH, xTR);
 			if (tag == xTR)

@@ -812,7 +812,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		ClassMeta<?> aType = null;       // The actual type
 		ClassMeta<?> wType = null;     // The wrapped type (delegate)
-		ClassMeta<?> sType = object();   // The serialized type
+		ClassMeta<?> sType;   // The serialized type
 
 		var addJsonTags = isAddJsonTags();
 

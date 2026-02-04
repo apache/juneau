@@ -920,7 +920,7 @@ public class XmlParserSession extends ReaderParserSession {
 				if (depth <= 0)
 					break;
 			}
-			et = r.next();
+			r.next();
 		}
 		var s = sb2.toString();
 		returnStringBuilder(sb2);

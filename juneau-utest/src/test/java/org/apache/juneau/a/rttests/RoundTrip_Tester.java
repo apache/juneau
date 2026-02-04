@@ -144,7 +144,7 @@ public class RoundTrip_Tester {
 
 	public <T> Object serialize(T object, Serializer s) throws Exception {
 
-		var out = (Object)null;
+		Object out;
 		if (s.isWriterSerializer())
 			out = ((WriterSerializer)s).serialize(object);
 		else {

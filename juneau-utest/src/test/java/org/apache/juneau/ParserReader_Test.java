@@ -61,14 +61,13 @@ class ParserReader_Test extends TestBase {
 	//====================================================================================================
 	@Test void a02_marking() throws Exception {
 		var t = "a123456789b123456789c123456789d123456789e123456789f123456789g123456789h123456789i123456789j123456789";
-		var r = (Object)null;
 
 		// Min buff size is 20.
 		var pr = createParserReader(t);
 		read(pr, 5);
 		pr.mark();
 		read(pr, 10);
-		r = pr.getMarked();
+		Object r = pr.getMarked();
 		assertEquals("56789b1234", r);
 		r = read(pr);
 		assertEquals("56789c123456789d123456789e123456789f123456789g123456789h123456789i123456789j123456789", r);

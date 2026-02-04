@@ -217,7 +217,7 @@ class Swagger_Path_Test extends TestBase {
 		x = s.getParameterInfo("/c/{P}","post","path","P");
 		assertBean(x, "description,type", "b,string");
 
-		x = s.getParameterInfo("/d/{P}","delete","path","P");
+		s.getParameterInfo("/d/{P}","delete","path","P");
 
 		x = s.getParameterInfo("/e/{P}","get","path","P");
 		assertList(x.getEnum(), "a", "b");
