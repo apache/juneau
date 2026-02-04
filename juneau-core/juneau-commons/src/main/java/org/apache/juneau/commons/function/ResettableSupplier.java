@@ -177,7 +177,7 @@ public class ResettableSupplier<T> implements OptionalSupplier<T> {
 		Optional<T> o = cache.get();
 		if (o == null)
 			return new ResettableSupplier<>(supplier);
-		return new ResettableSupplier<>(()->o.get());
+		return new ResettableSupplier<>(o::get);
 	}
 
 	/**

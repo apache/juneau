@@ -48,17 +48,17 @@ public class JsonSchemaConfigAnnotation {
 		public void apply(AnnotationInfo<JsonSchemaConfig> ai, JsonSchemaGenerator.Builder b) {
 			JsonSchemaConfig a = ai.inner();
 
-			string(a.addDescriptionsTo()).map(TypeCategory::parseArray).ifPresent(x -> b.addDescriptionsTo(x));
-			string(a.addExamplesTo()).map(TypeCategory::parseArray).ifPresent(x -> b.addExamplesTo(x));
-			bool(a.allowNestedDescriptions()).ifPresent(x -> b.allowNestedDescriptions(x));
-			bool(a.allowNestedExamples()).ifPresent(x -> b.allowNestedExamples(x));
-			type(a.beanDefMapper()).ifPresent(x -> b.beanDefMapper(x));
-			string(a.ignoreTypes()).ifPresent(x -> b.ignoreTypes(x));
-			bool(a.useBeanDefs()).ifPresent(x -> b.useBeanDefs(x));
-			bool(a.detectRecursions()).ifPresent(x -> b.detectRecursions(x));
-			bool(a.ignoreRecursions()).ifPresent(x -> b.ignoreRecursions(x));
-			integer(a.initialDepth(), "initialDepth").ifPresent(x -> b.initialDepth(x));
-			integer(a.maxDepth(), "maxDepth").ifPresent(x -> b.maxDepth(x));
+			string(a.addDescriptionsTo()).map(TypeCategory::parseArray).ifPresent(b::addDescriptionsTo);
+			string(a.addExamplesTo()).map(TypeCategory::parseArray).ifPresent(b::addExamplesTo);
+			bool(a.allowNestedDescriptions()).ifPresent(b::allowNestedDescriptions);
+			bool(a.allowNestedExamples()).ifPresent(b::allowNestedExamples);
+			type(a.beanDefMapper()).ifPresent(b::beanDefMapper);
+			string(a.ignoreTypes()).ifPresent(b::ignoreTypes);
+			bool(a.useBeanDefs()).ifPresent(b::useBeanDefs);
+			bool(a.detectRecursions()).ifPresent(b::detectRecursions);
+			bool(a.ignoreRecursions()).ifPresent(b::ignoreRecursions);
+			integer(a.initialDepth(), "initialDepth").ifPresent(b::initialDepth);
+			integer(a.maxDepth(), "maxDepth").ifPresent(b::maxDepth);
 		}
 	}
 }

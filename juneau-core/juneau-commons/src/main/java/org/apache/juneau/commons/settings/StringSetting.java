@@ -123,7 +123,7 @@ public class StringSetting extends Setting<String> {
 	 * @return The property value as a Boolean, or {@link Optional#empty()} if not found.
 	 */
 	public Setting<Boolean> asBoolean() {
-		return map(v -> Boolean.parseBoolean(v));
+		return map(Boolean::parseBoolean);
 	}
 
 	/**
@@ -163,7 +163,7 @@ public class StringSetting extends Setting<String> {
 	 * @return The property value as a File, or {@link Optional#empty()} if not found.
 	 */
 	public Setting<File> asFile() {
-		return map(v -> new File(v));
+		return map(File::new);
 	}
 
 	/**

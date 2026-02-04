@@ -48,11 +48,11 @@ public class XmlConfigAnnotation {
 		public void apply(AnnotationInfo<XmlConfig> ai, XmlParser.Builder b) {
 			XmlConfig a = ai.inner();
 
-			type(a.eventAllocator()).ifPresent(x -> b.eventAllocator(x));
-			bool(a.preserveRootElement()).ifPresent(x -> b.preserveRootElement(x));
-			type(a.reporter()).ifPresent(x -> b.reporter(x));
-			type(a.resolver()).ifPresent(x -> b.resolver(x));
-			bool(a.validating()).ifPresent(x -> b.validating(x));
+			type(a.eventAllocator()).ifPresent(b::eventAllocator);
+			bool(a.preserveRootElement()).ifPresent(b::preserveRootElement);
+			type(a.reporter()).ifPresent(b::reporter);
+			type(a.resolver()).ifPresent(b::resolver);
+			bool(a.validating()).ifPresent(b::validating);
 		}
 	}
 
@@ -74,12 +74,12 @@ public class XmlConfigAnnotation {
 		public void apply(AnnotationInfo<XmlConfig> ai, XmlSerializer.Builder b) {
 			XmlConfig a = ai.inner();
 
-			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesXml(x));
-			bool(a.addNamespaceUrisToRoot()).ifPresent(x -> b.addNamespaceUrisToRoot(x));
-			bool(a.disableAutoDetectNamespaces()).ifPresent(x -> b.disableAutoDetectNamespaces(x));
-			string(a.defaultNamespace()).map(Namespace::create).ifPresent(x -> b.defaultNamespace(x));
-			bool(a.enableNamespaces()).ifPresent(x -> b.enableNamespaces(x));
-			strings(a.namespaces()).map(Namespace::createArray).ifPresent(x -> b.namespaces(x));
+			bool(a.addBeanTypes()).ifPresent(b::addBeanTypesXml);
+			bool(a.addNamespaceUrisToRoot()).ifPresent(b::addNamespaceUrisToRoot);
+			bool(a.disableAutoDetectNamespaces()).ifPresent(b::disableAutoDetectNamespaces);
+			string(a.defaultNamespace()).map(Namespace::create).ifPresent(b::defaultNamespace);
+			bool(a.enableNamespaces()).ifPresent(b::enableNamespaces);
+			strings(a.namespaces()).map(Namespace::createArray).ifPresent(b::namespaces);
 		}
 	}
 }

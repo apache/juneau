@@ -312,7 +312,7 @@ public class BeanCreator<T> {
 			var match = new Match<MethodInfo>();
 
 			// Look for static creator method.
-			type.getPublicMethods().stream().filter(x -> isStaticCreateMethod(x)).forEach(x -> {
+			type.getPublicMethods().stream().filter(this::isStaticCreateMethod).forEach(x -> {
 				found.set("STATIC_CREATOR");
 				if (hasAllParams(x))
 					match.add(x);
@@ -377,12 +377,12 @@ public class BeanCreator<T> {
 			msg = "No public/protected constructors found";
 		} else if (found.get().equals("STATIC_CREATOR")) {
 			msg = "Static creator found but could not find prerequisites: "
-				+ type.getPublicMethods().stream().filter(x -> isStaticCreateMethod(x)).map(x -> getMissingParams(x)).sorted().collect(joining(" or "));
+				+ type.getPublicMethods().stream().filter(this::isStaticCreateMethod).map(this::getMissingParams).sorted().collect(joining(" or "));
 		} else if (found.get().equals("PUBLIC_CONSTRUCTOR")) {
-			msg = "Public constructor found but could not find prerequisites: " + type.getPublicConstructors().stream().map(x -> getMissingParams(x)).sorted().collect(joining(" or "));
+			msg = "Public constructor found but could not find prerequisites: " + type.getPublicConstructors().stream().map(this::getMissingParams).sorted().collect(joining(" or "));
 		} else {
 			msg = "Protected constructor found but could not find prerequisites: "
-				+ type.getDeclaredConstructors().stream().filter(ConstructorInfo::isProtected).map(x -> getMissingParams(x)).sorted().collect(joining(" or "));
+				+ type.getDeclaredConstructors().stream().filter(ConstructorInfo::isProtected).map(this::getMissingParams).sorted().collect(joining(" or "));
 		}
 		throw new ExecutableException("Could not instantiate class {0}: {1}.", type.getName(), msg);
 	}
@@ -404,7 +404,7 @@ public class BeanCreator<T> {
 	 * @return A supplier that returns the results of the {@link #run()} method.
 	 */
 	public Supplier<T> supplier() {
-		return () -> run();
+		return this::run;
 	}
 
 	/**

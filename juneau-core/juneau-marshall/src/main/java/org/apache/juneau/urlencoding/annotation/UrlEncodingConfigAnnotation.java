@@ -48,7 +48,7 @@ public class UrlEncodingConfigAnnotation {
 		public void apply(AnnotationInfo<UrlEncodingConfig> ai, UrlEncodingParser.Builder b) {
 			UrlEncodingConfig a = ai.inner();
 
-			bool(a.expandedParams()).ifPresent(x -> b.expandedParams(x));
+			bool(a.expandedParams()).ifPresent(b::expandedParams);
 		}
 	}
 
@@ -70,7 +70,7 @@ public class UrlEncodingConfigAnnotation {
 		public void apply(AnnotationInfo<UrlEncodingConfig> ai, UrlEncodingSerializer.Builder b) {
 			UrlEncodingConfig a = ai.inner();
 
-			bool(a.expandedParams()).ifPresent(x -> b.expandedParams(x));
+			bool(a.expandedParams()).ifPresent(b::expandedParams);
 		}
 	}
 }

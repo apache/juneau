@@ -57,6 +57,6 @@ public class RestOpSessionArgs extends SimpleRestOperationArg {
 	 * @param function The function for finding the arg.
 	 */
 	protected <T> RestOpSessionArgs(ThrowingFunction<RestOpSession,T> function) {
-		super(session -> function.apply(session));
+		super(function::apply);
 	}
 }

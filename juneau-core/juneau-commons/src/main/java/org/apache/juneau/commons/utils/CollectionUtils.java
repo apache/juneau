@@ -2173,7 +2173,7 @@ public class CollectionUtils {
 		if (value == null || (nullIfEmpty && value.isEmpty()))
 			return null;
 		var l = new ArrayList<E>();
-		value.forEach(x -> l.add(x));
+		value.forEach(l::add);
 		return l;
 	}
 
@@ -2361,7 +2361,7 @@ public class CollectionUtils {
 		if (value == null)
 			return null;
 		var l = new TreeSet<E>();
-		value.forEach(x -> l.add(x));
+		value.forEach(l::add);
 		return l;
 	}
 
@@ -2377,7 +2377,7 @@ public class CollectionUtils {
 		if (value == null || (nullIfEmpty && value.isEmpty()))
 			return null;
 		var l = new TreeSet<E>();
-		value.forEach(x -> l.add(x));
+		value.forEach(l::add);
 		return l;
 	}
 

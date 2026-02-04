@@ -731,6 +731,6 @@ public class Cache<K,V> {
 	 * @return A cached or new Tuple1 wrapper for the key.
 	 */
 	private Tuple1<K> wrap(K key) {
-		return getWrapperCache().computeIfAbsent(key, k -> Tuple1.of(k));
+		return getWrapperCache().computeIfAbsent(key, Tuple1::of);
 	}
 }

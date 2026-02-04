@@ -229,7 +229,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 		this.isParameterizedType = innerType == null ? false : (innerType instanceof ParameterizedType);
 		this.dimensions = mem(this::findDimensions);
 		this.componentType = mem(this::findComponentType);
-		this.packageInfo = mem(() -> opt(inner).map(x -> x.getPackage()).filter(p -> p != null).map(PackageInfo::of).orElse(null));  // PackageInfo may be null for primitive types and arrays.
+		this.packageInfo = mem(() -> opt(inner).map(Class::getPackage).filter(p -> p != null).map(PackageInfo::of).orElse(null));  // PackageInfo may be null for primitive types and arrays.
 		this.parents = mem(this::findParents);
 		this.declaredAnnotations = mem(() -> (List)opt(inner).map(x -> u(l(x.getDeclaredAnnotations()))).orElse(liste()).stream().flatMap(a -> streamRepeated(a)).map(a -> ai(this, a)).toList());
 		this.nameFull = mem(() -> getNameFormatted(FULL, true, '$', BRACKETS));

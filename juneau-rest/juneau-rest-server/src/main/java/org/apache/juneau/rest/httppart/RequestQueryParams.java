@@ -411,7 +411,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	public RequestQueryParam getLast(String name) {
 		assertArgNotNull("name", name);
 		var v = Value.<RequestQueryParam>empty();
-		stream(name).forEach(x -> v.set(x));
+		stream(name).forEach(v::set);
 		return v.orElseGet(() -> new RequestQueryParam(req, name, null).parser(parser));
 	}
 

@@ -391,8 +391,8 @@ public class BeanMeta<T> {
 		implClassConstructor = opt(implClass).map(x -> x.getPublicConstructor(x2 -> x2.hasNumParameters(0)).orElse(null)).orElse(null);
 		fluentSetters = beanContext.isFindFluentSetters() || (nn(bf) && bf.isFluentSetters());
 		stopClass = opt(bf).map(x -> x.getStopClass()).orElse(info(Object.class));
-		beanRegistry = mem(()->findBeanRegistry());
-		classHierarchy = mem(()->findClassHierarchy());
+		beanRegistry = mem(this::findBeanRegistry);
+		classHierarchy = mem(this::findClassHierarchy);
 		beanConstructor = findBeanConstructor();
 
 		// Local variables for initialization
@@ -447,7 +447,7 @@ public class BeanMeta<T> {
 				findBeanFields().forEach(x -> {
 					var name = ap.find(x).stream()
 						.filter(x2 -> x2.isType(Beanp.class) || x2.isType(Name.class))
-						.map(x2 -> name(x2))
+						.map(BeanMeta::name)
 						.filter(Objects::nonNull)
 						.findFirst()
 						.orElse(propertyNamer.getPropertyName(x.getName()));
@@ -498,7 +498,7 @@ public class BeanMeta<T> {
 				var p = i.next();
 				try {
 					if (p.field == null)
-						findInnerBeanField(p.name).ifPresent(x -> p.setInnerField(x));
+						findInnerBeanField(p.name).ifPresent(p::setInnerField);
 
 					if (p.validate(beanContext, beanRegistry.get(), typeVarImpls, readOnlyProps, writeOnlyProps)) {
 
@@ -554,7 +554,7 @@ public class BeanMeta<T> {
 					// Only include specified properties if BeanFilter.includeKeys is specified.
 					// Note that the order must match includeKeys.
 					Map<String,BeanPropertyMeta> p2 = map();  // NOAI
-					bfbpi.stream().filter(x -> p.containsKey(x)).forEach(x -> p2.put(x, p.remove(x)));
+					bfbpi.stream().filter(p::containsKey).forEach(x -> p2.put(x, p.remove(x)));
 					_hiddenProperties.putAll(p);
 					_properties.set(p2);
 				}
@@ -588,7 +588,7 @@ public class BeanMeta<T> {
 		dynaProperty = _dynaProperty.get();
 		sortProperties = _sortProperties;
 		typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(beanContext.string()).beanRegistry(beanRegistry.get()).build();
-		dictionaryName = mem(()->findDictionaryName());
+		dictionaryName = mem(this::findDictionaryName);
 		beanProxyInvocationHandler = mem(()->beanContext.isUseInterfaceProxies() && c.isInterface() ? new BeanProxyInvocationHandler<>(this) : null);
 	}
 
@@ -1309,8 +1309,8 @@ public class BeanMeta<T> {
 			.getParentsAndInterfaces()
 			.stream()
 			.skip(1)
-			.map(x -> beanContext.getClassMeta(x))
-			.map(x -> x.getBeanRegistry())
+			.map(beanContext::getClassMeta)
+			.map(ClassMeta::getBeanRegistry)
 			.filter(Objects::nonNull)
 			.map(x -> x.getTypeName(this.classMeta))
 			.filter(Objects::nonNull)
@@ -1324,7 +1324,7 @@ public class BeanMeta<T> {
 			.stream()
 			.map(AnnotationInfo::inner)
 			.filter(x -> ! x.typeName().isEmpty())
-			.map(x -> x.typeName())
+			.map(Bean::typeName)
 			.findFirst()
 			.orElse(null);
 	}

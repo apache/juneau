@@ -66,12 +66,12 @@ public class HtmlConfigAnnotation {
 		public void apply(AnnotationInfo<HtmlConfig> ai, HtmlSerializer.Builder b) {
 			HtmlConfig a = ai.inner();
 
-			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesHtml(x));
-			bool(a.addKeyValueTableHeaders()).ifPresent(x -> b.addKeyValueTableHeaders(x));
-			bool(a.disableDetectLabelParameters()).ifPresent(x -> b.disableDetectLabelParameters(x));
-			bool(a.disableDetectLinksInStrings()).ifPresent(x -> b.disableDetectLinksInStrings(x));
-			string(a.labelParameter()).ifPresent(x -> b.labelParameter(x));
-			string(a.uriAnchorText()).map(AnchorText::valueOf).ifPresent(x -> b.uriAnchorText(x));
+			bool(a.addBeanTypes()).ifPresent(b::addBeanTypesHtml);
+			bool(a.addKeyValueTableHeaders()).ifPresent(b::addKeyValueTableHeaders);
+			bool(a.disableDetectLabelParameters()).ifPresent(b::disableDetectLabelParameters);
+			bool(a.disableDetectLinksInStrings()).ifPresent(b::disableDetectLinksInStrings);
+			string(a.labelParameter()).ifPresent(b::labelParameter);
+			string(a.uriAnchorText()).map(AnchorText::valueOf).ifPresent(b::uriAnchorText);
 		}
 	}
 }

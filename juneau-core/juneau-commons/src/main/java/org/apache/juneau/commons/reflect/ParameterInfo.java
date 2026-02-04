@@ -179,7 +179,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		this.inner = inner;
 		this.index = index;
 		this.type = type;
-		this.annotations = mem(() -> stream(inner.getAnnotations()).flatMap(a -> AnnotationUtils.streamRepeated(a)).map(a -> ai(this, a)).toList());
+		this.annotations = mem(() -> stream(inner.getAnnotations()).flatMap(AnnotationUtils::streamRepeated).map(a -> ai(this, a)).toList());
 		this.matchingParameters = mem(this::findMatchingParameters);
 		this.toString = mem(this::findToString);
 	}

@@ -48,7 +48,7 @@ public class JsonConfigAnnotation {
 		public void apply(AnnotationInfo<JsonConfig> ai, JsonParser.Builder b) {
 			JsonConfig a = ai.inner();
 
-			bool(a.validateEnd()).ifPresent(x -> b.validateEnd(x));
+			bool(a.validateEnd()).ifPresent(b::validateEnd);
 		}
 	}
 
@@ -70,9 +70,9 @@ public class JsonConfigAnnotation {
 		public void apply(AnnotationInfo<JsonConfig> ai, JsonSerializer.Builder b) {
 			JsonConfig a = ai.inner();
 
-			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesJson(x));
-			bool(a.escapeSolidus()).ifPresent(x -> b.escapeSolidus(x));
-			bool(a.simpleAttrs()).ifPresent(x -> b.simpleAttrs(x));
+			bool(a.addBeanTypes()).ifPresent(b::addBeanTypesJson);
+			bool(a.escapeSolidus()).ifPresent(b::escapeSolidus);
+			bool(a.simpleAttrs()).ifPresent(b::simpleAttrs);
 		}
 	}
 }

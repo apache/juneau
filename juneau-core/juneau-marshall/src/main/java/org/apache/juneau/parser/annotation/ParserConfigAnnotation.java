@@ -48,7 +48,7 @@ public class ParserConfigAnnotation {
 		public void apply(AnnotationInfo<ParserConfig> ai, InputStreamParser.Builder b) {
 			ParserConfig a = ai.inner();
 
-			string(a.binaryFormat()).map(BinaryFormat::valueOf).ifPresent(x -> b.binaryFormat(x));
+			string(a.binaryFormat()).map(BinaryFormat::valueOf).ifPresent(b::binaryFormat);
 		}
 	}
 
@@ -70,12 +70,12 @@ public class ParserConfigAnnotation {
 		public void apply(AnnotationInfo<ParserConfig> ai, Parser.Builder b) {
 			ParserConfig a = ai.inner();
 
-			bool(a.autoCloseStreams()).ifPresent(x -> b.autoCloseStreams(x));
-			integer(a.debugOutputLines(), "debugOutputLines").ifPresent(x -> b.debugOutputLines(x));
-			type(a.listener()).ifPresent(x -> b.listener(x));
-			bool(a.strict()).ifPresent(x -> b.strict(x));
-			bool(a.trimStrings()).ifPresent(x -> b.trimStrings(x));
-			bool(a.unbuffered()).ifPresent(x -> b.unbuffered(x));
+			bool(a.autoCloseStreams()).ifPresent(b::autoCloseStreams);
+			integer(a.debugOutputLines(), "debugOutputLines").ifPresent(b::debugOutputLines);
+			type(a.listener()).ifPresent(b::listener);
+			bool(a.strict()).ifPresent(b::strict);
+			bool(a.trimStrings()).ifPresent(b::trimStrings);
+			bool(a.unbuffered()).ifPresent(b::unbuffered);
 		}
 	}
 
@@ -97,8 +97,8 @@ public class ParserConfigAnnotation {
 		public void apply(AnnotationInfo<ParserConfig> ai, ReaderParser.Builder b) {
 			ParserConfig a = ai.inner();
 
-			charset(a.fileCharset()).ifPresent(x -> b.fileCharset(x));
-			charset(a.streamCharset()).ifPresent(x -> b.streamCharset(x));
+			charset(a.fileCharset()).ifPresent(b::fileCharset);
+			charset(a.streamCharset()).ifPresent(b::streamCharset);
 		}
 	}
 }

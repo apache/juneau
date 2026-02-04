@@ -453,10 +453,10 @@ public class RestPostAnnotation {
 			string(a.defaultCharset()).map(Charset::forName).ifPresent(b::defaultCharset);
 			string(a.maxInput()).ifPresent(b::maxInput);
 			stream(a.path()).forEach(b::path);
-			string(a.value()).ifPresent(x -> b.path(x));
+			string(a.value()).ifPresent(b::path);
 			cdl(a.rolesDeclared()).forEach(b::rolesDeclared);
 			string(a.roleGuard()).ifPresent(b::roleGuard);
-			string(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
+			string(a.debug()).map(Enablement::fromString).ifPresent(b::debug);
 		}
 
 	}

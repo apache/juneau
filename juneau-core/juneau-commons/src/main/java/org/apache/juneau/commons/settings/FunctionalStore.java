@@ -136,7 +136,7 @@ public class FunctionalStore implements SettingStore {
 	 */
 	@Override
 	public void clear() {
-		safe(()->clearer.run());
+		safe(clearer::run);
 	}
 
 	/**

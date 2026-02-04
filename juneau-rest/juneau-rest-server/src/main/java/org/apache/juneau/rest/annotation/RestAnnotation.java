@@ -668,34 +668,34 @@ public class RestAnnotation {
 			classes(a.parsers()).ifPresent(x -> b.parsers().add(x));
 			type(a.partSerializer()).ifPresent(x -> b.partSerializer().type(x));
 			type(a.partParser()).ifPresent(x -> b.partParser().type(x));
-			stream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
-			stream(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
-			stream(a.defaultRequestAttributes()).map(BasicNamedAttribute::ofPair).forEach(x -> b.defaultRequestAttributes(x));
-			stream(a.defaultRequestHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultRequestHeaders(x));
-			stream(a.defaultResponseHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultResponseHeaders(x));
-			string(a.defaultAccept()).map(HttpHeaders::accept).ifPresent(x -> b.defaultRequestHeaders(x));
-			string(a.defaultContentType()).map(HttpHeaders::contentType).ifPresent(x -> b.defaultRequestHeaders(x));
+			stream(a.produces()).map(MediaType::of).forEach(b::produces);
+			stream(a.consumes()).map(MediaType::of).forEach(b::consumes);
+			stream(a.defaultRequestAttributes()).map(BasicNamedAttribute::ofPair).forEach(b::defaultRequestAttributes);
+			stream(a.defaultRequestHeaders()).map(HttpHeaders::stringHeader).forEach(b::defaultRequestHeaders);
+			stream(a.defaultResponseHeaders()).map(HttpHeaders::stringHeader).forEach(b::defaultResponseHeaders);
+			string(a.defaultAccept()).map(HttpHeaders::accept).ifPresent(b::defaultRequestHeaders);
+			string(a.defaultContentType()).map(HttpHeaders::contentType).ifPresent(b::defaultRequestHeaders);
 			b.responseProcessors().add(a.responseProcessors());
 			b.children((java.lang.Object[])a.children());
 			b.restOpArgs(a.restOpArgs());
 			classes(a.encoders()).ifPresent(x -> b.encoders().add(x));
-			string(a.uriContext()).ifPresent(x -> b.uriContext(x));
-			string(a.uriAuthority()).ifPresent(x -> b.uriAuthority(x));
-			string(a.uriRelativity()).map(UriRelativity::valueOf).ifPresent(x -> b.uriRelativity(x));
-			string(a.uriResolution()).map(UriResolution::valueOf).ifPresent(x -> b.uriResolution(x));
+			string(a.uriContext()).ifPresent(b::uriContext);
+			string(a.uriAuthority()).ifPresent(b::uriAuthority);
+			string(a.uriRelativity()).map(UriRelativity::valueOf).ifPresent(b::uriRelativity);
+			string(a.uriResolution()).map(UriResolution::valueOf).ifPresent(b::uriResolution);
 			b.messages().location(string(a.messages()).orElse(null));
 			type(a.staticFiles()).ifPresent(x -> b.staticFiles().type(x));
-			string(a.path()).ifPresent(x -> b.path(x));
-			string(a.clientVersionHeader()).ifPresent(x -> b.clientVersionHeader(x));
+			string(a.path()).ifPresent(b::path);
+			string(a.clientVersionHeader()).ifPresent(b::clientVersionHeader);
 			type(a.callLogger()).ifPresent(x -> b.callLogger().type(x));
-			type(a.swaggerProvider()).ifPresent(x -> b.swaggerProvider(x));
-			type(a.restChildrenClass()).ifPresent(x -> b.restChildrenClass(x));
+			type(a.swaggerProvider()).ifPresent(b::swaggerProvider);
+			type(a.restChildrenClass()).ifPresent(b::restChildrenClass);
 			type(a.debugEnablement()).ifPresent(x -> b.debugEnablement().type(x));
-			string(a.disableContentParam()).map(Boolean::parseBoolean).ifPresent(x -> b.disableContentParam(x));
-			string(a.allowedHeaderParams()).ifPresent(x -> b.allowedHeaderParams(x));
-			string(a.allowedMethodHeaders()).ifPresent(x -> b.allowedMethodHeaders(x));
-			string(a.allowedMethodParams()).ifPresent(x -> b.allowedMethodParams(x));
-			bool(a.renderResponseStackTraces()).ifPresent(x -> b.renderResponseStackTraces(x));
+			string(a.disableContentParam()).map(Boolean::parseBoolean).ifPresent(b::disableContentParam);
+			string(a.allowedHeaderParams()).ifPresent(b::allowedHeaderParams);
+			string(a.allowedMethodHeaders()).ifPresent(b::allowedMethodHeaders);
+			string(a.allowedMethodParams()).ifPresent(b::allowedMethodParams);
+			bool(a.renderResponseStackTraces()).ifPresent(b::renderResponseStackTraces);
 		}
 	}
 
@@ -717,14 +717,14 @@ public class RestAnnotation {
 		public void apply(AnnotationInfo<Rest> ai, RestOpContext.Builder b) {
 			Rest a = ai.inner();
 
-			stream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
-			stream(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
+			stream(a.produces()).map(MediaType::of).forEach(b::produces);
+			stream(a.consumes()).map(MediaType::of).forEach(b::consumes);
 			b.converters().append(a.converters());
 			b.guards().append(a.guards());
-			string(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
-			string(a.maxInput()).ifPresent(x -> b.maxInput(x));
-			cdl(a.rolesDeclared()).forEach(x -> b.rolesDeclared(x));
-			string(a.roleGuard()).ifPresent(x -> b.roleGuard(x));
+			string(a.defaultCharset()).map(Charset::forName).ifPresent(b::defaultCharset);
+			string(a.maxInput()).ifPresent(b::maxInput);
+			cdl(a.rolesDeclared()).forEach(b::rolesDeclared);
+			string(a.roleGuard()).ifPresent(b::roleGuard);
 		}
 	}
 

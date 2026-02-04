@@ -1579,7 +1579,7 @@ public class BeanSession extends ContextSession {
 	 */
 	protected final ClassMeta<Object[]> getArgsClassMeta(Type[] classes) {
 		assertArgNotNull("classes", classes);
-		return new ClassMeta(Arrays.stream(classes).map(x -> getClassMeta(x)).toList());
+		return new ClassMeta(Arrays.stream(classes).map(this::getClassMeta).toList());
 	}
 
 	/**

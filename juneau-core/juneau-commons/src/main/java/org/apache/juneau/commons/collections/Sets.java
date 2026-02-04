@@ -226,7 +226,7 @@ public class Sets<E> {
 			for (var o : values) {
 				if (nn(o)) {
 					if (o instanceof Collection<?> o2) {
-						o2.forEach(x -> addAny(x));
+						o2.forEach(this::addAny);
 					} else if (isArray(o)) {
 						for (var i = 0; i < Array.getLength(o); i++)
 							addAny(Array.get(o, i));

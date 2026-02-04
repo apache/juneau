@@ -49,20 +49,20 @@ public class HtmlDocConfigAnnotation {
 		public void apply(AnnotationInfo<HtmlDocConfig> ai, HtmlDocSerializer.Builder b) {
 			HtmlDocConfig a = ai.inner();
 
-			strings(a.aside()).ifPresent(x -> b.aside(x));
-			strings(a.footer()).ifPresent(x -> b.footer(x));
-			strings(a.head()).ifPresent(x -> b.head(x));
-			strings(a.header()).ifPresent(x -> b.header(x));
-			strings(a.nav()).ifPresent(x -> b.nav(x));
-			strings(a.navlinks()).ifPresent(x -> b.navlinks(x));
-			strings(a.script()).ifPresent(x -> b.script(x));
-			strings(a.style()).ifPresent(x -> b.style(x));
-			strings(a.stylesheet()).ifPresent(x -> b.stylesheet(x));
-			string(a.asideFloat()).filter(x -> ! "DEFAULT".equalsIgnoreCase(x)).map(AsideFloat::valueOf).ifPresent(x -> b.asideFloat(x));
-			string(a.noResultsMessage()).ifPresent(x -> b.noResultsMessage(x));
-			bool(a.nowrap()).ifPresent(x -> b.nowrap(x));
-			bool(a.resolveBodyVars()).ifPresent(x -> b.resolveBodyVars(x));
-			type(a.template()).ifPresent(x -> b.template(x));
+			strings(a.aside()).ifPresent(b::aside);
+			strings(a.footer()).ifPresent(b::footer);
+			strings(a.head()).ifPresent(b::head);
+			strings(a.header()).ifPresent(b::header);
+			strings(a.nav()).ifPresent(b::nav);
+			strings(a.navlinks()).ifPresent(b::navlinks);
+			strings(a.script()).ifPresent(b::script);
+			strings(a.style()).ifPresent(b::style);
+			strings(a.stylesheet()).ifPresent(b::stylesheet);
+			string(a.asideFloat()).filter(x -> ! "DEFAULT".equalsIgnoreCase(x)).map(AsideFloat::valueOf).ifPresent(b::asideFloat);
+			string(a.noResultsMessage()).ifPresent(b::noResultsMessage);
+			bool(a.nowrap()).ifPresent(b::nowrap);
+			bool(a.resolveBodyVars()).ifPresent(b::resolveBodyVars);
+			type(a.template()).ifPresent(b::template);
 			classes(a.widgets()).ifPresent(x -> b.widgets((Class<? extends HtmlWidget>[])x));
 		}
 	}

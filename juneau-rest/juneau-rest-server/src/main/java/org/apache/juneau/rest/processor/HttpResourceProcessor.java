@@ -47,7 +47,7 @@ public class HttpResourceProcessor implements ResponseProcessor {
 		if (contentLength >= 0)
 			res.setHeader(contentLength(contentLength));
 
-		r.getHeaders().forEach(x -> res.addHeader(x));
+		r.getHeaders().forEach(res::addHeader);
 
 		try (var os = res.getNegotiatedOutputStream()) {
 			r.writeTo(os);

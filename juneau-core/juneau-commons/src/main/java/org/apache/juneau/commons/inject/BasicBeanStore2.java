@@ -214,7 +214,7 @@ public class BasicBeanStore2 implements WritableBeanStore {
 		Map<String,T> result = map();
 		if (nn(parent)) {
 			var parentBeans = parent.getBeansOfType(beanType);
-			parentBeans.forEach((name, bean) -> result.put(name, bean));
+			parentBeans.forEach(result::put);
 		}
 		var typeMap = entries.get(beanType);
 		if (nn(typeMap)) {

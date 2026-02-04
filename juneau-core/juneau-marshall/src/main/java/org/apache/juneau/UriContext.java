@@ -131,12 +131,12 @@ public class UriContext {
 		this.servletPath = nullIfEmpty(trimSlashes(m.getString("servletPath")));
 		this.pathInfo = nullIfEmpty(trimSlashes(m.getString("pathInfo")));
 		this.parentPath = this.pathInfo == null || this.pathInfo.indexOf('/') == -1 ? null : this.pathInfo.substring(0, this.pathInfo.lastIndexOf('/'));
-		this.rContextRoot = mem(() -> findRContextRoot());
-		this.rResource = mem(() -> findRResource());
-		this.rPath = mem(() -> findRPath());
-		this.aContextRoot = mem(() -> findAContextRoot());
-		this.aServletPath = mem(() -> findAServletPath());
-		this.aPathInfo = mem(() -> findAPathInfo());
+		this.rContextRoot = mem(this::findRContextRoot);
+		this.rResource = mem(this::findRResource);
+		this.rPath = mem(this::findRPath);
+		this.aContextRoot = mem(this::findAContextRoot);
+		this.aServletPath = mem(this::findAServletPath);
+		this.aPathInfo = mem(this::findAPathInfo);
 	}
 
 	/**
@@ -164,12 +164,12 @@ public class UriContext {
 		this.servletPath = nullIfEmpty(trimSlashes(servletPath));
 		this.pathInfo = nullIfEmpty(trimSlashes(pathInfo));
 		this.parentPath = this.pathInfo == null || this.pathInfo.indexOf('/') == -1 ? null : this.pathInfo.substring(0, this.pathInfo.lastIndexOf('/'));
-		this.rContextRoot = mem(() -> findRContextRoot());
-		this.rResource = mem(() -> findRResource());
-		this.rPath = mem(() -> findRPath());
-		this.aContextRoot = mem(() -> findAContextRoot());
-		this.aServletPath = mem(() -> findAServletPath());
-		this.aPathInfo = mem(() -> findAPathInfo());
+		this.rContextRoot = mem(this::findRContextRoot);
+		this.rResource = mem(this::findRResource);
+		this.rPath = mem(this::findRPath);
+		this.aContextRoot = mem(this::findAContextRoot);
+		this.aServletPath = mem(this::findAServletPath);
+		this.aPathInfo = mem(this::findAPathInfo);
 	}
 
 	private String findRContextRoot() {

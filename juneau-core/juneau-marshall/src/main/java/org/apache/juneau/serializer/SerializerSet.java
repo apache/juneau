@@ -116,7 +116,7 @@ public class SerializerSet {
 			super(copyFrom);
 			bcBuilder = copyFrom.bcBuilder == null ? null : copyFrom.bcBuilder.copy();
 			entries = list();
-			copyFrom.entries.stream().map(this::copyBuilder).forEach(x -> entries.add(x));
+			copyFrom.entries.stream().map(this::copyBuilder).forEach(entries::add);
 		}
 
 		/**
@@ -365,7 +365,7 @@ public class SerializerSet {
 		}
 
 		private <T extends Serializer.Builder> Stream<T> builders(Class<T> type) {
-			return entries.stream().filter(x -> type.isInstance(x)).map(x -> type.cast(x));
+			return entries.stream().filter(type::isInstance).map(type::cast);
 		}
 
 		private Object copyBuilder(Object o) {
@@ -486,7 +486,7 @@ public class SerializerSet {
 				lmtr.add(x);
 				l.add(e);
 			});
-			e.forEachAcceptMediaType(x -> lmt.add(x));
+			e.forEachAcceptMediaType(lmt::add);
 		}
 
 		this.mediaRanges = lmtr.toArray(new MediaRange[lmtr.size()]);

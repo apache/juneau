@@ -121,10 +121,10 @@ class MultiSet_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, ()->new MultiSet<>((Collection<String>)null));
 		var emptyMultiSet = new MultiSet<String>();
 		var iterator = emptyMultiSet.iterator();
-		assertThrows(NoSuchElementException.class, ()->iterator.next());
+		assertThrows(NoSuchElementException.class, iterator::next);
 		var emptyMultiSet2 = new MultiSet<String>();
 		var iterator2 = emptyMultiSet2.iterator();
-		assertThrows(NoSuchElementException.class, ()->iterator2.remove());
+		assertThrows(NoSuchElementException.class, iterator2::remove);
 	}
 
 	@Test

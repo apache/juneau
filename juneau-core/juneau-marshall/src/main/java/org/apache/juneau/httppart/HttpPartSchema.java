@@ -3583,7 +3583,7 @@ public class HttpPartSchema {
 		for (var ss : s)
 			if (nn(ss))
 				for (var ss2 : ss)
-					StringUtils.split(ss2, x -> set.add(x));
+					StringUtils.split(ss2, set::add);
 		return set.isEmpty() ? null : set;
 	}
 

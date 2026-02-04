@@ -48,7 +48,7 @@ public class SerializerConfigAnnotation {
 		public void apply(AnnotationInfo<SerializerConfig> ai, OutputStreamSerializer.Builder b) {
 			SerializerConfig a = ai.inner();
 
-			string(a.binaryFormat()).map(BinaryFormat::valueOf).ifPresent(x -> b.binaryFormat(x));
+			string(a.binaryFormat()).map(BinaryFormat::valueOf).ifPresent(b::binaryFormat);
 		}
 	}
 
@@ -70,22 +70,22 @@ public class SerializerConfigAnnotation {
 		public void apply(AnnotationInfo<SerializerConfig> ai, Serializer.Builder b) {
 			SerializerConfig a = ai.inner();
 
-			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypes(x));
-			bool(a.addRootType()).ifPresent(x -> b.addRootType(x));
-			bool(a.keepNullProperties()).ifPresent(x -> b.keepNullProperties(x));
-			type(a.listener()).ifPresent(x -> b.listener(x));
-			bool(a.sortCollections()).ifPresent(x -> b.sortCollections(x));
-			bool(a.sortMaps()).ifPresent(x -> b.sortMaps(x));
-			bool(a.trimEmptyCollections()).ifPresent(x -> b.trimEmptyCollections(x));
-			bool(a.trimEmptyMaps()).ifPresent(x -> b.trimEmptyMaps(x));
-			bool(a.trimStrings()).ifPresent(x -> b.trimStrings(x));
-			string(a.uriContext()).map(UriContext::of).ifPresent(x -> b.uriContext(x));
-			string(a.uriRelativity()).map(UriRelativity::valueOf).ifPresent(x -> b.uriRelativity(x));
-			string(a.uriResolution()).map(UriResolution::valueOf).ifPresent(x -> b.uriResolution(x));
-			bool(a.detectRecursions()).ifPresent(x -> b.detectRecursions(x));
-			bool(a.ignoreRecursions()).ifPresent(x -> b.ignoreRecursions(x));
-			integer(a.initialDepth(), "initialDepth").ifPresent(x -> b.initialDepth(x));
-			integer(a.maxDepth(), "maxDepth").ifPresent(x -> b.maxDepth(x));
+			bool(a.addBeanTypes()).ifPresent(b::addBeanTypes);
+			bool(a.addRootType()).ifPresent(b::addRootType);
+			bool(a.keepNullProperties()).ifPresent(b::keepNullProperties);
+			type(a.listener()).ifPresent(b::listener);
+			bool(a.sortCollections()).ifPresent(b::sortCollections);
+			bool(a.sortMaps()).ifPresent(b::sortMaps);
+			bool(a.trimEmptyCollections()).ifPresent(b::trimEmptyCollections);
+			bool(a.trimEmptyMaps()).ifPresent(b::trimEmptyMaps);
+			bool(a.trimStrings()).ifPresent(b::trimStrings);
+			string(a.uriContext()).map(UriContext::of).ifPresent(b::uriContext);
+			string(a.uriRelativity()).map(UriRelativity::valueOf).ifPresent(b::uriRelativity);
+			string(a.uriResolution()).map(UriResolution::valueOf).ifPresent(b::uriResolution);
+			bool(a.detectRecursions()).ifPresent(b::detectRecursions);
+			bool(a.ignoreRecursions()).ifPresent(b::ignoreRecursions);
+			integer(a.initialDepth(), "initialDepth").ifPresent(b::initialDepth);
+			integer(a.maxDepth(), "maxDepth").ifPresent(b::maxDepth);
 		}
 	}
 
@@ -107,11 +107,11 @@ public class SerializerConfigAnnotation {
 		public void apply(AnnotationInfo<SerializerConfig> ai, WriterSerializer.Builder b) {
 			SerializerConfig a = ai.inner();
 
-			charset(a.fileCharset()).ifPresent(x -> b.fileCharset(x));
-			integer(a.maxIndent(), "maxIndent").ifPresent(x -> b.maxIndent(x));
-			character(a.quoteChar(), "quoteChar").ifPresent(x -> b.quoteChar(x));
-			charset(a.streamCharset()).ifPresent(x -> b.streamCharset(x));
-			bool(a.useWhitespace()).ifPresent(x -> b.useWhitespace(x));
+			charset(a.fileCharset()).ifPresent(b::fileCharset);
+			integer(a.maxIndent(), "maxIndent").ifPresent(b::maxIndent);
+			character(a.quoteChar(), "quoteChar").ifPresent(b::quoteChar);
+			charset(a.streamCharset()).ifPresent(b::streamCharset);
+			bool(a.useWhitespace()).ifPresent(b::useWhitespace);
 		}
 	}
 }

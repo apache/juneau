@@ -72,7 +72,7 @@ public class RoleBasedRestGuard extends RestGuard {
 
 	@Override
 	public boolean isRequestAllowed(RestRequest req) {
-		Set<String> userRoles = roles.stream().filter(x -> req.isUserInRole(x)).collect(Collectors.toSet());
+		Set<String> userRoles = roles.stream().filter(req::isUserInRole).collect(Collectors.toSet());
 		return roleMatcher.matches(userRoles);
 	}
 }

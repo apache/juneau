@@ -45,7 +45,7 @@ public class SoapXmlConfigAnnotation {
 		public void apply(AnnotationInfo<SoapXmlConfig> ai, SoapXmlSerializer.Builder b) {
 			SoapXmlConfig a = ai.inner();
 
-			string(a.soapAction()).ifPresent(x -> b.soapAction(x));
+			string(a.soapAction()).ifPresent(b::soapAction);
 		}
 	}
 }

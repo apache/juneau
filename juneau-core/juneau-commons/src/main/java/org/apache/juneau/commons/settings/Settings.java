@@ -189,8 +189,8 @@ public class Settings {
 	 * Builder for creating Settings instances.
 	 */
 	public static class Builder {
-		private Supplier<SettingStore> globalStoreSupplier = () -> new MapStore();
-		private Supplier<SettingStore> localStoreSupplier = () -> new MapStore();
+		private Supplier<SettingStore> globalStoreSupplier = MapStore::new;
+		private Supplier<SettingStore> localStoreSupplier = MapStore::new;
 		private final List<SettingSource> sources = new ArrayList<>();
 		private final Map<Class<?>,Function<String,?>> customTypeFunctions = new IdentityHashMap<>();
 
@@ -298,7 +298,7 @@ public class Settings {
 	}
 
 	private static final Settings INSTANCE = new Builder()
-		.globalStore(initProperty(DISABLE_GLOBAL_PROP).map(Boolean::valueOf).orElse(false) ? () -> null : () -> new MapStore())
+		.globalStore(initProperty(DISABLE_GLOBAL_PROP).map(Boolean::valueOf).orElse(false) ? () -> null : MapStore::new)
 		.setSources(SYSTEM_ENV_SOURCE, SYSTEM_PROPERTY_SOURCE)
 		.build();
 
@@ -577,7 +577,7 @@ public class Settings {
 			ClassInfoTyped<T> ci = info(c);
 			f = ci.getDeclaredMethod(x -> x.isStatic() && x.hasParameterTypes(String.class) && x.hasReturnType(c) && FROM_STRING_METHOD_NAMES.contains(x.getName())).map(x -> (Function<String,T>)s2 -> x.invoke(null, s2)).orElse(null);
 			if (f == null)
-				f = ci.getPublicConstructor(x -> x.hasParameterTypes(String.class)).map(x -> (Function<String,T>)s2 -> x.newInstance(s2)).orElse(null);
+				f = ci.getPublicConstructor(x -> x.hasParameterTypes(String.class)).map(x -> (Function<String,T>)x::newInstance).orElse(null);
 			if (f != null)
 				toTypeFunctions.putIfAbsent(c, f);
 		}

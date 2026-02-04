@@ -2548,7 +2548,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (HttpHeaders.canCast(value)) {
 			l.add(HttpHeaders.cast(value));
 		} else if (value instanceof HeaderList value2) {
-			value2.forEach(x -> l.add(x));
+			value2.forEach(l::add);
 		} else if (value instanceof Collection<?> value3) {
 			value3.forEach(x -> l.add(HttpHeaders.cast(x)));
 		} else if (isArray(value)) {

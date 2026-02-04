@@ -355,7 +355,7 @@ public class HeaderAnnotation {
 			.map(AnnotationInfo::inner)
 			.filter(x -> ne(x.def()))
 			.findFirst()
-			.map(x -> x.def());
+			.map(Header::def);
 		// @formatter:on
 	}
 

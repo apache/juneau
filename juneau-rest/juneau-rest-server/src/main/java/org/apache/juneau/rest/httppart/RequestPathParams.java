@@ -377,7 +377,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	public RequestPathParam getLast(String name) {
 		assertArgNotNull("name", name);
 		var v = Value.<RequestPathParam>empty();
-		stream(name).forEach(x -> v.set(x));
+		stream(name).forEach(v::set);
 		return v.orElseGet(() -> new RequestPathParam(req, name, null).parser(parser));
 	}
 

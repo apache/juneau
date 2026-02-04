@@ -537,7 +537,7 @@ public abstract class Context {
 		 * @return <jk>true</jk> if any of the annotations/appliers can be applied to this builder.
 		 */
 		public boolean canApply(AnnotationWorkList work) {
-			return assertArgNotNull("work", work).stream().anyMatch(x -> builders.stream().anyMatch(b -> x.canApply(b)));
+			return assertArgNotNull("work", work).stream().anyMatch(x -> builders.stream().anyMatch(x::canApply));
 		}
 
 		/**

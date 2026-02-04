@@ -356,7 +356,7 @@ public class PathAnnotation {
 			.map(AnnotationInfo::inner)
 			.filter(x -> ne(x.def()) && neq(NONE, x.def()))
 			.findFirst()
-			.map(x -> x.def());
+			.map(Header::def);
 		// @formatter:on
 	}
 

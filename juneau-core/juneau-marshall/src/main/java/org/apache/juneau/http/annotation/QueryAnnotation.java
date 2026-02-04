@@ -355,7 +355,7 @@ public class QueryAnnotation {
 			.map(AnnotationInfo::inner)
 			.filter(x -> ne(x.def()))
 			.findFirst()
-			.map(x -> x.def());
+			.map(Query::def);
 		// @formatter:on
 	}
 

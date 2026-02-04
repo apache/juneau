@@ -114,7 +114,7 @@ public class IoUtils {
 	 */
 	public static void closeQuietly(InputStream is) {
 		if (nn(is))
-			safe(() -> is.close());
+			safe(is::close);
 	}
 
 	/**
@@ -145,7 +145,7 @@ public class IoUtils {
 	 */
 	public static void closeQuietly(OutputStream os) {
 		if (nn(os))
-			quiet(() -> os.close());
+			quiet(os::close);
 	}
 
 	/**
@@ -158,7 +158,7 @@ public class IoUtils {
 	 */
 	public static void closeQuietly(Reader r) {
 		if (nn(r))
-			quiet(() -> r.close());
+			quiet(r::close);
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class IoUtils {
 	 */
 	public static void closeQuietly(Writer w) {
 		if (nn(w))
-			quiet(() -> w.close());
+			quiet(w::close);
 	}
 
 	/**

@@ -48,8 +48,8 @@ public class UonConfigAnnotation {
 		public void apply(AnnotationInfo<UonConfig> ai, UonParser.Builder b) {
 			var a = ai.inner();
 
-			bool(a.decoding()).ifPresent(x -> b.decoding(x));
-			bool(a.validateEnd()).ifPresent(x -> b.validateEnd(x));
+			bool(a.decoding()).ifPresent(b::decoding);
+			bool(a.validateEnd()).ifPresent(b::validateEnd);
 		}
 	}
 
@@ -71,9 +71,9 @@ public class UonConfigAnnotation {
 		public void apply(AnnotationInfo<UonConfig> ai, UonSerializer.Builder b) {
 			var a = ai.inner();
 
-			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesUon(x));
-			bool(a.encoding()).ifPresent(x -> b.encoding(x));
-			string(a.paramFormat()).map(ParamFormat::valueOf).ifPresent(x -> b.paramFormat(x));
+			bool(a.addBeanTypes()).ifPresent(b::addBeanTypesUon);
+			bool(a.encoding()).ifPresent(b::encoding);
+			string(a.paramFormat()).map(ParamFormat::valueOf).ifPresent(b::paramFormat);
 		}
 	}
 }

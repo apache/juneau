@@ -5721,7 +5721,7 @@ public class StringUtils {
 			}
 
 			// If no readifier found, use toString() as fallback
-			return x -> x.toString();
+			return Object::toString;
 		});
 
 		return f.apply(o);

@@ -96,7 +96,7 @@ public class ObjectViewer implements ObjectTool<ViewArgs> {
 			var c = (Collection)input;
 			l = listOfSize(c.size());
 			List<Object> l2 = l;
-			c.forEach(x -> l2.add(x));
+			c.forEach(l2::add);
 		} else {
 			return input;
 		}

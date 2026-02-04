@@ -49,8 +49,8 @@ public class XmlClassMeta extends ExtendedClassMeta {
 		List<Xml> xmls = list();
 		List<XmlSchema> schemas = list();
 		if (nn(cm)) {
-			cm.forEachAnnotation(Xml.class, x -> true, x -> xmls.add(x));
-			cm.forEachAnnotation(XmlSchema.class, x -> true, x -> schemas.add(x));
+			cm.forEachAnnotation(Xml.class, x -> true, xmls::add);
+			cm.forEachAnnotation(XmlSchema.class, x -> true, schemas::add);
 		}
 		this.namespace = XmlUtils.findNamespace(xmls, schemas);
 

@@ -1556,7 +1556,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			var bs = BasicBeanStore.of(beanStore).addBean(NamedAttributeMap.class, v.get());
 			new BeanCreateMethodFinder<>(NamedAttributeMap.class, resource, bs)
 				.find(x -> matches(x, "defaultRequestAttributes"))
-				.run(x -> v.set(x));
+				.run(v::set);
 			// @formatter:on
 
 			return v.get();
@@ -1582,7 +1582,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			var bs = BasicBeanStore.of(beanStore).addBean(PartList.class, v.get());
 			new BeanCreateMethodFinder<>(PartList.class, resource, bs)
 				.find(x -> matches(x, "defaultRequestFormData"))
-				.run(x -> v.set(x));
+				.run(v::set);
 			// @formatter:on
 
 			return v.get();
@@ -1608,7 +1608,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			var bs = BasicBeanStore.of(beanStore).addBean(HeaderList.class, v.get());
 			new BeanCreateMethodFinder<>(HeaderList.class, resource, bs)
 				.find(x -> matches(x, "defaultRequestHeaders"))
-				.run(x -> v.set(x));
+				.run(v::set);
 			// @formatter:on
 
 			return v.get();
@@ -1634,7 +1634,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			var bs = BasicBeanStore.of(beanStore).addBean(PartList.class, v.get());
 			new BeanCreateMethodFinder<>(PartList.class, resource, bs)
 				.find(x -> matches(x, "defaultRequestQueryData"))
-				.run(x -> v.set(x));
+				.run(v::set);
 			// @formatter:on
 
 			return v.get();
@@ -1660,7 +1660,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			var bs = BasicBeanStore.of(beanStore).addBean(HeaderList.class, v.get());
 			new BeanCreateMethodFinder<>(HeaderList.class, resource, bs)
 				.find(x -> matches(x, "defaultResponseHeaders"))
-				.run(x -> v.set(x));
+				.run(v::set);
 			// @formatter:on
 
 			return v.get();
@@ -1738,7 +1738,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			// @formatter:off
 			new BeanCreateMethodFinder<>(RestGuardList.class, resource.get(), beanStore)
 				.addBean(RestGuardList.Builder.class, v.get())
-				.find(m -> this.matches(m))
+				.find(this::matches)
 				.run(x -> v.get().impl(x));
 			// @formatter:on
 
@@ -2018,7 +2018,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			new BeanCreateMethodFinder<>(UrlPathMatcherList.class, resource().get(), beanStore())
 				.addBean(UrlPathMatcherList.class, v.get())
 				.find(this::matches)
-				.run(x -> v.set(x));
+				.run(v::set);
 			// @formatter:on
 
 			return v.get();

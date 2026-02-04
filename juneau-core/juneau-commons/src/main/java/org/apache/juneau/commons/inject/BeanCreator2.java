@@ -433,7 +433,7 @@ public class BeanCreator2<T> {
 	 * @return A resettable supplier that caches the created bean until reset.
 	 */
 	public ResettableSupplier<T> asResettableSupplier() {
-		return new ResettableSupplier<>(() -> run());
+		return new ResettableSupplier<>(this::run);
 	}
 
 	/**
@@ -442,7 +442,7 @@ public class BeanCreator2<T> {
 	 * @return A supplier that returns the results of the {@link #run()} method.
 	 */
 	public Supplier<T> asSupplier() {
-		return () -> run();
+		return this::run;
 	}
 
 	/**
