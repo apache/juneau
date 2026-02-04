@@ -43,7 +43,7 @@ public abstract class MapVar extends DefaultingVar {
 	 * @param name The name of this variable.
 	 * @param m The map to pull values from.
 	 */
-	public MapVar(String name, Map m) {
+	protected MapVar(String name, Map m) {
 		super(name);
 		assertArgNotNull(ARG_m, m);
 		this.m = m;

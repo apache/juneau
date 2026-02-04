@@ -41,7 +41,7 @@ public abstract class DefaultingVar extends SimpleVar {
 	 *
 	 * @param name The name of this variable.
 	 */
-	public DefaultingVar(String name) {
+	protected DefaultingVar(String name) {
 		super(name);
 	}
 

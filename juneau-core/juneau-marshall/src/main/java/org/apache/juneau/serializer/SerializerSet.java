@@ -420,7 +420,7 @@ public class SerializerSet {
 	 */
 	@SuppressWarnings("javadoc")
 	public abstract static class Inherit extends Serializer {
-		public Inherit(Serializer.Builder builder) {
+		protected Inherit(Serializer.Builder builder) {
 			super(builder);
 		}
 	}
@@ -432,7 +432,7 @@ public class SerializerSet {
 	 */
 	@SuppressWarnings("javadoc")
 	public abstract static class NoInherit extends Serializer {
-		public NoInherit(Serializer.Builder builder) {
+		protected NoInherit(Serializer.Builder builder) {
 			super(builder);
 		}
 	}

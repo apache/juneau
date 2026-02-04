@@ -44,7 +44,7 @@ public abstract class StreamedVar extends Var {
 	 *
 	 * @param name The variable name (e.g. <js>"C"</js> for variables of the form <js>"$C{...}"</js>)
 	 */
-	public StreamedVar(String name) {
+	protected StreamedVar(String name) {
 		super(name, true);
 	}
 

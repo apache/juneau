@@ -44,7 +44,7 @@ public abstract class MultipartResolvingVar extends SimpleVar {
 	 *
 	 * @param name The name of this variable.
 	 */
-	public MultipartResolvingVar(String name) {
+	protected MultipartResolvingVar(String name) {
 		super(name);
 	}
 

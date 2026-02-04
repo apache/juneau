@@ -222,7 +222,7 @@ public abstract class DebugEnablement {
 	 *
 	 * @param beanStore The bean store containing injectable beans for this enablement.
 	 */
-	public DebugEnablement(BasicBeanStore beanStore) {
+	protected DebugEnablement(BasicBeanStore beanStore) {
 		var builder = init(beanStore);
 		this.defaultEnablement = firstNonNull(builder.defaultEnablement, NEVER);
 		this.enablementMap = builder.mapBuilder.build();
@@ -234,7 +234,7 @@ public abstract class DebugEnablement {
 	 *
 	 * @param builder The builder for this enablement.
 	 */
-	public DebugEnablement(Builder builder) {
+	protected DebugEnablement(Builder builder) {
 		this.defaultEnablement = firstNonNull(builder.defaultEnablement, NEVER);
 		this.enablementMap = builder.mapBuilder.build();
 		this.conditionalPredicate = firstNonNull(builder.conditional, x -> eqic("true", x.getHeader("Debug")));

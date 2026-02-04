@@ -70,7 +70,7 @@ public abstract class Var {
 	 * 	is implemented.
 	 * 	If <jk>false</jk>, then the {@link #resolve(VarResolverSession, String)} method is implemented.
 	 */
-	public Var(String name, boolean streamed) {
+	protected Var(String name, boolean streamed) {
 		assertArgNotNull(ARG_name, name);
 		this.name = name;
 		this.streamed = streamed;

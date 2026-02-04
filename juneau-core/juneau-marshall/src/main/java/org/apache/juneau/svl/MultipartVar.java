@@ -38,7 +38,7 @@ public abstract class MultipartVar extends SimpleVar {
 	 *
 	 * @param name The name of this variable.
 	 */
-	public MultipartVar(String name) {
+	protected MultipartVar(String name) {
 		super(name);
 	}
 
