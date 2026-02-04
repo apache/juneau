@@ -5913,8 +5913,8 @@ public class RestContext extends Context {
 		if (t instanceof InvocationTargetException t2)
 			t = t2.getTargetException();
 
-		if (t instanceof ExecutableException t3)
-			t = t3.getTargetException();
+		if (t instanceof ExecutableException t2)
+			t = t2.getTargetException();
 
 		if (t instanceof BasicHttpException t2)
 			return t2;
@@ -6041,7 +6041,7 @@ public class RestContext extends Context {
 			if (r.value().length > 0)
 				code = r.value()[0];
 
-		var e2 = (e instanceof BasicHttpException e3 ? e3 : new BasicHttpException(code, e));
+		var e2 = (e instanceof BasicHttpException e22 ? e22 : new BasicHttpException(code, e));
 
 		var req = session.getRequest();
 		var res = session.getResponse();

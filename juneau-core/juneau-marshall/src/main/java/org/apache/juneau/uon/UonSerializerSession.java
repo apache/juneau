@@ -452,8 +452,8 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		else if (sType.isUri() || (nn(pMeta) && pMeta.isUri()))
 			out.appendUri(o);
 		else if (sType.isMap()) {
-			if (o instanceof BeanMap)
-				serializeBeanMap(out, (BeanMap)o, typeName);
+			if (o instanceof BeanMap o2)
+				serializeBeanMap(out, o2, typeName);
 			else
 				serializeMap(out, (Map)o, eType);
 		} else if (sType.isCollection()) {

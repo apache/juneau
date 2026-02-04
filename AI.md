@@ -144,6 +144,45 @@ var map = new HashMap<String,Integer>();
 var keys = map.keySet();
 ```
 
+#### Instanceof Pattern Matching Variable Naming
+When using instanceof pattern matching (Java 16+), follow this naming convention:
+
+1. **General Rule**: Append "2" to the original variable name:
+   - `if (o instanceof Type o2)` - original variable is `o`, pattern variable is `o2`
+   - `if (value instanceof Calendar value2)` - original variable is `value`, pattern variable is `value2`
+   - `if (this instanceof MethodInfo this2)` - original variable is `this`, pattern variable is `this2`
+
+2. **Exception for variables ending in "2"**: When the original variable already ends in "2" (like `o2`), use "o3" instead of "o22" for simplicity:
+   - `if (o2 instanceof InputStream o3)` - original variable is `o2`, pattern variable is `o3`
+   - `if (o1 instanceof Comparable o3)` - original variable is `o1`, pattern variable is `o3` (not `o12`)
+
+3. **Conflict Resolution**: When there's a naming conflict (e.g., a lambda parameter with the same name), use a different name:
+   - `if (value instanceof BeanMap<?> value2)` followed by `value2.forEachValue(..., (pMeta2, key2, value3, thrown2) -> ...)` - lambda parameter uses `value3` to avoid conflict with pattern variable `value2`
+
+**Examples:**
+```java
+// CORRECT - Standard pattern
+if (o instanceof BeanMap o2)
+    serializeBeanMap(out, o2, typeName);
+
+// CORRECT - Variable ending in "2"
+for (var o2 : o) {
+    if (o2 instanceof InputStream o3)
+        o3.close();
+}
+
+// CORRECT - Conflict resolution
+if (value instanceof BeanMap<?> value2) {
+    value2.forEachValue(x -> true, (pMeta2, key2, value3, thrown2) -> {
+        // value3 used to avoid conflict with value2
+    });
+}
+
+// WRONG - Not following convention
+if (o instanceof BeanMap bm)  // Should be o2
+if (value instanceof Calendar cal)  // Should be value2
+```
+
 #### Final Fields and Memoization Pattern
 When declaring class fields, always use `final` to ensure true immutability:
 

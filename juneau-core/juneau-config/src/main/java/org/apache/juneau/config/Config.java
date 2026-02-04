@@ -1187,8 +1187,8 @@ public class Config extends Context implements ConfigEventListener {
 		if (serializer == null)
 			serializer = this.serializer;
 		var c = value.getClass();
-		if (value instanceof CharSequence cs)
-			return nlIfMl(cs);
+		if (value instanceof CharSequence value2)
+			return nlIfMl(value2);
 		if (isSimpleType(c))
 			return value.toString();
 

@@ -374,14 +374,14 @@ public class RdfSerializerSession extends WriterSerializerSession {
 				n = m.createTypedLiteral(o);
 
 		} else if (sType.isMap() || (nn(wType) && wType.isMap())) {
-			if (o instanceof BeanMap bm) {
+			if (o instanceof BeanMap o2) {
 				var uri = (Object)null;
-				var rbm = getRdfBeanMeta(bm.getMeta());
+				var rbm = getRdfBeanMeta(o2.getMeta());
 				if (rbm.hasBeanUri())
-					uri = rbm.getBeanUriProperty().get(bm, null);
+					uri = rbm.getBeanUriProperty().get(o2, null);
 				var uri2 = getUri(uri, null);
 				n = m.createResource(uri2);
-				serializeBeanMap(bm, (Resource)n, typeName);
+				serializeBeanMap(o2, (Resource)n, typeName);
 			} else {
 				var m2 = (Map)o;
 				n = m.createResource();
@@ -391,7 +391,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		} else if (sType.isBean()) {
 			var bm = toBeanMap(o);
 			var uri = (Object)null;
-			RdfBeanMeta rbm = getRdfBeanMeta(bm.getMeta());
+			RdfBeanMeta rbm = getRdfBeanMeta(o2.getMeta());
 			if (rbm.hasBeanUri())
 				uri = rbm.getBeanUriProperty().get(bm, null);
 			String uri2 = getUri(uri, null);

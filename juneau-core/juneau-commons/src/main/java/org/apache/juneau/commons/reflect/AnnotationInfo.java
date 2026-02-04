@@ -860,9 +860,9 @@ public class AnnotationInfo<T extends Annotation> {
 		if (value instanceof Enum<?> e) {
 			return e.getDeclaringClass().getSimpleName() + "." + e.name();
 		}
-		if (value instanceof Annotation ann) {
+		if (value instanceof Annotation value2) {
 			// For nested annotations, use simple format
-			return "@" + ClassInfo.of(ann.annotationType()).getNameSimple() + "(...)";
+			return "@" + ClassInfo.of(value2.annotationType()).getNameSimple() + "(...)";
 		}
 		return String.valueOf(value);
 	}

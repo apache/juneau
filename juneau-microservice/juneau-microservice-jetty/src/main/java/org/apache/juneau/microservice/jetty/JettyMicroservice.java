@@ -208,14 +208,14 @@ public class JettyMicroservice extends Microservice {
 		public Builder jettyXml(Object jettyXml, boolean resolveVars) throws IOException {
 			if (jettyXml instanceof String jettyXml2)
 				this.jettyXml = read(resolveFile(jettyXml2));
-			else if (jettyXml instanceof File jettyXml3)
-				this.jettyXml = read(jettyXml3);
-			else if (jettyXml instanceof Path jettyXml4)
-				this.jettyXml = read(jettyXml4);
-			else if (jettyXml instanceof InputStream jettyXml5)
-				this.jettyXml = read(jettyXml5);
-			else if (jettyXml instanceof Reader jettyXml6)
-				this.jettyXml = read(jettyXml6);
+			else if (jettyXml instanceof File jettyXml2)
+				this.jettyXml = read(jettyXml2);
+			else if (jettyXml instanceof Path jettyXml2)
+				this.jettyXml = read(jettyXml2);
+			else if (jettyXml instanceof InputStream jettyXml2)
+				this.jettyXml = read(jettyXml2);
+			else if (jettyXml instanceof Reader jettyXml2)
+				this.jettyXml = read(jettyXml2);
 			else
 				throw rex("Invalid object type passed to jettyXml(Object): {0}", cn(jettyXml));
 			this.jettyXmlResolveVars = resolveVars;

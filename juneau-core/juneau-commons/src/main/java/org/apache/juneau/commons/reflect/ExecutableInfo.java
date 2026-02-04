@@ -856,10 +856,10 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		// Add synthetic, bridge, varargs, and default flags (not actual modifiers but useful to show)
 		if (isSynthetic())
 			sb.append("synthetic ");
-		if (this instanceof MethodInfo mi) {
-			if (mi.isBridge())
+		if (this instanceof MethodInfo this2) {
+			if (this2.isBridge())
 				sb.append("bridge ");
-			if (mi.isDefault())
+			if (this2.isDefault())
 				sb.append("default ");
 		}
 		if (isVarArgs())
@@ -896,8 +896,8 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		}
 
 		// Return type (skip for constructors)
-		if (this instanceof MethodInfo mi)
-			mi.getReturnType().appendNameFormatted(sb, FULL, true, '$', BRACKETS).append(" ");
+		if (this instanceof MethodInfo this2)
+			this2.getReturnType().appendNameFormatted(sb, FULL, true, '$', BRACKETS).append(" ");
 
 		// Full name - use generic parameter types if we have type parameters
 		if (hasTypeParams) {

@@ -409,22 +409,22 @@ public class Microservice implements ConfigEventListener {
 		public Builder manifest(Object value) throws IOException {
 			if (value == null)
 				this.manifest = null;
-			else if (value instanceof ManifestFile manifestFile)
-				this.manifest = manifestFile;
-			else if (value instanceof Manifest manifest)
-				this.manifest = new ManifestFile(manifest);
-			else if (value instanceof Reader reader)
-				this.manifest = new ManifestFile(reader);
-			else if (value instanceof InputStream inputStream)
-				this.manifest = new ManifestFile(inputStream);
-			else if (value instanceof File file)
-				this.manifest = new ManifestFile(file);
-			else if (value instanceof Path path)
-				this.manifest = new ManifestFile(path);
-			else if (value instanceof String string)
-				this.manifest = new ManifestFile(resolveFile(string));
-			else if (value instanceof Class clazz)
-				this.manifest = new ManifestFile(clazz);
+			else if (value instanceof ManifestFile value2)
+				this.manifest = value2;
+			else if (value instanceof Manifest value2)
+				this.manifest = new ManifestFile(value2);
+			else if (value instanceof Reader value2)
+				this.manifest = new ManifestFile(value2);
+			else if (value instanceof InputStream value2)
+				this.manifest = new ManifestFile(value2);
+			else if (value instanceof File value2)
+				this.manifest = new ManifestFile(value2);
+			else if (value instanceof Path value2)
+				this.manifest = new ManifestFile(value2);
+			else if (value instanceof String value2)
+				this.manifest = new ManifestFile(resolveFile(value2));
+			else if (value instanceof Class value2)
+				this.manifest = new ManifestFile(value2);
 			else
 				throw rex("Invalid type passed to Builder.manifest(Object).  Type=[{0}]", cn(value));
 

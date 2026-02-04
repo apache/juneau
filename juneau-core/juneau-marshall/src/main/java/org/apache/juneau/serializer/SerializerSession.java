@@ -266,15 +266,15 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @param causedBy The exception to cast or wrap.
 	 */
 	protected static <T extends Throwable> void handleThrown(T causedBy) {
-		if (causedBy instanceof Error)
-			throw (Error)causedBy;
-		if (causedBy instanceof RuntimeException)
-			throw (RuntimeException)causedBy;
+		if (causedBy instanceof Error causedBy2)
+			throw causedBy2;
+		if (causedBy instanceof RuntimeException causedBy2)
+			throw causedBy2;
 		if (causedBy instanceof StackOverflowError)
 			throw new SerializeException(
 				"Stack overflow occurred.  This can occur when trying to serialize models containing loops.  It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
-		if (causedBy instanceof SerializeException)
-			throw (SerializeException)causedBy;
+		if (causedBy instanceof SerializeException causedBy2)
+			throw causedBy2;
 		throw new SerializeException(causedBy);
 	}
 

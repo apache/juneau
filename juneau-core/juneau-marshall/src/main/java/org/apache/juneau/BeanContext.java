@@ -4430,8 +4430,8 @@ public class BeanContext extends Context {
 		}
 
 		// Handle ClassInfo by extracting the underlying Type
-		if (o instanceof ClassInfo ci) {
-			return resolveClassMeta(ci.innerType(), typeVars);
+		if (o instanceof ClassInfo o2) {
+			return resolveClassMeta(o2.innerType(), typeVars);
 		}
 
 		var c = TypeVariables.resolve(o, typeVars);

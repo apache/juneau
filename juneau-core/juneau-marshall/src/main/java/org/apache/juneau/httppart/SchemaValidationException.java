@@ -46,8 +46,9 @@ public class SchemaValidationException extends ParseException {
 	@Override /* Overridden from ParseException */
 	public SchemaValidationException getRootCause() {
 		ParseException t = this;
-		while (! (t.getCause() == null || ! (t.getCause() instanceof SchemaValidationException)))
-			t = (SchemaValidationException)t.getCause();
+		while (t.getCause() instanceof SchemaValidationException t2) {
+			t = t2;
+		}
 		return (SchemaValidationException)t;
 	}
 

@@ -248,9 +248,9 @@ class PropertyExtractor_Test extends TestBase {
 
 				@Override
 				public Object extract(BeanConverter converter, Object o, String key) {
-					if ("recursive".equals(key) && o instanceof String str) {
+					if ("recursive".equals(key) && o instanceof String o2) {
 						// Use the converter recursively
-						return "RECURSIVE[" + converter.stringify(str.length()) + "]";
+						return "RECURSIVE[" + converter.stringify(o2.length()) + "]";
 					}
 					return "NON_RECURSIVE:" + key;
 				}

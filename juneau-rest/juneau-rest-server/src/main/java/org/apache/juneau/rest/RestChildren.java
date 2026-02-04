@@ -133,8 +133,8 @@ public class RestChildren {
 	public void destroy() {
 		for (var r : children.values()) {
 			r.destroy();
-			if (r.getResource() instanceof Servlet)
-				((Servlet)r.getResource()).destroy();
+			if (r.getResource() instanceof Servlet r2)
+				r2.destroy();
 		}
 	}
 

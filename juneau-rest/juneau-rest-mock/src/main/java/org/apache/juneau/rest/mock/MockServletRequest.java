@@ -125,63 +125,63 @@ public class MockServletRequest implements HttpServletRequest {
 	 */
 	public MockServletRequest applyOverrides(HttpRequest req) {
 
-		if (req instanceof MockRestRequest mreq) {
-			mreq.getAttributeMap().forEach(this::attribute);
-			mreq.getRequestDispatcherMap().forEach(this::requestDispatcher);
-			if (nn(mreq.getCharacterEncoding()))
-				characterEncoding(mreq.getCharacterEncoding());
-			if (nn(mreq.getProtocol()))
-				protocol(mreq.getProtocol());
-			if (nn(mreq.getScheme()))
-				scheme(mreq.getScheme());
-			if (nn(mreq.getServerName()))
-				serverName(mreq.getServerName());
-			if (nn(mreq.getRemoteAddr()))
-				remoteAddr(mreq.getRemoteAddr());
-			if (nn(mreq.getRemoteHost()))
-				remoteHost(mreq.getRemoteHost());
-			if (nn(mreq.getLocalName()))
-				localName(mreq.getLocalName());
-			if (nn(mreq.getLocalAddr()))
-				localAddr(mreq.getLocalAddr());
-			if (nn(mreq.getPathInfo()))
-				pathInfo(mreq.getPathInfo());
-			if (nn(mreq.getPathTranslated()))
-				pathTranslated(mreq.getPathTranslated());
-			if (nn(mreq.getContextPath()))
-				contextPath(mreq.getContextPath());
-			if (nn(mreq.getQueryString()))
-				queryString(mreq.getQueryString());
-			if (nn(mreq.getRemoteUser()))
-				remoteUser(mreq.getRemoteUser());
-			if (nn(mreq.getRequestedSessionId()))
-				requestedSessionId(mreq.getRequestedSessionId());
-			if (nn(mreq.getRequestURI()))
-				requestURI(mreq.getRequestURI());
-			if (nn(mreq.getServletPath()))
-				servletPath(mreq.getServletPath());
-			if (nn(mreq.getAuthType()))
-				authType(mreq.getAuthType());
-			if (nn(mreq.getServerPort()))
-				serverPort(mreq.getServerPort());
-			if (nn(mreq.getRemotePort()))
-				remotePort(mreq.getRemotePort());
-			if (nn(mreq.getLocalPort()))
-				localPort(mreq.getLocalPort());
-			if (nn(mreq.getLocale()))
-				locale(mreq.getLocale());
-			if (nn(mreq.getServletContext()))
-				servletContext(mreq.getServletContext());
-			if (nn(mreq.getDispatcherType()))
-				dispatcherType(mreq.getDispatcherType());
-			if (nn(mreq.getCookies()))
-				cookies(mreq.getCookies());
-			if (nn(mreq.getUserPrincipal()))
-				userPrincipal(mreq.getUserPrincipal());
-			if (nn(mreq.getHttpSession()))
-				httpSession(mreq.getHttpSession());
-			if (nn(mreq.getRoles()))
-				roles(mreq.getRoles());
+		if (req instanceof MockRestRequest req2) {
+			req2.getAttributeMap().forEach(this::attribute);
+			req2.getRequestDispatcherMap().forEach(this::requestDispatcher);
+			if (nn(req2.getCharacterEncoding()))
+				characterEncoding(req2.getCharacterEncoding());
+			if (nn(req2.getProtocol()))
+				protocol(req2.getProtocol());
+			if (nn(req2.getScheme()))
+				scheme(req2.getScheme());
+			if (nn(req2.getServerName()))
+				serverName(req2.getServerName());
+			if (nn(req2.getRemoteAddr()))
+				remoteAddr(req2.getRemoteAddr());
+			if (nn(req2.getRemoteHost()))
+				remoteHost(req2.getRemoteHost());
+			if (nn(req2.getLocalName()))
+				localName(req2.getLocalName());
+			if (nn(req2.getLocalAddr()))
+				localAddr(req2.getLocalAddr());
+			if (nn(req2.getPathInfo()))
+				pathInfo(req2.getPathInfo());
+			if (nn(req2.getPathTranslated()))
+				pathTranslated(req2.getPathTranslated());
+			if (nn(req2.getContextPath()))
+				contextPath(req2.getContextPath());
+			if (nn(req2.getQueryString()))
+				queryString(req2.getQueryString());
+			if (nn(req2.getRemoteUser()))
+				remoteUser(req2.getRemoteUser());
+			if (nn(req2.getRequestedSessionId()))
+				requestedSessionId(req2.getRequestedSessionId());
+			if (nn(req2.getRequestURI()))
+				requestURI(req2.getRequestURI());
+			if (nn(req2.getServletPath()))
+				servletPath(req2.getServletPath());
+			if (nn(req2.getAuthType()))
+				authType(req2.getAuthType());
+			if (nn(req2.getServerPort()))
+				serverPort(req2.getServerPort());
+			if (nn(req2.getRemotePort()))
+				remotePort(req2.getRemotePort());
+			if (nn(req2.getLocalPort()))
+				localPort(req2.getLocalPort());
+			if (nn(req2.getLocale()))
+				locale(req2.getLocale());
+			if (nn(req2.getServletContext()))
+				servletContext(req2.getServletContext());
+			if (nn(req2.getDispatcherType()))
+				dispatcherType(req2.getDispatcherType());
+			if (nn(req2.getCookies()))
+				cookies(req2.getCookies());
+			if (nn(req2.getUserPrincipal()))
+				userPrincipal(req2.getUserPrincipal());
+			if (nn(req2.getHttpSession()))
+				httpSession(req2.getHttpSession());
+			if (nn(req2.getRoles()))
+				roles(req2.getRoles());
 		}
 
 		return this;
@@ -248,14 +248,14 @@ public class MockServletRequest implements HttpServletRequest {
 	 */
 	public MockServletRequest content(Object value) {
 		try {
-			if (value instanceof byte[] byteArray)
-				this.content = byteArray;
-			else if (value instanceof Reader reader)
-				this.content = readBytes(reader);
-			else if (value instanceof InputStream inputstream)
-				this.content = readBytes(inputstream);
-			else if (value instanceof CharSequence charsequence)
-				this.content = charsequence.toString().getBytes();
+			if (value instanceof byte[] value2)
+				this.content = value2;
+			else if (value instanceof Reader value2)
+				this.content = readBytes(value2);
+			else if (value instanceof InputStream value2)
+				this.content = readBytes(value2);
+			else if (value instanceof CharSequence value2)
+				this.content = value2.toString().getBytes();
 			else if (nn(value))
 				this.content = value.toString().getBytes();
 		} catch (IOException e) {

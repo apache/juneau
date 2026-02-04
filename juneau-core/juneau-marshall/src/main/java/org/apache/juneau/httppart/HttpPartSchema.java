@@ -368,22 +368,22 @@ public class HttpPartSchema {
 				apply(a2);
 			else if (a instanceof FormData a2)
 				apply(a2);
-			else if (a instanceof Query a3)
-				apply(a3);
-			else if (a instanceof Path a4)
-				apply(a4);
-			else if (a instanceof PathRemainder a5)
-				apply(a5);
-			else if (a instanceof Response a6)
-				apply(a6);
-			else if (a instanceof StatusCode a7)
-				apply(a7);
-			else if (a instanceof HasQuery a8)
-				apply(a8);
-			else if (a instanceof HasFormData a9)
-				apply(a9);
-			else if (a instanceof Schema a10)
-				apply(a10);
+			else if (a instanceof Query a2)
+				apply(a2);
+			else if (a instanceof Path a2)
+				apply(a2);
+			else if (a instanceof PathRemainder a2)
+				apply(a2);
+			else if (a instanceof Response a2)
+				apply(a2);
+			else if (a instanceof StatusCode a2)
+				apply(a2);
+			else if (a instanceof HasQuery a2)
+				apply(a2);
+			else if (a instanceof HasFormData a2)
+				apply(a2);
+			else if (a instanceof Schema a2)
+				apply(a2);
 			else if (cn(a.annotationType()).startsWith("jakarta.validation.constraints."))
 				applyJakartaValidation(a);
 			else
@@ -4126,8 +4126,8 @@ public class HttpPartSchema {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		Predicate<Object> ne = x -> ne(s(x));
-		Predicate<Object> nf = x -> x instanceof Boolean && (Boolean)x;
-		Predicate<Object> nm1 = x -> x instanceof Number && ((Number)x).intValue() != -1;
+		Predicate<Object> nf = x -> x instanceof Boolean x2 && x2;
+		Predicate<Object> nm1 = x -> x instanceof Number x2 && x2.intValue() != -1;
 		Predicate<Object> nn = Utils::nn;
 		return mapb_so().sorted().buildFluent()
 			.ai(ne, "name", name)

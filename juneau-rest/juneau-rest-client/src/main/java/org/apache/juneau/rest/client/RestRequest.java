@@ -1934,21 +1934,21 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					input2 = s.get();
 
 				HttpEntity entity = null;
-				if (input2 instanceof PartList input22)
-					entity = new UrlEncodedFormEntity(input22.stream().map(SimpleFormData::new).filter(SimplePart::isValid).toList());
-				else if (input2 instanceof HttpResource input23) {
-					input23.getHeaders().forEach(request::addHeader);
+				if (input2 instanceof PartList input3)
+					entity = new UrlEncodedFormEntity(input3.stream().map(SimpleFormData::new).filter(SimplePart::isValid).toList());
+				else if (input2 instanceof HttpResource input3) {
+					input3.getHeaders().forEach(request::addHeader);
 					entity = (HttpEntity)input2;
 				} else if (input2 instanceof HttpEntity input3) {
-					if (input3 instanceof SerializedEntity input32) {
-						entity = input32.copyWith(serializer, contentSchema);
+					if (input3 instanceof SerializedEntity input4) {
+						entity = input4.copyWith(serializer, contentSchema);
 					} else {
 						entity = input3;
 					}
-				} else if (input2 instanceof Reader input24)
-					entity = readerEntity(input24, getRequestContentType(TEXT_PLAIN));
-				else if (input2 instanceof InputStream input25)
-					entity = streamEntity(input25, -1, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
+				} else if (input2 instanceof Reader input3)
+					entity = readerEntity(input3, getRequestContentType(TEXT_PLAIN));
+				else if (input2 instanceof InputStream input3)
+					entity = streamEntity(input3, -1, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
 				else if (nn(serializer))
 					entity = serializedEntity(input2, serializer, contentSchema).setContentType(contentType);
 				else {
@@ -2511,8 +2511,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		} else if (isArray(value)) {
 			for (var i = 0; i < Array.getLength(value); i++)
 				l.add(HttpParts.cast(Array.get(value, i)));
-		} else if (value instanceof Map value4) {
-			toMap(value4).forEach((k, v) -> l.add(createPart(s(k), v, FORMDATA, serializer, schema, skipIfEmpty)));
+		} else if (value instanceof Map value2) {
+			toMap(value2).forEach((k, v) -> l.add(createPart(s(k), v, FORMDATA, serializer, schema, skipIfEmpty)));
 		} else if (isBean(value)) {
 			toBeanMap(value).forEach((k, v) -> l.add(createPart(k, v, FORMDATA, serializer, schema, skipIfEmpty)));
 		} else if (nn(value)) {
@@ -2589,8 +2589,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		} else if (isArray(value)) {
 			for (var i = 0; i < Array.getLength(value); i++)
 				l.add(HttpParts.cast(Array.get(value, i)));
-		} else if (value instanceof Map value4) {
-			toMap(value4).forEach((k, v) -> l.add(createPart(s(k), v, PATH, serializer, schema, false)));
+		} else if (value instanceof Map value2) {
+			toMap(value2).forEach((k, v) -> l.add(createPart(s(k), v, PATH, serializer, schema, false)));
 		} else if (isBean(value)) {
 			toBeanMap(value).forEach((k, v) -> l.add(createPart(k, v, PATH, serializer, schema, false)));
 		} else if (nn(value)) {
@@ -2622,8 +2622,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		} else if (isArray(value)) {
 			for (var i = 0; i < Array.getLength(value); i++)
 				l.add(HttpParts.cast(Array.get(value, i)));
-		} else if (value instanceof Map value4) {
-			toMap(value4).forEach((k, v) -> l.add(createPart(s(k), v, QUERY, serializer, schema, skipIfEmpty)));
+		} else if (value instanceof Map value2) {
+			toMap(value2).forEach((k, v) -> l.add(createPart(s(k), v, QUERY, serializer, schema, skipIfEmpty)));
 		} else if (isBean(value)) {
 			toBeanMap(value).forEach((k, v) -> l.add(createPart(k, v, QUERY, serializer, schema, skipIfEmpty)));
 		} else if (nn(value)) {

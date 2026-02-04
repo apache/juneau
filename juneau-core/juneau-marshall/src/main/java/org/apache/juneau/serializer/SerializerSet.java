@@ -223,8 +223,8 @@ public class SerializerSet {
 		 */
 		public boolean canApply(AnnotationWorkList work) {
 			for (var o : entries)
-				if (o instanceof Serializer.Builder)
-					if (((Serializer.Builder)o).canApply(work))
+				if (o instanceof Serializer.Builder o2)
+					if (o2.canApply(work))
 						return true;
 			return false;
 		}

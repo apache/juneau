@@ -738,19 +738,19 @@ public class Items extends OpenApiElement {
 
 	/* Resolve references in extra attributes */
 	private Object resolveRefs(Object o, OpenApi openApi, Deque<String> refStack, int maxDepth) {
-		if (o instanceof JsonMap om) {
-			var ref2 = om.get("$ref");
+		if (o instanceof JsonMap o2) {
+			var ref2 = o2.get("$ref");
 			if (ref2 instanceof CharSequence) {
 				var sref = ref2.toString();
 				if (refStack.contains(sref) || refStack.size() >= maxDepth)
 					return o;
 				refStack.addLast(sref);
-				var o2 = openApi.findRef(sref, Object.class);
-				o2 = resolveRefs(o2, openApi, refStack, maxDepth);
+				var o3 = openApi.findRef(sref, Object.class);
+				o3 = resolveRefs(o3, openApi, refStack, maxDepth);
 				refStack.removeLast();
-				return o2;
+				return o3;
 			}
-			for (var e : om.entrySet())
+			for (var e : o2.entrySet())
 				e.setValue(resolveRefs(e.getValue(), openApi, refStack, maxDepth));
 		}
 		if (o instanceof JsonList o2)

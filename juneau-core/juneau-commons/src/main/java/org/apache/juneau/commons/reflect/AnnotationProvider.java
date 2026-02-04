@@ -1015,48 +1015,48 @@ public class AnnotationProvider {
 				if (element2.getPackage() != null)
 					l.addAll(element2.getPackage().getAnnotations());
 			}
-		} else if (element instanceof MethodInfo element3) {
+		} else if (element instanceof MethodInfo element2) {
 			if (t.contains(SELF)) {
-				l.addAll(runtimeCache.get(element3.inner()));
-				l.addAll(element3.getDeclaredAnnotations());
+				l.addAll(runtimeCache.get(element2.inner()));
+				l.addAll(element2.getDeclaredAnnotations());
 			}
 			if (t.contains(MATCHING_METHODS)) {
-				for (var m : element3.getMatchingMethods().stream().skip(1).toList()) {
+				for (var m : element2.getMatchingMethods().stream().skip(1).toList()) {
 					l.addAll(runtimeCache.get(m.inner()));
 					l.addAll(m.getDeclaredAnnotations());
 				}
 			}
 			if (t.contains(DECLARING_CLASS)) {
-				l.addAll(find(element3.getDeclaringClass(), a(PARENTS)));
+				l.addAll(find(element2.getDeclaringClass(), a(PARENTS)));
 			}
 			if (t.contains(RETURN_TYPE)) {
-				l.addAll(find(element3.getReturnType().unwrap(Value.class, Optional.class), a(PARENTS)));
+				l.addAll(find(element2.getReturnType().unwrap(Value.class, Optional.class), a(PARENTS)));
 			}
 			if (t.contains(PACKAGE)) {
-				if (element3.getDeclaringClass().getPackage() != null)
-					l.addAll(element3.getDeclaringClass().getPackage().getAnnotations());
+				if (element2.getDeclaringClass().getPackage() != null)
+					l.addAll(element2.getDeclaringClass().getPackage().getAnnotations());
 			}
-		} else if (element instanceof FieldInfo element4) {
+		} else if (element instanceof FieldInfo element2) {
 			if (t.contains(SELF)) {
-				l.addAll(runtimeCache.get(element4.inner()));
-				l.addAll(element4.getAnnotations());
+				l.addAll(runtimeCache.get(element2.inner()));
+				l.addAll(element2.getAnnotations());
 			}
-		} else if (element instanceof ConstructorInfo element5) {
+		} else if (element instanceof ConstructorInfo element2) {
 			if (t.contains(SELF)) {
-				l.addAll(runtimeCache.get(element5.inner()));
-				l.addAll(element5.getDeclaredAnnotations());
+				l.addAll(runtimeCache.get(element2.inner()));
+				l.addAll(element2.getDeclaredAnnotations());
 			}
-		} else if (element instanceof ParameterInfo element6) {
+		} else if (element instanceof ParameterInfo element2) {
 			if (t.contains(SELF)) {
-				l.addAll(element6.getAnnotations());
+				l.addAll(element2.getAnnotations());
 			}
 			if (t.contains(MATCHING_PARAMETERS)) {
-				for (var p : element6.getMatchingParameters().stream().skip(1).toList()) {
+				for (var p : element2.getMatchingParameters().stream().skip(1).toList()) {
 					l.addAll(p.getAnnotations());
 				}
 			}
 			if (t.contains(PARAMETER_TYPE)) {
-				l.addAll(find(element6.getParameterType().unwrap(Value.class, Optional.class), a(PARENTS, PACKAGE)));
+				l.addAll(find(element2.getParameterType().unwrap(Value.class, Optional.class), a(PARENTS, PACKAGE)));
 			}
 		}
 

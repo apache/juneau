@@ -1035,10 +1035,10 @@ public class BasicSwaggerProviderSession {
 		for (var val : om) {
 			if (val instanceof JsonMap val2) {
 				val = resolve(val2);
-			} else if (val instanceof JsonList val3) {
-				val = resolve(val3);
-			} else if (val instanceof String val4) {
-				val = resolve(val4);
+			} else if (val instanceof JsonList val2) {
+				val = resolve(val2);
+			} else if (val instanceof String val2) {
+				val = resolve(val2);
 			}
 			ol2.add(val);
 		}
@@ -1057,10 +1057,10 @@ public class BasicSwaggerProviderSession {
 			var val = e.getValue();
 			if (val instanceof JsonMap val2) {
 				val = resolve(val2);
-			} else if (val instanceof JsonList val3) {
-				val = resolve(val3);
-			} else if (val instanceof String val4) {
-				val = resolve(val4);
+			} else if (val instanceof JsonList val2) {
+				val = resolve(val2);
+			} else if (val instanceof String val2) {
+				val = resolve(val2);
 			}
 			om2.put(e.getKey(), val);
 		}

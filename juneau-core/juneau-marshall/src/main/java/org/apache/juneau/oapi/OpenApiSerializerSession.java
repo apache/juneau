@@ -338,12 +338,12 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 					out = toSpacedHex(toType(value, CM_ByteArray));
 				} else if (f == DATE) {
 					try {
-						if (value instanceof Calendar)
-							out = TemporalCalendarSwap.IsoDate.DEFAULT.swap(this, (Calendar)value);
-						else if (value instanceof Date)
-							out = TemporalDateSwap.IsoDate.DEFAULT.swap(this, (Date)value);
-						else if (value instanceof Temporal)
-							out = TemporalSwap.IsoDate.DEFAULT.swap(this, (Temporal)value);
+						if (value instanceof Calendar value2)
+							out = TemporalCalendarSwap.IsoDate.DEFAULT.swap(this, value2);
+						else if (value instanceof Date value2)
+							out = TemporalDateSwap.IsoDate.DEFAULT.swap(this, value2);
+						else if (value instanceof Temporal value2)
+							out = TemporalSwap.IsoDate.DEFAULT.swap(this, value2);
 						else
 							out = value.toString();
 					} catch (Exception e) {
@@ -351,12 +351,12 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 					}
 				} else if (f == DATE_TIME) {
 					try {
-						if (value instanceof Calendar)
-							out = TemporalCalendarSwap.IsoInstant.DEFAULT.swap(this, (Calendar)value);
-						else if (value instanceof Date)
-							out = TemporalDateSwap.IsoInstant.DEFAULT.swap(this, (Date)value);
-						else if (value instanceof Temporal)
-							out = TemporalSwap.IsoInstant.DEFAULT.swap(this, (Temporal)value);
+						if (value instanceof Calendar value2)
+							out = TemporalCalendarSwap.IsoInstant.DEFAULT.swap(this, value2);
+						else if (value instanceof Date value2)
+							out = TemporalDateSwap.IsoInstant.DEFAULT.swap(this, value2);
+						else if (value instanceof Temporal value2)
+							out = TemporalSwap.IsoInstant.DEFAULT.swap(this, value2);
 						else
 							out = value.toString();
 					} catch (Exception e) {

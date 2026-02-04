@@ -892,9 +892,9 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 					// If wrapped in Optional, unwrap it to get the nested type
 					if (rawType instanceof Class<?> rawClass && rawClass == Optional.class) {
 						var typeArgs = pt2.getActualTypeArguments();
-						if (typeArgs.length > 0 && typeArgs[0] instanceof ParameterizedType nestedPt) {
+						if (typeArgs.length > 0 && typeArgs[0] instanceof ParameterizedType typeArgs2) {
 							// Optional<List<T>> -> List<T>
-							parameterizedType = nestedPt;
+							parameterizedType = typeArgs2;
 						} else {
 							// Optional<SomeClass> - not a collection, elementType remains null
 							parameterizedType = null;

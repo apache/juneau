@@ -926,8 +926,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 			} else if (sType.isMap() || (nn(wType) && wType.isMap())) {
 				out.nlIf(! isRoot, xIndent + 1);
-				if (o instanceof BeanMap)
-					serializeBeanMap(out, (BeanMap)o, eType, pMeta);
+				if (o instanceof BeanMap o2)
+					serializeBeanMap(out, o2, eType, pMeta);
 				else
 					serializeMap(out, (Map)o, sType, eType.getKeyType(), eType.getValueType(), typeName, pMeta);
 

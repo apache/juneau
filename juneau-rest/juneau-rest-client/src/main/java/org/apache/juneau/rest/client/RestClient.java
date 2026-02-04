@@ -3013,10 +3013,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 						throw new ConfigException("Invalid object of type ''{0}'' passed to interceptors().", ci.getName());
 					if (o instanceof HttpRequestInterceptor o2)
 						addInterceptorLast(o2);
-					if (o instanceof HttpResponseInterceptor o3)
-						addInterceptorLast(o3);
-					if (o instanceof RestCallInterceptor o4)
-						l.add(o4);
+					if (o instanceof HttpResponseInterceptor o2)
+						addInterceptorLast(o2);
+					if (o instanceof RestCallInterceptor o2)
+						l.add(o2);
 				}
 			}
 			if (interceptors == null)
@@ -6717,10 +6717,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				return req.content(new UrlEncodedFormEntity(body2));
 			if (body instanceof HttpResource body2)
 				body2.getHeaders().forEach(req::header);
-			if (body instanceof HttpEntity body3) {
-				if (body3.getContentType() == null)
+			if (body instanceof HttpEntity body2) {
+				if (body2.getContentType() == null)
 					req.header(ContentType.APPLICATION_FORM_URLENCODED);
-				return req.content(body3);
+				return req.content(body2);
 			}
 			if (body instanceof Reader || body instanceof InputStream)
 				return req.header(ContentType.APPLICATION_FORM_URLENCODED).content(body);
@@ -8097,10 +8097,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		try {
 			if (x instanceof URI x2)
 				return x2;
-			if (x instanceof URL x3)
-				return x3.toURI();
-			if (x instanceof URIBuilder x4)
-				return x4.build();
+			if (x instanceof URL x2)
+				return x2.toURI();
+			if (x instanceof URIBuilder x2)
+				return x2.build();
 			var s = x == null ? "" : x.toString();
 			if (nn(rootUrl) && ! absUrlPattern.matcher(s).matches()) {
 				if (s.isEmpty())

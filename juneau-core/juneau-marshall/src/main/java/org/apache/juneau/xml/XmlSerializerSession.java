@@ -404,11 +404,11 @@ public class XmlSerializerSession extends WriterSerializerSession {
 					if (pMeta.isUri()) {
 						out.attrUri(ns, key, value);
 					} else if (n.equals(attrsProperty)) {
-						if (value instanceof BeanMap<?> bm2) {
-							bm2.forEachValue(x -> true, (pMeta2, key2, value2, thrown2) -> {
+						if (value instanceof BeanMap<?> value2) {
+							value2.forEachValue(x -> true, (pMeta2, key2, value3, thrown2) -> {
 								if (nn(thrown2))
 									onBeanGetterException(pMeta, thrown2);
-								out.attr(ns, key2, value2);
+								out.attr(ns, key2, value3);
 							});
 						} else /* Map */ {
 							var m2 = (Map)value;
@@ -951,8 +951,8 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			} else if (sType.isNumber() || sType.isBoolean()) {
 				out.append(o);
 			} else if (sType.isMap() || (nn(wType) && wType.isMap())) {
-				if (o instanceof BeanMap)
-					rc = serializeBeanMap(out, (BeanMap)o, elementNamespace, isCollapsed, isMixedOrText);
+				if (o instanceof BeanMap o2)
+					rc = serializeBeanMap(out, o2, elementNamespace, isCollapsed, isMixedOrText);
 				else
 					rc = serializeMap(out, (Map)o, sType, eType.getKeyType(), eType.getValueType(), isMixedOrText);
 			} else if (sType.isBean()) {

@@ -205,8 +205,8 @@ public class RestResponse extends HttpServletResponseWrapper {
 			// Do nothing.
 		} else if (header instanceof BasicUriHeader header2) {
 			addHeader(header2.getName(), resolveUris(header2.getValue()));
-		} else if (header instanceof SerializedHeader header3) {
-			var x = header3.copyWith(request.getPartSerializerSession(), null);
+		} else if (header instanceof SerializedHeader header2) {
+			var x = header2.copyWith(request.getPartSerializerSession(), null);
 			addHeader(x.getName(), resolveUris(x.getValue()));
 		} else {
 			addHeader(header.getName(), header.getValue());
