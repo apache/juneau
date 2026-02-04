@@ -22,6 +22,7 @@ Release Notes - Juneau - Version 9.2.1
     * Bump maven.compiler.target in juneau-rest-server-springboot from a mix for 1.8 and 17 to 17 (inherited from parent POM).
     * Bump org.apache:apache from 35 to 37 #306.
     * Bump org.mockito:mockito-core from 5.15.2 to 5.21.0 #307.
+    * Bump spring.version from 4.0.1 to 4.0.2 #308.
 
 Release Notes - Juneau - Version 9.2.0
 
