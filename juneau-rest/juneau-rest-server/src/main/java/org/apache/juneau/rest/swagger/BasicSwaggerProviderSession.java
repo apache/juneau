@@ -612,7 +612,7 @@ public class BasicSwaggerProviderSession {
 		if (isEmpty(sex))
 			return;
 
-		var example = (Object)null;
+		Object example = null;
 		if (isProbablyJson(sex)) {
 			example = jp.parse(sex, type);
 		} else {
@@ -1045,7 +1045,7 @@ public class BasicSwaggerProviderSession {
 	}
 
 	private JsonMap resolve(JsonMap om) throws ParseException {
-		var om2 = (JsonMap)null;
+		JsonMap om2 = null;
 		if (om.containsKey("_value")) {
 			om = om.modifiable();
 			om2 = parseMap(om.remove("_value"));

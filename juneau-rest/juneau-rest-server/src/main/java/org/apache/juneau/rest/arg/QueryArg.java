@@ -92,7 +92,7 @@ public class QueryArg implements RestOpArg {
 			return null;
 
 		// Find matching @Query from class-level queryParams array
-		var classLevelQuery = (Query)null;
+		Query classLevelQuery = null;
 		for (var q : restAnnotation.queryParams()) {
 			var qName = firstNonEmpty(q.name(), q.value());
 			if (paramName.equals(qName)) {

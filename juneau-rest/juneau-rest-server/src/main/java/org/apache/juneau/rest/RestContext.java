@@ -4501,7 +4501,7 @@ public class RestContext extends Context {
 
 			// Initialize our child resources.
 			for (var o : children) {
-				var path = (String)null;
+				String path = null;
 				Supplier<?> so;
 
 				if (o instanceof RestChild o2) {
@@ -4510,7 +4510,7 @@ public class RestContext extends Context {
 					so = () -> o3;
 				}
 
-				var cb = (Builder)null;
+				RestContext.Builder cb = null;
 
 				if (o instanceof Class<?> oc) {
 					// Don't allow specifying yourself as a child.  Causes an infinite loop.
@@ -6057,7 +6057,7 @@ public class RestContext extends Context {
 			var statusCode = e2.getStatusLine().getStatusCode();
 			res.setStatus(statusCode);
 
-			var w = (PrintWriter)null;
+			PrintWriter w = null;
 			try {
 				w = res.getWriter();
 			} catch (@SuppressWarnings("unused") IllegalStateException x) {

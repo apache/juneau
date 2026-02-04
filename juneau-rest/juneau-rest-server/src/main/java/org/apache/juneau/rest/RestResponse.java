@@ -152,7 +152,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 
 		// Find acceptable charset
 		var h = request.getHeaderParam("accept-charset").orElse(null);
-		var charset = (Charset)null;
+		Charset charset = null;
 		if (h == null)
 			charset = opContext.getDefaultCharset();
 		else
@@ -375,7 +375,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 */
 	public FinishableServletOutputStream getNegotiatedOutputStream() throws NotAcceptable, IOException {
 		if (os == null) {
-			var encoder = (Encoder)null;
+			Encoder encoder = null;
 			var encoders = request.getOpContext().getEncoders();
 
 			var ae = request.getHeaderParam("Accept-Encoding").orElse(null);

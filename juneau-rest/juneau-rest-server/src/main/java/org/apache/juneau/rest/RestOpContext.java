@@ -1984,8 +1984,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			if (v.get().isEmpty()) {
 				var mi = MethodInfo.of(restMethod);
-				var p = (String)null;
-				var httpMethod = (String)null;
+				String p = null;
+				String httpMethod = null;
 				if (mi.hasAnnotation(RestGet.class))
 					httpMethod = "get";
 				else if (mi.hasAnnotation(RestPut.class))
@@ -2033,7 +2033,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		protected void processParameterAnnotations() {
 			for (var aa : restMethod.getParameterAnnotations()) {
 
-				var def = (String)null;
+				String def = null;
 				for (var a : aa) {
 					if (a instanceof Schema a2) {
 						def = joinnlFirstNonEmptyArray(a2.default_(), a2.df());
@@ -2539,7 +2539,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	}
 
 	private UrlPathMatch matchPattern(RestSession call) {
-		var pm = (UrlPathMatch)null;
+		UrlPathMatch pm = null;
 		for (var pp : pathMatchers)
 			if (pm == null)
 				pm = pp.match(call.getUrlPath());

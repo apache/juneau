@@ -136,7 +136,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 		this.vs = req.getVarResolverSession();
 
 		Map<String,String[]> m = null;
-		var c = (Collection<Part>)null;
+		Collection<Part> c = null;
 
 		RequestContent content = req.getContent();
 		if (content.isLoaded() || ! req.getHeader(ContentType.class).orElse(ContentType.NULL).equalsIgnoreCase("multipart/form-data")) {

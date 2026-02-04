@@ -206,7 +206,7 @@ public class LogEntryFormatter extends Formatter {
 	public String format(LogRecord r) {
 		String msg = formatMessage(r);
 		Throwable t = r.getThrown();
-		var hash = (String)null;
+		String hash = null;
 		int c = 0;
 		if (nn(hashes) && nn(t)) {
 			hash = hashCode(t);

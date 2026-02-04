@@ -235,7 +235,7 @@ public class RestUtils {
 				r.read();
 
 			var state = S1;
-			var currAttr = (String)null;
+			String currAttr = null;
 			while (c != -1) {
 				c = r.read();
 				if (state == S1) {
