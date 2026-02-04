@@ -117,6 +117,7 @@ public class ConfigMapEntry {
 	 */
 	public String getValue() { return value; }
 
+	@SuppressWarnings("java:S3776")
 	Writer writeTo(Writer w) throws IOException {
 		if (value == null)
 			return w;

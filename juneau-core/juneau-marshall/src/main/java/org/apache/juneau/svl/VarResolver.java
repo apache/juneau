@@ -103,7 +103,7 @@ public class VarResolver {
 		 * @return This object .
 		 */
 		public <T> Builder bean(Class<T> c, T value) {
-			beanStore().addBean(c, value);
+			super.beanStore().addBean(c, value);
 			return this;
 		}
 

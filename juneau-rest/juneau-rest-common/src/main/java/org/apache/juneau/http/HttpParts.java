@@ -74,9 +74,7 @@ public class HttpParts {
 		return n.orElse(null);
 	};
 
-	private static final Function<ClassMeta<?>,ConstructorInfo> CONSTRUCTOR_FUNCTION = x -> {
-		return x.getPublicConstructor(y -> y.hasParameterTypes(String.class)).orElseGet(() -> x.getPublicConstructor(y -> y.hasParameterTypes(String.class, String.class)).orElse(null));
-	};
+	private static final Function<ClassMeta<?>,ConstructorInfo> CONSTRUCTOR_FUNCTION = x -> x.getPublicConstructor(y -> y.hasParameterTypes(String.class)).orElseGet(() -> x.getPublicConstructor(y -> y.hasParameterTypes(String.class, String.class)).orElse(null));
 
 	/**
 	 * Creates a {@link BasicPart} from a name/value pair string (e.g. <js>"Foo: bar"</js>)

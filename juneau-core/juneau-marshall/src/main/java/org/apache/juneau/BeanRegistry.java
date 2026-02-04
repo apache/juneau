@@ -134,6 +134,7 @@ public class BeanRegistry {
 		return r(properties());
 	}
 
+	@SuppressWarnings("java:S3776")
 	private void addClass(ClassInfo ci) {
 		try {
 			if (nn(ci) && nn(ci.inner())) {

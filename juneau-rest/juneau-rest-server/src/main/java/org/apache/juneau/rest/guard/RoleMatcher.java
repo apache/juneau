@@ -238,7 +238,7 @@ public class RoleMatcher {
 		return exp.toString();
 	}
 
-	@SuppressWarnings("java:S6541")
+	@SuppressWarnings({"java:S6541", "java:S3776"})
 	private Exp parse(String expression) throws ParseException {
 		if (StringUtils.isBlank(expression))
 			return new Never();

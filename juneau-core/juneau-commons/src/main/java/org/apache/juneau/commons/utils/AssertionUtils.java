@@ -226,6 +226,7 @@ public class AssertionUtils {
 	 * @param o4 The fourth object to check.
 	 * @throws IllegalArgumentException Constructed exception.
 	 */
+	@SuppressWarnings("java:S107")
 	public static final void assertArgsNotNull(String name1, Object o1, String name2, Object o2, String name3, Object o3, String name4, Object o4) throws IllegalArgumentException {
 		assertArgNotNull(name1, o1);
 		assertArgNotNull(name2, o2);
@@ -248,6 +249,7 @@ public class AssertionUtils {
 	 * @param o5 The fifth object to check.
 	 * @throws IllegalArgumentException Constructed exception.
 	 */
+	@SuppressWarnings("java:S107")
 	public static final void assertArgsNotNull(String name1, Object o1, String name2, Object o2, String name3, Object o3, String name4, Object o4, String name5, Object o5)
 		throws IllegalArgumentException {
 		assertArgNotNull(name1, o1);

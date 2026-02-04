@@ -101,6 +101,7 @@ public class ObjectMerger {
 		 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 		 */
 		@Override /* Overridden from InvocationHandler */
+		@SuppressWarnings("java:S3776")
 		public Object invoke(Object proxy, Method method, Object[] args) throws ExecutableException {
 			Object r = null;
 			var isGetter = args == null && method.getReturnType() != Void.class;

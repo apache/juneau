@@ -58,6 +58,7 @@ public class NumberMatcherFactory extends MatcherFactory {
 		NumberRange[] numberRanges;
 		String pattern;
 
+		@SuppressWarnings("java:S3776")
 		public NumberMatcher(String s) {
 
 			s = s.trim();

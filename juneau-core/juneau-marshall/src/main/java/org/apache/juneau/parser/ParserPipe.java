@@ -271,6 +271,7 @@ public class ParserPipe implements Closeable {
 	 * @return The input object wrapped in a Reader, or <jk>null</jk> if the object is null.
 	 * @throws IOException If object could not be converted to a reader.
 	 */
+	@SuppressWarnings("java:S3776")
 	public Reader getReader() throws IOException {
 		if (input == null)
 			return null;

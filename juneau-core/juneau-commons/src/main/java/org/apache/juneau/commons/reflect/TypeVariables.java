@@ -108,6 +108,7 @@ public class TypeVariables {
 	 * @param t The type we're recursing.
 	 * @param m Where the results are loaded.
 	 */
+	@SuppressWarnings("java:S3776")
 	private static void findTypeVarImpls(Type t, Map<Class<?>, List<Class<?>>> m) {
 		if (t instanceof Class<?> c) {
 			findTypeVarImpls(c.getGenericSuperclass(), m);
@@ -227,6 +228,7 @@ public class TypeVariables {
 	 * @param t The type to resolve.
 	 * @return The resolved class, or <jk>null</jk> if the type cannot be resolved to a class.
 	 */
+	@SuppressWarnings("java:S3776")
 	public Class<?> resolve(Type t) {
 		if (t instanceof Class<?> c)
 			return c;

@@ -148,6 +148,7 @@ public class UonWriter extends SerializerWriter {
 	 * @param isTopAttrName If this is a top-level attribute name we're serializing.
 	 * @return This object.
 	 */
+	@SuppressWarnings("java:S3776")
 	public UonWriter appendObject(Object o, boolean isTopAttrName) {
 
 		if (o instanceof Boolean)

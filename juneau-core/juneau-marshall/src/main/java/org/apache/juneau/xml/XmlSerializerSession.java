@@ -753,7 +753,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * @return The same writer passed in so that calls to the writer can be chained.
 	 * @throws SerializeException General serialization error occurred.
 	 */
-	@SuppressWarnings({ "null", "java:S3776", "java:S6541" })
+	@SuppressWarnings({ "null", "java:S3776", "java:S6541", "java:S107" })
 	protected ContentResult serializeAnything(XmlWriter out, Object o, ClassMeta<?> eType, String keyName, String elementName, Namespace elementNamespace, boolean addNamespaceUris, XmlFormat format,
 		boolean isMixedOrText, boolean preserveWhitespace, BeanPropertyMeta pMeta) throws SerializeException {
 

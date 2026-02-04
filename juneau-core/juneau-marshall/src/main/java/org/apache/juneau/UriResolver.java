@@ -133,6 +133,7 @@ public class UriResolver {
 	 * @param o The URI to convert to absolute form.
 	 * @return The same appendable passed in.
 	 */
+	@SuppressWarnings("java:S3776")
 	public Appendable append(Appendable a, Object o) {
 
 		try {

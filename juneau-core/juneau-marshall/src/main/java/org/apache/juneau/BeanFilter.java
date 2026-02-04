@@ -110,10 +110,10 @@ public class BeanFilter {
 
 		/**
 		 * Applies the information in the specified list of {@link Bean @Bean} annotations to this filter.
-		 *
 		 * @param annotations The annotations to apply.
 		 * @return This object.
 		 */
+		@SuppressWarnings("java:S3776")
 		public Builder applyAnnotations(List<Bean> annotations) {
 
 			annotations.forEach(x -> {

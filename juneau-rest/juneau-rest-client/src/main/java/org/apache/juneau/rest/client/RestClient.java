@@ -3977,7 +3977,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder parsers(Class<? extends Parser>...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			parsers().add(value);
 			return this;
 		}

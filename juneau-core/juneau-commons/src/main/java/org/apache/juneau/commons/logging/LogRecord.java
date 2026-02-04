@@ -109,6 +109,7 @@ public class LogRecord extends java.util.logging.LogRecord {  // NOSONAR(java:S2
 		return source.get().map(x -> x.getMethodName()).orElse(null);
 	}
 
+	@SuppressWarnings("java:S3776")
 	private static Optional<StackTraceElement> findSource() {
 		for (var e : new Throwable().getStackTrace()) {  // NOSONAR(java:S1147): Creating Throwable to get stack trace
 			var c = e.getClassName();

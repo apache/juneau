@@ -137,6 +137,7 @@ public class XmlUtils {
 	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
+	@SuppressWarnings("java:S3776")
 	public static Writer encodeAttrName(Writer w, Object value) throws IOException {
 		if (value == null)
 			return w.append("_x0000_");
@@ -184,6 +185,7 @@ public class XmlUtils {
 	 * 	If <jk>true</jk>, leading and trailing whitespace characters will be encoded.
 	 * @return The same writer passed in.
 	 */
+	@SuppressWarnings("java:S3776")
 	public static Writer encodeAttrValue(Writer w, Object value, boolean trim) {
 		try {
 			if (value == null)
@@ -283,6 +285,7 @@ public class XmlUtils {
 	 * 	If <jk>true</jk>, leading and trailing whitespace characters will be encoded.
 	 * @return The same writer passed in.
 	 */
+	@SuppressWarnings("java:S3776")
 	public static Writer encodeText(Writer w, Object value, boolean trim, boolean preserveWhitespace) {
 
 		try {
@@ -423,6 +426,7 @@ public class XmlUtils {
 	}
 
 	// Converts an integer to a hexadecimal string padded to 4 places.
+	@SuppressWarnings("java:S3776")
 	private static Writer appendPaddedHexChar(Writer out, int num) throws IOException {
 		out.append("_x");
 		for (var c : toHex4(num))
@@ -430,6 +434,7 @@ public class XmlUtils {
 		return out.append('_');
 	}
 
+	@SuppressWarnings("java:S3776")
 	private static Writer encodeElementNameInner(Writer w, String s) throws IOException {
 		for (var i = 0; i < s.length(); i++) {
 			var c = s.charAt(i);

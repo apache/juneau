@@ -2462,6 +2462,7 @@ public class StringUtils {
 	 * @return
 	 * 	The time in milliseconds, or <c>-1</c> if the string is empty or <jk>null</jk>.
 	 */
+	@SuppressWarnings("java:S3776")
 	public static long getDuration(String s) {
 		s = trim(s);
 		if (isEmpty(s))
@@ -6558,6 +6559,7 @@ public class StringUtils {
 	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
 	 * 	<br>An empty string results in an empty array.
 	 */
+	@SuppressWarnings("java:S3776")
 	public static List<String> splitNested(String s) {
 		var escapeChars = getEscapeSet(',');
 

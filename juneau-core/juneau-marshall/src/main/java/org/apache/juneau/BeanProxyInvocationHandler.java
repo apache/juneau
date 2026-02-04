@@ -113,6 +113,7 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 	 * @throws UnsupportedOperationException If the method is not a supported bean method (getter, setter, equals, hashCode, or toString)
 	 */
 	@Override /* Overridden from InvocationHandler */
+	@SuppressWarnings("java:S3776")
 	public Object invoke(Object proxy, Method method, Object[] args) {
 		var mi = info(method);
 		if (mi.hasName("equals") && mi.hasParameterTypes(Object.class)) {

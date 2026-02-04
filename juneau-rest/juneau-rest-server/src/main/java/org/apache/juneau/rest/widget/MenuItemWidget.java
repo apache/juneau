@@ -118,6 +118,7 @@ public abstract class MenuItemWidget extends Widget {
 	public abstract Object getContent(RestRequest req, RestResponse res);
 
 	@Override /* Overridden from Widget */
+	@SuppressWarnings("java:S3776")
 	public String getHtml(RestRequest req, RestResponse res) {
 		var sb = new StringBuilder();
 

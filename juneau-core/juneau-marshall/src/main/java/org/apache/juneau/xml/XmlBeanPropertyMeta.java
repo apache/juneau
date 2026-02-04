@@ -101,6 +101,7 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 */
 	public XmlFormat getXmlFormat() { return xmlFormat; }
 
+	@SuppressWarnings("java:S3776")
 	private void findXmlInfo(Xml xml, AnnotationProvider mp) {
 		if (xml == null)
 			return;

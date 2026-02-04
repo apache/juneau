@@ -37,6 +37,7 @@ public class ConfigCommand extends ConsoleCommand {
 	private final Messages mb = Messages.of(ConfigCommand.class, "Messages");
 
 	@Override /* Overridden from ConsoleCommand */
+	@SuppressWarnings("java:S3776")
 	public boolean execute(Scanner in, PrintWriter out, Args args) {
 		var conf = Microservice.getInstance().getConfig();
 		if (args.size() > 2) {

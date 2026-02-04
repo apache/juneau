@@ -227,6 +227,7 @@ public class StringExpressionMatcher {
 		return exp.toString();
 	}
 
+	@SuppressWarnings("java:S3776")
 	private Exp parse(String expression) throws ParseException {
 		if (b(expression))
 			return new Never();

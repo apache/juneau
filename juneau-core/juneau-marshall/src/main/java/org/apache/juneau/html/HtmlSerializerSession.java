@@ -806,7 +806,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @return The type of content encountered.  Either simple (no whitespace) or normal (elements with whitespace).
 	 * @throws SerializeException Generic serialization error occurred.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked", "null", "java:S3776" })
+	@SuppressWarnings({ "rawtypes", "unchecked", "null", "java:S3776", "java:S107" })
 	protected ContentResult serializeAnything(XmlWriter out, Object o, ClassMeta<?> eType, String name, BeanPropertyMeta pMeta, int xIndent, boolean isRoot, boolean nlIfElement)
 		throws SerializeException {
 

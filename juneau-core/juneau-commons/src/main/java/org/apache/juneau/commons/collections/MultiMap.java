@@ -205,6 +205,7 @@ public class MultiMap<K,V> extends AbstractMap<K,V> {
 	 * @return A set view of the mappings contained in this map.
 	 */
 	@Override
+	@SuppressWarnings("java:S3776")
 	public Set<Entry<K,V>> entrySet() {
 		return new AbstractSet<>() {
 			@Override

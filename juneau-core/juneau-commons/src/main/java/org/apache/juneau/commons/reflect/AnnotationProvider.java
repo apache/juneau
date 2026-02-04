@@ -329,6 +329,7 @@ public class AnnotationProvider {
 		 * @throws BeanRuntimeException If any annotation is invalid (missing {@code on()} or {@code onClass()} methods,
 		 * 	or if the methods return incorrect types).
 		 */
+		@SuppressWarnings("java:S3776")
 		public Builder addRuntimeAnnotations(List<Annotation> annotations) {
 			if (runtimeAnnotations == null)
 				runtimeAnnotations = ReflectionMap.create(Annotation.class);
@@ -985,7 +986,7 @@ public class AnnotationProvider {
 	 * Computes and caches the complete list of annotations for a given type, class, and traversal combination.
 	 * This is the supplier function for the findCache.
 	 */
-	@SuppressWarnings("java:S6541")
+	@SuppressWarnings({"java:S6541", "java:S3776"})
 	private List load(Class<?> type, ElementInfo element, AnnotationTraversal[] traversals) {
 
 		if (type != null) {

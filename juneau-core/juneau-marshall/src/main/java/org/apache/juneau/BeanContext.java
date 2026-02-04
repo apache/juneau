@@ -485,7 +485,7 @@ public class BeanContext extends Context {
 		 * @see #beanDictionary(ClassInfo...)
 		 */
 		public Builder beanDictionary(Class<?>...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			return beanDictionary(Stream.of(values).map(ReflectionUtils::info).toArray(ClassInfo[]::new));
 		}
 
@@ -2572,7 +2572,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder interfaces(Class<?>...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			for (var v : value)
 				annotations(BeanAnnotation.create(v).interfaceClass(v).build());
 			return this;

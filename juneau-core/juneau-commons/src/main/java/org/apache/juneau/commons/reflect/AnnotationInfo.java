@@ -723,18 +723,16 @@ public class AnnotationInfo<T extends Annotation> {
 		// @formatter:off
 		var ca = info(a.annotationType());
 		var ja = mapb().sorted().buildFluent();  // NOAI
-		ca.getDeclaredMethods().stream().forEach(x -> {
-			safeOptCatch(() -> {
-				var val = x.invoke(a);
-				var d = x.inner().getDefaultValue();
-				// Add values only if they're different from the default.
-				if (neq(val, d)) {
-					if (! (isArray(val) && length(val) == 0 && isArray(d) && length(d) == 0))
-						return val;
-				}
-				return null;
-			}, e -> lm(e)).ifPresent(v -> ja.a(x.getName(), v));
-		});
+		ca.getDeclaredMethods().stream().forEach(x -> safeOptCatch(() -> {
+			var val = x.invoke(a);
+			var d = x.inner().getDefaultValue();
+			// Add values only if they're different from the default.
+			if (neq(val, d)) {
+				if (! (isArray(val) && length(val) == 0 && isArray(d) && length(d) == 0))
+					return val;
+			}
+			return null;
+		}, e -> lm(e)).ifPresent(v -> ja.a(x.getName(), v)));
 		return filteredBeanPropertyMap()
 			.a(s(annotatable.getAnnotatableType()), annotatable.getLabel())
 			.a("@" + ca.getNameSimple(), ja);
@@ -813,20 +811,18 @@ public class AnnotationInfo<T extends Annotation> {
 		// Get annotation values (non-default only)
 		var ca = info(annotationType);
 		var values = new ArrayList<String>();
-		ca.getDeclaredMethods().stream().forEach(m -> {
-			safeOptCatch(() -> {
-				var val = m.invoke(a);
-				var d = m.inner().getDefaultValue();
-				// Add values only if they're different from the default
-				if (neq(val, d)) {
-					if (! (isArray(val) && length(val) == 0 && isArray(d) && length(d) == 0)) {
-						var valueStr = formatAnnotationValue(val);
-						values.add(m.getName() + "=" + valueStr);
-					}
+		ca.getDeclaredMethods().stream().forEach(m -> safeOptCatch(() -> {
+			var val = m.invoke(a);
+			var d = m.inner().getDefaultValue();
+			// Add values only if they're different from the default
+			if (neq(val, d)) {
+				if (! (isArray(val) && length(val) == 0 && isArray(d) && length(d) == 0)) {
+					var valueStr = formatAnnotationValue(val);
+					values.add(m.getName() + "=" + valueStr);
 				}
-				return null;
-			}, e -> null);
-		});
+			}
+			return null;
+		}, e -> null));
 
 		// Build the string: @AnnotationType(key1=value1, key2=value2, on=location)
 		if (! values.isEmpty()) {

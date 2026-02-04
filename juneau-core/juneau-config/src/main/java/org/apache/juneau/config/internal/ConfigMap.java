@@ -54,6 +54,7 @@ public class ConfigMap implements ConfigStoreListener {
 		/**
 		 * Constructor.
 		 */
+		@SuppressWarnings("java:S3776")
 		ConfigSection(List<String> lines) {
 
 			String name2 = null;

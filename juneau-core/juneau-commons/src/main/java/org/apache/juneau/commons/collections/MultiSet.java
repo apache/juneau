@@ -206,6 +206,7 @@ public class MultiSet<E> extends AbstractSet<E> {
 	 * @return An iterator over all elements in all underlying collections.
 	 */
 	@Override /* Set */
+	@SuppressWarnings("java:S3776")
 	public Iterator<E> iterator() {
 		return new Iterator<>() {
 			int i = 0;

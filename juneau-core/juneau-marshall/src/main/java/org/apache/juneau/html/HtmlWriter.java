@@ -378,6 +378,7 @@ public class HtmlWriter extends XmlWriter {
 	}
 
 	@Override /* Overridden from XmlSerializerWriter */
+	@SuppressWarnings("java:S3776")
 	public HtmlWriter text(Object o, boolean preserveWhitespace) {
 
 		if (o == null) {

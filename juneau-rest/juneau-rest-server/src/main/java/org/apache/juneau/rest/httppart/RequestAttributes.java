@@ -300,7 +300,7 @@ public class RequestAttributes {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("attributes", asMap());
+			.a(ARG_attributes, asMap());
 		// @formatter:on
 	}
 

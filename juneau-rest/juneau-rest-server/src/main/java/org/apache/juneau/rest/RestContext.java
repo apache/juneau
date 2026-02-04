@@ -1626,7 +1626,7 @@ public class RestContext extends Context {
 		 */
 		@SafeVarargs
 		public final Builder encoders(Class<? extends Encoder>...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			encoders().add(value);
 			return this;
 		}

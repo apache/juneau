@@ -811,6 +811,7 @@ public class ObjectRest {
 	/*
 	 * Workhorse method.
 	 */
+	@SuppressWarnings("java:S3776")
 	private Object service(int method, String url, Object val) throws ObjectRestException {
 
 		url = normalizeUrl(url);
@@ -947,6 +948,7 @@ public class ObjectRest {
 		return null;	// Never gets here.
 	}
 
+	@SuppressWarnings("java:S3776")
 	private Object[] setArrayEntry(Object o, int index, Object val, ClassMeta componentType) {
 		var a = (Object[])o;
 		if (a.length <= index) {

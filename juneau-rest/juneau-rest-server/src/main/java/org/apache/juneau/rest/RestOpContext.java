@@ -419,7 +419,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 */
 		@SafeVarargs
 		public final Builder converters(Class<? extends RestConverter>...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			converters().append(value);
 			return this;
 		}

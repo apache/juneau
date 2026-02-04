@@ -210,13 +210,13 @@ public class LogsResource extends BasicRestServlet {
 		);
 	}
 
-	@SuppressWarnings({ "resource", "java:S3776" })
 	@RestOp(
 		method="VIEW",
 		path="/*",
 		summary="View contents of log file",
 		description="View the contents of a log file."
 	)
+	@SuppressWarnings({ "resource", "java:S3776", "java:S107" })
 	public void viewFile(
 			RestResponse res,
 			@Path("/*") String path,

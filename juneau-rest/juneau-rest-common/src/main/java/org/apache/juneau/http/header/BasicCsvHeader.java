@@ -182,6 +182,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 * @param val The value to check for.
 	 * @return <jk>true</jk> if this header contains the specified value.
 	 */
+	@SuppressWarnings("java:S3776")
 	public boolean contains(String val) {
 		if (nn(value))
 			for (var v : value)
@@ -204,6 +205,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 * @param val The value to check for.
 	 * @return <jk>true</jk> if this header contains the specified value.
 	 */
+	@SuppressWarnings("java:S3776")
 	public boolean containsIgnoreCase(String val) {
 		if (nn(value))
 			for (var v : value)

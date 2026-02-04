@@ -314,6 +314,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
+	@SuppressWarnings("java:S3776")
 	protected void nav(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		String[] links = session.getNavLinks();
 		if (links.length > 0 && ! contains("NONE", links)) {
@@ -356,9 +357,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 		var addSpace = Flag.create();
 		for (var s : session.getScript())
 			w.sIf(addSpace.getAndSet()).append(3, session.resolve(s)).append('\n'); // Must always append a newline even if whitespace disabled!
-		session.forEachWidget(x -> {
-			w.sIf(addSpace.getAndSet()).append(3, session.resolve(x.getScript(session.getVarResolver()))).w('\n'); // Must always append a newline even if whitespace disabled!
-		});
+		session.forEachWidget(x -> w.sIf(addSpace.getAndSet()).append(3, session.resolve(x.getScript(session.getVarResolver()))).w('\n')); // Must always append a newline even if whitespace disabled!
 	}
 
 	/**
@@ -377,8 +376,6 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 			w.appendln(3, "div.data * {white-space:nowrap;} ");
 		for (var s : session.getStyle())
 			w.sIf(addSpace.getAndSet()).appendln(3, session.resolve(s));
-		session.forEachWidget(x -> {
-			w.sIf(addSpace.getAndSet()).appendln(3, session.resolve(x.getStyle(session.getVarResolver())));
-		});
+		session.forEachWidget(x -> w.sIf(addSpace.getAndSet()).appendln(3, session.resolve(x.getStyle(session.getVarResolver()))));
 	}
 }

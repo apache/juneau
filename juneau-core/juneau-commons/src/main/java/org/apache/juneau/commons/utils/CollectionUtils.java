@@ -1225,6 +1225,7 @@ public class CollectionUtils {
 	 * @param v4 Value 4.
 	 * @return A new unmodifiable map.
 	 */
+	@SuppressWarnings("java:S107")
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
 		return new SimpleMap<>(a(k1, k2, k3, k4), a(v1, v2, v3, v4));
 	}
@@ -1247,6 +1248,7 @@ public class CollectionUtils {
 	 * @param v5 Value 5.
 	 * @return A new unmodifiable map.
 	 */
+	@SuppressWarnings("java:S107")
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
 		return new SimpleMap<>(a(k1, k2, k3, k4, k5), a(v1, v2, v3, v4, v5));
 	}
@@ -1271,6 +1273,7 @@ public class CollectionUtils {
 	 * @param v6 Value 6.
 	 * @return A new unmodifiable map.
 	 */
+	@SuppressWarnings("java:S107")
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) {
 		return new SimpleMap<>(a(k1, k2, k3, k4, k5, k6), a(v1, v2, v3, v4, v5, v6));
 	}
@@ -1297,6 +1300,7 @@ public class CollectionUtils {
 	 * @param v7 Value 7.
 	 * @return A new unmodifiable map.
 	 */
+	@SuppressWarnings("java:S107")
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7) {
 		return new SimpleMap<>(a(k1, k2, k3, k4, k5, k6, k7), a(v1, v2, v3, v4, v5, v6, v7));
 	}
@@ -1325,6 +1329,7 @@ public class CollectionUtils {
 	 * @param v8 Value 8.
 	 * @return A new unmodifiable map.
 	 */
+	@SuppressWarnings("java:S107")
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) {
 		return new SimpleMap<>(a(k1, k2, k3, k4, k5, k6, k7, k8), a(v1, v2, v3, v4, v5, v6, v7, v8));
 	}
@@ -1355,6 +1360,7 @@ public class CollectionUtils {
 	 * @param v9 Value 9.
 	 * @return A new unmodifiable map.
 	 */
+	@SuppressWarnings("java:S107")
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) {
 		return new SimpleMap<>(a(k1, k2, k3, k4, k5, k6, k7, k8, k9), a(v1, v2, v3, v4, v5, v6, v7, v8, v9));
 	}
@@ -1387,6 +1393,7 @@ public class CollectionUtils {
 	 * @param v10 Value 10.
 	 * @return A new unmodifiable map.
 	 */
+	@SuppressWarnings("java:S107")
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) {
 		return new SimpleMap<>(a(k1, k2, k3, k4, k5, k6, k7, k8, k9, k10), a(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10));
 	}
@@ -1476,6 +1483,7 @@ public class CollectionUtils {
 	 * @param v4 Value 4.
 	 * @return A new modifiable map.
 	 */
+	@SuppressWarnings("java:S107")
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
@@ -1502,6 +1510,7 @@ public class CollectionUtils {
 	 * @param v5 Value 5.
 	 * @return A new modifiable map.
 	 */
+	@SuppressWarnings("java:S107")
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
@@ -1531,6 +1540,7 @@ public class CollectionUtils {
 	 * @param v6 Value 6.
 	 * @return A new modifiable map.
 	 */
+	@SuppressWarnings("java:S107")
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
@@ -1563,6 +1573,7 @@ public class CollectionUtils {
 	 * @param v7 Value 7.
 	 * @return A new modifiable map.
 	 */
+	@SuppressWarnings("java:S107")
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
@@ -1598,6 +1609,7 @@ public class CollectionUtils {
 	 * @param v8 Value 8.
 	 * @return A new modifiable map.
 	 */
+	@SuppressWarnings("java:S107")
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
@@ -1636,6 +1648,7 @@ public class CollectionUtils {
 	 * @param v9 Value 9.
 	 * @return A new modifiable map.
 	 */
+	@SuppressWarnings("java:S107")
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
@@ -1677,6 +1690,7 @@ public class CollectionUtils {
 	 * @param v10 Value 10.
 	 * @return A new modifiable map.
 	 */
+	@SuppressWarnings("java:S107")
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);

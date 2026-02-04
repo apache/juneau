@@ -186,7 +186,7 @@ public class Mutaters {
 	 * @param o The object to convert to a string.
 	 * @return The stringified object, or <jk>null</jk> if the object was <jk>null</jk>.
 	 */
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings({ "unchecked", "java:S3776" })
 	public static String toString(Object o) {
 		if (o == null)
 			return null;

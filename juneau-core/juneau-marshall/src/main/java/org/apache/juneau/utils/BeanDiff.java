@@ -187,7 +187,7 @@ public class BeanDiff {
 	 * 	Optional properties to exclude in the comparison.
 	 * 	<br>If <jk>null</jk>, no properties are excluded.
 	 */
-	@SuppressWarnings("null")
+	@SuppressWarnings({"null", "java:S3776"})
 	public <T> BeanDiff(BeanContext bc, T first, T second, Set<String> include, Set<String> exclude) {
 		if (first == null && second == null)
 			return;

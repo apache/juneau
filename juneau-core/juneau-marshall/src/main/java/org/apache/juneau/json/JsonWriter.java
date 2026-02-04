@@ -158,6 +158,7 @@ public class JsonWriter extends SerializerWriter {
 	 * @param s The object being serialized.
 	 * @return This object.
 	 */
+	@SuppressWarnings("java:S3776")
 	public JsonWriter attr(String s) {
 
 		if (trimStrings)
@@ -287,6 +288,7 @@ public class JsonWriter extends SerializerWriter {
 	 * @param s The object being serialized.
 	 * @return This object.
 	 */
+	@SuppressWarnings("java:S3776")
 	public JsonWriter stringValue(String s) {
 		if (s == null)
 			return this;

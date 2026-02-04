@@ -52,9 +52,7 @@ public class FileUtils {
 	public static void create(File f) {
 		if (f.exists())
 			return;
-		safe(() -> {
-			opt(f.createNewFile()).filter(x -> x).orElseThrow(() -> rex("Could not create file ''{0}''", f.getAbsolutePath()));
-		});
+		safe(() -> opt(f.createNewFile()).filter(x -> x).orElseThrow(() -> rex("Could not create file ''{0}''", f.getAbsolutePath())));
 	}
 
 	/**

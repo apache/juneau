@@ -251,6 +251,7 @@ public class MultiList<E> extends AbstractList<E> {
 	 * @return An iterator over all elements in all underlying lists.
 	 */
 	@Override /* List */
+	@SuppressWarnings("java:S3776")
 	public Iterator<E> iterator() {
 		return new Iterator<>() {
 			int i = 0;
@@ -327,6 +328,7 @@ public class MultiList<E> extends AbstractList<E> {
 	 * @throws IndexOutOfBoundsException if the index is out of range (index &lt; 0 || index &gt; size()).
 	 */
 	@Override /* List */
+	@SuppressWarnings("java:S3776")
 	public ListIterator<E> listIterator(int index) {
 		if (index < 0 || index > size())
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());

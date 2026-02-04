@@ -142,6 +142,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 	}
 
 	// Creates the informational summary before the ops.
+	@SuppressWarnings("java:S3776")
 	private static Table header(Session s) {
 		var table = table()._class("header");
 
@@ -289,6 +290,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 	}
 
 	// Creates the contents under the "pet  Everything about your Pets  ext-link" header.
+	@SuppressWarnings("java:S3776")
 	private static Div tagBlockContents(Session s, Tag t) {
 		var tagBlockContents = div()._class("tag-block-contents");
 

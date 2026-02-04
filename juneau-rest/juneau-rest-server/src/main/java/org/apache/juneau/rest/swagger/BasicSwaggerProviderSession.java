@@ -287,17 +287,17 @@ public class BasicSwaggerProviderSession {
 				);
 		}
 
-		omSwagger.appendIf(nem, SWAGGER_externalDocs, parseMap(mb.findFirstString("externalDocs"), "Messages/externalDocs on class {0}", c));
+		omSwagger.appendIf(nem, SWAGGER_externalDocs, parseMap(mb.findFirstString(SWAGGER_externalDocs), "Messages/externalDocs on class {0}", c));
 
 		var info = omSwagger.getMap(SWAGGER_info, true);
 
 		info
-			.appendIf(ne, SWAGGER_title, resolve(mb.findFirstString("title")))
-			.appendIf(ne, SWAGGER_description, resolve(mb.findFirstString("description")))
-			.appendIf(ne, SWAGGER_version, resolve(mb.findFirstString("version")))
-			.appendIf(ne, SWAGGER_termsOfService, resolve(mb.findFirstString("termsOfService")))
-			.appendIf(nem, SWAGGER_contact, parseMap(mb.findFirstString("contact"), "Messages/contact on class {0}", c))
-			.appendIf(nem, SWAGGER_license, parseMap(mb.findFirstString("license"), "Messages/license on class {0}", c));
+			.appendIf(ne, SWAGGER_title, resolve(mb.findFirstString(SWAGGER_title)))
+			.appendIf(ne, SWAGGER_description, resolve(mb.findFirstString(SWAGGER_description)))
+			.appendIf(ne, SWAGGER_version, resolve(mb.findFirstString(SWAGGER_version)))
+			.appendIf(ne, SWAGGER_termsOfService, resolve(mb.findFirstString(SWAGGER_termsOfService)))
+			.appendIf(nem, SWAGGER_contact, parseMap(mb.findFirstString(SWAGGER_contact), "Messages/contact on class {0}", c))
+			.appendIf(nem, SWAGGER_license, parseMap(mb.findFirstString(SWAGGER_license), "Messages/license on class {0}", c));
 
 		if (info.isEmpty())
 			omSwagger.remove(SWAGGER_info);
@@ -366,7 +366,7 @@ public class BasicSwaggerProviderSession {
 			);
 
 			var _summary = Value.<String>empty();
-			al.forEach(ai -> ai.getValue(String.class, "summary").filter(NOT_EMPTY).ifPresent(_summary::set));
+			al.forEach(ai -> ai.getValue(String.class, SWAGGER_summary).filter(NOT_EMPTY).ifPresent(_summary::set));
 			op.appendIf(ne, SWAGGER_summary,
 				firstNonEmpty(
 					resolve(ms.summary()),

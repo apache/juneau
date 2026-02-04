@@ -235,6 +235,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @param action The action to perform.
 	 * @return The list of all bean property values.
 	 */
+	@SuppressWarnings("java:S3776")
 	public BeanMap<T> forEachValue(Predicate<Object> valueFilter, BeanPropertyConsumer action) {
 
 		// Normal bean.

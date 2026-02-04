@@ -89,6 +89,7 @@ public class VarResolverSession {
 	 * Checks to see if string is of the simple form "$X{...}" with no embedded variables.
 	 * This is a common case, and we can avoid using StringWriters.
 	 */
+	@SuppressWarnings("java:S3776")
 	private static boolean isSimpleVar(String s) {
 		// S1: Not in variable, looking for $
 		// S2: Found $, Looking for {
@@ -179,6 +180,7 @@ public class VarResolverSession {
 	 * 	The new string with all variables resolved, or the same string if no variables were found.
 	 * 	<br>Returns <jk>null</jk> if the input was <jk>null</jk>.
 	 */
+	@SuppressWarnings("java:S3776")
 	public String resolve(String s) {
 
 		if (s == null || s.isEmpty() || (s.indexOf('$') == -1 && s.indexOf('\\') == -1))
@@ -249,7 +251,7 @@ public class VarResolverSession {
 	 * @return The same object if no resolution was needed, otherwise a new object or data structure if resolution was
 	 * needed.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes", "unchecked", "java:S3776" })
 	public <T> T resolve(T o) {
 		if (o == null)
 			return null;
@@ -320,7 +322,7 @@ public class VarResolverSession {
 	 * @return The same writer.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	@SuppressWarnings("java:S6541")
+	@SuppressWarnings({"java:S6541", "java:S3776"})
 	public Writer resolveTo(String s, Writer out) throws IOException {
 
 		// S1: Not in variable, looking for $

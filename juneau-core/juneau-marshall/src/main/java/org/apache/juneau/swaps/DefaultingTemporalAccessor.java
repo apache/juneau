@@ -92,7 +92,7 @@ public class DefaultingTemporalAccessor implements TemporalAccessor {
 	}
 
 	@Override /* Overridden from TemporalAccessor */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "java:S3776"})
 	public <R> R query(TemporalQuery<R> query) {
 		var r = inner.query(query);
 

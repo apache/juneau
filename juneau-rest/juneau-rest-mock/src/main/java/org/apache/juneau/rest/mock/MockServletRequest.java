@@ -123,6 +123,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @param req The request to copy overrides from.
 	 * @return This object.
 	 */
+	@SuppressWarnings("java:S3776")
 	public MockServletRequest applyOverrides(HttpRequest req) {
 
 		if (req instanceof MockRestRequest req2) {
@@ -450,6 +451,7 @@ public class MockServletRequest implements HttpServletRequest {
 	public String getProtocolRequestId() { return null; }
 
 	@Override /* Overridden from HttpServletRequest */
+	@SuppressWarnings("java:S3776")
 	public String getQueryString() {
 		if (queryString == null) {
 			if (queryDataMap.isEmpty())

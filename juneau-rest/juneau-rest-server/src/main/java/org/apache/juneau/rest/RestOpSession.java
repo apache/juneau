@@ -231,6 +231,6 @@ public class RestOpSession extends ContextSession {
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
 			.a("ctx", ctx)
-			.a("session", session);
+			.a(ARG_session, session);
 	}
 }

@@ -148,7 +148,7 @@ public class BasicFileFinder implements FileFinder {
 	 * @return The resolved resource contents, or <jk>null</jk> if the resource was not found.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	@SuppressWarnings("null")
+	@SuppressWarnings({"null", "java:S3776"})
 	protected Optional<InputStream> find(String name, Locale locale) throws IOException {
 		name = trimSlashesAndSpaces(name);
 

@@ -231,6 +231,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object.
 	 */
+	@SuppressWarnings("java:S3776")
 	public ParameterInfo copyFrom(ParameterInfo p) {
 		if (nn(p)) {
 			if (nn(p.name))

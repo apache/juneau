@@ -499,7 +499,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 
 		@Override /* Overridden from Context.Builder */
 		public MockRestClient build() {
-			return build(MockRestClient.class);
+			return super.build(MockRestClient.class);
 		}
 
 		@Override /* Overridden from Builder */

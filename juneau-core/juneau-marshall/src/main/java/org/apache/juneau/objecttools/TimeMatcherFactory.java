@@ -65,6 +65,7 @@ public class TimeMatcherFactory extends MatcherFactory {
 		TimestampRange[] ranges;
 		List<TimestampRange> l = new LinkedList<>();
 
+		@SuppressWarnings("java:S3776")
 		public TimeMatcher(String s) {
 
 			// Possible patterns:

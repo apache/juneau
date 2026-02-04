@@ -175,6 +175,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {  // NOSONAR(java:S1200): C
 	 * 	Don't call init() in constructor.
 	 * 	Used for delayed initialization when the possibility of class reference loops exist.
 	 */
+	@SuppressWarnings("java:S3776")
 	ClassMeta(Class<T> innerClass, BeanContext beanContext) {
 		super(innerClass);
 		this.beanContext = beanContext;
@@ -522,7 +523,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {  // NOSONAR(java:S1200): C
 	 * @param jpSession The JSON parser for parsing examples into POJOs.
 	 * @return The serialized class type, or this object if no swap is associated with the class.
 	 */
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings({ "unchecked", "java:S3776" })
 	public T getExample(BeanSession session, JsonParserSession jpSession) {
 		try {
 			if (example.isPresent())
@@ -1507,6 +1508,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {  // NOSONAR(java:S1200): C
 		return MarshalledFilter.create(inner()).applyAnnotations(reverse(l.stream().map(AnnotationInfo::inner).toList())).build();
 	}
 
+	@SuppressWarnings("java:S3776")
 	private Property<T,Object> findNameProperty() {
 		var ap = beanContext.getAnnotationProvider();
 
@@ -1599,6 +1601,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {  // NOSONAR(java:S1200): C
 			.orElse(null);
 	}
 
+	@SuppressWarnings("java:S3776")
 	private Property<T,Object> findParentProperty() {
 		var ap = beanContext.getAnnotationProvider();
 

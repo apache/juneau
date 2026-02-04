@@ -119,6 +119,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 			this.matchers = new AbstractMatcher[factories.length];
 		}
 
+		@SuppressWarnings("java:S3776")
 		boolean matches(Object o) {
 			var cm = bs.getClassMetaForObject(o);
 			if (cm == null)
@@ -160,6 +161,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 			query.forEach((k, v) -> entryMatchers.put(s(k), new ColumnMatcher(bs, s(v))));
 		}
 
+		@SuppressWarnings("java:S3776")
 		boolean matches(Object o) {
 			if (o == null)
 				return false;

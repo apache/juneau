@@ -40,6 +40,7 @@ import org.apache.juneau.serializer.*;
 public class SerializedPojoProcessor implements ResponseProcessor {
 
 	@Override /* Overridden from ResponseProcessor */
+	@SuppressWarnings("java:S3776")
 	public int process(RestOpSession opSession) throws IOException, NotAcceptable, BasicHttpException {
 		RestRequest req = opSession.getRequest();
 		RestResponse res = opSession.getResponse();

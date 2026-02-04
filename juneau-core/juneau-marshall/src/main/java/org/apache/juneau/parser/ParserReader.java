@@ -375,6 +375,7 @@ public class ParserReader extends Reader implements Positionable {
 		return this;
 	}
 
+	@SuppressWarnings("java:S3776")
 	private final int readFromBuff() throws IOException {
 		while (iCurrent >= iEnd) {
 			if (endReached)

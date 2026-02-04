@@ -372,7 +372,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder beanDictionary(Class<?>...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			bcBuilder.beanDictionary(values);
 			return this;
 		}
@@ -2175,7 +2175,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder interfaces(Class<?>...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			bcBuilder.interfaces(value);
 			return this;
 		}

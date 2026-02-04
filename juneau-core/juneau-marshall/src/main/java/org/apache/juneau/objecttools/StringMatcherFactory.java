@@ -65,6 +65,7 @@ public class StringMatcherFactory extends MatcherFactory {
 		Pattern[] andPatterns;
 		Pattern[] notPatterns;
 
+		@SuppressWarnings("java:S3776")
 		public StringMatcher(String searchPattern) {
 
 			this.pattern = searchPattern.trim();

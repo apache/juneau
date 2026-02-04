@@ -62,6 +62,7 @@ public enum JsonType {
 	 * @param value The lowercase form of the enum (e.g. <js>"array"</js>).
 	 * @return The matching <c>Enum</c>, or <jk>null</jk> if no match found.
 	 */
+	@SuppressWarnings("java:S3776")
 	public static JsonType fromString(String value) {
 		if (value == null || value.length() < 4)
 			return null;

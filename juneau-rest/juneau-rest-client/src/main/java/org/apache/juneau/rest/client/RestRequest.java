@@ -2493,7 +2493,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	@Override /* Overridden from BeanSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("client", client.properties())
+			.a(ARG_client, client.properties())
 			.a("ignoreErrors", ignoreErrors)
 			.a("interceptors", interceptors)
 			.a("requestBodySchema", contentSchema)

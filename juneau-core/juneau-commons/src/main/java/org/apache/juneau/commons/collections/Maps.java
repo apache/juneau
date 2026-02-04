@@ -303,6 +303,7 @@ public class Maps<K,V> {
 	 *
 	 * @return The built map, or {@code null} if {@link #sparse()} is set and the map is empty.
 	 */
+	@SuppressWarnings("java:S3776")
 	public Map<K,V> build() {
 
 		if (sparse && e(map))

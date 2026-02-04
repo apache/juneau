@@ -144,6 +144,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	}
 
 	// Creates the informational summary before the ops.
+	@SuppressWarnings("java:S3776")
 	private static Table header(Session s) {
 		var table = table()._class("header");
 
