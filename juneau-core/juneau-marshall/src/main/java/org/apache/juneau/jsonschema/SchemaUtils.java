@@ -36,6 +36,11 @@ import org.apache.juneau.parser.*;
 public class SchemaUtils {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private SchemaUtils() {}
+
+	/**
 	 * Joins an array of strings with newlines.
 	 *
 	 * @param s The array to join.

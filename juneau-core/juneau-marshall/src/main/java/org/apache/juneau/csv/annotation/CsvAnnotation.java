@@ -35,6 +35,11 @@ import org.apache.juneau.svl.*;
 public class CsvAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private CsvAnnotation() {}
+
+	/**
 	 * Applies targeted {@link Csv} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
 	public static class Apply extends AnnotationApplier<Csv,Context.Builder> {

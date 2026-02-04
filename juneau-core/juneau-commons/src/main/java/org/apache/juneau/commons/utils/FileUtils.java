@@ -32,6 +32,11 @@ import java.nio.file.*;
 @SuppressWarnings("java:S115")
 public class FileUtils {
 
+	/**
+	 * Prevents instantiation.
+	 */
+	private FileUtils() {}
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_f = "f";
 	private static final String ARG_path = "path";

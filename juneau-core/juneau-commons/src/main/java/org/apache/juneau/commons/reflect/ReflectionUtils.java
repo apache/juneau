@@ -79,6 +79,11 @@ import org.apache.juneau.commons.inject.*;
 public class ReflectionUtils {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private ReflectionUtils() {}
+
+	/**
 	 * Returns the {@link ClassInfo} wrapper for the specified class.
 	 *
 	 * <h5 class='section'>Example:</h5>

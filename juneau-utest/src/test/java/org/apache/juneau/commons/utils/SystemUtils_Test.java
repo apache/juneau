@@ -26,15 +26,5 @@ import org.junit.jupiter.api.*;
  */
 class SystemUtils_Test extends TestBase {
 
-	//====================================================================================================
-	// Constructor (line 26)
-	//====================================================================================================
-	@Test
-	void a00_constructor() {
-		// Test line 26: class instantiation
-		// SystemUtils has an implicit public no-arg constructor
-		var instance = new SystemUtils();
-		assertNotNull(instance);
-	}
 }
 

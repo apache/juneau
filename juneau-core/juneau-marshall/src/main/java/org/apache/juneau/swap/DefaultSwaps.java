@@ -39,6 +39,11 @@ import org.apache.juneau.swaps.*;
  */
 public class DefaultSwaps {
 
+	/**
+	 * Prevents instantiation.
+	 */
+	private DefaultSwaps() {}
+
 	private static final Map<Class<?>,ObjectSwap<?,?>> SWAPS = new ConcurrentHashMap<>();
 	static {
 		SWAPS.put(Enumeration.class, new EnumerationSwap());

@@ -35,6 +35,11 @@ import org.apache.juneau.svl.*;
 public class NamePropertyAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private NamePropertyAnnotation() {}
+
+	/**
 	 * Applies targeted {@link NameProperty} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
 	public static class Applier extends AnnotationApplier<NameProperty,BeanContext.Builder> {

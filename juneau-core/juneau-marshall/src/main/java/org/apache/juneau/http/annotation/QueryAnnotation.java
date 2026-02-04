@@ -39,6 +39,11 @@ import org.apache.juneau.svl.*;
  */
 public class QueryAnnotation {
 
+	/**
+	 * Prevents instantiation.
+	 */
+	private QueryAnnotation() {}
+
 	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	/**

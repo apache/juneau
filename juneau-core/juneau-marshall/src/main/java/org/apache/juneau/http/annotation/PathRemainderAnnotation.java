@@ -44,6 +44,11 @@ import org.apache.juneau.svl.*;
  */
 public class PathRemainderAnnotation {
 
+	/**
+	 * Prevents instantiation.
+	 */
+	private PathRemainderAnnotation() {}
+
 	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	/**

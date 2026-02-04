@@ -41,6 +41,11 @@ import org.apache.juneau.svl.*;
 public class SchemaAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private SchemaAnnotation() {}
+
+	/**
 	 * Applies targeted {@link Schema} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
 	public static class Apply extends AnnotationApplier<Schema,Context.Builder> {

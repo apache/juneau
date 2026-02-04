@@ -160,6 +160,11 @@ import org.apache.juneau.utils.*;
  */
 public class ConverterUtils {
 
+	/**
+	 * Prevents instantiation.
+	 */
+	private ConverterUtils() {}
+
 	// Session objects are usually not thread safe, but we're not using any feature
 	// of bean sessions that would cause thread safety issues.
 	private static final BeanSession session = BeanContext.DEFAULT_SESSION;

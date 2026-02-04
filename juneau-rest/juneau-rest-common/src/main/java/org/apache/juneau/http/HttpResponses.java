@@ -28,6 +28,11 @@ import org.apache.juneau.http.response.*;
 public class HttpResponses {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private HttpResponses() {}
+
+	/**
 	 * A synonym for {@link Accepted#INSTANCE}.
 	 */
 	public static final Accepted ACCEPTED = Accepted.INSTANCE;

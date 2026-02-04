@@ -28,17 +28,6 @@ import org.junit.jupiter.api.*;
 class AssertionUtils_Test extends TestBase {
 
 	//====================================================================================================
-	// Constructor (line 56)
-	//====================================================================================================
-	@Test
-	void a00_constructor() {
-		// Test line 56: class instantiation
-		// AssertionUtils has an implicit public no-arg constructor
-		var instance = new AssertionUtils();
-		assertNotNull(instance);
-	}
-
-	//====================================================================================================
 	// assertArg(boolean, String, Object...)
 	//====================================================================================================
 	@Test

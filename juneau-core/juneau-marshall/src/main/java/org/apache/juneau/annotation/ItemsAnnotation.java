@@ -29,6 +29,11 @@ import org.apache.juneau.commons.annotation.*;
 public class ItemsAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private ItemsAnnotation() {}
+
+	/**
 	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>

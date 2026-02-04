@@ -24,6 +24,11 @@ import java.lang.reflect.*;
  */
 public class HttpUtils {
 
+	/**
+	 * Prevents instantiation.
+	 */
+	private HttpUtils() {}
+
 	// @formatter:off
 	private static final String[] 
 		LC_METHODS = { "get", "put", "post", "delete", "options", "head", "connect", "trace", "patch" },

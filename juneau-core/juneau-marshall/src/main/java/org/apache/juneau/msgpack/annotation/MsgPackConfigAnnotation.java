@@ -31,6 +31,11 @@ import org.apache.juneau.svl.*;
 public class MsgPackConfigAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private MsgPackConfigAnnotation() {}
+
+	/**
 	 * Applies {@link MsgPackConfig} annotations to a {@link org.apache.juneau.msgpack.MsgPackParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<MsgPackConfig,MsgPackParser.Builder> {

@@ -31,6 +31,11 @@ import org.apache.juneau.uon.*;
 public class UonConfigAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private UonConfigAnnotation() {}
+
+	/**
 	 * Applies {@link UonConfig} annotations to a {@link org.apache.juneau.uon.UonParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<UonConfig,UonParser.Builder> {

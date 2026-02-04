@@ -31,6 +31,11 @@ import org.apache.juneau.svl.*;
 public class HtmlConfigAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private HtmlConfigAnnotation() {}
+
+	/**
 	 * Applies {@link HtmlConfig} annotations to a {@link org.apache.juneau.html.HtmlParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<HtmlConfig,HtmlParser.Builder> {

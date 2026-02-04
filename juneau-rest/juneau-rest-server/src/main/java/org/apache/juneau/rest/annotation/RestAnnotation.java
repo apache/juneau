@@ -52,6 +52,11 @@ import org.apache.juneau.svl.*;
 public class RestAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private RestAnnotation() {}
+
+	/**
 	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>

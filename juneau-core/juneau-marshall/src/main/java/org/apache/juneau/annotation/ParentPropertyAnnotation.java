@@ -35,6 +35,11 @@ import org.apache.juneau.svl.*;
 public class ParentPropertyAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private ParentPropertyAnnotation() {}
+
+	/**
 	 * Applies targeted {@link ParentProperty} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
 	public static class Applier extends AnnotationApplier<ParentProperty,BeanContext.Builder> {

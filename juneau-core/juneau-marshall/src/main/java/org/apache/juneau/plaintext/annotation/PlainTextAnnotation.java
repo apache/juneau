@@ -35,6 +35,11 @@ import org.apache.juneau.svl.*;
 public class PlainTextAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private PlainTextAnnotation() {}
+
+	/**
 	 * Applies targeted {@link PlainText} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
 	public static class Apply extends AnnotationApplier<PlainText,Context.Builder> {

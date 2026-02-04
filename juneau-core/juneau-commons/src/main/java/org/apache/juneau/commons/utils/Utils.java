@@ -51,7 +51,7 @@ import org.apache.juneau.commons.settings.*;
  *   <li class='link'><a class="doclink" href='../../../../../index.html#juneau-commons.utils'>Overview &gt; juneau-commons.utils</a>
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({"java:S115", "java:S1118"})
 public class Utils {
 
 	// Argument name constants for assertArgNotNull

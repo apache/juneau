@@ -34,6 +34,11 @@ import org.apache.juneau.parser.*;
 public class ExternalDocsAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private ExternalDocsAnnotation() {}
+
+	/**
 	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>

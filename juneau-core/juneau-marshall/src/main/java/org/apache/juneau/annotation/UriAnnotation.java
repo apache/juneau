@@ -35,6 +35,11 @@ import org.apache.juneau.svl.*;
 public class UriAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private UriAnnotation() {}
+
+	/**
 	 * Applies targeted {@link Uri} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
 	public static class Applier extends AnnotationApplier<Uri,BeanContext.Builder> {

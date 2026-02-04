@@ -28,6 +28,11 @@ import org.apache.juneau.svl.*;
 public class SoapXmlConfigAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private SoapXmlConfigAnnotation() {}
+
+	/**
 	 * Applies {@link SoapXmlConfig} annotations to a {@link org.apache.juneau.soap.SoapXmlSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<SoapXmlConfig,SoapXmlSerializer.Builder> {

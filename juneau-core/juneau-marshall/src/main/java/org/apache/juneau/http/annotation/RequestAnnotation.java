@@ -35,6 +35,11 @@ import org.apache.juneau.svl.*;
 public class RequestAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private RequestAnnotation() {}
+
+	/**
 	 * Applies targeted {@link Request} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
 	public static class Applier extends AnnotationApplier<Request,BeanContext.Builder> {

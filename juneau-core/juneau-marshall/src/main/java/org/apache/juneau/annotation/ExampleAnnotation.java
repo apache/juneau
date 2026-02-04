@@ -35,6 +35,11 @@ import org.apache.juneau.svl.*;
 public class ExampleAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private ExampleAnnotation() {}
+
+	/**
 	 * Applies targeted {@link Example} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
 	public static class Applier extends AnnotationApplier<Example,BeanContext.Builder> {

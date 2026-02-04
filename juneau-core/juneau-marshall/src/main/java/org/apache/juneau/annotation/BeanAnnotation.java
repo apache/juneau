@@ -35,6 +35,11 @@ import org.apache.juneau.swap.*;
 public class BeanAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private BeanAnnotation() {}
+
+	/**
 	 * Applies targeted {@link Bean} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
 	public static class Applier extends AnnotationApplier<Bean,BeanContext.Builder> {

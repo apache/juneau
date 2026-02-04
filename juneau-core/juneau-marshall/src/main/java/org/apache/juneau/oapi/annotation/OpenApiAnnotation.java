@@ -38,6 +38,11 @@ import org.apache.juneau.svl.*;
 public class OpenApiAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private OpenApiAnnotation() {}
+
+	/**
 	 * Applies targeted {@link OpenApi} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
 	public static class Apply extends AnnotationApplier<OpenApi,Context.Builder> {

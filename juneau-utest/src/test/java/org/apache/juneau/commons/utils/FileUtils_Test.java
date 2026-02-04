@@ -35,17 +35,6 @@ class FileUtils_Test extends TestBase {
 	Path tempDir;
 
 	//====================================================================================================
-	// Constructor (line 32)
-	//====================================================================================================
-	@Test
-	void a00_constructor() {
-		// Test line 32: class instantiation
-		// FileUtils has an implicit public no-arg constructor
-		var instance = new FileUtils();
-		assertNotNull(instance);
-	}
-
-	//====================================================================================================
 	// create(File)
 	//====================================================================================================
 	@Test

@@ -39,6 +39,11 @@ import org.apache.juneau.svl.*;
  */
 public class HeaderAnnotation {
 
+	/**
+	 * Prevents instantiation.
+	 */
+	private HeaderAnnotation() {}
+
 	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	/**

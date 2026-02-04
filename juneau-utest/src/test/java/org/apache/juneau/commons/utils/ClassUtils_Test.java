@@ -34,17 +34,6 @@ import org.junit.jupiter.api.*;
 class ClassUtils_Test {
 
 	//====================================================================================================
-	// Constructor (line 35)
-	//====================================================================================================
-	@Test
-	void a00_constructor() {
-		// Test line 35: class instantiation
-		// ClassUtils has an implicit public no-arg constructor
-		var instance = new ClassUtils();
-		assertNotNull(instance);
-	}
-
-	//====================================================================================================
 	// canAddTo(Collection<?>)
 	//====================================================================================================
 	@Test

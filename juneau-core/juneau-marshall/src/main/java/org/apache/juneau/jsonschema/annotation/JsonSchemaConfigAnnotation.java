@@ -31,6 +31,11 @@ import org.apache.juneau.svl.*;
 public class JsonSchemaConfigAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private JsonSchemaConfigAnnotation() {}
+
+	/**
 	 * Applies {@link JsonSchemaConfig} annotations to a {@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder}.
 	 */
 	public static class Apply extends AnnotationApplier<JsonSchemaConfig,JsonSchemaGenerator.Builder> {

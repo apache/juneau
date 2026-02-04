@@ -36,6 +36,11 @@ import org.apache.juneau.http.resource.*;
 public class HttpResources {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private HttpResources() {}
+
+	/**
 	 * Creates a new {@link ByteArrayResource} builder.
 	 *
 	 * <p>

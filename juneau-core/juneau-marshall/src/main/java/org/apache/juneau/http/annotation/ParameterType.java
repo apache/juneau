@@ -22,6 +22,11 @@ package org.apache.juneau.http.annotation;
  */
 public class ParameterType {
 
+	/**
+	 * Prevents instantiation.
+	 */
+	private ParameterType() {}
+
 	// @formatter:off
 	@SuppressWarnings("javadoc")
 	public static final String

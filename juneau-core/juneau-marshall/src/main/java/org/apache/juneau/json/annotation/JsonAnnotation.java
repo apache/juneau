@@ -38,6 +38,11 @@ import org.apache.juneau.svl.*;
 public class JsonAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private JsonAnnotation() {}
+
+	/**
 	 * Applies targeted {@link Json} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
 	public static class Apply extends AnnotationApplier<Json,Context.Builder> {

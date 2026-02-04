@@ -39,6 +39,11 @@ import org.apache.juneau.svl.*;
  */
 public class FormDataAnnotation {
 
+	/**
+	 * Prevents instantiation.
+	 */
+	private FormDataAnnotation() {}
+
 	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	/**

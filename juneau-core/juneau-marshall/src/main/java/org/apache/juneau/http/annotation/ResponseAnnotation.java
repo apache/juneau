@@ -37,6 +37,11 @@ import org.apache.juneau.svl.*;
 public class ResponseAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private ResponseAnnotation() {}
+
+	/**
 	 * Applies targeted {@link Response} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
 	public static class Applier extends AnnotationApplier<Response,BeanContext.Builder> {

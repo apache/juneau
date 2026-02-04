@@ -40,6 +40,11 @@ import org.apache.juneau.svl.*;
  */
 public class PathAnnotation {
 
+	/**
+	 * Prevents instantiation.
+	 */
+	private PathAnnotation() {}
+
 	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	/**

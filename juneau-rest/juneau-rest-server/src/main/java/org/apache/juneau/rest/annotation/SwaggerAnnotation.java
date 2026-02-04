@@ -34,6 +34,11 @@ import org.apache.juneau.http.annotation.*;
 public class SwaggerAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private SwaggerAnnotation() {}
+
+	/**
 	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>

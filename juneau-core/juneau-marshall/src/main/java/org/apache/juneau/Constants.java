@@ -22,6 +22,11 @@ package org.apache.juneau;
 public class Constants {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private Constants() {}
+
+	/**
 	 * Sentinel value to indicate that a default value is not specified.
 	 * 
 	 * <p>

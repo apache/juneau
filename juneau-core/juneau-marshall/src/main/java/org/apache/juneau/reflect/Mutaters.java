@@ -31,6 +31,12 @@ import org.apache.juneau.commons.reflect.*;
  *
  */
 public class Mutaters {
+
+	/**
+	 * Prevents instantiation.
+	 */
+	private Mutaters() {}
+
 	private static final ConcurrentHashMap<Class<?>,Map<Class<?>,Mutater<?,?>>> CACHE = new ConcurrentHashMap<>();
 
 	/**

@@ -37,6 +37,11 @@ import org.apache.juneau.svl.*;
 public class HtmlLinkAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private HtmlLinkAnnotation() {}
+
+	/**
 	 * Applies targeted {@link HtmlLink} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
 	public static class Apply extends AnnotationApplier<HtmlLink,Context.Builder> {

@@ -38,6 +38,11 @@ import org.apache.juneau.svl.*;
 public class XmlAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private XmlAnnotation() {}
+
+	/**
 	 * Applies targeted {@link Xml} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
 	public static class Apply extends AnnotationApplier<Xml,Context.Builder> {

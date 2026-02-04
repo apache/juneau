@@ -35,6 +35,11 @@ import org.apache.juneau.parser.*;
 public class SubItemsAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private SubItemsAnnotation() {}
+
+	/**
 	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>

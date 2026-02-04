@@ -32,6 +32,11 @@ import org.apache.juneau.svl.*;
 public class OpenApiConfigAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private OpenApiConfigAnnotation() {}
+
+	/**
 	 * Applies {@link OpenApiConfig} annotations to a {@link org.apache.juneau.oapi.OpenApiParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<OpenApiConfig,OpenApiParser.Builder> {

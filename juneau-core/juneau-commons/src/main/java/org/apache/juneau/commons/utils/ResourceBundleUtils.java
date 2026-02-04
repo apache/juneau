@@ -27,6 +27,11 @@ import java.util.*;
 @SuppressWarnings("java:S115")
 public class ResourceBundleUtils {
 
+	/**
+	 * Prevents instantiation.
+	 */
+	private ResourceBundleUtils() {}
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_loader = "loader";
 

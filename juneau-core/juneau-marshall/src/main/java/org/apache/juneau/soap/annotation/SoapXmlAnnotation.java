@@ -35,6 +35,11 @@ import org.apache.juneau.svl.*;
 public class SoapXmlAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private SoapXmlAnnotation() {}
+
+	/**
 	 * Applies targeted {@link SoapXml} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
 	public static class Apply extends AnnotationApplier<SoapXml,Context.Builder> {

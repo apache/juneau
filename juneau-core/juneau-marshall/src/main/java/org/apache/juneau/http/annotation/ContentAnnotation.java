@@ -36,6 +36,11 @@ import org.apache.juneau.svl.*;
 public class ContentAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private ContentAnnotation() {}
+
+	/**
 	 * Applies targeted {@link Content} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
 	public static class Applier extends AnnotationApplier<Content,BeanContext.Builder> {

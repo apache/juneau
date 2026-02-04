@@ -28,6 +28,11 @@ import org.apache.juneau.svl.*;
 public class CsvConfigAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private CsvConfigAnnotation() {}
+
+	/**
 	 * Applies {@link CsvConfig} annotations to a {@link org.apache.juneau.csv.CsvParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<CsvConfig,CsvParser.Builder> {

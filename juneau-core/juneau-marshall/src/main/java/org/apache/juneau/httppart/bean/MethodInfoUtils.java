@@ -28,6 +28,11 @@ import org.apache.juneau.commons.reflect.*;
  */
 class MethodInfoUtils {
 
+	/**
+	 * Prevents instantiation.
+	 */
+	private MethodInfoUtils() {}
+
 	static void assertArgType(MethodInfo m, Class<? extends Annotation> a, Class<?>...c) throws InvalidAnnotationException {
 		var params = m.getParameters();
 		if (params.size() != 1)

@@ -82,6 +82,11 @@ import org.apache.juneau.commons.reflect.*;
  */
 public class ObjectMerger {
 
+	/**
+	 * Prevents instantiation.
+	 */
+	private ObjectMerger() {}
+
 	private static class MergeInvocationHandler implements InvocationHandler {
 		private final Object[] pojos;
 		private final boolean callAllNonGetters;

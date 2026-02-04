@@ -26,6 +26,11 @@ package org.apache.juneau.httppart;
 public class Constants {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private Constants() {}
+
+	/**
 	 * Comma-separated values (e.g. <js>"foo,bar"</js>).
 	 */
 	public static final String CF_CSV = "csv";

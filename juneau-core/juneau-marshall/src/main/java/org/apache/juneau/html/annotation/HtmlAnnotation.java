@@ -40,6 +40,11 @@ import org.apache.juneau.svl.*;
 public class HtmlAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private HtmlAnnotation() {}
+
+	/**
 	 * Applies targeted {@link Html} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
 	public static class Apply extends AnnotationApplier<Html,Context.Builder> {

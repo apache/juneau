@@ -35,6 +35,11 @@ import org.apache.juneau.commons.reflect.*;
 @SuppressWarnings("java:S115")
 public class ClassUtils {
 
+	/**
+	 * Prevents instantiation.
+	 */
+	private ClassUtils() {}
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_value = "value";
 	private static final String ARG_args = "args";

@@ -29,17 +29,6 @@ import org.junit.jupiter.api.*;
 class AnnotationUtils_Test {
 
 	//====================================================================================================
-	// Constructor (line 31)
-	//====================================================================================================
-	@Test
-	void a00_constructor() {
-		// Test line 31: class instantiation
-		// AnnotationUtils has an implicit public no-arg constructor
-		var instance = new AnnotationUtils();
-		assertNotNull(instance);
-	}
-
-	//====================================================================================================
 	// equals(Annotation, Annotation)
 	//====================================================================================================
 	@Target({ElementType.TYPE, ElementType.METHOD})

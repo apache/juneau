@@ -34,6 +34,11 @@ import org.apache.juneau.svl.*;
 public class MarshalledAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private MarshalledAnnotation() {}
+
+	/**
 	 * Applies targeted {@link Marshalled} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
 	public static class Applier extends AnnotationApplier<Marshalled,BeanContext.Builder> {

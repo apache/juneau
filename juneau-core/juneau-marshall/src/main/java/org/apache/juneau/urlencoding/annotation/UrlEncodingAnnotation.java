@@ -38,6 +38,11 @@ import org.apache.juneau.svl.*;
 public class UrlEncodingAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private UrlEncodingAnnotation() {}
+
+	/**
 	 * Applies targeted {@link UrlEncoding} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
 	public static class Apply extends AnnotationApplier<UrlEncoding,Context.Builder> {

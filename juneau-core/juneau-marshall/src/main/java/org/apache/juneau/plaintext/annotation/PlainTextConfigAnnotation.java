@@ -28,6 +28,11 @@ import org.apache.juneau.svl.*;
 public class PlainTextConfigAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private PlainTextConfigAnnotation() {}
+
+	/**
 	 * Applies {@link PlainTextConfig} annotations to a {@link org.apache.juneau.plaintext.PlainTextParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<PlainTextConfig,PlainTextParser.Builder> {

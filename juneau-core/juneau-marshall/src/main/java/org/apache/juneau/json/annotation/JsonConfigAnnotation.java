@@ -31,6 +31,11 @@ import org.apache.juneau.svl.*;
 public class JsonConfigAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private JsonConfigAnnotation() {}
+
+	/**
 	 * Applies {@link JsonConfig} annotations to a {@link org.apache.juneau.json.JsonParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<JsonConfig,JsonParser.Builder> {

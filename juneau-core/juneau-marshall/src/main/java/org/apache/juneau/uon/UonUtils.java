@@ -29,6 +29,11 @@ import org.apache.juneau.commons.lang.*;
  */
 public class UonUtils {
 
+	/**
+	 * Prevents instantiation.
+	 */
+	private UonUtils() {}
+
 	private static final AsciiSet needsQuoteChars = AsciiSet.of("),=\n\t\r\b\f ");
 	private static final AsciiSet maybeNeedsQuotesFirstChar = AsciiSet.of("),=\n\t\r\b\f tfn+-.#0123456789");
 

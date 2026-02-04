@@ -26,6 +26,7 @@ import org.apache.juneau.bean.atom.*;
  * Atom feed example.
  *
  */
+@SuppressWarnings("java:S1118")
 public class AtomFeed {
 
 	/**

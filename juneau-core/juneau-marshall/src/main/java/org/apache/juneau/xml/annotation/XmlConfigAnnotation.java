@@ -31,6 +31,11 @@ import org.apache.juneau.xml.*;
 public class XmlConfigAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private XmlConfigAnnotation() {}
+
+	/**
 	 * Applies {@link XmlConfig} annotations to a {@link org.apache.juneau.xml.XmlParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<XmlConfig,XmlParser.Builder> {

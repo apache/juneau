@@ -33,6 +33,11 @@ import org.apache.juneau.commons.annotation.*;
 public class OpSwaggerAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private OpSwaggerAnnotation() {}
+
+	/**
 	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>

@@ -35,6 +35,11 @@ import org.apache.juneau.svl.*;
 public class BeancAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private BeancAnnotation() {}
+
+	/**
 	 * Applies targeted {@link Beanc} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
 	public static class Applier extends AnnotationApplier<Beanc,BeanContext.Builder> {

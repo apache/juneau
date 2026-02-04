@@ -23,14 +23,4 @@ import org.junit.jupiter.api.*;
 
 class DateUtils_Test extends TestBase {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Constructor (line 42)
-	//-----------------------------------------------------------------------------------------------------------------
-	@Test
-	void a00_constructor() {
-		// Test line 42: class instantiation
-		// DateUtils has an implicit public no-arg constructor
-		var instance = new DateUtils();
-		assertNotNull(instance);
-	}
 }

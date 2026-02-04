@@ -31,6 +31,11 @@ import org.apache.juneau.urlencoding.*;
 public class UrlEncodingConfigAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private UrlEncodingConfigAnnotation() {}
+
+	/**
 	 * Applies {@link UrlEncodingConfig} annotations to a {@link org.apache.juneau.urlencoding.UrlEncodingParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<UrlEncodingConfig,UrlEncodingParser.Builder> {

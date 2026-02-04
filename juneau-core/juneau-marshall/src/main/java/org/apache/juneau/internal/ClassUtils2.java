@@ -26,6 +26,11 @@ import static org.apache.juneau.commons.utils.Utils.*;
 public class ClassUtils2 {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private ClassUtils2() {}
+
+	/**
 	 * Matches arguments to a list of parameter types.
 	 *
 	 * <p>

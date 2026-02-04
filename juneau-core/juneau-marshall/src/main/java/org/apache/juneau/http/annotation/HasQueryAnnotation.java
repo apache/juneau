@@ -29,6 +29,11 @@ import org.apache.juneau.commons.annotation.*;
 public class HasQueryAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private HasQueryAnnotation() {}
+
+	/**
 	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>

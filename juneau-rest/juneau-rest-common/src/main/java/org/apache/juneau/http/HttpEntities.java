@@ -34,6 +34,11 @@ import org.apache.juneau.serializer.*;
 public class HttpEntities {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private HttpEntities() {}
+
+	/**
 	 * Creates a new {@link ByteArrayEntity} builder.
 	 *
 	 * <p>

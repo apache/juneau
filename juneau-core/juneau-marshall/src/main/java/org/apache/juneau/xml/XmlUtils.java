@@ -40,6 +40,11 @@ import org.apache.juneau.xml.annotation.*;
 @SuppressWarnings("resource")
 public class XmlUtils {
 
+	/**
+	 * Prevents instantiation.
+	 */
+	private XmlUtils() {}
+
 	// @formatter:off
 	private static AsciiMap REPLACE_TEXT = new AsciiMap()
 		.append('&', "&amp;")

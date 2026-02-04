@@ -41,6 +41,11 @@ import org.apache.juneau.commons.reflect.*;
  */
 public class HttpParts {
 
+	/**
+	 * Prevents instantiation.
+	 */
+	private HttpParts() {}
+
 	private static final Function<ClassMeta<?>,String> HEADER_NAME_FUNCTION = x -> {
 		var n = Value.<String>empty();
 		x.forEachAnnotation(org.apache.juneau.http.annotation.Header.class, y -> ne(y.value()), y -> n.set(y.value()));

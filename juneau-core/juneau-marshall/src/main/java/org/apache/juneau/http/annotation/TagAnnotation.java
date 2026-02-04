@@ -30,6 +30,11 @@ import org.apache.juneau.commons.annotation.*;
 public class TagAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private TagAnnotation() {}
+
+	/**
 	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>

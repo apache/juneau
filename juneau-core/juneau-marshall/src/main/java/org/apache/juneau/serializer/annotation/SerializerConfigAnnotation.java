@@ -31,6 +31,11 @@ import org.apache.juneau.svl.*;
 public class SerializerConfigAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private SerializerConfigAnnotation() {}
+
+	/**
 	 * Applies {@link SerializerConfig} annotations to a {@link org.apache.juneau.serializer.OutputStreamSerializer.Builder}.
 	 */
 	public static class OutputStreamSerializerApply extends AnnotationApplier<SerializerConfig,OutputStreamSerializer.Builder> {

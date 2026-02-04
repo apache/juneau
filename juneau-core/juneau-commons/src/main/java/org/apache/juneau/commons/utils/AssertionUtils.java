@@ -58,6 +58,11 @@ import static org.apache.juneau.commons.utils.Utils.*;
 @SuppressWarnings("java:S115")
 public class AssertionUtils {
 
+	/**
+	 * Prevents instantiation.
+	 */
+	private AssertionUtils() {}
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_type = "type";
 	private static final String ARG_o = "o";

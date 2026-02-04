@@ -22,6 +22,11 @@ package org.apache.juneau.http.annotation;
  */
 public class FormatType {
 
+	/**
+	 * Prevents instantiation.
+	 */
+	private FormatType() {}
+
 	@SuppressWarnings("javadoc")
 	// @formatter:off
 	public static final String

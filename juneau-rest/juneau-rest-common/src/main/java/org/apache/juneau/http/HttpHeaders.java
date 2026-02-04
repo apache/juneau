@@ -43,6 +43,11 @@ import org.apache.juneau.oapi.*;
  */
 public class HttpHeaders {
 
+	/**
+	 * Prevents instantiation.
+	 */
+	private HttpHeaders() {}
+
 	// @formatter:off
 	@SuppressWarnings("javadoc")
 	public static final Accept

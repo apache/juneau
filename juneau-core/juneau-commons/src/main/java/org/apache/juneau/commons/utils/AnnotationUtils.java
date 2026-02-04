@@ -31,6 +31,11 @@ import java.util.stream.*;
 public class AnnotationUtils {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private AnnotationUtils() {}
+
+	/**
 	 * Checks if two annotations are equal using the criteria for equality presented in the {@link Annotation#equals(Object)} API docs.
 	 *
 	 * @param a1 the first Annotation to compare, {@code null} returns {@code false} unless both are {@code null}

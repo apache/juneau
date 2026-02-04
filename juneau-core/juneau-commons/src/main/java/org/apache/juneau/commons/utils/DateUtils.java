@@ -35,6 +35,11 @@ import org.apache.juneau.commons.collections.*;
  */
 public class DateUtils {
 
+	/**
+	 * Prevents instantiation.
+	 */
+	private DateUtils() {}
+
 	private static final Cache<String, DateTimeFormatter> DATE_TIME_FORMATTER_CACHE = Cache.of(String.class, DateTimeFormatter.class)
 		.maxSize(100)
 		.supplier(pattern -> {

@@ -31,6 +31,11 @@ import java.util.*;
  */
 public class HttpMethod {
 
+	/**
+	 * Prevents instantiation.
+	 */
+	private HttpMethod() {}
+
 	/** <a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.2">OPTIONS</a> */
 	public static final String OPTIONS = "OPTIONS";
 

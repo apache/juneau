@@ -38,6 +38,11 @@ import org.apache.juneau.svl.*;
 public class UonAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private UonAnnotation() {}
+
+	/**
 	 * Applies targeted {@link Uon} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
 	public static class Apply extends AnnotationApplier<Uon,Context.Builder> {

@@ -26,6 +26,11 @@ import org.apache.juneau.commons.reflect.*;
 public class RemoteUtils {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private RemoteUtils() {}
+
+	/**
 	 * Predicate that can be used to filter annotation streams.
 	 * 
 	 * <p>

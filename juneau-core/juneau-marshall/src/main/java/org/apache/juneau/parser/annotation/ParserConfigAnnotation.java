@@ -31,6 +31,11 @@ import org.apache.juneau.svl.*;
 public class ParserConfigAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private ParserConfigAnnotation() {}
+
+	/**
 	 * Applies {@link ParserConfig} annotations to a {@link org.apache.juneau.parser.InputStreamParser.Builder}.
 	 */
 	public static class InputStreamParserApply extends AnnotationApplier<ParserConfig,InputStreamParser.Builder> {

@@ -31,6 +31,11 @@ import org.apache.juneau.svl.*;
 public class HtmlDocConfigAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private HtmlDocConfigAnnotation() {}
+
+	/**
 	 * Applies {@link HtmlDocConfig} annotations to a {@link org.apache.juneau.html.HtmlDocSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<HtmlDocConfig,HtmlDocSerializer.Builder> {

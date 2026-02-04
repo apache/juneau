@@ -35,6 +35,11 @@ import org.apache.juneau.svl.*;
 public class BeanIgnoreAnnotation {
 
 	/**
+	 * Prevents instantiation.
+	 */
+	private BeanIgnoreAnnotation() {}
+
+	/**
 	 * Applies targeted {@link BeanIgnore} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
 	public static class Applier extends AnnotationApplier<BeanIgnore,BeanContext.Builder> {
