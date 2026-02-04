@@ -57,6 +57,7 @@ import org.apache.juneau.rest.servlet.*;
 public class ConfigResource extends BasicRestServlet {
 	@Response
 	@Schema(description = "Section not found.")
+	@SuppressWarnings("java:S110")
 	private class SectionNotFound extends NotFound {
 		private static final long serialVersionUID = 1L;
 

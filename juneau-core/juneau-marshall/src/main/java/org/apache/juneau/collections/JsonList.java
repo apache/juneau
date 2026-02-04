@@ -110,7 +110,9 @@ import org.apache.juneau.serializer.*;
  *
  * @serial exclude
  */
+@SuppressWarnings("java:S110")
 public class JsonList extends LinkedList<Object> {
+	@SuppressWarnings("java:S110")
 	private static class UnmodifiableJsonList extends JsonList {
 		private static final long serialVersionUID = 1L;
 
@@ -145,6 +147,7 @@ public class JsonList extends LinkedList<Object> {
 	 *
 	 * @serial exclude
 	 */
+	@SuppressWarnings("java:S110")
 	public static final JsonList EMPTY_LIST = new JsonList() {
 		private static final long serialVersionUID = 1L;
 

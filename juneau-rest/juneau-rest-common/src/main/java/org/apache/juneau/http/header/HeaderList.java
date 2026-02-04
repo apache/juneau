@@ -62,6 +62,7 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
+@SuppressWarnings("java:S110")
 public class HeaderList extends ControlledArrayList<Header> {
 
 	/** Represents no header list in annotations. */

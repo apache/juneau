@@ -43,6 +43,7 @@ import org.apache.juneau.http.header.*;
 @Response
 @StatusCode(STATUS_CODE)
 @Schema(description = REASON_PHRASE)
+@SuppressWarnings("java:S110")
 public class FailedDependency extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 

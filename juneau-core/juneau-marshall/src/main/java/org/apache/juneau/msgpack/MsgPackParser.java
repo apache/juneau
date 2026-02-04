@@ -44,9 +44,11 @@ import org.apache.juneau.parser.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S110")
 public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvider {
 
 	/** Default parser, string input encoded as BASE64. */
+	@SuppressWarnings("java:S110")
 	public static class Base64 extends MsgPackParser {
 
 		/**
@@ -602,6 +604,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 	}
 
 	/** Default parser, string input encoded as spaced-hex. */
+	@SuppressWarnings("java:S110")
 	public static class SpacedHex extends MsgPackParser {
 
 		/**

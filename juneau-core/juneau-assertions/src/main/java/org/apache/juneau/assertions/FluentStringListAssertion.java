@@ -123,6 +123,7 @@ import org.apache.juneau.serializer.*;
  *
  * @param <R> The return type.
  */
+@SuppressWarnings("java:S110")
 public class FluentStringListAssertion<R> extends FluentListAssertion<String,R> {
 
 	/**

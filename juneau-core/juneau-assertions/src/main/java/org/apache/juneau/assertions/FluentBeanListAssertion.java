@@ -122,6 +122,7 @@ import org.apache.juneau.serializer.*;
  * @param <E> The bean type.
  * @param <R> The return type.
  */
+@SuppressWarnings("java:S110")
 public class FluentBeanListAssertion<E,R> extends FluentListAssertion<E,R> {
 
 	private static BeanMap<?> beanMap(Object o) {

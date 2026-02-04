@@ -46,6 +46,7 @@ import org.apache.juneau.rest.servlet.*;
  * @serial exclude
  */
 @Rest
+@SuppressWarnings("java:S110")
 public abstract class BasicSpringRestServletGroup extends BasicSpringRestServlet implements BasicGroupOperations {
 	private static final long serialVersionUID = 1L;
 

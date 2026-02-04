@@ -49,12 +49,13 @@ import org.apache.juneau.xml.annotation.*;
 
  * </ul>
  */
-@SuppressWarnings({ "unchecked", "rawtypes", "resource" })
+@SuppressWarnings({"unchecked","rawtypes","resource","java:S110"})
 public class XmlSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends WriterSerializerSession.Builder {
 
 		private XmlSerializer ctx;

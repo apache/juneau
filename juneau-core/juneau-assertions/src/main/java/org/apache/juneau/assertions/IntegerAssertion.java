@@ -94,6 +94,7 @@ import org.apache.juneau.serializer.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem Overview</a>
  * </ul>
  */
+@SuppressWarnings("java:S110")
 public class IntegerAssertion extends FluentIntegerAssertion<IntegerAssertion> {
 
 	/**

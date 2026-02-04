@@ -48,6 +48,7 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
+@SuppressWarnings("java:S110")
 public class PartList extends ControlledArrayList<NameValuePair> {
 
 	/** Represents no part list in annotations. */

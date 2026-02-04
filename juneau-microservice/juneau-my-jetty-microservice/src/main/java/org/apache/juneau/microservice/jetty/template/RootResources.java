@@ -52,6 +52,7 @@ import org.apache.juneau.rest.widget.*;
 		"stats: servlet:/stats"
 	}
 )
+@SuppressWarnings("java:S110")
 public class RootResources extends BasicRestServletGroup {
 	private static final long serialVersionUID = 1L;
 }

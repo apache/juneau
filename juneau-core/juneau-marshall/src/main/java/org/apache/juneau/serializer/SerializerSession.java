@@ -27,8 +27,6 @@ import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
 import java.util.function.*;
-import java.util.stream.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.reflect.*;

@@ -30,7 +30,7 @@ import org.apache.juneau.serializer.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshalling">Marshalling</a>
  * </ul>
  */
-@SuppressWarnings("javadoc")
+@SuppressWarnings({"javadoc","java:S110"})
 public class ImageSerializer extends OutputStreamSerializer {
 
 	public ImageSerializer() {
