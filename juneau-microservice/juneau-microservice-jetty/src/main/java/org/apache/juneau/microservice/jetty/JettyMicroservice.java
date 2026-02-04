@@ -555,13 +555,14 @@ public class JettyMicroservice extends Microservice {
 		var jettyXml = builder.jettyXml;
 		var jettyConfig = cf.get("Jetty/config").orElse(mf.getString("Jetty-Config", "jetty.xml"));
 		var resolveVars = firstNonNull(builder.jettyXmlResolveVars, cf.get("Jetty/resolveVars").asBoolean().orElse(false));
+		boolean resolveVars2 = isTrue(resolveVars);
 
 		if (jettyXml == null)
 			jettyXml = loadSystemResourceAsString("jetty.xml", ".", "files");
 		if (jettyXml == null)
 			throw rex("jetty.xml file ''{0}'' was not found on the file system or classpath.", jettyConfig);
 
-		if (resolveVars)
+		if (resolveVars2)
 			jettyXml = vr.resolve(jettyXml);
 
 		getLogger().info(jettyXml);

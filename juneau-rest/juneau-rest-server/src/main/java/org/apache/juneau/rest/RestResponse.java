@@ -629,7 +629,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 */
 	public RestResponse setDebug(Boolean b) throws IOException {
 		request.setDebug(b);
-		if (b)
+		if (isTrue(b))
 			inner = CachingHttpServletResponse.wrap(inner);
 		return this;
 	}

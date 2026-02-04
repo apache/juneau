@@ -22,6 +22,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S4144")
 class HasQuery_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -1215,18 +1215,19 @@ public class BeanSession extends ContextSession {
 							return (T)Byte.valueOf(n.byteValue());
 					} else if (from.isBoolean()) {
 						var b = (Boolean)value;
+						boolean b2 = isTrue(b);
 						if (tc == Integer.TYPE)
-							return (T)(Integer.valueOf(b ? 1 : 0));
+							return (T)(Integer.valueOf(b2 ? 1 : 0));
 						if (tc == Short.TYPE)
-							return (T)(Short.valueOf(b ? (short)1 : 0));
+							return (T)(Short.valueOf(b2 ? (short)1 : 0));
 						if (tc == Long.TYPE)
-							return (T)(Long.valueOf(b ? 1L : 0));
+							return (T)(Long.valueOf(b2 ? 1L : 0));
 						if (tc == Float.TYPE)
-							return (T)(Float.valueOf(b ? 1f : 0));
+							return (T)(Float.valueOf(b2 ? 1f : 0));
 						if (tc == Double.TYPE)
-							return (T)(Double.valueOf(b ? 1d : 0));
+							return (T)(Double.valueOf(b2 ? 1d : 0));
 						if (tc == Byte.TYPE)
-							return (T)(Byte.valueOf(b ? (byte)1 : 0));
+							return (T)(Byte.valueOf(b2 ? (byte)1 : 0));
 					} else if (isNullOrEmpty(value)) {
 						return to.getPrimitiveDefault();
 					} else {
@@ -1293,22 +1294,23 @@ public class BeanSession extends ContextSession {
 						return (T)new AtomicLong(n.intValue());
 				} else if (from.isBoolean()) {
 					var b = (Boolean)value;
+					boolean b2 = isTrue(b);
 					if (tc == Integer.class)
-						return (T)Integer.valueOf(b ? 1 : 0);
+						return (T)Integer.valueOf(b2 ? 1 : 0);
 					if (tc == Short.class)
-						return (T)Short.valueOf(b ? (short)1 : 0);
+						return (T)Short.valueOf(b2 ? (short)1 : 0);
 					if (tc == Long.class)
-						return (T)Long.valueOf(b ? 1 : 0);
+						return (T)Long.valueOf(b2 ? 1 : 0);
 					if (tc == Float.class)
-						return (T)Float.valueOf(b ? 1 : 0);
+						return (T)Float.valueOf(b2 ? 1 : 0);
 					if (tc == Double.class)
-						return (T)Double.valueOf(b ? 1 : 0);
+						return (T)Double.valueOf(b2 ? 1 : 0);
 					if (tc == Byte.class)
-						return (T)Byte.valueOf(b ? (byte)1 : 0);
+						return (T)Byte.valueOf(b2 ? (byte)1 : 0);
 					if (tc == AtomicInteger.class)
-						return (T)new AtomicInteger(b ? 1 : 0);
+						return (T)new AtomicInteger(b2 ? 1 : 0);
 					if (tc == AtomicLong.class)
-						return (T)new AtomicLong(b ? 1 : 0);
+						return (T)new AtomicLong(b2 ? 1 : 0);
 				} else if (isNullOrEmpty(value)) {
 					return null;
 				} else if (! hasMutater(from, to)) {

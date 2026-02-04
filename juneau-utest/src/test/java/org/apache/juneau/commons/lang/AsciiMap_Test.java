@@ -23,6 +23,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for {@link AsciiMap}.
  */
+@SuppressWarnings("java:S4144")
 class AsciiMap_Test {
 
 	//====================================================================================================

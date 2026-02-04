@@ -532,7 +532,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			var currentIsTextNode = isTextNode(x);
 
 			// Insert delimiter between consecutive text nodes
-			if (previousWasTextNode.get() && currentIsTextNode && nn(textNodeDelimiter) && ! textNodeDelimiter.isEmpty()) {
+			if (isTrue(previousWasTextNode.get()) && currentIsTextNode && nn(textNodeDelimiter) && ! textNodeDelimiter.isEmpty()) {
 				out.append(textNodeDelimiter);
 			}
 

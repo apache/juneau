@@ -25,7 +25,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"java:S117"})
+@SuppressWarnings({"java:S117", "java:S4144"})
 class AnnotationObject_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -24,6 +24,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for {@link AsciiSet}.
  */
+@SuppressWarnings("java:S4144")
 class AsciiSet_Test extends TestBase {
 
 	//====================================================================================================

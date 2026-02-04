@@ -24,6 +24,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S4144")
 class BasicBeanStore_Test extends TestBase {
 
 	// Test bean classes

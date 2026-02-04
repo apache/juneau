@@ -28,6 +28,7 @@ import org.junit.jupiter.api.*;
 /**
  * Unit tests for {@link BctConfig} annotation and extension.
  */
+@SuppressWarnings("java:S4144")
 class BctConfig_Test extends TestBase {
 
 	// ====================================================================================================

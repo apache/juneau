@@ -26,6 +26,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.junit.bct.annotations.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S4144")
 class Maps_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

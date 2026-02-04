@@ -26,6 +26,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S4144")
 class LocalFile_Test extends TestBase {
 
 	private static final Path TEST_FILE = Paths.get("src/test/resources/files/Test3.properties");

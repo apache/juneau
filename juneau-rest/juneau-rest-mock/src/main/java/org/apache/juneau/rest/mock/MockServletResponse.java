@@ -37,6 +37,7 @@ import jakarta.servlet.http.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics">juneau-rest-mock Basics</a>
  * </ul>
 */
+@SuppressWarnings("java:S4144")
 public class MockServletResponse implements HttpServletResponse {
 
 	/**

@@ -37,7 +37,7 @@ import org.apache.juneau.serializer.*;
 
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({"resource", "java:S4144"})
 public class UonWriter extends SerializerWriter {
 
 	// Characters that do not need to be URL-encoded in strings.

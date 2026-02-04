@@ -233,8 +233,9 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 
 	private static Div opBlock(Session s, String path, String opName, Operation op) {
 
-		var opClass = nn(op.getDeprecated()) && op.getDeprecated() ? "deprecated" : opName.toLowerCase();
-		if (! (nn(op.getDeprecated()) && op.getDeprecated()) && ! STANDARD_METHODS.contains(opClass))
+		boolean deprecated = isTrue(op.getDeprecated());
+		var opClass = deprecated ? "deprecated" : opName.toLowerCase();
+		if (! deprecated && ! STANDARD_METHODS.contains(opClass))
 			opClass = "other";
 
 		return div()._class("op-block op-block-closed " + opClass).children(opBlockSummary(path, opName, op), div(tableContainer(s, op))._class("op-block-contents"));

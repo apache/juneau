@@ -532,7 +532,7 @@ public class Config extends Context implements ConfigEventListener {
 		for (var n : getCandidateSystemDefaultConfigNames()) {
 			var config = find(n);
 			if (nn(config)) {
-				if (! DISABLE_AUTO_SYSTEM_PROPS.get())
+				if (! isTrue(DISABLE_AUTO_SYSTEM_PROPS.get()))
 					config.setSystemProperties();
 				return config;
 			}

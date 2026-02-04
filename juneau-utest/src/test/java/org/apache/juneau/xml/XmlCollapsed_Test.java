@@ -28,7 +28,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"serial"})
+@SuppressWarnings({"serial", "java:S4144"})
 class XmlCollapsed_Test extends TestBase {
 
 	//====================================================================================================

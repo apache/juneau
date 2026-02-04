@@ -27,6 +27,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for {@link HashCode}.
  */
+@SuppressWarnings("java:S4144")
 class HashCode_Test extends TestBase {
 
 	//====================================================================================================

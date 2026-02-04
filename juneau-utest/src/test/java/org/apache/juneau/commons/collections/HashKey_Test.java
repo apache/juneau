@@ -23,6 +23,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S4144")
 class HashKey_Test extends TestBase {
 
 	//====================================================================================================

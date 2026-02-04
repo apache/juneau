@@ -53,7 +53,7 @@ import org.apache.juneau.rest.client.assertion.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({"resource", "java:S4144"})
 public class ResponseContent implements HttpEntity {
 
 	private static final HttpEntity NULL_ENTITY = new HttpEntity() {

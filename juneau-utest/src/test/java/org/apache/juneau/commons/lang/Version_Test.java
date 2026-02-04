@@ -26,6 +26,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S4144")
 class Version_Test extends TestBase {
 
 	@Test void a01_basic() {

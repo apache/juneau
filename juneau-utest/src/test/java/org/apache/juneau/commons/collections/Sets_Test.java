@@ -27,6 +27,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.junit.bct.annotations.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S4144")
 class Sets_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -27,6 +27,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.config.store.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S4144")
 class ConfigMap_Test extends TestBase {
 
 	static final String ENCODED = "*";

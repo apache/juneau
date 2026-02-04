@@ -1331,6 +1331,27 @@ public class Utils {
 	}
 
 	/**
+	 * Checks if the specified Boolean is not <jk>null</jk> and is <jk>false</jk>.
+	 *
+	 * <p>
+	 * This is a null-safe way to check if a Boolean wrapper is false. Returns <jk>false</jk> if
+	 * the value is <jk>null</jk> or <jk>true</jk>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isFalse(<jk>false</jk>);      <jc>// true</jc>
+	 * 	isFalse(<jk>true</jk>);       <jc>// false</jc>
+	 * 	isFalse(<jk>null</jk>);       <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param value The value being checked.
+	 * @return <jk>true</jk> if the specified boolean is not <jk>null</jk> and is <jk>false</jk>.
+	 */
+	public static boolean isFalse(Object value) {
+		return Boolean.FALSE.equals(value);
+	}
+
+	/**
 	 * Convenience method for calling {@link StringUtils#lowerCase(String)}.
 	 *
 	 * <p>

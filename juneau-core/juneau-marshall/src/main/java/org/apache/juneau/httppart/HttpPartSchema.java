@@ -2930,7 +2930,7 @@ public class HttpPartSchema {
 						Boolean minInclusive = getAnnotationValue(a, "inclusive", Boolean.class);
 						if (nn(minVal)) {
 							minimum(toNumber(minVal));
-							if (Boolean.FALSE.equals(minInclusive))
+							if (isFalse(minInclusive))
 								exclusiveMinimum(true);
 						}
 						break;
@@ -2939,7 +2939,7 @@ public class HttpPartSchema {
 						Boolean maxInclusive = getAnnotationValue(a, "inclusive", Boolean.class);
 						if (nn(maxVal)) {
 							maximum(toNumber(maxVal));
-							if (Boolean.FALSE.equals(maxInclusive))
+							if (isFalse(maxInclusive))
 								exclusiveMaximum(true);
 						}
 						break;

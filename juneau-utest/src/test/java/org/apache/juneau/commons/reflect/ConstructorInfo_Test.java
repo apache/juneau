@@ -34,6 +34,7 @@ import org.apache.juneau.annotation.Named;
 import org.apache.juneau.commons.inject.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S4144")
 class ConstructorInfo_Test extends TestBase {
 
 	private static void check(String expected, Object o) {

@@ -29,6 +29,7 @@ import org.junit.jupiter.api.*;
 /**
  * Testcase for {@link SwaggerUI}.
  */
+@SuppressWarnings("java:S4144")
 class SwaggerUI_Test extends TestBase {
 
 	private final BeanSession bs = BeanContext.DEFAULT_SESSION;

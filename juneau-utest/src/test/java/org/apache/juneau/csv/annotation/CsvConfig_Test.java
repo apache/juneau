@@ -27,6 +27,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the @CsvConfig annotation.
  */
+@SuppressWarnings("java:S4144")
 class CsvConfig_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
