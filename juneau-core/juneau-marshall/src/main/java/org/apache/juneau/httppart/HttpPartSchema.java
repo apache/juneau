@@ -4422,7 +4422,7 @@ public class HttpPartSchema {
 
 	private static boolean isValidIriReference(String x) {
 		// RFC 3987 IRI reference (allows international characters)
-		return x.length() > 0;
+		return !x.isEmpty();
 	}
 
 	private static boolean isValidJsonPointer(String x) {

@@ -281,7 +281,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	public String asQueryString() {
 		var sb = new StringBuilder();
 		for (var e : this) {
-			if (sb.length() > 0)
+			if (!sb.isEmpty())
 				sb.append("&");
 			sb.append(urlEncode(e.getName())).append('=').append(urlEncode(e.getValue()));
 		}

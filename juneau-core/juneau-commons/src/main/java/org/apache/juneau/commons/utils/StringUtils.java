@@ -302,7 +302,7 @@ public class StringUtils {
 		if (str != null) {
 			if (sb == null)
 				sb = new StringBuilder();
-			else if (sb.length() > 0 && separator != null)
+			else if (!sb.isEmpty() && separator != null)
 				sb.append(separator);
 			sb.append(str);
 		}
@@ -4476,7 +4476,7 @@ public class StringUtils {
 			i++;
 		}
 
-		return result.length() > 0 ? result.toString() : upper.substring(0, Math.min(1, upper.length()));
+		return !result.isEmpty() ? result.toString() : upper.substring(0, Math.min(1, upper.length()));
 	}
 
 	/**
@@ -7793,7 +7793,7 @@ public class StringUtils {
 					// (single long words should not be broken for readability)
 					if (wordLength > wrapLength && words.length > 1) {
 						// Word is too long and there are other words, break it
-						if (result.length() > 0)
+						if (!result.isEmpty())
 							result.append(newline);
 						var wordPos = 0;
 						while (wordPos < wordLength) {
@@ -7819,7 +7819,7 @@ public class StringUtils {
 						currentLine.append(' ').append(word);
 					} else {
 						// Doesn't fit or fits exactly - start new line
-						if (result.length() > 0)
+						if (!result.isEmpty())
 							result.append(newline);
 						result.append(currentLine);
 						currentLine.setLength(0);
@@ -7846,8 +7846,8 @@ public class StringUtils {
 			}
 
 			// Append any remaining line
-			if (currentLine.length() > 0) {
-				if (result.length() > 0)
+			if (!currentLine.isEmpty()) {
+				if (!result.isEmpty())
 					result.append(newline);
 				result.append(currentLine);
 			}
@@ -8273,7 +8273,7 @@ public class StringUtils {
 			var isLetter = LETTER.contains(c);
 
 			if (isSeparator) {
-				if (sb.length() > 0) {
+				if (!sb.isEmpty()) {
 					words.add(sb.toString());
 					sb.setLength(0);
 				}
@@ -8285,7 +8285,7 @@ public class StringUtils {
 				// 1. Uppercase after lowercase (e.g., "helloWorld" → "hello", "World")
 				// 2. Uppercase after consecutive uppercase when next is lowercase (e.g., "XMLHttp" → "XML", "Http")
 				// 3. Lowercase after 2+ consecutive uppercase (e.g., "XMLHttp" → "XML", "Http")
-				if (sb.length() > 0) {
+				if (!sb.isEmpty()) {
 					if (isUpperCase && wasLowerCase) {
 						// Case 1: uppercase after lowercase (e.g., "helloWorld" → "hello", "World")
 						words.add(sb.toString());
@@ -8328,12 +8328,12 @@ public class StringUtils {
 				sb.append(c);
 				wasLowerCase = false;
 				wasUpperCase = false;
-				consecutiveUpperCount = 0;
-			}
+			consecutiveUpperCount = 0;
 		}
+	}
 
-		if (sb.length() > 0)
-			words.add(sb.toString());
+	if (!sb.isEmpty())
+		words.add(sb.toString());
 
 		return words;
 	}

@@ -877,7 +877,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 			if (nn(p)) {
 				var v = p.getValue();
 				if (nn(v)) {
-					if (sb.length() > 0)
+					if (!sb.isEmpty())
 						sb.append("&");
 					sb.append(urlEncode(p.getName())).append('=').append(urlEncode(p.getValue()));
 				}

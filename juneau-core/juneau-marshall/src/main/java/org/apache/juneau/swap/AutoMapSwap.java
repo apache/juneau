@@ -133,7 +133,7 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 			&& mi.hasAnyName(SWAP_METHOD_NAMES)
 			&& mi.hasReturnTypeParent(Map.class)
 			&& mi.hasParameterTypesLenient(BeanSession.class)
-			&& ! mi.getMatchingMethods().stream().anyMatch(m2 -> bc.getAnnotationProvider().has(BeanIgnore.class, m2));
+			&& mi.getMatchingMethods().stream().noneMatch(m2 -> bc.getAnnotationProvider().has(BeanIgnore.class, m2));
 		// @formatter:on
 	}
 
@@ -156,7 +156,7 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 			&& mi.hasAnyName(UNSWAP_METHOD_NAMES)
 			&& mi.hasParameterTypesLenient(BeanSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
-			&& ! mi.getMatchingMethods().stream().anyMatch(m2 -> bc.getAnnotationProvider().has(BeanIgnore.class, m2));
+			&& mi.getMatchingMethods().stream().noneMatch(m2 -> bc.getAnnotationProvider().has(BeanIgnore.class, m2));
 		// @formatter:on
 	}
 
