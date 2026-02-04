@@ -83,6 +83,7 @@ public class OpenApi extends OpenApiElement {
 	private static final String ARG_path = "path";
 	private static final String ARG_pathItem = "pathItem";
 	private static final String ARG_property = "property";
+	private static final String ARG_ref = "ref";
 
 	/** Represents a null OpenAPI document */
 	public static final OpenApi NULL = new OpenApi();
@@ -270,7 +271,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return The referenced node, or <jk>null</jk> if not found.
 	 */
 	public <T> T findRef(String ref, Class<T> c) {
-		assertArgNotNullOrBlank("ref", ref);
+		assertArgNotNullOrBlank(ARG_ref, ref);
 		assertArgNotNull(ARG_c, c);
 		if (! ref.startsWith("#/"))
 			throw rex("Unsupported reference:  ''{0}''", ref);

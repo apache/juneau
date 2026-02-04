@@ -98,6 +98,7 @@ public class Swagger extends SwaggerElement {
 	private static final String ARG_parameter = "parameter";
 	private static final String ARG_path = "path";
 	private static final String ARG_property = "property";
+	private static final String ARG_ref = "ref";
 	private static final String ARG_response = "response";
 	private static final String ARG_scheme = "scheme";
 	private static final String ARG_schema = "schema";
@@ -515,7 +516,7 @@ public class Swagger extends SwaggerElement {
 	 * @return The referenced node, or <jk>null</jk> if not found.
 	 */
 	public <T> T findRef(String ref, Class<T> c) {
-		assertArgNotNullOrBlank("ref", ref);
+		assertArgNotNullOrBlank(ARG_ref, ref);
 		assertArgNotNull(ARG_c, c);
 		if (! ref.startsWith("#/"))
 			throw rex("Unsupported reference:  ''{0}''", ref);

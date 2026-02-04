@@ -45,7 +45,11 @@ import org.apache.juneau.serializer.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSchemaDetails">JSON-Schema Support</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class JsonSchemaGeneratorSession extends BeanTraverseSession {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -61,7 +65,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(JsonSchemaGenerator ctx) {
-			super(assertArgNotNull("ctx", ctx));
+			super(assertArgNotNull(ARG_ctx, ctx));
 			this.ctx = ctx;
 		}
 
@@ -139,7 +143,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(JsonSchemaGenerator ctx) {
-		return new Builder(assertArgNotNull("ctx", ctx));
+		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
 	private final JsonSchemaGenerator ctx;

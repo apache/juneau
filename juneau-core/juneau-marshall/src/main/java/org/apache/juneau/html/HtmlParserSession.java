@@ -53,13 +53,16 @@ import org.apache.juneau.xml.*;
 
  * </ul>
  */
-@SuppressWarnings({"unchecked","rawtypes","java:S110"})
+@SuppressWarnings({"unchecked","rawtypes","java:S110","java:S115"})
 public class HtmlParserSession extends XmlParserSession {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
+	@SuppressWarnings({"java:S110", "java:S115"})
 	public static class Builder extends XmlParserSession.Builder {
 
 		private HtmlParser ctx;
@@ -71,7 +74,7 @@ public class HtmlParserSession extends XmlParserSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(HtmlParser ctx) {
-			super(assertArgNotNull("ctx", ctx));
+			super(assertArgNotNull(ARG_ctx, ctx));
 			this.ctx = ctx;
 		}
 
@@ -187,7 +190,7 @@ public class HtmlParserSession extends XmlParserSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(HtmlParser ctx) {
-		return new Builder(assertArgNotNull("ctx", ctx));
+		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
 	private static String getAttribute(XmlReader r, String name, String def) {

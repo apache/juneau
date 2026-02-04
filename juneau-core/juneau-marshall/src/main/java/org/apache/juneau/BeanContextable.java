@@ -46,9 +46,19 @@ import org.apache.juneau.swap.*;
  */
 public abstract class BeanContextable extends Context {
 
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
+	private static final String ARG_operation = "operation";
+	private static final String ARG_on = "on";
+	private static final String ARG_properties = "properties";
+	private static final String ARG_values = "values";
+	private static final String ARG_beanClassName = "beanClassName";
+	private static final String ARG_pojoClass = "pojoClass";
+
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S115")
 	public abstract static class Builder extends Context.Builder {
 
 		private BeanContext.Builder bcBuilder;
@@ -156,7 +166,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder beanClassVisibility(Visibility value) {
-			bcBuilder.beanClassVisibility(assertArgNotNull("value", value));
+			bcBuilder.beanClassVisibility(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -205,7 +215,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder beanConstructorVisibility(Visibility value) {
-			bcBuilder.beanConstructorVisibility(assertArgNotNull("value", value));
+			bcBuilder.beanConstructorVisibility(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -231,7 +241,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder beanContext(BeanContext value) {
-			bc = assertArgNotNull("value", value);
+			bc = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -248,7 +258,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder beanContext(BeanContext.Builder value) {
-			bcBuilder = assertArgNotNull("value", value);
+			bcBuilder = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -260,7 +270,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public final Builder beanContext(Consumer<BeanContext.Builder> operation) {
-			assertArgNotNull("operation", operation);
+			assertArgNotNull(ARG_operation, operation);
 			operation.accept(beanContext());
 			return this;
 		}
@@ -415,7 +425,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder beanFieldVisibility(Visibility value) {
-			bcBuilder.beanFieldVisibility(assertArgNotNull("value", value));
+			bcBuilder.beanFieldVisibility(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -472,7 +482,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder beanInterceptor(Class<?> on, Class<? extends BeanInterceptor<?>> value) {
-			bcBuilder.beanInterceptor(assertArgNotNull("on", on), assertArgNotNull("value", value));
+			bcBuilder.beanInterceptor(assertArgNotNull(ARG_on, on), assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -555,7 +565,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder beanMethodVisibility(Visibility value) {
-			bcBuilder.beanMethodVisibility(assertArgNotNull("value", value));
+			bcBuilder.beanMethodVisibility(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -616,7 +626,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder beanProperties(Class<?> beanClass, String properties) {
-			bcBuilder.beanProperties(beanClass, assertArgNotNull("properties", properties));
+			bcBuilder.beanProperties(beanClass, assertArgNotNull(ARG_properties, properties));
 			return this;
 		}
 
@@ -679,7 +689,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder beanProperties(Map<String,Object> values) {
-			bcBuilder.beanProperties(assertArgNotNull("values", values));
+			bcBuilder.beanProperties(assertArgNotNull(ARG_values, values));
 			return this;
 		}
 
@@ -743,7 +753,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder beanProperties(String beanClassName, String properties) {
-			bcBuilder.beanProperties(assertArgNotNull("beanClassName", beanClassName), assertArgNotNull("properties", properties));
+			bcBuilder.beanProperties(assertArgNotNull(ARG_beanClassName, beanClassName), assertArgNotNull(ARG_properties, properties));
 			return this;
 		}
 
@@ -796,7 +806,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-			bcBuilder.beanPropertiesExcludes(beanClass, assertArgNotNull("properties", properties));
+			bcBuilder.beanPropertiesExcludes(beanClass, assertArgNotNull(ARG_properties, properties));
 			return this;
 		}
 
@@ -851,7 +861,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder beanPropertiesExcludes(Map<String,Object> values) {
-			bcBuilder.beanPropertiesExcludes(assertArgNotNull("values", values));
+			bcBuilder.beanPropertiesExcludes(assertArgNotNull(ARG_values, values));
 			return this;
 		}
 
@@ -907,7 +917,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
-			bcBuilder.beanPropertiesExcludes(assertArgNotNull("beanClassName", beanClassName), assertArgNotNull("properties", properties));
+			bcBuilder.beanPropertiesExcludes(assertArgNotNull(ARG_beanClassName, beanClassName), assertArgNotNull(ARG_properties, properties));
 			return this;
 		}
 
@@ -963,7 +973,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
-			bcBuilder.beanPropertiesReadOnly(beanClass, assertArgNotNull("properties", properties));
+			bcBuilder.beanPropertiesReadOnly(beanClass, assertArgNotNull(ARG_properties, properties));
 			return this;
 		}
 
@@ -1021,7 +1031,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
-			bcBuilder.beanPropertiesReadOnly(assertArgNotNull("values", values));
+			bcBuilder.beanPropertiesReadOnly(assertArgNotNull(ARG_values, values));
 			return this;
 		}
 
@@ -1080,7 +1090,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
-			bcBuilder.beanPropertiesReadOnly(assertArgNotNull("beanClassName", beanClassName), assertArgNotNull("properties", properties));
+			bcBuilder.beanPropertiesReadOnly(assertArgNotNull(ARG_beanClassName, beanClassName), assertArgNotNull(ARG_properties, properties));
 			return this;
 		}
 
@@ -1135,7 +1145,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
-			bcBuilder.beanPropertiesWriteOnly(beanClass, assertArgNotNull("properties", properties));
+			bcBuilder.beanPropertiesWriteOnly(beanClass, assertArgNotNull(ARG_properties, properties));
 			return this;
 		}
 
@@ -1192,7 +1202,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
-			bcBuilder.beanPropertiesWriteOnly(assertArgNotNull("values", values));
+			bcBuilder.beanPropertiesWriteOnly(assertArgNotNull(ARG_values, values));
 			return this;
 		}
 
@@ -1250,7 +1260,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
-			bcBuilder.beanPropertiesWriteOnly(assertArgNotNull("beanClassName", beanClassName), assertArgNotNull("properties", properties));
+			bcBuilder.beanPropertiesWriteOnly(assertArgNotNull(ARG_beanClassName, beanClassName), assertArgNotNull(ARG_properties, properties));
 			return this;
 		}
 
@@ -1464,7 +1474,7 @@ public abstract class BeanContextable extends Context {
 		 */
 		public Builder dictionaryOn(Class<?> on, Class<?>...values) {
 			assertArgNoNulls("values", values);
-			bcBuilder.dictionaryOn(assertArgNotNull("on", on), values);
+			bcBuilder.dictionaryOn(assertArgNotNull(ARG_on, on), values);
 			return this;
 		}
 
@@ -1695,7 +1705,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public <T> Builder example(Class<T> pojoClass, String json) {
-			bcBuilder.example(assertArgNotNull("pojoClass", pojoClass), json);
+			bcBuilder.example(assertArgNotNull(ARG_pojoClass, pojoClass), json);
 			return this;
 		}
 
@@ -1746,7 +1756,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public <T> Builder example(Class<T> pojoClass, T o) {
-			bcBuilder.example(assertArgNotNull("pojoClass", pojoClass), o);
+			bcBuilder.example(assertArgNotNull(ARG_pojoClass, pojoClass), o);
 			return this;
 		}
 
@@ -1837,7 +1847,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder findFluentSetters(Class<?> on) {
-			bcBuilder.findFluentSetters(assertArgNotNull("on", on));
+			bcBuilder.findFluentSetters(assertArgNotNull(ARG_on, on));
 			return this;
 		}
 
@@ -2065,7 +2075,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder implClasses(Map<Class<?>,Class<?>> values) {
-			bcBuilder.implClasses(assertArgNotNull("values", values));
+			bcBuilder.implClasses(assertArgNotNull(ARG_values, values));
 			return this;
 		}
 
@@ -2113,7 +2123,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder interfaceClass(Class<?> on, Class<?> value) {
-			bcBuilder.interfaceClass(assertArgNotNull("on", on), assertArgNotNull("value", value));
+			bcBuilder.interfaceClass(assertArgNotNull(ARG_on, on), assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -2204,7 +2214,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder locale(Locale value) {
-			bcBuilder.locale(assertArgNotNull("value", value));
+			bcBuilder.locale(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -2398,7 +2408,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder propertyNamer(Class<?> on, Class<? extends PropertyNamer> value) {
-			bcBuilder.propertyNamer(assertArgNotNull("on", on), assertArgNotNull("value", value));
+			bcBuilder.propertyNamer(assertArgNotNull(ARG_on, on), assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -2445,7 +2455,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder propertyNamer(Class<? extends PropertyNamer> value) {
-			bcBuilder.propertyNamer(assertArgNotNull("value", value));
+			bcBuilder.propertyNamer(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -2580,7 +2590,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder stopClass(Class<?> on, Class<?> value) {
-			bcBuilder.stopClass(assertArgNotNull("on", on), assertArgNotNull("value", value));
+			bcBuilder.stopClass(assertArgNotNull(ARG_on, on), assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -2843,7 +2853,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder typeName(Class<?> on, String value) {
-			bcBuilder.typeName(on, assertArgNotNull("value", value));
+			bcBuilder.typeName(on, assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -2890,7 +2900,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder typePropertyName(Class<?> on, String value) {
-			bcBuilder.typePropertyName(on, assertArgNotNull("value", value));
+			bcBuilder.typePropertyName(on, assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -2948,7 +2958,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder typePropertyName(String value) {
-			bcBuilder.typePropertyName(assertArgNotNull("value", value));
+			bcBuilder.typePropertyName(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 

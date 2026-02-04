@@ -43,13 +43,16 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
  * </ul>
  */
-@SuppressWarnings({"resource","java:S110"})
+@SuppressWarnings({"resource","java:S110","java:S115"})
 public class JsonSerializerSession extends WriterSerializerSession {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
+	@SuppressWarnings({"java:S110", "java:S115"})
 	public static class Builder extends WriterSerializerSession.Builder {
 
 		private JsonSerializer ctx;
@@ -61,7 +64,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(JsonSerializer ctx) {
-			super(assertArgNotNull("ctx", ctx));
+			super(assertArgNotNull(ARG_ctx, ctx));
 			this.ctx = ctx;
 		}
 
@@ -187,7 +190,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(JsonSerializer ctx) {
-		return new Builder(assertArgNotNull("ctx", ctx));
+		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
 	private final JsonSerializer ctx;

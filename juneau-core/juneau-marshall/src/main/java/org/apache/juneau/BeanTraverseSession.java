@@ -47,7 +47,11 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  *
  */
+@SuppressWarnings("java:S115")
 public class BeanTraverseSession extends BeanSession {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -64,7 +68,7 @@ public class BeanTraverseSession extends BeanSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(BeanTraverseContext ctx) {
-			super(assertArgNotNull("ctx", ctx).getBeanContext());
+			super(assertArgNotNull(ARG_ctx, ctx).getBeanContext());
 			this.ctx = ctx;
 			initialDepth = ctx.getInitialDepth();
 		}

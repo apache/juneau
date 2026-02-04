@@ -60,9 +60,14 @@ import org.apache.juneau.swaps.*;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
+	private static final String ARG_innerField = "innerField";
+
 	/**
 	 * BeanPropertyMeta builder class.
 	 */
+	@SuppressWarnings("java:S115")
 	public static class Builder {
 		BeanMeta<?> beanMeta;  // Package-private for BeanMeta access
 		BeanContext bc;  // Package-private for BeanMeta access
@@ -94,7 +99,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder beanRegistry(BeanRegistry value) {
-			beanRegistry = assertArgNotNull("value", value);
+			beanRegistry = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -112,7 +117,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder delegateFor(BeanPropertyMeta value) {
-			delegateFor = assertArgNotNull("value", value);
+			delegateFor = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -134,7 +139,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder rawMetaType(ClassMeta<?> value) {
-			rawTypeMeta = assertArgNotNull("value", value);
+			rawTypeMeta = assertArgNotNull(ARG_value, value);
 			typeMeta = rawTypeMeta;
 			return this;
 		}
@@ -204,7 +209,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder setExtraKeys(MethodInfo value) {
-			assertArgNotNull("value", value);
+			assertArgNotNull(ARG_value, value);
 			extraKeys = value.accessible();
 			return this;
 		}
@@ -216,7 +221,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder setField(FieldInfo value) {
-			assertArgNotNull("value", value);
+			assertArgNotNull(ARG_value, value);
 			field = value.accessible();
 			innerField = field;
 			return this;
@@ -229,7 +234,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder setGetter(MethodInfo value) {
-			assertArgNotNull("value", value);
+			assertArgNotNull(ARG_value, value);
 			getter = value.accessible();
 			return this;
 		}
@@ -241,7 +246,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder setInnerField(FieldInfo value) {
-			innerField = assertArgNotNull("value", value);
+			innerField = assertArgNotNull(ARG_innerField, value);
 			return this;
 		}
 
@@ -252,7 +257,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return This object.
 		 */
 		public Builder setSetter(MethodInfo value) {
-			assertArgNotNull("value", value);
+			assertArgNotNull(ARG_value, value);
 			setter = value.accessible();
 			return this;
 		}

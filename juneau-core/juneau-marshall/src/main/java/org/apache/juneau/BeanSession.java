@@ -51,8 +51,11 @@ import org.apache.juneau.swap.*;
  * </ul>
  *
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({ "unchecked", "rawtypes", "java:S115" })
 public class BeanSession extends ContextSession {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -71,7 +74,7 @@ public class BeanSession extends ContextSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(BeanContext ctx) {
-			super(assertArgNotNull("ctx", ctx));
+			super(assertArgNotNull(ARG_ctx, ctx));
 			this.ctx = ctx;
 			mediaType = ctx.getMediaType();
 			timeZone = ctx.getTimeZone();
@@ -228,7 +231,7 @@ public class BeanSession extends ContextSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(BeanContext ctx) {
-		return new Builder(assertArgNotNull("ctx", ctx));
+		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
 	/**

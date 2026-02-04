@@ -47,7 +47,11 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class OutputStreamSerializerSession extends SerializerSession {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -63,7 +67,7 @@ public class OutputStreamSerializerSession extends SerializerSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(OutputStreamSerializer ctx) {
-			super(assertArgNotNull("ctx", ctx));
+			super(assertArgNotNull(ARG_ctx, ctx));
 			this.ctx = ctx;
 		}
 
@@ -171,7 +175,7 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(OutputStreamSerializer ctx) {
-		return new Builder(assertArgNotNull("ctx", ctx));
+		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
 	private final OutputStreamSerializer ctx;

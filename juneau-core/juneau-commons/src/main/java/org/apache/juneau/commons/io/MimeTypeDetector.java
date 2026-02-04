@@ -67,7 +67,13 @@ public class MimeTypeDetector {
 	/**
 	 * Builder class for creating MimeTypeDetector instances.
 	 */
+	@SuppressWarnings("java:S115")
 	public static class Builder {
+		// Argument name constants for assertArgNotNull
+		private static final String ARG_ext = "ext";
+		private static final String ARG_type = "type";
+		private static final String ARG_name = "name";
+
 		private final Map<String,String> extMap = new ConcurrentHashMap<>();
 		private final Map<String,String> fileMap = new ConcurrentHashMap<>();
 		private boolean nioContentBasedDetection = true;
@@ -102,8 +108,8 @@ public class MimeTypeDetector {
 		 * @throws IllegalArgumentException If ext or type is null or blank.
 		 */
 		public Builder addExtensionType(String ext, String type) {
-			assertArgNotNullOrBlank("ext", ext);
-			assertArgNotNullOrBlank("type", type);
+			assertArgNotNullOrBlank(ARG_ext, ext);
+			assertArgNotNullOrBlank(ARG_type, type);
 			extMap.put(ext.toLowerCase(), type);
 			return this;
 		}
@@ -117,8 +123,8 @@ public class MimeTypeDetector {
 		 * @throws IllegalArgumentException If name or type is null or blank.
 		 */
 		public Builder addFileType(String name, String type) {
-			assertArgNotNullOrBlank("name", name);
-			assertArgNotNullOrBlank("type", type);
+			assertArgNotNullOrBlank(ARG_name, name);
+			assertArgNotNullOrBlank(ARG_type, type);
 			fileMap.put(name, type);
 			return this;
 		}

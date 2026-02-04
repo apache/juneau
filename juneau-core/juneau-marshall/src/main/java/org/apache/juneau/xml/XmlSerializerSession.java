@@ -49,13 +49,16 @@ import org.apache.juneau.xml.annotation.*;
 
  * </ul>
  */
-@SuppressWarnings({"unchecked","rawtypes","resource","java:S110"})
+@SuppressWarnings({"unchecked","rawtypes","resource","java:S110","java:S115"})
 public class XmlSerializerSession extends WriterSerializerSession {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
+	@SuppressWarnings({"java:S110", "java:S115"})
 	public static class Builder extends WriterSerializerSession.Builder {
 
 		private XmlSerializer ctx;
@@ -67,7 +70,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(XmlSerializer ctx) {
-			super(assertArgNotNull("ctx", ctx));
+			super(assertArgNotNull(ARG_ctx, ctx));
 			this.ctx = ctx;
 		}
 
@@ -232,7 +235,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(XmlSerializer ctx) {
-		return new Builder(assertArgNotNull("ctx", ctx));
+		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
 	private final String textNodeDelimiter;

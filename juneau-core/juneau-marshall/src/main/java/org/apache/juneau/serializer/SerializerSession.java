@@ -62,7 +62,11 @@ import org.apache.juneau.swap.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class SerializerSession extends BeanTraverseSession {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -82,7 +86,7 @@ public class SerializerSession extends BeanTraverseSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Serializer ctx) {
-			super(assertArgNotNull("ctx", ctx));
+			super(assertArgNotNull(ARG_ctx, ctx));
 			this.ctx = ctx;
 			mediaTypeDefault(ctx.getResponseContentType());
 			uriContext = ctx.getUriContext();
@@ -244,7 +248,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(Serializer ctx) {
-		return new Builder(assertArgNotNull("ctx", ctx));
+		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
 	/**

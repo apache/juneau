@@ -63,7 +63,7 @@ public class RrpcRestOpSession extends RestOpSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public Builder(RrpcRestOpContext ctx, RestSession session) {
-			super(assertArgNotNull("ctx", ctx), assertArgNotNull("session", session));
+			super(assertArgNotNull(ARG_ctx, ctx), assertArgNotNull(ARG_session, session));
 			this.ctx = ctx;
 		}
 

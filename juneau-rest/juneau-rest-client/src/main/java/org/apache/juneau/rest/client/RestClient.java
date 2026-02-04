@@ -1055,7 +1055,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S115")
 	public static class Builder extends BeanContextable.Builder {
+
+		// Argument name constants for assertArgNotNull
+		private static final String ARG_itcp = "itcp";
+		private static final String ARG_value = "value";
 
 		private BeanCreator<RestCallHandler> callHandler;
 		private BasicBeanStore beanStore = BasicBeanStore.create().build();
@@ -1192,7 +1197,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @see HttpClientBuilder#addInterceptorFirst(HttpRequestInterceptor)
 		 */
 		public Builder addInterceptorFirst(HttpRequestInterceptor itcp) {
-			httpClientBuilder().addInterceptorFirst(assertArgNotNull("itcp", itcp));
+			httpClientBuilder().addInterceptorFirst(assertArgNotNull(ARG_itcp, itcp));
 			return this;
 		}
 
@@ -1209,7 +1214,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @see HttpClientBuilder#addInterceptorFirst(HttpResponseInterceptor)
 		 */
 		public Builder addInterceptorFirst(HttpResponseInterceptor itcp) {
-			httpClientBuilder().addInterceptorFirst(assertArgNotNull("itcp", itcp));
+			httpClientBuilder().addInterceptorFirst(assertArgNotNull(ARG_itcp, itcp));
 			return this;
 		}
 
@@ -1226,7 +1231,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @see HttpClientBuilder#addInterceptorLast(HttpRequestInterceptor)
 		 */
 		public Builder addInterceptorLast(HttpRequestInterceptor itcp) {
-			httpClientBuilder().addInterceptorLast(assertArgNotNull("itcp", itcp));
+			httpClientBuilder().addInterceptorLast(assertArgNotNull(ARG_itcp, itcp));
 			return this;
 		}
 
@@ -1243,7 +1248,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @see HttpClientBuilder#addInterceptorLast(HttpResponseInterceptor)
 		 */
 		public Builder addInterceptorLast(HttpResponseInterceptor itcp) {
-			httpClientBuilder().addInterceptorLast(assertArgNotNull("itcp", itcp));
+			httpClientBuilder().addInterceptorLast(assertArgNotNull(ARG_itcp, itcp));
 			return this;
 		}
 
@@ -1578,7 +1583,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @see #callHandler()
 		 */
 		public Builder callHandler(Class<? extends RestCallHandler> value) {
-			callHandler().type(assertArgNotNull("value", value));
+			callHandler().type(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -2101,7 +2106,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		public Builder errorCodes(Predicate<Integer> value) {
-			errorCodes = assertArgNotNull("value", value);
+			errorCodes = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -4053,7 +4058,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		public Builder partParser(Class<? extends HttpPartParser> value) {
-			partParser().type(assertArgNotNull("value", value));
+			partParser().type(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -4082,7 +4087,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		public Builder partParser(HttpPartParser value) {
-			partParser().impl(assertArgNotNull("value", value));
+			partParser().impl(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -4122,7 +4127,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		public Builder partSerializer(Class<? extends HttpPartSerializer> value) {
-			partSerializer().type(assertArgNotNull("value", value));
+			partSerializer().type(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -4151,7 +4156,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		public Builder partSerializer(HttpPartSerializer value) {
-			partSerializer().impl(assertArgNotNull("value", value));
+			partSerializer().impl(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -5633,7 +5638,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		public Builder uriContext(UriContext value) {
-			serializers().forEach(x -> x.uriContext(assertArgNotNull("value", value)));
+			serializers().forEach(x -> x.uriContext(assertArgNotNull(ARG_value, value)));
 			return this;
 		}
 
@@ -5670,7 +5675,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		public Builder uriRelativity(UriRelativity value) {
-			serializers().forEach(x -> x.uriRelativity(assertArgNotNull("value", value)));
+			serializers().forEach(x -> x.uriRelativity(assertArgNotNull(ARG_value, value)));
 			return this;
 		}
 
@@ -5709,7 +5714,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		public Builder uriResolution(UriResolution value) {
-			serializers().forEach(x -> x.uriResolution(assertArgNotNull("value", value)));
+			serializers().forEach(x -> x.uriResolution(assertArgNotNull(ARG_value, value)));
 			return this;
 		}
 

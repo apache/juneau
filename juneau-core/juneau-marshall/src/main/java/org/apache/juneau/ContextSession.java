@@ -39,7 +39,12 @@ import org.apache.juneau.commons.reflect.*;
  * </ul>
  *
  */
+@SuppressWarnings("java:S115")
 public abstract class ContextSession {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ctx = "ctx";
+	private static final String ARG_value = "value";
 
 	/**
 	 * Builder class.
@@ -57,7 +62,7 @@ public abstract class ContextSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Context ctx) {
-			this.ctx = assertArgNotNull("ctx", ctx);
+			this.ctx = assertArgNotNull(ARG_ctx, ctx);
 			this.properties = memr(LinkedHashMap::new);
 		}
 
@@ -123,7 +128,7 @@ public abstract class ContextSession {
 		 * @return This object.
 		 */
 		public Builder properties(Map<String,Object> value) {
-			assertArgNotNull("value", value);
+			assertArgNotNull(ARG_value, value);
 			properties.reset();
 			properties.get().putAll(value);
 			return this;
