@@ -801,7 +801,7 @@ public @interface Schema {
 	 * @return The annotation value.
 	 * @deprecated Use {@link #exclusiveMaximumValue()} for JSON Schema Draft 2020-12 compliance.
 	 */
-	@Deprecated
+	@Deprecated(since = "9.2.0", forRemoval = true)
 	boolean exclusiveMaximum() default false;
 
 	/**
@@ -879,7 +879,7 @@ public @interface Schema {
 	 * @return The annotation value.
 	 * @deprecated Use {@link #exclusiveMinimumValue()} for JSON Schema Draft 2020-12 compliance.
 	 */
-	@Deprecated
+	@Deprecated(since = "9.2.0", forRemoval = true)
 	boolean exclusiveMinimum() default false;
 
 	/**
