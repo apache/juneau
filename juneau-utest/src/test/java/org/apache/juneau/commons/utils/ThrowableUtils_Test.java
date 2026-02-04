@@ -228,35 +228,31 @@ class ThrowableUtils_Test extends TestBase {
 		var ex2 = new RuntimeException("test");
 
 		// Same exception type and stack trace should produce same hash
-		int hash1 = hash(ex1, null);
-		int hash2 = hash(ex2, null);
-		// Note: hash might be different due to different stack traces, but should be consistent
-		assertNotNull(hash1);
-		assertNotNull(hash2);
+		assertDoesNotThrow(() -> {
+			int hash1 = hash(ex1, null);
+			int hash2 = hash(ex2, null);
+			// Note: hash might be different due to different stack traces, but should be consistent
 
-		// Test with stop class - covers line 180 (break when stopClass matches)
-		// Use a class name that will be in the stack trace
-		String testClassName = ThrowableUtils_Test.class.getName();
-		int hash3 = hash(ex1, testClassName);
-		assertNotNull(hash3);
+			// Test with stop class - covers line 180 (break when stopClass matches)
+			// Use a class name that will be in the stack trace
+			String testClassName = ThrowableUtils_Test.class.getName();
+			int hash3 = hash(ex1, testClassName);
 
-		// Test with stop class that doesn't match (should process all stack frames)
-		int hash4 = hash(ex1, "java.lang.Object");
-		assertNotNull(hash4);
+			// Test with stop class that doesn't match (should process all stack frames)
+			int hash4 = hash(ex1, "java.lang.Object");
 
-		// Test with nested exception
-		var cause = new IOException("cause");
-		var wrapped = new RuntimeException("wrapped", cause);
-		int hash5 = hash(wrapped, null);
-		assertNotNull(hash5);
+			// Test with nested exception
+			var cause = new IOException("cause");
+			var wrapped = new RuntimeException("wrapped", cause);
+			int hash5 = hash(wrapped, null);
+
+			// Test with stop class matching a class in the cause chain - covers line 180
+			int hash7 = hash(wrapped, "java.io.IOException");
+		});
 
 		// Test with null exception
 		int hash6 = hash(null, null);
 		assertEquals(0, hash6);
-
-		// Test with stop class matching a class in the cause chain - covers line 180
-		int hash7 = hash(wrapped, "java.io.IOException");
-		assertNotNull(hash7);
 	}
 
 	//====================================================================================================

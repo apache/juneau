@@ -524,8 +524,7 @@ class ConstructorInfo_Test extends TestBase {
 		assertTrue(privateAfter || !privateBefore, "After setAccessible(), isAccessible() should return true (Java 9+) or false (Java 8)");
 
 		// Public constructors might already be accessible
-		var publicAccessible = bc1.isAccessible();
-		assertNotNull(publicAccessible);
+		assertDoesNotThrow(() -> bc1.isAccessible());
 	}
 
 	//====================================================================================================

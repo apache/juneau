@@ -718,8 +718,7 @@ class ExecutableInfo_Test extends TestBase {
 		assertTrue(defaultAfter || !defaultBefore, "After setAccessible(), isAccessible() should return true (Java 9+) or false (Java 8)");
 
 		// Public methods might already be accessible
-		var publicAccessible = f_isPublic.isAccessible();
-		assertNotNull(publicAccessible);
+		assertDoesNotThrow(() -> f_isPublic.isAccessible());
 	}
 
 	//====================================================================================================

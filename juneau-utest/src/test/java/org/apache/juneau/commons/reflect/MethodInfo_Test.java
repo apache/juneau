@@ -570,9 +570,8 @@ class MethodInfo_Test extends TestBase {
 		// So e_a2(int, int) with args (int.class) should return true because both int parameters match int.class.
 		// However, the current implementation may have different behavior - test reflects actual behavior.
 		// This test case demonstrates the limitation mentioned in the javadoc.
-		var result = e_a2.hasOnlyParameterTypes(int.class);
+		assertDoesNotThrow(() -> e_a2.hasOnlyParameterTypes(int.class));
 		// The result depends on the implementation - it may be true (lenient) or false (strict)
-		assertNotNull(result);
 	}
 
 	//====================================================================================================

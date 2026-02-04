@@ -501,8 +501,7 @@ class FieldInfo_Test extends TestBase {
 		assertTrue(defaultAfter || !defaultBefore, "After setAccessible(), isAccessible() should return true (Java 9+) or false (Java 8)");
 
 		// Public fields might already be accessible
-		var publicAccessible = d_isPublic.isAccessible();
-		assertNotNull(publicAccessible);
+		assertDoesNotThrow(() -> d_isPublic.isAccessible());
 	}
 
 	//====================================================================================================

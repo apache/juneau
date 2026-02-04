@@ -237,8 +237,10 @@ class Version_Test extends TestBase {
 		var v2 = of("1.2.4");
 		// Different versions may have same hashcode (collision), but usually different
 		// We just verify both produce valid hashcodes
-		assertNotNull(v1.hashCode());
-		assertNotNull(v2.hashCode());
+		assertDoesNotThrow(() -> {
+			v1.hashCode();
+			v2.hashCode();
+		});
 	}
 
 	@Test
@@ -258,8 +260,10 @@ class Version_Test extends TestBase {
 		// These are equal according to equals(Version), so should have same hashcode
 		// But hashCode uses Arrays.hashCode which considers length, so they may differ
 		// We just verify both produce valid hashcodes
-		assertNotNull(v1.hashCode());
-		assertNotNull(v2.hashCode());
+		assertDoesNotThrow(() -> {
+			v1.hashCode();
+			v2.hashCode();
+		});
 	}
 
 	@Test
@@ -282,9 +286,11 @@ class Version_Test extends TestBase {
 		var v2 = of("2.3.4");
 		var v3 = of("3.4.5");
 		// All should produce valid hashcodes
-		assertNotNull(v1.hashCode());
-		assertNotNull(v2.hashCode());
-		assertNotNull(v3.hashCode());
+		assertDoesNotThrow(() -> {
+			v1.hashCode();
+			v2.hashCode();
+			v3.hashCode();
+		});
 	}
 
 	@Test

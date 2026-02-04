@@ -440,7 +440,7 @@ class HashCode_Test extends TestBase {
 			hc.add(i);
 		}
 		// Just verify it doesn't throw and produces a value
-		assertNotNull(hc.get());
+		assertDoesNotThrow(() -> hc.get());
 	}
 
 	@Test
@@ -464,8 +464,6 @@ class HashCode_Test extends TestBase {
 		// Different array types should produce different hashcodes (usually, but not guaranteed)
 		// Arrays.hashCode for int[] and long[] with same values might coincidentally be the same
 		// So we just verify both produce valid hashcodes
-		assertNotNull(hc1.get());
-		assertNotNull(hc2.get());
 		// Verify they use Arrays.hashCode correctly
 		assertEquals(31 * 1 + Arrays.hashCode(new int[] {1, 2, 3}), hc1.get());
 		assertEquals(31 * 1 + Arrays.hashCode(new long[] {1L, 2L, 3L}), hc2.get());

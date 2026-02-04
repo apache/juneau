@@ -458,8 +458,7 @@ class Utils_Test extends TestBase {
 		@TestAnnotation("test")
 		class T {}
 		var a1 = T.class.getAnnotation(TestAnnotation.class);
-		var hash4 = h(a1, "value");
-		assertNotNull(hash4);
+		assertDoesNotThrow(() -> h(a1, "value"));
 	}
 
 	//====================================================================================================

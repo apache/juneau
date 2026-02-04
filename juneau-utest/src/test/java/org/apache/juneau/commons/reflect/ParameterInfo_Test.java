@@ -795,8 +795,7 @@ class ParameterInfo_Test extends TestBase {
 	@Test
 	void a024_isNamePresent() {
 		// This checks if name is present in bytecode, not if it has a resolved name
-		var namePresent = b_a1_a.isNamePresent();
-		assertNotNull(namePresent);
+		assertDoesNotThrow(() -> b_a1_a.isNamePresent());
 	}
 
 	//====================================================================================================
