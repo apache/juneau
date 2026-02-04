@@ -30,16 +30,6 @@ import org.junit.jupiter.api.*;
 class CollectionUtils_Test extends TestBase {
 
 	//====================================================================================================
-	// Constructor (line 126)
-	//====================================================================================================
-	@Test
-	void a00_constructor() {
-		// Test line 126: class instantiation
-		// CollectionUtils has a private constructor, so it cannot be instantiated.
-		// Line 126 (class declaration) is covered by using the class's static methods.
-	}
-
-	//====================================================================================================
 	// a(T...)
 	//====================================================================================================
 	@Test

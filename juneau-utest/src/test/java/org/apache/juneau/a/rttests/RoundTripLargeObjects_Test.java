@@ -17,6 +17,7 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.commons.utils.Utils.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
@@ -122,6 +123,12 @@ class RoundTripLargeObjects_Test extends TestBase {
 		for (var i = 0; i < numRuns; i++)
 			p.parse(r, A.class);
 		System.err.println(f("Average parsed time: {0,number}ms", (System.currentTimeMillis()-startTime)/numRuns)); // NOT DEBUG
+		// Verify round-trip correctness
+		var parsed = p.parse(r, A.class);
+		assertNotNull(parsed);
+		assertEquals(a.a1Map.size(), parsed.a1Map.size());
+		assertEquals(a.a1List.size(), parsed.a1List.size());
+		assertEquals(a.a1Array.length, parsed.a1Array.length);
 	}
 
 	public static class A {

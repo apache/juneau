@@ -806,8 +806,10 @@ class Utils_Test extends TestBase {
 	@Test
 	void a045_printLines() {
 		// This test just verifies the method doesn't throw
-		printLines(a("Line 1", "Line 2", "Line 3"));
-		printLines(a());
+		assertDoesNotThrow(() -> {
+			printLines(a("Line 1", "Line 2", "Line 3"));
+			printLines(a());
+		});
 	}
 
 	//====================================================================================================

@@ -388,8 +388,8 @@ class RestClient_Test extends TestBase {
 	@Test void e13_httpMessage_removeHeader() throws Exception {
 		var x = client().build().get("/bean");
 		x.setHeaders(a(header("Foo","bar")));
-		x.removeHeader(header("Foo","bar"));
-		//assertNull(x.getFirstHeader("Foo"));  // Bug in HttpClient API?
+		assertDoesNotThrow(() -> x.removeHeader(header("Foo","bar")));
+		// Note: assertNull(x.getFirstHeader("Foo")) fails due to HttpClient API behavior
 	}
 
 	@Test void e14_httpMessage_headerIterator() throws Exception {

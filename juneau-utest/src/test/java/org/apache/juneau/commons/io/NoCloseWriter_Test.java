@@ -113,10 +113,11 @@ class NoCloseWriter_Test extends TestBase {
 	@Test void c02_flush_multipleTimes() throws IOException {
 		var sw = new StringWriter();
 		var wrapper = new NoCloseWriter(sw);
-		wrapper.flush();
-		wrapper.flush();
-		wrapper.flush();
-		// Should not throw
+		assertDoesNotThrow(() -> {
+			wrapper.flush();
+			wrapper.flush();
+			wrapper.flush();
+		});
 	}
 
 	//====================================================================================================
@@ -144,10 +145,11 @@ class NoCloseWriter_Test extends TestBase {
 	@Test void d03_close_multipleTimes() throws IOException {
 		var sw = new StringWriter();
 		var wrapper = new NoCloseWriter(sw);
-		wrapper.close();
-		wrapper.close();
-		wrapper.close();
-		// Should not throw
+		assertDoesNotThrow(() -> {
+			wrapper.close();
+			wrapper.close();
+			wrapper.close();
+		});
 	}
 
 	//====================================================================================================

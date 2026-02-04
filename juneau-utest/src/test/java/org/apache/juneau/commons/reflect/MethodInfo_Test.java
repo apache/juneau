@@ -950,8 +950,7 @@ class MethodInfo_Test extends TestBase {
 		beanStore.addBean(TestService.class, service);
 		var instance = new TestMethodClass();
 		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("method1") && x.hasParameterTypes(TestService.class)).get();
-		method.inject(beanStore, instance);
-		// Method should execute without exception
+		assertDoesNotThrow(() -> method.inject(beanStore, instance));
 	}
 
 	@Test
@@ -959,8 +958,7 @@ class MethodInfo_Test extends TestBase {
 		var service = new TestService("test1");
 		beanStore.addBean(TestService.class, service);
 		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("staticMethod") && x.hasParameterTypes(TestService.class)).get();
-		method.inject(beanStore, null); // null for static methods
-		// Method should execute without exception
+		assertDoesNotThrow(() -> method.inject(beanStore, null)); // null for static methods
 	}
 
 	//====================================================================================================
@@ -973,8 +971,7 @@ class MethodInfo_Test extends TestBase {
 		// Service not in bean store, but provided as otherBeans
 		var instance = new TestMethodClass();
 		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("method1") && x.hasParameterTypes(TestService.class)).get();
-		method.inject(beanStore, instance, service);
-		// Method should execute without exception
+		assertDoesNotThrow(() -> method.inject(beanStore, instance, service));
 	}
 
 	@Test

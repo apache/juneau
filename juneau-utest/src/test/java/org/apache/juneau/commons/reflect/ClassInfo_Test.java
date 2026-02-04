@@ -4129,9 +4129,8 @@ public class ClassInfo_Test extends TestBase {
 			}
 		}
 		var bean = new ConcreteMethodInjection();
-		ClassInfo.of(bean).inject(bean, beanStore);
+		assertDoesNotThrow(() -> ClassInfo.of(bean).inject(bean, beanStore));
 		// Abstract method should be skipped (not called)
-		// Should complete without error
 	}
 
 	@Test
@@ -4166,8 +4165,7 @@ public class ClassInfo_Test extends TestBase {
 		beanStore.addBean(TestService.class, service1, "service1"); // Required for method8
 		var bean = new TestMethodInjection();
 		// Static methods should be called (with null instance)
-		// Just verify no exception is thrown
-		ClassInfo.of(bean).inject(bean, beanStore);
+		assertDoesNotThrow(() -> ClassInfo.of(bean).inject(bean, beanStore));
 		// Method should execute without error (can't check instance field from static method)
 	}
 

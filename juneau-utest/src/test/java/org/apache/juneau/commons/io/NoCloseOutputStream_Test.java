@@ -65,10 +65,11 @@ class NoCloseOutputStream_Test extends TestBase {
 	@Test void b02_flush_multipleTimes() throws IOException {
 		var baos = new ByteArrayOutputStream();
 		var wrapper = new NoCloseOutputStream(baos);
-		wrapper.flush();
-		wrapper.flush();
-		wrapper.flush();
-		// Should not throw
+		assertDoesNotThrow(() -> {
+			wrapper.flush();
+			wrapper.flush();
+			wrapper.flush();
+		});
 	}
 
 	//====================================================================================================
@@ -96,10 +97,11 @@ class NoCloseOutputStream_Test extends TestBase {
 	@Test void c03_close_multipleTimes() throws IOException {
 		var baos = new ByteArrayOutputStream();
 		var wrapper = new NoCloseOutputStream(baos);
-		wrapper.close();
-		wrapper.close();
-		wrapper.close();
-		// Should not throw
+		assertDoesNotThrow(() -> {
+			wrapper.close();
+			wrapper.close();
+			wrapper.close();
+		});
 	}
 
 	//====================================================================================================

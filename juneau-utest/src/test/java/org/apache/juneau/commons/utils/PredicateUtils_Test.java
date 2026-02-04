@@ -30,16 +30,6 @@ import org.junit.jupiter.api.*;
 class PredicateUtils_Test {
 
 	//====================================================================================================
-	// Constructor (line 24)
-	//====================================================================================================
-	@Test
-	void a00_constructor() {
-		// Test line 24: class declaration
-		// PredicateUtils has a private constructor, so it cannot be instantiated.
-		// Line 24 (class declaration) is covered by using the class's static methods.
-	}
-
-	//====================================================================================================
 	// consumeIf(Predicate<T>, Consumer<T>, T)
 	//====================================================================================================
 	@Test

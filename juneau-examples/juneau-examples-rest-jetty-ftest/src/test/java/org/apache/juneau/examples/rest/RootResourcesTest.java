@@ -97,6 +97,7 @@ public class RootResourcesTest extends RestTestcase {
 	public void testJsonSchema() throws Exception {
 		try (RestClient client = SamplesMicroservice.client().parsers(JsonParser.DEFAULT).accept("text/json+schema").build()) {
 			var m = client.get("").run().getContent().as(JsonMap.class);
+			assertNotNull(m);
 			if (debug)
 				System.err.println(m);
 			client.closeQuietly();
