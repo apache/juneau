@@ -950,6 +950,11 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @throws SerializeException Thrown if ignoreInvocationExceptionOnGetters is false.
 	 */
 	protected final void onBeanGetterException(BeanPropertyMeta p, Throwable t) throws SerializeException {
+		// If it's a StackOverflowError, let it propagate so it can be caught by serialize() method
+		// and converted to a proper SerializeException with recursion detection message
+		if (t instanceof StackOverflowError t2)
+			throw t2;
+
 		if (nn(listener))
 			listener.onBeanGetterException(this, t, p);
 		String prefix = (isDebug() ? getStack(false) + ": " : "");

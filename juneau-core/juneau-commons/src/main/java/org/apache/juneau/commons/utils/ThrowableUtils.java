@@ -419,11 +419,22 @@ public class ThrowableUtils {
 	/**
 	 * Convenience method for calling {@link Throwable#getLocalizedMessage()}.
 	 *
+	 * <p>
+	 * Long messages (>2000 characters) are truncated to prevent stack overflow issues
+	 * when exception messages contain circular references. The format is:
+	 * "first-1000-chars&lt;truncated-#-chars&gt;last-1000-chars"
+	 *
 	 * @param t The throwable.
-	 * @return The localized message of the throwable.
+	 * @return The localized message of the throwable, truncated if necessary.
 	 */
 	public static String lm(Throwable t) {
-		return t.getLocalizedMessage();
+		String msg = t.getLocalizedMessage();
+		if (msg == null)
+			return null;
+		if (msg.length() <= 2000)
+			return msg;
+		int truncated = msg.length() - 2000;
+		return msg.substring(0, 1000) + "<truncated-" + truncated + "-chars>" + msg.substring(msg.length() - 1000);
 	}
 
 	/**
