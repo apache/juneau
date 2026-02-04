@@ -52,7 +52,9 @@ public class SwaggerAnnotation {
 		private ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
 		private License license = LicenseAnnotation.DEFAULT;
 		private String version = "";
-		private String[] termsOfService = {}, title = {}, value = {};
+		private String[] termsOfService = {};
+		private String[] title = {};
+		private String[] value = {};
 		private Tag[] tags = {};
 
 		/**
@@ -179,7 +181,9 @@ public class SwaggerAnnotation {
 		private final ExternalDocs externalDocs;
 		private final License license;
 		private final String version;
-		private final String[] termsOfService, title, value;
+		private final String[] termsOfService;
+		private final String[] title;
+		private final String[] value;
 		private final Tag[] tags;
 
 		Object(SwaggerAnnotation.Builder b) {

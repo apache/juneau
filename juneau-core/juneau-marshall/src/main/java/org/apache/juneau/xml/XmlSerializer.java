@@ -1214,8 +1214,8 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	/** Default serializer, single quotes, whitespace added. */
 	public static final XmlSerializer DEFAULT_NS_SQ_READABLE = new NsSqReadable(create());
 
-	protected static final Namespace DEFAULT_JUNEAU_NAMESPACE = Namespace.of("juneau", "http://www.apache.org/2013/Juneau"),
-		DEFAULT_XS_NAMESPACE = Namespace.of("xs", "http://www.w3.org/2001/XMLSchema");
+	protected static final Namespace DEFAULT_JUNEAU_NAMESPACE = Namespace.of("juneau", "http://www.apache.org/2013/Juneau");
+	protected static final Namespace DEFAULT_XS_NAMESPACE = Namespace.of("xs", "http://www.w3.org/2001/XMLSchema");
 
 	/**
 	 * Creates a new builder for this object.

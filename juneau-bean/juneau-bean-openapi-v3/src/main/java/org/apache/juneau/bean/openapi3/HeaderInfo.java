@@ -95,8 +95,13 @@ public class HeaderInfo extends OpenApiElement {
 	private static final String PROP_schema = "schema";
 	private static final String PROP_xExample = "x-example";
 
-	private String description, ref;
-	private Boolean required, explode, deprecated, allowEmptyValue, allowReserved;
+	private String description;
+	private String ref;
+	private Boolean required;
+	private Boolean explode;
+	private Boolean deprecated;
+	private Boolean allowEmptyValue;
+	private Boolean allowReserved;
 	private SchemaInfo schema;
 	private Object example;
 	private Map<String,Example> examples = map();

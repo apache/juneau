@@ -92,7 +92,9 @@ public class XmlAnnotation {
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF {
 
 		private String[] description = {};
-		private String childName = "", namespace = "", prefix = "";
+		private String childName = "";
+		private String namespace = "";
+		private String prefix = "";
 		private XmlFormat format = XmlFormat.DEFAULT;
 
 		/**
@@ -225,7 +227,9 @@ public class XmlAnnotation {
 	private static class Object extends AppliedOnClassAnnotationObject implements Xml {
 
 		private final String[] description;
-		private final String childName, namespace, prefix;
+		private final String childName;
+		private final String namespace;
+		private final String prefix;
 		private final XmlFormat format;
 
 		Object(XmlAnnotation.Builder b) {

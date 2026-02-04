@@ -112,7 +112,10 @@ public class Info extends OpenApiElement {
 	private static final String PROP_title = "title";
 	private static final String PROP_version = "version";
 
-	private String title, description, termsOfService, version;
+	private String title;
+	private String description;
+	private String termsOfService;
+	private String version;
 	private Contact contact;
 	private License license;
 

@@ -103,11 +103,20 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 			return s.length == 0 ? null : l(s);
 		}
 
-		List<String> aside, footer, head, header, nav, navlinks, script, style, stylesheet;
+		List<String> aside;
+	List<String> footer;
+	List<String> head;
+	List<String> header;
+	List<String> nav;
+	List<String> navlinks;
+	List<String> script;
+	List<String> style;
+	List<String> stylesheet;
 		AsideFloat asideFloat;
 		String noResultsMessage;
 
-		boolean nowrap, resolveBodyVars;
+		boolean nowrap;
+		boolean resolveBodyVars;
 
 		Class<? extends HtmlDocTemplate> template;
 
@@ -1629,13 +1638,22 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * @return A new builder.
 	 */
 	public static Builder create() {
-		return new Builder();
-	}
+	return new Builder();
+}
 
-	final String[] style, stylesheet, script, navlinks, head, header, nav, aside, footer;
-	final AsideFloat asideFloat;
+final String[] style;
+final String[] stylesheet;
+final String[] script;
+final String[] navlinks;
+final String[] head;
+final String[] header;
+final String[] nav;
+final String[] aside;
+final String[] footer;
+final AsideFloat asideFloat;
 	final String noResultsMessage;
-	final boolean nowrap, resolveBodyVars;
+	final boolean nowrap;
+	final boolean resolveBodyVars;
 	final Class<? extends HtmlDocTemplate> template;
 	final List<Class<? extends HtmlWidget>> widgets;
 

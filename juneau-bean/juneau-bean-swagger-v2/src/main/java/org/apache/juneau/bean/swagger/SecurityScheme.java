@@ -91,7 +91,13 @@ public class SecurityScheme extends SwaggerElement {
 
 	private static final String[] VALID_TYPES = { "basic", "apiKey", "oauth2" };
 
-	private String type, description, name, in, flow, authorizationUrl, tokenUrl;
+	private String type;
+	private String description;
+	private String name;
+	private String in;
+	private String flow;
+	private String authorizationUrl;
+	private String tokenUrl;
 	private Map<String,String> scopes = map();
 
 	/**

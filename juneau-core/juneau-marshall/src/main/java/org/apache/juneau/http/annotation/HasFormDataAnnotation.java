@@ -43,7 +43,8 @@ public class HasFormDataAnnotation {
 	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
-		private String name = "", value = "";
+		private String name = "";
+		private String value = "";
 
 		/**
 		 * Constructor.
@@ -99,7 +100,8 @@ public class HasFormDataAnnotation {
 	private static class Object extends AnnotationObject implements HasFormData {
 
 		private final String[] description;
-		private final String name, value;
+		private final String name;
+		private final String value;
 
 		Object(HasFormDataAnnotation.Builder b) {
 			super(b);

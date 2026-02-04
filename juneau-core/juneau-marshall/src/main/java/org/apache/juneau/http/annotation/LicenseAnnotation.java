@@ -43,7 +43,8 @@ public class LicenseAnnotation {
 	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
-		private String name = "", url = "";
+		private String name = "";
+		private String url = "";
 
 		/**
 		 * Constructor.
@@ -99,7 +100,8 @@ public class LicenseAnnotation {
 	private static class Object extends AnnotationObject implements License {
 
 		private final String[] description;
-		private final String name, url;
+		private final String name;
+		private final String url;
 
 		Object(LicenseAnnotation.Builder b) {
 			super(b);

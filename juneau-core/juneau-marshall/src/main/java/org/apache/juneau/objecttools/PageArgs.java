@@ -41,7 +41,8 @@ public class PageArgs {
 		return new PageArgs(opt(position).orElse(0), opt(limit).orElse(-1));
 	}
 
-	final int position, limit;
+	final int position;
+	final int limit;
 
 	/**
 	 * Constructor.

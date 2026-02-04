@@ -108,10 +108,21 @@ public class Items extends OpenApiElement {
 	private static final String PROP_type = "type";
 	private static final String PROP_uniqueItems = "uniqueItems";
 
-	private String type, format, collectionFormat, pattern, ref;
-	private Number maximum, minimum, multipleOf;
-	private Integer maxLength, minLength, maxItems, minItems;
-	private Boolean exclusiveMaximum, exclusiveMinimum, uniqueItems;
+	private String type;
+	private String format;
+	private String collectionFormat;
+	private String pattern;
+	private String ref;
+	private Number maximum;
+	private Number minimum;
+	private Number multipleOf;
+	private Integer maxLength;
+	private Integer minLength;
+	private Integer maxItems;
+	private Integer minItems;
+	private Boolean exclusiveMaximum;
+	private Boolean exclusiveMinimum;
+	private Boolean uniqueItems;
 	private Items items;  // NOSONAR - Intentional naming.
 	private Object default_;
 	private List<Object> enum_ = list();

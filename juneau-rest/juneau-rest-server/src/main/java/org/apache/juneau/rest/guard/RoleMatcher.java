@@ -184,10 +184,9 @@ public class RoleMatcher {
 	}
 
 	// @formatter:off
-	private static final AsciiSet
-		WS = AsciiSet.of(" \t"),
-		OP = AsciiSet.of(",|&"),
-		META = AsciiSet.of("*?");
+	private static final AsciiSet WS = AsciiSet.of(" \t");
+	private static final AsciiSet OP = AsciiSet.of(",|&");
+	private static final AsciiSet META = AsciiSet.of("*?");
 	// @formatter:on
 
 	private static Exp parseOperand(String operand) {
@@ -250,7 +249,8 @@ public class RoleMatcher {
 		List<Exp> ands = list();
 
 		StateEnum state = S1;
-		int i = 0, mark = -1;
+		int i = 0;
+		int mark = -1;
 		int pDepth = 0;
 		boolean error = false;
 

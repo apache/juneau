@@ -34,7 +34,9 @@ public class ConfigMapEntry {
 	static final ConfigMapEntry NULL = new ConfigMapEntry(null, null, null, null, null);
 	private static final AsciiSet REPLACE_CHARS = AsciiSet.of("\\#");
 	final String rawLine;
-	final String key, value, comment;
+	final String key;
+	final String value;
+	final String comment;
 
 	final String modifiers;
 

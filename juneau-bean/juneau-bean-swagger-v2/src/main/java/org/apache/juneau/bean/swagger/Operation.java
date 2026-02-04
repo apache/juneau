@@ -184,11 +184,15 @@ public class Operation extends SwaggerElement {
 	private static final String PROP_summary = "summary";
 	private static final String PROP_tags = "tags";
 
-	private String summary, description, operationId;
+	private String summary;
+	private String description;
+	private String operationId;
 	private Boolean deprecated;
 	private ExternalDocumentation externalDocs;
-	private Set<String> tags = new LinkedHashSet<>(), schemes = new LinkedHashSet<>();
-	private Set<MediaType> consumes = new LinkedHashSet<>(), produces = new LinkedHashSet<>();
+	private Set<String> tags = new LinkedHashSet<>();
+	private Set<String> schemes = new LinkedHashSet<>();
+	private Set<MediaType> consumes = new LinkedHashSet<>();
+	private Set<MediaType> produces = new LinkedHashSet<>();
 	private List<ParameterInfo> parameters = list();
 	private List<Map<String,List<String>>> security = list();
 

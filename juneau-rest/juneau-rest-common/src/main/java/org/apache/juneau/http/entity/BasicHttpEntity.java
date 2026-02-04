@@ -56,7 +56,9 @@ public class BasicHttpEntity implements HttpEntity {
 	 * An empty HttpEntity.
 	 */
 	public static final BasicHttpEntity EMPTY = new BasicHttpEntity().setUnmodifiable();
-	private boolean cached, chunked, unmodifiable;
+	private boolean cached;
+	private boolean chunked;
+	private boolean unmodifiable;
 	private Object content;
 	private Supplier<?> contentSupplier;
 	private ContentType contentType;

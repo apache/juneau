@@ -94,7 +94,8 @@ public class LogsResource extends BasicRestServlet {
 
 		private final String uri;
 
-		private final boolean includeChildren, allowDeletes;
+		private final boolean includeChildren;
+		private final boolean allowDeletes;
 
 		public FileResource(File f, String path, boolean allowDeletes, boolean includeChildren) {
 			this.f = f;

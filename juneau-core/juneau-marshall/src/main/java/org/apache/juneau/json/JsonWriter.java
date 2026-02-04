@@ -43,9 +43,8 @@ public class JsonWriter extends SerializerWriter {
 
 	// Characters that trigger special handling of serializing attribute values.
 	// @formatter:off
-	private static final AsciiSet
-		encodedChars = AsciiSet.of("\n\t\b\f\r'\"\\"),
-		encodedChars2 = AsciiSet.of("\n\t\b\f\r'\"\\/");
+	private static final AsciiSet encodedChars = AsciiSet.of("\n\t\b\f\r'\"\\");
+	private static final AsciiSet encodedChars2 = AsciiSet.of("\n\t\b\f\r'\"\\/");
 
 	private static final KeywordSet reservedWords = new KeywordSet(
 		"arguments","break","case","catch","class","const","continue","debugger","default","delete",
@@ -63,7 +62,8 @@ public class JsonWriter extends SerializerWriter {
 	private static final AsciiSet validAttrChars = AsciiSet.create().ranges("a-z", "A-Z", "0-9").chars("_").build();
 
 	private static final AsciiSet validFirstAttrChars = AsciiSet.create().ranges("a-z", "A-Z").chars("_").build();
-	private final boolean simpleAttrs, escapeSolidus;
+	private final boolean simpleAttrs;
+	private final boolean escapeSolidus;
 
 	private final AsciiSet ec;
 

@@ -75,7 +75,8 @@ public class Tag extends SwaggerElement {
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_property = "property";
 
-	private String name, description;
+	private String name;
+	private String description;
 	private ExternalDocumentation externalDocs;
 
 	/**

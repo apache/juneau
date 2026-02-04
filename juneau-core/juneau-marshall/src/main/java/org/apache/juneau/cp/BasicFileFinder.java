@@ -59,8 +59,10 @@ public class BasicFileFinder implements FileFinder {
 
 	private final LocalDir[] roots;
 	private final long cachingLimit;
-	private final Pattern[] include, exclude;
-	private final String[] includePatterns, excludePatterns;
+	private final Pattern[] include;
+	private final Pattern[] exclude;
+	private final String[] includePatterns;
+	private final String[] excludePatterns;
 	private final int hashCode;
 
 	/**

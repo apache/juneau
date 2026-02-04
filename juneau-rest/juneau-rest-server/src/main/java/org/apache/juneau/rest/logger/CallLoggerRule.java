@@ -49,7 +49,8 @@ public class CallLoggerRule {
 		Enablement enabled;
 		Predicate<HttpServletRequest> enabledTest;
 		Level level;
-		CallLoggingDetail requestDetail, responseDetail;
+		CallLoggingDetail requestDetail;
+		CallLoggingDetail responseDetail;
 		boolean logStackTrace;
 
 		/**
@@ -315,7 +316,8 @@ public class CallLoggerRule {
 	private final Level level;
 	private final Enablement enabled;
 	private final Predicate<HttpServletRequest> enabledTest;
-	private final CallLoggingDetail requestDetail, responseDetail;
+	private final CallLoggingDetail requestDetail;
+	private final CallLoggingDetail responseDetail;
 
 	/**
 	 * Constructor.

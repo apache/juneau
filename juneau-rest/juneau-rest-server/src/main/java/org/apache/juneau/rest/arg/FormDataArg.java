@@ -152,7 +152,8 @@ public class FormDataArg implements RestOpArg {
 
 	private final HttpPartSchema schema;
 
-	private final String name, def;
+	private final String name;
+	private final String def;
 
 	private final ClassInfo type;
 

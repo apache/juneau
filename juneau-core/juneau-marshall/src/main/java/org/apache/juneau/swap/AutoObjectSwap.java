@@ -167,7 +167,8 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 
 	//------------------------------------------------------------------------------------------------------------------
 
-	private final Method swapMethod, unswapMethod;
+	private final Method swapMethod;
+	private final Method unswapMethod;
 	private final Constructor<?> unswapConstructor;
 
 	private AutoObjectSwap(BeanContext bc, ClassInfo ci, MethodInfo swapMethod, MethodInfo unswapMethod, ConstructorInfo unswapConstructor) {

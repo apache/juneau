@@ -95,7 +95,11 @@ public class Info extends SwaggerElement {
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_property = "property";
 
-	private String siteName, title, description, termsOfService, version;
+	private String siteName;
+	private String title;
+	private String description;
+	private String termsOfService;
+	private String version;
 	private Contact contact;
 	private License license;
 

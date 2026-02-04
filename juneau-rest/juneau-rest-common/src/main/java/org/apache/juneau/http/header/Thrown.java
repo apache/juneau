@@ -66,7 +66,8 @@ public class Thrown extends BasicCsvHeader {
 	 */
 	public static class Part {
 
-		String className, message;
+		String className;
+		String message;
 		String value;
 
 		/**

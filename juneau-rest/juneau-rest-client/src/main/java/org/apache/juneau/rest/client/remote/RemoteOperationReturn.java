@@ -43,7 +43,8 @@ public class RemoteOperationReturn {
 	private final Type returnType;
 	private final RemoteReturn returnValue;
 	private final ResponseBeanMeta meta;
-	private boolean isFuture, isCompletableFuture;
+	private boolean isFuture;
+	private boolean isCompletableFuture;
 
 	RemoteOperationReturn(MethodInfo m) {
 		var rt = m.getReturnType();

@@ -101,7 +101,8 @@ public interface FileFinder {
 
 		final Set<LocalDir> roots;
 		long cachingLimit;
-		Pattern[] include, exclude;
+		Pattern[] include;
+		Pattern[] exclude;
 
 		/**
 		 * Constructor.

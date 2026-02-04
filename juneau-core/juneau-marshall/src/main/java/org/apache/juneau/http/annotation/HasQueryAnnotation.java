@@ -43,7 +43,8 @@ public class HasQueryAnnotation {
 	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
-		private String name = "", value = "";
+		private String name = "";
+		private String value = "";
 
 		/**
 		 * Constructor.
@@ -99,7 +100,8 @@ public class HasQueryAnnotation {
 	private static class Object extends AnnotationObject implements HasQuery {
 
 		private final String[] description;
-		private final String name, value;
+		private final String name;
+		private final String value;
 
 		Object(HasQueryAnnotation.Builder b) {
 			super(b);

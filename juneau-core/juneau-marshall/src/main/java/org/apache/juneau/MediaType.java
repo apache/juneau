@@ -49,24 +49,33 @@ public class MediaType implements Comparable<MediaType> {
 
 	/** Reusable predefined media type */
 	@SuppressWarnings("javadoc")
-	// @formatter:off
-	public static final MediaType
-		CSV = of("text/csv"),
-		HTML = of("text/html"),
-		JSON = of("application/json"),
-		MSGPACK = of("octal/msgpack"),
-		PLAIN = of("text/plain"),
-		UON = of("text/uon"),
-		URLENCODING = of("application/x-www-form-urlencoded"),
-		XML = of("text/xml"),
-		XMLSOAP = of("text/xml+soap"),
-
-		RDF = of("text/xml+rdf"),
-		RDFABBREV = of("text/xml+rdf+abbrev"),
-		NTRIPLE = of("text/n-triple"),
-		TURTLE = of("text/turtle"),
-		N3 = of("text/n3")
-	;
+	public static final MediaType CSV = of("text/csv");
+	@SuppressWarnings("javadoc")
+	public static final MediaType HTML = of("text/html");
+	@SuppressWarnings("javadoc")
+	public static final MediaType JSON = of("application/json");
+	@SuppressWarnings("javadoc")
+	public static final MediaType MSGPACK = of("octal/msgpack");
+	@SuppressWarnings("javadoc")
+	public static final MediaType PLAIN = of("text/plain");
+	@SuppressWarnings("javadoc")
+	public static final MediaType UON = of("text/uon");
+	@SuppressWarnings("javadoc")
+	public static final MediaType URLENCODING = of("application/x-www-form-urlencoded");
+	@SuppressWarnings("javadoc")
+	public static final MediaType XML = of("text/xml");
+	@SuppressWarnings("javadoc")
+	public static final MediaType XMLSOAP = of("text/xml+soap");
+	@SuppressWarnings("javadoc")
+	public static final MediaType RDF = of("text/xml+rdf");
+	@SuppressWarnings("javadoc")
+	public static final MediaType RDFABBREV = of("text/xml+rdf+abbrev");
+	@SuppressWarnings("javadoc")
+	public static final MediaType NTRIPLE = of("text/n-triple");
+	@SuppressWarnings("javadoc")
+	public static final MediaType TURTLE = of("text/turtle");
+	@SuppressWarnings("javadoc")
+	public static final MediaType N3 = of("text/n3");
 	// @formatter:on
 
 	/**

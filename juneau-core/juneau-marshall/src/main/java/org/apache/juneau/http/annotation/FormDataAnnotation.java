@@ -99,7 +99,9 @@ public class FormDataAnnotation {
 		private Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
 		private Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
 		private Schema schema = SchemaAnnotation.DEFAULT;
-		private String def = "", name = "", value = "";
+		private String def = "";
+		private String name = "";
+		private String value = "";
 
 		/**
 		 * Constructor.
@@ -255,7 +257,9 @@ public class FormDataAnnotation {
 		private final String[] description;
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
-		private final String name, value, def;
+		private final String name;
+		private final String value;
+		private final String def;
 		private final Schema schema;
 
 		Object(FormDataAnnotation.Builder b) {

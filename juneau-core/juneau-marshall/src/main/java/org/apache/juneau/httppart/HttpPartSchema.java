@@ -91,18 +91,32 @@ public class HttpPartSchema {
 	 * Builder class.
 	 */
 	public static class Builder {
-		String name, default_;
+		String name;
+		String default_;
 		Set<Integer> codes;
 		Set<String> enum_;
-		Boolean allowEmptyValue, exclusiveMaximum, exclusiveMinimum, required, uniqueItems, skipIfEmpty;
+		Boolean allowEmptyValue;
+		Boolean exclusiveMaximum;
+		Boolean exclusiveMinimum;
+		Boolean required;
+		Boolean uniqueItems;
+		Boolean skipIfEmpty;
 		HttpPartCollectionFormat collectionFormat = HttpPartCollectionFormat.NO_COLLECTION_FORMAT;
 		HttpPartDataType type = HttpPartDataType.NO_TYPE;
 		HttpPartFormat format = HttpPartFormat.NO_FORMAT;
 		Pattern pattern;
-		Number maximum, minimum, multipleOf;
-		Long maxLength, minLength, maxItems, minItems, maxProperties, minProperties;
+		Number maximum;
+		Number minimum;
+		Number multipleOf;
+		Long maxLength;
+		Long minLength;
+		Long maxItems;
+		Long minItems;
+		Long maxProperties;
+		Long minProperties;
 		Map<String,Object> properties;
-		Object items, additionalProperties;
+		Object items;
+		Object additionalProperties;
 		boolean noValidate;
 		Class<? extends HttpPartParser> parser;
 		Class<? extends HttpPartSerializer> serializer;
@@ -110,7 +124,8 @@ public class HttpPartSchema {
 		String const_;
 		String[] examples;
 		Boolean deprecated;
-		Number exclusiveMaximumValue, exclusiveMinimumValue;
+		Number exclusiveMaximumValue;
+		Number exclusiveMinimumValue;
 
 		/**
 		 * <mk>const</mk> field (JSON Schema Draft 2020-12).
@@ -3592,14 +3607,27 @@ public class HttpPartSchema {
 	final String default_;
 	final Set<String> enum_;
 	final Map<String,HttpPartSchema> properties;
-	final boolean allowEmptyValue, exclusiveMaximum, exclusiveMinimum, required, uniqueItems, skipIfEmpty;
+	final boolean allowEmptyValue;
+	final boolean exclusiveMaximum;
+	final boolean exclusiveMinimum;
+	final boolean required;
+	final boolean uniqueItems;
+	final boolean skipIfEmpty;
 	final HttpPartCollectionFormat collectionFormat;
 	final HttpPartDataType type;
 	final HttpPartFormat format;
 	final Pattern pattern;
-	final HttpPartSchema items, additionalProperties;
-	final Number maximum, minimum, multipleOf;
-	final Long maxLength, minLength, maxItems, minItems, maxProperties, minProperties;
+	final HttpPartSchema items;
+	final HttpPartSchema additionalProperties;
+	final Number maximum;
+	final Number minimum;
+	final Number multipleOf;
+	final Long maxLength;
+	final Long minLength;
+	final Long maxItems;
+	final Long minItems;
+	final Long maxProperties;
+	final Long minProperties;
 
 	final Class<? extends HttpPartParser> parser;
 
@@ -3614,7 +3642,8 @@ public class HttpPartSchema {
 
 	final boolean deprecated;
 
-	final Number exclusiveMaximumValue, exclusiveMinimumValue;
+	final Number exclusiveMaximumValue;
+	final Number exclusiveMinimumValue;
 
 	@SuppressWarnings("java:S3776")
 	HttpPartSchema(Builder b) {

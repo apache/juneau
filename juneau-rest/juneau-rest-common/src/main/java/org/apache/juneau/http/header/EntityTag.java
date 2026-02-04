@@ -56,7 +56,8 @@ public class EntityTag {
 
 	private final String value;
 
-	private final boolean isWeak, isAny;
+	private final boolean isWeak;
+	private final boolean isAny;
 
 	/**
 	 * Constructor.

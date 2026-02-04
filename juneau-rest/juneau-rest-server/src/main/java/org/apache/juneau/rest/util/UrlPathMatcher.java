@@ -39,7 +39,9 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 	 */
 	private static class FileNameMatcher extends UrlPathMatcher {
 
-		private final String basePattern, extPattern, comparator;
+		private final String basePattern;
+		private final String extPattern;
+		private final String comparator;
 
 		FileNameMatcher(String pattern) {
 			super(pattern);
@@ -72,8 +74,11 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 	private static class PathMatcher extends UrlPathMatcher {
 		private static final Pattern VAR_PATTERN = Pattern.compile("\\{([^\\}]+)\\}");
 
-		private final String pattern, comparator;
-		private final String[] parts, vars, varKeys;
+		private final String pattern;
+		private final String comparator;
+		private final String[] parts;
+		private final String[] vars;
+		private final String[] varKeys;
 		private final boolean hasRemainder;
 
 		PathMatcher(String patternString) {

@@ -291,7 +291,15 @@ public class GranularZonedDateTime {
 		// S20: Found om, looking for om(S20).
 
 
-		int year = 1, month = 1, day = 1, hour = 0, minute = 0, second = 0, nanos = 0, ohour = -1, ominute = -1;
+		int year = 1;
+		int month = 1;
+		int day = 1;
+		int hour = 0;
+		int minute = 0;
+		int second = 0;
+		int nanos = 0;
+		int ohour = -1;
+		int ominute = -1;
 		boolean nego = false; // negative offset
 		boolean timeOnly = false; // Track if format started with "T" (time-only)
 		ZoneId zoneId = null;

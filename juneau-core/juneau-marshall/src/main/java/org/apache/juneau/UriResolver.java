@@ -103,7 +103,11 @@ public class UriResolver {
 
 	private final UriRelativity relativity;
 
-	private final String authority, contextRoot, servletPath, pathInfo, parentPath;
+	private final String authority;
+	private final String contextRoot;
+	private final String servletPath;
+	private final String pathInfo;
+	private final String parentPath;
 
 	/**
 	 * Constructor.

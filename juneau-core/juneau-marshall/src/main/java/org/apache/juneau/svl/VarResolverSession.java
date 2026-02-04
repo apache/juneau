@@ -55,7 +55,8 @@ import org.apache.juneau.cp.*;
 @SuppressWarnings("resource")
 public class VarResolverSession {
 
-	private static final AsciiSet AS1 = AsciiSet.of("\\{"), AS2 = AsciiSet.of("\\${}");
+	private static final AsciiSet AS1 = AsciiSet.of("\\{");
+	private static final AsciiSet AS2 = AsciiSet.of("\\${}");
 
 	private static boolean containsVars(Collection<?> c) {
 		var f = Flag.create();

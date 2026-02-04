@@ -166,7 +166,8 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 
 	//------------------------------------------------------------------------------------------------------------------
 
-	private final Method swapMethod, unswapMethod;
+	private final Method swapMethod;
+	private final Method unswapMethod;
 	private final Constructor<?> unswapConstructor;
 
 	private AutoMapSwap(BeanContext bc, ClassInfo ci, MethodInfo swapMethod, MethodInfo unswapMethod, ConstructorInfo unswapConstructor) {

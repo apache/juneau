@@ -43,10 +43,13 @@ public class LogConfig {
 		return new LogConfig();
 	}
 
-	String logFile, logDir;
+	String logFile;
+	String logDir;
 	Boolean append;
-	Integer limit, count;
-	Level fileLevel, consoleLevel;
+	Integer limit;
+	Integer count;
+	Level fileLevel;
+	Level consoleLevel;
 	Map<String,Level> levels = new LinkedHashMap<>();
 
 	Formatter formatter;

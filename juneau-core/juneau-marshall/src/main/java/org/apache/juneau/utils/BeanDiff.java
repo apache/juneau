@@ -56,9 +56,11 @@ public class BeanDiff {
 	 * @param <T> The bean type.
 	 */
 	public static class Builder<T> {
-		T first, second;
+		T first;
+		T second;
 		BeanContext beanContext = BeanContext.DEFAULT;
-		Set<String> include, exclude;
+		Set<String> include;
+		Set<String> exclude;
 
 		/**
 		 * Specifies the bean context to use for introspecting beans.
@@ -168,7 +170,8 @@ public class BeanDiff {
 		return new Builder<T>().first(first).second(second);
 	}
 
-	private JsonMap v1 = new JsonMap(), v2 = new JsonMap();
+	private JsonMap v1 = new JsonMap();
+	private JsonMap v2 = new JsonMap();
 
 	/**
 	 * Constructor.

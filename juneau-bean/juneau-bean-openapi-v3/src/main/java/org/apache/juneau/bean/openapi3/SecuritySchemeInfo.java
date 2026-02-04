@@ -104,7 +104,13 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	private static final String PROP_scheme = "scheme";
 	private static final String PROP_type = "type";
 
-	private String type, description, name, in, scheme, bearerFormat, openIdConnectUrl;
+	private String type;
+	private String description;
+	private String name;
+	private String in;
+	private String scheme;
+	private String bearerFormat;
+	private String openIdConnectUrl;
 
 	private OAuthFlow flows;
 

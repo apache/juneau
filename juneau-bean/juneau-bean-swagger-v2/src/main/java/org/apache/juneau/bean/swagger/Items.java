@@ -86,10 +86,21 @@ public class Items extends SwaggerElement {
 	private static final String[] VALID_TYPES = { "string", "number", "integer", "boolean", "array" };
 	private static final String[] VALID_COLLECTION_FORMATS = { "csv", "ssv", "tsv", "pipes", "multi" };
 
-	private String type, format, collectionFormat, pattern, ref;
-	private Number maximum, minimum, multipleOf;
-	private Integer maxLength, minLength, maxItems, minItems;
-	private Boolean exclusiveMaximum, exclusiveMinimum, uniqueItems;
+	private String type;
+	private String format;
+	private String collectionFormat;
+	private String pattern;
+	private String ref;
+	private Number maximum;
+	private Number minimum;
+	private Number multipleOf;
+	private Integer maxLength;
+	private Integer minLength;
+	private Integer maxItems;
+	private Integer minItems;
+	private Boolean exclusiveMaximum;
+	private Boolean exclusiveMinimum;
+	private Boolean uniqueItems;
 	private Items items;  // NOSONAR - Intentional naming.
 	private Object default_;
 	private Set<Object> enum_ = new LinkedHashSet<>();

@@ -100,7 +100,9 @@ public class PathAnnotation {
 		private Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
 		private Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
 		private Schema schema = SchemaAnnotation.DEFAULT;
-		private String name = "", value = "", def = NONE;
+		private String name = "";
+		private String value = "";
+		private String def = NONE;
 
 		/**
 		 * Constructor.
@@ -256,7 +258,9 @@ public class PathAnnotation {
 		private final String[] description;
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
-		private final String name, value, def;
+		private final String name;
+		private final String value;
+		private final String def;
 		private final Schema schema;
 
 		Object(PathAnnotation.Builder b) {

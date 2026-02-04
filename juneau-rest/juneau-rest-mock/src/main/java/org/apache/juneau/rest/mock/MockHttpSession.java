@@ -46,7 +46,8 @@ public class MockHttpSession implements HttpSession {
 	}
 
 	private Map<String,Object> attributes = map();
-	private long creationTime, lastAccessedTime;
+	private long creationTime;
+	private long lastAccessedTime;
 	private int maxInactiveInterval;
 	private String id;
 	private ServletContext servletContext;

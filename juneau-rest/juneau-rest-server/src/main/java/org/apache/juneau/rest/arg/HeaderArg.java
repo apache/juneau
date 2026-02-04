@@ -198,7 +198,8 @@ public class HeaderArg implements RestOpArg {
 
 	private final boolean multi;
 
-	private final String name, def;
+	private final String name;
+	private final String def;
 
 	private final ClassInfo type;
 

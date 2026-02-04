@@ -43,7 +43,10 @@ public class SqlStore extends ConfigStore {
 	 */
 	public static class Builder extends ConfigStore.Builder {
 
-		String jdbcUrl, tableName, nameColumn, valueColumn;
+		String jdbcUrl;
+		String tableName;
+		String nameColumn;
+		String valueColumn;
 		int pollInterval;
 
 		Builder() {
@@ -137,7 +140,9 @@ public class SqlStore extends ConfigStore {
 	}
 
 	private final String jdbcUrl;
-	private final String tableName, nameColumn, valueColumn;
+	private final String tableName;
+	private final String nameColumn;
+	private final String valueColumn;
 	private final Timer watcher;
 	private final ConcurrentHashMap<String,String> cache = new ConcurrentHashMap<>();
 

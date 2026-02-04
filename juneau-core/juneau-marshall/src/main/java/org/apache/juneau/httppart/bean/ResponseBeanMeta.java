@@ -173,7 +173,8 @@ public class ResponseBeanMeta {
 	private final Map<String,ResponseBeanPropertyMeta> properties;
 	private final int code;
 	private final Map<String,ResponseBeanPropertyMeta> headerMethods;
-	private final ResponseBeanPropertyMeta statusMethod, contentMethod;
+	private final ResponseBeanPropertyMeta statusMethod;
+	private final ResponseBeanPropertyMeta contentMethod;
 	private final Optional<HttpPartSerializer> partSerializer;
 	private final Optional<HttpPartParser> partParser;
 

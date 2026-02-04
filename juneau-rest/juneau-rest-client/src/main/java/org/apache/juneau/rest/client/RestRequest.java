@@ -184,7 +184,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 	final RestClient client;                               // The client that created this call.
 	private final HttpRequestBase request;                 // The request.
-	private boolean ignoreErrors, suppressLogging;
+	private boolean ignoreErrors;
+	private boolean suppressLogging;
 	private HttpContext context;
 	private HttpHost target;
 	private HttpPartSchema contentSchema;
@@ -194,7 +195,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	List<RestCallInterceptor> interceptors = list();   // Used for intercepting and altering requests.
 	private Object content;
 	private Parser parser;
-	private PartList formData, pathData, queryData;
+	private PartList formData;
+	private PartList pathData;
+	private PartList queryData;
 	private Predicate<Integer> errorCodes;
 	private RestResponse response;                         // The response.
 	private Serializer serializer;

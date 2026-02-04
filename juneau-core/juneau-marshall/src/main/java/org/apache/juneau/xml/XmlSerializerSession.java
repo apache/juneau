@@ -373,10 +373,9 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		var xbm = getXmlBeanMeta(bm);
 
 		// @formatter:off
-		Set<String>
-			attrs = xbm.getAttrPropertyNames(),
-			elements = xbm.getElementPropertyNames(),
-			collapsedElements = xbm.getCollapsedPropertyNames();
+		Set<String> attrs = xbm.getAttrPropertyNames();
+		Set<String> elements = xbm.getElementPropertyNames();
+		Set<String> collapsedElements = xbm.getCollapsedPropertyNames();
 		var attrsProperty = xbm.getAttrsPropertyName();
 		var contentProperty = xbm.getContentPropertyName();
 		// @formatter:on
@@ -425,7 +424,9 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			}
 		}
 
-		boolean hasContent = false, preserveWhitespace = false, isVoidElement = xbm.getContentFormat() == VOID;
+		boolean hasContent = false;
+		boolean preserveWhitespace = false;
+		boolean isVoidElement = xbm.getContentFormat() == VOID;
 
 		for (var p : lp) {
 			BeanPropertyMeta pMeta = p.getMeta();

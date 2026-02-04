@@ -64,31 +64,49 @@ public class ContentType extends BasicMediaTypeHeader {
 
 	// Constants
 	@SuppressWarnings("javadoc")
-	// @formatter:off
-	public static final ContentType
-		APPLICATION_ATOM_XML = of("application/atom+xml"),
-		APPLICATION_FORM_URLENCODED = of("application/x-www-form-urlencoded"),
-		APPLICATION_JSON = of("application/json"),
-		APPLICATION_OCTET_STREAM = of("application/octet-stream"),
-		APPLICATION_SOAP_XML = of("application/soap+xml"),
-		APPLICATION_SVG_XML = of("application/svg+xml"),
-		APPLICATION_XHTML_XML = of("application/xhtml+xml"),
-		APPLICATION_XML = of("application/xml"),
-		IMAGE_BMP = of("image/bmp"),
-		IMAGE_GIF = of("image/gif"),
-		IMAGE_JPEG = of("image/jpeg"),
-		IMAGE_PNG = of("image/png"),
-		IMAGE_SVG = of("image/svg+xml"),
-		IMAGE_TIFF = of("image/tiff"),
-		IMAGE_WEBP = of("image/webp"),
-		MULTIPART_FORM_DATA = of("multipart/form-data"),
-		TEXT_HTML = of("text/html"),
-		TEXT_OPENAPI = of("text/openapi"),
-		TEXT_PLAIN = of("text/plain"),
-		TEXT_XML = of("text/xml"),
-		WILDCARD = of("*/*"),
-		NULL = new ContentType((String)null);
-	// @formatter:on
+	public static final ContentType APPLICATION_ATOM_XML = of("application/atom+xml");
+	@SuppressWarnings("javadoc")
+	public static final ContentType APPLICATION_FORM_URLENCODED = of("application/x-www-form-urlencoded");
+	@SuppressWarnings("javadoc")
+	public static final ContentType APPLICATION_JSON = of("application/json");
+	@SuppressWarnings("javadoc")
+	public static final ContentType APPLICATION_OCTET_STREAM = of("application/octet-stream");
+	@SuppressWarnings("javadoc")
+	public static final ContentType APPLICATION_SOAP_XML = of("application/soap+xml");
+	@SuppressWarnings("javadoc")
+	public static final ContentType APPLICATION_SVG_XML = of("application/svg+xml");
+	@SuppressWarnings("javadoc")
+	public static final ContentType APPLICATION_XHTML_XML = of("application/xhtml+xml");
+	@SuppressWarnings("javadoc")
+	public static final ContentType APPLICATION_XML = of("application/xml");
+	@SuppressWarnings("javadoc")
+	public static final ContentType IMAGE_BMP = of("image/bmp");
+	@SuppressWarnings("javadoc")
+	public static final ContentType IMAGE_GIF = of("image/gif");
+	@SuppressWarnings("javadoc")
+	public static final ContentType IMAGE_JPEG = of("image/jpeg");
+	@SuppressWarnings("javadoc")
+	public static final ContentType IMAGE_PNG = of("image/png");
+	@SuppressWarnings("javadoc")
+	public static final ContentType IMAGE_SVG = of("image/svg+xml");
+	@SuppressWarnings("javadoc")
+	public static final ContentType IMAGE_TIFF = of("image/tiff");
+	@SuppressWarnings("javadoc")
+	public static final ContentType IMAGE_WEBP = of("image/webp");
+	@SuppressWarnings("javadoc")
+	public static final ContentType MULTIPART_FORM_DATA = of("multipart/form-data");
+	@SuppressWarnings("javadoc")
+	public static final ContentType TEXT_HTML = of("text/html");
+	@SuppressWarnings("javadoc")
+	public static final ContentType TEXT_OPENAPI = of("text/openapi");
+	@SuppressWarnings("javadoc")
+	public static final ContentType TEXT_PLAIN = of("text/plain");
+	@SuppressWarnings("javadoc")
+	public static final ContentType TEXT_XML = of("text/xml");
+	@SuppressWarnings("javadoc")
+	public static final ContentType WILDCARD = of("*/*");
+	@SuppressWarnings("javadoc")
+	public static final ContentType NULL = new ContentType((String)null);
 
 	/**
 	 * Static creator.

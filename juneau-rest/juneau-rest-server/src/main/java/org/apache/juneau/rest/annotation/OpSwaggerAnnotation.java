@@ -48,8 +48,16 @@ public class OpSwaggerAnnotation {
 
 		private String[] description = {};
 		private ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
-		private String deprecated = "", operationId = "";
-		private String[] consumes = {}, parameters = {}, produces = {}, responses = {}, schemes = {}, summary = {}, tags = {}, value = {};
+		private String deprecated = "";
+		private String operationId = "";
+		private String[] consumes = {};
+		private String[] parameters = {};
+		private String[] produces = {};
+		private String[] responses = {};
+		private String[] schemes = {};
+		private String[] summary = {};
+		private String[] tags = {};
+		private String[] value = {};
 
 		/**
 		 * Constructor.
@@ -205,8 +213,16 @@ public class OpSwaggerAnnotation {
 
 		private final String[] description;
 		private final ExternalDocs externalDocs;
-		private final String deprecated, operationId;
-		private final String[] consumes, parameters, produces, responses, schemes, summary, tags, value;
+		private final String deprecated;
+		private final String operationId;
+		private final String[] consumes;
+		private final String[] parameters;
+		private final String[] produces;
+		private final String[] responses;
+		private final String[] schemes;
+		private final String[] summary;
+		private final String[] tags;
+		private final String[] value;
 
 		Object(OpSwaggerAnnotation.Builder b) {
 			super(b);

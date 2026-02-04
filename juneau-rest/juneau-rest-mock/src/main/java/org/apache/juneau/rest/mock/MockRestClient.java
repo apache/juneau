@@ -254,7 +254,8 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	public static class Builder extends RestClient.Builder {
 
 		Object restBean;
-		String contextPath, servletPath;
+		String contextPath;
+		String servletPath;
 		RestContext restContext;
 		Map<String,String> pathVars;
 
@@ -1860,7 +1861,8 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 
 	private final RestContext restContext;
 	private final Object restObject;
-	private final String contextPath, servletPath;
+	private final String contextPath;
+	private final String servletPath;
 
 	private final Map<String,String> pathVars;
 	private final ThreadLocal<HttpRequest> rreq = new ThreadLocal<>();

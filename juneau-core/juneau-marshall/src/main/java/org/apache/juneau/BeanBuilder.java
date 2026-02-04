@@ -30,7 +30,8 @@ import org.apache.juneau.cp.*;
  */
 public class BeanBuilder<T> {
 
-	private Class<? extends T> type, defaultType;
+	private Class<? extends T> type;
+	private Class<? extends T> defaultType;
 	private T impl;
 	private final BasicBeanStore beanStore;
 

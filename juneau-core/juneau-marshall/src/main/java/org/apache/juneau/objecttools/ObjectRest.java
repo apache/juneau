@@ -156,7 +156,10 @@ public class ObjectRest {
 	}
 
 	/** The list of possible request types. */
-	private static final int GET = 1, PUT = 2, POST = 3, DELETE = 4;
+	private static final int GET = 1;
+	private static final int PUT = 2;
+	private static final int POST = 3;
+	private static final int DELETE = 4;
 
 	/**
 	 * Static creator.

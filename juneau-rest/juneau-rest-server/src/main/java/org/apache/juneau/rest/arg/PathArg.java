@@ -152,7 +152,8 @@ public class PathArg implements RestOpArg {
 
 	private final HttpPartParser partParser;
 	private final HttpPartSchema schema;
-	private final String name, def;
+	private final String name;
+	private final String def;
 	private final Type type;
 
 	/**

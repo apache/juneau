@@ -103,10 +103,12 @@ public class CallLogger {
 
 		Logger logger;
 		ThrownStore thrownStore;
-		List<CallLoggerRule> normalRules = list(), debugRules = list();
+		List<CallLoggerRule> normalRules = list();
+		List<CallLoggerRule> debugRules = list();
 		Enablement enabled;
 		Predicate<HttpServletRequest> enabledTest;
-		CallLoggingDetail requestDetail, responseDetail;
+		CallLoggingDetail requestDetail;
+		CallLoggingDetail responseDetail;
 		Level level;
 
 		/**
@@ -493,11 +495,13 @@ public class CallLogger {
 
 	private final Logger logger;
 	private final ThrownStore thrownStore;
-	private final CallLoggerRule[] normalRules, debugRules;
+	private final CallLoggerRule[] normalRules;
+	private final CallLoggerRule[] debugRules;
 	private final Enablement enabled;
 	private final Predicate<HttpServletRequest> enabledTest;
 	private final Level level;
-	private final CallLoggingDetail requestDetail, responseDetail;
+	private final CallLoggingDetail requestDetail;
+	private final CallLoggingDetail responseDetail;
 
 	/**
 	 * Constructor.

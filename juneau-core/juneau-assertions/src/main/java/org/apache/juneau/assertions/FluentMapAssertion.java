@@ -197,7 +197,8 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	public FluentMapAssertion<K,V,R> asValueMap(K...keys) {
 		if (valueIsNull())
 			return new FluentMapAssertion<>(this, null, returns());
-		Map<K,V> m1 = value(), m2 = CollectionUtils.map();
+		Map<K,V> m1 = value();
+		Map<K,V> m2 = CollectionUtils.map();
 		if (nn(m1))
 			for (var k : keys)
 				m2.put(k, m1.get(k));

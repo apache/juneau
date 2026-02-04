@@ -90,8 +90,14 @@ public class BeanpAnnotation {
 
 		private String[] description = {};
 		private Class<?> type = void.class;
-		private Class<?>[] dictionary = new Class[0], params = new Class[0];
-		private String format = "", name = "", properties = "", ro = "", value = "", wo = "";
+		private Class<?>[] dictionary = new Class[0];
+		private Class<?>[] params = new Class[0];
+		private String format = "";
+		private String name = "";
+		private String properties = "";
+		private String ro = "";
+		private String value = "";
+		private String wo = "";
 
 		/**
 		 * Constructor.
@@ -255,8 +261,14 @@ public class BeanpAnnotation {
 
 		private final String[] description;
 		private final Class<?> type;
-		private final Class<?>[] params, dictionary;
-		private final String name, value, properties, format, ro, wo;
+		private final Class<?>[] params;
+		private final Class<?>[] dictionary;
+		private final String name;
+		private final String value;
+		private final String properties;
+		private final String format;
+		private final String ro;
+		private final String wo;
 
 		Object(BeanpAnnotation.Builder b) {
 			super(b);

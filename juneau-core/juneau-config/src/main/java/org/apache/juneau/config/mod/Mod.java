@@ -26,7 +26,8 @@ public class Mod {
 	/** A no-op modifier. */
 	public static final Mod NO_OP = new Mod(' ', x -> x, x -> x, x -> true);
 	private final char id;
-	private final Function<String,String> removeFunction, applyFunction;
+	private final Function<String,String> removeFunction;
+	private final Function<String,String> applyFunction;
 	private final Function<String,Boolean> detectFunction;
 
 	/**

@@ -224,7 +224,8 @@ public class SwapAnnotation {
 	private static class Object extends AppliedOnClassAnnotationObject implements Swap {
 
 		private final String[] description;
-		private final Class<?> impl, value;
+		private final Class<?> impl;
+		private final Class<?> value;
 		private final String template;
 		private final String[] mediaTypes;
 

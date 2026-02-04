@@ -47,7 +47,8 @@ public class Debug extends BasicBooleanHeader {
 	private static final String NAME = "Debug";
 
 	@SuppressWarnings("javadoc")
-	public static final Debug TRUE = of(true), FALSE = of(false);
+	public static final Debug TRUE = of(true);
+	public static final Debug FALSE = of(false);
 
 	/**
 	 * Static creator.

@@ -141,7 +141,8 @@ public class FileWriterBuilder {
 
 	private Charset cs = Charset.defaultCharset();
 
-	private boolean append, buffered;
+	private boolean append;
+	private boolean buffered;
 
 	/**
 	 * Enables append mode, which appends to the file instead of overwriting it.

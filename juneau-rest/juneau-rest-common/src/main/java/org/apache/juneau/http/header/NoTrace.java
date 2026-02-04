@@ -35,7 +35,8 @@ public class NoTrace extends BasicBooleanHeader {
 	private static final String NAME = "No-Trace";
 
 	@SuppressWarnings("javadoc")
-	public static final NoTrace TRUE = of(true), FALSE = of(false);
+	public static final NoTrace TRUE = of(true);
+	public static final NoTrace FALSE = of(false);
 
 	/**
 	 * Static creator.

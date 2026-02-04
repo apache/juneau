@@ -112,7 +112,9 @@ public class MethodExecStats {
 	private final AtomicInteger maxTime = new AtomicInteger();
 	private final AtomicInteger minTime = new AtomicInteger(-1);
 
-	private AtomicInteger starts = new AtomicInteger(), finishes = new AtomicInteger(), errors = new AtomicInteger();
+	private AtomicInteger starts = new AtomicInteger();
+	private AtomicInteger finishes = new AtomicInteger();
+	private AtomicInteger errors = new AtomicInteger();
 
 	private AtomicLong totalTime = new AtomicLong();
 

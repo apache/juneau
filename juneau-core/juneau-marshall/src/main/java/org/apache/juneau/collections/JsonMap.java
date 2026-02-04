@@ -1790,7 +1790,8 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 
 			if (cm.isMap()) {
 				Map m2 = (cm.canCreateNewInstance() ? (Map)cm.newInstance() : new JsonMap(bs));
-				ClassMeta<?> kType = cm.getKeyType(), vType = cm.getValueType();
+				ClassMeta<?> kType = cm.getKeyType();
+				ClassMeta<?> vType = cm.getValueType();
 				forEach((k, v) -> {
 					if (! k.equals(bs.getBeanTypePropertyName(cm))) {
 

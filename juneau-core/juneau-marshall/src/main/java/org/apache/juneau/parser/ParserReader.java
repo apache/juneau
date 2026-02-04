@@ -54,7 +54,8 @@ public class ParserReader extends Reader implements Positionable {
 	private int iCurrent;      // Current pointer into character buffer
 	private int iMark = -1;    // Mark position in buffer
 	private int iEnd;          // The last good character position in the buffer
-	private boolean endReached, holesExist;
+	private boolean endReached;
+	private boolean holesExist;
 	private final boolean unbuffered;
 
 	/**
@@ -153,7 +154,8 @@ public class ParserReader extends Reader implements Positionable {
 			}
 			holesExist = false;
 		}
-		int start = iMark + offsetStart, len = iCurrent - iMark + offsetEnd - offsetStart - offset;
+		int start = iMark + offsetStart;
+		int len = iCurrent - iMark + offsetEnd - offsetStart - offset;
 		var s = new String(buff, start, len);
 		iMark = -1;
 		return s;

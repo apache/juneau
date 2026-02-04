@@ -48,53 +48,87 @@ public class HttpHeaders {
 	 */
 	private HttpHeaders() {}
 
-	// @formatter:off
 	@SuppressWarnings("javadoc")
-	public static final Accept
-		ACCEPT_APPLICATION_ATOM_XML = Accept.APPLICATION_ATOM_XML,
-		ACCEPT_APPLICATION_FORM_URLENCODED = Accept.APPLICATION_FORM_URLENCODED,
-		ACCEPT_APPLICATION_JSON = Accept.APPLICATION_JSON,
-		ACCEPT_APPLICATION_OCTET_STREAM = Accept.APPLICATION_OCTET_STREAM,
-		ACCEPT_APPLICATION_SOAP_XML = Accept.APPLICATION_SOAP_XML,
-		ACCEPT_APPLICATION_SVG_XML = Accept.APPLICATION_SVG_XML,
-		ACCEPT_APPLICATION_XHTML_XML = Accept.APPLICATION_XHTML_XML,
-		ACCEPT_APPLICATION_XML = Accept.APPLICATION_XML,
-		ACCEPT_IMAGE_BMP = Accept.IMAGE_BMP,
-		ACCEPT_IMAGE_GIF = Accept.IMAGE_GIF,
-		ACCEPT_IMAGE_JPEG = Accept.IMAGE_JPEG,
-		ACCEPT_IMAGE_PNG = Accept.IMAGE_PNG,
-		ACCEPT_IMAGE_SVG = Accept.IMAGE_SVG,
-		ACCEPT_IMAGE_TIFF = Accept.IMAGE_TIFF,
-		ACCEPT_IMAGE_WEBP = Accept.IMAGE_WEBP,
-		ACCEPT_MULTIPART_FORM_DATA = Accept.MULTIPART_FORM_DATA,
-		ACCEPT_TEXT_HTML = Accept.TEXT_HTML,
-		ACCEPT_TEXT_PLAIN = Accept.TEXT_PLAIN,
-		ACCEPT_TEXT_XML = Accept.TEXT_XML,
-		ACCEPT_WILDCARD = Accept.WILDCARD;
+	public static final Accept ACCEPT_APPLICATION_ATOM_XML = Accept.APPLICATION_ATOM_XML;
+	@SuppressWarnings("javadoc")
+	public static final Accept ACCEPT_APPLICATION_FORM_URLENCODED = Accept.APPLICATION_FORM_URLENCODED;
+	@SuppressWarnings("javadoc")
+	public static final Accept ACCEPT_APPLICATION_JSON = Accept.APPLICATION_JSON;
+	@SuppressWarnings("javadoc")
+	public static final Accept ACCEPT_APPLICATION_OCTET_STREAM = Accept.APPLICATION_OCTET_STREAM;
+	@SuppressWarnings("javadoc")
+	public static final Accept ACCEPT_APPLICATION_SOAP_XML = Accept.APPLICATION_SOAP_XML;
+	@SuppressWarnings("javadoc")
+	public static final Accept ACCEPT_APPLICATION_SVG_XML = Accept.APPLICATION_SVG_XML;
+	@SuppressWarnings("javadoc")
+	public static final Accept ACCEPT_APPLICATION_XHTML_XML = Accept.APPLICATION_XHTML_XML;
+	@SuppressWarnings("javadoc")
+	public static final Accept ACCEPT_APPLICATION_XML = Accept.APPLICATION_XML;
+	@SuppressWarnings("javadoc")
+	public static final Accept ACCEPT_IMAGE_BMP = Accept.IMAGE_BMP;
+	@SuppressWarnings("javadoc")
+	public static final Accept ACCEPT_IMAGE_GIF = Accept.IMAGE_GIF;
+	@SuppressWarnings("javadoc")
+	public static final Accept ACCEPT_IMAGE_JPEG = Accept.IMAGE_JPEG;
+	@SuppressWarnings("javadoc")
+	public static final Accept ACCEPT_IMAGE_PNG = Accept.IMAGE_PNG;
+	@SuppressWarnings("javadoc")
+	public static final Accept ACCEPT_IMAGE_SVG = Accept.IMAGE_SVG;
+	@SuppressWarnings("javadoc")
+	public static final Accept ACCEPT_IMAGE_TIFF = Accept.IMAGE_TIFF;
+	@SuppressWarnings("javadoc")
+	public static final Accept ACCEPT_IMAGE_WEBP = Accept.IMAGE_WEBP;
+	@SuppressWarnings("javadoc")
+	public static final Accept ACCEPT_MULTIPART_FORM_DATA = Accept.MULTIPART_FORM_DATA;
+	@SuppressWarnings("javadoc")
+	public static final Accept ACCEPT_TEXT_HTML = Accept.TEXT_HTML;
+	@SuppressWarnings("javadoc")
+	public static final Accept ACCEPT_TEXT_PLAIN = Accept.TEXT_PLAIN;
+	@SuppressWarnings("javadoc")
+	public static final Accept ACCEPT_TEXT_XML = Accept.TEXT_XML;
+	@SuppressWarnings("javadoc")
+	public static final Accept ACCEPT_WILDCARD = Accept.WILDCARD;
 
 	@SuppressWarnings("javadoc")
-	public static final ContentType
-		CONTENTTYPE_APPLICATION_ATOM_XML = ContentType.APPLICATION_ATOM_XML,
-		CONTENTTYPE_APPLICATION_FORM_URLENCODED = ContentType.APPLICATION_FORM_URLENCODED,
-		CONTENTTYPE_APPLICATION_JSON = ContentType.APPLICATION_JSON,
-		CONTENTTYPE_APPLICATION_OCTET_STREAM = ContentType.APPLICATION_OCTET_STREAM,
-		CONTENTTYPE_APPLICATION_SOAP_XML = ContentType.APPLICATION_SOAP_XML,
-		CONTENTTYPE_APPLICATION_SVG_XML = ContentType.APPLICATION_SVG_XML,
-		CONTENTTYPE_APPLICATION_XHTML_XML = ContentType.APPLICATION_XHTML_XML,
-		CONTENTTYPE_APPLICATION_XML = ContentType.APPLICATION_XML,
-		CONTENTTYPE_IMAGE_BMP = ContentType.IMAGE_BMP,
-		CONTENTTYPE_IMAGE_GIF = ContentType.IMAGE_GIF,
-		CONTENTTYPE_IMAGE_JPEG = ContentType.IMAGE_JPEG,
-		CONTENTTYPE_IMAGE_PNG = ContentType.IMAGE_PNG,
-		CONTENTTYPE_IMAGE_SVG = ContentType.IMAGE_SVG,
-		CONTENTTYPE_IMAGE_TIFF = ContentType.IMAGE_TIFF,
-		CONTENTTYPE_IMAGE_WEBP = ContentType.IMAGE_WEBP,
-		CONTENTTYPE_MULTIPART_FORM_DATA = ContentType.MULTIPART_FORM_DATA,
-		CONTENTTYPE_TEXT_HTML = ContentType.TEXT_HTML,
-		CONTENTTYPE_TEXT_PLAIN = ContentType.TEXT_PLAIN,
-		CONTENTTYPE_TEXT_XML = ContentType.TEXT_XML,
-		CONTENTTYPE_WILDCARD = ContentType.WILDCARD;
-	// @formatter:on
+	public static final ContentType CONTENTTYPE_APPLICATION_ATOM_XML = ContentType.APPLICATION_ATOM_XML;
+	@SuppressWarnings("javadoc")
+	public static final ContentType CONTENTTYPE_APPLICATION_FORM_URLENCODED = ContentType.APPLICATION_FORM_URLENCODED;
+	@SuppressWarnings("javadoc")
+	public static final ContentType CONTENTTYPE_APPLICATION_JSON = ContentType.APPLICATION_JSON;
+	@SuppressWarnings("javadoc")
+	public static final ContentType CONTENTTYPE_APPLICATION_OCTET_STREAM = ContentType.APPLICATION_OCTET_STREAM;
+	@SuppressWarnings("javadoc")
+	public static final ContentType CONTENTTYPE_APPLICATION_SOAP_XML = ContentType.APPLICATION_SOAP_XML;
+	@SuppressWarnings("javadoc")
+	public static final ContentType CONTENTTYPE_APPLICATION_SVG_XML = ContentType.APPLICATION_SVG_XML;
+	@SuppressWarnings("javadoc")
+	public static final ContentType CONTENTTYPE_APPLICATION_XHTML_XML = ContentType.APPLICATION_XHTML_XML;
+	@SuppressWarnings("javadoc")
+	public static final ContentType CONTENTTYPE_APPLICATION_XML = ContentType.APPLICATION_XML;
+	@SuppressWarnings("javadoc")
+	public static final ContentType CONTENTTYPE_IMAGE_BMP = ContentType.IMAGE_BMP;
+	@SuppressWarnings("javadoc")
+	public static final ContentType CONTENTTYPE_IMAGE_GIF = ContentType.IMAGE_GIF;
+	@SuppressWarnings("javadoc")
+	public static final ContentType CONTENTTYPE_IMAGE_JPEG = ContentType.IMAGE_JPEG;
+	@SuppressWarnings("javadoc")
+	public static final ContentType CONTENTTYPE_IMAGE_PNG = ContentType.IMAGE_PNG;
+	@SuppressWarnings("javadoc")
+	public static final ContentType CONTENTTYPE_IMAGE_SVG = ContentType.IMAGE_SVG;
+	@SuppressWarnings("javadoc")
+	public static final ContentType CONTENTTYPE_IMAGE_TIFF = ContentType.IMAGE_TIFF;
+	@SuppressWarnings("javadoc")
+	public static final ContentType CONTENTTYPE_IMAGE_WEBP = ContentType.IMAGE_WEBP;
+	@SuppressWarnings("javadoc")
+	public static final ContentType CONTENTTYPE_MULTIPART_FORM_DATA = ContentType.MULTIPART_FORM_DATA;
+	@SuppressWarnings("javadoc")
+	public static final ContentType CONTENTTYPE_TEXT_HTML = ContentType.TEXT_HTML;
+	@SuppressWarnings("javadoc")
+	public static final ContentType CONTENTTYPE_TEXT_PLAIN = ContentType.TEXT_PLAIN;
+	@SuppressWarnings("javadoc")
+	public static final ContentType CONTENTTYPE_TEXT_XML = ContentType.TEXT_XML;
+	@SuppressWarnings("javadoc")
+	public static final ContentType CONTENTTYPE_WILDCARD = ContentType.WILDCARD;
 
 	/**
 	 * Creates a new {@link Accept} header.

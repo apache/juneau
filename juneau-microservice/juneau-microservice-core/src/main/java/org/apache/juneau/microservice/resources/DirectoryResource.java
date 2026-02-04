@@ -206,7 +206,9 @@ public class DirectoryResource extends BasicRestServlet {
 	private final File rootDir;     // The root directory
 
 	// Properties enabled through servlet init parameters
-	final boolean allowDeletes, allowUploads, allowViews;
+	final boolean allowDeletes;
+	final boolean allowUploads;
+	final boolean allowViews;
 
 	public DirectoryResource(Config c) throws Exception {
 		rootDir = new File(c.get(DIRECTORY_RESOURCE_rootDir).orElse("."));

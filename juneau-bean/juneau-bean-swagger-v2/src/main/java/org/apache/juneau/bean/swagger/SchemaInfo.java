@@ -104,12 +104,29 @@ public class SchemaInfo extends SwaggerElement {
 	private static final String ARG_property = "property";
 	private static final String ARG_value = "value";
 
-	private String format, title, description, pattern, type, discriminator, ref;
-	private Number multipleOf, maximum, minimum;
-	private Integer maxLength, minLength, maxItems, minItems, maxProperties, minProperties;
-	private Boolean exclusiveMaximum, exclusiveMinimum, uniqueItems, readOnly, required;
-	private Object default_,
-		example;
+	private String format;
+	private String title;
+	private String description;
+	private String pattern;
+	private String type;
+	private String discriminator;
+	private String ref;
+	private Number multipleOf;
+	private Number maximum;
+	private Number minimum;
+	private Integer maxLength;
+	private Integer minLength;
+	private Integer maxItems;
+	private Integer minItems;
+	private Integer maxProperties;
+	private Integer minProperties;
+	private Boolean exclusiveMaximum;
+	private Boolean exclusiveMinimum;
+	private Boolean uniqueItems;
+	private Boolean readOnly;
+	private Boolean required;
+	private Object default_;
+	private Object example;
 	private Items items;
 	private Xml xml;
 	private ExternalDocumentation externalDocs;

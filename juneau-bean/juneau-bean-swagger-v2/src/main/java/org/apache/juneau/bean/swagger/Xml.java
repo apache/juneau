@@ -77,8 +77,11 @@ public class Xml extends SwaggerElement {
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_property = "property";
 
-	private String name, namespace, prefix;
-	private Boolean attribute, wrapped;
+	private String name;
+	private String namespace;
+	private String prefix;
+	private Boolean attribute;
+	private Boolean wrapped;
 
 	/**
 	 * Default constructor.

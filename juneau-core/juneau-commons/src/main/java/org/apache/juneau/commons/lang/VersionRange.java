@@ -32,8 +32,10 @@ import static org.apache.juneau.commons.utils.Utils.*;
  */
 public class VersionRange {
 
-	private final Version minVersion, maxVersion;
-	private final boolean minExclusive, maxExclusive;
+	private final Version minVersion;
+	private final Version maxVersion;
+	private final boolean minExclusive;
+	private final boolean maxExclusive;
 
 	/**
 	 * Constructor.
@@ -43,7 +45,8 @@ public class VersionRange {
 	public VersionRange(String range) {
 		range = range.trim();
 		if (! range.isEmpty()) {
-			char c1 = range.charAt(0), c2 = range.charAt(range.length() - 1);
+			char c1 = range.charAt(0);
+			char c2 = range.charAt(range.length() - 1);
 			var c = range.indexOf(',');
 			if (c > -1 && (c1 == '[' || c1 == '(') && (c2 == ']' || c2 == ')')) {
 				var v1 = range.substring(1, c);

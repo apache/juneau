@@ -49,11 +49,40 @@ public class SubItemsAnnotation {
 	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
-		private String $ref = "", cf = "", collectionFormat = "", f = "", format = "", max = "", maximum = "", min = "", minimum = "", mo = "", multipleOf = "", p = "", pattern = "", t = "",
-			type = "";
-		private long maxItems = -1, maxLength = -1, maxi = -1, maxl = -1, minItems = -1, minLength = -1, mini = -1, minl = -1;
-		private boolean emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
-		private String[] default_ = {}, enum_ = {}, df = {}, e = {}, items = {};
+		private String $ref = "";
+		private String cf = "";
+		private String collectionFormat = "";
+		private String f = "";
+		private String format = "";
+		private String max = "";
+		private String maximum = "";
+		private String min = "";
+		private String minimum = "";
+		private String mo = "";
+		private String multipleOf = "";
+		private String p = "";
+		private String pattern = "";
+		private String t = "";
+		private String type = "";
+		private long maxItems = -1;
+		private long maxLength = -1;
+		private long maxi = -1;
+		private long maxl = -1;
+		private long minItems = -1;
+		private long minLength = -1;
+		private long mini = -1;
+		private long minl = -1;
+		private boolean emax;
+		private boolean emin;
+		private boolean exclusiveMaximum;
+		private boolean exclusiveMinimum;
+		private boolean ui;
+		private boolean uniqueItems;
+		private String[] default_ = {};
+		private String[] enum_ = {};
+		private String[] df = {};
+		private String[] e = {};
+		private String[] items = {};
 
 		/**
 		 * Constructor.
@@ -461,10 +490,40 @@ public class SubItemsAnnotation {
 	private static class Object extends AnnotationObject implements SubItems {
 
 		private final String[] description;
-		private final boolean emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
-		private final long maxi, maxItems, maxl, maxLength, mini, minItems, minl, minLength;
-		private final String $ref, cf, collectionFormat, f, format, max, maximum, min, minimum, mo, multipleOf, p, pattern, t, type;
-		private final String[] default_, enum_, df, e, items;
+		private final boolean emax;
+		private final boolean emin;
+		private final boolean exclusiveMaximum;
+		private final boolean exclusiveMinimum;
+		private final boolean ui;
+		private final boolean uniqueItems;
+		private final long maxi;
+		private final long maxItems;
+		private final long maxl;
+		private final long maxLength;
+		private final long mini;
+		private final long minItems;
+		private final long minl;
+		private final long minLength;
+		private final String $ref;
+		private final String cf;
+		private final String collectionFormat;
+		private final String f;
+		private final String format;
+		private final String max;
+		private final String maximum;
+		private final String min;
+		private final String minimum;
+		private final String mo;
+		private final String multipleOf;
+		private final String p;
+		private final String pattern;
+		private final String t;
+		private final String type;
+		private final String[] default_;
+		private final String[] enum_;
+		private final String[] df;
+		private final String[] e;
+		private final String[] items;
 
 		Object(SubItemsAnnotation.Builder b) {
 			super(b);

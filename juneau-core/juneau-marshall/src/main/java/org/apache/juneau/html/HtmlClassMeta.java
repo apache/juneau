@@ -35,7 +35,8 @@ import org.apache.juneau.html.annotation.*;
  */
 public class HtmlClassMeta extends ExtendedClassMeta {
 
-	private final boolean noTables, noTableHeaders;
+	private final boolean noTables;
+	private final boolean noTableHeaders;
 	private final HtmlFormat format;
 	private final HtmlRender<?> render;
 

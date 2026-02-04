@@ -41,8 +41,10 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 	@SuppressWarnings("javadoc")
 	public class Entry {
 		public Date date;
-		public String severity, logger;
-		protected String line, text;
+		public String severity;
+		public String logger;
+		protected String line;
+		protected String text;
 		protected String thread;
 		protected List<String> additionalText;
 		protected boolean isRecord;
@@ -123,7 +125,8 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 
 	private BufferedReader br;
 	LogEntryFormatter formatter;
-	Date start, end;
+	Date start;
+	Date end;
 	Set<String> loggerFilter, severityFilter;
 
 	String threadFilter;

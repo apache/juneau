@@ -57,7 +57,8 @@ public class BuilderSwap<T,B> {
 
 		var objectClass = info(builderClass).getParameterType(0, Builder.class);
 
-		MethodInfo createObjectMethod, createBuilderMethod;
+		MethodInfo createObjectMethod;
+		MethodInfo createBuilderMethod;
 		ConstructorInfo objectConstructor;
 		ConstructorInfo builderConstructor;
 
@@ -94,7 +95,8 @@ public class BuilderSwap<T,B> {
 	@SuppressWarnings("rawtypes")
 	public static BuilderSwap<?,?> findSwapFromObjectClass(BeanContext bc, Class<?> objectClass, Visibility cVis, Visibility mVis) {
 		var builderClass = Value.<Class<?>>empty();
-		MethodInfo objectCreateMethod, builderCreateMethod;
+		MethodInfo objectCreateMethod;
+		MethodInfo builderCreateMethod;
 		ConstructorInfo objectConstructor = null;
 		ConstructorInfo builderConstructor;
 		var pci = info(objectClass);

@@ -78,7 +78,8 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	/** Reusable ClassInfo for Object class. */
 	public static final ClassInfo OBJECT = ClassInfo.of(Object.class);
 
-	private static final Map<Class<?>,Class<?>> pmap1 = new HashMap<>(), pmap2 = new HashMap<>();
+	private static final Map<Class<?>,Class<?>> pmap1 = new HashMap<>();
+	private static final Map<Class<?>,Class<?>> pmap2 = new HashMap<>();
 
 	static {
 		pmap1.put(boolean.class, Boolean.class);

@@ -521,7 +521,8 @@ public class Utils {
 			return AnnotationUtils.equals(o1a, o2a);
 
 		if (isArray(o1) && isArray(o2)) {
-			int l1 = Array.getLength(o1), l2 = Array.getLength(o2);
+			int l1 = Array.getLength(o1);
+			int l2 = Array.getLength(o2);
 			if (l1 != l2)
 				return false;
 			for (var i = 0; i < l1; i++)

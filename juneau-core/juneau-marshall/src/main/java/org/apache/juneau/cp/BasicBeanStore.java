@@ -91,7 +91,8 @@ public class BasicBeanStore {
 	public static class Builder {
 
 		BasicBeanStore parent;
-		boolean readOnly, threadSafe;
+		boolean readOnly;
+		boolean threadSafe;
 		Class<? extends BasicBeanStore> type;
 		BasicBeanStore impl;
 
@@ -237,7 +238,8 @@ public class BasicBeanStore {
 	private final Map<Class<?>,Entry<?>> unnamedEntries;
 
 	final Optional<BasicBeanStore> parent;
-	final boolean readOnly, threadSafe;
+	final boolean readOnly;
+	final boolean threadSafe;
 	final SimpleReadWriteLock lock;
 
 	/**

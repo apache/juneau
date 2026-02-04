@@ -94,9 +94,12 @@ public class HtmlAnnotation {
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF {
 
 		private String[] description = {};
-		private String anchorText = "", link = "", style = "";
+		private String anchorText = "";
+		private String link = "";
+		private String style = "";
 		private HtmlFormat format = HtmlFormat.HTML;
-		private boolean noTableHeaders, noTables;
+		private boolean noTableHeaders;
+		private boolean noTables;
 		private Class<? extends HtmlRender> render = HtmlRender.class;
 
 		/**
@@ -262,9 +265,12 @@ public class HtmlAnnotation {
 	private static class Object extends AppliedOnClassAnnotationObject implements Html {
 
 		private final String[] description;
-		private final boolean noTableHeaders, noTables;
+		private final boolean noTableHeaders;
+		private final boolean noTables;
 		private final Class<? extends HtmlRender> render;
-		private final String anchorText, link, style;
+		private final String anchorText;
+		private final String link;
+		private final String style;
 		private final HtmlFormat format;
 
 		Object(HtmlAnnotation.Builder b) {

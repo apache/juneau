@@ -173,7 +173,13 @@ public class XmlParserSession extends ReaderParserSession {
 		}
 	}
 
-	private static final int UNKNOWN = 0, OBJECT = 1, ARRAY = 2, STRING = 3, NUMBER = 4, BOOLEAN = 5, NULL = 6;
+	private static final int UNKNOWN = 0;
+	private static final int OBJECT = 1;
+	private static final int ARRAY = 2;
+	private static final int STRING = 3;
+	private static final int NUMBER = 4;
+	private static final int BOOLEAN = 5;
+	private static final int NULL = 6;
 
 	/**
 	 * Creates a new builder for this object.

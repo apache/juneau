@@ -77,14 +77,21 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		MethodInfo getter;  // Package-private for BeanMeta access
 		MethodInfo setter;  // Package-private for BeanMeta access
 		MethodInfo extraKeys;  // Package-private for BeanMeta access
-		private boolean isConstructorArg, isUri, isDyna, isDynaGetterMap;
-		private ClassMeta<?> rawTypeMeta, typeMeta;
+		private boolean isConstructorArg;
+		private boolean isUri;
+		private boolean isDyna;
+		private boolean isDynaGetterMap;
+		private ClassMeta<?> rawTypeMeta;
+		private ClassMeta<?> typeMeta;
 		private List<String> properties;
 		private ObjectSwap swap;
 		private BeanRegistry beanRegistry;
 		private Object overrideValue;
 		private BeanPropertyMeta delegateFor;
-		private boolean canRead, canWrite, readOnly, writeOnly;
+		private boolean canRead;
+		private boolean canWrite;
+		private boolean readOnly;
+		private boolean writeOnly;
 
 		Builder(BeanMeta<?> beanMeta, String name) {
 			this.beanMeta = beanMeta;

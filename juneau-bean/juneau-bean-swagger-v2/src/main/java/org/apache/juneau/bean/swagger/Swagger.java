@@ -129,12 +129,14 @@ public class Swagger extends SwaggerElement {
 	private static final String PROP_swagger = "swagger";
 	private static final String PROP_tags = "tags";
 
-	private String swagger = "2.0",  // NOSONAR - Intentional naming.
-		host, basePath;
+	private String swagger = "2.0";  // NOSONAR - Intentional naming.
+	private String host;
+	private String basePath;
 	private Info info;
 	private ExternalDocumentation externalDocs;
 	private Set<String> schemes = new LinkedHashSet<>();
-	private Set<MediaType> consumes = new LinkedHashSet<>(), produces = new LinkedHashSet<>();
+	private Set<MediaType> consumes = new LinkedHashSet<>();
+	private Set<MediaType> produces = new LinkedHashSet<>();
 	private Set<Tag> tags = new LinkedHashSet<>();
 	private List<Map<String,List<String>>> security = list();
 	private Map<String,JsonMap> definitions = map();

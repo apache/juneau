@@ -84,10 +84,17 @@ public class BeanFilter {
 	public static class Builder {
 
 		private ClassInfoTyped<?> beanClass;
-		private String typeName, example;
-		private Set<String> properties = set(), excludeProperties = set(), readOnlyProperties = set(), writeOnlyProperties = set();
-		private ClassInfo implClass, interfaceClass, stopClass;
-		private boolean sortProperties, fluentSetters;
+		private String typeName;
+		private String example;
+		private Set<String> properties = set();
+		private Set<String> excludeProperties = set();
+		private Set<String> readOnlyProperties = set();
+		private Set<String> writeOnlyProperties = set();
+		private ClassInfo implClass;
+		private ClassInfo interfaceClass;
+		private ClassInfo stopClass;
+		private boolean sortProperties;
+		private boolean fluentSetters;
 		private BeanCreator<PropertyNamer> propertyNamer = BeanCreator.of(PropertyNamer.class);
 		private List<ClassInfo> dictionary;
 		private BeanCreator<BeanInterceptor> interceptor = BeanCreator.of(BeanInterceptor.class);

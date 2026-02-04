@@ -139,7 +139,10 @@ public class Sets<E> {
 	}
 
 	private Set<E> set;
-	private boolean unmodifiable, sparse, concurrent, ordered = false;
+	private boolean unmodifiable;
+	private boolean sparse;
+	private boolean concurrent;
+	private boolean ordered = false;
 
 	private Comparator<E> comparator;
 	private Predicate<E> filter;

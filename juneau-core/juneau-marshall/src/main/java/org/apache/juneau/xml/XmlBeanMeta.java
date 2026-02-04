@@ -39,8 +39,11 @@ import org.apache.juneau.xml.annotation.*;
 public class XmlBeanMeta extends ExtendedBeanMeta {
 
 	private static class XmlBeanMetaBuilder {
-		Map<String,BeanPropertyMeta> attrs = map(), elements = map(), collapsedProperties = map();
-		BeanPropertyMeta attrsProperty, contentProperty;
+		Map<String,BeanPropertyMeta> attrs = map();
+		Map<String,BeanPropertyMeta> elements = map();
+		Map<String,BeanPropertyMeta> collapsedProperties = map();
+		BeanPropertyMeta attrsProperty;
+		BeanPropertyMeta contentProperty;
 		XmlFormat contentFormat = DEFAULT;
 
 		XmlBeanMetaBuilder(BeanMeta<?> beanMeta, XmlMetaProvider mp) {

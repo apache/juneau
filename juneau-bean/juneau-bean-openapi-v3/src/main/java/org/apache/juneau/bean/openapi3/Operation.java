@@ -116,7 +116,9 @@ public class Operation extends OpenApiElement {
 	private static final String PROP_tags = "tags";
 
 	private List<String> tags = list();
-	private String summary, description, operationId;
+	private String summary;
+	private String description;
+	private String operationId;
 	private ExternalDocumentation externalDocs;
 	private List<Parameter> parameters = list();
 	private RequestBodyInfo requestBody;

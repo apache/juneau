@@ -105,7 +105,11 @@ public class ConfigEvent {
 	}
 
 	private final ConfigEventType type;
-	private final String config, section, key, value, comment;
+	private final String config;
+	private final String section;
+	private final String key;
+	private final String value;
+	private final String comment;
 
 	private final List<String> preLines;
 

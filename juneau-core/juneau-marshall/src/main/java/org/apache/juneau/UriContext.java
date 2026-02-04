@@ -96,10 +96,23 @@ public class UriContext {
 	}
 
 	@SuppressWarnings("javadoc")
-	public final String authority, contextRoot, servletPath, pathInfo, parentPath;
+	public final String authority;
+	@SuppressWarnings("javadoc")
+	public final String contextRoot;
+	@SuppressWarnings("javadoc")
+	public final String servletPath;
+	@SuppressWarnings("javadoc")
+	public final String pathInfo;
+	@SuppressWarnings("javadoc")
+	public final String parentPath;
 
 	// Memoized suppliers.
-	private final Supplier<String> aContextRoot, rContextRoot, aServletPath, rResource, aPathInfo, rPath;
+	private final Supplier<String> aContextRoot;
+	private final Supplier<String> rContextRoot;
+	private final Supplier<String> aServletPath;
+	private final Supplier<String> rResource;
+	private final Supplier<String> aPathInfo;
+	private final Supplier<String> rPath;
 
 	/**
 	 * Default constructor.

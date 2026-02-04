@@ -140,7 +140,9 @@ public class Lists<E> {
 	}
 
 	private List<E> list;
-	private boolean unmodifiable = false, sparse = false, concurrent = false;
+	private boolean unmodifiable = false;
+	private boolean sparse = false;
+	private boolean concurrent = false;
 	private Comparator<E> comparator;
 
 	private Predicate<E> filter;

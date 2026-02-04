@@ -50,12 +50,20 @@ import org.apache.juneau.rest.common.utils.*;
 public class RemoteOperationMeta {
 
 	private static class Builder {
-		String httpMethod, fullPath, path;
-		List<RemoteOperationArg> pathArgs = new LinkedList<>(), queryArgs = new LinkedList<>(), headerArgs = new LinkedList<>(), formDataArgs = new LinkedList<>();
+		String httpMethod;
+		String fullPath;
+		String path;
+		List<RemoteOperationArg> pathArgs = new LinkedList<>();
+		List<RemoteOperationArg> queryArgs = new LinkedList<>();
+		List<RemoteOperationArg> headerArgs = new LinkedList<>();
+		List<RemoteOperationArg> formDataArgs = new LinkedList<>();
 		List<RemoteOperationBeanArg> requestArgs = new LinkedList<>();
 		RemoteOperationArg bodyArg;
 		RemoteOperationReturn methodReturn;
-		Map<String,String> pathDefaults = new LinkedHashMap<>(), queryDefaults = new LinkedHashMap<>(), headerDefaults = new LinkedHashMap<>(), formDataDefaults = new LinkedHashMap<>();
+		Map<String,String> pathDefaults = new LinkedHashMap<>();
+		Map<String,String> queryDefaults = new LinkedHashMap<>();
+		Map<String,String> headerDefaults = new LinkedHashMap<>();
+		Map<String,String> formDataDefaults = new LinkedHashMap<>();
 		String contentDefault = null;
 		static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
@@ -194,14 +202,20 @@ public class RemoteOperationMeta {
 
 	private final String httpMethod;
 	private final String fullPath;
-	private final RemoteOperationArg[] pathArgs, queryArgs, headerArgs, formDataArgs;
+	private final RemoteOperationArg[] pathArgs;
+	private final RemoteOperationArg[] queryArgs;
+	private final RemoteOperationArg[] headerArgs;
+	private final RemoteOperationArg[] formDataArgs;
 	private final RemoteOperationBeanArg[] requestArgs;
 	private final RemoteOperationArg contentArg;
 	private final RemoteOperationReturn methodReturn;
 
 	private final Class<?>[] exceptions;
 	// Method-level annotations with defaults (9.2.0)
-	private final Map<String,String> pathDefaults, queryDefaults, headerDefaults, formDataDefaults;
+	private final Map<String,String> pathDefaults;
+	private final Map<String,String> queryDefaults;
+	private final Map<String,String> headerDefaults;
+	private final Map<String,String> formDataDefaults;
 
 	private final String contentDefault;
 

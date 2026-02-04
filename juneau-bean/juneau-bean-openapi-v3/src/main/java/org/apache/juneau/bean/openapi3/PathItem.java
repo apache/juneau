@@ -100,8 +100,16 @@ public class PathItem extends OpenApiElement {
 	private static final String PROP_summary = "summary";
 	private static final String PROP_trace = "trace";
 
-	private String summary, description;
-	private Operation get, put, post, delete, options, head, patch, trace;
+	private String summary;
+	private String description;
+	private Operation get;
+	private Operation put;
+	private Operation post;
+	private Operation delete;
+	private Operation options;
+	private Operation head;
+	private Operation patch;
+	private Operation trace;
 	private List<Server> servers;
 	private List<Parameter> parameters;
 

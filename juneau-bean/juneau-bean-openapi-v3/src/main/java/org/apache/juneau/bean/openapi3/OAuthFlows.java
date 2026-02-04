@@ -79,7 +79,10 @@ public class OAuthFlows extends OpenApiElement {
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_property = "property";
 
-	private OAuthFlow implicit, password, clientCredentials, authorizationCode;
+	private OAuthFlow implicit;
+	private OAuthFlow password;
+	private OAuthFlow clientCredentials;
+	private OAuthFlow authorizationCode;
 
 	/**
 	 * Default constructor.

@@ -57,7 +57,8 @@ public class RrpcInterfaceMethodMeta {
 		return sb.toString();
 	}
 
-	private final String url, path;
+	private final String url;
+	private final String path;
 
 	private final Method method;
 

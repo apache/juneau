@@ -155,7 +155,9 @@ public class Namespace {
 		return n;
 	}
 
-	final String key, name, uri;
+	final String key;
+	final String name;
+	final String uri;
 
 	/**
 	 * Constructor.

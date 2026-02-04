@@ -89,9 +89,11 @@ public class Encoding extends OpenApiElement {
 	private static final String PROP_headers = "headers";
 	private static final String PROP_style = "style";
 
-	private String contentType, style;
+	private String contentType;
+	private String style;
 	private Map<String,HeaderInfo> headers = map();
-	private Boolean explode, allowReserved;
+	private Boolean explode;
+	private Boolean allowReserved;
 
 	/**
 	 * Default constructor.

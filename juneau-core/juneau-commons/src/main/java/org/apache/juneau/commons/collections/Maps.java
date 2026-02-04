@@ -171,7 +171,10 @@ public class Maps<K,V> {
 	}
 
 	private Map<K,V> map;
-	private boolean unmodifiable = false, sparse = false, concurrent = false, ordered = false;
+	private boolean unmodifiable = false;
+	private boolean sparse = false;
+	private boolean concurrent = false;
+	private boolean ordered = false;
 	private Comparator<K> comparator;
 
 	private BiPredicate<K,V> filter;

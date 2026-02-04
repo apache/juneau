@@ -197,7 +197,8 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 
 	//------------------------------------------------------------------------------------------------------------------
 
-	private final Method swapMethod, unswapMethod;
+	private final Method swapMethod;
+	private final Method unswapMethod;
 	private final Constructor<?> unswapConstructor;
 	private final Class<?> unswapType;
 

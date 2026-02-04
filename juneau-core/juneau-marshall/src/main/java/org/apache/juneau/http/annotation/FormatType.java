@@ -28,17 +28,23 @@ public class FormatType {
 	private FormatType() {}
 
 	@SuppressWarnings("javadoc")
-	// @formatter:off
-	public static final String
-		INT32 = "int32",
-		INT64 = "int64",
-		FLOAT = "float",
-		DOUBLE = "double",
-		BYTE = "byte",
-		BINARY = "binary",
-		DATE = "date",
-		DATE_TIME = "date-time",
-		PASSWORD = "password",
-		UON = "uon";
-	// @formatter:on
+	public static final String INT32 = "int32";
+	@SuppressWarnings("javadoc")
+	public static final String INT64 = "int64";
+	@SuppressWarnings("javadoc")
+	public static final String FLOAT = "float";
+	@SuppressWarnings("javadoc")
+	public static final String DOUBLE = "double";
+	@SuppressWarnings("javadoc")
+	public static final String BYTE = "byte";
+	@SuppressWarnings("javadoc")
+	public static final String BINARY = "binary";
+	@SuppressWarnings("javadoc")
+	public static final String DATE = "date";
+	@SuppressWarnings("javadoc")
+	public static final String DATE_TIME = "date-time";
+	@SuppressWarnings("javadoc")
+	public static final String PASSWORD = "password";
+	@SuppressWarnings("javadoc")
+	public static final String UON = "uon";
 }

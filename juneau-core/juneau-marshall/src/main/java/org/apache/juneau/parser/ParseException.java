@@ -79,7 +79,8 @@ public class ParseException extends BasicRuntimeException {
 				sb.append("\n\tUse BEAN_debug setting to display content.");
 			else {
 				int numLines = session.getDebugOutputLines();
-				int start = p.line - numLines, end = p.line + numLines;
+				int start = p.line - numLines;
+				int end = p.line + numLines;
 				sb.append("\n---start--\n").append(getNumberedLines(lines, start, end)).append("---end---");
 			}
 

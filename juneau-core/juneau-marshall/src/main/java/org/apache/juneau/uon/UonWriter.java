@@ -54,7 +54,8 @@ public class UonWriter extends SerializerWriter {
 
 	private final UonSerializerSession session;
 
-	private final boolean encodeChars, plainTextParams;
+	private final boolean encodeChars;
+	private final boolean plainTextParams;
 
 	private final char quoteChar2;
 

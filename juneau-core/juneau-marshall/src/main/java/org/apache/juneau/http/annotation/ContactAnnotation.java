@@ -43,7 +43,9 @@ public class ContactAnnotation {
 	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
-		private String email = "", name = "", url = "";
+		private String email = "";
+		private String name = "";
+		private String url = "";
 
 		/**
 		 * Constructor.
@@ -109,7 +111,9 @@ public class ContactAnnotation {
 	private static class Object extends AnnotationObject implements Contact {
 
 		private final String[] description;
-		private final String email, name, url;
+		private final String email;
+		private final String name;
+		private final String url;
 
 		Object(ContactAnnotation.Builder b) {
 			super(b);

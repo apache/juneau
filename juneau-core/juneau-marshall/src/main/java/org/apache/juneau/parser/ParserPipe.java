@@ -63,7 +63,10 @@ import org.apache.juneau.commons.utils.*;
 public class ParserPipe implements Closeable {
 
 	private final Object input;
-	final boolean debug, strict, autoCloseStreams, unbuffered;
+	final boolean debug;
+	final boolean strict;
+	final boolean autoCloseStreams;
+	final boolean unbuffered;
 	private final Charset charset;
 
 	private String inputString;

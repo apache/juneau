@@ -36,10 +36,13 @@ import org.apache.juneau.html.annotation.*;
 public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 	static class Builder {
-		boolean noTables, noTableHeaders;
+		boolean noTables;
+		boolean noTableHeaders;
 		HtmlFormat format = HtmlFormat.HTML;
 		BeanCreator<HtmlRender> render = BeanCreator.of(HtmlRender.class);
-		String link, anchorText, style;
+		String link;
+		String anchorText;
+		String style;
 
 		void findHtmlInfo(Html html) {
 			if (html == null)
@@ -64,11 +67,14 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 * Default instance.
 	 */
 	public static final HtmlBeanPropertyMeta DEFAULT = new HtmlBeanPropertyMeta();
-	private final boolean noTables, noTableHeaders;
+	private final boolean noTables;
+	private final boolean noTableHeaders;
 	private final HtmlFormat format;
 	private final HtmlRender render;
 
-	private final String link, anchorText, style;
+	private final String link;
+	private final String anchorText;
+	private final String style;
 
 	/**
 	 * Constructor.

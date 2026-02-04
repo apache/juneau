@@ -101,8 +101,15 @@ public class Parameter extends OpenApiElement {
 	private static final String PROP_schema = "schema";
 	private static final String PROP_style = "style";
 
-	private String name, in, description, style;
-	private Boolean required, deprecated, allowEmptyValue, explode, allowReserved;
+	private String name;
+	private String in;
+	private String description;
+	private String style;
+	private Boolean required;
+	private Boolean deprecated;
+	private Boolean allowEmptyValue;
+	private Boolean explode;
+	private Boolean allowReserved;
 	private SchemaInfo schema;
 	private Object example;
 	private Map<String,Example> examples;

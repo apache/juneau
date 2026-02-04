@@ -32,7 +32,9 @@ public class Position {
 
 	static final Position UNKNOWN = new Position(-1);
 
-	int line, column, position;
+	int line;
+	int column;
+	int position;
 
 	/**
 	 * Constructor.

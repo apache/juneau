@@ -140,7 +140,8 @@ public class ThrownStats implements Cloneable {
 	private final Optional<ThrownStats> causedBy;
 
 	private final AtomicInteger count;
-	private final AtomicLong firstOccurrence, lastOccurrence;
+	private final AtomicLong firstOccurrence;
+	private final AtomicLong lastOccurrence;
 
 	/**
 	 * Copy constructor.

@@ -299,7 +299,8 @@ public class ReflectionMap<V> {
 	}
 
 	private static class ClassEntry<V> {
-		final String simpleName, fullName;
+		final String simpleName;
+		final String fullName;
 		final V value;
 
 		ClassEntry(String name, V value) {
@@ -330,7 +331,9 @@ public class ReflectionMap<V> {
 	}
 
 	private static class ConstructorEntry<V> {
-		String simpleClassName, fullClassName, args[];
+		String simpleClassName;
+		String fullClassName;
+		String args[];
 		V value;
 
 		ConstructorEntry(String name, V value) {
@@ -370,7 +373,9 @@ public class ReflectionMap<V> {
 	}
 
 	private static class FieldEntry<V> {
-		String simpleClassName, fullClassName, fieldName;
+		String simpleClassName;
+		String fullClassName;
+		String fieldName;
 		V value;
 
 		FieldEntry(String name, V value) {
@@ -407,7 +412,10 @@ public class ReflectionMap<V> {
 	}
 
 	private static class MethodEntry<V> {
-		String simpleClassName, fullClassName, methodName, args[];
+		String simpleClassName;
+		String fullClassName;
+		String methodName;
+		String args[];
 		V value;
 
 		MethodEntry(String name, V value) {

@@ -111,7 +111,8 @@ public abstract class ObjectSwap<T,S> {
 
 	private final Class<T> normalClass;
 	private final Class<?> swapClass;
-	private final ClassInfo normalClassInfo, swapClassInfo;
+	private final ClassInfo normalClassInfo;
+	private final ClassInfo swapClassInfo;
 	private ClassMeta<?> swapClassMeta;
 
 	// Unfortunately these cannot be made final because we want to allow for ObjectSwaps with no-arg constructors

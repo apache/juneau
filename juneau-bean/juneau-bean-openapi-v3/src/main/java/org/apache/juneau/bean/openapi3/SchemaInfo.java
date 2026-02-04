@@ -102,16 +102,37 @@ public class SchemaInfo extends OpenApiElement {
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_property = "property";
 
-	private String format, title, description, pattern, ref, type;
-	private Number multipleOf, maximum, minimum;
-	private Integer maxLength, minLength, maxItems, minItems, maxProperties, minProperties;
-	private Boolean exclusiveMaximum, exclusiveMinimum, uniqueItems, nullable, writeOnly, readOnly, deprecated;
-	private Object default_,
-		example;
+	private String format;
+	private String title;
+	private String description;
+	private String pattern;
+	private String ref;
+	private String type;
+	private Number multipleOf;
+	private Number maximum;
+	private Number minimum;
+	private Integer maxLength;
+	private Integer minLength;
+	private Integer maxItems;
+	private Integer minItems;
+	private Integer maxProperties;
+	private Integer minProperties;
+	private Boolean exclusiveMaximum;
+	private Boolean exclusiveMinimum;
+	private Boolean uniqueItems;
+	private Boolean nullable;
+	private Boolean writeOnly;
+	private Boolean readOnly;
+	private Boolean deprecated;
+	private Object default_;
+	private Object example;
 	private Items items;
 	private Xml xml;
 	private ExternalDocumentation externalDocs;
-	private List<Object> allOf = list(), oneOf = list(), anyOf = list(), enum_ = list();
+	private List<Object> allOf = list();
+	private List<Object> oneOf = list();
+	private List<Object> anyOf = list();
+	private List<Object> enum_ = list();
 	private List<String> required = list();
 	private Discriminator discriminator;
 	private Map<String,SchemaInfo> properties;

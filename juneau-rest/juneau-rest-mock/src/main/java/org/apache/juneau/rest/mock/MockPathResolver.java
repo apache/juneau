@@ -48,7 +48,11 @@ class MockPathResolver {
 
 	}
 
-	private String uri, target, contextPath, servletPath, remainder;
+	private String uri;
+	private String target;
+	private String contextPath;
+	private String servletPath;
+	private String remainder;
 
 	private String error;
 

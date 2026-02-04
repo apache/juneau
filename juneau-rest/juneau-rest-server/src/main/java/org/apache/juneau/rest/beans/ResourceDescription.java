@@ -42,7 +42,9 @@ import org.apache.juneau.http.annotation.*;
 @Response(schema = @Schema(ignore = true))
 public class ResourceDescription implements Comparable<ResourceDescription> {
 
-	private String name, uri, description;
+	private String name;
+	private String uri;
+	private String description;
 
 	/** No-arg constructor.  Used for JUnit testing of OPTIONS pages. */
 	public ResourceDescription() {}

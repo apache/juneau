@@ -95,9 +95,19 @@ public class BeanAnnotation {
 		private Class<?> stopClass = void.class;
 		private Class<? extends BeanInterceptor<?>> interceptor = BeanInterceptor.Void.class;
 		private Class<? extends PropertyNamer> propertyNamer = BasicPropertyNamer.class;
-		private String example = "", excludeProperties = "", p = "", properties = "", readOnlyProperties = "", ro = "", typeName = "", typePropertyName = "", wo = "", writeOnlyProperties = "",
-			xp = "";
-		private boolean findFluentSetters, sort;
+		private String example = "";
+		private String excludeProperties = "";
+		private String p = "";
+		private String properties = "";
+		private String readOnlyProperties = "";
+		private String ro = "";
+		private String typeName = "";
+		private String typePropertyName = "";
+		private String wo = "";
+		private String writeOnlyProperties = "";
+		private String xp = "";
+		private boolean findFluentSetters;
+		private boolean sort;
 
 		/**
 		 * Constructor.
@@ -370,12 +380,25 @@ public class BeanAnnotation {
 	private static class Object extends AppliedOnClassAnnotationObject implements Bean {
 
 		private final String[] description;
-		private final boolean findFluentSetters, sort;
+		private final boolean findFluentSetters;
+		private final boolean sort;
 		private final Class<? extends BeanInterceptor<?>> interceptor;
 		private final Class<? extends PropertyNamer> propertyNamer;
-		private final Class<?> implClass, interfaceClass, stopClass;
+		private final Class<?> implClass;
+		private final Class<?> interfaceClass;
+		private final Class<?> stopClass;
 		private final Class<?>[] dictionary;
-		private final String example, excludeProperties, p, properties, readOnlyProperties, ro, typeName, typePropertyName, wo, writeOnlyProperties, xp;
+		private final String example;
+		private final String excludeProperties;
+		private final String p;
+		private final String properties;
+		private final String readOnlyProperties;
+		private final String ro;
+		private final String typeName;
+		private final String typePropertyName;
+		private final String wo;
+		private final String writeOnlyProperties;
+		private final String xp;
 
 		Object(BeanAnnotation.Builder b) {
 			super(b);
