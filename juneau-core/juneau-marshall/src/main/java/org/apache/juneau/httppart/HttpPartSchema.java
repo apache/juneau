@@ -2845,6 +2845,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 * @since 9.2.0
 		 */
+		@SuppressWarnings("java:S3776")
 		Builder applyJakartaValidation(Annotation a) {
 			String simpleName = cns(a.annotationType());
 
@@ -3615,6 +3616,7 @@ public class HttpPartSchema {
 
 	final Number exclusiveMaximumValue, exclusiveMinimumValue;
 
+	@SuppressWarnings("java:S3776")
 	HttpPartSchema(Builder b) {
 		name = b.name;
 		default_ = b.default_;
@@ -4169,6 +4171,7 @@ public class HttpPartSchema {
 	 * @return The same object passed in.
 	 * @throws SchemaValidationException if the specified pre-parsed input does not validate against this schema.
 	 */
+	@SuppressWarnings("java:S3776")
 	public String validateInput(String in) throws SchemaValidationException {
 		if (! isValidRequired(in))
 			throw new SchemaValidationException("No value specified.");
@@ -4200,6 +4203,7 @@ public class HttpPartSchema {
 	 * @return The same object passed in.
 	 * @throws SchemaValidationException if the specified parsed output does not validate against this schema.
 	 */
+	@SuppressWarnings("java:S3776")
 	public <T> T validateOutput(T o, BeanContext bc) throws SchemaValidationException {
 		if (o == null) {
 			if (! isValidRequired(o))
@@ -4430,6 +4434,7 @@ public class HttpPartSchema {
 		return x.isEmpty() || x.matches("^(/[^/]*)*$");
 	}
 
+	@SuppressWarnings("java:S3776")
 	private boolean isValidMaximum(Number x) {
 		// Check Draft 2020-12 exclusiveMaximumValue first (takes precedence)
 		if (nn(exclusiveMaximumValue)) {
@@ -4474,6 +4479,7 @@ public class HttpPartSchema {
 		return maxProperties == null || x.size() <= maxProperties;
 	}
 
+	@SuppressWarnings("java:S3776")
 	private boolean isValidMinimum(Number x) {
 		// Check Draft 2020-12 exclusiveMinimumValue first (takes precedence)
 		if (nn(exclusiveMinimumValue)) {

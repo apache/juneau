@@ -542,6 +542,7 @@ public class CallLogger {
 	 * @param req The servlet request.
 	 * @param res The servlet response.
 	 */
+	@SuppressWarnings("java:S3776")
 	public void log(HttpServletRequest req, HttpServletResponse res) {
 
 		var rule = getRule(req, res);

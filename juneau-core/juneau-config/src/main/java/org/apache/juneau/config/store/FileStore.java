@@ -500,6 +500,7 @@ public class FileStore extends ConfigStore {
 	}
 
 	@Override /* Overridden from ConfigStore */
+	@SuppressWarnings("java:S3776")
 	public synchronized String write(String name, String expectedContents, String newContents) throws IOException {
 		name = resolveName(name);
 
@@ -601,6 +602,7 @@ public class FileStore extends ConfigStore {
 	}
 
 	@Override
+	@SuppressWarnings("java:S3776")
 	protected String resolveName(String name) {
 		if (! nameCache.containsKey(name)) {
 			String n = null;

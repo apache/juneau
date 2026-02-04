@@ -292,7 +292,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * @return
 	 * 	The same StringBuilder for method chaining.
 	 */
-	@SuppressWarnings("null")
+	@SuppressWarnings({ "null", "java:S3776" })
 	public StringBuilder appendNameFormatted(StringBuilder sb, ClassNameFormat nameFormat, boolean includeTypeParams, char separator, ClassArrayFormat arrayFormat) {
 		var dim = getDimensions();
 
@@ -1374,6 +1374,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * @param pt The parameterized type class containing the parameterized type to resolve (e.g. <c>HashMap</c>).
 	 * @return The resolved real class.
 	 */
+	@SuppressWarnings("java:S3776")
 	public Class<?> getParameterType(int index, Class<?> pt) {
 		assertArgNotNull("pt", pt);
 
@@ -2529,6 +2530,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 		return toString.get();
 	}
 
+	@SuppressWarnings("java:S3776")
 	private String findToString() {
 		var sb = new StringBuilder(256);
 

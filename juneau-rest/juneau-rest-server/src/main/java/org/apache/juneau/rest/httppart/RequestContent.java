@@ -523,6 +523,7 @@ public class RequestContent {
 	}
 
 	/* Workhorse method */
+	@SuppressWarnings("java:S3776")
 	private <T> T parse(ClassMeta<T> cm) throws SchemaValidationException, ParseException, UnsupportedMediaType, IOException {
 
 		if (cm.isReader())

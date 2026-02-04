@@ -915,7 +915,7 @@ public class ParserSession extends BeanSession {
 	 * @return The resolved class, or <jk>null</jk> if the type name could not be resolved.
 	 */
 	protected final ClassMeta<?> getClassMeta(String typeName, BeanPropertyMeta pMeta, ClassMeta<?> eType) {
-		var br = (BeanRegistry)null;
+		BeanRegistry br = null;
 
 		// Resolve via @Beanp(dictionary={})
 		if (nn(pMeta)) {

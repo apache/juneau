@@ -121,7 +121,7 @@ public class BeanMeta<T> {
 				return true;
 
 			// Get the bean property type from the getter/field.
-			var pt = (Class<?>)null;  // TODO - Convert to ClassInfo
+			Class<?> pt = null;  // TODO - Convert to ClassInfo
 			if (nn(b.getter))
 				pt = b.getter.getReturnType().inner();
 			else if (nn(b.field))
@@ -384,6 +384,7 @@ public class BeanMeta<T> {
 	 * @param pNames Explicit list of property names and order. If <jk>null</jk>, properties are determined automatically.
 	 * @param implClass Optional implementation class constructor to use if one cannot be found. Can be <jk>null</jk>.
 	 */
+	@SuppressWarnings("java:S3776")
 	protected BeanMeta(ClassMeta<T> cm, BeanFilter bf, String[] pNames, ClassInfo implClass) {
 		classMeta = cm;
 		beanContext = cm.getBeanContext();
@@ -399,7 +400,7 @@ public class BeanMeta<T> {
 		var ap = beanContext.getAnnotationProvider();
 		var c = cm.inner();
 		var ci = cm;
-		var _notABeanReason = (String)null;
+		String _notABeanReason = null;
 		var _properties = Value.<Map<String,BeanPropertyMeta>>empty();
 		var _hiddenProperties = CollectionUtils.<String,BeanPropertyMeta>map();
 		var _getterProps = CollectionUtils.<Method,String>map();  // Convert to MethodInfo keys
@@ -427,7 +428,7 @@ public class BeanMeta<T> {
 
 			if (beanContext.isUseJavaBeanIntrospector()) {
 				var c2 = bfo.map(x -> x.getInterfaceClass()).filter(Objects::nonNull).orElse(classMeta);
-				var bi = (BeanInfo)null;
+				BeanInfo bi = null;
 				if (! c2.isInterface())
 					bi = Introspector.getBeanInfo(c2.inner(), stopClass.inner());
 				else
@@ -945,6 +946,7 @@ public class BeanMeta<T> {
 	 * 	the number of properties specified in {@link Beanc @Beanc} doesn't match the number of constructor parameters,
 	 * 	or if parameter names cannot be determined from the bytecode.
 	 */
+	@SuppressWarnings("java:S3776")
 	private BeanConstructor findBeanConstructor() {
 		var ap = beanContext.getAnnotationProvider();
 		var vis = beanContext.getBeanConstructorVisibility();
@@ -1057,6 +1059,7 @@ public class BeanMeta<T> {
 	 *
 	 * @return A list of {@link BeanMethod} objects representing all found bean methods.
 	 */
+	@SuppressWarnings("java:S3776")
 	private List<BeanMethod> findBeanMethods() {
 		var l = new LinkedList<BeanMethod>();
 		var ap = beanContext.getAnnotationProvider();

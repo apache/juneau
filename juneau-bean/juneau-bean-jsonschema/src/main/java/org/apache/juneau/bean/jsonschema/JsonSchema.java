@@ -2054,6 +2054,7 @@ public class JsonSchema {
 	 *
 	 * @param master The master schema to associate on this and all children.  Can be <jk>null</jk>.
 	 */
+	@SuppressWarnings("java:S3776")
 	protected void setMaster(JsonSchema master) {
 		this.master = master;
 		if (nn(definitions))

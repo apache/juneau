@@ -152,6 +152,7 @@ public class MimeTypeDetector {
 		 * @param mimeTypesLines The MIME types lines or file contents.
 		 * @return This builder.
 		 */
+		@SuppressWarnings("java:S3776")
 		public Builder addTypes(String...mimeTypesLines) {
 			for (var input : mimeTypesLines) {
 				if (ne(input)) {

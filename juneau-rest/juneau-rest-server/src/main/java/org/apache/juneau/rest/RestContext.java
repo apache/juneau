@@ -211,13 +211,11 @@ public class RestContext extends Context {
 			return isRestInjectMethod(mi, null);
 		}
 
-		private static boolean isRestInjectMethod(MethodInfo mi, String name) {
-			return mi.getAnnotations(RestInject.class)
-				.map(AnnotationInfo::inner)
-				.filter(x -> nn(x) && x.methodScope().length == 0 && (n(name) || eq(x.name(), name)))
-				.findFirst()
-				.isPresent();
-		}
+	private static boolean isRestInjectMethod(MethodInfo mi, String name) {
+		return mi.getAnnotations(RestInject.class)
+			.map(AnnotationInfo::inner)
+			.anyMatch(x -> nn(x) && x.methodScope().length == 0 && (n(name) || eq(x.name(), name)));
+	}
 
 		private BeanContext.Builder beanContext;
 		private BeanCreator<CallLogger> callLogger;
@@ -4494,6 +4492,7 @@ public class RestContext extends Context {
 		 * @return A new REST children list.
 		 * @throws Exception If a problem occurred instantiating one of the child rest contexts.
 		 */
+		@SuppressWarnings("java:S3776")
 		protected RestChildren.Builder createRestChildren(BasicBeanStore beanStore, Supplier<?> resource, RestContext restContext) throws Exception {
 
 			// Default value.
@@ -4599,6 +4598,7 @@ public class RestContext extends Context {
 		 * @return A new REST operations list.
 		 * @throws ServletException If a problem occurred instantiating one of the child rest contexts.
 		 */
+		@SuppressWarnings("java:S3776")
 		protected RestOperations.Builder createRestOperations(BasicBeanStore beanStore, Supplier<?> resource, RestContext restContext) throws ServletException {
 
 			// Default value.
@@ -5157,6 +5157,7 @@ public class RestContext extends Context {
 	 * @throws ServletException General servlet exception.
 	 * @throws IOException Thrown by underlying stream.
 	 */
+	@SuppressWarnings("java:S3776")
 	public void execute(Object resource, HttpServletRequest r1, HttpServletResponse r2) throws ServletException, IOException {
 
 		// Must be careful not to bleed thread-locals.

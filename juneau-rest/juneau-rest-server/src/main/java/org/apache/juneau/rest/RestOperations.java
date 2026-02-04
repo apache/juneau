@@ -145,6 +145,7 @@ public class RestOperations {
 	 * @throws PreconditionFailed At least one method was found but it didn't match one or more matchers.
 	 * @throws NotFound HTTP method match was found but matching path was not.
 	 */
+	@SuppressWarnings("java:S3776")
 	public RestOpContext findOperation(RestSession session) throws MethodNotAllowed, PreconditionFailed, NotFound {
 		String m = session.getMethod();
 

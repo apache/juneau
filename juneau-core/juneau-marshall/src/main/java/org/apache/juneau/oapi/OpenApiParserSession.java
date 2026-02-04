@@ -243,7 +243,7 @@ public class OpenApiParserSession extends UonParserSession {
 		return t;
 	}
 
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings({ "unchecked", "java:S3776" })
 	private <T> T parseInner(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws SchemaValidationException, ParseException {
 		schema.validateInput(in);
 		if (in == null || "null".equals(in)) {
@@ -254,7 +254,7 @@ public class OpenApiParserSession extends UonParserSession {
 
 			var swap = (ObjectSwap<T,Object>)type.getSwap(this);
 			var builder = (BuilderSwap<T,Object>)type.getBuilderSwap(this);
-			var sType = (ClassMeta<?>)null;
+			ClassMeta<?> sType = null;
 			if (nn(builder))
 				sType = builder.getBuilderClassMeta(this);
 			else if (nn(swap))

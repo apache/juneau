@@ -389,6 +389,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * </ul>
 	 */
 	@Override /* Overridden from AutoCloseable */
+	@SuppressWarnings("java:S3776")
 	public void close() {
 		if (isClosed)
 			return;
@@ -502,7 +503,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 */
 	public String getCharacterEncoding() throws RestCallException {
 		var ct = getContentType();
-		var s = (String)null;
+		String s = null;
 		if (ct.isPresent())
 			s = getContentType().get().getParameter("charset");
 		return e(s) ? "utf-8" : s;

@@ -330,8 +330,8 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 */
 	public Optional<NameValuePair> get(String name) {
 
-		var first = (NameValuePair)null;
-		var rest = (List<NameValuePair>)null;
+		NameValuePair first = null;
+		List<NameValuePair> rest = null;
 		for (var x : this) {
 			if (eq(x.getName(), name)) {
 				if (first == null)
@@ -388,8 +388,8 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 */
 	public <T> Optional<T> get(String name, Class<T> type) {
 
-		var first = (NameValuePair)null;
-		var rest = (List<NameValuePair>)null;
+		NameValuePair first = null;
+		List<NameValuePair> rest = null;
 		for (var x : this) {
 			if (eq(x.getName(), name)) {
 				if (first == null)
@@ -702,6 +702,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @param values The parts to replace.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
+	@SuppressWarnings("java:S3776")
 	public PartList set(List<NameValuePair> values) {
 
 		if (nn(values)) {

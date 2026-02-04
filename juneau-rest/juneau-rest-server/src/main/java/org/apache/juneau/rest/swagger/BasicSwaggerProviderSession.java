@@ -599,6 +599,7 @@ public class BasicSwaggerProviderSession {
 		// @formatter:on
 	}
 
+	@SuppressWarnings("java:S3776")
 	private void addBodyExamples(RestOpContext sm, JsonMap piri, boolean response, Type type, Locale locale) throws Exception {
 
 		var sex = piri.getString("example");

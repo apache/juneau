@@ -1674,7 +1674,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest queryCustom(Object value) {
 		try {
-			var q = (String)null;
+			String q = null;
 			if (value instanceof Reader value2)
 				q = read(value2);
 			else if (value instanceof InputStream value2)
@@ -1923,7 +1923,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 			if (nn(request2)) {
 
-				var input2 = (Object)null;
+				Object input2 = null;
 				if (content != NO_BODY) {
 					input2 = content;
 				} else {
@@ -1933,7 +1933,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				if (input2 instanceof Supplier<?> s)
 					input2 = s.get();
 
-				var entity = (HttpEntity)null;
+				HttpEntity entity = null;
 				if (input2 instanceof PartList input22)
 					entity = new UrlEncodedFormEntity(input22.stream().map(SimpleFormData::new).filter(SimplePart::isValid).toList());
 				else if (input2 instanceof HttpResource input23) {
@@ -1987,7 +1987,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				var message = thrownPart.getMessage();
 				for (var t : rethrow) {
 					if (t.getName().equals(className)) {
-						var c = (ConstructorInfo)null;
+						ConstructorInfo c = null;
 						var ci = ClassInfo.of(t);
 						c = ci.getPublicConstructor(x -> x.hasParameterTypes(HttpResponse.class)).orElse(null);
 						if (nn(c))

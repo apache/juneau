@@ -249,14 +249,14 @@ public class Messages extends ResourceBundle {
 			return this;
 		}
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "java:S3776" })
 		@Override /* Overridden from BeanBuilder */
 		protected Messages buildDefault() {
 
 			if (! locations.isEmpty()) {
 				Tuple2<Class<?>,String>[] mbl = locations.toArray(new Tuple2[0]);
 
-				var x = (Builder)null;
+				Messages.Builder x = null;
 
 				for (var i = mbl.length - 1; i >= 0; i--) {
 					var c = firstNonNull(mbl[i].getA(), forClass);

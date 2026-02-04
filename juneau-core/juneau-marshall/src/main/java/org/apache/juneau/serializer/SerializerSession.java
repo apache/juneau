@@ -350,6 +350,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return <jk>true</jk> if the specified value should not be serialized.
 	 * @throws SerializeException If recursion occurred.
 	 */
+	@SuppressWarnings("java:S3776")
 	public final boolean canIgnoreValue(ClassMeta<?> cm, String attrName, Object value) throws SerializeException {
 
 		if (value == null && ! isKeepNullProperties())
@@ -762,7 +763,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @param pMeta The current bean property being serialized.
 	 * @return The bean dictionary name, or <jk>null</jk> if a name could not be found.
 	 */
-	@SuppressWarnings("null")
+	@SuppressWarnings({ "null", "java:S3776" })
 	protected final String getBeanTypeName(SerializerSession session, ClassMeta<?> eType, ClassMeta<?> aType, BeanPropertyMeta pMeta) {
 		if (eType == aType || ! (isAddBeanTypes() || (session.isRoot() && isAddRootType())))
 			return null;

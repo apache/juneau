@@ -1141,7 +1141,7 @@ public class BeanSession extends ContextSession {
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 * @return The converted value.
 	 */
-	@SuppressWarnings("null")
+	@SuppressWarnings({ "null", "java:S3776" })
 	protected final <T> T convertToMemberType(Object outer, Object value, ClassMeta<T> to) throws InvalidDataConversionException {
 		if (to == null)
 			to = (ClassMeta<T>)object();

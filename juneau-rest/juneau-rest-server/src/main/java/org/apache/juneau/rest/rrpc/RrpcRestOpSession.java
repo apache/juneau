@@ -103,6 +103,7 @@ public class RrpcRestOpSession extends RestOpSession {
 	}
 
 	@Override
+	@SuppressWarnings("java:S3776")
 	public void run() throws Throwable {
 
 		super.run();

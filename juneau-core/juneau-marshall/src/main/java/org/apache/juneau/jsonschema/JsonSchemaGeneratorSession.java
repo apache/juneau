@@ -302,7 +302,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		return null;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked", "rawtypes", "java:S3776" })
 	private JsonMap getSchema(ClassMeta<?> eType, String attrName, List<String> pNames, boolean exampleAdded, boolean descriptionAdded, JsonSchemaBeanPropertyMeta jsbpm)
 		throws BeanRecursionException, SerializeException {
 
@@ -314,18 +314,18 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		if (eType == null)
 			eType = object();
 
-		var aType = (ClassMeta<?>)null;			// The actual type (will be null if recursion occurs)
-		var sType = (ClassMeta<?>)null;			// The serialized type
+		ClassMeta<?> aType = null;			// The actual type (will be null if recursion occurs)
+		ClassMeta<?> sType = null;			// The serialized type
 		var objectSwap = eType.getSwap(this);
 
 		aType = push(attrName, eType, null);
 
 		sType = eType.getSerializedClassMeta(this);
 
-		var type = (String)null;
-		var format = (String)null;
-		var example = (Object)null;
-		var description = (Object)null;
+		String type = null;
+		String format = null;
+		Object example = null;
+		Object description = null;
 
 		boolean useDef = isUseBeanDefs() && sType.isBean() && pNames == null;
 
@@ -339,14 +339,14 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 			return new JsonMap().append("$ref", getBeanDefUri(sType));
 		}
 
-		var jscm = (JsonSchemaClassMeta)null;
+		JsonSchemaClassMeta jscm = null;
 		var objectSwapCM = objectSwap == null ? null : getClassMeta(objectSwap.getClass());
 		if (nn(objectSwapCM) && getAnnotationProvider().has(Schema.class, objectSwapCM))
 			jscm = getJsonSchemaClassMeta(objectSwapCM);
 		if (jscm == null)
 			jscm = getJsonSchemaClassMeta(sType);
 
-		var tc = (TypeCategory)null;
+		TypeCategory tc = null;
 
 		if (sType.isNumber()) {
 			tc = NUMBER;

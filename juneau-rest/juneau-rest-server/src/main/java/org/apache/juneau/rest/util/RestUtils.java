@@ -219,7 +219,7 @@ public class RestUtils {
 		return safe(()-> parseQuery(new ParserPipe(qs)));
 	}
 
-	@SuppressWarnings("java:S2677")
+	@SuppressWarnings({ "java:S2677", "java:S3776" })
 	private static Map<String,List<String>> parseQuery(ParserPipe p) throws IOException {
 
 		var m = CollectionUtils.<String,List<String>>map();

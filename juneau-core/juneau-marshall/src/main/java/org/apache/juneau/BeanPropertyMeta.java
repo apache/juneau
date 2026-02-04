@@ -268,6 +268,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return <jk>true</jk> if this property is valid, <jk>false</jk> otherwise.
 		 * @throws Exception If validation fails.
 		 */
+		@SuppressWarnings("java:S3776")
 		public boolean validate(BeanContext bc, BeanRegistry parentBeanRegistry, TypeVariables typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
 
 			var bdClasses = list();
@@ -505,6 +506,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @param value The value to add to the field.
 	 * @throws BeanRuntimeException If field is not a collection or array.
 	 */
+	@SuppressWarnings("java:S3776")
 	public void add(BeanMap<?> m, String pName, Object value) throws BeanRuntimeException {
 
 		// Read-only beans get their properties stored in a cache.
@@ -531,9 +533,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			var v = session.convertToType(value, elementType);
 
 			if (isCollection) {
-				var c = (Collection)invokeGetter(bean, pName);
+				Collection c = (Collection)invokeGetter(bean, pName);
 
-				var c2 = (Collection)null;
+				Collection c2 = null;
 				if (nn(c)) {
 					if (canAddTo(c)) {
 						c.add(v);
@@ -591,6 +593,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @param value The value to add to the field.
 	 * @throws BeanRuntimeException If field is not a map or array.
 	 */
+	@SuppressWarnings("java:S3776")
 	public void add(BeanMap<?> m, String pName, String key, Object value) throws BeanRuntimeException {
 
 		// Read-only beans get their properties stored in a cache.
@@ -954,6 +957,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @return The previous property value.
 	 * @throws BeanRuntimeException If property could not be set.
 	 */
+	@SuppressWarnings("java:S3776")
 	public Object set(BeanMap<?> m, String pName, Object value) throws BeanRuntimeException {
 		Object value1 = m.meta.onWriteProperty(m.bean, pName, value);
 		try {
@@ -1178,6 +1182,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		return o;
 	}
 
+	@SuppressWarnings("java:S3776")
 	private Object getInner(BeanMap<?> m, String pName) {
 		try {
 
@@ -1234,7 +1239,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 	private Object invokeGetter(Object bean, String pName) throws IllegalArgumentException {
 		if (isDyna) {
-			var m = (Map)null;
+			Map m = null;
 			if (nn(getter)) {
 				if (! isDynaGetterMap)
 					return getter.invoke(bean, pName);
@@ -1256,7 +1261,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		if (isDyna) {
 			if (nn(setter))
 				return setter.invoke(bean, pName, val);
-			var m = (Map)null;
+			Map m = null;
 			if (nn(field))
 				m = (Map<String,Object>)field.get(bean);
 			else if (nn(getter))

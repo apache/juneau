@@ -273,13 +273,14 @@ public class HtmlParserSession extends XmlParserSession {
 	 * Precondition:  Must be pointing at outer START_ELEMENT.
 	 * Postcondition:  Pointing at outer END_ELEMENT.
 	 */
+	@SuppressWarnings("java:S3776")
 	private <T> T parseAnything(ClassMeta<T> eType, XmlReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
 		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
-		var sType = (ClassMeta<?>)null;
+		ClassMeta<?> sType = null;
 		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
 		else if (nn(swap))
@@ -312,7 +313,7 @@ public class HtmlParserSession extends XmlParserSession {
 		if (hcm.getFormat() == HtmlFormat.XML)
 			return super.parseAnything(eType, null, r, outer, false, pMeta);
 
-		var o = (Object)null;
+		Object o = null;
 
 		var isValid = true;
 		var tag = (event == CHARACTERS ? null : HtmlTag.forString(r.getName().getLocalPart(), false));
@@ -470,6 +471,7 @@ public class HtmlParserSession extends XmlParserSession {
 	 * Precondition:  Must be pointing at event following <table> event.
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
+	@SuppressWarnings("java:S3776")
 	private <T> BeanMap<T> parseIntoBean(XmlReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		while (true) {
 			HtmlTag tag = nextTag(r, TR, xTABLE);
@@ -562,6 +564,7 @@ public class HtmlParserSession extends XmlParserSession {
 	 * Precondition:  Must be pointing at event following <ul> event.
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
+	@SuppressWarnings("java:S3776")
 	private <E> Collection<E> parseTableIntoCollection(XmlReader r, Collection<E> l, ClassMeta<E> type, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException, XMLStreamException {
 
@@ -582,7 +585,7 @@ public class HtmlParserSession extends XmlParserSession {
 			if (tag == xTABLE)
 				break;
 
-			var elementType = (ClassMeta)null;
+			ClassMeta elementType = null;
 			String beanType = getAttribute(r, getBeanTypePropertyName(type), null);
 			if (nn(beanType))
 				elementType = getClassMeta(beanType, pMeta, null);
@@ -801,6 +804,7 @@ public class HtmlParserSession extends XmlParserSession {
 	 * @throws XMLStreamException Thrown by underlying XML stream.
 	 */
 	@Override /* Overridden from XmlParserSession */
+	@SuppressWarnings("java:S3776")
 	protected String parseText(XmlReader r) throws IOException, ParseException, XMLStreamException {
 
 		StringBuilder sb = getStringBuilder();
@@ -811,7 +815,7 @@ public class HtmlParserSession extends XmlParserSession {
 
 		int depth = 0;
 
-		var characters = (String)null;
+		String characters = null;
 
 		while (true) {
 			if (et == START_ELEMENT) {

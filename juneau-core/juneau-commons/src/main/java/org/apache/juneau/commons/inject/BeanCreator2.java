@@ -1096,7 +1096,7 @@ public class BeanCreator2<T> {
 	 * @return The created bean.
 	 * @throws ExecutableException if bean could not be created.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "java:S3776" })
 	private T findBeanImpl() {
 		var store = this.store;
 		var builder = explicitBuilder != null ? explicitBuilder : this.builder.get();  // Use explicit builder if set, otherwise get from supplier
@@ -1571,9 +1571,7 @@ public class BeanCreator2<T> {
 				var returnType = x.getReturnType();
 				return returnType.is(beanSubType.inner()) || returnType.is(beanType.inner()) || returnType.isParentOf(beanSubType);
 			})
-			.filter(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, "Inject", "Autowired")) || x.getParameterCount() == 0)
-			.findFirst()
-			.isPresent();
+			.anyMatch(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, "Inject", "Autowired")) || x.getParameterCount() == 0);
 
 		if (hasBuildMethod) {
 			log("Builder is valid: has build/create/get method returning bean type");

@@ -223,10 +223,11 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	/*
 	 * Workhorse method. Determines the type of object, and then calls the appropriate type-specific serialization method.
 	 */
+	@SuppressWarnings("java:S3776")
 	private SerializerWriter serializeAnything(UonWriter out, Object o) throws IOException, SerializeException {
 
-		var aType = (ClassMeta<?>)null;			// The actual type
-		var sType = (ClassMeta<?>)null;			// The serialized type
+		ClassMeta<?> aType = null;			// The actual type
+		ClassMeta<?> sType = null;			// The serialized type
 
 		var eType = getExpectedRootType(o);
 		aType = push2("root", o, eType);
@@ -276,6 +277,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		return out;
 	}
 
+	@SuppressWarnings("java:S3776")
 	private SerializerWriter serializeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
 		var addAmp = Flag.create();
 

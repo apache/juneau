@@ -210,7 +210,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 	 * Workhorse method.
 	 * Determines the type of object, and then calls the appropriate type-specific serialization method.
 	 */
-	@SuppressWarnings({ "rawtypes" })
+	@SuppressWarnings({ "rawtypes", "java:S3776" })
 	private MsgPackOutputStream serializeAnything(MsgPackOutputStream out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
 
 		if (o == null)
@@ -219,8 +219,8 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		if (eType == null)
 			eType = object();
 
-		var aType = (ClassMeta<?>)null;			// The actual type
-		var sType = (ClassMeta<?>)null;			// The serialized type
+		ClassMeta<?> aType = null;			// The actual type
+		ClassMeta<?> sType = null;			// The serialized type
 
 		aType = push2(attrName, o, eType);
 		boolean isRecursion = aType == null;

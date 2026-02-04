@@ -387,6 +387,7 @@ public class CollectionUtils {
 	 *         Returns null if the input is null.
 	 * @throws IllegalArgumentException if the input is not an array.
 	 */
+	@SuppressWarnings("java:S3776")
 	public static List<Object> arrayToList(Object array) {
 		assertArgNotNull("array", array);
 		assertArg(isArray(array), "Input must be an array but was {0}", cn(array));

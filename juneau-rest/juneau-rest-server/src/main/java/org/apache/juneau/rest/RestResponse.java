@@ -128,6 +128,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	/**
 	 * Constructor.
 	 */
+	@SuppressWarnings("java:S3776")
 	RestResponse(RestOpContext opContext, RestSession session, RestRequest req) throws Exception {
 		super(session.getResponse());
 
@@ -373,6 +374,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @throws NotAcceptable If unsupported Accept-Encoding value specified.
 	 * @throws IOException Thrown by underlying stream.
 	 */
+	@SuppressWarnings("java:S3776")
 	public FinishableServletOutputStream getNegotiatedOutputStream() throws NotAcceptable, IOException {
 		if (os == null) {
 			Encoder encoder = null;

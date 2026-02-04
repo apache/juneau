@@ -395,7 +395,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	 * @return The same writer passed in.
 	 * @throws SerializeException Generic serialization error occurred.
 	 */
-	@SuppressWarnings({ "rawtypes" })
+	@SuppressWarnings({ "rawtypes", "java:S3776" })
 	protected SerializerWriter serializeAnything(UonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
 
 		if (o == null) {
@@ -406,8 +406,8 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		if (eType == null)
 			eType = object();
 
-		var aType = (ClassMeta<?>)null;			// The actual type
-		var sType = (ClassMeta<?>)null;			// The serialized type
+		ClassMeta<?> aType = null;			// The actual type
+		ClassMeta<?> sType = null;			// The serialized type
 
 		aType = push2(attrName, o, eType);
 		boolean isRecursion = aType == null;

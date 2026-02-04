@@ -538,6 +538,7 @@ public class JettyMicroservice extends Microservice {
 	 * @throws IOException File could not be read.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
+	@SuppressWarnings("java:S3776")
 	public Server createServer() throws ParseException, IOException, ExecutableException {
 		listener.onCreateServer(this);
 

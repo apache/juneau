@@ -263,6 +263,7 @@ public class BeanCreator<T> {
 	 * @return A new bean.
 	 * @throws ExecutableException if bean could not be created and {@link #silent()} was not enabled.
 	 */
+	@SuppressWarnings("java:S3776")
 	public T run() {
 
 		if (nn(impl))
@@ -372,7 +373,7 @@ public class BeanCreator<T> {
 		if (silent)
 			return null;
 
-		var msg = (String)null;
+		String msg = null;
 		if (found.isEmpty()) {
 			msg = "No public/protected constructors found";
 		} else if (found.get().equals("STATIC_CREATOR")) {

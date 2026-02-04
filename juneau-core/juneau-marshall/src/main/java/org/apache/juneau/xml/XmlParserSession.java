@@ -290,12 +290,12 @@ public class XmlParserSession extends ReaderParserSession {
 		return decodeString(s);
 	}
 
-	@SuppressWarnings("null")
+	@SuppressWarnings({ "null", "java:S3776" })
 	private Object getUnknown(XmlReader r) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		if (r.getEventType() != START_ELEMENT) {
 			throw new ParseException(this, "Parser must be on START_ELEMENT to read next text.");
 		}
-		var m = (JsonMap)null;
+		JsonMap m = null;
 
 		// If this element has attributes, then it's always a JsonMap.
 		if (r.getAttributeCount() > 0) {
@@ -369,7 +369,7 @@ public class XmlParserSession extends ReaderParserSession {
 		return key.equals(getBeanTypePropertyName(null)) || key.equals(getNamePropertyName());
 	}
 
-	@SuppressWarnings("null")
+	@SuppressWarnings({ "null", "java:S3776" })
 	private <T> BeanMap<T> parseIntoBean(XmlReader r, BeanMap<T> m, boolean isNil) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		var bMeta = m.getMeta();
 		var xmlMeta = getXmlBeanMeta(bMeta);
@@ -401,9 +401,9 @@ public class XmlParserSession extends ReaderParserSession {
 		var cpf = xmlMeta.getContentFormat();
 		var trim = cp == null || ! cpf.isOneOf(MIXED_PWS, TEXT_PWS);
 		var cpcm = (cp == null ? object() : cp.getClassMeta());
-		var sb = (StringBuilder)null;
+		StringBuilder sb = null;
 		var breg = cp == null ? null : cp.getBeanRegistry();
-		var l = (LinkedList<Object>)null;
+		LinkedList<Object> l = null;
 
 		int depth = 0;
 		do {
@@ -543,6 +543,7 @@ public class XmlParserSession extends ReaderParserSession {
 		return l;
 	}
 
+	@SuppressWarnings("java:S3776")
 	private <K,V> Map<K,V> parseIntoMap(XmlReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException, XMLStreamException {
 		int depth = 0;
@@ -761,7 +762,7 @@ public class XmlParserSession extends ReaderParserSession {
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 * @throws XMLStreamException Malformed XML encountered.
 	 */
-	@SuppressWarnings("null")
+	@SuppressWarnings({ "null", "java:S3776" })
 	protected <T> T parseAnything(ClassMeta<T> eType, String currAttr, XmlReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException, XMLStreamException {
 
@@ -769,7 +770,7 @@ public class XmlParserSession extends ReaderParserSession {
 			eType = (ClassMeta<T>)object();
 		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
-		var sType = (ClassMeta<?>)null;
+		ClassMeta<?> sType = null;
 		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
 		else if (nn(swap))
@@ -802,7 +803,7 @@ public class XmlParserSession extends ReaderParserSession {
 		if (nn(tcm))
 			sType = eType = tcm;
 
-		var o = (Object)null;
+		Object o = null;
 
 		if (jsonType == NULL) {
 			r.nextTag();	// Discard end tag

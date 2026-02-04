@@ -59,6 +59,7 @@ public class RemoteOperationMeta {
 		String contentDefault = null;
 		static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
+		@SuppressWarnings("java:S3776")
 		Builder(String parentPath, Method m, String defaultMethod) {
 
 			var mi = MethodInfo.of(m);

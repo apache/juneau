@@ -1180,6 +1180,7 @@ public class Config extends Context implements ConfigEventListener {
 		return s;
 	}
 
+	@SuppressWarnings("java:S3776")
 	private String serialize(Object value, Serializer serializer) throws SerializeException {
 		if (value == null)
 			return "";

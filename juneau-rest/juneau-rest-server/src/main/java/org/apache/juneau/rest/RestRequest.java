@@ -1156,6 +1156,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * @param rbm The metadata about the request bean interface to create.
 	 * @return A new request bean proxy for this REST request.
 	 */
+	@SuppressWarnings("java:S3776")
 	public <T> T getRequest(RequestBeanMeta rbm) {
 		try {
 			var c = (Class<T>)rbm.getClassMeta().inner();

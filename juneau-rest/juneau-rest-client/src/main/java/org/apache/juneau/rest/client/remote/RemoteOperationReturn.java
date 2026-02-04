@@ -51,7 +51,7 @@ public class RemoteOperationReturn {
 		var ap = AP;
 		var al = rstream(ap.find(m)).filter(REMOTE_OP_GROUP).toList();
 
-		var rv = (RemoteReturn)null;
+		RemoteReturn rv = null;
 
 		if (rt.is(Future.class)) {
 			isFuture = true;

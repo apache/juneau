@@ -129,7 +129,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @param caseSensitive Whether case-sensitive name matching is enabled.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	@SuppressWarnings("null")
+	@SuppressWarnings({ "null", "java:S3776" })
 	public RequestFormParams(RestRequest req, boolean caseSensitive) throws Exception {
 		this.req = req;
 		this.caseSensitive = caseSensitive;

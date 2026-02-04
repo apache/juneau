@@ -209,7 +209,7 @@ public class LogsResource extends BasicRestServlet {
 		);
 	}
 
-	@SuppressWarnings("resource")
+	@SuppressWarnings({ "resource", "java:S3776" })
 	@RestOp(
 		method="VIEW",
 		path="/*",

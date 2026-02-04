@@ -214,7 +214,7 @@ public class ResponseContent implements HttpEntity {
 	 * 	</ul>
 	 * @see BeanSession#getClassMeta(Class) for argument syntax for maps and collections.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "java:S3776" })
 	public <T> T as(ClassMeta<T> type) throws RestCallException {
 		try {
 			if (type.is(ResponseContent.class) || type.is(HttpEntity.class))
@@ -744,7 +744,7 @@ public class ResponseContent implements HttpEntity {
 	public Reader asReader() throws IOException {
 
 		// Figure out what the charset of the response is.
-		var cs = (String)null;
+		String cs = null;
 		var ct = getContentType().orElse(null);
 
 		// First look for "charset=" in Content-Type header of response.

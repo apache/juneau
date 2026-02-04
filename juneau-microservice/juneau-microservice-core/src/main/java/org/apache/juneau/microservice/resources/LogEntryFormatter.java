@@ -88,6 +88,7 @@ public class LogEntryFormatter extends Formatter {
 	 * 	If <jk>true</jk>, only print unique stack traces once and then refer to them by a simple 8 character hash
 	 * 	identifier.
 	 */
+	@SuppressWarnings("java:S3776")
 	public LogEntryFormatter(String format, String dateFormat, boolean useStackTraceHashes) {
 		this.df = new SimpleDateFormat(dateFormat);
 		if (useStackTraceHashes)

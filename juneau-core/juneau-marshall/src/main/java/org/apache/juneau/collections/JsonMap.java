@@ -1781,7 +1781,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	/*
 	 * Converts this map to the specified class type.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked", "rawtypes", "java:S3776" })
 	private <T> T cast2(ClassMeta<T> cm) {
 
 		BeanSession bs = bs();

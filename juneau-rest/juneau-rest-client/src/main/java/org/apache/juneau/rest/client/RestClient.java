@@ -3001,6 +3001,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>Can contain <jk>null</jk> values (ignored).
 		 * @return This object.
 		 */
+		@SuppressWarnings("java:S3776")
 		public Builder interceptors(Object...value) {
 			List<RestCallInterceptor> l = list();
 			for (var o : value) {
@@ -6267,6 +6268,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * 	as a parsed object.
 	 * @throws RestCallException REST call failed.
 	 */
+	@SuppressWarnings("java:S3776")
 	public RestRequest callback(String callString) throws RestCallException {
 		callString = emptyIfNull(callString);
 
@@ -6279,10 +6281,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		var state = S1;
 
 		var mark = 0;
-		var method = (String)null;
-		var headers = (String)null;
-		var uri = (String)null;
-		var content = (String)null;
+		String method = null;
+		String headers = null;
+		String uri = null;
+		String content = null;
 		for (var i = 0; i < callString.length(); i++) {
 			var c = callString.charAt(i);
 			if (state == S1) {
@@ -6929,7 +6931,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * 	<br>Can be <jk>null</jk> (will use the default parser from the client).
 	 * @return The new proxy interface.
 	 */
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings({ "unchecked", "java:S3776" })
 	public <T> T getRemote(Class<T> interfaceClass, Object rootUrl, Serializer serializer, Parser parser) {
 
 		if (rootUrl == null)
@@ -7169,7 +7171,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * 	<br>Can be <jk>null</jk> (will use the default parser from the client).
 	 * @return The new proxy interface.
 	 */
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings({ "unchecked", "java:S3776" })
 	public <T> T getRrpcInterface(Class<T> interfaceClass, Object uri, Serializer serializer, Parser parser) {
 
 		if (uri == null) {
@@ -7194,7 +7196,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				var rim = rm.getMethodMeta(method);
 
 				var uri = rim.getUri();
-				var res = (RestResponse)null;
+				RestResponse res = null;
 
 				try {
 					// @formatter:off
@@ -7926,7 +7928,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 */
 	protected RestRequest request(RestOperation op) throws RestCallException {
 		if (isClosed.get()) {
-			var e2 = (Exception)null;
+			Exception e2 = null;
 			if (nn(closedStack)) {
 				e2 = new Exception("Creation stack:");
 				e2.setStackTrace(closedStack);
@@ -7975,11 +7977,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		return callHandler.run(target, request, context);
 	}
 
+	@SuppressWarnings("java:S3776")
 	Object executeRemote(Class<?> interfaceClass, RestRequest rc, Method method, RemoteOperationMeta rom) throws Throwable {
 		RemoteOperationReturn ror = rom.getReturns();
 
 		try {
-			var ret = (Object)null;
+			Object ret = null;
 			var res = (RestResponse)null;
 			rc.rethrow(RuntimeException.class);
 			rom.forEachException(rc::rethrow);

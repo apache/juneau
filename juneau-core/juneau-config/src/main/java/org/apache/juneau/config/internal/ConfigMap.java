@@ -672,6 +672,7 @@ public class ConfigMap implements ConfigStoreListener {
 		return w;
 	}
 
+	@SuppressWarnings("java:S3776")
 	private ConfigMap applyChange(boolean addToChangeList, ConfigEvent ce) {
 		if (ce == null)
 			return this;
@@ -727,6 +728,7 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 	}
 
+	@SuppressWarnings("java:S3776")
 	private ConfigEvents findDiffs(String updatedContents) throws IOException {
 		var changes2 = new ConfigEvents();
 		var newMap = new ConfigMap(store, name, updatedContents);

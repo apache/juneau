@@ -331,7 +331,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * Returns an empty array if it should be treated as a table but without headers.
 	 * 2-dimensional tables are used for collections of objects that all have the same set of property names.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes", "unchecked", "java:S3776" })
 	private Object[] getTableHeaders(Collection c, HtmlBeanPropertyMeta bpHtml) throws SerializeException {
 
 		if (c.isEmpty())
@@ -339,7 +339,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		c = sort(c);
 
-		var o1 = (Object)null;
+		Object o1 = null;
 		for (var o : c)
 			if (nn(o)) {
 				o1 = o;
@@ -394,6 +394,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		return bm.keySet().toArray(new String[bm.size()]);
 	}
 
+	@SuppressWarnings("java:S3776")
 	private void serializeBeanMap(XmlWriter out, BeanMap<?> m, ClassMeta<?> eType, BeanPropertyMeta ppMeta) throws SerializeException {
 
 		HtmlClassMeta cHtml = getHtmlClassMeta(m.getClassMeta());
@@ -426,8 +427,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			if (canIgnoreValue(cMeta, key, value))
 				return;
 
-			var link = (String)null;
-			var anchorText = (String)null;
+			String link = null;
+			String anchorText = null;
 			if (! cMeta.isCollectionOrArray()) {
 				link = m.resolveVars(getLink(pMeta));
 				anchorText = m.resolveVars(getAnchorText(pMeta));
@@ -464,7 +465,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		out.ie(i).eTag("table").nl(i);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes", "unchecked", "java:S3776" })
 	private void serializeCollection(XmlWriter out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, String name, BeanPropertyMeta ppMeta) throws SerializeException {
 
 		HtmlClassMeta cHtml = getHtmlClassMeta(sType);
@@ -482,7 +483,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			return;
 		}
 
-		var type2 = (String)null;
+		String type2 = null;
 		if (sType != eType)
 			type2 = sType.getBeanDictionaryName();
 		if (type2 == null)
@@ -560,8 +561,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 						if (pMeta.canRead()) {
 							Object value = p.getValue();
 
-							var link = (String)null;
-							var anchorText = (String)null;
+							String link = null;
+							String anchorText = null;
 							if (! pMeta.getClassMeta().isCollectionOrArray()) {
 								link = m2.resolveVars(getLink(pMeta));
 								anchorText = m2.resolveVars(getAnchorText(pMeta));
@@ -654,7 +655,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	@SuppressWarnings("rawtypes")
 	private void serializeMapEntry(XmlWriter out, Map.Entry e, ClassMeta<?> keyType, ClassMeta<?> valueType, int i, BeanPropertyMeta ppMeta) throws SerializeException {
 		Object key = generalize(e.getKey(), keyType);
-		var value = (Object)null;
+		Object value = null;
 		try {
 			value = e.getValue();
 		} catch (StackOverflowError t) {
@@ -802,7 +803,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @return The type of content encountered.  Either simple (no whitespace) or normal (elements with whitespace).
 	 * @throws SerializeException Generic serialization error occurred.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked", "null" })
+	@SuppressWarnings({ "rawtypes", "unchecked", "null", "java:S3776" })
 	protected ContentResult serializeAnything(XmlWriter out, Object o, ClassMeta<?> eType, String name, BeanPropertyMeta pMeta, int xIndent, boolean isRoot, boolean nlIfElement)
 		throws SerializeException {
 
@@ -849,7 +850,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 			sType = aType;
 
-			var typeName = (String)null;
+			String typeName = null;
 			if (isAddBeanTypes() && ! eType.equals(aType))
 				typeName = aType.getBeanDictionaryName();
 

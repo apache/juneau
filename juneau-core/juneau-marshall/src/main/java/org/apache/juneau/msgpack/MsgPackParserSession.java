@@ -175,13 +175,14 @@ public class MsgPackParserSession extends InputStreamParserSession {
 	/*
 	 * Workhorse method.
 	 */
+	@SuppressWarnings("java:S3776")
 	private <T> T parseAnything(ClassMeta<?> eType, MsgPackInputStream is, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
 			eType = object();
 		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
-		var sType = (ClassMeta<?>)null;
+		ClassMeta<?> sType = null;
 		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
 		else if (nn(swap))
@@ -194,7 +195,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 
 		setCurrentClass(sType);
 
-		var o = (Object)null;
+		Object o = null;
 		DataType dt = is.readDataType();
 		int length = (int)is.readLength();
 

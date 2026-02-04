@@ -281,6 +281,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	}
 
 	@Override /* Overridden from PartSerializer */
+	@SuppressWarnings("java:S3776")
 	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 
 		ClassMeta<?> type = getClassMetaForObject(value);
@@ -311,7 +312,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		if (cf == HttpPartCollectionFormat.NO_COLLECTION_FORMAT)
 			cf = ctx.getCollectionFormat();
 
-		var out = (String)null;
+		String out = null;
 
 		schema.validateOutput(value, ctx.getBeanContext());
 
@@ -495,7 +496,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		return m;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "java:S3776" })
 	private Object toObject(HttpPartType partType, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
 		if (o == null)
 			return null;

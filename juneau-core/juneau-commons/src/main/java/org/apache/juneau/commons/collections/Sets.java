@@ -221,6 +221,7 @@ public class Sets<E> {
 	 * @param values The values to add.
 	 * @return This object.
 	 */
+	@SuppressWarnings("java:S3776")
 	public Sets<E> addAny(Object...values) {
 		if (nn(values)) {
 			for (var o : values) {
@@ -297,7 +298,7 @@ public class Sets<E> {
 		if (sparse && e(set))
 			return null;
 
-		var set2 = (Set<E>)null;
+		Set<E> set2 = null;
 
 		if (ordered) {
 			set2 = new LinkedHashSet<>();

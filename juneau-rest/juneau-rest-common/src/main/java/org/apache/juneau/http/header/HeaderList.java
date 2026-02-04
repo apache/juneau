@@ -346,8 +346,8 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 */
 	public Optional<Header> get(String name) {
 
-		var first = (Header)null;
-		var rest = (List<Header>)null;
+		Header first = null;
+		List<Header> rest = null;
 		for (var x : this) {
 			if (eq(x.getName(), name)) {
 				if (first == null)
@@ -404,8 +404,8 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 */
 	public <T> Optional<T> get(String name, Class<T> type) {
 
-		var first = (Header)null;
-		var rest = (List<Header>)null;
+		Header first = null;
+		List<Header> rest = null;
 		for (var x : this) {
 			if (eq(x.getName(), name)) {
 				if (first == null)
@@ -775,6 +775,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
+	@SuppressWarnings("java:S3776")
 	public HeaderList set(List<Header> values) {
 
 		if (nn(values)) {

@@ -195,13 +195,14 @@ public class JsonParserSession extends ReaderParserSession {
 		ctx = builder.ctx;
 	}
 
+	@SuppressWarnings("java:S3776")
 	private <T> T parseAnything(ClassMeta<?> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
 			eType = object();
 		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
-		var sType = (ClassMeta<?>)null;
+		ClassMeta<?> sType = null;
 		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
 		else if (nn(swap))
@@ -215,7 +216,7 @@ public class JsonParserSession extends ReaderParserSession {
 		setCurrentClass(sType);
 		var wrapperAttr = getJsonClassMeta(sType).getWrapperAttr();
 
-		var o = (Object)null;
+		Object o = null;
 
 		skipCommentsAndSpace(r);
 		if (nn(wrapperAttr))
@@ -356,6 +357,7 @@ public class JsonParserSession extends ReaderParserSession {
 		throw new ParseException(this, "Could not find the end of the field name.");
 	}
 
+	@SuppressWarnings("java:S3776")
 	private <T> BeanMap<T> parseIntoBeanMap2(ParserReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 
 		// S1: Looking for outer {
@@ -446,6 +448,7 @@ public class JsonParserSession extends ReaderParserSession {
 		return null; // Unreachable.
 	}
 
+	@SuppressWarnings("java:S3776")
 	private <E> Collection<E> parseIntoCollection2(ParserReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		// S1: Looking for outermost [
@@ -508,6 +511,7 @@ public class JsonParserSession extends ReaderParserSession {
 		return null;  // Unreachable.
 	}
 
+	@SuppressWarnings("java:S3776")
 	private <K,V> Map<K,V> parseIntoMap2(ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (keyType == null)
@@ -522,7 +526,7 @@ public class JsonParserSession extends ReaderParserSession {
 
 		skipCommentsAndSpace(r);
 		var state = S1;
-		var currAttr = (String)null;
+		String currAttr = null;
 		int c = 0;
 		while (c != -1) {
 			c = r.read();
@@ -612,6 +616,7 @@ public class JsonParserSession extends ReaderParserSession {
 		return parseNumber(r, r.parseNumberString(), type);
 	}
 
+	@SuppressWarnings("java:S3776")
 	private Number parseNumber(ParserReader r, String s, Class<? extends Number> type) throws ParseException {
 
 		// JSON has slightly different number rules from Java.
@@ -658,6 +663,7 @@ public class JsonParserSession extends ReaderParserSession {
 	 * If the string consists of a concatenation of strings (e.g. 'AAA' + "BBB"), this method
 	 * will automatically concatenate the strings and return the result.
 	 */
+	@SuppressWarnings("java:S3776")
 	private String parseString(ParserReader r) throws IOException, ParseException {
 		r.mark();
 		int qc = r.read();		// The quote character being used (" or ')
@@ -666,7 +672,7 @@ public class JsonParserSession extends ReaderParserSession {
 			throw new ParseException(this, msg, (char)qc);
 		}
 		final boolean isQuoted = (qc == '\'' || qc == '"');
-		var s = (String)null;
+		String s = null;
 		boolean isInEscape = false;
 		int c = 0;
 		while (c != -1) {
@@ -740,6 +746,7 @@ public class JsonParserSession extends ReaderParserSession {
 	 * Doesn't actually parse anything, but when positioned at the beginning of comment,
 	 * it will move the pointer to the last character in the comment.
 	 */
+	@SuppressWarnings("java:S3776")
 	private void skipComments(ParserReader r) throws ParseException, IOException {
 		int c = r.read();
 		//  "/* */" style comments
@@ -806,6 +813,7 @@ public class JsonParserSession extends ReaderParserSession {
 	 * Doesn't actually parse anything, but moves the position beyond the construct "{wrapperAttr:" when
 	 * the @Json(wrapperAttr) annotation is used on a class.
 	 */
+	@SuppressWarnings("java:S3776")
 	private void skipWrapperAttrStart(ParserReader r, String wrapperAttr) throws IOException, ParseException {
 
 		// S1: Looking for outer '{'
@@ -814,7 +822,7 @@ public class JsonParserSession extends ReaderParserSession {
 		// S4: Found :, looking for valStart: { [ " ' LITERAL.
 
 		var state = S1;
-		var currAttr = (String)null;
+		String currAttr = null;
 		int c = 0;
 		while (c != -1) {
 			c = r.read();

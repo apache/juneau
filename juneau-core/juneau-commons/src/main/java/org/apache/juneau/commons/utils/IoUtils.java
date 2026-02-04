@@ -85,7 +85,7 @@ public class IoUtils {
 	 */
 	@SuppressWarnings("null")
 	public static void close(Object...o) throws IOException {
-		var ex = (IOException)null;
+		IOException ex = null;
 		for (var o2 : o) {
 			try {
 				if (o2 instanceof InputStream o3)
@@ -226,7 +226,7 @@ public class IoUtils {
 	 */
 	@SuppressWarnings("null")
 	public static void flush(Object...o) throws IOException {
-		var ex = (IOException)null;
+		IOException ex = null;
 		for (var o2 : o) {
 			try {
 				if (o2 instanceof OutputStream o3)

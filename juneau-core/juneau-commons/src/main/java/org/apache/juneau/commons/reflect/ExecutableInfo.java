@@ -843,6 +843,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		return toString.get();
 	}
 
+	@SuppressWarnings("java:S3776")
 	private String findToString() {
 		var sb = new StringBuilder(256);
 

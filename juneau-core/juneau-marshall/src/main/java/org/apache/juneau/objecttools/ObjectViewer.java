@@ -85,7 +85,7 @@ public class ObjectViewer implements ObjectTool<ViewArgs> {
 		if (type.isBean())
 			return new DelegateBeanMap(input, session).filterKeys(view);
 
-		var l = (ArrayList<Object>)null;
+		ArrayList<Object> l = null;
 
 		if (type.isArray()) {
 			var size = Array.getLength(input);

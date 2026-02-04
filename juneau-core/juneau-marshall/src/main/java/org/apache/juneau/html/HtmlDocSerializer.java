@@ -1593,6 +1593,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 			return x;
 		}
 
+		@SuppressWarnings("java:S3776")
 		private static List<String> mergeNavLinks(List<String> old, String[] newValues) {
 			List<String> x = listOfSize(newValues.length);
 			for (var s : newValues) {

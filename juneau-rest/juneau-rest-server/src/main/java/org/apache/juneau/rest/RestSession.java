@@ -315,6 +315,7 @@ public class RestSession extends ContextSession {
 	 * @return The HTTP method name, always uppercased.
 	 * @throws NotFound If the method parameter contains invalid/malformed characters.
 	 */
+	@SuppressWarnings("java:S3776")
 	public String getMethod() throws NotFound {
 		if (method == null) {
 

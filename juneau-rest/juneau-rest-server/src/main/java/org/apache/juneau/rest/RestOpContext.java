@@ -1970,6 +1970,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The path matchers for this method.
 		 */
+		@SuppressWarnings("java:S3776")
 		protected UrlPathMatcherList getPathMatchers() {
 
 			var v = Value.of(UrlPathMatcherList.create());
@@ -2030,6 +2031,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <p>
 		 * This includes: {@link Header}, {@link Query}, {@link FormData}.
 		 */
+		@SuppressWarnings("java:S3776")
 		protected void processParameterAnnotations() {
 			for (var aa : restMethod.getParameterAnnotations()) {
 

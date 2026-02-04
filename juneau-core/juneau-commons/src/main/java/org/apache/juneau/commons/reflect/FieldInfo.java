@@ -580,6 +580,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @return The same bean instance (for method chaining).
 	 * @throws ExecutableException If a required field (non-Optional, non-collection) cannot be resolved from the bean store.
 	 */
+	@SuppressWarnings("java:S3776")
 	public <T> T inject(BeanStore beanStore, T bean) {
 		accessible();
 		var fieldType = getFieldType();

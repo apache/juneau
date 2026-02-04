@@ -227,7 +227,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 
 		try (var w = getCsvWriter(pipe)) {
 			var cm = getClassMetaForObject(o);
-			var l = (Collection<?>)null;
+			Collection<?> l = null;
 			if (cm.isArray()) {
 				l = l((Object[])o);
 			} else if (cm.isCollection()) {

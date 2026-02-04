@@ -37,6 +37,7 @@ public class HelpCommand extends ConsoleCommand {
 	private final Messages mb = Messages.of(HelpCommand.class, "Messages");
 
 	@Override /* Overridden from ConsoleCommand */
+	@SuppressWarnings("java:S3776")
 	public boolean execute(Scanner in, PrintWriter out, Args args) throws Exception {
 		var commands = Microservice.getInstance().getConsoleCommands();
 		if (args.size() == 1) {

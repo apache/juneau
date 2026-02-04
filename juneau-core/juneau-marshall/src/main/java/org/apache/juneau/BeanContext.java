@@ -4244,6 +4244,7 @@ public class BeanContext extends Context {
 	 * @param ci The class info being tested.
 	 * @return <jk>true</jk> if the specified class matches any of the exclusion parameters.
 	 */
+	@SuppressWarnings("java:S3776")
 	protected final boolean isNotABean(ClassInfo ci) {
 		if (ci.isArray() || ci.isPrimitive() || ci.isEnum() || ci.isAnnotation())
 			return true;
@@ -4319,6 +4320,7 @@ public class BeanContext extends Context {
 	 * 	Can be <jk>null</jk> if the information is not known.
 	 * @return The new {@code ClassMeta} object wrapped around the type.
 	 */
+	@SuppressWarnings("java:S3776")
 	protected final <T> ClassMeta<T> resolveClassMeta(AnnotationInfo<Beanp> p, ClassInfo ci, TypeVariables typeVarImpls) {
 		var cm = resolveClassMeta(ci, typeVarImpls);
 		var cm2 = cm;
@@ -4372,6 +4374,7 @@ public class BeanContext extends Context {
 		return cmString;
 	}
 
+	@SuppressWarnings("java:S3776")
 	final ClassMeta[] findParameters(Type o, Class c) {
 		if (o == null)
 			o = c;
@@ -4408,6 +4411,7 @@ public class BeanContext extends Context {
 		return null;
 	}
 
+	@SuppressWarnings("java:S3776")
 	final ClassMeta resolveClassMeta(Type o, TypeVariables typeVars) {
 		if (o == null)
 			return null;

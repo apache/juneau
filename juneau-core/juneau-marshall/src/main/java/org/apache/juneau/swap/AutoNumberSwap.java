@@ -208,7 +208,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 		this.unswapMethod = unswapMethod == null ? null : bc.getBeanMethodVisibility().transform(unswapMethod.inner());
 		this.unswapConstructor = unswapConstructor == null ? null : bc.getBeanConstructorVisibility().transform(unswapConstructor.inner());
 
-		var unswapType = (Class<?>)null;
+		Class<?> unswapType = null;
 		if (nn(unswapMethod)) {
 			for (var pi : unswapMethod.getParameters())
 				if (! pi.getParameterType().is(BeanSession.class))

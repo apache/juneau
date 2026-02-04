@@ -295,13 +295,14 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * @throws ParseException Malformed input encountered.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
+	@SuppressWarnings("java:S3776")
 	public <T> T parseAnything(ClassMeta<?> eType, UonReader r, Object outer, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
 			eType = object();
 		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
-		var sType = (ClassMeta<?>)null;
+		ClassMeta<?> sType = null;
 		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
 		else if (nn(swap))
@@ -314,7 +315,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 		setCurrentClass(sType);
 
-		var o = (Object)null;
+		Object o = null;
 
 		int c = r.peekSkipWs();
 
@@ -450,6 +451,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		throw new ParseException(this, "Unrecognized syntax for boolean.  ''{0}''.", s);
 	}
 
+	@SuppressWarnings("java:S3776")
 	private <T> BeanMap<T> parseIntoBeanMap(UonReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 
 		int c = r.readSkipWs();
@@ -567,6 +569,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		return null; // Unreachable.
 	}
 
+	@SuppressWarnings("java:S3776")
 	private <E> Collection<E> parseIntoCollection(UonReader r, Collection<E> l, ClassMeta<E> type, boolean isUrlParamValue, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException {
 
@@ -654,6 +657,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		return null;  // Unreachable.
 	}
 
+	@SuppressWarnings("java:S3776")
 	private <K,V> Map<K,V> parseIntoMap(UonReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (keyType == null)
@@ -865,6 +869,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * @throws IOException Exception thrown by underlying stream.
 	 * @throws ParseException Attribute name was malformed.
 	 */
+	@SuppressWarnings("java:S3776")
 	protected final String parseAttrName(UonReader r, boolean encoded) throws IOException, ParseException {
 
 		// If string is of form 'xxx', we're looking for ' at the end.
@@ -931,7 +936,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 		r.mark();
 		boolean isInEscape = false;
-		var s = (String)null;
+		String s = null;
 		var endChars = (isUrlParamValue ? endCharsParam : endCharsNormal);
 		while (c != -1) {
 			c = r.read();

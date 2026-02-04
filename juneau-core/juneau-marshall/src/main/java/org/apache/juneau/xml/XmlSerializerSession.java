@@ -357,7 +357,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		return xcm.getFormat() == XMLTEXT;
 	}
 
-	@SuppressWarnings("null")
+	@SuppressWarnings({ "null", "java:S3776" })
 	private ContentResult serializeBeanMap(XmlWriter out, BeanMap<?> m, Namespace elementNs, boolean isCollapsed, boolean isMixedOrText) throws SerializeException {
 		boolean hasChildren = false;
 		var bm = m.getMeta();
@@ -378,10 +378,10 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		var contentProperty = xbm.getContentPropertyName();
 		// @formatter:on
 
-		var cf = (XmlFormat)null;
+		XmlFormat cf = null;
 
-		var content = (Object)null;
-		var contentType = (ClassMeta<?>)null;
+		Object content = null;
+		ClassMeta<?> contentType = null;
 		for (var p : lp) {
 			var n = p.getName();
 			if (attrs.contains(n) || attrs.contains("*") || n.equals(attrsProperty)) {
@@ -510,7 +510,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		var c = (sType.isCollection() ? (Collection)in : toList(sType.inner(), in));
 
-		var type2 = (String)null;
+		String type2 = null;
 
 		var eName = Value.of(type2);
 		var eNs = Value.<Namespace>empty();
@@ -578,7 +578,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * @param o The POJO to check.
 	 * @throws SerializeException Thrown if bean recursion occurred.
 	 */
-	@SuppressWarnings("null")
+	@SuppressWarnings({ "null", "java:S3776" })
 	protected final void findNsfMappings(Object o) throws SerializeException {
 		ClassMeta<?> aType = null;						// The actual type
 
@@ -601,7 +601,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		// Handle recursion
 		if (nn(aType) && ! aType.isPrimitive()) {
 
-			var bm = (BeanMap<?>)null;
+			BeanMap<?> bm = null;
 			if (aType.isBeanMap()) {
 				bm = (BeanMap<?>)o;
 			} else if (aType.isBean()) {
@@ -751,7 +751,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * @return The same writer passed in so that calls to the writer can be chained.
 	 * @throws SerializeException General serialization error occurred.
 	 */
-	@SuppressWarnings("null")
+	@SuppressWarnings({ "null", "java:S3776" })
 	protected ContentResult serializeAnything(XmlWriter out, Object o, ClassMeta<?> eType, String keyName, String elementName, Namespace elementNamespace, boolean addNamespaceUris, XmlFormat format,
 		boolean isMixedOrText, boolean preserveWhitespace, BeanPropertyMeta pMeta) throws SerializeException {
 
@@ -895,8 +895,8 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		boolean encodeEn = nn(elementName);
 		var ns = (elementNamespace == null ? null : elementNamespace.name);
-		var dns = (String)null;
-		var elementNs = (String)null;
+		String dns = null;
+		String elementNs = null;
 		if (isEnableNamespaces()) {
 			dns = elementName == null && nn(defaultNamespace) ? defaultNamespace.name : null;
 			elementNs = elementName == null ? dns : ns;

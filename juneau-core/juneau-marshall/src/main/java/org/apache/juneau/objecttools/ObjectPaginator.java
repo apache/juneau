@@ -62,7 +62,7 @@ public class ObjectPaginator implements ObjectTool<PageArgs> {
 	}
 
 	@Override /* Overridden from ObjectTool */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes", "unchecked", "java:S3776" })
 	public Object run(BeanSession session, Object input, PageArgs args) {
 
 		if (input == null)

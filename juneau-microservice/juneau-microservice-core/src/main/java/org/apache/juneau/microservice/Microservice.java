@@ -561,7 +561,7 @@ public class Microservice implements ConfigEventListener {
 	 * @throws IOException Problem occurred reading file.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	@SuppressWarnings("resource")
+	@SuppressWarnings({ "resource", "java:S3776" })
 	protected Microservice(Builder builder) throws IOException, ParseException {
 		setInstance(this);
 		this.builder = builder.copy();

@@ -223,6 +223,7 @@ public class Lists<E> {
 	 * @throws IllegalStateException if element type is unknown.
 	 * @throws RuntimeException if a value cannot be converted to the element type.
 	 */
+	@SuppressWarnings("java:S3776")
 	public Lists<E> addAny(Object...values) {
 		if (nn(values)) {
 			for (var o : values) {
@@ -281,7 +282,7 @@ public class Lists<E> {
 		if (sparse && e(list))
 			return null;
 
-		var list2 = (List<E>)null;
+		List<E> list2 = null;
 		if (nn(comparator))
 			list2 = new SortedArrayList<>(comparator);
 		else

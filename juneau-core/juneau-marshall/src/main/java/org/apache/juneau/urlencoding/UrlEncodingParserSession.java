@@ -211,13 +211,14 @@ public class UrlEncodingParserSession extends UonParserSession {
 		return false;
 	}
 
+	@SuppressWarnings("java:S3776")
 	private <T> T parseAnything(ClassMeta<T> eType, UonReader r, Object outer) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
 		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
-		var sType = (ClassMeta<?>)null;
+		ClassMeta<?> sType = null;
 		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
 		else if (nn(swap))
@@ -290,6 +291,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 		return (T)o;
 	}
 
+	@SuppressWarnings("java:S3776")
 	private <T> BeanMap<T> parseIntoBeanMap(UonReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 
 		int c = r.peekSkipWs();
@@ -416,6 +418,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 		return null; // Unreachable.
 	}
 
+	@SuppressWarnings("java:S3776")
 	private <K,V> Map<K,V> parseIntoMap2(UonReader r, Map<K,V> m, ClassMeta<?> type, Object outer) throws IOException, ParseException, ExecutableException {
 
 		var keyType = (ClassMeta<K>)(type.isArgs() || type.isCollectionOrArray() ? getClassMeta(Integer.class) : type.getKeyType());
@@ -433,7 +436,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 
 		var state = S1;
 		int argIndex = 0;
-		var currAttr = (K)null;
+		K currAttr = null;
 		while (c != -1) {
 			c = r.read();
 			if (! isInEscape) {

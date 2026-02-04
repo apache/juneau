@@ -393,6 +393,7 @@ public class MediaType implements Comparable<MediaType> {
 	 * @param allowExtraSubTypes If <jk>true</jk>,
 	 * @return <jk>true</jk> if the media types match.
 	 */
+	@SuppressWarnings("java:S3776")
 	public final int match(MediaType o, boolean allowExtraSubTypes) {
 
 		if (o == null)
