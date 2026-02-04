@@ -84,6 +84,26 @@ public class Items extends OpenApiElement {
 	private static final String[] VALID_TYPES = { "string", "number", "integer", "boolean", "array" };
 	private static final String[] VALID_COLLECTION_FORMATS = { "csv", "ssv", "tsv", "pipes", "multi" };
 
+	// Property name constants
+	private static final String PROP_COLLECTION_FORMAT = "collectionFormat";
+	private static final String PROP_DEFAULT = "default";
+	private static final String PROP_ENUM = "enum";
+	private static final String PROP_EXCLUSIVE_MAXIMUM = "exclusiveMaximum";
+	private static final String PROP_EXCLUSIVE_MINIMUM = "exclusiveMinimum";
+	private static final String PROP_FORMAT = "format";
+	private static final String PROP_ITEMS = "items";
+	private static final String PROP_MAXIMUM = "maximum";
+	private static final String PROP_MAX_ITEMS = "maxItems";
+	private static final String PROP_MAX_LENGTH = "maxLength";
+	private static final String PROP_MINIMUM = "minimum";
+	private static final String PROP_MIN_ITEMS = "minItems";
+	private static final String PROP_MIN_LENGTH = "minLength";
+	private static final String PROP_MULTIPLE_OF = "multipleOf";
+	private static final String PROP_PATTERN = "pattern";
+	private static final String PROP_REF = "$ref";
+	private static final String PROP_TYPE = "type";
+	private static final String PROP_UNIQUE_ITEMS = "uniqueItems";
+
 	private String type, format, collectionFormat, pattern, ref;
 	private Number maximum, minimum, multipleOf;
 	private Integer maxLength, minLength, maxItems, minItems;
@@ -155,24 +175,24 @@ public class Items extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "type" -> toType(getType(), type);
-			case "format" -> toType(getFormat(), type);
-			case "items" -> toType(getItems(), type);
-			case "collectionFormat" -> toType(getCollectionFormat(), type);
-			case "default" -> toType(getDefault(), type);
-			case "maximum" -> toType(getMaximum(), type);
-			case "exclusiveMaximum" -> toType(getExclusiveMaximum(), type);
-			case "minimum" -> toType(getMinimum(), type);
-			case "exclusiveMinimum" -> toType(getExclusiveMinimum(), type);
-			case "maxLength" -> toType(getMaxLength(), type);
-			case "minLength" -> toType(getMinLength(), type);
-			case "pattern" -> toType(getPattern(), type);
-			case "maxItems" -> toType(getMaxItems(), type);
-			case "minItems" -> toType(getMinItems(), type);
-			case "uniqueItems" -> toType(getUniqueItems(), type);
-			case "enum" -> toType(getEnum(), type);
-			case "multipleOf" -> toType(getMultipleOf(), type);
-			case "$ref" -> toType(getRef(), type);
+			case PROP_TYPE -> toType(getType(), type);
+			case PROP_FORMAT -> toType(getFormat(), type);
+			case PROP_ITEMS -> toType(getItems(), type);
+			case PROP_COLLECTION_FORMAT -> toType(getCollectionFormat(), type);
+			case PROP_DEFAULT -> toType(getDefault(), type);
+			case PROP_MAXIMUM -> toType(getMaximum(), type);
+			case PROP_EXCLUSIVE_MAXIMUM -> toType(getExclusiveMaximum(), type);
+			case PROP_MINIMUM -> toType(getMinimum(), type);
+			case PROP_EXCLUSIVE_MINIMUM -> toType(getExclusiveMinimum(), type);
+			case PROP_MAX_LENGTH -> toType(getMaxLength(), type);
+			case PROP_MIN_LENGTH -> toType(getMinLength(), type);
+			case PROP_PATTERN -> toType(getPattern(), type);
+			case PROP_MAX_ITEMS -> toType(getMaxItems(), type);
+			case PROP_MIN_ITEMS -> toType(getMinItems(), type);
+			case PROP_UNIQUE_ITEMS -> toType(getUniqueItems(), type);
+			case PROP_ENUM -> toType(getEnum(), type);
+			case PROP_MULTIPLE_OF -> toType(getMultipleOf(), type);
+			case PROP_REF -> toType(getRef(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -331,24 +351,24 @@ public class Items extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(ref), "$ref")
-			.addIf(nn(collectionFormat), "collectionFormat")
-			.addIf(nn(default_), "default")
-			.addIf(ne(enum_), "enum")
-			.addIf(nn(exclusiveMaximum), "exclusiveMaximum")
-			.addIf(nn(exclusiveMinimum), "exclusiveMinimum")
-			.addIf(nn(format), "format")
-			.addIf(nn(items), "items")
-			.addIf(nn(maxItems), "maxItems")
-			.addIf(nn(maxLength), "maxLength")
-			.addIf(nn(maximum), "maximum")
-			.addIf(nn(minItems), "minItems")
-			.addIf(nn(minLength), "minLength")
-			.addIf(nn(minimum), "minimum")
-			.addIf(nn(multipleOf), "multipleOf")
-			.addIf(nn(pattern), "pattern")
-			.addIf(nn(type), "type")
-			.addIf(nn(uniqueItems), "uniqueItems")
+			.addIf(nn(ref), PROP_REF)
+			.addIf(nn(collectionFormat), PROP_COLLECTION_FORMAT)
+			.addIf(nn(default_), PROP_DEFAULT)
+			.addIf(ne(enum_), PROP_ENUM)
+			.addIf(nn(exclusiveMaximum), PROP_EXCLUSIVE_MAXIMUM)
+			.addIf(nn(exclusiveMinimum), PROP_EXCLUSIVE_MINIMUM)
+			.addIf(nn(format), PROP_FORMAT)
+			.addIf(nn(items), PROP_ITEMS)
+			.addIf(nn(maxItems), PROP_MAX_ITEMS)
+			.addIf(nn(maxLength), PROP_MAX_LENGTH)
+			.addIf(nn(maximum), PROP_MAXIMUM)
+			.addIf(nn(minItems), PROP_MIN_ITEMS)
+			.addIf(nn(minLength), PROP_MIN_LENGTH)
+			.addIf(nn(minimum), PROP_MINIMUM)
+			.addIf(nn(multipleOf), PROP_MULTIPLE_OF)
+			.addIf(nn(pattern), PROP_PATTERN)
+			.addIf(nn(type), PROP_TYPE)
+			.addIf(nn(uniqueItems), PROP_UNIQUE_ITEMS)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -393,24 +413,24 @@ public class Items extends OpenApiElement {
 	public Items set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "$ref" -> setRef(value);
-			case "collectionFormat" -> setCollectionFormat(s(value));
-			case "default" -> setDefault(value);
-			case "enum" -> setEnum(value);
-			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
-			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
-			case "format" -> setFormat(s(value));
-			case "items" -> setItems(toType(value, Items.class));
-			case "maxItems" -> setMaxItems(toInteger(value));
-			case "maxLength" -> setMaxLength(toInteger(value));
-			case "maximum" -> setMaximum(toNumber(value));
-			case "minItems" -> setMinItems(toInteger(value));
-			case "minLength" -> setMinLength(toInteger(value));
-			case "minimum" -> setMinimum(toNumber(value));
-			case "multipleOf" -> setMultipleOf(toNumber(value));
-			case "pattern" -> setPattern(s(value));
-			case "type" -> setType(s(value));
-			case "uniqueItems" -> setUniqueItems(toBoolean(value));
+			case PROP_REF -> setRef(value);
+			case PROP_COLLECTION_FORMAT -> setCollectionFormat(s(value));
+			case PROP_DEFAULT -> setDefault(value);
+			case PROP_ENUM -> setEnum(value);
+			case PROP_EXCLUSIVE_MAXIMUM -> setExclusiveMaximum(toBoolean(value));
+			case PROP_EXCLUSIVE_MINIMUM -> setExclusiveMinimum(toBoolean(value));
+			case PROP_FORMAT -> setFormat(s(value));
+			case PROP_ITEMS -> setItems(toType(value, Items.class));
+			case PROP_MAX_ITEMS -> setMaxItems(toInteger(value));
+			case PROP_MAX_LENGTH -> setMaxLength(toInteger(value));
+			case PROP_MAXIMUM -> setMaximum(toNumber(value));
+			case PROP_MIN_ITEMS -> setMinItems(toInteger(value));
+			case PROP_MIN_LENGTH -> setMinLength(toInteger(value));
+			case PROP_MINIMUM -> setMinimum(toNumber(value));
+			case PROP_MULTIPLE_OF -> setMultipleOf(toNumber(value));
+			case PROP_PATTERN -> setPattern(s(value));
+			case PROP_TYPE -> setType(s(value));
+			case PROP_UNIQUE_ITEMS -> setUniqueItems(toBoolean(value));
 			default -> {
 				super.set(property, value);
 				yield this;

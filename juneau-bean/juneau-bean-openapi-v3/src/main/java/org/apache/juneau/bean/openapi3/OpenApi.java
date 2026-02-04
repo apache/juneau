@@ -82,6 +82,16 @@ public class OpenApi extends OpenApiElement {
 
 	private static final Comparator<String> PATH_COMPARATOR = (o1, o2) -> o1.replace('{', '@').compareTo(o2.replace('{', '@'));
 
+	// Property name constants
+	private static final String PROP_COMPONENTS = "components";
+	private static final String PROP_EXTERNAL_DOCS = "externalDocs";
+	private static final String PROP_INFO = "info";
+	private static final String PROP_OPENAPI = "openapi";
+	private static final String PROP_PATHS = "paths";
+	private static final String PROP_SECURITY = "security";
+	private static final String PROP_SERVERS = "servers";
+	private static final String PROP_TAGS = "tags";
+
 	private String openapi = "3.0.0";
 	private Info info;
 	private List<Server> servers = list();
@@ -268,14 +278,14 @@ public class OpenApi extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "openapi" -> toType(getOpenapi(), type);
-			case "info" -> toType(getInfo(), type);
-			case "servers" -> toType(getServers(), type);
-			case "paths" -> toType(getPaths(), type);
-			case "components" -> toType(getComponents(), type);
-			case "security" -> toType(getSecurity(), type);
-			case "tags" -> toType(getTags(), type);
-			case "externalDocs" -> toType(getExternalDocs(), type);
+			case PROP_OPENAPI -> toType(getOpenapi(), type);
+			case PROP_INFO -> toType(getInfo(), type);
+			case PROP_SERVERS -> toType(getServers(), type);
+			case PROP_PATHS -> toType(getPaths(), type);
+			case PROP_COMPONENTS -> toType(getComponents(), type);
+			case PROP_SECURITY -> toType(getSecurity(), type);
+			case PROP_TAGS -> toType(getTags(), type);
+			case PROP_EXTERNAL_DOCS -> toType(getExternalDocs(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -340,14 +350,14 @@ public class OpenApi extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(components), "components")
-			.addIf(nn(externalDocs), "externalDocs")
-			.addIf(nn(info), "info")
-			.addIf(nn(openapi), "openapi")
-			.addIf(nn(paths), "paths")
-			.addIf(ne(security), "security")
-			.addIf(ne(servers), "servers")
-			.addIf(ne(tags), "tags")
+			.addIf(nn(components), PROP_COMPONENTS)
+			.addIf(nn(externalDocs), PROP_EXTERNAL_DOCS)
+			.addIf(nn(info), PROP_INFO)
+			.addIf(nn(openapi), PROP_OPENAPI)
+			.addIf(nn(paths), PROP_PATHS)
+			.addIf(ne(security), PROP_SECURITY)
+			.addIf(ne(servers), PROP_SERVERS)
+			.addIf(ne(tags), PROP_TAGS)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -357,14 +367,14 @@ public class OpenApi extends OpenApiElement {
 	public OpenApi set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "components" -> setComponents(toType(value, Components.class));
-			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case "info" -> setInfo(toType(value, Info.class));
-			case "openapi" -> setOpenapi(s(value));
-			case "paths" -> setPaths(toMapBuilder(value, String.class, PathItem.class).sparse().build());
-			case "security" -> setSecurity(listb(SecurityRequirement.class).addAny(value).sparse().build());
-			case "servers" -> setServers(listb(Server.class).addAny(value).sparse().build());
-			case "tags" -> setTags(listb(Tag.class).addAny(value).sparse().build());
+			case PROP_COMPONENTS -> setComponents(toType(value, Components.class));
+			case PROP_EXTERNAL_DOCS -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			case PROP_INFO -> setInfo(toType(value, Info.class));
+			case PROP_OPENAPI -> setOpenapi(s(value));
+			case PROP_PATHS -> setPaths(toMapBuilder(value, String.class, PathItem.class).sparse().build());
+			case PROP_SECURITY -> setSecurity(listb(SecurityRequirement.class).addAny(value).sparse().build());
+			case PROP_SERVERS -> setServers(listb(Server.class).addAny(value).sparse().build());
+			case PROP_TAGS -> setTags(listb(Tag.class).addAny(value).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;

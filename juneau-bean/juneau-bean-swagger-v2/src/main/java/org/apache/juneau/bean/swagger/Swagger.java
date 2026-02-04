@@ -93,6 +93,24 @@ public class Swagger extends SwaggerElement {
 	public static final Swagger NULL = new Swagger();
 
 	private static final Comparator<String> PATH_COMPARATOR = (o1, o2) -> o1.replace('{', '@').compareTo(o2.replace('{', '@'));
+
+	// Property name constants
+	private static final String PROP_BASE_PATH = "basePath";
+	private static final String PROP_CONSUMES = "consumes";
+	private static final String PROP_DEFINITIONS = "definitions";
+	private static final String PROP_EXTERNAL_DOCS = "externalDocs";
+	private static final String PROP_HOST = "host";
+	private static final String PROP_INFO = "info";
+	private static final String PROP_PARAMETERS = "parameters";
+	private static final String PROP_PATHS = "paths";
+	private static final String PROP_PRODUCES = "produces";
+	private static final String PROP_RESPONSES = "responses";
+	private static final String PROP_SCHEMES = "schemes";
+	private static final String PROP_SECURITY = "security";
+	private static final String PROP_SECURITY_DEFINITIONS = "securityDefinitions";
+	private static final String PROP_SWAGGER = "swagger";
+	private static final String PROP_TAGS = "tags";
+
 	private String swagger = "2.0",  // NOSONAR - Intentional naming.
 		host, basePath;
 	private Info info;
@@ -495,21 +513,21 @@ public class Swagger extends SwaggerElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "basePath" -> toType(getBasePath(), type);
-			case "consumes" -> toType(getConsumes(), type);
-			case "definitions" -> toType(getDefinitions(), type);
-			case "externalDocs" -> toType(getExternalDocs(), type);
-			case "host" -> toType(getHost(), type);
-			case "info" -> toType(getInfo(), type);
-			case "parameters" -> toType(getParameters(), type);
-			case "paths" -> toType(getPaths(), type);
-			case "produces" -> toType(getProduces(), type);
-			case "responses" -> toType(getResponses(), type);
-			case "schemes" -> toType(getSchemes(), type);
-			case "security" -> toType(getSecurity(), type);
-			case "securityDefinitions" -> toType(getSecurityDefinitions(), type);
-			case "swagger" -> toType(getSwagger(), type);
-			case "tags" -> toType(getTags(), type);
+			case PROP_BASE_PATH -> toType(getBasePath(), type);
+			case PROP_CONSUMES -> toType(getConsumes(), type);
+			case PROP_DEFINITIONS -> toType(getDefinitions(), type);
+			case PROP_EXTERNAL_DOCS -> toType(getExternalDocs(), type);
+			case PROP_HOST -> toType(getHost(), type);
+			case PROP_INFO -> toType(getInfo(), type);
+			case PROP_PARAMETERS -> toType(getParameters(), type);
+			case PROP_PATHS -> toType(getPaths(), type);
+			case PROP_PRODUCES -> toType(getProduces(), type);
+			case PROP_RESPONSES -> toType(getResponses(), type);
+			case PROP_SCHEMES -> toType(getSchemes(), type);
+			case PROP_SECURITY -> toType(getSecurity(), type);
+			case PROP_SECURITY_DEFINITIONS -> toType(getSecurityDefinitions(), type);
+			case PROP_SWAGGER -> toType(getSwagger(), type);
+			case PROP_TAGS -> toType(getTags(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -735,21 +753,21 @@ public class Swagger extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(basePath), "basePath")
-			.addIf(ne(consumes), "consumes")
-			.addIf(ne(definitions), "definitions")
-			.addIf(nn(externalDocs), "externalDocs")
-			.addIf(nn(host), "host")
-			.addIf(nn(info), "info")
-			.addIf(ne(parameters), "parameters")
-			.addIf(ne(paths), "paths")
-			.addIf(ne(produces), "produces")
-			.addIf(ne(responses), "responses")
-			.addIf(ne(schemes), "schemes")
-			.addIf(ne(security), "security")
-			.addIf(ne(securityDefinitions), "securityDefinitions")
-			.addIf(nn(swagger), "swagger")
-			.addIf(ne(tags), "tags")
+			.addIf(nn(basePath), PROP_BASE_PATH)
+			.addIf(ne(consumes), PROP_CONSUMES)
+			.addIf(ne(definitions), PROP_DEFINITIONS)
+			.addIf(nn(externalDocs), PROP_EXTERNAL_DOCS)
+			.addIf(nn(host), PROP_HOST)
+			.addIf(nn(info), PROP_INFO)
+			.addIf(ne(parameters), PROP_PARAMETERS)
+			.addIf(ne(paths), PROP_PATHS)
+			.addIf(ne(produces), PROP_PRODUCES)
+			.addIf(ne(responses), PROP_RESPONSES)
+			.addIf(ne(schemes), PROP_SCHEMES)
+			.addIf(ne(security), PROP_SECURITY)
+			.addIf(ne(securityDefinitions), PROP_SECURITY_DEFINITIONS)
+			.addIf(nn(swagger), PROP_SWAGGER)
+			.addIf(ne(tags), PROP_TAGS)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -760,21 +778,21 @@ public class Swagger extends SwaggerElement {
 	public Swagger set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "basePath" -> setBasePath(s(value));
-			case "consumes" -> setConsumes(toListBuilder(value, MediaType.class).sparse().build());
-			case "definitions" -> setDefinitions(toMapBuilder(value, String.class, JsonMap.class).sparse().build());
-			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case "host" -> setHost(s(value));
-			case "info" -> setInfo(toType(value, Info.class));
-			case "parameters" -> setParameters(toMapBuilder(value, String.class, ParameterInfo.class).sparse().build());
-			case "paths" -> setPaths(toMapBuilder(value, String.class, OperationMap.class).sparse().build());
-			case "produces" -> setProduces(toListBuilder(value, MediaType.class).sparse().build());
-			case "responses" -> setResponses(toMapBuilder(value, String.class, ResponseInfo.class).sparse().build());
-			case "schemes" -> setSchemes(toListBuilder(value, String.class).sparse().build());
-			case "security" -> setSecurity((List)toListBuilder(value, MapOfStringLists.class).sparse().build());
-			case "securityDefinitions" -> setSecurityDefinitions(toMapBuilder(value, String.class, SecurityScheme.class).sparse().build());
-			case "swagger" -> setSwagger(s(value));
-			case "tags" -> setTags(toListBuilder(value, Tag.class).sparse().build());
+			case PROP_BASE_PATH -> setBasePath(s(value));
+			case PROP_CONSUMES -> setConsumes(toListBuilder(value, MediaType.class).sparse().build());
+			case PROP_DEFINITIONS -> setDefinitions(toMapBuilder(value, String.class, JsonMap.class).sparse().build());
+			case PROP_EXTERNAL_DOCS -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			case PROP_HOST -> setHost(s(value));
+			case PROP_INFO -> setInfo(toType(value, Info.class));
+			case PROP_PARAMETERS -> setParameters(toMapBuilder(value, String.class, ParameterInfo.class).sparse().build());
+			case PROP_PATHS -> setPaths(toMapBuilder(value, String.class, OperationMap.class).sparse().build());
+			case PROP_PRODUCES -> setProduces(toListBuilder(value, MediaType.class).sparse().build());
+			case PROP_RESPONSES -> setResponses(toMapBuilder(value, String.class, ResponseInfo.class).sparse().build());
+			case PROP_SCHEMES -> setSchemes(toListBuilder(value, String.class).sparse().build());
+			case PROP_SECURITY -> setSecurity((List)toListBuilder(value, MapOfStringLists.class).sparse().build());
+			case PROP_SECURITY_DEFINITIONS -> setSecurityDefinitions(toMapBuilder(value, String.class, SecurityScheme.class).sparse().build());
+			case PROP_SWAGGER -> setSwagger(s(value));
+			case PROP_TAGS -> setTags(toListBuilder(value, Tag.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;

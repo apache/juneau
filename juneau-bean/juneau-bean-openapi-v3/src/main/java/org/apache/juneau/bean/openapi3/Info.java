@@ -100,6 +100,14 @@ import org.apache.juneau.commons.collections.*;
  */
 public class Info extends OpenApiElement {
 
+	// Property name constants
+	private static final String PROP_CONTACT = "contact";
+	private static final String PROP_DESCRIPTION = "description";
+	private static final String PROP_LICENSE = "license";
+	private static final String PROP_TERMS_OF_SERVICE = "termsOfService";
+	private static final String PROP_TITLE = "title";
+	private static final String PROP_VERSION = "version";
+
 	private String title, description, termsOfService, version;
 	private Contact contact;
 	private License license;
@@ -138,12 +146,12 @@ public class Info extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "title" -> toType(getTitle(), type);
-			case "description" -> toType(getDescription(), type);
-			case "termsOfService" -> toType(getTermsOfService(), type);
-			case "contact" -> toType(getContact(), type);
-			case "license" -> toType(getLicense(), type);
-			case "version" -> toType(getVersion(), type);
+			case PROP_TITLE -> toType(getTitle(), type);
+			case PROP_DESCRIPTION -> toType(getDescription(), type);
+			case PROP_TERMS_OF_SERVICE -> toType(getTermsOfService(), type);
+			case PROP_CONTACT -> toType(getContact(), type);
+			case PROP_LICENSE -> toType(getLicense(), type);
+			case PROP_VERSION -> toType(getVersion(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -212,12 +220,12 @@ public class Info extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(contact), "contact")
-			.addIf(nn(description), "description")
-			.addIf(nn(license), "license")
-			.addIf(nn(termsOfService), "termsOfService")
-			.addIf(nn(title), "title")
-			.addIf(nn(version), "version")
+			.addIf(nn(contact), PROP_CONTACT)
+			.addIf(nn(description), PROP_DESCRIPTION)
+			.addIf(nn(license), PROP_LICENSE)
+			.addIf(nn(termsOfService), PROP_TERMS_OF_SERVICE)
+			.addIf(nn(title), PROP_TITLE)
+			.addIf(nn(version), PROP_VERSION)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -227,12 +235,12 @@ public class Info extends OpenApiElement {
 	public Info set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "contact" -> setContact(toType(value, Contact.class));
-			case "description" -> setDescription(s(value));
-			case "license" -> setLicense(toType(value, License.class));
-			case "termsOfService" -> setTermsOfService(s(value));
-			case "title" -> setTitle(s(value));
-			case "version" -> setVersion(s(value));
+			case PROP_CONTACT -> setContact(toType(value, Contact.class));
+			case PROP_DESCRIPTION -> setDescription(s(value));
+			case PROP_LICENSE -> setLicense(toType(value, License.class));
+			case PROP_TERMS_OF_SERVICE -> setTermsOfService(s(value));
+			case PROP_TITLE -> setTitle(s(value));
+			case PROP_VERSION -> setVersion(s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

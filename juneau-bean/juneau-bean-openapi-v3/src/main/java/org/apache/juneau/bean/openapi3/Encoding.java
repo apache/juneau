@@ -76,6 +76,13 @@ import org.apache.juneau.commons.collections.*;
  */
 public class Encoding extends OpenApiElement {
 
+	// Property name constants
+	private static final String PROP_ALLOW_RESERVED = "allowReserved";
+	private static final String PROP_CONTENT_TYPE = "contentType";
+	private static final String PROP_EXPLODE = "explode";
+	private static final String PROP_HEADERS = "headers";
+	private static final String PROP_STYLE = "style";
+
 	private String contentType, style;
 	private Map<String,HeaderInfo> headers = map();
 	private Boolean explode, allowReserved;
@@ -130,11 +137,11 @@ public class Encoding extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "contentType" -> toType(getContentType(), type);
-			case "style" -> toType(getStyle(), type);
-			case "headers" -> toType(getHeaders(), type);
-			case "explode" -> toType(getExplode(), type);
-			case "allowReserved" -> toType(getAllowReserved(), type);
+			case PROP_CONTENT_TYPE -> toType(getContentType(), type);
+			case PROP_STYLE -> toType(getStyle(), type);
+			case PROP_HEADERS -> toType(getHeaders(), type);
+			case PROP_EXPLODE -> toType(getExplode(), type);
+			case PROP_ALLOW_RESERVED -> toType(getAllowReserved(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -187,11 +194,11 @@ public class Encoding extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(allowReserved), "allowReserved")
-			.addIf(nn(contentType), "contentType")
-			.addIf(nn(explode), "explode")
-			.addIf(ne(headers), "headers")
-			.addIf(nn(style), "style")
+			.addIf(nn(allowReserved), PROP_ALLOW_RESERVED)
+			.addIf(nn(contentType), PROP_CONTENT_TYPE)
+			.addIf(nn(explode), PROP_EXPLODE)
+			.addIf(ne(headers), PROP_HEADERS)
+			.addIf(nn(style), PROP_STYLE)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -201,11 +208,11 @@ public class Encoding extends OpenApiElement {
 	public Encoding set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "allowReserved" -> setAllowReserved(toBoolean(value));
-			case "contentType" -> setContentType(s(value));
-			case "explode" -> setExplode(toBoolean(value));
-			case "headers" -> setHeaders(toMapBuilder(value, String.class, HeaderInfo.class).sparse().build());
-			case "style" -> setStyle(s(value));
+			case PROP_ALLOW_RESERVED -> setAllowReserved(toBoolean(value));
+			case PROP_CONTENT_TYPE -> setContentType(s(value));
+			case PROP_EXPLODE -> setExplode(toBoolean(value));
+			case PROP_HEADERS -> setHeaders(toMapBuilder(value, String.class, HeaderInfo.class).sparse().build());
+			case PROP_STYLE -> setStyle(s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

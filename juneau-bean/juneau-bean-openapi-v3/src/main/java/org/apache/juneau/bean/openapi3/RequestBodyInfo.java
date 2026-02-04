@@ -67,6 +67,11 @@ import org.apache.juneau.commons.collections.*;
  */
 public class RequestBodyInfo extends OpenApiElement {
 
+	// Property name constants
+	private static final String PROP_CONTENT = "content";
+	private static final String PROP_DESCRIPTION = "description";
+	private static final String PROP_REQUIRED = "required";
+
 	private String description;
 	private Map<String,MediaType> content = map();
 	private Boolean required;
@@ -120,9 +125,9 @@ public class RequestBodyInfo extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "description" -> toType(getDescription(), type);
-			case "content" -> toType(getContent(), type);
-			case "required" -> toType(getRequired(), type);
+			case PROP_DESCRIPTION -> toType(getDescription(), type);
+			case PROP_CONTENT -> toType(getContent(), type);
+			case PROP_REQUIRED -> toType(getRequired(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -158,9 +163,9 @@ public class RequestBodyInfo extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(ne(content), "content")
-			.addIf(nn(description), "description")
-			.addIf(nn(required), "required")
+			.addIf(ne(content), PROP_CONTENT)
+			.addIf(nn(description), PROP_DESCRIPTION)
+			.addIf(nn(required), PROP_REQUIRED)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -170,9 +175,9 @@ public class RequestBodyInfo extends OpenApiElement {
 	public RequestBodyInfo set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "content" -> setContent(toMapBuilder(value, String.class, MediaType.class).sparse().build());
-			case "description" -> setDescription(s(value));
-			case "required" -> setRequired(toBoolean(value));
+			case PROP_CONTENT -> setContent(toMapBuilder(value, String.class, MediaType.class).sparse().build());
+			case PROP_DESCRIPTION -> setDescription(s(value));
+			case PROP_REQUIRED -> setRequired(toBoolean(value));
 			default -> {
 				super.set(property, value);
 				yield this;

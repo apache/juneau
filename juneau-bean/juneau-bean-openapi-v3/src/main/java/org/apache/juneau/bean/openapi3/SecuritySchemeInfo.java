@@ -90,6 +90,16 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	private static final String[] VALID_IN = { "query", "header", "cookie" };
 	private static final String[] VALID_TYPES = { "apiKey", "http", "oauth2", "openIdConnect" };
 
+	// Property name constants
+	private static final String PROP_BEARER_FORMAT = "bearerFormat";
+	private static final String PROP_DESCRIPTION = "description";
+	private static final String PROP_FLOWS = "flows";
+	private static final String PROP_IN = "in";
+	private static final String PROP_NAME = "name";
+	private static final String PROP_OPEN_ID_CONNECT_URL = "openIdConnectUrl";
+	private static final String PROP_SCHEME = "scheme";
+	private static final String PROP_TYPE = "type";
+
 	private String type, description, name, in, scheme, bearerFormat, openIdConnectUrl;
 
 	private OAuthFlow flows;
@@ -130,14 +140,14 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "name" -> toType(getName(), type);
-			case "in" -> toType(getIn(), type);
-			case "description" -> toType(getDescription(), type);
-			case "scheme" -> toType(getScheme(), type);
-			case "flows" -> toType(getFlows(), type);
-			case "bearerFormat" -> toType(getBearerFormat(), type);
-			case "openIdConnectUrl" -> toType(getOpenIdConnectUrl(), type);
-			case "type" -> toType(getType(), type);
+			case PROP_NAME -> toType(getName(), type);
+			case PROP_IN -> toType(getIn(), type);
+			case PROP_DESCRIPTION -> toType(getDescription(), type);
+			case PROP_SCHEME -> toType(getScheme(), type);
+			case PROP_FLOWS -> toType(getFlows(), type);
+			case PROP_BEARER_FORMAT -> toType(getBearerFormat(), type);
+			case PROP_OPEN_ID_CONNECT_URL -> toType(getOpenIdConnectUrl(), type);
+			case PROP_TYPE -> toType(getType(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -238,14 +248,14 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(bearerFormat), "bearerFormat")
-			.addIf(nn(description), "description")
-			.addIf(nn(flows), "flows")
-			.addIf(nn(in), "in")
-			.addIf(nn(name), "name")
-			.addIf(nn(openIdConnectUrl), "openIdConnectUrl")
-			.addIf(nn(scheme), "scheme")
-			.addIf(nn(type), "type")
+			.addIf(nn(bearerFormat), PROP_BEARER_FORMAT)
+			.addIf(nn(description), PROP_DESCRIPTION)
+			.addIf(nn(flows), PROP_FLOWS)
+			.addIf(nn(in), PROP_IN)
+			.addIf(nn(name), PROP_NAME)
+			.addIf(nn(openIdConnectUrl), PROP_OPEN_ID_CONNECT_URL)
+			.addIf(nn(scheme), PROP_SCHEME)
+			.addIf(nn(type), PROP_TYPE)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -255,14 +265,14 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	public SecuritySchemeInfo set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "bearerFormat" -> setBearerFormat(s(value));
-			case "description" -> setDescription(s(value));
-			case "flows" -> setFlows(toType(value, OAuthFlow.class));
-			case "in" -> setIn(s(value));
-			case "name" -> setName(s(value));
-			case "openIdConnectUrl" -> setOpenIdConnectUrl(s(value));
-			case "scheme" -> setScheme(s(value));
-			case "type" -> setType(s(value));
+			case PROP_BEARER_FORMAT -> setBearerFormat(s(value));
+			case PROP_DESCRIPTION -> setDescription(s(value));
+			case PROP_FLOWS -> setFlows(toType(value, OAuthFlow.class));
+			case PROP_IN -> setIn(s(value));
+			case PROP_NAME -> setName(s(value));
+			case PROP_OPEN_ID_CONNECT_URL -> setOpenIdConnectUrl(s(value));
+			case PROP_SCHEME -> setScheme(s(value));
+			case PROP_TYPE -> setType(s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

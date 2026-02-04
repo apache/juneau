@@ -72,6 +72,9 @@ import org.apache.juneau.commons.collections.*;
  */
 public class Callback extends OpenApiElement {
 
+	// Property name constants
+	private static final String PROP_CALLBACKS = "callbacks";
+
 	private Map<String,PathItem> callbacks;
 
 	/**
@@ -118,7 +121,7 @@ public class Callback extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "callbacks" -> toType(getCallbacks(), type);
+			case PROP_CALLBACKS -> toType(getCallbacks(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -134,7 +137,7 @@ public class Callback extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(callbacks), "callbacks")
+			.addIf(nn(callbacks), PROP_CALLBACKS)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -144,7 +147,7 @@ public class Callback extends OpenApiElement {
 	public Callback set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "callbacks" -> setCallbacks(toMapBuilder(value, String.class, PathItem.class).sparse().build());
+			case PROP_CALLBACKS -> setCallbacks(toMapBuilder(value, String.class, PathItem.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;

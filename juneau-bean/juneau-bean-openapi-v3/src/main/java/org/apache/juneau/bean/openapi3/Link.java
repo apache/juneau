@@ -64,6 +64,14 @@ import org.apache.juneau.commons.collections.*;
  */
 public class Link extends OpenApiElement {
 
+	// Property name constants
+	private static final String PROP_DESCRIPTION = "description";
+	private static final String PROP_OPERATION_ID = "operationId";
+	private static final String PROP_OPERATION_REF = "operationRef";
+	private static final String PROP_PARAMETERS = "parameters";
+	private static final String PROP_REQUEST_BODY = "requestBody";
+	private static final String PROP_SERVER = "server";
+
 	private String operationRef;
 	private String operationId;
 	private String description;
@@ -120,12 +128,12 @@ public class Link extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "description" -> toType(getDescription(), type);
-			case "operationRef" -> toType(getOperationRef(), type);
-			case "operationId" -> toType(getOperationId(), type);
-			case "requestBody" -> toType(getRequestBody(), type);
-			case "parameters" -> toType(getParameters(), type);
-			case "server" -> toType(getServer(), type);
+			case PROP_DESCRIPTION -> toType(getDescription(), type);
+			case PROP_OPERATION_REF -> toType(getOperationRef(), type);
+			case PROP_OPERATION_ID -> toType(getOperationId(), type);
+			case PROP_REQUEST_BODY -> toType(getRequestBody(), type);
+			case PROP_PARAMETERS -> toType(getParameters(), type);
+			case PROP_SERVER -> toType(getServer(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -195,12 +203,12 @@ public class Link extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(description), "description")
-			.addIf(nn(operationId), "operationId")
-			.addIf(nn(operationRef), "operationRef")
-			.addIf(ne(parameters), "parameters")
-			.addIf(nn(requestBody), "requestBody")
-			.addIf(nn(server), "server")
+			.addIf(nn(description), PROP_DESCRIPTION)
+			.addIf(nn(operationId), PROP_OPERATION_ID)
+			.addIf(nn(operationRef), PROP_OPERATION_REF)
+			.addIf(ne(parameters), PROP_PARAMETERS)
+			.addIf(nn(requestBody), PROP_REQUEST_BODY)
+			.addIf(nn(server), PROP_SERVER)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -210,12 +218,12 @@ public class Link extends OpenApiElement {
 	public Link set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "description" -> setDescription(s(value));
-			case "operationId" -> setOperationId(s(value));
-			case "operationRef" -> setOperationRef(s(value));
-			case "parameters" -> setParameters(toMapBuilder(value, String.class, Object.class).sparse().build());
-			case "requestBody" -> setRequestBody(value);
-			case "server" -> setServer(toType(value, Server.class));
+			case PROP_DESCRIPTION -> setDescription(s(value));
+			case PROP_OPERATION_ID -> setOperationId(s(value));
+			case PROP_OPERATION_REF -> setOperationRef(s(value));
+			case PROP_PARAMETERS -> setParameters(toMapBuilder(value, String.class, Object.class).sparse().build());
+			case PROP_REQUEST_BODY -> setRequestBody(value);
+			case PROP_SERVER -> setServer(toType(value, Server.class));
 			default -> {
 				super.set(property, value);
 				yield this;
