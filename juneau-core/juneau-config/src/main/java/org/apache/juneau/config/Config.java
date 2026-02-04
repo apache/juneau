@@ -54,7 +54,13 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauConfigBasics">juneau-config Basics</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class Config extends Context implements ConfigEventListener {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
+	private static final String ARG_section = "section";
+	private static final String ARG_key = "key";
 
 	/**
 	 * Builder class.
@@ -181,7 +187,7 @@ public class Config extends Context implements ConfigEventListener {
 		 * @return This object.
 		 */
 		public Builder binaryFormat(BinaryFormat value) {
-			binaryFormat = assertArgNotNull("value", value);
+			binaryFormat = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -313,7 +319,7 @@ public class Config extends Context implements ConfigEventListener {
 		 * @return This object.
 		 */
 		public Builder name(String value) {
-			name = assertArgNotNull("value", value);
+			name = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -330,7 +336,7 @@ public class Config extends Context implements ConfigEventListener {
 		 * @return This object.
 		 */
 		public Builder parser(ReaderParser value) {
-			parser = assertArgNotNull("value", value);
+			parser = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -368,7 +374,7 @@ public class Config extends Context implements ConfigEventListener {
 		 * @return This object.
 		 */
 		public Builder serializer(WriterSerializer value) {
-			serializer = assertArgNotNull("value", value);
+			serializer = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -385,7 +391,7 @@ public class Config extends Context implements ConfigEventListener {
 		 * @return This object.
 		 */
 		public Builder store(ConfigStore value) {
-			store = assertArgNotNull("value", value);
+			store = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -408,7 +414,7 @@ public class Config extends Context implements ConfigEventListener {
 		 * @return This object.
 		 */
 		public Builder varResolver(VarResolver value) {
-			varResolver = assertArgNotNull("value", value);
+			varResolver = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 	}
@@ -542,7 +548,7 @@ public class Config extends Context implements ConfigEventListener {
 		return (c == String.class || c.isPrimitive() || c.isAssignableFrom(Number.class) || c == Boolean.class || c.isEnum());
 	}
 	private static String section(String section) {
-		assertArgNotNull("section", section);
+		assertArgNotNull(ARG_section, section);
 		if (isEmpty(section))
 			return "";
 		return section;
@@ -554,7 +560,7 @@ public class Config extends Context implements ConfigEventListener {
 		return key.substring(i + 1);
 	}
 	private static String sname(String key) {
-		assertArgNotNull("key", key);
+		assertArgNotNull(ARG_key, key);
 		var i = key.indexOf('/');
 		if (i == -1)
 			return "";
@@ -984,7 +990,7 @@ public class Config extends Context implements ConfigEventListener {
 	 */
 	public Config set(String key, Object value, Serializer serializer, String modifiers, String comment, List<String> preLines) throws SerializeException {
 		checkWrite();
-		assertArgNotNull("key", key);
+		assertArgNotNull(ARG_key, key);
 		var sname = sname(key);
 		var skey = skey(key);
 		modifiers = nullIfEmpty(modifiers);
@@ -1005,7 +1011,7 @@ public class Config extends Context implements ConfigEventListener {
 	 */
 	public Config set(String key, String value) {
 		checkWrite();
-		assertArgNotNull("key", key);
+		assertArgNotNull(ARG_key, key);
 		var sname = sname(key);
 		var skey = skey(key);
 

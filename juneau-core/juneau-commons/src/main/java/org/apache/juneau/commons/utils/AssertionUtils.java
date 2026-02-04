@@ -55,7 +55,12 @@ import static org.apache.juneau.commons.utils.Utils.*;
  *   <li class='link'><a class="doclink" href='../../../../../index.html#juneau-commons.utils'>Overview &gt; juneau-commons.utils</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class AssertionUtils {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_type = "type";
+	private static final String ARG_o = "o";
 
 	/**
 	 * Throws an {@link IllegalArgumentException} if the specified expression is <jk>false</jk>.
@@ -269,8 +274,8 @@ public class AssertionUtils {
 	 */
 	@SuppressWarnings({ "unchecked" })
 	public static final <T> T assertType(Class<T> type, Object o) throws IllegalArgumentException {
-		assertArgNotNull("type", type);
-		assertArgNotNull("o", o);
+		assertArgNotNull(ARG_type, type);
+		assertArgNotNull(ARG_o, o);
 		if (! type.isInstance(o))
 			throw illegalArg("Object is not an instance of {0}: {1}", cn(type), cn(o));
 		return (T)o;
@@ -299,8 +304,8 @@ public class AssertionUtils {
 	 */
 	@SuppressWarnings({ "unchecked" })
 	public static final <T> T assertType(Class<T> type, Object o, java.util.function.Supplier<? extends RuntimeException> exceptionSupplier) throws RuntimeException {
-		assertArgNotNull("type", type);
-		assertArgNotNull("o", o);
+		assertArgNotNull(ARG_type, type);
+		assertArgNotNull(ARG_o, o);
 		if (! type.isInstance(o))
 			throw exceptionSupplier.get();
 		return (T)o;

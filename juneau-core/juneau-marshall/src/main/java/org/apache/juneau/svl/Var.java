@@ -52,7 +52,11 @@ import java.io.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public abstract class Var {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_name = "name";
 
 	private final String name;
 	final boolean streamed;
@@ -67,7 +71,7 @@ public abstract class Var {
 	 * 	If <jk>false</jk>, then the {@link #resolve(VarResolverSession, String)} method is implemented.
 	 */
 	public Var(String name, boolean streamed) {
-		assertArgNotNull("name", name);
+		assertArgNotNull(ARG_name, name);
 		this.name = name;
 		this.streamed = streamed;
 

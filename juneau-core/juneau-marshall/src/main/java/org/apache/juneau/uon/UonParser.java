@@ -52,7 +52,11 @@ import org.apache.juneau.parser.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class UonParser extends ReaderParser implements HttpPartParser, UonMetaProvider {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -80,7 +84,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			decoding = copyFrom.decoding;
 			validateEnd = copyFrom.validateEnd;
 		}
@@ -92,7 +96,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(UonParser copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			decoding = copyFrom.decoding;
 			validateEnd = copyFrom.validateEnd;
 		}

@@ -66,8 +66,12 @@ import org.apache.juneau.commons.lang.*;
  * </p>
  *
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({ "unchecked", "rawtypes", "java:S115" })
 public class ClassInfo extends ElementInfo implements Annotatable, Type, Comparable<ClassInfo> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_type = "type";
+	private static final String ARG_pt = "pt";
 
 	private static final Cache<Class,ClassInfoTyped> CACHE = Cache.of(Class.class, ClassInfoTyped.class).build();
 
@@ -733,7 +737,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * @return A stream of annotation infos of the specified type.
 	 */
 	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
-		assertArgNotNull("type", type);
+		assertArgNotNull(ARG_type, type);
 		return getAnnotations().stream().filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
 	}
 
@@ -1376,7 +1380,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 */
 	@SuppressWarnings("java:S3776")
 	public Class<?> getParameterType(int index, Class<?> pt) {
-		assertArgNotNull("pt", pt);
+		assertArgNotNull(ARG_pt, pt);
 
 		// We need to make up a mapping of type names.
 		var typeMap = new HashMap<Type,Type>();

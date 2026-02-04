@@ -93,7 +93,11 @@ import org.apache.juneau.commons.utils.*;
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection">Reflection Package</a>
 	 * </ul>
 	 */
+@SuppressWarnings("java:S115")
 public class ParameterInfo extends ElementInfo implements Annotatable {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_inner = "inner";
 
 	/**
 	 * Resettable supplier for the system property to disable bytecode parameter name detection.
@@ -128,7 +132,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @throws IllegalArgumentException If the parameter is <jk>null</jk> or cannot be found in its declaring executable.
 	 */
 	public static ParameterInfo of(Parameter inner) {
-		assertArgNotNull("inner", inner);
+		assertArgNotNull(ARG_inner, inner);
 		var exec = inner.getDeclaringExecutable();
 		ExecutableInfo execInfo;
 		if (exec instanceof Constructor<?> c)

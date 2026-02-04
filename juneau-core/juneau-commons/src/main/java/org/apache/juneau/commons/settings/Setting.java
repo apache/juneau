@@ -44,7 +44,14 @@ import org.apache.juneau.commons.function.ResettableSupplier;
  *
  * @param <T> The type of value supplied.
  */
+@SuppressWarnings("java:S115")
 public class Setting<T> extends ResettableSupplier<T> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_supplier = "supplier";
+	private static final String ARG_settings = "settings";
+	private static final String ARG_mapper = "mapper";
+	private static final String ARG_predicate = "predicate";
 	private final Settings settings;
 
 	/**
@@ -54,8 +61,8 @@ public class Setting<T> extends ResettableSupplier<T> {
 	 * @param supplier The supplier that provides the value. Must not be <jk>null</jk>.
 	 */
 	public Setting(Settings settings, Supplier<T> supplier) {
-		super(assertArgNotNull("supplier", supplier));
-		this.settings = assertArgNotNull("settings", settings);
+		super(assertArgNotNull(ARG_supplier, supplier));
+		this.settings = assertArgNotNull(ARG_settings, settings);
 	}
 
 	/**
@@ -94,7 +101,7 @@ public class Setting<T> extends ResettableSupplier<T> {
 	 */
 	@Override
 	public <U> Setting<U> map(Function<? super T, ? extends U> mapper) {
-		assertArgNotNull("mapper", mapper);
+		assertArgNotNull(ARG_mapper, mapper);
 		return new Setting<>(settings, () -> {
 			T value = get();
 			return nn(value) ? mapper.apply(value) : null;
@@ -113,7 +120,7 @@ public class Setting<T> extends ResettableSupplier<T> {
 	 */
 	@Override
 	public Setting<T> filter(Predicate<? super T> predicate) {
-		assertArgNotNull("predicate", predicate);
+		assertArgNotNull(ARG_predicate, predicate);
 		return new Setting<>(settings, () -> {
 			T value = get();
 			return (nn(value) && predicate.test(value)) ? value : null;

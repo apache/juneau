@@ -39,13 +39,16 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  */
-@SuppressWarnings({"resource","java:S110"})
+@SuppressWarnings({"resource","java:S110","java:S115"})
 public class SoapXmlSerializerSession extends XmlSerializerSession {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
+	@SuppressWarnings({"java:S110", "java:S115"})
 	public static class Builder extends XmlSerializerSession.Builder {
 
 		private SoapXmlSerializer ctx;
@@ -57,7 +60,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(SoapXmlSerializer ctx) {
-			super(assertArgNotNull("ctx", ctx));
+			super(assertArgNotNull(ARG_ctx, ctx));
 			this.ctx = ctx;
 		}
 
@@ -183,7 +186,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(SoapXmlSerializer ctx) {
-		return new Builder(assertArgNotNull("ctx", ctx));
+		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
 	private final SoapXmlSerializer ctx;

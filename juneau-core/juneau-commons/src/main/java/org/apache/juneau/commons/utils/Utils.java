@@ -51,7 +51,12 @@ import org.apache.juneau.commons.settings.*;
  *   <li class='link'><a class="doclink" href='../../../../../index.html#juneau-commons.utils'>Overview &gt; juneau-commons.utils</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class Utils {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_values = "values";
+	private static final String ARG_supplier = "supplier";
 
 	/**
 	 * Converts an object to a boolean.
@@ -978,7 +983,7 @@ public class Utils {
 	 * @see Objects#hash(Object...)
 	 */
 	public static final int h(Object...values) {
-		assertArgNotNull("values", values);
+		assertArgNotNull(ARG_values, values);
 		return HashCode.of(values);
 	}
 
@@ -1380,7 +1385,7 @@ public class Utils {
 	 * @throws NullPointerException if supplier is <jk>null</jk>.
 	 */
 	public static <T> OptionalSupplier<T> mem(Supplier<T> supplier) {
-		assertArgNotNull("supplier", supplier);
+		assertArgNotNull(ARG_supplier, supplier);
 
 		var cache = new AtomicReference<Optional<T>>();
 
@@ -1436,7 +1441,7 @@ public class Utils {
 	 * @throws NullPointerException if supplier is <jk>null</jk>.
 	 */
 	public static <T> ResettableSupplier<T> memr(Supplier<T> supplier) {
-		assertArgNotNull("supplier", supplier);
+		assertArgNotNull(ARG_supplier, supplier);
 		return new ResettableSupplier<>(supplier);
 	}
 

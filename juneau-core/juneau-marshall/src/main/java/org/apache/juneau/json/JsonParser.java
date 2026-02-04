@@ -123,7 +123,11 @@ import org.apache.juneau.parser.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class JsonParser extends ReaderParser implements JsonMetaProvider {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -149,7 +153,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			validateEnd = copyFrom.validateEnd;
 		}
 
@@ -160,7 +164,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(JsonParser copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			validateEnd = copyFrom.validateEnd;
 		}
 

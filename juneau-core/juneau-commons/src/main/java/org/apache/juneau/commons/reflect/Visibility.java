@@ -37,6 +37,7 @@ import java.lang.reflect.*;
  * </ul>
  *
  */
+@SuppressWarnings("java:S115")
 public enum Visibility {
 
 	/** Ignore all */

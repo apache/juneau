@@ -47,8 +47,12 @@ import org.apache.juneau.serializer.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({"java:S110", "java:S115"})
 public class MsgPackSerializer extends OutputStreamSerializer implements MsgPackMetaProvider {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_builder = "builder";
+	private static final String ARG_copyFrom = "copyFrom";
 
 	/** Default serializer, BASE64 string output. */
 	@SuppressWarnings("java:S110")
@@ -61,7 +65,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public Base64(Builder builder) {
-			super(assertArgNotNull("builder", builder).binaryFormat(BinaryFormat.BASE64));
+			super(assertArgNotNull(ARG_builder, builder).binaryFormat(BinaryFormat.BASE64));
 		}
 	}
 
@@ -90,7 +94,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
 		/**
@@ -100,7 +104,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(MsgPackSerializer copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
 		@Override /* Overridden from Builder */

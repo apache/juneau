@@ -86,7 +86,12 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection">Reflection Package</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, Annotatable {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_declaringClass = "declaringClass";
+	private static final String ARG_inner = "inner";
 
 	/**
 	 * Creates a FieldInfo wrapper for the specified field.
@@ -103,7 +108,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @return A new FieldInfo object wrapping the field.
 	 */
 	public static FieldInfo of(ClassInfo declaringClass, Field inner) {
-		assertArgNotNull("declaringClass", declaringClass);
+		assertArgNotNull(ARG_declaringClass, declaringClass);
 		return declaringClass.getField(inner);
 	}
 
@@ -123,7 +128,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @return A new FieldInfo object wrapping the field.
 	 */
 	public static FieldInfo of(Field inner) {
-		assertArgNotNull("inner", inner);
+		assertArgNotNull(ARG_inner, inner);
 		return ClassInfo.of(inner.getDeclaringClass()).getField(inner);
 	}
 
@@ -147,7 +152,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 */
 	protected FieldInfo(ClassInfo declaringClass, Field inner) {
 		super(inner, inner.getModifiers());
-		assertArgNotNull("inner", inner);
+		assertArgNotNull(ARG_inner, inner);
 		this.declaringClass = declaringClass;
 		this.inner = inner;
 		this.type = mem(() -> ClassInfo.of(inner.getType(), inner.getGenericType()));

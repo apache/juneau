@@ -53,8 +53,11 @@ import com.hp.hpl.jena.rdf.model.*;
 
  * </ul>
  */
-@SuppressWarnings({ "rawtypes", "unchecked" })
+@SuppressWarnings({ "rawtypes", "unchecked", "java:S115" })
 public class RdfSerializerSession extends WriterSerializerSession {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -70,7 +73,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(RdfSerializer ctx) {
-			super(assertArgNotNull("ctx", ctx));
+			super(assertArgNotNull(ARG_ctx, ctx));
 			this.ctx = ctx;
 		}
 
@@ -213,7 +216,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(RdfSerializer ctx) {
-		return new Builder(assertArgNotNull("ctx", ctx));
+		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
 	private final Model model;

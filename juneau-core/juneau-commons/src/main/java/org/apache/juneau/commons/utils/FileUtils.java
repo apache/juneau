@@ -29,7 +29,12 @@ import java.nio.file.*;
  * File utilities.
  *
  */
+@SuppressWarnings("java:S115")
 public class FileUtils {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_f = "f";
+	private static final String ARG_path = "path";
 
 	/**
 	 * Creates a file if it doesn't already exist using {@link File#createNewFile()}.
@@ -195,7 +200,7 @@ public class FileUtils {
 	 * @throws RuntimeException if directory could not be created.
 	 */
 	public static File mkdirs(File f, boolean clean) {
-		assertArgNotNull("f", f);
+		assertArgNotNull(ARG_f, f);
 		if (f.exists()) {
 			if (clean) {
 				opt(deleteFile(f)).filter(x -> x).orElseThrow(() -> rex("Could not clean directory ''{0}''", f.getAbsolutePath()));
@@ -215,7 +220,7 @@ public class FileUtils {
 	 * @return The directory.
 	 */
 	public static File mkdirs(String path, boolean clean) {
-		assertArgNotNull("path", path);
+		assertArgNotNull(ARG_path, path);
 		return mkdirs(new File(path), clean);
 	}
 

@@ -47,8 +47,12 @@ import org.apache.juneau.commons.collections.FluentMap;
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({"resource", "java:S115"})
 public class FileStore extends ConfigStore {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
+	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -81,7 +85,7 @@ public class FileStore extends ConfigStore {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			charset = copyFrom.charset;
 			directory = copyFrom.directory;
 			enableWatcher = copyFrom.enableWatcher;
@@ -97,7 +101,7 @@ public class FileStore extends ConfigStore {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(FileStore copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			type(copyFrom.getClass());
 			charset = copyFrom.charset;
 			directory = copyFrom.directory;
@@ -160,7 +164,7 @@ public class FileStore extends ConfigStore {
 		 * @return This object.
 		 */
 		public Builder charset(Charset value) {
-			charset = assertArgNotNull("value", value);
+			charset = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -199,7 +203,7 @@ public class FileStore extends ConfigStore {
 		 * @return This object.
 		 */
 		public Builder directory(File value) {
-			directory = assertArgNotNull("value", value).getAbsolutePath();
+			directory = assertArgNotNull(ARG_value, value).getAbsolutePath();
 			return this;
 		}
 
@@ -221,7 +225,7 @@ public class FileStore extends ConfigStore {
 		 * @return This object.
 		 */
 		public Builder directory(String value) {
-			directory = assertArgNotNull("value", value);
+			directory = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -268,7 +272,7 @@ public class FileStore extends ConfigStore {
 		 * @return This object.
 		 */
 		public Builder extensions(String value) {
-			extensions = assertArgNotNull("value", value);
+			extensions = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -331,7 +335,7 @@ public class FileStore extends ConfigStore {
 		 * @return This object.
 		 */
 		public Builder watcherSensitivity(WatcherSensitivity value) {
-			watcherSensitivity = assertArgNotNull("value", value);
+			watcherSensitivity = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 	}

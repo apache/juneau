@@ -46,11 +46,17 @@ import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 
-@SuppressWarnings("java:S115")
 /**
  * Reusable string utility methods.
  */
+@SuppressWarnings("java:S115")
 public class StringUtils {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
+	private static final String ARG_builder = "builder";
+	private static final String ARG_values = "values";
+	private static final String ARG_s = "s";
 
 	/** Characters considered common separators (comma/semicolon/colon/pipe/tab). */
 	public static final AsciiSet COMMON_SEPARATORS = AsciiSet.of(",;:|\t");
@@ -451,7 +457,7 @@ public class StringUtils {
 	 * @throws IllegalArgumentException If <c>builder</c> is <jk>null</jk>.
 	 */
 	public static String buildString(Consumer<StringBuilder> builder) {
-		assertArgNotNull("builder", builder);
+		assertArgNotNull(ARG_builder, builder);
 		var sb = new StringBuilder();
 		builder.accept(sb);
 		return sb.toString();
@@ -3453,7 +3459,7 @@ public class StringUtils {
 	 * @return <jk>true</jk> if the specified string is one of the specified values.
 	 */
 	public static boolean isOneOf(String s, String...values) {
-		assertArgNotNull("values", values);
+		assertArgNotNull(ARG_values, values);
 		for (var value : values)
 			if (eq(s, value))
 				return true;
@@ -5100,7 +5106,7 @@ public class StringUtils {
 	 * @return The parsed value.
 	 */
 	public static int parseIntWithSuffix(String s) {
-		assertArgNotNull("s", s);
+		assertArgNotNull(ARG_s, s);
 		var m = multiplierInt(s);
 		if (m == 1)
 			return Integer.decode(s);
@@ -5143,7 +5149,7 @@ public class StringUtils {
 	 * @return The parsed value.
 	 */
 	public static long parseLongWithSuffix(String s) {
-		assertArgNotNull("s", s);
+		assertArgNotNull(ARG_s, s);
 		var m = multiplierLong(s);
 		if (m == 1) {
 			// If multiplier is 1, try to decode the whole string
@@ -5935,7 +5941,7 @@ public class StringUtils {
 	 * @see #parseNumber(String, Class)
 	 */
 	public static String removeUnderscores(String value) {
-		assertArgNotNull("value", value);
+		assertArgNotNull(ARG_value, value);
 		return notContains(value, '_') ? value : value.replace("_", "");
 	}
 

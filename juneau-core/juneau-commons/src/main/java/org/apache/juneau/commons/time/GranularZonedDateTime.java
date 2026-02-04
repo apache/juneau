@@ -92,7 +92,11 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='jm'>{@link DateUtils}
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class GranularZonedDateTime {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
 
 	/**
 	 * Creates a GranularZonedDateTime from a Date with the specified precision.
@@ -259,7 +263,7 @@ public class GranularZonedDateTime {
 	 * @throws DateTimeParseException if the timestamp format is invalid.
 	 */
 	public static GranularZonedDateTime of(String value, ZoneId defaultZoneId, TimeProvider timeProvider) {
-		assertArgNotNull("value", value);
+		assertArgNotNull(ARG_value, value);
 		var digit = StringUtils.DIGIT;
 		timeProvider = timeProvider == null ? TimeProvider.INSTANCE : timeProvider;
 

@@ -39,7 +39,12 @@ import org.apache.juneau.commons.reflect.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class OutputStreamSerializer extends Serializer {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
+	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -62,7 +67,7 @@ public class OutputStreamSerializer extends Serializer {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			binaryFormat = copyFrom.binaryFormat;
 		}
 
@@ -73,7 +78,7 @@ public class OutputStreamSerializer extends Serializer {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(OutputStreamSerializer copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			binaryFormat = copyFrom.binaryFormat;
 		}
 
@@ -304,7 +309,7 @@ public class OutputStreamSerializer extends Serializer {
 		 * @return This object.
 		 */
 		public Builder binaryFormat(BinaryFormat value) {
-			binaryFormat = assertArgNotNull("value", value);
+			binaryFormat = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 

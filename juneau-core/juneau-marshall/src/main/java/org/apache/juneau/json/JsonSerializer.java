@@ -109,8 +109,11 @@ import org.apache.juneau.serializer.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({"java:S110", "java:S115"})
 public class JsonSerializer extends WriterSerializer implements JsonMetaProvider {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -142,7 +145,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			addBeanTypesJson = copyFrom.addBeanTypesJson;
 			escapeSolidus = copyFrom.escapeSolidus;
 			simpleAttrs = copyFrom.simpleAttrs;
@@ -155,7 +158,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(JsonSerializer copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			addBeanTypesJson = copyFrom.addBeanTypesJson;
 			escapeSolidus = copyFrom.escapeSolidus;
 			simpleAttrs = copyFrom.simpleAttrs;

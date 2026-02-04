@@ -46,13 +46,16 @@ import org.apache.juneau.svl.*;
 
  * </ul>
  */
-@SuppressWarnings({"resource","java:S110"})
+@SuppressWarnings({"resource","java:S110","java:S115"})
 public class UonSerializerSession extends WriterSerializerSession implements HttpPartSerializerSession {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
+	@SuppressWarnings({"java:S110", "java:S115"})
 	public static class Builder extends WriterSerializerSession.Builder {
 
 		private UonSerializer ctx;
@@ -64,7 +67,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(UonSerializer ctx) {
-			super(assertArgNotNull("ctx", ctx));
+			super(assertArgNotNull(ARG_ctx, ctx));
 			this.ctx = ctx;
 		}
 
@@ -190,7 +193,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	 * @return A new builder.
 	 */
 	public static Builder create(UonSerializer ctx) {
-		return new Builder(assertArgNotNull("ctx", ctx));
+		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
 	private final UonSerializer ctx;

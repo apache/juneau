@@ -80,7 +80,12 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection">Reflection Package</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public abstract class ExecutableInfo extends AccessibleInfo {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_inner = "inner";
+	private static final String ARG_type = "type";
 
 	protected final ClassInfo declaringClass;
 	private final Executable inner;
@@ -106,7 +111,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param inner The constructor or method that this info represents. Must not be <jk>null</jk>.
 	 */
 	protected ExecutableInfo(ClassInfo declaringClass, Executable inner) {
-		super(inner, assertArgNotNull("inner", inner).getModifiers());
+		super(inner, assertArgNotNull(ARG_inner, inner).getModifiers());
 		this.declaringClass = declaringClass;
 		this.inner = inner;
 		this.isConstructor = inner instanceof Constructor;
@@ -259,7 +264,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 */
 	@SuppressWarnings("unchecked")
 	public final <A extends Annotation> Stream<AnnotationInfo<A>> getDeclaredAnnotations(Class<A> type) {
-		assertArgNotNull("type", type);
+		assertArgNotNull(ARG_type, type);
 		// @formatter:off
 		return declaredAnnotations.get().stream()
 			.filter(x -> type.isInstance(x.inner()))

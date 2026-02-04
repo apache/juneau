@@ -62,17 +62,18 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='jm'><c>javax.activation.MimetypesFileTypeMap</c> (legacy class, not available in Java 11+)
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class MimeTypeDetector {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ext = "ext";
+	private static final String ARG_type = "type";
+	private static final String ARG_name = "name";
 
 	/**
 	 * Builder class for creating MimeTypeDetector instances.
 	 */
-	@SuppressWarnings("java:S115")
 	public static class Builder {
-		// Argument name constants for assertArgNotNull
-		private static final String ARG_ext = "ext";
-		private static final String ARG_type = "type";
-		private static final String ARG_name = "name";
 
 		private final Map<String,String> extMap = new ConcurrentHashMap<>();
 		private final Map<String,String> fileMap = new ConcurrentHashMap<>();

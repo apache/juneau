@@ -43,13 +43,16 @@ import org.apache.juneau.svl.*;
 
  * </ul>
  */
-@SuppressWarnings({"resource","java:S110"})
+@SuppressWarnings({"resource","java:S110","java:S115"})
 public class MsgPackSerializerSession extends OutputStreamSerializerSession {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
+	@SuppressWarnings({"java:S110", "java:S115"})
 	public static class Builder extends OutputStreamSerializerSession.Builder {
 
 		private MsgPackSerializer ctx;
@@ -61,7 +64,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(MsgPackSerializer ctx) {
-			super(assertArgNotNull("ctx", ctx));
+			super(assertArgNotNull(ARG_ctx, ctx));
 			this.ctx = ctx;
 		}
 
@@ -179,7 +182,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(MsgPackSerializer ctx) {
-		return new Builder(assertArgNotNull("ctx", ctx));
+		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
 	/*

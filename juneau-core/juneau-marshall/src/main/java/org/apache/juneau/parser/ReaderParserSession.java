@@ -39,7 +39,11 @@ import org.apache.juneau.httppart.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class ReaderParserSession extends ParserSession {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -57,7 +61,7 @@ public class ReaderParserSession extends ParserSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(ReaderParser ctx) {
-			super(assertArgNotNull("ctx", ctx));
+			super(assertArgNotNull(ARG_ctx, ctx));
 			this.ctx = ctx;
 			fileCharset = ctx.getFileCharset();
 			streamCharset = ctx.getStreamCharset();
@@ -205,7 +209,7 @@ public class ReaderParserSession extends ParserSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(ReaderParser ctx) {
-		return new Builder(assertArgNotNull("ctx", ctx));
+		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
 	private final ReaderParser ctx;

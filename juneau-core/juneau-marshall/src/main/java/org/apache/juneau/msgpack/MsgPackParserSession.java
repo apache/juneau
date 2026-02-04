@@ -44,8 +44,11 @@ import org.apache.juneau.swap.*;
 
  * </ul>
  */
-@SuppressWarnings({ "rawtypes", "unchecked" })
+@SuppressWarnings({ "rawtypes", "unchecked", "java:S115" })
 public class MsgPackParserSession extends InputStreamParserSession {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -59,7 +62,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(MsgPackParser ctx) {
-			super(assertArgNotNull("ctx", ctx));
+			super(assertArgNotNull(ARG_ctx, ctx));
 		}
 
 		@Override /* Overridden from Builder */
@@ -160,7 +163,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(MsgPackParser ctx) {
-		return new Builder(assertArgNotNull("ctx", ctx));
+		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
 	/**

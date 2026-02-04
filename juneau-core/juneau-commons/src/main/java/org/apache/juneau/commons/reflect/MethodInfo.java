@@ -83,7 +83,13 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection">Reflection Package</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>, Annotatable {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_declaringClass = "declaringClass";
+	private static final String ARG_inner = "inner";
+	private static final String ARG_type = "type";
 
 	/**
 	 * Creates a MethodInfo wrapper for the specified method.
@@ -117,7 +123,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return A new MethodInfo object wrapping the method.
 	 */
 	public static MethodInfo of(ClassInfo declaringClass, Method inner) {
-		assertArgNotNull("declaringClass", declaringClass);
+		assertArgNotNull(ARG_declaringClass, declaringClass);
 		return declaringClass.getMethod(inner);
 	}
 
@@ -137,7 +143,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return A new MethodInfo object wrapping the method.
 	 */
 	public static MethodInfo of(Method inner) {
-		assertArgNotNull("inner", inner);
+		assertArgNotNull(ARG_inner, inner);
 		return ClassInfo.of(inner.getDeclaringClass()).getMethod(inner);
 	}
 
@@ -281,7 +287,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
-		assertArgNotNull("type", type);
+		assertArgNotNull(ARG_type, type);
 		return getAnnotations().stream().filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
 	}
 

@@ -56,7 +56,11 @@ import org.apache.juneau.swap.*;
  * </ul>
  *
  */
+@SuppressWarnings("java:S115")
 public class PlainTextParser extends ReaderParser implements PlainTextMetaProvider {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -79,7 +83,7 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
 		/**
@@ -89,7 +93,7 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(PlainTextParser copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
 		@Override /* Overridden from Builder */

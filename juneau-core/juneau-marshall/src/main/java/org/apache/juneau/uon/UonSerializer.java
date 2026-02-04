@@ -137,8 +137,12 @@ import org.apache.juneau.serializer.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({"java:S110", "java:S115"})
 public class UonSerializer extends WriterSerializer implements HttpPartSerializer, UonMetaProvider {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
+	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -171,7 +175,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			addBeanTypesUon = copyFrom.addBeanTypesUon;
 			encoding = copyFrom.encoding;
 			paramFormat = copyFrom.paramFormat;
@@ -185,7 +189,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(UonSerializer copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			addBeanTypesUon = copyFrom.addBeanTypesUon;
 			encoding = copyFrom.encoding;
 			paramFormat = copyFrom.paramFormat;
@@ -757,7 +761,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * @return This object.
 		 */
 		public Builder paramFormat(ParamFormat value) {
-			paramFormat = assertArgNotNull("value", value);
+			paramFormat = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 

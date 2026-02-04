@@ -44,8 +44,11 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({"java:S110", "java:S115"})
 public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -69,7 +72,7 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
 		/**
@@ -79,7 +82,7 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(CsvSerializer copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
 		@Override /* Overridden from Builder */

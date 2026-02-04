@@ -79,7 +79,13 @@ import org.apache.juneau.commons.reflect.*;
  *
  * @param <T> The bean type being created.
  */
+@SuppressWarnings("java:S115")
 public class BeanCreateMethodFinder<T> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_beanType = "beanType";
+	private static final String ARG_resourceClass = "resourceClass";
+	private static final String ARG_resource = "resource";
 
 	private Class<T> beanType;
 	private final Class<?> resourceClass;
@@ -97,9 +103,9 @@ public class BeanCreateMethodFinder<T> {
 	 * @param beanStore The bean store to use for parameter resolution.
 	 */
 	public BeanCreateMethodFinder(Class<T> beanType, Class<?> resourceClass, BasicBeanStore beanStore) {
-		this.beanType = assertArgNotNull("beanType", beanType);
+		this.beanType = assertArgNotNull(ARG_beanType, beanType);
 		this.resource = null;
-		this.resourceClass = assertArgNotNull("resourceClass", resourceClass);
+		this.resourceClass = assertArgNotNull(ARG_resourceClass, resourceClass);
 		this.beanStore = BasicBeanStore.of(beanStore);
 	}
 
@@ -111,8 +117,8 @@ public class BeanCreateMethodFinder<T> {
 	 * @param beanStore The bean store to use for parameter resolution.
 	 */
 	public BeanCreateMethodFinder(Class<T> beanType, Object resource, BasicBeanStore beanStore) {
-		this.beanType = assertArgNotNull("beanType", beanType);
-		this.resource = assertArgNotNull("resource", resource);
+		this.beanType = assertArgNotNull(ARG_beanType, beanType);
+		this.resource = assertArgNotNull(ARG_resource, resource);
 		this.resourceClass = resource.getClass();
 		this.beanStore = BasicBeanStore.of(beanStore);
 	}

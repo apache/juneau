@@ -37,7 +37,11 @@ import org.apache.juneau.parser.*;
  * </ul>
  *
  */
+@SuppressWarnings("java:S115")
 public class CsvParser extends ReaderParser implements CsvMetaProvider {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -60,7 +64,7 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
 		/**
@@ -70,7 +74,7 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(CsvParser copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
 		@Override /* Overridden from Builder */

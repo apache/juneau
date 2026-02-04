@@ -33,7 +33,11 @@ import org.apache.juneau.svl.*;
  *
  * @serial exclude
  */
+@SuppressWarnings("java:S115")
 public class AnnotationWorkList extends ArrayList<AnnotationWork> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_vrs = "vrs";
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -79,7 +83,7 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	private final VarResolverSession vrs;
 
 	private AnnotationWorkList(VarResolverSession vrs) {
-		this.vrs = assertArgNotNull("vrs", vrs);
+		this.vrs = assertArgNotNull(ARG_vrs, vrs);
 	}
 
 	/**

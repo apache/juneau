@@ -78,7 +78,12 @@ import org.apache.juneau.commons.reflect.*;
  * </ul>
  *
  */
+@SuppressWarnings("java:S115")
 public class BasicBeanStore {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_bean = "bean";
+	private static final String ARG_type = "type";
 
 	/**
 	 * Builder class.
@@ -577,8 +582,8 @@ public class BasicBeanStore {
 		 * @param name Optional name to associate with the bean.  Can be <jk>null</jk>.
 		 */
 		protected Entry(Class<T> type, Supplier<T> bean, String name) {
-			this.bean = assertArgNotNull("bean", bean);
-			this.type = assertArgNotNull("type", type);
+			this.bean = assertArgNotNull(ARG_bean, bean);
+			this.type = assertArgNotNull(ARG_type, type);
 			this.name = nullIfEmpty(name);
 		}
 

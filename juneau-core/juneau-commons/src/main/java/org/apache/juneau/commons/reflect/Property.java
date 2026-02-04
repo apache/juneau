@@ -79,7 +79,13 @@ import org.apache.juneau.commons.function.*;
  * @param <T> The object type.
  * @param <V> The value type.
  */
+@SuppressWarnings("java:S115")
 public class Property<T, V> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_object = "object";
+	private static final String ARG_field = "field";
+	private static final String ARG_method = "method";
 
 	/**
 	 * Creates a new builder for constructing a property.
@@ -123,7 +129,7 @@ public class Property<T, V> {
 	 * @throws ExecutableException
 	 */
 	public V get(T object) throws ExecutableException {
-		assertArgNotNull("object", object);
+		assertArgNotNull(ARG_object, object);
 		if (producer == null)
 			throw exex("No getter defined for this property");
 		return safe(() -> producer.applyThrows(object));
@@ -137,7 +143,7 @@ public class Property<T, V> {
 	 * @throws ExecutableException
 	 */
 	public void set(T object, V value) throws ExecutableException {
-		assertArgNotNull("object", object);
+		assertArgNotNull(ARG_object, object);
 		if (consumer == null)
 			throw exex("No setter defined for this property");
 		safe(() -> consumer.acceptThrows(object, value));
@@ -204,7 +210,7 @@ public class Property<T, V> {
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder<T, V> field(FieldInfo field) {
-			assertArgNotNull("field", field);
+			assertArgNotNull(ARG_field, field);
 			field.accessible();
 			boolean isStatic = field.isStatic();
 			this.producer = obj -> (V)field.get(isStatic ? null : obj);
@@ -223,7 +229,7 @@ public class Property<T, V> {
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder<T, V> getter(MethodInfo method) {
-			assertArgNotNull("method", method);
+			assertArgNotNull(ARG_method, method);
 			method.accessible();
 			boolean isStatic = method.isStatic();
 			this.producer = obj -> (V)method.invoke(isStatic ? null : obj);
@@ -240,7 +246,7 @@ public class Property<T, V> {
 		 * @return This object.
 		 */
 		public Builder<T, V> setter(MethodInfo method) {
-			assertArgNotNull("method", method);
+			assertArgNotNull(ARG_method, method);
 			method.accessible();
 			boolean isStatic = method.isStatic();
 			this.consumer = (obj, val) -> method.invoke(isStatic ? null : obj, val);

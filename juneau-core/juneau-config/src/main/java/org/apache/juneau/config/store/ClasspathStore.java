@@ -40,8 +40,11 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({"resource", "java:S115"})
 public class ClasspathStore extends ConfigStore {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -60,7 +63,7 @@ public class ClasspathStore extends ConfigStore {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
 		/**
@@ -70,7 +73,7 @@ public class ClasspathStore extends ConfigStore {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(ClasspathStore copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			type(copyFrom.getClass());
 		}
 

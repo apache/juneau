@@ -42,7 +42,11 @@ import org.apache.juneau.json.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class WriterSerializer extends Serializer {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -75,7 +79,7 @@ public class WriterSerializer extends Serializer {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			fileCharset = copyFrom.fileCharset;
 			streamCharset = copyFrom.streamCharset;
 			maxIndent = copyFrom.maxIndent;
@@ -91,7 +95,7 @@ public class WriterSerializer extends Serializer {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(WriterSerializer copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			fileCharset = copyFrom.getFileCharset();
 			streamCharset = copyFrom.getStreamCharset();
 			maxIndent = copyFrom.maxIndent;

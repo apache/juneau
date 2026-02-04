@@ -34,7 +34,12 @@ import org.apache.juneau.parser.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpPartSerializersParsers">HTTP Part Serializers and Parsers</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public abstract class BaseHttpPartParser extends BeanContextable implements HttpPartParser {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_toType = "toType";
+	private static final String ARG_builder = "builder";
 
 	/**
 	 * Builder class.
@@ -53,7 +58,7 @@ public abstract class BaseHttpPartParser extends BeanContextable implements Http
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder builder) {
-			super(assertArgNotNull("builder", builder));
+			super(assertArgNotNull(ARG_builder, builder));
 		}
 	}
 
@@ -95,7 +100,7 @@ public abstract class BaseHttpPartParser extends BeanContextable implements Http
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
-		return getPartSession().parse(partType, schema, in, getClassMeta(assertArgNotNull("toType", toType)));
+		return getPartSession().parse(partType, schema, in, getClassMeta(assertArgNotNull(ARG_toType, toType)));
 	}
 
 	/**
@@ -117,7 +122,7 @@ public abstract class BaseHttpPartParser extends BeanContextable implements Http
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
-		return getPartSession().parse(partType, schema, in, assertArgNotNull("toType", toType));
+		return getPartSession().parse(partType, schema, in, assertArgNotNull(ARG_toType, toType));
 	}
 
 	/**
@@ -142,6 +147,6 @@ public abstract class BaseHttpPartParser extends BeanContextable implements Http
 	 */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
 		assertArgNoNulls("toTypeArgs", toTypeArgs);
-		return getPartSession().parse(partType, schema, in, getClassMeta(assertArgNotNull("toType", toType), toTypeArgs));
+		return getPartSession().parse(partType, schema, in, getClassMeta(assertArgNotNull(ARG_toType, toType), toTypeArgs));
 	}
 }

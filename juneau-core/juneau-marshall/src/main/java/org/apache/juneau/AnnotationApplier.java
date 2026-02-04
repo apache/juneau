@@ -85,7 +85,13 @@ import org.apache.juneau.svl.*;
  * @param <A> The annotation that this applier reads from.
  * @param <B> The builder class to apply the annotation to.
  */
+@SuppressWarnings("java:S115")
 public abstract class AnnotationApplier<A extends Annotation,B> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_annotationClass = "annotationClass";
+	private static final String ARG_builderClass = "builderClass";
+	private static final String ARG_vr = "vr";
 
 	private final VarResolverSession vr;
 	private final Class<A> ca;
@@ -99,9 +105,9 @@ public abstract class AnnotationApplier<A extends Annotation,B> {
 	 * @param varResolverSession The string resolver to use for resolving strings.
 	 */
 	protected AnnotationApplier(Class<A> annotationClass, Class<B> builderClass, VarResolverSession varResolverSession) {
-		ca = assertArgNotNull("annotationClass", annotationClass);
-		cb = assertArgNotNull("builderClass", builderClass);
-		vr = assertArgNotNull("vr", varResolverSession);
+		ca = assertArgNotNull(ARG_annotationClass, annotationClass);
+		cb = assertArgNotNull(ARG_builderClass, builderClass);
+		vr = assertArgNotNull(ARG_vr, varResolverSession);
 	}
 
 	/**

@@ -52,8 +52,11 @@ import org.apache.juneau.swap.*;
  * </ul>
  *
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({"java:S110", "java:S115"})
 public class PlainTextSerializer extends WriterSerializer implements PlainTextMetaProvider {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -77,7 +80,7 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
 		/**
@@ -87,7 +90,7 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(PlainTextSerializer copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
 		@Override /* Overridden from Builder */

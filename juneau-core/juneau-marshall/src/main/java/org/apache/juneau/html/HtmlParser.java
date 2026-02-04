@@ -51,8 +51,11 @@ import org.apache.juneau.xml.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({"java:S110", "java:S115"})
 public class HtmlParser extends XmlParser implements HtmlMetaProvider {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -76,7 +79,7 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
 		/**
@@ -86,7 +89,7 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(HtmlParser copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
 		@Override /* Overridden from Builder */

@@ -29,8 +29,11 @@ import java.util.*;
 
  * </ul>
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes", "java:S115"})
 public abstract class MapVar extends DefaultingVar {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_m = "m";
 
 	private final Map m;
 
@@ -42,7 +45,7 @@ public abstract class MapVar extends DefaultingVar {
 	 */
 	public MapVar(String name, Map m) {
 		super(name);
-		assertArgNotNull("m", m);
+		assertArgNotNull(ARG_m, m);
 		this.m = m;
 	}
 

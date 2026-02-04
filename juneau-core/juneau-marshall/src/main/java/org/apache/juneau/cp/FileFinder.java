@@ -87,7 +87,12 @@ import org.apache.juneau.commons.io.*;
  * </ul>
  *
  */
+@SuppressWarnings("java:S115")
 public interface FileFinder {
+
+	// Argument name constants for assertArgNotNull
+	String ARG_value = "value";
+	String ARG_c = "c";
 
 	/**
 	 * Builder class.
@@ -132,7 +137,7 @@ public interface FileFinder {
 		 */
 		@SuppressWarnings("null")
 		public Builder cp(Class<?> c, String path, boolean recursive) {
-			assertArgNotNull("c", c);
+			assertArgNotNull(ARG_c, c);
 			while (nn(c)) {
 				roots.add(new LocalDir(c, path));
 				c = recursive ? c.getSuperclass() : null;
@@ -147,7 +152,7 @@ public interface FileFinder {
 		 * @return This object.
 		 */
 		public Builder dir(String value) {
-			assertArgNotNull("value", value);
+			assertArgNotNull(ARG_value, value);
 			return path(Paths.get(".").resolve(value));
 		}
 

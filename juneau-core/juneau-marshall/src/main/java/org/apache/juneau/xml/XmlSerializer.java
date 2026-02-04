@@ -134,8 +134,12 @@ import org.apache.juneau.serializer.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({"java:S110", "java:S115"})
 public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_copyFrom = "copyFrom";
+	private static final String ARG_builder = "builder";
 
 	/**
 	 * Builder class.
@@ -176,7 +180,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			addBeanTypesXml = copyFrom.addBeanTypesXml;
 			addNamespaceUrisToRoot = copyFrom.addNamespaceUrisToRoot;
 			defaultNamespace = copyFrom.defaultNamespace;
@@ -194,7 +198,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(XmlSerializer copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			addBeanTypesXml = copyFrom.addBeanTypesXml;
 			addNamespaceUrisToRoot = copyFrom.addNamespaceUrlsToRoot;
 			defaultNamespace = copyFrom.getDefaultNamespace();
@@ -1128,7 +1132,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public Ns(Builder builder) {
-			super(assertArgNotNull("builder", builder).enableNamespaces());
+			super(assertArgNotNull(ARG_builder, builder).enableNamespaces());
 		}
 	}
 
@@ -1143,7 +1147,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public NsSq(Builder builder) {
-			super(assertArgNotNull("builder", builder).enableNamespaces().quoteChar('\''));
+			super(assertArgNotNull(ARG_builder, builder).enableNamespaces().quoteChar('\''));
 		}
 	}
 
@@ -1158,7 +1162,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public NsSqReadable(Builder builder) {
-			super(assertArgNotNull("builder", builder).enableNamespaces().quoteChar('\'').useWhitespace());
+			super(assertArgNotNull(ARG_builder, builder).enableNamespaces().quoteChar('\'').useWhitespace());
 		}
 	}
 
@@ -1173,7 +1177,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public Sq(Builder builder) {
-			super(assertArgNotNull("builder", builder).quoteChar('\''));
+			super(assertArgNotNull(ARG_builder, builder).quoteChar('\''));
 		}
 	}
 
@@ -1188,7 +1192,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public SqReadable(Builder builder) {
-			super(assertArgNotNull("builder", builder).quoteChar('\'').useWhitespace());
+			super(assertArgNotNull(ARG_builder, builder).quoteChar('\'').useWhitespace());
 		}
 	}
 

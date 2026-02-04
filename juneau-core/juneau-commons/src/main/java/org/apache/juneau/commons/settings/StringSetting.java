@@ -33,7 +33,13 @@ import java.util.function.*;
  * This class extends {@link Setting} with type-specific conversion methods such as {@link #asInteger()},
  * {@link #asBoolean()}, {@link #asCharset()}, etc.
  */
+@SuppressWarnings("java:S115")
 public class StringSetting extends Setting<String> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_mapper = "mapper";
+	private static final String ARG_predicate = "predicate";
+	private static final String ARG_c = "c";
 
 	/**
 	 * Creates a new StringSetting from a Settings instance and a Supplier.
@@ -59,7 +65,7 @@ public class StringSetting extends Setting<String> {
 	 * @return A StringSetting describing the result of applying a mapping function to the value of this StringSetting, if a value is present, otherwise an empty StringSetting.
 	 */
 	public StringSetting mapString(Function<? super String, ? extends String> mapper) {
-		assertArgNotNull("mapper", mapper);
+		assertArgNotNull(ARG_mapper, mapper);
 		return new StringSetting(getSettings(), () -> {
 			String value = get();
 			return nn(value) ? mapper.apply(value) : null;
@@ -78,7 +84,7 @@ public class StringSetting extends Setting<String> {
 	 */
 	@Override
 	public StringSetting filter(Predicate<? super String> predicate) {
-		assertArgNotNull("predicate", predicate);
+		assertArgNotNull(ARG_predicate, predicate);
 		return new StringSetting(getSettings(), () -> {
 			String value = get();
 			return (nn(value) && predicate.test(value)) ? value : null;
@@ -217,7 +223,7 @@ public class StringSetting extends Setting<String> {
 	 * @return The property value as the specified type, or {@link Optional#empty()} if not found or not a valid conversion.
 	 */
 	public <T> Setting<T> asType(Class<T> c) {
-		assertArgNotNull("c", c);
+		assertArgNotNull(ARG_c, c);
 		return map(v -> getSettings().toType(v, c)).filter(Objects::nonNull);
 	}
 }

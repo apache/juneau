@@ -47,7 +47,12 @@ import org.apache.juneau.json.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSchemaDetails">JSON-Schema Support</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSchemaMetaProvider {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
+	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -91,7 +96,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			BeanContext.Builder bc = beanContext();
 			jsonSerializerBuilder = copyFrom.jsonSerializerBuilder.copy().beanContext(bc);
 			jsonParserBuilder = copyFrom.jsonParserBuilder.copy().beanContext(bc);
@@ -112,7 +117,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(JsonSchemaGenerator copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			BeanContext.Builder bc = beanContext();
 			jsonSerializerBuilder = copyFrom.jsonSerializer.copy().beanContext(bc);
 			jsonParserBuilder = copyFrom.jsonParser.copy().beanContext(bc);
@@ -309,7 +314,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * @return This object.
 		 */
 		public Builder beanDefMapper(Class<? extends BeanDefMapper> value) {
-			beanDefMapper = assertArgNotNull("value", value);
+			beanDefMapper = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 

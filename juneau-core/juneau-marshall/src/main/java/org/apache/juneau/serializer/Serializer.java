@@ -70,7 +70,11 @@ import org.apache.juneau.soap.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class Serializer extends BeanTraverseContext {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -119,7 +123,7 @@ public class Serializer extends BeanTraverseContext {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			produces = copyFrom.produces;
 			accept = copyFrom.accept;
 			addBeanTypes = copyFrom.addBeanTypes;
@@ -143,7 +147,7 @@ public class Serializer extends BeanTraverseContext {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Serializer copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			produces = copyFrom.produces;
 			accept = copyFrom.accept;
 			addBeanTypes = copyFrom.addBeanTypes;

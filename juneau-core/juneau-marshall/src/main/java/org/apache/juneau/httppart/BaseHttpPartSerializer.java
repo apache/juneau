@@ -32,7 +32,11 @@ import org.apache.juneau.serializer.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpPartSerializersParsers">HTTP Part Serializers and Parsers</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public abstract class BaseHttpPartSerializer extends BeanContextable implements HttpPartSerializer {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_builder = "builder";
 
 	/**
 	 * Builder class.
@@ -50,7 +54,7 @@ public abstract class BaseHttpPartSerializer extends BeanContextable implements 
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder builder) {
-			super(assertArgNotNull("builder", builder));
+			super(assertArgNotNull(ARG_builder, builder));
 		}
 	}
 

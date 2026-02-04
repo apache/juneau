@@ -24,7 +24,11 @@ import java.util.*;
  * Class-related utility methods.
  *
  */
+@SuppressWarnings("java:S115")
 public class ResourceBundleUtils {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_loader = "loader";
 
 	/**
 	 * Same as {@link ResourceBundle#getBundle(String, Locale, ClassLoader)} but never throws a {@link MissingResourceException}.
@@ -35,7 +39,7 @@ public class ResourceBundleUtils {
 	 * @return The matching resource bundle, or <jk>null</jk> if it could not be found.
 	 */
 	public static ResourceBundle findBundle(String baseName, Locale locale, ClassLoader loader) {
-		assertArgNotNull("loader", loader);
+		assertArgNotNull(ARG_loader, loader);
 		try {
 			return ResourceBundle.getBundle(baseName, locale, loader);
 		} catch (@SuppressWarnings("unused") MissingResourceException e) {}

@@ -60,7 +60,14 @@ import org.apache.juneau.commons.function.Snippet;
  * 	<jv>store</jv>.unset(<js>"my.property"</js>);
  * </p>
  */
+@SuppressWarnings("java:S115")
 public class FunctionalStore implements SettingStore {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_reader = "reader";
+	private static final String ARG_writer = "writer";
+	private static final String ARG_unsetter = "unsetter";
+	private static final String ARG_clearer = "clearer";
 
 	private final Function<String, String> reader;
 	private final BiConsumer<String, String> writer;
@@ -81,10 +88,10 @@ public class FunctionalStore implements SettingStore {
 		Consumer<String> unsetter,
 		Snippet clearer
 	) {
-		assertArgNotNull("reader", reader);
-		assertArgNotNull("writer", writer);
-		assertArgNotNull("unsetter", unsetter);
-		assertArgNotNull("clearer", clearer);
+		assertArgNotNull(ARG_reader, reader);
+		assertArgNotNull(ARG_writer, writer);
+		assertArgNotNull(ARG_unsetter, unsetter);
+		assertArgNotNull(ARG_clearer, clearer);
 		this.reader = reader;
 		this.writer = writer;
 		this.unsetter = unsetter;

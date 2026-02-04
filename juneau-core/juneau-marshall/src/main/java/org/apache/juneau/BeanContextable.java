@@ -54,6 +54,12 @@ public abstract class BeanContextable extends Context {
 	private static final String ARG_values = "values";
 	private static final String ARG_beanClassName = "beanClassName";
 	private static final String ARG_pojoClass = "pojoClass";
+	private static final String ARG_interfaceClass = "interfaceClass";
+	private static final String ARG_implClass = "implClass";
+	private static final String ARG_normalClass = "normalClass";
+	private static final String ARG_swappedClass = "swappedClass";
+	private static final String ARG_swapFunction = "swapFunction";
+	private static final String ARG_unswapFunction = "unswapFunction";
 
 	/**
 	 * Builder class.
@@ -2035,7 +2041,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
-			bcBuilder.implClass(assertArgNotNull("interfaceClass", interfaceClass), assertArgNotNull("implClass", implClass));
+			bcBuilder.implClass(assertArgNotNull(ARG_interfaceClass, interfaceClass), assertArgNotNull(ARG_implClass, implClass));
 			return this;
 		}
 
@@ -2617,7 +2623,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
-			bcBuilder.swap(assertArgNotNull("normalClass", normalClass), assertArgNotNull("swappedClass", swappedClass), assertArgNotNull("swapFunction", swapFunction));
+			bcBuilder.swap(assertArgNotNull(ARG_normalClass, normalClass), assertArgNotNull(ARG_swappedClass, swappedClass), assertArgNotNull(ARG_swapFunction, swapFunction));
 			return this;
 		}
 
@@ -2646,7 +2652,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
-			bcBuilder.swap(assertArgNotNull("normalClass", normalClass), assertArgNotNull("swappedClass", swappedClass), assertArgNotNull("swapFunction", swapFunction), assertArgNotNull("unswapFunction", unswapFunction));
+			bcBuilder.swap(assertArgNotNull(ARG_normalClass, normalClass), assertArgNotNull(ARG_swappedClass, swappedClass), assertArgNotNull(ARG_swapFunction, swapFunction), assertArgNotNull(ARG_unswapFunction, unswapFunction));
 			return this;
 		}
 

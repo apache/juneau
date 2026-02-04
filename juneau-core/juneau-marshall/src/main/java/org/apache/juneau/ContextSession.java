@@ -45,6 +45,10 @@ public abstract class ContextSession {
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
 	private static final String ARG_value = "value";
+	private static final String ARG_type = "type";
+	private static final String ARG_apply = "apply";
+	private static final String ARG_key = "key";
+	private static final String ARG_builder = "builder";
 
 	/**
 	 * Builder class.
@@ -77,8 +81,8 @@ public abstract class ContextSession {
 		 * @return This object.
 		 */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
-			if (assertArgNotNull("type", type).isInstance(this))
-				assertArgNotNull("apply", apply).accept(type.cast(this));
+			if (assertArgNotNull(ARG_type, type).isInstance(this))
+				assertArgNotNull(ARG_apply, apply).accept(type.cast(this));
 			return this;
 		}
 
@@ -144,7 +148,7 @@ public abstract class ContextSession {
 		 * @return This object.
 		 */
 		public Builder property(String key, Object value) {
-			assertArgNotNull("key", key);
+			assertArgNotNull(ARG_key, key);
 			var map = properties.get();
 			if (value == null) {
 				map.remove(key);
@@ -181,7 +185,7 @@ public abstract class ContextSession {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected ContextSession(Builder builder) {
-		assertArgNotNull("builder", builder);
+		assertArgNotNull(ARG_builder, builder);
 		ctx = builder.ctx;
 		debug = opt(builder.debug).orElse(ctx.isDebug());
 		unmodifiable = builder.unmodifiable;

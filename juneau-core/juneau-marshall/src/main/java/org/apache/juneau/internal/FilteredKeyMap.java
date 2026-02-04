@@ -29,7 +29,12 @@ import org.apache.juneau.*;
  * @param <K> The key class type.
  * @param <V> The value class type.
  */
+@SuppressWarnings("java:S115")
 public class FilteredKeyMap<K,V> extends AbstractMap<K,V> implements Delegate<Map<K,V>> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_innerMap = "innerMap";
+	private static final String ARG_keys = "keys";
 
 	/**
 	 * A set with ordered entries (a List with a Set API).
@@ -67,8 +72,8 @@ public class FilteredKeyMap<K,V> extends AbstractMap<K,V> implements Delegate<Ma
 	 */
 	// TODO - Convert keys to List<K>
 	public FilteredKeyMap(ClassMeta<Map<K,V>> classMeta, Map<K,V> innerMap, K[] keys) {
-		assertArgNotNull("innerMap", innerMap);
-		assertArgNotNull("keys", keys);
+		assertArgNotNull(ARG_innerMap, innerMap);
+		assertArgNotNull(ARG_keys, keys);
 
 		this.classMeta = classMeta;
 		this.innerMap = innerMap;

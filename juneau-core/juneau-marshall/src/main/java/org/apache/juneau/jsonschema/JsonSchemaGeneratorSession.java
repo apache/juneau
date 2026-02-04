@@ -50,6 +50,8 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
+	private static final String ARG_id = "id";
+	private static final String ARG_def = "def";
 
 	/**
 	 * Builder class.
@@ -173,7 +175,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 */
 	public JsonSchemaGeneratorSession addBeanDef(String id, JsonMap def) {
 		if (nn(defs))
-			defs.put(assertArgNotNull("id", id), assertArgNotNull("def", def));
+			defs.put(assertArgNotNull(ARG_id, id), assertArgNotNull(ARG_def, def));
 		return this;
 	}
 

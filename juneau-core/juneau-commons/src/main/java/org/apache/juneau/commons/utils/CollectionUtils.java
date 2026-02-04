@@ -123,7 +123,15 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">juneau-commons</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class CollectionUtils {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
+	private static final String ARG_array = "array";
+	private static final String ARG_arrays = "arrays";
+	private static final String ARG_values = "values";
+	private static final String ARG_o = "o";
 
 	/**
 	 * Creates an array of objects.
@@ -374,7 +382,7 @@ public class CollectionUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <E> E[] array(Collection<E> value, Class<E> componentType) {
-		assertArgNotNull("value", value);
+		assertArgNotNull(ARG_value, value);
 		var array = (E[])Array.newInstance(componentType, value.size());
 		return value.toArray(array);
 	}
@@ -389,7 +397,7 @@ public class CollectionUtils {
 	 */
 	@SuppressWarnings("java:S3776")
 	public static List<Object> arrayToList(Object array) {
-		assertArgNotNull("array", array);
+		assertArgNotNull(ARG_array, array);
 		assertArg(isArray(array), "Input must be an array but was {0}", cn(array));
 
 		var componentType = array.getClass().getComponentType();
@@ -509,7 +517,7 @@ public class CollectionUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <E> E[] combine(E[]...arrays) {
-		assertArgNotNull("arrays", arrays);
+		assertArgNotNull(ARG_arrays, arrays);
 		int l = 0;
 		E[] a1 = null;
 		for (var a : arrays) {
@@ -1928,7 +1936,7 @@ public class CollectionUtils {
 	 */
 	@SafeVarargs
 	public static <T> LinkedHashSet<T> set(T...values) {  // NOSONAR(java:UNKNOWN): Varargs convenience method
-		assertArgNotNull("values", values);
+		assertArgNotNull(ARG_values, values);
 		return new LinkedHashSet<>(Arrays.asList(values));
 	}
 
@@ -2064,7 +2072,7 @@ public class CollectionUtils {
 	 */
 	@SafeVarargs
 	public static <E> TreeSet<E> sortedSet(E...values) {
-		assertArgNotNull("values", values);
+		assertArgNotNull(ARG_values, values);
 		var l = new TreeSet<E>();
 		for (var v : values)
 			if (v != null)
@@ -2234,7 +2242,7 @@ public class CollectionUtils {
 	 * @see arrayToList
 	 */
 	public static final List<?> toList(Object o) {  // NOSONAR(java:UNKNOWN): Raw type return
-		assertArgNotNull("o", o);
+		assertArgNotNull(ARG_o, o);
 		if (o instanceof List<?> o2)
 			return o2;
 		if (o instanceof Iterable<?> o2)
@@ -2311,7 +2319,7 @@ public class CollectionUtils {
 	 * @return The new set.
 	 */
 	public static <T> Set<T> toSet(T[] array) {
-		assertArgNotNull("array", array);
+		assertArgNotNull(ARG_array, array);
 		return new AbstractSet<>() {
 
 			@Override /* Overridden from Set */

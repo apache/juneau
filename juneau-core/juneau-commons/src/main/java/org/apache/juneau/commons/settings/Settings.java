@@ -129,7 +129,18 @@ import org.apache.juneau.commons.reflect.*;
  * 		</p>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class Settings {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_name = "name";
+	private static final String ARG_def = "def";
+	private static final String ARG_s = "s";
+	private static final String ARG_c = "c";
+	private static final String ARG_supplier = "supplier";
+	private static final String ARG_source = "source";
+	private static final String ARG_type = "type";
+	private static final String ARG_function = "function";
 
 	/**
 	 * System property source that delegates to {@link System#getProperty(String)}.
@@ -201,7 +212,7 @@ public class Settings {
 		 * @return This builder for method chaining.
 		 */
 		public Builder globalStore(OptionalSupplier<SettingStore> supplier) {
-			this.globalStoreSupplier = assertArgNotNull("supplier", supplier);
+			this.globalStoreSupplier = assertArgNotNull(ARG_supplier, supplier);
 			return this;
 		}
 
@@ -212,7 +223,7 @@ public class Settings {
 		 * @return This builder for method chaining.
 		 */
 		public Builder localStore(OptionalSupplier<SettingStore> supplier) {
-			this.localStoreSupplier = assertArgNotNull("supplier", supplier);
+			this.localStoreSupplier = assertArgNotNull(ARG_supplier, supplier);
 			return this;
 		}
 
@@ -239,7 +250,7 @@ public class Settings {
 		 * @return This builder for method chaining.
 		 */
 		public Builder addSource(SettingSource source) {
-			assertArgNotNull("source", source);
+			assertArgNotNull(ARG_source, source);
 			this.sources.add(source);
 			return this;
 		}
@@ -281,8 +292,8 @@ public class Settings {
 		 * @return This builder for method chaining.
 		 */
 		public <T> Builder addTypeFunction(Class<T> type, Function<String,T> function) {
-			assertArgNotNull("type", type);
-			assertArgNotNull("function", function);
+			assertArgNotNull(ARG_type, type);
+			assertArgNotNull(ARG_function, function);
 			customTypeFunctions.put(type, function);
 			return this;
 		}
@@ -348,7 +359,7 @@ public class Settings {
 	 * @return A {@link StringSetting} that provides the property value, or <jk>null</jk> if not found.
 	 */
 	public StringSetting get(String name) {
-		assertArgNotNull("name", name);
+		assertArgNotNull(ARG_name, name);
 		return new StringSetting(this, () -> {
 			// 1. Check thread-local override
 			var v = localStore.get().get(name);
@@ -402,7 +413,7 @@ public class Settings {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T get(String name, T def) {
-		assertArgNotNull("def", def);
+		assertArgNotNull(ARG_def, def);
 		return get(name).asType((Class<T>)def.getClass()).orElse(def);
 	}
 
@@ -430,7 +441,7 @@ public class Settings {
 	 * @see #clearGlobal()
 	 */
 	public Settings setGlobal(String name, String value) {
-		assertArgNotNull("name", name);
+		assertArgNotNull(ARG_name, name);
 		globalStore.orElseThrow(()->illegalState(MSG_globalDisabled)).set(name, value);
 		return this;
 	}
@@ -447,7 +458,7 @@ public class Settings {
 	 * @see #clearGlobal()
 	 */
 	public void unsetGlobal(String name) {
-		assertArgNotNull("name", name);
+		assertArgNotNull(ARG_name, name);
 		globalStore.orElseThrow(()->illegalState(MSG_globalDisabled)).unset(name);
 	}
 
@@ -470,7 +481,7 @@ public class Settings {
 	 * @see #clearLocal()
 	 */
 	public Settings setLocal(String name, String value) {
-		assertArgNotNull("name", name);
+		assertArgNotNull(ARG_name, name);
 		assertState(nn(localStore.get()), MSG_localDisabled);
 		localStore.get().set(name, value);
 		return this;
@@ -488,7 +499,7 @@ public class Settings {
 	 * @see #clearLocal()
 	 */
 	public void unsetLocal(String name) {
-		assertArgNotNull("name", name);
+		assertArgNotNull(ARG_name, name);
 		assertState(nn(localStore.get()), MSG_localDisabled);
 		localStore.get().unset(name);
 	}
@@ -566,8 +577,8 @@ public class Settings {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected <T> T toType(String s, Class<T> c) {
-		assertArgNotNull("s", s);
-		assertArgNotNull("c", c);
+		assertArgNotNull(ARG_s, s);
+		assertArgNotNull(ARG_c, c);
 		var f = (Function<String,T>)toTypeFunctions.get(c);
 		if (f == null) {
 			if (c == String.class)

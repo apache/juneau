@@ -32,7 +32,13 @@ import org.apache.juneau.commons.reflect.*;
  * Utility methods for working with classes.
  *
  */
+@SuppressWarnings("java:S115")
 public class ClassUtils {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
+	private static final String ARG_args = "args";
+	private static final String ARG_x = "x";
 
 	/**
 	 * Predicate check to filter out void classes.
@@ -77,7 +83,7 @@ public class ClassUtils {
 	 * @throws IllegalArgumentException If value is <jk>null</jk>.
 	 */
 	public static boolean canAddTo(Collection<?> value) {
-		assertArgNotNull("value", value);
+		assertArgNotNull(ARG_value, value);
 		return canAddTo(value.getClass());
 	}
 
@@ -114,7 +120,7 @@ public class ClassUtils {
 	 * @throws IllegalArgumentException If value is <jk>null</jk>.
 	 */
 	public static boolean canPutTo(Map<?,?> value) {
-		assertArgNotNull("value", value);
+		assertArgNotNull(ARG_value, value);
 		return canAddTo(value.getClass());
 	}
 
@@ -339,7 +345,7 @@ public class ClassUtils {
 	 * 	matches (fast path optimization).
 	 */
 	public static Object[] getMatchingArgs(Class<?>[] paramTypes, Object...args) {
-		assertArgNotNull("args", args);
+		assertArgNotNull(ARG_args, args);
 		var needsShuffle = paramTypes.length != args.length;
 		if (! needsShuffle) {
 			for (var i = 0; i < paramTypes.length; i++) {
@@ -470,7 +476,7 @@ public class ClassUtils {
 	 * @return <jk>true</jk> if call was successful.
 	 */
 	public static boolean setAccessible(Constructor<?> x) {
-		assertArgNotNull("x", x);
+		assertArgNotNull(ARG_x, x);
 		return safeOpt(() -> {
 			x.setAccessible(true);
 			return true;
@@ -484,7 +490,7 @@ public class ClassUtils {
 	 * @return <jk>true</jk> if call was successful.
 	 */
 	public static boolean setAccessible(Field x) {
-		assertArgNotNull("x", x);
+		assertArgNotNull(ARG_x, x);
 		return safeOpt(() -> {
 			x.setAccessible(true);
 			return true;
@@ -498,7 +504,7 @@ public class ClassUtils {
 	 * @return <jk>true</jk> if call was successful.
 	 */
 	public static boolean setAccessible(Method x) {
-		assertArgNotNull("x", x);
+		assertArgNotNull(ARG_x, x);
 		return safeOpt(() -> {
 			x.setAccessible(true);
 			return true;

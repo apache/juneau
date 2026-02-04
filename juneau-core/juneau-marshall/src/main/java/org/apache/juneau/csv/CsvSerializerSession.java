@@ -41,13 +41,16 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  */
-@SuppressWarnings({"resource","java:S110"})
+@SuppressWarnings({"resource","java:S110","java:S115"})
 public class CsvSerializerSession extends WriterSerializerSession {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
+	@SuppressWarnings({"java:S110", "java:S115"})
 	public static class Builder extends WriterSerializerSession.Builder {
 
 		/**
@@ -57,7 +60,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(CsvSerializer ctx) {
-			super(assertArgNotNull("ctx", ctx));
+			super(assertArgNotNull(ARG_ctx, ctx));
 		}
 
 		@Override /* Overridden from Builder */
@@ -182,7 +185,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(CsvSerializer ctx) {
-		return new Builder(assertArgNotNull("ctx", ctx));
+		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
 	/**

@@ -51,7 +51,12 @@ import org.apache.juneau.cp.*;
  * </ul>
  *
  */
+@SuppressWarnings("java:S115")
 public class BeanRegistry {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_bc = "bc";
+	private static final String ARG_classes = "classes";
 
 	private final Map<String,ClassMeta<?>> map;
 	private final Map<Class<?>,String> reverseMap;
@@ -60,8 +65,8 @@ public class BeanRegistry {
 	private final boolean isEmpty;
 
 	BeanRegistry(BeanContext bc, BeanRegistry parent, List<ClassInfo> classes) {
-		assertArgNotNull("bc", bc);
-		assertArgNotNull("classes", classes);
+		assertArgNotNull(ARG_bc, bc);
+		assertArgNotNull(ARG_classes, classes);
 		this.bc = bc;
 		this.ap = bc.getAnnotationProvider();
 		this.map = new ConcurrentHashMap<>();

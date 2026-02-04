@@ -123,7 +123,16 @@ import jakarta.servlet.http.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class RestContext extends Context {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
+	private static final String ARG_path = "path";
+	private static final String ARG_key = "key";
+	private static final String ARG_resource = "resource";
+	private static final String ARG_type = "type";
+	private static final String ARG_restContext = "restContext";
 
 	/**
 	 * Builder class.
@@ -341,7 +350,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder allowedHeaderParams(String value) {
-			allowedHeaderParams = assertArgNotNull("value", value);
+			allowedHeaderParams = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -404,7 +413,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder allowedMethodHeaders(String value) {
-			allowedMethodHeaders = assertArgNotNull("value", value);
+			allowedMethodHeaders = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -477,7 +486,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder allowedMethodParams(String value) {
-			allowedMethodParams = assertArgNotNull("value", value);
+			allowedMethodParams = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -710,7 +719,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder callLogger(CallLogger value) {
-			callLogger().impl(assertArgNotNull("value", value));
+			callLogger().impl(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -733,7 +742,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder callLogger(Class<? extends CallLogger> value) {
-			callLogger().type(assertArgNotNull("value", value));
+			callLogger().type(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -752,7 +761,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder child(String path, Object child) {
-			children.add(new RestChild(assertArgNotNull("path", path), child));
+			children.add(new RestChild(assertArgNotNull(ARG_path, path), child));
 			return this;
 		}
 
@@ -928,7 +937,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder clientVersionHeader(String value) {
-			clientVersionHeader = assertArgNotNull("value", value);
+			clientVersionHeader = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -986,7 +995,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder config(Config value) {
-			config = assertArgNotNull("value", value);
+			config = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -1079,7 +1088,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder debugDefault(Enablement value) {
-			defaultSettings().set("RestContext.debugDefault", assertArgNotNull("value", value));
+			defaultSettings().set("RestContext.debugDefault", assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -1111,7 +1120,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder debugEnablement(Class<? extends DebugEnablement> value) {
-			debugEnablement().type(assertArgNotNull("value", value));
+			debugEnablement().type(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -1123,7 +1132,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder debugEnablement(DebugEnablement value) {
-			debugEnablement().impl(assertArgNotNull("value", value));
+			debugEnablement().impl(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -1189,7 +1198,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder defaultCharset(Charset value) {
-			defaultCharset = assertArgNotNull("value", value);
+			defaultCharset = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -1473,7 +1482,7 @@ public class RestContext extends Context {
 		 * @see #defaultSettings()
 		 */
 		public Builder defaultSetting(String key, Object value) {
-			defaultSettings().set(assertArgNotNull("key", key), value);
+			defaultSettings().set(assertArgNotNull(ARG_key, key), value);
 			return this;
 		}
 
@@ -1760,7 +1769,7 @@ public class RestContext extends Context {
 				return this;
 			initialized = true;
 
-			this.resource = new ResourceSupplier(resourceClass, assertArgNotNull("resource", resource));
+			this.resource = new ResourceSupplier(resourceClass, assertArgNotNull(ARG_resource, resource));
 			var r = this.resource;
 			var rc = resourceClass;
 
@@ -1888,7 +1897,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder jsonSchemaGenerator(Class<? extends JsonSchemaGenerator> value) {
-			jsonSchemaGenerator().type(assertArgNotNull("value", value));
+			jsonSchemaGenerator().type(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -1911,7 +1920,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder jsonSchemaGenerator(JsonSchemaGenerator value) {
-			jsonSchemaGenerator().impl(assertArgNotNull("value", value));
+			jsonSchemaGenerator().impl(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -1964,7 +1973,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder logger(Logger value) {
-			logger = assertArgNotNull("value", value);
+			logger = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -2029,7 +2038,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder maxInput(String value) {
-			maxInput = StringUtils.parseLongWithSuffix(assertArgNotNull("value", value));
+			maxInput = StringUtils.parseLongWithSuffix(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -2151,7 +2160,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder messages(Class<? extends Messages> value) {
-			messages().type(assertArgNotNull("value", value));
+			messages().type(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -2174,7 +2183,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder messages(Messages value) {
-			messages().impl(assertArgNotNull("value", value));
+			messages().impl(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -2228,7 +2237,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder methodExecStore(Class<? extends MethodExecStore> value) {
-			methodExecStore().type(assertArgNotNull("value", value));
+			methodExecStore().type(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -2251,7 +2260,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder methodExecStore(MethodExecStore value) {
-			methodExecStore().impl(assertArgNotNull("value", value));
+			methodExecStore().impl(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -2270,7 +2279,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder parserListener(Class<? extends ParserListener> value) {
-			if (isNotVoid(assertArgNotNull("value", value)))
+			if (isNotVoid(assertArgNotNull(ARG_value, value)))
 				parsers.forEach(x -> x.listener(value));
 			return this;
 		}
@@ -2404,7 +2413,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder partParser(Class<? extends HttpPartParser> value) {
-			partParser().type(assertArgNotNull("value", value));
+			partParser().type(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -2427,7 +2436,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder partParser(HttpPartParser value) {
-			partParser().impl(assertArgNotNull("value", value));
+			partParser().impl(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -2480,7 +2489,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder partSerializer(Class<? extends HttpPartSerializer> value) {
-			partSerializer().type(assertArgNotNull("value", value));
+			partSerializer().type(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -2503,7 +2512,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder partSerializer(HttpPartSerializer value) {
-			partSerializer().impl(assertArgNotNull("value", value));
+			partSerializer().impl(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -2732,7 +2741,7 @@ public class RestContext extends Context {
 		 */
 		public <T> Optional<T> resourceAs(Class<T> type) {
 			var r = resource().get();
-			return opt(assertArgNotNull("type", type).isInstance(r) ? type.cast(r) : null);
+			return opt(assertArgNotNull(ARG_type, type).isInstance(r) ? type.cast(r) : null);
 		}
 
 		/**
@@ -2952,7 +2961,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder restChildrenClass(Class<? extends RestChildren> value) {
-			childrenClass = assertArgNotNull("value", value);
+			childrenClass = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -3048,7 +3057,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder restOpContextClass(Class<? extends RestOpContext> value) {
-			opContextClass = assertArgNotNull("value", value);
+			opContextClass = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -3062,7 +3071,7 @@ public class RestContext extends Context {
 		 */
 		public RestOperations.Builder restOperations(RestContext restContext) throws ServletException {
 			if (restOperations == null)
-				restOperations = createRestOperations(beanStore(), resource(), assertArgNotNull("restContext", restContext));
+				restOperations = createRestOperations(beanStore(), resource(), assertArgNotNull(ARG_restContext, restContext));
 			return restOperations;
 		}
 
@@ -3094,7 +3103,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder serializerListener(Class<? extends SerializerListener> value) {
-			if (isNotVoid(assertArgNotNull("value", value)))
+			if (isNotVoid(assertArgNotNull(ARG_value, value)))
 				serializers.forEach(x -> x.listener(value));
 			return this;
 		}
@@ -3273,7 +3282,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder staticFiles(Class<? extends StaticFiles> value) {
-			staticFiles().type(assertArgNotNull("value", value));
+			staticFiles().type(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -3295,7 +3304,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder staticFiles(StaticFiles value) {
-			staticFiles().impl(assertArgNotNull("value", value));
+			staticFiles().impl(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -3324,7 +3333,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder swaggerProvider(Class<? extends SwaggerProvider> value) {
-			swaggerProvider().type(assertArgNotNull("value", value));
+			swaggerProvider().type(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -3342,7 +3351,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder swaggerProvider(SwaggerProvider value) {
-			swaggerProvider().impl(assertArgNotNull("value", value));
+			swaggerProvider().impl(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -3397,7 +3406,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder thrownStore(Class<? extends ThrownStore> value) {
-			thrownStore().type(assertArgNotNull("value", value));
+			thrownStore().type(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -3420,7 +3429,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder thrownStore(ThrownStore value) {
-			thrownStore().impl(assertArgNotNull("value", value));
+			thrownStore().impl(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -3497,7 +3506,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder uriAuthority(String value) {
-			uriAuthority = assertArgNotNull("value", value);
+			uriAuthority = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -3558,7 +3567,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder uriContext(String value) {
-			uriContext = assertArgNotNull("value", value);
+			uriContext = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -3617,7 +3626,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder uriRelativity(UriRelativity value) {
-			uriRelativity = assertArgNotNull("value", value);
+			uriRelativity = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -3676,7 +3685,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder uriResolution(UriResolution value) {
-			uriResolution = assertArgNotNull("value", value);
+			uriResolution = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 

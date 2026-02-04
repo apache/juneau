@@ -47,7 +47,12 @@ import org.apache.juneau.commons.reflect.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class InputStreamParser extends Parser {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
+	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -70,7 +75,7 @@ public class InputStreamParser extends Parser {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			binaryFormat = copyFrom.binaryFormat;
 		}
 
@@ -81,7 +86,7 @@ public class InputStreamParser extends Parser {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(InputStreamParser copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			binaryFormat = copyFrom.binaryFormat;
 		}
 
@@ -292,7 +297,7 @@ public class InputStreamParser extends Parser {
 		 * @return This object.
 		 */
 		public Builder binaryFormat(BinaryFormat value) {
-			binaryFormat = assertArgNotNull("value", value);
+			binaryFormat = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 

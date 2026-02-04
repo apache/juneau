@@ -146,8 +146,12 @@ import org.apache.juneau.xml.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({"java:S110", "java:S115"})
 public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
+	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -184,7 +188,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			addBeanTypesHtml = copyFrom.addBeanTypesHtml;
 			addKeyValueTableHeaders = copyFrom.addKeyValueTableHeaders;
 			disableDetectLabelParameters = copyFrom.disableDetectLabelParameters;
@@ -200,7 +204,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(HtmlSerializer copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			addBeanTypesHtml = copyFrom.addBeanTypesHtml;
 			addKeyValueTableHeaders = copyFrom.addKeyValueTableHeaders;
 			disableDetectLabelParameters = ! copyFrom.detectLabelParameters;
@@ -935,7 +939,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * @return This object.
 		 */
 		public Builder labelParameter(String value) {
-			labelParameter = assertArgNotNull("value", value);
+			labelParameter = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -1333,7 +1337,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * @return This object.
 		 */
 		public Builder uriAnchorText(AnchorText value) {
-			uriAnchorText = assertArgNotNull("value", value);
+			uriAnchorText = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 

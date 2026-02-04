@@ -56,6 +56,9 @@ public class BeanSession extends ContextSession {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
+	private static final String ARG_o = "o";
+	private static final String ARG_c = "c";
+	private static final String ARG_classes = "classes";
 
 	/**
 	 * Builder class.
@@ -1098,8 +1101,8 @@ public class BeanSession extends ContextSession {
 	 * class.
 	 */
 	public final <T> BeanMap<T> toBeanMap(T o, Class<? super T> c) throws BeanRuntimeException {
-		assertArgNotNull("o", o);
-		assertArgNotNull("c", c);
+		assertArgNotNull(ARG_o, o);
+		assertArgNotNull(ARG_c, c);
 		assertArg(c.isInstance(o), "The specified object is not an instance of the specified class.  class=''{0}'', objectClass=''{1}'', object=''{2}''", cn(c), cn(o), 0);
 
 		var cm = getClassMeta(c);
@@ -1581,7 +1584,7 @@ public class BeanSession extends ContextSession {
 	 * @return The args {@link ClassMeta} object corresponding to the classes.  Never <jk>null</jk>.
 	 */
 	protected final ClassMeta<Object[]> getArgsClassMeta(Type[] classes) {
-		assertArgNotNull("classes", classes);
+		assertArgNotNull(ARG_classes, classes);
 		return new ClassMeta(Arrays.stream(classes).map(this::getClassMeta).toList());
 	}
 

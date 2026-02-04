@@ -36,7 +36,12 @@ import org.apache.juneau.commons.collections.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class SimplePartSerializer extends BaseHttpPartSerializer {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_copyFrom = "copyFrom";
+	private static final String ARG_builder = "builder";
 
 	/**
 	 * Builder class.
@@ -57,7 +62,7 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
 		@Override
@@ -96,7 +101,7 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public SimplePartSerializer(Builder builder) {
-		super(assertArgNotNull("builder", builder));
+		super(assertArgNotNull(ARG_builder, builder));
 	}
 
 	@Override

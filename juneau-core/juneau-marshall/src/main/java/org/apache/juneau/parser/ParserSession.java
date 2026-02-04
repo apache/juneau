@@ -49,7 +49,11 @@ import org.apache.juneau.swap.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class ParserSession extends BeanSession {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ctx = "ctx";
 
 	/**
 	 * Builder class.
@@ -68,7 +72,7 @@ public class ParserSession extends BeanSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Parser ctx) {
-			super(assertArgNotNull("ctx", ctx).getBeanContext());
+			super(assertArgNotNull(ARG_ctx, ctx).getBeanContext());
 			this.ctx = ctx;
 			mediaTypeDefault(ctx.getPrimaryMediaType());
 		}
@@ -205,7 +209,7 @@ public class ParserSession extends BeanSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(Parser ctx) {
-		return new Builder(assertArgNotNull("ctx", ctx));
+		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
 	/**

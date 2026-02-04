@@ -55,7 +55,11 @@ import org.apache.juneau.parser.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class XmlParser extends ReaderParser implements XmlMetaProvider {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -89,7 +93,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			preserveRootElement = copyFrom.preserveRootElement;
 			validating = copyFrom.validating;
 			eventAllocator = copyFrom.eventAllocator;
@@ -104,7 +108,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(XmlParser copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			preserveRootElement = copyFrom.preserveRootElement;
 			validating = copyFrom.validating;
 			eventAllocator = copyFrom.eventAllocator;

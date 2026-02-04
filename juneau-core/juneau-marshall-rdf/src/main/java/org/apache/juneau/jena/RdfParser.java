@@ -58,7 +58,12 @@ import org.apache.juneau.xml.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class RdfParser extends ReaderParser implements RdfMetaProvider {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
+	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
@@ -100,7 +105,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			collectionFormat = copyFrom.collectionFormat;
 			juneauBpNs = copyFrom.juneauBpNs;
 			juneauNs = copyFrom.juneauNs;
@@ -117,7 +122,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(RdfParser copyFrom) {
-			super(assertArgNotNull("copyFrom", copyFrom));
+			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			collectionFormat = copyFrom.collectionFormat;
 			juneauBpNs = copyFrom.juneauBpNs;
 			juneauNs = copyFrom.juneauNs;
@@ -339,7 +344,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * @return This object.
 		 */
 		public Builder collectionFormat(RdfCollectionFormat value) {
-			collectionFormat = assertArgNotNull("value", value);
+			collectionFormat = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -518,7 +523,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * @return This object.
 		 */
 		public Builder juneauBpNs(Namespace value) {
-			juneauBpNs = assertArgNotNull("value", value);
+			juneauBpNs = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -532,7 +537,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * @return This object.
 		 */
 		public Builder juneauNs(Namespace value) {
-			juneauNs = assertArgNotNull("value", value);
+			juneauNs = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -581,7 +586,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * @return This object.
 		 */
 		public Builder language(String value) {
-			language = assertArgNotNull("value", value);
+			language = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 

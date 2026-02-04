@@ -32,7 +32,12 @@ import org.apache.juneau.parser.*;
 /**
  * A single section in a config file.
  */
+@SuppressWarnings("java:S115")
 public class Section {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_c = "c";
+	private static final String ARG_bean = "bean";
 
 	final Config config;
 	private final ConfigMap configMap;
@@ -103,7 +108,7 @@ public class Section {
 	 * @throws ParseException Unknown property was encountered in section.
 	 */
 	public <T> Optional<T> asBean(Class<T> c, boolean ignoreUnknownProperties) throws ParseException {
-		assertArgNotNull("c", c);
+		assertArgNotNull(ARG_c, c);
 
 		if (! isPresent())
 			return opte();
@@ -186,7 +191,7 @@ public class Section {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> Optional<T> asInterface(Class<T> c) {
-		assertArgNotNull("c", c);
+		assertArgNotNull(ARG_c, c);
 
 		if (! c.isInterface())
 			throw illegalArg("Class ''{0}'' passed to toInterface() is not an interface.", cn(c));
@@ -241,7 +246,7 @@ public class Section {
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Section writeToBean(Object bean, boolean ignoreUnknownProperties) throws ParseException {
-		assertArgNotNull("bean", bean);
+		assertArgNotNull(ARG_bean, bean);
 		if (! isPresent())
 			throw illegalArg("Section ''{0}'' not found in configuration.", name);
 

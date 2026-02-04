@@ -40,8 +40,11 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
  * </ul>
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({"java:S110", "java:S115"})
 public class XmlDocSerializer extends XmlSerializer {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_builder = "builder";
 
 	/** Default serializer without namespaces. */
 	@SuppressWarnings("java:S110")
@@ -54,7 +57,7 @@ public class XmlDocSerializer extends XmlSerializer {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public Ns(XmlSerializer.Builder builder) {
-			super(assertArgNotNull("builder", builder).enableNamespaces());
+			super(assertArgNotNull(ARG_builder, builder).enableNamespaces());
 		}
 	}
 
@@ -74,7 +77,7 @@ public class XmlDocSerializer extends XmlSerializer {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	public XmlDocSerializer(XmlSerializer.Builder builder) {
-		super(assertArgNotNull("builder", builder));
+		super(assertArgNotNull(ARG_builder, builder));
 	}
 
 	@Override /* Overridden from Context */

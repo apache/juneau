@@ -1049,18 +1049,17 @@ import org.apache.juneau.xml.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({"resource", "java:S115"})
 public class RestClient extends BeanContextable implements HttpClient, Closeable {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_itcp = "itcp";
+	private static final String ARG_value = "value";
 
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S115")
 	public static class Builder extends BeanContextable.Builder {
-
-		// Argument name constants for assertArgNotNull
-		private static final String ARG_itcp = "itcp";
-		private static final String ARG_value = "value";
 
 		private BeanCreator<RestCallHandler> callHandler;
 		private BasicBeanStore beanStore = BasicBeanStore.create().build();

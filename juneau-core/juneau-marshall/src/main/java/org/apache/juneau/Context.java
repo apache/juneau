@@ -69,7 +69,16 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  *
  */
+@SuppressWarnings("java:S115")
 public abstract class Context {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_type = "type";
+	private static final String ARG_builder = "builder";
+	private static final String ARG_copyFrom = "copyFrom";
+	private static final String ARG_work = "work";
+	private static final String ARG_subtype = "subtype";
+	private static final String ARG_c = "c";
 
 	/**
 	 * Builder class.
@@ -107,7 +116,7 @@ public abstract class Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Builder copyFrom) {
-			assertArgNotNull("copyFrom", copyFrom);
+			assertArgNotNull(ARG_copyFrom, copyFrom);
 			annotations = copyOf(copyFrom.annotations);
 			debug = copyFrom.debug;
 			type = copyFrom.type;
@@ -121,7 +130,7 @@ public abstract class Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Context copyFrom) {
-			assertArgNotNull("copyFrom", copyFrom);
+			assertArgNotNull(ARG_copyFrom, copyFrom);
 			annotations = copyOf(copyFrom.annotations);
 			debug = copyFrom.debug;
 			type = copyFrom.getClass();
@@ -349,7 +358,7 @@ public abstract class Context {
 		 * @return This object.
 		 */
 		public Builder apply(AnnotationWorkList work) {
-			assertArgNotNull("work", work);
+			assertArgNotNull(ARG_work, work);
 			applied.addAll(work);
 			work.forEach(x -> builders.forEach(x::apply));
 			return this;
@@ -481,7 +490,7 @@ public abstract class Context {
 		 * @return An {@link Optional} containing this builder cast to the subtype, or empty if not an instance.
 		 */
 		public <T extends Builder> Optional<T> asSubtype(Class<T> subtype) {
-			return opt(assertArgNotNull("subtype", subtype).isInstance(this) ? subtype.cast(this) : null);
+			return opt(assertArgNotNull(ARG_subtype, subtype).isInstance(this) ? subtype.cast(this) : null);
 		}
 
 		/**
@@ -503,7 +512,7 @@ public abstract class Context {
 		 */
 		@SuppressWarnings("unchecked")
 		public final <T extends Context> T build(Class<T> c) {
-			if (type == null || ! assertArgNotNull("c", c).isAssignableFrom(type))
+			if (type == null || ! assertArgNotNull(ARG_c, c).isAssignableFrom(type))
 				type = c;
 			return (T)innerBuild();
 		}
@@ -537,7 +546,7 @@ public abstract class Context {
 		 * @return <jk>true</jk> if any of the annotations/appliers can be applied to this builder.
 		 */
 		public boolean canApply(AnnotationWorkList work) {
-			return assertArgNotNull("work", work).stream().anyMatch(x -> builders.stream().anyMatch(x::canApply));
+			return assertArgNotNull(ARG_work, work).stream().anyMatch(x -> builders.stream().anyMatch(x::canApply));
 		}
 
 		/**
@@ -821,7 +830,7 @@ public abstract class Context {
 	 * @return A new builder.
 	 */
 	public static Builder createBuilder(Class<? extends Context> type) {
-		assertArgNotNull("type", type);
+		assertArgNotNull(ARG_type, type);
 		try {
 			return ((Builder)BUILDER_CREATE_METHODS.get(type).invoke(null)).type(type);
 		} catch (ExecutableException e) {
@@ -857,7 +866,7 @@ public abstract class Context {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 */
 	protected Context(Builder builder) {
-		assertArgNotNull("builder", builder);
+		assertArgNotNull(ARG_builder, builder);
 		init(builder);
 		annotations = copyOf(builder.annotations);
 		annotationProvider = AnnotationProvider.create().addRuntimeAnnotations(annotations).build();
