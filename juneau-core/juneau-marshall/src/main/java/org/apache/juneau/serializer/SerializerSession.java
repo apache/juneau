@@ -401,7 +401,7 @@ public class SerializerSession extends BeanTraverseSession {
 	public final <E> void forEachEntry(Collection<E> c, Consumer<E> consumer) {
 		if (c == null || c.isEmpty())
 			return;
-		if (isSortCollections() && ! SortedSet.class.isInstance(c) && isSortable(c))
+		if (isSortCollections() && !(c instanceof SortedSet) && isSortable(c))
 			c.stream().sorted().forEach(consumer);
 		else
 			c.forEach(consumer);
@@ -419,7 +419,7 @@ public class SerializerSession extends BeanTraverseSession {
 	public final <K,V> void forEachEntry(Map<K,V> m, Consumer<Map.Entry<K,V>> consumer) {
 		if (m == null || m.isEmpty())
 			return;
-		if (isSortMaps() && ! SortedMap.class.isInstance(m) && isSortable(m.keySet()))
+		if (isSortMaps() && !(m instanceof SortedMap) && isSortable(m.keySet()))
 			((Map)m).entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(x -> consumer.accept((Map.Entry<K,V>)x));
 		else
 			m.entrySet().forEach(consumer);
@@ -589,10 +589,10 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return A new sorted {@link TreeSet}.
 	 */
 	public final <E> Collection<E> sort(Collection<E> c) {
-		if (c == null || c.isEmpty() || SortedSet.class.isInstance(c))
+		if (c == null || c.isEmpty() || c instanceof SortedSet)
 			return c;
 		if (isSortCollections() && isSortable(c))
-			return c.stream().sorted().collect(Collectors.toList());
+			return c.stream().sorted().toList();
 		return c;
 	}
 
@@ -607,7 +607,7 @@ public class SerializerSession extends BeanTraverseSession {
 		if (c == null || c.isEmpty())
 			return c;
 		if (isSortCollections() && isSortable(c))
-			return c.stream().sorted().collect(Collectors.toList());
+			return c.stream().sorted().toList();
 		return c;
 	}
 
@@ -620,7 +620,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return A new sorted {@link TreeMap}.
 	 */
 	public final <K,V> Map<K,V> sort(Map<K,V> m) {
-		if (m == null || m.isEmpty() || SortedMap.class.isInstance(m))
+		if (m == null || m.isEmpty() || m instanceof SortedMap)
 			return m;
 		if (isSortMaps() && isSortable(m.keySet()))
 			return new TreeMap<>(m);

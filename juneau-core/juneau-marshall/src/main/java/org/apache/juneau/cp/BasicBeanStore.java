@@ -17,7 +17,6 @@
 package org.apache.juneau.cp;
 
 import static java.util.stream.Collectors.*;
-import static java.util.stream.Collectors.toList;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
@@ -504,7 +503,7 @@ public class BasicBeanStore {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("entries", entries.stream().map(Entry::properties).collect(toList()))
+			.a("entries", entries.stream().map(Entry::properties).toList())
 			.a("identity", id(this))
 			.a("parent", parent.map(BasicBeanStore::properties).orElse(null))
 			.ai(readOnly, "readOnly", readOnly)

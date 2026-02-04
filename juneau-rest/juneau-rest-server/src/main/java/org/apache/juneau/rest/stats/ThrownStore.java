@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.stats;
 
 import static java.util.Comparator.*;
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -190,7 +189,7 @@ public class ThrownStore {
 	 *
 	 * @return The list of all stack traces in this database, cloned and sorted by count descending.
 	 */
-	public List<ThrownStats> getStats() { return db.values().stream().map(ThrownStats::clone).sorted(comparingInt(ThrownStats::getCount).reversed()).collect(toList()); }
+	public List<ThrownStats> getStats() { return db.values().stream().map(ThrownStats::clone).sorted(comparingInt(ThrownStats::getCount).reversed()).toList(); }
 
 	/**
 	 * Retrieves the stack trace information for the exception with the specified hash as calculated by {@link #hash(Throwable)}.
@@ -259,7 +258,7 @@ public class ThrownStore {
 	 * @return A modifiable list of strings.
 	 */
 	protected List<String> createStackTrace(Throwable t) {
-		return l(t.getStackTrace()).stream().filter(this::include).map(this::normalize).collect(toList());
+		return l(t.getStackTrace()).stream().filter(this::include).map(this::normalize).toList();
 	}
 
 	/**

@@ -205,7 +205,7 @@ public class MethodExecStore {
 	 *
 	 * @return A list of timing statistics ordered by average execution time descending.
 	 */
-	public List<MethodExecStats> getStatsByTotalTime() { return getStats().stream().sorted(Comparator.comparingLong(MethodExecStats::getTotalTime).reversed()).collect(toList()); }
+	public List<MethodExecStats> getStatsByTotalTime() { return getStats().stream().sorted(Comparator.comparingLong(MethodExecStats::getTotalTime).reversed()).toList(); }
 
 	/**
 	 * Returns the thrown exception store being used by this store.

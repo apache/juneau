@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.matcher;
 
-import static java.util.stream.Collectors.toList;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.util.*;
@@ -112,7 +111,7 @@ public class RestMatcherList {
 	 * @param builder The builder containing the contents for this list.
 	 */
 	protected RestMatcherList(Builder builder) {
-		List<RestMatcher> l = builder.entries.stream().map(BeanCreator::run).collect(toList());
+		List<RestMatcher> l = builder.entries.stream().map(BeanCreator::run).toList();
 		optionalEntries = l.stream().filter(x -> ! x.required()).toArray(RestMatcher[]::new);
 		requiredEntries = l.stream().filter(RestMatcher::required).toArray(RestMatcher[]::new);
 	}

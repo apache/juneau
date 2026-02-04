@@ -4064,7 +4064,7 @@ public class RestContext extends Context {
 		protected MethodList createDestroyMethods(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			var v = Value.of(MethodList.of(getAnnotatedMethods(resource, RestDestroy.class).collect(Collectors.toList())));
+			var v = Value.of(MethodList.of(getAnnotatedMethods(resource, RestDestroy.class).toList()));
 
 			// Replace with bean from:  @RestInject(name="destroyMethods") public [static] MethodList xxx(<args>)
 			new BeanCreateMethodFinder<>(MethodList.class, resource.get(), beanStore).addBean(MethodList.class, v.get()).find(x -> isRestInjectMethod(x, "destroyMethods")).run(x -> v.set(x));
@@ -4116,7 +4116,7 @@ public class RestContext extends Context {
 		protected MethodList createEndCallMethods(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<MethodList> v = Value.of(MethodList.of(getAnnotatedMethods(resource, RestEndCall.class).collect(Collectors.toList())));
+			Value<MethodList> v = Value.of(MethodList.of(getAnnotatedMethods(resource, RestEndCall.class).toList()));
 
 			// Replace with bean from:  @RestInject(name="endCallMethods") public [static] MethodList xxx(<args>)
 			new BeanCreateMethodFinder<>(MethodList.class, resource.get(), beanStore).addBean(MethodList.class, v.get()).find(x -> isRestInjectMethod(x, "endCallMethods")).run(x -> v.set(x));
@@ -4356,7 +4356,7 @@ public class RestContext extends Context {
 		protected MethodList createPostCallMethods(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<MethodList> v = Value.of(MethodList.of(getAnnotatedMethods(resource, RestPostCall.class).collect(Collectors.toList())));
+			Value<MethodList> v = Value.of(MethodList.of(getAnnotatedMethods(resource, RestPostCall.class).toList()));
 
 			// Replace with bean from:  @RestInject(name="postCallMethods") public [static] MethodList xxx(<args>)
 			new BeanCreateMethodFinder<>(MethodList.class, resource.get(), beanStore).addBean(MethodList.class, v.get()).find(x -> isRestInjectMethod(x, "postCallMethods")).run(x -> v.set(x));
@@ -4384,7 +4384,7 @@ public class RestContext extends Context {
 						.map(AnnotationInfo::inner)
 						.anyMatch(RestPostInit::childFirst);
 				})
-				.collect(Collectors.toList())));
+				.toList()));
 
 			// Replace with bean from:  @RestInject(name="postInitChildFirstMethods") public [static] MethodList xxx(<args>)
 			new BeanCreateMethodFinder<>(MethodList.class, resource.get(), beanStore).addBean(MethodList.class, v.get()).find(x -> isRestInjectMethod(x, "postInitChildFirstMethods")).run(x -> v.set(x));
@@ -4412,7 +4412,7 @@ public class RestContext extends Context {
 						.map(AnnotationInfo::inner)
 						.anyMatch(x -> ! x.childFirst());
 				})
-				.collect(Collectors.toList())));
+				.toList()));
 
 			// Replace with bean from:  @RestInject(name="postInitMethods") public [static] MethodList xxx(<args>)
 			new BeanCreateMethodFinder<>(MethodList.class, resource.get(), beanStore).addBean(MethodList.class, v.get()).find(x -> isRestInjectMethod(x, "postInitMethods")).run(x -> v.set(x));
@@ -4432,7 +4432,7 @@ public class RestContext extends Context {
 		protected MethodList createPreCallMethods(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<MethodList> v = Value.of(MethodList.of(getAnnotatedMethods(resource, RestPreCall.class).collect(Collectors.toList())));
+			Value<MethodList> v = Value.of(MethodList.of(getAnnotatedMethods(resource, RestPreCall.class).toList()));
 
 			// Replace with bean from:  @RestInject(name="preCallMethods") public [static] MethodList xxx(<args>)
 			new BeanCreateMethodFinder<>(MethodList.class, resource.get(), beanStore).addBean(MethodList.class, v.get()).find(x -> isRestInjectMethod(x, "preCallMethods")).run(x -> v.set(x));
@@ -4727,7 +4727,7 @@ public class RestContext extends Context {
 		protected MethodList createStartCallMethods(BasicBeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<MethodList> v = Value.of(MethodList.of(getAnnotatedMethods(resource, RestStartCall.class).collect(Collectors.toList())));
+			Value<MethodList> v = Value.of(MethodList.of(getAnnotatedMethods(resource, RestStartCall.class).toList()));
 
 			// Replace with bean from:  @RestInject(name="startCallMethods") public [static] MethodList xxx(<args>)
 			new BeanCreateMethodFinder<>(MethodList.class, resource.get(), beanStore).addBean(MethodList.class, v.get()).find(x -> isRestInjectMethod(x, "startCallMethods")).run(x -> v.set(x));

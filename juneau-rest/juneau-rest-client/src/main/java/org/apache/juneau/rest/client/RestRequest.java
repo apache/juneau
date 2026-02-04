@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.client;
 
-import static java.util.stream.Collectors.toList;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
@@ -1928,7 +1927,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				if (content != NO_BODY) {
 					input2 = content;
 				} else {
-					input2 = new UrlEncodedFormEntity(formData.stream().map(SimpleFormData::new).filter(SimplePart::isValid).collect(toList()));
+					input2 = new UrlEncodedFormEntity(formData.stream().map(SimpleFormData::new).filter(SimplePart::isValid).toList());
 				}
 
 				if (input2 instanceof Supplier<?> s)
@@ -1936,7 +1935,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 				var entity = (HttpEntity)null;
 				if (input2 instanceof PartList input22)
-					entity = new UrlEncodedFormEntity(input22.stream().map(SimpleFormData::new).filter(SimplePart::isValid).collect(toList()));
+					entity = new UrlEncodedFormEntity(input22.stream().map(SimpleFormData::new).filter(SimplePart::isValid).toList());
 				else if (input2 instanceof HttpResource input23) {
 					input23.getHeaders().forEach(request::addHeader);
 					entity = (HttpEntity)input2;
