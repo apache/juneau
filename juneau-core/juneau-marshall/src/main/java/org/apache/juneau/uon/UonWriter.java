@@ -56,7 +56,7 @@ public class UonWriter extends SerializerWriter {
 
 	private final boolean encodeChars, plainTextParams;
 
-	private final char quoteChar;
+	private final char quoteChar2;
 
 	/**
 	 * Constructor.
@@ -77,7 +77,7 @@ public class UonWriter extends SerializerWriter {
 		this.session = session;
 		this.encodeChars = encodeChars;
 		this.plainTextParams = plainTextParams;
-		this.quoteChar = quoteChar;
+		this.quoteChar2 = quoteChar;
 	}
 
 	@Override /* Overridden from SerializerWriter */
@@ -164,7 +164,7 @@ public class UonWriter extends SerializerWriter {
 		var esc = plainTextParams ? noChars : escapedChars;
 
 		if (needsQuotes)
-			w(quoteChar);
+			w(quoteChar2);
 		for (var i = 0; i < s.length(); i++) {
 			var c = s.charAt(i);
 			if (esc.contains(c))
@@ -196,7 +196,7 @@ public class UonWriter extends SerializerWriter {
 			}
 		}
 		if (needsQuotes)
-			w(quoteChar);
+			w(quoteChar2);
 
 		return this;
 	}

@@ -605,7 +605,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		if (m.bean == null) {
 			if (! m.propertyCache.containsKey(name))
 				m.propertyCache.put(name, new JsonMap(m.getBeanSession()));
-			((JsonMap)m.propertyCache.get(name)).append(key.toString(), value);
+			((JsonMap)m.propertyCache.get(name)).append(key, value);
 			return;
 		}
 

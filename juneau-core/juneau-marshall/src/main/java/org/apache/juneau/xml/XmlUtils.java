@@ -73,7 +73,7 @@ public class XmlUtils {
 			Object o = i.next();
 			if (o instanceof String o2) {
 				if (prev == null)
-					prev = o2.toString();
+					prev = o2;
 				else {
 					prev += o2;
 					i.remove();

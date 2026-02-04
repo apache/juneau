@@ -331,7 +331,7 @@ public class Messages extends ResourceBundle {
 
 	private ResourceBundle rb;
 	private Class<?> c;
-	private Messages parent;
+	private Messages parent2;
 	private Locale locale;
 
 	// Cache of message bundles per locale.
@@ -355,7 +355,7 @@ public class Messages extends ResourceBundle {
 	Messages(Class<?> forClass, ResourceBundle rb, Locale locale, Messages parent) {
 		this.c = forClass;
 		this.rb = rb;
-		this.parent = parent;
+		this.parent2 = parent;
 		if (nn(parent))
 			setParent(parent);
 		this.locale = locale == null ? Locale.getDefault() : locale;
@@ -372,8 +372,8 @@ public class Messages extends ResourceBundle {
 				}
 			});
 		}
-		if (nn(parent)) {
-			parent.keySet().forEach(x -> {
+		if (nn(parent2)) {
+			parent2.keySet().forEach(x -> {
 				keyMap.put(x, x);
 				if (x.startsWith(cn)) {
 					var shortKey = x.substring(cn.length());
@@ -418,7 +418,7 @@ public class Messages extends ResourceBundle {
 			return this;
 		var mb = localizedMessages.get(locale);
 		if (mb == null) {
-			var parent = this.parent == null ? null : this.parent.forLocale(locale);
+			var parent = this.parent2 == null ? null : this.parent2.forLocale(locale);
 			var rb = this.rb == null ? null : findBundle(this.rb.getBaseBundleName(), locale, c.getClassLoader());
 			mb = new Messages(c, rb, locale, parent);
 			localizedMessages.put(locale, mb);
@@ -490,6 +490,6 @@ public class Messages extends ResourceBundle {
 			if (rbKeys.contains(k))
 				return rb.getObject(k);
 		} catch (@SuppressWarnings("unused") MissingResourceException e) { /* Shouldn't happen */ }
-		return parent.handleGetObject(key);
+		return parent2.handleGetObject(key);
 	}
 }

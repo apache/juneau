@@ -74,7 +74,7 @@ public class JettyMicroservice extends Microservice {
 		Boolean jettyXmlResolveVars;
 		Map<String,Servlet> servlets = map();
 		Map<String,Object> servletAttributes = map();
-		JettyMicroserviceListener listener;
+		JettyMicroserviceListener listener2;
 		JettyServerFactory factory;
 
 		/**
@@ -94,7 +94,7 @@ public class JettyMicroservice extends Microservice {
 			this.jettyXmlResolveVars = copyFrom.jettyXmlResolveVars;
 			this.servlets = copyOf(copyFrom.servlets);
 			this.servletAttributes = copyOf(copyFrom.servletAttributes);
-			this.listener = copyFrom.listener;
+			this.listener2 = copyFrom.listener2;
 		}
 
 		@Override /* Overridden from MicroserviceBuilder */
@@ -230,7 +230,7 @@ public class JettyMicroservice extends Microservice {
 		 */
 		public Builder listener(JettyMicroserviceListener listener) {
 			super.listener(listener);
-			this.listener = listener;
+			this.listener2 = listener;
 			return this;
 		}
 
@@ -453,7 +453,7 @@ public class JettyMicroservice extends Microservice {
 		}
 	}
 
-	final Messages messages = Messages.of(JettyMicroservice.class);
+	final Messages messages2 = Messages.of(JettyMicroservice.class);
 	private final Builder builder;
 	final JettyMicroserviceListener listener;
 
@@ -472,7 +472,7 @@ public class JettyMicroservice extends Microservice {
 		super(builder);
 		setInstance(this);
 		this.builder = builder.copy();
-		this.listener = nn(builder.listener) ? builder.listener : new BasicJettyMicroserviceListener();
+		this.listener = nn(builder.listener2) ? builder.listener2 : new BasicJettyMicroserviceListener();
 		this.factory = nn(builder.factory) ? builder.factory : new BasicJettyServerFactory();
 	}
 
@@ -744,7 +744,7 @@ public class JettyMicroservice extends Microservice {
 	@Override /* Overridden from Microservice */
 	public synchronized JettyMicroservice stop() throws Exception {
 		final Logger logger = getLogger();
-		final Messages mb2 = messages;
+		final Messages mb2 = messages2;
 		var t = new Thread("JettyMicroserviceStop") {
 			@Override /* Overridden from Thread */
 			public void run() {
@@ -790,7 +790,7 @@ public class JettyMicroservice extends Microservice {
 	protected int startServer() throws Exception {
 		listener.onStartServer(this);
 		server.start();
-		out(messages, "ServerStarted", getPort());
+		out(messages2, "ServerStarted", getPort());
 		listener.onPostStartServer(this);
 		return getPort();
 	}

@@ -1050,7 +1050,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	protected final boolean escapeSolidus;
 	protected final boolean simpleAttrs;
 
-	private final boolean addBeanTypes;
+	private final boolean addBeanTypes2;
 	private final Map<BeanPropertyMeta,JsonBeanPropertyMeta> jsonBeanPropertyMetas = new ConcurrentHashMap<>();
 	private final Map<ClassMeta<?>,JsonClassMeta> jsonClassMetas = new ConcurrentHashMap<>();
 
@@ -1067,7 +1067,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		escapeSolidus = builder.escapeSolidus;
 		simpleAttrs = builder.simpleAttrs;
 
-		addBeanTypes = addBeanTypesJson || super.isAddBeanTypes();
+		addBeanTypes2 = addBeanTypesJson || super.isAddBeanTypes();
 	}
 
 	@Override /* Overridden from Context */
@@ -1124,7 +1124,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 * 	through reflection.
 	 */
 	@Override
-	protected final boolean isAddBeanTypes() { return addBeanTypes; }
+	protected final boolean isAddBeanTypes() { return addBeanTypes2; }
 
 	/**
 	 * Prefix solidus <js>'/'</js> characters with escapes.

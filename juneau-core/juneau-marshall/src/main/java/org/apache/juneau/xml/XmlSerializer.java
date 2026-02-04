@@ -1235,7 +1235,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	private final List<Namespace> namespaces;
 	private final String textNodeDelimiter;
 
-	private final boolean addBeanTypes;
+	private final boolean addBeanTypes2;
 	private final Map<ClassMeta<?>,XmlClassMeta> xmlClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanMeta<?>,XmlBeanMeta> xmlBeanMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,XmlBeanPropertyMeta> xmlBeanPropertyMetas = new ConcurrentHashMap<>();
@@ -1256,7 +1256,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		enableNamespaces = builder.enableNamespaces;
 		namespaces = u(nn(builder.namespaces) ? new ArrayList<>(builder.namespaces) : new ArrayList<>());
 		textNodeDelimiter = builder.textNodeDelimiter;
-		addBeanTypes = addBeanTypesXml || super.isAddBeanTypes();
+		addBeanTypes2 = addBeanTypesXml || super.isAddBeanTypes();
 	}
 
 	@Override /* Overridden from Context */
@@ -1326,7 +1326,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	 * 	through reflection.
 	 */
 	@Override
-	protected boolean isAddBeanTypes() { return addBeanTypes; }
+	protected boolean isAddBeanTypes() { return addBeanTypes2; }
 
 	/**
 	 * Add namespace URLs to the root element.
@@ -1358,7 +1358,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	@Override /* Overridden from WriterSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("addBeanTypes", addBeanTypes)
+			.a("addBeanTypes", addBeanTypes2)
 			.a("addNamespaceUrlsToRoot", addNamespaceUrlsToRoot)
 			.a("autoDetectNamespaces", autoDetectNamespaces)
 			.a("defaultNamespace", defaultNamespace)

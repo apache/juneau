@@ -390,7 +390,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 					}
 				} else {
 					encoder = match.getEncoder();
-					var encoding = match.getEncoding().toString();
+					var encoding = match.getEncoding();
 
 					// Some clients don't recognize identity as an encoding, so don't set it.
 					if (! encoding.equals("identity"))

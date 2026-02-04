@@ -143,7 +143,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 		public K getKey() { return keys[index]; }
 
 		@Override /* Map.Entry */
-		public V getValue() { return values[index]; }
+		public V getValue() { return values2[index]; }
 
 		@Override /* Map.Entry */
 		public V setValue(V val) {
@@ -172,7 +172,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 	final K[] keys;
 
 	/** The array of values. Values are immutable after construction. */
-	final V[] values;
+	final V[] values2;
 
 	/** Pre-constructed entries array for {@link #entrySet()}. */
 	final SimpleUnmodifiableMapEntry[] entries;
@@ -220,7 +220,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 		}
 
 		this.keys = keys;
-		this.values = values;
+		this.values2 = values;
 		entries = (SimpleUnmodifiableMapEntry[])Array.newInstance(SimpleUnmodifiableMapEntry.class, keys.length);
 		for (var i = 0; i < keys.length; i++) {
 			entries[i] = new SimpleUnmodifiableMapEntry(i);
@@ -279,7 +279,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 	public V get(Object key) {
 		for (var i = 0; i < keys.length; i++)
 			if (Utils.eq(keys[i], key))
-				return values[i];
+				return values2[i];
 		return null;
 	}
 

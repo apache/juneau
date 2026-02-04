@@ -65,7 +65,7 @@ public class MsgPackInputStream extends ParserInputStream {
 	private int lastByte;
 	private int extType;
 
-	int pos = 0;
+	int pos2 = 0;
 
 	/**
 	 * Constructor.
@@ -136,7 +136,7 @@ public class MsgPackInputStream extends ParserInputStream {
 	DataType readDataType() throws IOException {
 		int i = read();
 		if (i == -1)
-			throw ioex("Unexpected end of file found at position {0}", pos);
+			throw ioex("Unexpected end of file found at position {0}", pos2);
 		currentDataType = TYPES[i];
 		switch (currentDataType) {
 			case NULL:

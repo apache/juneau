@@ -74,7 +74,7 @@ public class ResourceDescription implements Comparable<ResourceDescription> {
 
 	@Override /* Overridden from Comparable */
 	public int compareTo(ResourceDescription o) {
-		return getName().toString().compareTo(o.getName().toString());
+		return getName().compareTo(o.getName());
 	}
 
 	/**

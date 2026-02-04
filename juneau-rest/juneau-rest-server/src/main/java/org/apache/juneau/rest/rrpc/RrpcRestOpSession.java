@@ -52,7 +52,7 @@ public class RrpcRestOpSession extends RestOpSession {
 	 */
 	public static class Builder extends RestOpSession.Builder {
 
-		private RrpcRestOpContext ctx;
+		private RrpcRestOpContext ctx2;
 
 		/**
 		 * Constructor.
@@ -64,7 +64,7 @@ public class RrpcRestOpSession extends RestOpSession {
 		 */
 		public Builder(RrpcRestOpContext ctx, RestSession session) {
 			super(assertArgNotNull(ARG_ctx, ctx), assertArgNotNull(ARG_session, session));
-			this.ctx = ctx;
+			this.ctx2 = ctx;
 		}
 
 		@Override
@@ -97,7 +97,7 @@ public class RrpcRestOpSession extends RestOpSession {
 	 */
 	protected RrpcRestOpSession(Builder builder) {
 		super(builder);
-		ctx = builder.ctx;
+		ctx = builder.ctx2;
 	}
 
 	@Override /* Overridden from RestOpSession */

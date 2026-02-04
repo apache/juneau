@@ -1081,9 +1081,9 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	protected final boolean encoding;
 	protected final Character quoteCharUon;
 	protected final ParamFormat paramFormat;
-	private final boolean addBeanTypes;
+	private final boolean addBeanTypes2;
 
-	private final char quoteChar;
+	private final char quoteChar2;
 	private final Map<BeanPropertyMeta,UonBeanPropertyMeta> uonBeanPropertyMetas = new ConcurrentHashMap<>();
 	private final Map<ClassMeta<?>,UonClassMeta> uonClassMetas = new ConcurrentHashMap<>();
 
@@ -1101,8 +1101,8 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		paramFormat = builder.paramFormat;
 		quoteCharUon = builder.quoteCharUon;
 
-		addBeanTypes = addBeanTypesUon || super.isAddBeanTypes();
-		quoteChar = nn(quoteCharUon) ? quoteCharUon : nn(super.quoteChar()) ? super.quoteChar() : '\'';
+		addBeanTypes2 = addBeanTypesUon || super.isAddBeanTypes();
+		quoteChar2 = nn(quoteCharUon) ? quoteCharUon : nn(super.quoteChar()) ? super.quoteChar() : '\'';
 	}
 
 	@Override /* Overridden from Context */
@@ -1171,7 +1171,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * 	The character used for quoting attributes and values.
 	 */
 	@Override
-	protected final char getQuoteChar() { return quoteChar; }
+	protected final char getQuoteChar() { return quoteChar2; }
 
 	/**
 	 * Add <js>"_type"</js> properties when needed.
@@ -1182,7 +1182,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * 	through reflection.
 	 */
 	@Override
-	protected final boolean isAddBeanTypes() { return addBeanTypes; }
+	protected final boolean isAddBeanTypes() { return addBeanTypes2; }
 
 	/**
 	 * Encode non-valid URI characters.
@@ -1196,7 +1196,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	@Override /* Overridden from WriterSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("addBeanTypes", addBeanTypes)
+			.a("addBeanTypes", addBeanTypes2)
 			.a("encoding", encoding)
 			.a("paramFormat", paramFormat);
 	}

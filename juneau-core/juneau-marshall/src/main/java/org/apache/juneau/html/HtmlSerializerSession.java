@@ -581,7 +581,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 							out.cTag();
 							if (nn(link))
 								out.oTag("a").attrUri("href", link).cTag();
-							ContentResult cr = serializeAnything(out, value, pMeta.getClassMeta(), p.getKey().toString(), pMeta, 2, false, true);
+							ContentResult cr = serializeAnything(out, value, pMeta.getClassMeta(), p.getKey(), pMeta, 2, false, true);
 							if (cr == CR_ELEMENTS)
 								out.i(i + 2);
 							if (nn(link))
