@@ -43,12 +43,13 @@ import org.apache.juneau.svl.*;
 
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({"resource","java:S110"})
 public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends OutputStreamSerializerSession.Builder {
 
 		private MsgPackSerializer ctx;

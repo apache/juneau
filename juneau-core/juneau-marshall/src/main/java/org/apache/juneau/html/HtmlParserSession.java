@@ -53,12 +53,13 @@ import org.apache.juneau.xml.*;
 
  * </ul>
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({"unchecked","rawtypes","java:S110"})
 public class HtmlParserSession extends XmlParserSession {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends XmlParserSession.Builder {
 
 		private HtmlParser ctx;
@@ -815,7 +816,7 @@ public class HtmlParserSession extends XmlParserSession {
 		while (true) {
 			if (et == START_ELEMENT) {
 				if (nn(characters)) {
-					if (sb.length() == 0)
+					if (sb.isEmpty())
 						characters = trimStart(characters);
 					sb.append(characters);
 					characters = null;
@@ -857,7 +858,7 @@ public class HtmlParserSession extends XmlParserSession {
 				}
 			} else if (et == END_ELEMENT) {
 				if (nn(characters)) {
-					if (sb.length() == 0)
+					if (sb.isEmpty())
 						characters = trimStart(characters);
 					if (depth == 0)
 						characters = trimEnd(characters);

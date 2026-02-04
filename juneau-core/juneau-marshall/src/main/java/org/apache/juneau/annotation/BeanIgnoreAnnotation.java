@@ -81,6 +81,7 @@ public class BeanIgnoreAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends AppliedAnnotationObject.BuilderTMFC {
 
 		private String[] description = {};

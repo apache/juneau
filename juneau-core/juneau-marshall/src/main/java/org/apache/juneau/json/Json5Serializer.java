@@ -41,9 +41,11 @@ package org.apache.juneau.json;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
  * </ul>
  */
+@SuppressWarnings("java:S110")
 public class Json5Serializer extends JsonSerializer {
 
 	/** Default serializer, single quotes, simple mode, with whitespace. */
+	@SuppressWarnings("java:S110")
 	public static class Readable extends Json5Serializer {
 
 		/**

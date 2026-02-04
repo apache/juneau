@@ -40,9 +40,11 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
  * </ul>
  */
+@SuppressWarnings("java:S110")
 public class XmlDocSerializer extends XmlSerializer {
 
 	/** Default serializer without namespaces. */
+	@SuppressWarnings("java:S110")
 	public static class Ns extends XmlDocSerializer {
 
 		/**

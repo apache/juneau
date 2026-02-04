@@ -43,12 +43,13 @@ import org.apache.juneau.uon.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingBasics">URL-Encoding Basics</a>
  * </ul>
  */
-@SuppressWarnings({ "rawtypes", "unchecked", "resource" })
+@SuppressWarnings({"rawtypes","unchecked","resource","java:S110"})
 public class UrlEncodingSerializerSession extends UonSerializerSession {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends UonSerializerSession.Builder {
 
 		private UrlEncodingSerializer ctx;

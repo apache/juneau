@@ -39,11 +39,13 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
  * </ul>
  */
+@SuppressWarnings("java:S110")
 public class JsonSchemaSerializerSession extends JsonSerializerSession {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends JsonSerializerSession.Builder {
 
 		private JsonSchemaSerializer ctx;

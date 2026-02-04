@@ -54,11 +54,13 @@ import org.apache.juneau.uon.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingBasics">URL-Encoding Basics</a>
  * </ul>
  */
+@SuppressWarnings("java:S110")
 public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvider {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends UonParser.Builder {
 
 		private static final Cache<HashKey,UrlEncodingParser> CACHE = Cache.of(HashKey.class, UrlEncodingParser.class).build();

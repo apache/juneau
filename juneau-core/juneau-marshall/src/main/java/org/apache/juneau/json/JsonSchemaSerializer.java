@@ -50,11 +50,13 @@ import org.apache.juneau.jsonschema.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S110")
 public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMetaProvider {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends JsonSerializer.Builder {
 
 		private static final Cache<HashKey,JsonSchemaSerializer> CACHE = Cache.of(HashKey.class, JsonSchemaSerializer.class).build();
@@ -917,6 +919,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 	}
 
 	/** Default serializer, with whitespace. */
+	@SuppressWarnings("java:S110")
 	public static class Readable extends JsonSchemaSerializer {
 
 		/**
@@ -930,6 +933,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 	}
 
 	/** Default serializer, single quotes, simple mode. */
+	@SuppressWarnings("java:S110")
 	public static class Simple extends JsonSchemaSerializer {
 
 		/**
@@ -943,6 +947,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 	}
 
 	/** Default serializer, single quotes, simple mode, with whitespace. */
+	@SuppressWarnings("java:S110")
 	public static class SimpleReadable extends JsonSchemaSerializer {
 
 		/**

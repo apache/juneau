@@ -47,11 +47,13 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  */
+@SuppressWarnings("java:S110")
 public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvider {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends XmlSerializer.Builder {
 
 		private static final Cache<HashKey,SoapXmlSerializer> CACHE = Cache.of(HashKey.class, SoapXmlSerializer.class).build();

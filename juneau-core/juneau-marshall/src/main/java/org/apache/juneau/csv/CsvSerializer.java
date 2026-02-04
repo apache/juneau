@@ -44,11 +44,13 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  */
+@SuppressWarnings("java:S110")
 public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends WriterSerializer.Builder {
 
 		private static final Cache<HashKey,CsvSerializer> CACHE = Cache.of(HashKey.class, CsvSerializer.class).build();

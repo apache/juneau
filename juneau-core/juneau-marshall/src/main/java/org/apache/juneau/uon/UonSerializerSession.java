@@ -46,12 +46,13 @@ import org.apache.juneau.svl.*;
 
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({"resource","java:S110"})
 public class UonSerializerSession extends WriterSerializerSession implements HttpPartSerializerSession {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends WriterSerializerSession.Builder {
 
 		private UonSerializer ctx;

@@ -134,11 +134,13 @@ import org.apache.juneau.serializer.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S110")
 public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends WriterSerializer.Builder {
 
 		private static final Cache<HashKey,XmlSerializer> CACHE = Cache.of(HashKey.class, XmlSerializer.class).build();
@@ -1116,6 +1118,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	}
 
 	/** Default serializer without namespaces. */
+	@SuppressWarnings("java:S110")
 	public static class Ns extends XmlSerializer {
 
 		/**
@@ -1130,6 +1133,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	}
 
 	/** Default serializer without namespaces, single quotes. */
+	@SuppressWarnings("java:S110")
 	public static class NsSq extends XmlSerializer {
 
 		/**
@@ -1144,6 +1148,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	}
 
 	/** Default serializer without namespaces, single quotes, with whitespace. */
+	@SuppressWarnings("java:S110")
 	public static class NsSqReadable extends XmlSerializer {
 
 		/**
@@ -1158,6 +1163,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	}
 
 	/** Default serializer, single quotes. */
+	@SuppressWarnings("java:S110")
 	public static class Sq extends XmlSerializer {
 
 		/**
@@ -1172,6 +1178,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	}
 
 	/** Default serializer, single quotes, whitespace added. */
+	@SuppressWarnings("java:S110")
 	public static class SqReadable extends XmlSerializer {
 
 		/**

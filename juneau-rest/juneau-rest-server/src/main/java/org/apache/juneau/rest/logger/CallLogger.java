@@ -619,7 +619,7 @@ public class CallLogger {
 
 			if (resd.isOneOf(HEADER, ENTITY)) {
 				var hh = res.getHeaderNames();
-				if (hh.size() > 0) {
+				if (!hh.isEmpty()) {
 					sb.append("\n---Response Headers---");
 					for (var h : hh) {
 						sb.append("\n\t").append(h).append(": ").append(res.getHeader(h));

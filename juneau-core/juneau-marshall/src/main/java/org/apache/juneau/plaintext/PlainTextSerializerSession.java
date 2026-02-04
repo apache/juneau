@@ -37,12 +37,13 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({"resource","java:S110"})
 public class PlainTextSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends WriterSerializerSession.Builder {
 
 		/**

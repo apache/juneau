@@ -146,11 +146,13 @@ import org.apache.juneau.xml.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S110")
 public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends XmlSerializer.Builder {
 
 		private static final Cache<HashKey,HtmlSerializer> CACHE = Cache.of(HashKey.class, HtmlSerializer.class).build();
@@ -1385,6 +1387,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	}
 
 	/** Default serializer, single quotes. */
+	@SuppressWarnings("java:S110")
 	public static class Sq extends HtmlSerializer {
 
 		/**
@@ -1398,6 +1401,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	}
 
 	/** Default serializer, single quotes, whitespace added. */
+	@SuppressWarnings("java:S110")
 	public static class SqReadable extends HtmlSerializer {
 
 		/**

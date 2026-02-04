@@ -50,11 +50,13 @@ import org.apache.juneau.xml.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S110")
 public class HtmlStrippedDocSerializer extends HtmlSerializer {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends HtmlSerializer.Builder {
 
 		private static final Cache<HashKey,HtmlStrippedDocSerializer> CACHE = Cache.of(HashKey.class, HtmlStrippedDocSerializer.class).build();

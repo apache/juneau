@@ -43,11 +43,13 @@ import org.apache.juneau.svl.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S110")
 public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends HtmlStrippedDocSerializerSession.Builder {
 
 		private HtmlDocSerializer ctx;

@@ -39,11 +39,13 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
  * </ul>
  */
+@SuppressWarnings("java:S110")
 public class HtmlSchemaSerializerSession extends HtmlSerializerSession {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends HtmlSerializerSession.Builder {
 
 		private HtmlSchemaSerializer ctx;

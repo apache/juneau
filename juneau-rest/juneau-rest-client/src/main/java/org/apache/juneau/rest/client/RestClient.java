@@ -7705,8 +7705,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			var sb = new StringBuilder("WARNING:  RestClient garbage collected before it was finalized.");  // NOT DEBUG
 			if (nn(creationStack)) {
 				sb.append("\nCreation Stack:");  // NOT DEBUG
-				for (var e : creationStack)
-					sb.append("\n\t" + e);  // NOT DEBUG
+				for (var e : creationStack) {
+					sb.append("\n\t").append(e);  // NOT DEBUG
+				}
 			}
 			log(WARNING, sb.toString());
 		}

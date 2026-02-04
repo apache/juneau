@@ -415,7 +415,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		var sb = new StringBuilder(128);
 		sb.append(inner.getName());
 		var params = getParameters();
-		if (params.size() > 0) {
+		if (!params.isEmpty()) {
 			sb.append('(');
 			for (var i = 0; i < params.size(); i++) {
 				if (i > 0)

@@ -51,12 +51,13 @@ import org.apache.juneau.uon.*;
 
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({"resource","java:S110"})
 public class OpenApiSerializerSession extends UonSerializerSession {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends UonSerializerSession.Builder {
 
 		private OpenApiSerializer ctx;

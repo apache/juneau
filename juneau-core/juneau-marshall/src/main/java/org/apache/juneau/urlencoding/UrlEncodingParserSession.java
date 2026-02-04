@@ -45,12 +45,13 @@ import org.apache.juneau.uon.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingBasics">URL-Encoding Basics</a>
  * </ul>
  */
-@SuppressWarnings({ "unchecked", "rawtypes", "resource" })
+@SuppressWarnings({"unchecked","rawtypes","resource","java:S110"})
 public class UrlEncodingParserSession extends UonParserSession {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends UonParserSession.Builder {
 
 		private UrlEncodingParser ctx;

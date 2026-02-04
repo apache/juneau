@@ -52,11 +52,13 @@ import org.apache.juneau.uon.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S110")
 public class OpenApiParserSession extends UonParserSession {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends UonParserSession.Builder {
 
 		private OpenApiParser ctx;

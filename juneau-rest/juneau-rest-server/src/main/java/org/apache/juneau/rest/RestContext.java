@@ -4628,7 +4628,7 @@ public class RestContext extends Context {
 					mi.getMatchingMethods().stream().filter(isRestAnnotatedInterface).forEach(x -> al.add(AnnotationInfo.of(x, RestOpAnnotation.DEFAULT)));
 				}
 
-				if (al.size() > 0) {
+				if (!al.isEmpty()) {
 					try {
 						if (mi.isNotPublic())
 							throw servletException("@RestOp method {0}.{1} must be defined as public.", rci.inner().getName(), mi.getNameSimple());

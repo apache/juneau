@@ -458,10 +458,10 @@ public class MockServletRequest implements HttpServletRequest {
 				var sb = new StringBuilder();
 				queryDataMap.forEach((k, v) -> {
 					if (v == null)
-						sb.append(sb.length() == 0 ? "" : "&").append(urlEncode(k));
+						sb.append(sb.isEmpty() ? "" : "&").append(urlEncode(k));
 					else
 						for (var v2 : v)
-							sb.append(sb.length() == 0 ? "" : "&").append(urlEncode(k)).append('=').append(urlEncode(v2));
+							sb.append(sb.isEmpty() ? "" : "&").append(urlEncode(k)).append('=').append(urlEncode(v2));
 				});
 				queryString = sb.toString();
 			}

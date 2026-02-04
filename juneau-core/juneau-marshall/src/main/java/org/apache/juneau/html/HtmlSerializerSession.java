@@ -53,12 +53,13 @@ import org.apache.juneau.xml.annotation.*;
 
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({"resource","java:S110"})
 public class HtmlSerializerSession extends XmlSerializerSession {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends XmlSerializerSession.Builder {
 
 		private HtmlSerializer ctx;

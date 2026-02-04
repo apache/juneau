@@ -52,11 +52,13 @@ import org.apache.juneau.swap.*;
  * </ul>
  *
  */
+@SuppressWarnings("java:S110")
 public class PlainTextSerializer extends WriterSerializer implements PlainTextMetaProvider {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends WriterSerializer.Builder {
 
 		private static final Cache<HashKey,PlainTextSerializer> CACHE = Cache.of(HashKey.class, PlainTextSerializer.class).build();

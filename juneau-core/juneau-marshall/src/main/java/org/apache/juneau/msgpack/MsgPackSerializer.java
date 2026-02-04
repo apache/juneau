@@ -47,9 +47,11 @@ import org.apache.juneau.serializer.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S110")
 public class MsgPackSerializer extends OutputStreamSerializer implements MsgPackMetaProvider {
 
 	/** Default serializer, BASE64 string output. */
+	@SuppressWarnings("java:S110")
 	public static class Base64 extends MsgPackSerializer {
 
 		/**
@@ -66,6 +68,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends OutputStreamSerializer.Builder {
 
 		private static final Cache<HashKey,MsgPackSerializer> CACHE = Cache.of(HashKey.class, MsgPackSerializer.class).build();
@@ -739,6 +742,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	}
 
 	/** Default serializer, spaced-hex string output. */
+	@SuppressWarnings("java:S110")
 	public static class SpacedHex extends MsgPackSerializer {
 
 		/**

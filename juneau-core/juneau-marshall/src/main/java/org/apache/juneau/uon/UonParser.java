@@ -691,6 +691,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	}
 
 	/** Default parser, decoding. */
+	@SuppressWarnings("java:S110")
 	public static class Decoding extends UonParser {
 
 		/**

@@ -716,6 +716,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 	}
 
 	/** Default parser, strict mode. */
+	@SuppressWarnings("java:S110")
 	public static class Strict extends JsonParser {
 
 		/**

@@ -39,12 +39,13 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({"resource","java:S110"})
 public class SoapXmlSerializerSession extends XmlSerializerSession {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends XmlSerializerSession.Builder {
 
 		private SoapXmlSerializer ctx;

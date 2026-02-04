@@ -58,11 +58,13 @@ import org.apache.juneau.xml.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S110")
 public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends HtmlDocSerializer.Builder {
 
 		JsonSchemaGenerator.Builder generatorBuilder;

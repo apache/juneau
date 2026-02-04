@@ -468,7 +468,7 @@ public final class StringFormat {
 	}
 
 	private static int parseIndexMF(String s) {
-		if (! s.matches("[0-9]+")) throw new IllegalArgumentException("can't parse argument number: " + s);
+		if (! s.matches("\\d+")) throw new IllegalArgumentException("can't parse argument number: " + s);
 		return Integer.parseInt(s);
 	}
 

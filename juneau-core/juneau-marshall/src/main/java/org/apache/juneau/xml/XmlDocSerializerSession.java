@@ -39,12 +39,13 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({"resource","java:S110"})
 public class XmlDocSerializerSession extends XmlSerializerSession {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends XmlSerializerSession.Builder {
 
 		/**

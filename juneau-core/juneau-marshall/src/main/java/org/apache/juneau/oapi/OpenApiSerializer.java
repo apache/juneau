@@ -41,11 +41,13 @@ import org.apache.juneau.uon.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S110")
 public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvider {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends UonSerializer.Builder {
 
 		private static final Cache<HashKey,OpenApiSerializer> CACHE = Cache.of(HashKey.class, OpenApiSerializer.class).build();

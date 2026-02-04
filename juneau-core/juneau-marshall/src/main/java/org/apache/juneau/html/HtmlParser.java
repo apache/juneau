@@ -51,11 +51,13 @@ import org.apache.juneau.xml.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S110")
 public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S110")
 	public static class Builder extends XmlParser.Builder {
 
 		private static final Cache<HashKey,HtmlParser> CACHE = Cache.of(HashKey.class, HtmlParser.class).build();
