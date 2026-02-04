@@ -8092,7 +8092,7 @@ public class StringUtils {
 		list.add(readifier(File.class, (File x) -> safe(() -> read(x))));
 		list.add(readifier(byte[].class, x -> toHex(x)));
 		list.add(readifier(Enum.class, x -> ((Enum<?>)x).name()));
-		list.add(readifier(Class.class, x -> cns(x)));
+		list.add(readifier(Class.class, Utils::cns));
 		list.add(readifier(Constructor.class, x -> ConstructorInfo.of(x).getNameFull()));
 		list.add(readifier(Method.class, x -> MethodInfo.of(x).getNameFull()));
 		list.add(readifier(Field.class, x -> FieldInfo.of(x).toString()));

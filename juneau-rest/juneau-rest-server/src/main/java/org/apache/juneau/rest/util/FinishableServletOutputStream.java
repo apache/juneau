@@ -41,8 +41,8 @@ public class FinishableServletOutputStream extends ServletOutputStream implement
 	 */
 	public FinishableServletOutputStream(OutputStream os) {
 		this.os = os;
-		this.sos = (os instanceof ServletOutputStream ? (ServletOutputStream)os : null);
-		this.f = (os instanceof Finishable ? (Finishable)os : null);
+		this.sos = (os instanceof ServletOutputStream os2 ? os2 : null);
+		this.f = (os instanceof Finishable os2 ? os2 : null);
 	}
 
 	@Override /* Overridden from OutputStream */

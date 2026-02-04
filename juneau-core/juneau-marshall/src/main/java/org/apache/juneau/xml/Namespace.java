@@ -80,14 +80,13 @@ public class Namespace {
 	 */
 	public static Namespace[] createArray(Object o) {
 
-		if (o instanceof Namespace[])
-			return (Namespace[])o;
+		if (o instanceof Namespace[] o2)
+			return o2;
 
-		if (o instanceof String[]) {
-			var ss = (String[])o;
-			var n = new Namespace[ss.length];
-			for (var i = 0; i < ss.length; i++)
-				n[i] = create(ss[i]);
+		if (o instanceof String[] o2) {
+			var n = new Namespace[o2.length];
+			for (var i = 0; i < o2.length; i++)
+				n[i] = create(o2[i]);
 			return n;
 		}
 

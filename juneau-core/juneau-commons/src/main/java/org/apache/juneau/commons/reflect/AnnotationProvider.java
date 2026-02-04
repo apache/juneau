@@ -488,7 +488,7 @@ public class AnnotationProvider {
 			.logOnExit(builder.logOnExit, "AnnotationProvider.cache")
 			.build();
 
-		this.annotationMap = opt(builder.runtimeAnnotations).map(x -> x.build()).orElse(null);
+		this.annotationMap = opt(builder.runtimeAnnotations).map(ReflectionMap.Builder::build).orElse(null);
 		// @formatter:on
 	}
 

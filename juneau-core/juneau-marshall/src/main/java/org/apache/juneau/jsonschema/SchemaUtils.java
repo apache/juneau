@@ -64,8 +64,8 @@ public class SchemaUtils {
 	public static JsonMap parseMap(Object o) throws ParseException {
 		if (o == null)
 			return null;
-		if (o instanceof String[])
-			o = joinnl((String[])o);
+		if (o instanceof String[] o2)
+			o = joinnl(o2);
 		if (o instanceof String o2) {
 			var s = o2;
 			if (s.isEmpty())

@@ -221,10 +221,10 @@ public class ParserPipe implements Closeable {
 				inputStream = input2;
 				doClose = autoCloseStreams;
 			}
-		} else if (input instanceof byte[]) {
+		} else if (input instanceof byte[] input2) {
 			if (debug)
-				inputString = toHex((byte[])input);
-			inputStream = new ByteArrayInputStream((byte[])input);
+				inputString = toHex(input2);
+			inputStream = new ByteArrayInputStream(input2);
 			doClose = false;
 		} else if (input instanceof String input2) {
 			inputString = input2;

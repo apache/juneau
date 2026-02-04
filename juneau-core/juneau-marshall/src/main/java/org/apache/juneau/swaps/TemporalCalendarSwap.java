@@ -293,7 +293,7 @@ public class TemporalCalendarSwap extends StringSwap<Calendar> {
 	public String swap(BeanSession session, Calendar o) throws Exception {
 		if (o == null)
 			return null;
-		var t = o instanceof GregorianCalendar ? ((GregorianCalendar)o).toZonedDateTime() : o.toInstant().atZone(session.getTimeZoneId());
+		var t = o instanceof GregorianCalendar o2 ? o2.toZonedDateTime() : o.toInstant().atZone(session.getTimeZoneId());
 		return formatter.format(t);
 	}
 

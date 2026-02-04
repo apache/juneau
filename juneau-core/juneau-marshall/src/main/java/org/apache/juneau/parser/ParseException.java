@@ -162,8 +162,8 @@ public class ParseException extends BasicRuntimeException {
 	 */
 	public ParseException getRootCause() {
 		ParseException t = this;
-		while (! (t.getCause() == null || ! (t.getCause() instanceof ParseException)))
-			t = (ParseException)t.getCause();
+		while (! (t.getCause() == null || ! (t.getCause() instanceof ParseException t2)))
+			t = t2;
 		return t;
 	}
 

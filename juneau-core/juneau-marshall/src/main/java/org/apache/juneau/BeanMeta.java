@@ -410,7 +410,7 @@ public class BeanMeta<T> {
 		var ba = ap.find(Bean.class, cm);
 		var propertyNamer = opt(bf).map(x -> x.getPropertyNamer()).orElse(beanContext.getPropertyNamer());
 
-		this.typePropertyName = ba.stream().map(x -> x.inner().typePropertyName()).filter(Utils::ne).findFirst().orElseGet(() -> beanContext.getBeanTypePropertyName());
+		this.typePropertyName = ba.stream().map(x -> x.inner().typePropertyName()).filter(Utils::ne).findFirst().orElseGet(beanContext::getBeanTypePropertyName);
 
 		// Check if constructor is required but not found
 		if (! beanConstructor.constructor().isPresent() && bf == null && beanContext.isBeansRequireDefaultConstructor())

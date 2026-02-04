@@ -116,8 +116,8 @@ public class SerializeException extends BasicRuntimeException {
 	 */
 	public SerializeException getRootCause() {
 		SerializeException t = this;
-		while (! (t.getCause() == null || ! (t.getCause() instanceof SerializeException)))
-			t = (SerializeException)t.getCause();
+		while (! (t.getCause() == null || ! (t.getCause() instanceof SerializeException t2)))
+			t = t2;
 		return t;
 	}
 

@@ -17,7 +17,8 @@
 package org.apache.juneau.rest.vars;
 
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+
+import org.apache.juneau.commons.utils.Utils;
 
 import java.util.*;
 
@@ -99,7 +100,7 @@ public class RequestSwaggerVar extends MultipartResolvingVar {
 			char c = charAt(key, 0);
 			if (c == 'c') {
 				if ("contact".equals(key))
-					return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getContact()).map(x -> s(x)).orElse(null);
+					return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getContact()).map(Utils::s).orElse(null);
 			} else if (c == 'd') {
 				if ("description".equals(key))
 					return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getDescription()).orElse(null);
@@ -108,7 +109,7 @@ public class RequestSwaggerVar extends MultipartResolvingVar {
 					return swagger.map(Swagger::getExternalDocs).map(ExternalDocumentation::toString).orElse(null);
 			} else if (c == 'l') {
 				if ("license".equals(key))
-					return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getLicense()).map(x -> s(x)).orElse(null);
+					return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getLicense()).map(Utils::s).orElse(null);
 			} else if (c == 'o') {
 				if ("operationDescription".equals(key))
 					return methodSwagger.map(Operation::getDescription).orElse(null);
