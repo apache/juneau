@@ -773,22 +773,12 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 	public CsvBeanPropertyMeta getCsvBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
 			return CsvBeanPropertyMeta.DEFAULT;
-		CsvBeanPropertyMeta m = csvBeanPropertyMetas.get(bpm);
-		if (m == null) {
-			m = new CsvBeanPropertyMeta(bpm.getDelegateFor(), this);
-			csvBeanPropertyMetas.put(bpm, m);
-		}
-		return m;
+		return csvBeanPropertyMetas.computeIfAbsent(bpm, k -> new CsvBeanPropertyMeta(k.getDelegateFor(), this));
 	}
 
 	@Override /* Overridden from CsvMetaProvider */
 	public CsvClassMeta getCsvClassMeta(ClassMeta<?> cm) {
-		CsvClassMeta m = csvClassMetas.get(cm);
-		if (m == null) {
-			m = new CsvClassMeta(cm, this);
-			csvClassMetas.put(cm, m);
-		}
-		return m;
+		return csvClassMetas.computeIfAbsent(cm, k -> new CsvClassMeta(k, this));
 	}
 
 	@Override /* Overridden from Context */

@@ -655,22 +655,12 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 	public MsgPackBeanPropertyMeta getMsgPackBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
 			return MsgPackBeanPropertyMeta.DEFAULT;
-		MsgPackBeanPropertyMeta m = msgPackBeanPropertyMetas.get(bpm);
-		if (m == null) {
-			m = new MsgPackBeanPropertyMeta(bpm.getDelegateFor(), this);
-			msgPackBeanPropertyMetas.put(bpm, m);
-		}
-		return m;
+		return msgPackBeanPropertyMetas.computeIfAbsent(bpm, k -> new MsgPackBeanPropertyMeta(k.getDelegateFor(), this));
 	}
 
 	@Override /* Overridden from MsgPackMetaProvider */
 	public MsgPackClassMeta getMsgPackClassMeta(ClassMeta<?> cm) {
-		MsgPackClassMeta m = msgPackClassMetas.get(cm);
-		if (m == null) {
-			m = new MsgPackClassMeta(cm, this);
-			msgPackClassMetas.put(cm, m);
-		}
-		return m;
+		return msgPackClassMetas.computeIfAbsent(cm, k -> new MsgPackClassMeta(k, this));
 	}
 
 	@Override /* Overridden from Context */

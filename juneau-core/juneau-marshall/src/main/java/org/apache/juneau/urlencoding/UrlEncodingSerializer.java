@@ -1026,22 +1026,12 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	public UrlEncodingBeanPropertyMeta getUrlEncodingBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
 			return UrlEncodingBeanPropertyMeta.DEFAULT;
-		UrlEncodingBeanPropertyMeta m = urlEncodingBeanPropertyMetas.get(bpm);
-		if (m == null) {
-			m = new UrlEncodingBeanPropertyMeta(bpm.getDelegateFor(), this);
-			urlEncodingBeanPropertyMetas.put(bpm, m);
-		}
-		return m;
+		return urlEncodingBeanPropertyMetas.computeIfAbsent(bpm, k -> new UrlEncodingBeanPropertyMeta(k.getDelegateFor(), this));
 	}
 
 	@Override /* Overridden from UrlEncodingMetaProvider */
 	public UrlEncodingClassMeta getUrlEncodingClassMeta(ClassMeta<?> cm) {
-		UrlEncodingClassMeta m = urlEncodingClassMetas.get(cm);
-		if (m == null) {
-			m = new UrlEncodingClassMeta(cm, this);
-			urlEncodingClassMetas.put(cm, m);
-		}
-		return m;
+		return urlEncodingClassMetas.computeIfAbsent(cm, k -> new UrlEncodingClassMeta(k, this));
 	}
 
 	/**

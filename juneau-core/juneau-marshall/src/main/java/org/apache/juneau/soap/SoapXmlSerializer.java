@@ -884,22 +884,12 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 	public SoapXmlBeanPropertyMeta getSoapXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
 			return SoapXmlBeanPropertyMeta.DEFAULT;
-		var m = soapXmlBeanPropertyMetas.get(bpm);
-		if (m == null) {
-			m = new SoapXmlBeanPropertyMeta(bpm.getDelegateFor(), this);
-			soapXmlBeanPropertyMetas.put(bpm, m);
-		}
-		return m;
+		return soapXmlBeanPropertyMetas.computeIfAbsent(bpm, k -> new SoapXmlBeanPropertyMeta(k.getDelegateFor(), this));
 	}
 
 	@Override /* Overridden from SoapXmlMetaProvider */
 	public SoapXmlClassMeta getSoapXmlClassMeta(ClassMeta<?> cm) {
-		var m = soapXmlClassMetas.get(cm);
-		if (m == null) {
-			m = new SoapXmlClassMeta(cm, this);
-			soapXmlClassMetas.put(cm, m);
-		}
-		return m;
+		return soapXmlClassMetas.computeIfAbsent(cm, k -> new SoapXmlClassMeta(k, this));
 	}
 
 	@Override /* Overridden from XmlSerializer */

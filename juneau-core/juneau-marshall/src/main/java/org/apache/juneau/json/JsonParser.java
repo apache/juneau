@@ -772,22 +772,12 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 	public JsonBeanPropertyMeta getJsonBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
 			return JsonBeanPropertyMeta.DEFAULT;
-		JsonBeanPropertyMeta m = jsonBeanPropertyMetas.get(bpm);
-		if (m == null) {
-			m = new JsonBeanPropertyMeta(bpm.getDelegateFor(), this);
-			jsonBeanPropertyMetas.put(bpm, m);
-		}
-		return m;
+		return jsonBeanPropertyMetas.computeIfAbsent(bpm, k -> new JsonBeanPropertyMeta(k.getDelegateFor(), this));
 	}
 
 	@Override /* Overridden from JsonMetaProvider */
 	public JsonClassMeta getJsonClassMeta(ClassMeta<?> cm) {
-		JsonClassMeta m = jsonClassMetas.get(cm);
-		if (m == null) {
-			m = new JsonClassMeta(cm, this);
-			jsonClassMetas.put(cm, m);
-		}
-		return m;
+		return jsonClassMetas.computeIfAbsent(cm, k -> new JsonClassMeta(k, this));
 	}
 
 	@Override /* Overridden from Context */

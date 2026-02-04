@@ -70,9 +70,7 @@ public class RestOperations {
 		 */
 		public Builder add(String httpMethodName, RestOpContext value) {
 			httpMethodName = httpMethodName.toUpperCase();
-			if (! map.containsKey(httpMethodName))
-				map.put(httpMethodName, new TreeSet<>());
-			map.get(httpMethodName).add(value);
+			map.computeIfAbsent(httpMethodName, k -> new TreeSet<>()).add(value);
 			set.add(value);
 			return this;
 		}

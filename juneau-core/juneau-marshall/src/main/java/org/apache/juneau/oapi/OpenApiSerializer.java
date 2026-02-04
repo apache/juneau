@@ -940,22 +940,12 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 	public OpenApiBeanPropertyMeta getOpenApiBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
 			return OpenApiBeanPropertyMeta.DEFAULT;
-		OpenApiBeanPropertyMeta m = openApiBeanPropertyMetas.get(bpm);
-		if (m == null) {
-			m = new OpenApiBeanPropertyMeta(bpm.getDelegateFor(), this);
-			openApiBeanPropertyMetas.put(bpm, m);
-		}
-		return m;
+		return openApiBeanPropertyMetas.computeIfAbsent(bpm, k -> new OpenApiBeanPropertyMeta(k.getDelegateFor(), this));
 	}
 
 	@Override /* Overridden from OpenApiMetaProvider */
 	public OpenApiClassMeta getOpenApiClassMeta(ClassMeta<?> cm) {
-		OpenApiClassMeta m = openApiClassMetas.get(cm);
-		if (m == null) {
-			m = new OpenApiClassMeta(cm, this);
-			openApiClassMetas.put(cm, m);
-		}
-		return m;
+		return openApiClassMetas.computeIfAbsent(cm, k -> new OpenApiClassMeta(k, this));
 	}
 
 	@Override /* Overridden from HttpPartSerializer */

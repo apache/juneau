@@ -1270,32 +1270,17 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 
 	@Override /* Overridden from XmlMetaProvider */
 	public XmlBeanMeta getXmlBeanMeta(BeanMeta<?> bm) {
-		XmlBeanMeta m = xmlBeanMetas.get(bm);
-		if (m == null) {
-			m = new XmlBeanMeta(bm, this);
-			xmlBeanMetas.put(bm, m);
-		}
-		return m;
+		return xmlBeanMetas.computeIfAbsent(bm, k -> new XmlBeanMeta(k, this));
 	}
 
 	@Override /* Overridden from XmlMetaProvider */
 	public XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
-		XmlBeanPropertyMeta m = xmlBeanPropertyMetas.get(bpm);
-		if (m == null) {
-			m = new XmlBeanPropertyMeta(bpm.getDelegateFor(), this);
-			xmlBeanPropertyMetas.put(bpm, m);
-		}
-		return m;
+		return xmlBeanPropertyMetas.computeIfAbsent(bpm, k -> new XmlBeanPropertyMeta(k.getDelegateFor(), this));
 	}
 
 	@Override /* Overridden from XmlMetaProvider */
 	public XmlClassMeta getXmlClassMeta(ClassMeta<?> cm) {
-		XmlClassMeta m = xmlClassMetas.get(cm);
-		if (m == null) {
-			m = new XmlClassMeta(cm, this);
-			xmlClassMetas.put(cm, m);
-		}
-		return m;
+		return xmlClassMetas.computeIfAbsent(cm, k -> new XmlClassMeta(k, this));
 	}
 
 	/**

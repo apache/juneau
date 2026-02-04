@@ -1008,22 +1008,12 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 
 	@Override /* Overridden from JsonSchemaMetaProvider */
 	public JsonSchemaBeanPropertyMeta getJsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {
-		JsonSchemaBeanPropertyMeta m = jsonSchemaBeanPropertyMetas.get(bpm);
-		if (m == null) {
-			m = new JsonSchemaBeanPropertyMeta(bpm.getDelegateFor(), this);
-			jsonSchemaBeanPropertyMetas.put(bpm, m);
-		}
-		return m;
+		return jsonSchemaBeanPropertyMetas.computeIfAbsent(bpm, k -> new JsonSchemaBeanPropertyMeta(k.getDelegateFor(), this));
 	}
 
 	@Override /* Overridden from JsonSchemaMetaProvider */
 	public JsonSchemaClassMeta getJsonSchemaClassMeta(ClassMeta<?> cm) {
-		JsonSchemaClassMeta m = jsonSchemaClassMetas.get(cm);
-		if (m == null) {
-			m = new JsonSchemaClassMeta(cm, this);
-			jsonSchemaClassMetas.put(cm, m);
-		}
-		return m;
+		return jsonSchemaClassMetas.computeIfAbsent(cm, k -> new JsonSchemaClassMeta(k, this));
 	}
 
 	@Override /* Overridden from Context */

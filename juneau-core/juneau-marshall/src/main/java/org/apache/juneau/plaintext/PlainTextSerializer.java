@@ -782,22 +782,12 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 	public PlainTextBeanPropertyMeta getPlainTextBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
 			return PlainTextBeanPropertyMeta.DEFAULT;
-		var m = plainTextBeanPropertyMetas.get(bpm);
-		if (m == null) {
-			m = new PlainTextBeanPropertyMeta(bpm.getDelegateFor(), this);
-			plainTextBeanPropertyMetas.put(bpm, m);
-		}
-		return m;
+		return plainTextBeanPropertyMetas.computeIfAbsent(bpm, k -> new PlainTextBeanPropertyMeta(k.getDelegateFor(), this));
 	}
 
 	@Override /* Overridden from PlainTextMetaProvider */
 	public PlainTextClassMeta getPlainTextClassMeta(ClassMeta<?> cm) {
-		var m = plainTextClassMetas.get(cm);
-		if (m == null) {
-			m = new PlainTextClassMeta(cm, this);
-			plainTextClassMetas.put(cm, m);
-		}
-		return m;
+		return plainTextClassMetas.computeIfAbsent(cm, k -> new PlainTextClassMeta(k, this));
 	}
 
 	@Override /* Overridden from Context */

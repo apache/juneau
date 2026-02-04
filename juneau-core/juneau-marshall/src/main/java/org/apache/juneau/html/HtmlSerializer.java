@@ -1475,22 +1475,12 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	public HtmlBeanPropertyMeta getHtmlBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
 			return HtmlBeanPropertyMeta.DEFAULT;
-		HtmlBeanPropertyMeta m = htmlBeanPropertyMetas.get(bpm);
-		if (m == null) {
-			m = new HtmlBeanPropertyMeta(bpm.getDelegateFor(), this.getAnnotationProvider(), this);
-			htmlBeanPropertyMetas.put(bpm, m);
-		}
-		return m;
+		return htmlBeanPropertyMetas.computeIfAbsent(bpm, k -> new HtmlBeanPropertyMeta(k.getDelegateFor(), this.getAnnotationProvider(), this));
 	}
 
 	@Override /* Overridden from HtmlMetaProvider */
 	public HtmlClassMeta getHtmlClassMeta(ClassMeta<?> cm) {
-		HtmlClassMeta m = htmlClassMetas.get(cm);
-		if (m == null) {
-			m = new HtmlClassMeta(cm, this);
-			htmlClassMetas.put(cm, m);
-		}
-		return m;
+		return htmlClassMetas.computeIfAbsent(cm, k -> new HtmlClassMeta(k, this));
 	}
 
 	/**
