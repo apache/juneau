@@ -182,7 +182,9 @@ public class BasicResource implements HttpResource {
 	}
 
 	@Override
-	public void consumeContent() throws IOException {}
+	public void consumeContent() throws IOException {
+		// No-op: Intentional empty implementation for optional interface method
+	}
 
 	/**
 	 * Creates a builder for this class initialized with the contents of this bean.

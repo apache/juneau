@@ -45,13 +45,19 @@ class MockHttpClientConnectionManager implements HttpClientConnectionManager {
 	private ConnectionRequest cr;
 
 	@Override /* Overridden from HttpClientConnectionManager */
-	public void closeExpiredConnections() {}
+	public void closeExpiredConnections() {
+		// No-op: Mock implementation - full functionality not required
+	}
 
 	@Override /* Overridden from HttpClientConnectionManager */
-	public void closeIdleConnections(long idletime, TimeUnit tunit) {}
+	public void closeIdleConnections(long idletime, TimeUnit tunit) {
+		// No-op: Mock implementation - full functionality not required
+	}
 
 	@Override /* Overridden from HttpClientConnectionManager */
-	public void connect(HttpClientConnection conn, HttpRoute route, int connectTimeout, HttpContext context) throws IOException {}
+	public void connect(HttpClientConnection conn, HttpRoute route, int connectTimeout, HttpContext context) throws IOException {
+		// No-op: Mock implementation - full functionality not required
+	}
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
@@ -84,7 +90,9 @@ class MockHttpClientConnectionManager implements HttpClientConnectionManager {
 	}
 
 	@Override /* Overridden from HttpClientConnectionManager */
-	public void releaseConnection(HttpClientConnection conn, Object newState, long validDuration, TimeUnit timeUnit) {}
+	public void releaseConnection(HttpClientConnection conn, Object newState, long validDuration, TimeUnit timeUnit) {
+		// No-op: Mock implementation - full functionality not required
+	}
 
 	@Override /* Overridden from HttpClientConnectionManager */
 	public ConnectionRequest requestConnection(HttpRoute route, Object state) {
@@ -92,11 +100,17 @@ class MockHttpClientConnectionManager implements HttpClientConnectionManager {
 	}
 
 	@Override /* Overridden from HttpClientConnectionManager */
-	public void routeComplete(HttpClientConnection conn, HttpRoute route, HttpContext context) throws IOException {}
+	public void routeComplete(HttpClientConnection conn, HttpRoute route, HttpContext context) throws IOException {
+		// No-op: Mock implementation - full functionality not required
+	}
 
 	@Override /* Overridden from HttpClientConnectionManager */
-	public void shutdown() {}
+	public void shutdown() {
+		// No-op: Mock implementation - full functionality not required
+	}
 
 	@Override /* Overridden from HttpClientConnectionManager */
-	public void upgrade(HttpClientConnection conn, HttpRoute route, HttpContext context) throws IOException {}
+	public void upgrade(HttpClientConnection conn, HttpRoute route, HttpContext context) throws IOException {
+		// No-op: Mock implementation - full functionality not required
+	}
 }

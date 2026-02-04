@@ -41,7 +41,9 @@ public class IdentityEncoder extends Encoder {
 	public static final IdentityEncoder INSTANCE = new IdentityEncoder();
 
 	/** Constructor. */
-	public IdentityEncoder() {}
+	public IdentityEncoder() {
+		// No-op: Intentional empty constructor
+	}
 
 	/**
 	 * Returns <code>[<js>"identity"</js>]</code>.

@@ -58,7 +58,9 @@ public class MockServletResponse implements HttpServletResponse {
 	private Map<String,String[]> headerMap = map();
 
 	@Override /* Overridden from HttpServletResponse */
-	public void addCookie(Cookie cookie) {}
+	public void addCookie(Cookie cookie) {
+		// No-op: Mock implementation - full functionality not required
+	}
 
 	@Override /* Overridden from HttpServletResponse */
 	public void addDateHeader(String name, long date) {
@@ -94,7 +96,9 @@ public class MockServletResponse implements HttpServletResponse {
 	}
 
 	@Override /* Overridden from HttpServletResponse */
-	public void flushBuffer() throws IOException {}
+	public void flushBuffer() throws IOException {
+		// No-op: Mock implementation - full functionality not required
+	}
 
 	@Override /* Overridden from HttpServletResponse */
 	public int getBufferSize() { return bufferSize; }
@@ -155,7 +159,9 @@ public class MockServletResponse implements HttpServletResponse {
 	public boolean isCommitted() { return false; }
 
 	@Override /* Overridden from HttpServletResponse */
-	public void reset() {}
+	public void reset() {
+		// No-op: Mock implementation - full functionality not required
+	}
 
 	@Override /* Overridden from HttpServletResponse */
 	public void resetBuffer() {}

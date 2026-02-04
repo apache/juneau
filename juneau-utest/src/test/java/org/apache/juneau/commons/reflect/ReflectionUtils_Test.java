@@ -25,6 +25,7 @@ import org.junit.jupiter.api.*;
 
 class ReflectionUtils_Test extends TestBase {
 
+	@SuppressWarnings("java:S1186")
 	public static class TestClass {
 		public String field;
 		public TestClass() {}

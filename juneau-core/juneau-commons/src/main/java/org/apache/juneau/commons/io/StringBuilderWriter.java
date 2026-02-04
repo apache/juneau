@@ -179,10 +179,14 @@ public class StringBuilderWriter extends Writer {
 	}
 
 	@Override /* Overridden from Writer */
-	public void close() throws IOException {}
+	public void close() throws IOException {
+		// No-op: StringBuilder does not require closing
+	}
 
 	@Override /* Overridden from Writer */
-	public void flush() {}
+	public void flush() {
+		// No-op: StringBuilder does not require flushing
+	}
 
 	@Override /* Overridden from Object */
 	public String toString() {

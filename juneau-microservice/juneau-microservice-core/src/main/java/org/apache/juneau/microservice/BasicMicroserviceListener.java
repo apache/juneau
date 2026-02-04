@@ -28,11 +28,17 @@ import org.apache.juneau.config.event.*;
 public class BasicMicroserviceListener implements MicroserviceListener {
 
 	@Override /* Overridden from MicroserviceListener */
-	public void onConfigChange(Microservice microservice, ConfigEvents events) {}
+	public void onConfigChange(Microservice microservice, ConfigEvents events) {
+		// No-op: Intentional empty implementation for optional interface method
+	}
 
 	@Override /* Overridden from MicroserviceListener */
-	public void onStart(Microservice microservice) {}
+	public void onStart(Microservice microservice) {
+		// No-op: Intentional empty implementation for optional interface method
+	}
 
 	@Override /* Overridden from MicroserviceListener */
-	public void onStop(Microservice microservice) {}
+	public void onStop(Microservice microservice) {
+		// No-op: Intentional empty implementation for optional interface method
+	}
 }

@@ -59,7 +59,9 @@ public class ResponseContent implements HttpEntity {
 	private static final HttpEntity NULL_ENTITY = new HttpEntity() {
 
 		@Override
-		public void consumeContent() throws IOException {}
+		public void consumeContent() throws IOException {
+			// No-op: Mock implementation - full functionality not required
+		}
 
 		@Override
 		public InputStream getContent() throws IOException, UnsupportedOperationException { return new ByteArrayInputStream(new byte[0]); }
@@ -83,7 +85,9 @@ public class ResponseContent implements HttpEntity {
 		public boolean isStreaming() { return false; }
 
 		@Override
-		public void writeTo(OutputStream outstream) throws IOException {}
+		public void writeTo(OutputStream outstream) throws IOException {
+			// No-op: Mock implementation - full functionality not required
+		}
 	};
 
 	private final RestClient client;

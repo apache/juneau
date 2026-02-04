@@ -327,7 +327,9 @@ public class BasicHttpResponse implements HttpResponse {
 
 	@SuppressWarnings("deprecation")
 	@Override /* Overridden from HttpMessage */
-	public void setParams(HttpParams params) {}
+	public void setParams(HttpParams params) {
+		// No-op: Intentional empty implementation for deprecated optional interface method
+	}
 
 	/**
 	 * Sets the protocol version on the status line.

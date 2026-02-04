@@ -102,6 +102,7 @@ class MethodInfo_Test extends TestBase {
 	}
 	static MethodInfo a_m = ofm(A1.class, "m");  // NOSONAR(java:UNKNOWN): Field initialization
 
+	@SuppressWarnings("java:S1186")
 	public static class EqualsTestClass {
 		public void method1() {}
 		public void method2(String param) {}
@@ -268,6 +269,7 @@ class MethodInfo_Test extends TestBase {
 	}
 
 	// Test classes for compareTo tie-breaker testing
+	@SuppressWarnings("java:S1186")
 	public static class CompareToParent {
 		public CompareToParent getInstance() {
 			return new CompareToParent();
@@ -275,6 +277,7 @@ class MethodInfo_Test extends TestBase {
 		public void method(String param) {}
 	}
 
+	@SuppressWarnings("java:S1186")
 	public static class CompareToChild extends CompareToParent {
 		@Override
 		public CompareToChild getInstance() {
@@ -918,6 +921,7 @@ class MethodInfo_Test extends TestBase {
 	}
 
 	// Test method classes
+	@SuppressWarnings("java:S1186")
 	public static class TestMethodClass {
 		public void method1(TestService service) {}
 		public void method2(@org.apache.juneau.annotation.Named("service1") TestService service) {}

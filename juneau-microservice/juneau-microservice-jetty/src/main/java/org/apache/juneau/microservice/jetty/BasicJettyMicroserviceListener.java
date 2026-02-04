@@ -28,17 +28,27 @@ import org.apache.juneau.microservice.*;
 public class BasicJettyMicroserviceListener extends BasicMicroserviceListener implements JettyMicroserviceListener {
 
 	@Override /* Overridden from JettyMicroserviceListener */
-	public void onCreateServer(JettyMicroservice microservice) {}
+	public void onCreateServer(JettyMicroservice microservice) {
+		// No-op: Intentional empty implementation for optional interface method
+	}
 
 	@Override /* Overridden from JettyMicroserviceListener */
-	public void onPostStartServer(JettyMicroservice microservice) {}
+	public void onPostStartServer(JettyMicroservice microservice) {
+		// No-op: Intentional empty implementation for optional interface method
+	}
 
 	@Override /* Overridden from JettyMicroserviceListener */
-	public void onPostStopServer(JettyMicroservice microservice) {}
+	public void onPostStopServer(JettyMicroservice microservice) {
+		// No-op: Intentional empty implementation for optional interface method
+	}
 
 	@Override /* Overridden from JettyMicroserviceListener */
-	public void onStartServer(JettyMicroservice microservice) {}
+	public void onStartServer(JettyMicroservice microservice) {
+		// No-op: Intentional empty implementation for optional interface method
+	}
 
 	@Override /* Overridden from JettyMicroserviceListener */
-	public void onStopServer(JettyMicroservice microservice) {}
+	public void onStopServer(JettyMicroservice microservice) {
+		// No-op: Intentional empty implementation for optional interface method
+	}
 }

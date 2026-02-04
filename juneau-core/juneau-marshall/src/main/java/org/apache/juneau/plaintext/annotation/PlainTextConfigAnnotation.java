@@ -42,7 +42,9 @@ public class PlainTextConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<PlainTextConfig> ai, PlainTextParser.Builder b) {}
+		public void apply(AnnotationInfo<PlainTextConfig> ai, PlainTextParser.Builder b) {
+			// No-op: Annotation applier with no work to do
+		}
 	}
 
 	/**
@@ -60,6 +62,8 @@ public class PlainTextConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<PlainTextConfig> ai, PlainTextSerializer.Builder b) {}
+		public void apply(AnnotationInfo<PlainTextConfig> ai, PlainTextSerializer.Builder b) {
+			// No-op: Annotation applier with no work to do
+		}
 	}
 }

@@ -886,7 +886,7 @@ class ExecutableInfo_Test extends TestBase {
 	}
 
 	// Test classes for comprehensive toString() testing
-	@SuppressWarnings("unused")
+	@SuppressWarnings({"unused", "java:S1186"})
 	static class ToStringTestClass {
 		public ToStringTestClass() {}
 		private ToStringTestClass(int i) {}  // NOSONAR(java:S1186): Unused test method/constructor

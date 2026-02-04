@@ -106,6 +106,7 @@ class AppliedAnnotationObject_Test extends TestBase {
 	// Test classes for targeting
 	//------------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings("java:S1186")
 	public static class TC {
 		public String field1;
 		public int field2;

@@ -51,6 +51,7 @@ class AnnotationProvider_Test extends TestBase {
 	}
 
 	@TestAnnotation("class")
+	@SuppressWarnings("java:S1186")
 	public static class TestClass {
 		@MultiTargetAnnotation(1)
 		public String field1;
@@ -76,11 +77,13 @@ class AnnotationProvider_Test extends TestBase {
 		void matchingMethod(String param);
 	}
 
+	@SuppressWarnings("java:S1186")
 	public static class MatchingMethodParent {
 		@MultiTargetAnnotation(20)
 		public void matchingMethod(String param) {}
 	}
 
+	@SuppressWarnings("java:S1186")
 	public static class MatchingMethodChild extends MatchingMethodParent implements MatchingMethodInterface {
 		@MultiTargetAnnotation(30)
 		@Override

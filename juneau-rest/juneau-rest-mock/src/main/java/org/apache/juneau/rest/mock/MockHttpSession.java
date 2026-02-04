@@ -105,7 +105,9 @@ public class MockHttpSession implements HttpSession {
 	}
 
 	@Override /* Overridden from HttpSession */
-	public void invalidate() {}
+	public void invalidate() {
+		// No-op: Mock implementation - full functionality not required
+	}
 
 	@Override /* Overridden from HttpSession */
 	public boolean isNew() { return isNew; }

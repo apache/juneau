@@ -152,7 +152,9 @@ public class BasicHttpEntity implements HttpEntity {
 	}
 
 	@Override /* Overridden from HttpEntity */
-	public void consumeContent() throws IOException {}
+	public void consumeContent() throws IOException {
+		// No-op: Intentional empty implementation for optional interface method
+	}
 
 	/**
 	 * Creates a builder for this class initialized with the contents of this bean.
@@ -383,7 +385,9 @@ public class BasicHttpEntity implements HttpEntity {
 	}
 
 	@Override /* Overridden from HttpEntity */
-	public void writeTo(OutputStream outStream) throws IOException {}
+	public void writeTo(OutputStream outStream) throws IOException {
+		// No-op: Intentional empty implementation for optional interface method
+	}
 
 	/**
 	 * Same as {@link #asBytes()} but wraps {@link IOException IOExceptions} inside a {@link RuntimeException}.

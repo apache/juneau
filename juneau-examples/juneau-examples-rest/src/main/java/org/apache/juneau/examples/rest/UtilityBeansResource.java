@@ -78,7 +78,9 @@ public class UtilityBeansResource extends BasicRestObject {
 		public boolean isCurrent;
 
 		/** Default constructor. */
-		public Address() {}
+		public Address() {
+			// No-op: Test helper class - intentionally empty for testing
+		}
 	}
 
 	@SuppressWarnings("unused")

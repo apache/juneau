@@ -887,6 +887,7 @@ class AnnotationInfo_Test extends TestBase {
 		String value() default "default";
 	}
 
+	@SuppressWarnings("java:S1186")
 	public static class MethodAnnotationTestClass {
 		@TestAnnotationMultiTarget("method")
 		public void testMethod() {}

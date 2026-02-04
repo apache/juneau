@@ -29,26 +29,28 @@ class Visibility_Test extends TestBase {
 	// Test classes with various visibility modifiers
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings("java:S1186")
 	public static class PublicClass {
 		public PublicClass() {}
 		public void publicMethod() {}
 		public int publicField;
 	}
 
+	@SuppressWarnings({"java:S1186", "unused"})
 	private static class PrivateClass {
 		private PrivateClass() {}
-		@SuppressWarnings("unused")
 		private void privateMethod() {}
-		@SuppressWarnings("unused")
 		private int privateField;
 	}
 
+	@SuppressWarnings("java:S1186")
 	protected static class ProtectedClass {
 		protected ProtectedClass() {}
 		protected void protectedMethod() {}
 		protected int protectedField;
 	}
 
+	@SuppressWarnings("java:S1186")
 	static class PackagePrivateClass {
 		PackagePrivateClass() {}
 		void packagePrivateMethod() {}

@@ -7774,7 +7774,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	/**
 	 * Gets called add the end of the constructor call to perform any post-initialization.
 	 */
-	protected void init() {}
+	protected void init() {
+		// No-op: Intentional empty implementation for optional override method
+	}
 
 	/**
 	 * Returns <jk>true</jk> if empty request form-data parameter values should be ignored.

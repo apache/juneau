@@ -45,7 +45,9 @@ public class HtmlConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<HtmlConfig> ai, HtmlParser.Builder b) {}
+		public void apply(AnnotationInfo<HtmlConfig> ai, HtmlParser.Builder b) {
+			// No-op: Annotation applier with no work to do
+		}
 	}
 
 	/**

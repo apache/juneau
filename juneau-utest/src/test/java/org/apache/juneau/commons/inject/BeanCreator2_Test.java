@@ -56,6 +56,7 @@ class BeanCreator2_Test extends TestBase {
 	//====================================================================================================
 
 	// Type not in bean store - used for testing unresolvable dependencies
+	@SuppressWarnings("java:S1186")
 	public static class UnresolvableType {
 		public UnresolvableType() {}
 	}
@@ -89,6 +90,7 @@ class BeanCreator2_Test extends TestBase {
 	}
 
 	// Bean with no-arg constructor
+	@SuppressWarnings("java:S1186")
 	public static class SimpleBean {
 		public String value;
 		public SimpleBean() {}
@@ -109,6 +111,7 @@ class BeanCreator2_Test extends TestBase {
 	}
 
 	// Bean with injected fields
+	@SuppressWarnings("java:S1186")
 	public static class BeanWithInjectedFields {
 		@Inject TestService service;
 		@Inject AnotherService another;
@@ -120,6 +123,7 @@ class BeanCreator2_Test extends TestBase {
 	}
 
 	// Bean with injected method
+	@SuppressWarnings("java:S1186")
 	public static class BeanWithInjectedMethod {
 		private TestService service;
 
@@ -221,11 +225,13 @@ class BeanCreator2_Test extends TestBase {
 	}
 
 	// Bean classes for type specification testing (used across multiple nested test classes)
+	@SuppressWarnings("java:S1186")
 	public static class ParentBean {
 		public ParentBean() {}
 	}
 
 	// Child bean for type specification testing
+	@SuppressWarnings("java:S1186")
 	public static class ChildBean extends ParentBean {
 		public ChildBean() {}
 	}
@@ -561,6 +567,7 @@ class BeanCreator2_Test extends TestBase {
 		}
 
 		// Bean with PostConstruct method
+		@SuppressWarnings("java:S1186")
 		public static class B03_BeanWithPostConstruct {
 			private TestService service;
 			boolean postConstructCalled = false;
@@ -3037,6 +3044,7 @@ class BeanCreator2_Test extends TestBase {
 		}
 
 		// Bean that implements BeanInterface for fallback testing
+		@SuppressWarnings("java:S1186")
 		public static class M05_ConcreteBeanInterface implements BeanInterface {
 			public M05_ConcreteBeanInterface() {}
 		}

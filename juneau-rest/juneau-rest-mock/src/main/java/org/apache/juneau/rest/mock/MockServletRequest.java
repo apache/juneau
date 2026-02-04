@@ -634,10 +634,14 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	@Override /* Overridden from HttpServletRequest */
-	public void login(String username, String password) throws ServletException {}
+	public void login(String username, String password) throws ServletException {
+		// No-op: Mock implementation - full functionality not required
+	}
 
 	@Override /* Overridden from HttpServletRequest */
-	public void logout() throws ServletException {}
+	public void logout() throws ServletException {
+		// No-op: Mock implementation - full functionality not required
+	}
 
 	/**
 	 * Fluent setter.

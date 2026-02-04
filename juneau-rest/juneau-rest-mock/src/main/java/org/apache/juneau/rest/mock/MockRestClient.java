@@ -1908,7 +1908,9 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	@Override /* Overridden from HttpClientConnection */
-	public void flush() throws IOException {}
+	public void flush() throws IOException {
+		// No-op: Mock implementation - full functionality not required
+	}
 
 	@Override /* Overridden from RestClient */
 	public MockRestRequest formPost(Object url) throws RestCallException {
@@ -2157,10 +2159,14 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	@Override /* Overridden from HttpClientConnection */
-	public void setSocketTimeout(int timeout) {}
+	public void setSocketTimeout(int timeout) {
+		// No-op: Mock implementation - full functionality not required
+	}
 
 	@Override /* Overridden from HttpClientConnection */
-	public void shutdown() throws IOException {}
+	public void shutdown() throws IOException {
+		// No-op: Mock implementation - full functionality not required
+	}
 
 	/**
 	 * Attempts to unwrap the request to find the underlying RestRequest object.

@@ -1059,6 +1059,7 @@ class IoUtils_Test extends TestBase {
 		}
 	}
 
+	@SuppressWarnings("java:S1186")
 	public static class ThrowingTestReader extends Reader {
 		public ThrowingTestReader() {
 		}

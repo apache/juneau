@@ -107,6 +107,7 @@ class ConstructorInfo_Test extends TestBase {
 	@Retention(RUNTIME)
 	public static @interface DeprecatedAnnotation {}
 
+	@SuppressWarnings("java:S1186")
 	public static class DeprecatedClass {
 		@Deprecated
 		public DeprecatedClass() {}
@@ -120,6 +121,7 @@ class ConstructorInfo_Test extends TestBase {
 		public ExceptionClass() throws Exception {}
 	}
 
+	@SuppressWarnings("java:S1186")
 	public static class EqualsTestClass {
 		public EqualsTestClass() {}
 		public EqualsTestClass(String param) {}
@@ -857,6 +859,7 @@ class ConstructorInfo_Test extends TestBase {
 
 	// Inner class for testing outer parameter
 	// Note: This is a non-static inner class, so it requires an outer instance
+	@SuppressWarnings("java:S1186")
 	static class OuterClass {
 		public OuterClass() {}
 

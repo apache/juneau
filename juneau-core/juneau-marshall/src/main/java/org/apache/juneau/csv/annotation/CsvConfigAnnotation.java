@@ -42,7 +42,9 @@ public class CsvConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<CsvConfig> ai, CsvParser.Builder b) {}
+		public void apply(AnnotationInfo<CsvConfig> ai, CsvParser.Builder b) {
+			// No-op: Annotation applier with no work to do
+		}
 	}
 
 	/**
@@ -60,6 +62,8 @@ public class CsvConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<CsvConfig> ai, CsvSerializer.Builder b) {}
+		public void apply(AnnotationInfo<CsvConfig> ai, CsvSerializer.Builder b) {
+			// No-op: Annotation applier with no work to do
+		}
 	}
 }

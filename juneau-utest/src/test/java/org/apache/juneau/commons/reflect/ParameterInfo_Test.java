@@ -250,6 +250,7 @@ class ParameterInfo_Test extends TestBase {
 	}
 
 	// Constructor hierarchy tests
+	@SuppressWarnings("java:S1186")
 	public static class EqualsTestClass {
 		public void method(String param1, int param2) {}
 	}

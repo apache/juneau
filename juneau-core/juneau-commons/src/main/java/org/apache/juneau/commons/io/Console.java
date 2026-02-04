@@ -32,6 +32,7 @@ public class Console {
 	 * Constructor.
 	 */
 	public Console() {
+		// No-op: Intentional empty constructor
 	}
 
 	/**
