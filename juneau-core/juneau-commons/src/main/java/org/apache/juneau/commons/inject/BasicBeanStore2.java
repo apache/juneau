@@ -316,14 +316,10 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		var entryList = list();
-		entries.forEach((type, typeMap) -> {
-			typeMap.forEach((name, supplier) -> {
-				entryList.add(filteredBeanPropertyMap()
-					.a("type", cns(type))
-					.a("bean", id(supplier.get()))
-					.a("name", name));
-			});
-		});
+		entries.forEach((type, typeMap) -> typeMap.forEach((name, supplier) -> entryList.add(filteredBeanPropertyMap()
+			.a("type", cns(type))
+			.a("bean", id(supplier.get()))
+			.a("name", name))));
 		return filteredBeanPropertyMap()
 			.a("entries", entryList)
 			.a("identity", id(this))

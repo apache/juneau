@@ -422,7 +422,7 @@ public class ParserSet {
 	 * <p>
 	 * Used by {@link ParserSet.Builder#set(Class...)}
 	 */
-	public static abstract class Inherit extends Parser {
+	public abstract static class Inherit extends Parser {
 		protected Inherit(Parser.Builder builder) {
 			super(builder);
 		}
@@ -433,7 +433,7 @@ public class ParserSet {
 	 * <p>
 	 * Used by {@link ParserSet.Builder#add(Class...)}
 	 */
-	public static abstract class NoInherit extends Parser {
+	public abstract static class NoInherit extends Parser {
 		protected NoInherit(Parser.Builder builder) {
 			super(builder);
 		}

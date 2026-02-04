@@ -252,14 +252,14 @@ public class EncoderSet {
 	 * <p>
 	 * Used by {@link Builder#set(Class...)}
 	 */
-	public static abstract class Inherit extends Encoder {}
+	public abstract static class Inherit extends Encoder {}
 
 	/**
 	 * An identifier that the previous encoders in this group should not be inherited.
 	 * <p>
 	 * Used by {@link Builder#add(Class...)}
 	 */
-	public static abstract class NoInherit extends Encoder {}
+	public abstract static class NoInherit extends Encoder {}
 
 	/**
 	 * Static creator.

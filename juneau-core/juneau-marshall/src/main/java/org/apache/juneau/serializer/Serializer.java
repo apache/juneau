@@ -1247,7 +1247,7 @@ public class Serializer extends BeanTraverseContext {
 	/**
 	 * Represents no Serializer.
 	 */
-	public static abstract class Null extends Serializer {
+	public abstract static class Null extends Serializer {
 		private Null(Builder builder) {
 			super(builder);
 		}

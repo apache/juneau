@@ -365,9 +365,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		var lp = new ArrayList<BeanPropertyValue>();
 
 		var checkNull = (Predicate<Object>)(x -> isKeepNullProperties() || nn(x));
-		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
-			lp.add(new BeanPropertyValue(pMeta, key, value, thrown));
-		});
+		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> lp.add(new BeanPropertyValue(pMeta, key, value, thrown)));
 
 		var xbm = getXmlBeanMeta(bm);
 

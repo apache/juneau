@@ -239,7 +239,7 @@ public class BeanSession extends ContextSession {
 	 *
 	 * @return The name property name.  Never <jk>null</jk>.
 	 */
-	public final static String getNamePropertyName() { return "_name"; }
+	public static final String getNamePropertyName() { return "_name"; }
 
 	private static int getMultiplier(String s) {
 		if (s.endsWith("G"))

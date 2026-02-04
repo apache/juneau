@@ -3537,7 +3537,7 @@ public class HttpPartSchema {
 		return in == null ? emptySet() : u(copyOf(in));
 	}
 
-	final static JsonMap toJsonMap(String[] ss) {
+	static final JsonMap toJsonMap(String[] ss) {
 		String s = StringUtils.joinnl(ss);
 		if (s.isEmpty())
 			return null;
@@ -3550,7 +3550,7 @@ public class HttpPartSchema {
 		}
 	}
 
-	final static Number toNumber(String...s) {
+	static final Number toNumber(String...s) {
 		try {
 			for (var ss : s)
 				if (ne(ss))
@@ -3561,7 +3561,7 @@ public class HttpPartSchema {
 		}
 	}
 
-	final static Set<String> toSet(String s) {
+	static final Set<String> toSet(String s) {
 		if (isEmpty(s))
 			return null;
 		Set<String> set = set();
@@ -3573,7 +3573,7 @@ public class HttpPartSchema {
 		return set;
 	}
 
-	final static Set<String> toSet(String[]...s) {
+	static final Set<String> toSet(String[]...s) {
 		var isNotEmpty = false;
 		for (var ss : s)
 			isNotEmpty |= ss.length > 0;

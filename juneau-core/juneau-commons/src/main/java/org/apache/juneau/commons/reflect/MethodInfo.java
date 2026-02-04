@@ -28,6 +28,7 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import org.apache.juneau.commons.function.ThrowingSupplier;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.utils.*;
 
@@ -654,9 +655,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	public Object invokeLenient(Object pojo, Object...args) throws ExecutableException {
-		return safe(() -> {
-			return inner.invoke(pojo, ClassUtils.getMatchingArgs(inner.getParameterTypes(), args));
-		}, e -> exex(e instanceof InvocationTargetException ? ((InvocationTargetException)e).getTargetException() : e));
+		return safe((ThrowingSupplier<Object>)() -> inner.invoke(pojo, ClassUtils.getMatchingArgs(inner.getParameterTypes(), args)), e -> exex(e instanceof InvocationTargetException ? ((InvocationTargetException)e).getTargetException() : e));
 	}
 
 	@Override

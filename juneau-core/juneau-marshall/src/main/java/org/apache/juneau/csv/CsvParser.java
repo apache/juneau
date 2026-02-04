@@ -359,11 +359,6 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 			return this;
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public HashKey hashKey() {
-			return super.hashKey();
-		}
-
 		@Override /* Overridden from Builder */
 		public Builder ignoreInvocationExceptionsOnGetters() {
 			super.ignoreInvocationExceptionsOnGetters();

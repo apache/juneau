@@ -52,7 +52,7 @@ public class BeanTraverseSession extends BeanSession {
 	/**
 	 * Builder class.
 	 */
-	public static abstract class Builder extends BeanSession.Builder {
+	public abstract static class Builder extends BeanSession.Builder {
 
 		private BeanTraverseContext ctx;
 		private int initialDepth;
@@ -291,7 +291,7 @@ public class BeanTraverseSession extends BeanSession {
 	 * @param cm The meta to check.
 	 * @return <jk>true</jk> if the specified meta is an {@link Optional}.
 	 */
-	protected final static boolean isOptional(ClassMeta<?> cm) {
+	protected static final boolean isOptional(ClassMeta<?> cm) {
 		return (nn(cm) && cm.isOptional());
 	}
 

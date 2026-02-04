@@ -164,17 +164,6 @@ public class JsonSchemaRef extends JsonSchema {
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchema getNot() { return super.getNot(); }
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchema getUnevaluatedItems() { return super.getUnevaluatedItems(); }
-
-	@Override /* Overridden from JsonSchema */
-	public JsonSchema resolve() {
-		return super.resolve();
-	}
-
-	@Override /* Overridden from JsonSchema */
 	public JsonSchemaRef setAllOf(List<JsonSchema> value) {
 		super.setAllOf(value);
 		return this;

@@ -960,7 +960,7 @@ public class Parser extends BeanContextable {
 	/**
 	 * Represents no Parser.
 	 */
-	public static abstract class Null extends Parser {
+	public abstract static class Null extends Parser {
 		private Null(Builder builder) {
 			super(builder);
 		}

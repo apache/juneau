@@ -381,11 +381,6 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 			return this;
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public HashKey hashKey() {
-			return super.hashKey();
-		}
-
 		@Override /* Overridden from Builder */
 		public Builder ignoreInvocationExceptionsOnGetters() {
 			super.ignoreInvocationExceptionsOnGetters();

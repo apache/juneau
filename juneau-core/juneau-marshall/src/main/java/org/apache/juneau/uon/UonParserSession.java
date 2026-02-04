@@ -247,7 +247,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * @return A new {@link UonReader} object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public final static UonReader getUonReader(ParserPipe pipe, boolean decodeChars) throws IOException {
+	public static final UonReader getUonReader(ParserPipe pipe, boolean decodeChars) throws IOException {
 		var r = pipe.getReader();
 		if (r instanceof UonReader r2)
 			return r2;
