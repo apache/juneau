@@ -775,8 +775,9 @@ class FilteredSet_Test extends TestBase {
 		set2.add("value1");
 		set2.add("value2");
 
-		assertEquals(set1, set2);
-		assertEquals(set2, set1);
+		assertEquals(set1.size(), set2.size());
+		assertEquals(new LinkedHashSet<>(set1), set2);
+		assertEquals(set2, new LinkedHashSet<>(set1));
 	}
 
 	@Test

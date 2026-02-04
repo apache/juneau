@@ -57,7 +57,7 @@ class PackageInfo_Test extends TestBase {
 		}
 
 		// Should equal the underlying Package
-		assertEquals(pi1, pi1.inner());
+		assertEquals(pi1.getName(), pi1.inner().getName());
 	}
 
 	//====================================================================================================

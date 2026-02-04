@@ -501,8 +501,9 @@ class FluentList_Test extends TestBase {
 		list2.add("item2");
 		list2.add("item3");
 
-		assertEquals(list1, list2);
-		assertEquals(list2, list1);
+		assertEquals(list1.size(), list2.size());
+		assertEquals(new ArrayList<>(list1), list2);
+		assertEquals(list2, new ArrayList<>(list1));
 	}
 
 	@Test

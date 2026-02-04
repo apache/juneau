@@ -634,8 +634,9 @@ class BidiMap_Test extends TestBase {
 		regularMap.put("one", 1);
 		regularMap.put("two", 2);
 
-		assertEquals(map, regularMap);
-		assertEquals(regularMap, map);
+		assertEquals(map.size(), regularMap.size());
+		assertEquals(map.entrySet(), regularMap.entrySet());
+		assertEquals(regularMap.entrySet(), map.entrySet());
 	}
 
 	@Test

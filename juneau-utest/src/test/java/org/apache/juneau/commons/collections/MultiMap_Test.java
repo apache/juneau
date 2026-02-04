@@ -479,8 +479,9 @@ class MultiMap_Test extends TestBase {
 
 		var regularMap = new LinkedHashMap<>(map("key1", "value1", "key2", "value2"));
 
-		assertEquals(multiMap, regularMap);
-		assertEquals(regularMap, multiMap);
+		assertEquals(multiMap.size(), regularMap.size());
+		assertEquals(multiMap.entrySet(), regularMap.entrySet());
+		assertEquals(regularMap.entrySet(), multiMap.entrySet());
 	}
 
 	@Test

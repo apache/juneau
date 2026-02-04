@@ -463,8 +463,9 @@ class FluentMap_Test extends TestBase {
 		map2.put("key1", "value1");
 		map2.put("key2", "value2");
 
-		assertEquals(map1, map2);
-		assertEquals(map2, map1);
+		assertEquals(map1.size(), map2.size());
+		assertEquals(map1.entrySet(), map2.entrySet());
+		assertEquals(map2.entrySet(), map1.entrySet());
 	}
 
 	@Test

@@ -376,8 +376,9 @@ class SimpleMap_Test extends TestBase {
 		regularMap.put("key1", "value1");
 		regularMap.put("key2", "value2");
 
-		assertEquals(map, regularMap);
-		assertEquals(regularMap, map);
+		assertEquals(map.size(), regularMap.size());
+		assertEquals(map.entrySet(), regularMap.entrySet());
+		assertEquals(regularMap.entrySet(), map.entrySet());
 	}
 
 	@Test

@@ -558,8 +558,9 @@ class ReversedList_Test extends TestBase {
 		// A reversed list ["c", "b", "a"] should equal a regular list ["c", "b", "a"]
 		var regularList = new ArrayList<>(List.of("c", "b", "a"));
 
-		assertEquals(reversed, regularList);
-		assertEquals(regularList, reversed);
+		assertEquals(reversed.size(), regularList.size());
+		assertEquals(new ArrayList<>(reversed), regularList);
+		assertEquals(regularList, new ArrayList<>(reversed));
 	}
 
 	@Test

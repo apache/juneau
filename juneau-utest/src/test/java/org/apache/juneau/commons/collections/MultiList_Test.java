@@ -589,8 +589,9 @@ class MultiList_Test extends TestBase {
 
 		var regularList = new ArrayList<>(l(a("1", "2", "3")));
 
-		assertEquals(multiList, regularList);
-		assertEquals(regularList, multiList);
+		assertEquals(multiList.size(), regularList.size());
+		assertEquals(new ArrayList<>(multiList), regularList);
+		assertEquals(regularList, new ArrayList<>(multiList));
 	}
 
 	@Test

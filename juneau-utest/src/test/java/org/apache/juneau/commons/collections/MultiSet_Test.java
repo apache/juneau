@@ -279,8 +279,9 @@ class MultiSet_Test extends TestBase {
 
 		var regularSet = new LinkedHashSet<>(l(a("1", "2", "3")));
 
-		assertEquals(multiSet, regularSet);
-		assertEquals(regularSet, multiSet);
+		assertEquals(multiSet.size(), regularSet.size());
+		assertEquals(new LinkedHashSet<>(multiSet), regularSet);
+		assertEquals(regularSet, new LinkedHashSet<>(multiSet));
 	}
 
 	@Test

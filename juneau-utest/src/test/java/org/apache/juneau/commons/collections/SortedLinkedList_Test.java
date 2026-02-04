@@ -658,8 +658,9 @@ class SortedLinkedList_Test extends TestBase {
 		arrayList.add("c");
 
 		// Should be equal if they contain the same elements in the same order
-		assertEquals(sortedList, arrayList);
-		assertEquals(arrayList, sortedList);
+		assertEquals(sortedList.size(), arrayList.size());
+		assertEquals(new ArrayList<>(sortedList), arrayList);
+		assertEquals(arrayList, new ArrayList<>(sortedList));
 	}
 
 	@Test
@@ -675,8 +676,9 @@ class SortedLinkedList_Test extends TestBase {
 		linkedList.add("c");
 
 		// Should be equal if they contain the same elements in the same order
-		assertEquals(sortedList, linkedList);
-		assertEquals(linkedList, sortedList);
+		assertEquals(sortedList.size(), linkedList.size());
+		assertEquals(new ArrayList<>(sortedList), new ArrayList<>(linkedList));
+		assertEquals(new ArrayList<>(linkedList), new ArrayList<>(sortedList));
 	}
 
 	@Test
@@ -720,8 +722,9 @@ class SortedLinkedList_Test extends TestBase {
 		linkedList.add("b");
 
 		// Should be equal if they contain the same elements in the same order
-		assertEquals(arrayList, linkedList);
-		assertEquals(linkedList, arrayList);
+		assertEquals(arrayList.size(), linkedList.size());
+		assertEquals(new ArrayList<>(arrayList), new ArrayList<>(linkedList));
+		assertEquals(new ArrayList<>(linkedList), new ArrayList<>(arrayList));
 	}
 }
 

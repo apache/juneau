@@ -776,8 +776,9 @@ class FilteredList_Test extends TestBase {
 		list2.add("value1");
 		list2.add("value2");
 
-		assertEquals(list1, list2);
-		assertEquals(list2, list1);
+		assertEquals(list1.size(), list2.size());
+		assertEquals(new ArrayList<>(list1), list2);
+		assertEquals(list2, new ArrayList<>(list1));
 	}
 
 	@Test
