@@ -70,7 +70,13 @@ import java.io.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">I/O Package</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class NoCloseWriter extends Writer {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_cbuf = "cbuf";
+	private static final String ARG_str = "str";
+	private static final String ARG_w = "w";
 
 	private final Writer w;
 
@@ -90,7 +96,7 @@ public class NoCloseWriter extends Writer {
 	 * @param w The Writer to wrap. Must not be <jk>null</jk>.
 	 */
 	public NoCloseWriter(Writer w) {
-		this.w = assertArgNotNull("w", w);
+		this.w = assertArgNotNull(ARG_w, w);
 	}
 
 	@Override /* Overridden from Writer */
@@ -142,13 +148,13 @@ public class NoCloseWriter extends Writer {
 
 	@Override /* Overridden from Writer */
 	public void write(char[] cbuf) throws IOException {
-		assertArgNotNull("cbuf", cbuf);
+		assertArgNotNull(ARG_cbuf, cbuf);
 		w.write(cbuf);
 	}
 
 	@Override /* Overridden from Writer */
 	public void write(char[] cbuf, int off, int len) throws IOException {
-		assertArgNotNull("cbuf", cbuf);
+		assertArgNotNull(ARG_cbuf, cbuf);
 		w.write(cbuf, off, len);
 	}
 
@@ -159,13 +165,13 @@ public class NoCloseWriter extends Writer {
 
 	@Override /* Overridden from Writer */
 	public void write(String str) throws IOException {
-		assertArgNotNull("str", str);
+		assertArgNotNull(ARG_str, str);
 		w.write(str);
 	}
 
 	@Override /* Overridden from Writer */
 	public void write(String str, int off, int len) throws IOException {
-		assertArgNotNull("str", str);
+		assertArgNotNull(ARG_str, str);
 		w.write(str, off, len);
 	}
 }

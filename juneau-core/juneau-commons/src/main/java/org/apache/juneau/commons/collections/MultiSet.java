@@ -100,7 +100,11 @@ import java.util.stream.Collectors;
  *
  * @param <E> The element type of this set.
  */
+@SuppressWarnings("java:S115")
 public class MultiSet<E> extends AbstractSet<E> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_c = "c";
 
 	/**
 	 * The underlying collections being wrapped by this MultiSet.
@@ -131,9 +135,9 @@ public class MultiSet<E> extends AbstractSet<E> {
 	 */
 	@SafeVarargs
 	public MultiSet(Collection<E>...c) {
-		assertArgNotNull("c", c);
+		assertArgNotNull(ARG_c, c);
 		for (var cc : c)
-			assertArgNotNull("c", cc);
+			assertArgNotNull(ARG_c, cc);
 		l = c;
 	}
 

@@ -81,7 +81,13 @@ import org.apache.juneau.marshaller.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class SecurityScheme extends SwaggerElement {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_key = "key";
+	private static final String ARG_property = "property";
+	private static final String ARG_value = "value";
 
 	private static final String[] VALID_TYPES = { "basic", "apiKey", "oauth2" };
 
@@ -123,8 +129,8 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SecurityScheme addScope(String key, String value) {
-		assertArgNotNull("key", key);
-		assertArgNotNull("value", value);
+		assertArgNotNull(ARG_key, key);
+		assertArgNotNull(ARG_value, value);
 		scopes.put(key, value);
 		return this;
 	}
@@ -140,7 +146,7 @@ public class SecurityScheme extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "authorizationUrl" -> toType(getAuthorizationUrl(), type);
 			case "description" -> toType(getDescription(), type);
@@ -253,7 +259,7 @@ public class SecurityScheme extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public SecurityScheme set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "authorizationUrl" -> setAuthorizationUrl(s(value));
 			case "description" -> setDescription(s(value));

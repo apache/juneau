@@ -36,7 +36,11 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class BasicHeaderIterator implements HeaderIterator {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_headers = "headers";
 
 	private final Header[] entries;
 	private final String name;
@@ -52,7 +56,7 @@ public class BasicHeaderIterator implements HeaderIterator {
 	 * @param caseSensitive Use case-sensitive matching for part name.
 	 */
 	public BasicHeaderIterator(Header[] headers, String name, boolean caseSensitive) {
-		this.entries = assertArgNotNull("headers", headers);
+		this.entries = assertArgNotNull(ARG_headers, headers);
 		this.name = name;
 		this.caseSensitive = caseSensitive;
 		this.currentIndex = findNext(-1);

@@ -49,7 +49,11 @@ import org.apache.juneau.http.header.*;
  * </ul>
  */
 @BeanIgnore
+@SuppressWarnings("java:S115")
 public class BasicPart implements NameValuePair, Headerable {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Returns <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
@@ -138,7 +142,7 @@ public class BasicPart implements NameValuePair, Headerable {
 	 * @param copyFrom The object to copy.
 	 */
 	protected BasicPart(BasicPart copyFrom) {
-		assertArgNotNull("copyFrom", copyFrom);
+		assertArgNotNull(ARG_copyFrom, copyFrom);
 		this.name = copyFrom.name;
 		this.value = copyFrom.value;
 	}

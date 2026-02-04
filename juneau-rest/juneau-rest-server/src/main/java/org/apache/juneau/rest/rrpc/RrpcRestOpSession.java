@@ -40,8 +40,12 @@ import org.apache.juneau.rest.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestRpc">REST/RPC</a>
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({ "resource", "java:S115" })
 public class RrpcRestOpSession extends RestOpSession {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ctx = "ctx";
+	private static final String ARG_session = "session";
 
 	/**
 	 * Builder class.
@@ -80,7 +84,7 @@ public class RrpcRestOpSession extends RestOpSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(RrpcRestOpContext ctx, RestSession session) {
-		return new Builder(assertArgNotNull("ctx", ctx), assertArgNotNull("session", session));
+		return new Builder(assertArgNotNull(ARG_ctx, ctx), assertArgNotNull(ARG_session, session));
 
 	}
 

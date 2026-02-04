@@ -95,7 +95,13 @@ import jakarta.servlet.http.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class RequestAttributes {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_names = "names";
+	private static final String ARG_name = "name";
+	private static final String ARG_attributes = "attributes";
 
 	final RestRequest req;
 	final HttpServletRequest sreq;
@@ -191,7 +197,7 @@ public class RequestAttributes {
 	 * @return <jk>true</jk> if the parameters with the specified names are present.
 	 */
 	public boolean contains(String...names) {
-		assertArgNotNull("names", names);
+		assertArgNotNull(ARG_names, names);
 		for (var n : names)
 			if (sreq.getAttribute(n) == null)
 				return false;
@@ -205,7 +211,7 @@ public class RequestAttributes {
 	 * @return <jk>true</jk> if the attribute with any of the specified names are present.
 	 */
 	public boolean containsAny(String...names) {
-		assertArgNotNull("names", names);
+		assertArgNotNull(ARG_names, names);
 		for (var n : names)
 			if (nn(sreq.getAttribute(n)))
 				return true;
@@ -256,7 +262,7 @@ public class RequestAttributes {
 	 * @return This object.
 	 */
 	public RequestAttributes remove(String...name) {
-		assertArgNotNull("name", name);
+		assertArgNotNull(ARG_name, name);
 		for (var n : name) {
 			sreq.removeAttribute(n);
 		}
@@ -270,7 +276,7 @@ public class RequestAttributes {
 	 * @return This object.
 	 */
 	public RequestAttributes set(NamedAttribute...attributes) {
-		assertArgNotNull("attributes", attributes);
+		assertArgNotNull(ARG_attributes, attributes);
 		for (var p : attributes)
 			set(p);
 		return this;
@@ -286,7 +292,7 @@ public class RequestAttributes {
 	 * @return This object.
 	 */
 	public RequestAttributes set(String name, Object value) {
-		assertArgNotNull("name", name);
+		assertArgNotNull(ARG_name, name);
 		sreq.setAttribute(name, value);
 		return this;
 	}

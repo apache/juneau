@@ -183,7 +183,14 @@ import org.apache.juneau.commons.reflect.*;
  *
  * @param <T> The bean type being created.
  */
+@SuppressWarnings("java:S115")
 public class BeanCreator2<T> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_beanType = "beanType";
+	private static final String ARG_fallback = "fallback";
+	private static final String ARG_hook = "hook";
+	private static final String ARG_value = "value";
 
 	/** Default factory method names used for bean instantiation. */
 	protected static final Set<String> DEFAULT_FACTORY_METHOD_NAMES = u(set("getInstance"));
@@ -270,7 +277,7 @@ public class BeanCreator2<T> {
 	 * @param enclosingInstance The enclosing instance object. Can be <jk>null</jk>.
 	 */
 	protected BeanCreator2(Class<T> beanType, BeanStore parentStore, String name, Object enclosingInstance) {
-		this.beanType = info(assertArgNotNull("beanType", beanType));
+		this.beanType = info(assertArgNotNull(ARG_beanType, beanType));
 		this.beanSubType = this.beanType;
 		this.parentStore = parentStore;
 		this.store = new BasicBeanStore2(this.parentStore);
@@ -457,7 +464,7 @@ public class BeanCreator2<T> {
 	 * @throws IllegalArgumentException If value is not a subclass of {@code beanType}.
 	 */
 	public BeanCreator2<T> beanSubType(Class<? extends T> value) {
-		assertArgNotNull("value", value);
+		assertArgNotNull(ARG_value, value);
 		try (var writeLock = lock.write()) {
 			beanSubType = info(value);
 			assertArg(beanType.isParentOf(beanSubType), "beanSubType must be a subclass of beanType. beanType={0}, beanSubType={1}", cn(beanType), cn(beanSubType));
@@ -495,7 +502,7 @@ public class BeanCreator2<T> {
 	 */
 	public BeanCreator2<T> builder(Class<?> value) {
 		try (var writeLock = lock.write()) {
-			explicitBuilderType = info(assertArgNotNull("value", value));
+			explicitBuilderType = info(assertArgNotNull(ARG_value, value));
 			builderType.set(explicitBuilderType);
 			assertArg(isValidBuilderType(explicitBuilderType), "Invalid builder type {0} for bean type {1}. Builder must have a build(), create(), or get() method that returns {1} (or a parent of {1}). The method may have @Inject annotation to allow injected parameters; otherwise, it must have no parameters.", cn(explicitBuilderType), cn(beanType));
 			builderTypes.get();  // Triggers validation on type hierarchy.
@@ -534,7 +541,7 @@ public class BeanCreator2<T> {
 	public BeanCreator2<T> builder(Object value) {
 		try (var writeLock = lock.write()) {
 			builder(value.getClass());
-			explicitBuilder = assertArgNotNull("value", value);
+			explicitBuilder = assertArgNotNull(ARG_value, value);
 			reset();
 		}
 		return this;
@@ -835,7 +842,7 @@ public class BeanCreator2<T> {
 	 * @return This object.
 	 */
 	public BeanCreator2<T> fallback(Supplier<? extends T> fallback) {
-		assertArgNotNull("fallback", fallback);
+		assertArgNotNull(ARG_fallback, fallback);
 		try (var writeLock = lock.write()) {
 			this.fallbackSupplier = fallback;
 		}
@@ -1046,7 +1053,7 @@ public class BeanCreator2<T> {
 	 * @return This object.
 	 */
 	public BeanCreator2<T> postCreateHook(Consumer<T> hook) {
-		assertArgNotNull("hook", hook);
+		assertArgNotNull(ARG_hook, hook);
 		try (var writeLock = lock.write()) {
 			postCreateHooks.add(hook);
 		}

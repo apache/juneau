@@ -68,7 +68,11 @@ import java.util.stream.Collectors;
  *
  * @param <E> The element type.
  */
+@SuppressWarnings("java:S115")
 public class ReversedList<E> extends AbstractList<E> implements RandomAccess {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_list = "list";
 
 	private final List<E> list;
 
@@ -79,7 +83,7 @@ public class ReversedList<E> extends AbstractList<E> implements RandomAccess {
 	 * @throws IllegalArgumentException if list is <jk>null</jk>.
 	 */
 	public ReversedList(List<E> list) {
-		this.list = assertArgNotNull("list", list);
+		this.list = assertArgNotNull(ARG_list, list);
 	}
 
 	/**

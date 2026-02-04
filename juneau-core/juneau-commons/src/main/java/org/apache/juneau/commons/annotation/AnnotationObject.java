@@ -132,7 +132,12 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-commons.Annotations">Overview &gt; juneau-commons &gt; Annotations</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class AnnotationObject implements Annotation {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_annotationType = "annotationType";
+	private static final String ARG_b = "b";
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -151,7 +156,7 @@ public class AnnotationObject implements Annotation {
 		 * @param annotationType The annotation type of the annotation implementation class.
 		 */
 		public Builder(Class<? extends Annotation> annotationType) {
-			this.annotationType = assertArgNotNull("annotationType", annotationType);
+			this.annotationType = assertArgNotNull(ARG_annotationType, annotationType);
 		}
 
 		/**
@@ -175,7 +180,7 @@ public class AnnotationObject implements Annotation {
 	 * @param b The builder used to instantiate the fields of this class.
 	 */
 	public AnnotationObject(Builder b) {
-		assertArgNotNull("b", b);
+		assertArgNotNull(ARG_b, b);
 		annotationType = b.getAnnotationType();
 	}
 

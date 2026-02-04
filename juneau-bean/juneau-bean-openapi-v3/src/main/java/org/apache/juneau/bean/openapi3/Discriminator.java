@@ -72,7 +72,13 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class Discriminator extends OpenApiElement {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_key = "key";
+	private static final String ARG_property = "property";
+	private static final String ARG_value = "value";
 
 	private String propertyName;
 	private Map<String,String> mapping = map();
@@ -102,8 +108,8 @@ public class Discriminator extends OpenApiElement {
 	 * @return This object
 	 */
 	public Discriminator addMapping(String key, String value) {
-		assertArgNotNull("key", key);
-		assertArgNotNull("value", value);
+		assertArgNotNull(ARG_key, key);
+		assertArgNotNull(ARG_value, value);
 		mapping.put(key, value);
 		return this;
 	}
@@ -119,7 +125,7 @@ public class Discriminator extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "propertyName" -> toType(getPropertyName(), type);
 			case "mapping" -> toType(getMapping(), type);
@@ -160,7 +166,7 @@ public class Discriminator extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Discriminator set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "mapping" -> setMapping(toMapBuilder(value, String.class, String.class).sparse().build());
 			case "propertyName" -> setPropertyName(s(value));

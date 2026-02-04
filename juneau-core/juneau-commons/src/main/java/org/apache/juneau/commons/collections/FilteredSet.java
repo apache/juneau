@@ -96,7 +96,14 @@ import java.util.function.*;
  *
  * @param <E> The element type.
  */
+@SuppressWarnings("java:S115")
 public class FilteredSet<E> extends AbstractSet<E> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_elementType = "elementType";
+	private static final String ARG_filter = "filter";
+	private static final String ARG_set = "set";
+	private static final String ARG_value = "value";
 
 	/**
 	 * Builder for creating {@link FilteredSet} instances.
@@ -153,7 +160,7 @@ public class FilteredSet<E> extends AbstractSet<E> {
 		 * @return This object for method chaining.
 		 */
 		public Builder<E> filter(Predicate<E> value) {
-			Predicate<E> newFilter = assertArgNotNull("value", value);
+			Predicate<E> newFilter = assertArgNotNull(ARG_value, value);
 			if (filter == null)
 				filter = newFilter;
 			else
@@ -187,7 +194,7 @@ public class FilteredSet<E> extends AbstractSet<E> {
 		 * @return This object for method chaining.
 		 */
 		public Builder<E> inner(Set<E> value) {
-			inner = assertArgNotNull("value", value);
+			inner = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -241,7 +248,7 @@ public class FilteredSet<E> extends AbstractSet<E> {
 	 * @return A new builder.
 	 */
 	public static <E> Builder<E> create(Class<E> elementType) {
-		assertArgNotNull("elementType", elementType);
+		assertArgNotNull(ARG_elementType, elementType);
 		var builder = new Builder<E>();
 		builder.elementType = elementType;
 		return builder;
@@ -291,9 +298,9 @@ public class FilteredSet<E> extends AbstractSet<E> {
 	 * @param elementFunction The element conversion function, or <jk>null</jk> if not specified.
 	 */
 	protected FilteredSet(Predicate<E> filter, Set<E> set, Class<E> elementType, Function<Object,E> elementFunction) {
-		this.filter = assertArgNotNull("filter", filter);
-		this.set = assertArgNotNull("set", set);
-		this.elementType = assertArgNotNull("elementType", elementType);
+		this.filter = assertArgNotNull(ARG_filter, filter);
+		this.set = assertArgNotNull(ARG_set, set);
+		this.elementType = assertArgNotNull(ARG_elementType, elementType);
 		this.elementFunction = elementFunction;
 	}
 

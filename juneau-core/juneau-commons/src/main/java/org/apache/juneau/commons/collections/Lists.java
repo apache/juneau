@@ -110,7 +110,16 @@ import java.util.function.*;
  *
  * @param <E> The element type.
  */
+@SuppressWarnings("java:S115")
 public class Lists<E> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_comparator = "comparator";
+	private static final String ARG_elementFunction = "elementFunction";
+	private static final String ARG_elementType = "elementType";
+	private static final String ARG_filter = "filter";
+	private static final String ARG_value = "value";
+	private static final String ARG_values = "values";
 
 	/**
 	 * Creates a new list builder for the specified element type.
@@ -127,7 +136,7 @@ public class Lists<E> {
 	 * @return A new list builder instance.
 	 */
 	public static <E> Lists<E> create(Class<E> elementType) {
-		return new Lists<>(assertArgNotNull("elementType", elementType));
+		return new Lists<>(assertArgNotNull(ARG_elementType, elementType));
 	}
 
 	private List<E> list;
@@ -144,7 +153,7 @@ public class Lists<E> {
 	 * @param elementType The element type. Must not be <jk>null</jk>.
 	 */
 	public Lists(Class<E> elementType) {
-		this.elementType = assertArgNotNull("elementType", elementType);
+		this.elementType = assertArgNotNull(ARG_elementType, elementType);
 	}
 
 	/**
@@ -171,7 +180,7 @@ public class Lists<E> {
 	 */
 	@SuppressWarnings("unchecked")
 	public Lists<E> add(E...values) {
-		assertArgNotNull("values", values);
+		assertArgNotNull(ARG_values, values);
 		for (var v : values)
 			add(v);
 		return this;
@@ -373,7 +382,7 @@ public class Lists<E> {
 	 * @return This object.
 	 */
 	public Lists<E> elementFunction(Function<Object,E> elementFunction) {
-		this.elementFunction = assertArgNotNull("elementFunction", elementFunction);
+		this.elementFunction = assertArgNotNull(ARG_elementFunction, elementFunction);
 		return this;
 	}
 
@@ -384,7 +393,7 @@ public class Lists<E> {
 	 * @return This object.
 	 */
 	public Lists<E> elementType(Class<E> value) {
-		elementType = assertArgNotNull("value", value);
+		elementType = assertArgNotNull(ARG_value, value);
 		return this;
 	}
 
@@ -471,7 +480,7 @@ public class Lists<E> {
 	 * @return This object.
 	 */
 	public Lists<E> filtered(Predicate<E> filter) {
-		Predicate<E> newFilter = assertArgNotNull("filter", filter);
+		Predicate<E> newFilter = assertArgNotNull(ARG_filter, filter);
 		if (this.filter == null)
 			this.filter = newFilter;
 		else
@@ -496,7 +505,7 @@ public class Lists<E> {
 	 * @return This object.
 	 */
 	public Lists<E> sorted(Comparator<E> comparator) {
-		this.comparator = assertArgNotNull("comparator", comparator);
+		this.comparator = assertArgNotNull(ARG_comparator, comparator);
 		return this;
 	}
 

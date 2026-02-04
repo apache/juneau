@@ -87,7 +87,11 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * @param <C> The type of the third argument to the operation.
  */
 @FunctionalInterface
+@SuppressWarnings("java:S115")
 public interface ThrowingConsumer3<A,B,C> extends Consumer3<A,B,C> {
+
+	/** Argument name constant for assertArgNotNull. */
+	static final String ARG_after = "after";
 
 	/**
 	 * Performs this operation on the given arguments, wrapping any checked exceptions in a {@link RuntimeException}.
@@ -123,7 +127,7 @@ public interface ThrowingConsumer3<A,B,C> extends Consumer3<A,B,C> {
 	 * @throws NullPointerException if {@code after} is <jk>null</jk>.
 	 */
 	default ThrowingConsumer3<A,B,C> andThen(ThrowingConsumer3<? super A,? super B,? super C> after) {  // NOSONAR - false positive on generics
-		assertArgNotNull("after", after);
+		assertArgNotNull(ARG_after, after);
 		return (A a, B b, C c) -> {
 			acceptThrows(a, b, c);
 			after.acceptThrows(a, b, c);

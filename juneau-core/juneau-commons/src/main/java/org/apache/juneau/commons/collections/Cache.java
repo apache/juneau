@@ -150,7 +150,11 @@ import org.apache.juneau.commons.function.*;
  * @param <K> The key type. Can be an array type for content-based key matching.
  * @param <V> The value type.
  */
+@SuppressWarnings("java:S115")
 public class Cache<K,V> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_supplier = "supplier";
 
 	/**
 	 * Builder for creating configured {@link Cache} instances.
@@ -610,7 +614,7 @@ public class Cache<K,V> {
 	 * @return The cached or computed value. May be <jk>null</jk> if the supplier returns <jk>null</jk>.
 	 */
 	public V get(K key, Supplier<V> supplier) {
-		assertArgNotNull("supplier", supplier);
+		assertArgNotNull(ARG_supplier, supplier);
 		if (disableCaching)
 			return supplier.get();
 		var m = getMap();

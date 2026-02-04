@@ -88,6 +88,9 @@ import org.apache.juneau.commons.collections.*;
 @SuppressWarnings("java:S115")
 public class SecuritySchemeInfo extends OpenApiElement {
 
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_property = "property";
+
 	private static final String[] VALID_IN = { "query", "header", "cookie" };
 	private static final String[] VALID_TYPES = { "apiKey", "http", "oauth2", "openIdConnect" };
 
@@ -139,7 +142,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_name -> toType(getName(), type);
 			case PROP_in -> toType(getIn(), type);
@@ -264,7 +267,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public SecuritySchemeInfo set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_bearerFormat -> setBearerFormat(s(value));
 			case PROP_description -> setDescription(s(value));

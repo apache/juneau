@@ -47,7 +47,11 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang">Lang Package</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class FloatValue extends Value<Float> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_values = "values";
 
 	/**
 	 * Creates a new float value initialized to <c>0.0f</c>.
@@ -152,7 +156,7 @@ public class FloatValue extends Value<Float> {
 	 */
 	public boolean isAny(float precision, float...values) {
 		assertArg(precision >= 0, "Precision must be non-negative");
-		assertArgNotNull("values", values);
+		assertArgNotNull(ARG_values, values);
 		var v = get();
 		if (v == null)
 			return false;

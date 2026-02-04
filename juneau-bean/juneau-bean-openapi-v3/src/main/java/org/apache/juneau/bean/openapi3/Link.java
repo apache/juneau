@@ -65,6 +65,11 @@ import org.apache.juneau.commons.collections.*;
 @SuppressWarnings("java:S115")
 public class Link extends OpenApiElement {
 
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_mimeType = "mimeType";
+	private static final String ARG_parameter = "parameter";
+	private static final String ARG_property = "property";
+
 	// Property name constants
 	private static final String PROP_description = "description";
 	private static final String PROP_operationId = "operationId";
@@ -110,8 +115,8 @@ public class Link extends OpenApiElement {
 	 * @return This object
 	 */
 	public Link addParameter(String mimeType, Object parameter) {
-		assertArgNotNull("mimeType", mimeType);
-		assertArgNotNull("parameter", parameter);
+		assertArgNotNull(ARG_mimeType, mimeType);
+		assertArgNotNull(ARG_parameter, parameter);
 		parameters.put(mimeType, parameter);
 		return this;
 	}
@@ -127,7 +132,7 @@ public class Link extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_description -> toType(getDescription(), type);
 			case PROP_operationRef -> toType(getOperationRef(), type);
@@ -217,7 +222,7 @@ public class Link extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Link set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_description -> setDescription(s(value));
 			case PROP_operationId -> setOperationId(s(value));

@@ -43,7 +43,12 @@ import jakarta.servlet.http.*;
  * </ul>
  *
  */
+@SuppressWarnings("java:S115")
 public class RestSession extends ContextSession {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ctx = "ctx";
+	private static final String ARG_value = "value";
 
 	/**
 	 * Builder class.
@@ -65,7 +70,7 @@ public class RestSession extends ContextSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(RestContext ctx) {
-			super(assertArgNotNull("ctx", ctx));
+			super(assertArgNotNull(ARG_ctx, ctx));
 			this.ctx = ctx;
 		}
 
@@ -147,7 +152,7 @@ public class RestSession extends ContextSession {
 		 * @return This object.
 		 */
 		public Builder req(HttpServletRequest value) {
-			req = assertArgNotNull("value", value);
+			req = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -168,7 +173,7 @@ public class RestSession extends ContextSession {
 		 * @return This object.
 		 */
 		public Builder res(HttpServletResponse value) {
-			res = assertArgNotNull("value", value);
+			res = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -198,7 +203,7 @@ public class RestSession extends ContextSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(RestContext ctx) {
-		return new Builder(assertArgNotNull("ctx", ctx));
+		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
 	private final long startTime = System.currentTimeMillis();

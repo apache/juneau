@@ -46,6 +46,7 @@ import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 
+@SuppressWarnings("java:S115")
 /**
  * Reusable string utility methods.
  */

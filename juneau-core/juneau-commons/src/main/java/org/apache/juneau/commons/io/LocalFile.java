@@ -82,8 +82,13 @@ import java.nio.file.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">I/O Package</a>
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({"resource", "java:S115"})
 public class LocalFile {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_clazz = "clazz";
+	private static final String ARG_clazzPath = "clazzPath";
+	private static final String ARG_path = "path";
 
 	private final Class<?> clazz;
 	private final String clazzPath;
@@ -115,8 +120,8 @@ public class LocalFile {
 	 *                  Use absolute paths (starting with <js>'/'</js>) to reference from classpath root.
 	 */
 	public LocalFile(Class<?> clazz, String clazzPath) {
-		this.clazz = assertArgNotNull("clazz", clazz);
-		this.clazzPath = assertArgNotNull("clazzPath", clazzPath);
+		this.clazz = assertArgNotNull(ARG_clazz, clazz);
+		this.clazzPath = assertArgNotNull(ARG_clazzPath, clazzPath);
 		this.path = null;
 		var i = clazzPath.lastIndexOf('/');
 		this.name = i == -1 ? clazzPath : clazzPath.substring(i + 1);
@@ -149,7 +154,7 @@ public class LocalFile {
 	public LocalFile(Path path) {
 		this.clazz = null;
 		this.clazzPath = null;
-		this.path = assertArgNotNull("path", path);
+		this.path = assertArgNotNull(ARG_path, path);
 		var fileName = path.getFileName();
 		assertArg(fileName != null, "Argument 'path' must not be a root path (must have a filename).");
 		this.name = opt(fileName).map(Object::toString).orElse(null);

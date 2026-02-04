@@ -75,7 +75,15 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class Response extends OpenApiElement {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_key = "key";
+	private static final String ARG_mediaType = "mediaType";
+	private static final String ARG_name = "name";
+	private static final String ARG_property = "property";
+	private static final String ARG_value = "value";
 
 	private String description;
 	private Map<String,HeaderInfo> headers = map();
@@ -112,8 +120,8 @@ public class Response extends OpenApiElement {
 	 * @return This object
 	 */
 	public Response addContent(String key, MediaType value) {
-		assertArgNotNull("key", key);
-		assertArgNotNull("value", value);
+		assertArgNotNull(ARG_key, key);
+		assertArgNotNull(ARG_value, value);
 		content.put(key, value);
 		return this;
 	}
@@ -126,8 +134,8 @@ public class Response extends OpenApiElement {
 	 * @return This object
 	 */
 	public Response addHeader(String key, HeaderInfo value) {
-		assertArgNotNull("key", key);
-		assertArgNotNull("value", value);
+		assertArgNotNull(ARG_key, key);
+		assertArgNotNull(ARG_value, value);
 		headers.put(key, value);
 		return this;
 	}
@@ -140,8 +148,8 @@ public class Response extends OpenApiElement {
 	 * @return This object
 	 */
 	public Response addLink(String key, Link value) {
-		assertArgNotNull("key", key);
-		assertArgNotNull("value", value);
+		assertArgNotNull(ARG_key, key);
+		assertArgNotNull(ARG_value, value);
 		links.put(key, value);
 		return this;
 	}
@@ -157,7 +165,7 @@ public class Response extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "description" -> toType(getDescription(), type);
 			case "content" -> toType(getContent(), type);
@@ -181,7 +189,7 @@ public class Response extends OpenApiElement {
 	 * @return The media type info, or <jk>null</jk> if not found.
 	 */
 	public MediaType getContent(String mediaType) {
-		assertArgNotNull("mediaType", mediaType);
+		assertArgNotNull(ARG_mediaType, mediaType);
 		return content.get(mediaType);
 	}
 
@@ -202,7 +210,7 @@ public class Response extends OpenApiElement {
 	 * @return The header info, or <jk>null</jk> if not found.
 	 */
 	public HeaderInfo getHeader(String name) {
-		assertArgNotNull("name", name);
+		assertArgNotNull(ARG_name, name);
 		return headers.get(name);
 	}
 
@@ -220,7 +228,7 @@ public class Response extends OpenApiElement {
 	 * @return The link info, or <jk>null</jk> if not found.
 	 */
 	public Link getLink(String name) {
-		assertArgNotNull("name", name);
+		assertArgNotNull(ARG_name, name);
 		return links.get(name);
 	}
 
@@ -246,7 +254,7 @@ public class Response extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Response set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "content" -> setContent(toMapBuilder(value, String.class, MediaType.class).sparse().build());
 			case "description" -> setDescription(s(value));

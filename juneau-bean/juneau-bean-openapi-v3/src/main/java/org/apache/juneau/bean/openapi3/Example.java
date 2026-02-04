@@ -71,7 +71,11 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class Example extends OpenApiElement {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_property = "property";
 
 	private String summary;
 	private String description;
@@ -108,7 +112,7 @@ public class Example extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "description" -> toType(getDescription(), type);
 			case "externalValue" -> toType(getExternalValue(), type);
@@ -177,7 +181,7 @@ public class Example extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Example set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "description" -> setDescription(s(value));
 			case "externalValue" -> setExternalValue(s(value));

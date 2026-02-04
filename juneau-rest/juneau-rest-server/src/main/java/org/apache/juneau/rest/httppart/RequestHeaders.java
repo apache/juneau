@@ -109,7 +109,14 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class RequestHeaders extends ArrayList<RequestHeader> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_headers = "headers";
+	private static final String ARG_name = "name";
+	private static final String ARG_pairs = "pairs";
+	private static final String ARG_names = "names";
 
 	private static final long serialVersionUID = 1L;
 
@@ -183,7 +190,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @return This object.
 	 */
 	public RequestHeaders add(Header...headers) {
-		assertArgNotNull("headers", headers);
+		assertArgNotNull(ARG_headers, headers);
 		for (var h : headers)
 			if (nn(h))
 				add(h.getName(), h.getValue());
@@ -202,7 +209,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @return This object.
 	 */
 	public RequestHeaders add(String name, Object value) {
-		assertArgNotNull("name", name);
+		assertArgNotNull(ARG_name, name);
 		add(new RequestHeader(req, name, s(value)).parser(parser));
 		return this;
 	}
@@ -230,7 +237,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @return This object.
 	 */
 	public RequestHeaders addDefault(List<Header> pairs) {
-		assertArgNotNull("pairs", pairs);
+		assertArgNotNull(ARG_pairs, pairs);
 		for (var p : pairs) {
 			var name = p.getName();
 			var l = stream(name);
@@ -282,7 +289,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @return <jk>true</jk> if the header with any of the specified names are present.
 	 */
 	public boolean containsAny(String...names) {
-		assertArgNotNull("names", names);
+		assertArgNotNull(ARG_names, names);
 		for (var n : names)
 			if (stream(n).findAny().isPresent())
 				return true;
@@ -360,7 +367,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @return The header.  Never <jk>null</jk>.
 	 */
 	public RequestHeader getFirst(String name) {
-		assertArgNotNull("name", name);
+		assertArgNotNull(ARG_name, name);
 		return stream(name).findFirst().orElseGet(() -> new RequestHeader(req, name, null).parser(parser));
 	}
 
@@ -375,7 +382,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @return The header.  Never <jk>null</jk>.
 	 */
 	public RequestHeader getLast(String name) {
-		assertArgNotNull("name", name);
+		assertArgNotNull(ARG_name, name);
 		var v = Value.<RequestHeader>empty();
 		stream(name).forEach(v::set);
 		return v.orElseGet(() -> new RequestHeader(req, name, null).parser(parser));
@@ -420,7 +427,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @return This object.
 	 */
 	public RequestHeaders remove(String name) {
-		assertArgNotNull("name", name);
+		assertArgNotNull(ARG_name, name);
 		removeIf(x -> eq(x.getName(), name));
 		return this;
 	}
@@ -436,7 +443,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @return This object.
 	 */
 	public RequestHeaders set(Header...headers) {
-		assertArgNotNull("headers", headers);
+		assertArgNotNull(ARG_headers, headers);
 		for (var h : headers)
 			remove(h);
 		for (var h : headers)
@@ -459,7 +466,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @return This object.
 	 */
 	public RequestHeaders set(String name, Object value) {
-		assertArgNotNull("name", name);
+		assertArgNotNull(ARG_name, name);
 		set(new RequestHeader(req, name, s(value)).parser(parser));
 		return this;
 	}

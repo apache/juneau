@@ -74,7 +74,16 @@ import java.util.function.*;
  *
  * @param <V> The type of value held by this reference.
  */
+@SuppressWarnings("java:S115")
 public class OptionalReference<V> extends AtomicReference<V> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_action = "action";
+	private static final String ARG_emptyAction = "emptyAction";
+	private static final String ARG_exceptionSupplier = "exceptionSupplier";
+	private static final String ARG_mapper = "mapper";
+	private static final String ARG_other = "other";
+	private static final String ARG_predicate = "predicate";
 
 	private static final long serialVersionUID = 1L;
 
@@ -152,7 +161,7 @@ public class OptionalReference<V> extends AtomicReference<V> {
 	 * @return An OptionalReference describing the result of applying a mapping function to the value, if a value is present, otherwise an empty OptionalReference.
 	 */
 	public <U> OptionalReference<U> map(Function<? super V, ? extends U> mapper) {
-		assertArgNotNull("mapper", mapper);
+		assertArgNotNull(ARG_mapper, mapper);
 		V value = get();
 		return nn(value) ? OptionalReference.of(mapper.apply(value)) : OptionalReference.empty();
 	}
@@ -165,7 +174,7 @@ public class OptionalReference<V> extends AtomicReference<V> {
 	 * @return The result of applying an OptionalReference-bearing mapping function to the value, if a value is present, otherwise an empty OptionalReference.
 	 */
 	public <U> OptionalReference<U> flatMap(Function<? super V, ? extends OptionalReference<? extends U>> mapper) {
-		assertArgNotNull("mapper", mapper);
+		assertArgNotNull(ARG_mapper, mapper);
 		V value = get();
 		if (nn(value)) {
 			OptionalReference<? extends U> result = mapper.apply(value);
@@ -181,7 +190,7 @@ public class OptionalReference<V> extends AtomicReference<V> {
 	 * @return An OptionalReference describing the value if a value is present and the value matches the given predicate, otherwise an empty OptionalReference.
 	 */
 	public OptionalReference<V> filter(Predicate<? super V> predicate) {
-		assertArgNotNull("predicate", predicate);
+		assertArgNotNull(ARG_predicate, predicate);
 		V value = get();
 		return (nn(value) && predicate.test(value)) ? OptionalReference.of(value) : OptionalReference.empty();
 	}
@@ -204,7 +213,7 @@ public class OptionalReference<V> extends AtomicReference<V> {
 	 * @return The value, if present, otherwise the result of <jk>other.get()</jk>.
 	 */
 	public V orElseGet(Supplier<? extends V> other) {
-		assertArgNotNull("other", other);
+		assertArgNotNull(ARG_other, other);
 		V value = get();
 		return nn(value) ? value : other.get();
 	}
@@ -218,7 +227,7 @@ public class OptionalReference<V> extends AtomicReference<V> {
 	 * @throws X If no value is present.
 	 */
 	public <X extends Throwable> V orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
-		assertArgNotNull("exceptionSupplier", exceptionSupplier);
+		assertArgNotNull(ARG_exceptionSupplier, exceptionSupplier);
 		V value = get();
 		if (nn(value))
 			return value;
@@ -231,7 +240,7 @@ public class OptionalReference<V> extends AtomicReference<V> {
 	 * @param action The action to be performed, if a value is present. Must not be <jk>null</jk>.
 	 */
 	public void ifPresent(Consumer<? super V> action) {
-		assertArgNotNull("action", action);
+		assertArgNotNull(ARG_action, action);
 		V value = get();
 		if (nn(value))
 			action.accept(value);
@@ -244,8 +253,8 @@ public class OptionalReference<V> extends AtomicReference<V> {
 	 * @param emptyAction The empty-based action to be performed, if no value is present. Must not be <jk>null</jk>.
 	 */
 	public void ifPresentOrElse(Consumer<? super V> action, Runnable emptyAction) {
-		assertArgNotNull("action", action);
-		assertArgNotNull("emptyAction", emptyAction);
+		assertArgNotNull(ARG_action, action);
+		assertArgNotNull(ARG_emptyAction, emptyAction);
 		V value = get();
 		if (nn(value))
 			action.accept(value);

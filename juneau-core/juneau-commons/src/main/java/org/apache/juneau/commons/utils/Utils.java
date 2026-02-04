@@ -246,8 +246,8 @@ public class Utils {
 			return 1;
 		}
 
-		if (eq(o1.getClass(), o2.getClass()) && o1 instanceof Comparable o3)
-			return o3.compareTo(o2);
+		if (eq(o1.getClass(), o2.getClass()) && o1 instanceof Comparable o12)
+			return o12.compareTo(o2);
 
 		return 0;
 	}

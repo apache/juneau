@@ -70,7 +70,11 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class Contact extends OpenApiElement {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_property = "property";
 
 	private String name;
 	private URI url;
@@ -105,7 +109,7 @@ public class Contact extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "name" -> toType(getName(), type);
 			case "url" -> toType(getUrl(), type);
@@ -158,7 +162,7 @@ public class Contact extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Contact set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "email" -> setEmail(s(value));
 			case "name" -> setName(s(value));

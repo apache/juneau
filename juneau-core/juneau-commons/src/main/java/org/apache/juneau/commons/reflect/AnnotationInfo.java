@@ -68,7 +68,11 @@ import org.apache.juneau.commons.collections.*;
  *
  * @param <T> The annotation type.
  */
+@SuppressWarnings("java:S115")
 public class AnnotationInfo<T extends Annotation> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_a = "a";
 
 	/**
 	 * Creates a new annotation info object.
@@ -116,7 +120,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 */
 	AnnotationInfo(Annotatable on, T a) {
 		this.annotatable = on;  // TODO - Shouldn't allow null.
-		this.a = assertArgNotNull("a", a);
+		this.a = assertArgNotNull(ARG_a, a);
 		this.rank = findRank(a);
 		this.toString = mem(this::findToString);
 	}

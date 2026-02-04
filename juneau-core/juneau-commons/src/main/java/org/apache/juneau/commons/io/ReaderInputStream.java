@@ -70,8 +70,17 @@ import java.nio.charset.*;
  * </ul>
  *
  */
+@SuppressWarnings("java:S115")
 public class ReaderInputStream extends InputStream {
 	private static final int DEFAULT_BUFFER_SIZE = 1024;
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_array = "array";
+	private static final String ARG_b = "b";
+	private static final String ARG_charset = "charset";
+	private static final String ARG_charsetName = "charsetName";
+	private static final String ARG_encoder = "encoder";
+	private static final String ARG_reader = "reader";
 
 	private final Reader reader;
 	private final CharsetEncoder encoder;
@@ -113,8 +122,8 @@ public class ReaderInputStream extends InputStream {
 	@SuppressWarnings("resource")
 	public ReaderInputStream(Reader reader, Charset charset, int bufferSize) {
 		// @formatter:off
-		this(assertArgNotNull("reader", reader),
-			 assertArgNotNull("charset", charset).newEncoder()
+		this(assertArgNotNull(ARG_reader, reader),
+			 assertArgNotNull(ARG_charset, charset).newEncoder()
 					.onMalformedInput(CodingErrorAction.REPLACE)
 					.onUnmappableCharacter(CodingErrorAction.REPLACE),
 			 bufferSize
@@ -141,8 +150,8 @@ public class ReaderInputStream extends InputStream {
 	 * @param bufferSize the size of the input buffer in number of characters.  Must be positive.
 	 */
 	public ReaderInputStream(Reader reader, CharsetEncoder encoder, int bufferSize) {
-		this.reader = assertArgNotNull("reader", reader);
-		this.encoder = assertArgNotNull("encoder", encoder);
+		this.reader = assertArgNotNull(ARG_reader, reader);
+		this.encoder = assertArgNotNull(ARG_encoder, encoder);
 		assertArg(bufferSize > 0, "Argument 'bufferSize' must be positive.");
 		this.encoderIn = CharBuffer.allocate(bufferSize);
 		this.encoderIn.flip(); // Fixes Java 11 issue.
@@ -169,7 +178,7 @@ public class ReaderInputStream extends InputStream {
 	 * @param bufferSize the size of the input buffer in number of characters.  Must be positive.
 	 */
 	public ReaderInputStream(Reader reader, String charsetName, int bufferSize) {
-		this(reader, Charset.forName(assertArgNotNull("charsetName", charsetName)), bufferSize);
+		this(reader, Charset.forName(assertArgNotNull(ARG_charsetName, charsetName)), bufferSize);
 	}
 
 	/**
@@ -212,7 +221,7 @@ public class ReaderInputStream extends InputStream {
 	 */
 	@Override
 	public int read(byte[] b) throws IOException {
-		assertArgNotNull("b", b);
+		assertArgNotNull(ARG_b, b);
 		return read(b, 0, b.length);
 	}
 
@@ -228,7 +237,7 @@ public class ReaderInputStream extends InputStream {
 	 */
 	@Override
 	public int read(byte[] array, int off, int len) throws IOException {
-		assertArgNotNull("array", array);
+		assertArgNotNull(ARG_array, array);
 		if (len < 0 || off < 0 || (off + len) > array.length) {
 			throw new IndexOutOfBoundsException("Array Size=" + array.length + ", offset=" + off + ", length=" + len);
 		}

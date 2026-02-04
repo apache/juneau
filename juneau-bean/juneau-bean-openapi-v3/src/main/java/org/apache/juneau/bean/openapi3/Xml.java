@@ -69,7 +69,11 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class Xml extends OpenApiElement {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_property = "property";
 
 	private String name, namespace, prefix;
 	private Boolean attribute, wrapped;
@@ -105,7 +109,7 @@ public class Xml extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "name" -> toType(getName(), type);
 			case "namespace" -> toType(getNamespace(), type);
@@ -196,7 +200,7 @@ public class Xml extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Xml set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "attribute" -> setAttribute(toBoolean(value));
 			case "name" -> setName(s(value));

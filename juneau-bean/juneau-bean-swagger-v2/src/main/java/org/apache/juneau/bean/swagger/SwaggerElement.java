@@ -35,7 +35,12 @@ import org.apache.juneau.json.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public abstract class SwaggerElement {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_property = "property";
+	private static final String ARG_value = "value";
 
 	private boolean strict;
 	private Map<String,Object> extra;
@@ -84,7 +89,7 @@ public abstract class SwaggerElement {
 	 */
 	@Beanp("*")
 	public Object get(String property) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return opt(extra).map(x -> x.get(property)).orElse(null);
 	}
 
@@ -100,7 +105,7 @@ public abstract class SwaggerElement {
 	 * @return The property value, or <jk>null</jk> if the property does not exist or is not set.
 	 */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return toType(get(property), type);
 	}
 
@@ -127,7 +132,7 @@ public abstract class SwaggerElement {
 	 */
 	@Beanp("*")
 	public SwaggerElement set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		if (strict)
 			throw rex("Cannot set property ''{0}'' in strict mode.", property);
 		if (extra == null)
@@ -167,7 +172,7 @@ public abstract class SwaggerElement {
 	 * @return This object.
 	 */
 	protected SwaggerElement strict(Object value) {
-		assertArgNotNull("value", value);
+		assertArgNotNull(ARG_value, value);
 		strict = toBoolean(value);
 		return this;
 	}

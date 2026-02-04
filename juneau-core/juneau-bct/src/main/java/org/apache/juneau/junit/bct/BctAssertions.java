@@ -180,8 +180,16 @@ import org.opentest4j.*;
  * @see BctConfiguration#set(BeanConverter)
  * @see BctConfiguration#clear()
  */
-@SuppressWarnings("java:S1192")
+@SuppressWarnings({"java:S1192", "java:S115"})
 public class BctAssertions {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_actual = "actual";
+	private static final String ARG_expected = "expected";
+	private static final String ARG_fields = "fields";
+	private static final String ARG_function = "function";
+	private static final String ARG_pattern = "pattern";
+	private static final String ARG_properties = "properties";
 
 	/**
 	 * Asserts that the fields/properties on the specified bean are the specified values after being converted to strings.
@@ -383,8 +391,8 @@ public class BctAssertions {
 	 */
 	public static void assertBean(Supplier<String> message, Object actual, String fields, String expected) {
 		assertNotNull(actual, "Actual was null.");
-		assertArgNotNull("fields", fields);
-		assertArgNotNull("expected", expected);
+		assertArgNotNull(ARG_fields, fields);
+		assertArgNotNull(ARG_expected, expected);
 		var converter = BctConfiguration.getConverter();
 		assertEquals(expected, tokenize(fields).stream().map(x -> converter.getNested(actual, x)).collect(joining(",")), composeMessage(message, "Bean assertion failed."));
 	}
@@ -464,8 +472,8 @@ public class BctAssertions {
 	 */
 	public static void assertBeans(Supplier<String> message, Object actual, String fields, String...expected) {
 		assertNotNull(actual, "Value was null.");
-		assertArgNotNull("fields", fields);
-		assertArgNotNull("expected", expected);
+		assertArgNotNull(ARG_fields, fields);
+		assertArgNotNull(ARG_expected, expected);
 
 		var converter = BctConfiguration.getConverter();
 		var tokens = tokenize(fields);
@@ -539,8 +547,8 @@ public class BctAssertions {
 	 * @see #assertString(String, Object) for exact string matching
 	 */
 	public static void assertContains(Supplier<String> message, String expected, Object actual) {
-		assertArgNotNull("expected", expected);
-		assertArgNotNull("actual", actual);
+		assertArgNotNull(ARG_expected, expected);
+		assertArgNotNull(ARG_actual, actual);
 		assertNotNull(actual, "Value was null.");
 
 		var a = BctConfiguration.getConverter().stringify(actual);
@@ -587,7 +595,7 @@ public class BctAssertions {
 	 * @see #assertContains(String, Object) for single substring assertions
 	 */
 	public static void assertContainsAll(Supplier<String> message, Object actual, String...expected) {
-		assertArgNotNull("expected", expected);
+		assertArgNotNull(ARG_expected, expected);
 		assertNotNull(actual, "Value was null.");
 
 		var a = BctConfiguration.getConverter().stringify(actual);
@@ -694,7 +702,7 @@ public class BctAssertions {
 	 * @see #assertList(Supplier, Object, Object...)
 	 */
 	public static void assertList(Object actual, Object...expected) {
-		assertArgNotNull("actual", actual);
+		assertArgNotNull(ARG_actual, actual);
 		assertList(null, actual, expected);
 	}
 
@@ -752,8 +760,8 @@ public class BctAssertions {
 	 */
 	@SuppressWarnings({"unchecked","java:S3776"})
 	public static void assertList(Supplier<String> message, Object actual, Object...expected) {
-		assertArgNotNull("expected", expected);
-		assertArgNotNull("actual", actual);
+		assertArgNotNull(ARG_expected, expected);
+		assertArgNotNull(ARG_actual, actual);
 
 		var converter = BctConfiguration.getConverter();
 		List<Object> list = converter.listify(actual);
@@ -903,9 +911,9 @@ public class BctAssertions {
 	 */
 	public static <T> void assertMapped(Supplier<String> message, T actual, BiFunction<T,String,Object> function, String properties, String expected) {
 		assertNotNull(actual, "Value was null.");
-		assertArgNotNull("function", function);
-		assertArgNotNull("properties", properties);
-		assertArgNotNull("expected", expected);
+		assertArgNotNull(ARG_function, function);
+		assertArgNotNull(ARG_properties, properties);
+		assertArgNotNull(ARG_expected, expected);
 
 		var m = new LinkedHashMap<String,Object>();
 		for (var p : tokenize(properties)) {
@@ -982,7 +990,7 @@ public class BctAssertions {
 	 * @see #assertContains(Supplier, String, Object) for substring matching
 	 */
 	public static void assertMatchesGlob(Supplier<String> message, String pattern, Object value) {
-		assertArgNotNull("pattern", pattern);
+		assertArgNotNull(ARG_pattern, pattern);
 		assertNotNull(value, "Value was null.");
 
 		var v = BctConfiguration.getConverter().stringify(value);

@@ -83,7 +83,12 @@ import java.nio.file.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">I/O Package</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class LocalDir {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_clazz = "clazz";
+	private static final String ARG_path = "path";
 
 	/**
 	 * Validates that the specified classpath resource exists and is a file.
@@ -141,7 +146,7 @@ public class LocalDir {
 	 *                  </ul>
 	 */
 	public LocalDir(Class<?> clazz, String clazzPath) {
-		this.clazz = assertArgNotNull("clazz", clazz);
+		this.clazz = assertArgNotNull(ARG_clazz, clazz);
 		this.clazzPath = "/".equals(clazzPath) ? "/" : nullIfEmpty(trimTrailingSlashes(clazzPath));
 		this.path = null;
 		this.hashCode = h(clazz, clazzPath);
@@ -171,7 +176,7 @@ public class LocalDir {
 	public LocalDir(Path path) {
 		this.clazz = null;
 		this.clazzPath = null;
-		this.path = assertArgNotNull("path", path);
+		this.path = assertArgNotNull(ARG_path, path);
 		this.hashCode = path.hashCode();
 	}
 
@@ -227,7 +232,7 @@ public class LocalDir {
 	 * @return A {@link LocalFile} instance if the file exists and is readable, or <jk>null</jk> if it does not.
 	 */
 	public LocalFile resolve(String path) {
-		assertArgNotNull("path", path);
+		assertArgNotNull(ARG_path, path);
 		if (nn(clazz)) {
 			String p;
 			if (clazzPath == null) {

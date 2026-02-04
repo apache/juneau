@@ -68,7 +68,16 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class MediaType extends OpenApiElement {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_example = "example";
+	private static final String ARG_key = "key";
+	private static final String ARG_name = "name";
+	private static final String ARG_property = "property";
+	private static final String ARG_value = "value";
+
 	private SchemaInfo schema;
 	private Object example;
 	private Map<String,Example> examples = map();
@@ -105,8 +114,8 @@ public class MediaType extends OpenApiElement {
 	 * @return This object
 	 */
 	public MediaType addEncoding(String key, Encoding value) {
-		assertArgNotNull("key", key);
-		assertArgNotNull("value", value);
+		assertArgNotNull(ARG_key, key);
+		assertArgNotNull(ARG_value, value);
 		encoding.put(key, value);
 		return this;
 	}
@@ -119,8 +128,8 @@ public class MediaType extends OpenApiElement {
 	 * @return This object
 	 */
 	public MediaType addExample(String name, Example example) {
-		assertArgNotNull("name", name);
-		assertArgNotNull("example", example);
+		assertArgNotNull(ARG_name, name);
+		assertArgNotNull(ARG_example, example);
 		examples.put(name, example);
 		return this;
 	}
@@ -136,7 +145,7 @@ public class MediaType extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "encoding" -> toType(getEncoding(), type);
 			case "examples" -> toType(getExamples(), type);
@@ -193,7 +202,7 @@ public class MediaType extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public MediaType set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "encoding" -> setEncoding(toMapBuilder(value, String.class, Encoding.class).sparse().build());
 			case "examples" -> setExamples(toMapBuilder(value, String.class, Example.class).sparse().build());

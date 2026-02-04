@@ -83,6 +83,9 @@ import org.apache.juneau.commons.collections.*;
 @SuppressWarnings("java:S115")
 public class PathItem extends OpenApiElement {
 
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_property = "property";
+
 	// Property name constants
 	private static final String PROP_delete = "delete";
 	private static final String PROP_description = "description";
@@ -139,7 +142,7 @@ public class PathItem extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_summary -> toType(getSummary(), type);
 			case PROP_description -> toType(getDescription(), type);
@@ -264,7 +267,7 @@ public class PathItem extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public PathItem set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_delete -> setDelete(toType(value, Operation.class));
 			case PROP_description -> setDescription(s(value));

@@ -90,7 +90,11 @@ import java.nio.file.*;
  *
  * @since 9.1.0
  */
+@SuppressWarnings("java:S115")
 public class PathReaderBuilder {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_path = "path";
 
 	/**
 	 * Creates a new builder.
@@ -282,7 +286,7 @@ public class PathReaderBuilder {
 	 * @return This object for method chaining.
 	 */
 	public PathReaderBuilder path(String path) {
-		this.path = Paths.get(assertArgNotNull("path", path));
+		this.path = Paths.get(assertArgNotNull(ARG_path, path));
 		return this;
 	}
 }

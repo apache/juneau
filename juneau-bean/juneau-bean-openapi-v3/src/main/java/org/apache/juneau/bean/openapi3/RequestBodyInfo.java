@@ -68,6 +68,11 @@ import org.apache.juneau.commons.collections.*;
 @SuppressWarnings("java:S115")
 public class RequestBodyInfo extends OpenApiElement {
 
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_key = "key";
+	private static final String ARG_property = "property";
+	private static final String ARG_value = "value";
+
 	// Property name constants
 	private static final String PROP_content = "content";
 	private static final String PROP_description = "description";
@@ -107,8 +112,8 @@ public class RequestBodyInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public RequestBodyInfo addContent(String key, MediaType value) {
-		assertArgNotNull("key", key);
-		assertArgNotNull("value", value);
+		assertArgNotNull(ARG_key, key);
+		assertArgNotNull(ARG_value, value);
 		content.put(key, value);
 		return this;
 	}
@@ -124,7 +129,7 @@ public class RequestBodyInfo extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_description -> toType(getDescription(), type);
 			case PROP_content -> toType(getContent(), type);
@@ -174,7 +179,7 @@ public class RequestBodyInfo extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public RequestBodyInfo set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_content -> setContent(toMapBuilder(value, String.class, MediaType.class).sparse().build());
 			case PROP_description -> setDescription(s(value));

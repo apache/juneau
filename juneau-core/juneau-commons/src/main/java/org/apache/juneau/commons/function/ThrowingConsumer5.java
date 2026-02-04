@@ -89,7 +89,11 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * @param <E> The type of the fifth argument to the operation.
  */
 @FunctionalInterface
+@SuppressWarnings("java:S115")
 public interface ThrowingConsumer5<A,B,C,D,E> extends Consumer5<A,B,C,D,E> {
+
+	/** Argument name constant for assertArgNotNull. */
+	static final String ARG_after = "after";
 
 	/**
 	 * Performs this operation on the given arguments, wrapping any checked exceptions in a {@link RuntimeException}.
@@ -127,7 +131,7 @@ public interface ThrowingConsumer5<A,B,C,D,E> extends Consumer5<A,B,C,D,E> {
 	 * @throws NullPointerException if {@code after} is <jk>null</jk>.
 	 */
 	default ThrowingConsumer5<A,B,C,D,E> andThen(ThrowingConsumer5<? super A,? super B,? super C,? super D,? super E> after) {  // NOSONAR - false positive on generics
-		assertArgNotNull("after", after);
+		assertArgNotNull(ARG_after, after);
 		return (A a, B b, C c, D d, E e) -> {
 			acceptThrows(a, b, c, d, e);
 			after.acceptThrows(a, b, c, d, e);

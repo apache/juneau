@@ -32,7 +32,12 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class SecurityRequirement extends OpenApiElement {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_property = "property";
+	private static final String ARG_schemeName = "schemeName";
 
 	private Map<String,List<String>> requirements;
 
@@ -59,7 +64,7 @@ public class SecurityRequirement extends OpenApiElement {
 	 * @return This object.
 	 */
 	public SecurityRequirement addRequirement(String schemeName, String...scopes) {
-		assertArgNotNull("schemeName", schemeName);
+		assertArgNotNull(ARG_schemeName, schemeName);
 		assertArgNoNulls("scopes", scopes);
 		if (requirements == null)
 			requirements = new LinkedHashMap<>();
@@ -78,7 +83,7 @@ public class SecurityRequirement extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "requirements" -> toType(getRequirements(), type);
 			default -> super.get(property, type);
@@ -105,7 +110,7 @@ public class SecurityRequirement extends OpenApiElement {
 	@SuppressWarnings("unchecked")
 	@Override /* Overridden from OpenApiElement */
 	public SecurityRequirement set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "requirements" -> setRequirements((Map<String,List<String>>)value);
 			default -> {

@@ -71,7 +71,14 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class Server extends OpenApiElement {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_key = "key";
+	private static final String ARG_property = "property";
+	private static final String ARG_value = "value";
+
 	private URI url;
 	private String description;
 	private Map<String,ServerVariable> variables = map();
@@ -106,8 +113,8 @@ public class Server extends OpenApiElement {
 	 * @return This object
 	 */
 	public Server addVariable(String key, ServerVariable value) {
-		assertArgNotNull("key", key);
-		assertArgNotNull("value", value);
+		assertArgNotNull(ARG_key, key);
+		assertArgNotNull(ARG_value, value);
 		variables.put(key, value);
 		return this;
 	}
@@ -123,7 +130,7 @@ public class Server extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "url" -> toType(getUrl(), type);
 			case "description" -> toType(getDescription(), type);
@@ -170,7 +177,7 @@ public class Server extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Server set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "description" -> setDescription(s(value));
 			case "url" -> setUrl(toUri(value));

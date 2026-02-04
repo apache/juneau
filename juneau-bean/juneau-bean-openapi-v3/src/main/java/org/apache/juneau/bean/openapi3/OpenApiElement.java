@@ -32,7 +32,11 @@ import org.apache.juneau.json.*;
  * Root class for all Swagger beans.
  */
 @Bean
+@SuppressWarnings("java:S115")
 public abstract class OpenApiElement {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_property = "property";
 
 	private boolean strict;
 	private Map<String,Object> extra;
@@ -82,7 +86,7 @@ public abstract class OpenApiElement {
 	 */
 	@Beanp("*")
 	public Object get(String property) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return opt(extra).map(x -> x.get(property)).orElse(null);
 	}
 
@@ -98,7 +102,7 @@ public abstract class OpenApiElement {
 	 * @return The property value, or <jk>null</jk> if the property does not exist or is not set.
 	 */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return toType(get(property), type);
 	}
 
@@ -126,7 +130,7 @@ public abstract class OpenApiElement {
 	 */
 	@Beanp("*")
 	public OpenApiElement set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		if (strict)
 			throw rex("Cannot set property ''{0}'' in strict mode.", property);
 		if (extra == null)

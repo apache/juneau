@@ -88,7 +88,11 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * @param <D> The type of the fourth argument to the operation.
  */
 @FunctionalInterface
+@SuppressWarnings("java:S115")
 public interface ThrowingConsumer4<A,B,C,D> extends Consumer4<A,B,C,D> {
+
+	/** Argument name constant for assertArgNotNull. */
+	static final String ARG_after = "after";
 
 	/**
 	 * Performs this operation on the given arguments, wrapping any checked exceptions in a {@link RuntimeException}.
@@ -125,7 +129,7 @@ public interface ThrowingConsumer4<A,B,C,D> extends Consumer4<A,B,C,D> {
 	 * @throws NullPointerException if {@code after} is <jk>null</jk>.
 	 */
 	default ThrowingConsumer4<A,B,C,D> andThen(ThrowingConsumer4<? super A,? super B,? super C,? super D> after) {  // NOSONAR - false positive on generics
-		assertArgNotNull("after", after);
+		assertArgNotNull(ARG_after, after);
 		return (A a, B b, C c, D d) -> {
 			acceptThrows(a, b, c, d);
 			after.acceptThrows(a, b, c, d);

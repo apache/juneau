@@ -78,7 +78,11 @@ import org.apache.juneau.commons.settings.*;
  * @see org.apache.juneau.junit.bct.annotations.BctConfig
  * @see org.apache.juneau.junit.bct.BctAssertions
  */
+@SuppressWarnings("java:S115")
 public class BctConfiguration {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_converter = "converter";
 
 	/**
 	 * Private constructor to prevent instantiation.
@@ -320,7 +324,7 @@ public class BctConfiguration {
 	 * @see BasicBeanConverter
 	 */
 	public static void set(BeanConverter converter) {
-		assertArgNotNull("converter", converter);
+		assertArgNotNull(ARG_converter, converter);
 		CONVERTER_OVERRIDE.set(converter);
 	}
 

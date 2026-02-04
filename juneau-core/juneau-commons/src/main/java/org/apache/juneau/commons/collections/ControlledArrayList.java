@@ -118,7 +118,11 @@ import java.util.function.*;
  *
  * @param <E> The element type.
  */
+@SuppressWarnings("java:S115")
 public class ControlledArrayList<E> extends ArrayList<E> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_list = "list";
 
 	private static final long serialVersionUID = -1L;
 
@@ -167,7 +171,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 	 * @param list The initial contents of this list. Must not be <jk>null</jk>.
 	 */
 	public ControlledArrayList(boolean unmodifiable, List<? extends E> list) {
-		super(assertArgNotNull("list", list));
+		super(assertArgNotNull(ARG_list, list));
 		this.unmodifiable = unmodifiable;
 	}
 

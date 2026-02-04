@@ -120,7 +120,13 @@ import org.apache.juneau.serializer.*;
  *
  * @param <R> The return type.
  */
+@SuppressWarnings("java:S115")
 public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_lower = "lower";
+	private static final String ARG_upper = "upper";
+	private static final String ARG_value = "value";
 
 	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentDateAssertion.class, "Messages");
@@ -214,7 +220,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isAfter(Date value) throws AssertionError {
-		assertArgNotNull("value", value);
+		assertArgNotNull(ARG_value, value);
 		if (! (value().after(value)))
 			throw error(MSG_valueWasNotAfterExpected, value, value());
 		return returns();
@@ -236,7 +242,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isBefore(Date value) throws AssertionError {
-		assertArgNotNull("value", value);
+		assertArgNotNull(ARG_value, value);
 		if (! (value().before(value)))
 			throw error(MSG_valueWasNotBeforeExpected, value, value());
 		return returns();
@@ -260,8 +266,8 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 */
 	public R isBetween(Date lower, Date upper) throws AssertionError {
 		isExists();
-		assertArgNotNull("lower", lower);
-		assertArgNotNull("upper", upper);
+		assertArgNotNull(ARG_lower, lower);
+		assertArgNotNull(ARG_upper, upper);
 		isLte(upper);
 		isGte(lower);
 		return returns();

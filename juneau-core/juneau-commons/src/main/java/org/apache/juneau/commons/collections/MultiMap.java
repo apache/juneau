@@ -101,7 +101,11 @@ import java.util.stream.Collectors;
  * @param <K> The key type of this map.
  * @param <V> The value type of this map.
  */
+@SuppressWarnings("java:S115")
 public class MultiMap<K,V> extends AbstractMap<K,V> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_maps = "maps";
 
 	/**
 	 * The underlying maps being wrapped by this MultiMap.
@@ -132,9 +136,9 @@ public class MultiMap<K,V> extends AbstractMap<K,V> {
 	 */
 	@SafeVarargs
 	public MultiMap(Map<K,V>...maps) {
-		assertArgNotNull("maps", maps);
+		assertArgNotNull(ARG_maps, maps);
 		for (var map : maps)
-			assertArgNotNull("maps", map);
+			assertArgNotNull(ARG_maps, map);
 		m = maps;
 	}
 

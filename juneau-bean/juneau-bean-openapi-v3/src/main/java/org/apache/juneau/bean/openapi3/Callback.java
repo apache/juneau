@@ -73,6 +73,11 @@ import org.apache.juneau.commons.collections.*;
 @SuppressWarnings("java:S115")
 public class Callback extends OpenApiElement {
 
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_expression = "expression";
+	private static final String ARG_pathItem = "pathItem";
+	private static final String ARG_property = "property";
+
 	// Property name constants
 	private static final String PROP_callbacks = "callbacks";
 
@@ -101,8 +106,8 @@ public class Callback extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Callback addCallback(String expression, PathItem pathItem) {
-		assertArgNotNull("expression", expression);
-		assertArgNotNull("pathItem", pathItem);
+		assertArgNotNull(ARG_expression, expression);
+		assertArgNotNull(ARG_pathItem, pathItem);
 		if (callbacks == null)
 			callbacks = new LinkedHashMap<>();
 		callbacks.put(expression, pathItem);
@@ -120,7 +125,7 @@ public class Callback extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_callbacks -> toType(getCallbacks(), type);
 			default -> super.get(property, type);
@@ -146,7 +151,7 @@ public class Callback extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Callback set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_callbacks -> setCallbacks(toMapBuilder(value, String.class, PathItem.class).sparse().build());
 			default -> {

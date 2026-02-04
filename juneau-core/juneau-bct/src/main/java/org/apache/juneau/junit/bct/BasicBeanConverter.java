@@ -220,6 +220,10 @@ import java.util.stream.*;
 @SuppressWarnings({"rawtypes","java:S115","javabugs:S2259"})
 public class BasicBeanConverter implements BeanConverter {
 
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_o = "o";
+	private static final String ARG_token = "token";
+
 	/**
 	 * Builder for creating customized BasicBeanConverter instances.
 	 *
@@ -758,7 +762,7 @@ public class BasicBeanConverter implements BeanConverter {
 
 	@Override
 	public String getNested(Object o, NestedTokenizer.Token token) {
-		assertArgNotNull("token", token);
+		assertArgNotNull(ARG_token, token);
 
 		if (o == null)
 			return getSetting(SETTING_nullValue, null);
@@ -805,7 +809,7 @@ public class BasicBeanConverter implements BeanConverter {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Object> listify(Object o) {
-		assertArgNotNull("o", o);
+		assertArgNotNull(ARG_o, o);
 
 		o = swap(o);
 
@@ -828,7 +832,7 @@ public class BasicBeanConverter implements BeanConverter {
 	@Override
 	@SuppressWarnings("unchecked")
 	public int size(Object o) {
-		assertArgNotNull("o", o);
+		assertArgNotNull(ARG_o, o);
 
 		// Checks for Optional before unpacking.
 		if (o instanceof Optional o2)

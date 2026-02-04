@@ -77,6 +77,11 @@ import org.apache.juneau.commons.collections.*;
 @SuppressWarnings("java:S115")
 public class Encoding extends OpenApiElement {
 
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_key = "key";
+	private static final String ARG_property = "property";
+	private static final String ARG_value = "value";
+
 	// Property name constants
 	private static final String PROP_allowReserved = "allowReserved";
 	private static final String PROP_contentType = "contentType";
@@ -119,8 +124,8 @@ public class Encoding extends OpenApiElement {
 	 * @return This object
 	 */
 	public Encoding addHeader(String key, HeaderInfo value) {
-		assertArgNotNull("key", key);
-		assertArgNotNull("value", value);
+		assertArgNotNull(ARG_key, key);
+		assertArgNotNull(ARG_value, value);
 		headers.put(key, value);
 		return this;
 	}
@@ -136,7 +141,7 @@ public class Encoding extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_contentType -> toType(getContentType(), type);
 			case PROP_style -> toType(getStyle(), type);
@@ -207,7 +212,7 @@ public class Encoding extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Encoding set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_allowReserved -> setAllowReserved(toBoolean(value));
 			case PROP_contentType -> setContentType(s(value));

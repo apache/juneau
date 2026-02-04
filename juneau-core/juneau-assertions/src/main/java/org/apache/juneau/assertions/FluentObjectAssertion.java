@@ -93,7 +93,12 @@ import org.apache.juneau.serializer.*;
  * @param <T> The object type.
  * @param <R> The return type.
  */
+@SuppressWarnings("java:S115")
 public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_parent = "parent";
+	private static final String ARG_type = "type";
 
 	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentObjectAssertion.class, "Messages");
@@ -331,7 +336,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isExactType(Class<?> type) throws AssertionError {
-		assertArgNotNull("parent", type);
+		assertArgNotNull(ARG_type, type);
 		if (value().getClass() != type)
 			throw error(MSG_unexpectedType, cn(type), cn(value));
 		return returns();
@@ -503,7 +508,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isType(Class<?> parent) throws AssertionError {
-		assertArgNotNull("parent", parent);
+		assertArgNotNull(ARG_parent, parent);
 		if (! info(value()).isAssignableTo(parent))
 			throw error(MSG_unexpectedType, cn(parent), cn(value));
 		return returns();

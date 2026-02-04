@@ -55,7 +55,11 @@ import org.apache.juneau.http.header.*;
  * @serial exclude
  */
 @BeanIgnore /* Use toString() to serialize */
+@SuppressWarnings("java:S115")
 public class BasicHttpException extends BasicRuntimeException implements HttpResponse {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_response = "response";
 
 	private static final long serialVersionUID = 1L;
 
@@ -540,7 +544,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @throws AssertionError If status code is not what was expected.
 	 */
 	protected void assertStatusCode(HttpResponse response) throws AssertionError {
-		assertArgNotNull("response", response);
+		assertArgNotNull(ARG_response, response);
 		int expected = getStatusLine().getStatusCode();
 		int actual = response.getStatusLine().getStatusCode();
 		assertInteger(actual).setMsg("Unexpected status code.  Expected:[{0}], Actual:[{1}]", expected, actual).is(expected);

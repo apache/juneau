@@ -86,7 +86,11 @@ import java.util.*;
  * @param <E> The element type.
  * @see SortedLinkedList
  */
+@SuppressWarnings("java:S115")
 public class SortedArrayList<E> extends AbstractList<E> implements RandomAccess {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_comparator = "comparator";
 
 	private final List<E> list;
 	private final Comparator<? super E> comparator;
@@ -110,7 +114,7 @@ public class SortedArrayList<E> extends AbstractList<E> implements RandomAccess 
 	 * @param comparator The comparator to use for sorting. Must not be <jk>null</jk>.
 	 */
 	public SortedArrayList(Comparator<? super E> comparator) {
-		this.comparator = assertArgNotNull("comparator", comparator);
+		this.comparator = assertArgNotNull(ARG_comparator, comparator);
 		this.list = new ArrayList<>();
 	}
 
@@ -131,7 +135,7 @@ public class SortedArrayList<E> extends AbstractList<E> implements RandomAccess 
 	 * @param initialCapacity The initial capacity.
 	 */
 	public SortedArrayList(Comparator<? super E> comparator, int initialCapacity) {
-		this.comparator = assertArgNotNull("comparator", comparator);
+		this.comparator = assertArgNotNull(ARG_comparator, comparator);
 		this.list = new ArrayList<>(initialCapacity);
 	}
 
@@ -155,7 +159,7 @@ public class SortedArrayList<E> extends AbstractList<E> implements RandomAccess 
 	 * @param c The collection whose elements are to be placed into this list.
 	 */
 	public SortedArrayList(Comparator<? super E> comparator, Collection<? extends E> c) {
-		this.comparator = assertArgNotNull("comparator", comparator);
+		this.comparator = assertArgNotNull(ARG_comparator, comparator);
 		this.list = new ArrayList<>(c);
 		Collections.sort(this.list, this.comparator);
 	}

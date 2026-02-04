@@ -71,7 +71,11 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
  * @param <E> The type of the fifth argument to the operation.
  */
 @FunctionalInterface
+@SuppressWarnings("java:S115")
 public interface Consumer5<A,B,C,D,E> {
+
+	/** Argument name constant for assertArgNotNull. */
+	static final String ARG_after = "after";
 
 	/**
 	 * Returns a composed {@link Consumer5} that performs, in sequence, this operation followed by the {@code after} operation.
@@ -94,7 +98,7 @@ public interface Consumer5<A,B,C,D,E> {
 	 * @throws NullPointerException if {@code after} is <jk>null</jk>.
 	 */
 	default Consumer5<A,B,C,D,E> andThen(Consumer5<? super A,? super B,? super C,? super D,? super E> after) {  // NOSONAR - false positive on generics
-		assertArgNotNull("after", after);
+		assertArgNotNull(ARG_after, after);
 		return (A a, B b, C c, D d, E e) -> {
 			apply(a, b, c, d, e);
 			after.apply(a, b, c, d, e);

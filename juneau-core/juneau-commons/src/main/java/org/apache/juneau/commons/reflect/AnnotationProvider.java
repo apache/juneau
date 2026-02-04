@@ -177,8 +177,15 @@ import org.apache.juneau.commons.lang.*;
  * 	<li class='jc'>{@link MethodInfo}
  * </ul>
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({ "unchecked", "rawtypes", "java:S115" })
 public class AnnotationProvider {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_c = "c";
+	private static final String ARG_f = "f";
+	private static final String ARG_m = "m";
+	private static final String ARG_p = "p";
+	private static final String ARG_type = "type";
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// System properties
@@ -514,8 +521,8 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
 	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, ClassInfo c, AnnotationTraversal...traversals) {
-		assertArgNotNull("type", type);
-		assertArgNotNull("c", c);
+		assertArgNotNull(ARG_type, type);
+		assertArgNotNull(ARG_c, c);
 		return cache.get(type, c, traversals);
 	}
 
@@ -539,8 +546,8 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
 	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, ConstructorInfo c, AnnotationTraversal...traversals) {
-		assertArgNotNull("type", type);
-		assertArgNotNull("c", c);
+		assertArgNotNull(ARG_type, type);
+		assertArgNotNull(ARG_c, c);
 		return cache.get(type, c, traversals);
 	}
 
@@ -564,8 +571,8 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
 	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, FieldInfo f, AnnotationTraversal...traversals) {
-		assertArgNotNull("type", type);
-		assertArgNotNull("f", f);
+		assertArgNotNull(ARG_type, type);
+		assertArgNotNull(ARG_f, f);
 		return cache.get(type, f, traversals);
 	}
 
@@ -593,8 +600,8 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
 	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, MethodInfo m, AnnotationTraversal...traversals) {
-		assertArgNotNull("type", type);
-		assertArgNotNull("m", m);
+		assertArgNotNull(ARG_type, type);
+		assertArgNotNull(ARG_m, m);
 		return cache.get(type, m, traversals);
 	}
 
@@ -638,8 +645,8 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects in child-to-parent order. Never <jk>null</jk>.
 	 */
 	public <A extends Annotation> List<AnnotationInfo<A>> find(Class<A> type, ParameterInfo p, AnnotationTraversal...traversals) {
-		assertArgNotNull("type", type);
-		assertArgNotNull("p", p);
+		assertArgNotNull(ARG_type, type);
+		assertArgNotNull(ARG_p, p);
 		return cache.get(type, p, traversals);
 	}
 
@@ -666,7 +673,7 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
 	public List<AnnotationInfo<? extends Annotation>> find(ClassInfo c, AnnotationTraversal...traversals) {
-		assertArgNotNull("c", c);
+		assertArgNotNull(ARG_c, c);
 		return cache.get(null, c, traversals);
 	}
 
@@ -689,7 +696,7 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
 	public List<AnnotationInfo<? extends Annotation>> find(ConstructorInfo c, AnnotationTraversal...traversals) {
-		assertArgNotNull("c", c);
+		assertArgNotNull(ARG_c, c);
 		return cache.get(null, c, traversals);
 	}
 
@@ -712,7 +719,7 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
 	public List<AnnotationInfo<? extends Annotation>> find(FieldInfo f, AnnotationTraversal...traversals) {
-		assertArgNotNull("f", f);
+		assertArgNotNull(ARG_f, f);
 		return cache.get(null, f, traversals);
 	}
 
@@ -739,7 +746,7 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects. Never <jk>null</jk>.
 	 */
 	public List<AnnotationInfo<? extends Annotation>> find(MethodInfo m, AnnotationTraversal...traversals) {
-		assertArgNotNull("m", m);
+		assertArgNotNull(ARG_m, m);
 		return cache.get(null, m, traversals);
 	}
 
@@ -778,7 +785,7 @@ public class AnnotationProvider {
 	 * @return A list of {@link AnnotationInfo} objects in child-to-parent order. Never <jk>null</jk>.
 	 */
 	public List<AnnotationInfo<? extends Annotation>> find(ParameterInfo p, AnnotationTraversal...traversals) {
-		assertArgNotNull("p", p);
+		assertArgNotNull(ARG_p, p);
 		return cache.get(null, p, traversals);
 	}
 

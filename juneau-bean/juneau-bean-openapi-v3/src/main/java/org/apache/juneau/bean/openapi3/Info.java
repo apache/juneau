@@ -101,6 +101,9 @@ import org.apache.juneau.commons.collections.*;
 @SuppressWarnings("java:S115")
 public class Info extends OpenApiElement {
 
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_property = "property";
+
 	// Property name constants
 	private static final String PROP_contact = "contact";
 	private static final String PROP_description = "description";
@@ -145,7 +148,7 @@ public class Info extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_title -> toType(getTitle(), type);
 			case PROP_description -> toType(getDescription(), type);
@@ -234,7 +237,7 @@ public class Info extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Info set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_contact -> setContact(toType(value, Contact.class));
 			case PROP_description -> setDescription(s(value));

@@ -51,7 +51,11 @@ import static org.apache.juneau.commons.utils.Utils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang">Lang Package</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class StringValue extends Value<String> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_values = "values";
 
 	/**
 	 * Creates a new empty string value.
@@ -144,7 +148,7 @@ public class StringValue extends Value<String> {
 	 * @return <jk>true</jk> if the current value matches any of the specified values.
 	 */
 	public boolean isAny(String...values) {
-		assertArgNotNull("values", values);
+		assertArgNotNull(ARG_values, values);
 		var current = get();
 		for (var value : values)
 			if (eq(current, value))

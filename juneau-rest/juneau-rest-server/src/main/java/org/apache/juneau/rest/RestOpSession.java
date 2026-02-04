@@ -38,7 +38,12 @@ import org.apache.juneau.rest.logger.*;
  * </ul>
  *
  */
+@SuppressWarnings("java:S115")
 public class RestOpSession extends ContextSession {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ctx = "ctx";
+	private static final String ARG_session = "session";
 
 	/**
 	 * Builder class.
@@ -57,9 +62,9 @@ public class RestOpSession extends ContextSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		public Builder(RestOpContext ctx, RestSession session) {
-			super(assertArgNotNull("ctx", ctx));
+			super(assertArgNotNull(ARG_ctx, ctx));
 			this.ctx = ctx;
-			this.session = assertArgNotNull("session", session);
+			this.session = assertArgNotNull(ARG_session, session);
 		}
 
 		@Override /* Overridden from Session.Builder */
@@ -102,7 +107,7 @@ public class RestOpSession extends ContextSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(RestOpContext ctx, RestSession session) {
-		return new Builder(assertArgNotNull("ctx", ctx), assertArgNotNull("session", session));
+		return new Builder(assertArgNotNull(ARG_ctx, ctx), assertArgNotNull(ARG_session, session));
 	}
 
 	private final RestOpContext ctx;

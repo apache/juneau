@@ -80,7 +80,12 @@ import jakarta.servlet.http.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpContext">RestOpContext</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class RestOpContext extends Context implements Comparable<RestOpContext> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_beanType = "beanType";
+	private static final String ARG_value = "value";
 
 	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
@@ -237,7 +242,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public <T> Builder beanStore(Class<T> beanType, T bean) {
-			beanStore().addBean(assertArgNotNull("beanType", beanType), bean);
+			beanStore().addBean(assertArgNotNull(ARG_beanType, beanType), bean);
 			return this;
 		}
 
@@ -260,7 +265,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public <T> Builder beanStore(Class<T> beanType, T bean, String name) {
-			beanStore().addBean(assertArgNotNull("beanType", beanType), bean, name);
+			beanStore().addBean(assertArgNotNull(ARG_beanType, beanType), bean, name);
 			return this;
 		}
 
@@ -353,7 +358,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder clientVersion(String value) {
-			clientVersion = assertArgNotNull("value", value);
+			clientVersion = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -473,7 +478,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder debug(Enablement value) {
-			debug = assertArgNotNull("value", value);
+			debug = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -504,7 +509,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder defaultCharset(Charset value) {
-			defaultCharset = assertArgNotNull("value", value);
+			defaultCharset = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -845,7 +850,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder httpMethod(String value) {
-			httpMethod = assertArgNotNull("value", value);
+			httpMethod = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -880,7 +885,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder jsonSchemaGenerator(Class<? extends JsonSchemaGenerator> value) {
-			jsonSchemaGenerator().type(assertArgNotNull("value", value));
+			jsonSchemaGenerator().type(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -898,7 +903,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder jsonSchemaGenerator(JsonSchemaGenerator value) {
-			jsonSchemaGenerator().impl(assertArgNotNull("value", value));
+			jsonSchemaGenerator().impl(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -1013,7 +1018,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder maxInput(String value) {
-			maxInput = parseLongWithSuffix(assertArgNotNull("value", value));
+			maxInput = parseLongWithSuffix(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -1092,7 +1097,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder partParser(Class<? extends HttpPartParser> value) {
-			partParser().type(assertArgNotNull("value", value));
+			partParser().type(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -1110,7 +1115,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder partParser(HttpPartParser value) {
-			partParser().impl(assertArgNotNull("value", value));
+			partParser().impl(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -1139,7 +1144,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder partSerializer(Class<? extends HttpPartSerializer> value) {
-			partSerializer().type(assertArgNotNull("value", value));
+			partSerializer().type(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -1157,7 +1162,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder partSerializer(HttpPartSerializer value) {
-			partSerializer().impl(assertArgNotNull("value", value));
+			partSerializer().impl(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -1277,9 +1282,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 */
 		public Builder roleGuard(String value) {
 			if (roleGuard == null)
-				roleGuard = set(assertArgNotNull("value", value));
+				roleGuard = set(assertArgNotNull(ARG_value, value));
 			else
-				roleGuard.add(assertArgNotNull("value", value));
+				roleGuard.add(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 

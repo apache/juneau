@@ -82,6 +82,9 @@ import org.apache.juneau.json.*;
 @SuppressWarnings("java:S115")
 public class Items extends OpenApiElement {
 
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_property = "property";
+
 	private static final String[] VALID_TYPES = { "string", "number", "integer", "boolean", "array" };
 	private static final String[] VALID_COLLECTION_FORMATS = { "csv", "ssv", "tsv", "pipes", "multi" };
 
@@ -174,7 +177,7 @@ public class Items extends OpenApiElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_type -> toType(getType(), type);
 			case PROP_format -> toType(getFormat(), type);
@@ -412,7 +415,7 @@ public class Items extends OpenApiElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public Items set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_ref -> setRef(value);
 			case PROP_collectionFormat -> setCollectionFormat(s(value));

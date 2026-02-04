@@ -81,7 +81,13 @@ import java.io.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">I/O Package</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class StringBuilderWriter extends Writer {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_cbuf = "cbuf";
+	private static final String ARG_sb = "sb";
+	private static final String ARG_str = "str";
 
 	private StringBuilder sb;
 
@@ -146,7 +152,7 @@ public class StringBuilderWriter extends Writer {
 	 * @param sb The StringBuilder to wrap. Must not be <jk>null</jk>.
 	 */
 	public StringBuilderWriter(StringBuilder sb) {
-		this.sb = assertArgNotNull("sb", sb);
+		this.sb = assertArgNotNull(ARG_sb, sb);
 		lock = null;
 	}
 
@@ -185,7 +191,7 @@ public class StringBuilderWriter extends Writer {
 
 	@Override /* Overridden from Writer */
 	public void write(char cbuf[], int start, int length) {
-		assertArgNotNull("cbuf", cbuf);
+		assertArgNotNull(ARG_cbuf, cbuf);
 		sb.append(cbuf, start, length);
 	}
 
@@ -196,13 +202,13 @@ public class StringBuilderWriter extends Writer {
 
 	@Override /* Overridden from Writer */
 	public void write(String str) {
-		assertArgNotNull("str", str);
+		assertArgNotNull(ARG_str, str);
 		sb.append(str);
 	}
 
 	@Override /* Overridden from Writer */
 	public void write(String str, int off, int len) {
-		assertArgNotNull("str", str);
+		assertArgNotNull(ARG_str, str);
 		sb.append(str.substring(off, off + len));
 	}
 }

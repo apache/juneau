@@ -159,6 +159,15 @@ import org.apache.juneau.commons.collections.*;
 @SuppressWarnings("java:S115")
 public class Operation extends SwaggerElement {
 
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_in = "in";
+	private static final String ARG_property = "property";
+	private static final String ARG_response = "response";
+	private static final String ARG_scheme = "scheme";
+	private static final String ARG_status = "status";
+	private static final String ARG_statusCode = "statusCode";
+	private static final String ARG_value = "value";
+
 	private interface MapStringList extends Map<String,List<String>> {}
 
 	// Property name constants
@@ -339,8 +348,8 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addResponse(String statusCode, ResponseInfo response) {
-		assertArgNotNull("statusCode", statusCode);
-		assertArgNotNull("response", response);
+		assertArgNotNull(ARG_statusCode, statusCode);
+		assertArgNotNull(ARG_response, response);
 		responses.put(statusCode, response);
 		return this;
 	}
@@ -393,7 +402,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addSecurity(Collection<Map<String,List<String>>> value) {
-		assertArgNotNull("value", value);
+		assertArgNotNull(ARG_value, value);
 		security.addAll(value);
 		return this;
 	}
@@ -410,7 +419,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addSecurity(String scheme, String...alternatives) {
-		assertArgNotNull("scheme", scheme);
+		assertArgNotNull(ARG_scheme, scheme);
 		Map<String,List<String>> m = map();
 		m.put(scheme, l(alternatives));
 		security.add(m);
@@ -464,7 +473,7 @@ public class Operation extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_consumes -> toType(getConsumes(), type);
 			case PROP_deprecated -> toType(getDeprecated(), type);
@@ -540,7 +549,7 @@ public class Operation extends SwaggerElement {
 	 * @return The matching parameter info, or <jk>null</jk> if not found.
 	 */
 	public ParameterInfo getParameter(String in, String name) {
-		assertArgNotNull("in", in);
+		assertArgNotNull(ARG_in, in);
 		// Note: name can be null for "body" parameters
 		for (var pi : parameters)
 			if (eq(pi.getIn(), in) && (eq(pi.getName(), name) || "body".equals(pi.getIn())))
@@ -600,7 +609,7 @@ public class Operation extends SwaggerElement {
 	 * @return The response info, or <jk>null</jk> if not found.
 	 */
 	public ResponseInfo getResponse(String status) {
-		assertArgNotNull("status", status);
+		assertArgNotNull(ARG_status, status);
 		return responses.get(status);
 	}
 
@@ -689,7 +698,7 @@ public class Operation extends SwaggerElement {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override /* Overridden from SwaggerElement */
 	public Operation set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_consumes -> setConsumes(toListBuilder(value, MediaType.class).sparse().build());
 			case PROP_deprecated -> setDeprecated(toBoolean(value));

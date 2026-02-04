@@ -88,6 +88,22 @@ import org.apache.juneau.objecttools.*;
 @SuppressWarnings("java:S115")
 public class Swagger extends SwaggerElement {
 
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_c = "c";
+	private static final String ARG_in = "in";
+	private static final String ARG_method = "method";
+	private static final String ARG_methodName = "methodName";
+	private static final String ARG_name = "name";
+	private static final String ARG_operation = "operation";
+	private static final String ARG_parameter = "parameter";
+	private static final String ARG_path = "path";
+	private static final String ARG_property = "property";
+	private static final String ARG_response = "response";
+	private static final String ARG_scheme = "scheme";
+	private static final String ARG_schema = "schema";
+	private static final String ARG_securityScheme = "securityScheme";
+	private static final String ARG_status = "status";
+
 	private static interface MapOfStringLists extends Map<String,List<String>> {}
 
 	/** Represents a null swagger */
@@ -229,8 +245,8 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addDefinition(String name, JsonMap schema) {
-		assertArgNotNull("name", name);
-		assertArgNotNull("schema", schema);
+		assertArgNotNull(ARG_name, name);
+		assertArgNotNull(ARG_schema, schema);
 		definitions.put(name, schema);
 		return this;
 	}
@@ -246,8 +262,8 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addParameter(String name, ParameterInfo parameter) {
-		assertArgNotNull("name", name);
-		assertArgNotNull("parameter", parameter);
+		assertArgNotNull(ARG_name, name);
+		assertArgNotNull(ARG_parameter, parameter);
 		parameters.put(name, parameter);
 		return this;
 	}
@@ -264,9 +280,9 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addPath(String path, String methodName, Operation operation) {
-		assertArgNotNull("path", path);
-		assertArgNotNull("methodName", methodName);
-		assertArgNotNull("operation", operation);
+		assertArgNotNull(ARG_path, path);
+		assertArgNotNull(ARG_methodName, methodName);
+		assertArgNotNull(ARG_operation, operation);
 		paths.computeIfAbsent(path, k -> new OperationMap()).put(methodName, operation);
 		return this;
 	}
@@ -320,8 +336,8 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addResponse(String name, ResponseInfo response) {
-		assertArgNotNull("name", name);
-		assertArgNotNull("response", response);
+		assertArgNotNull(ARG_name, name);
+		assertArgNotNull(ARG_response, response);
 		responses.put(name, response);
 		return this;
 	}
@@ -405,7 +421,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addSecurity(String scheme, String...alternatives) {
-		assertArgNotNull("scheme", scheme);
+		assertArgNotNull(ARG_scheme, scheme);
 		Map<String,List<String>> m = map();
 		m.put(scheme, l(alternatives));
 		security.add(m);
@@ -423,8 +439,8 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addSecurityDefinition(String name, SecurityScheme securityScheme) {
-		assertArgNotNull("name", name);
-		assertArgNotNull("securityScheme", securityScheme);
+		assertArgNotNull(ARG_name, name);
+		assertArgNotNull(ARG_securityScheme, securityScheme);
 		securityDefinitions.put(name, securityScheme);
 		return this;
 	}
@@ -500,7 +516,7 @@ public class Swagger extends SwaggerElement {
 	 */
 	public <T> T findRef(String ref, Class<T> c) {
 		assertArgNotNullOrBlank("ref", ref);
-		assertArgNotNull("c", c);
+		assertArgNotNull(ARG_c, c);
 		if (! ref.startsWith("#/"))
 			throw rex("Unsupported reference:  ''{0}''", ref);
 		try {
@@ -512,7 +528,7 @@ public class Swagger extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_basePath -> toType(getBasePath(), type);
 			case PROP_consumes -> toType(getConsumes(), type);
@@ -601,8 +617,8 @@ public class Swagger extends SwaggerElement {
 	 * @return The operation for the specified path and operation id, or <jk>null</jk> if it doesn't exist.
 	 */
 	public Operation getOperation(String path, String operation) {
-		assertArgNotNull("path", path);
-		assertArgNotNull("operation", operation);
+		assertArgNotNull(ARG_path, path);
+		assertArgNotNull(ARG_operation, operation);
 		return opt(getPath(path)).map(x -> x.get(operation)).orElse(null);
 	}
 
@@ -616,9 +632,9 @@ public class Swagger extends SwaggerElement {
 	 * @return The parameter information or <jk>null</jk> if not found.
 	 */
 	public ParameterInfo getParameterInfo(String path, String method, String in, String name) {
-		assertArgNotNull("path", path);
-		assertArgNotNull("method", method);
-		assertArgNotNull("in", in);
+		assertArgNotNull(ARG_path, path);
+		assertArgNotNull(ARG_method, method);
+		assertArgNotNull(ARG_in, in);
 		return opt(getPath(path)).map(x -> x.get(method)).map(x -> x.getParameter(in, name)).orElse(null);
 	}
 
@@ -639,7 +655,7 @@ public class Swagger extends SwaggerElement {
 	 * @return The operation map for the specified path, or <jk>null</jk> if it doesn't exist.
 	 */
 	public OperationMap getPath(String path) {
-		assertArgNotNull("path", path);
+		assertArgNotNull(ARG_path, path);
 		return opt(getPaths()).map(x -> x.get(path)).orElse(null);
 	}
 
@@ -684,9 +700,9 @@ public class Swagger extends SwaggerElement {
 	 * @return The operation for the specified path and operation id, or <jk>null</jk> if it doesn't exist.
 	 */
 	public ResponseInfo getResponseInfo(String path, String operation, String status) {
-		assertArgNotNull("path", path);
-		assertArgNotNull("operation", operation);
-		assertArgNotNull("status", status);
+		assertArgNotNull(ARG_path, path);
+		assertArgNotNull(ARG_operation, operation);
+		assertArgNotNull(ARG_status, status);
 		return opt(getPath(path)).map(x -> x.get(operation)).map(x -> x.getResponse(status)).orElse(null);
 	}
 
@@ -771,13 +787,13 @@ public class Swagger extends SwaggerElement {
 			.addIf(ne(tags), PROP_tags)
 			.build();
 		// @formatter:on
-		return new MultiSet<String>(s, super.keySet());
+		return new MultiSet<>(s, super.keySet());
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override /* Overridden from SwaggerElement */
 	public Swagger set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_basePath -> setBasePath(s(value));
 			case PROP_consumes -> setConsumes(toListBuilder(value, MediaType.class).sparse().build());

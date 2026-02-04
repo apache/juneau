@@ -97,7 +97,16 @@ import java.util.function.*;
  * @param <K> The key type.
  * @param <V> The value type.
  */
+@SuppressWarnings("java:S115")
 public class FilteredMap<K,V> extends AbstractMap<K,V> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_filter = "filter";
+	private static final String ARG_keyType = "keyType";
+	private static final String ARG_map = "map";
+	private static final String ARG_pairs = "pairs";
+	private static final String ARG_value = "value";
+	private static final String ARG_valueType = "valueType";
 
 	/**
 	 * Builder for creating {@link FilteredMap} instances.
@@ -157,7 +166,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 		 * @return This object for method chaining.
 		 */
 		public Builder<K,V> filter(BiPredicate<K,V> value) {
-			BiPredicate<K,V> newFilter = assertArgNotNull("value", value);
+			BiPredicate<K,V> newFilter = assertArgNotNull(ARG_value, value);
 			if (filter == null)
 				filter = newFilter;
 			else
@@ -191,7 +200,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 		 * @return This object for method chaining.
 		 */
 		public Builder<K,V> inner(Map<K,V> value) {
-			inner = assertArgNotNull("value", value);
+			inner = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -302,8 +311,8 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	 * @return A new builder.
 	 */
 	public static <K,V> Builder<K,V> create(Class<K> keyType, Class<V> valueType) {
-		assertArgNotNull("keyType", keyType);
-		assertArgNotNull("valueType", valueType);
+		assertArgNotNull(ARG_keyType, keyType);
+		assertArgNotNull(ARG_valueType, valueType);
 		var builder = new Builder<K,V>();
 		builder.keyType = keyType;
 		builder.valueType = valueType;
@@ -360,10 +369,10 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	 * @param valueFunction The value conversion function, or <jk>null</jk> if not specified.
 	 */
 	protected FilteredMap(BiPredicate<K,V> filter, Map<K,V> map, Class<K> keyType, Class<V> valueType, Function<Object,K> keyFunction, Function<Object,V> valueFunction) {
-		this.filter = assertArgNotNull("filter", filter);
-		this.map = assertArgNotNull("map", map);
-		this.keyType = assertArgNotNull("keyType", keyType);
-		this.valueType = assertArgNotNull("valueType", valueType);
+		this.filter = assertArgNotNull(ARG_filter, filter);
+		this.map = assertArgNotNull(ARG_map, map);
+		this.keyType = assertArgNotNull(ARG_keyType, keyType);
+		this.valueType = assertArgNotNull(ARG_valueType, valueType);
 		this.keyFunction = keyFunction;
 		this.valueFunction = valueFunction;
 	}
@@ -649,7 +658,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	 * @throws IllegalArgumentException If an odd number of parameters is provided.
 	 */
 	public FilteredMap<K,V> addPairs(Object...pairs) {
-		assertArgNotNull("pairs", pairs);
+		assertArgNotNull(ARG_pairs, pairs);
 		if (pairs.length % 2 != 0)
 			throw illegalArg("Odd number of parameters passed into addPairs()");
 		for (var i = 0; i < pairs.length; i += 2)

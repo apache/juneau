@@ -30,7 +30,11 @@ import java.util.*;
  * </ul>
  *
  */
+@SuppressWarnings("java:S115")
 public class DefaultClassList {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_type = "type";
 
 	/**
 	 * Static creator.
@@ -98,7 +102,7 @@ public class DefaultClassList {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> Optional<Class<? extends T>> get(Class<T> type) {
-		assertArgNotNull("type", type);
+		assertArgNotNull(ARG_type, type);
 		for (var e : entries)
 			if (nn(e) && type.isAssignableFrom(e))
 				return opt((Class<? extends T>)e);

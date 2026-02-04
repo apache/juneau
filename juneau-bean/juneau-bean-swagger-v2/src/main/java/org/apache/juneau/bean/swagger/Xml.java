@@ -71,7 +71,11 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class Xml extends SwaggerElement {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_property = "property";
 
 	private String name, namespace, prefix;
 	private Boolean attribute, wrapped;
@@ -107,7 +111,7 @@ public class Xml extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "attribute" -> toType(getAttribute(), type);
 			case "name" -> toType(getName(), type);
@@ -188,7 +192,7 @@ public class Xml extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public Xml set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "attribute" -> setAttribute(toBoolean(value));
 			case "name" -> setName(s(value));

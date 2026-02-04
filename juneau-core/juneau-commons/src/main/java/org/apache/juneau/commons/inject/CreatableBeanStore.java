@@ -50,7 +50,11 @@ import java.util.function.*;
  * 	<li class='jc'>{@link BeanCreator2}
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class CreatableBeanStore extends BasicBeanStore2 {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_beanType = "beanType";
 
 	private final ConcurrentHashMap<Class<?>, BeanCreator2<?>> creators = new ConcurrentHashMap<>();
 	private final Object enclosingInstance;
@@ -74,7 +78,7 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 * @return The creator that was created and stored.
 	 */
 	public <T> BeanCreator2<T> add(Class<T> beanType) {
-		assertArgNotNull("beanType", beanType);  // NOSONAR(java:UNKNOWN): Assertion method, return value not used
+		assertArgNotNull(ARG_beanType, beanType);  // NOSONAR(java:UNKNOWN): Assertion method, return value not used
 		var creator = BeanCreator2.of(beanType, this, null, enclosingInstance);
 		creators.put(beanType, creator);
 		return creator;
@@ -89,7 +93,7 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 * @return The creator that was created and stored.
 	 */
 	public <T> BeanCreator2<T> add(Class<T> beanType, String name) {
-		assertArgNotNull("beanType", beanType);
+		assertArgNotNull(ARG_beanType, beanType);
 		var creator = BeanCreator2.of(beanType, this, name, enclosingInstance);
 		creators.put(beanType, creator);
 		return creator;
@@ -115,7 +119,7 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 * @return This object.
 	 */
 	public <T> CreatableBeanStore addCreator(Class<T> beanType) {
-		assertArgNotNull("beanType", beanType);
+		assertArgNotNull(ARG_beanType, beanType);
 		var creator = BeanCreator2.of(beanType, this, null, enclosingInstance);
 		creators.put(beanType, creator);
 		return this;
@@ -142,7 +146,7 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 * @return This object.
 	 */
 	public <T> CreatableBeanStore addCreator(Class<T> beanType, String name) {
-		assertArgNotNull("beanType", beanType);
+		assertArgNotNull(ARG_beanType, beanType);
 		var creator = BeanCreator2.of(beanType, this, name, enclosingInstance);
 		creators.put(beanType, creator);
 		return this;
@@ -170,7 +174,7 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> BeanCreator2<T> getCreator(Class<T> beanType) {
-		assertArgNotNull("beanType", beanType);
+		assertArgNotNull(ARG_beanType, beanType);
 		return (BeanCreator2<T>)creators.computeIfAbsent(beanType, k -> BeanCreator2.of((Class<T>)k, this, null, enclosingInstance));
 	}
 
@@ -197,7 +201,7 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> BeanCreator2<T> getCreator(Class<T> beanType, String name) {
-		assertArgNotNull("beanType", beanType);
+		assertArgNotNull(ARG_beanType, beanType);
 		return (BeanCreator2<T>)creators.computeIfAbsent(beanType, k -> BeanCreator2.of((Class<T>)k, this, name, enclosingInstance));
 	}
 

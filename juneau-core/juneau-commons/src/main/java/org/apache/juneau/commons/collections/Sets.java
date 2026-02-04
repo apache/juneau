@@ -116,7 +116,16 @@ import java.util.function.*;
  *
  * @param <E> The element type.
  */
+@SuppressWarnings("java:S115")
 public class Sets<E> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_comparator = "comparator";
+	private static final String ARG_elementFunction = "elementFunction";
+	private static final String ARG_elementType = "elementType";
+	private static final String ARG_filter = "filter";
+	private static final String ARG_value = "value";
+	private static final String ARG_values = "values";
 
 	/**
 	 * Static creator.
@@ -126,7 +135,7 @@ public class Sets<E> {
 	 * @return A new builder.
 	 */
 	public static <E> Sets<E> create(Class<E> elementType) {
-		return new Sets<>(assertArgNotNull("elementType", elementType));
+		return new Sets<>(assertArgNotNull(ARG_elementType, elementType));
 	}
 
 	private Set<E> set;
@@ -143,7 +152,7 @@ public class Sets<E> {
 	 * @param elementType The element type. Must not be <jk>null</jk>.
 	 */
 	public Sets(Class<E> elementType) {
-		this.elementType = assertArgNotNull("elementType", elementType);
+		this.elementType = assertArgNotNull(ARG_elementType, elementType);
 	}
 
 	/**
@@ -176,7 +185,7 @@ public class Sets<E> {
 	 */
 	@SuppressWarnings("unchecked")
 	public Sets<E> add(E...values) {
-		assertArgNotNull("values", values);
+		assertArgNotNull(ARG_values, values);
 		for (var v : values)
 			add(v);
 		return this;
@@ -401,7 +410,7 @@ public class Sets<E> {
 	 * @return This object.
 	 */
 	public Sets<E> elementFunction(Function<Object,E> elementFunction) {
-		this.elementFunction = assertArgNotNull("elementFunction", elementFunction);
+		this.elementFunction = assertArgNotNull(ARG_elementFunction, elementFunction);
 		return this;
 	}
 
@@ -412,7 +421,7 @@ public class Sets<E> {
 	 * @return This object.
 	 */
 	public Sets<E> elementType(Class<E> value) {
-		elementType = assertArgNotNull("value", value);
+		elementType = assertArgNotNull(ARG_value, value);
 		return this;
 	}
 
@@ -499,7 +508,7 @@ public class Sets<E> {
 	 * @return This object.
 	 */
 	public Sets<E> filtered(Predicate<E> filter) {
-		Predicate<E> newFilter = assertArgNotNull("filter", filter);
+		Predicate<E> newFilter = assertArgNotNull(ARG_filter, filter);
 		if (this.filter == null)
 			this.filter = newFilter;
 		else
@@ -532,7 +541,7 @@ public class Sets<E> {
 	 * @return This object.
 	 */
 	public Sets<E> sorted(Comparator<E> comparator) {
-		this.comparator = assertArgNotNull("comparator", comparator);
+		this.comparator = assertArgNotNull(ARG_comparator, comparator);
 		ordered = false;
 		return this;
 	}

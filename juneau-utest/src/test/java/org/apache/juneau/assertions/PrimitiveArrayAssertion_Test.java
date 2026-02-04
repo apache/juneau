@@ -233,7 +233,7 @@ class PrimitiveArrayAssertion_Test extends TestBase {
 		assertThrown(()->byteArray(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='[B'.");
 		assertThrown(()->byteArray(x).isExactType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='[B'.");
 		assertThrown(()->byteArray(nil).isExactType(String.class)).asMessage().asOneLine().is("Value was null.");
-		assertThrown(()->byteArray(x).isExactType(null)).asMessage().asOneLine().is("Argument 'parent' cannot be null.");
+		assertThrown(()->byteArray(x).isExactType(null)).asMessage().asOneLine().is("Argument 'type' cannot be null.");
 	}
 
 	@Test void ca14_isString() {

@@ -48,8 +48,11 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({"java:S110", "java:S115"})
 public class PartList extends ControlledArrayList<NameValuePair> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_type = "type";
 
 	/** Represents no part list in annotations. */
 	public static final class Void extends PartList {
@@ -310,7 +313,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return A part with a condensed value or <jk>null</jk> if no parts by the given name are present
 	 */
 	public <T> Optional<T> get(Class<T> type) {
-		assertArgNotNull("type", type);
+		assertArgNotNull(ARG_type, type);
 
 		var name = PartBeanMeta.of(type).getSchema().getName();
 		assertArg(nn(name), "Part name could not be found on bean type ''{0}''", cn(type));

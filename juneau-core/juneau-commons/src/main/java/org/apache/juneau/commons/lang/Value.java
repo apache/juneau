@@ -105,7 +105,12 @@ import org.apache.juneau.commons.reflect.ClassInfo;
  *
  * @param <T> The value type.
  */
+@SuppressWarnings("java:S115")
 public class Value<T> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_mapper = "mapper";
+	private static final String ARG_predicate = "predicate";
 
 	/**
 	 * Creates a new empty value (with <c>null</c> as the initial value).
@@ -225,7 +230,7 @@ public class Value<T> {
 	 * @return A {@link Value} describing the value if it is present and matches the predicate, otherwise an empty {@link Value}.
 	 */
 	public Value<T> filter(Predicate<? super T> predicate) {
-		assertArgNotNull("predicate", predicate);
+		assertArgNotNull(ARG_predicate, predicate);
 		if (t == null)
 			return Value.empty();
 		return predicate.test(t) ? this : Value.empty();
@@ -256,7 +261,7 @@ public class Value<T> {
 	 *         otherwise an empty {@link Value}.
 	 */
 	public <T2> Value<T2> flatMap(Function<? super T,? extends Value<? extends T2>> mapper) {
-		assertArgNotNull("mapper", mapper);
+		assertArgNotNull(ARG_mapper, mapper);
 		if (t == null)
 			return Value.empty();
 		var result = mapper.apply(t);
@@ -430,7 +435,7 @@ public class Value<T> {
 	 * @return A new {@link Value} containing the mapped result, or an empty value if this value is empty.
 	 */
 	public <T2> Value<T2> map(Function<? super T,T2> mapper) {
-		assertArgNotNull("mapper", mapper);
+		assertArgNotNull(ARG_mapper, mapper);
 		if (nn(t))
 			return of(mapper.apply(t));
 		return empty();

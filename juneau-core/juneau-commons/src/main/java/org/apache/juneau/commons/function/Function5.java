@@ -71,7 +71,11 @@ import java.util.function.*;
  * @param <R> The type of the result of the function.
  */
 @FunctionalInterface
+@SuppressWarnings("java:S115")
 public interface Function5<A,B,C,D,E,R> {
+
+	/** Argument name constant for assertArgNotNull. */
+	static final String ARG_after = "after";
 
 	/**
 	 * Returns a composed function that first applies this function to its input, and then applies
@@ -93,7 +97,7 @@ public interface Function5<A,B,C,D,E,R> {
 	 * @throws NullPointerException if {@code after} is <jk>null</jk>.
 	 */
 	default <V> Function5<A,B,C,D,E,V> andThen(Function<? super R,? extends V> after) {
-		assertArgNotNull("after", after);
+		assertArgNotNull(ARG_after, after);
 		return (A a, B b, C c, D d, E e) -> after.apply(apply(a, b, c, d, e));
 	}
 

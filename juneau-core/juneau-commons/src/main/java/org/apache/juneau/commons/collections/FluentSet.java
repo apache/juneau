@@ -85,7 +85,11 @@ import java.util.*;
  *
  * @param <E> The element type.
  */
+@SuppressWarnings("java:S115")
 public class FluentSet<E> extends AbstractSet<E> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_inner = "inner";
 
 	private final Set<E> set;
 
@@ -95,7 +99,7 @@ public class FluentSet<E> extends AbstractSet<E> {
 	 * @param inner The underlying set to wrap. Must not be <jk>null</jk>.
 	 */
 	public FluentSet(Set<E> inner) {
-		this.set = assertArgNotNull("inner", inner);
+		this.set = assertArgNotNull(ARG_inner, inner);
 	}
 
 	/**

@@ -120,7 +120,17 @@ import java.util.function.*;
  * @param <K> The key type.
  * @param <V> The value type.
  */
+@SuppressWarnings("java:S115")
 public class Maps<K,V> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_comparator = "comparator";
+	private static final String ARG_filter = "filter";
+	private static final String ARG_keyFunction = "keyFunction";
+	private static final String ARG_keyType = "keyType";
+	private static final String ARG_pairs = "pairs";
+	private static final String ARG_valueFunction = "valueFunction";
+	private static final String ARG_valueType = "valueType";
 
 	/**
 	 * Static creator.
@@ -132,7 +142,7 @@ public class Maps<K,V> {
 	 * @return A new builder.
 	 */
 	public static <K,V> Maps<K,V> create(Class<K> keyType, Class<V> valueType) {
-		return new Maps<>(assertArgNotNull("keyType", keyType), assertArgNotNull("valueType", valueType));
+		return new Maps<>(assertArgNotNull(ARG_keyType, keyType), assertArgNotNull(ARG_valueType, valueType));
 	}
 
 	/**
@@ -178,8 +188,8 @@ public class Maps<K,V> {
 	 * @param valueType The value type. Must not be <jk>null</jk>.
 	 */
 	public Maps(Class<K> keyType, Class<V> valueType) {
-		this.keyType = assertArgNotNull("keyType", keyType);
-		this.valueType = assertArgNotNull("valueType", valueType);
+		this.keyType = assertArgNotNull(ARG_keyType, keyType);
+		this.valueType = assertArgNotNull(ARG_valueType, valueType);
 	}
 
 	/**
@@ -263,7 +273,7 @@ public class Maps<K,V> {
 	 */
 	@SuppressWarnings("unchecked")
 	public Maps<K,V> addPairs(Object...pairs) {
-		assertArgNotNull("pairs", pairs);
+		assertArgNotNull(ARG_pairs, pairs);
 		if (pairs.length % 2 != 0)
 			throw illegalArg("Odd number of parameters passed into Maps.addPairs(...)");
 		for (var i = 0; i < pairs.length; i += 2)
@@ -400,7 +410,7 @@ public class Maps<K,V> {
 	 * @return This object.
 	 */
 	public Maps<K,V> keyFunction(Function<Object,K> keyFunction) {
-		this.keyFunction = assertArgNotNull("keyFunction", keyFunction);
+		this.keyFunction = assertArgNotNull(ARG_keyFunction, keyFunction);
 		return this;
 	}
 
@@ -414,7 +424,7 @@ public class Maps<K,V> {
 	 * @return This object.
 	 */
 	public Maps<K,V> valueFunction(Function<Object,V> valueFunction) {
-		this.valueFunction = assertArgNotNull("valueFunction", valueFunction);
+		this.valueFunction = assertArgNotNull(ARG_valueFunction, valueFunction);
 		return this;
 	}
 
@@ -429,8 +439,8 @@ public class Maps<K,V> {
 	 * @return This object.
 	 */
 	public Maps<K,V> functions(Function<Object,K> keyFunction, Function<Object,V> valueFunction) {
-		this.keyFunction = assertArgNotNull("keyFunction", keyFunction);
-		this.valueFunction = assertArgNotNull("valueFunction", valueFunction);
+		this.keyFunction = assertArgNotNull(ARG_keyFunction, keyFunction);
+		this.valueFunction = assertArgNotNull(ARG_valueFunction, valueFunction);
 		return this;
 	}
 
@@ -517,7 +527,7 @@ public class Maps<K,V> {
 	 * @return This object.
 	 */
 	public Maps<K,V> filtered(BiPredicate<K,V> filter) {
-		BiPredicate<K,V> newFilter = assertArgNotNull("filter", filter);
+		BiPredicate<K,V> newFilter = assertArgNotNull(ARG_filter, filter);
 		if (this.filter == null)
 			this.filter = newFilter;
 		else
@@ -550,7 +560,7 @@ public class Maps<K,V> {
 	 * @return This object.
 	 */
 	public Maps<K,V> sorted(Comparator<K> comparator) {
-		this.comparator = assertArgNotNull("comparator", comparator);
+		this.comparator = assertArgNotNull(ARG_comparator, comparator);
 		ordered = false;
 		return this;
 	}

@@ -98,8 +98,15 @@ import org.apache.juneau.xml.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({"java:S115", "resource"})
 public class RestRequest extends BeanSession implements HttpUriRequest, Configurable, AutoCloseable {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_client = "client";
+	private static final String ARG_method = "method";
+	private static final String ARG_parser = "parser";
+	private static final String ARG_uri = "uri";
+	private static final String ARG_value = "value";
 
 	private class SimpleFormData extends SimplePart {
 		SimpleFormData(NameValuePair x) {
@@ -208,9 +215,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 */
 	protected RestRequest(RestClient client, URI uri, String method, boolean hasBody) throws RestCallException {
-		super(assertArgNotNull("client", client).getBeanContext().createSession());
+		super(assertArgNotNull(ARG_client, client).getBeanContext().createSession());
 		this.client = client;
-		this.request = createInnerRequest(assertArgNotNull("method", method), assertArgNotNull("uri", uri), hasBody);
+		this.request = createInnerRequest(assertArgNotNull(ARG_method, method), assertArgNotNull(ARG_uri, uri), hasBody);
 		this.errorCodes = client.errorCodes;
 		this.formData = client.createFormData();
 		this.headerData = client.createHeaderData();
@@ -581,7 +588,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 */
 	public RestRequest errorCodes(Predicate<Integer> value) {
-		errorCodes = assertArgNotNull("value", value);
+		errorCodes = assertArgNotNull(ARG_value, value);
 		return this;
 	}
 
@@ -658,7 +665,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 */
 	public RestRequest formDataBean(Object value) {
-		assertArg(isBean(assertArgNotNull("value", value)), "Object passed into formDataBean(Object) is not a bean.");
+		assertArg(isBean(assertArgNotNull(ARG_value, value)), "Object passed into formDataBean(Object) is not a bean.");
 		var b = formData;
 		toBeanMap(value).forEach((k, v) -> b.append(createPart(FORMDATA, k, v)));
 		return this;
@@ -1091,7 +1098,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 */
 	public RestRequest headersBean(Object value) {
-		assertArg(isBean(assertArgNotNull("value", value)), "Object passed into headersBean(Object) is not a bean.");
+		assertArg(isBean(assertArgNotNull(ARG_value, value)), "Object passed into headersBean(Object) is not a bean.");
 		var b = headerData;
 		toBeanMap(value, PropertyNamerDUCS.INSTANCE).forEach((k, v) -> b.append(createHeader(k, v)));
 		return this;
@@ -1460,7 +1467,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 */
 	public RestRequest parser(Class<? extends Parser> parser) {
-		this.parser = client.getInstance(assertArgNotNull("parser", parser));
+		this.parser = client.getInstance(assertArgNotNull(ARG_parser, parser));
 		return this;
 	}
 
@@ -1482,7 +1489,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 */
 	public RestRequest parser(Parser parser) {
-		this.parser = assertArgNotNull("parser", parser);
+		this.parser = assertArgNotNull(ARG_parser, parser);
 		return this;
 	}
 
@@ -1559,7 +1566,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 */
 	public RestRequest pathDataBean(Object value) {
-		assertArg(isBean(assertArgNotNull("value", value)), "Object passed into pathDataBean(Object) is not a bean.");
+		assertArg(isBean(assertArgNotNull(ARG_value, value)), "Object passed into pathDataBean(Object) is not a bean.");
 		var b = pathData;
 		toBeanMap(value).forEach((k, v) -> b.set(createPart(PATH, k, v)));
 		return this;
@@ -1761,7 +1768,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 */
 	public RestRequest queryDataBean(Object value) {
-		assertArg(isBean(assertArgNotNull("value", value)), "Object passed into queryDataBean(Object) is not a bean.");
+		assertArg(isBean(assertArgNotNull(ARG_value, value)), "Object passed into queryDataBean(Object) is not a bean.");
 		var b = queryData;
 		toBeanMap(value).forEach((k, v) -> b.append(createPart(QUERY, k, v)));
 		return this;

@@ -160,8 +160,27 @@ import org.apache.juneau.swap.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanContextBasics">Bean Context Basics</a>
  * </ul>
  */
-@SuppressWarnings({"unchecked","rawtypes","java:S6539"})
+@SuppressWarnings({"unchecked","rawtypes","java:S6539","java:S115"})
 public class BeanContext extends Context {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_bc = "bc";
+	private static final String ARG_beanClass = "beanClass";
+	private static final String ARG_beanClassName = "beanClassName";
+	private static final String ARG_c = "c";
+	private static final String ARG_implClass = "implClass";
+	private static final String ARG_interfaceClass = "interfaceClass";
+	private static final String ARG_normalClass = "normalClass";
+	private static final String ARG_object = "object";
+	private static final String ARG_o = "o";
+	private static final String ARG_on = "on";
+	private static final String ARG_pojoClass = "pojoClass";
+	private static final String ARG_properties = "properties";
+	private static final String ARG_swapFunction = "swapFunction";
+	private static final String ARG_swappedClass = "swappedClass";
+	private static final String ARG_unswapFunction = "unswapFunction";
+	private static final String ARG_value = "value";
+	private static final String ARG_values = "values";
 
 	/**
 	 * Builder class.
@@ -390,7 +409,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder beanClassVisibility(Visibility value) {
-			beanClassVisibility = assertArgNotNull("value", value);
+			beanClassVisibility = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -439,7 +458,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder beanConstructorVisibility(Visibility value) {
-			beanConstructorVisibility = assertArgNotNull("value", value);
+			beanConstructorVisibility = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -635,7 +654,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder beanFieldVisibility(Visibility value) {
-			beanFieldVisibility = assertArgNotNull("value", value);
+			beanFieldVisibility = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -692,8 +711,8 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder beanInterceptor(Class<?> on, Class<? extends BeanInterceptor<?>> value) {
-			assertArgNotNull("on", on);
-			assertArgNotNull("value", value);
+			assertArgNotNull(ARG_on, on);
+			assertArgNotNull(ARG_value, value);
 			return annotations(BeanAnnotation.create(on).interceptor(value).build());
 		}
 
@@ -784,7 +803,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder beanMethodVisibility(Visibility value) {
-			beanMethodVisibility = assertArgNotNull("value", value);
+			beanMethodVisibility = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -846,8 +865,8 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder beanProperties(Class<?> beanClass, String properties) {
-			assertArgNotNull("beanClass", beanClass);
-			assertArgNotNull("properties", properties);
+			assertArgNotNull(ARG_beanClass, beanClass);
+			assertArgNotNull(ARG_properties, properties);
 			return annotations(BeanAnnotation.create(beanClass).p(properties).build());
 		}
 
@@ -910,7 +929,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder beanProperties(Map<String,Object> values) {
-			assertArgNotNull("values", values);
+			assertArgNotNull(ARG_values, values);
 			values.forEach((k, v) -> annotations(BeanAnnotation.create(k).p(s(v)).build()));
 			return this;
 		}
@@ -974,8 +993,8 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder beanProperties(String beanClassName, String properties) {
-			assertArgNotNull("beanClassName", beanClassName);
-			assertArgNotNull("properties", properties);
+			assertArgNotNull(ARG_beanClassName, beanClassName);
+			assertArgNotNull(ARG_properties, properties);
 			return annotations(BeanAnnotation.create(beanClassName).p(properties).build());
 		}
 
@@ -1029,8 +1048,8 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-			assertArgNotNull("beanClass", beanClass);
-			assertArgNotNull("properties", properties);
+			assertArgNotNull(ARG_beanClass, beanClass);
+			assertArgNotNull(ARG_properties, properties);
 			return annotations(BeanAnnotation.create(beanClass).xp(properties).build());
 		}
 
@@ -1085,7 +1104,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder beanPropertiesExcludes(Map<String,Object> values) {
-			assertArgNotNull("values", values);
+			assertArgNotNull(ARG_values, values);
 			values.forEach((k, v) -> annotations(BeanAnnotation.create(k).xp(s(v)).build()));
 			return this;
 		}
@@ -1142,8 +1161,8 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
-			assertArgNotNull("beanClassName", beanClassName);
-			assertArgNotNull("properties", properties);
+			assertArgNotNull(ARG_beanClassName, beanClassName);
+			assertArgNotNull(ARG_properties, properties);
 			return annotations(BeanAnnotation.create(beanClassName).xp(properties).build());
 		}
 
@@ -1200,8 +1219,8 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
-			assertArgNotNull("beanClass", beanClass);
-			assertArgNotNull("properties", properties);
+			assertArgNotNull(ARG_beanClass, beanClass);
+			assertArgNotNull(ARG_properties, properties);
 			return annotations(BeanAnnotation.create(beanClass).ro(properties).build());
 		}
 
@@ -1259,7 +1278,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
-			assertArgNotNull("values", values);
+			assertArgNotNull(ARG_values, values);
 			values.forEach((k, v) -> annotations(BeanAnnotation.create(k).ro(s(v)).build()));
 			return this;
 		}
@@ -1317,8 +1336,8 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
-			assertArgNotNull("beanClassName", beanClassName);
-			assertArgNotNull("properties", properties);
+			assertArgNotNull(ARG_beanClassName, beanClassName);
+			assertArgNotNull(ARG_properties, properties);
 			return annotations(BeanAnnotation.create(beanClassName).ro(properties).build());
 		}
 
@@ -1374,8 +1393,8 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
-			assertArgNotNull("beanClass", beanClass);
-			assertArgNotNull("properties", properties);
+			assertArgNotNull(ARG_beanClass, beanClass);
+			assertArgNotNull(ARG_properties, properties);
 			return annotations(BeanAnnotation.create(beanClass).wo(properties).build());
 		}
 
@@ -1432,7 +1451,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
-			assertArgNotNull("values", values);
+			assertArgNotNull(ARG_values, values);
 			values.forEach((k, v) -> annotations(BeanAnnotation.create(k).wo(s(v)).build()));
 			return this;
 		}
@@ -1489,8 +1508,8 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
-			assertArgNotNull("beanClassName", beanClassName);
-			assertArgNotNull("properties", properties);
+			assertArgNotNull(ARG_beanClassName, beanClassName);
+			assertArgNotNull(ARG_properties, properties);
 			return annotations(BeanAnnotation.create(beanClassName).wo(properties).build());
 		}
 
@@ -1736,7 +1755,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder dictionaryOn(Class<?> on, Class<?>...values) {
-			assertArgNotNull("on", on);
+			assertArgNotNull(ARG_on, on);
 			assertArgNoNulls("values", values);
 			return annotations(BeanAnnotation.create(on).dictionary(values).build());
 		}
@@ -2013,7 +2032,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public <T> Builder example(Class<T> pojoClass, String json) {
-			return annotations(MarshalledAnnotation.create(assertArgNotNull("pojoClass", pojoClass)).example(json).build());
+			return annotations(MarshalledAnnotation.create(assertArgNotNull(ARG_pojoClass, pojoClass)).example(json).build());
 		}
 
 		/**
@@ -2063,7 +2082,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public <T> Builder example(Class<T> pojoClass, T o) {
-			return annotations(MarshalledAnnotation.create(assertArgNotNull("pojoClass", pojoClass)).example(Json5.of(o)).build());
+			return annotations(MarshalledAnnotation.create(assertArgNotNull(ARG_pojoClass, pojoClass)).example(Json5.of(o)).build());
 		}
 
 		/**
@@ -2162,7 +2181,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder findFluentSetters(Class<?> on) {
-			assertArgNotNull("on", on);
+			assertArgNotNull(ARG_on, on);
 			return annotations(BeanAnnotation.create(on).findFluentSetters(true).build());
 		}
 
@@ -2416,8 +2435,8 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
-			assertArgNotNull("interfaceClass", interfaceClass);
-			assertArgNotNull("implClass", implClass);
+			assertArgNotNull(ARG_interfaceClass, interfaceClass);
+			assertArgNotNull(ARG_implClass, implClass);
 			return annotations(MarshalledAnnotation.create(interfaceClass).implClass(implClass).build());
 		}
 
@@ -2457,7 +2476,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder implClasses(Map<Class<?>,Class<?>> values) {
-			assertArgNotNull("values", values);
+			assertArgNotNull(ARG_values, values);
 			values.forEach((k, v) -> annotations(MarshalledAnnotation.create(k).implClass(v).build()));
 			return this;
 		}
@@ -2506,8 +2525,8 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder interfaceClass(Class<?> on, Class<?> value) {
-			assertArgNotNull("on", on);
-			assertArgNotNull("value", value);
+			assertArgNotNull(ARG_on, on);
+			assertArgNotNull(ARG_value, value);
 			return annotations(BeanAnnotation.create(on).interfaceClass(value).build());
 		}
 
@@ -2598,7 +2617,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder locale(Locale value) {
-			locale = assertArgNotNull("value", value);
+			locale = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -2850,8 +2869,8 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder propertyNamer(Class<?> on, Class<? extends PropertyNamer> value) {
-			assertArgNotNull("on", on);
-			assertArgNotNull("value", value);
+			assertArgNotNull(ARG_on, on);
+			assertArgNotNull(ARG_value, value);
 			return annotations(BeanAnnotation.create(on).propertyNamer(value).build());
 		}
 
@@ -3036,8 +3055,8 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder stopClass(Class<?> on, Class<?> value) {
-			assertArgNotNull("on", on);
-			assertArgNotNull("value", value);
+			assertArgNotNull(ARG_on, on);
+			assertArgNotNull(ARG_value, value);
 			return annotations(BeanAnnotation.create(on).stopClass(value).build());
 		}
 
@@ -3092,10 +3111,10 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
-			assertArgNotNull("normalClass", normalClass);
-			assertArgNotNull("swappedClass", swappedClass);
-			assertArgNotNull("swapFunction", swapFunction);
-			assertArgNotNull("unswapFunction", unswapFunction);
+			assertArgNotNull(ARG_normalClass, normalClass);
+			assertArgNotNull(ARG_swappedClass, swappedClass);
+			assertArgNotNull(ARG_swapFunction, swapFunction);
+			assertArgNotNull(ARG_unswapFunction, unswapFunction);
 			swaps().add(0, new FunctionalSwap<>(normalClass, swappedClass, swapFunction, unswapFunction));
 			return this;
 		}
@@ -3264,7 +3283,7 @@ public class BeanContext extends Context {
 
 		@Override /* Overridden from Builder */
 		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			assertArgNotNull("value", value);
+			assertArgNotNull(ARG_value, value);
 			super.type(value);
 			return this;
 		}
@@ -3313,8 +3332,8 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder typeName(Class<?> on, String value) {
-			assertArgNotNull("on", on);
-			assertArgNotNull("value", value);
+			assertArgNotNull(ARG_on, on);
+			assertArgNotNull(ARG_value, value);
 			return annotations(BeanAnnotation.create(on).typeName(value).build());
 		}
 
@@ -3361,8 +3380,8 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder typePropertyName(Class<?> on, String value) {
-			assertArgNotNull("on", on);
-			assertArgNotNull("value", value);
+			assertArgNotNull(ARG_on, on);
+			assertArgNotNull(ARG_value, value);
 			return annotations(BeanAnnotation.create(on).typePropertyName(value).build());
 		}
 
@@ -3419,7 +3438,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder typePropertyName(String value) {
-			typePropertyName = assertArgNotNull("value", value);
+			typePropertyName = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -3772,7 +3791,7 @@ public class BeanContext extends Context {
 	 * 	this context.
 	 */
 	public final <T> BeanMeta<T> getBeanMeta(Class<T> c) {
-		assertArgNotNull("c", c);
+		assertArgNotNull(ARG_c, c);
 		return getClassMeta(c).getBeanMeta();
 	}
 
@@ -3882,7 +3901,7 @@ public class BeanContext extends Context {
 	 * @return The ClassMeta object.
 	 */
 	public final <T> ClassMeta<T> getClassMetaForObject(T o) {
-		assertArgNotNull("o", o);
+		assertArgNotNull(ARG_o, o);
 		return (ClassMeta<T>)getClassMeta(o.getClass());
 	}
 
@@ -3959,7 +3978,7 @@ public class BeanContext extends Context {
 	 * @return <jk>true</jk> if the bean contexts have equivalent settings and thus share caches.
 	 */
 	public final boolean hasSameCache(BeanContext bc) {
-		assertArgNotNull("bc", bc);
+		assertArgNotNull(ARG_bc, bc);
 		return bc.getCmCache() == this.getCmCache();
 	}
 
@@ -4137,7 +4156,7 @@ public class BeanContext extends Context {
 	 * @see BeanSession#newBeanMap(Class)
 	 */
 	public <T> BeanMap<T> newBeanMap(Class<T> c) {
-		assertArgNotNull("c", c);
+		assertArgNotNull(ARG_c, c);
 		return defaultSession.newBeanMap(c);
 	}
 
@@ -4160,7 +4179,7 @@ public class BeanContext extends Context {
 	 * @see BeanSession#toBeanMap(Object)
 	 */
 	public <T> BeanMap<T> toBeanMap(T object) {
-		assertArgNotNull("object", object);
+		assertArgNotNull(ARG_object, object);
 		return defaultSession.toBeanMap(object);
 	}
 

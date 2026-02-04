@@ -77,7 +77,11 @@ import org.apache.juneau.marshaller.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class Items extends SwaggerElement {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_property = "property";
 
 	private static final String[] VALID_TYPES = { "string", "number", "integer", "boolean", "array" };
 	private static final String[] VALID_COLLECTION_FORMATS = { "csv", "ssv", "tsv", "pipes", "multi" };
@@ -151,7 +155,7 @@ public class Items extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "collectionFormat" -> toType(getCollectionFormat(), type);
 			case "default" -> toType(getDefault(), type);
@@ -383,7 +387,7 @@ public class Items extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public Items set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "collectionFormat" -> setCollectionFormat(s(value));
 			case "default" -> setDefault(value);

@@ -50,7 +50,11 @@ import static org.apache.juneau.commons.utils.Utils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang">Lang Package</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class CharValue extends Value<Character> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_values = "values";
 
 	/**
 	 * Creates a new character value initialized to <c>'\0'</c> (null character).
@@ -242,7 +246,7 @@ public class CharValue extends Value<Character> {
 	 * @return <jk>true</jk> if the current value matches any of the specified characters.
 	 */
 	public boolean isAny(Character...values) {
-		assertArgNotNull("values", values);
+		assertArgNotNull(ARG_values, values);
 		var current = get();
 		for (var value : values)
 			if (eq(current, value))

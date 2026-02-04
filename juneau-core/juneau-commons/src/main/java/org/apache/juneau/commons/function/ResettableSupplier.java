@@ -75,7 +75,14 @@ import java.util.function.*;
  *
  * @param <T> The type of value supplied.
  */
+@SuppressWarnings("java:S115")
 public class ResettableSupplier<T> implements OptionalSupplier<T> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_mapper = "mapper";
+	private static final String ARG_predicate = "predicate";
+	private static final String ARG_supplier = "supplier";
+
 	private final Supplier<T> supplier;
 	private final AtomicReference<Optional<T>> cache = new AtomicReference<>();
 
@@ -85,7 +92,7 @@ public class ResettableSupplier<T> implements OptionalSupplier<T> {
 	 * @param supplier The underlying supplier to call when computing values.  Must not be <jk>null</jk>.
 	 */
 	public ResettableSupplier(Supplier<T> supplier) {
-		this.supplier = assertArgNotNull("supplier", supplier);
+		this.supplier = assertArgNotNull(ARG_supplier, supplier);
 	}
 
 	/**
@@ -193,7 +200,7 @@ public class ResettableSupplier<T> implements OptionalSupplier<T> {
 	 */
 	@Override
 	public <U> ResettableSupplier<U> map(Function<? super T, ? extends U> mapper) {
-		assertArgNotNull("mapper", mapper);
+		assertArgNotNull(ARG_mapper, mapper);
 		return new ResettableSupplier<>(() -> {
 			T value = get();
 			return nn(value) ? mapper.apply(value) : null;
@@ -212,7 +219,7 @@ public class ResettableSupplier<T> implements OptionalSupplier<T> {
 	 */
 	@Override
 	public ResettableSupplier<T> filter(Predicate<? super T> predicate) {
-		assertArgNotNull("predicate", predicate);
+		assertArgNotNull(ARG_predicate, predicate);
 		return new ResettableSupplier<>(() -> {
 			T value = get();
 			return (nn(value) && predicate.test(value)) ? value : null;

@@ -81,6 +81,9 @@ import org.apache.juneau.marshaller.*;
 @SuppressWarnings("java:S115")
 public class Parameter extends OpenApiElement {
 
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_property = "property";
+
 	private static final String[] VALID_IN = { "query", "header", "path", "cookie" };
 	private static final String[] VALID_STYLES = { "matrix", "label", "form", "simple", "spaceDelimited", "pipeDelimited", "deepObject" };
 
@@ -141,7 +144,7 @@ public class Parameter extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_name -> toType(getName(), type);
 			case PROP_in -> toType(getIn(), type);
@@ -261,12 +264,12 @@ public class Parameter extends OpenApiElement {
 			.addIf(nn(style), PROP_style)
 			.build();
 		// @formatter:on
-		return new MultiSet<String>(s, super.keySet());
+		return new MultiSet<>(s, super.keySet());
 	}
 
 	@Override /* Overridden from OpenApiElement */
 	public Parameter set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_allowEmptyValue -> setAllowEmptyValue(toType(value, Boolean.class));
 			case PROP_allowReserved -> setAllowReserved(toType(value, Boolean.class));

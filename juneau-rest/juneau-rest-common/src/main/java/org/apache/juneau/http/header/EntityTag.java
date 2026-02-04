@@ -36,7 +36,11 @@ import static org.apache.juneau.commons.utils.Utils.*;
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class EntityTag {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
 
 	/**
 	 * Static creator.
@@ -61,7 +65,7 @@ public class EntityTag {
 	 * @throws IllegalArgumentException If attempting to set an invalid entity tag value.
 	 */
 	public EntityTag(String value) {
-		assertArgNotNull("value", value);
+		assertArgNotNull(ARG_value, value);
 
 		value = trim(emptyIfNull(value));
 		isWeak = value.startsWith("W/");

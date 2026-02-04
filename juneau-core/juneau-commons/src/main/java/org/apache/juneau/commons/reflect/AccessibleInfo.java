@@ -73,7 +73,11 @@ import java.lang.reflect.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection">Reflection Package</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public abstract class AccessibleInfo extends ElementInfo {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_inner = "inner";
 
 	private final AccessibleObject inner;
 
@@ -84,7 +88,7 @@ public abstract class AccessibleInfo extends ElementInfo {
 	 */
 	protected AccessibleInfo(AccessibleObject inner, int modifiers) {
 		super(modifiers);
-		this.inner = assertArgNotNull("inner", inner);
+		this.inner = assertArgNotNull(ARG_inner, inner);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

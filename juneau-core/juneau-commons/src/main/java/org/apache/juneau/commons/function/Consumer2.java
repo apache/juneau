@@ -71,7 +71,11 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
  * @param <B> The type of the second argument to the operation.
  */
 @FunctionalInterface
+@SuppressWarnings("java:S115")
 public interface Consumer2<A,B> {
+
+	/** Argument name constant for assertArgNotNull. */
+	static final String ARG_after = "after";
 
 	/**
 	 * Returns a composed {@link Consumer2} that performs, in sequence, this operation followed by the {@code after} operation.
@@ -96,7 +100,7 @@ public interface Consumer2<A,B> {
 	 * @throws NullPointerException if {@code after} is <jk>null</jk>.
 	 */
 	default Consumer2<A,B> andThen(Consumer2<? super A,? super B> after) {  // NOSONAR - false positive on generics
-		assertArgNotNull("after", after);
+		assertArgNotNull(ARG_after, after);
 		return (A a, B b) -> {
 			apply(a, b);
 			after.apply(a, b);

@@ -87,7 +87,11 @@ import java.util.*;
  * @param <E> The element type.
  * @see SortedArrayList
  */
+@SuppressWarnings("java:S115")
 public class SortedLinkedList<E> extends AbstractList<E> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_comparator = "comparator";
 
 	private final List<E> list;
 	private final Comparator<? super E> comparator;
@@ -111,7 +115,7 @@ public class SortedLinkedList<E> extends AbstractList<E> {
 	 * @param comparator The comparator to use for sorting. Must not be <jk>null</jk>.
 	 */
 	public SortedLinkedList(Comparator<? super E> comparator) {
-		this.comparator = assertArgNotNull("comparator", comparator);
+		this.comparator = assertArgNotNull(ARG_comparator, comparator);
 		this.list = new LinkedList<>();
 	}
 
@@ -135,7 +139,7 @@ public class SortedLinkedList<E> extends AbstractList<E> {
 	 * @param c The collection whose elements are to be placed into this list.
 	 */
 	public SortedLinkedList(Comparator<? super E> comparator, Collection<? extends E> c) {
-		this.comparator = assertArgNotNull("comparator", comparator);
+		this.comparator = assertArgNotNull(ARG_comparator, comparator);
 		this.list = new LinkedList<>(c);
 		Collections.sort(this.list, this.comparator);
 	}

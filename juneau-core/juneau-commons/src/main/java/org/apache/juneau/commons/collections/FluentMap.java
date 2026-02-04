@@ -85,7 +85,11 @@ import java.util.function.Predicate;
  * @param <K> The key type.
  * @param <V> The value type.
  */
+@SuppressWarnings("java:S115")
 public class FluentMap<K,V> extends AbstractMap<K,V> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_inner = "inner";
 
 	private final Map<K,V> map;
 
@@ -95,7 +99,7 @@ public class FluentMap<K,V> extends AbstractMap<K,V> {
 	 * @param inner The underlying map to wrap. Must not be <jk>null</jk>.
 	 */
 	public FluentMap(Map<K,V> inner) {
-		this.map = assertArgNotNull("inner", inner);
+		this.map = assertArgNotNull(ARG_inner, inner);
 	}
 
 	/**

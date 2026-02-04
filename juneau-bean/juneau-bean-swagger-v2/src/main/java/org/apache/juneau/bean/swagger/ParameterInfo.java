@@ -120,7 +120,11 @@ import org.apache.juneau.marshaller.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class ParameterInfo extends SwaggerElement {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_property = "property";
 
 	private static final String[] VALID_IN = { "query", "header", "path", "formData", "body" };
 	private static final String[] VALID_TYPES = { "string", "number", "integer", "boolean", "array", "file" };
@@ -270,7 +274,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "allowEmptyValue" -> toType(getAllowEmptyValue(), type);
 			case "collectionFormat" -> toType(getCollectionFormat(), type);
@@ -595,7 +599,7 @@ public class ParameterInfo extends SwaggerElement {
 	@SuppressWarnings("unchecked")
 	@Override /* Overridden from SwaggerElement */
 	public ParameterInfo set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "allowEmptyValue" -> setAllowEmptyValue(toBoolean(value));
 			case "collectionFormat" -> setCollectionFormat(s(value));

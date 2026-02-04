@@ -70,7 +70,11 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
  * @param <D> The type of the fourth argument to the operation.
  */
 @FunctionalInterface
+@SuppressWarnings("java:S115")
 public interface Consumer4<A,B,C,D> {
+
+	/** Argument name constant for assertArgNotNull. */
+	static final String ARG_after = "after";
 
 	/**
 	 * Returns a composed {@link Consumer4} that performs, in sequence, this operation followed by the {@code after} operation.
@@ -93,7 +97,7 @@ public interface Consumer4<A,B,C,D> {
 	 * @throws NullPointerException if {@code after} is <jk>null</jk>.
 	 */
 	default Consumer4<A,B,C,D> andThen(Consumer4<? super A,? super B,? super C,? super D> after) {  // NOSONAR - false positive on generics
-		assertArgNotNull("after", after);
+		assertArgNotNull(ARG_after, after);
 		return (A a, B b, C c, D d) -> {
 			apply(a, b, c, d);
 			after.apply(a, b, c, d);

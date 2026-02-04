@@ -114,7 +114,12 @@ import org.apache.juneau.serializer.*;
  * @param <E> The entry type.
  * @param <R> The return type.
  */
+@SuppressWarnings("java:S115")
 public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_entries = "entries";
+	private static final String ARG_test = "test";
 
 	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentArrayAssertion.class, "Messages");
@@ -293,7 +298,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isAll(Predicate<E> test) throws AssertionError {
-		assertArgNotNull("test", test);
+		assertArgNotNull(ARG_test, test);
 		for (int i = 0, j = length(); i < j; i++)
 			if (! test.test(at(i)))
 				throw error(MSG_arrayContainedNonMatchingValueAt, i, getFailureMessage(test, at(i)));
@@ -308,7 +313,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isAny(Predicate<E> test) throws AssertionError {
-		assertArgNotNull("test", test);
+		assertArgNotNull(ARG_test, test);
 		for (var v : value())
 			if (test.test(v))
 				return returns();
@@ -350,7 +355,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 */
 	@SuppressWarnings("unchecked")
 	public R isHas(E...entries) throws AssertionError {
-		assertArgNotNull("entries", entries);
+		assertArgNotNull(ARG_entries, entries);
 		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
 		return is(p);
 	}

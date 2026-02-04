@@ -79,7 +79,12 @@ import java.nio.charset.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">I/O Package</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class FileWriterBuilder {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_cs = "cs";
+	private static final String ARG_file = "file";
 
 	/**
 	 * Creates a new builder.
@@ -210,7 +215,7 @@ public class FileWriterBuilder {
 	 * @throws FileNotFoundException If the file could not be created or opened for writing.
 	 */
 	public Writer build() throws FileNotFoundException {
-		assertArgNotNull("file", file);
+		assertArgNotNull(ARG_file, file);
 		var os = (OutputStream)new FileOutputStream(file, append);
 		if (buffered)
 			os = new BufferedOutputStream(os);
@@ -262,7 +267,7 @@ public class FileWriterBuilder {
 	 * @return This object for method chaining.
 	 */
 	public FileWriterBuilder charset(String cs) {
-		this.cs = Charset.forName(assertArgNotNull("cs", cs));
+		this.cs = Charset.forName(assertArgNotNull(ARG_cs, cs));
 		return this;
 	}
 

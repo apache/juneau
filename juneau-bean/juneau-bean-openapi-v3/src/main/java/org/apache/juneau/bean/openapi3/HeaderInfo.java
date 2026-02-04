@@ -78,6 +78,11 @@ import org.apache.juneau.commons.collections.*;
 @SuppressWarnings("java:S115")
 public class HeaderInfo extends OpenApiElement {
 
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_example = "example";
+	private static final String ARG_name = "name";
+	private static final String ARG_property = "property";
+
 	// Property name constants
 	private static final String PROP_allowEmptyValue = "allowEmptyValue";
 	private static final String PROP_allowReserved = "allowReserved";
@@ -130,8 +135,8 @@ public class HeaderInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public HeaderInfo addExample(String name, Example example) {
-		assertArgNotNull("name", name);
-		assertArgNotNull("example", example);
+		assertArgNotNull(ARG_name, name);
+		assertArgNotNull(ARG_example, example);
 		examples.put(name, example);
 		return this;
 	}
@@ -147,7 +152,7 @@ public class HeaderInfo extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_description -> toType(getDescription(), type);
 			case PROP_required -> toType(getRequired(), type);
@@ -304,7 +309,7 @@ public class HeaderInfo extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public HeaderInfo set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_ref -> setRef(s(value));
 			case PROP_allowEmptyValue -> setAllowEmptyValue(toBoolean(value));

@@ -54,7 +54,13 @@ import org.apache.juneau.cp.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem Overview</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class AssertionPredicates {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_expression = "expression";
+	private static final String ARG_type = "type";
+	private static final String ARG_value = "value";
 
 	private static final Function<Object,String> TYPENAME = Utils::cn;
 
@@ -169,7 +175,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> exactType(Class<?> type) {
-		assertArgNotNull("type", type);
+		assertArgNotNull(ARG_type, type);
 		return test(x -> x != null && x.getClass().equals(type), MSG_valueWasNotExpectedType, cn(type), TYPENAME);
 	}
 
@@ -198,7 +204,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> match(String value) {
-		assertArgNotNull("value", value);
+		assertArgNotNull(ARG_value, value);
 		var p = getMatchPattern(value);
 		return test(x -> x != null && p.matcher(s(x)).matches(), MSG_valueDidNotMatchPattern, value, VALUE);
 	}
@@ -284,7 +290,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> regex(Pattern value) {
-		assertArgNotNull("value", value);
+		assertArgNotNull(ARG_value, value);
 		return test(x -> x != null && value.matcher(s(x)).matches(), MSG_valueDidNotMatchPattern, value.pattern(), VALUE);
 	}
 
@@ -299,7 +305,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> regex(String expression) {
-		assertArgNotNull("expression", expression);
+		assertArgNotNull(ARG_expression, expression);
 		var p = Pattern.compile(expression);
 		return test(x -> x != null && p.matcher(s(x)).matches(), MSG_valueDidNotMatchPattern, expression, VALUE);
 	}
@@ -326,7 +332,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> regex(String expression, int flags) {
-		assertArgNotNull("expression", expression);
+		assertArgNotNull(ARG_expression, expression);
 		var p = Pattern.compile(expression, flags);
 		return test(x -> x != null && p.matcher(s(x)).matches(), MSG_valueDidNotMatchPattern, expression, VALUE);
 	}
@@ -381,7 +387,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> type(Class<?> type) {
-		assertArgNotNull("type", type);
+		assertArgNotNull(ARG_type, type);
 		return test(x -> x != null && type.isAssignableFrom(x.getClass()), MSG_valueWasNotExpectedType, cn(type), TYPENAME);
 	}
 

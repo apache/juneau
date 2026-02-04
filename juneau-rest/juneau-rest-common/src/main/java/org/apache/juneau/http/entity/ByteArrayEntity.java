@@ -31,8 +31,12 @@ import org.apache.juneau.http.header.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({"java:S115", "resource"})
 public class ByteArrayEntity extends BasicHttpEntity {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_out = "out";
+
 	private static final byte[] EMPTY = {};
 
 	/**
@@ -163,7 +167,7 @@ public class ByteArrayEntity extends BasicHttpEntity {
 
 	@Override /* Overridden from HttpEntity */
 	public void writeTo(OutputStream out) throws IOException {
-		assertArgNotNull("out", out);
+		assertArgNotNull(ARG_out, out);
 		out.write(content());
 	}
 

@@ -75,7 +75,13 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class OAuthFlow extends OpenApiElement {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_description = "description";
+	private static final String ARG_name = "name";
+	private static final String ARG_property = "property";
 
 	private String authorizationUrl;
 	private String tokenUrl;
@@ -110,8 +116,8 @@ public class OAuthFlow extends OpenApiElement {
 	 * @return This object
 	 */
 	public OAuthFlow addScope(String name, String description) {
-		assertArgNotNull("name", name);
-		assertArgNotNull("description", description);
+		assertArgNotNull(ARG_name, name);
+		assertArgNotNull(ARG_description, description);
 		scopes.put(name, description);
 		return this;
 	}
@@ -127,7 +133,7 @@ public class OAuthFlow extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "refreshUrl" -> toType(getRefreshUrl(), type);
 			case "tokenUrl" -> toType(getTokenUrl(), type);
@@ -192,7 +198,7 @@ public class OAuthFlow extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public OAuthFlow set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "authorizationUrl" -> setAuthorizationUrl(s(value));
 			case "refreshUrl" -> setRefreshUrl(s(value));

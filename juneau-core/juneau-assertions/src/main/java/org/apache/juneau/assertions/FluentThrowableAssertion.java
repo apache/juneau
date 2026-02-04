@@ -102,7 +102,12 @@ import org.apache.juneau.serializer.*;
  * @param <T> The throwable type.
  * @param <R> The return type.
  */
+@SuppressWarnings("java:S115")
 public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjectAssertion<T,R> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_parent = "parent";
+	private static final String ARG_type = "type";
 
 	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentThrowableAssertion.class, "Messages");
@@ -355,7 +360,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 */
 	@Override
 	public R isExactType(Class<?> type) {
-		assertArgNotNull("type", type);
+		assertArgNotNull(ARG_type, type);
 		if (type != value().getClass())
 			throw error(MSG_exceptionWasNotExpectedType, cn(type), cn(value()));
 		return returns();
@@ -394,7 +399,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 */
 	@Override
 	public R isType(Class<?> parent) {
-		assertArgNotNull("parent", parent);
+		assertArgNotNull(ARG_parent, parent);
 		if (! parent.isInstance(value()))
 			throw error(MSG_exceptionWasNotExpectedType, cn(parent), cn(value()));
 		return returns();

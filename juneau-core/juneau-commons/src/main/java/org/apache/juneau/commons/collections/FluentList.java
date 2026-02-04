@@ -83,7 +83,11 @@ import java.util.*;
  *
  * @param <E> The element type.
  */
+@SuppressWarnings("java:S115")
 public class FluentList<E> extends AbstractList<E> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_inner = "inner";
 
 	private final List<E> list;
 
@@ -93,7 +97,7 @@ public class FluentList<E> extends AbstractList<E> {
 	 * @param inner The underlying list to wrap. Must not be <jk>null</jk>.
 	 */
 	public FluentList(List<E> inner) {
-		this.list = assertArgNotNull("inner", inner);
+		this.list = assertArgNotNull(ARG_inner, inner);
 	}
 
 	/**

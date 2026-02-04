@@ -96,7 +96,13 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class SchemaInfo extends SwaggerElement {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_key = "key";
+	private static final String ARG_property = "property";
+	private static final String ARG_value = "value";
 
 	private String format, title, description, pattern, type, discriminator, ref;
 	private Number multipleOf, maximum, minimum;
@@ -239,8 +245,8 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo addProperty(String key, SchemaInfo value) {
-		assertArgNotNull("key", key);
-		assertArgNotNull("value", value);
+		assertArgNotNull(ARG_key, key);
+		assertArgNotNull(ARG_value, value);
 		properties.put(key, value);
 		return this;
 	}
@@ -292,7 +298,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {  // NOSONAR(java:UNKNOWN): Switch expression
 			case "additionalProperties" -> toType(getAdditionalProperties(), type);
 			case "allOf" -> toType(getAllOf(), type);
@@ -632,7 +638,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public SchemaInfo set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {  // NOSONAR(java:UNKNOWN): Switch expression
 			case "additionalProperties" -> setAdditionalProperties(toType(value, SchemaInfo.class));
 			case "allOf" -> setAllOf(toSetBuilder(value, SchemaInfo.class).sparse().build());

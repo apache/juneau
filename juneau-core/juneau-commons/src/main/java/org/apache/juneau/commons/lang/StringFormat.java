@@ -94,7 +94,11 @@ import java.util.MissingFormatArgumentException;
  *
  * @see StringUtils#format(String, Object...)
  */
+@SuppressWarnings("java:S115")
 public final class StringFormat {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_pattern = "pattern";
 
 	/**
 	 * Literal text token.
@@ -447,7 +451,7 @@ public final class StringFormat {
 	 * @throws IllegalArgumentException If the pattern is <jk>null</jk>.
 	 */
 	public static StringFormat of(String pattern) {
-		assertArgNotNull("pattern", pattern);
+		assertArgNotNull(ARG_pattern, pattern);
 		return CACHE.get(pattern, () -> new StringFormat(pattern));
 	}
 
@@ -614,7 +618,7 @@ public final class StringFormat {
 	 * @throws IllegalArgumentException If the pattern is <jk>null</jk>.
 	 */
 	public StringFormat(String pattern) {
-		this.pattern = assertArgNotNull("pattern", pattern);
+		this.pattern = assertArgNotNull(ARG_pattern, pattern);
 		this.tokens = parseTokens(pattern).toArray(Token[]::new);
 	}
 

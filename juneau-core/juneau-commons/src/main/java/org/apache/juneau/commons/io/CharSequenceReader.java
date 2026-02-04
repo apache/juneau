@@ -84,7 +84,11 @@ import java.io.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">I/O Package</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class CharSequenceReader extends BufferedReader {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_cbuf = "cbuf";
 
 	private final CharSequence cs;
 	private String s;
@@ -149,7 +153,7 @@ public class CharSequenceReader extends BufferedReader {
 
 	@Override /* Overridden from Reader */
 	public int read(char[] cbuf, int off, int len) {
-		assertArgNotNull("cbuf", cbuf);
+		assertArgNotNull(ARG_cbuf, cbuf);
 		if (next >= length)
 			return -1;
 		int n = Math.min(length - next, len);

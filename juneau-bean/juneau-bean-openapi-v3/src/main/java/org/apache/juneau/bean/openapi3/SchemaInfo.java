@@ -96,7 +96,11 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class SchemaInfo extends OpenApiElement {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_property = "property";
 
 	private String format, title, description, pattern, ref, type;
 	private Number multipleOf, maximum, minimum;
@@ -334,7 +338,7 @@ public class SchemaInfo extends OpenApiElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "format" -> toType(getFormat(), type);
 			case "title" -> toType(getTitle(), type);
@@ -722,7 +726,7 @@ public class SchemaInfo extends OpenApiElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public SchemaInfo set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {  // NOSONAR(java:UNKNOWN): Switch expression
 			case "$ref" -> setRef(value);
 			case "additionalProperties" -> setAdditionalProperties(toType(value, SchemaInfo.class));

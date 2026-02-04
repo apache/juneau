@@ -70,7 +70,12 @@ import java.io.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">I/O Package</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class NoCloseOutputStream extends OutputStream {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_b = "b";
+	private static final String ARG_os = "os";
 
 	private final OutputStream os;
 
@@ -90,7 +95,7 @@ public class NoCloseOutputStream extends OutputStream {
 	 * @param os The OutputStream to wrap. Must not be <jk>null</jk>.
 	 */
 	public NoCloseOutputStream(OutputStream os) {
-		this.os = assertArgNotNull("os", os);
+		this.os = assertArgNotNull(ARG_os, os);
 	}
 
 	/**
@@ -122,13 +127,13 @@ public class NoCloseOutputStream extends OutputStream {
 
 	@Override /* Overridden from OutputStream */
 	public void write(byte[] b) throws IOException {
-		assertArgNotNull("b", b);
+		assertArgNotNull(ARG_b, b);
 		os.write(b);
 	}
 
 	@Override /* Overridden from OutputStream */
 	public void write(byte[] b, int off, int len) throws IOException {
-		assertArgNotNull("b", b);
+		assertArgNotNull(ARG_b, b);
 		os.write(b, off, len);
 	}
 

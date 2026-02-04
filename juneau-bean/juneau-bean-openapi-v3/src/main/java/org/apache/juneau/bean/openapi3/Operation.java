@@ -92,6 +92,15 @@ import org.apache.juneau.commons.collections.*;
 @SuppressWarnings("java:S115")
 public class Operation extends OpenApiElement {
 
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_callback = "callback";
+	private static final String ARG_in = "in";
+	private static final String ARG_name = "name";
+	private static final String ARG_property = "property";
+	private static final String ARG_response = "response";
+	private static final String ARG_status = "status";
+	private static final String ARG_statusCode = "statusCode";
+
 	// Property name constants
 	private static final String PROP_callbacks = "callbacks";
 	private static final String PROP_deprecated = "deprecated";
@@ -164,8 +173,8 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addCallback(String name, Callback callback) {
-		assertArgNotNull("name", name);
-		assertArgNotNull("callback", callback);
+		assertArgNotNull(ARG_name, name);
+		assertArgNotNull(ARG_callback, callback);
 		callbacks.put(name, callback);
 		return this;
 	}
@@ -221,8 +230,8 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addResponse(String statusCode, Response response) {
-		assertArgNotNull("statusCode", statusCode);
-		assertArgNotNull("response", response);
+		assertArgNotNull(ARG_statusCode, statusCode);
+		assertArgNotNull(ARG_response, response);
 		responses.put(statusCode, response);
 		return this;
 	}
@@ -346,7 +355,7 @@ public class Operation extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_tags -> toType(getTags(), type);
 			case PROP_summary -> toType(getSummary(), type);
@@ -407,8 +416,8 @@ public class Operation extends OpenApiElement {
 	 * @return The matching parameter, or <jk>null</jk> if not found.
 	 */
 	public Parameter getParameter(String in, String name) {
-		assertArgNotNull("in", in);
-		assertArgNotNull("name", name);
+		assertArgNotNull(ARG_in, in);
+		assertArgNotNull(ARG_name, name);
 		for (var p : parameters)
 			if (eq(p.getIn(), in) && eq(p.getName(), name))
 				return p;
@@ -446,7 +455,7 @@ public class Operation extends OpenApiElement {
 	 * @return The response, or <jk>null</jk> if not found.
 	 */
 	public Response getResponse(String status) {
-		assertArgNotNull("status", status);
+		assertArgNotNull(ARG_status, status);
 		return responses.get(status);
 	}
 
@@ -508,7 +517,7 @@ public class Operation extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Operation set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_callbacks -> setCallbacks(toMapBuilder(value, String.class, Callback.class).sparse().build());
 			case PROP_deprecated -> setDeprecated(toType(value, Boolean.class));

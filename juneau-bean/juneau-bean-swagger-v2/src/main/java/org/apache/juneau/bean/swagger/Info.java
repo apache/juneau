@@ -89,7 +89,11 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class Info extends SwaggerElement {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_property = "property";
 
 	private String siteName, title, description, termsOfService, version;
 	private Contact contact;
@@ -128,7 +132,7 @@ public class Info extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "contact" -> toType(getContact(), type);
 			case "description" -> toType(getDescription(), type);
@@ -229,7 +233,7 @@ public class Info extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public Info set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "contact" -> setContact(toType(value, Contact.class));
 			case "description" -> setDescription(s(value));

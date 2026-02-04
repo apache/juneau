@@ -63,7 +63,23 @@ import java.util.function.*;
  * @param <T> The type of value supplied by this supplier.
  */
 @FunctionalInterface
+@SuppressWarnings("java:S115")
 public interface OptionalSupplier<T> extends Supplier<T> {
+
+	/** Argument name constant for assertArgNotNull. */
+	static final String ARG_action = "action";
+	/** Argument name constant for assertArgNotNull. */
+	static final String ARG_emptyAction = "emptyAction";
+	/** Argument name constant for assertArgNotNull. */
+	static final String ARG_exceptionSupplier = "exceptionSupplier";
+	/** Argument name constant for assertArgNotNull. */
+	static final String ARG_mapper = "mapper";
+	/** Argument name constant for assertArgNotNull. */
+	static final String ARG_other = "other";
+	/** Argument name constant for assertArgNotNull. */
+	static final String ARG_predicate = "predicate";
+	/** Argument name constant for assertArgNotNull. */
+	static final String ARG_supplier = "supplier";
 
 	/**
 	 * Creates an OptionalSupplier from a Supplier.
@@ -73,7 +89,7 @@ public interface OptionalSupplier<T> extends Supplier<T> {
 	 * @return A new OptionalSupplier instance.
 	 */
 	public static <T> OptionalSupplier<T> of(Supplier<T> supplier) {
-		assertArgNotNull("supplier", supplier);
+		assertArgNotNull(ARG_supplier, supplier);
 		return supplier::get;
 	}
 
@@ -124,7 +140,7 @@ public interface OptionalSupplier<T> extends Supplier<T> {
 	 * @return An OptionalSupplier describing the result of applying a mapping function to the value of this OptionalSupplier, if a value is present, otherwise an empty OptionalSupplier.
 	 */
 	default <U> OptionalSupplier<U> map(Function<? super T, ? extends U> mapper) {
-		assertArgNotNull("mapper", mapper);
+		assertArgNotNull(ARG_mapper, mapper);
 		return () -> {
 			T value = get();
 			return nn(value) ? mapper.apply(value) : null;
@@ -139,7 +155,7 @@ public interface OptionalSupplier<T> extends Supplier<T> {
 	 * @return The result of applying an OptionalSupplier-bearing mapping function to the value of this OptionalSupplier, if a value is present, otherwise an empty OptionalSupplier.
 	 */
 	default <U> OptionalSupplier<U> flatMap(Function<? super T, ? extends OptionalSupplier<? extends U>> mapper) {
-		assertArgNotNull("mapper", mapper);
+		assertArgNotNull(ARG_mapper, mapper);
 		return () -> {
 			T value = get();
 			if (nn(value)) {
@@ -157,7 +173,7 @@ public interface OptionalSupplier<T> extends Supplier<T> {
 	 * @return An OptionalSupplier describing the value of this OptionalSupplier if a value is present and the value matches the given predicate, otherwise an empty OptionalSupplier.
 	 */
 	default OptionalSupplier<T> filter(Predicate<? super T> predicate) {
-		assertArgNotNull("predicate", predicate);
+		assertArgNotNull(ARG_predicate, predicate);
 		return () -> {
 			T value = get();
 			return (nn(value) && predicate.test(value)) ? value : null;
@@ -182,7 +198,7 @@ public interface OptionalSupplier<T> extends Supplier<T> {
 	 * @return The value, if present, otherwise the result of <jk>other.get()</jk>.
 	 */
 	default T orElseGet(Supplier<? extends T> other) {
-		assertArgNotNull("other", other);
+		assertArgNotNull(ARG_other, other);
 		T value = get();
 		return nn(value) ? value : other.get();
 	}
@@ -196,7 +212,7 @@ public interface OptionalSupplier<T> extends Supplier<T> {
 	 * @throws X If no value is present.
 	 */
 	default <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
-		assertArgNotNull("exceptionSupplier", exceptionSupplier);
+		assertArgNotNull(ARG_exceptionSupplier, exceptionSupplier);
 		T value = get();
 		if (nn(value))
 			return value;
@@ -209,7 +225,7 @@ public interface OptionalSupplier<T> extends Supplier<T> {
 	 * @param action The action to be performed, if a value is present. Must not be <jk>null</jk>.
 	 */
 	default void ifPresent(Consumer<? super T> action) {
-		assertArgNotNull("action", action);
+		assertArgNotNull(ARG_action, action);
 		T value = get();
 		if (nn(value))
 			action.accept(value);
@@ -222,8 +238,8 @@ public interface OptionalSupplier<T> extends Supplier<T> {
 	 * @param emptyAction The empty-based action to be performed, if no value is present. Must not be <jk>null</jk>.
 	 */
 	default void ifPresentOrElse(Consumer<? super T> action, Runnable emptyAction) {
-		assertArgNotNull("action", action);
-		assertArgNotNull("emptyAction", emptyAction);
+		assertArgNotNull(ARG_action, action);
+		assertArgNotNull(ARG_emptyAction, emptyAction);
 		T value = get();
 		if (nn(value))
 			action.accept(value);

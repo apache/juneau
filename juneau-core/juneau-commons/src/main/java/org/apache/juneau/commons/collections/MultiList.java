@@ -109,7 +109,11 @@ import java.util.stream.Collectors;
  *
  * @param <E> The element type of this list.
  */
+@SuppressWarnings("java:S115")
 public class MultiList<E> extends AbstractList<E> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_c = "c";
 
 	/**
 	 * The underlying lists being wrapped by this MultiList.
@@ -140,9 +144,9 @@ public class MultiList<E> extends AbstractList<E> {
 	 */
 	@SafeVarargs
 	public MultiList(List<E>...c) {
-		assertArgNotNull("c", c);
+		assertArgNotNull(ARG_c, c);
 		for (var cc : c)
-			assertArgNotNull("c", cc);
+			assertArgNotNull(ARG_c, cc);
 		l = c;
 	}
 

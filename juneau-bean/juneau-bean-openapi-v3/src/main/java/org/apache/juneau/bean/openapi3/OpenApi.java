@@ -78,6 +78,12 @@ import org.apache.juneau.objecttools.*;
 @SuppressWarnings("java:S115")
 public class OpenApi extends OpenApiElement {
 
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_c = "c";
+	private static final String ARG_path = "path";
+	private static final String ARG_pathItem = "pathItem";
+	private static final String ARG_property = "property";
+
 	/** Represents a null OpenAPI document */
 	public static final OpenApi NULL = new OpenApi();
 
@@ -135,8 +141,8 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi addPath(String path, PathItem pathItem) {
-		assertArgNotNull("path", path);
-		assertArgNotNull("pathItem", pathItem);
+		assertArgNotNull(ARG_path, path);
+		assertArgNotNull(ARG_pathItem, pathItem);
 		if (paths == null)
 			paths = new TreeMap<>(PATH_COMPARATOR);
 		getPaths().put(path, pathItem);
@@ -265,7 +271,7 @@ public class OpenApi extends OpenApiElement {
 	 */
 	public <T> T findRef(String ref, Class<T> c) {
 		assertArgNotNullOrBlank("ref", ref);
-		assertArgNotNull("c", c);
+		assertArgNotNull(ARG_c, c);
 		if (! ref.startsWith("#/"))
 			throw rex("Unsupported reference:  ''{0}''", ref);
 		try {
@@ -277,7 +283,7 @@ public class OpenApi extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_openapi -> toType(getOpenapi(), type);
 			case PROP_info -> toType(getInfo(), type);
@@ -366,7 +372,7 @@ public class OpenApi extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public OpenApi set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_components -> setComponents(toType(value, Components.class));
 			case PROP_externalDocs -> setExternalDocs(toType(value, ExternalDocumentation.class));

@@ -62,8 +62,11 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({"java:S110", "java:S115"})
 public class HeaderList extends ControlledArrayList<Header> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_type = "type";
 
 	/** Represents no header list in annotations. */
 	public static final class Void extends HeaderList {
@@ -326,7 +329,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return A header with a condensed value or <jk>null</jk> if no headers by the given name are present
 	 */
 	public <T> Optional<T> get(Class<T> type) {
-		assertArgNotNull("type", type);
+		assertArgNotNull(ARG_type, type);
 
 		String name = HeaderBeanMeta.of(type).getSchema().getName();
 		assertArg(nn(name), "Header name could not be found on bean type ''{0}''", cn(type));

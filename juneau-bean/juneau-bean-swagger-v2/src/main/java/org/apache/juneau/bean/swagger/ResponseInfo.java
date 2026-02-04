@@ -80,7 +80,15 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class ResponseInfo extends SwaggerElement {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_example = "example";
+	private static final String ARG_header = "header";
+	private static final String ARG_mimeType = "mimeType";
+	private static final String ARG_name = "name";
+	private static final String ARG_property = "property";
 
 	private String description;
 	private SchemaInfo schema;
@@ -119,8 +127,8 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ResponseInfo addExample(String mimeType, Object example) {
-		assertArgNotNull("mimeType", mimeType);
-		assertArgNotNull("example", example);
+		assertArgNotNull(ARG_mimeType, mimeType);
+		assertArgNotNull(ARG_example, example);
 		examples.put(mimeType, example);
 		return this;
 	}
@@ -133,8 +141,8 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ResponseInfo addHeader(String name, HeaderInfo header) {
-		assertArgNotNull("name", name);
-		assertArgNotNull("header", header);
+		assertArgNotNull(ARG_name, name);
+		assertArgNotNull(ARG_header, header);
 		headers.put(name, header);
 		return this;
 	}
@@ -172,7 +180,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "description" -> toType(getDescription(), type);
 			case "examples" -> toType(getExamples(), type);
@@ -209,7 +217,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return The header info, or <jk>null</jk> if not found.
 	 */
 	public HeaderInfo getHeader(String name) {
-		assertArgNotNull("name", name);
+		assertArgNotNull(ARG_name, name);
 		return headers.get(name);
 	}
 
@@ -271,7 +279,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public ResponseInfo set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case "description" -> setDescription(s(value));
 			case "examples" -> setExamples(toMapBuilder(value, String.class, Object.class).sparse().build());

@@ -35,7 +35,11 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class BasicPartIterator implements PartIterator {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_parts = "parts";
 
 	private final NameValuePair[] entries;
 	private final String name;
@@ -51,7 +55,7 @@ public class BasicPartIterator implements PartIterator {
 	 * @param caseInsensitive Use case-insensitive matching for part name.
 	 */
 	public BasicPartIterator(NameValuePair[] parts, String name, boolean caseInsensitive) {
-		this.entries = assertArgNotNull("parts", parts);
+		this.entries = assertArgNotNull(ARG_parts, parts);
 		this.name = name;
 		this.caseInsensitive = caseInsensitive;
 		this.currentIndex = findNext(-1);

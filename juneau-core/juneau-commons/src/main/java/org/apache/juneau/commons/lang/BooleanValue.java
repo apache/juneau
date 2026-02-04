@@ -59,7 +59,11 @@ import java.util.concurrent.atomic.*;
  * 	<li class='jc'>{@link Flag}
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class BooleanValue extends Value<Boolean> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_values = "values";
 
 	/**
 	 * Creates a new boolean value initialized to <c>false</c>.
@@ -142,7 +146,7 @@ public class BooleanValue extends Value<Boolean> {
 	 * @return <jk>true</jk> if the current value matches any of the specified values.
 	 */
 	public boolean isAny(Boolean...values) {
-		assertArgNotNull("values", values);
+		assertArgNotNull(ARG_values, values);
 		var current = get();
 		for (var value : values)
 			if (eq(current, value))

@@ -85,6 +85,9 @@ import org.apache.juneau.commons.collections.*;
 @SuppressWarnings("java:S115")
 public class Components extends OpenApiElement {
 
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_property = "property";
+
 	// Property name constants
 	private static final String PROP_callbacks = "callbacks";
 	private static final String PROP_examples = "examples";
@@ -140,7 +143,7 @@ public class Components extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_schemas -> toType(getSchemas(), type);
 			case PROP_responses -> toType(getResponses(), type);
@@ -238,7 +241,7 @@ public class Components extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Components set(String property, Object value) {
-		assertArgNotNull("property", property);
+		assertArgNotNull(ARG_property, property);
 		return switch (property) {
 			case PROP_callbacks -> setCallbacks(toMapBuilder(value, String.class, Callback.class).sparse().build());
 			case PROP_examples -> setExamples(toMapBuilder(value, String.class, Example.class).sparse().build());
