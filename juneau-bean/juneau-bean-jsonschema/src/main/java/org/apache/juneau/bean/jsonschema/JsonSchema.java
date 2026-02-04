@@ -196,6 +196,7 @@ import org.apache.juneau.swap.*;
  * </ul>
  */
 @Bean(typeName = "schema")
+@SuppressWarnings("java:S116")
 public class JsonSchema {
 
 	/**

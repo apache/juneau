@@ -96,7 +96,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({"java:S115", "java:S116"})
 public class SchemaInfo extends OpenApiElement {
 
 	// Argument name constants for assertArgNotNull

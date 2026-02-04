@@ -83,6 +83,7 @@ import org.apache.juneau.parser.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics">OpenApi Basics</a>
  * </ul>
  */
+@SuppressWarnings("java:S116")
 public class HttpPartSchema {
 
 	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
@@ -90,6 +91,7 @@ public class HttpPartSchema {
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S116")
 	public static class Builder {
 		String name;
 		String default_;

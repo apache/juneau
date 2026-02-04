@@ -92,6 +92,7 @@ public class SchemaAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
+	@SuppressWarnings("java:S116")
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF {
 
 		private boolean aev;
@@ -1059,6 +1060,7 @@ public class SchemaAnnotation {
 
 	}
 
+	@SuppressWarnings("java:S116")
 	private static class Object extends AppliedOnClassAnnotationObject implements Schema {
 
 		private final String[] description;

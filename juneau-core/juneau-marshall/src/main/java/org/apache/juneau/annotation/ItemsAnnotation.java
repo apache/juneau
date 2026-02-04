@@ -40,6 +40,7 @@ public class ItemsAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
+	@SuppressWarnings("java:S116")
 	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
@@ -481,6 +482,7 @@ public class ItemsAnnotation {
 
 	}
 
+	@SuppressWarnings("java:S116")
 	private static class Object extends AnnotationObject implements Items {
 
 		private final String[] description;
