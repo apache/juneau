@@ -155,12 +155,12 @@ public class MethodExecStore {
 	public String getReport() {
 		// @formatter:off
 		var sb = new StringBuilder()
-			.append(" Method                         Runs      Running   Errors   Avg          Total     \n")
-			.append("------------------------------ --------- --------- -------- ------------ -----------\n");
+			.append(f(" Method                         Runs      Running   Errors   Avg          Total     %n"))
+			.append(f("------------------------------ --------- --------- -------- ------------ -----------%n"));
 		getStatsByTotalTime()
 			.stream()
 			.sorted(Comparator.comparingDouble(MethodExecStats::getTotalTime).reversed())
-			.forEach(x -> sb.append(String.format("%30s %9d %9d %9d %10dms %10dms\n", x.getMethod(), x.getRuns(), x.getRunning(), x.getErrors(), x.getAvgTime(), x.getTotalTime())));
+			.forEach(x -> sb.append(f("%30s %9d %9d %9d %10dms %10dms%n", x.getMethod(), x.getRuns(), x.getRunning(), x.getErrors(), x.getAvgTime(), x.getTotalTime())));
 		// @formatter:on
 		return sb.toString();
 

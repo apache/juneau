@@ -142,6 +142,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	private static final String ARG_regex = "regex";
 	private static final String ARG_replacement = "replacement";
 	private static final String ARG_searchPattern = "searchPattern";
+	private static final String LINE_SEPARATOR_REGEX = "[\\r\\n]+";
 	private static final String ARG_string = "string";
 	private static final String ARG_target = "target";
 	private static final String ARG_values = "values";
@@ -239,7 +240,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @return This object.
 	 */
 	public FluentListAssertion<String,R> asLines() {
-		return asSplit("[\r\n]+");
+		return asSplit(LINE_SEPARATOR_REGEX);
 	}
 
 	/**
@@ -582,8 +583,8 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		assertArgNotNull(ARG_lines, lines);
 
 		// Must work for windows too.
-		var e = join(lines, '\n').trim().split("[\r\n]+");
-		var a = value().trim().split("[\r\n]+");
+		var e = join(lines, '\n').trim().split(LINE_SEPARATOR_REGEX);
+		var a = value().trim().split(LINE_SEPARATOR_REGEX);
 
 		if (e.length != a.length)
 			throw error(MSG_expectedStringHadDifferentNumbersOfLines, e.length, a.length);
