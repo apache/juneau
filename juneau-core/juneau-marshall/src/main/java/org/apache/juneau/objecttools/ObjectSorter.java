@@ -123,7 +123,7 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 		if (! type.isCollectionOrArray())
 			return input;
 
-		var l = (ArrayList<SortEntry>)null;
+		ArrayList<SortEntry> l = null;
 
 		if (type.isArray()) {
 			var size = Array.getLength(input);

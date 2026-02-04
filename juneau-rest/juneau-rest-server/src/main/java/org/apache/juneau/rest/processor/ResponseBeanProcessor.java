@@ -74,7 +74,7 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 				var ps = hm.getSchema();
 				if ("*".equals(n)) {
 					for (var o2 : iterate(o)) {
-						var h = (Header)null;
+						Header h = null;
 						if (o2 instanceof Map.Entry o22) {
 							var x = o22;
 							var k = s(x.getKey());
@@ -89,7 +89,7 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 						res.addHeader(h);
 					}
 				} else {
-					var h = (Header)null;
+					Header h = null;
 					if (o instanceof Header o2)
 						h = o2;
 					else if (o instanceof NameValuePair o3)

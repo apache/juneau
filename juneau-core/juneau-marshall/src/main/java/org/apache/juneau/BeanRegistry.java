@@ -149,7 +149,7 @@ public class BeanRegistry {
 					Map<?,?> m = BeanCreator.of(Map.class).type(ci).run();
 					m.forEach((k, v) -> {
 						var typeName = s(k);
-						var val = (ClassMeta<?>)null;
+						ClassMeta<?> val = null;
 						if (v instanceof Type v2)
 							val = bc.getClassMeta(v2);
 						else if (isArray(v))

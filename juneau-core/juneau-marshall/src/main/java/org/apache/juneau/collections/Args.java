@@ -149,7 +149,7 @@ public class Args extends JsonMap {
 		}
 
 		// Capture the mapped arguments.
-		var key = (String)null;
+		String key = null;
 		while (! argList.isEmpty()) {
 			String s = argList.remove(0);
 			if (startsWith(s, '-')) {

@@ -232,7 +232,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		}
 	}
 
-	private final UonWriter getUonWriter(Writer out) throws Exception {
+	private final UonWriter getUonWriter(Writer out) {
 		return new UonWriter(this, out, isUseWhitespace(), getMaxIndent(), isEncoding(), isTrimStrings(), plainTextParams, getQuoteChar(), getUriResolver());
 	}
 
@@ -353,7 +353,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	 * @return The output target object wrapped in an {@link UonWriter}.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected final UonWriter getUonWriter(SerializerPipe out) throws IOException {
+	protected final UonWriter getUonWriter(SerializerPipe out) {
 		var output = out.getRawOutput();
 		if (output instanceof UonWriter output2)
 			return output2;

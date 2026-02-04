@@ -168,7 +168,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 				Map m = cm.isMap() ? (Map)o : bs.toBeanMap(o);
 				for (var e : entryMatchers.entrySet()) {
 					String key = e.getKey();
-					var val = (Object)null;
+					Object val = null;
 					if (m instanceof BeanMap m2) {
 						val = m2.getRaw(key);
 					} else {
@@ -244,7 +244,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 		if (search.isEmpty() || type == null || ! type.isCollectionOrArray())
 			return input;
 
-		var l = (List<Object>)null;
+		List<Object> l = null;
 		var rowMatcher = new RowMatcher(session, search);
 
 		if (type.isCollection()) {

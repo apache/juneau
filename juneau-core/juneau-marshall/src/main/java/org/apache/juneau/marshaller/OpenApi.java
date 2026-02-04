@@ -125,7 +125,7 @@ public class OpenApi extends CharMarshaller {
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public static <T> T to(HttpPartSchema schema, String input, Class<T> type) throws ParseException, IOException {
+	public static <T> T to(HttpPartSchema schema, String input, Class<T> type) throws ParseException {
 		return DEFAULT.p.parse(HttpPartType.ANY, schema, input, type);
 	}
 

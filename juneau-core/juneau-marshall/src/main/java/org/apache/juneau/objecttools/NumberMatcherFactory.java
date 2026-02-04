@@ -85,8 +85,8 @@ public class NumberMatcherFactory extends MatcherFactory {
 			var mark = 0;
 			var isNot = false;
 			var eq = Equality.NONE;
-			var n1 = (Integer)null;
-			var n2 = (Integer)null;
+			Integer n1 = null;
+			Integer n2 = null;
 
 			int i;
 			for (i = 0; i < s.length(); i++) {

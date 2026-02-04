@@ -66,7 +66,7 @@ public class LocalizationVar extends MultipartVar {
 		if (args.length > 0) {
 			var key = args[0];
 			String[] a = (args.length > 1) ? Arrays.copyOfRange(args, 1, args.length) : new String[0];
-			var messages = (Messages)null;
+			Messages messages = null;
 			if (session.getBean(RestRequest.class).isPresent())
 				messages = session.getBean(RestRequest.class).get().getMessages();
 			if (messages == null)

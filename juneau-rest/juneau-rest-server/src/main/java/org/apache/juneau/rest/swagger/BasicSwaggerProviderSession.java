@@ -729,7 +729,7 @@ public class BasicSwaggerProviderSession {
 			piri.put(examplesKey, examples);
 	}
 
-	private static void addParamExample(RestOpContext sm, JsonMap piri, RestPartType in, Type type) throws Exception {
+	private static void addParamExample(RestOpContext sm, JsonMap piri, RestPartType in, Type type) {
 
 		var s = piri.getString(SWAGGER_example);
 

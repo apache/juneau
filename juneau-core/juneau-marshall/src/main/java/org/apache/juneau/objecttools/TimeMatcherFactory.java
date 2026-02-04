@@ -88,8 +88,8 @@ public class TimeMatcherFactory extends MatcherFactory {
 			var state = S1;
 			var mark = 0;
 			var eq = Equality.NONE;
-			var s1 = (String)null;
-			var s2 = (String)null;
+			String s1 = null;
+			String s2 = null;
 
 			int i;
 			char c = 0;
@@ -306,7 +306,7 @@ public class TimeMatcherFactory extends MatcherFactory {
 			if (ranges.length == 0)
 				return true;
 
-			var zdt = (ZonedDateTime)null;
+			ZonedDateTime zdt = null;
 			if (cm.isCalendar()) {
 				var c = (Calendar)o;
 				zdt = c.toInstant().atZone(c.getTimeZone().toZoneId());

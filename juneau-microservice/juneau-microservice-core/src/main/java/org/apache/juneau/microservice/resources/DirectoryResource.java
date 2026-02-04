@@ -129,7 +129,7 @@ public class DirectoryResource extends BasicRestServlet {
 		}
 
 		@Html(format = HtmlFormat.HTML_CDC)
-		public List<Action> getActions() throws Exception {
+		public List<Action> getActions() {
 			List<Action> l = list();
 			if (allowViews && f.canRead() && ! f.isDirectory()) {
 				l.add(new Action("view", uri + "?method=VIEW"));
@@ -210,7 +210,7 @@ public class DirectoryResource extends BasicRestServlet {
 	final boolean allowUploads;
 	final boolean allowViews;
 
-	public DirectoryResource(Config c) throws Exception {
+	public DirectoryResource(Config c) {
 		rootDir = new File(c.get(DIRECTORY_RESOURCE_rootDir).orElse("."));
 		allowViews = c.get(DIRECTORY_RESOURCE_allowViews).asBoolean().orElse(false);
 		allowDeletes = c.get(DIRECTORY_RESOURCE_allowDeletes).asBoolean().orElse(false);

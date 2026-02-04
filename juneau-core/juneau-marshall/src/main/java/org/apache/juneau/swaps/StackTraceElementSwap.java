@@ -46,7 +46,7 @@ public class StackTraceElementSwap extends ObjectSwap<StackTraceElement,String> 
 	@Override /* Overridden from ObjectSwap */
 	public StackTraceElement unswap(BeanSession session, String in, ClassMeta<?> hint) {
 		var methodName = "";
-		var fileName = (String)null;
+		String fileName = null;
 		int lineNumber = -1;
 
 		if (in == null)

@@ -122,7 +122,7 @@ public abstract class MenuItemWidget extends Widget {
 		var sb = new StringBuilder();
 
 		// Need a unique number to define unique function names.
-		var id = (Integer)null;
+		Integer id = null;
 
 		var pre = nullIfEmpty(getBeforeShowScript(req, res));
 		var post = nullIfEmpty(getAfterShowScript(req, res));

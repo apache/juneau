@@ -76,7 +76,7 @@ public class ChildResourceDescriptions extends ResourceDescriptions {
 	 */
 	public ChildResourceDescriptions(RestContext context, RestRequest req, boolean sort) {
 		for (var e : context.getRestChildren().asMap().entrySet()) {
-			var title = (String)null;
+			String title = null;
 			try {
 				title = e.getValue().getSwagger(req.getLocale()).map(x -> x == null ? null : x.getInfo()).map(x -> x == null ? null : x.getTitle()).orElse(null);
 			} catch (Exception e1) {

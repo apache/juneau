@@ -294,7 +294,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * @return The output target object wrapped in an {@link XmlWriter}.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public final XmlWriter getXmlWriter(SerializerPipe out) throws IOException {
+	public final XmlWriter getXmlWriter(SerializerPipe out) {
 		var output = out.getRawOutput();
 		if (output instanceof XmlWriter output2)
 			return output2;

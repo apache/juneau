@@ -106,7 +106,7 @@ public class LogsResource extends BasicRestServlet {
 		}
 
 		@Html(format = HtmlFormat.HTML_CDC)
-		public List<Action> getActions() throws Exception {
+		public List<Action> getActions() {
 			var l = new ArrayList<Action>();
 			if (f.canRead() && ! f.isDirectory()) {
 				l.add(new Action("view", uri + "?method=VIEW"));
@@ -200,7 +200,7 @@ public class LogsResource extends BasicRestServlet {
 	}
 
 	@RestInit
-	public void init(Config config) throws Exception {
+	public void init(Config config) {
 		logDir = new File(config.get("Logging/logDir").asString().orElse("logs"));
 		allowDeletes = config.get("Logging/allowDeletes").asBoolean().orElse(true);
 		leFormatter = new LogEntryFormatter(

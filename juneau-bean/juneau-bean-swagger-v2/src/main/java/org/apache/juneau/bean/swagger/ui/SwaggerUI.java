@@ -122,7 +122,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		if (m.isEmpty())
 			return null;
 
-		var select = (Select)null;
+		Select select = null;
 		if (m.size() > 1) {
 			select = select().onchange("selectExample(this)")._class("example-select");
 		}

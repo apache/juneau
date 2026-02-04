@@ -299,7 +299,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 * @return The output target object wrapped in an {@link JsonWriter}.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected final JsonWriter getJsonWriter(SerializerPipe out) throws IOException {
+	protected final JsonWriter getJsonWriter(SerializerPipe out) {
 		var output = out.getRawOutput();
 		if (output instanceof JsonWriter output2)
 			return output2;

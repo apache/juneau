@@ -331,8 +331,8 @@ public class VarResolverSession {
 		var isInEscape = false;
 		var hasInternalVar = false;
 		var hasInnerEscapes = false;
-		var varType = (String)null;
-		var varVal = (String)null;
+		String varType = null;
+		String varVal = null;
 		var x = 0;
 		var x2 = 0;
 		var depth = 0;

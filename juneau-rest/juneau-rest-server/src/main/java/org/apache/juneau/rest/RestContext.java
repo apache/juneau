@@ -4932,7 +4932,7 @@ public class RestContext extends Context {
 	 * @return A new builder object.
 	 * @throws ServletException Something bad happened.
 	 */
-	public static Builder create(Class<?> resourceClass, RestContext parentContext, ServletConfig servletConfig) throws ServletException {
+	public static Builder create(Class<?> resourceClass, RestContext parentContext, ServletConfig servletConfig) {
 		return new Builder(resourceClass, parentContext, servletConfig);
 	}
 

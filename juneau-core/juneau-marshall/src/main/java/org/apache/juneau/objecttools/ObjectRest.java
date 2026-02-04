@@ -964,7 +964,7 @@ public class ObjectRest {
 			return n;
 		int i = url.indexOf('/');
 		String parentKey;
-		var childUrl = (String)null;
+		String childUrl = null;
 		if (i == -1) {
 			parentKey = url;
 		} else {
@@ -973,9 +973,9 @@ public class ObjectRest {
 		}
 
 		var o = n.o;
-		var o2 = (Object)null;
+		Object o2 = null;
 		var cm = n.cm;
-		var ct2 = (ClassMeta)null;
+		ClassMeta ct2 = null;
 		if (o == null)
 			return null;
 		if (cm.isMap()) {

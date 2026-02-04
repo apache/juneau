@@ -65,7 +65,7 @@ public class RemoteMeta {
 		var remotes = rstream(ci.getAnnotations(Remote.class).toList()).map(AnnotationInfo::inner).toList();
 
 		var versionHeader = "Client-Version";
-		var clientVersion = (String)null;
+		String clientVersion = null;
 		var headers = HeaderList.create().resolving();
 
 		for (var r : remotes) {

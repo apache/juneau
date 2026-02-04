@@ -681,7 +681,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		boolean isInEscape = false;
 
 		var state = S1;
-		var currAttr = (K)null;
+		K currAttr = null;
 		while (c != -1 && c != AMP) {
 			c = r.read();
 			if (! isInEscape) {

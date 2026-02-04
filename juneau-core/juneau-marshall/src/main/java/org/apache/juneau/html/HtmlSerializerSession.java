@@ -291,7 +291,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @return The same writer passed in.
 	 * @throws IOException If a problem occurred trying to send output to the writer.
 	 */
-	private XmlWriter doSerialize(Object o, XmlWriter w) throws IOException, SerializeException {
+	private XmlWriter doSerialize(Object o, XmlWriter w) throws SerializeException {
 		serializeAnything(w, o, getExpectedRootType(o), null, null, getInitialDepth() - 1, true, false);
 		return w;
 	}
@@ -724,7 +724,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @return The output target object wrapped in an {@link HtmlWriter}.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected final HtmlWriter getHtmlWriter(SerializerPipe out) throws IOException {
+	protected final HtmlWriter getHtmlWriter(SerializerPipe out) {
 		Object output = out.getRawOutput();
 		if (output instanceof HtmlWriter output2)
 			return output2;

@@ -82,7 +82,7 @@ enum HtmlTag {
 
 	static HtmlTag forString(String tag, boolean end) {
 		var c = tag.charAt(0);
-		var t = (HtmlTag)null;
+		HtmlTag t = null;
 		if (c == 'u')
 			t = (end ? xUL : UL);
 		else if (c == 'l')

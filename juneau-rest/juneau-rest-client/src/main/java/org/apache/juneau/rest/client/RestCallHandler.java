@@ -85,5 +85,5 @@ public interface RestCallHandler {
 	 * @throws IOException In case of a problem or the connection was aborted.
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
-	HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) throws ClientProtocolException, IOException;
+	HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) throws IOException;
 }
