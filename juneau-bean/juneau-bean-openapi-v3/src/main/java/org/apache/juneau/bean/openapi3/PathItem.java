@@ -80,21 +80,22 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class PathItem extends OpenApiElement {
 
 	// Property name constants
-	private static final String PROP_DELETE = "delete";
-	private static final String PROP_DESCRIPTION = "description";
-	private static final String PROP_GET = "get";
-	private static final String PROP_HEAD = "head";
-	private static final String PROP_OPTIONS = "options";
-	private static final String PROP_PARAMETERS = "parameters";
-	private static final String PROP_PATCH = "patch";
-	private static final String PROP_POST = "post";
-	private static final String PROP_PUT = "put";
-	private static final String PROP_SERVERS = "servers";
-	private static final String PROP_SUMMARY = "summary";
-	private static final String PROP_TRACE = "trace";
+	private static final String PROP_delete = "delete";
+	private static final String PROP_description = "description";
+	private static final String PROP_get = "get";
+	private static final String PROP_head = "head";
+	private static final String PROP_options = "options";
+	private static final String PROP_parameters = "parameters";
+	private static final String PROP_patch = "patch";
+	private static final String PROP_post = "post";
+	private static final String PROP_put = "put";
+	private static final String PROP_servers = "servers";
+	private static final String PROP_summary = "summary";
+	private static final String PROP_trace = "trace";
 
 	private String summary, description;
 	private Operation get, put, post, delete, options, head, patch, trace;
@@ -140,18 +141,18 @@ public class PathItem extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case PROP_SUMMARY -> toType(getSummary(), type);
-			case PROP_DESCRIPTION -> toType(getDescription(), type);
-			case PROP_GET -> toType(getGet(), type);
-			case PROP_PUT -> toType(getPut(), type);
-			case PROP_POST -> toType(getPost(), type);
-			case PROP_DELETE -> toType(getDelete(), type);
-			case PROP_OPTIONS -> toType(getOptions(), type);
-			case PROP_HEAD -> toType(getHead(), type);
-			case PROP_PATCH -> toType(getPatch(), type);
-			case PROP_TRACE -> toType(getTrace(), type);
-			case PROP_SERVERS -> toType(getServers(), type);
-			case PROP_PARAMETERS -> toType(getParameters(), type);
+			case PROP_summary -> toType(getSummary(), type);
+			case PROP_description -> toType(getDescription(), type);
+			case PROP_get -> toType(getGet(), type);
+			case PROP_put -> toType(getPut(), type);
+			case PROP_post -> toType(getPost(), type);
+			case PROP_delete -> toType(getDelete(), type);
+			case PROP_options -> toType(getOptions(), type);
+			case PROP_head -> toType(getHead(), type);
+			case PROP_patch -> toType(getPatch(), type);
+			case PROP_trace -> toType(getTrace(), type);
+			case PROP_servers -> toType(getServers(), type);
+			case PROP_parameters -> toType(getParameters(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -244,18 +245,18 @@ public class PathItem extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(delete), PROP_DELETE)
-			.addIf(nn(description), PROP_DESCRIPTION)
-			.addIf(nn(get), PROP_GET)
-			.addIf(nn(head), PROP_HEAD)
-			.addIf(nn(options), PROP_OPTIONS)
-			.addIf(nn(parameters), PROP_PARAMETERS)
-			.addIf(nn(patch), PROP_PATCH)
-			.addIf(nn(post), PROP_POST)
-			.addIf(nn(put), PROP_PUT)
-			.addIf(nn(servers), PROP_SERVERS)
-			.addIf(nn(summary), PROP_SUMMARY)
-			.addIf(nn(trace), PROP_TRACE)
+			.addIf(nn(delete), PROP_delete)
+			.addIf(nn(description), PROP_description)
+			.addIf(nn(get), PROP_get)
+			.addIf(nn(head), PROP_head)
+			.addIf(nn(options), PROP_options)
+			.addIf(nn(parameters), PROP_parameters)
+			.addIf(nn(patch), PROP_patch)
+			.addIf(nn(post), PROP_post)
+			.addIf(nn(put), PROP_put)
+			.addIf(nn(servers), PROP_servers)
+			.addIf(nn(summary), PROP_summary)
+			.addIf(nn(trace), PROP_trace)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -265,18 +266,18 @@ public class PathItem extends OpenApiElement {
 	public PathItem set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case PROP_DELETE -> setDelete(toType(value, Operation.class));
-			case PROP_DESCRIPTION -> setDescription(s(value));
-			case PROP_GET -> setGet(toType(value, Operation.class));
-			case PROP_HEAD -> setHead(toType(value, Operation.class));
-			case PROP_OPTIONS -> setOptions(toType(value, Operation.class));
-			case PROP_PATCH -> setPatch(toType(value, Operation.class));
-			case PROP_PARAMETERS -> setParameters(listb(Parameter.class).addAny(value).sparse().build());
-			case PROP_POST -> setPost(toType(value, Operation.class));
-			case PROP_PUT -> setPut(toType(value, Operation.class));
-			case PROP_SERVERS -> setServers(listb(Server.class).addAny(value).sparse().build());
-			case PROP_SUMMARY -> setSummary(s(value));
-			case PROP_TRACE -> setTrace(toType(value, Operation.class));
+			case PROP_delete -> setDelete(toType(value, Operation.class));
+			case PROP_description -> setDescription(s(value));
+			case PROP_get -> setGet(toType(value, Operation.class));
+			case PROP_head -> setHead(toType(value, Operation.class));
+			case PROP_options -> setOptions(toType(value, Operation.class));
+			case PROP_patch -> setPatch(toType(value, Operation.class));
+			case PROP_parameters -> setParameters(listb(Parameter.class).addAny(value).sparse().build());
+			case PROP_post -> setPost(toType(value, Operation.class));
+			case PROP_put -> setPut(toType(value, Operation.class));
+			case PROP_servers -> setServers(listb(Server.class).addAny(value).sparse().build());
+			case PROP_summary -> setSummary(s(value));
+			case PROP_trace -> setTrace(toType(value, Operation.class));
 			default -> {
 				super.set(property, value);
 				yield this;

@@ -65,12 +65,13 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class RequestBodyInfo extends OpenApiElement {
 
 	// Property name constants
-	private static final String PROP_CONTENT = "content";
-	private static final String PROP_DESCRIPTION = "description";
-	private static final String PROP_REQUIRED = "required";
+	private static final String PROP_content = "content";
+	private static final String PROP_description = "description";
+	private static final String PROP_required = "required";
 
 	private String description;
 	private Map<String,MediaType> content = map();
@@ -125,9 +126,9 @@ public class RequestBodyInfo extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case PROP_DESCRIPTION -> toType(getDescription(), type);
-			case PROP_CONTENT -> toType(getContent(), type);
-			case PROP_REQUIRED -> toType(getRequired(), type);
+			case PROP_description -> toType(getDescription(), type);
+			case PROP_content -> toType(getContent(), type);
+			case PROP_required -> toType(getRequired(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -163,9 +164,9 @@ public class RequestBodyInfo extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(ne(content), PROP_CONTENT)
-			.addIf(nn(description), PROP_DESCRIPTION)
-			.addIf(nn(required), PROP_REQUIRED)
+			.addIf(ne(content), PROP_content)
+			.addIf(nn(description), PROP_description)
+			.addIf(nn(required), PROP_required)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -175,9 +176,9 @@ public class RequestBodyInfo extends OpenApiElement {
 	public RequestBodyInfo set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case PROP_CONTENT -> setContent(toMapBuilder(value, String.class, MediaType.class).sparse().build());
-			case PROP_DESCRIPTION -> setDescription(s(value));
-			case PROP_REQUIRED -> setRequired(toBoolean(value));
+			case PROP_content -> setContent(toMapBuilder(value, String.class, MediaType.class).sparse().build());
+			case PROP_description -> setDescription(s(value));
+			case PROP_required -> setRequired(toBoolean(value));
 			default -> {
 				super.set(property, value);
 				yield this;

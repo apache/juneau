@@ -156,23 +156,24 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class Operation extends SwaggerElement {
 
 	private interface MapStringList extends Map<String,List<String>> {}
 
 	// Property name constants
-	private static final String PROP_CONSUMES = "consumes";
-	private static final String PROP_DEPRECATED = "deprecated";
-	private static final String PROP_DESCRIPTION = "description";
-	private static final String PROP_EXTERNAL_DOCS = "externalDocs";
-	private static final String PROP_OPERATION_ID = "operationId";
-	private static final String PROP_PARAMETERS = "parameters";
-	private static final String PROP_PRODUCES = "produces";
-	private static final String PROP_RESPONSES = "responses";
-	private static final String PROP_SCHEMES = "schemes";
-	private static final String PROP_SECURITY = "security";
-	private static final String PROP_SUMMARY = "summary";
-	private static final String PROP_TAGS = "tags";
+	private static final String PROP_consumes = "consumes";
+	private static final String PROP_deprecated = "deprecated";
+	private static final String PROP_description = "description";
+	private static final String PROP_externalDocs = "externalDocs";
+	private static final String PROP_operationId = "operationId";
+	private static final String PROP_parameters = "parameters";
+	private static final String PROP_produces = "produces";
+	private static final String PROP_responses = "responses";
+	private static final String PROP_schemes = "schemes";
+	private static final String PROP_security = "security";
+	private static final String PROP_summary = "summary";
+	private static final String PROP_tags = "tags";
 
 	private String summary, description, operationId;
 	private Boolean deprecated;
@@ -465,18 +466,18 @@ public class Operation extends SwaggerElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case PROP_CONSUMES -> toType(getConsumes(), type);
-			case PROP_DEPRECATED -> toType(getDeprecated(), type);
-			case PROP_DESCRIPTION -> toType(getDescription(), type);
-			case PROP_EXTERNAL_DOCS -> toType(getExternalDocs(), type);
-			case PROP_OPERATION_ID -> toType(getOperationId(), type);
-			case PROP_PARAMETERS -> toType(getParameters(), type);
-			case PROP_PRODUCES -> toType(getProduces(), type);
-			case PROP_RESPONSES -> toType(getResponses(), type);
-			case PROP_SCHEMES -> toType(getSchemes(), type);
-			case PROP_SECURITY -> toType(getSecurity(), type);
-			case PROP_SUMMARY -> toType(getSummary(), type);
-			case PROP_TAGS -> toType(getTags(), type);
+			case PROP_consumes -> toType(getConsumes(), type);
+			case PROP_deprecated -> toType(getDeprecated(), type);
+			case PROP_description -> toType(getDescription(), type);
+			case PROP_externalDocs -> toType(getExternalDocs(), type);
+			case PROP_operationId -> toType(getOperationId(), type);
+			case PROP_parameters -> toType(getParameters(), type);
+			case PROP_produces -> toType(getProduces(), type);
+			case PROP_responses -> toType(getResponses(), type);
+			case PROP_schemes -> toType(getSchemes(), type);
+			case PROP_security -> toType(getSecurity(), type);
+			case PROP_summary -> toType(getSummary(), type);
+			case PROP_tags -> toType(getTags(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -668,18 +669,18 @@ public class Operation extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(ne(consumes), PROP_CONSUMES)
-			.addIf(nn(deprecated), PROP_DEPRECATED)
-			.addIf(nn(description), PROP_DESCRIPTION)
-			.addIf(nn(externalDocs), PROP_EXTERNAL_DOCS)
-			.addIf(nn(operationId), PROP_OPERATION_ID)
-			.addIf(ne(parameters), PROP_PARAMETERS)
-			.addIf(ne(produces), PROP_PRODUCES)
-			.addIf(ne(responses), PROP_RESPONSES)
-			.addIf(ne(schemes), PROP_SCHEMES)
-			.addIf(ne(security), PROP_SECURITY)
-			.addIf(nn(summary), PROP_SUMMARY)
-			.addIf(ne(tags), PROP_TAGS)
+			.addIf(ne(consumes), PROP_consumes)
+			.addIf(nn(deprecated), PROP_deprecated)
+			.addIf(nn(description), PROP_description)
+			.addIf(nn(externalDocs), PROP_externalDocs)
+			.addIf(nn(operationId), PROP_operationId)
+			.addIf(ne(parameters), PROP_parameters)
+			.addIf(ne(produces), PROP_produces)
+			.addIf(ne(responses), PROP_responses)
+			.addIf(ne(schemes), PROP_schemes)
+			.addIf(ne(security), PROP_security)
+			.addIf(nn(summary), PROP_summary)
+			.addIf(ne(tags), PROP_tags)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -690,18 +691,18 @@ public class Operation extends SwaggerElement {
 	public Operation set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case PROP_CONSUMES -> setConsumes(toListBuilder(value, MediaType.class).sparse().build());
-			case PROP_DEPRECATED -> setDeprecated(toBoolean(value));
-			case PROP_DESCRIPTION -> setDescription(s(value));
-			case PROP_EXTERNAL_DOCS -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case PROP_OPERATION_ID -> setOperationId(s(value));
-			case PROP_PARAMETERS -> setParameters(toListBuilder(value, ParameterInfo.class).sparse().build());
-			case PROP_PRODUCES -> setProduces(toListBuilder(value, MediaType.class).sparse().build());
-			case PROP_RESPONSES -> setResponses(toMapBuilder(value, String.class, ResponseInfo.class).sparse().build());
-			case PROP_SCHEMES -> setSchemes(toListBuilder(value, String.class).sparse().addAny(value).build());
-			case PROP_SECURITY -> setSecurity((List)toListBuilder(value, MapStringList.class).sparse().build());
-			case PROP_SUMMARY -> setSummary(s(value));
-			case PROP_TAGS -> setTags(toListBuilder(value, String.class).sparse().build());
+			case PROP_consumes -> setConsumes(toListBuilder(value, MediaType.class).sparse().build());
+			case PROP_deprecated -> setDeprecated(toBoolean(value));
+			case PROP_description -> setDescription(s(value));
+			case PROP_externalDocs -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			case PROP_operationId -> setOperationId(s(value));
+			case PROP_parameters -> setParameters(toListBuilder(value, ParameterInfo.class).sparse().build());
+			case PROP_produces -> setProduces(toListBuilder(value, MediaType.class).sparse().build());
+			case PROP_responses -> setResponses(toMapBuilder(value, String.class, ResponseInfo.class).sparse().build());
+			case PROP_schemes -> setSchemes(toListBuilder(value, String.class).sparse().addAny(value).build());
+			case PROP_security -> setSecurity((List)toListBuilder(value, MapStringList.class).sparse().build());
+			case PROP_summary -> setSummary(s(value));
+			case PROP_tags -> setTags(toListBuilder(value, String.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;

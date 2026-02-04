@@ -230,8 +230,23 @@ class Common_UonTest extends TestBase {
 		r2.r3 = r3;
 		r3.r1 = r1;
 
-		// No recursion detection
-		assertThrowsWithMessage(Exception.class, "It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.", ()->s.build().serialize(r1));
+		// No recursion detection - DEBUG: Check what exception is thrown
+		assertThrowsWithMessage(Exception.class, "It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.", ()->{
+			try {
+				s.build().serialize(r1);
+			} catch (Throwable t) {
+				System.out.println("DEBUG: Exception type: " + t.getClass().getName());
+				System.out.println("DEBUG: Exception class: " + t.getClass());
+				System.out.println("DEBUG: Is StackOverflowError? " + (t instanceof StackOverflowError));
+				System.out.println("DEBUG: Is SerializeException? " + (t instanceof org.apache.juneau.serializer.SerializeException));
+				System.out.println("DEBUG: Stack trace (without message):");
+				for (StackTraceElement ste : t.getStackTrace()) {
+					System.out.println("  " + ste);
+				}
+				// Re-throw to let assertThrowsWithMessage handle it
+				throw t;
+			}
+		});
 
 		// Recursion detection, no ignore
 		s.detectRecursions();

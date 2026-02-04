@@ -89,21 +89,22 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class Operation extends OpenApiElement {
 
 	// Property name constants
-	private static final String PROP_CALLBACKS = "callbacks";
-	private static final String PROP_DEPRECATED = "deprecated";
-	private static final String PROP_DESCRIPTION = "description";
-	private static final String PROP_EXTERNAL_DOCS = "externalDocs";
-	private static final String PROP_OPERATION_ID = "operationId";
-	private static final String PROP_PARAMETERS = "parameters";
-	private static final String PROP_REQUEST_BODY = "requestBody";
-	private static final String PROP_RESPONSES = "responses";
-	private static final String PROP_SECURITY = "security";
-	private static final String PROP_SERVERS = "servers";
-	private static final String PROP_SUMMARY = "summary";
-	private static final String PROP_TAGS = "tags";
+	private static final String PROP_callbacks = "callbacks";
+	private static final String PROP_deprecated = "deprecated";
+	private static final String PROP_description = "description";
+	private static final String PROP_externalDocs = "externalDocs";
+	private static final String PROP_operationId = "operationId";
+	private static final String PROP_parameters = "parameters";
+	private static final String PROP_requestBody = "requestBody";
+	private static final String PROP_responses = "responses";
+	private static final String PROP_security = "security";
+	private static final String PROP_servers = "servers";
+	private static final String PROP_summary = "summary";
+	private static final String PROP_tags = "tags";
 
 	private List<String> tags = list();
 	private String summary, description, operationId;
@@ -347,18 +348,18 @@ public class Operation extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case PROP_TAGS -> toType(getTags(), type);
-			case PROP_SUMMARY -> toType(getSummary(), type);
-			case PROP_DESCRIPTION -> toType(getDescription(), type);
-			case PROP_OPERATION_ID -> toType(getOperationId(), type);
-			case PROP_EXTERNAL_DOCS -> toType(getExternalDocs(), type);
-			case PROP_PARAMETERS -> toType(getParameters(), type);
-			case PROP_REQUEST_BODY -> toType(getRequestBody(), type);
-			case PROP_RESPONSES -> toType(getResponses(), type);
-			case PROP_CALLBACKS -> toType(getCallbacks(), type);
-			case PROP_DEPRECATED -> toType(getDeprecated(), type);
-			case PROP_SECURITY -> toType(getSecurity(), type);
-			case PROP_SERVERS -> toType(getServers(), type);
+			case PROP_tags -> toType(getTags(), type);
+			case PROP_summary -> toType(getSummary(), type);
+			case PROP_description -> toType(getDescription(), type);
+			case PROP_operationId -> toType(getOperationId(), type);
+			case PROP_externalDocs -> toType(getExternalDocs(), type);
+			case PROP_parameters -> toType(getParameters(), type);
+			case PROP_requestBody -> toType(getRequestBody(), type);
+			case PROP_responses -> toType(getResponses(), type);
+			case PROP_callbacks -> toType(getCallbacks(), type);
+			case PROP_deprecated -> toType(getDeprecated(), type);
+			case PROP_security -> toType(getSecurity(), type);
+			case PROP_servers -> toType(getServers(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -488,18 +489,18 @@ public class Operation extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(ne(callbacks), PROP_CALLBACKS)
-			.addIf(nn(deprecated), PROP_DEPRECATED)
-			.addIf(nn(description), PROP_DESCRIPTION)
-			.addIf(nn(externalDocs), PROP_EXTERNAL_DOCS)
-			.addIf(nn(operationId), PROP_OPERATION_ID)
-			.addIf(ne(parameters), PROP_PARAMETERS)
-			.addIf(nn(requestBody), PROP_REQUEST_BODY)
-			.addIf(ne(responses), PROP_RESPONSES)
-			.addIf(ne(security), PROP_SECURITY)
-			.addIf(ne(servers), PROP_SERVERS)
-			.addIf(nn(summary), PROP_SUMMARY)
-			.addIf(ne(tags), PROP_TAGS)
+			.addIf(ne(callbacks), PROP_callbacks)
+			.addIf(nn(deprecated), PROP_deprecated)
+			.addIf(nn(description), PROP_description)
+			.addIf(nn(externalDocs), PROP_externalDocs)
+			.addIf(nn(operationId), PROP_operationId)
+			.addIf(ne(parameters), PROP_parameters)
+			.addIf(nn(requestBody), PROP_requestBody)
+			.addIf(ne(responses), PROP_responses)
+			.addIf(ne(security), PROP_security)
+			.addIf(ne(servers), PROP_servers)
+			.addIf(nn(summary), PROP_summary)
+			.addIf(ne(tags), PROP_tags)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -509,18 +510,18 @@ public class Operation extends OpenApiElement {
 	public Operation set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case PROP_CALLBACKS -> setCallbacks(toMapBuilder(value, String.class, Callback.class).sparse().build());
-			case PROP_DEPRECATED -> setDeprecated(toType(value, Boolean.class));
-			case PROP_DESCRIPTION -> setDescription(s(value));
-			case PROP_EXTERNAL_DOCS -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case PROP_OPERATION_ID -> setOperationId(s(value));
-			case PROP_PARAMETERS -> setParameters(toListBuilder(value, Parameter.class).sparse().build());
-			case PROP_REQUEST_BODY -> setRequestBody(toType(value, RequestBodyInfo.class));
-			case PROP_RESPONSES -> setResponses(toMapBuilder(value, String.class, Response.class).sparse().build());
-			case PROP_SECURITY -> setSecurity(toListBuilder(value, SecurityRequirement.class).sparse().build());
-			case PROP_SERVERS -> setServers(toListBuilder(value, Server.class).sparse().build());
-			case PROP_SUMMARY -> setSummary(s(value));
-			case PROP_TAGS -> setTags(toListBuilder(value, String.class).sparse().build());
+			case PROP_callbacks -> setCallbacks(toMapBuilder(value, String.class, Callback.class).sparse().build());
+			case PROP_deprecated -> setDeprecated(toType(value, Boolean.class));
+			case PROP_description -> setDescription(s(value));
+			case PROP_externalDocs -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			case PROP_operationId -> setOperationId(s(value));
+			case PROP_parameters -> setParameters(toListBuilder(value, Parameter.class).sparse().build());
+			case PROP_requestBody -> setRequestBody(toType(value, RequestBodyInfo.class));
+			case PROP_responses -> setResponses(toMapBuilder(value, String.class, Response.class).sparse().build());
+			case PROP_security -> setSecurity(toListBuilder(value, SecurityRequirement.class).sparse().build());
+			case PROP_servers -> setServers(toListBuilder(value, Server.class).sparse().build());
+			case PROP_summary -> setSummary(s(value));
+			case PROP_tags -> setTags(toListBuilder(value, String.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;

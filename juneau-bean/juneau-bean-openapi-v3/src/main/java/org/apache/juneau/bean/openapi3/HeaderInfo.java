@@ -75,19 +75,20 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
+@SuppressWarnings("java:S115")
 public class HeaderInfo extends OpenApiElement {
 
 	// Property name constants
-	private static final String PROP_ALLOW_EMPTY_VALUE = "allowEmptyValue";
-	private static final String PROP_ALLOW_RESERVED = "allowReserved";
-	private static final String PROP_DEPRECATED = "deprecated";
-	private static final String PROP_DESCRIPTION = "description";
-	private static final String PROP_EXAMPLES = "examples";
-	private static final String PROP_EXPLODE = "explode";
-	private static final String PROP_REF = "$ref";
-	private static final String PROP_REQUIRED = "required";
-	private static final String PROP_SCHEMA = "schema";
-	private static final String PROP_X_EXAMPLE = "x-example";
+	private static final String PROP_allowEmptyValue = "allowEmptyValue";
+	private static final String PROP_allowReserved = "allowReserved";
+	private static final String PROP_deprecated = "deprecated";
+	private static final String PROP_description = "description";
+	private static final String PROP_examples = "examples";
+	private static final String PROP_explode = "explode";
+	private static final String PROP_ref = "$ref";
+	private static final String PROP_required = "required";
+	private static final String PROP_schema = "schema";
+	private static final String PROP_xExample = "x-example";
 
 	private String description, ref;
 	private Boolean required, explode, deprecated, allowEmptyValue, allowReserved;
@@ -148,16 +149,16 @@ public class HeaderInfo extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case PROP_DESCRIPTION -> toType(getDescription(), type);
-			case PROP_REQUIRED -> toType(getRequired(), type);
-			case PROP_EXPLODE -> toType(getExplode(), type);
-			case PROP_DEPRECATED -> toType(getDeprecated(), type);
-			case PROP_ALLOW_EMPTY_VALUE -> toType(getAllowEmptyValue(), type);
-			case PROP_ALLOW_RESERVED -> toType(getAllowReserved(), type);
-			case PROP_REF -> toType(getRef(), type);
-			case PROP_SCHEMA -> toType(getSchema(), type);
-			case PROP_X_EXAMPLE -> toType(getExample(), type);
-			case PROP_EXAMPLES -> toType(getExamples(), type);
+			case PROP_description -> toType(getDescription(), type);
+			case PROP_required -> toType(getRequired(), type);
+			case PROP_explode -> toType(getExplode(), type);
+			case PROP_deprecated -> toType(getDeprecated(), type);
+			case PROP_allowEmptyValue -> toType(getAllowEmptyValue(), type);
+			case PROP_allowReserved -> toType(getAllowReserved(), type);
+			case PROP_ref -> toType(getRef(), type);
+			case PROP_schema -> toType(getSchema(), type);
+			case PROP_xExample -> toType(getExample(), type);
+			case PROP_examples -> toType(getExamples(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -259,16 +260,16 @@ public class HeaderInfo extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(ref), PROP_REF)
-			.addIf(nn(allowEmptyValue), PROP_ALLOW_EMPTY_VALUE)
-			.addIf(nn(allowReserved), PROP_ALLOW_RESERVED)
-			.addIf(nn(deprecated), PROP_DEPRECATED)
-			.addIf(nn(description), PROP_DESCRIPTION)
-			.addIf(ne(examples), PROP_EXAMPLES)
-			.addIf(nn(explode), PROP_EXPLODE)
-			.addIf(nn(required), PROP_REQUIRED)
-			.addIf(nn(schema), PROP_SCHEMA)
-			.addIf(nn(example), PROP_X_EXAMPLE)
+			.addIf(nn(ref), PROP_ref)
+			.addIf(nn(allowEmptyValue), PROP_allowEmptyValue)
+			.addIf(nn(allowReserved), PROP_allowReserved)
+			.addIf(nn(deprecated), PROP_deprecated)
+			.addIf(nn(description), PROP_description)
+			.addIf(ne(examples), PROP_examples)
+			.addIf(nn(explode), PROP_explode)
+			.addIf(nn(required), PROP_required)
+			.addIf(nn(schema), PROP_schema)
+			.addIf(nn(example), PROP_xExample)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -305,16 +306,16 @@ public class HeaderInfo extends OpenApiElement {
 	public HeaderInfo set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case PROP_REF -> setRef(s(value));
-			case PROP_ALLOW_EMPTY_VALUE -> setAllowEmptyValue(toBoolean(value));
-			case PROP_ALLOW_RESERVED -> setAllowReserved(toBoolean(value));
-			case PROP_DEPRECATED -> setDeprecated(toBoolean(value));
-			case PROP_DESCRIPTION -> setDescription(s(value));
-			case PROP_EXAMPLES -> setExamples(toMapBuilder(value, String.class, Example.class).sparse().build());
-			case PROP_EXPLODE -> setExplode(toBoolean(value));
-			case PROP_REQUIRED -> setRequired(toBoolean(value));
-			case PROP_SCHEMA -> setSchema(toType(value, SchemaInfo.class));
-			case PROP_X_EXAMPLE -> setExample(value);
+			case PROP_ref -> setRef(s(value));
+			case PROP_allowEmptyValue -> setAllowEmptyValue(toBoolean(value));
+			case PROP_allowReserved -> setAllowReserved(toBoolean(value));
+			case PROP_deprecated -> setDeprecated(toBoolean(value));
+			case PROP_description -> setDescription(s(value));
+			case PROP_examples -> setExamples(toMapBuilder(value, String.class, Example.class).sparse().build());
+			case PROP_explode -> setExplode(toBoolean(value));
+			case PROP_required -> setRequired(toBoolean(value));
+			case PROP_schema -> setSchema(toType(value, SchemaInfo.class));
+			case PROP_xExample -> setExample(value);
 			default -> {
 				super.set(property, value);
 				yield this;
