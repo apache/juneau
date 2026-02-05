@@ -162,6 +162,7 @@ public class StringMatcherFactory extends MatcherFactory {
 	/**
 	 * Default reusable matcher.
 	 */
+	@SuppressWarnings("java:S6541") // Stateless factory, singleton for convenience
 	public static final StringMatcherFactory DEFAULT = new StringMatcherFactory();
 
 	@Override

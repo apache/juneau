@@ -307,6 +307,7 @@ public class NumberMatcherFactory extends MatcherFactory {
 	/**
 	 * Default reusable matcher.
 	 */
+	@SuppressWarnings("java:S6541") // Stateless factory, singleton for convenience
 	public static final NumberMatcherFactory DEFAULT = new NumberMatcherFactory();
 
 	@Override

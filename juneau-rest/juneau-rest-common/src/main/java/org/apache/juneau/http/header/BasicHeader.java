@@ -143,6 +143,15 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 		this.supplier = copyFrom.supplier;
 	}
 
+	@Override
+	public BasicHeader clone() {
+		BasicHeader cloned = new BasicHeader(this);
+		if (this.elements != null) {
+			cloned.elements = this.elements.clone();
+		}
+		return cloned;
+	}
+
 	/**
 	 * Provides an object for performing assertions against the name of this header.
 	 *

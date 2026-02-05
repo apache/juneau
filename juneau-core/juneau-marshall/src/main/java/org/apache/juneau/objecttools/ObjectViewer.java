@@ -58,6 +58,7 @@ public class ObjectViewer implements ObjectTool<ViewArgs> {
 	/**
 	 * Default reusable searcher.
 	 */
+	@SuppressWarnings("java:S6541") // Stateless utility, singleton for convenience
 	public static final ObjectViewer DEFAULT = new ObjectViewer();
 
 	/**
