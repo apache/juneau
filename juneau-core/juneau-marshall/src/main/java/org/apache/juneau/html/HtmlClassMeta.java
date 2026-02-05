@@ -49,21 +49,21 @@ public class HtmlClassMeta extends ExtendedClassMeta {
 	public HtmlClassMeta(ClassMeta<?> cm, HtmlMetaProvider mp) {
 		super(cm);
 
-		var noTables = Value.<Boolean>empty();
-		var noTableHeaders = Value.<Boolean>empty();
-		var format = Value.<HtmlFormat>empty();
-		var render = Value.<HtmlRender<?>>empty();
+		var noTables2 = Value.<Boolean>empty();
+		var noTableHeaders2 = Value.<Boolean>empty();
+		var format2 = Value.<HtmlFormat>empty();
+		var render2 = Value.<HtmlRender<?>>empty();
 
 		Consumer<Html> c = x -> {
 			if (x.noTables())
-				noTables.set(true);
+				noTables2.set(true);
 			if (x.noTableHeaders())
-				noTableHeaders.set(true);
+				noTableHeaders2.set(true);
 			if (x.format() != HtmlFormat.HTML)
-				format.set(x.format());
+				format2.set(x.format());
 			if (x.render() != HtmlRender.class) {
 				try {
-					render.set(x.render().getDeclaredConstructor().newInstance());
+					render2.set(x.render().getDeclaredConstructor().newInstance());
 				} catch (Exception e) {
 					throw toRex(e);
 				}
@@ -71,10 +71,10 @@ public class HtmlClassMeta extends ExtendedClassMeta {
 		};
 		cm.forEachAnnotation(Html.class, x -> true, c);
 
-		this.noTables = noTables.orElse(false);
-		this.noTableHeaders = noTableHeaders.orElse(false);
-		this.render = render.orElse(null);
-		this.format = format.orElse(HtmlFormat.HTML);
+		this.noTables = noTables2.orElse(false);
+		this.noTableHeaders = noTableHeaders2.orElse(false);
+		this.render = render2.orElse(null);
+		this.format = format2.orElse(HtmlFormat.HTML);
 	}
 
 	/**

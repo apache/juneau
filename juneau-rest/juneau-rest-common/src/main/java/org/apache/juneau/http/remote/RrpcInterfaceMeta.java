@@ -57,20 +57,20 @@ public class RrpcInterfaceMeta {
 	 */
 	public RrpcInterfaceMeta(Class<?> c, String uri) {
 		this.c = c;
-		Value<String> path = Value.of("");
+		Value<String> path2 = Value.of("");
 		var ci = ClassInfo.of(c);
 
-		rstream(AP.find(Remote.class, ci)).map(x -> x.inner().path()).filter(Utils::ne).forEach(x -> path.set(trimSlashes(x)));
+		rstream(AP.find(Remote.class, ci)).map(x -> x.inner().path()).filter(Utils::ne).forEach(x -> path2.set(trimSlashes(x)));
 
-		Map<Method,RrpcInterfaceMethodMeta> methods = map();
-		ci.getPublicMethods().stream().forEach(x -> methods.put(x.inner(), new RrpcInterfaceMethodMeta(uri, x.inner())));
+		Map<Method,RrpcInterfaceMethodMeta> methods2 = map();
+		ci.getPublicMethods().stream().forEach(x -> methods2.put(x.inner(), new RrpcInterfaceMethodMeta(uri, x.inner())));
 
-		Map<String,RrpcInterfaceMethodMeta> methodsByPath = map();
-		methods.values().forEach(x -> methodsByPath.put(x.getPath(), x));
+		Map<String,RrpcInterfaceMethodMeta> methodsByPath2 = map();
+		methods2.values().forEach(x -> methodsByPath2.put(x.getPath(), x));
 
-		this.methods = u(methods);
-		this.methodsByPath = u(methodsByPath);
-		this.path = path.get();
+		this.methods = u(methods2);
+		this.methodsByPath = u(methodsByPath2);
+		this.path = path2.get();
 	}
 
 	/**

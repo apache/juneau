@@ -224,15 +224,15 @@ public class SerializedHeader extends BasicHeader {
 			Object v = value;
 			if (nn(supplier))
 				v = supplier.get();
-			HttpPartSchema schema = this.schema == null ? HttpPartSchema.DEFAULT : this.schema;
-			var def = schema.getDefault();
+			HttpPartSchema schema2 = this.schema == null ? HttpPartSchema.DEFAULT : this.schema;
+			var def = schema2.getDefault();
 			if (v == null) {
-				if ((def == null && ! schema.isRequired()) || (def == null && schema.isAllowEmptyValue()))
+				if ((def == null && ! schema2.isRequired()) || (def == null && schema2.isAllowEmptyValue()))
 					return null;
 			}
 			if (e(s(v)) && skipIfEmpty && def == null)
 				return null;
-			return serializer == null ? s(v) : serializer.serialize(HttpPartType.HEADER, schema, v);
+			return serializer == null ? s(v) : serializer.serialize(HttpPartType.HEADER, schema2, v);
 		} catch (SchemaValidationException e) {
 			throw rex(e, "Validation error on request {0} parameter ''{1}''=''{2}''", HttpPartType.HEADER, getName(), value);
 		} catch (SerializeException e) {

@@ -66,20 +66,20 @@ public class RemoteMeta {
 
 		var versionHeader = "Client-Version";
 		String clientVersion = null;
-		var headers = HeaderList.create().resolving();
+		var headers2 = HeaderList.create().resolving();
 
 		for (var r : remotes) {
 			if (ne(r.path()))
 				path = trimSlashes(resolve(r.path()));
 			for (var h : r.headers())
-				headers.append(stringHeader(resolve(h)));
+				headers2.append(stringHeader(resolve(h)));
 			if (ne(r.version()))
 				clientVersion = resolve(r.version());
 			if (ne(r.versionHeader()))
 				versionHeader = resolve(r.versionHeader());
 			if (isNotVoid(r.headerList())) {
 				try {
-					headers.append(r.headerList().getDeclaredConstructor().newInstance().getAll());
+					headers2.append(r.headerList().getDeclaredConstructor().newInstance().getAll());
 				} catch (Exception e) {
 					throw rex(e, "Could not instantiate HeaderSupplier class");
 				}
@@ -87,14 +87,14 @@ public class RemoteMeta {
 		}
 
 		if (nn(clientVersion))
-			headers.append(stringHeader(versionHeader, clientVersion));
+			headers2.append(stringHeader(versionHeader, clientVersion));
 
-		Map<Method,RemoteOperationMeta> operations = map();
+		Map<Method,RemoteOperationMeta> operations2 = map();
 		var path2 = path;
-		ci.getPublicMethods().stream().forEach(x -> operations.put(x.inner(), new RemoteOperationMeta(path2, x.inner(), "GET")));
+		ci.getPublicMethods().stream().forEach(x -> operations2.put(x.inner(), new RemoteOperationMeta(path2, x.inner(), "GET")));
 
-		this.operations = u(operations);
-		this.headers = headers;
+		this.operations = u(operations2);
+		this.headers = headers2;
 	}
 
 	/**

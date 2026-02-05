@@ -108,9 +108,9 @@ public abstract class RestServlet extends HttpServlet {
 	 * @return The path defined on this servlet, or an empty string if not specified.
 	 */
 	public synchronized String getPath() {
-		var context = this.context.get();
-		if (nn(context))
-			return context.getFullPath();
+		var context2 = this.context.get();
+		if (nn(context2))
+			return context2.getFullPath();
 		var ci = ClassInfo.of(getClass());
 		// @formatter:off
 		return rstream(AP.find(Rest.class, ci))

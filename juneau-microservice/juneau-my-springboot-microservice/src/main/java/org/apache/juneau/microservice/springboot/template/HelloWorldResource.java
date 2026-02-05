@@ -71,9 +71,9 @@ public class HelloWorldResource extends BasicRestObject {
 	 */
 	@RestGet(path = "/*", summary = "Responds with \"Hello world!\"")
 	public String sayHello() {
-		var message = this.message;
+		var message2 = this.message;
 		if (nn(messageProvider) && messageProvider.isPresent())
-			message = messageProvider.get().get();
-		return message;
+			message2 = messageProvider.get().get();
+		return message2;
 	}
 }

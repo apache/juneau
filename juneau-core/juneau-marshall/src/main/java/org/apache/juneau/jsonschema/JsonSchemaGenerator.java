@@ -873,9 +873,9 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		ignoreTypes = builder.ignoreTypes == null ? Collections.emptySet() : new TreeSet<>(builder.ignoreTypes);
 		useBeanDefs = builder.useBeanDefs;
 
-		Set<Pattern> ignoreTypePatterns = set();
-		ignoreTypes.forEach(y -> split(y, x -> ignoreTypePatterns.add(Pattern.compile(x.replace(".", "\\.").replace("*", ".*")))));
-		this.ignoreTypePatterns = u(new ArrayList<>(ignoreTypePatterns));
+		Set<Pattern> ignoreTypePatterns2 = set();
+		ignoreTypes.forEach(y -> split(y, x -> ignoreTypePatterns2.add(Pattern.compile(x.replace(".", "\\.").replace("*", ".*")))));
+		this.ignoreTypePatterns = u(new ArrayList<>(ignoreTypePatterns2));
 
 		try {
 			beanDefMapperBean = beanDefMapper.getDeclaredConstructor().newInstance();

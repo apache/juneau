@@ -334,7 +334,7 @@ class ExecutableInfo_Test extends TestBase {
 				// Verify no package prefix (no dots before the class name, except for inner classes)
 				assertFalse(fullName.matches("^[a-z][a-z0-9]*(\\.[a-z][a-z0-9]*)+\\."), "Full name should not have package prefix when package is null: " + fullName);
 			}
-		} catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException e2) {
 			// If class not found, skip this part of the test
 		}
 	}

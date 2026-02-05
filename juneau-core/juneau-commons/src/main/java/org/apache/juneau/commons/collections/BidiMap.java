@@ -182,10 +182,10 @@ public class BidiMap<K,V> implements Map<K,V> {
 	 * @param builder The builder containing the initial entries.
 	 */
 	public BidiMap(Builder<K,V> builder) {
-		var forward = builder.map.entrySet().stream().filter(x -> nn(x.getKey()) && nn(x.getValue())).collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> b, LinkedHashMap::new));
-		var reverse = builder.map.entrySet().stream().filter(x -> nn(x.getKey()) && nn(x.getValue())).collect(toMap(Map.Entry::getValue, Map.Entry::getKey, (a, b) -> b, LinkedHashMap::new));
-		this.forward = builder.unmodifiable ? unmodifiableMap(forward) : forward;
-		this.reverse = builder.unmodifiable ? unmodifiableMap(reverse) : reverse;
+		var forward2 = builder.map.entrySet().stream().filter(x -> nn(x.getKey()) && nn(x.getValue())).collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> b, LinkedHashMap::new));
+		var reverse2 = builder.map.entrySet().stream().filter(x -> nn(x.getKey()) && nn(x.getValue())).collect(toMap(Map.Entry::getValue, Map.Entry::getKey, (a, b) -> b, LinkedHashMap::new));
+		this.forward = builder.unmodifiable ? unmodifiableMap(forward2) : forward2;
+		this.reverse = builder.unmodifiable ? unmodifiableMap(reverse2) : reverse2;
 	}
 
 	/**

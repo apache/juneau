@@ -187,13 +187,13 @@ public class ResponseBeanMeta {
 		partParser = opt(b.partParser).map(x -> HttpPartParser.creator().type(x).apply(b.annotations).create());
 		schema = b.schema.build();
 
-		Map<String,ResponseBeanPropertyMeta> properties = map();
+		Map<String,ResponseBeanPropertyMeta> properties2 = map();
 
 		Map<String,ResponseBeanPropertyMeta> hm = map();
 		b.headerMethods.forEach((k, v) -> {
 			ResponseBeanPropertyMeta pm = v.build(partSerializer, partParser);
 			hm.put(k, pm);
-			properties.put(pm.getGetter().getName(), pm);
+			properties2.put(pm.getGetter().getName(), pm);
 		});
 		this.headerMethods = u(hm);
 
@@ -201,11 +201,11 @@ public class ResponseBeanMeta {
 		statusMethod = b.statusMethod == null ? null : b.statusMethod.build(opte(), opte());
 
 		if (nn(contentMethod))
-			properties.put(contentMethod.getGetter().getName(), contentMethod);
+			properties2.put(contentMethod.getGetter().getName(), contentMethod);
 		if (nn(statusMethod))
-			properties.put(statusMethod.getGetter().getName(), statusMethod);
+			properties2.put(statusMethod.getGetter().getName(), statusMethod);
 
-		this.properties = u(properties);
+		this.properties = u(properties2);
 	}
 
 	/**

@@ -1105,23 +1105,23 @@ public class BeanCreator2<T> {
 	 */
 	@SuppressWarnings({ "unchecked", "java:S3776", "java:S6541" })
 	private T findBeanImpl() {
-		var store = this.store;
-		var builder = explicitBuilder != null ? explicitBuilder : this.builder.get();  // Use explicit builder if set, otherwise get from supplier
+		var store2 = this.store;
+		var builder2 = explicitBuilder != null ? explicitBuilder : this.builder.get();  // Use explicit builder if set, otherwise get from supplier
 		T bean = null;
 		var methodComparator = comparing(MethodInfo::getParameterCount).reversed();
 		var constructorComparator = comparing(ConstructorInfo::getParameterCount).reversed();
 
-		if (builder != null) {
-			log("Builder detected: %s", builder.getClass().getName());
+		if (builder2 != null) {
+			log("Builder detected: %s", builder2.getClass().getName());
 
 			// Look for Builder.build()/create()/get() - REQUIRED
 			// Uses buildMethodNames configuration (defaults to "build", "create", "get")
 			// Check declared methods first to get the most specific override, then fall back to public methods
-			var buildMethod = info(builder.getClass()).getPublicMethods().stream()
+			var buildMethod = info(builder2.getClass()).getPublicMethods().stream()
 				.filter(x -> x.isAll(NOT_STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
 				.filter(x -> buildMethodNames.contains(x.getNameSimple()))
 				.filter(x -> opt(x).map(x2 -> x2.getReturnType()).filter(x2 -> x2.is(beanSubType.inner()) || x2.isParentOf(beanSubType)).isPresent()) // Accept methods that return beanSubType or a parent type of beanSubType
-				.filter(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, "Inject", "Autowired")) ? x.canResolveAllParameters(store) : x.getParameterCount() == 0)
+				.filter(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, "Inject", "Autowired")) ? x.canResolveAllParameters(store2) : x.getParameterCount() == 0)
 				.sorted(methodComparator)
 				.findFirst();
 
@@ -1129,7 +1129,7 @@ public class BeanCreator2<T> {
 				var method = buildMethod.get();
 				log("Found build method: %s", method.getNameFull());
 				log("Method declaring class: %s", method.getDeclaringClass().getName());
-				log("Builder class: %s", builder.getClass().getName());
+				log("Builder class: %s", builder2.getClass().getName());
 				var returnType = method.getReturnType();
 				log("Method return type: %s", returnType.getName());
 				log("Expected beanSubType: %s", beanSubType.getName());
@@ -1143,7 +1143,7 @@ public class BeanCreator2<T> {
 				}
 
 				// Call the builder method
-				Object builtBean = method.inject(store, builder);
+				Object builtBean = method.inject(store2, builder2);
 
 				// Builder build method must return the exact beanSubType
 				if (!returnType.is(beanSubType.inner())) {
@@ -1163,11 +1163,11 @@ public class BeanCreator2<T> {
 			// Builder was found but no appropriate build method was found
 			// Try fallback: look for ANY method on builder that returns the exact bean type
 			log("Attempting Builder.anything()");
-			var anyMethod = info(builder.getClass()).getPublicMethods().stream()
+			var anyMethod = info(builder2.getClass()).getPublicMethods().stream()
 				.filter(x -> x.isAll(NOT_STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
 				.filter(x -> !buildMethodNames.contains(x.getNameSimple())) // Skip standard build methods we already checked
 				.filter(x -> x.getReturnType().is(beanSubType.inner())) // Must return exact beanSubType, not parent
-				.filter(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, "Inject", "Autowired")) ? x.canResolveAllParameters(store) : x.getParameterCount() == 0)
+				.filter(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, "Inject", "Autowired")) ? x.canResolveAllParameters(store2) : x.getParameterCount() == 0)
 				.sorted(methodComparator)
 				.findFirst();
 
@@ -1177,7 +1177,7 @@ public class BeanCreator2<T> {
 				var returnType = method.getReturnType();
 
 				// Call the builder method
-				Object builtBean = method.inject(store, builder);
+				Object builtBean = method.inject(store2, builder2);
 
 				// Builder method must return the exact beanSubType
 				if (!returnType.is(beanSubType.inner())) {
@@ -1212,12 +1212,12 @@ public class BeanCreator2<T> {
 
 			if (hasAnyMethodWithRightReturnType && !hasBuildMethodWithRightReturnType) {
 				// Builder has a method returning the right type but not with the expected name
-				log("Builder detected but no appropriate build method found. Builder type: %s. Expected method names: %s", builder.getClass().getName(), buildMethodNames);
+				log("Builder detected but no appropriate build method found. Builder type: %s. Expected method names: %s", builder2.getClass().getName(), buildMethodNames);
 				// Fall through to factory methods/constructors
 			} else if (hasBuildMethodWithRightReturnType || isExplicitBuilder || isValidBuilder) {
 				// Builder has a build method with right return type (even if can't be called) or was explicitly set
 				// Throw exception unless fallback exists
-				log("Builder detected but no appropriate build method found. Builder type: %s. Expected method names: %s", builder.getClass().getName(), buildMethodNames);
+				log("Builder detected but no appropriate build method found. Builder type: %s. Expected method names: %s", builder2.getClass().getName(), buildMethodNames);
 
 				if (fallbackSupplier != null) {
 					log("Using fallback supplier");
@@ -1227,27 +1227,27 @@ public class BeanCreator2<T> {
 				}
 
 				log("Failed to create bean using builder");
-				throw exex("Could not instantiate class {0} using builder type {1}. Builder must have a build(), create(), or get() method that returns {0}. The method may have @Inject annotation to allow injected parameters.", beanSubType.getName(), builderTypeInfo != null ? builderTypeInfo.getName() : builder.getClass().getName());
+				throw exex("Could not instantiate class {0} using builder type {1}. Builder must have a build(), create(), or get() method that returns {0}. The method may have @Inject annotation to allow injected parameters.", beanSubType.getName(), builderTypeInfo != null ? builderTypeInfo.getName() : builder2.getClass().getName());
 			} else {
 				// Builder type is invalid and was auto-detected - fall through to factory methods/constructors
-				log("Builder detected but builder type is invalid. Builder type: %s. Falling back to factory methods/constructors.", builder.getClass().getName());
+				log("Builder detected but builder type is invalid. Builder type: %s. Falling back to factory methods/constructors.", builder2.getClass().getName());
 			}
 		}
 
 		// Look for Bean.factoryMethod().
 		log("Attempting Bean.factoryMethod()");
 		// If builder was detected but has no build method, pass it as extra bean for factory methods
-		Object[] factoryMethodExtraBeans = builder != null ? new Object[]{builder} : new Object[0];
+		Object[] factoryMethodExtraBeans = builder2 != null ? new Object[]{builder2} : new Object[0];
 		bean = beanSubType.getPublicMethods().stream()
 			.filter(x -> x.isAll(STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
 			.filter(x -> factoryMethodNames.contains(x.getNameSimple()))
 			.filter(x -> x.hasReturnType(beanSubType))
-			.filter(x -> x.canResolveAllParameters(store, factoryMethodExtraBeans))
+			.filter(x -> x.canResolveAllParameters(store2, factoryMethodExtraBeans))
 			.sorted(methodComparator)
 			.findFirst()
 			.map(x -> {
 				log("Found factory method: %s", x.getNameFull());
-				return (T)beanType.cast(x.inject(store, null, factoryMethodExtraBeans));
+				return (T)beanType.cast(x.inject(store2, null, factoryMethodExtraBeans));
 			})
 			.orElse(null);
 
@@ -1255,16 +1255,16 @@ public class BeanCreator2<T> {
 		if (bean == null) {
 			log("Attempting Bean() constructor");
 			// If builder was detected but has no build method, pass it as extra bean for constructors
-			Object[] constructorExtraBeans = builder != null ? new Object[]{builder} : new Object[0];
+			Object[] constructorExtraBeans = builder2 != null ? new Object[]{builder2} : new Object[0];
 			bean = beanSubType.getPublicConstructors().stream()
 				.filter(x -> x.isAll(NOT_DEPRECATED))
 				.filter(x -> x.isDeclaringClass(beanSubType))
-				.filter(x -> x.canResolveAllParameters(store, enclosingInstance, constructorExtraBeans))
+				.filter(x -> x.canResolveAllParameters(store2, enclosingInstance, constructorExtraBeans))
 				.sorted(constructorComparator)
 				.findFirst()
 				.map(x -> {
 					log("Found constructor: %s", x.getNameFull());
-					return (T)beanType.cast(x.inject(store, enclosingInstance, constructorExtraBeans));
+					return (T)beanType.cast(x.inject(store2, enclosingInstance, constructorExtraBeans));
 				})
 				.orElse(null);
 		}
@@ -1359,10 +1359,10 @@ public class BeanCreator2<T> {
 	private Object findBuilder() {
 
 		var bs = store;
-		var builderType = this.builderType.get();
+		var builderType2 = this.builderType.get();
 
 		// If no builder type was determined, return null (builder not needed)
-		if (builderType == null)
+		if (builderType2 == null)
 			return null;
 
 		Optional<Object> r;
@@ -1371,7 +1371,7 @@ public class BeanCreator2<T> {
 		r = beanSubType.getPublicMethods().stream()
 			.filter(x -> x.isAll(STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
 			.filter(x -> builderMethodNames.contains(x.getNameSimple()))
-			.filter(x -> x.hasReturnType(builderType))
+			.filter(x -> x.hasReturnType(builderType2))
 			.filter(x -> x.canResolveAllParameters(bs, enclosingInstance))
 			.sorted(comparing(MethodInfo::getParameterCount).reversed())
 			.findFirst()
@@ -1380,7 +1380,7 @@ public class BeanCreator2<T> {
 			return r.get();
 
 		// Step 2: Look for a public constructor on the builder type
-		r = builderType.getPublicConstructors().stream()
+		r = builderType2.getPublicConstructors().stream()
 			.filter(x -> x.isAll(NOT_DEPRECATED))
 			.filter(x -> x.canResolveAllParameters(bs, enclosingInstance))
 			.sorted(comparing(ConstructorInfo::getParameterCount).reversed())
@@ -1391,7 +1391,7 @@ public class BeanCreator2<T> {
 			return r.get();
 
 		// Step 3: Look for a protected constructor on the builder type
-		r = builderType.getDeclaredConstructors().stream()
+		r = builderType2.getDeclaredConstructors().stream()
 			.filter(x -> x.isAll(ElementFlag.PROTECTED, NOT_DEPRECATED))
 			.filter(x -> x.canResolveAllParameters(bs, enclosingInstance))
 			.sorted(comparing(ConstructorInfo::getParameterCount).reversed())

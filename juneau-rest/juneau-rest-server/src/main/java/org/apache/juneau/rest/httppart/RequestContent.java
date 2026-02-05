@@ -541,7 +541,7 @@ public class RequestContent {
 
 		if (nn(pm)) {
 			var p = pm.getParser();
-			var mediaType = pm.getMediaType();
+			var mediaType2 = pm.getMediaType();
 			// @formatter:off
 			var session = p
 				.createSession()
@@ -549,7 +549,7 @@ public class RequestContent {
 				.javaMethod(req.getOpContext().getJavaMethod())
 				.locale(locale)
 				.timeZone(timeZone.orElse(null))
-				.mediaType(mediaType)
+				.mediaType(mediaType2)
 				.apply(ReaderParser.Builder.class, x -> x.streamCharset(req.getCharset()))
 				.schema(schema)
 				.debug(req.isDebug() ? true : null)

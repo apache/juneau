@@ -397,8 +397,8 @@ public class RestResponse extends HttpServletResponseWrapper {
 						setHeader("content-encoding", encoding);
 				}
 			}
-			var sos = getOutputStream();
-			os = new FinishableServletOutputStream(encoder == null ? sos : encoder.getOutputStream(sos));
+			var sos2 = getOutputStream();
+			os = new FinishableServletOutputStream(encoder == null ? sos2 : encoder.getOutputStream(sos2));
 		}
 		return os;
 	}

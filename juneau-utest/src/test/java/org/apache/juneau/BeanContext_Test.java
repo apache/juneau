@@ -83,46 +83,46 @@ class BeanContext_Test extends TestBase {
 	@Test void c01_locale_fromSettings() {
 		Settings.get().setLocal("BeanContext.locale", "fr-CA");
 		try {
-			var bc = BeanContext.create().build();
-			assertEquals(Locale.forLanguageTag("fr-CA"), bc.getLocale());
+			var bc2 = BeanContext.create().build();
+			assertEquals(Locale.forLanguageTag("fr-CA"), bc2.getLocale());
 		} finally {
 			Settings.get().clearLocal();
 		}
 	}
 
 	@Test void c02_locale_defaultWhenNotSet() {
-		var bc = BeanContext.create().build();
-		assertEquals(Locale.getDefault(), bc.getLocale());
+		var bc2 = BeanContext.create().build();
+		assertEquals(Locale.getDefault(), bc2.getLocale());
 	}
 
 	@Test void c03_mediaType_fromSettings() {
 		Settings.get().setLocal("BeanContext.mediaType", "application/json");
 		try {
-			var bc = BeanContext.create().build();
-			assertEquals(MediaType.of("application/json"), bc.getMediaType());
+			var bc2 = BeanContext.create().build();
+			assertEquals(MediaType.of("application/json"), bc2.getMediaType());
 		} finally {
 			Settings.get().clearLocal();
 		}
 	}
 
 	@Test void c04_mediaType_nullWhenNotSet() {
-		var bc = BeanContext.create().build();
-		assertNull(bc.getMediaType());
+		var bc2 = BeanContext.create().build();
+		assertNull(bc2.getMediaType());
 	}
 
 	@Test void c05_timeZone_fromSettings() {
 		Settings.get().setLocal("BeanContext.timeZone", "America/New_York");
 		try {
-			var bc = BeanContext.create().build();
-			assertEquals(TimeZone.getTimeZone("America/New_York"), bc.getTimeZone());
+			var bc2 = BeanContext.create().build();
+			assertEquals(TimeZone.getTimeZone("America/New_York"), bc2.getTimeZone());
 		} finally {
 			Settings.get().clearLocal();
 		}
 	}
 
 	@Test void c06_timeZone_nullWhenNotSet() {
-		var bc = BeanContext.create().build();
-		assertNull(bc.getTimeZone());
+		var bc2 = BeanContext.create().build();
+		assertNull(bc2.getTimeZone());
 	}
 
 	//====================================================================================================

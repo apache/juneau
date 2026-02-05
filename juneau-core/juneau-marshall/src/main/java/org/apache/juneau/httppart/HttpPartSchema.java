@@ -3684,31 +3684,31 @@ public class HttpPartSchema {
 		exclusiveMinimumValue = b.exclusiveMinimumValue;
 
 		// Calculate parse type
-		Class<?> parsedType = Object.class;
+		Class<?> parsedType2 = Object.class;
 		if (type == ARRAY) {
 			if (nn(items))
-				parsedType = Array.newInstance(items.parsedType.inner(), 0).getClass();
+				parsedType2 = Array.newInstance(items.parsedType.inner(), 0).getClass();
 		} else if (type == BOOLEAN) {
-			parsedType = Boolean.class;
+			parsedType2 = Boolean.class;
 		} else if (type == INTEGER) {
 			if (format == INT64)
-				parsedType = Long.class;
+				parsedType2 = Long.class;
 			else
-				parsedType = Integer.class;
+				parsedType2 = Integer.class;
 		} else if (type == NUMBER) {
 			if (format == DOUBLE)
-				parsedType = Double.class;
+				parsedType2 = Double.class;
 			else
-				parsedType = Float.class;
+				parsedType2 = Float.class;
 		} else if (type == STRING) {
 			if (format == BYTE || format == BINARY || format == BINARY_SPACED)
-				parsedType = byte[].class;
+				parsedType2 = byte[].class;
 			else if (format == DATE || format == DATE_TIME)
-				parsedType = Calendar.class;
+				parsedType2 = Calendar.class;
 			else
-				parsedType = String.class;
+				parsedType2 = String.class;
 		}
-		this.parsedType = BeanContext.DEFAULT.getClassMeta(parsedType);
+		this.parsedType = BeanContext.DEFAULT.getClassMeta(parsedType2);
 
 		if (b.noValidate)
 			return;
@@ -4251,10 +4251,10 @@ public class HttpPartSchema {
 						throw new SchemaValidationException("Maximum number of items exceeded.");
 					if (! isValidUniqueItems(o))
 						throw new SchemaValidationException("Duplicate items not allowed.");
-					HttpPartSchema items = getItems();
-					if (nn(items))
+					HttpPartSchema items2 = getItems();
+					if (nn(items2))
 						for (var i = 0; i < Array.getLength(o); i++)
-							items.validateOutput(Array.get(o, i), bc);
+							items2.validateOutput(Array.get(o, i), bc);
 				} else if (cm.isCollection()) {
 					Collection<?> c = (Collection<?>)o;
 					if (! isValidMinItems(c))
@@ -4263,9 +4263,9 @@ public class HttpPartSchema {
 						throw new SchemaValidationException("Maximum number of items exceeded.");
 					if (! isValidUniqueItems(c))
 						throw new SchemaValidationException("Duplicate items not allowed.");
-					HttpPartSchema items = getItems();
-					if (nn(items))
-						c.forEach(x -> items.validateOutput(x, bc));
+					HttpPartSchema items2 = getItems();
+					if (nn(items2))
+						c.forEach(x -> items2.validateOutput(x, bc));
 				}
 				break;
 			}

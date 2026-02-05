@@ -360,29 +360,29 @@ public class Messages extends ResourceBundle {
 			setParent(parent);
 		this.locale = locale == null ? Locale.getDefault() : locale;
 
-		var keyMap = new TreeMap<String,String>();
+		var keyMap2 = new TreeMap<String,String>();
 
 		var cn = cns(c) + '.';
 		if (nn(rb)) {
 			rb.keySet().forEach(x -> {
-				keyMap.put(x, x);
+				keyMap2.put(x, x);
 				if (x.startsWith(cn)) {
 					var shortKey = x.substring(cn.length());
-					keyMap.put(shortKey, x);
+					keyMap2.put(shortKey, x);
 				}
 			});
 		}
 		if (nn(parent2)) {
 			parent2.keySet().forEach(x -> {
-				keyMap.put(x, x);
+				keyMap2.put(x, x);
 				if (x.startsWith(cn)) {
 					var shortKey = x.substring(cn.length());
-					keyMap.put(shortKey, x);
+					keyMap2.put(shortKey, x);
 				}
 			});
 		}
 
-		this.keyMap = u(copyOf(keyMap));
+		this.keyMap = u(copyOf(keyMap2));
 		this.rbKeys = rb == null ? Collections.emptySet() : rb.keySet();
 	}
 
@@ -419,8 +419,8 @@ public class Messages extends ResourceBundle {
 		var mb = localizedMessages.get(locale);
 		if (mb == null) {
 			var parent = this.parent2 == null ? null : this.parent2.forLocale(locale);
-			var rb = this.rb == null ? null : findBundle(this.rb.getBaseBundleName(), locale, c.getClassLoader());
-			mb = new Messages(c, rb, locale, parent);
+			var rb2 = this.rb == null ? null : findBundle(this.rb.getBaseBundleName(), locale, c.getClassLoader());
+			mb = new Messages(c, rb2, locale, parent);
 			localizedMessages.put(locale, mb);
 		}
 		return mb;

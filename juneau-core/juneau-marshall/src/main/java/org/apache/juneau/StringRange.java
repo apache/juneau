@@ -64,35 +64,35 @@ public class StringRange {
 	 * @param e The parsed string range element.
 	 */
 	public StringRange(HeaderElement e) {
-		Float qValue = 1f;
+		Float qValue2 = 1f;
 
 		// The media type consists of everything up to the q parameter.
 		// The q parameter and stuff after is part of the range.
-		List<NameValuePair> extensions = list();
+		List<NameValuePair> extensions2 = list();
 		for (var p : e.getParameters()) {
 			if (p.getName().equals("q")) {
-				qValue = Float.parseFloat(p.getValue());
+				qValue2 = Float.parseFloat(p.getValue());
 			} else {
-				extensions.add(new BasicNameValuePair(p.getName(), p.getValue()));
+				extensions2.add(new BasicNameValuePair(p.getName(), p.getValue()));
 			}
 		}
 
-		this.qValue = qValue;
-		this.extensions = extensions.toArray(new NameValuePair[extensions.size()]);
+		this.qValue = qValue2;
+		this.extensions = extensions2.toArray(new NameValuePair[extensions2.size()]);
 		this.name = e.getName();
 
 		var sb = new StringBuffer();
 		sb.append(name);
 
 		// '1' is equivalent to specifying no qValue. If there's no extensions, then we won't include a qValue.
-		if (Float.compare(qValue.floatValue(), 1f) == 0) {
+		if (Float.compare(qValue2.floatValue(), 1f) == 0) {
 			if (this.extensions.length > 0) {
-				sb.append(";q=").append(qValue);
-				extensions.forEach(x -> sb.append(';').append(x.getName()).append('=').append(x.getValue()));
+				sb.append(";q=").append(qValue2);
+				extensions2.forEach(x -> sb.append(';').append(x.getName()).append('=').append(x.getValue()));
 			}
 		} else {
-			sb.append(";q=").append(qValue);
-			extensions.forEach(x -> sb.append(';').append(x.getName()).append('=').append(x.getValue()));
+			sb.append(";q=").append(qValue2);
+			extensions2.forEach(x -> sb.append(';').append(x.getName()).append('=').append(x.getValue()));
 		}
 		string = sb.toString();
 	}

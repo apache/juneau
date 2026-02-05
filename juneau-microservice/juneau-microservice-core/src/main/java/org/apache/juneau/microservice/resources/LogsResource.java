@@ -84,7 +84,7 @@ public class LogsResource extends BasicRestServlet {
 	@Response(schema = @Schema(description = "File or directory details"))
 	@Bean(properties = "type,name,size,lastModified,actions,files")
 	public static class FileResource {
-		static final FileFilter FILE_FILTER = f -> f.isDirectory() || f.getName().endsWith(".log");
+		static final FileFilter FILE_FILTER = f2 -> f2.isDirectory() || f2.getName().endsWith(".log");
 		static final Comparator<FileResource> FILE_COMPARATOR = (o1, o2) -> {
 			int c = o1.getType().compareTo(o2.getType());
 			return c != 0 ? c : o1.getName().compareTo(o2.getName());

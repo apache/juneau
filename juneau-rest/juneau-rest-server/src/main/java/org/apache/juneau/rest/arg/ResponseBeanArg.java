@@ -82,10 +82,10 @@ public class ResponseBeanArg implements RestOpArg {
 		v.listener(o -> {
 			RestRequest req = opSession.getRequest();
 			RestResponse res = opSession.getResponse();
-			ResponseBeanMeta meta = req.getOpContext().getResponseBeanMeta(o);
-			if (meta == null)
-				meta = ResponseBeanArg.this.meta;
-			res.setResponseBeanMeta(meta);
+			ResponseBeanMeta meta2 = req.getOpContext().getResponseBeanMeta(o);
+			if (meta2 == null)
+				meta2 = ResponseBeanArg.this.meta;
+			res.setResponseBeanMeta(meta2);
 			res.setContent(o);
 		});
 		return v;

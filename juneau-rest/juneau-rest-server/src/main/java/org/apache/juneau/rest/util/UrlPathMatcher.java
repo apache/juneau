@@ -92,25 +92,25 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 				c = c + "/W";
 			this.comparator = c;
 
-			String[] parts = new UrlPath(pattern).getParts();
+			String[] parts2 = new UrlPath(pattern).getParts();
 
-			this.hasRemainder = parts.length > 0 && "*".equals(parts[parts.length - 1]);
+			this.hasRemainder = parts2.length > 0 && "*".equals(parts2[parts2.length - 1]);
 
-			parts = hasRemainder ? Arrays.copyOf(parts, parts.length - 1) : parts;
+			parts2 = hasRemainder ? Arrays.copyOf(parts2, parts2.length - 1) : parts2;
 
-			this.parts = parts;
-			this.vars = new String[parts.length];
-			List<String> vars = list();
+			this.parts = parts2;
+			this.vars = new String[parts2.length];
+			List<String> vars2 = list();
 
-			for (var i = 0; i < parts.length; i++) {
-				Matcher m = VAR_PATTERN.matcher(parts[i]);
+			for (var i = 0; i < parts2.length; i++) {
+				Matcher m = VAR_PATTERN.matcher(parts2[i]);
 				if (m.matches()) {
 					this.vars[i] = m.group(1);
-					vars.add(this.vars[i]);
+					vars2.add(this.vars[i]);
 				}
 			}
 
-			this.varKeys = vars.isEmpty() ? null : vars.toArray(new String[vars.size()]);
+			this.varKeys = vars2.isEmpty() ? null : vars2.toArray(new String[vars2.size()]);
 		}
 
 		@Override

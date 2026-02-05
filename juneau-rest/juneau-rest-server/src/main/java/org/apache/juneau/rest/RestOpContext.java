@@ -1991,18 +1991,18 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			if (v.get().isEmpty()) {
 				var mi = MethodInfo.of(restMethod);
 				String p = null;
-				String httpMethod = null;
+				String httpMethod2 = null;
 				if (mi.hasAnnotation(RestGet.class))
-					httpMethod = "get";
+					httpMethod2 = "get";
 				else if (mi.hasAnnotation(RestPut.class))
-					httpMethod = "put";
+					httpMethod2 = "put";
 				else if (mi.hasAnnotation(RestPost.class))
-					httpMethod = "post";
+					httpMethod2 = "post";
 				else if (mi.hasAnnotation(RestDelete.class))
-					httpMethod = "delete";
+					httpMethod2 = "delete";
 				else if (mi.hasAnnotation(RestOp.class)) {
 					// @formatter:off
-					httpMethod = AP.find(RestOp.class, mi)
+					httpMethod2 = AP.find(RestOp.class, mi)
 						.stream()
 						.map(x -> x.inner().method())
 						.filter(Utils::ne)
@@ -2011,7 +2011,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 					// @formatter:on
 				}
 
-				p = HttpUtils.detectHttpPath(restMethod, httpMethod);
+				p = HttpUtils.detectHttpPath(restMethod, httpMethod2);
 
 				if (dotAll && ! p.endsWith("/*"))
 					p += "/*";
@@ -2085,9 +2085,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 		RestGuardList getGuards() {
 			var b = guards();
-			var roleGuard = opt(this.roleGuard).orElseGet(CollectionUtils::set);
+			var roleGuard2 = opt(this.roleGuard).orElseGet(CollectionUtils::set);
 
-			for (var rg : roleGuard) {
+			for (var rg : roleGuard2) {
 				try {
 					b.append(new RoleBasedRestGuard(rolesDeclared, rg));
 				} catch (java.text.ParseException e1) {

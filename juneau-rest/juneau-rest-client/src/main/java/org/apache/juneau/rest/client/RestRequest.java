@@ -1911,20 +1911,20 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			var hl = headerData;
 			var h = hl.getLast("Content-Type");
 			var contentType = h.isPresent() ? h.get().getValue() : null;
-			var serializer = this.serializer;
-			if (serializer == null)
-				serializer = client.getMatchingSerializer(contentType);
-			if (contentType == null && nn(serializer))
-				contentType = serializer.getPrimaryMediaType().toString();
+			var serializer2 = this.serializer;
+			if (serializer2 == null)
+				serializer2 = client.getMatchingSerializer(contentType);
+			if (contentType == null && nn(serializer2))
+				contentType = serializer2.getPrimaryMediaType().toString();
 
 			// Pick the parser if it hasn't been overridden.
 			h = hl.getLast("Accept");
 			var accept = h.isPresent() ? h.get().getValue() : null;
-			var parser = this.parser;
-			if (parser == null)
-				parser = client.getMatchingParser(accept);
-			if (accept == null && nn(parser))
-				hl.set(Accept.of(parser.getPrimaryMediaType()));
+			var parser2 = this.parser;
+			if (parser2 == null)
+				parser2 = client.getMatchingParser(accept);
+			if (accept == null && nn(parser2))
+				hl.set(Accept.of(parser2.getPrimaryMediaType()));
 
 			headerData.stream().map(SimpleHeader::new).filter(SimplePart::isValid).forEach(request::addHeader);
 
@@ -1951,7 +1951,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					entity = (HttpEntity)input2;
 				} else if (input2 instanceof HttpEntity input3) {
 					if (input3 instanceof SerializedEntity input4) {
-						entity = input4.copyWith(serializer, contentSchema);
+						entity = input4.copyWith(serializer2, contentSchema);
 					} else {
 						entity = input3;
 					}
@@ -1959,8 +1959,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					entity = readerEntity(input3, getRequestContentType(TEXT_PLAIN));
 				else if (input2 instanceof InputStream input3)
 					entity = streamEntity(input3, -1, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
-				else if (nn(serializer))
-					entity = serializedEntity(input2, serializer, contentSchema).setContentType(contentType);
+				else if (nn(serializer2))
+					entity = serializedEntity(input2, serializer2, contentSchema).setContentType(contentType);
 				else {
 					if (client.hasSerializers()) {
 						if (contentType == null)
@@ -1975,7 +1975,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			}
 
 			try {
-				response = client.createResponse(this, client.run(target, request, context), parser);
+				response = client.createResponse(this, client.run(target, request, context), parser2);
 			} catch (Exception e) {
 				throw e;
 			}

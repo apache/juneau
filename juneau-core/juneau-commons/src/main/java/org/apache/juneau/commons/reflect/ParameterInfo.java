@@ -913,15 +913,15 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 				}
 
 				// Handle List<T> or Set<T>
-				var inner = opt(ptu.inner()).orElse(Object.class);
-				if (eq(inner, List.class) || eq(inner, Set.class)) {
+				var inner2 = opt(ptu.inner()).orElse(Object.class);
+				if (eq(inner2, List.class) || eq(inner2, Set.class)) {
 					if (parameterizedType instanceof ParameterizedType pt2) {
 						var typeArgs = pt2.getActualTypeArguments();
 						if (typeArgs.length > 0 && typeArgs[0] instanceof Class<?> elementClass) {
 							elementType = elementClass;
 						}
 					}
-				} else if (eq(inner, Map.class)) {
+				} else if (eq(inner2, Map.class)) {
 					// Handle Map<String,T> - extract value type (second type argument)
 					if (parameterizedType instanceof ParameterizedType pt2) {
 						var typeArgs = pt2.getActualTypeArguments();

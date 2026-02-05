@@ -4509,12 +4509,12 @@ public class RestContext extends Context {
 
 			// Initialize our child resources.
 			for (var o : children) {
-				String path = null;
+				String path2 = null;
 				Supplier<?> so;
 				RestContext.Builder cb = null;
 
 				if (o instanceof RestChild o2) {
-					path = o2.path;
+					path2 = o2.path;
 					var o3 = o2.resource;
 					so = () -> o3;
 					cb = RestContext.create(o3.getClass(), restContext, inner);
@@ -4536,8 +4536,8 @@ public class RestContext extends Context {
 					}
 				}
 
-				if (nn(path))
-					cb.path(path);
+				if (nn(path2))
+					cb.path(path2);
 
 				var cc = cb.init(so).build();
 
@@ -5835,11 +5835,11 @@ public class RestContext extends Context {
 	public synchronized RestContext postInit() throws ServletException {
 		if (initialized.get())
 			return this;
-		var resource = getResource();
+		var resource2 = getResource();
 		var mi = ClassInfo.of(getResource()).getPublicMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class)).orElse(null);
 		if (nn(mi)) {
 			try {
-				mi.accessible().invoke(resource, this);
+				mi.accessible().invoke(resource2, this);
 			} catch (ExecutableException e) {
 				throw new ServletException(e.unwrap());
 			}

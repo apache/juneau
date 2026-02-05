@@ -554,9 +554,9 @@ public class CallLogger {
 		if (! isEnabled(rule, req))
 			return;
 
-		var level = firstNonNull(rule.getLevel(), this.level);
+		var level2 = firstNonNull(rule.getLevel(), this.level);
 
-		if (level == Level.OFF)
+		if (level2 == Level.OFF)
 			return;
 
 		var e = cast(Throwable.class, req.getAttribute("Exception"));
@@ -656,7 +656,7 @@ public class CallLogger {
 			sb.append("\n=== END ======================================================================");
 		}
 
-		log(level, sb.toString(), e);
+		log(level2, sb.toString(), e);
 
 	}
 
@@ -773,9 +773,9 @@ public class CallLogger {
 	 * @return <jk>true</jk> if logging is enabled for this request.
 	 */
 	protected boolean isEnabled(CallLoggerRule rule, HttpServletRequest req) {
-		var enabled = firstNonNull(rule.getEnabled(), this.enabled);
-		var enabledTest = firstNonNull(rule.getEnabledTest(), this.enabledTest);
-		return enabled.isEnabled(enabledTest.test(req));
+		var enabled2 = firstNonNull(rule.getEnabled(), this.enabled);
+		var enabledTest2 = firstNonNull(rule.getEnabledTest(), this.enabledTest);
+		return enabled2.isEnabled(enabledTest2.test(req));
 	}
 
 	/**

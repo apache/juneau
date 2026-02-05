@@ -303,8 +303,8 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 
 		// Handle arrays - format component type recursively, then add array notation
 		if (dim > 0) {
-			var componentType = getComponentType();
-			componentType.appendNameFormatted(sb, nameFormat, includeTypeParams, separator, arrayFormat);
+			var componentType2 = getComponentType();
+			componentType2.appendNameFormatted(sb, nameFormat, includeTypeParams, separator, arrayFormat);
 
 			if (arrayFormat == ClassArrayFormat.WORD) {
 				for (var i = 0; i < dim; i++)
@@ -2662,9 +2662,9 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 		var list = new ArrayList<AnnotationInfo<Annotation>>();
 
 		// On all parent classes and interfaces (properly traversed to avoid duplicates)
-		var parentsAndInterfaces = getParentsAndInterfaces();
-		for (var i = 0; i < parentsAndInterfaces.size(); i++) {
-			var ci = parentsAndInterfaces.get(i);
+		var parentsAndInterfaces2 = getParentsAndInterfaces();
+		for (var i = 0; i < parentsAndInterfaces2.size(); i++) {
+			var ci = parentsAndInterfaces2.get(i);
 			// Add declared annotations from this class/interface
 			for (var a : ci.inner().getDeclaredAnnotations())
 				streamRepeated(a).forEach(a2 -> list.add(ai(ci, a2)));
@@ -2744,15 +2744,15 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 		var set = new LinkedHashSet<ClassInfo>();
 
 		// Process all parent classes (includes this class)
-		var parents = getParents();
-		for (var i = 0; i < parents.size(); i++) {
-			var parent = parents.get(i);
+		var parents2 = getParents();
+		for (var i = 0; i < parents2.size(); i++) {
+			var parent = parents2.get(i);
 			set.add(parent);
 
 			// Process interfaces declared on this parent (and their parent interfaces)
-			var declaredInterfaces = parent.getDeclaredInterfaces();
-			for (var j = 0; j < declaredInterfaces.size(); j++)
-				addInterfaceHierarchy(set, declaredInterfaces.get(j));
+			var declaredInterfaces2 = parent.getDeclaredInterfaces();
+			for (var j = 0; j < declaredInterfaces2.size(); j++)
+				addInterfaceHierarchy(set, declaredInterfaces2.get(j));
 		}
 
 		return u(toList(set));
@@ -2886,9 +2886,9 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	public boolean isInjectCollectionType() {
 		if (isArray())
 			return true;
-		var inner = opt(this.inner()).orElse(Object.class);
+		var inner2 = opt(this.inner()).orElse(Object.class);
 		// Only match the exact interfaces, not their implementations (matches Spring's behavior)
-		return eq(inner, List.class) || eq(inner, Set.class) || eq(inner, Map.class);
+		return eq(inner2, List.class) || eq(inner2, Set.class) || eq(inner2, Map.class);
 	}
 
 	/**

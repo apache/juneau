@@ -156,15 +156,15 @@ public class SerializedPart extends BasicPart {
 	public String getValue() {
 		try {
 			Object v = unwrap(value);
-			HttpPartSchema schema = this.schema == null ? HttpPartSchema.DEFAULT : this.schema;
-			var def = schema.getDefault();
+			HttpPartSchema schema2 = this.schema == null ? HttpPartSchema.DEFAULT : this.schema;
+			var def = schema2.getDefault();
 			if (v == null) {
-				if ((def == null && ! schema.isRequired()) || (def == null && schema.isAllowEmptyValue()))
+				if ((def == null && ! schema2.isRequired()) || (def == null && schema2.isAllowEmptyValue()))
 					return null;
 			}
 			if (e(s(v)) && skipIfEmpty && def == null)
 				return null;
-			return serializer == null ? s(v) : serializer.serialize(type, schema, v);
+			return serializer == null ? s(v) : serializer.serialize(type, schema2, v);
 		} catch (SchemaValidationException e) {
 			throw rex(e, "Validation error on request {0} part ''{1}''=''{2}''", type, getName(), value);
 		} catch (SerializeException e) {

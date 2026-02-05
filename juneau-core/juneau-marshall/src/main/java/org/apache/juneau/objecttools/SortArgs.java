@@ -85,16 +85,16 @@ public class SortArgs {
 	 * 	</ul>
 	 */
 	public SortArgs(Collection<String> sortArgs) {
-		Map<String,Boolean> sort = map();
+		Map<String,Boolean> sort2 = map();
 		sortArgs.forEach(s -> {
 			var isDesc = false;
 			if (endsWithAny(s, '-', '+')) {
 				isDesc = endsWith(s, '-');
 				s = s.substring(0, s.length() - 1);
 			}
-			sort.put(s, isDesc);
+			sort2.put(s, isDesc);
 		});
-		this.sort = u(sort);
+		this.sort = u(sort2);
 	}
 
 	/**

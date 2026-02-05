@@ -573,8 +573,8 @@ public class Microservice implements ConfigEventListener {
 		// --------------------------------------------------------------------------------
 		// Try to get the manifest file if it wasn't already set.
 		// --------------------------------------------------------------------------------
-		var manifest = builder.manifest;
-		if (manifest == null) {
+		var manifest2 = builder.manifest;
+		if (manifest2 == null) {
 			var m = new Manifest();
 
 			// If running within an eclipse workspace, need to get it from the file system.
@@ -596,17 +596,17 @@ public class Microservice implements ConfigEventListener {
 					}
 				}
 			}
-			manifest = new ManifestFile(m);
+			manifest2 = new ManifestFile(m);
 		}
-		ManifestFileVar.init(manifest);
-		this.manifest = manifest;
+		ManifestFileVar.init(manifest2);
+		this.manifest = manifest2;
 
 		// --------------------------------------------------------------------------------
 		// Try to resolve the configuration if not specified.
 		// --------------------------------------------------------------------------------
-		var config = builder.config;
+		var config2 = builder.config;
 		var configBuilder = builder.configBuilder.varResolver(builder.varResolver.build()).store(MemoryStore.DEFAULT);
-		if (config == null) {
+		if (config2 == null) {
 			var store = builder.configStore;
 			var cfs = workingDir == null ? FileStore.DEFAULT : FileStore.create().directory(workingDir).build();
 			for (var name : getCandidateConfigNames()) {
@@ -626,12 +626,12 @@ public class Microservice implements ConfigEventListener {
 					}
 				}
 			}
-			config = configBuilder.build();
+			config2 = configBuilder.build();
 		}
-		this.config = config;
+		this.config = config2;
 		Config.setSystemDefault(this.config);
 		this.config.addListener(this);
-		this.varResolver = builder.varResolver.bean(Config.class, config).build();
+		this.varResolver = builder.varResolver.bean(Config.class, config2).build();
 
 		// --------------------------------------------------------------------------------
 		// Initialize console commands.
@@ -667,9 +667,9 @@ public class Microservice implements ConfigEventListener {
 					while (true) {
 						out.append("> ").flush();
 						var line = in.nextLine();
-						var args = new Args(line);
-						if (! args.isEmpty())
-							executeCommand(args, in, out);
+						var args2 = new Args(line);
+						if (! args2.isEmpty())
+							executeCommand(args2, in, out);
 					}
 				}
 			};
@@ -1117,13 +1117,13 @@ public class Microservice implements ConfigEventListener {
 		if (nn(configName))
 			return Collections.singletonList(configName);
 
-		var args = getArgs();
+		var args2 = getArgs();
 		if (getArgs().hasArg("configFile"))
-			return Collections.singletonList(args.getArg("configFile"));
+			return Collections.singletonList(args2.getArg("configFile"));
 
-		var manifest = getManifest();
-		if (manifest.containsKey("Main-Config"))
-			return Collections.singletonList(manifest.getString("Main-Config"));
+		var manifest2 = getManifest();
+		if (manifest2.containsKey("Main-Config"))
+			return Collections.singletonList(manifest2.getString("Main-Config"));
 
 		return Config.getCandidateSystemDefaultConfigNames();
 	}

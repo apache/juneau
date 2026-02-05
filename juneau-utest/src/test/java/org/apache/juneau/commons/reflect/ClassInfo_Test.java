@@ -546,8 +546,8 @@ public class ClassInfo_Test extends TestBase {
 		assertEquals(String[].class, arrayType.inner());
 
 		// Multi-dimensional
-		var ci2 = ClassInfo.of(String[].class);
-		var arrayType2 = ci2.arrayType();
+		var ci22 = ClassInfo.of(String[].class);
+		var arrayType2 = ci22.arrayType();
 		assertNotNull(arrayType2);
 		assertEquals(String[][].class, arrayType2.inner());
 
@@ -586,8 +586,8 @@ public class ClassInfo_Test extends TestBase {
 		assertThrows(ClassCastException.class, () -> ci.asSubclass(Integer.class));
 
 		// For types without inner class, should return null
-		var ci2 = ClassInfo.of((Class<?>)null, pType);
-		assertNull(ci2.asSubclass(CharSequence.class));
+		var ci22 = ClassInfo.of((Class<?>)null, pType);
+		assertNull(ci22.asSubclass(CharSequence.class));
 	}
 
 	//====================================================================================================
@@ -803,9 +803,9 @@ public class ClassInfo_Test extends TestBase {
 		assertThrows(ClassCastException.class, () -> ci.cast(42));
 
 		// For types without inner class, should return null
-		var ci2 = ClassInfo.of((Class<?>)null, pType);
-		assertNull(ci2.cast("test"));
-		assertNull(ci2.cast(null));
+		var ci22 = ClassInfo.of((Class<?>)null, pType);
+		assertNull(ci22.cast("test"));
+		assertNull(ci22.cast(null));
 	}
 
 	//====================================================================================================
@@ -869,8 +869,8 @@ public class ClassInfo_Test extends TestBase {
 	void a012c_equals() {
 		// Same class
 		var ci1 = ClassInfo.of(String.class);
-		var ci2 = ClassInfo.of(String.class);
-		assertEquals(ci1, ci2);
+		var ci22 = ClassInfo.of(String.class);
+		assertEquals(ci1, ci22);
 
 		// Different classes
 		var ci3 = ClassInfo.of(Integer.class);
@@ -1332,12 +1332,12 @@ public class ClassInfo_Test extends TestBase {
 		assertEquals("java.lang.String", ci.getNameFormatted(FULL, true, '$', BRACKETS));
 
 		// Inner class
-		var ci2 = ClassInfo.of(Map.Entry.class);
-		assertEquals("Entry", ci2.getNameFormatted(SIMPLE, false, '$', BRACKETS));
-		assertEquals("Map$Entry", ci2.getNameFormatted(SHORT, false, '$', BRACKETS));
-		assertEquals("Map.Entry", ci2.getNameFormatted(SHORT, false, '.', BRACKETS));
-		assertEquals("java.util.Map$Entry", ci2.getNameFormatted(FULL, false, '$', BRACKETS));
-		assertEquals("java.util.Map.Entry", ci2.getNameFormatted(FULL, false, '.', BRACKETS));
+		var ci22 = ClassInfo.of(Map.Entry.class);
+		assertEquals("Entry", ci22.getNameFormatted(SIMPLE, false, '$', BRACKETS));
+		assertEquals("Map$Entry", ci22.getNameFormatted(SHORT, false, '$', BRACKETS));
+		assertEquals("Map.Entry", ci22.getNameFormatted(SHORT, false, '.', BRACKETS));
+		assertEquals("java.util.Map$Entry", ci22.getNameFormatted(FULL, false, '$', BRACKETS));
+		assertEquals("java.util.Map.Entry", ci22.getNameFormatted(FULL, false, '.', BRACKETS));
 
 		// Arrays
 		var ci3 = ClassInfo.of(String[].class);
