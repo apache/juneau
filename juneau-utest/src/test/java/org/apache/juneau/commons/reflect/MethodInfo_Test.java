@@ -33,6 +33,7 @@ import org.junit.jupiter.api.*;
 
 import static org.apache.juneau.commons.utils.Utils.*;
 
+@SuppressWarnings("java:S1186")
 class MethodInfo_Test extends TestBase {
 
 	@Documented

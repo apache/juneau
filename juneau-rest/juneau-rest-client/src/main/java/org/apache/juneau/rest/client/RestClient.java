@@ -6968,6 +6968,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			final RemoteMeta rm = new RemoteMeta(interfaceClass);
 
 			@Override /* Overridden from InvocationHandler */
+			@SuppressWarnings("java:S3776")
 			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 				var rom = rm.getOperationMeta(method);
 

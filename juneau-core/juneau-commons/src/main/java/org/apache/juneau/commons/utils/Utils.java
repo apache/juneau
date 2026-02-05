@@ -1731,6 +1731,7 @@ public class Utils {
 	 *
 	 * @param snippet The snippet of code to run.
 	 */
+	@SuppressWarnings("java:S1181") // Need to catch Throwable to handle all exception types including Error
 	public static void safe(Snippet snippet) {
 		try {
 			snippet.run();
@@ -1762,6 +1763,7 @@ public class Utils {
 	 * @see #safe(Snippet)
 	 * @see #safeOpt(ThrowingSupplier)
 	 */
+	@SuppressWarnings("java:S1181") // Need to catch Throwable to handle all exception types including Error
 	public static void quiet(Snippet snippet) {
 		try {
 			snippet.run();
@@ -1787,6 +1789,7 @@ public class Utils {
 	 * @param exceptionMapper A function that converts the thrown throwable into a runtime exception.
 	 * @throws RuntimeException The exception returned by the exception mapper if the snippet throws a throwable.
 	 */
+	@SuppressWarnings("java:S1181") // Need to catch Throwable to handle all exception types including Error
 	public static void safe(Snippet snippet, Function<Throwable, RuntimeException> exceptionMapper) {
 		try {
 			snippet.run();

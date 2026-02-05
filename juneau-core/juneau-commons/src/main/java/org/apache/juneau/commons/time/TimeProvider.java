@@ -42,6 +42,7 @@ import java.time.*;
  * 	<li class='jm'>{@link GranularZonedDateTime}
  * </ul>
  */
+@SuppressWarnings("java:S6541") // Intentional singleton for extensibility
 public class TimeProvider {
 
 	/**

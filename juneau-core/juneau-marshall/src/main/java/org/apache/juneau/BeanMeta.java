@@ -596,8 +596,6 @@ public class BeanMeta<T> {
 			} else {
 				i.remove();
 			}
-		} catch (ClassNotFoundException e) {
-			throw bex(c, lm(e));
 		} catch (Exception e) {
 			throw bex(c, lm(e));
 		}

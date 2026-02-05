@@ -44,6 +44,7 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.opentest4j.*;
 
+@SuppressWarnings("java:S1186")
 class RrpcInterface_Test extends TestBase {
 
 	private static final Input[] INPUT = {

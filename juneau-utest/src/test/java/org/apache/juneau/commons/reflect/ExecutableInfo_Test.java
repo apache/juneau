@@ -32,7 +32,7 @@ import java.util.stream.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"java:S3008", "java:S5961"})
+@SuppressWarnings({"java:S3008", "java:S5961", "java:S1186"})
 class ExecutableInfo_Test extends TestBase {
 
 	private static void check(String expected, Object o) {

@@ -29,6 +29,7 @@ import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S1186")
 class ConfigMapListener_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

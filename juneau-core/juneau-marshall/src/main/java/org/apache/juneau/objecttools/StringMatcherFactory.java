@@ -46,6 +46,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ObjectTools">Object Tools</a>
  * </ul>
  */
+@SuppressWarnings("java:S6541") // Stateless utility, singleton for convenience
 public class StringMatcherFactory extends MatcherFactory {
 
 	/**

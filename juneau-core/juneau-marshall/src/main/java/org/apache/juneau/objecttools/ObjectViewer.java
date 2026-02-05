@@ -52,7 +52,7 @@ import org.apache.juneau.internal.*;
 
  * </ul>
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({ "unchecked", "rawtypes", "java:S6541" }) // Stateless utility, singleton for convenience
 public class ObjectViewer implements ObjectTool<ViewArgs> {
 
 	/**

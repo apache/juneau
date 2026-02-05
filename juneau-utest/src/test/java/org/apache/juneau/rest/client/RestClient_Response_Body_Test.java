@@ -43,7 +43,7 @@ import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S5961")
+@SuppressWarnings({"java:S5961", "java:S1186"})
 class RestClient_Response_Body_Test extends TestBase {
 
 	public static class ABean {

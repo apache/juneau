@@ -1025,6 +1025,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 	}
 
+	@SuppressWarnings("java:S3776")
 	private Object setPropertyValue(BeanMap<?> m, String pName, Object value1, Object bean, boolean isMap, boolean isCollection, BeanSession session) throws ParseException {
 		try {
 			var r = (bc.isBeanMapPutReturnsOldValue() || isMap || isCollection) && (nn(getter) || nn(field)) ? get(m, pName) : null;

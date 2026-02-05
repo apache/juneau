@@ -44,6 +44,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S1186")
 class RestClient_Test extends TestBase {
 
 	public static class ABean {

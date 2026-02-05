@@ -55,7 +55,7 @@ import org.apache.juneau.*;
 
  * </ul>
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({ "unchecked", "rawtypes", "java:S6541" }) // Stateless utility, singleton for convenience
 public class ObjectSorter implements ObjectTool<SortArgs> {
 	private static class SortEntry implements Comparable {
 		Object o;

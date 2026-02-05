@@ -40,7 +40,7 @@ import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"java:S3008", "java:S5961"})
+@SuppressWarnings({"java:S3008", "java:S5961", "java:S1186"})
 public class ClassInfo_Test extends TestBase {
 
 	@Documented

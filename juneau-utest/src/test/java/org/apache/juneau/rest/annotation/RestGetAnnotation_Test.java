@@ -28,6 +28,7 @@ import org.apache.juneau.rest.matcher.*;
 import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S1186")
 class RestGetAnnotation_Test extends TestBase {
 
 	private static final String CNAME = RestGetAnnotation_Test.class.getName();

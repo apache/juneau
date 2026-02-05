@@ -32,7 +32,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.Name;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"java:S117", "java:S5961"})
+@SuppressWarnings({"java:S117", "java:S5961", "java:S1186"})
 class ParameterInfo_Test extends TestBase {
 
 	private static String originalDisableParamNameDetection;
