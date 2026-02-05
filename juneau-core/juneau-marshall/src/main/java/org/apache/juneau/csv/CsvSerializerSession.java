@@ -241,7 +241,10 @@ public class CsvSerializerSession extends WriterSerializerSession {
 
 			// TODO - Doesn't support DynaBeans.
 			if (ne(l)) {
-				var entryType = getClassMetaForObject(first(l).get());
+				var firstOpt = first(l);
+				if (!firstOpt.isPresent())
+					return;
+				var entryType = getClassMetaForObject(firstOpt.get());
 				if (entryType.isBean()) {
 					var bm = entryType.getBeanMeta();
 					var addComma = Flag.create();
@@ -269,7 +272,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 					});
 				} else if (entryType.isMap()) {
 					var addComma = Flag.create();
-					var first = (Map)first(l).get();
+					var first = (Map)firstOpt.get();
 					first.keySet().forEach(x -> {
 						addComma.ifSet(() -> w.w(',')).set();
 						w.writeEntry(x);

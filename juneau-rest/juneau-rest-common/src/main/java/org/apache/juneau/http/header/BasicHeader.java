@@ -205,7 +205,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * @return The value if present.
 	 */
 	public String get() {
-		return asString().get();
+		return asString().orElseThrow(() -> new NoSuchElementException("Header value is not present"));
 	}
 
 	@Override

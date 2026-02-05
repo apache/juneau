@@ -85,8 +85,11 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	public BasicHttpException(HttpResponse response) {
 		super((Throwable)null);
 		var h = response.getLastHeader("Thrown");
-		if (nn(h))
-			setMessage(thrown(h.getValue()).asParts().get().get(0).getMessage());
+		if (nn(h)) {
+			var partsOpt = thrown(h.getValue()).asParts();
+			if (partsOpt.isPresent() && !partsOpt.get().isEmpty())
+				setMessage(partsOpt.get().get(0).getMessage());
+		}
 		setHeaders(response.getAllHeaders());
 		setContent(response.getEntity());
 		setStatusCode(response.getStatusLine().getStatusCode());

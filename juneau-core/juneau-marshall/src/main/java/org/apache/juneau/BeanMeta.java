@@ -964,7 +964,7 @@ public class BeanMeta<T> {
 		if (l.size() > 1)
 			throw bex(ci, "Multiple instances of '@Beanc' found.");
 		if (l.size() == 1) {
-			var con = first(l).get().accessible();
+			var con = first(l).orElseThrow(() -> bex(ci, "No constructor found.")).accessible();
 			var args = ap.find(Beanc.class, con).stream().map(x -> x.inner().properties()).filter(StringUtils::isNotBlank).map(x -> split(x)).findFirst().orElse(liste());
 			if (! con.hasNumParameters(args.size())) {
 				if (ne(args))

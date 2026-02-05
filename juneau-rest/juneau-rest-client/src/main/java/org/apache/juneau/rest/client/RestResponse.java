@@ -513,7 +513,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 		var ct = getContentType();
 		String s = null;
 		if (ct.isPresent())
-			s = getContentType().get().getParameter("charset");
+			s = ct.get().getParameter("charset");
 		return e(s) ? "utf-8" : s;
 	}
 

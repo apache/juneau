@@ -332,7 +332,10 @@ public class MockServletRequest implements HttpServletRequest {
 	@Override /* Overridden from HttpServletRequest */
 	public long getDateHeader(String name) {
 		var s = getHeader(name);
-		return s == null ? 0 : date(s).asZonedDateTime().get().toInstant().toEpochMilli();
+		if (s == null)
+			return 0;
+		var zonedDateTimeOpt = date(s).asZonedDateTime();
+		return zonedDateTimeOpt.isPresent() ? zonedDateTimeOpt.get().toInstant().toEpochMilli() : 0;
 	}
 
 	@Override /* Overridden from HttpServletRequest */

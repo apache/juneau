@@ -63,10 +63,10 @@ public class BasicDebugEnablement extends DebugEnablement {
 	protected Builder init(BasicBeanStore beanStore) {
 		var b = super.init(beanStore);
 
-		var defaultSettings = beanStore.getBean(DefaultSettingsMap.class).get();
-		var builder = beanStore.getBean(RestContext.Builder.class).get();
-		var resource = beanStore.getBean(ResourceSupplier.class).get();
-		var varResolver = beanStore.getBean(VarResolver.class).get();
+		var defaultSettings = beanStore.getBean(DefaultSettingsMap.class).orElseThrow(() -> new IllegalStateException("DefaultSettingsMap not found"));
+		var builder = beanStore.getBean(RestContext.Builder.class).orElseThrow(() -> new IllegalStateException("RestContext.Builder not found"));
+		var resource = beanStore.getBean(ResourceSupplier.class).orElseThrow(() -> new IllegalStateException("ResourceSupplier not found"));
+		var varResolver = beanStore.getBean(VarResolver.class).orElseThrow(() -> new IllegalStateException("VarResolver not found"));
 		var ap = AP;
 
 		// Default debug enablement if not overridden at class/method level.

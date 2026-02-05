@@ -1989,7 +1989,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 			var thrown = response.getHeader("Thrown").asHeader(Thrown.class);
 			if (thrown.isPresent() && nn(rethrow)) {
-				var thrownPart = thrown.asParts().get().get(0);
+				var partsOpt = thrown.asParts();
+				if (!partsOpt.isPresent() || partsOpt.get().isEmpty())
+					return response;
+				var thrownPart = partsOpt.get().get(0);
 				var className = thrownPart.getClassName();
 				var message = thrownPart.getMessage();
 				for (var t : rethrow) {

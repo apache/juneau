@@ -446,7 +446,7 @@ public class RequestHttpPart {
 	 * @return The value if present.
 	 */
 	public String get() {
-		return asString().get();
+		return asString().orElseThrow(() -> new NoSuchElementException("Value is not present"));
 	}
 
 	/**
