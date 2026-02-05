@@ -37,6 +37,7 @@ import org.apache.juneau.commons.reflect.*;
  * </ul>
  *
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_detectRecursions)
 public abstract class BeanTraverseContext extends BeanContextable {
 
 	// Property name constants

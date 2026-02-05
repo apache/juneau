@@ -123,7 +123,7 @@ import jakarta.servlet.http.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_allowContentParam)
 public class RestContext extends Context {
 
 	// Property name constants

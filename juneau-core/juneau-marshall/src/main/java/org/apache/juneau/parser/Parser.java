@@ -138,6 +138,7 @@ import org.apache.juneau.xml.*;
 
  * </ul>
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_autoCloseStreams)
 public class Parser extends BeanContextable {
 
 	// Property name constants

@@ -45,6 +45,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='jc'>{@link WritableBeanStore} - Writable bean store interface
  * </ul>
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_bean)
 public class BasicBeanStore2 implements WritableBeanStore {
 
 	// Property name constants

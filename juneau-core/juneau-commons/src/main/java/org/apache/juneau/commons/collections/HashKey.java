@@ -88,6 +88,7 @@ import java.util.*;
  * 	Processor <jv>p</jv> = <jv>processorCache</jv>.<jsm>get</jsm>(<jv>key2</jv>);  <jc>// Returns cached instance</jc>
  * </p>
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_array)
 public class HashKey {
 
 	// Property name constants

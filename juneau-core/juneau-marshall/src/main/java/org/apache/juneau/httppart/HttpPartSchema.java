@@ -83,7 +83,7 @@ import org.apache.juneau.parser.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics">OpenApi Basics</a>
  * </ul>
  */
-@SuppressWarnings("java:S116")
+@SuppressWarnings({ "java:S116", "java:S115" }) // Constants use UPPER_snakeCase convention (e.g., PROP_additionalProperties)
 public class HttpPartSchema {
 
 	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;

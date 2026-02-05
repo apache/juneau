@@ -49,7 +49,7 @@ import org.apache.juneau.commons.io.*;
  * </p>
  *
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({ "resource", "java:S115" }) // Constants use UPPER_snakeCase convention (e.g., PROP_cachingLimit)
 public class BasicFileFinder implements FileFinder {
 
 	// Property name constants

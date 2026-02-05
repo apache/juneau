@@ -82,7 +82,7 @@ import org.apache.juneau.xml.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({ "java:S110", "java:S115" }) // Constants use UPPER_snakeCase convention (e.g., PROP_aside)
 public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	// Property name constants

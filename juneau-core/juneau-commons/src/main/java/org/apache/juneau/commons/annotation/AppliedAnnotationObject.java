@@ -119,6 +119,7 @@ import org.apache.juneau.commons.reflect.*;
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-commons.Annotations">Overview &gt; juneau-commons &gt; Annotations</a>
  * </ul>
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., ARG_value, ARG_values)
 public class AppliedAnnotationObject extends AnnotationObject {
 
 	// Argument name constants for assertArgNoNulls

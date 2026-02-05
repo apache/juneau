@@ -52,7 +52,7 @@ import org.apache.juneau.cp.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics">Simple Variable Language Basics</a>
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({ "resource", "java:S115" }) // Constants use UPPER_snakeCase convention (e.g., PROP_contextBeanStore)
 public class VarResolverSession {
 
 	// Property name constants

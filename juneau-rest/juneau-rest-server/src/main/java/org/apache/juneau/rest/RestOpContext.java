@@ -80,7 +80,7 @@ import jakarta.servlet.http.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpContext">RestOpContext</a>
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_defaultRequestFormData)
 public class RestOpContext extends Context implements Comparable<RestOpContext> {
 
 	// Property name constants

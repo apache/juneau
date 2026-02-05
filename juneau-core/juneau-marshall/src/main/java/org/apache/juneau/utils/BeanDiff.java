@@ -48,6 +48,7 @@ import org.apache.juneau.commons.collections.*;
  * </p>
  *
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_v1)
 public class BeanDiff {
 
 	// Property name constants

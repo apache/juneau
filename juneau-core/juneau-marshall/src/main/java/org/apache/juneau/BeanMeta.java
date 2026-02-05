@@ -66,6 +66,7 @@ import org.apache.juneau.commons.utils.*;
  *
  * @param <T> The class type that this metadata applies to.
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_class)
 public class BeanMeta<T> {
 
 	// Property name constants

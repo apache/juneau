@@ -35,6 +35,7 @@ import org.apache.juneau.rest.util.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics">juneau-rest-mock Basics</a>
  * </ul>
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_contextPath)
 class MockPathResolver {
 
 	// Property name constants

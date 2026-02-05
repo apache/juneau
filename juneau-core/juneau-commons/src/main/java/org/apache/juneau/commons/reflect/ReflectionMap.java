@@ -180,6 +180,7 @@ import org.apache.juneau.commons.utils.*;
  *
  * @param <V> The type of values stored in this map.
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_classEntries)
 public class ReflectionMap<V> {
 
 	// Property name constants

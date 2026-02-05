@@ -43,7 +43,7 @@ import org.apache.juneau.svl.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({ "java:S110", "java:S115" }) // Constants use UPPER_snakeCase convention (e.g., PROP_ctx)
 public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
 	// Property name constants

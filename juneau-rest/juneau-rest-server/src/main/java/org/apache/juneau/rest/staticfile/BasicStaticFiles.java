@@ -44,7 +44,7 @@ import org.apache.juneau.rest.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/StaticFiles">Static files</a>
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({ "resource", "java:S115" }) // Constants use UPPER_snakeCase convention (e.g., PROP_headers)
 public class BasicStaticFiles implements StaticFiles {
 
 	// Property name constants

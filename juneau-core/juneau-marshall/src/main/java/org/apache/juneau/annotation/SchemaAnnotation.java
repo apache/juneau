@@ -38,6 +38,7 @@ import org.apache.juneau.svl.*;
  * Utility classes and methods for the {@link Schema @Schema} annotation.
  *
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_additionalProperties)
 public class SchemaAnnotation {
 
 	// Property name constants

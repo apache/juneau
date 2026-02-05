@@ -30,6 +30,7 @@ import org.apache.juneau.commons.utils.*;
  * Represents a parsed URL path-info string.
  *
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_parts)
 public class UrlPath {
 
 	// Property name constants

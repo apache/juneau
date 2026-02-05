@@ -32,6 +32,7 @@ import org.apache.juneau.parser.*;
  * Utility classes and methods for the {@link SubItems @SubItems} annotation.
  *
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_collectionFormat)
 public class SubItemsAnnotation {
 
 	// Property name constants

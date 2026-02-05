@@ -32,6 +32,7 @@ import org.apache.juneau.commons.utils.*;
  * you a map containing <js>"{bar:123}"</js> and a remainder string containing <js>"baz/qux"</js>.
  *
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_r)
 public class UrlPathMatch {
 
 	// Property name constants

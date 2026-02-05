@@ -50,7 +50,7 @@ import org.apache.juneau.jsonschema.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({ "java:S110", "java:S115" }) // Constants use UPPER_snakeCase convention (e.g., PROP_generator)
 public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMetaProvider {
 
 	// Property name constants

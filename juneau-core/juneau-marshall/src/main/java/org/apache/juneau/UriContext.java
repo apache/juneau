@@ -45,6 +45,7 @@ import org.apache.juneau.parser.*;
  *
  */
 @Bean
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_aContextRoot)
 public class UriContext {
 
 	// Property name constants

@@ -44,6 +44,7 @@ import org.apache.juneau.swap.*;
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_beanContext, ARG_value)
 public abstract class BeanContextable extends Context {
 
 	// Property name constants

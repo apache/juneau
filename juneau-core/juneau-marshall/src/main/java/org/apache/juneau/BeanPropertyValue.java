@@ -24,6 +24,7 @@ import org.apache.juneau.commons.collections.*;
 /**
  * Represents a simple bean property value and the meta-data associated with it.
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_name)
 public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 
 	// Property name constants
