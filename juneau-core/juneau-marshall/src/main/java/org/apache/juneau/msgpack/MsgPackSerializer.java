@@ -54,6 +54,9 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	private static final String ARG_builder = "builder";
 	private static final String ARG_copyFrom = "copyFrom";
 
+	// Property name constants
+	private static final String PROP_addBeanTypesMsgPack = "addBeanTypesMsgPack";
+
 	/** Default serializer, BASE64 string output. */
 	@SuppressWarnings("java:S110")
 	public static class Base64 extends MsgPackSerializer {
@@ -822,6 +825,6 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	@Override /* Overridden from OutputStreamSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("addBeanTypesMsgPack", addBeanTypesMsgPack);
+			.a(PROP_addBeanTypesMsgPack, addBeanTypesMsgPack);
 	}
 }

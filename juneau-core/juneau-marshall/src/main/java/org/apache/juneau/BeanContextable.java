@@ -46,6 +46,9 @@ import org.apache.juneau.swap.*;
  */
 public abstract class BeanContextable extends Context {
 
+	// Property name constants
+	private static final String PROP_beanContext = "beanContext";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_value = "value";
 	private static final String ARG_operation = "operation";
@@ -3063,6 +3066,6 @@ public abstract class BeanContextable extends Context {
 	@Override /* Overridden from Context */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("beanContext", beanContext.properties());
+			.a(PROP_beanContext, beanContext.properties());
 	}
 }

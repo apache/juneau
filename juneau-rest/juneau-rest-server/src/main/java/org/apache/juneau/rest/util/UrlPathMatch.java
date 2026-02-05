@@ -34,6 +34,10 @@ import org.apache.juneau.commons.utils.*;
  */
 public class UrlPathMatch {
 
+	// Property name constants
+	private static final String PROP_r = "r";
+	private static final String PROP_v = "v";
+
 	private final int matchedParts;
 	private final String path;
 	private final Map<String,String> vars;
@@ -137,8 +141,8 @@ public class UrlPathMatch {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("r", getRemainder())
-			.a("v", getVars());
+			.a(PROP_r, getRemainder())
+			.a(PROP_v, getVars());
 		// @formatter:on
 	}
 

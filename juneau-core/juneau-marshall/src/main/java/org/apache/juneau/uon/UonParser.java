@@ -55,6 +55,10 @@ import org.apache.juneau.parser.*;
 @SuppressWarnings("java:S115")
 public class UonParser extends ReaderParser implements HttpPartParser, UonMetaProvider {
 
+	// Property name constants
+	private static final String PROP_decoding = "decoding";
+	private static final String PROP_validateEnd = "validateEnd";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_copyFrom = "copyFrom";
 
@@ -858,7 +862,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	@Override /* Overridden from ReaderParser */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("decoding", decoding)
-			.a("validateEnd", validateEnd);
+			.a(PROP_decoding, decoding)
+			.a(PROP_validateEnd, validateEnd);
 	}
 }

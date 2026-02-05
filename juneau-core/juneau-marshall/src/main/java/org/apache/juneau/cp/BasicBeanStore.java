@@ -85,6 +85,13 @@ public class BasicBeanStore {
 	private static final String ARG_bean = "bean";
 	private static final String ARG_type = "type";
 
+	// Property name constants
+	private static final String PROP_entries = "entries";
+	private static final String PROP_identity = "identity";
+	private static final String PROP_parent = "parent";
+	private static final String PROP_readOnly = "readOnly";
+	private static final String PROP_threadSafe = "threadSafe";
+
 	/**
 	 * Builder class.
 	 */
@@ -510,11 +517,11 @@ public class BasicBeanStore {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("entries", entries.stream().map(Entry::properties).toList())
-			.a("identity", id(this))
-			.a("parent", parent.map(BasicBeanStore::properties).orElse(null))
-			.ai(readOnly, "readOnly", readOnly)
-			.ai(threadSafe, "threadSafe", threadSafe);
+			.a(PROP_entries, entries.stream().map(Entry::properties).toList())
+			.a(PROP_identity, id(this))
+			.a(PROP_parent, parent.map(BasicBeanStore::properties).orElse(null))
+			.ai(readOnly, PROP_readOnly, readOnly)
+			.ai(threadSafe, PROP_threadSafe, threadSafe);
 		// @formatter:on
 	}
 
@@ -558,6 +565,11 @@ public class BasicBeanStore {
 	 * @param <T> The bean type.
 	 */
 	public static class Entry<T> {
+
+		// Property name constants
+		private static final String PROP_bean = "bean";
+		private static final String PROP_name = "name";
+		private static final String PROP_type = "type";
 
 		/**
 		 * Static creator.
@@ -642,9 +654,9 @@ public class BasicBeanStore {
 		protected FluentMap<String,Object> properties() {
 			// @formatter:off
 			return filteredBeanPropertyMap()
-				.a("type", cns(getType()))
-				.a("bean", id(get()))
-				.a("name", getName());
+				.a(PROP_type, cns(getType()))
+				.a(PROP_bean, id(get()))
+				.a(PROP_name, getName());
 			// @formatter:on
 		}
 	}

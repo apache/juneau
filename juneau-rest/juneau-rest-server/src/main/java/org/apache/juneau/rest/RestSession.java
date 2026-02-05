@@ -46,6 +46,10 @@ import jakarta.servlet.http.*;
 @SuppressWarnings("java:S115")
 public class RestSession extends ContextSession {
 
+	// Property name constants
+	private static final String PROP_context = "context";
+	private static final String PROP_resource = "resource";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
 	private static final String ARG_value = "value";
@@ -564,7 +568,7 @@ public class RestSession extends ContextSession {
 	@Override /* Overridden from ContextSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("context", context)
-			.a("resource", resource);
+			.a(PROP_context, context)
+			.a(PROP_resource, resource);
 	}
 }

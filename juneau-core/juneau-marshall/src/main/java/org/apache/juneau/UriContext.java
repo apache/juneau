@@ -47,6 +47,19 @@ import org.apache.juneau.parser.*;
 @Bean
 public class UriContext {
 
+	// Property name constants
+	private static final String PROP_aContextRoot = "aContextRoot";
+	private static final String PROP_aPathInfo = "aPathInfo";
+	private static final String PROP_aServletPath = "aServletPath";
+	private static final String PROP_authority = "authority";
+	private static final String PROP_contextRoot = "contextRoot";
+	private static final String PROP_parentPath = "parentPath";
+	private static final String PROP_pathInfo = "pathInfo";
+	private static final String PROP_rContextRoot = "rContextRoot";
+	private static final String PROP_rResource = "rResource";
+	private static final String PROP_rPath = "rPath";
+	private static final String PROP_servletPath = "servletPath";
+
 	/**
 	 * Default URI context.
 	 *
@@ -424,17 +437,17 @@ public class UriContext {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("aContextRoot", aContextRoot.get())
-			.a("aPathInfo", aPathInfo.get())
-			.a("aServletPath", aServletPath.get())
-			.a("authority", authority)
-			.a("contextRoot", contextRoot)
-			.a("parentPath", parentPath)
-			.a("pathInfo", pathInfo)
-			.a("rContextRoot", rContextRoot.get())
-			.a("rResource", rResource.get())
-			.a("servletPath", servletPath)
-			.a("rPath", rPath.get());
+			.a(PROP_aContextRoot, aContextRoot.get())
+			.a(PROP_aPathInfo, aPathInfo.get())
+			.a(PROP_aServletPath, aServletPath.get())
+			.a(PROP_authority, authority)
+			.a(PROP_contextRoot, contextRoot)
+			.a(PROP_parentPath, parentPath)
+			.a(PROP_pathInfo, pathInfo)
+			.a(PROP_rContextRoot, rContextRoot.get())
+			.a(PROP_rResource, rResource.get())
+			.a(PROP_servletPath, servletPath)
+			.a(PROP_rPath, rPath.get());
 		// @formatter:on
 	}
 

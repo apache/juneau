@@ -68,6 +68,10 @@ import org.apache.juneau.commons.utils.*;
  */
 public class BeanMeta<T> {
 
+	// Property name constants
+	private static final String PROP_class = "class";
+	private static final String PROP_properties = "properties";
+
 	/**
 	 * Represents the result of creating a BeanMeta, including the bean metadata and any reason why it's not a bean.
 	 *
@@ -757,8 +761,8 @@ public class BeanMeta<T> {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("class", classMeta.getName())
-			.a("properties", properties);
+			.a(PROP_class, classMeta.getName())
+			.a(PROP_properties, properties);
 		// @formatter:on
 	}
 

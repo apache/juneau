@@ -52,6 +52,9 @@ import org.apache.juneau.swap.*;
 @SuppressWarnings({ "unchecked", "rawtypes", "resource" })
 public class UonParserSession extends ReaderParserSession implements HttpPartParserSession {
 
+	// Property name constants
+	private static final String PROP_decoding = "decoding";
+
 	/**
 	 * Builder class.
 	 */
@@ -970,6 +973,6 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	@Override /* Overridden from ReaderParserSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("decoding", decoding);
+			.a(PROP_decoding, decoding);
 	}
 }

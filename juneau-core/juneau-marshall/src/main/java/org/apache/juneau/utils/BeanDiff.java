@@ -50,6 +50,10 @@ import org.apache.juneau.commons.collections.*;
  */
 public class BeanDiff {
 
+	// Property name constants
+	private static final String PROP_v1 = "v1";
+	private static final String PROP_v2 = "v2";
+
 	/**
 	 * Builder class.
 	 *
@@ -234,8 +238,8 @@ public class BeanDiff {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return mapb_so().buildFluent()
-			.a("v1", v1)
-			.a("v2", v2);
+			.a(PROP_v1, v1)
+			.a(PROP_v2, v2);
 		// @formatter:on
 	}
 

@@ -69,6 +69,8 @@ public class AtomFeedResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	private static final String CONST_timestamp = "2016-12-31T05:02:03Z";
+	private static final String EXAMPLE_URL_FOO_ORG = "http://foo.org/";
+	private static final String EXAMPLE_URL_WWW_FOO_ORG = "http://www.foo.org/";
 
 	private Feed feed;     // The root resource object
 
@@ -90,11 +92,11 @@ public class AtomFeedResource extends BasicRestServlet {
 				feed("tag:foo.org", "Title", CONST_timestamp)
 				.setSubtitle(text("html").setText("Subtitle"))
 				.setLinks(
-					link("alternate", "text/html", "http://foo.org/").setHreflang("en"),
+					link("alternate", "text/html", EXAMPLE_URL_FOO_ORG).setHreflang("en"),
 					link("self", "application/atom+xml", "http://foo.org/feed.atom")
 				)
 				.setGenerator(
-					generator("Example Toolkit").setUri("http://www.foo.org/").setVersion("1.0")
+					generator("Example Toolkit").setUri(EXAMPLE_URL_WWW_FOO_ORG).setVersion("1.0")
 				)
 				.setEntries(
 					entry("tag:foo.org", "Title", CONST_timestamp)
@@ -104,7 +106,7 @@ public class AtomFeedResource extends BasicRestServlet {
 					)
 					.setPublished(CONST_timestamp)
 					.setAuthors(
-						person("John Smith").setUri(new URI("http://foo.org/")).setEmail("foo@foo.org")
+						person("John Smith").setUri(new URI(EXAMPLE_URL_FOO_ORG)).setEmail("foo@foo.org")
 					)
 					.setContributors(
 						person("John Smith"),
@@ -113,7 +115,7 @@ public class AtomFeedResource extends BasicRestServlet {
 					.setContent(
 						content("xhtml")
 						.setLang("en")
-						.setBase("http://foo.org/")
+						.setBase(EXAMPLE_URL_FOO_ORG)
 						.setText("<div><p><i>[Sample content]</i></p></div>")
 					)
 				);

@@ -96,6 +96,16 @@ import jakarta.servlet.http.*;
  */
 public class CallLogger {
 
+	// Property name constants
+	private static final String PROP_debugRules = "debugRules";
+	private static final String PROP_enabled = "enabled";
+	private static final String PROP_level = "level";
+	private static final String PROP_logger = "logger";
+	private static final String PROP_normalRules = "normalRules";
+	private static final String PROP_requestDetail = "requestDetail";
+	private static final String PROP_responseDetail = "responseDetail";
+	private static final String PROP_thrownStore = "thrownStore";
+
 	/**
 	 * Builder class.
 	 */
@@ -663,14 +673,14 @@ public class CallLogger {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("debugRules", debugRules)
-			.a("enabled", enabled)
-			.a("level", level)
-			.a("logger", logger)
-			.a("normalRules", normalRules)
-			.a("requestDetail", requestDetail)
-			.a("responseDetail", responseDetail)
-			.a("thrownStore", thrownStore);
+			.a(PROP_debugRules, debugRules)
+			.a(PROP_enabled, enabled)
+			.a(PROP_level, level)
+			.a(PROP_logger, logger)
+			.a(PROP_normalRules, normalRules)
+			.a(PROP_requestDetail, requestDetail)
+			.a(PROP_responseDetail, responseDetail)
+			.a(PROP_thrownStore, thrownStore);
 		// @formatter:on
 	}
 

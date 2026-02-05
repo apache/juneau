@@ -54,6 +54,9 @@ public class InputStreamParser extends Parser {
 	private static final String ARG_value = "value";
 	private static final String ARG_copyFrom = "copyFrom";
 
+	// Property name constants
+	private static final String PROP_binaryFormat = "binaryFormat";
+
 	/**
 	 * Builder class.
 	 */
@@ -667,6 +670,6 @@ public class InputStreamParser extends Parser {
 	@Override /* Overridden from Parser */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("binaryFormat", binaryFormat);
+			.a(PROP_binaryFormat, binaryFormat);
 	}
 }

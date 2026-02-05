@@ -50,6 +50,10 @@ import org.apache.juneau.commons.utils.*;
 @SuppressWarnings("java:S115")
 public class BeanTraverseSession extends BeanSession {
 
+	// Property name constants
+	private static final String PROP_indent = "indent";
+	private static final String PROP_depth = "depth";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
 
@@ -338,8 +342,8 @@ public class BeanTraverseSession extends BeanSession {
 	@Override /* Overridden from BeanSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("indent", indent)
-			.a("depth", depth);
+			.a(PROP_indent, indent)
+			.a(PROP_depth, depth);
 	}
 
 	/**

@@ -62,6 +62,18 @@ public class Config extends Context implements ConfigEventListener {
 	private static final String ARG_section = "section";
 	private static final String ARG_key = "key";
 
+	// Property name constants
+	private static final String PROP_binaryFormat = "binaryFormat";
+	private static final String PROP_binaryLineLength = "binaryLineLength";
+	private static final String PROP_mods = "mods";
+	private static final String PROP_multiLineValuesOnSeparateLines = "multiLineValuesOnSeparateLines";
+	private static final String PROP_name = "name";
+	private static final String PROP_parser = "parser";
+	private static final String PROP_readOnly = "readOnly";
+	private static final String PROP_serializer = "serializer";
+	private static final String PROP_store = "store";
+	private static final String PROP_varResolver = "varResolver";
+
 	/**
 	 * Builder class.
 	 */
@@ -1126,16 +1138,16 @@ public class Config extends Context implements ConfigEventListener {
 	@Override /* Overridden from Context */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("binaryFormat", binaryFormat)
-			.a("binaryLineLength", binaryLineLength)
-			.a("mods", mods)
-			.a("multiLineValuesOnSeparateLines", multiLineValuesOnSeparateLines)
-			.a("name", name)
-			.a("parser", parser)
-			.a("readOnly", readOnly)
-			.a("serializer", serializer)
-			.a("store", store)
-			.a("varResolver", varResolver);
+			.a(PROP_binaryFormat, binaryFormat)
+			.a(PROP_binaryLineLength, binaryLineLength)
+			.a(PROP_mods, mods)
+			.a(PROP_multiLineValuesOnSeparateLines, multiLineValuesOnSeparateLines)
+			.a(PROP_name, name)
+			.a(PROP_parser, parser)
+			.a(PROP_readOnly, readOnly)
+			.a(PROP_serializer, serializer)
+			.a(PROP_store, store)
+			.a(PROP_varResolver, varResolver);
 	}
 
 	@Override /* Overridden from Object */

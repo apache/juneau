@@ -54,6 +54,11 @@ import org.apache.juneau.swap.*;
 @SuppressWarnings({ "unchecked", "rawtypes", "java:S115" })
 public class BeanSession extends ContextSession {
 
+	// Property name constants
+	private static final String PROP_locale = "locale";
+	private static final String PROP_mediaType = "mediaType";
+	private static final String PROP_timeZone = "timeZone";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
 	private static final String ARG_o = "o";
@@ -1561,9 +1566,9 @@ public class BeanSession extends ContextSession {
 	@Override /* Overridden from ContextSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("locale", locale)
-			.a("mediaType", mediaType)
-			.a("timeZone", timeZone);
+			.a(PROP_locale, locale)
+			.a(PROP_mediaType, mediaType)
+			.a(PROP_timeZone, timeZone);
 	}
 
 	/**

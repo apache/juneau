@@ -45,6 +45,13 @@ import org.apache.juneau.json.*;
 @SuppressWarnings("java:S115")
 public class WriterSerializer extends Serializer {
 
+	// Property name constants
+	private static final String PROP_fileCharset = "fileCharset";
+	private static final String PROP_maxIndent = "maxIndent";
+	private static final String PROP_quoteChar = "quoteChar";
+	private static final String PROP_streamCharset = "streamCharset";
+	private static final String PROP_useWhitespace = "useWhitespace";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_copyFrom = "copyFrom";
 
@@ -1118,11 +1125,11 @@ public class WriterSerializer extends Serializer {
 	@Override /* Overridden from Serializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("fileCharset", fileCharset)
-			.a("maxIndent", maxIndent)
-			.a("quoteChar", quoteChar)
-			.a("streamCharset", streamCharset)
-			.a("useWhitespace", useWhitespace);
+			.a(PROP_fileCharset, fileCharset)
+			.a(PROP_maxIndent, maxIndent)
+			.a(PROP_quoteChar, quoteChar)
+			.a(PROP_streamCharset, streamCharset)
+			.a(PROP_useWhitespace, useWhitespace);
 	}
 
 	/**

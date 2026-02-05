@@ -37,6 +37,14 @@ import org.apache.juneau.rest.util.*;
  */
 class MockPathResolver {
 
+	// Property name constants
+	private static final String PROP_contextPath = "contextPath";
+	private static final String PROP_error = "error";
+	private static final String PROP_remainder = "remainder";
+	private static final String PROP_servletPath = "servletPath";
+	private static final String PROP_target = "target";
+	private static final String PROP_uri = "uri";
+
 	private static String fixSegment(String s, Map<String,Object> pathVars) {
 		s = formatNamed(emptyIfNull(s), pathVars);
 		if (s.isEmpty() || s.equals("/"))
@@ -125,12 +133,12 @@ class MockPathResolver {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("contextPath", contextPath)
-			.a("error", error)
-			.a("remainder", remainder)
-			.a("servletPath", servletPath)
-			.a("target", target)
-			.a("uri", uri);
+			.a(PROP_contextPath, contextPath)
+			.a(PROP_error, error)
+			.a(PROP_remainder, remainder)
+			.a(PROP_servletPath, servletPath)
+			.a(PROP_target, target)
+			.a(PROP_uri, uri);
 		// @formatter:on
 	}
 

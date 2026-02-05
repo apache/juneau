@@ -61,6 +61,14 @@ import org.apache.juneau.xml.*;
 @SuppressWarnings("java:S115")
 public class RdfParser extends ReaderParser implements RdfMetaProvider {
 
+	// Property name constants
+	private static final String PROP_collectionFormat = "collectionFormat";
+	private static final String PROP_juneauBpNs = "juneauBpNs";
+	private static final String PROP_juneauNs = "juneauNs";
+	private static final String PROP_language = "language";
+	private static final String PROP_looseCollections = "looseCollections";
+	private static final String PROP_trimWhitespace = "trimWhitespace";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_value = "value";
 	private static final String ARG_copyFrom = "copyFrom";
@@ -1612,11 +1620,11 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	@Override /* Overridden from ReaderParser */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("collectionFormat", collectionFormat)
-			.a("juneauBpNs", juneauBpNs)
-			.a("juneauNs", juneauNs)
-			.a("language", language)
-			.a("looseCollections", looseCollections)
-			.a("trimWhitespace", trimWhitespace);
+			.a(PROP_collectionFormat, collectionFormat)
+			.a(PROP_juneauBpNs, juneauBpNs)
+			.a(PROP_juneauNs, juneauNs)
+			.a(PROP_language, language)
+			.a(PROP_looseCollections, looseCollections)
+			.a(PROP_trimWhitespace, trimWhitespace);
 	}
 }

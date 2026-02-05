@@ -47,6 +47,9 @@ import org.apache.juneau.rest.*;
 @SuppressWarnings("resource")
 public class BasicStaticFiles implements StaticFiles {
 
+	// Property name constants
+	private static final String PROP_headers = "headers";
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -154,7 +157,7 @@ public class BasicStaticFiles implements StaticFiles {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("headers", headers);
+			.a(PROP_headers, headers);
 		// @formatter:on
 	}
 

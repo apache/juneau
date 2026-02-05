@@ -61,6 +61,9 @@ import org.apache.juneau.xml.*;
 @SuppressWarnings("java:S110")
 public class HtmlSchemaSerializer extends HtmlSerializer {
 
+	// Property name constants
+	private static final String PROP_generator = "generator";
+
 	/**
 	 * Builder class.
 	 */
@@ -1106,7 +1109,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	@Override /* Overridden from HtmlSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("generator", generator);
+			.a(PROP_generator, generator);
 	}
 
 	JsonSchemaGenerator getGenerator() { return generator; }

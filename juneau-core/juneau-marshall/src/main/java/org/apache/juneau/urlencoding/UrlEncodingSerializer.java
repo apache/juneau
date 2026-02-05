@@ -134,6 +134,9 @@ import org.apache.juneau.uon.*;
 @SuppressWarnings("java:S110")
 public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingMetaProvider {
 
+	// Property name constants
+	private static final String PROP_expandedParams = "expandedParams";
+
 	/**
 	 * Builder class.
 	 */
@@ -1047,6 +1050,6 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	@Override /* Overridden from UonSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("expandedParams", expandedParams);
+			.a(PROP_expandedParams, expandedParams);
 	}
 }

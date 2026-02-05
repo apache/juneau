@@ -126,6 +126,30 @@ import jakarta.servlet.http.*;
 @SuppressWarnings("java:S115")
 public class RestContext extends Context {
 
+	// Property name constants
+	private static final String PROP_allowContentParam = "allowContentParam";
+	private static final String PROP_allowedHeaderParams = "allowedHeaderParams";
+	private static final String PROP_allowedMethodHeader = "allowedMethodHeader";
+	private static final String PROP_allowedMethodParams = "allowedMethodParams";
+	private static final String PROP_beanStore = "beanStore";
+	private static final String PROP_clientVersionHeader = "clientVersionHeader";
+	private static final String PROP_consumes = "consumes";
+	private static final String PROP_defaultRequestAttributes = "defaultRequestAttributes";
+	private static final String PROP_defaultRequestHeaders = "defaultRequestHeaders";
+	private static final String PROP_defaultResponseHeaders = "defaultResponseHeaders";
+	private static final String PROP_partParser = "partParser";
+	private static final String PROP_partSerializer = "partSerializer";
+	private static final String PROP_produces = "produces";
+	private static final String PROP_renderResponseStackTraces = "renderResponseStackTraces";
+	private static final String PROP_responseProcessors = "responseProcessors";
+	private static final String PROP_restOpArgs = "restOpArgs";
+	private static final String PROP_staticFiles = "staticFiles";
+	private static final String PROP_swaggerProvider = "swaggerProvider";
+	private static final String PROP_uriAuthority = "uriAuthority";
+	private static final String PROP_uriContext = "uriContext";
+	private static final String PROP_uriRelativity = "uriRelativity";
+	private static final String PROP_uriResolution = "uriResolution";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_value = "value";
 	private static final String ARG_path = "path";
@@ -133,11 +157,6 @@ public class RestContext extends Context {
 	private static final String ARG_resource = "resource";
 	private static final String ARG_type = "type";
 	private static final String ARG_restContext = "restContext";
-
-	// Property name constants
-	private static final String PROP_defaultRequestAttributes = "defaultRequestAttributes";
-	private static final String PROP_defaultRequestHeaders = "defaultRequestHeaders";
-	private static final String PROP_defaultResponseHeaders = "defaultResponseHeaders";
 
 	/**
 	 * Builder class.
@@ -6194,27 +6213,27 @@ public class RestContext extends Context {
 	@Override /* Overridden from Context */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("allowContentParam", allowContentParam)
-			.a("allowedHeaderParams", allowedHeaderParams)
-			.a("allowedMethodHeader", allowedMethodHeaders)
-			.a("allowedMethodParams", allowedMethodParams)
-			.a("beanStore", beanStore)
-			.a("clientVersionHeader", clientVersionHeader)
-			.a("consumes", consumes)
+			.a(PROP_allowContentParam, allowContentParam)
+			.a(PROP_allowedHeaderParams, allowedHeaderParams)
+			.a(PROP_allowedMethodHeader, allowedMethodHeaders)
+			.a(PROP_allowedMethodParams, allowedMethodParams)
+			.a(PROP_beanStore, beanStore)
+			.a(PROP_clientVersionHeader, clientVersionHeader)
+			.a(PROP_consumes, consumes)
 			.a(PROP_defaultRequestHeaders, defaultRequestHeaders)
 			.a(PROP_defaultResponseHeaders, defaultResponseHeaders)
-			.a("partParser", partParser)
-			.a("partSerializer", partSerializer)
-			.a("produces", produces)
-			.a("renderResponseStackTraces", renderResponseStackTraces)
-			.a("responseProcessors", responseProcessors)
-			.a("restOpArgs", restOpArgs)
-			.a("staticFiles", staticFiles)
-			.a("swaggerProvider", swaggerProvider)
-			.a("uriAuthority", uriAuthority)
-			.a("uriContext", uriContext)
-			.a("uriRelativity", uriRelativity)
-			.a("uriResolution", uriResolution);
+			.a(PROP_partParser, partParser)
+			.a(PROP_partSerializer, partSerializer)
+			.a(PROP_produces, produces)
+			.a(PROP_renderResponseStackTraces, renderResponseStackTraces)
+			.a(PROP_responseProcessors, responseProcessors)
+			.a(PROP_restOpArgs, restOpArgs)
+			.a(PROP_staticFiles, staticFiles)
+			.a(PROP_swaggerProvider, swaggerProvider)
+			.a(PROP_uriAuthority, uriAuthority)
+			.a(PROP_uriContext, uriContext)
+			.a(PROP_uriRelativity, uriRelativity)
+			.a(PROP_uriResolution, uriResolution);
 	}
 
 	/**

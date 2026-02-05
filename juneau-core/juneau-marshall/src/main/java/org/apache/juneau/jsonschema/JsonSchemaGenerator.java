@@ -52,7 +52,17 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_value = "value";
+	private static final String ARG_values = "values";
 	private static final String ARG_copyFrom = "copyFrom";
+
+	// Property name constants
+	private static final String PROP_addDescriptionsTo = "addDescriptionsTo";
+	private static final String PROP_addExamplesTo = "addExamplesTo";
+	private static final String PROP_allowNestedDescriptions = "allowNestedDescriptions";
+	private static final String PROP_allowNestedExamples = "allowNestedExamples";
+	private static final String PROP_beanDefMapper = "beanDefMapper";
+	private static final String PROP_ignoreTypes = "ignoreTypes";
+	private static final String PROP_useBeanDefs = "useBeanDefs";
 
 	/**
 	 * Builder class.
@@ -158,7 +168,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * @return This object.
 		 */
 		public Builder addDescriptionsTo(TypeCategory...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			addDescriptionsTo = addAll(addDescriptionsTo, values);
 			return this;
 		}
@@ -198,7 +208,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * @return This object.
 		 */
 		public Builder addExamplesTo(TypeCategory...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			addExamplesTo = addAll(addExamplesTo, values);
 			return this;
 		}
@@ -617,7 +627,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * @return This object.
 		 */
 		public Builder ignoreTypes(String...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			ignoreTypes = addAll(ignoreTypes, values);
 			return this;
 		}
@@ -995,13 +1005,13 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	@Override /* Overridden from BeanTraverseContext */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("addDescriptionsTo", addDescriptionsTo)
-			.a("addExamplesTo", addExamplesTo)
-			.a("allowNestedDescriptions", allowNestedDescriptions)
-			.a("allowNestedExamples", allowNestedExamples)
-			.a("beanDefMapper", beanDefMapper)
-			.a("ignoreTypes", ignoreTypes)
-			.a("useBeanDefs", useBeanDefs);
+			.a(PROP_addDescriptionsTo, addDescriptionsTo)
+			.a(PROP_addExamplesTo, addExamplesTo)
+			.a(PROP_allowNestedDescriptions, allowNestedDescriptions)
+			.a(PROP_allowNestedExamples, allowNestedExamples)
+			.a(PROP_beanDefMapper, beanDefMapper)
+			.a(PROP_ignoreTypes, ignoreTypes)
+			.a(PROP_useBeanDefs, useBeanDefs);
 	}
 
 	JsonParser getJsonParser() { return jsonParser; }

@@ -42,6 +42,9 @@ import org.apache.juneau.commons.reflect.*;
 @SuppressWarnings("java:S115")
 public abstract class ContextSession {
 
+	// Property name constants
+	private static final String PROP_debug = "debug";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
 	private static final String ARG_value = "value";
@@ -264,6 +267,6 @@ public abstract class ContextSession {
 	 */
 	protected FluentMap<String,Object> properties() {
 		return filteredBeanPropertyMap()
-			.a("debug", debug);
+			.a(PROP_debug, debug);
 	}
 }

@@ -1052,6 +1052,18 @@ import org.apache.juneau.xml.*;
 @SuppressWarnings({"resource", "java:S115"})
 public class RestClient extends BeanContextable implements HttpClient, Closeable {
 
+	// Property name constants
+	private static final String PROP_errorCodes = "errorCodes";
+	private static final String PROP_executorService = "executorService";
+	private static final String PROP_executorServiceShutdownOnClose = "executorServiceShutdownOnClose";
+	private static final String PROP_headerData = "headerData";
+	private static final String PROP_interceptors = "interceptors";
+	private static final String PROP_keepHttpClientOpen = "keepHttpClientOpen";
+	private static final String PROP_partParser = "partParser";
+	private static final String PROP_partSerializer = "partSerializer";
+	private static final String PROP_queryData = "queryData";
+	private static final String PROP_rootUrl = "rootUrl";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_itcp = "itcp";
 	private static final String ARG_value = "value";
@@ -7955,16 +7967,16 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	@Override /* Overridden from BeanContextable */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("errorCodes", errorCodes)
-			.a("executorService", executorService.get())
-			.a("executorServiceShutdownOnClose", executorServiceShutdownOnClose)
-			.a("headerData", headerData)
-			.a("interceptors", interceptors)
-			.a("keepHttpClientOpen", keepHttpClientOpen)
-			.a("partParser", partParser)
-			.a("partSerializer", partSerializer)
-			.a("queryData", queryData)
-			.a("rootUrl", rootUrl);
+			.a(PROP_errorCodes, errorCodes)
+			.a(PROP_executorService, executorService.get())
+			.a(PROP_executorServiceShutdownOnClose, executorServiceShutdownOnClose)
+			.a(PROP_headerData, headerData)
+			.a(PROP_interceptors, interceptors)
+			.a(PROP_keepHttpClientOpen, keepHttpClientOpen)
+			.a(PROP_partParser, partParser)
+			.a(PROP_partSerializer, partSerializer)
+			.a(PROP_queryData, queryData)
+			.a(PROP_rootUrl, rootUrl);
 	}
 
 	/**

@@ -182,6 +182,12 @@ import org.apache.juneau.commons.utils.*;
  */
 public class ReflectionMap<V> {
 
+	// Property name constants
+	private static final String PROP_classEntries = "classEntries";
+	private static final String PROP_constructorEntries = "constructorEntries";
+	private static final String PROP_fieldEntries = "fieldEntries";
+	private static final String PROP_methodEntries = "methodEntries";
+
 	/**
 	 * Builder for creating {@link ReflectionMap} instances.
 	 *
@@ -299,6 +305,11 @@ public class ReflectionMap<V> {
 	}
 
 	private static class ClassEntry<V> {
+		// Property name constants
+		private static final String PROP_fullName = "fullName";
+		private static final String PROP_simpleName = "simpleName";
+		private static final String PROP_value = "value";
+
 		final String simpleName;
 		final String fullName;
 		final V value;
@@ -318,9 +329,9 @@ public class ReflectionMap<V> {
 		protected FluentMap<String,Object> properties() {
 			// @formatter:off
 			return filteredBeanPropertyMap()
-				.a("fullName", fullName)
-				.a("simpleName", simpleName)
-				.a("value", value);
+				.a(PROP_fullName, fullName)
+				.a(PROP_simpleName, simpleName)
+				.a(PROP_value, value);
 			// @formatter:on
 		}
 
@@ -331,6 +342,12 @@ public class ReflectionMap<V> {
 	}
 
 	private static class ConstructorEntry<V> {
+		// Property name constants
+		private static final String PROP_args = "args";
+		private static final String PROP_fullClassName = "fullClassName";
+		private static final String PROP_simpleClassName = "simpleClassName";
+		private static final String PROP_value = "value";
+
 		String simpleClassName;
 		String fullClassName;
 		String args[];
@@ -359,10 +376,10 @@ public class ReflectionMap<V> {
 		protected FluentMap<String,Object> properties() {
 			// @formatter:off
 			return filteredBeanPropertyMap()
-				.a("args", args)
-				.a("fullClassName", fullClassName)
-				.a("simpleClassName", simpleClassName)
-				.a("value", value);
+				.a(PROP_args, args)
+				.a(PROP_fullClassName, fullClassName)
+				.a(PROP_simpleClassName, simpleClassName)
+				.a(PROP_value, value);
 			// @formatter:on
 		}
 
@@ -373,6 +390,12 @@ public class ReflectionMap<V> {
 	}
 
 	private static class FieldEntry<V> {
+		// Property name constants
+		private static final String PROP_fieldName = "fieldName";
+		private static final String PROP_fullClassName = "fullClassName";
+		private static final String PROP_simpleClassName = "simpleClassName";
+		private static final String PROP_value = "value";
+
 		String simpleClassName;
 		String fullClassName;
 		String fieldName;
@@ -398,10 +421,10 @@ public class ReflectionMap<V> {
 		protected FluentMap<String,Object> properties() {
 			// @formatter:off
 			return filteredBeanPropertyMap()
-				.a("fieldName", fieldName)
-				.a("fullClassName", fullClassName)
-				.a("simpleClassName", simpleClassName)
-				.a("value", value);
+				.a(PROP_fieldName, fieldName)
+				.a(PROP_fullClassName, fullClassName)
+				.a(PROP_simpleClassName, simpleClassName)
+				.a(PROP_value, value);
 			// @formatter:on
 		}
 
@@ -412,6 +435,13 @@ public class ReflectionMap<V> {
 	}
 
 	private static class MethodEntry<V> {
+		// Property name constants
+		private static final String PROP_args = "args";
+		private static final String PROP_fullClassName = "fullClassName";
+		private static final String PROP_methodName = "methodName";
+		private static final String PROP_simpleClassName = "simpleClassName";
+		private static final String PROP_value = "value";
+
 		String simpleClassName;
 		String fullClassName;
 		String methodName;
@@ -452,11 +482,11 @@ public class ReflectionMap<V> {
 		protected FluentMap<String,Object> properties() {
 			// @formatter:off
 			return filteredBeanPropertyMap()
-				.a("args", opt(args).map(x -> '[' + toCdl(x) + "]").orElse(null))
-				.a("fullClassName", fullClassName)
-				.a("methodName", methodName)
-				.a("simpleClassName", simpleClassName)
-				.a("value", value);
+				.a(PROP_args, opt(args).map(x -> '[' + toCdl(x) + "]").orElse(null))
+				.a(PROP_fullClassName, fullClassName)
+				.a(PROP_methodName, methodName)
+				.a(PROP_simpleClassName, simpleClassName)
+				.a(PROP_value, value);
 			// @formatter:on
 		}
 
@@ -729,10 +759,10 @@ public class ReflectionMap<V> {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("classEntries", classEntries)
-			.a("methodEntries", methodEntries)
-			.a("fieldEntries", fieldEntries)
-			.a("constructorEntries", constructorEntries);
+			.a(PROP_classEntries, classEntries)
+			.a(PROP_methodEntries, methodEntries)
+			.a(PROP_fieldEntries, fieldEntries)
+			.a(PROP_constructorEntries, constructorEntries);
 		// @formatter:on
 	}
 

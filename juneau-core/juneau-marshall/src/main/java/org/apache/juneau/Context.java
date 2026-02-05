@@ -72,6 +72,10 @@ import org.apache.juneau.xml.annotation.*;
 @SuppressWarnings("java:S115")
 public abstract class Context {
 
+	// Property name constants
+	private static final String PROP_annotations = "annotations";
+	private static final String PROP_debug = "debug";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_type = "type";
 	private static final String ARG_builder = "builder";
@@ -957,7 +961,7 @@ public abstract class Context {
 	 */
 	protected FluentMap<String,Object> properties() {
 		return filteredBeanPropertyMap()
-			.a("annotations", annotations)
-			.a("debug", debug);
+			.a(PROP_annotations, annotations)
+			.a(PROP_debug, debug);
 	}
 }

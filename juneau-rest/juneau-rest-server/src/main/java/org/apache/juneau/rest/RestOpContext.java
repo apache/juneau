@@ -83,6 +83,12 @@ import jakarta.servlet.http.*;
 @SuppressWarnings("java:S115")
 public class RestOpContext extends Context implements Comparable<RestOpContext> {
 
+	// Property name constants
+	private static final String PROP_defaultRequestFormData = "defaultRequestFormData";
+	private static final String PROP_defaultRequestHeaders = "defaultRequestHeaders";
+	private static final String PROP_defaultRequestQueryData = "defaultRequestQueryData";
+	private static final String PROP_httpMethod = "httpMethod";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_beanType = "beanType";
 	private static final String ARG_value = "value";
@@ -2609,10 +2615,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	@Override /* Overridden from Context */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("defaultRequestFormData", defaultRequestFormData)
-			.a("defaultRequestHeaders", defaultRequestHeaders)
-			.a("defaultRequestQueryData", defaultRequestQueryData)
-			.a("httpMethod", httpMethod);
+			.a(PROP_defaultRequestFormData, defaultRequestFormData)
+			.a(PROP_defaultRequestHeaders, defaultRequestHeaders)
+			.a(PROP_defaultRequestQueryData, defaultRequestQueryData)
+			.a(PROP_httpMethod, httpMethod);
 	}
 
 	RestConverter[] getConverters() { return converters; }

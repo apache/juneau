@@ -101,6 +101,13 @@ import org.apache.juneau.xml.*;
 @SuppressWarnings({"java:S115", "resource"})
 public class RestRequest extends BeanSession implements HttpUriRequest, Configurable, AutoCloseable {
 
+	// Property name constants
+	private static final String PROP_ignoreErrors = "ignoreErrors";
+	private static final String PROP_interceptors = "interceptors";
+	private static final String PROP_requestBodySchema = "requestBodySchema";
+	private static final String PROP_response = "response";
+	private static final String PROP_serializer = "serializer";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_client = "client";
 	private static final String ARG_method = "method";
@@ -2507,11 +2514,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
 			.a(ARG_client, client.properties())
-			.a("ignoreErrors", ignoreErrors)
-			.a("interceptors", interceptors)
-			.a("requestBodySchema", contentSchema)
-			.a("response", response)
-			.a("serializer", serializer);
+			.a(PROP_ignoreErrors, ignoreErrors)
+			.a(PROP_interceptors, interceptors)
+			.a(PROP_requestBodySchema, contentSchema)
+			.a(PROP_response, response)
+			.a(PROP_serializer, serializer);
 	}
 
 	RestRequest formDataArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {

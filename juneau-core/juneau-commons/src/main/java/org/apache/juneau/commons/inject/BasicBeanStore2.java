@@ -47,6 +47,14 @@ import org.apache.juneau.commons.collections.*;
  */
 public class BasicBeanStore2 implements WritableBeanStore {
 
+	// Property name constants
+	private static final String PROP_bean = "bean";
+	private static final String PROP_entries = "entries";
+	private static final String PROP_identity = "identity";
+	private static final String PROP_name = "name";
+	private static final String PROP_parent = "parent";
+	private static final String PROP_type = "type";
+
 	private final ConcurrentHashMap<Class<?>, ConcurrentHashMap<String, Supplier<?>>> entries;
 	private final BeanStore parent;
 
@@ -317,13 +325,13 @@ public class BasicBeanStore2 implements WritableBeanStore {
 		// @formatter:off
 		var entryList = list();
 		entries.forEach((type, typeMap) -> typeMap.forEach((name, supplier) -> entryList.add(filteredBeanPropertyMap()
-			.a("type", cns(type))
-			.a("bean", id(supplier.get()))
-			.a("name", name))));
+			.a(PROP_type, cns(type))
+			.a(PROP_bean, id(supplier.get()))
+			.a(PROP_name, name))));
 		return filteredBeanPropertyMap()
-			.a("entries", entryList)
-			.a("identity", id(this))
-			.a("parent", parent instanceof BasicBeanStore2 parent2 ? parent2.properties() : s(parent));
+			.a(PROP_entries, entryList)
+			.a(PROP_identity, id(this))
+			.a(PROP_parent, parent instanceof BasicBeanStore2 parent2 ? parent2.properties() : s(parent));
 		// @formatter:on
 	}
 }

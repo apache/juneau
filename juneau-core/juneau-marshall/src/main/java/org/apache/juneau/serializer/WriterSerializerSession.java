@@ -53,6 +53,11 @@ import org.apache.juneau.svl.*;
 @SuppressWarnings("java:S115")
 public class WriterSerializerSession extends SerializerSession {
 
+	// Property name constants
+	private static final String PROP_fileCharset = "fileCharset";
+	private static final String PROP_streamCharset = "streamCharset";
+	private static final String PROP_useWhitespace = "useWhitespace";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
 
@@ -343,8 +348,8 @@ public class WriterSerializerSession extends SerializerSession {
 	@Override /* Overridden from SerializerSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("fileCharset", fileCharset)
-			.a("streamCharset", streamCharset)
-			.a("useWhitespace", useWhitespace);
+			.a(PROP_fileCharset, fileCharset)
+			.a(PROP_streamCharset, streamCharset)
+			.a(PROP_useWhitespace, useWhitespace);
 	}
 }

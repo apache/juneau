@@ -39,6 +39,12 @@ import org.apache.juneau.commons.reflect.*;
  */
 public abstract class BeanTraverseContext extends BeanContextable {
 
+	// Property name constants
+	private static final String PROP_detectRecursions = "detectRecursions";
+	private static final String PROP_ignoreRecursions = "ignoreRecursions";
+	private static final String PROP_initialDepth = "initialDepth";
+	private static final String PROP_maxDepth = "maxDepth";
+
 	/**
 	 * Builder class.
 	 */
@@ -776,9 +782,9 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	@Override /* Overridden from BeanContextable */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("detectRecursions", detectRecursions)
-			.a("ignoreRecursions", ignoreRecursions)
-			.a("initialDepth", initialDepth)
-			.a("maxDepth", maxDepth);
+			.a(PROP_detectRecursions, detectRecursions)
+			.a(PROP_ignoreRecursions, ignoreRecursions)
+			.a(PROP_initialDepth, initialDepth)
+			.a(PROP_maxDepth, maxDepth);
 	}
 }

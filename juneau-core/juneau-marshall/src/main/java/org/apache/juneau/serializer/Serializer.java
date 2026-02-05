@@ -73,6 +73,20 @@ import org.apache.juneau.soap.*;
 @SuppressWarnings("java:S115")
 public class Serializer extends BeanTraverseContext {
 
+	// Property name constants
+	private static final String PROP_addBeanTypes = "addBeanTypes";
+	private static final String PROP_addRootType = "addRootType";
+	private static final String PROP_keepNullProperties = "keepNullProperties";
+	private static final String PROP_listener = "listener";
+	private static final String PROP_sortCollections = "sortCollections";
+	private static final String PROP_sortMaps = "sortMaps";
+	private static final String PROP_trimEmptyCollections = "trimEmptyCollections";
+	private static final String PROP_trimEmptyMaps = "trimEmptyMaps";
+	private static final String PROP_trimStrings = "trimStrings";
+	private static final String PROP_uriContext = "uriContext";
+	private static final String PROP_uriRelativity = "uriRelativity";
+	private static final String PROP_uriResolution = "uriResolution";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_copyFrom = "copyFrom";
 
@@ -1602,17 +1616,17 @@ public class Serializer extends BeanTraverseContext {
 	@Override /* Overridden from BeanTraverseContext */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("addBeanTypes", addBeanTypes)
-			.a("addRootType", addRootType)
-			.a("keepNullProperties", keepNullProperties)
-			.a("listener", listener)
-			.a("sortCollections", sortCollections)
-			.a("sortMaps", sortMaps)
-			.a("trimEmptyCollections", trimEmptyCollections)
-			.a("trimEmptyMaps", trimEmptyMaps)
-			.a("trimStrings", trimStrings)
-			.a("uriContext", uriContext)
-			.a("uriRelativity", uriRelativity)
-			.a("uriResolution", uriResolution);
+			.a(PROP_addBeanTypes, addBeanTypes)
+			.a(PROP_addRootType, addRootType)
+			.a(PROP_keepNullProperties, keepNullProperties)
+			.a(PROP_listener, listener)
+			.a(PROP_sortCollections, sortCollections)
+			.a(PROP_sortMaps, sortMaps)
+			.a(PROP_trimEmptyCollections, trimEmptyCollections)
+			.a(PROP_trimEmptyMaps, trimEmptyMaps)
+			.a(PROP_trimStrings, trimStrings)
+			.a(PROP_uriContext, uriContext)
+			.a(PROP_uriRelativity, uriRelativity)
+			.a(PROP_uriResolution, uriResolution);
 	}
 }

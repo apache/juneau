@@ -149,6 +149,14 @@ import org.apache.juneau.xml.*;
 @SuppressWarnings({"java:S110", "java:S115"})
 public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 
+	// Property name constants
+	private static final String PROP_addBeanTypesHtml = "addBeanTypesHtml";
+	private static final String PROP_addKeyValueTableHeaders = "addKeyValueTableHeaders";
+	private static final String PROP_detectLabelParameters = "detectLabelParameters";
+	private static final String PROP_detectLinksInStrings = "detectLinksInStrings";
+	private static final String PROP_labelParameter = "labelParameter";
+	private static final String PROP_uriAnchorText = "uriAnchorText";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_value = "value";
 	private static final String ARG_copyFrom = "copyFrom";
@@ -1566,11 +1574,11 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	@Override /* Overridden from XmlSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("addBeanTypesHtml", addBeanTypesHtml)
-			.a("addKeyValueTableHeaders", addKeyValueTableHeaders)
-			.a("detectLabelParameters", detectLabelParameters)
-			.a("detectLinksInStrings", detectLinksInStrings)
-			.a("labelParameter", labelParameter)
-			.a("uriAnchorText", uriAnchorText);
+			.a(PROP_addBeanTypesHtml, addBeanTypesHtml)
+			.a(PROP_addKeyValueTableHeaders, addKeyValueTableHeaders)
+			.a(PROP_detectLabelParameters, detectLabelParameters)
+			.a(PROP_detectLinksInStrings, detectLinksInStrings)
+			.a(PROP_labelParameter, labelParameter)
+			.a(PROP_uriAnchorText, uriAnchorText);
 	}
 }

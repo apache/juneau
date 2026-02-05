@@ -60,6 +60,13 @@ import org.apache.juneau.swaps.*;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
+	// Property name constants
+	private static final String PROP_field = "field";
+	private static final String PROP_getter = "getter";
+	private static final String PROP_name = "name";
+	private static final String PROP_setter = "setter";
+	private static final String PROP_type = "type";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_value = "value";
 	private static final String ARG_innerField = "innerField";
@@ -1173,11 +1180,11 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("field", field)
-			.a("getter", getter)
-			.a("name", name)
-			.a("setter", setter)
-			.a("type", cn(rawTypeMeta));
+			.a(PROP_field, field)
+			.a(PROP_getter, getter)
+			.a(PROP_name, name)
+			.a(PROP_setter, setter)
+			.a(PROP_type, cn(rawTypeMeta));
 		// @formatter:on
 	}
 

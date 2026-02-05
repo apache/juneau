@@ -46,6 +46,10 @@ import org.apache.juneau.svl.*;
 @SuppressWarnings("java:S110")
 public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
+	// Property name constants
+	private static final String PROP_ctx = "ctx";
+	private static final String PROP_varResolver = "varResolver";
+
 	/**
 	 * Builder class.
 	 */
@@ -385,7 +389,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	@Override /* Overridden from HtmlStrippedDocSerializerSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("ctx", ctx)
-			.a("varResolver", getVarResolver());
+			.a(PROP_ctx, ctx)
+			.a(PROP_varResolver, getVarResolver());
 	}
 }

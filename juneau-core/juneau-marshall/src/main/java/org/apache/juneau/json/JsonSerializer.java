@@ -112,6 +112,11 @@ import org.apache.juneau.serializer.*;
 @SuppressWarnings({"java:S110", "java:S115"})
 public class JsonSerializer extends WriterSerializer implements JsonMetaProvider {
 
+	// Property name constants
+	private static final String PROP_addBeanTypesJson = "addBeanTypesJson";
+	private static final String PROP_escapeSolidus = "escapeSolidus";
+	private static final String PROP_simpleAttrs = "simpleAttrs";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_copyFrom = "copyFrom";
 
@@ -1148,8 +1153,8 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	@Override /* Overridden from WriterSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("addBeanTypesJson", addBeanTypesJson)
-			.a("escapeSolidus", escapeSolidus)
-			.a("simpleAttrs", simpleAttrs);
+			.a(PROP_addBeanTypesJson, addBeanTypesJson)
+			.a(PROP_escapeSolidus, escapeSolidus)
+			.a(PROP_simpleAttrs, simpleAttrs);
 	}
 }

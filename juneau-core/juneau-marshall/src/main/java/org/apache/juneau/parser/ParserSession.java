@@ -52,6 +52,11 @@ import org.apache.juneau.swap.*;
 @SuppressWarnings("java:S115")
 public class ParserSession extends BeanSession {
 
+	// Property name constants
+	private static final String PROP_javaMethod = "javaMethod";
+	private static final String PROP_listener = "listener";
+	private static final String PROP_outer = "outer";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
 
@@ -1080,9 +1085,9 @@ public class ParserSession extends BeanSession {
 	@Override /* Overridden from BeanSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("javaMethod", javaMethod)
-			.a("listener", listener)
-			.a("outer", outer);
+			.a(PROP_javaMethod, javaMethod)
+			.a(PROP_listener, listener)
+			.a(PROP_outer, outer);
 	}
 
 	/**

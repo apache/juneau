@@ -37,6 +37,17 @@ import jakarta.servlet.http.*;
  */
 public class CallLoggerRule {
 
+	// Property name constants
+	private static final String PROP_codeFilter = "codeFilter";
+	private static final String PROP_enabled = "enabled";
+	private static final String PROP_enabledTest = "enabledTest";
+	private static final String PROP_exceptionFilter = "exceptionFilter";
+	private static final String PROP_level = "level";
+	private static final String PROP_requestDetail = "requestDetail";
+	private static final String PROP_requestFilter = "requestFilter";
+	private static final String PROP_responseDetail = "responseDetail";
+	private static final String PROP_responseFilter = "responseFilter";
+
 	/**
 	 * Builder class.
 	 */
@@ -396,15 +407,15 @@ public class CallLoggerRule {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("codeFilter", statusFilter)
-			.a("enabled", enabled)
-			.a("enabledTest", enabledTest)
-			.a("exceptionFilter", exceptionFilter)
-			.a("level", level)
-			.a("requestDetail", requestDetail)
-			.a("requestFilter", requestFilter)
-			.a("responseDetail", responseDetail)
-			.a("responseFilter", responseFilter);
+			.a(PROP_codeFilter, statusFilter)
+			.a(PROP_enabled, enabled)
+			.a(PROP_enabledTest, enabledTest)
+			.a(PROP_exceptionFilter, exceptionFilter)
+			.a(PROP_level, level)
+			.a(PROP_requestDetail, requestDetail)
+			.a(PROP_requestFilter, requestFilter)
+			.a(PROP_responseDetail, responseDetail)
+			.a(PROP_responseFilter, responseFilter);
 		// @formatter:on
 	}
 

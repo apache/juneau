@@ -65,6 +65,9 @@ import org.apache.juneau.swap.*;
 @SuppressWarnings("java:S115")
 public class SerializerSession extends BeanTraverseSession {
 
+	// Property name constants
+	private static final String PROP_uriResolver = "uriResolver";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
 
@@ -985,7 +988,7 @@ public class SerializerSession extends BeanTraverseSession {
 	@Override /* Overridden from BeanTraverseSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("uriResolver", uriResolver);
+			.a(PROP_uriResolver, uriResolver);
 	}
 
 	/**

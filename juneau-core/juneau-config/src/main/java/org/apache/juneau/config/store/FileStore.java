@@ -54,6 +54,11 @@ public class FileStore extends ConfigStore {
 	private static final String ARG_value = "value";
 	private static final String ARG_copyFrom = "copyFrom";
 
+	// Property name constants
+	private static final String PROP_charset = "charset";
+	private static final String PROP_extensions = "extensions";
+	private static final String PROP_updateOnWrite = "updateOnWrite";
+
 	/**
 	 * Builder class.
 	 */
@@ -600,9 +605,9 @@ public class FileStore extends ConfigStore {
 	@Override /* Overridden from ConfigStore */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("charset", charset)
-			.a("extensions", extensions)
-			.a("updateOnWrite", updateOnWrite);
+			.a(PROP_charset, charset)
+			.a(PROP_extensions, extensions)
+			.a(PROP_updateOnWrite, updateOnWrite);
 	}
 
 	@Override

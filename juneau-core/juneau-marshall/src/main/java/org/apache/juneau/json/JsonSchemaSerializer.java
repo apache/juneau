@@ -53,6 +53,9 @@ import org.apache.juneau.jsonschema.*;
 @SuppressWarnings("java:S110")
 public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMetaProvider {
 
+	// Property name constants
+	private static final String PROP_generator = "generator";
+
 	/**
 	 * Builder class.
 	 */
@@ -1022,7 +1025,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 	@Override /* Overridden from JsonSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("generator", generator);
+			.a(PROP_generator, generator);
 	}
 
 	JsonSchemaGenerator getGenerator() { return generator; }

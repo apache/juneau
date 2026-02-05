@@ -32,6 +32,10 @@ import org.apache.juneau.commons.utils.*;
  */
 public class UrlPath {
 
+	// Property name constants
+	private static final String PROP_parts = "parts";
+	private static final String PROP_raw = "raw";
+
 	/**
 	 * Creates a new parsed {@link UrlPath} object from the specified string.
 	 *
@@ -101,8 +105,8 @@ public class UrlPath {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("parts", parts)
-			.a("raw", path);
+			.a(PROP_parts, parts)
+			.a(PROP_raw, path);
 		// @formatter:on
 	}
 

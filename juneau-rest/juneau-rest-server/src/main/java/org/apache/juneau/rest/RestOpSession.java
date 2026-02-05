@@ -41,6 +41,10 @@ import org.apache.juneau.rest.logger.*;
 @SuppressWarnings("java:S115")
 public class RestOpSession extends ContextSession {
 
+	// Property name constants
+	private static final String PROP_ctx = "ctx";
+	private static final String PROP_session = "session";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
 	private static final String ARG_session = "session";
@@ -230,7 +234,7 @@ public class RestOpSession extends ContextSession {
 	@Override /* Overridden from ContextSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("ctx", ctx)
-			.a(ARG_session, session);
+			.a(PROP_ctx, ctx)
+			.a(PROP_session, session);
 	}
 }

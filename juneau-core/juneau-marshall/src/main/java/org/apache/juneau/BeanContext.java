@@ -163,6 +163,31 @@ import org.apache.juneau.swap.*;
 @SuppressWarnings({"unchecked","rawtypes","java:S6539","java:S115"})
 public class BeanContext extends Context {
 
+	// Property name constants
+	private static final String PROP_beanClassVisibility = "beanClassVisibility";
+	private static final String PROP_beanConstructorVisibility = "beanConstructorVisibility";
+	private static final String PROP_beanDictionary = "beanDictionary";
+	private static final String PROP_beanFieldVisibility = "beanFieldVisibility";
+	private static final String PROP_beanMethodVisibility = "beanMethodVisibility";
+	private static final String PROP_beansRequireDefaultConstructor = "beansRequireDefaultConstructor";
+	private static final String PROP_beansRequireSerializable = "beansRequireSerializable";
+	private static final String PROP_beansRequireSettersForGetters = "beansRequireSettersForGetters";
+	private static final String PROP_beansRequireSomeProperties = "beansRequireSomeProperties";
+	private static final String PROP_id = "id";
+	private static final String PROP_ignoreInvocationExceptionsOnGetters = "ignoreInvocationExceptionsOnGetters";
+	private static final String PROP_ignoreInvocationExceptionsOnSetters = "ignoreInvocationExceptionsOnSetters";
+	private static final String PROP_ignoreTransientFields = "ignoreTransientFields";
+	private static final String PROP_ignoreUnknownBeanProperties = "ignoreUnknownBeanProperties";
+	private static final String PROP_ignoreUnknownNullBeanProperties = "ignoreUnknownNullBeanProperties";
+	private static final String PROP_notBeanClasses = "notBeanClasses";
+	private static final String PROP_notBeanPackageNames = "notBeanPackageNames";
+	private static final String PROP_notBeanPackagePrefixes = "notBeanPackagePrefixes";
+	private static final String PROP_sortProperties = "sortProperties";
+	private static final String PROP_swaps = "swaps";
+	private static final String PROP_useEnumNames = "useEnumNames";
+	private static final String PROP_useInterfaceProxies = "useInterfaceProxies";
+	private static final String PROP_useJavaBeanIntrospector = "useJavaBeanIntrospector";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_bc = "bc";
 	private static final String ARG_beanClass = "beanClass";
@@ -4302,29 +4327,29 @@ public class BeanContext extends Context {
 	@Override /* Overridden from Context */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("beanClassVisibility", beanClassVisibility)
-			.a("beanConstructorVisibility", beanConstructorVisibility)
-			.a("beanDictionary", beanDictionary)
-			.a("beanFieldVisibility", beanFieldVisibility)
-			.a("beanMethodVisibility", beanMethodVisibility)
-			.a("beansRequireDefaultConstructor", beansRequireDefaultConstructor)
-			.a("beansRequireSerializable", beansRequireSerializable)
-			.a("beansRequireSettersForGetters", beansRequireSettersForGetters)
-			.a("beansRequireSomeProperties", beansRequireSomeProperties)
-			.a("id", System.identityHashCode(this))
-			.a("ignoreInvocationExceptionsOnGetters", ignoreInvocationExceptionsOnGetters)
-			.a("ignoreInvocationExceptionsOnSetters", ignoreInvocationExceptionsOnSetters)
-			.a("ignoreTransientFields", ignoreTransientFields)
-			.a("ignoreUnknownBeanProperties", ignoreUnknownBeanProperties)
-			.a("ignoreUnknownNullBeanProperties", ignoreUnknownNullBeanProperties)
-			.a("notBeanClasses", notBeanClasses)
-			.a("notBeanPackageNames", notBeanPackageNames)
-			.a("notBeanPackagePrefixes", notBeanPackagePrefixes)
-			.a("sortProperties", sortProperties)
-			.a("swaps", swaps)
-			.a("useEnumNames", useEnumNames)
-			.a("useInterfaceProxies", useInterfaceProxies)
-			.a("useJavaBeanIntrospector", useJavaBeanIntrospector);
+			.a(PROP_beanClassVisibility, beanClassVisibility)
+			.a(PROP_beanConstructorVisibility, beanConstructorVisibility)
+			.a(PROP_beanDictionary, beanDictionary)
+			.a(PROP_beanFieldVisibility, beanFieldVisibility)
+			.a(PROP_beanMethodVisibility, beanMethodVisibility)
+			.a(PROP_beansRequireDefaultConstructor, beansRequireDefaultConstructor)
+			.a(PROP_beansRequireSerializable, beansRequireSerializable)
+			.a(PROP_beansRequireSettersForGetters, beansRequireSettersForGetters)
+			.a(PROP_beansRequireSomeProperties, beansRequireSomeProperties)
+			.a(PROP_id, System.identityHashCode(this))
+			.a(PROP_ignoreInvocationExceptionsOnGetters, ignoreInvocationExceptionsOnGetters)
+			.a(PROP_ignoreInvocationExceptionsOnSetters, ignoreInvocationExceptionsOnSetters)
+			.a(PROP_ignoreTransientFields, ignoreTransientFields)
+			.a(PROP_ignoreUnknownBeanProperties, ignoreUnknownBeanProperties)
+			.a(PROP_ignoreUnknownNullBeanProperties, ignoreUnknownNullBeanProperties)
+			.a(PROP_notBeanClasses, notBeanClasses)
+			.a(PROP_notBeanPackageNames, notBeanPackageNames)
+			.a(PROP_notBeanPackagePrefixes, notBeanPackagePrefixes)
+			.a(PROP_sortProperties, sortProperties)
+			.a(PROP_swaps, swaps)
+			.a(PROP_useEnumNames, useEnumNames)
+			.a(PROP_useInterfaceProxies, useInterfaceProxies)
+			.a(PROP_useJavaBeanIntrospector, useJavaBeanIntrospector);
 	}
 
 	/**

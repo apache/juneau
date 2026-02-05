@@ -35,6 +35,8 @@ import org.apache.juneau.json.*;
 public class BeanExample {
 
 	private static final String CONST_timestamp = "2016-12-31T05:02:03Z";
+	private static final String EXAMPLE_URL_FOO_ORG = "http://foo.org/";
+	private static final String EXAMPLE_URL_WWW_FOO_ORG = "http://www.foo.org/";
 
 	/**
 	 * DTO Samples
@@ -111,11 +113,11 @@ public class BeanExample {
 			feed("tag:foo.org", "Title", CONST_timestamp)
 			.setSubtitle(text("html").setText("Subtitle"))
 			.setLinks(
-				link("alternate", "text/html", "http://foo.org/").setHreflang("en"),
+				link("alternate", "text/html", EXAMPLE_URL_FOO_ORG).setHreflang("en"),
 				link("self", "application/atom+xml", "http://foo.org/feed.atom")
 			)
 			.setGenerator(
-				generator("Example Toolkit").setUri("http://www.foo.org/").setVersion("1.0")
+				generator("Example Toolkit").setUri(EXAMPLE_URL_WWW_FOO_ORG).setVersion("1.0")
 			)
 			.setEntries(
 				entry("tag:foo.org", "Title", CONST_timestamp)
@@ -125,7 +127,7 @@ public class BeanExample {
 				)
 				.setPublished(CONST_timestamp)
 				.setAuthors(
-					person("John Smith").setUri(new URI("http://foo.org/")).setEmail("foo@foo.org")
+					person("John Smith").setUri(new URI(EXAMPLE_URL_FOO_ORG)).setEmail("foo@foo.org")
 				)
 				.setContributors(
 					person("John Smith"),
@@ -134,7 +136,7 @@ public class BeanExample {
 				.setContent(
 					content("xhtml")
 					.setLang("en")
-					.setBase("http://foo.org/")
+					.setBase(EXAMPLE_URL_FOO_ORG)
 					.setText("<div><p><i>[Sample content]</i></p></div>")
 				)
 			);

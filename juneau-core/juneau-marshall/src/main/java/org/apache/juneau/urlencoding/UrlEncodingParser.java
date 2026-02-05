@@ -57,6 +57,9 @@ import org.apache.juneau.uon.*;
 @SuppressWarnings("java:S110")
 public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvider {
 
+	// Property name constants
+	private static final String PROP_expandedParams = "expandedParams";
+
 	/**
 	 * Builder class.
 	 */
@@ -756,6 +759,6 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 	@Override /* Overridden from UonParser */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("expandedParams", expandedParams);
+			.a(PROP_expandedParams, expandedParams);
 	}
 }

@@ -42,6 +42,9 @@ import org.apache.juneau.commons.reflect.*;
 @SuppressWarnings("java:S115")
 public class OutputStreamSerializer extends Serializer {
 
+	// Property name constants
+	private static final String PROP_binaryFormat = "binaryFormat";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_value = "value";
 	private static final String ARG_copyFrom = "copyFrom";
@@ -777,6 +780,6 @@ public class OutputStreamSerializer extends Serializer {
 	@Override /* Overridden from Serializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("binaryFormat", binaryFormat);
+			.a(PROP_binaryFormat, binaryFormat);
 	}
 }

@@ -137,6 +137,14 @@ import org.apache.juneau.serializer.*;
 @SuppressWarnings({"java:S110", "java:S115"})
 public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 
+	// Property name constants
+	private static final String PROP_addBeanTypes = "addBeanTypes";
+	private static final String PROP_addNamespaceUrlsToRoot = "addNamespaceUrlsToRoot";
+	private static final String PROP_autoDetectNamespaces = "autoDetectNamespaces";
+	private static final String PROP_defaultNamespace = "defaultNamespace";
+	private static final String PROP_enableNamespaces = "enableNamespaces";
+	private static final String PROP_namespaces = "namespaces";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_copyFrom = "copyFrom";
 	private static final String ARG_builder = "builder";
@@ -1358,11 +1366,11 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	@Override /* Overridden from WriterSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("addBeanTypes", addBeanTypes2)
-			.a("addNamespaceUrlsToRoot", addNamespaceUrlsToRoot)
-			.a("autoDetectNamespaces", autoDetectNamespaces)
-			.a("defaultNamespace", defaultNamespace)
-			.a("enableNamespaces", enableNamespaces)
-			.a("namespaces", namespaces);
+			.a(PROP_addBeanTypes, addBeanTypes2)
+			.a(PROP_addNamespaceUrlsToRoot, addNamespaceUrlsToRoot)
+			.a(PROP_autoDetectNamespaces, autoDetectNamespaces)
+			.a(PROP_defaultNamespace, defaultNamespace)
+			.a(PROP_enableNamespaces, enableNamespaces)
+			.a(PROP_namespaces, namespaces);
 	}
 }

@@ -61,6 +61,13 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_copyFrom = "copyFrom";
 
+	// Property name constants
+	private static final String PROP_eventAllocator = "eventAllocator";
+	private static final String PROP_preserveRootElement = "preserveRootElement";
+	private static final String PROP_reporter = "reporter";
+	private static final String PROP_resolver = "resolver";
+	private static final String PROP_validating = "validating";
+
 	/**
 	 * Builder class.
 	 */
@@ -885,10 +892,10 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	@Override /* Overridden from ReaderParser */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("eventAllocator", eventAllocator)
-			.a("preserveRootElement", preserveRootElement)
-			.a("reporter", reporter)
-			.a("resolver", resolver)
-			.a("validating", validating);
+			.a(PROP_eventAllocator, eventAllocator)
+			.a(PROP_preserveRootElement, preserveRootElement)
+			.a(PROP_reporter, reporter)
+			.a(PROP_resolver, resolver)
+			.a(PROP_validating, validating);
 	}
 }

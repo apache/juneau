@@ -60,6 +60,19 @@ import org.apache.juneau.xml.annotation.*;
 @SuppressWarnings("java:S115")
 public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 
+	// Property name constants
+	private static final String PROP_addBeanTypes = "addBeanTypes";
+	private static final String PROP_addLiteralTypes = "addLiteralTypes";
+	private static final String PROP_addRootProperty = "addRootProperty";
+	private static final String PROP_autoDetectNamespaces = "autoDetectNamespaces";
+	private static final String PROP_collectionFormat = "collectionFormat";
+	private static final String PROP_juneauBpNs = "juneauBpNs";
+	private static final String PROP_juneauNs = "juneauNs";
+	private static final String PROP_language = "language";
+	private static final String PROP_looseCollections = "looseCollections";
+	private static final String PROP_namespaces = "namespaces";
+	private static final String PROP_useXmlNamespaces = "useXmlNamespaces";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_value = "value";
 	private static final String ARG_copyFrom = "copyFrom";
@@ -2057,16 +2070,16 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	@Override /* Overridden from WriterSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("addBeanTypes", addBeanTypes)
-			.a("addLiteralTypes", addLiteralTypes)
-			.a("addRootProperty", addRootProperty)
-			.a("autoDetectNamespaces", autoDetectNamespaces)
-			.a("collectionFormat", collectionFormat)
-			.a("juneauBpNs", juneauBpNs)
-			.a("juneauNs", juneauNs)
-			.a("language", language)
-			.a("looseCollections", looseCollections)
-			.a("namespaces", namespaces)
-			.a("useXmlNamespaces", useXmlNamespaces);
+			.a(PROP_addBeanTypes, addBeanTypes)
+			.a(PROP_addLiteralTypes, addLiteralTypes)
+			.a(PROP_addRootProperty, addRootProperty)
+			.a(PROP_autoDetectNamespaces, autoDetectNamespaces)
+			.a(PROP_collectionFormat, collectionFormat)
+			.a(PROP_juneauBpNs, juneauBpNs)
+			.a(PROP_juneauNs, juneauNs)
+			.a(PROP_language, language)
+			.a(PROP_looseCollections, looseCollections)
+			.a(PROP_namespaces, namespaces)
+			.a(PROP_useXmlNamespaces, useXmlNamespaces);
 	}
 }

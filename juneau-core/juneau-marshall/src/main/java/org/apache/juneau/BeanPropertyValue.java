@@ -26,6 +26,11 @@ import org.apache.juneau.commons.collections.*;
  */
 public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 
+	// Property name constants
+	private static final String PROP_name = "name";
+	private static final String PROP_value = "value";
+	private static final String PROP_type = "type";
+
 	private final BeanPropertyMeta pMeta;
 	private final String name;
 	private final Object value;
@@ -89,9 +94,9 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("name", name)
-			.a("value", value)
-			.a("type", cns(pMeta.getClassMeta()));
+			.a(PROP_name, name)
+			.a(PROP_value, value)
+			.a(PROP_type, cns(pMeta.getClassMeta()));
 		// @formatter:on
 	}
 

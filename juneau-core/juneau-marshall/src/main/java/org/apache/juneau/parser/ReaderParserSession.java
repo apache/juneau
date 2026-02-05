@@ -42,6 +42,10 @@ import org.apache.juneau.httppart.*;
 @SuppressWarnings("java:S115")
 public class ReaderParserSession extends ParserSession {
 
+	// Property name constants
+	private static final String PROP_fileCharset = "fileCharset";
+	private static final String PROP_streamCharset = "streamCharset";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
 
@@ -275,7 +279,7 @@ public class ReaderParserSession extends ParserSession {
 	@Override /* Overridden from ParserSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("fileCharset", fileCharset)
-			.a("streamCharset", streamCharset);
+			.a(PROP_fileCharset, fileCharset)
+			.a(PROP_streamCharset, streamCharset);
 	}
 }

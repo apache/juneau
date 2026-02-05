@@ -52,6 +52,14 @@ import org.apache.juneau.commons.io.*;
 @SuppressWarnings("resource")
 public class BasicFileFinder implements FileFinder {
 
+	// Property name constants
+	private static final String PROP_cachingLimit = "cachingLimit";
+	private static final String PROP_class = "class";
+	private static final String PROP_exclude = "exclude";
+	private static final String PROP_hashCode = "hashCode";
+	private static final String PROP_include = "include";
+	private static final String PROP_roots = "roots";
+
 	private static final ResourceBundle.Control RB_CONTROL = ResourceBundle.Control.getControl(Control.FORMAT_DEFAULT);
 
 	private final Map<String,LocalFile> files = new ConcurrentHashMap<>();
@@ -120,12 +128,12 @@ public class BasicFileFinder implements FileFinder {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("cachingLimit", cachingLimit)
-			.a("class", cns(getClass()))
-			.a("exclude", excludePatterns)
-			.a("include", includePatterns)
-			.a("roots", roots)
-			.a("hashCode", hashCode);
+			.a(PROP_cachingLimit, cachingLimit)
+			.a(PROP_class, cns(getClass()))
+			.a(PROP_exclude, excludePatterns)
+			.a(PROP_include, includePatterns)
+			.a(PROP_roots, roots)
+			.a(PROP_hashCode, hashCode);
 		// @formatter:on
 	}
 

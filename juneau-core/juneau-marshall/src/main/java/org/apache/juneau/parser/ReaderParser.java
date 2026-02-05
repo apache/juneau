@@ -51,6 +51,10 @@ import org.apache.juneau.commons.reflect.*;
 @SuppressWarnings("java:S115")
 public class ReaderParser extends Parser {
 
+	// Property name constants
+	private static final String PROP_fileCharset = "fileCharset";
+	private static final String PROP_streamCharset = "streamCharset";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_copyFrom = "copyFrom";
 
@@ -721,7 +725,7 @@ public class ReaderParser extends Parser {
 	@Override /* Overridden from Parser */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("fileCharset", fileCharset)
-			.a("streamCharset", streamCharset);
+			.a(PROP_fileCharset, fileCharset)
+			.a(PROP_streamCharset, streamCharset);
 	}
 }

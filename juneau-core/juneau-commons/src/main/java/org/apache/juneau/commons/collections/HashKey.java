@@ -90,6 +90,10 @@ import java.util.*;
  */
 public class HashKey {
 
+	// Property name constants
+	private static final String PROP_array = "array";
+	private static final String PROP_hashCode = "hashCode";
+
 	/**
 	 * Creates a new hash key from the specified values.
 	 *
@@ -177,8 +181,8 @@ public class HashKey {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("hashCode", hashCode())
-			.a("array", array);
+			.a(PROP_hashCode, hashCode())
+			.a(PROP_array, array);
 		// @formatter:on
 	}
 

@@ -140,6 +140,11 @@ import org.apache.juneau.serializer.*;
 @SuppressWarnings({"java:S110", "java:S115"})
 public class UonSerializer extends WriterSerializer implements HttpPartSerializer, UonMetaProvider {
 
+	// Property name constants
+	private static final String PROP_addBeanTypes = "addBeanTypes";
+	private static final String PROP_encoding = "encoding";
+	private static final String PROP_paramFormat = "paramFormat";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_value = "value";
 	private static final String ARG_copyFrom = "copyFrom";
@@ -1202,8 +1207,8 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	@Override /* Overridden from WriterSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("addBeanTypes", addBeanTypes2)
-			.a("encoding", encoding)
-			.a("paramFormat", paramFormat);
+			.a(PROP_addBeanTypes, addBeanTypes2)
+			.a(PROP_encoding, encoding)
+			.a(PROP_paramFormat, paramFormat);
 	}
 }

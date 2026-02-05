@@ -41,6 +41,11 @@ import jakarta.servlet.http.*;
  */
 public abstract class DebugEnablement {
 
+	// Property name constants
+	private static final String PROP_conditionalPredicate = "conditionalPredicate";
+	private static final String PROP_defaultEnablement = "defaultEnablement";
+	private static final String PROP_enablementMap = "enablementMap";
+
 	private static final String HEADER_Debug = "Debug";
 
 	/**
@@ -280,9 +285,9 @@ public abstract class DebugEnablement {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("conditionalPredicate", conditionalPredicate)
-			.a("defaultEnablement", defaultEnablement)
-			.a("enablementMap", enablementMap);
+			.a(PROP_conditionalPredicate, conditionalPredicate)
+			.a(PROP_defaultEnablement, defaultEnablement)
+			.a(PROP_enablementMap, enablementMap);
 		// @formatter:on
 	}
 

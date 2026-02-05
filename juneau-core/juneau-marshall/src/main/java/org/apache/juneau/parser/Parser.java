@@ -140,6 +140,14 @@ import org.apache.juneau.xml.*;
  */
 public class Parser extends BeanContextable {
 
+	// Property name constants
+	private static final String PROP_autoCloseStreams = "autoCloseStreams";
+	private static final String PROP_debugOutputLines = "debugOutputLines";
+	private static final String PROP_listener = "listener";
+	private static final String PROP_strict = "strict";
+	private static final String PROP_trimStrings = "trimStrings";
+	private static final String PROP_unbuffered = "unbuffered";
+
 	/**
 	 * Builder class.
 	 */
@@ -1418,11 +1426,11 @@ public class Parser extends BeanContextable {
 	@Override /* Overridden from BeanContextable */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("autoCloseStreams", autoCloseStreams)
-			.a("debugOutputLines", debugOutputLines)
-			.a("listener", listener)
-			.a("strict", strict)
-			.a("trimStrings", trimStrings)
-			.a("unbuffered", unbuffered);
+			.a(PROP_autoCloseStreams, autoCloseStreams)
+			.a(PROP_debugOutputLines, debugOutputLines)
+			.a(PROP_listener, listener)
+			.a(PROP_strict, strict)
+			.a(PROP_trimStrings, trimStrings)
+			.a(PROP_unbuffered, unbuffered);
 	}
 }

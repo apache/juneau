@@ -50,6 +50,9 @@ import org.apache.juneau.xml.*;
 @SuppressWarnings({"java:S110", "java:S115"})
 public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvider {
 
+	// Property name constants
+	private static final String PROP_soapAction = "soapAction";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_value = "value";
 	private static final String ARG_copyFrom = "copyFrom";
@@ -899,6 +902,6 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 	@Override /* Overridden from XmlSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a("soapAction", soapAction);
+			.a(PROP_soapAction, soapAction);
 	}
 }

@@ -55,6 +55,11 @@ import org.apache.juneau.cp.*;
 @SuppressWarnings("resource")
 public class VarResolverSession {
 
+	// Property name constants
+	private static final String PROP_contextBeanStore = "context.beanStore";
+	private static final String PROP_sessionBeanStore = "session.beanStore";
+	private static final String PROP_var = "var";
+
 	private static final AsciiSet AS1 = AsciiSet.of("\\{");
 	private static final AsciiSet AS2 = AsciiSet.of("\\${}");
 
@@ -442,9 +447,9 @@ public class VarResolverSession {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a("context.beanStore", this.context.beanStore)
-			.a("var", this.context.getVarMap().keySet())
-			.a("session.beanStore", beanStore);
+			.a(PROP_contextBeanStore, this.context.beanStore)
+			.a(PROP_var, this.context.getVarMap().keySet())
+			.a(PROP_sessionBeanStore, beanStore);
 		// @formatter:on
 	}
 
