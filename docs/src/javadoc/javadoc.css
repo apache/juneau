@@ -452,10 +452,10 @@ div.table-tabs > button.table-tab {
     background:#dee3e9;
     font-weight: bold;
 }
-.col-first, .col-first {
+.col-first {
     font-size:13px;
 }
-.col-second, .col-second, .col-last, .col-constructor-name, .col-summary-item-name, .col-last {
+.col-second, .col-last, .col-constructor-name, .col-summary-item-name {
     font-size:13px;
 }
 .col-first, .col-second, .col-constructor-name {
@@ -465,8 +465,6 @@ div.table-tabs > button.table-tab {
 .col-last {
     white-space:normal;
 }
-.col-first a:link, .col-first a:visited,
-.col-second a:link, .col-second a:visited,
 .col-first a:link, .col-first a:visited,
 .col-second a:link, .col-second a:visited,
 .col-constructor-name a:link, .col-constructor-name a:visited,
@@ -1274,9 +1272,14 @@ h2.topic, h3.topic, h4.topic {
 h2.topic { font-size:14pt; }
 h3.topic { font-size:13pt; }
 h4.topic { font-size:12pt; }
-h5.topic { font-size:11pt; }
+h5.topic {
+	font-size:11pt;
+	background:linear-gradient(to bottom, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
+	background:-moz-linear-gradient(to bottom, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
+	background:-webkit-gradient(linear, left top, left bottom, from(#F5F5F5), to(#DEE3E9) );
+	max-width:800px;
+}
 .topic p { max-width:800px; }
-/*.topic ul li, .topic ol li { max-width:750px; }*/
 div.topic { margin-left:10px; max-width:950px; }
 
 h5.figure { color:#2c4557; margin-left:30px; margin-right:30px; margin-top:10px; margin-bottom:0px; font-style:italic; }
@@ -1307,12 +1310,6 @@ div.contentContainer > div.block > p:first-child {
 	background:-moz-linear-gradient(to bottom, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
 	background:-webkit-gradient(linear, left top, left bottom, from(#F5F5F5), to(#DEE3E9) );
 	max-width:900px;
-}
-h5.topic {
-	background:linear-gradient(to bottom, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
-	background:-moz-linear-gradient(to bottom, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
-	background:-webkit-gradient(linear, left top, left bottom, from(#F5F5F5), to(#DEE3E9) );
-	max-width:800px;
 }
 
 /* Dark-colored background headers */

@@ -2626,7 +2626,6 @@ public class HttpPartSchema {
 			return this;
 		}
 
-		@SuppressWarnings("deprecation")
 		Builder apply(Items a) {
 			default_(joinnlOrNull(a.default_(), a.df()));
 			enum_(toSet(a.enum_(), a.e()));
@@ -2745,7 +2744,6 @@ public class HttpPartSchema {
 		// Other
 		// -----------------------------------------------------------------------------------------------------------------
 
-		@SuppressWarnings("deprecation")
 		Builder apply(Schema a) {
 			default_(joinnlOrNull(a.default_(), a.df()));
 			enum_(toSet(a.enum_(), a.e()));
@@ -2800,7 +2798,6 @@ public class HttpPartSchema {
 			return this;
 		}
 
-		@SuppressWarnings("deprecation")
 		Builder apply(SubItems a) {
 			default_(joinnlOrNull(a.default_(), a.df()));
 			enum_(toSet(a.enum_(), a.e()));

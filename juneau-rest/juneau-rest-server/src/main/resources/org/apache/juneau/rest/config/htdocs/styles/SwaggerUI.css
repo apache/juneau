@@ -13,7 +13,7 @@
  ***************************************************************************************************************************
 */
 
-.swagger-ui {	
+.swagger-ui {
 }
 
 /*-----------------------------------------------------------------------------------------------------------
@@ -251,7 +251,6 @@ td.parameter-value, td.response-value {
  
 .op-block-contents .example-select {
     margin: 10px 0 5px 0;
-	border-width: 1px;
 	font-weight:bold;
     padding: 5px 40px 5px 10px;
     border: 1px solid #41444e;
@@ -332,7 +331,6 @@ div.headers {
 }
 
 .section-table {
-/*	display: inline-block;*/
 }
 
 .responses .section-table td {

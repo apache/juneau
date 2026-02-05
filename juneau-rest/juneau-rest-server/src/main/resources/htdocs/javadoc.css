@@ -74,6 +74,7 @@ h5 {
 }
 h6 {
     font-size:1.1em;
+    margin:10px 0px;
 }
 ul {
     list-style-type:disc;
@@ -134,7 +135,7 @@ Navigation bar styles
     background-repeat:repeat-x;
     color:#FFFFFF;
     padding:.8em .5em .4em .8em;
-    height:auto;/*height:1.8em;*/
+    height:auto;
     font-size:1em;
     margin:0;
 }
@@ -697,9 +698,6 @@ h5.topic,h6.topic {
 	margin-top:20px;
 	color: rgb(44,69,87);
 	text-decoration: underline;
-}
-h6 {
-	margin:10px 0px;
 }
 h6.figure {
 	color: rgb(44,69,87);
