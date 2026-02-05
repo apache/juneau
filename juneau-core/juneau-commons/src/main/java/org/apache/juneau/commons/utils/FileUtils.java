@@ -118,7 +118,12 @@ public class FileUtils {
 				for (var c : cf)
 					deleteFile(c);
 		}
-		return f.delete();
+		try {
+			Files.delete(f.toPath());
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
 	}
 
 	/**

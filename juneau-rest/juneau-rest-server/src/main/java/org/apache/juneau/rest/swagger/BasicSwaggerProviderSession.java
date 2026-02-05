@@ -377,7 +377,7 @@ public class BasicSwaggerProviderSession {
 			);
 
 			var _description = Value.<String[]>empty();
-			al.forEach(ai -> ai.getValue(String[].class, "description").filter(x -> x.length > 0).ifPresent(_description::set));
+			al.forEach(ai -> ai.getValue(String[].class, SWAGGER_description).filter(x -> x.length > 0).ifPresent(_description::set));
 			op.appendIf(ne, SWAGGER_description,
 				firstNonEmpty(
 					resolve(ms.description()),

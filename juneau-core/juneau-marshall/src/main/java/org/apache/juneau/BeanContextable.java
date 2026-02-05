@@ -1479,7 +1479,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder dictionaryOn(Class<?> on, Class<?>...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			bcBuilder.dictionaryOn(assertArgNotNull(ARG_on, on), values);
 			return this;
 		}

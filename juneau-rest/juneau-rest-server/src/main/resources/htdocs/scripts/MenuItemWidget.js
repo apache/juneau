@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License.
  *
  ***************************************************************************************************************************/
-var popupItem;
+let popupItem;
 
 function closePopup() {
 	if (popupItem != null) {

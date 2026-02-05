@@ -73,18 +73,18 @@ public class XmlUtils {
 	 */
 	public static LinkedList<Object> collapseTextNodes(LinkedList<Object> value) {
 
-		String prev = null;
+		StringBuilder prev = null;
 		for (ListIterator<Object> i = value.listIterator(); i.hasNext();) {
 			Object o = i.next();
 			if (o instanceof String o2) {
 				if (prev == null)
-					prev = o2;
+					prev = new StringBuilder(o2);
 				else {
-					prev += o2;
+					prev.append(o2);
 					i.remove();
 					i.previous();
 					i.remove();
-					i.add(prev);
+					i.add(prev.toString());
 				}
 			} else {
 				prev = null;

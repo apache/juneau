@@ -581,7 +581,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder beanDictionary(ClassInfo...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			return beanDictionary(l(values));
 		}
 

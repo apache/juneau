@@ -863,7 +863,7 @@ public class ConfigMap implements ConfigStoreListener {
 
 		// Collapse any multi-lines.
 		var li = lines.listIterator(lines.size());
-		String accumulator = null;
+		StringBuilder accumulator = null;
 		while (li.hasPrevious()) {
 			var l = li.previous();
 			var c = firstChar(l);
@@ -871,13 +871,13 @@ public class ConfigMap implements ConfigStoreListener {
 				c = firstNonWhitespaceChar(l);
 				if (c != '#') {
 					if (accumulator == null)
-						accumulator = l.substring(1);
+						accumulator = new StringBuilder(l.substring(1));
 					else
-						accumulator = l.substring(1) + "\n" + accumulator;
+						accumulator.insert(0, l.substring(1) + "\n");
 					li.remove();
 				}
 			} else if (nn(accumulator)) {
-				li.set(l + "\n" + accumulator);
+				li.set(l + "\n" + accumulator.toString());
 				accumulator = null;
 			}
 		}

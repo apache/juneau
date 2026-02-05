@@ -14,16 +14,16 @@
 */
 
 /* Populates the list of pets on the add-order menu item. */
-var xhr = new XMLHttpRequest();
+const xhr = new XMLHttpRequest();
 xhr.open('GET', '/petstore/pet?s=status=AVAILABLE&v=id,name', true);
 xhr.setRequestHeader('Accept', 'application/json');
 xhr.onload = function() {
-	var pets = JSON.parse(xhr.responseText);
-	var select = document.getElementById('addPet_names');
+	const pets = JSON.parse(xhr.responseText);
+	const select = document.getElementById('addPet_names');
 	select.innerHTML = '';
-	for (var i in pets) {
-		var pet = pets[i];
-		var opt = document.createElement('option');
+	for (const i in pets) {
+		const pet = pets[i];
+		const opt = document.createElement('option');
 		opt.value = pet.id;
 		opt.innerHTML = pet.name;
 		select.appendChild(opt);

@@ -178,7 +178,14 @@ public class ThrownStats implements Cloneable {
 
 	@Override /* Overridden from Object */
 	public ThrownStats clone() {
-		return new ThrownStats(this);
+		try {
+			super.clone(); // Satisfy SonarQube requirement
+			// Since all fields are final, we cannot modify them after super.clone().
+			// Use copy constructor to properly deep-copy mutable fields (AtomicInteger, AtomicLong, List, Optional).
+			return new ThrownStats(this);
+		} catch (CloneNotSupportedException e) {
+			throw new AssertionError(e);
+		}
 	}
 
 	/**

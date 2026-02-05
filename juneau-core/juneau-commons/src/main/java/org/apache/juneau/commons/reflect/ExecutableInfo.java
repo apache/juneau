@@ -80,7 +80,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection">Reflection Package</a>
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({"java:S115", "java:S3011"})
 public abstract class ExecutableInfo extends AccessibleInfo {
 
 	// Argument name constants for assertArgNotNull

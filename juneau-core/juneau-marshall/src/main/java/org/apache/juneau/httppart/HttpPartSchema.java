@@ -4584,7 +4584,7 @@ public class HttpPartSchema {
 
 	private static boolean isValidRelativeJsonPointer(String x) {
 		// Relative JSON Pointer validation
-		return x.matches("^(0|[1-9][0-9]*)(#|(/[^/]*)*)$");
+		return x.matches("^(0|[1-9]\\d*)(#|(/[^/]*)*)$");
 	}
 
 	private boolean isValidRequired(Object x) {

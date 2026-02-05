@@ -1650,7 +1650,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder encoders(Encoder...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			encoders().add(value);
 			return this;
 		}

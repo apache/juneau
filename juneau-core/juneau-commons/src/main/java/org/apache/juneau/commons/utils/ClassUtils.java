@@ -32,7 +32,7 @@ import org.apache.juneau.commons.reflect.*;
  * Utility methods for working with classes.
  *
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({"java:S115", "java:S3011"})
 public class ClassUtils {
 
 	/**
