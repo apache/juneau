@@ -74,6 +74,10 @@ public class License extends OpenApiElement {
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_property = "property";
 
+	// Property name constants
+	private static final String PROP_name = "name";
+	private static final String PROP_url = "url";
+
 	private String name;
 	private URI url;
 
@@ -107,8 +111,8 @@ public class License extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "name" -> toType(getName(), type);
-			case "url" -> toType(getUrl(), type);
+			case PROP_name -> toType(getName(), type);
+			case PROP_url -> toType(getUrl(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -137,8 +141,8 @@ public class License extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(name), "name")
-			.addIf(nn(url), "url")
+			.addIf(nn(name), PROP_name)
+			.addIf(nn(url), PROP_url)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -148,8 +152,8 @@ public class License extends OpenApiElement {
 	public License set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "name" -> setName(s(value));
-			case "url" -> setUrl(toUri(value));
+			case PROP_name -> setName(s(value));
+			case PROP_url -> setUrl(toUri(value));
 			default -> {
 				super.set(property, value);
 				yield this;

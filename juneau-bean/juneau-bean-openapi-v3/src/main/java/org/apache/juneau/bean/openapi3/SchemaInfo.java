@@ -102,6 +102,44 @@ public class SchemaInfo extends OpenApiElement {
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_property = "property";
 
+	// Property name constants
+	private static final String PROP_additionalProperties = "additionalProperties";
+	private static final String PROP_allOf = "allOf";
+	private static final String PROP_anyOf = "anyOf";
+	private static final String PROP_default = "default";
+	private static final String PROP_deprecated = "deprecated";
+	private static final String PROP_description = "description";
+	private static final String PROP_discriminator = "discriminator";
+	private static final String PROP_enum = "enum";
+	private static final String PROP_example = "example";
+	private static final String PROP_exclusiveMaximum = "exclusiveMaximum";
+	private static final String PROP_exclusiveMinimum = "exclusiveMinimum";
+	private static final String PROP_externalDocs = "externalDocs";
+	private static final String PROP_format = "format";
+	private static final String PROP_items = "items";
+	private static final String PROP_maxItems = "maxItems";
+	private static final String PROP_maxLength = "maxLength";
+	private static final String PROP_maxProperties = "maxProperties";
+	private static final String PROP_maximum = "maximum";
+	private static final String PROP_minItems = "minItems";
+	private static final String PROP_minLength = "minLength";
+	private static final String PROP_minProperties = "minProperties";
+	private static final String PROP_minimum = "minimum";
+	private static final String PROP_multipleOf = "multipleOf";
+	private static final String PROP_not = "not";
+	private static final String PROP_nullable = "nullable";
+	private static final String PROP_oneOf = "oneOf";
+	private static final String PROP_pattern = "pattern";
+	private static final String PROP_properties = "properties";
+	private static final String PROP_readOnly = "readOnly";
+	private static final String PROP_required = "required";
+	private static final String PROP_title = "title";
+	private static final String PROP_type = "type";
+	private static final String PROP_uniqueItems = "uniqueItems";
+	private static final String PROP_writeOnly = "writeOnly";
+	private static final String PROP_xml = "xml";
+	private static final String PROP_ref = "$ref";
+
 	private String format;
 	private String title;
 	private String description;
@@ -361,42 +399,42 @@ public class SchemaInfo extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "format" -> toType(getFormat(), type);
-			case "title" -> toType(getTitle(), type);
-			case "description" -> toType(getDescription(), type);
-			case "default" -> toType(getDefault(), type);
-			case "multipleOf" -> toType(getMultipleOf(), type);
-			case "maximum" -> toType(getMaximum(), type);
-			case "exclusiveMaximum" -> toType(getExclusiveMaximum(), type);
-			case "minimum" -> toType(getMinimum(), type);
-			case "exclusiveMinimum" -> toType(getExclusiveMinimum(), type);
-			case "maxLength" -> toType(getMaxLength(), type);
-			case "minLength" -> toType(getMinLength(), type);
-			case "pattern" -> toType(getPattern(), type);
-			case "maxItems" -> toType(getMaxItems(), type);
-			case "minItems" -> toType(getMinItems(), type);
-			case "uniqueItems" -> toType(getUniqueItems(), type);
-			case "maxProperties" -> toType(getMaxProperties(), type);
-			case "minProperties" -> toType(getMinProperties(), type);
-			case "required" -> toType(getRequired(), type);
-			case "enum" -> toType(getEnum(), type);
-			case "type" -> toType(getType(), type);
-			case "items" -> toType(getItems(), type);
-			case "allOf" -> toType(getAllOf(), type);
-			case "oneOf" -> toType(getOneOf(), type);
-			case "anyOf" -> toType(getAnyOf(), type);
-			case "properties" -> toType(getProperties(), type);
-			case "additionalProperties" -> toType(getAdditionalProperties(), type);
-			case "not" -> toType(getNot(), type);
-			case "nullable" -> toType(getNullable(), type);
-			case "deprecated" -> toType(getDeprecated(), type);
-			case "discriminator" -> toType(getDiscriminator(), type);
-			case "readOnly" -> toType(getReadOnly(), type);
-			case "writeOnly" -> toType(getWriteOnly(), type);
-			case "xml" -> toType(getXml(), type);
-			case "externalDocs" -> toType(getExternalDocs(), type);
-			case "example" -> toType(getExample(), type);
-			case "$ref" -> toType(getRef(), type);
+			case PROP_format -> toType(getFormat(), type);
+			case PROP_title -> toType(getTitle(), type);
+			case PROP_description -> toType(getDescription(), type);
+			case PROP_default -> toType(getDefault(), type);
+			case PROP_multipleOf -> toType(getMultipleOf(), type);
+			case PROP_maximum -> toType(getMaximum(), type);
+			case PROP_exclusiveMaximum -> toType(getExclusiveMaximum(), type);
+			case PROP_minimum -> toType(getMinimum(), type);
+			case PROP_exclusiveMinimum -> toType(getExclusiveMinimum(), type);
+			case PROP_maxLength -> toType(getMaxLength(), type);
+			case PROP_minLength -> toType(getMinLength(), type);
+			case PROP_pattern -> toType(getPattern(), type);
+			case PROP_maxItems -> toType(getMaxItems(), type);
+			case PROP_minItems -> toType(getMinItems(), type);
+			case PROP_uniqueItems -> toType(getUniqueItems(), type);
+			case PROP_maxProperties -> toType(getMaxProperties(), type);
+			case PROP_minProperties -> toType(getMinProperties(), type);
+			case PROP_required -> toType(getRequired(), type);
+			case PROP_enum -> toType(getEnum(), type);
+			case PROP_type -> toType(getType(), type);
+			case PROP_items -> toType(getItems(), type);
+			case PROP_allOf -> toType(getAllOf(), type);
+			case PROP_oneOf -> toType(getOneOf(), type);
+			case PROP_anyOf -> toType(getAnyOf(), type);
+			case PROP_properties -> toType(getProperties(), type);
+			case PROP_additionalProperties -> toType(getAdditionalProperties(), type);
+			case PROP_not -> toType(getNot(), type);
+			case PROP_nullable -> toType(getNullable(), type);
+			case PROP_deprecated -> toType(getDeprecated(), type);
+			case PROP_discriminator -> toType(getDiscriminator(), type);
+			case PROP_readOnly -> toType(getReadOnly(), type);
+			case PROP_writeOnly -> toType(getWriteOnly(), type);
+			case PROP_xml -> toType(getXml(), type);
+			case PROP_externalDocs -> toType(getExternalDocs(), type);
+			case PROP_example -> toType(getExample(), type);
+			case PROP_ref -> toType(getRef(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -664,42 +702,42 @@ public class SchemaInfo extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(ref), "$ref")
-			.addIf(nn(additionalProperties), "additionalProperties")
-			.addIf(ne(allOf), "allOf")
-			.addIf(ne(anyOf), "anyOf")
-			.addIf(nn(default_), "default")
-			.addIf(nn(deprecated), "deprecated")
-			.addIf(nn(description), "description")
-			.addIf(nn(discriminator), "discriminator")
-			.addIf(ne(enum_), "enum")
-			.addIf(nn(example), "example")
-			.addIf(nn(exclusiveMaximum), "exclusiveMaximum")
-			.addIf(nn(exclusiveMinimum), "exclusiveMinimum")
-			.addIf(nn(externalDocs), "externalDocs")
-			.addIf(nn(format), "format")
-			.addIf(nn(items), "items")
-			.addIf(nn(maxItems), "maxItems")
-			.addIf(nn(maxLength), "maxLength")
-			.addIf(nn(maxProperties), "maxProperties")
-			.addIf(nn(maximum), "maximum")
-			.addIf(nn(minItems), "minItems")
-			.addIf(nn(minLength), "minLength")
-			.addIf(nn(minProperties), "minProperties")
-			.addIf(nn(minimum), "minimum")
-			.addIf(nn(multipleOf), "multipleOf")
-			.addIf(nn(not), "not")
-			.addIf(nn(nullable), "nullable")
-			.addIf(ne(oneOf), "oneOf")
-			.addIf(nn(pattern), "pattern")
-			.addIf(nn(properties), "properties")
-			.addIf(nn(readOnly), "readOnly")
-			.addIf(ne(required), "required")
-			.addIf(nn(title), "title")
-			.addIf(nn(type), "type")
-			.addIf(nn(uniqueItems), "uniqueItems")
-			.addIf(nn(writeOnly), "writeOnly")
-			.addIf(nn(xml), "xml")
+			.addIf(nn(ref), PROP_ref)
+			.addIf(nn(additionalProperties), PROP_additionalProperties)
+			.addIf(ne(allOf), PROP_allOf)
+			.addIf(ne(anyOf), PROP_anyOf)
+			.addIf(nn(default_), PROP_default)
+			.addIf(nn(deprecated), PROP_deprecated)
+			.addIf(nn(description), PROP_description)
+			.addIf(nn(discriminator), PROP_discriminator)
+			.addIf(ne(enum_), PROP_enum)
+			.addIf(nn(example), PROP_example)
+			.addIf(nn(exclusiveMaximum), PROP_exclusiveMaximum)
+			.addIf(nn(exclusiveMinimum), PROP_exclusiveMinimum)
+			.addIf(nn(externalDocs), PROP_externalDocs)
+			.addIf(nn(format), PROP_format)
+			.addIf(nn(items), PROP_items)
+			.addIf(nn(maxItems), PROP_maxItems)
+			.addIf(nn(maxLength), PROP_maxLength)
+			.addIf(nn(maxProperties), PROP_maxProperties)
+			.addIf(nn(maximum), PROP_maximum)
+			.addIf(nn(minItems), PROP_minItems)
+			.addIf(nn(minLength), PROP_minLength)
+			.addIf(nn(minProperties), PROP_minProperties)
+			.addIf(nn(minimum), PROP_minimum)
+			.addIf(nn(multipleOf), PROP_multipleOf)
+			.addIf(nn(not), PROP_not)
+			.addIf(nn(nullable), PROP_nullable)
+			.addIf(ne(oneOf), PROP_oneOf)
+			.addIf(nn(pattern), PROP_pattern)
+			.addIf(nn(properties), PROP_properties)
+			.addIf(nn(readOnly), PROP_readOnly)
+			.addIf(ne(required), PROP_required)
+			.addIf(nn(title), PROP_title)
+			.addIf(nn(type), PROP_type)
+			.addIf(nn(uniqueItems), PROP_uniqueItems)
+			.addIf(nn(writeOnly), PROP_writeOnly)
+			.addIf(nn(xml), PROP_xml)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -749,42 +787,42 @@ public class SchemaInfo extends OpenApiElement {
 	public SchemaInfo set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "$ref" -> setRef(value);
-			case "additionalProperties" -> setAdditionalProperties(toType(value, SchemaInfo.class));
-			case "allOf" -> setAllOf(listb(Object.class).addAny(value).sparse().build());
-			case "anyOf" -> setAnyOf(listb(Object.class).addAny(value).sparse().build());
-			case "default" -> setDefault(value);
-			case "deprecated" -> setDeprecated(toBoolean(value));
-			case "description" -> setDescription(s(value));
-			case "discriminator" -> setDiscriminator(toType(value, Discriminator.class));
-			case "enum" -> setEnum(listb(Object.class).addAny(value).sparse().build());
-			case "example" -> setExample(value);
-			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
-			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
-			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case "format" -> setFormat(s(value));
-			case "items" -> setItems(toType(value, Items.class));
-			case "maxItems" -> setMaxItems(toInteger(value));
-			case "maxLength" -> setMaxLength(toInteger(value));
-			case "maxProperties" -> setMaxProperties(toInteger(value));
-			case "maximum" -> setMaximum(toNumber(value));
-			case "minItems" -> setMinItems(toInteger(value));
-			case "minLength" -> setMinLength(toInteger(value));
-			case "minProperties" -> setMinProperties(toInteger(value));
-			case "minimum" -> setMinimum(toNumber(value));
-			case "multipleOf" -> setMultipleOf(toNumber(value));
-			case "not" -> setNot(toType(value, SchemaInfo.class));
-			case "nullable" -> setNullable(toBoolean(value));
-			case "oneOf" -> setOneOf(listb(Object.class).addAny(value).sparse().build());
-			case "pattern" -> setPattern(s(value));
-			case "properties" -> setProperties(toMapBuilder(value, String.class, SchemaInfo.class).sparse().build());
-			case "readOnly" -> setReadOnly(toBoolean(value));
-			case "required" -> setRequired(listb(String.class).addAny(value).sparse().build());
-			case "title" -> setTitle(s(value));
-			case "type" -> setType(s(value));
-			case "uniqueItems" -> setUniqueItems(toBoolean(value));
-			case "writeOnly" -> setWriteOnly(toBoolean(value));
-			case "xml" -> setXml(toType(value, Xml.class));
+			case PROP_ref -> setRef(value);
+			case PROP_additionalProperties -> setAdditionalProperties(toType(value, SchemaInfo.class));
+			case PROP_allOf -> setAllOf(listb(Object.class).addAny(value).sparse().build());
+			case PROP_anyOf -> setAnyOf(listb(Object.class).addAny(value).sparse().build());
+			case PROP_default -> setDefault(value);
+			case PROP_deprecated -> setDeprecated(toBoolean(value));
+			case PROP_description -> setDescription(s(value));
+			case PROP_discriminator -> setDiscriminator(toType(value, Discriminator.class));
+			case PROP_enum -> setEnum(listb(Object.class).addAny(value).sparse().build());
+			case PROP_example -> setExample(value);
+			case PROP_exclusiveMaximum -> setExclusiveMaximum(toBoolean(value));
+			case PROP_exclusiveMinimum -> setExclusiveMinimum(toBoolean(value));
+			case PROP_externalDocs -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			case PROP_format -> setFormat(s(value));
+			case PROP_items -> setItems(toType(value, Items.class));
+			case PROP_maxItems -> setMaxItems(toInteger(value));
+			case PROP_maxLength -> setMaxLength(toInteger(value));
+			case PROP_maxProperties -> setMaxProperties(toInteger(value));
+			case PROP_maximum -> setMaximum(toNumber(value));
+			case PROP_minItems -> setMinItems(toInteger(value));
+			case PROP_minLength -> setMinLength(toInteger(value));
+			case PROP_minProperties -> setMinProperties(toInteger(value));
+			case PROP_minimum -> setMinimum(toNumber(value));
+			case PROP_multipleOf -> setMultipleOf(toNumber(value));
+			case PROP_not -> setNot(toType(value, SchemaInfo.class));
+			case PROP_nullable -> setNullable(toBoolean(value));
+			case PROP_oneOf -> setOneOf(listb(Object.class).addAny(value).sparse().build());
+			case PROP_pattern -> setPattern(s(value));
+			case PROP_properties -> setProperties(toMapBuilder(value, String.class, SchemaInfo.class).sparse().build());
+			case PROP_readOnly -> setReadOnly(toBoolean(value));
+			case PROP_required -> setRequired(listb(String.class).addAny(value).sparse().build());
+			case PROP_title -> setTitle(s(value));
+			case PROP_type -> setType(s(value));
+			case PROP_uniqueItems -> setUniqueItems(toBoolean(value));
+			case PROP_writeOnly -> setWriteOnly(toBoolean(value));
+			case PROP_xml -> setXml(toType(value, Xml.class));
 			default -> {
 				super.set(property, value);
 				yield this;

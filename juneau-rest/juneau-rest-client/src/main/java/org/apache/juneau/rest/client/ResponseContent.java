@@ -56,6 +56,8 @@ import org.apache.juneau.rest.client.assertion.*;
 @SuppressWarnings({"resource", "java:S4144"})
 public class ResponseContent implements HttpEntity {
 
+	private static final String HEADER_ContentType = "Content-Type";
+
 	private static final HttpEntity NULL_ENTITY = new HttpEntity() {
 
 		@Override
@@ -240,7 +242,7 @@ public class ResponseContent implements HttpEntity {
 			if (result.isPresent())
 				return result.get();
 
-			var ct = firstNonEmpty(response.getHeader("Content-Type").orElse("text/plain"));
+			var ct = firstNonEmpty(response.getHeader(HEADER_ContentType).orElse("text/plain"));
 
 			if (parser == null)
 				parser = client.getMatchingParser(ct);
@@ -283,7 +285,7 @@ public class ResponseContent implements HttpEntity {
 			if (type.hasInputStreamMutater())
 				return type.getInputStreamMutater().mutate(asInputStream());
 
-			ct = response.getStringHeader("Content-Type").orElse(null);
+			ct = response.getStringHeader(HEADER_ContentType).orElse(null);
 
 			if (ct == null && client.hasParsers())
 				throw new ParseException("Content-Type not specified in response header.  Cannot find appropriate parser.");
@@ -1047,7 +1049,7 @@ public class ResponseContent implements HttpEntity {
 	 * @return The <c>Content-Type</c> header for this entity, or <jk>null</jk> if the content type is unknown.
 	 */
 	@Override /* Overridden from HttpEntity */
-	public ResponseHeader getContentType() { return new ResponseHeader("Content-Type", request, response, entity.getContentType()); }
+	public ResponseHeader getContentType() { return new ResponseHeader(HEADER_ContentType, request, response, entity.getContentType()); }
 
 	/**
 	 * Tells about chunked encoding for this entity.

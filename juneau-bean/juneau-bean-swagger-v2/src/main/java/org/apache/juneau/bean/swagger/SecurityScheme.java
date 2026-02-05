@@ -89,6 +89,16 @@ public class SecurityScheme extends SwaggerElement {
 	private static final String ARG_property = "property";
 	private static final String ARG_value = "value";
 
+	// Property name constants
+	private static final String PROP_authorizationUrl = "authorizationUrl";
+	private static final String PROP_description = "description";
+	private static final String PROP_scopes = "scopes";
+	private static final String PROP_flow = "flow";
+	private static final String PROP_in = "in";
+	private static final String PROP_name = "name";
+	private static final String PROP_tokenUrl = "tokenUrl";
+	private static final String PROP_type = "type";
+
 	private static final String[] VALID_TYPES = { "basic", "apiKey", "oauth2" };
 
 	private String type;
@@ -154,14 +164,14 @@ public class SecurityScheme extends SwaggerElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "authorizationUrl" -> toType(getAuthorizationUrl(), type);
-			case "description" -> toType(getDescription(), type);
-			case "flow" -> toType(getFlow(), type);
-			case "in" -> toType(getIn(), type);
-			case "name" -> toType(getName(), type);
-			case "scopes" -> toType(getScopes(), type);
-			case "tokenUrl" -> toType(getTokenUrl(), type);
-			case "type" -> toType(getType(), type);
+			case PROP_authorizationUrl -> toType(getAuthorizationUrl(), type);
+			case PROP_description -> toType(getDescription(), type);
+			case PROP_flow -> toType(getFlow(), type);
+			case PROP_in -> toType(getIn(), type);
+			case PROP_name -> toType(getName(), type);
+			case PROP_scopes -> toType(getScopes(), type);
+			case PROP_tokenUrl -> toType(getTokenUrl(), type);
+			case PROP_type -> toType(getType(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -250,14 +260,14 @@ public class SecurityScheme extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(authorizationUrl), "authorizationUrl")
-			.addIf(nn(description), "description")
-			.addIf(nn(flow), "flow")
-			.addIf(nn(in), "in")
-			.addIf(nn(name), "name")
-			.addIf(ne(scopes), "scopes")
-			.addIf(nn(tokenUrl), "tokenUrl")
-			.addIf(nn(type), "type")
+			.addIf(nn(authorizationUrl), PROP_authorizationUrl)
+			.addIf(nn(description), PROP_description)
+			.addIf(nn(flow), PROP_flow)
+			.addIf(nn(in), PROP_in)
+			.addIf(nn(name), PROP_name)
+			.addIf(ne(scopes), PROP_scopes)
+			.addIf(nn(tokenUrl), PROP_tokenUrl)
+			.addIf(nn(type), PROP_type)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -267,14 +277,14 @@ public class SecurityScheme extends SwaggerElement {
 	public SecurityScheme set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "authorizationUrl" -> setAuthorizationUrl(s(value));
-			case "description" -> setDescription(s(value));
-			case "flow" -> setFlow(s(value));
-			case "in" -> setIn(s(value));
-			case "name" -> setName(s(value));
-			case "scopes" -> setScopes(toMapBuilder(value, String.class, String.class).sparse().build());
-			case "tokenUrl" -> setTokenUrl(s(value));
-			case "type" -> setType(s(value));
+			case PROP_authorizationUrl -> setAuthorizationUrl(s(value));
+			case PROP_description -> setDescription(s(value));
+			case PROP_flow -> setFlow(s(value));
+			case PROP_in -> setIn(s(value));
+			case PROP_name -> setName(s(value));
+			case PROP_scopes -> setScopes(toMapBuilder(value, String.class, String.class).sparse().build());
+			case PROP_tokenUrl -> setTokenUrl(s(value));
+			case PROP_type -> setType(s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

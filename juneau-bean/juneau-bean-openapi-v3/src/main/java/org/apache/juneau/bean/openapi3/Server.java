@@ -79,6 +79,11 @@ public class Server extends OpenApiElement {
 	private static final String ARG_property = "property";
 	private static final String ARG_value = "value";
 
+	// Property name constants
+	private static final String PROP_description = "description";
+	private static final String PROP_url = "url";
+	private static final String PROP_variables = "variables";
+
 	private URI url;
 	private String description;
 	private Map<String,ServerVariable> variables = map();
@@ -132,9 +137,9 @@ public class Server extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "url" -> toType(getUrl(), type);
-			case "description" -> toType(getDescription(), type);
-			case "variables" -> toType(getVariables(), type);
+			case PROP_url -> toType(getUrl(), type);
+			case PROP_description -> toType(getDescription(), type);
+			case PROP_variables -> toType(getVariables(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -167,9 +172,9 @@ public class Server extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(description), "description")
-			.addIf(nn(url), "url")
-			.addIf(ne(variables), "variables")
+			.addIf(nn(description), PROP_description)
+			.addIf(nn(url), PROP_url)
+			.addIf(ne(variables), PROP_variables)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -179,9 +184,9 @@ public class Server extends OpenApiElement {
 	public Server set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "description" -> setDescription(s(value));
-			case "url" -> setUrl(toUri(value));
-			case "variables" -> setVariables(toMapBuilder(value, String.class, ServerVariable.class).sparse().build());
+			case PROP_description -> setDescription(s(value));
+			case PROP_url -> setUrl(toUri(value));
+			case PROP_variables -> setVariables(toMapBuilder(value, String.class, ServerVariable.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;

@@ -126,6 +126,33 @@ public class ParameterInfo extends SwaggerElement {
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_property = "property";
 
+	// Property name constants
+	private static final String PROP_allowEmptyValue = "allowEmptyValue";
+	private static final String PROP_collectionFormat = "collectionFormat";
+	private static final String PROP_default = "default";
+	private static final String PROP_description = "description";
+	private static final String PROP_example = "example";
+	private static final String PROP_examples = "examples";
+	private static final String PROP_exclusiveMaximum = "exclusiveMaximum";
+	private static final String PROP_exclusiveMinimum = "exclusiveMinimum";
+	private static final String PROP_format = "format";
+	private static final String PROP_items = "items";
+	private static final String PROP_maximum = "maximum";
+	private static final String PROP_maxItems = "maxItems";
+	private static final String PROP_maxLength = "maxLength";
+	private static final String PROP_minimum = "minimum";
+	private static final String PROP_minItems = "minItems";
+	private static final String PROP_minLength = "minLength";
+	private static final String PROP_multipleOf = "multipleOf";
+	private static final String PROP_pattern = "pattern";
+	private static final String PROP_required = "required";
+	private static final String PROP_schema = "schema";
+	private static final String PROP_enum = "enum";
+	private static final String PROP_in = "in";
+	private static final String PROP_name = "name";
+	private static final String PROP_type = "type";
+	private static final String PROP_uniqueItems = "uniqueItems";
+
 	private static final String[] VALID_IN = { "query", "header", "path", "formData", "body" };
 	private static final String[] VALID_TYPES = { "string", "number", "integer", "boolean", "array", "file" };
 	private static final String[] VALID_COLLECTION_FORMATS = { "csv", "ssv", "tsv", "pipes", "multi" };
@@ -292,31 +319,31 @@ public class ParameterInfo extends SwaggerElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "allowEmptyValue" -> toType(getAllowEmptyValue(), type);
-			case "collectionFormat" -> toType(getCollectionFormat(), type);
-			case "default" -> toType(getDefault(), type);
-			case "description" -> toType(getDescription(), type);
-			case "enum" -> toType(getEnum(), type);
-			case "example" -> toType(getExample(), type);
-			case "examples" -> toType(getExamples(), type);
-			case "exclusiveMaximum" -> toType(getExclusiveMaximum(), type);
-			case "exclusiveMinimum" -> toType(getExclusiveMinimum(), type);
-			case "format" -> toType(getFormat(), type);
-			case "in" -> toType(getIn(), type);
-			case "items" -> toType(getItems(), type);
-			case "maximum" -> toType(getMaximum(), type);
-			case "maxItems" -> toType(getMaxItems(), type);
-			case "maxLength" -> toType(getMaxLength(), type);
-			case "minimum" -> toType(getMinimum(), type);
-			case "minItems" -> toType(getMinItems(), type);
-			case "minLength" -> toType(getMinLength(), type);
-			case "multipleOf" -> toType(getMultipleOf(), type);
-			case "name" -> toType(getName(), type);
-			case "pattern" -> toType(getPattern(), type);
-			case "required" -> toType(getRequired(), type);
-			case "schema" -> toType(getSchema(), type);
-			case "type" -> toType(getType(), type);
-			case "uniqueItems" -> toType(getUniqueItems(), type);
+			case PROP_allowEmptyValue -> toType(getAllowEmptyValue(), type);
+			case PROP_collectionFormat -> toType(getCollectionFormat(), type);
+			case PROP_default -> toType(getDefault(), type);
+			case PROP_description -> toType(getDescription(), type);
+			case PROP_enum -> toType(getEnum(), type);
+			case PROP_example -> toType(getExample(), type);
+			case PROP_examples -> toType(getExamples(), type);
+			case PROP_exclusiveMaximum -> toType(getExclusiveMaximum(), type);
+			case PROP_exclusiveMinimum -> toType(getExclusiveMinimum(), type);
+			case PROP_format -> toType(getFormat(), type);
+			case PROP_in -> toType(getIn(), type);
+			case PROP_items -> toType(getItems(), type);
+			case PROP_maximum -> toType(getMaximum(), type);
+			case PROP_maxItems -> toType(getMaxItems(), type);
+			case PROP_maxLength -> toType(getMaxLength(), type);
+			case PROP_minimum -> toType(getMinimum(), type);
+			case PROP_minItems -> toType(getMinItems(), type);
+			case PROP_minLength -> toType(getMinLength(), type);
+			case PROP_multipleOf -> toType(getMultipleOf(), type);
+			case PROP_name -> toType(getName(), type);
+			case PROP_pattern -> toType(getPattern(), type);
+			case PROP_required -> toType(getRequired(), type);
+			case PROP_schema -> toType(getSchema(), type);
+			case PROP_type -> toType(getType(), type);
+			case PROP_uniqueItems -> toType(getUniqueItems(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -558,31 +585,31 @@ public class ParameterInfo extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(allowEmptyValue), "allowEmptyValue")
-			.addIf(nn(collectionFormat), "collectionFormat")
-			.addIf(nn(default_), "default")
-			.addIf(nn(description), "description")
-			.addIf(ne(enum_), "enum")
-			.addIf(nn(example), "example")
-			.addIf(nn(examples), "examples")
-			.addIf(nn(exclusiveMaximum), "exclusiveMaximum")
-			.addIf(nn(exclusiveMinimum), "exclusiveMinimum")
-			.addIf(nn(format), "format")
-			.addIf(nn(in), "in")
-			.addIf(nn(items), "items")
-			.addIf(nn(maxItems), "maxItems")
-			.addIf(nn(maxLength), "maxLength")
-			.addIf(nn(maximum), "maximum")
-			.addIf(nn(minItems), "minItems")
-			.addIf(nn(minLength), "minLength")
-			.addIf(nn(minimum), "minimum")
-			.addIf(nn(multipleOf), "multipleOf")
-			.addIf(nn(name), "name")
-			.addIf(nn(pattern), "pattern")
-			.addIf(nn(required), "required")
-			.addIf(nn(schema), "schema")
-			.addIf(nn(type), "type")
-			.addIf(nn(uniqueItems), "uniqueItems")
+			.addIf(nn(allowEmptyValue), PROP_allowEmptyValue)
+			.addIf(nn(collectionFormat), PROP_collectionFormat)
+			.addIf(nn(default_), PROP_default)
+			.addIf(nn(description), PROP_description)
+			.addIf(ne(enum_), PROP_enum)
+			.addIf(nn(example), PROP_example)
+			.addIf(nn(examples), PROP_examples)
+			.addIf(nn(exclusiveMaximum), PROP_exclusiveMaximum)
+			.addIf(nn(exclusiveMinimum), PROP_exclusiveMinimum)
+			.addIf(nn(format), PROP_format)
+			.addIf(nn(in), PROP_in)
+			.addIf(nn(items), PROP_items)
+			.addIf(nn(maxItems), PROP_maxItems)
+			.addIf(nn(maxLength), PROP_maxLength)
+			.addIf(nn(maximum), PROP_maximum)
+			.addIf(nn(minItems), PROP_minItems)
+			.addIf(nn(minLength), PROP_minLength)
+			.addIf(nn(minimum), PROP_minimum)
+			.addIf(nn(multipleOf), PROP_multipleOf)
+			.addIf(nn(name), PROP_name)
+			.addIf(nn(pattern), PROP_pattern)
+			.addIf(nn(required), PROP_required)
+			.addIf(nn(schema), PROP_schema)
+			.addIf(nn(type), PROP_type)
+			.addIf(nn(uniqueItems), PROP_uniqueItems)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -617,31 +644,31 @@ public class ParameterInfo extends SwaggerElement {
 	public ParameterInfo set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "allowEmptyValue" -> setAllowEmptyValue(toBoolean(value));
-			case "collectionFormat" -> setCollectionFormat(s(value));
-			case "default" -> setDefault(value);
-			case "description" -> setDescription(s(value));
-			case "enum" -> setEnum(value);
-			case "example" -> setExample(value);
-			case "examples" -> setExamples(toType(value, Map.class));
-			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
-			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
-			case "format" -> setFormat(s(value));
-			case "in" -> setIn(s(value));
-			case "items" -> setItems(toType(value, Items.class));
-			case "maximum" -> setMaximum(toNumber(value));
-			case "maxItems" -> setMaxItems(toInteger(value));
-			case "maxLength" -> setMaxLength(toInteger(value));
-			case "minimum" -> setMinimum(toNumber(value));
-			case "minItems" -> setMinItems(toInteger(value));
-			case "minLength" -> setMinLength(toInteger(value));
-			case "multipleOf" -> setMultipleOf(toNumber(value));
-			case "name" -> setName(s(value));
-			case "pattern" -> setPattern(s(value));
-			case "required" -> setRequired(toBoolean(value));
-			case "schema" -> setSchema(toType(value, SchemaInfo.class));
-			case "type" -> setType(s(value));
-			case "uniqueItems" -> setUniqueItems(toBoolean(value));
+			case PROP_allowEmptyValue -> setAllowEmptyValue(toBoolean(value));
+			case PROP_collectionFormat -> setCollectionFormat(s(value));
+			case PROP_default -> setDefault(value);
+			case PROP_description -> setDescription(s(value));
+			case PROP_enum -> setEnum(value);
+			case PROP_example -> setExample(value);
+			case PROP_examples -> setExamples(toType(value, Map.class));
+			case PROP_exclusiveMaximum -> setExclusiveMaximum(toBoolean(value));
+			case PROP_exclusiveMinimum -> setExclusiveMinimum(toBoolean(value));
+			case PROP_format -> setFormat(s(value));
+			case PROP_in -> setIn(s(value));
+			case PROP_items -> setItems(toType(value, Items.class));
+			case PROP_maximum -> setMaximum(toNumber(value));
+			case PROP_maxItems -> setMaxItems(toInteger(value));
+			case PROP_maxLength -> setMaxLength(toInteger(value));
+			case PROP_minimum -> setMinimum(toNumber(value));
+			case PROP_minItems -> setMinItems(toInteger(value));
+			case PROP_minLength -> setMinLength(toInteger(value));
+			case PROP_multipleOf -> setMultipleOf(toNumber(value));
+			case PROP_name -> setName(s(value));
+			case PROP_pattern -> setPattern(s(value));
+			case PROP_required -> setRequired(toBoolean(value));
+			case PROP_schema -> setSchema(toType(value, SchemaInfo.class));
+			case PROP_type -> setType(s(value));
+			case PROP_uniqueItems -> setUniqueItems(toBoolean(value));
 			default -> {
 				super.set(property, value);
 				yield this;

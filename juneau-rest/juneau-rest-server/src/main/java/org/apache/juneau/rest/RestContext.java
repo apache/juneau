@@ -134,6 +134,11 @@ public class RestContext extends Context {
 	private static final String ARG_type = "type";
 	private static final String ARG_restContext = "restContext";
 
+	// Property name constants
+	private static final String PROP_defaultRequestAttributes = "defaultRequestAttributes";
+	private static final String PROP_defaultRequestHeaders = "defaultRequestHeaders";
+	private static final String PROP_defaultResponseHeaders = "defaultResponseHeaders";
+
 	/**
 	 * Builder class.
 	 */
@@ -190,9 +195,9 @@ public class RestContext extends Context {
 		);
 
 		private static final Set<String> DELAYED_INJECTION_NAMES = set(
-			"defaultRequestAttributes",
-			"defaultRequestHeaders",
-			"defaultResponseHeaders",
+			PROP_defaultRequestAttributes,
+			PROP_defaultRequestHeaders,
+			PROP_defaultResponseHeaders,
 			"destroyMethods",
 			"endCallMethods",
 			"postCallMethods",
@@ -4011,10 +4016,10 @@ public class RestContext extends Context {
 			// Default value.
 			var v = Value.of(NamedAttributeMap.create());
 
-			beanStore.getBean(NamedAttributeMap.class, "defaultRequestAttributes").ifPresent(v::set);
+			beanStore.getBean(NamedAttributeMap.class, PROP_defaultRequestAttributes).ifPresent(v::set);
 
 			// Replace with bean from:  @RestInject(name="defaultRequestAttributes") public [static] NamedAttributeMap xxx(<args>)
-			new BeanCreateMethodFinder<>(NamedAttributeMap.class, resource.get(), beanStore).addBean(NamedAttributeMap.class, v.get()).find(x -> isRestInjectMethod(x, "defaultRequestAttributes")).run(v::set);
+			new BeanCreateMethodFinder<>(NamedAttributeMap.class, resource.get(), beanStore).addBean(NamedAttributeMap.class, v.get()).find(x -> isRestInjectMethod(x, PROP_defaultRequestAttributes)).run(v::set);
 
 			return v.get();
 		}
@@ -4034,10 +4039,10 @@ public class RestContext extends Context {
 			var v = Value.of(HeaderList.create());
 
 			// Replace with bean from bean store.
-			beanStore.getBean(HeaderList.class, "defaultRequestHeaders").ifPresent(v::set);
+			beanStore.getBean(HeaderList.class, PROP_defaultRequestHeaders).ifPresent(v::set);
 
 			// Replace with bean from:  @RestInject(name="defaultRequestHeaders") public [static] HeaderList xxx(<args>)
-			new BeanCreateMethodFinder<>(HeaderList.class, resource.get(), beanStore).addBean(HeaderList.class, v.get()).find(x -> isRestInjectMethod(x, "defaultRequestHeaders")).run(v::set);
+			new BeanCreateMethodFinder<>(HeaderList.class, resource.get(), beanStore).addBean(HeaderList.class, v.get()).find(x -> isRestInjectMethod(x, PROP_defaultRequestHeaders)).run(v::set);
 
 			return v.get();
 		}
@@ -4057,10 +4062,10 @@ public class RestContext extends Context {
 			var v = Value.of(HeaderList.create());
 
 			// Replace with bean from bean store.
-			beanStore.getBean(HeaderList.class, "defaultResponseHeaders").ifPresent(v::set);
+			beanStore.getBean(HeaderList.class, PROP_defaultResponseHeaders).ifPresent(v::set);
 
 			// Replace with bean from:  @RestInject(name="defaultResponseHeaders") public [static] HeaderList xxx(<args>)
-			new BeanCreateMethodFinder<>(HeaderList.class, resource.get(), beanStore).addBean(HeaderList.class, v.get()).find(x -> isRestInjectMethod(x, "defaultResponseHeaders")).run(v::set);
+			new BeanCreateMethodFinder<>(HeaderList.class, resource.get(), beanStore).addBean(HeaderList.class, v.get()).find(x -> isRestInjectMethod(x, PROP_defaultResponseHeaders)).run(v::set);
 
 			return v.get();
 		}
@@ -5088,9 +5093,9 @@ public class RestContext extends Context {
 			jsonSchemaGenerator = bs.add(JsonSchemaGenerator.class, builder.jsonSchemaGenerator().build());
 			staticFiles = bs.add(StaticFiles.class, builder.staticFiles().orElse(null));
 			bs.add(FileFinder.class, staticFiles);
-			defaultRequestHeaders = bs.add(HeaderList.class, builder.defaultRequestHeaders(), "defaultRequestHeaders");
-			defaultResponseHeaders = bs.add(HeaderList.class, builder.defaultResponseHeaders(), "defaultResponseHeaders");
-			defaultRequestAttributes = bs.add(NamedAttributeMap.class, builder.defaultRequestAttributes(), "defaultRequestAttributes");
+			defaultRequestHeaders = bs.add(HeaderList.class, builder.defaultRequestHeaders(), PROP_defaultRequestHeaders);
+			defaultResponseHeaders = bs.add(HeaderList.class, builder.defaultResponseHeaders(), PROP_defaultResponseHeaders);
+			defaultRequestAttributes = bs.add(NamedAttributeMap.class, builder.defaultRequestAttributes(), PROP_defaultRequestAttributes);
 			restOpArgs = builder.restOpArgs().build().asArray();
 			debugEnablement = bs.add(DebugEnablement.class, builder.debugEnablement().orElse(null));
 			startCallMethods = builder.startCallMethods().stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
@@ -6196,8 +6201,8 @@ public class RestContext extends Context {
 			.a("beanStore", beanStore)
 			.a("clientVersionHeader", clientVersionHeader)
 			.a("consumes", consumes)
-			.a("defaultRequestHeaders", defaultRequestHeaders)
-			.a("defaultResponseHeaders", defaultResponseHeaders)
+			.a(PROP_defaultRequestHeaders, defaultRequestHeaders)
+			.a(PROP_defaultResponseHeaders, defaultResponseHeaders)
 			.a("partParser", partParser)
 			.a("partSerializer", partSerializer)
 			.a("produces", produces)

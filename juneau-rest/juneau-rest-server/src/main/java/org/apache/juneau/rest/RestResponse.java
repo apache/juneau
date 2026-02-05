@@ -110,6 +110,8 @@ import jakarta.servlet.http.*;
 @SuppressWarnings("resource")
 public class RestResponse extends HttpServletResponseWrapper {
 
+	private static final String HEADER_ContentType = "Content-Type";
+
 	private HttpServletResponse inner;
 	private final RestRequest request;
 
@@ -233,7 +235,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	@Override
 	public void addHeader(String name, String value) {
 		if (nn(name) && nn(value)) {
-			if (eqic(name, "Content-Type"))
+			if (eqic(name, HEADER_ContentType))
 				setHeader(name, value);
 			else {
 				if (safeHeaders)
@@ -732,7 +734,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 
 		// Jetty doesn't set the content type correctly if set through this method.
 		// Tomcat/WAS does.
-		if (eqic(name, "Content-Type")) {
+		if (eqic(name, HEADER_ContentType)) {
 			inner.setContentType(value);
 			ContentType ct = contentType(value);
 			if (nn(ct) && nn(ct.getParameter("charset")))
@@ -815,7 +817,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 
 		// If plain text requested, override it now.
 		if (request.isPlainText())
-			setHeader("Content-Type", "text/plain");
+			setHeader(HEADER_ContentType, "text/plain");
 
 		try {
 			OutputStream out = (raw ? getOutputStream() : getNegotiatedOutputStream());

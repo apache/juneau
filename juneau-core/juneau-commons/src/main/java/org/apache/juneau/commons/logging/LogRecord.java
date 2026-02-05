@@ -51,6 +51,21 @@ import org.apache.juneau.commons.utils.*;
 public class LogRecord extends java.util.logging.LogRecord {
 
 	private static final long serialVersionUID = 1L;
+
+	// Key constants for format placeholders
+	private static final String KEY_date = "date";
+	private static final String KEY_source = "source";
+	private static final String KEY_logger = "logger";
+	private static final String KEY_level = "level";
+	private static final String KEY_msg = "msg";
+	private static final String KEY_thrown = "thrown";
+	private static final String KEY_timestamp = "timestamp";
+	private static final String KEY_class = "class";
+	private static final String KEY_method = "method";
+	private static final String KEY_thread = "thread";
+	private static final String KEY_threadid = "threadid";
+	private static final String KEY_exception = "exception";
+
 	private transient Supplier<Optional<StackTraceElement>> source = mem(()->findSource());
 
 	/**
@@ -234,17 +249,17 @@ public class LogRecord extends java.util.logging.LogRecord {
 		Supplier<String> sourceName = () -> getSourceClassName() + ' ' + getSourceMethodName();
 
 		Function<String, Object> resolver = key -> switch (key) {
-			case "date" -> "%1$s";
-			case "source" -> sourceName.get();  // Override default behavior since logging class doesn't handle classes outside of java.util.logging.
-			case "logger" -> "%3$s";
-			case "level" -> "%4$s";
-			case "msg" -> "%5$s";
-			case "thrown" -> "%6$s";
-			case "timestamp" -> new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(date);
-			case "class" -> getSourceClassName();
-			case "method" -> getSourceMethodName();
-			case "thread", "threadid" -> s(getThreadID());
-			case "exception" -> opt(getThrown()).map(x -> x.getMessage()).orElse("");
+			case KEY_date -> "%1$s";
+			case KEY_source -> sourceName.get();  // Override default behavior since logging class doesn't handle classes outside of java.util.logging.
+			case KEY_logger -> "%3$s";
+			case KEY_level -> "%4$s";
+			case KEY_msg -> "%5$s";
+			case KEY_thrown -> "%6$s";
+			case KEY_timestamp -> new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(date);
+			case KEY_class -> getSourceClassName();
+			case KEY_method -> getSourceMethodName();
+			case KEY_thread, KEY_threadid -> s(getThreadID());
+			case KEY_exception -> opt(getThrown()).map(x -> x.getMessage()).orElse("");
 			default -> "";
 		};
 

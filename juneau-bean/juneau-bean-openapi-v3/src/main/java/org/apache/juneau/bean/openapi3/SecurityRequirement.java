@@ -39,6 +39,9 @@ public class SecurityRequirement extends OpenApiElement {
 	private static final String ARG_property = "property";
 	private static final String ARG_schemeName = "schemeName";
 
+	// Property name constants
+	private static final String PROP_requirements = "requirements";
+
 	private Map<String,List<String>> requirements;
 
 	/**
@@ -85,7 +88,7 @@ public class SecurityRequirement extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "requirements" -> toType(getRequirements(), type);
+			case PROP_requirements -> toType(getRequirements(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -101,7 +104,7 @@ public class SecurityRequirement extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(requirements), "requirements")
+			.addIf(nn(requirements), PROP_requirements)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -112,7 +115,7 @@ public class SecurityRequirement extends OpenApiElement {
 	public SecurityRequirement set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "requirements" -> setRequirements((Map<String,List<String>>)value);
+			case PROP_requirements -> setRequirements((Map<String,List<String>>)value);
 			default -> {
 				super.set(property, value);
 				yield this;

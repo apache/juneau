@@ -41,6 +41,8 @@ import jakarta.servlet.http.*;
  */
 public abstract class DebugEnablement {
 
+	private static final String HEADER_Debug = "Debug";
+
 	/**
 	 * Builder class.
 	 */
@@ -59,7 +61,7 @@ public abstract class DebugEnablement {
 		protected Builder(BasicBeanStore beanStore) {
 			mapBuilder = ReflectionMap.create(Enablement.class);
 			defaultEnablement = NEVER;
-			conditional = x -> eqic("true", x.getHeader("Debug"));
+			conditional = x -> eqic("true", x.getHeader(HEADER_Debug));
 			creator = BeanCreator.of(DebugEnablement.class, beanStore).type(BasicDebugEnablement.class).builder(Builder.class, this);
 		}
 
@@ -226,7 +228,7 @@ public abstract class DebugEnablement {
 		var builder = init(beanStore);
 		this.defaultEnablement = firstNonNull(builder.defaultEnablement, NEVER);
 		this.enablementMap = builder.mapBuilder.build();
-		this.conditionalPredicate = firstNonNull(builder.conditional, x -> eqic("true", x.getHeader("Debug")));
+		this.conditionalPredicate = firstNonNull(builder.conditional, x -> eqic("true", x.getHeader(HEADER_Debug)));
 	}
 
 	/**
@@ -237,7 +239,7 @@ public abstract class DebugEnablement {
 	protected DebugEnablement(Builder builder) {
 		this.defaultEnablement = firstNonNull(builder.defaultEnablement, NEVER);
 		this.enablementMap = builder.mapBuilder.build();
-		this.conditionalPredicate = firstNonNull(builder.conditional, x -> eqic("true", x.getHeader("Debug")));
+		this.conditionalPredicate = firstNonNull(builder.conditional, x -> eqic("true", x.getHeader(HEADER_Debug)));
 
 	}
 

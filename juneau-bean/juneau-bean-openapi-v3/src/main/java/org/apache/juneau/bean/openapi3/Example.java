@@ -77,6 +77,12 @@ public class Example extends OpenApiElement {
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_property = "property";
 
+	// Property name constants
+	private static final String PROP_description = "description";
+	private static final String PROP_externalValue = "externalValue";
+	private static final String PROP_summary = "summary";
+	private static final String PROP_value = "value";
+
 	private String summary;
 	private String description;
 	private String externalValue;
@@ -114,10 +120,10 @@ public class Example extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "description" -> toType(getDescription(), type);
-			case "externalValue" -> toType(getExternalValue(), type);
-			case "summary" -> toType(getSummary(), type);
-			case "value" -> toType(getValue(), type);
+			case PROP_description -> toType(getDescription(), type);
+			case PROP_externalValue -> toType(getExternalValue(), type);
+			case PROP_summary -> toType(getSummary(), type);
+			case PROP_value -> toType(getValue(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -170,10 +176,10 @@ public class Example extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(description), "description")
-			.addIf(nn(externalValue), "externalValue")
-			.addIf(nn(summary), "summary")
-			.addIf(nn(value), "value")
+			.addIf(nn(description), PROP_description)
+			.addIf(nn(externalValue), PROP_externalValue)
+			.addIf(nn(summary), PROP_summary)
+			.addIf(nn(value), PROP_value)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -183,10 +189,10 @@ public class Example extends OpenApiElement {
 	public Example set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "description" -> setDescription(s(value));
-			case "externalValue" -> setExternalValue(s(value));
-			case "summary" -> setSummary(s(value));
-			case "value" -> setValue(value);
+			case PROP_description -> setDescription(s(value));
+			case PROP_externalValue -> setExternalValue(s(value));
+			case PROP_summary -> setSummary(s(value));
+			case PROP_value -> setValue(value);
 			default -> {
 				super.set(property, value);
 				yield this;

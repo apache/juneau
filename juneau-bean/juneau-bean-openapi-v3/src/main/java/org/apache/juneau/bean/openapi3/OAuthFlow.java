@@ -83,6 +83,12 @@ public class OAuthFlow extends OpenApiElement {
 	private static final String ARG_name = "name";
 	private static final String ARG_property = "property";
 
+	// Property name constants
+	private static final String PROP_authorizationUrl = "authorizationUrl";
+	private static final String PROP_refreshUrl = "refreshUrl";
+	private static final String PROP_scopes = "scopes";
+	private static final String PROP_tokenUrl = "tokenUrl";
+
 	private String authorizationUrl;
 	private String tokenUrl;
 	private String refreshUrl;
@@ -135,10 +141,10 @@ public class OAuthFlow extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "refreshUrl" -> toType(getRefreshUrl(), type);
-			case "tokenUrl" -> toType(getTokenUrl(), type);
-			case "authorizationUrl" -> toType(getAuthorizationUrl(), type);
-			case "scopes" -> toType(getScopes(), type);
+			case PROP_refreshUrl -> toType(getRefreshUrl(), type);
+			case PROP_tokenUrl -> toType(getTokenUrl(), type);
+			case PROP_authorizationUrl -> toType(getAuthorizationUrl(), type);
+			case PROP_scopes -> toType(getScopes(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -187,10 +193,10 @@ public class OAuthFlow extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(authorizationUrl), "authorizationUrl")
-			.addIf(nn(refreshUrl), "refreshUrl")
-			.addIf(ne(scopes), "scopes")
-			.addIf(nn(tokenUrl), "tokenUrl")
+			.addIf(nn(authorizationUrl), PROP_authorizationUrl)
+			.addIf(nn(refreshUrl), PROP_refreshUrl)
+			.addIf(ne(scopes), PROP_scopes)
+			.addIf(nn(tokenUrl), PROP_tokenUrl)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -200,10 +206,10 @@ public class OAuthFlow extends OpenApiElement {
 	public OAuthFlow set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "authorizationUrl" -> setAuthorizationUrl(s(value));
-			case "refreshUrl" -> setRefreshUrl(s(value));
-			case "scopes" -> setScopes(toMapBuilder(value, String.class, String.class).sparse().build());
-			case "tokenUrl" -> setTokenUrl(s(value));
+			case PROP_authorizationUrl -> setAuthorizationUrl(s(value));
+			case PROP_refreshUrl -> setRefreshUrl(s(value));
+			case PROP_scopes -> setScopes(toMapBuilder(value, String.class, String.class).sparse().build());
+			case PROP_tokenUrl -> setTokenUrl(s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

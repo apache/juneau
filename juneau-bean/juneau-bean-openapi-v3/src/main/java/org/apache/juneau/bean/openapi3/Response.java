@@ -85,6 +85,12 @@ public class Response extends OpenApiElement {
 	private static final String ARG_property = "property";
 	private static final String ARG_value = "value";
 
+	// Property name constants
+	private static final String PROP_content = "content";
+	private static final String PROP_description = "description";
+	private static final String PROP_headers = "headers";
+	private static final String PROP_links = "links";
+
 	private String description;
 	private Map<String,HeaderInfo> headers = map();
 	private Map<String,MediaType> content = map();
@@ -167,10 +173,10 @@ public class Response extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "description" -> toType(getDescription(), type);
-			case "content" -> toType(getContent(), type);
-			case "headers" -> toType(getHeaders(), type);
-			case "links" -> toType(getLinks(), type);
+			case PROP_description -> toType(getDescription(), type);
+			case PROP_content -> toType(getContent(), type);
+			case PROP_headers -> toType(getHeaders(), type);
+			case PROP_links -> toType(getLinks(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -243,10 +249,10 @@ public class Response extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(ne(content), "content")
-			.addIf(nn(description), "description")
-			.addIf(ne(headers), "headers")
-			.addIf(ne(links), "links")
+			.addIf(ne(content), PROP_content)
+			.addIf(nn(description), PROP_description)
+			.addIf(ne(headers), PROP_headers)
+			.addIf(ne(links), PROP_links)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -256,10 +262,10 @@ public class Response extends OpenApiElement {
 	public Response set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "content" -> setContent(toMapBuilder(value, String.class, MediaType.class).sparse().build());
-			case "description" -> setDescription(s(value));
-			case "headers" -> setHeaders(toMapBuilder(value, String.class, HeaderInfo.class).sparse().build());
-			case "links" -> setLinks(toMapBuilder(value, String.class, Link.class).sparse().build());
+			case PROP_content -> setContent(toMapBuilder(value, String.class, MediaType.class).sparse().build());
+			case PROP_description -> setDescription(s(value));
+			case PROP_headers -> setHeaders(toMapBuilder(value, String.class, HeaderInfo.class).sparse().build());
+			case PROP_links -> setLinks(toMapBuilder(value, String.class, Link.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;

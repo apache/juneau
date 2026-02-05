@@ -75,6 +75,10 @@ public class ExternalDocumentation extends SwaggerElement {
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_property = "property";
 
+	// Property name constants
+	private static final String PROP_description = "description";
+	private static final String PROP_url = "url";
+
 	private String description;
 	private URI url;
 
@@ -108,8 +112,8 @@ public class ExternalDocumentation extends SwaggerElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "description" -> toType(getDescription(), type);
-			case "url" -> toType(getUrl(), type);
+			case PROP_description -> toType(getDescription(), type);
+			case PROP_url -> toType(getUrl(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -138,8 +142,8 @@ public class ExternalDocumentation extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(description), "description")
-			.addIf(nn(url), "url")
+			.addIf(nn(description), PROP_description)
+			.addIf(nn(url), PROP_url)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -149,8 +153,8 @@ public class ExternalDocumentation extends SwaggerElement {
 	public ExternalDocumentation set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "description" -> setDescription(s(value));
-			case "url" -> setUrl(toUri(value));
+			case PROP_description -> setDescription(s(value));
+			case PROP_url -> setUrl(toUri(value));
 			default -> {
 				super.set(property, value);
 				yield this;

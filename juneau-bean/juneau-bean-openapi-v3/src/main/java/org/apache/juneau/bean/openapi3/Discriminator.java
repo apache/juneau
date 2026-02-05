@@ -80,6 +80,10 @@ public class Discriminator extends OpenApiElement {
 	private static final String ARG_property = "property";
 	private static final String ARG_value = "value";
 
+	// Property name constants
+	private static final String PROP_mapping = "mapping";
+	private static final String PROP_propertyName = "propertyName";
+
 	private String propertyName;
 	private Map<String,String> mapping = map();
 
@@ -127,8 +131,8 @@ public class Discriminator extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "propertyName" -> toType(getPropertyName(), type);
-			case "mapping" -> toType(getMapping(), type);
+			case PROP_propertyName -> toType(getPropertyName(), type);
+			case PROP_mapping -> toType(getMapping(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -157,8 +161,8 @@ public class Discriminator extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(ne(mapping), "mapping")
-			.addIf(nn(propertyName), "propertyName")
+			.addIf(ne(mapping), PROP_mapping)
+			.addIf(nn(propertyName), PROP_propertyName)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -168,8 +172,8 @@ public class Discriminator extends OpenApiElement {
 	public Discriminator set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "mapping" -> setMapping(toMapBuilder(value, String.class, String.class).sparse().build());
-			case "propertyName" -> setPropertyName(s(value));
+			case PROP_mapping -> setMapping(toMapBuilder(value, String.class, String.class).sparse().build());
+			case PROP_propertyName -> setPropertyName(s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

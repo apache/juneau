@@ -88,6 +88,40 @@ public class HttpPartSchema {
 
 	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
+	// Property name constants
+	private static final String PROP_additionalProperties = "additionalProperties";
+	private static final String PROP_collectionFormat = "collectionFormat";
+	private static final String PROP_exclusiveMaximum = "exclusiveMaximum";
+	private static final String PROP_exclusiveMinimum = "exclusiveMinimum";
+	private static final String PROP_items = "items";
+	private static final String PROP_maximum = "maximum";
+	private static final String PROP_maxItems = "maxItems";
+	private static final String PROP_maxLength = "maxLength";
+	private static final String PROP_maxProperties = "maxProperties";
+	private static final String PROP_minimum = "minimum";
+	private static final String PROP_minItems = "minItems";
+	private static final String PROP_minLength = "minLength";
+	private static final String PROP_minProperties = "minProperties";
+	private static final String PROP_multipleOf = "multipleOf";
+	private static final String PROP_pattern = "pattern";
+	private static final String PROP_properties = "properties";
+
+	// Jakarta validation annotation class name constants
+	private static final String CLASSNAME_NotNull = "NotNull";
+	private static final String CLASSNAME_Size = "Size";
+	private static final String CLASSNAME_Min = "Min";
+	private static final String CLASSNAME_Max = "Max";
+	private static final String CLASSNAME_Pattern = "Pattern";
+	private static final String CLASSNAME_Email = "Email";
+	private static final String CLASSNAME_Positive = "Positive";
+	private static final String CLASSNAME_PositiveOrZero = "PositiveOrZero";
+	private static final String CLASSNAME_Negative = "Negative";
+	private static final String CLASSNAME_NegativeOrZero = "NegativeOrZero";
+	private static final String CLASSNAME_NotEmpty = "NotEmpty";
+	private static final String CLASSNAME_NotBlank = "NotBlank";
+	private static final String CLASSNAME_DecimalMin = "DecimalMin";
+	private static final String CLASSNAME_DecimalMax = "DecimalMax";
+
 	/**
 	 * Builder class.
 	 */
@@ -2656,27 +2690,27 @@ public class HttpPartSchema {
 				default_(m.getString("default"));
 				enum_(HttpPartSchema.toSet(m.getString("enum")));
 				allowEmptyValue(m.getBoolean("allowEmptyValue"));
-				exclusiveMaximum(m.getBoolean("exclusiveMaximum"));
-				exclusiveMinimum(m.getBoolean("exclusiveMinimum"));
+				exclusiveMaximum(m.getBoolean(PROP_exclusiveMaximum));
+				exclusiveMinimum(m.getBoolean(PROP_exclusiveMinimum));
 				required(m.getBoolean("required"));
 				uniqueItems(m.getBoolean("uniqueItems"));
-				collectionFormat(m.getString("collectionFormat"));
+				collectionFormat(m.getString(PROP_collectionFormat));
 				type(m.getString("type"));
 				format(m.getString("format"));
-				pattern(m.getString("pattern"));
-				maximum(m.get("maximum", Number.class));
-				minimum(m.get("minimum", Number.class));
-				multipleOf(m.get("multipleOf", Number.class));
-				maxItems(m.get("maxItems", Long.class));
-				maxLength(m.get("maxLength", Long.class));
-				maxProperties(m.get("maxProperties", Long.class));
-				minItems(m.get("minItems", Long.class));
-				minLength(m.get("minLength", Long.class));
-				minProperties(m.get("minProperties", Long.class));
+				pattern(m.getString(PROP_pattern));
+				maximum(m.get(PROP_maximum, Number.class));
+				minimum(m.get(PROP_minimum, Number.class));
+				multipleOf(m.get(PROP_multipleOf, Number.class));
+				maxItems(m.get(PROP_maxItems, Long.class));
+				maxLength(m.get(PROP_maxLength, Long.class));
+				maxProperties(m.get(PROP_maxProperties, Long.class));
+				minItems(m.get(PROP_minItems, Long.class));
+				minLength(m.get(PROP_minLength, Long.class));
+				minProperties(m.get(PROP_minProperties, Long.class));
 
-				items(m.getMap("items"));
-				properties(m.getMap("properties"));
-				additionalProperties(m.getMap("additionalProperties"));
+				items(m.getMap(PROP_items));
+				properties(m.getMap(PROP_properties));
+				additionalProperties(m.getMap(PROP_additionalProperties));
 
 				apply(m.getMap("schema", null));
 			}
@@ -2867,10 +2901,10 @@ public class HttpPartSchema {
 
 			try {
 				switch (simpleName) {
-					case "NotNull":
+					case CLASSNAME_NotNull:
 						required(true);
 						break;
-					case "Size":
+					case CLASSNAME_Size:
 						Integer min = getAnnotationValue(a, "min", Integer.class);
 						Integer max = getAnnotationValue(a, "max", Integer.class);
 						if (nn(min) && min > 0) {
@@ -2882,49 +2916,49 @@ public class HttpPartSchema {
 							maxItems(max.longValue());
 						}
 						break;
-					case "Min":
+					case CLASSNAME_Min:
 						Long minValue = getAnnotationValue(a, "value", Long.class);
 						if (nn(minValue))
 							minimum(minValue);
 						break;
-					case "Max":
+					case CLASSNAME_Max:
 						Long maxValue = getAnnotationValue(a, "value", Long.class);
 						if (nn(maxValue))
 							maximum(maxValue);
 						break;
-					case "Pattern":
+					case CLASSNAME_Pattern:
 						String regexp = getAnnotationValue(a, "regexp", String.class);
 						if (nn(regexp))
 							pattern(regexp);
 						break;
-					case "Email":
+					case CLASSNAME_Email:
 						format("email");
 						break;
-					case "Positive":
+					case CLASSNAME_Positive:
 						minimum(0);
 						exclusiveMinimum(true);
 						break;
-					case "PositiveOrZero":
+					case CLASSNAME_PositiveOrZero:
 						minimum(0);
 						break;
-					case "Negative":
+					case CLASSNAME_Negative:
 						maximum(0);
 						exclusiveMaximum(true);
 						break;
-					case "NegativeOrZero":
+					case CLASSNAME_NegativeOrZero:
 						maximum(0);
 						break;
-					case "NotEmpty":
+					case CLASSNAME_NotEmpty:
 						required(true);
 						minLength(1L);
 						minItems(1L);
 						break;
-					case "NotBlank":
+					case CLASSNAME_NotBlank:
 						required(true);
 						minLength(1L);
 						pattern(".*\\S.*"); // Contains at least one non-whitespace character
 						break;
-					case "DecimalMin":
+					case CLASSNAME_DecimalMin:
 						String minVal = getAnnotationValue(a, "value", String.class);
 						Boolean minInclusive = getAnnotationValue(a, "inclusive", Boolean.class);
 						if (nn(minVal)) {
@@ -2933,7 +2967,7 @@ public class HttpPartSchema {
 								exclusiveMinimum(true);
 						}
 						break;
-					case "DecimalMax":
+					case CLASSNAME_DecimalMax:
 						String maxVal = getAnnotationValue(a, "value", String.class);
 						Boolean maxInclusive = getAnnotationValue(a, "inclusive", Boolean.class);
 						if (nn(maxVal)) {

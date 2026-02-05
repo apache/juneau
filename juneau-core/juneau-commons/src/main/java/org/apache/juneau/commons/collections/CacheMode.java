@@ -96,6 +96,11 @@ public enum CacheMode {
 	 */
 	FULL;
 
+	// Constant values for parsing
+	private static final String CONST_NONE = "NONE";
+	private static final String CONST_WEAK = "WEAK";
+	private static final String CONST_FULL = "FULL";
+
 	/**
 	 * Parses a string value into a {@link CacheMode}.
 	 *
@@ -118,9 +123,9 @@ public enum CacheMode {
 		if (value == null)
 			return FULL;
 		return switch (value.toUpperCase()) {
-			case "NONE" -> NONE;
-			case "WEAK" -> WEAK;
-			case "FULL" -> FULL;
+			case CONST_NONE -> NONE;
+			case CONST_WEAK -> WEAK;
+			case CONST_FULL -> FULL;
 			default -> FULL;
 		};
 	}

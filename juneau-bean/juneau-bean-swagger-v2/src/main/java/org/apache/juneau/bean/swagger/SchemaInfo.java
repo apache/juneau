@@ -104,6 +104,39 @@ public class SchemaInfo extends SwaggerElement {
 	private static final String ARG_property = "property";
 	private static final String ARG_value = "value";
 
+	// Property name constants
+	private static final String PROP_additionalProperties = "additionalProperties";
+	private static final String PROP_allOf = "allOf";
+	private static final String PROP_default = "default";
+	private static final String PROP_description = "description";
+	private static final String PROP_discriminator = "discriminator";
+	private static final String PROP_enum = "enum";
+	private static final String PROP_example = "example";
+	private static final String PROP_exclusiveMaximum = "exclusiveMaximum";
+	private static final String PROP_exclusiveMinimum = "exclusiveMinimum";
+	private static final String PROP_externalDocs = "externalDocs";
+	private static final String PROP_format = "format";
+	private static final String PROP_items = "items";
+	private static final String PROP_maxItems = "maxItems";
+	private static final String PROP_maxLength = "maxLength";
+	private static final String PROP_maxProperties = "maxProperties";
+	private static final String PROP_maximum = "maximum";
+	private static final String PROP_minItems = "minItems";
+	private static final String PROP_minLength = "minLength";
+	private static final String PROP_minProperties = "minProperties";
+	private static final String PROP_minimum = "minimum";
+	private static final String PROP_multipleOf = "multipleOf";
+	private static final String PROP_pattern = "pattern";
+	private static final String PROP_properties = "properties";
+	private static final String PROP_readOnly = "readOnly";
+	private static final String PROP_required = "required";
+	private static final String PROP_requiredProperties = "requiredProperties";
+	private static final String PROP_title = "title";
+	private static final String PROP_type = "type";
+	private static final String PROP_uniqueItems = "uniqueItems";
+	private static final String PROP_xml = "xml";
+	private static final String PROP_ref = "$ref";
+
 	private String format;
 	private String title;
 	private String description;
@@ -317,37 +350,37 @@ public class SchemaInfo extends SwaggerElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "additionalProperties" -> toType(getAdditionalProperties(), type);
-			case "allOf" -> toType(getAllOf(), type);
-			case "default" -> toType(getDefault(), type);
-			case "description" -> toType(getDescription(), type);
-			case "discriminator" -> toType(getDiscriminator(), type);
-			case "enum" -> toType(getEnum(), type);
-			case "example" -> toType(getExample(), type);
-			case "exclusiveMaximum" -> toType(getExclusiveMaximum(), type);
-			case "exclusiveMinimum" -> toType(getExclusiveMinimum(), type);
-			case "externalDocs" -> toType(getExternalDocs(), type);
-			case "format" -> toType(getFormat(), type);
-			case "items" -> toType(getItems(), type);
-			case "maximum" -> toType(getMaximum(), type);
-			case "maxItems" -> toType(getMaxItems(), type);
-			case "maxLength" -> toType(getMaxLength(), type);
-			case "maxProperties" -> toType(getMaxProperties(), type);
-			case "minimum" -> toType(getMinimum(), type);
-			case "minItems" -> toType(getMinItems(), type);
-			case "minLength" -> toType(getMinLength(), type);
-			case "minProperties" -> toType(getMinProperties(), type);
-			case "multipleOf" -> toType(getMultipleOf(), type);
-			case "pattern" -> toType(getPattern(), type);
-			case "properties" -> toType(getProperties(), type);
-			case "readOnly" -> toType(getReadOnly(), type);
-			case "$ref" -> toType(getRef(), type);
-			case "required" -> toType(getRequired(), type);
-			case "requiredProperties" -> toType(getRequiredProperties(), type);
-			case "title" -> toType(getTitle(), type);
-			case "type" -> toType(getType(), type);
-			case "uniqueItems" -> toType(getUniqueItems(), type);
-			case "xml" -> toType(getXml(), type);
+			case PROP_additionalProperties -> toType(getAdditionalProperties(), type);
+			case PROP_allOf -> toType(getAllOf(), type);
+			case PROP_default -> toType(getDefault(), type);
+			case PROP_description -> toType(getDescription(), type);
+			case PROP_discriminator -> toType(getDiscriminator(), type);
+			case PROP_enum -> toType(getEnum(), type);
+			case PROP_example -> toType(getExample(), type);
+			case PROP_exclusiveMaximum -> toType(getExclusiveMaximum(), type);
+			case PROP_exclusiveMinimum -> toType(getExclusiveMinimum(), type);
+			case PROP_externalDocs -> toType(getExternalDocs(), type);
+			case PROP_format -> toType(getFormat(), type);
+			case PROP_items -> toType(getItems(), type);
+			case PROP_maximum -> toType(getMaximum(), type);
+			case PROP_maxItems -> toType(getMaxItems(), type);
+			case PROP_maxLength -> toType(getMaxLength(), type);
+			case PROP_maxProperties -> toType(getMaxProperties(), type);
+			case PROP_minimum -> toType(getMinimum(), type);
+			case PROP_minItems -> toType(getMinItems(), type);
+			case PROP_minLength -> toType(getMinLength(), type);
+			case PROP_minProperties -> toType(getMinProperties(), type);
+			case PROP_multipleOf -> toType(getMultipleOf(), type);
+			case PROP_pattern -> toType(getPattern(), type);
+			case PROP_properties -> toType(getProperties(), type);
+			case PROP_readOnly -> toType(getReadOnly(), type);
+			case PROP_ref -> toType(getRef(), type);
+			case PROP_required -> toType(getRequired(), type);
+			case PROP_requiredProperties -> toType(getRequiredProperties(), type);
+			case PROP_title -> toType(getTitle(), type);
+			case PROP_type -> toType(getType(), type);
+			case PROP_uniqueItems -> toType(getUniqueItems(), type);
+			case PROP_xml -> toType(getXml(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -580,37 +613,37 @@ public class SchemaInfo extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(ref), "$ref")
-			.addIf(nn(additionalProperties), "additionalProperties")
-			.addIf(ne(allOf), "allOf")
-			.addIf(nn(default_), "default")
-			.addIf(nn(description), "description")
-			.addIf(nn(discriminator), "discriminator")
-			.addIf(ne(enum_), "enum")
-			.addIf(nn(example), "example")
-			.addIf(nn(exclusiveMaximum), "exclusiveMaximum")
-			.addIf(nn(exclusiveMinimum), "exclusiveMinimum")
-			.addIf(nn(externalDocs), "externalDocs")
-			.addIf(nn(format), "format")
-			.addIf(nn(items), "items")
-			.addIf(nn(maxItems), "maxItems")
-			.addIf(nn(maxLength), "maxLength")
-			.addIf(nn(maxProperties), "maxProperties")
-			.addIf(nn(maximum), "maximum")
-			.addIf(nn(minItems), "minItems")
-			.addIf(nn(minLength), "minLength")
-			.addIf(nn(minProperties), "minProperties")
-			.addIf(nn(minimum), "minimum")
-			.addIf(nn(multipleOf), "multipleOf")
-			.addIf(nn(pattern), "pattern")
-			.addIf(ne(properties), "properties")
-			.addIf(nn(readOnly), "readOnly")
-			.addIf(nn(required), "required")
-			.addIf(ne(requiredProperties), "requiredProperties")
-			.addIf(nn(title), "title")
-			.addIf(nn(type), "type")
-			.addIf(nn(uniqueItems), "uniqueItems")
-			.addIf(nn(xml), "xml")
+			.addIf(nn(ref), PROP_ref)
+			.addIf(nn(additionalProperties), PROP_additionalProperties)
+			.addIf(ne(allOf), PROP_allOf)
+			.addIf(nn(default_), PROP_default)
+			.addIf(nn(description), PROP_description)
+			.addIf(nn(discriminator), PROP_discriminator)
+			.addIf(ne(enum_), PROP_enum)
+			.addIf(nn(example), PROP_example)
+			.addIf(nn(exclusiveMaximum), PROP_exclusiveMaximum)
+			.addIf(nn(exclusiveMinimum), PROP_exclusiveMinimum)
+			.addIf(nn(externalDocs), PROP_externalDocs)
+			.addIf(nn(format), PROP_format)
+			.addIf(nn(items), PROP_items)
+			.addIf(nn(maxItems), PROP_maxItems)
+			.addIf(nn(maxLength), PROP_maxLength)
+			.addIf(nn(maxProperties), PROP_maxProperties)
+			.addIf(nn(maximum), PROP_maximum)
+			.addIf(nn(minItems), PROP_minItems)
+			.addIf(nn(minLength), PROP_minLength)
+			.addIf(nn(minProperties), PROP_minProperties)
+			.addIf(nn(minimum), PROP_minimum)
+			.addIf(nn(multipleOf), PROP_multipleOf)
+			.addIf(nn(pattern), PROP_pattern)
+			.addIf(ne(properties), PROP_properties)
+			.addIf(nn(readOnly), PROP_readOnly)
+			.addIf(nn(required), PROP_required)
+			.addIf(ne(requiredProperties), PROP_requiredProperties)
+			.addIf(nn(title), PROP_title)
+			.addIf(nn(type), PROP_type)
+			.addIf(nn(uniqueItems), PROP_uniqueItems)
+			.addIf(nn(xml), PROP_xml)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -657,37 +690,37 @@ public class SchemaInfo extends SwaggerElement {
 	public SchemaInfo set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "additionalProperties" -> setAdditionalProperties(toType(value, SchemaInfo.class));
-			case "allOf" -> setAllOf(toSetBuilder(value, SchemaInfo.class).sparse().build());
-			case "default" -> setDefault(value);
-			case "description" -> setDescription(s(value));
-			case "discriminator" -> setDiscriminator(s(value));
-			case "enum" -> setEnum(value);
-			case "example" -> setExample(value);
-			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
-			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
-			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case "format" -> setFormat(s(value));
-			case "items" -> setItems(toType(value, Items.class));
-			case "maximum" -> setMaximum(toNumber(value));
-			case "maxItems" -> setMaxItems(toInteger(value));
-			case "maxLength" -> setMaxLength(toInteger(value));
-			case "maxProperties" -> setMaxProperties(toInteger(value));
-			case "minimum" -> setMinimum(toNumber(value));
-			case "minItems" -> setMinItems(toInteger(value));
-			case "minLength" -> setMinLength(toInteger(value));
-			case "minProperties" -> setMinProperties(toInteger(value));
-			case "multipleOf" -> setMultipleOf(toNumber(value));
-			case "pattern" -> setPattern(s(value));
-			case "properties" -> setProperties(toMapBuilder(value, String.class, SchemaInfo.class).sparse().build());
-			case "readOnly" -> setReadOnly(toBoolean(value));
-			case "$ref" -> setRef(s(value));
-			case "required" -> setRequired(toBoolean(value));
-			case "requiredProperties" -> setRequiredProperties(listb(String.class).addAny(value).sparse().build());
-			case "title" -> setTitle(s(value));
-			case "type" -> setType(s(value));
-			case "uniqueItems" -> setUniqueItems(toBoolean(value));
-			case "xml" -> setXml(toType(value, Xml.class));
+			case PROP_additionalProperties -> setAdditionalProperties(toType(value, SchemaInfo.class));
+			case PROP_allOf -> setAllOf(toSetBuilder(value, SchemaInfo.class).sparse().build());
+			case PROP_default -> setDefault(value);
+			case PROP_description -> setDescription(s(value));
+			case PROP_discriminator -> setDiscriminator(s(value));
+			case PROP_enum -> setEnum(value);
+			case PROP_example -> setExample(value);
+			case PROP_exclusiveMaximum -> setExclusiveMaximum(toBoolean(value));
+			case PROP_exclusiveMinimum -> setExclusiveMinimum(toBoolean(value));
+			case PROP_externalDocs -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			case PROP_format -> setFormat(s(value));
+			case PROP_items -> setItems(toType(value, Items.class));
+			case PROP_maximum -> setMaximum(toNumber(value));
+			case PROP_maxItems -> setMaxItems(toInteger(value));
+			case PROP_maxLength -> setMaxLength(toInteger(value));
+			case PROP_maxProperties -> setMaxProperties(toInteger(value));
+			case PROP_minimum -> setMinimum(toNumber(value));
+			case PROP_minItems -> setMinItems(toInteger(value));
+			case PROP_minLength -> setMinLength(toInteger(value));
+			case PROP_minProperties -> setMinProperties(toInteger(value));
+			case PROP_multipleOf -> setMultipleOf(toNumber(value));
+			case PROP_pattern -> setPattern(s(value));
+			case PROP_properties -> setProperties(toMapBuilder(value, String.class, SchemaInfo.class).sparse().build());
+			case PROP_readOnly -> setReadOnly(toBoolean(value));
+			case PROP_ref -> setRef(s(value));
+			case PROP_required -> setRequired(toBoolean(value));
+			case PROP_requiredProperties -> setRequiredProperties(listb(String.class).addAny(value).sparse().build());
+			case PROP_title -> setTitle(s(value));
+			case PROP_type -> setType(s(value));
+			case PROP_uniqueItems -> setUniqueItems(toBoolean(value));
+			case PROP_xml -> setXml(toType(value, Xml.class));
 			default -> {
 				super.set(property, value);
 				yield this;

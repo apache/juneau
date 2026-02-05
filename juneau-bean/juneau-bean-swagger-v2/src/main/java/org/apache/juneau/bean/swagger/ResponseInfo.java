@@ -90,6 +90,12 @@ public class ResponseInfo extends SwaggerElement {
 	private static final String ARG_name = "name";
 	private static final String ARG_property = "property";
 
+	// Property name constants
+	private static final String PROP_description = "description";
+	private static final String PROP_examples = "examples";
+	private static final String PROP_headers = "headers";
+	private static final String PROP_schema = "schema";
+
 	private String description;
 	private SchemaInfo schema;
 	private Map<String,HeaderInfo> headers = map();
@@ -182,10 +188,10 @@ public class ResponseInfo extends SwaggerElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "description" -> toType(getDescription(), type);
-			case "examples" -> toType(getExamples(), type);
-			case "headers" -> toType(getHeaders(), type);
-			case "schema" -> toType(getSchema(), type);
+			case PROP_description -> toType(getDescription(), type);
+			case PROP_examples -> toType(getExamples(), type);
+			case PROP_headers -> toType(getHeaders(), type);
+			case PROP_schema -> toType(getSchema(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -245,10 +251,10 @@ public class ResponseInfo extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(description), "description")
-			.addIf(ne(examples), "examples")
-			.addIf(ne(headers), "headers")
-			.addIf(nn(schema), "schema")
+			.addIf(nn(description), PROP_description)
+			.addIf(ne(examples), PROP_examples)
+			.addIf(ne(headers), PROP_headers)
+			.addIf(nn(schema), PROP_schema)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -281,10 +287,10 @@ public class ResponseInfo extends SwaggerElement {
 	public ResponseInfo set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "description" -> setDescription(s(value));
-			case "examples" -> setExamples(toMapBuilder(value, String.class, Object.class).sparse().build());
-			case "headers" -> setHeaders(toMapBuilder(value, String.class, HeaderInfo.class).sparse().build());
-			case "schema" -> setSchema(toType(value, SchemaInfo.class));
+			case PROP_description -> setDescription(s(value));
+			case PROP_examples -> setExamples(toMapBuilder(value, String.class, Object.class).sparse().build());
+			case PROP_headers -> setHeaders(toMapBuilder(value, String.class, HeaderInfo.class).sparse().build());
+			case PROP_schema -> setSchema(toType(value, SchemaInfo.class));
 			default -> {
 				super.set(property, value);
 				yield this;

@@ -40,6 +40,8 @@ import jakarta.servlet.http.*;
 @SuppressWarnings("java:S4144")
 public class MockServletResponse implements HttpServletResponse {
 
+	private static final String HEADER_ContentType = "Content-Type";
+
 	/**
 	 * Creates a new servlet response.
 	 *
@@ -108,7 +110,7 @@ public class MockServletResponse implements HttpServletResponse {
 	public String getCharacterEncoding() { return characterEncoding; }
 
 	@Override /* Overridden from HttpServletResponse */
-	public String getContentType() { return getHeader("Content-Type"); }
+	public String getContentType() { return getHeader(HEADER_ContentType); }
 
 	@Override /* Overridden from HttpServletResponse */
 	public String getHeader(String name) {
@@ -213,7 +215,7 @@ public class MockServletResponse implements HttpServletResponse {
 
 	@Override /* Overridden from HttpServletResponse */
 	public void setContentType(String type) {
-		setHeader("Content-Type", type);
+		setHeader(HEADER_ContentType, type);
 		updateContentTypeHeader();
 	}
 
@@ -260,7 +262,7 @@ public class MockServletResponse implements HttpServletResponse {
 				contentType = contentType.replaceAll("\\;\\s*charset=.*", "");
 			if (! "UTF-8".equalsIgnoreCase(charset))
 				contentType = contentType + ";charset=" + charset;
-			header("Content-Type", contentType);
+			header(HEADER_ContentType, contentType);
 		}
 	}
 

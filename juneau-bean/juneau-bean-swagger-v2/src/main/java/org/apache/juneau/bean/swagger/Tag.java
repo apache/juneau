@@ -75,6 +75,11 @@ public class Tag extends SwaggerElement {
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_property = "property";
 
+	// Property name constants
+	private static final String PROP_description = "description";
+	private static final String PROP_externalDocs = "externalDocs";
+	private static final String PROP_name = "name";
+
 	private String name;
 	private String description;
 	private ExternalDocumentation externalDocs;
@@ -110,9 +115,9 @@ public class Tag extends SwaggerElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "description" -> toType(getDescription(), type);
-			case "externalDocs" -> toType(getExternalDocs(), type);
-			case "name" -> toType(getName(), type);
+			case PROP_description -> toType(getDescription(), type);
+			case PROP_externalDocs -> toType(getExternalDocs(), type);
+			case PROP_name -> toType(getName(), type);
 			default -> super.get(property, type);
 		};
 	}
@@ -151,9 +156,9 @@ public class Tag extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = setb(String.class)
-			.addIf(nn(description), "description")
-			.addIf(nn(externalDocs), "externalDocs")
-			.addIf(nn(name), "name")
+			.addIf(nn(description), PROP_description)
+			.addIf(nn(externalDocs), PROP_externalDocs)
+			.addIf(nn(name), PROP_name)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -163,9 +168,9 @@ public class Tag extends SwaggerElement {
 	public Tag set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
-			case "description" -> setDescription(s(value));
-			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case "name" -> setName(s(value));
+			case PROP_description -> setDescription(s(value));
+			case PROP_externalDocs -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			case PROP_name -> setName(s(value));
 			default -> {
 				super.set(property, value);
 				yield this;
