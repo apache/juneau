@@ -64,6 +64,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	private static final String ARG_value = "value";
 	private static final String ARG_innerField = "innerField";
 
+	// Error message constants
+	private static final String MSG_getterOrFieldNotDefined = "Getter or public field not defined on property ''{0}''";
+
 	/**
 	 * BeanPropertyMeta builder class.
 	 */
@@ -848,7 +851,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				return (Map)getter.invoke(bean);
 			if (nn(field))
 				return (Map)field.get(bean);
-			throw bex(beanMeta.getClassMeta(), "Getter or public field not defined on property ''{0}''", name);
+			throw bex(beanMeta.getClassMeta(), MSG_getterOrFieldNotDefined, name);
 		}
 		return mape();
 	}
@@ -1273,7 +1276,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			} else if (nn(field))
 				m = (Map)field.get(bean);
 			else
-				throw bex(beanMeta.getClassMeta(), "Getter or public field not defined on property ''{0}''", name);
+				throw bex(beanMeta.getClassMeta(), MSG_getterOrFieldNotDefined, name);
 			return (m == null ? null : m.get(pName));
 		}
 		if (nn(getter))

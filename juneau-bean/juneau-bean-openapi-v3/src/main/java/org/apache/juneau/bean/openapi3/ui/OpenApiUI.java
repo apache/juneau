@@ -41,6 +41,7 @@ import org.apache.juneau.swap.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
+@SuppressWarnings("java:S1192")
 public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 
 	private static class Session {

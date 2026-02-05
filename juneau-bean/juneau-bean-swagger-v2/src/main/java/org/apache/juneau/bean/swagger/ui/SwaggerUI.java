@@ -40,6 +40,7 @@ import org.apache.juneau.swap.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
+@SuppressWarnings("java:S1192")
 public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 	private static class Session {

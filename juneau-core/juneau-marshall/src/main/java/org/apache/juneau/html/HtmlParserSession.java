@@ -59,6 +59,10 @@ public class HtmlParserSession extends XmlParserSession {
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
 
+	// HTML tag name constants
+	private static final String HTMLTAG_array = "array";
+	private static final String HTMLTAG_object = "object";
+
 	/**
 	 * Builder class.
 	 */
@@ -392,18 +396,18 @@ public class HtmlParserSession extends XmlParserSession {
 
 		} else if (tag == TABLE) {
 
-			String typeName = getAttribute(r, getBeanTypePropertyName(eType), "object");
+			String typeName = getAttribute(r, getBeanTypePropertyName(eType), HTMLTAG_object);
 			ClassMeta cm = getClassMeta(typeName, pMeta, eType);
 
 			if (nn(cm)) {
 				sType = eType = cm;
-				typeName = sType.isCollectionOrArray() ? "array" : "object";
-			} else if (! "array".equals(typeName)) {
+				typeName = sType.isCollectionOrArray() ? HTMLTAG_array : HTMLTAG_object;
+			} else if (! HTMLTAG_array.equals(typeName)) {
 				// Type name could be a subtype name.
-				typeName = sType.isCollectionOrArray() ? "array" : "object";
+				typeName = sType.isCollectionOrArray() ? HTMLTAG_array : HTMLTAG_object;
 			}
 
-			if (typeName.equals("object")) {
+			if (typeName.equals(HTMLTAG_object)) {
 				if (sType.isObject()) {
 					o = parseIntoMap(r, newGenericMap(sType), sType.getKeyType(), sType.getValueType(), pMeta);
 				} else if (sType.isMap()) {
@@ -422,7 +426,7 @@ public class HtmlParserSession extends XmlParserSession {
 				}
 				skipTag(r, xTABLE);
 
-			} else if (typeName.equals("array")) {
+			} else if (typeName.equals(HTMLTAG_array)) {
 				if (sType.isObject())
 					o = parseTableIntoCollection(r, (Collection)new JsonList(this), sType, pMeta);
 				else if (sType.isCollection())
@@ -439,7 +443,7 @@ public class HtmlParserSession extends XmlParserSession {
 			}
 
 		} else if (tag == UL) {
-			String typeName = getAttribute(r, getBeanTypePropertyName(eType), "array");
+			String typeName = getAttribute(r, getBeanTypePropertyName(eType), HTMLTAG_array);
 			ClassMeta cm = getClassMeta(typeName, pMeta, eType);
 			if (nn(cm))
 				sType = eType = cm;

@@ -49,6 +49,12 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 from pathlib import Path
+
+# Constants for duplicated string literals
+POM_XML = 'pom.xml'
+STAGING_DIR = '~/tmp/dist-release-juneau'
+SVN_DIST_URL = 'https://dist.apache.org/repos/dist/dev/juneau'
+RC_PATTERN = r'RC(\d+)'
 from typing import Dict, Optional, List
 
 # Minimum required versions
@@ -216,7 +222,7 @@ class ReleaseScript:
         # Get the Juneau root directory
         script_dir = Path(__file__).parent
         juneau_root = script_dir.parent
-        pom_path = juneau_root / 'pom.xml'
+        pom_path = juneau_root / POM_XML
         
         if not pom_path.exists():
             self.fail(f"pom.xml not found at {pom_path}")
@@ -248,7 +254,7 @@ class ReleaseScript:
             # Try to get default from history
             default_rc = None
             if history.get('X_RELEASE_CANDIDATE'):
-                rc_match = re.search(r'RC(\d+)', history.get('X_RELEASE_CANDIDATE', ''))
+                rc_match = re.search(RC_PATTERN, history.get('X_RELEASE_CANDIDATE', ''))
                 if rc_match:
                     default_rc = rc_match.group(1)
             
@@ -275,7 +281,7 @@ class ReleaseScript:
         
         staging = self._prompt_with_default(
             "Staging directory",
-            history.get('X_STAGING', '~/tmp/dist-release-juneau'),
+            history.get('X_STAGING', STAGING_DIR),
             required=True
         )
         
@@ -598,7 +604,7 @@ class ReleaseScript:
         self.message("Making git folder")
         self.start_timer()
         
-        staging = Path(os.environ.get('X_STAGING', '~/tmp/dist-release-juneau')).expanduser()
+        staging = Path(os.environ.get('X_STAGING', STAGING_DIR)).expanduser()
         
         # Clean up entire staging directory to start fresh (avoids issues from previous runs)
         if staging.exists():
@@ -618,7 +624,7 @@ class ReleaseScript:
         self.message("Cloning juneau.git")
         self.start_timer()
         
-        staging = Path(os.environ.get('X_STAGING', '~/tmp/dist-release-juneau')).expanduser()
+        staging = Path(os.environ.get('X_STAGING', STAGING_DIR)).expanduser()
         git_dir = staging / 'git'
         
         juneau_dir = git_dir / 'juneau'
@@ -635,7 +641,7 @@ class ReleaseScript:
         """Configure git user name and email."""
         self.message("Configuring git")
         
-        staging = Path(os.environ.get('X_STAGING', '~/tmp/dist-release-juneau')).expanduser()
+        staging = Path(os.environ.get('X_STAGING', STAGING_DIR)).expanduser()
         juneau_dir = staging / 'git' / 'juneau'
         
         username = os.environ.get('X_USERNAME')
@@ -653,7 +659,7 @@ class ReleaseScript:
         self.message("Running clean verify")
         self.start_timer()
         
-        staging = Path(os.environ.get('X_STAGING', '~/tmp/dist-release-juneau')).expanduser()
+        staging = Path(os.environ.get('X_STAGING', STAGING_DIR)).expanduser()
         juneau_dir = staging / 'git' / 'juneau'
         
         self.run_command(['mvn', 'clean', 'verify'], cwd=juneau_dir)
@@ -665,7 +671,7 @@ class ReleaseScript:
         """Create test workspace."""
         self.message("Creating test workspace")
         
-        staging = Path(os.environ.get('X_STAGING', '~/tmp/dist-release-juneau')).expanduser()
+        staging = Path(os.environ.get('X_STAGING', STAGING_DIR)).expanduser()
         juneau_dir = staging / 'git' / 'juneau'
         workspace = juneau_dir / 'target' / 'workspace'
         
@@ -711,7 +717,7 @@ class ReleaseScript:
         self.message("Running deploy")
         self.start_timer()
         
-        staging = Path(os.environ.get('X_STAGING', '~/tmp/dist-release-juneau')).expanduser()
+        staging = Path(os.environ.get('X_STAGING', STAGING_DIR)).expanduser()
         juneau_dir = staging / 'git' / 'juneau'
         
         self.run_command(['mvn', 'deploy', '-Daether.checksums.algorithms=MD5,SHA-1,SHA-512'], cwd=juneau_dir)
@@ -723,7 +729,7 @@ class ReleaseScript:
         """Run Maven release:prepare."""
         self.message("Running release:prepare")
         
-        staging = Path(os.environ.get('X_STAGING', '~/tmp/dist-release-juneau')).expanduser()
+        staging = Path(os.environ.get('X_STAGING', STAGING_DIR)).expanduser()
         juneau_dir = staging / 'git' / 'juneau'
         
         version = os.environ.get('X_VERSION')
@@ -731,7 +737,7 @@ class ReleaseScript:
         next_version = os.environ.get('X_NEXT_VERSION')
         
         # Check that the current POM version is a SNAPSHOT (required by release:prepare)
-        pom_path = juneau_dir / 'pom.xml'
+        pom_path = juneau_dir / POM_XML
         if pom_path.exists():
             # Read version directly from POM (don't use current-release.py as it strips SNAPSHOT)
             try:
@@ -778,7 +784,7 @@ class ReleaseScript:
         """Run git diff."""
         self.message("Running git diff")
         
-        staging = Path(os.environ.get('X_STAGING', '~/tmp/dist-release-juneau')).expanduser()
+        staging = Path(os.environ.get('X_STAGING', STAGING_DIR)).expanduser()
         juneau_dir = staging / 'git' / 'juneau'
         release = os.environ.get('X_RELEASE')
         
@@ -791,7 +797,7 @@ class ReleaseScript:
         self.message("Running release:perform")
         self.start_timer()
         
-        staging = Path(os.environ.get('X_STAGING', '~/tmp/dist-release-juneau')).expanduser()
+        staging = Path(os.environ.get('X_STAGING', STAGING_DIR)).expanduser()
         juneau_dir = staging / 'git' / 'juneau'
         
         self.run_command(['mvn', 'release:perform', '-Daether.checksums.algorithms=MD5,SHA-1,SHA-512'], cwd=juneau_dir)
@@ -824,7 +830,7 @@ class ReleaseScript:
         self.message("Creating binary artifacts")
         self.start_timer()
         
-        staging = Path(os.environ.get('X_STAGING', '~/tmp/dist-release-juneau')).expanduser()
+        staging = Path(os.environ.get('X_STAGING', STAGING_DIR)).expanduser()
         version = os.environ.get('X_VERSION')
         release = os.environ.get('X_RELEASE')
         repo = self.state.get('X_REPO') or os.environ.get('X_REPO')
@@ -837,7 +843,7 @@ class ReleaseScript:
         if dist_dir.exists():
             shutil.rmtree(dist_dir)
         
-        self.run_command(['svn', 'checkout', 'https://dist.apache.org/repos/dist/dev/juneau', 'dist'], cwd=staging)
+        self.run_command(['svn', 'checkout', SVN_DIST_URL, 'dist'], cwd=staging)
         
         # Remove old files
         source_dir = dist_dir / 'source'
@@ -926,7 +932,7 @@ class ReleaseScript:
         """Verify distribution files are available."""
         self.message("Verifying distribution")
         
-        staging = Path(os.environ.get('X_STAGING', '~/tmp/dist-release-juneau')).expanduser()
+        staging = Path(os.environ.get('X_STAGING', STAGING_DIR)).expanduser()
         version = os.environ.get('X_VERSION')
         release = os.environ.get('X_RELEASE')
         
@@ -937,7 +943,7 @@ class ReleaseScript:
             self.run_command(['svn', 'update'], cwd=dist_dir, check=False)
         else:
             # Fresh checkout
-            self.run_command(['svn', 'checkout', 'https://dist.apache.org/repos/dist/dev/juneau', 'dist'], cwd=staging)
+            self.run_command(['svn', 'checkout', SVN_DIST_URL, 'dist'], cwd=staging)
         
         # Expected files
         source_dir = dist_dir / 'source' / release
@@ -978,7 +984,7 @@ class ReleaseScript:
             print(f"  ✓ {file_path.relative_to(dist_dir)} ({size_mb:.2f} MB)")
         
         # Open browser for manual inspection
-        subprocess.Popen(['open', 'https://dist.apache.org/repos/dist/dev/juneau'])
+        subprocess.Popen(['open', SVN_DIST_URL])
         
         print("\n✅ Distribution verification successful. Voting can be started.")
         
@@ -1023,7 +1029,7 @@ class ReleaseScript:
     
     def _get_git_commit_hash(self, release_tag: str) -> Optional[str]:
         """Get git commit hash for a release tag."""
-        staging = Path(os.environ.get('X_STAGING', '~/tmp/dist-release-juneau')).expanduser()
+        staging = Path(os.environ.get('X_STAGING', STAGING_DIR)).expanduser()
         juneau_dir = staging / 'git' / 'juneau'
         
         try:
@@ -1058,7 +1064,7 @@ class ReleaseScript:
         vote_end_date = self._calculate_vote_end_date()
         
         # Extract RC number from release (e.g., "juneau-9.2.0-RC1" -> "RC1")
-        rc_match = re.search(r'RC(\d+)', release)
+            rc_match = re.search(RC_PATTERN, release)
         rc_number = rc_match.group(1) if rc_match else "x"
         
         # Generate email body
@@ -1144,7 +1150,7 @@ Anyone can participate in testing and voting, not just committers, please feel f
             print("Revert cancelled.")
             return
         
-        staging = Path(os.environ.get('X_STAGING', '~/tmp/dist-release-juneau')).expanduser()
+        staging = Path(os.environ.get('X_STAGING', STAGING_DIR)).expanduser()
         git_dir = staging / 'git' / 'juneau'
         
         # Pull latest changes from git
@@ -1187,7 +1193,7 @@ Anyone can participate in testing and voting, not just committers, please feel f
         # Step 2: Revert Maven versions
         print("\nStep 2: Reverting Maven versions...")
         development_version = f"{version}-SNAPSHOT"
-        if git_dir.exists() and (git_dir / 'pom.xml').exists():
+        if git_dir.exists() and (git_dir / POM_XML).exists():
             try:
                 print(f"  Reverting to development version: {development_version}")
                 self.run_command([
@@ -1366,7 +1372,7 @@ def main():
         # Try to extract from X_RELEASE environment variable
         x_release = os.environ.get('X_RELEASE')
         if x_release:
-            rc_match = re.search(r'RC(\d+)', x_release)
+            rc_match = re.search(RC_PATTERN, x_release)
             if rc_match:
                 rc = int(rc_match.group(1))
                 print(f"📌 Detected RC number from X_RELEASE: {rc}")
@@ -1379,7 +1385,7 @@ def main():
                     state_data = json.load(f)
                 x_release = state_data.get('X_RELEASE')
                 if x_release and rc is None:
-                    rc_match = re.search(r'RC(\d+)', x_release)
+                    rc_match = re.search(RC_PATTERN, x_release)
                     if rc_match:
                         rc = int(rc_match.group(1))
                         print(f"📌 Detected RC number from state file: {rc}")
@@ -1402,7 +1408,7 @@ def main():
             # Try to get version from pom.xml
             script_dir = Path(__file__).parent
             juneau_root = script_dir.parent
-            pom_path = juneau_root / 'pom.xml'
+            pom_path = juneau_root / POM_XML
             if pom_path.exists():
                 try:
                     result = subprocess.run(
@@ -1429,7 +1435,7 @@ def main():
                         history = json.load(f)
                     release_candidate = history.get('X_RELEASE_CANDIDATE', '')
                     if release_candidate:
-                        rc_match = re.search(r'RC(\d+)', release_candidate)
+                        rc_match = re.search(RC_PATTERN, release_candidate)
                         if rc_match:
                             rc = int(rc_match.group(1))
                             print(f"📌 Detected RC number from history file: {rc}")
@@ -1479,7 +1485,7 @@ def main():
             os.environ['X_STAGING'] = state_data['X_STAGING']
         elif not os.environ.get('X_STAGING'):
             # Set default staging if not set
-            os.environ['X_STAGING'] = '~/tmp/dist-release-juneau'
+            os.environ['X_STAGING'] = STAGING_DIR
         
         script.revert_release()
         return
@@ -1490,7 +1496,7 @@ def main():
         # Try to extract from X_RELEASE environment variable
         x_release = os.environ.get('X_RELEASE')
         if x_release:
-            rc_match = re.search(r'RC(\d+)', x_release)
+            rc_match = re.search(RC_PATTERN, x_release)
             if rc_match:
                 rc = int(rc_match.group(1))
                 print(f"📌 Detected RC number from X_RELEASE: {rc}")
@@ -1504,7 +1510,7 @@ def main():
                         state = json.load(f)
                     x_release = state.get('X_RELEASE')
                     if x_release:
-                        rc_match = re.search(r'RC(\d+)', x_release)
+                        rc_match = re.search(RC_PATTERN, x_release)
                         if rc_match:
                             rc = int(rc_match.group(1))
                             print(f"📌 Detected RC number from state file: {rc}")
@@ -1515,7 +1521,7 @@ def main():
         if rc is None:
             script_dir = Path(__file__).parent
             juneau_root = script_dir.parent
-            pom_path = juneau_root / 'pom.xml'
+            pom_path = juneau_root / POM_XML
             if pom_path.exists():
                 try:
                     # Get version from pom
@@ -1536,7 +1542,7 @@ def main():
                         with open(history_file, 'r') as f:
                             history = json.load(f)
                         release_candidate = history.get('X_RELEASE_CANDIDATE', '')
-                        rc_match = re.search(r'RC(\d+)', release_candidate)
+                        rc_match = re.search(RC_PATTERN, release_candidate)
                         if rc_match:
                             rc = int(rc_match.group(1))
                             print(f"📌 Detected RC number from history file: {rc}")

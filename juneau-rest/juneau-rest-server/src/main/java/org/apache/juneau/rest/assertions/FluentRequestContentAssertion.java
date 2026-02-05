@@ -103,6 +103,9 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<RequestContent,R> {
 
+	// Error message constants
+	private static final String MSG_exceptionDuringCall = "Exception occurred during call.";
+
 	/**
 	 * Chained constructor.
 	 *
@@ -313,7 +316,7 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 		try {
 			return value().cache().asBytes();
 		} catch (IOException e) {
-			throw error(e, "Exception occurred during call.");
+			throw error(e, MSG_exceptionDuringCall);
 		}
 	}
 
@@ -321,7 +324,7 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 		try {
 			return value().cache().as(c);
 		} catch (IOException e) {
-			throw error(e, "Exception occurred during call.");
+			throw error(e, MSG_exceptionDuringCall);
 		}
 	}
 
@@ -329,7 +332,7 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 		try {
 			return value().cache().as(c, args);
 		} catch (IOException e) {
-			throw error(e, "Exception occurred during call.");
+			throw error(e, MSG_exceptionDuringCall);
 		}
 	}
 
@@ -338,7 +341,7 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 		try {
 			return value().cache().asString();
 		} catch (IOException e) {
-			throw error(e, "Exception occurred during call.");
+			throw error(e, MSG_exceptionDuringCall);
 		}
 	}
 }

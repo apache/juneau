@@ -7337,7 +7337,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @throws RestCallException REST call failed.
 	 */
 	public RestRequest patch(Object uri) throws RestCallException {
-		return request(op("PATCH", uri, NO_BODY));
+		return request(op(PATCH, uri, NO_BODY));
 	}
 
 	/**
@@ -7379,7 +7379,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest patch(Object uri, Object body) throws RestCallException {
-		return request(op("PATCH", uri, body));
+		return request(op(PATCH, uri, body));
 	}
 
 	/**
@@ -7405,7 +7405,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest patch(Object uri, String body, ContentType contentType) throws RestCallException {
-		return request(op("PATCH", uri, stringBody(body))).header(contentType);
+		return request(op(PATCH, uri, stringBody(body))).header(contentType);
 	}
 
 	/**

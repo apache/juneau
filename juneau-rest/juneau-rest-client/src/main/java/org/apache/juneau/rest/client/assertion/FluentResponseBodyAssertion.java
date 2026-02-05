@@ -104,6 +104,9 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<ResponseContent,R> {
 
+	// Error message constants
+	private static final String MSG_exceptionDuringCall = "Exception occurred during call.";
+
 	/**
 	 * Chained constructor.
 	 *
@@ -365,7 +368,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 		try {
 			return value().cache().asBytes();
 		} catch (RestCallException e) {
-			throw error(e, "Exception occurred during call.");
+			throw error(e, MSG_exceptionDuringCall);
 		}
 	}
 
@@ -373,7 +376,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 		try {
 			return value().cache().as(type, args);
 		} catch (RestCallException e) {
-			throw error(e, "Exception occurred during call.");
+			throw error(e, MSG_exceptionDuringCall);
 		}
 	}
 
@@ -382,7 +385,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 		try {
 			return value().cache().asString();
 		} catch (RestCallException e) {
-			throw error(e, "Exception occurred during call.");
+			throw error(e, MSG_exceptionDuringCall);
 		}
 	}
 }

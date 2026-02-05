@@ -34,6 +34,15 @@ import org.apache.juneau.microservice.*;
  */
 public class ConfigCommand extends ConsoleCommand {
 
+	// Message bundle key constants
+	private static final String MKEY_invalidArguments = "InvalidArguments";
+	private static final String MKEY_tooManyArguments = "TooManyArguments";
+	private static final String MKEY_keyNotFound = "KeyNotFound";
+	private static final String MKEY_configSet = "ConfigSet";
+	private static final String MKEY_configRemove = "ConfigRemove";
+	private static final String MKEY_description = "description";
+	private static final String MKEY_info = "info";
+
 	private final Messages mb = Messages.of(ConfigCommand.class, "Messages");
 
 	@Override /* Overridden from ConsoleCommand */
@@ -50,46 +59,46 @@ public class ConfigCommand extends ConsoleCommand {
 					if (nn(val))
 						out.println(val);
 					else
-						out.println(mb.getString("KeyNotFound", key));
+						out.println(mb.getString(MKEY_keyNotFound, key));
 				} else {
-					out.println(mb.getString("TooManyArguments"));
+					out.println(mb.getString(MKEY_tooManyArguments));
 				}
 			} else if (option.equals("set")) {
 				// config set <key> <value>
 				if (args.size() == 4) {
 					conf.set(key, args.getArg(3));
-					out.println(mb.getString("ConfigSet"));
+					out.println(mb.getString(MKEY_configSet));
 				} else if (args.size() < 4) {
-					out.println(mb.getString("InvalidArguments"));
+					out.println(mb.getString(MKEY_invalidArguments));
 				} else {
-					out.println(mb.getString("TooManyArguments"));
+					out.println(mb.getString(MKEY_tooManyArguments));
 				}
 			} else if (option.equals("remove")) {
 				// config remove <key>
 				if (args.size() == 3) {
 					if (conf.get(key).isPresent()) {
 						conf.remove(key);
-						out.println(mb.getString("ConfigRemove", key));
+						out.println(mb.getString(MKEY_configRemove, key));
 					} else {
-						out.println(mb.getString("KeyNotFound", key));
+						out.println(mb.getString(MKEY_keyNotFound, key));
 					}
 				} else {
-					out.println(mb.getString("TooManyArguments"));
+					out.println(mb.getString(MKEY_tooManyArguments));
 				}
 			} else {
-				out.println(mb.getString("InvalidArguments"));
+				out.println(mb.getString(MKEY_invalidArguments));
 			}
 		} else {
-			out.println(mb.getString("InvalidArguments"));
+			out.println(mb.getString(MKEY_invalidArguments));
 		}
 		return false;
 	}
 
 	@Override /* Overridden from ConsoleCommand */
-	public String getDescription() { return mb.getString("description"); }
+	public String getDescription() { return mb.getString(MKEY_description); }
 
 	@Override /* Overridden from ConsoleCommand */
-	public String getInfo() { return mb.getString("info"); }
+	public String getInfo() { return mb.getString(MKEY_info); }
 
 	@Override /* Overridden from ConsoleCommand */
 	public String getName() { return "config"; }

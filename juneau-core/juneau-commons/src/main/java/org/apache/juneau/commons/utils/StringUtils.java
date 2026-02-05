@@ -7567,7 +7567,7 @@ public class StringUtils {
 		}
 
 		if (needsDecode) {
-			return safe(()->URLDecoder.decode(s, "UTF-8"));
+			return safe(()->URLDecoder.decode(s, UTF_8.name()));
 		}
 		return s;
 	}
@@ -7589,7 +7589,7 @@ public class StringUtils {
 			needsEncode |= (! URL_UNENCODED_CHARS.contains(s.charAt(i)));
 
 		if (needsEncode) {
-			return safe(()->URLEncoder.encode(s, "UTF-8"));
+			return safe(()->URLEncoder.encode(s, UTF_8.name()));
 		}
 
 		return s;
@@ -7618,7 +7618,7 @@ public class StringUtils {
 				else if (c <= 127)
 					sb.append('%').append(toHex2(c));
 				else
-					safe(()->sb.append(URLEncoder.encode("" + c, "UTF-8")));  // Yuck.
+					safe(()->sb.append(URLEncoder.encode("" + c, UTF_8.name())));  // Yuck.
 			}
 			s = sb.toString();
 		}

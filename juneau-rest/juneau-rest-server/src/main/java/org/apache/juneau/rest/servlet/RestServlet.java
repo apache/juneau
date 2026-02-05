@@ -68,6 +68,9 @@ public abstract class RestServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
+	// Error message constants
+	private static final String MSG_servletInitError = "Servlet init error on class ''{0}''";
+
 	private AtomicReference<RestContext> context = new AtomicReference<>();
 	private AtomicReference<Exception> initException = new AtomicReference<>();
 
@@ -147,14 +150,14 @@ public abstract class RestServlet extends HttpServlet {
 			context.get().postInitChildFirst();
 		} catch (ServletException e) {
 			initException.set(e);
-			log(SEVERE, e, "Servlet init error on class ''{0}''", cn(this));
+			log(SEVERE, e, MSG_servletInitError, cn(this));
 			throw e;
 		} catch (BasicHttpException e) {
 			initException.set(e);
-			log(SEVERE, e, "Servlet init error on class ''{0}''", cn(this));
+			log(SEVERE, e, MSG_servletInitError, cn(this));
 		} catch (Exception e) {
 			initException.set(new InternalServerError(e));
-			log(SEVERE, e, "Servlet init error on class ''{0}''", cn(this));
+			log(SEVERE, e, MSG_servletInitError, cn(this));
 		}
 	}
 
