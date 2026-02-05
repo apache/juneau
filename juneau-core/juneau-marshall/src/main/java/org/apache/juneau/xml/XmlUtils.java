@@ -48,7 +48,7 @@ public class XmlUtils {
 	private XmlUtils() {}
 
 	// @formatter:off
-	private static AsciiMap REPLACE_TEXT = new AsciiMap()
+	private static final AsciiMap REPLACE_TEXT = new AsciiMap()
 		.append('&', "&amp;")
 		.append('<', "&lt;")
 		.append('>', "&gt;")
@@ -56,7 +56,7 @@ public class XmlUtils {
 		.append((char)0x0A, "&#x000a;")
 		.append((char)0x0D, "&#x000d;");
 
-	private static AsciiMap REPLACE_ATTR_VAL = new AsciiMap()
+	private static final AsciiMap REPLACE_ATTR_VAL = new AsciiMap()
 		.append('&', "&amp;")
 		.append('<', "&lt;")
 		.append('>', "&gt;")

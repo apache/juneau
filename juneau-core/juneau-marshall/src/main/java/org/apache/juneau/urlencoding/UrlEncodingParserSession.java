@@ -291,7 +291,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 		return (T)o;
 	}
 
-	@SuppressWarnings({ "java:S3776", "java:S6541" })
+	@SuppressWarnings({ "java:S3776", "java:S6541", "java:S1213" }) // Method name matches private method in parent class by design
 	private <T> BeanMap<T> parseIntoBeanMap(UonReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 
 		int c = r.peekSkipWs();

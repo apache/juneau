@@ -277,7 +277,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		return out;
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({ "java:S3776", "java:S1213" }) // Method name matches private method in parent class by design
 	private SerializerWriter serializeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
 		var addAmp = Flag.create();
 
@@ -339,6 +339,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		return out;
 	}
 
+	@SuppressWarnings("java:S1213") // Method name matches private method in parent class by design
 	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		var keyType = type.getKeyType();

@@ -216,6 +216,7 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 		return value == null ? null : MediaRanges.of(value);
 	}
 
+	@SuppressWarnings("java:S1213") // Method name matches private method in parent class by design
 	private MediaRanges value() {
 		if (nn(supplier))
 			return supplier.get();

@@ -111,7 +111,7 @@ public class ResponseBeanMeta {
 	/**
 	 * Represents a non-existent meta object.
 	 */
-	public static ResponseBeanMeta NULL = new ResponseBeanMeta(new Builder(AnnotationWorkList.create()));
+	public static final ResponseBeanMeta NULL = new ResponseBeanMeta(new Builder(AnnotationWorkList.create()));
 
 	/**
 	 * Create metadata from specified method return.

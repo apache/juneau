@@ -99,7 +99,7 @@ public class SimpleReadWriteLock extends ReentrantReadWriteLock {
 	 * 	<li class='note'>This instance is thread-safe and can be shared across threads.
 	 * </ul>
 	 */
-	public static SimpleReadWriteLock NO_OP = new SimpleReadWriteLock() {
+	public static final SimpleReadWriteLock NO_OP = new SimpleReadWriteLock() {
 		private static final long serialVersionUID = 1L;
 
 		@Override

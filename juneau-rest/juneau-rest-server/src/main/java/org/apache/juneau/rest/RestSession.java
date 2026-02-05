@@ -316,7 +316,7 @@ public class RestSession extends ContextSession {
 	 */
 	public Throwable getException() { return (Throwable)req.getAttribute("Exception"); }
 
-	private static AsciiSet VALID_METHOD_CHARS = AsciiSet.create().ranges("A-Z", "a-z" ,"0-9").chars("_-").build();
+	private static final AsciiSet VALID_METHOD_CHARS = AsciiSet.create().ranges("A-Z", "a-z" ,"0-9").chars("_-").build();
 
 	/**
 	 * Returns the HTTP method name.

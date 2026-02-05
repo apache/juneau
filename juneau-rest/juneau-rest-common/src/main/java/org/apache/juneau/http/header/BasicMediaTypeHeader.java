@@ -315,6 +315,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 		return MediaType.of(value);
 	}
 
+	@SuppressWarnings("java:S1213") // Method name matches private method in parent class by design
 	private MediaType value() {
 		if (nn(supplier))
 			return supplier.get();

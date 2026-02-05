@@ -54,7 +54,7 @@ public class BasicStatusLine implements StatusLine {
 		return new BasicStatusLine().setStatusCode(statusCode).setReasonPhrase(reasonPhrase);
 	}
 
-	private ProtocolVersion DEFAULT_PROTOCOL_VERSION = new ProtocolVersion("HTTP", 1, 1);
+	private static final ProtocolVersion DEFAULT_PROTOCOL_VERSION = new ProtocolVersion("HTTP", 1, 1);
 
 	private ProtocolVersion protocolVersion = DEFAULT_PROTOCOL_VERSION;
 	private int statusCode;

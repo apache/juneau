@@ -43,7 +43,7 @@ public class MsgPackOutputStream extends OutputStream {
 
 	private final OutputStream os;
 
-	final long L2X31 = ((long)(1 << 30)) * 2;
+	private static final long L2X31 = ((long)(1 << 30)) * 2;
 
 	/**
 	 * Constructor.

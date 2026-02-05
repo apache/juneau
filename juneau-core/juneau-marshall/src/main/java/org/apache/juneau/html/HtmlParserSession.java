@@ -520,6 +520,7 @@ public class HtmlParserSession extends XmlParserSession {
 	 * Precondition:  Must be pointing at event following <ul> event.
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
+	@SuppressWarnings("java:S1213") // Method name matches private method in parent class by design
 	private <E> Collection<E> parseIntoCollection(XmlReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		int argIndex = 0;
 		while (true) {
@@ -539,6 +540,7 @@ public class HtmlParserSession extends XmlParserSession {
 	 * Precondition:  Must be pointing at <table> event.
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
+	@SuppressWarnings("java:S1213") // Method name matches private method in parent class by design
 	private <K,V> Map<K,V> parseIntoMap(XmlReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException, XMLStreamException {
 		while (true) {

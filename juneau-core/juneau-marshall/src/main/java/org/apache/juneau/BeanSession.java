@@ -229,7 +229,7 @@ public class BeanSession extends ContextSession {
 		}
 	}
 
-	private static Logger LOG = Logger.getLogger(cn(BeanSession.class));
+	private static final Logger LOG = Logger.getLogger(cn(BeanSession.class));
 
 	/**
 	 * Creates a builder of this object.
