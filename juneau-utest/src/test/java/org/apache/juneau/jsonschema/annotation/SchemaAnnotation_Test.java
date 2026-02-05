@@ -199,6 +199,7 @@ class SchemaAnnotation_Test extends TestBase {
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings("deprecation")
 	@Schema(
 		default_="a",
 		enum_="b",
@@ -258,6 +259,7 @@ class SchemaAnnotation_Test extends TestBase {
 	public static class D1 {}
 	Schema d1 = D1.class.getAnnotationsByType(Schema.class)[0];
 
+	@SuppressWarnings("deprecation")
 	@Schema(
 		default_="a",
 		enum_="b",

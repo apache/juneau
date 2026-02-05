@@ -862,6 +862,7 @@ public class BasicSwaggerProviderSession {
 		return om;
 	}
 
+	@SuppressWarnings("deprecation")
 	private JsonMap merge(JsonMap om, Items a) throws ParseException {
 		if (ItemsAnnotation.empty(a))
 			return om;
@@ -911,6 +912,7 @@ public class BasicSwaggerProviderSession {
 		// @formatter:on
 	}
 
+	@SuppressWarnings("deprecation")
 	private JsonMap merge(JsonMap om, Schema a) {
 		try {
 			if (SchemaAnnotation.empty(a))

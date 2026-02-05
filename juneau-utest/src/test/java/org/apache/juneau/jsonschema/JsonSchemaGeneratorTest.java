@@ -1514,6 +1514,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertBean(schema, "exclusiveMaximum,exclusiveMinimum,maximum,minimum", "true,true,100,0");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Schema(type="integer", exclusiveMaximum=true, exclusiveMinimum=true, maximum="100", minimum="0")
 	public static class OldStyleExclusiveBean {
 		public int value;
@@ -1526,6 +1527,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertBean(schema, "exclusiveMaximum,exclusiveMinimum", "100,0");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Schema(type="integer",
 		exclusiveMaximumValue="100",
 		exclusiveMinimumValue="0",
