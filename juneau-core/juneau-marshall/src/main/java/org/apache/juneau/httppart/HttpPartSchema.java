@@ -90,9 +90,13 @@ public class HttpPartSchema {
 
 	// Property name constants
 	private static final String PROP_additionalProperties = "additionalProperties";
+	private static final String PROP_allowEmptyValue = "allowEmptyValue";
 	private static final String PROP_collectionFormat = "collectionFormat";
+	private static final String PROP_default = "default";
+	private static final String PROP_enum = "enum";
 	private static final String PROP_exclusiveMaximum = "exclusiveMaximum";
 	private static final String PROP_exclusiveMinimum = "exclusiveMinimum";
+	private static final String PROP_format = "format";
 	private static final String PROP_items = "items";
 	private static final String PROP_maximum = "maximum";
 	private static final String PROP_maxItems = "maxItems";
@@ -103,8 +107,14 @@ public class HttpPartSchema {
 	private static final String PROP_minLength = "minLength";
 	private static final String PROP_minProperties = "minProperties";
 	private static final String PROP_multipleOf = "multipleOf";
+	private static final String PROP_name = "name";
+	private static final String PROP_parsedType = "parsedType";
 	private static final String PROP_pattern = "pattern";
 	private static final String PROP_properties = "properties";
+	private static final String PROP_required = "required";
+	private static final String PROP_skipIfEmpty = "skipIfEmpty";
+	private static final String PROP_type = "type";
+	private static final String PROP_uniqueItems = "uniqueItems";
 
 	// Jakarta validation annotation class name constants
 	private static final String CLASSNAME_NotNull = "NotNull";
@@ -2687,16 +2697,16 @@ public class HttpPartSchema {
 
 		Builder apply(JsonMap m) {
 			if (nn(m) && ! m.isEmpty()) {
-				default_(m.getString("default"));
-				enum_(HttpPartSchema.toSet(m.getString("enum")));
-				allowEmptyValue(m.getBoolean("allowEmptyValue"));
+				default_(m.getString(PROP_default));
+				enum_(HttpPartSchema.toSet(m.getString(PROP_enum)));
+				allowEmptyValue(m.getBoolean(PROP_allowEmptyValue));
 				exclusiveMaximum(m.getBoolean(PROP_exclusiveMaximum));
 				exclusiveMinimum(m.getBoolean(PROP_exclusiveMinimum));
-				required(m.getBoolean("required"));
-				uniqueItems(m.getBoolean("uniqueItems"));
+				required(m.getBoolean(PROP_required));
+				uniqueItems(m.getBoolean(PROP_uniqueItems));
 				collectionFormat(m.getString(PROP_collectionFormat));
-				type(m.getString("type"));
-				format(m.getString("format"));
+				type(m.getString(PROP_type));
+				format(m.getString(PROP_format));
 				pattern(m.getString(PROP_pattern));
 				maximum(m.get(PROP_maximum, Number.class));
 				minimum(m.get(PROP_minimum, Number.class));
@@ -3755,57 +3765,57 @@ public class HttpPartSchema {
 		switch (type) {
 			case STRING: {
 				notAllowed
-					.addIf(nn(properties), "properties")
-					.addIf(nn(additionalProperties), "additionalProperties")
-					.addIf(exclusiveMaximum, "exclusiveMaximum")
-					.addIf(exclusiveMinimum, "exclusiveMinimum")
-					.addIf(uniqueItems, "uniqueItems")
-					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat")
-					.addIf(nn(items), "items")
-					.addIf(nn(maximum), "maximum")
-					.addIf(nn(minimum), "minimum")
-					.addIf(nn(multipleOf), "multipleOf")
-					.addIf(nn(maxItems), "maxItems")
-					.addIf(nn(minItems), "minItems")
-					.addIf(nn(minProperties), "minProperties");
+					.addIf(nn(properties), PROP_properties)
+					.addIf(nn(additionalProperties), PROP_additionalProperties)
+					.addIf(exclusiveMaximum, PROP_exclusiveMaximum)
+					.addIf(exclusiveMinimum, PROP_exclusiveMinimum)
+					.addIf(uniqueItems, PROP_uniqueItems)
+					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, PROP_collectionFormat)
+					.addIf(nn(items), PROP_items)
+					.addIf(nn(maximum), PROP_maximum)
+					.addIf(nn(minimum), PROP_minimum)
+					.addIf(nn(multipleOf), PROP_multipleOf)
+					.addIf(nn(maxItems), PROP_maxItems)
+					.addIf(nn(minItems), PROP_minItems)
+					.addIf(nn(minProperties), PROP_minProperties);
 				invalidFormat = ! format.isOneOf(HttpPartFormat.BYTE, HttpPartFormat.BINARY, HttpPartFormat.BINARY_SPACED, HttpPartFormat.DATE, HttpPartFormat.DATE_TIME, HttpPartFormat.PASSWORD, HttpPartFormat.UON, HttpPartFormat.NO_FORMAT);
 				break;
 			}
 			case ARRAY: {
-				notAllowed.addIf(nn(properties), "properties")
-					.addIf(nn(additionalProperties), "additionalProperties")
-					.addIf(exclusiveMaximum, "exclusiveMaximum")
-					.addIf(exclusiveMinimum, "exclusiveMinimum")
-					.addIf(nn(pattern), "pattern")
-					.addIf(nn(maximum), "maximum")
-					.addIf(nn(minimum), "minimum")
-					.addIf(nn(multipleOf), "multipleOf")
-					.addIf(nn(maxLength), "maxLength")
-					.addIf(nn(minLength), "minLength")
-					.addIf(nn(maxProperties), "maxProperties")
-					.addIf(nn(minProperties), "minProperties");
+				notAllowed.addIf(nn(properties), PROP_properties)
+					.addIf(nn(additionalProperties), PROP_additionalProperties)
+					.addIf(exclusiveMaximum, PROP_exclusiveMaximum)
+					.addIf(exclusiveMinimum, PROP_exclusiveMinimum)
+					.addIf(nn(pattern), PROP_pattern)
+					.addIf(nn(maximum), PROP_maximum)
+					.addIf(nn(minimum), PROP_minimum)
+					.addIf(nn(multipleOf), PROP_multipleOf)
+					.addIf(nn(maxLength), PROP_maxLength)
+					.addIf(nn(minLength), PROP_minLength)
+					.addIf(nn(maxProperties), PROP_maxProperties)
+					.addIf(nn(minProperties), PROP_minProperties);
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON);
 				break;
 			}
 			case BOOLEAN: {
-				notAllowed.addIf(! enum_.isEmpty(), "enum")
-					.addIf(nn(properties), "properties")
-					.addIf(nn(additionalProperties), "additionalProperties")
-					.addIf(exclusiveMaximum, "exclusiveMaximum")
-					.addIf(exclusiveMinimum, "exclusiveMinimum")
-					.addIf(uniqueItems, "uniqueItems")
-					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat")
-					.addIf(nn(pattern), "pattern")
-					.addIf(nn(items), "items")
-					.addIf(nn(maximum), "maximum")
-					.addIf(nn(minimum), "minimum")
-					.addIf(nn(multipleOf), "multipleOf")
-					.addIf(nn(maxItems), "maxItems")
-					.addIf(nn(maxLength), "maxLength")
-					.addIf(nn(maxProperties), "maxProperties")
-					.addIf(nn(minItems), "minItems")
-					.addIf(nn(minLength), "minLength")
-					.addIf(nn(minProperties), "minProperties");
+				notAllowed.addIf(! enum_.isEmpty(), PROP_enum)
+					.addIf(nn(properties), PROP_properties)
+					.addIf(nn(additionalProperties), PROP_additionalProperties)
+					.addIf(exclusiveMaximum, PROP_exclusiveMaximum)
+					.addIf(exclusiveMinimum, PROP_exclusiveMinimum)
+					.addIf(uniqueItems, PROP_uniqueItems)
+					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, PROP_collectionFormat)
+					.addIf(nn(pattern), PROP_pattern)
+					.addIf(nn(items), PROP_items)
+					.addIf(nn(maximum), PROP_maximum)
+					.addIf(nn(minimum), PROP_minimum)
+					.addIf(nn(multipleOf), PROP_multipleOf)
+					.addIf(nn(maxItems), PROP_maxItems)
+					.addIf(nn(maxLength), PROP_maxLength)
+					.addIf(nn(maxProperties), PROP_maxProperties)
+					.addIf(nn(minItems), PROP_minItems)
+					.addIf(nn(minLength), PROP_minLength)
+					.addIf(nn(minProperties), PROP_minProperties);
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON);
 				break;
 			}
@@ -3813,50 +3823,50 @@ public class HttpPartSchema {
 				break;
 			}
 			case INTEGER: {
-				notAllowed.addIf(nn(properties), "properties")
-					.addIf(nn(additionalProperties), "additionalProperties")
-					.addIf(uniqueItems, "uniqueItems")
-					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat")
-					.addIf(nn(pattern), "pattern")
-					.addIf(nn(items), "items")
-					.addIf(nn(maxItems), "maxItems")
-					.addIf(nn(maxLength), "maxLength")
-					.addIf(nn(maxProperties), "maxProperties")
-					.addIf(nn(minItems), "minItems")
-					.addIf(nn(minLength), "minLength")
-					.addIf(nn(minProperties), "minProperties");
+				notAllowed.addIf(nn(properties), PROP_properties)
+					.addIf(nn(additionalProperties), PROP_additionalProperties)
+					.addIf(uniqueItems, PROP_uniqueItems)
+					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, PROP_collectionFormat)
+					.addIf(nn(pattern), PROP_pattern)
+					.addIf(nn(items), PROP_items)
+					.addIf(nn(maxItems), PROP_maxItems)
+					.addIf(nn(maxLength), PROP_maxLength)
+					.addIf(nn(maxProperties), PROP_maxProperties)
+					.addIf(nn(minItems), PROP_minItems)
+					.addIf(nn(minLength), PROP_minLength)
+					.addIf(nn(minProperties), PROP_minProperties);
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON, HttpPartFormat.INT32, HttpPartFormat.INT64);
 				break;
 			}
 			case NUMBER: {
-				notAllowed.addIf(nn(properties), "properties")
-					.addIf(nn(additionalProperties), "additionalProperties")
-					.addIf(uniqueItems, "uniqueItems")
-					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat")
-					.addIf(nn(pattern), "pattern")
-					.addIf(nn(items), "items")
-					.addIf(nn(maxItems), "maxItems")
-					.addIf(nn(maxLength), "maxLength")
-					.addIf(nn(maxProperties), "maxProperties")
-					.addIf(nn(minItems), "minItems")
-					.addIf(nn(minLength), "minLength")
-					.addIf(nn(minProperties), "minProperties");
+				notAllowed.addIf(nn(properties), PROP_properties)
+					.addIf(nn(additionalProperties), PROP_additionalProperties)
+					.addIf(uniqueItems, PROP_uniqueItems)
+					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, PROP_collectionFormat)
+					.addIf(nn(pattern), PROP_pattern)
+					.addIf(nn(items), PROP_items)
+					.addIf(nn(maxItems), PROP_maxItems)
+					.addIf(nn(maxLength), PROP_maxLength)
+					.addIf(nn(maxProperties), PROP_maxProperties)
+					.addIf(nn(minItems), PROP_minItems)
+					.addIf(nn(minLength), PROP_minLength)
+					.addIf(nn(minProperties), PROP_minProperties);
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON, HttpPartFormat.FLOAT, HttpPartFormat.DOUBLE);
 				break;
 			}
 			case OBJECT: {
-				notAllowed.addIf(exclusiveMaximum, "exclusiveMaximum")
-					.addIf(exclusiveMinimum, "exclusiveMinimum")
-					.addIf(uniqueItems, "uniqueItems")
-					.addIf(nn(pattern), "pattern")
-					.addIf(nn(items), "items")
-					.addIf(nn(maximum), "maximum")
-					.addIf(nn(minimum), "minimum")
-					.addIf(nn(multipleOf), "multipleOf")
-					.addIf(nn(maxItems), "maxItems")
-					.addIf(nn(maxLength), "maxLength")
-					.addIf(nn(minItems), "minItems")
-					.addIf(nn(minLength), "minLength");
+				notAllowed.addIf(exclusiveMaximum, PROP_exclusiveMaximum)
+					.addIf(exclusiveMinimum, PROP_exclusiveMinimum)
+					.addIf(uniqueItems, PROP_uniqueItems)
+					.addIf(nn(pattern), PROP_pattern)
+					.addIf(nn(items), PROP_items)
+					.addIf(nn(maximum), PROP_maximum)
+					.addIf(nn(minimum), PROP_minimum)
+					.addIf(nn(multipleOf), PROP_multipleOf)
+					.addIf(nn(maxItems), PROP_maxItems)
+					.addIf(nn(maxLength), PROP_maxLength)
+					.addIf(nn(minItems), PROP_minItems)
+					.addIf(nn(minLength), PROP_minLength);
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT);
 				break;
 			}
@@ -4194,32 +4204,32 @@ public class HttpPartSchema {
 		Predicate<Object> nm1 = x -> x instanceof Number x2 && x2.intValue() != -1;
 		Predicate<Object> nn = Utils::nn;
 		return mapb_so().sorted().buildFluent()
-			.ai(ne, "name", name)
-			.ai(ne, "type", type)
-			.ai(ne, "format", format)
-			.ai(ne, "default", default_)
-			.ai(ne, "enum", enum_)
-			.ai(ne, "properties", properties)
-			.ai(nf, "allowEmptyValue", allowEmptyValue)
-			.ai(nf, "exclusiveMaximum", exclusiveMaximum)
-			.ai(nf, "exclusiveMinimum", exclusiveMinimum)
-			.ai(nf, "required", required)
-			.ai(nf, "uniqueItems", uniqueItems)
-			.ai(nf, "skipIfEmpty", skipIfEmpty)
-			.ai(x -> x != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat", collectionFormat)
-			.ai(ne, "pattern", pattern)
-			.ai(nn, "items", items)
-			.ai(nn, "additionalProperties", additionalProperties)
-			.ai(nm1, "maximum", maximum)
-			.ai(nm1, "minimum", minimum)
-			.ai(nm1, "multipleOf", multipleOf)
-			.ai(nm1, "maxLength", maxLength)
-			.ai(nm1, "minLength", minLength)
-			.ai(nm1, "maxItems", maxItems)
-			.ai(nm1, "minItems", minItems)
-			.ai(nm1, "maxProperties", maxProperties)
-			.ai(nm1, "minProperties", minProperties)
-			.a("parsedType", parsedType);
+			.ai(ne, PROP_name, name)
+			.ai(ne, PROP_type, type)
+			.ai(ne, PROP_format, format)
+			.ai(ne, PROP_default, default_)
+			.ai(ne, PROP_enum, enum_)
+			.ai(ne, PROP_properties, properties)
+			.ai(nf, PROP_allowEmptyValue, allowEmptyValue)
+			.ai(nf, PROP_exclusiveMaximum, exclusiveMaximum)
+			.ai(nf, PROP_exclusiveMinimum, exclusiveMinimum)
+			.ai(nf, PROP_required, required)
+			.ai(nf, PROP_uniqueItems, uniqueItems)
+			.ai(nf, PROP_skipIfEmpty, skipIfEmpty)
+			.ai(x -> x != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, PROP_collectionFormat, collectionFormat)
+			.ai(ne, PROP_pattern, pattern)
+			.ai(nn, PROP_items, items)
+			.ai(nn, PROP_additionalProperties, additionalProperties)
+			.ai(nm1, PROP_maximum, maximum)
+			.ai(nm1, PROP_minimum, minimum)
+			.ai(nm1, PROP_multipleOf, multipleOf)
+			.ai(nm1, PROP_maxLength, maxLength)
+			.ai(nm1, PROP_minLength, minLength)
+			.ai(nm1, PROP_maxItems, maxItems)
+			.ai(nm1, PROP_minItems, minItems)
+			.ai(nm1, PROP_maxProperties, maxProperties)
+			.ai(nm1, PROP_minProperties, minProperties)
+			.a(PROP_parsedType, parsedType);
 		// @formatter:on
 	}
 

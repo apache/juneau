@@ -40,6 +40,55 @@ import org.apache.juneau.svl.*;
  */
 public class SchemaAnnotation {
 
+	// Property name constants
+	private static final String PROP_additionalProperties = "additionalProperties";
+	private static final String PROP_allOf = "allOf";
+	private static final String PROP_collectionFormat = "collectionFormat";
+	private static final String PROP_const = "const";
+	private static final String PROP_contentEncoding = "contentEncoding";
+	private static final String PROP_contentMediaType = "contentMediaType";
+	private static final String PROP_default = "default";
+	private static final String PROP_deprecated = "deprecated";
+	private static final String PROP_dependentRequired = "dependentRequired";
+	private static final String PROP_dependentSchemas = "dependentSchemas";
+	private static final String PROP_description = "description";
+	private static final String PROP_discriminator = "discriminator";
+	private static final String PROP_else = "else";
+	private static final String PROP_enum = "enum";
+	private static final String PROP_examples = "examples";
+	private static final String PROP_exclusiveMaximum = "exclusiveMaximum";
+	private static final String PROP_exclusiveMinimum = "exclusiveMinimum";
+	private static final String PROP_externalDocs = "externalDocs";
+	private static final String PROP_format = "format";
+	private static final String PROP_id = "$id";
+	private static final String PROP_if = "if";
+	private static final String PROP_ignore = "ignore";
+	private static final String PROP_items = "items";
+	private static final String PROP_maximum = "maximum";
+	private static final String PROP_maxItems = "maxItems";
+	private static final String PROP_maxLength = "maxLength";
+	private static final String PROP_maxProperties = "maxProperties";
+	private static final String PROP_minimum = "minimum";
+	private static final String PROP_minItems = "minItems";
+	private static final String PROP_minLength = "minLength";
+	private static final String PROP_minProperties = "minProperties";
+	private static final String PROP_multipleOf = "multipleOf";
+	private static final String PROP_pattern = "pattern";
+	private static final String PROP_prefixItems = "prefixItems";
+	private static final String PROP_properties = "properties";
+	private static final String PROP_readOnly = "readOnly";
+	private static final String PROP_ref = "$ref";
+	private static final String PROP_required = "required";
+	private static final String PROP_then = "then";
+	private static final String PROP_title = "title";
+	private static final String PROP_type = "type";
+	private static final String PROP_unevaluatedItems = "unevaluatedItems";
+	private static final String PROP_unevaluatedProperties = "unevaluatedProperties";
+	private static final String PROP_uniqueItems = "uniqueItems";
+	private static final String PROP_xml = "xml";
+	private static final String PROP_comment = "$comment";
+	private static final String PROP_defs = "$defs";
+
 	/**
 	 * Prevents instantiation.
 	 */
@@ -1636,54 +1685,54 @@ public class SchemaAnnotation {
 
 		// @formatter:off
 		return m
-			.appendIf(nem, "additionalProperties", parseMap(a.additionalProperties()))
-			.appendIf(ne, "allOf", joinnl(a.allOf()))
-			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
-			.appendIf(ne, "default", joinnl(a.default_(), a.df()))
-			.appendIf(ne, "discriminator", a.discriminator())
-			.appendIf(ne, "description", joinnl(a.description(), a.d()))
-			.appendFirst(nec, "enum", parseSet(a.enum_()), parseSet(a.e()))
-			.appendIf(ne, "exclusiveMaximum", exclusiveMaximumValue)
-			.appendIf(ne, "exclusiveMinimum", exclusiveMinimumValue)
-			.appendIf(nem, "externalDocs", ExternalDocsAnnotation.merge(m.getMap("externalDocs"), a.externalDocs()))
-			.appendFirst(ne, "format", a.format(), a.f())
-			.appendIf(ne, "ignore", a.ignore() ? "true" : null)
-			.appendIf(nem, "items", merge(m.getMap("items"), a.items()))
-			.appendFirst(ne, "maximum", a.maximum(), a.max())
-			.appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
-			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())
-			.appendFirst(nm1, "maxProperties", a.maxProperties(), a.maxp())
-			.appendFirst(ne, "minimum", a.minimum(), a.min())
-			.appendFirst(nm1, "minItems", a.minItems(), a.mini())
-			.appendFirst(nm1, "minLength", a.minLength(), a.minl())
-			.appendFirst(nm1, "minProperties", a.minProperties(), a.minp())
-			.appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())
-			.appendFirst(ne, "pattern", a.pattern(), a.p())
-			.appendIf(nem, "properties", parseMap(a.properties()))
-			.appendIf(nf, "readOnly", a.readOnly() || a.ro())
-			.appendIf(nf, "required", a.required() || a.r())
-			.appendIf(ne, "title", a.title())
-			.appendFirst(ne, "type", a.type(), a.t())
-			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
-			.appendIf(ne, "xml", joinnl(a.xml()))
-			.appendIf(ne, "$ref", a.$ref())
+			.appendIf(nem, PROP_additionalProperties, parseMap(a.additionalProperties()))
+			.appendIf(ne, PROP_allOf, joinnl(a.allOf()))
+			.appendFirst(ne, PROP_collectionFormat, a.collectionFormat(), a.cf())
+			.appendIf(ne, PROP_default, joinnl(a.default_(), a.df()))
+			.appendIf(ne, PROP_discriminator, a.discriminator())
+			.appendIf(ne, PROP_description, joinnl(a.description(), a.d()))
+			.appendFirst(nec, PROP_enum, parseSet(a.enum_()), parseSet(a.e()))
+			.appendIf(ne, PROP_exclusiveMaximum, exclusiveMaximumValue)
+			.appendIf(ne, PROP_exclusiveMinimum, exclusiveMinimumValue)
+			.appendIf(nem, PROP_externalDocs, ExternalDocsAnnotation.merge(m.getMap(PROP_externalDocs), a.externalDocs()))
+			.appendFirst(ne, PROP_format, a.format(), a.f())
+			.appendIf(ne, PROP_ignore, a.ignore() ? "true" : null)
+			.appendIf(nem, PROP_items, merge(m.getMap(PROP_items), a.items()))
+			.appendFirst(ne, PROP_maximum, a.maximum(), a.max())
+			.appendFirst(nm1, PROP_maxItems, a.maxItems(), a.maxi())
+			.appendFirst(nm1, PROP_maxLength, a.maxLength(), a.maxl())
+			.appendFirst(nm1, PROP_maxProperties, a.maxProperties(), a.maxp())
+			.appendFirst(ne, PROP_minimum, a.minimum(), a.min())
+			.appendFirst(nm1, PROP_minItems, a.minItems(), a.mini())
+			.appendFirst(nm1, PROP_minLength, a.minLength(), a.minl())
+			.appendFirst(nm1, PROP_minProperties, a.minProperties(), a.minp())
+			.appendFirst(ne, PROP_multipleOf, a.multipleOf(), a.mo())
+			.appendFirst(ne, PROP_pattern, a.pattern(), a.p())
+			.appendIf(nem, PROP_properties, parseMap(a.properties()))
+			.appendIf(nf, PROP_readOnly, a.readOnly() || a.ro())
+			.appendIf(nf, PROP_required, a.required() || a.r())
+			.appendIf(ne, PROP_title, a.title())
+			.appendFirst(ne, PROP_type, a.type(), a.t())
+			.appendIf(nf, PROP_uniqueItems, a.uniqueItems() || a.ui())
+			.appendIf(ne, PROP_xml, joinnl(a.xml()))
+			.appendIf(ne, PROP_ref, a.$ref())
 			// JSON Schema Draft 2020-12 properties
-			.appendIf(ne, "const", joinnl(a.const_()))
-			.appendIf(nec, "examples", a.examples().length == 0 ? null : l(a.examples()))
-			.appendIf(ne, "$comment", joinnl(a.$comment()))
-			.appendIf(nf, "deprecated", a.deprecatedProperty())
-			.appendIf(ne, "contentMediaType", a.contentMediaType())
-			.appendIf(ne, "contentEncoding", a.contentEncoding())
-			.appendIf(ne, "prefixItems", joinnl(a.prefixItems()))
-			.appendIf(ne, "unevaluatedItems", joinnl(a.unevaluatedItems()))
-			.appendIf(ne, "unevaluatedProperties", joinnl(a.unevaluatedProperties()))
-			.appendIf(ne, "dependentSchemas", joinnl(a.dependentSchemas()))
-			.appendIf(ne, "dependentRequired", joinnl(a.dependentRequired()))
-			.appendIf(ne, "if", joinnl(a.if_()))
-			.appendIf(ne, "then", joinnl(a.then_()))
-			.appendIf(ne, "else", joinnl(a.else_()))
-			.appendIf(ne, "$defs", joinnl(a.$defs()))
-			.appendIf(ne, "$id", a.$id())
+			.appendIf(ne, PROP_const, joinnl(a.const_()))
+			.appendIf(nec, PROP_examples, a.examples().length == 0 ? null : l(a.examples()))
+			.appendIf(ne, PROP_comment, joinnl(a.$comment()))
+			.appendIf(nf, PROP_deprecated, a.deprecatedProperty())
+			.appendIf(ne, PROP_contentMediaType, a.contentMediaType())
+			.appendIf(ne, PROP_contentEncoding, a.contentEncoding())
+			.appendIf(ne, PROP_prefixItems, joinnl(a.prefixItems()))
+			.appendIf(ne, PROP_unevaluatedItems, joinnl(a.unevaluatedItems()))
+			.appendIf(ne, PROP_unevaluatedProperties, joinnl(a.unevaluatedProperties()))
+			.appendIf(ne, PROP_dependentSchemas, joinnl(a.dependentSchemas()))
+			.appendIf(ne, PROP_dependentRequired, joinnl(a.dependentRequired()))
+			.appendIf(ne, PROP_if, joinnl(a.if_()))
+			.appendIf(ne, PROP_then, joinnl(a.then_()))
+			.appendIf(ne, PROP_else, joinnl(a.else_()))
+			.appendIf(ne, PROP_defs, joinnl(a.$defs()))
+			.appendIf(ne, PROP_id, a.$id())
 		;
 		// @formatter:on
 	}
@@ -1735,11 +1784,11 @@ public class SchemaAnnotation {
 		Predicate<Map<?,?>> nem = Utils::ne;
 		Predicate<Boolean> nf = Utils::isTrue;
 		Predicate<Long> nm1 = Utils::nm1;
-		return m.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf()).appendIf(ne, "default", joinnl(a.default_(), a.df())).appendFirst(nec, "enum", parseSet(a.enum_()), parseSet(a.e()))
-			.appendFirst(ne, "format", a.format(), a.f()).appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax()).appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.appendIf(nem, "items", SubItemsAnnotation.merge(m.getMap("items"), a.items())).appendFirst(ne, "maximum", a.maximum(), a.max()).appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
-			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl()).appendFirst(ne, "minimum", a.minimum(), a.min()).appendFirst(nm1, "minItems", a.minItems(), a.mini())
-			.appendFirst(nm1, "minLength", a.minLength(), a.minl()).appendFirst(ne, "multipleOf", a.multipleOf(), a.mo()).appendFirst(ne, "pattern", a.pattern(), a.p())
-			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui()).appendFirst(ne, "type", a.type(), a.t()).appendIf(ne, "$ref", a.$ref());
+		return m.appendFirst(ne, PROP_collectionFormat, a.collectionFormat(), a.cf()).appendIf(ne, PROP_default, joinnl(a.default_(), a.df())).appendFirst(nec, PROP_enum, parseSet(a.enum_()), parseSet(a.e()))
+			.appendFirst(ne, PROP_format, a.format(), a.f()).appendIf(nf, PROP_exclusiveMaximum, a.exclusiveMaximum() || a.emax()).appendIf(nf, PROP_exclusiveMinimum, a.exclusiveMinimum() || a.emin())
+			.appendIf(nem, PROP_items, SubItemsAnnotation.merge(m.getMap(PROP_items), a.items())).appendFirst(ne, PROP_maximum, a.maximum(), a.max()).appendFirst(nm1, PROP_maxItems, a.maxItems(), a.maxi())
+			.appendFirst(nm1, PROP_maxLength, a.maxLength(), a.maxl()).appendFirst(ne, PROP_minimum, a.minimum(), a.min()).appendFirst(nm1, PROP_minItems, a.minItems(), a.mini())
+			.appendFirst(nm1, PROP_minLength, a.minLength(), a.minl()).appendFirst(ne, PROP_multipleOf, a.multipleOf(), a.mo()).appendFirst(ne, PROP_pattern, a.pattern(), a.p())
+			.appendIf(nf, PROP_uniqueItems, a.uniqueItems() || a.ui()).appendFirst(ne, PROP_type, a.type(), a.t()).appendIf(ne, PROP_ref, a.$ref());
 	}
 }

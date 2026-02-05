@@ -34,6 +34,26 @@ import org.apache.juneau.parser.*;
  */
 public class SubItemsAnnotation {
 
+	// Property name constants
+	private static final String PROP_collectionFormat = "collectionFormat";
+	private static final String PROP_default = "default";
+	private static final String PROP_enum = "enum";
+	private static final String PROP_exclusiveMaximum = "exclusiveMaximum";
+	private static final String PROP_exclusiveMinimum = "exclusiveMinimum";
+	private static final String PROP_format = "format";
+	private static final String PROP_items = "items";
+	private static final String PROP_maximum = "maximum";
+	private static final String PROP_maxItems = "maxItems";
+	private static final String PROP_maxLength = "maxLength";
+	private static final String PROP_minimum = "minimum";
+	private static final String PROP_minItems = "minItems";
+	private static final String PROP_minLength = "minLength";
+	private static final String PROP_multipleOf = "multipleOf";
+	private static final String PROP_pattern = "pattern";
+	private static final String PROP_ref = "$ref";
+	private static final String PROP_type = "type";
+	private static final String PROP_uniqueItems = "uniqueItems";
+
 	/**
 	 * Prevents instantiation.
 	 */
@@ -782,24 +802,24 @@ public class SubItemsAnnotation {
 		Predicate<Long> nm1 = Utils::nm1;
 		// @formatter:off
 		return om
-			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
-			.appendIf(ne, "default", joinnl(a.default_(), a.df()))
-			.appendFirst(nec, "enum", parseSet(a.enum_()), parseSet(a.e()))
-			.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.appendFirst(ne, "format", a.format(), a.f())
-			.appendIf(nem, "items", parseMap(a.items()))
-			.appendFirst(ne, "maximum", a.maximum(), a.max())
-			.appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
-			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())
-			.appendFirst(ne, "minimum", a.minimum(), a.min())
-			.appendFirst(nm1, "minItems", a.minItems(), a.mini())
-			.appendFirst(nm1, "minLength", a.minLength(), a.minl())
-			.appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())
-			.appendFirst(ne, "pattern", a.pattern(), a.p())
-			.appendFirst(ne, "type", a.type(), a.t())
-			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
-			.appendIf(ne, "$ref", a.$ref())
+			.appendFirst(ne, PROP_collectionFormat, a.collectionFormat(), a.cf())
+			.appendIf(ne, PROP_default, joinnl(a.default_(), a.df()))
+			.appendFirst(nec, PROP_enum, parseSet(a.enum_()), parseSet(a.e()))
+			.appendIf(nf, PROP_exclusiveMaximum, a.exclusiveMaximum() || a.emax())
+			.appendIf(nf, PROP_exclusiveMinimum, a.exclusiveMinimum() || a.emin())
+			.appendFirst(ne, PROP_format, a.format(), a.f())
+			.appendIf(nem, PROP_items, parseMap(a.items()))
+			.appendFirst(ne, PROP_maximum, a.maximum(), a.max())
+			.appendFirst(nm1, PROP_maxItems, a.maxItems(), a.maxi())
+			.appendFirst(nm1, PROP_maxLength, a.maxLength(), a.maxl())
+			.appendFirst(ne, PROP_minimum, a.minimum(), a.min())
+			.appendFirst(nm1, PROP_minItems, a.minItems(), a.mini())
+			.appendFirst(nm1, PROP_minLength, a.minLength(), a.minl())
+			.appendFirst(ne, PROP_multipleOf, a.multipleOf(), a.mo())
+			.appendFirst(ne, PROP_pattern, a.pattern(), a.p())
+			.appendFirst(ne, PROP_type, a.type(), a.t())
+			.appendIf(nf, PROP_uniqueItems, a.uniqueItems() || a.ui())
+			.appendIf(ne, PROP_ref, a.$ref())
 		;
 		// @formatter:on
 	}

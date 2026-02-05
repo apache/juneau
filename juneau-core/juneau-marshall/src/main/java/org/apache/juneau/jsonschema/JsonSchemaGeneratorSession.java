@@ -53,6 +53,19 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	private static final String ARG_id = "id";
 	private static final String ARG_def = "def";
 
+	// JSON Schema property name constants
+	private static final String PROP_additionalProperties = "additionalProperties";
+	private static final String PROP_enum = "enum";
+	private static final String PROP_format = "format";
+	private static final String PROP_items = "items";
+	private static final String PROP_properties = "properties";
+	private static final String PROP_type = "type";
+	private static final String PROP_uniqueItems = "uniqueItems";
+
+	// JSON Schema type and format constants
+	private static final String TYPE_string = "string";
+	private static final String FORMAT_uri = "uri";
+
 	/**
 	 * Builder class.
 	 */
@@ -390,17 +403,17 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 			type = "array";
 		} else if (sType.isEnum()) {
 			tc = ENUM;
-			type = "string";
+			type = TYPE_string;
 		} else if (sType.isCharSequence() || sType.isChar()) {
 			tc = STRING;
-			type = "string";
+			type = TYPE_string;
 		} else if (sType.isUri()) {
 			tc = STRING;
-			type = "string";
-			format = "uri";
+			type = TYPE_string;
+			format = FORMAT_uri;
 		} else {
 			tc = STRING;
-			type = "string";
+			type = TYPE_string;
 		}
 
 		// Add info from @Schema on bean property.
@@ -411,8 +424,8 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		out.append(jscm.getSchema());
 
 		Predicate<String> ne = Utils::ne;
-		out.appendIfAbsentIf(ne, "type", type);
-		out.appendIfAbsentIf(ne, "format", format);
+		out.appendIfAbsentIf(ne, PROP_type, type);
+		out.appendIfAbsentIf(ne, PROP_format, format);
 
 		if (nn(aType)) {
 
@@ -433,27 +446,27 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 						properties.put(p.getName(), getSchema(p.getClassMeta(), p.getName(), pProps, exampleAdded, descriptionAdded, getJsonSchemaBeanPropertyMeta(p)));
 					}
 				}
-				out.put("properties", properties);
+				out.put(PROP_properties, properties);
 
 			} else if (tc == COLLECTION) {
 				ClassMeta et = sType.getElementType();
 				if (sType.isCollection() && sType.isAssignableTo(Set.class))
-					out.put("uniqueItems", true);
-				out.put("items", getSchema(et, "items", pNames, exampleAdded, descriptionAdded, null));
+					out.put(PROP_uniqueItems, true);
+				out.put(PROP_items, getSchema(et, PROP_items, pNames, exampleAdded, descriptionAdded, null));
 
 			} else if (tc == ARRAY) {
 				ClassMeta et = sType.getElementType();
 				if (sType.isCollection() && sType.isAssignableTo(Set.class))
-					out.put("uniqueItems", true);
-				out.put("items", getSchema(et, "items", pNames, exampleAdded, descriptionAdded, null));
+					out.put(PROP_uniqueItems, true);
+				out.put(PROP_items, getSchema(et, PROP_items, pNames, exampleAdded, descriptionAdded, null));
 
 			} else if (tc == ENUM) {
-				out.put("enum", getEnums(sType));
+				out.put(PROP_enum, getEnums(sType));
 
 			} else if (tc == MAP) {
-				var om = getSchema(sType.getValueType(), "additionalProperties", null, exampleAdded, descriptionAdded, null);
+				var om = getSchema(sType.getValueType(), PROP_additionalProperties, null, exampleAdded, descriptionAdded, null);
 				if (! om.isEmpty())
-					out.put("additionalProperties", om);
+					out.put(PROP_additionalProperties, om);
 
 			}
 		}
