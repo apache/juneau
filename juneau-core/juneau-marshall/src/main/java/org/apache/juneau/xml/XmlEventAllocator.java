@@ -28,6 +28,11 @@ import javax.xml.stream.util.*;
 public abstract class XmlEventAllocator implements XMLEventAllocator {
 
 	/**
+	 * Constructor.
+	 */
+	protected XmlEventAllocator() {}
+
+	/**
 	 * Represents the absence of this class.
 	 */
 	public static abstract class Void extends XmlEventAllocator {}

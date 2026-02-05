@@ -184,6 +184,8 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 	@SuppressWarnings("null")
 	@Override /* Overridden from Iterator */
 	public Entry next() {
+		if (next == null)
+			throw new NoSuchElementException();
 		Entry current = next;
 		Entry prev = next;
 		try {

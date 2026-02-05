@@ -28,6 +28,11 @@ import javax.xml.stream.*;
 public abstract class XmlResolver implements XMLResolver {
 
 	/**
+	 * Constructor.
+	 */
+	protected XmlResolver() {}
+
+	/**
 	 * Represents the absence of this class.
 	 */
 	public static abstract class Void extends XmlResolver {}

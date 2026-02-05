@@ -28,6 +28,11 @@ import javax.xml.stream.*;
 public abstract class XmlReporter implements XMLReporter {
 
 	/**
+	 * Constructor.
+	 */
+	protected XmlReporter() {}
+
+	/**
 	 * Represents the absence of this class.
 	 */
 	public static abstract class Void extends XmlReporter {}
