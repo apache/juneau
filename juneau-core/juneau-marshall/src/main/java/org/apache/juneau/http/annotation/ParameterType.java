@@ -27,15 +27,18 @@ public class ParameterType {
 	 */
 	private ParameterType() {}
 
-	// @formatter:off
 	@SuppressWarnings("javadoc")
-	public static final String
-		STRING = "string",
-		NUMBER = "number",
-		INTEGER = "integer",
-		BOOLEAN = "boolean",
-		ARRAY = "array",
-		OBJECT = "object",
-		FILE = "file";
-	// @formatter:on
+	public static final String STRING = "string";
+	/** Number parameter type. */
+	public static final String NUMBER = "number";
+	/** Integer parameter type. */
+	public static final String INTEGER = "integer";
+	/** Boolean parameter type. */
+	public static final String BOOLEAN = "boolean";
+	/** Array parameter type. */
+	public static final String ARRAY = "array";
+	/** Object parameter type. */
+	public static final String OBJECT = "object";
+	/** File parameter type. */
+	public static final String FILE = "file";
 }

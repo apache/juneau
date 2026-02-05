@@ -103,14 +103,11 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	private static final String ARG_upper = "upper";
 	private static final String ARG_value = "value";
 
-	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentComparableAssertion.class, "Messages");
-	private static final String
-		MSG_valueWasNotGreaterThanExpected = MESSAGES.getString("valueWasNotGreaterThanExpected"),
-		MSG_valueWasNotGreaterOrEqualsToExpected = MESSAGES.getString("valueWasNotGreaterOrEqualsToExpected"),
-		MSG_valueWasNotLessThanExpected = MESSAGES.getString("valueWasNotLessThanExpected"),
-		MSG_valueWasNotLessOrEqualsToExpected = MESSAGES.getString("valueWasNotLessOrEqualsToExpected");
-	// @formatter:on
+	private static final String MSG_valueWasNotGreaterThanExpected = MESSAGES.getString("valueWasNotGreaterThanExpected");
+	private static final String MSG_valueWasNotGreaterOrEqualsToExpected = MESSAGES.getString("valueWasNotGreaterOrEqualsToExpected");
+	private static final String MSG_valueWasNotLessThanExpected = MESSAGES.getString("valueWasNotLessThanExpected");
+	private static final String MSG_valueWasNotLessOrEqualsToExpected = MESSAGES.getString("valueWasNotLessOrEqualsToExpected");
 
 	/**
 	 * Chained constructor.

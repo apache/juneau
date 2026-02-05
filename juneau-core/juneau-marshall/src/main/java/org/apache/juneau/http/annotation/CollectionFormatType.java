@@ -27,14 +27,16 @@ public class CollectionFormatType {
 	 */
 	private CollectionFormatType() {}
 
-	@SuppressWarnings("javadoc")
-	// @formatter:off
-	public static final String
-		CSV = "csv",
-		SSV = "ssv",
-		TSV = "tsv",
-		PIPES = "pipes",
-		MULTI = "multi",
-		UON = "uon";
-	// @formatter:on
+	/** CSV collection format. */
+	public static final String CSV = "csv";
+	/** SSV collection format. */
+	public static final String SSV = "ssv";
+	/** TSV collection format. */
+	public static final String TSV = "tsv";
+	/** PIPES collection format. */
+	public static final String PIPES = "pipes";
+	/** MULTI collection format. */
+	public static final String MULTI = "multi";
+	/** UON collection format. */
+	public static final String UON = "uon";
 }

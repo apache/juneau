@@ -876,7 +876,7 @@ public class ConfigMap implements ConfigStoreListener {
 						accumulator.insert(0, l.substring(1) + "\n");
 					li.remove();
 				}
-			} else if (nn(accumulator)) {
+			} else if (accumulator != null) {
 				li.set(l + "\n" + accumulator.toString());
 				accumulator = null;
 			}

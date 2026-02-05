@@ -29,11 +29,8 @@ public class HttpUtils {
 	 */
 	private HttpUtils() {}
 
-	// @formatter:off
-	private static final String[] 
-		LC_METHODS = { "get", "put", "post", "delete", "options", "head", "connect", "trace", "patch" },
-		UC_METHODS = { "GET", "PUT", "POST", "DELETE", "OPTIONS", "HEAD", "CONNECT", "TRACE", "PATCH" };
-	// @formatter:on
+	private static final String[] LC_METHODS = { "get", "put", "post", "delete", "options", "head", "connect", "trace", "patch" };
+	private static final String[] UC_METHODS = { "GET", "PUT", "POST", "DELETE", "OPTIONS", "HEAD", "CONNECT", "TRACE", "PATCH" };
 
 	/**
 	 * Given a method name, infers the REST method name.

@@ -121,18 +121,15 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	private static final String ARG_entries = "entries";
 	private static final String ARG_test = "test";
 
-	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentArrayAssertion.class, "Messages");
-	private static final String
-		MSG_arrayWasNotEmpty = MESSAGES.getString("arrayWasNotEmpty"),
-		MSG_arrayWasEmpty = MESSAGES.getString("arrayWasEmpty"),
-		MSG_arrayUnexpectedSize = MESSAGES.getString("arrayUnexpectedSize"),
-		MSG_arrayDidNotContainExpectedValue = MESSAGES.getString("arrayDidNotContainExpectedValue"),
-		MSG_arrayContainedUnexpectedValue = MESSAGES.getString("arrayContainedUnexpectedValue"),
-		MSG_arrayDidNotContainExpectedValueAt = MESSAGES.getString("arrayDidNotContainExpectedValueAt"),
-		MSG_arrayDidntContainAnyMatchingValue = MESSAGES.getString("arrayDidntContainAnyMatchingValue"),
-		MSG_arrayContainedNonMatchingValueAt = MESSAGES.getString("arrayContainedNonMatchingValueAt");
-	// @formatter:on
+	private static final String MSG_arrayWasEmpty = MESSAGES.getString("arrayWasEmpty");
+	private static final String MSG_arrayWasNotEmpty = MESSAGES.getString("arrayWasNotEmpty");
+	private static final String MSG_arrayUnexpectedSize = MESSAGES.getString("arrayUnexpectedSize");
+	private static final String MSG_arrayDidNotContainExpectedValue = MESSAGES.getString("arrayDidNotContainExpectedValue");
+	private static final String MSG_arrayContainedUnexpectedValue = MESSAGES.getString("arrayContainedUnexpectedValue");
+	private static final String MSG_arrayDidNotContainExpectedValueAt = MESSAGES.getString("arrayDidNotContainExpectedValueAt");
+	private static final String MSG_arrayDidntContainAnyMatchingValue = MESSAGES.getString("arrayDidntContainAnyMatchingValue");
+	private static final String MSG_arrayContainedNonMatchingValueAt = MESSAGES.getString("arrayContainedNonMatchingValueAt");
 
 	/**
 	 * Chained constructor.

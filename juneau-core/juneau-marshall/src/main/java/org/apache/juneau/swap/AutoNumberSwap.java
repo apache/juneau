@@ -107,11 +107,8 @@ import org.apache.juneau.serializer.*;
  */
 public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 
-	// @formatter:off
-	private static final Set<String>
-		SWAP_METHOD_NAMES = u(set("toNumber", "toInteger", "toInt", "toLong", "toFloat", "toDouble", "toShort", "toByte")),
-		UNSWAP_METHOD_NAMES = u(set("fromInteger", "fromInt", "fromLong", "fromFloat", "fromDouble", "fromShort", "fromByte", "create", "valueOf"));
-	// @formatter:on
+	private static final Set<String> SWAP_METHOD_NAMES = u(set("toNumber", "toInteger", "toInt", "toLong", "toFloat", "toDouble", "toShort", "toByte"));
+	private static final Set<String> UNSWAP_METHOD_NAMES = u(set("fromInteger", "fromInt", "fromLong", "fromFloat", "fromDouble", "fromShort", "fromByte", "create", "valueOf"));
 
 	/**
 	 * Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.

@@ -127,7 +127,8 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 	LogEntryFormatter formatter;
 	Date start;
 	Date end;
-	Set<String> loggerFilter, severityFilter;
+	Set<String> loggerFilter;
+	Set<String> severityFilter;
 
 	String threadFilter;
 

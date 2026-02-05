@@ -109,13 +109,10 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	private static final String ARG_parent = "parent";
 	private static final String ARG_type = "type";
 
-	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentThrowableAssertion.class, "Messages");
-	private static final String
-		MSG_exceptionWasNotExpectedType = MESSAGES.getString("exceptionWasNotExpectedType"),
-		MSG_exceptionWasNotThrown = MESSAGES.getString("exceptionWasNotThrown"),
-		MSG_causedByExceptionNotExpectedType = MESSAGES.getString("causedByExceptionNotExpectedType");
-	// @formatter:on
+	private static final String MSG_exceptionWasNotExpectedType = MESSAGES.getString("exceptionWasNotExpectedType");
+	private static final String MSG_exceptionWasNotThrown = MESSAGES.getString("exceptionWasNotThrown");
+	private static final String MSG_causedByExceptionNotExpectedType = MESSAGES.getString("causedByExceptionNotExpectedType");
 
 	/**
 	 * Chained constructor.

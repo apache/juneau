@@ -189,11 +189,8 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	 */
 	public static final Function<Object,String> VALUE = StringUtils::readable;
 	private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, "Messages");
-	// @formatter:off
-	private static final String
-		MSG_valueDidNotPassTest = MESSAGES.getString("valueDidNotPassTest"),
-		MSG_valueDidNotPassTestWithValue = MESSAGES.getString("valueDidNotPassTestWithValue");
-	// @formatter:on
+	private static final String MSG_valueDidNotPassTest = MESSAGES.getString("valueDidNotPassTest");
+	private static final String MSG_valueDidNotPassTestWithValue = MESSAGES.getString("valueDidNotPassTestWithValue");
 	private final Predicate<T> inner;
 
 	private final String message;

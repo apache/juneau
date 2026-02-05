@@ -52,13 +52,10 @@ public class StringMatcherFactory extends MatcherFactory {
 	 * A construct representing a single search pattern.
 	 */
 	private static class StringMatcher extends AbstractMatcher {
-		// @formatter:off
-		private static final AsciiSet
-			META_CHARS = AsciiSet.of("*?'\""),
-			SQ_CHAR = AsciiSet.of("'"),
-			DQ_CHAR = AsciiSet.of("\""),
-			REGEX_CHARS = AsciiSet.of("+\\[]{}()^$.");
-		// @formatter:on
+		private static final AsciiSet META_CHARS = AsciiSet.of("*?'\"");
+		private static final AsciiSet SQ_CHAR = AsciiSet.of("'");
+		private static final AsciiSet DQ_CHAR = AsciiSet.of("\"");
+		private static final AsciiSet REGEX_CHARS = AsciiSet.of("+\\[]{}()^$.");
 		private String pattern;
 
 		Pattern[] orPatterns;

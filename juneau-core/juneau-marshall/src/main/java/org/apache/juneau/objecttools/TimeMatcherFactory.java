@@ -56,11 +56,8 @@ public class TimeMatcherFactory extends MatcherFactory {
 	 */
 	private static class TimeMatcher extends AbstractMatcher {
 
-		// @formatter:off
-		private static final AsciiSet
-			DT = AsciiSet.of("0123456789-:T./"),
-			WS = AsciiSet.of(" \t");
-		// @formatter:on
+		private static final AsciiSet DT = AsciiSet.of("0123456789-:T./");
+		private static final AsciiSet WS = AsciiSet.of(" \t");
 
 		TimestampRange[] ranges;
 		List<TimestampRange> l = new LinkedList<>();

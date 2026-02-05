@@ -100,20 +100,17 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	private static final String ARG_parent = "parent";
 	private static final String ARG_type = "type";
 
-	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentObjectAssertion.class, "Messages");
-	private static final String
-		MSG_unexpectedType = MESSAGES.getString("unexpectedType"),
-		MSG_unexpectedComparison = MESSAGES.getString("unexpectedComparison"),
-		MSG_unexpectedValue = MESSAGES.getString("unexpectedValue"),
-		MSG_unexpectedValueDidNotExpect = MESSAGES.getString("unexpectedValueDidNotExpect"),
-		MSG_notTheSameValue = MESSAGES.getString("notTheSameValue"),
-		MSG_valueWasNull = MESSAGES.getString("valueWasNull"),
-		MSG_valueWasNotNull = MESSAGES.getString("valueWasNotNull"),
-		MSG_expectedValueNotFound = MESSAGES.getString("expectedValueNotFound"),
-		MSG_unexpectedValueFound = MESSAGES.getString("unexpectedValueFound"),
-		MSG_unexpectedValue2 = MESSAGES.getString("unexpectedValue2");
-	// @formatter:on
+	private static final String MSG_unexpectedType = MESSAGES.getString("unexpectedType");
+	private static final String MSG_unexpectedComparison = MESSAGES.getString("unexpectedComparison");
+	private static final String MSG_unexpectedValue = MESSAGES.getString("unexpectedValue");
+	private static final String MSG_unexpectedValueDidNotExpect = MESSAGES.getString("unexpectedValueDidNotExpect");
+	private static final String MSG_notTheSameValue = MESSAGES.getString("notTheSameValue");
+	private static final String MSG_valueWasNull = MESSAGES.getString("valueWasNull");
+	private static final String MSG_valueWasNotNull = MESSAGES.getString("valueWasNotNull");
+	private static final String MSG_expectedValueNotFound = MESSAGES.getString("expectedValueNotFound");
+	private static final String MSG_unexpectedValueFound = MESSAGES.getString("unexpectedValueFound");
+	private static final String MSG_unexpectedValue2 = MESSAGES.getString("unexpectedValue2");
 
 	private static final JsonSerializer JSON = JsonSerializer.create().json5().build();
 

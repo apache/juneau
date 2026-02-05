@@ -147,22 +147,19 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	private static final String ARG_target = "target";
 	private static final String ARG_values = "values";
 
-	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentStringAssertion.class, "Messages");
-	private static final String
-		MSG_stringDifferedAtPosition = MESSAGES.getString("stringDifferedAtPosition"),
-		MSG_expectedStringHadDifferentNumbersOfLines = MESSAGES.getString("expectedStringHadDifferentNumbersOfLines"),
-		MSG_expectedStringHadDifferentValuesAtLine = MESSAGES.getString("expectedStringHadDifferentValuesAtLine"),
-		MSG_stringEqualedUnexpected = MESSAGES.getString("stringEqualedUnexpected"),
-		MSG_stringDidNotContainExpectedSubstring = MESSAGES.getString("stringDidNotContainExpectedSubstring"),
-		MSG_stringContainedUnexpectedSubstring = MESSAGES.getString("stringContainedUnexpectedSubstring"),
-		MSG_stringWasNotEmpty = MESSAGES.getString("stringWasNotEmpty"),
-		MSG_stringWasNull = MESSAGES.getString("stringWasNull"),
-		MSG_stringWasEmpty = MESSAGES.getString("stringWasEmpty"),
-		MSG_stringDidNotMatchExpectedPattern = MESSAGES.getString("stringDidNotMatchExpectedPattern"),
-		MSG_stringDidNotStartWithExpected = MESSAGES.getString("stringDidNotStartWithExpected"),
-		MSG_stringDidNotEndWithExpected = MESSAGES.getString("stringDidNotEndWithExpected");
-	// @formatter:on
+	private static final String MSG_stringDifferedAtPosition = MESSAGES.getString("stringDifferedAtPosition");
+	private static final String MSG_expectedStringHadDifferentNumbersOfLines = MESSAGES.getString("expectedStringHadDifferentNumbersOfLines");
+	private static final String MSG_expectedStringHadDifferentValuesAtLine = MESSAGES.getString("expectedStringHadDifferentValuesAtLine");
+	private static final String MSG_stringEqualedUnexpected = MESSAGES.getString("stringEqualedUnexpected");
+	private static final String MSG_stringDidNotContainExpectedSubstring = MESSAGES.getString("stringDidNotContainExpectedSubstring");
+	private static final String MSG_stringContainedUnexpectedSubstring = MESSAGES.getString("stringContainedUnexpectedSubstring");
+	private static final String MSG_stringWasNotEmpty = MESSAGES.getString("stringWasNotEmpty");
+	private static final String MSG_stringWasNull = MESSAGES.getString("stringWasNull");
+	private static final String MSG_stringWasEmpty = MESSAGES.getString("stringWasEmpty");
+	private static final String MSG_stringDidNotMatchExpectedPattern = MESSAGES.getString("stringDidNotMatchExpectedPattern");
+	private static final String MSG_stringDidNotStartWithExpected = MESSAGES.getString("stringDidNotStartWithExpected");
+	private static final String MSG_stringDidNotEndWithExpected = MESSAGES.getString("stringDidNotEndWithExpected");
 
 	private boolean javaStrings;
 

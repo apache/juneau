@@ -124,13 +124,10 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	private static final String ARG_upper = "upper";
 	private static final String ARG_value = "value";
 
-	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentZonedDateTimeAssertion.class, "Messages");
-	private static final String
-		MSG_unexpectedValue = MESSAGES.getString("unexpectedValue"),
-		MSG_valueWasNotAfterExpected = MESSAGES.getString("valueWasNotAfterExpected"),
-		MSG_valueWasNotBeforeExpected = MESSAGES.getString("valueWasNotBeforeExpected");
-	// @formatter:on
+	private static final String MSG_unexpectedValue = MESSAGES.getString("unexpectedValue");
+	private static final String MSG_valueWasNotAfterExpected = MESSAGES.getString("valueWasNotAfterExpected");
+	private static final String MSG_valueWasNotBeforeExpected = MESSAGES.getString("valueWasNotBeforeExpected");
 
 	/**
 	 * Chained constructor.

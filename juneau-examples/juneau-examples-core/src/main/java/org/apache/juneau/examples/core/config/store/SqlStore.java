@@ -123,12 +123,11 @@ public class SqlStore extends ConfigStore {
 		}
 	}
 
-	static final String
-		SQLSTORE_jdbcUrl = "SqlStore.jdbcUrl",
-		SQLSTORE_tableName = "SqlStore.tableName",
-		SQLSTORE_nameColumn = "SqlStore.nameColumn",
-		SQLSTORE_valueColumn = "SqlStore.valueColumn",
-		SQLSTORE_pollInterval = "SqlStore.pollInterval";
+	static final String SQLSTORE_jdbcUrl = "SqlStore.jdbcUrl";
+	static final String SQLSTORE_tableName = "SqlStore.tableName";
+	static final String SQLSTORE_nameColumn = "SqlStore.nameColumn";
+	static final String SQLSTORE_valueColumn = "SqlStore.valueColumn";
+	static final String SQLSTORE_pollInterval = "SqlStore.pollInterval";
 
 	/**
 	 * Instantiates a builder for this object.

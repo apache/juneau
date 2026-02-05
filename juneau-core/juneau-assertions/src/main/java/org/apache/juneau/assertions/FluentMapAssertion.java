@@ -109,15 +109,12 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R> {
 
-	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentMapAssertion.class, "Messages");
-	private static final String
-		MSG_mapWasNotEmpty = MESSAGES.getString("mapWasNotEmpty"),
-		MSG_mapDidNotContainExpectedKey = MESSAGES.getString("mapDidNotContainExpectedKey"),
-		MSG_mapContainedUnexpectedKey = MESSAGES.getString("mapContainedUnexpectedKey"),
-		MSG_mapWasEmpty = MESSAGES.getString("mapWasEmpty"),
-		MSG_mapDidNotHaveTheExpectedSize = MESSAGES.getString("mapDidNotHaveTheExpectedSize");
-	// @formatter:on
+	private static final String MSG_mapWasNotEmpty = MESSAGES.getString("mapWasNotEmpty");
+	private static final String MSG_mapDidNotContainExpectedKey = MESSAGES.getString("mapDidNotContainExpectedKey");
+	private static final String MSG_mapContainedUnexpectedKey = MESSAGES.getString("mapContainedUnexpectedKey");
+	private static final String MSG_mapWasEmpty = MESSAGES.getString("mapWasEmpty");
+	private static final String MSG_mapDidNotHaveTheExpectedSize = MESSAGES.getString("mapDidNotHaveTheExpectedSize");
 
 	/**
 	 * Chained constructor.

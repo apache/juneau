@@ -128,19 +128,16 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 		STRINGIFIERS.put(short.class, x -> Arrays.toString((short[])x));
 	}
 
-	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentPrimitiveArrayAssertion.class, "Messages");
-	static final String
-		MSG_objectWasNotAnArray = MESSAGES.getString("objectWasNotAnArray"),
-		MSG_arrayWasNotEmpty = MESSAGES.getString("arrayWasNotEmpty"),
-		MSG_arrayWasEmpty = MESSAGES.getString("arrayWasEmpty"),
-		MSG_arrayDidNotHaveExpectedSize = MESSAGES.getString("arrayDidNotHaveExpectedSize"),
-		MSG_arrayDidNotContainExpectedValue = MESSAGES.getString("arrayDidNotContainExpectedValue"),
-		MSG_arrayDidNotContainExpectedValueAt = MESSAGES.getString("arrayDidNotContainExpectedValueAt"),
-		MSG_arrayContainedUnexpectedValue = MESSAGES.getString("arrayContainedUnexpectedValue"),
-		MSG_arrayDidntContainAnyMatchingValue = MESSAGES.getString("arrayDidntContainAnyMatchingValue"),
-		MSG_arrayContainedNonMatchingValueAt = MESSAGES.getString("arrayContainedNonMatchingValueAt");
-	// @formatter:on
+	static final String MSG_objectWasNotAnArray = MESSAGES.getString("objectWasNotAnArray");
+	static final String MSG_arrayWasNotEmpty = MESSAGES.getString("arrayWasNotEmpty");
+	static final String MSG_arrayWasEmpty = MESSAGES.getString("arrayWasEmpty");
+	static final String MSG_arrayDidNotHaveExpectedSize = MESSAGES.getString("arrayDidNotHaveExpectedSize");
+	static final String MSG_arrayDidNotContainExpectedValue = MESSAGES.getString("arrayDidNotContainExpectedValue");
+	static final String MSG_arrayDidNotContainExpectedValueAt = MESSAGES.getString("arrayDidNotContainExpectedValueAt");
+	static final String MSG_arrayContainedUnexpectedValue = MESSAGES.getString("arrayContainedUnexpectedValue");
+	static final String MSG_arrayDidntContainAnyMatchingValue = MESSAGES.getString("arrayDidntContainAnyMatchingValue");
+	static final String MSG_arrayContainedNonMatchingValueAt = MESSAGES.getString("arrayContainedNonMatchingValueAt");
 
 	/**
 	 * Chained constructor.

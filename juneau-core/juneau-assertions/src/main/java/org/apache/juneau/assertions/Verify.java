@@ -43,12 +43,9 @@ import org.apache.juneau.cp.*;
  */
 public class Verify {
 
-	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(Verify.class, "Messages");
-	static final String
-		MSG_unexpectedType = MESSAGES.getString("unexpectedType"),
-		MSG_unexpectedValue = MESSAGES.getString("unexpectedValue");
-	// @formatter:on
+	static final String MSG_unexpectedType = MESSAGES.getString("unexpectedType");
+	static final String MSG_unexpectedValue = MESSAGES.getString("unexpectedValue");
 
 	/**
 	 * Create a new verifier object.

@@ -62,11 +62,8 @@ public class Assertion {
 
 	private static final Messages MESSAGES = Messages.of(Assertion.class, "Messages");
 
-	// @formatter:off
-	static final String
-		MSG_parameterCannotBeNull = MESSAGES.getString("parameterCannotBeNull"),
-		MSG_causedBy = MESSAGES.getString("causedBy");
-	// @formatter:on
+	static final String MSG_parameterCannotBeNull = MESSAGES.getString("parameterCannotBeNull");
+	static final String MSG_causedBy = MESSAGES.getString("causedBy");
 
 	/**
 	 * Convenience method for getting the array class of the specified element type.

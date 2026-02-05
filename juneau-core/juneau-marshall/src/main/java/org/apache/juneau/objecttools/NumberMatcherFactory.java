@@ -49,12 +49,9 @@ public class NumberMatcherFactory extends MatcherFactory {
 	 * A construct representing a single search pattern.
 	 */
 	private static class NumberMatcher extends AbstractMatcher {
-		// @formatter:off
-		private static final AsciiSet
-			SNUM = AsciiSet.of("-0123456789."),
-			NUM = AsciiSet.of("0123456789."),
-			WS = AsciiSet.of(" \t");
-		// @formatter:on
+		private static final AsciiSet SNUM = AsciiSet.of("-0123456789.");
+		private static final AsciiSet NUM = AsciiSet.of("0123456789.");
+		private static final AsciiSet WS = AsciiSet.of(" \t");
 		NumberRange[] numberRanges;
 		String pattern;
 

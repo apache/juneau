@@ -64,17 +64,14 @@ public class AssertionPredicates {
 
 	private static final Function<Object,String> TYPENAME = Utils::cn;
 
-	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(AssertionPredicates.class, "Messages");
-	private static final String
-		MSG_valueWasNull = MESSAGES.getString("valueWasNull"),
-		MSG_valueWasNotNull = MESSAGES.getString("valueWasNotNull"),
-		MSG_valueDidNotMatchExpected = MESSAGES.getString("valueDidNotMatchExpected"),
-		MSG_valueDidNotContainExpected = MESSAGES.getString("valueDidNotContainExpected"),
-		MSG_valueUnexpectedlyMatched = MESSAGES.getString("valueUnexpectedlyMatched"),
-		MSG_valueWasNotExpectedType = MESSAGES.getString("valueWasNotExpectedType"),
-		MSG_valueDidNotMatchPattern = MESSAGES.getString("valueDidNotMatchPattern");
-	// @formatter:on
+	private static final String MSG_valueWasNull = MESSAGES.getString("valueWasNull");
+	private static final String MSG_valueWasNotNull = MESSAGES.getString("valueWasNotNull");
+	private static final String MSG_valueDidNotMatchExpected = MESSAGES.getString("valueDidNotMatchExpected");
+	private static final String MSG_valueDidNotContainExpected = MESSAGES.getString("valueDidNotContainExpected");
+	private static final String MSG_valueUnexpectedlyMatched = MESSAGES.getString("valueUnexpectedlyMatched");
+	private static final String MSG_valueWasNotExpectedType = MESSAGES.getString("valueWasNotExpectedType");
+	private static final String MSG_valueDidNotMatchPattern = MESSAGES.getString("valueDidNotMatchPattern");
 
 	/**
 	 * Combines the specified predicates into a singled AND'ed predicate.

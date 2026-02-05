@@ -105,16 +105,13 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collection<E>,R> {
 
-	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentCollectionAssertion.class, "Messages");
-	private static final String
-		MSG_collectionWasNotEmpty = MESSAGES.getString("collectionWasNotEmpty"),
-		MSG_collectionDidNotContainExpectedValue = MESSAGES.getString("collectionDidNotContainExpectedValue"),
-		MSG_collectionDidNotContainTestedValue = MESSAGES.getString("collectionDidNotContainTestedValue"),
-		MSG_collectionContainedUnexpectedValue = MESSAGES.getString("collectionContainedUnexpectedValue"),
-		MSG_collectionWasEmpty = MESSAGES.getString("collectionWasEmpty"),
-		MSG_collectionDidNotHaveExpectedSize = MESSAGES.getString("collectionDidNotHaveExpectedSize");
-	// @formatter:on
+	private static final String MSG_collectionWasNotEmpty = MESSAGES.getString("collectionWasNotEmpty");
+	private static final String MSG_collectionDidNotContainExpectedValue = MESSAGES.getString("collectionDidNotContainExpectedValue");
+	private static final String MSG_collectionDidNotContainTestedValue = MESSAGES.getString("collectionDidNotContainTestedValue");
+	private static final String MSG_collectionContainedUnexpectedValue = MESSAGES.getString("collectionContainedUnexpectedValue");
+	private static final String MSG_collectionWasEmpty = MESSAGES.getString("collectionWasEmpty");
+	private static final String MSG_collectionDidNotHaveExpectedSize = MESSAGES.getString("collectionDidNotHaveExpectedSize");
 
 	/**
 	 * Chained constructor.
