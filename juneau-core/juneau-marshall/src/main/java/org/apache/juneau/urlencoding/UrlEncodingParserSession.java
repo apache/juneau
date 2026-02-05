@@ -48,6 +48,8 @@ import org.apache.juneau.uon.*;
 @SuppressWarnings({"unchecked","rawtypes","resource","java:S110"})
 public class UrlEncodingParserSession extends UonParserSession {
 
+	private static final String CONST_value = "_value";
+
 	/**
 	 * Builder class.
 	 */
@@ -238,8 +240,8 @@ public class UrlEncodingParserSession extends UonParserSession {
 		if (sType.isObject()) {
 			var m = new JsonMap(this);
 			parseIntoMap2(r, m, getClassMeta(Map.class, String.class, Object.class), outer);
-			if (m.containsKey("_value"))
-				o = m.get("_value");
+			if (m.containsKey(CONST_value))
+				o = m.get(CONST_value);
 			else
 				o = cast(m, null, eType);
 		} else if (sType.isMap()) {
@@ -271,8 +273,8 @@ public class UrlEncodingParserSession extends UonParserSession {
 			parseIntoMap2(r, m, getClassMeta(Map.class, String.class, Object.class), outer);
 			if (m.containsKey(getBeanTypePropertyName(eType)))
 				o = cast(m, null, eType);
-			else if (m.containsKey("_value"))
-				o = convertToType(m.get("_value"), sType);
+			else if (m.containsKey(CONST_value))
+				o = convertToType(m.get(CONST_value), sType);
 			else if (nn(sType.getProxyInvocationHandler())) {
 				o = newBeanMap(outer, sType.inner()).load(m).getBean();
 			} else {

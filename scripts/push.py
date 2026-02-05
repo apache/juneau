@@ -28,6 +28,12 @@ Usage: python3 push.py "commit message"
        python3 push.py "commit message" --skip-tests
 """
 
+# Sound file paths
+MACOS_SUCCESS_SOUND = "/System/Library/Sounds/Glass.aiff"
+MACOS_FAILURE_SOUND = "/System/Library/Sounds/Basso.aiff"
+LINUX_SUCCESS_SOUND = "/usr/share/sounds/freedesktop/stereo/complete.oga"
+LINUX_FAILURE_SOUND = "/usr/share/sounds/freedesktop/stereo/dialog-error.oga"
+
 import argparse
 import os
 import platform
@@ -85,10 +91,10 @@ def play_sound(success=True):
         if system == "Darwin":  # macOS
             if success:
                 # Success sound
-                sound_path = "/System/Library/Sounds/Glass.aiff"
+                sound_path = MACOS_SUCCESS_SOUND
             else:
                 # Failure sound
-                sound_path = "/System/Library/Sounds/Basso.aiff"
+                sound_path = MACOS_FAILURE_SOUND
             
             if os.path.exists(sound_path):
                 subprocess.run(
@@ -102,7 +108,7 @@ def play_sound(success=True):
                 # Try to play a beep or use speaker-test
                 try:
                     subprocess.run(
-                        ["paplay", "/usr/share/sounds/freedesktop/stereo/complete.oga"],
+                        ["paplay", LINUX_SUCCESS_SOUND],
                         capture_output=True,
                         timeout=5
                     )
@@ -116,7 +122,7 @@ def play_sound(success=True):
             else:
                 try:
                     subprocess.run(
-                        ["paplay", "/usr/share/sounds/freedesktop/stereo/dialog-error.oga"],
+                        ["paplay", LINUX_FAILURE_SOUND],
                         capture_output=True,
                         timeout=5
                     )
@@ -151,10 +157,10 @@ def play_sound(success=True):
         if system == "Darwin":  # macOS
             if success:
                 # Success sound
-                sound_path = "/System/Library/Sounds/Glass.aiff"
+                sound_path = MACOS_SUCCESS_SOUND
             else:
                 # Failure sound
-                sound_path = "/System/Library/Sounds/Basso.aiff"
+                sound_path = MACOS_FAILURE_SOUND
             
             if os.path.exists(sound_path):
                 subprocess.run(
@@ -168,7 +174,7 @@ def play_sound(success=True):
                 # Try to play a beep or use speaker-test
                 try:
                     subprocess.run(
-                        ["paplay", "/usr/share/sounds/freedesktop/stereo/complete.oga"],
+                        ["paplay", LINUX_SUCCESS_SOUND],
                         capture_output=True,
                         timeout=5
                     )
@@ -182,7 +188,7 @@ def play_sound(success=True):
             else:
                 try:
                     subprocess.run(
-                        ["paplay", "/usr/share/sounds/freedesktop/stereo/dialog-error.oga"],
+                        ["paplay", LINUX_FAILURE_SOUND],
                         capture_output=True,
                         timeout=5
                     )
@@ -233,10 +239,10 @@ def play_sound(success=True):
         if system == "Darwin":  # macOS
             if success:
                 # Success sound
-                sound_path = "/System/Library/Sounds/Glass.aiff"
+                sound_path = MACOS_SUCCESS_SOUND
             else:
                 # Failure sound
-                sound_path = "/System/Library/Sounds/Basso.aiff"
+                sound_path = MACOS_FAILURE_SOUND
             
             if os.path.exists(sound_path):
                 subprocess.run(
@@ -250,7 +256,7 @@ def play_sound(success=True):
                 # Try to play a beep or use speaker-test
                 try:
                     subprocess.run(
-                        ["paplay", "/usr/share/sounds/freedesktop/stereo/complete.oga"],
+                        ["paplay", LINUX_SUCCESS_SOUND],
                         capture_output=True,
                         timeout=5
                     )
@@ -264,7 +270,7 @@ def play_sound(success=True):
             else:
                 try:
                     subprocess.run(
-                        ["paplay", "/usr/share/sounds/freedesktop/stereo/dialog-error.oga"],
+                        ["paplay", LINUX_FAILURE_SOUND],
                         capture_output=True,
                         timeout=5
                     )

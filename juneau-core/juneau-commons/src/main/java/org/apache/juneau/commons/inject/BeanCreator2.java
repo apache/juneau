@@ -186,6 +186,8 @@ import org.apache.juneau.commons.reflect.*;
 @SuppressWarnings("java:S115")
 public class BeanCreator2<T> {
 
+	private static final String CLASSNAME_Autowired = "Autowired";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_beanType = "beanType";
 	private static final String ARG_fallback = "fallback";
@@ -1121,7 +1123,7 @@ public class BeanCreator2<T> {
 				.filter(x -> x.isAll(NOT_STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
 				.filter(x -> buildMethodNames.contains(x.getNameSimple()))
 				.filter(x -> opt(x).map(x2 -> x2.getReturnType()).filter(x2 -> x2.is(beanSubType.inner()) || x2.isParentOf(beanSubType)).isPresent()) // Accept methods that return beanSubType or a parent type of beanSubType
-				.filter(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, "Inject", "Autowired")) ? x.canResolveAllParameters(store2) : x.getParameterCount() == 0)
+				.filter(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, "Inject", CLASSNAME_Autowired)) ? x.canResolveAllParameters(store2) : x.getParameterCount() == 0)
 				.sorted(methodComparator)
 				.findFirst();
 
@@ -1135,7 +1137,7 @@ public class BeanCreator2<T> {
 				log("Expected beanSubType: %s", beanSubType.getName());
 
 				// Check if method has @Inject annotation
-				boolean hasInject = method.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, "Inject", "Autowired"));
+				boolean hasInject = method.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, "Inject", CLASSNAME_Autowired));
 				if (hasInject) {
 					log("Method has @Inject annotation, resolving parameters from bean store");
 				} else {
@@ -1167,7 +1169,7 @@ public class BeanCreator2<T> {
 				.filter(x -> x.isAll(NOT_STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
 				.filter(x -> !buildMethodNames.contains(x.getNameSimple())) // Skip standard build methods we already checked
 				.filter(x -> x.getReturnType().is(beanSubType.inner())) // Must return exact beanSubType, not parent
-				.filter(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, "Inject", "Autowired")) ? x.canResolveAllParameters(store2) : x.getParameterCount() == 0)
+				.filter(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, "Inject", CLASSNAME_Autowired)) ? x.canResolveAllParameters(store2) : x.getParameterCount() == 0)
 				.sorted(methodComparator)
 				.findFirst();
 
@@ -1578,7 +1580,7 @@ public class BeanCreator2<T> {
 				var returnType = x.getReturnType();
 				return returnType.is(beanSubType.inner()) || returnType.is(beanType.inner()) || returnType.isParentOf(beanSubType);
 			})
-			.anyMatch(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, "Inject", "Autowired")) || x.getParameterCount() == 0);
+			.anyMatch(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, "Inject", CLASSNAME_Autowired)) || x.getParameterCount() == 0);
 
 		if (hasBuildMethod) {
 			log("Builder is valid: has build/create/get method returning bean type");

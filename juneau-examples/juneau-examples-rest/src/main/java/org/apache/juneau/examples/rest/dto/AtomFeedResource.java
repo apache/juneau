@@ -68,6 +68,8 @@ import org.apache.juneau.serializer.annotation.*;
 public class AtomFeedResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
+	private static final String CONST_timestamp = "2016-12-31T05:02:03Z";
+
 	private Feed feed;     // The root resource object
 
 	/**
@@ -85,7 +87,7 @@ public class AtomFeedResource extends BasicRestServlet {
 	public void init() {
 		try {
 			feed =
-				feed("tag:foo.org", "Title", "2016-12-31T05:02:03Z")
+				feed("tag:foo.org", "Title", CONST_timestamp)
 				.setSubtitle(text("html").setText("Subtitle"))
 				.setLinks(
 					link("alternate", "text/html", "http://foo.org/").setHreflang("en"),
@@ -95,12 +97,12 @@ public class AtomFeedResource extends BasicRestServlet {
 					generator("Example Toolkit").setUri("http://www.foo.org/").setVersion("1.0")
 				)
 				.setEntries(
-					entry("tag:foo.org", "Title", "2016-12-31T05:02:03Z")
+					entry("tag:foo.org", "Title", CONST_timestamp)
 					.setLinks(
 						link("alternate", "text/html", "http://foo.org/2005/04/02/atom"),
 						link("enclosure", "audio/mpeg", "http://foo.org/audio/foobar.mp3").setLength(1337)
 					)
-					.setPublished("2016-12-31T05:02:03Z")
+					.setPublished(CONST_timestamp)
 					.setAuthors(
 						person("John Smith").setUri(new URI("http://foo.org/")).setEmail("foo@foo.org")
 					)

@@ -40,6 +40,8 @@ import org.apache.juneau.xml.annotation.*;
 @SuppressWarnings("resource")
 public class XmlUtils {
 
+	private static final String CONST_x0000 = "_x0000_";
+
 	/**
 	 * Prevents instantiation.
 	 */
@@ -140,7 +142,7 @@ public class XmlUtils {
 	@SuppressWarnings("java:S3776")
 	public static Writer encodeAttrName(Writer w, Object value) throws IOException {
 		if (value == null)
-			return w.append("_x0000_");
+			return w.append(CONST_x0000);
 		var s = value.toString();
 
 		if (needsAttrNameEncoding(s)) {
@@ -189,7 +191,7 @@ public class XmlUtils {
 	public static Writer encodeAttrValue(Writer w, Object value, boolean trim) {
 		try {
 			if (value == null)
-				return w.append("_x0000_");
+				return w.append(CONST_x0000);
 			var s = value.toString();
 			if (s.isEmpty())
 				return w;
@@ -229,7 +231,7 @@ public class XmlUtils {
 	 */
 	public static String encodeElementName(Object value) {
 		if (value == null)
-			return "_x0000_";
+			return CONST_x0000;
 		var s = value.toString();
 		if (s.isEmpty())
 			return "_xE000_";
@@ -256,7 +258,7 @@ public class XmlUtils {
 	public static Writer encodeElementName(Writer w, Object value) {
 		try {
 			if (value == null)
-				return w.append("_x0000_");
+				return w.append(CONST_x0000);
 			var s = value.toString();
 			if (needsElementNameEncoding(s))
 				return encodeElementNameInner(w, s);
@@ -290,7 +292,7 @@ public class XmlUtils {
 
 		try {
 			if (value == null)
-				return w.append("_x0000_");
+				return w.append(CONST_x0000);
 			var s = value.toString();
 			if (s.isEmpty())
 				return w.append("_xE000_");
@@ -330,7 +332,7 @@ public class XmlUtils {
 	 */
 	public static String escapeText(Object value) {
 		if (value == null)
-			return "_x0000_";
+			return CONST_x0000;
 		var s = value.toString();
 
 		try {

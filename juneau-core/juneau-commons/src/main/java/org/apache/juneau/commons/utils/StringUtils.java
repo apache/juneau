@@ -49,7 +49,7 @@ import org.apache.juneau.commons.reflect.*;
 /**
  * Reusable string utility methods.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({"java:S115", "java:S1192"}) // S115: Constant names, S1192: Duplicated string literals (HTML entities)
 public class StringUtils {
 
 	// Argument name constants for assertArgNotNull
