@@ -73,10 +73,8 @@ public class ResponseBeanMeta {
 		}
 
 		Builder apply(StatusCode a) {
-			if (nn(a)) {
-				if (a.value().length > 0)
-					code = a.value()[0];
-			}
+			if (nn(a) && a.value().length > 0)
+				code = a.value()[0];
 			return this;
 		}
 

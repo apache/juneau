@@ -379,10 +379,8 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 */
 	private boolean shouldUseExpandedParams(BeanPropertyMeta pMeta) {
 		var cm = pMeta.getClassMeta().getSerializedClassMeta(this);
-		if (cm.isCollectionOrArray()) {
-			if (isExpandedParams() || getUrlEncodingClassMeta(pMeta.getBeanMeta().getClassMeta()).isExpandedParams())
-				return true;
-		}
+		if (cm.isCollectionOrArray() && (isExpandedParams() || getUrlEncodingClassMeta(pMeta.getBeanMeta().getClassMeta()).isExpandedParams()))
+			return true;
 		return false;
 	}
 
@@ -393,10 +391,8 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		if (value == null || ! isExpandedParams())
 			return false;
 		var cm = getClassMetaForObject(value).getSerializedClassMeta(this);
-		if (cm.isCollectionOrArray()) {
-			if (isExpandedParams())
-				return true;
-		}
+		if (cm.isCollectionOrArray() && isExpandedParams())
+			return true;
 		return false;
 	}
 

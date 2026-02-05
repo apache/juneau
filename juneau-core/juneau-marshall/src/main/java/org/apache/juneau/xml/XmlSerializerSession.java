@@ -601,10 +601,8 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		if (nn(aType)) {
 			var ns = getXmlClassMeta(aType).getNamespace();
-			if (nn(ns)) {
-				if (nn(ns.uri))
-					addNamespace(ns);
-			}
+			if (nn(ns) && nn(ns.uri))
+				addNamespace(ns);
 		}
 
 		// Handle recursion
@@ -895,11 +893,9 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		boolean cr = nn(o) && (sType.isMapOrBean() || sType.isCollectionOrArray()) && ! isMixedOrText;
 
 		var en = elementName;
-		if (en == null && ! isRaw) {
-			if (isAddJsonTags()) {
-				en = type.toString();
-				type = null;
-			}
+		if (en == null && ! isRaw && isAddJsonTags()) {
+			en = type.toString();
+			type = null;
 		}
 
 		boolean encodeEn = nn(elementName);
@@ -934,10 +930,8 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			} else {
 				out.i(i);
 			}
-			if (o == null) {
-				if ((sType.isBoolean() || sType.isNumber()) && ! sType.isNullable())
-					o = sType.getPrimitiveDefault();
-			}
+			if (o == null && (sType.isBoolean() || sType.isNumber()) && ! sType.isNullable())
+				o = sType.getPrimitiveDefault();
 
 			if (nn(o) && ! (sType.isMapOrBean() || en == null))
 				out.w('>');

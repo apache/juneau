@@ -777,10 +777,8 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		boolean isInEscape = false;
 		while (c != -1) {
 			c = r.read();
-			if (! isInEscape) {
-				if (c == '\'')
-					return trim(r.getMarked(0, -1));
-			}
+			if (! isInEscape && c == '\'')
+				return trim(r.getMarked(0, -1));
 			if (c == EQ)
 				r.replace('=');
 			isInEscape = isInEscape(c, r, isInEscape);
@@ -904,13 +902,11 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		} else {
 			while (c != -1) {
 				c = r.read();
-				if (! isInEscape) {
-					if (c == '=' || c == -1 || Character.isWhitespace(c)) {
-						if (c != -1)
-							r.unread();
-						var s = r.getMarked();
-						return ("null".equals(s) ? null : trim(s));
-					}
+				if (! isInEscape && (c == '=' || c == -1 || Character.isWhitespace(c))) {
+					if (c != -1)
+						r.unread();
+					var s = r.getMarked();
+					return ("null".equals(s) ? null : trim(s));
 				}
 				isInEscape = isInEscape(c, r, isInEscape);
 			}
@@ -944,13 +940,11 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		var endChars = (isUrlParamValue ? endCharsParam : endCharsNormal);
 		while (c != -1) {
 			c = r.read();
-			if (! isInEscape) {
+			if (! isInEscape && endChars.contains(c)) {
 				// If this is a URL parameter value, we're looking for:  &
 				// If not, we're looking for:  &,)
-				if (endChars.contains(c)) {
-					r.unread();
-					c = -1;
-				}
+				r.unread();
+				c = -1;
 			}
 			if (c == -1)
 				s = r.getMarked();

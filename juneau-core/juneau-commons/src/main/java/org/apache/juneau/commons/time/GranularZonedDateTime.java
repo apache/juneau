@@ -661,16 +661,14 @@ public class GranularZonedDateTime {
 		}
 
 		// Build ZoneId if we have offset information
-		if (zoneId == null) {
-			if (ohour >= 0) {
-				if (ominute >= 0) {
-					// If negative offset, both hours and minutes must be negative
-					var offset = ZoneOffset.ofHoursMinutes(nego ? -ohour : ohour, nego ? -ominute : ominute);
-					zoneId = offset;
-				} else {
-					var offset = ZoneOffset.ofHours(nego ? -ohour : ohour);
-					zoneId = offset;
-				}
+		if (zoneId == null && ohour >= 0) {
+			if (ominute >= 0) {
+				// If negative offset, both hours and minutes must be negative
+				var offset = ZoneOffset.ofHoursMinutes(nego ? -ohour : ohour, nego ? -ominute : ominute);
+				zoneId = offset;
+			} else {
+				var offset = ZoneOffset.ofHours(nego ? -ohour : ohour);
+				zoneId = offset;
 			}
 		}
 

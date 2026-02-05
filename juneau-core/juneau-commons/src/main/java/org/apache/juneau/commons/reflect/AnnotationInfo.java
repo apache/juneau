@@ -727,10 +727,8 @@ public class AnnotationInfo<T extends Annotation> {
 			var val = x.invoke(a);
 			var d = x.inner().getDefaultValue();
 			// Add values only if they're different from the default.
-			if (neq(val, d)) {
-				if (! (isArray(val) && length(val) == 0 && isArray(d) && length(d) == 0))
-					return val;
-			}
+			if (neq(val, d) && ! (isArray(val) && length(val) == 0 && isArray(d) && length(d) == 0))
+				return val;
 			return null;
 		}, e -> lm(e)).ifPresent(v -> ja.a(x.getName(), v)));
 		return filteredBeanPropertyMap()
@@ -815,11 +813,9 @@ public class AnnotationInfo<T extends Annotation> {
 			var val = m.invoke(a);
 			var d = m.inner().getDefaultValue();
 			// Add values only if they're different from the default
-			if (neq(val, d)) {
-				if (! (isArray(val) && length(val) == 0 && isArray(d) && length(d) == 0)) {
-					var valueStr = formatAnnotationValue(val);
-					values.add(m.getName() + "=" + valueStr);
-				}
+			if (neq(val, d) && ! (isArray(val) && length(val) == 0 && isArray(d) && length(d) == 0)) {
+				var valueStr = formatAnnotationValue(val);
+				values.add(m.getName() + "=" + valueStr);
 			}
 			return null;
 		}, e -> null));

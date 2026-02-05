@@ -249,10 +249,8 @@ public class ResponseContent implements HttpEntity {
 
 			var mt = MediaType.of(ct);
 
-			if (parser == null || (mt.toString().contains("text/plain") && ! parser.canHandle(ct))) {
-				if (type.hasStringMutater())
-					return type.getStringMutater().mutate(asString());
-			}
+			if ((parser == null || (mt.toString().contains("text/plain") && ! parser.canHandle(ct))) && type.hasStringMutater())
+				return type.getStringMutater().mutate(asString());
 
 			if (nn(parser)) {
 				try (Closeable in = parser.isReaderParser() ? asReader() : asInputStream()) {
@@ -754,9 +752,8 @@ public class ResponseContent implements HttpEntity {
 		var ct = getContentType().orElse(null);
 
 		// First look for "charset=" in Content-Type header of response.
-		if (nn(ct))
-			if (ct.contains("charset="))
-				cs = ct.substring(ct.indexOf("charset=") + 8).trim();
+		if (nn(ct) && ct.contains("charset="))
+			cs = ct.substring(ct.indexOf("charset=") + 8).trim();
 
 		return asReader(cs == null ? UTF8 : Charset.forName(cs));
 	}

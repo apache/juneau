@@ -226,10 +226,8 @@ public class SerializedHeader extends BasicHeader {
 				v = supplier.get();
 			HttpPartSchema schema2 = this.schema == null ? HttpPartSchema.DEFAULT : this.schema;
 			var def = schema2.getDefault();
-			if (v == null) {
-				if ((def == null && ! schema2.isRequired()) || (def == null && schema2.isAllowEmptyValue()))
-					return null;
-			}
+			if (v == null && ((def == null && ! schema2.isRequired()) || (def == null && schema2.isAllowEmptyValue())))
+				return null;
 			if (e(s(v)) && skipIfEmpty && def == null)
 				return null;
 			return serializer == null ? s(v) : serializer.serialize(HttpPartType.HEADER, schema2, v);

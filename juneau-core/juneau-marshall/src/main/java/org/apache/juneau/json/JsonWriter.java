@@ -190,10 +190,8 @@ public class JsonWriter extends SerializerWriter {
 			}
 
 			// Reserved words and blanks must be quoted.
-			if (! doConvert) {
-				if (s.isEmpty() || reservedWords.contains(s))
-					doConvert = true;
-			}
+			if (! doConvert && (s.isEmpty() || reservedWords.contains(s)))
+				doConvert = true;
 		}
 
 		// If no conversion necessary, just print the attribute as-is.

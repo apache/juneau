@@ -125,10 +125,8 @@ public class RequestSwaggerVar extends MultipartResolvingVar {
 					return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getTermsOfService()).orElse(null);
 				if ("title".equals(key))
 					return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getTitle()).orElse(null);
-			} else if (c == 'v') {
-				if ("version".equals(key))
-					return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getVersion()).orElse(null);
-			}
+			} else if (c == 'v' && "version".equals(key))
+				return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getVersion()).orElse(null);
 			return null;
 		} catch (Exception e) {
 			throw new InternalServerError(e);

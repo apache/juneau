@@ -102,9 +102,8 @@ public class LocalDir {
 			if (url == null)
 				return false;
 			var uri = url.toURI();
-			if (uri.toString().startsWith("file:"))
-				if (Files.isDirectory(Paths.get(uri)))
-					return false;
+			if (uri.toString().startsWith("file:") && Files.isDirectory(Paths.get(uri)))
+				return false;
 			return true;
 		});
 	}

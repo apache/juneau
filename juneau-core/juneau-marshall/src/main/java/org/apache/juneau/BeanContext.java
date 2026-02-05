@@ -3616,10 +3616,8 @@ public class BeanContext extends Context {
 	private static boolean isCacheable(Class<?> c) {
 		var n = c.getName();
 		var x = n.charAt(n.length() - 1);  // All generated classes appear to end with digits.
-		if (x >= '0' && x <= '9') {
-			if (n.indexOf("$$") != -1 || n.startsWith("sun") || n.startsWith("com.sun") || n.indexOf("$Proxy") != -1)
-				return false;
-		}
+		if ((x >= '0' && x <= '9') && (n.indexOf("$$") != -1 || n.startsWith("sun") || n.startsWith("com.sun") || n.indexOf("$Proxy") != -1))
+			return false;
 		return true;
 	}
 
@@ -4447,18 +4445,16 @@ public class BeanContext extends Context {
 			} while (nn(c));
 		}
 
-		if (o instanceof ParameterizedType o2) {
-			if (! o2.getRawType().equals(Enum.class)) {
-				var l = new LinkedList<ClassMeta<?>>();
-				for (var pt2 : o2.getActualTypeArguments()) {
-					if (pt2 instanceof WildcardType || pt2 instanceof TypeVariable)
-						return null;
-					l.add(resolveClassMeta(pt2, null));
-				}
-				if (l.isEmpty())
+		if (o instanceof ParameterizedType o2 && ! o2.getRawType().equals(Enum.class)) {
+			var l = new LinkedList<ClassMeta<?>>();
+			for (var pt2 : o2.getActualTypeArguments()) {
+				if (pt2 instanceof WildcardType || pt2 instanceof TypeVariable)
 					return null;
-				return l.toArray(new ClassMeta[l.size()]);
+				l.add(resolveClassMeta(pt2, null));
 			}
+			if (l.isEmpty())
+				return null;
+			return l.toArray(new ClassMeta[l.size()]);
 		}
 
 		return null;
@@ -4515,11 +4511,9 @@ public class BeanContext extends Context {
 			}
 		}
 
-		if (rawType.isArray()) {
-			if (o instanceof GenericArrayType o2) {
-				var elementType = resolveClassMeta(o2.getGenericComponentType(), typeVars);
-				return new ClassMeta(rawType, null, null, elementType);
-			}
+		if (rawType.isArray() && o instanceof GenericArrayType o2) {
+			var elementType = resolveClassMeta(o2.getGenericComponentType(), typeVars);
+			return new ClassMeta(rawType, null, null, elementType);
 		}
 
 		return rawType;

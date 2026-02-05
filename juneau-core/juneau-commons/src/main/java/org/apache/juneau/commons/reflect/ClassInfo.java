@@ -1424,12 +1424,10 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 					// needs to be resolved further up the enclosing class chain.
 					var key = entry.getKey();
 					var value = entry.getValue();
-					if (key instanceof TypeVariable<?> key2) {
-						if (key2.getName().equals(actualType3.getName()) && isInnerClass(key2.getGenericDeclaration(), actualType3.getGenericDeclaration())) {
-							if (value instanceof Class<?> value2)
-								return value2;
-							actualType3 = (TypeVariable<?>)entry.getValue();
-						}
+					if (key instanceof TypeVariable<?> key2 && key2.getName().equals(actualType3.getName()) && isInnerClass(key2.getGenericDeclaration(), actualType3.getGenericDeclaration())) {
+						if (value instanceof Class<?> value2)
+							return value2;
+						actualType3 = (TypeVariable<?>)entry.getValue();
 					}
 				}
 			}

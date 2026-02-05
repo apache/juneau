@@ -619,12 +619,10 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 							elementType = elementClass;
 						}
 					}
-				} else if (eq(inner2, Map.class)) {
-					if (parameterizedType instanceof ParameterizedType pt2) {
-						var typeArgs = pt2.getActualTypeArguments();
-						if (typeArgs.length >= 2 && typeArgs[0] == String.class && typeArgs[1] instanceof Class<?> valueClass) {
-							elementType = valueClass;
-						}
+				} else if (eq(inner2, Map.class) && parameterizedType instanceof ParameterizedType pt2) {
+					var typeArgs = pt2.getActualTypeArguments();
+					if (typeArgs.length >= 2 && typeArgs[0] == String.class && typeArgs[1] instanceof Class<?> valueClass) {
+						elementType = valueClass;
 					}
 				}
 			}

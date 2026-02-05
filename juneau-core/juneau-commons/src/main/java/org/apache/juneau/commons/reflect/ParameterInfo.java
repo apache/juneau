@@ -921,14 +921,12 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 							elementType = elementClass;
 						}
 					}
-				} else if (eq(inner2, Map.class)) {
+				} else if (eq(inner2, Map.class) && parameterizedType instanceof ParameterizedType pt2) {
 					// Handle Map<String,T> - extract value type (second type argument)
-					if (parameterizedType instanceof ParameterizedType pt2) {
-						var typeArgs = pt2.getActualTypeArguments();
-						// Verify key type is String and get value type
-						if (typeArgs.length >= 2 && typeArgs[0] == String.class && typeArgs[1] instanceof Class<?> valueClass) {
-							elementType = valueClass;
-						}
+					var typeArgs = pt2.getActualTypeArguments();
+					// Verify key type is String and get value type
+					if (typeArgs.length >= 2 && typeArgs[0] == String.class && typeArgs[1] instanceof Class<?> valueClass) {
+						elementType = valueClass;
 					}
 				}
 			}

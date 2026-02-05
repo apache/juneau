@@ -1020,10 +1020,8 @@ public class AnnotationProvider {
 					l.addAll(p.getDeclaredAnnotations());
 				}
 			}
-			if (t.contains(PACKAGE)) {
-				if (element2.getPackage() != null)
-					l.addAll(element2.getPackage().getAnnotations());
-			}
+			if (t.contains(PACKAGE) && element2.getPackage() != null)
+				l.addAll(element2.getPackage().getAnnotations());
 		} else if (element instanceof MethodInfo element2) {
 			if (t.contains(SELF)) {
 				l.addAll(runtimeCache.get(element2.inner()));
@@ -1041,10 +1039,8 @@ public class AnnotationProvider {
 			if (t.contains(RETURN_TYPE)) {
 				l.addAll(find(element2.getReturnType().unwrap(Value.class, Optional.class), a(PARENTS)));
 			}
-			if (t.contains(PACKAGE)) {
-				if (element2.getDeclaringClass().getPackage() != null)
-					l.addAll(element2.getDeclaringClass().getPackage().getAnnotations());
-			}
+			if (t.contains(PACKAGE) && element2.getDeclaringClass().getPackage() != null)
+				l.addAll(element2.getDeclaringClass().getPackage().getAnnotations());
 		} else if (element instanceof FieldInfo element2) {
 			if (t.contains(SELF)) {
 				l.addAll(runtimeCache.get(element2.inner()));

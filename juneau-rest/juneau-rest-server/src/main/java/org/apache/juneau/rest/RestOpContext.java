@@ -2055,31 +2055,25 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				}
 
 				for (var a : aa) {
-					if (a instanceof Header a2) {
-						if (nn(def)) {
-							try {
-								defaultRequestHeaders().set(basicHeader(firstNonEmpty(a2.name(), a2.value()), parseIfJson(def)));
-							} catch (ParseException e) {
-								throw new ConfigException(e, "Malformed @Header annotation");
-							}
+					if (a instanceof Header a2 && nn(def)) {
+						try {
+							defaultRequestHeaders().set(basicHeader(firstNonEmpty(a2.name(), a2.value()), parseIfJson(def)));
+						} catch (ParseException e) {
+							throw new ConfigException(e, "Malformed @Header annotation");
 						}
 					}
-					if (a instanceof Query a2) {
-						if (nn(def)) {
-							try {
-								defaultRequestQueryData().setDefault(basicPart(firstNonEmpty(a2.name(), a2.value()), parseIfJson(def)));
-							} catch (ParseException e) {
-								throw new ConfigException(e, "Malformed @Query annotation");
-							}
+					if (a instanceof Query a2 && nn(def)) {
+						try {
+							defaultRequestQueryData().setDefault(basicPart(firstNonEmpty(a2.name(), a2.value()), parseIfJson(def)));
+						} catch (ParseException e) {
+							throw new ConfigException(e, "Malformed @Query annotation");
 						}
 					}
-					if (a instanceof FormData a2) {
-						if (nn(def)) {
-							try {
-								defaultRequestFormData().setDefault(basicPart(firstNonEmpty(a2.name(), a2.value()), parseIfJson(def)));
-							} catch (ParseException e) {
-								throw new ConfigException(e, "Malformed @FormData annotation");
-							}
+					if (a instanceof FormData a2 && nn(def)) {
+						try {
+							defaultRequestFormData().setDefault(basicPart(firstNonEmpty(a2.name(), a2.value()), parseIfJson(def)));
+						} catch (ParseException e) {
+							throw new ConfigException(e, "Malformed @FormData annotation");
 						}
 					}
 				}

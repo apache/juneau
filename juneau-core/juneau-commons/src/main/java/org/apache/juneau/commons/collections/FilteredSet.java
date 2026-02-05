@@ -328,10 +328,8 @@ public class FilteredSet<E> extends AbstractSet<E> {
 	public boolean addAll(Collection<? extends E> c) {
 		boolean modified = false;
 		for (var e : c) {
-			if (filter.test(e)) {
-				if (set.add(e))
-					modified = true;
-			}
+			if (filter.test(e) && set.add(e))
+				modified = true;
 		}
 		return modified;
 	}

@@ -1075,9 +1075,8 @@ public class ParserSession extends BeanSession {
 	protected final <T> void onUnknownProperty(String propertyName, BeanMap<T> beanMap, Object value) throws ParseException {
 		if (propertyName.equals(getBeanTypePropertyName(beanMap.getClassMeta())))
 			return;
-		if (! isIgnoreUnknownBeanProperties())
-			if (nn(value) || ! isIgnoreUnknownNullBeanProperties())
-				throw new ParseException(this, "Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", propertyName, beanMap.getClassMeta());
+		if (! isIgnoreUnknownBeanProperties() && (nn(value) || ! isIgnoreUnknownNullBeanProperties()))
+			throw new ParseException(this, "Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", propertyName, beanMap.getClassMeta());
 		if (nn(listener))
 			listener.onUnknownBeanProperty(this, propertyName, beanMap.getClassMeta().inner(), beanMap.getBean());
 	}

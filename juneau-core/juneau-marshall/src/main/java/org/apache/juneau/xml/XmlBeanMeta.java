@@ -144,10 +144,8 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 				throw bex(c, "{0} and COLLAPSED properties found on the same bean.  These cannot be mixed.", contentFormat);
 		}
 
-		if (! collapsedProperties.isEmpty()) {
-			if (! Collections.disjoint(elements.keySet(), collapsedProperties.keySet()))
-				throw bex(c, "Child element name conflicts found with another property.");
-		}
+		if (! collapsedProperties.isEmpty() && ! Collections.disjoint(elements.keySet(), collapsedProperties.keySet()))
+			throw bex(c, "Child element name conflicts found with another property.");
 	}
 
 	/**

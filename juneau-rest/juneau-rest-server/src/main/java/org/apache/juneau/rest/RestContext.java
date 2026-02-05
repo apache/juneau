@@ -6073,9 +6073,8 @@ public class RestContext extends Context {
 
 		var ci = ClassInfo.of(e);
 		var r = ci.getAnnotations(StatusCode.class).findFirst().map(AnnotationInfo::inner).orElse(null);
-		if (nn(r))
-			if (r.value().length > 0)
-				code = r.value()[0];
+		if (nn(r) && r.value().length > 0)
+			code = r.value()[0];
 
 		var e2 = (e instanceof BasicHttpException e22 ? e22 : new BasicHttpException(code, e));
 

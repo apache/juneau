@@ -226,10 +226,9 @@ public class ParserSet {
 		 * @return <jk>true</jk> if at least one of the specified annotations can be applied to at least one parser builder in this group.
 		 */
 		public boolean canApply(AnnotationWorkList work) {
-			for (var o : entries)
-				if (o instanceof Parser.Builder o2)
-					if (o2.canApply(work))
-						return true;
+		for (var o : entries)
+			if (o instanceof Parser.Builder o2 && o2.canApply(work))
+				return true;
 			return false;
 		}
 

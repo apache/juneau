@@ -127,9 +127,8 @@ public enum Visibility {
 	 */
 	public <T> Constructor<T> transform(Constructor<T> x) {
 		assertArgNotNull(ARG_x, x);
-		if (isVisible(x))
-			if (! setAccessible(x))
-				return null;  // HTT
+		if (isVisible(x) && ! setAccessible(x))
+			return null;  // HTT
 		return x;
 	}
 
@@ -147,9 +146,8 @@ public enum Visibility {
 	 */
 	public Field transform(Field x) {
 		assertArgNotNull(ARG_x, x);
-		if (isVisible(x))
-			if (! setAccessible(x))
-				return null;  // HTT
+		if (isVisible(x) && ! setAccessible(x))
+			return null;  // HTT
 		return x;
 	}
 
@@ -167,9 +165,8 @@ public enum Visibility {
 	 */
 	public Method transform(Method x) {
 		assertArgNotNull(ARG_x, x);
-		if (isVisible(x))
-			if (! setAccessible(x))
-				return null;  // HTT
+		if (isVisible(x) && ! setAccessible(x))
+			return null;  // HTT
 		return x;
 	}
 }

@@ -7450,12 +7450,10 @@ public class StringUtils {
 		for (var i = 0; i < s.length(); i++) {
 			var c = s.charAt(i);
 
-			if (c == '\\') {
-				if (i + 1 != s.length()) {
-					var c2 = s.charAt(i + 1);
-					if (escaped.contains(c2)) {
-						i++;
-					}
+			if (c == '\\' && i + 1 != s.length()) {
+				var c2 = s.charAt(i + 1);
+				if (escaped.contains(c2)) {
+					i++;
 				}
 			}
 			sb.append(s.charAt(i));
@@ -7661,13 +7659,11 @@ public class StringUtils {
 				} else {
 					do {
 						caw.write(c);
-						if (c >= 0xD800 && c <= 0xDBFF) {
-							if ((i + 1) < s.length()) {
-								int d = s.charAt(i + 1);
-								if (d >= 0xDC00 && d <= 0xDFFF) {
-									caw.write(d);
-									i++;
-								}
+						if (c >= 0xD800 && c <= 0xDBFF && (i + 1) < s.length()) {
+							int d = s.charAt(i + 1);
+							if (d >= 0xDC00 && d <= 0xDFFF) {
+								caw.write(d);
+								i++;
 							}
 						}
 						i++;

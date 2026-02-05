@@ -1156,14 +1156,12 @@ public class BeanMeta<T> {
 						methodType = SETTER;
 					}
 				} else if (params.size() == 2) {
-					if ("*".equals(bpName) && params.get(0).getParameterType().is(String.class)) {
-						if (n.startsWith("set") && (rt.isAssignableFrom(ci) || rt.is(Void.TYPE))) {
-							methodType = SETTER;
-						} else {
-							methodType = GETTER;
-						}
-						n = bpName;
+					if ("*".equals(bpName) && params.get(0).getParameterType().is(String.class) && n.startsWith("set") && (rt.isAssignableFrom(ci) || rt.is(Void.TYPE))) {
+						methodType = SETTER;
+					} else {
+						methodType = GETTER;
 					}
+					n = bpName;
 				}
 				n = pn.getPropertyName(n);
 

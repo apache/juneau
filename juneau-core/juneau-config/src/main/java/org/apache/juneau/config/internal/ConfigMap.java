@@ -707,10 +707,8 @@ public class ConfigMap implements ConfigStoreListener {
 			} else if (ce.getType() == REMOVE_ENTRY) {
 				if (nn(cs))
 					cs.entries.remove(ce.getKey());
-			} else if (ce.getType() == REMOVE_SECTION) {
-				if (nn(cs))
-					entries.remove(section);
-			}
+			} else if (ce.getType() == REMOVE_SECTION && nn(cs))
+				entries.remove(section);
 			if (addToChangeList)
 				changes.add(ce);
 		}

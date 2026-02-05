@@ -392,10 +392,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		// Must be a bean or BeanMap.
 		for (var o : c) {
 			o = swap(swap, o);
-			if (! canIgnoreValue(cm1, null, o)) {
-				if (! cm1.isInstance(o))
-					return null;
-			}
+			if (! canIgnoreValue(cm1, null, o) && ! cm1.isInstance(o))
+				return null;
 		}
 
 		BeanMap<?> bm = toBeanMap(o1);

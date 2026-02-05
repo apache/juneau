@@ -217,14 +217,12 @@ class MockPathResolver {
 						}
 					}
 				}
-			} else if (state == S6) {
-				if (c == '/') {
-					spSegments--;
-					if (spSegments == 0) {
-						this.servletPath = uri.substring(mark, i);
-						mark = i;
-						state = S7;
-					}
+			} else if (state == S6 && c == '/') {
+				spSegments--;
+				if (spSegments == 0) {
+					this.servletPath = uri.substring(mark, i);
+					mark = i;
+					state = S7;
 				}
 			}
 		}

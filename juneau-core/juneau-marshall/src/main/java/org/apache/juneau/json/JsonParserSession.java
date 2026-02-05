@@ -752,9 +752,8 @@ public class JsonParserSession extends ReaderParserSession {
 		//  "/* */" style comments
 		if (c == '*') {
 			while (c != -1)
-				if ((c = r.read()) == '*')
-					if ((c = r.read()) == '/')
-						return;
+				if ((c = r.read()) == '*' && (c = r.read()) == '/')
+					return;
 			//  "//" style comments
 		} else if (c == '/') {
 			while (c != -1) {

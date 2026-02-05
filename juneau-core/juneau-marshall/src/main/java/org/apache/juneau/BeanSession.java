@@ -1176,9 +1176,8 @@ public class BeanSession extends ContextSession {
 
 			// If no conversion needed, then just return the value.
 			// Don't include maps or collections, because child elements may need conversion.
-			if (tc.isInstance(value))
-				if (! ((to.isMap() && ! to.getValueType().is(Object.class)) || ((to.isCollection() || to.isOptional()) && ! to.getElementType().isObject())))
-					return (T)value;
+			if (tc.isInstance(value) && ! ((to.isMap() && ! to.getValueType().is(Object.class)) || ((to.isCollection() || to.isOptional()) && ! to.getElementType().isObject())))
+				return (T)value;
 
 			ObjectSwap swap = to.getSwap(this);
 			if (nn(swap)) {

@@ -81,9 +81,8 @@ public class RestOpInvoker extends MethodInvoker {
 				session.debug(false);
 			}
 
-			if (! inner().hasReturnType(Void.TYPE))
-				if (nn(output) || ! res.getOutputStreamCalled())
-					res.setContent(output);
+			if (! inner().hasReturnType(Void.TYPE) && (nn(output) || ! res.getOutputStreamCalled()))
+				res.setContent(output);
 
 		} catch (IllegalAccessException | IllegalArgumentException e) {
 			throw new InternalServerError(e, "Error occurred invoking method ''{0}''.", inner().getNameFull());
