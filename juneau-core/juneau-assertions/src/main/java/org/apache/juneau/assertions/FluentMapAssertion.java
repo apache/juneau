@@ -107,6 +107,7 @@ import org.apache.juneau.serializer.*;
  * @param <V> The value type.
  * @param <R> The return type.
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., MSG_mapWasNotEmpty)
 public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R> {
 
 	private static final Messages MESSAGES = Messages.of(FluentMapAssertion.class, "Messages");

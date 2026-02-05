@@ -129,7 +129,7 @@ import org.apache.juneau.commons.reflect.*;
  * 		</p>
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., ARG_sources, MSG_globalDisabled)
 public class Settings {
 
 	// Argument name constants for assertArgNoNulls

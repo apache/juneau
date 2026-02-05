@@ -63,6 +63,7 @@ import jakarta.servlet.http.*;
  *
  * @serial exclude
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., MSG_servletInitError)
 public abstract class RestServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;

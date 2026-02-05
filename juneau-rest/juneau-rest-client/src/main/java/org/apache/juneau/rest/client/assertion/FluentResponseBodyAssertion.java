@@ -102,6 +102,7 @@ import org.apache.juneau.serializer.*;
  *
  * @param <R> The return type.
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., MSG_exceptionDuringCall)
 public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<ResponseContent,R> {
 
 	// Error message constants

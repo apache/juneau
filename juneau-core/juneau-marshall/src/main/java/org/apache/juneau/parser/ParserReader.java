@@ -42,7 +42,7 @@ import org.apache.juneau.commons.io.*;
 
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({ "resource", "java:S115" }) // Constants use UPPER_snakeCase convention (e.g., MSG_bufferUnderflow)
 public class ParserReader extends Reader implements Positionable {
 
 	// Error message constants

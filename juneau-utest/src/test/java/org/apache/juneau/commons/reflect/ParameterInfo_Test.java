@@ -32,7 +32,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.Name;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"java:S117", "java:S5961", "java:S1186"})
+@SuppressWarnings({ "java:S117", "java:S5961", "java:S1186", "java:S116" }) // Field names use underscores for test data (e.g., b_a1_a, b_b_a)
 class ParameterInfo_Test extends TestBase {
 
 	private static String originalDisableParamNameDetection;

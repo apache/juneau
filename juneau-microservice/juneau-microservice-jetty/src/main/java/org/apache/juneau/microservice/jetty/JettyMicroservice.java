@@ -62,6 +62,7 @@ import jakarta.servlet.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJettyBasics">juneau-microservice-jetty Basics</a>
  * </ul>
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., KEY_SERVLET_CONTEXT_HANDLER)
 public class JettyMicroservice extends Microservice {
 
 	/**

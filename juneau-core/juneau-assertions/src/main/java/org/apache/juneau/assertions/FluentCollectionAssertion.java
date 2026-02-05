@@ -103,6 +103,7 @@ import org.apache.juneau.serializer.*;
  * @param <E> The element type.
  * @param <R> The return type.
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., MSG_collectionWasNotEmpty)
 public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collection<E>,R> {
 
 	private static final Messages MESSAGES = Messages.of(FluentCollectionAssertion.class, "Messages");

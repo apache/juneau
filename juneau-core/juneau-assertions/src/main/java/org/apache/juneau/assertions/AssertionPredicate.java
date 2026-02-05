@@ -59,6 +59,7 @@ import org.apache.juneau.cp.*;
  *
  * @param <T> the type of input being tested.
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., MSG_predicateTestFailed, MSG_valueDidNotPassTest)
 public class AssertionPredicate<T> implements Predicate<T> {
 
 	/**

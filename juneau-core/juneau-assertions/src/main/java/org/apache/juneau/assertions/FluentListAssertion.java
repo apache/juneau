@@ -119,6 +119,7 @@ import org.apache.juneau.serializer.*;
  * @param <E> The element type.
  * @param <R> The return type.
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., MSG_listDidNotContainExpectedValueAt)
 public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 
 	// @formatter:off

@@ -58,6 +58,7 @@ import org.apache.juneau.cp.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem Overview</a>
  * </ul>
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., MSG_parameterCannotBeNull)
 public class Assertion {
 
 	private static final Messages MESSAGES = Messages.of(Assertion.class, "Messages");
