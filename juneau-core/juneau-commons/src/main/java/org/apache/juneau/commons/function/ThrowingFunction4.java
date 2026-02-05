@@ -134,6 +134,7 @@ public interface ThrowingFunction4<A,B,C,D,R> extends Function4<A,B,C,D,R> {
 	 * @return A composed {@link ThrowingFunction4} that first applies this function and then applies the {@code after} function.
 	 * @throws NullPointerException if {@code after} is <jk>null</jk>.
 	 */
+	@Override
 	default <V> ThrowingFunction4<A,B,C,D,V> andThen(Function<? super R,? extends V> after) {
 		assertArgNotNull(ARG_after, after);
 		return (A a, B b, C c, D d) -> after.apply(applyThrows(a, b, c, d));

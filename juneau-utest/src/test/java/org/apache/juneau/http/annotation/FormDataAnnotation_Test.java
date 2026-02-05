@@ -24,6 +24,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.oapi.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S1186")
 class FormDataAnnotation_Test extends TestBase {
 
 	private static final String CNAME = FormDataAnnotation_Test.class.getName();

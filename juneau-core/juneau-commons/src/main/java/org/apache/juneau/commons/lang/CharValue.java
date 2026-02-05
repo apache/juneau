@@ -225,6 +225,7 @@ public class CharValue extends Value<Character> {
 	 * @param value The character to compare to.
 	 * @return <jk>true</jk> if the current value is equal to the specified character.
 	 */
+	@Override
 	public boolean is(Character value) {
 		return eq(get(), value);
 	}

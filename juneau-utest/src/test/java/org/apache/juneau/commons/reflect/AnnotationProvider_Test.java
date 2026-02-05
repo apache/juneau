@@ -26,6 +26,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S1186")
 class AnnotationProvider_Test extends TestBase {
 
 	//====================================================================================================

@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S1186")
 class RestPostCallAnnotation_Test extends TestBase {
 
 	private static final String CNAME = RestPostCallAnnotation_Test.class.getName();

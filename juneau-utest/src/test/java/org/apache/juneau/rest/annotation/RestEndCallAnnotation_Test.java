@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S1186")
 class RestEndCallAnnotation_Test extends TestBase {
 
 	private static final String CNAME = RestEndCallAnnotation_Test.class.getName();

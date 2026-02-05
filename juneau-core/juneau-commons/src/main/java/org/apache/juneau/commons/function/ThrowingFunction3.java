@@ -132,6 +132,7 @@ public interface ThrowingFunction3<A,B,C,R> extends Function3<A,B,C,R> {
 	 * @return A composed {@link ThrowingFunction3} that first applies this function and then applies the {@code after} function.
 	 * @throws NullPointerException if {@code after} is <jk>null</jk>.
 	 */
+	@Override
 	default <V> ThrowingFunction3<A,B,C,V> andThen(Function<? super R,? extends V> after) {
 		assertArgNotNull(ARG_after, after);
 		return (A a, B b, C c) -> after.apply(applyThrows(a, b, c));

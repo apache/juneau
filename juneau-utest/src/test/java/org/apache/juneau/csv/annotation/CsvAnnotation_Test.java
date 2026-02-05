@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S1186")
 class CsvAnnotation_Test extends TestBase {
 
 	private static final String CNAME = CsvAnnotation_Test.class.getName();

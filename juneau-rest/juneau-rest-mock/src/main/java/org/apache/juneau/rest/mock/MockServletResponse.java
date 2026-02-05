@@ -165,7 +165,9 @@ public class MockServletResponse implements HttpServletResponse {
 	}
 
 	@Override /* Overridden from HttpServletResponse */
-	public void resetBuffer() {}
+	public void resetBuffer() {
+		// Mock implementation - no-op for testing purposes
+	}
 
 	@Override /* Overridden from HttpServletResponse */
 	public void sendError(int sc) throws IOException {

@@ -245,6 +245,7 @@ public class ShortValue extends Value<Short> {
 	 * @param value The value to compare to.
 	 * @return <jk>true</jk> if the current value is equal to the specified value.
 	 */
+	@Override
 	public boolean is(Short value) {
 		return eq(get(), value);
 	}

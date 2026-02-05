@@ -410,7 +410,7 @@ Examples:
     
     # Check if there are changes to commit
     if not check_git_status(juneau_root):
-        print(f"\n⚠ Warning: No changes detected. Skipping commit and push.")
+        print("\n⚠ Warning: No changes detected. Skipping commit and push.")
         print("🎉 Build completed successfully (nothing to commit)!")
         play_sound(success=True)
         return 0

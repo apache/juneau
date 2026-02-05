@@ -29,7 +29,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings({"rawtypes", "java:S1186"})
 class AutoNumberSwapTest extends TestBase {
 
 	private static ObjectSwap find(Class<?> c) {

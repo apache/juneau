@@ -33,6 +33,7 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S1186")
 class RestClient_Query_Test extends TestBase {
 
 	@Rest

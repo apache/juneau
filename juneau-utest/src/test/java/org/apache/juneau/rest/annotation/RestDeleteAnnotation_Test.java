@@ -26,6 +26,7 @@ import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.matcher.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S1186")
 class RestDeleteAnnotation_Test extends TestBase {
 
 	private static final String CNAME = RestDeleteAnnotation_Test.class.getName();

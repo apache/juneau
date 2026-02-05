@@ -125,6 +125,7 @@ public class BooleanValue extends Value<Boolean> {
 	 * @param value The value to compare to.
 	 * @return <jk>true</jk> if the current value is equal to the specified value.
 	 */
+	@Override
 	public boolean is(Boolean value) {
 		return eq(get(), value);
 	}

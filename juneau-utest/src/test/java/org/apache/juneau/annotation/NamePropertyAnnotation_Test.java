@@ -24,6 +24,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.ExecutableException;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S1186")
 class NamePropertyAnnotation_Test extends TestBase {
 
 	private static final String CNAME = NamePropertyAnnotation_Test.class.getName();

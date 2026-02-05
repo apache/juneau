@@ -149,7 +149,7 @@ def main():
             modified_count += 1
             print(f"✓ Cleaned: {java_file}")
     
-    print(f"\nSummary:")
+            print("\nSummary:")
     print(f"  Total files scanned: {len(java_files)}")
     print(f"  Files modified: {modified_count}")
     print(f"  Files unchanged: {len(java_files) - modified_count}")

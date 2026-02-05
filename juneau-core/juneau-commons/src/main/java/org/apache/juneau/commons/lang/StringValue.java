@@ -124,6 +124,7 @@ public class StringValue extends Value<String> {
 	 * @param value The value to compare to.
 	 * @return <jk>true</jk> if the current value is equal to the specified value.
 	 */
+	@Override
 	public boolean is(String value) {
 		return eq(get(), value);
 	}

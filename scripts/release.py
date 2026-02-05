@@ -965,13 +965,13 @@ class ReleaseScript:
                 empty_files.append(str(file_path.relative_to(dist_dir)))
         
         if missing_files:
-            self.fail(f"Missing distribution files:\n  " + "\n  ".join(missing_files))
+            self.fail("Missing distribution files:\n  " + "\n  ".join(missing_files))
         
         if empty_files:
-            self.fail(f"Empty distribution files:\n  " + "\n  ".join(empty_files))
+            self.fail("Empty distribution files:\n  " + "\n  ".join(empty_files))
         
         # All files verified
-        print(f"\n✅ All distribution files verified:")
+        print("\n✅ All distribution files verified:")
         for file_path in expected_files:
             size = file_path.stat().st_size
             size_mb = size / (1024 * 1024)
@@ -1261,10 +1261,10 @@ Anyone can participate in testing and voting, not just committers, please feel f
         print("\n" + "=" * 79)
         print("✅ Release revert complete!")
         print("=" * 79)
-        print(f"\nNote: You may need to manually:")
-        print(f"  - Reset your local git repository if needed")
-        print(f"  - Verify Maven versions were reverted correctly")
-        print(f"  - Check SVN repository for any remaining files")
+        print("\nNote: You may need to manually:")
+        print("  - Reset your local git repository if needed")
+        print("  - Verify Maven versions were reverted correctly")
+        print("  - Check SVN repository for any remaining files")
     
     def run(self):
         """Run the release script."""
