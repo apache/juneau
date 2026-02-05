@@ -875,7 +875,6 @@ class HttpPartSchema_Body_Test extends TestBase {
 	// Backward compatibility: Old boolean exclusiveMaximum/exclusiveMinimum
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings("deprecation")
 	@Content
 	@Schema(t="integer", exclusiveMaximum=true, exclusiveMinimum=true, maximum="100", minimum="0")
 	public static class D03a {}
@@ -893,7 +892,6 @@ class HttpPartSchema_Body_Test extends TestBase {
 		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(101, BeanContext.DEFAULT));
 	}
 
-	@SuppressWarnings("deprecation")
 	@Content
 	@Schema(t="integer", exclusiveMaximum=false, exclusiveMinimum=false, maximum="100", minimum="0")
 	public static class D03b {}
@@ -911,7 +909,6 @@ class HttpPartSchema_Body_Test extends TestBase {
 		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(101, BeanContext.DEFAULT));
 	}
 
-	@SuppressWarnings("deprecation")
 	@Content
 	@Schema(t="integer", exclusiveMaximumValue="100", exclusiveMinimumValue="0", exclusiveMaximum=false, exclusiveMinimum=false)
 	public static class D03c {}

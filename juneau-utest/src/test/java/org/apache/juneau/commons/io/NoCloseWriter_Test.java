@@ -110,7 +110,7 @@ class NoCloseWriter_Test extends TestBase {
 		assertEquals("test", sw.toString());
 	}
 
-	@Test void c02_flush_multipleTimes() throws IOException {
+	@Test void c02_flush_multipleTimes() {
 		var sw = new StringWriter();
 		var wrapper = new NoCloseWriter(sw);
 		assertDoesNotThrow(() -> {
@@ -142,7 +142,7 @@ class NoCloseWriter_Test extends TestBase {
 		assertEquals("test", sw.toString());
 	}
 
-	@Test void d03_close_multipleTimes() throws IOException {
+	@Test void d03_close_multipleTimes() {
 		var sw = new StringWriter();
 		var wrapper = new NoCloseWriter(sw);
 		assertDoesNotThrow(() -> {

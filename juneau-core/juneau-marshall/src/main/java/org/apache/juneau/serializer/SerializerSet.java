@@ -418,7 +418,6 @@ public class SerializerSet {
 	 * <p>
 	 * Used by {@link SerializerSet.Builder#set(Class...)}
 	 */
-	@SuppressWarnings("javadoc")
 	public abstract static class Inherit extends Serializer {
 		protected Inherit(Serializer.Builder builder) {
 			super(builder);
@@ -430,7 +429,6 @@ public class SerializerSet {
 	 * <p>
 	 * Used by {@link SerializerSet.Builder#add(Class...)}
 	 */
-	@SuppressWarnings("javadoc")
 	public abstract static class NoInherit extends Serializer {
 		protected NoInherit(Serializer.Builder builder) {
 			super(builder);

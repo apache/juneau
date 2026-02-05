@@ -16,10 +16,7 @@
  */
 package org.apache.juneau.commons.utils;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.apache.juneau.*;
-import org.junit.jupiter.api.*;
 
 /**
  * Tests for {@link SystemUtils}.

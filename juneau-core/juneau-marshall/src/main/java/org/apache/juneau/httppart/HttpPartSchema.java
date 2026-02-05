@@ -2744,7 +2744,6 @@ public class HttpPartSchema {
 		// Other
 		// -----------------------------------------------------------------------------------------------------------------
 
-		@SuppressWarnings("deprecation")
 		Builder apply(Schema a) {
 			default_(joinnlOrNull(a.default_(), a.df()));
 			enum_(toSet(a.enum_(), a.e()));

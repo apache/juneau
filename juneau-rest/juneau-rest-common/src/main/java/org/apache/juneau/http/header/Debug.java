@@ -48,6 +48,7 @@ public class Debug extends BasicBooleanHeader {
 
 	@SuppressWarnings("javadoc")
 	public static final Debug TRUE = of(true);
+	/** Constant for <jk>false</jk> value. */
 	public static final Debug FALSE = of(false);
 
 	/**

@@ -90,8 +90,9 @@ import org.apache.juneau.commons.io.*;
 @SuppressWarnings("java:S115")
 public interface FileFinder {
 
-	// Argument name constants for assertArgNotNull
+	/** Argument name constant for assertArgNotNull. */
 	String ARG_value = "value";
+	/** Argument name constant for assertArgNotNull. */
 	String ARG_c = "c";
 
 	/**

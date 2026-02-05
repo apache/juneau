@@ -48,11 +48,10 @@ public class MediaType implements Comparable<MediaType> {
 	private static final Cache<String,MediaType> CACHE = Cache.of(String.class, MediaType.class).build();
 
 	/** Reusable predefined media type */
-	@SuppressWarnings("javadoc")
 	public static final MediaType CSV = of("text/csv");
-	@SuppressWarnings("javadoc")
+	/** Reusable predefined media type */
 	public static final MediaType HTML = of("text/html");
-	@SuppressWarnings("javadoc")
+	/** Reusable predefined media type */
 	public static final MediaType JSON = of("application/json");
 	@SuppressWarnings("javadoc")
 	public static final MediaType MSGPACK = of("octal/msgpack");

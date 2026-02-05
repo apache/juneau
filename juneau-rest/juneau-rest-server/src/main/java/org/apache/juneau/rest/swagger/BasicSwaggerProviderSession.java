@@ -911,7 +911,6 @@ public class BasicSwaggerProviderSession {
 		// @formatter:on
 	}
 
-	@SuppressWarnings("deprecation")
 	private JsonMap merge(JsonMap om, Schema a) {
 		try {
 			if (SchemaAnnotation.empty(a))

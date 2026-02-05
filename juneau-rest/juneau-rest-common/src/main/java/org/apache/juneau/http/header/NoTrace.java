@@ -36,6 +36,7 @@ public class NoTrace extends BasicBooleanHeader {
 
 	@SuppressWarnings("javadoc")
 	public static final NoTrace TRUE = of(true);
+	/** Constant for <jk>false</jk> value. */
 	public static final NoTrace FALSE = of(false);
 
 	/**

@@ -62,7 +62,7 @@ class NoCloseOutputStream_Test extends TestBase {
 		assertEquals("test", baos.toString());
 	}
 
-	@Test void b02_flush_multipleTimes() throws IOException {
+	@Test void b02_flush_multipleTimes() {
 		var baos = new ByteArrayOutputStream();
 		var wrapper = new NoCloseOutputStream(baos);
 		assertDoesNotThrow(() -> {
@@ -94,7 +94,7 @@ class NoCloseOutputStream_Test extends TestBase {
 		assertEquals("test", baos.toString());
 	}
 
-	@Test void c03_close_multipleTimes() throws IOException {
+	@Test void c03_close_multipleTimes() {
 		var baos = new ByteArrayOutputStream();
 		var wrapper = new NoCloseOutputStream(baos);
 		assertDoesNotThrow(() -> {
