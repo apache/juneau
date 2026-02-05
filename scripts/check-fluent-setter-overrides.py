@@ -255,11 +255,8 @@ def check_missing_overrides(classes, class_map):
         # Try to match parent classes from the same package or commonly imported packages
         filtered_parents = []
         for pc in parent_classes:
-            # If child and parent are in the same package, use it
-            if java_class.package == pc.package:
-                filtered_parents.append(pc)
-            # Otherwise, if there's only one parent class with this name, use it
-            elif len(parent_classes) == 1:
+            # If child and parent are in the same package, or there's only one parent class with this name, use it
+            if java_class.package == pc.package or len(parent_classes) == 1:
                 filtered_parents.append(pc)
         
         # If we couldn't filter by package, fall back to all parent classes

@@ -72,11 +72,12 @@ class BeanConfig_Test extends TestBase {
 		m3.put("address", p2.getAddress());
 
 		var pm1 = bc.toBeanMap(p1);
+		Map<?,?> pm1AsMap = pm1; // Compare as Map to avoid dissimilar type comparison
 
 		assertEquals(pm1.size(), m1.size(), fs("Bean Map size failed for: {0} / {1} / {2}", p1, pm1.size(), m1.size()));
 		assertEquals(pm1.keySet(), m1.keySet(), fs("Bean Map key set equality failed for: {0} / {1} / {2}", p1, pm1.keySet() , m1.keySet()));
 		assertEquals(m1.keySet(), pm1.keySet(), fs("Bean Map key set reverse equality failed for: {0} / {1} / {2}", p1, pm1.keySet(), m1.keySet()));
-		assertEquals(pm1, m1, fs("Bean Map equality failed for: {0} / {1} / {2}", p1, pm1, m1));
+		assertEquals(pm1AsMap, m1, fs("Bean Map equality failed for: {0} / {1} / {2}", p1, pm1, m1));
 		assertThrows(BeanRuntimeException.class, ()->bc.newBeanMap(Address.class));  // Address returned as a new bean type, but shouldn't be since it doesn't have a default constructor.
 		assertNull(bc.newBeanMap(java.lang.Integer.class), "java.lang.Integer incorrectly designated as bean type.");
 		assertNull(bc.newBeanMap(java.lang.Class.class), "java.lang.Class incorrectly designated as bean type.");

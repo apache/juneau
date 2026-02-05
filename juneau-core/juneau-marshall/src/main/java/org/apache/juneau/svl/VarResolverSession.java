@@ -327,7 +327,7 @@ public class VarResolverSession {
 	 * @return The same writer.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	@SuppressWarnings({"java:S6541", "java:S3776"})
+	@SuppressWarnings({"java:S6541", "java:S3776", "java:S2583"}) // State variables persist across loop iterations
 	public Writer resolveTo(String s, Writer out) throws IOException {
 
 		// S1: Not in variable, looking for $

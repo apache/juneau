@@ -6697,7 +6697,7 @@ public class StringUtils {
 	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
 	 * 	<br>An empty string results in an empty array.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({"java:S3776", "java:S2583"}) // State variables persist across loop iterations
 	public static String[] splitQuoted(String s, boolean keepQuotes) {
 
 		if (s == null)

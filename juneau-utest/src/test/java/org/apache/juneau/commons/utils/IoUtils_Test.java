@@ -972,9 +972,10 @@ class IoUtils_Test extends TestBase {
 		cleanupThreadLocals();
 		// Should not throw
 
-		// Call again to ensure it's safe to call multiple times
+		// Call again to ensure it's safe to call multiple times (idempotency)
 		cleanupThreadLocals();
-		// Should not throw
+		// Verify method completed successfully - if we reach here, no exception was thrown
+		assertDoesNotThrow(() -> cleanupThreadLocals());
 	}
 
 	//====================================================================================================

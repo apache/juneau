@@ -7755,6 +7755,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	}
 
 	@Override
+	@Deprecated(since = "9", forRemoval = true) // Object.finalize() is deprecated
 	protected void finalize() throws Throwable {
 		if (detectLeaks && ! isClosed.get() && ! keepHttpClientOpen) {
 			var sb = new StringBuilder("WARNING:  RestClient garbage collected before it was finalized.");  // NOT DEBUG
