@@ -60,8 +60,9 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	private static final String ARG_ctx = "ctx";
 
 	// HTML tag name constants
-	private static final String HTMLTAG_style = "style";
-	private static final String HTMLTAG_table = "table";
+	private static final String TAG_style = "style";
+	private static final String TAG_table = "table";
+	private static final String TAG_array = "array";
 
 	/**
 	 * Builder class.
@@ -409,7 +410,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		int i = indent;
 
-		out.oTag(i, HTMLTAG_table);
+		out.oTag(i, TAG_table);
 
 		String typeName = m.getMeta().getDictionaryName();
 		if (nn(typeName) && eType != m.getClassMeta())
@@ -449,7 +450,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			out.oTag(i + 2, "td");
 			String style = getStyle(this, pMeta, value);
 			if (nn(style))
-				out.attr(HTMLTAG_style, style);
+				out.attr(TAG_style, style);
 			out.cTag();
 
 			try {
@@ -469,7 +470,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			out.ie(i + 1).eTag("tr").nl(i + 1);
 		});
 
-		out.ie(i).eTag(HTMLTAG_table).nl(i);
+		out.ie(i).eTag(TAG_table).nl(i);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked", "java:S3776", "java:S6541" })
@@ -494,7 +495,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		if (sType != eType)
 			type2 = sType.getBeanDictionaryName();
 		if (type2 == null)
-			type2 = "array";
+			type2 = TAG_array;
 
 		c = sort(c);
 
@@ -508,7 +509,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		if (nn(th)) {
 
-			out.oTag(i, HTMLTAG_table).attr(btpn, type2).w('>').nl(i + 1);
+			out.oTag(i, TAG_table).attr(btpn, type2).w('>').nl(i + 1);
 			if (th.length > 0) {
 				out.sTag(i + 1, "tr").nl(i + 2);
 				for (var key : th) {
@@ -581,7 +582,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 							String style = getStyle(this, pMeta, value);
 							out.oTag(i + 2, "td");
 							if (nn(style))
-								out.attr(HTMLTAG_style, style);
+								out.attr(TAG_style, style);
 							out.cTag();
 							if (nn(link))
 								out.oTag("a").attrUri("href", link).cTag();
@@ -596,11 +597,11 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				}
 				out.ie(i + 1).eTag("tr").nl(i + 1);
 			}
-			out.ie(i).eTag(HTMLTAG_table).nl(i);
+			out.ie(i).eTag(TAG_table).nl(i);
 
 		} else {
 			out.oTag(i, isDc ? "p" : "ul");
-			if (! type2.equals("array"))
+			if (! type2.equals(TAG_array))
 				out.attr(btpn, type2);
 			out.w('>').nl(i + 1);
 			var isFirst = true;
@@ -612,7 +613,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				String style = getStyle(this, ppMeta, o);
 				String link = getLink(ppMeta);
 				if (nn(style) && ! isDc)
-					out.attr(HTMLTAG_style, style);
+					out.attr(TAG_style, style);
 				if (! isDc)
 					out.cTag();
 				if (nn(link))
@@ -641,7 +642,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		int i = indent;
 
-		out.oTag(i, HTMLTAG_table);
+		out.oTag(i, TAG_table);
 
 		if (nn(typeName) && nn(ppMeta) && ppMeta.getClassMeta() != aType)
 			out.attr(getBeanTypePropertyName(sType), typeName);
@@ -656,7 +657,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		forEachEntry(m, x -> serializeMapEntry(out, x, keyType, valueType, i, ppMeta));
 
-		out.ie(i).eTag(HTMLTAG_table).nl(i);
+		out.ie(i).eTag(TAG_table).nl(i);
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -677,7 +678,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		out.sTag(i + 1, "tr").nl(i + 2);
 		out.oTag(i + 2, "td");
 		if (nn(style))
-			out.attr(HTMLTAG_style, style);
+			out.attr(TAG_style, style);
 		out.cTag();
 		if (nn(link))
 			out.oTag(i + 3, "a").attrUri("href", link.replace("{#}", s(value))).cTag();

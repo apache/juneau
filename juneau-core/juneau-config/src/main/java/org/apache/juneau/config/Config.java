@@ -61,6 +61,7 @@ public class Config extends Context implements ConfigEventListener {
 	private static final String ARG_value = "value";
 	private static final String ARG_section = "section";
 	private static final String ARG_key = "key";
+	private static final String ARG_values = "values";
 
 	// Property name constants
 	private static final String PROP_binaryFormat = "binaryFormat";
@@ -284,7 +285,7 @@ public class Config extends Context implements ConfigEventListener {
 		 * @return This object.
 		 */
 		public Builder mods(Mod...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			for (var value : values)
 				mods.put(value.getId(), value);
 			return this;

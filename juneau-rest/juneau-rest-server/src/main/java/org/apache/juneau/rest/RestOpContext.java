@@ -92,6 +92,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_beanType = "beanType";
 	private static final String ARG_value = "value";
+	private static final String ARG_values = "values";
 
 	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
@@ -394,7 +395,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder consumes(MediaType...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			consumes = addAll(consumes, values);
 			return this;
 		}
@@ -564,7 +565,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder defaultRequestAttributes(NamedAttribute...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			defaultRequestAttributes().add(value);
 			return this;
 		}
@@ -594,7 +595,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder defaultRequestFormData(NameValuePair...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			defaultRequestFormData().append(value);
 			return this;
 		}
@@ -624,7 +625,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder defaultRequestHeaders(org.apache.http.Header...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			defaultRequestHeaders().append(value);
 			return this;
 		}
@@ -654,7 +655,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder defaultRequestQueryData(NameValuePair...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			defaultRequestQueryData().append(value);
 			return this;
 		}
@@ -684,7 +685,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder defaultResponseHeaders(org.apache.http.Header...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			defaultResponseHeaders().append(value);
 			return this;
 		}
@@ -725,7 +726,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 */
 		@SafeVarargs
 		public final Builder encoders(Class<? extends Encoder>...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			encoders().add(value);
 			return this;
 		}
@@ -744,7 +745,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder encoders(Encoder...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			encoders().add(value);
 			return this;
 		}
@@ -775,7 +776,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 */
 		@SafeVarargs
 		public final Builder guards(Class<? extends RestGuard>...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			guards().append(value);
 			return this;
 		}
@@ -794,7 +795,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder guards(RestGuard...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			guards().append(value);
 			return this;
 		}
@@ -939,7 +940,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 */
 		@SafeVarargs
 		public final Builder matchers(Class<? extends RestMatcher>...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			matchers().append(value);
 			return this;
 		}
@@ -958,7 +959,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder matchers(RestMatcher...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			matchers().append(value);
 			return this;
 		}
@@ -1054,7 +1055,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 */
 		@SafeVarargs
 		public final Builder parsers(Class<? extends Parser>...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			parsers().add(value);
 			return this;
 		}
@@ -1073,7 +1074,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder parsers(Parser...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			parsers().add(value);
 			return this;
 		}
@@ -1192,7 +1193,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder path(String...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			path = prependAll(path, values);
 			return this;
 		}
@@ -1225,7 +1226,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder produces(MediaType...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			produces = addAll(produces, values);
 			return this;
 		}
@@ -1323,7 +1324,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder rolesDeclared(String...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			rolesDeclared = addAll(rolesDeclared, values);
 			return this;
 		}
@@ -1354,7 +1355,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 */
 		@SafeVarargs
 		public final Builder serializers(Class<? extends Serializer>...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			serializers().add(value);
 			return this;
 		}
@@ -1373,7 +1374,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder serializers(Serializer...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			serializers().add(value);
 			return this;
 		}

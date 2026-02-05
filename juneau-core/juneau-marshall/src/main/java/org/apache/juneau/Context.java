@@ -83,6 +83,8 @@ public abstract class Context {
 	private static final String ARG_work = "work";
 	private static final String ARG_subtype = "subtype";
 	private static final String ARG_c = "c";
+	private static final String ARG_values = "values";
+	private static final String ARG_from = "from";
 
 	/**
 	 * Builder class.
@@ -314,7 +316,7 @@ public abstract class Context {
 		 * @return This object.
 		 */
 		public Builder annotations(Annotation...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			annotations(l(values));
 			return this;
 		}
@@ -376,7 +378,7 @@ public abstract class Context {
 		 * @return This object.
 		 */
 		public Builder applyAnnotations(Class<?>...from) {
-			assertArgNoNulls("from", from);
+			assertArgNoNulls(ARG_from, from);
 			return applyAnnotations((Object[])from);
 		}
 
@@ -464,7 +466,7 @@ public abstract class Context {
 		 * @return This object.
 		 */
 		public Builder applyAnnotations(Object...from) {
-			assertArgNoNulls("from", from);
+			assertArgNoNulls(ARG_from, from);
 			var work = AnnotationWorkList.create();
 			Arrays.stream(from).forEach(x -> traverse(work, x));
 			return apply(work);
@@ -705,7 +707,7 @@ public abstract class Context {
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 */
 		protected void registerBuilders(Object...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			for (var b : values) {
 				if (b == this)
 					builders.add(b);

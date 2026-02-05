@@ -152,6 +152,7 @@ public class RestContext extends Context {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_value = "value";
+	private static final String ARG_values = "values";
 	private static final String ARG_path = "path";
 	private static final String ARG_key = "key";
 	private static final String ARG_resource = "resource";
@@ -888,7 +889,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder children(Object...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			addAll(children, values);
 			return this;
 		}
@@ -1079,7 +1080,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder consumes(MediaType...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			consumes = addAll(consumes, values);
 			return this;
 		}
@@ -1262,7 +1263,7 @@ public class RestContext extends Context {
 		 * @see #defaultClasses()
 		 */
 		public Builder defaultClasses(Class<?>...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			defaultClasses().add(values);
 			return this;
 		}
@@ -1342,7 +1343,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder defaultRequestAttributes(NamedAttribute...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			defaultRequestAttributes().add(values);
 			return this;
 		}
@@ -1415,7 +1416,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder defaultRequestHeaders(Header...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			defaultRequestHeaders().setDefault(values);
 			return this;
 		}
@@ -1484,7 +1485,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder defaultResponseHeaders(Header...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			defaultResponseHeaders().setDefault(values);
 			return this;
 		}
@@ -2365,7 +2366,7 @@ public class RestContext extends Context {
 		 */
 		@SafeVarargs
 		public final Builder parsers(Class<? extends Parser>...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			parsers().add(value);
 			return this;
 		}
@@ -2389,7 +2390,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder parsers(Parser...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			parsers().add(value);
 			return this;
 		}
@@ -2718,7 +2719,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder produces(MediaType...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			produces = addAll(produces, values);
 			return this;
 		}
@@ -2895,7 +2896,7 @@ public class RestContext extends Context {
 		 */
 		@SafeVarargs
 		public final Builder responseProcessors(Class<? extends ResponseProcessor>...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			responseProcessors().add(value);
 			return this;
 		}
@@ -2919,7 +2920,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder responseProcessors(ResponseProcessor...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			responseProcessors().add(value);
 			return this;
 		}
@@ -3021,7 +3022,7 @@ public class RestContext extends Context {
 		 */
 		@SafeVarargs
 		public final Builder restOpArgs(Class<? extends RestOpArg>...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			restOpArgs().add(value);
 			return this;
 		}
@@ -3189,7 +3190,7 @@ public class RestContext extends Context {
 		 */
 		@SafeVarargs
 		public final Builder serializers(Class<? extends Serializer>...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			serializers().add(value);
 			return this;
 		}
@@ -3213,7 +3214,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder serializers(Serializer...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			serializers().add(value);
 			return this;
 		}
@@ -3806,7 +3807,7 @@ public class RestContext extends Context {
 		 */
 		@SafeVarargs
 		public final Builder vars(Class<? extends Var>...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			varResolver.vars(value);
 			return this;
 		}
@@ -3830,7 +3831,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder vars(Var...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			varResolver.vars(value);
 			return this;
 		}

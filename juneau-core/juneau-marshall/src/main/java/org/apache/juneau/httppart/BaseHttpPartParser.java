@@ -39,6 +39,7 @@ public abstract class BaseHttpPartParser extends BeanContextable implements Http
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_toType = "toType";
+	private static final String ARG_toTypeArgs = "toTypeArgs";
 	private static final String ARG_builder = "builder";
 
 	/**
@@ -146,7 +147,7 @@ public abstract class BaseHttpPartParser extends BeanContextable implements Http
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
-		assertArgNoNulls("toTypeArgs", toTypeArgs);
+		assertArgNoNulls(ARG_toTypeArgs, toTypeArgs);
 		return getPartSession().parse(partType, schema, in, getClassMeta(assertArgNotNull(ARG_toType, toType), toTypeArgs));
 	}
 }

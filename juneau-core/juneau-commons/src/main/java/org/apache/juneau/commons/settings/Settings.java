@@ -132,6 +132,9 @@ import org.apache.juneau.commons.reflect.*;
 @SuppressWarnings("java:S115")
 public class Settings {
 
+	// Argument name constants for assertArgNoNulls
+	private static final String ARG_sources = "sources";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_name = "name";
 	private static final String ARG_def = "def";
@@ -235,7 +238,7 @@ public class Settings {
 		 */
 		@SafeVarargs
 		public final Builder setSources(SettingSource...sources) {
-			assertArgNoNulls("sources", sources);
+			assertArgNoNulls(ARG_sources, sources);
 			this.sources.clear();
 			for (var source : sources) {
 				this.sources.add(source);

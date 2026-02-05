@@ -120,6 +120,10 @@ import org.apache.juneau.commons.utils.Utils;
  */
 public class SimpleMap<K,V> extends AbstractMap<K,V> {
 
+	// Argument name constants for assertArgsNotNull
+	private static final String ARG_keys = "keys";
+	private static final String ARG_values = "values";
+
 	/**
 	 * Inner class representing a single key-value entry in this map.
 	 * <p>
@@ -207,7 +211,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 	 */
 	@SuppressWarnings("unchecked")
 	public SimpleMap(K[] keys, V[] values) {
-		assertArgsNotNull("keys", keys, "values", values);
+		assertArgsNotNull(ARG_keys, keys, ARG_values, values);
 		assertArg(keys.length == values.length, "keys ''{0}'' and values ''{1}'' array lengths differ", keys.length, values.length);
 
 		// Check for duplicate keys

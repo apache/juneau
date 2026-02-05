@@ -55,6 +55,9 @@ public enum Visibility {
 	/** Include all classes/fields/methods. */
 	PRIVATE;
 
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_x = "x";
+
 	/**
 	 * Shortcut for <c>isVisible(x.getModifiers());</c>
 	 *
@@ -123,7 +126,7 @@ public enum Visibility {
 	 * @throws IllegalArgumentException If <c>x</c> is <jk>null</jk>.
 	 */
 	public <T> Constructor<T> transform(Constructor<T> x) {
-		assertArgNotNull("x", x);
+		assertArgNotNull(ARG_x, x);
 		if (isVisible(x))
 			if (! setAccessible(x))
 				return null;  // HTT
@@ -143,7 +146,7 @@ public enum Visibility {
 	 * @throws IllegalArgumentException If <c>x</c> is <jk>null</jk>.
 	 */
 	public Field transform(Field x) {
-		assertArgNotNull("x", x);
+		assertArgNotNull(ARG_x, x);
 		if (isVisible(x))
 			if (! setAccessible(x))
 				return null;  // HTT
@@ -163,7 +166,7 @@ public enum Visibility {
 	 * @throws IllegalArgumentException If <c>x</c> is <jk>null</jk>.
 	 */
 	public Method transform(Method x) {
-		assertArgNotNull("x", x);
+		assertArgNotNull(ARG_x, x);
 		if (isVisible(x))
 			if (! setAccessible(x))
 				return null;  // HTT

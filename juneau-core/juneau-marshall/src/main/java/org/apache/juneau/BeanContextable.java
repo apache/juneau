@@ -2327,7 +2327,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder notBeanClasses(Class<?>...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			bcBuilder.notBeanClasses(values);
 			return this;
 		}
@@ -2374,7 +2374,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder notBeanPackages(String...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			bcBuilder.notBeanPackages(values);
 			return this;
 		}
@@ -2551,7 +2551,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder sortProperties(Class<?>...on) {
-			assertArgNoNulls("on", on);
+			assertArgNoNulls(ARG_on, on);
 			bcBuilder.sortProperties(on);
 			return this;
 		}
@@ -2673,7 +2673,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder swaps(Class<?>...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			bcBuilder.swaps(values);
 			return this;
 		}
@@ -2765,7 +2765,7 @@ public abstract class BeanContextable extends Context {
 		 * @return This object.
 		 */
 		public Builder swaps(Object...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			bcBuilder.swaps(values);
 			return this;
 		}

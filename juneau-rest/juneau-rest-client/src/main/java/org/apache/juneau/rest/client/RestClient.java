@@ -4851,7 +4851,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder serializers(Class<? extends Serializer>...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			serializers().add(value);
 			return this;
 		}
@@ -4890,7 +4890,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		public Builder serializers(Serializer...value) {
-			assertArgNoNulls("value", value);
+			assertArgNoNulls(ARG_value, value);
 			serializers().add(value);
 			return this;
 		}

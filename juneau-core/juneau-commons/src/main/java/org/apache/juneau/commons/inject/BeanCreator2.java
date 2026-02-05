@@ -192,6 +192,7 @@ public class BeanCreator2<T> {
 	private static final String ARG_beanType = "beanType";
 	private static final String ARG_fallback = "fallback";
 	private static final String ARG_hook = "hook";
+	private static final String ARG_names = "names";
 	private static final String ARG_value = "value";
 
 	/** Default factory method names used for bean instantiation. */
@@ -579,7 +580,7 @@ public class BeanCreator2<T> {
 	 */
 	public BeanCreator2<T> builderClassNames(String... names) {
 		try (var writeLock = lock.write()) {
-			builderClassNames = set(assertArgNoNulls("names", names));
+			builderClassNames = set(assertArgNoNulls(ARG_names, names));
 			reset();
 		}
 		return this;
@@ -615,7 +616,7 @@ public class BeanCreator2<T> {
 	 */
 	public BeanCreator2<T> builderMethodNames(String... names) {
 		try (var writeLock = lock.write()) {
-			builderMethodNames = set(assertArgNoNulls("names", names));
+			builderMethodNames = set(assertArgNoNulls(ARG_names, names));
 			reset();
 		}
 		return this;
@@ -650,7 +651,7 @@ public class BeanCreator2<T> {
 	 */
 	public BeanCreator2<T> buildMethodNames(String... names) {
 		try (var writeLock = lock.write()) {
-			buildMethodNames = set(assertArgNoNulls("names", names));
+			buildMethodNames = set(assertArgNoNulls(ARG_names, names));
 			reset();
 		}
 		return this;
@@ -794,7 +795,7 @@ public class BeanCreator2<T> {
 	 */
 	public BeanCreator2<T> factoryMethodNames(String... names) {
 		try (var writeLock = lock.write()) {
-			factoryMethodNames = set(assertArgNoNulls("names", names));
+			factoryMethodNames = set(assertArgNoNulls(ARG_names, names));
 			reset();
 		}
 		return this;

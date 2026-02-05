@@ -148,6 +148,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_copyFrom = "copyFrom";
 	private static final String ARG_builder = "builder";
+	private static final String ARG_values = "values";
 
 	/**
 	 * Builder class.
@@ -840,7 +841,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * @return This object.
 		 */
 		public Builder namespaces(Namespace...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			namespaces = addAll(namespaces, values);
 			return this;
 		}

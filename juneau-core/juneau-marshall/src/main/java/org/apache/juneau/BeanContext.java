@@ -620,7 +620,7 @@ public class BeanContext extends Context {
 		 * @see #beanDictionary(ClassInfo...)
 		 */
 		public Builder beanDictionary(Collection<ClassInfo> values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			beanDictionary().addAll(0, values);
 			return this;
 		}
@@ -1781,7 +1781,7 @@ public class BeanContext extends Context {
 		 */
 		public Builder dictionaryOn(Class<?> on, Class<?>...values) {
 			assertArgNotNull(ARG_on, on);
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			return annotations(BeanAnnotation.create(on).dictionary(values).build());
 		}
 
@@ -2712,7 +2712,7 @@ public class BeanContext extends Context {
 		 * @see #notBeanClasses(ClassInfo...)
 		 */
 		public Builder notBeanClasses(Class<?>...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			return notBeanClasses(Stream.of(values).map(ReflectionUtils::info).toArray(ClassInfo[]::new));
 		}
 
@@ -2766,7 +2766,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder notBeanClasses(ClassInfo...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			notBeanClasses().addAll(l(values));
 			return this;
 		}
@@ -2781,7 +2781,7 @@ public class BeanContext extends Context {
 		 * @see #notBeanClasses(ClassInfo...)
 		 */
 		public Builder notBeanClasses(Collection<ClassInfo> values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			notBeanClasses().addAll(values);
 			return this;
 		}
@@ -2809,7 +2809,7 @@ public class BeanContext extends Context {
 		 * @see #notBeanPackages(String...)
 		 */
 		public Builder notBeanPackages(Collection<String> values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			notBeanPackages().addAll(values);
 			return this;
 		}
@@ -2852,7 +2852,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder notBeanPackages(String...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			return notBeanPackages(l(values));
 		}
 
@@ -3031,7 +3031,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder sortProperties(Class<?>...on) {
-			assertArgNoNulls("on", on);
+			assertArgNoNulls(ARG_on, on);
 			for (var c : on)
 				annotations(BeanAnnotation.create(c).sort(true).build());
 			return this;
@@ -3171,7 +3171,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder swaps(Class<?>...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			swaps().addAll(0, accumulate(values));
 			return this;
 		}
@@ -3259,7 +3259,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder swaps(Object...values) {
-			assertArgNoNulls("values", values);
+			assertArgNoNulls(ARG_values, values);
 			swaps().addAll(0, accumulate(values));
 			return this;
 		}

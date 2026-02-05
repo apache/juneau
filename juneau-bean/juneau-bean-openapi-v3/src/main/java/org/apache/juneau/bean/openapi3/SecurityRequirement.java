@@ -38,6 +38,7 @@ public class SecurityRequirement extends OpenApiElement {
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_property = "property";
 	private static final String ARG_schemeName = "schemeName";
+	private static final String ARG_scopes = "scopes";
 
 	// Property name constants
 	private static final String PROP_requirements = "requirements";
@@ -68,7 +69,7 @@ public class SecurityRequirement extends OpenApiElement {
 	 */
 	public SecurityRequirement addRequirement(String schemeName, String...scopes) {
 		assertArgNotNull(ARG_schemeName, schemeName);
-		assertArgNoNulls("scopes", scopes);
+		assertArgNoNulls(ARG_scopes, scopes);
 		if (requirements == null)
 			requirements = new LinkedHashMap<>();
 		requirements.put(schemeName, l(scopes));

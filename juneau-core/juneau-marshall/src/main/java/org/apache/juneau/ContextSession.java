@@ -48,6 +48,8 @@ public abstract class ContextSession {
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
 	private static final String ARG_value = "value";
+	private static final String ARG_msg = "msg";
+	private static final String ARG_args = "args";
 	private static final String ARG_type = "type";
 	private static final String ARG_apply = "apply";
 	private static final String ARG_key = "key";
@@ -209,7 +211,7 @@ public abstract class ContextSession {
 	 * 	<br>Cannot contain <jk>null</jk> values.
 	 */
 	public void addWarning(String msg, Object...args) {
-		assertArgsNotNull("msg", msg, "args", args);
+		assertArgsNotNull(ARG_msg, msg, ARG_args, args);
 		if (unmodifiable)
 			return;
 		if (warnings == null)

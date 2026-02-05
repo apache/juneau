@@ -114,6 +114,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	private static final String ARG_parser = "parser";
 	private static final String ARG_uri = "uri";
 	private static final String ARG_value = "value";
+	private static final String ARG_interceptors = "interceptors";
 
 	private class SimpleFormData extends SimplePart {
 		SimpleFormData(NameValuePair x) {
@@ -1236,7 +1237,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException If init method on interceptor threw an exception.
 	 */
 	public RestRequest interceptors(RestCallInterceptor...interceptors) throws RestCallException {
-		assertArgNoNulls("interceptors", interceptors);
+		assertArgNoNulls(ARG_interceptors, interceptors);
 		try {
 			for (var i : interceptors) {
 				this.interceptors.add(i);
