@@ -146,7 +146,7 @@ public class Thrown extends BasicCsvHeader {
 		return new Thrown(l(values).stream().map(Part::new).toList());
 	}
 
-	private final List<Part> value;
+	private final transient List<Part> value;
 
 	/**
 	 * Constructor.

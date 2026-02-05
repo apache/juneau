@@ -95,7 +95,7 @@ public class BasicLongHeader extends BasicHeader {
 	}
 
 	private final Long value;
-	private final Supplier<Long> supplier;
+	private final transient Supplier<Long> supplier;
 
 	/**
 	 * Constructor.

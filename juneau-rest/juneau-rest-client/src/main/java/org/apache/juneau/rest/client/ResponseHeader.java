@@ -63,11 +63,11 @@ public class ResponseHeader extends BasicHeader {
 		public String getValue() { return null; }
 	};
 
-	private final HeaderElement[] elements;
-	private final RestRequest request;
-	private final RestResponse response;
-	private HttpPartParserSession parser;
-	private HttpPartSchema schema;
+	private final transient HeaderElement[] elements;
+	private final transient RestRequest request;
+	private final transient RestResponse response;
+	private transient HttpPartParserSession parser;
+	private transient HttpPartSchema schema;
 
 	/**
 	 * Constructor.

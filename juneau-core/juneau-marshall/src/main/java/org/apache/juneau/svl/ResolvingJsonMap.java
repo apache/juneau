@@ -44,7 +44,7 @@ import org.apache.juneau.collections.*;
 @SuppressWarnings({ "serial" })
 public class ResolvingJsonMap extends JsonMap {
 
-	private final VarResolverSession varResolver;
+	private final transient VarResolverSession varResolver;
 
 	/**
 	 * Constructor.

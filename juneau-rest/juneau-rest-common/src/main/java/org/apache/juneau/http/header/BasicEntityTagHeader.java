@@ -88,8 +88,8 @@ public class BasicEntityTagHeader extends BasicHeader {
 		return value == null ? null : new BasicEntityTagHeader(name, value);
 	}
 
-	private final EntityTag value;
-	private final Supplier<EntityTag> supplier;
+	private final transient EntityTag value;
+	private final transient Supplier<EntityTag> supplier;
 
 	/**
 	 * Constructor.

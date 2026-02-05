@@ -129,7 +129,7 @@ public class RetryAfter extends BasicDateHeader {
 	}
 
 	private final Integer value;
-	private final Supplier<?> supplier;
+	private final transient Supplier<?> supplier;
 
 	/**
 	 * Constructor.

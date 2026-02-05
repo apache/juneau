@@ -120,11 +120,11 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 
 	private static final long serialVersionUID = 1L;
 
-	private final RestRequest req;
+	private final transient RestRequest req;
 	private boolean caseSensitive;
-	private final VarResolverSession vs;
+	private final transient VarResolverSession vs;
 
-	private HttpPartParserSession parser;
+	private transient HttpPartParserSession parser;
 
 	/**
 	 * Constructor.

@@ -119,7 +119,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 		return x;
 	}
 
-	private VarResolver varResolver;
+	private transient VarResolver varResolver;
 	boolean caseInsensitive;
 
 	/**

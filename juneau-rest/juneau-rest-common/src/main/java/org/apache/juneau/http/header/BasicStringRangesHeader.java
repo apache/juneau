@@ -89,8 +89,8 @@ public class BasicStringRangesHeader extends BasicHeader {
 	}
 
 	private final String stringValue;
-	private final StringRanges value;
-	private final Supplier<StringRanges> supplier;
+	private final transient StringRanges value;
+	private final transient Supplier<StringRanges> supplier;
 
 	/**
 	 * Constructor.

@@ -45,7 +45,7 @@ public abstract class SpringRestServlet extends RestServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Autowired
-	private Optional<ApplicationContext> appContext;
+	private transient Optional<ApplicationContext> appContext;
 
 	/**
 	 * Hook into Spring bean injection framework.

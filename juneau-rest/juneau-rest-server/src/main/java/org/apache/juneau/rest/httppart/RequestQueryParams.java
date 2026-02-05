@@ -131,10 +131,10 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 
 	private static final long serialVersionUID = 1L;
 
-	private final RestRequest req;
+	private final transient RestRequest req;
 	private boolean caseSensitive;
-	private final VarResolverSession vs;
-	private HttpPartParserSession parser;
+	private final transient VarResolverSession vs;
+	private transient HttpPartParserSession parser;
 
 	/**
 	 * Constructor.

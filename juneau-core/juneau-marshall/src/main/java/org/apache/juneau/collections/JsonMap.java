@@ -298,7 +298,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	}
 
 	private transient BeanSession session;
-	private Map<String,Object> inner;
+	private transient Map<String,Object> inner;
 
 	private transient ObjectRest objectRest;
 

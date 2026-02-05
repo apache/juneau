@@ -64,7 +64,7 @@ import org.apache.juneau.rest.widget.*;
 public class JsonSchemaResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
-	private JsonSchema schema;     // The schema document
+	private transient JsonSchema schema;     // The schema document
 
 	/**
 	 * [HTTP GET /dto/jsonSchema]

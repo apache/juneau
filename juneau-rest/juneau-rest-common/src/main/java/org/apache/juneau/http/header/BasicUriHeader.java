@@ -88,7 +88,7 @@ public class BasicUriHeader extends BasicHeader {
 	}
 
 	private final URI value;
-	private final Supplier<URI> supplier;
+	private final transient Supplier<URI> supplier;
 
 	/**
 	 * Constructor.

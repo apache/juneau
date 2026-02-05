@@ -133,7 +133,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 		return x;
 	}
 
-	private VarResolver varResolver;
+	private transient VarResolver varResolver;
 	boolean caseSensitive;
 
 	/**

@@ -72,8 +72,8 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 	}
 
 	private final String stringValue;
-	private final MediaRanges value;
-	private final Supplier<MediaRanges> supplier;
+	private final transient MediaRanges value;
+	private final transient Supplier<MediaRanges> supplier;
 
 	/**
 	 * Constructor.

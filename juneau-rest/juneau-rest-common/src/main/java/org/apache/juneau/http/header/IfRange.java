@@ -135,9 +135,9 @@ public class IfRange extends BasicDateHeader {
 		return s.startsWith("\"") || s.startsWith("W/");
 	}
 
-	private final EntityTag value;
+	private final transient EntityTag value;
 
-	private final Supplier<?> supplier;
+	private final transient Supplier<?> supplier;
 
 	/**
 	 * Constructor.

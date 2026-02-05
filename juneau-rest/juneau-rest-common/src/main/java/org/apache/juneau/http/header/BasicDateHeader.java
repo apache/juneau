@@ -92,7 +92,7 @@ public class BasicDateHeader extends BasicHeader {
 	}
 
 	private final ZonedDateTime value;
-	private final Supplier<ZonedDateTime> supplier;
+	private final transient Supplier<ZonedDateTime> supplier;
 
 	/**
 	 * Constructor.

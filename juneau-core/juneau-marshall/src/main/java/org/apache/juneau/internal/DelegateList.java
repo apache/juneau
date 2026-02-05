@@ -33,7 +33,7 @@ import org.apache.juneau.collections.*;
 public class DelegateList<T extends Collection<?>> extends JsonList implements Delegate<T> {
 	private static final long serialVersionUID = 1L;
 
-	private final ClassMeta<T> classMeta;
+	private final transient ClassMeta<T> classMeta;
 
 	/**
 	 * Constructor.

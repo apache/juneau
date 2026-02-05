@@ -80,7 +80,7 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 		return create(vrs).add(annotations);
 	}
 
-	private final VarResolverSession vrs;
+	private final transient VarResolverSession vrs;
 
 	private AnnotationWorkList(VarResolverSession vrs) {
 		this.vrs = assertArgNotNull(ARG_vrs, vrs);

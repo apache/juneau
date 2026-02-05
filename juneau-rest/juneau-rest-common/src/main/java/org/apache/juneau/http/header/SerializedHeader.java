@@ -115,10 +115,10 @@ public class SerializedHeader extends BasicHeader {
 		return new SerializedHeader(name, value, serializer, schema, skipIfEmpty);
 	}
 
-	private final Object value;
-	private final Supplier<Object> supplier;
-	private HttpPartSerializerSession serializer;
-	private HttpPartSchema schema = HttpPartSchema.DEFAULT;
+	private final transient Object value;
+	private final transient Supplier<Object> supplier;
+	private transient HttpPartSerializerSession serializer;
+	private transient HttpPartSchema schema = HttpPartSchema.DEFAULT;
 	private boolean skipIfEmpty;
 
 	/**

@@ -91,7 +91,7 @@ public class BasicCsvHeader extends BasicHeader {
 	}
 
 	private final String[] value;
-	private final Supplier<String[]> supplier;
+	private final transient Supplier<String[]> supplier;
 
 	/**
 	 * Constructor.

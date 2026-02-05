@@ -93,7 +93,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	}
 
 	private final Boolean value;
-	private final Supplier<Boolean> supplier;
+	private final transient Supplier<Boolean> supplier;
 
 	/**
 	 * Constructor.

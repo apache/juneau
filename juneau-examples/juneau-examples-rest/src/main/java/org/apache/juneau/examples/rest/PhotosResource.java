@@ -97,7 +97,7 @@ public class PhotosResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	// Our cache of photos
-	private Map<Integer,Photo> photos = new TreeMap<>();
+	private transient Map<Integer,Photo> photos = new TreeMap<>();
 
 	/**
 	 * [HTTP PUT /photos/{id}]

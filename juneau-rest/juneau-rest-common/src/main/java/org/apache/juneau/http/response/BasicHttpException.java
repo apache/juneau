@@ -64,8 +64,8 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	private static final long serialVersionUID = 1L;
 
 	HeaderList headers = HeaderList.create();
-	BasicStatusLine statusLine = new BasicStatusLine();
-	HttpEntity content;
+	transient BasicStatusLine statusLine = new BasicStatusLine();
+	transient HttpEntity content;
 
 	/**
 	 * Constructor.

@@ -116,10 +116,10 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 
 	private static final long serialVersionUID = 1L;
 
-	private final RestRequest req;
+	private final transient RestRequest req;
 	private boolean caseSensitive;
-	private HttpPartParserSession parser;
-	private final VarResolverSession vs;
+	private transient HttpPartParserSession parser;
+	private final transient VarResolverSession vs;
 
 	/**
 	 * Constructor.

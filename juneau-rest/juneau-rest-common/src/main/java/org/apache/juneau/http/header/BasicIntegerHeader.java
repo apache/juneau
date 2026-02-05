@@ -94,7 +94,7 @@ public class BasicIntegerHeader extends BasicHeader {
 	}
 
 	private final Integer value;
-	private final Supplier<Integer> supplier;
+	private final transient Supplier<Integer> supplier;
 
 	/**
 	 * Constructor.

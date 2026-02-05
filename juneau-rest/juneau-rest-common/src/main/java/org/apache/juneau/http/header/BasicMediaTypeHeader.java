@@ -73,8 +73,8 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 		return value == null ? null : new BasicMediaTypeHeader(name, value);
 	}
 
-	private final MediaType value;
-	private final Supplier<MediaType> supplier;
+	private final transient MediaType value;
+	private final transient Supplier<MediaType> supplier;
 
 	/**
 	 * Constructor.

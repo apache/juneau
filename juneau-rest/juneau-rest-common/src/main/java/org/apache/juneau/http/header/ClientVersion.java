@@ -94,8 +94,8 @@ public class ClientVersion extends BasicStringHeader {
 		return value == null ? null : new ClientVersion(value);
 	}
 
-	private final Version value;
-	private final Supplier<Version> supplier;
+	private final transient Version value;
+	private final transient Supplier<Version> supplier;
 
 	/**
 	 * Constructor.

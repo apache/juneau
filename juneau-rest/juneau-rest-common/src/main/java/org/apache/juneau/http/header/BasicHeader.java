@@ -87,10 +87,10 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	private final String name;
 	private final String stringValue;
 
-	private final Object value;
-	private final Supplier<Object> supplier;
+	private final transient Object value;
+	private final transient Supplier<Object> supplier;
 
-	private HeaderElement[] elements;
+	private transient HeaderElement[] elements;
 
 	/**
 	 * Constructor.

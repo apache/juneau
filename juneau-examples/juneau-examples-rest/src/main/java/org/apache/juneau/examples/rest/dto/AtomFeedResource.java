@@ -72,7 +72,7 @@ public class AtomFeedResource extends BasicRestServlet {
 	private static final String EXAMPLE_URL_FOO_ORG = "http://foo.org/";
 	private static final String EXAMPLE_URL_WWW_FOO_ORG = "http://www.foo.org/";
 
-	private Feed feed;     // The root resource object
+	private transient Feed feed;     // The root resource object
 
 	/**
 	 * [HTTP GET /dto/atom]

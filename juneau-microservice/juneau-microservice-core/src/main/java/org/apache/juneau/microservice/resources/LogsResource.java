@@ -155,7 +155,7 @@ public class LogsResource extends BasicRestServlet {
 
 	private File logDir;
 
-	private LogEntryFormatter leFormatter;
+	private transient LogEntryFormatter leFormatter;
 
 	boolean allowDeletes;
 
