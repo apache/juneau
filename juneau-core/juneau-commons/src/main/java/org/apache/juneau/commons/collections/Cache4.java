@@ -249,6 +249,7 @@ public class Cache4<K1,K2,K3,K4,V> {
 	// If threadLocal is true, this is null and threadLocalMap is used instead
 	private final java.util.Map<Tuple4<K1,K2,K3,K4>,V> map;
 
+	@SuppressWarnings("java:S5164") // Cleanup method provided: cleanup()
 	private final ThreadLocal<java.util.Map<Tuple4<K1,K2,K3,K4>,V>> threadLocalMap;
 
 	private final boolean isThreadLocal;
@@ -296,6 +297,20 @@ public class Cache4<K1,K2,K3,K4,V> {
 	 */
 	public void clear() {
 		getMap().clear();
+	}
+
+	/**
+	 * Cleans up thread-local storage for the current thread.
+	 *
+	 * <p>
+	 * This method should be called when a thread is finished using this cache to prevent memory leaks
+	 * in thread pool environments where threads are reused.
+	 * Only has an effect if this cache was created with thread-local mode enabled.
+	 */
+	public void cleanup() {
+		if (isThreadLocal && threadLocalMap != null) {
+			threadLocalMap.remove();
+		}
 	}
 
 	/**

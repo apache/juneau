@@ -1267,5 +1267,54 @@ class Settings_Test extends TestBase {
 		assertTrue(optional2.isPresent());
 		assertEquals("value1", optional2.get()); // Still value1 since system property hasn't changed
 	}
+
+	//====================================================================================================
+	// cleanup()
+	//====================================================================================================
+	@Test
+	void u01_cleanup() {
+		// Set a local value to ensure ThreadLocal has a value
+		Settings.get().setLocal(TEST_PROP, "local-value");
+		var result = Settings.get().get(TEST_PROP);
+		assertTrue(result.isPresent());
+		assertEquals("local-value", result.get());
+
+		// Cleanup should remove the ThreadLocal value
+		Settings.get().cleanup();
+
+		// After cleanup, the local value should be gone (falls back to system property if set)
+		// If system property is not set, should return empty
+		var resultAfterCleanup = Settings.get().get(TEST_PROP);
+		// The value may still be present if there's a system property, but the local override should be gone
+		// We can verify cleanup was called by ensuring it doesn't throw
+		assertNotNull(resultAfterCleanup);
+
+		// Call cleanup again to ensure it's safe to call multiple times
+		Settings.get().cleanup();
+		// Should not throw
+	}
+
+	@Test
+	void u02_cleanup_removesLocalOverride() {
+		// Set both system property and local override
+		System.setProperty(TEST_PROP, "system-value");
+		Settings.get().setLocal(TEST_PROP, "local-value");
+
+		// Verify local override takes precedence
+		var result = Settings.get().get(TEST_PROP);
+		assertTrue(result.isPresent());
+		assertEquals("local-value", result.get());
+
+		// Cleanup should remove local override
+		Settings.get().cleanup();
+
+		// After cleanup, should fall back to system property
+		var resultAfterCleanup = Settings.get().get(TEST_PROP);
+		assertTrue(resultAfterCleanup.isPresent());
+		assertEquals("system-value", resultAfterCleanup.get());
+
+		// Clean up
+		System.clearProperty(TEST_PROP);
+	}
 }
 

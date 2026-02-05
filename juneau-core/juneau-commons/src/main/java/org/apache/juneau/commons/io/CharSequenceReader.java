@@ -175,7 +175,7 @@ public class CharSequenceReader extends BufferedReader {
 	public long skip(long ns) {
 		if (next >= length)
 			return 0;
-		long n = Math.min(length - next, ns);
+		long n = Math.min((long) length - next, ns);
 		n = Math.max(-next, n);
 		next += n;
 		return n;

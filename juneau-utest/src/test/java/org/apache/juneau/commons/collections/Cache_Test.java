@@ -1216,5 +1216,60 @@ class Cache_Test extends TestBase {
 		cache.get("five", () -> 5);
 		assertSize(1, cache);
 	}
+
+	//====================================================================================================
+	// cleanup() - Thread-local cleanup
+	//====================================================================================================
+
+	@Test void a64_cleanup_threadLocal() {
+		var cache = Cache.of(String.class, String.class)
+			.threadLocal()
+			.build();
+
+		// Use the cache to populate ThreadLocal
+		cache.get("key1", () -> "value1");
+		cache.get("key2", () -> "value2");
+		assertSize(2, cache);
+
+		// Cleanup should remove ThreadLocal values
+		cache.cleanup();
+
+		// After cleanup, cache should be empty (ThreadLocal was cleared)
+		assertEmpty(cache);
+
+		// Call cleanup again to ensure it's safe to call multiple times
+		cache.cleanup();
+		// Should not throw
+	}
+
+	@Test void a65_cleanup_nonThreadLocal_noEffect() {
+		var cache = Cache.of(String.class, String.class)
+			.build(); // Not thread-local
+
+		cache.get("key1", () -> "value1");
+		cache.get("key2", () -> "value2");
+		assertSize(2, cache);
+
+		// Cleanup on non-thread-local cache should not affect the cache
+		cache.cleanup();
+
+		// Cache should still have values (cleanup only affects thread-local caches)
+		assertSize(2, cache);
+	}
+
+	@Test void a66_cleanup_threadLocal_weakMode() {
+		var cache = Cache.of(String.class, String.class)
+			.threadLocal()
+			.cacheMode(WEAK)
+			.build();
+
+		cache.get("key1", () -> "value1");
+		cache.get("key2", () -> "value2");
+		assertSize(2, cache);
+
+		// Cleanup should work with weak mode too
+		cache.cleanup();
+		assertEmpty(cache);
+	}
 }
 

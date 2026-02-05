@@ -323,6 +323,7 @@ public class Settings {
 	}
 
 	private final ResettableSupplier<SettingStore> globalStore;
+	@SuppressWarnings("java:S5164") // Cleanup method provided: cleanup()
 	private final ThreadLocal<SettingStore> localStore;
 	private final List<SettingSource> sources;
 	private final Map<Class<?>,Function<String,?>> toTypeFunctions;
@@ -523,6 +524,19 @@ public class Settings {
 		assertState(nn(localStore.get()), MSG_localDisabled);
 		localStore.get().clear();
 		return this;
+	}
+
+	/**
+	 * Cleans up thread-local storage for the current thread.
+	 *
+	 * <p>
+	 * This method should be called when a thread is finished using this Settings instance to prevent memory leaks
+	 * in thread pool environments where threads are reused.
+	 */
+	public void cleanup() {
+		if (localStore != null) {
+			localStore.remove();
+		}
 	}
 
 	/**

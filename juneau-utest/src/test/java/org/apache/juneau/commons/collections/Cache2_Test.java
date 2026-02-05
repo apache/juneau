@@ -906,5 +906,49 @@ class Cache2_Test extends TestBase {
 		x.get("k4", 4);
 		assertSize(1, x);
 	}
+
+	//====================================================================================================
+	// cleanup() - Thread-local cleanup
+	//====================================================================================================
+
+	@Test
+	void q01_cleanup_threadLocal() {
+		var x = Cache2.of(String.class, Integer.class, String.class)
+			.threadLocal()
+			.supplier((k1, k2) -> k1 + ":" + k2)
+			.build();
+
+		// Use the cache to populate ThreadLocal
+		x.get("key1", 1);
+		x.get("key2", 2);
+		assertSize(2, x);
+
+		// Cleanup should remove ThreadLocal values
+		x.cleanup();
+
+		// After cleanup, cache should be empty (ThreadLocal was cleared)
+		assertEmpty(x);
+
+		// Call cleanup again to ensure it's safe to call multiple times
+		x.cleanup();
+		// Should not throw
+	}
+
+	@Test
+	void q02_cleanup_nonThreadLocal_noEffect() {
+		var x = Cache2.of(String.class, Integer.class, String.class)
+			.supplier((k1, k2) -> k1 + ":" + k2)
+			.build(); // Not thread-local
+
+		x.get("key1", 1);
+		x.get("key2", 2);
+		assertSize(2, x);
+
+		// Cleanup on non-thread-local cache should not affect the cache
+		x.cleanup();
+
+		// Cache should still have values (cleanup only affects thread-local caches)
+		assertSize(2, x);
+	}
 }
 

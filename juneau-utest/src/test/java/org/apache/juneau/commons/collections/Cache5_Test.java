@@ -604,5 +604,49 @@ class Cache5_Test extends TestBase {
 		x.get("es", "ES", "south", "informal", 4);
 		assertSize(1, x);
 	}
+
+	//====================================================================================================
+	// cleanup() - Thread-local cleanup
+	//====================================================================================================
+
+	@Test
+	void q01_cleanup_threadLocal() {
+		var x = Cache5.of(String.class, String.class, String.class, String.class, Integer.class, String.class)
+			.threadLocal()
+			.supplier((k1, k2, k3, k4, k5) -> k1 + ":" + k2 + ":" + k3 + ":" + k4 + ":" + k5)
+			.build();
+
+		// Use the cache to populate ThreadLocal
+		x.get("key1", "key2", "key3", "key4", 1);
+		x.get("key5", "key6", "key7", "key8", 2);
+		assertSize(2, x);
+
+		// Cleanup should remove ThreadLocal values
+		x.cleanup();
+
+		// After cleanup, cache should be empty (ThreadLocal was cleared)
+		assertEmpty(x);
+
+		// Call cleanup again to ensure it's safe to call multiple times
+		x.cleanup();
+		// Should not throw
+	}
+
+	@Test
+	void q02_cleanup_nonThreadLocal_noEffect() {
+		var x = Cache5.of(String.class, String.class, String.class, String.class, Integer.class, String.class)
+			.supplier((k1, k2, k3, k4, k5) -> k1 + ":" + k2 + ":" + k3 + ":" + k4 + ":" + k5)
+			.build(); // Not thread-local
+
+		x.get("key1", "key2", "key3", "key4", 1);
+		x.get("key5", "key6", "key7", "key8", 2);
+		assertSize(2, x);
+
+		// Cleanup on non-thread-local cache should not affect the cache
+		x.cleanup();
+
+		// Cache should still have values (cleanup only affects thread-local caches)
+		assertSize(2, x);
+	}
 }
 

@@ -454,6 +454,7 @@ public class Cache<K,V> {
 	// Internal map with Tuple1 keys for content-based equality (especially for arrays)
 	// If threadLocal is true, this is null and threadLocalMap is used instead
 	private final Map<Tuple1<K>,V> map;
+	@SuppressWarnings("java:S5164") // Cleanup method provided: cleanup()
 	private final ThreadLocal<Map<Tuple1<K>,V>> threadLocalMap;
 
 	private final boolean isThreadLocal;
@@ -468,6 +469,7 @@ public class Cache<K,V> {
 	 */
 	private final Map<K,Tuple1<K>> wrapperCache;
 
+	@SuppressWarnings("java:S5164") // Cleanup method provided: cleanup()
 	private final ThreadLocal<Map<K,Tuple1<K>>> threadLocalWrapperCache;
 
 	private final int maxSize;
@@ -523,6 +525,25 @@ public class Cache<K,V> {
 	public void clear() {
 		getMap().clear();
 		getWrapperCache().clear(); // Clean up wrapper cache
+	}
+
+	/**
+	 * Cleans up thread-local storage for the current thread.
+	 *
+	 * <p>
+	 * This method should be called when a thread is finished using this cache to prevent memory leaks
+	 * in thread pool environments where threads are reused.
+	 * Only has an effect if this cache was created with thread-local mode enabled.
+	 */
+	public void cleanup() {
+		if (isThreadLocal) {
+			if (threadLocalMap != null) {
+				threadLocalMap.remove();
+			}
+			if (threadLocalWrapperCache != null) {
+				threadLocalWrapperCache.remove();
+			}
+		}
 	}
 
 	/**

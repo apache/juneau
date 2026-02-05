@@ -47,7 +47,9 @@ public class IoUtils {
 
 	private static final int BUFF_SIZE = 1024;
 
+	@SuppressWarnings("java:S5164") // Cleanup method provided: cleanupThreadLocals()
 	private static final ThreadLocal<byte[]> BYTE_BUFFER_CACHE = (Boolean.getBoolean("juneau.disableIoBufferReuse") ? null : new ThreadLocal<>());
+	@SuppressWarnings("java:S5164") // Cleanup method provided: cleanupThreadLocals()
 	private static final ThreadLocal<char[]> CHAR_BUFFER_CACHE = (Boolean.getBoolean("juneau.disableIoBufferReuse") ? null : new ThreadLocal<>());
 	static final AtomicInteger BYTE_BUFFER_CACHE_HITS = new AtomicInteger();
 
@@ -57,6 +59,22 @@ public class IoUtils {
 	static {
 		shutdownMessage(() -> "Byte buffer cache:  hits=" + BYTE_BUFFER_CACHE_HITS.get() + ", misses=" + BYTE_BUFFER_CACHE_MISSES);
 		shutdownMessage(() -> "Char buffer cache:  hits=" + CHAR_BUFFER_CACHE_HITS.get() + ", misses=" + CHAR_BUFFER_CACHE_MISSES);
+	}
+
+	/**
+	 * Cleans up thread-local buffer caches for the current thread.
+	 *
+	 * <p>
+	 * This method should be called when a thread is finished using the buffer caches to prevent memory leaks
+	 * in thread pool environments where threads are reused.
+	 */
+	public static void cleanupThreadLocals() {
+		if (BYTE_BUFFER_CACHE != null) {
+			BYTE_BUFFER_CACHE.remove();
+		}
+		if (CHAR_BUFFER_CACHE != null) {
+			CHAR_BUFFER_CACHE.remove();
+		}
 	}
 
 	/** Reusable empty reader. */

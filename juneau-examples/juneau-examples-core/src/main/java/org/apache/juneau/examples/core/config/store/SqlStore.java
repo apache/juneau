@@ -167,7 +167,7 @@ public class SqlStore extends ConfigStore {
 		};
 
 		this.watcher = new Timer("MyTimer");
-		watcher.scheduleAtFixedRate(timerTask, 0, pollInterval * 1000);
+		watcher.scheduleAtFixedRate(timerTask, 0, (long) pollInterval * 1000);
 	}
 
 	@Override /* Closeable */

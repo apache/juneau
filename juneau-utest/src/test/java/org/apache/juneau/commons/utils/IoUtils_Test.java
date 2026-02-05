@@ -962,6 +962,22 @@ class IoUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
+	// cleanupThreadLocals()
+	//====================================================================================================
+	@Test
+	void a046_cleanupThreadLocals() {
+		// Test that cleanupThreadLocals() can be called without throwing
+		// Note: We can't easily verify the ThreadLocal was cleared without accessing private fields,
+		// but we can verify the method executes successfully
+		cleanupThreadLocals();
+		// Should not throw
+
+		// Call again to ensure it's safe to call multiple times
+		cleanupThreadLocals();
+		// Should not throw
+	}
+
+	//====================================================================================================
 	// Test helper classes
 	//====================================================================================================
 	public static class TestReader extends StringReader {
