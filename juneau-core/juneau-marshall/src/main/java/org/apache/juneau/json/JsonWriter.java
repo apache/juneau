@@ -79,6 +79,7 @@ public class JsonWriter extends SerializerWriter {
 	 * @param trimStrings If <jk>true</jk>, strings will be trimmed before being serialized.
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
+	@SuppressWarnings("java:S107") // Constructor requires 8 parameters for JSON writer configuration
 	protected JsonWriter(Writer out, boolean useWhitespace, int maxIndent, boolean escapeSolidus, char quoteChar, boolean simpleAttrs, boolean trimStrings, UriResolver uriResolver) {
 		super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver);
 		this.simpleAttrs = simpleAttrs;

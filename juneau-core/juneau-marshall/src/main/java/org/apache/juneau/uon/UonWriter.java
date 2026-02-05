@@ -72,6 +72,7 @@ public class UonWriter extends SerializerWriter {
 	 * @param quoteChar The quote character to use.  If <c>0</c>, defaults to <js>'\''</js>.
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
+	@SuppressWarnings("java:S107") // Constructor requires 9 parameters for UON writer configuration
 	protected UonWriter(UonSerializerSession session, Writer out, boolean useWhitespace, int maxIndent, boolean encodeChars, boolean trimStrings, boolean plainTextParams, char quoteChar,
 		UriResolver uriResolver) {
 		super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver);
