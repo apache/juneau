@@ -56,6 +56,7 @@ public abstract class HtmlElement {
 	 * @param value Space-separated CSS class names (e.g., <js>"btn btn-primary"</js>).
 	 * @return This object.
 	 */
+	@SuppressWarnings("java:S100") // Method name uses underscore prefix to match HTML attribute name
 	public HtmlElement _class(String value) {
 		attr("class", value);
 		return this;

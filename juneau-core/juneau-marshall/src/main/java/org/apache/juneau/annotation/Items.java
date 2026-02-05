@@ -75,6 +75,7 @@ import org.apache.juneau.oapi.*;
  */
 @Documented
 @Retention(RUNTIME)
+@SuppressWarnings("java:S100") // Annotation methods use underscore suffix to avoid Java keyword conflicts (e.g., default_, enum_)
 public @interface Items {
 
 	/**

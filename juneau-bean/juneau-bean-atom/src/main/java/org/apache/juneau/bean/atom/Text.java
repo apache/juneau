@@ -91,6 +91,7 @@ import org.apache.juneau.xml.annotation.*;
 public class Text extends Common {
 
 	private String type;
+	@SuppressWarnings("java:S1845") // Field name intentionally matches class name
 	private String text;
 
 	/** Bean constructor. */

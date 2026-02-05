@@ -48,7 +48,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='jc'>{@link java.util.logging.LogRecord}
  * </ul>
  */
-@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., KEY_date)
+@SuppressWarnings({ "java:S115", "java:S100" }) // Constants use UPPER_snakeCase convention; class name intentionally matches java.util.logging.LogRecord
 public class LogRecord extends java.util.logging.LogRecord {
 
 	private static final long serialVersionUID = 1L;

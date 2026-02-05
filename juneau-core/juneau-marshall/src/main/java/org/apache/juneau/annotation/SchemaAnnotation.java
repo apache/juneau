@@ -233,6 +233,7 @@ public class SchemaAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
+		@SuppressWarnings("java:S100") // Method name uses underscore suffix to match JSON Schema keyword
 		public Builder const_(String...value) {
 			const_ = value;
 			return this;
@@ -244,6 +245,7 @@ public class SchemaAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
+		@SuppressWarnings("java:S100") // Method name uses underscore suffix to avoid Java keyword conflict
 		public Builder default_(String...value) {
 			default_ = value;
 			return this;
@@ -255,6 +257,7 @@ public class SchemaAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
+		@SuppressWarnings("java:S100") // Method name uses underscore suffix to avoid Java keyword conflict
 		public Builder else_(String...value) {
 			else_ = value;
 			return this;
@@ -266,6 +269,7 @@ public class SchemaAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
+		@SuppressWarnings("java:S100") // Method name uses underscore suffix to avoid Java keyword conflict
 		public Builder enum_(String...value) {
 			enum_ = value;
 			return this;
@@ -277,6 +281,7 @@ public class SchemaAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
+		@SuppressWarnings("java:S100") // Method name uses underscore suffix to avoid Java keyword conflict
 		public Builder if_(String...value) {
 			if_ = value;
 			return this;
@@ -288,6 +293,7 @@ public class SchemaAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
+		@SuppressWarnings("java:S100") // Method name uses underscore suffix to avoid Java keyword conflict
 		public Builder then_(String...value) {
 			then_ = value;
 			return this;
@@ -299,6 +305,7 @@ public class SchemaAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
+		@SuppressWarnings("java:S100") // Method name uses $ prefix to match JSON Schema keyword
 		public Builder $comment(String...value) {
 			this.$comment = value;
 			return this;
@@ -310,6 +317,7 @@ public class SchemaAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
+		@SuppressWarnings("java:S100") // Method name uses $ prefix to match JSON Schema keyword
 		public Builder $defs(String...value) {
 			this.$defs = value;
 			return this;
@@ -321,6 +329,7 @@ public class SchemaAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
+		@SuppressWarnings("java:S100") // Method name uses $ prefix to match JSON Schema keyword
 		public Builder $id(String value) {
 			this.$id = value;
 			return this;
@@ -332,6 +341,7 @@ public class SchemaAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
+		@SuppressWarnings("java:S100") // Method name uses $ prefix to match JSON Schema keyword
 		public Builder $ref(String value) {
 			this.$ref = value;
 			return this;

@@ -92,6 +92,7 @@ public class ItemsAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
+	@SuppressWarnings("java:S100") // Method name uses underscore suffix to avoid Java keyword conflict
 	public Builder default_(String...value) {
 		default_ = value;
 		return this;
@@ -103,6 +104,7 @@ public class ItemsAnnotation {
 	 * @param value The new value for this property.
 	 * @return This object.
 	 */
+	@SuppressWarnings("java:S100") // Method name uses underscore suffix to avoid Java keyword conflict
 	public Builder enum_(String...value) {
 		enum_ = value;
 		return this;
@@ -114,6 +116,7 @@ public class ItemsAnnotation {
 	 * @param value The new value for this property.
 	 * @return This object.
 	 */
+	@SuppressWarnings("java:S100") // Method name uses $ prefix to match JSON Schema keyword
 	public Builder $ref(String value) {
 		$ref = value;
 		return this;

@@ -121,6 +121,7 @@ public class Items extends SwaggerElement {
 	private Boolean exclusiveMaximum;
 	private Boolean exclusiveMinimum;
 	private Boolean uniqueItems;
+	@SuppressWarnings("java:S1845") // Field name intentionally matches class name
 	private Items items;
 	private Object default_;
 	private Set<Object> enum_ = new LinkedHashSet<>();

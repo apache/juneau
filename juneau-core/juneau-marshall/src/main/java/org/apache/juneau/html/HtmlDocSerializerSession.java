@@ -321,6 +321,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	Navigation links to add to the HTML page.
 	 */
+	@SuppressWarnings("java:S1845") // Method name intentionally differs only by case from getNavLinks
 	protected final String[] getNavlinks() { return ctx.navlinks; }
 
 	/**

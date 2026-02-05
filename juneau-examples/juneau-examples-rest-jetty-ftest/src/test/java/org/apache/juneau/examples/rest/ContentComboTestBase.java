@@ -40,6 +40,7 @@ import org.apache.juneau.xml.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
+@SuppressWarnings("java:S3577") // Class name ends with "TestBase" to indicate it's a base class, not a test class itself
 public class ContentComboTestBase extends RestTestcase {
 
 	// Reusable RestClients keyed by label that live for the duration of a testcase class.

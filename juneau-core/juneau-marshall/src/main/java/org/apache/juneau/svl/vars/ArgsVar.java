@@ -73,6 +73,7 @@ public class ArgsVar extends DefaultingVar {
 		ARGS = args;
 	}
 
+	@SuppressWarnings("java:S1845") // Field name intentionally differs only by case from static field ARGS
 	private final Args args;
 
 	/**

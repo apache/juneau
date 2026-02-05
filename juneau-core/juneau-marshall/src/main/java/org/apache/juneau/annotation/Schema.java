@@ -98,6 +98,7 @@ import org.apache.juneau.oapi.*;
 @Retention(RUNTIME)
 @Repeatable(SchemaAnnotation.Array.class)
 @ContextApply(SchemaAnnotation.Apply.class)
+@SuppressWarnings("java:S100") // Annotation methods use underscore suffix or $ prefix to match JSON Schema keywords (e.g., default_, enum_, $ref)
 public @interface Schema {
 
 	/**

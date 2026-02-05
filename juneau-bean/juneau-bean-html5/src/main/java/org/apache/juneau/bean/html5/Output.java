@@ -107,6 +107,7 @@ public class Output extends HtmlElementMixed {
 	 * @param value The IDs of the form controls that contribute to this output.
 	 * @return This object.
 	 */
+	@SuppressWarnings("java:S100") // Method name uses underscore prefix to avoid Java keyword conflict
 	public Output _for(String value) {
 		attr("for", value);
 		return this;

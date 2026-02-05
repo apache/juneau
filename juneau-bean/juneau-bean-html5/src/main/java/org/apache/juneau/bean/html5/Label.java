@@ -92,6 +92,7 @@ public class Label extends HtmlElementMixed {
 	 * @param value The ID of the form control to associate with this label.
 	 * @return This object.
 	 */
+	@SuppressWarnings("java:S100") // Method name uses underscore prefix to avoid Java keyword conflict
 	public Label _for(String value) {
 		attr("for", value);
 		return this;

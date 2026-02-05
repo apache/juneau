@@ -1757,6 +1757,7 @@ public class CollectionUtils {
 	 * @return A new map builder.
 	 * @see Maps
 	 */
+	@SuppressWarnings("java:S100") // Method name uses underscore convention
 	public static Maps<String,Object> mapb_so() {
 		return Maps.create(String.class, Object.class).ordered();
 	}

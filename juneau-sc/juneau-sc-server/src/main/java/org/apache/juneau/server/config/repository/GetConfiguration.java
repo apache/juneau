@@ -32,6 +32,7 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 
 	private Map<String,ConfigItem> configs = new HashMap<>();
 
+	@SuppressWarnings("java:S1845") // Field name intentionally differs only by case from static field PROJECT
 	private String project;
 	private String branch;
 

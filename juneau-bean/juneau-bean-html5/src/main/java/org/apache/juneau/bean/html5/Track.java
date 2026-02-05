@@ -130,6 +130,7 @@ public class Track extends HtmlElementVoid {
 	 * @param value Whether this track should be enabled by default.
 	 * @return This object.
 	 */
+	@SuppressWarnings("java:S100") // Method name uses underscore suffix to avoid Java keyword conflict
 	public Track default_(String value) {
 		attr("default", value);
 		return this;

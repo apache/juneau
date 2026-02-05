@@ -1139,6 +1139,7 @@ public class WriterSerializer extends Serializer {
 	 * @return
 	 * 	The character used for quoting attributes and values.
 	 */
+	@SuppressWarnings("java:S1845") // Method name intentionally matches field name
 	protected Character quoteChar() {
 		return nn(quoteCharOverride) ? quoteCharOverride : quoteChar;
 	}

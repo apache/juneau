@@ -184,6 +184,7 @@ public class HttpPartSchema {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
+		@SuppressWarnings("java:S100") // Method name uses underscore suffix to match JSON Schema keyword
 		public Builder const_(String value) {
 			const_ = value;
 			return this;
@@ -210,6 +211,7 @@ public class HttpPartSchema {
 		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object.
 		 */
+		@SuppressWarnings("java:S100") // Method name uses underscore suffix to avoid Java keyword conflict
 		public Builder default_(String value) {
 			if (ne(value))
 				default_ = value;
@@ -236,6 +238,7 @@ public class HttpPartSchema {
 		 * 	<br>Ignored if value is <jk>null</jk> or an empty set.
 		 * @return This object.
 		 */
+		@SuppressWarnings("java:S100") // Method name uses underscore suffix to avoid Java keyword conflict
 		public Builder enum_(Set<String> value) {
 			if (nn(value) && ! value.isEmpty())
 				enum_ = value;
@@ -253,6 +256,7 @@ public class HttpPartSchema {
 		 * 	<br>Ignored if value is empty.
 		 * @return This object.
 		 */
+		@SuppressWarnings("java:S100") // Method name uses underscore suffix to avoid Java keyword conflict
 		public Builder enum_(String...values) {
 			return enum_(set(values));
 		}

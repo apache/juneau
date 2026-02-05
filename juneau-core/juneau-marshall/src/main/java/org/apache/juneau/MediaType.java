@@ -142,6 +142,7 @@ public class MediaType implements Comparable<MediaType> {
 	}
 
 	private final String string;                          // The entire unparsed value.
+	@SuppressWarnings("java:S1845") // Field name intentionally matches method name
 	private final String mediaType;                      // The "type/subtype" portion of the media type..
 	private final String type;                           // The media type (e.g. "text" for Accept, "utf-8" for Accept-Charset)
 	private final String subType;                        // The media sub-type (e.g. "json" for Accept, not used for Accept-Charset)
