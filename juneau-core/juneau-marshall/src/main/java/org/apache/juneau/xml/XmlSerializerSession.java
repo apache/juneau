@@ -652,11 +652,11 @@ public class XmlSerializerSession extends WriterSerializerSession {
 					if (nn(ns) && nn(ns.uri))
 						addNamespace(ns);
 
-					try {
-						findNsfMappings(value);
-					} catch (@SuppressWarnings("unused") Throwable x) {
-						// Ignore
-					}
+				try {
+					findNsfMappings(value);
+				} catch (@SuppressWarnings("unused") Exception x) {
+					// Ignore
+				}
 				});
 			}
 		}

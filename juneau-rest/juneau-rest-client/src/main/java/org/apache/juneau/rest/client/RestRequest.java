@@ -343,7 +343,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			if (nn(response)) {
 				response.close();
 			}
-		} catch (RuntimeException | Error e) {
+		} catch (RuntimeException e) {
 			// Let unchecked exceptions propagate for debuggability
 			throw e;
 		} catch (Exception e) {
@@ -1999,18 +1999,31 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					if (t.getName().equals(className)) {
 						ConstructorInfo c = null;
 						var ci = ClassInfo.of(t);
+						Throwable thrownInstance = null;
 						c = ci.getPublicConstructor(x -> x.hasParameterTypes(HttpResponse.class)).orElse(null);
-						if (nn(c))
-							throw c.<Throwable>newInstance(response);
-						c = ci.getPublicConstructor(x -> x.hasParameterTypes(String.class)).orElse(null);
-						if (nn(c))
-							throw c.<Throwable>newInstance(nn(message) ? message : response.getContent().asString());
-						c = ci.getPublicConstructor(x -> x.hasParameterTypes(String.class, Throwable.class)).orElse(null);
-						if (nn(c))
-							throw c.<Throwable>newInstance(nn(message) ? message : response.getContent().asString(), null);
-						c = ci.getPublicConstructor(cons -> cons.getParameterCount() == 0).orElse(null);
-						if (nn(c))
-							throw c.<Throwable>newInstance();
+						if (nn(c)) {
+							thrownInstance = c.<Throwable>newInstance(response);
+						} else {
+							c = ci.getPublicConstructor(x -> x.hasParameterTypes(String.class)).orElse(null);
+							if (nn(c)) {
+								thrownInstance = c.<Throwable>newInstance(nn(message) ? message : response.getContent().asString());
+							} else {
+								c = ci.getPublicConstructor(x -> x.hasParameterTypes(String.class, Throwable.class)).orElse(null);
+								if (nn(c)) {
+									thrownInstance = c.<Throwable>newInstance(nn(message) ? message : response.getContent().asString(), null);
+								} else {
+									c = ci.getPublicConstructor(cons -> cons.getParameterCount() == 0).orElse(null);
+									if (nn(c)) {
+										thrownInstance = c.<Throwable>newInstance();
+									}
+								}
+							}
+						}
+						if (nn(thrownInstance)) {
+							if (thrownInstance instanceof Exception ex)
+								throw ex;
+							throw new RestCallException(response, thrownInstance, "Server threw non-Exception: {0}", className);
+						}
 					}
 				}
 			}
@@ -2024,7 +2037,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			if (nn(response))
 				response.close();
 			throw e;
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			if (nn(response))
 				response.close();
 			throw new RestCallException(response, e, "Call failed.");

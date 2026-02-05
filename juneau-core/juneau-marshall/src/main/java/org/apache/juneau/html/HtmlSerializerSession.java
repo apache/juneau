@@ -456,9 +456,9 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					out.i(i + 2);
 				if (nn(link))
 					out.eTag("a");
-			} catch (SerializeException | Error e) {
+			} catch (SerializeException e) {
 				throw e;
-			} catch (Throwable e) {
+			} catch (Exception e) {
 				onBeanGetterException(pMeta, e);
 			}
 			out.eTag("td").nl(i + 2);
@@ -663,7 +663,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			value = e.getValue();
 		} catch (StackOverflowError t) {
 			throw t;
-		} catch (Throwable t) {
+		} catch (Exception t) {
 			onError(t, "Could not call getValue() on property ''{0}'', {1}", e.getKey(), lm(t));
 		}
 

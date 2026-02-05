@@ -200,9 +200,9 @@ public class RestOpSession extends ContextSession {
 	 * 	<li>Calls the converters on the Java method.
 	 * </ol>
 	 *
-	 * @throws Throwable Any throwable can be thrown.
+	 * @throws Exception Any exception can be thrown.
 	 */
-	public void run() throws Throwable {
+	public void run() throws Exception {
 		for (var guard : ctx.getGuards()) {
 			if (! guard.guard(req, res))
 				return;

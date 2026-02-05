@@ -502,9 +502,9 @@ public class RestSession extends ContextSession {
 	 * 	<li>If no Java method matched, generates a 404/405/412 by calling {@link RestContext#handleNotFound(RestSession)}.
 	 * </ol>
 	 *
-	 * @throws Throwable Any throwable can be thrown.
+	 * @throws Exception Any exception can be thrown.
 	 */
-	public void run() throws Throwable {
+	public void run() throws Exception {
 		try {
 			opSession = context.getRestOperations().findOperation(this).createSession(this).build();
 			context.preCall(opSession);

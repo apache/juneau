@@ -52,9 +52,9 @@ public class RestOpInvoker extends MethodInvoker {
 	 * Invokes this method from the specified {@link RestSession}.
 	 *
 	 * @param opSession The REST call.
-	 * @throws Throwable If an error occurred during either parameter resolution or method invocation.
+	 * @throws Exception If an error occurred during either parameter resolution or method invocation.
 	 */
-	public void invoke(RestOpSession opSession) throws Throwable {
+	public void invoke(RestOpSession opSession) throws Exception {
 		var args = new Object[opArgs.length];
 		for (var i = 0; i < opArgs.length; i++) {
 			ParameterInfo pi = inner().getParameter(i);

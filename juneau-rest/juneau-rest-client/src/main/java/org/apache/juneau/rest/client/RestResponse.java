@@ -431,14 +431,14 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 			for (var r : request.interceptors) {
 				invokeInterceptorOnClose(r, request);
 			}
-			client.onCallClose(request, this);
-		} catch (RuntimeException | Error e) {
-			// Let unchecked exceptions propagate for debuggability
-			throw e;
-		} catch (Exception e) {
-			// Log checked exceptions but don't throw - follows AutoCloseable best practices
-			client.log(Level.WARNING, e, "Error during RestResponse close");
-		}
+		client.onCallClose(request, this);
+	} catch (RuntimeException e) {
+		// Let unchecked exceptions propagate for debuggability
+		throw e;
+	} catch (Exception e) {
+		// Log checked exceptions but don't throw - follows AutoCloseable best practices
+		client.log(Level.WARNING, e, "Error during RestResponse close");
+	}
 	}
 
 	/**
@@ -468,7 +468,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	private void invokeInterceptorOnClose(RestCallInterceptor r, RestRequest request) throws RestCallException {
 		try {
 			r.onClose(request, this);
-		} catch (RuntimeException | Error e) {
+		} catch (RuntimeException e) {
 			// Let unchecked exceptions propagate - these indicate programming errors that should be visible
 			throw e;
 		} catch (Exception e) {

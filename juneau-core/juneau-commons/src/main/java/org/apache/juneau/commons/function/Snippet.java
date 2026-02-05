@@ -97,7 +97,7 @@ public interface Snippet {
 	 * 	<jv>snippet</jv>.run();  <jc>// May throw IllegalArgumentException</jc>
 	 * </p>
 	 *
-	 * @throws Throwable Any throwable (checked or unchecked).
+	 * @throws Exception Any exception (checked or unchecked).
 	 */
-	void run() throws Throwable;
+	void run() throws Exception;
 }

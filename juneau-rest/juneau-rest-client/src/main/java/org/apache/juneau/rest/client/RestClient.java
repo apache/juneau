@@ -6377,7 +6377,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			ExecutorService es = executorService.get();
 			if (nn(es) && executorServiceShutdownOnClose)
 				es.shutdown();
-		} catch (@SuppressWarnings("unused") Throwable t) {}
+		} catch (@SuppressWarnings("unused") Exception t) {}
 		if (nn(creationStack))
 			closedStack = Thread.currentThread().getStackTrace();
 	}
@@ -7074,21 +7074,19 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 				var ror = rom.getReturns();
 				if (ror.isFuture()) {
-					return getExecutorService().submit(() -> {
-						try {
-							return executeRemote(interfaceClass, rc, method, rom);
-						} catch (Exception e) {
-							throw e;
-						} catch (Throwable e) {
-							throw toRex(e);
-						}
-					});
+				return getExecutorService().submit(() -> {
+					try {
+						return executeRemote(interfaceClass, rc, method, rom);
+					} catch (Exception e) {
+						throw toRex(e);
+					}
+				});
 				} else if (ror.isCompletableFuture()) {
 					var cf = new CompletableFuture<>();
 					getExecutorService().submit(() -> {
 						try {
 							cf.complete(executeRemote(interfaceClass, rc, method, rom));
-						} catch (Throwable e) {
+						} catch (Exception e) {
 							cf.completeExceptionally(e);
 						}
 						return null;
@@ -7096,7 +7094,21 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					return cf;
 				}
 
-				return executeRemote(interfaceClass, rc, method, rom);
+				try {
+					return executeRemote(interfaceClass, rc, method, rom);
+				} catch (Exception e) {
+					// Check if this is a RuntimeException wrapping a RestCallException with an Error cause
+					if (e instanceof RuntimeException rex && rex.getCause() instanceof RestCallException rce) {
+						var t = rce.getCause();
+						if (nn(t)) {
+							// Check if the cause matches the method's declared exception types
+							for (var t2 : method.getExceptionTypes())
+								if (t2.isInstance(t))
+									throw t; // Rethrow the original Throwable (can be Error)
+						}
+					}
+					throw e;
+				}
 			}
 		});
 	}
@@ -7226,11 +7238,27 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 						v = ClassInfo.of(method.getReturnType()).getPrimitiveDefault();
 					return v;
 
-				} catch (Throwable e) {
+				} catch (Exception e) {
+					// Check if this is a RuntimeException wrapping a RestCallException with an Error cause
+					if (e instanceof RuntimeException rex && rex.getCause() instanceof RestCallException rce) {
+						var t = rce.getCause();
+						if (nn(t)) {
+							// Check if the cause matches the method's declared exception types
+							for (var t2 : method.getExceptionTypes())
+								if (t2.isInstance(t))
+									throw t; // Rethrow the original Throwable (can be Error)
+						}
+					}
 					if (e instanceof RestCallException e2) {
 						var t = e2.getCause();
-						if (nn(t))
-							e = t;
+						if (nn(t)) {
+							// Check if the cause matches the method's declared exception types
+							for (var t2 : method.getExceptionTypes())
+								if (t2.isInstance(t))
+									throw t; // Rethrow the original Throwable (can be Error)
+							if (t instanceof Exception ex)
+								e = ex;
+						}
 					}
 					if (e instanceof RuntimeException e2)
 						throw e2;
@@ -8004,7 +8032,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	}
 
 	@SuppressWarnings("java:S3776")
-	Object executeRemote(Class<?> interfaceClass, RestRequest rc, Method method, RemoteOperationMeta rom) throws Throwable {
+	Object executeRemote(Class<?> interfaceClass, RestRequest rc, Method method, RemoteOperationMeta rom) throws Exception {
 		RemoteOperationReturn ror = rom.getReturns();
 
 		try {
@@ -8043,9 +8071,13 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			Throwable t = e.getCause();
 			if (t instanceof RuntimeException t2)
 				throw t2;
-			for (var t3 : method.getExceptionTypes())
-				if (t3.isInstance(t))
-					throw t;
+			if (t instanceof Exception ex) {
+				for (var t3 : method.getExceptionTypes())
+					if (t3.isInstance(ex))
+						throw ex;
+			}
+			// If cause is an Error that matches method's exception types, preserve it in RestCallException
+			// The InvocationHandler will unwrap it and rethrow the original Error
 			throw toRex(e);
 		}
 	}

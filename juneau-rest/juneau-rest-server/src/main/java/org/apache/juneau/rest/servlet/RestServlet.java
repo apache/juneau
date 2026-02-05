@@ -152,7 +152,7 @@ public abstract class RestServlet extends HttpServlet {
 		} catch (BasicHttpException e) {
 			initException.set(e);
 			log(SEVERE, e, "Servlet init error on class ''{0}''", cn(this));
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			initException.set(new InternalServerError(e));
 			log(SEVERE, e, "Servlet init error on class ''{0}''", cn(this));
 		}
@@ -203,7 +203,7 @@ public abstract class RestServlet extends HttpServlet {
 					"Servlet {0} not initialized.  init(ServletConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig).", cn(this));
 			getContext().execute(this, r1, r2);
 
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			r2.sendError(SC_INTERNAL_SERVER_ERROR, lm(e));
 		}
 	}

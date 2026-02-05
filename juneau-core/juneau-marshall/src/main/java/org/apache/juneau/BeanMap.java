@@ -245,10 +245,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 					var val = bpm.get(this, null);
 					if (valueFilter.test(val))
 						action.apply(bpm, bpm.getName(), val, null);
-				} catch (Error e) {
-					// Errors should always be uncaught.
-					throw e;
-				} catch (Throwable t) {
+				} catch (Exception t) {
 					action.apply(bpm, bpm.getName(), null, t);
 				}
 			});
@@ -260,10 +257,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			forEachProperty(x -> ! x.isDyna(), bpm -> {
 				try {
 					actions.put(bpm.getName(), new BeanPropertyValue(bpm, bpm.getName(), bpm.get(this, null), null));
-				} catch (Error e) {
-					// Errors should always be uncaught.
-					throw e;
-				} catch (Throwable t) {
+				} catch (Exception t) {
 					actions.put(bpm.getName(), new BeanPropertyValue(bpm, bpm.getName(), null, t));
 				}
 			});

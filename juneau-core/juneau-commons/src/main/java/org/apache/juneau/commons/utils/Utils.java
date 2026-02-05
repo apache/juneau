@@ -1878,7 +1878,7 @@ public class Utils {
 	public static <T> T safeCatch(ThrowingSupplier<T> s, Function<Throwable,T> exceptionFunction) {
 		try {
 			return s.get();
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			return exceptionFunction.apply(e);
 		}
 	}
@@ -1944,7 +1944,7 @@ public class Utils {
 	public static <T> Optional<T> safeOptCatch(ThrowingSupplier<T> s, Function<Throwable,T> exceptionFunction) {
 		try {
 			return opt(s.get());
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			return opt(exceptionFunction.apply(e));
 		}
 	}

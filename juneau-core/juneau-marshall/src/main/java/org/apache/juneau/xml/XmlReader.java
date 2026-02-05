@@ -70,12 +70,12 @@ public class XmlReader implements XMLStreamReader, Positionable {
 				factory.setProperty(XMLInputFactory.RESOLVER, resolver);
 			if (factory.isPropertySupported(XMLInputFactory.ALLOCATOR) && nn(eventAllocator))
 				factory.setProperty(XMLInputFactory.ALLOCATOR, eventAllocator);
-			sr = factory.createXMLStreamReader(r);
-			sr.nextTag();
-			pipe.setPositionable(this);
-		} catch (Error e) {
-			throw castException(IOException.class, e);
-		}
+		sr = factory.createXMLStreamReader(r);
+		sr.nextTag();
+		pipe.setPositionable(this);
+	} catch (Exception e) {
+		throw castException(IOException.class, e);
+	}
 	}
 
 	@Override /* Overridden from XMLStreamReader */

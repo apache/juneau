@@ -4683,7 +4683,7 @@ public class RestContext extends Context {
 						} else {
 							v.get().add(roc);
 						}
-					} catch (Throwable e) {
+					} catch (Exception e) {
 						throw servletException(e, "Problem occurred trying to initialize methods on class {0}", rci.inner().getName());
 					}
 				}
@@ -5239,7 +5239,7 @@ public class RestContext extends Context {
 				return;
 			}
 
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			handleError(sb.build(), convertThrowable(e));
 		}
 
@@ -5250,7 +5250,7 @@ public class RestContext extends Context {
 			s.debug(isDebug(s));
 			startCall(s);
 			s.run();
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			handleError(s, convertThrowable(e));
 		} finally {
 			try {
@@ -6131,9 +6131,9 @@ public class RestContext extends Context {
 		 * Called during a request to invoke all {@link RestPostCall} methods.
 		 *
 		 * @param session The current request.
-		 * @throws Throwable If thrown from call methods.
-		 */
-	protected void postCall(RestOpSession session) throws Throwable {
+	 * @throws Exception If thrown from call methods.
+	 */
+	protected void postCall(RestOpSession session) throws Exception {
 		for (var m : session.getContext().getPostCallMethods())
 			m.invoke(session);
 	}
@@ -6142,9 +6142,9 @@ public class RestContext extends Context {
 	 * Called during a request to invoke all {@link RestPreCall} methods.
 	 *
 	 * @param session The current request.
-	 * @throws Throwable If thrown from call methods.
+	 * @throws Exception If thrown from call methods.
 	 */
-	protected void preCall(RestOpSession session) throws Throwable {
+	protected void preCall(RestOpSession session) throws Exception {
 		for (var m : session.getContext().getPreCallMethods())
 			m.invoke(session);
 	}

@@ -905,16 +905,16 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (bean == null)
 				return m.propertyCache.get(name);
 
-			return invokeGetter(bean, pName);
+		return invokeGetter(bean, pName);
 
-		} catch (Throwable e) {
-			if (bc.isIgnoreInvocationExceptionsOnGetters()) {
-				if (rawTypeMeta.isPrimitive())
-					return rawTypeMeta.getPrimitiveDefault();
-				return null;
-			}
-			throw bex(e, beanMeta.getClassMeta(), "Exception occurred while getting property ''{0}''", name);
+	} catch (Exception e) {
+		if (bc.isIgnoreInvocationExceptionsOnGetters()) {
+			if (rawTypeMeta.isPrimitive())
+				return rawTypeMeta.getPrimitiveDefault();
+			return null;
 		}
+		throw bex(e, beanMeta.getClassMeta(), "Exception occurred while getting property ''{0}''", name);
+	}
 	}
 
 	/**
@@ -1219,17 +1219,17 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (bean == null)
 				return m.propertyCache.get(name);
 
-		var session = m.getBeanSession();
-		var o = getRaw(m, pName);
+	var session = m.getBeanSession();
+	var o = getRaw(m, pName);
 
-		return swapAndFilterProperty(session, o);
+	return swapAndFilterProperty(session, o);
 
-		} catch (Throwable e) {
-			if (bc.isIgnoreInvocationExceptionsOnGetters()) {
-				if (rawTypeMeta.isPrimitive())
-					return rawTypeMeta.getPrimitiveDefault();
-				return null;
-			}
+	} catch (Exception e) {
+		if (bc.isIgnoreInvocationExceptionsOnGetters()) {
+			if (rawTypeMeta.isPrimitive())
+				return rawTypeMeta.getPrimitiveDefault();
+			return null;
+		}
 			throw bex(e, beanMeta.getClassMeta(), "Exception occurred while getting property ''{0}''", name);
 		}
 	}

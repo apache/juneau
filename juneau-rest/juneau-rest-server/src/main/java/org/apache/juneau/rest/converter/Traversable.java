@@ -65,7 +65,7 @@ public class Traversable implements RestConverter {
 				o = or.get(pathRemainder);
 			} catch (ObjectRestException e) {
 				throw new BasicHttpException(e.getStatus(), e);
-			} catch (Throwable t) {
+			} catch (Exception t) {
 				throw new InternalServerError(t);
 			}
 		}
