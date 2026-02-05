@@ -56,8 +56,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return A new request.
 	 */
 	public static MockServletRequest create() {
-		var r = new MockServletRequest();
-		return r;
+		return new MockServletRequest();
 	}
 
 	/**

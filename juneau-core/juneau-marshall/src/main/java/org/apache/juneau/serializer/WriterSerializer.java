@@ -1005,7 +1005,13 @@ public class WriterSerializer extends Serializer {
 		streamCharset = builder.streamCharset;
 		useWhitespace = builder.useWhitespace;
 
-		quoteCharValue = nn(quoteCharOverride) ? quoteCharOverride : nn(quoteChar) ? quoteChar : '"';
+		if (nn(quoteCharOverride)) {
+			quoteCharValue = quoteCharOverride;
+		} else if (nn(quoteChar)) {
+			quoteCharValue = quoteChar;
+		} else {
+			quoteCharValue = '"';
+		}
 	}
 
 	@Override /* Overridden from Context */

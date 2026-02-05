@@ -418,8 +418,15 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (rawTypeMeta == null)
 				return false;
 
-			if (typeMeta == null)
-				typeMeta = (nn(swap) ? bc.getClassMeta(swap.getSwapClass()) : rawTypeMeta == null ? bc.object() : rawTypeMeta);
+			if (typeMeta == null) {
+				if (nn(swap)) {
+					typeMeta = bc.getClassMeta(swap.getSwapClass());
+				} else if (rawTypeMeta == null) {
+					typeMeta = bc.object();
+				} else {
+					typeMeta = rawTypeMeta;
+				}
+			}
 			if (typeMeta == null)
 				typeMeta = rawTypeMeta;
 
@@ -1002,158 +1009,161 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 			var bean = m.getBean(true);  // Don't use getBean() because it triggers array creation!
 
-			try {
-
-				var r = (bc.isBeanMapPutReturnsOldValue() || isMap || isCollection) && (nn(getter) || nn(field)) ? get(m, pName) : null;
-				var propertyClass = rawTypeMeta.inner();
-				var pcInfo = rawTypeMeta;
-
-				if (value1 == null && (isMap || isCollection)) {
-					invokeSetter(bean, pName, null);
-					return r;
-				}
-
-				var vc = value1 == null ? null : value1.getClass();
-
-				if (isMap && (setter == null || ! pcInfo.isAssignableFrom(vc))) {
-
-					if (! (value1 instanceof Map)) {
-						if (value1 instanceof CharSequence value21)
-							value1 = JsonMap.ofJson(value21).session(session);
-						else
-							throw bex(beanMeta.getClassMeta(), "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), cn(value1));
-					}
-
-					var valueMap = (Map)value1;
-					var propMap = (Map)r;
-					var valueType = rawTypeMeta.getValueType();
-
-					// If the property type is abstract, then we either need to reuse the existing
-					// map (if it's not null), or try to assign the value directly.
-					if (! rawTypeMeta.canCreateNewInstance()) {
-						if (propMap == null) {
-							if (setter == null && field == null)
-								throw bex(beanMeta.getClassMeta(),
-									"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter or public field is defined, and the current value is null", name,
-									propertyClass.getName(), cn(value1));
-
-							if (propertyClass.isInstance(valueMap)) {
-								if (! valueType.isObject()) {
-									var needsConversion = Flag.create();
-									valueMap.forEach((k, v2) -> {
-										if (nn(v2) && ! valueType.isInstance(v2)) {
-											needsConversion.set();
-										}
-									});
-									if (needsConversion.isSet())
-										valueMap = (Map)session.convertToType(valueMap, rawTypeMeta);
-								}
-								invokeSetter(bean, pName, valueMap);
-								return r;
-							}
-							throw bex(beanMeta.getClassMeta(),
-								"Cannot set property ''{0}'' of type ''{2}'' to object of type ''{2}'' because the assigned map cannot be converted to the specified type because the property type is abstract, and the property value is currently null",
-								name, propertyClass.getName(), cn(value1));
-						}
-					} else {
-						if (propMap == null) {
-							propMap = BeanCreator.of(Map.class).type(rawTypeMeta).run();
-						} else {
-							propMap.clear();
-						}
-					}
-
-					// Set the values.
-					var propMap2 = propMap;
-					valueMap.forEach((k1, v1) -> {
-						if (! valueType.isObject())
-							v1 = session.convertToType(v1, valueType);
-						propMap2.put(k1, v1);
-					});
-					if (nn(setter) || nn(field))
-						invokeSetter(bean, pName, propMap);
-
-				} else if (isCollection && (setter == null || ! pcInfo.isAssignableFrom(vc))) {
-
-					if (! (value1 instanceof Collection)) {
-						if (value1 instanceof CharSequence value2)
-							value1 = new JsonList(value2).setBeanSession(session);
-						else
-							throw bex(beanMeta.getClassMeta(), "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), cn(value1));
-					}
-
-					var valueList = (Collection)value1;
-					var propList = (Collection)r;
-					var elementType = rawTypeMeta.getElementType();
-
-					// If the property type is abstract, then we either need to reuse the existing
-					// collection (if it's not null), or try to assign the value directly.
-					if (! rawTypeMeta.canCreateNewInstance()) {
-						if (propList == null) {
-							if (setter == null && field == null)
-								throw bex(beanMeta.getClassMeta(),
-									"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter or public field is defined, and the current value is null", name,
-									propertyClass.getName(), cn(value1));
-
-							if (propertyClass.isInstance(valueList) || (nn(setter) && setter.getParameterTypes().get(0).is(Collection.class))) {
-								if (! elementType.isObject()) {
-									var l = new JsonList(valueList);
-									for (var i = l.listIterator(); i.hasNext();) {
-										var v = i.next();
-										if (nn(v) && (! elementType.isInstance(v))) {
-											i.set(session.convertToType(v, elementType));
-										}
-									}
-									valueList = l;
-								}
-								invokeSetter(bean, pName, valueList);
-								return r;
-							}
-							throw bex(beanMeta.getClassMeta(),
-								"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because the assigned map cannot be converted to the specified type because the property type is abstract, and the property value is currently null",
-								name, propertyClass.getName(), cn(value1));
-						}
-						propList.clear();
-					} else {
-						if (propList == null) {
-							propList = BeanCreator.of(Collection.class).type(rawTypeMeta).run();
-							invokeSetter(bean, pName, propList);
-						} else {
-							propList.clear();
-						}
-					}
-
-					// Set the values.
-					var propList2 = propList;
-					valueList.forEach(x -> {
-						if (! elementType.isObject())
-							x = session.convertToType(x, elementType);
-						propList2.add(x);
-					});
-
-				} else {
-					if (nn(swap) && value1 != null && swap.getSwapClass().isAssignableFrom(value1.getClass())) {
-						value1 = swap.unswap(session, value1, rawTypeMeta);
-					} else {
-						value1 = session.convertToType(value1, rawTypeMeta);
-					}
-					invokeSetter(bean, pName, value1);
-				}
-
-				return r;
-
-			} catch (BeanRuntimeException e) {
-				throw e;
-			} catch (Exception e1) {
-				if (bc.isIgnoreInvocationExceptionsOnSetters()) {
-					if (rawTypeMeta.isPrimitive())
-						return rawTypeMeta.getPrimitiveDefault();
-					return null;
-				}
-				throw bex(e1, beanMeta.getClassMeta(), "Error occurred trying to set property ''{0}''", name);
-			}
+			return setPropertyValue(m, pName, value1, bean, isMap, isCollection, session);
 		} catch (ParseException e2) {
 			throw bex(e2);
+		}
+	}
+
+	private Object setPropertyValue(BeanMap<?> m, String pName, Object value1, Object bean, boolean isMap, boolean isCollection, BeanSession session) throws ParseException {
+		try {
+			var r = (bc.isBeanMapPutReturnsOldValue() || isMap || isCollection) && (nn(getter) || nn(field)) ? get(m, pName) : null;
+			var propertyClass = rawTypeMeta.inner();
+			var pcInfo = rawTypeMeta;
+
+			if (value1 == null && (isMap || isCollection)) {
+				invokeSetter(bean, pName, null);
+				return r;
+			}
+
+			var vc = value1 == null ? null : value1.getClass();
+
+			if (isMap && (setter == null || ! pcInfo.isAssignableFrom(vc))) {
+
+				if (! (value1 instanceof Map)) {
+					if (value1 instanceof CharSequence value21)
+						value1 = JsonMap.ofJson(value21).session(session);
+					else
+						throw bex(beanMeta.getClassMeta(), "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), cn(value1));
+				}
+
+				var valueMap = (Map)value1;
+				var propMap = (Map)r;
+				var valueType = rawTypeMeta.getValueType();
+
+				// If the property type is abstract, then we either need to reuse the existing
+				// map (if it's not null), or try to assign the value directly.
+				if (! rawTypeMeta.canCreateNewInstance()) {
+					if (propMap == null) {
+						if (setter == null && field == null)
+							throw bex(beanMeta.getClassMeta(),
+								"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter or public field is defined, and the current value is null", name,
+								propertyClass.getName(), cn(value1));
+
+						if (propertyClass.isInstance(valueMap)) {
+							if (! valueType.isObject()) {
+								var needsConversion = Flag.create();
+								valueMap.forEach((k, v2) -> {
+									if (nn(v2) && ! valueType.isInstance(v2)) {
+										needsConversion.set();
+									}
+								});
+								if (needsConversion.isSet())
+									valueMap = (Map)session.convertToType(valueMap, rawTypeMeta);
+							}
+							invokeSetter(bean, pName, valueMap);
+							return r;
+						}
+						throw bex(beanMeta.getClassMeta(),
+							"Cannot set property ''{0}'' of type ''{2}'' to object of type ''{2}'' because the assigned map cannot be converted to the specified type because the property type is abstract, and the property value is currently null",
+							name, propertyClass.getName(), cn(value1));
+					}
+				} else {
+					if (propMap == null) {
+						propMap = BeanCreator.of(Map.class).type(rawTypeMeta).run();
+					} else {
+						propMap.clear();
+					}
+				}
+
+				// Set the values.
+				var propMap2 = propMap;
+				valueMap.forEach((k1, v1) -> {
+					if (! valueType.isObject())
+						v1 = session.convertToType(v1, valueType);
+					propMap2.put(k1, v1);
+				});
+				if (nn(setter) || nn(field))
+					invokeSetter(bean, pName, propMap);
+
+			} else if (isCollection && (setter == null || ! pcInfo.isAssignableFrom(vc))) {
+
+				if (! (value1 instanceof Collection)) {
+					if (value1 instanceof CharSequence value2)
+						value1 = new JsonList(value2).setBeanSession(session);
+					else
+						throw bex(beanMeta.getClassMeta(), "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), cn(value1));
+				}
+
+				var valueList = (Collection)value1;
+				var propList = (Collection)r;
+				var elementType = rawTypeMeta.getElementType();
+
+				// If the property type is abstract, then we either need to reuse the existing
+				// collection (if it's not null), or try to assign the value directly.
+				if (! rawTypeMeta.canCreateNewInstance()) {
+					if (propList == null) {
+						if (setter == null && field == null)
+							throw bex(beanMeta.getClassMeta(),
+								"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter or public field is defined, and the current value is null", name,
+								propertyClass.getName(), cn(value1));
+
+						if (propertyClass.isInstance(valueList) || (nn(setter) && setter.getParameterTypes().get(0).is(Collection.class))) {
+							if (! elementType.isObject()) {
+								var l = new JsonList(valueList);
+								for (var i = l.listIterator(); i.hasNext();) {
+									var v = i.next();
+									if (nn(v) && (! elementType.isInstance(v))) {
+										i.set(session.convertToType(v, elementType));
+									}
+								}
+								valueList = l;
+							}
+							invokeSetter(bean, pName, valueList);
+							return r;
+						}
+						throw bex(beanMeta.getClassMeta(),
+							"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because the assigned map cannot be converted to the specified type because the property type is abstract, and the property value is currently null",
+							name, propertyClass.getName(), cn(value1));
+					}
+					propList.clear();
+				} else {
+					if (propList == null) {
+						propList = BeanCreator.of(Collection.class).type(rawTypeMeta).run();
+						invokeSetter(bean, pName, propList);
+					} else {
+						propList.clear();
+					}
+				}
+
+				// Set the values.
+				var propList2 = propList;
+				valueList.forEach(x -> {
+					if (! elementType.isObject())
+						x = session.convertToType(x, elementType);
+					propList2.add(x);
+				});
+
+			} else {
+				if (nn(swap) && value1 != null && swap.getSwapClass().isAssignableFrom(value1.getClass())) {
+					value1 = swap.unswap(session, value1, rawTypeMeta);
+				} else {
+					value1 = session.convertToType(value1, rawTypeMeta);
+				}
+				invokeSetter(bean, pName, value1);
+			}
+
+			return r;
+
+		} catch (BeanRuntimeException e) {
+			throw e;
+		} catch (Exception e1) {
+			if (bc.isIgnoreInvocationExceptionsOnSetters()) {
+				if (rawTypeMeta.isPrimitive())
+					return rawTypeMeta.getPrimitiveDefault();
+				return null;
+			}
+			throw bex(e1, beanMeta.getClassMeta(), "Error occurred trying to set property ''{0}''", name);
 		}
 	}
 
@@ -1209,35 +1219,10 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (bean == null)
 				return m.propertyCache.get(name);
 
-			var session = m.getBeanSession();
-			var o = getRaw(m, pName);
+		var session = m.getBeanSession();
+		var o = getRaw(m, pName);
 
-			try {
-				o = swap(session, o);
-				if (o == null)
-					return null;
-				if (nn(properties)) {
-					if (rawTypeMeta.isArray()) {
-						var a = (Object[])o;
-						var l1 = new DelegateList(rawTypeMeta);
-						var childType1 = rawTypeMeta.getElementType();
-						for (var c1 : a)
-							l1.add(applyChildPropertiesFilter(session, childType1, c1));
-						return l1;
-					} else if (rawTypeMeta.isCollection()) {
-						var c = (Collection)o;
-						var l = listOfSize(c.size());
-						var childType = rawTypeMeta.getElementType();
-						c.forEach(x -> l.add(applyChildPropertiesFilter(session, childType, x)));
-						return l;
-					} else {
-						return applyChildPropertiesFilter(session, rawTypeMeta, o);
-					}
-				}
-				return o;
-			} catch (SerializeException e) {
-				throw bex(e);
-			}
+		return swapAndFilterProperty(session, o);
 
 		} catch (Throwable e) {
 			if (bc.isIgnoreInvocationExceptionsOnGetters()) {
@@ -1246,6 +1231,35 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				return null;
 			}
 			throw bex(e, beanMeta.getClassMeta(), "Exception occurred while getting property ''{0}''", name);
+		}
+	}
+
+	private Object swapAndFilterProperty(BeanSession session, Object o) {
+		try {
+			o = swap(session, o);
+			if (o == null)
+				return null;
+			if (nn(properties)) {
+				if (rawTypeMeta.isArray()) {
+					var a = (Object[])o;
+					var l1 = new DelegateList(rawTypeMeta);
+					var childType1 = rawTypeMeta.getElementType();
+					for (var c1 : a)
+						l1.add(applyChildPropertiesFilter(session, childType1, c1));
+					return l1;
+				} else if (rawTypeMeta.isCollection()) {
+					var c = (Collection)o;
+					var l = listOfSize(c.size());
+					var childType = rawTypeMeta.getElementType();
+					c.forEach(x -> l.add(applyChildPropertiesFilter(session, childType, x)));
+					return l;
+				} else {
+					return applyChildPropertiesFilter(session, rawTypeMeta, o);
+				}
+			}
+			return o;
+		} catch (SerializeException e) {
+			throw bex(e);
 		}
 	}
 

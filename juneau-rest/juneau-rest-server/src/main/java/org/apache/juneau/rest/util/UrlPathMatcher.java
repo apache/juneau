@@ -83,7 +83,13 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 
 		PathMatcher(String patternString) {
 			super(patternString);
-			this.pattern = e(patternString) ? "/" : patternString.charAt(0) != '/' ? '/' + patternString : patternString;
+			if (e(patternString)) {
+				this.pattern = "/";
+			} else if (patternString.charAt(0) != '/') {
+				this.pattern = '/' + patternString;
+			} else {
+				this.pattern = patternString;
+			}
 
 			var c = patternString.replaceAll("\\{[^\\}]+\\}", ".").replaceAll("\\w+", "X").replaceAll("\\.", "W");
 			if (c.isEmpty())

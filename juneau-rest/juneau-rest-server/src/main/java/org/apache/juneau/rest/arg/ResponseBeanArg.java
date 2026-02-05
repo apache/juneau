@@ -71,7 +71,14 @@ public class ResponseBeanArg implements RestOpArg {
 	protected ResponseBeanArg(ParameterInfo paramInfo, AnnotationWorkList annotations) {
 		this.type = paramInfo.getParameterType().innerType();
 		this.meta = ResponseBeanMeta.create(paramInfo, annotations);
-		var c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
+		Class<?> c;
+		if (type instanceof Class) {
+			c = (Class<?>)type;
+		} else if (type instanceof ParameterizedType) {
+			c = (Class<?>)((ParameterizedType)type).getRawType();
+		} else {
+			c = null;
+		}
 		if (c != Value.class)
 			throw new ArgException(paramInfo, "Type must be Value<?> on parameter annotated with @Response annotation");
 	}

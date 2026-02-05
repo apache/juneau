@@ -538,7 +538,14 @@ public class XmlParserSession extends ReaderParserSession {
 			var event = r.nextTag();
 			if (event == START_ELEMENT) {
 				depth++;
-				var elementType = type == null ? object() : type.isArgs() ? type.getArg(argIndex++) : type.getElementType();
+				ClassMeta<?> elementType;
+				if (type == null) {
+					elementType = object();
+				} else if (type.isArgs()) {
+					elementType = type.getArg(argIndex++);
+				} else {
+					elementType = type.getElementType();
+				}
 				E value = (E)parseAnything(elementType, null, r, l, false, pMeta);
 				l.add(value);
 			} else if (event == END_ELEMENT) {

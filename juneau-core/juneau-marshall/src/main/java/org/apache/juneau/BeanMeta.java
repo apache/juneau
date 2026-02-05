@@ -497,24 +497,7 @@ public class BeanMeta<T> {
 			var writeOnlyProps = bfo.map(x -> x.getWriteOnlyProperties()).orElse(sete());
 			for (var i = normalProps.values().iterator(); i.hasNext();) {
 				var p = i.next();
-				try {
-					if (p.field == null)
-						findInnerBeanField(p.name).ifPresent(p::setInnerField);
-
-					if (p.validate(beanContext, beanRegistry.get(), typeVarImpls, readOnlyProps, writeOnlyProps)) {
-
-						if (nn(p.getter))
-							_getterProps.put(p.getter.inner(), p.name);
-
-						if (nn(p.setter))
-							_setterProps.put(p.setter.inner(), p.name);
-
-					} else {
-						i.remove();
-					}
-				} catch (ClassNotFoundException e) {
-					throw bex(c, lm(e));
-				}
+				validateAndRegisterProperty(p, c, typeVarImpls, readOnlyProps, writeOnlyProps, i, _getterProps, _setterProps);
 			}
 
 			// Check for missing properties.
@@ -591,6 +574,29 @@ public class BeanMeta<T> {
 		typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(beanContext.string()).beanRegistry(beanRegistry.get()).build();
 		dictionaryName = mem(this::findDictionaryName);
 		beanProxyInvocationHandler = mem(()->beanContext.isUseInterfaceProxies() && c.isInterface() ? new BeanProxyInvocationHandler<>(this) : null);
+	}
+
+	private void validateAndRegisterProperty(BeanPropertyMeta.Builder p, Class<?> c, TypeVariables typeVarImpls, Set<String> readOnlyProps, Set<String> writeOnlyProps, Iterator<BeanPropertyMeta.Builder> i, Map<Method,String> getterProps, Map<Method,String> setterProps) {
+		try {
+			if (p.field == null)
+				findInnerBeanField(p.name).ifPresent(p::setInnerField);
+
+			if (p.validate(beanContext, beanRegistry.get(), typeVarImpls, readOnlyProps, writeOnlyProps)) {
+
+				if (nn(p.getter))
+					getterProps.put(p.getter.inner(), p.name);
+
+				if (nn(p.setter))
+					setterProps.put(p.setter.inner(), p.name);
+
+			} else {
+				i.remove();
+			}
+		} catch (ClassNotFoundException e) {
+			throw bex(c, lm(e));
+		} catch (Exception e) {
+			throw bex(c, lm(e));
+		}
 	}
 
 	@Override /* Overridden from Object */

@@ -7669,7 +7669,10 @@ public class StringUtils {
 							}
 						}
 						i++;
-					} while (i < s.length() && ! URL_ENCODE_PATHINFO_VALIDCHARS.contains((c = s.charAt(i))));
+						if (i < s.length()) {
+							c = s.charAt(i);
+						}
+					} while (i < s.length() && ! URL_ENCODE_PATHINFO_VALIDCHARS.contains(c));
 
 					caw.flush();
 					var s2 = new String(caw.toCharArray());

@@ -1742,7 +1742,13 @@ public class RestContext extends Context {
 
 		@Override /* Overridden from ServletConfig */
 		public ServletContext getServletContext() {
-			return nn(inner) ? inner.getServletContext() : nn(parentContext) ? parentContext.getBuilder().getServletContext() : null;
+			if (nn(inner)) {
+				return inner.getServletContext();
+			} else if (nn(parentContext)) {
+				return parentContext.getBuilder().getServletContext();
+			} else {
+				return null;
+			}
 		}
 
 		@Override /* Overridden from ServletConfig */
@@ -4650,11 +4656,7 @@ public class RestContext extends Context {
 								throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", cns(m.getDeclaringClass()), m.getSignature(),
 									beanStore.getMissingParams(m, resource.get()));
 							}
-							try {
-								m.invoke(resource.get(), beanStore.getParams(m, resource.get()));
-							} catch (Exception e) {
-								throw servletException(e, "Exception thrown from @RestInit method {0}.{1}.", cns(m.getDeclaringClass()), m.getSignature());
-							}
+							restContext.invokeRestInitMethod(m, resource, beanStore);
 						}
 
 						var roc = rocb.build();
@@ -6067,12 +6069,7 @@ public class RestContext extends Context {
 			var statusCode = e2.getStatusLine().getStatusCode();
 			res.setStatus(statusCode);
 
-			PrintWriter w = null;
-			try {
-				w = res.getWriter();
-			} catch (@SuppressWarnings("unused") IllegalStateException x) {
-				w = new PrintWriter(new OutputStreamWriter(res.getOutputStream(), UTF8));
-			}
+			PrintWriter w = getResponseWriter(res);
 
 			try (PrintWriter w2 = w) {
 				var httpMessage = RestUtils.getHttpResponseText(statusCode);
@@ -6099,6 +6096,22 @@ public class RestContext extends Context {
 	 * @param session The HTTP call.
 	 * @throws Exception Any exception can be thrown.
 	 */
+	void invokeRestInitMethod(MethodInfo m, Supplier<?> resource, BasicBeanStore beanStore) throws ServletException {
+		try {
+			m.invoke(resource.get(), beanStore.getParams(m, resource.get()));
+		} catch (Exception e) {
+			throw servletException(e, "Exception thrown from @RestInit method {0}.{1}.", cns(m.getDeclaringClass()), m.getSignature());
+		}
+	}
+
+	private PrintWriter getResponseWriter(HttpServletResponse res) throws IOException {
+		try {
+			return res.getWriter();
+		} catch (@SuppressWarnings("unused") IllegalStateException x) {
+			return new PrintWriter(new OutputStreamWriter(res.getOutputStream(), UTF8));
+		}
+	}
+
 	protected void handleNotFound(RestSession session) throws Exception {
 		var pathInfo = session.getPathInfo();
 		var methodUC = session.getMethod();

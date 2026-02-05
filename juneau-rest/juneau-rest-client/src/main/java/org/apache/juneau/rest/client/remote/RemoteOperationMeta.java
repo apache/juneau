@@ -117,7 +117,15 @@ public class RemoteOperationMeta {
 
 			methodReturn = new RemoteOperationReturn(mi);
 
-			fullPath = path.indexOf("://") != -1 ? path : (parentPath.isEmpty() ? urlEncodePath(path) : (trimSlashes(parentPath) + '/' + urlEncodePath(path)));
+			String fullPathValue;
+			if (path.indexOf("://") != -1) {
+				fullPathValue = path;
+			} else if (parentPath.isEmpty()) {
+				fullPathValue = urlEncodePath(path);
+			} else {
+				fullPathValue = trimSlashes(parentPath) + '/' + urlEncodePath(path);
+			}
+			fullPath = fullPathValue;
 
 			mi.getParameters().forEach(x -> {
 				var rma = RemoteOperationArg.create(x);

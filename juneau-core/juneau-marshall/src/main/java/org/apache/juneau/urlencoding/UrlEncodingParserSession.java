@@ -459,7 +459,14 @@ public class UrlEncodingParserSession extends UonParserSession {
 					}
 				} else if (state == S3) {
 					if (c == -1 || c == '\u0001') {
-						var valueType = (ClassMeta<V>)(type.isArgs() ? type.getArg(argIndex++) : type.isCollectionOrArray() ? type.getElementType() : type.getValueType());
+						ClassMeta<V> valueType;
+						if (type.isArgs()) {
+							valueType = (ClassMeta<V>)type.getArg(argIndex++);
+						} else if (type.isCollectionOrArray()) {
+							valueType = (ClassMeta<V>)type.getElementType();
+						} else {
+							valueType = (ClassMeta<V>)type.getValueType();
+						}
 						V value = convertAttrToType(m, "", valueType);
 						m.put(currAttr, value);
 						if (c == -1)
@@ -467,7 +474,14 @@ public class UrlEncodingParserSession extends UonParserSession {
 						state = S1;
 					} else {
 						// For performance, we bypass parseAnything for string values.
-						var valueType = (ClassMeta<V>)(type.isArgs() ? type.getArg(argIndex++) : type.isCollectionOrArray() ? type.getElementType() : type.getValueType());
+						ClassMeta<V> valueType;
+						if (type.isArgs()) {
+							valueType = (ClassMeta<V>)type.getArg(argIndex++);
+						} else if (type.isCollectionOrArray()) {
+							valueType = (ClassMeta<V>)type.getElementType();
+						} else {
+							valueType = (ClassMeta<V>)type.getValueType();
+						}
 						V value = (V)(valueType.isString() ? super.parseString(r.unread(), true) : super.parseAnything(valueType, r.unread(), outer, true, null));
 
 						// If we already encountered this parameter, turn it into a list.

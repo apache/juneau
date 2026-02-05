@@ -467,8 +467,15 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				}
 			}
 		}
-		if (contentProperty == null && ! hasContent)
-			return (hasChildren ? CR_ELEMENTS : isVoidElement ? CR_VOID : CR_EMPTY);
+		if (contentProperty == null && ! hasContent) {
+			if (hasChildren) {
+				return CR_ELEMENTS;
+			} else if (isVoidElement) {
+				return CR_VOID;
+			} else {
+				return CR_EMPTY;
+			}
+		}
 
 		// Serialize XML content.
 		if (nn(content)) {

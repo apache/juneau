@@ -858,8 +858,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * @throws ParseException Attribute was malformed.
 	 */
 	protected final Object parseAttr(UonReader r, boolean encoded) throws IOException, ParseException {
-		var attr = parseAttrName(r, encoded);
-		return attr;
+		return parseAttrName(r, encoded);
 	}
 
 	/**

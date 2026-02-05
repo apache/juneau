@@ -83,7 +83,14 @@ public class ResponseHeaderArg implements RestOpArg {
 		var ps = schema.getSerializer();
 		this.meta = new ResponsePartMeta(HttpPartType.HEADER, schema, nn(ps) ? HttpPartSerializer.creator().type(ps).apply(annotations).create() : null);
 
-		var c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
+		Class<?> c;
+		if (type instanceof Class) {
+			c = (Class<?>)type;
+		} else if (type instanceof ParameterizedType) {
+			c = (Class<?>)((ParameterizedType)type).getRawType();
+		} else {
+			c = null;
+		}
 		if (c != Value.class)
 			throw new ArgException(pi, "Type must be Value<?> on parameter annotated with @Header annotation");
 	}

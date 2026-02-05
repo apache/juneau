@@ -1387,69 +1387,12 @@ public class BeanSession extends ContextSession {
 
 			// Target type is some sort of Map that needs to be converted.
 			if (to.isMap()) {
-				try {
-					if (from.isMap()) {
-						var m = to.canCreateNewInstance(outer) ? (Map)to.newInstance(outer) : newGenericMap(to);
-						var keyType = to.getKeyType();
-						var valueType = to.getValueType();
-						((Map<?,?>)value).forEach((k, v) -> {
-							var k2 = k;
-							if (! keyType.isObject()) {
-								if (keyType.isString() && k.getClass() != Class.class)
-									k2 = k.toString();
-								else
-									k2 = convertToMemberType(m, k, keyType);
-							}
-							var v2 = v;
-							if (! valueType.isObject())
-								v2 = convertToMemberType(m, v, valueType);
-							m.put(k2, v2);
-						});
-						return (T)m;
-					} else if (! to.canCreateNewInstanceFromString(outer)) {
-						var m = JsonMap.ofJson(value.toString());
-						m.setBeanSession(this);
-						return convertToMemberType(outer, m, to);
-					}
-				} catch (Exception e) {
-					throw new InvalidDataConversionException(value.getClass(), to, e);
-				}
+				return convertToMapType(outer, value, from, to);
 			}
 
 			// Target type is some sort of Collection
 			if (to.isCollection()) {
-				try {
-					var l = to.canCreateNewInstance(outer) ? (Collection)to.newInstance(outer) : to.isSet() ? set() : new JsonList(this);
-					var elementType = to.getElementType();
-
-					if (from.isArray()) {
-						for (var i = 0; i < Array.getLength(value); i++) {
-							var o = Array.get(value, i);
-							l.add(elementType.isObject() ? o : convertToMemberType(l, o, elementType));
-						}
-					} else if (from.isCollection())
-						((Collection)value).forEach(x -> l.add(elementType.isObject() ? x : convertToMemberType(l, x, elementType)));
-					else if (from.isMap())
-						l.add(elementType.isObject() ? value : convertToMemberType(l, value, elementType));
-					else if (isNullOrEmpty(value))
-						return null;
-					else if (from.isString()) {
-						var s = value.toString();
-						if (isProbablyJsonArray(s, false)) {
-							var l2 = JsonList.ofJson(s);
-							l2.setBeanSession(this);
-							l2.forEach(x -> l.add(elementType.isObject() ? x : convertToMemberType(l, x, elementType)));
-						} else {
-							throw new InvalidDataConversionException(value.getClass(), to, null);
-						}
-					} else
-						throw new InvalidDataConversionException(value.getClass(), to, null);
-					return (T)l;
-				} catch (InvalidDataConversionException e) {
-					throw e;
-				} catch (Exception e) {
-					throw new InvalidDataConversionException(value.getClass(), to, e);
-				}
+				return convertToCollectionType(outer, value, from, to);
 			}
 
 			if (to.isEnum()) {
@@ -1657,5 +1600,78 @@ public class BeanSession extends ContextSession {
 			Array.set(array, i.getAndIncrement(), x2);
 		});
 		return array;
+	}
+
+	private <T> T convertToMapType(Object outer, Object value, ClassMeta<?> from, ClassMeta<T> to) {
+		try {
+			if (from.isMap()) {
+				var m = to.canCreateNewInstance(outer) ? (Map)to.newInstance(outer) : newGenericMap(to);
+				var keyType = to.getKeyType();
+				var valueType = to.getValueType();
+				((Map<?,?>)value).forEach((k, v) -> {
+					var k2 = k;
+					if (! keyType.isObject()) {
+						if (keyType.isString() && k.getClass() != Class.class)
+							k2 = k.toString();
+						else
+							k2 = convertToMemberType(m, k, keyType);
+					}
+					var v2 = v;
+					if (! valueType.isObject())
+						v2 = convertToMemberType(m, v, valueType);
+					m.put(k2, v2);
+				});
+				return (T)m;
+			} else if (! to.canCreateNewInstanceFromString(outer)) {
+				var m = JsonMap.ofJson(value.toString());
+				m.setBeanSession(this);
+				return convertToMemberType(outer, m, to);
+			}
+			return null;
+		} catch (Exception e) {
+			throw new InvalidDataConversionException(value.getClass(), to, e);
+		}
+	}
+
+	private <T> T convertToCollectionType(Object outer, Object value, ClassMeta<?> from, ClassMeta<T> to) {
+		try {
+			Collection l;
+			if (to.canCreateNewInstance(outer)) {
+				l = (Collection)to.newInstance(outer);
+			} else if (to.isSet()) {
+				l = set();
+			} else {
+				l = new JsonList(this);
+			}
+			var elementType = to.getElementType();
+	
+			if (from.isArray()) {
+				for (var i = 0; i < Array.getLength(value); i++) {
+					var o = Array.get(value, i);
+					l.add(elementType.isObject() ? o : convertToMemberType(l, o, elementType));
+				}
+			} else if (from.isCollection())
+				((Collection)value).forEach(x -> l.add(elementType.isObject() ? x : convertToMemberType(l, x, elementType)));
+			else if (from.isMap())
+				l.add(elementType.isObject() ? value : convertToMemberType(l, value, elementType));
+			else if (isNullOrEmpty(value))
+				return null;
+			else if (from.isString()) {
+				var s = value.toString();
+				if (isProbablyJsonArray(s, false)) {
+					var l2 = JsonList.ofJson(s);
+					l2.setBeanSession(this);
+					l2.forEach(x -> l.add(elementType.isObject() ? x : convertToMemberType(l, x, elementType)));
+				} else {
+					throw new InvalidDataConversionException(value.getClass(), to, null);
+				}
+			} else
+				throw new InvalidDataConversionException(value.getClass(), to, null);
+			return (T)l;
+		} catch (InvalidDataConversionException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new InvalidDataConversionException(value.getClass(), to, e);
+		}
 	}
 }

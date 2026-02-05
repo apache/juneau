@@ -628,15 +628,15 @@ public class HtmlParserSession extends XmlParserSession {
 						bpm.set(m, key, value);
 					}
 				}
-				// @formatter:off
-				l.add(
-					m == null
-					? null
-					: nn(builder)
-						? builder.build(this, m.getBean(), elementType)
-						: (E)m.getBean()
-				);
-				// @formatter:on
+				E element;
+				if (m == null) {
+					element = null;
+				} else if (nn(builder)) {
+					element = builder.build(this, m.getBean(), elementType);
+				} else {
+					element = (E)m.getBean();
+				}
+				l.add(element);
 			} else {
 				String c = getAttributes(r).get(getBeanTypePropertyName(type.getElementType()));
 				var m = (Map)(elementType.isMap() && elementType.canCreateNewInstance(l) ? elementType.newInstance(l) : newGenericMap(elementType));

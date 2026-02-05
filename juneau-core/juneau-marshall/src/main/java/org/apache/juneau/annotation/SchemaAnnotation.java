@@ -1613,6 +1613,27 @@ public class SchemaAnnotation {
 		Predicate<Map<?,?>> nem = Utils::ne;
 		Predicate<Boolean> nf = Utils::isTrue;
 		Predicate<Long> nm1 = Utils::nm1;
+
+		// Handle exclusiveMaximum with Draft 2020-12 fallback
+		String exclusiveMaximumValue;
+		if (ne.test(a.exclusiveMaximumValue())) {
+			exclusiveMaximumValue = a.exclusiveMaximumValue();
+		} else if (a.exclusiveMaximum() || a.emax()) {
+			exclusiveMaximumValue = "true";
+		} else {
+			exclusiveMaximumValue = null;
+		}
+
+		// Handle exclusiveMinimum with Draft 2020-12 fallback
+		String exclusiveMinimumValue;
+		if (ne.test(a.exclusiveMinimumValue())) {
+			exclusiveMinimumValue = a.exclusiveMinimumValue();
+		} else if (a.exclusiveMinimum() || a.emin()) {
+			exclusiveMinimumValue = "true";
+		} else {
+			exclusiveMinimumValue = null;
+		}
+
 		// @formatter:off
 		return m
 			.appendIf(nem, "additionalProperties", parseMap(a.additionalProperties()))
@@ -1622,14 +1643,8 @@ public class SchemaAnnotation {
 			.appendIf(ne, "discriminator", a.discriminator())
 			.appendIf(ne, "description", joinnl(a.description(), a.d()))
 			.appendFirst(nec, "enum", parseSet(a.enum_()), parseSet(a.e()))
-			// Handle exclusiveMaximum with Draft 2020-12 fallback
-			.appendIf(ne, "exclusiveMaximum",
-				ne.test(a.exclusiveMaximumValue()) ? a.exclusiveMaximumValue() :
-				(a.exclusiveMaximum() || a.emax()) ? "true" : null)
-			// Handle exclusiveMinimum with Draft 2020-12 fallback
-			.appendIf(ne, "exclusiveMinimum",
-				ne.test(a.exclusiveMinimumValue()) ? a.exclusiveMinimumValue() :
-				(a.exclusiveMinimum() || a.emin()) ? "true" : null)
+			.appendIf(ne, "exclusiveMaximum", exclusiveMaximumValue)
+			.appendIf(ne, "exclusiveMinimum", exclusiveMinimumValue)
 			.appendIf(nem, "externalDocs", ExternalDocsAnnotation.merge(m.getMap("externalDocs"), a.externalDocs()))
 			.appendFirst(ne, "format", a.format(), a.f())
 			.appendIf(ne, "ignore", a.ignore() ? "true" : null)

@@ -1406,8 +1406,7 @@ public class CollectionUtils {
 	 * @return A new modifiable map.
 	 */
 	public static <K,V> LinkedHashMap<K,V> map() {
-		var m = new LinkedHashMap<K,V>();
-		return m;
+		return new LinkedHashMap<>();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

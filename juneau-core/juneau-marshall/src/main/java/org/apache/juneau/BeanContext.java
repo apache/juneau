@@ -4363,8 +4363,17 @@ public class BeanContext extends Context {
 
 			if (cm2.isCollection() || cm2.isOptional()) {
 				var pParams = (beanp.params().length == 0 ? a(Object.class) : beanp.params());
-				if (pParams.length != 1)
-					throw rex("Invalid number of parameters specified for {1} (must be 1): {0}", pParams.length, (cm2.isCollection() ? "Collection" : cm2.isOptional() ? "Optional" : "Array"));
+				if (pParams.length != 1) {
+					String typeName;
+					if (cm2.isCollection()) {
+						typeName = "Collection";
+					} else if (cm2.isOptional()) {
+						typeName = "Optional";
+					} else {
+						typeName = "Array";
+					}
+					throw rex("Invalid number of parameters specified for {1} (must be 1): {0}", pParams.length, typeName);
+				}
 				var elementType = resolveType(pParams[0], cm2.getElementType(), cm.getElementType());
 				if (elementType.isObject())
 					return cm2;

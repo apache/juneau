@@ -803,9 +803,7 @@ public class BasicSwaggerProviderSession {
 		if (schema.containsKey(SWAGGER_type) || schema.containsKey(SWAGGER_$ref))
 			return schema;
 
-		var om = fixSwaggerExtensions(schema.append(js.getSchema(cm)));
-
-		return om;
+		return fixSwaggerExtensions(schema.append(js.getSchema(cm)));
 	}
 
 	private static boolean isMulti(Header h) {

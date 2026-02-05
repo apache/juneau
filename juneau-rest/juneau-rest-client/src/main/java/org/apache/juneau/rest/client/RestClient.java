@@ -6223,8 +6223,16 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		interceptors = nn(builder.interceptors) ? builder.interceptors.toArray(EMPTY_REST_CALL_INTERCEPTORS) : EMPTY_REST_CALL_INTERCEPTORS;
 		keepHttpClientOpen = builder.keepHttpClientOpen;
 		logger = nn(builder.logger) ? builder.logger : Logger.getLogger(cn(RestClient.class));
-		logRequests = nn(builder.logRequests) ? builder.logRequests : isDebug() ? DetailLevel.FULL : DetailLevel.NONE;
-		logRequestsLevel = nn(builder.logRequestsLevel) ? builder.logRequestsLevel : isDebug() ? Level.WARNING : Level.OFF;
+		if (nn(builder.logRequests)) {
+			logRequests = builder.logRequests;
+		} else {
+			logRequests = isDebug() ? DetailLevel.FULL : DetailLevel.NONE;
+		}
+		if (nn(builder.logRequestsLevel)) {
+			logRequestsLevel = builder.logRequestsLevel;
+		} else {
+			logRequestsLevel = isDebug() ? Level.WARNING : Level.OFF;
+		}
 		logRequestsPredicate = nn(builder.logRequestsPredicate) ? builder.logRequestsPredicate : LOG_REQUESTS_PREDICATE_DEFAULT;
 		logToConsole = builder.logToConsole || isDebug();
 		parsers = builder.parsers().build();
@@ -7807,9 +7815,14 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @param args The arguments.
 	 */
 	protected void log(Level level, String msg, Object...args) {
-		logger.log(level, f(msg, args));
-		if (logToConsole)
+		if (logger.isLoggable(level)) {
+			String formattedMsg = f(msg, args);
+			logger.log(level, formattedMsg);
+			if (logToConsole)
+				console.println(formattedMsg);
+		} else if (logToConsole) {
 			console.println(f(msg, args));
+		}
 	}
 
 	/**
@@ -7822,8 +7835,15 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @param args Optional message arguments.
 	 */
 	protected void log(Level level, Throwable t, String msg, Object...args) {
-		logger.log(level, t, fs(msg, args));
-		if (logToConsole) {
+		if (logger.isLoggable(level)) {
+			String formattedMsg = f(msg, args);
+			logger.log(level, formattedMsg, t);
+			if (logToConsole) {
+				console.println(f(msg, args));
+				if (nn(t))
+					t.printStackTrace(console);
+			}
+		} else if (logToConsole) {
 			console.println(f(msg, args));
 			if (nn(t))
 				t.printStackTrace(console);

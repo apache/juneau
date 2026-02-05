@@ -324,7 +324,14 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 	private static HtmlElement tagBlockSummary(Tag t) {
 		var ed = t.getExternalDocs();
 
-		var content = nn(ed) && nn(ed.getDescription()) ? ed.getDescription() : (nn(ed) ? ed.getUrl() : null);
+		String content;
+		if (nn(ed) && nn(ed.getDescription())) {
+			content = ed.getDescription();
+		} else if (nn(ed)) {
+			content = ed.getUrl().toString();
+		} else {
+			content = null;
+		}
 		return div()._class("tag-block-summary").onclick("toggleTagBlock(this)").children(span(t.getName())._class("name"), span(toBRL(t.getDescription()))._class("description"),
 			nn(ed) && nn(ed.getUrl()) ? span(a(ed.getUrl(), content))._class("extdocs") : null);
 	}

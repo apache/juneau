@@ -360,7 +360,14 @@ public class BeanTraverseSession extends BeanSession {
 		if (o == null)
 			return null;
 		var c = o.getClass();
-		var cm = (nn(eType) && c == eType.inner()) ? eType : ((o instanceof ClassMeta) ? (ClassMeta<?>)o : getClassMeta(c));
+		ClassMeta<?> cm;
+		if (nn(eType) && c == eType.inner()) {
+			cm = eType;
+		} else if (o instanceof ClassMeta) {
+			cm = (ClassMeta<?>)o;
+		} else {
+			cm = getClassMeta(c);
+		}
 		if (cm.isCharSequence() || cm.isNumber() || cm.isBoolean())
 			return cm;
 		if (depth > getMaxDepth())

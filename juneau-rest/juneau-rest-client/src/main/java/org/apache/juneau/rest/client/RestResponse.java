@@ -415,11 +415,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 						if (nn(e.getContentType()))
 							sb.append("\n\t").append(e.getContentType());
 						if (e.isRepeatable()) {
-							try {
-								sb.append("\n---request content---\n").append(EntityUtils.toString(e));
-							} catch (Exception ex) {
-								sb.append("\n---request content exception---\n").append(ex.getMessage());
-							}
+							appendRequestContent(sb, e);
 						}
 					}
 					sb.append("\n=== RESPONSE ===\n").append(getStatusLine());
@@ -433,15 +429,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 			}
 
 			for (var r : request.interceptors) {
-				try {
-					r.onClose(request, this);
-				} catch (RuntimeException | Error e) {
-					// Let unchecked exceptions propagate - these indicate programming errors that should be visible
-					throw e;
-				} catch (Exception e) {
-					// Wrap checked exceptions from interceptors (including RestCallException)
-					throw new RestCallException(this, e, "Interceptor throw exception on close");
-				}
+				invokeInterceptorOnClose(r, request);
 			}
 			client.onCallClose(request, this);
 		} catch (RuntimeException | Error e) {
@@ -467,6 +455,26 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	public RestResponse consume() {
 		close();
 		return this;
+	}
+
+	private void appendRequestContent(StringBuilder sb, HttpEntity e) {
+		try {
+			sb.append("\n---request content---\n").append(EntityUtils.toString(e));
+		} catch (Exception ex) {
+			sb.append("\n---request content exception---\n").append(ex.getMessage());
+		}
+	}
+
+	private void invokeInterceptorOnClose(RestCallInterceptor r, RestRequest request) throws RestCallException {
+		try {
+			r.onClose(request, this);
+		} catch (RuntimeException | Error e) {
+			// Let unchecked exceptions propagate - these indicate programming errors that should be visible
+			throw e;
+		} catch (Exception e) {
+			// Wrap checked exceptions from interceptors (including RestCallException)
+			throw new RestCallException(this, e, "Interceptor throw exception on close");
+		}
 	}
 
 	/**
