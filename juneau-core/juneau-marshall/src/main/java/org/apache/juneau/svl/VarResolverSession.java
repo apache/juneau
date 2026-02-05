@@ -112,7 +112,7 @@ public class VarResolverSession {
 				} else if (c < 'A' || c > 'z' || (c > 'Z' && c < 'a')) {   // False trigger "$X "
 					return false;
 				}
-			} else if (state == S3) {
+			} else if (state == S3) {  // NOSONAR - State check necessary for state machine
 				if (c == '}')
 					state = S4;
 				else if (c == '{' || c == '$')
@@ -354,6 +354,7 @@ public class VarResolverSession {
 				} else if (c == '$') {
 					x = i;
 					x2 = i;
+					hasInnerEscapes = false;
 					state = S2;
 				} else {
 					out.append(c);
@@ -367,6 +368,10 @@ public class VarResolverSession {
 				} else if (c == '{') {
 					varType = s.substring(x + 1, i);
 					x = i;
+					isInEscape = false;
+					depth = 0;
+					hasInnerEscapes = false;
+					hasInternalVar = false;
 					state = S3;
 				} else if (c < 'A' || c > 'z' || (c > 'Z' && c < 'a')) {  // False trigger "$X "
 					if (hasInnerEscapes)

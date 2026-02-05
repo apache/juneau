@@ -138,7 +138,7 @@ public class LogEntryFormatter extends Formatter {
 					re.append("\\%").append(c);
 					state = S1;
 				}
-			} else if (state == S3) {
+			} else if (state == S3) {  // NOSONAR - State check necessary for state machine
 				if (c == '$') {
 					state = S4;
 				} else {

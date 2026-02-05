@@ -331,7 +331,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 								return m;
 							state = S1;
 						}
-					} else if (state == S3) {
+					} else if (state == S3) {  // NOSONAR - State check necessary for state machine
 						if (c == -1 || c == '\u0001') {
 							if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
 								var pMeta = m.getPropertyMeta(currAttr);

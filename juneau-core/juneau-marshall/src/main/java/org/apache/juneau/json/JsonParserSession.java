@@ -392,7 +392,7 @@ public class JsonParserSession extends ReaderParserSession {
 						currAttr = parseFieldName(r);
 						state = S3;
 					}
-				} else if (state == S3) {
+				} else if (state == S3) {  // NOSONAR - State check necessary for state machine
 					if (c == ':')
 						state = S4;
 				} else if (state == S4) {
@@ -478,7 +478,7 @@ public class JsonParserSession extends ReaderParserSession {
 					l.add((E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, pMeta));
 					state = S3;
 				}
-			} else if (state == S3) {
+			} else if (state == S3) {  // NOSONAR - State check necessary for state machine
 				if (c == ',') {
 					state = S4;
 				} else if (isCommentOrWhitespace(c)) {
@@ -544,7 +544,7 @@ public class JsonParserSession extends ReaderParserSession {
 					currAttr = parseFieldName(r.unread());
 					state = S3;
 				}
-			} else if (state == S3) {
+			} else if (state == S3) {  // NOSONAR - State check necessary for state machine
 				if (c == ':')
 					state = S4;
 			} else if (state == S4) {
@@ -838,7 +838,7 @@ public class JsonParserSession extends ReaderParserSession {
 						throw new ParseException(this, "Expected to find wrapper attribute ''{0}'' but found attribute ''{1}''", wrapperAttr, currAttr);
 					state = S3;
 				}
-			} else if (state == S3) {
+			} else if (state == S3) {  // NOSONAR - State check necessary for state machine
 				if (c == ':')
 					state = S4;
 			} else if (state == S4) {

@@ -254,7 +254,7 @@ public class RestUtils {
 						currAttr = r.getMarked(0, -1);
 						state = S3;
 					}
-				} else if (state == S3) {
+				} else if (state == S3) {  // NOSONAR - State check necessary for state machine
 					if (c == -1 || c == '\u0001') {
 						add(m, currAttr, "");
 						state = S1;

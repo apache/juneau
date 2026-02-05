@@ -296,7 +296,7 @@ public class StringExpressionMatcher {
 						break;
 					}
 				}
-			} else if (state == S5) {
+			} else if (state == S5) {  // NOSONAR - State check necessary for state machine
 				// S5 = Found & or | or ,.
 				if (c == '&') {
 					//ands.add(operand);

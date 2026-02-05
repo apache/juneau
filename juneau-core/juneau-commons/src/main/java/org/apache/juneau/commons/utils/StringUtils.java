@@ -2399,7 +2399,8 @@ public class StringUtils {
 					state = S3;
 				else if (! isLowerCaseLetter(c))
 					return s;
-			} else if (state == S3) {
+				// else: continue in S2 (lowercase letter)
+			} else if (state == S3) {  // NOSONAR - State check necessary for state machine
 				if (c == '/')
 					state = S4;
 				else
@@ -2899,7 +2900,7 @@ public class StringUtils {
 					state = S3;
 				else if (! isLowerCaseLetter(c))
 					return false;
-			} else if (state == S3) {
+			} else if (state == S3) {  // NOSONAR - State check necessary for state machine
 				if (c == '/')
 					state = S4;
 				else
@@ -3563,7 +3564,7 @@ public class StringUtils {
 					state = S3;
 				else
 					return false;
-			} else if (state == S3) {
+			} else if (state == S3) {  // NOSONAR - State check necessary for state machine
 				if (c == ':')
 					state = S4;
 				else if (! isLowerCaseLetter(c))
@@ -6739,7 +6740,8 @@ public class StringUtils {
 			} else if (state == S2 || state == S3) {
 				if (c == '\\') {
 					isInEscape = ! isInEscape;
-					needsUnescape = ! keepQuotes;
+					if (isInEscape)
+						needsUnescape = ! keepQuotes;
 				} else if (! isInEscape) {
 					if (c == (state == S2 ? '\'' : '"')) {
 						var s2 = s.substring(mark, keepQuotes ? i + 1 : i);
