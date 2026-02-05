@@ -1412,10 +1412,8 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 			if (gct instanceof ParameterizedType gct2)
 				return Array.newInstance((Class<?>)gct2.getRawType(), 0).getClass();
 		} else if (actualType instanceof TypeVariable<?> actualType3) {
-			var nestedOuterTypes = new LinkedList<Class<?>>();
 			for (Class<?> ec = cc.getEnclosingClass(); nn(ec); ec = ec.getEnclosingClass()) {
 				var outerClass = ec;
-				nestedOuterTypes.add(outerClass);
 				var outerTypeMap = new HashMap<Type,Type>();
 				extractTypes(outerTypeMap, outerClass);
 				for (var entry : outerTypeMap.entrySet()) {

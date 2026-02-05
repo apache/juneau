@@ -284,6 +284,7 @@ class RoundTripMaps_Test extends TestBase {
 		assertEquals("a", x.get(TestEnum.FOO));
 		assertNull(null, x.get(TestEnum.BAR));
 
+		@SuppressWarnings("java:S1640") // HashMap required - test needs null key support which EnumMap doesn't allow
 		var x2 = new HashMap<TestEnum,String>();
 		x2.put(TestEnum.FOO, "a");
 		x2.put(TestEnum.BAR, null);

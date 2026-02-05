@@ -116,7 +116,9 @@ public class MsgPackInputStream extends ParserInputStream {
 	 */
 	byte[] readBinary() throws IOException {
 		var b = new byte[(int)length];
-		read(b);
+		var bytesRead = read(b);
+		if (bytesRead != b.length)
+			throw new IOException("Expected to read " + b.length + " bytes but only read " + bytesRead);
 		return b;
 	}
 

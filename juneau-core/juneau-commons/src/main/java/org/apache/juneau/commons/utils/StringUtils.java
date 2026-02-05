@@ -4927,7 +4927,7 @@ public class StringUtils {
 	public static String obfuscate(String s) {
 		if (s == null || s.length() < 2)
 			return "*";
-		return s.substring(0, 1) + s.substring(1).replaceAll(".", "*");
+		return s.substring(0, 1) + s.substring(1).replaceAll(".", "*");  // NOSONAR - Dot matches any character, which is intended
 	}
 
 	/**
