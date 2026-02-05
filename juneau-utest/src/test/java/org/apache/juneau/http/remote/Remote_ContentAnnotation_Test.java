@@ -212,7 +212,7 @@ class Remote_ContentAnnotation_Test extends TestBase {
 		}
 
 		@RestPost
-		public Object x9(@Content Reader b, @Header("Content-Type") String ct) {  // NOSONAR(java:S1186): Unused test method/constructor
+		public Object x9(@Content Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/plain",ct);
 			return b;
 		}
@@ -263,42 +263,42 @@ class Remote_ContentAnnotation_Test extends TestBase {
 			return b;
 		}
 		@RestPost
-		public Reader x2(@Content Reader b, @Header("Content-Type") String ct) {  // NOSONAR(java:S1186): Unused test method/constructor
+		public Reader x2(@Content Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
 		@RestPost
-		public Reader x3(@Content Reader b, @Header("Content-Type") String ct) {  // NOSONAR(java:S1186): Unused test method/constructor
+		public Reader x3(@Content Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
 		@RestPost
-		public Reader x5(@Content Reader b, @Header("Content-Type") String ct) {  // NOSONAR(java:S1186): Unused test method/constructor
+		public Reader x5(@Content Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
 		@RestPost
-		public Reader x6(@Content Reader b, @Header("Content-Type") String ct) {  // NOSONAR(java:S1186): Unused test method/constructor
+		public Reader x6(@Content Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
 		@RestPost
-		public Reader x7(@Content Reader b, @Header("Content-Type") String ct) {  // NOSONAR(java:S1186): Unused test method/constructor
+		public Reader x7(@Content Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
 		@RestPost
-		public Reader x8(@Content Reader b, @Header("Content-Type") String ct) {  // NOSONAR(java:S1186): Unused test method/constructor
+		public Reader x8(@Content Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
 		@RestPost
-		public Reader x9(@Content Reader b, @Header("Content-Type") String ct) {  // NOSONAR(java:S1186): Unused test method/constructor
+		public Reader x9(@Content Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
 		@RestPost
-		public Reader x10(@Content Reader b, @Header("Content-Type") String ct) {  // NOSONAR(java:S1186): Unused test method/constructor
+		public Reader x10(@Content Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}

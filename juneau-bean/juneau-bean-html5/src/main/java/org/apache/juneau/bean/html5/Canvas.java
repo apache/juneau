@@ -104,7 +104,7 @@ public class Canvas extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Canvas _class(String value) { // NOSONAR - Intentional naming.
+	public Canvas _class(String value) {
 		super._class(value);
 		return this;
 	}

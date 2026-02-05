@@ -100,7 +100,7 @@ public class Ol extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Ol _class(String value) { // NOSONAR - Intentional naming.
+	public Ol _class(String value) {
 		super._class(value);
 		return this;
 	}

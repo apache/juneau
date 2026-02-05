@@ -128,7 +128,7 @@ public interface ThrowingConsumer4<A,B,C,D> extends Consumer4<A,B,C,D> {
 	 * @return A composed {@link ThrowingConsumer4} that performs in sequence this operation followed by the {@code after} operation.
 	 * @throws NullPointerException if {@code after} is <jk>null</jk>.
 	 */
-	default ThrowingConsumer4<A,B,C,D> andThen(ThrowingConsumer4<? super A,? super B,? super C,? super D> after) {  // NOSONAR - false positive on generics
+	default ThrowingConsumer4<A,B,C,D> andThen(ThrowingConsumer4<? super A,? super B,? super C,? super D> after) {
 		assertArgNotNull(ARG_after, after);
 		return (A a, B b, C c, D d) -> {
 			acceptThrows(a, b, c, d);

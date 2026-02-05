@@ -99,7 +99,7 @@ public interface Consumer2<A,B> {
 	 * @return A composed {@link Consumer2} that performs in sequence this operation followed by the {@code after} operation.
 	 * @throws NullPointerException if {@code after} is <jk>null</jk>.
 	 */
-	default Consumer2<A,B> andThen(Consumer2<? super A,? super B> after) {  // NOSONAR - false positive on generics
+	default Consumer2<A,B> andThen(Consumer2<? super A,? super B> after) {
 		assertArgNotNull(ARG_after, after);
 		return (A a, B b) -> {
 			apply(a, b);

@@ -121,7 +121,7 @@ public class Figure extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Figure _class(String value) { // NOSONAR - Intentional naming.
+	public Figure _class(String value) {
 		super._class(value);
 		return this;
 	}

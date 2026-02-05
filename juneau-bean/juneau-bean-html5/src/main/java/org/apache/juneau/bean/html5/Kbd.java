@@ -105,7 +105,7 @@ public class Kbd extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Kbd _class(String value) { // NOSONAR - Intentional naming.
+	public Kbd _class(String value) {
 		super._class(value);
 		return this;
 	}

@@ -104,7 +104,7 @@ public class Div extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Div _class(String value) { // NOSONAR - Intentional naming.
+	public Div _class(String value) {
 		super._class(value);
 		return this;
 	}

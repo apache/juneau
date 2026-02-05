@@ -316,7 +316,7 @@ public class SchemaInfo extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull(ARG_property, property);
-		return switch (property) {  // NOSONAR(java:UNKNOWN): Switch expression
+		return switch (property) {
 			case "additionalProperties" -> toType(getAdditionalProperties(), type);
 			case "allOf" -> toType(getAllOf(), type);
 			case "default" -> toType(getDefault(), type);
@@ -656,7 +656,7 @@ public class SchemaInfo extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public SchemaInfo set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);
-		return switch (property) {  // NOSONAR(java:UNKNOWN): Switch expression
+		return switch (property) {
 			case "additionalProperties" -> setAdditionalProperties(toType(value, SchemaInfo.class));
 			case "allOf" -> setAllOf(toSetBuilder(value, SchemaInfo.class).sparse().build());
 			case "default" -> setDefault(value);

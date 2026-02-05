@@ -109,7 +109,7 @@ public class Ruby extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Ruby _class(String value) { // NOSONAR - Intentional naming.
+	public Ruby _class(String value) {
 		super._class(value);
 		return this;
 	}

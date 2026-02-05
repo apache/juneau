@@ -95,7 +95,7 @@ public class Iframe extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Iframe _class(String value) { // NOSONAR - Intentional naming.
+	public Iframe _class(String value) {
 		super._class(value);
 		return this;
 	}

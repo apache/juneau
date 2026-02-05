@@ -79,7 +79,7 @@ public class Audio extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Audio _class(String value) { // NOSONAR - Intentional naming.
+	public Audio _class(String value) {
 		super._class(value);
 		return this;
 	}

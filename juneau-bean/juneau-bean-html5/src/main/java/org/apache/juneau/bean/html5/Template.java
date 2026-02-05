@@ -140,7 +140,7 @@ public class Template extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Template _class(String value) { // NOSONAR - Intentional naming.
+	public Template _class(String value) {
 		super._class(value);
 		return this;
 	}

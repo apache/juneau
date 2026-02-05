@@ -98,7 +98,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Input _class(String value) { // NOSONAR - Intentional naming.
+	public Input _class(String value) {
 		super._class(value);
 		return this;
 	}

@@ -84,7 +84,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Body _class(String value) { // NOSONAR - Intentional naming.
+	public Body _class(String value) {
 		super._class(value);
 		return this;
 	}

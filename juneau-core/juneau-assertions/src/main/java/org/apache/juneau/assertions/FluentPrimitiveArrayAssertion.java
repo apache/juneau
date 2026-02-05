@@ -216,7 +216,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	}
 
 	@Override /* Overridden from FluentObjectAssertion */
-	public FluentPrimitiveArrayAssertion<E,T,R> asTransformed(Function<T,T> function) { // NOSONAR - Intentional.
+	public FluentPrimitiveArrayAssertion<E,T,R> asTransformed(Function<T,T> function) {
 		return new FluentPrimitiveArrayAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
@@ -380,7 +380,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	@Override
 	public String toString() {
 		if (valueIsNull())
-			return null; // NOSONAR - Intentional.
+			return null;
 		return STRINGIFIERS.get(value().getClass().getComponentType()).apply(value());
 	}
 

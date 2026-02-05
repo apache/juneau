@@ -74,7 +74,7 @@ public class Base extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Base _class(String value) { // NOSONAR - Intentional naming.
+	public Base _class(String value) {
 		super._class(value);
 		return this;
 	}

@@ -81,7 +81,7 @@ public class Del extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Del _class(String value) { // NOSONAR - Intentional naming.
+	public Del _class(String value) {
 		super._class(value);
 		return this;
 	}

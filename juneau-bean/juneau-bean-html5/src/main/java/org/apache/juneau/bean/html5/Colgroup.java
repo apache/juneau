@@ -105,7 +105,7 @@ public class Colgroup extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Colgroup _class(String value) { // NOSONAR - Intentional naming.
+	public Colgroup _class(String value) {
 		super._class(value);
 		return this;
 	}

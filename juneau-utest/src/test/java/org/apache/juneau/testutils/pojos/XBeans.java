@@ -44,7 +44,7 @@ public class XBeans {
 	}
 
 	@Bean(sort=true)
-	public static class XB {  // NOSONAR(java:S1186): Unused test method/constructor
+	public static class XB {
 		public String[] f01;
 		public List<String> f02;
 		public int[] f03;
@@ -166,7 +166,7 @@ public class XBeans {
 
 	}
 
-	public static class XE {  // NOSONAR(java:S1186): Unused test method/constructor
+	public static class XE {
 		public String[] f01;
 		public List<String> f02;
 		public int[] f03;

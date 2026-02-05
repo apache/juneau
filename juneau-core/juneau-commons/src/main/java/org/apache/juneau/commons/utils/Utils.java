@@ -1679,7 +1679,7 @@ public class Utils {
 	 */
 	public static final void printLines(String[] lines) {
 		for (var i = 0; i < lines.length; i++)
-			System.out.println(String.format("%4s:" + lines[i], i + 1)); // NOSONAR - NOT DEBUG
+			System.out.println(String.format("%4s:" + lines[i], i + 1));
 	}
 
 	/**

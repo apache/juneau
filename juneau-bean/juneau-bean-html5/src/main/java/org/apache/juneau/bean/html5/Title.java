@@ -74,7 +74,7 @@ public class Title extends HtmlElementRawText {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Title _class(String value) { // NOSONAR - Intentional naming.
+	public Title _class(String value) {
 		super._class(value);
 		return this;
 	}

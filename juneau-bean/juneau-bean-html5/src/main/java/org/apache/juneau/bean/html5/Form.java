@@ -108,7 +108,7 @@ public class Form extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Form _class(String value) { // NOSONAR - Intentional naming.
+	public Form _class(String value) {
 		super._class(value);
 		return this;
 	}

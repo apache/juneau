@@ -108,7 +108,7 @@ public class Var extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Var _class(String value) { // NOSONAR - Intentional naming.
+	public Var _class(String value) {
 		super._class(value);
 		return this;
 	}

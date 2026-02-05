@@ -129,7 +129,7 @@ public class Swagger extends SwaggerElement {
 	private static final String PROP_swagger = "swagger";
 	private static final String PROP_tags = "tags";
 
-	private String swagger = "2.0";  // NOSONAR - Intentional naming.
+	private String swagger = "2.0";
 	private String host;
 	private String basePath;
 	private Info info;

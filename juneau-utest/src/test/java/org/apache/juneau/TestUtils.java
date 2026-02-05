@@ -213,9 +213,9 @@ public class TestUtils extends Utils {
 		}
 
 		var indent = -1;
-		var startTag = Pattern.compile("^(\\s*)<[^/>]+(\\s+\\S+=['\"]\\S*['\"])*\\s*>$");  // NOSONAR(java:UNKNOWN): Field initialization
+		var startTag = Pattern.compile("^(\\s*)<[^/>]+(\\s+\\S+=['\"]\\S*['\"])*\\s*>$");
 		var endTag = Pattern.compile("^(\\s*)</[^>]+>$");
-		var combinedTag = Pattern.compile("^(\\s*)<[^>/]+(\\s+\\S+=['\"]\\S*['\"])*\\s*/>$");  // NOSONAR(java:UNKNOWN): Field initialization
+		var combinedTag = Pattern.compile("^(\\s*)<[^>/]+(\\s+\\S+=['\"]\\S*['\"])*\\s*/>$");
 		var contentOnly = Pattern.compile("^(\\s*)[^\\s\\<]+$");
 		var tagWithContent = Pattern.compile("^(\\s*)<[^>]+>.*</[^>]+>$");
 		var lines = out.split("\n");

@@ -260,7 +260,7 @@ class RrpcInterface_Test extends TestBase {
 				// Various primitives
 
 				@Override
-				public void returnVoid() {}  // NOSONAR(java:S1186): Unused test method/constructor
+				public void returnVoid() {}
 
 				@Override
 				public Integer returnInteger() {
@@ -528,7 +528,7 @@ class RrpcInterface_Test extends TestBase {
 				// Various primitives
 
 				@Override
-				public void setNothing() {}  // NOSONAR(java:S1186): Unused test method/constructor
+				public void setNothing() {}
 
 				@Override
 				public void setInt(int v) {

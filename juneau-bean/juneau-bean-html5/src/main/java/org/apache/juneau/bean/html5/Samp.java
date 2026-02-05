@@ -96,7 +96,7 @@ public class Samp extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Samp _class(String value) { // NOSONAR - Intentional naming.
+	public Samp _class(String value) {
 		super._class(value);
 		return this;
 	}

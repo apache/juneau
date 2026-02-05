@@ -123,7 +123,7 @@ public class Items extends OpenApiElement {
 	private Boolean exclusiveMaximum;
 	private Boolean exclusiveMinimum;
 	private Boolean uniqueItems;
-	private Items items;  // NOSONAR - Intentional naming.
+	private Items items;
 	private Object default_;
 	private List<Object> enum_ = list();
 
@@ -540,7 +540,7 @@ public class Items extends OpenApiElement {
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object
 	 */
-	public Items setEnum(Object...values) {  // NOSONAR - Intentional naming.
+	public Items setEnum(Object...values) {
 		enum_ = listb(Object.class).sparse().addAny(enum_, values).build();
 		return this;
 	}

@@ -98,9 +98,9 @@ class MethodInfo_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	public static class A1 {
-		public void m() {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void m() {}
 	}
-	static MethodInfo a_m = ofm(A1.class, "m");  // NOSONAR(java:UNKNOWN): Field initialization
+	static MethodInfo a_m = ofm(A1.class, "m");
 
 	@SuppressWarnings("java:S1186")
 	public static class EqualsTestClass {
@@ -114,8 +114,8 @@ class MethodInfo_Test extends TestBase {
 		int foo();
 	}
 	public static class B2 {
-		public int foo(int x) { return 0; }  // NOSONAR(java:UNKNOWN): Unused test code
-		public int foo(String x) {return 0;}  // NOSONAR(java:UNKNOWN): Unused test code
+		public int foo(int x) { return 0; }
+		public int foo(String x) {return 0;}
 		public int foo() {return 0;}
 	}
 	public static class B3 extends B2 implements B1 {
@@ -133,7 +133,7 @@ class MethodInfo_Test extends TestBase {
 	}
 
 	public class BM3 {
-		public void foo(String s) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void foo(String s) {}
 	}
 
 	public interface BM4 extends BM1 {
@@ -141,11 +141,11 @@ class MethodInfo_Test extends TestBase {
 	}
 
 	public class BM5 extends BM3 implements BM2 {
-		@Override public void foo(String s) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		@Override public void foo(String s) {}
 	}
 
 	public class BM6 extends BM5 implements BM4 {
-		@Override public void foo(String s) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		@Override public void foo(String s) {}
 	}
 
 	public interface BM7 {
@@ -153,8 +153,8 @@ class MethodInfo_Test extends TestBase {
 	}
 
 	public class BM8 implements BM7 {
-		@Override public void bar() {}  // NOSONAR(java:S1186): Unused test method/constructor
-		public void baz() {}  // NOSONAR(java:S1186): Unused test method/constructor
+		@Override public void bar() {}
+		public void baz() {}
 	}
 
 	@A("C1")
@@ -168,82 +168,82 @@ class MethodInfo_Test extends TestBase {
 
 	@A("C2")
 	public static class C2 implements C1 {
-		@Override public void a1() {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@Override @A("a2b") public void a2() {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@Override public void a3(CharSequence s) {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@Override public void a4() {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@Override public void a5() {}  // NOSONAR(java:S1186): Unused test method/constructor
+		@Override public void a1() {}
+		@Override @A("a2b") public void a2() {}
+		@Override public void a3(CharSequence s) {}
+		@Override public void a4() {}
+		@Override public void a5() {}
 	}
 
 	@A("C3")
 	public static class C3 extends C2 {
-		@Override public void a1() {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@Override public void a2() {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@Override public void a3(CharSequence foo) {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@Override @A("a4") public void a4() {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@Override public void a5() {}  // NOSONAR(java:S1186): Unused test method/constructor
+		@Override public void a1() {}
+		@Override public void a2() {}
+		@Override public void a3(CharSequence foo) {}
+		@Override @A("a4") public void a4() {}
+		@Override public void a5() {}
 	}
 	static MethodInfo
-		c_a1 = ofm(C3.class, "a1"),  // NOSONAR(java:UNKNOWN): Unused test code
-		c_a2 = ofm(C3.class, "a2"),  // NOSONAR(java:UNKNOWN): Unused test code
-		c_a3 = ofm(C3.class, "a3", CharSequence.class),  // NOSONAR(java:UNKNOWN): Unused test code
-		c_a4 = ofm(C3.class, "a4"),  // NOSONAR(java:UNKNOWN): Unused test code
-		c_a5 = ofm(C3.class, "a5");  // NOSONAR(java:UNKNOWN): Field initialization
+		c_a1 = ofm(C3.class, "a1"),
+		c_a2 = ofm(C3.class, "a2"),
+		c_a3 = ofm(C3.class, "a3", CharSequence.class),
+		c_a4 = ofm(C3.class, "a4"),
+		c_a5 = ofm(C3.class, "a5");
 
 	public static class D {
-		public void a1() {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void a1() {}
 		public Integer a2() {return null;}
 	}
 	static MethodInfo
-		d_a1 = ofm(D.class, "a1"),  // NOSONAR(java:UNKNOWN): Unused test code
-		d_a2 = ofm(D.class, "a2");  // NOSONAR(java:UNKNOWN): Field initialization
+		d_a1 = ofm(D.class, "a1"),
+		d_a2 = ofm(D.class, "a2");
 
 	public static class E {
 		private String f;
 		public void a1(CharSequence foo) {
 			f = foo == null ? null : foo.toString();
 		}
-		public void a2(int f1, int f2) {}  // NOSONAR(java:S1186): Unused test method/constructor
-		public void a3() {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void a2(int f1, int f2) {}
+		public void a3() {}
 	}
 	static MethodInfo
-		e_a1 = ofm(E.class, "a1", CharSequence.class),  // NOSONAR(java:UNKNOWN): Unused test code
-		e_a2 = ofm(E.class, "a2", int.class, int.class),  // NOSONAR(java:UNKNOWN): Unused test code
-		e_a3 = ofm(E.class, "a3");  // NOSONAR(java:UNKNOWN): Field initialization
+		e_a1 = ofm(E.class, "a1", CharSequence.class),
+		e_a2 = ofm(E.class, "a2", int.class, int.class),
+		e_a3 = ofm(E.class, "a3");
 
 	public static class F {
-		public void isA() {}  // NOSONAR(java:S1186): Unused test method/constructor
-		public void is() {}  // NOSONAR(java:S1186): Unused test method/constructor
-		public void getA() {}  // NOSONAR(java:S1186): Unused test method/constructor
-		public void get() {}  // NOSONAR(java:S1186): Unused test method/constructor
-		public void setA() {}  // NOSONAR(java:S1186): Unused test method/constructor
-		public void set() {}  // NOSONAR(java:S1186): Unused test method/constructor
-		public void foo() {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void isA() {}
+		public void is() {}
+		public void getA() {}
+		public void get() {}
+		public void setA() {}
+		public void set() {}
+		public void foo() {}
 	}
 	static MethodInfo
-		f_isA = ofm(F.class, "isA"),  // NOSONAR(java:UNKNOWN): Unused test code
-		f_is = ofm(F.class, "is"),  // NOSONAR(java:UNKNOWN): Unused test code
-		f_getA = ofm(F.class, "getA"),  // NOSONAR(java:UNKNOWN): Unused test code
-		f_get = ofm(F.class, "get"),  // NOSONAR(java:UNKNOWN): Unused test code
-		f_setA = ofm(F.class, "setA"),  // NOSONAR(java:UNKNOWN): Unused test code
-		f_set = ofm(F.class, "set"),  // NOSONAR(java:UNKNOWN): Unused test code
-		f_foo = ofm(F.class, "foo");  // NOSONAR(java:UNKNOWN): Field initialization
+		f_isA = ofm(F.class, "isA"),
+		f_is = ofm(F.class, "is"),
+		f_getA = ofm(F.class, "getA"),
+		f_get = ofm(F.class, "get"),
+		f_setA = ofm(F.class, "setA"),
+		f_set = ofm(F.class, "set"),
+		f_foo = ofm(F.class, "foo");
 
 	public static class G {
-		public void a1() {}  // NOSONAR(java:S1186): Unused test method/constructor
-		public void a1(int a1) {}  // NOSONAR(java:S1186): Unused test method/constructor
-		public void a1(int a1, int a2) {}  // NOSONAR(java:S1186): Unused test method/constructor
-		public void a1(String a1) {}  // NOSONAR(java:S1186): Unused test method/constructor
-		public void a2() {}  // NOSONAR(java:S1186): Unused test method/constructor
-		public void a3() {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void a1() {}
+		public void a1(int a1) {}
+		public void a1(int a1, int a2) {}
+		public void a1(String a1) {}
+		public void a2() {}
+		public void a3() {}
 	}
 	static MethodInfo
-		g_a1a = ofm(G.class, "a1"),  // NOSONAR(java:UNKNOWN): Unused test code
-		g_a1b = ofm(G.class, "a1", int.class),  // NOSONAR(java:UNKNOWN): Unused test code
-		g_a1c = ofm(G.class, "a1", int.class, int.class),  // NOSONAR(java:UNKNOWN): Unused test code
-		g_a1d = ofm(G.class, "a1", String.class),  // NOSONAR(java:UNKNOWN): Unused test code
-		g_a2 = ofm(G.class, "a2"),  // NOSONAR(java:UNKNOWN): Unused test code
-		g_a3 = ofm(G.class, "a3");  // NOSONAR(java:UNKNOWN): Field initialization
+		g_a1a = ofm(G.class, "a1"),
+		g_a1b = ofm(G.class, "a1", int.class),
+		g_a1c = ofm(G.class, "a1", int.class, int.class),
+		g_a1d = ofm(G.class, "a1", String.class),
+		g_a2 = ofm(G.class, "a2"),
+		g_a3 = ofm(G.class, "a3");
 
 	public interface DefaultInterface {
 		default String defaultMethod() { return "default"; }

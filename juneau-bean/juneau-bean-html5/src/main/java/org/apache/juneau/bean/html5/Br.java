@@ -108,7 +108,7 @@ public class Br extends HtmlElementVoid {
 	public Br() { /* Empty constructor. */ }
 
 	@Override /* Overridden from HtmlElement */
-	public Br _class(String value) { // NOSONAR - Intentional naming.
+	public Br _class(String value) {
 		super._class(value);
 		return this;
 	}

@@ -56,7 +56,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 	}
 
 	public static class A03 {
-		public void a(  // NOSONAR(java:UNKNOWN): Method parameter spans multiple lines
+		public void a(
 				@Content
 				@Schema(
 					d={"b1","b2"},
@@ -76,7 +76,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 	}
 
 	public static class A04 {
-		public void a(  // NOSONAR(java:UNKNOWN): Method parameter spans multiple lines
+		public void a(
 				@Content
 				@Schema(
 					d={"b3","b3"},

@@ -83,7 +83,7 @@ public class Assertion {
 	private String msg;
 	private Object[] msgArgs;
 
-	private PrintStream out = System.err; // NOSONAR - Intentional.
+	private PrintStream out = System.err;
 
 	private Class<? extends RuntimeException> throwable;
 
@@ -158,7 +158,7 @@ public class Assertion {
 	 * @return This object.
 	 */
 	public Assertion setStdOut() {
-		return setOut(System.out); // NOSONAR - Intentional.
+		return setOut(System.out);
 	}
 
 	/**

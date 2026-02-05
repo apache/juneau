@@ -110,7 +110,7 @@ public class Section extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Section _class(String value) { // NOSONAR - Intentional naming.
+	public Section _class(String value) {
 		super._class(value);
 		return this;
 	}

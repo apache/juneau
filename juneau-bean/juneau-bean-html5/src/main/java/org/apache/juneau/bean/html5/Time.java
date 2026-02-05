@@ -91,7 +91,7 @@ public class Time extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Time _class(String value) { // NOSONAR - Intentional naming.
+	public Time _class(String value) {
 		super._class(value);
 		return this;
 	}

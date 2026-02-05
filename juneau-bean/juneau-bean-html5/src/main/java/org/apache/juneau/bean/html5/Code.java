@@ -104,7 +104,7 @@ public class Code extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Code _class(String value) { // NOSONAR - Intentional naming.
+	public Code _class(String value) {
 		super._class(value);
 		return this;
 	}

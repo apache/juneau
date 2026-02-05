@@ -100,7 +100,7 @@ public class Source extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Source _class(String value) { // NOSONAR - Intentional naming.
+	public Source _class(String value) {
 		super._class(value);
 		return this;
 	}

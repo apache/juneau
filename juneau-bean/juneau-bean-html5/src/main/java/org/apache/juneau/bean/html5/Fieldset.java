@@ -85,7 +85,7 @@ public class Fieldset extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Fieldset _class(String value) { // NOSONAR - Intentional naming.
+	public Fieldset _class(String value) {
 		super._class(value);
 		return this;
 	}

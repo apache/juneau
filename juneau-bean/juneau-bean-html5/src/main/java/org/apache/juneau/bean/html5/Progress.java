@@ -101,7 +101,7 @@ public class Progress extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Progress _class(String value) { // NOSONAR - Intentional naming.
+	public Progress _class(String value) {
 		super._class(value);
 		return this;
 	}

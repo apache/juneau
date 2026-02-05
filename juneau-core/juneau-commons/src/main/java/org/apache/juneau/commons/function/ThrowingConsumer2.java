@@ -120,7 +120,7 @@ public interface ThrowingConsumer2<A,B> extends Consumer2<A,B> {
 	 * @return A composed {@link ThrowingConsumer2} that performs in sequence this operation followed by the {@code after} operation.
 	 * @throws NullPointerException if {@code after} is <jk>null</jk>.
 	 */
-	default ThrowingConsumer2<A,B> andThen(ThrowingConsumer2<? super A,? super B> after) {  // NOSONAR - false positive on generics
+	default ThrowingConsumer2<A,B> andThen(ThrowingConsumer2<? super A,? super B> after) {
 		assertArgNotNull(ARG_after, after);
 		return (A a, B b) -> {
 			acceptThrows(a, b);

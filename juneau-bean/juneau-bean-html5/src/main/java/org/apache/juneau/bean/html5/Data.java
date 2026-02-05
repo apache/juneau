@@ -102,7 +102,7 @@ public class Data extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Data _class(String value) { // NOSONAR - Intentional naming.
+	public Data _class(String value) {
 		super._class(value);
 		return this;
 	}

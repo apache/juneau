@@ -98,7 +98,7 @@ public class Dfn extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Dfn _class(String value) { // NOSONAR - Intentional naming.
+	public Dfn _class(String value) {
 		super._class(value);
 		return this;
 	}

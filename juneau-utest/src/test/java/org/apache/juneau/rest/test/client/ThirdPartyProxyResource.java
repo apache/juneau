@@ -1192,7 +1192,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	// Various primitives
 
 	@RestGet(path="/returnVoid")
-	public void returnVoid() {}  // NOSONAR(java:S1186): Unused test method/constructor
+	public void returnVoid() {}
 
 	@RestGet(path="/returnInteger")
 	public Integer returnInteger() {

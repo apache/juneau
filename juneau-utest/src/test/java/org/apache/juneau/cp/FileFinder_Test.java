@@ -31,7 +31,7 @@ import org.apache.juneau.cp.sub.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"java:S117","java:S5961"})
-public class FileFinder_Test extends TestBase {  // NOSONAR - Needs to be public.
+public class FileFinder_Test extends TestBase {
 
 	private static String read(FileFinder ff, String path) throws Exception {
 		return toUtf8(ff.getStream(path, null).orElse(null));

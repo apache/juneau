@@ -104,7 +104,7 @@ public class Select extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Select _class(String value) { // NOSONAR - Intentional naming.
+	public Select _class(String value) {
 		super._class(value);
 		return this;
 	}

@@ -95,7 +95,7 @@ public class Noscript extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Noscript _class(String value) { // NOSONAR - Intentional naming.
+	public Noscript _class(String value) {
 		super._class(value);
 		return this;
 	}

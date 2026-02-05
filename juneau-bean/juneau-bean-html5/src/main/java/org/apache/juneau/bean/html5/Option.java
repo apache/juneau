@@ -98,7 +98,7 @@ public class Option extends HtmlElementText {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Option _class(String value) { // NOSONAR - Intentional naming.
+	public Option _class(String value) {
 		super._class(value);
 		return this;
 	}

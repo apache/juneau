@@ -94,7 +94,7 @@ public class Img extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Img _class(String value) { // NOSONAR - Intentional naming.
+	public Img _class(String value) {
 		super._class(value);
 		return this;
 	}

@@ -106,7 +106,7 @@ public class Track extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Track _class(String value) { // NOSONAR - Intentional naming.
+	public Track _class(String value) {
 		super._class(value);
 		return this;
 	}

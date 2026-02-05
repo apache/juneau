@@ -76,7 +76,7 @@ public class Meta extends HtmlElementVoid {
 	public Meta() { /* Empty constructor. */ }
 
 	@Override /* Overridden from HtmlElement */
-	public Meta _class(String value) { // NOSONAR - Intentional naming.
+	public Meta _class(String value) {
 		super._class(value);
 		return this;
 	}

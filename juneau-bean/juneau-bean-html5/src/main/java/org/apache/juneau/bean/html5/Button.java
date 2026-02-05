@@ -103,7 +103,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Button _class(String value) { // NOSONAR - Intentional naming.
+	public Button _class(String value) {
 		super._class(value);
 		return this;
 	}

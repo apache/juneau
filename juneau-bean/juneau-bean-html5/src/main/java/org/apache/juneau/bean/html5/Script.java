@@ -98,7 +98,7 @@ public class Script extends HtmlElementRawText {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Script _class(String value) { // NOSONAR - Intentional naming.
+	public Script _class(String value) {
 		super._class(value);
 		return this;
 	}

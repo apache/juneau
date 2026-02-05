@@ -48,7 +48,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='jc'>{@link java.util.logging.LogRecord}
  * </ul>
  */
-public class LogRecord extends java.util.logging.LogRecord {  // NOSONAR(java:S2176): Intentional name shadowing for convenience
+public class LogRecord extends java.util.logging.LogRecord {
 
 	private static final long serialVersionUID = 1L;
 	private transient Supplier<Optional<StackTraceElement>> source = mem(()->findSource());
@@ -111,7 +111,7 @@ public class LogRecord extends java.util.logging.LogRecord {  // NOSONAR(java:S2
 
 	@SuppressWarnings("java:S3776")
 	private static Optional<StackTraceElement> findSource() {
-		for (var e : new Throwable().getStackTrace()) {  // NOSONAR(java:S1147): Creating Throwable to get stack trace
+		for (var e : new Throwable().getStackTrace()) {
 			var c = e.getClassName();
 			var m = e.getMethodName();
 			// Skip LogRecord and Logger classes

@@ -100,7 +100,7 @@ public class Dt extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Dt _class(String value) { // NOSONAR - Intentional naming.
+	public Dt _class(String value) {
 		super._class(value);
 		return this;
 	}

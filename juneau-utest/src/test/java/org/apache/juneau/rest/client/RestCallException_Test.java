@@ -55,7 +55,7 @@ class RestCallException_Test extends TestBase {
 
 	@Test void a01_basic() throws Exception {
 		try {
-			client().build().get().run();  // NOSONAR(java:UNKNOWN): Field initialization
+			client().build().get().run();
 			fail();
 		} catch (RestCallException e) {
 			assertEquals(404, e.getResponseCode());

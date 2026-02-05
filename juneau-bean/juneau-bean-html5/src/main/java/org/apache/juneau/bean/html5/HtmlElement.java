@@ -56,7 +56,7 @@ public abstract class HtmlElement {
 	 * @param value Space-separated CSS class names (e.g., <js>"btn btn-primary"</js>).
 	 * @return This object.
 	 */
-	public HtmlElement _class(String value) { // NOSONAR - Intentional naming.
+	public HtmlElement _class(String value) {
 		attr("class", value);
 		return this;
 	}

@@ -218,7 +218,7 @@ public class ConfigEvent {
 				out.append(')');
 				yield out.toString();
 			}
-			default -> null; // NOSONAR - Intentional.
+			default -> null;
 		};
 	}
 }

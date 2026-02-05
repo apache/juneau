@@ -118,7 +118,7 @@ public class Pre extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Pre _class(String value) { // NOSONAR - Intentional naming.
+	public Pre _class(String value) {
 		super._class(value);
 		return this;
 	}

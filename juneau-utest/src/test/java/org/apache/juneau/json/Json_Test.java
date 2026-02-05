@@ -52,13 +52,11 @@ class Json_Test extends TestBase{
 		m.put("x", "[\"]");
 		assertEquals("{x:\"[\\\"]\"}", s2.serialize(m));
 		// String = [\"]
-		// JSON = {x:"\\\""} - NOSONAR
 		m.clear();
 		m.put("x", "[\\\"]");
 		assertEquals("{x:\"[\\\\\\\"]\"}", s2.serialize(m));
 
 		// String = [\w[\w\-\.]{3,}\w]
-		// JSON = {x:"\\w[\\w\\-\\.]{3,}\\w"} - NOSONAR
 		m.clear();
 		var r = "\\w[\\w\\-\\.]{3,}\\w";
 		m.put("x", r);
@@ -66,7 +64,6 @@ class Json_Test extends TestBase{
 		assertEquals(r, JsonMap.ofJson(s2.serialize(m)).getString("x"));
 
 		// String = [foo\bar]
-		// JSON = {x:"foo\\bar"} - NOSONAR
 		m.clear();
 		m.put("x", "foo\\bar");
 		assertEquals("{x:\"foo\\\\bar\"}", s2.serialize(m));

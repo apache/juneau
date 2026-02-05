@@ -91,7 +91,7 @@ public class Bdi extends HtmlElementText {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Bdi _class(String value) { // NOSONAR - Intentional naming.
+	public Bdi _class(String value) {
 		super._class(value);
 		return this;
 	}

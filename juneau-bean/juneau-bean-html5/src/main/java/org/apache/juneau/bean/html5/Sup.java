@@ -78,7 +78,7 @@ public class Sup extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Sup _class(String value) { // NOSONAR - Intentional naming.
+	public Sup _class(String value) {
 		super._class(value);
 		return this;
 	}

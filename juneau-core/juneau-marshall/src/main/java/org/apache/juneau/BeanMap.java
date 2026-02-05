@@ -245,10 +245,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 					var val = bpm.get(this, null);
 					if (valueFilter.test(val))
 						action.apply(bpm, bpm.getName(), val, null);
-				} catch (Error e) {  // NOSONAR(java:S1181): Errors should always be rethrown
+				} catch (Error e) {
 					// Errors should always be uncaught.
 					throw e;
-				} catch (Throwable t) {  // NOSONAR(java:S1181): Exception used in action.apply
+				} catch (Throwable t) {
 					action.apply(bpm, bpm.getName(), null, t);
 				}
 			});
@@ -260,10 +260,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			forEachProperty(x -> ! x.isDyna(), bpm -> {
 				try {
 					actions.put(bpm.getName(), new BeanPropertyValue(bpm, bpm.getName(), bpm.get(this, null), null));
-				} catch (Error e) {  // NOSONAR(java:S1181): Errors should always be rethrown
+				} catch (Error e) {
 					// Errors should always be uncaught.
 					throw e;
-				} catch (Throwable t) {  // NOSONAR(java:S1181): Exception used in BeanPropertyValue
+				} catch (Throwable t) {
 					actions.put(bpm.getName(), new BeanPropertyValue(bpm, bpm.getName(), null, t));
 				}
 			});

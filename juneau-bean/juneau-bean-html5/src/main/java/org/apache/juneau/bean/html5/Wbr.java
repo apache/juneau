@@ -98,7 +98,7 @@ public class Wbr extends HtmlElementVoid {
 	public Wbr() { /* Empty constructor. */ }
 
 	@Override /* Overridden from HtmlElement */
-	public Wbr _class(String value) { // NOSONAR - Intentional naming.
+	public Wbr _class(String value) {
 		super._class(value);
 		return this;
 	}

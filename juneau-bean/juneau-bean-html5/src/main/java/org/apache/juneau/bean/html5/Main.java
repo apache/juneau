@@ -122,7 +122,7 @@ public class Main extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Main _class(String value) { // NOSONAR - Intentional naming.
+	public Main _class(String value) {
 		super._class(value);
 		return this;
 	}

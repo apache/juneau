@@ -79,7 +79,7 @@ public class Area extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Area _class(String value) { // NOSONAR - Intentional naming.
+	public Area _class(String value) {
 		super._class(value);
 		return this;
 	}

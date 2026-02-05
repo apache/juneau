@@ -123,7 +123,7 @@ public class Swappers {
 			if (future.isDone() && ! future.isCancelled()) {
 				try {
 					return future.get();
-				} catch (Exception e) { // NOSONAR(java:S1181): Exception caught but not used
+				} catch (Exception e) {
 					return "<error: " + e.getMessage() + ">";
 				}
 			}

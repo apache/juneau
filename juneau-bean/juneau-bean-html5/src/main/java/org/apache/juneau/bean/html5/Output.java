@@ -89,7 +89,7 @@ public class Output extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Output _class(String value) { // NOSONAR - Intentional naming.
+	public Output _class(String value) {
 		super._class(value);
 		return this;
 	}
@@ -107,7 +107,7 @@ public class Output extends HtmlElementMixed {
 	 * @param value The IDs of the form controls that contribute to this output.
 	 * @return This object.
 	 */
-	public Output _for(String value) { // NOSONAR - Intentional naming.
+	public Output _for(String value) {
 		attr("for", value);
 		return this;
 	}

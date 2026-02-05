@@ -496,7 +496,7 @@ class AutoNumberSwapTest extends TestBase {
 		}
 	}
 	public static class C13 {
-		public C13() {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public C13() {}
 		public Integer toInteger() {
 			return 1;
 		}

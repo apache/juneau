@@ -74,7 +74,7 @@ class RestClient_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A2 extends RestClient.Builder {
-		public A2() {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public A2() {}
 	}
 
 	@Test void a02_basic_useNoArgConstructor() {

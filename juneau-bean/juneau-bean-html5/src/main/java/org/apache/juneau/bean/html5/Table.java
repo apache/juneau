@@ -120,7 +120,7 @@ public class Table extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Table _class(String value) { // NOSONAR - Intentional naming.
+	public Table _class(String value) {
 		super._class(value);
 		return this;
 	}

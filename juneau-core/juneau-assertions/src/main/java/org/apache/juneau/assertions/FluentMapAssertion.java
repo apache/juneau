@@ -169,7 +169,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	}
 
 	@Override /* Overridden from FluentObjectAssertion */
-	public FluentMapAssertion<K,V,R> asTransformed(Function<Map<K,V>,Map<K,V>> function) { // NOSONAR - Intentional.
+	public FluentMapAssertion<K,V,R> asTransformed(Function<Map<K,V>,Map<K,V>> function) {
 		return new FluentMapAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 

@@ -72,7 +72,7 @@ class ConstructorInfo_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	static class A {
-		public A() {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public A() {}
 	}
 	static ConstructorInfo a = ofc(A.class);
 
@@ -85,7 +85,7 @@ class ConstructorInfo_Test extends TestBase {
 		public B(String f, String f2) {
 			this.f = f;
 		}
-		protected B(int f) {}  // NOSONAR(java:S1186): Unused test method/constructor
+		protected B(int f) {}
 		@Override
 		public String toString() {
 			return f;

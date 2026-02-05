@@ -37,7 +37,7 @@ public class HtmlElementContainer extends HtmlElement {
 	private List<Object> children;
 
 	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer _class(String value) { // NOSONAR - Intentional naming.
+	public HtmlElementContainer _class(String value) {
 		super._class(value);
 		return this;
 	}

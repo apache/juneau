@@ -116,7 +116,7 @@ public class Datalist extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Datalist _class(String value) { // NOSONAR - Intentional naming.
+	public Datalist _class(String value) {
 		super._class(value);
 		return this;
 	}

@@ -112,7 +112,7 @@ public class Thead extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Thead _class(String value) { // NOSONAR - Intentional naming.
+	public Thead _class(String value) {
 		super._class(value);
 		return this;
 	}

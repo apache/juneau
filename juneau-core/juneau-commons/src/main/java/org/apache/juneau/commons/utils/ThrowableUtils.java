@@ -45,7 +45,7 @@ public class ThrowableUtils {
 		 * @return a result
 		 * @throws Throwable if supplier threw an exception.
 		 */
-		T get() throws Throwable;  // NOSONAR(java:S112)
+		T get() throws Throwable;
 	}
 
 	/**
@@ -281,7 +281,7 @@ public class ThrowableUtils {
 	 * @param maxDepth The maximum number of stack trace elements to print. If <jk>null</jk> or negative, prints all elements.
 	 */
 	public static void printStackTrace(Throwable t, Integer maxDepth) {
-		printStackTrace(t, new PrintWriter(System.err, true), maxDepth);  // NOSONAR(java:S106)
+		printStackTrace(t, new PrintWriter(System.err, true), maxDepth);
 	}
 
 	/**

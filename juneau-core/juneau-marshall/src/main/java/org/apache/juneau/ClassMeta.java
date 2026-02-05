@@ -65,7 +65,7 @@ import org.apache.juneau.swap.*;
  * @param <T> The class type of the wrapped class.
  */
 @Bean(properties = "innerClass,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
-public class ClassMeta<T> extends ClassInfoTyped<T> {  // NOSONAR(java:S1200): ClassMeta is intentionally a large class that aggregates metadata from multiple sources
+public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 	private static class Categories {
 		int bits;
@@ -645,7 +645,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {  // NOSONAR(java:S1200): C
 	public Optional<?> getOptionalDefault() {
 		if (isOptional())
 			return opt(getElementType().getOptionalDefault());
-		return null;  // NOSONAR(java:UNKNOWN): Intentional null return
+		return null;
 	}
 
 	/**

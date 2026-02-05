@@ -425,7 +425,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			else
 				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", cn(sType), sType.getNotABeanReason());
 		} else if (c == 'n') {
-			r.read(); // NOSONAR - Intentional.
+			r.read();
 			parseNull(r);
 		} else {
 			throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", cn(sType), sType.getNotABeanReason());
@@ -592,7 +592,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			else
 				throw new ParseException(this, "Could not find '(' marking beginning of collection.");
 		} else {
-			r.read();  // NOSONAR - Intentional, we're skipping the '@' character.
+			r.read();
 		}
 
 		if (isInParens) {
@@ -607,7 +607,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 					if (c == ')') {
 						if (state == S2) {
 							l.add((E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, false, pMeta));
-							r.read();  // NOSONAR - Intentional, we're skipping the ')' character.
+							r.read();
 						}
 						return l;
 					} else if (Character.isWhitespace(c)) {
@@ -767,7 +767,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 */
 	private String parsePString(UonReader r) throws IOException, ParseException {
 
-		r.read(); // Skip first quote, NOSONAR - Intentional.
+		r.read();
 		r.mark();
 		int c = 0;
 

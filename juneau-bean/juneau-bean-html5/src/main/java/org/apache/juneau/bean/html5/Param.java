@@ -89,7 +89,7 @@ public class Param extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Param _class(String value) { // NOSONAR - Intentional naming.
+	public Param _class(String value) {
 		super._class(value);
 		return this;
 	}

@@ -78,7 +78,7 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 * @return The creator that was created and stored.
 	 */
 	public <T> BeanCreator2<T> add(Class<T> beanType) {
-		assertArgNotNull(ARG_beanType, beanType);  // NOSONAR(java:UNKNOWN): Assertion method, return value not used
+		assertArgNotNull(ARG_beanType, beanType);
 		var creator = BeanCreator2.of(beanType, this, null, enclosingInstance);
 		creators.put(beanType, creator);
 		return creator;

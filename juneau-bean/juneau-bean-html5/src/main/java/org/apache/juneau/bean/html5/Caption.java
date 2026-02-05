@@ -105,7 +105,7 @@ public class Caption extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Caption _class(String value) { // NOSONAR - Intentional naming.
+	public Caption _class(String value) {
 		super._class(value);
 		return this;
 	}

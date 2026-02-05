@@ -109,7 +109,7 @@ public class Tr extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Tr _class(String value) { // NOSONAR - Intentional naming.
+	public Tr _class(String value) {
 		super._class(value);
 		return this;
 	}

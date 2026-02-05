@@ -69,11 +69,11 @@ class RestPostInitAnnotation_Test extends TestBase {
 
 	public static class C1 {
 		public int f1;
-		public void m1() {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void m1() {}
 	}
 	public static class C2 {
 		public int f2;
-		public void m2() {}  // NOSONAR(java:S1186): Unused test method/constructor
+		public void m2() {}
 	}
 
 	@Test void c01_otherMethods() throws Exception {

@@ -284,7 +284,7 @@ class RoundTripMaps_Test extends TestBase {
 		assertEquals("a", x.get(TestEnum.FOO));
 		assertNull(null, x.get(TestEnum.BAR));
 
-		var x2 = new HashMap<TestEnum,String>();  // NOSONAR(java:UNKNOWN): Field initialization
+		var x2 = new HashMap<TestEnum,String>();
 		x2.put(TestEnum.FOO, "a");
 		x2.put(TestEnum.BAR, null);
 		x2.put(null, "b");

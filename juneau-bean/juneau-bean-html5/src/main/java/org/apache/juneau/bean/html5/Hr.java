@@ -88,7 +88,7 @@ public class Hr extends HtmlElementVoid {
 	public Hr() { /* Empty constructor. */ }
 
 	@Override /* Overridden from HtmlElement */
-	public Hr _class(String value) { // NOSONAR - Intentional naming.
+	public Hr _class(String value) {
 		super._class(value);
 		return this;
 	}

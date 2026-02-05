@@ -149,7 +149,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	}
 
 	@Override /* Overridden from FluentObjectAssertion */
-	public FluentComparableAssertion<T,R> asTransformed(Function<T,T> function) { // NOSONAR - Intentional.
+	public FluentComparableAssertion<T,R> asTransformed(Function<T,T> function) {
 		return new FluentComparableAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 

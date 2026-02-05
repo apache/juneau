@@ -78,7 +78,7 @@ public class Sub extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Sub _class(String value) { // NOSONAR - Intentional naming.
+	public Sub _class(String value) {
 		super._class(value);
 		return this;
 	}

@@ -112,7 +112,7 @@ public class Video extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Video _class(String value) { // NOSONAR - Intentional naming.
+	public Video _class(String value) {
 		super._class(value);
 		return this;
 	}

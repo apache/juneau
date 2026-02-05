@@ -334,7 +334,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 	 */
 	private static List<Object> toBRL(String s) {
 		if (s == null)
-			return null;  // NOSONAR - Intentionally returning null.
+			return null;
 		if (s.indexOf(',') == -1)
 			return singletonList(s);
 		var l = list();

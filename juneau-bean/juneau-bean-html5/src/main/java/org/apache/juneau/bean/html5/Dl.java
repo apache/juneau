@@ -126,7 +126,7 @@ public class Dl extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Dl _class(String value) { // NOSONAR - Intentional naming.
+	public Dl _class(String value) {
 		super._class(value);
 		return this;
 	}

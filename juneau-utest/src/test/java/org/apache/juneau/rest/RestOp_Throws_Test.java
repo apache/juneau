@@ -764,39 +764,39 @@ class RestOp_Throws_Test extends TestBase {
 
 	@Rest
 	public static class F {
-		@RestGet public void badRequest() throws BadRequest {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void conflict() throws Conflict {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void expectationFailed() throws ExpectationFailed {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void failedDependency() throws FailedDependency {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void forbidden() throws Forbidden {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void gone() throws Gone {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void httpVersionNotSupported() throws HttpVersionNotSupported {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void insufficientStorage() throws InsufficientStorage {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void internalServerError() throws InternalServerError {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void lengthRequired() throws LengthRequired {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void locked() throws Locked {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void loopDetected() throws LoopDetected {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void methodNotAllowed() throws MethodNotAllowed {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void misdirectedRequest() throws MisdirectedRequest {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void networkAuthenticationRequired() throws NetworkAuthenticationRequired {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void notAcceptable() throws NotAcceptable {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void notExtended() throws NotExtended {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void notFound() throws NotFound {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void notImplemented() throws NotImplemented {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void payloadTooLarge() throws PayloadTooLarge {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void preconditionFailed() throws PreconditionFailed {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void preconditionRequired() throws PreconditionRequired {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void rangeNotSatisfiable() throws RangeNotSatisfiable {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void requestHeaderFieldsTooLarge() throws RequestHeaderFieldsTooLarge {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void serviceUnavailable() throws ServiceUnavailable {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void tooManyRequests() throws TooManyRequests {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void unauthorized() throws Unauthorized {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void unavailableForLegalReasons() throws UnavailableForLegalReasons {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void unprocessableEntity() throws UnprocessableEntity {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void unsupportedMediaType() throws UnsupportedMediaType {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void upgradeRequired() throws UpgradeRequired {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void uriTooLong() throws UriTooLong {}  // NOSONAR(java:S1186): Unused test method/constructor
-		@RestGet public void variantAlsoNegotiates() throws VariantAlsoNegotiates {}  // NOSONAR(java:S1186): Unused test method/constructor
+		@RestGet public void badRequest() throws BadRequest {}
+		@RestGet public void conflict() throws Conflict {}
+		@RestGet public void expectationFailed() throws ExpectationFailed {}
+		@RestGet public void failedDependency() throws FailedDependency {}
+		@RestGet public void forbidden() throws Forbidden {}
+		@RestGet public void gone() throws Gone {}
+		@RestGet public void httpVersionNotSupported() throws HttpVersionNotSupported {}
+		@RestGet public void insufficientStorage() throws InsufficientStorage {}
+		@RestGet public void internalServerError() throws InternalServerError {}
+		@RestGet public void lengthRequired() throws LengthRequired {}
+		@RestGet public void locked() throws Locked {}
+		@RestGet public void loopDetected() throws LoopDetected {}
+		@RestGet public void methodNotAllowed() throws MethodNotAllowed {}
+		@RestGet public void misdirectedRequest() throws MisdirectedRequest {}
+		@RestGet public void networkAuthenticationRequired() throws NetworkAuthenticationRequired {}
+		@RestGet public void notAcceptable() throws NotAcceptable {}
+		@RestGet public void notExtended() throws NotExtended {}
+		@RestGet public void notFound() throws NotFound {}
+		@RestGet public void notImplemented() throws NotImplemented {}
+		@RestGet public void payloadTooLarge() throws PayloadTooLarge {}
+		@RestGet public void preconditionFailed() throws PreconditionFailed {}
+		@RestGet public void preconditionRequired() throws PreconditionRequired {}
+		@RestGet public void rangeNotSatisfiable() throws RangeNotSatisfiable {}
+		@RestGet public void requestHeaderFieldsTooLarge() throws RequestHeaderFieldsTooLarge {}
+		@RestGet public void serviceUnavailable() throws ServiceUnavailable {}
+		@RestGet public void tooManyRequests() throws TooManyRequests {}
+		@RestGet public void unauthorized() throws Unauthorized {}
+		@RestGet public void unavailableForLegalReasons() throws UnavailableForLegalReasons {}
+		@RestGet public void unprocessableEntity() throws UnprocessableEntity {}
+		@RestGet public void unsupportedMediaType() throws UnsupportedMediaType {}
+		@RestGet public void upgradeRequired() throws UpgradeRequired {}
+		@RestGet public void uriTooLong() throws UriTooLong {}
+		@RestGet public void variantAlsoNegotiates() throws VariantAlsoNegotiates {}
 	}
 
 	@Test void f01_swagger() {

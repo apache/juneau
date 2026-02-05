@@ -103,7 +103,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Textarea _class(String value) { // NOSONAR - Intentional naming.
+	public Textarea _class(String value) {
 		super._class(value);
 		return this;
 	}

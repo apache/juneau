@@ -96,7 +96,7 @@ public interface Consumer4<A,B,C,D> {
 	 * @return A composed {@link Consumer4} that performs in sequence this operation followed by the {@code after} operation.
 	 * @throws NullPointerException if {@code after} is <jk>null</jk>.
 	 */
-	default Consumer4<A,B,C,D> andThen(Consumer4<? super A,? super B,? super C,? super D> after) {  // NOSONAR - false positive on generics
+	default Consumer4<A,B,C,D> andThen(Consumer4<? super A,? super B,? super C,? super D> after) {
 		assertArgNotNull(ARG_after, after);
 		return (A a, B b, C c, D d) -> {
 			apply(a, b, c, d);

@@ -109,7 +109,7 @@ public class Rtc extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Rtc _class(String value) { // NOSONAR - Intentional naming.
+	public Rtc _class(String value) {
 		super._class(value);
 		return this;
 	}

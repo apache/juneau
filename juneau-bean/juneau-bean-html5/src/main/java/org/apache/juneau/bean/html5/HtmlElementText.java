@@ -31,7 +31,7 @@ public class HtmlElementText extends HtmlElement {
 	private Object text;
 
 	@Override /* Overridden from HtmlElement */
-	public HtmlElementText _class(String value) { // NOSONAR - Intentional naming.
+	public HtmlElementText _class(String value) {
 		super._class(value);
 		return this;
 	}
@@ -429,7 +429,7 @@ public class HtmlElementText extends HtmlElement {
 	 * @param value The text node to add to this element.
 	 * @return This object.
 	 */
-	public HtmlElement text(Object value) { // NOSONAR - Intentional naming.
+	public HtmlElement text(Object value) {
 		text = value;
 		return this;
 	}

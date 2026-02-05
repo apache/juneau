@@ -1026,7 +1026,7 @@ public class BasicBeanConverter implements BeanConverter {
 	private String safeToString(Object o) {
 		try {
 			return o.toString();
-		} catch (Throwable t) { // NOSONAR(java:S1181): Exception caught but not used
+		} catch (Throwable t) {
 			return cns(t) + ": " + t.getMessage();
 		}
 	}

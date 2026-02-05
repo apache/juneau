@@ -169,7 +169,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	 * @param function The transform to apply.
 	 * @return A new assertion.
 	 */
-	public FluentListAssertion<E,R> asApplied2(Function<List<E>,List<E>> function) { // NOSONAR - Intentional.
+	public FluentListAssertion<E,R> asApplied2(Function<List<E>,List<E>> function) {
 		return new FluentListAssertion<>(this, function.apply((List<E>)orElse(null)), returns());
 	}
 

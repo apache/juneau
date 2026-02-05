@@ -74,7 +74,7 @@ public class Label extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Label _class(String value) { // NOSONAR - Intentional naming.
+	public Label _class(String value) {
 		super._class(value);
 		return this;
 	}
@@ -92,7 +92,7 @@ public class Label extends HtmlElementMixed {
 	 * @param value The ID of the form control to associate with this label.
 	 * @return This object.
 	 */
-	public Label _for(String value) { // NOSONAR - Intentional naming.
+	public Label _for(String value) {
 		attr("for", value);
 		return this;
 	}

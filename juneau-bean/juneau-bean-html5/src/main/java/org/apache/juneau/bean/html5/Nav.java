@@ -130,7 +130,7 @@ public class Nav extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Nav _class(String value) { // NOSONAR - Intentional naming.
+	public Nav _class(String value) {
 		super._class(value);
 		return this;
 	}

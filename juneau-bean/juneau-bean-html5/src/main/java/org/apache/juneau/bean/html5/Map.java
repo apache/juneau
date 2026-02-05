@@ -78,7 +78,7 @@ public class Map extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Map _class(String value) { // NOSONAR - Intentional naming.
+	public Map _class(String value) {
 		super._class(value);
 		return this;
 	}

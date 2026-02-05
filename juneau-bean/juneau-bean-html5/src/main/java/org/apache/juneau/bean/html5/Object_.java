@@ -98,7 +98,7 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 @Bean(typeName = "object")
-public class Object_ extends HtmlElementMixed { // NOSONAR - Intentional naming.
+public class Object_ extends HtmlElementMixed {
 
 	/**
 	 * Creates an empty {@link Object_} element.
@@ -115,7 +115,7 @@ public class Object_ extends HtmlElementMixed { // NOSONAR - Intentional naming.
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Object_ _class(String value) { // NOSONAR - Intentional naming.
+	public Object_ _class(String value) {
 		super._class(value);
 		return this;
 	}

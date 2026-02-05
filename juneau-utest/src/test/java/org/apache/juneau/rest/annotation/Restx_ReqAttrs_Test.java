@@ -40,7 +40,6 @@ class Restx_ReqAttrs_Test extends TestBase {
 	public static class A2 extends A1 {
 		@RestOp
 		public JsonMap a1(RequestAttributes attrs) {
-			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4'} - NOSONAR
 			return transform(attrs);
 		}
 		@RestOp(defaultRequestAttributes={"p4:v4a","p5:v5"})
@@ -59,7 +58,6 @@ class Restx_ReqAttrs_Test extends TestBase {
 
 		@RestGet
 		public JsonMap b1(RequestAttributes attrs) {
-			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4'} - NOSONAR
 			return transform(attrs);
 		}
 		@RestGet(defaultRequestAttributes={"p4:v4a","p5:v5"})
@@ -78,7 +76,6 @@ class Restx_ReqAttrs_Test extends TestBase {
 
 		@RestPut
 		public JsonMap c1(RequestAttributes attrs) {
-			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4'} - NOSONAR
 			return transform(attrs);
 		}
 		@RestPut(defaultRequestAttributes={"p4:v4a","p5:v5"})
@@ -97,7 +94,6 @@ class Restx_ReqAttrs_Test extends TestBase {
 
 		@RestPost
 		public JsonMap d1(RequestAttributes attrs) {
-			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4'} - NOSONAR
 			return transform(attrs);
 		}
 		@RestPost(defaultRequestAttributes={"p4:v4a","p5:v5"})
@@ -116,7 +112,6 @@ class Restx_ReqAttrs_Test extends TestBase {
 
 		@RestDelete
 		public JsonMap e1(RequestAttributes attrs) {
-			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4'} - NOSONAR
 			return transform(attrs);
 		}
 		@RestDelete(defaultRequestAttributes={"p4:v4a","p5:v5"})

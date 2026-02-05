@@ -91,7 +91,7 @@ import org.apache.juneau.xml.annotation.*;
 public class Text extends Common {
 
 	private String type;
-	private String text; // NOSONAR - Intentional naming.
+	private String text;
 
 	/** Bean constructor. */
 	public Text() {}

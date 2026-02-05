@@ -104,7 +104,7 @@ public class H6 extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public H6 _class(String value) { // NOSONAR - Intentional naming.
+	public H6 _class(String value) {
 		super._class(value);
 		return this;
 	}

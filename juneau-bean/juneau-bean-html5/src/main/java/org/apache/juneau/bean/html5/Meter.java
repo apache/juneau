@@ -109,7 +109,7 @@ public class Meter extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Meter _class(String value) { // NOSONAR - Intentional naming.
+	public Meter _class(String value) {
 		super._class(value);
 		return this;
 	}

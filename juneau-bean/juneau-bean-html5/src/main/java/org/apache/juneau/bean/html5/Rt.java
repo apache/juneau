@@ -94,7 +94,7 @@ public class Rt extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Rt _class(String value) { // NOSONAR - Intentional naming.
+	public Rt _class(String value) {
 		super._class(value);
 		return this;
 	}

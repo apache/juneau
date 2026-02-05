@@ -708,7 +708,7 @@ public class ConfigMap implements ConfigStoreListener {
 				if (nn(cs))
 					cs.entries.remove(ce.getKey());
 			} else if (ce.getType() == REMOVE_SECTION) {
-				if (nn(cs))  // NOSONAR - Intentional.
+				if (nn(cs))
 					entries.remove(section);
 			}
 			if (addToChangeList)
@@ -873,7 +873,7 @@ public class ConfigMap implements ConfigStoreListener {
 					if (accumulator == null)
 						accumulator = l.substring(1);
 					else
-						accumulator = l.substring(1) + "\n" + accumulator;  // NOSONAR - Intentionally not using StringBuilder.
+						accumulator = l.substring(1) + "\n" + accumulator;
 					li.remove();
 				}
 			} else if (nn(accumulator)) {

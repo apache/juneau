@@ -89,7 +89,7 @@ public class Embed extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Embed _class(String value) { // NOSONAR - Intentional naming.
+	public Embed _class(String value) {
 		super._class(value);
 		return this;
 	}

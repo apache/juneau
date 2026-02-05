@@ -78,7 +78,7 @@ public class Keygen extends HtmlElementVoid {
 	public Keygen() { /* Empty constructor. */ }
 
 	@Override /* Overridden from HtmlElement */
-	public Keygen _class(String value) { // NOSONAR - Intentional naming.
+	public Keygen _class(String value) {
 		super._class(value);
 		return this;
 	}

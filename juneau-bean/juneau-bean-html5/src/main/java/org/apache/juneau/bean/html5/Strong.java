@@ -71,7 +71,7 @@ public class Strong extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Strong _class(String value) { // NOSONAR - Intentional naming.
+	public Strong _class(String value) {
 		super._class(value);
 		return this;
 	}

@@ -105,7 +105,7 @@ public class Tbody extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Tbody _class(String value) { // NOSONAR - Intentional naming.
+	public Tbody _class(String value) {
 		super._class(value);
 		return this;
 	}

@@ -101,7 +101,7 @@ public class Items extends SwaggerElement {
 	private Boolean exclusiveMaximum;
 	private Boolean exclusiveMinimum;
 	private Boolean uniqueItems;
-	private Items items;  // NOSONAR - Intentional naming.
+	private Items items;
 	private Object default_;
 	private Set<Object> enum_ = new LinkedHashSet<>();
 

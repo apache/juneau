@@ -106,7 +106,7 @@ public class Style extends HtmlElementRawText {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Style _class(String value) { // NOSONAR - Intentional naming.
+	public Style _class(String value) {
 		super._class(value);
 		return this;
 	}

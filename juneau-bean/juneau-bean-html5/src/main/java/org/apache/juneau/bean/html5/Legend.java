@@ -104,7 +104,7 @@ public class Legend extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Legend _class(String value) { // NOSONAR - Intentional naming.
+	public Legend _class(String value) {
 		super._class(value);
 		return this;
 	}

@@ -107,7 +107,7 @@ public class Link extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Link _class(String value) { // NOSONAR - Intentional naming.
+	public Link _class(String value) {
 		super._class(value);
 		return this;
 	}

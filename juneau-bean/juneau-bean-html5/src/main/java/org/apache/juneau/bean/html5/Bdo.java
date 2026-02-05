@@ -90,7 +90,7 @@ public class Bdo extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Bdo _class(String value) { // NOSONAR - Intentional naming.
+	public Bdo _class(String value) {
 		super._class(value);
 		return this;
 	}
