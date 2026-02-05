@@ -381,6 +381,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	/**
 	 * Used in combination with {@link #cancellable(Cancellable)}.
 	 *
+	 * @deprecated Since 10.0, for removal.
 	 * @return This object.
 	 */
 	@Deprecated(since = "10.0", forRemoval = true)
@@ -1974,11 +1975,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				request2.setEntity(entity);
 			}
 
-			try {
-				response = client.createResponse(this, client.run(target, request, context), parser2);
-			} catch (Exception e) {
-				throw e;
-			}
+			response = client.createResponse(this, client.run(target, request, context), parser2);
 
 			if (isDebug() || client.logRequests == DetailLevel.FULL)
 				response.cacheContent();
