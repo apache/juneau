@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.examples.core.oapi;
 
+import org.apache.juneau.commons.logging.Logger;
+
 import static org.apache.juneau.httppart.HttpPartType.*;
 
 import org.apache.juneau.examples.core.pojo.*;
@@ -71,7 +73,7 @@ public class OapiExample {
 		// Convert POJO to BASE64-encoded string.
 		var s = OpenApiSerializer.DEFAULT;
 		var httpPart = s.getPartSession().serialize(HEADER, schemab, pojo);
-		System.out.println(httpPart);
+		Logger.getLogger(OapiExample.class).info(httpPart);
 
 		// Convert BASE64-encoded string back into a POJO.
 		var p = OpenApiParser.DEFAULT;

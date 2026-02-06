@@ -20,10 +20,14 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 
+import org.apache.juneau.commons.logging.Logger;
+
 /**
  * System utilities.
  */
 public class SystemUtils {
+
+	private static final Logger LOG = Logger.getLogger(SystemUtils.class);
 
 	/**
 	 * Prevents instantiation.
@@ -37,7 +41,7 @@ public class SystemUtils {
 			@Override
 			public void run() {
 				if (! Boolean.getBoolean("juneau.shutdown.quiet"))
-					SHUTDOWN_MESSAGES.forEach(x -> System.out.println(x.get()));
+					SHUTDOWN_MESSAGES.forEach(x -> LOG.info(x.get()));
 			}
 		});
 	}

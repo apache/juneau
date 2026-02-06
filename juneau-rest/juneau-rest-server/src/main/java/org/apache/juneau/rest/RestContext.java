@@ -50,6 +50,7 @@ import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.lang.*;
+import org.apache.juneau.commons.logging.Logger;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.config.*;
@@ -125,6 +126,8 @@ import jakarta.servlet.http.*;
  */
 @SuppressWarnings({ "java:S115", "java:S1200" }) // Constants use UPPER_snakeCase convention (e.g., PROP_allowContentParam); class has 22 dependencies, acceptable for this core REST context class
 public class RestContext extends Context {
+
+	private static final Logger LOG = Logger.getLogger(RestContext.class);
 
 	// Property name constants
 	private static final String PROP_allowContentParam = "allowContentParam";
@@ -5101,6 +5104,7 @@ public class RestContext extends Context {
 			serializers = bs.add(SerializerSet.class, builder.serializers().build());
 			parsers = bs.add(ParserSet.class, builder.parsers().build());
 			logger = bs.add(Logger.class, builder.logger());
+			bs.addBean(java.util.logging.Logger.class, logger); // Also register under java.util.logging.Logger for CallLogger compatibility
 			thrownStore = bs.add(ThrownStore.class, builder.thrownStore().build());
 			methodExecStore = bs.add(MethodExecStore.class, builder.methodExecStore().thrownStoreOnce(thrownStore).build());
 			messages = bs.add(Messages.class, builder.messages().build());
@@ -5198,7 +5202,7 @@ public class RestContext extends Context {
 
 		// Must be careful not to bleed thread-locals.
 		if (nn(localSession.get()))
-			System.err.println("WARNING:  Thread-local call object was not cleaned up from previous request.  " + this + ", thread=[" + Thread.currentThread().getId() + "]");
+			LOG.warning("WARNING:  Thread-local call object was not cleaned up from previous request.  {}, thread=[{}]", this, Thread.currentThread().getId());
 
 		RestSession.Builder sb = createSession().resource(resource).req(r1).res(r2).logger(getCallLogger());
 

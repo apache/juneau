@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.examples.core.xml;
 
+import org.apache.juneau.commons.logging.Logger;
+
 import java.util.*;
 
 import org.apache.juneau.examples.core.pojo.*;
@@ -48,7 +50,7 @@ public class XmlConfigurationExample {
 		 */
 		var withWhitespace = XmlSerializer.create().ws().build().serialize(aPojo);
 		// the output will be padded with spaces after format characters.
-		System.out.println(withWhitespace);
+		Logger.getLogger(XmlConfigurationExample.class).info(withWhitespace);
 
 		var values = new HashMap<String,List<Pojo>>();
 		var pojoc = new PojoComplex("pojo", new Pojo("1.0", "name0"), values);
@@ -57,13 +59,13 @@ public class XmlConfigurationExample {
 		//<object><innerPojo><name>name0</name><id>1.0</id></innerPojo><id>pojo</id></object>
 		var mapescaped = XmlSerializer.create().trimEmptyMaps().build().serialize(pojoc);
 		// the output will have trimmed Empty maps.
-		System.out.println(mapescaped);
+		Logger.getLogger(XmlConfigurationExample.class).info(mapescaped);
 
 		//Produces
 		//<object xmlns="http://www.apache.org/2013/Juneau"><name>&lt;pojo&gt;</name><id>a</id></object>
 		var nspaceToRoot = XmlSerializer.create().ns().addNamespaceUrisToRoot().build().serialize(aPojo);
 		// the output will add default name space to the xml document root.
-		System.out.println(nspaceToRoot);
+		Logger.getLogger(XmlConfigurationExample.class).info(nspaceToRoot);
 
 		var nPojo = new Pojo("a", null);
 
@@ -71,14 +73,14 @@ public class XmlConfigurationExample {
 		//<object><id>a</id></object>
 		var nullescaped = XmlSerializer.create().build().serialize(nPojo);
 		// the output will have trimmed null properties.
-		System.out.println(nullescaped);
+		Logger.getLogger(XmlConfigurationExample.class).info(nullescaped);
 
 		//Produces
 		//<object xmlns="http://www.pierobon.org/iis/review1.htm.html#one"><name>&lt;pojo&gt;</name><id>a</id></object>
 		var dNamsSpace = XmlSerializer.create().enableNamespaces().defaultNamespace(Namespace.create("http://www.pierobon.org" + "/iis/review1.htm.html#one")).addNamespaceUrisToRoot().build()
 			.serialize(aPojo);
 		// the output will have new default namespace added.
-		System.out.println(dNamsSpace);
+		Logger.getLogger(XmlConfigurationExample.class).info(dNamsSpace);
 
 	}
 }

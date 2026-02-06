@@ -28,6 +28,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.logging.Logger;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.*;
 
@@ -1044,7 +1045,7 @@ public class WriterSerializer extends Serializer {
 	 * @return This object.
 	 */
 	public final WriterSerializer println(Object o) {
-		System.out.println(toString(o));  // NOT DEBUG
+		Logger.getLogger(WriterSerializer.class).info(toString(o));  // NOT DEBUG
 		return this;
 	}
 

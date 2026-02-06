@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.examples.core.uon;
 
+import org.apache.juneau.commons.logging.Logger;
+
 import org.apache.juneau.examples.core.pojo.*;
 import org.apache.juneau.uon.*;
 
@@ -42,7 +44,7 @@ public class UonExample {
 		 * (name=name,id=id)
 		 */
 		var serial = UonSerializer.DEFAULT.serialize(pojo);
-		System.out.println(serial);
+		Logger.getLogger(UonExample.class).info(serial);
 
 		// Deserialize back to Pojo instance
 		var obj = UonParser.DEFAULT.parse(serial, Pojo.class);

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.examples.core.xml;
 
+import org.apache.juneau.commons.logging.Logger;
+
 import java.util.*;
 
 import org.apache.juneau.examples.core.pojo.*;
@@ -50,7 +52,7 @@ public class XmlComplexExample {
 
 		// Serialize to human readable XML and print
 		var serial = XmlSerializer.DEFAULT_SQ_READABLE.serialize(pojoc);
-		System.out.println(serial);
+		Logger.getLogger(XmlComplexExample.class).info(serial);
 
 		// Deserialize back to PojoComplex instance
 		var obj = XmlParser.DEFAULT.parse(serial, PojoComplex.class);

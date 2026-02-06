@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.server.config.repository;
 
+import org.apache.juneau.commons.logging.Logger;
+
 import java.io.*;
 import java.util.*;
 
@@ -73,7 +75,7 @@ public class GitControl {
 		try {
 			var it = pc.call().iterator();
 			if (it.hasNext()) {
-				System.out.println(it.next().toString());
+				Logger.getLogger(GitControl.class).info("{}", it.next().toString());
 			}
 		} catch (InvalidRemoteException e) {
 			e.printStackTrace();

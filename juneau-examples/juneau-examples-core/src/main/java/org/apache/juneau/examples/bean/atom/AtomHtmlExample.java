@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.examples.bean.atom;
 
+import org.apache.juneau.commons.logging.Logger;
+
 import org.apache.juneau.html.*;
 
 /**
@@ -230,6 +232,6 @@ public class AtomHtmlExample {
 		 *     </tr>
 		 *  </table>
 		 */
-		System.out.print(s.serialize(feed));
+		Logger.getLogger(AtomHtmlExample.class).info(s.serialize(feed));
 	}
 }

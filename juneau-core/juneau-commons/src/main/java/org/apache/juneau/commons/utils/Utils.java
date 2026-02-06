@@ -27,6 +27,7 @@ import java.util.function.*;
 
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.lang.*;
+import org.apache.juneau.commons.logging.Logger;
 import org.apache.juneau.commons.settings.*;
 
 /**
@@ -1679,8 +1680,9 @@ public class Utils {
 	 * @param lines The lines to print.
 	 */
 	public static final void printLines(String[] lines) {
+		Logger log = Logger.getLogger(Utils.class);
 		for (var i = 0; i < lines.length; i++)
-			System.out.println(String.format("%4s:" + lines[i], i + 1));
+			log.info(String.format("%4s:" + lines[i], i + 1));
 	}
 
 	/**

@@ -32,6 +32,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.lang.*;
+import org.apache.juneau.commons.logging.Logger;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
@@ -61,6 +62,8 @@ import jakarta.servlet.*;
  */
 @SuppressWarnings({"resource","java:S1168","java:S115"})
 public class BasicSwaggerProviderSession {
+
+	private static final Logger LOG = Logger.getLogger(BasicSwaggerProviderSession.class);
 
 	// Swagger JSON property name constants
 	private static final String SWAGGER_additionalProperties = "additionalProperties";
@@ -719,7 +722,7 @@ public class BasicSwaggerProviderSession {
 						// @formatter:on
 						examples.put(s2.getPrimaryMediaType().toString(), eVal);
 					} catch (Exception e) {
-						System.err.println("Could not serialize to media type [" + mt + "]: " + lm(e));  // NOT DEBUG
+						LOG.warning("Could not serialize to media type [{}]: {}", mt, lm(e));  // NOT DEBUG
 					}
 				}
 			}

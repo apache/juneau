@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.examples.core.svl;
 
+import org.apache.juneau.commons.logging.Logger;
+
 import org.apache.juneau.svl.*;
 
 /**
@@ -37,29 +39,29 @@ public class SvlExample {
 		System.out.println(vr.resolve("JAVA_HOME=$E{JAVA_HOME, not defined}"));
 
 		// $S{key[,default]} for getting system properties (uses System.getProperty() )
-		System.out.println(vr.resolve("os.name=$S{os.name, not defined}"));
+		Logger.getLogger(SvlExample.class).info(vr.resolve("os.name=$S{os.name, not defined}"));
 
 		// $IF{key[,default]} general if or if-else condition
 		// $NE{arg} will return true if not empty
-		System.out.println(vr.resolve("TEST_VAR is $IF{$NE{$E{TEST_VAR}}, not empty, empty}"));
+		Logger.getLogger(SvlExample.class).info(vr.resolve("TEST_VAR is $IF{$NE{$E{TEST_VAR}}, not empty, empty}"));
 
 		// $SW{arg,pattern1:then1[,pattern2:then2...]} switch-case
 		System.out.println(vr.resolve("$SW{Carrot, *Ap*:Fruit, *Car*:Veg, *:N/A}"));
 
 		// $PR{arg,pattern,replace} pattern replace
-		System.out.println(vr.resolve("Java version=$PR{$S{java.version}, (_([0-9]+)), \\ build=\\$2}"));
+		Logger.getLogger(SvlExample.class).info(vr.resolve("Java version=$PR{$S{java.version}, (_([0-9]+)), \\ build=\\$2}"));
 
 		// $UC{arg} uppercase $LC{arg} lowecase
-		System.out.println(vr.resolve("$LC{JAVA_HOME} $UC{$E{JAVA_HOME}}"));
+		Logger.getLogger(SvlExample.class).info(vr.resolve("$LC{JAVA_HOME} $UC{$E{JAVA_HOME}}"));
 
 		// $LN{arg[,delimiter]} length var example
-		System.out.println(vr.resolve("parts = $LN{$S{os.version},.}, charcount = $LN{$S{os.version}}"));
+		Logger.getLogger(SvlExample.class).info(vr.resolve("parts = $LN{$S{os.version},.}, charcount = $LN{$S{os.version}}"));
 
 		// $ST{arg,start[,end]} substring var example
-		System.out.println(vr.resolve("version = $ST{$S{java.version}, 0, 3}"));
+		Logger.getLogger(SvlExample.class).info(vr.resolve("version = $ST{$S{java.version}, 0, 3}"));
 
 		// $PE{arg,start[,end]} pattern extractor var example
-		System.out.println(vr.resolve("update = $PE{$S{java.version},_([0-9]+),1}"));
+		Logger.getLogger(SvlExample.class).info(vr.resolve("update = $PE{$S{java.version},_([0-9]+),1}"));
 
 		/*
 		 *  See all supported variable types at,

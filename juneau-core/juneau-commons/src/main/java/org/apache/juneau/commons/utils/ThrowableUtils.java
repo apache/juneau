@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.commons.logging.Logger;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.settings.*;
 
@@ -28,6 +29,8 @@ import org.apache.juneau.commons.settings.*;
  * Various utility methods for creating and working with throwables.
  */
 public class ThrowableUtils {
+
+	private static final Logger LOG = Logger.getLogger(ThrowableUtils.class);
 
 	static final Setting<Boolean> VERBOSE = Settings.get().get("juneau.enableVerboseExceptions").asBoolean();
 
@@ -281,6 +284,7 @@ public class ThrowableUtils {
 	 * @param maxDepth The maximum number of stack trace elements to print. If <jk>null</jk> or negative, prints all elements.
 	 */
 	public static void printStackTrace(Throwable t, Integer maxDepth) {
+		LOG.warning(t, "Stack trace");
 		printStackTrace(t, new PrintWriter(System.err, true), maxDepth);
 	}
 

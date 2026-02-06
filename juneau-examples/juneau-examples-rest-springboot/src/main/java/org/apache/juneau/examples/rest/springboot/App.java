@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.examples.rest.springboot;
 
+import org.apache.juneau.commons.logging.Logger;
+
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.springboot.*;
 import org.springframework.boot.autoconfigure.*;
@@ -43,7 +45,7 @@ public class App {
 	public static void main(String[] args) {
 		try {
 			new SpringApplicationBuilder(App.class).run(args);
-			System.out.println("Initialized.  App available on http://localhost:5000");
+			Logger.getLogger(App.class).info("Initialized.  App available on http://localhost:5000");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

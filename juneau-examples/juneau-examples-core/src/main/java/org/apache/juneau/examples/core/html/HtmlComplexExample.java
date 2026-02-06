@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.examples.core.html;
 
+import org.apache.juneau.commons.logging.Logger;
+
 import java.util.*;
 
 import org.apache.juneau.examples.core.pojo.*;
@@ -66,7 +68,7 @@ public class HtmlComplexExample {
 		var flat = htmlSerializer.serialize(pojoc);
 
 		// Print out the created POJO in JSON format.
-		System.out.println(flat);
+		Logger.getLogger(HtmlComplexExample.class).info(flat);
 
 		var parse = htmlParser.parse(flat, PojoComplex.class);
 

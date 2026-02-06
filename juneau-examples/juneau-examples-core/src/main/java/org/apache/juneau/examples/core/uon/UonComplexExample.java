@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.examples.core.uon;
 
+import org.apache.juneau.commons.logging.Logger;
+
 import java.util.*;
 
 import org.apache.juneau.examples.core.pojo.*;
@@ -55,7 +57,7 @@ public class UonComplexExample {
 		 */
 		var uonSerializer = UonSerializer.DEFAULT;
 		// This will show the final output from the bean
-		System.out.println(uonSerializer.serialize(pojoc));
+		Logger.getLogger(UonComplexExample.class).info(uonSerializer.serialize(pojoc));
 
 		var obj = UonParser.DEFAULT.parse(uonSerializer.serialize(pojoc), PojoComplex.class);
 

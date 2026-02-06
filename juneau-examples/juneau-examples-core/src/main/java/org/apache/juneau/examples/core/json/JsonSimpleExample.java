@@ -19,6 +19,8 @@
 
 package org.apache.juneau.examples.core.json;
 
+import org.apache.juneau.commons.logging.Logger;
+
 import java.util.*;
 
 import org.apache.juneau.examples.core.pojo.*;
@@ -50,7 +52,7 @@ public class JsonSimpleExample {
 
 		var flat = jsonSerializer.serialize(pojo);
 		// Print out the created POJO in JSON format.
-		System.out.println(flat);
+		Logger.getLogger(JsonSimpleExample.class).info(flat);
 
 		var parse = jsonParser.parse(flat, Pojo.class);
 
@@ -60,7 +62,7 @@ public class JsonSimpleExample {
 		// Produces
 		// {name:'name',id:'id'}
 		var json5 = Json5Serializer.DEFAULT.serialize(pojo);
-		System.out.println(json5);
+		Logger.getLogger(JsonSimpleExample.class).info(json5);
 
 		// Parse a JSON object (creates a generic JsonMap).
 		var json = "{name:'John Smith',age:21}";

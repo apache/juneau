@@ -697,7 +697,7 @@ public class Microservice implements ConfigEventListener {
 	public void err(Messages mb, String messageKey, Object...args) {
 		var msg = mb.getString(messageKey, args);
 		if (consoleEnabled)
-			System.err.println(mb.getString(messageKey, args));  // NOT DEBUG
+			getLogger().warning(msg);  // NOT DEBUG
 		log(Level.SEVERE, msg);
 	}
 

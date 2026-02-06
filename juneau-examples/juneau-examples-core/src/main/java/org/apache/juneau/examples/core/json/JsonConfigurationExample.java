@@ -19,6 +19,8 @@
 
 package org.apache.juneau.examples.core.json;
 
+import org.apache.juneau.commons.logging.Logger;
+
 import org.apache.juneau.examples.core.pojo.*;
 import org.apache.juneau.json.*;
 
@@ -47,7 +49,7 @@ public class JsonConfigurationExample {
 		 */
 		var withWhitespace = JsonSerializer.create().ws().build().serialize(aPojo);
 		// the output will be padded with spaces after format characters
-		System.out.println(withWhitespace);
+		Logger.getLogger(JsonConfigurationExample.class).info(withWhitespace);
 
 		/**
 		 * Produces
@@ -55,7 +57,7 @@ public class JsonConfigurationExample {
 		 */
 		var escaped = JsonSerializer.create().escapeSolidus().build().serialize(aPojo);
 		// the output will have escaped /
-		System.out.println(escaped);
+		Logger.getLogger(JsonConfigurationExample.class).info(escaped);
 
 		/**
 		 * Produces
@@ -72,7 +74,7 @@ public class JsonConfigurationExample {
 			.build()
 			.serialize(aPojo);  // Create a JsonSerializer
 
-		System.out.println(configurableJson);
+		Logger.getLogger(JsonConfigurationExample.class).info(configurableJson);
 
 	}
 }

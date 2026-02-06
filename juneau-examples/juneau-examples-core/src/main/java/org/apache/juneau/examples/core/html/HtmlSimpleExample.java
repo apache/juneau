@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.examples.core.html;
 
+import org.apache.juneau.commons.logging.Logger;
+
 import org.apache.juneau.examples.core.pojo.*;
 import org.apache.juneau.html.*;
 
@@ -45,7 +47,7 @@ public class HtmlSimpleExample {
 		var flat = htmlSerializer.serialize(pojo);
 
 		// Print out the created POJO in JSON format.
-		System.out.println(flat);
+		Logger.getLogger(HtmlSimpleExample.class).info(flat);
 
 		var parse = htmlParser.parse(flat, Pojo.class);
 
@@ -59,7 +61,7 @@ public class HtmlSimpleExample {
 		 *  </table></div></div></article></section></body></html>
 		 */
 		var docSerialized = HtmlDocSerializer.DEFAULT.serialize(pojo);
-		System.out.println(docSerialized);
+		Logger.getLogger(HtmlSimpleExample.class).info(docSerialized);
 
 		// The object above can be parsed thanks to the @Beanc(properties = id,name) annotation on Pojo
 		// Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.
