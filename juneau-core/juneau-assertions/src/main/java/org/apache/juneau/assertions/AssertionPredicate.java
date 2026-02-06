@@ -62,6 +62,8 @@ import org.apache.juneau.cp.*;
 @SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., MSG_predicateTestFailed, MSG_valueDidNotPassTest)
 public class AssertionPredicate<T> implements Predicate<T> {
 
+	private static final String CONST_Messages = "Messages";
+
 	/**
 	 * Encapsulates multiple predicates into a single AND operation.
 	 *
@@ -73,7 +75,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	 */
 	public static class And<T> extends AssertionPredicate<T> {
 
-		private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, "Messages");
+		private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, CONST_Messages);
 
 		private static final String MSG_predicateTestFailed = MESSAGES.getString("predicateTestFailed");
 		private final Predicate<T>[] inner;
@@ -118,7 +120,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	 */
 	public static class Not<T> extends AssertionPredicate<T> {
 
-		private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, "Messages");
+		private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, CONST_Messages);
 		private static final String MSG_predicateTestsUnexpectedlyPassed = MESSAGES.getString("predicateTestsUnexpectedlyPassed");
 
 		private final Predicate<T> inner;
@@ -158,7 +160,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	 */
 	public static class Or<T> extends AssertionPredicate<T> {
 
-		private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, "Messages");
+		private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, CONST_Messages);
 		private static final String MSG_noPredicateTestsPassed = MESSAGES.getString("noPredicateTestsPassed");
 
 		private final Predicate<T>[] inner;
@@ -189,7 +191,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	 * Argument placeholder for tested value.
 	 */
 	public static final Function<Object,String> VALUE = StringUtils::readable;
-	private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, "Messages");
+	private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, CONST_Messages);
 	private static final String MSG_valueDidNotPassTest = MESSAGES.getString("valueDidNotPassTest");
 	private static final String MSG_valueDidNotPassTestWithValue = MESSAGES.getString("valueDidNotPassTestWithValue");
 	private final Predicate<T> inner;

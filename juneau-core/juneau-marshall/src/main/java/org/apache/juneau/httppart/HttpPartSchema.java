@@ -132,6 +132,13 @@ public class HttpPartSchema {
 	private static final String CLASSNAME_DecimalMin = "DecimalMin";
 	private static final String CLASSNAME_DecimalMax = "DecimalMax";
 
+	// Annotation attribute name constants
+	private static final String ANN_value = "value";
+	private static final String ANN_min = "min";
+	private static final String ANN_max = "max";
+	private static final String ANN_regexp = "regexp";
+	private static final String ANN_inclusive = "inclusive";
+
 	/**
 	 * Builder class.
 	 */
@@ -2918,9 +2925,9 @@ public class HttpPartSchema {
 					case CLASSNAME_NotNull:
 						required(true);
 						break;
-					case CLASSNAME_Size:
-						Integer min = getAnnotationValue(a, "min", Integer.class);
-						Integer max = getAnnotationValue(a, "max", Integer.class);
+				case CLASSNAME_Size:
+					Integer min = getAnnotationValue(a, ANN_min, Integer.class);
+					Integer max = getAnnotationValue(a, ANN_max, Integer.class);
 						if (nn(min) && min > 0) {
 							minLength(min.longValue());
 							minItems(min.longValue());
@@ -2930,18 +2937,18 @@ public class HttpPartSchema {
 							maxItems(max.longValue());
 						}
 						break;
-					case CLASSNAME_Min:
-						Long minValue = getAnnotationValue(a, "value", Long.class);
+				case CLASSNAME_Min:
+					Long minValue = getAnnotationValue(a, ANN_value, Long.class);
 						if (nn(minValue))
 							minimum(minValue);
 						break;
-					case CLASSNAME_Max:
-						Long maxValue = getAnnotationValue(a, "value", Long.class);
+				case CLASSNAME_Max:
+					Long maxValue = getAnnotationValue(a, ANN_value, Long.class);
 						if (nn(maxValue))
 							maximum(maxValue);
 						break;
-					case CLASSNAME_Pattern:
-						String regexp = getAnnotationValue(a, "regexp", String.class);
+				case CLASSNAME_Pattern:
+					String regexp = getAnnotationValue(a, ANN_regexp, String.class);
 						if (nn(regexp))
 							pattern(regexp);
 						break;
@@ -2972,18 +2979,18 @@ public class HttpPartSchema {
 						minLength(1L);
 						pattern(".*\\S.*"); // Contains at least one non-whitespace character
 						break;
-					case CLASSNAME_DecimalMin:
-						String minVal = getAnnotationValue(a, "value", String.class);
-						Boolean minInclusive = getAnnotationValue(a, "inclusive", Boolean.class);
+				case CLASSNAME_DecimalMin:
+					String minVal = getAnnotationValue(a, ANN_value, String.class);
+					Boolean minInclusive = getAnnotationValue(a, ANN_inclusive, Boolean.class);
 						if (nn(minVal)) {
 							minimum(toNumber(minVal));
 							if (isFalse(minInclusive))
 								exclusiveMinimum(true);
 						}
 						break;
-					case CLASSNAME_DecimalMax:
-						String maxVal = getAnnotationValue(a, "value", String.class);
-						Boolean maxInclusive = getAnnotationValue(a, "inclusive", Boolean.class);
+				case CLASSNAME_DecimalMax:
+					String maxVal = getAnnotationValue(a, ANN_value, String.class);
+					Boolean maxInclusive = getAnnotationValue(a, ANN_inclusive, Boolean.class);
 						if (nn(maxVal)) {
 							maximum(toNumber(maxVal));
 							if (isFalse(maxInclusive))

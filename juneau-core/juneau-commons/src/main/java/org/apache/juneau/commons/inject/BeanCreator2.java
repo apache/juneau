@@ -187,6 +187,7 @@ import org.apache.juneau.commons.reflect.*;
 public class BeanCreator2<T> {
 
 	private static final String CLASSNAME_Autowired = "Autowired";
+	private static final String CLASSNAME_Inject = "Inject";
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_beanType = "beanType";
@@ -194,6 +195,8 @@ public class BeanCreator2<T> {
 	private static final String ARG_hook = "hook";
 	private static final String ARG_names = "names";
 	private static final String ARG_value = "value";
+
+	private static final String CONST_usingFallbackSupplier = "Using fallback supplier";
 
 	/** Default factory method names used for bean instantiation. */
 	protected static final Set<String> DEFAULT_FACTORY_METHOD_NAMES = u(set("getInstance"));
@@ -1124,7 +1127,7 @@ public class BeanCreator2<T> {
 				.filter(x -> x.isAll(NOT_STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
 				.filter(x -> buildMethodNames.contains(x.getNameSimple()))
 				.filter(x -> opt(x).map(x2 -> x2.getReturnType()).filter(x2 -> x2.is(beanSubType.inner()) || x2.isParentOf(beanSubType)).isPresent()) // Accept methods that return beanSubType or a parent type of beanSubType
-				.filter(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, "Inject", CLASSNAME_Autowired)) ? x.canResolveAllParameters(store2) : x.getParameterCount() == 0)
+				.filter(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, CLASSNAME_Inject, CLASSNAME_Autowired)) ? x.canResolveAllParameters(store2) : x.getParameterCount() == 0)
 				.sorted(methodComparator)
 				.findFirst();
 
@@ -1138,7 +1141,7 @@ public class BeanCreator2<T> {
 				log("Expected beanSubType: %s", beanSubType.getName());
 
 				// Check if method has @Inject annotation
-				boolean hasInject = method.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, "Inject", CLASSNAME_Autowired));
+				boolean hasInject = method.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, CLASSNAME_Inject, CLASSNAME_Autowired));
 				if (hasInject) {
 					log("Method has @Inject annotation, resolving parameters from bean store");
 				} else {
@@ -1170,7 +1173,7 @@ public class BeanCreator2<T> {
 				.filter(x -> x.isAll(NOT_STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
 				.filter(x -> !buildMethodNames.contains(x.getNameSimple())) // Skip standard build methods we already checked
 				.filter(x -> x.getReturnType().is(beanSubType.inner())) // Must return exact beanSubType, not parent
-				.filter(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, "Inject", CLASSNAME_Autowired)) ? x.canResolveAllParameters(store2) : x.getParameterCount() == 0)
+				.filter(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, CLASSNAME_Inject, CLASSNAME_Autowired)) ? x.canResolveAllParameters(store2) : x.getParameterCount() == 0)
 				.sorted(methodComparator)
 				.findFirst();
 
@@ -1223,7 +1226,7 @@ public class BeanCreator2<T> {
 				log("Builder detected but no appropriate build method found. Builder type: %s. Expected method names: %s", builder2.getClass().getName(), buildMethodNames);
 
 				if (fallbackSupplier != null) {
-					log("Using fallback supplier");
+					log(CONST_usingFallbackSupplier);
 					T fallbackBean = fallbackSupplier.get();
 					runPostCreateHooks(fallbackBean);
 					return fallbackBean;
@@ -1282,7 +1285,7 @@ public class BeanCreator2<T> {
 		if (beanSubType.isInterface()) {
 			log("Bean type is an interface");
 			if (fallbackSupplier != null) {
-				log("Using fallback supplier");
+				log(CONST_usingFallbackSupplier);
 				T fallbackBean = fallbackSupplier.get();
 				runPostCreateHooks(fallbackBean);
 				return fallbackBean;
@@ -1293,7 +1296,7 @@ public class BeanCreator2<T> {
 		if (beanSubType.isAbstract()) {
 			log("Bean type is abstract");
 			if (fallbackSupplier != null) {
-				log("Using fallback supplier");
+				log(CONST_usingFallbackSupplier);
 				T fallbackBean = fallbackSupplier.get();
 				runPostCreateHooks(fallbackBean);
 				return fallbackBean;
@@ -1302,7 +1305,7 @@ public class BeanCreator2<T> {
 		}
 
 		if (fallbackSupplier != null) {
-			log("Using fallback supplier");
+			log(CONST_usingFallbackSupplier);
 			T fallbackBean = fallbackSupplier.get();
 			runPostCreateHooks(fallbackBean);
 			return fallbackBean;
@@ -1581,7 +1584,7 @@ public class BeanCreator2<T> {
 				var returnType = x.getReturnType();
 				return returnType.is(beanSubType.inner()) || returnType.is(beanType.inner()) || returnType.isParentOf(beanSubType);
 			})
-			.anyMatch(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, "Inject", CLASSNAME_Autowired)) || x.getParameterCount() == 0);
+			.anyMatch(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, CLASSNAME_Inject, CLASSNAME_Autowired)) || x.getParameterCount() == 0);
 
 		if (hasBuildMethod) {
 			log("Builder is valid: has build/create/get method returning bean type");
