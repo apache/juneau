@@ -73,8 +73,8 @@ public abstract class RestServlet extends HttpServlet {
 	// Error message constants
 	private static final String MSG_servletInitError = "Servlet init error on class ''{0}''";
 
-	private AtomicReference<RestContext> context = new AtomicReference<>();
-	private AtomicReference<Exception> initException = new AtomicReference<>();
+	private final AtomicReference<RestContext> context = new AtomicReference<>();
+	private final AtomicReference<Exception> initException = new AtomicReference<>();
 
 	@Override /* Overridden from GenericServlet */
 	public synchronized void destroy() {

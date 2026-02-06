@@ -19,6 +19,7 @@ package org.apache.juneau.examples.rest;
 import java.awt.image.*;
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.examples.parser.*;
 import org.apache.juneau.examples.serializer.*;
@@ -97,7 +98,7 @@ public class PhotosResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	// Our cache of photos
-	private transient Map<Integer,Photo> photos = new TreeMap<>();
+	private transient Map<Integer,Photo> photos = new ConcurrentHashMap<>();
 
 	/**
 	 * [HTTP PUT /photos/{id}]

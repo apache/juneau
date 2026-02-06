@@ -272,7 +272,7 @@ public class XmlParserSession extends ReaderParserSession {
 	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
 	 */
 	private String getNameProperty(XmlReader r) {
-		return decodeString(r.getAttributeValue(null, getNamePropertyName()));
+		return decodeString(r.getAttributeValue(null, BeanSession.NAME_PROPERTY_NAME));
 	}
 
 	/*
@@ -372,7 +372,7 @@ public class XmlParserSession extends ReaderParserSession {
 	}
 
 	private boolean isSpecialAttr(String key) {
-		return key.equals(getBeanTypePropertyName(null)) || key.equals(getNamePropertyName());
+		return key.equals(getBeanTypePropertyName(null)) || key.equals(BeanSession.NAME_PROPERTY_NAME);
 	}
 
 	@SuppressWarnings({ "null", "java:S3776", "java:S6541" })

@@ -116,6 +116,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	private static final String ARG_value = "value";
 	private static final String ARG_interceptors = "interceptors";
 
+	// URI path separator (always "/" per RFC 3986)
+	private static final String URI_PATH_SEPARATOR = "/";
+
 	private class SimpleFormData extends SimplePart {
 		SimpleFormData(NameValuePair x) {
 			super(x, client.isSkipEmptyFormData());
@@ -1907,7 +1910,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				if (path.indexOf(pathVar) == -1 && ! name.equals("/*"))
 					throw new IllegalStateException("Path variable {" + name + "} was not found in path.");
 				if (name.equals("/*"))
-					path = path.replaceAll("\\/\\*$", "/" + value);
+					path = path.replaceAll("\\/\\*$", URI_PATH_SEPARATOR + value);
 				else
 					path = path.replace(pathVar, String.valueOf(value));
 				uriBuilder.setPath(path);

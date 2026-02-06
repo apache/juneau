@@ -926,7 +926,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 						out.attr(dns, getBeanTypePropertyName(eType), type);
 				}
 				if (nn(name))
-					out.attr(getNamePropertyName(), name);
+					out.attr(BeanSession.NAME_PROPERTY_NAME, name);
 			} else {
 				out.i(i);
 			}

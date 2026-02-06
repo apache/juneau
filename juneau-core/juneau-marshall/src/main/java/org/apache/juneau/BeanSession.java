@@ -243,14 +243,12 @@ public class BeanSession extends ContextSession {
 	}
 
 	/**
-	 * Returns the name property name.
+	 * The name property name.
 	 *
 	 * <p>
 	 * Currently this always returns <js>"_name"</js>.
-	 *
-	 * @return The name property name.  Never <jk>null</jk>.
 	 */
-	public static final String getNamePropertyName() { return "_name"; }
+	public static final String NAME_PROPERTY_NAME = "_name";
 
 	private static int getMultiplier(String s) {
 		if (s.endsWith("G"))

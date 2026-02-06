@@ -40,7 +40,7 @@ import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({ "java:S3008", "java:S5961", "java:S1186", "java:S1172" }) // Unused parameters in tests are typically intentional
+@SuppressWarnings({ "java:S3008", "java:S5961", "java:S1186", "java:S1172", "java:S1854" }) // Unused parameters in tests are typically intentional. S1854: Must create anonymous class instances (new Object() {}) to test anonymous class behavior, cannot use Object.class
 public class ClassInfo_Test extends TestBase {
 
 	@Documented

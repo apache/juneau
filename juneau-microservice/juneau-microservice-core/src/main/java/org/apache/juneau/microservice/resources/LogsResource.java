@@ -48,7 +48,7 @@ import org.apache.juneau.rest.servlet.*;
 	allowedMethodParams="*"
 )
 @HtmlConfig(uriAnchorText="PROPERTY_NAME")
-@SuppressWarnings("javadoc")
+@SuppressWarnings({ "javadoc", "java:S2386" }) // S2386: Fields logDir, leFormatter, and allowDeletes are effectively final after @RestInit initialization
 public class LogsResource extends BasicRestServlet {
 	@Response(schema = @Schema(description = "File action"))
 	public static class Action extends LinkString {
