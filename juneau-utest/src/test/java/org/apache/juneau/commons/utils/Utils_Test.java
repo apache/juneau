@@ -934,13 +934,13 @@ class Utils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// safe(ThrowingSupplier<T>, Function<Exception, RuntimeException>)
+	// safe(ThrowingSupplier<T>, Function<Throwable, RuntimeException>)
 	//====================================================================================================
 	@Test
 	void a051_safe_ThrowingSupplier_withExceptionMapper() {
 		// Test normal execution
 		ThrowingSupplier<String> supplier1 = () -> "result";
-		Function<Exception, RuntimeException> mapper1 = e -> new RuntimeException("mapped: " + e.getMessage());
+		Function<Throwable, RuntimeException> mapper1 = e -> new RuntimeException("mapped: " + e.getMessage());
 		String result = Utils.safe(supplier1, mapper1);
 		assertEquals("result", result);
 
@@ -948,7 +948,7 @@ class Utils_Test extends TestBase {
 		ThrowingSupplier<String> supplier2 = () -> {
 			throw new RuntimeException("original");
 		};
-		Function<Exception, RuntimeException> mapper2 = e -> new RuntimeException("mapped: " + e.getMessage());
+		Function<Throwable, RuntimeException> mapper2 = e -> new RuntimeException("mapped: " + e.getMessage());
 		var re = assertThrows(RuntimeException.class, () -> Utils.safe(supplier2, mapper2));
 		assertEquals("original", re.getMessage());
 
@@ -956,10 +956,18 @@ class Utils_Test extends TestBase {
 		ThrowingSupplier<String> supplier3 = () -> {
 			throw new Exception("test exception");
 		};
-		Function<Exception, RuntimeException> mapper3 = e -> new IllegalArgumentException("custom: " + e.getMessage());
+		Function<Throwable, RuntimeException> mapper3 = e -> new IllegalArgumentException("custom: " + e.getMessage());
 		var mapped = assertThrows(RuntimeException.class, () -> Utils.safe(supplier3, mapper3));
 		assertEquals("custom: test exception", mapped.getMessage());
 		assertTrue(mapped instanceof IllegalArgumentException);
+
+		// Test Error (e.g., InternalError from Java 21+ reflection operations) is mapped
+		ThrowingSupplier<String> supplier4 = () -> {
+			throw new InternalError("test error");
+		};
+		Function<Throwable, RuntimeException> mapper4 = e -> new RuntimeException("error mapped: " + e.getMessage());
+		var errorMapped = assertThrows(RuntimeException.class, () -> Utils.safe(supplier4, mapper4));
+		assertEquals("error mapped: test error", errorMapped.getMessage());
 
 		// Test with custom exception type
 		@SuppressWarnings("serial")

@@ -1809,12 +1809,13 @@ public class Utils {
 	 * @param s The supplier that may throw an exception.
 	 * @return The result of the supplier execution.
 	 */
+	@SuppressWarnings("java:S1181") // Need to catch Throwable to handle all exception types including Error
 	public static <T> T safe(ThrowingSupplier<T> s) {
 		try {
 			return s.get();
 		} catch (RuntimeException e) {
 			throw e;
-		} catch (Exception e) {
+		} catch (Exception | Error e) {
 			throw rex(e);
 		}
 	}
@@ -1840,16 +1841,17 @@ public class Utils {
 	 *
 	 * @param <T> The return type.
 	 * @param s The supplier that may throw an exception.
-	 * @param exceptionMapper A function that converts the thrown exception into a runtime exception.
+	 * @param exceptionMapper A function that converts the thrown exception or error into a runtime exception.
 	 * @return The result of the supplier execution.
-	 * @throws RuntimeException The exception returned by the exception mapper if the supplier throws an exception.
+	 * @throws RuntimeException The exception returned by the exception mapper if the supplier throws an exception or error.
 	 */
-	public static <T> T safe(ThrowingSupplier<T> s, Function<Exception, RuntimeException> exceptionMapper) {
+	@SuppressWarnings("java:S1181") // Need to catch Throwable to handle all exception types including Error
+	public static <T> T safe(ThrowingSupplier<T> s, Function<Throwable, RuntimeException> exceptionMapper) {
 		try {
 			return s.get();
 		} catch (RuntimeException e) {
 			throw e;
-		} catch (Exception e) {
+		} catch (Exception | Error e) {
 			throw exceptionMapper.apply(e);
 		}
 	}
