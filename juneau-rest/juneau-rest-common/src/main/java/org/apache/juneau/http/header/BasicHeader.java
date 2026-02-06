@@ -145,11 +145,15 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 
 	@Override
 	public BasicHeader clone() {
-		BasicHeader cloned = new BasicHeader(this);
-		if (this.elements != null) {
-			cloned.elements = this.elements.clone();
+		try {
+			BasicHeader cloned = (BasicHeader) super.clone();
+			if (this.elements != null) {
+				cloned.elements = this.elements.clone();
+			}
+			return cloned;
+		} catch (CloneNotSupportedException e) {
+			throw new AssertionError(e); // Should never happen since we implement Cloneable
 		}
-		return cloned;
 	}
 
 	/**

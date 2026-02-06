@@ -18,7 +18,7 @@
 /**********************************************************************************************************************/
 
 body {
-	background-image: linear-gradient(top, #CDDDDF 0, #EAEDED 20px, #FFFFFF 70px);
+	background-image: linear-gradient(to bottom, #CDDDDF 0, #EAEDED 20px, #FFFFFF 70px);
 	background-image: -webkit-linear-gradient(top, #CDDDDF 0, #EAEDED 20px, #FFFFFF 70px);
 	background-attachment: fixed;
 	font-family: Sans-Serif;
@@ -130,7 +130,7 @@ article th {
 	padding: 3px 5px;
 	color: #666666;
 	text-align: center;
-	background-image: linear-gradient(top, #FBF9E4 0%, #F3F2C2 100%);
+	background-image: linear-gradient(to bottom, #FBF9E4 0%, #F3F2C2 100%);
 	background-image: -webkit-linear-gradient(top, #FBF9E4 0%, #F3F2C2 100%);
 }
 

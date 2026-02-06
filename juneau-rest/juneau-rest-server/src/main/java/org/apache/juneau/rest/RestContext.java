@@ -6132,7 +6132,7 @@ public class RestContext extends Context {
 		}
 	}
 
-	private PrintWriter getResponseWriter(HttpServletResponse res) throws IOException {
+	private static PrintWriter getResponseWriter(HttpServletResponse res) throws IOException {
 		try {
 			return res.getWriter();
 		} catch (@SuppressWarnings("unused") IllegalStateException x) {

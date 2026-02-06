@@ -135,7 +135,7 @@ def extract_class_info(file_path):
             
             # Clean up extends (remove generics for simplicity)
             if extends:
-                extends = re.sub(r'<.*?>', '', extends).strip()
+                extends = re.sub(r'<[^>]*>', '', extends).strip()
             
             java_class = JavaClass(class_name, file_path, extends, package)
             

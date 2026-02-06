@@ -15,7 +15,7 @@
 Overall document style
 */
 body {
-	background-image: linear-gradient(top, #CDDDDF 0, #EAEDED 20px, #FFFFFF 70px);
+	background-image: linear-gradient(to bottom, #CDDDDF 0, #EAEDED 20px, #FFFFFF 70px);
 	background-image: -o-linear-gradient(top, #CDDDDF 0, #EAEDED 20px, #FFFFFF 70px);
 	background-image: -moz-linear-gradient(top, #CDDDDF 0, #EAEDED 20px, #FFFFFF 70px);
 	background-image: -webkit-linear-gradient(top, #CDDDDF 0, #EAEDED 20px, #FFFFFF 70px);
@@ -773,7 +773,7 @@ h5.toc, h6.toc {
 	border-radius: 15px 15px 15px 0px;
 	text-decoration: none;
 	background: linear-gradient(to bottom, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
-	background: -moz-linear-gradient(to bottom, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
+	background: -moz-linear-gradient(top, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
 	background: -webkit-gradient(linear, left top, left bottom, from(#F5F5F5), to(#DEE3E9));
 }
 
@@ -787,6 +787,6 @@ div.contentContainer > div.block > p:first-child {
 	border-radius: 15px;
 	text-decoration: none;
 	background: linear-gradient(to bottom, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
-	background: -moz-linear-gradient(to bottom, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
+	background: -moz-linear-gradient(top, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
 	background: -webkit-gradient(linear, left top, left bottom, from(#F5F5F5), to(#DEE3E9));
 }

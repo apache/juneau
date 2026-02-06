@@ -92,6 +92,9 @@ public class ParserSet {
 	 */
 	public static class Builder extends BeanBuilder<ParserSet> {
 
+		private static final String CLASS_NoInherit = "NoInherit";
+		private static final String CLASS_Inherit = "Inherit";
+
 		List<Object> entries;
 		private BeanContext.Builder bcBuilder;
 
@@ -157,12 +160,12 @@ public class ParserSet {
 		public Builder add(Class<?>...values) {
 			List<Object> l = list();
 			for (var v : values)
-				if (v.getSimpleName().equals("NoInherit"))
+				if (v.getSimpleName().equals(CLASS_NoInherit))
 					clear();
 			for (var v : values) {
 				if (Parser.class.isAssignableFrom(v)) {
 					l.add(createBuilder(v));
-				} else if (! v.getSimpleName().equals("NoInherit")) {
+				} else if (! v.getSimpleName().equals(CLASS_NoInherit)) {
 					throw rex("Invalid type passed to ParserSet.Builder.add(): {0}", cn(v));
 				}
 			}
@@ -344,7 +347,7 @@ public class ParserSet {
 		public Builder set(Class<?>...values) {
 			List<Object> l = list();
 			for (var v : values) {
-				if (v.getSimpleName().equals("Inherit")) {
+				if (v.getSimpleName().equals(CLASS_Inherit)) {
 					l.addAll(entries);
 				} else if (Parser.class.isAssignableFrom(v)) {
 					l.add(createBuilder(v));

@@ -457,7 +457,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 		return this;
 	}
 
-	private void appendRequestContent(StringBuilder sb, HttpEntity e) {
+	private static void appendRequestContent(StringBuilder sb, HttpEntity e) {
 		try {
 			sb.append("\n---request content---\n").append(EntityUtils.toString(e));
 		} catch (Exception ex) {

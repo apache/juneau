@@ -480,10 +480,6 @@ div.table-tabs > button.table-tab {
 /*
  * Styles for contents.
  */
-div.block {
-    font-size:14px;
-    font-family:'DejaVu Serif', Georgia, "Times New Roman", Times, serif;
-}
 .col-last div {
     padding-top:0;
 }
@@ -1020,9 +1016,11 @@ pre.snippet .highlighted {
 /* --------------------------------- Overrides ---------------------------------------*/
 h3.topic {
 	font-style:normal;
+	font-size:13pt;
 }
 
 div.block {
+	font-size:14px;
 	font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif;
 }
 
@@ -1270,12 +1268,11 @@ h2.topic, h3.topic, h4.topic {
 }
 
 h2.topic { font-size:14pt; }
-h3.topic { font-size:13pt; }
 h4.topic { font-size:12pt; }
 h5.topic {
 	font-size:11pt;
 	background:linear-gradient(to bottom, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
-	background:-moz-linear-gradient(to bottom, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
+	background:-moz-linear-gradient(top, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
 	background:-webkit-gradient(linear, left top, left bottom, from(#F5F5F5), to(#DEE3E9) );
 	max-width:800px;
 }
@@ -1307,7 +1304,7 @@ h2.title,
 div.docSummary > div.block,
 div.contentContainer > div.block > p:first-child {
 	background:linear-gradient(to bottom, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
-	background:-moz-linear-gradient(to bottom, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
+	background:-moz-linear-gradient(top, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
 	background:-webkit-gradient(linear, left top, left bottom, from(#F5F5F5), to(#DEE3E9) );
 	max-width:900px;
 }
@@ -1319,7 +1316,7 @@ h1.title,
 div.contentContainer > h2:first-of-type,
 body > p:first-child {
 	background:linear-gradient(to bottom, #3B596D, #6289A3) repeat scroll 0% 0% transparent;
-	background:-moz-linear-gradient(to bottom, #3B596D, #6289A3) repeat scroll 0% 0% transparent;
+	background:-moz-linear-gradient(top, #3B596D, #6289A3) repeat scroll 0% 0% transparent;
 	background:-webkit-gradient(linear, left top, left bottom, from(#3B596D), to(#6289A3) );
 }
 

@@ -91,6 +91,8 @@ public class SerializerSet {
 	 */
 	public static class Builder extends BeanBuilder<SerializerSet> {
 
+		private static final String CLASS_Inherit = "Inherit";
+
 		List<Object> entries;
 		private BeanContext.Builder bcBuilder;
 
@@ -340,7 +342,7 @@ public class SerializerSet {
 		public Builder set(Class<?>...values) {
 			List<Object> l = list();
 			for (var e : values) {
-				if (e.getSimpleName().equals("Inherit")) {
+				if (e.getSimpleName().equals(CLASS_Inherit)) {
 					l.addAll(entries);
 				} else if (Serializer.class.isAssignableFrom(e)) {
 					l.add(createBuilder(e));
