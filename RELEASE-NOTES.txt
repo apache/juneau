@@ -23,6 +23,7 @@ Release Notes - Juneau - Version 9.2.1
     * Bump org.apache:apache from 35 to 37 #306.
     * Bump org.mockito:mockito-core from 5.15.2 to 5.21.0 #307.
     * Bump spring.version from 4.0.1 to 4.0.2 #308.
+    * Bump Bump org.apache.maven.plugins:maven-compiler-plugin from 3.14.1 to 3.15.0 #314.
 
 Release Notes - Juneau - Version 9.2.0
 
