@@ -304,10 +304,8 @@ public class CollectionUtils {
 		if (newElements.length == 0)
 			return array;
 		var a = (T[])Array.newInstance(array.getClass().getComponentType(), array.length + newElements.length);
-		for (var i = 0; i < array.length; i++)
-			a[i] = array[i];
-		for (var i = 0; i < newElements.length; i++)
-			a[i + array.length] = newElements[i];
+		System.arraycopy(array, 0, a, 0, array.length);
+		System.arraycopy(newElements, 0, a, array.length, newElements.length);
 		return a;
 	}
 

@@ -216,8 +216,7 @@ public class BeanFilter {
 		public Builder dictionary(ClassInfo...values) {
 			if (dictionary == null)
 				dictionary = list();
-			for (var ci : values)
-				dictionary.add(ci);
+			Collections.addAll(dictionary, values);
 			return this;
 		}
 

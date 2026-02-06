@@ -121,7 +121,7 @@ public class FileUtils {
 		try {
 			Files.delete(f.toPath());
 			return true;
-		} catch (IOException e) {
+		} catch (@SuppressWarnings("unused") IOException e) {
 			return false;
 		}
 	}

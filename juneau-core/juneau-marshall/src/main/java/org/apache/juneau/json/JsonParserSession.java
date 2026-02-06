@@ -735,7 +735,7 @@ public class JsonParserSession extends ReaderParserSession {
 		if (r.peek() == '+') {
 			if (isStrict())
 				throw new ParseException(this, "String concatenation detected.");
-			r.read();
+			@SuppressWarnings("unused") int ignored = r.read();
 			skipCommentsAndSpace(r);
 			s += parseString(r);
 		}

@@ -392,6 +392,7 @@ public class JettyMicroservice extends Microservice {
 	}
 
 	private static final String KEY_SERVLET_CONTEXT_HANDLER = "ServletContextHandler";
+	private static final Random RANDOM = new Random();
 
 	private static volatile JettyMicroservice INSTANCE;
 
@@ -440,7 +441,7 @@ public class JettyMicroservice extends Microservice {
 		for (var port : ports) {
 			// If port is 0, try a random port between ports[0] and 32767.
 			if (port == 0)
-				port = new Random().nextInt(32767 - ports[0] + 1) + ports[0];
+				port = RANDOM.nextInt(32767 - ports[0] + 1) + ports[0];
 			try (var ss = new ServerSocket(port)) {
 				return port;
 			} catch (@SuppressWarnings("unused") IOException e) {}

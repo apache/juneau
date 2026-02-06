@@ -216,8 +216,7 @@ public class JsonList extends LinkedList<Object> {
 	 */
 	public static JsonList ofArrays(Object[]...values) {
 		var l = new JsonList();
-		for (var v : values)
-			l.add(v);
+		Collections.addAll(l, values);
 		return l;
 	}
 
@@ -229,8 +228,7 @@ public class JsonList extends LinkedList<Object> {
 	 */
 	public static JsonList ofCollections(Collection<?>...values) {
 		var l = new JsonList();
-		for (var v : values)
-			l.add(v);
+		Collections.addAll(l, values);
 		return l;
 	}
 

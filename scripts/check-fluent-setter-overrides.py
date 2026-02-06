@@ -114,6 +114,7 @@ def extract_class_info(file_path):
         package = extract_package(content)
         
         # Find class declarations (public class X extends Y)
+        # NOSONAR: S5843 - Regex complexity acceptable for Java class declaration parsing
         class_pattern = re.compile(
             r'^\s*public\s+(?:static\s+)?(?:abstract\s+)?class\s+(\w+)(?:\s+extends\s+([\w.<>, ]+?))?(?:\s+implements\s+[\w.<>, ]+?)?\s*\{',
             re.MULTILINE

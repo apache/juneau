@@ -155,8 +155,7 @@ public class CallLogger {
 		 * @return This object.
 		 */
 		public Builder debugRules(CallLoggerRule...values) {
-			for (var rule : values)
-				debugRules.add(rule);
+			Collections.addAll(debugRules, values);
 			return this;
 		}
 
@@ -314,8 +313,7 @@ public class CallLogger {
 		 * @return This object.
 		 */
 		public Builder normalRules(CallLoggerRule...values) {
-			for (var rule : values)
-				normalRules.add(rule);
+			Collections.addAll(normalRules, values);
 			return this;
 		}
 

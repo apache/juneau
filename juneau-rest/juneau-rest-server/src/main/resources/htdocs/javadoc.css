@@ -202,7 +202,7 @@ ul.subNavList li{
 .navBarCell1Rev {
 	background-image: url('data:image/gif;base64,R0lGODlhAwAeANUAAAAAAP///9+VNfChOu+gOeKXNr58Kr18Krp6KbZ3KMyGLr9+K7t6Krh4KbZ3KdKKMM+IL8yGL8mELsiDLsWBLcWCLcKALLl4KtKLMd+UNdyRNNmPM9WNMvCgOuqcOOaZN+WYN+KWNtqQNPGhO+yeOuucOeeaOPOiPP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAACgALAAAAAADAB4AAAZAwJNwMBoQOgSS0lPymJ4f0CdUCGUEGY12I9pwvpgHBkJWRBQTyaRCqVjei/jBcGAgGI1LI+FI5Pd9f3x+eoJ9QQA7');
     background-color:#a88834;
-    color:#FFFFFF;
+    color:#000000;
     margin: auto 5px;
     border:1px solid #c9aa44;
 }
@@ -748,7 +748,7 @@ a.doclink {
 ol.toc, .toc ol {
   background: rgb(222, 227, 233);
   font: italic 1em Georgia, Times, serif;
-  color: rgb(76,107,135);
+  color: rgb(40, 60, 80);
   margin: 0px;
   padding: 0px;
 }

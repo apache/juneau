@@ -230,8 +230,9 @@ public class UrlEncodingParserSession extends UonParserSession {
 			return (T)opt(parseAnything(eType.getElementType(), r, outer));
 
 		int c = r.peekSkipWs();
-		if (c == '?')
-			r.read();
+		if (c == '?') {
+			@SuppressWarnings("unused") int ignored = r.read();
+		}
 
 		Object o;
 
@@ -530,8 +531,9 @@ public class UrlEncodingParserSession extends UonParserSession {
 	@Override /* Overridden from ReaderParserSession */
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
 		try (var r = getUonReader(pipe, true)) {
-			if (r.peekSkipWs() == '?')
-				r.read();
+			if (r.peekSkipWs() == '?') {
+				@SuppressWarnings("unused") int ignored = r.read();
+			}
 			m = parseIntoMap2(r, m, getClassMeta(Map.class, keyType, valueType), null);
 			return m;
 		}
