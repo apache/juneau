@@ -88,10 +88,10 @@ public class Queryable implements RestConverter {
 			in:'query',
 			name:'s',
 			description:'Search.
-				Key/value pairs representing column names and search tokens.
-				\\'*\\' and \\'?\\' can be used as meta-characters in string fields.
-				\\'>\\', \\'>=\\', \\'<\\', and \\'<=\\' can be used as limits on numeric and date fields.
-				Date fields can be matched with partial dates (e.g. \\'2018\\' to match any date in the year 2018).',
+\t\t\t\tKey/value pairs representing column names and search tokens.
+\t\t\t\t\\'*\\' and \\'?\\' can be used as meta-characters in string fields.
+\t\t\t\t\\'>\\', \\'>=\\', \\'<\\', and \\'<=\\' can be used as limits on numeric and date fields.
+\t\t\t\tDate fields can be matched with partial dates (e.g. \\'2018\\' to match any date in the year 2018).',
 			type:'array',
 			collectionFormat:'csv',
 			examples:{example:'?s=Bill*,birthDate>2000'}

@@ -49,7 +49,7 @@ import org.apache.juneau.serializer.annotation.*;
 	},
 	aside={
 		"<div style='max-width:400px' class='text'>",
-		"	<p>This is an example of a nested 'router' page that serves as a jumping-off point to other child resources.</p>",
+		"\t<p>This is an example of a nested 'router' page that serves as a jumping-off point to other child resources.</p>",
 		"</div>"
 	}
 )

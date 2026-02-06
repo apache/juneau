@@ -28,7 +28,7 @@ import org.junit.jupiter.api.io.*;
 /**
  * Test class for {@link MimeTypeDetector}.
  */
-public class MimeTypeDetector_Test {
+class MimeTypeDetector_Test {
 
 	@TempDir
 	Path tempDir;

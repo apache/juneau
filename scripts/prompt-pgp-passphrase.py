@@ -49,7 +49,7 @@ def prompt_pgp_passphrase():
             # Attempt to sign the dummy file (this will prompt for passphrase)
             # Don't use --batch so it will prompt interactively for passphrase
             # Use --yes to auto-confirm overwrite prompts, but allow passphrase prompt
-            result = subprocess.run(
+            subprocess.run(
                 ["gpg", "--yes", "--clearsign", tmp_path],
                 capture_output=False,  # Don't capture output so user can see the prompt
                 text=True,

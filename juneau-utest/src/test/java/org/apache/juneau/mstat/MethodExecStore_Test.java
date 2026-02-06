@@ -105,9 +105,9 @@ class MethodExecStore_Test extends TestBase {
 		}
 	}
 
-	@Test public void a06_builder_statsImplClass() throws Exception {
+	@Test void a06_builder_statsImplClass() throws Exception {
 		var bs = BasicBeanStore.create().build();
-		var m = MethodExecStore_Test.class.getMethod("a06_builder_statsImplClass");
+		var m = MethodExecStore_Test.class.getDeclaredMethod("a06_builder_statsImplClass");
 
 		assertThrowsWithMessage(Exception.class, "Public constructor found but could not find prerequisites: A6a", ()->MethodExecStore.create(bs).statsImplClass(A6b.class).build().getStats(m));
 		assertInstanceOf(A6c.class, MethodExecStore.create(bs).statsImplClass(A6c.class).build().getStats(m));
@@ -117,8 +117,8 @@ class MethodExecStore_Test extends TestBase {
 		assertInstanceOf(A6c.class, MethodExecStore.create(bs).statsImplClass(A6c.class).build().getStats(m));
 	}
 
-	@Test public void a07_builder_thrownStore() throws Exception {
-		var m = MethodExecStore_Test.class.getMethod("a07_builder_thrownStore");
+	@Test void a07_builder_thrownStore() throws Exception {
+		var m = MethodExecStore_Test.class.getDeclaredMethod("a07_builder_thrownStore");
 		var s = ThrownStore.create().build();
 
 		var store = MethodExecStore.create().thrownStore(s).build();
@@ -136,8 +136,8 @@ class MethodExecStore_Test extends TestBase {
 	// Store tests.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test public void b01_store_getStats() throws Exception {
-		var m = MethodExecStore_Test.class.getMethod("b01_store_getStats");
+	@Test void b01_store_getStats() throws Exception {
+		var m = MethodExecStore_Test.class.getDeclaredMethod("b01_store_getStats");
 		var s = ThrownStore.create().build();
 
 		var store = MethodExecStore.create().thrownStore(s).build();
@@ -152,8 +152,8 @@ class MethodExecStore_Test extends TestBase {
 	// MethodExecStats tests.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test public void c01_stats_basic() throws Exception {
-		var m = MethodExecStore_Test.class.getMethod("c01_stats_basic");
+	@Test void c01_stats_basic() throws Exception {
+		var m = MethodExecStore_Test.class.getDeclaredMethod("c01_stats_basic");
 		var s = ThrownStore.create().build();
 
 		var store = MethodExecStore.create().thrownStore(s).build();

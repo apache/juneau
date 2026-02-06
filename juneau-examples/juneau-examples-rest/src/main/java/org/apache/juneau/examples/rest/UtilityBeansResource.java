@@ -49,7 +49,7 @@ import org.apache.juneau.rest.widget.*;
 	},
 	aside={
 		"<div class='text'>",
-		"	<p>Examples of serialized beans in the org.apache.juneau.rest.utilitybeans package.</p>",
+		"\t<p>Examples of serialized beans in the org.apache.juneau.rest.utilitybeans package.</p>",
 		"</div>"
 	},
 	asideFloat="RIGHT"
@@ -94,7 +94,7 @@ public class UtilityBeansResource extends BasicRestObject {
 	@HtmlDocConfig(
 		aside={
 			"<div class='text'>",
-			"	<p>Example of serialized ResourceDescriptions bean.</p>",
+			"\t<p>Example of serialized ResourceDescriptions bean.</p>",
 			"</div>"
 		}
 	)
@@ -110,7 +110,7 @@ public class UtilityBeansResource extends BasicRestObject {
 	@HtmlDocConfig(
 		aside={
 			"<div class='text'>",
-			"	<p>Example of serialized Hyperlink bean.</p>",
+			"\t<p>Example of serialized Hyperlink bean.</p>",
 			"</div>"
 		}
 	)
@@ -127,7 +127,7 @@ public class UtilityBeansResource extends BasicRestObject {
 	@HtmlDocConfig(
 		aside={
 			"<div class='text'>",
-			"	<p>Example of serialized org.apache.juneau.rest.utilitybeans.SeeOtherRoot bean.</p>",
+			"\t<p>Example of serialized org.apache.juneau.rest.utilitybeans.SeeOtherRoot bean.</p>",
 			"</div>"
 		}
 	)

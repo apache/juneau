@@ -51,7 +51,7 @@ import org.apache.juneau.rest.widget.*;
 	},
 	aside={
 		"<div class='text'>",
-		"	<p>Examples of serialized HTML beans.</p>",
+		"\t<p>Examples of serialized HTML beans.</p>",
 		"</div>"
 	},
 	asideFloat="RIGHT"
@@ -69,7 +69,7 @@ public class HtmlBeansResource extends BasicRestObject {
 	@HtmlDocConfig(
 		aside={
 			"<div class='text'>",
-			"	<p>Example of serialized div tag.</p>",
+			"\t<p>Example of serialized div tag.</p>",
 			"</div>"
 		}
 	)
@@ -89,7 +89,7 @@ public class HtmlBeansResource extends BasicRestObject {
 	@HtmlDocConfig(
 		aside={
 			"<div class='text'>",
-			"	<p>Example of serialized HTML form.</p>",
+			"\t<p>Example of serialized HTML form.</p>",
 			"</div>"
 		}
 	)
@@ -111,7 +111,7 @@ public class HtmlBeansResource extends BasicRestObject {
 	@HtmlDocConfig(
 		aside={
 			"<div class='text'>",
-			"	<p>Example of serialized table.</p>",
+			"\t<p>Example of serialized table.</p>",
 			"</div>"
 		}
 	)

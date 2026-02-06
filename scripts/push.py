@@ -61,7 +61,7 @@ def run_command(cmd, description, cwd=None):
     print(f"Running: {' '.join(cmd) if isinstance(cmd, list) else cmd}")
     
     try:
-        result = subprocess.run(
+        subprocess.run(
             cmd,
             cwd=cwd,
             shell=isinstance(cmd, str),

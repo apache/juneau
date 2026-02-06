@@ -50,7 +50,7 @@ def main():
     print()
     
     try:
-        result = subprocess.run(
+        subprocess.run(
             ["git", "restore", "--source=INDEX", file_path],
             check=True,
             capture_output=True,

@@ -57,7 +57,7 @@ import org.apache.juneau.rest.widget.*;
 	},
 	aside={
 		"<div class='text'>",
-		"	<p>Examples of serialized beans in the org.apache.juneau.rest.utilitybeans package.</p>",
+		"\t<p>Examples of serialized beans in the org.apache.juneau.rest.utilitybeans package.</p>",
 		"</div>"
 	},
 	asideFloat="RIGHT"
