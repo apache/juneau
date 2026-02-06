@@ -101,11 +101,7 @@ public class Mutaters {
 	 * @param t The transform for converting the input to the output.
 	 */
 	public static synchronized void add(Class<?> ic, Class<?> oc, Mutater<?,?> t) {
-		var m = CACHE.get(oc);
-		if (m == null) {
-			m = new ConcurrentHashMap<>();
-			CACHE.put(oc, m);
-		}
+		var m = CACHE.computeIfAbsent(oc, k -> new ConcurrentHashMap<>());
 		m.put(ic, t);
 	}
 
@@ -145,19 +141,9 @@ public class Mutaters {
 		if (ic == null || oc == null)
 			return null;
 
-		var m = CACHE.get(oc);
-		if (m == null) {
-			m = new ConcurrentHashMap<>();
-			CACHE.putIfAbsent(oc, m);
-			m = CACHE.get(oc);
-		}
+		var m = CACHE.computeIfAbsent(oc, k -> new ConcurrentHashMap<>());
 
-		var t = m.get(ic);
-
-		if (t == null) {
-			t = find(ic, oc, m);
-			m.put(ic, t);
-		}
+		var t = m.computeIfAbsent(ic, k -> find(ic, oc, m));
 
 		return t == NULL ? null : (Mutater<I,O>)t;
 	}

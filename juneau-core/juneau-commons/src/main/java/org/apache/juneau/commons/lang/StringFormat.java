@@ -169,23 +169,20 @@ public final class StringFormat {
 			}
 			var o = args[index];
 			var l = locale == null ? Locale.getDefault() : locale;
-			switch (format) {
-				case 's':
-					if (o == null) {
-						sb.append("null");
-					} else if (o instanceof Number o2) {
-						sb.append(NUMBER_FORMAT_CACHE.get(l).format(o2));
-					} else if (o instanceof Date o2) {
-						sb.append(DATE_FORMAT_CACHE.get(l).format(o2));
-					} else {
-						sb.append(o.toString());
-					}
-					break;
-				default:
-					// Use Cache2 with Locale and content as separate keys to avoid string concatenation
-					var mf = MESSAGE_FORMAT_CACHE.get(l, content);
-					sb.append(mf.format(a(o)));
-					break;
+			if (format == 's') {
+				if (o == null) {
+					sb.append("null");
+				} else if (o instanceof Number o2) {
+					sb.append(NUMBER_FORMAT_CACHE.get(l).format(o2));
+				} else if (o instanceof Date o2) {
+					sb.append(DATE_FORMAT_CACHE.get(l).format(o2));
+				} else {
+					sb.append(o.toString());
+				}
+			} else {
+				// Use Cache2 with Locale and content as separate keys to avoid string concatenation
+				var mf = MESSAGE_FORMAT_CACHE.get(l, content);
+				sb.append(mf.format(a(o)));
 			}
 		}
 	}

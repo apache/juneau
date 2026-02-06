@@ -76,9 +76,8 @@ public class VersionRange {
 		if (e(v))
 			return (minVersion == null && maxVersion == null);
 		var ver = new Version(v);
-		if ((nn(minVersion) && ! ver.isAtLeast(minVersion, minExclusive)) || (nn(maxVersion) && ! ver.isAtMost(maxVersion, maxExclusive)))
-			return false;
-		return true;
+		return (minVersion == null || ver.isAtLeast(minVersion, minExclusive))
+			&& (maxVersion == null || ver.isAtMost(maxVersion, maxExclusive));
 	}
 
 	@Override /* Overridden from Object */

@@ -54,7 +54,7 @@ public class AnnotationUtils {
 		if (! t1.equals(t2))
 			return false;
 
-		return ! getAnnotationMethods(t1).anyMatch(x -> ! memberEquals(x.getReturnType(), safeSupplier(() -> x.invoke(a1)), safeSupplier(() -> x.invoke(a2))));
+		return getAnnotationMethods(t1).allMatch(x -> memberEquals(x.getReturnType(), safeSupplier(() -> x.invoke(a1)), safeSupplier(() -> x.invoke(a2))));
 	}
 
 	/**

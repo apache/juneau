@@ -209,7 +209,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	private final HtmlSerializer ctx;
-	private final Pattern urlPattern = Pattern.compile("http[s]?\\:\\/\\/.*");
+	private final Pattern urlPattern = Pattern.compile("https?\\:\\/\\/.*");
 	private final Pattern labelPattern;
 
 	/**
@@ -280,11 +280,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @return <jk>true</jk> if the specified object is a URL.
 	 */
 	public boolean isUri(ClassMeta<?> cm, BeanPropertyMeta pMeta, Object o) {
-		if (cm.isUri() || (nn(pMeta) && pMeta.isUri()))
-			return true;
-		if (isDetectLinksInStrings() && o instanceof CharSequence && urlPattern.matcher(o.toString()).matches())
-			return true;
-		return false;
+		return (cm.isUri() || (nn(pMeta) && pMeta.isUri()))
+			|| (isDetectLinksInStrings() && o instanceof CharSequence && urlPattern.matcher(o.toString()).matches());
 	}
 
 	/**

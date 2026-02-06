@@ -337,10 +337,8 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	private static final Map<Class<? extends Temporal>,Method> FROM_METHODS = new ConcurrentHashMap<>();
 
 	private static Method findParseMethod(Class<? extends Temporal> c) throws ExecutableException {
-		var m = FROM_METHODS.get(c);
-		if (m == null) {
 		// @formatter:off
-		m = info(c).getPublicMethod(
+		return FROM_METHODS.computeIfAbsent(c, k -> info(c).getPublicMethod(
 			x -> x.isStatic()
 				&& x.isNotDeprecated()
 				&& x.hasName("from")
@@ -348,11 +346,8 @@ public class TemporalSwap extends StringSwap<Temporal> {
 				&& x.hasParameterTypes(TemporalAccessor.class)
 			)
 			.map(MethodInfo::inner)
-			.orElseThrow(() -> new ExecutableException("Parse method not found on temporal class ''{0}''", c.getSimpleName()));
+			.orElseThrow(() -> new ExecutableException("Parse method not found on temporal class ''{0}''", c.getSimpleName())));
 			// @formatter:on
-			FROM_METHODS.put(c, m);
-		}
-		return m;
 	}
 
 	private final DateTimeFormatter formatter;

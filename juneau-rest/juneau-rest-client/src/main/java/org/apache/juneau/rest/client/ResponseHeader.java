@@ -258,14 +258,13 @@ public class ResponseHeader extends BasicHeader {
 			cc = ci.getPublicConstructor(x -> x.hasParameterTypes(String.class, String.class)).orElse(null);
 			if (nn(cc))
 				return cc.newInstance(getName(), getValue());
+		} catch (ExecutableException e) {
+			var cause = e.getCause();
+			if (cause instanceof Exception ex)
+				throw toRex(ex);
+			else
+				throw toRex(cause);
 		} catch (Exception e) {
-			if (e instanceof ExecutableException) {
-				var cause = e.getCause();
-				if (cause instanceof Exception ex)
-					e = ex;
-				else
-					throw toRex(cause);
-			}
 			throw toRex(e);
 		}
 		throw rex("Could not determine a method to construct type {0}", cn(c));

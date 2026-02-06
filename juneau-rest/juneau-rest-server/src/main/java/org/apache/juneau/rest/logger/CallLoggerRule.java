@@ -391,18 +391,10 @@ public class CallLoggerRule {
 	 * @return <jk>true</jk> if this rule matches the specified parameters.
 	 */
 	public boolean matches(HttpServletRequest req, HttpServletResponse res) {
-
-		if ((nn(requestFilter) && ! requestFilter.test(req)) || (nn(responseFilter) && ! responseFilter.test(res)))
-			return false;
-
-		if (nn(statusFilter) && ! statusFilter.test(res.getStatus()))
-			return false;
-
 		var e = (Throwable)req.getAttribute("Exception");
-		if (nn(e) && nn(exceptionFilter) && ! exceptionFilter.test(e))
-			return false;
-
-		return true;
+		return !((nn(requestFilter) && ! requestFilter.test(req)) || (nn(responseFilter) && ! responseFilter.test(res)))
+			&& !(nn(statusFilter) && ! statusFilter.test(res.getStatus()))
+			&& !(nn(e) && nn(exceptionFilter) && ! exceptionFilter.test(e));
 	}
 
 	protected FluentMap<String,Object> properties() {

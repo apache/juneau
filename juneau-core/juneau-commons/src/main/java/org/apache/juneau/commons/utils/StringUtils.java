@@ -3542,7 +3542,7 @@ public class StringUtils {
 	 * @param s The string to test.
 	 * @return <jk>true</jk> if it's an absolute path.
 	 */
-	@SuppressWarnings("java:S3776") // Cognitive complexity is acceptable for this state machine-based URI validator
+	@SuppressWarnings({ "java:S3776", "java:S1126" }) // Cognitive complexity is acceptable for this state machine-based URI validator. S1126: State machine requires if-then-else structure
 	public static boolean isUri(String s) {
 
 		if (isEmpty(s))
