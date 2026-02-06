@@ -6332,7 +6332,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			} else if (state == S4) {
 				if (! isWhitespace(c)) {
 					mark = i;
-					state = S5;
+					// State machine requires state transition to S5, SonarLint reports false positive
+					@SuppressWarnings("java:S1854")
+					var unused = (state = S5);
 				}
 			} else /* (state == S5) */ {
 				if (isWhitespace(c)) {
@@ -8051,6 +8053,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 		try {
 			Object ret = null;
+			@SuppressWarnings("java:S1854") // res is assigned in all branches before use, SonarLint false positive
 			RestResponse res;
 			rc.rethrow(RuntimeException.class);
 			rom.forEachException(rc::rethrow);

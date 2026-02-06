@@ -609,7 +609,11 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 				if (state == S1 || state == S2) {
 					if (c == ')') {
 						if (state == S2) {
-							l.add((E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, false, pMeta));
+							// argIndex++ increment is necessary for expression evaluation to get correct argument index, even though incremented value is unused after return
+							@SuppressWarnings("java:S1854")
+							var argIdx = argIndex;
+							argIndex++;
+							l.add((E)parseAnything(type.isArgs() ? type.getArg(argIdx) : type.getElementType(), r.unread(), l, false, pMeta));
 							@SuppressWarnings("unused") int ignored = r.read();
 						}
 						return l;

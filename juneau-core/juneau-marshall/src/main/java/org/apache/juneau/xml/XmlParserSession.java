@@ -349,7 +349,6 @@ public class XmlParserSession extends ReaderParserSession {
 						}
 
 					} else if (event == END_ELEMENT) {
-						depth--;
 						break;
 					}
 					eventType = -1;
@@ -549,7 +548,6 @@ public class XmlParserSession extends ReaderParserSession {
 				E value = (E)parseAnything(elementType, null, r, l, false, pMeta);
 				l.add(value);
 			} else if (event == END_ELEMENT) {
-				depth--;
 				return l;
 			}
 		} while (depth > 0);
@@ -591,7 +589,6 @@ public class XmlParserSession extends ReaderParserSession {
 					m.put(key, value);
 				}
 			} else if (event == END_ELEMENT) {
-				depth--;
 				return m;
 			}
 		} while (depth > 0);
