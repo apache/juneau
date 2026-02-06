@@ -40,7 +40,7 @@ import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"java:S3008", "java:S5961", "java:S1186"})
+@SuppressWarnings({ "java:S3008", "java:S5961", "java:S1186", "java:S1172" }) // Unused parameters in tests are typically intentional
 public class ClassInfo_Test extends TestBase {
 
 	@Documented

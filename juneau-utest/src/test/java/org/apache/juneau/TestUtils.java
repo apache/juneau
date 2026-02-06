@@ -182,6 +182,7 @@ public class TestUtils extends Utils {
 		assertEquals(expected, s.toString(actual));
 	}
 
+	@SuppressWarnings("java:S1172") // Parameter expectedType is unused but kept for API consistency
 	public static <T extends Throwable> T assertThrowable(Class<? extends Throwable> expectedType, String expectedSubstring, T t) {
 		var messages = getMessages(t);
 		assertTrue(messages.contains(expectedSubstring), fs("Expected message to contain: {0}.\nActual:\n{1}", expectedSubstring, messages));

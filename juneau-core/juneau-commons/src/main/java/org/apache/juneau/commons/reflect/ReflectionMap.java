@@ -513,6 +513,7 @@ public class ReflectionMap<V> {
 	 * @param c The class type of values (used for type safety, not stored).
 	 * @return A new builder instance.
 	 */
+	@SuppressWarnings("java:S1172") // Parameter c is used for type inference, not runtime behavior
 	public static <V> Builder<V> create(Class<V> c) {
 		return new Builder<>();
 	}

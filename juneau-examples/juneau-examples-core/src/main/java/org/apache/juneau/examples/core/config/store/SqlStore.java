@@ -218,6 +218,7 @@ public class SqlStore extends ConfigStore {
 	}
 
 	// Reads the value from the database.
+	@SuppressWarnings("java:S1172") // Parameter name is unused in base implementation, intended for override
 	protected String getDatabaseValue(String name) {
 		// Implement me!
 		return null;

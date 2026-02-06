@@ -31,7 +31,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings({ "rawtypes", "java:S1172" }) // Unused parameters in tests are typically intentional
 class AutoListSwapTest extends TestBase {
 
 	private static final List<String> STRINGLIST = l("foo");

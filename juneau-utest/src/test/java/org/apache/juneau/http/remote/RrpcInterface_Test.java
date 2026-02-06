@@ -44,7 +44,7 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.opentest4j.*;
 
-@SuppressWarnings("java:S1186")
+@SuppressWarnings({ "java:S1186", "java:S1172" }) // Unused parameters in tests are typically intentional
 class RrpcInterface_Test extends TestBase {
 
 	private static final Input[] INPUT = {

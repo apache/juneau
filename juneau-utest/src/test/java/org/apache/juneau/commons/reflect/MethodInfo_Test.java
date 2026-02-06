@@ -33,7 +33,7 @@ import org.junit.jupiter.api.*;
 
 import static org.apache.juneau.commons.utils.Utils.*;
 
-@SuppressWarnings({ "java:S1186", "java:S116" }) // Field names use underscores for test data (e.g., a_m, c_a1)
+@SuppressWarnings({ "java:S1186", "java:S116", "java:S1172" }) // Field names use underscores for test data; unused parameters in tests are typically intentional
 class MethodInfo_Test extends TestBase {
 
 	@Documented

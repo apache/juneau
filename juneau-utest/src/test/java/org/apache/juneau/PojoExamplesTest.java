@@ -24,6 +24,7 @@ import org.junit.jupiter.api.*;
 /*
  * Tests the BEAN_examples property and @Example annotation.
  */
+@SuppressWarnings("java:S1172") // Unused parameters in tests are typically intentional
 class PojoExamplesTest extends TestBase {
 
 	private final JsonParserSession session = JsonParser.DEFAULT.getSession();

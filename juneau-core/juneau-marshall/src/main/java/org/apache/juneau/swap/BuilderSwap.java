@@ -49,7 +49,7 @@ public class BuilderSwap<T,B> {
 	 * @param mVis Minimum method visibility.
 	 * @return A new swap instance, or <jk>null</jk> if class wasn't a builder class.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "java:S1172" }) // Parameter mVis is unused but kept for API consistency
 	public static BuilderSwap<?,?> findSwapFromBuilderClass(Class<?> builderClass, Visibility cVis, Visibility mVis) {
 		var bci = info(builderClass);
 		if (bci.isNotPublic())
@@ -92,7 +92,7 @@ public class BuilderSwap<T,B> {
 	 * @param mVis Minimum method visibility.
 	 * @return A new swap instance, or <jk>null</jk> if class didn't have a builder class.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "java:S1172" }) // Parameter mVis is unused but kept for API consistency
 	public static BuilderSwap<?,?> findSwapFromObjectClass(BeanContext bc, Class<?> objectClass, Visibility cVis, Visibility mVis) {
 		var builderClass = Value.<Class<?>>empty();
 		MethodInfo objectCreateMethod;

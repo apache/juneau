@@ -32,7 +32,7 @@ import java.util.stream.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"java:S3008", "java:S5961", "java:S1186"})
+@SuppressWarnings({ "java:S3008", "java:S5961", "java:S1186", "java:S1172" }) // Unused parameters in tests are typically intentional
 class ExecutableInfo_Test extends TestBase {
 
 	private static void check(String expected, Object o) {

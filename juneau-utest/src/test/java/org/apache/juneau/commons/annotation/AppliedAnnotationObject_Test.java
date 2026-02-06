@@ -26,6 +26,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("java:S1172") // Unused parameters in tests are typically intentional
 class AppliedAnnotationObject_Test extends TestBase {
 
 	private static final String CNAME = AppliedAnnotationObject_Test.class.getName();

@@ -47,6 +47,7 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.opentest4j.*;
 
+@SuppressWarnings("java:S1172") // Unused parameters in tests are typically intentional
 class ThirdPartyProxy_Test extends TestBase {
 
 	private static final Input[] INPUT = {

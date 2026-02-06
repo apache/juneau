@@ -283,6 +283,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @return A new map or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
+	@SuppressWarnings("java:S1172") // Parameter p is unused but kept for API consistency
 	public static JsonMap ofText(Reader in, Parser p) throws ParseException {
 		return in == null ? null : new JsonMap(in);
 	}

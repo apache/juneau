@@ -729,6 +729,7 @@ public class BasicSwaggerProviderSession {
 			piri.put(examplesKey, examples);
 	}
 
+	@SuppressWarnings("java:S1172") // Parameter type is unused but kept for API consistency
 	private static void addParamExample(RestOpContext sm, JsonMap piri, RestPartType in, Type type) {
 
 		var s = piri.getString(SWAGGER_example);

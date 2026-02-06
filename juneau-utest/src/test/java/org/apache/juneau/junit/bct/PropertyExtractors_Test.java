@@ -30,6 +30,7 @@ import org.junit.jupiter.api.*;
  * Unit tests for PropertyExtractors.
  */
 @DisplayName("PropertyExtractors")
+@SuppressWarnings("java:S1172") // Unused parameters in tests are typically intentional
 class PropertyExtractors_Test extends TestBase {
 
 	private BasicBeanConverter converter;

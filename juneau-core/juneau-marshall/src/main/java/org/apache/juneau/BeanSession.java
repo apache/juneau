@@ -1135,6 +1135,7 @@ public class BeanSession extends ContextSession {
 	 * @param propertyNamer The property namer to use.
 	 * @return The wrapped object.
 	 */
+	@SuppressWarnings("java:S1172") // Parameter propertyNamer is unused but kept for API consistency
 	public final <T> BeanMap<T> toBeanMap(T o, PropertyNamer propertyNamer) {
 		return this.toBeanMap(o, (Class<T>)o.getClass());
 	}

@@ -32,7 +32,7 @@ import org.apache.juneau.annotation.Named;
 import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"java:S4144","java:S5961", "java:S1186"})
+@SuppressWarnings({ "java:S4144", "java:S5961", "java:S1186", "java:S1172" }) // Unused parameters in tests are typically intentional
 class BeanStore_Test extends TestBase {
 
 	@Documented

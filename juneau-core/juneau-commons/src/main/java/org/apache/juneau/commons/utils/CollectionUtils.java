@@ -1096,6 +1096,7 @@ public class CollectionUtils {
 	 * @param type The element type class.
 	 * @return An empty list.
 	 */
+	@SuppressWarnings("java:S1172") // Parameter type is used for type inference, not runtime behavior
 	public static <T> List<T> liste(Class<T> type) {
 		return Collections.emptyList();
 	}
@@ -1107,6 +1108,7 @@ public class CollectionUtils {
 	 * @param type The element type class.
 	 * @return <jk>null</jk>.
 	 */
+	@SuppressWarnings("java:S1172") // Parameter type is used for type inference, not runtime behavior
 	public static <T> List<T> listn(Class<T> type) {
 		return null;
 	}
@@ -1860,6 +1862,7 @@ public class CollectionUtils {
 	 * @param type The component type class.
 	 * @return <jk>null</jk>.
 	 */
+	@SuppressWarnings("java:S1172") // Parameter type is used for type inference, not runtime behavior
 	public static <T> T[] na(Class<T> type) {
 		return null;
 	}
@@ -2286,7 +2289,7 @@ public class CollectionUtils {
 	 * 	It must match the actual component type in the array.
 	 * @return A new {@link ArrayList}
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "java:S1172" }) // Parameter elementType is used for type inference, not runtime behavior
 	public static <E> List<E> toList(Object array, Class<E> elementType) {
 		var l = new ArrayList<E>(Array.getLength(array));
 		for (var i = 0; i < Array.getLength(array); i++)

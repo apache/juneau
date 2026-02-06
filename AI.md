@@ -15,6 +15,10 @@ This document outlines the rules, guidelines, and best practices that AI assista
 - **"s"** means **"status"** - When the user sends just "s", give a status update on what you're currently working on
 - **"TODO-x"** means **"work on this TODO"** - When the user sends just "TODO-3", "TODO-67", etc., start working on that specific TODO item from the TODO.md file
 
+### Task Interpretation Commands
+- **"make a plan"** or **"come up with a plan"** - When the user asks to make a plan for something, provide a summary of suggested changes only. **Do NOT make actual code changes**. The plan should outline what needs to be done, but implementation should wait for explicit user approval.
+- **"suppress warnings"** or **"suppress issues"** - When the user asks to suppress warnings or issues that appear to refer to SonarLint/SonarQube issues, add `@SuppressWarnings("java:Sxxx")` annotations to the appropriate class or method level. Use the specific rule ID from the warning (e.g., `java:S100`, `java:S115`, `java:S116`). Apply class-level suppressions when multiple methods/fields are affected, or method-level suppressions for specific methods.
+
 ### Script Shortcut Commands
 - **"start docs"** or **"start docusaurus"** - Runs `scripts/start-docusaurus.py`
 - **"revert staged"** - Runs `scripts/revert-staged.py`

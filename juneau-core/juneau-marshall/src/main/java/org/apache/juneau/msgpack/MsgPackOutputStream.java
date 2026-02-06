@@ -81,6 +81,7 @@ public class MsgPackOutputStream extends OutputStream {
 		return count;
 	}
 
+	@SuppressWarnings("java:S1172") // Parameter out is unused but kept for method signature consistency
 	private int writeUtf8To(CharSequence in, OutputStream out) {
 		var count = 0;
 		for (int i = 0, len = in.length(); i < len; i++) {

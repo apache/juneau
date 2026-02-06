@@ -34,6 +34,7 @@ import org.junit.jupiter.api.*;
 import org.apache.juneau.commons.annotation.*;
 import java.util.logging.Level;
 
+@SuppressWarnings("java:S1172") // Unused parameters in tests are typically intentional
 class BeanCreator2_Test extends TestBase {
 
 	private BasicBeanStore2 beanStore;

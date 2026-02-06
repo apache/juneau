@@ -1484,6 +1484,7 @@ public class Utils {
 	 * @param type The type class (unused, but helps with type inference).
 	 * @return <jk>null</jk>.
 	 */
+	@SuppressWarnings("java:S1172") // Parameter type is used for type inference, not runtime behavior
 	public static <T> T no(Class<T> type) {
 		return null;
 	}

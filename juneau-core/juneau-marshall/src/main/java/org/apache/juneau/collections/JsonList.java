@@ -306,6 +306,7 @@ public class JsonList extends LinkedList<Object> {
 	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
+	@SuppressWarnings("java:S1172") // Parameter p is unused but kept for API consistency
 	public static JsonList ofText(Reader in, Parser p) throws ParseException {
 		return in == null ? null : new JsonList(in);
 	}
