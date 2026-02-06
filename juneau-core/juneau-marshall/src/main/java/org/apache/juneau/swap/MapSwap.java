@@ -50,14 +50,4 @@ import org.apache.juneau.collections.*;
  * @param <T> The normal form of the class.
  */
 public abstract class MapSwap<T> extends ObjectSwap<T,JsonMap> {
-
-	@Override /* Overridden from ObjectSwap */
-	public JsonMap swap(BeanSession session, T o) throws Exception {
-		return super.swap(session, o);
-	}
-
-	@Override /* Overridden from ObjectSwap */
-	public T unswap(BeanSession session, JsonMap f, ClassMeta<?> hint) throws Exception {
-		return super.unswap(session, f, hint);
-	}
 }

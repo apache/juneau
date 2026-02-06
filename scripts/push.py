@@ -113,7 +113,7 @@ def play_sound(success=True):
                         capture_output=True,
                         timeout=5
                     )
-                except:
+                except OSError:
                     # Fallback to speaker-test
                     subprocess.run(
                         ["speaker-test", "-t", "sine", "-f", "1000", "-l", "1"],
@@ -127,7 +127,7 @@ def play_sound(success=True):
                         capture_output=True,
                         timeout=5
                     )
-                except:
+                except OSError:
                     # Fallback to speaker-test with lower frequency
                     subprocess.run(
                         ["speaker-test", "-t", "sine", "-f", "400", "-l", "1"],
@@ -180,7 +180,7 @@ def play_sound(success=True):
                         capture_output=True,
                         timeout=5
                     )
-                except:
+                except OSError:
                     # Fallback to speaker-test
                     subprocess.run(
                         ["speaker-test", "-t", "sine", "-f", "1000", "-l", "1"],
@@ -194,7 +194,7 @@ def play_sound(success=True):
                         capture_output=True,
                         timeout=5
                     )
-                except:
+                except OSError:
                     # Fallback to speaker-test with lower frequency
                     subprocess.run(
                         ["speaker-test", "-t", "sine", "-f", "400", "-l", "1"],
@@ -263,7 +263,7 @@ def play_sound(success=True):
                         capture_output=True,
                         timeout=5
                     )
-                except:
+                except OSError:
                     # Fallback to speaker-test
                     subprocess.run(
                         ["speaker-test", "-t", "sine", "-f", "1000", "-l", "1"],
@@ -277,7 +277,7 @@ def play_sound(success=True):
                         capture_output=True,
                         timeout=5
                     )
-                except:
+                except OSError:
                     # Fallback to speaker-test with lower frequency
                     subprocess.run(
                         ["speaker-test", "-t", "sine", "-f", "400", "-l", "1"],

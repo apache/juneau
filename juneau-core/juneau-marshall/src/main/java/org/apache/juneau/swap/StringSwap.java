@@ -63,14 +63,4 @@ public abstract class StringSwap<T> extends ObjectSwap<T,String> {
 	protected StringSwap(Class<T> normalClass) {
 		super(normalClass, String.class);
 	}
-
-	@Override /* Overridden from ObjectSwap */
-	public String swap(BeanSession session, T o) throws Exception {
-		return super.swap(session, o);
-	}
-
-	@Override /* Overridden from ObjectSwap */
-	public T unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
-		return super.unswap(session, f, hint);
-	}
 }

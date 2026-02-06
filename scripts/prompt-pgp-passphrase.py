@@ -60,7 +60,7 @@ def prompt_pgp_passphrase():
                 os.unlink(tmp_path)
                 if os.path.exists(tmp_path + ".asc"):
                     os.unlink(tmp_path + ".asc")
-            except:
+            except OSError:
                 pass
             print("✅ PGP passphrase entered successfully")
             return True

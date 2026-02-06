@@ -243,7 +243,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * @param context Sets the context object on this servlet.
 	 * @throws ServletException If error occurred during initialization.
 	 */
-	protected void setContext(RestContext context) throws ServletException {
+	protected synchronized void setContext(RestContext context) throws ServletException {
 		if (this.context.get() == null) {
 			super.init(context.getBuilder());
 			this.context.set(context);
