@@ -65,7 +65,7 @@ public class MediaRange extends MediaType {
 		this.qValue = qValue2;
 		this.extensions = extensions2.toArray(new NameValuePair[extensions2.size()]);
 
-		var sb = new StringBuffer().append(super.toString());
+		var sb = new StringBuilder().append(super.toString());
 
 		// '1' is equivalent to specifying no qValue. If there's no extensions, then we won't include a qValue.
 		if (qValue2.floatValue() == 1.0) {

@@ -74,11 +74,11 @@ public class ParserReader extends Reader implements Positionable {
 			this.r = new CharSequenceReader(in);
 			this.buff = new char[in.length() < 1024 ? in.length() : 1024];
 		} else {
-			Reader _r = pipe.getReader();
-			if (_r instanceof ParserReader _r2)
-				this.r = _r2.r;
+			Reader reader = pipe.getReader();
+			if (reader instanceof ParserReader reader2)
+				this.r = reader2.r;
 			else
-				this.r = _r;
+				this.r = reader;
 			this.buff = new char[1024];
 		}
 		pipe.setPositionable(this);

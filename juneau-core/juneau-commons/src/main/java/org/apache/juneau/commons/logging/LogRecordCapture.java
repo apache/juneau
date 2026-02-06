@@ -74,11 +74,11 @@ public class LogRecordCapture implements LogRecordListener, Closeable {
 	/**
 	 * Called when a log record is logged.
 	 *
-	 * @param record The log record that was logged.
+	 * @param rec The log record that was logged.
 	 */
 	@Override
-	public void onLogRecord(LogRecord record) {
-		records.add(record);
+	public void onLogRecord(LogRecord rec) {
+		records.add(rec);
 	}
 
 	/**

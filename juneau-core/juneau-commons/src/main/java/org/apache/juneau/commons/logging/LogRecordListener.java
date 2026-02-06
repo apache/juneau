@@ -33,7 +33,7 @@ public interface LogRecordListener {
 	/**
 	 * Called when a log record is logged.
 	 *
-	 * @param record The log record that was logged.
+	 * @param rec The log record that was logged.
 	 */
-	void onLogRecord(LogRecord record);
+	void onLogRecord(LogRecord rec);
 }

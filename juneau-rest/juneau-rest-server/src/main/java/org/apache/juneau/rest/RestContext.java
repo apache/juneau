@@ -5053,7 +5053,7 @@ public class RestContext extends Context {
 
 		REGISTRY.put(builder.resourceClass, this);
 
-		BasicHttpException _initException = null;
+		BasicHttpException initExceptionTemp = null;
 
 		try {
 			this.builder = builder;
@@ -5149,13 +5149,13 @@ public class RestContext extends Context {
 			// @formatter:on
 
 		} catch (BasicHttpException e) {
-			_initException = e;
+			initExceptionTemp = e;
 			throw e;
 		} catch (Exception e) {
-			_initException = new InternalServerError(e);
+			initExceptionTemp = new InternalServerError(e);
 			throw e;
 		} finally {
-			initException = _initException;
+			initException = initExceptionTemp;
 		}
 	}
 

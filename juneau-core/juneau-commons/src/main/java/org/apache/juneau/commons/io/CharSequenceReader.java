@@ -92,8 +92,7 @@ public class CharSequenceReader extends BufferedReader {
 
 	private final CharSequence cs;
 	private String s;
-	private StringBuffer sb;
-	private StringBuilder sb2;
+	private StringBuilder sb;
 	private int length;
 	private int next;
 
@@ -128,9 +127,9 @@ public class CharSequenceReader extends BufferedReader {
 		if (cs instanceof String s2)
 			s = s2;
 		else if (cs instanceof StringBuffer sb3)
-			sb = sb3;
+			sb = new StringBuilder(sb3);
 		else if (cs instanceof StringBuilder sb4)
-			sb2 = sb4;
+			sb = sb4;
 		this.length = cs.length();
 	}
 
@@ -161,8 +160,6 @@ public class CharSequenceReader extends BufferedReader {
 			s.getChars(next, next + n, cbuf, off);
 		else if (nn(sb))
 			sb.getChars(next, next + n, cbuf, off);
-		else if (nn(sb2))
-			sb2.getChars(next, next + n, cbuf, off);
 		else {
 			for (var i = 0; i < n; i++)
 				cbuf[off + i] = cs.charAt(next + i);

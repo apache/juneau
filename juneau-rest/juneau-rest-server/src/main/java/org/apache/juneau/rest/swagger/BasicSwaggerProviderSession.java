@@ -351,10 +351,10 @@ public class BasicSwaggerProviderSession {
 			// Get the operation from the existing swagger so far.
 			var op = getOperation(omSwagger, sm.getPathPattern(), sm.getHttpMethod().toLowerCase());
 
-			// Add @RestOp(swagger)
-			var _ms = Value.<OpSwagger>empty();
-			al.forEach(ai -> ai.getValue(OpSwagger.class, "swagger").filter(OpSwaggerAnnotation::notEmpty).ifPresent(_ms::set));
-			var ms = _ms.orElseGet(() -> OpSwaggerAnnotation.create().build());
+		// Add @RestOp(swagger)
+		var msValue = Value.<OpSwagger>empty();
+		al.forEach(ai -> ai.getValue(OpSwagger.class, "swagger").filter(OpSwaggerAnnotation::notEmpty).ifPresent(msValue::set));
+		var ms = msValue.orElseGet(() -> OpSwaggerAnnotation.create().build());
 
 			op.append(parseMap(ms.value(), "@OpSwagger(value) on class {0} method {1}", c, m));
 			op.appendIf(ne, SWAGGER_operationId,
@@ -365,27 +365,27 @@ public class BasicSwaggerProviderSession {
 				)
 			);
 
-			var _summary = Value.<String>empty();
-			al.forEach(ai -> ai.getValue(String.class, SWAGGER_summary).filter(NOT_EMPTY).ifPresent(_summary::set));
-			op.appendIf(ne, SWAGGER_summary,
-				firstNonEmpty(
-					resolve(ms.summary()),
-					resolve(mb.findFirstString(mn + ".summary")),
-					op.getString(SWAGGER_summary),
-					resolve(_summary.orElse(null))
-				)
-			);
+		var summaryValue = Value.<String>empty();
+		al.forEach(ai -> ai.getValue(String.class, SWAGGER_summary).filter(NOT_EMPTY).ifPresent(summaryValue::set));
+		op.appendIf(ne, SWAGGER_summary,
+			firstNonEmpty(
+				resolve(ms.summary()),
+				resolve(mb.findFirstString(mn + ".summary")),
+				op.getString(SWAGGER_summary),
+				resolve(summaryValue.orElse(null))
+			)
+		);
 
-			var _description = Value.<String[]>empty();
-			al.forEach(ai -> ai.getValue(String[].class, SWAGGER_description).filter(x -> x.length > 0).ifPresent(_description::set));
-			op.appendIf(ne, SWAGGER_description,
-				firstNonEmpty(
-					resolve(ms.description()),
-					resolve(mb.findFirstString(mn + ".description")),
-					op.getString(SWAGGER_description),
-					resolve(_description.orElse(new String[0]))
-				)
-			);
+		var descriptionValue = Value.<String[]>empty();
+		al.forEach(ai -> ai.getValue(String[].class, SWAGGER_description).filter(x -> x.length > 0).ifPresent(descriptionValue::set));
+		op.appendIf(ne, SWAGGER_description,
+			firstNonEmpty(
+				resolve(ms.description()),
+				resolve(mb.findFirstString(mn + ".description")),
+				op.getString(SWAGGER_description),
+				resolve(descriptionValue.orElse(new String[0]))
+			)
+		);
 			op.appendIf(ne, SWAGGER_deprecated,
 				firstNonEmpty(
 					resolve(ms.deprecated()),

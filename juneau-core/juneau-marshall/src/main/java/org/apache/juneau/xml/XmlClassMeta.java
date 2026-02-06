@@ -54,16 +54,16 @@ public class XmlClassMeta extends ExtendedClassMeta {
 		}
 		this.namespace = XmlUtils.findNamespace(xmls, schemas);
 
-		String _childName = null;
-		var _format = XmlFormat.DEFAULT;
-		for (var a : xmls) {
-			if (a.format() != XmlFormat.DEFAULT)
-				_format = a.format();
-			if (! a.childName().isEmpty())
-				_childName = a.childName();
-		}
-		this.format = _format;
-		this.childName = _childName;
+	String childNameTemp = null;
+	var formatValue = XmlFormat.DEFAULT;
+	for (var a : xmls) {
+		if (a.format() != XmlFormat.DEFAULT)
+			formatValue = a.format();
+		if (! a.childName().isEmpty())
+			childNameTemp = a.childName();
+	}
+	this.format = formatValue;
+	this.childName = childNameTemp;
 	}
 
 	/**

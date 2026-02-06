@@ -3705,28 +3705,28 @@ public class BeanContext extends Context {
 		var builderNotBeanClasses = new ArrayList<>(builder.notBeanClasses);
 		notBeanClasses = builderNotBeanClasses.isEmpty() ? DEFAULT_NOTBEAN_CLASSES : Stream.concat(builderNotBeanClasses.stream(), DEFAULT_NOTBEAN_CLASSES.stream()).distinct().toList();
 
-		List<String> notBeanPackages_ = notBeanPackages.isEmpty() ? DEFAULT_NOTBEAN_PACKAGES : Stream.concat(notBeanPackages.stream(), DEFAULT_NOTBEAN_PACKAGES.stream()).toList();
-		LinkedHashSet<String> notBeanPackageNames_ = notBeanPackages_.stream().filter(x -> ! x.endsWith(".*")).collect(Collectors.toCollection(LinkedHashSet::new));
-		notBeanPackageNames = u(notBeanPackageNames_);
-		notBeanPackagePrefixes = notBeanPackages_.stream().filter(x -> x.endsWith(".*")).map(x -> x.substring(0, x.length() - 2)).toList();
+	List<String> notBeanPackagesList = notBeanPackages.isEmpty() ? DEFAULT_NOTBEAN_PACKAGES : Stream.concat(notBeanPackages.stream(), DEFAULT_NOTBEAN_PACKAGES.stream()).toList();
+	LinkedHashSet<String> notBeanPackageNamesTemp = notBeanPackagesList.stream().filter(x -> ! x.endsWith(".*")).collect(Collectors.toCollection(LinkedHashSet::new));
+	notBeanPackageNames = u(notBeanPackageNamesTemp);
+	notBeanPackagePrefixes = notBeanPackagesList.stream().filter(x -> x.endsWith(".*")).map(x -> x.substring(0, x.length() - 2)).toList();
 
 		propertyNamerBean = safe(()->propertyNamer.getDeclaredConstructor().newInstance());
 
-		var objectSwaps_ = new LinkedList<ObjectSwap<?,?>>();
-		swaps.forEach(x -> {
-			if (x instanceof ObjectSwap<?,?> os) {
-				objectSwaps_.add(os);
+	var objectSwapsList = new LinkedList<ObjectSwap<?,?>>();
+	swaps.forEach(x -> {
+		if (x instanceof ObjectSwap<?,?> os) {
+			objectSwapsList.add(os);
 			} else {
 				var ci = info((Class<?>)x);
 				if (ci.isAssignableTo(ObjectSwap.class))
-					objectSwaps_.add(BeanCreator.of(ObjectSwap.class).type(ci).run());
+					objectSwapsList.add(BeanCreator.of(ObjectSwap.class).type(ci).run());
 				else if (ci.isAssignableTo(Surrogate.class))
-					objectSwaps_.addAll(SurrogateSwap.findObjectSwaps(ci.inner(), this));
+					objectSwapsList.addAll(SurrogateSwap.findObjectSwaps(ci.inner(), this));
 				else
 					throw rex("Invalid class {0} specified in BeanContext.swaps property.  Must be a subclass of ObjectSwap or Surrogate.", cn(ci.inner()));
 			}
 		});
-		objectSwaps = u(objectSwaps_);
+		objectSwaps = u(objectSwapsList);
 
 		cmCache = Cache.<Class,ClassMeta>create().supplier(type -> new ClassMeta<>(type, this)).build();
 		cmString = cmCache.get(String.class);

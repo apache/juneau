@@ -2130,8 +2130,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		return new Builder(method, context);
 	}
 
-	private static HttpPartSerializer createPartSerializer(Class<? extends HttpPartSerializer> c, HttpPartSerializer _default) {
-		return BeanCreator.of(HttpPartSerializer.class).type(c).orElse(_default);
+	private static HttpPartSerializer createPartSerializer(Class<? extends HttpPartSerializer> c, HttpPartSerializer defaultSerializer) {
+		return BeanCreator.of(HttpPartSerializer.class).type(c).orElse(defaultSerializer);
 	}
 
 	protected final boolean dotAll;
@@ -2224,20 +2224,20 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			defaultRequestQueryData = builder.defaultRequestQueryData();
 			defaultResponseHeaders = builder.defaultResponseHeaders();
 
-			int _hierarchyDepth = 0;
-			var sc = method.getDeclaringClass().getSuperclass();
-			while (nn(sc)) {
-				_hierarchyDepth++;
-				sc = sc.getSuperclass();
-			}
-			hierarchyDepth = _hierarchyDepth;
+		int hierarchyDepthTemp = 0;
+		var sc = method.getDeclaringClass().getSuperclass();
+		while (nn(sc)) {
+			hierarchyDepthTemp++;
+			sc = sc.getSuperclass();
+		}
+		hierarchyDepth = hierarchyDepthTemp;
 
-			var _httpMethod = builder.httpMethod;
-			if (_httpMethod == null)
-				_httpMethod = HttpUtils.detectHttpMethod(method, true, "GET");
-			if ("METHOD".equals(_httpMethod))
-				_httpMethod = "*";
-			httpMethod = _httpMethod.toUpperCase(Locale.ENGLISH);
+		var httpMethodValue = builder.httpMethod;
+		if (httpMethodValue == null)
+			httpMethodValue = HttpUtils.detectHttpMethod(method, true, "GET");
+		if ("METHOD".equals(httpMethodValue))
+			httpMethodValue = "*";
+		httpMethod = httpMethodValue.toUpperCase(Locale.ENGLISH);
 
 			defaultCharset = nn(builder.defaultCharset) ? builder.defaultCharset : context.defaultCharset;
 			dotAll = builder.dotAll;

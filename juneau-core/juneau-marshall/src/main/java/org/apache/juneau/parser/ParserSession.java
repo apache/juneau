@@ -25,6 +25,8 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.function.*;
 
 import org.apache.juneau.*;
@@ -255,7 +257,7 @@ public class ParserSession extends BeanSession {
 	private final Object outer;
 	private final Parser ctx;
 	private final ParserListener listener;
-	private final Stack<StringBuilder> sbStack;
+	private final Deque<StringBuilder> sbStack;
 	private BeanPropertyMeta currentProperty;
 	private ClassMeta<?> currentClass;
 	private Position mark = new Position(-1);
@@ -273,7 +275,7 @@ public class ParserSession extends BeanSession {
 		outer = builder.outer;
 		schema = builder.schema;
 		listener = BeanCreator.of(ParserListener.class).type(ctx.getListener()).orElse(null);
-		sbStack = new Stack<>();
+		sbStack = new ArrayDeque<>();
 	}
 
 	/**

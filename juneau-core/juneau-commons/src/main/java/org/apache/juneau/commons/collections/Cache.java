@@ -488,7 +488,7 @@ public class Cache<K,V> {
 	protected Cache(Builder<K,V> builder) {
 		this.maxSize = builder.maxSize;
 		this.disableCaching = builder.cacheMode == NONE;
-		this.supplier = builder.supplier != null ? builder.supplier : (K) -> null;
+		this.supplier = builder.supplier != null ? builder.supplier : (key) -> null;
 		this.isThreadLocal = builder.threadLocal;
 
 		if (isThreadLocal) {

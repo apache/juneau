@@ -198,13 +198,13 @@ public final class StringFormat {
 		private final String content; // The format string to pass to String.format (null for simple formats)
 		private final int index; // 0-based index
 
-		StringFormatToken(String content, int index) {
-			// content is everything after '%' (e.g., "s", "1$s", "d", ".2f", "1$.2f")
-			var $ = content.indexOf('$');
-			if ($ >= 0) {
-				index = parseIndexSF(content.substring(0, $)) - 1;
-				content = content.substring($ + 1);
-			}
+	StringFormatToken(String content, int index) {
+		// content is everything after '%' (e.g., "s", "1$s", "d", ".2f", "1$.2f")
+		var dollarIndex = content.indexOf('$');
+		if (dollarIndex >= 0) {
+			index = parseIndexSF(content.substring(0, dollarIndex)) - 1;
+			content = content.substring(dollarIndex + 1);
+		}
 			this.format = content.length() == 1 ? content.charAt(content.length() - 1) : 'z';
 			this.index = index;
 			this.content = "%" + content;

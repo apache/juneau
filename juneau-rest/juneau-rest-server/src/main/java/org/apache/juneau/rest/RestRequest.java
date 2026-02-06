@@ -926,11 +926,11 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public Optional<Operation> getOperationSwagger() {
 
-		var swagger = getSwagger();
-		if (! swagger.isPresent())
+		var swagger2 = getSwagger();
+		if (! swagger2.isPresent())
 			return opte();
 
-		return opt(swagger.get().getOperation(opContext.getPathPattern(), getMethod().toLowerCase()));
+		return opt(swagger2.get().getOperation(opContext.getPathPattern(), getMethod().toLowerCase()));
 	}
 
 	/**

@@ -185,13 +185,13 @@ public class Logger extends java.util.logging.Logger {
 			return;
 
 		// Create LogRecord with lazy formatting support
-		var record = new LogRecord(getName(), level, msg, args, thrown);
+		var rec = new LogRecord(getName(), level, msg, args, thrown);
 
 		// Notify all listeners
-		listeners.forEach(x -> x.onLogRecord(record));
+		listeners.forEach(x -> x.onLogRecord(rec));
 
 		// Delegate to underlying logger (LogRecord extends java.util.logging.LogRecord)
-		delegate.log(record);
+		delegate.log(rec);
 	}
 
 	// Convenience methods with formatted strings

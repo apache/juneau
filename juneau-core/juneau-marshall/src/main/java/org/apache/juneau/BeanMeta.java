@@ -405,13 +405,13 @@ public class BeanMeta<T> {
 		var ap = beanContext.getAnnotationProvider();
 		var c = cm.inner();
 		var ci = cm;
-		String _notABeanReason = null;
-		var _properties = Value.<Map<String,BeanPropertyMeta>>empty();
-		var _hiddenProperties = CollectionUtils.<String,BeanPropertyMeta>map();
-		var _getterProps = CollectionUtils.<Method,String>map();  // Convert to MethodInfo keys
-		var _setterProps = CollectionUtils.<Method,String>map();
-		var _dynaProperty = Value.<BeanPropertyMeta>empty();
-		var _sortProperties = false;
+		String notABeanReasonTemp = null;
+		var propertiesValue = Value.<Map<String,BeanPropertyMeta>>empty();
+		var hiddenPropertiesMap = CollectionUtils.<String,BeanPropertyMeta>map();
+		var getterPropsMap = CollectionUtils.<Method,String>map();  // Convert to MethodInfo keys
+		var setterPropsMap = CollectionUtils.<Method,String>map();
+		var dynaPropertyValue = Value.<BeanPropertyMeta>empty();
+		var sortPropertiesTemp = false;
 		var ba = ap.find(Bean.class, cm);
 		var propertyNamer = opt(bf).map(x -> x.getPropertyNamer()).orElse(beanContext.getPropertyNamer());
 
@@ -419,7 +419,7 @@ public class BeanMeta<T> {
 
 		// Check if constructor is required but not found
 		if (! beanConstructor.constructor().isPresent() && bf == null && beanContext.isBeansRequireDefaultConstructor())
-			_notABeanReason = "Class does not have the required no-arg constructor";
+			notABeanReasonTemp = "Class does not have the required no-arg constructor";
 
 		var bfo = opt(bf);
 		var fixedBeanProps = bfo.map(x -> x.getProperties()).orElse(sete());
@@ -502,7 +502,7 @@ public class BeanMeta<T> {
 			var writeOnlyProps = bfo.map(x -> x.getWriteOnlyProperties()).orElse(sete());
 			for (var i = normalProps.values().iterator(); i.hasNext();) {
 				var p = i.next();
-				validateAndRegisterProperty(p, c, typeVarImpls, readOnlyProps, writeOnlyProps, i, _getterProps, _setterProps);
+				validateAndRegisterProperty(p, c, typeVarImpls, readOnlyProps, writeOnlyProps, i, getterPropsMap, setterPropsMap);
 			}
 
 			// Check for missing properties.
@@ -518,17 +518,17 @@ public class BeanMeta<T> {
 
 			// Make sure at least one property was found.
 			if (bf == null && beanContext.isBeansRequireSomeProperties() && normalProps.isEmpty())
-				_notABeanReason = "No properties detected on bean class";
+				notABeanReasonTemp = "No properties detected on bean class";
 
-			_sortProperties = beanContext.isSortProperties() || bfo.map(x -> x.isSortProperties()).orElse(false) && fixedBeanProps.isEmpty();
+			sortPropertiesTemp = beanContext.isSortProperties() || bfo.map(x -> x.isSortProperties()).orElse(false) && fixedBeanProps.isEmpty();
 
-			_properties.set(_sortProperties ? sortedMap() : map());
+			propertiesValue.set(sortPropertiesTemp ? sortedMap() : map());
 
 			normalProps.forEach((k, v) -> {
 				var pMeta = v.build();
 				if (pMeta.isDyna())
-					_dynaProperty.set(pMeta);
-				_properties.get().put(k, pMeta);
+					dynaPropertyValue.set(pMeta);
+				propertiesValue.get().put(k, pMeta);
 			});
 
 			// If a beanFilter is defined, look for inclusion and exclusion lists.
@@ -537,45 +537,45 @@ public class BeanMeta<T> {
 				// Eliminated excluded properties if BeanFilter.excludeKeys is specified.
 				var bfbpi = bf.getProperties();
 				var bfbpx = bf.getExcludeProperties();
-				var p = _properties.get();
+				var p = propertiesValue.get();
 
 				if (! bfbpi.isEmpty()) {
 					// Only include specified properties if BeanFilter.includeKeys is specified.
 					// Note that the order must match includeKeys.
 					Map<String,BeanPropertyMeta> p2 = map();  // NOAI
 					bfbpi.stream().filter(p::containsKey).forEach(x -> p2.put(x, p.remove(x)));
-					_hiddenProperties.putAll(p);
-					_properties.set(p2);
+					hiddenPropertiesMap.putAll(p);
+					propertiesValue.set(p2);
 				}
 
-				bfbpx.forEach(x -> _hiddenProperties.put(x, _properties.get().remove(x)));
+				bfbpx.forEach(x -> hiddenPropertiesMap.put(x, propertiesValue.get().remove(x)));
 			}
 
 			if (nn(pNames)) {
-				var p = _properties.get();
+				var p = propertiesValue.get();
 				Map<String,BeanPropertyMeta> p2 = map();
 				for (var k : pNames) {
 					if (p.containsKey(k))
 						p2.put(k, p.get(k));
 					else
-						_hiddenProperties.put(k, p.get(k));
+						hiddenPropertiesMap.put(k, p.get(k));
 				}
-				_properties.set(p2);
+				propertiesValue.set(p2);
 			}
 
 		} catch (BeanRuntimeException e) {
 			throw e;
 		} catch (Exception e) {
-			_notABeanReason = "Exception:  " + getStackTrace(e);
+			notABeanReasonTemp = "Exception:  " + getStackTrace(e);
 		}
 
-		notABeanReason = _notABeanReason;
-		properties = u(_properties.get());
-		hiddenProperties = u(_hiddenProperties);
-		getterProps = u(_getterProps);
-		setterProps = u(_setterProps);
-		dynaProperty = _dynaProperty.get();
-		sortProperties = _sortProperties;
+		notABeanReason = notABeanReasonTemp;
+		properties = u(propertiesValue.get());
+		hiddenProperties = u(hiddenPropertiesMap);
+		getterProps = u(getterPropsMap);
+		setterProps = u(setterPropsMap);
+		dynaProperty = dynaPropertyValue.get();
+		sortProperties = sortPropertiesTemp;
 		typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(beanContext.string()).beanRegistry(beanRegistry.get()).build();
 		dictionaryName = mem(this::findDictionaryName);
 		beanProxyInvocationHandler = mem(()->beanContext.isUseInterfaceProxies() && c.isInterface() ? new BeanProxyInvocationHandler<>(this) : null);
