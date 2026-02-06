@@ -18,7 +18,12 @@ package org.apache.juneau.commons.lang;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Tests for {@link AsciiMap}.
@@ -56,18 +61,23 @@ class AsciiMap_Test {
 		assertEquals("value2", map.get('a'));
 	}
 
-	@Test
-	void a04_append_nullValue() {
+	@ParameterizedTest
+	@MethodSource("appendValueProvider")
+	void a04_append_value(String value, String expected) {
 		var map = new AsciiMap();
-		map.append('a', null);
-		assertNull(map.get('a'));
+		map.append('a', value);
+		if (expected == null) {
+			assertNull(map.get('a'));
+		} else {
+			assertEquals(expected, map.get('a'));
+		}
 	}
 
-	@Test
-	void a05_append_emptyString() {
-		var map = new AsciiMap();
-		map.append('a', "");
-		assertEquals("", map.get('a'));
+	static Stream<Arguments> appendValueProvider() {
+		return Stream.of(
+			Arguments.of(null, null),
+			Arguments.of("", "")
+		);
 	}
 
 	//====================================================================================================
@@ -276,25 +286,20 @@ class AsciiMap_Test {
 		assertTrue(map.contains("abc"));
 	}
 
-	@Test
-	void d02_contains_CharSequence_notPresent() {
+	@ParameterizedTest
+	@MethodSource("containsNotPresentProvider")
+	void d02_contains_CharSequence_notPresent(CharSequence input) {
 		var map = new AsciiMap();
 		map.append('a', "value1");
-		assertFalse(map.contains("xyz"));
+		assertFalse(map.contains(input));
 	}
 
-	@Test
-	void d03_contains_CharSequence_null() {
-		var map = new AsciiMap();
-		map.append('a', "value1");
-		assertFalse(map.contains((CharSequence)null));
-	}
-
-	@Test
-	void d04_contains_CharSequence_empty() {
-		var map = new AsciiMap();
-		map.append('a', "value1");
-		assertFalse(map.contains(""));
+	static Stream<Arguments> containsNotPresentProvider() {
+		return Stream.of(
+			Arguments.of("xyz"),
+			Arguments.of((CharSequence)null),
+			Arguments.of("")
+		);
 	}
 
 	@Test

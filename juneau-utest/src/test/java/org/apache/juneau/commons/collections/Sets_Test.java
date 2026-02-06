@@ -22,10 +22,14 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import org.apache.juneau.*;
 import org.apache.juneau.junit.bct.annotations.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 @SuppressWarnings("java:S4144")
 class Sets_Test extends TestBase {
@@ -176,33 +180,36 @@ class Sets_Test extends TestBase {
 	// Sparse mode
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	void e01_sparse_empty() {
-		var set = Sets.create(String.class)
-			.sparse()
-			.build();
+	@ParameterizedTest
+	@MethodSource("sparseProvider")
+	void e01_sparse(boolean sparse, boolean addItem, boolean expectNull, int expectedSize) {
+		var builder = Sets.create(String.class);
+		if (sparse) {
+			builder.sparse();
+		}
+		if (addItem) {
+			builder.add("a");
+		}
+		var set = builder.build();
 
-		assertNull(set);
+		if (expectNull) {
+			assertNull(set);
+		} else {
+			assertNotNull(set);
+			if (expectedSize == 0) {
+				assertEmpty(set);
+			} else {
+				assertSize(expectedSize, set);
+			}
+		}
 	}
 
-	@Test
-	void e02_sparse_notEmpty() {
-		var set = Sets.create(String.class)
-			.add("a")
-			.sparse()
-			.build();
-
-		assertNotNull(set);
-		assertSize(1, set);
-	}
-
-	@Test
-	void e03_notSparse_empty() {
-		var set = Sets.create(String.class)
-			.build();
-
-		assertNotNull(set);
-		assertEmpty(set);
+	static Stream<Arguments> sparseProvider() {
+		return Stream.of(
+			Arguments.of(true, false, true, 0),   // sparse_empty
+			Arguments.of(true, true, false, 1),   // sparse_notEmpty
+			Arguments.of(false, false, false, 0)  // notSparse_empty
+		);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

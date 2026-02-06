@@ -19,9 +19,13 @@ package org.apache.juneau.commons.utils;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Tests for {@link ResourceBundleUtils}.
@@ -80,18 +84,19 @@ class ResourceBundleUtils_Test extends TestBase {
 		assertEquals("value1", bundle.getString("key1"));
 	}
 
-	@Test
-	void a06_findBundle_nonexistentBundle() {
+	@ParameterizedTest
+	@MethodSource("findBundleNonexistentProvider")
+	void a06_findBundle_nonexistentBundle(Locale locale) {
 		var loader = getClass().getClassLoader();
-		var bundle = ResourceBundleUtils.findBundle("nonexistent.Bundle", Locale.getDefault(), loader);
+		var bundle = ResourceBundleUtils.findBundle("nonexistent.Bundle", locale, loader);
 		assertNull(bundle);
 	}
 
-	@Test
-	void a07_findBundle_nonexistentBundle_differentLocale() {
-		var loader = getClass().getClassLoader();
-		var bundle = ResourceBundleUtils.findBundle("nonexistent.Bundle", Locale.JAPANESE, loader);
-		assertNull(bundle);
+	static Stream<Arguments> findBundleNonexistentProvider() {
+		return Stream.of(
+			Arguments.of(Locale.getDefault()),
+			Arguments.of(Locale.JAPANESE)
+		);
 	}
 
 	@Test

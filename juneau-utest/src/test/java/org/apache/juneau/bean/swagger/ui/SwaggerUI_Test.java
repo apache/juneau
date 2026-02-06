@@ -22,9 +22,13 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Testcase for {@link SwaggerUI}.
@@ -125,10 +129,9 @@ class SwaggerUI_Test extends TestBase {
 		);
 	}
 
-	/**
-	 * Test method for Swagger document with parameters.
-	 */
-	@Test void a04_swaggerWithParameters() throws Exception {
+	@ParameterizedTest
+	@MethodSource("swaggerEmptyPathsProvider")
+	void a04_swaggerWithEmptyPaths(String testName) throws Exception {
 		var swagger = swagger()
 			.setInfo(info("Test API", "1.0.0"))
 			.setPaths(new HashMap<>());
@@ -150,53 +153,12 @@ class SwaggerUI_Test extends TestBase {
 		);
 	}
 
-	/**
-	 * Test method for Swagger document with responses.
-	 */
-	@Test void a05_swaggerWithResponses() throws Exception {
-		var swagger = swagger()
-			.setInfo(info("Test API", "1.0.0"))
-			.setPaths(new HashMap<>());
-
-		assertString(
-			"""
-			<div class='swagger-ui'>
-				<style></style>
-				<script type='text/javascript'><sp/></script>
-				<table class='header'>
-					<tr><th>Version:</th><td>1.0.0</td></tr>
-				</table>
-				<div class='tag-block tag-block-open'>
-					<div class='tag-block-contents'></div>
-				</div>
-			</div>
-			""".replaceAll("\\n\\s*", ""),
-			new SwaggerUI().swap(bs, swagger)
-		);
-	}
-
-	/**
-	 * Test method for Swagger document with models.
-	 */
-	@Test void a06_swaggerWithModels() throws Exception {
-		var swagger = swagger()
-			.setInfo(info("Test API", "1.0.0"))
-			.setPaths(new HashMap<>());
-
-		assertString(
-			"""
-			<div class='swagger-ui'>
-				<style></style>
-				<script type='text/javascript'><sp/></script>
-				<table class='header'>
-					<tr><th>Version:</th><td>1.0.0</td></tr>
-				</table>
-				<div class='tag-block tag-block-open'>
-					<div class='tag-block-contents'></div>
-				</div>
-			</div>
-			""".replaceAll("\\n\\s*", ""),
-			new SwaggerUI().swap(bs, swagger)
+	static Stream<Arguments> swaggerEmptyPathsProvider() {
+		return Stream.of(
+			Arguments.of("parameters"),
+			Arguments.of("responses"),
+			Arguments.of("models"),
+			Arguments.of("empty")
 		);
 	}
 

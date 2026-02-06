@@ -22,9 +22,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
+import java.util.stream.Stream;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 @SuppressWarnings("java:S4144")
 class LocalFile_Test extends TestBase {
@@ -55,31 +59,27 @@ class LocalFile_Test extends TestBase {
 	//====================================================================================================
 	// Constructor tests - classpath
 	//====================================================================================================
-	@Test void b01_constructorWithClassAndPath() {
-		var file = new LocalFile(LocalFile_Test.class, "files/Test3.properties");
-		assertEquals("Test3.properties", file.getName());
+	@ParameterizedTest
+	@MethodSource("constructorWithClassAndPathProvider")
+	void b01_constructorWithClassAndPath(String path, String expectedName, Class<?> clazz, Class<? extends Throwable> expectedException) {
+		if (expectedException != null) {
+			assertThrows(expectedException, () -> {
+				new LocalFile(clazz, path);
+			});
+		} else {
+			var file = new LocalFile(clazz != null ? clazz : LocalFile_Test.class, path);
+			assertEquals(expectedName, file.getName());
+		}
 	}
 
-	@Test void b02_constructorWithClassAndPath_noSlash() {
-		var file = new LocalFile(LocalFile_Test.class, "Test3.properties");
-		assertEquals("Test3.properties", file.getName());
-	}
-
-	@Test void b03_constructorWithClassAndPath_nestedPath() {
-		var file = new LocalFile(LocalFile_Test.class, "files/subdir/Test3.properties");
-		assertEquals("Test3.properties", file.getName());
-	}
-
-	@Test void b04_constructorWithClassAndPath_nullClass() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			new LocalFile((Class<?>)null, "path");
-		});
-	}
-
-	@Test void b05_constructorWithClassAndPath_nullPath() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			new LocalFile(LocalFile_Test.class, null);
-		});
+	static Stream<Arguments> constructorWithClassAndPathProvider() {
+		return Stream.of(
+			Arguments.of("files/Test3.properties", "Test3.properties", LocalFile_Test.class, null),
+			Arguments.of("Test3.properties", "Test3.properties", LocalFile_Test.class, null),
+			Arguments.of("files/subdir/Test3.properties", "Test3.properties", LocalFile_Test.class, null),
+			Arguments.of("path", null, null, IllegalArgumentException.class),
+			Arguments.of(null, null, LocalFile_Test.class, IllegalArgumentException.class)
+		);
 	}
 
 	//====================================================================================================

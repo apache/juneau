@@ -19,9 +19,13 @@ package org.apache.juneau.commons.io;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.*;
+import java.util.stream.Stream;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class LocalDir_Test extends TestBase {
 
@@ -44,35 +48,28 @@ class LocalDir_Test extends TestBase {
 	//====================================================================================================
 	// Constructor tests - classpath
 	//====================================================================================================
-	@Test void b01_constructorWithClassAndPath_null() {
-		var dir = new LocalDir(LocalDir_Test.class, null);
-		assertNotNull(dir);
+	@ParameterizedTest
+	@MethodSource("constructorWithClassAndPathProvider")
+	void b01_constructorWithClassAndPath(String path, Class<?> clazz, Class<? extends Throwable> expectedException) {
+		if (expectedException != null) {
+			assertThrows(expectedException, () -> {
+				new LocalDir(clazz, path);
+			});
+		} else {
+			var dir = new LocalDir(clazz != null ? clazz : LocalDir_Test.class, path);
+			assertNotNull(dir);
+		}
 	}
 
-	@Test void b02_constructorWithClassAndPath_empty() {
-		var dir = new LocalDir(LocalDir_Test.class, "");
-		assertNotNull(dir);
-	}
-
-	@Test void b03_constructorWithClassAndPath_absolute() {
-		var dir = new LocalDir(LocalDir_Test.class, "/files");
-		assertNotNull(dir);
-	}
-
-	@Test void b04_constructorWithClassAndPath_relative() {
-		var dir = new LocalDir(LocalDir_Test.class, "files");
-		assertNotNull(dir);
-	}
-
-	@Test void b05_constructorWithClassAndPath_root() {
-		var dir = new LocalDir(LocalDir_Test.class, "/");
-		assertNotNull(dir);
-	}
-
-	@Test void b06_constructorWithClassAndPath_nullClass() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			new LocalDir((Class<?>)null, "path");
-		});
+	static Stream<Arguments> constructorWithClassAndPathProvider() {
+		return Stream.of(
+			Arguments.of(null, LocalDir_Test.class, null),
+			Arguments.of("", LocalDir_Test.class, null),
+			Arguments.of("/files", LocalDir_Test.class, null),
+			Arguments.of("files", LocalDir_Test.class, null),
+			Arguments.of("/", LocalDir_Test.class, null),
+			Arguments.of("path", null, IllegalArgumentException.class)
+		);
 	}
 
 	@Test void b07_constructorWithClassAndPath_trailingSlashes() {

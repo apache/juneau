@@ -20,9 +20,13 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Tests for {@link HashCode}.
@@ -97,11 +101,20 @@ class HashCode_Test extends TestBase {
 	// add(int) tests
 	//====================================================================================================
 
-	@Test
-	void c01_addInt_single() {
+	@ParameterizedTest
+	@MethodSource("addIntProvider")
+	void c01_addInt(int value, int expected) {
 		var hc = HashCode.create();
-		hc.add(42);
-		assertEquals(31 * 1 + 42, hc.get());
+		hc.add(value);
+		assertEquals(expected, hc.get());
+	}
+
+	static Stream<Arguments> addIntProvider() {
+		return Stream.of(
+			Arguments.of(42, 31 * 1 + 42),
+			Arguments.of(0, 31 * 1 + 0),
+			Arguments.of(-1, 31 * 1 + (-1))
+		);
 	}
 
 	@Test
@@ -110,13 +123,6 @@ class HashCode_Test extends TestBase {
 		hc.add(1).add(2).add(3);
 		var expected = 31 * (31 * (31 * 1 + 1) + 2) + 3;
 		assertEquals(expected, hc.get());
-	}
-
-	@Test
-	void c03_addInt_zero() {
-		var hc = HashCode.create();
-		hc.add(0);
-		assertEquals(31 * 1 + 0, hc.get());
 	}
 
 	@Test

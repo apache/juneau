@@ -20,9 +20,13 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 @SuppressWarnings("java:S4144")
 class BasicBeanStore_Test extends TestBase {
@@ -115,37 +119,24 @@ class BasicBeanStore_Test extends TestBase {
 	// addBean(Class, Object, String)
 	//====================================================================================================
 
-	@Test
-	void c01_addBean_named() {
+	@ParameterizedTest
+	@MethodSource("addBeanNamedProvider")
+	void c01_addBean_named(String name, boolean useNamedGetter) {
 		var store = new BasicBeanStore2(null);
 		var bean = new TestBean("test1");
-		store.addBean(TestBean.class, bean, "named1");
+		store.addBean(TestBean.class, bean, name);
 
-		var result = store.getBean(TestBean.class, "named1");
+		var result = useNamedGetter ? store.getBean(TestBean.class, name) : store.getBean(TestBean.class);
 		assertTrue(result.isPresent());
 		assertSame(bean, result.get());
 	}
 
-	@Test
-	void c02_addBean_named_nullName() {
-		var store = new BasicBeanStore2(null);
-		var bean = new TestBean("test1");
-		store.addBean(TestBean.class, bean, null);
-
-		var result = store.getBean(TestBean.class);
-		assertTrue(result.isPresent());
-		assertSame(bean, result.get());
-	}
-
-	@Test
-	void c03_addBean_named_emptyString() {
-		var store = new BasicBeanStore2(null);
-		var bean = new TestBean("test1");
-		store.addBean(TestBean.class, bean, "");
-
-		var result = store.getBean(TestBean.class);
-		assertTrue(result.isPresent());
-		assertSame(bean, result.get());
+	static Stream<Arguments> addBeanNamedProvider() {
+		return Stream.of(
+			Arguments.of("named1", true),
+			Arguments.of(null, false),
+			Arguments.of("", false)
+		);
 	}
 
 	@Test
@@ -602,18 +593,20 @@ class BasicBeanStore_Test extends TestBase {
 		assertFalse(store.hasBean(TestBean.class, "name1"));
 	}
 
-	@Test
-	void k02_hasBean_named_found() {
+	@ParameterizedTest
+	@MethodSource("hasBeanNamedProvider")
+	void k02_hasBean_named(String name, boolean expected) {
 		var store = new BasicBeanStore2(null);
-		store.addBean(TestBean.class, new TestBean("test1"), "name1");
-		assertTrue(store.hasBean(TestBean.class, "name1"));
+		store.addBean(TestBean.class, new TestBean("test1"), name);
+		assertEquals(expected, store.hasBean(TestBean.class, name));
 	}
 
-	@Test
-	void k03_hasBean_named_nullName() {
-		var store = new BasicBeanStore2(null);
-		store.addBean(TestBean.class, new TestBean("test1"), null);
-		assertTrue(store.hasBean(TestBean.class, null));
+	static Stream<Arguments> hasBeanNamedProvider() {
+		return Stream.of(
+			Arguments.of("name1", true),
+			Arguments.of(null, true),
+			Arguments.of("", true)
+		);
 	}
 
 	@Test

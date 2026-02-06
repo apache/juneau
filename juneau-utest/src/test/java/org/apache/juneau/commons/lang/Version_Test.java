@@ -22,9 +22,13 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 @SuppressWarnings("java:S4144")
 class Version_Test extends TestBase {
@@ -120,34 +124,38 @@ class Version_Test extends TestBase {
 		assertEquals(v1, v1);
 	}
 
-	@Test
-	void b02_equalsObject_sameVersion() {
-		var v1 = of("1.2.3");
-		var v2 = of("1.2.3");
-		assertEquals(v1, v2);
-		assertEquals(v2, v1);
-	}
-
-	@Test
-	void b03_equalsObject_differentVersions() {
-		var v1 = of("1.2.3");
-		var v2 = of("1.2.4");
-		assertNotEquals(v1, v2);
-		assertNotEquals(v2, v1);
-	}
-
-	@Test
-	void b04_equalsObject_null() {
-		var v1 = of("1.2.3");
-		// equals(Object) should return false for null
-		// The instanceof check should prevent any null access
-		try {
-			assertNotEquals(v1, (Object)null);
-		} catch (NullPointerException e) {
-			// If there's a bug in the implementation, we'll catch it here
-			// But ideally this should not throw
-			fail("equals(Object) should handle null without throwing NullPointerException");
+	@ParameterizedTest
+	@MethodSource("equalsObjectProvider")
+	void b02_equalsObject(String version1, String version2, boolean expectedEqual, boolean checkNull) {
+		var v1 = of(version1);
+		if (checkNull) {
+			// equals(Object) should return false for null
+			// The instanceof check should prevent any null access
+			try {
+				assertNotEquals(v1, (Object)null);
+			} catch (NullPointerException e) {
+				// If there's a bug in the implementation, we'll catch it here
+				// But ideally this should not throw
+				fail("equals(Object) should handle null without throwing NullPointerException");
+			}
+		} else {
+			var v2 = of(version2);
+			if (expectedEqual) {
+				assertEquals(v1, v2);
+				assertEquals(v2, v1);
+			} else {
+				assertNotEquals(v1, v2);
+				assertNotEquals(v2, v1);
+			}
 		}
+	}
+
+	static Stream<Arguments> equalsObjectProvider() {
+		return Stream.of(
+			Arguments.of("1.2.3", "1.2.3", true, false),
+			Arguments.of("1.2.3", "1.2.4", false, false),
+			Arguments.of("1.2.3", null, false, true)
+		);
 	}
 
 	@Test
@@ -225,60 +233,44 @@ class Version_Test extends TestBase {
 		assertEquals(hashCode1, hashCode2);
 	}
 
-	@Test
-	void c02_hashCode_sameVersion() {
-		var v1 = of("1.2.3");
-		var v2 = of("1.2.3");
-		assertEquals(v1.hashCode(), v2.hashCode());
-	}
-
-	@Test
-	void c03_hashCode_differentVersions() {
-		var v1 = of("1.2.3");
-		var v2 = of("1.2.4");
-		// Different versions may have same hashcode (collision), but usually different
-		// We just verify both produce valid hashcodes
-		assertDoesNotThrow(() -> {
-			v1.hashCode();
-			v2.hashCode();
-		});
-	}
-
-	@Test
-	void c04_hashCode_equalsContract() {
-		var v1 = of("1.2.3");
-		var v2 = of("1.2.3");
-		// If two objects are equal, they must have the same hashcode
-		if (v1.equals(v2)) {
-			assertEquals(v1.hashCode(), v2.hashCode());
+	@ParameterizedTest
+	@MethodSource("hashCodeProvider")
+	void c02_hashCode(String version1, String version2, boolean checkEquality, boolean checkConsistency, boolean checkDifferent) {
+		var v1 = of(version1);
+		if (checkConsistency) {
+			// Consistency check - same object should return same hashcode
+			var hashCode1 = v1.hashCode();
+			var hashCode2 = v1.hashCode();
+			assertEquals(hashCode1, hashCode2);
+		} else if (version2 != null) {
+			var v2 = of(version2);
+			if (checkEquality) {
+				// Same versions should have same hashcode
+				assertEquals(v1.hashCode(), v2.hashCode());
+			} else if (checkDifferent) {
+				// Different versions - just verify both produce valid hashcodes
+				assertDoesNotThrow(() -> {
+					v1.hashCode();
+					v2.hashCode();
+				});
+			} else {
+				// Equals contract - if equal, same hashcode
+				if (v1.equals(v2)) {
+					assertEquals(v1.hashCode(), v2.hashCode());
+				}
+			}
 		}
 	}
 
-	@Test
-	void c05_hashCode_differentLengths() {
-		var v1 = of("1.2");
-		var v2 = of("1.2.0");
-		// These are equal according to equals(Version), so should have same hashcode
-		// But hashCode uses Arrays.hashCode which considers length, so they may differ
-		// We just verify both produce valid hashcodes
-		assertDoesNotThrow(() -> {
-			v1.hashCode();
-			v2.hashCode();
-		});
-	}
-
-	@Test
-	void c06_hashCode_singlePart() {
-		var v1 = of("1");
-		var v2 = of("1");
-		assertEquals(v1.hashCode(), v2.hashCode());
-	}
-
-	@Test
-	void c07_hashCode_emptyVersion() {
-		var v1 = of("");
-		var v2 = of("");
-		assertEquals(v1.hashCode(), v2.hashCode());
+	static Stream<Arguments> hashCodeProvider() {
+		return Stream.of(
+			Arguments.of("1.2.3", "1.2.3", true, false, false),   // sameVersion
+			Arguments.of("1.2.3", "1.2.4", false, false, true),  // differentVersions
+			Arguments.of("1.2.3", "1.2.3", false, false, false), // equalsContract
+			Arguments.of("1.2", "1.2.0", false, false, true),    // differentLengths
+			Arguments.of("1", "1", true, false, false),           // singlePart
+			Arguments.of("", "", true, false, false)              // emptyVersion
+		);
 	}
 
 	@Test

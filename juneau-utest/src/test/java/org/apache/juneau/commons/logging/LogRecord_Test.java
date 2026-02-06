@@ -19,9 +19,13 @@ package org.apache.juneau.commons.logging;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.logging.Level;
+import java.util.stream.Stream;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Tests for {@link LogRecord}.
@@ -169,21 +173,27 @@ class LogRecord_Test extends TestBase {
 		assertTrue(formatted.contains("User logged in"));
 	}
 
-	@Test void d02_formatted_timestamp() {
+	@ParameterizedTest
+	@MethodSource("formattedProvider")
+	void d02_formatted(String pattern, String expectedPattern) {
 		var rec = new LogRecord("test.logger", Level.INFO, "Message", null, null);
 
-		var formatted = rec.formatted("{timestamp}");
-		// Should be ISO8601 format
-		assertTrue(formatted.matches("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}[+-]\\d{4}"));
+		var formatted = rec.formatted(pattern);
+		if (expectedPattern != null) {
+			// Should match expected pattern (e.g., ISO8601 format)
+			assertTrue(formatted.matches(expectedPattern));
+		} else {
+			// Should be formatted date (not null)
+			assertNotNull(formatted);
+			assertFalse(formatted.isEmpty());
+		}
 	}
 
-	@Test void d03_formatted_date() {
-		var rec = new LogRecord("test.logger", Level.INFO, "Message", null, null);
-
-		var formatted = rec.formatted("{date}");
-		// Should be formatted date (not null)
-		assertNotNull(formatted);
-		assertFalse(formatted.isEmpty());
+	static Stream<Arguments> formattedProvider() {
+		return Stream.of(
+			Arguments.of("{timestamp}", "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}[+-]\\d{4}"),
+			Arguments.of("{date}", null)  // null means just check not null and not empty
+		);
 	}
 
 	@Test void d04_formatted_classAndMethod() {

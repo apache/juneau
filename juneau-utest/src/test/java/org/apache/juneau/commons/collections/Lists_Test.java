@@ -21,9 +21,13 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 @SuppressWarnings("java:S4144")
 class Lists_Test extends TestBase {
@@ -143,33 +147,36 @@ class Lists_Test extends TestBase {
 	// Sparse mode
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	void d01_sparse_empty() {
-		var list = Lists.create(String.class)
-			.sparse()
-			.build();
+	@ParameterizedTest
+	@MethodSource("sparseProvider")
+	void d01_sparse(boolean sparse, boolean addItem, boolean expectNull, int expectedSize) {
+		var builder = Lists.create(String.class);
+		if (sparse) {
+			builder.sparse();
+		}
+		if (addItem) {
+			builder.add("a");
+		}
+		var list = builder.build();
 
-		assertNull(list);
+		if (expectNull) {
+			assertNull(list);
+		} else {
+			assertNotNull(list);
+			if (expectedSize == 0) {
+				assertEmpty(list);
+			} else {
+				assertSize(expectedSize, list);
+			}
+		}
 	}
 
-	@Test
-	void d02_sparse_notEmpty() {
-		var list = Lists.create(String.class)
-			.add("a")
-			.sparse()
-			.build();
-
-		assertNotNull(list);
-		assertSize(1, list);
-	}
-
-	@Test
-	void d03_notSparse_empty() {
-		var list = Lists.create(String.class)
-			.build();
-
-		assertNotNull(list);
-		assertEmpty(list);
+	static Stream<Arguments> sparseProvider() {
+		return Stream.of(
+			Arguments.of(true, false, true, 0),   // sparse_empty
+			Arguments.of(true, true, false, 1),   // sparse_notEmpty
+			Arguments.of(false, false, false, 0)  // notSparse_empty
+		);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

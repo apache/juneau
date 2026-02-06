@@ -21,10 +21,14 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import org.apache.juneau.*;
 import org.apache.juneau.junit.bct.annotations.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 @SuppressWarnings("java:S4144")
 class Maps_Test extends TestBase {
@@ -226,33 +230,36 @@ class Maps_Test extends TestBase {
 	// Sparse mode
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	void d01_sparse_empty() {
-		var map = Maps.create(String.class, Integer.class)
-			.sparse()
-			.build();
+	@ParameterizedTest
+	@MethodSource("sparseProvider")
+	void d01_sparse(boolean sparse, boolean addItem, boolean expectNull, int expectedSize) {
+		var builder = Maps.create(String.class, Integer.class);
+		if (sparse) {
+			builder.sparse();
+		}
+		if (addItem) {
+			builder.add("a", 1);
+		}
+		var map = builder.build();
 
-		assertNull(map);
+		if (expectNull) {
+			assertNull(map);
+		} else {
+			assertNotNull(map);
+			if (expectedSize == 0) {
+				assertEmpty(map);
+			} else {
+				assertSize(expectedSize, map);
+			}
+		}
 	}
 
-	@Test
-	void d02_sparse_notEmpty() {
-		var map = Maps.create(String.class, Integer.class)
-			.add("a", 1)
-			.sparse()
-			.build();
-
-		assertNotNull(map);
-		assertSize(1, map);
-	}
-
-	@Test
-	void d03_notSparse_empty() {
-		var map = Maps.create(String.class, Integer.class)
-			.build();
-
-		assertNotNull(map);
-		assertEmpty(map);
+	static Stream<Arguments> sparseProvider() {
+		return Stream.of(
+			Arguments.of(true, false, true, 0),   // sparse_empty
+			Arguments.of(true, true, false, 1),   // sparse_notEmpty
+			Arguments.of(false, false, false, 0)  // notSparse_empty
+		);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

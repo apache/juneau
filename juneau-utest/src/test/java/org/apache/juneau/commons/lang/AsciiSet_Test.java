@@ -18,8 +18,13 @@ package org.apache.juneau.commons.lang;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.stream.Stream;
+
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Tests for {@link AsciiSet}.
@@ -584,17 +589,23 @@ class AsciiSet_Test extends TestBase {
 		assertFalse(set.containsOnly("xyz"));
 	}
 
-	@Test
-	void j03_containsOnly_null() {
+	@ParameterizedTest
+	@MethodSource("containsOnlyProvider")
+	void j03_containsOnly(String input, boolean expected) {
 		var set = AsciiSet.of("abc");
-		assertFalse(set.containsOnly(null));
+		if (input == null) {
+			assertFalse(set.containsOnly(null));
+		} else {
+			assertEquals(expected, set.containsOnly(input));
+		}
 	}
 
-	@Test
-	void j04_containsOnly_empty() {
-		var set = AsciiSet.of("abc");
-		// Empty string should return true (all characters in empty string are in the set)
-		assertTrue(set.containsOnly(""));
+	static Stream<Arguments> containsOnlyProvider() {
+		return Stream.of(
+			Arguments.of(null, false),
+			Arguments.of("", true),  // Empty string should return true (all characters in empty string are in the set)
+			Arguments.of("a", true)
+		);
 	}
 
 	@Test
