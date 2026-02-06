@@ -152,7 +152,7 @@ public class HashKey {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		if (o == null || !(o instanceof HashKey))
+		if (!(o instanceof HashKey))
 			return false;
 		var x = (HashKey)o;
 		if (array.length != x.array.length)

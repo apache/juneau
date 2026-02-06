@@ -62,8 +62,9 @@ class RestClient_Response_Headers_Test extends TestBase {
 	public static class A2 extends BasicHeader {
 		private static final long serialVersionUID = 1L;
 
+		@SuppressWarnings("java:S1186") // Constructor required by BasicHeader parent class, even though never explicitly called
 		private A2(String name, Object value) {
-			super(name, value);  // Never called.
+			super(name, value);
 		}
 	}
 

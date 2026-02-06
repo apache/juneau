@@ -970,6 +970,7 @@ public class Parser extends BeanContextable {
 	 * Represents no Parser.
 	 */
 	public abstract static class Null extends Parser {
+		@SuppressWarnings("java:S1186") // Constructor required by Parser parent class, even though Null is abstract and never instantiated directly
 		private Null(Builder builder) {
 			super(builder);
 		}

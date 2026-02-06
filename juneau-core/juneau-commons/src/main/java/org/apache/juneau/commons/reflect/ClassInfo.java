@@ -78,7 +78,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 
 	private static final Cache<Class,ClassInfoTyped> CACHE = Cache.of(Class.class, ClassInfoTyped.class).build();
 
-	/** Reusable ClassInfo for Object class. */
+	/** Reusable cached ClassInfo instance for Object.class. */
 	public static final ClassInfo OBJECT = ClassInfo.of(Object.class);
 
 	private static final Map<Class<?>,Class<?>> pmap1 = new HashMap<>();

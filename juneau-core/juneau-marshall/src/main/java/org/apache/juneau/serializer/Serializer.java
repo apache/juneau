@@ -1266,6 +1266,7 @@ public class Serializer extends BeanTraverseContext {
 	 * Represents no Serializer.
 	 */
 	public abstract static class Null extends Serializer {
+		@SuppressWarnings("java:S1186") // Constructor required by Serializer parent class, even though Null is abstract and never instantiated directly
 		private Null(Builder builder) {
 			super(builder);
 		}
