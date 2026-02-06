@@ -65,6 +65,7 @@ import org.apache.juneau.swap.*;
  * @param <T> The class type of the wrapped class.
  */
 @Bean(properties = "innerClass,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
+@SuppressWarnings("java:S1200") // Class has 23 dependencies, acceptable for this core reflection metadata class
 public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 	private static class Categories {

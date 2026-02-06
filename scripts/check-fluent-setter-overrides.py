@@ -104,6 +104,7 @@ def extract_package(content):
     match = re.search(r'^\s*package\s+([\w.]+)\s*;', content, re.MULTILINE)
     return match.group(1) if match else None
 
+# NOSONAR -- S3776: Cognitive complexity is acceptable for this utility function
 def extract_class_info(file_path):
     """Extract class information from a Java file."""
     try:
@@ -199,6 +200,7 @@ def extract_class_info(file_path):
         print(f"ERROR: Failed to process {file_path}: {e}", file=sys.stderr)
         return []
 
+# NOSONAR -- S3776: Cognitive complexity is acceptable for this utility function
 def find_java_files(source_dir):
     """Find all Java files in the source tree, excluding test directories."""
     java_files = []
@@ -234,6 +236,7 @@ def build_class_hierarchy(classes):
     
     return class_map
 
+# NOSONAR -- S3776: Cognitive complexity is acceptable for this utility function
 def check_missing_overrides(classes, class_map):
     """Check for missing fluent setter overrides."""
     missing_overrides = []

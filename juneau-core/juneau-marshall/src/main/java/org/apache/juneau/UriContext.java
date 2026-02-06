@@ -153,10 +153,10 @@ public class UriContext {
 	 */
 	public UriContext(String s) throws ParseException {
 		var m = JsonMap.ofJson(s);
-		this.authority = nullIfEmpty(trimSlashes(m.getString("authority")));
-		this.contextRoot = nullIfEmpty(trimSlashes(m.getString("contextRoot")));
-		this.servletPath = nullIfEmpty(trimSlashes(m.getString("servletPath")));
-		this.pathInfo = nullIfEmpty(trimSlashes(m.getString("pathInfo")));
+		this.authority = nullIfEmpty(trimSlashes(m.getString(PROP_authority)));
+		this.contextRoot = nullIfEmpty(trimSlashes(m.getString(PROP_contextRoot)));
+		this.servletPath = nullIfEmpty(trimSlashes(m.getString(PROP_servletPath)));
+		this.pathInfo = nullIfEmpty(trimSlashes(m.getString(PROP_pathInfo)));
 		this.parentPath = this.pathInfo == null || this.pathInfo.indexOf('/') == -1 ? null : this.pathInfo.substring(0, this.pathInfo.lastIndexOf('/'));
 		this.rContextRoot = mem(this::findRContextRoot);
 		this.rResource = mem(this::findRResource);

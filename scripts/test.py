@@ -86,6 +86,7 @@ def parse_test_results(output):
         return total, failures, errors
     return None, None, None
 
+# NOSONAR -- S3776: Cognitive complexity is acceptable for this main function
 def main():
     args = sys.argv[1:]
     
@@ -130,7 +131,7 @@ def main():
         exit_code, output = test(verbose)
         if exit_code != 0:
             # Try to parse test results
-            total, failures, errors = parse_test_results(output)
+            _, failures, errors = parse_test_results(output)
             if failures is not None and errors is not None:
                 failed_count = failures + errors
                 print(f"\n❌ Tests failed! ({failed_count} failed: {failures} failures, {errors} errors)")

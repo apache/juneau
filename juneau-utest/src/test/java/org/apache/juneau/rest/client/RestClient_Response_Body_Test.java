@@ -139,7 +139,7 @@ class RestClient_Response_Body_Test extends TestBase {
 		var x2 = client().interceptors(rci).build(TestClient.class).entity(new StringEntity("{f:2}"));
 		assertThrowsWithMessage(NullPointerException.class, "foo", ()->x2.get("/bean").run().getContent().cache().asInputStream());
 		assertThrowsWithMessage(NullPointerException.class, "foo", ()->x2.get("/bean").run().getContent().asInputStream().close());
-		assertThrowsWithMessage(NullPointerException.class, "foo", ()->((EofSensorInputStream)x2.get("/bean").run().getContent().asInputStream()).abortConnection());
+		assertThrowsWithMessage(NullPointerException.class, "foo", ((EofSensorInputStream)x2.get("/bean").run().getContent().asInputStream())::abortConnection);
 	}
 
 	@Test void a04_asReader() throws Exception {

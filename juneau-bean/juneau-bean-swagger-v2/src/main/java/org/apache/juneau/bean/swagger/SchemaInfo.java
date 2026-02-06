@@ -347,6 +347,7 @@ public class SchemaInfo extends SwaggerElement {
 	}
 
 	@Override /* Overridden from SwaggerElement */
+	@SuppressWarnings("java:S1479") // Switch statement has 32 cases, exceeding recommended limit of 30
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
@@ -687,6 +688,7 @@ public class SchemaInfo extends SwaggerElement {
 	}
 
 	@Override /* Overridden from SwaggerElement */
+	@SuppressWarnings("java:S1479") // Switch statement has 32 cases, exceeding recommended limit of 30
 	public SchemaInfo set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {

@@ -194,7 +194,7 @@ public class Mutaters {
 		return t == null ? o.toString() : t.mutate(o);
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked", "rawtypes", "java:S3776" }) // Cognitive complexity is acceptable for this mutater finder
 	private static Mutater find(Class<?> ic, Class<?> oc, Map<Class<?>,Mutater<?,?>> m) {
 
 		if (ic == oc) {

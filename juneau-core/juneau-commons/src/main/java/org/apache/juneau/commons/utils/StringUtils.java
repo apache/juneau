@@ -28,6 +28,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.util.Objects;
 import java.math.*;
 import java.net.*;
 import java.nio.*;
@@ -2374,6 +2375,7 @@ public class StringUtils {
 	 * @param s The URI string.
 	 * @return Just the authority portion of the URI.
 	 */
+	@SuppressWarnings("java:S3776") // Cognitive complexity is acceptable for this state machine-based URI parser
 	public static String getAuthorityUri(String s) {
 
 		// Use a state machine for maximum performance.
@@ -2873,6 +2875,7 @@ public class StringUtils {
 	 * @param s The string to test.
 	 * @return <jk>true</jk> if it's an absolute path.
 	 */
+	@SuppressWarnings("java:S3776") // Cognitive complexity is acceptable for this state machine-based URI validator
 	public static boolean isAbsoluteUri(String s) {
 
 		if (isEmpty(s))
@@ -3333,7 +3336,8 @@ public class StringUtils {
 	public static boolean isInterned(String str) {
 		if (str == null)
 			return false;
-		return str == str.intern();
+		// Use == for reference equality check to determine if string is interned
+		return str == str.intern(); // NOSONAR - Reference equality required to check if interned
 	}
 
 	/**
@@ -3538,6 +3542,7 @@ public class StringUtils {
 	 * @param s The string to test.
 	 * @return <jk>true</jk> if it's an absolute path.
 	 */
+	@SuppressWarnings("java:S3776") // Cognitive complexity is acceptable for this state machine-based URI validator
 	public static boolean isUri(String s) {
 
 		if (isEmpty(s))

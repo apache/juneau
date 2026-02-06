@@ -1593,7 +1593,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			// @formatter:off
 			var bs = BasicBeanStore.of(beanStore).addBean(PartList.class, v.get());
 			new BeanCreateMethodFinder<>(PartList.class, resource, bs)
-				.find(x -> matches(x, "defaultRequestFormData"))
+				.find(x -> matches(x, PROP_defaultRequestFormData))
 				.run(v::set);
 			// @formatter:on
 
@@ -1619,7 +1619,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			// @formatter:off
 			var bs = BasicBeanStore.of(beanStore).addBean(HeaderList.class, v.get());
 			new BeanCreateMethodFinder<>(HeaderList.class, resource, bs)
-				.find(x -> matches(x, "defaultRequestHeaders"))
+				.find(x -> matches(x, PROP_defaultRequestHeaders))
 				.run(v::set);
 			// @formatter:on
 
@@ -1645,7 +1645,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			// @formatter:off
 			var bs = BasicBeanStore.of(beanStore).addBean(PartList.class, v.get());
 			new BeanCreateMethodFinder<>(PartList.class, resource, bs)
-				.find(x -> matches(x, "defaultRequestQueryData"))
+				.find(x -> matches(x, PROP_defaultRequestQueryData))
 				.run(v::set);
 			// @formatter:on
 

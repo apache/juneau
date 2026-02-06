@@ -1025,7 +1025,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings("java:S3776") // Cognitive complexity is acceptable for this complex property setter
 	private Object setPropertyValue(BeanMap<?> m, String pName, Object value1, Object bean, boolean isMap, boolean isCollection, BeanSession session) throws ParseException {
 		try {
 			var r = (bc.isBeanMapPutReturnsOldValue() || isMap || isCollection) && (nn(getter) || nn(field)) ? get(m, pName) : null;
@@ -1291,7 +1291,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			return getter.invoke(bean);
 		if (nn(field))
 			return field.get(bean);
-		throw bex(beanMeta.getClassMeta(), "Getter or public field not defined on property ''{0}''", name);
+		throw bex(beanMeta.getClassMeta(), MSG_getterOrFieldNotDefined, name);
 	}
 
 	private Object invokeSetter(Object bean, String pName, Object val) throws IllegalArgumentException {

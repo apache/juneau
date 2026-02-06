@@ -961,6 +961,7 @@ public class ObjectRest {
 		return a;
 	}
 
+	@SuppressWarnings("java:S3776") // Cognitive complexity is acceptable for this recursive node getter
 	JsonNode getNode(String url, JsonNode n) {
 		if (url == null || url.isEmpty())
 			return n;

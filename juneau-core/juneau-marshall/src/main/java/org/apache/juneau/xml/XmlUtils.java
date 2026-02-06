@@ -472,6 +472,7 @@ public class XmlUtils {
 		return w;
 	}
 
+	@SuppressWarnings("java:S3776") // Cognitive complexity is acceptable for this namespace finder
 	private static Namespace findNamespace(String prefix, String ns, List<Xml> xmls, List<XmlSchema> schemas) {
 
 		// If both prefix and namespace specified, use that Namespace mapping.

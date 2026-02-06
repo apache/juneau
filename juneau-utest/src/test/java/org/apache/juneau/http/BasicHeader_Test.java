@@ -117,7 +117,7 @@ class BasicHeader_Test extends TestBase {
 
 		// Test cloning with supplier value
 		var supplierValue = new AtomicReference<>("test");
-		var h2 = header("X-Test", () -> supplierValue.get());
+		var h2 = header("X-Test", supplierValue::get);
 		var cloned2 = h2.clone();
 		assertNotSame(h2, cloned2);
 		assertEquals(h2.getName(), cloned2.getName());

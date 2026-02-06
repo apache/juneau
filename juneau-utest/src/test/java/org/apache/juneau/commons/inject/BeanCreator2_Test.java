@@ -3198,9 +3198,7 @@ class BeanCreator2_Test extends TestBase {
 				.postCreateHook(b -> {
 					throw rex("Hook error");
 				});
-			assertThrows(RuntimeException.class, () -> {
-				builder.asOptional();
-			}, "Post-create hook exceptions should propagate even in tryCreate");
+			assertThrows(RuntimeException.class, builder::asOptional, "Post-create hook exceptions should propagate even in tryCreate");
 		}
 	}
 

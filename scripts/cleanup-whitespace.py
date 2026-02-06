@@ -30,6 +30,7 @@ import re
 from pathlib import Path
 
 
+# NOSONAR -- S3776: Cognitive complexity is acceptable for this utility function
 def clean_java_file(file_path):
     """
     Clean whitespace issues in a Java file.

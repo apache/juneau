@@ -441,7 +441,7 @@ class HashCode_Test extends TestBase {
 			hc.add(i);
 		}
 		// Just verify it doesn't throw and produces a value
-		assertDoesNotThrow(() -> hc.get());
+		assertDoesNotThrow(hc::get);
 	}
 
 	@Test

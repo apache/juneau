@@ -1371,7 +1371,7 @@ public class BeanSession extends ContextSession {
 					return to.mutateFrom(value);
 				if (from.hasMutaterTo(to))
 					return from.mutateTo(value, to);
-				return (T)value.toString().getBytes(Charset.forName("UTF-8"));
+				return (T)value.toString().getBytes(StandardCharsets.UTF_8);
 			}
 
 			// Handle setting of array properties
@@ -1607,6 +1607,7 @@ public class BeanSession extends ContextSession {
 		return array;
 	}
 
+	@SuppressWarnings("java:S3776") // Cognitive complexity is acceptable for this type conversion method
 	private <T> T convertToMapType(Object outer, Object value, ClassMeta<?> from, ClassMeta<T> to) {
 		try {
 			if (from.isMap()) {
@@ -1638,6 +1639,7 @@ public class BeanSession extends ContextSession {
 		}
 	}
 
+	@SuppressWarnings("java:S3776") // Cognitive complexity is acceptable for this type conversion method
 	private <T> T convertToCollectionType(Object outer, Object value, ClassMeta<?> from, ClassMeta<T> to) {
 		try {
 			Collection l;

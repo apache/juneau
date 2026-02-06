@@ -58,7 +58,7 @@ public abstract class ContextSession {
 	/**
 	 * Builder class.
 	 */
-	public static abstract class Builder {
+	public abstract static class Builder {
 		private Boolean debug;
 		private boolean unmodifiable;
 		private Context ctx;

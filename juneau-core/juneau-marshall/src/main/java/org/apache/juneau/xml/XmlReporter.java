@@ -35,5 +35,5 @@ public abstract class XmlReporter implements XMLReporter {
 	/**
 	 * Represents the absence of this class.
 	 */
-	public static abstract class Void extends XmlReporter {}
+	public abstract static class Void extends XmlReporter {}
 }
