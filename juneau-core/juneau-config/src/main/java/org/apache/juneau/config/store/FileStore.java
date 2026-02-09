@@ -380,6 +380,8 @@ public class FileStore extends ConfigStore {
 					if (! key.reset())
 						break;
 				}
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
 			} catch (Exception e) {
 				throw toRex(e);
 			}

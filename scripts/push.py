@@ -229,6 +229,73 @@ def check_git_status(repo_dir):
         return True
 
 
+def check_upstream_changes(repo_dir):
+    """
+    Check if local branch is behind upstream/remote branch.
+    
+    Returns:
+        tuple: (is_behind, error_message)
+        - is_behind: True if local is behind remote, False otherwise
+        - error_message: Error message if check failed, None otherwise
+    """
+    try:
+        # Get current branch name
+        result = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            cwd=repo_dir,
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        current_branch = result.stdout.strip()
+        
+        # Fetch latest from remote
+        subprocess.run(
+            ["git", "fetch"],
+            cwd=repo_dir,
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        
+        # Check if there's a remote tracking branch
+        result = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", f"{current_branch}@{{upstream}}"],
+            cwd=repo_dir,
+            capture_output=True,
+            text=True,
+            check=False
+        )
+        
+        if result.returncode != 0:
+            # No upstream branch configured, skip check
+            return (False, None)
+        
+        upstream_branch = result.stdout.strip()
+        
+        # Get commit counts
+        result = subprocess.run(
+            ["git", "rev-list", "--left-right", "--count", f"{current_branch}...{upstream_branch}"],
+            cwd=repo_dir,
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        
+        # Output format: "X\tY" where X is commits ahead, Y is commits behind
+        counts = result.stdout.strip().split('\t')
+        if len(counts) != 2:
+            return (False, "Could not parse upstream comparison")
+        
+        commits_behind = int(counts[1])
+        return (commits_behind > 0, None)
+        
+    except subprocess.CalledProcessError as e:
+        return (False, f"Git command failed: {e}")
+    except Exception as e:
+        return (False, f"Error checking upstream changes: {e}")
+
+
 # NOSONAR -- S3776: Cognitive complexity is acceptable for this utility function
 def play_sound(success=True):
     """
@@ -417,6 +484,19 @@ Examples:
         play_sound(success=False)
         return 1
     step_num += 1
+    
+    # Check if local branch is behind upstream
+    print(f"\n🔍 Checking for upstream changes...")
+    is_behind, error_msg = check_upstream_changes(juneau_root)
+    if error_msg:
+        print(f"\n⚠ Warning: Could not check upstream changes: {error_msg}")
+        print("Continuing anyway...")
+    elif is_behind:
+        print("\n❌ ERROR: Local branch is behind upstream/remote branch.")
+        print("Please pull/merge upstream changes before pushing.")
+        print("Run: git pull")
+        play_sound(success=False)
+        return 1
     
     # Check if there are changes to commit
     if not check_git_status(juneau_root):

@@ -25,7 +25,7 @@ This document outlines the rules, guidelines, and best practices that AI assista
 - **"revert unstaged"** - Runs `scripts/revert-unstaged.py`
 - **"start jetty"** - Runs `scripts/start-examples-rest-jetty.py`
 - **"start springboot"** - Runs `scripts/start-examples-springboot.py`
-- **"push [commit message]"** - Runs `scripts/build-and-push.py` with the commit message. Example: "push Added Algolia search"
+- **"push"** or **"push changes"** - When the user asks to push changes, use `./scripts/push.py "Commit message"` to push changes. **Always prompt the user for the commit message** and provide 2-3 suggested commit message options based on the changes made. Example: `./scripts/push.py "Replace Stream.collect(Collectors.toList()) with Stream.toList()"`
 - **"test"** - Runs `scripts/build-and-test.py`
 
 ### Documentation Commands
