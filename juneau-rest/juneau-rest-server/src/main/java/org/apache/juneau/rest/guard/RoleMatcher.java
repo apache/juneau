@@ -238,7 +238,11 @@ public class RoleMatcher {
 		return exp.toString();
 	}
 
-	@SuppressWarnings({"java:S6541", "java:S3776"})
+	@SuppressWarnings({
+		"java:S6541", // Thread-safe singleton pattern acceptable
+		"java:S3776", // Cognitive complexity acceptable for parser state machine
+		"java:S135" // Multiple break statements necessary for state machine error handling
+	})
 	private Exp parse(String expression) throws ParseException {
 		if (StringUtils.isBlank(expression))
 			return new Never();

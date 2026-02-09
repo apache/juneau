@@ -396,7 +396,9 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	@Override /* Overridden from SwaggerElement */
-	@SuppressWarnings("java:S1479") // Switch statement has 37 cases, exceeding recommended limit of 30
+	@SuppressWarnings({
+		"java:S1479" // Switch statement has 37 cases, exceeding recommended limit of 30 - necessary for bean property mapping
+	})
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {
@@ -785,7 +787,9 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	@Override /* Overridden from SwaggerElement */
-	@SuppressWarnings("java:S1479") // Switch statement has 37 cases, exceeding recommended limit of 30
+	@SuppressWarnings({
+		"java:S1479" // Switch statement has 37 cases, exceeding recommended limit of 30 - necessary for bean property mapping
+	})
 	public SchemaInfo set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);
 		return switch (property) {

@@ -185,10 +185,9 @@ public class ParserReader extends Reader implements Positionable {
 		int c = 0;
 		while (true) {
 			c = read();
-			if (c == -1)
-				break;
-			if (! isNumberChar((char)c)) {
-				unread();
+			if (c == -1 || ! isNumberChar((char)c)) {
+				if (c != -1)
+					unread();
 				break;
 			}
 		}

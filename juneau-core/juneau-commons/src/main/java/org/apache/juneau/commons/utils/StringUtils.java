@@ -1745,6 +1745,9 @@ public class StringUtils {
 	 * @param end The end marker. Can be <jk>null</jk>.
 	 * @return A list of text segments found between the markers, or an empty list if any parameter is <jk>null</jk> or empty.
 	 */
+	@SuppressWarnings({
+		"java:S135" // Multiple break statements in mutually exclusive branches - necessary for early termination
+	})
 	public static List<String> extractBetween(String str, String start, String end) {
 		if (isEmpty(str) || isEmpty(start) || isEmpty(end))
 			return Collections.emptyList();
@@ -2822,6 +2825,9 @@ public class StringUtils {
 	 * @param variables The map containing the variable values.
 	 * @return The interpolated string with variables replaced, or the original template if variables is null or empty.
 	 */
+	@SuppressWarnings({
+		"java:S135" // Multiple break statements in mutually exclusive branches - necessary for early termination
+	})
 	public static String interpolate(String template, Map<String,Object> variables) {
 		if (template == null)
 			return null;

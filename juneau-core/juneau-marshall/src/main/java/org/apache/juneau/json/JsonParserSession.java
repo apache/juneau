@@ -448,7 +448,10 @@ public class JsonParserSession extends ReaderParserSession {
 		return null; // Unreachable.
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for parser state machine
+		"java:S135" // Multiple break statements necessary for state machine error handling
+	})
 	private <E> Collection<E> parseIntoCollection2(ParserReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		// S1: Looking for outermost [
@@ -511,7 +514,10 @@ public class JsonParserSession extends ReaderParserSession {
 		return null;  // Unreachable.
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for parser state machine
+		"java:S135" // Multiple break statements necessary for state machine error handling
+	})
 	private <K,V> Map<K,V> parseIntoMap2(ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (keyType == null)
@@ -663,7 +669,10 @@ public class JsonParserSession extends ReaderParserSession {
 	 * If the string consists of a concatenation of strings (e.g. 'AAA' + "BBB"), this method
 	 * will automatically concatenate the strings and return the result.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for parser state machine
+		"java:S135" // Multiple break statements necessary for state machine error handling
+	})
 	private String parseString(ParserReader r) throws IOException, ParseException {
 		r.mark();
 		int qc = r.read();		// The quote character being used (" or ')
@@ -716,12 +725,11 @@ public class JsonParserSession extends ReaderParserSession {
 						break;
 					}
 				} else {
-					if (c == ',' || c == '}' || c == ']' || isWhitespace(c)) {
-						s = r.getMarked(0, -1);
-						r.unread();
-						break;
-					} else if (c == -1) {
-						s = r.getMarked(0, 0);
+					// Unquoted string ends on delimiter, whitespace, or EOF
+					if (c == ',' || c == '}' || c == ']' || isWhitespace(c) || c == -1) {
+						s = r.getMarked(0, c == -1 ? 0 : -1);
+						if (c != -1)
+							r.unread();
 						break;
 					}
 				}

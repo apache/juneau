@@ -130,21 +130,13 @@ public class LogRecord extends java.util.logging.LogRecord {
 		for (var e : new Throwable().getStackTrace()) {
 			var c = e.getClassName();
 			var m = e.getMethodName();
-			// Skip LogRecord and Logger classes
-			if (eq(c, cn(LogRecord.class)) || eq(c, cn(Logger.class)) || eq(c, cn(StringUtils.class)) || eq(c, cn(Utils.class)))
+			// Skip internal classes, logging classes, lambda methods/classes, and synthetic methods
+			if (eq(c, cn(LogRecord.class)) || eq(c, cn(Logger.class)) || eq(c, cn(StringUtils.class)) || eq(c, cn(Utils.class))
+				|| c.startsWith("java.util.logging.")
+				|| (m != null && (m.contains("lambda$") || m.startsWith("access$")))
+				|| c.contains("$$Lambda$") || (c.contains("/") && c.contains("$Lambda"))) {
 				continue;
-			// Skip java.util.logging classes.
-			if (c.startsWith("java.util.logging."))
-				continue;
-			// Skip lambda methods (e.g., lambda$mem$1) - check method name first
-			if (m != null && m.contains("lambda$"))
-				continue;
-			// Skip lambda classes (e.g., LogRecord$$Lambda$123/456789)
-			if (c.contains("$$Lambda$") || (c.contains("/") && c.contains("$Lambda")))
-				continue;
-			// Skip synthetic methods
-			if (m != null && m.startsWith("access$"))
-				continue;
+			}
 			return opt(e);
 		}
 		return opte();

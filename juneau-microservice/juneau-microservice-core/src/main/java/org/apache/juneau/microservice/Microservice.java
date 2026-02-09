@@ -609,20 +609,22 @@ public class Microservice implements ConfigEventListener {
 		if (config2 == null) {
 			var store = builder.configStore;
 			var cfs = workingDir == null ? FileStore.DEFAULT : FileStore.create().directory(workingDir).build();
+			boolean found = false;
 			for (var name : getCandidateConfigNames()) {
+				if (found)
+					break;
 				if (nn(store)) {
 					if (store.exists(name)) {
 						configBuilder.store(store).name(name);
-						break;
+						found = true;
 					}
 				} else {
 					if (cfs.exists(name)) {
 						configBuilder.store(cfs).name(name);
-						break;
-					}
-					if (ClasspathStore.DEFAULT.exists(name)) {
+						found = true;
+					} else if (ClasspathStore.DEFAULT.exists(name)) {
 						configBuilder.store(ClasspathStore.DEFAULT).name(name);
-						break;
+						found = true;
 					}
 				}
 			}

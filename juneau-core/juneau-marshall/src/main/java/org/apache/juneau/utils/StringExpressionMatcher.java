@@ -227,7 +227,10 @@ public class StringExpressionMatcher {
 		return exp.toString();
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for parser state machine
+		"java:S135" // Multiple break statements necessary for state machine error handling
+	})
 	private Exp parse(String expression) throws ParseException {
 		if (b(expression))
 			return new Never();

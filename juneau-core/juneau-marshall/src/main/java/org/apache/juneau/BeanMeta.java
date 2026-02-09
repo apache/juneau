@@ -1078,17 +1078,13 @@ public class BeanMeta<T> {
 
 		classHierarchy.get().stream().forEach(c2 -> {
 			for (var m : c2.getDeclaredMethods()) {
-
-				if (m.isStatic() || m.isBridge() || m.getParameterCount() > 2)
-					continue;
-
 				var mm = m.getMatchingMethods();
-
-				if (mm.stream().anyMatch(m2 -> ap.has(BeanIgnore.class, m2, SELF)))
+				// Skip static, bridge, or methods with >2 params; skip if ignored, transient, or not visible
+				if (m.isStatic() || m.isBridge() || m.getParameterCount() > 2
+					|| mm.stream().anyMatch(m2 -> ap.has(BeanIgnore.class, m2, SELF))
+					|| mm.stream().anyMatch(m2 -> ap.find(Transient.class, m2, SELF).stream().map(x -> x.inner().value()).findFirst().orElse(false))) {
 					continue;
-
-				if (mm.stream().anyMatch(m2 -> ap.find(Transient.class, m2, SELF).stream().map(x -> x.inner().value()).findFirst().orElse(false)))
-					continue;
+				}
 
 				var beanps = ap.find(Beanp.class, m).stream().map(AnnotationInfo::inner).toList();
 				var names = ap.find(Name.class, m).stream().map(AnnotationInfo::inner).toList();

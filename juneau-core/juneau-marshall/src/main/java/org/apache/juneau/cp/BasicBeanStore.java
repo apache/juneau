@@ -429,13 +429,12 @@ public class BasicBeanStore {
 	public String getMissingParams(ExecutableInfo executable, Object outer) {
 		var params = executable.getParameters();
 		List<String> l = list();
-		loop: for (int i = 0; i < params.size(); i++) {
+		for (int i = 0; i < params.size(); i++) {
 			var pi = params.get(i);
 			var pt = pi.getParameterType();
-			if (i == 0 && nn(outer) && pt.isInstance(outer))
-				continue loop;
-			if (pt.is(Optional.class))
-				continue loop;
+			// Skip first parameter if it matches outer instance, or skip Optional parameters
+			if ((i == 0 && nn(outer) && pt.isInstance(outer)) || pt.is(Optional.class))
+				continue;
 			var beanName = pi.getResolvedQualifier();  // Use @Named for bean injection
 			var ptc = pt.inner();
 			if (beanName == null && ! hasBean(ptc))
@@ -478,13 +477,12 @@ public class BasicBeanStore {
 	 * @return A comma-delimited list of types that are missing from this factory.
 	 */
 	public boolean hasAllParams(ExecutableInfo executable, Object outer) {
-		loop: for (int i = 0; i < executable.getParameterCount(); i++) {
+		for (int i = 0; i < executable.getParameterCount(); i++) {
 			var pi = executable.getParameter(i);
 			var pt = pi.getParameterType();
-			if (i == 0 && nn(outer) && pt.isInstance(outer))
-				continue loop;
-			if (pt.is(Optional.class))
-				continue loop;
+			// Skip first parameter if it matches outer instance, or skip Optional parameters
+			if ((i == 0 && nn(outer) && pt.isInstance(outer)) || pt.is(Optional.class))
+				continue;
 			var beanQualifier = pi.getResolvedQualifier();
 			var ptc = pt.inner();
 			if ((beanQualifier == null && ! hasBean(ptc)) || (nn(beanQualifier) && ! hasBean(ptc, beanQualifier)))

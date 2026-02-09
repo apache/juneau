@@ -56,7 +56,10 @@ public class NumberMatcherFactory extends MatcherFactory {
 		NumberRange[] numberRanges;
 		String pattern;
 
-		@SuppressWarnings("java:S3776")
+		@SuppressWarnings({
+			"java:S3776", // Cognitive complexity acceptable for parser state machine
+			"java:S135" // Multiple break statements necessary for state machine error handling
+		})
 		public NumberMatcher(String s) {
 
 			s = s.trim();
