@@ -1407,6 +1407,9 @@ public class Utils {
 	 * @return A thread-safe memoizing wrapper around the supplier.
 	 * @throws NullPointerException if supplier is <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"java:S2789" // null check on Optional is intentional - AtomicReference uses null to represent "not initialized" state
+	})
 	public static <T> OptionalSupplier<T> mem(Supplier<T> supplier) {
 		assertArgNotNull(ARG_supplier, supplier);
 

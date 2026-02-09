@@ -809,6 +809,9 @@ public class RestResponse extends HttpServletResponseWrapper {
 		return this;
 	}
 
+	@SuppressWarnings({
+		"java:S2789" // null check on Optional is intentional - content field can be null if never set
+	})
 	private Object getRawOutput() { return content == null ? null : content.orElse(null); }
 
 	private FinishablePrintWriter getWriter(boolean raw, boolean autoflush) throws NotAcceptable, IOException {

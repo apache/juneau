@@ -101,6 +101,9 @@ public class ResettableSupplier<T> implements OptionalSupplier<T> {
 	 * @return The cached or newly computed value.
 	 */
 	@Override
+	@SuppressWarnings({
+		"java:S2789" // null check on Optional is intentional - AtomicReference uses null to represent "not initialized" state
+	})
 	public T get() {
 		Optional<T> h = cache.get();
 		if (h == null) {
@@ -167,6 +170,9 @@ public class ResettableSupplier<T> implements OptionalSupplier<T> {
 	 *
 	 * @return <jk>true</jk> if the supplier has not been called yet, <jk>false</jk> if a value has been cached.
 	 */
+	@SuppressWarnings({
+		"java:S2789" // null check on Optional is intentional - AtomicReference uses null to represent "not initialized" state
+	})
 	public boolean isSupplied() {
 		return cache.get() == null;
 	}
@@ -180,6 +186,9 @@ public class ResettableSupplier<T> implements OptionalSupplier<T> {
 	 *
 	 * @return A new {@link ResettableSupplier} instance with the same state as this supplier.
 	 */
+	@SuppressWarnings({
+		"java:S2789" // null check on Optional is intentional - AtomicReference uses null to represent "not initialized" state
+	})
 	public ResettableSupplier<T> copy() {
 		Optional<T> o = cache.get();
 		if (o == null)

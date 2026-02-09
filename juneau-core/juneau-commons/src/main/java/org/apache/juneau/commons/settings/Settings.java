@@ -165,6 +165,9 @@ public class Settings {
 	 * Returns properties for this Settings object itself.
 	 * Note that these are initialized at startup and not changeable through System.setProperty().
 	 */
+	@SuppressWarnings({
+		"java:S2789" // null check on Optional is intentional - SettingSource.get() returns null if key doesn't exist, Optional.empty() if key exists with null value
+	})
 	private static final Optional<String> initProperty(String property) {
 		var v = SYSTEM_PROPERTY_SOURCE.get(property);
 		if (v != null)
@@ -362,6 +365,9 @@ public class Settings {
 	 * @param name The property name. Must not be <jk>null</jk>.
 	 * @return A {@link StringSetting} that provides the property value, or <jk>null</jk> if not found.
 	 */
+	@SuppressWarnings({
+		"java:S2789" // null check on Optional is intentional - SettingStore.get()/SettingSource.get() return null if key doesn't exist, Optional.empty() if key exists with null value
+	})
 	public StringSetting get(String name) {
 		assertArgNotNull(ARG_name, name);
 		return new StringSetting(this, () -> {
