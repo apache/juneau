@@ -351,9 +351,10 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 *
 	 * @param name The header name.
 	 * @return The list of all headers with matching names.  Never <jk>null</jk>.
+	 * 	<br>List is unmodifiable.
 	 */
 	public List<RequestHeader> getAll(String name) {
-		return stream(name).collect(toList());
+		return stream(name).toList();
 	}
 
 	/**
@@ -391,8 +392,9 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	/**
 	 * Returns all the unique header names in this list.
 	 * @return The list of all unique header names in this list.
+	 * 	<br>List is unmodifiable.
 	 */
-	public List<String> getNames() { return stream().map(RequestHeader::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList()); }
+	public List<String> getNames() { return stream().map(RequestHeader::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().toList(); }
 
 	/**
 	 * Returns all headers in sorted order.

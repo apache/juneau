@@ -1383,7 +1383,7 @@ public class SchemaAnnotation {
 		}
 
 		@Override /* Overridden from Schema */
-		public boolean deprecatedProperty() {
+		public boolean deprecated_() {
 			return deprecatedProperty;
 		}
 
@@ -1731,7 +1731,7 @@ public class SchemaAnnotation {
 			.appendIf(ne, PROP_const, joinnl(a.const_()))
 			.appendIf(nec, PROP_examples, a.examples().length == 0 ? null : l(a.examples()))
 			.appendIf(ne, PROP_comment, joinnl(a.$comment()))
-			.appendIf(nf, PROP_deprecated, a.deprecatedProperty())
+			.appendIf(nf, PROP_deprecated, a.deprecated_())
 			.appendIf(ne, PROP_contentMediaType, a.contentMediaType())
 			.appendIf(ne, PROP_contentEncoding, a.contentEncoding())
 			.appendIf(ne, PROP_prefixItems, joinnl(a.prefixItems()))

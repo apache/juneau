@@ -1339,7 +1339,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertBean(schema, "deprecated", "true");
 	}
 
-	@Schema(type="string", deprecatedProperty=true)
+	@Schema(type="string", deprecated_=true)
 	public static class DeprecatedBean {
 		public String value;
 	}
@@ -1497,7 +1497,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 		const_="FIXED",
 		examples={"ex1", "ex2"},
 		$comment="A comprehensive example",
-		deprecatedProperty=true,
+		deprecated_=true,
 		exclusiveMaximumValue="100",
 		exclusiveMinimumValue="0")
 	public static class CombinedPropertiesBean {

@@ -929,7 +929,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Content
-	@Schema(deprecatedProperty=true)
+	@Schema(deprecated_=true)
 	public static class D04a {}
 
 	@Test void d04a_deprecated() {

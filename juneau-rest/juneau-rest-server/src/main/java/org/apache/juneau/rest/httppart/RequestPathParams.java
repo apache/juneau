@@ -350,10 +350,11 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 *
 	 * @param name The parameter name.
 	 * @return The list of all parameters with the specified name, or an empty list if none are found.
+	 * 	<br>List is unmodifiable.
 	 */
 	public List<RequestPathParam> getAll(String name) {
 		assertArgNotNull(ARG_name, name);
-		return stream(name).collect(toList());
+		return stream(name).toList();
 	}
 
 	/**
@@ -391,8 +392,9 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	/**
 	 * Returns all the unique header names in this list.
 	 * @return The list of all unique header names in this list.
+	 * 	<br>List is unmodifiable.
 	 */
-	public List<String> getNames() { return stream().map(RequestPathParam::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList()); }
+	public List<String> getNames() { return stream().map(RequestPathParam::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().toList(); }
 
 	/**
 	 * Returns the decoded remainder of the URL following any path pattern matches.

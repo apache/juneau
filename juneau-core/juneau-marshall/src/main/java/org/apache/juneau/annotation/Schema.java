@@ -654,7 +654,7 @@ public @interface Schema {
 	 *
 	 * @return The annotation value.
 	 */
-	boolean deprecatedProperty() default false;
+	boolean deprecated_() default false;
 
 	/**
 	 * <mk>description</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.

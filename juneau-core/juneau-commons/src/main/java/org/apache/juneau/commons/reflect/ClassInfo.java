@@ -258,7 +258,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 		this.declaredMethods = mem(() -> opt(inner).map(x -> stream(x.getDeclaredMethods()).filter(m -> neq("$jacocoInit", m.getName())).map(this::getMethod).sorted().toList()).orElse(liste()));
 		this.allMethods = mem(() -> allParents.get().stream().flatMap(c2 -> c2.getDeclaredMethods().stream()).toList());
 		this.allMethodsTopDown = mem(() -> rstream(getAllParents()).flatMap(c2 -> c2.getDeclaredMethods().stream()).toList());
-		this.publicFields = mem(() -> parents.get().stream().flatMap(c2 -> c2.getDeclaredFields().stream()).filter(f -> f.isPublic() && neq("$jacocoData", f.getName())).collect(toMap(FieldInfo::getName, x -> x, (a, b) -> a, LinkedHashMap::new)).values().stream().sorted().collect(toList()));
+		this.publicFields = mem(() -> parents.get().stream().flatMap(c2 -> c2.getDeclaredFields().stream()).filter(f -> f.isPublic() && neq("$jacocoData", f.getName())).collect(toMap(FieldInfo::getName, x -> x, (a, b) -> a, LinkedHashMap::new)).values().stream().sorted().toList());
 		this.declaredFields = mem(() -> opt(inner).map(x -> stream(x.getDeclaredFields()).filter(f -> neq("$jacocoData", f.getName())).map(this::getField).sorted().toList()).orElse(liste()));
 		this.allFields = mem(() -> rstream(allParents.get()).flatMap(c2 -> c2.getDeclaredFields().stream()).toList());
 		this.publicConstructors = mem(() -> opt(inner).map(x -> stream(x.getConstructors()).map(this::getConstructor).sorted().toList()).orElse(liste()));

@@ -2843,7 +2843,7 @@ public class HttpPartSchema {
 			// JSON Schema Draft 2020-12 properties
 			const_(joinnlOrNull(a.const_()));
 			examples(a.examples());
-			deprecated(a.deprecatedProperty());
+			deprecated(a.deprecated_());
 
 			return this;
 		}
