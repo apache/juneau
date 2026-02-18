@@ -108,7 +108,8 @@ import jakarta.servlet.http.*;
  *
  */
 @SuppressWarnings({
-	"resource" // HttpServletResponseWrapper is managed by servlet container
+	"resource", // HttpServletResponseWrapper is managed by servlet container
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., HEADER_ContentType)
 })
 public class RestResponse extends HttpServletResponseWrapper {
 

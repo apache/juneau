@@ -508,7 +508,7 @@ public class Microservice implements ConfigEventListener {
 		}
 	}
 
-	private static volatile Microservice INSTANCE;
+	private static volatile Microservice instance;
 
 	/**
 	 * Creates a new builder for this object.
@@ -530,13 +530,13 @@ public class Microservice implements ConfigEventListener {
 	 */
 	public static Microservice getInstance() {
 		synchronized (Microservice.class) {
-			return INSTANCE;
+			return instance;
 		}
 	}
 
 	private static void setInstance(Microservice m) {
 		synchronized (Microservice.class) {
-			INSTANCE = m;
+			instance = m;
 		}
 	}
 

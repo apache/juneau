@@ -78,7 +78,10 @@ import org.apache.juneau.rest.servlet.*;
 	}
 )
 @HtmlConfig(uriAnchorText="PROPERTY_NAME")
-@SuppressWarnings("javadoc")
+@SuppressWarnings({
+	"javadoc",
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., DIRECTORY_RESOURCE_rootDir)
+})
 public class DirectoryResource extends BasicRestServlet {
 	@Response
 	@Schema(description = "File action")

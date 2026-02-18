@@ -37,7 +37,10 @@ import jakarta.servlet.http.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics">juneau-rest-mock Basics</a>
  * </ul>
 */
-@SuppressWarnings("java:S4144")
+@SuppressWarnings({
+	"java:S4144",
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., HEADER_ContentType)
+})
 public class MockServletResponse implements HttpServletResponse {
 
 	private static final String HEADER_ContentType = "Content-Type";

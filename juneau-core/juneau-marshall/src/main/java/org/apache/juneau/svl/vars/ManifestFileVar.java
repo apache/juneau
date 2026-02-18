@@ -56,7 +56,7 @@ public class ManifestFileVar extends DefaultingVar {
 	/** The name of this variable. */
 	public static final String NAME = "MF";
 
-	private static volatile ManifestFile MANIFEST_FILE;
+	private static volatile ManifestFile manifestFile;
 
 	/**
 	 * Initialize the manifest file for this variable.
@@ -64,7 +64,7 @@ public class ManifestFileVar extends DefaultingVar {
 	 * @param manifestFile The parsed manifest file.
 	 */
 	public static void init(ManifestFile manifestFile) {
-		MANIFEST_FILE = manifestFile;
+		ManifestFileVar.manifestFile = manifestFile;
 	}
 
 	/**
@@ -76,6 +76,6 @@ public class ManifestFileVar extends DefaultingVar {
 
 	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String key) {
-		return MANIFEST_FILE == null ? "" : MANIFEST_FILE.getString(key);
+		return manifestFile == null ? "" : manifestFile.getString(key);
 	}
 }

@@ -45,7 +45,13 @@ import org.apache.juneau.uon.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingBasics">URL-Encoding Basics</a>
  * </ul>
  */
-@SuppressWarnings({"unchecked","rawtypes","resource","java:S110"})
+@SuppressWarnings({
+	"unchecked",
+	"rawtypes",
+	"resource",
+	"java:S110",
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., CONST_value)
+})
 public class UrlEncodingParserSession extends UonParserSession {
 
 	private static final String CONST_value = "_value";

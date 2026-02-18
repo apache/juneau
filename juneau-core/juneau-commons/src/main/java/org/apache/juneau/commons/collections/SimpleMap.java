@@ -118,6 +118,7 @@ import org.apache.juneau.commons.utils.Utils;
  * @param <K> The key type.
  * @param <V> The value type.
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., ARG_keys, ARG_values)
 public class SimpleMap<K,V> extends AbstractMap<K,V> {
 
 	// Argument name constants for assertArgsNotNull

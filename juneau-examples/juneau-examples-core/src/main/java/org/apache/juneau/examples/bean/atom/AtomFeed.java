@@ -26,7 +26,10 @@ import org.apache.juneau.bean.atom.*;
  * Atom feed example.
  *
  */
-@SuppressWarnings("java:S1118")
+@SuppressWarnings({
+	"java:S1118",
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., CONST_timestamp)
+})
 public class AtomFeed {
 
 	private static final String CONST_timestamp = "2016-12-31T05:02:03Z";

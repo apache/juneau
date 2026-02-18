@@ -98,7 +98,10 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 @Bean(typeName = "object")
-@SuppressWarnings("java:S100") // Class name uses underscore suffix to avoid conflict with java.lang.Object
+@SuppressWarnings({
+	"java:S100", // Class name uses underscore suffix to avoid conflict with java.lang.Object
+	"java:S101" // Class name uses underscore suffix to avoid conflict with java.lang.Object
+})
 public class Object_ extends HtmlElementMixed {
 
 	/**

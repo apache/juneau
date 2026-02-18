@@ -90,6 +90,7 @@ public class ParserSet {
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., CLASS_NoInherit)
 	public static class Builder extends BeanBuilder<ParserSet> {
 
 		private static final String CLASS_NoInherit = "NoInherit";

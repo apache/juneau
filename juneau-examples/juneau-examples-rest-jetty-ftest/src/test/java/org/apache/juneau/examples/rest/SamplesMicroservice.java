@@ -32,8 +32,8 @@ public class SamplesMicroservice {
 	static URI microserviceURI;
 
 	// Reusable HTTP clients that get created and shut down with the microservice.
-	public static RestClient DEFAULT_CLIENT;
-	public static RestClient DEFAULT_CLIENT_PLAINTEXT;
+	public static RestClient defaultClient;
+	public static RestClient defaultClientPlaintext;
 
 	/**
 	 * Starts the microservice.
@@ -47,8 +47,8 @@ public class SamplesMicroservice {
 			Locale.setDefault(Locale.US);
 			microservice = JettyMicroservice.create().workingDir("../juneau-examples-rest-jetty").configName("juneau-examples-rest-jetty.cfg").servlet(RootResources.class).build();
 			microserviceURI = microservice.start().getURI();
-			DEFAULT_CLIENT = client().json().build();
-			DEFAULT_CLIENT_PLAINTEXT = client().plainText().build();
+			defaultClient = client().json().build();
+			defaultClientPlaintext = client().plainText().build();
 			return true;
 		} catch (Throwable e) {
 			// Probably already started.
@@ -75,8 +75,8 @@ public class SamplesMicroservice {
 		try {
 			microservice.stop();
 			microservice = null;
-			DEFAULT_CLIENT.closeQuietly();
-			DEFAULT_CLIENT_PLAINTEXT.closeQuietly();
+			defaultClient.closeQuietly();
+			defaultClientPlaintext.closeQuietly();
 		} catch (Exception e) {
 			System.err.println(e); // NOT DEBUG
 		}

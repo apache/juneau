@@ -1672,7 +1672,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 	}
 
-	private static Map<Class<?>,RestContext> REST_CONTEXTS = new ConcurrentHashMap<>();
+	private static Map<Class<?>,RestContext> restContexts = new ConcurrentHashMap<>();
 
 	/**
 	 * Creates a new {@link RestClient} with no registered serializer or parser.
@@ -1828,7 +1828,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 				rootUrl = "http://localhost";
 
 			var c = restBean instanceof Class restBean2 ? (Class<?>)restBean2 : restBean.getClass();
-			if (! REST_CONTEXTS.containsKey(c)) {
+			if (! restContexts.containsKey(c)) {
 				var isClass = restBean instanceof Class;
 				var o = isClass ? ((Class<?>)restBean).getDeclaredConstructor().newInstance() : restBean;
 				// @formatter:off
@@ -1841,9 +1841,9 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 					.postInit()
 					.postInitChildFirst();
 				// @formatter:on
-				REST_CONTEXTS.put(c, rc);
+				restContexts.put(c, rc);
 			}
-			var restBeanCtx = REST_CONTEXTS.get(c);
+			var restBeanCtx = restContexts.get(c);
 			builder.restContext(restBeanCtx);
 
 			if (servletPath == null)

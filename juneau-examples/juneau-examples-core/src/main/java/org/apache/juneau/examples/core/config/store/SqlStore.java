@@ -35,7 +35,11 @@ import org.apache.juneau.config.store.*;
  * </ul>
  *
  */
-@SuppressWarnings({ "resource", "unused" })
+@SuppressWarnings({
+	"resource",
+	"unused",
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., SQLSTORE_jdbcUrl)
+})
 public class SqlStore extends ConfigStore {
 
 	/**

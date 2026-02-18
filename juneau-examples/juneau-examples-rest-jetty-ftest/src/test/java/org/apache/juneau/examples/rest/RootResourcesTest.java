@@ -32,14 +32,14 @@ public class RootResourcesTest extends RestTestcase {
 
 	private static boolean debug;
 
-	private RestClient jsonClient = SamplesMicroservice.DEFAULT_CLIENT;
+	private RestClient jsonClient = SamplesMicroservice.defaultClient;
 
 	//====================================================================================================
 	// text/json
 	//====================================================================================================
 	@Test
 	public void testJson() throws Exception {
-		var client = SamplesMicroservice.DEFAULT_CLIENT;
+		var client = SamplesMicroservice.defaultClient;
 
 		var x = client.get("").run().getContent().as(ResourceDescription[].class);
 		assertEquals("helloWorld", x[0].getName());

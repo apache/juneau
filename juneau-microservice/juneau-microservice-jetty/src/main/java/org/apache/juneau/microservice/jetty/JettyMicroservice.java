@@ -398,7 +398,7 @@ public class JettyMicroservice extends Microservice {
 	private static final String KEY_SERVLET_CONTEXT_HANDLER = "ServletContextHandler";
 	private static final Random RANDOM = new Random();
 
-	private static volatile JettyMicroservice INSTANCE;
+	private static volatile JettyMicroservice instance;
 
 	/**
 	 * Creates a new microservice builder.
@@ -419,7 +419,7 @@ public class JettyMicroservice extends Microservice {
 	 */
 	public static JettyMicroservice getInstance() {
 		synchronized (JettyMicroservice.class) {
-			return INSTANCE;
+			return instance;
 		}
 	}
 
@@ -457,7 +457,7 @@ public class JettyMicroservice extends Microservice {
 
 	private static void setInstance(JettyMicroservice m) {
 		synchronized (JettyMicroservice.class) {
-			INSTANCE = m;
+			instance = m;
 		}
 	}
 

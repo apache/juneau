@@ -50,7 +50,7 @@ class BeanStore_Test extends TestBase {
 	public static class A1 {}
 	public static class A2 {}
 
-	public static final String A1n = A1.class.getSimpleName();
+	public static final String A1N = A1.class.getSimpleName();
 
 	public static class A3 extends BasicBeanStore {
 		protected A3(Builder builder) {
@@ -226,11 +226,11 @@ class BeanStore_Test extends TestBase {
 
 		for (var b : array(b1p, b1c, b2p, b2c)) {
 			for (var e : array(c1, m1, m3)) {
-				assertString(A1n, b.getMissingParams(e, outer));
+				assertString(A1N, b.getMissingParams(e, outer));
 				assertFalse(b.hasAllParams(e, outer));
 			}
 			for (var e : array(c2, m2)) {
-				assertString(A1n+"@foo", b.getMissingParams(e, outer));
+				assertString(A1N+"@foo", b.getMissingParams(e, outer));
 				assertFalse(b.hasAllParams(e, outer));
 			}
 		}
@@ -247,9 +247,9 @@ class BeanStore_Test extends TestBase {
 		b2p.add(A1.class, a1a);
 		for (var b : array(b1p, b1c, b2p, b2c)) {
 			assertNull(b.getMissingParams(c1, outer));
-			assertString(A1n+"@foo", b.getMissingParams(c2, outer));
+			assertString(A1N+"@foo", b.getMissingParams(c2, outer));
 			assertNull(b.getMissingParams(m1, outer));
-			assertString(A1n+"@foo", b.getMissingParams(m2, outer));
+			assertString(A1N+"@foo", b.getMissingParams(m2, outer));
 			assertNull(b.getMissingParams(m3, outer));
 			assertTrue(b.hasAllParams(c1, outer));
 			assertFalse(b.hasAllParams(c2, outer));
@@ -356,8 +356,8 @@ class BeanStore_Test extends TestBase {
 		var c2 = ci.getPublicConstructor(x -> x.hasParameterTypes(BeanStore_Test.class, A1.class, Optional.class)).get();
 
 		for (var b : array(b1p, b1c, b2p, b2c)) {
-			assertString(A1n, b.getMissingParams(c1, this));
-			assertString(A1n+"@foo", b.getMissingParams(c2, this));
+			assertString(A1N, b.getMissingParams(c1, this));
+			assertString(A1N+"@foo", b.getMissingParams(c2, this));
 			assertFalse(b.hasAllParams(c1, this));
 			assertFalse(b.hasAllParams(c2, this));
 		}
@@ -371,7 +371,7 @@ class BeanStore_Test extends TestBase {
 		b2p.add(A1.class, a1a);
 		for (var b : array(b1p, b1c, b2p, b2c)) {
 			assertNull(b.getMissingParams(c1, this));
-			assertString(A1n+"@foo", b.getMissingParams(c2, this));
+			assertString(A1N+"@foo", b.getMissingParams(c2, this));
 			assertTrue(b.hasAllParams(c1, this));
 			assertFalse(b.hasAllParams(c2, this));
 			assertList(b.getParams(c1, this), pThis, pA1a, pEmptyOptional, pIsBeanStore);

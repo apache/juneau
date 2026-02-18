@@ -52,23 +52,23 @@ enum HtmlTag {
 	SP(17, "<sp>"),   // space
 	P(18, "<p>"),
 	HTML(19, "<html>"),
-	xTABLE(-1,"</table>"),
-	xTR(-2,"</tr>"),
-	xTH(-3,"</th>"),
-	xTD(-4,"</td>"),
-	xUL(-5,"</ul>"),
-	xLI(-6,"</li>"),
-	xSTRING(-7,"</string>"),
-	xNUMBER(-8,"</number>"),
-	xBOOLEAN(-9,"</boolean>"),
-	xNULL(-10,"</null>"),
-	xA(-11,"</a>"),
-	xBR(-12,"</br>"),
-	xFF(-13,"</ff>"),
-	xBS(-14,"</bs>"),
-	xSP(-17, "</sp>"),
-	xP(-18, "</p>"),
-	xHTML(-19, "</html>");
+	X_TABLE(-1,"</table>"),
+	X_TR(-2,"</tr>"),
+	X_TH(-3,"</th>"),
+	X_TD(-4,"</td>"),
+	X_UL(-5,"</ul>"),
+	X_LI(-6,"</li>"),
+	X_STRING(-7,"</string>"),
+	X_NUMBER(-8,"</number>"),
+	X_BOOLEAN(-9,"</boolean>"),
+	X_NULL(-10,"</null>"),
+	X_A(-11,"</a>"),
+	X_BR(-12,"</br>"),
+	X_FF(-13,"</ff>"),
+	X_BS(-14,"</bs>"),
+	X_SP(-17, "</sp>"),
+	X_P(-18, "</p>"),
+	X_HTML(-19, "</html>");
 	// @formatter:on
 
 	static HtmlTag forEvent(ParserSession session, XMLStreamReader r) throws ParseException {
@@ -85,47 +85,47 @@ enum HtmlTag {
 		var c = tag.charAt(0);
 		HtmlTag t = null;
 		if (c == 'u')
-			t = (end ? xUL : UL);
+			t = (end ? X_UL : UL);
 		else if (c == 'l')
-			t = (end ? xLI : LI);
+			t = (end ? X_LI : LI);
 		else if (c == 's') {
 			c = tag.charAt(1);
 			if (c == 'p')
-				t = (end ? xSP : SP);
+				t = (end ? X_SP : SP);
 			else if (c == 't')
-				t = (end ? xSTRING : STRING);
+				t = (end ? X_STRING : STRING);
 		} else if (c == 'b') {
 			c = tag.charAt(1);
 			if (c == 'o')
-				t = (end ? xBOOLEAN : BOOLEAN);
+				t = (end ? X_BOOLEAN : BOOLEAN);
 			else if (c == 'r')
-				t = (end ? xBR : BR);
+				t = (end ? X_BR : BR);
 			else if (c == 's')
-				t = (end ? xBS : BS);
+				t = (end ? X_BS : BS);
 		} else if (c == 'a')
-			t = (end ? xA : A);
+			t = (end ? X_A : A);
 		else if (c == 'n') {
 			c = tag.charAt(2);
 			if (c == 'm')
-				t = (end ? xNUMBER : NUMBER);
+				t = (end ? X_NUMBER : NUMBER);
 			else if (c == 'l')
-				t = (end ? xNULL : NULL);
+				t = (end ? X_NULL : NULL);
 		} else if (c == 't') {
 			c = tag.charAt(1);
 			if (c == 'a')
-				t = (end ? xTABLE : TABLE);
+				t = (end ? X_TABLE : TABLE);
 			else if (c == 'r')
-				t = (end ? xTR : TR);
+				t = (end ? X_TR : TR);
 			else if (c == 'h')
-				t = (end ? xTH : TH);
+				t = (end ? X_TH : TH);
 			else if (c == 'd')
-				t = (end ? xTD : TD);
+				t = (end ? X_TD : TD);
 		} else if (c == 'f')
-			t = (end ? xFF : FF);
+			t = (end ? X_FF : FF);
 		else if (c == 'p')
-			t = (end ? xP : P);
+			t = (end ? X_P : P);
 		else if (c == 'h')
-			t = (end ? xHTML : HTML);
+			t = (end ? X_HTML : HTML);
 		return t;
 	}
 

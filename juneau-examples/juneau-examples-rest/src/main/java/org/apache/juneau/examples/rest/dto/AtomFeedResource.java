@@ -65,6 +65,7 @@ import org.apache.juneau.serializer.annotation.*;
 @SerializerConfig(
 	quoteChar="'"
 )
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., CONST_timestamp)
 public class AtomFeedResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 

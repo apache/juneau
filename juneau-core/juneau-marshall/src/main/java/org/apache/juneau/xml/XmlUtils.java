@@ -37,7 +37,10 @@ import org.apache.juneau.xml.annotation.*;
 
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({
+	"resource",
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., CONST_x0000)
+})
 public class XmlUtils {
 
 	private static final String CONST_x0000 = "_x0000_";

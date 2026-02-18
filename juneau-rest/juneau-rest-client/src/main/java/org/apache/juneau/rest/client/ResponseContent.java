@@ -53,7 +53,11 @@ import org.apache.juneau.rest.client.assertion.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
  * </ul>
  */
-@SuppressWarnings({"resource", "java:S4144"})
+@SuppressWarnings({
+	"resource",
+	"java:S4144",
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., HEADER_ContentType)
+})
 public class ResponseContent implements HttpEntity {
 
 	private static final String HEADER_ContentType = "Content-Type";

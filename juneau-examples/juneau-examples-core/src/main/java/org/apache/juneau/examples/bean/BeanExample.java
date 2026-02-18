@@ -32,6 +32,7 @@ import org.apache.juneau.json.*;
  * Sub module of the core.
  *
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., CONST_timestamp)
 public class BeanExample {
 
 	private static final String CONST_timestamp = "2016-12-31T05:02:03Z";

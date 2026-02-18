@@ -51,7 +51,7 @@ public class ClassUtils {
 	public static final Predicate<Class<?>> NOT_VOID = ClassUtils::isNotVoid;
 
 	@SuppressWarnings("rawtypes")
-	private static Cache<Class,Boolean> MODIFIABLE_COLLECTION_TYPES = Cache.of(Class.class, Boolean.class).build();
+	private static Cache<Class,Boolean> modifiableCollectionTypes = Cache.of(Class.class, Boolean.class).build();
 
 	/**
 	 * Determines whether the specified collection supports modification operations (e.g., {@code add()}, {@code remove()}).
@@ -537,11 +537,11 @@ public class ClassUtils {
 	}
 
 	private static boolean canAddTo(Class<?> c) {
-		var b = MODIFIABLE_COLLECTION_TYPES.get(c);
+		var b = modifiableCollectionTypes.get(c);
 		if (b == null) {
 			var name = c.getName();
 			b = (! name.contains("Immutable") && ! name.contains("Unmodifiable") && ! name.contains("Arrays$ArrayList"));
-			MODIFIABLE_COLLECTION_TYPES.put(c, b);
+			modifiableCollectionTypes.put(c, b);
 		}
 		return b;
 	}

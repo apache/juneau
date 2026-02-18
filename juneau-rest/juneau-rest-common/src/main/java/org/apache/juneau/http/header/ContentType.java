@@ -60,7 +60,7 @@ public class ContentType extends BasicMediaTypeHeader {
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Content-Type";
 
-	private static Cache<String,ContentType> CACHE = Cache.of(String.class, ContentType.class).build();
+	private static Cache<String,ContentType> cache = Cache.of(String.class, ContentType.class).build();
 
 	// Constants
 	@SuppressWarnings("javadoc")
@@ -130,7 +130,7 @@ public class ContentType extends BasicMediaTypeHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentType of(String value) {
-		return value == null ? null : CACHE.get(value, () -> new ContentType(value));
+		return value == null ? null : cache.get(value, () -> new ContentType(value));
 	}
 
 	/**

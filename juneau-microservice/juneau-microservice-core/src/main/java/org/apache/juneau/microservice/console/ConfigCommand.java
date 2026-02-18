@@ -32,6 +32,7 @@ import org.apache.juneau.microservice.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceCoreBasics">juneau-microservice-core Basics</a>
  * </ul>
  */
+@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., MKEY_invalidArguments)
 public class ConfigCommand extends ConsoleCommand {
 
 	// Message bundle key constants

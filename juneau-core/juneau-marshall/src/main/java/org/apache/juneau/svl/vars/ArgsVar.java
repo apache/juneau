@@ -62,7 +62,7 @@ public class ArgsVar extends DefaultingVar {
 	/** The name of this variable. */
 	public static final String NAME = "A";
 
-	private static volatile Args ARGS;
+	private static volatile Args staticArgs;
 
 	/**
 	 * Initialize the args for this variable.
@@ -70,10 +70,9 @@ public class ArgsVar extends DefaultingVar {
 	 * @param args The parsed command-line arguments.
 	 */
 	public static void init(Args args) {
-		ARGS = args;
+		staticArgs = args;
 	}
 
-	@SuppressWarnings("java:S1845") // Field name intentionally differs only by case from static field ARGS
 	private final Args args;
 
 	/**
@@ -81,8 +80,8 @@ public class ArgsVar extends DefaultingVar {
 	 */
 	public ArgsVar() {
 		super(NAME);
-		if (nn(ARGS))
-			this.args = ARGS;
+		if (nn(staticArgs))
+			this.args = staticArgs;
 		else {
 			var s = System.getProperty("sun.java.command");
 			if (ne(s)) {

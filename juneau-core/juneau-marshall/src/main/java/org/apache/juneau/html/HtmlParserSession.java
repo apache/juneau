@@ -360,7 +360,7 @@ public class HtmlParserSession extends XmlParserSession {
 				o = sType.newInstanceFromString(outer, text);
 			else
 				isValid = false;
-			skipTag(r, tag == STRING ? xSTRING : xA);
+			skipTag(r, tag == STRING ? X_STRING : X_A);
 
 		} else if (tag == NUMBER) {
 			String text = getElementText(r);
@@ -370,7 +370,7 @@ public class HtmlParserSession extends XmlParserSession {
 				o = parseNumber(text, (Class<? extends Number>)sType.inner());
 			else
 				isValid = false;
-			skipTag(r, xNUMBER);
+			skipTag(r, X_NUMBER);
 
 		} else if (tag == BOOLEAN) {
 			String text = getElementText(r);
@@ -378,21 +378,21 @@ public class HtmlParserSession extends XmlParserSession {
 				o = Boolean.parseBoolean(text);
 			else
 				isValid = false;
-			skipTag(r, xBOOLEAN);
+			skipTag(r, X_BOOLEAN);
 
 		} else if (tag == P) {
 			String text = getElementText(r);
 			if (! "No Results".equals(text))
 				isValid = false;
-			skipTag(r, xP);
+			skipTag(r, X_P);
 
 		} else if (tag == NULL) {
 			skipTag(r, NULL);
-			skipTag(r, xNULL);
+			skipTag(r, X_NULL);
 
 		} else if (tag == A) {
 			o = parseAnchor(r, swap == null ? eType : null);
-			skipTag(r, xA);
+			skipTag(r, X_A);
 
 		} else if (tag == TABLE) {
 
@@ -424,7 +424,7 @@ public class HtmlParserSession extends XmlParserSession {
 				} else {
 					isValid = false;
 				}
-				skipTag(r, xTABLE);
+				skipTag(r, X_TABLE);
 
 			} else if (typeName.equals(TAG_array)) {
 				if (sType.isObject())
@@ -436,7 +436,7 @@ public class HtmlParserSession extends XmlParserSession {
 					o = toArray(sType, l);
 				} else
 					isValid = false;
-				skipTag(r, xTABLE);
+				skipTag(r, X_TABLE);
 
 			} else {
 				isValid = false;
@@ -456,7 +456,7 @@ public class HtmlParserSession extends XmlParserSession {
 				o = toArray(sType, parseIntoCollection(r, list(), sType, pMeta));
 			else
 				isValid = false;
-			skipTag(r, xUL);
+			skipTag(r, X_UL);
 
 		}
 
@@ -481,8 +481,8 @@ public class HtmlParserSession extends XmlParserSession {
 	@SuppressWarnings("java:S3776")
 	private <T> BeanMap<T> parseIntoBean(XmlReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		while (true) {
-			HtmlTag tag = nextTag(r, TR, xTABLE);
-			if (tag == xTABLE)
+			HtmlTag tag = nextTag(r, TR, X_TABLE);
+			if (tag == X_TABLE)
 				break;
 			tag = nextTag(r, TD, TH);
 			// Skip over the column headers.
@@ -508,9 +508,9 @@ public class HtmlParserSession extends XmlParserSession {
 					}
 				}
 			}
-			HtmlTag t = nextTag(r, xTD, xTR);
-			if (t == xTD)
-				nextTag(r, xTR);
+			HtmlTag t = nextTag(r, X_TD, X_TR);
+			if (t == X_TD)
+				nextTag(r, X_TR);
 		}
 		return m;
 	}
@@ -524,10 +524,10 @@ public class HtmlParserSession extends XmlParserSession {
 	private <E> Collection<E> parseIntoCollection(XmlReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		int argIndex = 0;
 		while (true) {
-			HtmlTag tag = nextTag(r, LI, xUL, xLI);
-			if (tag == xLI)
-				tag = nextTag(r, LI, xUL, xLI);
-			if (tag == xUL)
+			HtmlTag tag = nextTag(r, LI, X_UL, X_LI);
+			if (tag == X_LI)
+				tag = nextTag(r, LI, X_UL, X_LI);
+			if (tag == X_UL)
 				break;
 			var elementType = type.isArgs() ? type.getArg(argIndex++) : type.getElementType();
 			l.add((E)parseAnything(elementType, r, l, false, pMeta));
@@ -544,8 +544,8 @@ public class HtmlParserSession extends XmlParserSession {
 	private <K,V> Map<K,V> parseIntoMap(XmlReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException, XMLStreamException {
 		while (true) {
-			HtmlTag tag = nextTag(r, TR, xTABLE);
-			if (tag == xTABLE)
+			HtmlTag tag = nextTag(r, TR, X_TABLE);
+			if (tag == X_TABLE)
 				break;
 			tag = nextTag(r, TD, TH);
 			// Skip over the column headers.
@@ -560,9 +560,9 @@ public class HtmlParserSession extends XmlParserSession {
 				setName(valueType, value, key);
 				m.put(key, value);
 			}
-			tag = nextTag(r, xTD, xTR);
-			if (tag == xTD)
-				nextTag(r, xTR);
+			tag = nextTag(r, X_TD, X_TR);
+			if (tag == X_TD)
+				nextTag(r, X_TR);
 		}
 
 		return m;
@@ -581,8 +581,8 @@ public class HtmlParserSession extends XmlParserSession {
 		List<String> keys = list();
 		HtmlTag tag;
 		while (true) {
-			tag = nextTag(r, TH, xTR);
-			if (tag == xTR)
+			tag = nextTag(r, TH, X_TR);
+			if (tag == X_TR)
 				break;
 			keys.add(getElementText(r));
 		}
@@ -592,7 +592,7 @@ public class HtmlParserSession extends XmlParserSession {
 		while (true) {
 			r.nextTag();
 			tag = HtmlTag.forEvent(this, r);
-			if (tag == xTABLE)
+			if (tag == X_TABLE)
 				break;
 
 			ClassMeta elementType = null;
@@ -615,12 +615,12 @@ public class HtmlParserSession extends XmlParserSession {
 				;
 				// @formatter:on
 				for (var key : keys) {
-					tag = nextTag(r, xTD, TD, NULL);
-					if (tag == xTD)
+					tag = nextTag(r, X_TD, TD, NULL);
+					if (tag == X_TD)
 						tag = nextTag(r, TD, NULL);
 					if (tag == NULL) {
 						m = null;
-						nextTag(r, xNULL);
+						nextTag(r, X_NULL);
 						break;
 					}
 					BeanMapEntry e = m.getProperty(key);
@@ -650,7 +650,7 @@ public class HtmlParserSession extends XmlParserSession {
 					tag = nextTag(r, TD, NULL);
 					if (tag == NULL) {
 						m = null;
-						nextTag(r, xNULL);
+						nextTag(r, X_NULL);
 						break;
 					}
 					if (nn(m)) {
@@ -672,7 +672,7 @@ public class HtmlParserSession extends XmlParserSession {
 						l.add((E)m);
 				}
 			}
-			nextTag(r, xTR);
+			nextTag(r, X_TR);
 		}
 		return l;
 	}
