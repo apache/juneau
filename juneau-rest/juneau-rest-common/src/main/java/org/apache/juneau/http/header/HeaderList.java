@@ -731,6 +731,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @param value The headers to replace.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
+	@SuppressWarnings("java:S127") // Loop counter j decrements when removing elements
 	public HeaderList set(Header value) {
 		if (nn(value)) {
 			var replaced = false;
@@ -778,7 +779,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({"java:S127", "java:S3776"}) // S127: loop counter j2 decrements when removing
 	public HeaderList set(List<Header> values) {
 
 		if (nn(values)) {

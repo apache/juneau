@@ -105,6 +105,7 @@ public class XmlUtils {
 	 * @param sb The string builder to use as a scratch pad.
 	 * @return The decoded string.
 	 */
+	@SuppressWarnings("java:S127") // Loop counter advances to skip _xXXXX_ escape sequences
 	public static String decode(String value, StringBuilder sb) {
 		if (value == null)
 			return null;

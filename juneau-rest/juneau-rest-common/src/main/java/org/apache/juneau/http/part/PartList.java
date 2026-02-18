@@ -705,7 +705,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @param values The parts to replace.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({"java:S127", "java:S3776"}) // S127: loop counter j2 decrements when removing
 	public PartList set(List<NameValuePair> values) {
 
 		if (nn(values)) {
@@ -740,6 +740,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @param value The part to replace.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
+	@SuppressWarnings("java:S127") // Loop counter j decrements when removing elements
 	public PartList set(NameValuePair value) {
 		if (nn(value)) {
 			var replaced = false;

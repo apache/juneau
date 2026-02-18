@@ -6201,6 +6201,7 @@ public class RestContext extends Context {
 	 * @throws BasicHttpException Non-200 response.
 	 * @throws NotImplemented No registered response processors could handle the call.
 	 */
+	@SuppressWarnings("java:S127") // Loop counter i resets to -1 on RESTART
 	protected void processResponse(RestOpSession opSession) throws IOException, BasicHttpException, NotImplemented {
 
 		// Loop until we find the correct processor for the POJO.

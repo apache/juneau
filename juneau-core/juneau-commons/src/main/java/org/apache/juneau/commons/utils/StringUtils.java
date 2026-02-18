@@ -4268,6 +4268,7 @@ public class StringUtils {
 	 * @param str The string to count lines in. Can be <jk>null</jk>.
 	 * @return The number of lines, or <c>0</c> if the string is <jk>null</jk> or empty.
 	 */
+	@SuppressWarnings("java:S127") // Loop counter advances to skip \r\n as single line break
 	public static int lineCount(String str) {
 		if (isEmpty(str))
 			return 0;
@@ -4279,9 +4280,8 @@ public class StringUtils {
 				count++;
 			} else if (c == '\r') {
 				// Handle \r\n as a single line break
-				if (i + 1 < str.length() && str.charAt(i + 1) == '\n') {
-					i++; // Skip the \n
-				}
+				if (i + 1 < str.length() && str.charAt(i + 1) == '\n')
+					i++;
 				count++;
 			}
 		}
@@ -7486,7 +7486,8 @@ public class StringUtils {
 	 * @return A new string if characters were removed, or the same string if not or if the input was <jk>null</jk>.
 	 */
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for character unescaping logic
+		"java:S127",  // Loop counter advances to skip escape sequences
+		"java:S3776"  // Cognitive complexity acceptable for character unescaping logic
 	})
 	public static String unescapeChars(String s, AsciiSet escaped) {
 		if (s == null || s.isEmpty())
@@ -7681,7 +7682,8 @@ public class StringUtils {
 	 * @return The URL encoded string, or <jk>null</jk> if the object was null.
 	 */
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for URL path encoding
+		"java:S127",  // Loop counter advances variably for surrogate pairs and multi-byte sequences
+		"java:S3776"  // Cognitive complexity acceptable for URL path encoding
 	})
 	public static String urlEncodePath(Object o) {
 
