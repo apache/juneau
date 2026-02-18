@@ -28,7 +28,13 @@ import java.text.*;
  */
 public class BasicRuntimeException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
+	@SuppressWarnings({
+		"java:S1104" // Field may be set via setUnmodifiable() method
+	})
 	boolean unmodifiable;
+	@SuppressWarnings({
+		"java:S1104" // Field reassigned via setMessage() method, cannot be final
+	})
 	String message;
 
 	/**

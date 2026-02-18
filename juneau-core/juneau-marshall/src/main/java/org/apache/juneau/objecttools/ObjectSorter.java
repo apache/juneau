@@ -55,7 +55,11 @@ import org.apache.juneau.*;
 
  * </ul>
  */
-@SuppressWarnings({ "unchecked", "rawtypes", "java:S6541" }) // Stateless utility, singleton for convenience
+@SuppressWarnings({
+	"unchecked", // Type erasure requires unchecked casts
+	"rawtypes", // Raw types necessary for generic type handling
+	"java:S6541" // Stateless utility, singleton for convenience
+})
 public class ObjectSorter implements ObjectTool<SortArgs> {
 	private static class SortEntry implements Comparable {
 		Object o;

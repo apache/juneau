@@ -169,6 +169,9 @@ public class BeanTraverseSession extends BeanSession {
 	private ClassMeta<?> currentClass;
 	private boolean isBottom;                                                       // If 'true', then we're at a leaf in the model (i.e. a String, Number, Boolean, or null).
 	/** The current indentation depth into the model. */
+	@SuppressWarnings({
+		"java:S1104" // Public field accessed externally (e.g., session.indent = 6)
+	})
 	public int indent;
 	private int depth;
 

@@ -137,6 +137,9 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @serial exclude
 	 */
+	@SuppressWarnings({
+		"java:S2386" // Public static final field accessed externally, cannot be protected
+	})
 	public static final JsonMap EMPTY_MAP = new JsonMap() {
 
 		private static final long serialVersionUID = 1L;

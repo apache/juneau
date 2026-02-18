@@ -145,16 +145,41 @@ public final class StringFormat {
 				this.placeholder = "{" + index + "}";
 			} else if (content.indexOf(',') == -1) {
 				this.content = null;
-				this.index = parseIndexMF(content);
+				this.index = parseIndex(content);
 				this.format = 's';
 				this.placeholder = "{" + this.index + "}";
 			} else {
 				var tokens = content.split(",", 2);
-				this.index = parseIndexMF(tokens[0]);
+				this.index = parseIndex(tokens[0]);
 				this.content = "{0," + tokens[1] + "}";
 				this.format = 'o';
 				this.placeholder = "{" + this.index + "," + tokens[1] + "}";
 			}
+		}
+
+		/**
+		 * Parses the index from a MessageFormat content string.
+		 *
+		 * @param s The content string (e.g., "0", "1").
+		 * @return The parsed index.
+		 * @throws IllegalArgumentException If the string is not a valid number.
+		 */
+		private static int parseIndex(String s) {
+			if (! s.matches("\\d+")) throw new IllegalArgumentException("can't parse argument number: " + s);
+			return Integer.parseInt(s);
+		}
+
+		/**
+		 * Creates a MessageFormatToken and adds it to the tokens list.
+		 *
+		 * @param tokens The list of tokens to add to.
+		 * @param pattern The pattern string.
+		 * @param start The start index in the pattern.
+		 * @param end The end index in the pattern.
+		 * @param index The token index.
+		 */
+		static void create(List<Token> tokens, String pattern, int start, int end, int index) {
+			tokens.add(new MessageFormatToken(pattern.substring(start, end), index));
 		}
 
 		@Override
@@ -201,12 +226,35 @@ public final class StringFormat {
 		// content is everything after '%' (e.g., "s", "1$s", "d", ".2f", "1$.2f")
 		var dollarIndex = content.indexOf('$');
 		if (dollarIndex >= 0) {
-			index = parseIndexSF(content.substring(0, dollarIndex)) - 1;
+			index = parseIndex(content.substring(0, dollarIndex)) - 1;
 			content = content.substring(dollarIndex + 1);
 		}
 			this.format = content.length() == 1 ? content.charAt(content.length() - 1) : 'z';
 			this.index = index;
 			this.content = "%" + content;
+		}
+
+		/**
+		 * Parses the index from a StringFormat content string.
+		 *
+		 * @param s The content string (e.g., "1", "2").
+		 * @return The parsed index.
+		 */
+		private static int parseIndex(String s) {
+			return Integer.parseInt(s);
+		}
+
+		/**
+		 * Creates a StringFormatToken and adds it to the tokens list.
+		 *
+		 * @param tokens The list of tokens to add to.
+		 * @param pattern The pattern string.
+		 * @param start The start index in the pattern.
+		 * @param end The end index in the pattern.
+		 * @param index The token index.
+		 */
+		static void create(List<Token> tokens, String pattern, int start, int end, int index) {
+			tokens.add(new StringFormatToken(pattern.substring(start, end), index));
 		}
 
 		@Override
@@ -466,19 +514,6 @@ public final class StringFormat {
 		tokens.add(new LiteralToken(pattern.substring(start, end)));
 	}
 
-	private static void mf(List<Token> tokens, String pattern, int start, int end, int index) {
-		tokens.add(new MessageFormatToken(pattern.substring(start, end), index));
-	}
-
-	private static int parseIndexMF(String s) {
-		if (! s.matches("\\d+")) throw new IllegalArgumentException("can't parse argument number: " + s);
-		return Integer.parseInt(s);
-	}
-
-	private static int parseIndexSF(String s) {
-		return Integer.parseInt(s);
-	}
-
 	/**
 	 * Parses the pattern into a list of tokens.
 	 */
@@ -538,7 +573,7 @@ public final class StringFormat {
 				} else if (ch == 't' || ch == 'T') {
 					// Do nothing.  Part of 2-character time conversion.
 				} else if (PRINTF_CONVERSION_CHARS.contains(ch)) {
-					sf(tokens, pattern, mark, i, sequentialIndex++);
+					StringFormatToken.create(tokens, pattern, mark, i, sequentialIndex++);
 					state = S1;
 					mark = i;
 				} else if (PRINTF_FORMAT_CHARS.contains(ch) || Character.isDigit(ch)) {
@@ -548,7 +583,7 @@ public final class StringFormat {
 					// Create StringFormatToken and let String.format() validate it
 					// This allows String.format() to throw IllegalFormatException for invalid conversions like %F
 					// printfStart is position after '%', so substring from printfStart-1 (the '%') to i (after the char)
-					sf(tokens, pattern, mark, i, sequentialIndex++);
+					StringFormatToken.create(tokens, pattern, mark, i, sequentialIndex++);
 					state = S1;
 					mark = i;
 				}
@@ -559,7 +594,7 @@ public final class StringFormat {
 					if (nestedBracketDepth > 0) {
 						nestedBracketDepth--;
 					} else {
-						mf(tokens, pattern, mark + 1, i - 1, sequentialIndex++);
+						MessageFormatToken.create(tokens, pattern, mark + 1, i - 1, sequentialIndex++);
 						state = S1;
 						mark = i;
 					}
@@ -598,9 +633,6 @@ public final class StringFormat {
 		return tokens;
 	}
 
-	private static void sf(List<Token> tokens, String pattern, int start, int end, int index) {
-		tokens.add(new StringFormatToken(pattern.substring(start, end), index));
-	}
 
 	private static String sf(Locale l, String s, Object o) {
 		return String.format(l, s, a(o));

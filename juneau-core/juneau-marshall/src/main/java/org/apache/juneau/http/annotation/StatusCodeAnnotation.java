@@ -90,7 +90,7 @@ public class StatusCodeAnnotation {
 	public static class Builder extends AppliedAnnotationObject.BuilderTM {
 
 		private String[] description = {};
-		private int value[] = {};
+		private int[] value = {};
 
 		/**
 		 * Constructor.

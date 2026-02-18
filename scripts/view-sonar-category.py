@@ -20,7 +20,7 @@ import json
 import sys
 from pathlib import Path
 
-# NOSONAR -- S3776: Cognitive complexity is acceptable for this script function
+# NOSONAR python:S3776 -- Cognitive complexity is acceptable for this script function
 def main():
     json_file = Path('/Users/james.bognar/Downloads/SonarQubeIssues.categorized.json')
     

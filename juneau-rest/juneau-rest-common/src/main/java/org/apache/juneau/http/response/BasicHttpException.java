@@ -63,8 +63,17 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 
 	private static final long serialVersionUID = 1L;
 
+	@SuppressWarnings({
+		"java:S1104" // Fields reassigned after construction, cannot be final
+	})
 	HeaderList headers = HeaderList.create();
+	@SuppressWarnings({
+		"java:S1104" // Field reassigned after construction, cannot be final
+	})
 	transient BasicStatusLine statusLine = new BasicStatusLine();
+	@SuppressWarnings({
+		"java:S1104" // Field reassigned after construction, cannot be final
+	})
 	transient HttpEntity content;
 
 	/**

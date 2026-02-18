@@ -42,13 +42,17 @@ import java.time.*;
  * 	<li class='jm'>{@link GranularZonedDateTime}
  * </ul>
  */
-@SuppressWarnings("java:S6541") // Intentional singleton for extensibility
+@SuppressWarnings({
+	"java:S6541" // Intentional singleton for extensibility
+})
 public class TimeProvider {
 
 	/**
 	 * The default instance that uses the system's time and timezone.
 	 */
-	@SuppressWarnings("java:S6541") // Intentional singleton for extensibility
+	@SuppressWarnings({
+		"java:S6541" // Intentional singleton for extensibility
+	})
 	public static final TimeProvider INSTANCE = new TimeProvider();
 
 	/**

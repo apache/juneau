@@ -244,6 +244,9 @@ public class JsonSchemaPropertySimpleArray extends JsonSchemaProperty {
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #setIdUri(Object)} instead.
+	 */
 	@Override /* Overridden from JsonSchemaProperty */
 	@Deprecated(since = "10.0", forRemoval = true) // Parent method is deprecated
 	public JsonSchemaPropertySimpleArray setId(Object value) {

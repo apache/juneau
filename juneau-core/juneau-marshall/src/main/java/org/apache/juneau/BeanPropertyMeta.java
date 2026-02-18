@@ -1025,7 +1025,10 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 	}
 
-	@SuppressWarnings("java:S3776") // Cognitive complexity is acceptable for this complex property setter
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for complex property setter
+		"java:S6541" // Brain method acceptable - complex property value setting logic requires high LOC/complexity
+	})
 	private Object setPropertyValue(BeanMap<?> m, String pName, Object value1, Object bean, boolean isMap, boolean isCollection, BeanSession session) throws ParseException {
 		try {
 			var r = (bc.isBeanMapPutReturnsOldValue() || isMap || isCollection) && (nn(getter) || nn(field)) ? get(m, pName) : null;

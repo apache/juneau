@@ -6973,7 +6973,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * 	<br>Can be <jk>null</jk> (will use the default parser from the client).
 	 * @return The new proxy interface.
 	 */
-	@SuppressWarnings({ "unchecked", "java:S3776" })
+	@SuppressWarnings({
+		"unchecked", // Type erasure requires unchecked casts
+		"java:S3776", // Cognitive complexity acceptable for remote proxy creation
+		"java:S6541" // Brain method acceptable - remote proxy creation requires complex initialization logic
+	})
 	public <T> T getRemote(Class<T> interfaceClass, Object rootUrl, Serializer serializer, Parser parser) {
 
 		if (rootUrl == null)
@@ -7774,6 +7778,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		return new RestResponse(this, request, httpResponse, parser);
 	}
 
+	/**
+	 * @deprecated Object.finalize() is deprecated. Use try-with-resources or explicit close() calls instead.
+	 */
 	@Override
 	@Deprecated(since = "9", forRemoval = true) // Object.finalize() is deprecated
 	protected void finalize() throws Throwable {

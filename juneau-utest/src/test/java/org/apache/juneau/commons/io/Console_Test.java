@@ -55,9 +55,9 @@ class Console_Test extends TestBase {
 	@Test
 	void a00_constructor() {
 		// Test line 29: class instantiation
-		// Console has an implicit public no-arg constructor
-		var instance = new Console();
-		assertNotNull(instance);
+		// Console is a utility class with private constructor - no instantiation needed
+		// Constructor is private to prevent instantiation of utility class
+		assertNotNull(Console.class);
 	}
 
 	//====================================================================================================

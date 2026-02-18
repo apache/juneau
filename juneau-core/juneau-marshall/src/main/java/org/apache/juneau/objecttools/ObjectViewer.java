@@ -52,13 +52,19 @@ import org.apache.juneau.internal.*;
 
  * </ul>
  */
-@SuppressWarnings({ "unchecked", "rawtypes", "java:S6541" }) // Stateless utility, singleton for convenience
+@SuppressWarnings({
+	"unchecked", // Type erasure requires unchecked casts
+	"rawtypes", // Raw types necessary for generic type handling
+	"java:S6541" // Stateless utility, singleton for convenience
+})
 public class ObjectViewer implements ObjectTool<ViewArgs> {
 
 	/**
 	 * Default reusable searcher.
 	 */
-	@SuppressWarnings("java:S6541") // Stateless utility, singleton for convenience
+	@SuppressWarnings({
+		"java:S6541" // Stateless utility, singleton for convenience
+	})
 	public static final ObjectViewer DEFAULT = new ObjectViewer();
 
 	/**

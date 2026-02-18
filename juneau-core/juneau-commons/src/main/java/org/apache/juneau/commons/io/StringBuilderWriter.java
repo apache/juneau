@@ -194,7 +194,7 @@ public class StringBuilderWriter extends Writer {
 	}
 
 	@Override /* Overridden from Writer */
-	public void write(char cbuf[], int start, int length) {
+	public void write(char[] cbuf, int start, int length) {
 		assertArgNotNull(ARG_cbuf, cbuf);
 		sb.append(cbuf, start, length);
 	}

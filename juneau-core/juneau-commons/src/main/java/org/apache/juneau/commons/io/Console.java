@@ -32,7 +32,7 @@ public class Console {
 	/**
 	 * Constructor.
 	 */
-	public Console() {
+	private Console() {
 		// No-op: Intentional empty constructor
 	}
 

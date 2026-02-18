@@ -473,6 +473,30 @@ public abstract class Context {
 		}
 
 		/**
+		 * Traverses the specified object and adds applicable annotations to the work list.
+		 *
+		 * @param work The annotation work list to add to.
+		 * @param x The object to traverse (Class, ClassInfo, Method, or MethodInfo).
+		 * @return The work list.
+		 */
+		private AnnotationWorkList traverse(AnnotationWorkList work, Object x) {
+			var ap = AP;
+			CollectionUtils.traverse(x, y -> {
+				if (x instanceof Class<?> x2)
+					work.add(rstream(ap.find(info(x2))).filter(CONTEXT_APPLY_FILTER));
+				else if (x instanceof ClassInfo x2)
+					work.add(rstream(ap.find(x2)).filter(CONTEXT_APPLY_FILTER));
+				else if (x instanceof Method x2)
+					work.add(rstream(ap.find(info(x2))).filter(CONTEXT_APPLY_FILTER));
+				else if (x instanceof MethodInfo x2)
+					work.add(rstream(ap.find(x2)).filter(CONTEXT_APPLY_FILTER));
+				else
+					illegalArg("Invalid type passed to applyAnnotations:  {0}", cn(x));
+			});
+			return work;
+		}
+
+		/**
 		 * Returns this builder cast to the specified subtype if it is an instance of that type.
 		 *
 		 * <p>
@@ -844,22 +868,6 @@ public abstract class Context {
 		}
 	}
 
-	private static AnnotationWorkList traverse(AnnotationWorkList work, Object x) {
-		var ap = AP;
-		CollectionUtils.traverse(x, y -> {
-			if (x instanceof Class<?> x2)
-				work.add(rstream(ap.find(info(x2))).filter(CONTEXT_APPLY_FILTER));
-			else if (x instanceof ClassInfo x2)
-				work.add(rstream(ap.find(x2)).filter(CONTEXT_APPLY_FILTER));
-			else if (x instanceof Method x2)
-				work.add(rstream(ap.find(info(x2))).filter(CONTEXT_APPLY_FILTER));
-			else if (x instanceof MethodInfo x2)
-				work.add(rstream(ap.find(x2)).filter(CONTEXT_APPLY_FILTER));
-			else
-				illegalArg("Invalid type passed to applyAnnotations:  {0}", cn(x));
-		});
-		return work;
-	}
 
 	private final AnnotationProvider annotationProvider;
 	private final boolean debug;

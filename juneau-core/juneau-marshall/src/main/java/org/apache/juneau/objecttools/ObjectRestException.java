@@ -48,7 +48,7 @@ public class ObjectRestException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	private int status;
+	private final int status;
 
 	/**
 	 * Constructor.

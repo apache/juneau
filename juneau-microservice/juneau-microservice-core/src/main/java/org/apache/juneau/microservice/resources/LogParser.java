@@ -38,7 +38,10 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 	/**
 	 * Represents a single line from the log file.
 	 */
-	@SuppressWarnings("javadoc")
+	@SuppressWarnings({
+		"javadoc",
+		"java:S1104" // Public fields accessed externally (e.g., le.severity)
+	})
 	public class Entry {
 		public Date date;
 		public String severity;

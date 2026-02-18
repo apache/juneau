@@ -303,6 +303,33 @@ public class ReflectionMap<V> {
 		public ReflectionMap<V> build() {
 			return new ReflectionMap<>(this);
 		}
+
+		/**
+		 * Splits a comma-delimited key string into individual keys, respecting escaped commas within parentheses.
+		 *
+		 * @param key The key string to split.
+		 * @param consumer The consumer to accept each split key.
+		 */
+		private void splitNames(String key, Consumer<String> consumer) {
+			if (key.indexOf(',') == -1) {
+				consumer.accept(key);
+			} else {
+				var m = 0;
+				var escaped = false;
+				for (var i = 0; i < key.length(); i++) {
+					var c = key.charAt(i);
+					if (c == '(')
+						escaped = true;
+					else if (c == ')')
+						escaped = false;
+					else if (c == ',' && ! escaped) {
+						consumer.accept(key.substring(m, i).trim());
+						m = i + 1;
+					}
+				}
+				consumer.accept(key.substring(m).trim());
+			}
+		}
 	}
 
 	private static class ClassEntry<V> {
@@ -351,7 +378,7 @@ public class ReflectionMap<V> {
 
 		String simpleClassName;
 		String fullClassName;
-		String args[];
+		String[] args;
 		V value;
 
 		ConstructorEntry(String name, V value) {
@@ -446,7 +473,7 @@ public class ReflectionMap<V> {
 		String simpleClassName;
 		String fullClassName;
 		String methodName;
-		String args[];
+		String[] args;
 		V value;
 
 		MethodEntry(String name, V value) {
@@ -595,26 +622,6 @@ public class ReflectionMap<V> {
 		return null;
 	}
 
-	private static void splitNames(String key, Consumer<String> consumer) {
-		if (key.indexOf(',') == -1) {
-			consumer.accept(key);
-		} else {
-			var m = 0;
-			var escaped = false;
-			for (var i = 0; i < key.length(); i++) {
-				var c = key.charAt(i);
-				if (c == '(')
-					escaped = true;
-				else if (c == ')')
-					escaped = false;
-				else if (c == ',' && ! escaped) {
-					consumer.accept(key.substring(m, i).trim());
-					m = i + 1;
-				}
-			}
-			consumer.accept(key.substring(m).trim());
-		}
-	}
 
 	private static String stripGenerics(String type) {
 		if (type.indexOf('<') == -1)

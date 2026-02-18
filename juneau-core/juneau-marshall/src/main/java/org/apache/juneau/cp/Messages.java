@@ -119,9 +119,9 @@ public class Messages extends ResourceBundle {
 	public static class Builder extends BeanBuilder<Messages> {
 
 		private static class MessagesString {
-			public String name;
-			public String[] baseNames;
-			public String locale;
+			private String name;
+			private String[] baseNames;
+			private String locale;
 		}
 
 		Class<?> forClass;

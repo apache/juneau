@@ -154,7 +154,8 @@ public class JsonList extends LinkedList<Object> {
 	 * @serial exclude
 	 */
 	@SuppressWarnings({
-		"java:S110" // Anonymous class has many fields, acceptable for collection implementation
+		"java:S110", // Anonymous class has many fields, acceptable for collection implementation
+		"java:S2386" // Public static final field accessed externally, cannot be protected
 	})
 	public static final JsonList EMPTY_LIST = new JsonList() {
 		private static final long serialVersionUID = 1L;

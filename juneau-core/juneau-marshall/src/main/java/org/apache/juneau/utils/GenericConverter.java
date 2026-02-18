@@ -50,7 +50,9 @@ import org.apache.juneau.commons.conversion.*;
  * 	<li class='jm'>{@link BeanSession#convertToType(Object, Class)}
  * </ul>
  */
-@SuppressWarnings("java:S6541") // Stateless converter, singleton for convenience
+@SuppressWarnings({
+	"java:S6541" // Stateless converter, singleton for convenience
+})
 public class GenericConverter implements Converter {
 
 	/**
@@ -59,7 +61,9 @@ public class GenericConverter implements Converter {
 	 * <p>
 	 * This instance can be safely shared across multiple threads and reused for all conversion operations.
 	 */
-	@SuppressWarnings("java:S6541") // Stateless converter, singleton for convenience
+	@SuppressWarnings({
+		"java:S6541" // Stateless converter, singleton for convenience
+	})
 	public static final GenericConverter INSTANCE = new GenericConverter();
 
 	/**

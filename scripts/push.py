@@ -79,7 +79,7 @@ def run_command(cmd, description, cwd=None):
         return False
 
 
-# NOSONAR -- S3776: Cognitive complexity is acceptable for this utility function
+# NOSONAR python:S3776 -- Cognitive complexity is acceptable for this utility function
 def play_sound(success=True):
     """
     Play a system sound to indicate success or failure.
@@ -146,7 +146,7 @@ def play_sound(success=True):
         pass
 
 
-# NOSONAR -- S3776: Cognitive complexity is acceptable for this utility function
+# NOSONAR python:S3776 -- Cognitive complexity is acceptable for this utility function
 def play_sound(success=True):
     """
     Play a system sound to indicate success or failure.
@@ -296,7 +296,7 @@ def check_upstream_changes(repo_dir):
         return (False, f"Error checking upstream changes: {e}")
 
 
-# NOSONAR -- S3776: Cognitive complexity is acceptable for this utility function
+# NOSONAR python:S3776 -- Cognitive complexity is acceptable for this utility function
 def play_sound(success=True):
     """
     Play a system sound to indicate success or failure.
@@ -363,7 +363,7 @@ def play_sound(success=True):
         pass
 
 
-# NOSONAR -- S3776: Cognitive complexity is acceptable for this main function
+# NOSONAR python:S3776 -- Cognitive complexity is acceptable for this main function
 def main():
     parser = argparse.ArgumentParser(
         description="Build, test, and push Juneau project to Git repository",
@@ -486,7 +486,7 @@ Examples:
     step_num += 1
     
     # Check if local branch is behind upstream
-    print(f"\n🔍 Checking for upstream changes...")
+    print("\n🔍 Checking for upstream changes...")
     is_behind, error_msg = check_upstream_changes(juneau_root)
     if error_msg:
         print(f"\n⚠ Warning: Could not check upstream changes: {error_msg}")
