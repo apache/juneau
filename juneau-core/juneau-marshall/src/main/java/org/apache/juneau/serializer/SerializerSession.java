@@ -376,12 +376,8 @@ public class SerializerSession extends BeanTraverseSession {
 				return true;
 		}
 
-		if (isTrimEmptyMaps()) {
-			if (cm.isMap() || (cm.isObject() && info(value).isAssignableTo(Map.class))) {
-				if (((Map<?,?>)value).isEmpty())
-					return true;
-			}
-		}
+		if (isTrimEmptyMaps() && (cm.isMap() || (cm.isObject() && info(value).isAssignableTo(Map.class))) && ((Map<?,?>)value).isEmpty())
+			return true;
 
 		try {
 			if ((! isKeepNullProperties()) && (willRecurse(attrName, value, cm) || willExceedDepth()))

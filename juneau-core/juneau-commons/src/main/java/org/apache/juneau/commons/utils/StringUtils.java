@@ -4439,12 +4439,7 @@ public class StringUtils {
 						result.append('T');
 					}
 					break;
-				case 'F':
-				case 'J':
-				case 'L':
-				case 'M':
-				case 'N':
-				case 'R':
+				case 'F', 'J', 'L', 'M', 'N', 'R':
 					result.append(c);
 					break;
 				case 'G':

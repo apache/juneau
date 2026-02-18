@@ -4413,9 +4413,7 @@ public class HttpPartSchema {
 				}
 				break;
 			}
-			case BOOLEAN:
-			case FILE:
-			case NO_TYPE:
+			case BOOLEAN, FILE, NO_TYPE:
 				break;
 			default:
 				break;

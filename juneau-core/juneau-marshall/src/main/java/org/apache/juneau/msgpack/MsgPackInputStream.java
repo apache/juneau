@@ -142,8 +142,7 @@ public class MsgPackInputStream extends ParserInputStream {
 			throw ioex("Unexpected end of file found at position {0}", pos2);
 		currentDataType = TYPES[i];
 		switch (currentDataType) {
-			case NULL:
-			case FLOAT: {
+			case NULL, FLOAT: {
 				length = 4;
 				break;
 			}

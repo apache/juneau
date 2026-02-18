@@ -2793,9 +2793,8 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 			var ta = innerType2.getActualTypeArguments();
 			if (ta.length > 0)
 				return ta[0];
-		} else if (innerType instanceof Class<?> innerType3) /* Class that extends Optional<T> */ {
-			if (innerType3 != parameterizedType && parameterizedType.isAssignableFrom(innerType3))
-				return ClassInfo.of(innerType3).getParameterType(0, parameterizedType);
+		} else if (innerType instanceof Class<?> innerType3 && innerType3 != parameterizedType && parameterizedType.isAssignableFrom(innerType3)) /* Class that extends Optional<T> */ {
+			return ClassInfo.of(innerType3).getParameterType(0, parameterizedType);
 		}
 		return null;
 	}
