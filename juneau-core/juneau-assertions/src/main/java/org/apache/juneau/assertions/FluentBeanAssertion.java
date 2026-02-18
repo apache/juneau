@@ -164,7 +164,7 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	}
 
 	@Override /* Overridden from FluentObjectAssertion */
-	public FluentBeanAssertion<T,R> asTransformed(Function<T,T> function) {
+	public FluentBeanAssertion<T,R> asTransformed(UnaryOperator<T> function) {
 		return new FluentBeanAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 

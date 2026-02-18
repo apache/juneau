@@ -66,7 +66,7 @@ public class StringSetting extends Setting<String> {
 	 * @param mapper A mapping function to apply to the value, if present. Must not be <jk>null</jk>.
 	 * @return A StringSetting describing the result of applying a mapping function to the value of this StringSetting, if a value is present, otherwise an empty StringSetting.
 	 */
-	public StringSetting mapString(Function<String, String> mapper) {
+	public StringSetting mapString(UnaryOperator<String> mapper) {
 		assertArgNotNull(ARG_mapper, mapper);
 		return new StringSetting(getSettings(), () -> {
 			String value = get();

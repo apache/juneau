@@ -98,7 +98,7 @@ public interface FunctionalSource extends SettingSource {
 	 * @param function The function to delegate property lookups to. Must not be <c>null</c>.
 	 * @return A new functional source instance.
 	 */
-	static FunctionalSource of(Function<String, String> function) {
+	static FunctionalSource of(UnaryOperator<String> function) {
 		return name -> {
 			var v = function.apply(name);
 			return v == null ? null : opt(v);

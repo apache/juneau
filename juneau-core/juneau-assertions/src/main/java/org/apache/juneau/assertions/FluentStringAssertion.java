@@ -287,7 +287,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	}
 
 	@Override /* Overridden from FluentObjectAssertion */
-	public FluentStringAssertion<R> asTransformed(Function<String,String> function) {
+	public FluentStringAssertion<R> asTransformed(UnaryOperator<String> function) {
 		return new FluentStringAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 

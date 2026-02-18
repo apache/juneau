@@ -26,8 +26,8 @@ public class Mod {
 	/** A no-op modifier. */
 	public static final Mod NO_OP = new Mod(' ', x -> x, x -> x, x -> true);
 	private final char id;
-	private final Function<String,String> removeFunction;
-	private final Function<String,String> applyFunction;
+	private final UnaryOperator<String> removeFunction;
+	private final UnaryOperator<String> applyFunction;
 	private final Function<String,Boolean> detectFunction;
 
 	/**
@@ -44,7 +44,7 @@ public class Mod {
 	 * 	The function to apply to detect whether the modification has been made.
 	 * 	Can be <jk>null</jk> if you override the {@link #isApplied(String)} method.
 	 */
-	public Mod(char id, Function<String,String> applyFunction, Function<String,String> removeFunction, Function<String,Boolean> detectFunction) {
+	public Mod(char id, UnaryOperator<String> applyFunction, UnaryOperator<String> removeFunction, Function<String,Boolean> detectFunction) {
 		this.id = id;
 		this.applyFunction = applyFunction;
 		this.removeFunction = removeFunction;

@@ -261,7 +261,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @param function The function to apply.
 	 * @return This object.
 	 */
-	public FluentObjectAssertion<T,R> asTransformed(Function<T,T> function) {
+	public FluentObjectAssertion<T,R> asTransformed(UnaryOperator<T> function) {
 		return new FluentObjectAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 

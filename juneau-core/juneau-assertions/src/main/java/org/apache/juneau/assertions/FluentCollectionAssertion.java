@@ -173,7 +173,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	}
 
 	@Override /* Overridden from FluentObjectAssertion */
-	public FluentCollectionAssertion<E,R> asTransformed(Function<Collection<E>,Collection<E>> function) {
+	public FluentCollectionAssertion<E,R> asTransformed(UnaryOperator<Collection<E>> function) {
 		return new FluentCollectionAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 

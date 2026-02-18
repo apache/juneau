@@ -69,7 +69,7 @@ public class FunctionalStore implements SettingStore {
 	private static final String ARG_unsetter = "unsetter";
 	private static final String ARG_clearer = "clearer";
 
-	private final Function<String, String> reader;
+	private final UnaryOperator<String> reader;
 	private final BiConsumer<String, String> writer;
 	private final Consumer<String> unsetter;
 	private final Snippet clearer;
@@ -83,7 +83,7 @@ public class FunctionalStore implements SettingStore {
 	 * @param clearer The snippet to clear all property values. Must not be <c>null</c>.
 	 */
 	public FunctionalStore(
-		Function<String, String> reader,
+		UnaryOperator<String> reader,
 		BiConsumer<String, String> writer,
 		Consumer<String> unsetter,
 		Snippet clearer
@@ -170,7 +170,7 @@ public class FunctionalStore implements SettingStore {
 	 * @return A new writable functional store instance.
 	 */
 	public static FunctionalStore of(
-		Function<String, String> reader,
+		UnaryOperator<String> reader,
 		BiConsumer<String, String> writer,
 		Consumer<String> unsetter,
 		Snippet clearer

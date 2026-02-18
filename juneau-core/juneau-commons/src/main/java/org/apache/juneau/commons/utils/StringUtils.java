@@ -4328,7 +4328,7 @@ public class StringUtils {
 	 * @param mapper The function to apply to each element. Can be <jk>null</jk>.
 	 * @return A new array with the mapped elements, or an empty array if the array was <jk>null</jk>.
 	 */
-	public static String[] mapped(String[] array, Function<String,String> mapper) {
+	public static String[] mapped(String[] array, UnaryOperator<String> mapper) {
 		if (array == null)
 			return new String[0];
 		if (mapper == null)

@@ -576,7 +576,7 @@ public class Value<T> {
 	 * @param updater The function to apply to the current value. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public Value<T> update(Function<T,T> updater) {
+	public Value<T> update(UnaryOperator<T> updater) {
 		if (nn(t))
 			set(updater.apply(t));
 		return this;

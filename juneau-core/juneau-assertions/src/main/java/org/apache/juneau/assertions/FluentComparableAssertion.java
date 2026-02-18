@@ -146,7 +146,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	}
 
 	@Override /* Overridden from FluentObjectAssertion */
-	public FluentComparableAssertion<T,R> asTransformed(Function<T,T> function) {
+	public FluentComparableAssertion<T,R> asTransformed(UnaryOperator<T> function) {
 		return new FluentComparableAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 

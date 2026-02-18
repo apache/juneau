@@ -265,7 +265,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	}
 
 	@Override /* Overridden from FluentObjectAssertion */
-	public FluentArrayAssertion<E,R> asTransformed(Function<E[],E[]> function) {
+	public FluentArrayAssertion<E,R> asTransformed(UnaryOperator<E[]> function) {
 		return new FluentArrayAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 

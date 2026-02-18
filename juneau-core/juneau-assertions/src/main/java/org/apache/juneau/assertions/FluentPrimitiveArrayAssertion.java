@@ -213,7 +213,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	}
 
 	@Override /* Overridden from FluentObjectAssertion */
-	public FluentPrimitiveArrayAssertion<E,T,R> asTransformed(Function<T,T> function) {
+	public FluentPrimitiveArrayAssertion<E,T,R> asTransformed(UnaryOperator<T> function) {
 		return new FluentPrimitiveArrayAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
