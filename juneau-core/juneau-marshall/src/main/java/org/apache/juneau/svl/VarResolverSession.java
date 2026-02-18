@@ -388,7 +388,7 @@ public class VarResolverSession {
 					state = S1;
 					hasInnerEscapes = false;
 				}
-			} else if (state == S3) {
+			} else if (state == S3) {  // NOSONAR - State check necessary for state machine
 				if (isInEscape) {
 					isInEscape = false;
 				} else if (c == '\\') {

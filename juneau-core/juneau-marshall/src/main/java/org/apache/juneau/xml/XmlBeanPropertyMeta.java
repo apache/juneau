@@ -141,7 +141,7 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 			} else {
 				throw bex(cmBean.inner(), "Annotation error on property ''{0}''.  @Xml.format=COLLAPSED can only be specified on collections and arrays.", name);
 			}
-			if (cen.isEmpty() && isCollection)
+			if (cen.isEmpty())
 				cen = cmProperty.getBeanDictionaryName();
 		}
 

@@ -580,6 +580,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 	@SuppressWarnings({
 		"java:S1168",    // TODO: null for EOF/AMP. Parser state machine.
+		"java:S2583",    // State variables persist across loop iterations
 		"java:S3776"     // Cognitive complexity acceptable for parser state machine
 	})
 	private <E> Collection<E> parseIntoCollection(UonReader r, Collection<E> l, ClassMeta<E> type, boolean isUrlParamValue, BeanPropertyMeta pMeta)

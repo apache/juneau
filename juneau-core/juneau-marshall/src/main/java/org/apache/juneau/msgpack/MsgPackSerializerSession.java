@@ -226,7 +226,6 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		ClassMeta<?> sType = null;			// The serialized type
 
 		aType = push2(attrName, o, eType);
-		boolean isRecursion = aType == null;
 
 		// Handle recursion
 		if (aType == null)
@@ -283,8 +282,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		} else
 			out.appendString(toString(o));
 
-		if (! isRecursion)
-			pop();
+		pop();
 		return out;
 	}
 

@@ -366,6 +366,7 @@ public class JsonParserSession extends ReaderParserSession {
 
 	@SuppressWarnings({
 		"java:S1168",    // Compiler-satisfying return: all paths return m or throw. S1168 flags null returns; here null is unreachable.
+		"java:S2583",    // State variables persist across loop iterations
 		"java:S3776"     // Cognitive complexity acceptable for parser state machine
 	})
 	private <T> BeanMap<T> parseIntoBeanMap2(ParserReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
@@ -461,6 +462,7 @@ public class JsonParserSession extends ReaderParserSession {
 	@SuppressWarnings({
 		"java:S1168",    // Compiler-satisfying return: all paths return l or throw. S1168 flags null returns; here null is unreachable.
 		"java:S135",     // Multiple break statements necessary for state machine error handling
+		"java:S2583",    // State variables persist across loop iterations
 		"java:S3776"     // Cognitive complexity acceptable for parser state machine
 	})
 	private <E> Collection<E> parseIntoCollection2(ParserReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
@@ -528,6 +530,7 @@ public class JsonParserSession extends ReaderParserSession {
 	@SuppressWarnings({
 		"java:S1168",    // Compiler-satisfying return: all paths return m or throw. S1168 flags null returns; here null is unreachable.
 		"java:S135",     // Multiple break statements necessary for state machine error handling
+		"java:S2583",    // State variables persist across loop iterations
 		"java:S3776"     // Cognitive complexity acceptable for parser state machine
 	})
 	private <K,V> Map<K,V> parseIntoMap2(ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
@@ -837,7 +840,8 @@ public class JsonParserSession extends ReaderParserSession {
 	 * the @Json(wrapperAttr) annotation is used on a class.
 	 */
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for wrapper attribute parsing
+		"java:S2583",    // State variables persist across loop iterations
+		"java:S3776"     // Cognitive complexity acceptable for wrapper attribute parsing
 	})
 	private void skipWrapperAttrStart(ParserReader r, String wrapperAttr) throws IOException, ParseException {
 
