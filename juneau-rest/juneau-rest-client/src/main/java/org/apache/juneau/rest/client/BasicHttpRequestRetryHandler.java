@@ -57,7 +57,7 @@ class BasicHttpRequestRetryHandler extends StandardHttpRequestRetryHandler {
 		if (retryInterval > 0) {
 			try {
 				Thread.sleep(retryInterval);
-			} catch (InterruptedException e) {
+			} catch (@SuppressWarnings("unused") InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
 		}

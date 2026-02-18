@@ -777,7 +777,7 @@ public class JettyMicroservice extends Microservice {
 		t.start();
 		try {
 			t.join();
-		} catch (InterruptedException e) {
+		} catch (@SuppressWarnings("unused") InterruptedException e) {
 			Thread.currentThread().interrupt();
 		}
 		super.stop();

@@ -125,7 +125,7 @@ public class Swappers {
 			if (future.isDone() && ! future.isCancelled()) {
 				try {
 					return future.get();
-				} catch (InterruptedException e) {
+				} catch (@SuppressWarnings("unused") InterruptedException e) {
 					Thread.currentThread().interrupt();
 					return "<interrupted>";
 				} catch (Exception e) {
