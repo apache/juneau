@@ -50,11 +50,11 @@ public class JsonComplexExample {
 		var jsonParser = JsonParser.DEFAULT;
 
 		// Fill some data to a PojoComplex bean
-		var values = new HashMap<String,List<Pojo>>();
-		var setOne = new ArrayList<Pojo>();
+		Map<String,List<Pojo>> values = new HashMap<>();
+		List<Pojo> setOne = new ArrayList<>();
 		setOne.add(new Pojo("1.1", "name1"));
 		setOne.add(new Pojo("1.1", "name2"));
-		var setTwo = new ArrayList<Pojo>();
+		List<Pojo> setTwo = new ArrayList<>();
 		setTwo.add(new Pojo("1.2", "name1"));
 		setTwo.add(new Pojo("1.2", "name2"));
 		values.put("setOne", setOne);

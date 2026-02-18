@@ -52,7 +52,7 @@ public class XmlConfigurationExample {
 		// the output will be padded with spaces after format characters.
 		Logger.getLogger(XmlConfigurationExample.class).info(withWhitespace);
 
-		var values = new HashMap<String,List<Pojo>>();
+		Map<String,List<Pojo>> values = new HashMap<>();
 		var pojoc = new PojoComplex("pojo", new Pojo("1.0", "name0"), values);
 
 		//Produces
