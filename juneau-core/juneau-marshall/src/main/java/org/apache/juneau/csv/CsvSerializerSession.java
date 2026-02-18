@@ -253,11 +253,6 @@ public class CsvSerializerSession extends WriterSerializerSession {
 						addComma.ifSet(() -> w.w(',')).set();
 						w.writeEntry(x.getName());
 					});
-
-//					bm.forEachProperty(BeanPropertyMeta::canRead, x -> {
-//						addComma.ifSet(() -> w.w(',')).set();
-//						w.writeEntry(x.getName());
-//					});
 					w.append('\n');
 					l.forEach(x -> {
 						var addComma2 = Flag.create();

@@ -95,7 +95,8 @@ public class VarResolverSession {
 	 * This is a common case, and we can avoid using StringWriters.
 	 */
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for variable resolution state machine
+		"java:S125",     // State-machine comments (S1: ..., S2: ...)
+		"java:S3776"     // Cognitive complexity acceptable for variable resolution state machine
 	})
 	private static boolean isSimpleVar(String s) {
 		// S1: Not in variable, looking for $
@@ -331,7 +332,7 @@ public class VarResolverSession {
 	 * @return The same writer.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	@SuppressWarnings({"java:S6541", "java:S3776", "java:S2583"}) // State variables persist across loop iterations
+	@SuppressWarnings({"java:S125", "java:S2583", "java:S6541", "java:S3776"})  // S125: state-machine comments
 	public Writer resolveTo(String s, Writer out) throws IOException {
 
 		// S1: Not in variable, looking for $

@@ -267,19 +267,20 @@ public class MsgPackOutputStream extends OutputStream {
 	/**
 	 * Appends an integer to the stream.
 	 */
+	@SuppressWarnings("java:S125")  // MsgPack format type byte reference - documentation, not commented-out code
 	MsgPackOutputStream appendInt(int i) {
-		// POSFIXINT_L  = 0x00,  //   pos fixint     0xxxxxxx     0x00 - 0x7f
-		// POSFIXINT_U  = 0x7F,
-		// UINT8        = 0xCC,  //   uint 8         11001100     0xcc
-		// UINT16       = 0xCD,  //   uint 16        11001101     0xcd
-		// UINT32       = 0xCE,  //   uint 32        11001110     0xce
-		// UINT64       = 0xCF,  //   uint 64        11001111     0xcf
-		// INT8         = 0xD0,  //   int 8          11010000     0xd0
-		// INT16        = 0xD1,  //   int 16         11010001     0xd1
-		// INT32        = 0xD2,  //   int 32         11010010     0xd2
-		// INT64        = 0xD3,  //   int 64         11010011     0xd3
-		// NEGFIXINT_L  = 0xE0,  //   neg fixint     111xxxxx     0xe0 - 0xff
-		// NEGFIXINT_U  = 0xFF;
+		// POSFIXINT_L  = 0x00,  pos fixint     0xxxxxxx     0x00 - 0x7f
+		// POSFIXINT_U  = 0x7F
+		// UINT8        = 0xCC   uint 8         11001100     0xcc
+		// UINT16       = 0xCD   uint 16        11001101     0xcd
+		// UINT32       = 0xCE   uint 32        11001110     0xce
+		// UINT64       = 0xCF   uint 64        11001111     0xcf
+		// INT8         = 0xD0   int 8          11010000     0xd0
+		// INT16        = 0xD1   int 16         11010001     0xd1
+		// INT32        = 0xD2   int 32         11010010     0xd2
+		// INT64        = 0xD3   int 64         11010011     0xd3
+		// NEGFIXINT_L  = 0xE0   neg fixint     111xxxxx     0xe0 - 0xff
+		// NEGFIXINT_U  = 0xFF
 		if (i >= 0) {
 			if (i < (1 << 7))
 				return append1(i);

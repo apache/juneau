@@ -49,7 +49,7 @@ import org.apache.juneau.swap.*;
 
  * </ul>
  */
-@SuppressWarnings({ "unchecked", "rawtypes", "resource", "java:S115" }) // Constants use UPPER_snakeCase convention (e.g., PROP_decoding)
+@SuppressWarnings({ "java:S125", "java:S115", "rawtypes", "resource", "unchecked" })  // S125: state-machine comments
 public class UonParserSession extends ReaderParserSession implements HttpPartParserSession {
 
 	// Property name constants

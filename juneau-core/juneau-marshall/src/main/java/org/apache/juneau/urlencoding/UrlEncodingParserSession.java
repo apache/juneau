@@ -303,6 +303,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 	@SuppressWarnings({
 		"java:S1168",    // TODO: null when currAttr is '%00'. Parser state machine.
 		"java:S1213",    // Method name matches private method in parent class by design
+		"java:S125",     // State-machine comments (S1: ..., S2: ...)
 		"java:S3776",
 		"java:S6541"
 	})

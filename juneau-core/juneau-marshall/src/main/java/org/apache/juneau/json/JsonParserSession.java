@@ -49,6 +49,7 @@ import org.apache.juneau.swap.*;
  * </ul>
  */
 @SuppressWarnings({
+	"java:S125",  // State-machine and parse-path comments (S1: ..., Let o be null) are documentation, not commented-out code
 	"unchecked", // Type erasure requires unchecked casts
 	"rawtypes", // Raw types necessary for generic type handling
 	"resource" // ParserReader is managed by caller

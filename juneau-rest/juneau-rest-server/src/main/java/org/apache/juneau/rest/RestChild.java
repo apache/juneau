@@ -42,7 +42,6 @@ import org.apache.juneau.cp.*;
  */
 public class RestChild {
 
-	// final UrlPathPattern path;
 	final String path;
 	final Object resource;
 
@@ -55,7 +54,7 @@ public class RestChild {
 	 * 	<br>Can either be a Class (which will be instantiated using the registered {@link BasicBeanStore})
 	 * 	or an already-instantiated object.
 	 */
-	public RestChild(/*UrlPathPattern path, */ String path, Object resource) {
+	public RestChild(String path, Object resource) {
 		this.path = path;
 		this.resource = resource;
 	}

@@ -228,8 +228,9 @@ public class StringExpressionMatcher {
 	}
 
 	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for parser state machine
-		"java:S135" // Multiple break statements necessary for state machine error handling
+		"java:S125",    // Inline /*...*/ documents implicit else condition
+		"java:S135",    // Multiple break statements necessary for state machine error handling
+		"java:S3776"    // Cognitive complexity acceptable for parser state machine
 	})
 	private Exp parse(String expression) throws ParseException {
 		if (b(expression))
@@ -300,9 +301,8 @@ public class StringExpressionMatcher {
 					}
 				}
 			} else if (state == S5) {  // NOSONAR - State check necessary for state machine
-				// S5 = Found & or | or ,.
+				// S5 = Found & or | or ,
 				if (c == '&') {
-					//ands.add(operand);
 					state = S6;
 				} else /* (c == '|' || c == ',') */ {
 					if (ands.size() == 1) {

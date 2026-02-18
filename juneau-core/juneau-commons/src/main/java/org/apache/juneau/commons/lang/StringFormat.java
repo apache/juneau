@@ -517,7 +517,7 @@ public final class StringFormat {
 	/**
 	 * Parses the pattern into a list of tokens.
 	 */
-	@SuppressWarnings({ "java:S3776", "java:S6541" })
+	@SuppressWarnings({ "java:S125", "java:S3776", "java:S6541" })  // S125: state-machine/docs comments
 	private static List<Token> parseTokens(String pattern) {
 		var tokens = new ArrayList<Token>();
 		var length = pattern.length();

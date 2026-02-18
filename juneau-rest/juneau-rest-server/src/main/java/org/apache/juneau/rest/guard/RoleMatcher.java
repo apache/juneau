@@ -239,9 +239,10 @@ public class RoleMatcher {
 	}
 
 	@SuppressWarnings({
-		"java:S6541", // Thread-safe singleton pattern acceptable
-		"java:S3776", // Cognitive complexity acceptable for parser state machine
-		"java:S135" // Multiple break statements necessary for state machine error handling
+		"java:S125",    // Inline /*...*/ documents implicit else condition
+		"java:S135",    // Multiple break statements necessary for state machine error handling
+		"java:S3776",   // Cognitive complexity acceptable for parser state machine
+		"java:S6541"    // Thread-safe singleton pattern acceptable
 	})
 	private Exp parse(String expression) throws ParseException {
 		if (StringUtils.isBlank(expression))
@@ -312,9 +313,8 @@ public class RoleMatcher {
 					}
 				}
 			} else if (state == S5) {  // NOSONAR - State check necessary for state machine
-				// S5 = Found & or | or ,.
+				// S5 = Found & or | or ,
 				if (c == '&') {
-					//ands.add(operand);
 					state = S6;
 				} else /* (c == '|' || c == ',') */ {
 					if (ands.size() == 1) {

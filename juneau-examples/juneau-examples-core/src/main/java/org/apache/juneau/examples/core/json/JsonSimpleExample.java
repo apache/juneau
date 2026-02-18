@@ -38,12 +38,9 @@ public class JsonSimpleExample {
 	 * @param args Unused.
 	 * @throws Exception Unused.
 	 */
-	@SuppressWarnings({ "unused", "rawtypes" })
+	@SuppressWarnings({ "java:S125", "rawtypes", "unused" })  // S125: example output comments document expected output
 	public static void main(String[] args) throws Exception {
 		// Juneau provides static constants with the most commonly used configurations
-		// Get a reference to a serializer - converting POJO to flat format
-		// Produces
-		// {"name":"name","id":"id"}
 		var jsonSerializer = JsonSerializer.DEFAULT;
 		// Get a reference to a parser - converts that flat format back into the POJO
 		var jsonParser = JsonParser.DEFAULT;
@@ -59,8 +56,6 @@ public class JsonSimpleExample {
 		assert parse.getId().equals(pojo.getId());
 		assert parse.getName().equals(pojo.getName());
 
-		// Produces
-		// {name:'name',id:'id'}
 		var json5 = Json5Serializer.DEFAULT.serialize(pojo);
 		Logger.getLogger(JsonSimpleExample.class).info(json5);
 
