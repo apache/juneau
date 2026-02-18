@@ -78,7 +78,9 @@ import org.apache.juneau.commons.reflect.*;
  * </ul>
  *
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class BasicBeanStore {
 
 	// Argument name constants for assertArgNotNull
@@ -387,7 +389,9 @@ public class BasicBeanStore {
 	 * @param beanType The type of bean to return.
 	 * @return The bean.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked cast
+	})
 	public <T> Optional<T> getBean(Class<T> beanType) {
 		try (var x = lock.read()) {
 			var e = (Entry<T>)unnamedEntries.get(beanType);
@@ -407,7 +411,9 @@ public class BasicBeanStore {
 	 * @param name The bean name.  Can be <jk>null</jk>.
 	 * @return The bean.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked cast
+	})
 	public <T> Optional<T> getBean(Class<T> beanType, String name) {
 		try (var x = lock.read()) {
 			var e = (Entry<T>)entries.stream().filter(x2 -> x2.matches(beanType, name)).findFirst().orElse(null);

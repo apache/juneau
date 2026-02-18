@@ -94,7 +94,9 @@ public class VarResolverSession {
 	 * Checks to see if string is of the simple form "$X{...}" with no embedded variables.
 	 * This is a common case, and we can avoid using StringWriters.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for variable resolution state machine
+	})
 	private static boolean isSimpleVar(String s) {
 		// S1: Not in variable, looking for $
 		// S2: Found $, Looking for {
@@ -185,7 +187,9 @@ public class VarResolverSession {
 	 * 	The new string with all variables resolved, or the same string if no variables were found.
 	 * 	<br>Returns <jk>null</jk> if the input was <jk>null</jk>.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for variable resolution
+	})
 	public String resolve(String s) {
 
 		if (s == null || s.isEmpty() || (s.indexOf('$') == -1 && s.indexOf('\\') == -1))

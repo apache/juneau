@@ -107,7 +107,9 @@ import jakarta.servlet.http.*;
  * </ul>
  *
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({
+	"resource" // HttpServletResponseWrapper is managed by servlet container
+})
 public class RestResponse extends HttpServletResponseWrapper {
 
 	private static final String HEADER_ContentType = "Content-Type";
@@ -130,7 +132,9 @@ public class RestResponse extends HttpServletResponseWrapper {
 	/**
 	 * Constructor.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for response initialization
+	})
 	RestResponse(RestOpContext opContext, RestSession session, RestRequest req) throws Exception {
 		super(session.getResponse());
 
@@ -299,7 +303,9 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @param c The class to cast to.
 	 * @return This value cast to the specified class, or <jk>null</jk> if the object doesn't exist or isn't the specified type.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked cast
+	})
 	public <T> T getContent(Class<T> c) {
 		if (isContentOfType(c))
 			return (T)getRawOutput();
@@ -376,7 +382,9 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @throws NotAcceptable If unsupported Accept-Encoding value specified.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for content negotiation
+	})
 	public FinishableServletOutputStream getNegotiatedOutputStream() throws NotAcceptable, IOException {
 		if (os == null) {
 			Encoder encoder = null;

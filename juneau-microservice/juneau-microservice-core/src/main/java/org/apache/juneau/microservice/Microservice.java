@@ -279,7 +279,9 @@ public class Microservice implements ConfigEventListener {
 		 * @return This object.
 		 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 		 */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure requires unchecked cast for varargs
+		})
 		public Builder consoleCommands(Class<? extends ConsoleCommand>...consoleCommands) throws ExecutableException {
 			try {
 				for (var cc : consoleCommands)
@@ -458,7 +460,9 @@ public class Microservice implements ConfigEventListener {
 		 * @param vars The set of variables to append to the var resolver builder.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure requires unchecked cast for varargs
+		})
 		public Builder vars(Class<? extends Var>...vars) {
 			varResolver.vars(vars);
 			return this;
@@ -561,7 +565,10 @@ public class Microservice implements ConfigEventListener {
 	 * @throws IOException Problem occurred reading file.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	@SuppressWarnings({ "resource", "java:S3776" })
+	@SuppressWarnings({
+		"resource", // Resources are managed by caller
+		"java:S3776" // Cognitive complexity acceptable for microservice initialization
+	})
 	protected Microservice(Builder builder) throws IOException, ParseException {
 		setInstance(this);
 		this.builder = builder.copy();
@@ -1036,7 +1043,9 @@ public class Microservice implements ConfigEventListener {
 	 * @param messageKey The message key.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	@SuppressWarnings("resource")
+	@SuppressWarnings({
+		"resource" // Resource is managed by caller
+	})
 	public void out(Messages mb, String messageKey, Object...args) {
 		var msg = mb.getString(messageKey, args);
 		if (consoleEnabled)

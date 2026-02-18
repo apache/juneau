@@ -70,7 +70,9 @@ import org.apache.juneau.soap.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class Serializer extends BeanTraverseContext {
 
 	// Property name constants
@@ -1266,7 +1268,9 @@ public class Serializer extends BeanTraverseContext {
 	 * Represents no Serializer.
 	 */
 	public abstract static class Null extends Serializer {
-		@SuppressWarnings("java:S1186") // Constructor required by Serializer parent class, even though Null is abstract and never instantiated directly
+		@SuppressWarnings({
+			"java:S1186" // Constructor required by Serializer parent class, even though Null is abstract and never instantiated directly
+		})
 		private Null(Builder builder) {
 			super(builder);
 		}

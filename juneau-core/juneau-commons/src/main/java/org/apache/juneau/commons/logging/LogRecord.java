@@ -48,7 +48,10 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='jc'>{@link java.util.logging.LogRecord}
  * </ul>
  */
-@SuppressWarnings({ "java:S115", "java:S100" }) // Constants use UPPER_snakeCase convention; class name intentionally matches java.util.logging.LogRecord
+@SuppressWarnings({
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S100" // Class name intentionally matches java.util.logging.LogRecord
+})
 public class LogRecord extends java.util.logging.LogRecord {
 
 	private static final long serialVersionUID = 1L;
@@ -125,7 +128,9 @@ public class LogRecord extends java.util.logging.LogRecord {
 		return source.get().map(x -> x.getMethodName()).orElse(null);
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for stack trace filtering
+	})
 	private static Optional<StackTraceElement> findSource() {
 		for (var e : new Throwable().getStackTrace()) {
 			var c = e.getClassName();
@@ -236,7 +241,9 @@ public class LogRecord extends java.util.logging.LogRecord {
 	 * @see java.util.logging.SimpleFormatter
 	 * @see java.util.Formatter
 	 */
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({
+		"deprecation" // Date constructor is deprecated but needed for compatibility
+	})
 	public String formatted(String format) {
 		var date = new Date(getMillis());
 		Supplier<String> sourceName = () -> getSourceClassName() + ' ' + getSourceMethodName();

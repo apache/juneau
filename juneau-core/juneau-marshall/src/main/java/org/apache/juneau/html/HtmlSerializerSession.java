@@ -397,7 +397,9 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		return bm.keySet().toArray(new String[bm.size()]);
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for bean map serialization
+	})
 	private void serializeBeanMap(XmlWriter out, BeanMap<?> m, ClassMeta<?> eType, BeanPropertyMeta ppMeta) throws SerializeException {
 
 		HtmlClassMeta cHtml = getHtmlClassMeta(m.getClassMeta());
@@ -655,7 +657,9 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		out.ie(i).eTag(TAG_table).nl(i);
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types necessary for generic type handling
+	})
 	private void serializeMapEntry(XmlWriter out, Map.Entry e, ClassMeta<?> keyType, ClassMeta<?> valueType, int i, BeanPropertyMeta ppMeta) throws SerializeException {
 		Object key = generalize(e.getKey(), keyType);
 		Object value = null;

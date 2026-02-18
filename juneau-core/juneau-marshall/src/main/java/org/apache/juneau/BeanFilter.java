@@ -75,7 +75,9 @@ import org.apache.juneau.swap.*;
  * 	<li class='jc'>{@link PropertyNamer}
  * </ul>
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({
+	"rawtypes" // Raw types necessary for generic type handling
+})
 public class BeanFilter {
 
 	/**
@@ -113,7 +115,9 @@ public class BeanFilter {
 		 * @param annotations The annotations to apply.
 		 * @return This object.
 		 */
-		@SuppressWarnings("java:S3776")
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for annotation application
+		})
 		public Builder applyAnnotations(List<Bean> annotations) {
 
 			annotations.forEach(x -> {
@@ -997,7 +1001,9 @@ public class BeanFilter {
 	 * @param value The value just extracted from calling the bean getter.
 	 * @return The value to serialize.  Default is just to return the existing value.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked casts
+	})
 	public Object readProperty(Object bean, String name, Object value) {
 		return interceptor.readProperty(bean, name, value);
 	}
@@ -1010,7 +1016,9 @@ public class BeanFilter {
 	 * @param value The value just parsed.
 	 * @return The value to serialize.  Default is just to return the existing value.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked casts
+	})
 	public Object writeProperty(Object bean, String name, Object value) {
 		return interceptor.writeProperty(bean, name, value);
 	}

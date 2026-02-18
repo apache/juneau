@@ -554,7 +554,9 @@ public class XmlParserSession extends ReaderParserSession {
 		return l;
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for parser state machine
+	})
 	private <K,V> Map<K,V> parseIntoMap(XmlReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException, XMLStreamException {
 		int depth = 0;

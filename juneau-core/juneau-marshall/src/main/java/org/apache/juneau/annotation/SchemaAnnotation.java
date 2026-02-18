@@ -38,7 +38,9 @@ import org.apache.juneau.svl.*;
  * Utility classes and methods for the {@link Schema @Schema} annotation.
  *
  */
-@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_additionalProperties)
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_additionalProperties)
+})
 public class SchemaAnnotation {
 
 	// Property name constants
@@ -142,7 +144,9 @@ public class SchemaAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	@SuppressWarnings("java:S116")
+	@SuppressWarnings({
+		"java:S116" // Field names intentionally match JSON property names
+	})
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF {
 
 		private boolean aev;
@@ -233,7 +237,9 @@ public class SchemaAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		@SuppressWarnings("java:S100") // Method name uses underscore suffix to match JSON Schema keyword
+		@SuppressWarnings({
+			"java:S100" // Method name uses underscore suffix to match JSON Schema keyword
+		})
 		public Builder const_(String...value) {
 			const_ = value;
 			return this;
@@ -245,7 +251,9 @@ public class SchemaAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		@SuppressWarnings("java:S100") // Method name uses underscore suffix to avoid Java keyword conflict
+		@SuppressWarnings({
+			"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
+		})
 		public Builder default_(String...value) {
 			default_ = value;
 			return this;
@@ -257,7 +265,9 @@ public class SchemaAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		@SuppressWarnings("java:S100") // Method name uses underscore suffix to avoid Java keyword conflict
+		@SuppressWarnings({
+			"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
+		})
 		public Builder else_(String...value) {
 			else_ = value;
 			return this;
@@ -269,7 +279,9 @@ public class SchemaAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		@SuppressWarnings("java:S100") // Method name uses underscore suffix to avoid Java keyword conflict
+		@SuppressWarnings({
+			"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
+		})
 		public Builder enum_(String...value) {
 			enum_ = value;
 			return this;
@@ -281,7 +293,9 @@ public class SchemaAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		@SuppressWarnings("java:S100") // Method name uses underscore suffix to avoid Java keyword conflict
+		@SuppressWarnings({
+			"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
+		})
 		public Builder if_(String...value) {
 			if_ = value;
 			return this;
@@ -293,7 +307,9 @@ public class SchemaAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		@SuppressWarnings("java:S100") // Method name uses underscore suffix to avoid Java keyword conflict
+		@SuppressWarnings({
+			"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
+		})
 		public Builder then_(String...value) {
 			then_ = value;
 			return this;
@@ -305,7 +321,9 @@ public class SchemaAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		@SuppressWarnings("java:S100") // Method name uses $ prefix to match JSON Schema keyword
+		@SuppressWarnings({
+			"java:S100" // Method name uses $ prefix to match JSON Schema keyword
+		})
 		public Builder $comment(String...value) {
 			this.$comment = value;
 			return this;
@@ -317,7 +335,9 @@ public class SchemaAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		@SuppressWarnings("java:S100") // Method name uses $ prefix to match JSON Schema keyword
+		@SuppressWarnings({
+			"java:S100" // Method name uses $ prefix to match JSON Schema keyword
+		})
 		public Builder $defs(String...value) {
 			this.$defs = value;
 			return this;
@@ -329,7 +349,9 @@ public class SchemaAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		@SuppressWarnings("java:S100") // Method name uses $ prefix to match JSON Schema keyword
+		@SuppressWarnings({
+			"java:S100" // Method name uses $ prefix to match JSON Schema keyword
+		})
 		public Builder $id(String value) {
 			this.$id = value;
 			return this;
@@ -341,7 +363,9 @@ public class SchemaAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		@SuppressWarnings("java:S100") // Method name uses $ prefix to match JSON Schema keyword
+		@SuppressWarnings({
+			"java:S100" // Method name uses $ prefix to match JSON Schema keyword
+		})
 		public Builder $ref(String value) {
 			this.$ref = value;
 			return this;
@@ -1120,7 +1144,9 @@ public class SchemaAnnotation {
 
 	}
 
-	@SuppressWarnings("java:S116")
+	@SuppressWarnings({
+		"java:S116" // Field names intentionally match JSON property names
+	})
 	private static class Object extends AppliedOnClassAnnotationObject implements Schema {
 
 		private final String[] description;

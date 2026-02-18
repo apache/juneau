@@ -71,7 +71,9 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
  * @param <B> The type of the second argument to the operation.
  */
 @FunctionalInterface
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public interface Consumer2<A,B> {
 
 	/** Argument name constant for assertArgNotNull. */

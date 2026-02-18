@@ -42,7 +42,10 @@ import org.apache.juneau.commons.io.*;
 
  * </ul>
  */
-@SuppressWarnings({ "resource", "java:S115" }) // Constants use UPPER_snakeCase convention (e.g., MSG_bufferUnderflow)
+@SuppressWarnings({
+	"resource", // ParserReader is managed by caller
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., MSG_bufferUnderflow)
+})
 public class ParserReader extends Reader implements Positionable {
 
 	// Error message constants
@@ -377,7 +380,9 @@ public class ParserReader extends Reader implements Positionable {
 		return this;
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for buffer reading logic
+	})
 	private final int readFromBuff() throws IOException {
 		while (iCurrent >= iEnd) {
 			if (endReached)

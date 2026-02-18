@@ -396,7 +396,9 @@ public class ParserSet {
 					return ci.newInstance();
 
 				// Check for builder.
-				@SuppressWarnings("unchecked")
+				@SuppressWarnings({
+					"unchecked" // Type erasure requires unchecked casts
+				})
 				Parser.Builder b = Parser.createParserBuilder((Class<? extends Parser>)o);
 				if (nn(bcBuilder))
 					b.beanContext(bcBuilder);

@@ -188,7 +188,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return NameValuePair.class.isAssignableFrom(o.getClass().getComponentType());
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked casts
+	})
 	private static Map<Object,Object> toMap(Object o) {
 		return (Map<Object,Object>)o;
 	}
@@ -1858,7 +1860,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	<br>Null elements are ignored (only non-null classes that extend {@link Throwable} are added).
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked casts
+	})
 	public RestRequest rethrow(Class<?>...values) {
 		if (rethrow == null)
 			rethrow = list();

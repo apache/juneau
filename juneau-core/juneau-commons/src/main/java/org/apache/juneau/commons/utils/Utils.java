@@ -52,7 +52,10 @@ import org.apache.juneau.commons.settings.*;
  *   <li class='link'><a class="doclink" href='../../../../../index.html#juneau-commons.utils'>Overview &gt; juneau-commons.utils</a>
  * </ul>
  */
-@SuppressWarnings({"java:S115", "java:S1118"})
+@SuppressWarnings({
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S1118" // Utility class with static methods only
+})
 public class Utils {
 
 	// Argument name constants for assertArgNotNull
@@ -242,7 +245,9 @@ public class Utils {
 	 * @return <c>-1</c>, <c>0</c>, or <c>1</c> if <c>o1</c> is less-than, equal, or greater-than <c>o2</c>.
 	 *         Returns <c>0</c> if objects are not of the same type or do not implement the {@link Comparable} interface.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked casts
+	})
 	public static int cmp(Object o1, Object o2) {
 		if (o1 == null) {
 			if (o2 == null)
@@ -378,7 +383,9 @@ public class Utils {
 	 * @param type The component type class.
 	 * @return An empty array of the specified type.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked cast for array creation
+	})
 	public static <T> T[] ea(Class<T> type) {
 		return (T[])Array.newInstance(type, 0);
 	}
@@ -507,14 +514,14 @@ public class Utils {
 	 * Tests two objects for equality, gracefully handling nulls and arrays.
 	 *
 	 * <p>
-	 * This method handles annotations specially by delegating to {@link org.apache.juneau.commons.utils.AnnotationUtils#equals(java.lang.annotation.Annotation, java.lang.annotation.Annotation)}
+	 * This method handles annotations specially by delegating to {@link AnnotationUtils#equals(java.lang.annotation.Annotation, java.lang.annotation.Annotation)}
 	 * to ensure proper annotation comparison according to the annotation equality contract.
 	 *
 	 * @param <T> The value types.
 	 * @param o1 Object 1.
 	 * @param o2 Object 2.
 	 * @return <jk>true</jk> if both objects are equal based on the {@link Object#equals(Object)} method.
-	 * @see org.apache.juneau.commons.utils.AnnotationUtils#equals(java.lang.annotation.Annotation, java.lang.annotation.Annotation)
+	 * @see AnnotationUtils#equals(java.lang.annotation.Annotation, java.lang.annotation.Annotation)
 	 */
 	public static <T> boolean eq(T o1, T o2) {
 		// Handle annotations specially
@@ -884,7 +891,9 @@ public class Utils {
 	 * @param value The number.
 	 * @return The absolute value.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked cast for Number types
+	})
 	public static <T extends Number> T abs(T value) {
 		if (value == null)
 			return null;
@@ -954,7 +963,7 @@ public class Utils {
 	 * <p>
 	 * Special handling is provided for:
 	 * <ul>
-	 * 	<li><b>Annotations:</b> Uses {@link org.apache.juneau.commons.utils.AnnotationUtils#hash(java.lang.annotation.Annotation)} to ensure consistent hashing
+	 * 	<li><b>Annotations:</b> Uses {@link AnnotationUtils#hash(java.lang.annotation.Annotation)} to ensure consistent hashing
 	 * 		according to the {@link java.lang.annotation.Annotation#hashCode()} contract.
 	 * 	<li><b>Arrays:</b> Uses content-based hashing via {@link java.util.Arrays#hashCode(Object[])}
 	 * 		instead of identity-based hashing.
@@ -981,7 +990,7 @@ public class Utils {
 	 * @param values The values to hash.
 	 * @return A hash code value for the given values.
 	 * @see HashCode#of(Object...)
-	 * @see org.apache.juneau.commons.utils.AnnotationUtils#hash(java.lang.annotation.Annotation)
+	 * @see AnnotationUtils#hash(java.lang.annotation.Annotation)
 	 * @see Objects#hash(Object...)
 	 */
 	public static final int h(Object...values) {
@@ -1488,7 +1497,9 @@ public class Utils {
 	 * @param type The type class (unused, but helps with type inference).
 	 * @return <jk>null</jk>.
 	 */
-	@SuppressWarnings("java:S1172") // Parameter type is used for type inference, not runtime behavior
+	@SuppressWarnings({
+		"java:S1172" // Parameter type is used for type inference, not runtime behavior
+	})
 	public static <T> T no(Class<T> type) {
 		return null;
 	}
@@ -1737,7 +1748,9 @@ public class Utils {
 	 *
 	 * @param snippet The snippet of code to run.
 	 */
-	@SuppressWarnings("java:S1181") // Need to catch Throwable to handle all exception types including Error
+	@SuppressWarnings({
+		"java:S1181" // Need to catch Throwable to handle all exception types including Error
+	})
 	public static void safe(Snippet snippet) {
 		try {
 			snippet.run();
@@ -1769,7 +1782,9 @@ public class Utils {
 	 * @see #safe(Snippet)
 	 * @see #safeOpt(ThrowingSupplier)
 	 */
-	@SuppressWarnings("java:S1181") // Need to catch Throwable to handle all exception types including Error
+	@SuppressWarnings({
+		"java:S1181" // Need to catch Throwable to handle all exception types including Error
+	})
 	public static void quiet(Snippet snippet) {
 		try {
 			snippet.run();
@@ -1795,7 +1810,9 @@ public class Utils {
 	 * @param exceptionMapper A function that converts the thrown throwable into a runtime exception.
 	 * @throws RuntimeException The exception returned by the exception mapper if the snippet throws a throwable.
 	 */
-	@SuppressWarnings("java:S1181") // Need to catch Throwable to handle all exception types including Error
+	@SuppressWarnings({
+		"java:S1181" // Need to catch Throwable to handle all exception types including Error
+	})
 	public static void safe(Snippet snippet, Function<Throwable, RuntimeException> exceptionMapper) {
 		try {
 			snippet.run();
@@ -1815,7 +1832,9 @@ public class Utils {
 	 * @param s The supplier that may throw an exception.
 	 * @return The result of the supplier execution.
 	 */
-	@SuppressWarnings("java:S1181") // Need to catch Throwable to handle all exception types including Error
+	@SuppressWarnings({
+		"java:S1181" // Need to catch Throwable to handle all exception types including Error
+	})
 	public static <T> T safe(ThrowingSupplier<T> s) {
 		try {
 			return s.get();
@@ -1831,7 +1850,7 @@ public class Utils {
 	 *
 	 * <p>
 	 * This method allows you to define a function that converts any thrown exception into a runtime exception.
-	 * This is useful when you need to wrap exceptions in a specific runtime exception type (e.g., {@link org.apache.juneau.commons.reflect.ExecutableException}).
+	 * This is useful when you need to wrap exceptions in a specific runtime exception type (e.g., {@link ExecutableException}).
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -1851,7 +1870,9 @@ public class Utils {
 	 * @return The result of the supplier execution.
 	 * @throws RuntimeException The exception returned by the exception mapper if the supplier throws an exception or error.
 	 */
-	@SuppressWarnings("java:S1181") // Need to catch Throwable to handle all exception types including Error
+	@SuppressWarnings({
+		"java:S1181" // Need to catch Throwable to handle all exception types including Error
+	})
 	public static <T> T safe(ThrowingSupplier<T> s, Function<Throwable, RuntimeException> exceptionMapper) {
 		try {
 			return s.get();

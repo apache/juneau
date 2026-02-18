@@ -191,7 +191,9 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Identifies what the contents were of a serialized bean.
 	 */
-	@SuppressWarnings("javadoc")
+	@SuppressWarnings({
+		"javadoc" // Enum values are self-documenting
+	})
 	public enum ContentResult {
 		CR_VOID,      // No content...append "/>" to the start tag.
 		CR_EMPTY,     // No content...append "/>" to the start tag if XML, "/></end>" if HTML.

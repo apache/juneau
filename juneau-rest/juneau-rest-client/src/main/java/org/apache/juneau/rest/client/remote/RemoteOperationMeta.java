@@ -67,7 +67,9 @@ public class RemoteOperationMeta {
 		String contentDefault = null;
 		static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
-		@SuppressWarnings("java:S3776")
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for operation metadata construction
+		})
 		Builder(String parentPath, Method m, String defaultMethod) {
 
 			var mi = MethodInfo.of(m);

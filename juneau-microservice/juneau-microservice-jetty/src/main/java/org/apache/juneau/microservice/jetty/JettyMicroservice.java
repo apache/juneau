@@ -62,7 +62,9 @@ import jakarta.servlet.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJettyBasics">juneau-microservice-jetty Basics</a>
  * </ul>
  */
-@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., KEY_SERVLET_CONTEXT_HANDLER)
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., KEY_SERVLET_CONTEXT_HANDLER)
+})
 public class JettyMicroservice extends Microservice {
 
 	/**
@@ -372,7 +374,9 @@ public class JettyMicroservice extends Microservice {
 		}
 
 		@Override /* Overridden from MicroserviceBuilder */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure requires unchecked cast for varargs
+		})
 		public Builder vars(Class<? extends Var>...vars) {
 			super.vars(vars);
 			return this;
@@ -540,7 +544,9 @@ public class JettyMicroservice extends Microservice {
 	 * @throws IOException File could not be read.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for server creation logic
+	})
 	public Server createServer() throws ParseException, IOException, ExecutableException {
 		listener.onCreateServer(this);
 

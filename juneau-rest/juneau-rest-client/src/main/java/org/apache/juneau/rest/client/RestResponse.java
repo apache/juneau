@@ -389,7 +389,9 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * </ul>
 	 */
 	@Override /* Overridden from AutoCloseable */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for resource cleanup
+	})
 	public void close() {
 		if (isClosed)
 			return;
@@ -909,7 +911,9 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 		return partParserSessions.computeIfAbsent(parser, HttpPartParser::getPartSession);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked casts
+	})
 	<T> T as(ResponseBeanMeta rbm) {
 		var c = (Class<T>)rbm.getClassMeta().inner();
 		final RestClient rc = this.client;

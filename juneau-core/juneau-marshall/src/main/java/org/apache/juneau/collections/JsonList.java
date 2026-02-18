@@ -110,13 +110,19 @@ import org.apache.juneau.serializer.*;
  *
  * @serial exclude
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({
+	"java:S110" // Class has many fields, acceptable for collection implementation
+})
 public class JsonList extends LinkedList<Object> {
-	@SuppressWarnings("java:S110")
+	@SuppressWarnings({
+		"java:S110" // Inner class has many fields, acceptable for collection implementation
+	})
 	private static class UnmodifiableJsonList extends JsonList {
 		private static final long serialVersionUID = 1L;
 
-		@SuppressWarnings("synthetic-access")
+		@SuppressWarnings({
+			"synthetic-access" // Access to outer class members is intentional
+		})
 		UnmodifiableJsonList(JsonList contents) {
 			if (nn(contents))
 				contents.forEach(super::add);
@@ -147,7 +153,9 @@ public class JsonList extends LinkedList<Object> {
 	 *
 	 * @serial exclude
 	 */
-	@SuppressWarnings("java:S110")
+	@SuppressWarnings({
+		"java:S110" // Anonymous class has many fields, acceptable for collection implementation
+	})
 	public static final JsonList EMPTY_LIST = new JsonList() {
 		private static final long serialVersionUID = 1L;
 
@@ -304,7 +312,9 @@ public class JsonList extends LinkedList<Object> {
 	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	@SuppressWarnings("java:S1172") // Parameter p is unused but kept for API consistency
+	@SuppressWarnings({
+		"java:S1172" // Parameter p is unused but kept for API consistency
+	})
 	public static JsonList ofText(Reader in, Parser p) throws ParseException {
 		return in == null ? null : new JsonList(in);
 	}

@@ -33,7 +33,9 @@ import java.util.function.*;
  * This class extends {@link Setting} with type-specific conversion methods such as {@link #asInteger()},
  * {@link #asBoolean()}, {@link #asCharset()}, etc.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class StringSetting extends Setting<String> {
 
 	// Argument name constants for assertArgNotNull

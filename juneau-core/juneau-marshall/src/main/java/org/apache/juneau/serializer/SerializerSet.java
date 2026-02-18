@@ -391,7 +391,9 @@ public class SerializerSet {
 					return ci.newInstance();
 
 				// Check for builder create method.
-				@SuppressWarnings("unchecked")
+				@SuppressWarnings({
+					"unchecked" // Type erasure requires unchecked casts
+				})
 				Serializer.Builder b = Serializer.createSerializerBuilder((Class<? extends Serializer>)o);
 				if (nn(bcBuilder))
 					b.beanContext(bcBuilder);

@@ -28,7 +28,6 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.util.Objects;
 import java.math.*;
 import java.net.*;
 import java.nio.*;
@@ -50,7 +49,11 @@ import org.apache.juneau.commons.reflect.*;
 /**
  * Reusable string utility methods.
  */
-@SuppressWarnings({"java:S115", "java:S1192", "java:S5843"}) // S115: Constant names, S1192: Duplicated string literals (HTML entities), S5843: FP_REGEX copied from JDK source for parsing consistency
+@SuppressWarnings({
+	"java:S115", // Constant names use UPPER_snakeCase convention
+	"java:S1192", // Duplicated string literals (HTML entities) are intentional
+	"java:S5843" // FP_REGEX copied from JDK source for parsing consistency
+})
 public class StringUtils {
 
 	// Argument name constants for assertArgNotNull
@@ -2036,7 +2039,9 @@ public class StringUtils {
 	 * @return The URI with invalid characters encoded, or <jk>null</jk> if input is <jk>null</jk>.
 	 * @see #urlEncode(String)
 	 */
-	@SuppressWarnings("null")
+	@SuppressWarnings({
+		"null" // Null analysis false positive - method handles null input
+	})
 	public static String fixUrl(String in) {
 
 		if (in == null)
@@ -2198,7 +2203,9 @@ public class StringUtils {
 	 * @param resolver The function that resolves variable names to values.
 	 * @return The new string with variables replaced, or the original string if it didn't have variables in it.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for string formatting logic
+	})
 	public static String formatNamed(String s, Function<String,Object> resolver) {
 
 		if (s == null)
@@ -2378,7 +2385,9 @@ public class StringUtils {
 	 * @param s The URI string.
 	 * @return Just the authority portion of the URI.
 	 */
-	@SuppressWarnings("java:S3776") // Cognitive complexity is acceptable for this state machine-based URI parser
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for state machine-based URI parser
+	})
 	public static String getAuthorityUri(String s) {
 
 		// Use a state machine for maximum performance.
@@ -2468,7 +2477,9 @@ public class StringUtils {
 	 * @return
 	 * 	The time in milliseconds, or <c>-1</c> if the string is empty or <jk>null</jk>.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for duration parsing logic
+	})
 	public static long getDuration(String s) {
 		s = trim(s);
 		if (isEmpty(s))
@@ -2881,7 +2892,9 @@ public class StringUtils {
 	 * @param s The string to test.
 	 * @return <jk>true</jk> if it's an absolute path.
 	 */
-	@SuppressWarnings("java:S3776") // Cognitive complexity is acceptable for this state machine-based URI validator
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for state machine-based URI validator
+	})
 	public static boolean isAbsoluteUri(String s) {
 
 		if (isEmpty(s))
@@ -3169,7 +3182,9 @@ public class StringUtils {
 	 * @param s The string to check.
 	 * @return <jk>true</jk> if the specified string is numeric.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for decimal validation logic
+	})
 	public static boolean isDecimal(String s) {
 		if (s == null || s.isEmpty() || ! FIRST_NUMBER_CHARS.contains(s.charAt(0)))
 			return false;
@@ -3548,7 +3563,10 @@ public class StringUtils {
 	 * @param s The string to test.
 	 * @return <jk>true</jk> if it's an absolute path.
 	 */
-	@SuppressWarnings({ "java:S3776", "java:S1126" }) // Cognitive complexity is acceptable for this state machine-based URI validator. S1126: State machine requires if-then-else structure
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for state machine-based URI validator
+		"java:S1126" // State machine requires if-then-else structure
+	})
 	public static boolean isUri(String s) {
 
 		if (isEmpty(s))
@@ -4356,7 +4374,10 @@ public class StringUtils {
 	 * @param str The string to generate a Metaphone code for. Can be <jk>null</jk>.
 	 * @return The Metaphone code, or <jk>null</jk> if input is <jk>null</jk> or empty.
 	 */
-	@SuppressWarnings({ "java:S3776", "java:S6541" })
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for metaphone algorithm
+		"java:S6541" // Thread-safe singleton pattern acceptable
+	})
 	public static String metaphone(String str) {
 		if (isEmpty(str))
 			return null;
@@ -4584,7 +4605,9 @@ public class StringUtils {
 	 * @param str2 The second string.
 	 * @return A negative integer, zero, or a positive integer as the first string is less than, equal to, or greater than the second.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for natural comparison algorithm
+	})
 	public static int naturalCompare(String str1, String str2) {
 		if (str1 == str2)
 			return 0;
@@ -5251,7 +5274,9 @@ public class StringUtils {
 	 * 	If <jk>null</jk> or <c>Number</c>, uses the best guess.
 	 * @return The parsed number, or <jk>null</jk> if the string was null.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for number parsing logic
+	})
 	public static Number parseNumber(String s, Class<? extends Number> type) {
 		if (s == null)
 			return null;
@@ -6456,7 +6481,9 @@ public class StringUtils {
 	 * @param trim Trim strings after parsing.
 	 * @return The parsed map, or null if the string was null.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for map splitting logic
+	})
 	public static Map<String,String> splitMap(String s, boolean trim) {
 
 		if (s == null)
@@ -6571,7 +6598,9 @@ public class StringUtils {
 	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
 	 * 	<br>An empty string results in an empty array.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for nested string splitting
+	})
 	public static List<String> splitNested(String s) {
 		var escapeChars = getEscapeSet(',');
 
@@ -6627,7 +6656,9 @@ public class StringUtils {
 	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
 	 * 	<br>An empty string results in an empty array.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for nested inner string splitting
+	})
 	public static List<String> splitNestedInner(String s) {
 		assertArg(nn(s), "String was null.");
 		assertArg(ne(s), "String was empty.");
@@ -6708,7 +6739,10 @@ public class StringUtils {
 	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
 	 * 	<br>An empty string results in an empty array.
 	 */
-	@SuppressWarnings({"java:S3776", "java:S2583"}) // State variables persist across loop iterations
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for quoted string splitting
+		"java:S2583" // State variables persist across loop iterations
+	})
 	public static String[] splitQuoted(String s, boolean keepQuotes) {
 
 		if (s == null)
@@ -7447,7 +7481,9 @@ public class StringUtils {
 	 * @param escaped The characters escaped.
 	 * @return A new string if characters were removed, or the same string if not or if the input was <jk>null</jk>.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for character unescaping logic
+	})
 	public static String unescapeChars(String s, AsciiSet escaped) {
 		if (s == null || s.isEmpty())
 			return s;
@@ -7640,7 +7676,9 @@ public class StringUtils {
 	 * @param o The object to encode.
 	 * @return The URL encoded string, or <jk>null</jk> if the object was null.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for URL path encoding
+	})
 	public static String urlEncodePath(Object o) {
 
 		if (o == null)
@@ -7786,7 +7824,10 @@ public class StringUtils {
 	 * @return The wrapped string, or <jk>null</jk> if input is <jk>null</jk>.
 	 * @throws IllegalArgumentException if wrapLength is &lt;= 0 or newline is <jk>null</jk>.
 	 */
-	@SuppressWarnings({ "java:S3776", "java:S6541" })
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for text wrapping algorithm
+		"java:S6541" // Thread-safe singleton pattern acceptable
+	})
 	public static String wrap(String str, int wrapLength, String newline) {
 		if (str == null)
 			return null;
@@ -7970,7 +8011,10 @@ public class StringUtils {
 	 * @param ip The IPv6 address string to validate.
 	 * @return <jk>true</jk> if the string is a valid IPv6 address format, <jk>false</jk> otherwise.
 	 */
-	@SuppressWarnings({ "java:S3776", "java:S6541" })
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for IPv6 validation
+		"java:S6541" // Thread-safe singleton pattern acceptable
+	})
 	public static boolean isValidIPv6Address(String ip) {
 		if (ip == null || ip.isEmpty())
 			return false;
@@ -8183,7 +8227,9 @@ public class StringUtils {
 	 * @param value The numeric value.
 	 * @return The value in milliseconds, or <c>-1</c> if the unit is invalid.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for unit parsing logic
+	})
 	private static long parseUnit(String unit, double value) {
 		if (isEmpty(unit)) {
 			// No unit means milliseconds
@@ -8247,7 +8293,9 @@ public class StringUtils {
 	 * @param r The StringReader positioned at the start of a comment (at the first <js>'/'</js>).
 	 * @throws IOException If an I/O error occurs.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for comment skipping logic
+	})
 	public static void skipComments(StringReader r) throws IOException {
 		var c = r.read();
 		//  "/* */" style comments
@@ -8290,7 +8338,9 @@ public class StringUtils {
 	 * @param str The string to split.
 	 * @return A list of words, or empty list if input is null or empty.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for word splitting logic
+	})
 	private static List<String> splitWords(String str) {
 		if (str == null || isEmpty(str))
 			return Collections.emptyList();

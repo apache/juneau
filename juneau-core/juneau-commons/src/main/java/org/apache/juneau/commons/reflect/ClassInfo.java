@@ -1382,7 +1382,9 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * @param pt The parameterized type class containing the parameterized type to resolve (e.g. <c>HashMap</c>).
 	 * @return The resolved real class.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for parameter type resolution
+	})
 	public Class<?> getParameterType(int index, Class<?> pt) {
 		assertArgNotNull(ARG_pt, pt);
 
@@ -2534,7 +2536,9 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 		return toString.get();
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for toString method finding
+	})
 	private String findToString() {
 		var sb = new StringBuilder(256);
 

@@ -53,7 +53,9 @@ public class UrlEncodingParserSession extends UonParserSession {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
+	@SuppressWarnings({
+		"java:S110" // Builder class has many fields, acceptable for builder pattern
+	})
 	public static class Builder extends UonParserSession.Builder {
 
 		private UrlEncodingParser ctx;
@@ -211,7 +213,9 @@ public class UrlEncodingParserSession extends UonParserSession {
 		return false;
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for parser state machine
+	})
 	private <T> T parseAnything(ClassMeta<T> eType, UonReader r, Object outer) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
@@ -419,7 +423,9 @@ public class UrlEncodingParserSession extends UonParserSession {
 		return null; // Unreachable.
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for parser state machine
+	})
 	private <K,V> Map<K,V> parseIntoMap2(UonReader r, Map<K,V> m, ClassMeta<?> type, Object outer) throws IOException, ParseException, ExecutableException {
 
 		var keyType = (ClassMeta<K>)(type.isArgs() || type.isCollectionOrArray() ? getClassMeta(Integer.class) : type.getKeyType());

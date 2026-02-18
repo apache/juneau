@@ -129,7 +129,9 @@ import org.apache.juneau.commons.reflect.*;
  * 		</p>
  * </ul>
  */
-@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., ARG_sources, MSG_globalDisabled)
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., ARG_sources, MSG_globalDisabled)
+})
 public class Settings {
 
 	// Argument name constants for assertArgNoNulls
@@ -329,7 +331,9 @@ public class Settings {
 	}
 
 	private final ResettableSupplier<SettingStore> globalStore;
-	@SuppressWarnings("java:S5164") // Cleanup method provided: cleanup()
+	@SuppressWarnings({
+		"java:S5164" // Cleanup method provided: cleanup()
+	})
 	private final ThreadLocal<SettingStore> localStore;
 	private final List<SettingSource> sources;
 	private final Map<Class<?>,Function<String,?>> toTypeFunctions;
@@ -421,7 +425,9 @@ public class Settings {
 	 * @see #get(String)
 	 * @see #toType(String, Class)
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked cast
+	})
 	public <T> T get(String name, T def) {
 		assertArgNotNull(ARG_def, def);
 		return get(name).asType((Class<T>)def.getClass()).orElse(def);
@@ -598,7 +604,10 @@ public class Settings {
 	 * @return The converted value.
 	 * @throws RuntimeException If the type is not supported for conversion (no static method or constructor found).
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({
+		"unchecked", // Type erasure requires unchecked cast
+		"rawtypes" // Raw types necessary for generic type handling
+	})
 	protected <T> T toType(String s, Class<T> c) {
 		assertArgNotNull(ARG_s, s);
 		assertArgNotNull(ARG_c, c);

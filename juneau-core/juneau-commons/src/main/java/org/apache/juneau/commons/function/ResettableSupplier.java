@@ -75,7 +75,10 @@ import java.util.function.*;
  *
  * @param <T> The type of value supplied.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
+// TODO - Rename to Memoizer
 public class ResettableSupplier<T> implements OptionalSupplier<T> {
 
 	// Argument name constants for assertArgNotNull

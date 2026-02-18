@@ -3017,7 +3017,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>Can contain <jk>null</jk> values (ignored).
 		 * @return This object.
 		 */
-		@SuppressWarnings("java:S3776")
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for interceptor configuration
+		})
 		public Builder interceptors(Object...value) {
 			List<RestCallInterceptor> l = list();
 			for (var o : value) {
@@ -3904,7 +3906,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default value is {@link JsonParser#DEFAULT}.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure requires unchecked casts
+		})
 		public Builder parser(Class<? extends Parser> value) {
 			return parsers(value);
 		}
@@ -3987,7 +3991,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default value is {@link JsonParser#DEFAULT}.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure requires unchecked casts
+		})
 		public Builder parsers(Class<? extends Parser>...value) {
 			assertArgNoNulls(ARG_value, value);
 			parsers().add(value);
@@ -4766,7 +4772,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default is {@link JsonSerializer}.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure requires unchecked casts
+		})
 		public Builder serializer(Class<? extends Serializer> value) {
 			return serializers(value);
 		}
@@ -4849,7 +4857,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default is {@link JsonSerializer}.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure requires unchecked casts
+		})
 		public Builder serializers(Class<? extends Serializer>...value) {
 			assertArgNoNulls(ARG_value, value);
 			serializers().add(value);
@@ -5529,7 +5539,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure requires unchecked casts
+		})
 		public Builder universal() {
 			// @formatter:off
 			return
@@ -6292,7 +6304,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * 	as a parsed object.
 	 * @throws RestCallException REST call failed.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for callback parsing state machine
+	})
 	public RestRequest callback(String callString) throws RestCallException {
 		callString = emptyIfNull(callString);
 
@@ -6333,7 +6347,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				if (! isWhitespace(c)) {
 					mark = i;
 					// State machine requires state transition to S5, SonarLint reports false positive
-					@SuppressWarnings("java:S1854")
+					@SuppressWarnings({
+						"java:S1854" // State machine requires state transition to S5, SonarLint reports false positive
+					})
 					var unused = (state = S5);
 				}
 			} else /* (state == S5) */ {
@@ -6970,8 +6986,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			final RemoteMeta rm = new RemoteMeta(interfaceClass);
 
 			@Override /* Overridden from InvocationHandler */
-			@SuppressWarnings("java:S3776")
-			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for proxy invocation handler
+		})
+		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 				var rom = rm.getOperationMeta(method);
 
 				var uri = rom.getFullPath();
@@ -8047,13 +8065,17 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		return callHandler.run(target, request, context);
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for remote execution logic
+	})
 	Object executeRemote(Class<?> interfaceClass, RestRequest rc, Method method, RemoteOperationMeta rom) throws Exception {
 		RemoteOperationReturn ror = rom.getReturns();
 
 		try {
 			Object ret = null;
-			@SuppressWarnings("java:S1854") // res is assigned in all branches before use, SonarLint false positive
+			@SuppressWarnings({
+				"java:S1854" // res is assigned in all branches before use, SonarLint false positive
+			})
 			RestResponse res;
 			rc.rethrow(RuntimeException.class);
 			rom.forEachException(rc::rethrow);
@@ -8113,7 +8135,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked casts
+	})
 	<T extends Context> T getInstance(Class<T> c) {
 		var o = requestContexts.computeIfAbsent(c, k -> {
 			if (Serializer.class.isAssignableFrom(k)) {

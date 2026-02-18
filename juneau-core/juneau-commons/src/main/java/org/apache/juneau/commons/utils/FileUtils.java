@@ -29,7 +29,9 @@ import java.nio.file.*;
  * File utilities.
  *
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class FileUtils {
 
 	/**

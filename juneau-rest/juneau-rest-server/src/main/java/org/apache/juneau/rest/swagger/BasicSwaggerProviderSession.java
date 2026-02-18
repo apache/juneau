@@ -674,7 +674,9 @@ public class BasicSwaggerProviderSession {
 		// @formatter:on
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for example generation logic
+	})
 	private void addBodyExamples(RestOpContext sm, JsonMap piri, boolean response, Type type, Locale locale) throws Exception {
 
 		var sex = piri.getString(SWAGGER_example);
@@ -732,7 +734,9 @@ public class BasicSwaggerProviderSession {
 			piri.put(examplesKey, examples);
 	}
 
-	@SuppressWarnings("java:S1172") // Parameter type is unused but kept for API consistency
+	@SuppressWarnings({
+		"java:S1172" // Parameter type is unused but kept for API consistency
+	})
 	private static void addParamExample(RestOpContext sm, JsonMap piri, RestPartType in, Type type) {
 
 		var s = piri.getString(SWAGGER_example);

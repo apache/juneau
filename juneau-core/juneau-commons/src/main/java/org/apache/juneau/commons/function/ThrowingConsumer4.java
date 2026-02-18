@@ -88,7 +88,9 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * @param <D> The type of the fourth argument to the operation.
  */
 @FunctionalInterface
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public interface ThrowingConsumer4<A,B,C,D> extends Consumer4<A,B,C,D> {
 
 	/** Argument name constant for assertArgNotNull. */

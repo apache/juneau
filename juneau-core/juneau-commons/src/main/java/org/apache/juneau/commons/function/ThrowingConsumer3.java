@@ -87,7 +87,9 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * @param <C> The type of the third argument to the operation.
  */
 @FunctionalInterface
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public interface ThrowingConsumer3<A,B,C> extends Consumer3<A,B,C> {
 
 	/** Argument name constant for assertArgNotNull. */

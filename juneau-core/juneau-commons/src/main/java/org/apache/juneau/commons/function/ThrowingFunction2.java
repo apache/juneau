@@ -89,7 +89,9 @@ import java.util.function.*;
  * @param <R> The type of the result of the function.
  */
 @FunctionalInterface
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public interface ThrowingFunction2<A,B,R> extends Function2<A,B,R> {
 
 	/** Argument name constant for assertArgNotNull. */

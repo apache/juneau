@@ -96,7 +96,10 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
-@SuppressWarnings({"java:S115", "java:S116"})
+@SuppressWarnings({
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S116" // Field names intentionally match JSON property names
+})
 public class SchemaInfo extends SwaggerElement {
 
 	// Argument name constants for assertArgNotNull

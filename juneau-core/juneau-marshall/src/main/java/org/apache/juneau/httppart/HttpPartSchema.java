@@ -142,7 +142,9 @@ public class HttpPartSchema {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S116")
+	@SuppressWarnings({
+		"java:S116" // Field names intentionally match JSON property names
+	})
 	public static class Builder {
 		String name;
 		String default_;
@@ -191,7 +193,9 @@ public class HttpPartSchema {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		@SuppressWarnings("java:S100") // Method name uses underscore suffix to match JSON Schema keyword
+		@SuppressWarnings({
+			"java:S100" // Method name uses underscore suffix to match JSON Schema keyword
+		})
 		public Builder const_(String value) {
 			const_ = value;
 			return this;
@@ -218,7 +222,9 @@ public class HttpPartSchema {
 		 * 	<br>Ignored if value is <jk>null</jk>.
 		 * @return This object.
 		 */
-		@SuppressWarnings("java:S100") // Method name uses underscore suffix to avoid Java keyword conflict
+		@SuppressWarnings({
+			"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
+		})
 		public Builder default_(String value) {
 			if (ne(value))
 				default_ = value;
@@ -245,7 +251,9 @@ public class HttpPartSchema {
 		 * 	<br>Ignored if value is <jk>null</jk> or an empty set.
 		 * @return This object.
 		 */
-		@SuppressWarnings("java:S100") // Method name uses underscore suffix to avoid Java keyword conflict
+		@SuppressWarnings({
+			"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
+		})
 		public Builder enum_(Set<String> value) {
 			if (nn(value) && ! value.isEmpty())
 				enum_ = value;
@@ -263,7 +271,9 @@ public class HttpPartSchema {
 		 * 	<br>Ignored if value is empty.
 		 * @return This object.
 		 */
-		@SuppressWarnings("java:S100") // Method name uses underscore suffix to avoid Java keyword conflict
+		@SuppressWarnings({
+			"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
+		})
 		public Builder enum_(String...values) {
 			return enum_(set(values));
 		}
@@ -2916,7 +2926,9 @@ public class HttpPartSchema {
 		 * @return This object.
 		 * @since 9.2.0
 		 */
-		@SuppressWarnings("java:S3776")
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for Jakarta validation application
+		})
 		Builder applyJakartaValidation(Annotation a) {
 			String simpleName = cns(a.annotationType());
 
@@ -3701,7 +3713,9 @@ public class HttpPartSchema {
 	final Number exclusiveMaximumValue;
 	final Number exclusiveMinimumValue;
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for schema construction
+	})
 	HttpPartSchema(Builder b) {
 		name = b.name;
 		default_ = b.default_;
@@ -4256,7 +4270,9 @@ public class HttpPartSchema {
 	 * @return The same object passed in.
 	 * @throws SchemaValidationException if the specified pre-parsed input does not validate against this schema.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for input validation
+	})
 	public String validateInput(String in) throws SchemaValidationException {
 		if (! isValidRequired(in))
 			throw new SchemaValidationException("No value specified.");
@@ -4288,7 +4304,9 @@ public class HttpPartSchema {
 	 * @return The same object passed in.
 	 * @throws SchemaValidationException if the specified parsed output does not validate against this schema.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for output validation
+	})
 	public <T> T validateOutput(T o, BeanContext bc) throws SchemaValidationException {
 		if (o == null) {
 			if (! isValidRequired(o))
@@ -4519,7 +4537,9 @@ public class HttpPartSchema {
 		return x.isEmpty() || x.matches("^(/[^/]*)*$");
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for maximum validation
+	})
 	private boolean isValidMaximum(Number x) {
 		// Check Draft 2020-12 exclusiveMaximumValue first (takes precedence)
 		if (nn(exclusiveMaximumValue)) {
@@ -4564,7 +4584,9 @@ public class HttpPartSchema {
 		return maxProperties == null || x.size() <= maxProperties;
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for minimum validation
+	})
 	private boolean isValidMinimum(Number x) {
 		// Check Draft 2020-12 exclusiveMinimumValue first (takes precedence)
 		if (nn(exclusiveMinimumValue)) {
@@ -4673,7 +4695,9 @@ public class HttpPartSchema {
 		return true;
 	}
 
-	@SuppressWarnings("unused")
+	@SuppressWarnings({
+		"unused" // Method kept for future use or API completeness
+	})
 	private static boolean isValidUri(String x) {
 		// RFC 3986 URI validation
 		try {
@@ -4684,7 +4708,9 @@ public class HttpPartSchema {
 		}
 	}
 
-	@SuppressWarnings("unused")
+	@SuppressWarnings({
+		"unused" // Method kept for future use or API completeness
+	})
 	private static boolean isValidUriReference(String x) {
 		// RFC 3986 URI reference (can be relative)
 		try {

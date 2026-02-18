@@ -66,7 +66,9 @@ import java.util.function.*;
  * @see BasicBeanConverter.Builder#addSwapper(Class, Swapper)
  * @see BasicBeanConverter.Builder#defaultSettings()
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({
+	"rawtypes" // Raw types necessary for generic type handling
+})
 public class Swappers {
 
 	/**
@@ -170,7 +172,9 @@ public class Swappers {
 	 * @return A {@link Swapper} for {@link Optional} objects
 	 * @see Optional
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked cast
+	})
 	public static Swapper<Optional> optionalSwapper() {
 		return (bc, optional) -> optional.orElse(null);
 	}

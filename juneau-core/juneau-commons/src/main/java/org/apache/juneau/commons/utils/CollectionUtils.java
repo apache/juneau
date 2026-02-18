@@ -123,7 +123,9 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">juneau-commons</a>
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class CollectionUtils {
 
 	// Argument name constants for assertArgNotNull
@@ -203,7 +205,9 @@ public class CollectionUtils {
 	 * @param o The object to traverse.
 	 * @return A list containing all accumulated elements.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked casts
+	})
 	public static <T> List<T> accumulate(Object o) {
 		var l = list();
 		traverse(o, l::add);
@@ -297,7 +301,9 @@ public class CollectionUtils {
 	 * @param newElements The new elements to append to the array.
 	 * @return A new array with the specified elements appended.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked casts
+	})
 	public static <T> T[] addAll(T[] array, T...newElements) {
 		if (array == null)
 			return newElements;
@@ -365,7 +371,9 @@ public class CollectionUtils {
 	 * @param length The length of the array.
 	 * @return A new array of the specified type and length. Never <jk>null</jk>.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked casts
+	})
 	public static <E> E[] array(Class<E> componentType, int length) {
 		return (E[])Array.newInstance(componentType, length);
 	}
@@ -378,7 +386,9 @@ public class CollectionUtils {
 	 * @param componentType The component type of the array.
 	 * @return A new array.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked casts
+	})
 	public static <E> E[] array(Collection<E> value, Class<E> componentType) {
 		assertArgNotNull(ARG_value, value);
 		var array = (E[])Array.newInstance(componentType, value.size());
@@ -393,7 +403,9 @@ public class CollectionUtils {
 	 *         Returns null if the input is null.
 	 * @throws IllegalArgumentException if the input is not an array.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for array conversion
+	})
 	public static List<Object> arrayToList(Object array) {
 		assertArgNotNull(ARG_array, array);
 		assertArg(isArray(array), "Input must be an array but was {0}", cn(array));
@@ -513,7 +525,9 @@ public class CollectionUtils {
 	 * @param arrays Collection of arrays to combine.
 	 * @return A new combined array, or <jk>null</jk> if all arrays are <jk>null</jk>.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked casts
+	})
 	public static <E> E[] combine(E[]...arrays) {
 		assertArgNotNull(ARG_arrays, arrays);
 		int l = 0;
@@ -1094,7 +1108,9 @@ public class CollectionUtils {
 	 * @param type The element type class.
 	 * @return An empty list.
 	 */
-	@SuppressWarnings("java:S1172") // Parameter type is used for type inference, not runtime behavior
+	@SuppressWarnings({
+		"java:S1172" // Parameter type is used for type inference, not runtime behavior
+	})
 	public static <T> List<T> liste(Class<T> type) {
 		return Collections.emptyList();
 	}
@@ -1106,7 +1122,9 @@ public class CollectionUtils {
 	 * @param type The element type class.
 	 * @return <jk>null</jk>.
 	 */
-	@SuppressWarnings("java:S1172") // Parameter type is used for type inference, not runtime behavior
+	@SuppressWarnings({
+		"java:S1172" // Parameter type is used for type inference, not runtime behavior
+	})
 	public static <T> List<T> listn(Class<T> type) {
 		return null;
 	}
@@ -1225,7 +1243,9 @@ public class CollectionUtils {
 	 * @param v4 Value 4.
 	 * @return A new unmodifiable map.
 	 */
-	@SuppressWarnings("java:S107")
+	@SuppressWarnings({
+		"java:S107" // Many parameters acceptable for convenience method
+	})
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
 		return new SimpleMap<>(a(k1, k2, k3, k4), a(v1, v2, v3, v4));
 	}
@@ -1248,7 +1268,9 @@ public class CollectionUtils {
 	 * @param v5 Value 5.
 	 * @return A new unmodifiable map.
 	 */
-	@SuppressWarnings("java:S107")
+	@SuppressWarnings({
+		"java:S107" // Many parameters acceptable for convenience method
+	})
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
 		return new SimpleMap<>(a(k1, k2, k3, k4, k5), a(v1, v2, v3, v4, v5));
 	}
@@ -1273,7 +1295,9 @@ public class CollectionUtils {
 	 * @param v6 Value 6.
 	 * @return A new unmodifiable map.
 	 */
-	@SuppressWarnings("java:S107")
+	@SuppressWarnings({
+		"java:S107" // Many parameters acceptable for convenience method
+	})
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) {
 		return new SimpleMap<>(a(k1, k2, k3, k4, k5, k6), a(v1, v2, v3, v4, v5, v6));
 	}
@@ -1300,7 +1324,9 @@ public class CollectionUtils {
 	 * @param v7 Value 7.
 	 * @return A new unmodifiable map.
 	 */
-	@SuppressWarnings("java:S107")
+	@SuppressWarnings({
+		"java:S107" // Many parameters acceptable for convenience method
+	})
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7) {
 		return new SimpleMap<>(a(k1, k2, k3, k4, k5, k6, k7), a(v1, v2, v3, v4, v5, v6, v7));
 	}
@@ -1329,7 +1355,9 @@ public class CollectionUtils {
 	 * @param v8 Value 8.
 	 * @return A new unmodifiable map.
 	 */
-	@SuppressWarnings("java:S107")
+	@SuppressWarnings({
+		"java:S107" // Many parameters acceptable for convenience method
+	})
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) {
 		return new SimpleMap<>(a(k1, k2, k3, k4, k5, k6, k7, k8), a(v1, v2, v3, v4, v5, v6, v7, v8));
 	}
@@ -1360,7 +1388,9 @@ public class CollectionUtils {
 	 * @param v9 Value 9.
 	 * @return A new unmodifiable map.
 	 */
-	@SuppressWarnings("java:S107")
+	@SuppressWarnings({
+		"java:S107" // Many parameters acceptable for convenience method
+	})
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) {
 		return new SimpleMap<>(a(k1, k2, k3, k4, k5, k6, k7, k8, k9), a(v1, v2, v3, v4, v5, v6, v7, v8, v9));
 	}
@@ -1393,7 +1423,9 @@ public class CollectionUtils {
 	 * @param v10 Value 10.
 	 * @return A new unmodifiable map.
 	 */
-	@SuppressWarnings("java:S107")
+	@SuppressWarnings({
+		"java:S107" // Many parameters acceptable for convenience method
+	})
 	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) {
 		return new SimpleMap<>(a(k1, k2, k3, k4, k5, k6, k7, k8, k9, k10), a(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10));
 	}
@@ -1482,7 +1514,9 @@ public class CollectionUtils {
 	 * @param v4 Value 4.
 	 * @return A new modifiable map.
 	 */
-	@SuppressWarnings("java:S107")
+	@SuppressWarnings({
+		"java:S107" // Many parameters acceptable for convenience method
+	})
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
@@ -1509,7 +1543,9 @@ public class CollectionUtils {
 	 * @param v5 Value 5.
 	 * @return A new modifiable map.
 	 */
-	@SuppressWarnings("java:S107")
+	@SuppressWarnings({
+		"java:S107" // Many parameters acceptable for convenience method
+	})
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
@@ -1539,7 +1575,9 @@ public class CollectionUtils {
 	 * @param v6 Value 6.
 	 * @return A new modifiable map.
 	 */
-	@SuppressWarnings("java:S107")
+	@SuppressWarnings({
+		"java:S107" // Many parameters acceptable for convenience method
+	})
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
@@ -1572,7 +1610,9 @@ public class CollectionUtils {
 	 * @param v7 Value 7.
 	 * @return A new modifiable map.
 	 */
-	@SuppressWarnings("java:S107")
+	@SuppressWarnings({
+		"java:S107" // Many parameters acceptable for convenience method
+	})
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
@@ -1608,7 +1648,9 @@ public class CollectionUtils {
 	 * @param v8 Value 8.
 	 * @return A new modifiable map.
 	 */
-	@SuppressWarnings("java:S107")
+	@SuppressWarnings({
+		"java:S107" // Many parameters acceptable for convenience method
+	})
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
@@ -1647,7 +1689,9 @@ public class CollectionUtils {
 	 * @param v9 Value 9.
 	 * @return A new modifiable map.
 	 */
-	@SuppressWarnings("java:S107")
+	@SuppressWarnings({
+		"java:S107" // Many parameters acceptable for convenience method
+	})
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
@@ -1689,7 +1733,9 @@ public class CollectionUtils {
 	 * @param v10 Value 10.
 	 * @return A new modifiable map.
 	 */
-	@SuppressWarnings("java:S107")
+	@SuppressWarnings({
+		"java:S107" // Many parameters acceptable for convenience method
+	})
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
@@ -1724,7 +1770,9 @@ public class CollectionUtils {
 	 * @return A new map builder.
 	 * @see Maps
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked casts
+	})
 	public static <K,V> Maps<K,V> mapb() {
 		return (Maps<K,V>)Maps.create().ordered();
 	}
@@ -1757,7 +1805,9 @@ public class CollectionUtils {
 	 * @return A new map builder.
 	 * @see Maps
 	 */
-	@SuppressWarnings("java:S100") // Method name uses underscore convention
+	@SuppressWarnings({
+		"java:S100" // Method name uses underscore convention
+	})
 	public static Maps<String,Object> mapb_so() {
 		return Maps.create(String.class, Object.class).ordered();
 	}
@@ -1860,7 +1910,9 @@ public class CollectionUtils {
 	 * @param type The component type class.
 	 * @return <jk>null</jk>.
 	 */
-	@SuppressWarnings("java:S1172") // Parameter type is used for type inference, not runtime behavior
+	@SuppressWarnings({
+		"java:S1172" // Parameter type is used for type inference, not runtime behavior
+	})
 	public static <T> T[] na(Class<T> type) {
 		return null;
 	}
@@ -2452,7 +2504,9 @@ public class CollectionUtils {
 	 * @param o The object to traverse.
 	 * @param c The consumer of the objects.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked casts
+	})
 	public static <T> void traverse(Object o, Consumer<T> c) {
 		if (o == null)
 			return;

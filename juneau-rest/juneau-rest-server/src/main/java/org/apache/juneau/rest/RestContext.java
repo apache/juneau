@@ -4535,7 +4535,9 @@ public class RestContext extends Context {
 		 * @return A new REST children list.
 		 * @throws Exception If a problem occurred instantiating one of the child rest contexts.
 		 */
-		@SuppressWarnings("java:S3776")
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for REST children creation
+		})
 		protected RestChildren.Builder createRestChildren(BasicBeanStore beanStore, Supplier<?> resource, RestContext restContext) throws Exception {
 
 			// Default value.
@@ -4641,7 +4643,9 @@ public class RestContext extends Context {
 		 * @return A new REST operations list.
 		 * @throws ServletException If a problem occurred instantiating one of the child rest contexts.
 		 */
-		@SuppressWarnings("java:S3776")
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for REST operations creation
+		})
 		protected RestOperations.Builder createRestOperations(BasicBeanStore beanStore, Supplier<?> resource, RestContext restContext) throws ServletException {
 
 			// Default value.
@@ -5197,7 +5201,9 @@ public class RestContext extends Context {
 	 * @throws ServletException General servlet exception.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for request execution logic
+	})
 	public void execute(Object resource, HttpServletRequest r1, HttpServletResponse r2) throws ServletException, IOException {
 
 		// Must be careful not to bleed thread-locals.

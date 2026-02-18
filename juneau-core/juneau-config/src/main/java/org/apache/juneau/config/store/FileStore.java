@@ -47,7 +47,10 @@ import org.apache.juneau.commons.collections.FluentMap;
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  */
-@SuppressWarnings({"resource", "java:S115"})
+@SuppressWarnings({
+	"resource", // Resources are managed by caller
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class FileStore extends ConfigStore {
 
 	// Argument name constants for assertArgNotNull
@@ -366,7 +369,9 @@ public class FileStore extends ConfigStore {
 			}
 		}
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure requires unchecked casts
+		})
 		@Override /* Overridden from Thread */
 		public void run() {
 			try {
@@ -511,7 +516,9 @@ public class FileStore extends ConfigStore {
 	}
 
 	@Override /* Overridden from ConfigStore */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for file writing logic
+	})
 	public synchronized String write(String name, String expectedContents, String newContents) throws IOException {
 		name = resolveName(name);
 
@@ -613,7 +620,9 @@ public class FileStore extends ConfigStore {
 	}
 
 	@Override
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for name resolution logic
+	})
 	protected String resolveName(String name) {
 		if (! nameCache.containsKey(name)) {
 			String n = null;

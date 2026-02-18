@@ -138,7 +138,9 @@ import org.apache.juneau.xml.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_autoCloseStreams)
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_autoCloseStreams)
+})
 public class Parser extends BeanContextable {
 
 	// Property name constants
@@ -970,7 +972,9 @@ public class Parser extends BeanContextable {
 	 * Represents no Parser.
 	 */
 	public abstract static class Null extends Parser {
-		@SuppressWarnings("java:S1186") // Constructor required by Parser parent class, even though Null is abstract and never instantiated directly
+		@SuppressWarnings({
+			"java:S1186" // Constructor required by Parser parent class, even though Null is abstract and never instantiated directly
+		})
 		private Null(Builder builder) {
 			super(builder);
 		}

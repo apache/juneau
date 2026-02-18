@@ -63,7 +63,9 @@ import java.util.function.*;
  * @param <T> The type of value supplied by this supplier.
  */
 @FunctionalInterface
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public interface OptionalSupplier<T> extends Supplier<T> {
 
 	/** Argument name constant for assertArgNotNull. */

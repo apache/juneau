@@ -43,7 +43,9 @@ import org.apache.juneau.commons.lang.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ObjectTools">Object Tools</a>
  * </ul>
  */
-@SuppressWarnings("java:S6541") // Stateless utility, singleton for convenience
+@SuppressWarnings({
+	"java:S6541" // Stateless utility, singleton for convenience
+})
 public class NumberMatcherFactory extends MatcherFactory {
 
 	/**
@@ -311,7 +313,9 @@ public class NumberMatcherFactory extends MatcherFactory {
 	/**
 	 * Default reusable matcher.
 	 */
-	@SuppressWarnings("java:S6541") // Stateless factory, singleton for convenience
+	@SuppressWarnings({
+		"java:S6541" // Stateless factory, singleton for convenience
+	})
 	public static final NumberMatcherFactory DEFAULT = new NumberMatcherFactory();
 
 	@Override

@@ -164,7 +164,9 @@ public class ResponseHeader extends BasicHeader {
 	 * @param args The type parameters.
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked casts
+	})
 	public <T> RestResponse as(Value<T> value, Type type, Type...args) {
 		value.set((T)as(type, args).orElse(null));
 		return response;

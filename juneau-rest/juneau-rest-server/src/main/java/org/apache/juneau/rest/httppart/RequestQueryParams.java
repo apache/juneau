@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.httppart;
 
-import static java.util.stream.Collectors.toList;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -120,7 +119,9 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 
 	// Argument name constants for assertArgNotNull

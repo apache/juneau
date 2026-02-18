@@ -66,7 +66,9 @@ import org.apache.juneau.commons.utils.*;
  *
  * @param <T> The class type that this metadata applies to.
  */
-@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_class)
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_class)
+})
 public class BeanMeta<T> {
 
 	// Property name constants
@@ -389,7 +391,9 @@ public class BeanMeta<T> {
 	 * @param pNames Explicit list of property names and order. If <jk>null</jk>, properties are determined automatically.
 	 * @param implClass Optional implementation class constructor to use if one cannot be found. Can be <jk>null</jk>.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for bean metadata initialization
+	})
 	protected BeanMeta(ClassMeta<T> cm, BeanFilter bf, String[] pNames, ClassInfo implClass) {
 		classMeta = cm;
 		beanContext = cm.getBeanContext();
@@ -902,7 +906,9 @@ public class BeanMeta<T> {
 	 * @return A new instance of this bean if possible, or <jk>null</jk> if not.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked cast
+	})
 	protected T newBean(Object outer) throws ExecutableException {
 		if (classMeta.isMemberClass() && classMeta.isNotStatic()) {
 			if (hasConstructor())
@@ -955,7 +961,9 @@ public class BeanMeta<T> {
 	 * 	the number of properties specified in {@link Beanc @Beanc} doesn't match the number of constructor parameters,
 	 * 	or if parameter names cannot be determined from the bytecode.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for constructor finding logic
+	})
 	private BeanConstructor findBeanConstructor() {
 		var ap = beanContext.getAnnotationProvider();
 		var vis = beanContext.getBeanConstructorVisibility();
@@ -1068,7 +1076,9 @@ public class BeanMeta<T> {
 	 *
 	 * @return A list of {@link BeanMethod} objects representing all found bean methods.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for bean method finding logic
+	})
 	private List<BeanMethod> findBeanMethods() {
 		var l = new LinkedList<BeanMethod>();
 		var ap = beanContext.getAnnotationProvider();

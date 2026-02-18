@@ -94,7 +94,9 @@ import java.util.MissingFormatArgumentException;
  *
  * @see StringUtils#format(String, Object...)
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public final class StringFormat {
 
 	// Argument name constants for assertArgNotNull

@@ -80,7 +80,9 @@ import jakarta.servlet.http.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpContext">RestOpContext</a>
  * </ul>
  */
-@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_defaultRequestFormData)
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_defaultRequestFormData)
+})
 public class RestOpContext extends Context implements Comparable<RestOpContext> {
 
 	// Property name constants
@@ -1982,7 +1984,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The path matchers for this method.
 		 */
-		@SuppressWarnings("java:S3776")
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for path matcher creation
+		})
 		protected UrlPathMatcherList getPathMatchers() {
 
 			var v = Value.of(UrlPathMatcherList.create());
@@ -2043,7 +2047,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <p>
 		 * This includes: {@link Header}, {@link Query}, {@link FormData}.
 		 */
-		@SuppressWarnings("java:S3776")
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for HTTP parts configuration
+		})
 		protected void processParameterAnnotations() {
 			for (var aa : restMethod.getParameterAnnotations()) {
 

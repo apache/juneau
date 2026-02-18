@@ -1133,7 +1133,9 @@ public class BeanSession extends ContextSession {
 	 * @param propertyNamer The property namer to use.
 	 * @return The wrapped object.
 	 */
-	@SuppressWarnings("java:S1172") // Parameter propertyNamer is unused but kept for API consistency
+	@SuppressWarnings({
+		"java:S1172" // Parameter propertyNamer is unused but kept for API consistency
+	})
 	public final <T> BeanMap<T> toBeanMap(T o, PropertyNamer propertyNamer) {
 		return this.toBeanMap(o, (Class<T>)o.getClass());
 	}
@@ -1605,7 +1607,9 @@ public class BeanSession extends ContextSession {
 		return array;
 	}
 
-	@SuppressWarnings("java:S3776") // Cognitive complexity is acceptable for this type conversion method
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity is acceptable for this type conversion method
+	})
 	private <T> T convertToMapType(Object outer, Object value, ClassMeta<?> from, ClassMeta<T> to) {
 		try {
 			if (from.isMap()) {
@@ -1637,7 +1641,9 @@ public class BeanSession extends ContextSession {
 		}
 	}
 
-	@SuppressWarnings("java:S3776") // Cognitive complexity is acceptable for this type conversion method
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity is acceptable for this type conversion method
+	})
 	private <T> T convertToCollectionType(Object outer, Object value, ClassMeta<?> from, ClassMeta<T> to) {
 		try {
 			Collection l;

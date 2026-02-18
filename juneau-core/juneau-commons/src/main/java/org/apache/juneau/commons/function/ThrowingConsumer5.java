@@ -89,7 +89,9 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * @param <E> The type of the fifth argument to the operation.
  */
 @FunctionalInterface
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public interface ThrowingConsumer5<A,B,C,D,E> extends Consumer5<A,B,C,D,E> {
 
 	/** Argument name constant for assertArgNotNull. */

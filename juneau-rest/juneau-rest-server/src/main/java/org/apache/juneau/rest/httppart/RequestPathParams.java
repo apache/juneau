@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.httppart;
 
-import static java.util.stream.Collectors.toList;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -105,7 +104,9 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
 */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class RequestPathParams extends ArrayList<RequestPathParam> {
 
 	// Argument name constants for assertArgNotNull
@@ -134,7 +135,9 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 		this.vs = req.getVarResolverSession();
 
 		// Add parameters from parent context if any.
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure requires unchecked cast
+		})
 		var parentVars = (Map<String,String>)req.getAttribute("juneau.pathVars").orElse(mape());
 		for (var e : parentVars.entrySet())
 			add(e.getKey(), e.getValue());

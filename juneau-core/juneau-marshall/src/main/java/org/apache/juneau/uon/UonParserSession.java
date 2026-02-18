@@ -574,7 +574,9 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		return null; // Unreachable.
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for parser state machine
+	})
 	private <E> Collection<E> parseIntoCollection(UonReader r, Collection<E> l, ClassMeta<E> type, boolean isUrlParamValue, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException {
 
@@ -610,7 +612,9 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 					if (c == ')') {
 						if (state == S2) {
 							// argIndex++ increment is necessary for expression evaluation to get correct argument index, even though incremented value is unused after return
-							@SuppressWarnings("java:S1854")
+							@SuppressWarnings({
+								"java:S1854" // argIndex++ increment is necessary for expression evaluation to get correct argument index, even though incremented value is unused after return
+							})
 							var argIdx = argIndex;
 							argIndex++;
 							l.add((E)parseAnything(type.isArgs() ? type.getArg(argIdx) : type.getElementType(), r.unread(), l, false, pMeta));
@@ -666,7 +670,9 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		return null;  // Unreachable.
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for parser state machine
+	})
 	private <K,V> Map<K,V> parseIntoMap(UonReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (keyType == null)
@@ -875,7 +881,9 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * @throws IOException Exception thrown by underlying stream.
 	 * @throws ParseException Attribute name was malformed.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for parser state machine
+	})
 	protected final String parseAttrName(UonReader r, boolean encoded) throws IOException, ParseException {
 
 		// If string is of form 'xxx', we're looking for ' at the end.

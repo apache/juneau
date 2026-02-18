@@ -373,7 +373,9 @@ public class TemporalSwap extends StringSwap<Temporal> {
 		return formatter.format(o);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked casts
+	})
 	@Override /* Overridden from ObjectSwap */
 	public Temporal unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
 		if (f == null)

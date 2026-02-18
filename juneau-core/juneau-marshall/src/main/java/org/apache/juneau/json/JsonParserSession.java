@@ -48,7 +48,11 @@ import org.apache.juneau.swap.*;
 
  * </ul>
  */
-@SuppressWarnings({ "unchecked", "rawtypes", "resource" })
+@SuppressWarnings({
+	"unchecked", // Type erasure requires unchecked casts
+	"rawtypes", // Raw types necessary for generic type handling
+	"resource" // ParserReader is managed by caller
+})
 public class JsonParserSession extends ReaderParserSession {
 
 	/**
@@ -195,7 +199,9 @@ public class JsonParserSession extends ReaderParserSession {
 		ctx = builder.ctx;
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for parser state machine
+	})
 	private <T> T parseAnything(ClassMeta<?> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
@@ -357,7 +363,9 @@ public class JsonParserSession extends ReaderParserSession {
 		throw new ParseException(this, "Could not find the end of the field name.");
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for parser state machine
+	})
 	private <T> BeanMap<T> parseIntoBeanMap2(ParserReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 
 		// S1: Looking for outer {
@@ -622,7 +630,9 @@ public class JsonParserSession extends ReaderParserSession {
 		return parseNumber(r, r.parseNumberString(), type);
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for number parsing logic
+	})
 	private Number parseNumber(ParserReader r, String s, Class<? extends Number> type) throws ParseException {
 
 		// JSON has slightly different number rules from Java.
@@ -754,7 +764,9 @@ public class JsonParserSession extends ReaderParserSession {
 	 * Doesn't actually parse anything, but when positioned at the beginning of comment,
 	 * it will move the pointer to the last character in the comment.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for comment parsing logic
+	})
 	private void skipComments(ParserReader r) throws ParseException, IOException {
 		int c = r.read();
 		//  "/* */" style comments
@@ -820,7 +832,9 @@ public class JsonParserSession extends ReaderParserSession {
 	 * Doesn't actually parse anything, but moves the position beyond the construct "{wrapperAttr:" when
 	 * the @Json(wrapperAttr) annotation is used on a class.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for wrapper attribute parsing
+	})
 	private void skipWrapperAttrStart(ParserReader r, String wrapperAttr) throws IOException, ParseException {
 
 		// S1: Looking for outer '{'
