@@ -33,7 +33,7 @@ import java.util.regex.*;
  * Provides the capability of returning splices of log files based on dates and filtering based on thread and logger
  * names.
  */
-public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.Entry>, Closeable {
+public class LogParser implements Iterable<LogParser.Entry>, Closeable {
 
 	/**
 	 * Represents a single line from the log file.
@@ -135,7 +135,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 
 	String threadFilter;
 
-	private Entry next;
+	private List<Entry> entries;
 
 	/**
 	 * Constructor.
@@ -160,60 +160,50 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 		if (nn(severity))
 			this.severityFilter = new LinkedHashSet<>(l(severity));
 
-		// Find the first line.
+		// Buffer all matching entries to support multiple traversal.
+		List<Entry> allEntries = new ArrayList<>();
+		Entry prev = null;
 		String line;
-		while (next == null && nn(line = br.readLine())) {
+		while (nn(line = br.readLine())) {
 			var e = new Entry(line);
-			if (e.matches())
-				next = e;
+			if (e.isRecord) {
+				if (e.matches()) {
+					if (nn(prev))
+						allEntries.add(prev);
+					prev = e;
+				} else {
+					prev = null;
+				}
+			} else {
+				if (nn(prev))
+					prev.addText(e.line);
+			}
 		}
+		if (nn(prev))
+			allEntries.add(prev);
+		this.entries = allEntries;
+		br.close();
+		br = null;
 	}
 
 	@Override /* Overridden from Closeable */
 	public void close() throws IOException {
-		br.close();
+		if (nn(br)) {
+			br.close();
+			br = null;
+		}
 	}
 
-	@Override /* Overridden from Iterator */
+	/**
+	 * Returns whether any entries are available.
+	 */
 	public boolean hasNext() {
-		return nn(next);
+		return !entries.isEmpty();
 	}
 
 	@Override /* Overridden from Iterable */
 	public Iterator<Entry> iterator() {
-		return this;
-	}
-
-	@SuppressWarnings("null")
-	@Override /* Overridden from Iterator */
-	public Entry next() {
-		if (next == null)
-			throw new NoSuchElementException();
-		Entry current = next;
-		Entry prev = next;
-		try {
-			next = null;
-			String line = null;
-			while (next == null && nn(line = br.readLine())) {
-				var e = new Entry(line);
-				if (e.isRecord) {
-					if (e.matches())
-						next = e;
-					prev = null;
-				} else {
-					if (nn(prev))
-						prev.addText(e.line);
-				}
-			}
-		} catch (IOException e) {
-			throw new UncheckedIOException(e);
-		}
-		return current;
-	}
-
-	@Override /* Overridden from Iterator */
-	public void remove() {
-		throw new NoSuchMethodError();
+		return entries.iterator();
 	}
 
 	/**
