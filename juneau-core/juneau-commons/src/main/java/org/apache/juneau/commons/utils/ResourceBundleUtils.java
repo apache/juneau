@@ -47,7 +47,9 @@ public class ResourceBundleUtils {
 		assertArgNotNull(ARG_loader, loader);
 		try {
 			return ResourceBundle.getBundle(baseName, locale, loader);
-		} catch (@SuppressWarnings("unused") MissingResourceException e) {}
+		} catch (@SuppressWarnings("unused") MissingResourceException e) {
+			// Resource bundle not found, return null
+		}
 		return null;
 	}
 }

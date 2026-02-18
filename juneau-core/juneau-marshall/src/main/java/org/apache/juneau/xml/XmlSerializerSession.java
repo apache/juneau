@@ -482,7 +482,9 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		// Serialize XML content.
 		if (nn(content)) {
 			out.w('>').nlIf(! isMixedOrText, indent);
-			if (contentType == null) {} else if (contentType.isCollection()) {
+			if (contentType == null) {
+				// No content type specified - skip content serialization
+			} else if (contentType.isCollection()) {
 				var c = (Collection)content;
 				boolean previousWasTextNode = false;
 				for (var value : c) {

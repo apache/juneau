@@ -6392,6 +6392,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			httpClient.close();
 		if (nn(es) && executorServiceShutdownOnClose)
 			es.shutdown();
+		// If executorServiceShutdownOnClose is false, executor service remains open for reuse
 		if (nn(creationStack))
 			closedStack = Thread.currentThread().getStackTrace();
 	}

@@ -4363,6 +4363,7 @@ public class HttpPartSchema {
 					if (! isValidMultipleOf(n))
 						throw new SchemaValidationException("Multiple-of not met.");
 				}
+				// If not a number, skip validation (validation only applies to number types)
 				break;
 			}
 			case OBJECT: {

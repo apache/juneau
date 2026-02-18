@@ -448,7 +448,9 @@ public class JettyMicroservice extends Microservice {
 				port = RANDOM.nextInt(32767 - ports[0] + 1) + ports[0];
 			try (var ss = new ServerSocket(port)) {
 				return port;
-			} catch (@SuppressWarnings("unused") IOException e) {}
+			} catch (@SuppressWarnings("unused") IOException e) {
+				// Port is in use, try next port in array
+			}
 		}
 		return 0;
 	}
@@ -653,7 +655,9 @@ public class JettyMicroservice extends Microservice {
 		String hostname = "localhost";
 		try {
 			hostname = InetAddress.getLocalHost().getHostName();
-		} catch (@SuppressWarnings("unused") UnknownHostException e) {}
+		} catch (@SuppressWarnings("unused") UnknownHostException e) {
+			// Cannot determine hostname, use default "localhost"
+		}
 		return hostname;
 	}
 

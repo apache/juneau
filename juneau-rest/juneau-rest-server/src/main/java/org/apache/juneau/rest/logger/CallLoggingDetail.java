@@ -52,7 +52,9 @@ public enum CallLoggingDetail {
 		if (ne(s)) {
 			try {
 				return valueOf(s.toUpperCase());
-			} catch (@SuppressWarnings("unused") IllegalArgumentException e) {}
+			} catch (@SuppressWarnings("unused") IllegalArgumentException e) {
+				// Invalid enum value - return null below
+			}
 		}
 		return null;
 	}
