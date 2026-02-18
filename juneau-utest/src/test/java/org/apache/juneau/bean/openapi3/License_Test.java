@@ -208,7 +208,7 @@ class License_Test extends TestBase {
 		@Test void c10_nullPropertyValue() {
 			var license = bean();
 			assertThrows(IllegalArgumentException.class, ()->license.get(null));
-			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
+			assertThrows(IllegalArgumentException.class, ()->license.get(null, String.class));
 			assertThrows(IllegalArgumentException.class, ()->license.set(null, "a"));
 		}
 	}

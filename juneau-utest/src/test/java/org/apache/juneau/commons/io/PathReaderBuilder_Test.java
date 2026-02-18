@@ -48,8 +48,16 @@ class PathReaderBuilder_Test extends TestBase {
 	}
 
 	@Test void a02_allowNoFileException() {
-		assertThrows(IllegalStateException.class, () -> PathReaderBuilder.create().build());
-		assertThrows(NoSuchFileException.class, () -> PathReaderBuilder.create().path("this file does not exist, at all.").build());
+		assertThrows(IllegalStateException.class, this::buildReaderWithoutPath);
+		assertThrows(NoSuchFileException.class, this::buildReaderForNonExistentPath);
+	}
+
+	private Reader buildReaderWithoutPath() throws IOException {
+		return PathReaderBuilder.create().build();
+	}
+
+	private Reader buildReaderForNonExistentPath() throws IOException {
+		return PathReaderBuilder.create().path("this file does not exist, at all.").build();
 	}
 
 	@Test void a03_charsetCharset() throws IOException {
