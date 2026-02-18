@@ -52,7 +52,10 @@ import org.apache.juneau.cp.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics">Simple Variable Language Basics</a>
  * </ul>
  */
-@SuppressWarnings({ "resource", "java:S115" }) // Constants use UPPER_snakeCase convention (e.g., PROP_contextBeanStore)
+@SuppressWarnings({
+	"resource",   // VarResolver resources managed by calling code
+	"java:S115"   // Constants use UPPER_snakeCase convention (e.g., PROP_contextBeanStore)
+})
 public class VarResolverSession {
 
 	// Property name constants
@@ -261,7 +264,11 @@ public class VarResolverSession {
 	 * @return The same object if no resolution was needed, otherwise a new object or data structure if resolution was
 	 * needed.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked", "java:S3776" })
+	@SuppressWarnings({
+		"rawtypes",   // Raw types necessary for generic resolution
+		"unchecked",  // Type erasure requires unchecked operations
+		"java:S3776"  // Cognitive complexity acceptable for recursive resolution logic
+	})
 	public <T> T resolve(T o) {
 		if (o == null)
 			return null;

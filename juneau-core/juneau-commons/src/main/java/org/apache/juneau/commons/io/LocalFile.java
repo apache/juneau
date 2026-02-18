@@ -82,7 +82,10 @@ import java.nio.file.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">I/O Package</a>
  * </ul>
  */
-@SuppressWarnings({"resource", "java:S115"})
+@SuppressWarnings({
+	"resource",   // File resources managed by calling code
+	"java:S115"   // Constants use UPPER_snakeCase convention (e.g., CONST_value)
+})
 public class LocalFile {
 
 	// Argument name constants for assertArgNotNull

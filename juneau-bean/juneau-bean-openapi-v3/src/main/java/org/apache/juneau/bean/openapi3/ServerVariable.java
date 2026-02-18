@@ -26,9 +26,6 @@ import java.util.*;
 import org.apache.juneau.commons.collections.*;
 
 /**
- * TODO
- *
- * <p>
  * The ServerVariable Object represents a server variable for server URL template substitution. Server variables can be
  * used to define different server environments (e.g., development, staging, production) with different base URLs,
  * ports, or other variable parts of the server URL.

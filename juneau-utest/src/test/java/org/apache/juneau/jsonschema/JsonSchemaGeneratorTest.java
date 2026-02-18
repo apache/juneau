@@ -1508,6 +1508,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 	// Backward compatibility: Old boolean exclusiveMaximum/exclusiveMinimum
 	//====================================================================================================
 
+	@SuppressWarnings("removal")  // Tests deprecated boolean-style exclusiveMaximum/exclusiveMinimum for backward compatibility
 	@Test void backwardCompatibility_exclusiveMaxMin_boolean() throws Exception {
 		var s = JsonSchemaGenerator.DEFAULT.getSession();
 		var schema = s.getSchema(OldStyleExclusiveBean.class);
@@ -1519,6 +1520,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 		public int value;
 	}
 
+	@SuppressWarnings("removal")  // Tests precedence of new numeric style over deprecated boolean style
 	@Test void backwardCompatibility_newStyleTakesPrecedence() throws Exception {
 		var s = JsonSchemaGenerator.DEFAULT.getSession();
 		// New numeric style should take precedence in asMap() when both are set

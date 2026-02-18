@@ -572,7 +572,10 @@ public class CollectionUtils {
 	 * @param list The list to copy the values into.
 	 * @return The same list passed in.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({
+		"unchecked", // Type erasure requires unchecked cast from array
+		"rawtypes"   // Raw types necessary for generic array handling
+	})
 	public static List copyArrayToList(Object array, List list) {
 		if (nn(array)) {
 			var length = Array.getLength(array);
@@ -2120,7 +2123,10 @@ public class CollectionUtils {
 	 * @param values The values to initialize the list with.
 	 * @return A new modifiable list.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({
+		"rawtypes",  // Raw types necessary for varargs handling
+		"unchecked"  // Type erasure requires unchecked operations
+	})
 	@SafeVarargs
 	public static <E> List<E> sortedList(E...values) {
 		List<E> l = list(values);

@@ -43,7 +43,11 @@ import org.apache.juneau.svl.*;
 
  * </ul>
  */
-@SuppressWarnings({"resource","java:S110","java:S115"})
+@SuppressWarnings({
+	"resource",   // Output streams managed by calling code
+	"java:S110",  // Inheritance depth acceptable for serializer session hierarchy
+	"java:S115"   // Constants use UPPER_snakeCase convention (e.g., CONST_value)
+})
 public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 
 	// Argument name constants for assertArgNotNull
@@ -52,7 +56,10 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings({"java:S110", "java:S115"})
+	@SuppressWarnings({
+		"java:S110", // Inheritance depth acceptable for builder hierarchy
+		"java:S115"  // Constants use UPPER_snakeCase convention (e.g., CONST_value)
+	})
 	public static class Builder extends OutputStreamSerializerSession.Builder {
 
 		private MsgPackSerializer ctx;
@@ -213,7 +220,10 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 	 * Workhorse method.
 	 * Determines the type of object, and then calls the appropriate type-specific serialization method.
 	 */
-	@SuppressWarnings({ "rawtypes", "java:S3776" })
+	@SuppressWarnings({
+		"rawtypes",   // Raw types necessary for generic type handling
+		"java:S3776"  // Cognitive complexity acceptable for serialization dispatch logic
+	})
 	private MsgPackOutputStream serializeAnything(MsgPackOutputStream out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
 
 		if (o == null)
@@ -325,7 +335,10 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		});
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({
+		"rawtypes",  // Raw types necessary for generic collection handling
+		"unchecked"  // Type erasure requires unchecked operations
+	})
 	private void serializeCollection(MsgPackOutputStream out, Collection c, ClassMeta<?> type) throws SerializeException {
 		var elementType = type.getElementType();
 		List<Object> l = listOfSize(c.size());
@@ -335,7 +348,10 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		l.forEach(x -> serializeAnything(out, x, elementType, "<iterator>", null));
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({
+		"rawtypes",  // Raw types necessary for generic map handling
+		"unchecked"  // Type erasure requires unchecked operations
+	})
 	private void serializeMap(MsgPackOutputStream out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		var keyType = type.getKeyType();

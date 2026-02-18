@@ -73,7 +73,10 @@ import java.lang.reflect.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection">Reflection Package</a>
  * </ul>
  */
-@SuppressWarnings({"java:S115", "java:S3011"})
+@SuppressWarnings({
+	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., CONST_value)
+	"java:S3011"  // Reflection access needed for accessibility introspection
+})
 public abstract class AccessibleInfo extends ElementInfo {
 
 	// Argument name constants for assertArgNotNull

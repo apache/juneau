@@ -249,6 +249,7 @@ public class JsonSchemaPropertySimpleArray extends JsonSchemaProperty {
 	 */
 	@Override /* Overridden from JsonSchemaProperty */
 	@Deprecated(since = "10.0", forRemoval = true) // Parent method is deprecated
+	@SuppressWarnings("java:S1133")  // Kept for Draft 04 backward compatibility, will be removed in future version
 	public JsonSchemaPropertySimpleArray setId(Object value) {
 		super.setId(value);
 		return this;

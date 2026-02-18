@@ -264,8 +264,7 @@ public class ResponseHeader extends BasicHeader {
 			var cause = e.getCause();
 			if (cause instanceof Exception ex)
 				throw toRex(ex);
-			else
-				throw toRex(cause);
+			throw toRex(cause);
 		} catch (Exception e) {
 			throw toRex(e);
 		}

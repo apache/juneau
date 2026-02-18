@@ -909,6 +909,7 @@ public class JsonSchema {
 	 * @deprecated Use {@link #getIdUri()} instead.
 	 */
 	@Deprecated(since = "10.0", forRemoval = true)
+	@SuppressWarnings("java:S1133")  // Kept for Draft 04 backward compatibility, will be removed in future version
 	public URI getId() {
 		return nn(id) ? id : idUri; // Fall back to new '$id' for compatibility when reading
 	}
@@ -1570,6 +1571,7 @@ public class JsonSchema {
 	 * @deprecated Use {@link #setIdUri(Object)} instead.
 	 */
 	@Deprecated(since = "10.0", forRemoval = true)
+	@SuppressWarnings("java:S1133")  // Kept for Draft 04 backward compatibility, will be removed in future version
 	public JsonSchema setId(Object value) {
 		this.id = toUri(value);
 		return this;

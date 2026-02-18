@@ -49,7 +49,13 @@ import org.apache.juneau.swap.*;
 
  * </ul>
  */
-@SuppressWarnings({ "java:S125", "java:S115", "rawtypes", "resource", "unchecked" })  // S125: state-machine comments
+@SuppressWarnings({
+	"java:S125",   // State-machine comments are documentation, not commented-out code
+	"java:S115",   // Constants use UPPER_snakeCase convention (e.g., CONST_value)
+	"rawtypes",    // Raw types necessary for generic type handling
+	"resource",    // UonReader is managed by caller
+	"unchecked"    // Type erasure requires unchecked casts
+})
 public class UonParserSession extends ReaderParserSession implements HttpPartParserSession {
 
 	// Property name constants
@@ -300,7 +306,10 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * @throws ParseException Malformed input encountered.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	@SuppressWarnings({ "java:S3776", "java:S6541" })
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for parser state machine
+		"java:S6541"  // Synchronization not needed for session-local state
+	})
 	public <T> T parseAnything(ClassMeta<?> eType, UonReader r, Object outer, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)

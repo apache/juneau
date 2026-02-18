@@ -1688,6 +1688,7 @@ public class SchemaAnnotation {
 	 * @return The schema converted to a map, or and empty map if the annotation was null.
 	 * @throws ParseException Malformed input encountered.
 	 */
+	@SuppressWarnings("removal")  // Handles deprecated boolean-style exclusiveMaximum/exclusiveMinimum for backward compatibility
 	public static JsonMap asMap(Schema a) throws ParseException {
 		if (a == null)
 			return JsonMap.EMPTY_MAP;

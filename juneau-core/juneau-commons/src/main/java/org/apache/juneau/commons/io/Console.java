@@ -26,7 +26,10 @@ import java.text.*;
  * <p>
  * Uses {@link java.text.MessageFormat} for formatting messages with arguments.
  */
-@SuppressWarnings({"java:S106", "java:S108"}) // System.err/out usage is intentional for console output utility
+@SuppressWarnings({
+	"java:S106", // System.err/out usage is intentional for console output utility
+	"java:S108"  // Nested blocks used for logical grouping in console operations
+})
 public class Console {
 
 	/**

@@ -174,10 +174,11 @@ public class LogParser implements Iterable<LogParser.Entry>, Closeable {
 				} else {
 					prev = null;
 				}
-			} else {
-				if (nn(prev))
-					prev.addText(e.line);
+		} else {
+			if (nn(prev)) {  // prev is non-null here
+				prev.addText(e.line);
 			}
+		}
 		}
 		if (nn(prev))
 			allEntries.add(prev);
@@ -196,6 +197,8 @@ public class LogParser implements Iterable<LogParser.Entry>, Closeable {
 
 	/**
 	 * Returns whether any entries are available.
+	 *
+	 * @return <jk>true</jk> if entries are available, <jk>false</jk> otherwise.
 	 */
 	public boolean hasNext() {
 		return !entries.isEmpty();

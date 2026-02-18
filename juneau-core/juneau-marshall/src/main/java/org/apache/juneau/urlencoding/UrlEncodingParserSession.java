@@ -46,11 +46,11 @@ import org.apache.juneau.uon.*;
  * </ul>
  */
 @SuppressWarnings({
-	"unchecked",
-	"rawtypes",
-	"resource",
-	"java:S110",
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., CONST_value)
+	"unchecked",   // Type erasure requires unchecked casts
+	"rawtypes",    // Raw types necessary for generic type handling
+	"resource",    // UonReader is managed by caller
+	"java:S110",   // Inheritance depth acceptable for session hierarchy
+	"java:S115"    // Constants use UPPER_snakeCase convention (e.g., CONST_value)
 })
 public class UrlEncodingParserSession extends UonParserSession {
 

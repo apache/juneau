@@ -2814,6 +2814,7 @@ public class HttpPartSchema {
 		// Other
 		// -----------------------------------------------------------------------------------------------------------------
 
+		@SuppressWarnings("removal")  // Handles deprecated boolean-style exclusiveMaximum/exclusiveMinimum for backward compatibility
 		Builder apply(Schema a) {
 			default_(joinnlOrNull(a.default_(), a.df()));
 			enum_(toSet(a.enum_(), a.e()));

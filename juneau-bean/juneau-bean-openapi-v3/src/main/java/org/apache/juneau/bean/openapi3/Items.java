@@ -123,7 +123,10 @@ public class Items extends OpenApiElement {
 	private Boolean exclusiveMaximum;
 	private Boolean exclusiveMinimum;
 	private Boolean uniqueItems;
-	@SuppressWarnings("java:S1845") // Field name intentionally matches class name
+	@SuppressWarnings({
+		"java:S1845", // Field name intentionally matches class name per OpenAPI spec
+		"java:S1700"  // Field duplicates class name per OpenAPI spec
+	})
 	private Items items;
 	private Object default_;
 	private List<Object> enum_ = list();

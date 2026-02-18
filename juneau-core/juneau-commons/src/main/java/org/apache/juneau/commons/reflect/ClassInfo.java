@@ -305,7 +305,11 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * @return
 	 * 	The same StringBuilder for method chaining.
 	 */
-	@SuppressWarnings({ "null", "java:S3776", "java:S6541" })
+	@SuppressWarnings({
+		"null",       // Null analysis handled by runtime checks
+		"java:S3776", // Cognitive complexity acceptable for name formatting logic
+		"java:S6541"  // Synchronization not needed for local StringBuilder operations
+	})
 	public StringBuilder appendNameFormatted(StringBuilder sb, ClassNameFormat nameFormat, boolean includeTypeParams, char separator, ClassArrayFormat arrayFormat) {
 		var dim = getDimensions();
 

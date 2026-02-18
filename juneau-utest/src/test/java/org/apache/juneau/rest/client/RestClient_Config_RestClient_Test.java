@@ -324,6 +324,7 @@ class RestClient_Config_RestClient_Test extends TestBase {
 		}
 	}
 
+	@SuppressWarnings("removal")  // Tests deprecated finalize() method for leak detection
 	@Test void a07_leakDetection() throws Throwable {
 		client().detectLeaks().build(A7.class).finalize();
 		assertEquals("WARNING:  RestClient garbage collected before it was finalized.",A7.lastMessage);

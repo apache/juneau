@@ -256,6 +256,7 @@ class SchemaAnnotation_Test extends TestBase {
 		uniqueItems=true,
 		xml="cc"
 	)
+	@SuppressWarnings("removal")
 	public static class D1 {}
 	Schema d1 = D1.class.getAnnotationsByType(Schema.class)[0];
 
@@ -315,6 +316,7 @@ class SchemaAnnotation_Test extends TestBase {
 		uniqueItems=true,
 		xml="cc"
 	)
+	@SuppressWarnings("removal")
 	public static class D2 {}
 	Schema d2 = D2.class.getAnnotationsByType(Schema.class)[0];
 
@@ -444,6 +446,7 @@ class SchemaAnnotation_Test extends TestBase {
 	// Backward compatibility: exclusiveMaximum/exclusiveMinimum fallback
 	//------------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings("removal")  // Tests deprecated boolean-style exclusiveMaximum/exclusiveMinimum for backward compatibility
 	@Test void f01_backwardCompatibility_exclusiveMaxMin() {
 		// Test that old boolean exclusiveMaximum/exclusiveMinimum still work
 		Schema oldStyle = SchemaAnnotation.create()

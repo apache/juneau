@@ -32,7 +32,10 @@ import org.apache.juneau.commons.reflect.*;
  * Utility methods for working with classes.
  *
  */
-@SuppressWarnings({"java:S115", "java:S3011"})
+@SuppressWarnings({
+	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., CONST_value)
+	"java:S3011"  // Reflection access needed for class introspection utilities
+})
 public class ClassUtils {
 
 	/**

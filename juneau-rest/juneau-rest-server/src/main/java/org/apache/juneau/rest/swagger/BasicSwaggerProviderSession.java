@@ -923,6 +923,7 @@ public class BasicSwaggerProviderSession {
 		// @formatter:on
 	}
 
+	@SuppressWarnings("removal")  // Uses deprecated exclusiveMaximum/exclusiveMinimum for backward compatibility
 	private JsonMap merge(JsonMap om, Schema a) {
 		try {
 			if (SchemaAnnotation.empty(a))

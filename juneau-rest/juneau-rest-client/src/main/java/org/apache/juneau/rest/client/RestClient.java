@@ -6344,12 +6344,13 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			} else if (state == S4) {
 				if (! isWhitespace(c)) {
 					mark = i;
-					// State machine requires state transition to S5, SonarLint reports false positive
-					@SuppressWarnings({
-						"java:S1854",  // State machine requires state transition to S5
-						"java:S1481"   // unused variable intentional; assignment is for side effect (state = S5)
-					})
-					var unused = (state = S5);
+				// State machine requires state transition to S5, SonarLint reports false positive
+				@SuppressWarnings({
+					"java:S1854",  // State machine requires state transition to S5
+					"java:S1481",  // unused variable intentional; assignment is for side effect (state = S5)
+					"unused"       // Eclipse/Java compiler warning for unused variable
+				})
+				var unused = (state = S5);
 				}
 			} else /* (state == S5) */ {
 				if (isWhitespace(c)) {

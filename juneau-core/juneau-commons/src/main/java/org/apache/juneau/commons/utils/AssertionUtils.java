@@ -279,7 +279,9 @@ public class AssertionUtils {
 	 * @return The object cast to the specified type.
 	 * @throws IllegalArgumentException Thrown if the object is not an instance of the specified type.
 	 */
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings({
+		"unchecked" // Type safety ensured by instanceof check
+	})
 	public static final <T> T assertType(Class<T> type, Object o) throws IllegalArgumentException {
 		assertArgNotNull(ARG_type, type);
 		assertArgNotNull(ARG_o, o);
@@ -309,7 +311,10 @@ public class AssertionUtils {
 	 * @return The object cast to the specified type.
 	 * @throws RuntimeException Thrown if the object is not an instance of the specified type (the exception is provided by the supplier).
 	 */
-	@SuppressWarnings({ "unchecked", "java:S112" }) // Exception type comes from caller's supplier
+	@SuppressWarnings({
+		"unchecked", // Type safety ensured by instanceof check
+		"java:S112"  // Exception type comes from caller's supplier
+	})
 	public static final <T> T assertType(Class<T> type, Object o, java.util.function.Supplier<? extends RuntimeException> exceptionSupplier) {
 		assertArgNotNull(ARG_type, type);
 		assertArgNotNull(ARG_o, o);

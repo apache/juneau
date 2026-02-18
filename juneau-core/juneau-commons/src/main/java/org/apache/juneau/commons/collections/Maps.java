@@ -165,7 +165,10 @@ public class Maps<K,V> {
 	 * @param <V> Value type.
 	 * @return A new builder.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({
+		"unchecked", // Type erasure requires unchecked operations
+		"rawtypes"   // Raw types necessary for generic map handling
+	})
 	public static <K,V> Maps<K,V> create() {
 		return new Maps(Object.class, Object.class);
 	}

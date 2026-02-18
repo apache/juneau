@@ -581,7 +581,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @return The result, never <jk>null</jk>.
 	 */
 	protected String getFailureMessage(Predicate<?> p, Object value) {
-		if (p instanceof AssertionPredicate p2)
+		if (p instanceof AssertionPredicate<?> p2)
 			return p2.getFailureMessage();
 		return f(MSG_unexpectedValue2, r(value));
 	}

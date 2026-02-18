@@ -80,7 +80,10 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection">Reflection Package</a>
  * </ul>
  */
-@SuppressWarnings({"java:S115", "java:S3011"})
+@SuppressWarnings({
+	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., CONST_value)
+	"java:S3011"  // Reflection access needed for executable introspection
+})
 public abstract class ExecutableInfo extends AccessibleInfo {
 
 	// Argument name constants for assertArgNotNull
@@ -851,7 +854,10 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		return toString.get();
 	}
 
-	@SuppressWarnings({ "java:S3776", "java:S6541" })
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for toString formatting logic
+		"java:S6541"  // Synchronization not needed for local string building
+	})
 	private String findToString() {
 		var sb = new StringBuilder(256);
 

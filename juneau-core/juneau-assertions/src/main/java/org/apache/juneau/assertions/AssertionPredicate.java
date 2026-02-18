@@ -99,7 +99,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 					var b = p.test(t);
 					if (! b) {
 						var m = f(MSG_predicateTestFailed, i + 1);
-						if (p instanceof AssertionPredicate p2)
+						if (p instanceof AssertionPredicate<?> p2)
 							m += "\n\t" + p2.getFailureMessage();
 						failedMessage.set(m);
 						return false;
@@ -250,7 +250,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 					oargs[i] = r(a);
 			}
 			m = f(m, oargs);
-			if (inner instanceof AssertionPredicate inner2)
+			if (inner instanceof AssertionPredicate<?> inner2)
 				m += "\n\t" + inner2.getFailureMessage();
 			failedMessage.set(m);
 		}

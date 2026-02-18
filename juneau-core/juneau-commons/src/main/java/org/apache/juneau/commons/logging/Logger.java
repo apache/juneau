@@ -75,7 +75,10 @@ import org.apache.juneau.commons.collections.Cache;
  * 	<li class='jc'>{@link java.util.logging.Logger}
  * </ul>
  */
-@SuppressWarnings({ "java:S100", "java:S1192" }) // Class name intentionally matches java.util.logging.Logger for compatibility
+@SuppressWarnings({
+	"java:S100",  // Method names match java.util.logging.Logger for API compatibility
+	"java:S1192"  // String literals intentionally duplicated for clarity
+})
 public class Logger extends java.util.logging.Logger {
 
 	/**

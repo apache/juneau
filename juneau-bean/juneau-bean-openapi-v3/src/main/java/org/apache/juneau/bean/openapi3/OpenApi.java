@@ -100,7 +100,10 @@ public class OpenApi extends OpenApiElement {
 	private static final String PROP_servers = "servers";
 	private static final String PROP_tags = "tags";
 
-	@SuppressWarnings("java:S1845") // Field name intentionally matches class name
+	@SuppressWarnings({
+		"java:S1845", // Field name intentionally matches class name per OpenAPI spec
+		"java:S1700"  // Field duplicates class name per OpenAPI spec
+	})
 	private String openapi = "3.0.0";
 	private Info info;
 	private List<Server> servers = list();

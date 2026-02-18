@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.swap;
 
-import org.apache.juneau.*;
-
 /**
  * Abstract subclass for object swaps that swap objects for strings.
  *

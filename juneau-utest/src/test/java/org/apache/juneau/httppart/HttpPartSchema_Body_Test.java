@@ -879,6 +879,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 	@Schema(t="integer", exclusiveMaximum=true, exclusiveMinimum=true, maximum="100", minimum="0")
 	public static class D03a {}
 
+	@SuppressWarnings("removal")  // Tests deprecated boolean-style exclusiveMaximum/exclusiveMinimum for backward compatibility
 	@Test void d03a_exclusiveBooleanBounds() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Content.class, D03a.class).build();
 		s.validateOutput(1, BeanContext.DEFAULT);
@@ -896,6 +897,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 	@Schema(t="integer", exclusiveMaximum=false, exclusiveMinimum=false, maximum="100", minimum="0")
 	public static class D03b {}
 
+	@SuppressWarnings("removal")  // Tests deprecated boolean-style exclusiveMaximum/exclusiveMinimum for backward compatibility
 	@Test void d03b_inclusiveBounds() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Content.class, D03b.class).build();
 		// With boolean flags set to false, 0 and 100 are included
@@ -913,6 +915,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 	@Schema(t="integer", exclusiveMaximumValue="100", exclusiveMinimumValue="0", exclusiveMaximum=false, exclusiveMinimum=false)
 	public static class D03c {}
 
+	@SuppressWarnings("removal")  // Tests precedence of new numeric style over deprecated boolean style
 	@Test void d03c_newStyleTakesPrecedence() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Content.class, D03c.class).build();
 		// New numeric style should take precedence over old boolean flags
