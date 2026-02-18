@@ -18,6 +18,8 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
+
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -99,6 +101,16 @@ public class EntityTags {
 	 */
 	public List<EntityTag> toList() {
 		return u(l(value));
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof EntityTags other && eq(this, other, (x, y) -> Arrays.equals(x.value, y.value));
+	}
+
+	@Override
+	public int hashCode() {
+		return Arrays.hashCode(value);
 	}
 
 	@Override /* Overridden from Object */

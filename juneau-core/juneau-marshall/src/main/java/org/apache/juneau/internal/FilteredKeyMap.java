@@ -17,6 +17,7 @@
 package org.apache.juneau.internal;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
@@ -91,6 +92,16 @@ public class FilteredKeyMap<K,V> extends AbstractMap<K,V> implements Delegate<Ma
 
 	@Override /* Overridden from Delegate */
 	public ClassMeta<Map<K,V>> getClassMeta() { return classMeta; }
+
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return o instanceof Map<?,?> o2 && eq(this, o2, (x, y) -> x.entrySet().equals(y.entrySet()));
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return entries.hashCode();
+	}
 
 	private Map.Entry<K,V> createEntry(K key) {
 		return new Map.Entry<>() {

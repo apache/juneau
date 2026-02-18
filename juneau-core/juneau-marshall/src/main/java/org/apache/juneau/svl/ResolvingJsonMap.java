@@ -55,6 +55,16 @@ public class ResolvingJsonMap extends JsonMap {
 		this.varResolver = varResolver;
 	}
 
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return this == o || (o instanceof ResolvingJsonMap other && super.equals(o));
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return super.hashCode();
+	}
+
 	@Override /* Overridden from JsonMap */
 	public ResolvingJsonMap append(Map<String,Object> values) {
 		super.append(values);

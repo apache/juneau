@@ -212,6 +212,16 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 		return o.getComparator().compareTo(getComparator());
 	}
 
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return o instanceof UrlPathMatcher other && compareTo(other) == 0;
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return getComparator() != null ? getComparator().hashCode() : 0;
+	}
+
 	/**
 	 * Returns the variable names found in the pattern.
 	 *

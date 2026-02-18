@@ -82,6 +82,16 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 			return cmp(this.sortVal, ((SortEntry)o).sortVal);
 		}
 
+		@Override
+		public boolean equals(Object o) {
+			return o instanceof SortEntry other && compareTo(other) == 0;
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hashCode(sortVal);
+		}
+
 		void setSort(String sortCol, boolean isDesc) {
 			this.isDesc = isDesc;
 

@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
+import java.util.Objects;
 
 import org.apache.http.*;
 import org.apache.http.impl.*;
@@ -202,6 +203,18 @@ public class BasicStatusLine implements StatusLine {
 	@Override /* Overridden from Object */
 	public String toString() {
 		return BasicLineFormatter.INSTANCE.formatStatusLine(null, this).toString();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof BasicStatusLine other && eq(this, other, (x, y) ->
+			eq(x.protocolVersion, y.protocolVersion) && x.statusCode == y.statusCode
+			&& eq(x.reasonPhrase, y.reasonPhrase) && eq(x.locale, y.locale));
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(protocolVersion, statusCode, reasonPhrase, locale);
 	}
 
 	/**

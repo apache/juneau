@@ -150,6 +150,16 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 		this.unmodifiable = unmodifiable;
 	}
 
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return this == o || (o instanceof ControlledArrayList<?> other && super.equals(other) && unmodifiable == other.unmodifiable);
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return super.hashCode() + Boolean.hashCode(unmodifiable);
+	}
+
 	/**
 	 * Constructor.
 	 *

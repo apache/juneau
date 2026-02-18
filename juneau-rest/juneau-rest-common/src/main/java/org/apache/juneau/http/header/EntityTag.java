@@ -106,6 +106,16 @@ public class EntityTag {
 	public boolean isWeak() { return isWeak; }
 
 	@Override
+	public boolean equals(Object o) {
+		return o instanceof EntityTag other && eq(this, other, (x, y) -> x.isWeak == y.isWeak && x.isAny == y.isAny && eq(x.value, y.value));
+	}
+
+	@Override
+	public int hashCode() {
+		return (value != null ? value.hashCode() : 0) + Boolean.hashCode(isWeak) + Boolean.hashCode(isAny);
+	}
+
+	@Override
 	public String toString() {
 		return (isWeak ? "W/" : "") + (isAny() ? "*" : ('"' + value + '"'));
 	}

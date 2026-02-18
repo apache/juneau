@@ -86,6 +86,16 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 		this.vrs = assertArgNotNull(ARG_vrs, vrs);
 	}
 
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return this == o || (o instanceof AnnotationWorkList other && super.equals(other));
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return super.hashCode();
+	}
+
 	/**
 	 * Adds an entry to this list.
 	 *

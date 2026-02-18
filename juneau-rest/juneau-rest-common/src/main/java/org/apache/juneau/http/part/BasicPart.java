@@ -183,6 +183,16 @@ public class BasicPart implements NameValuePair, Headerable {
 	@Override /* Overridden from NameValuePair */
 	public String getValue() { return s(unwrap(value)); }
 
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof NameValuePair nvp && eq(this, nvp, (x, y) -> eq(x.getName(), y.getName()) && eq(x.getValue(), y.getValue()));
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name, getValue());
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
 		return getName() + "=" + getValue();

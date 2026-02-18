@@ -17,6 +17,7 @@
 package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 
@@ -99,4 +100,14 @@ public class RrpcInterfaceMethodMeta {
 	 * @return The absolute URL of the REST interface, never <jk>null</jk>.
 	 */
 	public String getUri() { return url; }
+
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof RrpcInterfaceMethodMeta other && eq(this, other, (x, y) -> x.method.equals(y.method));
+	}
+
+	@Override
+	public int hashCode() {
+		return method.hashCode();
+	}
 }

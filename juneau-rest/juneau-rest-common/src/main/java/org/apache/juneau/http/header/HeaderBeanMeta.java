@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
+import java.util.Objects;
 import java.util.concurrent.*;
 
 import org.apache.juneau.commons.reflect.*;
@@ -153,6 +154,16 @@ public class HeaderBeanMeta<T> {
 		} catch (Exception e) {
 			throw toRex(e);
 		}
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof HeaderBeanMeta<?> other && eq(this, other, (x, y) -> x.type == y.type);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(type);
 	}
 
 	/**

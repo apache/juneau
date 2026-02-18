@@ -57,6 +57,16 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 		return name.compareTo(o.name);
 	}
 
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return o instanceof BeanPropertyValue other && compareTo(other) == 0;
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return name != null ? name.hashCode() : 0;
+	}
+
 	/**
 	 * Returns the bean property metadata.
 	 *

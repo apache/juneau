@@ -18,6 +18,7 @@ package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -121,4 +122,14 @@ public class RrpcInterfaceMeta {
 	 * 	<br>Never has leading or trailing slashes.
 	 */
 	public String getPath() { return path; }
+
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof RrpcInterfaceMeta other && eq(this, other, (x, y) -> x.c == y.c);
+	}
+
+	@Override
+	public int hashCode() {
+		return System.identityHashCode(c);
+	}
 }

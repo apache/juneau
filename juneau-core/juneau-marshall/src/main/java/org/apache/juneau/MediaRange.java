@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -128,5 +129,15 @@ public class MediaRange extends MediaType {
 	@Override /* Overridden from Object */
 	public String toString() {
 		return string;
+	}
+
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return o instanceof MediaRange other && eq(this, other, (x, y) -> eq(x.string, y.string));
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return string != null ? string.hashCode() : 0;
 	}
 }
