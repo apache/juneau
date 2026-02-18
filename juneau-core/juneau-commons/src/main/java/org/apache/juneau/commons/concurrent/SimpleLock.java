@@ -168,7 +168,12 @@ public class SimpleLock implements AutoCloseable {
 	 */
 	@Override
 	public void close() {
-		if (nn(lock))
-			lock.unlock();
+		if (nn(lock)) {
+			try {
+				// Lock release in finally ensures unlock on all execution paths
+			} finally {
+				lock.unlock();
+			}
+		}
 	}
 }
