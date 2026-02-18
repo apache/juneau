@@ -408,7 +408,7 @@ public class XmlParserSession extends ReaderParserSession {
 		var cpcm = (cp == null ? object() : cp.getClassMeta());
 		StringBuilder sb = null;
 		var breg = cp == null ? null : cp.getBeanRegistry();
-		LinkedList<Object> l = null;
+		List<Object> l = null;
 
 		int depth = 0;
 		do {

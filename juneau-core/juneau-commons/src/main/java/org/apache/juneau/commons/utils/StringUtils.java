@@ -552,7 +552,7 @@ public class StringUtils {
 	 * @param s The comma-delimited string.
 	 * @return A new {@link LinkedHashSet}. Never <jk>null</jk>.
 	 */
-	public static LinkedHashSet<String> cdlToSet(String s) {
+	public static Set<String> cdlToSet(String s) {
 		return split(s).stream().collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 

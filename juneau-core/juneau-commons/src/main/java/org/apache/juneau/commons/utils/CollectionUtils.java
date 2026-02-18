@@ -600,7 +600,7 @@ public class CollectionUtils {
 	 * @param value The list to copy.
 	 * @return A new modifiable list.
 	 */
-	public static <E> ArrayList<E> copyOf(List<E> value) {
+	public static <E> List<E> copyOf(List<E> value) {
 		return value == null ? null : new ArrayList<>(value);
 	}
 
@@ -1006,7 +1006,7 @@ public class CollectionUtils {
 	 * @see #list(Object...)
 	 */
 	@SafeVarargs
-	public static <T> ArrayList<T> al(T...values) {
+	public static <T> List<T> al(T...values) {
 		return new ArrayList<>(l(values));
 	}
 
@@ -1026,7 +1026,7 @@ public class CollectionUtils {
 	 * @return A new modifiable LinkedList containing the specified values.
 	 */
 	@SafeVarargs
-	public static <T> LinkedList<T> ll(T...values) {
+	public static <T> List<T> ll(T...values) {
 		return new LinkedList<>(l(values));
 	}
 
@@ -1046,7 +1046,7 @@ public class CollectionUtils {
 	 * @return A new modifiable HashSet containing the specified values.
 	 */
 	@SafeVarargs
-	public static <T> HashSet<T> hs(T...values) {
+	public static <T> Set<T> hs(T...values) {
 		return new HashSet<>(Arrays.asList(values));
 	}
 
@@ -1067,7 +1067,7 @@ public class CollectionUtils {
 	 * @return A new modifiable TreeSet containing the specified values.
 	 */
 	@SafeVarargs
-	public static <T extends Comparable<T>> TreeSet<T> ts(T...values) {
+	public static <T extends Comparable<T>> SortedSet<T> ts(T...values) {
 		return new TreeSet<>(Arrays.asList(values));
 	}
 
@@ -1152,7 +1152,7 @@ public class CollectionUtils {
 	 * @param size The initial size of the list.
 	 * @return A new modifiable list.
 	 */
-	public static <E> ArrayList<E> listOfSize(int size) {
+	public static <E> List<E> listOfSize(int size) {
 		return new ArrayList<>(size);
 	}
 
@@ -1440,7 +1440,7 @@ public class CollectionUtils {
 	 * @param <V> The value type.
 	 * @return A new modifiable map.
 	 */
-	public static <K,V> LinkedHashMap<K,V> map() {
+	public static <K,V> Map<K,V> map() {
 		return new LinkedHashMap<>();
 	}
 
@@ -1457,7 +1457,7 @@ public class CollectionUtils {
 	 * @param v1 Value 1.
 	 * @return A new modifiable map.
 	 */
-	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1) {
+	public static <K,V> Map<K,V> map(K k1, V v1) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
 		return m;
@@ -1474,7 +1474,7 @@ public class CollectionUtils {
 	 * @param v2 Value 2.
 	 * @return A new modifiable map.
 	 */
-	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2) {
+	public static <K,V> Map<K,V> map(K k1, V v1, K k2, V v2) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
 		m.put(k2, v2);
@@ -1494,7 +1494,7 @@ public class CollectionUtils {
 	 * @param v3 Value 3.
 	 * @return A new modifiable map.
 	 */
-	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3) {
+	public static <K,V> Map<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
 		m.put(k2, v2);
@@ -1520,7 +1520,7 @@ public class CollectionUtils {
 	@SuppressWarnings({
 		"java:S107" // Many parameters acceptable for convenience method
 	})
-	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
+	public static <K,V> Map<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
 		m.put(k2, v2);
@@ -1549,7 +1549,7 @@ public class CollectionUtils {
 	@SuppressWarnings({
 		"java:S107" // Many parameters acceptable for convenience method
 	})
-	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
+	public static <K,V> Map<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
 		m.put(k2, v2);
@@ -1581,7 +1581,7 @@ public class CollectionUtils {
 	@SuppressWarnings({
 		"java:S107" // Many parameters acceptable for convenience method
 	})
-	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) {
+	public static <K,V> Map<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
 		m.put(k2, v2);
@@ -1616,7 +1616,7 @@ public class CollectionUtils {
 	@SuppressWarnings({
 		"java:S107" // Many parameters acceptable for convenience method
 	})
-	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7) {
+	public static <K,V> Map<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
 		m.put(k2, v2);
@@ -1654,7 +1654,7 @@ public class CollectionUtils {
 	@SuppressWarnings({
 		"java:S107" // Many parameters acceptable for convenience method
 	})
-	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) {
+	public static <K,V> Map<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
 		m.put(k2, v2);
@@ -1695,7 +1695,7 @@ public class CollectionUtils {
 	@SuppressWarnings({
 		"java:S107" // Many parameters acceptable for convenience method
 	})
-	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) {
+	public static <K,V> Map<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
 		m.put(k2, v2);
@@ -1739,7 +1739,7 @@ public class CollectionUtils {
 	@SuppressWarnings({
 		"java:S107" // Many parameters acceptable for convenience method
 	})
-	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) {
+	public static <K,V> Map<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) {
 		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
 		m.put(k2, v2);
@@ -1907,7 +1907,7 @@ public class CollectionUtils {
 	 * @param valueType The value type.
 	 * @return A new modifiable map.
 	 */
-	public static <K,V> LinkedHashMap<K,V> mapOf(Class<K> keyType, Class<V> valueType) {
+	public static <K,V> Map<K,V> mapOf(Class<K> keyType, Class<V> valueType) {
 		return map();
 	}
 
@@ -2013,7 +2013,7 @@ public class CollectionUtils {
 	 * @return A modifiable LinkedHashSet containing the specified values.
 	 */
 	@SafeVarargs
-	public static <T> LinkedHashSet<T> set(T...values) {
+	public static <T> Set<T> set(T...values) {
 		assertArgNotNull(ARG_values, values);
 		return new LinkedHashSet<>(Arrays.asList(values));
 	}
@@ -2057,7 +2057,7 @@ public class CollectionUtils {
 	 * @return A new modifiable set.
 	 */
 	@SafeVarargs
-	public static <E> LinkedHashSet<E> setOf(Class<E> elementType, E...values) {
+	public static <E> Set<E> setOf(Class<E> elementType, E...values) {
 		return set(values);
 	}
 
@@ -2090,8 +2090,8 @@ public class CollectionUtils {
 	 * @param value The values to initialize the list with.
 	 * @return A new modifiable list.
 	 */
-	public static <E> ArrayList<E> sortedList(Comparator<E> comparator, Collection<E> value) {
-		ArrayList<E> l = toList(value);
+	public static <E> List<E> sortedList(Comparator<E> comparator, Collection<E> value) {
+		List<E> l = toList(value);
 		Collections.sort(l, comparator);
 		return l;
 	}
@@ -2132,7 +2132,7 @@ public class CollectionUtils {
 	 * @param <V> The value type.
 	 * @return A new modifiable set.
 	 */
-	public static <K,V> TreeMap<K,V> sortedMap() {
+	public static <K,V> SortedMap<K,V> sortedMap() {
 		return new TreeMap<>();
 	}
 
@@ -2149,7 +2149,7 @@ public class CollectionUtils {
 	 * @return A new modifiable set.
 	 */
 	@SafeVarargs
-	public static <E> TreeSet<E> sortedSet(E...values) {
+	public static <E> SortedSet<E> sortedSet(E...values) {
 		assertArgNotNull(ARG_values, values);
 		var l = new TreeSet<E>();
 		for (var v : values)
@@ -2253,7 +2253,7 @@ public class CollectionUtils {
 	 * @param value The collection to copy from.
 	 * @return A new modifiable list.
 	 */
-	public static <E> ArrayList<E> toList(Collection<E> value) {
+	public static <E> List<E> toList(Collection<E> value) {
 		return toList(value, false);
 	}
 
@@ -2268,7 +2268,7 @@ public class CollectionUtils {
 	@SuppressWarnings({
 		"java:S1168"     // Intentional null when nullIfEmpty and (null or empty).
 	})
-	public static <E> ArrayList<E> toList(Collection<E> value, boolean nullIfEmpty) {
+	public static <E> List<E> toList(Collection<E> value, boolean nullIfEmpty) {
 		if (value == null)
 			return nullIfEmpty ? null : new ArrayList<>();
 		if (nullIfEmpty && value.isEmpty())
@@ -2458,7 +2458,7 @@ public class CollectionUtils {
 	 * @param value The value to copy from.
 	 * @return A new {@link TreeSet}, or an empty {@link TreeSet} if the input was <jk>null</jk>.
 	 */
-	public static <E> TreeSet<E> toSortedSet(Collection<E> value) {
+	public static <E> SortedSet<E> toSortedSet(Collection<E> value) {
 		if (value == null)
 			return new TreeSet<>();
 		var l = new TreeSet<E>();
@@ -2477,7 +2477,7 @@ public class CollectionUtils {
 	@SuppressWarnings({
 		"java:S1168"     // Intentional null when nullIfEmpty and empty.
 	})
-	public static <E> TreeSet<E> toSortedSet(Collection<E> value, boolean nullIfEmpty) {
+	public static <E> SortedSet<E> toSortedSet(Collection<E> value, boolean nullIfEmpty) {
 		if (value == null)
 			return new TreeSet<>();
 		if (nullIfEmpty && value.isEmpty())
@@ -2494,7 +2494,7 @@ public class CollectionUtils {
 	 * @param copyFrom The set to copy from.
 	 * @return A new {@link TreeSet}, or an empty {@link TreeSet} if the input was <jk>null</jk>.
 	 */
-	public static <T> TreeSet<T> toSortedSet(Set<T> copyFrom) {
+	public static <T> SortedSet<T> toSortedSet(Set<T> copyFrom) {
 		return copyFrom == null ? new TreeSet<>() : new TreeSet<>(copyFrom);
 	}
 

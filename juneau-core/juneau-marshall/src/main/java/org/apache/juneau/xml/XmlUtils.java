@@ -76,7 +76,7 @@ public class XmlUtils {
 	 * @param value The list of text nodes to collapse.
 	 * @return The same list.
 	 */
-	public static LinkedList<Object> collapseTextNodes(LinkedList<Object> value) {
+	public static List<Object> collapseTextNodes(List<Object> value) {
 
 		StringBuilder prev = null;
 		for (ListIterator<Object> i = value.listIterator(); i.hasNext();) {

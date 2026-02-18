@@ -391,7 +391,7 @@ class CollectionUtils_Test extends TestBase {
 	@Test
 	void a020_copyOf_list() {
 		List<String> list = list("a", "b", "c");
-		ArrayList<String> result = copyOf(list);
+		List<String> result = copyOf(list);
 		assertNotNull(result);
 		assertEquals(3, result.size());
 		assertEquals("a", result.get(0));
@@ -772,7 +772,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a049_listOfSize() {
-		ArrayList<String> result = listOfSize(5);
+		List<String> result = listOfSize(5);
 		assertNotNull(result);
 		assertEquals(0, result.size());
 		result.add("a");
@@ -876,61 +876,61 @@ class CollectionUtils_Test extends TestBase {
 	@Test
 	void a052_map() {
 		// Empty
-		LinkedHashMap<String, Integer> empty = map();
+		Map<String, Integer> empty = map();
 		assertNotNull(empty);
 		assertTrue(empty.isEmpty());
 		empty.put("x", 1); // Modifiable
 		assertEquals(1, empty.size());
 
 		// 1 pair
-		LinkedHashMap<String, Integer> m1 = map("a", 1);
+		Map<String, Integer> m1 = map("a", 1);
 		assertEquals(1, m1.size());
 		assertEquals(1, m1.get("a"));
 
 		// 2 pairs
-		LinkedHashMap<String, Integer> m2 = map("a", 1, "b", 2);
+		Map<String, Integer> m2 = map("a", 1, "b", 2);
 		assertEquals(2, m2.size());
 
 		// 3 pairs
-		LinkedHashMap<String, Integer> m3 = map("a", 1, "b", 2, "c", 3);
+		Map<String, Integer> m3 = map("a", 1, "b", 2, "c", 3);
 		assertEquals(3, m3.size());
 
 		// 4 pairs
-		LinkedHashMap<String, Integer> m4 = map("a", 1, "b", 2, "c", 3, "d", 4);
+		Map<String, Integer> m4 = map("a", 1, "b", 2, "c", 3, "d", 4);
 		assertEquals(4, m4.size());
 		var keys = new ArrayList<>(m4.keySet());
 		assertEquals(l("a", "b", "c", "d"), keys);
 
 		// 5 pairs
-		LinkedHashMap<String, Integer> m5 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5);
+		Map<String, Integer> m5 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5);
 		assertEquals(5, m5.size());
 
 		// 6 pairs
-		LinkedHashMap<String, Integer> m6 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6);
+		Map<String, Integer> m6 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6);
 		assertEquals(6, m6.size());
 
 		// 7 pairs - test lines 1400-1408
-		LinkedHashMap<String, Integer> m7 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7);
+		Map<String, Integer> m7 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7);
 		assertEquals(7, m7.size());
 		assertEquals(7, m7.get("g"));
 
 		// 8 pairs - test lines 1435-1444
-		LinkedHashMap<String, Integer> m8 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8);
+		Map<String, Integer> m8 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8);
 		assertEquals(8, m8.size());
 		assertEquals(8, m8.get("h"));
 
 		// 9 pairs - test lines 1473-1483
-		LinkedHashMap<String, Integer> m9 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9);
+		Map<String, Integer> m9 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9);
 		assertEquals(9, m9.size());
 		assertEquals(9, m9.get("i"));
 
 		// 10 pairs
-		LinkedHashMap<String, Integer> m10 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9, "j", 10);
+		Map<String, Integer> m10 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9, "j", 10);
 		assertEquals(10, m10.size());
 		assertEquals(l("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"), new ArrayList<>(m10.keySet()));
 
 		// Null values
-		LinkedHashMap<String, String> nullVals = map("a", "val1", "b", null, "c", "val3", "d", null);
+		Map<String, String> nullVals = map("a", "val1", "b", null, "c", "val3", "d", null);
 		assertEquals(4, nullVals.size());
 		assertNull(nullVals.get("b"));
 	}
@@ -983,7 +983,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a057_mapOf() {
-		LinkedHashMap<String, Integer> result = mapOf(String.class, Integer.class);
+		Map<String, Integer> result = mapOf(String.class, Integer.class);
 		assertNotNull(result);
 		assertTrue(result.isEmpty());
 		result.put("a", 1); // Modifiable
@@ -1069,7 +1069,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a063_set() {
-		LinkedHashSet<String> result = set("a", "b", "c");
+		Set<String> result = set("a", "b", "c");
 		assertNotNull(result);
 		assertEquals(3, result.size());
 		assertTrue(result.contains("a"));
@@ -1097,7 +1097,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a065_setOf() {
-		LinkedHashSet<String> result = setOf(String.class, "a", "b", "c");
+		Set<String> result = setOf(String.class, "a", "b", "c");
 		assertNotNull(result);
 		assertEquals(3, result.size());
 		assertTrue(result.contains("a"));
@@ -1153,7 +1153,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a070_sortedMap() {
-		TreeMap<String, Integer> result = sortedMap();
+		SortedMap<String, Integer> result = sortedMap();
 		assertNotNull(result);
 		assertTrue(result.isEmpty());
 		result.put("a", 1);
@@ -1165,22 +1165,22 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a071_sortedSet() {
-		TreeSet<String> result = sortedSet("c", "a", "b");
+		SortedSet<String> result = sortedSet("c", "a", "b");
 		assertNotNull(result);
 		assertEquals(3, result.size());
 		assertEquals(list("a", "b", "c"), new ArrayList<>(result));
 
 		// Empty
-		TreeSet<String> empty = sortedSet();
+		SortedSet<String> empty = sortedSet();
 		assertNotNull(empty);
 		assertTrue(empty.isEmpty());
 
 		// Single
-		TreeSet<String> single = sortedSet("a");
+		SortedSet<String> single = sortedSet("a");
 		assertEquals(1, single.size());
 
 		// Numbers
-		TreeSet<Integer> numbers = sortedSet(3, 1, 2, 5, 4);
+		SortedSet<Integer> numbers = sortedSet(3, 1, 2, 5, 4);
 		assertEquals(list(1, 2, 3, 4, 5), new ArrayList<>(numbers));
 	}
 
@@ -1257,7 +1257,7 @@ class CollectionUtils_Test extends TestBase {
 	@Test
 	void a077_toList_collection() {
 		Collection<String> col = set("a", "b", "c");
-		ArrayList<String> result = toList(col);
+		List<String> result = toList(col);
 		assertNotNull(result);
 		assertEquals(3, result.size());
 		assertTrue(result.contains("a"));
@@ -1269,11 +1269,11 @@ class CollectionUtils_Test extends TestBase {
 	@Test
 	void a078_toList_collectionBoolean() {
 		Collection<String> col = list("a", "b");
-		ArrayList<String> result1 = toList(col, false);
+		List<String> result1 = toList(col, false);
 		assertNotNull(result1);
 		assertEquals(2, result1.size());
 
-		ArrayList<String> result2 = toList(col, true);
+		List<String> result2 = toList(col, true);
 		assertNotNull(result2);
 		assertEquals(2, result2.size());
 
@@ -1375,13 +1375,13 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a081_toSortedSet() {
-		LinkedHashSet<String> input = new LinkedHashSet<>(l("c", "a", "b"));
-		TreeSet<String> result = toSortedSet(input);
+		Set<String> input = new LinkedHashSet<>(l("c", "a", "b"));
+		SortedSet<String> result = toSortedSet(input);
 		assertNotNull(result);
 		assertEquals(l("a", "b", "c"), new ArrayList<>(result));
 
-		LinkedHashSet<Integer> input2 = new LinkedHashSet<>(l(3, 1, 2));
-		TreeSet<Integer> result2 = toSortedSet(input2);
+		Set<Integer> input2 = new LinkedHashSet<>(l(3, 1, 2));
+		SortedSet<Integer> result2 = toSortedSet(input2);
 		assertEquals(l(1, 2, 3), new ArrayList<>(result2));
 
 		assertNotNull(toSortedSet((Set<String>)null));
@@ -1467,12 +1467,12 @@ class CollectionUtils_Test extends TestBase {
 	void a085b_toSortedSet_collection() {
 		// Test lines 2117-2121: toSortedSet(Collection<E>) - different from toSortedSet(Set<E>)
 		Collection<String> col = list("c", "a", "b");
-		TreeSet<String> result = toSortedSet(col);
+		SortedSet<String> result = toSortedSet(col);
 		assertNotNull(result);
 		assertEquals(l("a", "b", "c"), new ArrayList<>(result));
 
 		Collection<Integer> col2 = list(3, 1, 2);
-		TreeSet<Integer> result2 = toSortedSet(col2);
+		SortedSet<Integer> result2 = toSortedSet(col2);
 		assertEquals(l(1, 2, 3), new ArrayList<>(result2));
 
 		// Test line 2117: null returns empty TreeSet
@@ -1486,7 +1486,7 @@ class CollectionUtils_Test extends TestBase {
 	@Test
 	void a086_toSortedSet_collectionBoolean() {
 		Collection<String> col = list("c", "a", "b");
-		TreeSet<String> result1 = toSortedSet(col, false);
+		SortedSet<String> result1 = toSortedSet(col, false);
 		assertNotNull(result1);
 		assertEquals(3, result1.size());
 
@@ -1563,7 +1563,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a092_al() {
-		ArrayList<String> list = al("a", "b", "c");
+		List<String> list = al("a", "b", "c");
 		assertNotNull(list);
 		assertEquals(3, list.size());
 		assertEquals("a", list.get(0));
@@ -1571,7 +1571,7 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals("c", list.get(2));
 
 		// Empty list
-		ArrayList<String> empty = al();
+		List<String> empty = al();
 		assertNotNull(empty);
 		assertEquals(0, empty.size());
 
@@ -1585,7 +1585,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a093_ll() {
-		LinkedList<String> list = ll("a", "b", "c");
+		List<String> list = ll("a", "b", "c");
 		assertNotNull(list);
 		assertEquals(3, list.size());
 		assertEquals("a", list.get(0));
@@ -1593,7 +1593,7 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals("c", list.get(2));
 
 		// Empty list
-		LinkedList<String> empty = ll();
+		List<String> empty = ll();
 		assertNotNull(empty);
 		assertEquals(0, empty.size());
 
@@ -1607,7 +1607,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a094_hs() {
-		HashSet<String> set = hs("a", "b", "c");
+		Set<String> set = hs("a", "b", "c");
 		assertNotNull(set);
 		assertEquals(3, set.size());
 		assertTrue(set.contains("a"));
@@ -1615,7 +1615,7 @@ class CollectionUtils_Test extends TestBase {
 		assertTrue(set.contains("c"));
 
 		// Empty set
-		HashSet<String> empty = hs();
+		Set<String> empty = hs();
 		assertNotNull(empty);
 		assertEquals(0, empty.size());
 
@@ -1633,7 +1633,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a095_ts() {
-		TreeSet<String> set = ts("c", "a", "b");
+		SortedSet<String> set = ts("c", "a", "b");
 		assertNotNull(set);
 		assertEquals(3, set.size());
 		// TreeSet is sorted
@@ -1641,7 +1641,7 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals("c", set.last());
 
 		// Empty set
-		TreeSet<String> empty = ts();
+		SortedSet<String> empty = ts();
 		assertNotNull(empty);
 		assertEquals(0, empty.size());
 
@@ -1655,7 +1655,7 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals(4, set.size());
 
 		// Sorted order
-		TreeSet<Integer> intSet = ts(3, 1, 2);
+		SortedSet<Integer> intSet = ts(3, 1, 2);
 		assertEquals(1, intSet.first());
 		assertEquals(3, intSet.last());
 	}

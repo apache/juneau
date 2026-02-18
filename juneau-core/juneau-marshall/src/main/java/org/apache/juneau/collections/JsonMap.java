@@ -1526,7 +1526,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	public Set<String> keySet() {
 		if (inner == null)
 			return super.keySet();
-		LinkedHashSet<String> s = set();
+		Set<String> s = set();
 		s.addAll(inner.keySet());
 		s.addAll(super.keySet());
 		return s;
