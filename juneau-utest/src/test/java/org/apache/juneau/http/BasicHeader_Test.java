@@ -109,7 +109,7 @@ class BasicHeader_Test extends TestBase {
 	@Test void a10_clone() throws Exception {
 		// Test cloning with simple string value
 		var h1 = header("Foo", "bar");
-		var cloned1 = h1.clone();
+		var cloned1 = h1.copy();
 		assertNotSame(h1, cloned1);
 		assertEquals(h1.getName(), cloned1.getName());
 		assertEquals(h1.getValue(), cloned1.getValue());
@@ -118,7 +118,7 @@ class BasicHeader_Test extends TestBase {
 		// Test cloning with supplier value
 		var supplierValue = new AtomicReference<>("test");
 		var h2 = header("X-Test", supplierValue::get);
-		var cloned2 = h2.clone();
+		var cloned2 = h2.copy();
 		assertNotSame(h2, cloned2);
 		assertEquals(h2.getName(), cloned2.getName());
 		assertEquals(h2.getValue(), cloned2.getValue());
@@ -131,7 +131,7 @@ class BasicHeader_Test extends TestBase {
 		// Test cloning with elements already computed
 		var h3 = header("Content-Type", "text/plain; charset=utf-8");
 		var elements1 = h3.getElements(); // Force computation of elements
-		var cloned3 = h3.clone();
+		var cloned3 = h3.copy();
 		var elements2 = cloned3.getElements();
 		
 		// Elements should be cloned (different array instances)
@@ -144,7 +144,7 @@ class BasicHeader_Test extends TestBase {
 
 		// Test cloning header with empty string value (null values return null from header())
 		var h4 = header("X-Empty", "");
-		var cloned4 = h4.clone();
+		var cloned4 = h4.copy();
 		assertNotSame(h4, cloned4);
 		assertEquals(h4.getName(), cloned4.getName());
 		assertEquals(h4.getValue(), cloned4.getValue());

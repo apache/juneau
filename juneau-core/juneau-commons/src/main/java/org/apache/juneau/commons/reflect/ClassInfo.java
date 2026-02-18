@@ -234,7 +234,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 		assertArg(inner != null || innerType != null, "At least one of inner or innerType must be specified.");
 		this.innerType = innerType;
 		this.inner = inner;
-		this.isParameterizedType = innerType == null ? false : (innerType instanceof ParameterizedType);
+		this.isParameterizedType = innerType != null && (innerType instanceof ParameterizedType);
 		this.dimensions = mem(this::findDimensions);
 		this.componentType = mem(this::findComponentType);
 		this.packageInfo = mem(() -> opt(inner).map(Class::getPackage).filter(p -> p != null).map(PackageInfo::of).orElse(null));  // PackageInfo may be null for primitive types and arrays.

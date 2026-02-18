@@ -1089,7 +1089,7 @@ public class ResponseContent implements HttpEntity {
 	 * @return <jk>true</jk> if the entity content is streamed, <jk>false</jk> otherwise.
 	 */
 	@Override /* Overridden from HttpEntity */
-	public boolean isStreaming() { return cached ? false : entity.isStreaming(); }
+	public boolean isStreaming() { return !cached && entity.isStreaming(); }
 
 	/**
 	 * Specifies the parser to use for this body.

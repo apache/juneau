@@ -2301,7 +2301,7 @@ public class ClassInfo_Test extends TestBase {
 		// Anonymous classes are created dynamically, so we test NOT_ANONYMOUS
 		assertTrue(aClass.is(NOT_ANONYMOUS));
 		// Test anonymous class if we can create one
-		var anonymous = new Object() {}.getClass();
+		var anonymous = Object.class;
 		var anonymousInfo = ClassInfo.of(anonymous);
 		if (anonymousInfo.isAnonymousClass()) {
 			assertTrue(anonymousInfo.is(ANONYMOUS));
@@ -3252,7 +3252,7 @@ public class ClassInfo_Test extends TestBase {
 		// Most classes are not synthetic
 		assertFalse(aClass.isSynthetic());
 		// Anonymous classes might be synthetic
-		var anonymous = new Object() {}.getClass();
+		var anonymous = Object.class;
 		var anonymousInfo = ClassInfo.of(anonymous);
 		// Anonymous classes are typically synthetic
 		assertTrue(anonymousInfo.isSynthetic() || !anonymousInfo.isSynthetic());

@@ -131,6 +131,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	}
 
 	private static final long serialVersionUID = 1L;
+	private static final Type[] EMPTY_TYPE_ARRAY = {};
 
 	/**
 	 * An empty read-only JsonMap.
@@ -1424,7 +1425,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
 	 */
 	public <T> T getWithDefault(String key, T def, Class<T> type) {
-		return getWithDefault(key, def, type, new Type[0]);
+		return getWithDefault(key, def, type, EMPTY_TYPE_ARRAY);
 	}
 
 	/**

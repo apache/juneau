@@ -54,7 +54,7 @@ import org.apache.juneau.commons.utils.*;
  * @serial exclude
  */
 @BeanIgnore
-public class BasicHeader implements Header, Cloneable, Serializable {
+public class BasicHeader implements Header, Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final HeaderElement[] EMPTY_HEADER_ELEMENTS = {};
 
@@ -141,19 +141,18 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 		this.value = copyFrom.value;
 		this.stringValue = copyFrom.stringValue;
 		this.supplier = copyFrom.supplier;
+		if (copyFrom.elements != null) {
+			this.elements = copyFrom.elements.clone();
+		}
 	}
 
-	@Override
-	public BasicHeader clone() {
-		try {
-			BasicHeader cloned = (BasicHeader) super.clone();
-			if (this.elements != null) {
-				cloned.elements = this.elements.clone();
-			}
-			return cloned;
-		} catch (CloneNotSupportedException e) {
-			throw new AssertionError(e); // Should never happen since we implement Cloneable
-		}
+	/**
+	 * Creates a copy of this header.
+	 *
+	 * @return A new header instance with copied values.
+	 */
+	public BasicHeader copy() {
+		return new BasicHeader(this);
 	}
 
 	/**

@@ -1324,13 +1324,13 @@ public class BeanSession extends ContextSession {
 					var multiplier = (tc == Integer.class || tc == Short.class || tc == Long.class) ? getMultiplier(s) : 1;
 					if (multiplier != 1) {
 						s = s.substring(0, s.length() - 1).trim();
-						Long l = Long.valueOf(s) * multiplier;
+						long l = Long.parseLong(s) * multiplier;
 						if (tc == Integer.TYPE)
-							return (T)Integer.valueOf(l.intValue());
+							return (T)Integer.valueOf((int)l);
 						if (tc == Short.TYPE)
-							return (T)Short.valueOf(l.shortValue());
+							return (T)Short.valueOf((short)l);
 						if (tc == Long.TYPE)
-							return (T)Long.valueOf(l.longValue());
+							return (T)Long.valueOf(l);
 					} else {
 						if (tc == Integer.class)
 							return (T)Integer.valueOf(s);

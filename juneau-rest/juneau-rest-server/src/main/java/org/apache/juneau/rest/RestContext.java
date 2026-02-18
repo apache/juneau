@@ -5923,7 +5923,7 @@ public class RestContext extends Context {
 
 			@Override
 			public boolean contains(Object v) {
-				return v == null ? false : super.contains(v);
+				return v != null && super.contains(v);
 			}
 		};
 		StringUtils.split(value, s::add);

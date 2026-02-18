@@ -163,7 +163,7 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 	 */
 	public boolean hasSubtypePart(String part) {
 		MediaRanges x = value();
-		return x == null ? false : x.hasSubtypePart(part);
+		return x != null && x.hasSubtypePart(part);
 	}
 
 	/**

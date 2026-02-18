@@ -33,7 +33,7 @@ import org.apache.juneau.cp.*;
  * </ul>
  */
 @SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_causedBy)
-public class ThrownStats implements Cloneable {
+public class ThrownStats {
 
 	// Property name constants
 	private static final String PROP_causedBy = "causedBy";
@@ -163,11 +163,21 @@ public class ThrownStats implements Cloneable {
 		this.thrownClass = x.thrownClass;
 		this.firstMessage = x.firstMessage;
 		this.stackTrace = u(copyOf(x.stackTrace));
-		this.causedBy = opt(x.causedBy.isPresent() ? x.causedBy.get().clone() : null);
+		this.causedBy = opt(x.causedBy.isPresent() ? ThrownStats.copy(x.causedBy.get()) : null);
 		this.hash = x.hash;
 		this.count = new AtomicInteger(x.count.get());
 		this.firstOccurrence = new AtomicLong(x.firstOccurrence.get());
 		this.lastOccurrence = new AtomicLong(x.lastOccurrence.get());
+	}
+
+	/**
+	 * Creates a copy of this stats object.
+	 *
+	 * @param stats The stats object to copy.
+	 * @return A new stats instance with copied values.
+	 */
+	public static ThrownStats copy(ThrownStats stats) {
+		return new ThrownStats(stats);
 	}
 
 	/**
@@ -188,17 +198,6 @@ public class ThrownStats implements Cloneable {
 		this.lastOccurrence = new AtomicLong(ct);
 	}
 
-	@Override /* Overridden from Object */
-	public ThrownStats clone() {
-		try {
-			super.clone(); // Satisfy SonarQube requirement
-			// Since all fields are final, we cannot modify them after super.clone().
-			// Use copy constructor to properly deep-copy mutable fields (AtomicInteger, AtomicLong, List, Optional).
-			return new ThrownStats(this);
-		} catch (CloneNotSupportedException e) {
-			throw new AssertionError(e);
-		}
-	}
 
 	/**
 	 * Returns the stats on the caused-by exception.

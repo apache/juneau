@@ -143,7 +143,7 @@ public class LinkString implements Comparable<LinkString> {
 	 * @return This object.
 	 */
 	public LinkString setUri(String value) {
-		setUri(value, (Object[])new Object[0]);
+		setUri(value, new Object[0]);
 		return this;
 	}
 

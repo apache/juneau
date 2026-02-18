@@ -79,10 +79,10 @@ public class BoundedServletInputStream extends ServletInputStream {
 	}
 
 	@Override /* Overridden from ServletInputStream */
-	public boolean isFinished() { return sis == null ? false : sis.isFinished(); }
+	public boolean isFinished() { return sis != null && sis.isFinished(); }
 
 	@Override /* Overridden from ServletInputStream */
-	public boolean isReady() { return sis == null ? true : sis.isReady(); }
+	public boolean isReady() { return sis == null || sis.isReady(); }
 
 	@Override /* Overridden from InputStream */
 	public synchronized void mark(int limit) {

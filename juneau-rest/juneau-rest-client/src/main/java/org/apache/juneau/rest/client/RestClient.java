@@ -6333,10 +6333,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			} else if (state == S2) {
 				if (! isWhitespace(c)) {
 					mark = i;
-					if (c == '{')
-						state = S3;
-					else
-						state = S5;
+					state = (c == '{') ? S3 : S5;
 				}
 			} else if (state == S3) {
 				if (c == '}') {
@@ -7258,7 +7255,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				var rim = rm.getMethodMeta(method);
 
 				var uri = rim.getUri();
-				RestResponse res = null;
+				RestResponse res;
 
 				try {
 					// @formatter:off
