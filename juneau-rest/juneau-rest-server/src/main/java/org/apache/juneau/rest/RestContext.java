@@ -4536,7 +4536,8 @@ public class RestContext extends Context {
 		 * @throws Exception If a problem occurred instantiating one of the child rest contexts.
 		 */
 		@SuppressWarnings({
-			"java:S3776" // Cognitive complexity acceptable for REST children creation
+			"java:S3776", // Cognitive complexity acceptable for REST children creation
+			"java:S112"   // throws Exception intentional - callback/lifecycle method
 		})
 		protected RestChildren.Builder createRestChildren(BasicBeanStore beanStore, Supplier<?> resource, RestContext restContext) throws Exception {
 
@@ -6146,6 +6147,7 @@ public class RestContext extends Context {
 		}
 	}
 
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	protected void handleNotFound(RestSession session) throws Exception {
 		var pathInfo = session.getPathInfo();
 		var methodUC = session.getMethod();

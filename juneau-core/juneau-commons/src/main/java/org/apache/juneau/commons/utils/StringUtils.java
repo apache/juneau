@@ -690,10 +690,10 @@ public class StringUtils {
 	 *
 	 * @param contents The UTF-8 string to compress.
 	 * @return The GZIP-compressed byte array.
-	 * @throws Exception If compression fails.
+	 * @throws java.io.IOException If compression fails.
 	 * @see #decompress(byte[])
 	 */
-	public static byte[] compress(String contents) throws Exception {
+	public static byte[] compress(String contents) throws java.io.IOException {
 		var baos = new ByteArrayOutputStream(contents.length() >> 1);
 		try (var gos = new GZIPOutputStream(baos)) {
 			gos.write(contents.getBytes());
@@ -1101,10 +1101,10 @@ public class StringUtils {
 	 *
 	 * @param is The GZIP-compressed byte array to decompress.
 	 * @return The decompressed UTF-8 string.
-	 * @throws Exception If decompression fails or the input is not valid GZIP data.
+	 * @throws java.io.IOException If decompression fails or the input is not valid GZIP data.
 	 * @see #compress(String)
 	 */
-	public static String decompress(byte[] is) throws Exception {
+	public static String decompress(byte[] is) throws java.io.IOException {
 		return read(new GZIPInputStream(new ByteArrayInputStream(is)));
 	}
 

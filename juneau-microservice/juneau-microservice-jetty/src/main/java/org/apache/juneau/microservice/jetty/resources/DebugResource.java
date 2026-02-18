@@ -64,6 +64,7 @@ public class DebugResource extends BasicRestServlet {
 	 * @return The thread dump contents.
 	 */
 	@RestPost(path = "/jetty/dump", description = "Generates and saves the jetty thread dump file to jetty-thread-dump.log.")
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	public Ok createJettyDump(RestRequest req, RestResponse res) throws Exception {
 		var dump = JettyMicroservice.getInstance().getServer().dump();
 		try (var fw = new FileWriter(req.getConfig().get("Logging/logDir").orElse("") + "/jetty-thread-dump.log")) {

@@ -309,8 +309,8 @@ public class AssertionUtils {
 	 * @return The object cast to the specified type.
 	 * @throws RuntimeException Thrown if the object is not an instance of the specified type (the exception is provided by the supplier).
 	 */
-	@SuppressWarnings({ "unchecked" })
-	public static final <T> T assertType(Class<T> type, Object o, java.util.function.Supplier<? extends RuntimeException> exceptionSupplier) throws RuntimeException {
+	@SuppressWarnings({ "unchecked", "java:S112" }) // Exception type comes from caller's supplier
+	public static final <T> T assertType(Class<T> type, Object o, java.util.function.Supplier<? extends RuntimeException> exceptionSupplier) {
 		assertArgNotNull(ARG_type, type);
 		assertArgNotNull(ARG_o, o);
 		if (! type.isInstance(o))

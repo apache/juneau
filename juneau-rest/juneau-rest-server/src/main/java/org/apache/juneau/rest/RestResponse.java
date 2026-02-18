@@ -134,7 +134,8 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * Constructor.
 	 */
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for response initialization
+		"java:S3776", // Cognitive complexity acceptable for response initialization
+		"java:S112"   // throws Exception intentional - callback/lifecycle method
 	})
 	RestResponse(RestOpContext opContext, RestSession session, RestRequest req) throws Exception {
 		super(session.getResponse());

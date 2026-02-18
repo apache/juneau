@@ -114,6 +114,7 @@ public abstract class ConsoleCommand {
 	 * @throws Exception
 	 * 	Any thrown exception will simply be sent to STDERR.
 	 */
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	public abstract boolean execute(Scanner in, PrintWriter out, Args args) throws Exception;
 
 	/**

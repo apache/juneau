@@ -101,7 +101,7 @@ public class RestOperations {
 	 * The {@code Void} class is used as a placeholder when the {@link Rest} annotation
 	 * does not specify a custom {@code RestOperations} class.
 	 */
-	@SuppressWarnings("javadoc")
+	@SuppressWarnings({ "javadoc", "java:S112" }) // throws Exception intentional - callback/lifecycle method
 	public final class Void extends RestOperations {
 		public Void(Builder builder) throws Exception {
 			super(builder);

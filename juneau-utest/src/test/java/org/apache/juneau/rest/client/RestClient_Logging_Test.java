@@ -220,11 +220,11 @@ class RestClient_Logging_Test extends TestBase {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static RestClient.Builder client() {
+	private static MockRestClient.Builder client() {
 		return MockRestClient.create(A.class).json5();
 	}
 
-	private static RestClient.Builder clientPlain() {
+	private static MockRestClient.Builder clientPlain() {
 		return MockRestClient.create(A.class);
 	}
 }

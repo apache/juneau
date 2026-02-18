@@ -224,5 +224,6 @@ public abstract class RrpcServlet extends BasicRestServlet {
 	 * @return The service map.
 	 * @throws Exception Any exception.
 	 */
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	protected abstract Map<Class<?>,Object> getServiceMap() throws Exception;
 }

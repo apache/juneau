@@ -84,6 +84,7 @@ import java.util.function.*;
  * @param <R> The type of the result of the function.
  */
 @FunctionalInterface
+@SuppressWarnings("java:S112") // throws Exception intentional - function may throw any checked exception
 public interface ThrowingFunction<T,R> extends Function<T,R> {
 
 	/**

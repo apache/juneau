@@ -61,6 +61,7 @@ package org.apache.juneau.html;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
  * </ul>
  */
+@SuppressWarnings("java:S112") // throws Exception intentional - template methods may throw any checked exception
 public interface HtmlDocTemplate {
 
 	/**

@@ -894,6 +894,7 @@ public class ParserSession extends BeanSession {
 	 * @return The same collection that was passed in to allow this method to be chained.
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
 	 */
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
 		throw unsupportedOp("Parser ''{0}'' does not support this method.", cn(getClass()));
 	}
@@ -913,6 +914,7 @@ public class ParserSession extends BeanSession {
 	 * @return The same map that was passed in to allow this method to be chained.
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
 	 */
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
 		throw unsupportedOp("Parser ''{0}'' does not support this method.", cn(getClass()));
 	}

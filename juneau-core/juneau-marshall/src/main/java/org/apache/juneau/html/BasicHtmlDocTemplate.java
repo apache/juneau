@@ -36,7 +36,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
  * </ul>
  */
-@SuppressWarnings({"resource", "java:S1192"})
+@SuppressWarnings({"resource", "java:S112", "java:S1192"}) // S112: template methods throw Exception for subclass flexibility
 public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 
 	private static boolean exists(String s) {

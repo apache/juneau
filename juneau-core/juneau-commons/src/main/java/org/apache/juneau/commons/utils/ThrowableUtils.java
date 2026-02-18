@@ -40,6 +40,7 @@ public class ThrowableUtils {
 	 * @param <T> The supplier type.
 	 */
 	@FunctionalInterface
+	@SuppressWarnings("java:S112") // throws Throwable intentional - supplier may throw any exception
 	public interface SupplierWithThrowable<T> {
 
 		/**

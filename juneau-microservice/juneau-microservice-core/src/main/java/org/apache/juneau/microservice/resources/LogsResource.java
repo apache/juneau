@@ -194,6 +194,7 @@ public class LogsResource extends BasicRestServlet {
 	@HtmlDocConfig(
 		nav={"<h5>Folder:  $RA{fullPath}</h5>"}
 	)
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	public FileResource getFile(RestRequest req, @Path("/*") String path) throws NotFound, Exception {
 
 		var dir = getFile(path);

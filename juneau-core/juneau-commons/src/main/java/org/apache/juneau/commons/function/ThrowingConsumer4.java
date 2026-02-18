@@ -89,6 +89,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  */
 @FunctionalInterface
 @SuppressWarnings({
+	"java:S112", // throws Exception intentional - consumer may throw any checked exception
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
 public interface ThrowingConsumer4<A,B,C,D> extends Consumer4<A,B,C,D> {

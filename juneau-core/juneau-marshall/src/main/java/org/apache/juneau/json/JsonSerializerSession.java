@@ -447,6 +447,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 * @return The serialized object.
 	 * @throws Exception Error occurred.
 	 */
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	protected String serializeJson(Object o) throws Exception {
 		var sw = new StringWriter();
 		serializeAnything(getJsonWriter(createPipe(sw)).i(getInitialDepth()), o, getExpectedRootType(o), "root", null);

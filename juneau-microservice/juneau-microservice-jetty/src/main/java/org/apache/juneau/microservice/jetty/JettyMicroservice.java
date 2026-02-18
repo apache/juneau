@@ -625,6 +625,7 @@ public class JettyMicroservice extends Microservice {
 	 *
 	 * @throws Exception Error occurred.
 	 */
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	public void destroyServer() throws Exception {
 		var s = server.getAndSet(null);
 		if (nn(s))

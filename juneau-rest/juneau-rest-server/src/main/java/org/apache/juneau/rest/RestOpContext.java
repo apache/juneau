@@ -2325,6 +2325,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * @return The wrapped request object.
 	 * @throws Exception If any errors occur trying to interpret the request.
 	 */
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	public RestRequest createRequest(RestSession session) throws Exception {
 		return new RestRequest(this, session);
 	}
@@ -2338,6 +2339,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * @return The wrapped response object.
 	 * @throws Exception If any errors occur trying to interpret the request or response.
 	 */
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	public RestResponse createResponse(RestSession session, RestRequest req) throws Exception {
 		return new RestResponse(this, session, req);
 	}
@@ -2349,6 +2351,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * @return A new REST operation session.
 	 * @throws Exception If op session could not be created.
 	 */
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	public RestOpSession.Builder createSession(RestSession session) throws Exception {
 		return RestOpSession.create(this, session).logger(callLogger).debug(debug.isDebug(this, session.getRequest()));
 	}

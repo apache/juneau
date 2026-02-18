@@ -34,5 +34,6 @@ public interface JettyServerFactory {
 	 * @return A newly-created but not-yet-started server.
 	 * @throws Exception Any exception.
 	 */
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	Server create(String jettyXml) throws Exception;
 }

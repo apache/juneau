@@ -225,6 +225,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @param o The object being serialized.
 	 * @throws Exception Error occurred during serialization.
 	 */
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	public void parentSerialize(Object out, Object o) throws Exception {
 		try (var pipe = createPipe(out)) {
 			super.doSerialize(pipe, o);

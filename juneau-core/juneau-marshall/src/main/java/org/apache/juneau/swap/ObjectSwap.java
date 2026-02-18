@@ -327,6 +327,7 @@ public abstract class ObjectSwap<T,S> {
 	 * @return The transformed object.
 	 * @throws Exception If a problem occurred trying to convert the output.
 	 */
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	public S swap(BeanSession session, T o, String template) throws Exception {
 		throw new SerializeException("Swap method not implemented on ObjectSwap ''{0}''", cn(this));
 	}
@@ -351,6 +352,7 @@ public abstract class ObjectSwap<T,S> {
 	 * @return The narrowed object.
 	 * @throws Exception If this method is not implemented.
 	 */
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	public T unswap(BeanSession session, S f, ClassMeta<?> hint) throws Exception {
 		return unswap(session, f, hint, template);
 	}
@@ -372,6 +374,7 @@ public abstract class ObjectSwap<T,S> {
 	 * @return The transformed object.
 	 * @throws Exception If a problem occurred trying to convert the output.
 	 */
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	public T unswap(BeanSession session, S f, ClassMeta<?> hint, String template) throws Exception {
 		throw new ParseException("Unswap method not implemented on ObjectSwap ''{0}''", cn(this));
 	}

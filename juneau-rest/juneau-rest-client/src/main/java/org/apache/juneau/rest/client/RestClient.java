@@ -2952,6 +2952,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @throws Exception If one or more interceptors could not be created.
 		 */
+		@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 		public Builder interceptors(Class<?>...values) throws Exception {
 			for (var c : values) {
 				if (c == null)
@@ -8073,7 +8074,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	}
 
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for remote execution logic
+		"java:S3776", // Cognitive complexity acceptable for remote execution logic
+		"java:S112"   // throws Exception intentional - callback/lifecycle method
 	})
 	Object executeRemote(Class<?> interfaceClass, RestRequest rc, Method method, RemoteOperationMeta rom) throws Exception {
 		RemoteOperationReturn ror = rom.getReturns();

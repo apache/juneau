@@ -215,7 +215,7 @@ public class BasicSwaggerProviderSession {
 	 * @return A new {@link Swagger} object.
 	 * @throws Exception If an error occurred producing the Swagger.
 	 */
-	@SuppressWarnings({ "java:S3776", "java:S6541" })
+	@SuppressWarnings({ "java:S3776", "java:S6541", "java:S112" }) // throws Exception intentional - callback/lifecycle method
 	public Swagger getSwagger() throws Exception {
 		// @formatter:off
 
@@ -679,7 +679,8 @@ public class BasicSwaggerProviderSession {
 	}
 
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for example generation logic
+		"java:S3776", // Cognitive complexity acceptable for example generation logic
+		"java:S112"   // throws Exception intentional - callback/lifecycle method
 	})
 	private void addBodyExamples(RestOpContext sm, JsonMap piri, boolean response, Type type, Locale locale) throws Exception {
 
@@ -800,6 +801,7 @@ public class BasicSwaggerProviderSession {
 		return (JsonMap) om.get(httpMethod);
 	}
 
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	private JsonMap getSchema(JsonMap schema, Type type, BeanSession bs) throws Exception {
 
 		if (type == Swagger.class)

@@ -75,6 +75,7 @@ package org.apache.juneau.commons.function;
  * @param <T> The type of results supplied by this supplier.
  */
 @FunctionalInterface
+@SuppressWarnings("java:S112") // throws Exception intentional - supplier may throw any checked exception
 public interface ThrowingSupplier<T> {
 
 	/**

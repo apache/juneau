@@ -147,6 +147,7 @@ public class ConfigResource extends BasicRestServlet {
 			}
 		)
 	)
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	public JsonMap setConfigContents(
 			@Content @Schema(d="New contents in INI file format.") Reader contents
 		) throws Exception {
@@ -164,6 +165,7 @@ public class ConfigResource extends BasicRestServlet {
 			}
 		)
 	)
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	public JsonMap setConfigContentsFormPost(
 			@FormData("contents") @Schema(d="New contents in INI file format.") String contents
 		) throws Exception {
@@ -181,6 +183,7 @@ public class ConfigResource extends BasicRestServlet {
 			}
 		)
 	)
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	public JsonMap setConfigSection(
 			@Path("section") @Schema(d="Section name in config file.") String section,
 			@Content @Schema(d="New contents of config section as a simple map of key/value pairs.")

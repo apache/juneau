@@ -215,5 +215,6 @@ public interface SwaggerProvider {
 	 * @return A new {@link Swagger} DTO object.
 	 * @throws Exception If an error occurred producing the Swagger.
 	 */
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	Swagger getSwagger(RestContext context, Locale locale) throws Exception;
 }

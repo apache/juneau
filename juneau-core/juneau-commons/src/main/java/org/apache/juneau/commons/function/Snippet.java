@@ -76,6 +76,7 @@ package org.apache.juneau.commons.function;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem Overview</a>
  * </ul>
  */
+@SuppressWarnings("java:S112") // throws Exception intentional - callback may throw any checked exception
 public interface Snippet {
 
 	/**

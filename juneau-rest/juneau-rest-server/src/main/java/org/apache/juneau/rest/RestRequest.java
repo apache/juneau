@@ -211,6 +211,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Constructor.
 	 */
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	RestRequest(RestOpContext opContext, RestSession session) throws Exception {
 		super(session.getRequest());
 		this.session = session;

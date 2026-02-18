@@ -168,6 +168,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			return null;
 		}
 
+		@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 		private static ObjectSwap swapSwap(AnnotationInfo<Swap> ai) throws RuntimeException {
 			var s = ai.inner();
 			var c = s.value();
@@ -290,7 +291,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return <jk>true</jk> if this property is valid, <jk>false</jk> otherwise.
 		 * @throws Exception If validation fails.
 		 */
-		@SuppressWarnings("java:S3776")
+		@SuppressWarnings({ "java:S3776", "java:S112" }) // throws Exception intentional - callback/lifecycle method
 		public boolean validate(BeanContext bc, BeanRegistry parentBeanRegistry, TypeVariables typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
 
 			var bdClasses = list();

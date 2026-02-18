@@ -93,6 +93,7 @@ import java.util.function.*;
  */
 @FunctionalInterface
 @SuppressWarnings({
+	"java:S112", // throws Exception intentional - function may throw any checked exception
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
 public interface ThrowingFunction5<A,B,C,D,E,R> extends Function5<A,B,C,D,E,R> {

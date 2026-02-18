@@ -91,6 +91,7 @@ public abstract class Var {
 	 * @return The resolved value.
 	 * @throws Exception Any exception can be thrown.
 	 */
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	public abstract String resolve(VarResolverSession session, String arg) throws Exception;
 
 	/**
@@ -101,6 +102,7 @@ public abstract class Var {
 	 * @param arg The inside argument of the variable.
 	 * @throws Exception Any exception can be thrown.
 	 */
+	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
 	public abstract void resolveTo(VarResolverSession session, Writer w, String arg) throws Exception;
 
 	/**
