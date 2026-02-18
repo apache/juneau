@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.swap;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 
 /**

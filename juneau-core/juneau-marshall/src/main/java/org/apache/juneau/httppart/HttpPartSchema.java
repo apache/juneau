@@ -4505,8 +4505,36 @@ public class HttpPartSchema {
 	}
 
 	private static boolean isValidHostname(String x) {
-		// RFC 1123 hostname validation
-		return x.matches("^([a-zA-Z0-9]([a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])?\\.)*[a-zA-Z0-9]([a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])?$");
+		// RFC 1123 hostname validation (programmatic to avoid regex stack overflow on large inputs)
+		if (x.isEmpty())
+			return false;
+		int labelStart = 0;
+		for (int i = 0; i <= x.length(); i++) {
+			if (i == x.length() || x.charAt(i) == '.') {
+				if (! isValidHostnameLabel(x, labelStart, i))
+					return false;
+				labelStart = i + 1;
+			}
+		}
+		return true;
+	}
+
+	private static boolean isValidHostnameLabel(String x, int start, int end) {
+		int len = end - start;
+		if (len == 0 || len > 63)
+			return false;
+		if (! isAsciiAlphanumeric(x.charAt(start)) || ! isAsciiAlphanumeric(x.charAt(end - 1)))
+			return false;
+		for (int i = start + 1; i < end - 1; i++) {
+			char c = x.charAt(i);
+			if (! isAsciiAlphanumeric(c) && c != '-')
+				return false;
+		}
+		return true;
+	}
+
+	private static boolean isAsciiAlphanumeric(char c) {
+		return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9');
 	}
 
 	private static boolean isValidIdnEmail(String x) {
@@ -4515,8 +4543,13 @@ public class HttpPartSchema {
 	}
 
 	private static boolean isValidIdnHostname(String x) {
-		// RFC 5890 - allows international characters
-		return x.matches("^[^\\s]+$");
+		// RFC 5890 - allows international characters (programmatic to avoid regex stack overflow on large inputs)
+		if (x.isEmpty())
+			return false;
+		for (int i = 0; i < x.length(); i++)
+			if (Character.isWhitespace(x.charAt(i)))
+				return false;
+		return true;
 	}
 
 	private static boolean isValidIpv4(String x) {
@@ -4553,7 +4586,7 @@ public class HttpPartSchema {
 
 	private static boolean isValidJsonPointer(String x) {
 		// RFC 6901 JSON Pointer validation
-		return x.isEmpty() || x.matches("^(/[^/]*)*$");
+		return x.isEmpty() || x.charAt(0) == '/';
 	}
 
 	@SuppressWarnings({
@@ -4679,8 +4712,24 @@ public class HttpPartSchema {
 	}
 
 	private static boolean isValidRelativeJsonPointer(String x) {
-		// Relative JSON Pointer validation
-		return x.matches("^(0|[1-9]\\d*)(#|(/[^/]*)*)$");
+		// Relative JSON Pointer validation (programmatic to avoid regex stack overflow on large inputs)
+		int i = 0, len = x.length();
+		if (i >= len)
+			return false;
+		if (x.charAt(i) == '0') {
+			i++;
+		} else if (x.charAt(i) >= '1' && x.charAt(i) <= '9') {
+			i++;
+			while (i < len && x.charAt(i) >= '0' && x.charAt(i) <= '9')
+				i++;
+		} else {
+			return false;
+		}
+		if (i >= len)
+			return true;
+		if (x.charAt(i) == '#')
+			return i + 1 == len;
+		return x.charAt(i) == '/';
 	}
 
 	private boolean isValidRequired(Object x) {
