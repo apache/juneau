@@ -46,6 +46,9 @@ import org.apache.juneau.swap.*;
 @Inherited
 @Repeatable(BeanAnnotation.Array.class)
 @ContextApply(BeanAnnotation.Applier.class)
+@SuppressWarnings({
+	"java:S1452"  // Wildcard required - Class<? extends BeanInterceptor<?>> for interceptor definition
+})
 public @interface Bean {
 
 	/**

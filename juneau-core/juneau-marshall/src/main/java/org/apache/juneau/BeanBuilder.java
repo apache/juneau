@@ -126,6 +126,9 @@ public class BeanBuilder<T> {
 	 *
 	 * @return The creator for this bean.
 	 */
+	@SuppressWarnings({
+		"java:S1452"  // Wildcard required - BeanCreator<? extends T> for subclass flexibility
+	})
 	protected BeanCreator<? extends T> creator() {
 		return BeanCreator.of(type().orElseThrow(() -> new IllegalStateException("Type not specified.")), beanStore).builder(BeanBuilder.class, this);
 	}

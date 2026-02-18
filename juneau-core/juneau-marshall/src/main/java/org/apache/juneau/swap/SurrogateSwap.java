@@ -51,7 +51,11 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 	 * @param bc The bean context to use for looking up annotations.
 	 * @return The list of object swaps that apply to this class.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({
+		"unchecked",
+		"rawtypes",
+		"java:S1452"  // Wildcard required - List<SurrogateSwap<?,?>> for multiple constructor-based swaps
+	})
 	public static List<SurrogateSwap<?,?>> findObjectSwaps(Class<?> c, BeanContext bc) {
 		List<SurrogateSwap<?,?>> l = new LinkedList<>();
 		var ci = info(c);

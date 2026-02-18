@@ -268,6 +268,9 @@ public class SortedLinkedList<E> extends AbstractList<E> {
 	 *
 	 * @return The comparator, or <jk>null</jk> if natural ordering is used.
 	 */
+	@SuppressWarnings({
+		"java:S1452"  // Wildcard required - Comparator<? super E> for PECS (Producer Extends Consumer Super)
+	})
 	public Comparator<? super E> comparator() {
 		return comparator == Comparator.naturalOrder() ? null : comparator;
 	}

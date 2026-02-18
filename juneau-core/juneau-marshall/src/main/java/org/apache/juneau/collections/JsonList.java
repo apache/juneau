@@ -804,6 +804,9 @@ public class JsonList extends LinkedList<Object> {
 	 * @param index An index into this list, zero-based.
 	 * @return The data type of the object at the specified index, or <jk>null</jk> if the value is null.
 	 */
+	@SuppressWarnings({
+		"java:S1452"  // Wildcard required - ClassMeta<?> for element type metadata
+	})
 	public ClassMeta<?> getClassMeta(int index) {
 		return bs().getClassMetaForObject(get(index));
 	}

@@ -33,6 +33,9 @@ import org.apache.juneau.html.annotation.*;
 
  * </ul>
  */
+@SuppressWarnings({
+	"java:S1452"  // Wildcard required - HtmlRender<?> for render callback
+})
 public class HtmlClassMeta extends ExtendedClassMeta {
 
 	private final boolean noTables;

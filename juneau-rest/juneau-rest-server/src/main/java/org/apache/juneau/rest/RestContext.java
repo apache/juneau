@@ -2761,6 +2761,9 @@ public class RestContext extends Context {
 		 *
 		 * @return The REST servlet/bean instance that this context is defined against.
 		 */
+		@SuppressWarnings({
+			"java:S1452"  // Wildcard required - Supplier<?> for generic REST resource instance
+		})
 		public Supplier<?> resource() {
 			return Objects.requireNonNull(resource, "Resource not available. init(Object) has not been called.");
 		}

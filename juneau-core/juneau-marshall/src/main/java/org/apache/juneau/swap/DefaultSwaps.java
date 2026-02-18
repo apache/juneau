@@ -76,6 +76,9 @@ public class DefaultSwaps {
 	 * @param ci The class to find the swap for.
 	 * @return The matched swap, or <jk>null</jk> if it couldn't be found.
 	 */
+	@SuppressWarnings({
+		"java:S1452"  // Wildcard required - ObjectSwap<?,?> for heterogeneous default swap types
+	})
 	public static ObjectSwap<?,?> find(ClassInfo ci) {
 		var ci2 = ci.getAllParents().stream().filter(x -> nn(SWAPS.get(x.inner()))).findFirst().orElse(null);
 		return ci2 == null ? null : SWAPS.get(ci2.inner());

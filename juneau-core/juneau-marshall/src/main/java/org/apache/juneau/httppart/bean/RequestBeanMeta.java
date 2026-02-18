@@ -150,6 +150,9 @@ public class RequestBeanMeta {
 	 *
 	 * @return Metadata about the class.
 	 */
+	@SuppressWarnings({
+		"java:S1452"  // Wildcard required - ClassMeta<?> for request metadata
+	})
 	public ClassMeta<?> getClassMeta() { return cm; }
 
 	/**

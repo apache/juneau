@@ -22,6 +22,9 @@ import org.apache.juneau.commons.reflect.*;
  * Defines extended language-specific metadata associated with a class.
  *
  */
+@SuppressWarnings({
+	"java:S1452"  // Wildcard required - ClassMeta<?> for class metadata access
+})
 public class ExtendedClassMeta extends ExtendedMeta {
 
 	private final ClassMeta<?> cm;

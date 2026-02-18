@@ -83,7 +83,12 @@ import org.apache.juneau.parser.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics">OpenApi Basics</a>
  * </ul>
  */
-@SuppressWarnings({ "java:S116", "java:S115", "java:S5843" }) // Constants use UPPER_snakeCase convention (e.g., PROP_additionalProperties). S5843: Complex regex patterns needed for RFC compliance (IPv6, ISO 8601 duration, date-time formats)
+@SuppressWarnings({
+	"java:S116",
+	"java:S115",
+	"java:S5843", // Constants use UPPER_snakeCase convention (e.g., PROP_additionalProperties). S5843: Complex regex patterns needed for RFC compliance (IPv6, ISO 8601 duration, date-time formats)
+	"java:S1452"  // Wildcard required - ClassMeta<?> for parsed type metadata
+})
 public class HttpPartSchema {
 
 	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;

@@ -101,7 +101,11 @@ import org.apache.juneau.serializer.*;
  * @param <T> The normal form of the class.
  * @param <S> The swapped form of the class.
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({
+	"unchecked",
+	"rawtypes",
+	"java:S1452"  // Wildcard required - ObjectSwap<T,?>, ClassMeta<?> for fluent API and swap metadata
+})
 public abstract class ObjectSwap<T,S> {
 
 	/**

@@ -51,7 +51,12 @@ import org.apache.juneau.swap.*;
  * </ul>
  *
  */
-@SuppressWarnings({ "unchecked", "rawtypes", "java:S115" })
+@SuppressWarnings({
+	"unchecked",
+	"rawtypes",
+	"java:S115",
+	"java:S1452"  // Wildcard required - ClassMeta<?>, ObjectSwap<?,?>, etc. for bean metadata
+})
 public class BeanSession extends ContextSession {
 
 	// Property name constants

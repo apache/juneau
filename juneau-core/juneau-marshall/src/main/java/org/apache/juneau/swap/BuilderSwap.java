@@ -49,7 +49,11 @@ public class BuilderSwap<T,B> {
 	 * @param mVis Minimum method visibility.
 	 * @return A new swap instance, or <jk>null</jk> if class wasn't a builder class.
 	 */
-	@SuppressWarnings({ "rawtypes", "java:S1172" }) // Parameter mVis is unused but kept for API consistency
+	@SuppressWarnings({
+		"rawtypes",
+		"java:S1172",   // Parameter mVis is unused but kept for API consistency
+		"java:S1452"   // Wildcard required - BuilderSwap<?,?> for dynamically discovered builder types
+	})
 	public static BuilderSwap<?,?> findSwapFromBuilderClass(Class<?> builderClass, Visibility cVis, Visibility mVis) {
 		var bci = info(builderClass);
 		if (bci.isNotPublic())
@@ -92,7 +96,11 @@ public class BuilderSwap<T,B> {
 	 * @param mVis Minimum method visibility.
 	 * @return A new swap instance, or <jk>null</jk> if class didn't have a builder class.
 	 */
-	@SuppressWarnings({ "rawtypes", "java:S1172" }) // Parameter mVis is unused but kept for API consistency
+	@SuppressWarnings({
+		"rawtypes",
+		"java:S1172",   // Parameter mVis is unused but kept for API consistency
+		"java:S1452"   // Wildcard required - BuilderSwap<?,?> for dynamically discovered builder types
+	})
 	public static BuilderSwap<?,?> findSwapFromObjectClass(BeanContext bc, Class<?> objectClass, Visibility cVis, Visibility mVis) {
 		var builderClass = Value.<Class<?>>empty();
 		MethodInfo objectCreateMethod;
@@ -261,6 +269,9 @@ public class BuilderSwap<T,B> {
 	 * 	This is always going to be the same bean context that created this swap.
 	 * @return The {@link ClassMeta} of the transformed class type.
 	 */
+	@SuppressWarnings({
+		"java:S1452"  // Wildcard required - ClassMeta<?> for builder class type
+	})
 	public ClassMeta<?> getBuilderClassMeta(BeanSession session) {
 		if (builderClassMeta == null)
 			builderClassMeta = session.getClassMeta(getBuilderClass());

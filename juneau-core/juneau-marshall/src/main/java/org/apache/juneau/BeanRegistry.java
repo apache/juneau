@@ -51,7 +51,10 @@ import org.apache.juneau.cp.*;
  * </ul>
  *
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115",
+	"java:S1452"  // Wildcard required - Class<?> for bean dictionary types
+})
 public class BeanRegistry {
 
 	// Argument name constants for assertArgNotNull

@@ -76,7 +76,8 @@ import org.apache.juneau.swap.*;
  * </ul>
  */
 @SuppressWarnings({
-	"rawtypes" // Raw types necessary for generic type handling
+	"rawtypes",   // Raw types necessary for generic type handling
+	"java:S1452" // Wildcard required - ClassInfoTyped<?>, ClassMeta<?> for filter metadata
 })
 public class BeanFilter {
 

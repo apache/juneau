@@ -177,7 +177,12 @@ import org.apache.juneau.commons.lang.*;
  * 	<li class='jc'>{@link MethodInfo}
  * </ul>
  */
-@SuppressWarnings({ "unchecked", "rawtypes", "java:S115" })
+@SuppressWarnings({
+	"unchecked",
+	"rawtypes",
+	"java:S115",
+	"java:S1452"  // Wildcard required - List<AnnotationInfo<? extends Annotation>> for heterogeneous annotations
+})
 public class AnnotationProvider {
 
 	// Argument name constants for assertArgNotNull

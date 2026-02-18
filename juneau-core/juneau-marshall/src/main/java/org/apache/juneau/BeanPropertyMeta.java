@@ -57,7 +57,12 @@ import org.apache.juneau.swaps.*;
  * several methods on the {@link BeanMap} API.
  *
  */
-@SuppressWarnings({ "rawtypes", "unchecked", "java:S115" }) // Constants use UPPER_snakeCase convention (e.g., PROP_field, ARG_value)
+@SuppressWarnings({
+	"rawtypes",
+	"unchecked",
+	"java:S115",   // Constants use UPPER_snakeCase convention (e.g., PROP_field, ARG_value)
+	"java:S1452"  // Wildcard required - BeanMap<?>, ClassMeta<?> for property metadata
+})
 public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 	// Property name constants

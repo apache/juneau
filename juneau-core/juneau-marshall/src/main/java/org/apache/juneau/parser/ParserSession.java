@@ -927,6 +927,9 @@ public class ParserSession extends BeanSession {
 	 * @param eType The expected type we're currently parsing.
 	 * @return The resolved class, or <jk>null</jk> if the type name could not be resolved.
 	 */
+	@SuppressWarnings({
+		"java:S1452"  // Wildcard required - ClassMeta<?> for type resolution
+	})
 	protected final ClassMeta<?> getClassMeta(String typeName, BeanPropertyMeta pMeta, ClassMeta<?> eType) {
 		BeanRegistry br = null;
 

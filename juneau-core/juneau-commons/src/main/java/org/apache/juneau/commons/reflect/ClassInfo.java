@@ -66,7 +66,12 @@ import org.apache.juneau.commons.lang.*;
  * </p>
  *
  */
-@SuppressWarnings({ "unchecked", "rawtypes", "java:S115" })
+@SuppressWarnings({
+	"unchecked",
+	"rawtypes",
+	"java:S115",
+	"java:S1452"  // Wildcard required - List<AnnotationInfo<? extends Annotation>>, List<TypeVariable<?>>
+})
 public class ClassInfo extends ElementInfo implements Annotatable, Type, Comparable<ClassInfo> {
 
 	private static final String CLASSNAME_Autowired = "Autowired";

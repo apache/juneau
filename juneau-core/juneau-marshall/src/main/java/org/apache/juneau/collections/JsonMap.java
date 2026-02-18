@@ -1119,6 +1119,9 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @return
 	 * 	The data type of the object at the specified key, or <jk>null</jk> if the value is null or does not exist.
 	 */
+	@SuppressWarnings({
+		"java:S1452"  // Wildcard required - ClassMeta<?> for value type metadata
+	})
 	public ClassMeta<?> getClassMeta(String key) {
 		return bs().getClassMetaForObject(get(key));
 	}

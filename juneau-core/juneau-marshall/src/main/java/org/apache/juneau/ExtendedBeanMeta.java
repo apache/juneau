@@ -22,6 +22,9 @@ import org.apache.juneau.commons.reflect.*;
  * Defines extended language-specific metadata associated with a bean.
  *
  */
+@SuppressWarnings({
+	"java:S1452"  // Wildcard required - BeanMeta<?> for bean metadata access
+})
 public class ExtendedBeanMeta extends ExtendedMeta {
 
 	private final BeanMeta<?> bm;

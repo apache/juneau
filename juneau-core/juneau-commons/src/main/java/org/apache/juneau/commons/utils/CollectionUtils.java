@@ -2336,6 +2336,9 @@ public class CollectionUtils {
 	 * @throws IllegalArgumentException if the input object cannot be converted to a List.
 	 * @see arrayToList
 	 */
+	@SuppressWarnings({
+		"java:S1452"  // Wildcard required - List<?> for heterogeneous collections from various sources
+	})
 	public static final List<?> toList(Object o) {
 		assertArgNotNull(ARG_o, o);
 		if (o instanceof List<?> o2)

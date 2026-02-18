@@ -46,6 +46,9 @@ import org.apache.juneau.swap.*;
  * </p>
  *
  */
+@SuppressWarnings({
+	"java:S1452"  // Wildcard required - BeanMap<?> for generic bean map entries
+})
 public class BeanMapEntry implements Map.Entry<String,Object> {
 	private final BeanMap<?> beanMap;
 	private final BeanPropertyMeta meta;

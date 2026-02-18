@@ -47,7 +47,10 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  *
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115",
+	"java:S1452"  // Wildcard required - ClassMeta<?>, ObjectSwap<?,?> for traversal metadata
+})
 public class BeanTraverseSession extends BeanSession {
 
 	// Property name constants

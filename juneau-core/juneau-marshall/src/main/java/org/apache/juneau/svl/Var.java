@@ -52,7 +52,10 @@ import java.io.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115",
+	"java:S1452"  // Wildcard may appear in subclass method signatures
+})
 public abstract class Var {
 
 	// Argument name constants for assertArgNotNull

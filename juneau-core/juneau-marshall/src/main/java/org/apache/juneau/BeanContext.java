@@ -160,7 +160,13 @@ import org.apache.juneau.swap.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanContextBasics">Bean Context Basics</a>
  * </ul>
  */
-@SuppressWarnings({"unchecked","rawtypes","java:S6539","java:S115"})
+@SuppressWarnings({
+	"unchecked",
+	"rawtypes",
+	"java:S6539",
+	"java:S115",
+	"java:S1452"  // Wildcard required - ClassMeta<?> for parameter resolution and type variables
+})
 public class BeanContext extends Context {
 
 	// Property name constants

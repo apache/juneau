@@ -211,6 +211,9 @@ public class ResponseBeanMeta {
 	 *
 	 * @return Metadata about the class.
 	 */
+	@SuppressWarnings({
+		"java:S1452"  // Wildcard required - ClassMeta<?> for response metadata
+	})
 	public ClassMeta<?> getClassMeta() { return cm; }
 
 	/**

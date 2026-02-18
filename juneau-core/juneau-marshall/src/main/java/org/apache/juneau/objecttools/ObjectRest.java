@@ -510,6 +510,9 @@ public class ObjectRest {
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@SuppressWarnings({
+		"java:S1452"  // Wildcard required - List<?> for heterogeneous list elements
+	})
 	public List<?> getList(String url) {
 		return get(url, List.class);
 	}
@@ -525,6 +528,9 @@ public class ObjectRest {
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@SuppressWarnings({
+		"java:S1452"  // Wildcard required - List<?> for heterogeneous list elements
+	})
 	public List<?> getList(String url, List<?> defVal) {
 		return getWithDefault(url, defVal, List.class);
 	}
@@ -568,6 +574,9 @@ public class ObjectRest {
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@SuppressWarnings({
+		"java:S1452"  // Wildcard required - Map<?,?> for heterogeneous map entries
+	})
 	public Map<?,?> getMap(String url) {
 		return get(url, Map.class);
 	}
@@ -583,6 +592,9 @@ public class ObjectRest {
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@SuppressWarnings({
+		"java:S1452"  // Wildcard required - Map<?,?> for heterogeneous map entries
+	})
 	public Map<?,?> getMap(String url, Map<?,?> defVal) {
 		return getWithDefault(url, defVal, Map.class);
 	}

@@ -814,6 +814,9 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @param o The object to get the expected type on.
 	 * @return The expected type.
 	 */
+	@SuppressWarnings({
+		"java:S1452"  // Wildcard required - ClassMeta<?> for root type metadata
+	})
 	protected final ClassMeta<?> getExpectedRootType(Object o) {
 		if (isAddRootType())
 			return object();
@@ -994,6 +997,9 @@ public class SerializerSession extends BeanTraverseSession {
 	 * 	once (since they can be expensive).
 	 * @throws SerializeException If recursion occurred.
 	 */
+	@SuppressWarnings({
+		"java:S1452"  // Wildcard required - ClassMeta<?> for push stack metadata
+	})
 	protected final ClassMeta<?> push2(String attrName, Object o, ClassMeta<?> eType) throws SerializeException {
 		try {
 			return super.push(attrName, o, eType);

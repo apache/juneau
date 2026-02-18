@@ -96,7 +96,10 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 	 * @param ci The class to return a swap on.
 	 * @return An object swap instance, or <jk>null</jk> if one could not be created.
 	 */
-	@SuppressWarnings({ "rawtypes" })
+	@SuppressWarnings({
+		"rawtypes",
+		"java:S1452"  // Wildcard required - ObjectSwap<?,?> for dynamically discovered swap types
+	})
 	public static ObjectSwap<?,?> find(BeanContext bc, ClassInfo ci) {
 
 		if (shouldIgnore(bc, ci))

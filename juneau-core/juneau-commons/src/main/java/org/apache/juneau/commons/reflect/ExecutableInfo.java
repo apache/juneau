@@ -398,6 +398,9 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return An array of {@link TypeVariable} objects, or an empty array if none.
 	 * @see Executable#getTypeParameters()
 	 */
+	@SuppressWarnings({
+		"java:S1452"  // Wildcard required - TypeVariable<?> from Executable.getTypeParameters()
+	})
 	public final TypeVariable<?>[] getTypeParameters() { return inner.getTypeParameters(); }
 
 	/**

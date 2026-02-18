@@ -94,7 +94,10 @@ public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 	 * @param ci The class to try to constructor a dynamic swap on.
 	 * @return An object swap instance, or <jk>null</jk> if one could not be created.
 	 */
-	@SuppressWarnings({ "rawtypes" })
+	@SuppressWarnings({
+		"rawtypes",
+		"java:S1452"  // Wildcard required - ObjectSwap<?,?> for dynamically discovered swap types
+	})
 	public static ObjectSwap<?,?> find(BeanContext bc, ClassInfo ci) {
 
 		if (shouldIgnore(bc, ci))
