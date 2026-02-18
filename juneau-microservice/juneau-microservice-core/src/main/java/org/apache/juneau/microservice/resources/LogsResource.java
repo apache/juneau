@@ -48,7 +48,7 @@ import org.apache.juneau.rest.servlet.*;
 	allowedMethodParams="*"
 )
 @HtmlConfig(uriAnchorText="PROPERTY_NAME")
-@SuppressWarnings({ "javadoc", "java:S2386" }) // S2386: Fields logDir, leFormatter, and allowDeletes are effectively final after @RestInit initialization
+@SuppressWarnings("javadoc")
 public class LogsResource extends BasicRestServlet {
 	@Response(schema = @Schema(description = "File action"))
 	public static class Action extends LinkString {
@@ -156,11 +156,14 @@ public class LogsResource extends BasicRestServlet {
 		return new BufferedReader(new InputStreamReader(new FileInputStream(f), Charset.defaultCharset()));
 	}
 
-	private File logDir;
+	/** Log directory path. Set once in @RestInit, shared by all requests. */
+	private static File logDir;
 
-	private transient LogEntryFormatter leFormatter;
+	/** Log entry formatter. Set once in @RestInit, shared by all requests. */
+	private static LogEntryFormatter leFormatter;
 
-	boolean allowDeletes;
+	/** Whether deletes are allowed. Set once in @RestInit, shared by all requests. */
+	private static boolean allowDeletes;
 
 	@RestDelete(
 		path="/*",

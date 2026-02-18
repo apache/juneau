@@ -97,8 +97,8 @@ public class PhotosResource extends BasicRestServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	// Our cache of photos
-	private transient Map<Integer,Photo> photos = new ConcurrentHashMap<>();
+	/** Photo cache. Static - shared by all requests (singleton servlet). */
+	private static final Map<Integer,Photo> photos = new ConcurrentHashMap<>();
 
 	/**
 	 * [HTTP PUT /photos/{id}]
