@@ -150,6 +150,16 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 		return null;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		return this == o || (o instanceof Map<?,?> m && entrySet().equals(m.entrySet()));
+	}
+
+	@Override
+	public int hashCode() {
+		return entrySet().hashCode();
+	}
+
 	@Override /* Overridden from Map */
 	public Object remove(Object key) {
 		keys.remove(key);

@@ -46,6 +46,16 @@ public class DelegateList<T extends Collection<?>> extends JsonList implements D
 		this.classMeta = classMeta;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		return this == o || (o instanceof List<?> other && super.equals(other));
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
 	@Override /* Overridden from Delegate */
 	public ClassMeta<T> getClassMeta() { return classMeta; }
 }

@@ -230,6 +230,16 @@ public class MediaRanges {
 		return l(ranges);
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof MediaRanges other && eq(this, other, (x, y) -> eq(x.string, y.string));
+	}
+
+	@Override
+	public int hashCode() {
+		return string != null ? string.hashCode() : 0;
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
 		return string;

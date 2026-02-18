@@ -572,6 +572,16 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 		return m;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		return this == o || (o instanceof RequestPathParams other && super.equals(other));
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
 		return r(properties());

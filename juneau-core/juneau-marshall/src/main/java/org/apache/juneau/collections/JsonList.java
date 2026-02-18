@@ -111,7 +111,8 @@ import org.apache.juneau.serializer.*;
  * @serial exclude
  */
 @SuppressWarnings({
-	"java:S110" // Class has many fields, acceptable for collection implementation
+	"java:S110",  // Class has many fields, acceptable for collection implementation
+	"java:S1206"  // Inherits equals/hashCode from LinkedList; List equality is element-based
 })
 public class JsonList extends LinkedList<Object> {
 	@SuppressWarnings({

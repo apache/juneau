@@ -71,7 +71,7 @@ public class LinkString implements Comparable<LinkString> {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return (o instanceof LinkString o2) && eq(this, o2, (x, y) -> x.name.equals(y.name));
+		return (o instanceof LinkString o2) && eq(this, o2, (x, y) -> eq(x.name, y.name));
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class LinkString implements Comparable<LinkString> {
 
 	@Override /* Overridden from Object */
 	public int hashCode() {
-		return super.hashCode();
+		return name != null ? name.hashCode() : 0;
 	}
 
 	/**

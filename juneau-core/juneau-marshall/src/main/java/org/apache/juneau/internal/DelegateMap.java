@@ -68,6 +68,16 @@ public class DelegateMap<T extends Map> extends JsonMap implements Delegate<T> {
 		return this;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		return this == o || (o instanceof Map<?,?> m && entrySet().equals(m.entrySet()));
+	}
+
+	@Override
+	public int hashCode() {
+		return entrySet().hashCode();
+	}
+
 	@Override /* Overridden from Delegate */
 	public ClassMeta<T> getClassMeta() { return classMeta; }
 }

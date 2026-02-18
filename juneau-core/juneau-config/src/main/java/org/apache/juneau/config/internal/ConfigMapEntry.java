@@ -30,6 +30,7 @@ import org.apache.juneau.commons.lang.*;
  *
  * This is a read-only object.
  */
+@SuppressWarnings("java:S1206") // Internal config representation; value equality not needed
 public class ConfigMapEntry {
 	static final ConfigMapEntry NULL = new ConfigMapEntry(null, null, null, null, null);
 	private static final AsciiSet REPLACE_CHARS = AsciiSet.of("\\#");

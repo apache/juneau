@@ -503,6 +503,16 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 		// @formatter:on
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		return this == o || (o instanceof RequestHeaders other && super.equals(other));
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
 		return r(properties());

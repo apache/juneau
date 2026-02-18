@@ -49,7 +49,7 @@ import org.apache.juneau.http.header.*;
  * </ul>
  */
 @BeanIgnore
-@SuppressWarnings("resource")
+@SuppressWarnings({ "resource", "java:S1206" }) // Content may be streams; value equality not practical
 public class BasicHttpEntity implements HttpEntity {
 
 	/**

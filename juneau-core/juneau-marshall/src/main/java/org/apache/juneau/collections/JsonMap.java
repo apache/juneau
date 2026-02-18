@@ -104,6 +104,7 @@ import org.apache.juneau.swap.*;
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  */
+@SuppressWarnings("java:S1206") // Inherits equals/hashCode from LinkedHashMap; Map equality is entrySet-based
 public class JsonMap extends LinkedHashMap<String,Object> {
 	private static class UnmodifiableJsonMap extends JsonMap {
 		private static final long serialVersionUID = 1L;

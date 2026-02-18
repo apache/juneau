@@ -22,6 +22,7 @@ import static org.apache.juneau.httppart.HttpPartType.*;
 import java.lang.reflect.*;
 import java.time.*;
 import java.util.*;
+import java.util.Objects;
 import java.util.regex.*;
 
 import org.apache.http.*;
@@ -515,6 +516,16 @@ public class RequestHttpPart {
 	public RequestHttpPart schema(HttpPartSchema value) {
 		schema = value;
 		return this;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof NameValuePair nvp && eq(this, nvp, (x, y) -> eq(x.getName(), y.getName()) && eq(x.getValue(), y.getValue()));
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getName(), getValue());
 	}
 
 	@Override /* Overridden from Object */

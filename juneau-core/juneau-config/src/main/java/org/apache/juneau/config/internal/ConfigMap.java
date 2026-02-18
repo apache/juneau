@@ -38,9 +38,10 @@ import org.apache.juneau.config.store.*;
 /**
  * Represents the parsed contents of a configuration.
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({ "resource", "java:S1206" }) // Complex nested structure; value equality not practical
 public class ConfigMap implements ConfigStoreListener {
 
+	@SuppressWarnings("java:S1206") // Internal config structure; value equality not needed
 	class ConfigSection {
 
 		final String name;   // The config section name, or blank if the default section.  Never null.
