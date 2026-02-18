@@ -3616,9 +3616,7 @@ public class BeanContext extends Context {
 	private static boolean isCacheable(Class<?> c) {
 		var n = c.getName();
 		var x = n.charAt(n.length() - 1);  // All generated classes appear to end with digits.
-		if ((x >= '0' && x <= '9') && (n.indexOf("$$") != -1 || n.startsWith("sun") || n.startsWith("com.sun") || n.indexOf("$Proxy") != -1))
-			return false;
-		return true;
+		return !((x >= '0' && x <= '9') && (n.indexOf("$$") != -1 || n.startsWith("sun") || n.startsWith("com.sun") || n.indexOf("$Proxy") != -1));
 	}
 
 	private final OptionalSupplier<WriterSerializer> beanToStringSerializer;

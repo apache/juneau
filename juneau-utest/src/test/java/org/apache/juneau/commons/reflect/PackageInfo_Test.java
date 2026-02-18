@@ -260,7 +260,7 @@ class PackageInfo_Test extends TestBase {
 	@Test
 	void a016_isSealed() {
 		var pi = PackageInfo.of(TestClass1.class);
-		assertDoesNotThrow(() -> pi.isSealed());
+		assertDoesNotThrow((org.junit.jupiter.api.function.Executable)pi::isSealed);
 		// Most packages are not sealed
 	}
 

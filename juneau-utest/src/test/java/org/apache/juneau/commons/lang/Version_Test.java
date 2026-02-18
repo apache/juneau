@@ -286,26 +286,20 @@ class Version_Test extends TestBase {
 		});
 	}
 
-	@Test
-	void c09_hashCode_largeVersions() {
-		var v1 = of("1.2.3.4.5.6.7.8.9.10");
-		var v2 = of("1.2.3.4.5.6.7.8.9.10");
+	@ParameterizedTest
+	@MethodSource("hashCodeConsistencyTestData")
+	void c09_hashCode_consistency(String versionString) {
+		var v1 = of(versionString);
+		var v2 = of(versionString);
 		assertEquals(v1.hashCode(), v2.hashCode());
 	}
 
-	@Test
-	void c10_hashCode_withZeros() {
-		var v1 = of("1.0.0");
-		var v2 = of("1.0.0");
-		assertEquals(v1.hashCode(), v2.hashCode());
-	}
-
-	@Test
-	void c11_hashCode_withMaxValue() {
-		var v1 = of("1.x");
-		var v2 = of("1.x");
-		// Non-numeric parts become Integer.MAX_VALUE
-		assertEquals(v1.hashCode(), v2.hashCode());
+	static Stream<Arguments> hashCodeConsistencyTestData() {
+		return Stream.of(
+			Arguments.of("1.2.3.4.5.6.7.8.9.10"),
+			Arguments.of("1.0.0"),
+			Arguments.of("1.x")
+		);
 	}
 
 	@Test

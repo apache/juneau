@@ -214,9 +214,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 	 */
 	public final boolean shouldUseExpandedParams(BeanPropertyMeta pMeta) {
 		var cm = pMeta.getClassMeta().getSerializedClassMeta(this);
-		if (cm.isCollectionOrArray() && (isExpandedParams() || getUrlEncodingClassMeta(pMeta.getBeanMeta().getClassMeta()).isExpandedParams()))
-			return true;
-		return false;
+		return cm.isCollectionOrArray() && (isExpandedParams() || getUrlEncodingClassMeta(pMeta.getBeanMeta().getClassMeta()).isExpandedParams());
 	}
 
 	@SuppressWarnings({

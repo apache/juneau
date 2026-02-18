@@ -163,9 +163,11 @@ class SwaggerUI_Test extends TestBase {
 	}
 
 	/**
-	 * Test method for empty Swagger document.
+	 * Test method for Swagger documents with empty paths.
 	 */
-	@Test void a07_emptySwaggerDocument() throws Exception {
+	@ParameterizedTest
+	@MethodSource("swaggerWithEmptyPathsTestData")
+	void a07_swaggerWithEmptyPaths(String testName) throws Exception {
 		var swagger = swagger()
 			.setInfo(info("Test API", "1.0.0"))
 			.setPaths(new HashMap<>());
@@ -187,78 +189,12 @@ class SwaggerUI_Test extends TestBase {
 		);
 	}
 
-	/**
-	 * Test method for Swagger document with external documentation.
-	 */
-	@Test void a08_swaggerWithExternalDocs() throws Exception {
-		var swagger = swagger()
-			.setInfo(info("Test API", "1.0.0"))
-			.setPaths(new HashMap<>());
-
-		assertString(
-			"""
-			<div class='swagger-ui'>
-				<style></style>
-				<script type='text/javascript'><sp/></script>
-				<table class='header'>
-					<tr><th>Version:</th><td>1.0.0</td></tr>
-				</table>
-				<div class='tag-block tag-block-open'>
-					<div class='tag-block-contents'></div>
-				</div>
-			</div>
-			""".replaceAll("\\n\\s*", ""),
-			new SwaggerUI().swap(bs, swagger)
-		);
-	}
-
-	/**
-	 * Test method for Swagger document with security schemes.
-	 */
-	@Test void a09_swaggerWithSecuritySchemes() throws Exception {
-		var swagger = swagger()
-			.setInfo(info("Test API", "1.0.0"))
-			.setPaths(new HashMap<>());
-
-		assertString(
-			"""
-			<div class='swagger-ui'>
-				<style></style>
-				<script type='text/javascript'><sp/></script>
-				<table class='header'>
-					<tr><th>Version:</th><td>1.0.0</td></tr>
-				</table>
-				<div class='tag-block tag-block-open'>
-					<div class='tag-block-contents'></div>
-				</div>
-			</div>
-			""".replaceAll("\\n\\s*", ""),
-			new SwaggerUI().swap(bs, swagger)
-		);
-	}
-
-	/**
-	 * Test method for Swagger document with multiple operations.
-	 */
-	@Test void a10_swaggerWithMultipleOperations() throws Exception {
-		var swagger = swagger()
-			.setInfo(info("Test API", "1.0.0"))
-			.setPaths(new HashMap<>());
-
-		assertString(
-			"""
-			<div class='swagger-ui'>
-				<style></style>
-				<script type='text/javascript'><sp/></script>
-				<table class='header'>
-					<tr><th>Version:</th><td>1.0.0</td></tr>
-				</table>
-				<div class='tag-block tag-block-open'>
-					<div class='tag-block-contents'></div>
-				</div>
-			</div>
-			""".replaceAll("\\n\\s*", ""),
-			new SwaggerUI().swap(bs, swagger)
+	static Stream<Arguments> swaggerWithEmptyPathsTestData() {
+		return Stream.of(
+			Arguments.of("emptySwaggerDocument"),
+			Arguments.of("swaggerWithExternalDocs"),
+			Arguments.of("swaggerWithSecuritySchemes"),
+			Arguments.of("swaggerWithMultipleOperations")
 		);
 	}
 

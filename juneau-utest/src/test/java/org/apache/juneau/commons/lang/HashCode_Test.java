@@ -45,21 +45,34 @@ class HashCode_Test extends TestBase {
 		assertNotSame(hc1, hc2);
 	}
 
-	@Test
-	void a02_create_initialHashCode() {
-		var hc = HashCode.create();
-		assertEquals(1, hc.get());
+	@ParameterizedTest
+	@MethodSource("initialHashCodeTestData")
+	void a02_create_initialHashCode(String testName) {
+		int expectedHashCode = 1;
+		if ("create".equals(testName)) {
+			var hc = HashCode.create();
+			assertEquals(expectedHashCode, hc.get());
+		} else if ("of_empty".equals(testName)) {
+			var hashCode = HashCode.of();
+			assertEquals(expectedHashCode, hashCode);
+		} else if ("get_initialValue".equals(testName)) {
+			var hc = HashCode.create();
+			assertEquals(expectedHashCode, hc.get());
+		}
+	}
+
+	static Stream<Arguments> initialHashCodeTestData() {
+		return Stream.of(
+			Arguments.of("create"),
+			Arguments.of("of_empty"),
+			Arguments.of("get_initialValue")
+		);
 	}
 
 	//====================================================================================================
 	// of(Object...) tests
 	//====================================================================================================
 
-	@Test
-	void b01_of_empty() {
-		var hashCode = HashCode.of();
-		assertEquals(1, hashCode);
-	}
 
 	@Test
 	void b02_of_singleObject() {
@@ -345,11 +358,6 @@ class HashCode_Test extends TestBase {
 	// get() tests
 	//====================================================================================================
 
-	@Test
-	void h01_get_initialValue() {
-		var hc = HashCode.create();
-		assertEquals(1, hc.get());
-	}
 
 	@Test
 	void h02_get_afterAdd() {

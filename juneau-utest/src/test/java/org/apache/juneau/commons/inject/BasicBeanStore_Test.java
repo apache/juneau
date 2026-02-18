@@ -336,37 +336,24 @@ class BasicBeanStore_Test extends TestBase {
 		assertFalse(result.isPresent());
 	}
 
-	@Test
-	void h02_getBean_named_found() {
+	@ParameterizedTest
+	@MethodSource("getBeanNamedTestData")
+	void h02_getBean_named(String name) {
 		var store = new BasicBeanStore2(null);
 		var bean = new TestBean("test1");
-		store.addBean(TestBean.class, bean, "name1");
+		store.addBean(TestBean.class, bean, name);
 
-		var result = store.getBean(TestBean.class, "name1");
+		var result = store.getBean(TestBean.class, name);
 		assertTrue(result.isPresent());
 		assertSame(bean, result.get());
 	}
 
-	@Test
-	void h03_getBean_named_nullName() {
-		var store = new BasicBeanStore2(null);
-		var bean = new TestBean("test1");
-		store.addBean(TestBean.class, bean, null);
-
-		var result = store.getBean(TestBean.class, null);
-		assertTrue(result.isPresent());
-		assertSame(bean, result.get());
-	}
-
-	@Test
-	void h04_getBean_named_emptyString() {
-		var store = new BasicBeanStore2(null);
-		var bean = new TestBean("test1");
-		store.addBean(TestBean.class, bean, "");
-
-		var result = store.getBean(TestBean.class, "");
-		assertTrue(result.isPresent());
-		assertSame(bean, result.get());
+	static Stream<Arguments> getBeanNamedTestData() {
+		return Stream.of(
+			Arguments.of("name1"),
+			Arguments.of((String)null),
+			Arguments.of("")
+		);
 	}
 
 	@Test

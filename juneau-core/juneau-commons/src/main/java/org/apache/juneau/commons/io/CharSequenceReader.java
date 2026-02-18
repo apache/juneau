@@ -126,8 +126,6 @@ public class CharSequenceReader extends BufferedReader {
 		this.cs = cs;
 		if (cs instanceof String s2)
 			s = s2;
-		else if (cs instanceof StringBuffer sb3)
-			sb = new StringBuilder(sb3);
 		else if (cs instanceof StringBuilder sb4)
 			sb = sb4;
 		this.length = cs.length();

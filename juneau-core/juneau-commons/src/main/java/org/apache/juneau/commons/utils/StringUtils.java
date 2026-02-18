@@ -664,7 +664,7 @@ public class StringUtils {
 	 * @return A negative integer, zero, or a positive integer as the first string is less than, equal to, or greater than the second.
 	 */
 	public static int compareIgnoreCase(String str1, String str2) {
-		if (str1 == str2)
+		if (Objects.equals(str1, str2))
 			return 0;
 		if (str1 == null)
 			return -1;
@@ -1519,7 +1519,7 @@ public class StringUtils {
 	 * @see Utils#eqic(String, String)
 	 */
 	public static boolean equalsIgnoreCase(String str1, String str2) {
-		if (str1 == str2)
+		if (Objects.equals(str1, str2))
 			return true;
 		if (str1 == null || str2 == null)
 			return false;
@@ -3589,10 +3589,9 @@ public class StringUtils {
 				else
 					return false;
 			} else if (state == S2) {
-				if (isLowerCaseLetter(c))
-					state = S3;
-				else
+				if (! isLowerCaseLetter(c))
 					return false;
+				state = S3;
 			} else if (state == S3) {  // NOSONAR - State check necessary for state machine
 				if (c == ':')
 					state = S4;
@@ -4609,7 +4608,7 @@ public class StringUtils {
 		"java:S3776" // Cognitive complexity acceptable for natural comparison algorithm
 	})
 	public static int naturalCompare(String str1, String str2) {
-		if (str1 == str2)
+		if (Objects.equals(str1, str2))
 			return 0;
 		if (str1 == null)
 			return -1;
