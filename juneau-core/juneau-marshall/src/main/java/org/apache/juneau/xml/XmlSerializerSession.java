@@ -362,6 +362,16 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		return xcm.getFormat() == XMLTEXT;
 	}
 
+	private Optional<Map.Entry<String,Object>> getPropertyKeyValueIfNotIgnored(BeanPropertyValue p, BeanPropertyMeta pMeta, ClassMeta<?> cMeta) {
+		var key = p.getName();
+		var value = p.getValue();
+		if (nn(p.getThrown()))
+			onBeanGetterException(pMeta, p.getThrown());
+		if (canIgnoreValue(cMeta, key, value))
+			return Optional.empty();
+		return Optional.of(new AbstractMap.SimpleEntry<>(key, value));
+	}
+
 	@SuppressWarnings({ "null", "java:S3776", "java:S6541" })
 	private ContentResult serializeBeanMap(XmlWriter out, BeanMap<?> m, Namespace elementNs, boolean isCollapsed, boolean isMixedOrText) throws SerializeException {
 		boolean hasChildren = false;
@@ -391,17 +401,11 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			if (attrs.contains(n) || attrs.contains("*") || n.equals(attrsProperty)) {
 				var pMeta = p.getMeta();
 				if (pMeta.canRead()) {
-					var cMeta = p.getClassMeta();
-
-					var key = p.getName();
-					var value = p.getValue();
-					var t = p.getThrown();
-					if (nn(t))
-						onBeanGetterException(pMeta, t);
-
-					if (canIgnoreValue(cMeta, key, value))
+					var kv = getPropertyKeyValueIfNotIgnored(p, pMeta, p.getClassMeta());
+					if (kv.isEmpty())
 						continue;
-
+					var key = kv.get().getKey();
+					var value = kv.get().getValue();
 					var bpXml = getXmlBeanPropertyMeta(pMeta);
 					var ns = (isEnableNamespaces() && bpXml.getNamespace() != elementNs ? bpXml.getNamespace() : null);
 
@@ -450,15 +454,11 @@ public class XmlSerializerSession extends WriterSerializerSession {
 					else if (contentType.isArray() && Array.getLength(content) == 0)
 						hasContent = false;
 				} else if (elements.contains(n) || collapsedElements.contains(n) || elements.contains("*") || collapsedElements.contains("*")) {
-					var key = p.getName();
-					var value = p.getValue();
-					var t = p.getThrown();
-					if (nn(t))
-						onBeanGetterException(pMeta, t);
-
-					if (canIgnoreValue(cMeta, key, value))
+					var kv = getPropertyKeyValueIfNotIgnored(p, pMeta, cMeta);
+					if (kv.isEmpty())
 						continue;
-
+					var key = kv.get().getKey();
+					var value = kv.get().getValue();
 					if (! hasChildren) {
 						hasChildren = true;
 						out.appendIf(! isCollapsed, '>').nlIf(! isMixedOrText, indent);
@@ -964,13 +964,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 					rc = serializeMap(out, (Map)o, sType, eType.getKeyType(), eType.getValueType(), isMixedOrText);
 			} else if (sType.isBean()) {
 				rc = serializeBeanMap(out, toBeanMap(o), elementNamespace, isCollapsed, isMixedOrText);
-			} else if (sType.isCollection() || (nn(wType) && wType.isCollection())) {
-				if (isCollapsed)
-					indent--;
-				serializeCollection(out, o, sType, eType, pMeta, isMixedOrText);
-				if (isCollapsed)
-					indent++;
-			} else if (sType.isArray()) {
+			} else if (sType.isCollection() || sType.isArray() || (nn(wType) && (wType.isCollection() || wType.isArray()))) {
 				if (isCollapsed)
 					indent--;
 				serializeCollection(out, o, sType, eType, pMeta, isMixedOrText);

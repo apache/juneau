@@ -409,16 +409,11 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		} else if (sType.isEnum()) {
 			tc = ENUM;
 			type = TYPE_string;
-		} else if (sType.isCharSequence() || sType.isChar()) {
-			tc = STRING;
-			type = TYPE_string;
-		} else if (sType.isUri()) {
-			tc = STRING;
-			type = TYPE_string;
-			format = FORMAT_uri;
 		} else {
 			tc = STRING;
 			type = TYPE_string;
+			if (sType.isUri())
+				format = FORMAT_uri;
 		}
 
 		// Add info from @Schema on bean property.
