@@ -258,7 +258,7 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a007_base64Decode() {
-		assertNull(base64Decode(null));
+		assertArrayEquals(new byte[] {}, base64Decode(null));
 		assertArrayEquals(new byte[] {}, base64Decode(""));
 		assertArrayEquals("Hello".getBytes(UTF8), base64Decode("SGVsbG8="));
 		assertArrayEquals("Hello World".getBytes(UTF8), base64Decode("SGVsbG8gV29ybGQ="));
@@ -282,7 +282,7 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a008_base64DecodeToString() {
-		assertNull(base64DecodeToString(null));
+		assertEquals("", base64DecodeToString(null));
 		assertEquals("", base64DecodeToString(""));
 		assertEquals("Hello", base64DecodeToString("SGVsbG8="));
 		assertEquals("Hello World", base64DecodeToString("SGVsbG8gV29ybGQ="));
@@ -819,7 +819,7 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a032_distinct() {
-		assertNull(distinct(null));
+		assertList(distinct(null));
 		assertList(distinct(a()));
 		assertList(distinct(a("foo", "bar", "baz")), "foo", "bar", "baz");
 		assertList(distinct(a("foo", "bar", "foo", "baz", "bar")), "foo", "bar", "baz");
@@ -846,8 +846,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals(2, codes2.length);
 
 		// Null/empty input
-		assertNull(doubleMetaphone(null));
-		assertNull(doubleMetaphone(""));
+		assertList(doubleMetaphone(null));
+		assertList(doubleMetaphone(""));
 
 		// Test with numbers-only string - metaphone returns "" (empty string), not null
 		// So doubleMetaphone should return a valid array with empty strings
@@ -1338,7 +1338,7 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a052_filter() {
-		assertNull(filter(null, NOT_EMPTY));
+		assertList(filter(null, NOT_EMPTY));
 		assertList(filter(a(), NOT_EMPTY));
 		assertList(filter(a("foo", "", "bar", null, "baz"), NOT_EMPTY), "foo", "bar", "baz");
 		assertList(filter(a("foo", "", "bar", null, "baz"), null));
@@ -3677,7 +3677,7 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a123_mapped() {
-		assertNull(mapped(null, String::toUpperCase));
+		assertList(mapped(null, String::toUpperCase));
 		assertList(mapped(a(), String::toUpperCase));
 		assertList(mapped(a("foo", "bar", "baz"), String::toUpperCase), "FOO", "BAR", "BAZ");
 		assertList(mapped(a("FOO", "BAR", "BAZ"), String::toLowerCase), "foo", "bar", "baz");
@@ -5316,7 +5316,7 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a181_sort() {
-		assertNull(sort(null));
+		assertList(sort(null));
 		assertList(sort(a()));
 		assertList(sort(a("c", "a", "b")), "a", "b", "c");
 		assertList(sort(a("zebra", "apple", "banana")), "apple", "banana", "zebra");
@@ -5331,7 +5331,7 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a182_sortIgnoreCase() {
-		assertNull(sortIgnoreCase(null));
+		assertList(sortIgnoreCase(null));
 		assertList(sortIgnoreCase(a()));
 		assertList(sortIgnoreCase(a("c", "a", "b")), "a", "b", "c");
 		assertList(sortIgnoreCase(a("Zebra", "apple", "Banana")), "apple", "Banana", "Zebra");
@@ -5598,7 +5598,7 @@ class StringUtils_Test extends TestBase {
 		assertString("{a\\=1}", splitMap("a\\\\=1", true));
 
 		// Test code path
-		assertNull(splitMap(null, true));
+		assertTrue(splitMap(null, true).isEmpty());
 
 		// Test code path
 		assertTrue(splitMap("", true).isEmpty());
@@ -5644,7 +5644,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals("z", args3[2]);
 
 		// Null/empty input
-		assertNull(splitMethodArgs(null));
+		assertList(splitMethodArgs(null));
 		assertArrayEquals(new String[0], splitMethodArgs(""));
 	}
 
@@ -5768,7 +5768,7 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a190_splitQuoted() {
-		assertNull(splitQuoted(null));
+		assertList(splitQuoted(null));
 		assertEmpty(splitQuoted(""));
 		assertEmpty(splitQuoted(" \t "));
 		assertList(splitQuoted("foo"), "foo");
@@ -6270,7 +6270,7 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a210_toStringArray() {
-		assertNull(toStringArray(null));
+		assertList(toStringArray(null));
 		assertList(toStringArray(Collections.emptyList()));
 		assertList(toStringArray(List.of("a", "b", "c")), "a", "b", "c");
 

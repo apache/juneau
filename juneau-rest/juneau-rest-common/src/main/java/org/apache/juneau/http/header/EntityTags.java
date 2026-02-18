@@ -108,7 +108,7 @@ public class EntityTags {
 
 	private static EntityTag[] parse(String value) {
 		if (value == null)
-			return null;
+			return new EntityTag[0];
 		var s = splita(value);
 		var v = new EntityTag[s.length];
 		for (var i = 0; i < s.length; i++)

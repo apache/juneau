@@ -132,7 +132,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		}
 
 		@Override
-		public HeaderElement[] getElements() throws ParseException { return null; }
+		public HeaderElement[] getElements() throws ParseException { return new HeaderElement[0]; }
 	}
 
 	private class SimplePart implements NameValuePair {

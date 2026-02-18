@@ -523,7 +523,7 @@ public class CollectionUtils {
 	 *
 	 * @param <E> The element type.
 	 * @param arrays Collection of arrays to combine.
-	 * @return A new combined array, or <jk>null</jk> if all arrays are <jk>null</jk>.
+	 * @return A new combined array, or an empty array if all arrays are <jk>null</jk>.
 	 */
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires unchecked casts
@@ -538,7 +538,7 @@ public class CollectionUtils {
 			l += (a == null ? 0 : a.length);
 		}
 		if (a1 == null)
-			return null;
+			return (E[]) new Object[0];
 		var a = (E[])Array.newInstance(a1.getClass().getComponentType(), l);
 		int i = 0;
 		for (var aa : arrays)
@@ -1118,12 +1118,15 @@ public class CollectionUtils {
 	/**
 	 * Returns a null list.
 	 *
+	 * <p>TODO: SonarLint java:S1168 - Intentional null return for assertion testing. Consider Optional.
+	 *
 	 * @param <T> The element type.
 	 * @param type The element type class.
 	 * @return <jk>null</jk>.
 	 */
 	@SuppressWarnings({
-		"java:S1172" // Parameter type is used for type inference, not runtime behavior
+		"java:S1168",    // TODO: Intentional null return for assertion testing. Consider Optional.
+		"java:S1172"     // Parameter type is used for type inference, not runtime behavior
 	})
 	public static <T> List<T> listn(Class<T> type) {
 		return null;
@@ -1880,12 +1883,17 @@ public class CollectionUtils {
 	/**
 	 * Returns a null map.
 	 *
+	 * <p>TODO: SonarLint java:S1168 - Intentional null return for assertion testing. Consider Optional.
+	 *
 	 * @param <K> The key type.
 	 * @param <V> The value type.
 	 * @param keyType The key type class.
 	 * @param valueType The value type class.
 	 * @return <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"java:S1168"     // TODO: Intentional null return for assertion testing. Consider Optional.
+	})
 	public static <K,V> Map<K,V> mapn(Class<K> keyType, Class<V> valueType) {
 		return null;
 	}
@@ -1906,12 +1914,15 @@ public class CollectionUtils {
 	/**
 	 * Returns <jk>null</jk> for the specified array type.
 	 *
+	 * <p>TODO: SonarLint java:S1168 - Intentional null return for assertion testing. Consider Optional.
+	 *
 	 * @param <T> The component type.
 	 * @param type The component type class.
 	 * @return <jk>null</jk>.
 	 */
 	@SuppressWarnings({
-		"java:S1172" // Parameter type is used for type inference, not runtime behavior
+		"java:S1168",    // TODO: Intentional null return for assertion testing. Consider Optional.
+		"java:S1172"     // Parameter type is used for type inference, not runtime behavior
 	})
 	public static <T> T[] na(Class<T> type) {
 		return null;

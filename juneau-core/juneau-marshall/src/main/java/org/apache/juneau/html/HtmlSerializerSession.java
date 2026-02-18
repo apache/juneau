@@ -335,8 +335,16 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * Returns null if collection should not be serialized as a 2-dimensional table.
 	 * Returns an empty array if it should be treated as a table but without headers.
 	 * 2-dimensional tables are used for collections of objects that all have the same set of property names.
+	 *
+	 * TODO: SonarLint java:S1168 - null vs empty array have distinct semantics here (don't use table vs table with no headers).
+	 * Consider Optional or separate method to avoid null return.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked", "java:S3776" })
+	@SuppressWarnings({
+		"rawtypes",       // Collection uses raw type for mixed beans/maps
+		"unchecked",      // Type erasure in generic collection handling
+		"java:S1168",     // TODO: null vs empty array have distinct semantics (don't use table vs table with no headers)
+		"java:S3776"      // Cognitive complexity acceptable for table header resolution
+	})
 	private Object[] getTableHeaders(Collection c, HtmlBeanPropertyMeta bpHtml) throws SerializeException {
 
 		if (c.isEmpty())

@@ -4423,6 +4423,13 @@ public class BeanContext extends Context {
 		return cmString;
 	}
 
+	/**
+	 * Finds the type parameters for a parameterized type.
+	 *
+	 * @param o The generic type.
+	 * @param c The raw class.
+	 * @return The array of {@link ClassMeta} for each type parameter, or an empty array if parameters cannot be resolved.
+	 */
 	@SuppressWarnings("java:S3776")
 	final ClassMeta[] findParameters(Type o, Class c) {
 		if (o == null)
@@ -4447,15 +4454,15 @@ public class BeanContext extends Context {
 			var l = new LinkedList<ClassMeta<?>>();
 			for (var pt2 : o2.getActualTypeArguments()) {
 				if (pt2 instanceof WildcardType || pt2 instanceof TypeVariable)
-					return null;
+					return new ClassMeta[0];
 				l.add(resolveClassMeta(pt2, null));
 			}
 			if (l.isEmpty())
-				return null;
+				return new ClassMeta[0];
 			return l.toArray(new ClassMeta[l.size()]);
 		}
 
-		return null;
+		return new ClassMeta[0];
 	}
 
 	@SuppressWarnings("java:S3776")
@@ -4495,7 +4502,7 @@ public class BeanContext extends Context {
 		// then we need to figure out the parameters.
 		if (rawType.isMap() || rawType.isCollection() || rawType.isOptional()) {
 			var params = findParameters(o, c);
-			if (params == null)
+			if (params.length == 0)
 				return rawType;
 			if (rawType.isMap()) {
 				if (params.length != 2 || (params[0].isObject() && params[1].isObject()))

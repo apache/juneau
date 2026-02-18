@@ -336,11 +336,11 @@ public class StringUtils {
 	 * BASE64-decodes the specified string.
 	 *
 	 * @param in The BASE-64 encoded string.
-	 * @return The decoded byte array, or null if the input was <jk>null</jk>.
+	 * @return The decoded byte array, or an empty array if the input was <jk>null</jk>.
 	 */
 	public static byte[] base64Decode(String in) {
 		if (in == null)
-			return null;
+			return new byte[0];
 
 		var bIn = in.getBytes(UTF8);
 
@@ -380,12 +380,10 @@ public class StringUtils {
 	 * Shortcut for calling <c>base64Decode(String)</c> and converting the result to a UTF-8 encoded string.
 	 *
 	 * @param in The BASE-64 encoded string to decode.
-	 * @return The decoded string.
+	 * @return The decoded string, or an empty string if the input was <jk>null</jk>.
 	 */
 	public static String base64DecodeToString(String in) {
 		var b = base64Decode(in);
-		if (b == null)
-			return null;
 		return new String(b, UTF8);
 	}
 
@@ -1220,11 +1218,11 @@ public class StringUtils {
 	 * </p>
 	 *
 	 * @param array The array to process. Can be <jk>null</jk>.
-	 * @return A new array with duplicate elements removed, or <jk>null</jk> if the array was <jk>null</jk>.
+	 * @return A new array with duplicate elements removed, or an empty array if the array was <jk>null</jk>.
 	 */
 	public static String[] distinct(String[] array) {
 		if (array == null)
-			return null;
+			return new String[0];
 		return Arrays.stream(array).collect(Collectors.toCollection(LinkedHashSet::new)).toArray(new String[0]);
 	}
 
@@ -1242,11 +1240,11 @@ public class StringUtils {
 	 * </p>
 	 *
 	 * @param str The string to generate a Double Metaphone code for. Can be <jk>null</jk>.
-	 * @return An array with two elements: [primary code, alternate code]. Returns <jk>null</jk> if input is <jk>null</jk> or empty.
+	 * @return An array with two elements: [primary code, alternate code]. Returns an empty array if input is <jk>null</jk> or empty.
 	 */
 	public static String[] doubleMetaphone(String str) {
 		if (isEmpty(str))
-			return null;
+			return new String[0];
 
 		// For simplicity, return the same code for both primary and alternate
 		// A full Double Metaphone implementation would be much more complex
@@ -1906,11 +1904,11 @@ public class StringUtils {
 	 *
 	 * @param array The array to filter. Can be <jk>null</jk>.
 	 * @param predicate The predicate to apply to each element. Can be <jk>null</jk>.
-	 * @return A new array containing only the elements that match the predicate, or <jk>null</jk> if the array was <jk>null</jk>.
+	 * @return A new array containing only the elements that match the predicate, or an empty array if the array was <jk>null</jk>.
 	 */
 	public static String[] filter(String[] array, Predicate<String> predicate) {
 		if (array == null)
-			return null;
+			return new String[0];
 		if (predicate == null)
 			return new String[0];
 		return Arrays.stream(array).filter(predicate).toArray(String[]::new);
@@ -4325,11 +4323,11 @@ public class StringUtils {
 	 *
 	 * @param array The array to map. Can be <jk>null</jk>.
 	 * @param mapper The function to apply to each element. Can be <jk>null</jk>.
-	 * @return A new array with the mapped elements, or <jk>null</jk> if the array was <jk>null</jk>.
+	 * @return A new array with the mapped elements, or an empty array if the array was <jk>null</jk>.
 	 */
 	public static String[] mapped(String[] array, Function<String,String> mapper) {
 		if (array == null)
-			return null;
+			return new String[0];
 		if (mapper == null)
 			return Arrays.copyOf(array, array.length);
 		return Arrays.stream(array).map(mapper).toArray(String[]::new);
@@ -6179,11 +6177,11 @@ public class StringUtils {
 	 * </p>
 	 *
 	 * @param array The array to sort. Can be <jk>null</jk>.
-	 * @return A new sorted array, or <jk>null</jk> if the array was <jk>null</jk>.
+	 * @return A new sorted array, or an empty array if the array was <jk>null</jk>.
 	 */
 	public static String[] sort(String[] array) {
 		if (array == null)
-			return null;
+			return new String[0];
 		var result = Arrays.copyOf(array, array.length);
 		Arrays.sort(result);
 		return result;
@@ -6205,11 +6203,11 @@ public class StringUtils {
 	 * </p>
 	 *
 	 * @param array The array to sort. Can be <jk>null</jk>.
-	 * @return A new sorted array (case-insensitive), or <jk>null</jk> if the array was <jk>null</jk>.
+	 * @return A new sorted array (case-insensitive), or an empty array if the array was <jk>null</jk>.
 	 */
 	public static String[] sortIgnoreCase(String[] array) {
 		if (array == null)
-			return null;
+			return new String[0];
 		var result = Arrays.copyOf(array, array.length);
 		Arrays.sort(result, String.CASE_INSENSITIVE_ORDER);
 		return result;
@@ -6478,15 +6476,15 @@ public class StringUtils {
 	 *
 	 * @param s The string to split.
 	 * @param trim Trim strings after parsing.
-	 * @return The parsed map, or null if the string was null.
+	 * @return The parsed map, or an empty map if the string was null.
 	 */
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for map splitting logic
+		"java:S3776"     // Cognitive complexity acceptable for map splitting logic
 	})
 	public static Map<String,String> splitMap(String s, boolean trim) {
 
 		if (s == null)
-			return null;
+			return mape();
 		if (isEmpty(s))
 			return mape();
 
@@ -6552,7 +6550,7 @@ public class StringUtils {
 	public static String[] splitMethodArgs(String s) {
 
 		if (s == null)
-			return null;
+			return new String[0];
 		if (isEmpty(s))
 			return new String[0];
 		if (s.indexOf(',') == -1)
@@ -6739,13 +6737,13 @@ public class StringUtils {
 	 * 	<br>An empty string results in an empty array.
 	 */
 	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for quoted string splitting
-		"java:S2583" // State variables persist across loop iterations
+		"java:S3776",    // Cognitive complexity acceptable for quoted string splitting
+		"java:S2583"     // State variables persist across loop iterations
 	})
 	public static String[] splitQuoted(String s, boolean keepQuotes) {
 
 		if (s == null)
-			return null;
+			return new String[0];
 
 		s = s.trim();
 
@@ -7266,11 +7264,11 @@ public class StringUtils {
 	 * Returns an empty array if the collection is empty.
 	 *
 	 * @param collection The collection to convert. Can be <jk>null</jk>.
-	 * @return A new string array containing the collection elements, or <jk>null</jk> if the collection was <jk>null</jk>.
+	 * @return A new string array containing the collection elements, or an empty array if the collection was <jk>null</jk>.
 	 */
 	public static String[] toStringArray(Collection<String> collection) {
 		if (collection == null)
-			return null;
+			return new String[0];
 		return collection.toArray(new String[collection.size()]);
 	}
 

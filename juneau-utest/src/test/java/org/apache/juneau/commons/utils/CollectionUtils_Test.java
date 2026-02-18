@@ -331,8 +331,8 @@ class CollectionUtils_Test extends TestBase {
 		assertList(combine(s2), "b");
 		assertList(combine(s1, null), "a");
 		assertList(combine(null, s2), "b");
-		assertNull(combine(null, null));
-		assertNull(combine());
+		assertEmpty(combine(null, null));
+		assertEmpty(combine());
 	}
 
 	//====================================================================================================
