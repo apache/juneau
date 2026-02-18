@@ -119,11 +119,15 @@ class ResettableSupplier_Test extends TestBase {
 		assertEquals(1, callCount.get());
 	}
 
-	@Test void a06_threadSafety_raceCondition() throws InterruptedException {
+	@Test
+	@SuppressWarnings({
+		"java:S2925"  // Thread.sleep intentional - simulate work to provoke race condition
+	})
+	void a06_threadSafety_raceCondition() throws InterruptedException {
 		var callCount = new AtomicInteger();
 		ResettableSupplier<String> supplier = new ResettableSupplier<>(() -> {
 			callCount.incrementAndGet();
-			// Simulate some work
+			// Simulate some work to increase chance of race condition
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
@@ -163,7 +167,11 @@ class ResettableSupplier_Test extends TestBase {
 		assertTrue(callCount.get() >= 1);
 	}
 
-	@Test void a07_resetAndGetConcurrently() throws InterruptedException {
+	@Test
+	@SuppressWarnings({
+		"java:S2925"  // Thread.sleep intentional - timing variance for concurrency race test
+	})
+	void a07_resetAndGetConcurrently() throws InterruptedException {
 		var callCount = new AtomicInteger();
 		ResettableSupplier<Integer> supplier = new ResettableSupplier<>(() -> {
 			callCount.incrementAndGet();
@@ -174,7 +182,7 @@ class ResettableSupplier_Test extends TestBase {
 			for (int i = 0; i < 10; i++) {
 				supplier.reset();
 				try {
-					Thread.sleep(5);  // Increased sleep to increase chance of race
+					Thread.sleep(5);  // Timing variance to increase chance of race
 				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
 				}

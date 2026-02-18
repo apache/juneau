@@ -510,13 +510,11 @@ class FileUtils_Test extends TestBase {
 	// modifyTimestamp(File)
 	//====================================================================================================
 	@Test
-	void a057_modifyTimestamp() throws IOException, InterruptedException {
+	void a057_modifyTimestamp() throws IOException {
 		var f = new File(tempDir.toFile(), "test.txt");
 		f.createNewFile();
-		var originalTime = f.lastModified();
-
-		// Wait a bit to ensure time difference
-		Thread.sleep(10);
+		var originalTime = System.currentTimeMillis() - 2000;
+		f.setLastModified(originalTime);
 
 		FileUtils.modifyTimestamp(f);
 		var newTime = f.lastModified();
@@ -534,13 +532,11 @@ class FileUtils_Test extends TestBase {
 	}
 
 	@Test
-	void a059_modifyTimestamp_directory() throws InterruptedException {
+	void a059_modifyTimestamp_directory() {
 		var dir = new File(tempDir.toFile(), "testdir");
 		dir.mkdirs();
-		var originalTime = dir.lastModified();
-
-		// Wait a bit to ensure time difference
-		Thread.sleep(10);
+		var originalTime = System.currentTimeMillis() - 2000;
+		dir.setLastModified(originalTime);
 
 		FileUtils.modifyTimestamp(dir);
 		var newTime = dir.lastModified();
