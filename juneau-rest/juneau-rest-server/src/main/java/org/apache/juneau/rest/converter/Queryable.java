@@ -84,52 +84,52 @@ public class Queryable implements RestConverter {
 	 * Swagger parameters for this converter.
 	 */
 	public static final String SWAGGER_PARAMS = """
-		{
-			in:'query',
-			name:'s',
-			description:'Search.
+\t\t{
+\t\t\tin:'query',
+\t\t\tname:'s',
+\t\t\tdescription:'Search.
 \t\t\t\tKey/value pairs representing column names and search tokens.
 \t\t\t\t\\'*\\' and \\'?\\' can be used as meta-characters in string fields.
 \t\t\t\t\\'>\\', \\'>=\\', \\'<\\', and \\'<=\\' can be used as limits on numeric and date fields.
 \t\t\t\tDate fields can be matched with partial dates (e.g. \\'2018\\' to match any date in the year 2018).',
-			type:'array',
-			collectionFormat:'csv',
-			examples:{example:'?s=Bill*,birthDate>2000'}
-		},{
-			in:'query',
-			name:'v',
-			description:'View.
-				Column names to display.',
-			type:'array',
-			collectionFormat:'csv',
-			examples:{example:'?v=name,birthDate'}
-		},{
-			in:'query',
-			name:'o',
-			description:'Order by.
-				Columns to sort by.
-				Column names can be suffixed with \\'+\\' or \\'-\\' to indicate ascending or descending order.
-				The default is ascending order.',
-			type:'array',
-			collectionFormat:'csv',
-			examples:{example:'?o=name,birthDate-'}
-		},{
-			in:'query',
-			name:'p',
-			description:'Position.
-				Only return rows starting at the specified index position (zero-indexed).
-				Default is 0',
-			type:'integer',
-			examples:{example:'?p=100'}
-		},{
-			in:'query',
-			name:'l',
-			description:'Limit.
-				Only return the specified number of rows.
-				Default is 0 (meaning return all rows).',
-			type:'integer',
-			examples:{example:'?l=100'}
-		}""";
+\t\t\ttype:'array',
+\t\t\tcollectionFormat:'csv',
+\t\t\texamples:{example:'?s=Bill*,birthDate>2000'}
+\t\t},{
+\t\t\tin:'query',
+\t\t\tname:'v',
+\t\t\tdescription:'View.
+\t\t\t\tColumn names to display.',
+\t\t\ttype:'array',
+\t\t\tcollectionFormat:'csv',
+\t\t\texamples:{example:'?v=name,birthDate'}
+\t\t},{
+\t\t\tin:'query',
+\t\t\tname:'o',
+\t\t\tdescription:'Order by.
+\t\t\t\tColumns to sort by.
+\t\t\t\tColumn names can be suffixed with \\'+\\' or \\'-\\' to indicate ascending or descending order.
+\t\t\t\tThe default is ascending order.',
+\t\t\ttype:'array',
+\t\t\tcollectionFormat:'csv',
+\t\t\texamples:{example:'?o=name,birthDate-'}
+\t\t},{
+\t\t\tin:'query',
+\t\t\tname:'p',
+\t\t\tdescription:'Position.
+\t\t\t\tOnly return rows starting at the specified index position (zero-indexed).
+\t\t\t\tDefault is 0',
+\t\t\ttype:'integer',
+\t\t\texamples:{example:'?p=100'}
+\t\t},{
+\t\t\tin:'query',
+\t\t\tname:'l',
+\t\t\tdescription:'Limit.
+\t\t\t\tOnly return the specified number of rows.
+\t\t\t\tDefault is 0 (meaning return all rows).',
+\t\t\ttype:'integer',
+\t\t\texamples:{example:'?l=100'}
+\t\t}""";
 
 	@Override /* Overridden from RestConverter */
 	public Object convert(RestRequest req, Object o) {

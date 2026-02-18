@@ -1696,7 +1696,7 @@ public class Utils {
 	public static final void printLines(String[] lines) {
 		Logger log = Logger.getLogger(Utils.class);
 		for (var i = 0; i < lines.length; i++)
-			log.info(String.format("%4s:" + lines[i], i + 1));
+			log.info(String.format("%4s:%s", i + 1, lines[i]));
 	}
 
 	/**

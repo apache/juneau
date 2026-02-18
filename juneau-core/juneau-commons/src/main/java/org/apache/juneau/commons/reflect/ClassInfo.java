@@ -76,7 +76,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	private static final String ARG_type = "type";
 	private static final String ARG_pt = "pt";
 
-	private static final Cache<Class,ClassInfoTyped> CACHE = Cache.of(Class.class, ClassInfoTyped.class).build();
+	private static final Cache<Class,ClassInfo> CACHE = Cache.of(Class.class, ClassInfo.class).build();
 
 	/** Reusable cached ClassInfo instance for Object.class. */
 	public static final ClassInfo OBJECT = ClassInfo.of(Object.class);
@@ -149,7 +149,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * @return The constructed class info.
 	 */
 	public static <T> ClassInfoTyped<T> of(Class<T> inner) {
-		return CACHE.get(inner, () -> new ClassInfoTyped<>(inner));
+		return (ClassInfoTyped<T>) CACHE.get(inner, () -> new ClassInfoTyped<>(inner));
 	}
 
 	/**

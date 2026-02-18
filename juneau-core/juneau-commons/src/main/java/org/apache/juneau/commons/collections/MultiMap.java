@@ -210,67 +210,7 @@ public class MultiMap<K,V> extends AbstractMap<K,V> {
 		return new AbstractSet<>() {
 			@Override
 			public Iterator<Entry<K,V>> iterator() {
-				return new Iterator<>() {
-					int mapIndex = 0;
-					Iterator<Entry<K,V>> currentIterator;
-					Set<K> seenKeys = new HashSet<>();
-					Entry<K,V> nextEntry;
-					Iterator<Entry<K,V>> lastIterator; // Iterator that produced the last entry
-					boolean canRemove = false; // Whether remove() can be called
-
-					{
-						// Initialize to first map's iterator
-						if (m.length > 0) {
-							currentIterator = m[0].entrySet().iterator();
-							advance();
-						}
-					}
-
-					private void advance() {
-						nextEntry = null;
-						while (currentIterator != null) {
-							while (currentIterator.hasNext()) {
-								var entry = currentIterator.next();
-								if (!seenKeys.contains(entry.getKey())) {
-									seenKeys.add(entry.getKey());
-									nextEntry = entry;
-									return;
-								}
-							}
-							// Move to next map
-							mapIndex++;
-							if (mapIndex < m.length) {
-								currentIterator = m[mapIndex].entrySet().iterator();
-							} else {
-								currentIterator = null;
-							}
-						}
-					}
-
-					@Override
-					public boolean hasNext() {
-						return nextEntry != null;
-					}
-
-					@Override
-					public Entry<K,V> next() {
-						if (nextEntry == null)
-							throw new NoSuchElementException();
-						var result = nextEntry;
-						lastIterator = currentIterator; // Store the iterator that produced this entry
-						canRemove = true;
-						advance();
-						return result;
-					}
-
-					@Override
-					public void remove() {
-						if (!canRemove || lastIterator == null)
-							throw new IllegalStateException();
-						lastIterator.remove();
-						canRemove = false;
-					}
-				};
+				return new EntryIterator();
 			}
 
 			@Override
@@ -278,6 +218,71 @@ public class MultiMap<K,V> extends AbstractMap<K,V> {
 				return MultiMap.this.size();
 			}
 		};
+	}
+
+	private final class EntryIterator implements Iterator<Entry<K,V>> {
+		int mapIndex;
+		Iterator<Entry<K,V>> currentIterator;
+		final Set<K> seenKeys = new HashSet<>();
+		Entry<K,V> nextEntry;
+		Iterator<Entry<K,V>> lastIterator;
+		boolean canRemove;
+
+		EntryIterator() {
+			mapIndex = 0;
+			currentIterator = null;
+			nextEntry = null;
+			lastIterator = null;
+			canRemove = false;
+			if (m.length > 0) {
+				currentIterator = m[0].entrySet().iterator();
+				advance();
+			}
+		}
+
+		private void advance() {
+			nextEntry = null;
+			while (currentIterator != null) {
+				while (currentIterator.hasNext()) {
+					var entry = currentIterator.next();
+					if (!seenKeys.contains(entry.getKey())) {
+						seenKeys.add(entry.getKey());
+						nextEntry = entry;
+						return;
+					}
+				}
+				mapIndex++;
+				if (mapIndex < m.length) {
+					currentIterator = m[mapIndex].entrySet().iterator();
+				} else {
+					currentIterator = null;
+				}
+			}
+		}
+
+		@Override
+		public boolean hasNext() {
+			return nextEntry != null;
+		}
+
+		@Override
+		public Entry<K,V> next() {
+			if (nextEntry == null)
+				throw new NoSuchElementException();
+			var result = nextEntry;
+			lastIterator = currentIterator;
+			canRemove = true;
+			advance();
+			return result;
+		}
+
+		@Override
+		public void remove() {
+			if (!canRemove || lastIterator == null)
+				throw new IllegalStateException();
+			lastIterator.remove();
+			canRemove = false;
+		}
 	}
 
 	/**

@@ -6345,7 +6345,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					mark = i;
 					// State machine requires state transition to S5, SonarLint reports false positive
 					@SuppressWarnings({
-						"java:S1854" // State machine requires state transition to S5, SonarLint reports false positive
+						"java:S1854",  // State machine requires state transition to S5
+						"java:S1481"   // unused variable intentional; assignment is for side effect (state = S5)
 					})
 					var unused = (state = S5);
 				}
@@ -7781,6 +7782,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 */
 	@Override
 	@Deprecated(since = "9", forRemoval = true) // Object.finalize() is deprecated
+	@SuppressWarnings("java:S1113") // Kept for detectLeaks; logs warning when RestClient is GC'd without close
 	protected void finalize() throws Throwable {
 		if (detectLeaks && ! isClosed.get() && ! keepHttpClientOpen) {
 			var sb = new StringBuilder("WARNING:  RestClient garbage collected before it was finalized.");  // NOT DEBUG

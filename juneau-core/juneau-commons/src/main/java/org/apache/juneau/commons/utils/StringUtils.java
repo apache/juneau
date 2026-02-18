@@ -363,7 +363,7 @@ public class StringUtils {
 			var b0 = BASE64M2[i0];
 			var b1 = BASE64M2[i1];
 			var b2 = BASE64M2[i2];
-			var b3 = BASE64M2[i3];
+			var b3 = BASE64M2[i3 & 0xff];
 			var o0 = (b0 << 2) | (b1 >>> 4);
 			var o1 = ((b1 & 0xf) << 4) | (b2 >>> 2);
 			var o2 = ((b2 & 3) << 6) | b3;
@@ -1848,7 +1848,7 @@ public class StringUtils {
 
 		var result = new ArrayList<String>();
 		// Basic URL pattern: protocol://domain/path
-		var pattern = Pattern.compile("(?:https?|ftp)://[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=%]+", Pattern.CASE_INSENSITIVE);
+		var pattern = Pattern.compile("(?:https?|ftp)://[\\w\\-.~:/?#\\[\\]@!$&'()*+,;=%]+", Pattern.CASE_INSENSITIVE);
 		var matcher = pattern.matcher(str);
 		while (matcher.find()) {
 			result.add(matcher.group());
@@ -2668,8 +2668,9 @@ public class StringUtils {
 		if (end > lines.length)
 			end = lines.length;
 		var sb = new StringBuilder();
+		var format = String.format("%%0%dd", digits);
 		for (var l : l(lines).subList(start - 1, end))
-			sb.append(String.format("%0" + digits + "d", start++)).append(": ").append(l).append("\n");
+			sb.append(String.format(format, start++)).append(": ").append(l).append("\n");
 		return sb.toString();
 	}
 

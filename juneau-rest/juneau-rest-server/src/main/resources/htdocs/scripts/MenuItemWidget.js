@@ -25,7 +25,7 @@ function menuClick(item) {
 	popupItem = item;
 }
 
-window.onclick = function(event) {
+globalThis.onclick = function(event) {
 	if (popupItem != null && popupItem != event.target && ! popupItem.nextElementSibling.contains(event.target)) {
 		closePopup();
 	}

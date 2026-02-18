@@ -896,7 +896,7 @@ class ExecutableInfo_Test extends TestBase {
 		protected void protectedMethod() {}
 		static void staticMethod() {}
 		final void finalMethod() {}
-		public void methodWithThrows() throws java.io.IOException, java.lang.Exception {}
+		public void methodWithThrows() throws java.lang.Exception {}
 		public <T> void genericMethod(T t) {}
 		public <T extends Comparable<T>> void genericMethodWithBounds(T t) {}
 	}
@@ -936,7 +936,7 @@ class ExecutableInfo_Test extends TestBase {
 
 		// Method with throws
 		var methodWithThrows = ci.getPublicMethod(x -> x.hasName("methodWithThrows")).get();
-		assertEquals("public void org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass.methodWithThrows() throws java.io.IOException, java.lang.Exception", methodWithThrows.toString());
+		assertEquals("public void org.apache.juneau.commons.reflect.ExecutableInfo_Test$ToStringTestClass.methodWithThrows() throws java.lang.Exception", methodWithThrows.toString());
 
 		// Generic method
 		var genericMethod = ci.getPublicMethod(x -> x.hasName("genericMethod")).get();

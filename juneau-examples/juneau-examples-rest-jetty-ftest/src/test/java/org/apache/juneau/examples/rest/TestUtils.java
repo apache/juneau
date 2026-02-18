@@ -147,7 +147,7 @@ public class TestUtils {
 
 	private static void printLines(String[] lines) {
 		for (var i = 0; i < lines.length; i++)
-			System.err.println(String.format("%4s:" + lines[i], i + 1));  // NOT DEBUG
+			System.err.println(String.format("%4s:%s", i + 1, lines[i]));  // NOT DEBUG
 	}
 
 	public static void validateXml(Object o) throws Exception {

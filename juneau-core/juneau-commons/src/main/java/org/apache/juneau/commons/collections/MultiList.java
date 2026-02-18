@@ -332,112 +332,116 @@ public class MultiList<E> extends AbstractList<E> {
 	public ListIterator<E> listIterator(int index) {
 		if (index < 0 || index > size())
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
-		return new ListIterator<>() {
-			int currentIndex = index;
-			int listIndex = 0;
-			int offset = 0;
-			ListIterator<E> currentIterator = null;
+		return new MultiListIterator(index);
+	}
 
-			{
-				// Initialize to the correct position
-				for (var i = 0; i < l.length; i++) {
-					var size = l[i].size();
-					if (index < offset + size) {
-						listIndex = i;
-						currentIterator = l[i].listIterator(index - offset);
-						break;
-					}
-					offset += size;
+	private final class MultiListIterator implements ListIterator<E> {
+		int currentIndex;
+		int listIndex;
+		int offset;
+		ListIterator<E> currentIterator;
+
+		MultiListIterator(int index) {
+			currentIndex = index;
+			listIndex = 0;
+			offset = 0;
+			currentIterator = null;
+			for (var i = 0; i < l.length; i++) {
+				var size = l[i].size();
+				if (index < offset + size) {
+					listIndex = i;
+					currentIterator = l[i].listIterator(index - offset);
+					break;
 				}
-				if (currentIterator == null && l.length > 0) {
-					// Index is at the end, position at the last list
-					listIndex = l.length - 1;
-					currentIterator = l[listIndex].listIterator(l[listIndex].size());
-				}
+				offset += size;
 			}
+			if (currentIterator == null && l.length > 0) {
+				listIndex = l.length - 1;
+				currentIterator = l[listIndex].listIterator(l[listIndex].size());
+			}
+		}
 
-			@Override
-			public boolean hasNext() {
-				if (currentIterator == null)
-					return false;
-				if (currentIterator.hasNext())
-					return true;
-				for (var j = listIndex + 1; j < l.length; j++)
-					if (l[j].size() > 0)
-						return true;
+		@Override
+		public boolean hasNext() {
+			if (currentIterator == null)
 				return false;
-			}
-
-			@Override
-			public E next() {
-				if (currentIterator == null)
-					throw new NoSuchElementException();
-				while (! currentIterator.hasNext()) {
-					if (listIndex + 1 >= l.length)
-						throw new NoSuchElementException();
-					listIndex++;
-					currentIterator = l[listIndex].listIterator();
-				}
-				currentIndex++;
-				return currentIterator.next();
-			}
-
-			@Override
-			public boolean hasPrevious() {
-				if (currentIterator == null)
-					return false;
-				if (currentIterator.hasPrevious())
+			if (currentIterator.hasNext())
+				return true;
+			for (var j = listIndex + 1; j < l.length; j++)
+				if (l[j].size() > 0)
 					return true;
-				for (var j = listIndex - 1; j >= 0; j--)
-					if (l[j].size() > 0)
-						return true;
-				return false;
-			}
+			return false;
+		}
 
-			@Override
-			public E previous() {
-				if (currentIterator == null)
+		@Override
+		public E next() {
+			if (currentIterator == null)
+				throw new NoSuchElementException();
+			while (! currentIterator.hasNext()) {
+				if (listIndex + 1 >= l.length)
 					throw new NoSuchElementException();
-				while (! currentIterator.hasPrevious()) {
-					if (listIndex == 0)
-						throw new NoSuchElementException();
-					listIndex--;
-					currentIterator = l[listIndex].listIterator(l[listIndex].size());
-				}
-				currentIndex--;
-				return currentIterator.previous();
+				listIndex++;
+				currentIterator = l[listIndex].listIterator();
 			}
+			currentIndex++;
+			return currentIterator.next();
+		}
 
-			@Override
-			public int nextIndex() {
-				return currentIndex;
-			}
+		@Override
+		public boolean hasPrevious() {
+			if (currentIterator == null)
+				return false;
+			if (currentIterator.hasPrevious())
+				return true;
+			for (var j = listIndex - 1; j >= 0; j--)
+				if (l[j].size() > 0)
+					return true;
+			return false;
+		}
 
-			@Override
-			public int previousIndex() {
-				return currentIndex - 1;
+		@Override
+		public E previous() {
+			if (currentIterator == null)
+				throw new NoSuchElementException();
+			while (! currentIterator.hasPrevious()) {
+				if (listIndex == 0)
+					throw new NoSuchElementException();
+				listIndex--;
+				currentIterator = l[listIndex].listIterator(l[listIndex].size());
 			}
+			currentIndex--;
+			return currentIterator.previous();
+		}
 
-			@Override
-			public void remove() {
-				if (currentIterator == null)
-					throw new IllegalStateException();
-				currentIterator.remove();
-				currentIndex--;
-			}
+		@Override
+		public int nextIndex() {
+			return currentIndex;
+		}
 
-			@Override
-			public void set(E e) {
-				if (currentIterator == null)
-					throw new IllegalStateException();
-				currentIterator.set(e);
-			}
+		@Override
+		public int previousIndex() {
+			return currentIndex - 1;
+		}
 
-			@Override
-			public void add(E e) {
-				throw new UnsupportedOperationException("MultiList does not support add operations");
-			}
-		};
+		@Override
+		public void remove() {
+			if (currentIterator == null)
+				throw new IllegalStateException();
+			currentIterator.remove();
+			currentIndex--;
+		}
+
+		@Override
+		public void set(E e) {
+			if (currentIterator == null)
+				throw new IllegalStateException();
+			currentIterator.set(e);
+		}
+
+		@Override
+		public void add(E e) {
+			throw new UnsupportedOperationException("MultiList does not support add operations");
+		}
 	}
 
 	/**

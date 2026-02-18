@@ -18,7 +18,7 @@
 // This class is intentionally in the default package to test line 588 false branch
 // where a class has $ (is an inner class) but has no package
 
-@SuppressWarnings("java:S1220")
+@SuppressWarnings({ "java:S1220", "java:S1228" }) // Intentionally in default package for test
 public class DefaultPackageTestClass {
 	public int testField;  // Field for testing FieldInfo.getFullName() with null package
 

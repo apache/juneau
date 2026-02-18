@@ -54,20 +54,13 @@ class RestCallException_Test extends TestBase {
 	}
 
 	@Test void a01_basic() throws Exception {
-		try {
-			client().build().get().run();
-			fail();
-		} catch (RestCallException e) {
-			assertEquals(404, e.getResponseCode());
-			assertNull(e.getCause());
-		}
+		RestCallException ex1 = assertThrows(RestCallException.class, () -> client().build().get().run());
+		assertEquals(404, ex1.getResponseCode());
+		assertNull(ex1.getCause());
 
-		try {
-			client().build().post("/echo",new StringEntity("{f:")).run().getContent().as(ABean.class);
-			fail();
-		} catch (RestCallException e) {
-			assertThrowable(Exception.class, "Could not find '}'", e.getCause(ParseException.class));
-		}
+		RestCallException ex2 = assertThrows(RestCallException.class, () ->
+			client().build().post("/echo", new StringEntity("{f:")).run().getContent().as(ABean.class));
+		assertThrowable(Exception.class, "Could not find '}'", ex2.getCause(ParseException.class));
 
 		var e = new RestCallException(null, null, null);
 		assertNotNull(e.getThrown());

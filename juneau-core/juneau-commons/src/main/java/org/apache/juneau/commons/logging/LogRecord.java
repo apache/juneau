@@ -49,8 +49,9 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115", // Constants use UPPER_snakeCase convention
-	"java:S100" // Class name intentionally matches java.util.logging.LogRecord
+	"java:S115",  // Constants use UPPER_snakeCase convention
+	"java:S100", // Class name intentionally matches java.util.logging.LogRecord
+	"java:S1192" // Rename not desired; extends java.util.logging.LogRecord for compatibility
 })
 public class LogRecord extends java.util.logging.LogRecord {
 

@@ -291,6 +291,20 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	public StatusLine getStatusLine() { return statusLine; }
 
 	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return this == o || (o instanceof BasicHttpException other && eq(this, other, (x, y) -> {
+			Throwable t1 = x, t2 = y;
+			while (nn(t1) && nn(t2)) {
+				if (!Arrays.equals(t1.getStackTrace(), t2.getStackTrace()))
+					return false;
+				t1 = t1.getCause();
+				t2 = t2.getCause();
+			}
+			return t1 == null && t2 == null;
+		}));
+	}
+
+	@Override /* Overridden from Object */
 	public int hashCode() {
 		int i = 0;
 		Throwable t = this;

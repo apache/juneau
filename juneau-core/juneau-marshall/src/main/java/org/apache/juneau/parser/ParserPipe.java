@@ -72,7 +72,6 @@ public class ParserPipe implements Closeable {
 	private String inputString;
 	private InputStream inputStream;
 	private Reader reader;
-	private ParserReader parserReader;
 	private boolean doClose;
 	private BinaryFormat binaryFormat;
 	private Positionable positionable;
@@ -255,10 +254,7 @@ public class ParserPipe implements Closeable {
 	public ParserReader getParserReader() throws IOException {
 		if (input == null)
 			return null;
-		if (input instanceof ParserReader input2)
-			parserReader = input2;
-		else
-			parserReader = new ParserReader(this);
+		ParserReader parserReader = input instanceof ParserReader input2 ? input2 : new ParserReader(this);
 		return parserReader;
 	}
 

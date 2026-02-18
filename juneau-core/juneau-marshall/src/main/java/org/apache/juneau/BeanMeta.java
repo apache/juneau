@@ -585,6 +585,7 @@ public class BeanMeta<T> {
 		beanProxyInvocationHandler = mem(()->beanContext.isUseInterfaceProxies() && c.isInterface() ? new BeanProxyInvocationHandler<>(this) : null);
 	}
 
+	@SuppressWarnings("java:S107") // 8 parameters needed for property validation context
 	private void validateAndRegisterProperty(BeanPropertyMeta.Builder p, Class<?> c, TypeVariables typeVarImpls, Set<String> readOnlyProps, Set<String> writeOnlyProps, Iterator<BeanPropertyMeta.Builder> i, Map<Method,String> getterProps, Map<Method,String> setterProps) {
 		try {
 			if (p.field == null)

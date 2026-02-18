@@ -60,7 +60,6 @@ public class MsgPackInputStream extends ParserInputStream {
 		/*0xF?*/ INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT
 	};
 	// @formatter:on
-	private DataType currentDataType;
 	private long length;
 	private int lastByte;
 	private int extType;
@@ -140,7 +139,7 @@ public class MsgPackInputStream extends ParserInputStream {
 		int i = read();
 		if (i == -1)
 			throw ioex("Unexpected end of file found at position {0}", pos2);
-		currentDataType = TYPES[i];
+		DataType currentDataType = TYPES[i];
 		switch (currentDataType) {
 			case NULL, FLOAT: {
 				length = 4;
