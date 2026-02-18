@@ -1194,7 +1194,7 @@ public class BasicSwaggerProviderSession {
 		return nullIfEmpty(ol);
 	}
 
-	private JsonMap toMap(Contact a, String location, Object...locationArgs) {
+	private JsonMap toMap(Contact a, String _location, Object..._locationArgs) {
 		if (ContactAnnotation.empty(a))
 			return null;
 		Predicate<String> ne = Utils::ne;
@@ -1207,7 +1207,7 @@ public class BasicSwaggerProviderSession {
 		return nullIfEmpty(om);
 	}
 
-	private JsonMap toMap(ExternalDocs a, String location, Object...locationArgs) {
+	private JsonMap toMap(ExternalDocs a, String _location, Object..._locationArgs) {
 		if (ExternalDocsAnnotation.empty(a))
 			return null;
 		Predicate<String> ne = Utils::ne;
@@ -1219,7 +1219,7 @@ public class BasicSwaggerProviderSession {
 		return nullIfEmpty(om);
 	}
 
-	private JsonMap toMap(License a, String location, Object...locationArgs) {
+	private JsonMap toMap(License a, String _location, Object..._locationArgs) {
 		if (LicenseAnnotation.empty(a))
 			return null;
 		Predicate<String> ne = Utils::ne;

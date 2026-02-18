@@ -1862,6 +1862,7 @@ public class CollectionUtils {
 	 * @param valueType The value type class.
 	 * @return An empty unmodifiable map.
 	 */
+	@SuppressWarnings("java:S1172") // Parameters required for type inference in public API
 	public static <K,V> Map<K,V> mape(Class<K> keyType, Class<V> valueType) {
 		return Collections.emptyMap();
 	}
@@ -1892,7 +1893,8 @@ public class CollectionUtils {
 	 * @return <jk>null</jk>.
 	 */
 	@SuppressWarnings({
-		"java:S1168"     // TODO: Intentional null return for assertion testing. Consider Optional.
+		"java:S1168",    // TODO: Intentional null return for assertion testing. Consider Optional.
+		"java:S1172"    // Parameters required for type inference in public API
 	})
 	public static <K,V> Map<K,V> mapn(Class<K> keyType, Class<V> valueType) {
 		return null;
@@ -1907,6 +1909,7 @@ public class CollectionUtils {
 	 * @param valueType The value type.
 	 * @return A new modifiable map.
 	 */
+	@SuppressWarnings("java:S1172") // Parameters required for type inference in public API
 	public static <K,V> Map<K,V> mapOf(Class<K> keyType, Class<V> valueType) {
 		return map();
 	}

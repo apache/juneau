@@ -247,6 +247,7 @@ public class Cache5<K1,K2,K3,K4,K5,V> {
 	 * @param type The value type class.
 	 * @return A new builder for configuring the cache.
 	 */
+	@SuppressWarnings("java:S1172") // Parameters required for type inference in public API
 	public static <K1,K2,K3,K4,K5,V> Builder<K1,K2,K3,K4,K5,V> of(Class<K1> key1, Class<K2> key2, Class<K3> key3, Class<K4> key4, Class<K5> key5, Class<V> type) {
 		return new Builder<>();
 	}

@@ -447,6 +447,7 @@ public class Cache<K,V> {
 	 * @param type The value type class.
 	 * @return A new builder for configuring the cache.
 	 */
+	@SuppressWarnings("java:S1172") // Parameters required for type inference in public API
 	public static <K,V> Builder<K,V> of(Class<K> key, Class<V> type) {
 		return new Builder<>();
 	}
