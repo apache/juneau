@@ -456,7 +456,11 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		throw new ParseException(this, "Unrecognized syntax for boolean.  ''{0}''.", s);
 	}
 
-	@SuppressWarnings({ "java:S3776", "java:S6541" })
+	@SuppressWarnings({
+		"java:S1168",    // TODO: null for empty/EOF or parseAttrName('%00'). Parser state machine.
+		"java:S3776",
+		"java:S6541"
+	})
 	private <T> BeanMap<T> parseIntoBeanMap(UonReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 
 		int c = r.readSkipWs();
@@ -575,7 +579,8 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	}
 
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for parser state machine
+		"java:S1168",    // TODO: null for EOF/AMP. Parser state machine.
+		"java:S3776"     // Cognitive complexity acceptable for parser state machine
 	})
 	private <E> Collection<E> parseIntoCollection(UonReader r, Collection<E> l, ClassMeta<E> type, boolean isUrlParamValue, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException {
@@ -665,7 +670,8 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	}
 
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for parser state machine
+		"java:S1168",    // TODO: null for EOF/AMP. Parser state machine.
+		"java:S3776"     // Cognitive complexity acceptable for parser state machine
 	})
 	private <K,V> Map<K,V> parseIntoMap(UonReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 

@@ -1009,6 +1009,9 @@ public class BeanSession extends ContextSession {
 	 * 	Should be <jk>null</jk> if not a member class.
 	 * @return A new instance of the class.
 	 */
+	@SuppressWarnings({
+		"java:S1168"     // TODO: null when BeanMeta not found. Consider empty BeanMap.
+	})
 	public final <T> BeanMap<T> newBeanMap(Object outer, Class<T> c) {
 		var m = getBeanMeta(c);
 		if (m == null)

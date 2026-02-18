@@ -167,6 +167,9 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 	 * @param sortArgs The sort arguments.  See {@link SortArgs} for format.
 	 * @return A list of maps/beans matching the
 	 */
+	@SuppressWarnings({
+		"java:S1168"     // TODO: null when result not list/collection/array. Consider empty list.
+	})
 	public <R> List<R> run(Object input, String sortArgs) {
 		var r = run(BeanContext.DEFAULT_SESSION, input, SortArgs.create(sortArgs));
 		if (r instanceof List r2)

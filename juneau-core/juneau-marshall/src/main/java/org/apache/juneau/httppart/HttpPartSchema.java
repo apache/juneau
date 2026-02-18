@@ -3601,6 +3601,9 @@ public class HttpPartSchema {
 		return create().tString().fUon();
 	}
 
+	@SuppressWarnings({
+		"java:S1168"     // TODO: null when input null. Consider empty map.
+	})
 	private static Map<String,HttpPartSchema> build(Map<String,Object> in, boolean noValidate) {
 		if (in == null)
 			return null;
@@ -3609,6 +3612,9 @@ public class HttpPartSchema {
 		return u(m);
 	}
 
+	@SuppressWarnings({
+		"java:S1168"     // TODO: null for null input. Consider default schema.
+	})
 	private static HttpPartSchema build(Object in, boolean noValidate) {
 		if (in == null)
 			return null;
@@ -3621,6 +3627,9 @@ public class HttpPartSchema {
 		return in == null ? emptySet() : u(copyOf(in));
 	}
 
+	@SuppressWarnings({
+		"java:S1168"     // TODO: null for empty input. Consider empty JsonMap.
+	})
 	static final JsonMap toJsonMap(String[] ss) {
 		String s = StringUtils.joinnl(ss);
 		if (s.isEmpty())
@@ -3645,6 +3654,9 @@ public class HttpPartSchema {
 		}
 	}
 
+	@SuppressWarnings({
+		"java:S1168"     // TODO: null for empty input. Consider empty set.
+	})
 	static final Set<String> toSet(String s) {
 		if (isEmpty(s))
 			return null;
@@ -3657,6 +3669,9 @@ public class HttpPartSchema {
 		return set;
 	}
 
+	@SuppressWarnings({
+		"java:S1168"     // TODO: null when all arrays empty. Consider empty set.
+	})
 	static final Set<String> toSet(String[]...s) {
 		var isNotEmpty = false;
 		for (var ss : s)

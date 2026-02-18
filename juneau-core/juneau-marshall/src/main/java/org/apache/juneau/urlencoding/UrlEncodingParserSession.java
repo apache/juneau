@@ -300,7 +300,12 @@ public class UrlEncodingParserSession extends UonParserSession {
 		return (T)o;
 	}
 
-	@SuppressWarnings({ "java:S3776", "java:S6541", "java:S1213" }) // Method name matches private method in parent class by design
+	@SuppressWarnings({
+		"java:S1168",    // TODO: null when currAttr is '%00'. Parser state machine.
+		"java:S1213",    // Method name matches private method in parent class by design
+		"java:S3776",
+		"java:S6541"
+	})
 	private <T> BeanMap<T> parseIntoBeanMap(UonReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 
 		int c = r.peekSkipWs();
@@ -428,7 +433,8 @@ public class UrlEncodingParserSession extends UonParserSession {
 	}
 
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for parser state machine
+		"java:S1168",    // Compiler-satisfying return: all paths return m or throw. S1168 flags null returns; here null is unreachable.
+		"java:S3776"     // Cognitive complexity acceptable for parser state machine
 	})
 	private <K,V> Map<K,V> parseIntoMap2(UonReader r, Map<K,V> m, ClassMeta<?> type, Object outer) throws IOException, ParseException, ExecutableException {
 

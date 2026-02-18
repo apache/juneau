@@ -321,7 +321,12 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		return null;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes", "java:S3776" })
+	@SuppressWarnings({
+		"java:S1168",    // TODO: null when type ignored. Consider empty schema.
+		"java:S3776",
+		"rawtypes",
+		"unchecked"
+	})
 	private JsonMap getSchema(ClassMeta<?> eType, String attrName, List<String> pNames, boolean exampleAdded, boolean descriptionAdded, JsonSchemaBeanPropertyMeta jsbpm)
 		throws BeanRecursionException, SerializeException {
 

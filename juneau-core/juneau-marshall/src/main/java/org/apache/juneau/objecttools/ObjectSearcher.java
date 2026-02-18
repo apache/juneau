@@ -279,7 +279,10 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 	 * @param searchArgs The search arguments.  See {@link SearchArgs} for format.
 	 * @return A list of maps/beans matching the
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"java:S1168",    // TODO: null when result not list/collection/array. Consider empty list.
+		"unchecked"
+	})
 	public <R> List<R> run(Object input, String searchArgs) {
 		Object r = run(BeanContext.DEFAULT_SESSION, input, SearchArgs.create(searchArgs));
 		if (r instanceof List r2)

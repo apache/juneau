@@ -61,6 +61,9 @@ public class SchemaUtils {
 	 * @return The parsed contents.
 	 * @throws ParseException Invalid JSON encountered.
 	 */
+	@SuppressWarnings({
+		"java:S1168"     // TODO: null = not configured. Consider empty JsonMap for config parsing.
+	})
 	public static JsonMap parseMap(Object o) throws ParseException {
 		if (o == null)
 			return null;
@@ -88,6 +91,9 @@ public class SchemaUtils {
 	 * @return The parsed contents.
 	 * @throws ParseException Invalid JSON encountered.
 	 */
+	@SuppressWarnings({
+		"java:S1168"     // TODO: null = not configured. Consider empty JsonMap.
+	})
 	public static JsonMap parseMap(String[] ss) throws ParseException {
 		if (ss.length == 0)
 			return null;
@@ -106,6 +112,9 @@ public class SchemaUtils {
 	 * @return The parsed contents.
 	 * @throws ParseException Invalid JSON encountered.
 	 */
+	@SuppressWarnings({
+		"java:S1168"     // TODO: null = not configured. Consider empty set.
+	})
 	public static Set<String> parseSet(String[] ss) throws ParseException {
 		if (ss.length == 0)
 			return null;

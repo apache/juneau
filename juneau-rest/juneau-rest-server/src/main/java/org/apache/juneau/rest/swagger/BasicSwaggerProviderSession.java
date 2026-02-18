@@ -60,7 +60,11 @@ import jakarta.servlet.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
-@SuppressWarnings({"resource","java:S1168","java:S115"})
+@SuppressWarnings({
+	"resource",
+	"java:S1168",    // Swagger/OpenAPI spec: null = omit field (e.g. parseList, parseMap, nullIfEmpty, toMap, firstNonEmpty)
+	"java:S115"      // Constants use UPPER_snakeCase convention (e.g., SWAGGER_paths)
+})
 public class BasicSwaggerProviderSession {
 
 	private static final Logger LOG = Logger.getLogger(BasicSwaggerProviderSession.class);

@@ -594,6 +594,9 @@ public class ObjectRest {
 	 * @param url The URL.
 	 * @return The list of methods.
 	 */
+	@SuppressWarnings({
+		"java:S1168"     // TODO: null when object not found at URL. Consider empty collection.
+	})
 	public Collection<String> getPublicMethods(String url) {
 		var o = get(url);
 		if (o == null)

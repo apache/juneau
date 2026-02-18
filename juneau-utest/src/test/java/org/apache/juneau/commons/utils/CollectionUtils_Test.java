@@ -1280,7 +1280,9 @@ class CollectionUtils_Test extends TestBase {
 		Collection<String> empty = list();
 		assertNull(toList(empty, true));
 		assertNotNull(toList(empty, false));
-		assertNull(toList(null, false));
+		assertNotNull(toList(null, false));
+		assertTrue(toList(null, false).isEmpty());
+		assertNull(toList(null, true));
 	}
 
 	//====================================================================================================
@@ -1382,7 +1384,8 @@ class CollectionUtils_Test extends TestBase {
 		TreeSet<Integer> result2 = toSortedSet(input2);
 		assertEquals(l(1, 2, 3), new ArrayList<>(result2));
 
-		assertNull(toSortedSet((Set<String>)null));
+		assertNotNull(toSortedSet((Set<String>)null));
+		assertTrue(toSortedSet((Set<String>)null).isEmpty());
 	}
 
 	//====================================================================================================
@@ -1472,8 +1475,9 @@ class CollectionUtils_Test extends TestBase {
 		TreeSet<Integer> result2 = toSortedSet(col2);
 		assertEquals(l(1, 2, 3), new ArrayList<>(result2));
 
-		// Test line 2117: null returns null
-		assertNull(toSortedSet((Collection<String>)null));
+		// Test line 2117: null returns empty TreeSet
+		assertNotNull(toSortedSet((Collection<String>)null));
+		assertTrue(toSortedSet((Collection<String>)null).isEmpty());
 	}
 
 	//====================================================================================================
@@ -1489,7 +1493,8 @@ class CollectionUtils_Test extends TestBase {
 		Collection<String> empty = list();
 		assertNull(toSortedSet(empty, true));
 		assertNotNull(toSortedSet(empty, false));
-		assertNull(toSortedSet((Collection<String>)null, false));
+		assertNotNull(toSortedSet((Collection<String>)null, false));
+		assertTrue(toSortedSet((Collection<String>)null, false).isEmpty());
 	}
 
 	//====================================================================================================

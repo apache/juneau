@@ -5673,7 +5673,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals("b{c,d{e,f}}", result3.get(1));
 
 		// Null/empty input
-		assertNull(splitNested(null));
+		assertTrue(splitNested(null).isEmpty());
 		assertTrue(splitNested("").isEmpty());
 
 		// Code path: c == '\\' when inEscape is true (double backslash)

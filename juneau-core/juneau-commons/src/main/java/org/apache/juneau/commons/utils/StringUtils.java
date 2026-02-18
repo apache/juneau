@@ -3879,9 +3879,11 @@ public class StringUtils {
 	 * Combines collection values into a simple comma-delimited string.
 	 *
 	 * @param values The values to join.
-	 * @return A comma-delimited string.
+	 * @return A comma-delimited string, or <jk>null</jk> if the input is <jk>null</jk>.
 	 */
 	public static String join(Collection<?> values) {
+		if (values == null)
+			return null;
 		return joine(toList(values), ',');
 	}
 
@@ -6439,6 +6441,9 @@ public class StringUtils {
 	 * @param limit The maximum number of tokens to return.
 	 * @return The tokens, or <jk>null</jk> if the string was null.
 	 */
+	@SuppressWarnings({
+		"java:S1168"     // TODO: splita used widely; null propagates from split(). Consider empty array. See BasicCsvHeader, etc.
+	})
 	public static String[] splita(String s, char c, int limit) {
 		var l = StringUtils.split(s, c, limit);
 		return l == null ? null : l.toArray(new String[l.size()]);
@@ -6451,6 +6456,9 @@ public class StringUtils {
 	 * @param c The character to split on.
 	 * @return The tokens, or null if the input array was null
 	 */
+	@SuppressWarnings({
+		"java:S1168"     // TODO: splita used widely. Consider empty array. See BasicCsvHeader, etc.
+	})
 	public static String[] splita(String[] s, char c) {
 		if (s == null)
 			return null;
@@ -6592,17 +6600,17 @@ public class StringUtils {
 	 *
 	 * @param s The input string.
 	 * @return
-	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
-	 * 	<br>An empty string results in an empty array.
+	 * 	The results, or an empty list if the input was <jk>null</jk>.
+	 * 	<br>An empty string results in an empty list.
 	 */
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for nested string splitting
+		"java:S3776"     // Cognitive complexity acceptable for nested string splitting
 	})
 	public static List<String> splitNested(String s) {
 		var escapeChars = getEscapeSet(',');
 
 		if (s == null)
-			return null;
+			return Collections.emptyList();
 		if (isEmpty(s))
 			return Collections.emptyList();
 		if (s.indexOf(',') == -1)

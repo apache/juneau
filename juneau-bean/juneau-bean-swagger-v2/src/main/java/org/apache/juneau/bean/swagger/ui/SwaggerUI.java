@@ -373,7 +373,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	 */
 	private static List<Object> toBRL(String s) {
 		if (s == null)
-			return null;
+			return emptyList();
 		if (s.indexOf(',') == -1)
 			return singletonList(s);
 		var l = list();

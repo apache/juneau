@@ -2190,6 +2190,9 @@ public class CollectionUtils {
 	 * @param value The list to wrap.
 	 * @return The wrapped list.
 	 */
+	@SuppressWarnings({
+		"java:S1168"     // TODO: Pass-through null by design. Consider empty list.
+	})
 	public static <E> List<E> synced(List<E> value) {
 		return value == null ? null : Collections.synchronizedList(value);
 	}
@@ -2202,6 +2205,9 @@ public class CollectionUtils {
 	 * @param value The map to wrap.
 	 * @return The wrapped map.
 	 */
+	@SuppressWarnings({
+		"java:S1168"     // TODO: Pass-through null by design. Consider empty map.
+	})
 	public static <K,V> Map<K,V> synced(Map<K,V> value) {
 		return value == null ? null : Collections.synchronizedMap(value);
 	}
@@ -2213,6 +2219,9 @@ public class CollectionUtils {
 	 * @param value The set to wrap.
 	 * @return The wrapped set.
 	 */
+	@SuppressWarnings({
+		"java:S1168"     // TODO: Pass-through null by design. Consider empty set.
+	})
 	public static <E> Set<E> synced(Set<E> value) {
 		return value == null ? null : Collections.synchronizedSet(value);
 	}
@@ -2253,11 +2262,16 @@ public class CollectionUtils {
 	 *
 	 * @param <E> The element type.
 	 * @param value The collection to copy from.
-	 * @param nullIfEmpty If <jk>true</jk> will return <jk>null</jk> if the collection is empty.
-	 * @return A new modifiable list.
+	 * @param nullIfEmpty If <jk>true</jk> will return <jk>null</jk> if the collection is empty or null.
+	 * @return A new modifiable list, or an empty list if the input was <jk>null</jk> (when nullIfEmpty is false), or <jk>null</jk> if nullIfEmpty and the input was null or empty.
 	 */
+	@SuppressWarnings({
+		"java:S1168"     // Intentional null when nullIfEmpty and (null or empty).
+	})
 	public static <E> ArrayList<E> toList(Collection<E> value, boolean nullIfEmpty) {
-		if (value == null || (nullIfEmpty && value.isEmpty()))
+		if (value == null)
+			return nullIfEmpty ? null : new ArrayList<>();
+		if (nullIfEmpty && value.isEmpty())
 			return null;
 		var l = new ArrayList<E>();
 		value.forEach(l::add);
@@ -2442,11 +2456,11 @@ public class CollectionUtils {
 	 *
 	 * @param <E> The element type.
 	 * @param value The value to copy from.
-	 * @return A new {@link TreeSet}, or <jk>null</jk> if the input was null.
+	 * @return A new {@link TreeSet}, or an empty {@link TreeSet} if the input was <jk>null</jk>.
 	 */
 	public static <E> TreeSet<E> toSortedSet(Collection<E> value) {
 		if (value == null)
-			return null;
+			return new TreeSet<>();
 		var l = new TreeSet<E>();
 		value.forEach(l::add);
 		return l;
@@ -2458,10 +2472,15 @@ public class CollectionUtils {
 	 * @param <E> The element type.
 	 * @param value The value to copy from.
 	 * @param nullIfEmpty If <jk>true</jk> returns <jk>null</jk> if the collection is empty.
-	 * @return A new {@link TreeSet}, or <jk>null</jk> if the input was null.
+	 * @return A new {@link TreeSet}, or an empty {@link TreeSet} if the input was <jk>null</jk>, or <jk>null</jk> if nullIfEmpty and the collection is empty.
 	 */
+	@SuppressWarnings({
+		"java:S1168"     // Intentional null when nullIfEmpty and empty.
+	})
 	public static <E> TreeSet<E> toSortedSet(Collection<E> value, boolean nullIfEmpty) {
-		if (value == null || (nullIfEmpty && value.isEmpty()))
+		if (value == null)
+			return new TreeSet<>();
+		if (nullIfEmpty && value.isEmpty())
 			return null;
 		var l = new TreeSet<E>();
 		value.forEach(l::add);
@@ -2473,10 +2492,10 @@ public class CollectionUtils {
 	 *
 	 * @param <T> The element type.
 	 * @param copyFrom The set to copy from.
-	 * @return A new {@link TreeSet}, or <jk>null</jk> if the set was <jk>null</jk>.
+	 * @return A new {@link TreeSet}, or an empty {@link TreeSet} if the input was <jk>null</jk>.
 	 */
 	public static <T> TreeSet<T> toSortedSet(Set<T> copyFrom) {
-		return copyFrom == null ? null : new TreeSet<>(copyFrom);
+		return copyFrom == null ? new TreeSet<>() : new TreeSet<>(copyFrom);
 	}
 
 	/**

@@ -425,7 +425,7 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	@Override /* Overridden from HttpServletRequest */
-	public Collection<Part> getParts() throws IOException, ServletException { return null; }
+	public Collection<Part> getParts() throws IOException, ServletException { return Collections.emptyList(); }
 
 	@Override /* Overridden from HttpServletRequest */
 	public String getPathInfo() {

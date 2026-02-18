@@ -143,6 +143,9 @@ public class DirectoryResource extends BasicRestServlet {
 			return l;
 		}
 
+		@SuppressWarnings({
+			"java:S1168"     // TODO: Intentional null when file or !includeChildren. Consider empty set.
+		})
 		public Set<FileResource> getFiles() {
 			if (f.isFile() || ! includeChildren)
 				return null;

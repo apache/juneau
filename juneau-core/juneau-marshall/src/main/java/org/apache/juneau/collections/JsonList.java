@@ -263,6 +263,9 @@ public class JsonList extends LinkedList<Object> {
 	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
+	@SuppressWarnings({
+		"java:S1168"     // TODO: null input = null output by design. Consider empty JsonList.
+	})
 	public static JsonList ofJson(Reader json) throws ParseException {
 		return json == null ? null : new JsonList(json);
 	}
@@ -277,6 +280,9 @@ public class JsonList extends LinkedList<Object> {
 	 * @return The parsed string.
 	 * @throws ParseException Malformed input encountered.
 	 */
+	@SuppressWarnings({
+		"java:S1168"     // TODO: null for empty input. Consider empty JsonList.
+	})
 	public static JsonList ofJsonOrCdl(String s) throws ParseException {
 		if (Utils.e(s))  // NOAI
 			return null;
