@@ -28,6 +28,7 @@ import java.io.*;
 import java.net.*;
 import java.nio.file.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.*;
 
 import org.apache.juneau.collections.*;
@@ -398,7 +399,7 @@ public class JettyMicroservice extends Microservice {
 	private static final String KEY_SERVLET_CONTEXT_HANDLER = "ServletContextHandler";
 	private static final Random RANDOM = new Random();
 
-	private static volatile JettyMicroservice instance;
+	private static final AtomicReference<JettyMicroservice> instance = new AtomicReference<>();
 
 	/**
 	 * Creates a new microservice builder.
@@ -418,9 +419,7 @@ public class JettyMicroservice extends Microservice {
 	 * @return The Microservice instance, or <jk>null</jk> if there isn't one.
 	 */
 	public static JettyMicroservice getInstance() {
-		synchronized (JettyMicroservice.class) {
-			return instance;
-		}
+		return instance.get();
 	}
 
 	/**
@@ -456,9 +455,7 @@ public class JettyMicroservice extends Microservice {
 	}
 
 	private static void setInstance(JettyMicroservice m) {
-		synchronized (JettyMicroservice.class) {
-			instance = m;
-		}
+		instance.set(m);
 	}
 
 	final Messages messages2 = Messages.of(JettyMicroservice.class);
@@ -467,7 +464,7 @@ public class JettyMicroservice extends Microservice {
 
 	private final JettyServerFactory factory;
 
-	volatile Server server;
+	private final AtomicReference<Server> server = new AtomicReference<>();
 
 	/**
 	 * Constructor.
@@ -578,7 +575,7 @@ public class JettyMicroservice extends Microservice {
 		getLogger().info(jettyXml);
 
 		try {
-			server = factory.create(jettyXml);
+			server.set(factory.create(jettyXml));
 		} catch (Exception e2) {
 			throw new ExecutableException(e2);
 		}
@@ -620,7 +617,7 @@ public class JettyMicroservice extends Microservice {
 		if (System.getProperty("juneau.serverPort") == null)
 			System.setProperty("juneau.serverPort", String.valueOf(availablePort));
 
-		return server;
+		return server.get();
 	}
 
 	/**
@@ -629,9 +626,9 @@ public class JettyMicroservice extends Microservice {
 	 * @throws Exception Error occurred.
 	 */
 	public void destroyServer() throws Exception {
-		if (nn(server))
-			server.destroy();
-		server = null;
+		var s = server.getAndSet(null);
+		if (nn(s))
+			s.destroy();
 	}
 
 	/**
@@ -699,7 +696,7 @@ public class JettyMicroservice extends Microservice {
 	 *
 	 * @return The underlying Jetty server, or <jk>null</jk> if {@link #createServer()} has not yet been called.
 	 */
-	public Server getServer() { return Objects.requireNonNull(server, "Server not found.  createServer() must be called first."); }
+	public Server getServer() { return Objects.requireNonNull(server.get(), "Server not found.  createServer() must be called first."); }
 
 	/**
 	 * Finds and returns the servlet context handler defined in the Jetty container.
@@ -736,7 +733,7 @@ public class JettyMicroservice extends Microservice {
 
 	@Override /* Overridden from Microservice */
 	public JettyMicroservice join() throws Exception {
-		server.join();
+		server.get().join();
 		return this;
 	}
 
@@ -762,11 +759,12 @@ public class JettyMicroservice extends Microservice {
 			@Override /* Overridden from Thread */
 			public void run() {
 				try {
-					if (server == null || server.isStopping() || server.isStopped())
+					var s = server.get();
+					if (s == null || s.isStopping() || s.isStopped())
 						return;
 					listener.onStopServer(JettyMicroservice.this);
 					out(mb2, "StoppingServer");
-					server.stop();
+					s.stop();
 					out(mb2, "ServerStopped");
 					listener.onPostStopServer(JettyMicroservice.this);
 				} catch (Exception e) {
@@ -802,7 +800,7 @@ public class JettyMicroservice extends Microservice {
 	 */
 	protected int startServer() throws Exception {
 		listener.onStartServer(this);
-		server.start();
+		server.get().start();
 		out(messages2, "ServerStarted", getPort());
 		listener.onPostStartServer(this);
 		return getPort();

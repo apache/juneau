@@ -18,6 +18,8 @@ package org.apache.juneau.svl.vars;
 
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.apache.juneau.collections.*;
 import org.apache.juneau.svl.*;
 
@@ -62,7 +64,7 @@ public class ArgsVar extends DefaultingVar {
 	/** The name of this variable. */
 	public static final String NAME = "A";
 
-	private static volatile Args staticArgs;
+	private static final AtomicReference<Args> staticArgs = new AtomicReference<>();
 
 	/**
 	 * Initialize the args for this variable.
@@ -70,7 +72,7 @@ public class ArgsVar extends DefaultingVar {
 	 * @param args The parsed command-line arguments.
 	 */
 	public static void init(Args args) {
-		staticArgs = args;
+		staticArgs.set(args);
 	}
 
 	private final Args args;
@@ -80,8 +82,9 @@ public class ArgsVar extends DefaultingVar {
 	 */
 	public ArgsVar() {
 		super(NAME);
-		if (nn(staticArgs))
-			this.args = staticArgs;
+		var sa = staticArgs.get();
+		if (nn(sa))
+			this.args = sa;
 		else {
 			var s = System.getProperty("sun.java.command");
 			if (ne(s)) {

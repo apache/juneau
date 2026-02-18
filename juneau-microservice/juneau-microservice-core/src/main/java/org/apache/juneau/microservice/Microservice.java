@@ -27,6 +27,7 @@ import java.nio.file.*;
 import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.jar.*;
 import java.util.logging.*;
 
@@ -508,7 +509,7 @@ public class Microservice implements ConfigEventListener {
 		}
 	}
 
-	private static volatile Microservice instance;
+	private static final AtomicReference<Microservice> instance = new AtomicReference<>();
 
 	/**
 	 * Creates a new builder for this object.
@@ -529,15 +530,11 @@ public class Microservice implements ConfigEventListener {
 	 * @return The Microservice instance, or <jk>null</jk> if there isn't one.
 	 */
 	public static Microservice getInstance() {
-		synchronized (Microservice.class) {
-			return instance;
-		}
+		return instance.get();
 	}
 
 	private static void setInstance(Microservice m) {
-		synchronized (Microservice.class) {
-			instance = m;
-		}
+		instance.set(m);
 	}
 
 	final Messages messages = Messages.of(Microservice.class);
@@ -556,7 +553,7 @@ public class Microservice implements ConfigEventListener {
 	final File workingDir;
 	private final String configName;
 
-	private volatile Logger logger;
+	private final AtomicReference<Logger> logger = new AtomicReference<>();
 
 	/**
 	 * Constructor.
@@ -896,7 +893,7 @@ public class Microservice implements ConfigEventListener {
 	 *
 	 * @return The logger for this microservice.
 	 */
-	public Logger getLogger() { return logger; }
+	public Logger getLogger() { return logger.get(); }
 
 	/**
 	 * Returns the main jar manifest file contents as a simple {@link JsonMap}.
@@ -960,11 +957,11 @@ public class Microservice implements ConfigEventListener {
 		// --------------------------------------------------------------------------------
 		// Initialize logging.
 		// --------------------------------------------------------------------------------
-		this.logger = builder.logger;
+		logger.set(builder.logger);
 		var logConfig = nn(builder.logConfig) ? builder.logConfig : new LogConfig();
-		if (this.logger == null) {
+		if (logger.get() == null) {
 			LogManager.getLogManager().reset();
-			this.logger = Logger.getLogger("");
+			logger.set(Logger.getLogger(""));
 			var logFile = firstNonNull(logConfig.logFile, config.get("Logging/logFile").orElse(null));
 
 			if (ne(logFile)) {
@@ -989,12 +986,12 @@ public class Microservice implements ConfigEventListener {
 				}
 				fh.setFormatter(f);
 				fh.setLevel(firstNonNull(logConfig.fileLevel, config.get("Logging/fileLevel").as(Level.class).orElse(Level.INFO)));
-				logger.addHandler(fh);
+				logger.get().addHandler(fh);
 
 				var ch = new ConsoleHandler();
 				ch.setLevel(firstNonNull(logConfig.consoleLevel, config.get("Logging/consoleLevel").as(Level.class).orElse(Level.WARNING)));
 				ch.setFormatter(f);
-				logger.addHandler(ch);
+				logger.get().addHandler(ch);
 			}
 		}
 

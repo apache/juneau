@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.*;
 import java.util.logging.Formatter;
 
@@ -87,9 +88,9 @@ public class MockLogger extends Logger {
 
 	private final List<LogRecord> logRecords = list();
 	private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	private volatile Formatter formatter;
+	private final AtomicReference<Formatter> formatter = new AtomicReference<>();
 
-	private volatile String format = "%4$s: %5$s%6$s%n";
+	private final AtomicReference<String> format = new AtomicReference<>("%4$s: %5$s%6$s%n");
 
 	/**
 	 * Constructor.
@@ -160,7 +161,7 @@ public class MockLogger extends Logger {
 	 * @return This object.
 	 */
 	public synchronized MockLogger format(String format) {
-		this.format = format;
+		this.format.set(format);
 		return this;
 	}
 
@@ -174,7 +175,7 @@ public class MockLogger extends Logger {
 	 * @return This object.
 	 */
 	public synchronized MockLogger formatter(Formatter formatter) {
-		this.formatter = formatter;
+		this.formatter.set(formatter);
 		return this;
 	}
 
@@ -219,18 +220,23 @@ public class MockLogger extends Logger {
 	}
 
 	private Formatter getFormatter() {
-		if (formatter == null) {
+		var f = formatter.get();
+		if (f == null) {
 			synchronized (this) {
-				String oldFormat = System.getProperty(FORMAT_PROPERTY);
-				System.setProperty(FORMAT_PROPERTY, format);
-				formatter = new SimpleFormatter();
-				if (oldFormat == null)
-					System.clearProperty(FORMAT_PROPERTY);
-				else
-					System.setProperty(FORMAT_PROPERTY, oldFormat);
+				f = formatter.get();
+				if (f == null) {
+					String oldFormat = System.getProperty(FORMAT_PROPERTY);
+					System.setProperty(FORMAT_PROPERTY, format.get());
+					f = new SimpleFormatter();
+					formatter.set(f);
+					if (oldFormat == null)
+						System.clearProperty(FORMAT_PROPERTY);
+					else
+						System.setProperty(FORMAT_PROPERTY, oldFormat);
+				}
 			}
 		}
-		return formatter;
+		return f;
 	}
 
 	private LogRecord last() {

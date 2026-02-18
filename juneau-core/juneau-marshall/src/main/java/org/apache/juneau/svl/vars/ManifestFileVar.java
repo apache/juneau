@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.svl.vars;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
 
@@ -56,7 +58,7 @@ public class ManifestFileVar extends DefaultingVar {
 	/** The name of this variable. */
 	public static final String NAME = "MF";
 
-	private static volatile ManifestFile manifestFile;
+	private static final AtomicReference<ManifestFile> manifestFile = new AtomicReference<>();
 
 	/**
 	 * Initialize the manifest file for this variable.
@@ -64,7 +66,7 @@ public class ManifestFileVar extends DefaultingVar {
 	 * @param manifestFile The parsed manifest file.
 	 */
 	public static void init(ManifestFile manifestFile) {
-		ManifestFileVar.manifestFile = manifestFile;
+		ManifestFileVar.manifestFile.set(manifestFile);
 	}
 
 	/**
@@ -76,6 +78,7 @@ public class ManifestFileVar extends DefaultingVar {
 
 	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String key) {
-		return manifestFile == null ? "" : manifestFile.getString(key);
+		var mf = manifestFile.get();
+		return mf == null ? "" : mf.getString(key);
 	}
 }
