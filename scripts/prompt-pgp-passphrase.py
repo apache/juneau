@@ -34,7 +34,7 @@ import tempfile
 def prompt_pgp_passphrase():
     """
     Make a dummy PGP call to prompt for passphrase early in the execution.
-    
+
     This ensures the user is prompted for their PGP passphrase at the beginning
     rather than waiting until signing is needed near the end of the process.
     """
@@ -44,7 +44,7 @@ def prompt_pgp_passphrase():
         with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.txt') as tmp:
             tmp.write("dummy")
             tmp_path = tmp.name
-        
+
         try:
             # Attempt to sign the dummy file (this will prompt for passphrase)
             # Don't use --batch so it will prompt interactively for passphrase
@@ -63,20 +63,16 @@ def prompt_pgp_passphrase():
             except OSError:
                 pass
             print("✅ PGP passphrase entered successfully")
-            return True
         except subprocess.TimeoutExpired:
             print("⚠ PGP passphrase prompt timed out (this is okay if signing isn't needed)")
-            return True
         except FileNotFoundError:
             print("⚠ gpg command not found - skipping PGP passphrase prompt")
-            return True
         except Exception as e:
             # If signing fails for any reason, that's okay - we're just trying to prompt early
             print(f"⚠ Could not prompt for PGP passphrase: {e}")
-            return True
     except Exception as e:
         print(f"⚠ Could not set up PGP passphrase prompt: {e}")
-        return True
+    return True  # Never block the build; we're best-effort
 
 
 def main():

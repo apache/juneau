@@ -35,15 +35,10 @@ public class ThrowableProcessor implements ResponseProcessor {
 
 	@Override /* Overridden from ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException {
-
 		RestResponse res = opSession.getResponse();
 		Throwable t = res.getContent(Throwable.class);
-
-		if (t == null)
-			return NEXT;
-
-		res.addHeader(Thrown.of(t));
-
+		if (t != null)
+			res.addHeader(Thrown.of(t));
 		return NEXT; // Continue processing as bean.
 	}
 }

@@ -2384,7 +2384,8 @@ public class StringUtils {
 	 * @return Just the authority portion of the URI.
 	 */
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for state machine-based URI parser
+		"java:S3516", // Returns s or s.substring(0,i) - different values per parse path
+		"java:S3776"  // Cognitive complexity acceptable for state machine-based URI parser
 	})
 	public static String getAuthorityUri(String s) {
 
@@ -2836,7 +2837,8 @@ public class StringUtils {
 	 * @return The interpolated string with variables replaced, or the original template if variables is null or empty.
 	 */
 	@SuppressWarnings({
-		"java:S135" // Multiple break statements in mutually exclusive branches - necessary for early termination
+		"java:S135",  // Multiple break statements in mutually exclusive branches - necessary for early termination
+		"java:S3516"  // Returns varying result based on template and variables
 	})
 	public static String interpolate(String template, Map<String,Object> variables) {
 		if (template == null)
@@ -3546,6 +3548,7 @@ public class StringUtils {
 	 * @param threshold The similarity threshold (0.0 to 1.0).
 	 * @return <jk>true</jk> if the similarity is greater than or equal to the threshold, <jk>false</jk> otherwise.
 	 */
+	@SuppressWarnings("java:S3516") // Result varies based on similarity(str1, str2) and threshold
 	public static boolean isSimilar(String str1, String str2, double threshold) {
 		return similarity(str1, str2) >= threshold;
 	}
