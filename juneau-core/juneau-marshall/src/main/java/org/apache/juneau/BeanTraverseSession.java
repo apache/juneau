@@ -234,7 +234,7 @@ public class BeanTraverseSession extends BeanSession {
 	 * @return
 	 * 	<jk>true</jk> if recursions should be checked for during traversal.
 	 */
-	public final boolean isDetectRecursions() { return ctx.isDetectRecursions(); }
+	public final boolean isDetectRecursions() { return ctx.shouldDetectRecursions(); }
 
 	/**
 	 * Ignore recursion errors.

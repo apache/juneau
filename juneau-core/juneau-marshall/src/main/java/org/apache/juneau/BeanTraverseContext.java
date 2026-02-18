@@ -754,7 +754,13 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	 * @return
 	 * 	<jk>true</jk> if recursions should be checked for during traversal.
 	 */
-	public final boolean isDetectRecursions() { return actualDetectRecursions; }
+	public final boolean isDetectRecursions() { return detectRecursions; }
+
+	/**
+	 * Whether recursion detection is effectively enabled during traversal.
+	 * This is {@link #isDetectRecursions()} OR {@link #isIgnoreRecursions()} OR {@link #isDebug()}.
+	 */
+	protected final boolean shouldDetectRecursions() { return actualDetectRecursions; }
 
 	/**
 	 * Ignore recursion errors.
