@@ -209,12 +209,18 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 		Class<?> unswapType2 = null;
 		if (nn(unswapMethod)) {
 			for (var pi : unswapMethod.getParameters())
-				if (! pi.getParameterType().is(BeanSession.class))
-					unswapType2 = pi.getParameterType().getWrapperIfPrimitive().inner();
+				if (! pi.getParameterType().is(BeanSession.class)) {
+					var wrap = pi.getParameterType().getWrapperIfPrimitive();
+					if (nn(wrap))
+						unswapType2 = wrap.inner();
+				}
 		} else if (nn(unswapConstructor)) {
 			for (var pi : unswapConstructor.getParameters())
-				if (! pi.getParameterType().is(BeanSession.class))
-					unswapType2 = pi.getParameterType().getWrapperIfPrimitive().inner();
+				if (! pi.getParameterType().is(BeanSession.class)) {
+					var wrap = pi.getParameterType().getWrapperIfPrimitive();
+					if (nn(wrap))
+						unswapType2 = wrap.inner();
+				}
 		}
 		this.unswapType = unswapType2;
 	}

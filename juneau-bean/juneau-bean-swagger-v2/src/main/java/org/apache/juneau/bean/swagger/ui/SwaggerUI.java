@@ -132,7 +132,8 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 		if (nn(select))
 			select.child(option("model", "model"));
-		div.child(div(m.remove("model"))._class("model active").attr("data-name", "model"));
+		var modelContent = m.remove("model");
+		div.child(div(nn(modelContent) ? modelContent : "")._class("model active").attr("data-name", "model"));
 
 		var select2 = select;
 		m.forEach((k, v) -> {

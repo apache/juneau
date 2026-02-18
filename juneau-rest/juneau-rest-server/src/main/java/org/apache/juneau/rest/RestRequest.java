@@ -229,7 +229,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 
 		if (context.isAllowContentParam()) {
 			var b = queryParams.get("content").asString().orElse(null);
-			if (nn(b)) {
+			if (b != null) {
 				headers.set("Content-Type", UonSerializer.DEFAULT.getResponseContentType());
 				content.mediaType(MediaType.UON).parser(UonParser.DEFAULT).content(b.getBytes(UTF8));
 			}
