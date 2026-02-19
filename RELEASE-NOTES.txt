@@ -11,7 +11,7 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
-Release Notes - Juneau - Version 9.2.1
+Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
 
 ** Changes
 
@@ -26,7 +26,7 @@ Release Notes - Juneau - Version 9.2.1
     * Bump Bump org.apache.maven.plugins:maven-compiler-plugin from 3.14.1 to 3.15.0 #314.
     * Bump Bump jetty.version from 12.1.5 to 12.1.6 #312.
 
-Release Notes - Juneau - Version 9.2.0
+Release Notes - Juneau - Version 9.2.0 - 2025-12-30
 
 ** Changes
 
@@ -97,7 +97,7 @@ Release Notes - Juneau - Version 9.2.0
         - Code using ConcurrentXKeyHashMap without caching features requires no changes
         - Null keys are no longer allowed (previously bypassed cache, now throws exception)
 
-Release Notes - Juneau - Version 9.1.0
+Release Notes - Juneau - Version 9.1.0 - 2025-06-10
 
 ** Changes
 
@@ -138,7 +138,7 @@ Release Notes - Juneau - Version 9.1.0
     * Add org.apache.juneau.common.internal.IOUtils.read(Path)
     * org.apache.juneau.microservice.Microservice.Builder.manifest(Object) now handles java.nio.file.Path.
     
-Release Notes - Juneau - Version 9.0.1
+Release Notes - Juneau - Version 9.0.1 - 2023-09-06
 
 ** Improvement
 
@@ -148,11 +148,15 @@ Release Notes - Juneau - Version 9.0.1
     * [JUNEAU-246] Bump org.eclipse.jgit from 6.4.0.202211300538-r to 6.6.1.202309021850-r #101, #105, #110.
     * [JUNEAU-250] Bump org.codehaus.groovy:groovy from 3.0.18 to 3.0.19 #145.
 
-Release Notes - Juneau - Version 9.0.0
+Release Notes - Juneau - Version 9.0.0 - 2023-01-07
 
 ** Placeholder
 
-Release Notes - Juneau - Version 8.2.0
+Release Notes - Juneau - Version 9.0-B1 - 2022-06-23
+
+** Placeholder
+
+Release Notes - Juneau - Version 8.2.0 - 2020-10-01
 
 ** Bug
     * [JUNEAU-168] - Serializer/Parser handling of proxy beans.
@@ -199,7 +203,15 @@ Release Notes - Juneau - Version 8.2.0
     * [JUNEAU-240] - RestContext should be subclassible.
     
 
-Release Notes - Juneau - Version 8.1.3
+Release Notes - Juneau - Version 8.1.5 - 2025-05-13
+
+** Placeholder
+
+Release Notes - Juneau - Version 8.1.4 - 2024-10-16
+
+** Placeholder
+
+Release Notes - Juneau - Version 8.1.3 - 2020-01-13
 
 ** Bug
     * [JUNEAU-169] - Dynamic annotations.
@@ -217,7 +229,7 @@ Release Notes - Juneau - Version 8.1.3
     * [JUNEAU-177] - Allow REST methods at specific paths to be overridden by methods in child classes.
     
 
-Release Notes - Juneau - Version 8.1.2
+Release Notes - Juneau - Version 8.1.2 - 2019-11-25
 
 ** Bug
     * [JUNEAU-156] - Test Fails on ko_KR Locale.
@@ -235,7 +247,7 @@ Release Notes - Juneau - Version 8.1.2
     * [JUNEAU-159] - Package pet store application in jar format.
 
 
-Release Notes - Juneau - Version 8.1.1
+Release Notes - Juneau - Version 8.1.1 - 2019-09-15
 
 ** Bug
     * [JUNEAU-143] - Static files mapping doesn't properly handle override scenarios.
@@ -260,7 +272,7 @@ Release Notes - Juneau - Version 8.1.1
     * [JUNEAU-142] - BasicRest subclasses need programmatic access to RestRequest/RestResponse
 
 
-Release Notes - Juneau - Version 8.1.0
+Release Notes - Juneau - Version 8.1.0 - 2019-08-10
 
 ** Bug
     * [JUNEAU-29] - Replace @BeanConstructor with @BeanParameter annotations.
@@ -295,13 +307,13 @@ Release Notes - Juneau - Version 8.1.0
     * [JUNEAU-128] - Code improvements around DynamicSwaps
     
 
-Release Notes - Juneau - Version 8.0.0
+Release Notes - Juneau - Version 8.0.0 - 2018-12-23
 
 ** Improvement
     * [JUNEAU-91] - Update Jetty to jetty-9.4.13.v20181111
 
 
-Release Notes - Juneau - Version 7.2.2
+Release Notes - Juneau - Version 7.2.2 - 2018-11-07
 
 ** Bug
     * [JUNEAU-88] - AddressBookResourceTest fails with org.apache.juneau.rest.client.RestCallException: Software caused connection abort: recv failed
@@ -309,7 +321,7 @@ Release Notes - Juneau - Version 7.2.2
     * [JUNEAU-90] - Could not instantiate class  org.apache.juneau.svl.Var
     
 
-Release Notes - Juneau - Version 7.2.1
+Release Notes - Juneau - Version 7.2.1 - 2018-10-23
 
 ** Bug
     * [JUNEAU-85] - Don't break compatibility with 7.1.0
@@ -317,7 +329,7 @@ Release Notes - Juneau - Version 7.2.1
     * [JUNEAU-87] - Tests should not use hard-wired line-endings.
 
 
-Release Notes - Juneau - Version 7.2.0
+Release Notes - Juneau - Version 7.2.0 - 2018-09-17
 
 ** Bug
     * [JUNEAU-83] - Cannot subclass RestClient and RestClientBuilder
@@ -331,7 +343,7 @@ Release Notes - Juneau - Version 7.2.0
     * [JUNEAU-84] - Upgrade to Jetty 9.4.12
 
 
-Release Notes - Juneau - Version 7.1.0
+Release Notes - Juneau - Version 7.1.0 - 2018-03-02
 
 ** Bug
     * [JUNEAU-75] - Documentation not clear on how to customize htdocs folder
@@ -344,7 +356,7 @@ Release Notes - Juneau - Version 7.1.0
     * [JUNEAU-77] - Document how to customize the favicon
 
 
-Release Notes - Juneau - Version 7.0.1
+Release Notes - Juneau - Version 7.0.1 - 2017-12-18
 
 ** Bug
     * [JUNEAU-68] - Add BoundedReader to REST input
@@ -357,7 +369,7 @@ Release Notes - Juneau - Version 7.0.1
     * [JUNEAU-74] - Update Apache HttpClient from 4.5.3 to 4.5.4
 
 
-Release Notes - Juneau - Version 7.0.0
+Release Notes - Juneau - Version 7.0.0 - 2017-10-22
 
 ** Improvement
 
