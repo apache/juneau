@@ -52,13 +52,14 @@ import org.apache.juneau.uon.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({
+	"java:S110" // Inheritance depth acceptable for OpenApiParserSession hierarchy
+})
 public class OpenApiParserSession extends UonParserSession {
 
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class Builder extends UonParserSession.Builder {
 
 		private OpenApiParser ctx;
@@ -216,7 +217,9 @@ public class OpenApiParserSession extends UonParserSession {
 		ctx = builder.ctx;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to T
+	})
 	@Override /* Overridden from HttpPartParser */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationException {
 		if (partType == null)
@@ -243,7 +246,11 @@ public class OpenApiParserSession extends UonParserSession {
 		return t;
 	}
 
-	@SuppressWarnings({ "unchecked", "java:S3776", "java:S6541" })
+	@SuppressWarnings({
+		"unchecked", // Type erasure requires unchecked casts
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S6541", // Single-threaded session contexts do not require synchronization
+	})
 	private <T> T parseInner(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws SchemaValidationException, ParseException {
 		schema.validateInput(in);
 		if (in == null || "null".equals(in)) {

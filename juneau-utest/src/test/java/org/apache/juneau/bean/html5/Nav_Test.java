@@ -26,7 +26,7 @@ class Nav_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Nav x = nav()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

@@ -46,7 +46,9 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 		BeanPropertyMeta contentProperty;
 		XmlFormat contentFormat = DEFAULT;
 
-		@SuppressWarnings("java:S3776")
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for XML bean metadata building
+		})
 		XmlBeanMetaBuilder(BeanMeta<?> beanMeta, XmlMetaProvider mp) {
 			var c = beanMeta.getClassMeta().inner();
 			var ci = beanMeta.getClassMeta();
@@ -122,7 +124,9 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 	 * @param beanMeta The metadata on the bean that this metadata applies to.
 	 * @param mp XML metadata provider (for finding information about other artifacts).
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for XML bean metadata initialization
+	})
 	public XmlBeanMeta(BeanMeta<?> beanMeta, XmlMetaProvider mp) {
 		super(beanMeta);
 

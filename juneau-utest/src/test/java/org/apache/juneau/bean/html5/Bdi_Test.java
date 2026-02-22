@@ -26,7 +26,7 @@ class Bdi_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Bdi x = bdi()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

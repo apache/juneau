@@ -32,7 +32,7 @@ class Script_Test extends TestBase {
 			.defer("d")
 			.src("e")
 			.type("f")
-			._class("g")
+			.class_("g")
 			.accesskey("h")
 			.contenteditable("i")
 			.dir("j")

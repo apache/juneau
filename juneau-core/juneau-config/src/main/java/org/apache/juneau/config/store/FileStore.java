@@ -348,7 +348,9 @@ public class FileStore extends ConfigStore {
 		}
 	}
 
-	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method
+	})
 	class WatcherThread extends Thread {
 		private final WatchService watchService;
 

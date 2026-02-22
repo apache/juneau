@@ -55,7 +55,9 @@ import static org.apache.juneau.commons.utils.Utils.*;
  *   <li class='link'><a class="doclink" href='../../../../../index.html#juneau-commons.utils'>Overview &gt; juneau-commons.utils</a>
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class AssertionUtils {
 
 	/**
@@ -226,7 +228,9 @@ public class AssertionUtils {
 	 * @param o4 The fourth object to check.
 	 * @throws IllegalArgumentException Constructed exception.
 	 */
-	@SuppressWarnings("java:S107")
+	@SuppressWarnings({
+		"java:S107" // 8 parameters needed for argument validation
+	})
 	public static final void assertArgsNotNull(String name1, Object o1, String name2, Object o2, String name3, Object o3, String name4, Object o4) throws IllegalArgumentException {
 		assertArgNotNull(name1, o1);
 		assertArgNotNull(name2, o2);
@@ -249,7 +253,9 @@ public class AssertionUtils {
 	 * @param o5 The fifth object to check.
 	 * @throws IllegalArgumentException Constructed exception.
 	 */
-	@SuppressWarnings("java:S107")
+	@SuppressWarnings({
+		"java:S107" // 10 parameters needed for argument validation
+	})
 	public static final void assertArgsNotNull(String name1, Object o1, String name2, Object o2, String name3, Object o3, String name4, Object o4, String name5, Object o5)
 		throws IllegalArgumentException {
 		assertArgNotNull(name1, o1);
@@ -333,7 +339,9 @@ public class AssertionUtils {
 	 * @return The value cast to the specified array type.
 	 * @throws IllegalArgumentException Constructed exception.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to Class<E>[] for array validation
+	})
 	public static final <E> Class<E>[] assertClassArrayArgIsType(String name, Class<E> type, Class<?>[] value) throws IllegalArgumentException {
 		for (var i = 0; i < value.length; i++)
 			if (! type.isAssignableFrom(value[i]))

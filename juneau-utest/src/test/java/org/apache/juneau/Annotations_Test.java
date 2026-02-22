@@ -21,6 +21,9 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import org.apache.juneau.annotation.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"unused" // Test beans with intentionally unused private fields for visibility testing
+})
 class Annotations_Test extends TestBase {
 
 	//====================================================================================================
@@ -134,7 +137,6 @@ class Annotations_Test extends TestBase {
 	public static class A {
 		public int publicField;
 		protected int protectedField;
-		@SuppressWarnings("unused")
 		private int privateField;
 		int defaultField;
 	}

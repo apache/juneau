@@ -43,7 +43,11 @@ import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"java:S5961", "java:S1186"})
+@SuppressWarnings({
+	"java:S5961", // High assertion count acceptable in comprehensive tests
+	"java:S1186", // Empty method body intentional for callback testing
+	"removal" // Tests deprecated API for backward compatibility
+})
 class RestClient_Response_Body_Test extends TestBase {
 
 	public static class ABean {
@@ -261,7 +265,6 @@ class RestClient_Response_Body_Test extends TestBase {
 	// HttpEntity passthrough methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings("removal")
 	@Test void b01_httpEntityMethods() throws Exception {
 		var x1 = testClient().entity(stringEntity("foo")).get().run().getContent();
 		assertTrue(x1.isRepeatable());
@@ -298,7 +301,6 @@ class RestClient_Response_Body_Test extends TestBase {
 		testClient().entity(inputStreamEntity("foo")).get().run().getContent().consumeContent();
 	}
 
-	@SuppressWarnings("removal")
 	@Test void b02_head() throws Exception {
 		assertFalse(client().build().head("").run().getContent().isRepeatable());
 		assertFalse(client().build().head("").run().getContent().isChunked());

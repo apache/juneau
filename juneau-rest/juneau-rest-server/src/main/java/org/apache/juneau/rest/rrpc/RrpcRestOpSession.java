@@ -40,7 +40,10 @@ import org.apache.juneau.rest.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestRpc">REST/RPC</a>
  * </ul>
  */
-@SuppressWarnings({ "resource", "java:S115" })
+@SuppressWarnings({
+	"resource", // Resource management handled externally
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+})
 public class RrpcRestOpSession extends RestOpSession {
 
 	// Argument name constants for assertArgNotNull
@@ -107,7 +110,9 @@ public class RrpcRestOpSession extends RestOpSession {
 	}
 
 	@Override
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for RRPC request handling
+	})
 	public void run() throws Exception {
 
 		super.run();

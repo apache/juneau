@@ -50,7 +50,9 @@ import java.util.function.*;
  * 	<li class='jc'>{@link BeanCreator2}
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class CreatableBeanStore extends BasicBeanStore2 {
 
 	// Argument name constants for assertArgNotNull
@@ -172,7 +174,9 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 * @param beanType The bean type to get a creator for. Cannot be <jk>null</jk>.
 	 * @return The creator for the specified bean type. Never <jk>null</jk>.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to BeanCreator2<T>
+	})
 	public <T> BeanCreator2<T> getCreator(Class<T> beanType) {
 		assertArgNotNull(ARG_beanType, beanType);
 		return (BeanCreator2<T>)creators.computeIfAbsent(beanType, k -> BeanCreator2.of((Class<T>)k, this, null, enclosingInstance));
@@ -199,7 +203,9 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 * @param name The bean name. Can be <jk>null</jk>.
 	 * @return The creator for the specified bean type. Never <jk>null</jk>.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to BeanCreator2<T>
+	})
 	public <T> BeanCreator2<T> getCreator(Class<T> beanType, String name) {
 		assertArgNotNull(ARG_beanType, beanType);
 		return (BeanCreator2<T>)creators.computeIfAbsent(beanType, k -> BeanCreator2.of((Class<T>)k, this, name, enclosingInstance));
@@ -221,7 +227,9 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 * @return The supplier, or {@link Optional#empty()} if no matching creator or supplier exists.
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for supplier resolution
+	})
 	protected <T> Optional<Supplier<T>> resolve(Class<T> beanType, String name) {
 		// First check if there's a creator for the exact bean type
 		var creator = creators.get(beanType);

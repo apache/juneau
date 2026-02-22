@@ -109,8 +109,8 @@ public class Rtc extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Rtc _class(String value) {
-		super._class(value);
+	public Rtc class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

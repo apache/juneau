@@ -29,7 +29,10 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.function.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"java:S4144"})
+@SuppressWarnings({
+	"java:S4144",
+	"unused" // Test beans with intentionally unused fields (e.g. UnsupportedType)
+})
 class Settings_Test extends TestBase {
 
 	private static final String TEST_PROP = "juneau.test.property";
@@ -1042,7 +1045,6 @@ class Settings_Test extends TestBase {
 		// Try to use a type that doesn't have a static method or constructor
 		// Custom class without static method or String constructor
 		class UnsupportedType {
-			@SuppressWarnings("unused")
 			private final int value;
 			UnsupportedType(int value) { this.value = value; }
 		}

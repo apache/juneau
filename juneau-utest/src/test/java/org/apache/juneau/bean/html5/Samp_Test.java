@@ -26,7 +26,7 @@ class Samp_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Samp x = samp()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

@@ -29,7 +29,9 @@ import org.apache.juneau.collections.*;
  * @param <T> The class type of the wrapped bean.
  * @serial exclude
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({
+	"java:S110" // Inheritance depth acceptable for DelegateList hierarchy
+})
 public class DelegateList<T extends Collection<?>> extends JsonList implements Delegate<T> {
 	private static final long serialVersionUID = 1L;
 

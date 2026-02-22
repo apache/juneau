@@ -100,7 +100,9 @@ import java.util.stream.Collectors;
  *
  * @param <E> The element type of this set.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class MultiSet<E> extends AbstractSet<E> {
 
 	// Argument name constants for assertArgNotNull
@@ -206,7 +208,9 @@ public class MultiSet<E> extends AbstractSet<E> {
 	 * @return An iterator over all elements in all underlying collections.
 	 */
 	@Override /* Set */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for iterator over multiple sets
+	})
 	public Iterator<E> iterator() {
 		return new Iterator<>() {
 			int i = 0;

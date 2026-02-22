@@ -105,7 +105,9 @@ import org.apache.juneau.commons.reflect.ClassInfo;
  *
  * @param <T> The value type.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class Value<T> {
 
 	// Argument name constants for assertArgNotNull
@@ -260,12 +262,14 @@ public class Value<T> {
 	 * @return The result of applying the {@link Value}-bearing mapping function to the value if present,
 	 *         otherwise an empty {@link Value}.
 	 */
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to Value<T2>
+	})
 	public <T2> Value<T2> flatMap(Function<? super T,? extends Value<? extends T2>> mapper) {
 		assertArgNotNull(ARG_mapper, mapper);
 		if (t == null)
 			return Value.empty();
 		var result = mapper.apply(t);
-		@SuppressWarnings("unchecked")
 		var cast = (Value<T2>)result;
 		return cast;
 	}

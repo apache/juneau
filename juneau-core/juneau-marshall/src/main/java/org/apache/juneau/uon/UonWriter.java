@@ -37,7 +37,10 @@ import org.apache.juneau.serializer.*;
 
  * </ul>
  */
-@SuppressWarnings({"resource", "java:S4144"})
+@SuppressWarnings({
+	"resource", // Resource management handled externally
+	"java:S4144", // Identical methods intentional for different test scenarios
+})
 public class UonWriter extends SerializerWriter {
 
 	// Characters that do not need to be URL-encoded in strings.
@@ -72,7 +75,9 @@ public class UonWriter extends SerializerWriter {
 	 * @param quoteChar The quote character to use.  If <c>0</c>, defaults to <js>'\''</js>.
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
-	@SuppressWarnings("java:S107") // Constructor requires 9 parameters for UON writer configuration
+	@SuppressWarnings({
+		"java:S107" // Constructor requires 9 parameters for UON writer configuration
+	})
 	protected UonWriter(UonSerializerSession session, Writer out, boolean useWhitespace, int maxIndent, boolean encodeChars, boolean trimStrings, boolean plainTextParams, char quoteChar,
 		UriResolver uriResolver) {
 		super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver);
@@ -149,7 +154,10 @@ public class UonWriter extends SerializerWriter {
 	 * @param isTopAttrName If this is a top-level attribute name we're serializing.
 	 * @return This object.
 	 */
-	@SuppressWarnings({"java:S127", "java:S3776"}) // Loop counter advances for surrogate pairs
+	@SuppressWarnings({
+		"java:S127", // Loop counter advances for surrogate pairs
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+	})
 	public UonWriter appendObject(Object o, boolean isTopAttrName) {
 
 		if (o instanceof Boolean)

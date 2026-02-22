@@ -36,8 +36,8 @@ import org.apache.juneau.config.store.*;
  *
  */
 @SuppressWarnings({
-	"resource",
-	"unused",
+	"resource", // Resource management handled externally
+	"unused", // Builder.copy() returns null - example skeleton; abstract methods not implemented
 	"java:S115" // Constants use UPPER_snakeCase convention (e.g., SQLSTORE_jdbcUrl)
 })
 public class SqlStore extends ConfigStore {
@@ -222,7 +222,9 @@ public class SqlStore extends ConfigStore {
 	}
 
 	// Reads the value from the database.
-	@SuppressWarnings("java:S1172") // Parameter name is unused in base implementation, intended for override
+	@SuppressWarnings({
+		"java:S1172" // Parameter name is unused in base implementation, intended for override
+	})
 	protected String getDatabaseValue(String name) {
 		// Implement me!
 		return null;

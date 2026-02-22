@@ -88,8 +88,8 @@ public class Hr extends HtmlElementVoid {
 	public Hr() { /* Empty constructor. */ }
 
 	@Override /* Overridden from HtmlElement */
-	public Hr _class(String value) {
-		super._class(value);
+	public Hr class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

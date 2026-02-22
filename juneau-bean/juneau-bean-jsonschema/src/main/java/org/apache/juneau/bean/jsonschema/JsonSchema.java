@@ -196,7 +196,9 @@ import org.apache.juneau.swap.*;
  * </ul>
  */
 @Bean(typeName = "schema")
-@SuppressWarnings("java:S116")
+@SuppressWarnings({
+	"java:S116" // Field names follow OpenAPI/JSON Schema spec
+})
 public class JsonSchema {
 
 	/**
@@ -909,7 +911,9 @@ public class JsonSchema {
 	 * @deprecated Use {@link #getIdUri()} instead.
 	 */
 	@Deprecated(since = "10.0", forRemoval = true)
-	@SuppressWarnings("java:S1133")  // Kept for Draft 04 backward compatibility, will be removed in future version
+	@SuppressWarnings({
+		"java:S1133" // Kept for Draft 04 backward compatibility, will be removed in future version
+	})
 	public URI getId() {
 		return nn(id) ? id : idUri; // Fall back to new '$id' for compatibility when reading
 	}
@@ -1571,7 +1575,9 @@ public class JsonSchema {
 	 * @deprecated Use {@link #setIdUri(Object)} instead.
 	 */
 	@Deprecated(since = "10.0", forRemoval = true)
-	@SuppressWarnings("java:S1133")  // Kept for Draft 04 backward compatibility, will be removed in future version
+	@SuppressWarnings({
+		"java:S1133" // Kept for Draft 04 backward compatibility, will be removed in future version
+	})
 	public JsonSchema setId(Object value) {
 		this.id = toUri(value);
 		return this;
@@ -2057,7 +2063,9 @@ public class JsonSchema {
 	 *
 	 * @param master The master schema to associate on this and all children.  Can be <jk>null</jk>.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for this logic
+	})
 	protected void setMaster(JsonSchema master) {
 		this.master = master;
 		if (nn(definitions))

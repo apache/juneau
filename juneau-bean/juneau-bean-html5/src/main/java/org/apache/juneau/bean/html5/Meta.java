@@ -76,8 +76,8 @@ public class Meta extends HtmlElementVoid {
 	public Meta() { /* Empty constructor. */ }
 
 	@Override /* Overridden from HtmlElement */
-	public Meta _class(String value) {
-		super._class(value);
+	public Meta class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

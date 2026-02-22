@@ -45,7 +45,9 @@ import org.apache.juneau.serializer.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSchemaDetails">JSON-Schema Support</a>
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 	// Argument name constants for assertArgNotNull
@@ -298,7 +300,9 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to List<String> for enum extraction
+	})
 	private static List<String> getEnums(ClassMeta<?> cm) {
 		List<String> l = list();
 		for (var e : ((Class<Enum<?>>)cm.inner()).getEnumConstants())
@@ -323,9 +327,9 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 	@SuppressWarnings({
 		"java:S1168",    // TODO: null when type ignored. Consider empty schema.
-		"java:S3776",
-		"rawtypes",
-		"unchecked"
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"rawtypes", // Raw types necessary for generic type handling
+		"unchecked", // Type erasure requires unchecked casts
 	})
 	private JsonMap getSchema(ClassMeta<?> eType, String attrName, List<String> pNames, boolean exampleAdded, boolean descriptionAdded, JsonSchemaBeanPropertyMeta jsbpm)
 		throws BeanRecursionException, SerializeException {

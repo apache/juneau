@@ -75,7 +75,9 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection">Reflection Package</a>
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class ConstructorInfo extends ExecutableInfo implements Comparable<ConstructorInfo>, Annotatable {
 
 	// Argument name constants for assertArgNotNull
@@ -179,7 +181,9 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 * @param <T> The class type of the constructor.
 	 * @return The wrapped constructor.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to Constructor<T>
+	})
 	public <T> Constructor<T> inner() {
 		return (Constructor<T>)inner;
 	}
@@ -231,7 +235,9 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 * @return The object returned from the constructor.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to T for instance creation
+	})
 	public <T> T newInstance(Object...args) throws ExecutableException {
 		return safe(() -> {
 			try {

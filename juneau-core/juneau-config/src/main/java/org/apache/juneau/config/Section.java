@@ -32,7 +32,9 @@ import org.apache.juneau.parser.*;
 /**
  * A single section in a config file.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class Section {
 
 	// Argument name constants for assertArgNotNull
@@ -189,7 +191,9 @@ public class Section {
 	 * @param c The proxy interface class.
 	 * @return The proxy interface.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to T for interface proxy
+	})
 	public <T> Optional<T> asInterface(Class<T> c) {
 		assertArgNotNull(ARG_c, c);
 

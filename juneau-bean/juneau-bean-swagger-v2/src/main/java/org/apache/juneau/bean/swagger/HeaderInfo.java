@@ -78,7 +78,10 @@ import org.apache.juneau.marshaller.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
-@SuppressWarnings({"java:S115", "java:S116"})
+@SuppressWarnings({
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S116", // Field name uses trailing underscore (default_) to avoid Java keyword conflict
+})
 public class HeaderInfo extends SwaggerElement {
 
 	// Argument name constants for assertArgNotNull

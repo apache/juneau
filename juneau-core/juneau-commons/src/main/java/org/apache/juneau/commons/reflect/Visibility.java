@@ -37,7 +37,9 @@ import java.lang.reflect.*;
  * </ul>
  *
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public enum Visibility {
 
 	/** Ignore all */

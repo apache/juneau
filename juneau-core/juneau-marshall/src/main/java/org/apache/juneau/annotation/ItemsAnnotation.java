@@ -40,7 +40,9 @@ public class ItemsAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	@SuppressWarnings("java:S116")
+	@SuppressWarnings({
+		"java:S116" // Field names match JSON Schema property names for API consistency
+	})
 	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
@@ -92,7 +94,9 @@ public class ItemsAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-	@SuppressWarnings("java:S100") // Method name uses underscore suffix to avoid Java keyword conflict
+	@SuppressWarnings({
+		"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
+	})
 	public Builder default_(String...value) {
 		default_ = value;
 		return this;
@@ -104,7 +108,9 @@ public class ItemsAnnotation {
 	 * @param value The new value for this property.
 	 * @return This object.
 	 */
-	@SuppressWarnings("java:S100") // Method name uses underscore suffix to avoid Java keyword conflict
+	@SuppressWarnings({
+		"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
+	})
 	public Builder enum_(String...value) {
 		enum_ = value;
 		return this;
@@ -116,7 +122,9 @@ public class ItemsAnnotation {
 	 * @param value The new value for this property.
 	 * @return This object.
 	 */
-	@SuppressWarnings("java:S100") // Method name uses $ prefix to match JSON Schema keyword
+	@SuppressWarnings({
+		"java:S100" // Method name uses $ prefix to match JSON Schema keyword
+	})
 	public Builder $ref(String value) {
 		$ref = value;
 		return this;
@@ -485,7 +493,9 @@ public class ItemsAnnotation {
 
 	}
 
-	@SuppressWarnings("java:S116")
+	@SuppressWarnings({
+		"java:S116" // Field names match JSON Schema property names for API consistency
+	})
 	private static class Object extends AnnotationObject implements Items {
 
 		private final String[] description;

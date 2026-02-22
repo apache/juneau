@@ -41,7 +41,9 @@ import org.apache.juneau.cp.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem Overview</a>
  * </ul>
  */
-@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., MSG_unexpectedType)
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., MSG_unexpectedType)
+})
 public class Verify {
 
 	private static final Messages MESSAGES = Messages.of(Verify.class, "Messages");
@@ -104,7 +106,9 @@ public class Verify {
 	 * @param type The type to test against.
 	 * @return An error message if the object is not of the specified type, otherwise <jk>null</jk>.
 	 */
-	@SuppressWarnings("null")
+	@SuppressWarnings({
+		"null" // Null analysis not applicable to type verification
+	})
 	public String isType(Class<?> type) {
 		if ((type == null && o == null) || (nn(type) && type.isInstance(o)))
 			return null;

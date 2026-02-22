@@ -105,8 +105,8 @@ public class Tbody extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Tbody _class(String value) {
-		super._class(value);
+	public Tbody class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

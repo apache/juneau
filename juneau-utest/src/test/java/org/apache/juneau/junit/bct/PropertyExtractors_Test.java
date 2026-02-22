@@ -30,7 +30,10 @@ import org.junit.jupiter.api.*;
  * Unit tests for PropertyExtractors.
  */
 @DisplayName("PropertyExtractors")
-@SuppressWarnings("java:S1172") // Unused parameters in tests are typically intentional
+@SuppressWarnings({
+	"java:S1172", // Unused parameters in tests are intentional
+	"unused" // Test beans with intentionally unused private fields
+})
 class PropertyExtractors_Test extends TestBase {
 
 	private BasicBeanConverter converter;
@@ -401,7 +404,6 @@ class PropertyExtractors_Test extends TestBase {
 
 	public static class TestBeanWithFields {
 		public String publicField;
-		@SuppressWarnings("unused")
 		private String privateField = "private";
 	}
 

@@ -29,7 +29,7 @@ class Fieldset_Test extends TestBase {
 			.disabled(true)
 			.form("b")
 			.name("c")
-			._class("d")
+			.class_("d")
 			.accesskey("e")
 			.contenteditable("f")
 			.dir("g")

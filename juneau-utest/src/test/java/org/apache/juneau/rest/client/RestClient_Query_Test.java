@@ -33,7 +33,9 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S1186")
+@SuppressWarnings({
+	"java:S1186" // Empty test method intentional for framework testing
+})
 class RestClient_Query_Test extends TestBase {
 
 	@Rest

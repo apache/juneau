@@ -118,8 +118,8 @@ public class Pre extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Pre _class(String value) {
-		super._class(value);
+	public Pre class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

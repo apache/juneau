@@ -78,8 +78,8 @@ public class Map extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Map _class(String value) {
-		super._class(value);
+	public Map class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

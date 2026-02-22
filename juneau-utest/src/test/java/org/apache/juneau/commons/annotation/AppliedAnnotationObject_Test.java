@@ -26,7 +26,10 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S1172") // Unused parameters in tests are typically intentional
+@SuppressWarnings({
+	"java:S1172", // Unused parameters in tests are intentional
+	"java:S1186" // Empty test method intentional for framework testing
+})
 class AppliedAnnotationObject_Test extends TestBase {
 
 	private static final String CNAME = AppliedAnnotationObject_Test.class.getName();
@@ -107,7 +110,6 @@ class AppliedAnnotationObject_Test extends TestBase {
 	// Test classes for targeting
 	//------------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings("java:S1186")
 	public static class TC {
 		public String field1;
 		public int field2;

@@ -75,7 +75,9 @@ import org.apache.juneau.objecttools.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class OpenApi extends OpenApiElement {
 
 	// Argument name constants for assertArgNotNull
@@ -101,7 +103,6 @@ public class OpenApi extends OpenApiElement {
 	private static final String PROP_tags = "tags";
 
 	@SuppressWarnings({
-		"java:S1845", // Field name intentionally matches class name per OpenAPI spec
 		"java:S1700"  // Field duplicates class name per OpenAPI spec
 	})
 	private String openapi = "3.0.0";

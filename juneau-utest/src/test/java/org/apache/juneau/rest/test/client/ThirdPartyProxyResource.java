@@ -43,7 +43,11 @@ import jakarta.servlet.http.*;
 	callLogger=BasicDisabledCallLogger.class
 )
 @SerializerConfig(addRootType="true",addBeanTypes="true")
-@SuppressWarnings({"serial","java:S4144", "java:S1186"})
+@SuppressWarnings({
+	"serial", // Serialization not relevant
+	"java:S4144", // Identical methods intentional for different test scenarios
+	"java:S1186", // Empty method body intentional for REST/proxy interface testing
+})
 public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	public static FileWriter logFile;

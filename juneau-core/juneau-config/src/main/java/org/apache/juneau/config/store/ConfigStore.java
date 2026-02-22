@@ -43,7 +43,9 @@ import org.apache.juneau.config.internal.*;
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
 */
-@SuppressWarnings("resource")
+@SuppressWarnings({
+	"resource" // ConfigStore manages Closeable resources
+})
 public abstract class ConfigStore extends Context implements Closeable {
 
 	/**

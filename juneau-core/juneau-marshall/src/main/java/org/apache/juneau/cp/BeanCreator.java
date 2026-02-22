@@ -123,7 +123,9 @@ public class BeanCreator<T> {
 		T executable = null;
 		int numMatches = -1;
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure requires cast for ExecutableInfo
+		})
 		void add(T ei) {
 			if (ei.getParameterCount() > numMatches) {
 				numMatches = ei.getParameterCount();
@@ -216,7 +218,9 @@ public class BeanCreator<T> {
 	 * @param value The value for this setting.
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for builder type
+	})
 	public <B> BeanCreator<T> builder(Class<B> type, B value) {
 		builder = value;
 		var t = value.getClass();
@@ -263,7 +267,9 @@ public class BeanCreator<T> {
 	 * @return A new bean.
 	 * @throws ExecutableException if bean could not be created and {@link #silent()} was not enabled.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for bean creation with multiple creation strategies
+	})
 	public T run() {
 
 		if (nn(impl))

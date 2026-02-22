@@ -26,7 +26,7 @@ class Ruby_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Ruby x = ruby()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

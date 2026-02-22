@@ -126,8 +126,8 @@ public class Dl extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Dl _class(String value) {
-		super._class(value);
+	public Dl class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

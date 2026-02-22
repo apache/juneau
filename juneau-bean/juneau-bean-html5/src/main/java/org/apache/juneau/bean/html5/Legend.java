@@ -104,8 +104,8 @@ public class Legend extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Legend _class(String value) {
-		super._class(value);
+	public Legend class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

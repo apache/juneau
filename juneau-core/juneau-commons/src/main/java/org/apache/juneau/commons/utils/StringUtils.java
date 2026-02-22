@@ -3548,7 +3548,9 @@ public class StringUtils {
 	 * @param threshold The similarity threshold (0.0 to 1.0).
 	 * @return <jk>true</jk> if the similarity is greater than or equal to the threshold, <jk>false</jk> otherwise.
 	 */
-	@SuppressWarnings("java:S3516") // Result varies based on similarity(str1, str2) and threshold
+	@SuppressWarnings({
+		"java:S3516" // Result varies based on similarity(str1, str2) and threshold
+	})
 	public static boolean isSimilar(String str1, String str2, double threshold) {
 		return similarity(str1, str2) >= threshold;
 	}
@@ -4268,7 +4270,9 @@ public class StringUtils {
 	 * @param str The string to count lines in. Can be <jk>null</jk>.
 	 * @return The number of lines, or <c>0</c> if the string is <jk>null</jk> or empty.
 	 */
-	@SuppressWarnings("java:S127") // Loop counter advances to skip \r\n as single line break
+	@SuppressWarnings({
+		"java:S127" // Loop counter advances to skip \r\n as single line break
+	})
 	public static int lineCount(String str) {
 		if (isEmpty(str))
 			return 0;

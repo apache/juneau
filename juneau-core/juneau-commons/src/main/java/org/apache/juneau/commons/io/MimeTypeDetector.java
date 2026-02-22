@@ -62,7 +62,9 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='jm'><c>javax.activation.MimetypesFileTypeMap</c> (legacy class, not available in Java 11+)
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class MimeTypeDetector {
 
 	// Argument name constants for assertArgNotNull
@@ -159,7 +161,9 @@ public class MimeTypeDetector {
 		 * @param mimeTypesLines The MIME types lines or file contents.
 		 * @return This builder.
 		 */
-		@SuppressWarnings("java:S3776")
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for MIME type parsing
+		})
 		public Builder addTypes(String...mimeTypesLines) {
 			for (var input : mimeTypesLines) {
 				if (ne(input)) {
@@ -358,9 +362,9 @@ public class MimeTypeDetector {
 					if (ne(contentType)) {
 						return contentType;
 					}
-				}
-			} catch (@SuppressWarnings("unused") Exception e) {
-				// Fall back to extension-based detection
+			}
+			} catch (Exception e) {
+			// Fall back to extension-based detection
 			}
 		}
 

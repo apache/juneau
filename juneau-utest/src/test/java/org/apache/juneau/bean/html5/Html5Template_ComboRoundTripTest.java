@@ -27,7 +27,9 @@ import org.apache.juneau.annotation.*;
 /**
  * Tests serialization of HTML5 templates.
  */
-@SuppressWarnings("java:S1172") // Unused parameters in tests are typically intentional
+@SuppressWarnings({
+	"java:S1172" // Unused parameters in tests are intentional
+})
 class Html5Template_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
 	private static <T> ComboRoundTrip_Tester.Builder<T> tester(int index, String label, Type type, T bean) {

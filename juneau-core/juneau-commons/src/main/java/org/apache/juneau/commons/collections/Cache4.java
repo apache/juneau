@@ -63,7 +63,9 @@ import org.apache.juneau.commons.function.*;
  * @param <K4> The fourth key type.
  * @param <V> The value type.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class Cache4<K1,K2,K3,K4,V> {
 
 	// Argument name constants for assertArgNotNull
@@ -241,7 +243,9 @@ public class Cache4<K1,K2,K3,K4,V> {
 	 * @param type The value type class.
 	 * @return A new builder for configuring the cache.
 	 */
-	@SuppressWarnings("java:S1172") // Parameters required for type inference in public API
+	@SuppressWarnings({
+		"java:S1172" // Parameters required for type inference in public API
+	})
 	public static <K1,K2,K3,K4,V> Builder<K1,K2,K3,K4,V> of(Class<K1> key1, Class<K2> key2, Class<K3> key3, Class<K4> key4, Class<V> type) {
 		return new Builder<>();
 	}
@@ -250,7 +254,9 @@ public class Cache4<K1,K2,K3,K4,V> {
 	// If threadLocal is true, this is null and threadLocalMap is used instead
 	private final java.util.Map<Tuple4<K1,K2,K3,K4>,V> map;
 
-	@SuppressWarnings("java:S5164") // Cleanup method provided: cleanup()
+	@SuppressWarnings({
+		"java:S5164" // Cleanup method provided: cleanup()
+	})
 	private final ThreadLocal<java.util.Map<Tuple4<K1,K2,K3,K4>,V>> threadLocalMap;
 
 	private final boolean isThreadLocal;

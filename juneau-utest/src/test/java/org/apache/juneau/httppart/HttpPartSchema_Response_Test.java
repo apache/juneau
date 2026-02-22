@@ -29,7 +29,9 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S5961")
+@SuppressWarnings({
+	"java:S5961" // High assertion count acceptable in comprehensive test
+})
 class HttpPartSchema_Response_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

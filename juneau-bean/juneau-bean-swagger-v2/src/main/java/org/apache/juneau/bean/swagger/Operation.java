@@ -156,7 +156,9 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class Operation extends SwaggerElement {
 
 	// Argument name constants for assertArgNotNull
@@ -699,7 +701,10 @@ public class Operation extends SwaggerElement {
 		return new MultiSet<>(s, super.keySet());
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({
+		"rawtypes", // Raw types necessary for generic type handling
+		"unchecked" // Type erasure requires unchecked casts in generic type conversions
+	})
 	@Override /* Overridden from SwaggerElement */
 	public Operation set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);

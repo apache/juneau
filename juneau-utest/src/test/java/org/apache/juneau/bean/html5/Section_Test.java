@@ -26,7 +26,7 @@ class Section_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Section x = section()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

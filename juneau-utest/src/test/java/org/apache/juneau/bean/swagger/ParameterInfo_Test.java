@@ -31,7 +31,9 @@ import org.junit.jupiter.api.*;
 /**
  * Testcase for {@link ParameterInfo}.
  */
-@SuppressWarnings("java:S5961")
+@SuppressWarnings({
+	"java:S5961" // High assertion count acceptable in comprehensive test
+})
 class ParameterInfo_Test extends TestBase {
 
 	@Nested class A_basicTests extends TestBase {

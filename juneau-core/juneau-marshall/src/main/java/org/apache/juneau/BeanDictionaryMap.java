@@ -67,7 +67,9 @@ import org.apache.juneau.annotation.*;
  *
  * @serial exclude
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({
+	"rawtypes" // Raw types necessary for bean dictionary Map operations
+})
 public class BeanDictionaryMap extends LinkedHashMap<String,Object> {
 	private static final long serialVersionUID = 1L;
 

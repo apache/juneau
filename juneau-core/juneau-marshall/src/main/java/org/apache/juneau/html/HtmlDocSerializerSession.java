@@ -43,7 +43,10 @@ import org.apache.juneau.svl.*;
 
  * </ul>
  */
-@SuppressWarnings({ "java:S110", "java:S115" }) // Constants use UPPER_snakeCase convention (e.g., PROP_ctx)
+@SuppressWarnings({
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+})
 public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
 	// Property name constants
@@ -53,7 +56,6 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class Builder extends HtmlStrippedDocSerializerSession.Builder {
 
 		private HtmlDocSerializer ctx;
@@ -225,7 +227,9 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @param o The object being serialized.
 	 * @throws Exception Error occurred during serialization.
 	 */
-	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method for parent serializer
+	})
 	public void parentSerialize(Object out, Object o) throws Exception {
 		try (var pipe = createPipe(out)) {
 			super.doSerialize(pipe, o);
@@ -322,7 +326,9 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	Navigation links to add to the HTML page.
 	 */
-	@SuppressWarnings("java:S1845") // Method name intentionally differs only by case from getNavLinks
+	@SuppressWarnings({
+		"java:S1845" // Method name intentionally differs only by case from getNavLinks for backward compatibility
+	})
 	protected final String[] getNavlinks() { return ctx.navlinks; }
 
 	/**

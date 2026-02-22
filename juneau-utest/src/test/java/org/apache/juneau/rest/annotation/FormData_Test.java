@@ -32,7 +32,9 @@ import org.apache.juneau.testutils.pojos.*;
 import org.apache.juneau.urlencoding.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S4144")
+@SuppressWarnings({
+	"java:S4144" // Identical test methods intentional for testing different scenarios
+})
 class FormData_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

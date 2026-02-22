@@ -24,7 +24,9 @@ import org.apache.juneau.*;
 import org.apache.juneau.html.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S1186")
+@SuppressWarnings({
+	"java:S1186" // Empty test method intentional for framework testing
+})
 class HtmlAnnotation_Test extends TestBase {
 
 	private static final String CNAME = HtmlAnnotation_Test.class.getName();

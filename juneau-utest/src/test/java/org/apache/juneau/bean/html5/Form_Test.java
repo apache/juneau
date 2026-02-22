@@ -34,7 +34,7 @@ class Form_Test extends TestBase {
 			.name("f")
 			.novalidate(true)
 			.target("h")
-			._class("i")
+			.class_("i")
 			.accesskey("j")
 			.contenteditable("k")
 			.dir("l")

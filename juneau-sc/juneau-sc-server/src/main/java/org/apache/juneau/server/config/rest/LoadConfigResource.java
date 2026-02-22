@@ -22,12 +22,26 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.server.config.repository.*;
 
+/**
+ * REST resource for loading configuration from a Git repository.
+ *
+ * <p>
+ * Fetches configuration files for a given project and branch,
+ * combining application defaults with project-specific overrides.
+ */
 @Rest(path = "/configs/*")
-@SuppressWarnings("javadoc")
 public class LoadConfigResource extends RestServlet {
 
 	private static final long serialVersionUID = 8247663789227304097L;
 
+	/**
+	 * Returns configuration for the specified project and branch as JSON.
+	 *
+	 * @param project Project name.
+	 * @param branch Branch name.
+	 * @return JSON-serialized configuration map.
+	 * @throws Exception If configuration cannot be loaded.
+	 */
 	@RestGet(path = "/{project}/{branch}/*", produces = "application/json")
 	public String gets(@Path("project") String project, @Path("branch") String branch) throws Exception {
 		var jsonSerializer = JsonSerializer.DEFAULT_READABLE;

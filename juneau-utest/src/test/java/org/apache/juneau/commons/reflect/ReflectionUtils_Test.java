@@ -23,9 +23,11 @@ import java.lang.reflect.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"java:S1186" // Empty test method intentional for framework testing
+})
 class ReflectionUtils_Test extends TestBase {
 
-	@SuppressWarnings("java:S1186")
 	public static class TestClass {
 		public String field;
 		public TestClass() {}

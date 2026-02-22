@@ -90,7 +90,9 @@ import java.nio.file.*;
  *
  * @since 9.1.0
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class PathReaderBuilder {
 
 	// Argument name constants for assertArgNotNull

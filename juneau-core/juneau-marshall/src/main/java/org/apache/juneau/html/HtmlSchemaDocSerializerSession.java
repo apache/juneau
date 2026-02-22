@@ -39,13 +39,14 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
  * </ul>
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({
+	"java:S110" // Inheritance depth acceptable for HtmlSchemaDocSerializerSession hierarchy
+})
 public class HtmlSchemaDocSerializerSession extends HtmlDocSerializerSession {
 
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class Builder extends HtmlDocSerializerSession.Builder {
 
 		private HtmlSchemaDocSerializer ctx;

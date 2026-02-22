@@ -49,7 +49,9 @@ public class BctConfigExtension implements BeforeEachCallback, AfterEachCallback
 		al.stream().map(x -> x.beanConverter()).filter(x -> neq(x, BeanConverter.class)).findFirst().map(x -> eq(x, BasicBeanConverter.class) ? null : x).ifPresent(x -> setConverter(x));
 	}
 
-	@SuppressWarnings("java:S3011")
+	@SuppressWarnings({
+		"java:S3011" // Reflection access needed for test configuration
+	})
 	private static void setConverter(Class<? extends BeanConverter> x) {
 		safe(()->{
 			var c = x.getDeclaredConstructor();

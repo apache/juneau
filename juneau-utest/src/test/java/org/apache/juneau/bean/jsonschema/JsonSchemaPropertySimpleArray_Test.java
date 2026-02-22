@@ -24,9 +24,11 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for JsonSchemaPropertySimpleArray fluent setter overrides.
  */
+@SuppressWarnings({
+	"removal" // Tests deprecated setId() method for backward compatibility
+})
 class JsonSchemaPropertySimpleArray_Test extends TestBase {
 
-	@SuppressWarnings("removal")  // Tests deprecated setId() method for backward compatibility
 	@Test void a01_fluentChaining_basicSetters() {
 		var p = new JsonSchemaPropertySimpleArray("myArray", JsonType.STRING);
 

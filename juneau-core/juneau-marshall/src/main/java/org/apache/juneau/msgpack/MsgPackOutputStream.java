@@ -38,7 +38,9 @@ import org.apache.juneau.serializer.*;
 
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({
+	"resource" // OutputStream resource managed by calling code
+})
 public class MsgPackOutputStream extends OutputStream {
 
 	private final OutputStream os;
@@ -63,7 +65,9 @@ public class MsgPackOutputStream extends OutputStream {
 		}
 	}
 
-	@SuppressWarnings("java:S127") // Loop counter advances for surrogate pairs
+	@SuppressWarnings({
+		"java:S127" // Loop counter advances for surrogate pairs
+	})
 	private static int getUtf8ByteLength(CharSequence cs) {
 		var count = 0;
 		for (int i = 0, len = cs.length(); i < len; i++) {
@@ -82,7 +86,11 @@ public class MsgPackOutputStream extends OutputStream {
 		return count;
 	}
 
-	@SuppressWarnings({"java:S1172", "java:S127"}) // Parameter out unused; loop counter advances for surrogate pairs
+	
+	@SuppressWarnings({
+		"java:S1172", // Parameter out unused; loop counter advances for surrogate pairs
+		"java:S127", // For-loop counter modification acceptable in this algorithm
+	})
 	private int writeUtf8To(CharSequence in, OutputStream out) {
 		var count = 0;
 		for (int i = 0, len = in.length(); i < len; i++) {
@@ -268,7 +276,9 @@ public class MsgPackOutputStream extends OutputStream {
 	/**
 	 * Appends an integer to the stream.
 	 */
-	@SuppressWarnings("java:S125")  // MsgPack format type byte reference - documentation, not commented-out code
+	@SuppressWarnings({
+		"java:S125" // MsgPack format type byte reference - documentation, not commented-out code
+	})
 	MsgPackOutputStream appendInt(int i) {
 		// POSFIXINT_L  = 0x00,  pos fixint     0xxxxxxx     0x00 - 0x7f
 		// POSFIXINT_U  = 0x7F

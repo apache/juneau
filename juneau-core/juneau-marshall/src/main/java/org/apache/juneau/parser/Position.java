@@ -34,7 +34,9 @@ public class Position {
 
 	int line;
 	int column;
-	@SuppressWarnings("java:S1845") // Field name intentionally matches class name
+	@SuppressWarnings({
+		"java:S1700" // Field name intentionally matches class name
+	})
 	int position;
 
 	/**

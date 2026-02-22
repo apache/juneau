@@ -30,7 +30,9 @@ import org.apache.juneau.*;
  * @param <K> The key class type.
  * @param <V> The value class type.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class FilteredKeyMap<K,V> extends AbstractMap<K,V> implements Delegate<Map<K,V>> {
 
 	// Argument name constants for assertArgNotNull

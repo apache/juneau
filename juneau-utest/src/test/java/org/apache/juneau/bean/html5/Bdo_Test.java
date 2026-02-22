@@ -26,7 +26,7 @@ class Bdo_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Bdo x = bdo()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

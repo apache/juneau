@@ -88,7 +88,9 @@ public class BeanBuilder<T> {
 	 * @param value The setting value.
 	 * @return  This object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for BeanBuilder chain
+	})
 	public BeanBuilder<T> impl(Object value) {
 		impl = (T)value;
 		return this;
@@ -103,7 +105,9 @@ public class BeanBuilder<T> {
 	 * @param value The setting value.
 	 * @return  This object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for BeanBuilder chain
+	})
 	public BeanBuilder<T> type(Class<?> value) {
 		type = (Class<T>)value;
 		return this;

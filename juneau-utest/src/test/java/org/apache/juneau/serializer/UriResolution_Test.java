@@ -35,7 +35,9 @@ import org.junit.jupiter.params.provider.*;
 /**
  * Superclass for tests that verify results against all supported content types.
  */
-@SuppressWarnings("java:S1172") // Unused parameters in tests are typically intentional
+@SuppressWarnings({
+	"java:S1172" // Unused parameters in tests are intentional
+})
 class UriResolution_Test extends TestBase {
 
 	private static class Tester {

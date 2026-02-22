@@ -26,7 +26,7 @@ class Datalist_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Datalist x = datalist()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

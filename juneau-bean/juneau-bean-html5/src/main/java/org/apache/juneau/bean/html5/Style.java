@@ -106,8 +106,8 @@ public class Style extends HtmlElementRawText {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Style _class(String value) {
-		super._class(value);
+	public Style class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

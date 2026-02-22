@@ -31,7 +31,7 @@ class Track_Test extends TestBase {
 			.label("c")
 			.src("d")
 			.srclang("e")
-			._class("f")
+			.class_("f")
 			.accesskey("g")
 			.contenteditable("h")
 			.dir("i")

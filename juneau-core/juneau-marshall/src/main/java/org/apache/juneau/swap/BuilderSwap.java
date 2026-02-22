@@ -38,7 +38,9 @@ import org.apache.juneau.commons.utils.*;
  * @param <T> The bean class.
  * @param <B> The builder class.
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({
+	"unchecked" // Type erasure requires unchecked operations for builder pattern
+})
 public class BuilderSwap<T,B> {
 
 	/**
@@ -50,8 +52,8 @@ public class BuilderSwap<T,B> {
 	 * @return A new swap instance, or <jk>null</jk> if class wasn't a builder class.
 	 */
 	@SuppressWarnings({
-		"rawtypes",
-		"java:S1172",   // Parameter mVis is unused but kept for API consistency
+		"rawtypes", // Raw types necessary for ObjectSwap generic bridge methods
+		"java:S1172",   // Parameter kept to match ObjectSwap interface signature
 		"java:S1452"   // Wildcard required - BuilderSwap<?,?> for dynamically discovered builder types
 	})
 	public static BuilderSwap<?,?> findSwapFromBuilderClass(Class<?> builderClass, Visibility cVis, Visibility mVis) {
@@ -97,8 +99,8 @@ public class BuilderSwap<T,B> {
 	 * @return A new swap instance, or <jk>null</jk> if class didn't have a builder class.
 	 */
 	@SuppressWarnings({
-		"rawtypes",
-		"java:S1172",   // Parameter mVis is unused but kept for API consistency
+		"rawtypes", // Raw types necessary for ObjectSwap generic bridge methods
+		"java:S1172",   // Parameter kept to match ObjectSwap interface signature
 		"java:S1452"   // Wildcard required - BuilderSwap<?,?> for dynamically discovered builder types
 	})
 	public static BuilderSwap<?,?> findSwapFromObjectClass(BeanContext bc, Class<?> objectClass, Visibility cVis, Visibility mVis) {

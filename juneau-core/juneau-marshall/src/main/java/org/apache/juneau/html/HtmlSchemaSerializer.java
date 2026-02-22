@@ -58,7 +58,10 @@ import org.apache.juneau.xml.*;
 
  * </ul>
  */
-@SuppressWarnings({ "java:S110", "java:S115" }) // Constants use UPPER_snakeCase convention (e.g., PROP_generator)
+@SuppressWarnings({
+	"java:S110", // Inheritance depth acceptable for HtmlSchemaSerializer hierarchy
+	"java:S115"  // Constants use UPPER_snakeCase convention (e.g., PROP_generator)
+})
 public class HtmlSchemaSerializer extends HtmlSerializer {
 
 	// Property name constants
@@ -67,7 +70,6 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class Builder extends HtmlSerializer.Builder {
 
 		private static final Cache<HashKey,HtmlSchemaSerializer> CACHE = Cache.of(HashKey.class, HtmlSchemaSerializer.class).build();
@@ -1019,7 +1021,6 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	}
 
 	/** Default serializer, with whitespace. */
-	@SuppressWarnings("java:S110")
 	public static class Readable extends HtmlSchemaSerializer {
 
 		/**
@@ -1033,7 +1034,6 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	}
 
 	/** Default serializer, single quotes, simple mode. */
-	@SuppressWarnings("java:S110")
 	public static class Simple extends HtmlSchemaSerializer {
 
 		/**
@@ -1047,7 +1047,6 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	}
 
 	/** Default serializer, single quotes, simple mode, with whitespace. */
-	@SuppressWarnings("java:S110")
 	public static class SimpleReadable extends HtmlSchemaSerializer {
 
 		/**

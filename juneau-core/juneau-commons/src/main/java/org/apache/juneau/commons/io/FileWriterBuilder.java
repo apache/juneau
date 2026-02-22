@@ -79,7 +79,9 @@ import java.nio.charset.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">I/O Package</a>
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class FileWriterBuilder {
 
 	// Argument name constants for assertArgNotNull

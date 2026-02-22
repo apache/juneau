@@ -30,7 +30,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-@SuppressWarnings("java:S4144")
+@SuppressWarnings({
+	"java:S4144" // Identical test methods intentional for testing different scenarios
+})
 class LocalFile_Test extends TestBase {
 
 	private static final Path TEST_FILE = Paths.get("src/test/resources/files/Test3.properties");

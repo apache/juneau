@@ -96,8 +96,8 @@ public class Samp extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Samp _class(String value) {
-		super._class(value);
+	public Samp class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

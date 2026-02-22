@@ -108,8 +108,8 @@ public class Var extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Var _class(String value) {
-		super._class(value);
+	public Var class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

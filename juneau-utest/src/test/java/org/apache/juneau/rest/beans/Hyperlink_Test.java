@@ -55,7 +55,7 @@ class Hyperlink_Test extends TestBase {
 		// Test global HTML attributes
 		Hyperlink result;
 
-		result = h._class("link-class");
+		result = h.class_("link-class");
 		assertSame(h, result);
 		assertInstanceOf(Hyperlink.class, result);
 
@@ -141,7 +141,7 @@ class Hyperlink_Test extends TestBase {
 		var result = new Hyperlink()
 			.href("/path/to/page")
 			.target("_blank")
-			._class("nav-link")
+			.class_("nav-link")
 			.id("main-link")
 			.onclick("track()")
 			.children("Click here");
@@ -163,7 +163,7 @@ class Hyperlink_Test extends TestBase {
 		var h = new Hyperlink()
 			.href("/path")
 			.target("_blank")
-			._class("link")
+			.class_("link")
 			.id("my-link")
 			.children("Link text");
 

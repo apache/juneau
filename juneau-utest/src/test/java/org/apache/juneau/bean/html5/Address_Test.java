@@ -26,7 +26,7 @@ class Address_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Address x = address()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

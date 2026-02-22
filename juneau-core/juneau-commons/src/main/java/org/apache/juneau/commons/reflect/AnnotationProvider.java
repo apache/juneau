@@ -178,9 +178,9 @@ import org.apache.juneau.commons.lang.*;
  * </ul>
  */
 @SuppressWarnings({
-	"unchecked",
-	"rawtypes",
-	"java:S115",
+	"unchecked", // Type erasure requires unchecked casts
+	"rawtypes", // Raw types necessary for generic type handling
+	"java:S115", // Constants use UPPER_snakeCase naming convention
 	"java:S1452"  // Wildcard required - List<AnnotationInfo<? extends Annotation>> for heterogeneous annotations
 })
 public class AnnotationProvider {
@@ -334,7 +334,9 @@ public class AnnotationProvider {
 		 * @throws BeanRuntimeException If any annotation is invalid (missing {@code on()} or {@code onClass()} methods,
 		 * 	or if the methods return incorrect types).
 		 */
-		@SuppressWarnings("java:S3776")
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for runtime annotation processing
+		})
 		public Builder addRuntimeAnnotations(List<Annotation> annotations) {
 			if (runtimeAnnotations == null)
 				runtimeAnnotations = ReflectionMap.create(Annotation.class);

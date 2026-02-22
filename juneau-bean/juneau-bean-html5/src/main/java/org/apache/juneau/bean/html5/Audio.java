@@ -79,8 +79,8 @@ public class Audio extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Audio _class(String value) {
-		super._class(value);
+	public Audio class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

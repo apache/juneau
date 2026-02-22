@@ -179,7 +179,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * 	Don't call init() in constructor.
 	 * 	Used for delayed initialization when the possibility of class reference loops exist.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for ClassMeta initialization with category detection
+	})
 	ClassMeta(Class<T> innerClass, BeanContext beanContext) {
 		super(innerClass);
 		this.beanContext = beanContext;
@@ -274,7 +276,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	/**
 	 * Constructor for args-arrays.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Object[] cast required for args-array type handling
+	})
 	ClassMeta(List<ClassMeta<?>> args) {
 		super((Class<T>)Object[].class);
 		this.args = args;
@@ -527,7 +531,10 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @param jpSession The JSON parser for parsing examples into POJOs.
 	 * @return The serialized class type, or this object if no swap is associated with the class.
 	 */
-	@SuppressWarnings({ "unchecked", "java:S3776" })
+	@SuppressWarnings({
+		"unchecked", // Type erasure requires unchecked casts
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+	})
 	public T getExample(BeanSession session, JsonParserSession jpSession) {
 		try {
 			if (example.isPresent())
@@ -580,7 +587,11 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @param c The transform-from class.
 	 * @return The transform, or <jk>null</jk> if no such transform exists.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	
+	@SuppressWarnings({
+		"rawtypes", // Raw types necessary for generic type mutation/conversion for generic type mutation/conversion for generic type mutation/conversion
+		"unchecked", // Type erasure requires unchecked casts in type mutation
+	})
 	public <I> Mutater<I,T> getFromMutater(Class<I> c) {
 		Mutater t = fromMutaters.get(c);
 		if (t == Mutaters.NULL)
@@ -699,7 +710,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return An {@link Optional} containing the property value if the function returned a non-null value,
 	 * 	otherwise an empty {@link Optional}. Never <jk>null</jk>.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to Optional<T2>
+	})
 	public <T2> Optional<T2> getProperty(String name, Function<ClassMeta<?>,T2> function) {
 		return (Optional<T2>)properties.get(name, () -> opt(function.apply(this)));
 	}
@@ -778,7 +791,11 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @param c The transform-from class.
 	 * @return The transform, or <jk>null</jk> if no such transform exists.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	
+	@SuppressWarnings({
+		"rawtypes", // Raw types necessary for generic type mutation/conversion
+		"unchecked", // Type erasure requires unchecked casts in type mutation
+	})
 	public <O> Mutater<T,O> getToMutater(Class<O> c) {
 		Mutater t = toMutaters.get(c);
 		if (t == Mutaters.NULL)
@@ -1124,7 +1141,11 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @param o The object to transform.
 	 * @return The transformed object.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	
+	@SuppressWarnings({
+		"unchecked", // Type erasure requires unchecked casts in type mutation
+		"rawtypes", // Raw types necessary for generic type mutation/conversion
+	})
 	public T mutateFrom(Object o) {
 		Mutater t = getFromMutater(o.getClass());
 		return (T)(t == null ? null : t.mutate(o));
@@ -1163,7 +1184,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for array instantiation
+	})
 	public T newInstance() throws ExecutableException {
 		if (super.isArray())
 			return (T)Array.newInstance(inner().getComponentType(), 0);
@@ -1270,7 +1293,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		return t.toString();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for ObjectSwap<T,?>
+	})
 	private ObjectSwap<T,?> createSwap(Swap s) {
 		var c = s.value();
 		if (ClassUtils.isVoid(c))
@@ -1347,7 +1372,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for BuilderSwap<T,?>
+	})
 	private BuilderSwap<T,?> findBuilderSwap() {
 		var bc = beanContext;
 		if (bc == null)
@@ -1355,7 +1382,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		return (BuilderSwap<T,?>)BuilderSwap.findSwapFromObjectClass(bc, inner(), bc.getBeanConstructorVisibility(), bc.getBeanMethodVisibility());
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for List<ObjectSwap<T,?>>
+	})
 	private List<ObjectSwap<T,?>> findSwaps() {
 		if (beanContext == null)
 			return l();
@@ -1490,7 +1519,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		// @formatter:on
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for ClassInfoTyped<? extends T>
+	})
 	private ClassInfoTyped<? extends T> findImplClass() {
 
 		if (is(Object.class))
@@ -1512,7 +1543,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		return MarshalledFilter.create(inner()).applyAnnotations(reverse(l.stream().map(AnnotationInfo::inner).toList())).build();
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for name property detection with annotation traversal
+	})
 	private Property<T,Object> findNameProperty() {
 		var ap = beanContext.getAnnotationProvider();
 
@@ -1605,7 +1638,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			.orElse(null);
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for parent property detection with annotation traversal
+	})
 	private Property<T,Object> findParentProperty() {
 		var ap = beanContext.getAnnotationProvider();
 

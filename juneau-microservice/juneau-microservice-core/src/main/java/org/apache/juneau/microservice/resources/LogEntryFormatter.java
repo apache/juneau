@@ -88,7 +88,9 @@ public class LogEntryFormatter extends Formatter {
 	 * 	If <jk>true</jk>, only print unique stack traces once and then refer to them by a simple 8 character hash
 	 * 	identifier.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for console command logic
+	})
 	public LogEntryFormatter(String format, String dateFormat, boolean useStackTraceHashes) {
 		this.df = new SimpleDateFormat(dateFormat);
 		if (useStackTraceHashes)
@@ -202,7 +204,9 @@ public class LogEntryFormatter extends Formatter {
 		fieldIndexes = copyOf(fieldIndexes);
 	}
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({
+		"deprecation" // Uses deprecated API for compatibility
+	})
 	@Override /* Overridden from Formatter */
 	public String format(LogRecord r) {
 		String msg = formatMessage(r);

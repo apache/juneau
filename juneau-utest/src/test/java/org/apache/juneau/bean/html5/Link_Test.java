@@ -33,7 +33,7 @@ class Link_Test extends TestBase {
 			.rel("e")
 			.sizes("f")
 			.type("g")
-			._class("h")
+			.class_("h")
 			.accesskey("i")
 			.contenteditable("j")
 			.dir("k")

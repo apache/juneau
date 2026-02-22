@@ -26,7 +26,7 @@ class Sup_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Sup x = sup()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

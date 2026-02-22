@@ -26,7 +26,7 @@ class Title_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Title x = title()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

@@ -38,7 +38,9 @@ public class SimpleRestOperationArg implements RestOpArg {
 	 * @param <T> The function return type.
 	 * @param function The function to use to retrieve the parameter value from the {@link RestSession}.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for function
+	})
 	protected <T> SimpleRestOperationArg(ThrowingFunction<RestOpSession,T> function) {
 		this.function = (Function<RestOpSession,Object>)function;
 	}

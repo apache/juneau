@@ -123,8 +123,8 @@ public class Head extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Head _class(String value) {
-		super._class(value);
+	public Head class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

@@ -51,7 +51,9 @@ import org.apache.juneau.swap.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class ParserSession extends BeanSession {
 
 	// Property name constants
@@ -227,7 +229,10 @@ public class ParserSession extends BeanSession {
 	 * @param name The name to set.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({
+		"rawtypes",  // Raw types necessary for generic name property handling
+		"unchecked"  // Type erasure requires unchecked operations
+	})
 	protected static final void setName(ClassMeta<?> cm, Object o, Object name) throws ExecutableException {
 		if (nn(cm)) {
 			Property m = cm.getNameProperty();
@@ -245,7 +250,10 @@ public class ParserSession extends BeanSession {
 	 * @param parent The parent to set.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({
+		"unchecked", // Type erasure requires unchecked operations
+		"rawtypes"   // Raw types necessary for generic parent property handling
+	})
 	protected static final void setParent(ClassMeta<?> cm, Object o, Object parent) throws ExecutableException {
 		Property m = cm.getParentProperty();
 		if (nn(m) && m.canWrite())
@@ -318,7 +326,9 @@ public class ParserSession extends BeanSession {
 	 * @param c The listener class to cast to.
 	 * @return The listener associated with this session, or <jk>null</jk> if there is no listener.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to T for listener retrieval
+	})
 	public <T extends ParserListener> T getListener(Class<T> c) {
 		return (T)listener;
 	}
@@ -489,7 +499,9 @@ public class ParserSession extends BeanSession {
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 * @throws IOException Thrown by the underlying stream.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to T for generic type parsing
+	})
 	public final <T> T parse(Object input, Type type, Type...args) throws ParseException, IOException {
 		try (var p = createPipe(input)) {
 			return (T)parseInner(p, getClassMeta(type, args));
@@ -596,7 +608,9 @@ public class ParserSession extends BeanSession {
 	 * @throws ParseException Malformed input encountered.
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to T for generic type parsing
+	})
 	public final <T> T parse(String input, Type type, Type...args) throws ParseException {
 		try (var p = createPipe(input)) {
 			return (T)parseInner(p, getClassMeta(type, args));
@@ -793,7 +807,9 @@ public class ParserSession extends BeanSession {
 	 * @throws ParseException Malformed input encountered.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to T for attribute conversion
+	})
 	protected final <T> T convertAttrToType(Object outer, String s, ClassMeta<T> type) throws ParseException {
 		if (s == null)
 			return null;
@@ -894,7 +910,9 @@ public class ParserSession extends BeanSession {
 	 * @return The same collection that was passed in to allow this method to be chained.
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
 	 */
-	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method
+	})
 	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
 		throw unsupportedOp("Parser ''{0}'' does not support this method.", cn(getClass()));
 	}
@@ -914,7 +932,9 @@ public class ParserSession extends BeanSession {
 	 * @return The same map that was passed in to allow this method to be chained.
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
 	 */
-	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method
+	})
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
 		throw unsupportedOp("Parser ''{0}'' does not support this method.", cn(getClass()));
 	}
@@ -1140,7 +1160,9 @@ public class ParserSession extends BeanSession {
 	 * @param o The object to trim.
 	 * @return The trimmed string if it's a string.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to K for trim operation
+	})
 	protected final <K> K trim(K o) {
 		if (isTrimStrings() && o instanceof String o2)
 			return (K)o2.trim();
@@ -1178,7 +1200,10 @@ public class ParserSession extends BeanSession {
 	 * @return The swapped object.
 	 * @throws ParseException If swap method threw an exception.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({
+		"rawtypes",  // Raw types necessary for swap handling
+		"unchecked"  // Type erasure requires unchecked operations
+	})
 	protected Object unswap(ObjectSwap swap, Object o, ClassMeta<?> eType) throws ParseException {
 		try {
 			return swap.unswap(this, o, eType);

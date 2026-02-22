@@ -91,8 +91,8 @@ public class Time extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Time _class(String value) {
-		super._class(value);
+	public Time class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

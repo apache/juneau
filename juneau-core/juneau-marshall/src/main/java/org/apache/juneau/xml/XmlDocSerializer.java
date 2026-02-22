@@ -40,14 +40,16 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
  * </ul>
  */
-@SuppressWarnings({"java:S110", "java:S115"})
+@SuppressWarnings({
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S115"  // Constants use UPPER_snakeCase naming convention
+})
 public class XmlDocSerializer extends XmlSerializer {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_builder = "builder";
 
 	/** Default serializer without namespaces. */
-	@SuppressWarnings("java:S110")
 	public static class Ns extends XmlDocSerializer {
 
 		/**

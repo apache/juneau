@@ -36,11 +36,15 @@ import org.apache.juneau.serializer.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({
+	"resource" // SerializedPojoProcessor manages Closeable resources
+})
 public class SerializedPojoProcessor implements ResponseProcessor {
 
 	@Override /* Overridden from ResponseProcessor */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for POJO serialization logic
+	})
 	public int process(RestOpSession opSession) throws IOException, NotAcceptable, BasicHttpException {
 		RestRequest req = opSession.getRequest();
 		RestResponse res = opSession.getResponse();

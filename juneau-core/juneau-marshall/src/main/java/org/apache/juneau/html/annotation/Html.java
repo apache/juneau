@@ -244,7 +244,9 @@ public @interface Html {
 	 *
 	 * @return The annotation value.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types necessary for HtmlRender class parameter
+	})
 	Class<? extends HtmlRender> render() default HtmlRender.class;
 
 	/**

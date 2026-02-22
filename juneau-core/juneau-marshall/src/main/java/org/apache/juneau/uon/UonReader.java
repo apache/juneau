@@ -40,7 +40,9 @@ import org.apache.juneau.parser.*;
 
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({
+	"resource" // Reader resource managed by calling code
+})
 public class UonReader extends ParserReader {
 
 	private static int fromHexChar(int c) throws IOException {
@@ -80,7 +82,9 @@ public class UonReader extends ParserReader {
 	}
 
 	@Override /* Overridden from Reader */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for UON character reading with encoding handling
+	})
 	public int read(char[] cbuf, int off, int len) throws IOException {
 
 		if (! decodeChars)

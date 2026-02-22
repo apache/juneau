@@ -30,7 +30,9 @@ import org.junit.jupiter.params.provider.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-@SuppressWarnings("java:S1172") // Unused parameters in tests are typically intentional
+@SuppressWarnings({
+	"java:S1172" // Unused parameters in tests are intentional
+})
 class JsonMaps_RoundTripTest extends RoundTripTest_Base {
 
 	//====================================================================================================

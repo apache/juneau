@@ -120,8 +120,8 @@ public class Aside extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Aside _class(String value) {
-		super._class(value);
+	public Aside class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

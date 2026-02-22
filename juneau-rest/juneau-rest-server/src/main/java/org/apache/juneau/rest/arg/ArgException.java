@@ -35,7 +35,9 @@ import org.apache.juneau.http.response.*;
  *
  * @serial exclude
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({
+	"java:S110" // Inheritance depth acceptable for ArgException hierarchy
+})
 public class ArgException extends InternalServerError {
 	private static final long serialVersionUID = 1L;
 

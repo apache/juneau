@@ -26,7 +26,9 @@ import org.junit.jupiter.api.*;
  * Testcase for {@link SwaggerBuilder}.
  * Ensures Swagger beans are serialized to proper JSON.
  */
-@SuppressWarnings("java:S4144")
+@SuppressWarnings({
+	"java:S4144" // Identical test methods intentional for testing different scenarios
+})
 class SwaggerBuilder_Test extends TestBase {
 
 	@Test void a01_contact() {

@@ -26,7 +26,7 @@ class Sub_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Sub x = sub()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

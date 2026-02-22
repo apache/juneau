@@ -109,7 +109,10 @@ import org.apache.juneau.serializer.*;
 
  * </ul>
  */
-@SuppressWarnings({"java:S110", "java:S115"})
+@SuppressWarnings({
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+})
 public class JsonSerializer extends WriterSerializer implements JsonMetaProvider {
 
 	// Property name constants
@@ -123,7 +126,6 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class Builder extends WriterSerializer.Builder {
 
 		private static final Cache<HashKey,JsonSerializer> CACHE = Cache.of(HashKey.class, JsonSerializer.class).build();
@@ -1004,7 +1006,6 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	}
 
 	/** Default serializer, with whitespace. */
-	@SuppressWarnings("java:S110")
 	public static class Readable extends JsonSerializer {
 
 		/**
@@ -1021,7 +1022,6 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 * Default serializer, single quotes, simple mode, with whitespace and recursion detection.
 	 * Note that recursion detection introduces a small performance penalty.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class ReadableSafe extends JsonSerializer {
 
 		/**

@@ -101,8 +101,8 @@ public class Progress extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Progress _class(String value) {
-		super._class(value);
+	public Progress class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

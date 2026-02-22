@@ -58,7 +58,9 @@ import org.apache.juneau.xml.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class RdfParser extends ReaderParser implements RdfMetaProvider {
 
 	// Property name constants

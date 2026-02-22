@@ -29,7 +29,9 @@ import org.apache.juneau.parser.ParseException;
  *
  * @serial exclude
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({
+	"java:S110" // Inheritance depth acceptable for SchemaValidationException hierarchy
+})
 public class SchemaValidationException extends ParseException {
 	private static final long serialVersionUID = 1L;
 

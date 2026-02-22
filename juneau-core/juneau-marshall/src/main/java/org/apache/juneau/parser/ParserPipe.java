@@ -59,7 +59,9 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({
+	"resource" // ParserPipe manages Closeable resources
+})
 public class ParserPipe implements Closeable {
 
 	private final Object input;
@@ -267,7 +269,9 @@ public class ParserPipe implements Closeable {
 	 * @return The input object wrapped in a Reader, or <jk>null</jk> if the object is null.
 	 * @throws IOException If object could not be converted to a reader.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for reader initialization logic
+	})
 	public Reader getReader() throws IOException {
 		if (input == null)
 			return null;

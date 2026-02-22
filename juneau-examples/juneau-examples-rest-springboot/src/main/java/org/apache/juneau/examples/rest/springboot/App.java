@@ -41,7 +41,9 @@ public class App {
 	 * Entry point method.
 	 * @param args Command-line arguments.
 	 */
-	@SuppressWarnings("resource")
+	@SuppressWarnings({
+		"resource" // Spring ApplicationContext managed by Spring framework
+	})
 	public static void main(String[] args) {
 		try {
 			new SpringApplicationBuilder(App.class).run(args);

@@ -180,7 +180,9 @@ import org.apache.juneau.commons.utils.*;
  *
  * @param <V> The type of values stored in this map.
  */
-@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_classEntries)
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_classEntries)
+})
 public class ReflectionMap<V> {
 
 	// Property name constants
@@ -284,9 +286,9 @@ public class ReflectionMap<V> {
 							fieldEntries.add(new FieldEntry<>(k, value));
 						}
 					}
-				});
-			} catch (@SuppressWarnings("unused") IndexOutOfBoundsException e) {
-				throw rex("Invalid reflection signature: [{0}]", key);
+			});
+			} catch (IndexOutOfBoundsException e) {
+			throw rex("Invalid reflection signature: [{0}]", key);
 			}
 
 			return this;
@@ -540,7 +542,9 @@ public class ReflectionMap<V> {
 	 * @param c The class type of values (used for type safety, not stored).
 	 * @return A new builder instance.
 	 */
-	@SuppressWarnings("java:S1172") // Parameter c is used for type inference, not runtime behavior
+	@SuppressWarnings({
+		"java:S1172" // Parameter c is used for type inference, not runtime behavior
+	})
 	public static <V> Builder<V> create(Class<V> c) {
 		return new Builder<>();
 	}

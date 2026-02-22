@@ -139,7 +139,9 @@ public abstract class FluentAssertion<R> extends Assertion {
 	 *
 	 * @return The response object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to R for returns
+	})
 	protected R returns() {
 		return nn(returns) ? returns : (R)this;
 	}

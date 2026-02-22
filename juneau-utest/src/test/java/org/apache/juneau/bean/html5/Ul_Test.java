@@ -26,7 +26,7 @@ class Ul_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Ul x = ul()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

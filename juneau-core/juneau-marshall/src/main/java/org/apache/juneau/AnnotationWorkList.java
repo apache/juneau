@@ -33,7 +33,9 @@ import org.apache.juneau.svl.*;
  *
  * @serial exclude
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 
 	// Argument name constants for assertArgNotNull
@@ -124,7 +126,9 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	 *
 	 * @param ai The annotation info to process.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for annotation applier instantiation
+	})
 	private void applyAnnotation(AnnotationInfo<?> ai) {
 		var a = ai.inner();
 		var cpa = assertNotNull(a.annotationType().getAnnotation(ContextApply.class), "Annotation found without @ContextApply: %s", cn(ai.annotationType()));

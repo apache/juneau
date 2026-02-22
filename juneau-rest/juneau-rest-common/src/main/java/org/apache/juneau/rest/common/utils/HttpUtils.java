@@ -40,7 +40,9 @@ public class HttpUtils {
 	 * @param def The default HTTP method if not detected.
 	 * @return The REST method name, or the default value if not found.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for HTTP method detection
+	})
 	public static String detectHttpMethod(Method m, boolean detectMethod, String def) {
 		String n = m.getName();
 		if (detectMethod) {
@@ -64,7 +66,9 @@ public class HttpUtils {
 	 * @param method The HTTP method name if it's known.
 	 * @return The REST path or <jk>null</jk> if not detected.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for HTTP path detection
+	})
 	public static String detectHttpPath(Method m, String method) {
 		String n = m.getName();
 		if (method == null) {

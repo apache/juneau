@@ -82,10 +82,12 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-commons.Annotations">Overview &gt; juneau-commons &gt; Annotations</a>
  * </ul>
  */
-// java:S1206: Intentionally inherit equals/hashCode from AnnotationObject. Overriding would require
+// java:S2160: Intentionally inherit equals/hashCode from AnnotationObject. Overriding would require
 // instanceof AppliedOnClassAnnotationObject, which breaks comparison with declarative annotations (JDK proxies),
 // causing BeanContext/PropertyStore cache misses and schema validation failures (see XmlAnnotation_Test, FormData_Test).
-@SuppressWarnings("java:S1206")
+@SuppressWarnings({
+	"java:S2160" // Inherits equals/hashCode from parent; annotation identity based on type and attributes
+})
 public class AppliedOnClassAnnotationObject extends AppliedAnnotationObject {
 
 	private final Class<?>[] onClass;

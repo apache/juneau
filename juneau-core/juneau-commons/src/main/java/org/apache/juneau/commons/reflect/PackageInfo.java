@@ -69,7 +69,9 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection">Reflection Package</a>
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class PackageInfo implements Annotatable {
 
 	// Argument name constants for assertArgNotNull
@@ -174,7 +176,9 @@ public class PackageInfo implements Annotatable {
 	 * @param type The annotation type.
 	 * @return A stream of annotation infos of the specified type, never <jk>null</jk>.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for annotation stream
+	})
 	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
 		return getAnnotations().stream().filter(ai -> type.isInstance(ai.inner())).map(ai -> (AnnotationInfo<A>)ai);
 	}

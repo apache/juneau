@@ -25,7 +25,9 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.oapi.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S1186")
+@SuppressWarnings({
+	"java:S1186" // Empty test method intentional for framework testing
+})
 class ResponseAnnotation_Test extends TestBase {
 
 	private static final String CNAME = ResponseAnnotation_Test.class.getName();

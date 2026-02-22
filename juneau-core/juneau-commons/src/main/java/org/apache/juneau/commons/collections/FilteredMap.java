@@ -97,7 +97,9 @@ import java.util.function.*;
  * @param <K> The key type.
  * @param <V> The value type.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class FilteredMap<K,V> extends AbstractMap<K,V> {
 
 	// Argument name constants for assertArgNotNull
@@ -344,7 +346,9 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	 * @param <V> The value type.
 	 * @return A new builder.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to Builder<K,V>
+	})
 	public static <K,V> Builder<K,V> create() {
 		var builder = new Builder<K,V>();
 		builder.keyType = (Class<K>)Object.class;

@@ -48,86 +48,86 @@ public class HttpHeaders {
 	 */
 	private HttpHeaders() {}
 
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>application/atom+xml</c>. */
 	public static final Accept ACCEPT_APPLICATION_ATOM_XML = Accept.APPLICATION_ATOM_XML;
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>application/x-www-form-urlencoded</c>. */
 	public static final Accept ACCEPT_APPLICATION_FORM_URLENCODED = Accept.APPLICATION_FORM_URLENCODED;
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>application/json</c>. */
 	public static final Accept ACCEPT_APPLICATION_JSON = Accept.APPLICATION_JSON;
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>application/octet-stream</c>. */
 	public static final Accept ACCEPT_APPLICATION_OCTET_STREAM = Accept.APPLICATION_OCTET_STREAM;
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>application/soap+xml</c>. */
 	public static final Accept ACCEPT_APPLICATION_SOAP_XML = Accept.APPLICATION_SOAP_XML;
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>application/svg+xml</c>. */
 	public static final Accept ACCEPT_APPLICATION_SVG_XML = Accept.APPLICATION_SVG_XML;
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>application/xhtml+xml</c>. */
 	public static final Accept ACCEPT_APPLICATION_XHTML_XML = Accept.APPLICATION_XHTML_XML;
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>application/xml</c>. */
 	public static final Accept ACCEPT_APPLICATION_XML = Accept.APPLICATION_XML;
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>image/bmp</c>. */
 	public static final Accept ACCEPT_IMAGE_BMP = Accept.IMAGE_BMP;
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>image/gif</c>. */
 	public static final Accept ACCEPT_IMAGE_GIF = Accept.IMAGE_GIF;
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>image/jpeg</c>. */
 	public static final Accept ACCEPT_IMAGE_JPEG = Accept.IMAGE_JPEG;
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>image/png</c>. */
 	public static final Accept ACCEPT_IMAGE_PNG = Accept.IMAGE_PNG;
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>image/svg+xml</c>. */
 	public static final Accept ACCEPT_IMAGE_SVG = Accept.IMAGE_SVG;
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>image/tiff</c>. */
 	public static final Accept ACCEPT_IMAGE_TIFF = Accept.IMAGE_TIFF;
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>image/webp</c>. */
 	public static final Accept ACCEPT_IMAGE_WEBP = Accept.IMAGE_WEBP;
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>multipart/form-data</c>. */
 	public static final Accept ACCEPT_MULTIPART_FORM_DATA = Accept.MULTIPART_FORM_DATA;
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>text/html</c>. */
 	public static final Accept ACCEPT_TEXT_HTML = Accept.TEXT_HTML;
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>text/plain</c>. */
 	public static final Accept ACCEPT_TEXT_PLAIN = Accept.TEXT_PLAIN;
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>text/xml</c>. */
 	public static final Accept ACCEPT_TEXT_XML = Accept.TEXT_XML;
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>*&#47;*</c> (all media types). */
 	public static final Accept ACCEPT_WILDCARD = Accept.WILDCARD;
 
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>application/atom+xml</c>. */
 	public static final ContentType CONTENTTYPE_APPLICATION_ATOM_XML = ContentType.APPLICATION_ATOM_XML;
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>application/x-www-form-urlencoded</c>. */
 	public static final ContentType CONTENTTYPE_APPLICATION_FORM_URLENCODED = ContentType.APPLICATION_FORM_URLENCODED;
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>application/json</c>. */
 	public static final ContentType CONTENTTYPE_APPLICATION_JSON = ContentType.APPLICATION_JSON;
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>application/octet-stream</c>. */
 	public static final ContentType CONTENTTYPE_APPLICATION_OCTET_STREAM = ContentType.APPLICATION_OCTET_STREAM;
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>application/soap+xml</c>. */
 	public static final ContentType CONTENTTYPE_APPLICATION_SOAP_XML = ContentType.APPLICATION_SOAP_XML;
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>application/svg+xml</c>. */
 	public static final ContentType CONTENTTYPE_APPLICATION_SVG_XML = ContentType.APPLICATION_SVG_XML;
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>application/xhtml+xml</c>. */
 	public static final ContentType CONTENTTYPE_APPLICATION_XHTML_XML = ContentType.APPLICATION_XHTML_XML;
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>application/xml</c>. */
 	public static final ContentType CONTENTTYPE_APPLICATION_XML = ContentType.APPLICATION_XML;
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>image/bmp</c>. */
 	public static final ContentType CONTENTTYPE_IMAGE_BMP = ContentType.IMAGE_BMP;
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>image/gif</c>. */
 	public static final ContentType CONTENTTYPE_IMAGE_GIF = ContentType.IMAGE_GIF;
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>image/jpeg</c>. */
 	public static final ContentType CONTENTTYPE_IMAGE_JPEG = ContentType.IMAGE_JPEG;
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>image/png</c>. */
 	public static final ContentType CONTENTTYPE_IMAGE_PNG = ContentType.IMAGE_PNG;
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>image/svg+xml</c>. */
 	public static final ContentType CONTENTTYPE_IMAGE_SVG = ContentType.IMAGE_SVG;
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>image/tiff</c>. */
 	public static final ContentType CONTENTTYPE_IMAGE_TIFF = ContentType.IMAGE_TIFF;
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>image/webp</c>. */
 	public static final ContentType CONTENTTYPE_IMAGE_WEBP = ContentType.IMAGE_WEBP;
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>multipart/form-data</c>. */
 	public static final ContentType CONTENTTYPE_MULTIPART_FORM_DATA = ContentType.MULTIPART_FORM_DATA;
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>text/html</c>. */
 	public static final ContentType CONTENTTYPE_TEXT_HTML = ContentType.TEXT_HTML;
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>text/plain</c>. */
 	public static final ContentType CONTENTTYPE_TEXT_PLAIN = ContentType.TEXT_PLAIN;
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>text/xml</c>. */
 	public static final ContentType CONTENTTYPE_TEXT_XML = ContentType.TEXT_XML;
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>*&#47;*</c> (all media types). */
 	public static final ContentType CONTENTTYPE_WILDCARD = ContentType.WILDCARD;
 
 	/**

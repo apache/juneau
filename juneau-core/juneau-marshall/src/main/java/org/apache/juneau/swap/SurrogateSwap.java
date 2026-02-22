@@ -52,8 +52,8 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 	 * @return The list of object swaps that apply to this class.
 	 */
 	@SuppressWarnings({
-		"unchecked",
-		"rawtypes",
+		"unchecked", // Type erasure requires unchecked casts
+		"rawtypes", // Raw types necessary for generic type handling
 		"java:S1452"  // Wildcard required - List<SurrogateSwap<?,?>> for multiple constructor-based swaps
 	})
 	public static List<SurrogateSwap<?,?>> findObjectSwaps(Class<?> c, BeanContext bc) {
@@ -97,7 +97,9 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 	}
 
 	@Override /* Overridden from ObjectSwap */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to T
+	})
 	public T unswap(BeanSession session, F f, ClassMeta<?> hint) throws ParseException {
 		if (unswapMethod == null)
 			throw new ParseException("unswap() method not implement on surrogate class ''{1}'': {0}", cn(f), getNormalClass().getNameFull());

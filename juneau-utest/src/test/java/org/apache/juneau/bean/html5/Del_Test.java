@@ -28,7 +28,7 @@ class Del_Test extends TestBase {
 		Del x = del()
 			.cite("a")
 			.datetime("b")
-			._class("c")
+			.class_("c")
 			.accesskey("d")
 			.contenteditable("e")
 			.dir("f")

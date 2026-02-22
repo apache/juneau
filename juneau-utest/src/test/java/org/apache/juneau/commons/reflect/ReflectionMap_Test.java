@@ -26,7 +26,10 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"java:S117"})
+@SuppressWarnings({
+	"java:S117", // Local variable names use underscores for test data
+	"rawtypes" // Raw types used for generic testing scenarios
+})
 class ReflectionMap_Test extends TestBase {
 
 	private static ReflectionMap.Builder<Number> create() {
@@ -287,7 +290,6 @@ class ReflectionMap_Test extends TestBase {
 		}
 
 		// Test for generic parameters in method signatures (lines 407-411)
-		@SuppressWarnings("rawtypes")
 		static class B2a {
 			public void m1(List x) { /* no-op */ }
 			public void m2(List<String> x) { /* no-op */ }

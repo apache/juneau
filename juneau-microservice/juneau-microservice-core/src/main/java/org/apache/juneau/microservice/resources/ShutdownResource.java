@@ -44,7 +44,7 @@ public class ShutdownResource extends BasicRestServlet {
 			try {
 				Thread.sleep(1000);
 				System.exit(0);
-			} catch (@SuppressWarnings("unused") InterruptedException e) {
+			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
 		}).start();

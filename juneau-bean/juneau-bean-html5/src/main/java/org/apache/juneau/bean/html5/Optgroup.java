@@ -92,8 +92,8 @@ public class Optgroup extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Optgroup _class(String value) {
-		super._class(value);
+	public Optgroup class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

@@ -103,8 +103,8 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Textarea _class(String value) {
-		super._class(value);
+	public Textarea class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

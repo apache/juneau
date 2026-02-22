@@ -23,7 +23,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S1186")
+@SuppressWarnings({
+	"java:S1186" // Empty test method intentional for framework testing
+})
 class RestPostInitAnnotation_Test extends TestBase {
 
 	private static final String CNAME = RestPostInitAnnotation_Test.class.getName();

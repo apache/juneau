@@ -28,7 +28,7 @@ class Optgroup_Test extends TestBase {
 		Optgroup x = optgroup()
 			.disabled("a")
 			.label("b")
-			._class("c")
+			.class_("c")
 			.accesskey("d")
 			.contenteditable("e")
 			.dir("f")

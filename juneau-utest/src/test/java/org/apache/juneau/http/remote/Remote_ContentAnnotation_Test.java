@@ -41,7 +41,9 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the @Body annotation.
  */
-@SuppressWarnings("java:S4144")  // Test endpoints intentionally share structure to verify Content-Type per type
+@SuppressWarnings({
+	"java:S4144" // Identical test methods intentional - test endpoints share structure to verify Content-Type per type
+})
 class Remote_ContentAnnotation_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -79,8 +79,8 @@ public class Blockquote extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Blockquote _class(String value) {
-		super._class(value);
+	public Blockquote class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

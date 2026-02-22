@@ -51,7 +51,9 @@ import org.apache.juneau.http.header.*;
  * </ul>
  */
 @BeanIgnore /* Use toString() to serialize */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_status)
+})
 public class BasicHttpResponse implements HttpResponse {
 
 	// Argument name constants for assertArgNotNull
@@ -147,7 +149,9 @@ public class BasicHttpResponse implements HttpResponse {
 	@Override /* Overridden from HttpMessage */
 	public Locale getLocale() { return statusLine.getLocale(); }
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({
+		"deprecation" // Uses deprecated HttpMessage API
+	})
 	@Override /* Overridden from HttpMessage */
 	public HttpParams getParams() { return null; }
 
@@ -325,7 +329,9 @@ public class BasicHttpResponse implements HttpResponse {
 		return this;
 	}
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({
+		"deprecation" // Uses deprecated HttpMessage API
+	})
 	@Override /* Overridden from HttpMessage */
 	public void setParams(HttpParams params) {
 		// No-op: Intentional empty implementation for deprecated optional interface method

@@ -150,7 +150,9 @@ import org.apache.juneau.commons.function.*;
  * @param <K> The key type. Can be an array type for content-based key matching.
  * @param <V> The value type.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class Cache<K,V> {
 
 	// Argument name constants for assertArgNotNull
@@ -447,7 +449,9 @@ public class Cache<K,V> {
 	 * @param type The value type class.
 	 * @return A new builder for configuring the cache.
 	 */
-	@SuppressWarnings("java:S1172") // Parameters required for type inference in public API
+	@SuppressWarnings({
+		"java:S1172" // Parameters required for type inference in public API
+	})
 	public static <K,V> Builder<K,V> of(Class<K> key, Class<V> type) {
 		return new Builder<>();
 	}
@@ -455,7 +459,9 @@ public class Cache<K,V> {
 	// Internal map with Tuple1 keys for content-based equality (especially for arrays)
 	// If threadLocal is true, this is null and threadLocalMap is used instead
 	private final Map<Tuple1<K>,V> map;
-	@SuppressWarnings("java:S5164") // Cleanup method provided: cleanup()
+	@SuppressWarnings({
+		"java:S5164" // Cleanup method provided: cleanup()
+	})
 	private final ThreadLocal<Map<Tuple1<K>,V>> threadLocalMap;
 
 	private final boolean isThreadLocal;
@@ -470,7 +476,9 @@ public class Cache<K,V> {
 	 */
 	private final Map<K,Tuple1<K>> wrapperCache;
 
-	@SuppressWarnings("java:S5164") // Cleanup method provided: cleanup()
+	@SuppressWarnings({
+		"java:S5164" // Cleanup method provided: cleanup()
+	})
 	private final ThreadLocal<Map<K,Tuple1<K>>> threadLocalWrapperCache;
 
 	private final int maxSize;

@@ -71,8 +71,8 @@ public class Strong extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Strong _class(String value) {
-		super._class(value);
+	public Strong class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

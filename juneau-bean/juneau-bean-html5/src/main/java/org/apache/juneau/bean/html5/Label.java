@@ -74,8 +74,8 @@ public class Label extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Label _class(String value) {
-		super._class(value);
+	public Label class_(String value) {
+		super.class_(value);
 		return this;
 	}
 
@@ -92,7 +92,9 @@ public class Label extends HtmlElementMixed {
 	 * @param value The ID of the form control to associate with this label.
 	 * @return This object.
 	 */
-	@SuppressWarnings("java:S100") // Method name uses underscore prefix to avoid Java keyword conflict
+	@SuppressWarnings({
+		"java:S100" // Method name uses underscore prefix to avoid Java keyword conflict
+	})
 	public Label _for(String value) {
 		attr("for", value);
 		return this;

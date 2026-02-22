@@ -34,7 +34,9 @@ import org.apache.juneau.rest.servlet.*;
 	description="This is a sample router page",
 	children={ConfigResource.class}
 )
-@SuppressWarnings("java:S110")
+@SuppressWarnings({
+	"java:S110" // Inheritance depth acceptable for microservice hierarchy
+})
 public class SampleRootResource extends BasicRestServletGroup {
 	private static final long serialVersionUID = 1L;
 }

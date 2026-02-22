@@ -32,7 +32,9 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({ "rawtypes", "java:S1172" }) // Unused parameters in tests are typically intentional
+@SuppressWarnings({
+	"rawtypes" // Raw types necessary for test bean handling
+})
 class AutoMapSwapTest extends TestBase {
 
 	private static final Map<String,String> STRINGMAP = m("foo","bar");
@@ -77,14 +79,14 @@ class AutoMapSwapTest extends TestBase {
 
 	@Test void a01_swap_toMap() throws Exception {
 		assertJson(
-			"{foo:'bar'}",
+	"{foo:'bar'}",
 			find(A01.class).swap(null, new A01())
 		);
 	}
 
 	@Test void a02_swap_toJsonMap() throws Exception {
 		assertJson(
-			"{foo:'bar'}",
+	"{foo:'bar'}",
 			find(A02.class).swap(null, new A02())
 		);
 	}

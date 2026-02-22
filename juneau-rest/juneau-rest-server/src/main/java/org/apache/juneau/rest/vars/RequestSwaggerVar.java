@@ -90,7 +90,9 @@ public class RequestSwaggerVar extends MultipartResolvingVar {
 	}
 
 	@Override /* Overridden from Var */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for Swagger variable resolution
+	})
 	public String resolve(VarResolverSession session, String key) throws BasicHttpException, InternalServerError {
 		try {
 			RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);

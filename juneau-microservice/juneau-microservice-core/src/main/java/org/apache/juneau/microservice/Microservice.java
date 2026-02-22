@@ -178,7 +178,9 @@ public class Microservice implements ConfigEventListener {
 		 * @return A new microservice.
 		 * @throws Exception Error occurred.
 		 */
-		@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+		@SuppressWarnings({
+			"java:S112" // throws Exception intentional - callback/lifecycle method
+		})
 		public Microservice build() throws Exception {
 			return new Microservice(this);
 		}
@@ -1014,7 +1016,9 @@ public class Microservice implements ConfigEventListener {
 	 * @return This object.
 	 * @throws Exception Error occurred
 	 */
-	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method
+	})
 	public Microservice join() throws Exception {
 		return this;
 	}
@@ -1061,7 +1065,9 @@ public class Microservice implements ConfigEventListener {
 	 * @return This object.
 	 * @throws Exception Error occurred.
 	 */
-	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method
+	})
 	public synchronized Microservice start() throws Exception {
 
 		if (config.getName() == null)
@@ -1092,7 +1098,9 @@ public class Microservice implements ConfigEventListener {
 	 * @return This object.
 	 * @throws Exception Error occurred
 	 */
-	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method
+	})
 	public synchronized Microservice startConsole() throws Exception {
 		if (nn(consoleThread) && ! consoleThread.isAlive())
 			consoleThread.start();
@@ -1108,7 +1116,9 @@ public class Microservice implements ConfigEventListener {
 	 * @return This object.
 	 * @throws Exception Error occurred
 	 */
-	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method
+	})
 	public Microservice stop() throws Exception {
 		listener.onStop(this);
 		return this;
@@ -1120,7 +1130,9 @@ public class Microservice implements ConfigEventListener {
 	 * @return This object.
 	 * @throws Exception Error occurred
 	 */
-	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method
+	})
 	public synchronized Microservice stopConsole() throws Exception {
 		if (nn(consoleThread) && consoleThread.isAlive())
 			consoleThread.interrupt();

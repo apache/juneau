@@ -60,7 +60,9 @@ public class RestOpAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for Builder inheritance
+	})
 	public static class Builder extends AppliedAnnotationObject.BuilderM {
 
 		private String[] description = {};

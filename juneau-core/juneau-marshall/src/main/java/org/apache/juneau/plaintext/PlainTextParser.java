@@ -56,7 +56,9 @@ import org.apache.juneau.swap.*;
  * </ul>
  *
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class PlainTextParser extends ReaderParser implements PlainTextMetaProvider {
 
 	// Argument name constants for assertArgNotNull

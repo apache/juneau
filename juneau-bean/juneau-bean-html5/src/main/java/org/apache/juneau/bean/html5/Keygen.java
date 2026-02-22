@@ -78,8 +78,8 @@ public class Keygen extends HtmlElementVoid {
 	public Keygen() { /* Empty constructor. */ }
 
 	@Override /* Overridden from HtmlElement */
-	public Keygen _class(String value) {
-		super._class(value);
+	public Keygen class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

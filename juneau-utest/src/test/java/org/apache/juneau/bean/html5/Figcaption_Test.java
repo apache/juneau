@@ -26,7 +26,7 @@ class Figcaption_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Figcaption x = figcaption()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

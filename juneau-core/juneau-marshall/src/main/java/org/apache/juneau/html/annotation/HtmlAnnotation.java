@@ -36,7 +36,9 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
  * </ul>
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({
+	"rawtypes" // Raw types necessary for annotation handler registration
+})
 public class HtmlAnnotation {
 
 	/**

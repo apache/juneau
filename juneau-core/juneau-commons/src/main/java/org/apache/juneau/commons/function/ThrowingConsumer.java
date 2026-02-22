@@ -80,7 +80,9 @@ import java.util.function.*;
  * @param <T> The type of the input to the operation.
  */
 @FunctionalInterface
-@SuppressWarnings("java:S112") // throws Exception intentional - consumer may throw any checked exception
+@SuppressWarnings({
+	"java:S112" // throws Exception intentional - consumer may throw any checked exception
+})
 public interface ThrowingConsumer<T> extends Consumer<T> {
 
 	/**

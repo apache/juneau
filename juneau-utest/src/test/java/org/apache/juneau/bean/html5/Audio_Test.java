@@ -35,7 +35,7 @@ class Audio_Test extends TestBase {
 			.muted("f")
 			.preload("g")
 			.src("h")
-			._class("i")
+			.class_("i")
 			.accesskey("j")
 			.contenteditable("k")
 			.dir("l")

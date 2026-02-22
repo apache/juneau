@@ -36,7 +36,9 @@ public class PropertyNamerDUCS implements PropertyNamer {
 	public static final PropertyNamer INSTANCE = new PropertyNamerDUCS();
 
 	@Override /* Overridden from PropertyNamer */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for property name conversion logic
+	})
 	public String getPropertyName(String name) {
 		if (e(name))
 			return name;

@@ -31,7 +31,9 @@ import org.apache.juneau.xml.*;
 
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({
+	"resource" // Writer resource managed by calling code
+})
 public class HtmlWriter extends XmlWriter {
 
 	/**
@@ -378,7 +380,9 @@ public class HtmlWriter extends XmlWriter {
 	}
 
 	@Override /* Overridden from XmlSerializerWriter */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for text serialization with whitespace handling
+	})
 	public HtmlWriter text(Object o, boolean preserveWhitespace) {
 
 		if (o == null) {

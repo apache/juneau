@@ -101,7 +101,9 @@ import java.util.stream.Collectors;
  * @param <K> The key type of this map.
  * @param <V> The value type of this map.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class MultiMap<K,V> extends AbstractMap<K,V> {
 
 	// Argument name constants for assertArgNotNull
@@ -205,7 +207,9 @@ public class MultiMap<K,V> extends AbstractMap<K,V> {
 	 * @return A set view of the mappings contained in this map.
 	 */
 	@Override
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for entry set iteration over multiple maps
+	})
 	public Set<Entry<K,V>> entrySet() {
 		return new AbstractSet<>() {
 			@Override

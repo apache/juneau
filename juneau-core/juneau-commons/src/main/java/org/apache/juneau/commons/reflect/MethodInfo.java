@@ -83,7 +83,9 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection">Reflection Package</a>
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>, Annotatable {
 
 	// Argument name constants for assertArgNotNull
@@ -285,7 +287,9 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * 	A stream of matching annotation infos in child-to-parent order.
 	 * 	<br>Repeatable annotations are expanded into individual instances.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for annotation stream
+	})
 	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
 		assertArgNotNull(ARG_type, type);
 		return getAnnotations().stream().filter(a -> a.isType(type)).map(a -> (AnnotationInfo<A>)a);
@@ -627,7 +631,9 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return The object returned from the method.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to T for method invocation result
+	})
 	public <T> T invoke(Object obj, Object...args) throws ExecutableException {
 		return safe(() -> {
 			try {

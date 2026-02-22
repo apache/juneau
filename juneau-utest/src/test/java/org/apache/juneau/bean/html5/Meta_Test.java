@@ -30,7 +30,7 @@ class Meta_Test extends TestBase {
 			.content("b")
 			.httpequiv("c")
 			.name("d")
-			._class("e")
+			.class_("e")
 			.accesskey("f")
 			.contenteditable("g")
 			.dir("h")

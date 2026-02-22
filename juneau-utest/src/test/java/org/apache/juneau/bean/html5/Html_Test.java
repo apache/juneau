@@ -27,7 +27,7 @@ class Html_Test extends TestBase {
 	@Test void a01_basicSetters() {
 		Html x = html()
 			.manifest("a")
-			._class("b")
+			.class_("b")
 			.accesskey("c")
 			.contenteditable("d")
 			.dir("e")

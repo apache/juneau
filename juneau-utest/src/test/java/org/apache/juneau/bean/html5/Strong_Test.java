@@ -26,7 +26,7 @@ class Strong_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Strong x = strong()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

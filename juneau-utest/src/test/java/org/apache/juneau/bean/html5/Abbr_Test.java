@@ -26,7 +26,7 @@ class Abbr_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Abbr x = abbr()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

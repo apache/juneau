@@ -27,7 +27,9 @@ import org.apache.juneau.cp.test3.*;
 import org.apache.juneau.cp.test4.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S4144")
+@SuppressWarnings({
+	"java:S4144" // Identical test methods intentional for testing different scenarios
+})
 class Messages_Test extends TestBase {
 
 	@Test void a01_sameDirectory() {

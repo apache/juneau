@@ -52,7 +52,9 @@ import org.apache.juneau.parser.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class UonParser extends ReaderParser implements HttpPartParser, UonMetaProvider {
 
 	// Property name constants
@@ -699,7 +701,9 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	}
 
 	/** Default parser, decoding. */
-	@SuppressWarnings("java:S110")
+	@SuppressWarnings({
+		"java:S110" // Inheritance depth acceptable for UonParser.Decoding hierarchy
+	})
 	public static class Decoding extends UonParser {
 
 		/**

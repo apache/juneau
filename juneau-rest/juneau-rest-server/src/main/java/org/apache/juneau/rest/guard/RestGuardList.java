@@ -55,7 +55,9 @@ public class RestGuardList {
 		 * @param values The values to add.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Varargs with generics require unchecked cast
+		})
 		public Builder append(Class<? extends RestGuard>...values) {
 			for (var v : values)
 				entries.add(BeanCreator.of(RestGuard.class, beanStore()).type(v));

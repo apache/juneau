@@ -109,8 +109,8 @@ public class Meter extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Meter _class(String value) {
-		super._class(value);
+	public Meter class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

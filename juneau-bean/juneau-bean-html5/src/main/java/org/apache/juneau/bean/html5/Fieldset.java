@@ -85,8 +85,8 @@ public class Fieldset extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Fieldset _class(String value) {
-		super._class(value);
+	public Fieldset class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

@@ -28,7 +28,7 @@ class Base_Test extends TestBase {
 		Base x = base()
 			.href("a")
 			.target("b")
-			._class("c")
+			.class_("c")
 			.accesskey("d")
 			.contenteditable("e")
 			.dir("f")

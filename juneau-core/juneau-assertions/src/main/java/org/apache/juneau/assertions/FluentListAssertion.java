@@ -119,7 +119,9 @@ import org.apache.juneau.serializer.*;
  * @param <E> The element type.
  * @param <R> The return type.
  */
-@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., MSG_listDidNotContainExpectedValueAt)
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., MSG_listDidNotContainExpectedValueAt)
+})
 public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 
 	// @formatter:off
@@ -314,7 +316,9 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for list has check
+	})
 	public R isHas(E...entries) throws AssertionError {
 		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
 		return isEach(p);

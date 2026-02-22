@@ -467,8 +467,8 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 	@SuppressWarnings({
 		"java:S1168",    // TODO: null for empty/EOF or parseAttrName('%00'). Parser state machine.
-		"java:S3776",
-		"java:S6541"
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S6541", // Single-threaded session contexts do not require synchronization
 	})
 	private <T> BeanMap<T> parseIntoBeanMap(UonReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 

@@ -28,7 +28,7 @@ class Style_Test extends TestBase {
 		Style x = style()
 			.media("a")
 			.type("b")
-			._class("c")
+			.class_("c")
 			.accesskey("d")
 			.contenteditable("e")
 			.dir("f")

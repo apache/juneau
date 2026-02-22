@@ -79,7 +79,9 @@ import org.apache.juneau.commons.function.*;
  * @param <T> The object type.
  * @param <V> The value type.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class Property<T, V> {
 
 	// Argument name constants for assertArgNotNull
@@ -208,7 +210,9 @@ public class Property<T, V> {
 		 * @param field The field info. Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure requires cast to Builder<T, V>
+		})
 		public Builder<T, V> field(FieldInfo field) {
 			assertArgNotNull(ARG_field, field);
 			field.accessible();
@@ -227,7 +231,9 @@ public class Property<T, V> {
 		 * @param method The method info. Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure requires cast to Builder<T, V>
+		})
 		public Builder<T, V> getter(MethodInfo method) {
 			assertArgNotNull(ARG_method, method);
 			method.accessible();

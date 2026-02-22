@@ -84,8 +84,8 @@ public class Body extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Body _class(String value) {
-		super._class(value);
+	public Body class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

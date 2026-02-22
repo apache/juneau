@@ -107,8 +107,8 @@ public class Link extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Link _class(String value) {
-		super._class(value);
+	public Link class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

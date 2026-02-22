@@ -38,7 +38,10 @@ import org.apache.juneau.urlencoding.annotation.*;
 import org.apache.juneau.urlencoding.annotation.UrlEncoding;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S5961")
+@SuppressWarnings({
+	"java:S5961", // High assertion count acceptable in comprehensive test
+	"serial" // Serialization not relevant in test code
+})
 class Content_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -444,7 +447,6 @@ class Content_Test extends TestBase {
 		public B3 c(B3 b) {
 			return b;
 		}
-		@SuppressWarnings("serial")
 		@Content
 		public static class B3 extends LinkedList<B2> {}
 		@RestPut(path="/InputStreamTransform")

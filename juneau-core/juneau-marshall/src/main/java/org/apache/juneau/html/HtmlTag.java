@@ -80,7 +80,9 @@ enum HtmlTag {
 		throw new ParseException(session, "Invalid call to HtmlTag.forEvent on event of type ''{0}''", XmlUtils.toReadableEvent(r));
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for HTML tag string parsing
+	})
 	static HtmlTag forString(String tag, boolean end) {
 		var c = tag.charAt(0);
 		HtmlTag t = null;

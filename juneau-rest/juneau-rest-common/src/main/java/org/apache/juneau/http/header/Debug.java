@@ -46,7 +46,7 @@ public class Debug extends BasicBooleanHeader {
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Debug";
 
-	@SuppressWarnings("javadoc")
+	/** Constant for <jk>true</jk> value. */
 	public static final Debug TRUE = of(true);
 	/** Constant for <jk>false</jk> value. */
 	public static final Debug FALSE = of(false);

@@ -70,7 +70,9 @@ import java.nio.charset.*;
  * </ul>
  *
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class ReaderInputStream extends InputStream {
 	private static final int DEFAULT_BUFFER_SIZE = 1024;
 
@@ -119,7 +121,9 @@ public class ReaderInputStream extends InputStream {
 	 * @param charset the charset encoding.  Must not be <jk>null</jk>.
 	 * @param bufferSize the size of the input buffer in number of characters.  Must be positive.
 	 */
-	@SuppressWarnings("resource")
+	@SuppressWarnings({
+		"resource" // Reader resource managed by caller
+	})
 	public ReaderInputStream(Reader reader, Charset charset, int bufferSize) {
 		// @formatter:off
 		this(assertArgNotNull(ARG_reader, reader),

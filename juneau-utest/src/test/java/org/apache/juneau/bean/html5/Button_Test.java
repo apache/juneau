@@ -38,7 +38,7 @@ class Button_Test extends TestBase {
 			.name("j")
 			.type("k")
 			.value("l")
-			._class("m")
+			.class_("m")
 			.accesskey("n")
 			.contenteditable("o")
 			.dir("p")

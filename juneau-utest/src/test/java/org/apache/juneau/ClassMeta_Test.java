@@ -26,7 +26,11 @@ import org.apache.juneau.commons.reflect.ClassInfo_Test.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"rawtypes","serial","java:S5961"})
+@SuppressWarnings({
+	"rawtypes", // Raw types necessary for test bean handling
+	"serial", // Serialization not relevant
+	"java:S5961", // High assertion count acceptable in comprehensive tests
+})
 class ClassMeta_Test extends TestBase {
 
 	BeanContext bc = BeanContext.DEFAULT;

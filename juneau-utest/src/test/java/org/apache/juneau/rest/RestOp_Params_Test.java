@@ -40,7 +40,9 @@ import org.junit.jupiter.api.*;
 
 import jakarta.servlet.*;
 
-@SuppressWarnings("java:S5961")
+@SuppressWarnings({
+	"java:S5961" // High assertion count acceptable in comprehensive test
+})
 class RestOp_Params_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

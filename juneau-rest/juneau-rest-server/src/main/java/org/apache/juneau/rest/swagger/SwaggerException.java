@@ -20,7 +20,9 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.parser.*;
 
-@SuppressWarnings("java:S110")
+@SuppressWarnings({
+	"java:S110" // Inheritance depth acceptable for SwaggerException hierarchy
+})
 class SwaggerException extends ParseException {
 	private static final long serialVersionUID = 1L;
 

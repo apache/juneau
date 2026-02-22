@@ -103,7 +103,7 @@ class HtmlElement_Attr_Test extends TestBase {
 		Div x = div()
 			.attr("data-test", "value")
 			.attrUri("data-url", "http://test.com")
-			._class("test");
+			.class_("test");
 		var result = x.toString();
 		assertNotNull(result);
 		assertTrue(result.contains("data-test='value'"));

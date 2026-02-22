@@ -78,7 +78,9 @@ public class DefaultSettingsMap {
 	 * @param name The setting name.
 	 * @return The setting value.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for settings map
+	})
 	public <T> Optional<T> get(Class<T> type, String name) {
 		return opt((T)entries.get(name));
 	}

@@ -29,7 +29,7 @@ class Td_Test extends TestBase {
 			.colspan("a")
 			.headers("b")
 			.rowspan("c")
-			._class("d")
+			.class_("d")
 			.accesskey("e")
 			.contenteditable("f")
 			.dir("g")

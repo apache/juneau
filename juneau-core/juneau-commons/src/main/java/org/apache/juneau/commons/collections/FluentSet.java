@@ -85,7 +85,9 @@ import java.util.*;
  *
  * @param <E> The element type.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class FluentSet<E> extends AbstractSet<E> {
 
 	// Argument name constants for assertArgNotNull

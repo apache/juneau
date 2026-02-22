@@ -28,7 +28,9 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.stats.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S1172") // Unused parameters in tests are typically intentional
+@SuppressWarnings({
+	"java:S1172" // Unused parameters in tests are intentional
+})
 class ThrownStore_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

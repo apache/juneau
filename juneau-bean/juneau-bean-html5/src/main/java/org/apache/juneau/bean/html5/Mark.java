@@ -94,8 +94,8 @@ public class Mark extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Mark _class(String value) {
-		super._class(value);
+	public Mark class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

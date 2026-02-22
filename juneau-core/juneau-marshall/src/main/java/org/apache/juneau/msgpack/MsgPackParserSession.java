@@ -44,7 +44,11 @@ import org.apache.juneau.swap.*;
 
  * </ul>
  */
-@SuppressWarnings({ "rawtypes", "unchecked", "java:S115" })
+@SuppressWarnings({
+	"rawtypes", // Raw types necessary for generic type handling
+	"unchecked", // Type erasure requires unchecked casts
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+})
 public class MsgPackParserSession extends InputStreamParserSession {
 
 	// Argument name constants for assertArgNotNull
@@ -178,7 +182,10 @@ public class MsgPackParserSession extends InputStreamParserSession {
 	/*
 	 * Workhorse method.
 	 */
-	@SuppressWarnings({ "java:S3776", "java:S6541" })
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S6541", // Single-threaded session contexts do not require synchronization
+	})
 	private <T> T parseAnything(ClassMeta<?> eType, MsgPackInputStream is, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)

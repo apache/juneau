@@ -61,7 +61,7 @@ import jakarta.servlet.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource",
+	"resource", // Resource management handled externally
 	"java:S1168",    // Swagger/OpenAPI spec: null = omit field (e.g. parseList, parseMap, nullIfEmpty, toMap, firstNonEmpty)
 	"java:S115"      // Constants use UPPER_snakeCase convention (e.g., SWAGGER_paths)
 })
@@ -215,7 +215,11 @@ public class BasicSwaggerProviderSession {
 	 * @return A new {@link Swagger} object.
 	 * @throws Exception If an error occurred producing the Swagger.
 	 */
-	@SuppressWarnings({ "java:S3776", "java:S6541", "java:S112" }) // throws Exception intentional - callback/lifecycle method
+	@SuppressWarnings({
+		"java:S3776", // throws Exception intentional - callback/lifecycle method
+		"java:S6541", // Single-threaded context; synchronization unnecessary
+		"java:S112", // Generic exception thrown; acceptable for framework/lifecycle methods
+	})
 	public Swagger getSwagger() throws Exception {
 		// @formatter:off
 
@@ -740,7 +744,7 @@ public class BasicSwaggerProviderSession {
 	}
 
 	@SuppressWarnings({
-		"java:S1172" // Parameter type is unused but kept for API consistency
+		"java:S1172" // Parameter kept to match interface contract
 	})
 	private static void addParamExample(RestOpContext sm, JsonMap piri, RestPartType in, Type type) {
 
@@ -801,7 +805,9 @@ public class BasicSwaggerProviderSession {
 		return (JsonMap) om.get(httpMethod);
 	}
 
-	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method
+	})
 	private JsonMap getSchema(JsonMap schema, Type type, BeanSession bs) throws Exception {
 
 		if (type == Swagger.class)
@@ -923,7 +929,9 @@ public class BasicSwaggerProviderSession {
 		// @formatter:on
 	}
 
-	@SuppressWarnings("removal")  // Uses deprecated exclusiveMaximum/exclusiveMinimum for backward compatibility
+	@SuppressWarnings({
+		"removal" // Uses deprecated exclusiveMaximum/exclusiveMinimum for backward compatibility
+	})
 	private JsonMap merge(JsonMap om, Schema a) {
 		try {
 			if (SchemaAnnotation.empty(a))

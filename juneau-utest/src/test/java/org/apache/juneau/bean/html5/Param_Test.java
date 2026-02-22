@@ -28,7 +28,7 @@ class Param_Test extends TestBase {
 		Param x = param()
 			.name("a")
 			.value("b")
-			._class("c")
+			.class_("c")
 			.accesskey("d")
 			.contenteditable("e")
 			.dir("f")

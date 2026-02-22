@@ -109,8 +109,8 @@ public class Ruby extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Ruby _class(String value) {
-		super._class(value);
+	public Ruby class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

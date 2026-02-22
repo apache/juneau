@@ -26,7 +26,7 @@ class Dfn_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Dfn x = dfn()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

@@ -43,7 +43,11 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
  * </ul>
  */
-@SuppressWarnings({"resource","java:S110","java:S115"})
+@SuppressWarnings({
+	"resource", // Resource management handled externally
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S115" // Constants use UPPER_snakeCase naming convention
+})
 public class JsonSerializerSession extends WriterSerializerSession {
 
 	// Argument name constants for assertArgNotNull
@@ -52,7 +56,6 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings({"java:S110", "java:S115"})
 	public static class Builder extends WriterSerializerSession.Builder {
 
 		private JsonSerializer ctx;
@@ -237,7 +240,11 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		return out;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	
+	@SuppressWarnings({
+		"rawtypes", // Raw types necessary for generic collection/map serialization
+		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
+	})
 	private SerializerWriter serializeCollection(JsonWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
 
 		var elementType = type.getElementType();
@@ -254,7 +261,11 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		return out;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	
+	@SuppressWarnings({
+		"rawtypes", // Raw types necessary for generic collection/map serialization
+		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
+	})
 	private SerializerWriter serializeMap(JsonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		var keyType = type.getKeyType();
@@ -350,7 +361,11 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 * @return The same writer passed in.
 	 * @throws SerializeException General serialization error occurred.
 	 */
-	@SuppressWarnings({ "rawtypes", "java:S3776" })
+	
+	@SuppressWarnings({
+		"rawtypes", // Raw types necessary for generic type handling
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+	})
 	protected JsonWriter serializeAnything(JsonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
 
 		if (o == null) {
@@ -447,7 +462,9 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 * @return The serialized object.
 	 * @throws Exception Error occurred.
 	 */
-	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method for serialization hooks
+	})
 	protected String serializeJson(Object o) throws Exception {
 		var sw = new StringWriter();
 		serializeAnything(getJsonWriter(createPipe(sw)).i(getInitialDepth()), o, getExpectedRootType(o), "root", null);

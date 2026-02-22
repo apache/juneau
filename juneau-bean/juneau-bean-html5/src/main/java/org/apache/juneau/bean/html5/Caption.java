@@ -105,8 +105,8 @@ public class Caption extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Caption _class(String value) {
-		super._class(value);
+	public Caption class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

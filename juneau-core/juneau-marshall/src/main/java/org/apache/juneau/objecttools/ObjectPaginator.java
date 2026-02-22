@@ -62,7 +62,11 @@ public class ObjectPaginator implements ObjectTool<PageArgs> {
 	}
 
 	@Override /* Overridden from ObjectTool */
-	@SuppressWarnings({ "rawtypes", "unchecked", "java:S3776" })
+	@SuppressWarnings({
+		"rawtypes", // Raw types necessary for generic type handling
+		"unchecked", // Type erasure requires unchecked casts
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+	})
 	public Object run(BeanSession session, Object input, PageArgs args) {
 
 		if (input == null)
@@ -115,7 +119,9 @@ public class ObjectPaginator implements ObjectTool<PageArgs> {
 	 * @param limit The max number of entries to retrieve.
 	 * @return A sublist of representing the entries from the position with the specified limit.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to R for list elements
+	})
 	public <R> List<R> run(Object input, int pos, int limit) {
 		var bs = BeanContext.DEFAULT_SESSION;
 		var r = run(BeanContext.DEFAULT_SESSION, input, PageArgs.create(pos, limit));

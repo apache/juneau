@@ -47,7 +47,10 @@ import org.apache.juneau.serializer.*;
 
  * </ul>
  */
-@SuppressWarnings({"java:S110", "java:S115"})
+@SuppressWarnings({
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+})
 public class MsgPackSerializer extends OutputStreamSerializer implements MsgPackMetaProvider {
 
 	// Argument name constants for assertArgNotNull
@@ -58,7 +61,6 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	private static final String PROP_addBeanTypesMsgPack = "addBeanTypesMsgPack";
 
 	/** Default serializer, BASE64 string output. */
-	@SuppressWarnings("java:S110")
 	public static class Base64 extends MsgPackSerializer {
 
 		/**
@@ -75,7 +77,6 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class Builder extends OutputStreamSerializer.Builder {
 
 		private static final Cache<HashKey,MsgPackSerializer> CACHE = Cache.of(HashKey.class, MsgPackSerializer.class).build();
@@ -749,7 +750,6 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	}
 
 	/** Default serializer, spaced-hex string output. */
-	@SuppressWarnings("java:S110")
 	public static class SpacedHex extends MsgPackSerializer {
 
 		/**

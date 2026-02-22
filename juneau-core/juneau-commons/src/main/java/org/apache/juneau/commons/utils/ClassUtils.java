@@ -53,7 +53,9 @@ public class ClassUtils {
 	 */
 	public static final Predicate<Class<?>> NOT_VOID = ClassUtils::isNotVoid;
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types necessary for generic class cache
+	})
 	private static Cache<Class,Boolean> modifiableCollectionTypes = Cache.of(Class.class, Boolean.class).build();
 
 	/**
@@ -461,7 +463,9 @@ public class ClassUtils {
 	 * @param c The class to check.
 	 * @return <jk>false</jk> if the specific class is <jk>null</jk> or <c><jk>void</jk>.<jk>class</jk></c> or {@link Void} or has the simple name <js>"Void</js>.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types necessary for generic void check
+	})
 	public static boolean isNotVoid(Class c) {
 		return ! isVoid(c);
 	}
@@ -472,7 +476,9 @@ public class ClassUtils {
 	 * @param c The class to check.
 	 * @return <jk>true</jk> if the specific class is <jk>null</jk> or <c><jk>void</jk>.<jk>class</jk></c> or {@link Void} or has the simple name <js>"Void</js>.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types necessary for generic void check
+	})
 	public static boolean isVoid(Class c) {
 		return c == null || c == void.class || c == Void.class || cns(c).equalsIgnoreCase("void");
 	}

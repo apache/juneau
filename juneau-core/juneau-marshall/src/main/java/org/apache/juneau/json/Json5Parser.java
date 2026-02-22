@@ -35,7 +35,9 @@ package org.apache.juneau.json;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
  * </ul>
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({
+	"java:S110" // Inheritance depth acceptable for Json5Parser hierarchy
+})
 public class Json5Parser extends JsonParser {
 
 	/** Default parser, Accept=application/json5. */

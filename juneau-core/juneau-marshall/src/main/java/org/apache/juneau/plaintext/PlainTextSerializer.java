@@ -52,7 +52,10 @@ import org.apache.juneau.swap.*;
  * </ul>
  *
  */
-@SuppressWarnings({"java:S110", "java:S115"})
+@SuppressWarnings({
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+})
 public class PlainTextSerializer extends WriterSerializer implements PlainTextMetaProvider {
 
 	// Argument name constants for assertArgNotNull
@@ -61,7 +64,6 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class Builder extends WriterSerializer.Builder {
 
 		private static final Cache<HashKey,PlainTextSerializer> CACHE = Cache.of(HashKey.class, PlainTextSerializer.class).build();

@@ -41,7 +41,9 @@ import org.apache.juneau.swap.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
-@SuppressWarnings("java:S1192")
+@SuppressWarnings({
+	"java:S1192" // String literals repeated for clarity in UI generation
+})
 public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 
 	private static class Session {
@@ -65,7 +67,9 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 
 	private static final Set<String> STANDARD_METHODS = set("get", "put", "post", "delete", "options", "head", "patch", "trace");
 
-	@SuppressWarnings("null")
+	@SuppressWarnings({
+		"null" // Null analysis not applicable for optional values
+	})
 	private static void addOperationIfTagMatches(Div tagBlockContents, Session s, String path, String method, Operation op, Tag t) {
 		if ((t == null && (op.getTags() == null || op.getTags().isEmpty())) || (nn(t) && nn(op.getTags()) && op.getTags().contains(t.getName()))) {
 			tagBlockContents.child(opBlock(s, path, method, op));
@@ -116,37 +120,41 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		return examplesDiv(m);
 	}
 
-	@SuppressWarnings("null")
+	@SuppressWarnings({
+		"null" // Null analysis not applicable for optional values
+	})
 	private static Div examplesDiv(JsonMap m) {
 		if (m.isEmpty())
 			return null;
 
 		Select select = null;
 		if (m.size() > 1) {
-			select = select().onchange("selectExample(this)")._class("example-select");
+			select = select().onchange("selectExample(this)").class_("example-select");
 		}
 
-		var div = div(select)._class("examples");
+		var div = div(select).class_("examples");
 
 		if (nn(select))
 			select.child(option("model", "model"));
 		var modelContent = m.remove("model");
-		div.child(div(nn(modelContent) ? modelContent : "")._class("model active").attr("data-name", "model"));
+		div.child(div(nn(modelContent) ? modelContent : "").class_("model active").attr("data-name", "model"));
 
 		var select2 = select;
 		m.forEach((k, v) -> {
 			if (nn(select2))
 				select2.child(option(k, k));
-			div.child(div(v.toString().replace("\\n", "\n"))._class("example").attr("data-name", k));
+			div.child(div(v.toString().replace("\\n", "\n")).class_("example").attr("data-name", k));
 		});
 
 		return div;
 	}
 
 	// Creates the informational summary before the ops.
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for this logic
+	})
 	private static Table header(Session s) {
-		var table = table()._class("header");
+		var table = table().class_("header");
 
 		var info = s.openApi.getInfo();
 		if (nn(info)) {
@@ -199,29 +207,29 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		if (ri.getHeaders() == null)
 			return null;
 
-		var sectionTable = table(tr(th("Name"), th("Description"), th("Schema")))._class("section-table");
+		var sectionTable = table(tr(th("Name"), th("Description"), th("Schema"))).class_("section-table");
 
-		var headers = div(div("Headers:")._class("section-name"), sectionTable)._class("headers");
+		var headers = div(div("Headers:").class_("section-name"), sectionTable).class_("headers");
 
 		ri.getHeaders()
-			.forEach((k, v) -> sectionTable.child(tr(td(k)._class("name"), td(toBRL(v.getDescription()))._class("description"), td(v.asMap().keepAll("type", "format", "items", "collectionFormat",
+			.forEach((k, v) -> sectionTable.child(tr(td(k).class_("name"), td(toBRL(v.getDescription())).class_("description"), td(v.asMap().keepAll("type", "format", "items", "collectionFormat",
 				"default", "maximum", "exclusiveMaximum", "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern", "maxItems", "minItems", "uniqueItems", "enum", "multipleOf")))));
 
 		return headers;
 	}
 
 	private static Div modelBlock(String modelName, SchemaInfo model) {
-		return div()._class("op-block op-block-closed model").children(modelBlockSummary(modelName, model), div(model)._class("op-block-contents"));
+		return div().class_("op-block op-block-closed model").children(modelBlockSummary(modelName, model), div(model).class_("op-block-contents"));
 	}
 
 	private static HtmlElement modelBlockSummary(String modelName, SchemaInfo model) {
-		return div()._class("op-block-summary").onclick("toggleOpBlock(this)").children(span(modelName)._class("method-button"),
-			nn(model.getDescription()) ? span(toBRL(model.getDescription()))._class("summary") : null);
+		return div().class_("op-block-summary").onclick("toggleOpBlock(this)").children(span(modelName).class_("method-button"),
+			nn(model.getDescription()) ? span(toBRL(model.getDescription())).class_("summary") : null);
 	}
 
 	// Creates the contents under the "Model" header.
 	private static Div modelsBlockContents(Session s) {
-		var modelBlockContents = div()._class("tag-block-contents");
+		var modelBlockContents = div().class_("tag-block-contents");
 		if (nn(s.openApi.getComponents()) && nn(s.openApi.getComponents().getSchemas())) {
 			s.openApi.getComponents().getSchemas().forEach((k, v) -> modelBlockContents.child(modelBlock(k, v)));
 		}
@@ -230,7 +238,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 
 	// Creates the "Model" header.
 	private static HtmlElement modelsBlockSummary() {
-		return div()._class("tag-block-summary").onclick("toggleTagBlock(this)").children(span("Models")._class("name"));
+		return div().class_("tag-block-summary").onclick("toggleTagBlock(this)").children(span("Models").class_("name"));
 	}
 
 	private static Div opBlock(Session s, String path, String opName, Operation op) {
@@ -240,33 +248,33 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		if (! deprecated && ! STANDARD_METHODS.contains(opClass))
 			opClass = "other";
 
-		return div()._class("op-block op-block-closed " + opClass).children(opBlockSummary(path, opName, op), div(tableContainer(s, op))._class("op-block-contents"));
+		return div().class_("op-block op-block-closed " + opClass).children(opBlockSummary(path, opName, op), div(tableContainer(s, op)).class_("op-block-contents"));
 	}
 
 	private static HtmlElement opBlockSummary(String path, String opName, Operation op) {
-		return div()._class("op-block-summary").onclick("toggleOpBlock(this)").children(span(opName.toUpperCase())._class("method-button"), span(path)._class("path"),
-			nn(op.getSummary()) ? span(op.getSummary())._class("summary") : null);
+		return div().class_("op-block-summary").onclick("toggleOpBlock(this)").children(span(opName.toUpperCase()).class_("method-button"), span(path).class_("path"),
+			nn(op.getSummary()) ? span(op.getSummary()).class_("summary") : null);
 	}
 
 	private static Div tableContainer(Session s, Operation op) {
-		var tableContainer = div()._class("table-container");
+		var tableContainer = div().class_("table-container");
 
 		if (nn(op.getDescription()))
-			tableContainer.child(div(toBRL(op.getDescription()))._class("op-block-description"));
+			tableContainer.child(div(toBRL(op.getDescription())).class_("op-block-description"));
 
 		if (nn(op.getParameters())) {
-			tableContainer.child(div(h4("Parameters")._class("title"))._class("op-block-section-header"));
+			tableContainer.child(div(h4("Parameters").class_("title")).class_("op-block-section-header"));
 
-			var parameters = table(tr(th("Name")._class("parameter-key"), th("Description")._class("parameter-key")))._class("parameters");
+			var parameters = table(tr(th("Name").class_("parameter-key"), th("Description").class_("parameter-key"))).class_("parameters");
 
 			op.getParameters().forEach(x -> {
 				var piName = x.getName();
 				var required = nn(x.getRequired()) && x.getRequired();
 
-				var parameterKey = td(div(piName)._class("name" + (required ? " required" : "")), required ? div("required")._class("requiredlabel") : null,
-					nn(x.getSchema()) ? div(x.getSchema().getType())._class("type") : null, div('(' + x.getIn() + ')')._class("in"))._class("parameter-key");
+				var parameterKey = td(div(piName).class_("name" + (required ? " required" : "")), required ? div("required").class_("requiredlabel") : null,
+					nn(x.getSchema()) ? div(x.getSchema().getType()).class_("type") : null, div('(' + x.getIn() + ')').class_("in")).class_("parameter-key");
 
-				var parameterValue = td(div(toBRL(x.getDescription()))._class("description"), examples(s, x))._class("parameter-value");
+				var parameterValue = td(div(toBRL(x.getDescription())).class_("description"), examples(s, x)).class_("parameter-value");
 
 				parameters.child(tr(parameterKey, parameterValue));
 			});
@@ -275,15 +283,15 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		}
 
 		if (nn(op.getResponses())) {
-			tableContainer.child(div(h4("Responses")._class("title"))._class("op-block-section-header"));
+			tableContainer.child(div(h4("Responses").class_("title")).class_("op-block-section-header"));
 
-			var responses = table(tr(th("Code")._class("response-key"), th("Description")._class("response-key")))._class("responses");
+			var responses = table(tr(th("Code").class_("response-key"), th("Description").class_("response-key"))).class_("responses");
 			tableContainer.child(responses);
 
 			op.getResponses().forEach((k, v) -> {
-				var code = td(k)._class("response-key");
+				var code = td(k).class_("response-key");
 
-				var codeValue = td(div(toBRL(v.getDescription()))._class("description"), examples(s, v), headers(v))._class("response-value");
+				var codeValue = td(div(toBRL(v.getDescription())).class_("description"), examples(s, v), headers(v)).class_("response-value");
 
 				responses.child(tr(code, codeValue));
 			});
@@ -293,9 +301,11 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 	}
 
 	// Creates the contents under the "pet  Everything about your Pets  ext-link" header.
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for this logic
+	})
 	private static Div tagBlockContents(Session s, Tag t) {
-		var tagBlockContents = div()._class("tag-block-contents");
+		var tagBlockContents = div().class_("tag-block-contents");
 
 		if (nn(s.openApi.getPaths())) {
 			s.openApi.getPaths().forEach((path, pathItem) -> {
@@ -334,8 +344,8 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		} else {
 			content = null;
 		}
-		return div()._class("tag-block-summary").onclick("toggleTagBlock(this)").children(span(t.getName())._class("name"), span(toBRL(t.getDescription()))._class("description"),
-			nn(ed) && nn(ed.getUrl()) ? span(a(ed.getUrl(), content))._class("extdocs") : null);
+		return div().class_("tag-block-summary").onclick("toggleTagBlock(this)").children(span(t.getName()).class_("name"), span(toBRL(t.getDescription())).class_("description"),
+			nn(ed) && nn(ed.getUrl()) ? span(a(ed.getUrl(), content)).class_("extdocs") : null);
 	}
 
 	/**
@@ -373,20 +383,20 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		if (css == null)
 			css = RESOURCES.getString("OpenApiUI.css", null).orElse(null);
 
-		var outer = div(style(css), script("text/javascript", RESOURCES.getString("OpenApiUI.js", null).orElse(null)), header(s))._class("openapi-ui");
+		var outer = div(style(css), script("text/javascript", RESOURCES.getString("OpenApiUI.js", null).orElse(null)), header(s)).class_("openapi-ui");
 
 		// Operations without tags are rendered first.
-		outer.child(div()._class("tag-block tag-block-open").children(tagBlockContents(s, null)));
+		outer.child(div().class_("tag-block tag-block-open").children(tagBlockContents(s, null)));
 
 		if (nn(s.openApi.getTags())) {
 			s.openApi.getTags().forEach(x -> {
-				var tagBlock = div()._class("tag-block tag-block-open").children(tagBlockSummary(x), tagBlockContents(s, x));
+				var tagBlock = div().class_("tag-block tag-block-open").children(tagBlockSummary(x), tagBlockContents(s, x));
 				outer.child(tagBlock);
 			});
 		}
 
 		if (nn(s.openApi.getComponents()) && nn(s.openApi.getComponents().getSchemas())) {
-			var modelBlock = div()._class("tag-block").children(modelsBlockSummary(), modelsBlockContents(s));
+			var modelBlock = div().class_("tag-block").children(modelsBlockSummary(), modelsBlockContents(s));
 			outer.child(modelBlock);
 		}
 

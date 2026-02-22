@@ -43,7 +43,9 @@ import jakarta.servlet.http.*;
  * </ul>
  *
  */
-@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_context)
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_context)
+})
 public class RestSession extends ContextSession {
 
 	// Property name constants
@@ -124,7 +126,9 @@ public class RestSession extends ContextSession {
 		 * 	<br>Can be <jk>null</jk> (ignored).
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure requires cast for pathVars
+		})
 		public Builder pathVars(Map<String,String> value) {
 			if (nn(value) && ! value.isEmpty()) {
 				var m = (Map<String,String>)req.getAttribute(REST_PATHVARS_ATTR);
@@ -324,7 +328,9 @@ public class RestSession extends ContextSession {
 	 * @return The HTTP method name, always uppercased.
 	 * @throws NotFound If the method parameter contains invalid/malformed characters.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for REST method resolution/mapping
+	})
 	public String getMethod() throws NotFound {
 		if (method == null) {
 
@@ -396,7 +402,9 @@ public class RestSession extends ContextSession {
 	 *
 	 * @return Resolved <c><ja>@Resource</ja>(path)</c> variable values on this call.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for pathVars
+	})
 	public Map<String,String> getPathVars() {
 		var m = (Map<String,String>)req.getAttribute(REST_PATHVARS_ATTR);
 		return m == null ? mape() : m;

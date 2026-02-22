@@ -26,7 +26,10 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S1186")
+@SuppressWarnings({
+	"java:S1186", // Empty test method intentional for framework testing
+	"unused" // Test override methods with intentional wrong return types or unused impl
+})
 class AnnotationProvider_Test extends TestBase {
 
 	//====================================================================================================
@@ -52,7 +55,6 @@ class AnnotationProvider_Test extends TestBase {
 	}
 
 	@TestAnnotation("class")
-	@SuppressWarnings("java:S1186")
 	public static class TestClass {
 		@MultiTargetAnnotation(1)
 		public String field1;
@@ -78,13 +80,11 @@ class AnnotationProvider_Test extends TestBase {
 		void matchingMethod(String param);
 	}
 
-	@SuppressWarnings("java:S1186")
 	public static class MatchingMethodParent {
 		@MultiTargetAnnotation(20)
 		public void matchingMethod(String param) {}
 	}
 
-	@SuppressWarnings("java:S1186")
 	public static class MatchingMethodChild extends MatchingMethodParent implements MatchingMethodInterface {
 		@MultiTargetAnnotation(30)
 		@Override
@@ -890,7 +890,6 @@ class AnnotationProvider_Test extends TestBase {
 			return TestAnnotation.class;
 		}
 
-		@SuppressWarnings("unused")
 		public Class<?>[] onClass() {
 			return onClass;
 		}
@@ -934,7 +933,6 @@ class AnnotationProvider_Test extends TestBase {
 			return TestAnnotation.class;
 		}
 
-		@SuppressWarnings("unused")
 		public String[] on() {
 			return on;
 		}
@@ -1018,7 +1016,6 @@ class AnnotationProvider_Test extends TestBase {
 			return TestAnnotation.class;
 		}
 
-		@SuppressWarnings("unused")
 		public String onClass() {  // Wrong return type - should be Class[]
 			return "invalid";
 		}
@@ -1051,7 +1048,6 @@ class AnnotationProvider_Test extends TestBase {
 			return TestAnnotation.class;
 		}
 
-		@SuppressWarnings("unused")
 		public String on() {  // Wrong return type - should be String[]
 			return "invalid";
 		}
@@ -1102,7 +1098,6 @@ class AnnotationProvider_Test extends TestBase {
 			return TestAnnotation.class;
 		}
 
-		@SuppressWarnings("unused")
 		public Class<?>[] onClass() {
 			throw new RuntimeException("Test exception from onClass()");
 		}

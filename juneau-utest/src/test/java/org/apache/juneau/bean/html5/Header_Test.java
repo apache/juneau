@@ -26,7 +26,7 @@ class Header_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Header x = header()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

@@ -217,7 +217,11 @@ import java.util.stream.*;
  *
  * @see BeanConverter
  */
-@SuppressWarnings({"rawtypes","java:S115","javabugs:S2259"})
+@SuppressWarnings({
+	"rawtypes", // Raw types necessary for generic type handling
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"javabugs:S2259", // False positive - null checks are properly handled via framework patterns
+})
 public class BasicBeanConverter implements BeanConverter {
 
 	// Argument name constants for assertArgNotNull
@@ -523,7 +527,9 @@ public class BasicBeanConverter implements BeanConverter {
 		private Class<T> forClass;
 		private Stringifier<T> function;
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure requires cast for stringifier entry
+		})
 		private StringifierEntry(Class<T> forClass, Stringifier function) {
 			this.forClass = forClass;
 			this.function = function;
@@ -801,13 +807,17 @@ public class BasicBeanConverter implements BeanConverter {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to T for settings retrieval
+	})
 	public <T> T getSetting(String key, T def) {
 		return (T)settings.getOrDefault(key, def);
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for list conversion
+	})
 	public List<Object> listify(Object o) {
 		assertArgNotNull(ARG_o, o);
 
@@ -830,7 +840,9 @@ public class BasicBeanConverter implements BeanConverter {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for size calculation
+	})
 	public int size(Object o) {
 		assertArgNotNull(ARG_o, o);
 
@@ -892,7 +904,9 @@ public class BasicBeanConverter implements BeanConverter {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for stringification
+	})
 	public String stringify(Object o) {
 
 		o = swap(o);
@@ -964,7 +978,9 @@ public class BasicBeanConverter implements BeanConverter {
 	 */
 
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for object swapping
+	})
 	public Object swap(Object o) {
 		if (o == null)
 			return null;

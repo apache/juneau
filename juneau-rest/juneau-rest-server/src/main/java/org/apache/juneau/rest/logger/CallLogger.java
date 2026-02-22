@@ -557,7 +557,10 @@ public class CallLogger {
 	 * @param req The servlet request.
 	 * @param res The servlet response.
 	 */
-	@SuppressWarnings({ "java:S3776", "java:S6541" })
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S6541", // Single-threaded context; synchronization unnecessary
+	})
 	public void log(HttpServletRequest req, HttpServletResponse res) {
 
 		var rule = getRule(req, res);

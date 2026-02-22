@@ -171,7 +171,9 @@ public class CsvParserSession extends ReaderParserSession {
 		super(builder);
 	}
 
-	@SuppressWarnings("java:S1172") // Future code - parameters reserved for implementation
+	@SuppressWarnings({
+		"java:S1172" // Future code - parameters reserved for future implementation
+	})
 	private static <T> T parseAnything(ClassMeta<T> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws ParseException {
 		throw new ParseException("Not implemented.");
 	}

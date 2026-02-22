@@ -51,7 +51,10 @@ import org.apache.juneau.xml.*;
 
  * </ul>
  */
-@SuppressWarnings({"java:S110", "java:S115"})
+@SuppressWarnings({
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+})
 public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 
 	// Argument name constants for assertArgNotNull
@@ -60,7 +63,6 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class Builder extends XmlParser.Builder {
 
 		private static final Cache<HashKey,HtmlParser> CACHE = Cache.of(HashKey.class, HtmlParser.class).build();

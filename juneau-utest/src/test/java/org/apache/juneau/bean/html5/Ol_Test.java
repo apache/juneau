@@ -29,7 +29,7 @@ class Ol_Test extends TestBase {
 			.reversed("a")
 			.start("b")
 			.type("c")
-			._class("d")
+			.class_("d")
 			.accesskey("e")
 			.contenteditable("f")
 			.dir("g")

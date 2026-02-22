@@ -97,8 +97,8 @@ public class Col extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Col _class(String value) {
-		super._class(value);
+	public Col class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

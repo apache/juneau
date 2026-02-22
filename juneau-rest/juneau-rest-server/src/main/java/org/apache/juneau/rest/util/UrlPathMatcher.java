@@ -137,7 +137,10 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 		 * @return
 		 * 	A pattern match object, or <jk>null</jk> if the path didn't match this pattern.
 		 */
-		@SuppressWarnings({"null", "java:S3776"})
+		@SuppressWarnings({
+			"null", // Null handling verified by context or framework
+			"java:S3776", // Cognitive complexity acceptable for this specific logic
+		})
 		@Override
 		public UrlPathMatch match(UrlPath urlPath) {
 

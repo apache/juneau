@@ -30,7 +30,7 @@ class Article_Test extends TestBase {
 			.footer("b")
 			.link(link().href("c"))
 			.section(section("d"))
-			._class("e")
+			.class_("e")
 			.accesskey("f")
 			.contenteditable("g")
 			.dir("h")

@@ -36,7 +36,10 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
  * </ul>
  */
-@SuppressWarnings({"resource", "java:S112", "java:S1192"}) // S112: template methods throw Exception for subclass flexibility
+@SuppressWarnings({
+	"resource", // Resource management handled externally
+	"java:S112", // Generic exception thrown; template methods throw Exception for subclass flexibility
+})
 public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 
 	private static boolean exists(String s) {
@@ -314,7 +317,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for navigation link rendering with conditional logic
+	})
 	protected void nav(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		String[] links = session.getNavLinks();
 		if (links.length > 0 && ! contains("NONE", links)) {

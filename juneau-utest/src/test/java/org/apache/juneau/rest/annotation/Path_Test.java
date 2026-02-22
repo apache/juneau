@@ -34,7 +34,9 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S5961")
+@SuppressWarnings({
+	"java:S5961" // High assertion count acceptable in comprehensive test
+})
 class Path_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

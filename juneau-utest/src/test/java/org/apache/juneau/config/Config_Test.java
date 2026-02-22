@@ -36,6 +36,9 @@ import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"rawtypes" // Raw types used for generic testing scenarios
+})
 class Config_Test extends TestBase {
 
 	private Config.Builder cb = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg");
@@ -513,7 +516,6 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public <T> T getObject(String key, Class<T> type) throws ParseException
 	//====================================================================================================
-	@SuppressWarnings("rawtypes")
 	@Test void getObject3() {
 		var c = init(
 			"a1={foo:123}",
@@ -550,7 +552,6 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public <T> T getObject(String key, Parser parser, Class<T> type) throws ParseException
 	//====================================================================================================
-	@SuppressWarnings("rawtypes")
 	@Test void getObject4() {
 		var c = init(
 			"a1=(foo=123)",
@@ -587,7 +588,6 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public <T> T getObjectWithDefault(String key, T def, Class<T> type) throws ParseException
 	//====================================================================================================
-	@SuppressWarnings("rawtypes")
 	@Test void getObjectWithDefault1() {
 		var c = init(
 			"a1={foo:123}",
@@ -633,7 +633,6 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public <T> T getObjectWithDefault(String key, Parser parser, T def, Class<T> type) throws ParseException
 	//====================================================================================================
-	@SuppressWarnings("rawtypes")
 	@Test void getObjectWithDefault2() {
 		var c = init(
 			"a1=(foo=123)",

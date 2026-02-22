@@ -24,7 +24,9 @@ import java.util.*;
  * Class-related utility methods.
  *
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class ResourceBundleUtils {
 
 	/**

@@ -26,7 +26,7 @@ class Cite_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Cite x = cite()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

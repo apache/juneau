@@ -28,7 +28,9 @@ import org.apache.juneau.parser.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
-@SuppressWarnings("java:S125")  // Inline /*...*/ in INPUTS documents hex-to-JSON for test data; not commented-out code
+@SuppressWarnings({
+	"java:S125" // Commented code kept for test documentation - inline /*...*/ in INPUTS documents hex-to-JSON for test data
+})
 class JsonParserEdgeCases_Test extends TestBase {
 
 	private static final Input[] INPUTS = {

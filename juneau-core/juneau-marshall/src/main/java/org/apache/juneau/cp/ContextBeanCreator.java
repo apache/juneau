@@ -138,7 +138,9 @@ public class ContextBeanCreator<T> {
 	 *
 	 * @return The built bean.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to T
+	})
 	public T create() {
 		if (nn(impl))
 			return impl;
@@ -153,7 +155,9 @@ public class ContextBeanCreator<T> {
 	 * @param value The bean to set.
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to T
+	})
 	public ContextBeanCreator<T> impl(Object value) {
 		this.impl = (T)value;
 		return this;
@@ -168,7 +172,9 @@ public class ContextBeanCreator<T> {
 	 * @param value The bean type.
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for Context builder type
+	})
 	public ContextBeanCreator<T> type(Class<? extends T> value) {
 		builder = Context.createBuilder((Class<? extends Context>)value);
 		if (builder == null)

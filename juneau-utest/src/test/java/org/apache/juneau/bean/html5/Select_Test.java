@@ -33,7 +33,7 @@ class Select_Test extends TestBase {
 			.name("e")
 			.required("f")
 			.size("g")
-			._class("h")
+			.class_("h")
 			.accesskey("i")
 			.contenteditable("j")
 			.dir("k")

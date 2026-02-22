@@ -81,8 +81,8 @@ public class Del extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Del _class(String value) {
-		super._class(value);
+	public Del class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

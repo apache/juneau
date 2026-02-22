@@ -93,8 +93,8 @@ public class Rp extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Rp _class(String value) {
-		super._class(value);
+	public Rp class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

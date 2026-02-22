@@ -49,7 +49,10 @@ import org.apache.juneau.commons.io.*;
  * </p>
  *
  */
-@SuppressWarnings({ "resource", "java:S115" }) // Constants use UPPER_snakeCase convention (e.g., PROP_cachingLimit)
+@SuppressWarnings({
+	"resource", // Resource management handled externally
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., PROP_cachingLimit)
+})
 public class BasicFileFinder implements FileFinder {
 
 	// Property name constants
@@ -156,7 +159,10 @@ public class BasicFileFinder implements FileFinder {
 	 * @return The resolved resource contents, or <jk>null</jk> if the resource was not found.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	@SuppressWarnings({"null", "java:S3776"})
+	@SuppressWarnings({
+		"null", // Null handling verified by context or framework
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+	})
 	protected Optional<InputStream> find(String name, Locale locale) throws IOException {
 		name = trimSlashesAndSpaces(name);
 

@@ -26,7 +26,7 @@ class Footer_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Footer x = footer()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

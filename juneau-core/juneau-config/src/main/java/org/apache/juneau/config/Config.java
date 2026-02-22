@@ -54,7 +54,9 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauConfigBasics">juneau-config Basics</a>
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class Config extends Context implements ConfigEventListener {
 
 	// Argument name constants for assertArgNotNull
@@ -1199,7 +1201,9 @@ public class Config extends Context implements ConfigEventListener {
 		return s;
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for config value serialization
+	})
 	private String serialize(Object value, Serializer serializer) throws SerializeException {
 		if (value == null)
 			return "";

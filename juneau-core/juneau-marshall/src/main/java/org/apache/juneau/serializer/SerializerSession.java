@@ -62,7 +62,9 @@ import org.apache.juneau.swap.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class SerializerSession extends BeanTraverseSession {
 
 	// Property name constants
@@ -357,7 +359,9 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return <jk>true</jk> if the specified value should not be serialized.
 	 * @throws SerializeException If recursion occurred.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for value ignore logic with multiple conditions
+	})
 	public final boolean canIgnoreValue(ClassMeta<?> cm, String attrName, Object value) throws SerializeException {
 
 		if (value == null && ! isKeepNullProperties())
@@ -413,7 +417,11 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @param m The map being consumed.
 	 * @param consumer The map entry consumer.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes", "cast" })
+	@SuppressWarnings({
+		"unchecked", // Type erasure requires unchecked cast
+		"rawtypes",  // Raw types necessary for generic map handling
+		"cast"       // Cast required for generic type safety
+	})
 	public final <K,V> void forEachEntry(Map<K,V> m, Consumer<Map.Entry<K,V>> consumer) {
 		if (m == null || m.isEmpty())
 			return;
@@ -437,7 +445,9 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @param c The listener class to cast to.
 	 * @return The listener associated with this session, or <jk>null</jk> if there is no listener.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to T for listener retrieval
+	})
 	public <T extends SerializerListener> T getListener(Class<T> c) {
 		return (T)listener;
 	}
@@ -737,7 +747,10 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return The generalized object, or <jk>null</jk> if the object is <jk>null</jk>.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({
+		"rawtypes",  // Raw types necessary for swap handling
+		"unchecked"  // Type erasure requires unchecked operations
+	})
 	protected final Object generalize(Object o, ClassMeta<?> type) throws SerializeException {
 		try {
 			if (o == null)
@@ -762,7 +775,10 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @param pMeta The current bean property being serialized.
 	 * @return The bean dictionary name, or <jk>null</jk> if a name could not be found.
 	 */
-	@SuppressWarnings({ "null", "java:S3776" })
+	@SuppressWarnings({
+		"null",       // Null analysis handled by runtime checks
+		"java:S3776"  // Cognitive complexity acceptable for type name resolution logic
+	})
 	protected final String getBeanTypeName(SerializerSession session, ClassMeta<?> eType, ClassMeta<?> aType, BeanPropertyMeta pMeta) {
 		if (eType == aType || ! (isAddBeanTypes() || (session.isRoot() && isAddRootType())))
 			return null;
@@ -1054,7 +1070,10 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return The swapped object.
 	 * @throws SerializeException If swap method threw an exception.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({
+		"rawtypes",  // Raw types necessary for swap handling
+		"unchecked"  // Type erasure requires unchecked operations
+	})
 	protected Object swap(ObjectSwap swap, Object o) throws SerializeException {
 		try {
 			if (swap == null)

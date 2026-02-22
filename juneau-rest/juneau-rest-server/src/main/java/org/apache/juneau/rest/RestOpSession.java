@@ -38,7 +38,9 @@ import org.apache.juneau.rest.logger.*;
  * </ul>
  *
  */
-@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_ctx, ARG_ctx)
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_ctx, ARG_ctx)
+})
 public class RestOpSession extends ContextSession {
 
 	// Property name constants

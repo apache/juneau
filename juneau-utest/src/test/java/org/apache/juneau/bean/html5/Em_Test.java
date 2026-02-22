@@ -26,7 +26,7 @@ class Em_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Em x = em()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

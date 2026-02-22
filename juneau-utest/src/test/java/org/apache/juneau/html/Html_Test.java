@@ -29,7 +29,9 @@ import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("serial")
+@SuppressWarnings({
+	"serial" // Serialization not relevant in test code
+})
 class Html_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

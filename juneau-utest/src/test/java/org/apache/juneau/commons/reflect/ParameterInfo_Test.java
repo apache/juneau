@@ -32,7 +32,13 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.Name;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({ "java:S117", "java:S5961", "java:S1186", "java:S116", "java:S1172" }) // Field names use underscores for test data (e.g., b_b_a, b_a1_a); unused parameters in tests are typically intentional
+@SuppressWarnings({
+	"java:S117", // Field names use underscores for test data (e.g., b_b_a, b_a1_a); unused parameters in tests are typically intentional
+	"java:S5961", // High assertion count acceptable in comprehensive tests
+	"java:S1186", // Empty method body intentional for callback testing
+	"java:S116", // Field names use underscores for test data clarity
+	"java:S1172", // Unused parameters kept for API consistency or framework requirements
+})
 class ParameterInfo_Test extends TestBase {
 
 	private static String originalDisableParamNameDetection;
@@ -250,7 +256,6 @@ class ParameterInfo_Test extends TestBase {
 	}
 
 	// Constructor hierarchy tests
-	@SuppressWarnings("java:S1186")
 	public static class EqualsTestClass {
 		public void method(String param1, int param2) {}
 	}

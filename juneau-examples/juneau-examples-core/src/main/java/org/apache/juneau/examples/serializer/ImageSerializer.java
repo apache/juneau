@@ -30,13 +30,21 @@ import org.apache.juneau.serializer.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshalling">Marshalling</a>
  * </ul>
  */
-@SuppressWarnings({"javadoc","java:S110"})
+@SuppressWarnings({
+	"java:S110" // Inheritance depth acceptable for this class hierarchy
+})
 public class ImageSerializer extends OutputStreamSerializer {
 
+	/**
+	 * Constructor with default settings (produces image/png and image/jpeg).
+	 */
 	public ImageSerializer() {
 		super(create().produces("image/png,image/jpeg"));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void doSerialize(SerializerSession session, SerializerPipe pipe, Object o) throws IOException, SerializeException {
 		var image = (RenderedImage)o;

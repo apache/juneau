@@ -18,17 +18,34 @@ package org.apache.juneau.server.config.repository;
 
 import org.apache.juneau.json.annotation.*;
 
+/**
+ * Configuration item representing a named value (e.g., a config file section).
+ */
 @Json
-@SuppressWarnings("javadoc")
 public class ConfigItem {
 
 	private String value;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param value The configuration value.
+	 */
 	public ConfigItem(String value) {
 		this.value = value;
 	}
 
+	/**
+	 * Returns the configuration value.
+	 *
+	 * @return The value.
+	 */
 	public String getValue() { return value; }
 
+	/**
+	 * Sets the configuration value.
+	 *
+	 * @param value The value to set.
+	 */
 	public void setValue(String value) { this.value = value; }
 }

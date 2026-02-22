@@ -40,7 +40,10 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  */
-@SuppressWarnings({"resource", "java:S115"})
+@SuppressWarnings({
+	"resource", // Resource management handled externally
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+})
 public class ClasspathStore extends ConfigStore {
 
 	// Argument name constants for assertArgNotNull

@@ -48,7 +48,7 @@ import org.apache.juneau.commons.utils.*;
  *
  */
 @SuppressWarnings({
-	"java:S115",
+	"java:S115", // Constants use UPPER_snakeCase naming convention
 	"java:S1452"  // Wildcard required - ClassMeta<?>, ObjectSwap<?,?> for traversal metadata
 })
 public class BeanTraverseSession extends BeanSession {

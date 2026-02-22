@@ -53,7 +53,11 @@ import com.hp.hpl.jena.rdf.model.*;
 
  * </ul>
  */
-@SuppressWarnings({ "rawtypes", "unchecked", "java:S115" })
+@SuppressWarnings({
+	"rawtypes", // Raw types necessary for generic type handling
+	"unchecked", // Type erasure requires unchecked casts
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+})
 public class RdfSerializerSession extends WriterSerializerSession {
 
 	// Argument name constants for assertArgNotNull
@@ -296,7 +300,9 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		return getUriResolver().resolve(s);
 	}
 
-	@SuppressWarnings("null")
+	@SuppressWarnings({
+		"null" // Null analysis not applicable to RDF serialization
+	})
 	private RDFNode serializeAnything(Object o, boolean isURI, ClassMeta<?> eType, String attrName, BeanPropertyMeta bpm, Resource parentResource) throws SerializeException {
 		var m = model;
 
@@ -537,7 +543,9 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		});
 	}
 
-	@SuppressWarnings("resource")
+	@SuppressWarnings({
+		"resource" // Resource management handled by Serializer
+	})
 	@Override /* Overridden from Serializer */
 	protected void doSerialize(SerializerPipe out, Object o) throws SerializeException {
 

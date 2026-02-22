@@ -28,7 +28,7 @@ class Source_Test extends TestBase {
 		Source x = source()
 			.src("a")
 			.type("b")
-			._class("c")
+			.class_("c")
 			.accesskey("d")
 			.contenteditable("e")
 			.dir("f")

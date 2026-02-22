@@ -32,7 +32,9 @@ import org.junit.jupiter.params.provider.*;
 /**
  * Validates that comments in XML files are ignored.
  */
-@SuppressWarnings("serial")
+@SuppressWarnings({
+	"serial" // Serialization not relevant in test code
+})
 class XmlIgnoreComments_Test extends TestBase {
 
 	private static final Input[] INPUT = {

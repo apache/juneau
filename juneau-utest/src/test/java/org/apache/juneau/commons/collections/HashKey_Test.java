@@ -23,7 +23,9 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S4144")
+@SuppressWarnings({
+	"java:S4144" // Identical test methods intentional for testing different scenarios
+})
 class HashKey_Test extends TestBase {
 
 	//====================================================================================================

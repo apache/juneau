@@ -47,7 +47,10 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  */
-@SuppressWarnings({"java:S110", "java:S115"})
+@SuppressWarnings({
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+})
 public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvider {
 
 	// Property name constants
@@ -60,7 +63,6 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class Builder extends XmlSerializer.Builder {
 
 		private static final Cache<HashKey,SoapXmlSerializer> CACHE = Cache.of(HashKey.class, SoapXmlSerializer.class).build();

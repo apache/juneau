@@ -180,7 +180,9 @@ import org.opentest4j.*;
  * @see BctConfiguration#set(BeanConverter)
  * @see BctConfiguration#clear()
  */
-@SuppressWarnings({"java:S1192", "java:S115"})
+@SuppressWarnings({
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+})
 public class BctAssertions {
 
 	// Argument name constants for assertArgNotNull
@@ -758,7 +760,10 @@ public class BctAssertions {
 	 *                 Can be Strings (readable format comparison), Predicates (functional testing), or Objects (direct equality).
 	 * @throws AssertionError if the List size or contents don't match expected values
 	 */
-	@SuppressWarnings({"unchecked","java:S3776"})
+	@SuppressWarnings({
+		"unchecked", // Type erasure requires unchecked casts
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+	})
 	public static void assertList(Supplier<String> message, Object actual, Object...expected) {
 		assertArgNotNull(ARG_expected, expected);
 		assertArgNotNull(ARG_actual, actual);

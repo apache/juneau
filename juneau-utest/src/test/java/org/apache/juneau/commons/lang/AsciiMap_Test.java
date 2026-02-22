@@ -28,7 +28,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests for {@link AsciiMap}.
  */
-@SuppressWarnings("java:S4144")
+@SuppressWarnings({
+	"java:S4144" // Identical test methods intentional for testing different scenarios
+})
 class AsciiMap_Test {
 
 	//====================================================================================================

@@ -34,7 +34,9 @@ import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S5961")
+@SuppressWarnings({
+	"java:S5961" // High assertion count acceptable in comprehensive test
+})
 class OpenApiPartParser_Test extends TestBase {
 
 	static OpenApiParserSession p = OpenApiParser.DEFAULT.getSession();

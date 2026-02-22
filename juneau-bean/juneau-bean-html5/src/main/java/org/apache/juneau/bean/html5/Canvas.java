@@ -104,8 +104,8 @@ public class Canvas extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Canvas _class(String value) {
-		super._class(value);
+	public Canvas class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

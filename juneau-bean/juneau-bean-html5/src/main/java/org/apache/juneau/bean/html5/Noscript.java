@@ -95,8 +95,8 @@ public class Noscript extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Noscript _class(String value) {
-		super._class(value);
+	public Noscript class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

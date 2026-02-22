@@ -52,7 +52,10 @@ import com.hp.hpl.jena.util.iterator.*;
 
  * </ul>
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({
+	"unchecked", // Type erasure requires unchecked casts
+	"rawtypes", // Raw types necessary for generic type handling
+})
 public class RdfParserSession extends ReaderParserSession {
 
 	/**
@@ -539,7 +542,9 @@ public class RdfParserSession extends ReaderParserSession {
 		return m;
 	}
 
-	@SuppressWarnings("resource")
+	@SuppressWarnings({
+		"resource" // Resource management handled by ReaderParserSession
+	})
 	@Override /* Overridden from ReaderParserSession */
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 

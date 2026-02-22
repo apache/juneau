@@ -27,7 +27,9 @@ import org.apache.juneau.*;
 import org.apache.juneau.config.store.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S116") // Field names use underscores for test data
+@SuppressWarnings({
+	"java:S116" // Field names use underscores for test data
+})
 class ConfigBuilder_Test extends TestBase {
 
 	private static File tempDir;

@@ -23,7 +23,9 @@ import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S4144")
+@SuppressWarnings({
+	"java:S4144" // Identical test methods intentional for testing different scenarios
+})
 class Restx_ReqAttrs_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

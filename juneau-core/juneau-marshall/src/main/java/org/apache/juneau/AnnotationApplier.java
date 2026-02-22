@@ -85,7 +85,9 @@ import org.apache.juneau.svl.*;
  * @param <A> The annotation that this applier reads from.
  * @param <B> The builder class to apply the annotation to.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public abstract class AnnotationApplier<A extends Annotation,B> {
 
 	// Argument name constants for assertArgNotNull

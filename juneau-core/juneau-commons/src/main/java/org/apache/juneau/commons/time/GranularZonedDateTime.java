@@ -92,7 +92,9 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='jm'>{@link DateUtils}
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class GranularZonedDateTime {
 
 	// Argument name constants for assertArgNotNull
@@ -262,7 +264,11 @@ public class GranularZonedDateTime {
 	 * @throws IllegalArgumentException if value is null.
 	 * @throws DateTimeParseException if the timestamp format is invalid.
 	 */
-	@SuppressWarnings({"java:S6541", "java:S3776"})
+	
+	@SuppressWarnings({
+		"java:S6541", // Single-threaded context; synchronization unnecessary
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+	})
 	public static GranularZonedDateTime of(String value, ZoneId defaultZoneId, TimeProvider timeProvider) {
 		assertArgNotNull(ARG_value, value);
 		var digit = StringUtils.DIGIT;

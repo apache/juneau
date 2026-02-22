@@ -131,9 +131,11 @@ import org.apache.juneau.parser.*;
  * 	<jc>// Get map/bean with name attribute value of 'foo' from a list of items</jc>
  * 	Map <jv>map</jv> = <jv>objectRest</jv>.getMap(<js>"/items/@name=foo"</js>);
  * </p>
- *
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({
+	"unchecked", // Type erasure requires unchecked operations for generic collections
+	"rawtypes"   // Raw types necessary for generic type handling
+})
 public class ObjectRest {
 	class JsonNode {
 		Object o;
@@ -826,7 +828,9 @@ public class ObjectRest {
 	/*
 	 * Workhorse method.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for REST operation routing logic
+	})
 	private Object service(int method, String url, Object val) throws ObjectRestException {
 
 		url = normalizeUrl(url);
@@ -963,7 +967,9 @@ public class ObjectRest {
 		return null;	// Never gets here.
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for array element setting with expansion logic
+	})
 	private Object[] setArrayEntry(Object o, int index, Object val, ClassMeta componentType) {
 		var a = (Object[])o;
 		if (a.length <= index) {
@@ -976,7 +982,9 @@ public class ObjectRest {
 		return a;
 	}
 
-	@SuppressWarnings("java:S3776") // Cognitive complexity is acceptable for this recursive node getter
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for recursive node navigation
+	})
 	JsonNode getNode(String url, JsonNode n) {
 		if (url == null || url.isEmpty())
 			return n;

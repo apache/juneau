@@ -34,7 +34,7 @@ class Object__Test extends TestBase {
 			.typemustmatch("f")
 			.usemap("g")
 			.width("h")
-			._class("i")
+			.class_("i")
 			.accesskey("j")
 			.contenteditable("k")
 			.dir("l")

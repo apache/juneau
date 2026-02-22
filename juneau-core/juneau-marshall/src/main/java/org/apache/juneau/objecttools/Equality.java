@@ -23,7 +23,20 @@ package org.apache.juneau.objecttools;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ObjectTools">Object Tools</a>
  * </ul>
  */
-@SuppressWarnings("javadoc")
 public enum Equality {
-	GT, GTE, LT, LTE, NONE
+	
+	/** Greater than. */
+	GT,
+	
+	/** Greater than or equal to. */
+	GTE,
+	
+	/** Less than. */
+	LT,
+	
+	/** Less than or equal to. */
+	LTE,
+	
+	/** No comparison/equality check. */
+	NONE
 }

@@ -84,9 +84,9 @@ import org.apache.juneau.parser.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S116",
-	"java:S115",
-	"java:S5843", // Constants use UPPER_snakeCase convention (e.g., PROP_additionalProperties). S5843: Complex regex patterns needed for RFC compliance (IPv6, ISO 8601 duration, date-time formats)
+	"java:S116", // Field names use trailing underscores (default_, enum_, const_) to avoid Java keyword conflicts
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., PROP_additionalProperties)
+	"java:S5843", // Complex regex patterns needed for RFC compliance (IPv6, ISO 8601 duration, date-time formats)
 	"java:S1452"  // Wildcard required - ClassMeta<?> for parsed type metadata
 })
 public class HttpPartSchema {
@@ -2814,7 +2814,9 @@ public class HttpPartSchema {
 		// Other
 		// -----------------------------------------------------------------------------------------------------------------
 
-		@SuppressWarnings("removal")  // Handles deprecated boolean-style exclusiveMaximum/exclusiveMinimum for backward compatibility
+		@SuppressWarnings({
+			"removal" // Handles deprecated boolean-style exclusiveMaximum/exclusiveMinimum for backward compatibility
+		})
 		Builder apply(Schema a) {
 			default_(joinnlOrNull(a.default_(), a.df()));
 			enum_(toSet(a.enum_(), a.e()));

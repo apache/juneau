@@ -26,7 +26,7 @@ class Tbody_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Tbody x = tbody()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

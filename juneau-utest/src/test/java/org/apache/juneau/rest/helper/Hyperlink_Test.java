@@ -28,7 +28,9 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("serial")
+@SuppressWarnings({
+	"serial" // Serialization not relevant in test code
+})
 class Hyperlink_Test extends TestBase {
 
 	@Rest

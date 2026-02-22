@@ -94,8 +94,8 @@ public class Img extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Img _class(String value) {
-		super._class(value);
+	public Img class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

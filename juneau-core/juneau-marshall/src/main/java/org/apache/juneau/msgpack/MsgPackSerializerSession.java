@@ -56,10 +56,6 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings({
-		"java:S110", // Inheritance depth acceptable for builder hierarchy
-		"java:S115"  // Constants use UPPER_snakeCase convention (e.g., CONST_value)
-	})
 	public static class Builder extends OutputStreamSerializerSession.Builder {
 
 		private MsgPackSerializer ctx;

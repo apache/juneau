@@ -27,7 +27,7 @@ class Data_Test extends TestBase {
 	@Test void a01_basicSetters() {
 		Data x = data()
 			.value("a")
-			._class("b")
+			.class_("b")
 			.accesskey("c")
 			.contenteditable("d")
 			.dir("e")

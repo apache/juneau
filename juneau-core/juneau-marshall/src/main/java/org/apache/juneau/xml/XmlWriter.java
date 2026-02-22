@@ -38,7 +38,9 @@ import org.apache.juneau.xml.annotation.*;
 
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({
+	"resource" // Writer resource managed by calling code
+})
 public class XmlWriter extends SerializerWriter {
 
 	private String defaultNsPrefix;
@@ -56,7 +58,9 @@ public class XmlWriter extends SerializerWriter {
 	 * @param enableNs Flag to indicate if XML namespaces are enabled.
 	 * @param defaultNamespace The default namespace if XML namespaces are enabled.
 	 */
-	@SuppressWarnings("java:S107") // Constructor requires 8 parameters for XML writer configuration
+	@SuppressWarnings({
+		"java:S107" // Constructor requires 8 parameters for XML writer configuration
+	})
 	public XmlWriter(Writer out, boolean useWhitespace, int maxIndent, boolean trimStrings, char quoteChar, UriResolver uriResolver, boolean enableNs, Namespace defaultNamespace) {
 		super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver);
 		this.enableNs = enableNs;

@@ -26,7 +26,7 @@ class Hr_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Hr x = hr()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

@@ -112,8 +112,8 @@ public class Video extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Video _class(String value) {
-		super._class(value);
+	public Video class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

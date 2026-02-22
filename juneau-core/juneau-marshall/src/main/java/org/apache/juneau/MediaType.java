@@ -40,6 +40,9 @@ import org.apache.juneau.json.*;
  * </ul>
  */
 @BeanIgnore
+@SuppressWarnings({
+	"java:S1845" // Field name intentionally matches method name
+})
 public class MediaType implements Comparable<MediaType> {
 
 	/** Represents an empty media type object. */
@@ -53,27 +56,27 @@ public class MediaType implements Comparable<MediaType> {
 	public static final MediaType HTML = of("text/html");
 	/** Reusable predefined media type */
 	public static final MediaType JSON = of("application/json");
-	@SuppressWarnings("javadoc")
+	/** Reusable predefined media type for MessagePack binary format */
 	public static final MediaType MSGPACK = of("octal/msgpack");
-	@SuppressWarnings("javadoc")
+	/** Reusable predefined media type for plain text */
 	public static final MediaType PLAIN = of("text/plain");
-	@SuppressWarnings("javadoc")
+	/** Reusable predefined media type for UON (URL-Encoding Object Notation) */
 	public static final MediaType UON = of("text/uon");
-	@SuppressWarnings("javadoc")
+	/** Reusable predefined media type for URL-encoded form data */
 	public static final MediaType URLENCODING = of("application/x-www-form-urlencoded");
-	@SuppressWarnings("javadoc")
+	/** Reusable predefined media type for XML */
 	public static final MediaType XML = of("text/xml");
-	@SuppressWarnings("javadoc")
+	/** Reusable predefined media type for SOAP XML */
 	public static final MediaType XMLSOAP = of("text/xml+soap");
-	@SuppressWarnings("javadoc")
+	/** Reusable predefined media type for RDF XML */
 	public static final MediaType RDF = of("text/xml+rdf");
-	@SuppressWarnings("javadoc")
+	/** Reusable predefined media type for RDF XML with abbreviations */
 	public static final MediaType RDFABBREV = of("text/xml+rdf+abbrev");
-	@SuppressWarnings("javadoc")
+	/** Reusable predefined media type for N-Triple RDF format */
 	public static final MediaType NTRIPLE = of("text/n-triple");
-	@SuppressWarnings("javadoc")
+	/** Reusable predefined media type for Turtle RDF format */
 	public static final MediaType TURTLE = of("text/turtle");
-	@SuppressWarnings("javadoc")
+	/** Reusable predefined media type for N3 (Notation3) RDF format */
 	public static final MediaType N3 = of("text/n3");
 	// @formatter:on
 
@@ -142,7 +145,6 @@ public class MediaType implements Comparable<MediaType> {
 	}
 
 	private final String string;                          // The entire unparsed value.
-	@SuppressWarnings("java:S1845") // Field name intentionally matches method name
 	private final String mediaType;                      // The "type/subtype" portion of the media type..
 	private final String type;                           // The media type (e.g. "text" for Accept, "utf-8" for Accept-Charset)
 	private final String subType;                        // The media sub-type (e.g. "json" for Accept, not used for Accept-Charset)
@@ -402,7 +404,9 @@ public class MediaType implements Comparable<MediaType> {
 	 * @param allowExtraSubTypes If <jk>true</jk>,
 	 * @return <jk>true</jk> if the media types match.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for media type matching logic
+	})
 	public final int match(MediaType o, boolean allowExtraSubTypes) {
 
 		if (o == null)

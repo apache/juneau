@@ -34,7 +34,11 @@ import org.apache.juneau.annotation.Named;
 import org.apache.juneau.commons.inject.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({ "java:S4144", "java:S1186", "java:S1172" }) // Unused parameters in tests are typically intentional
+@SuppressWarnings({
+	"java:S4144", // Identical methods intentional for different test scenarios
+	"java:S1186", // Empty method body intentional for callback testing
+	"java:S1172", // Unused parameters kept for API consistency or framework requirements
+})
 class ConstructorInfo_Test extends TestBase {
 
 	private static void check(String expected, Object o) {
@@ -108,7 +112,6 @@ class ConstructorInfo_Test extends TestBase {
 	@Retention(RUNTIME)
 	public static @interface DeprecatedAnnotation {}
 
-	@SuppressWarnings("java:S1186")
 	public static class DeprecatedClass {
 		@Deprecated
 		public DeprecatedClass() {}
@@ -122,7 +125,6 @@ class ConstructorInfo_Test extends TestBase {
 		public ExceptionClass() throws Exception {}
 	}
 
-	@SuppressWarnings("java:S1186")
 	public static class EqualsTestClass {
 		public EqualsTestClass() {}
 		public EqualsTestClass(String param) {}
@@ -859,7 +861,6 @@ class ConstructorInfo_Test extends TestBase {
 
 	// Inner class for testing outer parameter
 	// Note: This is a non-static inner class, so it requires an outer instance
-	@SuppressWarnings("java:S1186")
 	static class OuterClass {
 		public OuterClass() {}
 

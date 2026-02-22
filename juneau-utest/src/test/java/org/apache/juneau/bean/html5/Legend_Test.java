@@ -26,7 +26,7 @@ class Legend_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Legend x = legend()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

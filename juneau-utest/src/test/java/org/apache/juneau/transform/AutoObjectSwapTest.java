@@ -32,7 +32,10 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({ "rawtypes", "java:S1172" }) // Unused parameters in tests are typically intentional
+@SuppressWarnings({
+	"rawtypes", // Raw types necessary for test bean handling
+	"java:S1172", // Unused parameters kept for API consistency or framework requirements
+})
 class AutoObjectSwapTest extends TestBase {
 
 	private static final Map<String,String> STRINGMAP = m("foo","bar");

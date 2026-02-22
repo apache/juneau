@@ -52,7 +52,7 @@ import org.apache.juneau.cp.*;
  *
  */
 @SuppressWarnings({
-	"java:S115",
+	"java:S115", // Constants use UPPER_snakeCase naming convention
 	"java:S1452"  // Wildcard required - Class<?> for bean dictionary types
 })
 public class BeanRegistry {
@@ -137,7 +137,9 @@ public class BeanRegistry {
 		return r(properties());
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for class registration with multiple conditions
+	})
 	private void addClass(ClassInfo ci) {
 		try {
 			if (nn(ci) && nn(ci.inner())) {

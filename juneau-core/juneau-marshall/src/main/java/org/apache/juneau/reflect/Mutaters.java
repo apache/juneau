@@ -172,7 +172,10 @@ public class Mutaters {
 	 * @param o The object to convert to a string.
 	 * @return The stringified object, or <jk>null</jk> if the object was <jk>null</jk>.
 	 */
-	@SuppressWarnings({ "unchecked", "java:S3776" })
+	@SuppressWarnings({
+		"unchecked", // Type erasure requires unchecked casts in type mutation
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+	})
 	public static String toString(Object o) {
 		if (o == null)
 			return null;
@@ -180,7 +183,11 @@ public class Mutaters {
 		return t == null ? o.toString() : t.mutate(o);
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes", "java:S3776" }) // Cognitive complexity is acceptable for this mutater finder
+	@SuppressWarnings({
+		"unchecked", // Cognitive complexity is acceptable for this mutater finder
+		"rawtypes", // Raw types necessary for generic type mutation/conversion
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+	})
 	private static Mutater find(Class<?> ic, Class<?> oc, Map<Class<?>,Mutater<?,?>> m) {
 
 		if (ic == oc) {

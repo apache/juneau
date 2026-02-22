@@ -110,8 +110,8 @@ public class Section extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Section _class(String value) {
-		super._class(value);
+	public Section class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

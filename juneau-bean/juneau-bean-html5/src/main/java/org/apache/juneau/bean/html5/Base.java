@@ -74,8 +74,8 @@ public class Base extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Base _class(String value) {
-		super._class(value);
+	public Base class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

@@ -86,7 +86,9 @@ public class BeanIgnoreAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	@SuppressWarnings("java:S110")
+	@SuppressWarnings({
+		"java:S110" // Inheritance depth acceptable for BeanIgnoreAnnotation.Builder hierarchy
+	})
 	public static class Builder extends AppliedAnnotationObject.BuilderTMFC {
 
 		private String[] description = {};

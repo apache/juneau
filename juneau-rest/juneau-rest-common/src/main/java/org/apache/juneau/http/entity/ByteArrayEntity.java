@@ -31,7 +31,10 @@ import org.apache.juneau.http.header.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
-@SuppressWarnings({"java:S115", "resource"})
+@SuppressWarnings({
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"resource", // Resource management handled externally
+})
 public class ByteArrayEntity extends BasicHttpEntity {
 
 	// Argument name constants for assertArgNotNull

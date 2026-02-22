@@ -91,8 +91,8 @@ public class Bdi extends HtmlElementText {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Bdi _class(String value) {
-		super._class(value);
+	public Bdi class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

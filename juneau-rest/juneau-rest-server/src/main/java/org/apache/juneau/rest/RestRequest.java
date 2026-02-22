@@ -169,7 +169,11 @@ import jakarta.servlet.http.*;
  * </ul>
  *
  */
-@SuppressWarnings({"unchecked","unused","java:S6539"})
+@SuppressWarnings({
+	"unchecked", // Type erasure requires unchecked casts in REST client operations
+	"unused", // Unused parameters in HttpServletRequest overrides and helper methods
+	"java:S6539", // Collection.toArray() usage intentional
+})
 public class RestRequest extends HttpServletRequestWrapper {
 
 	/*
@@ -211,7 +215,9 @@ public class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Constructor.
 	 */
-	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method
+	})
 	RestRequest(RestOpContext opContext, RestSession session) throws Exception {
 		super(session.getRequest());
 		this.session = session;
@@ -1157,7 +1163,9 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * @param rbm The metadata about the request bean interface to create.
 	 * @return A new request bean proxy for this REST request.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for request bean mapping logic
+	})
 	public <T> T getRequest(RequestBeanMeta rbm) {
 		try {
 			var c = (Class<T>)rbm.getClassMeta().inner();

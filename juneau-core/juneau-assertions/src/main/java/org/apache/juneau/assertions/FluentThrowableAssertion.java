@@ -102,7 +102,9 @@ import org.apache.juneau.serializer.*;
  * @param <T> The throwable type.
  * @param <R> The return type.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjectAssertion<T,R> {
 
 	// Argument name constants for assertArgNotNull

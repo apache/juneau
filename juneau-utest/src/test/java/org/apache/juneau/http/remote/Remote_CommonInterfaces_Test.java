@@ -36,7 +36,9 @@ import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S5961")
+@SuppressWarnings({
+	"java:S5961" // High assertion count acceptable in comprehensive test
+})
 class Remote_CommonInterfaces_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

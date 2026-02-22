@@ -248,7 +248,9 @@ public class JsonSchemaRef extends JsonSchema {
 	}
 
 	@Override /* Overridden from JsonSchema */
-	@SuppressWarnings({"java:S1186","removal"})
+	@SuppressWarnings({
+		"removal", // Uses deprecated API for compatibility
+	})
 	public JsonSchemaRef setId(Object value) {
 		super.setId(value);
 		return this;

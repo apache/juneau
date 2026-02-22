@@ -29,7 +29,7 @@ class Output_Test extends TestBase {
 			._for("a")
 			.form("b")
 			.name("c")
-			._class("d")
+			.class_("d")
 			.accesskey("e")
 			.contenteditable("f")
 			.dir("g")

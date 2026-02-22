@@ -40,7 +40,9 @@ import org.apache.juneau.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({
+	"resource" // SerializerWriter manages Closeable resources
+})
 public class SerializerWriter extends Writer {
 
 	/** The underlying writer. */

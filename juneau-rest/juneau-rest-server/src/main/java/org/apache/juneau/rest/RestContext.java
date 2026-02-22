@@ -124,7 +124,10 @@ import jakarta.servlet.http.*;
 
  * </ul>
  */
-@SuppressWarnings({ "java:S115", "java:S1200" }) // Constants use UPPER_snakeCase convention (e.g., PROP_allowContentParam); class has 22 dependencies, acceptable for this core REST context class
+@SuppressWarnings({
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., PROP_allowContentParam); class has 22 dependencies, acceptable for this core REST context class
+	"java:S1200", // Class has many dependencies; acceptable for this core context class
+})
 public class RestContext extends Context {
 
 	private static final Logger LOG = Logger.getLogger(RestContext.class);
@@ -6150,7 +6153,9 @@ public class RestContext extends Context {
 		}
 	}
 
-	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method
+	})
 	protected void handleNotFound(RestSession session) throws Exception {
 		var pathInfo = session.getPathInfo();
 		var methodUC = session.getMethod();
@@ -6206,7 +6211,9 @@ public class RestContext extends Context {
 	 * @throws BasicHttpException Non-200 response.
 	 * @throws NotImplemented No registered response processors could handle the call.
 	 */
-	@SuppressWarnings("java:S127") // Loop counter i resets to -1 on RESTART
+	@SuppressWarnings({
+		"java:S127" // Loop counter i resets to -1 on RESTART
+	})
 	protected void processResponse(RestOpSession opSession) throws IOException, BasicHttpException, NotImplemented {
 
 		// Loop until we find the correct processor for the POJO.

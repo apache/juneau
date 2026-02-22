@@ -133,7 +133,9 @@ public class UriResolver {
 	 * @param o The URI to convert to absolute form.
 	 * @return The same appendable passed in.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for URI resolution logic
+	})
 	public Appendable append(Appendable a, Object o) {
 
 		try {

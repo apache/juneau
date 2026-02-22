@@ -101,7 +101,9 @@ public class ObjectMerger {
 		 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 		 */
 		@Override /* Overridden from InvocationHandler */
-		@SuppressWarnings("java:S3776")
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for proxy method invocation routing
+		})
 		public Object invoke(Object proxy, Method method, Object[] args) throws ExecutableException {
 			Object r = null;
 			var isGetter = args == null && method.getReturnType() != Void.class;
@@ -138,7 +140,9 @@ public class ObjectMerger {
 	 * 	<br>Can contain nulls.
 	 * @return A proxy interface over the merged POJOs.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to T for proxy creation
+	})
 	public static <T> T merge(Class<T> interfaceClass, boolean callAllNonGetters, T...pojos) {
 		return (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), a(interfaceClass), new MergeInvocationHandler(callAllNonGetters, pojos));
 	}
@@ -156,7 +160,9 @@ public class ObjectMerger {
 	 * 	<br>Can contain nulls.
 	 * @return A proxy interface over the merged POJOs.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to T for proxy creation
+	})
 	public static <T> T merge(Class<T> interfaceClass, T...pojos) {
 		return merge(interfaceClass, false, pojos);
 	}

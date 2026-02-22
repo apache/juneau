@@ -26,7 +26,7 @@ class Noscript_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Noscript x = noscript()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

@@ -97,7 +97,9 @@ public class RestOpArgList {
 	 *
 	 * @param builder The builder containing the contents for this list.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for builder list
+	})
 	protected RestOpArgList(Builder builder) {
 		entries = builder.entries.stream().toArray(Class[]::new);
 	}

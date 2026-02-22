@@ -87,7 +87,9 @@ import java.util.*;
  * @see BasicBeanConverter.Builder#addStringifier(Class, Stringifier)
  * @see BasicBeanConverter.Builder#defaultSettings()
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({
+	"rawtypes" // Raw types necessary for generic stringifier handling
+})
 public class Stringifiers {
 
 	private static final char[] HEX = "0123456789ABCDEF".toCharArray();

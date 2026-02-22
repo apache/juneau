@@ -58,7 +58,10 @@ import org.apache.juneau.cp.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem Overview</a>
  * </ul>
  */
-@SuppressWarnings({"java:S115", "java:S106", "java:S108"}) // Constants use UPPER_snakeCase convention (e.g., MSG_parameterCannotBeNull); System.err/out usage is intentional for assertion error output
+@SuppressWarnings({
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., MSG_parameterCannotBeNull); System.err/out usage is intentional for assertion error output
+	"java:S106" // System.out/err usage acceptable for assertion output
+})
 public class Assertion {
 
 	private static final Messages MESSAGES = Messages.of(Assertion.class, "Messages");
@@ -73,7 +76,9 @@ public class Assertion {
 	 * @param c The object to get the class name for.
 	 * @return The class name for an object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to Class<E[]> for array class
+	})
 	protected static <E> Class<E[]> arrayClass(Class<E> c) {
 		return (Class<E[]>)Array.newInstance(c, 0).getClass();
 	}
@@ -224,9 +229,9 @@ public class Assertion {
 					.arg(String.class, msg)
 					.arg(Object[].class,new Object[0])
 					.run();
-				// @formatter:on
-			} catch (@SuppressWarnings("unused") ExecutableException e) {
-				// If we couldn't create requested exception, just throw a RuntimeException.
+			// @formatter:on
+			} catch (ExecutableException e) {
+			// If we couldn't create requested exception, just throw a RuntimeException.
 				throw rex(cause, msg);
 			}
 		}

@@ -914,7 +914,9 @@ public class Assertions {
 	 * @param snippet The snippet of code to execute.
 	 * @return A new assertion object.  Never <jk>null</jk>.
 	 */
-	@SuppressWarnings("java:S1181") // Need to catch Throwable to handle all exception types including Error
+	@SuppressWarnings({
+		"java:S1181" // Need to catch Throwable to handle all exception types including Error
+	})
 	public static final ThrowableAssertion<Throwable> assertThrown(Snippet snippet) {
 		try {
 			snippet.run();

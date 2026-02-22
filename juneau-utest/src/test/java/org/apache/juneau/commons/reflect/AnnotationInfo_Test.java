@@ -25,7 +25,11 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"java:S5961", "java:S1186", "java:S1874"}) // S1874: Intentional use of deprecated classes/methods in tests to verify deprecated functionality
+@SuppressWarnings({
+	"java:S5961", // S1874: Intentional use of deprecated classes/methods in tests to verify deprecated functionality
+	"java:S1186", // Empty method body intentional for REST/proxy interface testing
+	"java:S1874", // Intentional use of deprecated API to verify functionality
+})
 class AnnotationInfo_Test extends TestBase {
 
 	//====================================================================================================
@@ -887,7 +891,6 @@ class AnnotationInfo_Test extends TestBase {
 		String value() default "default";
 	}
 
-	@SuppressWarnings("java:S1186")
 	public static class MethodAnnotationTestClass {
 		@TestAnnotationMultiTarget("method")
 		public void testMethod() {}

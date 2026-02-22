@@ -133,7 +133,9 @@ import org.apache.juneau.commons.function.*;
  * @param <K2> The second key type. Can be an array type for content-based key matching.
  * @param <V> The value type.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class Cache2<K1,K2,V> {
 
 	// Argument name constants for assertArgNotNull
@@ -383,7 +385,9 @@ public class Cache2<K1,K2,V> {
 	 * @param type The value type class.
 	 * @return A new builder for configuring the cache.
 	 */
-	@SuppressWarnings("java:S1172") // Parameters required for type inference in public API
+	@SuppressWarnings({
+		"java:S1172" // Parameters required for type inference in public API
+	})
 	public static <K1,K2,V> Builder<K1,K2,V> of(Class<K1> key1, Class<K2> key2, Class<V> type) {
 		return new Builder<>();
 	}
@@ -392,7 +396,9 @@ public class Cache2<K1,K2,V> {
 	// If threadLocal is true, this is null and threadLocalMap is used instead
 	private final java.util.Map<Tuple2<K1,K2>,V> map;
 
-	@SuppressWarnings("java:S5164") // Cleanup method provided: cleanup()
+	@SuppressWarnings({
+		"java:S5164" // Cleanup method provided: cleanup()
+	})
 	private final ThreadLocal<Map<Tuple2<K1,K2>,V>> threadLocalMap;
 
 	private final boolean isThreadLocal;

@@ -59,7 +59,9 @@ import org.apache.juneau.serializer.annotation.*;
 	// You can apply any of the Serializer/Parser/BeanContext settings this way.
 	quoteChar="'"
 )
-@SuppressWarnings("java:S110")
+@SuppressWarnings({
+	"java:S110" // Inheritance depth acceptable for example/demo code
+})
 public class DtoExamples extends BasicRestServletGroup {
 	private static final long serialVersionUID = 1L;
 }

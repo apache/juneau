@@ -54,8 +54,8 @@ import org.apache.juneau.rest.client.assertion.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource",
-	"java:S4144",
+	"resource", // Resource management handled externally
+	"java:S4144", // Identical methods intentional for different test scenarios
 	"java:S115" // Constants use UPPER_snakeCase convention (e.g., HEADER_ContentType)
 })
 public class ResponseContent implements HttpEntity {
@@ -224,7 +224,10 @@ public class ResponseContent implements HttpEntity {
 	 * 	</ul>
 	 * @see BeanSession#getClassMeta(Class) for argument syntax for maps and collections.
 	 */
-	@SuppressWarnings({ "unchecked", "java:S3776" })
+	@SuppressWarnings({
+		"unchecked", // Type erasure requires unchecked casts in content parsing
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+	})
 	public <T> T as(ClassMeta<T> type) throws RestCallException {
 		try {
 			if (type.is(ResponseContent.class) || type.is(HttpEntity.class))

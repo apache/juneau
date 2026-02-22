@@ -106,8 +106,8 @@ public class Track extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Track _class(String value) {
-		super._class(value);
+	public Track class_(String value) {
+		super.class_(value);
 		return this;
 	}
 
@@ -130,7 +130,9 @@ public class Track extends HtmlElementVoid {
 	 * @param value Whether this track should be enabled by default.
 	 * @return This object.
 	 */
-	@SuppressWarnings("java:S100") // Method name uses underscore suffix to avoid Java keyword conflict
+	@SuppressWarnings({
+		"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
+	})
 	public Track default_(String value) {
 		attr("default", value);
 		return this;

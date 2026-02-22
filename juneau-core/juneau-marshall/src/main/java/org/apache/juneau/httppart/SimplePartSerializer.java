@@ -36,7 +36,9 @@ import org.apache.juneau.commons.collections.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class SimplePartSerializer extends BaseHttpPartSerializer {
 
 	// Argument name constants for assertArgNotNull

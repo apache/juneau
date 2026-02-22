@@ -100,8 +100,8 @@ public class Source extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Source _class(String value) {
-		super._class(value);
+	public Source class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

@@ -28,7 +28,10 @@ import org.junit.jupiter.api.*;
 /**
  * Unit tests for {@link BctConfig} annotation and extension.
  */
-@SuppressWarnings({ "java:S4144", "java:S1172" }) // Unused parameters in tests are typically intentional
+@SuppressWarnings({
+	"java:S4144", // Identical methods intentional for different test scenarios
+	"java:S1172", // Unused parameters kept for API consistency or framework requirements
+})
 class BctConfig_Test extends TestBase {
 
 	// ====================================================================================================

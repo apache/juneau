@@ -48,7 +48,9 @@ import org.apache.juneau.commons.collections.*;
  * </p>
  *
  */
-@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_v1)
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_v1)
+})
 public class BeanDiff {
 
 	// Property name constants
@@ -192,7 +194,10 @@ public class BeanDiff {
 	 * 	Optional properties to exclude in the comparison.
 	 * 	<br>If <jk>null</jk>, no properties are excluded.
 	 */
-	@SuppressWarnings({"null", "java:S3776"})
+	@SuppressWarnings({
+		"null", // Null handling verified by context or framework
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+	})
 	public <T> BeanDiff(BeanContext bc, T first, T second, Set<String> include, Set<String> exclude) {
 		if (first == null && second == null)
 			return;

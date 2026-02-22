@@ -49,7 +49,6 @@ import org.apache.juneau.xml.annotation.*;
 
  * </ul>
  */
-@SuppressWarnings({"unchecked","rawtypes","resource","java:S110","java:S115"})
 public class XmlSerializerSession extends WriterSerializerSession {
 
 	// Argument name constants for assertArgNotNull
@@ -58,7 +57,6 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings({"java:S110", "java:S115"})
 	public static class Builder extends WriterSerializerSession.Builder {
 
 		private XmlSerializer ctx;
@@ -372,7 +370,11 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		return Optional.of(new AbstractMap.SimpleEntry<>(key, value));
 	}
 
-	@SuppressWarnings({ "null", "java:S3776", "java:S6541" })
+	@SuppressWarnings({
+		"null", // Null handling verified by context or framework
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S6541", // Single-threaded session contexts do not require synchronization
+	})
 	private ContentResult serializeBeanMap(XmlWriter out, BeanMap<?> m, Namespace elementNs, boolean isCollapsed, boolean isMixedOrText) throws SerializeException {
 		boolean hasChildren = false;
 		var bm = m.getMeta();
@@ -593,7 +595,10 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * @param o The POJO to check.
 	 * @throws SerializeException Thrown if bean recursion occurred.
 	 */
-	@SuppressWarnings({ "null", "java:S3776" })
+	@SuppressWarnings({
+		"null", // Null handling verified by context or framework
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+	})
 	protected final void findNsfMappings(Object o) throws SerializeException {
 		ClassMeta<?> aType = null;						// The actual type
 
@@ -654,11 +659,11 @@ public class XmlSerializerSession extends WriterSerializerSession {
 					if (nn(ns) && nn(ns.uri))
 						addNamespace(ns);
 
-				try {
-					findNsfMappings(value);
-				} catch (@SuppressWarnings("unused") Exception x) {
-					// Ignore
-				}
+					try {
+						findNsfMappings(value);
+					} catch (@SuppressWarnings("unused") Exception x) {
+						// Ignore
+					}
 				});
 			}
 		}
@@ -762,7 +767,12 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * @return The same writer passed in so that calls to the writer can be chained.
 	 * @throws SerializeException General serialization error occurred.
 	 */
-	@SuppressWarnings({ "null", "java:S3776", "java:S6541", "java:S107" })
+	@SuppressWarnings({
+		"null", // Null handling verified by context or framework
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S6541", // Single-threaded session contexts do not require synchronization
+		"java:S107", // Method has many parameters; acceptable for builder/configuration methods
+	})
 	protected ContentResult serializeAnything(XmlWriter out, Object o, ClassMeta<?> eType, String keyName, String elementName, Namespace elementNamespace, boolean addNamespaceUris, XmlFormat format,
 		boolean isMixedOrText, boolean preserveWhitespace, BeanPropertyMeta pMeta) throws SerializeException {
 

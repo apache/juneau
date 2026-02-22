@@ -28,7 +28,10 @@ import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.http.annotation.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"serial"})
+@SuppressWarnings({
+	"serial", // Serialization not relevant in test code
+	"unused" // REST resource classes with @Response for schema testing
+})
 class Swagger_Response_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -239,7 +242,6 @@ class Swagger_Response_Test extends TestBase {
 	}
 
 	@Rest
-	@SuppressWarnings("unused")
 	public static class D {
 
 		@Response(
@@ -308,7 +310,6 @@ class Swagger_Response_Test extends TestBase {
 	}
 
 	@Rest
-	@SuppressWarnings("unused")
 	public static class E {
 
 		@Response(schema=@Schema(type="number"))
@@ -329,7 +330,6 @@ class Swagger_Response_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
-	@SuppressWarnings("unused")
 	public static class F {
 
 		@Response(examples={" foo:'b' "})

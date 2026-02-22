@@ -109,7 +109,9 @@ import org.apache.juneau.serializer.*;
  * @param <T> The array type.
  * @param <R> The return type.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<T,R> {
 
 	// Argument name constants for assertArgNotNull
@@ -298,7 +300,9 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for array has check
+	})
 	public R isHas(E...entries) throws AssertionError {
 		assertArgNotNull(ARG_entries, entries);
 		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
@@ -381,7 +385,9 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 		return STRINGIFIERS.get(value().getClass().getComponentType()).apply(value());
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to E for array access
+	})
 	private E at(int index) {
 		return valueIsNull() || index < 0 || index >= length2() ? null : (E)Array.get(value(), index);
 	}

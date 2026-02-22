@@ -53,7 +53,7 @@ import java.io.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115",
+	"java:S115", // Constants use UPPER_snakeCase naming convention
 	"java:S1452"  // Wildcard may appear in subclass method signatures
 })
 public abstract class Var {
@@ -94,7 +94,9 @@ public abstract class Var {
 	 * @return The resolved value.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method
+	})
 	public abstract String resolve(VarResolverSession session, String arg) throws Exception;
 
 	/**
@@ -105,7 +107,9 @@ public abstract class Var {
 	 * @param arg The inside argument of the variable.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method
+	})
 	public abstract void resolveTo(VarResolverSession session, Writer w, String arg) throws Exception;
 
 	/**

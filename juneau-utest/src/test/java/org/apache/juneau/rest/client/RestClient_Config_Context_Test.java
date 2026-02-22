@@ -30,7 +30,9 @@ import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S4144")
+@SuppressWarnings({
+	"java:S4144" // Identical test methods intentional for testing different scenarios
+})
 class RestClient_Config_Context_Test extends TestBase {
 
 	@Rest

@@ -38,7 +38,10 @@ import org.junit.jupiter.params.provider.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-@SuppressWarnings({"deprecation"})
+@SuppressWarnings({
+	"deprecation",
+	"java:S1640" // HashMap required in one test for null key support (EnumMap doesn't allow)
+})
 class RoundTripMaps_Test extends TestBase {
 
 	private static final RoundTrip_Tester[] TESTERS = {
@@ -284,7 +287,6 @@ class RoundTripMaps_Test extends TestBase {
 		assertEquals("a", x.get(TestEnum.FOO));
 		assertNull(null, x.get(TestEnum.BAR));
 
-		@SuppressWarnings("java:S1640") // HashMap required - test needs null key support which EnumMap doesn't allow
 		var x2 = new HashMap<TestEnum,String>();
 		x2.put(TestEnum.FOO, "a");
 		x2.put(TestEnum.BAR, null);

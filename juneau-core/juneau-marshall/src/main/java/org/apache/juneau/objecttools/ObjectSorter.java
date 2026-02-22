@@ -109,7 +109,9 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 	/**
 	 * Default reusable searcher.
 	 */
-	@SuppressWarnings("java:S6541") // Stateless utility, singleton for convenience
+	@SuppressWarnings({
+		"java:S6541" // Stateless utility, singleton for convenience
+	})
 	public static final ObjectSorter DEFAULT = new ObjectSorter();
 
 	/**

@@ -120,7 +120,9 @@ import org.apache.juneau.serializer.*;
  *
  * @param <R> The return type.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 
 	// Argument name constants for assertArgNotNull

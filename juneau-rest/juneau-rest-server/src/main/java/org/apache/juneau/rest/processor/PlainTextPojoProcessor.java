@@ -32,7 +32,9 @@ import org.apache.juneau.rest.util.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({
+	"resource" // PlainTextPojoProcessor manages Closeable resources
+})
 public class PlainTextPojoProcessor implements ResponseProcessor {
 
 	@Override /* Overridden from ResponseProcessor */

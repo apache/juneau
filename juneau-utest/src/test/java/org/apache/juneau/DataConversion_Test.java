@@ -26,7 +26,9 @@ import java.util.*;
 import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({
+	"rawtypes" // Raw types used for generic testing scenarios
+})
 class DataConversion_Test extends TestBase {
 
 	@BeforeEach

@@ -93,7 +93,9 @@ import org.apache.juneau.serializer.*;
  * @param <T> The object type.
  * @param <R> The return type.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 
 	// Argument name constants for assertArgNotNull

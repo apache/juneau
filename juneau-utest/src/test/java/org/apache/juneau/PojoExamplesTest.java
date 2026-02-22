@@ -24,7 +24,10 @@ import org.junit.jupiter.api.*;
 /*
  * Tests the BEAN_examples property and @Example annotation.
  */
-@SuppressWarnings("java:S1172") // Unused parameters in tests are typically intentional
+@SuppressWarnings({
+	"java:S1172", // Unused parameters in tests are intentional
+	"unused" // Example fields and methods for BEAN_examples testing
+})
 class PojoExamplesTest extends TestBase {
 
 	private final JsonParserSession session = JsonParser.DEFAULT.getSession();
@@ -120,7 +123,6 @@ class PojoExamplesTest extends TestBase {
 	public static class B2c {
 		public String f1;
 
-		@SuppressWarnings("unused")
 		private static final B2c EXAMPLE = new B2c().init();
 
 		public B2c init() {
@@ -214,7 +216,6 @@ class PojoExamplesTest extends TestBase {
 			return this;
 		}
 
-		@SuppressWarnings("unused")
 		private static C2c x() {
 			return new C2c().init();
 		}

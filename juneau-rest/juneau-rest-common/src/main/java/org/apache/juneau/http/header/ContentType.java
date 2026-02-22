@@ -63,49 +63,49 @@ public class ContentType extends BasicMediaTypeHeader {
 	private static Cache<String,ContentType> cache = Cache.of(String.class, ContentType.class).build();
 
 	// Constants
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>application/atom+xml</c>. */
 	public static final ContentType APPLICATION_ATOM_XML = of("application/atom+xml");
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>application/x-www-form-urlencoded</c>. */
 	public static final ContentType APPLICATION_FORM_URLENCODED = of("application/x-www-form-urlencoded");
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>application/json</c>. */
 	public static final ContentType APPLICATION_JSON = of("application/json");
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>application/octet-stream</c>. */
 	public static final ContentType APPLICATION_OCTET_STREAM = of("application/octet-stream");
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>application/soap+xml</c>. */
 	public static final ContentType APPLICATION_SOAP_XML = of("application/soap+xml");
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>application/svg+xml</c>. */
 	public static final ContentType APPLICATION_SVG_XML = of("application/svg+xml");
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>application/xhtml+xml</c>. */
 	public static final ContentType APPLICATION_XHTML_XML = of("application/xhtml+xml");
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>application/xml</c>. */
 	public static final ContentType APPLICATION_XML = of("application/xml");
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>image/bmp</c>. */
 	public static final ContentType IMAGE_BMP = of("image/bmp");
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>image/gif</c>. */
 	public static final ContentType IMAGE_GIF = of("image/gif");
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>image/jpeg</c>. */
 	public static final ContentType IMAGE_JPEG = of("image/jpeg");
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>image/png</c>. */
 	public static final ContentType IMAGE_PNG = of("image/png");
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>image/svg+xml</c>. */
 	public static final ContentType IMAGE_SVG = of("image/svg+xml");
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>image/tiff</c>. */
 	public static final ContentType IMAGE_TIFF = of("image/tiff");
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>image/webp</c>. */
 	public static final ContentType IMAGE_WEBP = of("image/webp");
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>multipart/form-data</c>. */
 	public static final ContentType MULTIPART_FORM_DATA = of("multipart/form-data");
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>text/html</c>. */
 	public static final ContentType TEXT_HTML = of("text/html");
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>text/openapi</c>. */
 	public static final ContentType TEXT_OPENAPI = of("text/openapi");
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>text/plain</c>. */
 	public static final ContentType TEXT_PLAIN = of("text/plain");
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>text/xml</c>. */
 	public static final ContentType TEXT_XML = of("text/xml");
-	@SuppressWarnings("javadoc")
+	/** Content-Type for <c>*&#47;*</c> (all media types). */
 	public static final ContentType WILDCARD = of("*/*");
-	@SuppressWarnings("javadoc")
+	/** Constant for <jk>null</jk> value. */
 	public static final ContentType NULL = new ContentType((String)null);
 
 	/**

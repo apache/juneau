@@ -66,7 +66,9 @@ import org.apache.juneau.svl.vars.*;
 
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({
+	"resource" // VarResolver manages Closeable resources
+})
 public class VarResolver {
 
 	/**

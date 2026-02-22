@@ -48,7 +48,6 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings({"java:S110", "java:S115"})
 	public static class Builder extends XmlSerializerSession.Builder {
 
 		/**

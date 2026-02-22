@@ -74,7 +74,9 @@ import java.util.function.*;
  *
  * @param <V> The type of value held by this reference.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class OptionalReference<V> extends AtomicReference<V> {
 
 	// Argument name constants for assertArgNotNull

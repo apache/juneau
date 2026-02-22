@@ -79,7 +79,10 @@ import org.apache.juneau.json.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
-@SuppressWarnings({"java:S115", "java:S116"})
+@SuppressWarnings({
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S116", // Field name uses trailing underscore (default_) to avoid Java keyword conflict
+})
 public class Items extends OpenApiElement {
 
 	// Argument name constants for assertArgNotNull
@@ -124,7 +127,6 @@ public class Items extends OpenApiElement {
 	private Boolean exclusiveMinimum;
 	private Boolean uniqueItems;
 	@SuppressWarnings({
-		"java:S1845", // Field name intentionally matches class name per OpenAPI spec
 		"java:S1700"  // Field duplicates class name per OpenAPI spec
 	})
 	private Items items;

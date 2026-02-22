@@ -101,8 +101,17 @@ public class RestOperations {
 	 * The {@code Void} class is used as a placeholder when the {@link Rest} annotation
 	 * does not specify a custom {@code RestOperations} class.
 	 */
-	@SuppressWarnings({ "javadoc", "java:S112" }) // throws Exception intentional - callback/lifecycle method
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method
+	})
 	public final class Void extends RestOperations {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param builder The builder.
+		 * @throws Exception If initialization fails.
+		 */
 		public Void(Builder builder) throws Exception {
 			super(builder);
 		}
@@ -143,7 +152,9 @@ public class RestOperations {
 	 * @throws PreconditionFailed At least one method was found but it didn't match one or more matchers.
 	 * @throws NotFound HTTP method match was found but matching path was not.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for REST operation lookup/matching logic
+	})
 	public RestOpContext findOperation(RestSession session) throws MethodNotAllowed, PreconditionFailed, NotFound {
 		String m = session.getMethod();
 

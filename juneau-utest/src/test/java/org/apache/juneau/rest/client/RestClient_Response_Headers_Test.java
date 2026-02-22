@@ -36,7 +36,10 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S5961")
+@SuppressWarnings({
+	"java:S5961", // High assertion count acceptable in comprehensive test
+	"java:S1186" // Empty test method intentional - constructor required by BasicHeader parent class
+})
 class RestClient_Response_Headers_Test extends TestBase {
 
 	@Rest
@@ -62,7 +65,6 @@ class RestClient_Response_Headers_Test extends TestBase {
 	public static class A2 extends BasicHeader {
 		private static final long serialVersionUID = 1L;
 
-		@SuppressWarnings("java:S1186") // Constructor required by BasicHeader parent class, even though never explicitly called
 		private A2(String name, Object value) {
 			super(name, value);
 		}

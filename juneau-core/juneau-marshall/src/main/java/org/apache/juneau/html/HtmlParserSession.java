@@ -53,7 +53,12 @@ import org.apache.juneau.xml.*;
 
  * </ul>
  */
-@SuppressWarnings({"unchecked","rawtypes","java:S110","java:S115"})
+@SuppressWarnings({
+	"unchecked", // Type erasure requires unchecked casts
+	"rawtypes", // Raw types necessary for generic type handling
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+})
 public class HtmlParserSession extends XmlParserSession {
 
 	// Argument name constants for assertArgNotNull
@@ -66,7 +71,6 @@ public class HtmlParserSession extends XmlParserSession {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings({"java:S110", "java:S115"})
 	public static class Builder extends XmlParserSession.Builder {
 
 		private HtmlParser ctx;
@@ -280,7 +284,9 @@ public class HtmlParserSession extends XmlParserSession {
 	 * Precondition:  Must be pointing at outer START_ELEMENT.
 	 * Postcondition:  Pointing at outer END_ELEMENT.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for HTML parsing with type detection
+	})
 	private <T> T parseAnything(ClassMeta<T> eType, XmlReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
 
 		if (eType == null)
@@ -478,7 +484,9 @@ public class HtmlParserSession extends XmlParserSession {
 	 * Precondition:  Must be pointing at event following <table> event.
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for HTML bean parsing
+	})
 	private <T> BeanMap<T> parseIntoBean(XmlReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		while (true) {
 			HtmlTag tag = nextTag(r, TR, X_TABLE);
@@ -520,7 +528,9 @@ public class HtmlParserSession extends XmlParserSession {
 	 * Precondition:  Must be pointing at event following <ul> event.
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
-	@SuppressWarnings("java:S1213") // Method name matches private method in parent class by design
+	@SuppressWarnings({
+		"java:S1213" // Method name matches private method in parent class by design for override behavior
+	})
 	private <E> Collection<E> parseIntoCollection(XmlReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		int argIndex = 0;
 		while (true) {
@@ -540,7 +550,9 @@ public class HtmlParserSession extends XmlParserSession {
 	 * Precondition:  Must be pointing at <table> event.
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
-	@SuppressWarnings("java:S1213") // Method name matches private method in parent class by design
+	@SuppressWarnings({
+		"java:S1213" // Method name matches private method in parent class by design for override behavior
+	})
 	private <K,V> Map<K,V> parseIntoMap(XmlReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException, XMLStreamException {
 		while (true) {
@@ -573,7 +585,9 @@ public class HtmlParserSession extends XmlParserSession {
 	 * Precondition:  Must be pointing at event following <ul> event.
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for HTML table parsing into collection
+	})
 	private <E> Collection<E> parseTableIntoCollection(XmlReader r, Collection<E> l, ClassMeta<E> type, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException, XMLStreamException {
 
@@ -814,7 +828,9 @@ public class HtmlParserSession extends XmlParserSession {
 	 * @throws XMLStreamException Thrown by underlying XML stream.
 	 */
 	@Override /* Overridden from XmlParserSession */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for HTML text parsing with whitespace handling
+	})
 	protected String parseText(XmlReader r) throws IOException, ParseException, XMLStreamException {
 
 		StringBuilder sb = getStringBuilder();

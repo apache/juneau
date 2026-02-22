@@ -79,7 +79,9 @@ import java.util.stream.*;
  * @see BasicBeanConverter.Builder#addListifier(Class, Listifier)
  * @see BasicBeanConverter.Builder#defaultSettings()
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({
+	"rawtypes" // Raw types necessary for generic listifier handling
+})
 public class Listifiers {
 
 	/**
@@ -133,7 +135,9 @@ public class Listifiers {
 	 * @see TreeSet
 	 * @see LinkedHashSet
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to Listifier<Collection>
+	})
 	public static Listifier<Collection> collectionListifier() {
 		return (bc, collection) -> {
 			if (collection instanceof Set && ! (collection instanceof SortedSet) && ! (collection instanceof LinkedHashSet) && BctConfiguration.get(BCT_SORT_COLLECTIONS, false)) {
@@ -175,7 +179,9 @@ public class Listifiers {
 	 * @return A {@link Listifier} for {@link Enumeration} objects
 	 * @see Enumeration
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to Listifier<Enumeration>
+	})
 	public static Listifier<Enumeration> enumerationListifier() {
 		return (bc, enumeration) -> list(enumeration);
 	}
@@ -208,7 +214,9 @@ public class Listifiers {
 	 * @return A {@link Listifier} for {@link Iterable} objects
 	 * @see Iterable
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to Listifier<Iterable>
+	})
 	public static Listifier<Iterable> iterableListifier() {
 		return (bc, iterable) -> stream(iterable.spliterator(), false).toList();
 	}
@@ -249,7 +257,9 @@ public class Listifiers {
 	 * @return A {@link Listifier} for {@link Iterator} objects
 	 * @see Iterator
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to Listifier<Iterator>
+	})
 	public static Listifier<Iterator> iteratorListifier() {
 		return (bc, iterator) -> stream(spliteratorUnknownSize(iterator, 0), false).toList();
 	}
@@ -313,7 +323,9 @@ public class Listifiers {
 	 * @see TreeMap
 	 * @see LinkedHashMap
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to Listifier<Map>
+	})
 	public static Listifier<Map> mapListifier() {
 		return (bc, map) -> {
 			if (! (map instanceof SortedMap) && ! (map instanceof LinkedHashMap) && BctConfiguration.get(BCT_SORT_MAPS, false)) {
@@ -362,7 +374,9 @@ public class Listifiers {
 	 * @return A {@link Listifier} for {@link Stream} objects
 	 * @see Stream
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to Listifier<Stream>
+	})
 	public static Listifier<Stream> streamListifier() {
 		return (bc, stream) -> stream.toList();
 	}

@@ -48,7 +48,10 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
-@SuppressWarnings({"java:S110", "java:S115"})
+@SuppressWarnings({
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S115"  // Constants use UPPER_snakeCase naming convention
+})
 public class PartList extends ControlledArrayList<NameValuePair> {
 
 	// Argument name constants for assertArgNotNull
@@ -705,7 +708,10 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @param values The parts to replace.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@SuppressWarnings({"java:S127", "java:S3776"}) // S127: loop counter j2 decrements when removing
+	@SuppressWarnings({
+		"java:S127", // S127: loop counter j2 decrements when removing
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+	})
 	public PartList set(List<NameValuePair> values) {
 
 		if (nn(values)) {
@@ -740,7 +746,9 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @param value The part to replace.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@SuppressWarnings("java:S127") // Loop counter j decrements when removing elements
+	@SuppressWarnings({
+		"java:S127" // Loop counter j decrements when removing elements
+	})
 	public PartList set(NameValuePair value) {
 		if (nn(value)) {
 			var replaced = false;

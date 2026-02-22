@@ -33,7 +33,11 @@ import org.junit.jupiter.api.*;
 
 import static org.apache.juneau.commons.utils.Utils.*;
 
-@SuppressWarnings({ "java:S1186", "java:S116", "java:S1172" }) // Field names use underscores for test data (e.g., a_m, c_a1); unused parameters in tests are typically intentional
+@SuppressWarnings({
+	"java:S1186", // Field names use underscores for test data (e.g., a_m, c_a1); unused parameters in tests are typically intentional
+	"java:S116", // Field names use underscores for test data clarity
+	"java:S1172", // Unused parameters kept for API consistency or framework requirements
+})
 class MethodInfo_Test extends TestBase {
 
 	@Documented
@@ -103,7 +107,6 @@ class MethodInfo_Test extends TestBase {
 	}
 	static MethodInfo a_m = ofm(A1.class, "m");
 
-	@SuppressWarnings("java:S1186")
 	public static class EqualsTestClass {
 		public void method1() {}
 		public void method2(String param) {}
@@ -270,7 +273,6 @@ class MethodInfo_Test extends TestBase {
 	}
 
 	// Test classes for compareTo tie-breaker testing
-	@SuppressWarnings("java:S1186")
 	public static class CompareToParent {
 		public CompareToParent getInstance() {
 			return new CompareToParent();
@@ -278,7 +280,6 @@ class MethodInfo_Test extends TestBase {
 		public void method(String param) {}
 	}
 
-	@SuppressWarnings("java:S1186")
 	public static class CompareToChild extends CompareToParent {
 		@Override
 		public CompareToChild getInstance() {
@@ -921,7 +922,6 @@ class MethodInfo_Test extends TestBase {
 	}
 
 	// Test method classes
-	@SuppressWarnings("java:S1186")
 	public static class TestMethodClass {
 		public void method1(TestService service) {}
 		public void method2(@org.apache.juneau.annotation.Named("service1") TestService service) {}

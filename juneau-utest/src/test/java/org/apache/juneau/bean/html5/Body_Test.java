@@ -32,7 +32,7 @@ class Body_Test extends TestBase {
 			.ononline("d")
 			.onpageshow("e")
 			.onstorage("f")
-			._class("g")
+			.class_("g")
 			.accesskey("h")
 			.contenteditable("i")
 			.dir("j")

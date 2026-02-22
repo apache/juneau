@@ -27,7 +27,7 @@ class Colgroup_Test extends TestBase {
 	@Test void a01_basicSetters() {
 		Colgroup x = colgroup()
 			.span("a")
-			._class("b")
+			.class_("b")
 			.accesskey("c")
 			.contenteditable("d")
 			.dir("e")

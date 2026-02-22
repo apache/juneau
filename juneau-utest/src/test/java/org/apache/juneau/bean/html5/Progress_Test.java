@@ -28,7 +28,7 @@ class Progress_Test extends TestBase {
 		Progress x = progress()
 			.max("a")
 			.value("b")
-			._class("c")
+			.class_("c")
 			.accesskey("d")
 			.contenteditable("e")
 			.dir("f")

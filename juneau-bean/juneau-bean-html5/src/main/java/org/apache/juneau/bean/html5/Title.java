@@ -74,8 +74,8 @@ public class Title extends HtmlElementRawText {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Title _class(String value) {
-		super._class(value);
+	public Title class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

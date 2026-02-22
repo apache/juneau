@@ -26,7 +26,7 @@ class U_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		U x = u()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

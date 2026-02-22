@@ -33,7 +33,7 @@ class Img_Test extends TestBase {
 			.src("e")
 			.usemap("f")
 			.width("g")
-			._class("h")
+			.class_("h")
 			.accesskey("i")
 			.contenteditable("j")
 			.dir("k")

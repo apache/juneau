@@ -28,7 +28,9 @@ import org.junit.jupiter.api.*;
 /**
  * Testcase for {@link OpenApiBuilder}.
  */
-@SuppressWarnings("java:S5961")
+@SuppressWarnings({
+	"java:S5961" // High assertion count acceptable in comprehensive test
+})
 class OpenApiBuilder_Test extends TestBase {
 
 	/**

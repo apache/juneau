@@ -26,7 +26,7 @@ class Kbd_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Kbd x = kbd()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

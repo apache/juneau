@@ -47,9 +47,13 @@ public class IoUtils {
 
 	private static final int BUFF_SIZE = 1024;
 
-	@SuppressWarnings("java:S5164") // Cleanup method provided: cleanupThreadLocals()
+	@SuppressWarnings({
+		"java:S5164" // Cleanup method provided: cleanupThreadLocals()
+	})
 	private static final ThreadLocal<byte[]> BYTE_BUFFER_CACHE = (Boolean.getBoolean("juneau.disableIoBufferReuse") ? null : new ThreadLocal<>());
-	@SuppressWarnings("java:S5164") // Cleanup method provided: cleanupThreadLocals()
+	@SuppressWarnings({
+		"java:S5164" // Cleanup method provided: cleanupThreadLocals()
+	})
 	private static final ThreadLocal<char[]> CHAR_BUFFER_CACHE = (Boolean.getBoolean("juneau.disableIoBufferReuse") ? null : new ThreadLocal<>());
 	static final AtomicInteger BYTE_BUFFER_CACHE_HITS = new AtomicInteger();
 
@@ -101,7 +105,9 @@ public class IoUtils {
 	 * 	<jk>null</jk> entries are ignored.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	@SuppressWarnings("null")
+	@SuppressWarnings({
+		"null" // Null analysis not applicable to variadic close operations
+	})
 	public static void close(Object...o) throws IOException {
 		IOException ex = null;
 		for (var o2 : o) {
@@ -242,7 +248,9 @@ public class IoUtils {
 	 * 	<jk>null</jk> entries are ignored.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	@SuppressWarnings("null")
+	@SuppressWarnings({
+		"null" // Null analysis not applicable to variadic flush operations
+	})
 	public static void flush(Object...o) throws IOException {
 		IOException ex = null;
 		for (var o2 : o) {

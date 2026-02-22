@@ -31,15 +31,22 @@ import org.apache.juneau.parser.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshalling">Marshalling</a>
  * </ul>
  */
-@SuppressWarnings("javadoc")
 public class ImageParser extends InputStreamParser {
 
+	/**
+	 * Constructor with default settings (consumes image/png and image/jpg).
+	 */
 	public ImageParser() {
 		super(create().consumes("image/png,image/jpg"));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override /* Parser */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for image return
+	})
 	public <T> T doParse(ParserSession session, ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
 		try (var is = pipe.getInputStream()) {
 			var image = ImageIO.read(is);

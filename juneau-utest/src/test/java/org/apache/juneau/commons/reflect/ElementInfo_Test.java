@@ -24,14 +24,18 @@ import java.lang.reflect.Modifier;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"java:S5961", "java:S1186"})
+
+@SuppressWarnings({
+	"java:S5961", // High assertion count acceptable in comprehensive tests
+	"java:S1186", // Empty method body intentional for callback testing
+	"unused" // Private members and helper methods required for reflection testing
+})
 class ElementInfo_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test classes with various modifiers
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings("java:S1186")
 	public static class PublicClass {
 		public PublicClass() {}
 		public void publicMethod() {}
@@ -40,33 +44,27 @@ class ElementInfo_Test extends TestBase {
 
 	private static class PrivateClass {
 		private PrivateClass() {}
-		@SuppressWarnings("unused")
 		private void privateMethod() {}
-		@SuppressWarnings("unused")
 		private int privateField;
 	}
 
-	@SuppressWarnings("java:S1186")
 	protected static class ProtectedClass {
 		protected ProtectedClass() {}
 		protected void protectedMethod() {}
 		protected int protectedField;
 	}
 
-	@SuppressWarnings("java:S1186")
 	static class PackagePrivateClass {
 		PackagePrivateClass() {}
 		void packagePrivateMethod() {}
 		int packagePrivateField;
 	}
 
-	@SuppressWarnings("java:S1186")
 	public static class StaticClass {
 		public static void staticMethod() {}
 		public static int staticField;
 	}
 
-	@SuppressWarnings("java:S1186")
 	public static class FinalClass {
 		public final void finalMethod() {}
 		public final int finalField = 0;
@@ -80,7 +78,6 @@ class ElementInfo_Test extends TestBase {
 		void interfaceMethod();
 	}
 
-	@SuppressWarnings("java:S1186")
 	public static class SynchronizedClass {
 		public synchronized void synchronizedMethod() {}
 	}
@@ -89,7 +86,6 @@ class ElementInfo_Test extends TestBase {
 		public native void nativeMethod();
 	}
 
-	@SuppressWarnings("java:S1186")
 	public static class StrictClass {
 		public void strictMethod() {}
 	}
@@ -116,7 +112,6 @@ class ElementInfo_Test extends TestBase {
 		);
 	}
 
-	@SuppressWarnings("unused")
 	private static ConstructorInfo getConstructor(Class<?> c) {
 		return ClassInfo.of(c).getPublicConstructor(cons -> cons.getParameterCount() == 0).orElse(
 			ClassInfo.of(c).getDeclaredConstructor(cons -> cons.getParameterCount() == 0).orElse(null)
@@ -327,7 +322,6 @@ class ElementInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a006_isFinal() {
-		@SuppressWarnings("unused")
 		var finalClass = getClassInfo(FinalClass.class);
 		var finalMethod = getMethod(FinalClass.class, "finalMethod");
 		var finalField = getField(FinalClass.class, "finalField");

@@ -110,7 +110,9 @@ import java.util.function.*;
  *
  * @param <E> The element type.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class Lists<E> {
 
 	// Argument name constants for assertArgNotNull
@@ -180,7 +182,9 @@ public class Lists<E> {
 	 * @param values The values to add to this list.
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for varargs addition
+	})
 	public Lists<E> add(E...values) {
 		assertArgNotNull(ARG_values, values);
 		for (var v : values)
@@ -234,7 +238,9 @@ public class Lists<E> {
 	 * @throws IllegalStateException if element type is unknown.
 	 * @throws RuntimeException if a value cannot be converted to the element type.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for adding elements of various types
+	})
 	public Lists<E> addAny(Object...values) {
 		if (nn(values)) {
 			for (var o : values) {
@@ -498,7 +504,9 @@ public class Lists<E> {
 	 *
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for sorted list creation
+	})
 	public Lists<E> sorted() {
 		return sorted((Comparator<E>)Comparator.naturalOrder());
 	}
@@ -591,7 +599,9 @@ public class Lists<E> {
 	 * @param o The object to convert.
 	 * @return The converted element, or <jk>null</jk> if conversion is not possible.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to E for element conversion
+	})
 	private E convertElement(Object o) {
 		if (elementType.isInstance(o))
 			return (E)o;

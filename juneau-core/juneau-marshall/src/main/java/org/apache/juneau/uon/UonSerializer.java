@@ -137,7 +137,10 @@ import org.apache.juneau.serializer.*;
 
  * </ul>
  */
-@SuppressWarnings({"java:S110", "java:S115"})
+@SuppressWarnings({
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+})
 public class UonSerializer extends WriterSerializer implements HttpPartSerializer, UonMetaProvider {
 
 	// Property name constants
@@ -152,7 +155,6 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class Builder extends WriterSerializer.Builder {
 
 		private static final Cache<HashKey,UonSerializer> CACHE = Cache.of(HashKey.class, UonSerializer.class).build();
@@ -1036,7 +1038,6 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	/**
 	 * Equivalent to <code>UonSerializer.<jsm>create</jsm>().encoding().build();</code>.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class Encoding extends UonSerializer {
 
 		/**
@@ -1052,7 +1053,6 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	/**
 	 * Equivalent to <code>UonSerializer.<jsm>create</jsm>().ws().build();</code>.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class Readable extends UonSerializer {
 
 		/**

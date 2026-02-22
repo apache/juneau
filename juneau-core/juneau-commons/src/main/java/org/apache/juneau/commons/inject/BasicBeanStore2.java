@@ -45,7 +45,9 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='jc'>{@link WritableBeanStore} - Writable bean store interface
  * </ul>
  */
-@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_bean)
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_bean)
+})
 public class BasicBeanStore2 implements WritableBeanStore {
 
 	// Property name constants
@@ -218,7 +220,9 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	 * @return A map of bean names to bean instances.  Never <jk>null</jk>.
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to Map<String,T>
+	})
 	public <T> Map<String,T> getBeansOfType(Class<T> beanType) {
 		Map<String,T> result = map();
 		if (nn(parent)) {
@@ -287,7 +291,9 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	 * @param name The bean name.  Can be <jk>null</jk>.
 	 * @return The supplier, or {@link Optional#empty()} if no supplier of the specified type and name exists.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for supplier resolution
+	})
 	protected <T> Optional<Supplier<T>> resolve(Class<T> beanType, String name) {
 		var typeMap = entries.get(beanType);
 		if (nn(typeMap)) {

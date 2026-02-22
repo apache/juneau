@@ -235,7 +235,9 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @param action The action to perform.
 	 * @return The list of all bean property values.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for bean property filtering with predicate
+	})
 	public BeanMap<T> forEachValue(Predicate<Object> valueFilter, BeanPropertyConsumer action) {
 
 		// Normal bean.
@@ -346,7 +348,9 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	</ol>
 	 * @throws ClassCastException if property is not the specified type.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to T2 for property retrieval
+	})
 	public <T2> T2 get(String property, Class<T2> c) {
 		var pName = s(property);
 		var p = getPropertyMeta(pName);
@@ -543,7 +547,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @param entries The map containing the entries to add to this map.
 	 * @return This object.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({
+		"unchecked", // Type erasure requires unchecked casts for dynamic bean property access
+		"rawtypes", // Raw types necessary for generic type handling
+	})
 	public BeanMap<T> load(Map entries) {
 		putAll(entries);
 		return this;
@@ -652,7 +659,9 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 */
 	protected Collection<BeanPropertyMeta> getProperties() { return meta.getProperties().values(); }
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to T for bean assignment
+	})
 	void setBean(Object bean) { this.bean = (T)bean; }
 
 	/**

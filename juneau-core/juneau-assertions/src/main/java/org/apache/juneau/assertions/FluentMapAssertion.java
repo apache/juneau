@@ -107,7 +107,9 @@ import org.apache.juneau.serializer.*;
  * @param <V> The value type.
  * @param <R> The return type.
  */
-@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., MSG_mapWasNotEmpty)
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., MSG_mapWasNotEmpty)
+})
 public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R> {
 
 	private static final Messages MESSAGES = Messages.of(FluentMapAssertion.class, "Messages");
@@ -191,7 +193,9 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 * @param keys The entries to extract.
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for map value filtering
+	})
 	public FluentMapAssertion<K,V,R> asValueMap(K...keys) {
 		if (valueIsNull())
 			return new FluentMapAssertion<>(this, null, returns());
@@ -212,7 +216,9 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 * @param keys The keys of the values to retrieve from the map.
 	 * @return A new assertion.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for values list extraction
+	})
 	public FluentListAssertion<Object,R> asValues(K...keys) {
 		return new FluentListAssertion<>(this, valueIsNull() ? null : stream(keys).map(this::get).collect(toList()), returns());
 	}

@@ -27,7 +27,11 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"rawtypes","serial"})
+
+@SuppressWarnings({
+	"rawtypes", // Raw types necessary for test bean handling
+	"serial", // Serialization not relevant
+})
 class CommonParser_Test extends TestBase {
 
 	//====================================================================================================

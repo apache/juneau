@@ -37,8 +37,8 @@ public class HtmlElementContainer extends HtmlElement {
 	private List<Object> children;
 
 	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer _class(String value) {
-		super._class(value);
+	public HtmlElementContainer class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

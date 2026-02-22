@@ -54,7 +54,10 @@ import org.apache.juneau.uon.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingBasics">URL-Encoding Basics</a>
  * </ul>
  */
-@SuppressWarnings({ "java:S110", "java:S115" }) // Constants use UPPER_snakeCase convention (e.g., PROP_expandedParams)
+@SuppressWarnings({
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+})
 public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvider {
 
 	// Property name constants
@@ -63,7 +66,6 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class Builder extends UonParser.Builder {
 
 		private static final Cache<HashKey,UrlEncodingParser> CACHE = Cache.of(HashKey.class, UrlEncodingParser.class).build();

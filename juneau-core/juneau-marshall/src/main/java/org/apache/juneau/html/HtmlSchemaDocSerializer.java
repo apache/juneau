@@ -58,13 +58,14 @@ import org.apache.juneau.xml.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({
+	"java:S110" // Inheritance depth acceptable for HtmlSchemaDocSerializer hierarchy
+})
 public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class Builder extends HtmlDocSerializer.Builder {
 
 		JsonSchemaGenerator.Builder generatorBuilder;
@@ -1081,7 +1082,9 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		}
 
 		@Override /* Overridden from Builder */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Varargs method requires unchecked cast
+		})
 		public Builder widgets(java.lang.Class<? extends org.apache.juneau.html.HtmlWidget>...values) {
 			super.widgets(values);
 			return this;

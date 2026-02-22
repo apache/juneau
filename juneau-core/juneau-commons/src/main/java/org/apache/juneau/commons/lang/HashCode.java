@@ -73,7 +73,9 @@ public class HashCode {
 		return x.get();
 	}
 
-	@SuppressWarnings("java:S1845") // Field name intentionally matches Object.hashCode() method name
+	@SuppressWarnings({
+		"java:S1845" // Field name intentionally matches Object.hashCode() method name
+	})
 	private int hashCode = 1;
 
 	/**

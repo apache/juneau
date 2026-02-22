@@ -50,7 +50,10 @@ import org.apache.juneau.jsonschema.*;
 
  * </ul>
  */
-@SuppressWarnings({ "java:S110", "java:S115" }) // Constants use UPPER_snakeCase convention (e.g., PROP_generator)
+@SuppressWarnings({
+	"java:S110", // Inheritance depth acceptable for JsonSchemaSerializer hierarchy
+	"java:S115"  // Constants use UPPER_snakeCase convention (e.g., PROP_generator)
+})
 public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMetaProvider {
 
 	// Property name constants
@@ -59,7 +62,6 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class Builder extends JsonSerializer.Builder {
 
 		private static final Cache<HashKey,JsonSchemaSerializer> CACHE = Cache.of(HashKey.class, JsonSchemaSerializer.class).build();
@@ -922,7 +924,6 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 	}
 
 	/** Default serializer, with whitespace. */
-	@SuppressWarnings("java:S110")
 	public static class Readable extends JsonSchemaSerializer {
 
 		/**
@@ -936,7 +937,6 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 	}
 
 	/** Default serializer, single quotes, simple mode. */
-	@SuppressWarnings("java:S110")
 	public static class Simple extends JsonSchemaSerializer {
 
 		/**
@@ -950,7 +950,6 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 	}
 
 	/** Default serializer, single quotes, simple mode, with whitespace. */
-	@SuppressWarnings("java:S110")
 	public static class SimpleReadable extends JsonSchemaSerializer {
 
 		/**

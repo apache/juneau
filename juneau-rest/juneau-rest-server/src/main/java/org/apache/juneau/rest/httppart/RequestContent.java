@@ -94,7 +94,10 @@ import jakarta.servlet.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
  */
-@SuppressWarnings({ "unchecked", "resource" })
+@SuppressWarnings({
+	"unchecked", // Type erasure requires unchecked casts in content parsing
+	"resource", // Resource management handled externally
+})
 public class RequestContent {
 
 	private byte[] content;
@@ -523,7 +526,9 @@ public class RequestContent {
 	}
 
 	/* Workhorse method */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for content parsing/schema validation
+	})
 	private <T> T parse(ClassMeta<T> cm) throws SchemaValidationException, ParseException, UnsupportedMediaType, IOException {
 
 		if (cm.isReader())

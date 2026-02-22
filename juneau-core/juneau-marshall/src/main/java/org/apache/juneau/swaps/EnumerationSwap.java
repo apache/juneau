@@ -32,7 +32,10 @@ import org.apache.juneau.swap.*;
 
  * </ul>
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({
+	"unchecked", // Type erasure requires unchecked casts in ObjectSwap operations
+	"rawtypes", // Raw types necessary for ObjectSwap implementation
+})
 public class EnumerationSwap extends ObjectSwap<Enumeration,List> {
 
 	/**

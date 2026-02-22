@@ -247,7 +247,9 @@ public class JsonSchemaProperty extends JsonSchema {
 	}
 
 	@Override /* Overridden from JsonSchema */
-	@SuppressWarnings({"java:S1186","removal"})
+	@SuppressWarnings({
+		"removal", // Uses deprecated API for compatibility
+	})
 	public JsonSchemaProperty setId(Object value) {
 		super.setId(value);
 		return this;

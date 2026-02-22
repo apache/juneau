@@ -35,7 +35,9 @@ import org.apache.juneau.rest.util.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics">juneau-rest-mock Basics</a>
  * </ul>
  */
-@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_contextPath)
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_contextPath)
+})
 class MockPathResolver {
 
 	// Property name constants
@@ -148,7 +150,10 @@ class MockPathResolver {
 		return r(properties());
 	}
 
-	@SuppressWarnings({ "java:S3776", "java:S6541" })
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S6541", // Single-threaded context; synchronization unnecessary
+	})
 	private void init(String target, String contextPath, String servletPath, String pathToResolve, Map<String,Object> pathVars) {
 
 		target = trimTrailingSlashes(emptyIfNull(target));

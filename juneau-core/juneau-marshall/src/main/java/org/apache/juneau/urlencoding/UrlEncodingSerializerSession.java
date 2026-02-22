@@ -43,13 +43,17 @@ import org.apache.juneau.uon.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingBasics">URL-Encoding Basics</a>
  * </ul>
  */
-@SuppressWarnings({"rawtypes","unchecked","resource","java:S110"})
+@SuppressWarnings({
+	"rawtypes",   // Raw types necessary for generic type handling
+	"unchecked",  // Type erasure requires unchecked casts
+	"resource",   // Resource management handled externally
+	"java:S110"   // Inheritance depth acceptable for this class hierarchy
+})
 public class UrlEncodingSerializerSession extends UonSerializerSession {
 
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class Builder extends UonSerializerSession.Builder {
 
 		private UrlEncodingSerializer ctx;
@@ -223,7 +227,9 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	/*
 	 * Workhorse method. Determines the type of object, and then calls the appropriate type-specific serialization method.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for URL encoding serialization routing
+	})
 	private SerializerWriter serializeAnything(UonWriter out, Object o) throws IOException, SerializeException {
 
 		ClassMeta<?> aType = null;			// The actual type
@@ -277,7 +283,11 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		return out;
 	}
 
-	@SuppressWarnings({ "java:S3776", "java:S1213" }) // Method name matches private method in parent class by design
+	
+	@SuppressWarnings({
+		"java:S3776", // Method name matches private method in parent class by design
+		"java:S1213", // Field order differs from constructor for logical grouping
+	})
 	private SerializerWriter serializeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
 		var addAmp = Flag.create();
 
@@ -339,7 +349,9 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		return out;
 	}
 
-	@SuppressWarnings("java:S1213") // Method name matches private method in parent class by design
+	@SuppressWarnings({
+		"java:S1213" // Method name matches private method in parent class by design for override behavior
+	})
 	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		var keyType = type.getKeyType();

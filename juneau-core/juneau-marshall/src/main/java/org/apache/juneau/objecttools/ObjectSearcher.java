@@ -119,7 +119,9 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 			this.matchers = new AbstractMatcher[factories.length];
 		}
 
-		@SuppressWarnings("java:S3776")
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for search pattern matching logic
+		})
 		boolean matches(Object o) {
 			var cm = bs.getClassMetaForObject(o);
 			if (cm == null)
@@ -155,13 +157,17 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 		Map<String,ColumnMatcher> entryMatchers = new HashMap<>();
 		BeanSession bs;
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure requires unchecked cast for Map query
+		})
 		RowMatcher(BeanSession bs, Map query) {
 			this.bs = bs;
 			query.forEach((k, v) -> entryMatchers.put(s(k), new ColumnMatcher(bs, s(v))));
 		}
 
-		@SuppressWarnings("java:S3776")
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for row matching across multiple criteria
+		})
 		boolean matches(Object o) {
 			if (o == null)
 				return false;
@@ -281,7 +287,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 	 */
 	@SuppressWarnings({
 		"java:S1168",    // TODO: null when result not list/collection/array. Consider empty list.
-		"unchecked"
+		"unchecked", // Type erasure requires unchecked casts
 	})
 	public <R> List<R> run(Object input, String searchArgs) {
 		Object r = run(BeanContext.DEFAULT_SESSION, input, SearchArgs.create(searchArgs));

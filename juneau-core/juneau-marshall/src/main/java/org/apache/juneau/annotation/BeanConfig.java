@@ -38,7 +38,9 @@ import org.apache.juneau.swap.*;
 @Retention(RUNTIME)
 @Inherited
 @ContextApply(BeanConfigAnnotation.Applier.class)
-@SuppressWarnings("java:S100")
+@SuppressWarnings({
+	"java:S100" // Annotation methods use underscore suffix to avoid Java keyword conflicts
+})
 public @interface BeanConfig {
 
 	/**

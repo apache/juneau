@@ -101,8 +101,8 @@ public class Tfoot extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Tfoot _class(String value) {
-		super._class(value);
+	public Tfoot class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

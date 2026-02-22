@@ -86,8 +86,17 @@ public class RestChildren {
 	/**
 	 * Represents a null value for the {@link Rest#restChildrenClass()} annotation.
 	 */
-	@SuppressWarnings({ "javadoc", "java:S112" }) // throws Exception intentional - callback/lifecycle method
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method
+	})
 	public final class Void extends RestChildren {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param builder The builder.
+		 * @throws Exception If initialization fails.
+		 */
 		public Void(Builder builder) throws Exception {
 			super(builder);
 		}

@@ -126,7 +126,9 @@ public class ConfigEvent {
 	 * @param comment - Optional comment string to add on the same line as the entry.
 	 * @param preLines - Optional comment lines that occur before this entry.
 	 */
-	@SuppressWarnings("java:S107") // Constructor requires 8 parameters for configuration event
+	@SuppressWarnings({
+		"java:S107" // Constructor requires 8 parameters for configuration event
+	})
 	protected ConfigEvent(ConfigEventType type, String config, String section, String key, String value, String modifiers, String comment, List<String> preLines) {
 		this.type = type;
 		this.config = config;

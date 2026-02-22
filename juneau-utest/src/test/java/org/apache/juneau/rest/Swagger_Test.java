@@ -38,7 +38,9 @@ import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S1874") // Intentional use of deprecated classes/methods in tests to verify deprecated functionality
+@SuppressWarnings({
+	"java:S1874" // Intentional use of deprecated classes/methods in tests to verify deprecated functionality
+})
 class Swagger_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

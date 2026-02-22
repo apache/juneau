@@ -26,7 +26,7 @@ class Aside_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Aside x = aside()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

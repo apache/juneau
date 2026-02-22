@@ -36,11 +36,16 @@ import org.apache.juneau.rest.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({
+	"resource" // ResponseBeanProcessor manages Closeable resources
+})
 public class ResponseBeanProcessor implements ResponseProcessor {
 
 	@Override /* Overridden from ResponseProcessor */
-	@SuppressWarnings({"java:S6541", "java:S3776"})
+	@SuppressWarnings({
+		"java:S6541", // Session objects are single-threaded by design
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+	})
 	public int process(RestOpSession opSession) throws IOException {
 
 		var req = opSession.getRequest();

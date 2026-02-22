@@ -33,7 +33,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Testcase for {@link SwaggerUI}.
  */
-@SuppressWarnings("java:S4144")
+@SuppressWarnings({
+	"java:S4144" // Identical test methods intentional for testing different scenarios
+})
 class SwaggerUI_Test extends TestBase {
 
 	private final BeanSession bs = BeanContext.DEFAULT_SESSION;

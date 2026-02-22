@@ -44,7 +44,11 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S1186")
+@SuppressWarnings({
+	"java:S1186", // Empty test method intentional for framework testing
+	"deprecation", // Uses deprecated API
+	"removal" // Tests deprecated API for backward compatibility
+})
 class RestClient_Test extends TestBase {
 
 	public static class ABean {
@@ -208,7 +212,6 @@ class RestClient_Test extends TestBase {
 		assertDoesNotThrow(()->RestClient.create().disableRedirectHandling().redirectStrategy(DefaultRedirectStrategy.INSTANCE).defaultCookieSpecRegistry(null).sslHostnameVerifier(null).publicSuffixMatcher(null).sslContext(null).sslSocketFactory(null).maxConnTotal(10).maxConnPerRoute(10).defaultSocketConfig(null).defaultConnectionConfig(null).connectionTimeToLive(100,TimeUnit.DAYS).connectionManager(null).connectionManagerShared(true).connectionReuseStrategy(null).keepAliveStrategy(null).targetAuthenticationStrategy(null).proxyAuthenticationStrategy(null).userTokenHandler(null).disableConnectionState().schemePortResolver(null).disableCookieManagement().disableContentCompression().disableAuthCaching().retryHandler(null).disableAutomaticRetries().proxy(null).routePlanner(null).connectionBackoffStrategy(null).backoffManager(null).serviceUnavailableRetryStrategy(null).defaultCookieStore(null).defaultCredentialsProvider(null).defaultAuthSchemeRegistry(null).contentDecoderRegistry(null).defaultRequestConfig(null).useSystemProperties().evictExpiredConnections().evictIdleConnections(1,TimeUnit.DAYS));
 	}
 
-	@SuppressWarnings("removal")
 	@Test void c06_httpClient_unusedHttpClientMethods() {
 		var x = RestClient.create().build();
 		assertThrows(UnsupportedOperationException.class, x::getParams);
@@ -327,7 +330,6 @@ class RestClient_Test extends TestBase {
 		assertEquals(2,x.getMajor());
 	}
 
-	@SuppressWarnings("removal")
 	@Test void e04_httpRequestBase_completed() throws Exception {
 		client().build().get("/bean").completed().run().assertStatus(200);
 	}
@@ -400,7 +402,7 @@ class RestClient_Test extends TestBase {
 		assertEquals("Foo: bar", x.headerIterator("Foo").next().toString());
 	}
 
-	@SuppressWarnings({"deprecation","removal"})
+	
 	@Test void e15_httpMessage_getParams() throws Exception {
 		var p = new BasicHttpParams();
 		var x = client().build().get("/bean");

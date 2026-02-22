@@ -98,7 +98,10 @@ import org.apache.juneau.xml.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
  * </ul>
  */
-@SuppressWarnings({"java:S115", "resource"})
+@SuppressWarnings({
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"resource", // Resource management handled externally
+})
 public class RestRequest extends BeanSession implements HttpUriRequest, Configurable, AutoCloseable {
 
 	// Property name constants
@@ -1897,7 +1900,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return The response object.
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 */
-	@SuppressWarnings({"null","java:S3776","java:S6541"})
+	@SuppressWarnings({
+		"null", // Null handling verified by context or framework
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S6541", // Single-threaded context; synchronization unnecessary
+	})
 	public RestResponse run() throws RestCallException {
 		if (nn(response))
 			throw new RestCallException(response, null, "run() already called.");

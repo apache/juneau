@@ -49,7 +49,9 @@ import jakarta.servlet.http.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics">juneau-rest-mock Basics</a>
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({
+	"resource" // MockRestRequest manages Closeable resources
+})
 public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	private Map<String,Object> attributeMap = map();
 	private Map<String,RequestDispatcher> requestDispatcherMap = map();

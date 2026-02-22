@@ -37,7 +37,9 @@ import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S1186")
+@SuppressWarnings({
+	"java:S1186" // Empty test method intentional for framework testing
+})
 class RestAnnotation_Test extends TestBase {
 
 	private static final String CNAME = RestAnnotation_Test.class.getName();

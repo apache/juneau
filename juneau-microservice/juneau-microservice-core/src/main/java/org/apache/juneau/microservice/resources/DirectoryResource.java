@@ -79,35 +79,48 @@ import org.apache.juneau.rest.servlet.*;
 )
 @HtmlConfig(uriAnchorText="PROPERTY_NAME")
 @SuppressWarnings({
-	"javadoc",
 	"java:S115" // Constants use UPPER_snakeCase convention (e.g., DIRECTORY_RESOURCE_rootDir)
 })
 public class DirectoryResource extends BasicRestServlet {
+
+	/** File action link. */
 	@Response
 	@Schema(description = "File action")
 	public static class Action extends LinkString {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param name Action name.
+		 * @param uri Action URI.
+		 * @param uriArgs URI format arguments.
+		 */
 		public Action(String name, String uri, Object...uriArgs) {
 			super(name, uri, uriArgs);
 		}
 
+		/** {@inheritDoc} */
 		@Override /* Overridden from LinkString */
 		public Action setName(String value) {
 			super.setName(value);
 			return this;
 		}
 
+		/** {@inheritDoc} */
 		@Override /* Overridden from LinkString */
 		public Action setUri(java.net.URI value) {
 			super.setUri(value);
 			return this;
 		}
 
+		/** {@inheritDoc} */
 		@Override /* Overridden from LinkString */
 		public Action setUri(String value) {
 			super.setUri(value);
 			return this;
 		}
 
+		/** {@inheritDoc} */
 		@Override /* Overridden from LinkString */
 		public Action setUri(String value, Object...args) {
 			super.setUri(value, args);
@@ -115,6 +128,7 @@ public class DirectoryResource extends BasicRestServlet {
 		}
 	}
 
+	/** File or directory details for REST response. */
 	@Response
 	@Schema(description = "File or directory details")
 	@Bean(properties = "type,name,size,lastModified,actions,files")
@@ -124,6 +138,13 @@ public class DirectoryResource extends BasicRestServlet {
 		private final String uri;
 		private final boolean includeChildren;
 
+		/**
+		 * Constructor.
+		 *
+		 * @param f The file or directory.
+		 * @param path The path.
+		 * @param includeChildren Whether to include child files.
+		 */
 		public FileResource(File f, String path, boolean includeChildren) {
 			this.f = f;
 			this.path = path;
@@ -131,6 +152,11 @@ public class DirectoryResource extends BasicRestServlet {
 			this.includeChildren = includeChildren;
 		}
 
+		/**
+		 * Returns available actions for this file (view, download, delete).
+		 *
+		 * @return The list of actions.
+		 */
 		@Html(format = HtmlFormat.HTML_CDC)
 		public List<Action> getActions() {
 			List<Action> l = list();
@@ -143,6 +169,11 @@ public class DirectoryResource extends BasicRestServlet {
 			return l;
 		}
 
+		/**
+		 * Returns child files when this is a directory and includeChildren is true.
+		 *
+		 * @return Child files, or <jk>null</jk> when this is a file or includeChildren is false.
+		 */
 		@SuppressWarnings({
 			"java:S1168"     // TODO: Intentional null when file or !includeChildren. Consider empty set.
 		})
@@ -155,26 +186,55 @@ public class DirectoryResource extends BasicRestServlet {
 			return s;
 		}
 
+		/**
+		 * Returns the last modified date of the file.
+		 *
+		 * @return The last modified date.
+		 */
 		public Date getLastModified() { return new Date(f.lastModified()); }
 
+		/**
+		 * Returns the file name as a link.
+		 *
+		 * @return The name as a link.
+		 */
 		public LinkString getName() { return new LinkString(f.getName(), uri); }
 
+		/**
+		 * Returns the file size, or number of items for directories.
+		 *
+		 * @return The size.
+		 */
 		public long getSize() { return f.isDirectory() ? f.listFiles().length : f.length(); }
 
+		/**
+		 * Returns the type: "dir" or "file".
+		 *
+		 * @return The type.
+		 */
 		public String getType() { return (f.isDirectory() ? "dir" : "file"); }
 	}
 
 	@Response
 	@Schema(type = "string", format = "binary", description = "Contents of file")
 	static class FileContents extends FileInputStream {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param file The file to read.
+		 * @throws FileNotFoundException If the file is not found.
+		 */
 		public FileContents(File file) throws FileNotFoundException {
 			super(file);
 		}
 	}
 
+	/** Comparator for sorting file resources (directories before files, then by name). */
 	static class FileResourceComparator implements Comparator<FileResource>, Serializable {
 		private static final long serialVersionUID = 1L;
 
+		/** {@inheritDoc} */
 		@Override /* Overridden from Comparator */
 		public int compare(FileResource o1, FileResource o2) {
 			int c = o1.getType().compareTo(o2.getType());
@@ -216,12 +276,24 @@ public class DirectoryResource extends BasicRestServlet {
 	final boolean allowUploads;
 	final boolean allowViews;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param c The microservice configuration.
+	 */
 	public DirectoryResource(Config c) {
 		rootDir = new File(c.get(DIRECTORY_RESOURCE_rootDir).orElse("."));
 		allowViews = c.get(DIRECTORY_RESOURCE_allowViews).asBoolean().orElse(false);
 		allowDeletes = c.get(DIRECTORY_RESOURCE_allowDeletes).asBoolean().orElse(false);
 		allowUploads = c.get(DIRECTORY_RESOURCE_allowUploads).asBoolean().orElse(false);
 	}
+	/**
+	 * Deletes a file on the file system.
+	 *
+	 * @param path The file path.
+	 * @return Redirect to root on success.
+	 * @throws MethodNotAllowed If deletes are not enabled.
+	 */
 	@RestDelete(
 		path="/*",
 		summary="Delete file",
@@ -232,6 +304,15 @@ public class DirectoryResource extends BasicRestServlet {
 		return new RedirectToRoot();
 	}
 
+	/**
+	 * Downloads the contents of a file.
+	 *
+	 * @param res The response.
+	 * @param path The file path.
+	 * @return The file contents stream.
+	 * @throws NotFound If the file is not found.
+	 * @throws MethodNotAllowed If views are not enabled.
+	 */
 	@RestOp(
 		method="DOWNLOAD",
 		path="/*",
@@ -245,11 +326,20 @@ public class DirectoryResource extends BasicRestServlet {
 		res.setContentType("application/octet-stream");
 		try {
 			return new FileContents(getFile(path));
-		} catch (@SuppressWarnings("unused") FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 			throw new NotFound("File not found");
 		}
 	}
 
+	/**
+	 * Returns information about the specified file or directory.
+	 *
+	 * @param req The request.
+	 * @param path The file path.
+	 * @return The file or directory details.
+	 * @throws NotFound If the file is not found.
+	 * @throws Exception If an error occurs.
+	 */
 	@RestGet(
 		path="/*",
 		summary="View information on file or directory",
@@ -258,7 +348,9 @@ public class DirectoryResource extends BasicRestServlet {
 	@HtmlDocConfig(
 		nav={"<h5>Folder:  $RA{fullPath}</h5>"}
 	)
-	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method
+	})
 	public FileResource getFile(RestRequest req, @Path("/*") String path) throws NotFound, Exception {
 
 		var dir = getFile(path);
@@ -267,6 +359,14 @@ public class DirectoryResource extends BasicRestServlet {
 		return new FileResource(dir, path, true);
 	}
 
+	/**
+	 * Adds or overwrites a file on the file system.
+	 *
+	 * @param is The file contents.
+	 * @param path The file path.
+	 * @return Redirect to root on success.
+	 * @throws InternalServerError If the write fails.
+	 */
 	@RestPut(
 		path="/*",
 		summary="Add or replace file",
@@ -291,6 +391,15 @@ public class DirectoryResource extends BasicRestServlet {
 		return new RedirectToRoot();
 	}
 
+	/**
+	 * Views the contents of a file.
+	 *
+	 * @param res The response.
+	 * @param path The file path.
+	 * @return The file contents stream.
+	 * @throws NotFound If the file is not found.
+	 * @throws MethodNotAllowed If views are not enabled.
+	 */
 	@RestOp(
 		method="VIEW",
 		path="/*",
@@ -304,7 +413,7 @@ public class DirectoryResource extends BasicRestServlet {
 		res.setContentType("text/plain");
 		try {
 			return new FileContents(getFile(path));
-		} catch (@SuppressWarnings("unused") FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 			throw new NotFound("File not found");
 		}
 	}
@@ -321,7 +430,7 @@ public class DirectoryResource extends BasicRestServlet {
 		}
 		try {
 			Files.delete(f.toPath());
-		} catch (@SuppressWarnings("unused") IOException e) {
+		} catch (IOException e) {
 			throw new Forbidden("Could not delete file {0}", f.getAbsolutePath());
 		}
 	}

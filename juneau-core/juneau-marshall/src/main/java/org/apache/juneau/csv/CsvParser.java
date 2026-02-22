@@ -37,7 +37,9 @@ import org.apache.juneau.parser.*;
  * </ul>
  *
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class CsvParser extends ReaderParser implements CsvMetaProvider {
 
 	// Argument name constants for assertArgNotNull

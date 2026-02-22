@@ -85,7 +85,9 @@ import java.util.function.Predicate;
  * @param <K> The key type.
  * @param <V> The value type.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class FluentMap<K,V> extends AbstractMap<K,V> {
 
 	// Argument name constants for assertArgNotNull

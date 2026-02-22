@@ -104,8 +104,8 @@ public class Figcaption extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Figcaption _class(String value) {
-		super._class(value);
+	public Figcaption class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

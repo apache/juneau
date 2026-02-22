@@ -79,8 +79,8 @@ public class Area extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Area _class(String value) {
-		super._class(value);
+	public Area class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

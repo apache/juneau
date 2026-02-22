@@ -113,8 +113,8 @@ public class Address extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Address _class(String value) {
-		super._class(value);
+	public Address class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

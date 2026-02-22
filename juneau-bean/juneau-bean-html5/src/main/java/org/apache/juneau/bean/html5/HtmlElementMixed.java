@@ -37,8 +37,8 @@ public class HtmlElementMixed extends HtmlElement {
 	private List<Object> children;
 
 	@Override /* Overridden from HtmlElement */
-	public HtmlElementMixed _class(String value) {
-		super._class(value);
+	public HtmlElementMixed class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

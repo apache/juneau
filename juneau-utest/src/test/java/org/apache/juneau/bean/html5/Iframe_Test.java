@@ -32,7 +32,7 @@ class Iframe_Test extends TestBase {
 			.src("d")
 			.srcdoc("e")
 			.width("f")
-			._class("g")
+			.class_("g")
 			.accesskey("h")
 			.contenteditable("i")
 			.dir("j")

@@ -49,7 +49,9 @@ package org.apache.juneau.rest.client;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
  * </ul>
  */
-@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+@SuppressWarnings({
+	"java:S112" // throws Exception intentional - callback/lifecycle method
+})
 public interface RestCallInterceptor {
 
 	/**

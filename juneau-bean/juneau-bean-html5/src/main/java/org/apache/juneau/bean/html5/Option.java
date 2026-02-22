@@ -98,8 +98,8 @@ public class Option extends HtmlElementText {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Option _class(String value) {
-		super._class(value);
+	public Option class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

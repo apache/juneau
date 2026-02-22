@@ -36,7 +36,9 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the @BeanConfig annotation.
  */
-@SuppressWarnings("java:S5961")
+@SuppressWarnings({
+	"java:S5961" // High assertion count acceptable in comprehensive test
+})
 class BeanConfigAnnotation_Test extends TestBase {
 
 	private static void check(String expected, Object o) {

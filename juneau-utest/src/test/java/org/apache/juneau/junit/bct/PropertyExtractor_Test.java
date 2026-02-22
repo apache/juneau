@@ -32,6 +32,9 @@ import org.junit.jupiter.api.*;
  * <p>This test class verifies interface contract compliance, custom implementations,
  * and edge case handling for PropertyExtractor implementations.</p>
  */
+@SuppressWarnings({
+	"cast" // Explicit cast needed for type testing
+})
 class PropertyExtractor_Test extends TestBase {
 
 	// ====================================================================================================
@@ -41,7 +44,6 @@ class PropertyExtractor_Test extends TestBase {
 	@Nested
 	class A_interfaceContract extends TestBase {
 
-		@SuppressWarnings("cast")
 		@Test
 		void a01_interfaceImplementation() {
 			// Verify it's a proper interface with two methods

@@ -87,7 +87,9 @@ import org.apache.juneau.commons.io.*;
  * </ul>
  *
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public interface FileFinder {
 
 	/** Argument name constant for assertArgNotNull. */
@@ -137,7 +139,9 @@ public interface FileFinder {
 		 * @param recursive If <jk>true</jk>, also recursively adds all the paths of the parent classes as well.
 		 * @return This object.
 		 */
-		@SuppressWarnings("null")
+		@SuppressWarnings({
+			"null" // Null check handled by assertArgNotNull
+		})
 		public Builder cp(Class<?> c, String path, boolean recursive) {
 			assertArgNotNull(ARG_c, c);
 			while (nn(c)) {

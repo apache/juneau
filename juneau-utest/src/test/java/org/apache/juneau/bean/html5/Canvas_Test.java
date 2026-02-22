@@ -28,7 +28,7 @@ class Canvas_Test extends TestBase {
 		Canvas x = canvas()
 			.height("a")
 			.width("b")
-			._class("c")
+			.class_("c")
 			.accesskey("d")
 			.contenteditable("e")
 			.dir("f")

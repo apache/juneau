@@ -69,7 +69,9 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  *
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public abstract class Context {
 
 	// Property name constants
@@ -103,7 +105,9 @@ public abstract class Context {
 		 * Constructor.
 		 * Default settings.
 		 */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure requires cast for Builder pattern
+		})
 		protected Builder() {
 			debug = env("Context.debug", false);
 			annotations = list();
@@ -540,7 +544,9 @@ public abstract class Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return The built context bean.
 		 */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure requires cast to T for context build
+		})
 		public final <T extends Context> T build(Class<T> c) {
 			if (type == null || ! assertArgNotNull(ARG_c, c).isAssignableFrom(type))
 				type = c;

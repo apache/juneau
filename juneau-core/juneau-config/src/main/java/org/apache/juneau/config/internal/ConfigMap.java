@@ -38,10 +38,15 @@ import org.apache.juneau.config.store.*;
 /**
  * Represents the parsed contents of a configuration.
  */
-@SuppressWarnings({ "resource", "java:S1206" }) // Complex nested structure; value equality not practical
+@SuppressWarnings({
+	"resource", // Complex nested structure; value equality not practical
+	"java:S1206", // equals/hashCode not overridden; value equality not practical for this class
+})
 public class ConfigMap implements ConfigStoreListener {
 
-	@SuppressWarnings("java:S1206") // Internal config structure; value equality not needed
+	@SuppressWarnings({
+		"java:S1206" // Internal config structure; value equality not needed
+	})
 	class ConfigSection {
 
 		final String name;   // The config section name, or blank if the default section.  Never null.
@@ -55,7 +60,9 @@ public class ConfigMap implements ConfigStoreListener {
 		/**
 		 * Constructor.
 		 */
-		@SuppressWarnings("java:S3776")
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for config section parsing
+		})
 		ConfigSection(List<String> lines) {
 
 			String name2 = null;
@@ -475,7 +482,9 @@ public class ConfigMap implements ConfigStoreListener {
 		return this;
 	}
 
-	@SuppressWarnings("null")
+	@SuppressWarnings({
+		"null" // Null analysis not applicable to this config listener method
+	})
 	@Override /* Overridden from ConfigStoreListener */
 	public void onChange(String newContents) {
 		ConfigEvents changes2 = null;
@@ -674,7 +683,9 @@ public class ConfigMap implements ConfigStoreListener {
 		return w;
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for config change application
+	})
 	private ConfigMap applyChange(boolean addToChangeList, ConfigEvent ce) {
 		if (ce == null)
 			return this;
@@ -728,7 +739,9 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for config diff detection
+	})
 	private ConfigEvents findDiffs(String updatedContents) throws IOException {
 		var changes2 = new ConfigEvents();
 		var newMap = new ConfigMap(store, name, updatedContents);
@@ -792,7 +805,10 @@ public class ConfigMap implements ConfigStoreListener {
 		return changes2;
 	}
 
-	@SuppressWarnings({ "java:S3776", "java:S6541" })
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S6541", // Single-threaded context; synchronization unnecessary
+	})
 	private ConfigMap load(String contents) throws IOException {
 		if (contents == null)
 			contents = "";

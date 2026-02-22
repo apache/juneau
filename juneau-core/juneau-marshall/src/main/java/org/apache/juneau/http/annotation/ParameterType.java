@@ -17,8 +17,12 @@
 package org.apache.juneau.http.annotation;
 
 /**
- * Static strings used for Swagger parameter formats.
+ * Static strings used for Swagger parameter types.
  *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2/#data-types">Swagger 2.0 Data Types</a>
+ * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/#data-types">OpenAPI 3.0 Data Types</a>
+ * </ul>
  */
 public class ParameterType {
 
@@ -27,18 +31,24 @@ public class ParameterType {
 	 */
 	private ParameterType() {}
 
-	@SuppressWarnings("javadoc")
+	/** String parameter type. */
 	public static final String STRING = "string";
+
 	/** Number parameter type. */
 	public static final String NUMBER = "number";
+
 	/** Integer parameter type. */
 	public static final String INTEGER = "integer";
+
 	/** Boolean parameter type. */
 	public static final String BOOLEAN = "boolean";
+
 	/** Array parameter type. */
 	public static final String ARRAY = "array";
+
 	/** Object parameter type. */
 	public static final String OBJECT = "object";
+
 	/** File parameter type. */
 	public static final String FILE = "file";
 }

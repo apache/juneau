@@ -32,7 +32,9 @@ import org.apache.juneau.json.*;
  * Root class for all Swagger beans.
  */
 @Bean
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public abstract class OpenApiElement {
 
 	// Argument name constants for assertArgNotNull

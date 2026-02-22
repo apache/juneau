@@ -26,7 +26,7 @@ class Var_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Var x = var()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

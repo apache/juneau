@@ -76,7 +76,9 @@ public class HeaderBeanMeta<T> {
 	 * @param type The header bean type.
 	 * @return The metadata, or <jk>null</jk> if a valid constructor could not be found.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for HeaderBeanMeta creation
+	})
 	public static <T> HeaderBeanMeta<T> of(Class<T> type) {
 		HeaderBeanMeta<?> m = CACHE.computeIfAbsent(type, HeaderBeanMeta::new);
 		return (HeaderBeanMeta<T>)m;

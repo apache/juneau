@@ -52,9 +52,9 @@ import org.apache.juneau.swap.*;
  *
  */
 @SuppressWarnings({
-	"unchecked",
-	"rawtypes",
-	"java:S115",
+	"unchecked", // Type erasure requires unchecked casts
+	"rawtypes", // Raw types necessary for generic type handling
+	"java:S115", // Constants use UPPER_snakeCase naming convention
 	"java:S1452"  // Wildcard required - ClassMeta<?>, ObjectSwap<?,?>, etc. for bean metadata
 })
 public class BeanSession extends ContextSession {
@@ -1142,7 +1142,7 @@ public class BeanSession extends ContextSession {
 	 * @return The wrapped object.
 	 */
 	@SuppressWarnings({
-		"java:S1172" // Parameter propertyNamer is unused but kept for API consistency
+		"java:S1172" // Parameter reserved for future property naming strategy support
 	})
 	public final <T> BeanMap<T> toBeanMap(T o, PropertyNamer propertyNamer) {
 		return this.toBeanMap(o, (Class<T>)o.getClass());
@@ -1161,7 +1161,11 @@ public class BeanSession extends ContextSession {
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 * @return The converted value.
 	 */
-	@SuppressWarnings({ "null", "java:S3776", "java:S6541" })
+	@SuppressWarnings({
+		"null", // Null handling verified by context or framework
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S6541", // Single-threaded context; synchronization unnecessary
+	})
 	protected final <T> T convertToMemberType(Object outer, Object value, ClassMeta<T> to) throws InvalidDataConversionException {
 		if (to == null)
 			to = (ClassMeta<T>)object();

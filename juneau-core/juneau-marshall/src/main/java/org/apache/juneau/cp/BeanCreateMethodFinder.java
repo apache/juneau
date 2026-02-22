@@ -79,7 +79,9 @@ import org.apache.juneau.commons.reflect.*;
  *
  * @param <T> The bean type being created.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class BeanCreateMethodFinder<T> {
 
 	// Argument name constants for assertArgNotNull
@@ -185,7 +187,9 @@ public class BeanCreateMethodFinder<T> {
 	 * @return The object returned by the method invocation, or the default value if method was not found.
 	 * @throws ExecutableException If method invocation threw an exception.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to T
+	})
 	public T run() throws ExecutableException {
 		if (nn(method))
 			return (T)method.invoke(resource, args);

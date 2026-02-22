@@ -37,6 +37,9 @@ import org.junit.jupiter.api.*;
 	int num() default 0;
 }
 
+@SuppressWarnings({
+	"serial" // Serialization not relevant in test code
+})
 class Utils_Test extends TestBase {
 
 	//====================================================================================================
@@ -899,7 +902,6 @@ class Utils_Test extends TestBase {
 		assertTrue(mappedError instanceof IllegalStateException);
 
 		// Test with custom exception type
-		@SuppressWarnings("serial")
 		class CustomRuntimeException extends RuntimeException {
 			CustomRuntimeException(String message, Throwable cause) {
 				super(message, cause);
@@ -970,7 +972,6 @@ class Utils_Test extends TestBase {
 		assertEquals("error mapped: test error", errorMapped.getMessage());
 
 		// Test with custom exception type
-		@SuppressWarnings("serial")
 		class CustomRuntimeException extends RuntimeException {
 			CustomRuntimeException(String message, Throwable cause) {
 				super(message, cause);
@@ -1051,7 +1052,6 @@ class Utils_Test extends TestBase {
 		assertTrue(mappedError instanceof IllegalStateException);
 
 		// Test with custom exception type
-		@SuppressWarnings("serial")
 		class CustomRuntimeException extends RuntimeException {
 			CustomRuntimeException(String message, Throwable cause) {
 				super(message, cause);

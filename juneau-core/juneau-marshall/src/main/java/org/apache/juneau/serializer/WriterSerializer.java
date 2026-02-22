@@ -43,7 +43,9 @@ import org.apache.juneau.json.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class WriterSerializer extends Serializer {
 
 	// Property name constants
@@ -1140,7 +1142,9 @@ public class WriterSerializer extends Serializer {
 	 * @return
 	 * 	The character used for quoting attributes and values.
 	 */
-	@SuppressWarnings("java:S1845") // Method name intentionally matches field name
+	@SuppressWarnings({
+		"java:S1845" // Method name intentionally matches field name
+	})
 	protected Character quoteChar() {
 		return nn(quoteCharOverride) ? quoteCharOverride : quoteChar;
 	}

@@ -104,8 +104,8 @@ public class Select extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Select _class(String value) {
-		super._class(value);
+	public Select class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

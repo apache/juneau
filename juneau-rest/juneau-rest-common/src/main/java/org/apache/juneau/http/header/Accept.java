@@ -155,47 +155,47 @@ public class Accept extends BasicMediaRangesHeader {
 	private static final Cache<String,Accept> CACHE = Cache.of(String.class, Accept.class).build();
 
 	// Constants
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>application/atom+xml</c>. */
 	public static final Accept APPLICATION_ATOM_XML = of("application/atom+xml");
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>application/x-www-form-urlencoded</c>. */
 	public static final Accept APPLICATION_FORM_URLENCODED = of("application/x-www-form-urlencoded");
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>application/json</c>. */
 	public static final Accept APPLICATION_JSON = of("application/json");
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>application/octet-stream</c>. */
 	public static final Accept APPLICATION_OCTET_STREAM = of("application/octet-stream");
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>application/soap+xml</c>. */
 	public static final Accept APPLICATION_SOAP_XML = of("application/soap+xml");
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>application/svg+xml</c>. */
 	public static final Accept APPLICATION_SVG_XML = of("application/svg+xml");
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>application/xhtml+xml</c>. */
 	public static final Accept APPLICATION_XHTML_XML = of("application/xhtml+xml");
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>application/xml</c>. */
 	public static final Accept APPLICATION_XML = of("application/xml");
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>image/bmp</c>. */
 	public static final Accept IMAGE_BMP = of("image/bmp");
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>image/gif</c>. */
 	public static final Accept IMAGE_GIF = of("image/gif");
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>image/jpeg</c>. */
 	public static final Accept IMAGE_JPEG = of("image/jpeg");
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>image/png</c>. */
 	public static final Accept IMAGE_PNG = of("image/png");
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>image/svg+xml</c>. */
 	public static final Accept IMAGE_SVG = of("image/svg+xml");
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>image/tiff</c>. */
 	public static final Accept IMAGE_TIFF = of("image/tiff");
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>image/webp</c>. */
 	public static final Accept IMAGE_WEBP = of("image/webp");
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>multipart/form-data</c>. */
 	public static final Accept MULTIPART_FORM_DATA = of("multipart/form-data");
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>text/html</c>. */
 	public static final Accept TEXT_HTML = of("text/html");
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>text/plain</c>. */
 	public static final Accept TEXT_PLAIN = of("text/plain");
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>text/xml</c>. */
 	public static final Accept TEXT_XML = of("text/xml");
-	@SuppressWarnings("javadoc")
+	/** Accept header for <c>*&#47;*</c> (all media types). */
 	public static final Accept WILDCARD = of("*/*");
-	@SuppressWarnings("javadoc")
+	/** Constant for <jk>null</jk> value. */
 	public static final Accept NULL = new Accept((String)null);
 
 	/**

@@ -89,8 +89,8 @@ public class Param extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Param _class(String value) {
-		super._class(value);
+	public Param class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

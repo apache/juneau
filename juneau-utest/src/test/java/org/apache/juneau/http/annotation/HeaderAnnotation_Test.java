@@ -24,7 +24,9 @@ import org.apache.juneau.*;
 import org.apache.juneau.oapi.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S1186")
+@SuppressWarnings({
+	"java:S1186" // Empty test method intentional for framework testing
+})
 class HeaderAnnotation_Test extends TestBase {
 
 	private static final String CNAME = HeaderAnnotation_Test.class.getName();

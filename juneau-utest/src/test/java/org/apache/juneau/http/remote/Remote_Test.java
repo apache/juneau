@@ -36,7 +36,10 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S5961")
+@SuppressWarnings({
+	"java:S5961", // High assertion count acceptable in comprehensive test
+	"serial" // Serialization not relevant in test code
+})
 class Remote_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -308,7 +311,7 @@ class Remote_Test extends TestBase {
 	}
 
 	@Rest(path="/C4")
-	@SuppressWarnings("unused")
+	
 	public static class C4a implements BasicJson5Config {
 		@RestOp
 		public String x1() throws C4c {
@@ -350,7 +353,6 @@ class Remote_Test extends TestBase {
 		Future<String> x6() throws AssertionError;
 	}
 
-	@SuppressWarnings("serial")
 	public static class C4c extends Exception {
 		public C4c(String msg) {
 			super(msg);
@@ -493,7 +495,6 @@ class Remote_Test extends TestBase {
 		}
 	}
 
-	@SuppressWarnings("serial")
 	public static class E5a extends Exception {
 		public E5a(String msg) {
 			super(msg);
@@ -541,7 +542,6 @@ class Remote_Test extends TestBase {
 		String[] getHeaders();
 	}
 
-	@SuppressWarnings("serial")
 	public static class F1b extends HeaderList {
 		public F1b() {
 			super(
@@ -564,7 +564,6 @@ class Remote_Test extends TestBase {
 		String[] getHeaders();
 	}
 
-	@SuppressWarnings("serial")
 	public static class F2b extends HeaderList {
 		public F2b() {
 			throw new NullPointerException("foo");

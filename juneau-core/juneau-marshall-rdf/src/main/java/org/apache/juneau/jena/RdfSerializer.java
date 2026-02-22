@@ -57,7 +57,9 @@ import org.apache.juneau.xml.annotation.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 
 	// Property name constants

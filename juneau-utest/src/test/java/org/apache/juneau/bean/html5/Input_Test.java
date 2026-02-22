@@ -59,7 +59,7 @@ class Input_Test extends TestBase {
 			.type("ae")
 			.value("af")
 			.width("ag")
-			._class("ah")
+			.class_("ah")
 			.accesskey("ai")
 			.contenteditable("aj")
 			.dir("ak")

@@ -26,7 +26,7 @@ class Span_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Span x = span()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

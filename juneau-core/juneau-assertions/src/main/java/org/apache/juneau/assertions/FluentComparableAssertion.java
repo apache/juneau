@@ -95,7 +95,10 @@ import org.apache.juneau.serializer.*;
  * @param <T> The value type
  * @param <R> The return type.
  */
-@SuppressWarnings({"java:S115", "rawtypes"})
+@SuppressWarnings({
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"rawtypes", // Raw Comparable type necessary for flexible comparison API without self-referencing type constraints
+})
 public class FluentComparableAssertion<T extends Comparable,R> extends FluentObjectAssertion<T,R> {
 
 	// Argument name constants for assertArgNotNull
@@ -174,7 +177,9 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for comparable comparison
+	})
 	public R isGt(Comparable value) throws AssertionError {
 		assertArgNotNull(ARG_value, value);
 		if (value().compareTo(value) <= 0)
@@ -189,7 +194,9 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for comparable comparison
+	})
 	public R isGte(Comparable value) throws AssertionError {
 		assertArgNotNull(ARG_value, value);
 		if (value().compareTo(value) < 0)
@@ -204,7 +211,9 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for comparable comparison
+	})
 	public R isLt(Comparable value) throws AssertionError {
 		assertArgNotNull(ARG_value, value);
 		if (value().compareTo(value) >= 0)
@@ -219,7 +228,9 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for comparable comparison
+	})
 	public R isLte(Comparable value) throws AssertionError {
 		assertArgNotNull(ARG_value, value);
 		if (value().compareTo(value) > 0)

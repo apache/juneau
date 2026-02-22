@@ -30,7 +30,9 @@ import java.util.*;
  * </ul>
  *
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_classes)
+})
 public class DefaultClassList {
 
 	// Argument name constants for assertArgNotNull
@@ -100,7 +102,9 @@ public class DefaultClassList {
 	 * @param type The parent type to check for.
 	 * @return The first class in this list which is a subclass of the specified type.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for class lookup
+	})
 	public <T> Optional<Class<? extends T>> get(Class<T> type) {
 		assertArgNotNull(ARG_type, type);
 		for (var e : entries)

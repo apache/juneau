@@ -76,7 +76,9 @@ public class PartBeanMeta<T> {
 	 * @param type The part bean type.
 	 * @return The metadata, or <jk>null</jk> if a valid constructor could not be found.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for PartBeanMeta creation
+	})
 	public static <T> PartBeanMeta<T> of(Class<T> type) {
 		PartBeanMeta<?> m = CACHE.computeIfAbsent(type, PartBeanMeta::new);
 		return (PartBeanMeta<T>)m;

@@ -60,7 +60,9 @@ import org.apache.juneau.commons.function.Snippet;
  * 	<jv>store</jv>.unset(<js>"my.property"</js>);
  * </p>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class FunctionalStore implements SettingStore {
 
 	// Argument name constants for assertArgNotNull

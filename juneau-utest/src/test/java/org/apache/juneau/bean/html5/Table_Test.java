@@ -27,7 +27,7 @@ class Table_Test extends TestBase {
 	@Test void a01_basicSetters() {
 		Table x = table()
 			.border("a")
-			._class("b")
+			.class_("b")
 			.accesskey("c")
 			.contenteditable("d")
 			.dir("e")

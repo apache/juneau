@@ -93,7 +93,9 @@ import org.apache.juneau.commons.utils.*;
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection">Reflection Package</a>
 	 * </ul>
 	 */
-@SuppressWarnings("java:S115")
+	@SuppressWarnings({
+		"java:S115" // Constants use UPPER_snakeCase convention
+	})
 public class ParameterInfo extends ElementInfo implements Annotatable {
 
 	// Argument name constants for assertArgNotNull
@@ -245,7 +247,9 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @param type The annotation type.
 	 * @return A stream of annotation infos, never <jk>null</jk>.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for annotation stream
+	})
 	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
 		return getAnnotations().stream().filter(x -> x.isType(type)).map(x -> (AnnotationInfo<A>)x);
 	}
@@ -873,7 +877,11 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @throws ExecutableException If a required parameter (non-Optional, non-collection) cannot be resolved
 	 * 	from the bean store or <c>otherBeans</c>.
 	 */
-	@SuppressWarnings({ "java:S3776", "java:S6541" })
+	
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S6541", // Single-threaded context; synchronization unnecessary
+	})
 	public Object resolveValue(BeanStore beanStore, Object... otherBeans) {
 		var pt = getParameterType();
 		var bq = getResolvedQualifier();

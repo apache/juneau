@@ -26,7 +26,7 @@ class Pre_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Pre x = pre()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

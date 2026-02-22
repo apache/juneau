@@ -29,7 +29,10 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({ "rawtypes", "java:S1186", "java:S1172" }) // Unused parameters in tests are typically intentional
+@SuppressWarnings({
+	"rawtypes", // Raw types necessary for test bean handling
+	"java:S1186" // Empty method body intentional for callback testing
+})
 class AutoNumberSwapTest extends TestBase {
 
 	private static ObjectSwap find(Class<?> c) {

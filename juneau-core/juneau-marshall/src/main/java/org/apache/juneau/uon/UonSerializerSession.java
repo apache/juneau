@@ -46,7 +46,11 @@ import org.apache.juneau.svl.*;
 
  * </ul>
  */
-@SuppressWarnings({"resource","java:S110","java:S115"})
+@SuppressWarnings({
+	"resource", // Resource management handled externally
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S115" // Constants use UPPER_snakeCase naming convention
+})
 public class UonSerializerSession extends WriterSerializerSession implements HttpPartSerializerSession {
 
 	// Argument name constants for assertArgNotNull
@@ -55,7 +59,6 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings({"java:S110", "java:S115"})
 	public static class Builder extends WriterSerializerSession.Builder {
 
 		private UonSerializer ctx;
@@ -274,7 +277,10 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		return out;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({
+		"rawtypes", // Raw types necessary for generic collection/map serialization
+		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
+	})
 	private SerializerWriter serializeCollection(UonWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
 
 		var elementType = type.getElementType();
@@ -296,7 +302,10 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		return out;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({
+		"rawtypes", // Raw types necessary for generic collection/map serialization
+		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
+	})
 	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		var keyType = type.getKeyType();
@@ -398,7 +407,10 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	 * @return The same writer passed in.
 	 * @throws SerializeException Generic serialization error occurred.
 	 */
-	@SuppressWarnings({ "rawtypes", "java:S3776" })
+	@SuppressWarnings({
+		"rawtypes", // Raw types necessary for generic type handling
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+	})
 	protected SerializerWriter serializeAnything(UonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
 
 		if (o == null) {

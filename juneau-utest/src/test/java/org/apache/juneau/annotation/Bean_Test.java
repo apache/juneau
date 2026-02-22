@@ -26,6 +26,9 @@ import org.apache.juneau.marshaller.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"unused" // Private and package classes required for @Bean visibility testing
+})
 class Bean_Test extends TestBase {
 
 	static VarResolverSession vr = VarResolver.create().vars(XVar.class).build().createSession();
@@ -35,7 +38,6 @@ class Bean_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Bean
-	@SuppressWarnings("unused")
 	private static class A1 {
 		public int f1;
 
@@ -59,7 +61,6 @@ class Bean_Test extends TestBase {
 	@Bean(on="Dummy2")
 	private static class A2Config {}
 
-	@SuppressWarnings("unused")
 	private static class A2 {
 		public int f1;
 
@@ -129,7 +130,6 @@ class Bean_Test extends TestBase {
 	@Beanp(on="B2.getF2")
 	private static class B2Config {}
 
-	@SuppressWarnings("unused")
 	public static class B2 {
 
 		private int f1;

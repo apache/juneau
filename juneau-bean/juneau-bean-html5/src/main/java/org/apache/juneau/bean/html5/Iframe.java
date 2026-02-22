@@ -95,8 +95,8 @@ public class Iframe extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Iframe _class(String value) {
-		super._class(value);
+	public Iframe class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

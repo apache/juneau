@@ -59,7 +59,9 @@ import org.apache.juneau.cp.*;
  *
  * @param <T> the type of input being tested.
  */
-@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., MSG_predicateTestFailed, MSG_valueDidNotPassTest)
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., MSG_predicateTestFailed, MSG_valueDidNotPassTest)
+})
 public class AssertionPredicate<T> implements Predicate<T> {
 
 	private static final String CONST_Messages = "Messages";
@@ -235,7 +237,9 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	}
 
 	@Override /* Overridden from Predicate */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for predicate test
+	})
 	public boolean test(T t) {
 		failedMessage.remove();
 		var b = inner.test(t);

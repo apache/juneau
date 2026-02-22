@@ -28,7 +28,11 @@ import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"java:S5961", "java:S1186"})
+
+@SuppressWarnings({
+	"java:S5961", // High assertion count acceptable in comprehensive tests
+	"java:S1186", // Empty method body intentional for callback testing
+})
 class RestOp_Throws_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic sanity tests

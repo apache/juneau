@@ -32,8 +32,8 @@ public class HtmlElementRawText extends HtmlElement {
 	private Object text;
 
 	@Override /* Overridden from HtmlElement */
-	public HtmlElementRawText _class(String value) {
-		super._class(value);
+	public HtmlElementRawText class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

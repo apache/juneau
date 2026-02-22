@@ -49,7 +49,9 @@ public class HtmlDocConfigAnnotation {
 			super(HtmlDocConfig.class, HtmlDocSerializer.Builder.class, vr);
 		}
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Varargs method requires unchecked cast
+		})
 		@Override
 		public void apply(AnnotationInfo<HtmlDocConfig> ai, HtmlDocSerializer.Builder b) {
 			HtmlDocConfig a = ai.inner();

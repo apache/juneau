@@ -89,7 +89,9 @@ public class SerializerSet {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., CLASS_Inherit)
+	@SuppressWarnings({
+		"java:S115" // Constants use UPPER_snakeCase convention (e.g., CLASS_Inherit)
+	})
 	public static class Builder extends BeanBuilder<SerializerSet> {
 
 		private static final String CLASS_Inherit = "Inherit";

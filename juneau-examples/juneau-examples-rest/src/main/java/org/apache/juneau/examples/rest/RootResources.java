@@ -72,7 +72,9 @@ import org.apache.juneau.serializer.annotation.*;
 	// You can apply any of the Serializer/Parser/BeanContext settings this way.
 	quoteChar="'"
 )
-@SuppressWarnings("java:S110")
+@SuppressWarnings({
+	"java:S110" // Inheritance depth acceptable for example/demo code
+})
 public class RootResources extends BasicRestServletGroup {
 	// IMPORTANT!  If you don't need RDF support, change the parent interface to BasicUniversalConfig.
 	// It allows you to remove the Jena prerequisite.

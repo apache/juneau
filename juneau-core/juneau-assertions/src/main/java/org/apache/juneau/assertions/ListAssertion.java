@@ -121,7 +121,9 @@ import org.apache.juneau.serializer.*;
  *
  * @param <E> The element type.
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({
+	"java:S110" // Inheritance depth acceptable for ListAssertion hierarchy
+})
 public class ListAssertion<E> extends FluentListAssertion<E,ListAssertion<E>> {
 
 	/**

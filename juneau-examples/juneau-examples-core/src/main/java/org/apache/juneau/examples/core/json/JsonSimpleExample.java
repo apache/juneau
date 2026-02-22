@@ -38,7 +38,11 @@ public class JsonSimpleExample {
 	 * @param args Unused.
 	 * @throws Exception Unused.
 	 */
-	@SuppressWarnings({ "java:S125", "rawtypes", "unused" })  // S125: example output comments document expected output
+	@SuppressWarnings({
+		"java:S125", // S125: example output comments document expected output
+		"rawtypes", // Raw types necessary for generic type handling
+		"unused", // main(String[] args) - args required by JVM signature but unused in example
+	})
 	public static void main(String[] args) throws Exception {
 		// Juneau provides static constants with the most commonly used configurations
 		var jsonSerializer = JsonSerializer.DEFAULT;

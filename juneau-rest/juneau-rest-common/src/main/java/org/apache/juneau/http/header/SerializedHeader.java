@@ -137,7 +137,9 @@ public class SerializedHeader extends BasicHeader {
 	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for supplier
+	})
 	public SerializedHeader(String name, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
 		super(name, null);
 		this.value = value instanceof Supplier ? null : value;

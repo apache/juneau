@@ -117,8 +117,8 @@ public class Ul extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Ul _class(String value) {
-		super._class(value);
+	public Ul class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

@@ -32,7 +32,13 @@ import java.util.stream.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({ "java:S3008", "java:S5961", "java:S1186", "java:S1172" }) // Unused parameters in tests are typically intentional
+@SuppressWarnings({
+	"java:S3008", // Static field naming follows test convention
+	"java:S5961", // High assertion count acceptable in comprehensive tests
+	"java:S1186", // Empty method body intentional for callback testing
+	"java:S1172", // Unused parameters kept for API consistency or framework requirements
+	"unused" // Private members required for reflection/ExecutableInfo testing
+})
 class ExecutableInfo_Test extends TestBase {
 
 	private static void check(String expected, Object o) {
@@ -118,7 +124,6 @@ class ExecutableInfo_Test extends TestBase {
 		c_m3=c.getPublicMethod(x -> x.hasName("m") && x.hasParameterTypes(int.class)).get()
 	;
 
-	@SuppressWarnings("unused")
 	static class D {
 		public D() throws IOException {}
 		public void m() throws IOException {}
@@ -160,7 +165,6 @@ class ExecutableInfo_Test extends TestBase {
 	abstract static class F {
 		public void isPublic() {}
 		protected void isProtected() {}
-		@SuppressWarnings("unused")
 		private void isPrivate() {}
 		void isDefault() {}
 	}
@@ -885,7 +889,6 @@ class ExecutableInfo_Test extends TestBase {
 	}
 
 	// Test classes for comprehensive toString() testing
-	@SuppressWarnings({"unused", "java:S1186"})
 	static class ToStringTestClass {
 		public ToStringTestClass() {}
 		private ToStringTestClass(int i) {}

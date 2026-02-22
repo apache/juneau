@@ -95,7 +95,7 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 	 * @return An object swap instance, or <jk>null</jk> if one could not be created.
 	 */
 	@SuppressWarnings({
-		"rawtypes",
+		"rawtypes", // Raw types necessary for generic type handling
 		"java:S1452"  // Wildcard required - ObjectSwap<?,?> for dynamically discovered swap types
 	})
 	public static ObjectSwap<?,?> find(BeanContext bc, ClassInfo ci) {
@@ -186,7 +186,9 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to T
+	})
 	@Override /* Overridden from ObjectSwap */
 	public T unswap(BeanSession session, Map<?,?> o, ClassMeta<?> hint) throws ParseException {
 		try {

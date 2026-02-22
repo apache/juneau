@@ -39,7 +39,9 @@ import org.apache.juneau.collections.*;
  *
  * @serial exclude
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({
+	"resource" // ManifestFile manages Closeable resources
+})
 public class ManifestFile extends JsonMap {
 
 	private static final long serialVersionUID = 1L;

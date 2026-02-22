@@ -161,10 +161,10 @@ import org.apache.juneau.swap.*;
  * </ul>
  */
 @SuppressWarnings({
-	"unchecked",
-	"rawtypes",
-	"java:S6539",
-	"java:S115",
+	"unchecked", // Type erasure requires unchecked casts
+	"rawtypes", // Raw types necessary for generic type handling
+	"java:S6539", // Collection.toArray() usage intentional
+	"java:S115", // Constants use UPPER_snakeCase naming convention
 	"java:S1452"  // Wildcard required - ClassMeta<?> for parameter resolution and type variables
 })
 public class BeanContext extends Context {
@@ -4290,7 +4290,9 @@ public class BeanContext extends Context {
 	 * @param ci The class info being tested.
 	 * @return <jk>true</jk> if the specified class matches any of the exclusion parameters.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for bean exclusion rule checking
+	})
 	protected final boolean isNotABean(ClassInfo ci) {
 		if (ci.isArray() || ci.isPrimitive() || ci.isEnum() || ci.isAnnotation())
 			return true;
@@ -4366,7 +4368,9 @@ public class BeanContext extends Context {
 	 * 	Can be <jk>null</jk> if the information is not known.
 	 * @return The new {@code ClassMeta} object wrapped around the type.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for ClassMeta resolution with property annotations
+	})
 	protected final <T> ClassMeta<T> resolveClassMeta(AnnotationInfo<Beanp> p, ClassInfo ci, TypeVariables typeVarImpls) {
 		var cm = resolveClassMeta(ci, typeVarImpls);
 		var cm2 = cm;
@@ -4436,7 +4440,9 @@ public class BeanContext extends Context {
 	 * @param c The raw class.
 	 * @return The array of {@link ClassMeta} for each type parameter, or an empty array if parameters cannot be resolved.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for type parameter resolution
+	})
 	final ClassMeta[] findParameters(Type o, Class c) {
 		if (o == null)
 			o = c;
@@ -4471,7 +4477,9 @@ public class BeanContext extends Context {
 		return new ClassMeta[0];
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for ClassMeta resolution with type variables
+	})
 	final ClassMeta resolveClassMeta(Type o, TypeVariables typeVars) {
 		if (o == null)
 			return null;

@@ -28,7 +28,7 @@ class Label_Test extends TestBase {
 		Label x = label()
 			._for("a")
 			.form("b")
-			._class("c")
+			.class_("c")
 			.accesskey("d")
 			.contenteditable("e")
 			.dir("f")

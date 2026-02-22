@@ -30,7 +30,9 @@ import org.apache.juneau.collections.*;
  * @param <T> The class type of the wrapped bean.
  * @serial exclude
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({
+	"rawtypes" // Raw types necessary for generic Map delegation
+})
 public class DelegateMap<T extends Map> extends JsonMap implements Delegate<T> {
 	private static final long serialVersionUID = 1L;
 
@@ -42,7 +44,9 @@ public class DelegateMap<T extends Map> extends JsonMap implements Delegate<T> {
 	 * @param m The metadata object that created this delegate object.
 	 * @param session The current bean session.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for Map operations
+	})
 	public DelegateMap(T m, BeanSession session) {
 		this.classMeta = session.getClassMetaForObject(m);
 		m.forEach((k, v) -> put(s(k), v));

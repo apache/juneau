@@ -98,8 +98,8 @@ public class Wbr extends HtmlElementVoid {
 	public Wbr() { /* Empty constructor. */ }
 
 	@Override /* Overridden from HtmlElement */
-	public Wbr _class(String value) {
-		super._class(value);
+	public Wbr class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

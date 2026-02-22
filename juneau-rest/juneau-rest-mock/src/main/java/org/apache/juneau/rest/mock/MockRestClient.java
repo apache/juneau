@@ -1111,7 +1111,9 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* Overridden from Builder */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure requires cast for builder chain
+		})
 		public Builder parsers(java.lang.Class<? extends org.apache.juneau.parser.Parser>...value) {
 			super.parsers(value);
 			return this;
@@ -1366,7 +1368,9 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* Overridden from Builder */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure requires cast for builder chain
+		})
 		public Builder serializers(java.lang.Class<? extends org.apache.juneau.serializer.Serializer>...value) {
 			super.serializers(value);
 			return this;

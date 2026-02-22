@@ -39,7 +39,9 @@ import org.apache.juneau.commons.reflect.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class OutputStreamSerializer extends Serializer {
 
 	// Property name constants

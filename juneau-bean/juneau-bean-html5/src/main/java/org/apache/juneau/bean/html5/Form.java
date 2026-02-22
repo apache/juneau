@@ -108,8 +108,8 @@ public class Form extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Form _class(String value) {
-		super._class(value);
+	public Form class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

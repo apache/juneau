@@ -114,7 +114,9 @@ import org.apache.juneau.serializer.*;
  * @param <E> The entry type.
  * @param <R> The return type.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 
 	// Argument name constants for assertArgNotNull
@@ -350,7 +352,9 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for array has check
+	})
 	public R isHas(E...entries) throws AssertionError {
 		assertArgNotNull(ARG_entries, entries);
 		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);

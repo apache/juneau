@@ -41,7 +41,6 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  */
-@SuppressWarnings({"resource","java:S110","java:S115"})
 public class CsvSerializerSession extends WriterSerializerSession {
 
 	// Argument name constants for assertArgNotNull
@@ -50,7 +49,6 @@ public class CsvSerializerSession extends WriterSerializerSession {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings({"java:S110", "java:S115"})
 	public static class Builder extends WriterSerializerSession.Builder {
 
 		/**
@@ -224,7 +222,10 @@ public class CsvSerializerSession extends WriterSerializerSession {
 		}
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({
+		"rawtypes", // Raw types necessary for generic type handling
+		"unchecked", // Type erasure requires unchecked casts
+	})
 	@Override /* Overridden from SerializerSession */
 	protected void doSerialize(SerializerPipe pipe, Object o) throws IOException, SerializeException {
 

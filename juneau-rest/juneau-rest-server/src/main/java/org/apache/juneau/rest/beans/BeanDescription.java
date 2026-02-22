@@ -46,9 +46,6 @@ public class BeanDescription {
 	/**
 	 * Information about a bean property.
 	 */
-	@SuppressWarnings({
-		"java:S1104" // Public fields required for @Bean serialization
-	})
 	public static class BeanPropertyDescription {
 
 		/** The bean property name. */

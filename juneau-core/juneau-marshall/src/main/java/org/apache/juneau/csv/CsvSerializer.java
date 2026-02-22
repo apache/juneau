@@ -44,7 +44,10 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  */
-@SuppressWarnings({"java:S110", "java:S115"})
+@SuppressWarnings({
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+})
 public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 
 	// Argument name constants for assertArgNotNull
@@ -53,7 +56,6 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class Builder extends WriterSerializer.Builder {
 
 		private static final Cache<HashKey,CsvSerializer> CACHE = Cache.of(HashKey.class, CsvSerializer.class).build();

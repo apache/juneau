@@ -78,7 +78,9 @@ public class RequestVar extends MultipartResolvingVar {
 	}
 
 	@Override /* Overridden from Var */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for request variable resolution
+	})
 	public String resolve(VarResolverSession session, String key) {
 		RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
 		char c = charAt(key, 0);

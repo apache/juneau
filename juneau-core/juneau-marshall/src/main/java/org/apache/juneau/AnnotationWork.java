@@ -29,7 +29,9 @@ import org.apache.juneau.commons.reflect.*;
  * </ul>
  *
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({
+	"rawtypes" // Raw types necessary for annotation work with generic appliers
+})
 public class AnnotationWork {
 	final AnnotationInfo annotation;
 	final AnnotationApplier applier;
@@ -53,7 +55,9 @@ public class AnnotationWork {
 	 *
 	 * @param builder The builder.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for annotation applier invocation
+	})
 	public void apply(Object builder) {
 		if (canApply(builder))
 			applier.apply(annotation, builder);

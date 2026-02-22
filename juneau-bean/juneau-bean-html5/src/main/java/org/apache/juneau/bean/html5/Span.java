@@ -82,8 +82,8 @@ public class Span extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Span _class(String value) {
-		super._class(value);
+	public Span class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

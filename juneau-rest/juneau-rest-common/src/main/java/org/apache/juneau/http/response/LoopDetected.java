@@ -43,7 +43,9 @@ import org.apache.juneau.http.header.*;
 @Response
 @StatusCode(STATUS_CODE)
 @Schema(description = REASON_PHRASE)
-@SuppressWarnings("java:S110")
+@SuppressWarnings({
+	"java:S110" // Inheritance depth acceptable for HTTP exception hierarchy
+})
 public class LoopDetected extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 

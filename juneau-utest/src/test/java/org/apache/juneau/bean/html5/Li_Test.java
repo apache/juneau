@@ -26,7 +26,7 @@ class Li_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Li x = li()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

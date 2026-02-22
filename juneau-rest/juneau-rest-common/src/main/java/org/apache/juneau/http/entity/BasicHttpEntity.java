@@ -49,7 +49,11 @@ import org.apache.juneau.http.header.*;
  * </ul>
  */
 @BeanIgnore
-@SuppressWarnings({ "resource", "java:S1206" }) // Content may be streams; value equality not practical
+
+@SuppressWarnings({
+	"resource", // Content may be streams; value equality not practical
+	"java:S1206", // equals/hashCode not overridden; value equality not practical for this class
+})
 public class BasicHttpEntity implements HttpEntity {
 
 	/**
@@ -419,7 +423,9 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @param def The default value if <jk>null</jk>.
 	 * @return The content object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for content
+	})
 	protected <T> T contentOrElse(T def) {
 		Object o = content;
 		if (o == null && nn(contentSupplier))

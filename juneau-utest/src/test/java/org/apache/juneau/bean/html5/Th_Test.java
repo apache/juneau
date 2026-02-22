@@ -32,7 +32,7 @@ class Th_Test extends TestBase {
 			.rowspan("d")
 			.scope("e")
 			.sorted("f")
-			._class("g")
+			.class_("g")
 			.accesskey("h")
 			.contenteditable("i")
 			.dir("j")

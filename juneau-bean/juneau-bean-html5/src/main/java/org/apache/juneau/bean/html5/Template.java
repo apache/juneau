@@ -140,8 +140,8 @@ public class Template extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Template _class(String value) {
-		super._class(value);
+	public Template class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

@@ -28,7 +28,10 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"rawtypes","java:S5961"})
+@SuppressWarnings({
+	"rawtypes", // Raw types necessary for test bean handling
+	"java:S5961", // High assertion count acceptable in comprehensive tests
+})
 class UonParser_Test extends TestBase {
 
 	static UonParser p = UonParser.DEFAULT;

@@ -81,8 +81,8 @@ public class Hyperlink extends A {
 	// A-specific attributes
 
 	@Override /* Overridden from A */
-	public Hyperlink _class(String value) {
-		super._class(value);
+	public Hyperlink class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

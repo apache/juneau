@@ -26,7 +26,7 @@ class Tr_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Tr x = tr()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

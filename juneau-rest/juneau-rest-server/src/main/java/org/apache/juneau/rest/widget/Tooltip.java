@@ -64,6 +64,6 @@ public class Tooltip {
 	 * @return The swapped contents of this bean.
 	 */
 	public Div swap(BeanSession session) {
-		return div(small(display), span()._class("tooltiptext").children(content))._class("tooltip");
+		return div(small(display), span().class_("tooltiptext").children(content)).class_("tooltip");
 	}
 }

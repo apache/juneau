@@ -37,7 +37,7 @@ class Video_Test extends TestBase {
 			.preload("i")
 			.src("j")
 			.width("k")
-			._class("l")
+			.class_("l")
 			.accesskey("m")
 			.contenteditable("n")
 			.dir("o")

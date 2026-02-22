@@ -32,7 +32,7 @@ class Meter_Test extends TestBase {
 			.min("d")
 			.optimum("e")
 			.value("f")
-			._class("g")
+			.class_("g")
 			.accesskey("h")
 			.contenteditable("i")
 			.dir("j")

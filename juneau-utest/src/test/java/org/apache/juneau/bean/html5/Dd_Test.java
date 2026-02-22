@@ -26,7 +26,7 @@ class Dd_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Dd x = dd()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

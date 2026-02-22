@@ -183,7 +183,9 @@ import org.apache.juneau.commons.reflect.*;
  *
  * @param <T> The bean type being created.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class BeanCreator2<T> {
 
 	private static final String CLASSNAME_Autowired = "Autowired";
@@ -392,9 +394,9 @@ public class BeanCreator2<T> {
 	 */
 	public Optional<T> asOptional() {
 		try {
-			return Optional.of(run());
-		} catch (@SuppressWarnings("unused") ExecutableException e) {
-			return Optional.empty();
+		return Optional.of(run());
+		} catch (ExecutableException e) {
+		return Optional.empty();
 		}
 	}
 
@@ -912,7 +914,9 @@ public class BeanCreator2<T> {
 	 * @param <B> The builder type.
 	 * @return The builder instance wrapped in an {@link Optional}, or an empty optional if no builder exists.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to B for builder retrieval
+	})
 	public <B> Optional<B> getBuilder() {
 		try (var writeLock = lock.write()) {
 			beanImpl.reset();
@@ -1109,7 +1113,11 @@ public class BeanCreator2<T> {
 	 * @return The created bean.
 	 * @throws ExecutableException if bean could not be created.
 	 */
-	@SuppressWarnings({ "unchecked", "java:S3776", "java:S6541" })
+	@SuppressWarnings({
+		"unchecked", // Type erasure requires unchecked casts
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S6541", // Single-threaded context; synchronization unnecessary
+	})
 	private T findBeanImpl() {
 		var store2 = this.store;
 		var builder2 = explicitBuilder != null ? explicitBuilder : this.builder.get();  // Use explicit builder if set, otherwise get from supplier
@@ -1254,7 +1262,7 @@ public class BeanCreator2<T> {
 			.map(x -> {
 				log("Found factory method: %s", x.getNameFull());
 				return (T)beanType.cast(x.inject(store2, null, factoryMethodExtraBeans));
-			})
+	})
 			.orElse(null);
 
 		// Look for Bean().
@@ -1413,7 +1421,9 @@ public class BeanCreator2<T> {
 	 * 2. @Builder annotation on beanSubType (includes inherited annotations)
 	 * 3. Autodetect from static methods or inner classes
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to ClassInfo for builder type
+	})
 	private ClassInfo findBuilderType() {
 		log("Finding builder type...");
 

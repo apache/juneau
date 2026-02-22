@@ -98,8 +98,8 @@ public class Script extends HtmlElementRawText {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Script _class(String value) {
-		super._class(value);
+	public Script class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

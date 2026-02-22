@@ -112,8 +112,8 @@ public class Thead extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Thead _class(String value) {
-		super._class(value);
+	public Thead class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

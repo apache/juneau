@@ -33,8 +33,8 @@ import org.apache.juneau.xml.annotation.*;
 @Xml(format = VOID)
 public class HtmlElementVoid extends HtmlElement {
 	@Override /* Overridden from HtmlElement */
-	public HtmlElementVoid _class(String value) {
-		super._class(value);
+	public HtmlElementVoid class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

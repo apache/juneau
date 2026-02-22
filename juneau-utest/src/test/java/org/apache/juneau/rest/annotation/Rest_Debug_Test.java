@@ -24,7 +24,10 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"java:S4144","java:S5961"})
+@SuppressWarnings({
+	"java:S4144", // Identical methods intentional for different test scenarios
+	"java:S5961", // High assertion count acceptable in comprehensive tests
+})
 public class Rest_Debug_Test extends TestBase {
 
 	public static final CaptureLogger LOGGER = new CaptureLogger();

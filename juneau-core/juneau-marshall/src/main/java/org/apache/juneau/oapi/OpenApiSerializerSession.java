@@ -51,13 +51,15 @@ import org.apache.juneau.uon.*;
 
  * </ul>
  */
-@SuppressWarnings({"resource","java:S110"})
+@SuppressWarnings({
+	"resource", // Resource management handled externally
+	"java:S110" // Inheritance depth acceptable for this class hierarchy
+})
 public class OpenApiSerializerSession extends UonSerializerSession {
 
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class Builder extends UonSerializerSession.Builder {
 
 		private OpenApiSerializer ctx;
@@ -281,7 +283,10 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	}
 
 	@Override /* Overridden from PartSerializer */
-	@SuppressWarnings({ "java:S3776", "java:S6541" })
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S6541", // Single-threaded session contexts do not require synchronization
+	})
 	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 
 		ClassMeta<?> type = getClassMetaForObject(value);
@@ -457,7 +462,9 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		return out;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types necessary for generic list handling
+	})
 	private List toList(HttpPartType partType, ClassMeta<?> type, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
 		if (s == null)
 			s = DEFAULT_SCHEMA;
@@ -496,7 +503,10 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		return m;
 	}
 
-	@SuppressWarnings({ "rawtypes", "java:S3776" })
+	@SuppressWarnings({
+		"rawtypes", // Raw types necessary for generic object tool operations
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+	})
 	private Object toObject(HttpPartType partType, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
 		if (o == null)
 			return null;

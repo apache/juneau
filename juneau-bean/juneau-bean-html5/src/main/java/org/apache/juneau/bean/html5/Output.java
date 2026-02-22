@@ -89,8 +89,8 @@ public class Output extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Output _class(String value) {
-		super._class(value);
+	public Output class_(String value) {
+		super.class_(value);
 		return this;
 	}
 
@@ -107,7 +107,9 @@ public class Output extends HtmlElementMixed {
 	 * @param value The IDs of the form controls that contribute to this output.
 	 * @return This object.
 	 */
-	@SuppressWarnings("java:S100") // Method name uses underscore prefix to avoid Java keyword conflict
+	@SuppressWarnings({
+		"java:S100" // Method name uses underscore prefix to avoid Java keyword conflict
+	})
 	public Output _for(String value) {
 		attr("for", value);
 		return this;

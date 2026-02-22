@@ -123,7 +123,10 @@ import org.apache.juneau.parser.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S110", // Inheritance depth acceptable
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class JsonParser extends ReaderParser implements JsonMetaProvider {
 
 	// Argument name constants for assertArgNotNull
@@ -720,7 +723,6 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 	}
 
 	/** Default parser, strict mode. */
-	@SuppressWarnings("java:S110")
 	public static class Strict extends JsonParser {
 
 		/**

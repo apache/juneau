@@ -221,7 +221,11 @@ public class PropertyExtractors {
 			return true;
 		}
 
-		@SuppressWarnings({"null","java:S3011","java:S3776"})  // Intentional brain method.
+		@SuppressWarnings({
+			"null", // Intentional brain method.
+			"java:S3011", // Reflection access required for framework functionality
+			"java:S3776", // Cognitive complexity acceptable for this specific logic
+		})
 		@Override
 		public Object extract(BeanConverter converter, Object o, String name) {
 			return safe(() -> {

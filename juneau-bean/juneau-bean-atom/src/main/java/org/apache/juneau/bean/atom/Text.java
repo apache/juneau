@@ -88,10 +88,12 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>
  */
+@SuppressWarnings({
+	"java:S1700" // Field name intentionally matches class name
+})
 public class Text extends Common {
 
 	private String type;
-	@SuppressWarnings("java:S1845") // Field name intentionally matches class name
 	private String text;
 
 	/** Bean constructor. */

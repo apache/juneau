@@ -30,6 +30,10 @@ import org.apache.juneau.swap.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"serial", // Serialization not relevant for test beans
+	"removal" // Tests precedence of new numeric style over deprecated boolean style
+})
 class JsonSchemaGeneratorTest extends TestBase {
 
 	//====================================================================================================
@@ -122,7 +126,6 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertBean(s.getSchema(SimpleList.class), "type,items{type,format}", "array,{integer,int32}");
 	}
 
-	@SuppressWarnings("serial")
 	public static class SimpleList extends LinkedList<Integer> {}
 
 	@Test void simpleList2d() throws Exception {
@@ -130,7 +133,6 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'array',items:{type:'array',items:{type:'integer',format:'int32'}}}", s.getSchema(Simple2dList.class));
 	}
 
-	@SuppressWarnings("serial")
 	public static class Simple2dList extends LinkedList<LinkedList<Integer>> {}
 
 	//====================================================================================================
@@ -142,7 +144,6 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}", s.getSchema(BeanList.class));
 	}
 
-	@SuppressWarnings("serial")
 	public static class BeanList extends LinkedList<SimpleBean> {}
 
 	@Test void beanList2d() throws Exception {
@@ -150,7 +151,6 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}}", s.getSchema(BeanList2d.class));
 	}
 
-	@SuppressWarnings("serial")
 	public static class BeanList2d extends LinkedList<LinkedList<SimpleBean>> {}
 
 	//====================================================================================================
@@ -162,7 +162,6 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}}}", s.getSchema(BeanMap.class));
 	}
 
-	@SuppressWarnings("serial")
 	public static class BeanMap extends LinkedHashMap<Integer,SimpleBean> {}
 
 	@Test void beanMap2d() throws Exception {
@@ -170,7 +169,6 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'object',additionalProperties:{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}}}}", s.getSchema(BeanMap2d.class));
 	}
 
-	@SuppressWarnings("serial")
 	public static class BeanMap2d extends LinkedHashMap<Integer,LinkedHashMap<Integer,SimpleBean>> {}
 
 	//====================================================================================================
@@ -491,7 +489,6 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'456':{f1:'foobar'}}}", s.getSchema(C1.class));
 	}
 
-	@SuppressWarnings("serial")
 	public static class C1 extends BeanMap {
 
 		@Example
@@ -517,7 +514,6 @@ class JsonSchemaGeneratorTest extends TestBase {
 	@Example(on="C1c.example")
 	private static class C1cConfig {}
 
-	@SuppressWarnings("serial")
 	public static class C1c extends BeanMap {
 
 		public static C1c example() {
@@ -537,7 +533,6 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'array',items:{type:'array',items:{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'123':{f1:'foobar'}}}}}", s.getSchema(C2[][].class));
 	}
 
-	@SuppressWarnings("serial")
 	public static class C2 extends BeanMap {
 
 		@Example
@@ -563,7 +558,6 @@ class JsonSchemaGeneratorTest extends TestBase {
 	@Example(on="C2c.EXAMPLE")
 	private static class C2cConfig {}
 
-	@SuppressWarnings("serial")
 	public static class C2c extends BeanMap {
 
 		public static final C2c EXAMPLE = getExample();
@@ -585,7 +579,6 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'array',items:{type:'array',items:{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'123':{f1:'baz'}}}}}", s.getSchema(C3[][].class));
 	}
 
-	@SuppressWarnings("serial")
 	@Example("{'123':{f1:'baz'}}")
 	public static class C3 extends BeanMap {}
 
@@ -602,7 +595,6 @@ class JsonSchemaGeneratorTest extends TestBase {
 	@Example(on="C3c", value="{'123':{f1:'baz'}}")
 	private static class C3cConfig {}
 
-	@SuppressWarnings("serial")
 	public static class C3c extends BeanMap {}
 
 	@Test void addExample_MAP_exampleBeanProperty() throws Exception {
@@ -638,7 +630,6 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},example:[{f1:'baz'}]}", s.getSchema(D1.class));
 	}
 
-	@SuppressWarnings("serial")
 	public static class D1 extends BeanList {
 
 		@Example
@@ -666,7 +657,6 @@ class JsonSchemaGeneratorTest extends TestBase {
 	@Example(on="D1c.example")
 	private static class D1cConfig {}
 
-	@SuppressWarnings("serial")
 	public static class D1c extends BeanList {
 
 		public static D1c example() {
@@ -686,7 +676,6 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}},example:[[[{f1:'foobar'}]]]}", s.getSchema(D2[][].class));
 	}
 
-	@SuppressWarnings("serial")
 	public static class D2 extends BeanList {
 
 		@Example
@@ -712,7 +701,6 @@ class JsonSchemaGeneratorTest extends TestBase {
 	@Example(on="D2c.EXAMPLE")
 	private static class D2cConfig {}
 
-	@SuppressWarnings("serial")
 	public static class D2c extends BeanList {
 
 		public static final D2c EXAMPLE = getExample();
@@ -734,7 +722,6 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}},example:[[[{f1:'baz'}]]]}", s.getSchema(D3[][].class));
 	}
 
-	@SuppressWarnings("serial")
 	@Example("[{f1:'baz'}]")
 	public static class D3 extends BeanList {}
 
@@ -751,7 +738,6 @@ class JsonSchemaGeneratorTest extends TestBase {
 	@Example(on="D3c", value="[{f1:'baz'}]")
 	private static class D3cConfig {}
 
-	@SuppressWarnings("serial")
 	public static class D3c extends BeanList {}
 
 	@Test void addExample_COLLECTION_exampleBeanProperty() throws Exception {
@@ -1508,7 +1494,6 @@ class JsonSchemaGeneratorTest extends TestBase {
 	// Backward compatibility: Old boolean exclusiveMaximum/exclusiveMinimum
 	//====================================================================================================
 
-	@SuppressWarnings("removal")  // Tests deprecated boolean-style exclusiveMaximum/exclusiveMinimum for backward compatibility
 	@Test void backwardCompatibility_exclusiveMaxMin_boolean() throws Exception {
 		var s = JsonSchemaGenerator.DEFAULT.getSession();
 		var schema = s.getSchema(OldStyleExclusiveBean.class);
@@ -1520,7 +1505,6 @@ class JsonSchemaGeneratorTest extends TestBase {
 		public int value;
 	}
 
-	@SuppressWarnings("removal")  // Tests precedence of new numeric style over deprecated boolean style
 	@Test void backwardCompatibility_newStyleTakesPrecedence() throws Exception {
 		var s = JsonSchemaGenerator.DEFAULT.getSession();
 		// New numeric style should take precedence in asMap() when both are set

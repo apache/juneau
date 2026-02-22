@@ -24,7 +24,10 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S1186")
+@SuppressWarnings({
+	"java:S1186", // Empty test method intentional for framework testing
+	"removal" // Tests deprecated API for backward compatibility
+})
 class SchemaAnnotation_Test extends TestBase {
 
 	private static final String CNAME = SchemaAnnotation_Test.class.getName();
@@ -256,7 +259,6 @@ class SchemaAnnotation_Test extends TestBase {
 		uniqueItems=true,
 		xml="cc"
 	)
-	@SuppressWarnings("removal")
 	public static class D1 {}
 	Schema d1 = D1.class.getAnnotationsByType(Schema.class)[0];
 
@@ -316,7 +318,6 @@ class SchemaAnnotation_Test extends TestBase {
 		uniqueItems=true,
 		xml="cc"
 	)
-	@SuppressWarnings("removal")
 	public static class D2 {}
 	Schema d2 = D2.class.getAnnotationsByType(Schema.class)[0];
 
@@ -446,7 +447,6 @@ class SchemaAnnotation_Test extends TestBase {
 	// Backward compatibility: exclusiveMaximum/exclusiveMinimum fallback
 	//------------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings("removal")  // Tests deprecated boolean-style exclusiveMaximum/exclusiveMinimum for backward compatibility
 	@Test void f01_backwardCompatibility_exclusiveMaxMin() {
 		// Test that old boolean exclusiveMaximum/exclusiveMinimum still work
 		Schema oldStyle = SchemaAnnotation.create()

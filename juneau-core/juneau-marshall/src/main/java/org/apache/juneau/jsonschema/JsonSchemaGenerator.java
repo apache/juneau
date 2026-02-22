@@ -47,7 +47,9 @@ import org.apache.juneau.json.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSchemaDetails">JSON-Schema Support</a>
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSchemaMetaProvider {
 
 	// Argument name constants for assertArgNotNull

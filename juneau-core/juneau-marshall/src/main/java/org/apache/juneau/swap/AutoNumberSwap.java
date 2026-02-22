@@ -118,7 +118,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 	 * @return An object swap instance, or <jk>null</jk> if one could not be created.
 	 */
 	@SuppressWarnings({
-		"rawtypes",
+		"rawtypes", // Raw types necessary for generic type handling
 		"java:S1452"  // Wildcard required - ObjectSwap<?,?> for dynamically discovered swap types
 	})
 	public static ObjectSwap<?,?> find(BeanContext bc, ClassInfo ci) {
@@ -202,7 +202,9 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 	private final Constructor<?> unswapConstructor;
 	private final Class<?> unswapType;
 
-	@SuppressWarnings("null")
+	@SuppressWarnings({
+		"null" // Method info variables are checked for null before use in method body
+	})
 	private AutoNumberSwap(BeanContext bc, ClassInfo ci, MethodInfo swapMethod, MethodInfo unswapMethod, ConstructorInfo unswapConstructor) {
 		super(ci.inner(), swapMethod.inner().getReturnType());
 		this.swapMethod = bc.getBeanMethodVisibility().transform(swapMethod.inner());
@@ -237,7 +239,9 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to T
+	})
 	@Override /* Overridden from ObjectSwap */
 	public T unswap(BeanSession session, Number o, ClassMeta<?> hint) throws ParseException {
 		if (unswapType == null)

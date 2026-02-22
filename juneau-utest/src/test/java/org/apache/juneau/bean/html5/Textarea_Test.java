@@ -41,7 +41,7 @@ class Textarea_Test extends TestBase {
 			.required("m")
 			.rows(1)
 			.wrap("o")
-			._class("p")
+			.class_("p")
 			.accesskey("q")
 			.contenteditable("r")
 			.dir("s")

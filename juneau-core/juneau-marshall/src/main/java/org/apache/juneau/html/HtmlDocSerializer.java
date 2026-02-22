@@ -82,7 +82,10 @@ import org.apache.juneau.xml.*;
 
  * </ul>
  */
-@SuppressWarnings({ "java:S110", "java:S115" }) // Constants use UPPER_snakeCase convention (e.g., PROP_aside)
+@SuppressWarnings({
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+})
 public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	// Property name constants
@@ -103,7 +106,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class Builder extends HtmlStrippedDocSerializer.Builder {
 
 		private static final Cache<HashKey,HtmlDocSerializer> CACHE = Cache.of(HashKey.class, HtmlDocSerializer.class).build();
@@ -1589,7 +1591,9 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * @param values The values to add to this setting.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Varargs method requires unchecked cast
+		})
 		public Builder widgets(Class<? extends HtmlWidget>...values) {
 			addAll(widgets(), values);
 			return this;
@@ -1617,7 +1621,9 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 			return x;
 		}
 
-		@SuppressWarnings("java:S3776")
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for nav link merging with various input formats
+		})
 		private static List<String> mergeNavLinks(List<String> old, String[] newValues) {
 			List<String> x = listOfSize(newValues.length);
 			for (var s : newValues) {

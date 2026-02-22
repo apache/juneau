@@ -35,7 +35,7 @@ class Area_Test extends TestBase {
 			.shape("g")
 			.target("h")
 			.type("i")
-			._class("j")
+			.class_("j")
 			.accesskey("k")
 			.contenteditable("l")
 			.dir("m")

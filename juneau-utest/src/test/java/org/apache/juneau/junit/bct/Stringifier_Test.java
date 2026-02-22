@@ -31,6 +31,9 @@ import org.junit.jupiter.api.*;
  * <p>This test class verifies functional interface compliance, lambda compatibility,
  * and edge case handling for Stringifier implementations.</p>
  */
+@SuppressWarnings({
+	"cast" // Explicit cast needed for type testing
+})
 class Stringifier_Test extends TestBase {
 
 	// ====================================================================================================
@@ -40,7 +43,6 @@ class Stringifier_Test extends TestBase {
 	@Nested
 	class A_functionalInterfaceCompliance extends TestBase {
 
-		@SuppressWarnings("cast")
 		@Test
 		void a01_functionalInterfaceContract() {
 			// Verify it's a proper functional interface

@@ -74,7 +74,10 @@ import org.apache.juneau.rest.client.assertion.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
  * </ul>
  */
-@SuppressWarnings({"resource", "java:S4144"})
+@SuppressWarnings({
+	"resource", // Resource management handled externally
+	"java:S4144", // Identical methods intentional for different test scenarios
+})
 public class RestResponse implements HttpResponse, AutoCloseable {
 
 	private final RestClient client;

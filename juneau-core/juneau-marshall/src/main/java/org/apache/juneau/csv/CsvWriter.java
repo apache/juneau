@@ -29,7 +29,9 @@ import org.apache.juneau.serializer.*;
  * 		This class is not intended for external use.
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({
+	"resource" // Writer resource managed by calling code
+})
 public class CsvWriter extends SerializerWriter {
 
 	/**

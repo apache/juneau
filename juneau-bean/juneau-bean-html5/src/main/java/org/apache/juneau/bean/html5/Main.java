@@ -122,8 +122,8 @@ public class Main extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Main _class(String value) {
-		super._class(value);
+	public Main class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

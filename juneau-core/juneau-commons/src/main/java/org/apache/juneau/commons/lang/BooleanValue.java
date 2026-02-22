@@ -59,7 +59,9 @@ import java.util.concurrent.atomic.*;
  * 	<li class='jc'>{@link Flag}
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class BooleanValue extends Value<Boolean> {
 
 	// Argument name constants for assertArgNotNull

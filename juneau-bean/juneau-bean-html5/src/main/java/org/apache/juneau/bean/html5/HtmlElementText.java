@@ -31,8 +31,8 @@ public class HtmlElementText extends HtmlElement {
 	private Object text;
 
 	@Override /* Overridden from HtmlElement */
-	public HtmlElementText _class(String value) {
-		super._class(value);
+	public HtmlElementText class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

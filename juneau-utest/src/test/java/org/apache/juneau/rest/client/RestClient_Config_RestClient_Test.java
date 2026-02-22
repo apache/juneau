@@ -46,7 +46,11 @@ import org.apache.juneau.utest.utils.*;
 import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"java:S5961", "java:S1186"})
+@SuppressWarnings({
+	"java:S5961", // High assertion count acceptable in comprehensive tests
+	"java:S1186", // Empty method body intentional for callback testing
+	"removal" // Tests deprecated finalize() method for leak detection
+})
 class RestClient_Config_RestClient_Test extends TestBase {
 
 	public static class ABean {
@@ -324,7 +328,6 @@ class RestClient_Config_RestClient_Test extends TestBase {
 		}
 	}
 
-	@SuppressWarnings("removal")  // Tests deprecated finalize() method for leak detection
 	@Test void a07_leakDetection() throws Throwable {
 		client().detectLeaks().build(A7.class).finalize();
 		assertEquals("WARNING:  RestClient garbage collected before it was finalized.",A7.lastMessage);

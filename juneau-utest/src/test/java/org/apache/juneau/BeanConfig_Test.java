@@ -35,7 +35,11 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"rawtypes", "java:S5961"})
+@SuppressWarnings({
+	"rawtypes", // Raw types necessary for test bean handling
+	"java:S5961", // High assertion count acceptable in comprehensive tests
+	"cast" // Explicit cast needed for type testing
+})
 class BeanConfig_Test extends TestBase {
 
 	//====================================================================================================
@@ -99,7 +103,6 @@ class BeanConfig_Test extends TestBase {
 		assertNotNull(bc.toBeanMap(p2), fs("Failed to identify class as bean type: {0}", p2.getClass()));
 
 		var m5 = bc.toBeanMap(p2);
-		@SuppressWarnings("cast")
 		var es1 = (Set)m5.entrySet();
 
 		assertEquals(es1, m3.entrySet(), fs("Entry set equality failed: {0} / {1} / {2}", p2, es1, m3.entrySet()));

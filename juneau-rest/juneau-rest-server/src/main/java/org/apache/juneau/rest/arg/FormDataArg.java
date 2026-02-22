@@ -182,7 +182,10 @@ public class FormDataArg implements RestOpArg {
 			throw new ArgException(pi, "Use of multipart flag on @FormData parameter that is not an array or Collection");
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({
+		"rawtypes", // Raw types necessary for REST argument resolution with generic types
+		"unchecked", // Type erasure requires unchecked casts in REST argument parsing
+	})
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
 		RestRequest req = opSession.getRequest();

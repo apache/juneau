@@ -109,7 +109,9 @@ import java.util.stream.Collectors;
  *
  * @param <E> The element type of this list.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class MultiList<E> extends AbstractList<E> {
 
 	// Argument name constants for assertArgNotNull
@@ -251,7 +253,9 @@ public class MultiList<E> extends AbstractList<E> {
 	 * @return An iterator over all elements in all underlying lists.
 	 */
 	@Override /* List */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for iterator over multiple lists
+	})
 	public Iterator<E> iterator() {
 		return new Iterator<>() {
 			int i = 0;
@@ -328,7 +332,9 @@ public class MultiList<E> extends AbstractList<E> {
 	 * @throws IndexOutOfBoundsException if the index is out of range (index &lt; 0 || index &gt; size()).
 	 */
 	@Override /* List */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for list iterator over multiple lists
+	})
 	public ListIterator<E> listIterator(int index) {
 		if (index < 0 || index > size())
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());

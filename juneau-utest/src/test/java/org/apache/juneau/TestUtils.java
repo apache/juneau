@@ -139,6 +139,9 @@ import org.junit.jupiter.api.*;
  * @see BeanConverter
  * @see BasicBeanConverter
  */
+@SuppressWarnings({
+	"java:S1172" // Parameters kept for consistent method signatures across test utilities
+})
 public class TestUtils extends Utils {
 
 	private static final ThreadLocal<TimeZone> SYSTEM_TIME_ZONE = new ThreadLocal<>();
@@ -182,7 +185,6 @@ public class TestUtils extends Utils {
 		assertEquals(expected, s.toString(actual));
 	}
 
-	@SuppressWarnings("java:S1172") // Parameter expectedType is unused but kept for API consistency
 	public static <T extends Throwable> T assertThrowable(Class<? extends Throwable> expectedType, String expectedSubstring, T t) {
 		var messages = getMessages(t);
 		assertTrue(messages.contains(expectedSubstring), fs("Expected message to contain: {0}.\nActual:\n{1}", expectedSubstring, messages));

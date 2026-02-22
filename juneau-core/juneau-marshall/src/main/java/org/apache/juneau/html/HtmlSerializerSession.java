@@ -53,7 +53,11 @@ import org.apache.juneau.xml.annotation.*;
 
  * </ul>
  */
-@SuppressWarnings({"resource","java:S110","java:S115"})
+@SuppressWarnings({
+	"resource", // Resource management handled externally
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+})
 public class HtmlSerializerSession extends XmlSerializerSession {
 
 	// Argument name constants for assertArgNotNull
@@ -67,7 +71,6 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings({"java:S110", "java:S115"})
 	public static class Builder extends XmlSerializerSession.Builder {
 
 		private HtmlSerializer ctx;
@@ -317,7 +320,11 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		return render;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	
+	@SuppressWarnings({
+		"rawtypes", // Raw types necessary for generic type handling
+		"unchecked", // Type erasure requires unchecked casts
+	})
 	private String getStyle(HtmlSerializerSession session, BeanPropertyMeta pMeta, Object value) {
 		// Check for annotation style first
 		if (nn(pMeta)) {
@@ -478,7 +485,13 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		out.ie(i).eTag(TAG_table).nl(i);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked", "java:S3776", "java:S6541" })
+	
+	@SuppressWarnings({
+		"rawtypes", // Raw types necessary for generic type handling
+		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S6541", // Single-threaded session contexts do not require synchronization
+	})
 	private void serializeCollection(XmlWriter out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, String name, BeanPropertyMeta ppMeta) throws SerializeException {
 
 		HtmlClassMeta cHtml = getHtmlClassMeta(sType);
@@ -636,7 +649,11 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		}
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	
+	@SuppressWarnings({
+		"rawtypes", // Raw types necessary for generic type handling
+		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
+	})
 	private void serializeMap(XmlWriter out, Map m, ClassMeta<?> sType, ClassMeta<?> eKeyType, ClassMeta<?> eValueType, String typeName, BeanPropertyMeta ppMeta) throws SerializeException {
 
 		var keyType = eKeyType == null ? string() : eKeyType;
@@ -818,7 +835,14 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @return The type of content encountered.  Either simple (no whitespace) or normal (elements with whitespace).
 	 * @throws SerializeException Generic serialization error occurred.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked", "null", "java:S3776", "java:S107" })
+	
+	@SuppressWarnings({
+		"rawtypes", // Raw types necessary for generic type handling
+		"unchecked", // Type erasure requires unchecked casts
+		"null", // Null handling verified by context or framework
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S107", // Method has many parameters; acceptable for builder/configuration methods
+	})
 	protected ContentResult serializeAnything(XmlWriter out, Object o, ClassMeta<?> eType, String name, BeanPropertyMeta pMeta, int xIndent, boolean isRoot, boolean nlIfElement)
 		throws SerializeException {
 

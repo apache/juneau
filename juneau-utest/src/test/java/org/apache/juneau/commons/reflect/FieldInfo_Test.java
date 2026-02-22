@@ -30,7 +30,12 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"java:S115","java:S117","java:S3008"})
+@SuppressWarnings({
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S117", // Local variable names use underscores for test data clarity
+	"java:S3008", // Static field naming follows test or framework convention
+	"unused" // Private members required for reflection/visibility testing
+})
 class FieldInfo_Test extends TestBase {
 
 	@Documented
@@ -128,7 +133,6 @@ class FieldInfo_Test extends TestBase {
 	abstract static class D {
 		public int isPublic;
 		protected int isProtected;
-		@SuppressWarnings("unused")
 		private int isPrivate;
 		int isDefault;
 	}
@@ -746,7 +750,6 @@ class FieldInfo_Test extends TestBase {
 	}
 
 	// Test class for toString() comprehensive tests
-	@SuppressWarnings("unused")
 	public static class ToStringTestClass {
 		public int publicField;
 		private String privateField;

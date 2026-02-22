@@ -58,8 +58,8 @@ import org.apache.juneau.swaps.*;
  *
  */
 @SuppressWarnings({
-	"rawtypes",
-	"unchecked",
+	"rawtypes", // Raw types necessary for generic type handling
+	"unchecked", // Type erasure requires unchecked casts
 	"java:S115",   // Constants use UPPER_snakeCase convention (e.g., PROP_field, ARG_value)
 	"java:S1452"  // Wildcard required - BeanMap<?>, ClassMeta<?> for property metadata
 })
@@ -82,7 +82,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	/**
 	 * BeanPropertyMeta builder class.
 	 */
-	@SuppressWarnings("java:S115")
 	public static class Builder {
 		BeanMeta<?> beanMeta;  // Package-private for BeanMeta access
 		BeanContext bc;  // Package-private for BeanMeta access
@@ -173,7 +172,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			return null;
 		}
 
-		@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+		@SuppressWarnings({
+			"java:S112" // throws RuntimeException intentional - callback/lifecycle method for swap initialization
+		})
 		private static ObjectSwap swapSwap(AnnotationInfo<Swap> ai) throws RuntimeException {
 			var s = ai.inner();
 			var c = s.value();
@@ -296,7 +297,10 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @return <jk>true</jk> if this property is valid, <jk>false</jk> otherwise.
 		 * @throws Exception If validation fails.
 		 */
-		@SuppressWarnings({ "java:S3776", "java:S112" }) // throws Exception intentional - callback/lifecycle method
+		@SuppressWarnings({
+			"java:S3776", // throws Exception intentional - callback/lifecycle method
+			"java:S112", // Generic exception thrown; acceptable for framework/lifecycle methods
+		})
 		public boolean validate(BeanContext bc, BeanRegistry parentBeanRegistry, TypeVariables typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
 
 			var bdClasses = list();
@@ -541,7 +545,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @param value The value to add to the field.
 	 * @throws BeanRuntimeException If field is not a collection or array.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for property add operation with various collection types
+	})
 	public void add(BeanMap<?> m, String pName, Object value) throws BeanRuntimeException {
 
 		// Read-only beans get their properties stored in a cache.
@@ -628,7 +634,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @param value The value to add to the field.
 	 * @throws BeanRuntimeException If field is not a map or array.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for property add operation with map key handling
+	})
 	public void add(BeanMap<?> m, String pName, String key, Object value) throws BeanRuntimeException {
 
 		// Read-only beans get their properties stored in a cache.
@@ -992,7 +1000,10 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @return The previous property value.
 	 * @throws BeanRuntimeException If property could not be set.
 	 */
-	@SuppressWarnings({ "java:S3776", "java:S6541" })
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S6541", // Session objects are single-threaded by design
+	})
 	public Object set(BeanMap<?> m, String pName, Object value) throws BeanRuntimeException {
 		Object value1 = m.meta.onWriteProperty(m.bean, pName, value);
 		try {
@@ -1224,7 +1235,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		return o;
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for inner property getter with delegate/swap handling
+	})
 	private Object getInner(BeanMap<?> m, String pName) {
 		try {
 

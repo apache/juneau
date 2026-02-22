@@ -138,8 +138,8 @@ public class Article extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Article _class(String value) {
-		super._class(value);
+	public Article class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

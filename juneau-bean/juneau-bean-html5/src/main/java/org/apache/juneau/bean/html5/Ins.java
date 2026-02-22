@@ -105,8 +105,8 @@ public class Ins extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Ins _class(String value) {
-		super._class(value);
+	public Ins class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

@@ -38,7 +38,9 @@ import org.apache.juneau.serializer.*;
 
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({
+	"resource" // Writer resource managed by calling code
+})
 public class JsonWriter extends SerializerWriter {
 
 	// Characters that trigger special handling of serializing attribute values.
@@ -79,7 +81,9 @@ public class JsonWriter extends SerializerWriter {
 	 * @param trimStrings If <jk>true</jk>, strings will be trimmed before being serialized.
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
-	@SuppressWarnings("java:S107") // Constructor requires 8 parameters for JSON writer configuration
+	@SuppressWarnings({
+		"java:S107" // Constructor requires 8 parameters for JSON writer configuration
+	})
 	protected JsonWriter(Writer out, boolean useWhitespace, int maxIndent, boolean escapeSolidus, char quoteChar, boolean simpleAttrs, boolean trimStrings, UriResolver uriResolver) {
 		super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver);
 		this.simpleAttrs = simpleAttrs;
@@ -159,7 +163,9 @@ public class JsonWriter extends SerializerWriter {
 	 * @param s The object being serialized.
 	 * @return This object.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for JSON attribute writing with encoding
+	})
 	public JsonWriter attr(String s) {
 
 		if (trimStrings)
@@ -287,7 +293,9 @@ public class JsonWriter extends SerializerWriter {
 	 * @param s The object being serialized.
 	 * @return This object.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for JSON string value writing with escaping
+	})
 	public JsonWriter stringValue(String s) {
 		if (s == null)
 			return this;

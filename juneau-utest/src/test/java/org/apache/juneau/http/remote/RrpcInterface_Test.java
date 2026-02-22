@@ -44,7 +44,12 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.opentest4j.*;
 
-@SuppressWarnings({ "java:S1186", "java:S1172" }) // Unused parameters in tests are typically intentional
+
+@SuppressWarnings({
+	"java:S1186", // Empty test method intentional for framework testing
+	"java:S1172", // Unused parameters kept for API consistency or framework requirements
+	"serial" // Serialization not relevant in test code
+})
 class RrpcInterface_Test extends TestBase {
 
 	private static final Input[] INPUT = {
@@ -230,14 +235,12 @@ class RrpcInterface_Test extends TestBase {
 		// Helper classes
 		//-------------------------------------------------------------------------------------------------------------
 
-		@SuppressWarnings("serial")
 		public static class InterfaceProxyException1 extends Exception {
 			public InterfaceProxyException1(String msg) {
 				super(msg);
 			}
 		}
 
-		@SuppressWarnings("serial")
 		public static class InterfaceProxyException2 extends Exception {
 		}
 	}

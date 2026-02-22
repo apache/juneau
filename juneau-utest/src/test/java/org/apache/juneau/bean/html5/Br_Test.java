@@ -26,7 +26,7 @@ class Br_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Br x = br()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

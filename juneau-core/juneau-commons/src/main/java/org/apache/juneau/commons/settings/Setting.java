@@ -44,7 +44,9 @@ import org.apache.juneau.commons.function.ResettableSupplier;
  *
  * @param <T> The type of value supplied.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class Setting<T> extends ResettableSupplier<T> {
 
 	// Argument name constants for assertArgNotNull

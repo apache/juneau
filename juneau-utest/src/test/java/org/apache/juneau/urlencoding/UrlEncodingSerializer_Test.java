@@ -24,7 +24,9 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S5961")
+@SuppressWarnings({
+	"java:S5961" // High assertion count acceptable in comprehensive test
+})
 class UrlEncodingSerializer_Test extends TestBase {
 
 	static UrlEncodingSerializer s = UrlEncodingSerializer.DEFAULT.copy().addRootType().build();

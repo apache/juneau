@@ -54,7 +54,9 @@ import org.apache.juneau.commons.collections.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class SimplePartParser extends BaseHttpPartParser {
 
 	// Argument name constants for assertArgNotNull

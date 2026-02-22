@@ -45,7 +45,9 @@ import org.apache.juneau.parser.*;
  *
  */
 @Bean
-@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., PROP_aContextRoot)
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_aContextRoot)
+})
 public class UriContext {
 
 	// Property name constants
@@ -109,15 +111,19 @@ public class UriContext {
 		return uri.substring(0, i);
 	}
 
-	@SuppressWarnings("javadoc")
+	/** The URI authority (host and port). */
 	public final String authority;
-	@SuppressWarnings("javadoc")
+
+	/** The context root path (typically the servlet context path). */
 	public final String contextRoot;
-	@SuppressWarnings("javadoc")
+
+	/** The servlet path. */
 	public final String servletPath;
-	@SuppressWarnings("javadoc")
+
+	/** The path info portion of the URI. */
 	public final String pathInfo;
-	@SuppressWarnings("javadoc")
+
+	/** The parent path (path excluding the last segment). */
 	public final String parentPath;
 
 	// Memoized suppliers.

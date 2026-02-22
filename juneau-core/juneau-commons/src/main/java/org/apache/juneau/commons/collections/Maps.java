@@ -120,7 +120,9 @@ import java.util.function.*;
  * @param <K> The key type.
  * @param <V> The value type.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class Maps<K,V> {
 
 	// Argument name constants for assertArgNotNull
@@ -253,7 +255,9 @@ public class Maps<K,V> {
 	 * @return This object.
 	 * @throws RuntimeException If a non-Map object is provided.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for map addition
+	})
 	public Maps<K,V> addAny(Object...values) {
 		for (var o : values) {
 			if (nn(o)) {
@@ -277,7 +281,9 @@ public class Maps<K,V> {
 	 * @param pairs The pairs to add.
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for pair addition
+	})
 	public Maps<K,V> addPairs(Object...pairs) {
 		assertArgNotNull(ARG_pairs, pairs);
 		if (pairs.length % 2 != 0)
@@ -554,7 +560,9 @@ public class Maps<K,V> {
 	 *
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for sorted map
+	})
 	public Maps<K,V> sorted() {
 		return sorted((Comparator<K>)Comparator.naturalOrder());
 	}
@@ -737,7 +745,9 @@ public class Maps<K,V> {
 	 * @param o The object to convert.
 	 * @return The converted key.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to K for key conversion
+	})
 	private K convertKey(Object o) {
 		if (keyType.isInstance(o))
 			return (K)o;
@@ -752,7 +762,9 @@ public class Maps<K,V> {
 	 * @param o The object to convert.
 	 * @return The converted value.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to V for value conversion
+	})
 	private V convertValue(Object o) {
 		if (valueType.isInstance(o))
 			return (V)o;

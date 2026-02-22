@@ -96,7 +96,9 @@ import org.apache.juneau.serializer.*;
  *
  * @param <R> The return type.
  */
-@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., MSG_valueWasFalse)
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., MSG_valueWasFalse)
+})
 public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean,R> {
 
 	private static final Messages MESSAGES = Messages.of(FluentBooleanAssertion.class, "Messages");

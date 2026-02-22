@@ -39,7 +39,11 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  */
-@SuppressWarnings({"resource","java:S110","java:S115"})
+@SuppressWarnings({
+	"resource", // Resource management handled externally
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S115" // Constants use UPPER_snakeCase naming convention
+})
 public class SoapXmlSerializerSession extends XmlSerializerSession {
 
 	// Argument name constants for assertArgNotNull
@@ -48,7 +52,6 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings({"java:S110", "java:S115"})
 	public static class Builder extends XmlSerializerSession.Builder {
 
 		private SoapXmlSerializer ctx;

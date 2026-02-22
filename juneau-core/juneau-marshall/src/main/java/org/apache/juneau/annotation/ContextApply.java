@@ -41,6 +41,8 @@ public @interface ContextApply {
 	 *
 	 * @return The annotation value.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types necessary for AnnotationApplier class array
+	})
 	public Class<? extends AnnotationApplier>[] value();
 }

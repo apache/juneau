@@ -26,7 +26,7 @@ class Rtc_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Rtc x = rtc()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

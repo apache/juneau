@@ -38,6 +38,10 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"deprecation", // Uses deprecated API
+	"removal" // Uses deprecated API for compatibility
+})
 class RestClient_Response_Test extends TestBase {
 
 	public static class ABean {
@@ -214,7 +218,6 @@ class RestClient_Response_Test extends TestBase {
 	// Other.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings({"deprecation","removal"})
 	@Test void e01_response_getParams_setParams() throws Exception {
 		var x = client(D.class).build().post("/bean",bean).run();
 		var p = new BasicHttpParams();

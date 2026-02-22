@@ -29,7 +29,10 @@ import java.util.*;
 
  * </ul>
  */
-@SuppressWarnings({"rawtypes", "java:S115"})
+@SuppressWarnings({
+	"rawtypes", // Raw types necessary for generic type handling
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+})
 public abstract class MapVar extends DefaultingVar {
 
 	// Argument name constants for assertArgNotNull

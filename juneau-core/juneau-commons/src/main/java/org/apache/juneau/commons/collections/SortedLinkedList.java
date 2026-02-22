@@ -87,7 +87,9 @@ import java.util.*;
  * @param <E> The element type.
  * @see SortedArrayList
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class SortedLinkedList<E> extends AbstractList<E> {
 
 	// Argument name constants for assertArgNotNull
@@ -104,7 +106,9 @@ public class SortedLinkedList<E> extends AbstractList<E> {
 	 *
 	 * @throws ClassCastException if elements are not comparable.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for comparator initialization
+	})
 	public SortedLinkedList() {
 		this((Comparator<? super E>)Comparator.naturalOrder());
 	}
@@ -127,7 +131,9 @@ public class SortedLinkedList<E> extends AbstractList<E> {
 	 *
 	 * @param c The collection whose elements are to be placed into this list.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for comparator initialization
+	})
 	public SortedLinkedList(Collection<? extends E> c) {
 		this((Comparator<? super E>)Comparator.naturalOrder(), c);
 	}

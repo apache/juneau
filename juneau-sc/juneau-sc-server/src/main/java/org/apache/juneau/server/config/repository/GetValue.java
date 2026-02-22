@@ -16,7 +16,17 @@
  */
 package org.apache.juneau.server.config.repository;
 
-@SuppressWarnings("javadoc")
+/**
+ * Callback interface for retrieving a value after asynchronous execution.
+ *
+ * @param <T> The type of value returned.
+ */
 public interface GetValue<T> {
+
+	/**
+	 * Returns the retrieved value.
+	 *
+	 * @return The value.
+	 */
 	T get();
 }

@@ -26,7 +26,7 @@ class H1_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		H1 x = h1()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

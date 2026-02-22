@@ -249,7 +249,10 @@ public class Messages extends ResourceBundle {
 			return this;
 		}
 
-		@SuppressWarnings({ "unchecked", "java:S3776" })
+		@SuppressWarnings({
+			"unchecked", // Type erasure requires unchecked casts for message bundle access
+			"java:S3776", // Cognitive complexity acceptable for this specific logic
+		})
 		@Override /* Overridden from BeanBuilder */
 		protected Messages buildDefault() {
 

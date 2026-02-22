@@ -48,7 +48,10 @@ import org.apache.juneau.http.header.*;
  * </ul>
  */
 @BeanIgnore /* Use toString() to serialize */
-@SuppressWarnings({ "resource", "java:S1206" }) // Depends on entity (streams); value equality not practical
+@SuppressWarnings({
+	"resource", // Depends on entity (streams); value equality not practical
+	"java:S1206", // equals/hashCode not overridden; value equality not practical for this class
+})
 public class BasicResource implements HttpResource {
 	BasicHttpEntity entity;
 	HeaderList headers = HeaderList.create();

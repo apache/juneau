@@ -26,7 +26,7 @@ class Tfoot_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Tfoot x = tfoot()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

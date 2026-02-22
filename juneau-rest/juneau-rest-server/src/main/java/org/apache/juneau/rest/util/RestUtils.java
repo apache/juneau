@@ -36,7 +36,9 @@ import jakarta.servlet.http.*;
  * Various reusable utility methods.
  *
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({
+	"resource" // RestUtils manages Closeable resources
+})
 public class RestUtils {
 
 	/**
@@ -219,7 +221,10 @@ public class RestUtils {
 		return safe(()-> parseQuery(new ParserPipe(qs)));
 	}
 
-	@SuppressWarnings({ "java:S2677", "java:S3776" })
+	@SuppressWarnings({
+		"java:S2677", // Return value intentionally ignored in this context
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+	})
 	private static Map<String,List<String>> parseQuery(ParserPipe p) throws IOException {
 
 		var m = CollectionUtils.<String,List<String>>map();

@@ -86,7 +86,9 @@ import java.util.*;
  * @param <E> The element type.
  * @see SortedLinkedList
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class SortedArrayList<E> extends AbstractList<E> implements RandomAccess {
 
 	// Argument name constants for assertArgNotNull
@@ -103,7 +105,9 @@ public class SortedArrayList<E> extends AbstractList<E> implements RandomAccess 
 	 *
 	 * @throws ClassCastException if elements are not comparable.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for comparator initialization
+	})
 	public SortedArrayList() {
 		this((Comparator<? super E>)Comparator.naturalOrder());
 	}
@@ -123,7 +127,9 @@ public class SortedArrayList<E> extends AbstractList<E> implements RandomAccess 
 	 *
 	 * @param initialCapacity The initial capacity.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for comparator initialization
+	})
 	public SortedArrayList(int initialCapacity) {
 		this((Comparator<? super E>)Comparator.naturalOrder(), initialCapacity);
 	}
@@ -147,7 +153,9 @@ public class SortedArrayList<E> extends AbstractList<E> implements RandomAccess 
 	 *
 	 * @param c The collection whose elements are to be placed into this list.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for comparator initialization
+	})
 	public SortedArrayList(Collection<? extends E> c) {
 		this((Comparator<? super E>)Comparator.naturalOrder(), c);
 	}

@@ -1921,8 +1921,8 @@ class Html5_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			table(
 				caption("caption1"),
 				colgroup(
-					col()._class("foo"),
-					col()._class("bar")
+					col().class_("foo"),
+					col().class_("bar")
 				),
 				thead(tr(th("c1"),th("c2"))),
 				tbody(tr(td("v1"),td("v2"))),

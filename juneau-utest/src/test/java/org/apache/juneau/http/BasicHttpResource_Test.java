@@ -30,7 +30,10 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"java:S5961", "java:S4144"})
+@SuppressWarnings({
+	"java:S5961", // High assertion count acceptable in comprehensive tests
+	"java:S4144", // Identical methods intentional for different test scenarios
+})
 class BasicHttpResource_Test extends TestBase {
 
 	@Test void a01_basic() throws Exception {

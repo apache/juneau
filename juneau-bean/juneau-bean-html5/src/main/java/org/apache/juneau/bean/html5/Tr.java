@@ -109,8 +109,8 @@ public class Tr extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Tr _class(String value) {
-		super._class(value);
+	public Tr class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

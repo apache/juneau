@@ -31,7 +31,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests for {@link HashCode}.
  */
-@SuppressWarnings("java:S4144")
+@SuppressWarnings({
+	"java:S4144" // Identical test methods intentional for testing different scenarios
+})
 class HashCode_Test extends TestBase {
 
 	//====================================================================================================

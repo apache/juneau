@@ -78,7 +78,9 @@ import org.apache.juneau.commons.settings.*;
  * @see org.apache.juneau.junit.bct.annotations.BctConfig
  * @see org.apache.juneau.junit.bct.BctAssertions
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class BctConfiguration {
 
 	// Argument name constants for assertArgNotNull

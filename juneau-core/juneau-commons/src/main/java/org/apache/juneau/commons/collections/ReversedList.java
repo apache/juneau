@@ -68,7 +68,9 @@ import java.util.stream.Collectors;
  *
  * @param <E> The element type.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class ReversedList<E> extends AbstractList<E> implements RandomAccess {
 
 	// Argument name constants for assertArgNotNull

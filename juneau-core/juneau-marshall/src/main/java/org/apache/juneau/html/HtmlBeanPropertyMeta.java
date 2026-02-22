@@ -32,7 +32,9 @@ import org.apache.juneau.html.annotation.*;
 
  * </ul>
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({
+	"rawtypes" // Raw types necessary for HtmlRender class parameter
+})
 public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 	static class Builder {

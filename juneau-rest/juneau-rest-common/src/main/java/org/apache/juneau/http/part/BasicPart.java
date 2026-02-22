@@ -49,7 +49,9 @@ import org.apache.juneau.http.header.*;
  * </ul>
  */
 @BeanIgnore
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_value)
+})
 public class BasicPart implements NameValuePair, Headerable {
 
 	// Argument name constants for assertArgNotNull

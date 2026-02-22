@@ -48,32 +48,45 @@ import org.apache.juneau.rest.servlet.*;
 	allowedMethodParams="*"
 )
 @HtmlConfig(uriAnchorText="PROPERTY_NAME")
-@SuppressWarnings("javadoc")
 public class LogsResource extends BasicRestServlet {
+
+	/** File action link. */
 	@Response(schema = @Schema(description = "File action"))
 	public static class Action extends LinkString {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param name Action name.
+		 * @param uri Action URI.
+		 * @param uriArgs URI format arguments.
+		 */
 		public Action(String name, String uri, Object...uriArgs) {
 			super(name, uri, uriArgs);
 		}
 
+		/** {@inheritDoc} */
 		@Override /* Overridden from LinkString */
 		public Action setName(String value) {
 			super.setName(value);
 			return this;
 		}
 
+		/** {@inheritDoc} */
 		@Override /* Overridden from LinkString */
 		public Action setUri(java.net.URI value) {
 			super.setUri(value);
 			return this;
 		}
 
+		/** {@inheritDoc} */
 		@Override /* Overridden from LinkString */
 		public Action setUri(String value) {
 			super.setUri(value);
 			return this;
 		}
 
+		/** {@inheritDoc} */
 		@Override /* Overridden from LinkString */
 		public Action setUri(String value, Object...args) {
 			super.setUri(value, args);
@@ -81,6 +94,7 @@ public class LogsResource extends BasicRestServlet {
 		}
 	}
 
+	/** File or directory details for REST response. */
 	@Response(schema = @Schema(description = "File or directory details"))
 	@Bean(properties = "type,name,size,lastModified,actions,files")
 	public static class FileResource {
@@ -97,6 +111,14 @@ public class LogsResource extends BasicRestServlet {
 		private final boolean includeChildren;
 		private final boolean allowDeletes;
 
+		/**
+		 * Constructor.
+		 *
+		 * @param f The file or directory.
+		 * @param path The path.
+		 * @param allowDeletes Whether deletes are allowed.
+		 * @param includeChildren Whether to include child files.
+		 */
 		public FileResource(File f, String path, boolean allowDeletes, boolean includeChildren) {
 			this.f = f;
 			this.path = path;
@@ -105,6 +127,11 @@ public class LogsResource extends BasicRestServlet {
 			this.allowDeletes = allowDeletes;
 		}
 
+		/**
+		 * Returns available actions for this file (view, download, delete, etc.).
+		 *
+		 * @return The list of actions.
+		 */
 		@Html(format = HtmlFormat.HTML_CDC)
 		public List<Action> getActions() {
 			var l = new ArrayList<Action>();
@@ -119,6 +146,11 @@ public class LogsResource extends BasicRestServlet {
 			return l;
 		}
 
+		/**
+		 * Returns child files when this is a directory and includeChildren is true.
+		 *
+		 * @return Child files, or <jk>null</jk> when this is a file or includeChildren is false.
+		 */
 		@SuppressWarnings({
 			"java:S1168"     // TODO: Intentional null when file or !includeChildren. Consider empty set.
 		})
@@ -131,17 +163,44 @@ public class LogsResource extends BasicRestServlet {
 			return s;
 		}
 
+		/**
+		 * Returns the last modified date of the file.
+		 *
+		 * @return The last modified date.
+		 */
 		public Date getLastModified() { return new Date(f.lastModified()); }
 
+		/**
+		 * Returns the file name as a link.
+		 *
+		 * @return The name as a link.
+		 */
 		public LinkString getName() { return new LinkString(f.getName(), uri); }
 
+		/**
+		 * Returns the file size, or number of items for directories.
+		 *
+		 * @return The size.
+		 */
 		public long getSize() { return f.isDirectory() ? f.listFiles().length : f.length(); }
 
+		/**
+		 * Returns the type: "dir" or "file".
+		 *
+		 * @return The type.
+		 */
 		public String getType() { return (f.isDirectory() ? "dir" : "file"); }
 	}
 
 	@Response(schema = @Schema(type = "string", format = "binary", description = "Contents of file"))
 	static class FileContents extends FileInputStream {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param file The file to read.
+		 * @throws FileNotFoundException If the file is not found.
+		 */
 		public FileContents(File file) throws FileNotFoundException {
 			super(file);
 		}
@@ -165,6 +224,13 @@ public class LogsResource extends BasicRestServlet {
 	/** Whether deletes are allowed. Set once in @RestInit, shared by all requests. */
 	private static boolean allowDeletes;
 
+	/**
+	 * Deletes a log file on the file system.
+	 *
+	 * @param path The file path.
+	 * @return Redirect to root on success.
+	 * @throws MethodNotAllowed If deletes are not enabled.
+	 */
 	@RestDelete(
 		path="/*",
 		summary="Delete log file",
@@ -174,6 +240,15 @@ public class LogsResource extends BasicRestServlet {
 		deleteFile(getFile(path));
 		return new RedirectToRoot();
 	}
+	/**
+	 * Downloads the contents of a file.
+	 *
+	 * @param res The response.
+	 * @param path The file path.
+	 * @return The file contents stream.
+	 * @throws NotFound If the file is not found.
+	 * @throws MethodNotAllowed If method not allowed.
+	 */
 	@RestOp(
 		method="DOWNLOAD",
 		path="/*",
@@ -184,11 +259,20 @@ public class LogsResource extends BasicRestServlet {
 		res.setContentType("application/octet-stream");
 		try {
 			return new FileContents(getFile(path));
-		} catch (@SuppressWarnings("unused") FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 			throw new NotFound("File not found");
 		}
 	}
 
+	/**
+	 * Returns information about the specified file or directory.
+	 *
+	 * @param req The request.
+	 * @param path The file path.
+	 * @return The file or directory details.
+	 * @throws NotFound If the file is not found.
+	 * @throws Exception If an error occurs.
+	 */
 	@RestGet(
 		path="/*",
 		summary="View information on file or directory",
@@ -197,7 +281,9 @@ public class LogsResource extends BasicRestServlet {
 	@HtmlDocConfig(
 		nav={"<h5>Folder:  $RA{fullPath}</h5>"}
 	)
-	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method
+	})
 	public FileResource getFile(RestRequest req, @Path("/*") String path) throws NotFound, Exception {
 
 		var dir = getFile(path);
@@ -206,6 +292,11 @@ public class LogsResource extends BasicRestServlet {
 		return new FileResource(dir, path, allowDeletes, true);
 	}
 
+	/**
+	 * Initializes log directory and formatter from config.
+	 *
+	 * @param config The microservice configuration.
+	 */
 	@RestInit
 	public void init(Config config) {
 		logDir = new File(config.get("Logging/logDir").asString().orElse("logs"));
@@ -217,13 +308,32 @@ public class LogsResource extends BasicRestServlet {
 		);
 	}
 
+	/**
+	 * Views the contents of a log file with optional filtering.
+	 *
+	 * @param res The response.
+	 * @param path The file path.
+	 * @param highlight Add severity color highlighting.
+	 * @param start Start timestamp filter.
+	 * @param end End timestamp filter.
+	 * @param thread Thread name filter.
+	 * @param loggers Logger filter.
+	 * @param severity Severity filter.
+	 * @throws NotFound If the file is not found.
+	 * @throws MethodNotAllowed If method not allowed.
+	 * @throws IOException If an I/O error occurs.
+	 */
 	@RestOp(
 		method="VIEW",
 		path="/*",
 		summary="View contents of log file",
 		description="View the contents of a log file."
 	)
-	@SuppressWarnings({ "resource", "java:S3776", "java:S107" })
+	@SuppressWarnings({
+		"resource", // Resource management handled externally
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S107", // Method has many parameters; acceptable for builder/configuration methods
+	})
 	public void viewFile(
 			RestResponse res,
 			@Path("/*") String path,
@@ -279,6 +389,20 @@ public class LogsResource extends BasicRestServlet {
 			}
 		}
 	}
+	/**
+	 * Views the parsed contents of a log file with filtering.
+	 *
+	 * @param req The request.
+	 * @param path The file path.
+	 * @param start Start timestamp filter.
+	 * @param end End timestamp filter.
+	 * @param thread Thread name filter.
+	 * @param loggers Logger filter.
+	 * @param severity Severity filter.
+	 * @return The log parser iterable.
+	 * @throws NotFound If the file is not found.
+	 * @throws IOException If an I/O error occurs.
+	 */
 	@RestOp(
 		method="PARSE",
 		path="/*",
@@ -325,7 +449,7 @@ public class LogsResource extends BasicRestServlet {
 		}
 		try {
 			Files.delete(f.toPath());
-		} catch (@SuppressWarnings("unused") IOException e) {
+		} catch (IOException e) {
 			throw new Forbidden("Could not delete file {0}", f.getAbsolutePath());
 		}
 	}

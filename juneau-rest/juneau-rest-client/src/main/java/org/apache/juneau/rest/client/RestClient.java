@@ -1049,7 +1049,10 @@ import org.apache.juneau.xml.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
  * </ul>
  */
-@SuppressWarnings({"resource", "java:S115"})
+@SuppressWarnings({
+	"resource", // Resource management handled externally
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+})
 public class RestClient extends BeanContextable implements HttpClient, Closeable {
 
 	// Property name constants
@@ -2952,7 +2955,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @throws Exception If one or more interceptors could not be created.
 		 */
-		@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+		@SuppressWarnings({
+			"java:S112" // throws Exception intentional - callback/lifecycle method
+		})
 		public Builder interceptors(Class<?>...values) throws Exception {
 			for (var c : values) {
 				if (c == null)
@@ -7233,7 +7238,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * 	<br>Can be <jk>null</jk> (will use the default parser from the client).
 	 * @return The new proxy interface.
 	 */
-	@SuppressWarnings({ "unchecked", "java:S3776" })
+	@SuppressWarnings({
+		"unchecked", // Type erasure requires unchecked casts in REST client operations
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+	})
 	public <T> T getRrpcInterface(Class<T> interfaceClass, Object uri, Serializer serializer, Parser parser) {
 
 		if (uri == null) {
@@ -7784,7 +7792,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 */
 	@Override
 	@Deprecated(since = "9", forRemoval = true) // Object.finalize() is deprecated
-	@SuppressWarnings("java:S1113") // Kept for detectLeaks; logs warning when RestClient is GC'd without close
+	@SuppressWarnings({
+		"java:S1113" // Kept for detectLeaks; logs warning when RestClient is GC'd without close
+	})
 	protected void finalize() throws Throwable {
 		if (detectLeaks && ! isClosed.get() && ! keepHttpClientOpen) {
 			var sb = new StringBuilder("WARNING:  RestClient garbage collected before it was finalized.");  // NOT DEBUG

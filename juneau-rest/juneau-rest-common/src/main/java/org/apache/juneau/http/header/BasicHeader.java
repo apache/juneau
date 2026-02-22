@@ -102,7 +102,9 @@ public class BasicHeader implements Header, Serializable {
 	 * 	<br>Can also be an <l>Object</l> {@link Supplier}.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for supplier
+	})
 	public BasicHeader(String name, Object value) {
 		assertArg(Utils.ne(name), "Name cannot be empty on header.");  // NOAI
 		this.name = name;

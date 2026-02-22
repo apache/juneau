@@ -24,7 +24,9 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S5961")
+@SuppressWarnings({
+	"java:S5961" // High assertion count acceptable in comprehensive test
+})
 class Visibility_Test extends TestBase {
 
 	//====================================================================================================

@@ -42,7 +42,9 @@ public class App {
 	 * Entry point method.
 	 * @param args Command-line arguments.
 	 */
-	@SuppressWarnings("resource")
+	@SuppressWarnings({
+		"resource" // Resources managed by framework
+	})
 	public static void main(String[] args) {
 		new SpringApplicationBuilder(App.class).run(args);
 	}

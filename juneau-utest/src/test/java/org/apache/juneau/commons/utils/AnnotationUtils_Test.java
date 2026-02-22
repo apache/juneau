@@ -25,7 +25,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S5961")
+@SuppressWarnings({
+	"java:S5961" // High assertion count acceptable in comprehensive test
+})
 class AnnotationUtils_Test {
 
 	//====================================================================================================

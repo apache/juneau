@@ -16,7 +16,18 @@
  */
 package org.apache.juneau.server.config.repository;
 
-@SuppressWarnings({ "javadoc", "java:S112" }) // throws Exception intentional - callback/lifecycle method
+/**
+ * Repository command executed by the server.
+ */
+@SuppressWarnings({
+	"java:S112" // throws Exception intentional - callback/lifecycle method
+})
 public interface Command {
+
+	/**
+	 * Executes the command.
+	 *
+	 * @throws Exception If execution fails.
+	 */
 	void execute() throws Exception;
 }

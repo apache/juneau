@@ -265,7 +265,9 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param type The annotation type.
 	 * @return A stream of matching annotations.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for annotation stream
+	})
 	public final <A extends Annotation> Stream<AnnotationInfo<A>> getDeclaredAnnotations(Class<A> type) {
 		assertArgNotNull(ARG_type, type);
 		// @formatter:off

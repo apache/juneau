@@ -116,8 +116,8 @@ public class Datalist extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Datalist _class(String value) {
-		super._class(value);
+	public Datalist class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

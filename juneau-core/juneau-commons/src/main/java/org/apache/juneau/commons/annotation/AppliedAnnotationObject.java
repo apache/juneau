@@ -119,7 +119,9 @@ import org.apache.juneau.commons.reflect.*;
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-commons.Annotations">Overview &gt; juneau-commons &gt; Annotations</a>
  * </ul>
  */
-@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., ARG_value, ARG_values)
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., ARG_value, ARG_values)
+})
 public class AppliedAnnotationObject extends AnnotationObject {
 
 	// Argument name constants for assertArgNoNulls
@@ -462,7 +464,9 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param value The values to append.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure requires cast to BuilderT
+		})
 		public BuilderT onClass(Class<?>...value) {
 			assertArgNoNulls(ARG_value, value);
 			for (var v : value)
@@ -476,7 +480,9 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param value The values to append.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure requires cast to BuilderT
+		})
 		public BuilderT onClass(ClassInfo...value) {
 			assertArgNoNulls(ARG_value, value);
 			for (var v : value)

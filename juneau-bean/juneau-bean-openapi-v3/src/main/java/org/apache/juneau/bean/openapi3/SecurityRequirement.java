@@ -32,7 +32,9 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class SecurityRequirement extends OpenApiElement {
 
 	// Argument name constants for assertArgNotNull
@@ -111,7 +113,9 @@ public class SecurityRequirement extends OpenApiElement {
 		return new MultiSet<>(s, super.keySet());
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for map operations
+	})
 	@Override /* Overridden from OpenApiElement */
 	public SecurityRequirement set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);

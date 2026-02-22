@@ -40,7 +40,18 @@ import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({ "java:S3008", "java:S5961", "java:S1186", "java:S1172", "java:S1854", "java:S1874" }) // Unused parameters in tests are typically intentional. S1854: Must create anonymous class instances (new Object() {}) to test anonymous class behavior, cannot use Object.class. S1874: Intentional use of deprecated classes/methods in tests to verify deprecated functionality
+@SuppressWarnings({
+	"java:S3008", // Static field naming follows test convention
+	"java:S5961", // High assertion count acceptable in comprehensive tests
+	"java:S1186", // Empty method body intentional for callback testing
+	"java:S1172", // Unused parameters kept for API consistency or framework requirements
+	"java:S1854", // Dead stores intentional for test verification
+	"java:S1874", // Intentional use of deprecated API to verify functionality
+	"serial", // Serialization not relevant in test code
+	"unused", // Private members and type params intentional for reflection testing
+	"rawtypes", // Raw types necessary for test bean handling
+	"java:S125" // Commented code kept for test documentation
+})
 public class ClassInfo_Test extends TestBase {
 
 	@Documented
@@ -452,43 +463,31 @@ public class ClassInfo_Test extends TestBase {
 
 	static ClassInfo la = of(LA.class);
 
-	@SuppressWarnings("serial")
 	public static class MA extends HashMap<String,Integer> {}
 
-	@SuppressWarnings("serial")
 	public static class MB extends MA {}
 
-	@SuppressWarnings("serial")
 	public static class MC<K,E> extends HashMap<K,E> {}
 
-	@SuppressWarnings("serial")
 	public static class MD extends MC<String,Integer> {}
 
-	@SuppressWarnings("serial")
 	public static class ME extends HashMap<String,HashMap<String,Integer>> {}
 
-	@SuppressWarnings("serial")
 	public static class MF extends HashMap<String,String[]> {}
 
-	@SuppressWarnings("serial")
 	public static class MG extends HashMap<String,HashMap<String,Integer>[]> {}
 
-	@SuppressWarnings({ "serial", "rawtypes" })
 	public static class MH extends HashMap<String,LinkedList[]> {}
 
-	@SuppressWarnings({ "serial" })
 	public static class MI<X> extends HashMap<String,X[]> {}
 
-	@SuppressWarnings({ "serial" })
 	public static class MJ<X extends Number> extends HashMap<String,X> {}
 
 	public class MK {}
 
-	@SuppressWarnings({ "serial" })
 	public class ML extends HashMap<String,MK> {}
 
 	public static class MM {
-		@SuppressWarnings({ "serial" })
 		public class MN extends HashMap<String,MM> {}
 	}
 
@@ -511,7 +510,6 @@ public class ClassInfo_Test extends TestBase {
 
 	static class Child extends Parent implements IChild {}
 
-	@SuppressWarnings("unused")
 	private static class GenericsTestClass {
 		HashMap<String,Integer> hashMap;
 		HashMap<String,ArrayList<Integer>> nestedMap;
@@ -538,7 +536,6 @@ public class ClassInfo_Test extends TestBase {
 	// arrayType()
 	//====================================================================================================
 	@Test
-	@SuppressWarnings("java:S125")
 	void a002_arrayType() {
 		var ci = ClassInfo.of(String.class);
 		var arrayType = ci.arrayType();
@@ -1466,7 +1463,6 @@ public class ClassInfo_Test extends TestBase {
 		assertEquals("V", pTypeGenericArgInfo.getNameFull());
 
 		// Local class
-		@SuppressWarnings("serial")
 		class LocalClass implements Serializable {}
 		var localClassName = of(LocalClass.class).getNameFull();
 		assertTrue(localClassName.startsWith("org.apache.juneau.commons.reflect.ClassInfo_Test$"), "Should start with package and class name");
@@ -1518,7 +1514,6 @@ public class ClassInfo_Test extends TestBase {
 		assertEquals("V", pTypeGenericArgInfo.getNameShort());
 
 		// Local class
-		@SuppressWarnings("serial")
 		class LocalClass implements Serializable {}
 		assertEquals("ClassInfo_Test$LocalClass", of(LocalClass.class).getNameShort());
 	}
@@ -1557,7 +1552,6 @@ public class ClassInfo_Test extends TestBase {
 		assertEquals("V", pTypeGenericArgInfo.getNameSimple());
 
 		// Local class
-		@SuppressWarnings("serial")
 		class LocalClass implements Serializable {}
 		assertEquals("LocalClass", of(LocalClass.class).getNameSimple());
 	}
@@ -3418,7 +3412,6 @@ public class ClassInfo_Test extends TestBase {
 	private static class ToStringTestPrivate {}
 	public static final class ToStringTestFinal {}
 	public abstract static class ToStringTestAbstract {}
-	@SuppressWarnings("unused")
 	public static class ToStringTestGeneric<T> {}
 	public static class ToStringTestGenericWithBounds<T extends Comparable<T> & java.io.Serializable> {}
 	public enum ToStringTestEnum { VALUE1, VALUE2 }
@@ -3679,7 +3672,6 @@ public class ClassInfo_Test extends TestBase {
 
 		// Method with type parameters - should be skipped
 		@Inject
-		@SuppressWarnings("unused")
 		<T> void methodWithTypeParams(TestService service) {
 			method11Called = true;
 		}
@@ -3767,7 +3759,6 @@ public class ClassInfo_Test extends TestBase {
 		boolean called = false;
 
 		@PostConstruct
-		@SuppressWarnings("unused")
 		<T> void postConstruct() {
 			called = true; // Should not be called - has type parameters
 		}

@@ -37,7 +37,9 @@ import org.apache.juneau.parser.*;
  * </ul>
  *
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({
+	"resource" // Reader resource managed by calling code
+})
 public class PlainTextParserSession extends ReaderParserSession {
 
 	/**

@@ -134,7 +134,9 @@ public class MsgPackInputStream extends ParserInputStream {
 	 * <p>
 	 * This is the byte that indicates what kind of data follows.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for MsgPack data type reading
+	})
 	DataType readDataType() throws IOException {
 		int i = read();
 		if (i == -1)

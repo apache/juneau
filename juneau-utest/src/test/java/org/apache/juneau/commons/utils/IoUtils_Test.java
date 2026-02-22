@@ -32,6 +32,9 @@ import org.junit.jupiter.api.*;
 /**
  * Tests {@link IoUtils}.
  */
+@SuppressWarnings({
+	"java:S1186" // Empty test method intentional for framework testing
+})
 class IoUtils_Test extends TestBase {
 
 	//====================================================================================================
@@ -1076,7 +1079,6 @@ class IoUtils_Test extends TestBase {
 		}
 	}
 
-	@SuppressWarnings("java:S1186")
 	public static class ThrowingTestReader extends Reader {
 		public ThrowingTestReader() {
 		}

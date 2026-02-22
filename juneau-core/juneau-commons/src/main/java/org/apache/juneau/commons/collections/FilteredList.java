@@ -94,7 +94,9 @@ import java.util.function.*;
  *
  * @param <E> The element type.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class FilteredList<E> extends AbstractList<E> {
 
 	// Argument name constants for assertArgNotNull
@@ -276,7 +278,9 @@ public class FilteredList<E> extends AbstractList<E> {
 	 * @param <E> The element type.
 	 * @return A new builder.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to Builder<E>
+	})
 	public static <E> Builder<E> create() {
 		var builder = new Builder<E>();
 		builder.elementType = (Class<E>)Object.class;

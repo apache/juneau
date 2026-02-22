@@ -98,8 +98,8 @@ public class Input extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Input _class(String value) {
-		super._class(value);
+	public Input class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

@@ -59,9 +59,6 @@ public class UrlEncodingParserSession extends UonParserSession {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings({
-		"java:S110" // Builder class has many fields, acceptable for builder pattern
-	})
 	public static class Builder extends UonParserSession.Builder {
 
 		private UrlEncodingParser ctx;
@@ -305,8 +302,8 @@ public class UrlEncodingParserSession extends UonParserSession {
 		"java:S1213",    // Method name matches private method in parent class by design
 		"java:S125",     // State-machine comments (S1: ..., S2: ...)
 		"java:S2583",    // State variables persist across loop iterations
-		"java:S3776",
-		"java:S6541"
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S6541", // Single-threaded session contexts do not require synchronization
 	})
 	private <T> BeanMap<T> parseIntoBeanMap(UonReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 

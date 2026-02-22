@@ -22,7 +22,9 @@ import java.util.function.*;
 /**
  * Utility methods for composing {@link Predicate} instances.
  */
-@SuppressWarnings("java:S106") // System.err usage is intentional for debug peek() methods
+@SuppressWarnings({
+	"java:S106" // System.err usage is intentional for debug peek() methods
+})
 public final class PredicateUtils {
 
 	/**

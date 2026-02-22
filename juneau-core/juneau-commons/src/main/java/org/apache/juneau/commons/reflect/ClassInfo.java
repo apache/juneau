@@ -67,9 +67,9 @@ import org.apache.juneau.commons.lang.*;
  *
  */
 @SuppressWarnings({
-	"unchecked",
-	"rawtypes",
-	"java:S115",
+	"unchecked", // Type erasure requires unchecked casts
+	"rawtypes", // Raw types necessary for generic type handling
+	"java:S115", // Constants use UPPER_snakeCase naming convention
 	"java:S1452"  // Wildcard required - List<AnnotationInfo<? extends Annotation>>, List<TypeVariable<?>>
 })
 public class ClassInfo extends ElementInfo implements Annotatable, Type, Comparable<ClassInfo> {

@@ -25,6 +25,9 @@ import org.junit.jupiter.api.*;
 /**
  * Unit tests for {@link PropertyNotFoundException}.
  */
+@SuppressWarnings({
+	"cast" // Explicit cast needed for type testing
+})
 class PropertyNotFoundException_Test extends TestBase {
 
 	@Nested
@@ -90,7 +93,6 @@ class PropertyNotFoundException_Test extends TestBase {
 			assertTrue(ex.getMessage().contains("TestBean"));
 		}
 
-		@SuppressWarnings("cast")
 		@Test
 		void b02_exceptionHierarchy() {
 			var ex = new PropertyNotFoundException("test");

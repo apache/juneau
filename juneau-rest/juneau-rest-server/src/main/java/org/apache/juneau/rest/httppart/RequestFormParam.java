@@ -96,7 +96,9 @@ import org.apache.juneau.rest.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({
+	"resource" // RequestFormParam manages Closeable resources
+})
 public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 
 	private final jakarta.servlet.http.Part part;

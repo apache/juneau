@@ -52,7 +52,9 @@ import org.apache.juneau.rest.widget.*;
 		"stats: servlet:/stats"
 	}
 )
-@SuppressWarnings("java:S110")
+@SuppressWarnings({
+	"java:S110" // Inheritance depth acceptable for microservice hierarchy
+})
 public class RootResources extends BasicRestServletGroup {
 	private static final long serialVersionUID = 1L;
 }

@@ -26,7 +26,7 @@ class Caption_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Caption x = caption()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

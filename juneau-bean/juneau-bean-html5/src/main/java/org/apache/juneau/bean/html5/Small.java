@@ -72,8 +72,8 @@ public class Small extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Small _class(String value) {
-		super._class(value);
+	public Small class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

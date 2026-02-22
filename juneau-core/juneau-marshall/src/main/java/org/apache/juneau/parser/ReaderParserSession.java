@@ -39,7 +39,9 @@ import org.apache.juneau.httppart.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class ReaderParserSession extends ParserSession {
 
 	// Property name constants
@@ -253,7 +255,9 @@ public class ReaderParserSession extends ParserSession {
 	 * @return
 	 * 	A new {@link ParserPipe} wrapper around the specified input object.
 	 */
-	@SuppressWarnings("resource")
+	@SuppressWarnings({
+		"resource" // Resource management handled by ParserPipe
+	})
 	@Override /* Overridden from ParserSesson */
 	public final ParserPipe createPipe(Object input) {
 		return setPipe(new ParserPipe(input, isDebug(), ctx.isStrict(), ctx.isAutoCloseStreams(), ctx.isUnbuffered(), streamCharset, fileCharset));

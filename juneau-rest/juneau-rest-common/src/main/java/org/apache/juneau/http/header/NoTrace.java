@@ -34,7 +34,7 @@ public class NoTrace extends BasicBooleanHeader {
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "No-Trace";
 
-	@SuppressWarnings("javadoc")
+	/** Constant for <jk>true</jk> value. */
 	public static final NoTrace TRUE = of(true);
 	/** Constant for <jk>false</jk> value. */
 	public static final NoTrace FALSE = of(false);

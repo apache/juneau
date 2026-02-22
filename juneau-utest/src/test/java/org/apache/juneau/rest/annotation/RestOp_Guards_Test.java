@@ -22,7 +22,9 @@ import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S5961")
+@SuppressWarnings({
+	"java:S5961" // High assertion count acceptable in comprehensive test
+})
 class RestOp_Guards_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

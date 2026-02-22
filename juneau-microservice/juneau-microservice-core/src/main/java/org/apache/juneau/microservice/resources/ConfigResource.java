@@ -53,14 +53,16 @@ import org.apache.juneau.rest.servlet.*;
 	},
 	resolveBodyVars="true"
 )
-@SuppressWarnings("javadoc")
 public class ConfigResource extends BasicRestServlet {
 	@Response
 	@Schema(description = "Section not found.")
-	@SuppressWarnings("java:S110")
+	@SuppressWarnings({
+		"java:S110" // Inheritance depth acceptable for microservice hierarchy
+	})
 	private class SectionNotFound extends NotFound {
 		private static final long serialVersionUID = 1L;
 
+		/** Constructor. */
 		SectionNotFound() {
 			super("Section not found.");
 		}
@@ -78,6 +80,11 @@ public class ConfigResource extends BasicRestServlet {
 			}
 		)
 	)
+	/**
+	 * Returns the config file contents as a nested map.
+	 *
+	 * @return The config as a map of maps.
+	 */
 	public JsonMap getConfig() {
 		return getContext().getConfig().toMap();
 	}
@@ -87,9 +94,14 @@ public class ConfigResource extends BasicRestServlet {
 		summary="Render form entry page for editing config file",
 		description="Renders a form entry page for editing the raw text of a config file."
 	)
+	/**
+	 * Returns an HTML form for editing the config file contents.
+	 *
+	 * @return The edit form.
+	 */
 	public Form getConfigEditForm() {
 		return form().id("form").action("servlet:/").method("POST").enctype("application/x-www-form-urlencoded").children(
-			div()._class("data").children(
+			div().class_("data").children(
 				table(
 					tr(td().style("text-align:right").children(button("submit","Submit"),button("reset","Reset"))),
 					tr(th().child("Contents")),
@@ -112,6 +124,14 @@ public class ConfigResource extends BasicRestServlet {
 			}
 		)
 	)
+	/**
+	 * Returns the value of a config entry for the given section and key.
+	 *
+	 * @param section Section name in config file.
+	 * @param key Key name in section.
+	 * @return The entry value.
+	 * @throws SectionNotFound If the section is not found.
+	 */
 	public String getConfigEntry(
 			@Path("section") @Schema(d="Section name in config file.") String section,
 			@Path("key") @Schema(d="Key name in section.") String key
@@ -130,6 +150,13 @@ public class ConfigResource extends BasicRestServlet {
 			}
 		)
 	)
+	/**
+	 * Returns the contents of a config section as a map.
+	 *
+	 * @param section Section name in config file.
+	 * @return The section as a map.
+	 * @throws SectionNotFound If the section is not found.
+	 */
 	public JsonMap getConfigSection(
 			@Path("section") @Schema(d="Section name in config file.") String section
 		) throws SectionNotFound {
@@ -147,7 +174,16 @@ public class ConfigResource extends BasicRestServlet {
 			}
 		)
 	)
-	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+	/**
+	 * Updates the config file from raw text in INI format.
+	 *
+	 * @param contents New contents in INI file format.
+	 * @return The config as a map.
+	 * @throws Exception If parsing or loading fails.
+	 */
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method
+	})
 	public JsonMap setConfigContents(
 			@Content @Schema(d="New contents in INI file format.") Reader contents
 		) throws Exception {
@@ -165,7 +201,16 @@ public class ConfigResource extends BasicRestServlet {
 			}
 		)
 	)
-	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+	/**
+	 * Updates the config file from form POST data.
+	 *
+	 * @param contents New contents in INI file format.
+	 * @return The config as a map.
+	 * @throws Exception If parsing or loading fails.
+	 */
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method
+	})
 	public JsonMap setConfigContentsFormPost(
 			@FormData("contents") @Schema(d="New contents in INI file format.") String contents
 		) throws Exception {
@@ -183,7 +228,17 @@ public class ConfigResource extends BasicRestServlet {
 			}
 		)
 	)
-	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+	/**
+	 * Adds or overwrites a config section.
+	 *
+	 * @param section Section name in config file.
+	 * @param contents New contents of config section as a simple map of key/value pairs.
+	 * @return The updated section as a map.
+	 * @throws Exception If the update fails.
+	 */
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method
+	})
 	public JsonMap setConfigSection(
 			@Path("section") @Schema(d="Section name in config file.") String section,
 			@Content @Schema(d="New contents of config section as a simple map of key/value pairs.")
@@ -203,6 +258,15 @@ public class ConfigResource extends BasicRestServlet {
 			}
 		)
 	)
+	/**
+	 * Adds or overwrites a config entry value.
+	 *
+	 * @param section Section name in config file.
+	 * @param key Key name in section.
+	 * @param value New value for entry.
+	 * @return The updated value.
+	 * @throws SectionNotFound If the section is not found.
+	 */
 	public String setConfigValue(
 			@Path("section") @Schema(d="Section name in config file.") String section,
 			@Path("key") @Schema(d="Key name in section.") String key,

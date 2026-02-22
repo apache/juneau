@@ -27,7 +27,7 @@ class A_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		A x = a()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.children("c1", strong("c2"))
 			.contenteditable("d")

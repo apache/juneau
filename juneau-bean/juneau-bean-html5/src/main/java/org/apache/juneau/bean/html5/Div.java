@@ -104,8 +104,8 @@ public class Div extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Div _class(String value) {
-		super._class(value);
+	public Div class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

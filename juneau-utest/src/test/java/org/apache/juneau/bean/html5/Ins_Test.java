@@ -28,7 +28,7 @@ class Ins_Test extends TestBase {
 		Ins x = ins()
 			.cite("a")
 			.datetime("b")
-			._class("c")
+			.class_("c")
 			.accesskey("d")
 			.contenteditable("e")
 			.dir("f")

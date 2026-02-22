@@ -105,8 +105,8 @@ public class Kbd extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Kbd _class(String value) {
-		super._class(value);
+	public Kbd class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

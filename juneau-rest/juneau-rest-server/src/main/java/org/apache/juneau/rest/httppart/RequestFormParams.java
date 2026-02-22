@@ -112,7 +112,10 @@ import jakarta.servlet.http.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
  */
-@SuppressWarnings({"resource","java:S115"})
+@SuppressWarnings({
+	"resource", // Resource management handled externally
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+})
 public class RequestFormParams extends ArrayList<RequestFormParam> {
 
 	// Argument name constants for assertArgNotNull
@@ -136,7 +139,12 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @param caseSensitive Whether case-sensitive name matching is enabled.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	@SuppressWarnings({ "null", "java:S3776", "java:S112" }) // throws Exception intentional - callback/lifecycle method
+	
+	@SuppressWarnings({
+		"null", // throws Exception intentional - callback/lifecycle method
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S112", // Generic exception thrown; acceptable for framework/lifecycle methods
+	})
 	public RequestFormParams(RestRequest req, boolean caseSensitive) throws Exception {
 		this.req = req;
 		this.caseSensitive = caseSensitive;

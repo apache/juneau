@@ -118,7 +118,9 @@ import org.apache.juneau.commons.utils.Utils;
  * @param <K> The key type.
  * @param <V> The value type.
  */
-@SuppressWarnings("java:S115") // Constants use UPPER_snakeCase convention (e.g., ARG_keys, ARG_values)
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., ARG_keys, ARG_values)
+})
 public class SimpleMap<K,V> extends AbstractMap<K,V> {
 
 	// Argument name constants for assertArgsNotNull
@@ -210,7 +212,9 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 	 *         	<li>Any key appears more than once (duplicate keys)
 	 *         </ul>
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for array-based map construction
+	})
 	public SimpleMap(K[] keys, V[] values) {
 		assertArgsNotNull(ARG_keys, keys, ARG_values, values);
 		assertArg(keys.length == values.length, "keys ''{0}'' and values ''{1}'' array lengths differ", keys.length, values.length);

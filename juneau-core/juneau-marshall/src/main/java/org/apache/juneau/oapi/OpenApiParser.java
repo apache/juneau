@@ -41,13 +41,14 @@ import org.apache.juneau.uon.*;
 
  * </ul>
  */
-@SuppressWarnings("java:S110")
+@SuppressWarnings({
+	"java:S110" // Inheritance depth acceptable for OpenApiParser hierarchy
+})
 public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class Builder extends UonParser.Builder {
 
 		private static final Cache<HashKey,OpenApiParser> CACHE = Cache.of(HashKey.class, OpenApiParser.class).build();

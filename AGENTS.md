@@ -6,7 +6,7 @@ This document outlines the rules, guidelines, and best practices that AI assista
 
 **Important**: Also read `AI_SESSION.md` to understand the current session's work context, what we're currently working on, and any recent changes or patterns established in this session.
 
-**Documentation Separation Rule**: `AI_SESSION.md` should only contain session-specific information that is not already covered in `AI.md`. General rules, permanent conventions, and best practices belong in `AI.md`. Session-specific work progress, current tasks, and temporary patterns belong in `AI_SESSION.md`.
+**Documentation Separation Rule**: `AI_SESSION.md` should only contain session-specific information that is not already covered in `AGENTS.md`. General rules, permanent conventions, and best practices belong in `AGENTS.md`. Session-specific work progress, current tasks, and temporary patterns belong in `AI_SESSION.md`.
 
 ## User Commands
 
@@ -36,9 +36,9 @@ This document outlines the rules, guidelines, and best practices that AI assista
 - **"test"** - Runs `scripts/build-and-test.py`
 
 ### Documentation Commands
-- **"save a rule"** or **"save this rule"** - Add the rule/information to `AI.md` (permanent/general)
+- **"save a rule"** or **"save this rule"** - Add the rule/information to `AGENTS.md` (permanent/general)
 - **"store this rule in the session"** - Add the rule/information to `AI_SESSION.md` (session-specific)
-- **"store this rule in the context"** - Add the rule/information to `AI.md` (permanent/general)
+- **"store this rule in the context"** - Add the rule/information to `AGENTS.md` (permanent/general)
 
 ## Core Working Principles
 

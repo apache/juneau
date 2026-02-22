@@ -130,8 +130,8 @@ public class Nav extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Nav _class(String value) {
-		super._class(value);
+	public Nav class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

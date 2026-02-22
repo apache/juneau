@@ -120,8 +120,8 @@ public class Footer extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Footer _class(String value) {
-		super._class(value);
+	public Footer class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

@@ -131,7 +131,10 @@ import org.apache.juneau.uon.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingBasics">URL-Encoding Basics</a>
  * </ul>
  */
-@SuppressWarnings({ "java:S110", "java:S115" }) // Constants use UPPER_snakeCase convention (e.g., PROP_expandedParams)
+@SuppressWarnings({
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+})
 public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingMetaProvider {
 
 	// Property name constants
@@ -140,7 +143,6 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class Builder extends UonSerializer.Builder {
 
 		private static final Cache<HashKey,UrlEncodingSerializer> CACHE = Cache.of(HashKey.class, UrlEncodingSerializer.class).build();
@@ -932,7 +934,6 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	/**
 	 * Equivalent to <code>UrlEncodingSerializer.<jsm>create</jsm>().expandedParams().build();</code>.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class Expanded extends UrlEncodingSerializer {
 
 		/**
@@ -948,7 +949,6 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	/**
 	 * Equivalent to <code>UrlEncodingSerializer.<jsm>create</jsm>().plainTextParts().build();</code>.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class PlainText extends UrlEncodingSerializer {
 
 		/**
@@ -964,7 +964,6 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	/**
 	 * Equivalent to <code>UrlEncodingSerializer.<jsm>create</jsm>().useWhitespace().build();</code>.
 	 */
-	@SuppressWarnings("java:S110")
 	public static class Readable extends UrlEncodingSerializer {
 
 		/**

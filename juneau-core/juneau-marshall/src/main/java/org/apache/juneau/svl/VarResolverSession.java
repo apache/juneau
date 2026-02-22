@@ -339,7 +339,12 @@ public class VarResolverSession {
 	 * @return The same writer.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	@SuppressWarnings({"java:S125", "java:S2583", "java:S6541", "java:S3776"})  // S125: state-machine comments
+	@SuppressWarnings({
+		"java:S125", // State-machine comments
+		"java:S2583", // Condition always true/false; state persists across iterations or calls
+		"java:S6541", // Single-threaded context; synchronization unnecessary
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+	})
 	public Writer resolveTo(String s, Writer out) throws IOException {
 
 		// S1: Not in variable, looking for $

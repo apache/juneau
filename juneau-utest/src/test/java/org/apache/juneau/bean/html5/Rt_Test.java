@@ -26,7 +26,7 @@ class Rt_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Rt x = rt()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

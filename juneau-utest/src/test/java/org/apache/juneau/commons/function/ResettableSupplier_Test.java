@@ -23,6 +23,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"cast", // Explicit cast needed for type testing
+	"java:S2925" // Thread.sleep intentional for concurrency/race condition tests
+})
 class ResettableSupplier_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -120,9 +124,6 @@ class ResettableSupplier_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"java:S2925"  // Thread.sleep intentional - simulate work to provoke race condition
-	})
 	void a06_threadSafety_raceCondition() throws InterruptedException {
 		var callCount = new AtomicInteger();
 		ResettableSupplier<String> supplier = new ResettableSupplier<>(() -> {
@@ -168,9 +169,6 @@ class ResettableSupplier_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings({
-		"java:S2925"  // Thread.sleep intentional - timing variance for concurrency race test
-	})
 	void a07_resetAndGetConcurrently() throws InterruptedException {
 		var callCount = new AtomicInteger();
 		ResettableSupplier<Integer> supplier = new ResettableSupplier<>(() -> {
@@ -342,7 +340,6 @@ class ResettableSupplier_Test extends TestBase {
 	}
 
 	@Test void d02_map_empty() {
-		@SuppressWarnings("cast")
 		var supplier = new ResettableSupplier<>(() -> (String)null);
 		var mapped = supplier.map(String::length);
 		assertNull(mapped.get());
@@ -391,7 +388,6 @@ class ResettableSupplier_Test extends TestBase {
 	}
 
 	@Test void e03_filter_empty() {
-		@SuppressWarnings("cast")
 		var supplier = new ResettableSupplier<>(() -> (String)null);
 		var filtered = supplier.filter(s -> s.length() > 3);
 		assertNull(filtered.get());
@@ -529,7 +525,6 @@ class ResettableSupplier_Test extends TestBase {
 	}
 
 	@Test void f16_flatMap_empty() {
-		@SuppressWarnings("cast")
 		var supplier = new ResettableSupplier<>(() -> (String)null);
 		var mapped = supplier.flatMap(s -> OptionalSupplier.ofNullable(s.length()));
 		assertNull(mapped.get());

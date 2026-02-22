@@ -104,7 +104,9 @@ import org.apache.juneau.swap.*;
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  */
-@SuppressWarnings("java:S1206") // Inherits equals/hashCode from LinkedHashMap; Map equality is entrySet-based
+@SuppressWarnings({
+	"java:S1206" // Inherits equals/hashCode from LinkedHashMap; Map equality is entrySet-based
+})
 public class JsonMap extends LinkedHashMap<String,Object> {
 	private static class UnmodifiableJsonMap extends JsonMap {
 		private static final long serialVersionUID = 1L;
@@ -290,9 +292,6 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @return A new map or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	@SuppressWarnings({
-		"java:S1172" // Parameter p is unused but kept for API consistency
-	})
 	public static JsonMap ofText(Reader in, Parser p) throws ParseException {
 		return in == null ? null : new JsonMap(in);
 	}
@@ -1392,7 +1391,10 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({
+		"rawtypes", // Raw types necessary for generic type handling for generic type handling
+		"unchecked", // Type erasure requires unchecked casts in ObjectSwap operations
+	})
 	public <T> T getSwapped(String key, ObjectSwap<T,?> objectSwap) throws ParseException {
 		try {
 			Object o = super.get(key);
@@ -1796,7 +1798,11 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	/*
 	 * Converts this map to the specified class type.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes", "java:S3776" })
+	@SuppressWarnings({
+		"unchecked", // Type erasure requires unchecked casts in dynamic map operations
+		"rawtypes", // Raw types necessary for generic type handling
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+	})
 	private <T> T cast2(ClassMeta<T> cm) {
 
 		BeanSession bs = bs();

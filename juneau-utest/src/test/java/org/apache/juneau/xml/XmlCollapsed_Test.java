@@ -28,7 +28,10 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"serial", "java:S4144"})
+@SuppressWarnings({
+	"serial", // Serialization not relevant
+	"java:S4144", // Identical methods intentional for different test scenarios
+})
 class XmlCollapsed_Test extends TestBase {
 
 	//====================================================================================================

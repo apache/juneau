@@ -105,8 +105,8 @@ public class H1 extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public H1 _class(String value) {
-		super._class(value);
+	public H1 class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

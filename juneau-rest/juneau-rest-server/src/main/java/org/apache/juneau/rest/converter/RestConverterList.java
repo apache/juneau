@@ -55,7 +55,9 @@ public class RestConverterList {
 		 * @param values The values to add.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Varargs with generics require unchecked cast
+		})
 		public Builder append(Class<? extends RestConverter>...values) {
 			for (var v : values)
 				entries.add(BeanCreator.of(RestConverter.class, beanStore()).type(v));

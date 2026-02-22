@@ -32,10 +32,13 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("java:S5961")
+@SuppressWarnings({
+	"java:S5961", // High assertion count acceptable in comprehensive test
+	"java:S125", // Commented code kept for test documentation
+	"serial" // Serialization not relevant in test code
+})
 class StringUtils_Test extends TestBase {
 
-	@SuppressWarnings("serial")
 	private abstract static class BadNumber extends Number {}
 
 	//====================================================================================================
@@ -1490,7 +1493,6 @@ class StringUtils_Test extends TestBase {
 	// formatNamed(String,Map<String,Object>)
 	//====================================================================================================
 	@Test
-	@SuppressWarnings("java:S125")
 	void a059_formatNamed() {
 		var args = new HashMap<String,Object>();
 		args.put("name", "John");
@@ -1688,7 +1690,6 @@ class StringUtils_Test extends TestBase {
 	// getDuration(String)
 	//====================================================================================================
 	@Test
-	@SuppressWarnings("java:S125")
 	void a066_getDuration() {
 		// Basic tests
 		assertEquals(-1, getDuration(null));
@@ -6466,7 +6467,6 @@ class StringUtils_Test extends TestBase {
 	// unescapeChars(String,AsciiSet)
 	//====================================================================================================
 	@Test
-	@SuppressWarnings("java:S125")
 	void a222_unescapeChars() {
 		var escape = AsciiSet.of("\\,|");
 

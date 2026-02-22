@@ -61,6 +61,8 @@ public interface RestOpArg {
 	 * @return The resolved object.
 	 * @throws Exception Generic error occurred.
 	 */
-	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method
+	})
 	Object resolve(RestOpSession opSession) throws Exception;
 }

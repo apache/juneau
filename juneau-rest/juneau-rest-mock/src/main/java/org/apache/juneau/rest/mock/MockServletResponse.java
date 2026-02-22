@@ -38,7 +38,7 @@ import jakarta.servlet.http.*;
  * </ul>
 */
 @SuppressWarnings({
-	"java:S4144",
+	"java:S4144", // Identical methods intentional for different test scenarios
 	"java:S115" // Constants use UPPER_snakeCase convention (e.g., HEADER_ContentType)
 })
 public class MockServletResponse implements HttpServletResponse {

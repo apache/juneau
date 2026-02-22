@@ -30,7 +30,9 @@ import org.apache.juneau.commons.lang.*;
  *
  * This is a read-only object.
  */
-@SuppressWarnings("java:S1206") // Internal config representation; value equality not needed
+@SuppressWarnings({
+	"java:S1206" // Internal config representation; value equality not needed
+})
 public class ConfigMapEntry {
 	static final ConfigMapEntry NULL = new ConfigMapEntry(null, null, null, null, null);
 	private static final AsciiSet REPLACE_CHARS = AsciiSet.of("\\#");
@@ -118,7 +120,9 @@ public class ConfigMapEntry {
 	 */
 	public String getValue() { return value; }
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for config entry writer
+	})
 	Writer writeTo(Writer w) throws IOException {
 		if (value == null)
 			return w;

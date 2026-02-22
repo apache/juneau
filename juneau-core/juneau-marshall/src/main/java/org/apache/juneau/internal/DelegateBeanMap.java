@@ -60,7 +60,9 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 	 * @param bean The bean being wrapped.
 	 * @param session The bean session that created this bean map.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for BeanMap creation
+	})
 	public DelegateBeanMap(T bean, BeanSession session) {
 		super(session, bean, session.getBeanMeta((Class<T>)bean.getClass()));
 	}

@@ -103,8 +103,8 @@ public class Button extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Button _class(String value) {
-		super._class(value);
+	public Button class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

@@ -30,7 +30,7 @@ class Option_Test extends TestBase {
 			.label("b")
 			.selected("c")
 			.value("d")
-			._class("e")
+			.class_("e")
 			.accesskey("f")
 			.contenteditable("g")
 			.dir("h")

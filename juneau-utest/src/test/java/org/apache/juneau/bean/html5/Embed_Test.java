@@ -30,7 +30,7 @@ class Embed_Test extends TestBase {
 			.src("b")
 			.type("c")
 			.width("d")
-			._class("e")
+			.class_("e")
 			.accesskey("f")
 			.contenteditable("g")
 			.dir("h")

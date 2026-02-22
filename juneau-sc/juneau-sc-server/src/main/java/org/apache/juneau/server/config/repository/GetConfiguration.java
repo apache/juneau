@@ -22,7 +22,13 @@ import java.util.*;
 
 import org.apache.juneau.config.*;
 
-@SuppressWarnings("javadoc")
+/**
+ * Command that fetches configuration from a Git repository for a given project and branch.
+ *
+ * <p>
+ * Clones or pulls the configured Git repo, then loads application and project-specific
+ * configuration files into a map of {@link ConfigItem} values.
+ */
 public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem>> {
 
 	private static final String APPLICATION = "APPLICATION";
@@ -32,15 +38,24 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 
 	private Map<String,ConfigItem> configs = new HashMap<>();
 
-	@SuppressWarnings("java:S1845") // Field name intentionally differs only by case from static field PROJECT
+	@SuppressWarnings({
+		"java:S1845" // Field name intentionally differs only by case from static field PROJECT
+	})
 	private String project;
 	private String branch;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param project Project name.
+	 * @param branch Branch name.
+	 */
 	public GetConfiguration(String project, String branch) {
 		this.branch = branch;
 		this.project = project;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void execute() throws Exception {
 
@@ -79,6 +94,7 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Map<String,ConfigItem> get() {
 		return configs;

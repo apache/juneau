@@ -70,7 +70,9 @@ public class PathRemainderArg implements RestOpArg {
 	 * @param pathMatcher Path matcher for the specified method (not used, but included for BasicBeanStore compatibility).
 	 * @return A new {@link PathRemainderArg}, or <jk>null</jk> if the parameter is not annotated with {@link PathRemainder}.
 	 */
-	@SuppressWarnings("java:S1172") // Parameter pathMatcher is kept for BasicBeanStore compatibility
+	@SuppressWarnings({
+		"java:S1172" // Parameter pathMatcher is kept for BasicBeanStore compatibility
+	})
 	public static PathRemainderArg create(ParameterInfo paramInfo, AnnotationWorkList annotations, UrlPathMatcher pathMatcher) {
 		if (AP.has(PathRemainder.class, paramInfo))
 			return new PathRemainderArg(paramInfo, annotations);

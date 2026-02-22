@@ -120,7 +120,10 @@ import org.apache.juneau.marshaller.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
-@SuppressWarnings({"java:S115", "java:S116"})
+@SuppressWarnings({
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S116", // Field names use trailing underscore (default_, enum_) to avoid Java keyword conflicts
+})
 public class ParameterInfo extends SwaggerElement {
 
 	// Argument name constants for assertArgNotNull
@@ -258,7 +261,9 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for this logic
+	})
 	public ParameterInfo copyFrom(ParameterInfo p) {
 		if (nn(p)) {
 			if (nn(p.name))
@@ -639,7 +644,9 @@ public class ParameterInfo extends SwaggerElement {
 		return this;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for Swagger operations
+	})
 	@Override /* Overridden from SwaggerElement */
 	public ParameterInfo set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);

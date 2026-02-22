@@ -22,7 +22,9 @@ import org.apache.juneau.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("serial")
+@SuppressWarnings({
+	"serial" // Serialization not relevant in test code
+})
 class Assertion_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

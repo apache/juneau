@@ -32,7 +32,7 @@ class Keygen_Test extends TestBase {
 			.form("d")
 			.keytype("e")
 			.name("f")
-			._class("g")
+			.class_("g")
 			.accesskey("h")
 			.contenteditable("i")
 			.dir("j")

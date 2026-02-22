@@ -105,8 +105,8 @@ public class Colgroup extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Colgroup _class(String value) {
-		super._class(value);
+	public Colgroup class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

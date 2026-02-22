@@ -184,7 +184,9 @@ public class ReflectionUtils {
 	 * @return The enum class as a raw type suitable for use with {@link EnumSet#allOf(Class)}.
 	 * @throws ClassCastException if the class is not an enum class.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types necessary for enum class return
+	})
 	public static Class<? extends Enum> asEnumClass(Class<?> clazz) {
 		return clazz.asSubclass(Enum.class);
 	}

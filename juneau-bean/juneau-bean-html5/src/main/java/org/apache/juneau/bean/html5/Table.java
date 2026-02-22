@@ -120,8 +120,8 @@ public class Table extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Table _class(String value) {
-		super._class(value);
+	public Table class_(String value) {
+		super.class_(value);
 		return this;
 	}
 

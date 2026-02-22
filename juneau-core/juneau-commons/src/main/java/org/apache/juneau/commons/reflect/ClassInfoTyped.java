@@ -44,13 +44,17 @@ public class ClassInfoTyped<T> extends ClassInfo {
 		super(inner, innerType);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for ClassInfo typed operations
+	})
 	@Override
 	public Class<T> inner() {
 		return (Class<T>)super.inner();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for ClassInfo typed operations
+	})
 	@Override
 	public T getPrimitiveDefault() { return (T)super.getPrimitiveDefault(); }
 }

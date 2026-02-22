@@ -107,7 +107,10 @@ public class Entry {
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The value, or {@link Optional#empty()} if the section or key does not exist.
 	 */
-	@SuppressWarnings({"unchecked", "java:S3776"})
+	@SuppressWarnings({
+		"unchecked", // Type erasure requires unchecked casts
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+	})
 	public <T> Optional<T> as(Parser parser, Type type, Type...args) {
 		if (isNull())
 			return opte();

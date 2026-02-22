@@ -276,7 +276,10 @@ public class Args extends JsonMap {
 	 * @param name The optional argument name.
 	 * @return The optional argument values, or an empty list if the optional argument was not specified.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({
+		"rawtypes", // Raw types necessary for generic type handling
+		"unchecked", // Type erasure requires unchecked casts in dynamic map operations
+	})
 	public List<String> getArgs(String name) {
 		List l = (JsonList)get(name);
 		if (l == null)

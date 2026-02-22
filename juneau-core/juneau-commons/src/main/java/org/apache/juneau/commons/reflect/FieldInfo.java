@@ -190,7 +190,9 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @return The field value.
 	 * @throws BeanRuntimeException Field was not accessible or field does not belong to object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to T for field retrieval
+	})
 	public <T> T get(Object o) throws BeanRuntimeException {
 		return safe(() -> {
 			inner.setAccessible(true);
@@ -242,7 +244,9 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @param type The annotation type.
 	 * @return A stream of all matching annotations.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for annotation stream
+	})
 	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
 		return annotations.get().stream().filter(x -> type.isInstance(x.inner())).map(x -> (AnnotationInfo<A>)x);
 	}
@@ -588,7 +592,9 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @return The same bean instance (for method chaining).
 	 * @throws ExecutableException If a required field (non-Optional, non-collection) cannot be resolved from the bean store.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for dependency injection
+	})
 	public <T> T inject(BeanStore beanStore, T bean) {
 		accessible();
 		var fieldType = getFieldType();

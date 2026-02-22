@@ -39,12 +39,14 @@ public class LogParser implements Iterable<LogParser.Entry>, Closeable {
 	 * Represents a single line from the log file.
 	 */
 	@SuppressWarnings({
-		"javadoc",
 		"java:S1104" // Public fields accessed externally (e.g., le.severity)
 	})
 	public class Entry {
+		/** Log entry timestamp. */
 		public Date date;
+		/** Log level (SEVERE, WARNING, INFO, etc.). */
 		public String severity;
+		/** Logger name (simple class name). */
 		public String logger;
 		protected String line;
 		protected String text;
@@ -52,6 +54,12 @@ public class LogParser implements Iterable<LogParser.Entry>, Closeable {
 		protected List<String> additionalText;
 		protected boolean isRecord;
 
+		/**
+		 * Constructor.
+		 *
+		 * @param line The raw log line.
+		 * @throws IOException If parsing fails.
+		 */
 		Entry(String line) throws IOException {
 			try {
 				this.line = line;
@@ -73,6 +81,13 @@ public class LogParser implements Iterable<LogParser.Entry>, Closeable {
 			}
 		}
 
+		/**
+		 * Appends HTML-escaped log entry to the writer.
+		 *
+		 * @param w The writer.
+		 * @return The writer for chaining.
+		 * @throws IOException If writing fails.
+		 */
 		public Writer appendHtml(Writer w) throws IOException {
 			w.append(toHtml(line)).append("<br>");
 			if (nn(additionalText))
@@ -81,6 +96,11 @@ public class LogParser implements Iterable<LogParser.Entry>, Closeable {
 			return w;
 		}
 
+		/**
+		 * Returns the full log message text, including additional stacked lines.
+		 *
+		 * @return The message text.
+		 */
 		public String getText() {
 			if (additionalText == null)
 				return text;
@@ -94,6 +114,11 @@ public class LogParser implements Iterable<LogParser.Entry>, Closeable {
 			return sb.toString();
 		}
 
+		/**
+		 * Returns the thread name.
+		 *
+		 * @return The thread name.
+		 */
 		public String getThread() { return thread; }
 
 		protected Writer append(Writer w) throws IOException {
@@ -215,7 +240,9 @@ public class LogParser implements Iterable<LogParser.Entry>, Closeable {
 	 * @param w The writer to write the log file to.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	@SuppressWarnings("resource")
+	@SuppressWarnings({
+		"resource" // Log file resources managed by parser
+	})
 	public void writeTo(Writer w) throws IOException {
 		try {
 			if (! hasNext())

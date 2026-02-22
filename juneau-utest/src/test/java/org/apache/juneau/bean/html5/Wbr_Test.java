@@ -26,7 +26,7 @@ class Wbr_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Wbr x = wbr()
-			._class("a")
+			.class_("a")
 			.accesskey("b")
 			.contenteditable("c")
 			.dir("d")

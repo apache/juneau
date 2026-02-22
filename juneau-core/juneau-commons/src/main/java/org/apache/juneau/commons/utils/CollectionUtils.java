@@ -1865,7 +1865,9 @@ public class CollectionUtils {
 	 * @param valueType The value type class.
 	 * @return An empty unmodifiable map.
 	 */
-	@SuppressWarnings("java:S1172") // Parameters required for type inference in public API
+	@SuppressWarnings({
+		"java:S1172" // Parameters required for type inference in public API
+	})
 	public static <K,V> Map<K,V> mape(Class<K> keyType, Class<V> valueType) {
 		return Collections.emptyMap();
 	}
@@ -1912,7 +1914,9 @@ public class CollectionUtils {
 	 * @param valueType The value type.
 	 * @return A new modifiable map.
 	 */
-	@SuppressWarnings("java:S1172") // Parameters required for type inference in public API
+	@SuppressWarnings({
+		"java:S1172" // Parameters required for type inference in public API
+	})
 	public static <K,V> Map<K,V> mapOf(Class<K> keyType, Class<V> valueType) {
 		return map();
 	}
@@ -2376,7 +2380,10 @@ public class CollectionUtils {
 	 * 	It must match the actual component type in the array.
 	 * @return A new {@link ArrayList}
 	 */
-	@SuppressWarnings({ "unchecked", "java:S1172" }) // Parameter elementType is used for type inference, not runtime behavior
+	@SuppressWarnings({
+		"unchecked", // Parameter elementType is used for type inference, not runtime behavior
+		"java:S1172", // Unused parameters kept for API consistency or framework requirements
+	})
 	public static <E> List<E> toList(Object array, Class<E> elementType) {
 		var l = new ArrayList<E>(Array.getLength(array));
 		for (var i = 0; i < Array.getLength(array); i++)

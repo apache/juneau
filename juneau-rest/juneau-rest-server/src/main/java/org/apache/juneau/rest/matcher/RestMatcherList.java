@@ -55,7 +55,9 @@ public class RestMatcherList {
 		 * @param values The values to add.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Varargs with generics require unchecked cast
+		})
 		public Builder append(Class<? extends RestMatcher>...values) {
 			for (var v : values)
 				entries.add(BeanCreator.of(RestMatcher.class, beanStore()).type(v));
