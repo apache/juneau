@@ -25,7 +25,6 @@ import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.annotation.*;
-import org.apache.juneau.swaps.*;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -64,12 +63,6 @@ import jakarta.servlet.http.*;
 		"</div>"
 	},
 	nowrap="false"
-)
-@BeanConfig(
-	swaps={
-		// Add a special filter for Enumerations
-		EnumerationSwap.class
-	}
 )
 @SerializerConfig(
 	maxDepth="5",

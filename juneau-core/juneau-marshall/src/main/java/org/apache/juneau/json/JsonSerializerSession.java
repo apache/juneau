@@ -261,6 +261,21 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		return out;
 	}
 
+	private SerializerWriter serializeStreamable(JsonWriter out, Object o, ClassMeta<?> sType, ClassMeta<?> type) throws SerializeException {
+		var elementType = type.getElementType();
+
+		out.w('[');
+		var addComma = Flag.create();
+		forEachStreamableEntry(o, sType, x -> {
+			addComma.ifSet(() -> out.w(',').smi(indent)).set();
+			out.cr(indent);
+			serializeAnything(out, x, elementType, "<iterator>", null);
+		});
+
+		out.cre(indent - 1).w(']');
+		return out;
+	}
+
 	
 	@SuppressWarnings({
 		"rawtypes", // Raw types necessary for generic collection/map serialization
@@ -434,6 +449,8 @@ public class JsonSerializerSession extends WriterSerializerSession {
 			serializeCollection(out, (Collection)o, eType);
 		} else if (sType.isArray()) {
 			serializeCollection(out, toList(sType.inner(), o), eType);
+		} else if (sType.isStreamable()) {
+			serializeStreamable(out, o, sType, eType);
 		} else if (sType.isReader()) {
 			pipe((Reader)o, out, SerializerSession::handleThrown);
 		} else if (sType.isInputStream()) {

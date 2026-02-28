@@ -24,7 +24,6 @@ import java.util.regex.*;
 
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.swaps.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
@@ -45,12 +44,10 @@ public class TestUtils {
 
 	private static JsonSerializer js2 = JsonSerializer.create()
 		.json5()
-		.swaps(IteratorSwap.class, EnumerationSwap.class)
 		.build();
 
 	private static JsonSerializer js3 = JsonSerializer.create()
 		.json5()
-		.swaps(IteratorSwap.class, EnumerationSwap.class)
 		.sortProperties()
 		.build();
 	// @formatter:on

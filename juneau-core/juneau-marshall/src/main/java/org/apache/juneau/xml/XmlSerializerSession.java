@@ -556,6 +556,35 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		return out;
 	}
 
+	private XmlWriter serializeStreamable(XmlWriter out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, BeanPropertyMeta ppMeta, boolean isMixed) throws SerializeException {
+
+		var eeType = eType.getElementType();
+
+		var eName = Value.<String>empty();
+		var eNs = Value.<Namespace>empty();
+
+		if (nn(ppMeta)) {
+			XmlBeanPropertyMeta bpXml = getXmlBeanPropertyMeta(ppMeta);
+			eName.set(bpXml.getChildName());
+			eNs.set(bpXml.getNamespace());
+		}
+
+		var previousWasTextNode = Value.of(false);
+
+		forEachStreamableEntry(in, sType, x -> {
+			var currentIsTextNode = isTextNode(x);
+
+			if (isTrue(previousWasTextNode.get()) && currentIsTextNode && nn(textNodeDelimiter) && ! textNodeDelimiter.isEmpty()) {
+				out.append(textNodeDelimiter);
+			}
+
+			serializeAnything(out, x, eeType, null, eName.get(), eNs.get(), false, XmlFormat.DEFAULT, isMixed, false, null);
+			previousWasTextNode.set(currentIsTextNode);
+		});
+
+		return out;
+	}
+
 	private ContentResult serializeMap(XmlWriter out, Map m, ClassMeta<?> sType, ClassMeta<?> eKeyType, ClassMeta<?> eValueType, boolean isMixed) throws SerializeException {
 
 		var keyType = eKeyType == null ? sType.getKeyType() : eKeyType;
@@ -831,8 +860,8 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				isExpectedType = aType.isNumber();
 			else if (eType.isMap())
 				isExpectedType = aType.isMap();
-			else if (eType.isCollectionOrArray())
-				isExpectedType = aType.isCollectionOrArray();
+			else if (eType.isCollectionOrArray() || eType.isStreamable())
+				isExpectedType = aType.isCollectionOrArray() || aType.isStreamable();
 			else
 				isExpectedType = false;
 		}
@@ -864,7 +893,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		} else if (sType.isMapOrBean()) {
 			isCollapsed = getXmlClassMeta(sType).getFormat() == COLLAPSED;
 			type = OBJECT;
-		} else if (sType.isCollectionOrArray()) {
+		} else if (sType.isCollectionOrArray() || sType.isStreamable()) {
 			isCollapsed = (format == COLLAPSED && ! addNamespaceUris);
 			type = ARRAY;
 		} else {
@@ -978,6 +1007,12 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				if (isCollapsed)
 					indent--;
 				serializeCollection(out, o, sType, eType, pMeta, isMixedOrText);
+				if (isCollapsed)
+					indent++;
+			} else if (sType.isStreamable()) {
+				if (isCollapsed)
+					indent--;
+				serializeStreamable(out, o, sType, eType, pMeta, isMixedOrText);
 				if (isCollapsed)
 					indent++;
 			} else if (sType.isReader()) {

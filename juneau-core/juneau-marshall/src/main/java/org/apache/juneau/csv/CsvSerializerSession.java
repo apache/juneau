@@ -236,6 +236,9 @@ public class CsvSerializerSession extends WriterSerializerSession {
 				l = l((Object[])o);
 			} else if (cm.isCollection()) {
 				l = (Collection<?>)o;
+			} else if (cm.isStreamable()) {
+				// CSV must inspect first element for column headers, so materialization is unavoidable.
+				l = toListFromStreamable(o, cm);
 			} else {
 				l = Collections.singleton(o);
 			}

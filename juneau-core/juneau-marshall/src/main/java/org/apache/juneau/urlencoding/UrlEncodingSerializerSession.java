@@ -266,6 +266,8 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		} else if (sType.isCollection() || sType.isArray()) {
 			var m = sType.isCollection() ? getCollectionMap((Collection)o) : getCollectionMap(o);
 			serializeCollectionMap(out, m, getClassMeta(Map.class, Integer.class, Object.class));
+		} else if (sType.isStreamable()) {
+			serializeStreamableAsCollectionMap(out, o, sType);
 		} else if (sType.isReader()) {
 			pipe((Reader)o, out);
 		} else if (sType.isInputStream()) {
@@ -346,6 +348,17 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 			super.serializeAnything(out, v, valueType, null, null);
 		});
 
+		return out;
+	}
+
+	private SerializerWriter serializeStreamableAsCollectionMap(UonWriter out, Object o, ClassMeta<?> sType) throws SerializeException {
+		var addAmp = Flag.create();
+		var i = IntegerValue.create();
+		forEachStreamableEntry(o, sType, v -> {
+			addAmp.ifSet(() -> out.cr(indent).append('&')).set();
+			out.append(i.getAndIncrement()).append('=');
+			super.serializeAnything(out, v, null, null, null);
+		});
 		return out;
 	}
 

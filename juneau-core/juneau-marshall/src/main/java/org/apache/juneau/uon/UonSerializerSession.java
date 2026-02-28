@@ -302,6 +302,27 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		return out;
 	}
 
+	private SerializerWriter serializeStreamable(UonWriter out, Object o, ClassMeta<?> sType, ClassMeta<?> type) throws SerializeException {
+
+		var elementType = type.getElementType();
+
+		if (! plainTextParams)
+			out.append('@').append('(');
+
+		var addComma = Flag.create();
+		forEachStreamableEntry(o, sType, x -> {
+			addComma.ifSet(() -> out.append(',')).set();
+			out.cr(indent);
+			serializeAnything(out, x, elementType, "<iterator>", null);
+		});
+
+		addComma.ifSet(() -> out.cre(indent - 1));
+		if (! plainTextParams)
+			out.append(')');
+
+		return out;
+	}
+
 	@SuppressWarnings({
 		"rawtypes", // Raw types necessary for generic collection/map serialization
 		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
@@ -475,6 +496,8 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 			serializeCollection(out, (Collection)o, eType);
 		} else if (sType.isArray()) {
 			serializeCollection(out, toList(sType.inner(), o), eType);
+		} else if (sType.isStreamable()) {
+			serializeStreamable(out, o, sType, eType);
 		} else if (sType.isReader()) {
 			pipe((Reader)o, out, SerializerSession::handleThrown);
 		} else if (sType.isInputStream()) {

@@ -281,6 +281,9 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 			out.appendBinary((byte[])o);
 		} else if (sType.isArray()) {
 			serializeCollection(out, toList(sType.inner(), o), eType);
+		} else if (sType.isStreamable()) {
+			// MsgPack protocol requires array size in header (startArray(size)), so materialization is unavoidable.
+			serializeCollection(out, toListFromStreamable(o, sType), eType);
 		} else if (sType.isReader()) {
 			pipe((Reader)o, out, SerializerSession::handleThrown);
 		} else if (sType.isInputStream()) {

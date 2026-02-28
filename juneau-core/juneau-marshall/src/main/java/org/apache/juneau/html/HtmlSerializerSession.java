@@ -991,6 +991,12 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				out.nlIf(! isRoot, xIndent + 1);
 				serializeCollection(out, o, sType, eType, name, pMeta);
 
+			} else if (sType.isStreamable()) {
+				// HTML must inspect elements to decide table vs. list layout (getTableHeaders), so materialization is unavoidable.
+				out.nlIf(! isRoot, xIndent + 1);
+				var list = toListFromStreamable(o, sType);
+				serializeCollection(out, list, getClassMeta(List.class), eType, name, pMeta);
+
 			} else if (isUri(sType, pMeta, o)) {
 				String label = getAnchorText(pMeta, o);
 				out.oTag("a").attrUri("href", o).w('>');

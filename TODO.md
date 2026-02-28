@@ -12,3 +12,8 @@
 - Create full-fledged CSV serializer/parser support.
 - Add YAML serializer/parser support.
 - Update REST server API to use new BeanStore2.
+- ClassInfo should have a findGetter(String propertyName) convenience method.
+- Make sure @Beanp("*") works on plain fields.
+- Add schema validation to beans during parsing.
+- Duration objects should be supported for serialization by default.
+

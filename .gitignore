@@ -24,3 +24,4 @@ cursor-*
 scripts/release-history-*.json
 /SONARQUBE_ISSUES.txt
 /AISESSION.md
+/plans/

@@ -46,8 +46,6 @@ public class DefaultSwaps {
 
 	private static final Map<Class<?>,ObjectSwap<?,?>> SWAPS = new ConcurrentHashMap<>();
 	static {
-		SWAPS.put(Enumeration.class, new EnumerationSwap());
-		SWAPS.put(Iterator.class, new IteratorSwap());
 		SWAPS.put(Locale.class, new LocaleSwap());
 		SWAPS.put(Class.class, new ClassSwap());
 		SWAPS.put(Calendar.class, new TemporalCalendarSwap.IsoOffsetDateTime());

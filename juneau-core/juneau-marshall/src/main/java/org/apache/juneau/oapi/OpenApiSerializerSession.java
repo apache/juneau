@@ -406,6 +406,8 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 							sb.append(serialize(partType, items, Array.get(value, i)));
 					} else if (type.isCollection()) {
 						((Collection<?>)value).forEach(x -> sb.append(serialize(partType, items, x)));
+					} else if (type.isStreamable()) {
+						forEachStreamableEntry(value, type, x -> sb.append(serialize(partType, items, x)));
 					} else if (vt.hasMutaterTo(String[].class)) {
 						String[] ss = toType(value, CM_StringArray);
 						for (var element : ss)
@@ -475,6 +477,8 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 				l.add(toObject(partType, Array.get(o, i), items));
 		} else if (type.isCollection()) {
 			((Collection<?>)o).forEach(x -> l.add(toObject(partType, x, items)));
+		} else if (type.isStreamable()) {
+			forEachStreamableEntry(o, type, x -> l.add(toObject(partType, x, items)));
 		} else {
 			l.add(toObject(partType, o, items));
 		}

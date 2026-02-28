@@ -32,6 +32,7 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.collections.*;
@@ -112,7 +113,10 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		LIST(17),
 		SET(18),
 		DELEGATE(19),
-		BEAN(20);
+		BEAN(20),
+		ITERATOR(21),
+		ITERABLE(22),
+		STREAM(23);
 
 		private final int mask;
 
@@ -215,6 +219,12 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			} else if (isAssignableTo(List.class)) {
 				cat.set(LIST);
 			}
+		} else if (isAssignableTo(Iterable.class)) {
+			cat.set(ITERABLE);
+		} else if (isAssignableTo(Iterator.class) || isAssignableTo(Enumeration.class)) {
+			cat.set(ITERATOR);
+		} else if (isAssignableTo(BaseStream.class)) {
+			cat.set(STREAM);
 		} else if (isAssignableTo(Map.class)) {
 			cat.set(MAP);
 			if (isAssignableTo(BeanMap.class)) {
@@ -1020,6 +1030,33 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	public boolean isInteger() { return isAny(Integer.class, int.class); }
 
 	/**
+	 * Returns <jk>true</jk> if this class implements {@link Iterable} but is not a {@link Collection}.
+	 *
+	 * @return <jk>true</jk> if this class implements {@link Iterable} but is not a {@link Collection}.
+	 * @since 9.2.1
+	 */
+	public boolean isIterable() { return cat.is(ITERABLE); }
+
+	/**
+	 * Returns <jk>true</jk> if this class implements {@link Iterator} or {@link Enumeration}.
+	 *
+	 * @return <jk>true</jk> if this class implements {@link Iterator} or {@link Enumeration}.
+	 * @since 9.2.1
+	 */
+	public boolean isIterator() { return cat.is(ITERATOR); }
+
+	/**
+	 * Returns <jk>true</jk> if this class is an {@link Iterator}, {@link Iterable} (non-Collection), or {@link BaseStream}.
+	 *
+	 * <p>
+	 * These types represent lazily-evaluated sequences that can be serialized as arrays.
+	 *
+	 * @return <jk>true</jk> if this class is a streamable type.
+	 * @since 9.2.1
+	 */
+	public boolean isStreamable() { return cat.is(ITERATOR) || cat.is(ITERABLE) || cat.is(STREAM); }
+
+	/**
 	 * Returns <jk>true</jk> if this class extends from {@link List}.
 	 *
 	 * @return <jk>true</jk> if this class extends from {@link List}.
@@ -1113,6 +1150,14 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return <jk>true</jk> if this class is either {@link Short} or <jk>short</jk>.
 	 */
 	public boolean isShort() { return isAny(Short.class, short.class); }
+
+	/**
+	 * Returns <jk>true</jk> if this class is a subclass of {@link BaseStream} (includes {@link java.util.stream.Stream}).
+	 *
+	 * @return <jk>true</jk> if this class is a subclass of {@link BaseStream}.
+	 * @since 9.2.1
+	 */
+	public boolean isStream() { return cat.is(STREAM); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a {@link String}.
@@ -1361,8 +1406,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			return null;
 		if (cat.is(ARRAY)) {
 			return beanContext.getClassMeta(inner().getComponentType());
-		} else if (cat.is(COLLECTION) || is(Optional.class)) {
-			// If this is a COLLECTION, see if it's parameterized (e.g. AddressBook extends LinkedList<Person>)
+		} else if (cat.is(COLLECTION) || cat.is(ITERABLE) || cat.is(ITERATOR) || cat.is(STREAM) || is(Optional.class)) {
 			var parameters = beanContext.findParameters(inner(), inner());
 			if (nn(parameters) && parameters.length == 1) {
 				return parameters[0];
@@ -1401,7 +1445,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		var ap = beanContext.getAnnotationProvider();
 		ap.find(Swap.class, this).stream().map(AnnotationInfo::inner).forEach(x -> list.add(createSwap(x)));
 		var ds = DefaultSwaps.find(this);
-		if (ds == null)
+		if (ds == null && !isStreamable()) {
 			ds = AutoObjectSwap.find(beanContext, this);
 		if (ds == null)
 			ds = AutoNumberSwap.find(beanContext, this);
@@ -1409,6 +1453,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			ds = AutoMapSwap.find(beanContext, this);
 		if (ds == null)
 			ds = AutoListSwap.find(beanContext, this);
+		}
 
 		if (nn(ds))
 			list.add((ObjectSwap<T,?>)ds);

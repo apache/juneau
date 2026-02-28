@@ -27,6 +27,7 @@ import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.reflect.*;
@@ -429,6 +430,57 @@ public class SerializerSession extends BeanTraverseSession {
 			((Map)m).entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(x -> consumer.accept((Map.Entry<K,V>)x));
 		else
 			m.entrySet().forEach(consumer);
+	}
+
+	/**
+	 * Iterates over a streamable object (Iterator, Iterable, or Stream), consuming each entry.
+	 *
+	 * <p>
+	 * For collections, delegates to {@link #forEachEntry(Collection, Consumer)} which supports sorting.
+	 * For other streamable types, iterates lazily without materializing into a List.
+	 *
+	 * @param o The streamable object.
+	 * @param type The class meta for the object.
+	 * @param consumer The entry consumer.
+	 * @since 9.2.1
+	 */
+	@SuppressWarnings({
+		"rawtypes",  // Raw types necessary for generic streamable handling
+		"unchecked"  // Type erasure requires unchecked operations
+	})
+	public final void forEachStreamableEntry(Object o, ClassMeta<?> type, Consumer consumer) {
+		if (o == null)
+			return;
+		if (type.isCollection()) {
+			forEachEntry((Collection)o, consumer);
+		} else if (type.isIterable()) {
+			((Iterable)o).forEach(consumer);
+		} else if (type.isIterator()) {
+			if (o instanceof Enumeration e)
+				e.asIterator().forEachRemaining(consumer);
+			else
+				((Iterator)o).forEachRemaining(consumer);
+		} else if (type.isStream()) {
+			((Stream)o).forEach(consumer);
+		}
+	}
+
+	/**
+	 * Converts a streamable object (Iterator, Iterable, or Stream) to a List.
+	 *
+	 * <p>
+	 * Used by serializers that need to know the collection size or inspect elements before serializing
+	 * (e.g. MsgPack, HTML, CSV).
+	 *
+	 * @param o The streamable object.
+	 * @param type The class meta for the object.
+	 * @return A new list containing all elements.
+	 * @since 9.2.1
+	 */
+	public final List<?> toListFromStreamable(Object o, ClassMeta<?> type) {
+		var list = new ArrayList<>();
+		forEachStreamableEntry(o, type, list::add);
+		return list;
 	}
 
 	/**

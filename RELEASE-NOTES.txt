@@ -26,6 +26,32 @@ Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
     * Bump Bump org.apache.maven.plugins:maven-compiler-plugin from 3.14.1 to 3.15.0 #314.
     * Bump Bump jetty.version from 12.1.5 to 12.1.6 #312.
 
+<<<<<<< Updated upstream
+** New Features - Direct Iterator/Iterable/Stream/Enumeration Serialization
+
+    * Iterators, Iterables (non-Collection), Enumerations, and java.util.stream.Streams
+      are now serialized directly as arrays without requiring intermediate List materialization.
+    * Text-based serializers (JSON, XML, UON, URL Encoding, OpenAPI) write elements lazily
+      to the output one at a time via forEachStreamableEntry().
+    * Binary/layout-dependent serializers (MsgPack, HTML, CSV) collect to a List internally
+      since the format requires knowing the size or inspecting elements upfront.
+    * New ClassMeta methods: isIterator(), isIterable(), isStream(), isStreamable().
+    * New ClassMeta.Category enum values: ITERATOR, ITERABLE, STREAM.
+=======
+** New Features - Direct Iterator/Iterable/Stream Serialization
+
+    * Iterators, Iterables (non-Collection), Enumerations, and java.util.stream.Streams
+      are now serialized directly as arrays without requiring intermediate List materialization.
+    * For text-based serializers (JSON, XML, UON), elements are written lazily one at a
+      time for improved memory efficiency with large datasets.
+    * For binary/structured serializers (MsgPack, HTML, CSV), elements are collected to a
+      List internally since the format requires knowing the size or inspecting elements upfront.
+    * New ClassMeta methods: isIterator(), isIterable(), isStream(), isStreamable().
+>>>>>>> Stashed changes
+    * New SerializerSession methods: forEachStreamableEntry(), toListFromStreamable().
+    * IteratorSwap and EnumerationSwap classes have been removed; Iterator, Enumeration, Iterable,
+      and Stream types are now handled natively by all serializers.
+
 Release Notes - Juneau - Version 9.2.0 - 2025-12-30
 
 ** Changes

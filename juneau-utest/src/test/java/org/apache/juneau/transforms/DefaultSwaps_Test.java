@@ -68,7 +68,7 @@ class DefaultSwaps_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	//	POJO_SWAPS.put(Enumeration.class, new EnumerationSwap())
+	//	Enumeration - natively serialized as array
 	//------------------------------------------------------------------------------------------------------------------
 	private static final Vector<String> A = new Vector<>();
 	static {
@@ -138,7 +138,7 @@ class DefaultSwaps_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	//	POJO_SWAPS.put(Iterator.class, new IteratorSwap())
+	//	Iterator - natively serialized as array
 	//------------------------------------------------------------------------------------------------------------------
 	private static final List<String> B = l("foo","bar");
 
