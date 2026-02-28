@@ -37,6 +37,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.swap.*;
+import org.apache.juneau.utils.Iso8601Utils;
 
 /**
  * Serializer session that lives for the duration of a single use of {@link Serializer}.
@@ -709,6 +710,9 @@ public class SerializerSession extends BeanTraverseSession {
 			return ((ClassInfo)o).getNameFull();
 		if (o.getClass().isEnum())
 			return getClassMetaForObject(o).toString(o);
+		var cm = getClassMetaForObject(o);
+		if (cm.isDateOrCalendarOrTemporal() || cm.isDuration())
+			return Iso8601Utils.format(o, cm, getTimeZone());
 		var s = o.toString();
 		if (isTrimStrings())
 			s = s.trim();

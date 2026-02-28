@@ -33,6 +33,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link UonSerializer}.
@@ -483,6 +484,10 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 			out.appendBoolean(o);
 		else if (sType.isNumber())
 			out.appendNumber(o);
+		else if (sType.isDateOrCalendarOrTemporal())
+			out.appendObject(Iso8601Utils.format(o, sType, getTimeZone()), false);
+		else if (sType.isDuration())
+			out.appendObject(o.toString(), false);
 		else if (sType.isBean())
 			serializeBeanMap(out, toBeanMap(o), typeName);
 		else if (sType.isUri() || (nn(pMeta) && pMeta.isUri()))

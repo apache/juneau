@@ -20,12 +20,9 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.net.*;
 import java.time.*;
-import java.time.temporal.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.*;
-
-import javax.xml.datatype.*;
 
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.swaps.*;
@@ -48,21 +45,8 @@ public class DefaultSwaps {
 	static {
 		SWAPS.put(Locale.class, new LocaleSwap());
 		SWAPS.put(Class.class, new ClassSwap());
-		SWAPS.put(Calendar.class, new TemporalCalendarSwap.IsoOffsetDateTime());
-		SWAPS.put(Date.class, new TemporalDateSwap.IsoLocalDateTime());
-		SWAPS.put(Instant.class, new TemporalSwap.IsoInstant());
-		SWAPS.put(ZonedDateTime.class, new TemporalSwap.IsoOffsetDateTime());
-		SWAPS.put(LocalDate.class, new TemporalSwap.IsoLocalDate());
-		SWAPS.put(LocalDateTime.class, new TemporalSwap.IsoLocalDateTime());
-		SWAPS.put(LocalTime.class, new TemporalSwap.IsoLocalTime());
-		SWAPS.put(OffsetDateTime.class, new TemporalSwap.IsoOffsetDateTime());
-		SWAPS.put(OffsetTime.class, new TemporalSwap.IsoOffsetTime());
 		SWAPS.put(StackTraceElement.class, new StackTraceElementSwap());
-		SWAPS.put(Year.class, new TemporalSwap.IsoYear());
-		SWAPS.put(YearMonth.class, new TemporalSwap.IsoYearMonth());
-		SWAPS.put(Temporal.class, new TemporalSwap.IsoInstant());
 		SWAPS.put(TimeZone.class, new TimeZoneSwap());
-		SWAPS.put(XMLGregorianCalendar.class, new XMLGregorianCalendarSwap());
 		SWAPS.put(ZoneId.class, new ZoneIdSwap());
 		SWAPS.put(MatchResult.class, new MatchResultSwap());
 		SWAPS.put(URL.class, new UrlSwap());

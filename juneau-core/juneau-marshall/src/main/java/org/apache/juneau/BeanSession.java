@@ -41,6 +41,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.time.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.swap.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link BeanContext}.
@@ -1213,6 +1214,18 @@ public class BeanSession extends ContextSession {
 				if (nc.isAssignableFrom(from.inner()) && fc.isAssignableFrom(tc))
 					return (T)swap.swap(this, value);
 			}
+
+			if (to.isCharSequence() && (from.isDateOrCalendarOrTemporal() || from.isDuration()))
+				return (T) Iso8601Utils.format(value, from, getTimeZone());
+
+			if (to.isDateOrCalendarOrTemporal() && value instanceof CharSequence)
+				return (T) Iso8601Utils.parse(value.toString(), to, getTimeZone());
+
+			if (to.isDuration() && value instanceof CharSequence)
+				return (T) Duration.parse(value.toString());
+
+			if (to.isDateOrCalendarOrTemporal() && value instanceof Number)
+				return (T) Iso8601Utils.fromEpochMillis(((Number)value).longValue(), to, getTimeZone());
 
 			if (to.isPrimitive()) {
 				if (to.isNumber()) {

@@ -38,6 +38,7 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.objecttools.*;
 import org.apache.juneau.swap.*;
+import org.apache.juneau.utils.Iso8601Utils;
 
 /**
  * Session object that lives for the duration of a single use of {@link Parser}.
@@ -826,6 +827,8 @@ public class ParserSession extends BeanSession {
 			o = parseNumber(s, (Class<? extends Number>)sType.inner());
 		else if (sType.isBoolean())
 			o = Boolean.parseBoolean(s);
+		else if (sType.isDateOrCalendarOrTemporal() || sType.isDuration())
+			o = Iso8601Utils.parse(s, sType, getTimeZone());
 		else if (! (sType.isCharSequence() || sType.isObject())) {
 			if (sType.canCreateNewInstanceFromString(outer))
 				o = sType.newInstanceFromString(outer, s);

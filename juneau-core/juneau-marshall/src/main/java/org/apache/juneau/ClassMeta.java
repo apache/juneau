@@ -27,6 +27,7 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.lang.reflect.Proxy;
 import java.net.*;
+import java.time.*;
 import java.time.temporal.*;
 import java.util.*;
 import java.util.List;
@@ -116,7 +117,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		BEAN(20),
 		ITERATOR(21),
 		ITERABLE(22),
-		STREAM(23);
+		STREAM(23),
+		DURATION(24);
 
 		private final int mask;
 
@@ -236,8 +238,12 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			} else if (isAssignableTo(Calendar.class)) {
 				cat.set(CALENDAR);
 			}
+		} else if (is(Duration.class)) {
+			cat.set(DURATION);
 		} else if (isAssignableTo(Temporal.class)) {
 			cat.set(TEMPORAL);
+		} else if (isAssignableTo(javax.xml.datatype.XMLGregorianCalendar.class)) {
+			cat.set(CALENDAR);
 		} else if (inner().isArray()) {
 			cat.set(ARRAY);
 		} else if (isAssignableToAny(URL.class, URI.class) || ap.has(Uri.class, this)) {
@@ -1172,6 +1178,13 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return <jk>true</jk> if this class is a {@link Temporal}.
 	 */
 	public boolean isTemporal() { return cat.is(TEMPORAL); }
+
+	/**
+	 * Returns <jk>true</jk> if this class is a {@link java.time.Duration}.
+	 *
+	 * @return <jk>true</jk> if this class is a {@link java.time.Duration}.
+	 */
+	public boolean isDuration() { return cat.is(DURATION); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a {@link URI} or {@link URL}.

@@ -38,6 +38,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.swap.*;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -961,6 +962,22 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					out.append(o);
 				else
 					out.sTag("boolean").append(o).eTag("boolean");
+				cr = CR_MIXED;
+
+			} else if (sType.isDateOrCalendarOrTemporal()) {
+				String s = Iso8601Utils.format(o, sType, getTimeZone());
+				if (isRoot && addJsonTags)
+					out.sTag("string").text(s).eTag("string");
+				else
+					out.text(s);
+				cr = CR_MIXED;
+
+			} else if (sType.isDuration()) {
+				String s = o.toString();
+				if (isRoot && addJsonTags)
+					out.sTag("string").text(s).eTag("string");
+				else
+					out.text(s);
 				cr = CR_MIXED;
 
 			} else if (sType.isMap() || (nn(wType) && wType.isMap())) {

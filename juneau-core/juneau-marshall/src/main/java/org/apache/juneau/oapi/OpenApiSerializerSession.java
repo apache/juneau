@@ -36,8 +36,8 @@ import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.swaps.*;
 import org.apache.juneau.uon.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link OpenApiSerializer}.
@@ -342,31 +342,9 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 				} else if (f == BINARY_SPACED) {
 					out = toSpacedHex(toType(value, CM_ByteArray));
 				} else if (f == DATE) {
-					try {
-						if (value instanceof Calendar value2)
-							out = TemporalCalendarSwap.IsoDate.DEFAULT.swap(this, value2);
-						else if (value instanceof Date value2)
-							out = TemporalDateSwap.IsoDate.DEFAULT.swap(this, value2);
-						else if (value instanceof Temporal value2)
-							out = TemporalSwap.IsoDate.DEFAULT.swap(this, value2);
-						else
-							out = value.toString();
-					} catch (Exception e) {
-						throw new SerializeException(e);
-					}
+					out = Iso8601Utils.formatAsDate(value, type, getTimeZone());
 				} else if (f == DATE_TIME) {
-					try {
-						if (value instanceof Calendar value2)
-							out = TemporalCalendarSwap.IsoInstant.DEFAULT.swap(this, value2);
-						else if (value instanceof Date value2)
-							out = TemporalDateSwap.IsoInstant.DEFAULT.swap(this, value2);
-						else if (value instanceof Temporal value2)
-							out = TemporalSwap.IsoInstant.DEFAULT.swap(this, value2);
-						else
-							out = value.toString();
-					} catch (Exception e) {
-						throw new SerializeException(e);
-					}
+					out = Iso8601Utils.formatAsDateTime(value, type, getTimeZone());
 				} else if (f == HttpPartFormat.UON) {
 					out = super.serialize(partType, schema, value);
 				} else {

@@ -31,6 +31,7 @@ import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link JsonSerializer}.
@@ -436,6 +437,10 @@ public class JsonSerializerSession extends WriterSerializerSession {
 			out.append("null");
 		} else if (sType.isNumber() || sType.isBoolean()) {
 			out.append(o);
+		} else if (sType.isDateOrCalendarOrTemporal()) {
+			out.stringValue(Iso8601Utils.format(o, sType, getTimeZone()));
+		} else if (sType.isDuration()) {
+			out.stringValue(o.toString());
 		} else if (sType.isBean()) {
 			serializeBeanMap(out, toBeanMap(o), typeName);
 		} else if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {

@@ -36,6 +36,7 @@ import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
+import org.apache.juneau.utils.Iso8601Utils;
 
 /**
  * Session object that lives for the duration of a single use of {@link UonParser}.
@@ -377,6 +378,8 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			o = parseCharacter(parseString(r, isUrlParamValue));
 		} else if (sType.isNumber()) {
 			o = parseNumber(r, (Class<? extends Number>)sType.inner());
+		} else if (sType.isDateOrCalendarOrTemporal() || sType.isDuration()) {
+			o = Iso8601Utils.parse(parseString(r, isUrlParamValue), sType, getTimeZone());
 		} else if (sType.isMap()) {
 			var m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 			o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);

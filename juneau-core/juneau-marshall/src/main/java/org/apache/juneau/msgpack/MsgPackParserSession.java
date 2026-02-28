@@ -31,6 +31,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
+import org.apache.juneau.utils.Iso8601Utils;
 
 /**
  * Session object that lives for the duration of a single use of {@link MsgPackParser}.
@@ -240,6 +241,8 @@ public class MsgPackParserSession extends InputStreamParserSession {
 				// Do nothing.
 			} else if (sType.isBoolean() || sType.isCharSequence() || sType.isChar() || sType.isNumber() || sType.isByteArray()) {
 				o = convertToType(o, sType);
+			} else if (sType.isDateOrCalendarOrTemporal() || sType.isDuration()) {
+				o = Iso8601Utils.parse(String.valueOf(o), sType, getTimeZone());
 			} else if (sType.isMap()) {
 				if (dt == MAP) {
 					Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));

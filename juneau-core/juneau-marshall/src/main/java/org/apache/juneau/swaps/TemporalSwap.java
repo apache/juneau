@@ -55,6 +55,11 @@ import org.apache.juneau.swap.*;
  * 	<li class='jc'>{@link ZonedDateTime}
  * </ul>
  *
+ * <p>
+ * Date/time types are now serialized as ISO 8601 strings by default without needing a swap.
+ * These swap classes can be used to override the default format (e.g., using RFC 1123 instead of ISO 8601).
+ * They can be registered globally via {@link BeanContext#swaps()} or per-field via the {@link Swap @Swap} annotation.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
  * </ul>

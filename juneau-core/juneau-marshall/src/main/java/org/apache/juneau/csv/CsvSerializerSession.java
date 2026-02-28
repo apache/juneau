@@ -27,11 +27,17 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.function.*;
 
+import java.time.*;
+import java.time.temporal.*;
+import java.util.Calendar;
+import java.util.Date;
+
 import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link CsvSerializer}.
@@ -216,6 +222,10 @@ public class CsvSerializerSession extends WriterSerializerSession {
 			if (nn(swap)) {
 				return swap(swap, value);
 			}
+			if (type.isDateOrCalendarOrTemporal())
+				return Iso8601Utils.format(value, type, getTimeZone());
+			if (type.isDuration())
+				return value.toString();
 			return value;
 		} catch (SerializeException e) {
 			throw rex(e);
@@ -262,10 +272,10 @@ public class CsvSerializerSession extends WriterSerializerSession {
 						var addComma2 = Flag.create();
 						BeanMap<?> bean = toBeanMap(x);
 						bm.getProperties().values().stream().filter(BeanPropertyMeta::canRead).forEach(y -> {
-							addComma2.ifSet(() -> w.w(',')).set();
-							// Bean property values are already swapped by BeanPropertyMeta.get() via toSerializedForm()
-							var value = y.get(bean, y.getName());
-							w.writeEntry(value);
+						addComma2.ifSet(() -> w.w(',')).set();
+						var value = y.get(bean, y.getName());
+						value = formatIfDateOrDuration(value);
+						w.writeEntry(value);
 						});
 						w.w('\n');
 					});
@@ -298,6 +308,17 @@ public class CsvSerializerSession extends WriterSerializerSession {
 				}
 			}
 		}
+	}
+
+	private Object formatIfDateOrDuration(Object value) {
+		if (value == null)
+			return null;
+		if (value instanceof Calendar || value instanceof Date || value instanceof Temporal
+				|| value instanceof javax.xml.datatype.XMLGregorianCalendar)
+			return Iso8601Utils.format(value, getClassMetaForObject(value), getTimeZone());
+		if (value instanceof Duration)
+			return value.toString();
+		return value;
 	}
 
 	CsvWriter getCsvWriter(SerializerPipe out) {

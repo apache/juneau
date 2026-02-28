@@ -30,6 +30,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link MsgPackSerializer}.
@@ -266,6 +267,10 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 			out.appendBoolean((Boolean)o);
 		else if (sType.isNumber())
 			out.appendNumber((Number)o);
+		else if (sType.isDateOrCalendarOrTemporal())
+			out.appendString(Iso8601Utils.format(o, sType, getTimeZone()));
+		else if (sType.isDuration())
+			out.appendString(o.toString());
 		else if (sType.isBean())
 			serializeBeanMap(out, toBeanMap(o), typeName);
 		else if (sType.isUri() || (nn(pMeta) && pMeta.isUri()))

@@ -38,6 +38,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
+import org.apache.juneau.utils.Iso8601Utils;
 
 /**
  * Session object that lives for the duration of a single use of {@link XmlParser}.
@@ -870,6 +871,8 @@ public class XmlParserSession extends ReaderParserSession {
 			o = parseIntoCollection(r, l, sType, pMeta);
 		} else if (sType.isNumber()) {
 			o = parseNumber(getElementText(r), (Class<? extends Number>)sType.inner());
+		} else if (sType.isDateOrCalendarOrTemporal() || sType.isDuration()) {
+			o = Iso8601Utils.parse(getElementText(r), sType, getTimeZone());
 		} else if (nn(builder) || sType.canCreateNewBean(outer)) {
 			if (getXmlClassMeta(sType).getFormat() == COLLAPSED) {
 				var fieldName = r.getLocalName();

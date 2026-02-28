@@ -677,4 +677,34 @@ class DefaultSwaps_Test extends TestBase {
 	@Test void i03_ZoneId_overrideAnnotation() throws Exception {
 		test1("{f1:'Z',f2:'FOO'}", new IBean());
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	//	Duration - built-in first-class support
+	//------------------------------------------------------------------------------------------------------------------
+	private static final java.time.Duration J = java.time.Duration.ofHours(1).plusMinutes(30);
+
+	public static class JSwap extends StringSwap<java.time.Duration> {
+		@Override /* ObjectSwap */
+		public String swap(BeanSession session, java.time.Duration o) throws Exception {
+			return "FOO";
+		}
+	}
+
+	public static class JBean {
+		public java.time.Duration f1 = J;
+		@Swap(JSwap.class)
+		public java.time.Duration f2 = J;
+	}
+
+	@Test void j01_Duration() throws Exception {
+		test1("'PT1H30M'", J);
+	}
+
+	@Test void j02_Duration_overrideSwap() throws Exception {
+		test3("'FOO'", J, JSwap.class);
+	}
+
+	@Test void j03_Duration_overrideAnnotation() throws Exception {
+		test1("{f1:'PT1H30M',f2:'FOO'}", new JBean());
+	}
 }

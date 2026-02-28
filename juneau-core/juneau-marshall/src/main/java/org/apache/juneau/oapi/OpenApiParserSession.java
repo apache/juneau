@@ -37,8 +37,8 @@ import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.swaps.*;
 import org.apache.juneau.uon.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link OpenApiParser}.
@@ -298,31 +298,10 @@ public class OpenApiParserSession extends UonParserSession {
 				}
 				if (f == BYTE)
 					return toType(base64Decode(in), type);
-				if (f == DATE) {
-					try {
-						if (type.isCalendar())
-							return toType(TemporalCalendarSwap.IsoDate.DEFAULT.unswap(this, in, type), type);
-						if (type.isDate())
-							return toType(TemporalDateSwap.IsoDate.DEFAULT.unswap(this, in, type), type);
-						if (type.isTemporal())
-							return toType(TemporalSwap.IsoDate.DEFAULT.unswap(this, in, type), type);
-						return toType(in, type);
-					} catch (Exception e) {
-						throw new ParseException(e);
-					}
-				}
-				if (f == DATE_TIME) {
-					try {
-						if (type.isCalendar())
-							return toType(TemporalCalendarSwap.IsoDateTime.DEFAULT.unswap(this, in, type), type);
-						if (type.isDate())
-							return toType(TemporalDateSwap.IsoDateTime.DEFAULT.unswap(this, in, type), type);
-						if (type.isTemporal())
-							return toType(TemporalSwap.IsoDateTime.DEFAULT.unswap(this, in, type), type);
-						return toType(in, type);
-					} catch (Exception e) {
-						throw new ParseException(e);
-					}
+				if (f == DATE || f == DATE_TIME) {
+					if (type.isDateOrCalendarOrTemporal())
+						return toType(Iso8601Utils.parse(in, type, getTimeZone()), type);
+					return toType(in, type);
 				}
 				if (f == BINARY)
 					return toType(fromHex(in), type);
