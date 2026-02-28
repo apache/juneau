@@ -347,7 +347,7 @@ public class BeanMeta<T> {
 		return new BeanMetaValue<>(null, reason);
 	}
 
-	private final BeanConstructor beanConstructor;                             // The constructor for this bean.
+	private BeanConstructor beanConstructor;                                   // The constructor for this bean.
 	private final BeanContext beanContext;                                     // The bean context that created this metadata object.
 	private final BeanFilter beanFilter;                                       // Optional bean filter associated with the target class.
 	private final OptionalSupplier<InvocationHandler> beanProxyInvocationHandler;  // The invocation handler for this bean (if it's an interface).
@@ -421,8 +421,8 @@ public class BeanMeta<T> {
 
 		this.typePropertyName = ba.stream().map(x -> x.inner().typePropertyName()).filter(Utils::ne).findFirst().orElseGet(beanContext::getBeanTypePropertyName);
 
-		// Check if constructor is required but not found
-		if (! beanConstructor.constructor().isPresent() && bf == null && beanContext.isBeansRequireDefaultConstructor())
+		// Check if constructor is required but not found (records are exempt since they use canonical constructors)
+		if (! beanConstructor.constructor().isPresent() && bf == null && beanContext.isBeansRequireDefaultConstructor() && ! ci.isRecord())
 			notABeanReasonTemp = "Class does not have the required no-arg constructor";
 
 		var bfo = opt(bf);
@@ -512,6 +512,28 @@ public class BeanMeta<T> {
 			// Check for missing properties.
 			fixedBeanProps.stream().filter(x -> ! normalProps.containsKey(x)).findFirst().ifPresent(x -> { throw bex(c, "The property ''{0}'' was defined on the @Bean(properties=X) annotation of class ''{1}'' but was not found on the class definition.", x, ci.getNameSimple()); });
 
+			// For records with renamed properties, remap constructor args to use the actual property names.
+			if (ci.isRecord() && ne(beanConstructor.args())) {
+				var components = ci.getRecordComponents();
+				var remappedArgs = new ArrayList<String>(beanConstructor.args().size());
+				for (int idx = 0; idx < beanConstructor.args().size(); idx++) {
+					var componentName = beanConstructor.args().get(idx);
+					if (normalProps.containsKey(componentName)) {
+						remappedArgs.add(componentName);
+					} else {
+						var rcName = idx < components.size() ? components.get(idx).getName() : componentName;
+						var found = normalProps.entrySet().stream()
+							.filter(e -> (e.getValue().field != null && e.getValue().field.hasName(rcName))
+								|| (e.getValue().getter != null && e.getValue().getter.hasName(rcName)))
+							.map(Map.Entry::getKey)
+							.findFirst()
+							.orElse(componentName);
+						remappedArgs.add(found);
+					}
+				}
+				beanConstructor = new BeanConstructor(beanConstructor.constructor(), remappedArgs);
+			}
+
 			// Mark constructor arg properties.
 			for (var fp : beanConstructor.args()) {
 				var m = normalProps.get(fp);
@@ -520,8 +542,8 @@ public class BeanMeta<T> {
 				m.setAsConstructorArg();
 			}
 
-			// Make sure at least one property was found.
-			if (bf == null && beanContext.isBeansRequireSomeProperties() && normalProps.isEmpty())
+			// Make sure at least one property was found (records with no components are exempt).
+			if (bf == null && beanContext.isBeansRequireSomeProperties() && normalProps.isEmpty() && ! ci.isRecord())
 				notABeanReasonTemp = "No properties detected on bean class";
 
 			sortPropertiesTemp = beanContext.isSortProperties() || bfo.map(x -> x.isSortProperties()).orElse(false) && fixedBeanProps.isEmpty();
@@ -992,6 +1014,14 @@ public class BeanMeta<T> {
 			return new BeanConstructor(opt(con), args);
 		}
 
+		if (ci.isRecord()) {
+			var components = ci.getRecordComponents();
+			var paramTypes = components.stream().map(java.lang.reflect.RecordComponent::getType).toArray(Class[]::new);
+			var rcon = ci.getPublicConstructor(x -> x.hasParameterTypes(paramTypes)).orElse(null);
+			if (rcon != null)
+				return new BeanConstructor(opt(rcon.accessible()), components.stream().map(java.lang.reflect.RecordComponent::getName).toList());
+		}
+
 		if (implClassConstructor != null)
 			return new BeanConstructor(opt(implClassConstructor.accessible()), liste());
 
@@ -1023,6 +1053,10 @@ public class BeanMeta<T> {
 		var v = beanContext.getBeanFieldVisibility();
 		var noIgnoreTransients = ! beanContext.isIgnoreTransientFields();
 		var ap = beanContext.getAnnotationProvider();
+		var isRecord = classMeta.isRecord();
+		var recordComponentNames = isRecord
+			? classMeta.getRecordComponents().stream().map(java.lang.reflect.RecordComponent::getName).collect(java.util.stream.Collectors.toSet())
+			: Set.<String>of();
 		// @formatter:off
 		return classHierarchy.get().stream()
 			.flatMap(c2 -> c2.getDeclaredFields().stream())
@@ -1030,7 +1064,8 @@ public class BeanMeta<T> {
 				&& (x.isNotTransient() || noIgnoreTransients)
 				&& (! x.hasAnnotation(Transient.class) || noIgnoreTransients)
 				&& ! ap.has(BeanIgnore.class, x)
-				&& (v.isVisible(x.inner()) || ap.has(Beanp.class, x)))
+				&& (v.isVisible(x.inner()) || ap.has(Beanp.class, x)
+					|| (isRecord && recordComponentNames.contains(x.getName()))))
 			.toList();
 		// @formatter:on
 	}
@@ -1122,6 +1157,8 @@ public class BeanMeta<T> {
 					} else if (n.startsWith("is") && (rt.is(Boolean.TYPE) || rt.is(Boolean.class))) {
 						methodType = GETTER;
 						n = n.substring(2);
+					} else if (ci.isRecord() && isRecordAccessor(m, ci)) {
+						methodType = GETTER;
 					} else if (nn(bpName)) {
 						methodType = GETTER;
 						if (bpName.isEmpty()) {
@@ -1183,6 +1220,12 @@ public class BeanMeta<T> {
 			}
 		});
 		return l;
+	}
+
+	private static boolean isRecordAccessor(MethodInfo m, ClassInfo ci) {
+		return ci.getRecordComponents().stream()
+			.anyMatch(rc -> rc.getName().equals(m.getNameSimple())
+				&& rc.getType().equals(m.getReturnType().inner()));
 	}
 
 	/*

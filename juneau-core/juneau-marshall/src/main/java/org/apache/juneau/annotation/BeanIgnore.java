@@ -33,6 +33,13 @@ import java.lang.annotation.*;
  * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
  * </ul>
  *
+ * <h5 class='section'>Java Records:</h5>
+ * <p>
+ * Ignoring individual record components is not supported during parsing.
+ * Because records are immutable, all components must be provided to the canonical constructor.
+ * Applying this annotation to a record component's accessor method or field will exclude it from serialization
+ * output, but the parser will be unable to instantiate the record if the component value is missing from the input.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanIgnoreAnnotation">@BeanIgnore Annotation</a>
 

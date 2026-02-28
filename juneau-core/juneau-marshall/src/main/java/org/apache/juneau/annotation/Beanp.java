@@ -392,6 +392,14 @@ public @interface Beanp {
 	 * 	}
 	 * </p>
 	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		<b>Java Records:</b> Marking record components as read-only is not supported during parsing.
+	 * 		Because records are immutable, all components must be provided to the canonical constructor.
+	 * 		Read-only components will be serialized as usual, but the parser will be unable to instantiate the
+	 * 		record if the read-only component values are missing from the input.
+	 * </ul>
+	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(Class, String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(String, String)}

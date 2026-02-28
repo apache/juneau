@@ -313,7 +313,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				return false;
 
 			canRead |= (nn(field) || nn(getter));
-			canWrite |= (nn(field) || nn(setter));
+			canWrite |= (nn(field) || nn(setter) || isConstructorArg);
 
 			var ifi = innerField;
 			var gi = getter;

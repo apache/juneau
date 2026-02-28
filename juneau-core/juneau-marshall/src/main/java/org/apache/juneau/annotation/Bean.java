@@ -132,6 +132,11 @@ public @interface Bean {
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		{@link #xp()} is a shortened synonym for this value.
+	 * 	<li class='note'>
+	 * 		<b>Java Records:</b> Excluding record components is not supported during parsing.
+	 * 		Because records are immutable, all components must be provided to the canonical constructor.
+	 * 		Excluded components will be omitted from serialization output, but the parser will be unable to
+	 * 		instantiate the record if the excluded component values are missing from the input.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
@@ -330,6 +335,11 @@ public @interface Bean {
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		{@link #p()} is a shortened synonym for this value.
+	 * 	<li class='note'>
+	 * 		<b>Java Records:</b> When used on records to control property order, all record components should
+	 * 		be included.  Omitting record components from this list will prevent them from being parsed, and
+	 * 		because records are immutable, all components must be provided to the canonical constructor.
+	 * 		Use {@link Beanc @Beanc} to specify a non-canonical constructor if you need to omit components.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
@@ -380,6 +390,11 @@ public @interface Bean {
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		{@link #ro()} is a shortened synonym for this value.
+	 * 	<li class='note'>
+	 * 		<b>Java Records:</b> Marking record components as read-only is not supported during parsing.
+	 * 		Because records are immutable, all components must be provided to the canonical constructor.
+	 * 		Read-only components will be serialized as usual, but the parser will be unable to instantiate the
+	 * 		record if the read-only component values are missing from the input.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
