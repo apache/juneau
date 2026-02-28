@@ -66,6 +66,8 @@ public class MediaType implements Comparable<MediaType> {
 	public static final MediaType URLENCODING = of("application/x-www-form-urlencoded");
 	/** Reusable predefined media type for XML */
 	public static final MediaType XML = of("text/xml");
+	/** Reusable predefined media type for YAML */
+	public static final MediaType YAML = of("application/yaml");
 	/** Reusable predefined media type for SOAP XML */
 	public static final MediaType XMLSOAP = of("text/xml+soap");
 	/** Reusable predefined media type for RDF XML */

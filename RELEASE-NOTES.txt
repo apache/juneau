@@ -26,7 +26,6 @@ Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
     * Bump Bump org.apache.maven.plugins:maven-compiler-plugin from 3.14.1 to 3.15.0 #314.
     * Bump Bump jetty.version from 12.1.5 to 12.1.6 #312.
 
-<<<<<<< Updated upstream
 ** New Features - Direct Iterator/Iterable/Stream/Enumeration Serialization
 
     * Iterators, Iterables (non-Collection), Enumerations, and java.util.stream.Streams
@@ -37,20 +36,29 @@ Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
       since the format requires knowing the size or inspecting elements upfront.
     * New ClassMeta methods: isIterator(), isIterable(), isStream(), isStreamable().
     * New ClassMeta.Category enum values: ITERATOR, ITERABLE, STREAM.
-=======
-** New Features - Direct Iterator/Iterable/Stream Serialization
-
-    * Iterators, Iterables (non-Collection), Enumerations, and java.util.stream.Streams
-      are now serialized directly as arrays without requiring intermediate List materialization.
-    * For text-based serializers (JSON, XML, UON), elements are written lazily one at a
-      time for improved memory efficiency with large datasets.
-    * For binary/structured serializers (MsgPack, HTML, CSV), elements are collected to a
-      List internally since the format requires knowing the size or inspecting elements upfront.
-    * New ClassMeta methods: isIterator(), isIterable(), isStream(), isStreamable().
->>>>>>> Stashed changes
     * New SerializerSession methods: forEachStreamableEntry(), toListFromStreamable().
     * IteratorSwap and EnumerationSwap classes have been removed; Iterator, Enumeration, Iterable,
       and Stream types are now handled natively by all serializers.
+
+** New Features - Built-in Date/Time and Duration Serialization
+
+    * Date, time, and duration types are now serialized and parsed natively as ISO 8601
+      strings by all serializers and parsers without requiring ObjectSwap registration.
+    * Supported types:
+        - All java.time.temporal.Temporal subtypes (Instant, ZonedDateTime, OffsetDateTime,
+          LocalDateTime, LocalDate, LocalTime, OffsetTime, Year, YearMonth)
+        - java.util.Calendar and java.util.Date
+        - javax.xml.datatype.XMLGregorianCalendar
+        - java.time.Duration (serialized as ISO 8601 duration strings, e.g. "PT1H30M")
+    * New ClassMeta.Category enum value: DURATION.
+    * New ClassMeta method: isDuration().
+    * New utility class: Iso8601Utils - centralizes ISO 8601 formatting and parsing.
+    * Default date/time swaps removed from DefaultSwaps; existing swap classes
+      (TemporalCalendarSwap, TemporalDateSwap, CalendarSwap, DateSwap, TemporalSwap)
+      remain available as override mechanisms for customizing output format.
+    * BeanSession.convertToMemberType() and SerializerSession.toString() updated to
+      use ISO 8601 formatting for date/time/Duration types.
+    * All parser sessions updated with date/time/Duration dispatch in parseAnything().
 
 Release Notes - Juneau - Version 9.2.0 - 2025-12-30
 

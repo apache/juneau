@@ -23,6 +23,7 @@ import org.apache.juneau.msgpack.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
+import org.apache.juneau.yaml.*;
 
 /**
  * Tests designed to serialize and parse objects to make sure we end up
@@ -100,6 +101,10 @@ public abstract class RoundTripTest_Base extends TestBase {
 		tester(16, "Json schema")
 			.serializer(JsonSchemaSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.returnOriginalObject()
+			.build(),
+		tester(17, "Yaml - default")
+			.serializer(YamlSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(YamlParser.create())
 			.build(),
 	};
 

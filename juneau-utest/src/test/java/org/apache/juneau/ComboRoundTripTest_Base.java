@@ -440,4 +440,70 @@ public abstract class ComboRoundTripTest_Base extends TestBase {
 	public void f24_verifyMsgPackT(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParseVerify("msgPackT");
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// YAML
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void g11_serializeYaml(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("yaml");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void g12_parseYaml(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("yaml");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void g13_verifyYaml(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("yaml");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// YAML - 't' property
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void g21_serializeYamlT(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("yamlT");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void g22_parseYamlT(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("yamlT");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void g23_verifyYamlT(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("yamlT");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// YAML - Readable
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void g31_serializeYamlR(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("yamlR");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void g32_parseYamlR(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("yamlR");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void g33_verifyYamlR(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("yamlR");
+	}
 }

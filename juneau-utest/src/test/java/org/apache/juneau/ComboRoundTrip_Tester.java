@@ -34,6 +34,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
+import org.apache.juneau.yaml.*;
 
 /**
  * Represents the input to a ComboTest.
@@ -115,6 +116,9 @@ public class ComboRoundTrip_Tester<T> {
 		public Builder<T> rdfXml(String value) { expected.put("rdfXml", value); return this; }
 		public Builder<T> rdfXmlT(String value) { expected.put("rdfXmlT", value); return this; }
 		public Builder<T> rdfXmlR(String value) { expected.put("rdfXmlR", value); return this; }
+		public Builder<T> yaml(String value) { expected.put("yaml", value); return this; }
+		public Builder<T> yamlT(String value) { expected.put("yamlT", value); return this; }
+		public Builder<T> yamlR(String value) { expected.put("yamlR", value); return this; }
 
 		public ComboRoundTrip_Tester<T> build() {
 			return new ComboRoundTrip_Tester<>(this);
@@ -160,6 +164,9 @@ public class ComboRoundTrip_Tester<T> {
 		serializers.put("urlEncR", create(b, UrlEncodingSerializer.DEFAULT_READABLE.copy().addBeanTypes().addRootType()));
 		serializers.put("msgPack", create(b, MsgPackSerializer.create().addBeanTypes().addRootType()));
 		serializers.put("msgPackT", create(b, MsgPackSerializer.create().typePropertyName("t").addBeanTypes().addRootType()));
+		serializers.put("yaml", create(b, YamlSerializer.DEFAULT.copy().addBeanTypes().addRootType()));
+		serializers.put("yamlT", create(b, YamlSerializer.create().typePropertyName("t").addBeanTypes().addRootType()));
+		serializers.put("yamlR", create(b, YamlSerializer.DEFAULT_READABLE.copy().addBeanTypes().addRootType()));
 
 		parsers.put("json", create(b, JsonParser.DEFAULT.copy()));
 		parsers.put("jsonT", create(b, JsonParser.create().typePropertyName("t")));
@@ -179,6 +186,9 @@ public class ComboRoundTrip_Tester<T> {
 		parsers.put("urlEncR", create(b, UrlEncodingParser.DEFAULT.copy()));
 		parsers.put("msgPack", create(b, MsgPackParser.DEFAULT.copy()));
 		parsers.put("msgPackT", create(b, MsgPackParser.create().typePropertyName("t")));
+		parsers.put("yaml", create(b, YamlParser.DEFAULT.copy()));
+		parsers.put("yamlT", create(b, YamlParser.create().typePropertyName("t")));
+		parsers.put("yamlR", create(b, YamlParser.DEFAULT.copy()));
 	}
 
 	private Serializer create(Builder<?> tb, Serializer.Builder sb) {
@@ -215,7 +225,7 @@ public class ComboRoundTrip_Tester<T> {
 	}
 
 	private boolean isSkipped(String testName, String expected) {
-		return "SKIP".equals(expected) || skipTest.test(testName);
+		return expected == null || "SKIP".equals(expected) || skipTest.test(testName);
 	}
 
 	public void testSerialize(String testName) throws Exception {
