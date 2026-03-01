@@ -22,12 +22,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
+import org.apache.juneau.yaml.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -83,6 +85,15 @@ class RoundTripLargeObjects_Test extends TestBase {
 		tester(9, "MsgPack")
 			.serializer(MsgPackSerializer.create().keepNullProperties())
 			.parser(MsgPackParser.create())
+			.build(),
+		tester(10, "Yaml - default")
+			.serializer(YamlSerializer.create().keepNullProperties())
+			.parser(YamlParser.create())
+			.build(),
+		tester(11, "Csv - default")
+			.serializer(CsvSerializer.create().keepNullProperties())
+			.skipIf(o -> o == null || (o.getClass().isArray() && o.getClass().getComponentType().isPrimitive()))
+			.returnOriginalObject()
 			.build()
 	};
 

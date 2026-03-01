@@ -506,4 +506,26 @@ public abstract class ComboRoundTripTest_Base extends TestBase {
 	public void g33_verifyYamlR(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParseVerify("yamlR");
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// CSV
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h11_serializeCsv(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("csv");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h12_parseCsv(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("csv");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h13_verifyCsv(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("csv");
+	}
 }

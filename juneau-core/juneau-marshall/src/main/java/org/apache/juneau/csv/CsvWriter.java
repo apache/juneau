@@ -183,23 +183,39 @@ public class CsvWriter extends SerializerWriter {
 	/**
 	 * Writes an entry to the writer.
 	 *
+	 * <p>
+	 * Follows RFC 4180 quoting rules:
+	 * <ul>
+	 *   <li>Values containing commas, double-quote characters, or newlines are enclosed in double quotes.
+	 *   <li>Double-quote characters within a quoted field are escaped by preceding them with another double-quote.
+	 *   <li>The literal string {@code null} is written unquoted; the string value {@code "null"} is quoted.
+	 * </ul>
+	 *
 	 * @param value The value to write.
 	 */
 	public void writeEntry(Object value) {
-		if (value == null)
+		if (value == null) {
 			w("null");
-		else {
+		} else {
 			var s = value.toString();
 			var mustQuote = false;
-			for (var i = 0; i < s.length() && ! mustQuote; i++) {
+			for (var i = 0; i < s.length() && !mustQuote; i++) {
 				var c = s.charAt(i);
-				if (Character.isWhitespace(c) || c == ',')
+				if (c == ',' || c == '"' || c == '\r' || c == '\n')
 					mustQuote = true;
 			}
-			if (mustQuote)
-				w('"').w(s).w('"');
-			else
+			if (mustQuote) {
+				w('"');
+				for (var i = 0; i < s.length(); i++) {
+					var c = s.charAt(i);
+					if (c == '"')
+						w('"');  // RFC 4180: escape embedded quote by doubling it
+					w(c);
+				}
+				w('"');
+			} else {
 				w(s);
+			}
 		}
 	}
 }

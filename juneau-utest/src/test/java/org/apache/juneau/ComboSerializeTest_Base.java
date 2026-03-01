@@ -203,4 +203,44 @@ public abstract class ComboSerializeTest_Base extends TestBase {
 	public void f21_serializeMsgPackT(ComboSerialize_Tester<?> t) throws Exception {
 		t.testSerialize("msgPackT");
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// YAML
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void g11_serializeYaml(ComboSerialize_Tester<?> t) throws Exception {
+		t.testSerialize("yaml");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// YAML - 't' property
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void g21_serializeYamlT(ComboSerialize_Tester<?> t) throws Exception {
+		t.testSerialize("yamlT");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// YAML - Readable
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void g31_serializeYamlR(ComboSerialize_Tester<?> t) throws Exception {
+		t.testSerialize("yamlR");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// CSV
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h11_serializeCsv(ComboSerialize_Tester<?> t) throws Exception {
+		t.testSerialize("csv");
+	}
 }

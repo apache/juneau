@@ -24,6 +24,7 @@ import java.util.*;
 import javax.xml.datatype.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
@@ -113,6 +114,11 @@ class RoundTripDateTime_Test extends TestBase {
 		tester(17, "Yaml - default")
 			.serializer(YamlSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(YamlParser.create())
+			.build(),
+		tester(18, "Csv - default")
+			.serializer(CsvSerializer.create().keepNullProperties())
+			.skipIf(o -> o == null || (o.getClass().isArray() && o.getClass().getComponentType().isPrimitive()))
+			.returnOriginalObject()
 			.build(),
 	};
 

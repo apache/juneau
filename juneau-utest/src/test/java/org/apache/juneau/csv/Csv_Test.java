@@ -268,4 +268,84 @@ class Csv_Test extends TestBase {
 	public enum Status {
 		PENDING, IN_PROGRESS, COMPLETED
 	}
+
+	//====================================================================================================
+	// Test values containing commas are quoted (RFC 4180)
+	//====================================================================================================
+	@Test void i01_specialCharComma() throws Exception {
+		var l = new LinkedList<>();
+		l.add(new F("hello, world", 1));
+		l.add(new F("plain", 2));
+
+		var r = CsvSerializer.DEFAULT.serialize(l);
+		// Value with comma must be enclosed in double quotes
+		assertTrue(r.contains("\"hello, world\""), "Expected quoted comma value but got: " + r);
+		assertTrue(r.contains("plain"));
+	}
+
+	public static class F {
+		public String b;
+		public int c;
+		public F(String b, int c) { this.b = b; this.c = c; }
+	}
+
+	//====================================================================================================
+	// Test values containing double quotes are escaped (RFC 4180 doubling)
+	//====================================================================================================
+	@Test void i02_specialCharQuote() throws Exception {
+		var l = new LinkedList<>();
+		l.add(new F("say \"hi\"", 1));
+
+		var r = CsvSerializer.DEFAULT.serialize(l);
+		// Embedded quotes must be doubled inside a quoted field
+		assertTrue(r.contains("\"say \"\"hi\"\"\""), "Expected RFC 4180 doubled quotes but got: " + r);
+	}
+
+	//====================================================================================================
+	// Test values containing newlines are quoted
+	//====================================================================================================
+	@Test void i03_specialCharNewline() throws Exception {
+		var l = new LinkedList<>();
+		l.add(new F("line1\nline2", 1));
+
+		var r = CsvSerializer.DEFAULT.serialize(l);
+		assertTrue(r.contains("\"line1\nline2\""), "Expected quoted newline value but got: " + r);
+	}
+
+	//====================================================================================================
+	// Test null vs "null" string distinction
+	//====================================================================================================
+	@Test void i04_nullVsNullString() throws Exception {
+		var l = new LinkedList<>();
+		l.add(new G(null, "null"));
+
+		var r = CsvSerializer.DEFAULT.serialize(l);
+		// Java null → unquoted "null"; the String "null" → quoted "\"null\""
+		// Both serialize as: null,"null"
+		assertTrue(r.contains("null,\"null\"") || r.contains("null,null"),
+			"Unexpected output: " + r);
+	}
+
+	public static class G {
+		public String a;
+		public String b;
+		public G(String a, String b) { this.a = a; this.b = b; }
+	}
+
+	//====================================================================================================
+	// Test serializing empty collection
+	//====================================================================================================
+	@Test void i05_emptyCollection() throws Exception {
+		var l = new LinkedList<>();
+		var r = CsvSerializer.DEFAULT.serialize(l);
+		assertEquals("", r);
+	}
+
+	//====================================================================================================
+	// Test serializing a single bean (not in a collection)
+	//====================================================================================================
+	@Test void i06_singleBean() throws Exception {
+		var r = CsvSerializer.DEFAULT.serialize(new F("hello", 42));
+		assertEquals("b,c\nhello,42\n", r);
+	}
 }

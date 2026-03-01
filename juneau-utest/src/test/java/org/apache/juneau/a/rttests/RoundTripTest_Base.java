@@ -16,7 +16,10 @@
  */
 package org.apache.juneau.a.rttests;
 
+import java.util.*;
+
 import org.apache.juneau.*;
+import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
@@ -106,6 +109,14 @@ public abstract class RoundTripTest_Base extends TestBase {
 			.serializer(YamlSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(YamlParser.create())
 			.build(),
+		tester(18, "Csv - default")
+			.serializer(CsvSerializer.create().keepNullProperties())
+			// CSV serialization is validated here without parsing (returnOriginalObject), analogous
+			// to the JSON schema tester.  Full CSV round-trip tests are in CsvParser_Test.
+			// Only test serialization of inputs that CSV can represent.
+			.skipIf(o -> !isCsvSerializableInput(o))
+			.returnOriginalObject()
+			.build(),
 	};
 
 	static RoundTrip_Tester[]  testers() {
@@ -114,5 +125,79 @@ public abstract class RoundTripTest_Base extends TestBase {
 
 	protected static RoundTrip_Tester.Builder tester(int index, String label) {
 		return RoundTrip_Tester.create(index, label);
+	}
+
+	/**
+	 * Returns true if the object can be serialized to CSV without error.
+	 *
+	 * <p>
+	 * CSV can serialize any non-null input, but restricts to non-null, non-array inputs
+	 * to avoid serialization errors on raw byte arrays and similar types.
+	 */
+	protected static boolean isCsvSerializableInput(Object o) {
+		if (o == null) return false;
+		var cls = o.getClass();
+		// Skip raw primitive arrays (byte[], char[], int[][], etc.) - they serialize as toString()
+		if (cls.isArray() && cls.getComponentType().isPrimitive()) return false;
+		return true;
+	}
+
+	/**
+	 * Returns true if the object can be faithfully round-tripped through CSV.
+	 *
+	 * <p>
+	 * CSV is tabular and only round-trips cleanly when:
+	 * <ul>
+	 *   <li>The object is a non-empty {@link Collection} of flat beans or Maps.
+	 *   <li>Primitive arrays, 2D arrays, scalar lists, and enum arrays are excluded
+	 *       because CSV cannot unambiguously represent them during parsing.
+	 * </ul>
+	 */
+	protected static boolean isCsvRoundTripCompatible(Object o) {
+		if (o == null)
+			return false;
+		// Only Collections are supported; reject raw arrays of any kind
+		if (!(o instanceof Collection<?> col))
+			return false;
+		if (col.isEmpty())
+			return false;
+		var first = col.iterator().next();
+		if (first == null)
+			return false;
+		return isCsvCompatibleElement(first);
+	}
+
+	private static boolean isCsvCompatibleElement(Object elem) {
+		if (elem == null) return false;
+		var cls = elem.getClass();
+		// Reject scalars, arrays, enums, Optional, and any type that isn't a bean or Map
+		if (cls.isPrimitive() || cls.isArray()) return false;
+		if (elem instanceof Number || elem instanceof Boolean || elem instanceof Character) return false;
+		if (elem instanceof CharSequence || cls.isEnum()) return false;
+		if (elem instanceof java.util.Optional || elem instanceof Collection) return false;
+		// Accept Maps only if all values are also simple types
+		if (elem instanceof Map m) {
+			return m.values().stream().allMatch(v -> v == null || isCsvSimpleType(v.getClass()));
+		}
+		// Reject JDK types that are not beans
+		if (cls.getName().startsWith("java.") || cls.getName().startsWith("javax.")) return false;
+		// For POJO beans: only accept if all public fields have simple (flat) types
+		for (var field : cls.getFields()) {
+			if (!isCsvSimpleType(field.getType())) return false;
+		}
+		return cls.getFields().length > 0 || cls.getMethods().length > 0;
+	}
+
+	private static boolean isCsvSimpleType(Class<?> t) {
+		if (t == null) return true;
+		return t.isPrimitive()
+			|| t == String.class
+			|| t == Boolean.class
+			|| t == Character.class
+			|| Number.class.isAssignableFrom(t)
+			|| t.isEnum()
+			|| java.time.temporal.Temporal.class.isAssignableFrom(t)
+			|| t == java.util.Date.class
+			|| t == java.util.Calendar.class;
 	}
 }

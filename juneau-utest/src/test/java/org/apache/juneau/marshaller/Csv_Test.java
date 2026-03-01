@@ -19,13 +19,13 @@ package org.apache.juneau.marshaller;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
 class Csv_Test extends TestBase{
@@ -42,14 +42,29 @@ class Csv_Test extends TestBase{
 		assertString(expected2, Csv.of(in2,stringWriter()));
 	}
 
-	@Test void a02_from() {
-		var in1 = "'foo'";
-		var in2 = "{foo:'bar'}";
+	@SuppressWarnings("unchecked")
+	@Test void a02_from() throws Exception {
+		// Parser is now fully implemented.
+		var csv1 = "value\nfoo\n";
+		var csv2 = "a,b\nfoo,bar\n";
 
-		assertThrowsWithMessage(ParseException.class, "Not implemented.", ()->Csv.to(in1, String.class));
-		assertThrowsWithMessage(ParseException.class, "Not implemented.", ()->Csv.to(stringReader(in1), String.class));
-		assertThrowsWithMessage(ParseException.class, "Not implemented.", ()->Csv.to(in2, Map.class, String.class, String.class));
-		assertThrowsWithMessage(ParseException.class, "Not implemented.", ()->Csv.to(stringReader(in2), Map.class, String.class, String.class));
+		// Parse a single-column list of strings
+		var r1 = (List<String>) Csv.to(csv1, List.class, String.class);
+		assertEquals(1, r1.size());
+		assertEquals("foo", r1.get(0));
+
+		// Parse from Reader
+		var r2 = (List<String>) Csv.to(stringReader(csv1), List.class, String.class);
+		assertEquals(1, r2.size());
+
+		// Parse into a map
+		var r3 = (Map<?, ?>) Csv.to(csv2, Map.class);
+		assertEquals("foo", r3.get("a"));
+		assertEquals("bar", r3.get("b"));
+
+		// Parse from Reader into a map
+		var r4 = (Map<?, ?>) Csv.to(stringReader(csv2), Map.class);
+		assertEquals("foo", r4.get("a"));
 	}
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods

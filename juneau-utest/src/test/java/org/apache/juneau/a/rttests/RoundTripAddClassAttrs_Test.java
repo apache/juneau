@@ -24,12 +24,14 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
+import org.apache.juneau.yaml.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
@@ -78,6 +80,15 @@ class RoundTripAddClassAttrs_Test extends TestBase {
 		tester(9, "MsgPackSerializer.DEFAULT/MsgPackParser.DEFAULT")
 			.serializer(MsgPackSerializer.create().addBeanTypes().addRootType())
 			.parser(MsgPackParser.create().disableInterfaceProxies())
+			.build(),
+		tester(10, "Yaml - default")
+			.serializer(YamlSerializer.create().addBeanTypes().addRootType())
+			.parser(YamlParser.create().disableInterfaceProxies())
+			.build(),
+		tester(11, "Csv - default")
+			.serializer(CsvSerializer.create())
+			.skipIf(o -> o == null || (o.getClass().isArray() && o.getClass().getComponentType().isPrimitive()))
+			.returnOriginalObject()
 			.build()
 	};
 

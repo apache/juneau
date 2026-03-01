@@ -37,10 +37,33 @@ import org.apache.juneau.serializer.*;
  * becomes a row and bean properties become columns. The first row typically contains column headers derived
  * from bean property names.
  *
+ * <h5 class='section'>Data Structures Incompatible with CSV (vs. JSON):</h5>
+ * <p>
+ * CSV is a flat, tabular format. Unlike {@link org.apache.juneau.json.JsonSerializer JSON}, which
+ * supports nested objects, arrays, and type discriminators, CSV cannot faithfully represent:
+ * <ul>
+ *   <li><b>Raw primitive arrays</b> ({@code byte[]}, {@code int[]}, etc.) — Serialize as
+ *       {@code Object.toString()} (e.g. {@code [B@12345}). <i>JSON</i> supports arrays natively
+ *       and typically uses base64 for {@code byte[]}.
+ *   <li><b>Nested beans</b> — Flatten to a single row; structure is lost. <i>JSON</i> preserves
+ *       nested objects naturally ({@code {"a":{"b":"c"}}}).
+ *   <li><b>Collections/arrays within beans</b> — {@code List&lt;X&gt;}, {@code Map&lt;K,V&gt;}, and
+ *       array properties serialize as {@code toString()}; they cannot be parsed back. <i>JSON</i>
+ *       supports arrays and objects as first-class values.
+ *   <li><b>Generic type preservation</b> — No type discriminator. <i>JSON</i> can add {@code @type}
+ *       via {@code addBeanTypes().addRootType()}.
+ *   <li><b>Parent/inherited properties</b> — Hierarchy flattens; may collide with child names.
+ *       <i>JSON</i> serializes all properties in a single object without loss.
+ *   <li><b>Optional wrappers</b> — May serialize as the inner value; round-trip differs from
+ *       tree formats. <i>JSON</i> handles Optional consistently as value or null.
+ * </ul>
+ *
+ * <h5 class='section'>Best Supported:</h5>
+ * <p>
+ * Collections of flat beans or maps whose properties are primitives, strings, numbers, enums, or dates.
+ *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
- * 	<li class='warn'>This serializer is optimized for simple tabular data structures and may have limitations
- * 		with complex nested objects.
  * </ul>
  *
  */

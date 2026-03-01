@@ -89,8 +89,24 @@ import org.apache.juneau.serializer.*;
  * 	String <jv>yaml</jv> = <jv>serializer</jv>.serialize(<jv>someObject</jv>);
  * </p>
  *
+ * <h5 class='section'>Limitations compared to JSON</h5>
+ * <p>
+ * The YAML serializer has fewer configuration options than {@link org.apache.juneau.json.JsonSerializer JsonSerializer}:
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		No compact single-line output mode; YAML is always emitted in block-style (indentation-based) format.
+ * 	<li>
+ * 		No equivalent to JSON's simple mode or attribute quoting style variants (single vs double quotes).
+ * 	<li>
+ * 		No strict vs lax output modes; YAML output follows a consistent, human-readable style.
+ * </ul>
+ *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/YamlBasics">YAML Basics</a>
  * </ul>
  */
 @SuppressWarnings({

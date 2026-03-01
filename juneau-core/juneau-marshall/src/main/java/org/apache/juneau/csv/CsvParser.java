@@ -30,7 +30,38 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.parser.*;
 
 /**
- * TODO - Work in progress.  CSV parser.
+ * Parses CSV (Comma Separated Values) input into Java objects.
+ *
+ * <p>
+ * Parses RFC 4180-compliant CSV into collections of beans, maps, or simple values. Each row becomes an
+ * element; the header row defines column names.
+ *
+ * <h5 class='section'>Data Structures Incompatible with CSV (vs. JSON):</h5>
+ * <p>
+ * CSV is a flat, tabular format. Unlike {@link org.apache.juneau.json.JsonParser JSON}, which
+ * parses nested structures and supports type discriminators, CSV cannot faithfully parse:
+ * <ul>
+ *   <li><b>Raw primitive arrays</b> ({@code byte[]}, {@code int[]}, etc.) — Cells are strings; no
+ *       unambiguous encoding. <i>JSON</i> parses arrays and base64-encoded bytes.
+ *   <li><b>Nested beans</b> — Cannot reconstruct bean- or map-valued properties from flat columns.
+ *       <i>JSON</i> parses nested objects directly.
+ *   <li><b>Collections/arrays within beans</b> — Cannot parse {@code List&lt;X&gt;},
+ *       {@code Map&lt;K,V&gt;}, or array properties from a single cell. <i>JSON</i> parses arrays
+ *       and nested objects.
+ *   <li><b>Generic type parameters</b> — No type discriminator. <i>JSON</i> uses {@code @type} when
+ *       configured with {@code addBeanTypes().addRootType()}.
+ *   <li><b>Parent/inherited properties</b> — Bean hierarchy cannot be reconstructed.
+ *       <i>JSON</i> reconstructs flattened properties into the correct bean hierarchy.
+ *   <li><b>Optional wrappers</b> — Round-trip may differ from tree formats. <i>JSON</i> handles
+ *       Optional consistently.
+ *   <li><b>Interface/abstract types</b> — No discriminator to select implementation. <i>JSON</i>
+ *       uses {@code @type} with {@code implClass} mappings.
+ * </ul>
+ *
+ * <h5 class='section'>Best Supported:</h5>
+ * <p>
+ * Parsing into {@link java.util.Collection} of flat beans or maps, or single beans/maps with simple
+ * property types (primitives, strings, numbers, enums, dates).
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.

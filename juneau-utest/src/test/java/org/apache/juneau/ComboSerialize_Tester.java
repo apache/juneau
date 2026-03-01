@@ -26,6 +26,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.function.*;
+import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
@@ -33,6 +34,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
+import org.apache.juneau.yaml.*;
 
 /**
  * Represents the input to a ComboTest.
@@ -100,6 +102,10 @@ public class ComboSerialize_Tester<T> {
 		public Builder<T> rdfXml(String value) { expected.put("rdfXml", value); return this; }
 		public Builder<T> rdfXmlT(String value) { expected.put("rdfXmlT", value); return this; }
 		public Builder<T> rdfXmlR(String value) { expected.put("rdfXmlR", value); return this; }
+		public Builder<T> csv(String value) { expected.put("csv", value); return this; }
+		public Builder<T> yaml(String value) { expected.put("yaml", value); return this; }
+		public Builder<T> yamlT(String value) { expected.put("yamlT", value); return this; }
+		public Builder<T> yamlR(String value) { expected.put("yamlR", value); return this; }
 
 		public ComboSerialize_Tester<T> build() {
 			return new ComboSerialize_Tester<>(this);
@@ -138,6 +144,10 @@ public class ComboSerialize_Tester<T> {
 		serializers.put("urlEncR", create(b, UrlEncodingSerializer.DEFAULT_READABLE.copy().addBeanTypes().addRootType()));
 		serializers.put("msgPack", create(b, MsgPackSerializer.create().addBeanTypes().addRootType()));
 		serializers.put("msgPackT", create(b, MsgPackSerializer.create().typePropertyName("t").addBeanTypes().addRootType()));
+		serializers.put("csv", create(b, CsvSerializer.create()));
+		serializers.put("yaml", create(b, YamlSerializer.DEFAULT.copy().addBeanTypes().addRootType()));
+		serializers.put("yamlT", create(b, YamlSerializer.create().typePropertyName("t").addBeanTypes().addRootType()));
+		serializers.put("yamlR", create(b, YamlSerializer.DEFAULT_READABLE.copy().addBeanTypes().addRootType()));
 	}
 
 	private Serializer create(Builder<?> tb, Serializer.Builder sb) {
@@ -153,7 +163,7 @@ public class ComboSerialize_Tester<T> {
 	}
 
 	private boolean isSkipped(String testName, String expected) {
-		return "SKIP".equals(expected) || skipTest.test(testName);
+		return expected == null || "SKIP".equals(expected) || skipTest.test(testName);
 	}
 
 	public void testSerialize(String testName) throws Exception {

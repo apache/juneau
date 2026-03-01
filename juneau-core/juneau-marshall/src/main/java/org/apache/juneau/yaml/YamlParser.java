@@ -38,8 +38,39 @@ import org.apache.juneau.parser.*;
  * <p>
  * Handles <c>Content-Type</c> types:  <bc>application/yaml, text/yaml</bc>
  *
+ * <h5 class='topic'>Description</h5>
+ * <p>
+ * This parser uses an indentation-aware state machine to parse YAML directly into POJOs without intermediate
+ * DOM objects.  It supports block-style and flow-style mappings and sequences, plain and quoted scalars,
+ * comments, document markers, and standard YAML scalar types.
+ *
+ * <h5 class='section'>Limitations compared to JSON</h5>
+ * <p>
+ * The YAML parser has some limitations when compared to {@link org.apache.juneau.json.JsonParser JsonParser}:
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		Maps with non-String keys ({@link Boolean}, {@link java.util.Date}, {@link java.time.temporal.Temporal},
+ * 		{@link Enum}) may not round-trip correctly when the target type is a generic {@link java.util.Map} with
+ * 		those key types.  {@link java.util.LinkedHashMap LinkedHashMap} and {@link java.util.TreeMap TreeMap}
+ * 		with {@link String} keys work reliably.
+ * 	<li>
+ * 		{@link java.util.HashMap HashMap} instances that contain a {@code null} key can fail to round-trip in
+ * 		some cases; {@link java.util.LinkedHashMap LinkedHashMap} and {@link java.util.TreeMap TreeMap} handle
+ * 		null keys correctly.
+ * 	<li>
+ * 		No strict vs non-strict mode; unlike JSON, there is no equivalent to JSON's lax parsing of comments,
+ * 		unquoted attributes, or concatenated strings.
+ * 	<li>
+ * 		YAML's indentation-based structure requires consistent formatting; malformed indentation can cause
+ * 		parsing errors where equivalent JSON would parse successfully.
+ * </ul>
+ *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/YamlBasics">YAML Basics</a>
  * </ul>
  */
 @SuppressWarnings({

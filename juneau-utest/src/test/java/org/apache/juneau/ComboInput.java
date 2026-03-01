@@ -40,7 +40,7 @@ public class ComboInput<T> {
 	List<Class<?>> swaps = list();
 	final Type type;
 	String json, jsonT, jsonR, xml, xmlT, xmlR, xmlNs, html, htmlT, htmlR, uon, uonT, uonR, urlEncoding,
-		urlEncodingT, urlEncodingR, msgPack, msgPackT, rdfXml, rdfXmlT, rdfXmlR;
+		urlEncodingT, urlEncodingR, msgPack, msgPackT, rdfXml, rdfXmlT, rdfXmlR, csv, yaml, yamlT, yamlR;
 	List<Tuple2<Class<?>,Consumer<?>>> applies = list();
 
 	public ComboInput<T> beanContext(Consumer<BeanContext.Builder> c) {
@@ -177,6 +177,22 @@ public class ComboInput<T> {
 	}
 	public ComboInput<T> rdfXmlR(String value) {
 		rdfXmlR = value;
+		return this;
+	}
+	public ComboInput<T> csv(String value) {
+		csv = value;
+		return this;
+	}
+	public ComboInput<T> yaml(String value) {
+		yaml = value;
+		return this;
+	}
+	public ComboInput<T> yamlT(String value) {
+		yamlT = value;
+		return this;
+	}
+	public ComboInput<T> yamlR(String value) {
+		yamlR = value;
 		return this;
 	}
 

@@ -253,62 +253,90 @@ public class CsvSerializerSession extends WriterSerializerSession {
 				l = Collections.singleton(o);
 			}
 
-			// TODO - Doesn't support DynaBeans.
 			if (ne(l)) {
 				var firstOpt = first(l);
 				if (!firstOpt.isPresent())
 					return;
-				var entryType = getClassMetaForObject(firstOpt.get());
-				if (entryType.isBean()) {
-					var bm = entryType.getBeanMeta();
-					var addComma = Flag.create();
 
+				// Apply any registered swap to the first element to determine column structure.
+				var firstRaw = firstOpt.get();
+				var firstEntry = applySwap(firstRaw, getClassMetaForObject(firstRaw));
+				var entryType = getClassMetaForObject(firstEntry);
+
+				// Determine the best representation strategy.
+				// Use the BeanMeta from the entry type for bean serialization.
+				var bm = entryType.isBean() ? entryType.getBeanMeta() : null;
+
+				if (bm != null) {
+					// Bean or DynaBean path: header row = property names
+					var addComma = Flag.create();
 					bm.getProperties().values().stream().filter(BeanPropertyMeta::canRead).forEach(x -> {
 						addComma.ifSet(() -> w.w(',')).set();
 						w.writeEntry(x.getName());
 					});
 					w.append('\n');
+					var readableProps = bm.getProperties().values().stream().filter(BeanPropertyMeta::canRead).toList();
 					l.forEach(x -> {
 						var addComma2 = Flag.create();
-						BeanMap<?> bean = toBeanMap(x);
-						bm.getProperties().values().stream().filter(BeanPropertyMeta::canRead).forEach(y -> {
-						addComma2.ifSet(() -> w.w(',')).set();
-						var value = y.get(bean, y.getName());
-						value = formatIfDateOrDuration(value);
-						w.writeEntry(value);
-						});
+						if (x == null) {
+							// Null entry: write null for each column
+							readableProps.forEach(y -> {
+								addComma2.ifSet(() -> w.w(',')).set();
+								w.writeEntry(null);
+							});
+						} else {
+							// Apply swap before extracting bean properties (e.g. surrogate swaps)
+							var swapped = applySwap(x, getClassMetaForObject(x));
+							BeanMap<?> bean = toBeanMap(swapped);
+							readableProps.forEach(y -> {
+								addComma2.ifSet(() -> w.w(',')).set();
+								var value = y.get(bean, y.getName());
+								value = formatIfDateOrDuration(value);
+								// Use toString() to respect trimStrings setting on String values
+								if (value instanceof String s) value = toString(s);
+								w.writeEntry(value);
+							});
+						}
 						w.w('\n');
 					});
 				} else if (entryType.isMap()) {
+					// Map path: header row = map keys from the first entry
 					var addComma = Flag.create();
-					var first = (Map)firstOpt.get();
+					var first = (Map) firstEntry;
 					first.keySet().forEach(x -> {
 						addComma.ifSet(() -> w.w(',')).set();
-						w.writeEntry(x);
+						// Apply trimStrings to map keys as well
+						w.writeEntry(x instanceof String s ? toString(s) : x);
 					});
 					w.append('\n');
-					l.stream().forEach(x -> {
+					l.forEach(x -> {
 						var addComma2 = Flag.create();
-						var map = (Map)x;
+						var swapped = applySwap(x, getClassMetaForObject(x));
+						var map = (Map) swapped;
 						map.values().forEach(y -> {
 							addComma2.ifSet(() -> w.w(',')).set();
 							var value = applySwap(y, getClassMetaForObject(y));
+							// Apply trimStrings to map values
+							if (value instanceof String s) value = toString(s);
 							w.writeEntry(value);
 						});
 						w.w('\n');
 					});
 				} else {
+					// Simple value path: single "value" column
 					w.writeEntry("value");
 					w.append('\n');
-					l.stream().forEach(x -> {
+					l.forEach(x -> {
 						var value = applySwap(x, getClassMetaForObject(x));
-						w.writeEntry(value);
+						// Use toString() to respect trimStrings setting
+						w.writeEntry(value == null ? null : toString(value));
 						w.w('\n');
 					});
 				}
 			}
 		}
 	}
+
 
 	private Object formatIfDateOrDuration(Object value) {
 		if (value == null)

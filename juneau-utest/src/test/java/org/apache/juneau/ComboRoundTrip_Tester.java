@@ -26,6 +26,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.function.*;
+import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
@@ -119,6 +120,7 @@ public class ComboRoundTrip_Tester<T> {
 		public Builder<T> yaml(String value) { expected.put("yaml", value); return this; }
 		public Builder<T> yamlT(String value) { expected.put("yamlT", value); return this; }
 		public Builder<T> yamlR(String value) { expected.put("yamlR", value); return this; }
+		public Builder<T> csv(String value) { expected.put("csv", value); return this; }
 
 		public ComboRoundTrip_Tester<T> build() {
 			return new ComboRoundTrip_Tester<>(this);
@@ -167,6 +169,7 @@ public class ComboRoundTrip_Tester<T> {
 		serializers.put("yaml", create(b, YamlSerializer.DEFAULT.copy().addBeanTypes().addRootType()));
 		serializers.put("yamlT", create(b, YamlSerializer.create().typePropertyName("t").addBeanTypes().addRootType()));
 		serializers.put("yamlR", create(b, YamlSerializer.DEFAULT_READABLE.copy().addBeanTypes().addRootType()));
+		serializers.put("csv", create(b, CsvSerializer.create()));
 
 		parsers.put("json", create(b, JsonParser.DEFAULT.copy()));
 		parsers.put("jsonT", create(b, JsonParser.create().typePropertyName("t")));
@@ -189,6 +192,7 @@ public class ComboRoundTrip_Tester<T> {
 		parsers.put("yaml", create(b, YamlParser.DEFAULT.copy()));
 		parsers.put("yamlT", create(b, YamlParser.create().typePropertyName("t")));
 		parsers.put("yamlR", create(b, YamlParser.DEFAULT.copy()));
+		parsers.put("csv", create(b, CsvParser.create()));
 	}
 
 	private Serializer create(Builder<?> tb, Serializer.Builder sb) {
@@ -282,7 +286,7 @@ public class ComboRoundTrip_Tester<T> {
 		var s = serializers.get(testName);
 		var p = parsers.get(testName);
 		try {
-			if (isSkipped(testName + "verify", "")) return;
+			if (isSkipped(testName + "verify", expected.get(testName))) return;
 
 			var r = s.serializeToString(in.get());
 			var o = p.parse(r, type);

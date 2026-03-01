@@ -29,6 +29,7 @@ import javax.xml.datatype.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.html5.*;
+import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json.annotation.*;
@@ -36,6 +37,7 @@ import org.apache.juneau.msgpack.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
+import org.apache.juneau.yaml.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
@@ -115,6 +117,15 @@ class RoundTripBeanMaps_Test extends TestBase {
 			.build(),
 		tester(16, "Json schema")
 			.serializer(JsonSchemaSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.returnOriginalObject()
+			.build(),
+		tester(17, "Yaml - default")
+			.serializer(YamlSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(YamlParser.create())
+			.build(),
+		tester(18, "Csv - default")
+			.serializer(CsvSerializer.create().keepNullProperties())
+			.skipIf(o -> o == null || (o.getClass().isArray() && o.getClass().getComponentType().isPrimitive()))
 			.returnOriginalObject()
 			.build(),
 	};
