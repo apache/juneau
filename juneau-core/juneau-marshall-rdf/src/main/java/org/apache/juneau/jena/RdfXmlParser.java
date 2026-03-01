@@ -17,7 +17,31 @@
 package org.apache.juneau.jena;
 
 /**
- * Subclass of {@link RdfParser} for parsing RDF in standard XML notation.
+ * Subclass of {@link RdfParser} for parsing RDF/XML into POJOs.
+ *
+ * <p>
+ * Accepts RDF in standard XML notation (including RDF/XML-Abbrev output) and converts it to Java beans,
+ * maps, collections, and primitive types. Date/time literals are parsed via ISO 8601.
+ *
+ * <h5 class='figure'>Examples:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Parse RDF/XML string into a bean.</jc>
+ * 	String <jv>rdfXml</jv> = ...;  <jc>// RDF/XML content</jc>
+ * 	Person <jv>person</jv> = RdfXmlParser.<jsf>DEFAULT</jsf>.parse(<jv>rdfXml</jv>, Person.<jk>class</jk>);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Or use the RdfXml marshaller for convenience.</jc>
+ * 	Person <jv>person</jv> = RdfXml.to(<jv>rdfXml</jv>, Person.<jk>class</jk>);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Parse into a map.</jc>
+ * 	Map&lt;String, String&gt; <jv>map</jv> = RdfXmlParser.<jsf>DEFAULT</jsf>.parse(<jv>rdfXml</jv>, Map.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Custom parser with swaps.</jc>
+ * 	RdfXmlParser <jv>p</jv> = RdfXmlParser.create().swaps(DateSwap.<jk>class</jk>).build();
+ * 	MyBean <jv>bean</jv> = <jv>p</jv>.parse(<jv>rdfXml</jv>, MyBean.<jk>class</jk>);
+ * </p>
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.

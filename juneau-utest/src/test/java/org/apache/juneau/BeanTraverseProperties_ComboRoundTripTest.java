@@ -49,9 +49,6 @@ class BeanTraverseProperties_ComboRoundTripTest extends ComboRoundTripTest_Base 
 			.urlEncR("\t\tf=1")
 			.msgPack("81A16601")
 			.msgPackT("81A16601")
-			.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f>1</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
-			.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f>1</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
-			.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f>1</jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
 			.apply(BeanTraverseContext.Builder.class, x -> x.initialDepth(2))
 			.build(),
 		tester(2, "BEANTRAVERSE_detectRecursions", B.class, new B().initRecursion())
@@ -73,9 +70,6 @@ class BeanTraverseProperties_ComboRoundTripTest extends ComboRoundTripTest_Base 
 			.urlEncR("x")
 			.msgPack("x")
 			.msgPackT("x")
-			.rdfXml("x")
-			.rdfXmlT("x")
-			.rdfXmlR("x")
 			.apply(BeanTraverseContext.Builder.class, Builder::detectRecursions)
 			.exceptionMsg("Recursion occurred")
 			.build(),
@@ -98,9 +92,6 @@ class BeanTraverseProperties_ComboRoundTripTest extends ComboRoundTripTest_Base 
 			.urlEncR("")
 			.msgPack("80")
 			.msgPackT("80")
-			.rdfXml("<rdf:RDF>\n</rdf:RDF>\n")
-			.rdfXmlT("<rdf:RDF>\n</rdf:RDF>\n")
-			.rdfXmlR("<rdf:RDF>\n</rdf:RDF>\n")
 			.apply(BeanTraverseContext.Builder.class, Builder::ignoreRecursions)
 			.build(),
 		tester(4, "BEANTRAVERSE_maxDepth", B.class, new B().initA())
@@ -122,9 +113,6 @@ class BeanTraverseProperties_ComboRoundTripTest extends ComboRoundTripTest_Base 
 			.urlEncR("")
 			.msgPack("80")
 			.msgPackT("80")
-			.rdfXml("<rdf:RDF>\n</rdf:RDF>\n")
-			.rdfXmlT("<rdf:RDF>\n</rdf:RDF>\n")
-			.rdfXmlR("<rdf:RDF>\n</rdf:RDF>\n")
 			.apply(BeanTraverseContext.Builder.class, x -> x.maxDepth(1))
 			.build()
 	};

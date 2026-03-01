@@ -31,6 +31,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.msgpack.*;
@@ -115,15 +116,27 @@ class RoundTripBeanMaps_Test extends TestBase {
 			.serializer(MsgPackSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(MsgPackParser.create())
 			.build(),
-		tester(16, "Json schema")
+		tester(16, "RdfXml")
+			.serializer(RdfXmlSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(RdfXmlParser.create())
+			.build(),
+		tester(17, "RdfThrift")
+			.serializer(RdfThriftSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(RdfThriftParser.create())
+			.build(),
+		tester(18, "RdfProto")
+			.serializer(RdfProtoSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(RdfProtoParser.create())
+			.build(),
+		tester(19, "Json schema")
 			.serializer(JsonSchemaSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.returnOriginalObject()
 			.build(),
-		tester(17, "Yaml - default")
+		tester(20, "Yaml - default")
 			.serializer(YamlSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(YamlParser.create())
 			.build(),
-		tester(18, "Csv - default")
+		tester(21, "Csv - default")
 			.serializer(CsvSerializer.create().keepNullProperties())
 			.skipIf(o -> o == null || (o.getClass().isArray() && o.getClass().getComponentType().isPrimitive()))
 			.returnOriginalObject()

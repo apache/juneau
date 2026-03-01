@@ -34,11 +34,12 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
+import org.apache.juneau.utils.Iso8601Utils;
 import org.apache.juneau.xml.*;
 
-import com.hp.hpl.jena.rdf.model.*;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.util.iterator.*;
+import org.apache.jena.rdf.model.*;
+import org.apache.jena.riot.*;
+import org.apache.jena.util.iterator.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link RdfParser}.
@@ -53,8 +54,11 @@ import com.hp.hpl.jena.util.iterator.*;
  * </ul>
  */
 @SuppressWarnings({
-	"unchecked", // Type erasure requires unchecked casts
-	"rawtypes", // Raw types necessary for generic type handling
+	"java:S138",  // RDF parsing requires complex dispatch logic
+	"java:S3776", // Cognitive complexity - RDF graph traversal is inherently complex
+	"java:S6541", // Brain method - RDF graph-to-POJO conversion requires complex dispatch
+	"unchecked",  // Type erasure requires unchecked casts
+	"rawtypes"    // Raw types necessary for generic type handling
 })
 public class RdfParserSession extends ReaderParserSession {
 
@@ -188,8 +192,11 @@ public class RdfParserSession extends ReaderParserSession {
 	}
 
 	private final Model model;
-	private final Property pRoot, pValue, pType, pRdfType;
-	private final RDFReader rdfReader;
+	private final org.apache.jena.rdf.model.Property pRoot;
+	private final org.apache.jena.rdf.model.Property pValue;
+	private final org.apache.jena.rdf.model.Property pType;
+	private final org.apache.jena.rdf.model.Property pRdfType;
+	private final Lang lang;
 	private final RdfParser ctx;
 	private final Set<Resource> urisVisited = new HashSet<>();
 
@@ -208,11 +215,30 @@ public class RdfParserSession extends ReaderParserSession {
 		pRoot = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_ROOT);
 		pType = model.createProperty(ctx.getJuneauBpNs().getUri(), RDF_juneauNs_TYPE);
 		pValue = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_VALUE);
-		rdfReader = model.getReader(ctx.getLanguage());
 
-		// Note: NTripleReader throws an exception if you try to set any properties on it.
-		if (! ctx.getLanguage().equals(LANG_NTRIPLE))
-			ctx.getJenaSettings().forEach((k, v) -> rdfReader.setProperty(k, v));
+		// Map legacy language names to RIOT Lang
+		var langName = ctx.getLanguage();
+		lang = toLang(langName);
+		if (lang == null)
+			throw new IllegalStateException("Unknown RDF language: " + langName);
+	}
+
+	private static Lang toLang(String langName) {
+		var lang = RDFLanguages.nameToLang(langName);
+		if (lang != null)
+			return lang;
+		return switch (langName) {
+			case "N-TRIPLE" -> Lang.NTRIPLES;
+			case "RDF/XML-ABBREV" -> Lang.RDFXML;
+			case "JSON-LD" -> Lang.JSONLD;
+			case "N-QUADS" -> Lang.NQUADS;
+			case "TRIG" -> Lang.TRIG;
+			case "TRIX" -> Lang.TRIX;
+			case "RDF/JSON" -> Lang.RDFJSON;
+			case "RDF/THRIFT" -> Lang.RDFTHRIFT;
+			case "RDF/PROTO" -> Lang.RDFPROTO;
+			default -> null;
+		};
 	}
 
 	private final void addModelPrefix(Namespace ns) {
@@ -320,7 +346,7 @@ public class RdfParserSession extends ReaderParserSession {
 			eType = object();
 		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
-		var sType = (ClassMeta<?>)null;
+		ClassMeta<?> sType;
 		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
 		else if (nn(swap))
@@ -333,19 +359,17 @@ public class RdfParserSession extends ReaderParserSession {
 
 		setCurrentClass(sType);
 
-		if (! sType.canCreateNewInstance(outer)) {
-			if (n.isResource()) {
-				var st = n.asResource().getProperty(pType);
-				if (nn(st)) {
-					var c = st.getLiteral().getString();
-					var tcm = getClassMeta(c, pMeta, eType);
-					if (nn(tcm))
-						sType = eType = tcm;
-				}
+		if (! sType.canCreateNewInstance(outer) && n.isResource()) {
+			var st = n.asResource().getProperty(pType);
+			if (nn(st)) {
+				var c = st.getLiteral().getString();
+				var tcm = getClassMeta(c, pMeta, eType);
+				if (nn(tcm))
+					sType = eType = tcm;
 			}
 		}
 
-		var o = (Object)null;
+		Object o = null;
 		if (n.isResource() && nn(n.asResource().getURI()) && n.asResource().getURI().equals(RDF_NIL)) {
 			// Do nothing.  Leave o == null.
 		} else if (sType.isObject()) {
@@ -392,6 +416,8 @@ public class RdfParserSession extends ReaderParserSession {
 			o = parseCharacter(decodeString(getValue(n, outer)));
 		} else if (sType.isNumber()) {
 			o = parseNumber(getValue(n, outer).toString(), (Class<? extends Number>)sType.inner());
+		} else if (sType.isDateOrCalendarOrTemporal() || sType.isDuration()) {
+			o = Iso8601Utils.parse(getValue(n, outer).toString(), sType, getTimeZone());
 		} else if (sType.isMap()) {
 			var r = n.asResource();
 			if (! urisVisited.add(r))
@@ -542,20 +568,20 @@ public class RdfParserSession extends ReaderParserSession {
 		return m;
 	}
 
-	@SuppressWarnings({
-		"resource" // Resource management handled by ReaderParserSession
-	})
 	@Override /* Overridden from ReaderParserSession */
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 
-		var r = rdfReader;
-		r.read(model, pipe.getBufferedReader(), null);
+		// RDFDataMgr.read accepts StringReader; use RDFParser for Reader input
+		var content = pipe.asString();
+		RDFParser.fromString(content, lang)
+			.base("http://unknown/")
+			.parse(model);
 
 		var roots = getRoots(model);
 
 		// Special case where we're parsing a loose collection of resources.
 		if (isLooseCollections() && type.isCollectionOrArray()) {
-			var c = (Collection)null;
+			Collection c;
 			if (type.isArray() || type.isArgs())
 				c = list();
 			else

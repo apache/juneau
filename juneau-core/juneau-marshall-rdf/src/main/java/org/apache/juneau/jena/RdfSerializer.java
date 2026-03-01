@@ -1692,6 +1692,66 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return language(Constants.LANG_TURTLE);
 		}
 
+		/**
+		 * RDF language.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>language(<jsf>LANG_JSONLD</jsf>)</code>
+		 *
+		 * @return This object.
+		 */
+		public Builder jsonLd() {
+			return language(Constants.LANG_JSONLD);
+		}
+
+		/**
+		 * RDF language.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>language(<jsf>LANG_NQUADS</jsf>)</code>
+		 *
+		 * @return This object.
+		 */
+		public Builder nQuads() {
+			return language(Constants.LANG_NQUADS);
+		}
+
+		/**
+		 * RDF language.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>language(<jsf>LANG_TRIG</jsf>)</code>
+		 *
+		 * @return This object.
+		 */
+		public Builder triG() {
+			return language(Constants.LANG_TRIG);
+		}
+
+		/**
+		 * RDF language.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>language(<jsf>LANG_TRIX</jsf>)</code>
+		 *
+		 * @return This object.
+		 */
+		public Builder triX() {
+			return language(Constants.LANG_TRIX);
+		}
+
+		/**
+		 * RDF language.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>language(<jsf>LANG_RDFJSON</jsf>)</code>
+		 *
+		 * @return This object.
+		 */
+		public Builder rdfJson() {
+			return language(Constants.LANG_RDFJSON);
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder type(Class<? extends org.apache.juneau.Context> value) {
 			super.type(value);
@@ -1817,6 +1877,11 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			case "N3-PLAIN" -> "text/n3-plain";
 			case "N3-TRIPLES" -> "text/n3-triples";
 			case "TURTLE" -> "text/turtle";
+			case "JSON-LD" -> "application/ld+json";
+			case "N-QUADS" -> "application/n-quads";
+			case "TRIG" -> "application/trig";
+			case "TRIX" -> "application/trix+xml";
+			case "RDF/JSON" -> "application/rdf+json";
 			default -> "text/xml+rdf";
 		};
 	}
@@ -1833,6 +1898,11 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			case "N3-PLAIN" -> "text/n3-plain";
 			case "N3-TRIPLES" -> "text/n3-triples";
 			case "TURTLE" -> "text/turtle";
+			case "JSON-LD" -> "application/ld+json";
+			case "N-QUADS" -> "application/n-quads";
+			case "TRIG" -> "application/trig";
+			case "TRIX" -> "application/trix+xml";
+			case "RDF/JSON" -> "application/rdf+json";
 			default -> "text/xml+rdf";
 		};
 	}

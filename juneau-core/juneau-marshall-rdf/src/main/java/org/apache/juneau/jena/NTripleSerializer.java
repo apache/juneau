@@ -17,7 +17,26 @@
 package org.apache.juneau.jena;
 
 /**
- * Subclass of {@link RdfSerializer} for serializing RDF in N-Triple notation.
+ * Subclass of {@link RdfSerializer} for serializing POJOs to N-Triples notation.
+ *
+ * <p>
+ * Produces one RDF triple per line in W3C N-Triples format. Simple, line-oriented, and easy to parse.
+ *
+ * <h5 class='figure'>Examples:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Serialize a bean to N-Triples string.</jc>
+ * 	Person <jv>person</jv> = <jk>new</jk> Person(<js>"Alice"</js>, 30);
+ * 	String <jv>nTriples</jv> = NTripleSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>person</jv>);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Or use the NTriple marshaller for convenience.</jc>
+ * 	String <jv>nTriples</jv> = NTriple.<jsf>DEFAULT</jsf>.write(<jv>person</jv>);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Custom serializer with swaps.</jc>
+ * 	NTripleSerializer <jv>s</jv> = NTripleSerializer.create().swaps(DateSwap.<jk>class</jk>).build();
+ * 	String <jv>nTriples</jv> = <jv>s</jv>.serialize(<jv>bean</jv>);
+ * </p>
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.

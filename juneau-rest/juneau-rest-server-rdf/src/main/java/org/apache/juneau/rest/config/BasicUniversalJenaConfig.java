@@ -61,6 +61,11 @@ import org.apache.juneau.xml.*;
  * 					<li class='jc'>{@link TurtleSerializer}
  * 					<li class='jc'>{@link NTripleSerializer}
  * 					<li class='jc'>{@link N3Serializer}
+ * 					<li class='jc'>{@link JsonLdSerializer}
+ * 					<li class='jc'>{@link NQuadsSerializer}
+ * 					<li class='jc'>{@link TriGSerializer}
+ * 					<li class='jc'>{@link TriXSerializer}
+ * 					<li class='jc'>{@link RdfJsonSerializer}
  * 				</ul>
  * 			</li>
  * 			<li class='jma'>{@link Rest#parsers() parsers}:
@@ -78,6 +83,11 @@ import org.apache.juneau.xml.*;
  * 					<li class='jc'>{@link TurtleParser}
  * 					<li class='jc'>{@link NTripleParser}
  * 					<li class='jc'>{@link N3Parser}
+ * 					<li class='jc'>{@link JsonLdParser}
+ * 					<li class='jc'>{@link NQuadsParser}
+ * 					<li class='jc'>{@link TriGParser}
+ * 					<li class='jc'>{@link TriXParser}
+ * 					<li class='jc'>{@link RdfJsonParser}
  * 				</ul>
  * 			</li>
  * 			<li class='jma'>{@link Rest#config() config}:  <js>"$S{juneau.configFile,SYSTEM_DEFAULT}"</js>
@@ -142,13 +152,27 @@ import org.apache.juneau.xml.*;
 		RdfXmlAbbrevSerializer.class,
 		TurtleSerializer.class,
 		NTripleSerializer.class,
-		N3Serializer.class
+		N3Serializer.class,
+		JsonLdSerializer.class,
+		NQuadsSerializer.class,
+		TriGSerializer.class,
+		TriXSerializer.class,
+		RdfJsonSerializer.class,
+		RdfThriftSerializer.class,
+		RdfProtoSerializer.class
 	},
 	parsers={
 		RdfXmlParser.class,
 		TurtleParser.class,
 		NTripleParser.class,
-		N3Parser.class
+		N3Parser.class,
+		JsonLdParser.class,
+		NQuadsParser.class,
+		TriGParser.class,
+		TriXParser.class,
+		RdfJsonParser.class,
+		RdfThriftParser.class,
+		RdfProtoParser.class
 	}
 )
 public interface BasicUniversalJenaConfig extends BasicUniversalConfig {}

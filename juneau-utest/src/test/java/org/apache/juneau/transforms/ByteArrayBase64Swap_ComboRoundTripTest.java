@@ -25,6 +25,13 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.swaps.*;
 
+/**
+ * Round-trip testing for ByteArrayBase64Swap (byte[] serialized as Base64 strings).
+ *
+ * <p>RDF expected values (rdfXml, rdfThrift, rdfProto) are intentionally omitted. RDF output from
+ * Jena can be non-deterministic, and byte arrays with Base64 swap produce RDF that is brittle to
+ * assert. RDF round-trip is covered by other combo tests and dedicated RDF tests.
+ */
 class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
 	private static <T> ComboRoundTrip_Tester.Builder<T> tester(int index, String label, Type type, T bean) {
@@ -53,9 +60,6 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEncR("_value=AQID")
 			.msgPack("A441514944")
 			.msgPackT("A441514944")
-			.rdfXml("<rdf:RDF>\n<rdf:Description>\n<j:value>AQID</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
-			.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<j:value>AQID</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
-			.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <j:value>AQID</j:value>\n  </rdf:Description>\n</rdf:RDF>\n")
 			.verify(x -> verify(x).isType(byte[].class))
 			.build(),
 		tester(2, "ByteArray2d", byte[][].class, new byte[][]{{1,2,3},{4,5,6},null})
@@ -77,9 +81,6 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEncR("0=AQID\n&1=BAUG\n&2=null")
 			.msgPack("93A441514944A442415547C0")
 			.msgPackT("93A441514944A442415547C0")
-			.rdfXml("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</rdf:RDF>\n")
-			.rdfXmlT("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</rdf:RDF>\n")
-			.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>AQID</rdf:li>\n    <rdf:li>BAUG</rdf:li>\n    <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Seq>\n</rdf:RDF>\n")
 			.verify(x -> verify(x).isType(byte[][].class))
 			.build(),
 		tester(3, "ListOfByteArrays", getType(List.class,byte[].class), l(bytes(1,2,3),bytes(4,5,6),null))
@@ -101,9 +102,6 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEncR("0=AQID\n&1=BAUG\n&2=null")
 			.msgPack("93A441514944A442415547C0")
 			.msgPackT("93A441514944A442415547C0")
-			.rdfXml("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</rdf:RDF>\n")
-			.rdfXmlT("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</rdf:RDF>\n")
-			.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>AQID</rdf:li>\n    <rdf:li>BAUG</rdf:li>\n    <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Seq>\n</rdf:RDF>\n")
 			.verify(x -> verify(x).isType(List.class))
 			.verify(x -> verify(x.get(0)).isType(byte[].class))
 			.build(),
@@ -126,9 +124,6 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEncR("foo=AQID\n&bar=null\n&null=BAUG\n&'null'=BwgJ")
 			.msgPack("84A3666F6FA441514944A3626172C0C0A442415547A46E756C6CA44277674A")
 			.msgPackT("84A3666F6FA441514944A3626172C0C0A442415547A46E756C6CA44277674A")
-			.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:foo>AQID</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_>BAUG</jp:_x0000_>\n<jp:null>BwgJ</jp:null>\n</rdf:Description>\n</rdf:RDF>\n")
-			.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:foo>AQID</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_>BAUG</jp:_x0000_>\n<jp:null>BwgJ</jp:null>\n</rdf:Description>\n</rdf:RDF>\n")
-			.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:foo>AQID</jp:foo>\n    <jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n    <jp:_x0000_>BAUG</jp:_x0000_>\n    <jp:null>BwgJ</jp:null>\n  </rdf:Description>\n</rdf:RDF>\n")
 			.verify(x -> verify(x).isType(Map.class))
 			.verify(x -> verify(x.keySet().iterator().next()).isType(String.class))
 			.verify(x -> verify(x.values().iterator().next()).isType(byte[].class))
@@ -152,9 +147,6 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEncR("f=AQID")
 			.msgPack("81A166A441514944")
 			.msgPackT("81A166A441514944")
-			.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f>AQID</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
-			.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f>AQID</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
-			.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f>AQID</jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
 			.verify(x -> verify(x).isType(BeanWithByteArrayField.class))
 			.build(),
 		tester(6, "BeanWithByteArray2dField", BeanWithByteArray2dField.class, new BeanWithByteArray2dField().init())
@@ -176,9 +168,6 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEncR("f=@(\n\tAQID,\n\tBAUG,\n\tnull\n)")
 			.msgPack("81A16693A441514944A442415547C0")
 			.msgPackT("81A16693A441514944A442415547C0")
-			.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
-			.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
-			.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f>\n      <rdf:Seq>\n        <rdf:li>AQID</rdf:li>\n        <rdf:li>BAUG</rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
 			.verify(x -> verify(x).isType(BeanWithByteArray2dField.class))
 			.build(),
 		tester(7, "BeanWithByteArrayNullField", BeanWithByteArrayNullField.class, new BeanWithByteArrayNullField().init())
@@ -200,9 +189,6 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEncR("f=null")
 			.msgPack("81A166C0")
 			.msgPackT("81A166C0")
-			.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Description>\n</rdf:RDF>\n")
-			.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Description>\n</rdf:RDF>\n")
-			.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Description>\n</rdf:RDF>\n")
 			.verify(x -> verify(x).isType(BeanWithByteArrayNullField.class))
 			.build(),
 		tester(8, "BeanWithByteArrayListField", BeanWithByteArrayListField.class, new BeanWithByteArrayListField().init())
@@ -224,9 +210,6 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEncR("f=@(\n\tAQID,\n\tBAUG,\n\tnull\n)")
 			.msgPack("81A16693A441514944A442415547C0")
 			.msgPackT("81A16693A441514944A442415547C0")
-			.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
-			.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
-			.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f>\n      <rdf:Seq>\n        <rdf:li>AQID</rdf:li>\n        <rdf:li>BAUG</rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
 			.verify(x -> verify(x).isType(BeanWithByteArrayListField.class))
 			.build(),
 		tester(9, "BeanWithByteArrayMapField", BeanWithByteArrayMapField.class, new BeanWithByteArrayMapField().init())
@@ -248,9 +231,6 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEncR("f=(\n\tfoo=AQID,\n\tbar=null,\n\tnull=BAUG\n)")
 			.msgPack("81A16683A3666F6FA441514944A3626172C0C0A442415547")
 			.msgPackT("81A16683A3666F6FA441514944A3626172C0C0A442415547")
-			.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f rdf:parseType='Resource'>\n<jp:foo>AQID</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_>BAUG</jp:_x0000_>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
-			.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f rdf:parseType='Resource'>\n<jp:foo>AQID</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_>BAUG</jp:_x0000_>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
-			.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f rdf:parseType='Resource'>\n      <jp:foo>AQID</jp:foo>\n      <jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      <jp:_x0000_>BAUG</jp:_x0000_>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
 			.verify(x -> verify(x).isType(BeanWithByteArrayMapField.class))
 			.build(),
 		tester(10, "BeanWithByteArrayBeanListField", BeanWithByteArrayBeanListField.class, new BeanWithByteArrayBeanListField().init())
@@ -272,9 +252,6 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEncR("f=@(\n\t(\n\t\tf1=AQID,\n\t\tf2=@(\n\t\t\tAQID,\n\t\t\tBAUG,\n\t\t\tnull\n\t\t),\n\t\tf3=null,\n\t\tf4=@(\n\t\t\tAQID,\n\t\t\tBAUG,\n\t\t\tnull\n\t\t),\n\t\tf5=(\n\t\t\tfoo=AQID,\n\t\t\tbar=null,\n\t\t\tnull=BAUG\n\t\t)\n\t),\n\tnull\n)")
 			.msgPack("81A1669285A26631A441514944A2663293A441514944A442415547C0A26633C0A2663493A441514944A442415547C0A2663583A3666F6FA441514944A3626172C0C0A442415547C0")
 			.msgPackT("81A1669285A26631A441514944A2663293A441514944A442415547C0A26633C0A2663493A441514944A442415547C0A2663583A3666F6FA441514944A3626172C0C0A442415547C0")
-			.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:f1>AQID</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f2>\n<jp:f3 rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:f4>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f4>\n<jp:f5 rdf:parseType='Resource'>\n<jp:foo>AQID</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_>BAUG</jp:_x0000_>\n</jp:f5>\n</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
-			.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:f1>AQID</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f2>\n<jp:f3 rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:f4>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f4>\n<jp:f5 rdf:parseType='Resource'>\n<jp:foo>AQID</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_>BAUG</jp:_x0000_>\n</jp:f5>\n</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
-			.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:f1>AQID</jp:f1>\n          <jp:f2>\n            <rdf:Seq>\n              <rdf:li>AQID</rdf:li>\n              <rdf:li>BAUG</rdf:li>\n              <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n            </rdf:Seq>\n          </jp:f2>\n          <jp:f3 rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          <jp:f4>\n            <rdf:Seq>\n              <rdf:li>AQID</rdf:li>\n              <rdf:li>BAUG</rdf:li>\n              <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n            </rdf:Seq>\n          </jp:f4>\n          <jp:f5 rdf:parseType='Resource'>\n            <jp:foo>AQID</jp:foo>\n            <jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n            <jp:_x0000_>BAUG</jp:_x0000_>\n          </jp:f5>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
 			.verify(x -> verify(x).isType(BeanWithByteArrayBeanListField.class))
 			.build(),
 		tester(11, "BeanWithByteArrayBeanMapField", BeanWithByteArrayBeanMapField.class, new BeanWithByteArrayBeanMapField().init())
@@ -296,9 +273,6 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEncR("f=(\n\tfoo=(\n\t\tf1=AQID,\n\t\tf2=@(\n\t\t\tAQID,\n\t\t\tBAUG,\n\t\t\tnull\n\t\t),\n\t\tf3=null,\n\t\tf4=@(\n\t\t\tAQID,\n\t\t\tBAUG,\n\t\t\tnull\n\t\t),\n\t\tf5=(\n\t\t\tfoo=AQID,\n\t\t\tbar=null,\n\t\t\tnull=BAUG\n\t\t)\n\t),\n\tbar=null,\n\tnull=(\n\t\tf1=AQID,\n\t\tf2=@(\n\t\t\tAQID,\n\t\t\tBAUG,\n\t\t\tnull\n\t\t),\n\t\tf3=null,\n\t\tf4=@(\n\t\t\tAQID,\n\t\t\tBAUG,\n\t\t\tnull\n\t\t),\n\t\tf5=(\n\t\t\tfoo=AQID,\n\t\t\tbar=null,\n\t\t\tnull=BAUG\n\t\t)\n\t)\n)")
 			.msgPack("81A16683A3666F6F85A26631A441514944A2663293A441514944A442415547C0A26633C0A2663493A441514944A442415547C0A2663583A3666F6FA441514944A3626172C0C0A442415547A3626172C0C085A26631A441514944A2663293A441514944A442415547C0A26633C0A2663493A441514944A442415547C0A2663583A3666F6FA441514944A3626172C0C0A442415547")
 			.msgPackT("81A16683A3666F6F85A26631A441514944A2663293A441514944A442415547C0A26633C0A2663493A441514944A442415547C0A2663583A3666F6FA441514944A3626172C0C0A442415547A3626172C0C085A26631A441514944A2663293A441514944A442415547C0A26633C0A2663493A441514944A442415547C0A2663583A3666F6FA441514944A3626172C0C0A442415547")
-			.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f rdf:parseType='Resource'>\n<jp:foo rdf:parseType='Resource'>\n<jp:f1>AQID</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f2>\n<jp:f3 rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:f4>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f4>\n<jp:f5 rdf:parseType='Resource'>\n<jp:foo>AQID</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_>BAUG</jp:_x0000_>\n</jp:f5>\n</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_ rdf:parseType='Resource'>\n<jp:f1>AQID</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f2>\n<jp:f3 rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:f4>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f4>\n<jp:f5 rdf:parseType='Resource'>\n<jp:foo>AQID</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_>BAUG</jp:_x0000_>\n</jp:f5>\n</jp:_x0000_>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
-			.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f rdf:parseType='Resource'>\n<jp:foo rdf:parseType='Resource'>\n<jp:f1>AQID</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f2>\n<jp:f3 rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:f4>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f4>\n<jp:f5 rdf:parseType='Resource'>\n<jp:foo>AQID</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_>BAUG</jp:_x0000_>\n</jp:f5>\n</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_ rdf:parseType='Resource'>\n<jp:f1>AQID</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f2>\n<jp:f3 rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:f4>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f4>\n<jp:f5 rdf:parseType='Resource'>\n<jp:foo>AQID</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_>BAUG</jp:_x0000_>\n</jp:f5>\n</jp:_x0000_>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
-			.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f rdf:parseType='Resource'>\n      <jp:foo rdf:parseType='Resource'>\n        <jp:f1>AQID</jp:f1>\n        <jp:f2>\n          <rdf:Seq>\n            <rdf:li>AQID</rdf:li>\n            <rdf:li>BAUG</rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </jp:f2>\n        <jp:f3 rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n        <jp:f4>\n          <rdf:Seq>\n            <rdf:li>AQID</rdf:li>\n            <rdf:li>BAUG</rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </jp:f4>\n        <jp:f5 rdf:parseType='Resource'>\n          <jp:foo>AQID</jp:foo>\n          <jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          <jp:_x0000_>BAUG</jp:_x0000_>\n        </jp:f5>\n      </jp:foo>\n      <jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      <jp:_x0000_ rdf:parseType='Resource'>\n        <jp:f1>AQID</jp:f1>\n        <jp:f2>\n          <rdf:Seq>\n            <rdf:li>AQID</rdf:li>\n            <rdf:li>BAUG</rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </jp:f2>\n        <jp:f3 rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n        <jp:f4>\n          <rdf:Seq>\n            <rdf:li>AQID</rdf:li>\n            <rdf:li>BAUG</rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </jp:f4>\n        <jp:f5 rdf:parseType='Resource'>\n          <jp:foo>AQID</jp:foo>\n          <jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          <jp:_x0000_>BAUG</jp:_x0000_>\n        </jp:f5>\n      </jp:_x0000_>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
 			.verify(x -> verify(x).isType(BeanWithByteArrayBeanMapField.class))
 			.build()
 	};

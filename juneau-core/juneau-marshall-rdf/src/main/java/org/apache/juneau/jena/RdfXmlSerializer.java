@@ -17,7 +17,26 @@
 package org.apache.juneau.jena;
 
 /**
- * Subclass of {@link RdfSerializer} for serializing RDF in standard XML notation.
+ * Subclass of {@link RdfSerializer} for serializing POJOs to RDF/XML (standard XML notation).
+ *
+ * <p>
+ * Produces human-readable RDF/XML output suitable for interchange and debugging.
+ *
+ * <h5 class='figure'>Examples:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Serialize a bean to RDF/XML string.</jc>
+ * 	Person <jv>person</jv> = <jk>new</jk> Person(<js>"Alice"</js>, 30);
+ * 	String <jv>rdfXml</jv> = RdfXmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>person</jv>);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Or use the RdfXml marshaller for convenience.</jc>
+ * 	String <jv>rdfXml</jv> = RdfXml.<jsf>DEFAULT</jsf>.write(<jv>person</jv>);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Custom serializer with swaps.</jc>
+ * 	RdfXmlSerializer <jv>s</jv> = RdfXmlSerializer.create().swaps(DateSwap.<jk>class</jk>).build();
+ * 	String <jv>rdfXml</jv> = <jv>s</jv>.serialize(<jv>bean</jv>);
+ * </p>
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.

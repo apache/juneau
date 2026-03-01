@@ -39,7 +39,8 @@ import org.apache.juneau.svl.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
 
-import com.hp.hpl.jena.rdf.model.*;
+import org.apache.jena.rdf.model.*;
+import org.apache.jena.riot.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link RdfSerializer}.
@@ -209,6 +210,11 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		.add("N3-TRIPLES", "n3.")
 		.add("TURTLE", "n3.")
 		.add("N-TRIPLE", "ntriple.")
+		.add("JSON-LD", "jsonLd.")
+		.add("N-QUADS", "nquads.")
+		.add("TRIG", "trig.")
+		.add("TRIX", "trix.")
+		.add("RDF/JSON", "rdfJson.")
 		.build();
 	// @formatter:on
 
@@ -225,7 +231,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 
 	private final Model model;
 	private final Property pRoot, pValue;
-	private final RDFWriter writer;
+	private final Lang lang;
 	private final RdfSerializer ctx;
 	private final Namespace[] namespaces;
 
@@ -246,23 +252,31 @@ public class RdfSerializerSession extends WriterSerializerSession {
 			addModelPrefix(ns);
 		pRoot = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_ROOT);
 		pValue = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_VALUE);
-		writer = model.getWriter(ctx.getLanguage());
 
-		// Only apply properties with this prefix!
-		var propPrefix = LANG_PROP_MAP.get(ctx.getLanguage());
-		if (propPrefix == null)
-			throw rex("Unknown RDF language encountered: ''{0}''", ctx.getLanguage());
+		// Map legacy language names to RIOT Lang (e.g. "N-TRIPLE" -> NTRIPLES)
+		var langName = ctx.getLanguage();
+		lang = toLang(langName);
+		if (lang == null)
+			throw rex("Unknown RDF language encountered: ''{0}''", langName);
+	}
 
-		// RDF/XML specific properties.
-		if (propPrefix.equals("rdfXml.")) {
-			writer.setProperty("tab", isUseWhitespace() ? 2 : 0);
-			writer.setProperty("attributeQuoteChar", Character.toString(getQuoteChar()));
-		}
-
-		ctx.getJenaSettings().forEach((k, v) -> {
-			if (k.startsWith(propPrefix, 5))
-				writer.setProperty(k.substring(5 + propPrefix.length()), v);
-		});
+	private static Lang toLang(String langName) {
+		var lang = RDFLanguages.nameToLang(langName);
+		if (lang != null)
+			return lang;
+		// Legacy and alternate name mappings
+		return switch (langName) {
+			case "N-TRIPLE" -> Lang.NTRIPLES;
+			case "RDF/XML-ABBREV" -> Lang.RDFXML;
+			case "JSON-LD" -> Lang.JSONLD;
+			case "N-QUADS" -> Lang.NQUADS;
+			case "TRIG" -> Lang.TRIG;
+			case "TRIX" -> Lang.TRIX;
+			case "RDF/JSON" -> Lang.RDFJSON;
+			case "RDF/THRIFT" -> Lang.RDFTHRIFT;
+			case "RDF/PROTO" -> Lang.RDFPROTO;
+			default -> null;
+		};
 	}
 
 	/*
@@ -400,7 +414,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		} else if (sType.isBean()) {
 			var bm = toBeanMap(o);
 			var uri = (Object)null;
-			RdfBeanMeta rbm = getRdfBeanMeta(o2.getMeta());
+			RdfBeanMeta rbm = getRdfBeanMeta(bm.getMeta());
 			if (rbm.hasBeanUri())
 				uri = rbm.getBeanUriProperty().get(bm, null);
 			String uri2 = getUri(uri, null);
@@ -497,7 +511,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		var keyType = type.getKeyType();
 		var valueType = type.getValueType();
 
-		ArrayList<Map.Entry<Object,Object>> l = CollectionUtils.toList(m.entrySet());
+		List<Map.Entry<Object,Object>> l = CollectionUtils.toList(m.entrySet());
 		Collections.reverse(l);
 		l.forEach(x -> {
 			Object value = x.getValue();
@@ -544,6 +558,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	@SuppressWarnings({
+		"deprecation", // RDFWriter.output(Writer) - RDF uses UTF-8
 		"resource" // Resource management handled by Serializer
 	})
 	@Override /* Overridden from Serializer */
@@ -568,7 +583,12 @@ public class RdfSerializerSession extends WriterSerializerSession {
 				r.addProperty(pRoot, "true");
 		}
 
-		writer.write(model, out.getWriter(), "http://unknown/");
+		// Use RDFWriter - build() returns RDFWriter which has output(Writer)
+		org.apache.jena.riot.RDFWriter.create()
+			.source(model)
+			.lang(lang)
+			.build()
+			.output(out.getWriter());
 	}
 
 	/**

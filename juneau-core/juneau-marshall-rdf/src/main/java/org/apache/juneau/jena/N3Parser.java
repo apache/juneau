@@ -17,7 +17,27 @@
 package org.apache.juneau.jena;
 
 /**
- * Subclass of {@link RdfParser} for parsing RDF in N3 notation.
+ * Subclass of {@link RdfParser} for parsing N3 (Notation3) into POJOs.
+ *
+ * <p>
+ * Accepts RDF in Notation3 format and converts it to Java beans, maps, collections, and primitive
+ * types. Date/time literals are parsed via ISO 8601.
+ *
+ * <h5 class='figure'>Examples:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Parse N3 string into a bean.</jc>
+ * 	String <jv>n3</jv> = ...;  <jc>// N3 content</jc>
+ * 	Person <jv>person</jv> = N3Parser.<jsf>DEFAULT</jsf>.parse(<jv>n3</jv>, Person.<jk>class</jk>);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Or use the N3 marshaller for convenience.</jc>
+ * 	Person <jv>person</jv> = N3.<jsf>DEFAULT</jsf>.read(<jv>n3</jv>, Person.<jk>class</jk>);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Custom parser with swaps.</jc>
+ * 	N3Parser <jv>p</jv> = N3Parser.create().swaps(DateSwap.<jk>class</jk>).build();
+ * 	MyBean <jv>bean</jv> = <jv>p</jv>.parse(<jv>n3</jv>, MyBean.<jk>class</jk>);
+ * </p>
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.

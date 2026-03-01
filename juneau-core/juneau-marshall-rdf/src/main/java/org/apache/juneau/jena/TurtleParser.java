@@ -17,7 +17,31 @@
 package org.apache.juneau.jena;
 
 /**
- * Subclass of {@link RdfParser} for parsing RDF in Turtle notation.
+ * Subclass of {@link RdfParser} for parsing Turtle into POJOs.
+ *
+ * <p>
+ * Accepts RDF in W3C Turtle format and converts it to Java beans, maps, collections, and primitive
+ * types. Date/time literals are parsed via ISO 8601.
+ *
+ * <h5 class='figure'>Examples:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Parse Turtle string into a bean.</jc>
+ * 	String <jv>turtle</jv> = ...;  <jc>// Turtle content</jc>
+ * 	Person <jv>person</jv> = TurtleParser.<jsf>DEFAULT</jsf>.parse(<jv>turtle</jv>, Person.<jk>class</jk>);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Or use the Turtle marshaller for convenience.</jc>
+ * 	Person <jv>person</jv> = Turtle.<jsf>DEFAULT</jsf>.read(<jv>turtle</jv>, Person.<jk>class</jk>);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Parse into a list of beans.</jc>
+ * 	List&lt;Person&gt; <jv>people</jv> = TurtleParser.<jsf>DEFAULT</jsf>.parse(<jv>turtle</jv>, List.<jk>class</jk>, Person.<jk>class</jk>);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Custom parser with swaps.</jc>
+ * 	TurtleParser <jv>p</jv> = TurtleParser.create().swaps(DateSwap.<jk>class</jk>).build();
+ * 	MyBean <jv>bean</jv> = <jv>p</jv>.parse(<jv>turtle</jv>, MyBean.<jk>class</jk>);
+ * </p>
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.

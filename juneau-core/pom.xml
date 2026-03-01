@@ -33,6 +33,7 @@
 	<modules>
 		<module>juneau-commons</module>
 		<module>juneau-marshall</module>
+		<module>juneau-marshall-rdf</module>
 		<module>juneau-config</module>
 		<module>juneau-assertions</module>
 		<module>juneau-bct</module>

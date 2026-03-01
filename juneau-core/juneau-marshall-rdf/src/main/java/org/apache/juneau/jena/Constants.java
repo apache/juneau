@@ -40,6 +40,28 @@ public class Constants {
 
 	/** Jena language support: <js>"N3"</js>.*/
 	public static final String LANG_N3 = "N3";
+
+	/** Jena language support: <js>"JSON-LD"</js>.*/
+	public static final String LANG_JSONLD = "JSON-LD";
+
+	/** Jena language support: <js>"N-QUADS"</js>.*/
+	public static final String LANG_NQUADS = "N-QUADS";
+
+	/** Jena language support: <js>"TRIG"</js>.*/
+	public static final String LANG_TRIG = "TRIG";
+
+	/** Jena language support: <js>"TRIX"</js>.*/
+	public static final String LANG_TRIX = "TRIX";
+
+	/** Jena language support: <js>"RDF/JSON"</js>.*/
+	public static final String LANG_RDFJSON = "RDF/JSON";
+
+	/** Jena language support: <js>"RDF/THRIFT"</js> (binary).*/
+	public static final String LANG_RDFTHRIFT = "RDF/THRIFT";
+
+	/** Jena language support: <js>"RDF/PROTO"</js> (binary).*/
+	public static final String LANG_RDFPROTO = "RDF/PROTO";
+
 	/**
 	 * RDF property identifier <js>"items"</js>.
 	 *

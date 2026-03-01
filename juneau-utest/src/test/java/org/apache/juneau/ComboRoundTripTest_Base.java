@@ -508,6 +508,414 @@ public abstract class ComboRoundTripTest_Base extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// RDF/XML
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h21_serializeRdfXml(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("rdfXml");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h22_parseRdfXml(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("rdfXml");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h23_parseRdfXmlJsonEquivalency(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseJsonEquivalency("rdfXml");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h24_verifyRdfXml(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("rdfXml");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h25_serializeRdfXmlT(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("rdfXmlT");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h26_parseRdfXmlT(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("rdfXmlT");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h27_verifyRdfXmlT(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("rdfXmlT");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h28_serializeRdfXmlR(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("rdfXmlR");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h29_parseRdfXmlR(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("rdfXmlR");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h2a_verifyRdfXmlR(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("rdfXmlR");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// RDF/THRIFT
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h31_serializeRdfThrift(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("rdfThrift");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h32_parseRdfThrift(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("rdfThrift");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h33_parseRdfThriftJsonEquivalency(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseJsonEquivalency("rdfThrift");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h34_verifyRdfThrift(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("rdfThrift");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h35_serializeRdfThriftT(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("rdfThriftT");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h36_parseRdfThriftT(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("rdfThriftT");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h37_verifyRdfThriftT(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("rdfThriftT");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// RDF/PROTO
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h41_serializeRdfProto(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("rdfProto");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h42_parseRdfProto(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("rdfProto");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h43_parseRdfProtoJsonEquivalency(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseJsonEquivalency("rdfProto");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h44_verifyRdfProto(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("rdfProto");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h45_serializeRdfProtoT(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("rdfProtoT");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h46_parseRdfProtoT(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("rdfProtoT");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h47_verifyRdfProtoT(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("rdfProtoT");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// RDF/XML-ABBREV
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h51_serializeRdfXmlAbbrev(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("rdfXmlAbbrev");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h52_parseRdfXmlAbbrev(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("rdfXmlAbbrev");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h53_parseRdfXmlAbbrevJsonEquivalency(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseJsonEquivalency("rdfXmlAbbrev");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h54_verifyRdfXmlAbbrev(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("rdfXmlAbbrev");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// RDF/Turtle
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h61_serializeRdfTurtle(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("rdfTurtle");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h62_parseRdfTurtle(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("rdfTurtle");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h63_parseRdfTurtleJsonEquivalency(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseJsonEquivalency("rdfTurtle");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h64_verifyRdfTurtle(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("rdfTurtle");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// RDF/N3
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h71_serializeRdfN3(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("rdfN3");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h72_parseRdfN3(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("rdfN3");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h73_parseRdfN3JsonEquivalency(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseJsonEquivalency("rdfN3");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h74_verifyRdfN3(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("rdfN3");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// RDF/N-Triples
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h81_serializeRdfNtriple(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("rdfNtriple");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h82_parseRdfNtriple(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("rdfNtriple");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h83_parseRdfNtripleJsonEquivalency(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseJsonEquivalency("rdfNtriple");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h84_verifyRdfNtriple(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("rdfNtriple");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// RDF/N-Quads
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h91_serializeRdfNquads(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("rdfNquads");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h92_parseRdfNquads(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("rdfNquads");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h93_parseRdfNquadsJsonEquivalency(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseJsonEquivalency("rdfNquads");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h94_verifyRdfNquads(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("rdfNquads");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// RDF/TriG
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void ha1_serializeRdfTrig(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("rdfTrig");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void ha2_parseRdfTrig(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("rdfTrig");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void ha3_parseRdfTrigJsonEquivalency(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseJsonEquivalency("rdfTrig");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void ha4_verifyRdfTrig(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("rdfTrig");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// RDF/JSON-LD
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void hb1_serializeRdfJsonLd(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("rdfJsonLd");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void hb2_parseRdfJsonLd(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("rdfJsonLd");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void hb3_parseRdfJsonLdJsonEquivalency(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseJsonEquivalency("rdfJsonLd");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void hb4_verifyRdfJsonLd(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("rdfJsonLd");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// RDF/JSON
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void hc1_serializeRdfJson(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("rdfJson");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void hc2_parseRdfJson(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("rdfJson");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void hc3_parseRdfJsonJsonEquivalency(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseJsonEquivalency("rdfJson");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void hc4_verifyRdfJson(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("rdfJson");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// RDF/TriX
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void hd1_serializeRdfTriX(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("rdfTriX");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void hd2_parseRdfTriX(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("rdfTriX");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void hd3_parseRdfTriXJsonEquivalency(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseJsonEquivalency("rdfTriX");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void hd4_verifyRdfTriX(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("rdfTriX");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// CSV
 	//-----------------------------------------------------------------------------------------------------------------
 

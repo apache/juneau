@@ -29,6 +29,7 @@ import org.apache.juneau.commons.function.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.jena.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
@@ -102,6 +103,19 @@ public class ComboSerialize_Tester<T> {
 		public Builder<T> rdfXml(String value) { expected.put("rdfXml", value); return this; }
 		public Builder<T> rdfXmlT(String value) { expected.put("rdfXmlT", value); return this; }
 		public Builder<T> rdfXmlR(String value) { expected.put("rdfXmlR", value); return this; }
+		public Builder<T> rdfXmlAbbrev(String value) { expected.put("rdfXmlAbbrev", value); return this; }
+		public Builder<T> rdfTurtle(String value) { expected.put("rdfTurtle", value); return this; }
+		public Builder<T> rdfN3(String value) { expected.put("rdfN3", value); return this; }
+		public Builder<T> rdfNtriple(String value) { expected.put("rdfNtriple", value); return this; }
+		public Builder<T> rdfNquads(String value) { expected.put("rdfNquads", value); return this; }
+		public Builder<T> rdfTrig(String value) { expected.put("rdfTrig", value); return this; }
+		public Builder<T> rdfJsonLd(String value) { expected.put("rdfJsonLd", value); return this; }
+		public Builder<T> rdfJson(String value) { expected.put("rdfJson", value); return this; }
+		public Builder<T> rdfTriX(String value) { expected.put("rdfTriX", value); return this; }
+		public Builder<T> rdfThrift(String value) { expected.put("rdfThrift", value); return this; }
+		public Builder<T> rdfThriftT(String value) { expected.put("rdfThriftT", value); return this; }
+		public Builder<T> rdfProto(String value) { expected.put("rdfProto", value); return this; }
+		public Builder<T> rdfProtoT(String value) { expected.put("rdfProtoT", value); return this; }
 		public Builder<T> csv(String value) { expected.put("csv", value); return this; }
 		public Builder<T> yaml(String value) { expected.put("yaml", value); return this; }
 		public Builder<T> yamlT(String value) { expected.put("yamlT", value); return this; }
@@ -144,6 +158,22 @@ public class ComboSerialize_Tester<T> {
 		serializers.put("urlEncR", create(b, UrlEncodingSerializer.DEFAULT_READABLE.copy().addBeanTypes().addRootType()));
 		serializers.put("msgPack", create(b, MsgPackSerializer.create().addBeanTypes().addRootType()));
 		serializers.put("msgPackT", create(b, MsgPackSerializer.create().typePropertyName("t").addBeanTypes().addRootType()));
+		serializers.put("rdfXml", create(b, RdfXmlSerializer.create().addBeanTypes().addRootType()));
+		serializers.put("rdfXmlT", create(b, RdfXmlSerializer.create().typePropertyName("t").addBeanTypes().addRootType()));
+		serializers.put("rdfXmlR", create(b, RdfXmlSerializer.create().useWhitespace().addBeanTypes().addRootType()));
+		serializers.put("rdfXmlAbbrev", create(b, RdfXmlAbbrevSerializer.create().addBeanTypes().addRootType()));
+		serializers.put("rdfTurtle", create(b, TurtleSerializer.create().addBeanTypes().addRootType()));
+		serializers.put("rdfN3", create(b, N3Serializer.create().addBeanTypes().addRootType()));
+		serializers.put("rdfNtriple", create(b, NTripleSerializer.create().addBeanTypes().addRootType()));
+		serializers.put("rdfNquads", create(b, NQuadsSerializer.create().addBeanTypes().addRootType()));
+		serializers.put("rdfTrig", create(b, TriGSerializer.create().addBeanTypes().addRootType()));
+		serializers.put("rdfJsonLd", create(b, JsonLdSerializer.create().addBeanTypes().addRootType()));
+		serializers.put("rdfJson", create(b, RdfJsonSerializer.create().addBeanTypes().addRootType()));
+		serializers.put("rdfTriX", create(b, TriXSerializer.create().addBeanTypes().addRootType()));
+		serializers.put("rdfThrift", create(b, RdfThriftSerializer.create().addBeanTypes().addRootType()));
+		serializers.put("rdfThriftT", create(b, RdfThriftSerializer.create().typePropertyName("t").addBeanTypes().addRootType()));
+		serializers.put("rdfProto", create(b, RdfProtoSerializer.create().addBeanTypes().addRootType()));
+		serializers.put("rdfProtoT", create(b, RdfProtoSerializer.create().typePropertyName("t").addBeanTypes().addRootType()));
 		serializers.put("csv", create(b, CsvSerializer.create()));
 		serializers.put("yaml", create(b, YamlSerializer.DEFAULT.copy().addBeanTypes().addRootType()));
 		serializers.put("yamlT", create(b, YamlSerializer.create().typePropertyName("t").addBeanTypes().addRootType()));

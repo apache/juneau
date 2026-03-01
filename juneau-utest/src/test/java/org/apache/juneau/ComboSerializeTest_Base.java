@@ -235,6 +235,118 @@ public abstract class ComboSerializeTest_Base extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// RDF/XML
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h21_serializeRdfXml(ComboSerialize_Tester<?> t) throws Exception {
+		t.testSerialize("rdfXml");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h22_serializeRdfXmlT(ComboSerialize_Tester<?> t) throws Exception {
+		t.testSerialize("rdfXmlT");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h23_serializeRdfXmlR(ComboSerialize_Tester<?> t) throws Exception {
+		t.testSerialize("rdfXmlR");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// RDF/THRIFT
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h31_serializeRdfThrift(ComboSerialize_Tester<?> t) throws Exception {
+		t.testSerialize("rdfThrift");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h32_serializeRdfThriftT(ComboSerialize_Tester<?> t) throws Exception {
+		t.testSerialize("rdfThriftT");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// RDF/PROTO
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h41_serializeRdfProto(ComboSerialize_Tester<?> t) throws Exception {
+		t.testSerialize("rdfProto");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h42_serializeRdfProtoT(ComboSerialize_Tester<?> t) throws Exception {
+		t.testSerialize("rdfProtoT");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// RDF/XML-ABBREV, Turtle, N3, N-Triples, N-Quads, TriG, JSON-LD, RDF/JSON, TriX
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h51_serializeRdfXmlAbbrev(ComboSerialize_Tester<?> t) throws Exception {
+		t.testSerialize("rdfXmlAbbrev");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h52_serializeRdfTurtle(ComboSerialize_Tester<?> t) throws Exception {
+		t.testSerialize("rdfTurtle");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h53_serializeRdfN3(ComboSerialize_Tester<?> t) throws Exception {
+		t.testSerialize("rdfN3");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h54_serializeRdfNtriple(ComboSerialize_Tester<?> t) throws Exception {
+		t.testSerialize("rdfNtriple");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h55_serializeRdfNquads(ComboSerialize_Tester<?> t) throws Exception {
+		t.testSerialize("rdfNquads");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h56_serializeRdfTrig(ComboSerialize_Tester<?> t) throws Exception {
+		t.testSerialize("rdfTrig");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h57_serializeRdfJsonLd(ComboSerialize_Tester<?> t) throws Exception {
+		t.testSerialize("rdfJsonLd");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h58_serializeRdfJson(ComboSerialize_Tester<?> t) throws Exception {
+		t.testSerialize("rdfJson");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void h59_serializeRdfTriX(ComboSerialize_Tester<?> t) throws Exception {
+		t.testSerialize("rdfTriX");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// CSV
 	//-----------------------------------------------------------------------------------------------------------------
 

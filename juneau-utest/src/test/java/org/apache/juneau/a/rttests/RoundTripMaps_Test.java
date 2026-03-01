@@ -25,6 +25,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.serializer.*;
@@ -113,16 +114,64 @@ class RoundTripMaps_Test extends TestBase {
 			.serializer(MsgPackSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(MsgPackParser.create())
 			.build(),
-		tester(16, "Json schema")
+		tester(16, "RdfXml")
+			.serializer(RdfXmlSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(RdfXmlParser.create())
+			.build(),
+		tester(17, "RdfThrift")
+			.serializer(RdfThriftSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(RdfThriftParser.create())
+			.build(),
+		tester(18, "RdfProto")
+			.serializer(RdfProtoSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(RdfProtoParser.create())
+			.build(),
+		tester(19, "RdfXmlAbbrev")
+			.serializer(RdfXmlAbbrevSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(RdfXmlParser.create())
+			.build(),
+		tester(20, "RdfTurtle")
+			.serializer(TurtleSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(TurtleParser.create())
+			.build(),
+		tester(21, "RdfN3")
+			.serializer(N3Serializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(N3Parser.create())
+			.build(),
+		tester(22, "RdfNtriple")
+			.serializer(NTripleSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(NTripleParser.create())
+			.build(),
+		tester(23, "RdfNquads")
+			.serializer(NQuadsSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(NQuadsParser.create())
+			.build(),
+		tester(24, "RdfTrig")
+			.serializer(TriGSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(TriGParser.create())
+			.build(),
+		tester(25, "RdfJsonLd")
+			.serializer(JsonLdSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(JsonLdParser.create())
+			.build(),
+		tester(26, "RdfJson")
+			.serializer(RdfJsonSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(RdfJsonParser.create())
+			.build(),
+		tester(27, "RdfTriX")
+			.serializer(TriXSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(TriXParser.create())
+			.build(),
+		tester(28, "Json schema")
 			.serializer(JsonSchemaSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.returnOriginalObject()
 			.build(),
-		tester(17, "Yaml - default")
+		tester(29, "Yaml - default")
 			.serializer(YamlSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(YamlParser.create())
 			.skipIf(o -> o instanceof java.util.HashMap)
 			.build(),
-		tester(18, "Csv - default")
+		tester(30, "Csv - default")
 			.serializer(CsvSerializer.create().keepNullProperties())
 			.skipIf(o -> o == null || (o.getClass().isArray() && o.getClass().getComponentType().isPrimitive()))
 			.returnOriginalObject()

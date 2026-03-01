@@ -17,7 +17,27 @@
 package org.apache.juneau.jena;
 
 /**
- * Subclass of {@link RdfSerializer} for serializing RDF in N3 notation.
+ * Subclass of {@link RdfSerializer} for serializing POJOs to N3 (Notation3) format.
+ *
+ * <p>
+ * Produces RDF in Notation3 syntax, a compact, readable format that extends Turtle with additional
+ * features such as formulas and variables.
+ *
+ * <h5 class='figure'>Examples:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Serialize a bean to N3 string.</jc>
+ * 	Person <jv>person</jv> = <jk>new</jk> Person(<js>"Alice"</js>, 30);
+ * 	String <jv>n3</jv> = N3Serializer.<jsf>DEFAULT</jsf>.serialize(<jv>person</jv>);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Or use the N3 marshaller for convenience.</jc>
+ * 	String <jv>n3</jv> = N3.<jsf>DEFAULT</jsf>.write(<jv>person</jv>);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Custom serializer with swaps.</jc>
+ * 	N3Serializer <jv>s</jv> = N3Serializer.create().swaps(DateSwap.<jk>class</jk>).build();
+ * 	String <jv>n3</jv> = <jv>s</jv>.serialize(<jv>bean</jv>);
+ * </p>
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.

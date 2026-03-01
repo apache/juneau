@@ -59,7 +59,8 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S100", // RDF method names (getRdfXml, isXmlLang, etc.) use domain-specific casing
+	"java:S115"  // Constants use UPPER_snakeCase convention
 })
 public class RdfParser extends ReaderParser implements RdfMetaProvider {
 
@@ -82,15 +83,14 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 
 		private static final Cache<HashKey,RdfParser> CACHE = Cache.of(HashKey.class, RdfParser.class).build();
 
-		// @formatter:off
-		private static final Namespace
-			DEFAULT_JUNEAU_NS = Namespace.of("j", "http://www.apache.org/juneau/"),
-			DEFAULT_JUNEAUBP_NS = Namespace.of("jp", "http://www.apache.org/juneaubp/");
-		// @formatter:on
+		private static final Namespace DEFAULT_JUNEAU_NS = Namespace.of("j", "http://www.apache.org/juneau/");
+		private static final Namespace DEFAULT_JUNEAUBP_NS = Namespace.of("jp", "http://www.apache.org/juneaubp/");
 
-		boolean trimWhitespace, looseCollections;
+		boolean trimWhitespace;
+		boolean looseCollections;
 		String language;
-		Namespace juneauNs, juneauBpNs;
+		Namespace juneauNs;
+		Namespace juneauBpNs;
 		RdfCollectionFormat collectionFormat;
 		Map<String,Object> jenaSettings = new TreeMap<>();
 
@@ -1353,6 +1353,51 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			return language(Constants.LANG_TURTLE);
 		}
 
+		/**
+		 * Shortcut for calling <code>language(<jsf>LANG_JSONLD</jsf>)</code>.
+		 *
+		 * @return This object.
+		 */
+		public Builder jsonLd() {
+			return language(Constants.LANG_JSONLD);
+		}
+
+		/**
+		 * Shortcut for calling <code>language(<jsf>LANG_NQUADS</jsf>)</code>.
+		 *
+		 * @return This object.
+		 */
+		public Builder nQuads() {
+			return language(Constants.LANG_NQUADS);
+		}
+
+		/**
+		 * Shortcut for calling <code>language(<jsf>LANG_TRIG</jsf>)</code>.
+		 *
+		 * @return This object.
+		 */
+		public Builder triG() {
+			return language(Constants.LANG_TRIG);
+		}
+
+		/**
+		 * Shortcut for calling <code>language(<jsf>LANG_TRIX</jsf>)</code>.
+		 *
+		 * @return This object.
+		 */
+		public Builder triX() {
+			return language(Constants.LANG_TRIX);
+		}
+
+		/**
+		 * Shortcut for calling <code>language(<jsf>LANG_RDFJSON</jsf>)</code>.
+		 *
+		 * @return This object.
+		 */
+		public Builder rdfJson() {
+			return language(Constants.LANG_RDFJSON);
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder type(Class<? extends org.apache.juneau.Context> value) {
 			super.type(value);
@@ -1445,6 +1490,11 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			case "N3-PLAIN" -> "text/n3-plain";
 			case "N3-TRIPLES" -> "text/n3-triples";
 			case "TURTLE" -> "text/turtle";
+			case "JSON-LD" -> "application/ld+json";
+			case "N-QUADS" -> "application/n-quads";
+			case "TRIG" -> "application/trig";
+			case "TRIX" -> "application/trix+xml";
+			case "RDF/JSON" -> "application/rdf+json";
 			default -> "text/xml+rdf";
 		};
 	}
@@ -1495,32 +1545,17 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 
 	@Override /* Overridden from RdfMetaProvider */
 	public RdfBeanMeta getRdfBeanMeta(BeanMeta<?> bm) {
-		RdfBeanMeta m = rdfBeanMetas.get(bm);
-		if (m == null) {
-			m = new RdfBeanMeta(bm, this);
-			rdfBeanMetas.put(bm, m);
-		}
-		return m;
+		return rdfBeanMetas.computeIfAbsent(bm, k -> new RdfBeanMeta(k, this));
 	}
 
 	@Override /* Overridden from RdfMetaProvider */
 	public RdfBeanPropertyMeta getRdfBeanPropertyMeta(BeanPropertyMeta bpm) {
-		RdfBeanPropertyMeta m = rdfBeanPropertyMetas.get(bpm);
-		if (m == null) {
-			m = new RdfBeanPropertyMeta(bpm.getDelegateFor(), this);
-			rdfBeanPropertyMetas.put(bpm, m);
-		}
-		return m;
+		return rdfBeanPropertyMetas.computeIfAbsent(bpm, k -> new RdfBeanPropertyMeta(k.getDelegateFor(), this));
 	}
 
 	@Override /* Overridden from RdfMetaProvider */
 	public RdfClassMeta getRdfClassMeta(ClassMeta<?> cm) {
-		RdfClassMeta m = rdfClassMetas.get(cm);
-		if (m == null) {
-			m = new RdfClassMeta(cm, this);
-			rdfClassMetas.put(cm, m);
-		}
-		return m;
+		return rdfClassMetas.computeIfAbsent(cm, k -> new RdfClassMeta(k, this));
 	}
 
 	@Override /* Overridden from Context */
@@ -1528,32 +1563,17 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 
 	@Override /* Overridden from XmlMetaProvider */
 	public XmlBeanMeta getXmlBeanMeta(BeanMeta<?> bm) {
-		XmlBeanMeta m = xmlBeanMetas.get(bm);
-		if (m == null) {
-			m = new XmlBeanMeta(bm, this);
-			xmlBeanMetas.put(bm, m);
-		}
-		return m;
+		return xmlBeanMetas.computeIfAbsent(bm, k -> new XmlBeanMeta(k, this));
 	}
 
 	@Override /* Overridden from XmlMetaProvider */
 	public XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
-		XmlBeanPropertyMeta m = xmlBeanPropertyMetas.get(bpm);
-		if (m == null) {
-			m = new XmlBeanPropertyMeta(bpm.getDelegateFor(), this);
-			xmlBeanPropertyMetas.put(bpm, m);
-		}
-		return m;
+		return xmlBeanPropertyMetas.computeIfAbsent(bpm, k -> new XmlBeanPropertyMeta(k.getDelegateFor(), this));
 	}
 
 	@Override /* Overridden from XmlMetaProvider */
 	public XmlClassMeta getXmlClassMeta(ClassMeta<?> cm) {
-		XmlClassMeta m = xmlClassMetas.get(cm);
-		if (m == null) {
-			m = new XmlClassMeta(cm, this);
-			xmlClassMetas.put(cm, m);
-		}
-		return m;
+		return xmlClassMetas.computeIfAbsent(cm, k -> new XmlClassMeta(k, this));
 	}
 
 	/**

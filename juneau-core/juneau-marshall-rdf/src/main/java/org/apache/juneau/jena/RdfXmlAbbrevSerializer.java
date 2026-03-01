@@ -17,7 +17,26 @@
 package org.apache.juneau.jena;
 
 /**
- * Subclass of {@link RdfParser} for parsing RDF in Abbreviated-XML notation.
+ * Subclass of {@link RdfSerializer} for serializing POJOs to RDF/XML-Abbrev (abbreviated XML notation).
+ *
+ * <p>
+ * Produces more compact RDF/XML output than {@link RdfXmlSerializer} by using XML abbreviation syntax.
+ *
+ * <h5 class='figure'>Examples:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Serialize a bean to abbreviated RDF/XML.</jc>
+ * 	Person <jv>person</jv> = <jk>new</jk> Person(<js>"Alice"</js>, 30);
+ * 	String <jv>rdfXml</jv> = RdfXmlAbbrevSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>person</jv>);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Or use the RdfXmlAbbrev marshaller for convenience.</jc>
+ * 	String <jv>rdfXml</jv> = RdfXmlAbbrev.<jsf>DEFAULT</jsf>.write(<jv>person</jv>);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Custom serializer.</jc>
+ * 	RdfXmlAbbrevSerializer <jv>s</jv> = RdfXmlAbbrevSerializer.create().swaps(DateSwap.<jk>class</jk>).build();
+ * 	String <jv>rdfXml</jv> = <jv>s</jv>.serialize(<jv>bean</jv>);
+ * </p>
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.

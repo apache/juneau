@@ -26,6 +26,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.uon.*;
@@ -81,11 +82,59 @@ class RoundTripAddClassAttrs_Test extends TestBase {
 			.serializer(MsgPackSerializer.create().addBeanTypes().addRootType())
 			.parser(MsgPackParser.create().disableInterfaceProxies())
 			.build(),
-		tester(10, "Yaml - default")
+		tester(10, "RdfXml - default")
+			.serializer(RdfXmlSerializer.create().addBeanTypes().addRootType())
+			.parser(RdfXmlParser.create().disableInterfaceProxies())
+			.build(),
+		tester(11, "RdfThrift - default")
+			.serializer(RdfThriftSerializer.create().addBeanTypes().addRootType())
+			.parser(RdfThriftParser.create().disableInterfaceProxies())
+			.build(),
+		tester(12, "RdfProto - default")
+			.serializer(RdfProtoSerializer.create().addBeanTypes().addRootType())
+			.parser(RdfProtoParser.create().disableInterfaceProxies())
+			.build(),
+		tester(13, "RdfXmlAbbrev - default")
+			.serializer(RdfXmlAbbrevSerializer.create().addBeanTypes().addRootType())
+			.parser(RdfXmlParser.create().disableInterfaceProxies())
+			.build(),
+		tester(14, "RdfTurtle - default")
+			.serializer(TurtleSerializer.create().addBeanTypes().addRootType())
+			.parser(TurtleParser.create().disableInterfaceProxies())
+			.build(),
+		tester(15, "RdfN3 - default")
+			.serializer(N3Serializer.create().addBeanTypes().addRootType())
+			.parser(N3Parser.create().disableInterfaceProxies())
+			.build(),
+		tester(16, "RdfNtriple - default")
+			.serializer(NTripleSerializer.create().addBeanTypes().addRootType())
+			.parser(NTripleParser.create().disableInterfaceProxies())
+			.build(),
+		tester(17, "RdfNquads - default")
+			.serializer(NQuadsSerializer.create().addBeanTypes().addRootType())
+			.parser(NQuadsParser.create().disableInterfaceProxies())
+			.build(),
+		tester(18, "RdfTrig - default")
+			.serializer(TriGSerializer.create().addBeanTypes().addRootType())
+			.parser(TriGParser.create().disableInterfaceProxies())
+			.build(),
+		tester(19, "RdfJsonLd - default")
+			.serializer(JsonLdSerializer.create().addBeanTypes().addRootType())
+			.parser(JsonLdParser.create().disableInterfaceProxies())
+			.build(),
+		tester(20, "RdfJson - default")
+			.serializer(RdfJsonSerializer.create().addBeanTypes().addRootType())
+			.parser(RdfJsonParser.create().disableInterfaceProxies())
+			.build(),
+		tester(21, "RdfTriX - default")
+			.serializer(TriXSerializer.create().addBeanTypes().addRootType())
+			.parser(TriXParser.create().disableInterfaceProxies())
+			.build(),
+		tester(22, "Yaml - default")
 			.serializer(YamlSerializer.create().addBeanTypes().addRootType())
 			.parser(YamlParser.create().disableInterfaceProxies())
 			.build(),
-		tester(11, "Csv - default")
+		tester(23, "Csv - default")
 			.serializer(CsvSerializer.create())
 			.skipIf(o -> o == null || (o.getClass().isArray() && o.getClass().getComponentType().isPrimitive()))
 			.returnOriginalObject()
@@ -98,6 +147,10 @@ class RoundTripAddClassAttrs_Test extends TestBase {
 
 	protected static RoundTrip_Tester.Builder tester(int index, String label) {
 		return RoundTrip_Tester.create(index, label).dictionary(A.class, B.class, C.class, D.class, E.class, F.class);
+	}
+
+	private static boolean isRdfStream(RoundTrip_Tester t) {
+		return t.getParser() instanceof RdfStreamParser;
 	}
 
 	//====================================================================================================
@@ -149,6 +202,9 @@ class RoundTripAddClassAttrs_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a02_beanArray(RoundTrip_Tester t) throws Exception {
+		if (isRdfStream(t))
+			return;
+
 		var x = a(new A("foo"));
 
 		x = t.roundTrip(x, A[].class);
@@ -168,6 +224,9 @@ class RoundTripAddClassAttrs_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a03_beanWithBeanProps(RoundTrip_Tester t) throws Exception {
+		if (isRdfStream(t))
+			return;
+
 		var x = new B("foo");
 		x = t.roundTrip(x, B.class);
 		assertBean(x, "f2a{f1},f2b{f1},f2c{f1},f2d{f1}", "{foo},{foo},{foo},{foo}");
@@ -227,6 +286,9 @@ class RoundTripAddClassAttrs_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a05_mapsWithoutTypeParams(RoundTrip_Tester t) throws Exception {
+		if (isRdfStream(t))
+			return;
+
 		var x = new D("foo");
 		x = t.roundTrip(x, D.class);
 		assertBean(x, "f4a{0{f1}},f4b{0{f1}},f4c{0{f1}},f4d{0{f1}}", "{{foo}},{{foo}},{{foo}},{{foo}}");
@@ -259,6 +321,9 @@ class RoundTripAddClassAttrs_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a06_beanWithListProps(RoundTrip_Tester t) throws Exception {
+		if (isRdfStream(t))
+			return;
+
 		var x = new E("foo");
 		x = t.roundTrip(x, E.class);
 		assertBean(x, "f5a{0{f1}},f5b{0{f1}},f5c{0{f1}},f5d{0{f1}}", "{{foo}},{{foo}},{{foo}},{{foo}}");
@@ -291,6 +356,9 @@ class RoundTripAddClassAttrs_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a07_beanWithListOfArraysProps(RoundTrip_Tester t) throws Exception {
+		if (isRdfStream(t))
+			return;
+
 		var x = new F("foo");
 		x = t.roundTrip(x, F.class);
 		assertBean(x, "f6a{0{0{f1}}},f6b{0{0{f1}}},f6c{0{0{f1}}},f6d{0{0{f1}}}", "{{{foo}}},{{{foo}}},{{{foo}}},{{{foo}}}");

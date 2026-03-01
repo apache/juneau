@@ -17,7 +17,27 @@
 package org.apache.juneau.jena;
 
 /**
- * Subclass of {@link RdfSerializer} for serializing RDF in Turtle notation.
+ * Subclass of {@link RdfSerializer} for serializing POJOs to Turtle format.
+ *
+ * <p>
+ * Produces compact, human-readable RDF in W3C Turtle syntax. Turtle is widely used for RDF
+ * interchange and is often more readable than RDF/XML.
+ *
+ * <h5 class='figure'>Examples:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Serialize a bean to Turtle string.</jc>
+ * 	Person <jv>person</jv> = <jk>new</jk> Person(<js>"Alice"</js>, 30);
+ * 	String <jv>turtle</jv> = TurtleSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>person</jv>);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Or use the Turtle marshaller for convenience.</jc>
+ * 	String <jv>turtle</jv> = Turtle.<jsf>DEFAULT</jsf>.write(<jv>person</jv>);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Custom serializer with swaps.</jc>
+ * 	TurtleSerializer <jv>s</jv> = TurtleSerializer.create().swaps(DateSwap.<jk>class</jk>).build();
+ * 	String <jv>turtle</jv> = <jv>s</jv>.serialize(<jv>bean</jv>);
+ * </p>
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
