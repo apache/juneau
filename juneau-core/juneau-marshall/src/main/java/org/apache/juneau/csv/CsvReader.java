@@ -39,6 +39,9 @@ import org.apache.juneau.parser.*;
  * 	<li class='note'>This class is not intended for external use.
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // CsvReader owns ParserReader; caller must close CsvReader
+})
 public class CsvReader implements Closeable {
 
 	private final ParserReader r;
@@ -90,7 +93,11 @@ public class CsvReader implements Closeable {
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws ParseException If the CSV is malformed (e.g. an unclosed quoted field).
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S1168", // null = end of input (distinct from empty row)
+		"java:S3776", // Cognitive complexity acceptable for CSV row parsing state machine
+		"java:S6541" // Brain method acceptable for CSV row parsing state machine
+	})
 	public List<String> readRow() throws IOException, ParseException {
 		if (eof)
 			return null;
@@ -121,7 +128,7 @@ public class CsvReader implements Closeable {
 
 			if (c == -1) {
 				eof = true;
-				fields.add(finalize(field));
+				fields.add(finishField(field));
 				return fields;
 			}
 
@@ -131,35 +138,35 @@ public class CsvReader implements Closeable {
 				int next = r.read();
 				if (next == -1) {
 					eof = true;
-					fields.add(finalize(field));
+					fields.add(finishField(field));
 					return fields;
 				} else if (next == delimiter) {
-					fields.add(finalize(field));
+					fields.add(finishField(field));
 					field = new StringBuilder();
 				} else if (next == '\r') {
 					int peek = r.read();
 					if (peek != '\n' && peek != -1)
 						r.unread();
-					fields.add(finalize(field));
+					fields.add(finishField(field));
 					return fields;
 				} else if (next == '\n') {
-					fields.add(finalize(field));
+					fields.add(finishField(field));
 					return fields;
 				} else {
 					// Lenient: treat extra content after closing quote as unquoted
 					field.append((char) next);
 				}
 			} else if (c == delimiter) {
-				fields.add(finalize(field));
+				fields.add(finishField(field));
 				field = new StringBuilder();
 			} else if (c == '\r') {
 				int next = r.read();
 				if (next != '\n' && next != -1)
 					r.unread();
-				fields.add(finalize(field));
+				fields.add(finishField(field));
 				return fields;
 			} else if (c == '\n') {
-				fields.add(finalize(field));
+				fields.add(finishField(field));
 				return fields;
 			} else {
 				field.append((char) c);
@@ -188,7 +195,7 @@ public class CsvReader implements Closeable {
 				int next = r.read();
 				if (next == quoteChar) {
 					// Doubled quote → literal quote
-					field.append((char) quoteChar);
+					field.append(quoteChar);
 				} else {
 					// Closing quote; push back the following character
 					if (next != -1)
@@ -201,7 +208,7 @@ public class CsvReader implements Closeable {
 		}
 	}
 
-	private String finalize(StringBuilder sb) {
+	private String finishField(StringBuilder sb) {
 		var s = sb.toString();
 		return trimStrings ? s.trim() : s;
 	}

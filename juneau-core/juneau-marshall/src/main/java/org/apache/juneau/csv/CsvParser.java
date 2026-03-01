@@ -36,32 +36,28 @@ import org.apache.juneau.parser.*;
  * Parses RFC 4180-compliant CSV into collections of beans, maps, or simple values. Each row becomes an
  * element; the header row defines column names.
  *
- * <h5 class='section'>Data Structures Incompatible with CSV (vs. JSON):</h5>
- * <p>
- * CSV is a flat, tabular format. Unlike {@link org.apache.juneau.json.JsonParser JSON}, which
- * parses nested structures and supports type discriminators, CSV cannot faithfully parse:
+ * <h5 class='section'>JSON Parity Features (opt-in):</h5>
  * <ul>
- *   <li><b>Raw primitive arrays</b> ({@code byte[]}, {@code int[]}, etc.) — Cells are strings; no
- *       unambiguous encoding. <i>JSON</i> parses arrays and base64-encoded bytes.
- *   <li><b>Nested beans</b> — Cannot reconstruct bean- or map-valued properties from flat columns.
- *       <i>JSON</i> parses nested objects directly.
- *   <li><b>Collections/arrays within beans</b> — Cannot parse {@code List&lt;X&gt;},
- *       {@code Map&lt;K,V&gt;}, or array properties from a single cell. <i>JSON</i> parses arrays
- *       and nested objects.
- *   <li><b>Generic type parameters</b> — No type discriminator. <i>JSON</i> uses {@code @type} when
- *       configured with {@code addBeanTypes().addRootType()}.
- *   <li><b>Parent/inherited properties</b> — Bean hierarchy cannot be reconstructed.
- *       <i>JSON</i> reconstructs flattened properties into the correct bean hierarchy.
- *   <li><b>Optional wrappers</b> — Round-trip may differ from tree formats. <i>JSON</i> handles
- *       Optional consistently.
- *   <li><b>Interface/abstract types</b> — No discriminator to select implementation. <i>JSON</i>
- *       uses {@code @type} with {@code implClass} mappings.
+ *   <li><b>Type discriminator</b> — Parse {@code _type} column when present; use {@link #beanDictionary(Class[])
+ *       beanDictionary()} for polymorphic types.
+ *   <li><b>Byte arrays</b> — {@link #byteArrayFormat(ByteArrayFormat) byteArrayFormat(BASE64)} or
+ *       {@code SEMICOLON_DELIMITED}; primitive arrays from {@code [1;2;3]}.
+ *   <li><b>Nested structures</b> — {@link #allowNestedStructures(boolean) allowNestedStructures(true)}
+ *       parses inline {@code {key:val}} and {@code [val;val]} in cells.
+ *   <li><b>Null marker</b> — {@link #nullValue(String) nullValue("&lt;NULL&gt;")} (default); cells
+ *       matching this are parsed as null.
+ * </ul>
+ *
+ * <h5 class='section'>Data Structures Not Supported:</h5>
+ * <ul>
+ *   <li><b>Parent/inherited properties</b> — Bean hierarchy cannot be reconstructed from flat columns.
+ *   <li><b>Optional wrappers</b> — Round-trip may differ from tree formats.
  * </ul>
  *
  * <h5 class='section'>Best Supported:</h5>
  * <p>
  * Parsing into {@link java.util.Collection} of flat beans or maps, or single beans/maps with simple
- * property types (primitives, strings, numbers, enums, dates).
+ * property types (primitives, strings, numbers, enums, dates, byte arrays, or nested structures when enabled).
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
@@ -83,11 +79,17 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 
 		private static final Cache<HashKey,CsvParser> CACHE = Cache.of(HashKey.class, CsvParser.class).build();
 
+		private ByteArrayFormat byteArrayFormat;
+		private boolean allowNestedStructures;
+		private String nullValue;
+
 		/**
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
 			consumes("text/csv");
+			byteArrayFormat = ByteArrayFormat.BASE64;
+			nullValue = "<NULL>";
 		}
 
 		/**
@@ -98,6 +100,9 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 		 */
 		protected Builder(Builder copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			byteArrayFormat = copyFrom.byteArrayFormat;
+			allowNestedStructures = copyFrom.allowNestedStructures;
+			nullValue = copyFrom.nullValue;
 		}
 
 		/**
@@ -108,6 +113,31 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 		 */
 		protected Builder(CsvParser copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			byteArrayFormat = copyFrom.byteArrayFormat;
+			allowNestedStructures = copyFrom.allowNestedStructures;
+			nullValue = copyFrom.nullValue;
+		}
+
+		/**
+		 * String that denotes null when parsing. Must match the serializer's nullValue.
+		 *
+		 * @param value The null marker string.
+		 * @return This object.
+		 */
+		public Builder nullValue(String value) {
+			nullValue = value;
+			return this;
+		}
+
+		/**
+		 * Enables parsing of inline {@code {key:val}} and {@code [val;val]} notation in cells.
+		 *
+		 * @param value Whether to allow nested structures.
+		 * @return This object.
+		 */
+		public Builder allowNestedStructures(boolean value) {
+			allowNestedStructures = value;
+			return this;
 		}
 
 		@Override /* Overridden from Builder */
@@ -143,6 +173,20 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 		@Override /* Overridden from Builder */
 		public Builder autoCloseStreams(boolean value) {
 			super.autoCloseStreams(value);
+			return this;
+		}
+
+		/**
+		 * Format for parsing {@code byte[]} arrays from CSV cells.
+		 *
+		 * <p>
+		 * Must match the format used by the serializer. Default is {@link ByteArrayFormat#BASE64}.
+		 *
+		 * @param value The format to use.
+		 * @return This object.
+		 */
+		public Builder byteArrayFormat(ByteArrayFormat value) {
+			byteArrayFormat = value;
 			return this;
 		}
 
@@ -288,6 +332,11 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 		public Builder beansRequireSettersForGetters() {
 			super.beansRequireSettersForGetters();
 			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(super.hashKey(), byteArrayFormat, allowNestedStructures, nullValue);
 		}
 
 		@Override /* Overridden from Context.Builder */
@@ -633,6 +682,9 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 
 	private final Map<ClassMeta<?>,CsvClassMeta> csvClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,CsvBeanPropertyMeta> csvBeanPropertyMetas = new ConcurrentHashMap<>();
+	private final ByteArrayFormat byteArrayFormat;
+	private final boolean allowNestedStructures;
+	private final String nullValue;
 
 	/**
 	 * Constructor.
@@ -641,6 +693,36 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 	 */
 	public CsvParser(Builder builder) {
 		super(builder);
+		byteArrayFormat = builder.byteArrayFormat != null ? builder.byteArrayFormat : ByteArrayFormat.BASE64;
+		allowNestedStructures = builder.allowNestedStructures;
+		nullValue = builder.nullValue != null ? builder.nullValue : "<NULL>";
+	}
+
+	/**
+	 * Returns the format for parsing {@code byte[]} arrays from CSV cells.
+	 *
+	 * @return The byte array format.
+	 */
+	public ByteArrayFormat getByteArrayFormat() {
+		return byteArrayFormat;
+	}
+
+	/**
+	 * Returns whether inline {@code {key:val}} and {@code [val;val]} notation parsing is enabled.
+	 *
+	 * @return Whether nested structures are allowed.
+	 */
+	public boolean isAllowNestedStructures() {
+		return allowNestedStructures;
+	}
+
+	/**
+	 * Returns the string that denotes null when parsing.
+	 *
+	 * @return The null marker.
+	 */
+	public String getNullValue() {
+		return nullValue;
 	}
 
 	@Override /* Overridden from Context */

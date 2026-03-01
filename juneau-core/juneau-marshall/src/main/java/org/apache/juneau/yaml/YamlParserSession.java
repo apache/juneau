@@ -29,7 +29,6 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.httppart.*;
@@ -46,6 +45,10 @@ import org.apache.juneau.utils.Iso8601Utils;
  */
 @SuppressWarnings({
 	"java:S125",  // State-machine and parse-path comments are documentation, not commented-out code
+	"java:S135",  // Multiple break/continue acceptable for YAML parsing state machines
+	"java:S2589", // State checks in error path - analyzer FP on state machine flow
+	"java:S2677", // r.read() return value intentionally ignored when consuming/skipping chars
+	"java:S3626", // Redundant jump acceptable for state machine clarity
 	"unchecked",
 	"rawtypes",
 	"resource"
@@ -181,6 +184,7 @@ public class YamlParserSession extends ReaderParserSession {
 		return new Builder(ctx);
 	}
 
+	@SuppressWarnings("unused") // Stored for API consistency with Builder.create(YamlParser)
 	private final YamlParser ctx;
 
 	/**
@@ -231,7 +235,8 @@ public class YamlParserSession extends ReaderParserSession {
 	}
 
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for parser dispatch
+		"java:S3776", // Cognitive complexity acceptable for parser dispatch
+		"java:S6541" // Brain method acceptable for parser dispatch
 	})
 	private <T> T parseAnything(ClassMeta<?> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
@@ -335,7 +340,7 @@ public class YamlParserSession extends ReaderParserSession {
 			o = convertToType(s, sType, eType, outer, pMeta);
 		} else if (c == '~') {
 			r.read(); // consume '~'
-			o = null;
+			// o remains null (initialized at line 255)
 		} else {
 			String s = parsePlainScalar(r, 0);
 			o = handlePlainScalar(s, r, sType, eType, builder, outer, pMeta, contentColumn > 0 ? contentColumn - 1 : 0);
@@ -350,9 +355,13 @@ public class YamlParserSession extends ReaderParserSession {
 		return (T)o;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"java:S107", // 8 parameters required for YAML scalar handling dispatch
+		"java:S3776", // Cognitive complexity acceptable for scalar type dispatch
+		"java:S6541" // Brain method acceptable for scalar handling
+	})
 	private <T> Object handleQuotedScalar(String s, ParserReader r, ClassMeta<?> sType, ClassMeta<?> eType, BuilderSwap<T,Object> builder, Object outer, BeanPropertyMeta pMeta, int keyIndent) throws IOException, ParseException, ExecutableException {
-		if (looksLikeMappingKey(s, r)) {
+		if (looksLikeMappingKey(r)) {
 			r.read(); // consume ':'
 			int cp = r.peek();
 			if (cp == ' ')
@@ -401,7 +410,11 @@ public class YamlParserSession extends ReaderParserSession {
 		return convertToType(s, sType, eType, outer, pMeta);
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"java:S107", // 8 parameters required for YAML scalar handling dispatch
+		"java:S3776", // Cognitive complexity acceptable for scalar type dispatch
+		"java:S6541" // Brain method acceptable for scalar handling
+	})
 	private <T> Object handlePlainScalar(String s, ParserReader r, ClassMeta<?> sType, ClassMeta<?> eType, BuilderSwap<T,Object> builder, Object outer, BeanPropertyMeta pMeta, int keyIndent) throws IOException, ParseException, ExecutableException {
 		if (s.isEmpty())
 			return null;
@@ -415,7 +428,7 @@ public class YamlParserSession extends ReaderParserSession {
 			return convertToType(s, sType, eType, outer, pMeta);
 		}
 
-		if (looksLikeMappingKey(s, r)) {
+		if (looksLikeMappingKey(r)) {
 			r.read(); // consume ':'
 			int cp = r.peek();
 			if (cp == ' ')
@@ -463,6 +476,9 @@ public class YamlParserSession extends ReaderParserSession {
 		return convertToType(s, sType, eType, outer, pMeta);
 	}
 
+	@SuppressWarnings({
+		"java:S1172" // eType, pMeta kept for API consistency with callers
+	})
 	private Object convertToType(String s, ClassMeta<?> sType, ClassMeta<?> eType, Object outer, BeanPropertyMeta pMeta) throws ParseException {
 		if (sType.isObject()) {
 			return resolveScalarType(trim(s));
@@ -483,12 +499,8 @@ public class YamlParserSession extends ReaderParserSession {
 		}
 	}
 
-	private boolean looksLikeMappingKey(String s, ParserReader r) throws IOException {
-		int c = r.peek();
-		if (c != ':')
-			return false;
-		// Peek past ':' to make sure it's followed by space, newline, or EOF (not part of value)
-		return true;
+	private static boolean looksLikeMappingKey(ParserReader r) throws IOException {
+		return r.peek() == ':';
 	}
 
 	private <K,V> void parseBlockMappingRemainder(ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta, int parentIndent) throws IOException, ParseException, ExecutableException {
@@ -518,7 +530,7 @@ public class YamlParserSession extends ReaderParserSession {
 		setCurrentProperty(null);
 	}
 
-	private boolean isNullBlockValue(ParserReader r, int blockIndent) throws IOException {
+	private static boolean isNullBlockValue(ParserReader r, int blockIndent) throws IOException {
 		int c = r.peek();
 		if (c == -1)
 			return true;
@@ -540,7 +552,7 @@ public class YamlParserSession extends ReaderParserSession {
 		return nextColumn <= blockIndent;
 	}
 
-	private int peekSecondChar(ParserReader r) throws IOException {
+	private static int peekSecondChar(ParserReader r) throws IOException {
 		r.read();
 		int c2 = r.peek();
 		r.unread();
@@ -554,7 +566,8 @@ public class YamlParserSession extends ReaderParserSession {
 		"java:S1168",
 		"java:S135",
 		"java:S2583",
-		"java:S3776"
+		"java:S3776",
+		"java:S6541" // Brain method acceptable for flow mapping state machine
 	})
 	private <K,V> Map<K,V> parseFlowMapping(ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
@@ -596,16 +609,14 @@ public class YamlParserSession extends ReaderParserSession {
 				else if (isWhitespace(c))
 					continue;
 			} else if (state == S4) {
-				if (isWhitespace(c)) {
+				if (isWhitespace(c))
 					continue;
-				} else {
-					r.unread();
-					K key = convertAttrToType(m, currKey, keyType);
-					V value = parseAnything(valueType, r, m, pMeta);
-					setName(valueType, value, key);
-					m.put(key, value);
-					state = S5;
-				}
+				r.unread();
+				K key = convertAttrToType(m, currKey, keyType);
+				V value = parseAnything(valueType, r, m, pMeta);
+				setName(valueType, value, key);
+				m.put(key, value);
+				state = S5;
 			} else if (state == S5) {
 				if (c == ',') {
 					state = S6;
@@ -653,7 +664,7 @@ public class YamlParserSession extends ReaderParserSession {
 		return parsePlainFlowKey(r);
 	}
 
-	private String parsePlainFlowKey(ParserReader r) throws IOException {
+	private static String parsePlainFlowKey(ParserReader r) throws IOException {
 		var sb = new StringBuilder();
 		int c;
 		while ((c = r.read()) != -1) {
@@ -742,6 +753,9 @@ public class YamlParserSession extends ReaderParserSession {
 	// ==========================================
 	// Block mapping
 	// ==========================================
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for block mapping parsing
+	})
 	private <K,V> Map<K,V> parseBlockMapping(ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta, int parentIndent) throws IOException, ParseException, ExecutableException {
 
 		if (keyType == null)
@@ -793,7 +807,7 @@ public class YamlParserSession extends ReaderParserSession {
 		return m;
 	}
 
-	private int skipBlanksAndCountIndent(ParserReader r) throws IOException {
+	private static int skipBlanksAndCountIndent(ParserReader r) throws IOException {
 		int indent = 0;
 		int c;
 		while ((c = r.read()) != -1) {
@@ -811,7 +825,7 @@ public class YamlParserSession extends ReaderParserSession {
 		return indent;
 	}
 
-	private void unreadSpaces(ParserReader r, int count) throws IOException {
+	private static void unreadSpaces(ParserReader r, int count) throws IOException {
 		for (int i = 0; i < count; i++)
 			r.unread();
 	}
@@ -861,7 +875,8 @@ public class YamlParserSession extends ReaderParserSession {
 	@SuppressWarnings({
 		"java:S1168",
 		"java:S2583",
-		"java:S3776"
+		"java:S3776",
+		"java:S6541" // Brain method acceptable for bean map flow state machine
 	})
 	private <T> BeanMap<T> parseIntoBeanMapFlow(ParserReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 
@@ -902,31 +917,29 @@ public class YamlParserSession extends ReaderParserSession {
 					else if (isWhitespace(c))
 						continue;
 				} else if (state == S4) {
-					if (isWhitespace(c)) {
+					if (isWhitespace(c))
 						continue;
-					} else {
-						if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
-							var pm = m.getPropertyMeta(currAttr);
-							setCurrentProperty(pm);
-							if (pm == null) {
-								onUnknownProperty(currAttr, m, parseAnything(object(), r.unread(), m.getBean(false), null));
-								unmark();
-							} else {
-								unmark();
-								var cm = pm.getClassMeta();
-								Object value = parseAnything(cm, r.unread(), m.getBean(false), pm);
-								setName(cm, value, currAttr);
-								try {
-									pm.set(m, currAttr, value);
-								} catch (BeanRuntimeException e) {
-									onBeanSetterException(pm, e);
-									throw e;
-								}
+					if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
+						var pm = m.getPropertyMeta(currAttr);
+						setCurrentProperty(pm);
+						if (pm == null) {
+							onUnknownProperty(currAttr, m, parseAnything(object(), r.unread(), m.getBean(false), null));
+							unmark();
+						} else {
+							unmark();
+							var cm = pm.getClassMeta();
+							Object value = parseAnything(cm, r.unread(), m.getBean(false), pm);
+							setName(cm, value, currAttr);
+							try {
+								pm.set(m, currAttr, value);
+							} catch (BeanRuntimeException e) {
+								onBeanSetterException(pm, e);
+								throw e;
 							}
-							setCurrentProperty(null);
 						}
-						state = S5;
+						setCurrentProperty(null);
 					}
+					state = S5;
 				} else if (state == S5) {
 					if (c == ',')
 						state = S2;
@@ -1034,6 +1047,9 @@ public class YamlParserSession extends ReaderParserSession {
 	// ==========================================
 	// Block sequence: - value\n- value\n...
 	// ==========================================
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for block sequence parsing
+	})
 	private <E> Collection<E> parseBlockSequence(ParserReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta, int parentIndent) throws IOException, ParseException, ExecutableException {
 
 		int blockIndent = -1;
@@ -1173,7 +1189,10 @@ public class YamlParserSession extends ReaderParserSession {
 	// ==========================================
 	// Plain scalar (unquoted)
 	// ==========================================
-	private String parsePlainScalar(ParserReader r, int indent) throws IOException {
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for plain scalar parsing
+	})
+	private static String parsePlainScalar(ParserReader r, int indent) throws IOException {
 		var sb = new StringBuilder();
 		int c;
 		while ((c = r.read()) != -1) {
@@ -1196,10 +1215,7 @@ public class YamlParserSession extends ReaderParserSession {
 					break;
 				}
 				sb.append((char)c);
-			} else if (c == ',' || c == '}' || c == ']') {
-				r.unread();
-				break;
-			} else if (c == '#' && sb.isEmpty()) {
+			} else if ((c == ',' || c == '}' || c == ']') || (c == '#' && sb.isEmpty())) {
 				r.unread();
 				break;
 			} else {
@@ -1218,7 +1234,8 @@ public class YamlParserSession extends ReaderParserSession {
 	// Block scalar: | or >
 	// ==========================================
 	@SuppressWarnings({
-		"java:S3776"
+		"java:S3776", // Cognitive complexity acceptable for block scalar parsing
+		"java:S6541" // Brain method acceptable for block scalar state machine
 	})
 	private String parseBlockScalar(ParserReader r, char indicator) throws IOException, ParseException {
 		r.read(); // consume '|' or '>'
@@ -1354,7 +1371,7 @@ public class YamlParserSession extends ReaderParserSession {
 	// Helper methods
 	// ==========================================
 
-	private void skipWhitespaceAndComments(ParserReader r) throws IOException {
+	private static void skipWhitespaceAndComments(ParserReader r) throws IOException {
 		int c;
 		while ((c = r.read()) != -1) {
 			if (c == '#') {
@@ -1370,7 +1387,7 @@ public class YamlParserSession extends ReaderParserSession {
 		}
 	}
 
-	private void skipDocumentMarker(ParserReader r) throws IOException {
+	private static void skipDocumentMarker(ParserReader r) throws IOException {
 		int c = r.peek();
 		if (c == '-') {
 			r.read();
@@ -1405,7 +1422,7 @@ public class YamlParserSession extends ReaderParserSession {
 		}
 	}
 
-	private void skipToEndOfLine(ParserReader r) throws IOException {
+	private static void skipToEndOfLine(ParserReader r) throws IOException {
 		int c;
 		while ((c = r.read()) != -1) {
 			if (c == '\n' || c == '\r')
@@ -1413,11 +1430,14 @@ public class YamlParserSession extends ReaderParserSession {
 		}
 	}
 
-	private boolean isWhitespace(int c) {
+	private static boolean isWhitespace(int c) {
 		return c == ' ' || c == '\t' || c == '\n' || c == '\r';
 	}
 
-	private Object resolveScalarType(String s) {
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for scalar type resolution
+	})
+	private static Object resolveScalarType(String s) {
 		if (s == null || "null".equals(s) || "~".equals(s) || s.isEmpty())
 			return null;
 		if ("true".equals(s) || "True".equals(s) || "TRUE".equals(s))
@@ -1425,32 +1445,38 @@ public class YamlParserSession extends ReaderParserSession {
 		if ("false".equals(s) || "False".equals(s) || "FALSE".equals(s))
 			return Boolean.FALSE;
 
-		// Try parsing as number
-		if (!s.isEmpty()) {
-			char first = s.charAt(0);
-			if (first == '-' || first == '+' || (first >= '0' && first <= '9') || first == '.') {
-				try {
-					if (s.contains(".") || s.contains("e") || s.contains("E")) {
-						Double d = Double.parseDouble(s);
-						if (!d.isInfinite() && !d.isNaN())
-							return d;
-					} else {
-						try {
-							return Integer.parseInt(s);
-						} catch (@SuppressWarnings("unused") NumberFormatException e2) {
-							try {
-								return Long.parseLong(s);
-							} catch (@SuppressWarnings("unused") NumberFormatException e3) {
-								// Fall through to string
-							}
-						}
-					}
-				} catch (@SuppressWarnings("unused") NumberFormatException e) {
-					// Fall through to string
-				}
+		Object num = tryParseNumber(s);
+		if (num != null)
+			return num;
+		return s;
+	}
+
+	private static Object tryParseNumber(String s) {
+		if (s.isEmpty())
+			return null;
+		char first = s.charAt(0);
+		if (first != '-' && first != '+' && (first < '0' || first > '9') && first != '.')
+			return null;
+		try {
+			if (s.contains(".") || s.contains("e") || s.contains("E")) {
+				Double d = Double.parseDouble(s);
+				return (!d.isInfinite() && !d.isNaN()) ? d : null;
+			}
+			return tryParseIntegerOrLong(s);
+		} catch (@SuppressWarnings("unused") NumberFormatException e) {
+			return null;
+		}
+	}
+
+	private static Object tryParseIntegerOrLong(String s) {
+		try {
+			return Integer.valueOf(s);
+		} catch (@SuppressWarnings("unused") NumberFormatException e) {
+			try {
+				return Long.valueOf(s);
+			} catch (@SuppressWarnings("unused") NumberFormatException e2) {
+				return null;
 			}
 		}
-
-		return s;
 	}
 }

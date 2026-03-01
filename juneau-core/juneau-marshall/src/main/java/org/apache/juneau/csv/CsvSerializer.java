@@ -37,30 +37,27 @@ import org.apache.juneau.serializer.*;
  * becomes a row and bean properties become columns. The first row typically contains column headers derived
  * from bean property names.
  *
- * <h5 class='section'>Data Structures Incompatible with CSV (vs. JSON):</h5>
- * <p>
- * CSV is a flat, tabular format. Unlike {@link org.apache.juneau.json.JsonSerializer JSON}, which
- * supports nested objects, arrays, and type discriminators, CSV cannot faithfully represent:
+ * <h5 class='section'>JSON Parity Features (opt-in):</h5>
  * <ul>
- *   <li><b>Raw primitive arrays</b> ({@code byte[]}, {@code int[]}, etc.) — Serialize as
- *       {@code Object.toString()} (e.g. {@code [B@12345}). <i>JSON</i> supports arrays natively
- *       and typically uses base64 for {@code byte[]}.
- *   <li><b>Nested beans</b> — Flatten to a single row; structure is lost. <i>JSON</i> preserves
- *       nested objects naturally ({@code {"a":{"b":"c"}}}).
- *   <li><b>Collections/arrays within beans</b> — {@code List&lt;X&gt;}, {@code Map&lt;K,V&gt;}, and
- *       array properties serialize as {@code toString()}; they cannot be parsed back. <i>JSON</i>
- *       supports arrays and objects as first-class values.
- *   <li><b>Generic type preservation</b> — No type discriminator. <i>JSON</i> can add {@code @type}
- *       via {@code addBeanTypes().addRootType()}.
+ *   <li><b>Type discriminator</b> — {@link #addBeanTypes() addBeanTypes()}.{@link #addRootType() addRootType()}
+ *       adds a {@code _type} column for polymorphic parsing.
+ *   <li><b>Byte arrays</b> — {@link #byteArrayFormat(ByteArrayFormat) byteArrayFormat(BASE64)} (default) or
+ *       {@code SEMICOLON_DELIMITED} for {@code byte[]}; primitive arrays as {@code [1;2;3]}.
+ *   <li><b>Nested structures</b> — {@link #allowNestedStructures(boolean) allowNestedStructures(true)}
+ *       enables inline {@code {key:val}} and {@code [val;val]} in cells.
+ *   <li><b>Null marker</b> — {@link #nullValue(String) nullValue("&lt;NULL&gt;")} (default) for unambiguous null.
+ * </ul>
+ *
+ * <h5 class='section'>Data Structures Not Supported:</h5>
+ * <ul>
  *   <li><b>Parent/inherited properties</b> — Hierarchy flattens; may collide with child names.
- *       <i>JSON</i> serializes all properties in a single object without loss.
- *   <li><b>Optional wrappers</b> — May serialize as the inner value; round-trip differs from
- *       tree formats. <i>JSON</i> handles Optional consistently as value or null.
+ *   <li><b>Optional wrappers</b> — May serialize as the inner value; round-trip differs from tree formats.
  * </ul>
  *
  * <h5 class='section'>Best Supported:</h5>
  * <p>
- * Collections of flat beans or maps whose properties are primitives, strings, numbers, enums, or dates.
+ * Collections of flat beans or maps whose properties are primitives, strings, numbers, enums, dates,
+ * byte arrays, or (with {@code allowNestedStructures}) nested beans, maps, and lists.
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
@@ -83,11 +80,17 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 
 		private static final Cache<HashKey,CsvSerializer> CACHE = Cache.of(HashKey.class, CsvSerializer.class).build();
 
+		private ByteArrayFormat byteArrayFormat;
+		private boolean allowNestedStructures;
+		private String nullValue;
+
 		/**
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
 			produces("text/csv");
+			byteArrayFormat = ByteArrayFormat.BASE64;
+			nullValue = "<NULL>";
 		}
 
 		/**
@@ -98,6 +101,9 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 		 */
 		protected Builder(Builder copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			byteArrayFormat = copyFrom.byteArrayFormat;
+			allowNestedStructures = copyFrom.allowNestedStructures;
+			nullValue = copyFrom.nullValue;
 		}
 
 		/**
@@ -108,6 +114,34 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 		 */
 		protected Builder(CsvSerializer copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			byteArrayFormat = copyFrom.byteArrayFormat;
+			allowNestedStructures = copyFrom.allowNestedStructures;
+			nullValue = copyFrom.nullValue;
+		}
+
+		/**
+		 * String to write for null values. Parser treats cells matching this as null.
+		 *
+		 * <p>
+		 * Default is {@code <NULL>} to avoid confusion with the literal string {@code "null"}.
+		 *
+		 * @param value The null marker string.
+		 * @return This object.
+		 */
+		public Builder nullValue(String value) {
+			nullValue = value;
+			return this;
+		}
+
+		/**
+		 * Enables inline {@code {key:val}} and {@code [val;val]} notation in cells for nested beans, maps, and lists.
+		 *
+		 * @param value Whether to allow nested structures.
+		 * @return This object.
+		 */
+		public Builder allowNestedStructures(boolean value) {
+			allowNestedStructures = value;
+			return this;
 		}
 
 		@Override /* Overridden from Builder */
@@ -137,6 +171,20 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 		@Override /* Overridden from Builder */
 		public Builder addRootType(boolean value) {
 			super.addRootType(value);
+			return this;
+		}
+
+		/**
+		 * Format for serializing {@code byte[]} arrays in CSV cells.
+		 *
+		 * <p>
+		 * Default is {@link ByteArrayFormat#BASE64} (matches JSON).
+		 *
+		 * @param value The format to use.
+		 * @return This object.
+		 */
+		public Builder byteArrayFormat(ByteArrayFormat value) {
+			byteArrayFormat = value;
 			return this;
 		}
 
@@ -306,6 +354,11 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 		public Builder beansRequireSettersForGetters() {
 			super.beansRequireSettersForGetters();
 			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(super.hashKey(), byteArrayFormat, allowNestedStructures, nullValue);
 		}
 
 		@Override /* Overridden from Context.Builder */
@@ -777,6 +830,9 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 
 	private final Map<ClassMeta<?>,CsvClassMeta> csvClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,CsvBeanPropertyMeta> csvBeanPropertyMetas = new ConcurrentHashMap<>();
+	private final ByteArrayFormat byteArrayFormat;
+	private final boolean allowNestedStructures;
+	private final String nullValue;
 
 	/**
 	 * Constructor.
@@ -785,6 +841,36 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 	 */
 	public CsvSerializer(Builder builder) {
 		super(builder);
+		byteArrayFormat = builder.byteArrayFormat != null ? builder.byteArrayFormat : ByteArrayFormat.BASE64;
+		allowNestedStructures = builder.allowNestedStructures;
+		nullValue = builder.nullValue != null ? builder.nullValue : "<NULL>";
+	}
+
+	/**
+	 * Returns the format for serializing {@code byte[]} arrays in CSV cells.
+	 *
+	 * @return The byte array format.
+	 */
+	public ByteArrayFormat getByteArrayFormat() {
+		return byteArrayFormat;
+	}
+
+	/**
+	 * Returns whether inline {@code {key:val}} and {@code [val;val]} notation is enabled.
+	 *
+	 * @return Whether nested structures are allowed.
+	 */
+	public boolean isAllowNestedStructures() {
+		return allowNestedStructures;
+	}
+
+	/**
+	 * Returns the string written for null values.
+	 *
+	 * @return The null marker.
+	 */
+	public String getNullValue() {
+		return nullValue;
 	}
 
 	@Override /* Overridden from Context */

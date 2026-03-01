@@ -131,14 +131,17 @@ public abstract class RoundTripTest_Base extends TestBase {
 	 * Returns true if the object can be serialized to CSV without error.
 	 *
 	 * <p>
-	 * CSV can serialize any non-null input, but restricts to non-null, non-array inputs
-	 * to avoid serialization errors on raw byte arrays and similar types.
+	 * CSV supports byte[], primitive arrays ([1;2;3]), nested structures (when enabled),
+	 * and type discriminators. Only 2D+ primitive arrays are excluded.
 	 */
 	protected static boolean isCsvSerializableInput(Object o) {
 		if (o == null) return false;
 		var cls = o.getClass();
-		// Skip raw primitive arrays (byte[], char[], int[][], etc.) - they serialize as toString()
-		if (cls.isArray() && cls.getComponentType().isPrimitive()) return false;
+		// Skip 2D+ primitive arrays (int[][], etc.) - not supported
+		if (cls.isArray()) {
+			var ct = cls.getComponentType();
+			if (ct.isArray() && ct.getComponentType().isPrimitive()) return false;
+		}
 		return true;
 	}
 
@@ -146,17 +149,13 @@ public abstract class RoundTripTest_Base extends TestBase {
 	 * Returns true if the object can be faithfully round-tripped through CSV.
 	 *
 	 * <p>
-	 * CSV is tabular and only round-trips cleanly when:
-	 * <ul>
-	 *   <li>The object is a non-empty {@link Collection} of flat beans or Maps.
-	 *   <li>Primitive arrays, 2D arrays, scalar lists, and enum arrays are excluded
-	 *       because CSV cannot unambiguously represent them during parsing.
-	 * </ul>
+	 * CSV round-trips when the object is a non-empty {@link Collection} of flat beans or Maps
+	 * whose properties are primitives, strings, numbers, dates, byte arrays, or primitive arrays.
+	 * Nested structures require {@code allowNestedStructures(true)}.
 	 */
 	protected static boolean isCsvRoundTripCompatible(Object o) {
 		if (o == null)
 			return false;
-		// Only Collections are supported; reject raw arrays of any kind
 		if (!(o instanceof Collection<?> col))
 			return false;
 		if (col.isEmpty())
@@ -170,18 +169,19 @@ public abstract class RoundTripTest_Base extends TestBase {
 	private static boolean isCsvCompatibleElement(Object elem) {
 		if (elem == null) return false;
 		var cls = elem.getClass();
-		// Reject scalars, arrays, enums, Optional, and any type that isn't a bean or Map
-		if (cls.isPrimitive() || cls.isArray()) return false;
+		if (cls.isPrimitive()) return false;
 		if (elem instanceof Number || elem instanceof Boolean || elem instanceof Character) return false;
 		if (elem instanceof CharSequence || cls.isEnum()) return false;
 		if (elem instanceof java.util.Optional || elem instanceof Collection) return false;
-		// Accept Maps only if all values are also simple types
+		// 1D primitive arrays and byte[] are supported
+		if (cls.isArray()) {
+			var ct = cls.getComponentType();
+			return !ct.isArray(); // 1D arrays only
+		}
 		if (elem instanceof Map m) {
 			return m.values().stream().allMatch(v -> v == null || isCsvSimpleType(v.getClass()));
 		}
-		// Reject JDK types that are not beans
 		if (cls.getName().startsWith("java.") || cls.getName().startsWith("javax.")) return false;
-		// For POJO beans: only accept if all public fields have simple (flat) types
 		for (var field : cls.getFields()) {
 			if (!isCsvSimpleType(field.getType())) return false;
 		}
@@ -190,7 +190,7 @@ public abstract class RoundTripTest_Base extends TestBase {
 
 	private static boolean isCsvSimpleType(Class<?> t) {
 		if (t == null) return true;
-		return t.isPrimitive()
+		if (t.isPrimitive()
 			|| t == String.class
 			|| t == Boolean.class
 			|| t == Character.class
@@ -198,6 +198,13 @@ public abstract class RoundTripTest_Base extends TestBase {
 			|| t.isEnum()
 			|| java.time.temporal.Temporal.class.isAssignableFrom(t)
 			|| t == java.util.Date.class
-			|| t == java.util.Calendar.class;
+			|| t == java.util.Calendar.class)
+			return true;
+		// byte[] and primitive arrays [1;2;3]
+		if (t.isArray()) {
+			var ct = t.getComponentType();
+			return ct.isPrimitive() || ct == Byte.class;
+		}
+		return false;
 	}
 }

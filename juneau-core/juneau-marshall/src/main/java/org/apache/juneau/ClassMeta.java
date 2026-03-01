@@ -1440,7 +1440,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	}
 
 	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for List<ObjectSwap<T,?>>
+		"unchecked",   // Type erasure requires cast for List<ObjectSwap<T,?>>
+		"java:S3776"   // Cognitive complexity acceptable for swap resolution logic
 	})
 	private List<ObjectSwap<T,?>> findSwaps() {
 		if (beanContext == null)

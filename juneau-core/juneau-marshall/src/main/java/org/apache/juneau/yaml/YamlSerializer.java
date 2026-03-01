@@ -22,7 +22,6 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.*;
-import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;

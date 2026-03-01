@@ -120,7 +120,7 @@ class CsvParser_Test extends TestBase {
 	//====================================================================================================
 
 	@Test void d01_parseNullValues() throws Exception {
-		var csv = "b,c\nnull,1\nb2,null\n";
+		var csv = "b,c\n<NULL>,1\nb2,<NULL>\n";
 		var r = parseList(csv, B.class);
 		assertEquals(2, r.size());
 		assertNull(r.get(0).b);

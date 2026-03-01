@@ -483,7 +483,7 @@ public abstract class Context {
 		 * @param x The object to traverse (Class, ClassInfo, Method, or MethodInfo).
 		 * @return The work list.
 		 */
-		private AnnotationWorkList traverse(AnnotationWorkList work, Object x) {
+		private static AnnotationWorkList traverse(AnnotationWorkList work, Object x) {
 			var ap = AP;
 			CollectionUtils.traverse(x, y -> {
 				if (x instanceof Class<?> x2)

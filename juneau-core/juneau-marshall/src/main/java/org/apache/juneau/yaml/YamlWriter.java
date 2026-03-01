@@ -192,7 +192,7 @@ public class YamlWriter extends SerializerWriter {
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for YAML quoting checks
 	})
-	private boolean needsQuoting(String s) {
+	private static boolean needsQuoting(String s) {
 		if (s.isEmpty())
 			return true;
 

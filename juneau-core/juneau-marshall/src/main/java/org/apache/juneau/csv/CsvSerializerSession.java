@@ -18,6 +18,7 @@ package org.apache.juneau.csv;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -47,15 +48,32 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  */
+@SuppressWarnings({
+	"java:S110", // Inheritance depth acceptable for serializer session hierarchy
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., ARG_ctx)
+	"java:S3776", // Cognitive complexity acceptable for doSerialize, formatForCsvCell
+	"java:S6541", // Brain method acceptable for doSerialize, formatForCsvCell
+})
 public class CsvSerializerSession extends WriterSerializerSession {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
 
+	private final ByteArrayFormat byteArrayFormat;
+	private final boolean allowNestedStructures;
+	private final String nullValue;
+
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings({
+		"java:S110" // Inheritance depth acceptable for builder hierarchy
+	})
 	public static class Builder extends WriterSerializerSession.Builder {
+
+		private ByteArrayFormat byteArrayFormat;
+		private boolean allowNestedStructures;
+		private String nullValue;
 
 		/**
 		 * Constructor
@@ -65,6 +83,9 @@ public class CsvSerializerSession extends WriterSerializerSession {
 		 */
 		protected Builder(CsvSerializer ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));
+			byteArrayFormat = ctx.getByteArrayFormat();
+			allowNestedStructures = ctx.isAllowNestedStructures();
+			nullValue = ctx.getNullValue();
 		}
 
 		@Override /* Overridden from Builder */
@@ -199,6 +220,9 @@ public class CsvSerializerSession extends WriterSerializerSession {
 	 */
 	protected CsvSerializerSession(Builder builder) {
 		super(builder);
+		byteArrayFormat = builder.byteArrayFormat;
+		allowNestedStructures = builder.allowNestedStructures;
+		nullValue = builder.nullValue != null ? builder.nullValue : "<NULL>";
 	}
 
 	/**
@@ -235,15 +259,22 @@ public class CsvSerializerSession extends WriterSerializerSession {
 	@SuppressWarnings({
 		"rawtypes", // Raw types necessary for generic type handling
 		"unchecked", // Type erasure requires unchecked casts
+		"resource", // w is closed by try-with-resources; lambdas capture it
 	})
 	@Override /* Overridden from SerializerSession */
 	protected void doSerialize(SerializerPipe pipe, Object o) throws IOException, SerializeException {
-
-		try (var w = getCsvWriter(pipe)) {
-			var cm = getClassMetaForObject(o);
-			Collection<?> l = null;
-			if (cm.isArray()) {
-				l = l((Object[])o);
+		var cm = push2("root", o, getClassMetaForObject(o));
+		if (cm == null)
+			return;
+		try {
+			try (var w = getCsvWriter(pipe)) {
+				Collection<?> l = null;
+				if (cm.isArray()) {
+				// Primitive arrays and byte[] serialize as single row (value = [1;2;3] or base64)
+				if (o.getClass().getComponentType().isPrimitive())
+					l = Collections.singletonList(o);
+				else
+					l = l((Object[])o);
 			} else if (cm.isCollection()) {
 				l = (Collection<?>)o;
 			} else if (cm.isStreamable()) {
@@ -262,78 +293,148 @@ public class CsvSerializerSession extends WriterSerializerSession {
 				var firstRaw = firstOpt.get();
 				var firstEntry = applySwap(firstRaw, getClassMetaForObject(firstRaw));
 				var entryType = getClassMetaForObject(firstEntry);
+				// If swapped type is not a bean (e.g. interface proxy), use raw type for strategy
+				if (! entryType.isBean() && firstRaw != null) {
+					var rawType = getClassMetaForObject(firstRaw);
+					if (rawType.isBean())
+						entryType = rawType;
+				}
+
+				// Expected type for each element (for type discriminator)
+				var eType = cm.isArray() || cm.isCollection() || cm.isStreamable()
+					? cm.getElementType()
+					: getExpectedRootType(firstRaw);
+
+				// CSV is flat; when addBeanTypes or addRootType is set, add _type column to all rows
+				var addTypeColumn = isAddBeanTypes() || isAddRootType();
+				var typeColName = addTypeColumn ? getBeanTypePropertyName(entryType) : null;
 
 				// Determine the best representation strategy.
 				// Use the BeanMeta from the entry type for bean serialization.
 				var bm = entryType.isBean() ? entryType.getBeanMeta() : null;
 
 				if (bm != null) {
-					// Bean or DynaBean path: header row = property names
+					// Bean or DynaBean path: header row = property names + optional _type
 					var addComma = Flag.create();
 					bm.getProperties().values().stream().filter(BeanPropertyMeta::canRead).forEach(x -> {
 						addComma.ifSet(() -> w.w(',')).set();
 						w.writeEntry(x.getName());
 					});
+					// Always append _type when addBeanTypes or addRootType to support polymorphic parsing
+					if (addTypeColumn && ne(typeColName)) {
+						w.w(',');
+						w.writeEntry(typeColName);
+					}
 					w.append('\n');
 					var readableProps = bm.getProperties().values().stream().filter(BeanPropertyMeta::canRead).toList();
 					l.forEach(x -> {
 						var addComma2 = Flag.create();
 						if (x == null) {
-							// Null entry: write null for each column
+							// Null entry: write null marker for each column
 							readableProps.forEach(y -> {
 								addComma2.ifSet(() -> w.w(',')).set();
-								w.writeEntry(null);
+								w.writeEntry(nullValue);
 							});
+							if (addTypeColumn && ne(typeColName)) {
+								w.w(',');
+								w.writeEntry("");
+							}
 						} else {
 							// Apply swap before extracting bean properties (e.g. surrogate swaps)
 							var swapped = applySwap(x, getClassMetaForObject(x));
-							BeanMap<?> bean = toBeanMap(swapped);
+							var aType = getClassMetaForObject(swapped);
+							// When swap yields non-bean (e.g. String), use raw object for property extraction
+							var objForBean = aType.isBean() ? swapped : x;
+							BeanMap<?> bean = toBeanMap(objForBean);
 							readableProps.forEach(y -> {
 								addComma2.ifSet(() -> w.w(',')).set();
 								var value = y.get(bean, y.getName());
 								value = formatIfDateOrDuration(value);
+								value = formatForCsvCell(value);
 								// Use toString() to respect trimStrings setting on String values
 								if (value instanceof String s) value = toString(s);
-								w.writeEntry(value);
+								w.writeEntry(value != null ? value : nullValue);
 							});
+							if (addTypeColumn && ne(typeColName)) {
+								var typeName = getBeanTypeName(this, eType, aType, null);
+								w.w(',');
+								w.writeEntry(typeName != null ? typeName : "");
+							}
 						}
 						w.w('\n');
 					});
 				} else if (entryType.isMap()) {
-					// Map path: header row = map keys from the first entry
+					// Map path: header row = map keys from the first entry + optional _type
 					var addComma = Flag.create();
 					var first = (Map) firstEntry;
 					first.keySet().forEach(x -> {
 						addComma.ifSet(() -> w.w(',')).set();
 						// Apply trimStrings to map keys as well
-						w.writeEntry(x instanceof String s ? toString(s) : x);
+						Object keyVal;
+						if (x == null)
+							keyVal = nullValue;
+						else if (x instanceof String s)
+							keyVal = toString(s);
+						else
+							keyVal = x;
+						w.writeEntry(keyVal);
 					});
+					if (addTypeColumn && ne(typeColName)) {
+						w.w(',');
+						w.writeEntry(typeColName);
+					}
 					w.append('\n');
 					l.forEach(x -> {
 						var addComma2 = Flag.create();
 						var swapped = applySwap(x, getClassMetaForObject(x));
+						var aType = getClassMetaForObject(swapped);
 						var map = (Map) swapped;
 						map.values().forEach(y -> {
 							addComma2.ifSet(() -> w.w(',')).set();
 							var value = applySwap(y, getClassMetaForObject(y));
+							value = formatForCsvCell(value);
 							// Apply trimStrings to map values
 							if (value instanceof String s) value = toString(s);
-							w.writeEntry(value);
+							w.writeEntry(value != null ? value : nullValue);
 						});
+						if (addTypeColumn && ne(typeColName)) {
+							var typeName = getBeanTypeName(this, eType, aType, null);
+							w.w(',');
+							w.writeEntry(typeName != null ? typeName : "");
+						}
 						w.w('\n');
 					});
 				} else {
-					// Simple value path: single "value" column
+					// Simple value path: single "value" column + optional _type
 					w.writeEntry("value");
+					if (addTypeColumn && ne(typeColName)) {
+						w.w(',');
+						w.writeEntry(typeColName);
+					}
 					w.append('\n');
 					l.forEach(x -> {
 						var value = applySwap(x, getClassMetaForObject(x));
+						value = formatForCsvCell(value);
 						// Use toString() to respect trimStrings setting
-						w.writeEntry(value == null ? null : toString(value));
+						w.writeEntry(value != null ? toString(value) : nullValue);
+						if (addTypeColumn && ne(typeColName)) {
+							if (x != null) {
+								var aType = getClassMetaForObject(x);
+								var typeName = getBeanTypeName(this, eType, aType, null);
+								w.w(',');
+								w.writeEntry(typeName != null ? typeName : "");
+							} else {
+								w.w(',');
+								w.writeEntry("");
+							}
+						}
 						w.w('\n');
 					});
 				}
 			}
+			}
+		} finally {
+			pop();
 		}
 	}
 
@@ -347,6 +448,124 @@ public class CsvSerializerSession extends WriterSerializerSession {
 		if (value instanceof Duration)
 			return value.toString();
 		return value;
+	}
+
+	/**
+	 * Formats a value for a CSV cell, handling byte[], primitive arrays, and nested structures.
+	 */
+	private Object formatForCsvCell(Object value) {
+		if (value == null)
+			return null;
+		if (allowNestedStructures) {
+			var type = getClassMetaForObject(value);
+			if (value instanceof Map || value instanceof Collection || value instanceof Object[]
+					|| (type.isBean() && !(value instanceof Map)))
+				return new CsvCellSerializer(byteArrayFormat, nullValue).serialize(value, this);
+		}
+		if (value instanceof byte[] b) {
+			return byteArrayFormat == ByteArrayFormat.SEMICOLON_DELIMITED
+				? formatByteArraySemicolon(b)
+				: base64Encode(b);
+		}
+		if (value instanceof int[] a) {
+			var sb = new StringBuilder();
+			sb.append('[');
+			for (var i = 0; i < a.length; i++) {
+				if (i > 0) sb.append(';');
+				sb.append(a[i]);
+			}
+			sb.append(']');
+			return sb.toString();
+		}
+		if (value instanceof long[] a) {
+			var sb = new StringBuilder();
+			sb.append('[');
+			for (var i = 0; i < a.length; i++) {
+				if (i > 0) sb.append(';');
+				sb.append(a[i]);
+			}
+			sb.append(']');
+			return sb.toString();
+		}
+		if (value instanceof double[] a) {
+			var sb = new StringBuilder();
+			sb.append('[');
+			for (var i = 0; i < a.length; i++) {
+				if (i > 0) sb.append(';');
+				sb.append(a[i]);
+			}
+			sb.append(']');
+			return sb.toString();
+		}
+		if (value instanceof float[] a) {
+			var sb = new StringBuilder();
+			sb.append('[');
+			for (var i = 0; i < a.length; i++) {
+				if (i > 0) sb.append(';');
+				sb.append(a[i]);
+			}
+			sb.append(']');
+			return sb.toString();
+		}
+		if (value instanceof short[] a) {
+			var sb = new StringBuilder();
+			sb.append('[');
+			for (var i = 0; i < a.length; i++) {
+				if (i > 0) sb.append(';');
+				sb.append(a[i]);
+			}
+			sb.append(']');
+			return sb.toString();
+		}
+		if (value instanceof boolean[] a) {
+			var sb = new StringBuilder();
+			sb.append('[');
+			for (var i = 0; i < a.length; i++) {
+				if (i > 0) sb.append(';');
+				sb.append(a[i]);
+			}
+			sb.append(']');
+			return sb.toString();
+		}
+		if (value instanceof char[] a) {
+			var sb = new StringBuilder();
+			sb.append('[');
+			for (var i = 0; i < a.length; i++) {
+				if (i > 0) sb.append(';');
+				sb.append((int) a[i]);
+			}
+			sb.append(']');
+			return sb.toString();
+		}
+		return value;
+	}
+
+	private static String formatByteArraySemicolon(byte[] b) {
+		var sb = new StringBuilder();
+		for (var i = 0; i < b.length; i++) {
+			if (i > 0) sb.append(';');
+			sb.append(b[i] & 0xff);
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Prepares a value for inline cell serialization (bean→Map, date format, etc.).
+	 * Used by {@link CsvCellSerializer}.
+	 */
+	Object prepareForInlineValue(Object value) {
+		if (value == null)
+			return null;
+		var swapped = applySwap(value, getClassMetaForObject(value));
+		var type = getClassMetaForObject(swapped);
+		if (type.isBean() && !(swapped instanceof Map))
+			return toBeanMap(swapped);
+		if (swapped instanceof Calendar || swapped instanceof Date || swapped instanceof Temporal
+				|| swapped instanceof javax.xml.datatype.XMLGregorianCalendar)
+			return Iso8601Utils.format(swapped, type, getTimeZone());
+		if (swapped instanceof java.time.Duration)
+			return swapped.toString();
+		return swapped;
 	}
 
 	CsvWriter getCsvWriter(SerializerPipe out) {

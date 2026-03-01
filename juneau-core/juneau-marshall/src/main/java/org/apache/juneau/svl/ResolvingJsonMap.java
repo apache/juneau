@@ -57,7 +57,7 @@ public class ResolvingJsonMap extends JsonMap {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return this == o || (o instanceof ResolvingJsonMap other && super.equals(o));
+		return this == o || (o instanceof ResolvingJsonMap && super.equals(o));
 	}
 
 	@Override /* Overridden from Object */

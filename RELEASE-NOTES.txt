@@ -13,6 +13,15 @@
 
 Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
 
+** New Features - CSV Marshalling Parity with JSON
+
+    * Type discriminator: addBeanTypes().addRootType() adds _type column for polymorphic parsing.
+    * Byte arrays: byteArrayFormat(BASE64) or SEMICOLON_DELIMITED; primitive arrays as [1;2;3].
+    * Nested structures: allowNestedStructures(true) enables inline {key:val} and [val;val] in cells.
+    * Null marker: nullValue("<NULL>") (default) for unambiguous null serialization/parsing.
+    * New classes: CsvCellParser, CsvCellSerializer, ByteArrayFormat.
+    * New builder options: byteArrayFormat(), allowNestedStructures(), nullValue().
+
 ** Changes
 
     * Bump junit.version from a mix of 5.13.4 and 6.0.1 to 6.0.3.

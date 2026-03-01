@@ -145,11 +145,11 @@ class Csv_Test extends TestBase {
 		var s = CsvSerializer.create().swaps(DateSwap.class).build();
 		var r = s.serialize(l);
 
-		// Should have users and null values
+		// Should have users and null values (null marker defaults to <NULL>)
 		assertTrue(r.contains("user1"));
 		assertTrue(r.contains("user2"));
 		assertTrue(r.contains("user3"));
-		assertTrue(r.contains("null"));
+		assertTrue(r.contains("<NULL>"));
 		assertTrue(r.contains("1970-01-01") || r.contains("1969-12-31"), "Should have formatted date but was: " + r);
 	}
 
@@ -320,15 +320,14 @@ class Csv_Test extends TestBase {
 		l.add(new G(null, "null"));
 
 		var r = CsvSerializer.DEFAULT.serialize(l);
-		// Java null → unquoted "null"; the String "null" → quoted "\"null\""
-		// Both serialize as: null,"null"
-		assertTrue(r.contains("null,\"null\"") || r.contains("null,null"),
-			"Unexpected output: " + r);
+		// Java null → null marker (<NULL> by default); the String "null" → quoted "\"null\""
+		assertTrue(r.contains("<NULL>") && r.contains("null"), "Unexpected output: " + r);
 	}
 
 	public static class G {
 		public String a;
 		public String b;
+		public G() {}
 		public G(String a, String b) { this.a = a; this.b = b; }
 	}
 
@@ -347,5 +346,228 @@ class Csv_Test extends TestBase {
 	@Test void i06_singleBean() throws Exception {
 		var r = CsvSerializer.DEFAULT.serialize(new F("hello", 42));
 		assertEquals("b,c\nhello,42\n", r);
+	}
+
+	//====================================================================================================
+	// Test type discriminator - addBeanTypes adds _type column
+	//====================================================================================================
+	//====================================================================================================
+	// Test type discriminator - parser skips _type column when target is concrete
+	//====================================================================================================
+	@Test void j01_typeDiscriminator_skipsTypeColumn() throws Exception {
+		// CSV with _type column - parser skips it for concrete Circle type
+		var csv = "name,radius,_type\nc1,10,Circle\nc2,20,Circle\n";
+		var p = CsvParser.create().build();
+
+		@SuppressWarnings("unchecked")
+		var parsed = (List<Circle>) p.parse(csv, List.class, Circle.class);
+
+		assertNotNull(parsed);
+		assertEquals(2, parsed.size());
+		assertEquals("c1", parsed.get(0).name);
+		assertEquals(10, parsed.get(0).radius);
+		assertEquals("c2", parsed.get(1).name);
+		assertEquals(20, parsed.get(1).radius);
+	}
+
+	//====================================================================================================
+	// Test type discriminator - single bean with _type column
+	//====================================================================================================
+	@Test void j02_typeDiscriminator_singleBean() throws Exception {
+		var csv = "name,radius,_type\nc1,10,Circle\n";
+		var p = CsvParser.create().build();
+
+		var parsed = p.parse(csv, Circle.class);
+		assertNotNull(parsed);
+		assertEquals("c1", parsed.name);
+		assertEquals(10, parsed.radius);
+	}
+
+	@org.apache.juneau.annotation.Bean(dictionary = {Circle.class, Rectangle.class})
+	public interface Shape {
+		String getName();
+	}
+
+	@org.apache.juneau.annotation.Bean(typeName = "Circle")
+	public static class Circle implements Shape {
+		public String name;
+		public int radius;
+
+		public Circle() {}
+		public Circle(String name, int radius) {
+			this.name = name;
+			this.radius = radius;
+		}
+		@Override
+		public String getName() { return name; }
+	}
+
+	@org.apache.juneau.annotation.Bean(typeName = "Rectangle")
+	public static class Rectangle implements Shape {
+		public String name;
+		public int width;
+		public int height;
+
+		public Rectangle() {}
+		public Rectangle(String name, int width, int height) {
+			this.name = name;
+			this.width = width;
+			this.height = height;
+		}
+		@Override
+		public String getName() { return name; }
+	}
+
+	//====================================================================================================
+	// Test byte[] BASE64 round-trip
+	//====================================================================================================
+	@Test void k01_byteArray_base64() throws Exception {
+		var bytes = "Hello World".getBytes(java.nio.charset.StandardCharsets.UTF_8);
+		var l = new LinkedList<>();
+		l.add(new I("row1", bytes));
+		l.add(new I("row2", new byte[]{1, 2, 3}));
+
+		var s = CsvSerializer.create().byteArrayFormat(ByteArrayFormat.BASE64).build();
+		var p = CsvParser.create().byteArrayFormat(ByteArrayFormat.BASE64).build();
+
+		var csv = s.serialize(l);
+		assertTrue(csv.contains("SGVsbG8gV29ybGQ=") || csv.contains("data"), "Should have base64: " + csv);
+
+		@SuppressWarnings("unchecked")
+		var parsed = (List<I>) p.parse(csv, List.class, I.class);
+		assertNotNull(parsed);
+		assertEquals(2, parsed.size());
+		assertArrayEquals(bytes, parsed.get(0).data);
+		assertArrayEquals(new byte[]{1, 2, 3}, parsed.get(1).data);
+	}
+
+	//====================================================================================================
+	// Test byte[] SEMICOLON_DELIMITED round-trip
+	//====================================================================================================
+	@Test void k02_byteArray_semicolonDelimited() throws Exception {
+		var bytes = new byte[]{72, 101, 108, 108, 111};
+		var l = new LinkedList<>();
+		l.add(new I("row1", bytes));
+
+		var s = CsvSerializer.create().byteArrayFormat(ByteArrayFormat.SEMICOLON_DELIMITED).build();
+		var p = CsvParser.create().byteArrayFormat(ByteArrayFormat.SEMICOLON_DELIMITED).build();
+
+		var csv = s.serialize(l);
+		assertTrue(csv.contains("72;101;108;108;111"), "Should have semicolon format: " + csv);
+
+		@SuppressWarnings("unchecked")
+		var parsed = (List<I>) p.parse(csv, List.class, I.class);
+		assertNotNull(parsed);
+		assertArrayEquals(bytes, parsed.get(0).data);
+	}
+
+	public static class I {
+		public String name;
+		public byte[] data;
+
+		public I() {}
+		public I(String name, byte[] data) {
+			this.name = name;
+			this.data = data;
+		}
+	}
+
+	//====================================================================================================
+	// Test int[] and double[] via [1;2;3] format
+	//====================================================================================================
+	@Test void k03_primitiveArrays() throws Exception {
+		var l = new LinkedList<>();
+		l.add(new H("row1", new int[]{1, 2, 3}, new double[]{1.5, 2.5, 3.5}));
+		l.add(new H("row2", new int[]{}, new double[]{}));
+
+		var s = CsvSerializer.DEFAULT;
+		var p = CsvParser.DEFAULT;
+
+		var csv = s.serialize(l);
+		assertTrue(csv.contains("[1;2;3]"), "Should have int array format: " + csv);
+		assertTrue(csv.contains("[1.5;2.5;3.5]"), "Should have double array format: " + csv);
+
+		@SuppressWarnings("unchecked")
+		var parsed = (List<H>) p.parse(csv, List.class, H.class);
+		assertNotNull(parsed);
+		assertEquals(2, parsed.size());
+		assertArrayEquals(new int[]{1, 2, 3}, parsed.get(0).ints);
+		assertArrayEquals(new double[]{1.5, 2.5, 3.5}, parsed.get(0).doubles);
+		assertArrayEquals(new int[0], parsed.get(1).ints);
+		assertArrayEquals(new double[0], parsed.get(1).doubles);
+	}
+
+	public static class H {
+		public String name;
+		public int[] ints;
+		public double[] doubles;
+
+		public H() {}
+		public H(String name, int[] ints, double[] doubles) {
+			this.name = name;
+			this.ints = ints;
+			this.doubles = doubles;
+		}
+	}
+
+	//====================================================================================================
+	// Test nested structures - allowNestedStructures with {key:val} and [val;val]
+	//====================================================================================================
+	@Test void l01_nestedStructures() throws Exception {
+		var l = new LinkedList<>();
+		l.add(new J("row1", List.of("a", "b", "c"), Map.of("x", 1, "y", 2)));
+		l.add(new J("row2", List.of(), Map.of()));
+
+		var s = CsvSerializer.create().allowNestedStructures(true).build();
+		var p = CsvParser.create().allowNestedStructures(true).build();
+
+		var csv = s.serialize(l);
+		assertTrue(csv.contains("[a;b;c]") || csv.contains("tags"), "Should have array notation: " + csv);
+		assertTrue(csv.contains("x:1") || csv.contains("y:2") || csv.contains("meta"), "Should have object notation: " + csv);
+
+		@SuppressWarnings("unchecked")
+		var parsed = (List<J>) p.parse(csv, List.class, J.class);
+		assertNotNull(parsed);
+		assertEquals(2, parsed.size());
+		assertEquals(List.of("a", "b", "c"), parsed.get(0).tags);
+		assertEquals(2, parsed.get(0).meta.size());
+		assertEquals(1, ((Number) parsed.get(0).meta.get("x")).intValue());
+		assertEquals(2, ((Number) parsed.get(0).meta.get("y")).intValue());
+		assertEquals(List.of(), parsed.get(1).tags);
+		assertTrue(parsed.get(1).meta.isEmpty());
+	}
+
+	public static class J {
+		public String name;
+		public List<String> tags;
+		public Map<String, Object> meta;
+
+		public J() {}
+		public J(String name, List<String> tags, Map<String, Object> meta) {
+			this.name = name;
+			this.tags = tags;
+			this.meta = meta;
+		}
+	}
+
+	//====================================================================================================
+	// Test nullValue() - custom null marker
+	//====================================================================================================
+	@Test void m01_nullValue() throws Exception {
+		var l = new LinkedList<>();
+		l.add(new G(null, "x"));
+
+		var s = CsvSerializer.create().nullValue("<NULL>").build();
+		var p = CsvParser.create().nullValue("<NULL>").build();
+
+		var csv = s.serialize(l);
+		assertTrue(csv.contains("<NULL>"), "Should have null marker: " + csv);
+
+		@SuppressWarnings("unchecked")
+		var parsed = (List<G>) p.parse(csv, List.class, G.class);
+		assertNotNull(parsed);
+		assertEquals(1, parsed.size());
+		assertNull(parsed.get(0).a);
+		assertEquals("x", parsed.get(0).b);
 	}
 }

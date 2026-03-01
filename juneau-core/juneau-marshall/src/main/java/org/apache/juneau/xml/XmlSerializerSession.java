@@ -50,6 +50,11 @@ import org.apache.juneau.xml.annotation.*;
 
  * </ul>
  */
+@SuppressWarnings({
+	"rawtypes",  // Raw Map/Collection necessary for serializer dispatch over heterogeneous types
+	"unchecked", // Type erasure requires unchecked casts in serializer dispatch
+	"resource"  // Writer/Closeable resources managed by try-with-resources; analyzer FP in lambdas
+})
 public class XmlSerializerSession extends WriterSerializerSession {
 
 	// Argument name constants for assertArgNotNull

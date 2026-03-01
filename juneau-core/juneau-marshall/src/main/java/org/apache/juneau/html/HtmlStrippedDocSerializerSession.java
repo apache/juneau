@@ -189,6 +189,9 @@ public class HtmlStrippedDocSerializerSession extends HtmlSerializerSession {
 		super(builder);
 	}
 
+	@SuppressWarnings({
+		"resource" // w is closed by try-with-resources; analyzer false positive on super.doSerialize path
+	})
 	@Override /* Overridden from SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		try (var w = getHtmlWriter(out)) {
