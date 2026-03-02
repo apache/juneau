@@ -100,6 +100,16 @@ import org.apache.juneau.serializer.*;
  * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>someObject</jv>);
  * </p>
  *
+ * <h5 class='figure'>Example output (Map of name/age):</h5>
+ * <p class='bjson'>
+ * 	{<js>"name"</js>:<js>"Alice"</js>,<js>"age"</js>:30}
+ * </p>
+ *
+ * <h5 class='figure'>Complex (nested object + array):</h5>
+ * <p class='bjson'>
+ * 	{<js>"name"</js>:<js>"Alice"</js>,<js>"age"</js>:30,<js>"address"</js>:{<js>"street"</js>:<js>"123 Main St"</js>,<js>"city"</js>:<js>"Boston"</js>,<js>"state"</js>:<js>"MA"</js>},<js>"tags"</js>:[<js>"a"</js>,<js>"b"</js>,<js>"c"</js>]}
+ * </p>
+ *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>

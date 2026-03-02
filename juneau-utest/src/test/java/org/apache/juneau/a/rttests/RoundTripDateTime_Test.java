@@ -33,6 +33,7 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.yaml.*;
+import org.apache.juneau.toml.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
@@ -164,7 +165,11 @@ class RoundTripDateTime_Test extends TestBase {
 			.serializer(YamlSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(YamlParser.create())
 			.build(),
-		tester(30, "Csv - default")
+		tester(30, "Toml - default")
+			.serializer(TomlSerializer.create())
+			.parser(TomlParser.create())
+			.build(),
+		tester(31, "Csv - default")
 			.serializer(CsvSerializer.create().keepNullProperties())
 			.skipIf(o -> o == null || (o.getClass().isArray() && o.getClass().getComponentType().isPrimitive()))
 			.returnOriginalObject()

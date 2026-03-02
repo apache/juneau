@@ -29,6 +29,7 @@ import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.yaml.*;
+import org.apache.juneau.toml.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
@@ -147,7 +148,8 @@ import org.apache.juneau.xml.*;
 		SoapXmlSerializer.class,
 		PlainTextSerializer.class,
 		CsvSerializer.class,
-		YamlSerializer.class
+		YamlSerializer.class,
+		TomlSerializer.class
 	},
 
 	// Default parsers for all Java methods in the class.
@@ -162,7 +164,8 @@ import org.apache.juneau.xml.*;
 		MsgPackParser.class,
 		PlainTextParser.class,
 		CsvParser.class,
-		YamlParser.class
+		YamlParser.class,
+		TomlParser.class
 	}
 )
 public interface BasicUniversalConfig extends DefaultConfig, DefaultHtmlConfig {}

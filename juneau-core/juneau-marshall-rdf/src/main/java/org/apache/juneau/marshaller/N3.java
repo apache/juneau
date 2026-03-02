@@ -44,6 +44,21 @@ import org.apache.juneau.serializer.*;
  * 	String <jv>string</jv> = N3.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
+ * <h5 class='figure'>Example output (bean with name/age, N3/Turtle-like):</h5>
+ * <p class='bcode'>
+ * 	@prefix j: &lt;...&gt; .
+ * 	&lt;...&gt; a j:Person ; j:name "Alice" ; j:age 30 .
+ * </p>
+ *
+ * <h5 class='figure'>Complex (nested address + array):</h5>
+ * <p class='bcode'>
+ * 	@prefix j: &lt;...&gt; .
+ * 	&lt;...&gt; a j:Person ; j:name "Alice" ; j:age 30 ;
+ * 		j:address &lt;.../address&gt; ; j:tags &lt;.../tags&gt; .
+ * 	&lt;.../address&gt; a j:Address ; j:street "123 Main St" ;
+ * 		j:city "Boston" ; j:state "MA" .
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * 	<li class='link'>{doc jm.Marshallers}

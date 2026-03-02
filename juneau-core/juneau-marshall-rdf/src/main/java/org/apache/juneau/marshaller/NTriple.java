@@ -41,7 +41,23 @@ import org.apache.juneau.serializer.*;
  * <p class='bjava'>
  *	<jc>// Using DEFAULT instance.</jc>
  * 	MyPojo <jv>myPojo</jv> = NTriple.<jsf>DEFAULT</jsf>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
- * 	String stri<jv>string</jv>ng = NTriple.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
+ * 	String <jv>string</jv> = NTriple.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
+ * </p>
+ *
+ * <h5 class='figure'>Example output (bean with name/age):</h5>
+ * <p class='bcode'>
+ * 	&lt;...&gt; &lt;.../name&gt; "Alice" .
+ * 	&lt;...&gt; &lt;.../age&gt; "30"^^&lt;http://www.w3.org/2001/XMLSchema#int&gt; .
+ * </p>
+ *
+ * <h5 class='figure'>Complex (nested address + array):</h5>
+ * <p class='bcode'>
+ * 	&lt;...&gt; &lt;.../name&gt; "Alice" .
+ * 	&lt;...&gt; &lt;.../age&gt; "30"^^... .
+ * 	&lt;...&gt; &lt;.../address&gt; &lt;.../address&gt; .
+ * 	&lt;.../address&gt; &lt;.../street&gt; "123 Main St" .
+ * 	&lt;.../address&gt; &lt;.../city&gt; "Boston" .
+ * 	&lt;.../address&gt; &lt;.../state&gt; "MA" .
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

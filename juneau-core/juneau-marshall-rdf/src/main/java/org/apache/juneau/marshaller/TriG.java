@@ -26,6 +26,36 @@ import org.apache.juneau.serializer.*;
 /**
  * A pairing of a {@link TriGSerializer} and {@link TriGParser} into a single class with convenience read/write methods.
  *
+ * <h5 class='figure'>Examples:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Serialize a bean or map to TriG (Turtle with named graphs)</jc>
+ * 	String <jv>trig</jv> = TriG.<jsm>of</jsm>(<jv>myBean</jv>);
+ *
+ * 	<jc>// Parse TriG into a bean or map</jc>
+ * 	MyPojo <jv>parsed</jv> = TriG.<jsm>to</jsm>(<jv>trig</jv>, MyPojo.<jk>class</jk>);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Using instance methods</jc>
+ * 	TriG <jv>m</jv> = TriG.<jsf>DEFAULT</jsf>;
+ * 	<jv>trig</jv> = <jv>m</jv>.write(<jv>myBean</jv>);
+ * 	<jv>parsed</jv> = <jv>m</jv>.read(<jv>trig</jv>, MyPojo.<jk>class</jk>);
+ * </p>
+ *
+ * <h5 class='figure'>Example output (bean with name/age, Turtle with named graph):</h5>
+ * <p class='bcode'>
+ * 	@prefix j: &lt;...&gt; .
+ * 	&lt;...&gt; { &lt;...&gt; a j:Person ; j:name "Alice" ; j:age 30 . }
+ * </p>
+ *
+ * <h5 class='figure'>Complex (nested address + array):</h5>
+ * <p class='bcode'>
+ * 	@prefix j: &lt;...&gt; .
+ * 	&lt;...&gt; { &lt;...&gt; a j:Person ; j:name "Alice" ; j:age 30 ;
+ * 		j:address &lt;.../address&gt; . }
+ * 	&lt;...&gt; { &lt;.../address&gt; a j:Address ; j:street "123 Main St" ;
+ * 		j:city "Boston" ; j:state "MA" . }
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * 	<li class='link'>{doc jm.Marshallers}

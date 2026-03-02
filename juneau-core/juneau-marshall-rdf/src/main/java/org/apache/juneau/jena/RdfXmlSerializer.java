@@ -38,6 +38,33 @@ package org.apache.juneau.jena;
  * 	String <jv>rdfXml</jv> = <jv>s</jv>.serialize(<jv>bean</jv>);
  * </p>
  *
+ * <h5 class='figure'>Example output (bean with name/age):</h5>
+ * <p class='bxml'>
+ * 	<xt>&lt;rdf:RDF&gt;</xt>
+ * 		<xt>&lt;rdf:Description rdf:about=</xt><xs>"..."</xs><xt>&gt;</xt>
+ * 			<xt>&lt;j:name&gt;</xt>Alice<xt>&lt;/j:name&gt;</xt>
+ * 			<xt>&lt;j:age&gt;</xt>30<xt>&lt;/j:age&gt;</xt>
+ * 		<xt>&lt;/rdf:Description&gt;</xt>
+ * 	<xt>&lt;/rdf:RDF&gt;</xt>
+ * </p>
+ *
+ * <h5 class='figure'>Complex (nested address + array):</h5>
+ * <p class='bxml'>
+ * 	<xt>&lt;rdf:RDF&gt;</xt>
+ * 		<xt>&lt;rdf:Description rdf:about=</xt><xs>"..."</xs><xt>&gt;</xt>
+ * 			<xt>&lt;j:name&gt;</xt>Alice<xt>&lt;/j:name&gt;</xt>
+ * 			<xt>&lt;j:age&gt;</xt>30<xt>&lt;/j:age&gt;</xt>
+ * 			<xt>&lt;j:address rdf:resource=</xt><xs>".../address"</xs><xt>/&gt;</xt>
+ * 			<xt>&lt;j:tags rdf:resource=</xt><xs>".../tags"</xs><xt>/&gt;</xt>
+ * 		<xt>&lt;/rdf:Description&gt;</xt>
+ * 		<xt>&lt;rdf:Description rdf:about=</xt><xs>".../address"</xs><xt>&gt;</xt>
+ * 			<xt>&lt;j:street&gt;</xt>123 Main St<xt>&lt;/j:street&gt;</xt>
+ * 			<xt>&lt;j:city&gt;</xt>Boston<xt>&lt;/j:city&gt;</xt>
+ * 			<xt>&lt;j:state&gt;</xt>MA<xt>&lt;/j:state&gt;</xt>
+ * 		<xt>&lt;/rdf:Description&gt;</xt>
+ * 	<xt>&lt;/rdf:RDF&gt;</xt>
+ * </p>
+ *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>

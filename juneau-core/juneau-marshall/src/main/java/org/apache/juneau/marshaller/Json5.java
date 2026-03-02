@@ -44,6 +44,16 @@ import org.apache.juneau.serializer.*;
  * 	String <jv>string</jv> = Json5.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
+ * <h5 class='figure'>Example output (Map of name/age, JSON5 allows unquoted keys):</h5>
+ * <p class='bjson'>
+ * 	{name:<js>"Alice"</js>,age:30}
+ * </p>
+ *
+ * <h5 class='figure'>Complex (nested object + array):</h5>
+ * <p class='bjson'>
+ * 	{name:<js>"Alice"</js>,age:30,address:{street:<js>"123 Main St"</js>,city:<js>"Boston"</js>,state:<js>"MA"</js>},tags:[<js>"a"</js>,<js>"b"</js>,<js>"c"</js>]}
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * </ul>

@@ -359,7 +359,6 @@ class Csv_Test extends TestBase {
 		var csv = "name,radius,_type\nc1,10,Circle\nc2,20,Circle\n";
 		var p = CsvParser.create().build();
 
-		@SuppressWarnings("unchecked")
 		var parsed = (List<Circle>) p.parse(csv, List.class, Circle.class);
 
 		assertNotNull(parsed);
@@ -433,7 +432,6 @@ class Csv_Test extends TestBase {
 		var csv = s.serialize(l);
 		assertTrue(csv.contains("SGVsbG8gV29ybGQ=") || csv.contains("data"), "Should have base64: " + csv);
 
-		@SuppressWarnings("unchecked")
 		var parsed = (List<I>) p.parse(csv, List.class, I.class);
 		assertNotNull(parsed);
 		assertEquals(2, parsed.size());
@@ -455,7 +453,6 @@ class Csv_Test extends TestBase {
 		var csv = s.serialize(l);
 		assertTrue(csv.contains("72;101;108;108;111"), "Should have semicolon format: " + csv);
 
-		@SuppressWarnings("unchecked")
 		var parsed = (List<I>) p.parse(csv, List.class, I.class);
 		assertNotNull(parsed);
 		assertArrayEquals(bytes, parsed.get(0).data);
@@ -487,7 +484,6 @@ class Csv_Test extends TestBase {
 		assertTrue(csv.contains("[1;2;3]"), "Should have int array format: " + csv);
 		assertTrue(csv.contains("[1.5;2.5;3.5]"), "Should have double array format: " + csv);
 
-		@SuppressWarnings("unchecked")
 		var parsed = (List<H>) p.parse(csv, List.class, H.class);
 		assertNotNull(parsed);
 		assertEquals(2, parsed.size());
@@ -525,7 +521,6 @@ class Csv_Test extends TestBase {
 		assertTrue(csv.contains("[a;b;c]") || csv.contains("tags"), "Should have array notation: " + csv);
 		assertTrue(csv.contains("x:1") || csv.contains("y:2") || csv.contains("meta"), "Should have object notation: " + csv);
 
-		@SuppressWarnings("unchecked")
 		var parsed = (List<J>) p.parse(csv, List.class, J.class);
 		assertNotNull(parsed);
 		assertEquals(2, parsed.size());
@@ -563,7 +558,6 @@ class Csv_Test extends TestBase {
 		var csv = s.serialize(l);
 		assertTrue(csv.contains("<NULL>"), "Should have null marker: " + csv);
 
-		@SuppressWarnings("unchecked")
 		var parsed = (List<G>) p.parse(csv, List.class, G.class);
 		assertNotNull(parsed);
 		assertEquals(1, parsed.size());

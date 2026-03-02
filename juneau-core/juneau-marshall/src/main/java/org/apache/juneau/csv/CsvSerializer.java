@@ -59,6 +59,18 @@ import org.apache.juneau.serializer.*;
  * Collections of flat beans or maps whose properties are primitives, strings, numbers, enums, dates,
  * byte arrays, or (with {@code allowNestedStructures}) nested beans, maps, and lists.
  *
+ * <h5 class='figure'>Example output (list of maps with a,b):</h5>
+ * <p class='bcode'>
+ * 	a,b
+ * 	foo,bar
+ * </p>
+ *
+ * <h5 class='figure'>Complex (list of beans with nested address, flattened):</h5>
+ * <p class='bcode'>
+ * 	name,age,address_street,address_city,address_state,tags
+ * 	Alice,30,123 Main St,Boston,MA,"a,b,c"
+ * </p>
+ *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>

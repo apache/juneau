@@ -936,4 +936,26 @@ public abstract class ComboRoundTripTest_Base extends TestBase {
 	public void h13_verifyCsv(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParseVerify("csv");
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// TOML
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void i11_serializeToml(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("toml");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void i12_parseToml(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("toml");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void i13_verifyToml(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("toml");
+	}
 }

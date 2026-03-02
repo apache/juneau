@@ -43,6 +43,8 @@ package org.apache.juneau.jena;
  * 	<jk>byte</jk>[] <jv>bytes</jv> = <jv>s</jv>.serialize(<jv>bean</jv>);
  * </p>
  *
+ * <p>Output is binary (<jk>byte</jk>[]), Apache Thrift format. Complex structures (nested objects, arrays) serialize to equivalent RDF triples in binary form.</p>
+ *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>

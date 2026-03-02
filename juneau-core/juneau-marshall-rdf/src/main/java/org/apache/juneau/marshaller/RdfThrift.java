@@ -26,6 +26,25 @@ import org.apache.juneau.serializer.*;
 /**
  * A pairing of {@link RdfThriftSerializer} and {@link RdfThriftParser} for RDF/THRIFT binary format.
  *
+ * <h5 class='figure'>Examples:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Serialize a bean or map to RDF/THRIFT bytes</jc>
+ * 	byte[] <jv>bytes</jv> = RdfThrift.<jsm>of</jsm>(<jv>myBean</jv>);
+ *
+ * 	<jc>// Parse RDF/THRIFT bytes into a bean or map</jc>
+ * 	MyPojo <jv>parsed</jv> = RdfThrift.<jsm>to</jsm>(<jv>bytes</jv>, MyPojo.<jk>class</jk>);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Using instance methods</jc>
+ * 	RdfThrift <jv>m</jv> = RdfThrift.<jsf>DEFAULT</jsf>;
+ * 	<jv>bytes</jv> = <jv>m</jv>.write(<jv>myBean</jv>);
+ * 	<jv>parsed</jv> = <jv>m</jv>.read(<jv>bytes</jv>, MyPojo.<jk>class</jk>);
+ * </p>
+ *
+ * <p>Output is binary (<jk>byte</jk>[]), Apache Thrift format.</p>
+ *
+ * <p>Complex structures (nested objects, arrays) serialize to equivalent RDF triples in binary form.</p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * 	<li class='link'>{doc jm.Marshallers}

@@ -206,7 +206,7 @@ public final class Iso8601Utils {
 		ZoneId zoneId = timeZone != null ? timeZone.toZoneId() : ZoneId.systemDefault();
 
 		if (tc == Duration.class)
-			return (T) Duration.parse(iso8601);
+			return (T) parseDuration(iso8601);
 
 		if (Calendar.class.isAssignableFrom(tc))
 			return (T) parseCalendar(iso8601, zoneId);
@@ -221,6 +221,59 @@ public final class Iso8601Utils {
 			return (T) parseTemporal(iso8601, (Class<? extends Temporal>) tc, zoneId);
 
 		return null;
+	}
+
+	/** Normalizes PT-Nx to -PTNx and parses ISO-8601 duration, with fallback for edge cases. */
+	private static Duration parseDuration(String iso8601) {
+		if (iso8601 == null || iso8601.isEmpty())
+			return null;
+		String s = iso8601.trim();
+		// Strip optional surrounding quotes
+		if (s.length() >= 2 && s.startsWith("\"") && s.endsWith("\""))
+			s = s.substring(1, s.length() - 1).trim();
+		if (s.startsWith("PT-"))
+			s = "-PT" + s.substring(3);
+		// Use manual parser for full control (handles PTnH, PTnM, PTn.nS, -PTnH, PT-6H, etc.)
+		Duration d = parseDurationManual(s);
+		if (d != null)
+			return d;
+		// Fallback to standard parser
+		try {
+			return Duration.parse(s);
+		} catch (Exception e) {
+			throw toRex(e);
+		}
+	}
+
+	private static Duration parseDurationManual(String s) {
+		if (s == null || s.length() < 3)
+			return null;
+		boolean neg = s.startsWith("-");
+		if (neg)
+			s = s.substring(1);
+		if (!s.startsWith("PT") && !s.startsWith("pt"))
+			return null;
+		s = s.substring(2);
+		long totalNanos = 0;
+		boolean found = false;
+		var p = java.util.regex.Pattern.compile("(\\d+(?:\\.\\d+)?)\\s*([HhMmSs])");
+		var m = p.matcher(s);
+		while (m.find()) {
+			found = true;
+			double v = Double.parseDouble(m.group(1));
+			long nanos = (long)(v * 1_000_000_000);
+			char unit = Character.toUpperCase(m.group(2).charAt(0));
+			switch (unit) {
+				case 'H': totalNanos += nanos * 3600; break;
+				case 'M': totalNanos += nanos * 60; break;
+				case 'S': totalNanos += nanos; break;
+				default: break;
+			}
+		}
+		if (!found)
+			return null;
+		Duration d = Duration.ofNanos(totalNanos);
+		return neg ? d.negated() : d;
 	}
 
 	private static Calendar parseCalendar(String iso8601, ZoneId zoneId) {

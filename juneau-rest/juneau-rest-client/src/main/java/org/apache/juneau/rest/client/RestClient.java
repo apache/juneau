@@ -89,6 +89,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.client.assertion.*;
+import org.apache.juneau.toml.*;
 import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
@@ -5560,7 +5561,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					UrlEncodingSerializer.class,
 					OpenApiSerializer.class,
 					MsgPackSerializer.class,
-					PlainTextSerializer.class
+					PlainTextSerializer.class,
+					TomlSerializer.class
 				)
 				.parsers(
 					JsonParser.class,
@@ -5571,7 +5573,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					UrlEncodingParser.class,
 					OpenApiParser.class,
 					MsgPackParser.class,
-					PlainTextParser.class
+					PlainTextParser.class,
+					TomlParser.class
 				);
 			// @formatter:on
 		}

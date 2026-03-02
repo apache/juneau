@@ -59,6 +59,18 @@ import org.apache.juneau.parser.*;
  * Parsing into {@link java.util.Collection} of flat beans or maps, or single beans/maps with simple
  * property types (primitives, strings, numbers, enums, dates, byte arrays, or nested structures when enabled).
  *
+ * <h5 class='figure'>Example input (list of maps with a,b):</h5>
+ * <p class='bcode'>
+ * 	a,b
+ * 	foo,bar
+ * </p>
+ *
+ * <h5 class='figure'>Complex (list of beans with nested address, flattened):</h5>
+ * <p class='bcode'>
+ * 	name,age,address_street,address_city,address_state,tags
+ * 	Alice,30,123 Main St,Boston,MA,"a,b,c"
+ * </p>
+ *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>

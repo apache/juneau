@@ -28,7 +28,6 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for {@link CsvParser} and {@link CsvParserSession}.
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
 class CsvParser_Test extends TestBase {
 
 	/** Convenience: parse CSV into List&lt;T&gt;. */
@@ -88,7 +87,7 @@ class CsvParser_Test extends TestBase {
 
 	@Test void b02_parseSingleMap() throws Exception {
 		var csv = "k1,k2\nv1,v2\n";
-		var r = (Map<?, ?>) CsvParser.DEFAULT.parse(csv, Map.class);
+		var r = CsvParser.DEFAULT.parse(csv, Map.class);
 		assertEquals("v1", r.get("k1"));
 		assertEquals("v2", r.get("k2"));
 	}

@@ -62,6 +62,26 @@ import org.apache.juneau.parser.*;
  * 		parsing errors where equivalent JSON would parse successfully.
  * </ul>
  *
+ * <h5 class='figure'>Example input (Map of name/age):</h5>
+ * <p class='bcode'>
+ * 	name: Alice
+ * 	age: 30
+ * </p>
+ *
+ * <h5 class='figure'>Complex (nested object + array):</h5>
+ * <p class='bcode'>
+ * 	name: Alice
+ * 	age: 30
+ * 	address:
+ * 	  street: 123 Main St
+ * 	  city: Boston
+ * 	  state: MA
+ * 	tags:
+ * 	- a
+ * 	- b
+ * 	- c
+ * </p>
+ *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>

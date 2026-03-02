@@ -318,7 +318,7 @@ class Remote_Test extends TestBase {
 			throw new C4c("foo");
 		}
 		@RestOp
-		public String x2() throws C4c {
+		public String x2() {
 			throw new RuntimeException("foo");
 		}
 		@RestOp
@@ -330,7 +330,7 @@ class Remote_Test extends TestBase {
 			throw new C4c("foo");
 		}
 		@RestGet
-		public String x5() throws C4c {
+		public String x5() {
 			throw new RuntimeException("foo");
 		}
 		@RestGet

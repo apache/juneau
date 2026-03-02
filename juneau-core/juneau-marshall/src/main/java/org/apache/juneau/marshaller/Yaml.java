@@ -44,6 +44,26 @@ import org.apache.juneau.yaml.*;
  * 	String <jv>string</jv> = Yaml.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
+ * <h5 class='figure'>Example output (Map of name/age):</h5>
+ * <p class='bcode'>
+ * 	name: Alice
+ * 	age: 30
+ * </p>
+ *
+ * <h5 class='figure'>Complex (nested object + array):</h5>
+ * <p class='bcode'>
+ * 	name: Alice
+ * 	age: 30
+ * 	address:
+ * 	  street: 123 Main St
+ * 	  city: Boston
+ * 	  state: MA
+ * 	tags:
+ * 	- a
+ * 	- b
+ * 	- c
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * </ul>

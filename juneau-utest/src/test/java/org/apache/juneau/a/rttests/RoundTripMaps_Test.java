@@ -34,6 +34,7 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.yaml.*;
+import org.apache.juneau.toml.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
@@ -171,7 +172,12 @@ class RoundTripMaps_Test extends TestBase {
 			.parser(YamlParser.create())
 			.skipIf(o -> o instanceof java.util.HashMap)
 			.build(),
-		tester(30, "Csv - default")
+		tester(30, "Toml - default")
+			.serializer(TomlSerializer.create())
+			.parser(TomlParser.create())
+			.skipIf(o -> o instanceof java.util.HashMap || (o instanceof java.util.Map m && !m.isEmpty() && !(m.keySet().iterator().next() instanceof String)))
+			.build(),
+		tester(31, "Csv - default")
 			.serializer(CsvSerializer.create().keepNullProperties())
 			.skipIf(o -> o == null || (o.getClass().isArray() && o.getClass().getComponentType().isPrimitive()))
 			.returnOriginalObject()

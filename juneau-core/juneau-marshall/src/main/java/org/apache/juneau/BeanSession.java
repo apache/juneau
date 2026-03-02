@@ -1222,7 +1222,7 @@ public class BeanSession extends ContextSession {
 				return (T) Iso8601Utils.parse(value.toString(), to, getTimeZone());
 
 			if (to.isDuration() && value instanceof CharSequence)
-				return (T) Duration.parse(value.toString());
+				return (T) Iso8601Utils.parse(value.toString(), to, getTimeZone());
 
 			if (to.isDateOrCalendarOrTemporal() && value instanceof Number)
 				return (T) Iso8601Utils.fromEpochMillis(((Number)value).longValue(), to, getTimeZone());

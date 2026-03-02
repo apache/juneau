@@ -88,6 +88,26 @@ import org.apache.juneau.serializer.*;
  * 	String <jv>yaml</jv> = <jv>serializer</jv>.serialize(<jv>someObject</jv>);
  * </p>
  *
+ * <h5 class='figure'>Example output (Map of name/age):</h5>
+ * <p class='bcode'>
+ * 	name: Alice
+ * 	age: 30
+ * </p>
+ *
+ * <h5 class='figure'>Complex (nested object + array):</h5>
+ * <p class='bcode'>
+ * 	name: Alice
+ * 	age: 30
+ * 	address:
+ * 	  street: 123 Main St
+ * 	  city: Boston
+ * 	  state: MA
+ * 	tags:
+ * 	- a
+ * 	- b
+ * 	- c
+ * </p>
+ *
  * <h5 class='section'>Limitations compared to JSON</h5>
  * <p>
  * The YAML serializer has fewer configuration options than {@link org.apache.juneau.json.JsonSerializer JsonSerializer}:

@@ -26,6 +26,46 @@ import org.apache.juneau.serializer.*;
 /**
  * A pairing of a {@link TriXSerializer} and {@link TriXParser} into a single class with convenience read/write methods.
  *
+ * <h5 class='figure'>Examples:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Serialize a bean or map to TriX (RDF/XML-based)</jc>
+ * 	String <jv>trix</jv> = TriX.<jsm>of</jsm>(<jv>myBean</jv>);
+ *
+ * 	<jc>// Parse TriX into a bean or map</jc>
+ * 	MyPojo <jv>parsed</jv> = TriX.<jsm>to</jsm>(<jv>trix</jv>, MyPojo.<jk>class</jk>);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Using instance methods</jc>
+ * 	TriX <jv>m</jv> = TriX.<jsf>DEFAULT</jsf>;
+ * 	<jv>trix</jv> = <jv>m</jv>.write(<jv>myBean</jv>);
+ * 	<jv>parsed</jv> = <jv>m</jv>.read(<jv>trix</jv>, MyPojo.<jk>class</jk>);
+ * </p>
+ *
+ * <h5 class='figure'>Example output (bean with name/age):</h5>
+ * <p class='bxml'>
+ * 	<xt>&lt;TriX&gt;</xt>
+ * 		<xt>&lt;graph&gt;</xt>
+ * 			<xt>&lt;uri&gt;</xt>...<xt>&lt;/uri&gt;</xt>
+ * 			<xt>&lt;triple&gt;</xt>
+ * 				<xt>&lt;id&gt;</xt>...<xt>&lt;/id&gt;</xt>
+ * 				<xt>&lt;name&gt;</xt>Alice<xt>&lt;/name&gt;</xt>
+ * 				<xt>&lt;age&gt;</xt>30<xt>&lt;/age&gt;</xt>
+ * 			<xt>&lt;/triple&gt;</xt>
+ * 		<xt>&lt;/graph&gt;</xt>
+ * 	<xt>&lt;/TriX&gt;</xt>
+ * </p>
+ *
+ * <h5 class='figure'>Complex (nested address + array):</h5>
+ * <p class='bxml'>
+ * 	<xt>&lt;TriX&gt;</xt>
+ * 		<xt>&lt;graph&gt;</xt>
+ * 			<xt>&lt;triple&gt;</xt>...subject, predicate, object for name, age, address ref, tags...
+ * 			<xt>&lt;triple&gt;</xt>...address subject, street, city, state...
+ * 			<xt>&lt;triple&gt;</xt>...tags list members...
+ * 		<xt>&lt;/graph&gt;</xt>
+ * 	<xt>&lt;/TriX&gt;</xt>
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * 	<li class='link'>{doc jm.Marshallers}

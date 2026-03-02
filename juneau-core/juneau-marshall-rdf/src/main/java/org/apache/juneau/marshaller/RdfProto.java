@@ -26,6 +26,25 @@ import org.apache.juneau.serializer.*;
 /**
  * A pairing of {@link RdfProtoSerializer} and {@link RdfProtoParser} for RDF/PROTO binary format.
  *
+ * <h5 class='figure'>Examples:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Serialize a bean or map to RDF/PROTO bytes</jc>
+ * 	byte[] <jv>bytes</jv> = RdfProto.<jsm>of</jsm>(<jv>myBean</jv>);
+ *
+ * 	<jc>// Parse RDF/PROTO bytes into a bean or map</jc>
+ * 	MyPojo <jv>parsed</jv> = RdfProto.<jsm>to</jsm>(<jv>bytes</jv>, MyPojo.<jk>class</jk>);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Using instance methods</jc>
+ * 	RdfProto <jv>m</jv> = RdfProto.<jsf>DEFAULT</jsf>;
+ * 	<jv>bytes</jv> = <jv>m</jv>.write(<jv>myBean</jv>);
+ * 	<jv>parsed</jv> = <jv>m</jv>.read(<jv>bytes</jv>, MyPojo.<jk>class</jk>);
+ * </p>
+ *
+ * <p>Output is binary (<jk>byte</jk>[]), Protocol Buffers format.</p>
+ *
+ * <p>Complex structures (nested objects, arrays) serialize to equivalent RDF triples in binary form.</p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * 	<li class='link'>{doc jm.Marshallers}

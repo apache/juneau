@@ -43,6 +43,21 @@ package org.apache.juneau.jena;
  * 	MyBean <jv>bean</jv> = <jv>p</jv>.parse(<jv>nTriples</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
+ * <h5 class='figure'>Example input (bean with name/age):</h5>
+ * <p class='bcode'>
+ * 	&lt;...&gt; &lt;.../name&gt; "Alice" .
+ * 	&lt;...&gt; &lt;.../age&gt; "30"^^&lt;http://www.w3.org/2001/XMLSchema#int&gt; .
+ * </p>
+ *
+ * <h5 class='figure'>Complex (nested address + array):</h5>
+ * <p class='bcode'>
+ * 	&lt;...&gt; &lt;.../name&gt; "Alice" .
+ * 	&lt;...&gt; &lt;.../address&gt; &lt;.../address&gt; .
+ * 	&lt;.../address&gt; &lt;.../street&gt; "123 Main St" .
+ * 	&lt;.../address&gt; &lt;.../city&gt; "Boston" .
+ * 	&lt;.../address&gt; &lt;.../state&gt; "MA" .
+ * </p>
+ *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>

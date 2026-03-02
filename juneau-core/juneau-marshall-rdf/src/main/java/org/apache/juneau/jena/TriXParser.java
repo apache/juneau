@@ -39,6 +39,24 @@ package org.apache.juneau.jena;
  * 	MyBean <jv>bean</jv> = <jv>p</jv>.parse(<jv>triX</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
+ * <h5 class='figure'>Example input (bean with name/age):</h5>
+ * <p class='bxml'>
+ * 	<xt>&lt;TriX&gt;</xt>
+ * 		<xt>&lt;graph&gt;</xt>
+ * 			<xt>&lt;triple&gt;</xt>...subject, predicate, object...
+ * 		<xt>&lt;/graph&gt;</xt>
+ * 	<xt>&lt;/TriX&gt;</xt>
+ * </p>
+ *
+ * <h5 class='figure'>Complex (nested address + array):</h5>
+ * <p class='bxml'>
+ * 	<xt>&lt;TriX&gt;</xt>
+ * 		<xt>&lt;graph&gt;</xt>
+ * 			<xt>&lt;triple&gt;</xt>...person triples, address triples, tags...
+ * 		<xt>&lt;/graph&gt;</xt>
+ * 	<xt>&lt;/TriX&gt;</xt>
+ * </p>
+ *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>

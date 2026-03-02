@@ -44,6 +44,32 @@ import org.apache.juneau.xml.*;
  * 	String <jv>string</jv> = Xml.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
+ * <h5 class='figure'>Example output (Map of name/age):</h5>
+ * <p class='bxml'>
+ * 	<xt>&lt;object&gt;</xt>
+ * 		<xt>&lt;name&gt;</xt>Alice<xt>&lt;/name&gt;</xt>
+ * 		<xt>&lt;age&gt;</xt>30<xt>&lt;/age&gt;</xt>
+ * 	<xt>&lt;/object&gt;</xt>
+ * </p>
+ *
+ * <h5 class='figure'>Complex (nested object + array):</h5>
+ * <p class='bxml'>
+ * 	<xt>&lt;object&gt;</xt>
+ * 		<xt>&lt;name&gt;</xt>Alice<xt>&lt;/name&gt;</xt>
+ * 		<xt>&lt;age&gt;</xt>30<xt>&lt;/age&gt;</xt>
+ * 		<xt>&lt;address&gt;</xt>
+ * 			<xt>&lt;street&gt;</xt>123 Main St<xt>&lt;/street&gt;</xt>
+ * 			<xt>&lt;city&gt;</xt>Boston<xt>&lt;/city&gt;</xt>
+ * 			<xt>&lt;state&gt;</xt>MA<xt>&lt;/state&gt;</xt>
+ * 		<xt>&lt;/address&gt;</xt>
+ * 		<xt>&lt;tags&gt;</xt>
+ * 			<xt>&lt;string&gt;</xt>a<xt>&lt;/string&gt;</xt>
+ * 			<xt>&lt;string&gt;</xt>b<xt>&lt;/string&gt;</xt>
+ * 			<xt>&lt;string&gt;</xt>c<xt>&lt;/string&gt;</xt>
+ * 		<xt>&lt;/tags&gt;</xt>
+ * 	<xt>&lt;/object&gt;</xt>
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * </ul>

@@ -39,6 +39,21 @@ package org.apache.juneau.jena;
  * 	MyBean <jv>bean</jv> = <jv>p</jv>.parse(<jv>n3</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
+ * <h5 class='figure'>Example input (bean with name/age):</h5>
+ * <p class='bcode'>
+ * 	@prefix j: &lt;...&gt; .
+ * 	&lt;...&gt; a j:Person ; j:name "Alice" ; j:age 30 .
+ * </p>
+ *
+ * <h5 class='figure'>Complex (nested address + array):</h5>
+ * <p class='bcode'>
+ * 	@prefix j: &lt;...&gt; .
+ * 	&lt;...&gt; a j:Person ; j:name "Alice" ; j:age 30 ;
+ * 		j:address &lt;.../address&gt; ; j:tags &lt;.../tags&gt; .
+ * 	&lt;.../address&gt; a j:Address ; j:street "123 Main St" ;
+ * 		j:city "Boston" ; j:state "MA" .
+ * </p>
+ *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>

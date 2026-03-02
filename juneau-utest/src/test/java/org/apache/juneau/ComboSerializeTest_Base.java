@@ -355,4 +355,14 @@ public abstract class ComboSerializeTest_Base extends TestBase {
 	public void h11_serializeCsv(ComboSerialize_Tester<?> t) throws Exception {
 		t.testSerialize("csv");
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// TOML
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void i11_serializeToml(ComboSerialize_Tester<?> t) throws Exception {
+		t.testSerialize("toml");
+	}
 }

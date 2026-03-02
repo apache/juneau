@@ -39,6 +39,31 @@ package org.apache.juneau.jena;
  * 	String <jv>triX</jv> = <jv>s</jv>.serialize(<jv>bean</jv>);
  * </p>
  *
+ * <h5 class='figure'>Example output (bean with name/age):</h5>
+ * <p class='bxml'>
+ * 	<xt>&lt;TriX&gt;</xt>
+ * 		<xt>&lt;graph&gt;</xt>
+ * 			<xt>&lt;uri&gt;</xt>...<xt>&lt;/uri&gt;</xt>
+ * 			<xt>&lt;triple&gt;</xt>
+ * 				<xt>&lt;id&gt;</xt>...<xt>&lt;/id&gt;</xt>
+ * 				<xt>&lt;name&gt;</xt>Alice<xt>&lt;/name&gt;</xt>
+ * 				<xt>&lt;age&gt;</xt>30<xt>&lt;/age&gt;</xt>
+ * 			<xt>&lt;/triple&gt;</xt>
+ * 		<xt>&lt;/graph&gt;</xt>
+ * 	<xt>&lt;/TriX&gt;</xt>
+ * </p>
+ *
+ * <h5 class='figure'>Complex (nested address + array):</h5>
+ * <p class='bxml'>
+ * 	<xt>&lt;TriX&gt;</xt>
+ * 		<xt>&lt;graph&gt;</xt>
+ * 			<xt>&lt;triple&gt;</xt>...subject, predicate, object for name, age, address ref, tags...
+ * 			<xt>&lt;triple&gt;</xt>...address subject, street, city, state...
+ * 			<xt>&lt;triple&gt;</xt>...tags list members...
+ * 		<xt>&lt;/graph&gt;</xt>
+ * 	<xt>&lt;/TriX&gt;</xt>
+ * </p>
+ *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>

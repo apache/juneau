@@ -31,6 +31,7 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.yaml.*;
+import org.apache.juneau.toml.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -139,7 +140,11 @@ class RoundTripLargeObjects_Test extends TestBase {
 			.serializer(YamlSerializer.create().keepNullProperties())
 			.parser(YamlParser.create())
 			.build(),
-		tester(23, "Csv - default")
+		tester(23, "Toml - default")
+			.serializer(TomlSerializer.create())
+			.parser(TomlParser.create())
+			.build(),
+		tester(24, "Csv - default")
 			.serializer(CsvSerializer.create().keepNullProperties())
 			.skipIf(o -> o == null || (o.getClass().isArray() && o.getClass().getComponentType().isPrimitive()))
 			.returnOriginalObject()

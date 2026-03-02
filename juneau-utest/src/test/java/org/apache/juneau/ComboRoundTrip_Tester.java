@@ -37,6 +37,7 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.yaml.*;
+import org.apache.juneau.toml.*;
 
 /**
  * Represents the input to a ComboTest.
@@ -135,6 +136,7 @@ public class ComboRoundTrip_Tester<T> {
 		public Builder<T> yamlT(String value) { expected.put("yamlT", value); return this; }
 		public Builder<T> yamlR(String value) { expected.put("yamlR", value); return this; }
 		public Builder<T> csv(String value) { expected.put("csv", value); return this; }
+		public Builder<T> toml(String value) { expected.put("toml", value); return this; }
 
 		public ComboRoundTrip_Tester<T> build() {
 			return new ComboRoundTrip_Tester<>(this);
@@ -200,6 +202,7 @@ public class ComboRoundTrip_Tester<T> {
 		serializers.put("yamlT", create(b, YamlSerializer.create().typePropertyName("t").addBeanTypes().addRootType()));
 		serializers.put("yamlR", create(b, YamlSerializer.DEFAULT_READABLE.copy().addBeanTypes().addRootType()));
 		serializers.put("csv", create(b, CsvSerializer.create()));
+		serializers.put("toml", create(b, TomlSerializer.DEFAULT.copy().addBeanTypes().addRootType()));
 
 		parsers.put("json", create(b, JsonParser.DEFAULT.copy()));
 		parsers.put("jsonT", create(b, JsonParser.create().typePropertyName("t")));
@@ -239,6 +242,7 @@ public class ComboRoundTrip_Tester<T> {
 		parsers.put("yamlT", create(b, YamlParser.create().typePropertyName("t")));
 		parsers.put("yamlR", create(b, YamlParser.DEFAULT.copy()));
 		parsers.put("csv", create(b, CsvParser.create()));
+		parsers.put("toml", create(b, TomlParser.DEFAULT.copy()));
 	}
 
 	private Serializer create(Builder<?> tb, Serializer.Builder sb) {

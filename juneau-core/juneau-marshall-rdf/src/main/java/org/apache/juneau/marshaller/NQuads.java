@@ -26,6 +26,36 @@ import org.apache.juneau.serializer.*;
 /**
  * A pairing of a {@link NQuadsSerializer} and {@link NQuadsParser} into a single class with convenience read/write methods.
  *
+ * <h5 class='figure'>Examples:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Serialize a bean or map to N-Quads</jc>
+ * 	String <jv>nquads</jv> = NQuads.<jsm>of</jsm>(<jv>myBean</jv>);
+ *
+ * 	<jc>// Parse N-Quads into a bean or map</jc>
+ * 	MyPojo <jv>parsed</jv> = NQuads.<jsm>to</jsm>(<jv>nquads</jv>, MyPojo.<jk>class</jk>);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Using instance methods</jc>
+ * 	NQuads <jv>m</jv> = NQuads.<jsf>DEFAULT</jsf>;
+ * 	<jv>nquads</jv> = <jv>m</jv>.write(<jv>myBean</jv>);
+ * 	<jv>parsed</jv> = <jv>m</jv>.read(<jv>nquads</jv>, MyPojo.<jk>class</jk>);
+ * </p>
+ *
+ * <h5 class='figure'>Example output (bean with name/age, N-Triples with graph):</h5>
+ * <p class='bcode'>
+ * 	&lt;...&gt; &lt;.../name&gt; "Alice" &lt;...&gt; .
+ * 	&lt;...&gt; &lt;.../age&gt; "30"^^&lt;http://www.w3.org/2001/XMLSchema#int&gt; &lt;...&gt; .
+ * </p>
+ *
+ * <h5 class='figure'>Complex (nested address + array):</h5>
+ * <p class='bcode'>
+ * 	&lt;...&gt; &lt;.../name&gt; "Alice" &lt;graph&gt; .
+ * 	&lt;...&gt; &lt;.../address&gt; &lt;.../address&gt; &lt;graph&gt; .
+ * 	&lt;.../address&gt; &lt;.../street&gt; "123 Main St" &lt;graph&gt; .
+ * 	&lt;.../address&gt; &lt;.../city&gt; "Boston" &lt;graph&gt; .
+ * 	&lt;.../address&gt; &lt;.../state&gt; "MA" &lt;graph&gt; .
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * 	<li class='link'>{doc jm.Marshallers}

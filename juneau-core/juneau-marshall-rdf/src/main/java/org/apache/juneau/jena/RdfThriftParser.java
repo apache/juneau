@@ -47,6 +47,8 @@ package org.apache.juneau.jena;
  * 	MyBean <jv>bean</jv> = <jv>p</jv>.parse(<jv>thriftBytes</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
+ * <p>Input is binary (<jk>byte</jk>[] or {@link InputStream}). Complex structures (nested objects, arrays) are supported—they are encoded as equivalent RDF triples in Apache Thrift format.</p>
+ *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>

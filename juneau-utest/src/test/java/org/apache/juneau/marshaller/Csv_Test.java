@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshaller;
 
-import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,7 +41,6 @@ class Csv_Test extends TestBase{
 		assertString(expected2, Csv.of(in2,stringWriter()));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test void a02_from() throws Exception {
 		// Parser is now fully implemented.
 		var csv1 = "value\nfoo\n";
@@ -58,12 +56,12 @@ class Csv_Test extends TestBase{
 		assertEquals(1, r2.size());
 
 		// Parse into a map
-		var r3 = (Map<?, ?>) Csv.to(csv2, Map.class);
+		var r3 = Csv.to(csv2, Map.class);
 		assertEquals("foo", r3.get("a"));
 		assertEquals("bar", r3.get("b"));
 
 		// Parse from Reader into a map
-		var r4 = (Map<?, ?>) Csv.to(stringReader(csv2), Map.class);
+		var r4 = Csv.to(stringReader(csv2), Map.class);
 		assertEquals("foo", r4.get("a"));
 	}
 	//-----------------------------------------------------------------------------------------------------------------

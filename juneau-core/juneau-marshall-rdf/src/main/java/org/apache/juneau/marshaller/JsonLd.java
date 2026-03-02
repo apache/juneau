@@ -42,6 +42,21 @@ import org.apache.juneau.serializer.*;
  * 	String <jv>string</jv> = JsonLd.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
+ * <h5 class='figure'>Example output (bean with name/age, JSON-LD format):</h5>
+ * <p class='bjson'>
+ * 	{ <js>"@context"</js>: {...}, <js>"@id"</js>: <js>"..."</js>,
+ * 		<js>"@type"</js>: <js>"Person"</js>, <js>"name"</js>: <js>"Alice"</js>, <js>"age"</js>: 30 }
+ * </p>
+ *
+ * <h5 class='figure'>Complex (nested address + array):</h5>
+ * <p class='bjson'>
+ * 	{ <js>"@context"</js>: {...}, <js>"@id"</js>: <js>"..."</js>, <js>"@type"</js>: <js>"Person"</js>,
+ * 		<js>"name"</js>: <js>"Alice"</js>, <js>"age"</js>: 30,
+ * 		<js>"address"</js>: { <js>"@id"</js>: <js>".../address"</js>, <js>"street"</js>: <js>"123 Main St"</js>,
+ * 			<js>"city"</js>: <js>"Boston"</js>, <js>"state"</js>: <js>"MA"</js> },
+ * 		<js>"tags"</js>: [<js>"a"</js>,<js>"b"</js>,<js>"c"</js>] }
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * 	<li class='link'>{doc jm.Marshallers}

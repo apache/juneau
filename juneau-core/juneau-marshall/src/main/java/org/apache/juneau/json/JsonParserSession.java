@@ -51,6 +51,7 @@ import org.apache.juneau.utils.Iso8601Utils;
  */
 @SuppressWarnings({
 	"java:S125",  // State-machine and parse-path comments (S1: ..., Let o be null) are documentation, not commented-out code
+	"java:S6541", // Brain method acceptable for JSON parser dispatch and state machines
 	"unchecked", // Type erasure requires unchecked casts
 	"rawtypes", // Raw types necessary for generic type handling
 	"resource" // ParserReader is managed by caller

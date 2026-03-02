@@ -43,6 +43,20 @@ package org.apache.juneau.jena;
  * 	MyBean <jv>bean</jv> = <jv>p</jv>.parse(<jv>rdfJson</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
+ * <h5 class='figure'>Example input (bean with name/age):</h5>
+ * <p class='bjson'>
+ * 	{ <js>"&lt;subject&gt;"</js>: { <js>"&lt;.../name&gt;"</js>: [{ <js>"value"</js>: <js>"Alice"</js> }],
+ * 		<js>"&lt;.../age&gt;"</js>: [{ <js>"value"</js>: 30, <js>"type"</js>: <js>"literal"</js> }] } }
+ * </p>
+ *
+ * <h5 class='figure'>Complex (nested address + array):</h5>
+ * <p class='bjson'>
+ * 	{ <js>"&lt;...&gt;"</js>: { <js>"&lt;.../name&gt;"</js>: [{ <js>"value"</js>: <js>"Alice"</js> }],
+ * 		<js>"&lt;.../address&gt;"</js>: [{ <js>"type"</js>: <js>"uri"</js>, <js>"value"</js>: <js>".../address"</js> }] },
+ * 	  <js>"&lt;.../address&gt;"</js>: { <js>"&lt;.../street&gt;"</js>: [{ <js>"value"</js>: <js>"123 Main St"</js> }],
+ * 		<js>"&lt;.../city&gt;"</js>: [{ <js>"value"</js>: <js>"Boston"</js> }], <js>"&lt;.../state&gt;"</js>: [{ <js>"value"</js>: <js>"MA"</js> }] } }
+ * </p>
+ *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>

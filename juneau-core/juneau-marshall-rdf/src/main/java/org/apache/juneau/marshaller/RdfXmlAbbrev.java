@@ -44,6 +44,32 @@ import org.apache.juneau.serializer.*;
  * 	String <jv>string</jv> = RdfXmlAbbrev.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
+ * <h5 class='figure'>Example output (bean with name/age, abbreviated RDF/XML):</h5>
+ * <p class='bxml'>
+ * 	<xt>&lt;rdf:RDF&gt;</xt>
+ * 		<xt>&lt;j:Person rdf:about=</xt><xs>"..."</xs><xt>&gt;</xt>
+ * 			<xt>&lt;j:name&gt;</xt>Alice<xt>&lt;/j:name&gt;</xt>
+ * 			<xt>&lt;j:age&gt;</xt>30<xt>&lt;/j:age&gt;</xt>
+ * 		<xt>&lt;/j:Person&gt;</xt>
+ * 	<xt>&lt;/rdf:RDF&gt;</xt>
+ * </p>
+ *
+ * <h5 class='figure'>Complex (nested address + array):</h5>
+ * <p class='bxml'>
+ * 	<xt>&lt;rdf:RDF&gt;</xt>
+ * 		<xt>&lt;j:Person rdf:about=</xt><xs>"..."</xs><xt>&gt;</xt>
+ * 			<xt>&lt;j:name&gt;</xt>Alice<xt>&lt;/j:name&gt;</xt>
+ * 			<xt>&lt;j:age&gt;</xt>30<xt>&lt;/j:age&gt;</xt>
+ * 			<xt>&lt;j:address rdf:resource=</xt><xs>".../address"</xs><xt>/&gt;</xt>
+ * 		<xt>&lt;/j:Person&gt;</xt>
+ * 		<xt>&lt;j:Address rdf:about=</xt><xs>".../address"</xs><xt>&gt;</xt>
+ * 			<xt>&lt;j:street&gt;</xt>123 Main St<xt>&lt;/j:street&gt;</xt>
+ * 			<xt>&lt;j:city&gt;</xt>Boston<xt>&lt;/j:city&gt;</xt>
+ * 			<xt>&lt;j:state&gt;</xt>MA<xt>&lt;/j:state&gt;</xt>
+ * 		<xt>&lt;/j:Address&gt;</xt>
+ * 	<xt>&lt;/rdf:RDF&gt;</xt>
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * 	<li class='link'>{doc jm.Marshallers}

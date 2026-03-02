@@ -96,6 +96,16 @@ import org.apache.juneau.serializer.*;
  * 	)
  * </p>
  *
+ * <h5 class='figure'>Example output (Map of name/age):</h5>
+ * <p class='bcode'>
+ * 	(name=Alice,age=30)
+ * </p>
+ *
+ * <h5 class='figure'>Complex (nested object + array):</h5>
+ * <p class='bcode'>
+ * 	(name=Alice,age=30,address=(street=123+Main+St,city=Boston,state=MA),tags=@(a,b,c))
+ * </p>
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Serialize a Map</jc>
