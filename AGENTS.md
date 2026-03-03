@@ -18,7 +18,7 @@ This document outlines the rules, guidelines, and best practices that AI assista
 ### Task Interpretation Commands
 - **"make a plan"** or **"come up with a plan"** - When the user asks to make a plan for something, provide a summary of suggested changes only. **Do NOT make actual code changes**. The plan should outline what needs to be done, but implementation should wait for explicit user approval.
 - **"suppress warnings"** or **"suppress issues"** - When the user asks to suppress warnings or issues that appear to refer to SonarLint/SonarQube issues, add `@SuppressWarnings` annotations to the appropriate class or method level. Use the specific rule ID from the warning (e.g., `java:S100`, `java:S115`, `java:S116`). Apply class-level suppressions when multiple methods/fields are affected, or method-level suppressions for specific methods.
-- **SuppressWarnings Format**: When adding `@SuppressWarnings` annotations, always use multi-line format with curly braces and include a brief comment explaining why:
+- **SuppressWarnings Format**: All `@SuppressWarnings` annotations must use multi-line format with curly braces and include a brief comment explaining why each suppression is needed. Never use single-line `@SuppressWarnings("xxx")` without the multi-line format and comment.
   ```java
   @SuppressWarnings({
       "resource" // CsvReader owns ParserReader; caller must close CsvReader
@@ -32,7 +32,7 @@ This document outlines the rules, guidelines, and best practices that AI assista
       "resource" // w is closed by try-with-resources; lambdas capture it
   })
   ```
-  Never use single-line `@SuppressWarnings("xxx")` without the multi-line format and comment.
+  **Exception**: Parameter-level annotations (e.g. `catch (@SuppressWarnings("unused") Exception e)`) may remain single-line when multi-line format is impractical.
 
 ### Script Shortcut Commands
 - **"start docs"** or **"start docusaurus"** - Runs `scripts/start-docusaurus.py`

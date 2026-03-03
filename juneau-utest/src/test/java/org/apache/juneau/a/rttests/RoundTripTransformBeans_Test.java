@@ -32,6 +32,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.time.*;
 import org.apache.juneau.csv.*;
+import org.apache.juneau.markdown.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
@@ -185,6 +186,11 @@ class RoundTripTransformBeans_Test extends TestBase {
 			.serializer(CsvSerializer.create().keepNullProperties())
 			.skipIf(o -> o == null || (o.getClass().isArray() && o.getClass().getComponentType().isPrimitive()))
 			.returnOriginalObject()
+			.build(),
+		tester(31, "Markdown - default")
+			.serializer(MarkdownSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(MarkdownParser.create())
+			.skipIf(o -> o instanceof A)  // byte[][] not yet serialized as Base64 in inline JSON5
 			.build(),
 	};
 

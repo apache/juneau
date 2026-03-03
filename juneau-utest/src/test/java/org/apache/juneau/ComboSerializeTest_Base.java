@@ -365,4 +365,14 @@ public abstract class ComboSerializeTest_Base extends TestBase {
 	public void i11_serializeToml(ComboSerialize_Tester<?> t) throws Exception {
 		t.testSerialize("toml");
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Markdown
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void i21_serializeMarkdown(ComboSerialize_Tester<?> t) throws Exception {
+		t.testSerialize("markdown");
+	}
 }

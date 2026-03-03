@@ -1276,6 +1276,30 @@ public class Parser extends BeanContextable {
 	}
 
 	/**
+	 * Same as {@link #parse(String, ClassMeta)} but creates the parser session with a specific outer object.
+	 *
+	 * <p>
+	 * The outer object is used when instantiating top-level non-static inner classes and when setting
+	 * {@link org.apache.juneau.annotation.ParentProperty @ParentProperty} fields on parsed beans.
+	 * This is important when a parser is used to parse inline content (e.g. JSON5 embedded in a Markdown
+	 * table cell) where the parent bean context must be preserved.
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param input The input string to parse.
+	 * @param type The object type to create.
+	 * @param outer
+	 * 	The outer object to associate with this parse session.
+	 * 	Used for {@link org.apache.juneau.annotation.ParentProperty @ParentProperty} injection and
+	 * 	non-static inner class construction.
+	 * 	Can be <jk>null</jk>.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public final <T> T parseWithOuter(String input, ClassMeta<T> type, Object outer) throws ParseException {
+		return createSession().outer(outer).build().parse(input, type);
+	}
+
+	/**
 	 * Same as {@link #parse(Object, Type, Type...)} but since it's a {@link String} input doesn't throw an {@link IOException}.
 	 *
 	 * @param <T> The class type of the object being created.

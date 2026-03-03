@@ -37,6 +37,7 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.yaml.*;
 import org.apache.juneau.toml.*;
+import org.apache.juneau.markdown.*;
 
 /**
  * Represents the input to a ComboTest.
@@ -122,6 +123,7 @@ public class ComboSerialize_Tester<T> {
 		public Builder<T> yamlT(String value) { expected.put("yamlT", value); return this; }
 		public Builder<T> yamlR(String value) { expected.put("yamlR", value); return this; }
 		public Builder<T> toml(String value) { expected.put("toml", value); return this; }
+		public Builder<T> markdown(String value) { expected.put("markdown", value); return this; }
 
 		public ComboSerialize_Tester<T> build() {
 			return new ComboSerialize_Tester<>(this);
@@ -181,6 +183,7 @@ public class ComboSerialize_Tester<T> {
 		serializers.put("yamlT", create(b, YamlSerializer.create().typePropertyName("t").addBeanTypes().addRootType()));
 		serializers.put("yamlR", create(b, YamlSerializer.DEFAULT_READABLE.copy().addBeanTypes().addRootType()));
 		serializers.put("toml", create(b, TomlSerializer.DEFAULT.copy().addBeanTypes().addRootType()));
+		serializers.put("markdown", create(b, MarkdownSerializer.create().keepNullProperties().addBeanTypes().addRootType()));
 	}
 
 	private Serializer create(Builder<?> tb, Serializer.Builder sb) {

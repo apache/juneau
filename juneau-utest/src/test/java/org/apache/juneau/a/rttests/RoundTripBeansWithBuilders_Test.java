@@ -34,6 +34,7 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.yaml.*;
+import org.apache.juneau.markdown.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
@@ -134,6 +135,10 @@ class RoundTripBeansWithBuilders_Test extends TestBase {
 			.serializer(CsvSerializer.create().keepNullProperties())
 			.skipIf(o -> o == null || (o.getClass().isArray() && o.getClass().getComponentType().isPrimitive()))
 			.returnOriginalObject()
+			.build(),
+		tester(22, "Markdown - default")
+			.serializer(MarkdownSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(MarkdownParser.create())
 			.build(),
 	};
 

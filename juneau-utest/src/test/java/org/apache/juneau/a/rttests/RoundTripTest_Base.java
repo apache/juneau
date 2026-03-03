@@ -28,6 +28,7 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.yaml.*;
+import org.apache.juneau.markdown.*;
 
 /**
  * Tests designed to serialize and parse objects to make sure we end up
@@ -129,6 +130,10 @@ public abstract class RoundTripTest_Base extends TestBase {
 			// Only test serialization of inputs that CSV can represent.
 			.skipIf(o -> !isCsvSerializableInput(o))
 			.returnOriginalObject()
+			.build(),
+		tester(22, "Markdown - default")
+			.serializer(MarkdownSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(MarkdownParser.create())
 			.build(),
 	};
 
