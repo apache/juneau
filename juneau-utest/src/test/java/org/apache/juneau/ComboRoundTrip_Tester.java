@@ -39,6 +39,7 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.yaml.*;
 import org.apache.juneau.toml.*;
+import org.apache.juneau.ini.*;
 import org.apache.juneau.markdown.*;
 
 /**
@@ -143,6 +144,7 @@ public class ComboRoundTrip_Tester<T> {
 		public Builder<T> yamlR(String value) { expected.put("yamlR", value); return this; }
 		public Builder<T> csv(String value) { expected.put("csv", value); return this; }
 		public Builder<T> toml(String value) { expected.put("toml", value); return this; }
+		public Builder<T> ini(String value) { expected.put("ini", value); return this; }
 		public Builder<T> markdown(String value) { expected.put("markdown", value); return this; }
 
 		public ComboRoundTrip_Tester<T> build() {
@@ -211,6 +213,7 @@ public class ComboRoundTrip_Tester<T> {
 		serializers.put("yamlR", create(b, YamlSerializer.DEFAULT_READABLE.copy().addBeanTypes().addRootType()));
 		serializers.put("csv", create(b, CsvSerializer.create()));
 		serializers.put("toml", create(b, TomlSerializer.DEFAULT.copy().addBeanTypes().addRootType()));
+		serializers.put("ini", create(b, IniSerializer.DEFAULT.copy().addBeanTypes().addRootType()));
 		serializers.put("markdown", create(b, MarkdownSerializer.create().keepNullProperties().addBeanTypes().addRootType()));
 
 		parsers.put("json", create(b, JsonParser.DEFAULT.copy()));
@@ -253,6 +256,7 @@ public class ComboRoundTrip_Tester<T> {
 		parsers.put("yamlR", create(b, YamlParser.DEFAULT.copy()));
 		parsers.put("csv", create(b, CsvParser.create()));
 		parsers.put("toml", create(b, TomlParser.DEFAULT.copy()));
+		parsers.put("ini", create(b, IniParser.DEFAULT.copy()));
 		parsers.put("markdown", create(b, MarkdownParser.create()));
 	}
 

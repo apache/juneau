@@ -54,7 +54,8 @@ import org.apache.juneau.commons.settings.*;
  */
 @SuppressWarnings({
 	"java:S115", // Constants use UPPER_snakeCase convention
-	"java:S1118" // Utility class with static methods only
+	"java:S1118", // Utility class with static methods only
+	"java:S1135"  // TODO comment retained as documentation for future refactoring
 })
 public class Utils {
 
@@ -246,7 +247,8 @@ public class Utils {
 	 *         Returns <c>0</c> if objects are not of the same type or do not implement the {@link Comparable} interface.
 	 */
 	@SuppressWarnings({
-		"unchecked" // Type erasure requires unchecked casts
+		"unchecked", // Type erasure requires unchecked casts
+		"java:S3740" // Raw Comparable; parameterizing causes compile error in compareTo
 	})
 	public static int cmp(Object o1, Object o2) {
 		if (o1 == null) {
@@ -1525,7 +1527,6 @@ public class Utils {
 	 * @return <jk>true</jk> if the objects are not equal.
 	 * @see #eq(Object, Object)
 	 */
-	// TODO - Rename this to neq, then add a ne for not-empty
 	public static <T> boolean neq(T s1, T s2) {
 		return ! eq(s1, s2);
 	}
@@ -1552,7 +1553,6 @@ public class Utils {
 	 * @return <jk>true</jk> if the objects are not equal based on the test, or if one is <jk>null</jk> and the other is not.
 	 * @see #eq(Object, Object, BiPredicate)
 	 */
-	// TODO - Rename this to neq, then add a ne for not-empty
 	public static <T,U> boolean neq(T o1, U o2, BiPredicate<T,U> test) {
 		if (o1 == null)
 			return nn(o2);
@@ -1582,7 +1582,6 @@ public class Utils {
 	 * @return <jk>true</jk> if the strings are not equal ignoring case.
 	 * @see #eqic(String, String)
 	 */
-	// TODO - Rename this to neqic, then add a ne for not-empty
 	public static boolean neqic(String s1, String s2) {
 		return ! eqic(s1, s2);
 	}

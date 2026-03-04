@@ -470,7 +470,7 @@ timeout 120s sh -c 'mvn clean install 2>&1 | tail -20'
 - **TODO Identifiers**: When adding new TODO items, assign them a unique "TODO-#" identifier (e.g., "TODO-1", "TODO-2", etc.)
 - **TODO References**: When the user asks to "fix TODO-X" or "work on TODO-X", they are referring to the specific identifier in the TODO.md file
 - **TODO Completion**: When TODOs are completed, remove them from the TODO list entirely
-- **Plans**: Implementation plans (e.g., `jsonl_implementation.md`, `ini_implementation.md`) are also located in the `/todo` folder alongside TODO.md
+- **Plans**: Implementation plans (e.g., `1_ini_implementation.md`, `2_hjson_implementation.md`) are also located in the `/todo` folder alongside TODO.md
 
 ### 12. Release Notes Management
 - When the user says "add to release notes" or "add this to the release notes", this refers to the release notes in the `/juneau-docs` directory

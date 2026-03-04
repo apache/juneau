@@ -31,6 +31,7 @@ import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.yaml.*;
 import org.apache.juneau.toml.*;
+import org.apache.juneau.ini.*;
 import org.apache.juneau.proto.*;
 import org.apache.juneau.markdown.*;
 import org.apache.juneau.uon.*;
@@ -154,6 +155,7 @@ import org.apache.juneau.xml.*;
 		CsvSerializer.class,
 		YamlSerializer.class,
 		TomlSerializer.class,
+		IniSerializer.class,
 		ProtoSerializer.class,
 		MarkdownSerializer.class
 	},
@@ -173,6 +175,7 @@ import org.apache.juneau.xml.*;
 		CsvParser.class,
 		YamlParser.class,
 		TomlParser.class,
+		IniParser.class,
 		ProtoParser.class,
 		MarkdownParser.class
 	}

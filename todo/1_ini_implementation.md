@@ -454,26 +454,13 @@ Path: `juneau-rest/juneau-rest-server/src/main/java/org/apache/juneau/rest/confi
 
 Add `IniSerializer.class` to `serializers` array and `IniParser.class` to `parsers` array.
 
-### 2. `BasicIniConfig.java` (New)
-
-Path: `juneau-rest/juneau-rest-server/src/main/java/org/apache/juneau/rest/config/BasicIniConfig.java`
-
-```java
-@Rest(
-    serializers={IniSerializer.class},
-    parsers={IniParser.class},
-    defaultAccept="text/ini"
-)
-public interface BasicIniConfig extends DefaultConfig {}
-```
-
-### 3. `RestClient.java`
+### 2. `RestClient.java`
 
 Path: `juneau-rest/juneau-rest-client/src/main/java/org/apache/juneau/rest/client/RestClient.java`
 
 Add `IniSerializer.class` and `IniParser.class` to the `universal()` method's serializers/parsers lists.
 
-### 4. Context: `Context.java`
+### 3. Context: `Context.java`
 
 Path: `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/Context.java`
 
@@ -973,7 +960,7 @@ the same level of detail.
 13. **Annotation tests** (`IniAnnotation_Test.java`, `IniConfigAnnotation_Test.java`)
 14. **Edge case tests** (`IniEdgeCases_Test.java`) -- 13 test cases
 15. **Media type tests** (`IniMediaType_Test.java`)
-16. **REST integration** (`BasicUniversalConfig`, `BasicIniConfig`, `RestClient`)
+16. **REST integration** (`BasicUniversalConfig`, `RestClient`)
 17. **Context registration** (`IniConfig`, `IniConfigAnnotation`, `Context.java`)
 18. **Final documentation review**
 

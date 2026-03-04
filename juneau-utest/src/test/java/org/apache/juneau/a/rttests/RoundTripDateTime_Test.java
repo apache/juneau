@@ -36,6 +36,7 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.yaml.*;
 import org.apache.juneau.toml.*;
+import org.apache.juneau.ini.*;
 import org.apache.juneau.proto.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -176,16 +177,20 @@ class RoundTripDateTime_Test extends TestBase {
 			.serializer(TomlSerializer.create())
 			.parser(TomlParser.create())
 			.build(),
-		tester(32, "Csv - default")
+		tester(32, "Ini - default")
+			.serializer(IniSerializer.create())
+			.parser(IniParser.create())
+			.build(),
+		tester(33, "Csv - default")
 			.serializer(CsvSerializer.create().keepNullProperties())
 			.skipIf(o -> o == null || (o.getClass().isArray() && o.getClass().getComponentType().isPrimitive()))
 			.returnOriginalObject()
 			.build(),
-		tester(33, "Markdown - default")
+		tester(34, "Markdown - default")
 			.serializer(MarkdownSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(MarkdownParser.create())
 			.build(),
-		tester(34, "Proto - default")
+		tester(35, "Proto - default")
 			.serializer(ProtoSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(ProtoParser.create())
 			.build(),
