@@ -30,6 +30,9 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.urlencoding.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"unchecked" // Cast from Object to Map/List in rest util tests
+})
 class RestUtils_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

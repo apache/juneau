@@ -363,7 +363,7 @@ public class MimeTypeDetector {
 						return contentType;
 					}
 			}
-			} catch (Exception e) {
+			} catch (@SuppressWarnings("unused") Exception e) {
 			// Fall back to extension-based detection
 			}
 		}

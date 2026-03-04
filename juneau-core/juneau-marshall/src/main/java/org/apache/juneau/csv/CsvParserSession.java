@@ -287,12 +287,12 @@ public class CsvParserSession extends ReaderParserSession {
 				}
 				results.add(m);
 			}
-			if (results.isEmpty())
-				o = null;
-			else if (results.size() == 1)
-				o = results.get(0);
-			else
-				o = results;
+			if (!results.isEmpty()) {
+				if (results.size() == 1)
+					o = results.get(0);
+				else
+					o = results;
+			}
 		} else {
 			// For simple target types (String, Number, Boolean, etc.) that are not beans/maps/collections,
 			// treat CSV as a single "value" column.  Read the first data row's value column.

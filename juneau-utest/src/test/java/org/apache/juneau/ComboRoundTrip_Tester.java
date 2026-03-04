@@ -44,6 +44,9 @@ import org.apache.juneau.markdown.*;
  * Represents the input to a ComboTest.
  * @param <T>
  */
+@SuppressWarnings({
+	"unchecked" // Consumer/Builder casts and generic round-trip in test infra
+})
 public class ComboRoundTrip_Tester<T> {
 
 	public static <T> Builder<T> create(int index, String label, Type type, Supplier<T> in) {

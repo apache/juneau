@@ -32,7 +32,8 @@ import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"rawtypes" // Raw types necessary for test bean handling
+	"rawtypes", // Raw types necessary for test bean handling
+	"unchecked" // ObjectSwap.swap/unswap raw type invocations in tests
 })
 class AutoListSwapTest extends TestBase {
 

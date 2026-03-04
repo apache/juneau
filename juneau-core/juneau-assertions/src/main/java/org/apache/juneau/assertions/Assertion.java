@@ -230,7 +230,7 @@ public class Assertion {
 					.arg(Object[].class,new Object[0])
 					.run();
 			// @formatter:on
-			} catch (ExecutableException e) {
+			} catch (@SuppressWarnings("unused") ExecutableException e) {
 			// If we couldn't create requested exception, just throw a RuntimeException.
 				throw rex(cause, msg);
 			}

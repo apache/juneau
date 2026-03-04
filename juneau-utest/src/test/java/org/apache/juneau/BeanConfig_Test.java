@@ -37,6 +37,7 @@ import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
 	"rawtypes", // Raw types necessary for test bean handling
+	"unchecked", // Iterator/Iterator<String> unchecked conversion in tests
 	"java:S5961", // High assertion count acceptable in comprehensive tests
 	"cast" // Explicit cast needed for type testing
 })

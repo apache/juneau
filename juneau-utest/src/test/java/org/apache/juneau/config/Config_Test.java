@@ -37,7 +37,8 @@ import org.apache.juneau.uon.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"rawtypes" // Raw types used for generic testing scenarios
+	"rawtypes", // Raw types used for generic testing scenarios
+	"unchecked" // Cast from Object to List/Map in config tests
 })
 class Config_Test extends TestBase {
 

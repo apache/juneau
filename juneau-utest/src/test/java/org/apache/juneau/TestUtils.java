@@ -140,6 +140,7 @@ import org.junit.jupiter.api.*;
  * @see BasicBeanConverter
  */
 @SuppressWarnings({
+	"unchecked", // BeanTester cast and generic type handling in test utilities
 	"java:S1172" // Parameters kept for consistent method signatures across test utilities
 })
 public class TestUtils extends Utils {

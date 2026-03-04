@@ -43,6 +43,9 @@ import org.apache.juneau.markdown.*;
  * Represents the input to a ComboTest.
  * @param <T>
  */
+@SuppressWarnings({
+	"unchecked" // Consumer/Builder casts in test infra
+})
 public class ComboSerialize_Tester<T> {
 
 	public static <T> Builder<T> create(int index, String label, Supplier<T> in) {

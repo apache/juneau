@@ -287,7 +287,7 @@ public class ReflectionMap<V> {
 						}
 					}
 			});
-			} catch (IndexOutOfBoundsException e) {
+			} catch (@SuppressWarnings("unused") IndexOutOfBoundsException e) {
 			throw rex("Invalid reflection signature: [{0}]", key);
 			}
 
@@ -312,7 +312,7 @@ public class ReflectionMap<V> {
 		 * @param key The key string to split.
 		 * @param consumer The consumer to accept each split key.
 		 */
-		private void splitNames(String key, Consumer<String> consumer) {
+		private static void splitNames(String key, Consumer<String> consumer) {
 			if (key.indexOf(',') == -1) {
 				consumer.accept(key);
 			} else {

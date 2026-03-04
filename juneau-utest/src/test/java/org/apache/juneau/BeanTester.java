@@ -56,6 +56,9 @@ import org.apache.juneau.marshaller.*;
  *
  * @param <T> The type of bean being tested
  */
+@SuppressWarnings({
+	"unchecked" // Class<T> cast for generic bean type in test utility
+})
 public class BeanTester<T> {
 
 	private T bean;

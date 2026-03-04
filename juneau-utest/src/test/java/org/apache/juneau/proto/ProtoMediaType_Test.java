@@ -28,14 +28,14 @@ import org.junit.jupiter.api.Test;
 class ProtoMediaType_Test {
 
 	@Test
-	void a01_producesCorrectMediaType() throws Exception {
+	void a01_producesCorrectMediaType() {
 		var ct = ProtoSerializer.DEFAULT.getResponseContentType();
 		assertEquals("text", ct.getType());
 		assertEquals("protobuf", ct.getSubType());
 	}
 
 	@Test
-	void a02_consumesCorrectMediaType() throws Exception {
+	void a02_consumesCorrectMediaType() {
 		var types = ProtoParser.DEFAULT.getMediaTypes().stream()
 			.map(mt -> mt.getType() + "/" + mt.getSubType())
 			.toList();
@@ -43,7 +43,7 @@ class ProtoMediaType_Test {
 	}
 
 	@Test
-	void a03_contentNegotiation() throws Exception {
+	void a03_contentNegotiation() {
 		var bean = JsonMap.of("x", 1);
 		var proto = Proto.of(bean);
 		assertNotNull(proto);

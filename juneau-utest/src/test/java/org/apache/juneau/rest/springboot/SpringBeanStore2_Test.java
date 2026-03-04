@@ -30,6 +30,9 @@ import org.springframework.context.*;
 /**
  * Tests for {@link SpringBeanStore2}.
  */
+@SuppressWarnings({
+	"unchecked" // getBean(String, Class) invocation in test
+})
 class SpringBeanStore2_Test extends TestBase {
 
 	private ApplicationContext mockAppContext;

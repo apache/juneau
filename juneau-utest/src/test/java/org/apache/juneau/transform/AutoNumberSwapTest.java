@@ -31,6 +31,7 @@ import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
 	"rawtypes", // Raw types necessary for test bean handling
+	"unchecked", // ObjectSwap.swap/unswap raw type invocations in tests
 	"java:S1186" // Empty method body intentional for callback testing
 })
 class AutoNumberSwapTest extends TestBase {

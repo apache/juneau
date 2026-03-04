@@ -97,6 +97,9 @@ public class LogsResource extends BasicRestServlet {
 	/** File or directory details for REST response. */
 	@Response(schema = @Schema(description = "File or directory details"))
 	@Bean(properties = "type,name,size,lastModified,actions,files")
+	@SuppressWarnings({
+		"java:S1135" // TODO in getFiles() - will address later
+	})
 	public static class FileResource {
 		static final FileFilter FILE_FILTER = f2 -> f2.isDirectory() || f2.getName().endsWith(".log");
 		static final Comparator<FileResource> FILE_COMPARATOR = (o1, o2) -> {
@@ -298,6 +301,9 @@ public class LogsResource extends BasicRestServlet {
 	 * @param config The microservice configuration.
 	 */
 	@RestInit
+	@SuppressWarnings({
+		"java:S2696" // RestInit must be instance method; static fields shared across requests by design
+	})
 	public void init(Config config) {
 		logDir = new File(config.get("Logging/logDir").asString().orElse("logs"));
 		allowDeletes = config.get("Logging/allowDeletes").asBoolean().orElse(true);
@@ -467,7 +473,7 @@ public class LogsResource extends BasicRestServlet {
 		return new LogParser(leFormatter, f, start, end, thread, loggers, severity);
 	}
 
-	private Object getReader(File f, Date start, Date end, String thread, String[] loggers, String[] severity) throws IOException {
+	private static Object getReader(File f, Date start, Date end, String thread, String[] loggers, String[] severity) throws IOException {
 		if (start == null && end == null && thread == null && loggers == null)
 			return getReader(f);
 		return getLogParser(f, start, end, thread, loggers, severity);

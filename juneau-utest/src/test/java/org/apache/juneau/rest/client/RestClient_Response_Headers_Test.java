@@ -37,6 +37,7 @@ import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
+	"unchecked", // Cast from Object to List<Integer> in header test
 	"java:S5961", // High assertion count acceptable in comprehensive test
 	"java:S1186" // Empty test method intentional - constructor required by BasicHeader parent class
 })

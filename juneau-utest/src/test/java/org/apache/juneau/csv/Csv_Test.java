@@ -26,6 +26,9 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"unchecked" // Cast from Object to List<Csv_Test.*> in parse tests
+})
 class Csv_Test extends TestBase {
 
 	//====================================================================================================

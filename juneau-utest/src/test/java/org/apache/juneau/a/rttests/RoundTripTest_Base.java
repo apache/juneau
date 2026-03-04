@@ -34,6 +34,9 @@ import org.apache.juneau.markdown.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
+@SuppressWarnings({
+	"unchecked" // Type safety in generic test helpers
+})
 public abstract class RoundTripTest_Base extends TestBase {
 
 	private static final RoundTrip_Tester[] TESTERS = {

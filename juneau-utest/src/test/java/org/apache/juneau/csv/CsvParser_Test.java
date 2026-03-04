@@ -31,6 +31,9 @@ import org.junit.jupiter.params.provider.*;
 /**
  * Tests for {@link CsvParser} and {@link CsvParserSession}.
  */
+@SuppressWarnings({
+	"unchecked" // parseList casts to List<T> from parser result
+})
 class CsvParser_Test extends TestBase {
 
 	/** Convenience: parse CSV into List&lt;T&gt;. */

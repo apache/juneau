@@ -27,6 +27,9 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"unchecked" // Cast from Object to List<String> in Csv.from tests
+})
 class Csv_Test extends TestBase{
 
 	@Test void a01_to() throws Exception {

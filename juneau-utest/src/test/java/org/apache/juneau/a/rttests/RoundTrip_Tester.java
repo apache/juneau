@@ -28,6 +28,9 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 
+@SuppressWarnings({
+	"unchecked" // Cast from Object to T in round-trip test infra
+})
 public class RoundTrip_Tester {
 
 	public static Builder create(int index, String label) {

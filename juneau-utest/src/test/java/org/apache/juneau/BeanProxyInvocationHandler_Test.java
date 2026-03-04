@@ -23,6 +23,7 @@ import java.lang.reflect.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
+	"unchecked", // Cast from Object to T in proxy test
 	"java:S1172" // Unused parameters in tests are intentional
 })
 class BeanProxyInvocationHandler_Test extends TestBase {

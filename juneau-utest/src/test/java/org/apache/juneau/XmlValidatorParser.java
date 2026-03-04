@@ -35,6 +35,9 @@ import org.apache.juneau.xml.*;
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  */
+@SuppressWarnings({
+	"unchecked" // Cast from Object to Map/Collection in XML validation
+})
 public class XmlValidatorParser extends XmlParser {
 
 	//-----------------------------------------------------------------------------------------------------------------

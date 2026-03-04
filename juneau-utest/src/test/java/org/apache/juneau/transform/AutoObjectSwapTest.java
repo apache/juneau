@@ -34,7 +34,8 @@ import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
 	"rawtypes", // Raw types necessary for test bean handling
-	"java:S1172", // Unused parameters kept for API consistency or framework requirements
+	"unchecked", // ObjectSwap.swap/unswap raw type invocations in tests
+	"java:S1172" // Unused parameters kept for API consistency or framework requirements
 })
 class AutoObjectSwapTest extends TestBase {
 

@@ -33,6 +33,7 @@ import org.junit.jupiter.api.*;
  * and edge case handling for PropertyExtractor implementations.</p>
  */
 @SuppressWarnings({
+	"unchecked", // Cast from Object to List; toList raw invocation in tests
 	"cast" // Explicit cast needed for type testing
 })
 class PropertyExtractor_Test extends TestBase {

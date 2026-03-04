@@ -458,9 +458,9 @@ public class MarkdownSerializerSession extends WriterSerializerSession {
 			char c = s.charAt(i);
 			if (c < 32 || c == 127) return true;
 		}
-		try { Integer.parseInt(s); return true; } catch (NumberFormatException ignored) { /* Not a number; fall through */ }
-		try { Long.parseLong(s); return true; } catch (NumberFormatException ignored) { /* Not a number; fall through */ }
-		try { Double.parseDouble(s); return true; } catch (NumberFormatException ignored) { /* Not a number; fall through */ }
+		try { Integer.parseInt(s); return true; } catch (@SuppressWarnings("unused") NumberFormatException ignored) { /* Not a number; fall through */ }
+		try { Long.parseLong(s); return true; } catch (@SuppressWarnings("unused") NumberFormatException ignored) { /* Not a number; fall through */ }
+		try { Double.parseDouble(s); return true; } catch (@SuppressWarnings("unused") NumberFormatException ignored) { /* Not a number; fall through */ }
 		return false;
 	}
 

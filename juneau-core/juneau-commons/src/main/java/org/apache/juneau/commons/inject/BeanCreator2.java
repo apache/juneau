@@ -395,7 +395,7 @@ public class BeanCreator2<T> {
 	public Optional<T> asOptional() {
 		try {
 		return Optional.of(run());
-		} catch (ExecutableException e) {
+		} catch (@SuppressWarnings("unused") ExecutableException e) {
 		return Optional.empty();
 		}
 	}
