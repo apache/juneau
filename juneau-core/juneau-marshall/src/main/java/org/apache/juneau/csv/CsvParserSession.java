@@ -56,8 +56,10 @@ import org.apache.juneau.swap.*;
  * </ul>
  */
 @SuppressWarnings({
-	"unchecked",
-	"rawtypes",
+	"unchecked", // Type erasure requires unchecked casts in parse logic
+	"rawtypes",  // Raw types necessary for generic Map/List handling
+	"java:S3776", // Cognitive complexity acceptable for CSV parse logic; branching is inherent to format
+	"java:S6541"  // Brain method acceptable for doParse; CSV parse flow is inherently sequential
 })
 public class CsvParserSession extends ReaderParserSession {
 
@@ -285,7 +287,12 @@ public class CsvParserSession extends ReaderParserSession {
 				}
 				results.add(m);
 			}
-			o = results.isEmpty() ? null : (results.size() == 1 ? results.get(0) : results);
+			if (results.isEmpty())
+				o = null;
+			else if (results.size() == 1)
+				o = results.get(0);
+			else
+				o = results;
 		} else {
 			// For simple target types (String, Number, Boolean, etc.) that are not beans/maps/collections,
 			// treat CSV as a single "value" column.  Read the first data row's value column.
@@ -385,7 +392,9 @@ public class CsvParserSession extends ReaderParserSession {
 	/**
 	 * Parses a single data row into a map of the specified type.
 	 */
-	@SuppressWarnings("java:S3740")
+	@SuppressWarnings({
+		"java:S3740" // Raw Map required for generic map from ClassMeta
+	})
 	private Object parseRowIntoMap(List<String> headers, List<String> row, ClassMeta<?> eType, Object outer) throws ParseException {
 		Map m;
 		if (eType.canCreateNewInstance(outer))

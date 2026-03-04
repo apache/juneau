@@ -54,10 +54,12 @@ public class XmlReader implements XMLStreamReader, Positionable {
 	 * @throws IOException Thrown by underling
 	 * @throws XMLStreamException Thrown by underlying XML stream.
 	 */
+	@SuppressWarnings({
+		"resource" // Reader from pipe; consumed by XMLInputFactory
+	})
 	protected XmlReader(ParserPipe pipe, boolean validating, XMLReporter reporter, XMLResolver resolver, XMLEventAllocator eventAllocator) throws IOException, XMLStreamException {
 		this.pipe = pipe;
 		try {
-			@SuppressWarnings("resource")
 			Reader r = pipe.getBufferedReader();
 			var factory = XMLInputFactory.newInstance();
 			factory.setProperty(XMLInputFactory.IS_VALIDATING, validating);

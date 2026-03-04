@@ -13,7 +13,7 @@ This document outlines the rules, guidelines, and best practices that AI assista
 ### Shorthand Commands
 - **"c"** means **"continue"** - When the user sends just "c", continue with the current task or work
 - **"s"** means **"status"** - When the user sends just "s", give a status update on what you're currently working on
-- **"TODO-x"** means **"work on this TODO"** - When the user sends just "TODO-3", "TODO-67", etc., start working on that specific TODO item from the TODO.md file
+- **"TODO-x"** means **"work on this TODO"** - When the user sends just "TODO-3", "TODO-67", etc., start working on that specific TODO item from the `/todo/TODO.md` file
 
 ### Task Interpretation Commands
 - **"make a plan"** or **"come up with a plan"** - When the user asks to make a plan for something, provide a summary of suggested changes only. **Do NOT make actual code changes**. The plan should outline what needs to be done, but implementation should wait for explicit user approval.
@@ -463,13 +463,14 @@ timeout 120s sh -c 'mvn clean install 2>&1 | tail -20'
 - Maintain consistency across similar files
 
 ### 11. TODO List Management
-- When the user says "add to TODO" or "add to the TODO list", this refers to the `TODO.md` file in the project root
+- When the user says "add to TODO" or "add to the TODO list", this refers to the `TODO.md` file in the `/todo` folder
 - Do NOT use the in-memory todo list tool for user-requested TODO items
-- Add items directly to the `TODO.md` file using the write or search_replace tools
-- Follow the existing format and structure of the `TODO.md` file
+- Add items directly to the `/todo/TODO.md` file using the write or search_replace tools
+- Follow the existing format and structure of the TODO.md file
 - **TODO Identifiers**: When adding new TODO items, assign them a unique "TODO-#" identifier (e.g., "TODO-1", "TODO-2", etc.)
 - **TODO References**: When the user asks to "fix TODO-X" or "work on TODO-X", they are referring to the specific identifier in the TODO.md file
-- **TODO Completion**: When TODOs are completed, remove them from the TODO.md list entirely
+- **TODO Completion**: When TODOs are completed, remove them from the TODO list entirely
+- **Plans**: Implementation plans (e.g., `jsonl_implementation.md`, `ini_implementation.md`) are also located in the `/todo` folder alongside TODO.md
 
 ### 12. Release Notes Management
 - When the user says "add to release notes" or "add this to the release notes", this refers to the release notes in the `/juneau-docs` directory

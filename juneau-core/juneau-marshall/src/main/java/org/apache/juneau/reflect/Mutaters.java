@@ -135,7 +135,9 @@ public class Mutaters {
 	 * @param oc The output type.
 	 * @return The transform for performing the conversion, or <jk>null</jk> if the conversion cannot be made.
 	 */
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for Mutater lookup
+	})
 	public static <I,O> Mutater<I,O> get(Class<I> ic, Class<O> oc) {
 
 		if (ic == null || oc == null)

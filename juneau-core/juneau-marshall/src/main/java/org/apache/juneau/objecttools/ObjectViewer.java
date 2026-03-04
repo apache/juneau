@@ -55,7 +55,8 @@ import org.apache.juneau.internal.*;
 @SuppressWarnings({
 	"unchecked", // Type erasure requires unchecked casts
 	"rawtypes", // Raw types necessary for generic type handling
-	"java:S6541" // Stateless utility, singleton for convenience
+	"java:S6541", // Stateless utility, singleton for convenience
+	"java:S6542"  // Singleton required for ObjectTool pattern; stateless DEFAULT instance
 })
 public class ObjectViewer implements ObjectTool<ViewArgs> {
 
@@ -63,7 +64,8 @@ public class ObjectViewer implements ObjectTool<ViewArgs> {
 	 * Default reusable searcher.
 	 */
 	@SuppressWarnings({
-		"java:S6541" // Stateless utility, singleton for convenience
+		"java:S6541", // Stateless utility, singleton for convenience
+		"java:S6542"  // Singleton required for ObjectTool pattern; stateless DEFAULT instance
 	})
 	public static final ObjectViewer DEFAULT = new ObjectViewer();
 
@@ -72,6 +74,9 @@ public class ObjectViewer implements ObjectTool<ViewArgs> {
 	 *
 	 * @return A new {@link ObjectViewer} object.
 	 */
+	@SuppressWarnings({
+		"java:S6542"  // create() intentionally allows new instances; DEFAULT singleton for convenience
+	})
 	public static ObjectViewer create() {
 		return new ObjectViewer();
 	}

@@ -87,7 +87,10 @@ import org.apache.juneau.parser.*;
  * 	<li class='link'><a href="https://toml.io/en/v1.0.0">TOML v1.0.0 Specification</a>
  * </ul>
  */
-@SuppressWarnings({"java:S110", "java:S115"})
+@SuppressWarnings({
+	"java:S110", // Builder pattern requires many parameters
+	"java:S115"  // ARG_ prefix follows framework convention
+})
 public class TomlParser extends ReaderParser {
 
 	private static final String ARG_copyFrom = "copyFrom";

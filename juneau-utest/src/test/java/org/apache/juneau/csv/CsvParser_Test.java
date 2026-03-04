@@ -19,11 +19,14 @@ package org.apache.juneau.csv;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Tests for {@link CsvParser} and {@link CsvParserSession}.
@@ -148,22 +151,19 @@ class CsvParser_Test extends TestBase {
 	// e - Quoted field handling (RFC 4180)
 	//====================================================================================================
 
-	@Test void e01_parseQuotedComma() throws Exception {
-		var csv = "value\n\"hello, world\"\n";
-		var r = parseList(csv, String.class);
-		assertEquals("hello, world", r.get(0));
+	static Stream<Arguments> quotedFieldCases() {
+		return Stream.of(
+			Arguments.of("value\n\"hello, world\"\n", "hello, world"),
+			Arguments.of("value\n\"line1\nline2\"\n", "line1\nline2"),
+			Arguments.of("value\n\"say \"\"hello\"\"\"\n", "say \"hello\"")
+		);
 	}
 
-	@Test void e02_parseQuotedNewline() throws Exception {
-		var csv = "value\n\"line1\nline2\"\n";
+	@ParameterizedTest
+	@MethodSource("quotedFieldCases")
+	void e01_parseQuotedFields(String csv, String expected) throws Exception {
 		var r = parseList(csv, String.class);
-		assertEquals("line1\nline2", r.get(0));
-	}
-
-	@Test void e03_parseDoubledQuote() throws Exception {
-		var csv = "value\n\"say \"\"hello\"\"\"\n";
-		var r = parseList(csv, String.class);
-		assertEquals("say \"hello\"", r.get(0));
+		assertEquals(expected, r.get(0));
 	}
 
 	//====================================================================================================

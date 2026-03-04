@@ -55,7 +55,10 @@ import org.apache.juneau.rest.servlet.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestRpc">REST/RPC</a>
  * </ul>
  */
-@SuppressWarnings({ "serial", "javadoc" })
+@SuppressWarnings({
+	"serial",  // SerialVersionUID not used for servlet
+	"javadoc"  // Javadoc inherited from BasicRestServlet
+})
 public abstract class RrpcServlet extends BasicRestServlet {
 
 	private final Map<String,RrpcInterfaceMeta> serviceMap = new ConcurrentHashMap<>();
@@ -224,6 +227,8 @@ public abstract class RrpcServlet extends BasicRestServlet {
 	 * @return The service map.
 	 * @throws Exception Any exception.
 	 */
-	@SuppressWarnings("java:S112") // throws Exception intentional - callback/lifecycle method
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - callback/lifecycle method
+	})
 	protected abstract Map<Class<?>,Object> getServiceMap() throws Exception;
 }

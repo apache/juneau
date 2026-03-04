@@ -52,7 +52,10 @@ import org.apache.jena.riot.*;
 	"rawtypes",
 	"unchecked",
 	"resource",
-	"java:S115"
+	"java:S110", // Inheritance depth acceptable for serializer session hierarchy
+	"java:S115", // ARG_ prefix follows framework convention
+	"java:S3776", // Cognitive complexity acceptable for RDF stream serialization
+	"java:S6541"  // Brain method acceptable for RDF stream serialization dispatch logic
 })
 public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 
@@ -177,7 +180,8 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 	}
 
 	private final Model model;
-	private final Property pRoot, pValue;
+	private final Property pRoot;
+	private final Property pValue;
 	private final Lang lang;
 	private final RdfStreamSerializer ctx;
 	private final Namespace[] namespaces;
@@ -255,7 +259,7 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 	}
 
 	private String getUri(Object uri, Object uri2) {
-		var s = (String)null;
+		String s = null;
 		if (nn(uri))
 			s = uri.toString();
 		if ((s == null || s.isEmpty()) && nn(uri2))
@@ -265,14 +269,15 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 		return getUriResolver().resolve(s);
 	}
 
-	@SuppressWarnings("null")
+	@SuppressWarnings({
+		"null" // aType/wType intentionally null before assignment in control flow
+	})
 	private RDFNode serializeAnything(Object o, boolean isURI, ClassMeta<?> eType, String attrName, BeanPropertyMeta bpm, Resource parentResource) throws SerializeException {
 		var m = model;
-		var aType = (ClassMeta<?>)null;
-		var wType = (ClassMeta<?>)null;
-		ClassMeta<?> sType = object();
+		ClassMeta<?> aType = push2(attrName, o, eType);
+		ClassMeta<?> wType = null;
+		ClassMeta<?> sType;
 
-		aType = push2(attrName, o, eType);
 		if (eType == null)
 			eType = object();
 		if (aType == null) {
@@ -302,7 +307,7 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 		}
 
 		var typeName = getBeanTypeName(this, eType, aType, bpm);
-		var n = (RDFNode)null;
+		RDFNode n = null;
 
 		if (o == null || sType.isChar() && ((Character)o).charValue() == 0) {
 			if (nn(bpm)) {
@@ -326,7 +331,7 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 				n = m.createTypedLiteral(o);
 		} else if (sType.isMap() || (nn(wType) && wType.isMap())) {
 			if (o instanceof BeanMap o2) {
-				var uri = (Object)null;
+				Object uri = null;
 				var rbm = ctx.getRdfBeanMeta(o2.getMeta());
 				if (rbm.hasBeanUri())
 					uri = rbm.getBeanUriProperty().get(o2, null);
@@ -339,7 +344,7 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 			}
 		} else if (sType.isBean()) {
 			var bm = toBeanMap(o);
-			var uri = (Object)null;
+			Object uri = null;
 			var rbm = ctx.getRdfBeanMeta(bm.getMeta());
 			if (rbm.hasBeanUri())
 				uri = rbm.getBeanUriProperty().get(bm, null);

@@ -197,7 +197,9 @@ public final class Iso8601Utils {
 	 * @param timeZone The session time zone (used for types that need a default zone).
 	 * @return The parsed object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for date/time type conversion
+	})
 	public static <T> T parse(String iso8601, ClassMeta<T> targetType, TimeZone timeZone) {
 		if (iso8601 == null)
 			return null;
@@ -288,7 +290,9 @@ public final class Iso8601Utils {
 		return Date.from(ZonedDateTime.from(ta).toInstant());
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for Temporal.from() reflection
+	})
 	private static <T extends Temporal> T parseTemporal(String iso8601, Class<T> tc, ZoneId zoneId) {
 		ZoneId offset = (tc == Instant.class) ? Z : zoneId;
 		var formatter = getFormatterForType(tc);
@@ -342,7 +346,9 @@ public final class Iso8601Utils {
 	 * @param timeZone The session time zone.
 	 * @return The converted date/time object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for date/time type conversion
+	})
 	public static <T> T fromEpochMillis(long epochMillis, ClassMeta<T> targetType, TimeZone timeZone) {
 		Class<T> tc = targetType.inner();
 		ZoneId zoneId = timeZone != null ? timeZone.toZoneId() : ZoneId.systemDefault();

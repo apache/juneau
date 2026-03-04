@@ -259,7 +259,7 @@ public class LogsResource extends BasicRestServlet {
 		res.setContentType("application/octet-stream");
 		try {
 			return new FileContents(getFile(path));
-		} catch (FileNotFoundException e) {
+		} catch (@SuppressWarnings("unused") FileNotFoundException e) {
 			throw new NotFound("File not found");
 		}
 	}
@@ -449,12 +449,12 @@ public class LogsResource extends BasicRestServlet {
 		}
 		try {
 			Files.delete(f.toPath());
-		} catch (IOException e) {
+		} catch (@SuppressWarnings("unused") IOException e) {
 			throw new Forbidden("Could not delete file {0}", f.getAbsolutePath());
 		}
 	}
 
-	private File getFile(String path) throws NotFound {
+	private static File getFile(String path) throws NotFound {
 		if (path == null)
 			return logDir;
 		var f = new File(logDir.getAbsolutePath() + '/' + path);
@@ -463,7 +463,7 @@ public class LogsResource extends BasicRestServlet {
 		throw new NotFound("File not found.");
 	}
 
-	private LogParser getLogParser(File f, Date start, Date end, String thread, String[] loggers, String[] severity) throws IOException {
+	private static LogParser getLogParser(File f, Date start, Date end, String thread, String[] loggers, String[] severity) throws IOException {
 		return new LogParser(leFormatter, f, start, end, thread, loggers, severity);
 	}
 

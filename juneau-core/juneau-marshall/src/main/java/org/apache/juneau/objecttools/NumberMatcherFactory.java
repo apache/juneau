@@ -44,7 +44,8 @@ import org.apache.juneau.commons.lang.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S6541" // Stateless utility, singleton for convenience
+	"java:S6541", // Stateless utility, singleton for convenience
+	"java:S6542"  // Singleton required for stateless MatcherFactory; shared instance in ObjectSearcher
 })
 public class NumberMatcherFactory extends MatcherFactory {
 
@@ -314,9 +315,18 @@ public class NumberMatcherFactory extends MatcherFactory {
 	 * Default reusable matcher.
 	 */
 	@SuppressWarnings({
-		"java:S6541" // Stateless factory, singleton for convenience
+		"java:S6541", // Stateless factory, singleton for convenience
+		"java:S6542"  // Singleton required for stateless MatcherFactory; shared instance in ObjectSearcher
 	})
 	public static final NumberMatcherFactory DEFAULT = new NumberMatcherFactory();
+
+	/**
+	 * Constructor.
+	 */
+	@SuppressWarnings({
+		"java:S6542"  // Protected constructor part of intentional singleton; subclassing allowed
+	})
+	protected NumberMatcherFactory() {}
 
 	@Override
 	public boolean canMatch(ClassMeta<?> cm) {

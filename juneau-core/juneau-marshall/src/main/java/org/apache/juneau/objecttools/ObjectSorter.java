@@ -58,7 +58,8 @@ import org.apache.juneau.*;
 @SuppressWarnings({
 	"unchecked", // Type erasure requires unchecked casts
 	"rawtypes", // Raw types necessary for generic type handling
-	"java:S6541" // Stateless utility, singleton for convenience
+	"java:S6541", // Stateless utility, singleton for convenience
+	"java:S6542"  // Singleton required for ObjectTool pattern; stateless builder-style API
 })
 public class ObjectSorter implements ObjectTool<SortArgs> {
 	private static class SortEntry implements Comparable {
@@ -110,7 +111,8 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 	 * Default reusable searcher.
 	 */
 	@SuppressWarnings({
-		"java:S6541" // Stateless utility, singleton for convenience
+		"java:S6541", // Stateless utility, singleton for convenience
+		"java:S6542"  // Singleton required for ObjectTool pattern; stateless DEFAULT instance
 	})
 	public static final ObjectSorter DEFAULT = new ObjectSorter();
 
@@ -119,6 +121,9 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 	 *
 	 * @return A new {@link ObjectSorter} object.
 	 */
+	@SuppressWarnings({
+		"java:S6542"  // create() intentionally allows new instances; DEFAULT singleton for convenience
+	})
 	public static ObjectSorter create() {
 		return new ObjectSorter();
 	}

@@ -51,8 +51,7 @@ class MarkdownEdgeCases_Test {
 		// Multi-line strings are wrapped in JSON5 backtick syntax for round-trip correctness
 		assertTrue(md.contains("`'") && md.contains("\\n"), "Expected JSON5 escaped newline in output: " + md);
 		// Verify round-trip
-		@SuppressWarnings("unchecked")
-		var parsed = (Map<String, String>) MarkdownParser.DEFAULT.parse(md, Map.class);
+		var parsed = MarkdownParser.DEFAULT.parse(md, Map.class);
 		assertEquals(value, parsed.get("text"));
 	}
 

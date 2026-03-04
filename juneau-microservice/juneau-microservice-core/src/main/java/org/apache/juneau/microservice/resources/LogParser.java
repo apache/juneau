@@ -200,9 +200,8 @@ public class LogParser implements Iterable<LogParser.Entry>, Closeable {
 					prev = null;
 				}
 		} else {
-			if (nn(prev)) {  // prev is non-null here
+			if (prev != null)
 				prev.addText(e.line);
-			}
 		}
 		}
 		if (nn(prev))

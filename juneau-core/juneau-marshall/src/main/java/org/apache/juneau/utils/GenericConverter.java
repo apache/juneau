@@ -51,7 +51,8 @@ import org.apache.juneau.commons.conversion.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S6541" // Stateless converter, singleton for convenience
+	"java:S6541", // Stateless converter, singleton for convenience
+	"java:S6542"  // Singleton required for stateless Converter; thread-safe shared instance
 })
 public class GenericConverter implements Converter {
 
@@ -61,10 +62,12 @@ public class GenericConverter implements Converter {
 	 * <p>
 	 * This instance can be safely shared across multiple threads and reused for all conversion operations.
 	 */
-	@SuppressWarnings({
-		"java:S6541" // Stateless converter, singleton for convenience
-	})
 	public static final GenericConverter INSTANCE = new GenericConverter();
+
+	/**
+	 * Constructor.
+	 */
+	private GenericConverter() {}
 
 	/**
 	 * Converts the specified object to the specified type.

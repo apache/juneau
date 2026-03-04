@@ -34,16 +34,20 @@ import org.apache.juneau.csv.annotation.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.jsonschema.annotation.*;
+import org.apache.juneau.markdown.annotation.*;
 import org.apache.juneau.msgpack.annotation.*;
 import org.apache.juneau.oapi.annotation.*;
 import org.apache.juneau.parser.annotation.*;
 import org.apache.juneau.plaintext.annotation.*;
+import org.apache.juneau.proto.annotation.*;
 import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.soap.annotation.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.toml.annotation.*;
 import org.apache.juneau.uon.annotation.*;
 import org.apache.juneau.urlencoding.annotation.*;
 import org.apache.juneau.xml.annotation.*;
+import org.apache.juneau.yaml.annotation.*;
 
 /**
  * Base class for all Context beans.
@@ -399,15 +403,19 @@ public abstract class Context {
 		 * 	<li class ='ja'>{@link HtmlDocConfig}
 		 * 	<li class ='ja'>{@link JsonConfig}
 		 * 	<li class ='ja'>{@link JsonSchemaConfig}
+		 * 	<li class ='ja'>{@link MarkdownConfig}
 		 * 	<li class ='ja'>{@link MsgPackConfig}
 		 * 	<li class ='ja'>{@link OpenApiConfig}
 		 * 	<li class ='ja'>{@link ParserConfig}
+		 * 	<li class ='ja'>{@link ProtoConfig}
 		 * 	<li class ='ja'>{@link PlainTextConfig}
 		 * 	<li class ='ja'>{@link SerializerConfig}
 		 * 	<li class ='ja'>{@link SoapXmlConfig}
+		 * 	<li class ='ja'>{@link TomlConfig}
 		 * 	<li class ='ja'>{@link UonConfig}
 		 * 	<li class ='ja'>{@link UrlEncodingConfig}
 		 * 	<li class ='ja'>{@link XmlConfig}
+		 * 	<li class ='ja'>{@link YamlConfig}
 		 * 	<li class ='ja'><c>RdfConfig</c>
 		 * </ul>
 		 *

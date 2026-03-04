@@ -33,8 +33,8 @@ import org.apache.juneau.serializer.*;
  *
  */
 @SuppressWarnings({
-	"java:S110",
-	"resource", // Writer lifecycle managed by caller
+	"java:S110", // Inheritance depth acceptable for serializer writer hierarchy
+	"resource"   // Writer lifecycle managed by caller
 })
 public class MarkdownWriter extends SerializerWriter {
 

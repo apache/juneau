@@ -236,7 +236,9 @@ public class CsvSerializerSession extends WriterSerializerSession {
 	 * @param type The class metadata of the value's type.
 	 * @return The swapped value, or the original value if no swap is registered.
 	 */
-	@SuppressWarnings({ "rawtypes" })
+	@SuppressWarnings({
+		"rawtypes" // Raw types necessary for ObjectSwap handling
+	})
 	private Object applySwap(Object value, ClassMeta<?> type) {
 		try {
 			if (value == null || type == null)

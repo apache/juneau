@@ -101,7 +101,9 @@ import org.apache.juneau.*;
 
  * </ul>
  */
-@SuppressWarnings({ "rawtypes" })
+@SuppressWarnings({
+	"rawtypes" // Raw types necessary for generic search result handling
+})
 public class ObjectSearcher implements ObjectTool<SearchArgs> {
 	/*
 	 * Matcher that uses the correct matcher based on object type.

@@ -104,9 +104,6 @@ import org.apache.juneau.swap.*;
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  */
-@SuppressWarnings({
-	"java:S1206" // Inherits equals/hashCode from LinkedHashMap; Map equality is entrySet-based
-})
 public class JsonMap extends LinkedHashMap<String,Object> {
 	private static class UnmodifiableJsonMap extends JsonMap {
 		private static final long serialVersionUID = 1L;
@@ -293,7 +290,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static JsonMap ofText(Reader in, Parser p) throws ParseException {
-		return in == null ? null : new JsonMap(in);
+		return in == null ? null : new JsonMap(in, p);
 	}
 
 	/*
@@ -587,7 +584,9 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @throws ClassCastException
 	 * 	If the <js>"_type"</js> entry is present and not assignable from <c>type</c>
 	 */
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for ClassMeta<T>
+	})
 	public <T> T cast(ClassMeta<T> cm) {
 		BeanSession bs = bs();
 		var c1 = bs.getBeanRegistry().getClassMeta((String)get(bs.getBeanTypePropertyName(cm)));
@@ -1536,6 +1535,16 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		s.addAll(inner.keySet());
 		s.addAll(super.keySet());
 		return s;
+	}
+
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return super.equals(o);
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return super.hashCode();
 	}
 
 	/**

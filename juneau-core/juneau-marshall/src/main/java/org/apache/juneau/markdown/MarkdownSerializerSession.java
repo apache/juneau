@@ -54,7 +54,6 @@ public class MarkdownSerializerSession extends WriterSerializerSession {
 
 	final String nullValue;
 	final boolean showHeaders;
-	private JsonSerializer json5Serializer;
 
 	/**
 	 * Builder class.
@@ -338,9 +337,13 @@ public class MarkdownSerializerSession extends WriterSerializerSession {
 		}
 		for (var entry : m.entrySet()) {
 			String rawKey = entry.getKey() == null ? null : toString(entry.getKey());
-			String keyStr = rawKey == null ? nullValue
-				: isAmbiguousString(rawKey, nullValue) ? "`'" + escapeJson5String(rawKey) + "'`"
-				: MarkdownWriter.escapeCell(rawKey);
+			String keyStr;
+			if (rawKey == null)
+				keyStr = nullValue;
+			else if (isAmbiguousString(rawKey, nullValue))
+				keyStr = "`'" + escapeJson5String(rawKey) + "'`";
+			else
+				keyStr = MarkdownWriter.escapeCell(rawKey);
 			w.tableRow(keyStr, serializeInlineValue(entry.getValue()));
 		}
 	}
@@ -455,9 +458,9 @@ public class MarkdownSerializerSession extends WriterSerializerSession {
 			char c = s.charAt(i);
 			if (c < 32 || c == 127) return true;
 		}
-		try { Integer.parseInt(s); return true; } catch (NumberFormatException ignored) {}
-		try { Long.parseLong(s); return true; } catch (NumberFormatException ignored) {}
-		try { Double.parseDouble(s); return true; } catch (NumberFormatException ignored) {}
+		try { Integer.parseInt(s); return true; } catch (NumberFormatException ignored) { /* Not a number; fall through */ }
+		try { Long.parseLong(s); return true; } catch (NumberFormatException ignored) { /* Not a number; fall through */ }
+		try { Double.parseDouble(s); return true; } catch (NumberFormatException ignored) { /* Not a number; fall through */ }
 		return false;
 	}
 

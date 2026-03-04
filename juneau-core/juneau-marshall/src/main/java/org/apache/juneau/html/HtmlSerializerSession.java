@@ -58,6 +58,7 @@ import org.apache.juneau.xml.annotation.*;
 	"resource", // Resource management handled externally
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
 	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S6541" // Brain method acceptable for serializeAnything; refactoring would reduce clarity
 })
 public class HtmlSerializerSession extends XmlSerializerSession {
 
@@ -68,6 +69,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	private static final String TAG_style = "style";
 	private static final String TAG_table = "table";
 	private static final String TAG_array = "array";
+	private static final String CONST_string = "string";
 
 	/**
 	 * Builder class.
@@ -967,7 +969,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			} else if (sType.isDateOrCalendarOrTemporal()) {
 				String s = Iso8601Utils.format(o, sType, getTimeZone());
 				if (isRoot && addJsonTags)
-					out.sTag("string").text(s).eTag("string");
+					out.sTag(CONST_string).text(s).eTag(CONST_string);
 				else
 					out.text(s);
 				cr = CR_MIXED;
@@ -975,7 +977,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			} else if (sType.isDuration()) {
 				String s = o.toString();
 				if (isRoot && addJsonTags)
-					out.sTag("string").text(s).eTag("string");
+					out.sTag(CONST_string).text(s).eTag(CONST_string);
 				else
 					out.text(s);
 				cr = CR_MIXED;
@@ -1023,7 +1025,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 			} else {
 				if (isRoot && addJsonTags)
-					out.sTag("string").text(toString(o)).eTag("string");
+					out.sTag(CONST_string).text(toString(o)).eTag(CONST_string);
 				else
 					out.text(toString(o));
 				cr = CR_MIXED;
@@ -1034,7 +1036,9 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		return cr;
 	}
 
-	@SuppressWarnings({ "rawtypes" })
+	@SuppressWarnings({
+		"rawtypes" // Raw types necessary for XmlSerializerSession override
+	})
 	@Override /* Overridden from XmlSerializerSession */
 	protected ContentResult serializeAnything(XmlWriter out, Object o, ClassMeta<?> eType, String keyName, String elementName, Namespace elementNamespace, boolean addNamespaceUris, XmlFormat format,
 		boolean isMixed, boolean preserveWhitespace, BeanPropertyMeta pMeta) throws SerializeException {

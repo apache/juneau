@@ -13,6 +13,17 @@
 
 Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
 
+** New Features - Protobuf Text Format Support
+
+    * New ProtoSerializer and ProtoParser for the human-readable Protobuf Text Format (NOT binary wire format).
+    * Media types: produces text/protobuf, accepts text/protobuf and text/x-protobuf.
+    * No .proto schema files required—Java bean metadata provides the type information.
+    * Supports beans, maps, collections, scalars, repeated fields, and nested messages.
+    * Date/time and Duration types serialized as ISO 8601 strings.
+    * New classes: ProtoSerializer, ProtoParser, Proto (marshaller), ProtoWriter, ProtoTokenizer.
+    * New annotations: @Proto (comment), @ProtoConfig (useListSyntaxForBeans, useColonForMessages).
+    * BasicProtoConfig REST interface for Proto-only resources; Proto included in BasicUniversalConfig.
+
 ** New Features - CSV Marshalling Parity with JSON
 
     * Type discriminator: addBeanTypes().addRootType() adds _type column for polymorphic parsing.

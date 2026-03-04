@@ -41,7 +41,9 @@ import org.apache.juneau.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics">Simple Variable Language Basics</a>
  * </ul>
  */
-@SuppressWarnings({ "serial" })
+@SuppressWarnings({
+	"serial" // SerialVersionUID not needed for runtime-only map
+})
 public class ResolvingJsonMap extends JsonMap {
 
 	private final transient VarResolverSession varResolver;

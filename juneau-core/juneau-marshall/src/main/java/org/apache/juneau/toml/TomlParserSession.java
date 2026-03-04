@@ -39,7 +39,15 @@ import org.apache.juneau.utils.Iso8601Utils;
  * - java:S135: Multiple break/continue per loop needed for TOML state-machine parsing.
  * - java:S115: ARG_ctx follows project assertion-param naming convention (ARG_<param>).
  */
-@SuppressWarnings({"rawtypes", "unchecked", "java:S3776", "java:S6541", "java:S135", "java:S115"})
+@SuppressWarnings({
+	"rawtypes", // Raw types necessary for generic Map/List handling
+	"unchecked", // Type erasure requires unchecked casts in convertValue
+	"java:S3776", // Cognitive complexity acceptable for parseMessage
+	"java:S6541", // Brain method acceptable for parseMessage
+	"java:S135", // Multiple breaks acceptable in parse loop
+	"java:S115", // ARG_ prefix follows framework convention
+	"java:S1612" // Class.isAssignableFrom necessary when checking target type (Class<?>), not object instance
+})
 public class TomlParserSession extends ReaderParserSession {
 
 	private static final String ARG_ctx = "ctx";

@@ -39,7 +39,11 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
  * </ul>
  */
-@SuppressWarnings({"resource","java:S110","java:S115"})
+@SuppressWarnings({
+	"resource", // Writer managed by SerializerPipe; caller closes
+	"java:S110", // Session classes inherit many parameters from base
+	"java:S115"  // PROP_/ARG_ prefix follows framework convention
+})
 public class XmlDocSerializerSession extends XmlSerializerSession {
 
 	// Argument name constants for assertArgNotNull

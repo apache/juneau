@@ -1217,7 +1217,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @param c The class
 	 * @return The transformed object.
 	 */
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for Mutater<Object,O>.mutate
+	})
 	public <O> O mutateTo(Object o, Class<O> c) {
 		Mutater<Object,O> t = (Mutater<Object,O>)getToMutater(c);
 		return t == null ? null : t.mutate(o);
@@ -1288,7 +1290,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return A new instance of the object, or <jk>null</jk> if there is no string constructor on the object.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for enum/constructor instantiation
+	})
 	public T newInstanceFromString(Object outer, String arg) throws ExecutableException {
 
 		if (isEnum()) {
