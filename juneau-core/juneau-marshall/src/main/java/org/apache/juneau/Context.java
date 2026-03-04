@@ -33,6 +33,7 @@ import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.csv.annotation.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.json.annotation.*;
+import org.apache.juneau.jsonl.annotation.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.markdown.annotation.*;
 import org.apache.juneau.msgpack.annotation.*;
@@ -402,6 +403,7 @@ public abstract class Context {
 		 * 	<li class ='ja'>{@link HtmlConfig}
 		 * 	<li class ='ja'>{@link HtmlDocConfig}
 		 * 	<li class ='ja'>{@link JsonConfig}
+		 * 	<li class ='ja'>{@link JsonlConfig}
 		 * 	<li class ='ja'>{@link JsonSchemaConfig}
 		 * 	<li class ='ja'>{@link MarkdownConfig}
 		 * 	<li class ='ja'>{@link MsgPackConfig}

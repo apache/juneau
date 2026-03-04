@@ -13,6 +13,16 @@
 
 Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
 
+** New Features - JSONL (JSON Lines) Support
+
+    * New JsonlSerializer and JsonlParser for JSONL (JSON Lines / NDJSON) format.
+    * Media types: produces application/jsonl, accepts application/jsonl, application/x-ndjson, text/jsonl.
+    * Each line is a valid JSON value; collections and arrays serialize one element per line.
+    * Supports beans, maps, collections, scalars, ObjectSwaps, and streaming (Iterator, Iterable, Stream).
+    * New classes: JsonlSerializer, JsonlParser, Jsonl (marshaller), JsonlConfig.
+    * JSONL included in BasicUniversalConfig for REST resources.
+    * Round-trip parity with JSON for all data types; ideal for LLM datasets, streaming, and bulk pipelines.
+
 ** New Features - Protobuf Text Format Support
 
     * New ProtoSerializer and ProtoParser for the human-readable Protobuf Text Format (NOT binary wire format).

@@ -81,6 +81,7 @@ import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.jsonl.*;
 import org.apache.juneau.markdown.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.msgpack.*;
@@ -5557,6 +5558,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				serializers(
 					JsonSerializer.class,
 					Json5Serializer.class,
+					JsonlSerializer.class,
 					HtmlSerializer.class,
 					XmlSerializer.class,
 					UonSerializer.class,
@@ -5571,6 +5573,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				.parsers(
 					JsonParser.class,
 					Json5Parser.class,
+					JsonlParser.class,
 					XmlParser.class,
 					HtmlParser.class,
 					UonParser.class,

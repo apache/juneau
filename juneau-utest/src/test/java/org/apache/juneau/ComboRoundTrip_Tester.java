@@ -30,6 +30,7 @@ import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jena.*;
+import org.apache.juneau.jsonl.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -105,6 +106,7 @@ public class ComboRoundTrip_Tester<T> {
 		public Builder<T> json(String value) { expected.put("json", value); return this; }
 		public Builder<T> jsonT(String value) { expected.put("jsonT", value); return this; }
 		public Builder<T> jsonR(String value) { expected.put("jsonR", value); return this; }
+		public Builder<T> jsonl(String value) { expected.put("jsonl", value); return this; }
 		public Builder<T> xml(String value) { expected.put("xml", value); return this; }
 		public Builder<T> xmlT(String value) { expected.put("xmlT", value); return this; }
 		public Builder<T> xmlR(String value) { expected.put("xmlR", value); return this; }
@@ -172,6 +174,7 @@ public class ComboRoundTrip_Tester<T> {
 		serializers.put("json", create(b, Json5Serializer.DEFAULT.copy().addBeanTypes().addRootType()));
 		serializers.put("jsonT", create(b, JsonSerializer.create().json5().typePropertyName("t").addBeanTypes().addRootType()));
 		serializers.put("jsonR", create(b, Json5Serializer.DEFAULT_READABLE.copy().addBeanTypes().addRootType()));
+		serializers.put("jsonl", create(b, JsonlSerializer.create().keepNullProperties().addBeanTypes().addRootType()));
 		serializers.put("xml", create(b, XmlSerializer.DEFAULT_SQ.copy().addBeanTypes().addRootType()));
 		serializers.put("xmlT", create(b, XmlSerializer.create().sq().typePropertyName("t").addBeanTypes().addRootType()));
 		serializers.put("xmlR", create(b, XmlSerializer.DEFAULT_SQ_READABLE.copy().addBeanTypes().addRootType()));
@@ -213,6 +216,7 @@ public class ComboRoundTrip_Tester<T> {
 		parsers.put("json", create(b, JsonParser.DEFAULT.copy()));
 		parsers.put("jsonT", create(b, JsonParser.create().typePropertyName("t")));
 		parsers.put("jsonR", create(b, JsonParser.DEFAULT.copy()));
+		parsers.put("jsonl", create(b, JsonlParser.create()));
 		parsers.put("xml", create(b, XmlParser.DEFAULT.copy()));
 		parsers.put("xmlT", create(b, XmlParser.create().typePropertyName("t")));
 		parsers.put("xmlR", create(b, XmlParser.DEFAULT.copy()));

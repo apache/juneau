@@ -21,6 +21,7 @@ import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.jsonl.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.plaintext.*;
@@ -141,6 +142,7 @@ import org.apache.juneau.xml.*;
 		HtmlSchemaDocSerializer.class,
 		JsonSerializer.class,
 		Json5Serializer.class,
+		JsonlSerializer.class,
 		JsonSchemaSerializer.class,
 		XmlDocSerializer.class,
 		UonSerializer.class,
@@ -160,6 +162,7 @@ import org.apache.juneau.xml.*;
 	parsers={
 		JsonParser.class,
 		Json5Parser.class,
+		JsonlParser.class,
 		XmlParser.class,
 		HtmlParser.class,
 		UonParser.class,
