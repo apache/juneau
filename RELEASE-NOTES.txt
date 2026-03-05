@@ -53,8 +53,8 @@ Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
     * Bump org.apache:apache from 35 to 37 #306.
     * Bump org.mockito:mockito-core from 5.15.2 to 5.21.0 #307.
     * Bump spring.version from 4.0.1 to 4.0.3 #308, #316.
-    * Bump Bump org.apache.maven.plugins:maven-compiler-plugin from 3.14.1 to 3.15.0 #314.
-    * Bump Bump jetty.version from 12.1.5 to 12.1.6 #312.
+    * Bump org.apache.maven.plugins:maven-compiler-plugin from 3.14.1 to 3.15.0 #314.
+    * Bump jetty.version from 12.1.5 to 12.1.7 #312, #319.
 
 ** New Features - Direct Iterator/Iterable/Stream/Enumeration Serialization
 
