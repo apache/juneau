@@ -40,6 +40,7 @@ import org.apache.juneau.xml.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
+@Ignore("Base class for parameterized tests - not meant to be run directly")
 @SuppressWarnings({
 	"java:S3577" // Class name ends with "TestBase" to indicate it's a base class, not a test class itself
 })
