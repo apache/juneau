@@ -236,7 +236,8 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @return The list of all bean property values.
 	 */
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for bean property filtering with predicate
+		"java:S3776", // Cognitive complexity acceptable for bean property filtering with predicate
+		"java:S1135"  // TODO: dyna property iteration inefficiency - deferred optimization
 	})
 	public BeanMap<T> forEachValue(Predicate<Object> valueFilter, BeanPropertyConsumer action) {
 
@@ -420,8 +421,25 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			var props = meta.getConstructorArgs();
 			var c = meta.getConstructor();
 			var args = new Object[props.size()];
-			for (var i = 0; i < props.size(); i++)
-				args[i] = propertyCache.remove(props.get(i));
+			for (var i = 0; i < props.size(); i++) {
+				var propName = props.get(i);
+				var rawVal = propertyCache.remove(propName);
+				// Convert value to expected property type if it's not already the correct type.
+				// Uses the same logic as BeanSession.convertToMemberType's early-return check:
+				// collections/maps with specific element/value types always need conversion.
+				if (rawVal != null) {
+					var pm = getPropertyMeta(propName);
+					if (pm != null) {
+						var cm = pm.getClassMeta();
+						var needsConversion = !cm.inner().isInstance(rawVal)
+							|| (cm.isCollection() && !cm.getElementType().isObject())
+							|| (cm.isMap() && !cm.getValueType().is(Object.class));
+						if (needsConversion)
+							rawVal = session.convertToType(rawVal, cm);
+					}
+				}
+				args[i] = rawVal;
+			}
 			try {
 				bean = c.<T>newInstance(args);
 				propertyCache.forEach(this::put);

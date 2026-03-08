@@ -13,6 +13,30 @@
 
 Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
 
+** New Features - Hjson (Human JSON) Support
+
+    * New HjsonSerializer and HjsonParser for Hjson (Human JSON) format.
+    * Media types: produces application/hjson, accepts application/hjson and application/hjson+json.
+    * Hjson extends JSON with human-friendly syntax designed for configuration files and hand-edited data:
+        - Quoteless string values — unquoted strings ending at the newline (e.g. name: Alice)
+        - Multiline strings — triple-single-quote ''' blocks with automatic indentation stripping
+        - Comments — # single-line, // single-line, and /* ... */ block comments
+        - Optional commas — newlines serve as member/element separators
+        - Trailing commas — ignored
+        - Unquoted keys — object keys need not be quoted when safe
+        - Root-braceless objects — top-level objects can omit the surrounding {}
+    * Serializer options: useWhitespace, useQuotelessStrings, useQuotelessKeys, useMultilineStrings,
+      omitRootBraces, useNewlineSeparators.
+    * Full round-trip support for all standard Juneau data types: beans, maps, collections, arrays,
+      primitives, Optional, byte arrays, Date/time/Duration, ObjectSwap/surrogate transforms,
+      polymorphic _type resolution, builder-pattern beans, and non-static inner classes.
+    * New classes: HjsonSerializer, HjsonParser, HjsonSerializerSession, HjsonParserSession,
+      HjsonTokenizer, HjsonWriter, HjsonClassMeta, HjsonBeanPropertyMeta, HjsonMetaProvider.
+    * New marshaller class: org.apache.juneau.marshaller.Hjson with static of()/to() convenience methods.
+    * New annotations: @Hjson (class-level), @HjsonConfig (config-level).
+    * Hjson included in BasicUniversalConfig for REST resources.
+    * RestClient recognizes Hjson media types for automatic serializer/parser selection.
+
 ** New Features - JSONL (JSON Lines) Support
 
     * New JsonlSerializer and JsonlParser for JSONL (JSON Lines / NDJSON) format.

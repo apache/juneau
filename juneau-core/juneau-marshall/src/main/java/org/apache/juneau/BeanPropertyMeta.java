@@ -299,7 +299,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 */
 		@SuppressWarnings({
 			"java:S3776", // throws Exception intentional - callback/lifecycle method
-			"java:S112", // Generic exception thrown; acceptable for framework/lifecycle methods
+			"java:S112",  // Generic exception thrown; acceptable for framework/lifecycle methods
+			"java:S6541"  // Brain Method: validate() intentionally consolidates property metadata resolution
 		})
 		public boolean validate(BeanContext bc, BeanRegistry parentBeanRegistry, TypeVariables typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
 
@@ -1144,9 +1145,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 								var l = new JsonList(valueList);
 								for (var i = l.listIterator(); i.hasNext();) {
 									var v = i.next();
-									if (nn(v) && (! elementType.isInstance(v))) {
+									var needsConversion = v == null ? elementType.isOptional() : ! elementType.isInstance(v);
+									if (needsConversion)
 										i.set(session.convertToType(v, elementType));
-									}
 								}
 								valueList = l;
 							}
@@ -1179,7 +1180,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				if (nn(swap) && value1 != null && swap.getSwapClass().isAssignableFrom(value1.getClass())) {
 					value1 = swap.unswap(session, value1, rawTypeMeta);
 				} else {
-					value1 = session.convertToType(value1, rawTypeMeta);
+					// Pass bean as outer for non-static inner class instantiation (e.g. J2 with string constructor)
+					value1 = session.convertToMemberType(bean, value1, rawTypeMeta);
 				}
 				invokeSetter(bean, pName, value1);
 			}

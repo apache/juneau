@@ -35,6 +35,7 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.yaml.*;
 import org.apache.juneau.toml.*;
+import org.apache.juneau.hjson.*;
 import org.apache.juneau.markdown.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -187,6 +188,10 @@ class RoundTripMaps_Test extends TestBase {
 			.serializer(MarkdownSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(MarkdownParser.create())
 			.skipIf(o -> o instanceof java.util.HashMap)
+			.build(),
+		tester(33, "Hjson - default")
+			.serializer(HjsonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
+			.parser(HjsonParser.create())
 			.build(),
 	};
 

@@ -36,6 +36,7 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.yaml.*;
 import org.apache.juneau.toml.*;
+import org.apache.juneau.hjson.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.proto.*;
 import org.junit.jupiter.params.*;
@@ -193,6 +194,10 @@ class RoundTripDateTime_Test extends TestBase {
 		tester(35, "Proto - default")
 			.serializer(ProtoSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(ProtoParser.create())
+			.build(),
+		tester(36, "Hjson - default")
+			.serializer(HjsonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
+			.parser(HjsonParser.create())
 			.build(),
 	};
 

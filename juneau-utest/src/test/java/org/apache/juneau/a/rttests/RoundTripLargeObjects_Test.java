@@ -32,6 +32,7 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.yaml.*;
 import org.apache.juneau.toml.*;
+import org.apache.juneau.hjson.*;
 import org.apache.juneau.markdown.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
@@ -153,6 +154,10 @@ class RoundTripLargeObjects_Test extends TestBase {
 		tester(25, "Markdown - default")
 			.serializer(MarkdownSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(MarkdownParser.create())
+			.build(),
+		tester(26, "Hjson - default")
+			.serializer(HjsonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
+			.parser(HjsonParser.create())
 			.build()
 	};
 

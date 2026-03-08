@@ -29,6 +29,7 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.yaml.*;
+import org.apache.juneau.hjson.*;
 import org.apache.juneau.markdown.*;
 
 /**
@@ -142,6 +143,10 @@ public abstract class RoundTripTest_Base extends TestBase {
 		tester(23, "Markdown - default")
 			.serializer(MarkdownSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(MarkdownParser.create())
+			.build(),
+		tester(24, "Hjson - default")
+			.serializer(HjsonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
+			.parser(HjsonParser.create())
 			.build(),
 	};
 

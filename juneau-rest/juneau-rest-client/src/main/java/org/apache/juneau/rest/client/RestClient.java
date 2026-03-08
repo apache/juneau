@@ -92,6 +92,7 @@ import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.client.assertion.*;
 import org.apache.juneau.toml.*;
+import org.apache.juneau.hjson.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.proto.*;
 import org.apache.juneau.rest.client.remote.*;
@@ -5568,6 +5569,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					MsgPackSerializer.class,
 					PlainTextSerializer.class,
 					TomlSerializer.class,
+					HjsonSerializer.class,
 					IniSerializer.class,
 					ProtoSerializer.class,
 					MarkdownSerializer.class
@@ -5584,6 +5586,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					MsgPackParser.class,
 					PlainTextParser.class,
 					TomlParser.class,
+					HjsonParser.class,
 					IniParser.class,
 					ProtoParser.class,
 					MarkdownParser.class

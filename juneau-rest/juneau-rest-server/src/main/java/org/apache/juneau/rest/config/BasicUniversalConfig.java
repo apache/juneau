@@ -18,6 +18,7 @@ package org.apache.juneau.rest.config;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.csv.*;
+import org.apache.juneau.hjson.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.json.*;
@@ -141,6 +142,7 @@ import org.apache.juneau.xml.*;
 		HtmlDocSerializer.class, // HTML must be listed first because Internet Explore does not include text/html in their Accept header.
 		HtmlStrippedDocSerializer.class,
 		HtmlSchemaDocSerializer.class,
+		HjsonSerializer.class,
 		JsonSerializer.class,
 		Json5Serializer.class,
 		JsonlSerializer.class,
@@ -167,6 +169,7 @@ import org.apache.juneau.xml.*;
 		JsonlParser.class,
 		XmlParser.class,
 		HtmlParser.class,
+		HjsonParser.class,
 		UonParser.class,
 		UrlEncodingParser.class,
 		OpenApiParser.class,

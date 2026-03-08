@@ -45,6 +45,7 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.yaml.*;
+import org.apache.juneau.hjson.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
@@ -190,6 +191,11 @@ class RoundTripTransformBeans_Test extends TestBase {
 		tester(31, "Markdown - default")
 			.serializer(MarkdownSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(MarkdownParser.create())
+			.skipIf(o -> o instanceof A)  // byte[][] not yet serialized as Base64 in inline JSON5
+			.build(),
+		tester(32, "Hjson - default")
+			.serializer(HjsonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
+			.parser(HjsonParser.create())
 			.skipIf(o -> o instanceof A)  // byte[][] not yet serialized as Base64 in inline JSON5
 			.build(),
 	};

@@ -1016,7 +1016,8 @@ public class BeanSession extends ContextSession {
 	 * @return A new instance of the class.
 	 */
 	@SuppressWarnings({
-		"java:S1168"     // TODO: null when BeanMeta not found. Consider empty BeanMap.
+		"java:S1168",   // null when BeanMeta not found. Consider empty BeanMap.
+		"java:S1135"    // TODO comment - deferred design consideration
 	})
 	public final <T> BeanMap<T> newBeanMap(Object outer, Class<T> c) {
 		var m = getBeanMeta(c);
@@ -1396,6 +1397,10 @@ public class BeanSession extends ContextSession {
 					return to.mutateFrom(value);
 				if (from.hasMutaterTo(to))
 					return from.mutateTo(value, to);
+				if (from.isCollection())
+					return (T)toArray(to, (Collection)value);
+				if (from.isArray())
+					return (T)toArray(to, l((Object[])value));
 				return (T)value.toString().getBytes(StandardCharsets.UTF_8);
 			}
 
@@ -1643,7 +1648,9 @@ public class BeanSession extends ContextSession {
 				var valueType = to.getValueType();
 				((Map<?,?>)value).forEach((k, v) -> {
 					var k2 = k;
-					if (! keyType.isObject()) {
+					if (k == null) {
+						k2 = null;  // Preserve null keys (e.g. when null is used as a map key in source)
+					} else if (! keyType.isObject()) {
 						if (keyType.isString() && k.getClass() != Class.class)
 							k2 = k.toString();
 						else
