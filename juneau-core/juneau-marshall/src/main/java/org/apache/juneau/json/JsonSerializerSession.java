@@ -209,7 +209,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		this.ctx = builder.ctx;
 	}
 
-	private SerializerWriter serializeBeanMap(JsonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
+	protected SerializerWriter serializeBeanMap(JsonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
 		int i = indent;
 		out.w('{');
 
@@ -282,7 +282,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		"rawtypes", // Raw types necessary for generic collection/map serialization
 		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
 	})
-	private SerializerWriter serializeMap(JsonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
+	protected SerializerWriter serializeMap(JsonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		var keyType = type.getKeyType();
 		var valueType = type.getValueType();
@@ -326,7 +326,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 * @return The output target object wrapped in an {@link JsonWriter}.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected final JsonWriter getJsonWriter(SerializerPipe out) {
+	protected JsonWriter getJsonWriter(SerializerPipe out) {
 		var output = out.getRawOutput();
 		if (output instanceof JsonWriter output2)
 			return output2;

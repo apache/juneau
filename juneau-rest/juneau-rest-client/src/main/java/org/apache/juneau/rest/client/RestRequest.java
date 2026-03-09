@@ -1340,6 +1340,23 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	/**
+	 * Convenience method for specifying JCS (JSON Canonicalization Scheme, RFC 8785) as the marshalling transmission media type for this request only.
+	 *
+	 * <p>
+	 * 	{@link JcsSerializer} will be used to serialize POJOs to request bodies.
+	 * 	{@link JsonParser} will be used to parse POJOs from response bodies (JCS output is valid JSON).
+	 * <p>
+	 * 	<c>Accept</c> and <c>Content-Type</c> will be set to <js>"application/jcs+json"</js>.
+	 * <p>
+	 * 	Identical to calling <c>serializer(JcsSerializer.<jk>class</jk>).parser(JsonParser.<jk>class</jk>)</c>.
+	 *
+	 * @return This object.
+	 */
+	public RestRequest jcs() {
+		return serializer(JcsSerializer.class).parser(JsonParser.class);
+	}
+
+	/**
 	 * Logs a message.
 	 *
 	 * @param level The log level.

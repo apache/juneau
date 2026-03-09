@@ -36,7 +36,7 @@ import org.apache.juneau.parser.*;
  *
  * <h5 class='topic'>Media types</h5>
  * <p>
- * Handles <c>Content-Type</c> types:  <bc>application/json, text/json</bc>
+ * Handles <c>Content-Type</c> types:  <bc>application/json, text/json, application/jcs+json</bc>
  *
  * <h5 class='topic'>Description</h5>
  * <p>
@@ -155,7 +155,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			consumes("application/json,text/json");
+			consumes("application/json,text/json,application/jcs+json");
 			validateEnd = env("JsonParser.validateEnd", false);
 		}
 

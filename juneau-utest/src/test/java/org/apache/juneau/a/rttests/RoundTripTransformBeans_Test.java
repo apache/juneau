@@ -198,6 +198,12 @@ class RoundTripTransformBeans_Test extends TestBase {
 			.parser(HjsonParser.create())
 			.skipIf(o -> o instanceof A)  // byte[][] not yet serialized as Base64 in inline JSON5
 			.build(),
+		tester(33, "Jcs - default")
+			.serializer(JcsSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(JsonParser.create())
+			.skipIf(o -> o instanceof Double d && (d.isNaN() || d.isInfinite()))
+			.skipIf(o -> o instanceof A)  // byte[][] not yet serialized as Base64 in inline JSON5
+			.build(),
 	};
 
 	static RoundTrip_Tester[]  testers() {

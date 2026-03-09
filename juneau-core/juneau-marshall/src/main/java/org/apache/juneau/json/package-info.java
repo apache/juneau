@@ -15,6 +15,15 @@
  * limitations under the License.
  */
 /**
- * JSON Marshalling Support
+ * JSON Marshalling Support.
+ *
+ * <p>
+ * Includes support for:
+ * <ul>
+ * 	<li>{@link org.apache.juneau.json.JsonSerializer} - Standard JSON serialization
+ * 	<li>{@link org.apache.juneau.json.Json5Serializer} - JSON5 (simplified) serialization
+ * 	<li>{@link org.apache.juneau.json.JcsSerializer} - JCS (RFC 8785) canonical JSON for hashing and signing
+ * </ul>
+ * </p>
  */
 package org.apache.juneau.json;

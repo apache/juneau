@@ -144,6 +144,7 @@ import org.apache.juneau.xml.*;
 		HtmlSchemaDocSerializer.class,
 		HjsonSerializer.class,
 		JsonSerializer.class,
+		JcsSerializer.class,
 		Json5Serializer.class,
 		JsonlSerializer.class,
 		JsonSchemaSerializer.class,

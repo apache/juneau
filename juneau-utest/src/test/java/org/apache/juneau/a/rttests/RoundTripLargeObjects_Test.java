@@ -158,6 +158,11 @@ class RoundTripLargeObjects_Test extends TestBase {
 		tester(26, "Hjson - default")
 			.serializer(HjsonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
 			.parser(HjsonParser.create())
+			.build(),
+		tester(27, "Jcs - default")
+			.serializer(JcsSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(JsonParser.create())
+			.skipIf(o -> o instanceof Double d && (d.isNaN() || d.isInfinite()))
 			.build()
 	};
 

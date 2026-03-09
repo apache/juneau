@@ -149,6 +149,11 @@ class RoundTripAddClassAttrs_Test extends TestBase {
 			.serializer(HjsonSerializer.create().ws().addBeanTypes().addRootType())
 			.parser(HjsonParser.create().disableInterfaceProxies())
 			.build(),
+		tester(26, "Jcs - default")
+			.serializer(JcsSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(JsonParser.create().disableInterfaceProxies())
+			.skipIf(o -> o instanceof Double d && (d.isNaN() || d.isInfinite()))
+			.build(),
 	};
 
 	static RoundTrip_Tester[]  testers() {

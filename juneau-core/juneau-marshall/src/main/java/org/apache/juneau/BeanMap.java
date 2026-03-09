@@ -67,6 +67,9 @@ import org.apache.juneau.swap.*;
  *
  * @param <T> Specifies the type of object that this map encapsulates.
  */
+@SuppressWarnings({
+	"java:S3776" // Cognitive complexity acceptable for bean property iteration and filtering
+})
 public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T> {
 
 	/**

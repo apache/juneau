@@ -3157,6 +3157,23 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		/**
+		 * Convenience method for specifying JCS (JSON Canonicalization Scheme, RFC 8785) as the marshalling transmission media type.
+		 *
+		 * <p>
+		 * 	{@link JcsSerializer} will be used to serialize POJOs to request bodies.
+		 * 	{@link JsonParser} will be used to parse POJOs from response bodies (JCS output is valid JSON).
+		 * <p>
+		 * 	<c>Accept</c> and <c>Content-Type</c> will be set to <js>"application/jcs+json"</js>.
+		 * <p>
+		 * 	Identical to calling <c>serializer(JcsSerializer.<jk>class</jk>).parser(JsonParser.<jk>class</jk>)</c>.
+		 *
+		 * @return This object.
+		 */
+		public Builder jcs() {
+			return serializer(JcsSerializer.class).parser(JsonParser.class);
+		}
+
+		/**
 		 * Assigns {@link ConnectionKeepAliveStrategy} instance.
 		 *
 		 * @param keepAliveStrategy New property value.
@@ -5559,6 +5576,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			return
 				serializers(
 					JsonSerializer.class,
+					JcsSerializer.class,
 					Json5Serializer.class,
 					JsonlSerializer.class,
 					HtmlSerializer.class,

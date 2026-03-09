@@ -199,6 +199,11 @@ class RoundTripDateTime_Test extends TestBase {
 			.serializer(HjsonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
 			.parser(HjsonParser.create())
 			.build(),
+		tester(37, "Jcs - default")
+			.serializer(JcsSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(JsonParser.create())
+			.skipIf(o -> o instanceof Double d && (d.isNaN() || d.isInfinite()))
+			.build(),
 	};
 
 	static RoundTrip_Tester[] testers() {
