@@ -84,6 +84,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.jsonl.*;
 import org.apache.juneau.markdown.*;
 import org.apache.juneau.marshaller.*;
+import org.apache.juneau.bson.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.objecttools.*;
@@ -251,6 +252,7 @@ import org.apache.juneau.xml.*;
  * 		<li class='jm'>{@link Builder#xml() xml()}
  * 		<li class='jm'>{@link Builder#html() html()}
  * 		<li class='jm'>{@link Builder#plainText() plainText()}
+ * 		<li class='jm'>{@link Builder#bson() bson()}
  * 		<li class='jm'>{@link Builder#msgPack() msgPack()}
  * 		<li class='jm'>{@link Builder#uon() uon()}
  * 		<li class='jm'>{@link Builder#urlEnc() urlEnc()}
@@ -3573,6 +3575,19 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		/**
+		 * Convenience method for specifying BSON as the marshalling transmission media type.
+		 *
+		 * <p>
+		 * BSON (Binary JSON) is the format used by MongoDB. Identical to calling
+		 * <c>serializer(BsonSerializer.<jk>class</jk>).parser(BsonParser.<jk>class</jk>)</c>.
+		 *
+		 * @return This object.
+		 */
+		public Builder bson() {
+			return serializer(BsonSerializer.class).parser(BsonParser.class);
+		}
+
+		/**
 		 * Convenience method for specifying MessagePack as the marshalling transmission media type.
 		 *
 		 * <p>
@@ -5584,6 +5599,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					UonSerializer.class,
 					UrlEncodingSerializer.class,
 					OpenApiSerializer.class,
+					BsonSerializer.class,
 					MsgPackSerializer.class,
 					PlainTextSerializer.class,
 					TomlSerializer.class,
@@ -5601,6 +5617,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					UonParser.class,
 					UrlEncodingParser.class,
 					OpenApiParser.class,
+					BsonParser.class,
 					MsgPackParser.class,
 					PlainTextParser.class,
 					TomlParser.class,

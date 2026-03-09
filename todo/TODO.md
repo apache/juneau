@@ -22,3 +22,5 @@ Figure out why this needs a cast:
 - Need a better way to define serializer config values (e.g. useWhitespace) arguments through REST (Additional headers?  Content-Type modifications?)
 
 - RestResponse needs a setSerializer() command.
+
+- Upgrade to Jena 6.0

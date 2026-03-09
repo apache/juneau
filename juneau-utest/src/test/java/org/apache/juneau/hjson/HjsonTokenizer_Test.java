@@ -23,7 +23,12 @@ import java.io.*;
 
 import org.apache.juneau.TestBase;
 import org.apache.juneau.parser.ParserPipe;
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Tests for {@link HjsonTokenizer}.
@@ -34,29 +39,21 @@ class HjsonTokenizer_Test extends TestBase {
 		return new HjsonTokenizer(new StringReader(input));
 	}
 
-	@Test
-	void d01_quotedDouble() throws Exception {
-		var t = tokenizer("\"hello\"");
-		var tok = t.read();
-		assertEquals(STRING, tok.type());
-		assertEquals("hello", tok.stringValue());
+	static Stream<Arguments> stringTokenTypes() {
+		return Stream.of(
+			Arguments.of("\"hello\"", STRING, "hello"),
+			Arguments.of("'world'", STRING, "world"),
+			Arguments.of("'''line1\nline2'''", MULTILINE, "line1\nline2")
+		);
 	}
 
-	@Test
-	void d02_quotedSingle() throws Exception {
-		var t = tokenizer("'world'");
+	@ParameterizedTest
+	@MethodSource("stringTokenTypes")
+	void d01_to_d03_stringTokenTypes(String input, HjsonTokenizer.TokenType expectedType, String expectedValue) throws Exception {
+		var t = tokenizer(input);
 		var tok = t.read();
-		assertEquals(STRING, tok.type());
-		assertEquals("world", tok.stringValue());
-	}
-
-	@Test
-	void d03_multilineToken() throws Exception {
-		var t = tokenizer("'''line1\nline2'''");
-		var tok = t.read();
-		assertEquals(MULTILINE, tok.type());
-		assertTrue(tok.stringValue().contains("line1"));
-		assertTrue(tok.stringValue().contains("line2"));
+		assertEquals(expectedType, tok.type());
+		assertEquals(expectedValue, tok.stringValue());
 	}
 
 	@Test
@@ -115,35 +112,26 @@ class HjsonTokenizer_Test extends TestBase {
 		assertEquals(EOF, t.read().type());
 	}
 
-	@Test
-	void d09_hashComment() throws Exception {
-		var t = tokenizer("# comment\nx");
+	static Stream<Arguments> commentTypes() {
+		return Stream.of(
+			Arguments.of("# comment\nx", "x"),
+			Arguments.of("// comment\ny", "y"),
+			Arguments.of("/* block */\nz", "z")
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource("commentTypes")
+	void d09_commentTypes(String input, String expectedValue) throws Exception {
+		var t = tokenizer(input);
 		t.skipWhitespaceAndComments();
 		var tok = t.read();
 		assertEquals(QUOTELESS, tok.type());
-		assertEquals("x", tok.stringValue());
+		assertEquals(expectedValue, tok.stringValue());
 	}
 
 	@Test
-	void d10_slashComment() throws Exception {
-		var t = tokenizer("// comment\ny");
-		t.skipWhitespaceAndComments();
-		var tok = t.read();
-		assertEquals(QUOTELESS, tok.type());
-		assertEquals("y", tok.stringValue());
-	}
-
-	@Test
-	void d11_blockComment() throws Exception {
-		var t = tokenizer("/* block */\nz");
-		t.skipWhitespaceAndComments();
-		var tok = t.read();
-		assertEquals(QUOTELESS, tok.type());
-		assertEquals("z", tok.stringValue());
-	}
-
-	@Test
-	void d12_multipleQuotelessWithNewlines() throws Exception {
+	void d10_multipleQuotelessWithNewlines() throws Exception {
 		var t = tokenizer("a\nb\nc");
 		var t1 = t.read();
 		assertEquals(QUOTELESS, t1.type());
@@ -157,7 +145,7 @@ class HjsonTokenizer_Test extends TestBase {
 	}
 
 	@Test
-	void d13_bracelessInputFirstToken() throws Exception {
+	void d11_bracelessInputFirstToken() throws Exception {
 		// For "name: Bob\nage: 25", first token must be QUOTELESS "name" (not LBRACE)
 		var t = tokenizer("name: Bob\nage: 25");
 		t.skipWhitespaceAndComments();
@@ -167,8 +155,8 @@ class HjsonTokenizer_Test extends TestBase {
 	}
 
 	@Test
-	void d14_bracelessWithParserReader() throws Exception {
-		// Same test but using ParserReader (as the parser does) - must match d13
+	void d12_bracelessWithParserReader() throws Exception {
+		// Same test but using ParserReader (as the parser does) - must match d11
 		var pipe = new ParserPipe("name: Bob\nage: 25");
 		try (var r = pipe.getParserReader()) {
 			var t = new HjsonTokenizer(r);

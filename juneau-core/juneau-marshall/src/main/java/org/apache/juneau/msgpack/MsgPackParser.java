@@ -35,6 +35,20 @@ import org.apache.juneau.parser.*;
  *
  * Handles <c>Content-Type</c> types:  <bc>octal/msgpack</bc>
  *
+ * <h5 class='topic'>Description</h5>
+ * <p>
+ * MessagePack-to-Java type mapping:
+ * <ul class='spaced-list'>
+ * 	<li>MessagePack map → bean or {@link java.util.Map}
+ * 	<li>MessagePack array → {@link java.util.Collection} or Java array
+ * 	<li>MessagePack string → {@link String}; coerced to types parseable from string
+ * 	<li>MessagePack boolean → {@link Boolean}
+ * 	<li>MessagePack int → {@link Integer}; coerced to {@link Long}, {@link Short}, {@link Byte} as needed
+ * 	<li>MessagePack float → {@link Float} or {@link Double}
+ * 	<li>MessagePack binary → {@code byte[]}
+ * 	<li>MessagePack nil → {@code null}
+ * </ul>
+ *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>

@@ -23,6 +23,7 @@ import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonl.*;
+import org.apache.juneau.bson.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.plaintext.*;
@@ -152,6 +153,7 @@ import org.apache.juneau.xml.*;
 		UonSerializer.class,
 		UrlEncodingSerializer.class,
 		OpenApiSerializer.class,
+		BsonSerializer.class,
 		MsgPackSerializer.class,
 		SoapXmlSerializer.class,
 		PlainTextSerializer.class,
@@ -174,6 +176,7 @@ import org.apache.juneau.xml.*;
 		UonParser.class,
 		UrlEncodingParser.class,
 		OpenApiParser.class,
+		BsonParser.class,
 		MsgPackParser.class,
 		PlainTextParser.class,
 		CsvParser.class,

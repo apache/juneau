@@ -1045,6 +1045,12 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder bson() {
+			super.bson();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder msgPack() {
 			super.msgPack();
 			return this;

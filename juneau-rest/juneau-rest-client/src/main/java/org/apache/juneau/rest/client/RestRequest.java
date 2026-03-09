@@ -57,6 +57,7 @@ import org.apache.juneau.http.header.ContentType;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.bson.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
@@ -1400,6 +1401,18 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest mediaType(String value) throws RestCallException {
 		return header(Accept.of(value)).header(ContentType.of(value));
+	}
+
+	/**
+	 * Convenience method for specifying BSON as the marshalling transmission media type for this request only.
+	 *
+	 * <p>
+	 * Identical to calling <c>serializer(BsonSerializer.<jk>class</jk>).parser(BsonParser.<jk>class</jk>)</c>.
+	 *
+	 * @return This object.
+	 */
+	public RestRequest bson() {
+		return serializer(BsonSerializer.class).parser(BsonParser.class);
 	}
 
 	/**

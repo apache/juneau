@@ -256,6 +256,8 @@ public class ParserSession extends BeanSession {
 		"rawtypes"   // Raw types necessary for generic parent property handling
 	})
 	protected static final void setParent(ClassMeta<?> cm, Object o, Object parent) throws ExecutableException {
+		if (cm == null)
+			return;
 		Property m = cm.getParentProperty();
 		if (nn(m) && m.canWrite())
 			m.set(o, parent);

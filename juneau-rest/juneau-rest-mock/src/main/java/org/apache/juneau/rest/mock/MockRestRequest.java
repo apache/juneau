@@ -687,6 +687,12 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	}
 
 	@Override /* Overridden from RestRequest */
+	public MockRestRequest bson() {
+		super.bson();
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
 	public MockRestRequest msgPack() {
 		super.msgPack();
 		return this;

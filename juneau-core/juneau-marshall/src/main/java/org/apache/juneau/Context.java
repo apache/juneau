@@ -401,11 +401,12 @@ public abstract class Context {
 		 * applied as properties to this builder.  These annotations include:
 		 * <ul class='javatreec'>
 		 * 	<li class ='ja'>{@link BeanConfig}
+		 * 	<li class ='ja'>{@link BsonConfig}
 		 * 	<li class ='ja'>{@link CsvConfig}
 		 * 	<li class ='ja'>{@link HtmlConfig}
- * 	<li class ='ja'>{@link HtmlDocConfig}
- * 	<li class ='ja'>{@link HjsonConfig}
- * 	<li class ='ja'>{@link IniConfig}
+		 * 	<li class ='ja'>{@link HtmlDocConfig}
+		 * 	<li class ='ja'>{@link HjsonConfig}
+		 * 	<li class ='ja'>{@link IniConfig}
 		 * 	<li class ='ja'>{@link JsonConfig}
 		 * 	<li class ='ja'>{@link JsonlConfig}
 		 * 	<li class ='ja'>{@link JsonSchemaConfig}

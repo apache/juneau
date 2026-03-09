@@ -38,6 +38,22 @@ import org.apache.juneau.serializer.*;
  * <p>
  * Produces <c>Content-Type</c> types: <bc>octal/msgpack</bc>
  *
+ * <h5 class='topic'>Description</h5>
+ * <p>
+ * Java-to-MessagePack type mapping:
+ * <ul class='spaced-list'>
+ * 	<li>Maps and beans → MessagePack map type
+ * 	<li>Collections and arrays → MessagePack array type
+ * 	<li>{@link String} / {@link Enum} → MessagePack string type
+ * 	<li>{@link Boolean} → MessagePack boolean type
+ * 	<li>{@link Number} (int, long, float, double, etc.) → MessagePack number type (variable-length int or float)
+ * 	<li>{@link java.util.Date} / {@link java.util.Calendar} / {@link java.time.Instant} → ISO 8601 string
+ * 	<li>{@link java.time.Duration} → ISO 8601 duration string
+ * 	<li>{@code byte[]} → MessagePack binary type
+ * 	<li>{@code null} → MessagePack nil type
+ * 	<li>All other types → fallback to {@code toString()} as string
+ * </ul>
+ *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
