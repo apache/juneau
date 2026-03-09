@@ -53,6 +53,33 @@ Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
     * Hjson included in BasicUniversalConfig for REST resources.
     * RestClient recognizes Hjson media types for automatic serializer/parser selection.
 
+** New Features - HOCON (Human-Optimized Config Object Notation) Support
+
+    * New HoconSerializer and HoconParser for HOCON format (used by Akka, Play, sbt, Spark, Kafka).
+    * Media types: produces application/hocon, accepts application/hocon.
+    * HOCON extends JSON with configuration-friendly syntax:
+        - Key-value separators: = (convention), : (JSON-style), or space-brace for objects
+        - Path expressions: a.b.c = value expands to nested objects
+        - Unquoted strings for keys and simple values
+        - Object merging: duplicate keys merge instead of overwrite
+        - Substitutions: ${var} and ${?var} (optional) resolved after parse
+        - Triple-quoted strings """...""" for multi-line
+        - Comments: # and //
+        - Optional root braces
+    * Serializer options: useEqualsSign, useUnquotedStrings, useUnquotedKeys, omitRootBraces,
+      useMultilineStrings, useNewlineSeparators.
+    * Full round-trip support for beans, maps, collections, primitives, date/time/Duration,
+      Optional, ObjectSwap, and polymorphic _type resolution.
+    * New classes: HoconSerializer, HoconParser, HoconSerializerSession, HoconParserSession,
+      HoconTokenizer, HoconWriter, HoconValue, HoconResolver, HoconMetaProvider.
+    * New marshaller: org.apache.juneau.marshaller.Hocon with of()/to() convenience methods.
+    * New annotations: @Hocon (class-level), @HoconConfig (config-level).
+    * HOCON included in BasicUniversalConfig for REST resources.
+    * RestClient recognizes application/hocon for automatic serializer/parser selection.
+    * Parser enhancements: += array append, self-referential substitution (path = ${path}"/bin"),
+      value concatenation (/usr "/local" → /usr/local), array concatenation ([1,2] [3,4]),
+      and object concatenation ({a:1} {b:2}).
+
 ** New Features - JSONL (JSON Lines) Support
 
     * New JsonlSerializer and JsonlParser for JSONL (JSON Lines / NDJSON) format.

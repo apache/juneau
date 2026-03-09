@@ -20,8 +20,6 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.swap.*;
@@ -244,24 +242,14 @@ class CborSerializer_Test extends TestBase {
 
 	@Test
 	void c19_spacedHexOutput() throws Exception {
-		var s = CborSerializer.SpacedHex.DEFAULT;
-		var out = s.serialize(JsonMap.of("a", 1));
-		assertNotNull(out);
-		assertTrue(out.length > 0);
-		var p = CborParser.SpacedHex.DEFAULT;
-		var parsed = p.parse(out, JsonMap.class);
-		assertEquals(1, parsed.getInt("a"));
+		assertEquals(1, CborParser.DEFAULT_SPACED_HEX.parse(
+			CborSerializer.DEFAULT_SPACED_HEX.serialize(JsonMap.of("a", 1)), JsonMap.class).getInt("a"));
 	}
 
 	@Test
 	void c20_base64Output() throws Exception {
-		var s = CborSerializer.Base64.DEFAULT;
-		var out = s.serialize(JsonMap.of("a", 1));
-		assertNotNull(out);
-		assertTrue(out.length > 0);
-		var p = CborParser.Base64.DEFAULT;
-		var parsed = p.parse(out, JsonMap.class);
-		assertEquals(1, parsed.getInt("a"));
+		assertEquals(1, CborParser.DEFAULT_BASE64.parse(
+			CborSerializer.DEFAULT_BASE64.serialize(JsonMap.of("a", 1)), JsonMap.class).getInt("a"));
 	}
 
 	public static class Bean1 {

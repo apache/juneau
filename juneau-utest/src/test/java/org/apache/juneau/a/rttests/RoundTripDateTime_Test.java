@@ -38,6 +38,7 @@ import org.apache.juneau.xml.*;
 import org.apache.juneau.yaml.*;
 import org.apache.juneau.toml.*;
 import org.apache.juneau.hjson.*;
+import org.apache.juneau.hocon.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.proto.*;
 import org.junit.jupiter.params.*;
@@ -208,6 +209,10 @@ class RoundTripDateTime_Test extends TestBase {
 		tester(38, "Cbor - default")
 			.serializer(CborSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(CborParser.create())
+			.build(),
+		tester(39, "Hocon - default")
+			.serializer(HoconSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
+			.parser(HoconParser.create())
 			.build(),
 	};
 

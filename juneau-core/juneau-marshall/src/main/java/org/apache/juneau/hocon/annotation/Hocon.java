@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.cbor.annotation;
+package org.apache.juneau.hocon.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
@@ -22,56 +22,40 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.cbor.*;
 
 /**
- * Annotation for specifying config properties defined in {@link CborSerializer} and {@link CborParser}.
+ * Annotation for customizing HOCON serialization and parsing behavior on classes, methods, and fields.
  *
  * <p>
- * Used primarily for specifying bean configuration properties on REST classes and methods.
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Marshalled classes/methods/fields.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
+ * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/CborBasics">CBOR Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://github.com/lightbend/config/blob/main/HOCON.md">HOCON Specification</a>
  * </ul>
  */
-@Target({ TYPE, METHOD })
+@Documented
+@Target({ TYPE, METHOD, FIELD })
 @Retention(RUNTIME)
 @Inherited
-@ContextApply({ CborConfigAnnotation.SerializerApply.class, CborConfigAnnotation.ParserApply.class })
-public @interface CborConfig {
+@Repeatable(HoconAnnotation.Array.class)
+@ContextApply(HoconAnnotation.Apply.class)
+public @interface Hocon {
 
 	/**
-	 * Add <js>"_type"</js> properties when needed.
-	 *
-	 * <p>
-	 * If <js>"true"</js>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * through reflection.
-	 *
-	 * <ul class='values'>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
-	 * </ul>
+	 * Dynamically apply this annotation to the specified classes/methods/fields.
 	 *
 	 * @return The annotation value.
 	 */
-	String addBeanTypes() default "";
+	String[] on() default {};
 
 	/**
-	 * Use CBOR semantic tags for dates and other typed values.
-	 *
-	 * <ul class='values'>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
-	 * </ul>
+	 * Dynamically apply this annotation to the specified classes.
 	 *
 	 * @return The annotation value.
 	 */
-	String useTags() default "";
-
-	/**
-	 * Optional rank for this config.
-	 *
-	 * @return The annotation value.
-	 */
-	int rank() default 0;
+	Class<?>[] onClass() default {};
 }

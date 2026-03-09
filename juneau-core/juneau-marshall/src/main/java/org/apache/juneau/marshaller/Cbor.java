@@ -19,7 +19,6 @@ package org.apache.juneau.marshaller;
 import java.io.*;
 import java.lang.reflect.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.cbor.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;

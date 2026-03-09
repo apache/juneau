@@ -21,7 +21,6 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
-import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
@@ -133,20 +132,14 @@ class CborParser_Test extends TestBase {
 
 	@Test
 	void d16_spacedHexInput() throws Exception {
-		var s = CborSerializer.SpacedHex.DEFAULT;
-		var hex = s.serialize(JsonMap.of("k", "v"));
-		var p = CborParser.SpacedHex.DEFAULT;
-		var m = p.parse(hex, JsonMap.class);
-		assertEquals("v", m.getString("k"));
+		assertEquals("v", CborParser.DEFAULT_SPACED_HEX.parse(
+			CborSerializer.DEFAULT_SPACED_HEX.serialize(JsonMap.of("k", "v")), JsonMap.class).getString("k"));
 	}
 
 	@Test
 	void d17_base64Input() throws Exception {
-		var s = CborSerializer.Base64.DEFAULT;
-		var b64 = s.serialize(JsonMap.of("k", "v"));
-		var p = CborParser.Base64.DEFAULT;
-		var m = p.parse(b64, JsonMap.class);
-		assertEquals("v", m.getString("k"));
+		assertEquals("v", CborParser.DEFAULT_BASE64.parse(
+			CborSerializer.DEFAULT_BASE64.serialize(JsonMap.of("k", "v")), JsonMap.class).getString("k"));
 	}
 
 	@Test

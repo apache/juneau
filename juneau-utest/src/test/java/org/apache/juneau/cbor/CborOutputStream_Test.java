@@ -20,7 +20,6 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;

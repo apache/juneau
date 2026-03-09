@@ -16,11 +16,8 @@
  */
 package org.apache.juneau.cbor;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;

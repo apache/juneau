@@ -42,9 +42,6 @@ import org.apache.juneau.serializer.*;
  * 	<li class='link'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc8949.html">RFC 8949</a>
  * </ul>
  */
-@SuppressWarnings({
-	"resource" // OutputStream resource managed by calling code
-})
 public class CborOutputStream extends OutputStream {
 
 	private final OutputStream os;

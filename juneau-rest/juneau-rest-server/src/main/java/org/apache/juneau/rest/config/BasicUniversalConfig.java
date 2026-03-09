@@ -19,6 +19,7 @@ package org.apache.juneau.rest.config;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.hjson.*;
+import org.apache.juneau.hocon.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.json.*;
@@ -145,6 +146,7 @@ import org.apache.juneau.xml.*;
 		HtmlStrippedDocSerializer.class,
 		HtmlSchemaDocSerializer.class,
 		HjsonSerializer.class,
+		HoconSerializer.class,
 		JsonSerializer.class,
 		JcsSerializer.class,
 		Json5Serializer.class,
@@ -175,6 +177,7 @@ import org.apache.juneau.xml.*;
 		XmlParser.class,
 		HtmlParser.class,
 		HjsonParser.class,
+		HoconParser.class,
 		UonParser.class,
 		UrlEncodingParser.class,
 		OpenApiParser.class,

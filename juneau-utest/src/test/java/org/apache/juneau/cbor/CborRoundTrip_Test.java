@@ -19,8 +19,6 @@ package org.apache.juneau.cbor;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
@@ -136,7 +134,7 @@ class CborRoundTrip_Test extends TestBase {
 		assertTrue(emptyMap.isEmpty());
 	}
 
-	private <T> T roundTrip(T o, Class<T> type) throws Exception {
+	private static <T> T roundTrip(T o, Class<T> type) throws Exception {
 		var bytes = CborSerializer.DEFAULT.serialize(o);
 		return CborParser.DEFAULT.parse(bytes, type);
 	}

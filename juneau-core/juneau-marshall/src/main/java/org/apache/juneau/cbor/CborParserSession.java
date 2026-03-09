@@ -314,7 +314,7 @@ public class CborParserSession extends InputStreamParserSession {
 				} else if (dt == ARRAY) {
 					Collection l = (sType.isCollection() && sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new JsonList(this));
 					for (var i = 0; i < len; i++)
-						l.add(parseAnything(sType.isArgs() ? sType.getArg((int)i) : sType.getElementType(), is, l, pMeta));
+						l.add(parseAnything(sType.isArgs() ? sType.getArg(i) : sType.getElementType(), is, l, pMeta));
 					o = toArray(sType, l);
 				} else {
 					throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
