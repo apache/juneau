@@ -29,6 +29,7 @@ import javax.xml.datatype.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.html5.*;
+import org.apache.juneau.cbor.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.markdown.*;
 import org.apache.juneau.html.*;
@@ -155,6 +156,10 @@ class RoundTripBeanMaps_Test extends TestBase {
 			.serializer(JcsSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonParser.create())
 			.skipIf(o -> o instanceof Double d && (d.isNaN() || d.isInfinite()))
+			.build(),
+		tester(25, "Cbor - default")
+			.serializer(CborSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(CborParser.create().disableInterfaceProxies())
 			.build(),
 	};
 

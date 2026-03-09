@@ -1,0 +1,387 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.cbor;
+
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
+
+import java.io.*;
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.function.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.serializer.*;
+import org.apache.juneau.svl.*;
+import org.apache.juneau.utils.*;
+
+/**
+ * Session object that lives for the duration of a single use of {@link CborSerializer}.
+ *
+ * <h5 class='section'>Notes:</h5><ul>
+ * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
+ * </ul>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/CborBasics">CBOR Basics</a>
+ * </ul>
+ */
+@SuppressWarnings({
+	"resource",   // Output streams managed by calling code
+	"java:S110",  // Inheritance depth acceptable for serializer session hierarchy
+	"java:S115"   // Constants use UPPER_snakeCase convention (e.g., CONST_value)
+})
+public class CborSerializerSession extends OutputStreamSerializerSession {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ctx = "ctx";
+
+	/**
+	 * Builder class.
+	 */
+	public static class Builder extends OutputStreamSerializerSession.Builder {
+
+		private CborSerializer ctx;
+
+		/**
+		 * Constructor
+		 *
+		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
+		 */
+		protected Builder(CborSerializer ctx) {
+			super(assertArgNotNull(ARG_ctx, ctx));
+			this.ctx = ctx;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
+			super.apply(type, apply);
+			return this;
+		}
+
+		@Override
+		public CborSerializerSession build() {
+			return new CborSerializerSession(this);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug(Boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder mediaTypeDefault(MediaType value) {
+			super.mediaTypeDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder resolver(VarResolverSession value) {
+			super.resolver(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder schema(HttpPartSchema value) {
+			super.schema(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder schemaDefault(HttpPartSchema value) {
+			super.schemaDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZoneDefault(TimeZone value) {
+			super.timeZoneDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder uriContext(UriContext value) {
+			super.uriContext(value);
+			return this;
+		}
+	}
+
+	private static class SimpleMapEntry {
+		final Object key;
+		final Object value;
+
+		SimpleMapEntry(Object key, Object value) {
+			this.key = key;
+			this.value = value;
+		}
+	}
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
+	 * @return A new builder.
+	 */
+	public static Builder create(CborSerializer ctx) {
+		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+	}
+
+	/*
+	 * Converts the specified output target object to an {@link CborOutputStream}.
+	 */
+	private static CborOutputStream getCborOutputStream(SerializerPipe out) throws IOException {
+		Object output = out.getRawOutput();
+		if (output instanceof CborOutputStream output2)
+			return output2;
+		var os = new CborOutputStream(out.getOutputStream());
+		out.setOutputStream(os);
+		return os;
+	}
+
+	private final CborSerializer ctx;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected CborSerializerSession(Builder builder) {
+		super(builder);
+		ctx = builder.ctx;
+	}
+
+	/*
+	 * Workhorse method.
+	 * Determines the type of object, and then calls the appropriate type-specific serialization method.
+	 */
+	@SuppressWarnings({
+		"rawtypes",   // Raw types necessary for generic type handling
+		"java:S3776"  // Cognitive complexity acceptable for serialization dispatch logic
+	})
+	private CborOutputStream serializeAnything(CborOutputStream out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
+
+		if (o == null)
+			return out.appendNull();
+
+		if (eType == null)
+			eType = object();
+
+		ClassMeta<?> aType = null;
+		ClassMeta<?> sType = null;
+
+		aType = push2(attrName, o, eType);
+
+		if (aType == null)
+			return out.appendNull();
+
+		if (isOptional(aType)) {
+			o = getOptionalValue(o);
+			eType = getOptionalType(eType);
+			aType = getClassMetaForObject(o, object());
+		}
+
+		sType = aType;
+		String typeName = getBeanTypeName(this, eType, aType, pMeta);
+
+		var swap = aType.getSwap(this);
+		if (nn(swap)) {
+			o = swap(swap, o);
+			sType = swap.getSwapClassMeta(this);
+
+			if (sType.isObject())
+				sType = getClassMetaForObject(o);
+		}
+
+		if (o == null || (sType.isChar() && ((Character)o).charValue() == 0))
+			out.appendNull();
+		else if (sType.isBoolean())
+			out.appendBoolean((Boolean)o);
+		else if (sType.isNumber())
+			out.appendNumber((Number)o);
+		else if (sType.isDateOrCalendarOrTemporal())
+			out.appendString(Iso8601Utils.format(o, sType, getTimeZone()));
+		else if (sType.isDuration())
+			out.appendString(o.toString());
+		else if (sType.isBean())
+			serializeBeanMap(out, toBeanMap(o), typeName);
+		else if (sType.isUri() || (nn(pMeta) && pMeta.isUri()))
+			out.appendString(resolveUri(o.toString()));
+		else if (sType.isMap()) {
+			if (o instanceof BeanMap o2)
+				serializeBeanMap(out, o2, typeName);
+			else
+				serializeMap(out, (Map)o, eType);
+		} else if (sType.isCollection()) {
+			serializeCollection(out, (Collection)o, eType);
+		} else if (sType.isByteArray()) {
+			out.appendBinary((byte[])o);
+		} else if (sType.isArray()) {
+			serializeCollection(out, toList(sType.inner(), o), eType);
+		} else if (sType.isStreamable()) {
+			serializeCollection(out, toListFromStreamable(o, sType), eType);
+		} else if (sType.isReader()) {
+			pipe((Reader)o, out, SerializerSession::handleThrown);
+		} else if (sType.isInputStream()) {
+			pipe((InputStream)o, out, SerializerSession::handleThrown);
+		} else
+			out.appendString(toString(o));
+
+		pop();
+		return out;
+	}
+
+	private void serializeBeanMap(CborOutputStream out, BeanMap<?> m, String typeName) throws SerializeException {
+
+		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
+
+		var values = new ArrayList<BeanPropertyValue>();
+
+		if (nn(typeName)) {
+			BeanPropertyMeta pm = m.getMeta().getTypeProperty();
+			values.add(new BeanPropertyValue(pm, pm.getName(), typeName, null));
+		}
+
+		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
+			if (nn(thrown)) {
+				onBeanGetterException(pMeta, thrown);
+				return;
+			}
+			var p = new BeanPropertyValue(pMeta, key, value, null);
+
+			if ((! isKeepNullProperties()) && willRecurse(p)) {
+				return;
+			}
+
+			values.add(p);
+		});
+
+		out.startMap(values.size());
+
+		values.forEach(x -> {
+			BeanPropertyMeta pMeta = x.getMeta();
+			if (pMeta.canRead()) {
+				var cMeta = x.getClassMeta();
+				String key = x.getName();
+				Object value = x.getValue();
+				serializeAnything(out, key, null, null, null);
+				serializeAnything(out, value, cMeta, key, pMeta);
+			}
+		});
+	}
+
+	@SuppressWarnings({
+		"rawtypes",  // Raw types necessary for generic collection handling
+		"unchecked"  // Type erasure requires unchecked operations
+	})
+	private void serializeCollection(CborOutputStream out, Collection c, ClassMeta<?> type) throws SerializeException {
+		var elementType = type.getElementType();
+		List<Object> l = listOfSize(c.size());
+		c = sort(c);
+		l.addAll(c);
+		out.startArray(l.size());
+		l.forEach(x -> serializeAnything(out, x, elementType, "<iterator>", null));
+	}
+
+	@SuppressWarnings({
+		"rawtypes",  // Raw types necessary for generic map handling
+		"unchecked"  // Type erasure requires unchecked operations
+	})
+	private void serializeMap(CborOutputStream out, Map m, ClassMeta<?> type) throws SerializeException {
+
+		var keyType = type.getKeyType();
+		var valueType = type.getValueType();
+
+		m = sort(m);
+
+		List<SimpleMapEntry> entries = listOfSize(m.size());
+		m.forEach((k, v) -> entries.add(new SimpleMapEntry(k, v)));
+
+		out.startMap(entries.size());
+
+		entries.forEach(x -> {
+			Object value = x.value;
+			Object key = generalize(x.key, keyType);
+			serializeAnything(out, key, keyType, null, null);
+			serializeAnything(out, value, valueType, null, null);
+		});
+	}
+
+	private boolean willRecurse(BeanPropertyValue v) throws SerializeException {
+		var aType = push2(v.getName(), v.getValue(), v.getClassMeta());
+		if (nn(aType))
+			pop();
+		return aType == null;
+	}
+
+	@Override /* Overridden from SerializerSession */
+	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+		serializeAnything(getCborOutputStream(out), o, getExpectedRootType(o), "root", null);
+	}
+
+	@Override
+	protected boolean isAddBeanTypes() {
+		return ctx.isAddBeanTypes();
+	}
+}

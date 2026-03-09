@@ -35,6 +35,7 @@ import org.apache.juneau.csv.*;
 import org.apache.juneau.markdown.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.jena.*;
+import org.apache.juneau.cbor.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
@@ -203,6 +204,10 @@ class RoundTripTransformBeans_Test extends TestBase {
 			.parser(JsonParser.create())
 			.skipIf(o -> o instanceof Double d && (d.isNaN() || d.isInfinite()))
 			.skipIf(o -> o instanceof A)  // byte[][] not yet serialized as Base64 in inline JSON5
+			.build(),
+		tester(34, "Cbor - default")
+			.serializer(CborSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(CborParser.create())
 			.build(),
 	};
 

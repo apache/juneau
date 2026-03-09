@@ -24,6 +24,7 @@ import java.util.*;
 import javax.xml.datatype.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.cbor.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.jena.*;
@@ -203,6 +204,10 @@ class RoundTripDateTime_Test extends TestBase {
 			.serializer(JcsSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonParser.create())
 			.skipIf(o -> o instanceof Double d && (d.isNaN() || d.isInfinite()))
+			.build(),
+		tester(38, "Cbor - default")
+			.serializer(CborSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(CborParser.create())
 			.build(),
 	};
 

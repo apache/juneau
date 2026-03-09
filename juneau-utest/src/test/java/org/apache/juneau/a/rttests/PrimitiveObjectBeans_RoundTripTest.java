@@ -52,7 +52,7 @@ class PrimitiveObjectBeans_RoundTripTest extends RoundTripTest_Base {
 		assertEquals(Long.valueOf(4), x.poLong);
 		assertEquals(Float.valueOf(5), x.poFloat);
 		assertEquals(Double.valueOf(6), x.poDouble);
-		assertEquals(Integer.valueOf(7), x.poNumber);
+		assertEquals(7, x.poNumber.intValue());
 		assertEquals(8, x.poBigInteger.intValue());
 		assertEquals(9f, x.poBigDecimal.floatValue(), 0.1f);
 
@@ -78,7 +78,7 @@ class PrimitiveObjectBeans_RoundTripTest extends RoundTripTest_Base {
 		assertEquals(Long.valueOf(2), x.poaLong[1][0]);
 		assertEquals(Float.valueOf(2), x.poaFloat[1][0]);
 		assertEquals(Double.valueOf(2), x.poaDouble[1][0]);
-		assertEquals(Integer.valueOf(2), x.poaNumber[1][0]);
+		assertEquals(2, x.poaNumber[1][0].intValue());
 		assertEquals(2, x.poaBigInteger[1][0].intValue());
 		assertEquals(2, x.poaBigDecimal[1][0].intValue());
 		assertNull(x.poaBoolean[2]);

@@ -453,11 +453,11 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 		var x = JsonMap.ofJson("{a:'b',c:123,d:false,e:null,f:[123,'abc',true,false,null]}");
 		x = t.roundTrip(x);
 		assertEquals("b", x.get("a"));
-		assertEquals(123, x.get("c"));
+		assertEquals(123, ((Number)x.get("c")).intValue());
 		assertEquals(false, x.get("d"));
 		assertNull(x.get("e"));
 		var x2 = (List)x.get("f");
-		assertEquals(123, x2.get(0));
+		assertEquals(123, ((Number)x2.get(0)).intValue());
 		assertEquals("abc", x2.get(1));
 		assertEquals(true, x2.get(2));
 		assertEquals(false, x2.get(3));
@@ -472,7 +472,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 		var x = new JsonList("['abc',123,true,false,null,{a:'b'}]");
 		x = t.roundTrip(x);
 		assertEquals("abc", x.get(0));
-		assertEquals(123, x.get(1));
+		assertEquals(123, ((Number)x.get(1)).intValue());
 		assertEquals(true, x.get(2));
 		assertEquals(false, x.get(3));
 		assertNull(x.get(4));
@@ -490,9 +490,9 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 		x.put("b", 2);
 		x.put("c", 3);
 		x = t.roundTrip(x, TreeMap.class);
-		assertEquals(1, x.get("a"));
-		assertEquals(2, x.get("b"));
-		assertEquals(3, x.get("c"));
+		assertEquals(1, ((Number)x.get("a")).intValue());
+		assertEquals(2, ((Number)x.get("b")).intValue());
+		assertEquals(3, ((Number)x.get("c")).intValue());
 
 		x = new TreeMap<>();
 		x.put("a", true);

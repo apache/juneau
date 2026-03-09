@@ -32,6 +32,7 @@ import org.apache.juneau.yaml.*;
 import org.apache.juneau.hjson.*;
 import org.apache.juneau.markdown.*;
 import org.apache.juneau.bson.*;
+import org.apache.juneau.cbor.*;
 
 /**
  * Tests designed to serialize and parse objects to make sure we end up
@@ -157,6 +158,10 @@ public abstract class RoundTripTest_Base extends TestBase {
 		tester(26, "Bson - default")
 			.serializer(BsonSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(BsonParser.create())
+			.build(),
+		tester(27, "Cbor - default")
+			.serializer(CborSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(CborParser.create())
 			.build(),
 	};
 

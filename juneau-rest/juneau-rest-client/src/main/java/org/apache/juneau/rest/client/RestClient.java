@@ -85,6 +85,7 @@ import org.apache.juneau.jsonl.*;
 import org.apache.juneau.markdown.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.bson.*;
+import org.apache.juneau.cbor.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.objecttools.*;
@@ -5600,6 +5601,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					UrlEncodingSerializer.class,
 					OpenApiSerializer.class,
 					BsonSerializer.class,
+					CborSerializer.class,
 					MsgPackSerializer.class,
 					PlainTextSerializer.class,
 					TomlSerializer.class,
@@ -5618,6 +5620,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					UrlEncodingParser.class,
 					OpenApiParser.class,
 					BsonParser.class,
+					CborParser.class,
 					MsgPackParser.class,
 					PlainTextParser.class,
 					TomlParser.class,

@@ -402,6 +402,7 @@ public abstract class Context {
 		 * <ul class='javatreec'>
 		 * 	<li class ='ja'>{@link BeanConfig}
 		 * 	<li class ='ja'>{@link BsonConfig}
+		 * 	<li class ='ja'>{@link CborConfig}
 		 * 	<li class ='ja'>{@link CsvConfig}
 		 * 	<li class ='ja'>{@link HtmlConfig}
 		 * 	<li class ='ja'>{@link HtmlDocConfig}
@@ -410,7 +411,7 @@ public abstract class Context {
 		 * 	<li class ='ja'>{@link JsonConfig}
 		 * 	<li class ='ja'>{@link JsonlConfig}
 		 * 	<li class ='ja'>{@link JsonSchemaConfig}
-		 * 	<li class ='ja'>{@link org.apache.juneau.json.annotation.JcsConfig}
+		 * 	<li class ='ja'>{@link JcsConfig}
 		 * 	<li class ='ja'>{@link MarkdownConfig}
 		 * 	<li class ='ja'>{@link MsgPackConfig}
 		 * 	<li class ='ja'>{@link OpenApiConfig}

@@ -13,6 +13,22 @@
 
 Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
 
+** New Features - CBOR (Concise Binary Object Representation) Support
+
+    * New CborSerializer and CborParser for CBOR format per RFC 8949.
+    * Media types: produces application/cbor, accepts application/cbor.
+    * CBOR provides compact binary encoding for JSON-like data; ideal for IoT, constrained environments,
+      and WebAuthn. Same data model as JSON and MsgPack: maps, arrays, strings, numbers, booleans, null.
+    * Full round-trip support for beans, maps, collections, primitives, byte arrays, date/time/Duration,
+      Optional, ObjectSwap, and polymorphic _type resolution.
+    * New classes: CborSerializer, CborParser, CborOutputStream, CborInputStream, DataType,
+      CborSerializerSession, CborParserSession, CborMetaProvider, CborClassMeta, CborBeanPropertyMeta.
+    * New marshaller: org.apache.juneau.marshaller.Cbor with static of()/to() convenience methods.
+    * New annotations: @Cbor (class-level), @CborConfig (addBeanTypes, useTags).
+    * SpacedHex and Base64 variants for text-friendly output (debugging, testing).
+    * CBOR included in BasicUniversalConfig for REST resources.
+    * RestClient recognizes application/cbor for automatic serializer/parser selection.
+
 ** New Features - Hjson (Human JSON) Support
 
     * New HjsonSerializer and HjsonParser for Hjson (Human JSON) format.

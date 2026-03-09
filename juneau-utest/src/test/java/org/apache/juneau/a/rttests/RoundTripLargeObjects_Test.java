@@ -25,6 +25,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.jena.*;
+import org.apache.juneau.cbor.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.uon.*;
@@ -163,6 +164,10 @@ class RoundTripLargeObjects_Test extends TestBase {
 			.serializer(JcsSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonParser.create())
 			.skipIf(o -> o instanceof Double d && (d.isNaN() || d.isInfinite()))
+			.build(),
+		tester(28, "Cbor - default")
+			.serializer(CborSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(CborParser.create())
 			.build()
 	};
 

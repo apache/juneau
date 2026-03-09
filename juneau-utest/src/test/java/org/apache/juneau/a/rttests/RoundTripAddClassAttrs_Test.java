@@ -29,6 +29,7 @@ import org.apache.juneau.markdown.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.cbor.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
@@ -153,6 +154,10 @@ class RoundTripAddClassAttrs_Test extends TestBase {
 			.serializer(JcsSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonParser.create().disableInterfaceProxies())
 			.skipIf(o -> o instanceof Double d && (d.isNaN() || d.isInfinite()))
+			.build(),
+		tester(27, "Cbor - default")
+			.serializer(CborSerializer.create().addBeanTypes().addRootType())
+			.parser(CborParser.create().disableInterfaceProxies())
 			.build(),
 	};
 
