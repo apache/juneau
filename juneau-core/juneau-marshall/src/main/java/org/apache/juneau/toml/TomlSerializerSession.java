@@ -129,7 +129,7 @@ public class TomlSerializerSession extends WriterSerializerSession {
 	private void serializeMapAtRoot(TomlWriter w, Map<?,?> map, ClassMeta<?> type) throws SerializeException {
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 		forEachEntry(map, e -> {
-			String k = toString(e.getKey());
+			String k = e.getKey() == null ? "null" : toString(e.getKey());
 			Object v = e.getValue();
 			if (!checkNull.test(v))
 				return;
@@ -323,7 +323,7 @@ public class TomlSerializerSession extends WriterSerializerSession {
 	private void serializeMapAsTable(TomlWriter w, String path, Map<?,?> map, ClassMeta<?> type) throws SerializeException {
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 		forEachEntry(map, e -> {
-			String k = toString(e.getKey());
+			String k = e.getKey() == null ? "null" : toString(e.getKey());
 			Object v = e.getValue();
 			if (!checkNull.test(v))
 				return;

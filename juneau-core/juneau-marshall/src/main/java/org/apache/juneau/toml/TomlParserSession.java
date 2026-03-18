@@ -100,11 +100,7 @@ public class TomlParserSession extends ReaderParserSession {
 				Object inner = root.get("_value");
 				return (T) convertValue(inner, type);
 			}
-			T result = convertMapToType(root, type);
-			// Fallback: convert LinkedHashMap to JsonMap when target expects Map (JsonMap preferred for TOML)
-			if (result instanceof Map m && !(result instanceof JsonMap) && type.isMap())
-				return (T) toJsonMap(m);
-			return result;
+			return convertMapToType(root, type);
 		}
 	}
 
@@ -345,12 +341,17 @@ public class TomlParserSession extends ReaderParserSession {
 	}
 
 	private <T> T convertMapToType(Map<String, Object> map, ClassMeta<T> type) throws ParseException, ExecutableException {
-		// When target is JsonMap, convert LinkedHashMap to JsonMap (parser produces LinkedHashMap)
 		if (type.isMap()) {
-			Class<?> inner = type.inner();
-			if (JsonMap.class.isAssignableFrom(inner) || (inner != null && "org.apache.juneau.collections.JsonMap".equals(inner.getName())))
-				return (T) toJsonMap(map);
-			return (T) map;
+			var keyType = type.getKeyType();
+			var valueType = type.getValueType();
+			Map m = type.canCreateNewInstance(getOuter()) ? (Map) type.newInstance(getOuter()) : newGenericMap(type);
+			for (var e : map.entrySet()) {
+				String keyStr = "null".equals(e.getKey()) ? null : e.getKey();
+				Object key = convertAttrToType(m, keyStr, keyType);
+				Object val = convertValue(e.getValue(), valueType);
+				m.put(key, val);
+			}
+			return (T) m;
 		}
 		BeanMap<?> bm = toBeanMap(type.newInstance(getOuter()));
 		populateBeanMap(bm, map);

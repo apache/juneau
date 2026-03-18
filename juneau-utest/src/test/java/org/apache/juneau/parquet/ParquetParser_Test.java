@@ -28,9 +28,6 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for {@link ParquetParser}.
  */
-@SuppressWarnings({
-	"unchecked" // Parser returns raw types; explicit casts required for typed assertions
-})
 class ParquetParser_Test extends TestBase {
 
 	@Test

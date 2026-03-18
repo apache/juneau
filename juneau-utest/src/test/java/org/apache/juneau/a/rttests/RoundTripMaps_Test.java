@@ -178,8 +178,6 @@ class RoundTripMaps_Test extends TestBase {
 		tester(30, "Toml - default")
 			.serializer(TomlSerializer.create())
 			.parser(TomlParser.create())
-			// TODO: Revisit when TomlParser supports HashMap and maps with non-String keys
-			.skipIf(o -> o instanceof HashMap || (o instanceof Map<?,?> m && !m.isEmpty() && !(m.keySet().iterator().next() instanceof String)))
 			.build(),
 		tester(31, "Csv - default")
 			.serializer(CsvSerializer.create().keepNullProperties())

@@ -89,6 +89,7 @@ import org.apache.juneau.serializer.*;
  * 		Use <c>keepNullProperties()</c> to write the configured <c>nullValue</c> string (e.g. <c>&lt;NULL&gt;</c>) instead.
  * 	<li><b>Map keys</b> — TOML tables only support string keys. Maps with non-string keys
  * 		(e.g. <c>Map&lt;Integer,String&gt;</c>) have keys converted via <c>toString()</c>; ensure results are valid TOML keys.
+ * 		Null keys are serialized as the string <c>null</c>.
  * 	<li><b>Polymorphic types</b> — <c>addBeanTypes()</c> and <c>addRootType()</c> add <c>_type</c>
  * 		discriminators for polymorphic parsing; use with care as TOML structure differs from JSON.
  * 	<li><b>Root-level collections</b> — TOML expects a root table. Root arrays use array-of-tables

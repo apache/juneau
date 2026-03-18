@@ -37,8 +37,9 @@ import org.apache.juneau.parser.*;
  * 	<li><b>Null values</b> — TOML has no null type. Absent keys yield null for object properties.
  * 		The parser treats the configured <c>nullValue</c> string (e.g. <c>&lt;NULL&gt;</c>) as Java null
  * 		when it appears as a value.
- * 	<li><b>Non-string map keys</b> — TOML keys are always strings. Parsing to
- * 		<c>Map&lt;Integer,String&gt;</c> or similar requires key conversion that may not round-trip.
+ * 	<li><b>Non-string map keys</b> — TOML keys are always strings. Non-string key types
+ * 		(e.g. <c>Map&lt;Integer,String&gt;</c>) are converted via {@link org.apache.juneau.parser.ParserSession#convertAttrToType(Object, String, org.apache.juneau.ClassMeta) convertAttrToType}.
+ * 		Null keys are serialized as the string <c>null</c> and converted back to Java null during parsing.
  * 	<li><b>Polymorphic types</b> — Parsing to interfaces or abstract classes requires a
  * 		{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class[]) bean dictionary}
  * 		when no <c>_type</c> discriminator is present in the document.
