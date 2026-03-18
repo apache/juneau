@@ -187,8 +187,6 @@ class RoundTripMaps_Test extends TestBase {
 		tester(32, "Markdown - default")
 			.serializer(MarkdownSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(MarkdownParser.create())
-			// TODO: Revisit when MarkdownParser round-trips HashMap with null keys
-			.skipIf(HashMap.class::isInstance)
 			.build(),
 		tester(33, "Hjson - default")
 			.serializer(HjsonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
