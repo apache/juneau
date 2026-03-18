@@ -174,8 +174,6 @@ class RoundTripMaps_Test extends TestBase {
 		tester(29, "Yaml - default")
 			.serializer(YamlSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(YamlParser.create())
-			// TODO: Revisit when YamlParser round-trips HashMap with null keys (see YamlParser javadoc)
-			.skipIf(HashMap.class::isInstance)
 			.build(),
 		tester(30, "Toml - default")
 			.serializer(TomlSerializer.create())

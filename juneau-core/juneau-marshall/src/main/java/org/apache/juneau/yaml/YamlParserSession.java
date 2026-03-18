@@ -419,33 +419,24 @@ public class YamlParserSession extends ReaderParserSession {
 		if (s.isEmpty())
 			return null;
 
-		if ("null".equals(s))
-			return null;
-
-		if ("true".equals(s) || "false".equals(s)) {
-			if (sType.isObject() || sType.isBoolean())
-				return Boolean.valueOf(s);
-			return convertToType(s, sType, eType, outer, pMeta);
-		}
-
 		if (looksLikeMappingKey(r)) {
 			r.read(); // consume ':'
 			int cp = r.peek();
 			if (cp == ' ')
 				r.read(); // consume space after ':'
 
+			String keyStr = isYamlNull(s) ? null : trim(s);
 			if (sType.isObject()) {
 				var m2 = new JsonMap(this);
 				Object value = parseAnything(object(), r, m2, pMeta);
-				String ts = trim(s);
-				setName(object(), value, ts);
-				m2.put(ts, value);
+				setName(object(), value, keyStr);
+				m2.put(keyStr, value);
 				parseBlockMappingRemainder(r, m2, string(), object(), pMeta, keyIndent);
 				return cast(m2, pMeta, eType);
 			} else if (sType.isMap()) {
 				Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 				Object value = parseAnything(sType.getValueType(), r, m, pMeta);
-				Object key = convertAttrToType(m, trim(s), sType.getKeyType());
+				Object key = convertAttrToType(m, keyStr, sType.getKeyType());
 				setName(sType.getValueType(), value, key);
 				m.put(key, value);
 				parseBlockMappingRemainder(r, m, sType.getKeyType(), sType.getValueType(), pMeta, keyIndent);
@@ -471,6 +462,15 @@ public class YamlParserSession extends ReaderParserSession {
 					return newBeanMap(outer, sType.inner()).load(m2).getBean();
 				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", cn(sType), sType.getNotABeanReason());
 			}
+		}
+
+		if (isYamlNull(s))
+			return null;
+
+		if ("true".equals(s) || "false".equals(s)) {
+			if (sType.isObject() || sType.isBoolean())
+				return Boolean.valueOf(s);
+			return convertToType(s, sType, eType, outer, pMeta);
 		}
 
 		return convertToType(s, sType, eType, outer, pMeta);
@@ -501,6 +501,10 @@ public class YamlParserSession extends ReaderParserSession {
 
 	private static boolean looksLikeMappingKey(ParserReader r) throws IOException {
 		return r.peek() == ':';
+	}
+
+	private static boolean isYamlNull(String s) {
+		return "null".equals(s) || "Null".equals(s) || "NULL".equals(s) || "~".equals(s);
 	}
 
 	private <K,V> void parseBlockMappingRemainder(ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta, int parentIndent) throws IOException, ParseException, ExecutableException {
@@ -661,7 +665,10 @@ public class YamlParserSession extends ReaderParserSession {
 			return parseSingleQuotedString(r);
 		if (c == '"')
 			return parseDoubleQuotedString(r);
-		return parsePlainFlowKey(r);
+		var key = parsePlainFlowKey(r);
+		if (isYamlNull(key))
+			return null;
+		return key;
 	}
 
 	private static String parsePlainFlowKey(ParserReader r) throws IOException {
@@ -853,7 +860,7 @@ public class YamlParserSession extends ReaderParserSession {
 			}
 		}
 		String key = sb.toString().trim();
-		if ("null".equals(key) || "Null".equals(key) || "NULL".equals(key) || "~".equals(key))
+		if (isYamlNull(key))
 			return null;
 		return key;
 	}

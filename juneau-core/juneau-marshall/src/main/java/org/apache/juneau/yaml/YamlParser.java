@@ -51,10 +51,6 @@ import org.apache.juneau.parser.*;
  * 		those key types.  {@link java.util.LinkedHashMap LinkedHashMap} and {@link java.util.TreeMap TreeMap}
  * 		with {@link String} keys work reliably.
  * 	<li>
- * 		{@link java.util.HashMap HashMap} instances that contain a {@code null} key can fail to round-trip in
- * 		some cases; {@link java.util.LinkedHashMap LinkedHashMap} and {@link java.util.TreeMap TreeMap} handle
- * 		null keys correctly.
- * 	<li>
  * 		No strict vs non-strict mode; unlike JSON, there is no equivalent to JSON's lax parsing of comments,
  * 		unquoted attributes, or concatenated strings.
  * 	<li>
